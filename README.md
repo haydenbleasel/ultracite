@@ -2,7 +2,7 @@
 
 Unified, strict editor configuration for modern Next.js + Tailwind apps.
 
-# Installation 
+# Installation
 
 Run the command below to install Harmony:
 
@@ -22,20 +22,40 @@ Simply add these to your `package.json`:
 
 ```json
 {
-  "eslint": {
-    "extends": [
-      "plugin:@haydenbleasel/harmony/eslint"
-    ]
+  "eslintConfig": {
+    "extends": "@haydenbleasel/harmony/eslint"
   },
   "prettier": {
-    "extends": [
-      "plugin:@haydenbleasel/harmony/prettier"
-    ]
+    "extends": "@haydenbleasel/harmony/prettier"
   },
   "stylelint": {
-    "extends": [
-      "plugin:@haydenbleasel/harmony/stylelint"
-    ]
-  },
+    "extends": "@haydenbleasel/harmony/stylelint"
+  }
 }
+```
+
+or create seperate files e.g.
+
+**eslint.rc**
+
+```json
+{
+  "extends": "@haydenbleasel/harmony/eslint"
+}
+```
+
+**.prettierrc.js**
+
+```js
+module.exports = {
+  ...require("@haydenbleasel/harmony/prettier"),
+};
+```
+
+**stylelint.config.js**
+
+```js
+module.exports = {
+  extends: "@haydenbleasel/harmony/stylelint",
+};
 ```
