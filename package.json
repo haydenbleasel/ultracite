@@ -22,7 +22,11 @@
   "name": "@haydenbleasel/harmony",
   "description": "Unified, strict editor configuration for modern Next.js + Tailwind apps.",
   "version": "1.0.2",
-  "main": "index.js",
+  "exports": {
+    "eslint": "./src/eslint.js",
+    "prettier": "./src/prettier.js",
+    "stylelint": "./src/stylelint.js"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
