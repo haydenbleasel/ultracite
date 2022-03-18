@@ -1,6 +1,6 @@
 # Harmony
 
-Unified, strict editor configuration for modern Next.js apps
+Unified, strict editor configuration for modern Next.js + Tailwind apps.
 
 # Installation 
 
