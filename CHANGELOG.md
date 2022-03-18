@@ -1,3 +1,15 @@
+# v1.0.2 (Fri Mar 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Run auto init, generate labels ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.1 (Fri Mar 18 2022)
 
 #### ⚠️ Pushed to `main`
