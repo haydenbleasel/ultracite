@@ -1,3 +1,15 @@
+# v1.0.3 (Fri Mar 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Remove index file, expose multiple exports ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.2 (Fri Mar 18 2022)
 
 #### ⚠️ Pushed to `main`
