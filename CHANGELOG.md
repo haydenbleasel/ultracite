@@ -1,3 +1,15 @@
+# v1.0.5 (Fri Mar 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Swap out package imports for paths for now ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.4 (Fri Mar 18 2022)
 
 #### ⚠️ Pushed to `main`
