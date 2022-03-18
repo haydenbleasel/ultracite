@@ -23,13 +23,13 @@ Simply add these to your `package.json`:
 ```json
 {
   "eslintConfig": {
-    "extends": "@haydenbleasel/harmony/eslint"
+    "extends": "./node_modules/@haydenbleasel/harmony/src/eslint.js"
   },
   "prettier": {
-    "extends": "@haydenbleasel/harmony/prettier"
+    "extends": "./node_modules/@haydenbleasel/harmony/src/prettier.js"
   },
   "stylelint": {
-    "extends": "@haydenbleasel/harmony/stylelint"
+    "extends": "./node_modules/@haydenbleasel/harmony/src/stylelint.js"
   }
 }
 ```
@@ -40,7 +40,7 @@ or create seperate files e.g.
 
 ```json
 {
-  "extends": "@haydenbleasel/harmony/eslint"
+  "extends": "./node_modules/@haydenbleasel/harmony/src/eslint.js"
 }
 ```
 
@@ -48,7 +48,7 @@ or create seperate files e.g.
 
 ```js
 module.exports = {
-  ...require("@haydenbleasel/harmony/prettier"),
+  ...require("./node_modules/@haydenbleasel/harmony/src/prettier.js"),
 };
 ```
 
@@ -56,6 +56,6 @@ module.exports = {
 
 ```js
 module.exports = {
-  extends: "@haydenbleasel/harmony/stylelint",
+  extends: "./node_modules/@haydenbleasel/harmony/src/stylelint.js",
 };
 ```
