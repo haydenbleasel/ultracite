@@ -1,38 +1,31 @@
 module.exports = {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "env": {
-    "browser": true,
-    "node": true
+  root: true,
+  parser: "@typescript-eslint/parser",
+  env: {
+    browser: true,
+    node: true,
   },
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+  parserOptions: {
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  "plugins": [
-    "react",
-    "react-hooks",
-    "@typescript-eslint",
-    "jsx-a11y",
-    "import"
-  ],
-  "ignorePatterns": ["**/*.js"],
-  "extends": [
+  plugins: ["react", "react-hooks", "@typescript-eslint", "jsx-a11y", "import"],
+  ignorePatterns: ["**/*.js"],
+  extends: [
     "plugin:react/jsx-runtime",
     "plugin:@next/next/recommended",
     "plugin:@next/next/core-web-vitals",
     "prettier",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
   ],
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+  settings: {
+    react: {
+      version: "detect",
+    },
   },
-  "rules": {
-    
+  rules: {
     // ESLint Possible Problems: These rules relate to possible logic errors in code
     "array-callback-return": "error",
     "constructor-super": "error",
@@ -91,13 +84,13 @@ module.exports = {
     "block-scoped-var": "error",
     "capitalized-comments": "off",
     "class-methods-use-this": "error",
-    "complexity": "off",
+    complexity: "off",
     "consistent-return": "error",
     "consistent-this": "error",
-    "curly": "error",
+    curly: "error",
     "default-case": "error",
     "default-case-last": "error",
-    "eqeqeq": "error",
+    eqeqeq: "error",
     "func-name-matching": "error",
     "func-names": "error",
     "func-style": "error",
@@ -188,9 +181,9 @@ module.exports = {
     "prefer-destructuring": [
       "error",
       {
-        "array": false,
-        "object": true
-      }
+        array: false,
+        object: true,
+      },
     ],
     "prefer-exponentiation-operator": "error",
     "prefer-named-capture-group": "error",
@@ -201,17 +194,17 @@ module.exports = {
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "prefer-template": "error",
-    "radix": "error",
+    radix: "error",
     "require-unicode-regexp": "error",
     "require-yield": "error",
     "sort-imports": "off",
     "sort-keys": "off",
     "sort-vars": "off",
     "spaced-comment": "error",
-    "strict": "error",
+    strict: "error",
     "symbol-description": "error",
     "vars-on-top": "error",
-    "yoda": "error",
+    yoda: "error",
 
     // ESLint Layout & Formatting: These rules care about how the code looks rather than how it executes
     "array-element-newline": ["off"],
@@ -224,13 +217,13 @@ module.exports = {
 
     // ESLint Disabled for Typescript-ESLint
     "brace-style": "off",
-    "camelcase": "off",
+    camelcase: "off",
     "comma-dangle": "off",
     "comma-spacing": "off",
     "default-param-last": "off",
     "dot-notation": "off",
     "func-call-spacing": "off",
-    "indent": "off",
+    indent: "off",
     "init-declarations": "off",
     "keyword-spacing": "off",
     "lines-between-class-members": "off",
@@ -255,10 +248,10 @@ module.exports = {
     "no-useless-constructor": "off",
     "object-curly-spacing": "off",
     "padding-line-between-statements": "off",
-    "quotes": "off",
+    quotes: "off",
     "require-await": "off",
     "no-return-await": "off",
-    "semi": "off",
+    semi: "off",
     "space-before-function-paren": "off",
     "space-infix-ops": "off",
 
@@ -283,9 +276,9 @@ module.exports = {
     "@typescript-eslint/naming-convention": [
       "error",
       {
-        "selector": "default",
-        "format": ["camelCase", "PascalCase"]
-      }
+        selector: "default",
+        format: ["camelCase", "PascalCase"],
+      },
     ],
     "@typescript-eslint/no-base-to-string": "error",
     "@typescript-eslint/no-confusing-non-null-assertion": "error",
@@ -392,8 +385,8 @@ module.exports = {
     "react/function-component-definition": [
       "error",
       {
-        "namedComponents": "arrow-function"
-      }
+        namedComponents: "arrow-function",
+      },
     ],
     "react/no-access-state-in-setstate": "error",
     "react/no-adjacent-inline-elements": "error",
@@ -447,8 +440,8 @@ module.exports = {
     "react/jsx-filename-extension": [
       "error",
       {
-        "extensions": [".tsx"]
-      }
+        extensions: [".tsx"],
+      },
     ],
     "react/jsx-fragments": "error",
     "react/jsx-handler-names": "error",
@@ -480,8 +473,8 @@ module.exports = {
       "error",
       {
         // Add support for useAsync by react-use
-        "additionalHooks": "(useAsync)"
-      }
+        additionalHooks: "(useAsync)",
+      },
     ],
 
     // JSX a11y
@@ -662,6 +655,6 @@ module.exports = {
     // Disabled for Prettier: enabled but not automatically checked
     "@typescript-eslint/quotes": "off",
     "no-mixed-operators": "off",
-    "no-unexpected-multiline": "off"
-  }
+    "no-unexpected-multiline": "off",
+  },
 };
