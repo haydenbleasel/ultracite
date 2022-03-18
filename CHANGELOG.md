@@ -1,3 +1,15 @@
+# v1.0.7 (Fri Mar 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add publishConfig ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.6 (Fri Mar 18 2022)
 
 #### ⚠️ Pushed to `main`
