@@ -56,28 +56,24 @@ Simply add these to your `package.json`:
 }
 ```
 
-or create seperate files e.g.
+or create seperate files if you'd prefer.
 
-**eslint.rc**
+Additionally, create the following `.vscode/settings.json`. This will enable full formatting on save.
 
 ```json
 {
-  "extends": "./node_modules/@haydenbleasel/harmony/src/eslint.js"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "emmet.showExpandedAbbreviation": "never",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.esbenp.prettier-vscode": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
-```
-
-**.prettierrc.js**
-
-```js
-module.exports = {
-  ...require("./node_modules/@haydenbleasel/harmony/src/prettier.js"),
-};
-```
-
-**stylelint.config.js**
-
-```js
-module.exports = {
-  extends: "./node_modules/@haydenbleasel/harmony/src/stylelint.js",
-};
 ```
