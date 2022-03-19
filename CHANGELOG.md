@@ -1,3 +1,15 @@
+# v1.0.8 (Sat Mar 19 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add snake_case support for APIs, disable misused-promises error ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.7 (Fri Mar 18 2022)
 
 #### ⚠️ Pushed to `main`
