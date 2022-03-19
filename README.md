@@ -42,7 +42,10 @@ Simply add these to your `package.json`:
 ```json
 {
   "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/src/eslint.js"
+    "extends": "./node_modules/@haydenbleasel/harmony/src/eslint.js",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
   },
   "prettier": {
     "extends": "./node_modules/@haydenbleasel/harmony/src/prettier.js"
