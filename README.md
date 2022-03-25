@@ -13,7 +13,7 @@ yarn add -D @haydenbleasel/harmony
 Install peer dependencies:
 
 ```sh
-yarn add -D prettier-plugin-tailwindcss prettier eslint eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks @typescript-eslint/eslint-plugin @typescript-eslint/parser stylelint stylelint-prettier
+yarn add -D prettier-plugin-tailwindcss prettier eslint eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks @typescript-eslint/eslint-plugin @typescript-eslint/parser stylelint stylelint-prettier typescript
 ```
 
 Also, if you're running VS Code, ensure you have the following extensions installed. Some are required to make this config work, others enhance your experience.
