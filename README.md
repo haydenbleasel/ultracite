@@ -42,13 +42,13 @@ Simply add these to your `package.json`:
 ```json
 {
   "eslintConfig": {
-    "extends": "./eslint.js",
+    "extends": "./node_modules/@haydenbleasel/harmony/eslint.js",
     "parserOptions": {
       "project": "./tsconfig.json"
     }
   },
-  "prettier": "./prettier.js",
-  "stylelint": "./stylelint.js"
+  "prettier": "@haydenbleasel/harmony/prettier",
+  "stylelint": "@haydenbleasel/harmony/stylelint"
 }
 ```
 
