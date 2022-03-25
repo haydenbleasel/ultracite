@@ -19,15 +19,24 @@
     "stylelint": "^14.6.0",
     "stylelint-prettier": "^2.0.0"
   },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.6.0",
+    "prettier-plugin-tailwindcss": "^0.1.8",
+    "react": "^17.0.2",
+    "stylelint": "^14.6.0",
+    "stylelint-prettier": "^2.0.0",
+    "typescript": "^4.6.3"
+  },
   "name": "@haydenbleasel/harmony",
   "description": "Unified, strict editor configuration for modern Next.js + Tailwind apps.",
   "version": "1.0.11",
-  "exports": {
-    "./eslint": "./src/eslint.js",
-    "./prettier": "./src/prettier.js",
-    "./stylelint": "./src/stylelint.js"
-  },
-  "devDependencies": {},
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -52,14 +61,13 @@
   },
   "homepage": "https://github.com/haydenbleasel/harmony#readme",
   "eslintConfig": {
-    "extends": "./src/eslint.js"
+    "extends": "./eslint.js",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
   },
-  "prettier": {
-    "extends": "./src/prettier.js"
-  },
-  "stylelint": {
-    "extends": "./src/stylelint.js"
-  },
+  "prettier": "./prettier.js",
+  "stylelint": "./stylelint.js",
   "auto": {
     "plugins": [
       "npm",
