@@ -1,3 +1,15 @@
+# v1.0.11 (Fri Mar 25 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Move files to root folder ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.10 (Sat Mar 19 2022)
 
 #### ⚠️ Pushed to `main`
