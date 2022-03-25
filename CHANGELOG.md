@@ -1,3 +1,16 @@
+# v1.0.12 (Fri Mar 25 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add Typescript to peerDeps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix devDeps, peerDeps, file formatting and installation ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.11 (Fri Mar 25 2022)
 
 #### ⚠️ Pushed to `main`
