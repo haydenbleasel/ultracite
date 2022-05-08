@@ -1,3 +1,17 @@
+# v1.0.16 (Sun May 08 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Fix package lockfile ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix new Next rules ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.15 (Sun May 08 2022)
 
 #### ⚠️ Pushed to `main`
