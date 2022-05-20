@@ -1,3 +1,17 @@
+# v1.0.19 (Fri May 20 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Use next/core-web-vitals instead of custom config ([@haydenbleasel](https://github.com/haydenbleasel))
+- Revert "Attempt fixing Next format" ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.18 (Fri May 20 2022)
 
 #### ⚠️ Pushed to `main`
