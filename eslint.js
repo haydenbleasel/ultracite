@@ -13,13 +13,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'jsx-a11y', 'import'],
   ignorePatterns: ['**/*.js'],
-  extends: [
-    'plugin:react/jsx-runtime',
-    'plugin:@next/next/recommended',
-    'plugin:@next/next/core-web-vitals',
-    'prettier',
-    'plugin:import/typescript',
-  ],
+  extends: ['plugin:react/jsx-runtime', 'prettier', 'plugin:import/typescript'],
   settings: {
     react: {
       version: 'detect',
@@ -523,13 +517,11 @@ module.exports = {
     '@next/next/no-head-element': 'error',
     '@next/next/no-head-import-in-document': 'error',
     '@next/next/no-html-link-for-pages': 'error',
-    '@next/next/no-html-link-for-pages': 'error',
     '@next/next/no-img-element': 'error',
     '@next/next/no-page-custom-font': 'error',
     '@next/next/no-script-component-in-head': 'error',
     '@next/next/no-script-in-document': 'error',
     '@next/next/no-server-import-in-page': 'error',
-    '@next/next/no-sync-scripts': 'error',
     '@next/next/no-sync-scripts': 'error',
     '@next/next/no-title-in-document-head': 'error',
     '@next/next/no-typos': 'error',
