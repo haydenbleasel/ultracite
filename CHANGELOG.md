@@ -1,3 +1,15 @@
+# v1.0.17 (Fri May 20 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Remove extended Next configs, fix duplicate rules ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.16 (Sun May 08 2022)
 
 #### ⚠️ Pushed to `main`
