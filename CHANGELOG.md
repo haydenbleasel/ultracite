@@ -1,3 +1,15 @@
+# v1.0.18 (Fri May 20 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Attempt fixing Next format ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.17 (Fri May 20 2022)
 
 #### ⚠️ Pushed to `main`
