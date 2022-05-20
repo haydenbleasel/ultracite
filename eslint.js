@@ -11,16 +11,14 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: [
-    'react',
-    'react-hooks',
-    '@typescript-eslint',
-    'jsx-a11y',
-    'import',
-    '@next/eslint-plugin-next',
-  ],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'jsx-a11y', 'import'],
   ignorePatterns: ['**/*.js'],
-  extends: ['plugin:react/jsx-runtime', 'prettier', 'plugin:import/typescript'],
+  extends: [
+    'plugin:react/jsx-runtime',
+    'prettier',
+    'plugin:import/typescript',
+    'next/core-web-vitals',
+  ],
   settings: {
     react: {
       version: 'detect',
@@ -511,28 +509,6 @@ module.exports = {
     'jsx-a11y/role-supports-aria-props': 'error',
     'jsx-a11y/scope': 'error',
     'jsx-a11y/tabindex-no-positive': 'error',
-
-    // Next
-    '@next/next/google-font-display': 'error',
-    '@next/next/google-font-preconnect': 'error',
-    '@next/next/inline-script-id': 'error',
-    '@next/next/link-passhref': 'error',
-    '@next/next/next-script-for-ga': 'error',
-    '@next/next/no-css-tags': 'error',
-    '@next/next/no-document-import-in-page': 'error',
-    '@next/next/no-duplicate-head': 'error',
-    '@next/next/no-head-element': 'error',
-    '@next/next/no-head-import-in-document': 'error',
-    '@next/next/no-html-link-for-pages': 'error',
-    '@next/next/no-img-element': 'error',
-    '@next/next/no-page-custom-font': 'error',
-    '@next/next/no-script-component-in-head': 'error',
-    '@next/next/no-script-in-document': 'error',
-    '@next/next/no-server-import-in-page': 'error',
-    '@next/next/no-sync-scripts': 'error',
-    '@next/next/no-title-in-document-head': 'error',
-    '@next/next/no-typos': 'error',
-    '@next/next/no-unwanted-polyfillio': 'error',
 
     // ESLint-Import: Static analysis
     'import/no-unresolved': 'off',
