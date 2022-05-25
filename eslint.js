@@ -278,6 +278,11 @@ module.exports = {
         selector: 'default',
         format: ['camelCase', 'PascalCase', 'snake_case'],
       },
+      {
+        selector: 'objectLiteralProperty',
+        format: null,
+        modifiers: ['requiresQuotes']
+      }
     ],
     '@typescript-eslint/no-base-to-string': 'error',
     '@typescript-eslint/no-confusing-non-null-assertion': 'error',
