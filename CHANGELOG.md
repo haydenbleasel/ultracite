@@ -1,3 +1,15 @@
+# v1.0.20 (Wed May 25 2022)
+
+#### 🐛 Bug Fix
+
+- Allow HTTP header literals to break naming convention [#21](https://github.com/haydenbleasel/harmony/pull/21) ([@marktheunissen](https://github.com/marktheunissen))
+
+#### Authors: 1
+
+- Mark Theunissen ([@marktheunissen](https://github.com/marktheunissen))
+
+---
+
 # v1.0.19 (Fri May 20 2022)
 
 #### ⚠️ Pushed to `main`
