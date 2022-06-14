@@ -1,3 +1,26 @@
+# v1.0.21 (Tue Jun 14 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Fix stylelint extend ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @typescript-eslint/parser from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/harmony/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/harmony/pull/28) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/harmony/pull/27) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/harmony/pull/26) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/harmony/pull/25) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/harmony/pull/23) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/harmony/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.20 (Wed May 25 2022)
 
 #### 🐛 Bug Fix
