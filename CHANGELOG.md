@@ -1,3 +1,15 @@
+# v1.0.22 (Sat Jun 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Attempt to split config into core, Next and Expo ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.21 (Tue Jun 14 2022)
 
 #### ⚠️ Pushed to `main`
