@@ -13,12 +13,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'jsx-a11y', 'import'],
   ignorePatterns: ['**/*.js'],
-  extends: [
-    'plugin:react/jsx-runtime',
-    'prettier',
-    'plugin:import/typescript',
-    'next/core-web-vitals',
-  ],
+  extends: ['plugin:react/jsx-runtime', 'prettier', 'plugin:import/typescript'],
   settings: {
     react: {
       version: 'detect',
@@ -281,8 +276,8 @@ module.exports = {
       {
         selector: 'objectLiteralProperty',
         format: null,
-        modifiers: ['requiresQuotes']
-      }
+        modifiers: ['requiresQuotes'],
+      },
     ],
     '@typescript-eslint/no-base-to-string': 'error',
     '@typescript-eslint/no-confusing-non-null-assertion': 'error',
