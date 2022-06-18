@@ -1,3 +1,16 @@
+# v1.0.23 (Sat Jun 18 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add react-native plugin dependency ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.22 (Sat Jun 18 2022)
 
 #### ⚠️ Pushed to `main`
