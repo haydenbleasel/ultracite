@@ -1,3 +1,16 @@
+# v1.0.25 (Fri Jul 01 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove deprecated (?) rule ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.24 (Fri Jul 01 2022)
 
 #### ⚠️ Pushed to `main`
