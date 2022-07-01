@@ -1,3 +1,16 @@
+# v1.0.24 (Fri Jul 01 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update eslint-next.js ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.23 (Sat Jun 18 2022)
 
 #### ⚠️ Pushed to `main`
