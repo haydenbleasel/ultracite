@@ -1,4 +1,5 @@
 module.exports = {
+  // root is required for https://github.com/eslint/eslint/issues/13385
   root: true,
   extends: './eslint.js',
   plugins: ['@next/next'],

@@ -11,7 +11,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 Run the command below to install Harmony:
 
 ```sh
-yarn add -D @haydenbleasel/harmony
+yarn add -D @corellium/harmony
 ```
 
 You'll also need to install peer dependencies, like so:
@@ -48,14 +48,14 @@ Simply add the fields below to your `package.json`. If you don't use a particula
 ```json
 {
   "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint.js",
+    "extends": "./node_modules/@corellium/harmony/eslint.js",
     "parserOptions": {
       "project": "./tsconfig.json"
     }
   },
-  "prettier": "@haydenbleasel/harmony/prettier",
+  "prettier": "@corellium/harmony/prettier",
   "stylelint": {
-    "extends": "@haydenbleasel/harmony/stylelint"
+    "extends": "@corellium/harmony/stylelint"
   }
 }
 ```
@@ -97,7 +97,7 @@ Then updating your ESLint config to import like so...
 ```json
 {
   "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-next.js",
+    "extends": "./node_modules/@corellium/harmony/eslint-next.js",
     "parserOptions": {
       "project": "./tsconfig.json"
     }
@@ -118,7 +118,7 @@ Then updating your ESLint config to import like so...
 ```json
 {
   "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-expo.js",
+    "extends": "./node_modules/@corellium/harmony/eslint-expo.js",
     "parserOptions": {
       "project": "./tsconfig.json"
     }
