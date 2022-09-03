@@ -4,9 +4,7 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    globals: {
-      'jest/globals': true,
-    },
+    'jest/globals': true,
   },
   parserOptions: {
     sourceType: 'module',
