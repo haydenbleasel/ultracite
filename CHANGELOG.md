@@ -1,3 +1,16 @@
+# v1.0.28 (Sat Sep 03 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.27 (Sat Sep 03 2022)
 
 #### ⚠️ Pushed to `main`
