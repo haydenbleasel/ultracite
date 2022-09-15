@@ -1,3 +1,15 @@
+# v1.0.30 (Thu Sep 15 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add jest install to docs ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.29 (Sat Sep 03 2022)
 
 #### ⚠️ Pushed to `main`
