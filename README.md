@@ -30,7 +30,8 @@ prettier \
 prettier-plugin-tailwindcss \
 stylelint \
 stylelint-prettier \
-typescript
+typescript \
+jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
