@@ -45,7 +45,7 @@ code --install-extension stylelint.vscode-stylelint
 
 ## Usage
 
-Simply add the fields below to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not ignore the field.
+Simply add the fields below to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
 
 ```json
 {
