@@ -1,3 +1,32 @@
+# v1.0.32 (Fri Nov 11 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Update description, bump minor version ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add eslint-plugin-node ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add eslint-plugin-promise ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix devDeps -> peerDeps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @typescript-eslint/eslint-plugin from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/harmony/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/harmony/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/harmony/pull/46) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/harmony/pull/50) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/harmony/pull/53) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/harmony/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/harmony/pull/56) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/harmony/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/harmony/pull/58) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/harmony/pull/59) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.31 (Sat Oct 01 2022)
 
 #### ⚠️ Pushed to `main`
