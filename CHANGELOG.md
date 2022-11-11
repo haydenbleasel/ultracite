@@ -1,3 +1,15 @@
+# v1.1.5 (Fri Nov 11 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add ecmaVersion ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.4 (Fri Nov 11 2022)
 
 #### ⚠️ Pushed to `main`
