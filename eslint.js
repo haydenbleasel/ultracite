@@ -7,6 +7,7 @@ module.exports = {
     'jest/globals': true,
   },
   parserOptions: {
+    ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
