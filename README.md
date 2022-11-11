@@ -12,6 +12,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
 - [jest](https://www.npmjs.com/package/eslint-plugin-jest)
 - [promise](https://www.npmjs.com/package/eslint-plugin-promise)
+- [Node](https://www.npmjs.com/package/eslint-plugin-node)
 - [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
 - [Prettier](https://prettier.io/)
 - [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
@@ -37,6 +38,7 @@ eslint-plugin-react \
 eslint-plugin-react-hooks \
 eslint-plugin-jest \
 eslint-plugin-promise \
+eslint-plugin-node \
 @typescript-eslint/eslint-plugin \
 @typescript-eslint/parser \
 prettier \
