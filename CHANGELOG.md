@@ -1,3 +1,15 @@
+# v1.1.8 (Fri Nov 11 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Remove dumb rules ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.7 (Fri Nov 11 2022)
 
 #### ⚠️ Pushed to `main`
