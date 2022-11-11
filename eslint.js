@@ -20,7 +20,7 @@ module.exports = {
     'import',
     'jest',
     'promise',
-    'node',
+    'n',
   ],
   ignorePatterns: ['**/*.js'],
   extends: ['plugin:react/jsx-runtime', 'prettier', 'plugin:import/typescript'],
