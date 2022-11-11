@@ -1,3 +1,21 @@
+# v1.1.3 (Fri Nov 11 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps, disable promise/no-native ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @typescript-eslint/parser from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/harmony/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/harmony/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.2 (Fri Nov 11 2022)
 
 #### ⚠️ Pushed to `main`
