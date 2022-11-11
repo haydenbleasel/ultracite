@@ -19,6 +19,7 @@ module.exports = {
     'jsx-a11y',
     'import',
     'jest',
+    'promise',
   ],
   ignorePatterns: ['**/*.js'],
   extends: ['plugin:react/jsx-runtime', 'prettier', 'plugin:import/typescript'],
@@ -617,6 +618,20 @@ module.exports = {
     'jest/valid-expect': 'error',
     'jest/valid-expect-in-promise': 'error',
     'jest/valid-title': 'error',
+
+    // ESLint-Promise
+    'promise/always-return': 'error',
+    'promise/no-return-wrap': 'error',
+    'promise/param-names': 'error',
+    'promise/catch-or-return': 'error',
+    'promise/no-native': 'error',
+    'promise/no-nesting': 'error',
+    'promise/no-promise-in-callback': 'error',
+    'promise/no-callback-in-promise': 'error',
+    'promise/avoid-new': 'error',
+    'promise/no-new-statics': 'error',
+    'promise/no-return-in-finally': 'error',
+    'promise/valid-params': 'error',
 
     // Disabled for Prettier: unnecessary or might conflict
     '@typescript-eslint/brace-style': 'off',

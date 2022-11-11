@@ -4,7 +4,19 @@ _Unified, strict editor configuration for modern web apps._
 
 Harmony is a unified, strict editor configuration for modern React apps, designed to work seamlessly together and enforce hyper-strict syntax rules as you type to help you write bulletproof code. By default it supports React and Typescript, but also contains support for Tailwind as well as particular frameworks, such as Next.js and React Native / Expo.
 
-By default, Harmony combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as the [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest) and [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin). It also includes [Prettier](https://prettier.io/) with the [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) plugin, and [Stylelint](https://stylelint.io/) with the [Prettier](https://www.npmjs.com/package/stylelint-prettier) plugin.
+By default, Harmony combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as:
+
+- [Import](https://www.npmjs.com/package/eslint-plugin-import)
+- [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+- [React](https://www.npmjs.com/package/eslint-plugin-react)
+- [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+- [jest](https://www.npmjs.com/package/eslint-plugin-jest)
+- [promise](https://www.npmjs.com/package/eslint-plugin-promise)
+- [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
+- [Prettier](https://prettier.io/)
+- [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
+- [Stylelint](https://stylelint.io/)
+- [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
 
 ## Installation
 
@@ -24,6 +36,7 @@ eslint-plugin-jsx-a11y \
 eslint-plugin-react \
 eslint-plugin-react-hooks \
 eslint-plugin-jest \
+eslint-plugin-promise \
 @typescript-eslint/eslint-plugin \
 @typescript-eslint/parser \
 prettier \
