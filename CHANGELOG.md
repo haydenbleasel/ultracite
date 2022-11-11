@@ -1,3 +1,15 @@
+# v1.1.2 (Fri Nov 11 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Add missing jest deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.0.32 (Fri Nov 11 2022)
 
 #### ⚠️ Pushed to `main`
