@@ -1,3 +1,15 @@
+# v1.1.9 (Sat Nov 19 2022)
+
+#### ⚠️ Pushed to `main`
+
+- Allow finally in promises ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.8 (Fri Nov 11 2022)
 
 #### ⚠️ Pushed to `main`
