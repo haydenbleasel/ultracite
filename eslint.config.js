@@ -6,6 +6,7 @@ import importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
 import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
+import next from '@next/eslint-plugin-next';
 
 import eslintRules from './rules/eslint';
 import reactRules from './rules/react';
@@ -16,6 +17,7 @@ import importRules from './rules/import';
 import jestRules from './rules/jest';
 import promiseRules from './rules/promise';
 import nRules from './rules/n';
+import nextRules from './rules/next';
 import prettierRules from './rules/prettier';
 
 export default [
@@ -44,6 +46,7 @@ export default [
       jest,
       promise,
       n,
+      next,
     },
     rules: {
       ...eslintRules,
@@ -55,6 +58,7 @@ export default [
       ...jestRules,
       ...promiseRules,
       ...nRules,
+      ...nextRules,
       ...prettierRules,
     },
   },
@@ -63,5 +67,5 @@ export default [
     rules: {
       'import/unambiguous': 'off',
     },
-  }
+  },
 ];
