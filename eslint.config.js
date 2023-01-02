@@ -1,3 +1,12 @@
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import typescript from '@typescript-eslint/eslint-plugin';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import importPlugin from 'eslint-plugin-import';
+import jest from 'eslint-plugin-jest';
+import promise from 'eslint-plugin-promise';
+import n from 'eslint-plugin-n';
+
 export default [
   {
     languageOptions: {
@@ -15,6 +24,16 @@ export default [
       },
     },
     ignores: ['**/*.js'],
+    plugins: {
+      react,
+      reactHooks,
+      typescript,
+      jsxA11y,
+      importPlugin,
+      jest,
+      promise,
+      n,
+    },
     rules: {
       // ESLint Possible Problems: These rules relate to possible logic errors in code
       'array-callback-return': 'error',
