@@ -18,6 +18,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
 - [Stylelint](https://stylelint.io/)
 - [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
+- [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin)
 
 ## Installation
 
@@ -95,50 +96,6 @@ Lastly, create the following `.vscode/settings.json`. This will enable full form
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
-}
-```
-
-## Framework-Specific Configuration
-
-### Next.js
-
-You can use Next.js-specific config (incl. Core Web Vitals support) by adding the plugin...
-
-```sh
-yarn add -D @next/eslint-plugin-next
-```
-
-Then updating your ESLint config to import like so...
-
-```json
-{
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-next.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  }
-}
-```
-
-### React Native / Expo
-
-You can use React-Native-specific config by adding the plugin...
-
-```sh
-yarn add -D eslint-plugin-react-native
-```
-
-Then updating your ESLint config to import like so...
-
-```json
-{
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-expo.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
   }
 }
 ```
