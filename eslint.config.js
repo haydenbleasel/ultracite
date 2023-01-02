@@ -1,5 +1,19 @@
 export default [
   {
+    languageOptions: {
+      sourceType: 'module',
+      globals: {
+        browser: true,
+        node: true,
+        'jest/globals': true,
+      },
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     ignores: ['**/*.js'],
     rules: {
       // ESLint Possible Problems: These rules relate to possible logic errors in code
