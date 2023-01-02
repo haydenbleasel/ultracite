@@ -2,8 +2,9 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   sourcemap: false,
-  minify: true,
-  dts: true,
+  minify: false,
+  dts: false,
+  outDir: '.',
   format: ['cjs'],
   loader: {
     '.js': 'jsx',

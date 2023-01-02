@@ -1,6 +1,6 @@
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import typescript from '@typescript-eslint/eslint-plugin';
+import * as typescript from '@typescript-eslint/eslint-plugin';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
@@ -9,13 +9,12 @@ import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
 
 import prettier from 'eslint-config-prettier';
-import importTypescript from 'eslint-plugin-import/typescript';
 
 import eslintRules from './rules/eslint';
 import reactRules from './rules/react';
 import reactHooksRules from './rules/reactHooks';
 import typescriptRules from './rules/typescript';
-import jsxA11yRules from './rules/jsxA11y';
+import jsxA11yRules from './rules/jsx-a11y';
 import importRules from './rules/import';
 import jestRules from './rules/jest';
 import promiseRules from './rules/promise';
@@ -26,7 +25,7 @@ import prettierRules from './rules/prettier';
 export default [
   react.configs['jsx-runtime'],
   prettier,
-  importTypescript,
+  importPlugin.configs.typescript,
   {
     languageOptions: {
       sourceType: 'module',
@@ -35,7 +34,7 @@ export default [
         node: true,
         'jest/globals': true,
       },
-      parser: '@typescript-eslint/parser',
+      parser: typescript.configs.parser,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -45,14 +44,14 @@ export default [
     ignores: ['**/*.js'],
     plugins: {
       react,
-      reactHooks,
-      typescript,
-      jsxA11y,
-      importPlugin,
+      'react-hooks': reactHooks,
+      '@typescript-eslint': typescript,
+      'jsx-a11y': jsxA11y,
+      import: importPlugin,
       jest,
       promise,
       n,
-      next,
+      '@next/next': next,
     },
     rules: {
       ...eslintRules,
