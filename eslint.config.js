@@ -8,6 +8,9 @@ import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
 
+import prettier from 'eslint-config-prettier';
+import importTypescript from 'eslint-plugin-import/typescript';
+
 import eslintRules from './rules/eslint';
 import reactRules from './rules/react';
 import reactHooksRules from './rules/reactHooks';
@@ -20,12 +23,8 @@ import nRules from './rules/n';
 import nextRules from './rules/next';
 import prettierRules from './rules/prettier';
 
-import jsxRuntime from 'eslint-plugin-react/jsx-runtime';
-import prettier from 'eslint-config-prettier';
-import importTypescript from 'eslint-plugin-import/typescript';
-
 export default [
-  jsxRuntime,
+  react.configs['jsx-runtime'],
   prettier,
   importTypescript,
   {
