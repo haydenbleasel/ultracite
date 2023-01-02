@@ -23,7 +23,7 @@ import nRules from './rules/n';
 import nextRules from './rules/next';
 import prettierRules from './rules/prettier';
 
-export default [
+const config = [
   react.configs['jsx-runtime'],
   prettier,
   importPlugin.configs.typescript,
@@ -75,3 +75,5 @@ export default [
     },
   },
 ];
+
+export default config;
