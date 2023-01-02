@@ -20,7 +20,14 @@ import nRules from './rules/n';
 import nextRules from './rules/next';
 import prettierRules from './rules/prettier';
 
+import jsxRuntime from 'eslint-plugin-react/jsx-runtime';
+import prettier from 'eslint-config-prettier';
+import importTypescript from 'eslint-plugin-import/typescript';
+
 export default [
+  jsxRuntime,
+  prettier,
+  importTypescript,
   {
     languageOptions: {
       sourceType: 'module',
