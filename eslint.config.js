@@ -57,5 +57,11 @@ export default [
       ...nRules,
       ...prettierRules,
     },
+  },
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      'import/unambiguous': 'off',
+    },
   }
 ];
