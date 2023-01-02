@@ -9,6 +9,7 @@ import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
 
 import prettier from 'eslint-config-prettier';
+import * as typescriptParser from '@typescript-eslint/parser';
 
 import eslintRules from './rules/eslint';
 import reactRules from './rules/react';
@@ -34,7 +35,7 @@ export default [
         node: true,
         'jest/globals': true,
       },
-      parser: typescript.configs.parser,
+      parser: typescriptParser,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
