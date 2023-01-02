@@ -2,7 +2,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import * as typescript from '@typescript-eslint/eslint-plugin';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
+import * as importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
 import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';

@@ -5,6 +5,7 @@ export default defineConfig({
   minify: false,
   dts: false,
   outDir: '.',
+  entry: ['eslint.config.ts'],
   format: ['cjs'],
   loader: {
     '.js': 'jsx',
