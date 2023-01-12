@@ -7,33 +7,34 @@ import jest from 'eslint-plugin-jest';
 import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
+import globals from 'globals';
 
 import prettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 
-import eslintRules from './rules/eslint';
-import reactRules from './rules/react';
-import reactHooksRules from './rules/reactHooks';
-import typescriptRules from './rules/typescript';
-import jsxA11yRules from './rules/jsx-a11y';
-import importRules from './rules/import';
-import jestRules from './rules/jest';
-import promiseRules from './rules/promise';
-import nRules from './rules/n';
-import nextRules from './rules/next';
-import prettierRules from './rules/prettier';
+import eslintRules from './rules/eslint.mjs';
+import reactRules from './rules/react.mjs';
+import reactHooksRules from './rules/reactHooks.mjs';
+import typescriptRules from './rules/typescript.mjs';
+import jsxA11yRules from './rules/jsx-a11y.mjs';
+import importRules from './rules/import.mjs';
+import jestRules from './rules/jest.mjs';
+import promiseRules from './rules/promise.mjs';
+import nRules from './rules/n.mjs';
+import nextRules from './rules/next.mjs';
+import prettierRules from './rules/prettier.mjs';
 
 const config = [
-  react.configs['jsx-runtime'],
-  prettier,
-  importPlugin.configs.typescript,
+  // react.configs['jsx-runtime'],
+  // prettier,
+  // importPlugin.configs.typescript,
   {
     languageOptions: {
       sourceType: 'module',
       globals: {
-        browser: true,
-        node: true,
-        'jest/globals': true,
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
       },
       parser: typescriptParser,
       parserOptions: {
