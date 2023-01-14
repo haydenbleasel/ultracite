@@ -14,7 +14,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [promise](https://www.npmjs.com/package/eslint-plugin-promise)
 - [n](https://www.npmjs.com/package/eslint-plugin-n)
 - [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
-- [Prettier](https://prettier.io/)
+- [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
 - [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
 - [Stylelint](https://stylelint.io/)
 - [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
@@ -22,32 +22,10 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 
 ## Installation
 
-Run the command below to install Harmony:
+Run the command below to install Harmony with peer dependencies:
 
 ```sh
-yarn add -D @haydenbleasel/harmony
-```
-
-You'll also need to install peer dependencies, like so:
-
-```sh
-yarn add -D \
-eslint \
-eslint-plugin-import \
-eslint-plugin-jsx-a11y \
-eslint-plugin-react \
-eslint-plugin-react-hooks \
-eslint-plugin-jest \
-eslint-plugin-promise \
-eslint-plugin-n \
-@typescript-eslint/eslint-plugin \
-@typescript-eslint/parser \
-prettier \
-prettier-plugin-tailwindcss \
-stylelint \
-stylelint-prettier \
-typescript \
-jest
+yarn add -D @haydenbleasel/harmony eslint prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
@@ -61,24 +39,27 @@ code --install-extension stylelint.vscode-stylelint
 
 ## Usage
 
-Simply add the fields below to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
+Simply create an `eslint.config.js` that looks like this.
+
+```js
+import react from 'eslint-plugin-react';
+import harmony from '@haydenbleasel/harmony';
+
+const config = [harmony];
+
+export default config;
+```
+
+Additionally, add the following to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
 
 ```json
 {
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  },
   "prettier": "@haydenbleasel/harmony/prettier",
   "stylelint": {
     "extends": "@haydenbleasel/harmony/stylelint"
   }
 }
 ```
-
-You can also create seperate files if you'd prefer - `.eslintrc`, `stylelint.config.js` and `.prettierrc`. The import syntax will differ so check the respective websites for details. If these files already exist in your repo (or you have similar fields in your `package.json`), you'll need to delete them first otherwise there will be conflicts.
 
 Lastly, create the following `.vscode/settings.json`. This will enable full formatting on save.
 
@@ -96,6 +77,12 @@ Lastly, create the following `.vscode/settings.json`. This will enable full form
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.experimental": {
+    "useFlatConfig": true
+  },
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.mjs"
   }
 }
 ```
