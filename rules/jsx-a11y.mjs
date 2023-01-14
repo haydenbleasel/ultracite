@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // JSX a11y
   'jsx-a11y/alt-text': 'error',

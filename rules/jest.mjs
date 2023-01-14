@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // ESLint-Jest
   'jest/consistent-test-it': 'error',

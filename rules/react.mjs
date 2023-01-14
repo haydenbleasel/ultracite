@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // React-ESLint
   'react/boolean-prop-naming': 'error',

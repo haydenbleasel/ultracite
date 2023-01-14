@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // ESLint-Import: Static analysis
   'import/no-unresolved': 'off',

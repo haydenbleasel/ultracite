@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // ESLint-n
   'n/handle-callback-err': 'error',
@@ -37,4 +39,4 @@ export default {
   'n/prefer-global/url': 'error',
   'n/prefer-promises/dns': 'error',
   'n/prefer-promises/fs': 'error',
-}
+};

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // Typescript-ESLint Supported Rules
   '@typescript-eslint/adjacent-overload-signatures': 'error',
@@ -119,4 +121,4 @@ export default {
   '@typescript-eslint/padding-line-between-statements': 'error',
   '@typescript-eslint/require-await': 'error',
   '@typescript-eslint/return-await': 'error',
-}
+};

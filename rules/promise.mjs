@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // ESLint-Promise
   'promise/always-return': 'error',
@@ -12,4 +14,4 @@ export default {
   'promise/no-new-statics': 'error',
   'promise/no-return-in-finally': 'error',
   'promise/valid-params': 'error',
-}
+};

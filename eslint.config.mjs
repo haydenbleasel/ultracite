@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies, n/no-extraneous-dependencies, id-length */
+
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import * as typescript from '@typescript-eslint/eslint-plugin';
@@ -26,7 +28,6 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 
 const config = [
-  react.configs['jsx-runtime'],
   prettier,
   importPlugin.configs.typescript,
   {
@@ -53,6 +54,7 @@ const config = [
       '**/*.cjs',
     ],
     plugins: {
+      prettier,
       react,
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,

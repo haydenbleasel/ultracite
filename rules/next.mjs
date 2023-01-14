@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   '@next/next/google-font-display': 'error',
   '@next/next/google-font-preconnect': 'error',

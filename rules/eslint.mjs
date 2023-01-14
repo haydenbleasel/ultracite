@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 export default {
   // ESLint Possible Problems: These rules relate to possible logic errors in code
   'array-callback-return': 'error',
