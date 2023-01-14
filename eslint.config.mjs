@@ -43,7 +43,15 @@ const config = [
         },
       },
     },
-    ignores: ['**/*.js'],
+    files: [
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.json',
+      '**/*.mjs',
+      '**/*.cjs',
+    ],
     plugins: {
       react,
       'react-hooks': reactHooks,
