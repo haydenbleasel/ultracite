@@ -23,18 +23,18 @@ import promiseRules from './rules/promise.mjs';
 import nRules from './rules/n.mjs';
 import nextRules from './rules/next.mjs';
 import prettierRules from './rules/prettier.mjs';
+import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 
 const config = [
-  // react.configs['jsx-runtime'],
-  // prettier,
-  // importPlugin.configs.typescript,
+  react.configs['jsx-runtime'],
+  prettier,
+  importPlugin.configs.typescript,
   {
     languageOptions: {
       sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.jest,
       },
       parser: typescriptParser,
       parserOptions: {
@@ -47,10 +47,8 @@ const config = [
     plugins: {
       react,
       'react-hooks': reactHooks,
-      '@typescript-eslint': typescript,
       'jsx-a11y': jsxA11y,
       import: importPlugin,
-      jest,
       promise,
       n,
       '@next/next': next,
@@ -59,10 +57,8 @@ const config = [
       ...eslintRules,
       ...reactRules,
       ...reactHooksRules,
-      ...typescriptRules,
       ...jsxA11yRules,
       ...importRules,
-      ...jestRules,
       ...promiseRules,
       ...nRules,
       ...nextRules,
@@ -73,6 +69,30 @@ const config = [
     files: ['**/*.d.ts'],
     rules: {
       'import/unambiguous': 'off',
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      '@typescript-eslint': typescript,
+    },
+    rules: {
+      ...eslintTypescriptRules,
+      ...typescriptRules,
+    },
+  },
+  {
+    files: ['**/*.test.js', '**/*.test.jsx'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+    plugins: {
+      jest,
+    },
+    rules: {
+      ...jestRules,
     },
   },
 ];
