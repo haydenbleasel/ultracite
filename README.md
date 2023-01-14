@@ -39,7 +39,7 @@ code --install-extension stylelint.vscode-stylelint
 
 ## Usage
 
-Simply create an `eslint.config.js` that looks like this.
+Simply create an `eslint.config.mjs` that looks like this.
 
 ```js
 import harmony from '@haydenbleasel/harmony';
