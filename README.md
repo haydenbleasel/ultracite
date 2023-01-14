@@ -42,7 +42,6 @@ code --install-extension stylelint.vscode-stylelint
 Simply create an `eslint.config.js` that looks like this.
 
 ```js
-import react from 'eslint-plugin-react';
 import harmony from '@haydenbleasel/harmony';
 
 const config = [harmony];
