@@ -1,10 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies, n/no-extraneous-import, id-length */
 
+/*
+  eslint-plugin-import temporarily disabled until this issue is resolved:
+  https://github.com/import-js/eslint-plugin-import/issues/2556
+*/
+
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import * as typescript from '@typescript-eslint/eslint-plugin';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import * as importPlugin from 'eslint-plugin-import';
+// import * as importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
 import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
@@ -20,7 +25,7 @@ import reactRules from './rules/react.mjs';
 import reactHooksRules from './rules/reactHooks.mjs';
 import typescriptRules from './rules/typescript.mjs';
 import jsxA11yRules from './rules/jsx-a11y.mjs';
-import importRules from './rules/import.mjs';
+// import importRules from './rules/import.mjs';
 import jestRules from './rules/jest.mjs';
 import promiseRules from './rules/promise.mjs';
 import nRules from './rules/n.mjs';
@@ -59,7 +64,7 @@ const config = [
       react,
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,
-      import: importPlugin,
+      // import: importPlugin,
       promise,
       n,
       '@next/next': next,
@@ -69,26 +74,26 @@ const config = [
       ...reactRules,
       ...reactHooksRules,
       ...jsxA11yRules,
-      ...importRules,
+      // ...importRules,
       ...promiseRules,
       ...nRules,
       ...nextRules,
       ...prettierRules,
       ...eslintPrettier.rules,
     },
-    settings: {
-      'import/resolver': {
-        typescript: true,
-        node: true,
-      },
-    },
+    // settings: {
+    //   'import/resolver': {
+    //     typescript: true,
+    //     node: true,
+    //   },
+    // },
   },
-  {
-    files: ['**/*.d.ts'],
-    rules: {
-      'import/unambiguous': 'off',
-    },
-  },
+  // {
+  //   files: ['**/*.d.ts'],
+  //   rules: {
+  //     'import/unambiguous': 'off',
+  //   },
+  // },
   {
     files: ['**/*.ts', '**/*.tsx'],
     plugins: {
