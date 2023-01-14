@@ -42,7 +42,9 @@ code --install-extension stylelint.vscode-stylelint
 Simply create an `eslint.config.mjs` that looks like this.
 
 ```js
-export default '@haydenbleasel/harmony';
+import harmony from '@haydenbleasel/harmony';
+
+export default harmony;
 ```
 
 Additionally, add the following to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
