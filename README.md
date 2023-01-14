@@ -94,3 +94,15 @@ Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint conf
   "include": ["eslint.config.mjs"]
 }
 ```
+
+## Upgrading from V1
+
+Harmony v2 is a complete rewrite of the original Harmony package. It uses the new ESLint Flat Config, which means that you need a lot less peer dependencies and that you can use the new `eslint.config.mjs` format. If you're upgrading from v1, you'll need to do the following:
+
+1. Swap out the `eslintConfig` in your `package.json` for the new `eslint.config.mjs` as above.
+2. Remove all old peer deps: `yarn remove @next/eslint-plugin-next @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-import eslint-plugin-jest eslint-plugin-jsx-a11y eslint-plugin-n eslint-plugin-promise eslint-plugin-react eslint-plugin-react-hooks prettier-plugin-tailwindcss stylelint-prettier`
+3. Add the new deps: `yarn add -D @haydenbleasel/harmony eslint prettier stylelint typescript jest`
+4. Upgrade your `.vscode/settings.json` file (see above).
+5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
+
+Also, as of writing this README, you need to be on the pre-release version of the ESLint extension for VSCode.
