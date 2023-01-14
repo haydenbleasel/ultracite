@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, n/no-extraneous-dependencies, id-length */
+/* eslint-disable import/no-extraneous-dependencies, n/no-extraneous-import, id-length */
 
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -10,8 +10,9 @@ import promise from 'eslint-plugin-promise';
 import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
 import globals from 'globals';
+import prettier from 'eslint-plugin-prettier';
 
-import prettier from 'eslint-config-prettier';
+import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 
 import eslintRules from './rules/eslint.mjs';
@@ -28,7 +29,6 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 
 const config = [
-  prettier,
   importPlugin.configs.typescript,
   {
     languageOptions: {
@@ -42,6 +42,7 @@ const config = [
         ecmaFeatures: {
           jsx: true,
         },
+        project: './tsconfig.json',
       },
     },
     files: [
@@ -73,6 +74,7 @@ const config = [
       ...nRules,
       ...nextRules,
       ...prettierRules,
+      ...eslintPrettier.rules,
     },
   },
   {
