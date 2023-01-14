@@ -1,3 +1,37 @@
+# v1.1.10 (Sat Jan 14 2023)
+
+#### 🐛 Bug Fix
+
+- Harmony V2 [#83](https://github.com/beskar-co/harmony/pull/83) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
+- Ensure package is public ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove tsup, fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/beskar-co/harmony/pull/84) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.42.1 to 5.47.1 [#79](https://github.com/beskar-co/harmony/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/beskar-co/harmony/pull/69) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/beskar-co/harmony/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/beskar-co/harmony/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/beskar-co/harmony/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.0.3 to 13.1.1 [#76](https://github.com/beskar-co/harmony/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/beskar-co/harmony/pull/77) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/beskar-co/harmony/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.42.1 to 5.47.1 [#80](https://github.com/beskar-co/harmony/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/beskar-co/harmony/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/beskar-co/harmony/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.9 (Sat Nov 19 2022)
 
 #### ⚠️ Pushed to `main`
