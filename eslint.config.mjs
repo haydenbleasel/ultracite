@@ -90,7 +90,7 @@ const config = [
     },
   },
   {
-    files: ['**/*.test.js', '**/*.test.jsx'],
+    files: ['**/*.test.js', '**/*.test.jsx', 'tests/**/*.js', 'tests/**/*.jsx'],
     languageOptions: {
       globals: {
         ...globals.jest,
