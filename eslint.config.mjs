@@ -76,6 +76,12 @@ const config = [
       ...prettierRules,
       ...eslintPrettier.rules,
     },
+    settings: {
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
   },
   {
     files: ['**/*.d.ts'],
