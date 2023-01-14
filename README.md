@@ -14,39 +14,18 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [promise](https://www.npmjs.com/package/eslint-plugin-promise)
 - [n](https://www.npmjs.com/package/eslint-plugin-n)
 - [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
-- [Prettier](https://prettier.io/)
+- [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
 - [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
 - [Stylelint](https://stylelint.io/)
 - [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
+- [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin)
 
 ## Installation
 
-Run the command below to install Harmony:
+Run the command below to install Harmony with peer dependencies:
 
 ```sh
-yarn add -D @haydenbleasel/harmony
-```
-
-You'll also need to install peer dependencies, like so:
-
-```sh
-yarn add -D \
-eslint \
-eslint-plugin-import \
-eslint-plugin-jsx-a11y \
-eslint-plugin-react \
-eslint-plugin-react-hooks \
-eslint-plugin-jest \
-eslint-plugin-promise \
-eslint-plugin-n \
-@typescript-eslint/eslint-plugin \
-@typescript-eslint/parser \
-prettier \
-prettier-plugin-tailwindcss \
-stylelint \
-stylelint-prettier \
-typescript \
-jest
+yarn add -D @haydenbleasel/harmony eslint prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
@@ -60,16 +39,18 @@ code --install-extension stylelint.vscode-stylelint
 
 ## Usage
 
-Simply add the fields below to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
+Simply create an `eslint.config.mjs` that looks like this.
+
+```js
+import harmony from '@haydenbleasel/harmony';
+
+export default harmony;
+```
+
+Additionally, add the following to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
 
 ```json
 {
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  },
   "prettier": "@haydenbleasel/harmony/prettier",
   "stylelint": {
     "extends": "@haydenbleasel/harmony/stylelint"
@@ -77,9 +58,7 @@ Simply add the fields below to your `package.json`. If you don't use a particula
 }
 ```
 
-You can also create seperate files if you'd prefer - `.eslintrc`, `stylelint.config.js` and `.prettierrc`. The import syntax will differ so check the respective websites for details. If these files already exist in your repo (or you have similar fields in your `package.json`), you'll need to delete them first otherwise there will be conflicts.
-
-Lastly, create the following `.vscode/settings.json`. This will enable full formatting on save.
+Create the following `.vscode/settings.json`. This will enable full formatting on save.
 
 ```json
 {
@@ -95,50 +74,35 @@ Lastly, create the following `.vscode/settings.json`. This will enable full form
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.experimental": {
+    "useFlatConfig": true
+  },
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.mjs"
   }
 }
 ```
 
-## Framework-Specific Configuration
-
-### Next.js
-
-You can use Next.js-specific config (incl. Core Web Vitals support) by adding the plugin...
-
-```sh
-yarn add -D @next/eslint-plugin-next
-```
-
-Then updating your ESLint config to import like so...
+Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
 
 ```json
 {
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-next.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  }
+  "compilerOptions": {
+    "strictNullChecks": true
+  },
+  "include": ["eslint.config.mjs"]
 }
 ```
 
-### React Native / Expo
+## Upgrading from V1
 
-You can use React-Native-specific config by adding the plugin...
+Harmony v2 is a complete rewrite of the original Harmony package. It uses the new ESLint Flat Config, which means that you need a lot less peer dependencies and that you can use the new `eslint.config.mjs` format. If you're upgrading from v1, you'll need to do the following:
 
-```sh
-yarn add -D eslint-plugin-react-native
-```
+1. Swap out the `eslintConfig` in your `package.json` for the new `eslint.config.mjs` as above.
+2. Remove all old peer deps: `yarn remove @next/eslint-plugin-next @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-import eslint-plugin-jest eslint-plugin-jsx-a11y eslint-plugin-n eslint-plugin-promise eslint-plugin-react eslint-plugin-react-hooks prettier-plugin-tailwindcss stylelint-prettier`
+3. Add the new deps: `yarn add -D @haydenbleasel/harmony eslint prettier stylelint typescript jest`
+4. Upgrade your `.vscode/settings.json` file (see above).
+5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
 
-Then updating your ESLint config to import like so...
-
-```json
-{
-  "eslintConfig": {
-    "extends": "./node_modules/@haydenbleasel/harmony/eslint-expo.js",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  }
-}
-```
+Also, as of writing this README, you need to be on the pre-release version of the ESLint extension for VSCode.
