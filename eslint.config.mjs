@@ -34,7 +34,7 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 
 const config = [
-  importPlugin.configs.typescript,
+  // importPlugin.configs.typescript,
   {
     languageOptions: {
       sourceType: 'module',
