@@ -25,7 +25,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 Run the command below to install Harmony with peer dependencies:
 
 ```sh
-yarn add -D @beskar-co/harmony eslint prettier stylelint typescript jest
+yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
@@ -42,7 +42,7 @@ code --install-extension stylelint.vscode-stylelint
 Simply create an `eslint.config.mjs` that looks like this.
 
 ```js
-import harmony from '@beskar-co/harmony';
+import harmony from '@beskar-labs/harmony';
 
 export default harmony;
 ```
@@ -51,9 +51,9 @@ Additionally, add the following to your `package.json`. If you don't use a parti
 
 ```json
 {
-  "prettier": "@beskar-co/harmony/prettier",
+  "prettier": "@beskar-labs/harmony/prettier",
   "stylelint": {
-    "extends": "@beskar-co/harmony/stylelint"
+    "extends": "@beskar-labs/harmony/stylelint"
   }
 }
 ```
@@ -101,7 +101,7 @@ Harmony v2 is a complete rewrite of the original Harmony package. It uses the ne
 
 1. Swap out the `eslintConfig` in your `package.json` for the new `eslint.config.mjs` as above.
 2. Remove all old peer deps: `yarn remove @next/eslint-plugin-next @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-import eslint-plugin-jest eslint-plugin-jsx-a11y eslint-plugin-n eslint-plugin-promise eslint-plugin-react eslint-plugin-react-hooks prettier-plugin-tailwindcss stylelint-prettier`
-3. Add the new deps: `yarn add -D @beskar-co/harmony eslint prettier stylelint typescript jest`
+3. Add the new deps: `yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest`
 4. Upgrade your `.vscode/settings.json` file (see above).
 5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
 
