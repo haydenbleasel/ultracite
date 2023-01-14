@@ -1,3 +1,15 @@
+# v2.0.2 (Sat Jan 14 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v1.1.10 (Sat Jan 14 2023)
 
 #### 🐛 Bug Fix
