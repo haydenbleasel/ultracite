@@ -1,3 +1,16 @@
+# v2.0.8 (Sat Jan 14 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/beskar-co/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.7 (Sat Jan 14 2023)
 
 #### ⚠️ Pushed to `main`
