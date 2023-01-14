@@ -42,11 +42,7 @@ code --install-extension stylelint.vscode-stylelint
 Simply create an `eslint.config.mjs` that looks like this.
 
 ```js
-import harmony from '@haydenbleasel/harmony';
-
-const config = [harmony];
-
-export default config;
+export default '@haydenbleasel/harmony';
 ```
 
 Additionally, add the following to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
@@ -60,7 +56,7 @@ Additionally, add the following to your `package.json`. If you don't use a parti
 }
 ```
 
-Lastly, create the following `.vscode/settings.json`. This will enable full formatting on save.
+Create the following `.vscode/settings.json`. This will enable full formatting on save.
 
 ```json
 {
@@ -83,5 +79,16 @@ Lastly, create the following `.vscode/settings.json`. This will enable full form
   "eslint.options": {
     "overrideConfigFile": "eslint.config.mjs"
   }
+}
+```
+
+Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
+
+```json
+{
+  "compilerOptions": {
+    "strictNullChecks": true
+  },
+  "include": ["eslint.config.mjs"]
 }
 ```
