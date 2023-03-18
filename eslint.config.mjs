@@ -16,6 +16,7 @@ import n from 'eslint-plugin-n';
 import next from '@next/eslint-plugin-next';
 import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
+import cypress from 'eslint-plugin-cypress';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
@@ -32,6 +33,7 @@ import nRules from './rules/n.mjs';
 import nextRules from './rules/next.mjs';
 import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
+import cypressRules from './rules/cypress.mjs';
 
 const config = [
   // importPlugin.configs.typescript,
@@ -116,6 +118,20 @@ const config = [
     },
     rules: {
       ...jestRules,
+    },
+  },
+  {
+    files: ['**/*.cy.js', '**/*.cy.jsx'],
+    languageOptions: {
+      globals: {
+        ...globals.cypress,
+      },
+    },
+    plugins: {
+      cypress,
+    },
+    rules: {
+      ...cypressRules,
     },
   },
 ];

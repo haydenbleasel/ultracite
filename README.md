@@ -19,6 +19,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [Stylelint](https://stylelint.io/)
 - [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
 - [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin)
+- [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress)
 
 ## Installation
 
@@ -101,7 +102,7 @@ Harmony v2 is a complete rewrite of the original Harmony package. It uses the ne
 
 1. Swap out the `eslintConfig` in your `package.json` for the new `eslint.config.mjs` as above.
 2. Remove all old peer deps: `yarn remove @haydenbleasel/harmony @next/eslint-plugin-next @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-import eslint-plugin-jest eslint-plugin-jsx-a11y eslint-plugin-n eslint-plugin-promise eslint-plugin-react eslint-plugin-react-hooks prettier-plugin-tailwindcss stylelint-prettier`
-3. Add the new deps: `yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest`
+3. Add the new deps: `yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest cypress`
 4. Upgrade your `.vscode/settings.json` file (see above).
 5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
 
