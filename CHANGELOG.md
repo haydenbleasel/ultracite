@@ -1,3 +1,28 @@
+# v2.0.9 (Sat Mar 18 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Add Cypress support ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @typescript-eslint/parser from 5.48.1 to 5.50.0 [#88](https://github.com/beskar-co/harmony/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/beskar-co/harmony/pull/86) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/beskar-co/harmony/pull/87) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/beskar-co/harmony/pull/89) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.1.2 to 13.1.6 [#90](https://github.com/beskar-co/harmony/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/beskar-co/harmony/pull/91) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.48.1 to 5.50.0 [#92](https://github.com/beskar-co/harmony/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/beskar-co/harmony/pull/93) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/beskar-co/harmony/pull/85) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.8 (Sat Jan 14 2023)
 
 #### ⚠️ Pushed to `main`
