@@ -1,3 +1,15 @@
+# v2.0.10 (Sat Mar 18 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Add FAQ ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.9 (Sat Mar 18 2023)
 
 #### ⚠️ Pushed to `main`
