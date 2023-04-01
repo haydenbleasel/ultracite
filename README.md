@@ -107,20 +107,3 @@ Harmony v2 is a complete rewrite of the original Harmony package. It uses the ne
 5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
 
 Also, as of writing this README, you need to be on the pre-release version of the ESLint extension for VSCode.
-
-## FAQ
-
-### I'm getting a weird error: `TypeError: Key "languageOptions": Key "globals": Global "AudioWorkletGlobalScope " has leading or trailing whitespace.`
-
-Here's a workaround `eslint.config.mjs`:
-
-```mjs
-import harmony from '@beskar-labs/harmony';
-
-harmony[0].languageOptions.globals.AudioWorkletGlobalScope =
-  harmony[0].languageOptions.globals['AudioWorkletGlobalScope '];
-
-delete harmony[0].languageOptions.globals['AudioWorkletGlobalScope '];
-
-export default harmony;
-```

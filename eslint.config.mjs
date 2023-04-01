@@ -136,4 +136,9 @@ const config = [
   },
 ];
 
+// Fix weird ESLint regression
+config[0].languageOptions.globals.AudioWorkletGlobalScope =
+  config[0].languageOptions.globals['AudioWorkletGlobalScope '];
+delete config[0].languageOptions.globals['AudioWorkletGlobalScope '];
+
 export default config;
