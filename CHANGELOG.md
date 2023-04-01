@@ -1,3 +1,15 @@
+# v2.0.12 (Sat Apr 01 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Minor bump, improve release file ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.11 (Sat Apr 01 2023)
 
 #### ⚠️ Pushed to `main`
