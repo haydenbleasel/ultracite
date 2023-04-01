@@ -33,10 +33,11 @@ jobs:
           restore-keys: |
             yarn-deps-${{ hashFiles('yarn.lock') }}
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          yarn install --frozen-lockfile
-          npx auto shipit
+        run: npx auto shipit
