@@ -1,3 +1,30 @@
+# v2.0.11 (Sat Apr 01 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete dependabot.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Patch AudioWorkletGlobalScope issue ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @typescript-eslint/parser from 5.50.0 to 5.57.0 [#112](https://github.com/beskar-co/harmony/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/beskar-co/harmony/pull/111) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.1.6 to 13.2.4 [#110](https://github.com/beskar-co/harmony/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/beskar-co/harmony/pull/109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/beskar-co/harmony/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/beskar-co/harmony/pull/105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-prettier from 9.0.4 to 9.0.5 [#101](https://github.com/beskar-co/harmony/pull/101) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-prettier from 2.0.0 to 3.0.0 [#94](https://github.com/beskar-co/harmony/pull/94) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.10 (Sat Mar 18 2023)
 
 #### ⚠️ Pushed to `main`
