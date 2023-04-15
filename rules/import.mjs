@@ -39,7 +39,21 @@ export default {
   'import/no-duplicates': 'error',
   'import/no-namespace': 'off',
   'import/extensions': 'off',
-  'import/order': 'error',
+  'import/order': [
+    'error',
+    {
+      groups: [
+        'builtin',
+        'external',
+        'internal',
+        'parent',
+        'sibling',
+        'index',
+        'object',
+        'type',
+      ],
+    },
+  ],
   'import/newline-after-import': 'error',
   'import/prefer-default-export': 'off',
   'import/max-dependencies': 'off',

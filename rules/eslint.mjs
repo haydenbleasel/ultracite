@@ -172,7 +172,10 @@ export default {
   radix: 'error',
   'require-unicode-regexp': 'error',
   'require-yield': 'error',
-  'sort-imports': 'error',
+
+  // https://github.com/eslint/eslint/issues/11542
+  'sort-imports': 'off',
+
   'sort-keys': 'off',
   'sort-vars': 'off',
   'spaced-comment': 'error',
