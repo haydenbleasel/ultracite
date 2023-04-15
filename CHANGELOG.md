@@ -1,3 +1,15 @@
+# v2.2.2 (Sat Apr 15 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Add TS and TSX to espree ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.1.3 (Sat Apr 15 2023)
 
 #### ⚠️ Pushed to `main`
