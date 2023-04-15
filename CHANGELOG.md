@@ -1,3 +1,17 @@
+# v2.1.3 (Sat Apr 15 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Bump version ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix import-order ([@haydenbleasel](https://github.com/haydenbleasel))
+- Make import ordering stricter ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.1.2 (Sat Apr 15 2023)
 
 #### ⚠️ Pushed to `main`
