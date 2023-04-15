@@ -172,7 +172,7 @@ export default {
   radix: 'error',
   'require-unicode-regexp': 'error',
   'require-yield': 'error',
-  'sort-imports': 'off',
+  'sort-imports': 'error',
   'sort-keys': 'off',
   'sort-vars': 'off',
   'spaced-comment': 'error',
