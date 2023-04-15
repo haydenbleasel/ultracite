@@ -1,3 +1,15 @@
+# v2.1.2 (Sat Apr 15 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Re-enable sorted imports ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.0.12 (Sat Apr 01 2023)
 
 #### ⚠️ Pushed to `main`
