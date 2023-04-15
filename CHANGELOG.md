@@ -1,3 +1,15 @@
+# v2.2.3 (Sat Apr 15 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Possibly fix import issue ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.2 (Sat Apr 15 2023)
 
 #### ⚠️ Pushed to `main`
