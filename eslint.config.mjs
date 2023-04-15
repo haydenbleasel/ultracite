@@ -1,9 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies, n/no-extraneous-import, id-length */
-
-/*
-  eslint-plugin-import temporarily disabled until this issue is resolved:
-  https://github.com/import-js/eslint-plugin-import/issues/2556
-*/
+/* eslint-disable n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -51,6 +46,8 @@ const config = [
       },
       parser: typescriptParser,
       parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
         ecmaFeatures: {
           jsx: true,
         },
