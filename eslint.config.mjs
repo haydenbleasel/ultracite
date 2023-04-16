@@ -12,6 +12,7 @@ import next from '@next/eslint-plugin-next';
 import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import cypress from 'eslint-plugin-cypress';
+import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
@@ -69,6 +70,7 @@ const config = [
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,
       import: importPlugin,
+      'import/typescript': importTypescriptResolver,
       promise,
       n,
       '@next/next': next,
