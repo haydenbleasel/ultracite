@@ -1,3 +1,15 @@
+# v2.2.4 (Sun Apr 16 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Add Typescript import resolver ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.3 (Sat Apr 15 2023)
 
 #### ⚠️ Pushed to `main`
