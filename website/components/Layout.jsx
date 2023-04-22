@@ -1,3 +1,5 @@
+'use client';
+
 import { useId } from 'react'
 
 import { Intro, IntroFooter } from './Intro'
