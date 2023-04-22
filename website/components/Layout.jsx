@@ -1,5 +1,4 @@
 import { Intro, IntroFooter } from './Intro'
-import { ThemeToggle } from './ThemeToggle'
 
 function Timeline() {
   return (
@@ -50,7 +49,6 @@ export function Layout({ children }) {
   return (
     <>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
-      <ThemeToggle />
       <div className="relative flex-auto">
         <Timeline />
         <main className="space-y-20 py-20 sm:space-y-32 sm:py-32">

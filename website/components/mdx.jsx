@@ -1,34 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
-
 import { FormattedDate } from './FormattedDate'
-
-export const a = Link
-
-export const wrapper = function Wrapper({ children }) {
-  return children
-}
-
-export const h2 = function H2(props) {
-  return <h2 {...props} />
-}
-
-export const img = function Img(props) {
-  return (
-    <div className="relative mt-8 overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-900 [&+*]:mt-8">
-      <Image
-        alt=""
-        sizes="(min-width: 1280px) 36rem, (min-width: 1024px) 45vw, (min-width: 640px) 32rem, 95vw"
-        {...props}
-      />
-      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10 dark:ring-white/10" />
-    </div>
-  )
-}
 
 function ContentWrapper({ className, children }) {
   return (
@@ -54,7 +29,7 @@ function ArticleHeader({ id, date }) {
         <Link href={`#${id}`} className="inline-flex">
           <FormattedDate
             date={date}
-            className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-white/50"
+            className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-neutral-950/50"
           />
         </Link>
         <div className="h-[0.0625rem] w-3.5 bg-gray-400 lg:-mr-3.5 xl:mr-0 xl:bg-gray-300" />
@@ -64,7 +39,7 @@ function ArticleHeader({ id, date }) {
           <Link href={`#${id}`} className="inline-flex">
             <FormattedDate
               date={date}
-              className="text-2xs/4 font-medium text-gray-500 dark:text-white/50 xl:hidden"
+              className="text-2xs/4 font-medium text-gray-500 dark:text-neutral-950/50 xl:hidden"
             />
           </Link>
         </div>
