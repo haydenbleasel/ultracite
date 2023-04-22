@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Button } from '@beskar-labs/gravity/button';
 import Link from 'next/link';
 import octokit from '../lib/octokit';
-import { GitHubIcon, TwitterIcon } from '../components/icons';
+import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
@@ -16,7 +16,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   });
 
   return {
-    title: `@${repo.data.owner.login}/${repo.data.name}`,
+    title: 'Harmony',
     description: repo.data.description,
   };
 };
@@ -51,21 +51,33 @@ const RootLayout = async ({
                       href="/"
                       className="text-neutral-500 transition-colors hover:text-neutral-400"
                     >
-                      @{repo.data.owner.login}/{repo.data.name}
+                      Harmony
                     </Link>
                   </div>
-                  <h1 className="mt-8 font-display text-4xl/tight font-semibold text-neutral-950">
+                  <h1 className="mt-4 font-display text-4xl/tight font-semibold text-neutral-950">
                     {repo.data.description}
                   </h1>
-                  <Button
-                    className="mt-8 inline-flex items-center"
-                    href={repo.data.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <GitHubIcon className="mr-2 h-4 w-4" />
-                    View on GitHub
-                  </Button>
+                  <div className="flex flex-col items-center gap-2 sm:flex-row">
+                    <Button
+                      className="mt-8 inline-flex items-center"
+                      href="https://npmjs.com/package/@beskar-labs/harmony"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <NpmIcon className="mr-2 h-4 w-4" />
+                      Download on NPM
+                    </Button>
+                    <Button
+                      className="mt-8 inline-flex items-center"
+                      href={repo.data.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="secondary"
+                    >
+                      <GitHubIcon className="mr-2 h-4 w-4" />
+                      View on GitHub
+                    </Button>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-1 items-end justify-center pb-4 lg:justify-start lg:pb-6">
