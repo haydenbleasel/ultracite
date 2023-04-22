@@ -18,6 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return {
     title: 'Harmony',
     description: repo.data.description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? '')
   };
 };
 
