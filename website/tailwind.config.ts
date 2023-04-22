@@ -1,7 +1,7 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+import defaultTheme from 'tailwindcss/defaultTheme';
+import type { Config } from 'tailwindcss';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config: Config = {
   content: [
     './{app,mdx,components}/**/*.{ts,tsx,js,jsx}',
     './node_modules/@beskar-labs/gravity/**/*.js',
@@ -25,4 +25,6 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
+
+export default config;
