@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import { useFeed } from './FeedProvider'
 import { FormattedDate } from './FormattedDate'
 
 export const a = Link
@@ -15,12 +14,6 @@ export const wrapper = function Wrapper({ children }) {
 }
 
 export const h2 = function H2(props) {
-  let { isFeed } = useFeed()
-
-  if (isFeed) {
-    return null
-  }
-
   return <h2 {...props} />
 }
 
@@ -81,7 +74,6 @@ function ArticleHeader({ id, date }) {
 }
 
 export const article = function Article({ id, title, date, children }) {
-  let { isFeed } = useFeed()
   let heightRef = useRef()
   let [heightAdjustment, setHeightAdjustment] = useState(0)
 
@@ -98,21 +90,6 @@ export const article = function Article({ id, title, date, children }) {
       observer.disconnect()
     }
   }, [])
-
-  if (isFeed) {
-    return (
-      <article>
-        <script
-          type="text/metadata"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({ id, title, date }),
-          }}
-        />
-        {children}
-      </article>
-    )
-  }
-
   return (
     <article
       id={id}
