@@ -2,7 +2,10 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./{app,mdx,components}/**/*.{ts,tsx,js,jsx}'],
+  content: [
+    './{app,mdx,components}/**/*.{ts,tsx,js,jsx}',
+    './node_modules/@beskar-labs/gravity/**/*.js',
+  ],
   darkMode: 'class',
   theme: {
     extend: {
