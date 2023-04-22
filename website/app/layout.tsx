@@ -6,7 +6,20 @@ import Link from 'next/link';
 import octokit from '../lib/octokit';
 import { GitHubIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const repo = await octokit.repos.get({
+    owner: 'beskar-co',
+    repo: 'harmony',
+  });
+
+  return {
+    title: `@${repo.data.owner.login}/${repo.data.name}`,
+    description: repo.data.description,
+  };
+};
 
 const RootLayout = async ({
   children,
@@ -19,7 +32,7 @@ const RootLayout = async ({
   });
 
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full scroll-smooth antialiased">
       <body
         className={clsx(
           'flex min-h-full flex-col bg-white font-sans dark:bg-gray-950',
@@ -28,8 +41,8 @@ const RootLayout = async ({
           display.variable
         )}
       >
-        <div className="relative flex-none overflow-hidden px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:px-0">
-          <div className="relative flex w-full bg-neutral-100 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:pl-[max(4rem,calc(50%-38rem))]">
+        <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
+          <div className="relative flex w-full bg-neutral-100 px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
                 <div className="relative">
@@ -47,6 +60,8 @@ const RootLayout = async ({
                   <Button
                     className="mt-8 inline-flex items-center"
                     href={repo.data.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <GitHubIcon className="mr-2 h-4 w-4" />
                     View on GitHub
@@ -59,6 +74,8 @@ const RootLayout = async ({
                   <Button
                     variant="link"
                     href="https://twitter.com/haydenbleasel"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <TwitterIcon className="mr-2 h-4 w-4" />
                     @haydenbleasel

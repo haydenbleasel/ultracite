@@ -24,37 +24,6 @@ const ContentWrapper: FC<HTMLProps<HTMLDivElement>> = ({
   </div>
 );
 
-const ArticleHeader: FC<{
-  id: string;
-  date: string;
-}> = ({ id, date }) => (
-  <header className="relative mb-10 xl:mb-0">
-    <div className="pointer-events-none absolute left-[max(-0.5rem,calc(50%-18.625rem))] top-0 z-50 flex h-4 items-center justify-end gap-x-2 lg:left-0 lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] xl:h-8">
-      <Link href={`#${id}`} className="inline-flex">
-        <time
-          dateTime={date}
-          className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-neutral-950/50"
-        >
-          {dateFormatter.format(new Date(date))}
-        </time>
-      </Link>
-      <div className="h-[0.0625rem] w-3.5 bg-gray-400 lg:-mr-3.5 xl:mr-0 xl:bg-gray-300" />
-    </div>
-    <ContentWrapper className="">
-      <div className="flex">
-        <Link href={`#${id}`} className="inline-flex">
-          <time
-            dateTime={date}
-            className="text-2xs/4 font-medium text-gray-500 dark:text-neutral-950/50 xl:hidden"
-          >
-            {dateFormatter.format(new Date(date))}
-          </time>
-        </Link>
-      </div>
-    </ContentWrapper>
-  </header>
-);
-
 export const Article: FC<{
   id: number;
   date: string;
@@ -89,8 +58,32 @@ export const Article: FC<{
       style={{ paddingBottom: `${heightAdjustment}px` }}
     >
       <div ref={heightRef}>
-        <ArticleHeader id={id.toString()} date={date} />
-        <ContentWrapper className="prose prose-neutral prose-emerald">
+        <header className="relative mb-10 xl:mb-0">
+          <div className="pointer-events-none absolute left-[max(-0.5rem,calc(50%-18.625rem))] top-0 z-50 flex h-4 items-center justify-end gap-x-2 lg:left-0 lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] xl:h-8">
+            <Link href={`#${id}`} className="inline-flex">
+              <time
+                dateTime={date}
+                className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-neutral-950/50"
+              >
+                {dateFormatter.format(new Date(date))}
+              </time>
+            </Link>
+            <div className="h-[0.0625rem] w-3.5 bg-gray-400 lg:-mr-3.5 xl:mr-0 xl:bg-gray-300" />
+          </div>
+          <ContentWrapper>
+            <div className="flex">
+              <Link href={`#${id}`} className="inline-flex">
+                <time
+                  dateTime={date}
+                  className="text-2xs/4 font-medium text-gray-500 dark:text-neutral-950/50 xl:hidden"
+                >
+                  {dateFormatter.format(new Date(date))}
+                </time>
+              </Link>
+            </div>
+          </ContentWrapper>
+        </header>
+        <ContentWrapper className="prose prose-neutral prose-blue">
           {children}
         </ContentWrapper>
       </div>
