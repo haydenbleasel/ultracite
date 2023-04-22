@@ -1,3 +1,15 @@
+# v2.2.5 (Sat Apr 22 2023)
+
+#### 🐛 Bug Fix
+
+- Create website [#114](https://github.com/beskar-co/harmony/pull/114) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.4 (Sun Apr 16 2023)
 
 #### ⚠️ Pushed to `main`
