@@ -1,0 +1,133 @@
+import '../styles/tailwind.css';
+import 'focus-visible';
+import clsx from 'clsx';
+import { Button } from '@beskar-labs/gravity/button';
+import Link from 'next/link';
+import octokit from '../lib/octokit';
+import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
+import { display, mono, sans } from '../lib/fonts';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const repo = await octokit.repos.get({
+    owner: 'beskar-co',
+    repo: 'harmony',
+  });
+
+  return {
+    title: 'Harmony',
+    description: repo.data.description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? '')
+  };
+};
+
+const RootLayout = async ({
+  children,
+}: {
+  children: ReactNode;
+}): Promise<ReactNode> => {
+  const repo = await octokit.repos.get({
+    owner: 'beskar-co',
+    repo: 'harmony',
+  });
+
+  return (
+    <html lang="en" className="h-full scroll-smooth antialiased">
+      <body
+        className={clsx(
+          'flex min-h-full flex-col bg-white font-sans dark:bg-gray-950',
+          sans.variable,
+          mono.variable,
+          display.variable
+        )}
+      >
+        <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
+          <div className="relative flex w-full bg-neutral-100 px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
+            <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
+              <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
+                <div className="relative">
+                  <div>
+                    <Link
+                      href="/"
+                      className="text-neutral-500 transition-colors hover:text-neutral-400"
+                    >
+                      Harmony
+                    </Link>
+                  </div>
+                  <h1 className="mt-4 font-display text-4xl/tight font-semibold text-neutral-950">
+                    {repo.data.description}
+                  </h1>
+                  <div className="flex flex-col items-center gap-2 sm:flex-row">
+                    <Button
+                      className="mt-8 inline-flex items-center"
+                      href="https://npmjs.com/package/@beskar-labs/harmony"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <NpmIcon className="mr-2 h-4 w-4" />
+                      Download on NPM
+                    </Button>
+                    <Button
+                      className="mt-8 inline-flex items-center"
+                      href={repo.data.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="secondary"
+                    >
+                      <GitHubIcon className="mr-2 h-4 w-4" />
+                      View on GitHub
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-1 items-end justify-center pb-4 lg:justify-start lg:pb-6">
+                <p className="flex items-center gap-x-2 text-[0.8125rem]/6 text-neutral-500">
+                  Brought to you by{' '}
+                  <Button
+                    variant="link"
+                    href="https://twitter.com/haydenbleasel"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <TwitterIcon className="mr-2 h-4 w-4" />
+                    @haydenbleasel
+                  </Button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="relative flex-auto">
+          <div className="pointer-events-none absolute inset-0 z-50 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-visible">
+            <svg
+              className="absolute left-[max(0px,calc(50%-18.125rem))] top-0 h-full w-1.5 lg:left-full lg:ml-1 xl:left-auto xl:right-1 xl:ml-0"
+              aria-hidden="true"
+            >
+              <defs>
+                <pattern
+                  id="timeline"
+                  width="6"
+                  height="8"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M0 0H6M0 8H6"
+                    className="stroke-sky-900/10 dark:stroke-white/10 xl:stroke-neutral-950/10"
+                    fill="none"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#timeline)" />
+            </svg>
+          </div>
+          <main className="space-y-20 py-20 sm:space-y-32 sm:py-32">
+            {children}
+          </main>
+        </div>
+      </body>
+    </html>
+  );
+};
+
+export default RootLayout;
