@@ -1,9 +1,8 @@
 import { ReactNode } from 'react'
-import { Octokit } from '@octokit/rest';
 import { article as Article } from '../components/mdx';
 import { marked } from 'marked';
+import octokit from '../lib/octokit';
 
-const octokit = new Octokit();
 
 const Page = async (): Promise<ReactNode> => {
   const releases = await octokit.rest.repos.listReleases({
