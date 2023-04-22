@@ -41,7 +41,7 @@ const RootLayout = async ({
                       @{repo.data.owner.login}/{repo.data.name}
                     </Link>
                   </div>
-                  <h1 className="mt-8 font-display text-4xl/tight font-light text-neutral-950">
+                  <h1 className="mt-8 font-display text-4xl/tight font-semibold text-neutral-950">
                     {repo.data.description}
                   </h1>
                   <Button

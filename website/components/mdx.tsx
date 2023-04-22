@@ -90,7 +90,9 @@ export const Article: FC<{
     >
       <div ref={heightRef}>
         <ArticleHeader id={id.toString()} date={date} />
-        <ContentWrapper className="typography">{children}</ContentWrapper>
+        <ContentWrapper className="prose prose-neutral prose-emerald">
+          {children}
+        </ContentWrapper>
       </div>
     </article>
   );
