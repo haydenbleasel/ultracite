@@ -3,13 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
-
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'UTC',
-})
+import { dateFormatter } from '../lib/date';
 
 function ContentWrapper({ className, children }) {
   return (
@@ -59,7 +53,7 @@ function ArticleHeader({ id, date }) {
 }
 
 export const article = function Article({ id, title, date, children }) {
-  let heightRef = useRef()
+  let heightRef = useRef<HTMLDivElement>(null);
   let [heightAdjustment, setHeightAdjustment] = useState(0)
 
   useEffect(() => {
@@ -87,14 +81,4 @@ export const article = function Article({ id, title, date, children }) {
       </div>
     </article>
   )
-}
-
-export const code = function Code({ highlightedCode, ...props }) {
-  if (highlightedCode) {
-    return (
-      <code {...props} dangerouslySetInnerHTML={{ __html: highlightedCode }} />
-    )
-  }
-
-  return <code {...props} />
 }
