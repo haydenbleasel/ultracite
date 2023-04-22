@@ -1,15 +1,7 @@
 import { SparkleIcon } from '../components/SparkleIcon'
-import { generateRssFeed } from '../lib/generateRssFeed'
 import { FC } from 'react'
 
 import { article as Article } from '../components/mdx';
-
-export async function getStaticProps() {
-  if (process.env.NODE_ENV === 'production') {
-    await generateRssFeed()
-  }
-  return { props: {} }
-}
 
 const Page: FC = () => (
   <>
