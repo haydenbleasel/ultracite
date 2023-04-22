@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 #__next {
-  flex: auto;
   display: flex;
+  flex: auto;
   flex-direction: column;
 }
 
@@ -18,7 +18,7 @@
   --typography-link-underline: theme(colors.sky.400 / 0.4);
   --typography-link-hover-underline: theme(colors.sky.600 / 0.4);
   --typography-pre: theme(colors.gray.300);
-  --typography-pre-shadow: theme(boxShadow.md);
+  --typography-pre-shadow: theme(boxshadow.md);
   --typography-bold: theme(colors.gray.900);
   --typography-kbd: theme(colors.gray.600);
   --typography-kbd-border: theme(colors.gray.200);
@@ -27,7 +27,6 @@
   --typography-hr: theme(colors.gray.900 / 0.05);
   --typography-th-borders: theme(colors.gray.900 / 0.2);
   --typography-td-borders: theme(colors.gray.900 / 0.05);
-
   --shiki-color-text: theme(colors.white);
   --shiki-token-constant: theme(colors.emerald.300);
   --shiki-token-string: theme(colors.emerald.300);
@@ -60,60 +59,60 @@
   }
 
   color: var(--typography-body);
-  font-size: theme(fontSize.sm);
-  line-height: theme(lineHeight.6);
+  font-size: theme(fontsize.sm);
+  line-height: theme(lineheight.6);
 
   h2 {
-    font-family: theme(fontFamily.display);
     color: var(--typography-headings);
-    font-weight: theme(fontWeight.semibold);
-    font-size: theme(fontSize.xl);
-    line-height: theme(lineHeight.8);
+    font-family: theme(fontFamily.display);
+    font-size: theme(fontsize.xl);
+    font-weight: theme(fontweight.semibold);
+    line-height: theme(lineheight.8);
   }
 
   /* Headings */
   h3 {
-    color: var(--typography-headings);
-    font-family: theme(fontFamily.display);
-    font-weight: theme(fontWeight.semibold);
-    font-size: theme(fontSize.base);
-    line-height: theme(lineHeight.6);
     display: flex;
     align-items: center;
+    color: var(--typography-headings);
     column-gap: theme(gap.3);
+    font-family: theme(fontFamily.display);
+    font-size: theme(fontsize.base);
+    font-weight: theme(fontweight.semibold);
+    line-height: theme(lineheight.6);
   }
 
   h3 > svg {
-    flex: none;
     width: theme(width.4);
     height: theme(height.4);
+    flex: none;
   }
 
   h4 {
     color: var(--typography-headings);
     font-family: theme(fontFamily.display);
-    font-weight: theme(fontWeight.semibold);
-    font-size: theme(fontSize.sm);
-    line-height: theme(lineHeight.6);
+    font-size: theme(fontsize.sm);
+    font-weight: theme(fontweight.semibold);
+    line-height: theme(lineheight.6);
   }
 
   /* Quotes */
   blockquote {
-    border-left: 3px solid var(--typography-quotes-border);
     padding-left: theme(padding.6);
+    border-left: 3px solid var(--typography-quotes-border);
     color: var(--typography-quotes);
   }
 
   /* Links */
   a:not(h2 a) {
-    font-weight: theme(fontWeight.semibold);
     color: var(--typography-links);
+    font-weight: theme(fontweight.semibold);
     text-decoration: underline;
     text-decoration-color: var(--typography-link-underline);
-    text-underline-offset: theme(textUnderlineOffset.2);
+    text-underline-offset: theme(textunderlineoffset.2);
+    transition-duration: theme(transitionduration.default);
     transition-property: color, text-decoration-color;
-    transition-duration: theme(transitionDuration.DEFAULT);
-    transition-timing-function: theme(transitionTimingFunction.DEFAULT);
+    transition-timing-function: theme(transitiontimingfunction.default);
 
     &:hover {
       color: var(--typography-link-hover);
@@ -123,7 +122,7 @@
 
   /* Inline text */
   strong {
-    font-weight: theme(fontWeight.semibold);
+    font-weight: theme(fontweight.semibold);
   }
 
   strong:not(a strong) {
@@ -132,15 +131,15 @@
 
   kbd {
     display: inline-block;
-    border-radius: theme(borderRadius.DEFAULT);
-    background-color: var(--typography-kbd-bg);
     padding: 0 theme(padding[1.5]);
-    font-family: theme(fontFamily.mono);
-    font-size: theme(fontSize.xs);
-    font-weight: 400;
-    line-height: theme(lineHeight.5);
-    color: var(--typography-kbd);
+    border-radius: theme(borderradius.default);
+    background-color: var(--typography-kbd-bg);
     box-shadow: inset 0 0 0 1px var(--typography-kbd-border);
+    color: var(--typography-kbd);
+    font-family: theme(fontFamily.mono);
+    font-size: theme(fontsize.xs);
+    font-weight: 400;
+    line-height: theme(lineheight.5);
   }
 
   code {
@@ -153,8 +152,8 @@
 
   code:not(pre code) {
     font-size: calc(12 / 14 * 1em);
-    line-height: theme(lineHeight.none);
-    font-weight: theme(fontWeight.bold);
+    font-weight: theme(fontweight.bold);
+    line-height: theme(lineheight.none);
 
     &::before {
       content: '`';
@@ -168,18 +167,18 @@
   /* Code blocks */
   pre {
     display: flex;
+    border-radius: theme(borderradius.lg);
     background-color: theme(colors.gray.900);
-    border-radius: theme(borderRadius.lg);
-    overflow-x: auto;
     box-shadow: var(--typography-pre-shadow);
+    overflow-x: auto;
   }
 
   pre code {
     flex: none;
     padding: theme(padding.6);
-    font-size: 0.8125rem;
-    line-height: theme(lineHeight.6);
     color: var(--typography-pre);
+    font-size: 0.8125rem;
+    line-height: theme(lineheight.6);
   }
 
   /* <hr> */
@@ -210,8 +209,8 @@
   }
 
   ol > li::marker {
-    font-size: theme(fontSize.xs);
-    font-weight: theme(fontWeight.semibold);
+    font-size: theme(fontsize.xs);
+    font-weight: theme(fontweight.semibold);
   }
 
   /* Tables */
@@ -225,10 +224,10 @@
   }
 
   thead th {
-    font-weight: theme(fontWeight.semibold);
     padding-top: 0;
     padding-bottom: calc(theme(padding.2) - 1px);
     color: var(--typography-headings);
+    font-weight: theme(fontweight.semibold);
   }
 
   tbody tr {
@@ -241,18 +240,18 @@
   }
 
   :is(th, td):first-child {
-    padding-left: 0;
     padding-right: theme(padding.2);
+    padding-left: 0;
   }
 
   :is(th, td):last-child {
-    padding-left: theme(padding.2);
     padding-right: 0;
+    padding-left: theme(padding.2);
   }
 
   :is(th, td):not(:first-child, :last-child) {
-    padding-left: theme(padding.2);
     padding-right: theme(padding.2);
+    padding-left: theme(padding.2);
   }
 
   /* Spacing */
