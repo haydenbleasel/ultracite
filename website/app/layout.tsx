@@ -2,6 +2,8 @@ import type { FC, ReactNode } from 'react';
 import '../styles/tailwind.css';
 import 'focus-visible';
 import { Layout } from '../components/Layout'
+import clsx from 'clsx';
+import { display, mono, sans } from '../lib/fonts';
 
 const RootLayout: FC<{ children: ReactNode }> = ({
   children,
@@ -9,7 +11,12 @@ const RootLayout: FC<{ children: ReactNode }> = ({
   return (
     <html lang="en" className="h-full antialiased">
       <body
-        className="flex min-h-full flex-col bg-white dark:bg-gray-950"
+        className={clsx(
+          "flex min-h-full font-sans flex-col bg-white dark:bg-gray-950",
+          sans.variable,
+          mono.variable,
+          display.variable
+        )}
       >
         <Layout>
           {children}
