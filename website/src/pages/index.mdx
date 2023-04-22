@@ -1,0 +1,65 @@
+import { SparkleIcon } from '@/components/SparkleIcon'
+import { generateRssFeed } from '@/lib/generateRssFeed'
+
+export async function getStaticProps() {
+  if (process.env.NODE_ENV === 'production') {
+    await generateRssFeed()
+  }
+  return { props: {} }
+}
+
+---
+
+![](@/images/commit-suggestions.png)
+
+## Commit message suggestions {{ date: '2023-04-06T00:00Z' }}
+
+In the latest release, I've added support for commit message and description suggestions via an integration with OpenAI. Commit looks at all of your changes, and feeds that into the machine with a bit of prompt-tuning to get back a commit message that does a surprisingly good job at describing the intent of your changes.
+
+It's also been a pretty helpful way to remind myself what the hell I was working on at the end of the day yesterday when I get back to my computer and realize I didn't commit any of my work.
+
+### <SparkleIcon /> Improvements
+
+- Added commit message and description suggestions powered by OpenAI
+- Fixed race condition that could sometimes leave you in a broken rebase state
+- Improved active project detection to try and ignore file changes triggered by the system instead of the user
+- Fixed bug that sometimes reported the wrong number of changed files
+
+---
+
+![](@/images/configuration-files.png)
+
+## Project configuration files {{ date: '2023-03-17T00:00Z' }}
+
+I've added support for creating per-project `.commitrc` files that override your global settings for that particular project. Went with YAML for these because personally I'm sick of quoting keys in JSON all the time, or accidentally leaving in a trailing comma.
+
+### <SparkleIcon /> Improvements
+
+- Added per-project `.commitrc` configuration files
+- Improved performance when working with projects with large binary files
+- Fixed a bug that could cause Commit to crash when autocommitting after deleting a recently active branch
+
+---
+
+![](@/images/dark-mode.png)
+
+## Dark mode support {{ date: '2023-03-06T00:00Z' }}
+
+I released this thing last week hoping a couple of people would say "awesome job" and make me feel good about what I'd built but instead I just got a ton of people shaming me on Twitter for being such a horrible person for only shipping a light UI.
+
+### <SparkleIcon /> Improvements
+
+- Added dark mode support
+- Improved input field responsiveness when writing a commit message in a project with a large number of changed files
+- Made keyboard shortcut for opening the Commit window customizable
+- Deleted my Twitter account
+
+---
+
+![](@/images/first-release.png)
+
+## Commit v0.1.0 {{  date: '2023-03-03T00:00Z' }}
+
+Commit is a command palette-style Git client you can pull up from anywhere with a keyboard shortcut that makes it really easy to commit your work. It uses the "last modified" timestamp of the files in all of your projects to automatically know which project you're in the middle of working on, so any time you pull up the UI it's already got the right project selected — you just have to type your commit message, hit <kbd>Cmd</kbd> + <kbd>Enter</kbd> and your changes are captured.
+
+I'd be lying if I really thought this was that useful but I was looking for an excuse to learn macOS development and here we are. It's open source at least so maybe you can find something interesting in the code even if the app itself is a total waste of hard drive space.
