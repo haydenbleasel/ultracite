@@ -3,8 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
 
-import { useFeed } from '@/components/FeedProvider'
-import { FormattedDate } from '@/components/FormattedDate'
+import { useFeed } from './FeedProvider'
+import { FormattedDate } from './FormattedDate'
 
 export const a = Link
 

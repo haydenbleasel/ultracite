@@ -3,9 +3,9 @@ import { MDXProvider } from '@mdx-js/react'
 import { Feed } from 'feed'
 import { mkdir, writeFile } from 'fs/promises'
 
-import { FeedProvider } from '@/components/FeedProvider'
-import * as mdxComponents from '@/components/mdx'
-import Content from '@/pages/index.mdx'
+import { FeedProvider } from '../components/FeedProvider'
+import * as mdxComponents from '../components/mdx'
+import Content from '../pages/index'
 
 export async function generateRssFeed() {
   let siteUrl = process.env.NEXT_PUBLIC_SITE_URL
