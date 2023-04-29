@@ -1,3 +1,15 @@
+# v2.2.6 (Sat Apr 29 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Attempt to patch AudioWorkletGlobalScope issue ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.5 (Sat Apr 22 2023)
 
 #### 🐛 Bug Fix
