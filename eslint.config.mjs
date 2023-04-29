@@ -32,9 +32,11 @@ import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
 
 // Fix weird ESLint regression
-globals.browser.AudioWorkletGlobalScope =
-  globals.browser['AudioWorkletGlobalScope '];
-delete globals.browser['AudioWorkletGlobalScope '];
+const browserGlobals = { ...globals.browser };
+
+browserGlobals.AudioWorkletGlobalScope =
+  browserGlobals['AudioWorkletGlobalScope '];
+delete browserGlobals['AudioWorkletGlobalScope '];
 
 const config = [
   importPlugin.configs.typescript,
@@ -42,7 +44,7 @@ const config = [
     languageOptions: {
       sourceType: 'module',
       globals: {
-        ...globals.browser,
+        ...browserGlobals,
         ...globals.node,
       },
       parser: typescriptParser,
