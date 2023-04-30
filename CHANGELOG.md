@@ -1,3 +1,15 @@
+# v2.2.7 (Sun Apr 30 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Remove AudioWorkletGlobalScope ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.6 (Sat Apr 29 2023)
 
 #### ⚠️ Pushed to `main`
