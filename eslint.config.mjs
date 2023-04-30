@@ -31,11 +31,8 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
 
-// Fix weird ESLint regression
+// Remove AudioWorkletGlobalScope (so many issues)
 const browserGlobals = { ...globals.browser };
-
-browserGlobals.AudioWorkletGlobalScope =
-  browserGlobals['AudioWorkletGlobalScope '];
 delete browserGlobals['AudioWorkletGlobalScope '];
 
 const config = [
