@@ -76,9 +76,7 @@ Create the following `.vscode/settings.json`. This will enable full formatting o
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.experimental": {
-    "useFlatConfig": true
-  },
+  "eslint.experimental.useFlatConfig": true,
   "eslint.options": {
     "overrideConfigFile": "eslint.config.mjs"
   }
@@ -105,5 +103,3 @@ Harmony v2 is a complete rewrite of the original Harmony package. It uses the ne
 3. Add the new deps: `yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest cypress`
 4. Upgrade your `.vscode/settings.json` file (see above).
 5. Ensure your `tsconfig.json` includes your new ESLint config and that `strictNullChecks` is enabled.
-
-Also, as of writing this README, you need to be on the pre-release version of the ESLint extension for VSCode.
