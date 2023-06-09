@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import { rules } from 'eslint-plugin-react-hooks';
 
 const availableKeys = Object.keys(rules).filter(

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import { rules } from '@typescript-eslint/eslint-plugin';
 
 const availableKeys = Object.keys(rules).filter(

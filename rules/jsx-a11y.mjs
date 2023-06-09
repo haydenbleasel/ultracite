@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import plugin from 'eslint-plugin-jsx-a11y';
 
 const { rules } = plugin;

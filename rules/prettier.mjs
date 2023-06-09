@@ -1,5 +1,5 @@
-/* eslint-disable import/no-anonymous-default-export */
-
-export default {
+const config = {
   'prettier/prettier': 'error',
 };
+
+export default config;

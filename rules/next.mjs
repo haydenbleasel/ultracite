@@ -1,5 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
-
 import plugin from '@next/eslint-plugin-next';
 
 const { rules } = plugin;
