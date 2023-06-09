@@ -1,3 +1,15 @@
+# v2.3.0 (Fri Jun 09 2023)
+
+#### 🚀 Enhancement
+
+- Migrate to opt-in config [#115](https://github.com/beskar-co/harmony/pull/115) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.2.8 (Sat May 06 2023)
 
 #### ⚠️ Pushed to `main`
