@@ -1,17 +1,20 @@
-/* eslint-disable import/no-anonymous-default-export */
+import plugin from 'eslint-plugin-promise';
 
-export default {
-  // ESLint-Promise
-  'promise/always-return': 'error',
-  'promise/no-return-wrap': 'error',
-  'promise/param-names': 'error',
+const { rules } = plugin;
+
+const availableKeys = Object.keys(rules).filter(
+  (key) => !rules[key].meta.deprecated
+);
+
+const baseRules = Object.fromEntries(
+  availableKeys.map((key) => [`promise/${key}`, 'error'])
+);
+
+const overrideRules = {
   'promise/catch-or-return': ['error', { allowFinally: true }],
   'promise/no-native': 'off',
-  'promise/no-nesting': 'error',
-  'promise/no-promise-in-callback': 'error',
-  'promise/no-callback-in-promise': 'error',
-  'promise/avoid-new': 'error',
-  'promise/no-new-statics': 'error',
-  'promise/no-return-in-finally': 'error',
-  'promise/valid-params': 'error',
 };
+
+const config = Object.assign(baseRules, overrideRules);
+
+export default config;
