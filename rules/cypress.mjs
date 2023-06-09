@@ -1,12 +1,17 @@
-/* eslint-disable import/no-anonymous-default-export */
+import plugin from 'eslint-plugin-cypress';
 
-export default {
-  'cypress/assertion-before-screenshot': 'error',
-  'cypress/no-assigning-return-values': 'error',
-  'cypress/no-async-tests': 'error',
-  'cypress/no-force': 'error',
-  'cypress/no-pause': 'error',
-  'cypress/no-unnecessary-waiting': 'error',
-  'cypress/require-data-selectors': 'error',
-  'cypress/unsafe-to-chain-command': 'error',
-};
+const { rules } = plugin;
+
+const availableKeys = Object.keys(rules).filter(
+  (key) => !rules[key].meta.deprecated
+);
+
+const baseRules = Object.fromEntries(
+  availableKeys.map((key) => [`cypress/${key}`, 'error'])
+);
+
+const overrideRules = {};
+
+const config = Object.assign(baseRules, overrideRules);
+
+export default config;
