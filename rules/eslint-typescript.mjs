@@ -1,6 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-
-export default {
+const config = {
   // ESLint Disabled for Typescript-ESLint
   'brace-style': 'off',
   camelcase: 'off',
@@ -41,3 +39,5 @@ export default {
   'space-before-function-paren': 'off',
   'space-infix-ops': 'off',
 };
+
+export default config;

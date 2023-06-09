@@ -1,6 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-
-export default {
+const config = {
   // ESLint Possible Problems: These rules relate to possible logic errors in code
   'array-callback-return': 'error',
   'constructor-super': 'error',
@@ -193,3 +191,5 @@ export default {
   'multiline-ternary': 'off',
   'object-property-newline': 'off',
 };
+
+export default config;
