@@ -1,15 +1,15 @@
 /* eslint-disable import/no-anonymous-default-export */
 
-import eslintPluginPromise from 'eslint-plugin-promise';
+import plugin from 'eslint-plugin-promise';
 
-const { rules } = eslintPluginPromise;
+const { rules } = plugin;
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`react/${key}`, 'error'])
+  availableKeys.map((key) => [`promise/${key}`, 'error'])
 );
 
 const overrideRules = {

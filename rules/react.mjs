@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 
-import eslintPluginReact from 'eslint-plugin-react';
+import plugin from 'eslint-plugin-react';
 
-const { rules } = eslintPluginReact;
+const { rules } = plugin;
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated
