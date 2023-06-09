@@ -45,6 +45,4 @@ const overrideRules = {
 
 const config = Object.assign(baseRules, overrideRules);
 
-console.log(config);
-
 export default config;
