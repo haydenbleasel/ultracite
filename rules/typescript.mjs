@@ -36,4 +36,6 @@ const overrideRules = {
   '@typescript-eslint/no-magic-numbers': 'off',
 };
 
-export default Object.assign(baseRules, overrideRules);
+const config = Object.assign(baseRules, overrideRules);
+
+export default config;
