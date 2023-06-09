@@ -1,3 +1,15 @@
+# v2.3.1 (Fri Jun 09 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Fix typescript-eslint/prettier issues ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.3.0 (Fri Jun 09 2023)
 
 #### 🚀 Enhancement
