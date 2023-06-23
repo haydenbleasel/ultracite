@@ -28,28 +28,25 @@ const SVGGradient: FC = () => {
     return point.matrixTransform(svg.getScreenCTM()?.inverse());
   };
 
-  const handleMouseMove = useCallback(
-    (event: MouseEvent) => {
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
       const newCoords = screenToSVG({ x: event.clientX, y: event.clientY });
 
       if (newCoords.x !== coords.x && newCoords.y !== coords.y) {
         setCoords(newCoords);
       }
-    },
-    [coords.x, coords.y]
-  );
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    };
 
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [coords.x, coords.y]);
 
   return (
     <div className="absolute inset-0 hidden sm:block">

@@ -6,9 +6,9 @@ import Link from 'next/link';
 import octokit from '../lib/octokit';
 import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
+import SVGGradient from '../components/gradient';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import SVGGradient from '../components/gradient';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const repo = await octokit.repos.get({
@@ -19,15 +19,17 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return {
     title: 'Harmony',
     description: repo.data.description,
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? '')
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? ''),
   };
+};
+
+type RootLayoutProps = {
+  children: ReactNode;
 };
 
 const RootLayout = async ({
   children,
-}: {
-  children: ReactNode;
-}): Promise<ReactNode> => {
+}: RootLayoutProps): Promise<ReactNode> => {
   const repo = await octokit.repos.get({
     owner: 'beskar-co',
     repo: 'harmony',
@@ -48,12 +50,9 @@ const RootLayout = async ({
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
                 <SVGGradient />
-                <div className="relative dark">
+                <div className="dark relative">
                   <div>
-                    <Link
-                      href="/"
-                      className="text-white/70 font-medium"
-                    >
+                    <Link href="/" className="font-medium text-white/70">
                       Harmony
                     </Link>
                   </div>
