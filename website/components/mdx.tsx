@@ -63,7 +63,7 @@ export const Article: FC<{
             <Link href={`#${id}`} className="inline-flex">
               <time
                 dateTime={date}
-                className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-neutral-950/50"
+                className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-white/50"
               >
                 {dateFormatter.format(new Date(date))}
               </time>
@@ -75,7 +75,7 @@ export const Article: FC<{
               <Link href={`#${id}`} className="inline-flex">
                 <time
                   dateTime={date}
-                  className="text-2xs/4 font-medium text-gray-500 dark:text-neutral-950/50 xl:hidden"
+                  className="text-2xs/4 font-medium text-gray-500 dark:text-white/50 xl:hidden"
                 >
                   {dateFormatter.format(new Date(date))}
                 </time>

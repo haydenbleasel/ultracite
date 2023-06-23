@@ -8,6 +8,7 @@ import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import SVGGradient from '../components/gradient';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const repo = await octokit.repos.get({
@@ -46,16 +47,17 @@ const RootLayout = async ({
           <div className="relative flex w-full bg-neutral-100 px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
-                <div className="relative">
+                <SVGGradient />
+                <div className="relative dark">
                   <div>
                     <Link
                       href="/"
-                      className="text-neutral-500 transition-colors hover:text-neutral-400"
+                      className="text-white/70 font-medium"
                     >
                       Harmony
                     </Link>
                   </div>
-                  <h1 className="mt-4 font-display text-4xl/tight font-semibold text-neutral-950">
+                  <h1 className="mt-4 font-display text-4xl/tight font-semibold text-white">
                     {repo.data.description}
                   </h1>
                   <div className="flex flex-col items-center gap-2 sm:flex-row">
@@ -69,11 +71,11 @@ const RootLayout = async ({
                       Download on NPM
                     </Button>
                     <Button
-                      className="mt-8 inline-flex items-center"
+                      className="mt-8 inline-flex items-center dark:border-white/20 dark:hover:bg-white/10"
                       href={repo.data.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      variant="secondary"
+                      variant="tertiary"
                     >
                       <GitHubIcon className="mr-2 h-4 w-4" />
                       View on GitHub
@@ -113,7 +115,7 @@ const RootLayout = async ({
                 >
                   <path
                     d="M0 0H6M0 8H6"
-                    className="stroke-sky-900/10 dark:stroke-white/10 xl:stroke-neutral-950/10"
+                    className="stroke-sky-900/10 dark:stroke-white/10 xl:stroke-white/10"
                     fill="none"
                   />
                 </pattern>
