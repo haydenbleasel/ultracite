@@ -1,3 +1,15 @@
+# v2.4.0 (Fri Jun 23 2023)
+
+#### 🚀 Enhancement
+
+- Enhance website, general updates [#116](https://github.com/beskar-co/harmony/pull/116) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.3.1 (Fri Jun 09 2023)
 
 #### ⚠️ Pushed to `main`
