@@ -82,8 +82,8 @@ const RootLayout = async ({
                   </div>
                 </div>
               </div>
-              <div className="flex flex-1 items-end justify-center pb-4 lg:justify-start lg:pb-6">
-                <p className="flex items-center gap-x-2 text-[0.8125rem]/6 text-neutral-500">
+              <div className="dark relative z-10 flex flex-1 items-end justify-center pb-4 lg:justify-start lg:pb-6">
+                <p className="flex items-center gap-x-2 text-[0.8125rem]/6 text-white/70">
                   Brought to you by{' '}
                   <Button
                     variant="link"
