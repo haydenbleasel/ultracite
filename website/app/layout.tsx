@@ -1,6 +1,6 @@
 import '../styles/tailwind.css';
 import 'focus-visible';
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { Button } from '@beskar-labs/gravity/button';
 import Link from 'next/link';
 import octokit from '../lib/octokit';
@@ -36,7 +36,7 @@ const RootLayout = async ({
   return (
     <html lang="en" className="h-full scroll-smooth antialiased">
       <body
-        className={clsx(
+        className={twMerge(
           'flex min-h-full flex-col bg-white font-sans dark:bg-gray-950',
           sans.variable,
           mono.variable,
