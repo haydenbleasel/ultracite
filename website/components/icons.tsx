@@ -22,8 +22,8 @@ export const NpmIcon: FC<HTMLProps<SVGSVGElement>> = (props) => (
     {...props}
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M2500 0H0V2500H2500V0ZM268.5 268.5H2231.4V2231.4H1736.4V763.5H1241.4V2231.4H268.5V268.5Z"
     />
   </svg>

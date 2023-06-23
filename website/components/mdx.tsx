@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { dateFormatter } from '../lib/date';
 import type { FC, HTMLProps, ReactNode } from 'react';
 
@@ -13,7 +13,7 @@ const ContentWrapper: FC<HTMLProps<HTMLDivElement>> = ({
   <div className="mx-auto max-w-7xl px-6 lg:flex lg:px-8">
     <div className="lg:ml-96 lg:flex lg:w-full lg:justify-end lg:pl-32">
       <div
-        className={clsx(
+        className={twMerge(
           'mx-auto max-w-lg lg:mx-0 lg:w-0 lg:max-w-xl lg:flex-auto',
           className
         )}
@@ -63,7 +63,7 @@ export const Article: FC<{
             <Link href={`#${id}`} className="inline-flex">
               <time
                 dateTime={date}
-                className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-neutral-950/50"
+                className="hidden xl:pointer-events-auto xl:block xl:text-2xs/4 xl:font-medium xl:text-white/50"
               >
                 {dateFormatter.format(new Date(date))}
               </time>
@@ -75,7 +75,7 @@ export const Article: FC<{
               <Link href={`#${id}`} className="inline-flex">
                 <time
                   dateTime={date}
-                  className="text-2xs/4 font-medium text-gray-500 dark:text-neutral-950/50 xl:hidden"
+                  className="text-2xs/4 font-medium text-gray-500 dark:text-white/50 xl:hidden"
                 >
                   {dateFormatter.format(new Date(date))}
                 </time>

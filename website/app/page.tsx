@@ -13,10 +13,10 @@ const Page = async (): Promise<ReactNode> => {
   return releases.data.map((release) => (
     <Article id={release.id} date={release.created_at} key={release.id}>
       <h2>{release.name}</h2>
-      {release.body && (
+      {release.body ? (
         // eslint-disable-next-line react/no-danger, @typescript-eslint/naming-convention
         <div dangerouslySetInnerHTML={{ __html: marked.parse(release.body) }} />
-      )}
+      ) : null}
     </Article>
   ));
 };
