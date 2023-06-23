@@ -1,3 +1,15 @@
+# v2.4.1 (Fri Jun 23 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Fix footer issue ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.0 (Fri Jun 23 2023)
 
 #### 🚀 Enhancement
