@@ -67,7 +67,7 @@ const RootLayout = async ({
                       rel="noopener noreferrer"
                     >
                       <NpmIcon className="mr-2 h-4 w-4" />
-                      Download on NPM
+                      Download
                     </Button>
                     <Button
                       className="mt-8 inline-flex items-center dark:border-white/20 dark:hover:bg-white/10"
@@ -77,7 +77,7 @@ const RootLayout = async ({
                       variant="tertiary"
                     >
                       <GitHubIcon className="mr-2 h-4 w-4" />
-                      View on GitHub
+                      View source
                     </Button>
                   </div>
                 </div>
