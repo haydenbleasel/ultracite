@@ -2,9 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true,
     scrollRestoration: true,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
