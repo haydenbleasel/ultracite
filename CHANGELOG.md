@@ -1,3 +1,15 @@
+# v2.4.2 (Sat Jun 24 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Create favicon.ico ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.1 (Fri Jun 23 2023)
 
 #### ⚠️ Pushed to `main`
