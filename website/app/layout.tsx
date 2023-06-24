@@ -9,6 +9,7 @@ import { display, mono, sans } from '../lib/fonts';
 import SVGGradient from '../components/gradient';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const repo = await octokit.repos.get({
@@ -45,8 +46,9 @@ const RootLayout = async ({
           display.variable
         )}
       >
-        <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-          <div className="relative flex w-full bg-neutral-100 px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
+        <div className="relative bg-black flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
+          <Image className="block opacity-70 sm:hidden absolute w-full h-full object-cover" src="/mobile-background.jpg" alt="" width={1200} height={694} />
+          <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
                 <SVGGradient />
@@ -59,9 +61,9 @@ const RootLayout = async ({
                   <h1 className="mt-4 font-display text-4xl/tight font-semibold text-white">
                     {repo.data.description}
                   </h1>
-                  <div className="flex flex-col items-center gap-2 sm:flex-row">
+                  <div className="mt-8 flex flex-col sm:items-center gap-2 sm:flex-row">
                     <Button
-                      className="mt-8 inline-flex items-center"
+                      className="inline-flex items-center"
                       href="https://npmjs.com/package/@beskar-labs/harmony"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -70,7 +72,7 @@ const RootLayout = async ({
                       Download
                     </Button>
                     <Button
-                      className="mt-8 inline-flex items-center dark:border-white/20 dark:hover:bg-white/10"
+                      className="inline-flex items-center dark:border-white/20 dark:hover:bg-white/10"
                       href={repo.data.html_url}
                       target="_blank"
                       rel="noopener noreferrer"

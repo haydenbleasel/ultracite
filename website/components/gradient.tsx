@@ -3,7 +3,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 
 type Coordinates = {
@@ -52,7 +52,7 @@ const SVGGradient: FC = () => {
     <div className="absolute inset-0 hidden sm:block">
       <div className="relative h-full w-full">
         <Image
-          src="/images/noise.png"
+          src="/noise.png"
           alt="noise"
           className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay"
           width={1512}
