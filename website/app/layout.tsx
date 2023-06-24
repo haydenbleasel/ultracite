@@ -46,8 +46,10 @@ const RootLayout = async ({
           display.variable
         )}
       >
-        <div className="relative bg-black flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-          <Image className="block opacity-70 sm:hidden absolute w-full h-full object-cover" src="/mobile-background.jpg" alt="" width={1200} height={694} />
+        <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
+          <div className="bg-black sm:hidden absolute w-full h-full">
+            <Image className="w-full opacity-70 h-full object-cover" src="/mobile-background.jpg" alt="" width={1200} height={694} />
+          </div>
           <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
