@@ -1,3 +1,15 @@
+# v2.4.3 (Sat Jun 24 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Fix up images and responsive layout ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.2 (Sat Jun 24 2023)
 
 #### ⚠️ Pushed to `main`
