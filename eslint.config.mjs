@@ -18,7 +18,6 @@ import markdown from 'eslint-plugin-markdown';
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 
-import { ESLint } from 'eslint';
 import eslintRules from './rules/eslint.mjs';
 import reactRules from './rules/react.mjs';
 import reactHooksRules from './rules/reactHooks.mjs';
@@ -38,7 +37,7 @@ import markdownRules from './rules/markdown.mjs';
 const browserGlobals = { ...globals.browser };
 delete browserGlobals['AudioWorkletGlobalScope '];
 
-const config: ESLint.ConfigData = [
+const config = [
   importPlugin.configs.typescript,
   {
     languageOptions: {
