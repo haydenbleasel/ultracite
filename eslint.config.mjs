@@ -13,10 +13,12 @@ import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import cypress from 'eslint-plugin-cypress';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
+import markdown from 'eslint-plugin-markdown';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 
+import { ESLint } from 'eslint';
 import eslintRules from './rules/eslint.mjs';
 import reactRules from './rules/react.mjs';
 import reactHooksRules from './rules/reactHooks.mjs';
@@ -30,12 +32,13 @@ import nextRules from './rules/next.mjs';
 import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
+import markdownRules from './rules/markdown.mjs';
 
 // Remove AudioWorkletGlobalScope (so many issues)
 const browserGlobals = { ...globals.browser };
 delete browserGlobals['AudioWorkletGlobalScope '];
 
-const config = [
+const config: ESLint.ConfigData = [
   importPlugin.configs.typescript,
   {
     languageOptions: {
@@ -134,6 +137,16 @@ const config = [
     },
     rules: {
       ...cypressRules,
+    },
+  },
+  {
+    files: ['**/*.md', '**/*.mdx'],
+    processor: 'markdown/markdown',
+    plugins: {
+      markdown,
+    },
+    rules: {
+      ...markdownRules,
     },
   },
 ];
