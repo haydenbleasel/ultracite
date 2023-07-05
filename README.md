@@ -20,6 +20,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 - [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
 - [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin)
 - [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress)
+- [Markdown](https://www.npmjs.com/package/eslint-plugin-markdown)
 
 ## Installation
 
