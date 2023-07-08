@@ -1,3 +1,15 @@
+# v2.4.6 (Sat Jul 08 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Fix eslint-plugin-prettier issue ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.5 (Sat Jul 08 2023)
 
 #### ⚠️ Pushed to `main`
