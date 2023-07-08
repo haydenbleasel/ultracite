@@ -1,3 +1,21 @@
+# v2.4.5 (Sat Jul 08 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump stylelint from 15.8.0 to 15.10.1 [#119](https://github.com/beskar-co/harmony/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 15.8.0 to 15.10.1 in /website [#118](https://github.com/beskar-co/harmony/pull/118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.4 (Sat Jun 24 2023)
 
 #### ⚠️ Pushed to `main`
