@@ -1,3 +1,22 @@
+# v2.5.0 (Mon Jul 31 2023)
+
+#### 🚀 Enhancement
+
+- Add Storybook [#123](https://github.com/beskar-co/harmony/pull/123) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump word-wrap from 1.2.3 to 1.2.4 in /website [#122](https://github.com/beskar-co/harmony/pull/122) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump semver from 6.3.0 to 6.3.1 in /website [#121](https://github.com/beskar-co/harmony/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump semver from 6.3.0 to 6.3.1 [#120](https://github.com/beskar-co/harmony/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.4.6 (Sat Jul 08 2023)
 
 #### ⚠️ Pushed to `main`
