@@ -12,6 +12,7 @@ import next from '@next/eslint-plugin-next';
 import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import cypress from 'eslint-plugin-cypress';
+import storybook from 'eslint-plugin-storybook';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 
 import eslintPrettier from 'eslint-config-prettier';
@@ -30,6 +31,7 @@ import nextRules from './rules/next.mjs';
 import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
+import storybookRules from './rules/storybook.mjs';
 
 // Remove AudioWorkletGlobalScope (so many issues)
 const browserGlobals = { ...globals.browser };
@@ -134,6 +136,20 @@ const config = [
     },
     rules: {
       ...cypressRules,
+    },
+  },
+  {
+    files: [
+      '**/*.stories.js',
+      '**/*.stories.jsx',
+      '**/*.stories.ts',
+      '**/*.stories.tsx',
+    ],
+    plugins: {
+      storybook,
+    },
+    rules: {
+      ...storybookRules,
     },
   },
 ];
