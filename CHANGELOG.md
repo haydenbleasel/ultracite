@@ -1,3 +1,15 @@
+# v2.5.1 (Fri Aug 04 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.5.0 (Mon Jul 31 2023)
 
 #### 🚀 Enhancement
