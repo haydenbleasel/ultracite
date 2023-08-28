@@ -13,6 +13,7 @@ import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import cypress from 'eslint-plugin-cypress';
 import storybook from 'eslint-plugin-storybook';
+import unusedImports from 'eslint-plugin-unused-imports';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 
 import eslintPrettier from 'eslint-config-prettier';
@@ -32,6 +33,7 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
 import storybookRules from './rules/storybook.mjs';
+import unusedImportsRules from './rules/unused-imports.mjs';
 
 // Remove AudioWorkletGlobalScope (so many issues)
 const browserGlobals = { ...globals.browser };
@@ -75,6 +77,7 @@ const config = [
       promise,
       n,
       '@next/next': next,
+      'unused-imports': unusedImports,
     },
     rules: {
       ...eslintRules,
@@ -87,6 +90,7 @@ const config = [
       ...nextRules,
       ...prettierRules,
       ...eslintPrettier.rules,
+      ...unusedImportsRules,
     },
 
     // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
