@@ -1,3 +1,15 @@
+# v2.5.3 (Mon Aug 28 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Automatically remove unused imports ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.5.2 (Mon Aug 28 2023)
 
 #### ⚠️ Pushed to `main`
