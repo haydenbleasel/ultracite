@@ -1,3 +1,15 @@
+# v2.5.2 (Mon Aug 28 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Tweak jsx-a11y to support custom associated controls ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.5.1 (Fri Aug 04 2023)
 
 #### ⚠️ Pushed to `main`
