@@ -1,6 +1,20 @@
+<img src="./logo.svg" width="96" height="96" style="width: 96px; height: 96px;" alt="">
+
+<br />
+
 # Harmony
 
-_Unified, strict editor configuration for modern web apps._
+**Strict, opinionated ESLint config for modern TypeScript apps.**
+
+<img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/eslint-config-harmony/push.yaml" alt="" />
+
+<img src="https://img.shields.io/npm/dy/eslint-config-harmony" alt="" />
+
+<img src="https://img.shields.io/npm/v/eslint-config-harmony" alt="" />
+
+<img src="https://img.shields.io/github/license/haydenbleasel/eslint-config-harmony" alt="" />
+
+<hr />
 
 Harmony is a unified, strict editor configuration for modern React apps, designed to work seamlessly together and enforce hyper-strict syntax rules as you type to help you write bulletproof code. By default it supports React and Typescript, but also contains support for Tailwind as well as particular frameworks, such as Next.js and React Native / Expo.
 
@@ -26,7 +40,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 Run the command below to install Harmony with peer dependencies:
 
 ```sh
-yarn add -D @beskar-labs/harmony eslint prettier stylelint typescript jest
+yarn add -D eslint-config-harmony eslint prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
@@ -43,7 +57,7 @@ code --install-extension stylelint.vscode-stylelint
 Simply create an `eslint.config.mjs` that looks like this.
 
 ```js
-import harmony from '@beskar-labs/harmony';
+import harmony from 'eslint-config-harmony';
 
 export default harmony;
 ```
@@ -52,9 +66,9 @@ Additionally, add the following to your `package.json`. If you don't use a parti
 
 ```json
 {
-  "prettier": "@beskar-labs/harmony/prettier",
+  "prettier": "eslint-config-harmony/prettier",
   "stylelint": {
-    "extends": "@beskar-labs/harmony/stylelint"
+    "extends": "eslint-config-harmony/stylelint"
   }
 }
 ```
