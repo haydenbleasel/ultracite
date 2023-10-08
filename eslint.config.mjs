@@ -48,14 +48,12 @@ const config = [
         ...browserGlobals,
         ...globals.node,
       },
-      parser: typescriptParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
           jsx: true,
         },
-        project: './tsconfig.json',
       },
     },
     files: [
@@ -73,7 +71,6 @@ const config = [
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,
       import: importPlugin,
-      'import/typescript': importTypescriptResolver,
       promise,
       n,
       '@next/next': next,
@@ -106,8 +103,13 @@ const config = [
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
+    parser: typescriptParser,
+    parserOptions: {
+      project: './tsconfig.json',
+    },
     plugins: {
       '@typescript-eslint': typescript,
+      'import/typescript': importTypescriptResolver,
     },
     rules: {
       ...eslintTypescriptRules,

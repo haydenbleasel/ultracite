@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs, import/unambiguous */
+
 module.exports = {
   plugins: ['stylelint-prettier'],
   extends: [
