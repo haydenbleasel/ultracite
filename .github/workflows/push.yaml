@@ -16,6 +16,9 @@ jobs:
     # The list of steps that the action will go through
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Prepare repository
         run: git fetch --unshallow --tags
@@ -23,21 +26,20 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Cache node modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: yarn-deps-${{ hashFiles('yarn.lock') }}
+          key: pnpm-deps-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            yarn-deps-${{ hashFiles('yarn.lock') }}
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+            pnpm-deps-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx auto shipit
+        run: |
+          pnpm install
+          npx auto shipit
