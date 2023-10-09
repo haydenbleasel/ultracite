@@ -1,3 +1,15 @@
+# v3.0.3 (Mon Oct 09 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Switch from Yarn to pnpm, upgrade workflow ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.0.2 (Mon Oct 09 2023)
 
 #### ⚠️ Pushed to `main`
