@@ -103,7 +103,9 @@ const config = [
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    parser: typescriptParser,
+    languageOptions: {
+      parser: typescriptParser,
+    },
     parserOptions: {
       project: './tsconfig.json',
     },
