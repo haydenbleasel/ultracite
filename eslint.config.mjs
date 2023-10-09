@@ -105,9 +105,9 @@ const config = [
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: typescriptParser,
-    },
-    parserOptions: {
-      project: './tsconfig.json',
+      parserOptions: {
+        project: './tsconfig.json',
+      },
     },
     plugins: {
       '@typescript-eslint': typescript,
