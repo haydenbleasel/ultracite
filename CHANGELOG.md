@@ -1,3 +1,25 @@
+# v3.0.0 (Mon Oct 09 2023)
+
+#### 💥 Breaking Change
+
+- V3 [#125](https://github.com/haydenbleasel/eslint-config-harmony/pull/125) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create FUNDING.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump postcss from 8.4.24 to 8.4.31 [#124](https://github.com/haydenbleasel/eslint-config-harmony/pull/124) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v2.5.3 (Mon Aug 28 2023)
 
 #### ⚠️ Pushed to `main`
