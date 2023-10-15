@@ -1,4 +1,6 @@
-import { rules } from '@typescript-eslint/eslint-plugin';
+import typescript from '@typescript-eslint/eslint-plugin';
+
+const { rules } = typescript;
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated

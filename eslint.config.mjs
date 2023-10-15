@@ -2,7 +2,7 @@
 
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import * as typescript from '@typescript-eslint/eslint-plugin';
+import typescript from '@typescript-eslint/eslint-plugin';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import * as importPlugin from 'eslint-plugin-import';
 import jest from 'eslint-plugin-jest';
@@ -35,7 +35,7 @@ import cypressRules from './rules/cypress.mjs';
 import storybookRules from './rules/storybook.mjs';
 import unusedImportsRules from './rules/unused-imports.mjs';
 
-// Remove AudioWorkletGlobalScope (so many issues)
+// Patch AudioWorkletGlobalScope
 const browserGlobals = { ...globals.browser };
 delete browserGlobals['AudioWorkletGlobalScope '];
 
