@@ -1,3 +1,16 @@
+# v3.0.4 (Sun Oct 15 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Fix typescript-eslint issue ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.0.3 (Mon Oct 09 2023)
 
 #### ⚠️ Pushed to `main`
