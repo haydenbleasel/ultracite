@@ -1,3 +1,20 @@
+# v3.0.5 (Tue Oct 31 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump @babel/traverse from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/eslint-config-harmony/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.0.4 (Sun Oct 15 2023)
 
 #### ⚠️ Pushed to `main`
