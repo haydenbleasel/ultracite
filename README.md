@@ -16,7 +16,13 @@
 
 <hr />
 
+## Overview
+
 Harmony is an ESLint config for modern TypeScript apps. It's designed to be used with [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality through ESLint rules and TypeScript compiler options. It is designed for [Next.js](https://nextjs.org/) apps, but can be used with any TypeScript project, such as [React Native](https://reactnative.dev/) or [Node.js](https://nodejs.org/).
+
+Harmony is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save.
+
+## Features
 
 By default, Harmony combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as:
 
@@ -52,9 +58,9 @@ code --install-extension bradlc.vscode-tailwindcss
 code --install-extension stylelint.vscode-stylelint
 ```
 
-## Usage
+## Setup
 
-Simply create an `eslint.config.mjs` that looks like this.
+Create an `eslint.config.mjs` with the following contents:
 
 ```js
 import harmony from 'eslint-config-harmony';
@@ -62,7 +68,7 @@ import harmony from 'eslint-config-harmony';
 export default harmony;
 ```
 
-Additionally, add the following to your `package.json`. If you don't use a particular tool (say, [Stylelint](https://stylelint.io/)) then you can simply not include the field.
+Add the following to your `package.json`:
 
 ```json
 {
@@ -73,7 +79,7 @@ Additionally, add the following to your `package.json`. If you don't use a parti
 }
 ```
 
-Create the following `.vscode/settings.json`. This will enable full formatting on save.
+Create a `.vscode/settings.json` file with the following contents:
 
 ```json
 {
@@ -107,3 +113,38 @@ Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint conf
   "include": ["eslint.config.mjs"]
 }
 ```
+
+## Usage
+
+Once Harmony is set up, it will automatically format your code on save.
+
+## Configuration
+
+You can opt-out of certain rules by modifying your `eslint.config.mjs` file. For example, here's a common exception I use to avoid linting [shadcn/ui](https://ui.shadcn.com/) components:
+
+```js
+import harmony from 'eslint-config-harmony';
+
+harmony.forEach((config) => {
+  if (config.ignores) {
+    config.ignores.push('./components/ui/**/*');
+  } else {
+    config.ignores = ['./components/ui/**/*'];
+  }
+});
+
+export default harmony;
+```
+
+## Debugging
+
+If you're having issues with Harmony, you can open the ESLint Output panel in VS Code to see what's going on. Optimally, it should look something like this:
+
+```
+[Info  - 10:42:49 PM] ESLint server is starting.
+[Info  - 10:42:49 PM] ESLint server running in node v18.15.0
+[Info  - 10:42:49 PM] ESLint server is running.
+[Info  - 10:42:50 PM] ESLint library loaded from: /Users/haydenbleasel/GitHub/harmony/node_modules/.pnpm/eslint@8.51.0/node_modules/eslint/lib/unsupported-api.js
+```
+
+If you see any errors, it could be related to peer dependencies or changes in dependency versions. Feel free to report these as issues.
