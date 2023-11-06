@@ -90,8 +90,12 @@ const config = [
       ...unusedImportsRules,
     },
 
-    // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
     settings: {
+      react: {
+        version: 'detect',
+      },
+
+      // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
       'import/parsers': {
         espree: ['.js', '.cjs', '.mjs', '.jsx', '.ts', '.tsx'],
       },
