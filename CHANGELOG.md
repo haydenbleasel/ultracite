@@ -1,3 +1,15 @@
+# v3.0.9 (Mon Nov 13 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Add support for geometry coordinates ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.0.8 (Wed Nov 08 2023)
 
 #### ⚠️ Pushed to `main`
