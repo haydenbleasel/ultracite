@@ -70,7 +70,7 @@ const config = {
   'grouped-accessor-pairs': 'error',
   'guard-for-in': 'error',
   'id-denylist': 'error',
-  'id-length': 'error',
+  'id-length': ['error', { exceptions: ['x', 'y', 'z'] }],
   'id-match': 'error',
   'max-classes-per-file': 'error',
   'max-depth': 'error',
