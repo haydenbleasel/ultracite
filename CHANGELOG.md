@@ -1,3 +1,15 @@
+# v3.1.0 (Tue Nov 14 2023)
+
+#### 🚀 Enhancement
+
+- Add support for Tailwind rules [#127](https://github.com/haydenbleasel/eslint-config-harmony/pull/127) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.0.9 (Mon Nov 13 2023)
 
 #### ⚠️ Pushed to `main`
