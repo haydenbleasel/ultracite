@@ -12,6 +12,9 @@ const baseRules = Object.fromEntries(
 
 const overrideRules = {
   'tailwindcss/no-arbitrary-value': 'off',
+
+  // This is handled by prettier
+  'tailwindcss/classnames-order': 'off',
 };
 
 const config = Object.assign(baseRules, overrideRules);
