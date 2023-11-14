@@ -14,6 +14,7 @@ import prettier from 'eslint-plugin-prettier';
 import cypress from 'eslint-plugin-cypress';
 import storybook from 'eslint-plugin-storybook';
 import unusedImports from 'eslint-plugin-unused-imports';
+import tailwindcss from 'eslint-plugin-tailwindcss';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 
 import eslintPrettier from 'eslint-config-prettier';
@@ -33,6 +34,7 @@ import prettierRules from './rules/prettier.mjs';
 import eslintTypescriptRules from './rules/eslint-typescript.mjs';
 import cypressRules from './rules/cypress.mjs';
 import storybookRules from './rules/storybook.mjs';
+import tailwindcssRules from './rules/tailwindcss.mjs';
 import unusedImportsRules from './rules/unused-imports.mjs';
 
 // Patch AudioWorkletGlobalScope
@@ -75,6 +77,7 @@ const config = [
       n,
       '@next/next': next,
       'unused-imports': unusedImports,
+      tailwindcss,
     },
     rules: {
       ...eslintRules,
@@ -88,6 +91,7 @@ const config = [
       ...prettierRules,
       ...eslintPrettier.rules,
       ...unusedImportsRules,
+      ...tailwindcssRules,
     },
 
     settings: {
