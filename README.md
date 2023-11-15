@@ -148,3 +148,13 @@ If you're having issues with Harmony, you can open the ESLint Output panel in VS
 ```
 
 If you see any errors, it could be related to peer dependencies or changes in dependency versions. Feel free to report these as issues.
+
+## Roadmap
+
+- https://github.com/SonarSource/eslint-plugin-sonarjs
+- https://github.com/BenoitZugmeyer/eslint-plugin-html
+- https://github.com/ota-meshi/eslint-plugin-yml
+- https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx
+- https://github.com/eslint/eslint-plugin-markdown
+- https://github.com/amilajack/eslint-plugin-compat
+- https://github.com/sindresorhus/eslint-plugin-unicorn
