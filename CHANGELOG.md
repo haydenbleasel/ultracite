@@ -1,3 +1,18 @@
+# v3.1.5 (Thu Dec 14 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/eslint-config-harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove ESLint 8.53 deprecated rules ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.1.4 (Thu Nov 23 2023)
 
 #### ⚠️ Pushed to `main`
