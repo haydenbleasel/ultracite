@@ -183,13 +183,7 @@ const config = {
   yoda: 'error',
 
   // ESLint Layout & Formatting: These rules care about how the code looks rather than how it executes
-  'array-element-newline': ['off'],
-  'function-call-argument-newline': 'off',
   'line-comment-position': 'error',
-  'max-len': 'off',
-  'max-statements-per-line': 'error',
-  'multiline-ternary': 'off',
-  'object-property-newline': 'off',
 };
 
 export default config;
