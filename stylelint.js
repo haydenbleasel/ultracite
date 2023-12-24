@@ -2,13 +2,8 @@
 
 module.exports = {
   plugins: ['stylelint-prettier'],
-  extends: [
-    'stylelint-config-standard',
-    'stylelint-config-idiomatic-order',
-    'stylelint-config-prettier',
-  ],
+  extends: ['stylelint-config-standard', 'stylelint-config-idiomatic-order'],
   rules: {
-    'prettier/prettier': true,
     'at-rule-no-unknown': [
       true,
       {
@@ -22,7 +17,7 @@ module.exports = {
         ],
       },
     ],
-    'declaration-block-trailing-semicolon': null,
+    'declaration-property-value-no-unknown': true,
     'no-descending-specificity': null,
     'declaration-block-no-redundant-longhand-properties': [
       true,
