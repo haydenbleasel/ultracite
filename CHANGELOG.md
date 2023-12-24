@@ -1,3 +1,15 @@
+# v3.1.6 (Sun Dec 24 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Stylelint v15 updates ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.1.5 (Thu Dec 14 2023)
 
 #### ⚠️ Pushed to `main`
