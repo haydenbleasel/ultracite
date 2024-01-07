@@ -46,7 +46,7 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 Run the command below to install Harmony with peer dependencies:
 
 ```sh
-yarn add -D eslint-config-harmony eslint prettier stylelint typescript jest
+pnpm add -D eslint-config-harmony eslint prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
