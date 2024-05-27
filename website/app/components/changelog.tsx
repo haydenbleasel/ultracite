@@ -18,15 +18,19 @@ export const Changelog = async (): Promise<ReactElement> => {
     <div className="relative h-screen overflow-auto py-20">
       <Accordion
         type="single"
-        className="prose prose-neutral max-w-lg mx-auto"
+        className="prose prose-sm prose-neutral max-w-lg mx-auto"
         defaultValue={String(changelog.data[0].id)}
         collapsible
       >
         {changelog.data.map((release) => (
-          <AccordionItem value={String(release.id)} key={release.id}>
+          <AccordionItem
+            value={String(release.id)}
+            key={release.id}
+            className="[&>h3]:m-0"
+          >
             <AccordionTrigger>
-              <p className="m-0 flex-1">{release.name}</p>
-              <time dateTime={release.created_at} className="shrink-0 m-0">
+              <p className="m-0 flex-1 text-left">{release.name}</p>
+              <time dateTime={release.created_at} className="shrink-0 m-0 mr-2">
                 {dateFormatter.format(new Date(release.created_at))}
               </time>
             </AccordionTrigger>

@@ -1,6 +1,14 @@
 import { Octokit } from '@octokit/rest';
 
-const octokit = new Octokit();
+const githubToken = process.env.GITHUB_TOKEN;
+
+if (!githubToken) {
+  throw new Error('GITHUB_TOKEN is not set');
+}
+
+const octokit = new Octokit({
+  auth: githubToken,
+});
 
 const owner = 'haydenbleasel';
 const repo = 'harmony';
