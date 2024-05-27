@@ -1,3 +1,15 @@
+# v3.3.1 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update tsup.config.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.0 (Mon May 27 2024)
 
 #### 🚀 Enhancement
