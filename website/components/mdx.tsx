@@ -25,9 +25,9 @@ const ContentWrapper: FC<HTMLProps<HTMLDivElement>> = ({
 );
 
 export const Article: FC<{
-  id: number;
-  date: string;
-  children: ReactNode;
+  readonly id: number;
+  readonly date: string;
+  readonly children: ReactNode;
 }> = ({ id, date, children }) => {
   const heightRef = useRef<HTMLDivElement>(null);
   const [heightAdjustment, setHeightAdjustment] = useState(0);

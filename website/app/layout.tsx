@@ -2,14 +2,14 @@ import '../styles/tailwind.css';
 import 'focus-visible';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
+import Image from 'next/image';
 import octokit from '../lib/octokit';
 import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
 import SVGGradient from '../components/gradient';
+import { Button } from './components/button';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import Image from 'next/image';
-import { Button } from './components/button';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const repo = await octokit.repos.get({
@@ -25,7 +25,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 type RootLayoutProps = {
-  children: ReactNode;
+  readonly children: ReactNode;
 };
 
 const RootLayout = async ({

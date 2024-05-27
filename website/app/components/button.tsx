@@ -1,7 +1,7 @@
-import { FC, ComponentProps } from 'react';
+import type { FC, ComponentProps } from 'react';
 
 type ButtonProps = ComponentProps<'button'>;
 
-export const Button: FC<ButtonProps> = (props) => {
-  return <button {...props} />;
-};
+export const Button: FC<ButtonProps> = (props) => (
+  <button type="button" {...props} />
+);
