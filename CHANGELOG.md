@@ -1,3 +1,15 @@
+# v3.3.3 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix exports in package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.2 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
