@@ -1,3 +1,19 @@
+# v3.1.12 (Mon May 27 2024)
+
+#### 🐛 Bug Fix
+
+- Rebrand from `eslint-config-harmony` to `ultracite` [#129](https://github.com/haydenbleasel/ultracite/pull/129) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.1.11 (Mon May 06 2024)
 
 #### ⚠️ Pushed to `main`
