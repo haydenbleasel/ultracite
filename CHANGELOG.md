@@ -1,3 +1,19 @@
+# v3.4.0 (Mon May 27 2024)
+
+#### 🚀 Enhancement
+
+- Add SonarJS plugin [#132](https://github.com/haydenbleasel/ultracite/pull/132) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Upgrade GitHub Actions workflow ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.7 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
