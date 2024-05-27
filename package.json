@@ -21,7 +21,8 @@
     "prettier-plugin-tailwindcss": "^0.5.9",
     "stylelint-config-idiomatic-order": "^10.0.0",
     "stylelint-config-standard": "^35.0.0",
-    "stylelint-prettier": "^5.0.0"
+    "stylelint-prettier": "^5.0.0",
+    "tsup": "^8.0.2"
   },
   "peerDependencies": {
     "eslint": "^8.55.0",
@@ -55,6 +56,14 @@
     "prettier",
     "stylelint",
     "typescript"
+  ],
+  "scripts": {
+    "prepublishOnly": "pnpm build",
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "files": [
+    "dist"
   ],
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "license": "ISC",
