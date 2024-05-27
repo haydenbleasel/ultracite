@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['eslint.config.mjs', 'prettier.js', 'stylelint.js'],
+  entry: ['*.config.mjs'],
   sourcemap: false,
   minify: true,
   dts: true,

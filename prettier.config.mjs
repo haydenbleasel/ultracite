@@ -1,6 +1,5 @@
-/* eslint-disable import/no-commonjs, import/unambiguous */
-
-module.exports = {
+/** @type {import('prettier').Config} */
+const config = {
   tabWidth: 2,
   useTabs: false,
   semi: true,
@@ -11,3 +10,5 @@ module.exports = {
   proseWrap: 'never',
   printWidth: 80,
 };
+
+export default config;

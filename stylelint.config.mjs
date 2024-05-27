@@ -1,6 +1,5 @@
-/* eslint-disable import/no-commonjs, import/unambiguous */
-
-module.exports = {
+/** @type {import('stylelint').Config} */
+const config = {
   plugins: ['stylelint-prettier'],
   extends: ['stylelint-config-standard', 'stylelint-config-idiomatic-order'],
   rules: {
@@ -33,3 +32,5 @@ module.exports = {
     ],
   },
 };
+
+export default config;
