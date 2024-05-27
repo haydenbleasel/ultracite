@@ -2,7 +2,7 @@ import '../styles/tailwind.css';
 import 'focus-visible';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
-import octokit from '../lib/octokit';
+import { getRepo } from '../lib/octokit';
 import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
 import { Button } from '../components/button';
@@ -10,10 +10,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const repo = await octokit.repos.get({
-    owner: 'haydenbleasel',
-    repo: 'harmony',
-  });
+  const repo = await getRepo();
 
   return {
     title: 'Harmony',
@@ -29,10 +26,7 @@ type RootLayoutProps = {
 const RootLayout = async ({
   children,
 }: RootLayoutProps): Promise<ReactNode> => {
-  const repo = await octokit.repos.get({
-    owner: 'haydenbleasel',
-    repo: 'harmony',
-  });
+  const repo = await getRepo();
 
   return (
     <html lang="en" className="h-full scroll-smooth antialiased">
