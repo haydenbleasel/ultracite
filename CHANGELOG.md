@@ -1,3 +1,15 @@
+# v3.3.6 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Create apple-icon.png ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.5 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
