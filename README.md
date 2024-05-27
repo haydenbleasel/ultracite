@@ -12,7 +12,17 @@ Ultracite is a robust linting preset for modern TypeScript apps. It's comprised 
 
 ## Features
 
-By default, Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss), [Stylelint](https://stylelint.io/), [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin) and [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress).
+### ESLint
+
+Ultracite uses ESLint to enforce code quality and type safety. It includes a wide range of rules to ensure your code is consistent and error-free. Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as the following plugins: [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin) and [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress).
+
+### Prettier
+
+Ultracite uses [Prettier](https://prettier.io/) to format your code. It's configured to work with ESLint, so you can use both tools together without conflicts. Ultracite includes a pre-defined Prettier configuration that ensures your code is formatted consistently, as well as the [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) plugin for automatic class sorting.
+
+### Stylelint
+
+Ultracite uses [Stylelint](https://stylelint.io/) to enforce CSS code quality. Ultracite combines with pre-defined rules for Stylelint, as well as the [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier) plugin to ensure Stylelint and Prettier work together without conflicts.
 
 ## Installation
 
