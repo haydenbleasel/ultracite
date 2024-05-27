@@ -1,4 +1,4 @@
-/* eslint-disable n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -19,6 +19,7 @@ import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
+import sonarjs from 'eslint-plugin-sonarjs';
 
 import eslintRules from './rules/eslint.mjs';
 import reactRules from './rules/react.mjs';
@@ -36,6 +37,7 @@ import cypressRules from './rules/cypress.mjs';
 import storybookRules from './rules/storybook.mjs';
 // import tailwindcssRules from './rules/tailwindcss.mjs';
 import unusedImportsRules from './rules/unused-imports.mjs';
+import sonarjsRules from './rules/sonarjs.mjs';
 
 // Patch AudioWorkletGlobalScope
 const browserGlobals = { ...globals.browser };
@@ -78,6 +80,7 @@ const config = [
       '@next/next': next,
       'unused-imports': unusedImports,
       // tailwindcss,
+      sonarjs,
     },
     rules: {
       ...eslintRules,
@@ -92,6 +95,7 @@ const config = [
       ...eslintPrettier.rules,
       ...unusedImportsRules,
       // ...tailwindcssRules,
+      ...sonarjsRules,
     },
 
     settings: {
