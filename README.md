@@ -2,29 +2,21 @@
 
 <br />
 
-# Harmony
+# Ultracite
 
-**Strict, opinionated ESLint config for modern TypeScript apps.**
+Ultracite is a robust linting preset for modern TypeScript apps. It's comprised of configuration files for [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality through ESLint rules and TypeScript compiler options. It is designed for [Next.js](https://nextjs.org/) apps, but can be used with any TypeScript project, such as [React Native](https://reactnative.dev/) or [Node.js](https://nodejs.org/).
 
-<img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/eslint-config-harmony/push.yaml" alt="" />
+<img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/ultracite/push.yaml" alt="" />
 
-<img src="https://img.shields.io/npm/dy/eslint-config-harmony" alt="" />
+<img src="https://img.shields.io/npm/dy/ultracite" alt="" />
 
-<img src="https://img.shields.io/npm/v/eslint-config-harmony" alt="" />
+<img src="https://img.shields.io/npm/v/ultracite" alt="" />
 
-<img src="https://img.shields.io/github/license/haydenbleasel/eslint-config-harmony" alt="" />
-
-<hr />
-
-## Overview
-
-Harmony is an ESLint config for modern TypeScript apps. It's designed to be used with [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality through ESLint rules and TypeScript compiler options. It is designed for [Next.js](https://nextjs.org/) apps, but can be used with any TypeScript project, such as [React Native](https://reactnative.dev/) or [Node.js](https://nodejs.org/).
-
-Harmony is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save.
+<img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
 
 ## Features
 
-By default, Harmony combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as:
+By default, Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as:
 
 - [Import](https://www.npmjs.com/package/eslint-plugin-import)
 - [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
@@ -43,10 +35,10 @@ By default, Harmony combines with pre-defined rulesets for [ESLint](https://esli
 
 ## Installation
 
-Run the command below to install Harmony with peer dependencies:
+Run the command below to install Ultracite with peer dependencies:
 
 ```sh
-pnpm add -D eslint-config-harmony eslint@8 prettier stylelint typescript jest
+pnpm add -D ultracite eslint@8 prettier stylelint typescript jest
 ```
 
 If you're running [VS Code](https://code.visualstudio.com/), ensure you have the following extensions installed:
@@ -63,23 +55,23 @@ code --install-extension stylelint.vscode-stylelint
 Create an `eslint.config.mjs` with the following contents:
 
 ```js
-import harmony from 'eslint-config-harmony';
+import ultracite from 'ultracite';
 
-export default harmony;
+export default ultracite;
 ```
 
 Add the following to your `package.json`:
 
 ```json
 {
-  "prettier": "eslint-config-harmony/prettier",
+  "prettier": "ultracite/prettier",
   "stylelint": {
-    "extends": "eslint-config-harmony/stylelint"
+    "extends": "ultracite/stylelint"
   }
 }
 ```
 
-Create a `.vscode/settings.json` file with the following contents:
+Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save. Create a `.vscode/settings.json` file with the following contents:
 
 ```json
 {
@@ -116,16 +108,16 @@ Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint conf
 
 ## Usage
 
-Once Harmony is set up, it will automatically format your code on save.
+Once Ultracite is set up, it will automatically format your code on save.
 
 ## Configuration
 
 You can opt-out of certain rules by modifying your `eslint.config.mjs` file. For example, here's a common exception I use to avoid linting [shadcn/ui](https://ui.shadcn.com/) components:
 
 ```js
-import harmony from 'eslint-config-harmony';
+import ultracite from 'ultracite';
 
-harmony.forEach((config) => {
+ultracite.forEach((config) => {
   if (config.ignores) {
     config.ignores.push('./components/ui/**/*');
   } else {
@@ -133,18 +125,18 @@ harmony.forEach((config) => {
   }
 });
 
-export default harmony;
+export default ultracite;
 ```
 
 ## Debugging
 
-If you're having issues with Harmony, you can open the ESLint Output panel in VS Code to see what's going on. Optimally, it should look something like this:
+If you're having issues with Ultracite, you can open the ESLint Output panel in VS Code to see what's going on. Optimally, it should look something like this:
 
 ```
 [Info  - 10:42:49 PM] ESLint server is starting.
 [Info  - 10:42:49 PM] ESLint server running in node v18.15.0
 [Info  - 10:42:49 PM] ESLint server is running.
-[Info  - 10:42:50 PM] ESLint library loaded from: /Users/haydenbleasel/GitHub/harmony/node_modules/.pnpm/eslint@8.51.0/node_modules/eslint/lib/unsupported-api.js
+[Info  - 10:42:50 PM] ESLint library loaded from: /Users/haydenbleasel/GitHub/ultracite/node_modules/.pnpm/eslint@8.51.0/node_modules/eslint/lib/unsupported-api.js
 ```
 
 If you see any errors, it could be related to peer dependencies or changes in dependency versions. Feel free to report these as issues.
