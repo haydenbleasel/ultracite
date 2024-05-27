@@ -68,14 +68,14 @@ export const Article: FC<{
                 {dateFormatter.format(new Date(date))}
               </time>
             </Link>
-            <div className="h-[0.0625rem] w-3.5 bg-gray-400 lg:-mr-3.5 xl:mr-0 xl:bg-gray-300" />
+            <div className="h-[0.0625rem] w-3.5 bg-neutral-400 lg:-mr-3.5 xl:mr-0 xl:bg-neutral-300" />
           </div>
           <ContentWrapper>
             <div className="flex">
               <Link href={`#${id}`} className="inline-flex">
                 <time
                   dateTime={date}
-                  className="text-2xs/4 font-medium text-gray-500 dark:text-white/50 xl:hidden"
+                  className="text-2xs/4 font-medium text-neutral-500 dark:text-white/50 xl:hidden"
                 >
                   {dateFormatter.format(new Date(date))}
                 </time>
@@ -83,7 +83,7 @@ export const Article: FC<{
             </div>
           </ContentWrapper>
         </header>
-        <ContentWrapper className="prose prose-neutral prose-blue">
+        <ContentWrapper className="prose prose-neutral dark:prose-invert">
           {children}
         </ContentWrapper>
       </div>

@@ -2,10 +2,12 @@ import '../styles/tailwind.css';
 import 'focus-visible';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { getRepo } from '../lib/octokit';
 import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
-import { display, mono, sans } from '../lib/fonts';
 import { Button } from '../components/button';
+import { Logo } from '../components/logo';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
@@ -32,20 +34,19 @@ const RootLayout = async ({
     <html lang="en" className="h-full scroll-smooth antialiased">
       <body
         className={twMerge(
-          'flex min-h-full flex-col bg-white font-sans dark:bg-gray-950',
-          sans.variable,
-          mono.variable,
-          display.variable
+          'flex min-h-full flex-col bg-white font-sans',
+          GeistSans.variable,
+          GeistMono.variable
         )}
       >
         <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-          <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))] bg-gray-950">
+          <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))] bg-neutral-100">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
                 <div className="dark relative">
                   <div>
-                    <Link href="/" className="font-medium text-white/70">
-                      Harmony
+                    <Link href="/" className="text-neutral-950">
+                      <Logo />
                     </Link>
                   </div>
                   <h1 className="mt-4 font-display text-4xl/tight font-semibold text-white">
