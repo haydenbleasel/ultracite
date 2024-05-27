@@ -1,3 +1,15 @@
+# v3.2.5 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Add Vercel Analytics to site ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.2.4 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
