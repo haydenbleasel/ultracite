@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
+
 import { getReadme } from '../../lib/octokit';
 import type { ReactElement } from 'react';
 
