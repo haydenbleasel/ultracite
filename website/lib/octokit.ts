@@ -12,7 +12,7 @@ const octokit = new Octokit({
 });
 
 const owner = 'haydenbleasel';
-const repo = 'harmony';
+const repo = 'ultracite';
 
 export const getRepo = async () =>
   octokit.repos.get({

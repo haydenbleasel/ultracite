@@ -1,3 +1,3 @@
-import harmony from 'eslint-config-harmony';
+import ultracite from 'ultracite';
 
-export default harmony;
+export default ultracite;

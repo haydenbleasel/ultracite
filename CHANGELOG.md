@@ -75,7 +75,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/eslint-config-harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Remove ESLint 8.53 deprecated rules ([@haydenbleasel](https://github.com/haydenbleasel))
 - Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
 - Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
@@ -138,7 +138,7 @@
 
 #### 🚀 Enhancement
 
-- Add support for Tailwind rules [#127](https://github.com/haydenbleasel/eslint-config-harmony/pull/127) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add support for Tailwind rules [#127](https://github.com/haydenbleasel/ultracite/pull/127) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
 
@@ -202,7 +202,7 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @babel/traverse from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/eslint-config-harmony/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @babel/traverse from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/ultracite/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -264,7 +264,7 @@
 
 #### 💥 Breaking Change
 
-- V3 [#125](https://github.com/haydenbleasel/eslint-config-harmony/pull/125) ([@haydenbleasel](https://github.com/haydenbleasel))
+- V3 [#125](https://github.com/haydenbleasel/ultracite/pull/125) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### ⚠️ Pushed to `main`
 
@@ -273,7 +273,7 @@
 
 #### 🔩 Dependency Updates
 
-- Bump postcss from 8.4.24 to 8.4.31 [#124](https://github.com/haydenbleasel/eslint-config-harmony/pull/124) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump postcss from 8.4.24 to 8.4.31 [#124](https://github.com/haydenbleasel/ultracite/pull/124) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -322,13 +322,13 @@
 
 #### 🚀 Enhancement
 
-- Add Storybook [#123](https://github.com/beskar-co/harmony/pull/123) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add Storybook [#123](https://github.com/haydenbleasel/ultracite/pull/123) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### 🔩 Dependency Updates
 
-- Bump word-wrap from 1.2.3 to 1.2.4 in /website [#122](https://github.com/beskar-co/harmony/pull/122) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump semver from 6.3.0 to 6.3.1 in /website [#121](https://github.com/beskar-co/harmony/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump semver from 6.3.0 to 6.3.1 [#120](https://github.com/beskar-co/harmony/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump word-wrap from 1.2.3 to 1.2.4 in /website [#122](https://github.com/haydenbleasel/ultracite/pull/122) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump semver from 6.3.0 to 6.3.1 in /website [#121](https://github.com/haydenbleasel/ultracite/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump semver from 6.3.0 to 6.3.1 [#120](https://github.com/haydenbleasel/ultracite/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -357,8 +357,8 @@
 
 #### 🔩 Dependency Updates
 
-- Bump stylelint from 15.8.0 to 15.10.1 [#119](https://github.com/beskar-co/harmony/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 15.8.0 to 15.10.1 in /website [#118](https://github.com/beskar-co/harmony/pull/118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 15.8.0 to 15.10.1 [#119](https://github.com/haydenbleasel/ultracite/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 15.8.0 to 15.10.1 in /website [#118](https://github.com/haydenbleasel/ultracite/pull/118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -419,7 +419,7 @@
 
 #### 🚀 Enhancement
 
-- Enhance website, general updates [#116](https://github.com/beskar-co/harmony/pull/116) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Enhance website, general updates [#116](https://github.com/haydenbleasel/ultracite/pull/116) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
 
@@ -443,7 +443,7 @@
 
 #### 🚀 Enhancement
 
-- Migrate to opt-in config [#115](https://github.com/beskar-co/harmony/pull/115) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Migrate to opt-in config [#115](https://github.com/haydenbleasel/ultracite/pull/115) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
 
@@ -491,7 +491,7 @@
 
 #### 🐛 Bug Fix
 
-- Create website [#114](https://github.com/beskar-co/harmony/pull/114) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create website [#114](https://github.com/haydenbleasel/ultracite/pull/114) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
 
@@ -584,14 +584,14 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.50.0 to 5.57.0 [#112](https://github.com/beskar-co/harmony/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/beskar-co/harmony/pull/111) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.1.6 to 13.2.4 [#110](https://github.com/beskar-co/harmony/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/beskar-co/harmony/pull/109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/beskar-co/harmony/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/beskar-co/harmony/pull/105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-prettier from 9.0.4 to 9.0.5 [#101](https://github.com/beskar-co/harmony/pull/101) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-prettier from 2.0.0 to 3.0.0 [#94](https://github.com/beskar-co/harmony/pull/94) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.50.0 to 5.57.0 [#112](https://github.com/haydenbleasel/ultracite/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/haydenbleasel/ultracite/pull/111) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.1.6 to 13.2.4 [#110](https://github.com/haydenbleasel/ultracite/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/haydenbleasel/ultracite/pull/109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/haydenbleasel/ultracite/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/haydenbleasel/ultracite/pull/105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-prettier from 9.0.4 to 9.0.5 [#101](https://github.com/haydenbleasel/ultracite/pull/101) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-prettier from 2.0.0 to 3.0.0 [#94](https://github.com/haydenbleasel/ultracite/pull/94) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -620,15 +620,15 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.48.1 to 5.50.0 [#88](https://github.com/beskar-co/harmony/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/beskar-co/harmony/pull/86) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/beskar-co/harmony/pull/87) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/beskar-co/harmony/pull/89) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.1.2 to 13.1.6 [#90](https://github.com/beskar-co/harmony/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/beskar-co/harmony/pull/91) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.48.1 to 5.50.0 [#92](https://github.com/beskar-co/harmony/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/beskar-co/harmony/pull/93) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/beskar-co/harmony/pull/85) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.48.1 to 5.50.0 [#88](https://github.com/haydenbleasel/ultracite/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/haydenbleasel/ultracite/pull/86) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/haydenbleasel/ultracite/pull/87) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/haydenbleasel/ultracite/pull/89) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.1.2 to 13.1.6 [#90](https://github.com/haydenbleasel/ultracite/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/haydenbleasel/ultracite/pull/91) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.48.1 to 5.50.0 [#92](https://github.com/haydenbleasel/ultracite/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/haydenbleasel/ultracite/pull/93) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/haydenbleasel/ultracite/pull/85) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -641,7 +641,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/beskar-co/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -690,7 +690,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/beskar-co/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Add import/resolver settings ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -727,7 +727,7 @@
 
 #### 🐛 Bug Fix
 
-- Harmony V2 [#83](https://github.com/beskar-co/harmony/pull/83) ([@haydenbleasel](https://github.com/haydenbleasel))
+- V2 [#83](https://github.com/haydenbleasel/ultracite/pull/83) ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### ⚠️ Pushed to `main`
 
@@ -737,18 +737,18 @@
 
 #### 🔩 Dependency Updates
 
-- Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/beskar-co/harmony/pull/84) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.42.1 to 5.47.1 [#79](https://github.com/beskar-co/harmony/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/beskar-co/harmony/pull/69) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/beskar-co/harmony/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/beskar-co/harmony/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/beskar-co/harmony/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.0.3 to 13.1.1 [#76](https://github.com/beskar-co/harmony/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/beskar-co/harmony/pull/77) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/beskar-co/harmony/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.42.1 to 5.47.1 [#80](https://github.com/beskar-co/harmony/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/beskar-co/harmony/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/beskar-co/harmony/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/haydenbleasel/ultracite/pull/84) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.42.1 to 5.47.1 [#79](https://github.com/haydenbleasel/ultracite/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/haydenbleasel/ultracite/pull/69) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/haydenbleasel/ultracite/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/haydenbleasel/ultracite/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/haydenbleasel/ultracite/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 13.0.3 to 13.1.1 [#76](https://github.com/haydenbleasel/ultracite/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/haydenbleasel/ultracite/pull/77) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/haydenbleasel/ultracite/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.42.1 to 5.47.1 [#80](https://github.com/haydenbleasel/ultracite/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/haydenbleasel/ultracite/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/haydenbleasel/ultracite/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -837,8 +837,8 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/harmony/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/harmony/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/ultracite/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/ultracite/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -870,16 +870,16 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/eslint-plugin from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/harmony/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/harmony/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/harmony/pull/46) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/harmony/pull/50) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/harmony/pull/53) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/harmony/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/harmony/pull/56) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/harmony/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/harmony/pull/58) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/harmony/pull/59) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/ultracite/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/ultracite/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/ultracite/pull/46) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/ultracite/pull/50) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/ultracite/pull/53) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/ultracite/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/ultracite/pull/56) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/ultracite/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/ultracite/pull/58) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/ultracite/pull/59) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -916,7 +916,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Fix prefix for jest rules ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -929,7 +929,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -947,19 +947,19 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @next/eslint-plugin-next from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/harmony/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.21.0 to 8.23.0 [#37](https://github.com/haydenbleasel/harmony/pull/37) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/harmony/pull/38) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.9.1 to 14.11.0 [#39](https://github.com/haydenbleasel/harmony/pull/39) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/harmony/pull/40) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.7.4 to 4.8.2 [#41](https://github.com/haydenbleasel/harmony/pull/41) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.30.1 to 7.31.1 [#42](https://github.com/haydenbleasel/harmony/pull/42) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/harmony/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.18.0 to 8.21.0 [#30](https://github.com/haydenbleasel/harmony/pull/30) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jsx-a11y from 6.6.0 to 6.6.1 [#31](https://github.com/haydenbleasel/harmony/pull/31) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/harmony/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.11 to 0.1.13 [#33](https://github.com/haydenbleasel/harmony/pull/33) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/harmony/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/ultracite/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.21.0 to 8.23.0 [#37](https://github.com/haydenbleasel/ultracite/pull/37) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/ultracite/pull/38) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.9.1 to 14.11.0 [#39](https://github.com/haydenbleasel/ultracite/pull/39) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/ultracite/pull/40) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.7.4 to 4.8.2 [#41](https://github.com/haydenbleasel/ultracite/pull/41) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.30.1 to 7.31.1 [#42](https://github.com/haydenbleasel/ultracite/pull/42) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/ultracite/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.18.0 to 8.21.0 [#30](https://github.com/haydenbleasel/ultracite/pull/30) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-jsx-a11y from 6.6.0 to 6.6.1 [#31](https://github.com/haydenbleasel/ultracite/pull/31) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @next/eslint-plugin-next from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/ultracite/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.11 to 0.1.13 [#33](https://github.com/haydenbleasel/ultracite/pull/33) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/ultracite/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -984,7 +984,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Remove deprecated (?) rule ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -1010,7 +1010,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Add react-native plugin dependency ([@haydenbleasel](https://github.com/haydenbleasel))
 
 #### Authors: 1
@@ -1039,13 +1039,13 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/harmony/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/harmony/pull/28) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/harmony/pull/27) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/harmony/pull/26) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/harmony/pull/25) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/harmony/pull/23) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/harmony/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/ultracite/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/ultracite/pull/28) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/ultracite/pull/27) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/ultracite/pull/26) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/ultracite/pull/25) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/ultracite/pull/23) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/ultracite/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -1058,7 +1058,7 @@
 
 #### 🐛 Bug Fix
 
-- Allow HTTP header literals to break naming convention [#21](https://github.com/haydenbleasel/harmony/pull/21) ([@marktheunissen](https://github.com/marktheunissen))
+- Allow HTTP header literals to break naming convention [#21](https://github.com/haydenbleasel/ultracite/pull/21) ([@marktheunissen](https://github.com/marktheunissen))
 
 #### Authors: 1
 
@@ -1070,7 +1070,7 @@
 
 #### ⚠️ Pushed to `main`
 
-- Merge branch 'main' of https://github.com/haydenbleasel/harmony ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
 - Use next/core-web-vitals instead of custom config ([@haydenbleasel](https://github.com/haydenbleasel))
 - Revert "Attempt fixing Next format" ([@haydenbleasel](https://github.com/haydenbleasel))
 
@@ -1126,16 +1126,16 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/harmony/pull/17) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-import from 2.25.4 to 2.26.0 [#11](https://github.com/haydenbleasel/harmony/pull/11) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.6.1 to 14.8.1 [#12](https://github.com/haydenbleasel/harmony/pull/12) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.6.1 to 2.6.2 [#13](https://github.com/haydenbleasel/harmony/pull/13) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.8 to 0.1.10 [#14](https://github.com/haydenbleasel/harmony/pull/14) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.12.0 to 8.14.0 [#15](https://github.com/haydenbleasel/harmony/pull/15) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-config-next from 12.1.4 to 12.1.5 [#16](https://github.com/haydenbleasel/harmony/pull/16) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/harmony/pull/18) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react-hooks from 4.4.0 to 4.5.0 [#19](https://github.com/haydenbleasel/harmony/pull/19) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.6.3 to 4.6.4 [#20](https://github.com/haydenbleasel/harmony/pull/20) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/ultracite/pull/17) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-import from 2.25.4 to 2.26.0 [#11](https://github.com/haydenbleasel/ultracite/pull/11) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.6.1 to 14.8.1 [#12](https://github.com/haydenbleasel/ultracite/pull/12) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.6.1 to 2.6.2 [#13](https://github.com/haydenbleasel/ultracite/pull/13) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier-plugin-tailwindcss from 0.1.8 to 0.1.10 [#14](https://github.com/haydenbleasel/ultracite/pull/14) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.12.0 to 8.14.0 [#15](https://github.com/haydenbleasel/ultracite/pull/15) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-config-next from 12.1.4 to 12.1.5 [#16](https://github.com/haydenbleasel/ultracite/pull/16) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/ultracite/pull/18) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react-hooks from 4.4.0 to 4.5.0 [#19](https://github.com/haydenbleasel/ultracite/pull/19) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump typescript from 4.6.3 to 4.6.4 [#20](https://github.com/haydenbleasel/ultracite/pull/20) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
@@ -1153,14 +1153,14 @@
 
 #### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/harmony/pull/10) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/harmony/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.6.0 to 14.6.1 [#7](https://github.com/haydenbleasel/harmony/pull/7) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react-hooks from 4.3.0 to 4.4.0 [#8](https://github.com/haydenbleasel/harmony/pull/8) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.6.0 to 2.6.1 [#2](https://github.com/haydenbleasel/harmony/pull/2) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.11.0 to 8.12.0 [#3](https://github.com/haydenbleasel/harmony/pull/3) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-config-next from 12.1.0 to 12.1.4 [#9](https://github.com/haydenbleasel/harmony/pull/9) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump minimist from 1.2.5 to 1.2.6 [#1](https://github.com/haydenbleasel/harmony/pull/1) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/parser from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/ultracite/pull/10) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump @typescript-eslint/eslint-plugin from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/ultracite/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump stylelint from 14.6.0 to 14.6.1 [#7](https://github.com/haydenbleasel/ultracite/pull/7) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-plugin-react-hooks from 4.3.0 to 4.4.0 [#8](https://github.com/haydenbleasel/ultracite/pull/8) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump prettier from 2.6.0 to 2.6.1 [#2](https://github.com/haydenbleasel/ultracite/pull/2) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint from 8.11.0 to 8.12.0 [#3](https://github.com/haydenbleasel/ultracite/pull/3) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump eslint-config-next from 12.1.0 to 12.1.4 [#9](https://github.com/haydenbleasel/ultracite/pull/9) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump minimist from 1.2.5 to 1.2.6 [#1](https://github.com/haydenbleasel/ultracite/pull/1) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 #### Authors: 2
 
