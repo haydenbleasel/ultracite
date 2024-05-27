@@ -57,6 +57,14 @@
     "stylelint",
     "typescript"
   ],
+  "scripts": {
+    "prepublishOnly": "pnpm build",
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "files": [
+    "dist"
+  ],
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "license": "ISC",
   "bugs": {
