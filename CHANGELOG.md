@@ -1,3 +1,15 @@
+# v3.3.4 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.3 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
