@@ -1,3 +1,11 @@
 article a[class='anchor'] {
   @apply hidden;
 }
+
+article p:has(img) {
+  @apply hidden;
+}
+
+article p:has(> a[href*='camo.githubusercontent']) {
+  @apply inline-block m-0;
+}

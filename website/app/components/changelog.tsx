@@ -15,7 +15,7 @@ export const Changelog = async (): Promise<ReactElement> => {
   const changelog = await getChangelog();
 
   return (
-    <div className="relative h-screen overflow-auto py-20">
+    <div className="relative md:overflow-y-auto md:h-screen py-20 px-4">
       <Accordion
         type="single"
         className="prose prose-sm prose-neutral max-w-lg mx-auto"

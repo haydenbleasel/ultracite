@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 
 export const Logo: FC = () => (
-  <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2 not-prose">
     <svg
       fill="none"
       height={24}
