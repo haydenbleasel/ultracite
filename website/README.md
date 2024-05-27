@@ -10,10 +10,10 @@ To get started, first install dependencies via npm:
 npm install
 ```
 
-Next, create a `.env.local` file in the root of your project and set the `NEXT_PUBLIC_SITE_URL` environment variable to your site's public URL:
+Next, create a `.env.local` file in the root of your project and set the `VERCEL_PROJECT_PRODUCTION_URL` environment variable to your site's public URL:
 
 ```
-NEXT_PUBLIC_SITE_URL=https://example.com
+VERCEL_PROJECT_PRODUCTION_URL=https://example.com
 ```
 
 Then start the development server:

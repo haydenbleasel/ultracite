@@ -2,12 +2,10 @@ import '../styles/tailwind.css';
 import 'focus-visible';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
-import Image from 'next/image';
 import octokit from '../lib/octokit';
 import { GitHubIcon, NpmIcon, TwitterIcon } from '../components/icons';
 import { display, mono, sans } from '../lib/fonts';
-import SVGGradient from '../components/gradient';
-import { Button } from './components/button';
+import { Button } from '../components/button';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
@@ -20,7 +18,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return {
     title: 'Harmony',
     description: repo.data.description,
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? ''),
+    metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ?? ''),
   };
 };
 
@@ -47,19 +45,9 @@ const RootLayout = async ({
         )}
       >
         <div className="relative flex-none overflow-hidden lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-          <div className="bg-black sm:hidden absolute w-full h-full">
-            <Image
-              className="w-full opacity-70 h-full object-cover"
-              src="/mobile-background.jpg"
-              alt=""
-              width={1200}
-              height={694}
-            />
-          </div>
-          <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))]">
+          <div className="relative flex w-full px-6 lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:px-0 lg:pl-[max(4rem,calc(50%-38rem))] bg-gray-950">
             <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
               <div className="pb-16 pt-20 sm:pb-20 sm:pt-32 lg:py-20">
-                <SVGGradient />
                 <div className="dark relative">
                   <div>
                     <Link href="/" className="font-medium text-white/70">
