@@ -1,3 +1,15 @@
+# v3.4.1 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Bundle release notes on website on the same day ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.4.0 (Mon May 27 2024)
 
 #### 🚀 Enhancement
