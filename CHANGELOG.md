@@ -1,3 +1,15 @@
+# v3.2.4 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Remove logo from readme ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.2.3 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
