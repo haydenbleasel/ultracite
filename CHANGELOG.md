@@ -1,3 +1,15 @@
+# v3.3.5 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Add better feature definitions to README ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.4 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
