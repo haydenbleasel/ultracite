@@ -14,7 +14,7 @@ Ultracite is a robust linting preset for modern TypeScript apps. It's comprised 
 
 ### ESLint
 
-Ultracite uses ESLint to enforce code quality and type safety. It includes a wide range of rules to ensure your code is consistent and error-free. Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as the following plugins: [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin) and [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress).
+Ultracite uses [ESLint](https://eslint.org/) to enforce code quality and type safety. It includes a wide range of rules to ensure your code is consistent and error-free. Ultracite combines with pre-defined rulesets for ESLint, as well as the following plugins: [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin) and [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress).
 
 ### Prettier
 
@@ -108,11 +108,8 @@ You can opt-out of certain rules by modifying your `eslint.config.mjs` file. For
 import ultracite from 'ultracite';
 
 ultracite.forEach((config) => {
-  if (config.ignores) {
-    config.ignores.push('./components/ui/**/*');
-  } else {
-    config.ignores = ['./components/ui/**/*'];
-  }
+  config.ignores = config.ignores || [];
+  config.ignores.push('./components/ui/**/*');
 });
 
 export default ultracite;
