@@ -12,22 +12,7 @@ Ultracite is a robust linting preset for modern TypeScript apps. It's comprised 
 
 ## Features
 
-By default, Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as:
-
-- [Import](https://www.npmjs.com/package/eslint-plugin-import)
-- [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
-- [React](https://www.npmjs.com/package/eslint-plugin-react)
-- [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-- [jest](https://www.npmjs.com/package/eslint-plugin-jest)
-- [promise](https://www.npmjs.com/package/eslint-plugin-promise)
-- [n](https://www.npmjs.com/package/eslint-plugin-n)
-- [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin)
-- [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier)
-- [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
-- [Stylelint](https://stylelint.io/)
-- [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier)
-- [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin)
-- [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress)
+By default, Ultracite combines with pre-defined rulesets for [ESLint](https://eslint.org/), as well as [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss), [Stylelint](https://stylelint.io/), [Stylelint-Prettier](https://www.npmjs.com/package/stylelint-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin) and [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress).
 
 ## Installation
 
