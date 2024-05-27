@@ -51,20 +51,19 @@ code --install-extension stylelint.vscode-stylelint
 Create an `eslint.config.mjs` with the following contents:
 
 ```js
-import ultracite from 'ultracite';
-
-export default ultracite;
+export { default } from 'ultracite';
 ```
 
-Add the following to your `package.json`:
+Create a `prettier.config.mjs` with the following contents:
 
-```json
-{
-  "prettier": "ultracite/prettier",
-  "stylelint": {
-    "extends": "ultracite/stylelint"
-  }
-}
+```js
+export { default } from 'ultracite/prettier';
+```
+
+Create a `stylelint.config.mjs` with the following contents:
+
+```js
+export { default } from 'ultracite/stylelint';
 ```
 
 Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save. Create a `.vscode/settings.json` file with the following contents:
