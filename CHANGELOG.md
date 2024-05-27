@@ -1,3 +1,15 @@
+# v3.3.0 (Mon May 27 2024)
+
+#### 🚀 Enhancement
+
+- Bundle [#131](https://github.com/haydenbleasel/ultracite/pull/131) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.2.5 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
