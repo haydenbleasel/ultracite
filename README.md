@@ -4,7 +4,7 @@
 
 # Ultracite
 
-**Strict, opinionated ESLint config for modern TypeScript apps.**
+Ultracite is a robust linting preset for modern TypeScript apps. It's comprised of configuration files for [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality through ESLint rules and TypeScript compiler options. It is designed for [Next.js](https://nextjs.org/) apps, but can be used with any TypeScript project, such as [React Native](https://reactnative.dev/) or [Node.js](https://nodejs.org/).
 
 <img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/ultracite/push.yaml" alt="" />
 
@@ -13,14 +13,6 @@
 <img src="https://img.shields.io/npm/v/ultracite" alt="" />
 
 <img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
-
-<hr />
-
-## Overview
-
-Ultracite is an ESLint config for modern TypeScript apps. It's designed to be used with [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality through ESLint rules and TypeScript compiler options. It is designed for [Next.js](https://nextjs.org/) apps, but can be used with any TypeScript project, such as [React Native](https://reactnative.dev/) or [Node.js](https://nodejs.org/).
-
-Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save.
 
 ## Features
 
@@ -79,7 +71,7 @@ Add the following to your `package.json`:
 }
 ```
 
-Create a `.vscode/settings.json` file with the following contents:
+Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/), and includes a `.vscode/settings.json` file that enables full formatting on save. Create a `.vscode/settings.json` file with the following contents:
 
 ```json
 {
