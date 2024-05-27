@@ -13,7 +13,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => (
   <html lang="en" className="h-full scroll-smooth antialiased">
     <body
       className={twMerge(
-        'flex min-h-full flex-col bg-white font-sans',
+        'bg-white font-sans',
         GeistSans.variable,
         GeistMono.variable
       )}
