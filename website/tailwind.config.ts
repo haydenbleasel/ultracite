@@ -51,9 +51,10 @@ const config: Config = {
             },
             pre: {
               padding: theme('spacing.6'),
-              backgroundColor: theme('colors.neutral.900'),
+              backgroundColor: theme('colors.white'),
+              color: theme('colors.neutral.900'),
               borderWidth: 1,
-              borderColor: theme('colors.neutral.800'),
+              borderColor: theme('colors.neutral.200'),
               borderRadius: theme('borderRadius.lg'),
             },
           },

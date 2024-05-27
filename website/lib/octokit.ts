@@ -19,3 +19,18 @@ export const getChangelog = async () =>
     repo,
     per_page: 100,
   });
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const getReadme = async () => {
+  const response = await octokit.rest.repos.getReadme({
+    owner,
+    repo,
+    mediaType: {
+      format: 'html',
+    },
+  });
+
+  return response as unknown as {
+    data: string;
+  };
+};
