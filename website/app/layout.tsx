@@ -1,5 +1,6 @@
 import '../styles/tailwind.css';
 import '../styles/github-light.css';
+import '../styles/github.css';
 import 'focus-visible';
 import { twMerge } from 'tailwind-merge';
 import { GeistSans } from 'geist/font/sans';
