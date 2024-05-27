@@ -1,3 +1,15 @@
+# v3.2.3 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix baseUrl on website ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.2.2 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
