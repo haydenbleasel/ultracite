@@ -3,10 +3,7 @@ import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './{app,mdx,components}/**/*.{ts,tsx,js,jsx}',
-    './node_modules/@beskar-labs/gravity/**/*.js',
-  ],
+  content: ['./{app,mdx,components}/**/*.{ts,tsx,js,jsx}'],
   darkMode: 'class',
   theme: {
     extend: {

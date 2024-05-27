@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 
 const Page = async (): Promise<ReactNode> => {
   const releases = await octokit.rest.repos.listReleases({
-    owner: 'beskar-co',
+    owner: 'haydenbleasel',
     repo: 'harmony',
     per_page: 100,
   });

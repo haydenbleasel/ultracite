@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const repo = await octokit.repos.get({
-    owner: 'beskar-co',
+    owner: 'haydenbleasel',
     repo: 'harmony',
   });
 
@@ -30,7 +30,7 @@ const RootLayout = async ({
   children,
 }: RootLayoutProps): Promise<ReactNode> => {
   const repo = await octokit.repos.get({
-    owner: 'beskar-co',
+    owner: 'haydenbleasel',
     repo: 'harmony',
   });
 
@@ -60,7 +60,7 @@ const RootLayout = async ({
                   <div className="mt-8 flex flex-col sm:items-center gap-2 sm:flex-row">
                     <Button
                       className="inline-flex items-center"
-                      href="https://npmjs.com/package/@beskar-labs/harmony"
+                      href="https://npmjs.com/package/eslint-config-harmony"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
