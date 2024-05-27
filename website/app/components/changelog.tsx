@@ -60,14 +60,18 @@ export const Changelog = async (): Promise<ReactElement> => {
                     : '',
                 }}
               />
-              <h4>Other releases</h4>
-              <ul>
-                {releases.slice(1).map((release) => (
-                  <li key={release.id}>
-                    <a href={release.html_url}>{release.name}</a>
-                  </li>
-                ))}
-              </ul>
+              {releases.length > 1 && (
+                <>
+                  <h4>Other releases</h4>
+                  <ul>
+                    {releases.slice(1).map((release) => (
+                      <li key={release.id}>
+                        <a href={release.html_url}>{release.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </AccordionContent>
           </AccordionItem>
         ))}
