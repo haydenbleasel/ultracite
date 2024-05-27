@@ -1,3 +1,17 @@
+# v3.3.2 (Mon May 27 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Switch to config files, use default export syntax ([@haydenbleasel](https://github.com/haydenbleasel))
+- Switch js to mjs files ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.3.1 (Mon May 27 2024)
 
 #### ⚠️ Pushed to `main`
