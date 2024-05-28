@@ -10,7 +10,9 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`unicorn/${key}`, 'error'])
 );
 
-const overrideRules = {};
+const overrideRules = {
+  'unicorn/no-keyword-prefix': 'off',
+};
 
 const config = Object.assign(baseRules, overrideRules);
 
