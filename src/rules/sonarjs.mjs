@@ -10,7 +10,9 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`sonarjs/${key}`, 'error'])
 );
 
-const overrideRules = {};
+const overrideRules = {
+  'sonarjs/elseif-without-else': 'off',
+};
 
 const config = Object.assign(baseRules, overrideRules);
 
