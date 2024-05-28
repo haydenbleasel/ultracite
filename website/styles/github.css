@@ -7,3 +7,19 @@ article br {
 article p:has(> a[href*='camo.githubusercontent']) {
   @apply inline-block m-0;
 }
+
+article .markdown-alert {
+  @apply border-l-4 p-4 border-neutral-200;
+}
+
+article .markdown-alert p {
+  @apply m-0;
+}
+
+article .markdown-alert-title {
+  @apply flex items-center text-orange-500 font-semibold !mb-4;
+}
+
+article .markdown-alert-title svg {
+  @apply fill-current;
+}
