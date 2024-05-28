@@ -14,7 +14,7 @@ Ultracite is a robust linting preset for modern TypeScript apps. It's comprised 
 
 ### ESLint
 
-Ultracite uses [ESLint](https://eslint.org/) to enforce code quality and type safety. It includes a wide range of rules to ensure your code is consistent and error-free. Ultracite combines with pre-defined rulesets for ESLint, as well as the following plugins: [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin), [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress) and [SonarJS](https://www.npmjs.com/package/eslint-plugin-sonarjs).
+Ultracite uses [ESLint](https://eslint.org/) to enforce code quality and type safety. It includes a wide range of rules to ensure your code is consistent and error-free. Ultracite combines with pre-defined rulesets for ESLint, as well as the following plugins: [Import](https://www.npmjs.com/package/eslint-plugin-import), [jsx-a11y](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), [React](https://www.npmjs.com/package/eslint-plugin-react), [React Hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks), [jest](https://www.npmjs.com/package/eslint-plugin-jest), [promise](https://www.npmjs.com/package/eslint-plugin-promise), [n](https://www.npmjs.com/package/eslint-plugin-n), [Typescript](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), [Prettier](https://www.npmjs.com/package/eslint-plugin-prettier), [Next.js](https://nextjs.org/docs/basic-features/eslint#eslint-plugin), [Cypress](https://www.npmjs.com/package/eslint-plugin-cypress), [HTML](https://www.npmjs.com/package/eslint-plugin-html) and [SonarJS](https://www.npmjs.com/package/eslint-plugin-sonarjs).
 
 ### Prettier
 
@@ -130,8 +130,6 @@ If you see any errors, it could be related to peer dependencies or changes in de
 
 ## Roadmap
 
-- https://github.com/SonarSource/eslint-plugin-sonarjs
-- https://github.com/BenoitZugmeyer/eslint-plugin-html
 - https://github.com/ota-meshi/eslint-plugin-yml
 - https://github.com/mdx-js/eslint-mdx/tree/master/packages/eslint-plugin-mdx
 - https://github.com/eslint/eslint-plugin-markdown
