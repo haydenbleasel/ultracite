@@ -85,7 +85,9 @@ Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/),
 }
 ```
 
-> [!NOTE] If you are using the pre-release version of the ESLint extension, you may need to use `eslint.useFlatConfig` instead of `eslint.experimental.useFlatConfig`.
+<!-- prettier-ignore -->
+> [!NOTE]
+> If you are using the pre-release version of the ESLint extension, you may need to use `eslint.useFlatConfig` instead of `eslint.experimental.useFlatConfig`.
 
 Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
 
