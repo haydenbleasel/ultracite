@@ -17,6 +17,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 // import tailwindcss from 'eslint-plugin-tailwindcss';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 import html from 'eslint-plugin-html';
+import compat from 'eslint-plugin-compat';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
@@ -39,10 +40,7 @@ import storybookRules from './rules/storybook.mjs';
 // import tailwindcssRules from './rules/tailwindcss.mjs';
 import unusedImportsRules from './rules/unused-imports.mjs';
 import sonarjsRules from './rules/sonarjs.mjs';
-
-// Patch AudioWorkletGlobalScope
-const browserGlobals = { ...globals.browser };
-delete browserGlobals['AudioWorkletGlobalScope '];
+import compatRules from './rules/compat.mjs';
 
 const config = [
   importPlugin.configs.typescript,
@@ -50,7 +48,7 @@ const config = [
     languageOptions: {
       sourceType: 'module',
       globals: {
-        ...browserGlobals,
+        ...globals.browser,
         ...globals.node,
       },
       parserOptions: {
@@ -83,6 +81,7 @@ const config = [
       'unused-imports': unusedImports,
       // tailwindcss,
       sonarjs,
+      compat,
     },
     rules: {
       ...eslintRules,
@@ -98,6 +97,7 @@ const config = [
       ...unusedImportsRules,
       // ...tailwindcssRules,
       ...sonarjsRules,
+      ...compatRules,
     },
 
     settings: {
