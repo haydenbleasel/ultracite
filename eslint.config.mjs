@@ -179,6 +179,9 @@ const config = [
     plugins: {
       html,
     },
+    settings: {
+      'html/javascript-tag-names': ['script', 'Script'],
+    },
   },
 ];
 
