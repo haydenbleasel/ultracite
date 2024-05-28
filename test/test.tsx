@@ -25,3 +25,7 @@ const req = new PaymentRequest();
 const observer = new IntersectionObserver(() => {});
 
 const foo = Object.values({});
+
+const regex = /[a-zA-Z0-9_]/;
+const regex = /[a-z0-9_]/i;
+const clone = JSON.parse(JSON.stringify(foo));
