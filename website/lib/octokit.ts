@@ -21,7 +21,7 @@ export const getRepo = async () =>
   });
 
 export const getChangelog = async () =>
-  octokit.rest.repos.listReleases({
+  octokit.paginate(octokit.rest.repos.listReleases, {
     owner,
     repo,
     per_page: 100,

@@ -14,16 +14,17 @@ import type { ReactElement } from 'react';
 export const Changelog = async (): Promise<ReactElement> => {
   const changelog = await getChangelog();
 
-  const releasesByDay = changelog.data.reduce<
-    Record<string, typeof changelog.data>
-  >((acc, release) => {
-    const date = new Date(release.created_at).toDateString();
-    if (!(date in acc)) {
-      acc[date] = [];
-    }
-    acc[date].push(release);
-    return acc;
-  }, {});
+  const releasesByDay = changelog.reduce<Record<string, typeof changelog>>(
+    (acc, release) => {
+      const date = new Date(release.created_at).toDateString();
+      if (!(date in acc)) {
+        acc[date] = [];
+      }
+      acc[date].push(release);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="relative md:overflow-y-auto md:h-screen py-20 px-4">
