@@ -1,3 +1,15 @@
+# v3.6.2 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Add styles for GitHub Markdown alerts ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.6.1 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
