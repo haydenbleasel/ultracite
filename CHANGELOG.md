@@ -1,3 +1,15 @@
+# v3.7.4 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update unicorn's preventAbbreviations allowList for Next.js ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.7.3 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
