@@ -81,13 +81,14 @@ Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/),
   "eslint.experimental.useFlatConfig": true,
   "eslint.options": {
     "overrideConfigFile": "eslint.config.mjs"
-  }
+  },
+  "eslint.runtime": "node"
 }
 ```
 
 <!-- prettier-ignore -->
 > [!NOTE]
-> If you are using the pre-release version of the ESLint extension, you may need to use `eslint.useFlatConfig` instead of `eslint.experimental.useFlatConfig`.
+> If you are using the pre-release version of the ESLint extension, you can use `eslint.useFlatConfig` instead of `eslint.experimental.useFlatConfig`.
 
 Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
 
@@ -154,6 +155,26 @@ If you're having issues with Ultracite, you can open the ESLint Output panel in 
 ```
 
 If you see any errors, it could be related to peer dependencies or changes in dependency versions. Feel free to report these as issues.
+
+## Usage in Monorepos
+
+If you're using Ultracite in a monorepo, you will need to do two things:
+
+1. Place the files above in every package and application, as well as the root.
+2. Add the following to your `.vscode/settings.json` file:
+
+```json
+{
+  // ...
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ]
+}
+```
+
+This will ensure ESLint works correctly in all packages and applications by automatically detecting the working directory based on the nearest `package.json` and `eslint.config.mjs`, thus limiting the scope of ESLint to the current package or application and improving performance.
 
 ## Roadmap
 
