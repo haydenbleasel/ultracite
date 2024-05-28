@@ -16,6 +16,7 @@ import storybook from 'eslint-plugin-storybook';
 import unusedImports from 'eslint-plugin-unused-imports';
 // import tailwindcss from 'eslint-plugin-tailwindcss';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
+import html from 'eslint-plugin-html';
 
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
@@ -68,6 +69,7 @@ const config = [
       '**/*.json',
       '**/*.mjs',
       '**/*.cjs',
+      '**/*.html',
     ],
     plugins: {
       prettier,
@@ -170,6 +172,15 @@ const config = [
     },
     rules: {
       ...storybookRules,
+    },
+  },
+  {
+    files: ['**/*.html'],
+    plugins: {
+      html,
+    },
+    settings: {
+      'html/javascript-tag-names': ['script', 'Script'],
     },
   },
 ];
