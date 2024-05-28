@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['*.config.mjs'],
+  entry: ['src/*.config.mjs'],
   sourcemap: false,
   minify: true,
   dts: true,
