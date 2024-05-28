@@ -1,3 +1,15 @@
+# v3.7.0 (Tue May 28 2024)
+
+#### 🚀 Enhancement
+
+- Add `eslint-plugin-unicorn` [#135](https://github.com/haydenbleasel/ultracite/pull/135) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.6.2 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
