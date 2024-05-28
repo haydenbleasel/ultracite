@@ -1,3 +1,18 @@
+# v3.5.1 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add React / React DOM devDeps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.5.0 (Tue May 28 2024)
 
 #### 🚀 Enhancement
