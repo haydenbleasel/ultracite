@@ -130,7 +130,7 @@ const config = {
   'no-sequences': 'error',
   'no-shadow-restricted-names': 'error',
   'no-ternary': 'off',
-  'no-undef-init': 'error',
+  'no-undef-init': 'off',
   'no-undefined': 'off',
   'no-underscore-dangle': 'error',
   'no-unneeded-ternary': 'error',
