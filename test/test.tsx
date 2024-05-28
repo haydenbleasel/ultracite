@@ -8,7 +8,12 @@ const y = x();
 
 const something_NOT_recommended = true;
 
-const Component = () => <div className="mx-5 my-5" />;
+const Component = () => (
+  <>
+    <div className="mx-5 my-5" />
+    <a href="https://www.github.com" title="github.com">Learn more</a>
+  </>
+);
 
 if (true) {
   z();

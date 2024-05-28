@@ -22,6 +22,7 @@ import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
+import github from 'eslint-plugin-github';
 
 import eslintRules from './rules/eslint.mjs';
 import reactRules from './rules/react.mjs';
@@ -42,6 +43,7 @@ import unusedImportsRules from './rules/unused-imports.mjs';
 import sonarjsRules from './rules/sonarjs.mjs';
 import compatRules from './rules/compat.mjs';
 import unicornRules from './rules/unicorn.mjs';
+import githubRules from './rules/github.mjs';
 
 const config = [
   importPlugin.configs.typescript,
@@ -84,6 +86,7 @@ const config = [
       sonarjs,
       compat,
       unicorn,
+      github,
     },
     rules: {
       ...eslintRules,
@@ -101,6 +104,7 @@ const config = [
       ...sonarjsRules,
       ...compatRules,
       ...unicornRules,
+      ...githubRules,
     },
 
     settings: {
