@@ -111,12 +111,35 @@ You can opt-out of certain rules by modifying your `eslint.config.mjs` file. For
 ```js
 import ultracite from 'ultracite';
 
-ultracite.forEach((config) => {
+for (const config of ultracite) {
   config.ignores = config.ignores || [];
   config.ignores.push('./components/ui/**/*');
-});
+}
 
 export default ultracite;
+```
+
+Ultracite also lints the browser compatibility of your code. You can specify which polyfills exist in your project by modifying your `eslint.config.mjs` file. For example, here's how you can add polyfills for Next.js:
+
+```ts
+import ultracite from 'ultracite';
+
+for (const item of ultracite) {
+  item.settings = item.settings || {};
+  item.settings.polyfills = item.settings.polyfills || [];
+
+  item.settings.polyfills.push(
+    // These are from Next.js - https://nextjs.org/docs/architecture/supported-browsers#polyfills
+    'fetch',
+    'URL',
+    'Object.assign',
+
+    // This one is running on the server
+    'URLSearchParams'
+  );
+}
+
+export { default } from 'ultracite';
 ```
 
 ## Debugging
