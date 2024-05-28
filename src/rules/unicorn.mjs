@@ -12,6 +12,18 @@ const baseRules = Object.fromEntries(
 
 const overrideRules = {
   'unicorn/no-keyword-prefix': 'off',
+  'unicorn/prevent-abbreviations': [
+    'error',
+    {
+      allowList: {
+        getInitialProps: true,
+        getServerSideProps: true,
+        getStaticPaths: true,
+        getStaticProps: true,
+        generateStaticParams: true,
+      },
+    },
+  ],
 };
 
 const config = Object.assign(baseRules, overrideRules);
