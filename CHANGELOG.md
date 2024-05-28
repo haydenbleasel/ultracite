@@ -1,3 +1,15 @@
+# v3.8.1 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Add documentation on monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.8.0 (Tue May 28 2024)
 
 #### 🚀 Enhancement
