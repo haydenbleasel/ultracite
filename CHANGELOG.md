@@ -1,3 +1,15 @@
+# v3.8.0 (Tue May 28 2024)
+
+#### 🚀 Enhancement
+
+- Add `eslint-plugin-github` [#136](https://github.com/haydenbleasel/ultracite/pull/136) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.7.4 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
