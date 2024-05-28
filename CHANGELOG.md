@@ -1,3 +1,15 @@
+# v3.6.1 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Improve page design ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.6.0 (Tue May 28 2024)
 
 #### 🚀 Enhancement
