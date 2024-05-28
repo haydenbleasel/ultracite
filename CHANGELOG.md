@@ -1,3 +1,15 @@
+# v3.7.3 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix release pagination ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.7.2 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
