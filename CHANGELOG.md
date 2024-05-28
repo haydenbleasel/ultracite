@@ -1,3 +1,15 @@
+# v3.8.5 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Disable `sonarjs/elseif-without-else` ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.8.4 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
