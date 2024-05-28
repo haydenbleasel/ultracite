@@ -1,3 +1,15 @@
+# v3.7.2 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Disable unicorn/no-keyword-prefix for React className ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.7.1 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
