@@ -18,10 +18,10 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
 import html from 'eslint-plugin-html';
 import compat from 'eslint-plugin-compat';
-
 import eslintPrettier from 'eslint-config-prettier';
 import * as typescriptParser from '@typescript-eslint/parser';
 import sonarjs from 'eslint-plugin-sonarjs';
+import unicorn from 'eslint-plugin-unicorn';
 
 import eslintRules from './rules/eslint.mjs';
 import reactRules from './rules/react.mjs';
@@ -41,6 +41,7 @@ import storybookRules from './rules/storybook.mjs';
 import unusedImportsRules from './rules/unused-imports.mjs';
 import sonarjsRules from './rules/sonarjs.mjs';
 import compatRules from './rules/compat.mjs';
+import unicornRules from './rules/unicorn.mjs';
 
 const config = [
   importPlugin.configs.typescript,
@@ -82,6 +83,7 @@ const config = [
       // tailwindcss,
       sonarjs,
       compat,
+      unicorn,
     },
     rules: {
       ...eslintRules,
@@ -98,6 +100,7 @@ const config = [
       // ...tailwindcssRules,
       ...sonarjsRules,
       ...compatRules,
+      ...unicornRules,
     },
 
     settings: {
