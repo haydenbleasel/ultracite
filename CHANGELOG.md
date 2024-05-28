@@ -1,3 +1,15 @@
+# v3.8.3 (Tue May 28 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Swap no-undef-init for unicorn/no-null ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.8.2 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
