@@ -13,6 +13,7 @@ const baseRules = Object.fromEntries(
 const overrideRules = {
   'unicorn/no-keyword-prefix': 'off',
   'unicorn/no-null': 'off',
+  'unicorn/no-array-callback-reference': 'off',
   'unicorn/prevent-abbreviations': [
     'error',
     {

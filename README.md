@@ -125,11 +125,11 @@ Ultracite also lints the browser compatibility of your code. You can specify whi
 ```ts
 import ultracite from 'ultracite';
 
-for (const item of ultracite) {
-  item.settings = item.settings || {};
-  item.settings.polyfills = item.settings.polyfills || [];
+for (const config of ultracite) {
+  config.settings = config.settings || {};
+  config.settings.polyfills = config.settings.polyfills || [];
 
-  item.settings.polyfills.push(
+  config.settings.polyfills.push(
     // These are from Next.js - https://nextjs.org/docs/architecture/supported-browsers#polyfills
     'fetch',
     'URL',
@@ -165,7 +165,6 @@ If you're using Ultracite in a monorepo, you will need to do two things:
 
 ```json
 {
-  // ...
   "eslint.workingDirectories": [
     {
       "mode": "auto"
