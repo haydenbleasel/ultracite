@@ -1,3 +1,15 @@
+# v3.8.6 (Wed May 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Disable unicorn/no-array-callback-reference ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.8.5 (Tue May 28 2024)
 
 #### ⚠️ Pushed to `main`
