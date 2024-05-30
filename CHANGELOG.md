@@ -1,3 +1,15 @@
+# v3.9.0 (Thu May 30 2024)
+
+#### 🚀 Enhancement
+
+- Add `@tanstack/eslint-plugin-query` [#137](https://github.com/haydenbleasel/ultracite/pull/137) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.8.6 (Wed May 29 2024)
 
 #### ⚠️ Pushed to `main`
