@@ -34,3 +34,12 @@ const foo = Object.values({});
 const regex = /[a-zA-Z0-9_]/;
 const regex = /[a-z0-9_]/i;
 const clone = JSON.parse(JSON.stringify(foo));
+
+useQuery({
+  queryKey: ['todo'],
+  queryFn: () => api.getTodo(todoId),
+})
+
+const todoQueries = {
+  detail: (id) => ({ queryKey: ['todo'], queryFn: () => api.getTodo(id) }),
+}
