@@ -1,3 +1,15 @@
+# v3.9.2 (Sat Jun 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix main package ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.1 (Fri May 31 2024)
 
 #### ⚠️ Pushed to `main`
