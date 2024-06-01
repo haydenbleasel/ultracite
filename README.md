@@ -117,7 +117,7 @@ for (const config of ultracite) {
   config.ignores.push('./components/ui/**/*');
 }
 
-export { default } from ultracite;
+export { default } from 'ultracite';
 ```
 
 Ultracite also lints the browser compatibility of your code. You can specify which polyfills exist in your project by modifying your `eslint.config.mjs` file. For example, here's how you can add polyfills for Next.js:
