@@ -78,17 +78,13 @@ Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/),
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
   "eslint.options": {
     "overrideConfigFile": "eslint.config.mjs"
   },
   "eslint.runtime": "node"
 }
 ```
-
-<!-- prettier-ignore -->
-> [!NOTE]
-> If you are using the pre-release version of the ESLint extension, you can use `eslint.useFlatConfig` instead of `eslint.experimental.useFlatConfig`.
 
 Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
 
