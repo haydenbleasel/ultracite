@@ -1,3 +1,16 @@
+# v3.9.7 (Sat Jun 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update inspector ([@haydenbleasel](https://github.com/haydenbleasel))
+- Use new eslint/js for rules ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.6 (Sat Jun 29 2024)
 
 #### ⚠️ Pushed to `main`
