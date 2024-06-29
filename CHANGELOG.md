@@ -1,3 +1,15 @@
+# v3.9.5 (Sat Jun 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Add Inspector to website ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.4 (Tue Jun 25 2024)
 
 #### ⚠️ Pushed to `main`
