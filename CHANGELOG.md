@@ -1,3 +1,15 @@
+# v3.9.6 (Sat Jun 29 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update next.config.mjs ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.5 (Sat Jun 29 2024)
 
 #### ⚠️ Pushed to `main`
