@@ -6,7 +6,7 @@ const nextConfig = {
   },
   rewrites: async () => [
     {
-      source: '/inspector',
+      source: '/inspector/:path*',
       destination: '/inspector/index.html',
     },
   ],
