@@ -1,3 +1,15 @@
+# v3.9.8 (Wed Jul 03 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.7 (Sat Jun 29 2024)
 
 #### ⚠️ Pushed to `main`
