@@ -109,8 +109,9 @@ You can opt-out of certain rules by modifying your `eslint.config.mjs` file. For
 import ultracite from 'ultracite';
 
 for (const config of ultracite) {
-  config.ignores = config.ignores || [];
-  config.ignores.push('./components/ui/**/*');
+  if (config.ignores) {
+    config.ignores.push('./components/ui/**/*');
+  }
 }
 
 export { default } from 'ultracite';
@@ -122,8 +123,8 @@ Ultracite also lints the browser compatibility of your code. You can specify whi
 import ultracite from 'ultracite';
 
 for (const config of ultracite) {
-  config.settings = config.settings || {};
-  config.settings.polyfills = config.settings.polyfills || [];
+  config.settings ||= {};
+  config.settings.polyfills ||= [];
 
   config.settings.polyfills.push(
     // These are from Next.js - https://nextjs.org/docs/architecture/supported-browsers#polyfills
