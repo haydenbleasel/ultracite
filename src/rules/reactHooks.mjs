@@ -9,13 +9,7 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  'react-hooks/exhaustive-deps': [
-    'error',
-    {
-      // Add support for useAsync by react-use
-      additionalHooks: '(useAsync)',
-    },
-  ],
+  'react-hooks/exhaustive-deps': 'error',
 };
 
 const config = Object.assign(baseRules, overrideRules);
