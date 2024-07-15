@@ -1,3 +1,17 @@
+# v3.9.9 (Mon Jul 15 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump website deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove useAsync from exhaustive deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.8 (Wed Jul 03 2024)
 
 #### ⚠️ Pushed to `main`
