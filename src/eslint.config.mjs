@@ -50,6 +50,9 @@ import queryRules from './rules/query.mjs';
 const config = [
   importPlugin.configs.typescript,
   {
+    ignores: ['**/dist/', '**/build/'],
+  },
+  {
     languageOptions: {
       sourceType: 'module',
       globals: {
