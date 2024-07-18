@@ -1,3 +1,16 @@
+# v3.9.10 (Thu Jul 18 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Ignore .next and .turbo folders by default ([@haydenbleasel](https://github.com/haydenbleasel))
+- Ignore dist and build folders by default ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.9 (Mon Jul 15 2024)
 
 #### ⚠️ Pushed to `main`
