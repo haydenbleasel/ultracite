@@ -1,43 +1,5 @@
 {
-  "browserslist": [
-    "defaults"
-  ],
-  "devDependencies": {
-    "@biomejs/biome": "1.8.3"
-  },
-  "name": "ultracite",
-  "description": "Strict, opinionated linting config for modern TypeScript apps.",
-  "version": "3.9.11",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/haydenbleasel/ultracite.git"
-  },
-  "main": "./biome.json",
-  "keywords": [
-    "ultracite",
-    "eslint",
-    "prettier",
-    "stylelint",
-    "typescript"
-  ],
-  "scripts": {
-    "prepublishOnly": "pnpm build",
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "files": [
-    "biome.json"
-  ],
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/haydenbleasel/ultracite/issues"
-  },
-  "homepage": "https://github.com/haydenbleasel/ultracite#readme",
   "auto": {
     "plugins": [
       "npm",
@@ -46,5 +8,35 @@
       "first-time-contributor",
       "released"
     ]
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/haydenbleasel/ultracite/issues"
+  },
+  "description": "Strict, opinionated linting config for modern TypeScript apps.",
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3"
+  },
+  "files": [
+    "biome.json"
+  ],
+  "homepage": "https://github.com/haydenbleasel/ultracite#readme",
+  "keywords": [
+    "ultracite",
+    "eslint",
+    "prettier",
+    "stylelint",
+    "typescript"
+  ],
+  "license": "ISC",
+  "main": "./biome.json",
+  "name": "ultracite",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haydenbleasel/ultracite.git"
+  },
+  "version": "3.9.11"
 }
