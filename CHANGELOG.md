@@ -1,3 +1,15 @@
+# v4.0.2 (Fri Jul 19 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Disable useExplicitLengthCheck ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.0.1 (Fri Jul 19 2024)
 
 #### ⚠️ Pushed to `main`
