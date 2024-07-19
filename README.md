@@ -26,7 +26,7 @@ code --install-extension bradlc.vscode-tailwindcss
 
 ## Setup
 
-Create an `biome.json` with the following contents:
+Create a `biome.json` with the following contents:
 
 ```json
 { "extends": ["ultracite"] }
