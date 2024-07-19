@@ -1,3 +1,15 @@
+# v4.0.0 (Fri Jul 19 2024)
+
+#### 💥 Breaking Change
+
+- Switch from ESLint, Prettier and Stylelint to Biome [#140](https://github.com/haydenbleasel/ultracite/pull/140) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.11 (Fri Jul 19 2024)
 
 #### ⚠️ Pushed to `main`
