@@ -18,9 +18,13 @@
         "noAutofocus": "off"
       },
       "nursery": {
-        "all": true
+        "all": true,
+        "noReactSpecificProps": "off",
+        "useImportExtensions": "off"
       },
       "style": {
+        "noDefaultExport": "off",
+        "noImplicitBoolean": "off",
         "useFilenamingConvention": {
           "level": "error",
           "options": {
@@ -39,7 +43,6 @@
       "bracketSameLine": false,
       "bracketSpacing": true,
       "enabled": true,
-      "indentSize": 2,
       "indentStyle": "space",
       "indentWidth": 2,
       "jsxQuoteStyle": "double",
@@ -48,8 +51,7 @@
       "quoteProperties": "asNeeded",
       "quoteStyle": "single",
       "semicolons": "always",
-      "trailingComma":"all",
-      "trailingCommas": "all"
+      "trailingCommas": "es5"
     }
   },
   "css": {
@@ -72,7 +74,6 @@
   "json": {
     "formatter": {
       "enabled": true,
-      "indentSize": 2,
       "indentStyle": "space",
       "indentWidth": 2,
       "lineEnding": "lf",
@@ -89,6 +90,7 @@
   },
   "vcs": {
     "enabled": true,
+    "clientKind": "git",
     "useIgnoreFile": true
   },
   "files": {
