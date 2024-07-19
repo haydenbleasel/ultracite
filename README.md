@@ -2,13 +2,12 @@
 
 Ultracite is a robust linting configuration for modern TypeScript apps, built on [Biome](https://biomejs.dev/). It is incredibly opinionated and strict, enforcing the maximum amount of type safety and code quality. Once Ultracite is set up, it will automatically lint, fix and format your code on save.
 
-<img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/ultracite/push.yaml" alt="" />
-
-<img src="https://img.shields.io/npm/dy/ultracite" alt="" />
-
-<img src="https://img.shields.io/npm/v/ultracite" alt="" />
-
-<img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
+<div>
+  <img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/ultracite/push.yaml" alt="" />
+  <img src="https://img.shields.io/npm/dy/ultracite" alt="" />
+  <img src="https://img.shields.io/npm/v/ultracite" alt="" />
+  <img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
+</div>
 
 ## Installation
 
