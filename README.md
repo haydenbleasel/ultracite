@@ -76,6 +76,13 @@ While Ultracite is designed to be zero-config, you can modify anything you'd lik
 }
 ```
 
+You can also disable rules on a per-line basis by adding a comment to the end of the line:
+
+```tsx
+// biome-ignore lint/security/noDangerouslySetInnerHtml: I do what I want mate.
+<div dangerouslySetInnerHTML={{ ... }} />
+```
+
 ## Notes
 
 Ultracite was previously built on [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). If you'd like to use stack, you can install it with the following command:
