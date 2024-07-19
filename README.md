@@ -84,7 +84,7 @@ You can also disable rules on a per-line basis by adding a comment to the end of
 
 ## Notes
 
-Ultracite was previously built on [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). If you'd like to use stack, you can install it with the following command:
+Ultracite was previously built on [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/). If you'd like to use that stack, you can install a compatible version of Ultracite with the following command:
 
 ```sh
 pnpm add -D ultracite@3 eslint@8 prettier stylelint typescript jest
