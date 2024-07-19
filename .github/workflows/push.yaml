@@ -9,11 +9,10 @@ on:
 # what the action will do
 jobs:
   release:
-    # The operating system it will run on
     runs-on: ubuntu-latest
-    # This check needs to be in place to prevent a publish loop with auto and github actions
+    
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    # The list of steps that the action will go through
+    
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -22,19 +21,6 @@ jobs:
 
       - name: Prepare repository
         run: git fetch --unshallow --tags
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: pnpm-deps-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-deps-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Create Release
         env:

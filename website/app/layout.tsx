@@ -2,11 +2,11 @@ import '../styles/tailwind.css';
 import '../styles/github-light.css';
 import '../styles/github.css';
 import 'focus-visible';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
-import { Analytics } from '@vercel/analytics/react';
 import { cn } from '@/lib/utils';
-import type { ReactNode, FC } from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import type { FC, ReactNode } from 'react';
 
 type RootLayoutProps = {
   readonly children: ReactNode;

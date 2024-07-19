@@ -1,6 +1,6 @@
 import typography from '@tailwindcss/typography';
-import animate from 'tailwindcss-animate';
 import type { Config } from 'tailwindcss';
+import animate from 'tailwindcss-animate';
 
 const config: Config = {
   content: [
@@ -51,6 +51,7 @@ const config: Config = {
         mono: ['var(--font-geist-mono)'],
       },
       typography: (theme: (path: string) => string) => ({
+        // biome-ignore lint/style/useNamingConvention: This is a Tailwind CSS plugin
         DEFAULT: {
           css: {
             color: theme('colors.neutral.600'),

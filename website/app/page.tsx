@@ -1,8 +1,8 @@
-import { getRepo } from '../lib/octokit';
-import { Info } from './components/info';
-import { Changelog } from './components/changelog';
+import { getRepo } from '@/lib/octokit';
 import type { Metadata } from 'next';
 import type { FC } from 'react';
+import { Changelog } from './components/changelog';
+import { Info } from './components/info';
 
 const projectUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
@@ -24,7 +24,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Page: FC = () => (
-  <div className="grid lg:grid-cols-2 divide-x divide-neutral-200">
+  <div className="grid divide-x divide-neutral-200 lg:grid-cols-2">
     <Info />
     <Changelog />
   </div>
