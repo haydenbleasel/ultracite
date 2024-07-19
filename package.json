@@ -6,7 +6,7 @@
     "@biomejs/biome": "1.8.3"
   },
   "name": "ultracite",
-  "description": "Strict, opinionated ESLint config for modern TypeScript apps.",
+  "description": "Strict, opinionated linting config for modern TypeScript apps.",
   "version": "3.9.11",
   "publishConfig": {
     "access": "public",
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/haydenbleasel/ultracite.git"
   },
-  "main": "./dist/eslint.config.mjs",
+  "main": "./biome.json",
   "keywords": [
     "ultracite",
     "eslint",
@@ -30,13 +30,8 @@
     "dev": "tsup --watch"
   },
   "files": [
-    "dist"
+    "biome.json"
   ],
-  "exports": {
-    ".": "./dist/eslint.config.mjs",
-    "./prettier": "./dist/prettier.config.mjs",
-    "./stylelint": "./dist/stylelint.config.mjs"
-  },
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "license": "ISC",
   "bugs": {
