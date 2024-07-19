@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
 
-import { marked } from 'marked';
-import { getChangelog } from '@/lib/octokit';
-import { dateFormatter } from '@/lib/date';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { dateFormatter } from '@/lib/date';
+import { getChangelog } from '@/lib/octokit';
+import { marked } from 'marked';
 import type { ReactElement } from 'react';
 
 export const Changelog = async (): Promise<ReactElement> => {

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
 
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { Logo } from '@/components/logo';
-import { getReadme, getRepo } from '../../lib/octokit';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import type { ReactElement } from 'react';
+import { getReadme, getRepo } from '../../lib/octokit';
 
 export const Info = async (): Promise<ReactElement> => {
   const repo = await getRepo();
