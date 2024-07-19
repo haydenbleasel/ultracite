@@ -14,6 +14,7 @@ const overrideRules = {
   'unicorn/no-keyword-prefix': 'off',
   'unicorn/no-null': 'off',
   'unicorn/no-array-callback-reference': 'off',
+  'unicorn/prefer-dom-node-dataset': 'off',
   'unicorn/prevent-abbreviations': [
     'error',
     {

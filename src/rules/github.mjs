@@ -10,7 +10,9 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`github/${key}`, 'error'])
 );
 
-const overrideRules = {};
+const overrideRules = {
+  'github/unescaped-html-literal': 'off',
+};
 
 const config = Object.assign(baseRules, overrideRules);
 
