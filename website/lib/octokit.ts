@@ -24,6 +24,8 @@ export const getChangelog = async () =>
   octokit.paginate(octokit.rest.repos.listReleases, {
     owner,
     repo,
+
+    // biome-ignore lint/style/useNamingConvention: This is a GitHub API parameter
     per_page: 100,
   });
 

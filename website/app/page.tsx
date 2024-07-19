@@ -1,6 +1,6 @@
+import { getRepo } from '@/lib/octokit';
 import type { Metadata } from 'next';
 import type { FC } from 'react';
-import { getRepo } from '../lib/octokit';
 import { Changelog } from './components/changelog';
 import { Info } from './components/info';
 

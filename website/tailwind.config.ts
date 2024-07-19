@@ -51,6 +51,7 @@ const config: Config = {
         mono: ['var(--font-geist-mono)'],
       },
       typography: (theme: (path: string) => string) => ({
+        // biome-ignore lint/style/useNamingConvention: This is a Tailwind CSS plugin
         DEFAULT: {
           css: {
             color: theme('colors.neutral.600'),

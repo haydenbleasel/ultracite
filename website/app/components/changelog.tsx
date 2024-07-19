@@ -55,6 +55,7 @@ export const Changelog = async (): Promise<ReactElement> => {
             </AccordionTrigger>
             <AccordionContent>
               <div
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: marked is a markdown parser
                 dangerouslySetInnerHTML={{
                   __html: releases[0].body
                     ? marked.parse(releases[0].body)

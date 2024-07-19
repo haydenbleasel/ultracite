@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
 
 import { Logo } from '@/components/logo';
+import { getReadme, getRepo } from '@/lib/octokit';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import type { ReactElement } from 'react';
-import { getReadme, getRepo } from '../../lib/octokit';
 
 export const Info = async (): Promise<ReactElement> => {
   const repo = await getRepo();
@@ -25,6 +25,7 @@ export const Info = async (): Promise<ReactElement> => {
         </div>
         <div
           className="mt-8"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: readme is HTML
           dangerouslySetInnerHTML={{
             __html: readme,
           }}
