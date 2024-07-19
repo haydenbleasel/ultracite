@@ -1,3 +1,16 @@
+# v3.9.11 (Fri Jul 19 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Fix website lockfile ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable conflicting rules ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v3.9.10 (Thu Jul 18 2024)
 
 #### ⚠️ Pushed to `main`
