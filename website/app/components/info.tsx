@@ -10,9 +10,9 @@ export const Info = async (): Promise<ReactElement> => {
   const readme = await getReadme();
 
   return (
-    <div className="bg-neutral-50 md:overflow-y-auto md:h-screen py-20 px-4">
+    <div className="bg-neutral-50 px-4 py-20 md:h-screen md:overflow-y-auto">
       <div className="prose prose-neutral prose-img:m-0 mx-auto max-w-lg">
-        <div className="not-prose text-neutral-950 flex items-center justify-between">
+        <div className="not-prose flex items-center justify-between text-neutral-950">
           <Logo />
           <a
             href={repo.data.html_url}
@@ -20,7 +20,7 @@ export const Info = async (): Promise<ReactElement> => {
             rel="noopener noreferrer"
             aria-label="View on GitHub"
           >
-            <GitHubLogoIcon className="w-5 h-5" />
+            <GitHubLogoIcon className="h-5 w-5" />
           </a>
         </div>
         <div

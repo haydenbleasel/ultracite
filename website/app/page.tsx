@@ -24,7 +24,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Page: FC = () => (
-  <div className="grid lg:grid-cols-2 divide-x divide-neutral-200">
+  <div className="grid divide-x divide-neutral-200 lg:grid-cols-2">
     <Info />
     <Changelog />
   </div>

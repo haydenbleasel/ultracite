@@ -27,17 +27,17 @@ export const Changelog = async (): Promise<ReactElement> => {
   );
 
   return (
-    <div className="relative md:overflow-y-auto md:h-screen py-20 px-4">
+    <div className="relative px-4 py-20 md:h-screen md:overflow-y-auto">
       <Accordion
         type="single"
-        className="prose prose-sm prose-neutral max-w-lg mx-auto"
+        className="prose prose-sm prose-neutral mx-auto max-w-lg"
         defaultValue={Object.keys(releasesByDay)[0]}
         collapsible
       >
         {Object.entries(releasesByDay).map(([date, releases]) => (
           <AccordionItem value={date} key={date} className="[&>h3]:m-0">
             <AccordionTrigger>
-              <div className="flex items-center gap-1 flex-1 text-left">
+              <div className="flex flex-1 items-center gap-1 text-left">
                 <p className="m-0">{releases[0].name}</p>
                 {releases.length > 1 && (
                   <span className="font-normal text-neutral-500 dark:text-neutral-400">
@@ -48,7 +48,7 @@ export const Changelog = async (): Promise<ReactElement> => {
               </div>
               <time
                 dateTime={releases[0].created_at}
-                className="shrink-0 m-0 mr-2"
+                className="m-0 mr-2 shrink-0"
               >
                 {dateFormatter.format(new Date(releases[0].created_at))}
               </time>

@@ -18,7 +18,7 @@ export const Logo: FC = () => (
         <path d="m40.9741 75.7968c-2.7857-2.9824-4.8149-6.6808-5.7807-10.7889l-32.07328 8.5941 3.08444 11.5112z" />
       </g>
     </svg>
-    <p className="text-2xl font-mono font-semibold tracking-tighter">
+    <p className="font-mono font-semibold text-2xl tracking-tighter">
       Ultracite
     </p>
   </div>
