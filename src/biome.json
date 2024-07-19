@@ -216,6 +216,7 @@
 						"noUselessTernary": "error",
 						"noVoid": "error",
 						"noWith": "error",
+						"useArrowFunction": "error",
 						"useFlatMap": "error",
 						"useLiteralKeys": "error",
 						"useRegexLiterals": "error"
@@ -266,15 +267,24 @@
 						"noArguments": "error",
 						"noCommaOperator": "error",
 						"noDefaultExport": "off",
+						"noImplicitBoolean": "error",
 						"noNegationElse": "error",
 						"noParameterAssign": "error",
 						"noRestrictedGlobals": { "level": "error", "options": {} },
+						"noUselessElse": "error",
 						"noVar": "error",
 						"useBlockStatements": "off",
 						"useCollapsedElseIf": "error",
 						"useConst": "error",
 						"useDefaultParameterLast": "error",
 						"useExponentiationOperator": "error",
+						"useFilenamingConvention": {
+							"level": "error",
+							"options": {
+								"requireAscii": true,
+								"filenameCases": ["kebab-case"]
+							}
+						},
 						"useForOf": "error",
 						"useFragmentSyntax": "error",
 						"useNodejsImportProtocol": "error",
@@ -287,11 +297,14 @@
 					},
 					"suspicious": {
 						"noArrayIndexKey": "off",
+						"noAssignInExpressions": "error",
 						"noAsyncPromiseExecutor": "error",
 						"noCatchAssign": "error",
 						"noClassAssign": "error",
 						"noCommentText": "error",
 						"noCompareNegZero": "error",
+						"noConfusingLabels": "error",
+						"noConsoleLog": "error",
 						"noControlCharactersInRegex": "error",
 						"noDebugger": "error",
 						"noDoubleEquals": "error",
@@ -332,6 +345,7 @@
 						"noStaticOnlyClass": "error",
 						"noUselessConstructor": "error",
 						"noUselessEmptyExport": "error",
+						"noUselessThisAlias": "error",
 						"noUselessTypeConstraint": "error",
 						"useLiteralKeys": "error",
 						"useOptionalChain": "error"
@@ -346,18 +360,32 @@
 						"noInferrableTypes": "error",
 						"noNamespace": "error",
 						"noNonNullAssertion": "error",
+						"noParameterProperties": "error",
 						"useAsConstAssertion": "error",
 						"useConsistentArrayType": "error",
 						"useDefaultParameterLast": "error",
 						"useEnumInitializers": "error",
+						"useExportType": "error",
 						"useForOf": "error",
+						"useImportType": "error",
 						"useLiteralEnumMembers": "error",
+						"useNamingConvention": {
+							"level": "error",
+							"options": {
+								"strictCase": false,
+								"conventions": [
+									{ "selector": { "kind": "objectLiteralProperty" } },
+									{ "formats": ["camelCase", "snake_case", "PascalCase"] }
+								]
+							}
+						},
 						"useShorthandFunctionType": "error"
 					},
 					"suspicious": {
 						"noConfusingVoidType": "error",
 						"noDuplicateClassMembers": "error",
 						"noEmptyBlockStatements": "error",
+						"noEmptyInterface": "error",
 						"noExplicitAny": "error",
 						"noExtraNonNullAssertion": "error",
 						"noMisleadingInstantiator": "error",
@@ -378,7 +406,15 @@
 			],
 			"javascript": { "globals": [] },
 			"linter": {
-				"rules": { "complexity": { "noExcessiveNestedTestSuites": "error" } }
+				"rules": {
+					"complexity": { "noExcessiveNestedTestSuites": "error" },
+					"suspicious": {
+						"noDuplicateTestHooks": "error",
+						"noExportsInTest": "error",
+						"noFocusedTests": "error",
+						"noSkippedTests": "error"
+					}
+				}
 			}
 		},
 		{
