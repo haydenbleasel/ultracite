@@ -1,3 +1,15 @@
+# v4.1.0 (Mon Sep 16 2024)
+
+#### 🚀 Enhancement
+
+- Biome 1.9.0 [#141](https://github.com/haydenbleasel/ultracite/pull/141) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.0.6 (Sun Aug 18 2024)
 
 #### ⚠️ Pushed to `main`
