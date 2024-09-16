@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
-
 import {
   Accordion,
   AccordionContent,

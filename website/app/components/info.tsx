@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention, react/no-danger */
-
 import { Logo } from '@/components/logo';
 import { getReadme, getRepo } from '@/lib/octokit';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
