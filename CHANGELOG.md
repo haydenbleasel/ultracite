@@ -1,3 +1,16 @@
+# v4.1.3 (Tue Oct 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update Biome ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update biome.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.2 (Mon Sep 30 2024)
 
 #### ⚠️ Pushed to `main`
