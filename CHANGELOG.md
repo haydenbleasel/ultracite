@@ -1,3 +1,15 @@
+# v4.1.4 (Tue Oct 01 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #142, resolves #143 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.3 (Tue Oct 01 2024)
 
 #### ⚠️ Pushed to `main`
