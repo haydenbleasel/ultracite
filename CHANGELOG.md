@@ -1,3 +1,15 @@
+# v4.1.5 (Fri Oct 18 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Bump biome ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.4 (Tue Oct 01 2024)
 
 #### ⚠️ Pushed to `main`
