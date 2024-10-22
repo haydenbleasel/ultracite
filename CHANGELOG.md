@@ -1,3 +1,22 @@
+# v4.1.6 (Tue Oct 22 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update biome.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump micromatch from 4.0.7 to 4.0.8 in /website [#144](https://github.com/haydenbleasel/ultracite/pull/144) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.5 (Fri Oct 18 2024)
 
 #### ⚠️ Pushed to `main`
