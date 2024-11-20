@@ -73,6 +73,14 @@ Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint conf
 }
 ```
 
+## Usage
+
+Ultracite will automatically lint, fix and format your code on save. If you'd like to run Ultracite manually, you can do so with the following command:
+
+```sh
+npx ultracite
+```
+
 ## Configuration
 
 While Ultracite is designed to be zero-config, you can modify anything you'd like in your `biome.json` file. For example, to enable the `noAutofocus` rule, you can do the following:
