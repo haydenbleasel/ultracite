@@ -1,3 +1,16 @@
+# v4.1.7 (Wed Nov 20 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #130 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.6 (Tue Oct 22 2024)
 
 #### ⚠️ Pushed to `main`
