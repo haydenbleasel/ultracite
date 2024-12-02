@@ -1,3 +1,20 @@
+# v4.1.8 (Mon Dec 02 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump cross-spawn from 7.0.3 to 7.0.6 in /website [#145](https://github.com/haydenbleasel/ultracite/pull/145) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.7 (Wed Nov 20 2024)
 
 #### ⚠️ Pushed to `main`
