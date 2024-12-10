@@ -22,19 +22,36 @@
       },
       "correctness": {
         "noUndeclaredDependencies": "off",
-        "useImportExtensions": "off"
+        "useImportExtensions": "off",
+        "noNodejsModules": "off"
       },
       "nursery": {
         "all": true,
-        "useImportRestrictions": "off",
+        "noCommonJs": "off",
         "noProcessEnv": "off",
+        "noSecrets": "off",
         "useComponentExportOnlyModules": "off",
-        "useExplicitType": "off"
+        "useExplicitType": "off",
+        "useImportRestrictions": "off",
+        "useConsistentCurlyBraces": "off",
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "error",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
+        }
+        }
+      },
+      "performance": {
+        "noBarrelFile": "off",
+        "noReExportAll": "off"
       },
       "style": {
         "noDefaultExport": "off",
         "noImplicitBoolean": "off",
         "useExplicitLengthCheck": "off",
+        "noNamespaceImport": "off",
         "useFilenamingConvention": {
           "level": "error",
           "options": {
@@ -42,10 +59,12 @@
             "filenameCases": ["kebab-case"]
           }
         },
-        "useSingleVarDeclarator": "off"
+        "useSingleVarDeclarator": "off",
+        "useNamingConvention": "off"
       },
       "suspicious": {
-        "noReactSpecificProps": "off"
+        "noReactSpecificProps": "off",
+        "noArrayIndexKey": "off"
       }
     }
   },
