@@ -1,3 +1,15 @@
+# v4.1.10 (Tue Dec 10 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Update octokit.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.9 (Tue Dec 10 2024)
 
 #### ⚠️ Pushed to `main`
