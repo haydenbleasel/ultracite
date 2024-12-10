@@ -1,3 +1,17 @@
+# v4.1.11 (Tue Dec 10 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update files ([@haydenbleasel](https://github.com/haydenbleasel))
+- Cleanup website deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.10 (Tue Dec 10 2024)
 
 #### ⚠️ Pushed to `main`
