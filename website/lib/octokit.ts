@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Octokit } from '@octokit/rest';
 
-const githubToken = process.env.GITHUB_TOKEN;
-
-if (!githubToken) {
-  throw new Error('GITHUB_TOKEN is not set');
-}
-
-const octokit = new Octokit({
-  auth: githubToken,
-});
+const octokit = new Octokit();
 
 const owner = 'haydenbleasel';
 const repo = 'ultracite';
