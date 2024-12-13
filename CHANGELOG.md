@@ -1,3 +1,16 @@
+# v4.1.12 (Fri Dec 13 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Improve CLI ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tailwind.css ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.11 (Tue Dec 10 2024)
 
 #### ⚠️ Pushed to `main`
