@@ -1,7 +1,7 @@
 {
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "bin": {
-    "ultracite": "./scripts/run.js"
+    "ultracite": "./scripts/run.mjs"
   },
   "auto": {
     "plugins": [
@@ -18,7 +18,7 @@
   "description": "Strict, opinionated linting config for modern TypeScript apps.",
   "files": [
     "biome.json",
-    "scripts/run.js"
+    "scripts/run.mjs"
   ],
   "homepage": "https://github.com/haydenbleasel/ultracite#readme",
   "keywords": [
@@ -42,5 +42,8 @@
   "version": "4.1.11",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
   }
 }
