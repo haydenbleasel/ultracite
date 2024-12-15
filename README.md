@@ -29,7 +29,10 @@ code --install-extension bradlc.vscode-tailwindcss
 Create a `biome.json` with the following contents:
 
 ```json
-{ "extends": ["ultracite"] }
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "extends": ["ultracite"]
+}
 ```
 
 Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/). Create a `.vscode/settings.json` file with the following contents to enable full formatting and fixing on save:
