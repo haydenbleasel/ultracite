@@ -1,3 +1,20 @@
+# v4.1.13 (Sun Dec 15 2024)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #147 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump nanoid from 3.3.7 to 3.3.8 in /website [#146](https://github.com/haydenbleasel/ultracite/pull/146) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.12 (Fri Dec 13 2024)
 
 #### ⚠️ Pushed to `main`
