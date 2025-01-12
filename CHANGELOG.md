@@ -1,3 +1,20 @@
+# v4.1.15 (Sun Jan 12 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #148 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump next from 15.0.4 to 15.1.2 in /website [#149](https://github.com/haydenbleasel/ultracite/pull/149) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.14 (Sun Dec 15 2024)
 
 #### ⚠️ Pushed to `main`
