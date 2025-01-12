@@ -2,14 +2,12 @@
 
 import { execSync } from 'node:child_process';
 import { Command } from 'commander';
-import packageJson from '../package.json' assert { type: 'json' };
 
 const program = new Command();
 
 program
-  .name(packageJson.name)
-  .description(packageJson.description)
-  .version(packageJson.version);
+  .name('Ultracite')
+  .description('Strict, opinionated linting config for modern TypeScript apps.');
 
 program
   .command('lint')
