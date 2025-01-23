@@ -66,7 +66,7 @@ Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/).
 }
 ```
 
-Lastly, ensure your `tsconfig.json` (if it exists) includes your new ESLint config and that `strictNullChecks` is enabled.
+Lastly, ensure your `tsconfig.json` (if it exists) has `strictNullChecks` enabled.
 
 ```json
 {
