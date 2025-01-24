@@ -90,6 +90,7 @@ While Ultracite is designed to be zero-config, you can modify anything you'd lik
 
 ```json
 {
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "extends": ["ultracite"],
   "linter": {
     "rules": {
