@@ -1,3 +1,15 @@
+# v4.1.18 (Sat Feb 01 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Add basic init command ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.17 (Fri Jan 24 2025)
 
 #### ⚠️ Pushed to `main`
