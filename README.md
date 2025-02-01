@@ -11,6 +11,16 @@ Ultracite is a robust linting configuration for modern TypeScript apps, built on
 
 ## Installation
 
+### Automatic Installation
+
+Run the command below to install and initialize Ultracite in the current directory:
+
+```sh
+npx ultracite init
+```
+
+### Manual Installation
+
 Run the command below to install Ultracite:
 
 ```sh
