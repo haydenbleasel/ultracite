@@ -1,3 +1,15 @@
+# v4.1.19 (Wed Feb 12 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Add support for init in monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.1.18 (Sat Feb 01 2025)
 
 #### ⚠️ Pushed to `main`
