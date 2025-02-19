@@ -68,7 +68,7 @@ program
       }
 
       // Install dependencies
-      execSync('pnpm add -D -w --save-exact ultracite @biomejs/biome');
+      execSync('pnpm add -D --save-exact ultracite @biomejs/biome');
 
       // Write the config files
       execSync('mkdir -p .vscode');
