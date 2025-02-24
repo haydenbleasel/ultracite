@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { Command } from 'commander';
 
 const program = new Command();
@@ -55,7 +56,7 @@ program
       };
 
       try {
-        const existingTsConfig = JSON.parse(execSync('cat tsconfig.json', { encoding: 'utf-8' }));
+        const existingTsConfig = JSON.parse(readFileSync('tsconfig.json', 'utf-8'));
         tsConfig = {
           ...existingTsConfig,
           compilerOptions: {
