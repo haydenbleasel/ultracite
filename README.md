@@ -55,7 +55,7 @@ Ultracite is designed to be used with [VS Code](https://code.visualstudio.com/).
   "editor.formatOnPaste": true,
   "emmet.showExpandedAbbreviation": "never",
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
+    "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
   "[typescript]": {

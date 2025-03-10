@@ -7,7 +7,9 @@ const program = new Command();
 
 program
   .name('Ultracite')
-  .description('Strict, opinionated linting config for modern TypeScript apps.');
+  .description(
+    'Strict, opinionated linting config for modern TypeScript apps.'
+  );
 
 program
   .command('init')
@@ -28,7 +30,7 @@ program
         'editor.formatOnPaste': true,
         'emmet.showExpandedAbbreviation': 'never',
         'editor.codeActionsOnSave': {
-          'quickfix.biome': 'explicit',
+          'source.fixAll.biome': 'explicit',
           'source.organizeImports.biome': 'explicit',
         },
         '[typescript]': {
@@ -55,7 +57,9 @@ program
       };
 
       try {
-        const existingTsConfig = JSON.parse(execSync('cat tsconfig.json', { encoding: 'utf-8' }));
+        const existingTsConfig = JSON.parse(
+          execSync('cat tsconfig.json', { encoding: 'utf-8' })
+        );
         tsConfig = {
           ...existingTsConfig,
           compilerOptions: {
@@ -74,7 +78,11 @@ program
       execSync('mkdir -p .vscode');
       execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.json`);
       execSync(
-        `echo '${JSON.stringify(vsCodeSettings, null, 2)}' > .vscode/settings.json`
+        `echo '${JSON.stringify(
+          vsCodeSettings,
+          null,
+          2
+        )}' > .vscode/settings.json`
       );
       execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
 
