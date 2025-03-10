@@ -1,3 +1,15 @@
+# v4.1.21 (Mon Mar 10 2025)
+
+#### 🐛 Bug Fix
+
+- Update action on save config [#153](https://github.com/haydenbleasel/ultracite/pull/153) ([@haydenbarnett](https://github.com/haydenbarnett))
+
+#### Authors: 1
+
+- Hayden Barnett ([@haydenbarnett](https://github.com/haydenbarnett))
+
+---
+
 # v4.1.20 (Wed Feb 19 2025)
 
 #### ⚠️ Pushed to `main`
