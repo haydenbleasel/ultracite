@@ -1,3 +1,15 @@
+# v4.2.0 (Fri Mar 21 2025)
+
+#### 🚀 Enhancement
+
+- Bump next from 15.1.2 to 15.2.3 in /website [#154](https://github.com/haydenbleasel/ultracite/pull/154) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v4.1.21 (Mon Mar 10 2025)
 
 #### 🐛 Bug Fix
