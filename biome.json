@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
   "formatter": {
     "enabled": true,
     "formatWithErrors": true,
@@ -9,11 +9,16 @@
     "lineWidth": 80,
     "attributePosition": "auto"
   },
-  "organizeImports": { "enabled": true },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "all": true,
       "a11y": {
         "noAutofocus": "off"
       },
@@ -26,7 +31,6 @@
         "noNodejsModules": "off"
       },
       "nursery": {
-        "all": true,
         "noCommonJs": "off",
         "noProcessEnv": "off",
         "noSecrets": "off",
@@ -60,7 +64,28 @@
           }
         },
         "useSingleVarDeclarator": "off",
-        "useNamingConvention": "off"
+        "useNamingConvention": "off",
+        "useLiteralEnumMembers": "error",
+        "noCommaOperator": "error",
+        "useNodejsImportProtocol": "error",
+        "useAsConstAssertion": "error",
+        "useNumericLiterals": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useConst": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "useExponentiationOperator": "error",
+        "useTemplate": "error",
+        "noParameterAssign": "error",
+        "noNonNullAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "noArguments": "error",
+        "useImportType": "error",
+        "useExportType": "error",
+        "noUselessElse": "error",
+        "useShorthandFunctionType": "error"
       },
       "suspicious": {
         "noReactSpecificProps": "off",
