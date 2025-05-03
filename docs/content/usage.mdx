@@ -1,9 +1,7 @@
 ---
 title: Usage
-description: This section covers how to use Ultracite on a day-to-day basis—covering the command-line interface, editor integration details, and typical workflows.
+description: This section covers how to use Ultracite on a day-to-day basis — covering the command-line interface, editor integration details, and typical workflows.
 ---
-
-With installation and setup complete, you’re ready to use Ultracite.
 
 ## Automatic usage
 
@@ -20,11 +18,8 @@ If you introduce a common lint issue (like an unused variable), you might see a 
 - On paste: We even enabled formatOnPaste – so if you paste code from elsewhere, it will immediately be formatted to match your style.
 The key advantage here is instant feedback. You write code in VS Code, and Ultracite continuously keeps it clean. Over time, you’ll notice you spend little to no time fixing lint errors – Ultracite either fixes them for you or points them out early. This leads to a smooth development workflow where code style and minor issues never pile up.
 - Other Editors (Vim/NeoVim, JetBrains, etc.): While there isn’t an official Ultracite plugin for other editors yet, you can still integrate Biome:
-- NeoVim: You can use the @biomejs/biome LSP server with a client like nvim-lspconfig. This would give you on-the-fly diagnostics and formatting similar to VS Code (using the same biome.json config).
-- WebStorm/IntelliJ: These IDEs don’t have Biome support at the moment, but you could configure an External Tool to run npx ultracite on save or format. Alternatively, run Ultracite manually via a shortcut.
-- Pre-commit hooks: As mentioned, even if your editor doesn’t auto-run Ultracite, a Git pre-commit hook that runs ultracite can serve as a safety net to auto-format code before it’s committed. This isn’t as instantaneous as an editor integration, but it ensures consistency.
-
-In general, as Biome gains popularity, expect more first-class integrations. The VS Code extension is the reference implementation for now. If you’re not on VS Code, you still benefit from Ultracite’s speed and unified approach; you’ll just invoke it differently (manually or via other automation).
+  - NeoVim: You can use the @biomejs/biome LSP server with a client like nvim-lspconfig. This would give you on-the-fly diagnostics and formatting similar to VS Code (using the same biome.json config).
+  - WebStorm/IntelliJ: These IDEs don’t have Biome support at the moment, but you could configure an External Tool to run npx ultracite on save or format. Alternatively, run Ultracite manually via a shortcut.
 
 ## Manual CLI usage
 
@@ -34,7 +29,7 @@ Ultracite comes with a convenient CLI (invoked as ultracite when installed). Her
 npx ultracite format
 ```
 
-## Linting
+### Linting
 
 The `lint` command wraps the Biome `check` command, which runs the linter without fixing files.
 
@@ -42,10 +37,34 @@ The `lint` command wraps the Biome `check` command, which runs the linter withou
 npx ultracite lint
 ```
 
-## Formatting
+### Formatting
 
 The `format` command wraps the Biome `check --write` command, which runs the linter and fixes files.
 
 ```bash title="Terminal"
 npx ultracite format
+```
+
+## Pre-commit hooks
+
+If needed, you can use a Git pre-commit hook that runs `npx ultracite format` to auto-format code before it’s committed. This isn’t as instantaneous as an editor integration, but it ensures consistency.
+
+```bash title=".git/hooks/pre-commit"
+#!/bin/bash
+echo "Running pre-commit checks..."
+
+# Check for linting errors
+if ! npx ultracite lint; then
+  echo "Linting errors found. Please fix them before committing."
+  exit 1
+fi
+
+# Check for formatting issues
+if ! npx ultracite format; then
+  echo "Formatting issues found. Please format your code before committing."
+  exit 1
+fi
+
+echo "Pre-commit checks passed."
+exit 0
 ```
