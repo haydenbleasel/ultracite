@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: Introduction
 description: What is Ultracite?
 ---
 
@@ -7,8 +7,10 @@ Ultracite is a fast, intuitive, and simple development tool that brings automate
 
 It is highly opinionated and strict, enforcing strong type safety and code quality guidelines out-of-the-box. Once set up, Ultracite runs mostly in the background – automatically formatting your code and applying fixes every time you save your files – so you can focus on writing code instead of manually correcting style issues or runtime errors.
 
-## Core Benefits
+## How does Ultracite work?
 
-- Fast: Leverages Biome’s Rust engine for lightning-fast formatting and linting. It can process code in a fraction of a second, making on-save checks feel instant.
-- Intuitive: Works seamlessly with your editor to run fixes on save. No extra steps needed – just hit save and Ultracite handles the rest.
-- Simple: Zero-config by design. It comes with preconfigured rules (optimized for Next.js/React projects) so you don’t need to bikeshed over lint rules. It “just works” with sensible defaults, while still allowing customization when needed.
+When Ultracite runs (for example, when you save a file in VS Code or run npx ultracite), it invokes Biome on your code. Biome parses the file once and applies both formatting rules and lint rules in that single pass. This is much faster than the traditional approach of running Prettier then ESLint as separate steps. The result is that even on large projects, running Ultracite’s checks is extremely fast (often sub-second for a file save) and can comfortably run on every save without lag.
+
+## What is Biome?
+
+[Biome](https://biomejs.dev/) is an all-in-one toolchain for code formatting and linting. Biome, written in Rust, combines the functionality of tools like [Prettier](https://prettier.io/) (code formatter), [ESLint](https://eslint.org/) (linter), and [Stylelint](https://stylelint.io/) into a single fast binary. Ultracite leverages Biome’s speed and capabilities, providing a preset of rules and settings tailored for modern TypeScript projects.
