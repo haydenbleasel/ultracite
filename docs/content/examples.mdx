@@ -7,19 +7,19 @@ To illustrate Ultracite’s capabilities, here are a few practical examples of i
 
 ## Automatic Code Formatting
 
-Before (messy formatting):
+### Before (messy formatting)
 
 ```tsx title="page.tsx"
-function greet(name) { console.log("Hello, "+ name + "!!"); }
+function greet(name) { return 'Hello, '+ name + "!!" }
 ```
 
 In this code, spacing and concatenation style are off. It’s also using string concatenation instead of template literals, and has double quotes mixed with single quotes.
 
-After (formatted):
+### After (formatted)
 
 ```tsx title="page.tsx"
 function greet(name) {
-  console.log(`Hello, ${name}!!`);
+  return `Hello, ${name}!!`;
 }
 ```
 
@@ -28,14 +28,16 @@ Ultracite’s formatter has:
 - Broke the long line into multiple lines for readability.
 - Converted the string concatenation into a template literal (this could be an automatic fix from a lint rule suggesting template strings for readability).
 - Standardized quotes to backticks for the template (and would use single quotes consistently elsewhere if not a template).
-- Added a semicolon at the end of the console.log statement if it was missing (in this case it wasn’t missing, but Ultracite ensures semicolons are present).
+- Added a semicolon at the end of the `return` statement.
 - Ensured proper spacing around braces and parentheses.
 
 The developer didn’t manually reformat the code – they just saved the file, and Ultracite handled the rest. The result is cleaner, more consistent code.
 
+Ultracite will also warn that `name` is untyped and will suggest adding a type.
+
 ## Enforcing Strict Equality
 
-Before (potential bug with loose equality):
+### Before (potential bug with loose equality)
 
 ```tsx title="validate.ts"
 let isValid = false;
@@ -45,89 +47,88 @@ if (response.status == 200) {
 }
 ```
 
-Here, the code is using == to compare response.status to 200. Using == can be error-prone due to type coercion (e.g., response.status could be a string “200” and still pass). Ultracite’s strict rules likely enforce using === for comparisons.
+Here, the code is using loose equality (`==`) to compare `response.status` to `200`. Using loose equality can be error-prone due to type coercion (e.g., `response.status` could be a string `“200”` and still pass). Ultracite’s strict rules likely enforce using `===` for comparisons.
 
-After (Ultracite auto-fix applied):
+### After (Ultracite auto-fix applied)
 
 ```tsx title="validate.ts"
 let isValid = false;
 const response = getResponse();
-if (response.status === 200) {
+if (response.status === 200) { // [!code highlight]
   isValid = true;
 }
 ```
 
 Ultracite automatically replaced `== 200` with `=== 200`. This small change prevents subtle bugs. The fix was applied on save as part of the `source.fixAll.biome` actions. Such a rule (similar to ESLint’s `eqeqeq`) ensures developers use strict equality checking.
 
+Additionally, Ultracite will also warn that `isValid` is never used, and will suggest removing it.
+
 ## Organizing and Cleaning Imports
 
-Before (unorganized imports):
+### Before (unorganized imports)
 
-```ts title="index.ts"
+```tsx title="index.tsx"
 import Z from './z-module';
 import A from './a-module';
 import React from 'react';
 import { helper } from './util';
-// ... (code that never uses 'helper')
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
 ```
 
 The imports here are out of alphabetical order, and the helper import is never used in the file.
 
-After (after save with Ultracite):
+### After (after save with Ultracite)
 
-```ts title="index.ts"
-import React from 'react';
-import A from './a-module';
-import Z from './z-module';
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
 
-// ... (notice 'helper' import is removed)
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
 ```
 
-Ultracite (via Biome’s organize imports feature) sorted the imports alphabetically by module name. It also removed the unused helper import automatically. The before/after difference might happen immediately on save or when you trigger a organize-imports action. With the recommended settings, this is done on save. This ensures that your imports section is always tidy:
+Ultracite (via Biome’s organize imports feature) sorted the imports alphabetically by module name. It also removed the unused helper import automatically. The before/after difference happens immediately on save, ensuring that your imports section is always tidy:
 
 - No unused imports cluttering the top of your file.
 - Deterministic ordering of imports (so merges and diffs don’t get confused by different import orders added by different developers).
 
 This leads to more maintainable code, especially in files with many imports.
 
-## Catching a Potential Error (no auto-fix)
-
-Not all issues can be auto-fixed, but Ultracite will still alert you. For example:
-
-```tsx
-function WelcomeMessage(props) {
-  return <h1>Hello {props.username}</h1>;
-}
-
-// Somewhere else:
-<WelcomeMessage userName="John Doe" />
-```
-
-In this React snippet, the WelcomeMessage component expects props.username (lowercase `n`), but it’s being used with userName (capital `N`) attribute. This is likely a bug/typo. Ultracite, with its strict react/props rules, would catch this:
-
-- It would flag that an unknown prop userName is passed or that username is not being passed. Essentially, a discrepancy in prop casing.
-- This isn’t something it can auto-fix (it can’t know your intent), but it will show an error like “Unknown prop userName on ” or “Prop username is missing in WelcomeMessage usage.”
-
-While there’s no “after” fix automatically, the developer is immediately notified of the issue and can fix it by choosing one naming convention. The key is that Ultracite helped catch a bug that might otherwise have led to a undefined value at runtime.
-
 ## Accessibility Fix
 
-Before:
+### Before
 
 ```tsx title="Button.tsx"
-<button onClick={submitForm} autofocus>Submit</button>
+<button onClick={submitForm}>
+  Open modal
+</button>
 ```
 
-Using the autofocus attribute directly in JSX is an accessibility no-no (it can be problematic for users, and better handled via script if needed). Ultracite’s accessibility rule might flag this. It might not auto-remove it (since that could change behavior), but it will warn you:
-“Accessibility: autoFocus attribute is not allowed.”
+The default type of a button is `submit`, which causes the submission of a form when placed inside a form element. This is likely not the behaviour that you want inside a React application. Ultracite will warn you about this and offer a quick fix to change the type to `button`.
 
-After (developer manual fix following warning):
+### After (manual or quick fix)
 
 ```tsx title="Button.tsx"
-<button onClick={submitForm}>Submit</button>
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
 ```
 
-The developer removes the autofocus attribute. In some cases, a quick fix might be offered to remove it, but generally it’s a manual change. The important part is Ultracite brought this to attention. This keeps your app in line with best practices (similar to ESLint’s jsx-a11y plugin).
+The type is now `button`, which prevents a potential parent form from being submitted when the button is clicked.
+
+---
 
 These examples demonstrate how Ultracite improves code quality:
 
