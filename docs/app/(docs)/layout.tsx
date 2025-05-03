@@ -1,6 +1,6 @@
+import { source } from '@/lib/source';
 import { DocsLayout, type DocsLayoutProps } from 'fumadocs-ui/layouts/notebook';
 import type { ReactNode } from 'react';
-import { source } from '@/lib/source';
 
 type LayoutProps = {
   children: ReactNode;

@@ -1,20 +1,25 @@
 import { source } from '@/lib/source';
+import { getMDXComponents } from '@/mdx-components';
+import { createRelativeLink } from 'fumadocs-ui/mdx';
 import {
-  DocsPage,
   DocsBody,
   DocsDescription,
+  DocsPage,
   DocsTitle,
 } from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
-import { createRelativeLink } from 'fumadocs-ui/mdx';
-import { getMDXComponents } from '@/mdx-components';
 
-export default async function Page(props: {
+type PageProps = {
   params: Promise<{ slug?: string[] }>;
-}) {
+};
+
+const Page = async (props: PageProps) => {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+
+  if (!page) {
+    return notFound();
+  }
 
   const MDXContent = page.data.body;
 
@@ -32,21 +37,22 @@ export default async function Page(props: {
       </DocsBody>
     </DocsPage>
   );
-}
+};
 
-export async function generateStaticParams() {
-  return source.generateParams();
-}
+export const generateStaticParams = () => source.generateParams();
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
+export const generateMetadata = async (props: PageProps) => {
   const params = await props.params;
   const page = source.getPage(params.slug);
-  if (!page) notFound();
+
+  if (!page) {
+    return {};
+  }
 
   return {
     title: page.data.title,
     description: page.data.description,
   };
-}
+};
+
+export default Page;

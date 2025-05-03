@@ -1,8 +1,8 @@
 import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
-import type { ReactNode } from 'react';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { cn } from 'fumadocs-ui/utils/cn';
+import { Geist, Geist_Mono } from 'next/font/google';
+import type { ReactNode } from 'react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -19,12 +19,16 @@ const mono = Geist_Mono({
 });
 
 const Layout = ({ children }: LayoutProps) => (
-  <html lang="en" className={cn(
-    'touch-manipulation font-sans antialiased',
-    sans.variable,
-    mono.variable
-  )} suppressHydrationWarning>
-    <body className="flex flex-col min-h-screen">
+  <html
+    lang="en"
+    className={cn(
+      'touch-manipulation font-sans antialiased',
+      sans.variable,
+      mono.variable
+    )}
+    suppressHydrationWarning
+  >
+    <body className="flex min-h-screen flex-col">
       <RootProvider>{children}</RootProvider>
     </body>
   </html>
