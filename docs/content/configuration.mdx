@@ -44,6 +44,6 @@ For example, to disable the `noAutofocus` rule, you can do the following:
 You can also disable rules on a per-line basis by adding a comment to the end of the line:
 
 ```tsx title="page.tsx"
-// biome-ignore lint/security/noDangerouslySetInnerHtml: I do what I want mate.
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
 <div dangerouslySetInnerHTML={{ ... }} />
 ```
