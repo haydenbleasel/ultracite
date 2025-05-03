@@ -1,0 +1,44 @@
+---
+title: Configuration
+description: How to configure Ultracite
+---
+
+While Ultracite is designed to be zero-config, you can extend the configuration to your liking.
+
+## Modifying `biome.json`
+
+You can disable rules by modifying the `biome.json` file.
+
+For example, to disable the `noAutofocus` rule, you can do the following:
+
+```json title="biome.json"
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+Or, if you use [shadcn/ui](https://ui.shadcn.com/) and don't want to modify the core files, you can ignore them:
+
+```json title="biome.json"
+{
+  "extends": ["ultracite"],
+  "ignore": ["/components/ui/**", "/lib/**", "/hooks/**"]
+}
+```
+
+## Inline Comments
+
+You can also disable rules on a per-line basis by adding a comment to the end of the line:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: I do what I want mate.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

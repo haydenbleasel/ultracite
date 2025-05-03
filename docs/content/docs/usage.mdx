@@ -1,0 +1,24 @@
+---
+title: Usage
+description: How to use Ultracite
+---
+
+Ultracite will automatically lint, fix and format your code on save.
+
+If you'd like to run Ultracite manually, you can do so with the following commands.
+
+## Linting
+
+The `lint` command wraps the Biome `check` command, which runs the linter without fixing files.
+
+```bash title="Terminal"
+npx ultracite lint
+```
+
+## Formatting
+
+The `format` command wraps the Biome `check --write` command, which runs the linter and fixes files.
+
+```bash title="Terminal"
+npx ultracite format
+```

@@ -1,0 +1,89 @@
+---
+title: Setup
+description: How to install Ultracite in your project
+---
+
+## Automatic Installation
+
+Run the command below to install and initialize Ultracite in the current directory:
+
+```bash title="Terminal"
+npx ultracite init
+```
+
+This will perform all the steps below automatically.
+
+## Manual Installation
+
+### Install dependencies
+
+Run the command below to install Ultracite:
+
+```bash title="Terminal"
+pnpm add -D --save-exact ultracite @biomejs/biome
+```
+
+### Create a `biome.json` file
+
+Create a `biome.json` file with the following contents:
+
+```json title="biome.json"
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "extends": ["ultracite"]
+}
+```
+
+### Create a `.vscode/settings.json` file
+
+Ultracite is designed to be used with VS Code (or Cursor, Windsurf, etc.). Create a `.vscode/settings.json` file with the following contents to enable full formatting and fixing on save:
+
+```json title=".vscode/settings.json"
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "emmet.showExpandedAbbreviation": "never",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
+}
+```
+
+### Enable `strictNullChecks`
+
+Ensure your `tsconfig.json` (if it exists) has `strictNullChecks` enabled.
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
+```
+
+## Extensions
+
+If you're running VS Code, ensure you have the following extensions installed:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+code --install-extension bradlc.vscode-tailwindcss
+```
