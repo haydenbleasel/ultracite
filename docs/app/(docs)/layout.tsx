@@ -27,7 +27,7 @@ const nav: DocsLayoutProps['nav'] = {
           <path d="m40.9741 75.7968c-2.7857-2.9824-4.8149-6.6808-5.7807-10.7889l-32.07328 8.5941 3.08444 11.5112z" />
         </g>
       </svg>
-      <p className="font-mono text-xl tracking-tighter">Ultracite</p>
+      <p className="font-mono text-xl tracking-[-0.08em]">Ultracite</p>
     </div>
   ),
 };
