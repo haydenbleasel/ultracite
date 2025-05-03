@@ -3,9 +3,23 @@ title: Configuration
 description: How to configure Ultracite
 ---
 
-While Ultracite is designed to be zero-config, you can extend the configuration to your liking.
+One of Ultracite’s best features is that it’s zero-config out of the box – you can just extend the `ultracite` preset and get going. However, every project is a bit different, and you might want to customize certain rules or adapt Ultracite for different frameworks. This section explains the default configuration and how to extend or override it.
 
-## Modifying `biome.json`
+## Default configuration
+
+When you include `"extends": ["ultracite"]` in your `biome.json`, you are pulling in Ultracite’s preset configuration. This preset includes a wide array of rules and configurations. Some notable aspects of the default config:
+
+- TypeScript strictness: Ultracite enables TypeScript’s strict checks and lint rules requiring robust typing. For instance, it discourages use of `any`, requires handling of `null/undefined`, and prefers explicit types in certain situations to avoid ambiguity.
+- ESLint "Recommended" equivalents: Common best-practice rules (no unused vars, no explicit eval, no proto pollution, etc.) are included.
+- React and Accessibility: As mentioned, rules equivalent to React’s best practices and accessibility standards are on by default (if relevant to your files).
+- Next.js and Node: Environment-specific quirks are handled. For example, global variables provided by Next.js or Node (like `module`, `process`) are recognized so they won’t be incorrectly flagged as undefined. The config knows about `.next/` build folder to ignore it, etc.
+- Formatting conventions: Ultracite’s formatter settings (largely inherited from Biome/Prettier defaults) include 2-space indentation, a max line width of 80 characters, semicolons at ends of statements, trailing commas where valid (e.g., in multi-line arrays/objects), single quotes for strings (except JSON, which uses double quotes), etc. These are chosen to match common conventions and ensure diff cleanliness.
+
+All these defaults aim to enforce consistent style and prevent common errors without you having to manually configure each rule.
+
+## Overriding the configuration
+
+### Modifying `biome.json`
 
 You can disable rules by modifying the `biome.json` file.
 
@@ -34,7 +48,7 @@ Or, if you use [shadcn/ui](https://ui.shadcn.com/) and don't want to modify the 
 }
 ```
 
-## Inline Comments
+### Inline Comments
 
 You can also disable rules on a per-line basis by adding a comment to the end of the line:
 

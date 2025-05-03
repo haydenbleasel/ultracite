@@ -7,27 +7,31 @@ Ultracite can be installed via npm, Yarn, pnpm or bun. You have two main options
 
 ## Automatic Installation
 
-Run the command below to install and initialize Ultracite in the current directory:
+The easiest way to get started is to run Ultracite’s init script, which will install the necessary packages and set up the config file for you. In your project directory, run:
 
 ```package-install
 npx ultracite init
 ```
 
-This will perform all the steps below automatically.
+This single command will run everything below automatically.
 
 ## Manual Installation
 
-### Install dependencies
+If you prefer to install step by step or use a specific package manager, follow these steps.
+
+### 1. Install dependencies
 
 Run the command below to install Ultracite:
 
-```bash title="Terminal"
-pnpm add -D --save-exact ultracite @biomejs/biome
+```package-install
+npm install --save-exact ultracite @biomejs/biome
 ```
 
-### Create a `biome.json` file
+We pin an exact version (`--save-exact`) to ensure consistency across environments. Biome (and Ultracite) are under active development, so locking versions avoids unexpected changes on updates.
 
-Create a `biome.json` file with the following contents:
+### 2. Create a `biome.json` file
+
+In the root of your project, create a file named `biome.json` (or `biome.jsonc`). This is where you tell Biome to use Ultracite’s rules. For example, a minimal `biome.json` should include:
 
 ```json title="biome.json"
 {
@@ -36,9 +40,11 @@ Create a `biome.json` file with the following contents:
 }
 ```
 
-### Create a `.vscode/settings.json` file
+This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust 1.9.4 to the current Biome version if different).
 
-Ultracite is designed to be used with VS Code (or Cursor, Windsurf, etc.). Create a `.vscode/settings.json` file with the following contents to enable full formatting and fixing on save:
+### 3. Create a `.vscode/settings.json` file
+
+Ultracite is designed to work best with VS Code's (or Cursor, Windsurf, etc.) on-save functionality. Create or update your workspace `.vscode/settings.json` with the following configuration:
 
 ```json title=".vscode/settings.json"
 {
@@ -69,9 +75,19 @@ Ultracite is designed to be used with VS Code (or Cursor, Windsurf, etc.). Creat
 }
 ```
 
-### Enable `strictNullChecks`
+This setup does a few important things:
 
-Ensure your `tsconfig.json` (if it exists) has `strictNullChecks` enabled.
+- Makes Biome the formatter for JS / TS / JSON files (so Prettier or other formatters won’t interfere).
+- Turns on Format on Save and Fix All on Save for Biome. The `source.fixAll.biome` and `source.organizeImports.biome` settings ensure that on each save, Biome will not only format the file but also apply any quick fixes (like lint fixes) and sort your imports automatically.
+
+If you use a different editor, you can still use Ultracite but the integration steps will differ. Ultracite relies on Biome’s capabilities, so any editor with Biome support (or generic Language Server Protocol support) can work. For example, in NeoVim you might configure the Biome LSP, and in JetBrains IDEs you could run the Ultracite CLI on file save via a file-watcher. The VS Code setup above is the most straightforward, but Ultracite’s core (Biome) is editor-agnostic and can be used anywhere you can run its CLI or LSP.
+
+
+### 4. Enable `strictNullChecks`
+
+If your project is using TypeScript, it’s strongly recommended to enable `strictNullChecks` (or full strict mode) in your `tsconfig.json`. Ultracite’s rules assume strict type checking to catch potential null/undefined issues.
+
+In your `tsconfig.json`, ensure:
 
 ```json title="tsconfig.json"
 {
@@ -81,11 +97,19 @@ Ensure your `tsconfig.json` (if it exists) has `strictNullChecks` enabled.
 }
 ```
 
+This allows Ultracite’s type-safety lint rules to function correctly and aligns with its goal of maximal type safety.
+
 ## Extensions
 
-If you're running VS Code, ensure you have the following extensions installed:
+Install recommended VS Code extensions (if you use VS Code): If you’re using Visual Studio Code, install the official [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extension, which allows on-save formatting/fixing:
 
 ```bash title="Terminal"
 code --install-extension biomejs.biome
+```
+
+Additionally, if you use Tailwind CSS, it’s recommended to install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for class sorting and hints:
+
+```bash title="Terminal"
 code --install-extension bradlc.vscode-tailwindcss
 ```
+
