@@ -17,6 +17,9 @@ importers:
       fumadocs-core:
         specifier: 15.2.12
         version: 15.2.12(@types/react@19.1.2)(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      fumadocs-docgen:
+        specifier: ^2.0.0
+        version: 2.0.0
       fumadocs-mdx:
         specifier: 11.6.1
         version: 11.6.1(acorn@8.14.1)(fumadocs-core@15.2.12(@types/react@19.1.2)(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -423,6 +426,46 @@ packages:
   '@orama/orama@3.1.6':
     resolution: {integrity: sha512-qtSrqCqRU93SjEBedz987tvWao1YQSELjBhGkHYGVP7Dg0lBWP6d+uZEIt5gxTAYio/YWWlhivmRABvRfPLmnQ==}
     engines: {node: '>= 16.0.0'}
+
+  '@oxc-transform/binding-darwin-arm64@0.53.0':
+    resolution: {integrity: sha512-QG1djnqQ+EywamRwFMRYogmbF4aL+Fmw/tDKuZ4cpWpOBPaxgTNryfYS1WwCARlZLmLzDEZr0YkYSQ7Rmjyf1Q==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oxc-transform/binding-darwin-x64@0.53.0':
+    resolution: {integrity: sha512-rc6wBTnmeK/ZiENI7QvZBmrgFArAkO8cBpiKrYuov3+DqSbOLotoaYqXxxdjoiJ/EhPl9MBd9146uM99OKQYIA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oxc-transform/binding-linux-arm64-gnu@0.53.0':
+    resolution: {integrity: sha512-BgY+h7bQsGP6lsQe4s7stz6SpbfijhiZGx/lPoTYn9wkLonqBVk2bGkPkyZvzd3Sr8aw2taOE6ycb146scyniQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oxc-transform/binding-linux-arm64-musl@0.53.0':
+    resolution: {integrity: sha512-4AnomoFIEqS442s9KJbZRqo+dR9sM0es9YY9eFh+53btN9aKHW+u08Yvesb4k9nmwB5qDZbfqP8H+SsHyixFlg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oxc-transform/binding-linux-x64-gnu@0.53.0':
+    resolution: {integrity: sha512-iWFm/ZNEYF5IKN3/gcYaMJUI1yc5iJ2vQ9fVxYAFT6GglnBqXXxqwazlL5QkiAwDOzVwDUctAIZWgxse1vTm2A==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oxc-transform/binding-linux-x64-musl@0.53.0':
+    resolution: {integrity: sha512-fM9tdlBPY55T1s+qdg6NwDLaygXkvxKLfIqojw/pM+pErfnTJXa3MYWIDWEXHv3RcEypjaEMMo3BIe7E2jBDdg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oxc-transform/binding-win32-arm64-msvc@0.53.0':
+    resolution: {integrity: sha512-Afh37KNowRgdDtV6EL4IxWBv/l5/XLctXADOCAvYNUsiUwQ2vNKiNwx+k8QzMZW59G5JEIN8yroMd/qnQSpdJw==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@oxc-transform/binding-win32-x64-msvc@0.53.0':
+    resolution: {integrity: sha512-aYUx/uFCIdQJVOqEpV3AjOSBlZKLSFtws4B/iJpyJ6pKiLBQsH/sR4Y4oKm2rkaqAky+0ekP6gbjIgrJkCZR0Q==}
+    cpu: [x64]
+    os: [win32]
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -1156,6 +1199,9 @@ packages:
       react-dom:
         optional: true
 
+  fumadocs-docgen@2.0.0:
+    resolution: {integrity: sha512-jaM/rsCFEvC8rO6Nf0sYXDHp1xOWPAaz0zJHyFyt/CWFSj/nnBaeVIjN/bFX3ZUb93Nnx0I3s42NzAHYKsZI0w==}
+
   fumadocs-mdx@11.6.1:
     resolution: {integrity: sha512-z+H/eOJC4II0VW7rgf6btqeEkD9DEG1SNToNCYKMklCJAc9Y6l+NuQozKuknP2Ey6NK+Qqhvwhi2MOq38YLSeQ==}
     hasBin: true
@@ -1558,11 +1604,18 @@ packages:
       sass:
         optional: true
 
+  npm-to-yarn@3.0.1:
+    resolution: {integrity: sha512-tt6PvKu4WyzPwWUzy/hvPFqn+uwXO0K1ZHka8az3NnrhWJDmSqI8ncWq0fkL0k/lmmi5tAC11FXwXuh0rFbt1A==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
   oniguruma-parser@0.12.1:
     resolution: {integrity: sha512-8Unqkvk1RYc6yq2WBYRj4hdnsAxVze8i7iPfQr8e4uSP3tRv0rpZcbGUDvxfQQcdwHt/e9PrMvGCsa8OqG9X3w==}
 
   oniguruma-to-es@4.3.3:
     resolution: {integrity: sha512-rPiZhzC3wXwE59YQMRDodUwwT9FZ9nNBwQQfsd1wfdtlKEyCdRV0avrTcSZ5xlIvGRVPd/cx6ZN45ECmS39xvg==}
+
+  oxc-transform@0.53.0:
+    resolution: {integrity: sha512-ovYJDZfHNLyXlkJBT0HTNHDPHp4JlyG+NePCLrGRT4c1xXOPZ1TWy8xu2shOuLo6n6fiMbpqZha3Ne7C8H7OJA==}
 
   parse-entities@4.0.2:
     resolution: {integrity: sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw==}
@@ -2118,6 +2171,30 @@ snapshots:
       fastq: 1.19.1
 
   '@orama/orama@3.1.6': {}
+
+  '@oxc-transform/binding-darwin-arm64@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-darwin-x64@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-linux-arm64-gnu@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-linux-arm64-musl@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-linux-x64-gnu@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-linux-x64-musl@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-win32-arm64-msvc@0.53.0':
+    optional: true
+
+  '@oxc-transform/binding-win32-x64-msvc@0.53.0':
+    optional: true
 
   '@radix-ui/number@1.1.1': {}
 
@@ -2868,6 +2945,15 @@ snapshots:
       - '@types/react'
       - supports-color
 
+  fumadocs-docgen@2.0.0:
+    dependencies:
+      estree-util-to-js: 2.0.0
+      estree-util-value-to-estree: 3.3.3
+      npm-to-yarn: 3.0.1
+      oxc-transform: 0.53.0
+      unist-util-visit: 5.0.0
+      zod: 3.24.3
+
   fumadocs-mdx@11.6.1(acorn@8.14.1)(fumadocs-core@15.2.12(@types/react@19.1.2)(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
     dependencies:
       '@mdx-js/mdx': 3.1.0(acorn@8.14.1)
@@ -3570,6 +3656,8 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
+  npm-to-yarn@3.0.1: {}
+
   oniguruma-parser@0.12.1: {}
 
   oniguruma-to-es@4.3.3:
@@ -3577,6 +3665,17 @@ snapshots:
       oniguruma-parser: 0.12.1
       regex: 6.0.1
       regex-recursion: 6.0.2
+
+  oxc-transform@0.53.0:
+    optionalDependencies:
+      '@oxc-transform/binding-darwin-arm64': 0.53.0
+      '@oxc-transform/binding-darwin-x64': 0.53.0
+      '@oxc-transform/binding-linux-arm64-gnu': 0.53.0
+      '@oxc-transform/binding-linux-arm64-musl': 0.53.0
+      '@oxc-transform/binding-linux-x64-gnu': 0.53.0
+      '@oxc-transform/binding-linux-x64-musl': 0.53.0
+      '@oxc-transform/binding-win32-arm64-msvc': 0.53.0
+      '@oxc-transform/binding-win32-x64-msvc': 0.53.0
 
   parse-entities@4.0.2:
     dependencies:
