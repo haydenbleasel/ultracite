@@ -1,3 +1,15 @@
+# v4.2.3 (Sat May 03 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update goals.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.2 (Sat May 03 2025)
 
 #### 🐛 Bug Fix
