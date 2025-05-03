@@ -5,27 +5,27 @@ description: Here are answers to some frequently asked questions about Ultracite
 
 ## Q: What exactly is Ultracite – how is it different from Biome or ESLint?
 
-Ultracite is essentially a preset configuration built on Biome. Think of Ultracite as a curated bundle of rules and settings, whereas Biome is the engine that actually formats/lints code. You can use Biome by itself, but you’d have to decide which rules to enable and configure its options manually. Ultracite saves you that effort by providing a ready-to-go setup, influenced by the best practices from ESLint, Prettier, etc. Compared to ESLint+Prettier, Ultracite (with Biome) is faster (thanks to Rust) and unified (one tool instead of two or three). In short: Biome = tool (linter/formatter), Ultracite = configuration + integration glue for developers (particularly Next.js/TS folks). If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
+Ultracite is essentially a preset configuration built on Biome. Think of Ultracite as a curated bundle of rules and settings, whereas Biome is the engine that actually formats/lints code. You can use Biome by itself, but you’d have to decide which rules to enable and configure its options manually. Ultracite saves you that effort by providing a ready-to-go setup, influenced by the best practices from ESLint, Prettier, etc.
+
+Compared to ESLint+Prettier, Ultracite is faster (thanks to Biome's Rust implementation) and unified (one tool instead of two or three). In short: Biome = tool (linter/formatter), Ultracite = configuration + integration glue for developers (particularly Next.js/TS folks).
+
+If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
 
 ## Q: Do I still need ESLint or Prettier if I use Ultracite?
 
-No – Ultracite (via Biome) replaces the functionality of ESLint and Prettier for your JS/TS code. You do not need to run ESLint or Prettier at all. In fact, it’s recommended to remove those configs to avoid conflicts. Ultracite’s output will cover formatting and linting that those tools did, usually with equivalent or stricter rules. The only case you might still use them is if you have some edge-case plugin not supported by Biome (for example, a very specialized ESLint rule). But ideally, you’d work with Ultracite’s ecosystem entirely.
+No – Ultracite (via Biome) replaces the functionality of ESLint and Prettier for your JS/TS code. You do not need to run ESLint or Prettier at all. In fact, it’s recommended to remove those configs to avoid conflicts. Ultracite’s output will cover formatting and linting that those tools did, usually with equivalent or stricter rules.
 
-## Q: Is Ultracite only for Next.js projects? Can I use it in a Node.js or React Native project?
+The only case you might still use them is if you have some edge-case plugin not supported by Biome (for example, a very specialized ESLint rule). But ideally, you’d work with Ultracite’s ecosystem entirely.
 
-You can absolutely use Ultracite in any JavaScript/TypeScript project. While its defaults were optimized for Next.js (a common denominator requiring strict checks), it works for Node.js (backend), React Native, plain React, or even non-React TS libraries. Many rules in Ultracite are generic (not framework-specific). For frameworks beyond React, see the Configuration section for notes on tweaking Ultracite (e.g., ignoring .vue files or disabling React-only rules). But many users have successfully used Ultracite in Node.js server projects and library projects to enforce code quality. It’s a general tool – the Next.js mention is more about its initial target audience.
+## Q: What about my non-JS/TS files? Does Ultracite handle those?
 
-## Q: What about my CSS/Sass and other files? Does Ultracite handle those?
-
-Biome (the engine) can format CSS, and thus Ultracite will format your CSS files (and inline CSS in JS, like styled-jsx or CSS-in-JS objects). It doesn’t have the full linting rules that Stylelint has; for example, it won’t complain about using !important or unsupported browser properties, etc. If you need heavy CSS linting, you might add Stylelint for those specific rules. For most projects, consistent formatting of CSS (indentation, etc.) is often enough, which Biome provides. Ultracite doesn’t handle Sass/SCSS or Less specifically (Biome currently formats CSS, not SCSS). If you use SCSS, you may rely on the IDE or Prettier for SCSS, or compile to CSS then format. In summary: Ultracite focuses on JS/TS, with some support for CSS/JSON. Other file types (Markdown, SCSS, etc.) are outside its scope right now.
-
-## Q: The name “Ultracite” – any relation to Fallout (the game)?
-
-🙂 Ultracite is indeed a term from the Fallout game series (a powerful material). The choice of name here is likely just a fun nod, suggesting this tool is a “powerful resource” for developers. It doesn’t have any functional relation to the game, of course. It’s just a catchy name for a robust preset. (So, no, you won’t be crafting power armor with this Ultracite!)
+Biome provides various levels of linting and formatting support for JavaScript, TypeScript, JSX, CSS and GraphQL.
 
 ## Q: How often is Ultracite updated?
 
-Ultracite is updated as needed, often following Biome’s release cycle. Since Biome is still evolving, you might see frequent minor releases to Ultracite (especially in the initial phases around 2024-2025). These updates can bring new rules, bug fixes, or adjustments to defaults. Given it’s pinned via --save-exact, you won’t get surprise updates unless you choose to upgrade. It’s a good idea to watch the Ultracite repo for releases or check the CHANGELOG. When updating Ultracite, read release notes – occasionally a new rule might be enabled that could surface new warnings in your project (which is a good thing for catching issues, but should be aware of it). Upgrading Biome along with Ultracite is usually straightforward via package manager.
+Ultracite is updated as needed, often following Biome’s release cycle. Since Biome is still evolving, you might see frequent minor releases to Ultracite. These updates can bring new rules, bug fixes, or adjustments to defaults. Given it’s pinned via `--save-exact`, you won’t get surprise updates unless you choose to upgrade.
+
+It’s a good idea to watch the Ultracite repo for releases or check the CHANGELOG. When updating Ultracite, read release notes – occasionally a new rule might be enabled that could surface new warnings in your project (which is a good thing for catching issues, but should be aware of it). Upgrading Biome along with Ultracite is usually straightforward via package manager.
 
 ## Q: If I disagree with a rule Ultracite enforces, what should I do?
 
