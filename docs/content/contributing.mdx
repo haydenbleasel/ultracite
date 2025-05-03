@@ -5,60 +5,59 @@ description: How to contribute to Ultracite.
 
 Ultracite is an open-source project, and contributions are welcome! Whether you want to improve the documentation, adjust the configuration presets, or contribute code, here’s how you can get involved:
 
-## Source Code and Development
+## Source code
 
-- Repository: Ultracite’s source code is hosted on GitHub at [haydenbleasel/ultracite](https://github.com/haydenbleasel/ultracite). You can find all the configuration files, build scripts, and documentation in that repo. The project is primarily configuration (JSON and JavaScript for any CLI scaffolding) if you’re looking at v4 (Biome-based). The repository also contains the website/docs source.
-- Setting up locally: If you want to modify Ultracite or test changes:
-	1.	Fork the repository on GitHub and clone it locally.
-	2.	Run pnpm install (the project uses pnpm for managing dependencies and a lockfile, as indicated in the repo).
-	3.	The config is in biome.json and related files. The CLI command (like ultracite init) likely has a script in the repo – check the package.json bin field or the scripts/ directory for implementation.
-	4.	You can link your local Ultracite into a test project by using npm/yarn/pnpm link or npm pack to create a tarball and install it. This way, you can try your version of Ultracite on a sample project to see the effect of changes.
-	5.	If you adjust rules in the config, test them by running npx biome lint or similar in the context of that config.
-- Project structure: Ultracite v4 is mostly a wrapper around Biome’s config. You’ll find that it may simply extend Biome’s internal rule sets. If you open the ultracite package’s content, you might see a biome.json (like in the package or published files) that contains the rules Ultracite enables/disabled. Editing those and testing their impact is the main way to change Ultracite’s behavior.
-- Running the website/docs locally: If you want to contribute to documentation (like this site content), the repository has a website folder (it might use a static site generator or documentation framework). You can typically do pnpm run dev or pnpm run start inside that to preview changes. Check the README or package.json scripts for instructions (possibly it’s using Docusaurus or Mintlify as an engine, given the presence of a website directory).
-- Testing changes: If you add or remove rules, try running Ultracite on various sample codes to ensure there are no unexpected side effects. For instance, if you decide to enable a new rule by default, consider whether it might flag a lot of false positives. Running the config against a real project (or multiple) is a good idea. The repository might include some tests or fixtures – look for a test directory.
+Ultracite’s source code is hosted on GitHub at [haydenbleasel/ultracite](https://github.com/haydenbleasel/ultracite). You can find all the configuration files, build scripts, and documentation in that repo. The project is primarily configuration (JSON and JavaScript for any CLI scaffolding). The repository also contains the docs.
 
-## Contributing Custom Rules or Features
+## Setting up locally
 
-- Contributing to Ultracite vs Biome: It’s important to distinguish where a change should be made:
-- If you want to adjust which rules are enabled or their default severity – that’s a change in Ultracite’s config (this repository). For example, “enable the noAutofocus rule by default” or “turn X rule from warning to error in Ultracite preset”.
-- If you want to add a completely new rule or change how a rule works internally – that likely needs a change in Biome’s repository. Biome is the engine providing the lint rules. Ultracite can only enable/disable what Biome offers. So if Biome lacks a rule, you’d implement it in Biome.
-If you plan to contribute a new rule:
-- Check Biome’s repo (biomejs/biome on GitHub). See if someone already requested or is working on that rule (there might be an issue).
-- Biome’s code is in Rust. If you’re comfortable with Rust, you can try adding the rule. If not, you could open an issue or proposal in Biome’s repo with the idea – perhaps maintainers or others can take it on.
-- Once Biome releases a version with the new rule, Ultracite can bump the Biome dependency and incorporate that rule (likely enabling it if it fits the strict preset).
-- Guidelines and Style: Check if the Ultracite repo has a CONTRIBUTING.md. If so, follow that. Generally:
+If you want to modify Ultracite or test changes:
+
+1. Fork the repository on GitHub and clone it locally.
+2. Run pnpm install (the project uses pnpm for managing dependencies and a lockfile, as indicated in the repo).
+3. The config is in biome.json and related files. The CLI command (like ultracite init) likely has a script in the repo – check the package.json bin field or the scripts/ directory for implementation.
+4. You can link your local Ultracite into a test project by using npm/yarn/pnpm link or npm pack to create a tarball and install it. This way, you can try your version of Ultracite on a sample project to see the effect of changes.
+5. If you adjust rules in the config, test them by running npx biome lint or similar in the context of that config.
+
+## Project structure
+
+Ultracite is mostly a wrapper around Biome’s config. You’ll find that it may simply extend Biome’s internal rule sets. The root [`biome.json`](https://github.com/haydenbleasel/ultracite/blob/main/biome.json) contains the rules Ultracite enables / disabled. Editing those and testing their impact is the main way to change Ultracite’s behavior.
+
+## Editing the docs
+
+If you want to contribute to documentation (like this site content), the repository has a `docs` folder that contains a [Fumadocs](https://fumadocs.dev/) app. To run it locally, run the following commands:
+
+```bash title="Terminal"
+cd docs
+pnpm install
+pnpm run dev
+```
+
+This will start the Fumadocs app on [http://localhost:3000](http://localhost:3000).
+
+## Testing changes
+
+If you add or remove rules, try running Ultracite on various sample codes to ensure there are no unexpected side effects. For instance, if you decide to enable a new rule by default, consider whether it might flag a lot of false positives. Running the config against a real project (or multiple) is a good idea. The repository might include some tests or fixtures – look for a test directory.
+
+## Opening pull requests
+
+Typically if you want to add a new rule or change how a rule works internally, you should contribute to Biome's repository. If you want to adjust which rules are enabled or their default severity, you should make a change in Ultracite's repository.
+
+Once Biome releases a version with the new rule, Ultracite can bump the Biome dependency and incorporate that rule (likely enabling it if it fits the strict preset).
+
+If you're going to make a change to Ultracite, you should:
+
 - Write clear commit messages and pull request descriptions.
 - If you’re changing default behaviors, explain the rationale (e.g., “Rule X is causing too many false positives, turning it off by default” or “Adding support for Y framework”).
 - Keep consistency with the coding style of the project.
 - If adding a new config option, ensure it’s documented.
-- Building and versioning: After making changes, you might need to update the version (Ultracite follows semver, with versions like 4.x.x). Typically maintainers will handle publishing, but if your change is merged, expect it in the next release. You can always install from GitHub or use a custom build in the meantime.
 
-## Creating Custom Rules or Plugins Outside Biome
+## Building and versioning
 
-If contributing directly to Biome’s Rust code is outside your skillset or timeline, but you still need a custom rule for your project, you could:
-- Use ESLint for just that rule (for example, write a small ESLint plugin or script that checks your specific requirement). Run that in addition to Ultracite in CI. This is a pragmatic workaround until Biome can cover it.
-- There is also a concept of writing a rule in JS and running Biome’s --apply-suppressions mode (there’s a tool suppress-biome-errors on npm that adds ignore comments for all current errors). Not exactly a custom rule, but in theory one could post-process Biome’s output or input. This is hacky and not official.
+Ultracite uses [Intuit Auto](https://intuit.github.io/auto/) to manage the release process and handle versioning. When a PR is merged, the release process will run and a new version will be published to npm. The type of release is handled by Auto based on the PR labels, which a maintainer will add.
 
-However, as Biome is evolving, many common needs will eventually be covered natively. So contributing ideas to the Biome project is valuable.
+## Community discussions
 
-## Community and Support
+If you encounter a bug, feel free to open a GitHub [issue](https://github.com/haydenbleasel/ultracite/issues). Please be clear and provide examples.
 
-- Discussions/Issues: Feel free to open a GitHub issue if you encounter a bug or want to request a feature (e.g., “Ultracite should have an option to…”, or “Rule X is too strict…”). Maintainers or the community can discuss there. Be clear and provide examples if reporting an issue.
-- Discord/Chat: Biome has a Discord server (as linked on [biomejs.dev](https://biomejs.dev)) where you can ask questions. Since Ultracite is tightly coupled, you might find help there too. There may also be community forums or discussions on the Ultracite GitHub.
-- Contributing to Documentation: If you find these docs lacking or out-of-date, you can contribute by updating them. Often the docs site content is in the repo (maybe in Markdown files). Making a PR to clarify an instruction or add a FAQ entry is a great way to contribute without coding. As Ultracite updates (especially if Biome gets new features), documentation should evolve – community contributions here are very valuable.
-
-## Contributing to Biome (briefly)
-
-Given Ultracite’s reliance on Biome, contributing to Biome itself indirectly benefits Ultracite. If you go down that path, check Biome’s contributing guide. Typically:
-- You’d write Rust code to add/modify a rule or feature.
-- Run Biome’s test suite (cargo test perhaps).
-- Engage with Biome maintainers via PR review.
-
-Ultracite’s maintainer (Hayden Bleasel) is also active with these tools, so coordinating changes across Ultracite and Biome might happen (for example, releasing a new Ultracite version soon after a Biome release to expose new rules).
-
-In summary, contributing to Ultracite is welcome whether it’s through code, config tweaks, or simply feedback:
-- Fork, create a branch, commit your changes.
-- Submit a Pull Request on GitHub with a clear description.
-- Participate in any discussions on the PR.
-- Once merged, celebrate your contribution to making the JavaScript tooling ecosystem better!
+If you want to discuss a potential change or feature request (e.g., “Ultracite should have an option to…”, or “Rule X is too strict…”), feel free to open a [discussion](https://github.com/haydenbleasel/ultracite/discussions).
