@@ -13,25 +13,23 @@ This is why Ultracite feels snappy even when running on every file save. It’s 
 
 Ultracite is essentially a curated configuration on top of [Biome](https://biomejs.dev/). It comes with preconfigured rules and settings optimized for Next.js / React / TypeScript projects so you and your team don’t need to bikeshed over lint rules. It “just works” with sensible defaults, while still allowing customization when needed.
 
+It enables almost all rules by default across the various categories — type safety, code quality, stylistic consistency, accessibility, security, and more.
+
 ## Intuitive and simple
 
-Ultracite is designed to be intuitive – which means most of the time, you don’t even have to think about linting. With the editor integration, as soon as you save:
+Ultracite is designed to be invisible most of the time so you don’t even have to think about linting. With the editor integration, as soon as you save:
 
 - Biome’s formatter will reformat code (indentation, quotes, semicolons, etc.) according to a consistent style (97% Prettier-compatible formatting by design).
-- Biome’s linter (using Ultracite’s strict rule set) will automatically fix many lint issues. For example, it will add missing trailing commas or convert a == to === if that rule is enforced, remove unused imports, organize imports, etc.
+- Biome’s linter (using Ultracite’s strict rule set) will automatically fix many lint issues. For example, it will add missing trailing commas or convert a `==` to `===` if that rule is enforced, remove unused imports, organize imports, etc.
 - Both of the above are done together and the file is updated instantly. Any issues that cannot be fixed automatically (for example, a variable name that doesn’t follow convention, or an actual bug like using an undefined variable) will be reported as errors/warnings in your editor or terminal, so you can address them manually.
 
-## Maximally type-safe
+## Maximum type safety
 
-Ultracite’s default configuration is intentionally strict. It enforces maximum type safety (relying on TypeScript’s strict modes and additional lint rules) and best practices from across the JavaScript ecosystem. By default, Ultracite (via Biome) includes rules for:
+Ultracite’s default configuration is intentionally strict. It enforces maximum type safety (relying on TypeScript’s strict modes and additional lint rules) and best practices from across the JavaScript ecosystem. By default, Ultracite includes rules for catching type errors, use of the `any` type, unreachable code, and more.
 
-- TypeScript – catching type errors, use of the any type, unreachable code, etc.
-- Code Quality – similar to ESLint’s recommended set and more. For instance, it will warn against unused variables, undeclared variables, or problematic language features.
-- Stylistic Consistency – enforcing a consistent coding style (braces, quotes, semicolons, spacing, etc.) so that the codebase looks uniform. These are mostly handled by the formatter.
-- Accessibility (A11y) – especially for React/JSX projects, rules that ensure you follow accessibility best practices (similar to eslint-plugin-jsx-a11y). For example, using autoFocus on an input or using dangerouslySetInnerHTML in React might be flagged.
-- Security – rules that catch common security pitfalls. For example, usage of dangerouslySetInnerHTML is flagged (to prevent XSS vulnerabilities), or use of eval would be warned against.
-- React/Next.js specific – because Ultracite is optimized for Next.js, it includes React-specific linting rules (like hooks rules to ensure correct dependencies, using useEffect properly, etc., analogous to eslint-plugin-react and react-hooks) and Next.js best practices (for example, ensuring `<Image>` tags have alt attributes, or not using `<a>` without `<Link>` in Next.js, etc.). These help enforce conventions in React projects.
-- CSS/Tailwind – Biome can format CSS and sort Tailwind classes. While Ultracite v4 (Biome-based) doesn’t use Stylelint anymore, basic CSS linting is handled by Biome’s parser (e.g., it can catch invalid CSS) and Tailwind class sorting is supported via the recommended extension. Your CSS in styled-jsx or CSS files will be formatted consistently, and if you use Tailwind CSS, class lists will be kept ordered.
+## Plays nice with others
+
+Biome sorts CSS utility classes (like Tailwind) by default. It also supports a range of functions and prop names you might use in your project such as `className`, `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, etc.
 
 ## Extensible for any project
 
