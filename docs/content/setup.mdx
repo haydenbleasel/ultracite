@@ -3,11 +3,11 @@ title: Setup
 description: How to install Ultracite in your project.
 ---
 
-Ultracite can be installed via npm, Yarn, pnpm or bun. You have two main options for installation: automatic (one-step setup) or manual (granular control). In all cases, you’ll need Node.js v14.18+ (Node 18+ recommended) and a project with a package.json.
+Ultracite can be installed with all major package managers. You have two main options for installation: [automatic (one-step setup)](/setup#automatic-installation) or [manual (granular control)](/setup#manual-installation). In all cases, you’ll need Node.js v14.18+ (Node 18+ recommended) and a project with a `package.json` file.
 
 ## Automatic Installation
 
-The easiest way to get started is to run Ultracite’s init script, which will install the necessary packages and set up the config file for you. In your project directory, run:
+The easiest way to get started is to run Ultracite’s `init` script, which will install the necessary packages and set up the config file for you. In your project directory, run:
 
 ```package-install
 npx ultracite init
@@ -40,7 +40,7 @@ In the root of your project, create a file named `biome.json` (or `biome.jsonc`)
 }
 ```
 
-This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust 1.9.4 to the current Biome version if different).
+This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust `1.9.4` to the current Biome version if different).
 
 ### 3. Create a `.vscode/settings.json` file
 
