@@ -5,57 +5,71 @@ description: Here are answers to some frequently asked questions about Ultracite
 
 ## Q: What exactly is Ultracite – how is it different from Biome or ESLint?
 
-Ultracite is essentially a preset configuration built on Biome. Think of Ultracite as a curated bundle of rules and settings, whereas Biome is the engine that actually formats/lints code. You can use Biome by itself, but you’d have to decide which rules to enable and configure its options manually. Ultracite saves you that effort by providing a ready-to-go setup, influenced by the best practices from ESLint, Prettier, etc.
+Ultracite is essentially a preset configuration built on Biome. Think of Ultracite as a curated bundle of rules and settings, whereas Biome is the engine that actually formats / lints code. You can use Biome by itself, but you’d have to decide which rules to enable and configure its options manually. Ultracite saves you that effort by providing a ready-to-go setup that uses best practices from across the ecosystem.
 
-Compared to ESLint+Prettier, Ultracite is faster (thanks to Biome's Rust implementation) and unified (one tool instead of two or three). In short: Biome = tool (linter/formatter), Ultracite = configuration + integration glue for developers (particularly Next.js/TS folks).
+Compared to ESLint + Prettier, Biome is faster thanks to its Rust implementation and unified (one tool instead of two or three). If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
 
-If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
+In short: Biome is the engine (linter / formatter), Ultracite is the configuration.
 
 ## Q: Do I still need ESLint or Prettier if I use Ultracite?
 
-No – Ultracite (via Biome) replaces the functionality of ESLint and Prettier for your JS/TS code. You do not need to run ESLint or Prettier at all. In fact, it’s recommended to remove those configs to avoid conflicts. Ultracite’s output will cover formatting and linting that those tools did, usually with equivalent or stricter rules.
+No – Ultracite (via Biome) replaces the functionality of ESLint and Prettier for your Javascript / Typescript code. You do not need to run ESLint or Prettier at all. In fact, it’s recommended to remove those configs to avoid conflicts. Ultracite’s output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
 
 The only case you might still use them is if you have some edge-case plugin not supported by Biome (for example, a very specialized ESLint rule). But ideally, you’d work with Ultracite’s ecosystem entirely.
 
 ## Q: What about my non-JS/TS files? Does Ultracite handle those?
 
-Biome provides various levels of linting and formatting support for JavaScript, TypeScript, JSX, CSS and GraphQL.
+Ultracite, via Biome, provides various levels of linting and formatting support for JavaScript, TypeScript, JSX, CSS and GraphQL.
 
 ## Q: How often is Ultracite updated?
 
 Ultracite is updated as needed, often following Biome’s release cycle. Since Biome is still evolving, you might see frequent minor releases to Ultracite. These updates can bring new rules, bug fixes, or adjustments to defaults. Given it’s pinned via `--save-exact`, you won’t get surprise updates unless you choose to upgrade.
 
-It’s a good idea to watch the Ultracite repo for releases or check the CHANGELOG. When updating Ultracite, read release notes – occasionally a new rule might be enabled that could surface new warnings in your project (which is a good thing for catching issues, but should be aware of it). Upgrading Biome along with Ultracite is usually straightforward via package manager.
+It’s a good idea to watch the Ultracite repo for releases or check the [Releases](/releases) page. When updating Ultracite, read release notes – occasionally a new rule might be enabled that could surface new warnings in your project (which is a good thing for catching issues, but should be aware of it). Upgrading Biome along with Ultracite is usually straightforward via package manager.
 
 ## Q: If I disagree with a rule Ultracite enforces, what should I do?
 
 You have a few options:
 
-- Configure it off or to a different level in your biome.json (quick fix for your project).
-- Discuss on the Ultracite GitHub if the rule should be adjusted for everyone. Perhaps the maintainers might agree it’s too strict or could be optional.
+- Configure it off or to a different level in your `biome.json` (quick fix for your project).
+- Open a [discussion](https://github.com/haydenbleasel/ultracite/discussions/) on GitHub repo if the rule should be adjusted for everyone. Perhaps the maintainers might agree it’s too strict or could be optional.
 - If it’s a stylistic thing, remember the goal of Ultracite is to have convention over configuration – sometimes it’s worth adapting to the tool’s style for consistency across projects. But of course, your project’s needs come first.
 
-Ultimately, you control your project’s lint config. Ultracite is a starting point; feel free to mold it, but ideally in minor ways. If you find yourself turning off a majority of rules, then Ultracite might not be the right preset for your team’s preferences (though that would be uncommon). In that case, you could build your own Biome config from scratch, but you’d lose a lot of the convenience. Usually, a few tweaks is all that’s needed to make Ultracite fit nicely.
+Ultimately, you control your project’s lint config. Ultracite is a starting point; feel free to mold it, but ideally in minor ways. If you find yourself turning off a majority of rules, then Ultracite might not be the right preset for your team’s preferences (though that would be uncommon).
 
-## Q: Can I use Ultracite without VS Code?
+In that case, you could build your own Biome config from scratch, but you’d lose a lot of the convenience. Usually, a few tweaks is all that’s needed to make Ultracite fit nicely.
 
-Yes. While VS Code integration is a highlight (because it automates the fixes on save), Ultracite can be used purely via CLI or with other editor setups. You might run ultracite manually or on git hooks as described. Some users use Vim/Neovim with Biome’s LSP for on-the-fly linting. Others might just rely on CI to catch things and run formatting occasionally. Of course, you don’t get the same seamless experience as VS Code’s on-save, but the core functionality is fully available. The Biome project is exploring and improving editor integrations, so keep an eye out – there may be official support for more editors over time.
+## Q: Can I use Ultracite without VS Code / Cursor?
+
+Yes. While VS Code integration is a highlight (because it automates the fixes on save), Ultracite can be used purely via CLI or with [other editor setups](https://biomejs.dev/guides/editors/first-party-extensions/).
+
+You might run Ultracite manually or on git hooks as described. Some users use Vim/Neovim with Biome’s LSP for on-the-fly linting. Others might just rely on CI to catch things and run formatting occasionally.
+
+Of course, you don’t get the same seamless experience as the VS Code / Cursor on-save, but the core functionality is fully available. The Biome project is exploring and improving editor integrations, so keep an eye out – there may be official support for more editors over time.
 
 ## Q: How do I know what rules Ultracite is enforcing? Is there a list?
 
-Since Ultracite’s config is essentially a wrapper around Biome’s rules, one way is to consult Biome’s documentation for the list of lint rules (they often have similar names to ESLint rules). The Ultracite GitHub might also have the config file where you can see which rules are turned on/off. Because it extends Biome’s recommended defaults too, you can assume many common rules (no unused vars, etc.) are on. If you want to see in practice, run npx ultracite --check on your project and see what issues it flags – that gives insight into active rules. Also, when using VS Code, each diagnostic comes with a code (like lint/a11y/noAutofocus), which indicates the rule. You can search that code in Biome’s docs to get more info on what it expects. In the future, Ultracite’s documentation might include a comprehensive rules table if there’s demand.
+Yes, check the [biome.json](https://github.com/haydenbleasel/ultracite/blob/main/biome.json) file in the GitHub repo for the rules that are enabled.
 
 ## Q: Can Ultracite fix all issues it finds?
 
-Not all, but many. Ultracite (Biome) will auto-fix issues that are safe and deterministic to fix. These include formatting issues and many lint errors (particularly stylistic or simple code transformations like removing unused imports, adding missing parentheses, changing == to ===, etc.). More complex issues (business logic or things that require developer intention) are left for you to fix. For example, it won’t magically rename variables to follow a naming convention or add missing error handling code – it will just warn you. The philosophy is similar to ESLint’s: provide fixes where possible, but don’t risk altering code behavior. Always review the Problems panel or CLI output for any remaining warnings after auto-fix.
+Not all, but many. Ultracite will auto-fix issues that are safe and deterministic to fix. These include formatting issues and many lint errors (particularly stylistic or simple code transformations like removing unused imports, adding missing parentheses, changing `==` to `===`, etc.).
+
+More complex issues (business logic or things that require developer intention) are left for you to fix. For example, it won’t magically rename variables to follow a naming convention or add missing error handling code – it will just warn you.
+
+The philosophy is similar to ESLint’s: provide fixes where possible, but don’t risk altering code behavior. Always review the Problems panel or CLI output for any remaining warnings after auto-fix.
 
 ## Q: Where can I learn more about Biome (the tool Ultracite uses)?
 
-Biome has its own website with documentation, and you can find more technical details there. If you’re curious about how it formats code or the philosophy behind certain choices, the Biome docs are the best resource. Additionally, there are blog posts and community articles about Biome’s rise as a successor to Rome. Understanding Biome can help you better understand Ultracite’s capabilities. However, you don’t need to learn Biome in-depth to use Ultracite effectively – Ultracite’s goal is to abstract those details away for most users.
+[Biome](https://biomejs.dev/) has its own website with documentation, and you can find more technical details there. If you’re curious about how it formats code or the philosophy behind certain choices, the Biome docs are the best resource.
+
+Additionally, there are blog posts and community articles about Biome’s rise as a successor to Rome. Understanding Biome can help you better understand Ultracite’s capabilities. However, you don’t need to learn Biome in-depth to use Ultracite effectively – Ultracite’s goal is to abstract those details away for most users.
 
 ## Q: How do I disable Ultracite for a specific project or file?
 
-If you have a project where you temporarily don’t want Ultracite, you can simply not include the extends: ["ultracite"] in biome.json (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome’s defaults. To fully disable, you could turn off formatOnSave or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it’s not configured, it won’t run (Biome itself might still run formatting if triggered, but not linting rules).
+If you have a project where you temporarily don’t want Ultracite, you can simply not include the `extends: ["ultracite"]` in `biome.json` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome’s defaults.
+
+To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it’s not configured, it won’t run (Biome itself might still run formatting if triggered, but not linting rules).
 
 ---
 

@@ -17,11 +17,9 @@ It enables almost all rules by default across the various categories — type sa
 
 ## Intuitive and simple
 
-Ultracite is designed to be invisible most of the time so you don’t even have to think about linting. With the editor integration, as soon as you save:
+Ultracite is designed to be invisible most of the time so you don’t even have to think about linting. With the editor integration, as soon as you save Biome will automatically reformat your code and fix lint issues. Both are done together and the file is updated instantly.
 
-- Biome’s formatter will reformat code (indentation, quotes, semicolons, etc.) according to a consistent style (97% Prettier-compatible formatting by design).
-- Biome’s linter (using Ultracite’s strict rule set) will automatically fix many lint issues. For example, it will add missing trailing commas or convert a `==` to `===` if that rule is enforced, remove unused imports, organize imports, etc.
-- Both of the above are done together and the file is updated instantly. Any issues that cannot be fixed automatically (for example, a variable name that doesn’t follow convention, or an actual bug like using an undefined variable) will be reported as errors/warnings in your editor or terminal, so you can address them manually.
+Any issues that cannot be fixed automatically (for example, a variable name that doesn’t follow convention, or an actual bug like using an undefined variable) will be reported as errors/warnings in your editor or terminal, so you can address them manually.
 
 ## Maximum type safety
 
@@ -30,11 +28,3 @@ Ultracite’s default configuration is intentionally strict. It enforces maximum
 ## Plays nice with others
 
 Biome sorts CSS utility classes (like Tailwind) by default. It also supports a range of functions and prop names you might use in your project such as `className`, `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, etc.
-
-## Extensible for any project
-
-The default rule preset is tuned for Next.js and React apps. This means it assumes a React environment by default. However, since Biome and many rules are generic, Ultracite can be used in any JavaScript/TypeScript project.
-
-For example, in a Node.js backend or a React Native app, most rules still apply (e.g., type safety, code quality). In cases where some rules don’t apply (Next.js-specific ones), they simply won’t trigger if you’re not using Next.js.
-
-Ultracite’s config can detect the project type via file presence (for instance, Next.js pages directory or usage of JSX) and you can always tweak the config if needed. This gives you a solid starting point for virtually any project, with the knowledge that it’s simple to extend or disable rules as appropriate.
