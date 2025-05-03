@@ -1,3 +1,15 @@
+# v4.2.2 (Sat May 03 2025)
+
+#### 🐛 Bug Fix
+
+- New website [#158](https://github.com/haydenbleasel/ultracite/pull/158) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.1 (Wed Apr 02 2025)
 
 #### 🐛 Bug Fix
