@@ -1,0 +1,30 @@
+---
+title: Benefits
+description: Core benefits of using Ultracite over other tools or writing your own config.
+---
+
+## Lightning-fast performance
+
+Because [Biome](https://biomejs.dev/) is built in Rust (inspired by the Rome project and Rust Analyzer), it can handle parsing and analyzing code much faster than traditional JavaScript-based linters. It can process code in a fraction of a second, making on-save checks feel instant.
+
+This is why Ultracite feels snappy even when running on every file save. It’s engineered to save developer time both by automation and by raw speed. In practice, this means fewer interruptions to your flow: you write code and trust Ultracite to continuously keep it in check without slowing you down.
+
+## Zero-config by design
+
+Ultracite is essentially a curated configuration on top of [Biome](https://biomejs.dev/). It comes with preconfigured rules and settings optimized for Next.js / React / TypeScript projects so you and your team don’t need to bikeshed over lint rules. It “just works” with sensible defaults, while still allowing customization when needed.
+
+It enables almost all rules by default across the various categories — type safety, code quality, stylistic consistency, accessibility, security, and more.
+
+## Intuitive and simple
+
+Ultracite is designed to be invisible most of the time so you don’t even have to think about linting. With the editor integration, as soon as you save Biome will automatically reformat your code and fix lint issues. Both are done together and the file is updated instantly.
+
+Any issues that cannot be fixed automatically (for example, a variable name that doesn’t follow convention, or an actual bug like using an undefined variable) will be reported as errors/warnings in your editor or terminal, so you can address them manually.
+
+## Maximum type safety
+
+Ultracite’s default configuration is intentionally strict. It enforces maximum type safety (relying on TypeScript’s strict modes and additional lint rules) and best practices from across the JavaScript ecosystem. By default, Ultracite includes rules for catching type errors, use of the `any` type, unreachable code, and more.
+
+## Plays nice with others
+
+Biome sorts CSS utility classes (like Tailwind) by default. It also supports a range of functions and prop names you might use in your project such as `className`, `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, etc.
