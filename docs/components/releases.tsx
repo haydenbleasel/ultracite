@@ -45,7 +45,7 @@ export const Releases = async (): Promise<ReactElement> => {
             <div className="flex flex-1 items-center gap-1 text-left">
               <p className="m-0">{releases.at(0)?.name}</p>
               {releases.length > 1 && (
-                <span className="font-normal text-neutral-500 dark:text-neutral-400">
+                <span className="font-normal text-muted-foreground">
                   and {releases.length - 1} other release
                   {releases.length > 2 ? 's' : ''}
                 </span>
