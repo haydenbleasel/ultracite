@@ -44,7 +44,7 @@ This extends Ultracite’s preset configuration. The JSON schema reference helps
 
 ### 3. Create a `.vscode/settings.json` file
 
-Ultracite is designed to work best with the VS Code / Cursor on-save functionality. Create or update your workspace `.vscode/settings.json` with the following configuration:
+Ultracite is designed to work best with the VS Code (or forks like Cursor and Windsurf) on-save functionality. Create or update your workspace `.vscode/settings.json` with the following configuration:
 
 ```json title=".vscode/settings.json"
 {
@@ -80,7 +80,7 @@ This setup does a few important things:
 - Makes Biome the formatter for JS / TS / JSON files (so Prettier or other formatters won’t interfere).
 - Turns on Format on Save and Fix All on Save for Biome. The `source.fixAll.biome` and `source.organizeImports.biome` settings ensure that on each save, Biome will not only format the file but also apply any quick fixes (like lint fixes) and sort your imports automatically.
 
-If you use a different editor, you can still use Ultracite but the integration steps will differ. Ultracite relies on Biome’s capabilities, so any editor with Biome support (or generic Language Server Protocol support) can work. For example, in NeoVim you might configure the Biome LSP, and in JetBrains IDEs you could run the Ultracite CLI on file save via a file-watcher. The VS Code setup above is the most straightforward, but Ultracite’s core (Biome) is editor-agnostic and can be used anywhere you can run its CLI or LSP.
+If you use a different editor, you can still use Ultracite but the integration steps will differ. Ultracite relies on Biome’s capabilities, so any editor with Biome support (or generic Language Server Protocol support) can work. For example, in NeoVim you might configure the Biome LSP, and in JetBrains IDEs you could run the Ultracite CLI on file save via a file-watcher. The setup above is the most straightforward, but Ultracite’s core (Biome) is editor-agnostic and can be used anywhere you can run its CLI or LSP.
 
 
 ### 4. Enable `strictNullChecks`
@@ -101,7 +101,7 @@ This allows Ultracite’s type-safety lint rules to function correctly and align
 
 ## Extensions
 
-Install recommended VS Code extensions (if you use VS Code): If you’re using Visual Studio Code, install the official [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extension, which allows on-save formatting/fixing:
+If you’re using Visual Studio Code, install the official [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extension, which allows on-save formatting/fixing:
 
 ```bash title="Terminal"
 code --install-extension biomejs.biome
