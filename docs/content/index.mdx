@@ -3,14 +3,18 @@ title: Introduction
 description: A brief overview of Ultracite and how it works.
 ---
 
-Ultracite is a fast, intuitive, and simple development tool that brings automated code formatting and linting to your JavaScript/TypeScript projects. Built on top of [Biome](https://biomejs.dev/) (a high-performance Rust-based code formatter/linter), Ultracite provides a robust, preconfigured setup optimized for Next.js (React) by default.
-
-It is highly opinionated and strict, enforcing strong type safety and code quality guidelines out-of-the-box. Once set up, Ultracite runs mostly in the background – automatically formatting your code and applying fixes every time you save your files – so you can focus on writing code instead of manually correcting style issues or runtime errors.
+Ultracite is a fast, intuitive and simple development tool that brings automated code formatting and linting to your JavaScript / TypeScript projects. Built on top of [Biome](https://biomejs.dev/) (a Rust-based code formatter and linter), Ultracite provides a robust, preconfigured setup optimized for modern web development.
 
 ## How does Ultracite work?
 
-When Ultracite runs (for example, when you save a file in VS Code or run npx ultracite), it invokes Biome on your code. Biome parses the file once and applies both formatting rules and lint rules in that single pass. This is much faster than the traditional approach of running Prettier then ESLint as separate steps. The result is that even on large projects, running Ultracite’s checks is extremely fast (often sub-second for a file save) and can comfortably run on every save without lag.
+Once set up, Ultracite runs mostly in the background — automatically formatting your code and applying fixes every time you save your files. Because Biome is so fast, even on large projects, running Ultracite’s checks is extremely fast and can comfortably run on every save without lag. This means you can focus on building and shipping instead of manually correcting style issues or debugging runtime errors.
 
 ## What is Biome?
 
 [Biome](https://biomejs.dev/) is an all-in-one toolchain for code formatting and linting. Biome, written in Rust, combines the functionality of tools like [Prettier](https://prettier.io/) (code formatter), [ESLint](https://eslint.org/) (linter), and [Stylelint](https://stylelint.io/) into a single fast binary. Ultracite leverages Biome’s speed and capabilities, providing a preset of rules and settings tailored for modern TypeScript projects.
+
+## Wait so is Ultracite just a big JSON file?
+
+Yep pretty much. Biome has a massive amount of configuration options so you can customize it to your liking. We've found a configuration that works well for modern web development on tools like Next.js and Vite; and exported it into a JSON file that you can pull into your project.
+
+It is highly opinionated and strict, ensuring maximal type safety and code quality out-of-the-box.
