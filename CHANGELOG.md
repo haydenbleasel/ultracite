@@ -1,3 +1,16 @@
+# v4.2.5 (Fri May 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update OG image ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix opengraph metadata ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.4 (Sun May 04 2025)
 
 #### ⚠️ Pushed to `main`
