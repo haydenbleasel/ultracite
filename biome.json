@@ -106,10 +106,8 @@
         "noInvalidConstructorSuper": "error",
         "noInvalidDirectionInLinearGradient": "error",
         "noInvalidGridAreas": "error",
-        "noInvalidNewBuiltin": "error",
         "noInvalidPositionAtImportRule": "error",
         "noInvalidUseBeforeDeclaration": "error",
-        "noNewSymbol": "error",
         "noNonoctalDecimalEscape": "error",
         "noPrecisionLoss": "error",
         "noRenderReturnValue": "error",
@@ -257,7 +255,12 @@
         "useAsConstAssertion": "error",
         "useBlockStatements": "error",
         "useCollapsedElseIf": "error",
-        "useConsistentArrayType": "error",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
         "useConsistentBuiltinInstantiation": "error",
         "useConst": "error",
         "useDefaultParameterLast": "error",
@@ -275,10 +278,8 @@
         "useNumberNamespace": "error",
         "useNumericLiterals": "error",
         "useSelfClosingElements": "error",
-        "useShorthandArrayType": "error",
         "useShorthandAssign": "error",
         "useShorthandFunctionType": "error",
-        "useSingleCaseStatement": "error",
         "useTemplate": "error",
         "useThrowNewError": "error",
         "useThrowOnlyError": "error",
@@ -297,7 +298,7 @@
         "useSingleVarDeclarator": "off"
       },
       "security": {
-        "noBlankTarget": "error",
+        "noBlankTarget": "error"
       },
       "suspicious": {
         "noApproximativeNumericConstant": "error",
