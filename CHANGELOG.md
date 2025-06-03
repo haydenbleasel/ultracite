@@ -1,3 +1,15 @@
+# v4.2.6 (Tue Jun 03 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update bug_report.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.5 (Fri May 16 2025)
 
 #### ⚠️ Pushed to `main`
