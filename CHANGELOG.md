@@ -1,3 +1,15 @@
+# v4.2.8 (Wed Jun 04 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Bump Commander ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.7 (Wed Jun 04 2025)
 
 #### ⚠️ Pushed to `main`
