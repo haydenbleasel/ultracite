@@ -1,3 +1,15 @@
+# v4.2.10 (Wed Jun 11 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Create opengraph-image.jpg ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.9 (Wed Jun 11 2025)
 
 #### 🐛 Bug Fix
