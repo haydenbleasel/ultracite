@@ -1,3 +1,15 @@
+# v4.2.9 (Wed Jun 11 2025)
+
+#### 🐛 Bug Fix
+
+- New landing page [#160](https://github.com/haydenbleasel/ultracite/pull/160) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.8 (Wed Jun 04 2025)
 
 #### ⚠️ Pushed to `main`
