@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/shadcn.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/shadcn.css";
+@import "fumadocs-ui/css/preset.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -126,4 +126,74 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* This layer is by next-forge */
+@layer base {
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-border;
+  }
+  * {
+    @apply min-w-0;
+  }
+  html {
+    text-rendering: optimizelegibility;
+  }
+  body {
+    @apply min-h-[100dvh];
+  }
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-muted-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+h1,
+h2,
+h3 {
+  @apply tracking-tight;
+}
+
+/* Fix Fumadocs theme toggle icons */
+[data-theme-toggle] svg {
+  @apply fill-none;
+}
+
+#nd-subnav [data-active="true"] {
+  @apply font-medium text-primary;
+}
+
+#nd-subnav > div {
+  @apply container border-x border-dotted;
+}
+
+#nd-docs-layout {
+  @apply container mx-auto p-0 border-x border-dotted;
+}
+
+#nd-sidebar > div {
+  @apply border-dotted;
+}
+
+#nd-tocnav {
+  @apply translate-y-px border-dotted;
+}
+
+#nd-sidebar [data-hide-if-empty] {
+  @apply hidden;
+}
+
+#nd-subnav button[data-search] + button {
+  @apply hidden!;
+}
+
+#nd-subnav [data-search-full] {
+  @apply border-none bg-secondary rounded-md!;
 }
