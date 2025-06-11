@@ -1,26 +1,32 @@
 import { Tweet } from 'react-tweet';
 
 const tweets = [
-  ['1855005109572247585', '1863809657543799251', '1915946188635050258'],
-  ['1891799924343197884', '1882412853656977654', '1885643702502150218'],
-  [
-    '1882561938141634712',
-    '1889956770472403335',
-    '1883945341185355949',
-    '1914441046618214702',
-  ],
+  '1855005109572247585',
+  '1863809657543799251',
+  '1915946188635050258',
+  '1891799924343197884',
+  '1889956770472403335',
+  '1885643702502150218',
+  '1882561938141634712',
+  '1883945341185355949',
+  '1914441046618214702',
 ];
 
 export const Tweets = () => (
-  <div className="relative grid h-[900px] grid-cols-3 gap-4 overflow-hidden px-8 [&_.react-tweet-theme]:mt-0!">
-    <div className="absolute top-0 left-0 z-10 h-72 w-full bg-gradient-to-b from-background to-transparent" />
-    {tweets.map((tweet) => (
-      <div key={tweet[0]} className="-mt-2">
-        {tweet.map((id) => (
-          <Tweet key={id} id={id} />
-        ))}
+  <div className="grid divide-dotted sm:grid-cols-3 sm:divide-x">
+    <div className="p-8">
+      <div className="sticky top-20">
+        <h2 className="font-semibold text-3xl">What the community is saying</h2>
+        <p className="mt-4 text-pretty text-muted-foreground sm:text-lg">
+          Here's what some of the most FORWARD-THINKING, 1000 IQ developers in
+          the React ecosystem have to say about Ultracite.
+        </p>
       </div>
-    ))}
-    <div className="absolute bottom-0 left-0 z-10 h-72 w-full bg-gradient-to-t from-background to-transparent" />
+    </div>
+    <div className="p-8 sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4!">
+      {tweets.map((tweet) => (
+        <Tweet key={tweet} id={tweet} />
+      ))}
+    </div>
   </div>
 );

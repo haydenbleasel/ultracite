@@ -18,7 +18,7 @@ const benefits = [
     icon: SettingsIcon,
     title: 'Zero-config by design',
     description:
-      'Preconfigured rules optimized for Next.js/React/TypeScript projects with sensible defaults, while still allowing customization when needed.',
+      'Preconfigured rules optimized for Next.js, React and TypeScript projects with sensible defaults, while still allowing customization when needed.',
   },
   {
     icon: CheckIcon,
@@ -42,26 +42,30 @@ const benefits = [
     icon: UsersIcon,
     title: 'Team-ready collaboration',
     description:
-      'Ensures consistent code style and quality across all team members with a single command setup, eliminating debates over formatting and reducing code review friction.',
+      'Ensures consistent code style and quality across all team members with a single file, eliminating debates over formatting and reducing code review friction.',
   },
 ];
 
 export const Benefits = () => (
-  <div className="grid grid-cols-3 divide-x divide-y divide-dotted">
+  <div className="grid divide-y divide-dotted md:grid-cols-2 md:divide-x lg:grid-cols-3">
     {benefits.map((benefit) => (
       <div
         key={benefit.title}
         className={cn(
           'flex flex-col gap-2 p-8',
-          benefits.indexOf(benefit) >= benefits.length - 3 && 'border-b-0',
-          (benefits.indexOf(benefit) + 1) % 3 === 0 && 'border-r-0'
+          (benefits.indexOf(benefit) + 1) % 2 === 0 &&
+            'md:border-r-0 lg:border-r',
+          benefits.indexOf(benefit) >= benefits.length - 2 && 'md:border-b-0',
+
+          benefits.indexOf(benefit) >= benefits.length - 3 && 'lg:border-b-0',
+          (benefits.indexOf(benefit) + 1) % 3 === 0 && 'lg:border-r-0'
         )}
       >
         <div className="inline-flex w-fit items-center justify-center rounded-md bg-primary/10 p-2">
           <benefit.icon className="size-4 text-primary" />
         </div>
-        <h3 className="mt-4 font-semibold text-lg">{benefit.title}</h3>
-        <p className="text-muted-foreground text-sm">{benefit.description}</p>
+        <h3 className="mt-4 font-semibold text-xl">{benefit.title}</h3>
+        <p className="text-muted-foreground">{benefit.description}</p>
       </div>
     ))}
   </div>
