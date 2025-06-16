@@ -1,3 +1,15 @@
+# v4.2.11 (Mon Jun 16 2025)
+
+#### 🐛 Bug Fix
+
+- Feature/mobile menu [#161](https://github.com/haydenbleasel/ultracite/pull/161) ([@chocochu](https://github.com/chocochu))
+
+#### Authors: 1
+
+- Choco ([@chocochu](https://github.com/chocochu))
+
+---
+
 # v4.2.10 (Wed Jun 11 2025)
 
 #### ⚠️ Pushed to `main`
