@@ -190,8 +190,14 @@ h3 {
   @apply hidden;
 }
 
-#nd-subnav button[data-search] + button {
-  @apply hidden!;
+/* Hide the "Docs" link from the sidebar (duplicated with the "Introduction" link) */
+#nd-sidebar a[href="/introduction"]:first-of-type {
+  @apply hidden;
+}
+
+/* Hide the sidebar on the landing page on desktop */
+.landing-page #nd-sidebar {
+  @apply md:hidden;
 }
 
 #nd-subnav [data-search-full] {

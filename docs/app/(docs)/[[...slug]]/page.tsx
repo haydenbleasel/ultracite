@@ -26,8 +26,9 @@ const Page = async (props: PageProps) => {
 			<DocsLayout
 				{...baseOptions}
 				tree={source.pageTree}
-				sidebar={{ hidden: true, collapsible: false }}
+				sidebar={{ hidden: false, collapsible: false }}
 				nav={{ ...baseOptions.nav, mode: "top" }}
+				containerProps={{ className: "landing-page" }}
 			>
 				<Home />
 			</DocsLayout>
