@@ -1,3 +1,15 @@
+# v4.2.12 (Tue Jun 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.11 (Mon Jun 16 2025)
 
 #### 🐛 Bug Fix
