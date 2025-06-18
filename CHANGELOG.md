@@ -1,3 +1,15 @@
+# v4.2.13 (Wed Jun 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Allow for passing files to lint and format ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.12 (Tue Jun 17 2025)
 
 #### ⚠️ Pushed to `main`
