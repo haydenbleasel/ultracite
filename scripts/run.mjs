@@ -96,9 +96,11 @@ program
 program
   .command('lint')
   .description('Run Biome linter without fixing files')
-  .action(() => {
+  .argument('[files...]', 'specific files to lint (optional)')
+  .action((files) => {
     try {
-      execSync('npx biome check ./', { stdio: 'inherit' });
+      const target = files.length > 0 ? files.join(' ') : './';
+      execSync(`npx biome check ${target}`, { stdio: 'inherit' });
     } catch (error) {
       console.error('Failed to run Ultracite:', error.message);
       process.exit(1);
@@ -108,9 +110,11 @@ program
 program
   .command('format')
   .description('Run Biome linter and fixes files')
-  .action(() => {
+  .argument('[files...]', 'specific files to format (optional)')
+  .action((files) => {
     try {
-      execSync('npx biome check --write ./', { stdio: 'inherit' });
+      const target = files.length > 0 ? files.join(' ') : './';
+      execSync(`npx biome check --write ${target}`, { stdio: 'inherit' });
     } catch (error) {
       console.error('Failed to run Ultracite:', error.message);
       process.exit(1);
