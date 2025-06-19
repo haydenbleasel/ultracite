@@ -352,7 +352,22 @@
 				"useConsistentCurlyBraces": "off"
 			},
 			"performance": {
+				// Disallow the use of spread (...) syntax on accumulators.
+				"noAccumulatingSpread": "error",
+				// Disallow the use of the delete operator.
+				"noDelete": "error",
+				// Disallow accessing namespace imports dynamically.
+				"noDynamicNamespaceImportAccess": "error",
+				// Prevent usage of <img> element in a Next.js project.
+				"noImgElement": "error",
+				// Disallow the use of namespace imports.
+				"noNamespaceImport": "error",
+				// Require regex literals to be declared at the top level.
+				"useTopLevelRegex": "error",
+
+				// Disallow the use of barrel file.
 				"noBarrelFile": "off",
+				// Avoid re-export all.
 				"noReExportAll": "off"
 			},
 			"style": {
