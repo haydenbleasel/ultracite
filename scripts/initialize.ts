@@ -274,6 +274,26 @@ const initializeWindsurfRules = () => {
   s.stop('Windsurf rules initialized.');
 };
 
+const initializeZedRules = async () => {
+  const s = spinner();
+
+  s.start('Initializing Zed rules...');
+
+  const zedConfigExists = await exists('.rules');
+
+  if (zedConfigExists) {
+    s.message('rules found, updating...');
+
+    execSync(`echo '\n\n${rules}' >> .rules `);
+  } else {
+    s.message('rules not found, creating...');
+
+    execSync(`echo '${rules}' > .rules `);
+  }
+
+  s.stop('Zed rules initialized.');
+};
+
 export const initialize = async () => {
   intro(title);
 
@@ -295,6 +315,7 @@ export const initialize = async () => {
       options: [
         { value: 'cursor', label: 'Cursor' },
         { value: 'windsurf', label: 'Windsurf' },
+        { value: 'zed', label: 'Zed' },
       ],
     });
 
@@ -322,6 +343,9 @@ export const initialize = async () => {
       }
       if (editorRules.includes('windsurf')) {
         initializeWindsurfRules();
+      }
+      if (editorRules.includes('zed')) {
+        await initializeZedRules();
       }
     }
 
