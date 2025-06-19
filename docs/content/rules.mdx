@@ -1,0 +1,69 @@
+---
+title: Editor Rules
+description: How to use Ultracite with Cursor, Windsurf or Zed.
+---
+
+Ultracite provides seamless integration with modern AI-powered code editors by automatically generating editor-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
+
+The editor rules work alongside Biome's linting and formatting. While Biome handles code formatting and catches syntax errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
+
+This dual approach ensures both automated code quality (through Biome) and intelligent code generation (through editor rules).
+
+## Setup
+
+### Automatic Setup
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Windsurf  
+  ◯ Zed
+```
+
+This will create the relevant file in your project directory.
+
+### Manual Setup
+
+If you want to manually create the rules file, you can do so by creating the relevant file in your project directory.
+
+- `.cursor/rules/ultracite.mdc` for Cursor
+- `.windsurf/rules/ultracite.md` for Windsurf
+- `.rules` for Zed
+
+Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+
+## Supported Editors
+
+### Cursor
+
+[Cursor](https://cursor.com) is an AI-powered code editor built on top of Visual Studio Code. Cursor automatically detects and applies rules from the `.cursor/rules/` directory. The rules are written in Markdown format and guide Cursor's AI to follow specific coding conventions.
+
+As part of the Ultracite automatic setup, you can opt to create a `.cursor/rules/ultracite.mdc` file that contains all the coding rules and conventions.
+
+### Windsurf
+
+[Windsurf](https://windsurf.com) is another AI-powered development environment. During the setup process, you can opt to create a `.windsurf/rules/ultracite.md` file with the same comprehensive rule set. Similar to Cursor, Windsurf reads rules from the `.windsurf/rules/` directory and applies them when generating code suggestions.
+
+### Zed
+
+[Zed](https://zed.dev) is a high-performance, multiplayer code editor. During the setup process, you can opt to create a `.rules` file in your project root. Zed uses the `.rules` file to understand project-specific coding conventions and applies them when providing AI-powered code assistance.
+
+## Benefits
+
+Using Ultracite editor rules provides several advantages:
+
+- **Consistency**: All AI-generated code follows the same conventions
+- **Quality**: Rules enforce best practices and prevent common mistakes
+- **Accessibility**: Built-in accessibility guidelines ensure inclusive code
+- **Performance**: Rules promote efficient patterns and avoid anti-patterns
+- **Security**: Guidelines help prevent common security vulnerabilities
+
+## Customization
+
+While the default rules are comprehensive, you can customize them for your specific needs:
+
+1. **Modify existing rules**: Edit the rule files directly
+2. **Add project-specific rules**: Append additional guidelines
+3. **Disable rules**: Remove or comment out rules that don't apply to your project
