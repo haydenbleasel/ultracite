@@ -91,7 +91,7 @@ export const Hero = () => (
         <Button
           asChild
           size="lg"
-          className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs"
+          className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs hover:text-background"
         >
           <Link href="/introduction">Read the docs</Link>
         </Button>

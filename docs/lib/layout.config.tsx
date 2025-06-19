@@ -5,12 +5,12 @@ export const baseOptions: BaseLayoutProps = {
     {
       text: 'Home',
       url: '/',
-      active: 'url',
+      active: 'none',
     },
     {
       text: 'Docs',
       url: '/introduction',
-      active: 'nested-url',
+      active: 'none',
     },
     {
       text: 'Releases',
@@ -19,6 +19,9 @@ export const baseOptions: BaseLayoutProps = {
     },
   ],
   githubUrl: 'https://github.com/haydenbleasel/ultracite',
+  themeSwitch: {
+    enabled: false,
+  },
   nav: {
     title: (
       <div className="flex items-center gap-2">
