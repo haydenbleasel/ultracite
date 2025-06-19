@@ -5,43 +5,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Scene } from '@/components/ui/hero-section';
 import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
-import { Installer } from '../installer';
-import claude from './claude.jpg';
-import deepseek from './deepseek.jpg';
-import haydenbleasel from './haydenbleasel.jpg';
-import openai from './openai.jpg';
-import piersonmarks from './piersonmarks.jpg';
-import shadcn from './shadcn.jpg';
-
-const avatars = [
-  {
-    name: 'Hayden Bleasel',
-    avatar: haydenbleasel,
-  },
-  {
-    name: 'Shadcn',
-    avatar: shadcn,
-  },
-  {
-    name: 'Pierson Marks',
-    avatar: piersonmarks,
-  },
-];
-
-const aiProviders = [
-  {
-    name: 'OpenAI',
-    avatar: openai,
-  },
-  {
-    name: 'Claude',
-    avatar: claude,
-  },
-  {
-    name: 'DeepSeek',
-    avatar: deepseek,
-  },
-];
+import { people, providers } from './avatars';
+import { Installer } from './installer';
 
 export const Hero = () => (
   <div className="container mx-auto">
@@ -54,7 +19,7 @@ export const Hero = () => (
           The AI-ready toolchain that helps you{' '}
           <span className="mr-2 ml-1 inline-flex">
             <AvatarStack className="inline-flex translate-y-1" size={48}>
-              {avatars.map(({ name, avatar }) => (
+              {people.map(({ name, avatar }) => (
                 <Image
                   key={name}
                   src={avatar}
@@ -68,7 +33,7 @@ export const Hero = () => (
           </span>
           write and{' '}
           <AvatarStack className="inline-flex translate-y-1" size={48}>
-            {aiProviders.map(({ name, avatar }) => (
+            {providers.map(({ name, avatar }) => (
               <Image
                 key={name}
                 src={avatar}
