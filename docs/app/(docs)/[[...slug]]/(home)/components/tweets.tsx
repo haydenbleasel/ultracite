@@ -13,7 +13,7 @@ const tweets = [
 ];
 
 export const Tweets = () => (
-  <div className="grid gap-16 px-8 py-8 sm:grid-cols-3">
+  <div className="grid gap-16 sm:grid-cols-3">
     <div>
       <div className="sticky top-20">
         <h2 className="font-semibold text-3xl">What the community is saying</h2>

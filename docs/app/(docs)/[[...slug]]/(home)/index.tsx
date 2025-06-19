@@ -6,7 +6,7 @@ import { Recommendation } from './components/recommendation';
 import { Tweets } from './components/tweets';
 
 const Home = () => (
-  <div className="container mx-auto w-full px-0 pt-[var(--fd-nav-height)]">
+  <div className="container mx-auto mt-[var(--fd-nav-height)] grid w-full gap-16 px-8 pt-24 pb-8 md:gap-24">
     <Hero />
     <Benefits />
     <Recommendation />

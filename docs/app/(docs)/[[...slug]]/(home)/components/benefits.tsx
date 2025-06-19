@@ -39,16 +39,16 @@ const benefits = [
   },
   {
     icon: UsersIcon,
-    title: 'Team-ready collaboration',
+    title: 'Ready for humans and AI agents',
     description:
-      'Ensures consistent code style and quality across all team members with a single file, eliminating debates over formatting and reducing code review friction.',
+      'Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction.',
   },
 ];
 
 export const Benefits = () => (
-  <div className="grid py-8 md:grid-cols-2 lg:grid-cols-3">
+  <div className="grid gap-16 md:grid-cols-2 lg:grid-cols-3">
     {benefits.map((benefit) => (
-      <div key={benefit.title} className="flex flex-col gap-2 p-8">
+      <div key={benefit.title} className="flex flex-col gap-2">
         <div className="inline-flex w-fit items-center justify-center rounded-md bg-primary/10 p-2.5">
           <benefit.icon className="size-5 text-primary" />
         </div>
