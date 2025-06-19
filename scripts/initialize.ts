@@ -72,7 +72,7 @@ const upsertTsConfig = async () => {
     s.message('tsconfig.json found, updating...');
 
     const existingTsConfig = JSON.parse(
-      execSync('cat tsconfig.json', { encoding: 'utf-8' })
+      await readFile('tsconfig.json', { encoding: 'utf-8' })
     );
 
     tsConfig = {
