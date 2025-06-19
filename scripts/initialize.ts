@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { access, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { rules } from './rules';
@@ -43,6 +43,14 @@ let tsConfig = {
   },
 };
 
+const exists = async (path: string) => {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+};
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
@@ -53,12 +61,12 @@ const installDependencies = (packageManagerAdd: string) => {
   s.stop('Dependencies installed.');
 };
 
-const upsertTsConfig = () => {
+const upsertTsConfig = async () => {
   const s = spinner();
 
   s.start('Checking for tsconfig.json...');
 
-  const tsConfigExists = existsSync('tsconfig.json');
+  const tsConfigExists = await exists('tsconfig.json');
 
   if (tsConfigExists) {
     s.message('tsconfig.json found, updating...');
@@ -89,12 +97,12 @@ const upsertTsConfig = () => {
   s.stop('tsconfig.json created.');
 };
 
-const upsertVSCodeSettings = () => {
+const upsertVSCodeSettings = async () => {
   const s = spinner();
 
   s.start('Checking for .vscode/settings.json...');
 
-  const vsCodeSettingsExists = existsSync('.vscode/settings.json');
+  const vsCodeSettingsExists = await exists('.vscode/settings.json');
 
   if (vsCodeSettingsExists) {
     s.message('settings.json found, updating...');
@@ -115,12 +123,12 @@ const upsertVSCodeSettings = () => {
   s.stop('settings.json created.');
 };
 
-const upsertBiomeConfig = () => {
+const upsertBiomeConfig = async () => {
   const s = spinner();
 
   s.start('Checking for biome.jsonc...');
 
-  const biomeConfigExists = existsSync('biome.jsonc');
+  const biomeConfigExists = await exists('biome.jsonc');
 
   if (biomeConfigExists) {
     s.message('biome.jsonc found, updating...');
@@ -139,7 +147,7 @@ const upsertBiomeConfig = () => {
   s.stop('biome.jsonc created.');
 };
 
-const initializePrecommitHook = (packageManagerAdd: string) => {
+const initializePrecommitHook = async (packageManagerAdd: string) => {
   const s = spinner();
   const huskyCommand = 'npx ultracite format';
 
@@ -148,7 +156,7 @@ const initializePrecommitHook = (packageManagerAdd: string) => {
   s.message('Installing Husky...');
   execSync(`${packageManagerAdd} -D husky`);
 
-  const preCommitHookExists = existsSync('.husky/pre-commit');
+  const preCommitHookExists = await exists('.husky/pre-commit');
 
   if (!preCommitHookExists) {
     s.message('Pre-commit hook not found, creating...');
@@ -163,7 +171,7 @@ const initializePrecommitHook = (packageManagerAdd: string) => {
   s.stop('Pre-commit hooks initialized.');
 };
 
-const initializeLintStaged = (packageManagerAdd: string) => {
+const initializeLintStaged = async (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Initializing lint-staged...');
@@ -192,7 +200,8 @@ const initializeLintStaged = (packageManagerAdd: string) => {
 
   let existingConfigFile: string | null = null;
   for (const file of configFiles) {
-    if (existsSync(file)) {
+    // biome-ignore lint/nursery/noAwaitInLoop: "don't do what donny don't does"
+    if (await exists(file)) {
       existingConfigFile = file;
       break;
     }
@@ -202,7 +211,7 @@ const initializeLintStaged = (packageManagerAdd: string) => {
     s.message('package.json found, updating lint-staged configuration...');
 
     try {
-      const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
+      const packageJson = JSON.parse(await readFile('package.json', 'utf-8'));
 
       if (packageJson['lint-staged']) {
         s.message('Existing lint-staged configuration found, merging...');
@@ -214,13 +223,13 @@ const initializeLintStaged = (packageManagerAdd: string) => {
         packageJson['lint-staged'] = lintStagedConfig;
       }
 
-      writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+      await writeFile('package.json', JSON.stringify(packageJson, null, 2));
       s.message('lint-staged configuration added to package.json');
     } catch {
       s.message(
         'Failed to update package.json, creating .lintstagedrc.json...'
       );
-      writeFileSync(
+      await writeFile(
         '.lintstagedrc.json',
         JSON.stringify(lintStagedConfig, null, 2)
       );
@@ -235,7 +244,7 @@ const initializeLintStaged = (packageManagerAdd: string) => {
     s.message(
       'No existing configuration found, creating .lintstagedrc.json...'
     );
-    writeFileSync(
+    await writeFile(
       '.lintstagedrc.json',
       JSON.stringify(lintStagedConfig, null, 2)
     );
@@ -303,9 +312,9 @@ export const initialize = async () => {
     }
 
     installDependencies(packageManager);
-    upsertTsConfig();
-    upsertVSCodeSettings();
-    upsertBiomeConfig();
+    await upsertTsConfig();
+    await upsertVSCodeSettings();
+    await upsertBiomeConfig();
 
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('cursor')) {
@@ -318,10 +327,10 @@ export const initialize = async () => {
 
     if (Array.isArray(extraFeatures)) {
       if (extraFeatures.includes('precommit-hooks')) {
-        initializePrecommitHook(packageManager);
+        await initializePrecommitHook(packageManager);
       }
       if (extraFeatures.includes('lint-staged')) {
-        initializeLintStaged(packageManager);
+        await initializeLintStaged(packageManager);
       }
     }
 
