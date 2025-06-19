@@ -9,9 +9,7 @@ const program = new Command();
 
 program
   .name('Ultracite')
-  .description(
-    'Strict, opinionated linting config for modern TypeScript apps.'
-  );
+  .description('Ship code faster and with more confidence.');
 
 program
   .command('init')
