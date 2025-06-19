@@ -1,711 +1,705 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-	"formatter": {
-		"enabled": true,
-		"formatWithErrors": true,
-		"indentStyle": "space",
-		"indentWidth": 2,
-		"lineEnding": "lf",
-		"lineWidth": 80,
-		"attributePosition": "auto"
-	},
-	"assist": {
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"a11y": {
-				// Enforce that the accessKey attribute is not used on any HTML element.
-				"noAccessKey": "error",
-				// Enforce that aria-hidden="true" is not set on focusable elements.
-				"noAriaHiddenOnFocusable": "error",
-				// Enforce that elements that do not support ARIA roles, states, and properties do not have those attributes.
-				"noAriaUnsupportedElements": "error",
-				// Enforces that no distracting elements are used.
-				"noDistractingElements": "error",
-				// The scope prop should be used only on <th> elements.
-				"noHeaderScope": "error",
-				// Enforce that non-interactive ARIA roles are not assigned to interactive HTML elements.
-				"noInteractiveElementToNoninteractiveRole": "error",
-				// Enforce that a label element or component has a text label and an associated input.
-				"noLabelWithoutControl": "error",
-				// Enforce that interactive ARIA roles are not assigned to non-interactive HTML elements.
-				"noNoninteractiveElementToInteractiveRole": "error",
-				// Enforce that tabIndex is not assigned to non-interactive HTML elements.
-				"noNoninteractiveTabindex": "error",
-				// Prevent the usage of positive integers on tabIndex property
-				"noPositiveTabindex": "error",
-				// Enforce img alt prop does not contain the word "image", "picture", or "photo".
-				"noRedundantAlt": "error",
-				// Enforce explicit role property is not the same as implicit/default role property on an element.
-				"noRedundantRoles": "error",
-				// Enforce that static, visible elements (such as <div>) that have click handlers use the valid role attribute.
-				"noStaticElementInteractions": "error",
-				// Enforces the usage of the title element for the svg element.
-				"noSvgWithoutTitle": "error",
-				// Enforce that all elements that require alternative text have meaningful information to relay back to the end user.
-				"useAltText": "error",
-				// Enforce that anchors have content and that the content is accessible to screen readers.
-				"useAnchorContent": "error",
-				// Enforce that tabIndex is assigned to non-interactive HTML elements with aria-activedescendant.
-				"useAriaActivedescendantWithTabindex": "error",
-				// Enforce that elements with ARIA roles must have all required ARIA attributes for that role.
-				"useAriaPropsForRole": "error",
-				// Enforce that ARIA properties are valid for the roles that are supported by the element.
-				"useAriaPropsSupportedByRole": "error",
-				// Enforces the usage of the attribute type for the element button
-				"useButtonType": "error",
-				// Elements with an interactive role and interaction handlers must be focusable.
-				"useFocusableInteractive": "error",
-				// Enforce that heading elements (h1, h2, etc.) have content and that the content is accessible to screen readers. Accessible means that it is not hidden using the aria-hidden prop.
-				"useHeadingContent": "error",
-				// Enforce that html element has lang attribute.
-				"useHtmlLang": "error",
-				// Enforces the usage of the attribute title for the element iframe.
-				"useIframeTitle": "error",
-				// Enforce onClick is accompanied by at least one of the following: onKeyUp, onKeyDown, onKeyPress.
-				"useKeyWithClickEvents": "error",
-				// Enforce onMouseOver / onMouseOut are accompanied by onFocus / onBlur.
-				"useKeyWithMouseEvents": "error",
-				// Enforces that audio and video elements must have a track for captions.
-				"useMediaCaption": "error",
-				// It detects the use of role attributes in JSX elements and suggests using semantic elements instead.
-				"useSemanticElements": "error",
-				// Enforce that all anchors are valid, and they are navigable elements.
-				"useValidAnchor": "error",
-				// Ensures that ARIA properties aria-* are all valid.
-				"useValidAriaProps": "error",
-				// Elements with ARIA roles must use a valid, non-abstract ARIA role.
-				"useValidAriaRole": "error",
-				// Enforce that ARIA state and property values are valid.
-				"useValidAriaValues": "error",
-				// Use valid values for the autocomplete attribute on input elements.
-				"useValidAutocomplete": "error",
-				// Ensure that the attribute passed to the lang attribute is a correct ISO language and/or country.
-				"useValidLang": "error",
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80,
+    "attributePosition": "auto"
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        // Enforce that the accessKey attribute is not used on any HTML element.
+        "noAccessKey": "error",
+        // Enforce that aria-hidden="true" is not set on focusable elements.
+        "noAriaHiddenOnFocusable": "error",
+        // Enforce that elements that do not support ARIA roles, states, and properties do not have those attributes.
+        "noAriaUnsupportedElements": "error",
+        // Enforces that no distracting elements are used.
+        "noDistractingElements": "error",
+        // The scope prop should be used only on <th> elements.
+        "noHeaderScope": "error",
+        // Enforce that non-interactive ARIA roles are not assigned to interactive HTML elements.
+        "noInteractiveElementToNoninteractiveRole": "error",
+        // Enforce that a label element or component has a text label and an associated input.
+        "noLabelWithoutControl": "error",
+        // Enforce that interactive ARIA roles are not assigned to non-interactive HTML elements.
+        "noNoninteractiveElementToInteractiveRole": "error",
+        // Enforce that tabIndex is not assigned to non-interactive HTML elements.
+        "noNoninteractiveTabindex": "error",
+        // Prevent the usage of positive integers on tabIndex property
+        "noPositiveTabindex": "error",
+        // Enforce img alt prop does not contain the word "image", "picture", or "photo".
+        "noRedundantAlt": "error",
+        // Enforce explicit role property is not the same as implicit/default role property on an element.
+        "noRedundantRoles": "error",
+        // Enforce that static, visible elements (such as <div>) that have click handlers use the valid role attribute.
+        "noStaticElementInteractions": "error",
+        // Enforces the usage of the title element for the svg element.
+        "noSvgWithoutTitle": "error",
+        // Enforce that all elements that require alternative text have meaningful information to relay back to the end user.
+        "useAltText": "error",
+        // Enforce that anchors have content and that the content is accessible to screen readers.
+        "useAnchorContent": "error",
+        // Enforce that tabIndex is assigned to non-interactive HTML elements with aria-activedescendant.
+        "useAriaActivedescendantWithTabindex": "error",
+        // Enforce that elements with ARIA roles must have all required ARIA attributes for that role.
+        "useAriaPropsForRole": "error",
+        // Enforce that ARIA properties are valid for the roles that are supported by the element.
+        "useAriaPropsSupportedByRole": "error",
+        // Enforces the usage of the attribute type for the element button
+        "useButtonType": "error",
+        // Elements with an interactive role and interaction handlers must be focusable.
+        "useFocusableInteractive": "error",
+        // Enforce that heading elements (h1, h2, etc.) have content and that the content is accessible to screen readers. Accessible means that it is not hidden using the aria-hidden prop.
+        "useHeadingContent": "error",
+        // Enforce that html element has lang attribute.
+        "useHtmlLang": "error",
+        // Enforces the usage of the attribute title for the element iframe.
+        "useIframeTitle": "error",
+        // Enforce onClick is accompanied by at least one of the following: onKeyUp, onKeyDown, onKeyPress.
+        "useKeyWithClickEvents": "error",
+        // Enforce onMouseOver / onMouseOut are accompanied by onFocus / onBlur.
+        "useKeyWithMouseEvents": "error",
+        // Enforces that audio and video elements must have a track for captions.
+        "useMediaCaption": "error",
+        // It detects the use of role attributes in JSX elements and suggests using semantic elements instead.
+        "useSemanticElements": "error",
+        // Enforce that all anchors are valid, and they are navigable elements.
+        "useValidAnchor": "error",
+        // Ensures that ARIA properties aria-* are all valid.
+        "useValidAriaProps": "error",
+        // Elements with ARIA roles must use a valid, non-abstract ARIA role.
+        "useValidAriaRole": "error",
+        // Enforce that ARIA state and property values are valid.
+        "useValidAriaValues": "error",
+        // Use valid values for the autocomplete attribute on input elements.
+        "useValidAutocomplete": "error",
+        // Ensure that the attribute passed to the lang attribute is a correct ISO language and/or country.
+        "useValidLang": "error",
 
-				// Enforce that autoFocus prop is not used on elements.
-				"noAutofocus": "off"
-			},
-			"complexity": {
-				// Disallow unclear usage of consecutive space characters in regular expression literals
-				"noAdjacentSpacesInRegex": "error",
-				// Disallow the use of arguments.
-				"noArguments": "error",
-				// Disallow primitive type aliases and misleading types.
-				"noBannedTypes": "error",
-				// Disallow comma operator.
-				"noCommaOperator": "error",
-				// Disallow empty type parameters in type aliases and interfaces.
-				"noEmptyTypeParameters": "error",
-				// Disallow functions that exceed a given Cognitive Complexity score.
-				"noExcessiveCognitiveComplexity": "error",
-				// This rule enforces a maximum depth to nested describe() in test files.
-				"noExcessiveNestedTestSuites": "error",
-				// Disallow unnecessary boolean casts
-				"noExtraBooleanCast": "error",
-				// Disallow to use unnecessary callback on flatMap.
-				"noFlatMapIdentity": "error",
-				// Prefer for...of statement instead of Array.forEach.
-				"noForEach": "error",
-				// This rule reports when a class has no non-static members, such as for a class used exclusively as a static namespace.
-				"noStaticOnlyClass": "error",
-				// Disallow this and super in static contexts.
-				"noThisInStatic": "error",
-				// Disallow unnecessary catch clauses.
-				"noUselessCatch": "error",
-				// Disallow unnecessary constructors.
-				"noUselessConstructor": "error",
-				// Avoid using unnecessary continue.
-				"noUselessContinue": "error",
-				// Disallow empty exports that don't change anything in a module file.
-				"noUselessEmptyExport": "error",
-				// Disallow unnecessary escape sequence in regular expression literals.
-				"noUselessEscapeInRegex": "error",
-				// Disallow unnecessary fragments
-				"noUselessFragments": "error",
-				// Disallow unnecessary labels.
-				"noUselessLabel": "error",
-				// Disallow unnecessary nested block statements.
-				"noUselessLoneBlockStatements": "error",
-				// Disallow renaming import, export, and destructured assignments to the same name.
-				"noUselessRename": "error",
-				// Disallow unnecessary concatenation of string or template literals.
-				"noUselessStringConcat": "error",
-				// Disallow unnecessary String.raw function in template string literals without any escape sequence.
-				"noUselessStringRaw": "error",
-				// Disallow useless case in switch statements.
-				"noUselessSwitchCase": "error",
-				// Disallow ternary operators when simpler alternatives exist.
-				"noUselessTernary": "error",
-				// Disallow useless this aliasing.
-				"noUselessThisAlias": "error",
-				// Disallow using any or unknown as type constraint.
-				"noUselessTypeConstraint": "error",
-				// Disallow initializing variables to undefined.
-				"noUselessUndefinedInitialization": "error",
-				// Disallow the use of void operators, which is not a familiar operator.
-				"noVoid": "error",
-				// Use arrow functions over function expressions.
-				"useArrowFunction": "error",
-				// Use Date.now() to get the number of milliseconds since the Unix Epoch.
-				"useDateNow": "error",
-				// Promotes the use of .flatMap() when map().flat() are used together.
-				"useFlatMap": "error",
-				// Enforce the usage of a literal access to properties over computed property access.
-				"useLiteralKeys": "error",
-				// Disallow parseInt() and Number.parseInt() in favor of binary, octal, and hexadecimal literals
-				"useNumericLiterals": "error",
-				// Enforce using concise optional chain instead of chained logical expressions.
-				"useOptionalChain": "error",
-				// Enforce the use of the regular expression literals instead of the RegExp constructor if possible.
-				"useRegexLiterals": "error",
-				// Disallow number literal object member names which are not base 10 or use underscore as separator.
-				"useSimpleNumberKeys": "error",
-				// Discard redundant terms from logical expressions.
-				"useSimplifiedLogicExpression": "error",
-				// Enforce the use of while loops instead of for loops when the initializer and update expressions are not needed.
-				"useWhile": "error"
-			},
-			"correctness": {
-				// Prevent passing of children as props.
-				"noChildrenProp": "error",
-				// Prevents from having const variables being re-assigned.
-				"noConstAssign": "error",
-				// Disallow constant expressions in conditions
-				"noConstantCondition": "error",
-				// Disallow the use of Math.min and Math.max to clamp a value where the result itself is constant.
-				"noConstantMathMinMaxClamp": "error",
-				// Disallow returning a value from a constructor.
-				"noConstructorReturn": "error",
-				// Disallow empty character classes in regular expression literals.
-				"noEmptyCharacterClassInRegex": "error",
-				// Disallows empty destructuring patterns.
-				"noEmptyPattern": "error",
-				// Disallow calling global object properties as functions
-				"noGlobalObjectCalls": "error",
-				// Disallow function and var declarations that are accessible outside their block.
-				"noInnerDeclarations": "error",
-				// Ensure that builtins are correctly instantiated.
-				"noInvalidBuiltinInstantiation": "error",
-				// Prevents the incorrect use of super() inside classes. It also checks whether a call super() is missing from classes that extends other constructors.
-				"noInvalidConstructorSuper": "error",
-				// Disallow the use of variables and function parameters before their declaration
-				"noInvalidUseBeforeDeclaration": "error",
-				// Disallow \8 and \9 escape sequences in string literals.
-				"noNonoctalDecimalEscape": "error",
-				// Disallow literal numbers that lose precision
-				"noPrecisionLoss": "error",
-				// Restrict imports of private exports.
-				"noPrivateImports": "error",
-				// Prevent the usage of the return value of React.render.
-				"noRenderReturnValue": "error",
-				// Disallow assignments where both sides are exactly the same.
-				"noSelfAssign": "error",
-				// Disallow returning a value from a setter
-				"noSetterReturn": "error",
-				// Disallow comparison of expressions modifying the string case with non-compliant value.
-				"noStringCaseMismatch": "error",
-				// Disallow lexical declarations in switch clauses.
-				"noSwitchDeclarations": "error",
-				// Prevents the usage of variables that haven't been declared inside the document.
-				"noUndeclaredVariables": "error",
-				// Disallow unreachable code
-				"noUnreachable": "error",
-				// Ensures the super() constructor is called exactly once on every code path in a class constructor before this is accessed if the class has a superclass
-				"noUnreachableSuper": "error",
-				// Disallow control flow statements in finally blocks.
-				"noUnsafeFinally": "error",
-				// Disallow the use of optional chaining in contexts where the undefined value is not allowed.
-				"noUnsafeOptionalChaining": "error",
-				// Disallow unused function parameters.
-				"noUnusedFunctionParameters": "error",
-				// Disallow unused imports.
-				"noUnusedImports": "error",
-				// Disallow unused labels.
-				"noUnusedLabels": "error",
-				// Disallow unused private class members
-				"noUnusedPrivateClassMembers": "error",
-				// Disallow unused variables.
-				"noUnusedVariables": "error",
-				// This rules prevents void elements (AKA self-closing elements) from having children.
-				"noVoidElementsWithChildren": "error",
-				// Disallow returning a value from a function with the return type 'void'
-				"noVoidTypeReturn": "error",
-				// Enforce all dependencies are correctly specified in a React hook.
-				"useExhaustiveDependencies": "error",
-				// Enforce that all React hooks are being called from the Top Level component functions.
-				"useHookAtTopLevel": "error",
-				// Require calls to isNaN() when checking for NaN.
-				"useIsNan": "error",
-				// Disallow missing key props in iterators/collection literals.
-				"useJsxKeyInIterable": "error",
-				// Enforce "for" loop update clause moving the counter in the right direction.
-				"useValidForDirection": "error",
-				// This rule checks that the result of a typeof expression is compared to a valid value.
-				"useValidTypeof": "error",
-				// Require generator functions to contain yield.
-				"useYield": "error",
+        // Enforce that autoFocus prop is not used on elements.
+        "noAutofocus": "off"
+      },
+      "complexity": {
+        // Disallow unclear usage of consecutive space characters in regular expression literals
+        "noAdjacentSpacesInRegex": "error",
+        // Disallow the use of arguments.
+        "noArguments": "error",
+        // Disallow primitive type aliases and misleading types.
+        "noBannedTypes": "error",
+        // Disallow comma operator.
+        "noCommaOperator": "error",
+        // Disallow empty type parameters in type aliases and interfaces.
+        "noEmptyTypeParameters": "error",
+        // Disallow functions that exceed a given Cognitive Complexity score.
+        "noExcessiveCognitiveComplexity": "error",
+        // This rule enforces a maximum depth to nested describe() in test files.
+        "noExcessiveNestedTestSuites": "error",
+        // Disallow unnecessary boolean casts
+        "noExtraBooleanCast": "error",
+        // Disallow to use unnecessary callback on flatMap.
+        "noFlatMapIdentity": "error",
+        // Prefer for...of statement instead of Array.forEach.
+        "noForEach": "error",
+        // This rule reports when a class has no non-static members, such as for a class used exclusively as a static namespace.
+        "noStaticOnlyClass": "error",
+        // Disallow this and super in static contexts.
+        "noThisInStatic": "error",
+        // Disallow unnecessary catch clauses.
+        "noUselessCatch": "error",
+        // Disallow unnecessary constructors.
+        "noUselessConstructor": "error",
+        // Avoid using unnecessary continue.
+        "noUselessContinue": "error",
+        // Disallow empty exports that don't change anything in a module file.
+        "noUselessEmptyExport": "error",
+        // Disallow unnecessary escape sequence in regular expression literals.
+        "noUselessEscapeInRegex": "error",
+        // Disallow unnecessary fragments
+        "noUselessFragments": "error",
+        // Disallow unnecessary labels.
+        "noUselessLabel": "error",
+        // Disallow unnecessary nested block statements.
+        "noUselessLoneBlockStatements": "error",
+        // Disallow renaming import, export, and destructured assignments to the same name.
+        "noUselessRename": "error",
+        // Disallow unnecessary concatenation of string or template literals.
+        "noUselessStringConcat": "error",
+        // Disallow unnecessary String.raw function in template string literals without any escape sequence.
+        "noUselessStringRaw": "error",
+        // Disallow useless case in switch statements.
+        "noUselessSwitchCase": "error",
+        // Disallow ternary operators when simpler alternatives exist.
+        "noUselessTernary": "error",
+        // Disallow useless this aliasing.
+        "noUselessThisAlias": "error",
+        // Disallow using any or unknown as type constraint.
+        "noUselessTypeConstraint": "error",
+        // Disallow initializing variables to undefined.
+        "noUselessUndefinedInitialization": "error",
+        // Disallow the use of void operators, which is not a familiar operator.
+        "noVoid": "error",
+        // Use arrow functions over function expressions.
+        "useArrowFunction": "error",
+        // Use Date.now() to get the number of milliseconds since the Unix Epoch.
+        "useDateNow": "error",
+        // Promotes the use of .flatMap() when map().flat() are used together.
+        "useFlatMap": "error",
+        // Enforce the usage of a literal access to properties over computed property access.
+        "useLiteralKeys": "error",
+        // Disallow parseInt() and Number.parseInt() in favor of binary, octal, and hexadecimal literals
+        "useNumericLiterals": "error",
+        // Enforce using concise optional chain instead of chained logical expressions.
+        "useOptionalChain": "error",
+        // Enforce the use of the regular expression literals instead of the RegExp constructor if possible.
+        "useRegexLiterals": "error",
+        // Disallow number literal object member names which are not base 10 or use underscore as separator.
+        "useSimpleNumberKeys": "error",
+        // Discard redundant terms from logical expressions.
+        "useSimplifiedLogicExpression": "error",
+        // Enforce the use of while loops instead of for loops when the initializer and update expressions are not needed.
+        "useWhile": "error"
+      },
+      "correctness": {
+        // Prevent passing of children as props.
+        "noChildrenProp": "error",
+        // Prevents from having const variables being re-assigned.
+        "noConstAssign": "error",
+        // Disallow constant expressions in conditions
+        "noConstantCondition": "error",
+        // Disallow the use of Math.min and Math.max to clamp a value where the result itself is constant.
+        "noConstantMathMinMaxClamp": "error",
+        // Disallow returning a value from a constructor.
+        "noConstructorReturn": "error",
+        // Disallow empty character classes in regular expression literals.
+        "noEmptyCharacterClassInRegex": "error",
+        // Disallows empty destructuring patterns.
+        "noEmptyPattern": "error",
+        // Disallow calling global object properties as functions
+        "noGlobalObjectCalls": "error",
+        // Disallow function and var declarations that are accessible outside their block.
+        "noInnerDeclarations": "error",
+        // Ensure that builtins are correctly instantiated.
+        "noInvalidBuiltinInstantiation": "error",
+        // Prevents the incorrect use of super() inside classes. It also checks whether a call super() is missing from classes that extends other constructors.
+        "noInvalidConstructorSuper": "error",
+        // Disallow the use of variables and function parameters before their declaration
+        "noInvalidUseBeforeDeclaration": "error",
+        // Disallow \8 and \9 escape sequences in string literals.
+        "noNonoctalDecimalEscape": "error",
+        // Disallow literal numbers that lose precision
+        "noPrecisionLoss": "error",
+        // Prevent the usage of the return value of React.render.
+        "noRenderReturnValue": "error",
+        // Disallow assignments where both sides are exactly the same.
+        "noSelfAssign": "error",
+        // Disallow returning a value from a setter
+        "noSetterReturn": "error",
+        // Disallow comparison of expressions modifying the string case with non-compliant value.
+        "noStringCaseMismatch": "error",
+        // Disallow lexical declarations in switch clauses.
+        "noSwitchDeclarations": "error",
+        // Prevents the usage of variables that haven't been declared inside the document.
+        "noUndeclaredVariables": "error",
+        // Disallow unreachable code
+        "noUnreachable": "error",
+        // Ensures the super() constructor is called exactly once on every code path in a class constructor before this is accessed if the class has a superclass
+        "noUnreachableSuper": "error",
+        // Disallow control flow statements in finally blocks.
+        "noUnsafeFinally": "error",
+        // Disallow the use of optional chaining in contexts where the undefined value is not allowed.
+        "noUnsafeOptionalChaining": "error",
+        // Disallow unused function parameters.
+        "noUnusedFunctionParameters": "error",
+        // Disallow unused imports.
+        "noUnusedImports": "error",
+        // Disallow unused labels.
+        "noUnusedLabels": "error",
+        // Disallow unused private class members
+        "noUnusedPrivateClassMembers": "error",
+        // Disallow unused variables.
+        "noUnusedVariables": "error",
+        // This rules prevents void elements (AKA self-closing elements) from having children.
+        "noVoidElementsWithChildren": "error",
+        // Disallow returning a value from a function with the return type 'void'
+        "noVoidTypeReturn": "error",
+        // Enforce all dependencies are correctly specified in a React hook.
+        "useExhaustiveDependencies": "error",
+        // Enforce that all React hooks are being called from the Top Level component functions.
+        "useHookAtTopLevel": "error",
+        // Require calls to isNaN() when checking for NaN.
+        "useIsNan": "error",
+        // Disallow missing key props in iterators/collection literals.
+        "useJsxKeyInIterable": "error",
+        // Enforce "for" loop update clause moving the counter in the right direction.
+        "useValidForDirection": "error",
+        // This rule checks that the result of a typeof expression is compared to a valid value.
+        "useValidTypeof": "error",
+        // Require generator functions to contain yield.
+        "useYield": "error",
 
-				// Disallow the use of dependencies that aren't specified in the package.json.
-				"noUndeclaredDependencies": "off",
-				// Enforce file extensions for relative imports.
-				"useImportExtensions": "off",
-				// Forbid the use of Node.js builtin modules.
-				"noNodejsModules": "off"
-			},
-			"nursery": {
-				// Disallow await inside loops.
-				"noAwaitInLoop": "error",
-				// Disallow bitwise operators.
-				"noBitwiseOperators": "error",
-				// Disallow expressions where the operation doesn't affect the value
-				"noConstantBinaryExpression": "error",
-				// Disallow destructuring props inside JSX components in Solid projects.
-				"noDestructuredProps": "error",
-				// Require Promise-like statements to be handled appropriately.
-				"noFloatingPromises": "error",
-				// Disallow the use of __dirname and __filename in the global scope.
-				"noGlobalDirnameFilename": "error",
-				// Prevent import cycles.
-				"noImportCycles": "error",
-				// Disallows defining React components inside other components.
-				"noNestedComponentDefinitions": "error",
-				// Disallow use event handlers on non-interactive elements.
-				"noNoninteractiveElementInteractions": "error",
-				// Disallow the use of process global.
-				"noProcessGlobal": "error",
-				// Disallow assigning to React component props.
-				"noReactPropAssign": "error",
-				// Disallow the use of configured elements.
-				"noRestrictedElements": "error",
-				// Disallow usage of sensitive data such as API keys and tokens.
-				"noSecrets": "error",
-				// Disallow variable declarations from shadowing variables declared in the outer scope.
-				"noShadow": "error",
-				// Prevents the use of the TypeScript directive @ts-ignore.
-				"noTsIgnore": "error",
-				// Warn when importing non-existing exports.
-				"noUnresolvedImports": "error",
-				// Prevent duplicate polyfills from Polyfill.io.
-				"noUnwantedPolyfillio": "error",
-				// Disallow useless backreferences in regular expression literals that always match an empty string.
-				"noUselessBackrefInRegex": "error",
-				// Disallow unnecessary escapes in string literals.
-				"noUselessEscapeInString": "error",
-				// Disallow the use of useless undefined.
-				"noUselessUndefined": "error",
-				// Enforce that getters and setters for the same property are adjacent in class and object definitions.
-				"useAdjacentGetterSetter": "error",
-				// Require the consistent declaration of object literals. Defaults to explicit definitions.
-				"useConsistentObjectDefinition": "error",
-				// Use static Response methods instead of new Response() constructor when possible.
-				"useConsistentResponse": "error",
-				// Require switch-case statements to be exhaustive.
-				"useExhaustiveSwitchCases": "error",
-				// Require that all exports are declared after all non-export statements.
-				"useExportsLast": "error",
-				// Enforce using Solid's <For /> component for mapping an array to JSX elements.
-				"useForComponent": "error",
-				// Ensure the preconnect attribute is used when using Google Fonts.
-				"useGoogleFontPreconnect": "error",
-				// Prefer Array#{indexOf,lastIndexOf}() over Array#{findIndex,findLastIndex}() when looking for the index of an item.
-				"useIndexOf": "error",
-				// Enforce consistent return values in iterable callbacks.
-				"useIterableCallbackReturn": "error",
-				// Enforces the use of with { type: "json" } for JSON module imports.
-				"useJsonImportAttribute": "error",
-				// Enforce the use of numeric separators in numeric literals.
-				"useNumericSeparators": "error",
-				// Prefer object spread over Object.assign() when constructing new objects.
-				"useObjectSpread": "error",
-				// Enforce the consistent use of the radix argument when using parseInt().
-				"useParseIntRadix": "error",
-				// Enforce JSDoc comment lines to start with a single asterisk, except for the first one.
-				"useSingleJsDocAsterisk": "error",
-				// Require a description parameter for the Symbol().
-				"useSymbolDescription": "error",
-				// Prevent the usage of static string literal id attribute on elements.
-				"useUniqueElementIds": "error",
+        // Disallow the use of dependencies that aren't specified in the package.json.
+        "noUndeclaredDependencies": "off",
+        // Enforce file extensions for relative imports.
+        "useImportExtensions": "off",
+        // Forbid the use of Node.js builtin modules.
+        "noNodejsModules": "off",
+        // Restrict imports of private exports.
+        "noPrivateImports": "off"
+      },
+      "nursery": {
+        // Disallow await inside loops.
+        "noAwaitInLoop": "error",
+        // Disallow bitwise operators.
+        "noBitwiseOperators": "error",
+        // Disallow expressions where the operation doesn't affect the value
+        "noConstantBinaryExpression": "error",
+        // Disallow destructuring props inside JSX components in Solid projects.
+        "noDestructuredProps": "error",
+        // Require Promise-like statements to be handled appropriately.
+        "noFloatingPromises": "error",
+        // Disallow the use of __dirname and __filename in the global scope.
+        "noGlobalDirnameFilename": "error",
+        // Prevent import cycles.
+        "noImportCycles": "error",
+        // Disallows defining React components inside other components.
+        "noNestedComponentDefinitions": "error",
+        // Disallow use event handlers on non-interactive elements.
+        "noNoninteractiveElementInteractions": "error",
+        // Disallow the use of process global.
+        "noProcessGlobal": "error",
+        // Disallow assigning to React component props.
+        "noReactPropAssign": "error",
+        // Disallow the use of configured elements.
+        "noRestrictedElements": "error",
+        // Disallow usage of sensitive data such as API keys and tokens.
+        "noSecrets": "error",
+        // Disallow variable declarations from shadowing variables declared in the outer scope.
+        "noShadow": "error",
+        // Prevents the use of the TypeScript directive @ts-ignore.
+        "noTsIgnore": "error",
+        // Warn when importing non-existing exports.
+        "noUnresolvedImports": "error",
+        // Prevent duplicate polyfills from Polyfill.io.
+        "noUnwantedPolyfillio": "error",
+        // Disallow useless backreferences in regular expression literals that always match an empty string.
+        "noUselessBackrefInRegex": "error",
+        // Disallow unnecessary escapes in string literals.
+        "noUselessEscapeInString": "error",
+        // Disallow the use of useless undefined.
+        "noUselessUndefined": "error",
+        // Enforce that getters and setters for the same property are adjacent in class and object definitions.
+        "useAdjacentGetterSetter": "error",
+        // Require the consistent declaration of object literals. Defaults to explicit definitions.
+        "useConsistentObjectDefinition": "error",
+        // Use static Response methods instead of new Response() constructor when possible.
+        "useConsistentResponse": "error",
+        // Require switch-case statements to be exhaustive.
+        "useExhaustiveSwitchCases": "error",
+        // Require that all exports are declared after all non-export statements.
+        "useExportsLast": "error",
+        // Enforce using Solid's <For /> component for mapping an array to JSX elements.
+        "useForComponent": "error",
+        // Ensure the preconnect attribute is used when using Google Fonts.
+        "useGoogleFontPreconnect": "error",
+        // Prefer Array#{indexOf,lastIndexOf}() over Array#{findIndex,findLastIndex}() when looking for the index of an item.
+        "useIndexOf": "error",
+        // Enforce consistent return values in iterable callbacks.
+        "useIterableCallbackReturn": "error",
+        // Enforces the use of with { type: "json" } for JSON module imports.
+        "useJsonImportAttribute": "error",
+        // Enforce the use of numeric separators in numeric literals.
+        "useNumericSeparators": "error",
+        // Prefer object spread over Object.assign() when constructing new objects.
+        "useObjectSpread": "error",
+        // Enforce the consistent use of the radix argument when using parseInt().
+        "useParseIntRadix": "error",
+        // Enforce JSDoc comment lines to start with a single asterisk, except for the first one.
+        "useSingleJsDocAsterisk": "error",
+        // Require a description parameter for the Symbol().
+        "useSymbolDescription": "error",
+        // Prevent the usage of static string literal id attribute on elements.
+        "useUniqueElementIds": "error",
 
-				// Enforce types in functions, methods, variables, and parameters.
-				"useExplicitType": "off",
-				// Enforce the sorting of CSS utility classes.
-				"useSortedClasses": {
-					"fix": "safe",
-					"level": "error",
-					"options": {
-						"attributes": ["className"],
-						"functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
-					}
-				},
+        // Enforce types in functions, methods, variables, and parameters.
+        "useExplicitType": "off",
+        // Enforce the sorting of CSS utility classes.
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "error",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
+          }
+        }
+      },
+      "performance": {
+        // Disallow the use of spread (...) syntax on accumulators.
+        "noAccumulatingSpread": "error",
+        // Disallow the use of the delete operator.
+        "noDelete": "error",
+        // Disallow accessing namespace imports dynamically.
+        "noDynamicNamespaceImportAccess": "error",
+        // Prevent usage of <img> element in a Next.js project.
+        "noImgElement": "error",
+        // Disallow the use of namespace imports.
+        "noNamespaceImport": "error",
+        // Require regex literals to be declared at the top level.
+        "useTopLevelRegex": "error",
 
-				"noCommonJs": "off",
-				"noProcessEnv": "off",
-				"useComponentExportOnlyModules": "off",
-				"useImportRestrictions": "off",
-				"useConsistentCurlyBraces": "off"
-			},
-			"performance": {
-				// Disallow the use of spread (...) syntax on accumulators.
-				"noAccumulatingSpread": "error",
-				// Disallow the use of the delete operator.
-				"noDelete": "error",
-				// Disallow accessing namespace imports dynamically.
-				"noDynamicNamespaceImportAccess": "error",
-				// Prevent usage of <img> element in a Next.js project.
-				"noImgElement": "error",
-				// Disallow the use of namespace imports.
-				"noNamespaceImport": "error",
-				// Require regex literals to be declared at the top level.
-				"useTopLevelRegex": "error",
+        // Disallow the use of barrel file.
+        "noBarrelFile": "off",
+        // Avoid re-export all.
+        "noReExportAll": "off"
+      },
+      "security": {
+        // Disallow target="_blank" attribute without rel="noopener".
+        "noBlankTarget": "error",
+        // Prevent the usage of dangerous JSX props
+        "noDangerouslySetInnerHtml": "error",
+        // Report when a DOM element or a component uses both children and dangerouslySetInnerHTML prop.
+        "noDangerouslySetInnerHtmlWithChildren": "error",
+        // Disallow the use of global eval().
+        "noGlobalEval": "error"
+      },
+      "style": {
+        // Disallow using a callback in asynchronous tests and hooks.
+        "noDoneCallback": "error",
+        // Disallow TypeScript enum.
+        "noEnum": "error",
+        // Disallow exporting an imported variable.
+        "noExportedImports": "error",
+        // Prevent usage of <head> element in a Next.js project.
+        "noHeadElement": "error",
+        // Disallow type annotations for variables, parameters, and class properties initialized with a literal expression.
+        "noInferrableTypes": "error",
+        // Disallow the use of TypeScript's namespaces.
+        "noNamespace": "error",
+        // Disallow negation in the condition of an if statement if it has an else clause.
+        "noNegationElse": "error",
+        // Disallow nested ternary expressions.
+        "noNestedTernary": "error",
+        // Disallow non-null assertions using the ! postfix operator.
+        "noNonNullAssertion": "error",
+        // Disallow reassigning function parameters.
+        "noParameterAssign": "error",
+        // Disallow the use of parameter properties in class constructors.
+        "noParameterProperties": "error",
+        // This rule allows you to specify global variable names that you don't want to use in your application.
+        "noRestrictedGlobals": "error",
+        // Disallow specified modules when loaded by import or require.
+        "noRestrictedImports": "error",
+        // Disallow user defined types.
+        "noRestrictedTypes": "error",
+        // Disallow the use of constants which its value is the upper-case version of its name.
+        "noShoutyConstants": "error",
+        // Enforce the use of String.slice() over String.substr() and String.substring().
+        "noSubstr": "error",
+        // Disallow template literals if interpolation and special-character handling are not needed
+        "noUnusedTemplateLiteral": "error",
+        // Disallow else block when the if block breaks early.
+        "noUselessElse": "error",
+        // Disallow the use of yoda expressions.
+        "noYodaExpression": "error",
+        // Disallow Array constructors.
+        "useArrayLiterals": "error",
+        // Enforce the use of as const over literal type and type annotation.
+        "useAsConstAssertion": "error",
+        // Use at() instead of integer index access.
+        "useAtIndex": "error",
+        // Requires following curly brace conventions.
+        "useBlockStatements": "error",
+        // Enforce using else if instead of nested if in else clauses.
+        "useCollapsedElseIf": "error",
+        // Enforce using single if instead of nested if clauses.
+        "useCollapsedIf": "error",
+        // Require consistently using either T[] or Array<T>
+        "useConsistentArrayType": "error",
+        // Enforce the use of new for all builtins, except String, Number and Boolean.
+        "useConsistentBuiltinInstantiation": "error",
+        // Require consistent accessibility modifiers on class properties and methods.
+        "useConsistentMemberAccessibility": "error",
+        // Require const declarations for variables that are only assigned once.
+        "useConst": "error",
+        // Enforce default function parameters and optional function parameters to be last.
+        "useDefaultParameterLast": "error",
+        // Require the default clause in switch statements.
+        "useDefaultSwitchClause": "error",
+        // Require that each enum member value be explicitly initialized.
+        "useEnumInitializers": "error",
+        // Disallow the use of Math.pow in favor of the ** operator.
+        "useExponentiationOperator": "error",
+        // Promotes the use of export type for types.
+        "useExportType": "error",
+        // Enforce naming conventions for JavaScript and TypeScript filenames.
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "requireAscii": true,
+            "filenameCases": ["kebab-case"]
+          }
+        },
+        // This rule recommends a for-of loop when in a for loop, the index used to extract an item from the iterated array.
+        "useForOf": "error",
+        // This rule enforces the use of <>...</> over <Fragment>...</Fragment>.
+        "useFragmentSyntax": "error",
+        // Promotes the use of import type for types.
+        "useImportType": "error",
+        // Require all enum members to be literal values.
+        "useLiteralEnumMembers": "error",
+        // Promotes the usage of node:assert/strict over node:assert.
+        "useNodeAssertStrict": "error",
+        // Enforces using the node: protocol for Node.js builtin modules.
+        "useNodejsImportProtocol": "error",
+        // Use the Number properties instead of global ones.
+        "useNumberNamespace": "error",
+        // Prevent extra closing tags for components without children.
+        "useSelfClosingElements": "error",
+        // Require assignment operator shorthand where possible.
+        "useShorthandAssign": "error",
+        // Enforce using function types instead of object type with call signatures.
+        "useShorthandFunctionType": "error",
+        // Prefer template literals over string concatenation.
+        "useTemplate": "error",
+        // Require new when throwing an error.
+        "useThrowNewError": "error",
+        // Disallow throwing non-Error values.
+        "useThrowOnlyError": "error",
+        // Enforce the use of String.trimStart() and String.trimEnd() over String.trimLeft() and String.trimRight().
+        "useTrimStartEnd": "error",
 
-				// Disallow the use of barrel file.
-				"noBarrelFile": "off",
-				// Avoid re-export all.
-				"noReExportAll": "off"
-			},
-			"security": {
-				// Disallow target="_blank" attribute without rel="noopener".
-				"noBlankTarget": "error",
-				// Prevent the usage of dangerous JSX props
-				"noDangerouslySetInnerHtml": "error",
-				// Report when a DOM element or a component uses both children and dangerouslySetInnerHTML prop.
-				"noDangerouslySetInnerHtmlWithChildren": "error",
-				// Disallow the use of global eval().
-				"noGlobalEval": "error"
-			},
-			"style": {
-				// Disallow use of CommonJs module system in favor of ESM style imports.
-				"noCommonJs": "off",
-				// Disallow using a callback in asynchronous tests and hooks.
-				"noDoneCallback": "error",
-				// Disallow TypeScript enum.
-				"noEnum": "error",
-				// Disallow exporting an imported variable.
-				"noExportedImports": "error",
-				// Prevent usage of <head> element in a Next.js project.
-				"noHeadElement": "error",
-				// Disallow type annotations for variables, parameters, and class properties initialized with a literal expression.
-				"noInferrableTypes": "error",
-				// Disallow the use of TypeScript's namespaces.
-				"noNamespace": "error",
-				// Disallow negation in the condition of an if statement if it has an else clause.
-				"noNegationElse": "error",
-				// Disallow nested ternary expressions.
-				"noNestedTernary": "error",
-				// Disallow non-null assertions using the ! postfix operator.
-				"noNonNullAssertion": "error",
-				// Disallow reassigning function parameters.
-				"noParameterAssign": "error",
-				// Disallow the use of parameter properties in class constructors.
-				"noParameterProperties": "error",
-				// Disallow the use of process.env.
-				"noProcessEnv": "off",
-				// This rule allows you to specify global variable names that you don't want to use in your application.
-				"noRestrictedGlobals": "error",
-				// Disallow specified modules when loaded by import or require.
-				"noRestrictedImports": "error",
-				// Disallow user defined types.
-				"noRestrictedTypes": "error",
-				// Disallow the use of constants which its value is the upper-case version of its name.
-				"noShoutyConstants": "error",
-				// Enforce the use of String.slice() over String.substr() and String.substring().
-				"noSubstr": "error",
-				// Disallow template literals if interpolation and special-character handling are not needed
-				"noUnusedTemplateLiteral": "error",
-				// Disallow else block when the if block breaks early.
-				"noUselessElse": "error",
-				// Disallow the use of yoda expressions.
-				"noYodaExpression": "error",
-				// Disallow Array constructors.
-				"useArrayLiterals": "error",
-				// Enforce the use of as const over literal type and type annotation.
-				"useAsConstAssertion": "error",
-				// Use at() instead of integer index access.
-				"useAtIndex": "error",
-				// Requires following curly brace conventions.
-				"useBlockStatements": "error",
-				// Enforce using else if instead of nested if in else clauses.
-				"useCollapsedElseIf": "error",
-				// Enforce using single if instead of nested if clauses.
-				"useCollapsedIf": "error",
-				// Enforce declaring components only within modules that export React Components exclusively.
-				"useComponentExportOnlyModules": "off",
-				// Require consistently using either T[] or Array<T>
-				"useConsistentArrayType": "error",
-				// Enforce the use of new for all builtins, except String, Number and Boolean.
-				"useConsistentBuiltinInstantiation": "error",
-				// This rule enforces consistent use of curly braces inside JSX attributes and JSX children.
-				"useConsistentCurlyBraces": "off",
-				// Require consistent accessibility modifiers on class properties and methods.
-				"useConsistentMemberAccessibility": "error",
-				// Require const declarations for variables that are only assigned once.
-				"useConst": "error",
-				// Enforce default function parameters and optional function parameters to be last.
-				"useDefaultParameterLast": "error",
-				// Require the default clause in switch statements.
-				"useDefaultSwitchClause": "error",
-				// Require that each enum member value be explicitly initialized.
-				"useEnumInitializers": "error",
-				// Disallow the use of Math.pow in favor of the ** operator.
-				"useExponentiationOperator": "error",
-				// Promotes the use of export type for types.
-				"useExportType": "error",
-				// Enforce naming conventions for JavaScript and TypeScript filenames.
-				"useFilenamingConvention": {
-					"level": "error",
-					"options": {
-						"requireAscii": true,
-						"filenameCases": ["kebab-case"]
-					}
-				},
-				// This rule recommends a for-of loop when in a for loop, the index used to extract an item from the iterated array.
-				"useForOf": "error",
-				// This rule enforces the use of <>...</> over <Fragment>...</Fragment>.
-				"useFragmentSyntax": "error",
-				// Promotes the use of import type for types.
-				"useImportType": "error",
-				// Require all enum members to be literal values.
-				"useLiteralEnumMembers": "error",
-				// Promotes the usage of node:assert/strict over node:assert.
-				"useNodeAssertStrict": "error",
-				// Enforces using the node: protocol for Node.js builtin modules.
-				"useNodejsImportProtocol": "error",
-				// Use the Number properties instead of global ones.
-				"useNumberNamespace": "error",
-				// Prevent extra closing tags for components without children.
-				"useSelfClosingElements": "error",
-				// Require assignment operator shorthand where possible.
-				"useShorthandAssign": "error",
-				// Enforce using function types instead of object type with call signatures.
-				"useShorthandFunctionType": "error",
-				// Prefer template literals over string concatenation.
-				"useTemplate": "error",
-				// Require new when throwing an error.
-				"useThrowNewError": "error",
-				// Disallow throwing non-Error values.
-				"useThrowOnlyError": "error",
-				// Enforce the use of String.trimStart() and String.trimEnd() over String.trimLeft() and String.trimRight().
-				"useTrimStartEnd": "error",
+        // Disallow use of CommonJs module system in favor of ESM style imports.
+        "noCommonJs": "off",
+        // Disallow default exports.
+        "noDefaultExport": "off",
+        // Disallow implicit true values on JSX boolean attributes
+        "noImplicitBoolean": "off",
+        // Disallow the use of process.env.
+        "noProcessEnv": "off",
+        // Enforce declaring components only within modules that export React Components exclusively.
+        "useComponentExportOnlyModules": "off",
+        // This rule enforces consistent use of curly braces inside JSX attributes and JSX children.
+        "useConsistentCurlyBraces": "off",
+        // Enforce explicitly comparing the length, size, byteLength or byteOffset property of a value.
+        "useExplicitLengthCheck": "off",
+        // // Enforce naming conventions for everything across a codebase.
+        "useNamingConvention": "off",
+        // // Disallow multiple variable declarations in the same variable statement
+        "useSingleVarDeclarator": "off"
+      },
+      "suspicious": {
+        // Use standard constants instead of approximated literals.
+        "noApproximativeNumericConstant": "error",
+        // Discourage the usage of Array index in keys.
+        "noArrayIndexKey": "error",
+        // Disallow assignments in expressions.
+        "noAssignInExpressions": "error",
+        // Disallows using an async function as a Promise executor.
+        "noAsyncPromiseExecutor": "error",
+        // Disallow reassigning exceptions in catch clauses.
+        "noCatchAssign": "error",
+        // Disallow reassigning class members.
+        "noClassAssign": "error",
+        // Prevent comments from being inserted as text nodes
+        "noCommentText": "error",
+        // Disallow comparing against -0
+        "noCompareNegZero": "error",
+        // Disallow labeled statements that are not loops.
+        "noConfusingLabels": "error",
+        // Disallow void type outside of generic or return types.
+        "noConfusingVoidType": "error",
+        // Disallow the use of console.
+        "noConsole": "error",
+        // Disallow TypeScript const enum
+        "noConstEnum": "error",
+        // Prevents from having control characters and some escape sequences that match control characters in regular expression literals.
+        "noControlCharactersInRegex": "error",
+        // Disallow the use of debugger
+        "noDebugger": "error",
+        // Disallow direct assignments to document.cookie.
+        "noDocumentCookie": "error",
+        // Prevents importing next/document outside of pages/_document.jsx in Next.js projects.
+        "noDocumentImportInPage": "error",
+        // Require the use of === and !==.
+        "noDoubleEquals": "error",
+        // Disallow duplicate case labels.
+        "noDuplicateCase": "error",
+        // Disallow duplicate class members.
+        "noDuplicateClassMembers": "error",
+        // Disallow duplicate conditions in if-else-if chains
+        "noDuplicateElseIf": "error",
+        // Prevents JSX properties to be assigned multiple times.
+        "noDuplicateJsxProps": "error",
+        // Disallow two keys with the same name inside objects.
+        "noDuplicateObjectKeys": "error",
+        // Disallow duplicate function parameter name.
+        "noDuplicateParameters": "error",
+        // A describe block should not contain duplicate hooks.
+        "noDuplicateTestHooks": "error",
+        // Disallow empty block statements and static blocks.
+        "noEmptyBlockStatements": "error",
+        // Disallow the declaration of empty interfaces.
+        "noEmptyInterface": "error",
+        // Disallow variables from evolving into any type through reassignments.
+        "noEvolvingTypes": "error",
+        // Disallow the any type usage.
+        "noExplicitAny": "error",
+        // Disallow using export or module.exports in files containing tests
+        "noExportsInTest": "error",
+        // Prevents the wrong usage of the non-null assertion operator (!) in TypeScript files.
+        "noExtraNonNullAssertion": "error",
+        // Disallow fallthrough of switch clauses.
+        "noFallthroughSwitchClause": "error",
+        // Disallow focused tests.
+        "noFocusedTests": "error",
+        // Disallow reassigning function declarations.
+        "noFunctionAssign": "error",
+        // Disallow assignments to native objects and read-only global variables.
+        "noGlobalAssign": "error",
+        // Use Number.isFinite instead of global isFinite.
+        "noGlobalIsFinite": "error",
+        // Use Number.isNaN instead of global isNaN.
+        "noGlobalIsNan": "error",
+        // Prevent using the next/head module in pages/_document.js on Next.js projects.
+        "noHeadImportInDocument": "error",
+        // Disallow use of implicit any type on variable declarations.
+        "noImplicitAnyLet": "error",
+        // Disallow assigning to imported bindings
+        "noImportAssign": "error",
+        // Disallows the use of irregular whitespace characters.
+        "noIrregularWhitespace": "error",
+        // Disallow labels that share a name with a variable
+        "noLabelVar": "error",
+        // Disallow characters made with multiple code points in character class syntax.
+        "noMisleadingCharacterClass": "error",
+        // Enforce proper usage of new and constructor.
+        "noMisleadingInstantiator": "error",
+        // Checks that the assertion function, for example expect, is placed inside an it() function call.
+        "noMisplacedAssertion": "error",
+        // Disallow shorthand assign when variable appears on both sides.
+        "noMisrefactoredShorthandAssign": "error",
+        // Disallow octal escape sequences in string literals
+        "noOctalEscape": "error",
+        // Disallow direct use of Object.prototype builtins.
+        "noPrototypeBuiltins": "error",
+        // Disallow variable, function, class, and type redeclarations in the same scope.
+        "noRedeclare": "error",
+        // Prevents from having redundant "use strict".
+        "noRedundantUseStrict": "error",
+        // Disallow comparisons where both sides are exactly the same.
+        "noSelfCompare": "error",
+        // Disallow identifiers from shadowing restricted names.
+        "noShadowRestrictedNames": "error",
+        // Disallow disabled tests.
+        "noSkippedTests": "error",
+        // Prevents the use of sparse arrays (arrays with holes).
+        "noSparseArray": "error",
+        // It detects possible "wrong" semicolons inside JSX elements.
+        "noSuspiciousSemicolonInJsx": "error",
+        // Disallow template literal placeholder syntax in regular strings.
+        "noTemplateCurlyInString": "error",
+        // Disallow then property.
+        "noThenProperty": "error",
+        // Disallow unsafe declaration merging between interfaces and classes.
+        "noUnsafeDeclarationMerging": "error",
+        // Disallow using unsafe negation.
+        "noUnsafeNegation": "error",
+        // Disallow the use of var
+        "noVar": "error",
+        // Disallow with statements in non-strict contexts.
+        "noWith": "error",
+        // Disallow the use of overload signatures that are not next to each other.
+        "useAdjacentOverloadSignatures": "error",
+        // Ensure async functions utilize await.
+        "useAwait": "error",
+        // Enforce default clauses in switch statements to be last
+        "useDefaultSwitchClauseLast": "error",
+        // Enforce passing a message value when creating a built-in error.
+        "useErrorMessage": "error",
+        // Enforce get methods to always return a value.
+        "useGetterReturn": "error",
+        // Enforces the use of a recommended display strategy with Google Fonts.
+        "useGoogleFontDisplay": "error",
+        // Require for-in loops to include an if statement.
+        "useGuardForIn": "error",
+        // Use Array.isArray() instead of instanceof Array.
+        "useIsArray": "error",
+        // Require using the namespace keyword over the module keyword to declare TypeScript namespaces.
+        "useNamespaceKeyword": "error",
+        // Enforce using the digits argument with Number#toFixed().
+        "useNumberToFixedDigitsArgument": "error",
+        // Enforce the use of the directive "use strict" in script files.
+        "useStrictMode": "error",
 
-				// Disallow default exports.
-				"noDefaultExport": "off",
-				// Disallow implicit true values on JSX boolean attributes
-				"noImplicitBoolean": "off",
-				// Enforce explicitly comparing the length, size, byteLength or byteOffset property of a value.
-				"useExplicitLengthCheck": "off",
-				// // Enforce naming conventions for everything across a codebase.
-				"useNamingConvention": "off",
-				// // Disallow multiple variable declarations in the same variable statement
-				"useSingleVarDeclarator": "off"
-			},
-			"suspicious": {
-				// Use standard constants instead of approximated literals.
-				"noApproximativeNumericConstant": "error",
-				// Discourage the usage of Array index in keys.
-				"noArrayIndexKey": "error",
-				// Disallow assignments in expressions.
-				"noAssignInExpressions": "error",
-				// Disallows using an async function as a Promise executor.
-				"noAsyncPromiseExecutor": "error",
-				// Disallow reassigning exceptions in catch clauses.
-				"noCatchAssign": "error",
-				// Disallow reassigning class members.
-				"noClassAssign": "error",
-				// Prevent comments from being inserted as text nodes
-				"noCommentText": "error",
-				// Disallow comparing against -0
-				"noCompareNegZero": "error",
-				// Disallow labeled statements that are not loops.
-				"noConfusingLabels": "error",
-				// Disallow void type outside of generic or return types.
-				"noConfusingVoidType": "error",
-				// Disallow the use of console.
-				"noConsole": "error",
-				// Disallow TypeScript const enum
-				"noConstEnum": "error",
-				// Prevents from having control characters and some escape sequences that match control characters in regular expression literals.
-				"noControlCharactersInRegex": "error",
-				// Disallow the use of debugger
-				"noDebugger": "error",
-				// Disallow direct assignments to document.cookie.
-				"noDocumentCookie": "error",
-				// Prevents importing next/document outside of pages/_document.jsx in Next.js projects.
-				"noDocumentImportInPage": "error",
-				// Require the use of === and !==.
-				"noDoubleEquals": "error",
-				// Disallow duplicate case labels.
-				"noDuplicateCase": "error",
-				// Disallow duplicate class members.
-				"noDuplicateClassMembers": "error",
-				// Disallow duplicate conditions in if-else-if chains
-				"noDuplicateElseIf": "error",
-				// Prevents JSX properties to be assigned multiple times.
-				"noDuplicateJsxProps": "error",
-				// Disallow two keys with the same name inside objects.
-				"noDuplicateObjectKeys": "error",
-				// Disallow duplicate function parameter name.
-				"noDuplicateParameters": "error",
-				// A describe block should not contain duplicate hooks.
-				"noDuplicateTestHooks": "error",
-				// Disallow empty block statements and static blocks.
-				"noEmptyBlockStatements": "error",
-				// Disallow the declaration of empty interfaces.
-				"noEmptyInterface": "error",
-				// Disallow variables from evolving into any type through reassignments.
-				"noEvolvingTypes": "error",
-				// Disallow the any type usage.
-				"noExplicitAny": "error",
-				// Disallow using export or module.exports in files containing tests
-				"noExportsInTest": "error",
-				// Prevents the wrong usage of the non-null assertion operator (!) in TypeScript files.
-				"noExtraNonNullAssertion": "error",
-				// Disallow fallthrough of switch clauses.
-				"noFallthroughSwitchClause": "error",
-				// Disallow focused tests.
-				"noFocusedTests": "error",
-				// Disallow reassigning function declarations.
-				"noFunctionAssign": "error",
-				// Disallow assignments to native objects and read-only global variables.
-				"noGlobalAssign": "error",
-				// Use Number.isFinite instead of global isFinite.
-				"noGlobalIsFinite": "error",
-				// Use Number.isNaN instead of global isNaN.
-				"noGlobalIsNan": "error",
-				// Prevent using the next/head module in pages/_document.js on Next.js projects.
-				"noHeadImportInDocument": "error",
-				// Disallow use of implicit any type on variable declarations.
-				"noImplicitAnyLet": "error",
-				// Disallow assigning to imported bindings
-				"noImportAssign": "error",
-				// Disallows the use of irregular whitespace characters.
-				"noIrregularWhitespace": "error",
-				// Disallow labels that share a name with a variable
-				"noLabelVar": "error",
-				// Disallow characters made with multiple code points in character class syntax.
-				"noMisleadingCharacterClass": "error",
-				// Enforce proper usage of new and constructor.
-				"noMisleadingInstantiator": "error",
-				// Checks that the assertion function, for example expect, is placed inside an it() function call.
-				"noMisplacedAssertion": "error",
-				// Disallow shorthand assign when variable appears on both sides.
-				"noMisrefactoredShorthandAssign": "error",
-				// Disallow octal escape sequences in string literals
-				"noOctalEscape": "error",
-				// Disallow direct use of Object.prototype builtins.
-				"noPrototypeBuiltins": "error",
-				// Disallow variable, function, class, and type redeclarations in the same scope.
-				"noRedeclare": "error",
-				// Prevents from having redundant "use strict".
-				"noRedundantUseStrict": "error",
-				// Disallow comparisons where both sides are exactly the same.
-				"noSelfCompare": "error",
-				// Disallow identifiers from shadowing restricted names.
-				"noShadowRestrictedNames": "error",
-				// Disallow disabled tests.
-				"noSkippedTests": "error",
-				// Prevents the use of sparse arrays (arrays with holes).
-				"noSparseArray": "error",
-				// It detects possible "wrong" semicolons inside JSX elements.
-				"noSuspiciousSemicolonInJsx": "error",
-				// Disallow template literal placeholder syntax in regular strings.
-				"noTemplateCurlyInString": "error",
-				// Disallow then property.
-				"noThenProperty": "error",
-				// Disallow unsafe declaration merging between interfaces and classes.
-				"noUnsafeDeclarationMerging": "error",
-				// Disallow using unsafe negation.
-				"noUnsafeNegation": "error",
-				// Disallow the use of var
-				"noVar": "error",
-				// Disallow with statements in non-strict contexts.
-				"noWith": "error",
-				// Disallow the use of overload signatures that are not next to each other.
-				"useAdjacentOverloadSignatures": "error",
-				// Ensure async functions utilize await.
-				"useAwait": "error",
-				// Enforce default clauses in switch statements to be last
-				"useDefaultSwitchClauseLast": "error",
-				// Enforce passing a message value when creating a built-in error.
-				"useErrorMessage": "error",
-				// Enforce get methods to always return a value.
-				"useGetterReturn": "error",
-				// Enforces the use of a recommended display strategy with Google Fonts.
-				"useGoogleFontDisplay": "error",
-				// Require for-in loops to include an if statement.
-				"useGuardForIn": "error",
-				// Use Array.isArray() instead of instanceof Array.
-				"useIsArray": "error",
-				// Require using the namespace keyword over the module keyword to declare TypeScript namespaces.
-				"useNamespaceKeyword": "error",
-				// Enforce using the digits argument with Number#toFixed().
-				"useNumberToFixedDigitsArgument": "error",
-				// Enforce the use of the directive "use strict" in script files.
-				"useStrictMode": "error",
-
-				// Prevents React-specific JSX properties from being used.
-				"noReactSpecificProps": "off"
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"arrowParentheses": "always",
-			"attributePosition": "auto",
-			"bracketSameLine": false,
-			"bracketSpacing": true,
-			"enabled": true,
-			"indentStyle": "space",
-			"indentWidth": 2,
-			"jsxQuoteStyle": "double",
-			"lineEnding": "lf",
-			"lineWidth": 80,
-			"quoteProperties": "asNeeded",
-			"quoteStyle": "single",
-			"semicolons": "always",
-			"trailingCommas": "es5"
-		}
-	},
-	"css": {
-		"formatter": {
-			"indentStyle": "space",
-			"indentWidth": 2,
-			"lineEnding": "lf",
-			"lineWidth": 80,
-			"quoteStyle": "double"
-		},
-		"parser": {
-			"allowWrongLineComments": false,
-			"cssModules": false
-		}
-	},
-	"json": {
-		"formatter": {
-			"enabled": true,
-			"indentStyle": "space",
-			"indentWidth": 2,
-			"lineEnding": "lf",
-			"lineWidth": 80,
-			"trailingCommas": "none"
-		},
-		"linter": {
-			"enabled": true
-		},
-		"parser": {
-			"allowComments": false,
-			"allowTrailingCommas": false
-		}
-	},
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"useIgnoreFile": true,
-		"defaultBranch": "main"
-	}
+        // Prevents React-specific JSX properties from being used.
+        "noReactSpecificProps": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "jsxQuoteStyle": "double",
+      "lineEnding": "lf",
+      "lineWidth": 80,
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "es5"
+    }
+  },
+  "css": {
+    "formatter": {
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "lf",
+      "lineWidth": 80,
+      "quoteStyle": "double"
+    },
+    "parser": {
+      "allowWrongLineComments": false,
+      "cssModules": false
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "lf",
+      "lineWidth": 80,
+      "trailingCommas": "none"
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "allowComments": false,
+      "allowTrailingCommas": false
+    }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  }
 }
