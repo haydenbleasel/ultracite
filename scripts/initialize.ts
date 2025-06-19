@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { title } from './title';
