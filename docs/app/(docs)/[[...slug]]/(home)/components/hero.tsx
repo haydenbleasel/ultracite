@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import { Installer } from './installer';
 
 const avatars = [
@@ -18,7 +18,8 @@ export const Hero = () => (
   <div className="px-8 py-16 sm:py-24">
     <div className="mx-auto grid max-w-3xl gap-6 text-center">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
-        Ship code faster and with more confidence
+        Write code <span className="italic">faster</span> and with more
+        confidence
       </h1>
       <p className="mt-0 mb-0 text-balance text-muted-foreground md:text-xl">
         Ultracite is a zero-config{' '}

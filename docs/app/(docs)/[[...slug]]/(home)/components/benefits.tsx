@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import {
   CheckIcon,
   PuzzleIcon,
@@ -47,22 +46,11 @@ const benefits = [
 ];
 
 export const Benefits = () => (
-  <div className="grid divide-y divide-dotted md:grid-cols-2 md:divide-x lg:grid-cols-3">
+  <div className="grid py-8 md:grid-cols-2 lg:grid-cols-3">
     {benefits.map((benefit) => (
-      <div
-        key={benefit.title}
-        className={cn(
-          'flex flex-col gap-2 p-8',
-          (benefits.indexOf(benefit) + 1) % 2 === 0 &&
-            'md:border-r-0 lg:border-r',
-          benefits.indexOf(benefit) >= benefits.length - 2 && 'md:border-b-0',
-
-          benefits.indexOf(benefit) >= benefits.length - 3 && 'lg:border-b-0',
-          (benefits.indexOf(benefit) + 1) % 3 === 0 && 'lg:border-r-0'
-        )}
-      >
-        <div className="inline-flex w-fit items-center justify-center rounded-md bg-primary/10 p-2">
-          <benefit.icon className="size-4 text-primary" />
+      <div key={benefit.title} className="flex flex-col gap-2 p-8">
+        <div className="inline-flex w-fit items-center justify-center rounded-md bg-primary/10 p-2.5">
+          <benefit.icon className="size-5 text-primary" />
         </div>
         <h3 className="mt-4 font-semibold text-xl">{benefit.title}</h3>
         <p className="text-muted-foreground">{benefit.description}</p>
