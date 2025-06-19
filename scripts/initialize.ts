@@ -1,5 +1,8 @@
 import { execSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import process from 'node:process';
+import { intro, log, select, spinner } from '@clack/prompts';
+import { title } from './title';
 
 const biomeConfig = {
   $schema: 'https://biomejs.dev/schemas/2.0.0/schema.json',
@@ -33,48 +36,125 @@ const vsCodeSettings = {
   },
 };
 
-export const initialize = () => {
-  try {
-    // Create or merge tsconfig.json
-    let tsConfig = {
+let tsConfig = {
+  compilerOptions: {
+    strictNullChecks: true,
+  },
+};
+
+const installDependencies = (packageManager: string) => {
+  const s = spinner();
+
+  s.start('Installing dependencies...');
+  execSync(`${packageManager} -D --save-exact ultracite @biomejs/biome@2.0.0`);
+  s.stop('Dependencies installed.');
+};
+
+const upsertTsConfig = () => {
+  const s = spinner();
+
+  s.start('Checking for tsconfig.json...');
+
+  const tsConfigExists = existsSync('tsconfig.json');
+
+  if (tsConfigExists) {
+    s.message('tsconfig.json found, updating...');
+
+    const existingTsConfig = JSON.parse(
+      execSync('cat tsconfig.json', { encoding: 'utf-8' })
+    );
+
+    tsConfig = {
+      ...existingTsConfig,
       compilerOptions: {
-        strictNullChecks: true,
+        ...existingTsConfig.compilerOptions,
+        ...tsConfig.compilerOptions,
       },
     };
 
-    try {
-      const existingTsConfig = JSON.parse(
-        execSync('cat tsconfig.json', { encoding: 'utf-8' })
-      );
-      tsConfig = {
-        ...existingTsConfig,
-        compilerOptions: {
-          ...existingTsConfig.compilerOptions,
-          ...tsConfig.compilerOptions,
-        },
-      };
-    } catch (e) {
-      // tsconfig.json doesn't exist, use default config
-    }
-
-    // Install dependencies
-    execSync('pnpm add -D --save-exact ultracite @biomejs/biome@2.0.0');
-
-    // Write the config files
-    execSync('mkdir -p .vscode');
-    execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.jsonc`);
-    execSync(
-      `echo '${JSON.stringify(
-        vsCodeSettings,
-        null,
-        2
-      )}' > .vscode/settings.json`
-    );
     execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
 
-    console.log('Successfully initialized Ultracite configuration!');
+    s.stop('tsconfig.json updated.');
+  }
+
+  s.message('tsconfig.json not found, creating...');
+
+  execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
+
+  s.stop('tsconfig.json created.');
+};
+
+const upsertVSCodeSettings = () => {
+  const s = spinner();
+
+  s.start('Checking for .vscode/settings.json...');
+
+  const vsCodeSettingsExists = existsSync('.vscode/settings.json');
+
+  if (vsCodeSettingsExists) {
+    s.message('settings.json found, updating...');
+
+    // TODO: update settings.json
+  }
+
+  s.message('settings.json not found, creating...');
+
+  execSync(
+    `echo '${JSON.stringify(vsCodeSettings, null, 2)}' > .vscode/settings.json`
+  );
+
+  s.stop('settings.json created.');
+};
+
+const upsertBiomeConfig = () => {
+  const s = spinner();
+
+  s.start('Checking for biome.jsonc...');
+
+  const biomeConfigExists = existsSync('biome.jsonc');
+
+  if (biomeConfigExists) {
+    s.message('biome.jsonc found, updating...');
+
+    // TODO: update biome.jsonc
+  }
+
+  s.message('biome.jsonc not found, creating...');
+
+  execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.jsonc`);
+
+  s.stop('biome.jsonc created.');
+};
+
+export const initialize = async () => {
+  intro(title);
+
+  try {
+    const packageManager = await select({
+      message: 'Which package manager do you use?',
+      initialValue: 'pnpm',
+      options: [
+        { value: 'npm install', label: 'npm' },
+        { value: 'yarn add', label: 'yarn' },
+        { value: 'pnpm add', label: 'pnpm', hint: 'Recommended' },
+        { value: 'bun add', label: 'bun' },
+      ],
+    });
+
+    if (typeof packageManager !== 'string') {
+      throw new Error('No package manager selected');
+    }
+
+    installDependencies(packageManager);
+    upsertTsConfig();
+    upsertVSCodeSettings();
+    upsertBiomeConfig();
+
+    log.success('Successfully initialized Ultracite configuration!');
   } catch (error) {
-    console.error('Failed to run Ultracite:', error.message);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+
+    log.error(`Failed to initialize Ultracite configuration: ${message}`);
     process.exit(1);
   }
 };
