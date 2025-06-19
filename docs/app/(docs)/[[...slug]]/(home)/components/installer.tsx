@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 const command = 'npx ultracite@latest init';
 
@@ -22,7 +22,7 @@ export const Installer = () => {
   const Icon = copied ? CheckIcon : CopyIcon;
 
   return (
-    <div className="flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary py-2 pr-0.5 pl-4 text-foreground text-sm">
+    <div className="flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded-md border border-foreground/5 bg-foreground/5 py-2 pr-0.5 pl-4 text-foreground text-sm backdrop-blur-sm">
       <p className="pointer-events-none shrink-0 select-none text-muted-foreground">
         $
       </p>
