@@ -260,13 +260,82 @@
 				"noNodejsModules": "off"
 			},
 			"nursery": {
-				"noCommonJs": "off",
-				"noProcessEnv": "off",
-				"noSecrets": "off",
-				"useComponentExportOnlyModules": "off",
+				// Disallow await inside loops.
+				"noAwaitInLoop": "error",
+				// Disallow bitwise operators.
+				"noBitwiseOperators": "error",
+				// Disallow expressions where the operation doesn't affect the value
+				"noConstantBinaryExpression": "error",
+				// Disallow destructuring props inside JSX components in Solid projects.
+				"noDestructuredProps": "error",
+				// Require Promise-like statements to be handled appropriately.
+				"noFloatingPromises": "error",
+				// Disallow the use of __dirname and __filename in the global scope.
+				"noGlobalDirnameFilename": "error",
+				// Prevent import cycles.
+				"noImportCycles": "error",
+				// Disallows defining React components inside other components.
+				"noNestedComponentDefinitions": "error",
+				// Disallow use event handlers on non-interactive elements.
+				"noNoninteractiveElementInteractions": "error",
+				// Disallow the use of process global.
+				"noProcessGlobal": "error",
+				// Disallow assigning to React component props.
+				"noReactPropAssign": "error",
+				// Disallow the use of configured elements.
+				"noRestrictedElements": "error",
+				// Disallow usage of sensitive data such as API keys and tokens.
+				"noSecrets": "error",
+				// Disallow variable declarations from shadowing variables declared in the outer scope.
+				"noShadow": "error",
+				// Prevents the use of the TypeScript directive @ts-ignore.
+				"noTsIgnore": "error",
+				// Warn when importing non-existing exports.
+				"noUnresolvedImports": "error",
+				// Prevent duplicate polyfills from Polyfill.io.
+				"noUnwantedPolyfillio": "error",
+				// Disallow useless backreferences in regular expression literals that always match an empty string.
+				"noUselessBackrefInRegex": "error",
+				// Disallow unnecessary escapes in string literals.
+				"noUselessEscapeInString": "error",
+				// Disallow the use of useless undefined.
+				"noUselessUndefined": "error",
+				// Enforce that getters and setters for the same property are adjacent in class and object definitions.
+				"useAdjacentGetterSetter": "error",
+				// Require the consistent declaration of object literals. Defaults to explicit definitions.
+				"useConsistentObjectDefinition": "error",
+				// Use static Response methods instead of new Response() constructor when possible.
+				"useConsistentResponse": "error",
+				// Require switch-case statements to be exhaustive.
+				"useExhaustiveSwitchCases": "error",
+				// Require that all exports are declared after all non-export statements.
+				"useExportsLast": "error",
+				// Enforce using Solid's <For /> component for mapping an array to JSX elements.
+				"useForComponent": "error",
+				// Ensure the preconnect attribute is used when using Google Fonts.
+				"useGoogleFontPreconnect": "error",
+				// Prefer Array#{indexOf,lastIndexOf}() over Array#{findIndex,findLastIndex}() when looking for the index of an item.
+				"useIndexOf": "error",
+				// Enforce consistent return values in iterable callbacks.
+				"useIterableCallbackReturn": "error",
+				// Enforces the use of with { type: "json" } for JSON module imports.
+				"useJsonImportAttribute": "error",
+				// Enforce the use of numeric separators in numeric literals.
+				"useNumericSeparators": "error",
+				// Prefer object spread over Object.assign() when constructing new objects.
+				"useObjectSpread": "error",
+				// Enforce the consistent use of the radix argument when using parseInt().
+				"useParseIntRadix": "error",
+				// Enforce JSDoc comment lines to start with a single asterisk, except for the first one.
+				"useSingleJsDocAsterisk": "error",
+				// Require a description parameter for the Symbol().
+				"useSymbolDescription": "error",
+				// Prevent the usage of static string literal id attribute on elements.
+				"useUniqueElementIds": "error",
+
+				// Enforce types in functions, methods, variables, and parameters.
 				"useExplicitType": "off",
-				"useImportRestrictions": "off",
-				"useConsistentCurlyBraces": "off",
+				// Enforce the sorting of CSS utility classes.
 				"useSortedClasses": {
 					"fix": "safe",
 					"level": "error",
@@ -274,7 +343,13 @@
 						"attributes": ["className"],
 						"functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
 					}
-				}
+				},
+
+				"noCommonJs": "off",
+				"noProcessEnv": "off",
+				"useComponentExportOnlyModules": "off",
+				"useImportRestrictions": "off",
+				"useConsistentCurlyBraces": "off"
 			},
 			"performance": {
 				"noBarrelFile": "off",
