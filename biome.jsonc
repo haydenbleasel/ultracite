@@ -381,10 +381,83 @@
 				"noGlobalEval": "error"
 			},
 			"style": {
-				"noDefaultExport": "off",
-				"noImplicitBoolean": "off",
-				"useExplicitLengthCheck": "off",
-				"noNamespaceImport": "off",
+				// Disallow use of CommonJs module system in favor of ESM style imports.
+				"noCommonJs": "off",
+				// Disallow using a callback in asynchronous tests and hooks.
+				"noDoneCallback": "error",
+				// Disallow TypeScript enum.
+				"noEnum": "error",
+				// Disallow exporting an imported variable.
+				"noExportedImports": "error",
+				// Prevent usage of <head> element in a Next.js project.
+				"noHeadElement": "error",
+				// Disallow type annotations for variables, parameters, and class properties initialized with a literal expression.
+				"noInferrableTypes": "error",
+				// Disallow the use of TypeScript's namespaces.
+				"noNamespace": "error",
+				// Disallow negation in the condition of an if statement if it has an else clause.
+				"noNegationElse": "error",
+				// Disallow nested ternary expressions.
+				"noNestedTernary": "error",
+				// Disallow non-null assertions using the ! postfix operator.
+				"noNonNullAssertion": "error",
+				// Disallow reassigning function parameters.
+				"noParameterAssign": "error",
+				// Disallow the use of parameter properties in class constructors.
+				"noParameterProperties": "error",
+				// Disallow the use of process.env.
+				"noProcessEnv": "off",
+				// This rule allows you to specify global variable names that you don't want to use in your application.
+				"noRestrictedGlobals": "error",
+				// Disallow specified modules when loaded by import or require.
+				"noRestrictedImports": "error",
+				// Disallow user defined types.
+				"noRestrictedTypes": "error",
+				// Disallow the use of constants which its value is the upper-case version of its name.
+				"noShoutyConstants": "error",
+				// Enforce the use of String.slice() over String.substr() and String.substring().
+				"noSubstr": "error",
+				// Disallow template literals if interpolation and special-character handling are not needed
+				"noUnusedTemplateLiteral": "error",
+				// Disallow else block when the if block breaks early.
+				"noUselessElse": "error",
+				// Disallow the use of yoda expressions.
+				"noYodaExpression": "error",
+				// Disallow Array constructors.
+				"useArrayLiterals": "error",
+				// Enforce the use of as const over literal type and type annotation.
+				"useAsConstAssertion": "error",
+				// Use at() instead of integer index access.
+				"useAtIndex": "error",
+				// Requires following curly brace conventions.
+				"useBlockStatements": "error",
+				// Enforce using else if instead of nested if in else clauses.
+				"useCollapsedElseIf": "error",
+				// Enforce using single if instead of nested if clauses.
+				"useCollapsedIf": "error",
+				// Enforce declaring components only within modules that export React Components exclusively.
+				"useComponentExportOnlyModules": "off",
+				// Require consistently using either T[] or Array<T>
+				"useConsistentArrayType": "error",
+				// Enforce the use of new for all builtins, except String, Number and Boolean.
+				"useConsistentBuiltinInstantiation": "error",
+				// This rule enforces consistent use of curly braces inside JSX attributes and JSX children.
+				"useConsistentCurlyBraces": "off",
+				// Require consistent accessibility modifiers on class properties and methods.
+				"useConsistentMemberAccessibility": "error",
+				// Require const declarations for variables that are only assigned once.
+				"useConst": "error",
+				// Enforce default function parameters and optional function parameters to be last.
+				"useDefaultParameterLast": "error",
+				// Require the default clause in switch statements.
+				"useDefaultSwitchClause": "error",
+				// Require that each enum member value be explicitly initialized.
+				"useEnumInitializers": "error",
+				// Disallow the use of Math.pow in favor of the ** operator.
+				"useExponentiationOperator": "error",
+				// Promotes the use of export type for types.
+				"useExportType": "error",
+				// Enforce naming conventions for JavaScript and TypeScript filenames.
 				"useFilenamingConvention": {
 					"level": "error",
 					"options": {
@@ -392,8 +465,45 @@
 						"filenameCases": ["kebab-case"]
 					}
 				},
-				"useSingleVarDeclarator": "off",
-				"useNamingConvention": "off"
+				// This rule recommends a for-of loop when in a for loop, the index used to extract an item from the iterated array.
+				"useForOf": "error",
+				// This rule enforces the use of <>...</> over <Fragment>...</Fragment>.
+				"useFragmentSyntax": "error",
+				// Promotes the use of import type for types.
+				"useImportType": "error",
+				// Require all enum members to be literal values.
+				"useLiteralEnumMembers": "error",
+				// Promotes the usage of node:assert/strict over node:assert.
+				"useNodeAssertStrict": "error",
+				// Enforces using the node: protocol for Node.js builtin modules.
+				"useNodejsImportProtocol": "error",
+				// Use the Number properties instead of global ones.
+				"useNumberNamespace": "error",
+				// Prevent extra closing tags for components without children.
+				"useSelfClosingElements": "error",
+				// Require assignment operator shorthand where possible.
+				"useShorthandAssign": "error",
+				// Enforce using function types instead of object type with call signatures.
+				"useShorthandFunctionType": "error",
+				// Prefer template literals over string concatenation.
+				"useTemplate": "error",
+				// Require new when throwing an error.
+				"useThrowNewError": "error",
+				// Disallow throwing non-Error values.
+				"useThrowOnlyError": "error",
+				// Enforce the use of String.trimStart() and String.trimEnd() over String.trimLeft() and String.trimRight().
+				"useTrimStartEnd": "error",
+
+				// Disallow default exports.
+				"noDefaultExport": "off",
+				// Disallow implicit true values on JSX boolean attributes
+				"noImplicitBoolean": "off",
+				// Enforce explicitly comparing the length, size, byteLength or byteOffset property of a value.
+				"useExplicitLengthCheck": "off",
+				// // Enforce naming conventions for everything across a codebase.
+				"useNamingConvention": "off",
+				// // Disallow multiple variable declarations in the same variable statement
+				"useSingleVarDeclarator": "off"
 			},
 			"suspicious": {
 				"noReactSpecificProps": "off",
