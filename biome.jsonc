@@ -370,6 +370,16 @@
 				// Avoid re-export all.
 				"noReExportAll": "off"
 			},
+			"security": {
+				// Disallow target="_blank" attribute without rel="noopener".
+				"noBlankTarget": "error",
+				// Prevent the usage of dangerous JSX props
+				"noDangerouslySetInnerHtml": "error",
+				// Report when a DOM element or a component uses both children and dangerouslySetInnerHTML prop.
+				"noDangerouslySetInnerHtmlWithChildren": "error",
+				// Disallow the use of global eval().
+				"noGlobalEval": "error"
+			},
 			"style": {
 				"noDefaultExport": "off",
 				"noImplicitBoolean": "off",
