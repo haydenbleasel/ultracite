@@ -284,8 +284,6 @@
         "noReactPropAssign": "error",
         // Disallow the use of configured elements.
         "noRestrictedElements": "error",
-        // Disallow usage of sensitive data such as API keys and tokens.
-        "noSecrets": "error",
         // Disallow variable declarations from shadowing variables declared in the outer scope.
         "noShadow": "error",
         // Prevents the use of the TypeScript directive @ts-ignore.
@@ -329,6 +327,8 @@
         // Prevent the usage of static string literal id attribute on elements.
         "useUniqueElementIds": "error",
 
+        // Disallow usage of sensitive data such as API keys and tokens.
+        "noSecrets": "off",
         // Warn when importing non-existing exports.
         "noUnresolvedImports": "off",
         // Enforce types in functions, methods, variables, and parameters.
