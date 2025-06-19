@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
+import { rules } from './rules';
 import { title } from './title';
 
 const biomeConfig = {
@@ -244,6 +245,26 @@ const initializeLintStaged = (packageManagerAdd: string) => {
   s.stop('lint-staged initialized.');
 };
 
+const initializeCursorRules = () => {
+  const s = spinner();
+
+  s.start('Initializing Cursor rules...');
+
+  execSync(`echo '${rules}' > .cursor/rules/ultracite.mdc`);
+
+  s.stop('Cursor rules initialized.');
+};
+
+const initializeWindsurfRules = () => {
+  const s = spinner();
+
+  s.start('Initializing Windsurf rules...');
+
+  execSync(`echo '${rules}' > .windsurf/rules/ultracite.md`);
+
+  s.stop('Windsurf rules initialized.');
+};
+
 export const initialize = async () => {
   intro(title);
 
@@ -256,6 +277,15 @@ export const initialize = async () => {
         { value: 'yarn add', label: 'yarn' },
         { value: 'pnpm add', label: 'pnpm', hint: 'Recommended' },
         { value: 'bun add', label: 'bun' },
+      ],
+    });
+
+    const editorRules = await multiselect({
+      message: 'Which editor rules do you want to enable (optional)?',
+      required: false,
+      options: [
+        { value: 'cursor', label: 'Cursor' },
+        { value: 'windsurf', label: 'Windsurf' },
       ],
     });
 
@@ -276,6 +306,15 @@ export const initialize = async () => {
     upsertTsConfig();
     upsertVSCodeSettings();
     upsertBiomeConfig();
+
+    if (Array.isArray(editorRules)) {
+      if (editorRules.includes('cursor')) {
+        initializeCursorRules();
+      }
+      if (editorRules.includes('windsurf')) {
+        initializeWindsurfRules();
+      }
+    }
 
     if (Array.isArray(extraFeatures)) {
       if (extraFeatures.includes('precommit-hooks')) {
