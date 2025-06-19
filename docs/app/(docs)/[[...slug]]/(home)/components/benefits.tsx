@@ -5,8 +5,8 @@ import {
   UsersIcon,
   ZapIcon,
 } from 'lucide-react';
+import { PixelCanvas } from '@/components/ui/pixel-canvas';
 import { cn } from '@/lib/utils';
-import { PixelCanvas } from './pixel-canvas';
 
 const benefits = [
   {
@@ -64,14 +64,14 @@ export const Benefits = () => (
         <div
           key={benefit.title}
           className={cn(
-            'relative flex flex-col gap-2 rounded-xl border p-8',
+            'relative flex flex-col gap-2 overflow-hidden rounded-xl border p-8',
             benefit.className
           )}
         >
           <PixelCanvas
-            gap={10}
+            gap={20}
             speed={25}
-            colors={['#e0f2fe', '#7dd3fc', '#0ea5e9']}
+            colors={['#0F4468', '#2A83AD', '#0ea5e9']}
             variant="icon"
           />
           <div className="relative h-48 w-full" />

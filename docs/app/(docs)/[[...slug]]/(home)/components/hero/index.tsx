@@ -1,9 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Scene } from '@/components/ui/hero-section';
 import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
 import { Installer } from '../installer';
-import { Scene } from './animation';
 import claude from './claude.jpg';
 import deepseek from './deepseek.jpg';
 import haydenbleasel from './haydenbleasel.jpg';
