@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { title } from './title';
@@ -162,6 +162,88 @@ const initializePrecommitHook = (packageManagerAdd: string) => {
   s.stop('Pre-commit hooks initialized.');
 };
 
+const initializeLintStaged = (packageManagerAdd: string) => {
+  const s = spinner();
+
+  s.start('Initializing lint-staged...');
+
+  s.message('Installing lint-staged...');
+  execSync(`${packageManagerAdd} -D lint-staged`);
+
+  const lintStagedConfig = {
+    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
+  };
+
+  // Check for existing configuration files in order of preference
+  const configFiles = [
+    'package.json',
+    '.lintstagedrc.json',
+    '.lintstagedrc.js',
+    '.lintstagedrc.cjs',
+    '.lintstagedrc.mjs',
+    'lint-staged.config.js',
+    'lint-staged.config.cjs',
+    'lint-staged.config.mjs',
+    '.lintstagedrc.yaml',
+    '.lintstagedrc.yml',
+    '.lintstagedrc',
+  ];
+
+  let existingConfigFile: string | null = null;
+  for (const file of configFiles) {
+    if (existsSync(file)) {
+      existingConfigFile = file;
+      break;
+    }
+  }
+
+  if (existingConfigFile === 'package.json') {
+    s.message('package.json found, updating lint-staged configuration...');
+
+    try {
+      const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
+
+      if (packageJson['lint-staged']) {
+        s.message('Existing lint-staged configuration found, merging...');
+        packageJson['lint-staged'] = {
+          ...packageJson['lint-staged'],
+          ...lintStagedConfig,
+        };
+      } else {
+        packageJson['lint-staged'] = lintStagedConfig;
+      }
+
+      writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+      s.message('lint-staged configuration added to package.json');
+    } catch {
+      s.message(
+        'Failed to update package.json, creating .lintstagedrc.json...'
+      );
+      writeFileSync(
+        '.lintstagedrc.json',
+        JSON.stringify(lintStagedConfig, null, 2)
+      );
+      s.message('lint-staged configuration created as .lintstagedrc.json');
+    }
+  } else if (existingConfigFile) {
+    s.message(
+      `Existing lint-staged configuration found at ${existingConfigFile}`
+    );
+    s.message('Skipping lint-staged configuration (already exists)');
+  } else {
+    s.message(
+      'No existing configuration found, creating .lintstagedrc.json...'
+    );
+    writeFileSync(
+      '.lintstagedrc.json',
+      JSON.stringify(lintStagedConfig, null, 2)
+    );
+    s.message('lint-staged configuration created as .lintstagedrc.json');
+  }
+
+  s.stop('lint-staged initialized.');
+};
+
 export const initialize = async () => {
   intro(title);
 
@@ -200,7 +282,7 @@ export const initialize = async () => {
         initializePrecommitHook(packageManager);
       }
       if (extraFeatures.includes('lint-staged')) {
-        initializeLintStaged();
+        initializeLintStaged(packageManager);
       }
     }
 
