@@ -31,7 +31,7 @@ It’s a good idea to watch the Ultracite repo for releases or check the [Releas
 
 You have a few options:
 
-- Configure it off or to a different level in your `biome.json` (quick fix for your project).
+- Configure it off or to a different level in your `biome.jsonc` (quick fix for your project).
 - Open a [discussion](https://github.com/haydenbleasel/ultracite/discussions/) on GitHub repo if the rule should be adjusted for everyone. Perhaps the maintainers might agree it’s too strict or could be optional.
 - If it’s a stylistic thing, remember the goal of Ultracite is to have convention over configuration – sometimes it’s worth adapting to the tool’s style for consistency across projects. But of course, your project’s needs come first.
 
@@ -47,7 +47,7 @@ Check out Biome's [first-party](https://biomejs.dev/guides/editors/first-party-e
 
 ## Q: How do I know what rules Ultracite is enforcing? Is there a list?
 
-Yes, check the [biome.json](https://github.com/haydenbleasel/ultracite/blob/main/biome.json) file in the GitHub repo for the rules that are enabled.
+Yes, check the [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) file in the GitHub repo for the rules that are enabled.
 
 ## Q: Can Ultracite fix all issues it finds?
 
@@ -65,7 +65,7 @@ Additionally, there are blog posts and community articles about Biome’s rise a
 
 ## Q: How do I disable Ultracite for a specific project or file?
 
-If you have a project where you temporarily don’t want Ultracite, you can simply not include the `extends: ["ultracite"]` in `biome.json` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome’s defaults.
+If you have a project where you temporarily don’t want Ultracite, you can simply not include the `extends: ["ultracite"]` in `biome.jsonc` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome’s defaults.
 
 To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it’s not configured, it won’t run (Biome itself might still run formatting if triggered, but not linting rules).
 

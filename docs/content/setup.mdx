@@ -29,11 +29,11 @@ npm install --save-exact ultracite @biomejs/biome@1.9.4
 
 We pin an exact version (`--save-exact`) to ensure consistency across environments. Biome (and Ultracite) are under active development, so locking versions avoids unexpected changes on updates.
 
-### 2. Create a `biome.json` file
+### 2. Create a `biome.jsonc` file
 
-In the root of your project, create a file named `biome.json` (or `biome.jsonc`). This is where you tell Biome to use Ultracite’s rules. For example, a minimal `biome.json` should include:
+In the root of your project, create a file named `biome.jsonc` (or `biome.json`). This is where you tell Biome to use Ultracite’s rules. For example, a minimal `biome.jsonc` should include:
 
-```json title="biome.json"
+```json title="biome.jsonc"
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "extends": ["ultracite"]

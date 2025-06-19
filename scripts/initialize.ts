@@ -62,7 +62,7 @@ export const initialize = () => {
 
     // Write the config files
     execSync('mkdir -p .vscode');
-    execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.json`);
+    execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.jsonc`);
     execSync(
       `echo '${JSON.stringify(
         vsCodeSettings,
