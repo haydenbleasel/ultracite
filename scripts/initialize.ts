@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { access, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
-import { rules } from './rules';
+import { rulesFile } from './rules';
 import { title } from './title';
 
 const biomeConfig = {
@@ -259,7 +259,7 @@ const initializeCursorRules = () => {
 
   s.start('Initializing Cursor rules...');
 
-  execSync(`echo '${rules}' > .cursor/rules/ultracite.mdc`);
+  execSync(`echo '${rulesFile}' > .cursor/rules/ultracite.mdc`);
 
   s.stop('Cursor rules initialized.');
 };
@@ -269,7 +269,7 @@ const initializeWindsurfRules = () => {
 
   s.start('Initializing Windsurf rules...');
 
-  execSync(`echo '${rules}' > .windsurf/rules/ultracite.md`);
+  execSync(`echo '${rulesFile}' > .windsurf/rules/ultracite.md`);
 
   s.stop('Windsurf rules initialized.');
 };
@@ -281,15 +281,15 @@ const initializeZedRules = async () => {
 
   const zedConfigExists = await exists('.rules');
 
-  if (zedConfigExists) {
-    s.message('rules found, updating...');
-
-    execSync(`echo '\n\n${rules}' >> .rules `);
-  } else {
+  if (!zedConfigExists) {
     s.message('rules not found, creating...');
 
-    execSync(`echo '${rules}' > .rules `);
+    execSync('touch .rules');
   }
+
+  s.message('Updating rules...');
+
+  execSync(`echo '\n\n${rulesFile}' >> .rules `);
 
   s.stop('Zed rules initialized.');
 };
