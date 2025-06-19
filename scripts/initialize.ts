@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import process from 'node:process';
-import { intro, log, select, spinner } from '@clack/prompts';
+import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { title } from './title';
 
 const biomeConfig = {
@@ -42,11 +42,13 @@ let tsConfig = {
   },
 };
 
-const installDependencies = (packageManager: string) => {
+const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(`${packageManager} -D --save-exact ultracite @biomejs/biome@2.0.0`);
+  execSync(
+    `${packageManagerAdd} -D --save-exact ultracite @biomejs/biome@2.0.0`
+  );
   s.stop('Dependencies installed.');
 };
 
@@ -75,6 +77,8 @@ const upsertTsConfig = () => {
     execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
 
     s.stop('tsconfig.json updated.');
+
+    return;
   }
 
   s.message('tsconfig.json not found, creating...');
@@ -95,6 +99,10 @@ const upsertVSCodeSettings = () => {
     s.message('settings.json found, updating...');
 
     // TODO: update settings.json
+
+    s.stop('settings.json updated.');
+
+    return;
   }
 
   s.message('settings.json not found, creating...');
@@ -117,6 +125,10 @@ const upsertBiomeConfig = () => {
     s.message('biome.jsonc found, updating...');
 
     // TODO: update biome.jsonc
+
+    s.stop('biome.jsonc updated.');
+
+    return;
   }
 
   s.message('biome.jsonc not found, creating...');
@@ -124,6 +136,30 @@ const upsertBiomeConfig = () => {
   execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.jsonc`);
 
   s.stop('biome.jsonc created.');
+};
+
+const initializePrecommitHook = (packageManagerAdd: string) => {
+  const s = spinner();
+  const huskyCommand = 'npx ultracite format';
+
+  s.start('Initializing pre-commit hooks...');
+
+  s.message('Installing Husky...');
+  execSync(`${packageManagerAdd} -D husky`);
+
+  const preCommitHookExists = existsSync('.husky/pre-commit');
+
+  if (!preCommitHookExists) {
+    s.message('Pre-commit hook not found, creating...');
+
+    execSync('touch .husky/pre-commit');
+  }
+
+  s.message('Updating pre-commit hook...');
+
+  execSync(`echo '\n${huskyCommand}' >> .husky/pre-commit`);
+
+  s.stop('Pre-commit hooks initialized.');
 };
 
 export const initialize = async () => {
@@ -141,6 +177,15 @@ export const initialize = async () => {
       ],
     });
 
+    const extraFeatures = await multiselect({
+      message: 'Would you like any of the following (optional)?',
+      required: false,
+      options: [
+        { value: 'precommit-hooks', label: 'Pre-commit hook with Husky' },
+        { value: 'lint-staged', label: 'Lint-staged' },
+      ],
+    });
+
     if (typeof packageManager !== 'string') {
       throw new Error('No package manager selected');
     }
@@ -149,6 +194,15 @@ export const initialize = async () => {
     upsertTsConfig();
     upsertVSCodeSettings();
     upsertBiomeConfig();
+
+    if (Array.isArray(extraFeatures)) {
+      if (extraFeatures.includes('precommit-hooks')) {
+        initializePrecommitHook(packageManager);
+      }
+      if (extraFeatures.includes('lint-staged')) {
+        initializeLintStaged();
+      }
+    }
 
     log.success('Successfully initialized Ultracite configuration!');
   } catch (error) {
