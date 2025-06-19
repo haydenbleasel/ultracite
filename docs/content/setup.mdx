@@ -24,7 +24,7 @@ If you prefer to install step by step or use a specific package manager, follow 
 Run the command below to install Ultracite:
 
 ```package-install
-npm install --save-exact ultracite @biomejs/biome@1.9.4
+npm install --save-exact ultracite @biomejs/biome@2.0.0
 ```
 
 We pin an exact version (`--save-exact`) to ensure consistency across environments. Biome (and Ultracite) are under active development, so locking versions avoids unexpected changes on updates.
@@ -35,12 +35,12 @@ In the root of your project, create a file named `biome.jsonc` (or `biome.json`)
 
 ```json title="biome.jsonc"
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
   "extends": ["ultracite"]
 }
 ```
 
-This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust `1.9.4` to the current Biome version if different).
+This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust `2.0.0` to the current Biome version if different).
 
 ### 3. Create a `.vscode/settings.json` file
 

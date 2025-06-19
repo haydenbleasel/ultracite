@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import process from 'node:process';
 
 const biomeConfig = {
-  $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
+  $schema: 'https://biomejs.dev/schemas/2.0.0/schema.json',
   extends: ['ultracite'],
 };
 
@@ -58,7 +58,7 @@ export const initialize = () => {
     }
 
     // Install dependencies
-    execSync('pnpm add -D --save-exact ultracite @biomejs/biome@1.9.4');
+    execSync('pnpm add -D --save-exact ultracite @biomejs/biome@2.0.0');
 
     // Write the config files
     execSync('mkdir -p .vscode');
