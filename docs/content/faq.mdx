@@ -69,6 +69,10 @@ If you have a project where you temporarily don’t want Ultracite, you can simp
 
 To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it’s not configured, it won’t run (Biome itself might still run formatting if triggered, but not linting rules).
 
+## Q: Why is Ultracite 5 slower than 4?
+
+Biome v2 has a [new Scanner architecture](https://biomejs.dev/linter/#why-is-biome-linter-so-slow-compared-to-v1) responsible for crawling your project files and creating important information such as the module graph and the inferred types. Such information is needed for some rules as noFloatingPromises, noUnresolvedImports or noImportCycles, which can’t function otherwise.
+
 ---
 
 We hope these FAQs clear up common points of confusion. If you have a question that isn’t answered here, feel free to reach out on the project’s GitHub or community channels. Ultracite is here to make your developer life easier – so feedback and questions are always welcome to help improve it!

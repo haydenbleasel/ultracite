@@ -12,7 +12,7 @@ const benefits = [
     className: 'md:col-span-2',
     description:
       'Built in Rust for instant code analysis and processing, making on-save checks feel seamless without interrupting your workflow.',
-    title: 'Subsecond linting and formatting',
+    title: 'Speedy linting and formatting',
   },
   {
     children: ConfigGraphic,
