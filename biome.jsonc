@@ -12,7 +12,12 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on"
+        // Provides a code action to sort the imports and exports in the file using a built-in or custom order.
+        "organizeImports": "on",
+        // Enforce attribute sorting in JSX elements.
+        "useSortedAttributes": "on",
+        // Enforce ordering of a JS object properties.
+        "useSortedKeys": "on"
       }
     }
   },
@@ -756,6 +761,9 @@
     }
   },
   "json": {
+    "assist": {
+      "enabled": false
+    },
     "formatter": {
       "enabled": true,
       "indentStyle": "space",
