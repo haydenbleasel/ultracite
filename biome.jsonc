@@ -18,7 +18,7 @@
         // Enforce attribute sorting in JSX elements.
         "useSortedAttributes": "on",
         // Enforce ordering of a JS object properties.
-        "useSortedKeys": "on"
+        "useSortedKeys": "off"
       }
     }
   },
@@ -358,8 +358,6 @@
         "useSingleJsDocAsterisk": "error",
         // Require a description parameter for the Symbol().
         "useSymbolDescription": "error",
-        // Prevent the usage of static string literal id attribute on elements.
-        "useUniqueElementIds": "error",
 
         // Disallow destructuring props inside JSX components in Solid projects.
         "noDestructuredProps": "off",
@@ -382,6 +380,8 @@
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
           }
         },
+        // Prevent the usage of static string literal id attribute on elements.
+        "useUniqueElementIds": "off",
 
         /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
         // Require Promise-like statements to be handled appropriately.
