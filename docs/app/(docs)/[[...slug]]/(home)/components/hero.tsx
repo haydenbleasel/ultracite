@@ -1,12 +1,19 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Scene } from '@/components/ui/hero-section';
 import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
 import { people, providers } from './avatars';
 import { Installer } from './installer';
+
+const Scene = dynamic(
+  () => import('@/components/ui/hero-section').then((mod) => mod.Scene),
+  {
+    ssr: false,
+  }
+);
 
 export const Hero = () => (
   <div className="relative isolate overflow-hidden rounded-3xl border bg-linear-to-br from-background to-secondary/40 px-8">
