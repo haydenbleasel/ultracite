@@ -310,12 +310,8 @@
         "noBitwiseOperators": "error",
         // Disallow expressions where the operation doesn't affect the value
         "noConstantBinaryExpression": "error",
-        // Require Promise-like statements to be handled appropriately.
-        "noFloatingPromises": "error",
         // Disallow the use of __dirname and __filename in the global scope.
         "noGlobalDirnameFilename": "error",
-        // Prevent import cycles.
-        "noImportCycles": "error",
         // Disallows defining React components inside other components.
         "noNestedComponentDefinitions": "error",
         // Disallow use event handlers on non-interactive elements.
@@ -373,8 +369,6 @@
         "noProcessGlobal": "off",
         // Disallow usage of sensitive data such as API keys and tokens.
         "noSecrets": "off",
-        // Warn when importing non-existing exports.
-        "noUnresolvedImports": "off",
         // Enforce types in functions, methods, variables, and parameters.
         "useExplicitType": "off",
         // Enforce using Solid's <For /> component for mapping an array to JSX elements.
@@ -388,6 +382,14 @@
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
           }
         },
+
+        /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
+        // Require Promise-like statements to be handled appropriately.
+        "noFloatingPromises": "off",
+        // Warn when importing non-existing exports.
+        "noUnresolvedImports": "off",
+        // Prevent import cycles.
+        "noImportCycles": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         // Disallow the use of the !important style.
