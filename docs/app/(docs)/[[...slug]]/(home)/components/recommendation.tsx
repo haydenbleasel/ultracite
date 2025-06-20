@@ -9,7 +9,7 @@ export const Recommendation = () => (
         initial code roasting.
       </p>
     </div>
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center [&_.react-tweet-theme]:my-0! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-transparent!">
       {/** biome-ignore lint/nursery/useUniqueElementIds: "This is a tweet ID" */}
       <Tweet id="1882412853656977654" />
     </div>
