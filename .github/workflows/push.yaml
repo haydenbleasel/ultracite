@@ -43,7 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Build CLI
-        run: npx tsup
+        run: pnpm build
 
       - name: Create Release
         env:
