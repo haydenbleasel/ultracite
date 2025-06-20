@@ -235,6 +235,14 @@ const initializeLintStaged = async (packageManagerAdd: string) => {
   s.stop('lint-staged initialized.');
 };
 
+const initializeVSCodeCopilotRules = () => {
+  const s = spinner();
+
+  s.start('Initializing VSCode Copilot rules...');
+
+  execSync(`echo '${rulesFile}' > .github/copilot-instructions.md`);
+};
+
 const initializeCursorRules = () => {
   const s = spinner();
 
@@ -293,6 +301,7 @@ export const initialize = async () => {
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
       options: [
+        { label: 'GitHub Copilot (VSCode)', value: 'vscode-copilot' },
         { label: 'Cursor', value: 'cursor' },
         { label: 'Windsurf', value: 'windsurf' },
         { label: 'Zed', value: 'zed' },
@@ -319,6 +328,9 @@ export const initialize = async () => {
     await upsertBiomeConfig();
 
     if (Array.isArray(editorRules)) {
+      if (editorRules.includes('vscode-copilot')) {
+        initializeVSCodeCopilotRules();
+      }
       if (editorRules.includes('cursor')) {
         initializeCursorRules();
       }
