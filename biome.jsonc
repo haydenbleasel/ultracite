@@ -92,7 +92,11 @@
         "useValidLang": "error",
 
         // Enforce that autoFocus prop is not used on elements.
-        "noAutofocus": "off"
+        "noAutofocus": "off",
+
+        /** ------------------------ CSS Rules ------------------------ **/
+        // Disallow a missing generic family keyword within font families.
+        "useGenericFontNames": "error"
       },
       "complexity": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -263,7 +267,33 @@
         // Forbid the use of Node.js builtin modules.
         "noNodejsModules": "off",
         // Restrict imports of private exports.
-        "noPrivateImports": "off"
+        "noPrivateImports": "off",
+
+        /** ------------------------ CSS Rules ------------------------ **/
+        // Disallow non-standard direction values for linear gradient functions.
+        "noInvalidDirectionInLinearGradient": "error",
+        // Disallows invalid named grid areas in CSS Grid Layouts.
+        "noInvalidGridAreas": "error",
+        // Disallow the use of @import at-rules in invalid positions.
+        "noInvalidPositionAtImportRule": "error",
+        // Disallow missing var function for css variables.
+        "noMissingVarFunction": "error",
+        // Disallow unknown CSS value functions.
+        "noUnknownFunction": "error",
+        // Disallow unknown media feature names.
+        "noUnknownMediaFeatureName": "error",
+        // Disallow unknown properties.
+        "noUnknownProperty": "error",
+        // Disallow unknown pseudo-class selectors.
+        "noUnknownPseudoClass": "error",
+        // Disallow unknown pseudo-element selectors.
+        "noUnknownPseudoElement": "error",
+        // Disallow unknown type selectors.
+        "noUnknownTypeSelector": "error",
+        // Disallow unknown CSS units.
+        "noUnknownUnit": "error",
+        // Disallow unmatchable An+B selectors.
+        "noUnmatchableAnbSelector": "error"
       },
       "nursery": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -351,7 +381,13 @@
             "attributes": ["className"],
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin"]
           }
-        }
+        },
+
+        /** ------------------------ CSS Rules ------------------------ **/
+        // Disallow the use of the !important style.
+        "noImportantStyles": "error",
+        // Disallow unknown at-rules.
+        "noUnknownAtRule": "error"
       },
       "performance": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -511,7 +547,13 @@
         // // Enforce naming conventions for everything across a codebase.
         "useNamingConvention": "off",
         // // Disallow multiple variable declarations in the same variable statement
-        "useSingleVarDeclarator": "off"
+        "useSingleVarDeclarator": "off",
+
+        /** ------------------------ CSS Rules ------------------------ **/
+        // Disallow a lower specificity selector from coming after a higher specificity selector.
+        "noDescendingSpecificity": "error",
+        // Disallow use of @value rule in css modules.
+        "noValueAtRule": "error"
       },
       "suspicious": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -660,7 +702,25 @@
         "useStrictMode": "error",
 
         // Prevents React-specific JSX properties from being used.
-        "noReactSpecificProps": "off"
+        "noReactSpecificProps": "off",
+
+        /** ------------------------ CSS Rules ------------------------ **/
+        // Disallow duplicate @import rules.
+        "noDuplicateAtImportRules": "error",
+        // Disallow duplicate custom properties within declaration blocks.
+        "noDuplicateCustomProperties": "error",
+        // Disallow duplicate names within font families.
+        "noDuplicateFontNames": "error",
+        // Disallow duplicate properties within declaration blocks.
+        "noDuplicateProperties": "error",
+        // Disallow duplicate selectors within keyframe blocks.
+        "noDuplicateSelectorsKeyframeBlock": "error",
+        // Disallow CSS empty blocks.
+        "noEmptyBlock": "error",
+        // Disallow invalid !important within keyframe declarations
+        "noImportantInKeyframe": "error",
+        // Disallow shorthand properties that override related longhand properties.
+        "noShorthandPropertyOverrides": "error"
       }
     }
   },
