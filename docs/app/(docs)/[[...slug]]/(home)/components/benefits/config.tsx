@@ -7,7 +7,7 @@ export const ConfigGraphic = () => (
         <FileIcon className="size-5" />
         <p className="font-medium text-lg">biome.jsonc</p>
       </div>
-      <pre className="grid text-2xl leading-relaxed">
+      <pre className="grid text-xl leading-relaxed">
         <code>{'{'}</code>
         <code>{`  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",`}</code>
         <code>

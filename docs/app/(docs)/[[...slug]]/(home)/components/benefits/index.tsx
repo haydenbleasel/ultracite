@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils';
 import { AIGraphic } from './ai';
 import { ConfigGraphic } from './config';
-import { IntegrationsGraphic } from './integrations';
 import { IntuitiveGraphic } from './intuitive';
+import { MonoreposGraphic } from './monorepos';
 import { PerformanceGraphic } from './performance';
 import { TypeSafetyGraphic } from './type-safety';
 
 const benefits = [
   {
-    title: 'Lightning-fast performance',
+    title: 'Subsecond linting and formatting',
     description:
       'Built in Rust for instant code analysis and processing, making on-save checks feel seamless without interrupting your workflow.',
     className: 'md:col-span-2',
@@ -22,7 +22,7 @@ const benefits = [
     children: ConfigGraphic,
   },
   {
-    title: 'Intuitive and simple',
+    title: 'Intuitive and robust',
     description:
       'Automatically reformats code and fixes lint issues on save, with clear error reporting for issues that need manual attention.',
     className: 'md:col-span-3',
@@ -36,14 +36,14 @@ const benefits = [
     children: TypeSafetyGraphic,
   },
   {
-    title: 'Plays nice with others',
+    title: 'Designed for monorepos',
     description:
-      'Seamlessly integrates with popular tools and patterns, including automatic sorting of CSS utility classes and support for common utility functions.',
+      'Unified toolchain configuration across all packages and apps, eliminating thousands of lines of duplicate config files while maintaining consistency.',
     className: 'md:col-span-4',
-    children: IntegrationsGraphic,
+    children: MonoreposGraphic,
   },
   {
-    title: 'Ready for humans and AI agents',
+    title: 'Usable by humans and AI',
     description:
       'Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction.',
     className: 'md:col-span-2',
@@ -52,7 +52,7 @@ const benefits = [
 ];
 
 export const Benefits = () => (
-  <section className="container mx-auto grid py-24 md:gap-12">
+  <section className="grid py-24 md:gap-12">
     <p className="max-w-6xl text-balance font-semibold text-5xl tracking-tighter">
       Finally &mdash; a ⚡ lightning-fast toolchain that ensures you, your team
       and your AI agents are writing code in harmony.

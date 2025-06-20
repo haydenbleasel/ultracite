@@ -31,7 +31,7 @@ const defaultCards = [
 ];
 
 export const TypeSafetyGraphic = () => (
-  <div className="-ml-40 fade-in-0 grid animate-in place-items-center opacity-100 duration-700 [grid-template-areas:'stack']">
+  <div className="-ml-48 fade-in-0 grid animate-in place-items-center opacity-100 duration-700 [grid-template-areas:'stack']">
     {defaultCards.map((card) => (
       <div
         key={card.title}
