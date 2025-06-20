@@ -10,9 +10,7 @@ import { Installer } from './installer';
 
 const Scene = dynamic(
   () => import('@/components/ui/hero-section').then((mod) => mod.Scene),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
 
 export const Hero = () => (

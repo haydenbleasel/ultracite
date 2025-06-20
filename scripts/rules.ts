@@ -133,7 +133,6 @@ export const rules = [
   'Use static Response methods instead of new Response() constructor when possible.',
   'Make sure switch-case statements are exhaustive.',
   'Make sure all exports are declared after all non-export statements.',
-  `Use Solid's <For /> component for mapping arrays to JSX elements.`,
   'Make sure the `preconnect` attribute is used when using Google Fonts.',
   'Use `Array#{indexOf,lastIndexOf}()` instead of `Array#{findIndex,findLastIndex}()` when looking for the index of an item.',
   'Make sure iterable callbacks return consistent values.',
