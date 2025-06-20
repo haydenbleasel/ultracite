@@ -10,33 +10,6 @@ const biomeConfig = {
   extends: ['ultracite'],
 };
 
-const vsCodeSettings = {
-  'typescript.tsdk': 'node_modules/typescript/lib',
-  'editor.defaultFormatter': 'biomejs.biome',
-  'editor.formatOnSave': true,
-  'editor.formatOnPaste': true,
-  'emmet.showExpandedAbbreviation': 'never',
-  'editor.codeActionsOnSave': {
-    'source.fixAll.biome': 'explicit',
-    'source.organizeImports.biome': 'explicit',
-  },
-  '[typescript]': {
-    'editor.defaultFormatter': 'biomejs.biome',
-  },
-  '[json]': {
-    'editor.defaultFormatter': 'biomejs.biome',
-  },
-  '[javascript]': {
-    'editor.defaultFormatter': 'biomejs.biome',
-  },
-  '[jsonc]': {
-    'editor.defaultFormatter': 'biomejs.biome',
-  },
-  '[typescriptreact]': {
-    'editor.defaultFormatter': 'biomejs.biome',
-  },
-};
-
 let tsConfig = {
   compilerOptions: {
     strictNullChecks: true,
@@ -103,11 +76,21 @@ const upsertVSCodeSettings = async () => {
   s.start('Checking for .vscode/settings.json...');
 
   const vsCodeSettingsExists = await exists('.vscode/settings.json');
+  const vsCodeSettings = await readFile('.vscode/settings.json', 'utf-8');
 
   if (vsCodeSettingsExists) {
     s.message('settings.json found, updating...');
 
-    // TODO: update settings.json
+    const existingVsCodeSettings = JSON.parse(vsCodeSettings);
+
+    const newVsCodeSettings = {
+      ...existingVsCodeSettings,
+      ...JSON.parse(vsCodeSettings),
+    };
+
+    execSync(
+      `echo '${JSON.stringify(newVsCodeSettings, null, 2)}' > .vscode/settings.json`
+    );
 
     s.stop('settings.json updated.');
 
@@ -116,9 +99,7 @@ const upsertVSCodeSettings = async () => {
 
   s.message('settings.json not found, creating...');
 
-  execSync(
-    `echo '${JSON.stringify(vsCodeSettings, null, 2)}' > .vscode/settings.json`
-  );
+  execSync(`echo ${vsCodeSettings}' > .vscode/settings.json`);
 
   s.stop('settings.json created.');
 };
@@ -299,33 +280,33 @@ export const initialize = async () => {
 
   try {
     const packageManager = await select({
-      message: 'Which package manager do you use?',
       initialValue: 'pnpm',
+      message: 'Which package manager do you use?',
       options: [
-        { value: 'npm install', label: 'npm' },
-        { value: 'yarn add', label: 'yarn' },
-        { value: 'pnpm add', label: 'pnpm', hint: 'Recommended' },
-        { value: 'bun add', label: 'bun' },
+        { label: 'npm', value: 'npm install' },
+        { label: 'yarn', value: 'yarn add' },
+        { hint: 'Recommended', label: 'pnpm', value: 'pnpm add' },
+        { label: 'bun', value: 'bun add' },
       ],
     });
 
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
-      required: false,
       options: [
-        { value: 'cursor', label: 'Cursor' },
-        { value: 'windsurf', label: 'Windsurf' },
-        { value: 'zed', label: 'Zed' },
+        { label: 'Cursor', value: 'cursor' },
+        { label: 'Windsurf', value: 'windsurf' },
+        { label: 'Zed', value: 'zed' },
       ],
+      required: false,
     });
 
     const extraFeatures = await multiselect({
       message: 'Would you like any of the following (optional)?',
-      required: false,
       options: [
-        { value: 'precommit-hooks', label: 'Pre-commit hook with Husky' },
-        { value: 'lint-staged', label: 'Lint-staged' },
+        { label: 'Pre-commit hook with Husky', value: 'precommit-hooks' },
+        { label: 'Lint-staged', value: 'lint-staged' },
       ],
+      required: false,
     });
 
     if (typeof packageManager !== 'string') {
