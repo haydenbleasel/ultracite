@@ -285,10 +285,10 @@ const initializeZedRules = async () => {
 
 const determinePackageManager = async () => {
   const options = [
-    { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
-    { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
     { hint: 'Recommended', label: 'pnpm', value: 'pnpm add', lockfile: 'pnpm-lock.yaml' },
     { label: 'bun', value: 'bun add', lockfile: 'bun.lockb' },
+    { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
+    { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
   ];
 
   for (const option of options) {
