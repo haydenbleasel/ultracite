@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { access, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
-import { rulesFile } from './rules';
+import { rulesFile } from '../docs/lib/rules';
 import { title } from './title';
 
 const biomeConfig = {

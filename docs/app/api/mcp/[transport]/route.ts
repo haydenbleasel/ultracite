@@ -1,5 +1,5 @@
 import { createMcpHandler } from '@vercel/mcp-adapter';
-import { rules } from '@/../scripts/rules';
+import { rules } from '@/lib/rules';
 
 const REDIS_URL = process.env.REDIS_URL;
 
