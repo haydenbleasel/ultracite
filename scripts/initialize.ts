@@ -4,6 +4,8 @@ import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { rulesFile } from '../docs/lib/rules';
 import { biome } from './biome';
+import { husky } from './husky';
+import { lintStaged } from './lint-staged';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
 import { exists } from './utils';
@@ -69,26 +71,23 @@ const upsertBiomeConfig = async () => {
 
 const initializePrecommitHook = async (packageManagerAdd: string) => {
   const s = spinner();
-  const huskyCommand = 'npx ultracite format';
-
   s.start('Initializing pre-commit hooks...');
 
   s.message('Installing Husky...');
-  execSync(`${packageManagerAdd} -D husky`);
+  husky.install(packageManagerAdd);
 
-  const preCommitHookExists = await exists('.husky/pre-commit');
-
-  if (!preCommitHookExists) {
-    s.message('Pre-commit hook not found, creating...');
-
-    execSync('touch .husky/pre-commit');
+  if (await husky.exists()) {
+    s.message('Pre-commit hook found, updating...');
+    await husky.update();
+    s.stop('Pre-commit hook updated.');
+    return;
   }
 
   s.message('Updating pre-commit hook...');
 
-  execSync(`echo '\n${huskyCommand}' >> .husky/pre-commit`);
-
-  s.stop('Pre-commit hooks initialized.');
+  s.message('Pre-commit hook not found, creating...');
+  await husky.create();
+  s.stop('Pre-commit hook created.');
 };
 
 const initializeLintStaged = async (packageManagerAdd: string) => {
@@ -97,81 +96,18 @@ const initializeLintStaged = async (packageManagerAdd: string) => {
   s.start('Initializing lint-staged...');
 
   s.message('Installing lint-staged...');
-  execSync(`${packageManagerAdd} -D lint-staged`);
+  lintStaged.install(packageManagerAdd);
 
-  const lintStagedConfig = {
-    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
-  };
-
-  // Check for existing configuration files in order of preference
-  const configFiles = [
-    'package.json',
-    '.lintstagedrc.json',
-    '.lintstagedrc.js',
-    '.lintstagedrc.cjs',
-    '.lintstagedrc.mjs',
-    'lint-staged.config.js',
-    'lint-staged.config.cjs',
-    'lint-staged.config.mjs',
-    '.lintstagedrc.yaml',
-    '.lintstagedrc.yml',
-    '.lintstagedrc',
-  ];
-
-  let existingConfigFile: string | null = null;
-  for (const file of configFiles) {
-    // biome-ignore lint/nursery/noAwaitInLoop: "don't do what donny don't does"
-    if (await exists(file)) {
-      existingConfigFile = file;
-      break;
-    }
+  if (await lintStaged.exists()) {
+    s.message('lint-staged found, updating...');
+    await lintStaged.update();
+    s.stop('lint-staged updated.');
+    return;
   }
 
-  if (existingConfigFile === 'package.json') {
-    s.message('package.json found, updating lint-staged configuration...');
-
-    try {
-      const packageJson = JSON.parse(await readFile('package.json', 'utf-8'));
-
-      if (packageJson['lint-staged']) {
-        s.message('Existing lint-staged configuration found, merging...');
-        packageJson['lint-staged'] = {
-          ...packageJson['lint-staged'],
-          ...lintStagedConfig,
-        };
-      } else {
-        packageJson['lint-staged'] = lintStagedConfig;
-      }
-
-      await writeFile('package.json', JSON.stringify(packageJson, null, 2));
-      s.message('lint-staged configuration added to package.json');
-    } catch {
-      s.message(
-        'Failed to update package.json, creating .lintstagedrc.json...'
-      );
-      await writeFile(
-        '.lintstagedrc.json',
-        JSON.stringify(lintStagedConfig, null, 2)
-      );
-      s.message('lint-staged configuration created as .lintstagedrc.json');
-    }
-  } else if (existingConfigFile) {
-    s.message(
-      `Existing lint-staged configuration found at ${existingConfigFile}`
-    );
-    s.message('Skipping lint-staged configuration (already exists)');
-  } else {
-    s.message(
-      'No existing configuration found, creating .lintstagedrc.json...'
-    );
-    await writeFile(
-      '.lintstagedrc.json',
-      JSON.stringify(lintStagedConfig, null, 2)
-    );
-    s.message('lint-staged configuration created as .lintstagedrc.json');
-  }
-
-  s.stop('lint-staged initialized.');
+  s.message('lint-staged not found, creating...');
+  await lintStaged.create();
+  s.stop('lint-staged created.');
 };
 
 const initializeVSCodeCopilotRules = () => {
