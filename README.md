@@ -1,3 +1,5 @@
+![Ultracite](./docs/app/opengraph-image.jpg)
+
 # Ultracite
 
 **The AI-ready toolchain that helps you write and generate code _faster_.**
