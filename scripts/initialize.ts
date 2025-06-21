@@ -1,31 +1,14 @@
 import { execSync } from 'node:child_process';
-import { access, readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
-import deepmerge from 'deepmerge';
 import { rulesFile } from '../docs/lib/rules';
+import { biome } from './biome';
 import { title } from './title';
-import { vscodeSettings } from './vscode-settings';
+import { tsconfig } from './tsconfig';
+import { exists } from './utils';
+import { vscode } from './vscode-settings';
 
-const biomeConfig = {
-  $schema: 'https://www.ultracite.ai/v/2.0.0',
-  extends: ['ultracite'],
-};
-
-let tsConfig = {
-  compilerOptions: {
-    strictNullChecks: true,
-  },
-};
-
-const exists = async (path: string) => {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-};
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
@@ -38,95 +21,49 @@ const installDependencies = (packageManagerAdd: string) => {
 
 const upsertTsConfig = async () => {
   const s = spinner();
-
   s.start('Checking for tsconfig.json...');
 
-  const tsConfigExists = await exists('tsconfig.json');
-
-  if (tsConfigExists) {
+  if (await tsconfig.exists()) {
     s.message('tsconfig.json found, updating...');
-
-    const existingTsConfig = JSON.parse(
-      await readFile('tsconfig.json', { encoding: 'utf-8' })
-    );
-
-    tsConfig = {
-      ...existingTsConfig,
-      compilerOptions: {
-        ...existingTsConfig.compilerOptions,
-        ...tsConfig.compilerOptions,
-      },
-    };
-
-    execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
-
+    await tsconfig.update();
     s.stop('tsconfig.json updated.');
-
     return;
   }
 
   s.message('tsconfig.json not found, creating...');
-
-  execSync(`echo '${JSON.stringify(tsConfig, null, 2)}' > tsconfig.json`);
-
+  await tsconfig.create();
   s.stop('tsconfig.json created.');
 };
 
 const upsertVSCodeSettings = async () => {
   const s = spinner();
-
   s.start('Checking for .vscode/settings.json...');
 
-  const vsCodeSettingsExists = await exists('.vscode/settings.json');
-
-  if (vsCodeSettingsExists) {
+  if (await vscode.exists()) {
     s.message('settings.json found, updating...');
-
-    const existingVsCodeSettings = JSON.parse(
-      await readFile('.vscode/settings.json', 'utf-8')
-    );
-
-    const newVsCodeSettings = deepmerge(existingVsCodeSettings, vscodeSettings);
-
-    execSync(
-      `echo '${JSON.stringify(newVsCodeSettings, null, 2)}' > .vscode/settings.json`
-    );
-
+    await vscode.update();
     s.stop('settings.json updated.');
-
     return;
   }
 
   s.message('settings.json not found, creating...');
-
-  execSync(
-    `echo '${JSON.stringify(vscodeSettings, null, 2)}' > .vscode/settings.json`
-  );
-
+  await vscode.create();
   s.stop('settings.json created.');
 };
 
 const upsertBiomeConfig = async () => {
   const s = spinner();
-
   s.start('Checking for biome.jsonc...');
 
-  const biomeConfigExists = await exists('biome.jsonc');
-
-  if (biomeConfigExists) {
+  if (await biome.exists()) {
     s.message('biome.jsonc found, updating...');
-
-    // TODO: update biome.jsonc
-
+    await biome.update();
     s.stop('biome.jsonc updated.');
-
     return;
   }
 
   s.message('biome.jsonc not found, creating...');
-
-  execSync(`echo '${JSON.stringify(biomeConfig, null, 2)}' > biome.jsonc`);
-
+  await biome.create();
   s.stop('biome.jsonc created.');
 };
 

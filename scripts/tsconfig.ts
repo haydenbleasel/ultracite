@@ -3,24 +3,14 @@ import deepmerge from 'deepmerge';
 import { exists } from './utils';
 
 const defaultConfig = {
-  'editor.defaultFormatter': 'esbenp.prettier-vscode',
-  '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
-    {
-      'editor.defaultFormatter': 'biomejs.biome',
-    },
-  'typescript.tsdk': 'node_modules/typescript/lib',
-  'editor.formatOnSave': true,
-  'editor.formatOnPaste': true,
-  'emmet.showExpandedAbbreviation': 'never',
-  'editor.codeActionsOnSave': {
-    'source.fixAll.biome': 'explicit',
-    'source.organizeImports.biome': 'explicit',
+  compilerOptions: {
+    strictNullChecks: true,
   },
 };
 
-const path = '.vscode/settings.json';
+const path = 'tsconfig.json';
 
-export const vscode = {
+export const tsconfig = {
   exists: async () => {
     try {
       await exists(path);
