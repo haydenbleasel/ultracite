@@ -6,7 +6,7 @@ import { rulesFile } from './rules';
 import { title } from './title';
 
 const biomeConfig = {
-  $schema: 'https://biomejs.dev/schemas/2.0.0/schema.json',
+  $schema: 'https://www.ultracite.ai/v/2.0.0',
   extends: ['ultracite'],
 };
 

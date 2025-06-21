@@ -9,7 +9,7 @@ export const ConfigGraphic = () => (
       </div>
       <pre className="grid text-xl leading-relaxed">
         <code>{'{'}</code>
-        <code>{`  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",`}</code>
+        <code>{`  "$schema": "https://www.ultracite.ai/v/2.0.0",`}</code>
         <code>
           {`  "extends": ["`}
           <span className="text-foreground">ultracite</span>
