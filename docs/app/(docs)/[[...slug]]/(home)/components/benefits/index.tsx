@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { AIGraphic } from './ai';
-import { ConfigGraphic } from './config';
+import { IntegrationsGraphic } from './integrations';
 import { IntuitiveGraphic } from './intuitive';
 import { MonoreposGraphic } from './monorepos';
 import { PerformanceGraphic } from './performance';
@@ -15,11 +15,11 @@ const benefits = [
     title: 'Subsecond linting and formatting',
   },
   {
-    children: ConfigGraphic,
+    children: IntegrationsGraphic,
     className: 'lg:col-span-4',
     description:
-      'Preconfigured rules optimized for Next.js, React and TypeScript projects with sensible defaults, while still allowing customization when needed.',
-    title: 'Zero-config by design',
+      'Built-in scaffolding for Husky pre-commit hooks and lint-staged configuration, with support for all major package managers.',
+    title: 'Plays nice with others',
   },
   {
     children: IntuitiveGraphic,
