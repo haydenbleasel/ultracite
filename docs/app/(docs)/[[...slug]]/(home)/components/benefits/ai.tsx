@@ -48,10 +48,10 @@ export const AIGraphic = () => (
             'size-8 rounded-full',
             avatarClassNames[index % avatarClassNames.length]
           )}
-          height={24}
+          height={32}
           key={name}
           src={avatar}
-          width={24}
+          width={32}
         />
       ))}
     </div>
