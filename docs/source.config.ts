@@ -8,5 +8,11 @@ export const docs = defineDocs({
 export default defineConfig({
   mdxOptions: {
     remarkPlugins: [remarkInstall],
+    rehypeCodeOptions: {
+      themes: {
+        light: 'vesper',
+        dark: 'vesper',
+      },
+    },
   },
 });
