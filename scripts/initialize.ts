@@ -283,20 +283,41 @@ const initializeZedRules = async () => {
   s.stop('Zed rules initialized.');
 };
 
+const determinePackageManager = async () => {
+  const options = [
+    { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
+    { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
+    { hint: 'Recommended', label: 'pnpm', value: 'pnpm add', lockfile: 'pnpm-lock.yaml' },
+    { label: 'bun', value: 'bun add', lockfile: 'bun.lockb' },
+  ];
+
+  for (const option of options) {
+    // biome-ignore lint/nursery/noAwaitInLoop: "don't do what donny don't does"
+    if (await exists(option.lockfile)) {
+      log.info(`Detected ${option.label} lockfile, using ${option.value}`);
+
+      return option.value;
+    }
+  }
+
+  const packageManager = await select({
+    initialValue: 'pnpm',
+    message: 'Which package manager do you use?',
+    options,
+  });
+
+  if (typeof packageManager !== 'string') {
+    throw new Error('No package manager selected');
+  }
+
+  return packageManager;
+};
+
 export const initialize = async () => {
   intro(title);
 
   try {
-    const packageManager = await select({
-      initialValue: 'pnpm',
-      message: 'Which package manager do you use?',
-      options: [
-        { label: 'npm', value: 'npm install' },
-        { label: 'yarn', value: 'yarn add' },
-        { hint: 'Recommended', label: 'pnpm', value: 'pnpm add' },
-        { label: 'bun', value: 'bun add' },
-      ],
-    });
+    const packageManager = await determinePackageManager();
 
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
@@ -317,10 +338,6 @@ export const initialize = async () => {
       ],
       required: false,
     });
-
-    if (typeof packageManager !== 'string') {
-      throw new Error('No package manager selected');
-    }
 
     installDependencies(packageManager);
     await upsertTsConfig();
