@@ -1,36 +1,70 @@
-import { Button } from '@/components/ui/button';
+'use client';
+
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
+import { people, providers } from './avatars';
 import { Installer } from './installer';
 
-const avatars = [
-  'https://avatars.githubusercontent.com/u/44647675?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/99208066?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/18316?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/126797452?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/74460583?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/37576747?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/77968538?s=40&v=4',
-  'https://avatars.githubusercontent.com/u/40150036?s=40&v=4',
-];
+const Scene = dynamic(
+  () => import('@/components/ui/hero-section').then((mod) => mod.Scene),
+  { ssr: false }
+);
 
 export const Hero = () => (
-  <div className="px-8 py-16 sm:py-24">
-    <div className="mx-auto grid max-w-3xl gap-6 text-center">
+  <div className="relative isolate overflow-hidden rounded-3xl border bg-linear-to-br from-background to-secondary/40 px-4 sm:px-8">
+    <div className="-top-24 -left-[20%] absolute z-0 h-[50rem] w-[120%] opacity-50">
+      <Scene />
+    </div>
+    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center sm:py-32">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
-        Ship code faster and with more confidence
+        The AI-ready toolchain that helps you{' '}
+        <span className="mr-2 ml-1 hidden sm:inline-flex">
+          <AvatarStack className='inline-flex translate-y-1' size={48}>
+            {people.map(({ name, avatar }) => (
+              <Image
+                alt=""
+                className="size-12 rounded-full"
+                height={48}
+                key={name}
+                src={avatar}
+                width={48}
+              />
+            ))}
+          </AvatarStack>
+        </span>
+        write and{' '}
+        <AvatarStack className="hidden translate-y-1 sm:inline-flex" size={48}>
+          {providers.map(({ name, avatar }) => (
+            <Image
+              alt=""
+              className="size-12 rounded-full"
+              height={48}
+              key={name}
+              src={avatar}
+              width={48}
+            />
+          ))}
+        </AvatarStack>{' '}
+        generate code <span className="italic">faster</span>.
       </h1>
       <p className="mt-0 mb-0 text-balance text-muted-foreground md:text-xl">
         Ultracite is a zero-config{' '}
-        <a href="https://biomejs.dev" className="underline">
+        <a className="underline" href="https://biomejs.dev">
           Biome
         </a>{' '}
-        preset that provides a robust linting and formatting experience for
-        modern web development.
+        preset that provides a robust linting and formatting experience for your
+        team and your AI integrations.
       </p>
       <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-2 sm:flex-row">
         <Installer />
-        <Button asChild size="lg">
+        <Button
+          asChild
+          className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs hover:text-background"
+          size="lg"
+        >
           <Link href="/introduction">Read the docs</Link>
         </Button>
       </div>
@@ -38,25 +72,12 @@ export const Hero = () => (
         <p className="text-muted-foreground text-sm">
           Used by over{' '}
           <a
-            href="https://github.com/haydenbleasel/ultracite/network/dependents"
             className="underline"
+            href="https://github.com/haydenbleasel/ultracite/network/dependents"
           >
             500 developers
           </a>
         </p>
-        <div className="-space-x-2 flex">
-          {avatars.map((avatar) => (
-            <Image
-              key={avatar}
-              src={avatar}
-              alt="GitHub avatar"
-              width={32}
-              height={32}
-              className="rounded-full border-2 border-background"
-              unoptimized
-            />
-          ))}
-        </div>
       </div>
     </div>
   </div>

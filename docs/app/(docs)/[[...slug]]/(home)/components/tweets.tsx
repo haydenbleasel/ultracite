@@ -13,8 +13,8 @@ const tweets = [
 ];
 
 export const Tweets = () => (
-  <div className="grid divide-dotted sm:grid-cols-3 sm:divide-x">
-    <div className="p-8">
+  <div className="grid gap-16 sm:grid-cols-3">
+    <div>
       <div className="sticky top-20">
         <h2 className="font-semibold text-3xl">What the community is saying</h2>
         <p className="mt-4 text-pretty text-muted-foreground sm:text-lg">
@@ -23,9 +23,9 @@ export const Tweets = () => (
         </p>
       </div>
     </div>
-    <div className="p-8 sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4!">
+    <div className="sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-transparent!">
       {tweets.map((tweet) => (
-        <Tweet key={tweet} id={tweet} />
+        <Tweet id={tweet} key={tweet} />
       ))}
     </div>
   </div>

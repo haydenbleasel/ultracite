@@ -6,7 +6,7 @@ import { Recommendation } from './components/recommendation';
 import { Tweets } from './components/tweets';
 
 const Home = () => (
-  <div className="w-full divide-y divide-dotted px-0 pt-[var(--fd-nav-height)]">
+  <div className='relative mt-[var(--fd-nav-height)] grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-16 sm:pb-8'>
     <Hero />
     <Benefits />
     <Recommendation />
