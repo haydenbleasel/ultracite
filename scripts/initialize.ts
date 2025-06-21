@@ -2,8 +2,10 @@ import { execSync } from 'node:child_process';
 import { access, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
+import deepmerge from 'deepmerge';
 import { rulesFile } from '../docs/lib/rules';
 import { title } from './title';
+import { vscodeSettings } from './vscode-settings';
 
 const biomeConfig = {
   $schema: 'https://www.ultracite.ai/v/2.0.0',
@@ -76,17 +78,15 @@ const upsertVSCodeSettings = async () => {
   s.start('Checking for .vscode/settings.json...');
 
   const vsCodeSettingsExists = await exists('.vscode/settings.json');
-  const vsCodeSettings = await readFile('.vscode/settings.json', 'utf-8');
 
   if (vsCodeSettingsExists) {
     s.message('settings.json found, updating...');
 
-    const existingVsCodeSettings = JSON.parse(vsCodeSettings);
+    const existingVsCodeSettings = JSON.parse(
+      await readFile('.vscode/settings.json', 'utf-8')
+    );
 
-    const newVsCodeSettings = {
-      ...existingVsCodeSettings,
-      ...JSON.parse(vsCodeSettings),
-    };
+    const newVsCodeSettings = deepmerge(existingVsCodeSettings, vscodeSettings);
 
     execSync(
       `echo '${JSON.stringify(newVsCodeSettings, null, 2)}' > .vscode/settings.json`
@@ -99,7 +99,9 @@ const upsertVSCodeSettings = async () => {
 
   s.message('settings.json not found, creating...');
 
-  execSync(`echo ${vsCodeSettings}' > .vscode/settings.json`);
+  execSync(
+    `echo '${JSON.stringify(vscodeSettings, null, 2)}' > .vscode/settings.json`
+  );
 
   s.stop('settings.json created.');
 };
@@ -285,7 +287,12 @@ const initializeZedRules = async () => {
 
 const determinePackageManager = async () => {
   const options = [
-    { hint: 'Recommended', label: 'pnpm', value: 'pnpm add', lockfile: 'pnpm-lock.yaml' },
+    {
+      hint: 'Recommended',
+      label: 'pnpm',
+      value: 'pnpm add',
+      lockfile: 'pnpm-lock.yaml',
+    },
     { label: 'bun', value: 'bun add', lockfile: 'bun.lockb' },
     { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
     { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
