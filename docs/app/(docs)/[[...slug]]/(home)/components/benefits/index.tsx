@@ -53,7 +53,7 @@ const benefits = [
 
 export const Benefits = () => (
   <section className="grid md:gap-12">
-    <p className="max-w-6xl text-balance font-semibold text-5xl tracking-tighter">
+    <p className='max-w-6xl text-balance font-semibold text-3xl tracking-tighter sm:text-4xl md:text-5xl'>
       Finally &mdash; a ⚡ lightning-fast toolchain that ensures you, your team
       and your AI agents are writing code in harmony.
     </p>
@@ -61,7 +61,7 @@ export const Benefits = () => (
       {benefits.map((benefit) => (
         <div
           className={cn(
-            'relative flex flex-col gap-2 overflow-hidden rounded-xl border p-8',
+            'relative flex flex-col gap-2 overflow-hidden rounded-xl border p-4 sm:p-8',
             benefit.className
           )}
           key={benefit.title}

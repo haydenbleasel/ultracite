@@ -1,7 +1,7 @@
 import { Installer } from './installer';
 
 export const CallToAction = () => (
-  <div className="grid gap-6 text-center">
+  <div className="grid gap-6 sm:text-center">
     <div className="flex flex-col items-center justify-center gap-2">
       <h2 className="font-semibold text-3xl">
         Install in seconds. Run in milliseconds.

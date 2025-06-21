@@ -14,37 +14,37 @@ const Scene = dynamic(
 );
 
 export const Hero = () => (
-  <div className="relative isolate overflow-hidden rounded-3xl border bg-linear-to-br from-background to-secondary/40 px-8">
+  <div className="relative isolate overflow-hidden rounded-3xl border bg-linear-to-br from-background to-secondary/40 px-4 sm:px-8">
     <div className="-top-24 -left-[20%] absolute z-0 h-[50rem] w-[120%] opacity-50">
       <Scene />
     </div>
-    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-32 text-center">
+    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center sm:py-32">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
         The AI-ready toolchain that helps you{' '}
-        <span className="mr-2 ml-1 inline-flex">
-          <AvatarStack className="inline-flex translate-y-1" size={48}>
+        <span className="mr-2 ml-1 hidden sm:inline-flex">
+          <AvatarStack className='inline-flex translate-y-1' size={48}>
             {people.map(({ name, avatar }) => (
               <Image
+                alt=""
+                className="size-12 rounded-full"
+                height={48}
                 key={name}
                 src={avatar}
-                alt="GitHub avatar"
                 width={48}
-                height={48}
-                className="size-12 rounded-full"
               />
             ))}
           </AvatarStack>
         </span>
         write and{' '}
-        <AvatarStack className="inline-flex translate-y-1" size={48}>
+        <AvatarStack className="hidden translate-y-1 sm:inline-flex" size={48}>
           {providers.map(({ name, avatar }) => (
             <Image
+              alt=""
+              className="size-12 rounded-full"
+              height={48}
               key={name}
               src={avatar}
-              alt="AI provider"
               width={48}
-              height={48}
-              className="size-12 rounded-full"
             />
           ))}
         </AvatarStack>{' '}
@@ -52,7 +52,7 @@ export const Hero = () => (
       </h1>
       <p className="mt-0 mb-0 text-balance text-muted-foreground md:text-xl">
         Ultracite is a zero-config{' '}
-        <a href="https://biomejs.dev" className="underline">
+        <a className="underline" href="https://biomejs.dev">
           Biome
         </a>{' '}
         preset that provides a robust linting and formatting experience for your
@@ -62,8 +62,8 @@ export const Hero = () => (
         <Installer />
         <Button
           asChild
-          size="lg"
           className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs hover:text-background"
+          size="lg"
         >
           <Link href="/introduction">Read the docs</Link>
         </Button>
@@ -72,8 +72,8 @@ export const Hero = () => (
         <p className="text-muted-foreground text-sm">
           Used by over{' '}
           <a
-            href="https://github.com/haydenbleasel/ultracite/network/dependents"
             className="underline"
+            href="https://github.com/haydenbleasel/ultracite/network/dependents"
           >
             500 developers
           </a>

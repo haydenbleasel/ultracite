@@ -23,9 +23,9 @@ export const Tweets = () => (
         </p>
       </div>
     </div>
-    <div className="sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4!">
+    <div className="sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-transparent!">
       {tweets.map((tweet) => (
-        <Tweet key={tweet} id={tweet} />
+        <Tweet id={tweet} key={tweet} />
       ))}
     </div>
   </div>

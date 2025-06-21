@@ -1,6 +1,3 @@
-import { baseOptions } from '@/lib/layout.config';
-import { source } from '@/lib/source';
-import { getMDXComponents } from '@/mdx-components';
 import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import {
@@ -11,6 +8,9 @@ import {
 } from 'fumadocs-ui/page';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { baseOptions } from '@/lib/layout.config';
+import { source } from '@/lib/source';
+import { getMDXComponents } from '@/mdx-components';
 import Home from './(home)';
 
 type PageProps = {
@@ -25,10 +25,10 @@ const Page = async (props: PageProps) => {
     return (
       <DocsLayout
         {...baseOptions}
-        tree={source.pageTree}
-        sidebar={{ hidden: false, collapsible: false }}
+        containerProps={{ className: 'home' }}
         nav={{ ...baseOptions.nav, mode: 'top' }}
-        containerProps={{ className: 'landing-page' }}
+        sidebar={{ hidden: false, collapsible: false }}
+        tree={source.pageTree}
       >
         <Home />
       </DocsLayout>
@@ -44,14 +44,14 @@ const Page = async (props: PageProps) => {
   return (
     <DocsLayout
       {...baseOptions}
-      tree={source.pageTree}
-      sidebar={{ collapsible: false, tabs: false }}
       nav={{
         ...baseOptions.nav,
         mode: 'top',
       }}
+      sidebar={{ collapsible: false, tabs: false }}
+      tree={source.pageTree}
     >
-      <DocsPage toc={page.data.toc} full={page.data.full}>
+      <DocsPage full={page.data.full} toc={page.data.toc}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>
         <DocsBody>
