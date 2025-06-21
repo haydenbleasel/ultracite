@@ -1,6 +1,7 @@
 import { Tweet } from 'react-tweet';
 
 const tweets = [
+  '1882412853656977654',
   '1855005109572247585',
   '1863809657543799251',
   '1915946188635050258',
@@ -13,17 +14,15 @@ const tweets = [
 ];
 
 export const Tweets = () => (
-  <div className="grid gap-16 sm:grid-cols-3">
+  <div className="grid gap-8">
     <div>
-      <div className="sticky top-20">
-        <h2 className="font-semibold text-3xl">What the community is saying</h2>
-        <p className="mt-4 text-pretty text-muted-foreground sm:text-lg">
-          Here's what some of the most FORWARD-THINKING, 1000 IQ developers in
-          the React ecosystem have to say about Ultracite.
-        </p>
-      </div>
+      <h2 className="font-semibold text-4xl">What the community is saying</h2>
+      <p className="mt-4 text-balance text-muted-foreground sm:text-lg">
+        Here's what some of the most FORWARD-THINKING, 1000 IQ developers in the
+        React ecosystem have to say about Ultracite.
+      </p>
     </div>
-    <div className="sm:col-span-2 lg:columns-2 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-transparent!">
+    <div className='sm:col-span-2 lg:columns-2 xl:columns-3 [&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-transparent!'>
       {tweets.map((tweet) => (
         <Tweet id={tweet} key={tweet} />
       ))}
