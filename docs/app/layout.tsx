@@ -26,12 +26,12 @@ const mono = Geist_Mono({
 
 const Layout = ({ children }: LayoutProps) => (
   <html
-    lang="en"
     className={cn(
       'touch-manipulation font-sans antialiased',
       sans.variable,
       mono.variable
     )}
+    lang="en"
     suppressHydrationWarning
   >
     <body className="flex min-h-screen flex-col">

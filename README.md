@@ -15,4 +15,4 @@ Run the command below to install and initialize Ultracite in the current directo
 npx ultracite init
 ```
 
-Read the [docs](https://www.ultracite.dev/) for more information.
+Read the [docs](https://www.ultracite.ai/) for more information.
