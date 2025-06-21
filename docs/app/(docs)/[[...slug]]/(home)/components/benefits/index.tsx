@@ -9,42 +9,42 @@ import { TypeSafetyGraphic } from './type-safety';
 const benefits = [
   {
     children: PerformanceGraphic,
-    className: 'md:col-span-2',
+    className: 'lg:col-span-2',
     description:
       'Built in Rust for instant code analysis and processing, making on-save checks feel seamless without interrupting your workflow.',
     title: 'Subsecond linting and formatting',
   },
   {
     children: ConfigGraphic,
-    className: 'md:col-span-4',
+    className: 'lg:col-span-4',
     description:
       'Preconfigured rules optimized for Next.js, React and TypeScript projects with sensible defaults, while still allowing customization when needed.',
     title: 'Zero-config by design',
   },
   {
     children: IntuitiveGraphic,
-    className: 'md:col-span-3',
+    className: 'lg:col-span-3',
     description:
       'Automatically reformats code and fixes lint issues on save, with clear error reporting for issues that need manual attention.',
     title: 'Intuitive and robust',
   },
   {
     children: TypeSafetyGraphic,
-    className: 'md:col-span-3',
+    className: 'lg:col-span-3',
     description:
       'Enforces strict type checking and best practices by default, catching type errors and preventing unsafe code patterns.',
     title: 'Maximum type safety',
   },
   {
     children: MonoreposGraphic,
-    className: 'md:col-span-4',
+    className: 'lg:col-span-4',
     description:
       'Unified toolchain configuration across all packages and apps, eliminating thousands of lines of duplicate config files while maintaining consistency.',
     title: 'Designed for monorepos',
   },
   {
     children: AIGraphic,
-    className: 'md:col-span-2',
+    className: 'lg:col-span-2',
     description:
       'Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction.',
     title: 'Usable by humans and AI',
@@ -57,7 +57,7 @@ export const Benefits = () => (
       Finally &mdash; a ⚡ lightning-fast toolchain that ensures you, your team
       and your AI agents are writing code in harmony.
     </p>
-    <div className="isolate grid gap-4 md:grid-cols-6">
+    <div className="isolate grid gap-4 lg:grid-cols-6">
       {benefits.map((benefit) => (
         <div
           className={cn(

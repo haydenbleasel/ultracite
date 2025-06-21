@@ -4,17 +4,17 @@ import { people, providers } from '../avatars';
 
 const avatarClassNames = [
   'absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2', // 0° - top
-  'absolute top-3/4 left-[93.3%] -translate-x-1/2 -translate-y-1/2', // 120° - bottom right
-  'absolute top-3/4 left-[6.7%] -translate-x-1/2 -translate-y-1/2', // 240° - bottom left
+  'absolute top-[70%] left-[93.3%] -translate-x-1/2 -translate-y-1/2', // 120° - bottom right
+  'absolute top-[70%] left-[6.7%] -translate-x-1/2 -translate-y-1/2', // 240° - bottom left
 ];
 
 export const AIGraphic = () => (
-  <div className="-translate-y-1/2 relative flex aspect-square w-full items-center justify-center">
+  <div className='-translate-y-1/2 relative flex aspect-square h-[380px] items-center justify-center'>
     {/* Outer circle */}
-    <div className="absolute size-full rounded-full border border-dotted" />
+    <div className="absolute size-full rounded-full border border-muted-foreground opacity-40" />
 
     {/* Inner circle */}
-    <div className="absolute size-3/4 rounded-full border border-dotted" />
+    <div className="absolute size-[70%] rounded-full border border-muted-foreground opacity-40" />
 
     {/* Orbiting icons - Outer orbit */}
     <div
@@ -23,35 +23,35 @@ export const AIGraphic = () => (
     >
       {people.map(({ avatar, name }, index) => (
         <Image
-          key={name}
-          src={avatar}
           alt="GitHub avatar"
-          width={32}
-          height={32}
           className={cn(
             'size-8 rounded-full',
             avatarClassNames[index % avatarClassNames.length]
           )}
+          height={32}
+          key={name}
+          src={avatar}
+          width={32}
         />
       ))}
     </div>
 
     {/* Orbiting providers - Inner orbit (counter-rotating) */}
     <div
-      className="absolute size-3/4 animate-spin"
+      className="absolute size-[70%] animate-spin"
       style={{ animationDuration: '16s', animationDirection: 'reverse' }}
     >
       {providers.map(({ avatar, name }, index) => (
         <Image
-          key={name}
-          src={avatar}
           alt={`${name} logo`}
-          width={24}
-          height={24}
           className={cn(
             'size-8 rounded-full',
             avatarClassNames[index % avatarClassNames.length]
           )}
+          height={24}
+          key={name}
+          src={avatar}
+          width={24}
         />
       ))}
     </div>
