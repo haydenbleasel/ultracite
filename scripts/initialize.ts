@@ -303,7 +303,10 @@ const determinePackageManager = async () => {
   const packageManager = await select({
     initialValue: 'pnpm',
     message: 'Which package manager do you use?',
-    options,
+    options: options.map((option) => ({
+      label: option.label,
+      value: option.value,
+    })),
   });
 
   if (typeof packageManager !== 'string') {
