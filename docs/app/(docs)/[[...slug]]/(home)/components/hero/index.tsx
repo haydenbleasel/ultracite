@@ -22,7 +22,7 @@ export const Hero = () => (
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
         The AI-ready toolchain that helps you{' '}
         <span className="mr-2 ml-1 hidden sm:inline-flex">
-          <AvatarStack className='inline-flex translate-y-1' size={48}>
+          <AvatarStack className="inline-flex translate-y-1" size={48}>
             {people.map(({ name, avatar }) => (
               <Image
                 alt=""

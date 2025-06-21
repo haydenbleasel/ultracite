@@ -22,13 +22,13 @@ export const IntuitiveGraphic = () => {
   return (
     <div className="relative">
       <pre
-        ref={ref}
         className="grid rounded-lg border bg-gradient-to-b from-foreground/2 to-transparent p-4 leading-relaxed"
+        ref={ref}
       >
         <motion.code
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           className="text-muted-foreground"
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{
             duration: 0.3,
             delay: 0,
@@ -38,8 +38,8 @@ export const IntuitiveGraphic = () => {
           <span className="text-muted-foreground/50">$ </span>
           {isInView && (
             <motion.span
-              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
               transition={{
                 duration: 0.05,
                 delay: 0.05,
@@ -47,9 +47,9 @@ export const IntuitiveGraphic = () => {
             >
               {command.split('').map((char, charIndex) => (
                 <motion.span
-                  key={charIndex}
-                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  key={charIndex}
                   transition={{
                     duration: 0.05,
                     delay: charIndex * 0.05,
@@ -66,9 +66,9 @@ export const IntuitiveGraphic = () => {
         <div className="mt-4 grid gap-1">
           {lines.map((line, index) => (
             <motion.code
-              key={line}
-              initial={{ opacity: 0 }}
               animate={{ opacity: isInView ? 1 : 0 }}
+              initial={{ opacity: 0 }}
+              key={line}
               transition={{
                 duration: 0.05,
                 delay: firstLineDuration + index * 0.05,

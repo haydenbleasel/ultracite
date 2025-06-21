@@ -34,7 +34,6 @@ export const TypeSafetyGraphic = () => (
   <div className="-ml-48 fade-in-0 grid animate-in place-items-center opacity-100 duration-700 [grid-template-areas:'stack']">
     {defaultCards.map((card) => (
       <div
-        key={card.title}
         className={cn(
           '-skew-y-[8deg] relative flex h-36 w-[22rem] select-none flex-col justify-between rounded-xl border p-4 font-mono backdrop-blur-sm transition-all duration-700',
           "after:-right-1 after:absolute after:top-[-5%] after:h-[110%] after:w-[20rem] after:bg-gradient-to-l after:from-background after:to-transparent after:content-['']",
@@ -42,6 +41,7 @@ export const TypeSafetyGraphic = () => (
           '[&>*]:flex [&>*]:items-center [&>*]:gap-2',
           card.className
         )}
+        key={card.title}
       >
         <div>
           {card.icon}

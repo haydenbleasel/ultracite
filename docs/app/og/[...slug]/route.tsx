@@ -1,8 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { source } from '@/lib/source';
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
+import { source } from '@/lib/source';
 
 export const GET = async (
   _req: Request,
@@ -24,12 +24,12 @@ export const GET = async (
 
   return new ImageResponse(
     <div
-      tw="flex flex-col justify-between items-start w-full h-full bg-[#ff6900] p-12 text-white"
       style={{
         backgroundSize: '80px 80px',
         backgroundImage:
           'linear-gradient(to right, #FF781A 1px, transparent 1px), linear-gradient(to bottom, #FF781A 1px, transparent 1px)',
       }}
+      tw="flex flex-col justify-between items-start w-full h-full bg-[#ff6900] p-12 text-white"
     >
       <svg
         fill="none"

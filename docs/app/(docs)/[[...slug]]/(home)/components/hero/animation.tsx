@@ -81,7 +81,11 @@ const AnimatedBoxes = () => {
   return (
     <group ref={groupRef}>
       {boxes.map((box) => (
-        <Box key={box.id} position={box.position as [number, number, number]} rotation={box.rotation as [number, number, number]} />
+        <Box
+          key={box.id}
+          position={box.position as [number, number, number]}
+          rotation={box.rotation as [number, number, number]}
+        />
       ))}
     </group>
   );

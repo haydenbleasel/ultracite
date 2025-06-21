@@ -9,7 +9,7 @@ const avatarClassNames = [
 ];
 
 export const AIGraphic = () => (
-  <div className='-translate-y-1/2 relative flex aspect-square h-[380px] items-center justify-center'>
+  <div className="-translate-y-1/2 relative flex aspect-square h-[380px] items-center justify-center">
     {/* Outer circle */}
     <div className="absolute size-full rounded-full border border-muted-foreground opacity-40" />
 

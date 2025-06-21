@@ -29,14 +29,14 @@ export const Installer = () => {
       <div className="flex-1 truncate text-left font-mono">{command}</div>
       <div className="flex shrink-0 items-center gap-2">
         <Button
-          size="icon"
-          variant="ghost"
           aria-label="Copy"
-          onClick={handleCopy}
           className="cursor-pointer rounded-[6px] hover:bg-background/50"
           disabled={copied}
+          onClick={handleCopy}
+          size="icon"
+          variant="ghost"
         >
-          <Icon size={14} className="text-muted-foreground" />
+          <Icon className="text-muted-foreground" size={14} />
         </Button>
       </div>
     </div>
