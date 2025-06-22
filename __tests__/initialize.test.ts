@@ -198,4 +198,97 @@ describe('initialize command', () => {
     );
     expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
+
+  it('should initialize zed rules when selected', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect
+      .mockResolvedValueOnce(['zed'])
+      .mockResolvedValueOnce([]);
+
+    await initialize();
+
+    expect(mockExecSync).toHaveBeenCalledWith('touch .rules');
+    expect(mockExecSync).toHaveBeenCalledWith(
+      expect.stringContaining("echo '\\n\\n") && 
+      expect.stringContaining("' >> .rules")
+    );
+  });
+
+  it('should initialize precommit hooks when selected', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce(['precommit-hooks']);
+
+    await initialize();
+
+    // Should have run without errors - the actual function calls are mocked
+    expect(mockLog.success).toHaveBeenCalledWith('Successfully initialized Ultracite configuration!');
+  });
+
+  it('should initialize lint-staged when selected', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce(['lint-staged']);
+
+    await initialize();
+
+    // Should have run without errors - the actual function calls are mocked
+    expect(mockLog.success).toHaveBeenCalledWith('Successfully initialized Ultracite configuration!');
+  });
+
+  it('should test the upsert functions when files exist', async () => {
+    // Mock files existing so update paths are taken
+    mockExists.mockImplementation((path: string) => {
+      switch (path) {
+        case 'tsconfig.json':
+        case '.vscode/settings.json':
+        case 'biome.jsonc':
+        case '.husky/pre-commit':
+        case 'package.json':
+          return Promise.resolve(true);
+        default:
+          return Promise.resolve(false);
+      }
+    });
+    
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect.mockResolvedValue([]);
+
+    await initialize();
+
+    expect(mockLog.success).toHaveBeenCalledWith('Successfully initialized Ultracite configuration!');
+  });
+
+  it('should test the upsert functions when files do not exist', async () => {
+    // Mock files not existing so create paths are taken
+    mockExists.mockResolvedValue(false);
+    
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect.mockResolvedValue([]);
+
+    await initialize();
+
+    expect(mockLog.success).toHaveBeenCalledWith('Successfully initialized Ultracite configuration!');
+  });
+
+  it('should test zed rules when .rules file exists', async () => {
+    mockExists.mockImplementation((path: string) => {
+      return Promise.resolve(path === '.rules');
+    });
+    
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect
+      .mockResolvedValueOnce(['zed'])
+      .mockResolvedValueOnce([]);
+
+    await initialize();
+
+    // Should not create .rules file since it exists
+    expect(mockExecSync).not.toHaveBeenCalledWith('touch .rules');
+  });
 });

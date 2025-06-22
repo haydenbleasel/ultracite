@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the command modules
 const mockFormat = vi.fn();
@@ -18,6 +18,9 @@ vi.mock('../scripts/lint', () => ({
   lint: mockLint,
 }));
 
+// Mock process.argv to control command line arguments
+const originalArgv = process.argv;
+
 describe('CLI index', () => {
   let program: Command;
 
@@ -29,6 +32,14 @@ describe('CLI index', () => {
     program
       .name('Ultracite')
       .description('Ship code faster and with more confidence.');
+    
+    // Reset process.argv
+    process.argv = [...originalArgv];
+  });
+
+  afterEach(() => {
+    // Restore original process.argv
+    process.argv = originalArgv;
   });
 
   it('should verify the command line interface is properly configured', () => {
@@ -97,5 +108,13 @@ describe('CLI index', () => {
     // Test that the commands have the expected descriptions
     expect(lintCommand?.description()).toBe('Run Biome linter without fixing files');
     expect(formatCommand?.description()).toBe('Run Biome linter and fixes files');
+  });
+
+  it('should import and execute the CLI setup', async () => {
+    // Test that the CLI module can be imported without errors
+    const indexModule = await import('../scripts/index');
+    
+    // The import should not throw any errors
+    expect(indexModule).toBeDefined();
   });
 }); 

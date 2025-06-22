@@ -256,5 +256,61 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['lint-staged']).toBeDefined();
       expect(parsedContent['lint-staged']['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']).toEqual(['npx ultracite format']);
     });
+
+    it('should throw error when no config file exists for update', async () => {
+      mockExists.mockResolvedValue(false); // All files don't exist
+
+      await expect(lintStaged.update()).rejects.toThrow();
+    });
+
+    it('should handle .lintstagedrc file (no extension)', async () => {
+      const existingConfig = {
+        '*.js': ['eslint --fix'],
+      };
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(false) // lint-staged.config.cjs
+        .mockResolvedValueOnce(false) // lint-staged.config.mjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.yaml
+        .mockResolvedValueOnce(false) // .lintstagedrc.yml
+        .mockResolvedValueOnce(true); // .lintstagedrc
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+
+      await lintStaged.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('.lintstagedrc', 'utf-8');
+    });
+
+    it('should handle processing complex YAML with inline arrays', async () => {
+      const yamlContent = `'*.js': ['eslint --fix', 'prettier --write']
+'*.css':
+  - 'prettier --write'`;
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(false) // lint-staged.config.cjs
+        .mockResolvedValueOnce(false) // lint-staged.config.mjs
+        .mockResolvedValueOnce(true); // .lintstagedrc.yaml
+
+      mockReadFile.mockResolvedValue(yamlContent);
+
+      await lintStaged.update();
+
+      const writtenContent = mockWriteFile.mock.calls[0][1] as string;
+      expect(writtenContent).toContain('*.js:');
+      expect(writtenContent).toContain('*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:');
+    });
   });
 }); 

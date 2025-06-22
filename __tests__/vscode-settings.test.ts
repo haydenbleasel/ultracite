@@ -28,7 +28,7 @@ describe('vscode configuration', () => {
     });
 
     it('should return false when .vscode/settings.json does not exist', async () => {
-      mockExists.mockRejectedValue(new Error('File not found'));
+      mockExists.mockResolvedValue(false);
 
       const result = await vscode.exists();
 

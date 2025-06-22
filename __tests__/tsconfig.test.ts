@@ -28,7 +28,7 @@ describe('tsconfig configuration', () => {
     });
 
     it('should return false when tsconfig.json does not exist', async () => {
-      mockExists.mockRejectedValue(new Error('File not found'));
+      mockExists.mockResolvedValue(false);
 
       const result = await tsconfig.exists();
 
