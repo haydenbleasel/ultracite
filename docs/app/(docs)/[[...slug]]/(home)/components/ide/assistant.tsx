@@ -2,9 +2,10 @@ import { WrenchIcon } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
 export const Assistant = () => (
-  <div className='relative isolate flex h-full flex-col items-start gap-4 overflow-hidden p-4 text-muted-foreground text-xs'>
+  <div className="relative isolate flex h-full flex-col items-start gap-4 overflow-hidden p-4 text-muted-foreground text-xs">
     <Textarea
       className="h-auto w-full resize-none border-none px-4 pt-4 pb-8 text-xs md:text-xs"
+      readOnly
       value="Generate me a new UserCard component."
     />
     <p>Sure! I'll generate a new UserCard component for you.</p>
