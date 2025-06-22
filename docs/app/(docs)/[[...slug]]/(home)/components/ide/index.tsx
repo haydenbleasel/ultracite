@@ -48,7 +48,7 @@ export const IDE = () => (
       </div>
       <div className='hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-foreground/5 md:grid'>
         <Sidebar />
-        <div className="grid grid-rows-[1fr_150px] divide-y">
+        <div className="grid grid-rows-[2fr_1fr] divide-y overflow-hidden">
           <Editor />
           <Problems />
         </div>
