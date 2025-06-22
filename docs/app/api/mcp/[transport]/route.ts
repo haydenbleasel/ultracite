@@ -1,12 +1,7 @@
 import { track } from '@vercel/analytics/server';
 import { createMcpHandler } from '@vercel/mcp-adapter';
+import { env } from '@/env';
 import { rules } from '@/lib/rules';
-
-const REDIS_URL = process.env.REDIS_URL;
-
-if (!REDIS_URL) {
-  throw new Error('REDIS_URL is not set');
-}
 
 const handler = createMcpHandler(
   (server) => {
@@ -29,7 +24,7 @@ const handler = createMcpHandler(
     // Optional server options
   },
   {
-    redisUrl: REDIS_URL,
+    redisUrl: env.REDIS_URL,
     streamableHttpEndpoint: '/api/mcp/http',
     sseEndpoint: '/api/mcp/sse',
     sseMessageEndpoint: '/api/mcp/message',
