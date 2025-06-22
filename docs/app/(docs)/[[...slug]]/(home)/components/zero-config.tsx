@@ -27,11 +27,11 @@ const ZeroConfig = async () => {
       <div className="relative mx-auto w-full max-w-2xl">
         <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground">
           <div className="flex items-center gap-3">
-            <FileIcon className="size-5" />
-            <p className="font-medium text-lg">biome.jsonc</p>
+            <FileIcon className="size-4" />
+            <p className='font-medium'>biome.jsonc</p>
           </div>
           <div
-            className='text-xs leading-relaxed sm:text-sm md:text-base lg:text-lg xl:text-xl [&_pre]:bg-transparent!'
+            className="text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"
             // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
             dangerouslySetInnerHTML={{ __html: highlightedCode }}
           />
