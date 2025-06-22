@@ -1,5 +1,5 @@
 import { select } from '@clack/prompts';
-import { exists } from './utils';
+import { exists, isMonorepo } from './utils';
 
 const options = [
   {
@@ -7,18 +7,21 @@ const options = [
     label: 'pnpm',
     value: 'pnpm add',
     lockfile: 'pnpm-lock.yaml',
+    monorepoSuffix: '-w'
   },
-  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb' },
-  { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
-  { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
+  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '-w' },
+  { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock', monorepoSuffix: '-W' },
+  { label: 'npm', value: 'npm install', lockfile: 'package-lock.json', monorepoSuffix: '--workspace .' },
 ];
 
 export const packageManager = {
   get: async () => {
+    const monorepo = await isMonorepo();
+
     for (const option of options) {
       // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(option.lockfile)) {
-        return option.value;
+        return monorepo ? `${option.value} ${option.monorepoSuffix}` : option.value;
       }
     }
 
@@ -26,12 +29,14 @@ export const packageManager = {
   },
 
   select: async () => {
+    const monorepo = await isMonorepo();
+  
     const value = await select({
       initialValue: 'pnpm',
       message: 'Which package manager do you use?',
       options: options.map((option) => ({
         label: option.label,
-        value: option.value,
+        value: monorepo ? `${option.value} ${option.monorepoSuffix}` : option.value,
       })),
     });
 
