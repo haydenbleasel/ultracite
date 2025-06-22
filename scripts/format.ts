@@ -6,7 +6,10 @@ export const format = (files: string[]) => {
     const target = files.length > 0 ? files.join(' ') : './';
     execSync(`npx biome check --write ${target}`, { stdio: 'inherit' });
   } catch (error) {
-    console.error('Failed to run Ultracite:', error.message);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    
+    // biome-ignore lint/suspicious/noConsole: "We want to log the error to the console"
+    console.error('Failed to run Ultracite:', message);
     process.exit(1);
   }
 };

@@ -6,9 +6,7 @@ const huskyCommand = 'npx ultracite format';
 const path = '.husky/pre-commit';
 
 export const husky = {
-  exists: async () => {
-    return await exists(path);
-  },
+  exists: () => exists(path),
   install: (packageManagerAdd: string) => {
     execSync(`${packageManagerAdd} -D husky`);
   },

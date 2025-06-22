@@ -21,12 +21,8 @@ const defaultConfig = {
 const path = '.vscode/settings.json';
 
 export const vscode = {
-  exists: async () => {
-    return await exists(path);
-  },
-  create: async () => {
-    await writeFile(path, JSON.stringify(defaultConfig, null, 2));
-  },
+  exists: () => exists(path),
+  create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
     const existingConfig = JSON.parse(existingContents);
