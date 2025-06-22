@@ -19,18 +19,19 @@ const ZeroConfig = async () => {
           Zero-config by design
         </h2>
         <p className="text-muted-foreground text-xl">
-          Preconfigured rules optimized for Next.js, React and TypeScript projects
-          with sensible defaults, while still allowing customization when needed.
+          Preconfigured rules optimized for Next.js, React and TypeScript
+          projects with sensible defaults, while still allowing customization
+          when needed.
         </p>
       </div>
       <div className="relative mx-auto w-full max-w-2xl">
-        <div className='grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground'>
+        <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground">
           <div className="flex items-center gap-3">
             <FileIcon className="size-5" />
             <p className="font-medium text-lg">biome.jsonc</p>
           </div>
           <div
-            className="text-xl leading-relaxed [&_pre]:bg-transparent!"
+            className='text-xs leading-relaxed sm:text-sm md:text-base lg:text-lg xl:text-xl [&_pre]:bg-transparent!'
             // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
             dangerouslySetInnerHTML={{ __html: highlightedCode }}
           />
