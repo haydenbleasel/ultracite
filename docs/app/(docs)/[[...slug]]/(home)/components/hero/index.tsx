@@ -20,7 +20,7 @@ export const Hero = () => (
     </div>
     <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center sm:py-32">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
-        The AI-ready toolchain that helps you{' '}
+        The AI-ready formatter that helps you{' '}
         <span className="mr-2 ml-1 hidden sm:inline-flex">
           <AvatarStack className="inline-flex translate-y-1" size={48}>
             {people.map(({ name, avatar }) => (

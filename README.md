@@ -1,6 +1,6 @@
 # Ultracite
 
-**The AI-ready toolchain that helps you write and generate code _faster_.**
+**The AI-ready formatter that helps you write and generate code _faster_.**
 
 Ultracite is a zero-config [Biome](https://biomejs.dev) preset that provides a robust linting and formatting experience for your team and your AI integrations. Built in Rust for lightning-fast performance, it automatically formats your code and fixes lint issues on save without interrupting your workflow.
 
@@ -67,7 +67,7 @@ npx ultracite lint
 
 ## Why Ultracite?
 
-Finally — a lightning-fast toolchain that ensures you, your team, and your AI agents are writing code in harmony. Stop spending time on code style debates and formatting fixes. Let Ultracite handle the mundane so you can focus on building and shipping.
+Finally — a lightning-fast formatter that ensures you, your team, and your AI agents are writing code in harmony. Stop spending time on code style debates and formatting fixes. Let Ultracite handle the mundane so you can focus on building and shipping.
 
 **Used by over [500 developers](https://github.com/haydenbleasel/ultracite/network/dependents)**
 
