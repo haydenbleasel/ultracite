@@ -3,9 +3,12 @@
 import dynamic from 'next/dynamic';
 import { Installer } from '../installer';
 
-const PixelCanvas = dynamic(() => import('./pixel-canvas').then((mod) => mod.PixelCanvas), {
-  ssr: false,
-});
+const PixelCanvas = dynamic(
+  () => import('./pixel-canvas').then((mod) => mod.PixelCanvas),
+  {
+    ssr: false,
+  }
+);
 
 export const CallToAction = () => (
   <div className="relative grid gap-6 overflow-hidden rounded-3xl border bg-foreground/5 px-8 py-8 sm:py-16 sm:text-center md:py-24 lg:py-32">

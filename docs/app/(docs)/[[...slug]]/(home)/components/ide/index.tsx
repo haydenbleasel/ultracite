@@ -85,7 +85,7 @@ export const IDE = () => (
         </div>
       </div>
     </div>
-    <div className='flex items-center justify-center gap-4'>
+    <div className="flex items-center justify-center gap-4">
       <p className="text-muted-foreground text-sm">
         Works with all your favourite IDEs.
       </p>

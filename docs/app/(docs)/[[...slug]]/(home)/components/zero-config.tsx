@@ -28,7 +28,7 @@ const ZeroConfig = async () => {
         <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground">
           <div className="flex items-center gap-3">
             <FileIcon className="size-4" />
-            <p className='font-medium'>biome.jsonc</p>
+            <p className="font-medium">biome.jsonc</p>
           </div>
           <div
             className="text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"

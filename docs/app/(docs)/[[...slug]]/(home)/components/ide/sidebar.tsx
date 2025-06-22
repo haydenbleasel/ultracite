@@ -1,4 +1,9 @@
-import { SiCss, SiJson, SiReact, SiTypescript } from '@icons-pack/react-simple-icons';
+import {
+  SiCss,
+  SiJson,
+  SiReact,
+  SiTypescript,
+} from '@icons-pack/react-simple-icons';
 import { FolderIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -37,7 +42,7 @@ const FileItem = ({
   <div
     className={cn('flex items-center gap-2 rounded-md px-2 py-1', className)}
   >
-    <Icon className='size-3 shrink-0' />
+    <Icon className="size-3 shrink-0" />
     <p className="font-medium">{name}</p>
   </div>
 );

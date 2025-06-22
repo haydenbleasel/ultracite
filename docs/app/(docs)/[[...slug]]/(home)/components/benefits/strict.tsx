@@ -24,7 +24,10 @@ export const StrictGraphic = () => {
 
   return (
     <div className="relative">
-      <div className='grid gap-2 font-mono text-muted-foreground text-xs' ref={ref}>
+      <div
+        className="grid gap-2 font-mono text-muted-foreground text-xs"
+        ref={ref}
+      >
         {lines.map((line, index) => (
           <motion.div
             animate={{ opacity: isInView ? 1 : 0 }}

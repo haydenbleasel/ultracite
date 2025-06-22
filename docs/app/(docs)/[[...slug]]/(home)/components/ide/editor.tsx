@@ -28,7 +28,7 @@ export const Editor = async () => {
   return (
     // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
     <div
-      className='overflow-auto p-4 text-sm [&_pre]:bg-transparent!'
+      className="overflow-auto p-4 text-sm [&_pre]:bg-transparent!"
       dangerouslySetInnerHTML={{ __html: code }}
     />
   );
