@@ -1,3 +1,15 @@
+# v5.0.1 (Sun Jun 22 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Add support for installing in monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.0 (Sun Jun 22 2025)
 
 #### 💥 Breaking Change
