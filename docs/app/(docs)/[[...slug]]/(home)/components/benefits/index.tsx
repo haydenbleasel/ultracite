@@ -46,7 +46,7 @@ const benefits = [
     children: StrictGraphic,
     className: 'lg:col-span-2',
     description:
-      'Strict configuration and opinionated rules to ensure consistent code, eliminating debates over formatting and reducing code review friction.',
+      'Strict configuration and opinionated rules to ensure consistent code, eliminating formatting debates and streamlining code review.',
     title: 'Highly opinionated',
   },
 ];
