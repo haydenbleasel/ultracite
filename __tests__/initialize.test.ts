@@ -153,7 +153,7 @@ describe('initialize command', () => {
       recursive: true,
     });
     expect(mockWriteFile).toHaveBeenCalledWith(
-      './cursor/rules/ultracite.mdc',
+      './.cursor/rules/ultracite.mdc',
       expect.any(String)
     );
   });
