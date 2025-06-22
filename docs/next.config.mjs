@@ -6,6 +6,10 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
 
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
+
   // biome-ignore lint/suspicious/useAwait: "rewrites is async"
   rewrites: async () => {
     return [
