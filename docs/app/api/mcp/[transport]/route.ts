@@ -1,3 +1,4 @@
+import { track } from '@vercel/analytics/server';
 import { createMcpHandler } from '@vercel/mcp-adapter';
 import { rules } from '@/lib/rules';
 
@@ -13,7 +14,9 @@ const handler = createMcpHandler(
       'getRules',
       'Provides a list of all Ultracite rules.',
       {},
-      () => {
+      async () => {
+        await track('MCP: Get rules');
+
         return {
           content: [
             { type: 'text', text: rules.map((rule) => `- ${rule}`).join('\n') },
