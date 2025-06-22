@@ -8,7 +8,7 @@ const defaultConfig = {
   },
 };
 
-const path = 'tsconfig.json';
+const path = './tsconfig.json';
 
 export const tsconfig = {
   exists: () => exists(path),

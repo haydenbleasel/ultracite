@@ -10,17 +10,17 @@ const lintStagedConfig = {
 
 // Check for existing configuration files in order of preference
 const configFiles = [
-  'package.json',
-  '.lintstagedrc.json',
-  '.lintstagedrc.js',
-  '.lintstagedrc.cjs',
-  '.lintstagedrc.mjs',
-  'lint-staged.config.js',
-  'lint-staged.config.cjs',
-  'lint-staged.config.mjs',
-  '.lintstagedrc.yaml',
-  '.lintstagedrc.yml',
-  '.lintstagedrc',
+  './package.json',
+  './.lintstagedrc.json',
+  './.lintstagedrc.js',
+  './.lintstagedrc.cjs',
+  './.lintstagedrc.mjs',
+  './lint-staged.config.js',
+  './lint-staged.config.cjs',
+  './lint-staged.config.mjs',
+  './.lintstagedrc.yaml',
+  './.lintstagedrc.yml',
+  './.lintstagedrc',
 ];
 
 // Helper function to process YAML lines

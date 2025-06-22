@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { rulesFile } from '../docs/lib/rules';
 import { exists } from './utils';
 
-const path = '.rules';
+const path = './.rules';
 
 export const zed = {
   exists: () => exists(path),

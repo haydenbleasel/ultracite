@@ -7,7 +7,7 @@ const defaultConfig = {
   extends: ['ultracite'],
 };
 
-const path = 'biome.jsonc';
+const path = './biome.jsonc';
 
 export const biome = {
   exists: () => exists(path),

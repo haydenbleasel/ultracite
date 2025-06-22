@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { rulesFile } from '../docs/lib/rules';
 import { exists } from './utils';
 
-const path = '.cursor/rules/ultracite.mdc';
+const path = './cursor/rules/ultracite.mdc';
 
 export const cursor = {
   exists: () => exists(path),

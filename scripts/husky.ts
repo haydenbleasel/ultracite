@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { exists } from './utils';
 
 const huskyCommand = 'npx ultracite format';
-const path = '.husky/pre-commit';
+const path = './.husky/pre-commit';
 
 export const husky = {
   exists: () => exists(path),

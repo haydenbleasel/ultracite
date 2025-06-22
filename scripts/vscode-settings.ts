@@ -18,7 +18,7 @@ const defaultConfig = {
   },
 };
 
-const path = '.vscode/settings.json';
+const path = './.vscode/settings.json';
 
 export const vscode = {
   exists: () => exists(path),
