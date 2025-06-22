@@ -164,7 +164,9 @@ export const initialize = async () => {
   try {
     let packageManagerAdd = await packageManager.get();
 
-    if (!packageManagerAdd) {
+    if (packageManagerAdd) {
+      log.info(`Detected lockfile, using ${packageManagerAdd}`);
+    } else {
       packageManagerAdd = await packageManager.select();
     }
 

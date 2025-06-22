@@ -45,7 +45,7 @@ describe('initialize command', () => {
 
     expect(mockIntro).toHaveBeenCalled();
     expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected pnpm lockfile, using pnpm add'
+      'Detected lockfile, using pnpm add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
       'pnpm add -D --save-exact ultracite @biomejs/biome@2.0.0'
@@ -61,7 +61,7 @@ describe('initialize command', () => {
     await initialize();
 
     expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected yarn lockfile, using yarn add'
+      'Detected lockfile, using yarn add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
       'yarn add -D --save-exact ultracite @biomejs/biome@2.0.0'
@@ -77,7 +77,7 @@ describe('initialize command', () => {
     await initialize();
 
     expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected npm lockfile, using npm install'
+      'Detected lockfile, using npm install'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
       'npm install -D --save-exact ultracite @biomejs/biome@2.0.0'
@@ -93,7 +93,7 @@ describe('initialize command', () => {
     await initialize();
 
     expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected bun lockfile, using bun add'
+      'Detected lockfile, using bun add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
       'bun add -D --save-exact ultracite @biomejs/biome@2.0.0'
