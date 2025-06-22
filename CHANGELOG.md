@@ -1,3 +1,20 @@
+# v5.0.0 (Sun Jun 22 2025)
+
+#### 💥 Breaking Change
+
+- Ultracite v5 [#162](https://github.com/haydenbleasel/ultracite/pull/162) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v4.2.13 (Wed Jun 18 2025)
 
 #### ⚠️ Pushed to `main`
