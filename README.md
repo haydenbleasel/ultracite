@@ -73,20 +73,16 @@ Used by over [500 developers](https://github.com/haydenbleasel/ultracite/network
 
 ## Tests
 
-Tests are written in [Vitest](https://vitest.dev). Run with:
+Tests are written in [Vitest](https://vitest.dev). You can run them with:
 
 ```bash
-# Run all tests
-npm test
+pnpm test
+```
 
-# Run CLI tests only
-npm run test:cli
+Check the coverage of the CLI with:
 
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
+```bash
+pnpm test:coverage
 ```
 
 ---
