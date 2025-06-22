@@ -16,7 +16,17 @@ export const biome = {
     const existingContents = await readFile(path, 'utf-8');
     const existingConfig = JSON.parse(existingContents);
     
-    const newConfig = deepmerge(existingConfig, defaultConfig);
+    // Check if ultracite is already in the extends array
+    const existingExtends = existingConfig.extends || [];
+    if (!existingExtends.includes('ultracite')) {
+      existingConfig.extends = [...existingExtends, 'ultracite'];
+    }
+    
+    // Merge other properties from defaultConfig
+    const configToMerge = {
+      $schema: defaultConfig.$schema,
+    };
+    const newConfig = deepmerge(existingConfig, configToMerge);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
   },
