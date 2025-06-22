@@ -1,3 +1,16 @@
+# v5.0.6 (Sun Jun 22 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Run Ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.5 (Sun Jun 22 2025)
 
 #### ⚠️ Pushed to `main`
