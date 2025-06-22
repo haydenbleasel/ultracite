@@ -1,7 +1,15 @@
+import Image from 'next/image';
+import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
 import { Assistant } from './assistant';
 import { Editor } from './editor';
+import Cursor from './logos/cursor.jpg';
+import VSCode from './logos/vscode.jpg';
+import Windsurf from './logos/windsurf.jpg';
+import Zed from './logos/zed.jpg';
 import { Problems } from './problems';
 import { Sidebar } from './sidebar';
+
+const logos = [VSCode, Cursor, Windsurf, Zed];
 
 export const IDE = () => (
   <div className="grid gap-8">
@@ -46,7 +54,7 @@ export const IDE = () => (
           </p>
         </div>
       </div>
-      <div className='hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-foreground/5 md:grid'>
+      <div className="hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-foreground/5 md:grid">
         <Sidebar />
         <div className="grid grid-rows-[2fr_1fr] divide-y overflow-hidden">
           <Editor />
@@ -76,6 +84,23 @@ export const IDE = () => (
           </p>
         </div>
       </div>
+    </div>
+    <div className='flex items-center justify-center gap-4'>
+      <p className="text-muted-foreground text-sm">
+        Works with all your favourite IDEs.
+      </p>
+      <AvatarStack className="inline-flex" size={32}>
+        {logos.map((logo) => (
+          <Image
+            alt=""
+            className="size-8 overflow-hidden rounded-full border"
+            height={32}
+            key={logo.src}
+            src={logo}
+            width={32}
+          />
+        ))}
+      </AvatarStack>
     </div>
   </div>
 );
