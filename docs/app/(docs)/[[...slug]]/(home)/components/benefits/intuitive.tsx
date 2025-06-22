@@ -3,18 +3,18 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 
+const command = 'npx ultracite format';
+const lines = [
+  'Diagnostics not shown: 35.',
+  'Checked 1740 files in 214ms.',
+  'Found 2 errors.',
+  'Found 53 warnings.',
+  'Done in 312ms.',
+];
+
 export const IntuitiveGraphic = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
-  const command = 'npx ultracite format';
-  const lines = [
-    'Diagnostics not shown: 35.',
-    'Checked 1740 files in 214ms.',
-    'Found 2 errors.',
-    'Found 53 warnings.',
-    'Done in 312ms.',
-  ];
 
   // Calculate the total duration for the first line typing animation
   const firstLineDuration = lines[0].length * 0.05;

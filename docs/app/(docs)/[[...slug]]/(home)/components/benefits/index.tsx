@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
-import { AIGraphic } from './ai';
 import { IntegrationsGraphic } from './integrations';
 import { IntuitiveGraphic } from './intuitive';
 import { MonoreposGraphic } from './monorepos';
 import { PerformanceGraphic } from './performance';
+import { StrictGraphic } from './strict';
 import { TypeSafetyGraphic } from './type-safety';
 
 const benefits = [
@@ -43,11 +43,11 @@ const benefits = [
     title: 'Designed for monorepos',
   },
   {
-    children: AIGraphic,
+    children: StrictGraphic,
     className: 'lg:col-span-2',
     description:
-      'Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction.',
-    title: 'Usable by humans and AI',
+      'Strict configuration and opinionated rules to ensure consistent code, eliminating debates over formatting and reducing code review friction.',
+    title: 'Highly opinionated',
   },
 ];
 

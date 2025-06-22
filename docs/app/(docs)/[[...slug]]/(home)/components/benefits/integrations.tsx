@@ -3,20 +3,20 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 
+const lines = [
+  '✔ Backed up original state in git stash(5bda95f)',
+  '❯ Running tasks for staged files...',
+  '  ❯ packages / frontend /.lintstagedrc.json — 1 file',
+  '    ↓ *.js — no files[SKIPPED]',
+  '    ❯ *.{ ts, tsx, js, jsx } — 1 file',
+  '      ⠹ npx ultracite format',
+  '◼ Applying modifications from tasks...',
+  '◼ Cleaning up temporary files...',
+];
+
 export const IntegrationsGraphic = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
-  const lines = [
-    '✔ Backed up original state in git stash(5bda95f)',
-    '❯ Running tasks for staged files...',
-    '  ❯ packages / frontend /.lintstagedrc.json — 1 file',
-    '    ↓ *.js — no files[SKIPPED]',
-    '    ❯ *.{ ts, tsx, js, jsx } — 1 file',
-    '      ⠹ npx ultracite format',
-    '◼ Applying modifications from tasks...',
-    '◼ Cleaning up temporary files...',
-  ];
 
   return (
     <div className="relative">
