@@ -1,3 +1,15 @@
+# v5.0.5 (Sun Jun 22 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Misc design fixes ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.4 (Sun Jun 22 2025)
 
 #### ⚠️ Pushed to `main`
