@@ -1,11 +1,11 @@
 import { execSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { rulesFile } from '../docs/lib/rules';
 import { biome } from './biome';
 import { husky } from './husky';
 import { lintStaged } from './lint-staged';
+import { packageManager } from './package-manager';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
 import { exists } from './utils';
@@ -158,49 +158,15 @@ const initializeZedRules = async () => {
   s.stop('Zed rules initialized.');
 };
 
-const determinePackageManager = async () => {
-  const options = [
-    {
-      hint: 'Recommended',
-      label: 'pnpm',
-      value: 'pnpm add',
-      lockfile: 'pnpm-lock.yaml',
-    },
-    { label: 'bun', value: 'bun add', lockfile: 'bun.lockb' },
-    { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock' },
-    { label: 'npm', value: 'npm install', lockfile: 'package-lock.json' },
-  ];
-
-  for (const option of options) {
-    // biome-ignore lint/nursery/noAwaitInLoop: "don't do what donny don't does"
-    if (await exists(option.lockfile)) {
-      log.info(`Detected ${option.label} lockfile, using ${option.value}`);
-
-      return option.value;
-    }
-  }
-
-  const packageManager = await select({
-    initialValue: 'pnpm',
-    message: 'Which package manager do you use?',
-    options: options.map((option) => ({
-      label: option.label,
-      value: option.value,
-    })),
-  });
-
-  if (typeof packageManager !== 'string') {
-    throw new Error('No package manager selected');
-  }
-
-  return packageManager;
-};
-
 export const initialize = async () => {
   intro(title);
 
   try {
-    const packageManager = await determinePackageManager();
+    let packageManagerAdd = await packageManager.get();
+
+    if (!packageManagerAdd) {
+      packageManagerAdd = await packageManager.select();
+    }
 
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
@@ -222,7 +188,7 @@ export const initialize = async () => {
       required: false,
     });
 
-    installDependencies(packageManager);
+    installDependencies(packageManagerAdd);
     await upsertTsConfig();
     await upsertVSCodeSettings();
     await upsertBiomeConfig();
@@ -244,10 +210,10 @@ export const initialize = async () => {
 
     if (Array.isArray(extraFeatures)) {
       if (extraFeatures.includes('precommit-hooks')) {
-        await initializePrecommitHook(packageManager);
+        await initializePrecommitHook(packageManagerAdd);
       }
       if (extraFeatures.includes('lint-staged')) {
-        await initializeLintStaged(packageManager);
+        await initializeLintStaged(packageManagerAdd);
       }
     }
 
