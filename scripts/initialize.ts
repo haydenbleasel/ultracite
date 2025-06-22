@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 import process from 'node:process';
-import { intro, log, multiselect, select, spinner } from '@clack/prompts';
+import { intro, log, multiselect, spinner } from '@clack/prompts';
 import { rulesFile } from '../docs/lib/rules';
 import { biome } from './biome';
 import { husky } from './husky';

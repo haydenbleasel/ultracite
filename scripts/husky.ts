@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { exists } from './utils';
 
 const huskyCommand = 'npx ultracite format';
@@ -11,6 +11,7 @@ export const husky = {
     execSync(`${packageManagerAdd} -D husky`);
   },
   create: async () => {
+    await mkdir('.husky', { recursive: true });
     await writeFile(path, huskyCommand);
   },
   update: async () => {
