@@ -75,9 +75,9 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
 
   if (!params.slug) {
     return {
-      title: 'Ultracite',
+      title: 'The AI-ready toolchain that helps you write and generate code faster. | Ultracite',
       description:
-        'Ultracite is a fast, intuitive and simple development tool that brings automated code formatting and linting to your JavaScript / TypeScript projects.',
+        'Ultracite is a zero- config Biome preset that provides a robust linting and formatting experience for your team and your AI integrations.',
     };
   }
 
