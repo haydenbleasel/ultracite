@@ -71,6 +71,24 @@ Finally — a lightning-fast toolchain that ensures you, your team, and your AI 
 
 **Used by over [500 developers](https://github.com/haydenbleasel/ultracite/network/dependents)**
 
+## Tests
+
+Tests are written in [Vitest](https://vitest.dev). Run with:
+
+```bash
+# Run all tests
+npm test
+
+# Run CLI tests only
+npm run test:cli
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
 ---
 
 Read the [docs](https://www.ultracite.ai/) for detailed setup instructions, configuration options, and examples.

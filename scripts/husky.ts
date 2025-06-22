@@ -7,12 +7,7 @@ const path = '.husky/pre-commit';
 
 export const husky = {
   exists: async () => {
-    try {
-      await exists(path);
-      return true;
-    } catch {
-      return false;
-    }
+    return await exists(path);
   },
   install: (packageManagerAdd: string) => {
     execSync(`${packageManagerAdd} -D husky`);

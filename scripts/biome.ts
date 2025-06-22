@@ -11,12 +11,7 @@ const path = 'biome.jsonc';
 
 export const biome = {
   exists: async () => {
-    try {
-      await exists(path);
-      return true;
-    } catch {
-      return false;
-    }
+    return await exists(path);
   },
   create: async () => {
     await writeFile(path, JSON.stringify(defaultConfig, null, 2));
