@@ -28,7 +28,7 @@ describe('zed configuration', () => {
       const result = await zed.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.rules');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
     });
 
     it('should return false when .rules does not exist', async () => {
@@ -37,7 +37,7 @@ describe('zed configuration', () => {
       const result = await zed.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('.rules');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
     });
   });
 
@@ -46,7 +46,7 @@ describe('zed configuration', () => {
       await zed.create();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.rules',
+        './.rules',
         'mock rules content'
       );
     });
@@ -58,10 +58,10 @@ describe('zed configuration', () => {
 
       await zed.update();
 
-      expect(mockExists).toHaveBeenCalledWith('.rules');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
       expect(mockReadFile).not.toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.rules',
+        './.rules',
         'mock rules content'
       );
     });
@@ -73,10 +73,10 @@ describe('zed configuration', () => {
 
       await zed.update();
 
-      expect(mockExists).toHaveBeenCalledWith('.rules');
-      expect(mockReadFile).toHaveBeenCalledWith('.rules', 'utf-8');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
+      expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.rules',
+        './.rules',
         `${existingContent}\n\nmock rules content`
       );
     });
@@ -88,8 +88,8 @@ describe('zed configuration', () => {
 
       await zed.update();
 
-      expect(mockExists).toHaveBeenCalledWith('.rules');
-      expect(mockReadFile).toHaveBeenCalledWith('.rules', 'utf-8');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
+      expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
@@ -98,15 +98,15 @@ describe('zed configuration', () => {
       mockReadFile.mockRejectedValue(new Error('Permission denied'));
 
       await expect(zed.update()).rejects.toThrow('Permission denied');
-      expect(mockExists).toHaveBeenCalledWith('.rules');
-      expect(mockReadFile).toHaveBeenCalledWith('.rules', 'utf-8');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
+      expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
     });
 
     it('should handle exists check errors gracefully', async () => {
       mockExists.mockRejectedValue(new Error('Permission denied'));
 
       await expect(zed.update()).rejects.toThrow('Permission denied');
-      expect(mockExists).toHaveBeenCalledWith('.rules');
+      expect(mockExists).toHaveBeenCalledWith('./.rules');
     });
   });
 }); 

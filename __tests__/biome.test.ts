@@ -44,7 +44,7 @@ describe('biome configuration', () => {
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'biome.jsonc',
+        './biome.jsonc',
         JSON.stringify(expectedConfig, null, 2)
       );
     });
@@ -61,19 +61,19 @@ describe('biome configuration', () => {
 
       await biome.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('biome.jsonc', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'biome.jsonc',
+        './biome.jsonc',
         expect.stringContaining('"customProperty": "value"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'biome.jsonc',
+        './biome.jsonc',
         expect.stringContaining('"$schema": "https://www.ultracite.ai/s/2.0.0"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'biome.jsonc',
+        './biome.jsonc',
         expect.stringContaining(
           '"extends": [\n    "other-config",\n    "ultracite"\n  ]'
         )
@@ -84,7 +84,7 @@ describe('biome configuration', () => {
       mockReadFile.mockResolvedValue('invalid json');
 
       await expect(biome.update()).rejects.toThrow();
-      expect(mockReadFile).toHaveBeenCalledWith('biome.jsonc', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
     });
   });
 });

@@ -24,7 +24,7 @@ describe('vscode configuration', () => {
       const result = await vscode.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.vscode/settings.json');
+      expect(mockExists).toHaveBeenCalledWith('./.vscode/settings.json');
     });
 
     it('should return false when .vscode/settings.json does not exist', async () => {
@@ -33,7 +33,7 @@ describe('vscode configuration', () => {
       const result = await vscode.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('.vscode/settings.json');
+      expect(mockExists).toHaveBeenCalledWith('./.vscode/settings.json');
     });
   });
 
@@ -58,7 +58,7 @@ describe('vscode configuration', () => {
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         JSON.stringify(expectedConfig, null, 2)
       );
     });
@@ -77,27 +77,27 @@ describe('vscode configuration', () => {
       await vscode.update();
 
       expect(mockReadFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         'utf-8'
       );
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining('"editor.tabSize": 2')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining('"files.autoSave": "afterDelay"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining(
           '"editor.defaultFormatter": "esbenp.prettier-vscode"'
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining('"editor.formatOnSave": true')
       );
     });
@@ -120,11 +120,11 @@ describe('vscode configuration', () => {
 
       // Should merge the nested configuration properly
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining('"source.organizeImports.biome": "explicit"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         expect.stringContaining('"editor.tabSize": 4')
       );
     });
@@ -134,7 +134,7 @@ describe('vscode configuration', () => {
 
       await expect(vscode.update()).rejects.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith(
-        '.vscode/settings.json',
+        './.vscode/settings.json',
         'utf-8'
       );
     });

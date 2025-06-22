@@ -102,7 +102,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectESM = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile('package.json', 'utf-8'));
+    const packageJson = JSON.parse(await readFile('./package.json', 'utf-8'));
     return packageJson.type === 'module';
   } catch {
     return false;
@@ -111,7 +111,7 @@ const isProjectESM = async (): Promise<boolean> => {
 
 // Update package.json lint-staged config
 const updatePackageJson = async (): Promise<void> => {
-  const packageJson = JSON.parse(await readFile('package.json', 'utf-8'));
+  const packageJson = JSON.parse(await readFile('./package.json', 'utf-8'));
   
   if (packageJson['lint-staged']) {
     packageJson['lint-staged'] = deepmerge(packageJson['lint-staged'], lintStagedConfig);
@@ -119,7 +119,7 @@ const updatePackageJson = async (): Promise<void> => {
     packageJson['lint-staged'] = lintStagedConfig;
   }
 
-  await writeFile('package.json', JSON.stringify(packageJson, null, 2));
+  await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
 };
 
 // Update JSON config files
@@ -170,12 +170,12 @@ const createFallbackConfig = async (): Promise<void> => {
 
 // Handle updating different config file types
 const handleConfigFileUpdate = async (filename: string): Promise<void> => {
-  if (filename === 'package.json') {
+  if (filename === './package.json') {
     await updatePackageJson();
     return;
   }
   
-  if (filename.endsWith('.json') || filename === '.lintstagedrc') {
+  if (filename.endsWith('.json') || filename === './.lintstagedrc') {
     await updateJsonConfig(filename);
     return;
   }

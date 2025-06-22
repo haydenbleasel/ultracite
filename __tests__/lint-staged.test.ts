@@ -32,7 +32,7 @@ describe('lint-staged configuration', () => {
       const result = await lintStaged.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('package.json');
+      expect(mockExists).toHaveBeenCalledWith('./package.json');
     });
 
     it('should return true when .lintstagedrc.json exists', async () => {
@@ -43,7 +43,7 @@ describe('lint-staged configuration', () => {
       const result = await lintStaged.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.json');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.json');
     });
 
     it('should return false when no config files exist', async () => {
@@ -59,17 +59,17 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.exists();
 
-      expect(mockExists).toHaveBeenCalledWith('package.json');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.json');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.js');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.cjs');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.mjs');
-      expect(mockExists).toHaveBeenCalledWith('lint-staged.config.js');
-      expect(mockExists).toHaveBeenCalledWith('lint-staged.config.cjs');
-      expect(mockExists).toHaveBeenCalledWith('lint-staged.config.mjs');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.yaml');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc.yml');
-      expect(mockExists).toHaveBeenCalledWith('.lintstagedrc');
+      expect(mockExists).toHaveBeenCalledWith('./package.json');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.json');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.js');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.cjs');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.mjs');
+      expect(mockExists).toHaveBeenCalledWith('./lint-staged.config.js');
+      expect(mockExists).toHaveBeenCalledWith('./lint-staged.config.cjs');
+      expect(mockExists).toHaveBeenCalledWith('./lint-staged.config.mjs');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.yaml');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc.yml');
+      expect(mockExists).toHaveBeenCalledWith('./.lintstagedrc');
     });
   });
 
@@ -119,7 +119,7 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./package.json', 'utf-8');
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = JSON.parse(writtenContent);
@@ -141,7 +141,7 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('.lintstagedrc.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc.json', 'utf-8');
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = JSON.parse(writtenContent);
@@ -171,7 +171,7 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('.lintstagedrc.yaml', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc.yaml', 'utf-8');
       // Verify the YAML configuration is written correctly
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       
@@ -285,7 +285,7 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('.lintstagedrc', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc', 'utf-8');
     });
 
     it('should handle processing complex YAML with inline arrays', async () => {

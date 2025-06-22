@@ -27,7 +27,7 @@ describe('husky configuration', () => {
       const result = await husky.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.husky/pre-commit');
+      expect(mockExists).toHaveBeenCalledWith('./.husky/pre-commit');
     });
 
     it('should return false when .husky/pre-commit does not exist', async () => {
@@ -36,7 +36,7 @@ describe('husky configuration', () => {
       const result = await husky.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('.husky/pre-commit');
+      expect(mockExists).toHaveBeenCalledWith('./.husky/pre-commit');
     });
   });
 
@@ -63,7 +63,7 @@ describe('husky configuration', () => {
       await husky.create();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.husky/pre-commit',
+        './.husky/pre-commit',
         'npx ultracite format'
       );
     });
@@ -76,9 +76,9 @@ describe('husky configuration', () => {
 
       await husky.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('.husky/pre-commit', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./.husky/pre-commit', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.husky/pre-commit',
+        './.husky/pre-commit',
         '#!/bin/sh\nnpm test\nnpx ultracite format'
       );
     });
@@ -89,7 +89,7 @@ describe('husky configuration', () => {
       await husky.update();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.husky/pre-commit',
+        './.husky/pre-commit',
         '\nnpx ultracite format'
       );
     });

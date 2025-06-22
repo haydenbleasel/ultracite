@@ -29,7 +29,7 @@ describe('cursor configuration', () => {
       const result = await cursor.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.cursor/rules/ultracite.mdc');
+      expect(mockExists).toHaveBeenCalledWith('./cursor/rules/ultracite.mdc');
     });
 
     it('should return false when .cursor/rules/ultracite.mdc does not exist', async () => {
@@ -38,7 +38,7 @@ describe('cursor configuration', () => {
       const result = await cursor.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('.cursor/rules/ultracite.mdc');
+      expect(mockExists).toHaveBeenCalledWith('./cursor/rules/ultracite.mdc');
     });
   });
 
@@ -48,7 +48,7 @@ describe('cursor configuration', () => {
 
       expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.cursor/rules/ultracite.mdc',
+        './cursor/rules/ultracite.mdc',
         'mock rules content'
       );
     });
@@ -67,7 +67,7 @@ describe('cursor configuration', () => {
 
       expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.cursor/rules/ultracite.mdc',
+        './cursor/rules/ultracite.mdc',
         'mock rules content'
       );
     });

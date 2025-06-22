@@ -29,7 +29,7 @@ describe('windsurf configuration', () => {
       const result = await windsurf.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('.windsurf/rules/ultracite.md');
+      expect(mockExists).toHaveBeenCalledWith('./.windsurf/rules/ultracite.md');
     });
 
     it('should return false when .windsurf/rules/ultracite.md does not exist', async () => {
@@ -38,7 +38,7 @@ describe('windsurf configuration', () => {
       const result = await windsurf.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('.windsurf/rules/ultracite.md');
+      expect(mockExists).toHaveBeenCalledWith('./.windsurf/rules/ultracite.md');
     });
   });
 
@@ -48,7 +48,7 @@ describe('windsurf configuration', () => {
 
       expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.windsurf/rules/ultracite.md',
+        './.windsurf/rules/ultracite.md',
         'mock rules content'
       );
     });
@@ -67,7 +67,7 @@ describe('windsurf configuration', () => {
 
       expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
-        '.windsurf/rules/ultracite.md',
+        './.windsurf/rules/ultracite.md',
         'mock rules content'
       );
     });

@@ -36,7 +36,6 @@ describe('initialize command', () => {
   const mockSpinner = vi.mocked(spinner);
   const mockExists = vi.mocked(exists);
   const mockProcessExit = vi.mocked(process.exit);
-  const mockProcessExit = vi.mocked(process.exit);
 
   const mockSpinnerInstance = {
     start: vi.fn(),
@@ -154,7 +153,7 @@ describe('initialize command', () => {
       recursive: true,
     });
     expect(mockWriteFile).toHaveBeenCalledWith(
-      '.cursor/rules/ultracite.mdc',
+      './cursor/rules/ultracite.mdc',
       expect.any(String)
     );
   });
@@ -172,7 +171,7 @@ describe('initialize command', () => {
       recursive: true,
     });
     expect(mockWriteFile).toHaveBeenCalledWith(
-      '.windsurf/rules/ultracite.md',
+      './.windsurf/rules/ultracite.md',
       expect.any(String)
     );
   });
@@ -188,7 +187,7 @@ describe('initialize command', () => {
 
     expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
     expect(mockWriteFile).toHaveBeenCalledWith(
-      '.github/copilot-instructions.md',
+      './.github/copilot-instructions.md',
       expect.any(String)
     );
   });
@@ -237,7 +236,7 @@ describe('initialize command', () => {
 
     await initialize();
 
-    expect(mockWriteFile).toHaveBeenCalledWith('.rules', expect.any(String));
+    expect(mockWriteFile).toHaveBeenCalledWith('./.rules', expect.any(String));
   });
 
   it('should initialize precommit hooks when selected', async () => {

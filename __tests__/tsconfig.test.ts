@@ -24,7 +24,7 @@ describe('tsconfig configuration', () => {
       const result = await tsconfig.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('tsconfig.json');
+      expect(mockExists).toHaveBeenCalledWith('./tsconfig.json');
     });
 
     it('should return false when tsconfig.json does not exist', async () => {
@@ -33,7 +33,7 @@ describe('tsconfig configuration', () => {
       const result = await tsconfig.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('tsconfig.json');
+      expect(mockExists).toHaveBeenCalledWith('./tsconfig.json');
     });
   });
 
@@ -48,7 +48,7 @@ describe('tsconfig configuration', () => {
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         JSON.stringify(expectedConfig, null, 2)
       );
     });
@@ -68,19 +68,19 @@ describe('tsconfig configuration', () => {
 
       await tsconfig.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('tsconfig.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"target": "ES2020"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"strictNullChecks": true')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"include"')
       );
     });
@@ -96,15 +96,15 @@ describe('tsconfig configuration', () => {
       await tsconfig.update();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"strictNullChecks": true')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"include"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
-        'tsconfig.json',
+        './tsconfig.json',
         expect.stringContaining('"exclude"')
       );
     });
@@ -113,7 +113,7 @@ describe('tsconfig configuration', () => {
       mockReadFile.mockResolvedValue('invalid json');
 
       await expect(tsconfig.update()).rejects.toThrow();
-      expect(mockReadFile).toHaveBeenCalledWith('tsconfig.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
     });
   });
 }); 
