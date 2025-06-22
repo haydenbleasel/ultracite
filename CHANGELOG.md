@@ -1,3 +1,15 @@
+# v5.0.2 (Sun Jun 22 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.1 (Sun Jun 22 2025)
 
 #### ⚠️ Pushed to `main`
