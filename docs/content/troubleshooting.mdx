@@ -27,9 +27,9 @@ In general, migrating fully to Ultracite means you don’t need ESLint / Prettie
 
 A good example of this is installing components from a UI library like [`shadcn/ui`](https://ui.shadcn.com/). While they're designed to be modified, you may want to preserve the original source code for updates. In this case, you'll want to disable linting for those files.
 
-To do this, add patterns to your `biome.json` to exclude those files i.e.
+To do this, add patterns to your `biome.jsonc` to exclude those files i.e.
 
-```json title="biome.json"
+```json title="biome.jsonc"
 {
   "extends": ["ultracite"],
   "ignore": ["/components/ui/**", "/lib/**", "/hooks/**"]
@@ -68,7 +68,7 @@ Yes. While Ultracite’s value is in being strict, you’re free to override rul
 
 For instance, if you find the accessibility rules too noisy for an internal tool, you might disable some of them. Or if you disagree with a code style enforced, you can adjust it (though style disagreements are what Ultracite tries to eliminate).
 
-The key is communication with the team – perhaps educate why a rule is there before disabling it; if still unwanted, customize the config. Ultracite is not a black box – you have full control via `biome.json`.
+The key is communication with the team – perhaps educate why a rule is there before disabling it; if still unwanted, customize the config. Ultracite is not a black box – you have full control via `biome.jsonc`.
 
 Check out the [configuration](/configuration) section for more information on how to override rules.
 

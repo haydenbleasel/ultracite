@@ -5,13 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base {
-  /* Fix Fumadocs theme toggle icons */
-  [data-theme-toggle] svg {
-    @apply fill-none;
-  }
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -48,6 +41,18 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg))
+        translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
 }
 
 :root {
@@ -58,8 +63,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.705 0.213 47.604);
-  --primary-foreground: oklch(0.98 0.016 73.684);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -92,8 +97,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.66 0.2298 34.95);
-  --primary-foreground: oklch(0.98 0.016 73.684);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -155,51 +160,46 @@
   }
 }
 
-h1,
-h2,
-h3 {
-  @apply tracking-tight;
-}
+@layer base {
+  article h1,
+  article h2,
+  article h3 {
+    @apply tracking-tight font-semibold!;
+  }
 
-/* Fix Fumadocs theme toggle icons */
-[data-theme-toggle] svg {
-  @apply fill-none;
-}
+  /* Fix Fumadocs theme toggle icons */
+  [data-theme-toggle] svg {
+    @apply fill-none;
+  }
 
-#nd-subnav [data-active="true"] {
-  @apply font-medium text-primary;
-}
+  /* Hide the sidebar on the landing page on desktop */
+  .home #nd-sidebar {
+    @apply md:hidden;
+  }
 
-#nd-subnav > div {
-  @apply container border-x border-dotted;
-}
+  .home#nd-docs-layout {
+    @apply px-4!;
+  }
 
-#nd-docs-layout {
-  @apply container mx-auto p-0 border-x border-dotted;
-}
+  #nd-subnav > div,
+  #nd-docs-layout {
+    @apply container mx-auto pl-0;
+  }
 
-#nd-sidebar > div {
-  @apply border-dotted;
-}
+  #nd-subnav > div,
+  #nd-sidebar > div {
+    @apply border-none!;
+  }
 
-#nd-tocnav {
-  @apply translate-y-px border-dotted;
-}
+  #nd-subnav [data-search-full] {
+    @apply rounded-sm!;
+  }
 
-#nd-sidebar [data-hide-if-empty] {
-  @apply hidden;
-}
+  #nd-subnav [data-search-full] kbd {
+    @apply rounded-xs!;
+  }
 
-/* Hide the "Docs" link from the sidebar (duplicated with the "Introduction" link) */
-#nd-sidebar a[href="/introduction"]:first-of-type {
-  @apply hidden;
-}
-
-/* Hide the sidebar on the landing page on desktop */
-.landing-page #nd-sidebar {
-  @apply md:hidden;
-}
-
-#nd-subnav [data-search-full] {
-  @apply border-none bg-secondary rounded-md!;
+  article h1 + p {
+    @apply -mt-2!;
+  }
 }

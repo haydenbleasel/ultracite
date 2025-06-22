@@ -1,25 +1,24 @@
 {
-  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
+  "name": "ultracite",
+  "description": "The AI-ready formatter that helps you write and generate code faster.",
+  "version": "4.2.13",
   "bin": {
-    "ultracite": "scripts/run.mjs"
+    "ultracite": "dist/index.js"
   },
-  "auto": {
-    "plugins": [
-      "npm",
-      "all-contributors",
-      "conventional-commits",
-      "first-time-contributor",
-      "released"
-    ]
+  "files": [
+    "biome.jsonc",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:coverage": "vitest --coverage"
   },
+  "main": "./biome.jsonc",
+  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "bugs": {
     "url": "https://github.com/haydenbleasel/ultracite/issues"
   },
-  "description": "Strict, opinionated linting config for modern TypeScript apps.",
-  "files": [
-    "biome.json",
-    "scripts/run.mjs"
-  ],
   "homepage": "https://github.com/haydenbleasel/ultracite#readme",
   "keywords": [
     "ultracite",
@@ -29,8 +28,6 @@
     "fixer"
   ],
   "license": "MIT",
-  "main": "./biome.json",
-  "name": "ultracite",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -39,11 +36,18 @@
     "type": "git",
     "url": "git+https://github.com/haydenbleasel/ultracite.git"
   },
-  "version": "4.2.13",
   "devDependencies": {
-    "@biomejs/biome": "1.9.4"
+    "@auto-it/all-contributors": "^11.3.0",
+    "@auto-it/first-time-contributor": "^11.3.0",
+    "@biomejs/biome": "2.0.0",
+    "@types/node": "^24.0.3",
+    "@vitest/coverage-v8": "3.2.4",
+    "tsup": "^8.5.0"
   },
   "dependencies": {
-    "commander": "^14.0.0"
+    "@clack/prompts": "^0.11.0",
+    "commander": "^14.0.0",
+    "deepmerge": "^4.3.1",
+    "vitest": "^3.2.4"
   }
 }

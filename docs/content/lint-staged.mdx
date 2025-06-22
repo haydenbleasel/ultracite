@@ -1,0 +1,146 @@
+---
+title: lint-staged
+description: Automatically run Ultracite on your staged Git files with lint-staged
+---
+
+Ultracite seamlessly integrates with [lint-staged](https://github.com/okonet/lint-staged) to automatically format and lint your code before every commit. This ensures that only clean, properly formatted code makes it into your repository.
+
+## What is lint-staged?
+
+lint-staged is a tool that runs linters and formatters against staged Git files. It's particularly useful because it:
+
+- Only processes files that are actually being committed
+- Prevents poorly formatted code from entering your repository
+- Runs quickly since it only checks changed files
+- Integrates perfectly with Git hooks
+
+## How Ultracite Uses lint-staged
+
+When you run `npx ultracite init`, if you select the lint-staged option, Ultracite automatically:
+
+1. **Installs lint-staged** as a development dependency
+2. **Creates or updates** your lint-staged configuration
+3. **Configures the formatter** to run on relevant file types
+
+The default configuration runs `npx ultracite format` on these file types:
+- JavaScript/TypeScript files (`.js`, `.jsx`, `.ts`, `.tsx`)
+- JSON files (`.json`, `.jsonc`)
+- CSS files (`.css`, `.scss`)
+- Markdown files (`.md`, `.mdx`)
+
+## Supported Configuration Formats
+
+Ultracite's lint-staged integration supports all standard lint-staged configuration formats:
+
+### package.json
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+  }
+}
+```
+
+### .lintstagedrc.json
+```json
+{
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+}
+```
+
+### .lintstagedrc.js (CommonJS)
+```javascript
+module.exports = {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+};
+```
+
+### .lintstagedrc.mjs (ES Modules)
+```javascript
+export default {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+};
+```
+
+### .lintstagedrc.yaml
+```yaml
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - 'npx ultracite format'
+```
+
+## Smart Configuration Merging
+
+If you already have a lint-staged configuration, Ultracite will:
+
+- **Detect** your existing configuration format
+- **Merge** the Ultracite rules with your existing rules
+- **Preserve** your custom configurations
+- **Update** the file in place
+
+This means you can safely run `npx ultracite init` even if you already have lint-staged set up.
+
+## How It Works
+
+1. **Pre-commit Hook**: lint-staged runs before each commit via Husky
+2. **File Detection**: Only staged files matching the patterns are processed
+3. **Format Command**: `npx ultracite format` runs on each matching file
+4. **Auto-fixing**: Biome automatically fixes issues where possible
+5. **Re-staging**: Fixed files are automatically re-staged for commit
+
+## Manual Configuration
+
+If you need to customize your lint-staged setup, you can modify the configuration after initialization:
+
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["npx ultracite format", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite format"],
+    "*.{css,scss}": ["npx ultracite format", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite format"]
+  }
+}
+```
+
+## Commands Integration
+
+The lint-staged integration works with Ultracite's command structure:
+
+- **`npx ultracite format`**: Runs Biome with auto-fixing (used by lint-staged)
+- **`npx ultracite lint`**: Runs Biome without auto-fixing (for CI/manual checks)
+
+## Troubleshooting
+
+### Configuration Not Found
+If you see errors about missing lint-staged configuration:
+
+```bash
+npx ultracite init  # Re-run initialization
+```
+
+### ESM/CommonJS Issues
+Ultracite automatically detects your project type and creates the appropriate configuration format:
+
+- **ESM projects** (with `"type": "module"` in package.json) get `.mjs` configs
+- **CommonJS projects** get `.cjs` configs
+- **Fallback**: Creates `.lintstagedrc.json` if module detection fails
+
+### Existing Configuration Conflicts
+If you have complex existing configurations, you may need to manually merge:
+
+1. Back up your existing lint-staged config
+2. Run `npx ultracite init`
+3. Manually merge any custom rules you need to preserve
+
+## Best Practices
+
+1. **Keep it fast**: Only run essential checks in lint-staged
+2. **Use specific patterns**: Target only the files that need processing
+3. **Combine with CI**: Use lint-staged for quick local checks, full linting in CI
+4. **Test your setup**: Make a test commit to ensure everything works
+
+## Related
+
+- [Husky Integration](/husky) - Git hooks setup
+- [Configuration](/configuration) - Biome configuration options
+- [Setup](/setup) - Initial project setup
