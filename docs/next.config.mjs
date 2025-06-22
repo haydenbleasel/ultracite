@@ -9,16 +9,6 @@ const config = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-
-  // biome-ignore lint/suspicious/useAwait: "rewrites is async"
-  rewrites: async () => {
-    return [
-      {
-        source: '/s/:path*',
-        destination: 'https://biomejs.dev/schemas/:path*/schema.json',
-      },
-    ];
-  },
 };
 
 export default withMDX(config);
