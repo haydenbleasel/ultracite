@@ -1,5 +1,8 @@
 'use client';
 
+// React-компонент обертка
+import { forwardRef, type HTMLAttributes, useEffect } from 'react';
+
 // Сначала определяем класс Pixel
 class Pixel {
   width: number;
@@ -172,7 +175,9 @@ class PixelCanvasElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (this._initialized) return;
+    if (this._initialized) {
+      return;
+    }
     this._initialized = true;
     this._parent = this.parentElement;
 
@@ -180,7 +185,9 @@ class PixelCanvasElement extends HTMLElement {
       this.handleResize();
 
       const ro = new ResizeObserver((entries) => {
-        if (!entries.length) return;
+        if (!entries.length) {
+          return;
+        }
         requestAnimationFrame(() => this.handleResize());
       });
       ro.observe(this);
@@ -237,10 +244,14 @@ class PixelCanvasElement extends HTMLElement {
   }
 
   handleResize() {
-    if (!(this.ctx && this._initialized)) return;
+    if (!(this.ctx && this._initialized)) {
+      return;
+    }
 
     const rect = this.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
+    if (rect.width === 0 || rect.height === 0) {
+      return;
+    }
 
     const width = Math.floor(rect.width);
     const height = Math.floor(rect.height);
@@ -270,7 +281,9 @@ class PixelCanvasElement extends HTMLElement {
   }
 
   createPixels() {
-    if (!this.ctx) return;
+    if (!this.ctx) {
+      return;
+    }
     this.pixels = [];
 
     for (let x = 0; x < this.canvas.width; x += this.gap) {
@@ -303,17 +316,23 @@ class PixelCanvasElement extends HTMLElement {
       const timeNow = performance.now();
       const timePassed = timeNow - this.timePrevious;
 
-      if (timePassed < this.timeInterval) return;
+      if (timePassed < this.timeInterval) {
+        return;
+      }
 
       this.timePrevious = timeNow - (timePassed % this.timeInterval);
 
-      if (!this.ctx) return;
+      if (!this.ctx) {
+        return;
+      }
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       let allIdle = true;
       for (const pixel of this.pixels) {
         pixel[name]();
-        if (!pixel.isIdle) allIdle = false;
+        if (!pixel.isIdle) {
+          allIdle = false;
+        }
       }
 
       if (allIdle) {
@@ -326,10 +345,7 @@ class PixelCanvasElement extends HTMLElement {
   }
 }
 
-// React-компонент обертка
-import * as React from 'react';
-
-export interface PixelCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PixelCanvasProps extends HTMLAttributes<HTMLDivElement> {
   gap?: number;
   speed?: number;
   colors?: string[];
@@ -337,9 +353,9 @@ export interface PixelCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
   noFocus?: boolean;
 }
 
-const PixelCanvas = React.forwardRef<HTMLDivElement, PixelCanvasProps>(
+const PixelCanvas = forwardRef<HTMLDivElement, PixelCanvasProps>(
   ({ gap, speed, colors, variant, noFocus, style, ...props }, ref) => {
-    React.useEffect(() => {
+    useEffect(() => {
       // Регистрируем веб-компонент при первом рендере
       if (
         typeof window !== 'undefined' &&
@@ -350,6 +366,7 @@ const PixelCanvas = React.forwardRef<HTMLDivElement, PixelCanvasProps>(
     }, []);
 
     return (
+      // @ts-expect-error - Custom element
       <pixel-canvas
         data-colors={colors?.join(',')}
         data-gap={gap}
