@@ -1,15 +1,17 @@
 import { execSync } from 'node:child_process';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
-import { rulesFile } from '../docs/lib/rules';
 import { biome } from './biome';
+import { cursor } from './cursor';
 import { husky } from './husky';
 import { lintStaged } from './lint-staged';
 import { packageManager } from './package-manager';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
-import { exists } from './utils';
+import { vscodeCopilot } from './vscode-copilot';
 import { vscode } from './vscode-settings';
+import { windsurf } from './windsurf';
+import { zed } from './zed';
 
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
@@ -110,52 +112,68 @@ const initializeLintStaged = async (packageManagerAdd: string) => {
   s.stop('lint-staged created.');
 };
 
-const initializeVSCodeCopilotRules = () => {
+const upsertVSCodeCopilotRules = async () => {
   const s = spinner();
+  s.start('Checking for GitHub Copilot rules...');
 
-  s.start('Initializing VSCode Copilot rules...');
-
-  execSync(`echo '${rulesFile}' > .github/copilot-instructions.md`);
-};
-
-const initializeCursorRules = () => {
-  const s = spinner();
-
-  s.start('Initializing Cursor rules...');
-
-  execSync(`echo '${rulesFile}' > .cursor/rules/ultracite.mdc`);
-
-  s.stop('Cursor rules initialized.');
-};
-
-const initializeWindsurfRules = () => {
-  const s = spinner();
-
-  s.start('Initializing Windsurf rules...');
-
-  execSync(`echo '${rulesFile}' > .windsurf/rules/ultracite.md`);
-
-  s.stop('Windsurf rules initialized.');
-};
-
-const initializeZedRules = async () => {
-  const s = spinner();
-
-  s.start('Initializing Zed rules...');
-
-  const zedConfigExists = await exists('.rules');
-
-  if (!zedConfigExists) {
-    s.message('rules not found, creating...');
-
-    execSync('touch .rules');
+  if (await vscodeCopilot.exists()) {
+    s.message('GitHub Copilot rules found, updating...');
+    await vscodeCopilot.update();
+    s.stop('GitHub Copilot rules updated.');
+    return;
   }
 
-  s.message('Updating rules...');
+  s.message('GitHub Copilot rules not found, creating...');
+  await vscodeCopilot.create();
+  s.stop('GitHub Copilot rules created.');
+};
 
-  execSync(`echo '\n\n${rulesFile}' >> .rules `);
+const upsertCursorRules = async () => {
+  const s = spinner();
+  s.start('Checking for Cursor rules...');
 
-  s.stop('Zed rules initialized.');
+  if (await cursor.exists()) {
+    s.message('Cursor rules found, updating...');
+    await cursor.update();
+    s.stop('Cursor rules updated.');
+    return;
+  }
+
+  s.message('Cursor rules not found, creating...');
+  await cursor.create();
+  s.stop('Cursor rules created.');
+};
+
+const upsertWindsurfRules = async () => {
+  const s = spinner();
+  s.start('Checking for Windsurf rules...');
+
+  if (await windsurf.exists()) {
+    s.message('Windsurf rules found, updating...');
+    await windsurf.update();
+    s.stop('Windsurf rules updated.');
+    return;
+  }
+
+  s.message('Windsurf rules not found, creating...');
+  await windsurf.create();
+  s.stop('Windsurf rules created.');
+};
+
+const upsertZedRules = async () => {
+  const s = spinner();
+  s.start('Checking for Zed rules...');
+
+  if (await zed.exists()) {
+    s.message('Zed rules found, updating...');
+    await zed.update();
+    s.stop('Zed rules updated.');
+    return;
+  }
+
+  s.message('Zed rules not found, creating...');
+  await zed.create();
+  s.stop('Zed rules created.');
 };
 
 export const initialize = async () => {
@@ -197,16 +215,16 @@ export const initialize = async () => {
 
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('vscode-copilot')) {
-        initializeVSCodeCopilotRules();
+        await upsertVSCodeCopilotRules();
       }
       if (editorRules.includes('cursor')) {
-        initializeCursorRules();
+        await upsertCursorRules();
       }
       if (editorRules.includes('windsurf')) {
-        initializeWindsurfRules();
+        await upsertWindsurfRules();
       }
       if (editorRules.includes('zed')) {
-        await initializeZedRules();
+        await upsertZedRules();
       }
     }
 
