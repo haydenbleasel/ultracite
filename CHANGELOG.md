@@ -1,3 +1,15 @@
+# v5.0.7 (Sun Jun 22 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update ultracite.mdc ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.6 (Sun Jun 22 2025)
 
 #### ⚠️ Pushed to `main`
