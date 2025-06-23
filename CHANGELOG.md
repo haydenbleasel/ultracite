@@ -1,3 +1,15 @@
+# v5.0.11 (Mon Jun 23 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Remove -w flag from bun ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.10 (Mon Jun 23 2025)
 
 #### ⚠️ Pushed to `main`
