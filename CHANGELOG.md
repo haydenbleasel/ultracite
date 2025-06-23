@@ -1,3 +1,15 @@
+# v5.0.12 (Mon Jun 23 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Bump Biome to 2.0.5 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.11 (Mon Jun 23 2025)
 
 #### ⚠️ Pushed to `main`
