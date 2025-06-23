@@ -9,7 +9,7 @@ const options = [
     lockfile: 'pnpm-lock.yaml',
     monorepoSuffix: '-w'
   },
-  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '-w' },
+  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '' },
   { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock', monorepoSuffix: '-W' },
   { label: 'npm', value: 'npm install', lockfile: 'package-lock.json', monorepoSuffix: '--workspace .' },
 ];
@@ -25,7 +25,7 @@ export const packageManager = {
     for (const option of options) {
       // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(option.lockfile)) {
-        return monorepo ? `${option.value} ${option.monorepoSuffix}` : option.value;
+        return (monorepo && option.monorepoSuffix) ? `${option.value} ${option.monorepoSuffix}` : option.value;
       }
     }
 

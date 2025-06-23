@@ -56,7 +56,7 @@ describe('package-manager', () => {
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
     });
 
-    it('should return bun add -w when bun.lockb exists and is a monorepo', async () => {
+    it('should return bun add when bun.lockb exists and is a monorepo', async () => {
       mockIsMonorepo.mockResolvedValue(true);
       mockExists.mockImplementation((path: string) => {
         return Promise.resolve(path === 'bun.lockb');
@@ -64,7 +64,7 @@ describe('package-manager', () => {
 
       const result = await packageManager.get();
 
-      expect(result).toBe('bun add -w');
+      expect(result).toBe('bun add');
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
@@ -208,7 +208,7 @@ describe('package-manager', () => {
         message: 'Which package manager do you use?',
         options: [
           { label: 'pnpm', value: 'pnpm add -w' },
-          { label: 'bun', value: 'bun add -w' },
+          { label: 'bun', value: 'bun add ' },
           { label: 'yarn', value: 'yarn add -W' },
           { label: 'npm', value: 'npm install --workspace .' },
         ],
@@ -272,7 +272,7 @@ describe('package-manager', () => {
         expect.objectContaining({
           options: expect.arrayContaining([
             { label: 'pnpm', value: 'pnpm add -w' },
-            { label: 'bun', value: 'bun add -w' },
+            { label: 'bun', value: 'bun add ' },
             { label: 'yarn', value: 'yarn add -W' },
             { label: 'npm', value: 'npm install --workspace .' },
           ]),
