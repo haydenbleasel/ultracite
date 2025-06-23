@@ -1,5 +1,6 @@
 'use client';
 
+import { track } from '@vercel/analytics';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -14,6 +15,7 @@ export const Installer = () => {
     toast.success('Copied to clipboard');
     setCopied(true);
 
+    track('Copied installer command');
     setTimeout(() => {
       setCopied(false);
     }, 2000);
