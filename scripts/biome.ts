@@ -3,7 +3,7 @@ import deepmerge from 'deepmerge';
 import { exists } from './utils';
 
 const defaultConfig = {
-  $schema: 'https://biomejs.dev/schemas/2.0.0/schema.json',
+  $schema: 'https://biomejs.dev/schemas/2.0.5/schema.json',
   extends: ['ultracite'],
 };
 

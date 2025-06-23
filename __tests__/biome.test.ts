@@ -39,7 +39,7 @@ describe('biome configuration', () => {
       await biome.create();
 
       const expectedConfig = {
-        $schema: 'https://biomejs.dev/schemas/2.0.0/schema.json',
+        $schema: 'https://biomejs.dev/schemas/2.0.5/schema.json',
         extends: ['ultracite'],
       };
 
@@ -70,7 +70,7 @@ describe('biome configuration', () => {
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
-        expect.stringContaining('"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json"')
+        expect.stringContaining('"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
