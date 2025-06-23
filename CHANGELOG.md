@@ -1,3 +1,15 @@
+# v5.0.10 (Mon Jun 23 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update installer.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.9 (Sun Jun 22 2025)
 
 #### ⚠️ Pushed to `main`
