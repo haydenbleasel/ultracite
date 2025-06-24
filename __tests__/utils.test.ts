@@ -139,7 +139,7 @@ describe('utils', () => {
     it('should prioritize pnpm-workspace.yaml over package.json workspaces', async () => {
       mockAccess.mockResolvedValue(undefined);
       // mockReadFile should not be called when pnpm-workspace.yaml exists
-      
+
       const result = await isMonorepo();
 
       expect(result).toBe(true);

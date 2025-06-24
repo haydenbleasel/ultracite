@@ -76,10 +76,7 @@ describe('vscode configuration', () => {
 
       await vscode.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith(
-        './.vscode/settings.json',
-        'utf-8'
-      );
+      expect(mockReadFile).toHaveBeenCalledWith('./.vscode/settings.json', 'utf-8');
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -129,13 +126,75 @@ describe('vscode configuration', () => {
       );
     });
 
-    it('should handle JSON parsing errors gracefully', async () => {
+    it('should handle invalid JSON by treating it as empty config', async () => {
       mockReadFile.mockResolvedValue('invalid json');
 
-      await expect(vscode.update()).rejects.toThrow();
+      await vscode.update();
+
       expect(mockReadFile).toHaveBeenCalledWith(
         './.vscode/settings.json',
         'utf-8'
+      );
+      
+      // When parsing fails, jsonc-parser returns undefined, 
+      // so deepmerge treats it as merging with undefined (effectively just using defaultConfig)
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        JSON.stringify({
+          'editor.defaultFormatter': 'esbenp.prettier-vscode',
+          '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
+            {
+              'editor.defaultFormatter': 'biomejs.biome',
+            },
+          'typescript.tsdk': 'node_modules/typescript/lib',
+          'editor.formatOnSave': true,
+          'editor.formatOnPaste': true,
+          'emmet.showExpandedAbbreviation': 'never',
+          'editor.codeActionsOnSave': {
+            'source.fixAll.biome': 'explicit',
+            'source.organizeImports.biome': 'explicit',
+          },
+        }, null, 2)
+      );
+    });
+
+    it('should handle .jsonc files with comments', async () => {
+      const existingConfigWithComments = `{
+  // Default formatter for most files
+  "editor.defaultFormatter": "some-other-formatter",
+  
+  /* Tab configuration */
+  "editor.tabSize": 2,
+  
+  // Auto save configuration
+  "files.autoSave": "afterDelay"
+}`;
+
+      mockReadFile.mockResolvedValue(existingConfigWithComments);
+
+      await vscode.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('./.vscode/settings.json', 'utf-8');
+
+      // Verify that the JSONC content was properly parsed and merged
+      // Note: Comments are not preserved in the output (limitation of JSON.stringify)
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        expect.stringContaining('"editor.tabSize": 2')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        expect.stringContaining('"files.autoSave": "afterDelay"')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        expect.stringContaining(
+          '"editor.defaultFormatter": "esbenp.prettier-vscode"'
+        )
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        expect.stringContaining('"editor.formatOnSave": true')
       );
     });
   });

@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
+import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
@@ -28,7 +29,7 @@ export const vscode = {
   },
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = JSON.parse(existingContents);
+    const existingConfig = parse(existingContents);
     const newConfig = deepmerge(existingConfig, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));

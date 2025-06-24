@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { access, readFile } from 'node:fs/promises';
 
 export const exists = async (path: string) => {
   try {
