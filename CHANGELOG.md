@@ -1,3 +1,17 @@
+# v5.0.15 (Tue Jun 24 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix unit tests, handle parsing issues gracefully ([@haydenbleasel](https://github.com/haydenbleasel))
+- Type parse responses correctly ([@haydenbleasel](https://github.com/haydenbleasel))
+- Parse all JSON files using jsonc-parser ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.14 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`
