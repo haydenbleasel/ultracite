@@ -1,17 +1,19 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists } from '../scripts/utils';
+import { exists, parseJsonc } from '../scripts/utils';
 import { vscode } from '../scripts/vscode-settings';
 
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  parseJsonc: vi.fn(),
 }));
 
 describe('vscode configuration', () => {
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
+  const mockParseJsonc = vi.mocked(parseJsonc);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -73,13 +75,11 @@ describe('vscode configuration', () => {
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+      mockParseJsonc.mockReturnValue(existingConfig);
 
       await vscode.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith(
-        './.vscode/settings.json',
-        'utf-8'
-      );
+      expect(mockReadFile).toHaveBeenCalledWith('./.vscode/settings.json', 'utf-8');
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -115,6 +115,7 @@ describe('vscode configuration', () => {
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+      mockParseJsonc.mockReturnValue(existingConfig);
 
       await vscode.update();
 
@@ -131,6 +132,9 @@ describe('vscode configuration', () => {
 
     it('should handle JSON parsing errors gracefully', async () => {
       mockReadFile.mockResolvedValue('invalid json');
+      mockParseJsonc.mockImplementation(() => {
+        throw new Error('Invalid JSON');
+      });
 
       await expect(vscode.update()).rejects.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith(

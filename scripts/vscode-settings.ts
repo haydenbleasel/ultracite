@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
-import { exists } from './utils';
+import { exists, parseJsonc } from './utils';
 
 const defaultConfig = {
   'editor.defaultFormatter': 'esbenp.prettier-vscode',
@@ -28,7 +28,7 @@ export const vscode = {
   },
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = JSON.parse(existingContents);
+    const existingConfig = parseJsonc(existingContents) as Record<string, unknown>;
     const newConfig = deepmerge(existingConfig, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
