@@ -119,7 +119,7 @@ export const IDE = () => (
     </div>
     <div className="flex items-center justify-center gap-4">
       <p className="text-muted-foreground text-sm">
-        Works with all your favourite IDEs.
+        Works with all your favourite IDEs and agents.
       </p>
       <AvatarStack className="inline-flex" size={32}>
         {logos.map((logo) => (
