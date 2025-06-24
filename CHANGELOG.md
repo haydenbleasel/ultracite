@@ -1,3 +1,20 @@
+# v5.0.17 (Tue Jun 24 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Luke Nittmann ([@lnittman](https://github.com/lnittman)), for all your work!
+
+#### 🐛 Bug Fix
+
+- feat: Add support for Claude Code and OpenAI Codex AI assistants [#166](https://github.com/haydenbleasel/ultracite/pull/166) ([@lnittman](https://github.com/lnittman) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Luke Nittmann ([@lnittman](https://github.com/lnittman))
+
+---
+
 # v5.0.16 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`
