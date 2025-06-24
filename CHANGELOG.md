@@ -1,3 +1,20 @@
+# v5.0.13 (Tue Jun 24 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Fix: Add support for comments in VS Code settings.json [#165](https://github.com/haydenbleasel/ultracite/pull/165) ([@denis-avakov](https://github.com/denis-avakov) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Denis Avakov ([@denis-avakov](https://github.com/denis-avakov))
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.12 (Mon Jun 23 2025)
 
 #### ⚠️ Pushed to `main`
