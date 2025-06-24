@@ -29,7 +29,9 @@ describe('vscodeCopilot configuration', () => {
       const result = await vscodeCopilot.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('./.github/copilot-instructions.md');
+      expect(mockExists).toHaveBeenCalledWith(
+        './.github/copilot-instructions.md'
+      );
     });
 
     it('should return false when .github/copilot-instructions.md does not exist', async () => {
@@ -38,7 +40,9 @@ describe('vscodeCopilot configuration', () => {
       const result = await vscodeCopilot.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('./.github/copilot-instructions.md');
+      expect(mockExists).toHaveBeenCalledWith(
+        './.github/copilot-instructions.md'
+      );
     });
   });
 
@@ -79,4 +83,4 @@ describe('vscodeCopilot configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
     });
   });
-}); 
+});

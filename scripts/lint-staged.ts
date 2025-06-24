@@ -31,40 +31,48 @@ const processYamlLine = (
   currentArray: string[]
 ): { newCurrentKey: string | null; newCurrentArray: string[] } => {
   const trimmed = line.trim();
-  
+
   if (trimmed.includes(':') && !trimmed.startsWith('-')) {
     // Save previous array if exists
     if (currentKey && currentArray.length > 0) {
       result[currentKey] = currentArray;
     }
-    
+
     const [key, ...valueParts] = trimmed.split(':');
     const value = valueParts.join(':').trim();
     const newCurrentKey = key.trim().replace(/['"]/g, '');
-    
+
     if (value && value !== '') {
       if (value.startsWith('[') && value.endsWith(']')) {
         // Handle inline arrays
-        result[newCurrentKey] = value.slice(1, -1).split(',').map(v => v.trim().replace(/['"]/g, ''));
+        result[newCurrentKey] = value
+          .slice(1, -1)
+          .split(',')
+          .map((v) => v.trim().replace(/['"]/g, ''));
       } else {
         result[newCurrentKey] = value.replace(/['"]/g, '');
       }
       return { newCurrentKey: null, newCurrentArray: [] };
     }
     return { newCurrentKey, newCurrentArray: [] };
-  } 
-  
+  }
+
   if (trimmed.startsWith('-') && currentKey) {
-    const newCurrentArray = [...currentArray, trimmed.slice(1).trim().replace(/['"]/g, '')];
+    const newCurrentArray = [
+      ...currentArray,
+      trimmed.slice(1).trim().replace(/['"]/g, ''),
+    ];
     return { newCurrentKey: currentKey, newCurrentArray };
   }
-  
+
   return { newCurrentKey: currentKey, newCurrentArray: currentArray };
 };
 
 // Simple YAML parser for basic objects (limited but functional)
 const parseSimpleYaml = (content: string): Record<string, unknown> => {
-  const lines = content.split('\n').filter(line => line.trim() && !line.trim().startsWith('#'));
+  const lines = content
+    .split('\n')
+    .filter((line) => line.trim() && !line.trim().startsWith('#'));
   const result: Record<string, unknown> = {};
   let currentKey: string | null = null;
   let currentArray: string[] = [];
@@ -112,9 +120,12 @@ const isProjectESM = async (): Promise<boolean> => {
 // Update package.json lint-staged config
 const updatePackageJson = async (): Promise<void> => {
   const packageJson = JSON.parse(await readFile('./package.json', 'utf-8'));
-  
+
   if (packageJson['lint-staged']) {
-    packageJson['lint-staged'] = deepmerge(packageJson['lint-staged'], lintStagedConfig);
+    packageJson['lint-staged'] = deepmerge(
+      packageJson['lint-staged'],
+      lintStagedConfig
+    );
   } else {
     packageJson['lint-staged'] = lintStagedConfig;
   }
@@ -144,7 +155,7 @@ const updateEsmConfig = async (filename: string): Promise<void> => {
   const module = await import(fileUrl);
   const existingConfig = module.default || {};
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
-  
+
   const esmContent = `export default ${JSON.stringify(mergedConfig, null, 2)};
 `;
   await writeFile(filename, esmContent);
@@ -157,7 +168,7 @@ const updateCjsConfig = async (filename: string): Promise<void> => {
   delete require.cache[require.resolve(`./${filename}`)];
   const existingConfig = require(`./${filename}`);
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
-  
+
   const cjsContent = `module.exports = ${JSON.stringify(mergedConfig, null, 2)};
 `;
   await writeFile(filename, cjsContent);
@@ -165,7 +176,10 @@ const updateCjsConfig = async (filename: string): Promise<void> => {
 
 // Create fallback config file
 const createFallbackConfig = async (): Promise<void> => {
-  await writeFile('.lintstagedrc.json', JSON.stringify(lintStagedConfig, null, 2));
+  await writeFile(
+    '.lintstagedrc.json',
+    JSON.stringify(lintStagedConfig, null, 2)
+  );
 };
 
 // Handle updating different config file types
@@ -174,19 +188,19 @@ const handleConfigFileUpdate = async (filename: string): Promise<void> => {
     await updatePackageJson();
     return;
   }
-  
+
   if (filename.endsWith('.json') || filename === './.lintstagedrc') {
     await updateJsonConfig(filename);
     return;
   }
-  
+
   if (filename.endsWith('.yaml') || filename.endsWith('.yml')) {
     await updateYamlConfig(filename);
     return;
   }
-  
+
   const isEsm = await isProjectESM();
-  
+
   if (filename.endsWith('.mjs') || (filename.endsWith('.js') && isEsm)) {
     try {
       await updateEsmConfig(filename);
@@ -195,7 +209,7 @@ const handleConfigFileUpdate = async (filename: string): Promise<void> => {
     }
     return;
   }
-  
+
   if (filename.endsWith('.cjs') || (filename.endsWith('.js') && !isEsm)) {
     try {
       await updateCjsConfig(filename);
@@ -213,7 +227,7 @@ export const lintStaged = {
         return true;
       }
     }
-    
+
     return false;
   },
   install: (packageManagerAdd: string) => {
@@ -227,7 +241,7 @@ export const lintStaged = {
   },
   update: async () => {
     let existingConfigFile: string | null = null;
-    
+
     for (const file of configFiles) {
       // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(file)) {

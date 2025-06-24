@@ -120,7 +120,11 @@ describe('CLI integration', () => {
       'src/utils.ts',
     ]);
 
-    expect(mockLint).toHaveBeenCalledWith(['src/index.ts', 'src/utils.ts'], expect.anything(), expect.anything());
+    expect(mockLint).toHaveBeenCalledWith(
+      ['src/index.ts', 'src/utils.ts'],
+      expect.anything(),
+      expect.anything()
+    );
   });
 
   it('should call format with files when format command is triggered with arguments', async () => {
@@ -136,6 +140,10 @@ describe('CLI integration', () => {
     // Simulate command execution with file arguments
     await program.parseAsync(['node', 'ultracite', 'format', 'src/index.ts']);
 
-    expect(mockFormat).toHaveBeenCalledWith(['src/index.ts'], expect.anything(), expect.anything());
+    expect(mockFormat).toHaveBeenCalledWith(
+      ['src/index.ts'],
+      expect.anything(),
+      expect.anything()
+    );
   });
 });

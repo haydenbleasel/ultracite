@@ -15,7 +15,7 @@ describe('title', () => {
   it('should contain the expected ASCII art structure', () => {
     const lines = title.trim().split('\n');
     expect(lines.length).toBeGreaterThan(1);
-    
+
     // Check that it contains numbers/characters typical of ASCII art
     expect(title).toMatch(EIGHT_PATTERN);
     expect(title).toMatch(DIGIT_PATTERN);
@@ -26,4 +26,4 @@ describe('title', () => {
     expect(title.startsWith('\n')).toBe(true);
     expect(title.endsWith('\n')).toBe(true);
   });
-}); 
+});

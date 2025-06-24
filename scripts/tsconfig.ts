@@ -16,7 +16,7 @@ export const tsconfig = {
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
     const existingConfig = JSON.parse(existingContents);
-    
+
     const newConfig = deepmerge(existingConfig, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));

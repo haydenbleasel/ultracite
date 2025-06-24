@@ -12,8 +12,6 @@ vi.mock('node:fs/promises', () => ({
   access: vi.fn(),
 }));
 
-
-
 // Mock @clack/prompts
 vi.mock('@clack/prompts', () => ({
   intro: vi.fn(),
@@ -34,4 +32,4 @@ vi.mock('@clack/prompts', () => ({
 // Mock process
 Object.defineProperty(process, 'exit', {
   value: vi.fn(),
-}); 
+});

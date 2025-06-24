@@ -70,7 +70,9 @@ describe('biome configuration', () => {
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
-        expect.stringContaining('"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"')
+        expect.stringContaining(
+          '"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"'
+        )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',

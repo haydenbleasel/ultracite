@@ -11,7 +11,9 @@ const something_NOT_recommended = true;
 const Component = () => (
   <>
     <div className="mx-5 my-5" />
-    <a href="https://www.github.com" title="github.com">Learn more</a>
+    <a href="https://www.github.com" title="github.com">
+      Learn more
+    </a>
   </>
 );
 
@@ -38,8 +40,8 @@ const clone = JSON.parse(JSON.stringify(foo));
 useQuery({
   queryKey: ['todo'],
   queryFn: () => api.getTodo(todoId),
-})
+});
 
 const todoQueries = {
   detail: (id) => ({ queryKey: ['todo'], queryFn: () => api.getTodo(id) }),
-}
+};

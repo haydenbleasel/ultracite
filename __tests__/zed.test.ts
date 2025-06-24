@@ -82,7 +82,8 @@ describe('zed configuration', () => {
     });
 
     it('should not append rules when they already exist in the file', async () => {
-      const existingContent = 'existing content\nmock rules content\nmore content';
+      const existingContent =
+        'existing content\nmock rules content\nmore content';
       mockExists.mockResolvedValue(true);
       mockReadFile.mockResolvedValue(existingContent);
 
@@ -109,4 +110,4 @@ describe('zed configuration', () => {
       expect(mockExists).toHaveBeenCalledWith('./.rules');
     });
   });
-}); 
+});

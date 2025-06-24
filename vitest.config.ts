@@ -11,4 +11,4 @@ export default defineConfig({
       include: ['scripts/**/*.ts'],
     },
   },
-}); 
+});

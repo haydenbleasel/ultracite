@@ -26,8 +26,7 @@ describe('lint-staged configuration', () => {
 
   describe('exists', () => {
     it('should return true when package.json exists', async () => {
-      mockExists
-        .mockResolvedValueOnce(true); // package.json
+      mockExists.mockResolvedValueOnce(true); // package.json
 
       const result = await lintStaged.exists();
 
@@ -112,9 +111,8 @@ describe('lint-staged configuration', () => {
         },
       };
 
-      mockExists
-        .mockResolvedValueOnce(true); // package.json exists
-      
+      mockExists.mockResolvedValueOnce(true); // package.json exists
+
       mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
 
       await lintStaged.update();
@@ -123,9 +121,13 @@ describe('lint-staged configuration', () => {
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = JSON.parse(writtenContent);
-      
+
       expect(parsedContent['lint-staged']['*.js']).toEqual(['eslint --fix']);
-      expect(parsedContent['lint-staged']['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']).toEqual(['npx ultracite format']);
+      expect(
+        parsedContent['lint-staged'][
+          '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
+        ]
+      ).toEqual(['npx ultracite format']);
     });
 
     it('should update JSON configuration file', async () => {
@@ -141,13 +143,18 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith(
+        './.lintstagedrc.json',
+        'utf-8'
+      );
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = JSON.parse(writtenContent);
-      
+
       expect(parsedContent['*.js']).toEqual(['eslint --fix']);
-      expect(parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']).toEqual(['npx ultracite format']);
+      expect(
+        parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
+      ).toEqual(['npx ultracite format']);
     });
 
     it('should handle YAML configuration file', async () => {
@@ -171,19 +178,24 @@ describe('lint-staged configuration', () => {
 
       await lintStaged.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc.yaml', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith(
+        './.lintstagedrc.yaml',
+        'utf-8'
+      );
       // Verify the YAML configuration is written correctly
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
-      
+
       expect(writtenContent).toContain('*.js:');
-      expect(writtenContent).toContain('*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:');
+      expect(writtenContent).toContain(
+        '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:'
+      );
       expect(writtenContent).toContain('npx ultracite format');
     });
 
     it('should create fallback config when ESM update fails', async () => {
       // Mock project as ESM
       const packageJsonContent = JSON.stringify({ type: 'module' });
-      
+
       mockExists
         .mockResolvedValueOnce(false) // package.json (for config check)
         .mockResolvedValueOnce(false) // .lintstagedrc.json
@@ -206,14 +218,13 @@ describe('lint-staged configuration', () => {
     it('should create fallback config when CommonJS update fails', async () => {
       // Mock project as CommonJS
       const packageJsonContent = JSON.stringify({ type: 'commonjs' });
-      
+
       mockExists
         .mockResolvedValueOnce(false) // package.json (for config check)
         .mockResolvedValueOnce(false) // .lintstagedrc.json
         .mockResolvedValueOnce(true); // .lintstagedrc.js
 
-      mockReadFile
-        .mockResolvedValueOnce(packageJsonContent); // For ESM check
+      mockReadFile.mockResolvedValueOnce(packageJsonContent); // For ESM check
 
       // Mock require to throw error
       const originalRequire = require;
@@ -235,7 +246,9 @@ describe('lint-staged configuration', () => {
     it('should throw error when no config file exists', async () => {
       mockExists.mockResolvedValue(false); // All files
 
-      await expect(lintStaged.update()).rejects.toThrow('No config file found.');
+      await expect(lintStaged.update()).rejects.toThrow(
+        'No config file found.'
+      );
     });
 
     it('should handle package.json without existing lint-staged config', async () => {
@@ -252,9 +265,13 @@ describe('lint-staged configuration', () => {
       // Verify the lint-staged configuration is added
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = JSON.parse(writtenContent);
-      
+
       expect(parsedContent['lint-staged']).toBeDefined();
-      expect(parsedContent['lint-staged']['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']).toEqual(['npx ultracite format']);
+      expect(
+        parsedContent['lint-staged'][
+          '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
+        ]
+      ).toEqual(['npx ultracite format']);
     });
 
     it('should throw error when no config file exists for update', async () => {
@@ -310,7 +327,9 @@ describe('lint-staged configuration', () => {
 
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       expect(writtenContent).toContain('*.js:');
-      expect(writtenContent).toContain('*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:');
+      expect(writtenContent).toContain(
+        '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:'
+      );
     });
   });
-}); 
+});

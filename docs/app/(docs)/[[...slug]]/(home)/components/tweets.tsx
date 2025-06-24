@@ -15,7 +15,9 @@ const tweets = [
 export const Tweets = () => (
   <div className="grid gap-8">
     <div>
-      <h2 className="font-semibold text-4xl tracking-tight">What the community is saying</h2>
+      <h2 className="font-semibold text-4xl tracking-tight">
+        What the community is saying
+      </h2>
       <p className="mt-4 text-balance text-muted-foreground sm:text-lg">
         Here's what some of the most FORWARD-THINKING, 1000 IQ developers in the
         React ecosystem have to say about Ultracite.

@@ -7,11 +7,21 @@ const options = [
     label: 'pnpm',
     value: 'pnpm add',
     lockfile: 'pnpm-lock.yaml',
-    monorepoSuffix: '-w'
+    monorepoSuffix: '-w',
   },
   { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '' },
-  { label: 'yarn', value: 'yarn add', lockfile: 'yarn.lock', monorepoSuffix: '-W' },
-  { label: 'npm', value: 'npm install', lockfile: 'package-lock.json', monorepoSuffix: '--workspace .' },
+  {
+    label: 'yarn',
+    value: 'yarn add',
+    lockfile: 'yarn.lock',
+    monorepoSuffix: '-W',
+  },
+  {
+    label: 'npm',
+    value: 'npm install',
+    lockfile: 'package-lock.json',
+    monorepoSuffix: '--workspace .',
+  },
 ];
 
 export const packageManager = {
@@ -19,13 +29,17 @@ export const packageManager = {
     const monorepo = await isMonorepo();
 
     if (monorepo) {
-      log.info('Monorepo detected, updating install command to include workspace flag');
+      log.info(
+        'Monorepo detected, updating install command to include workspace flag'
+      );
     }
 
     for (const option of options) {
       // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(option.lockfile)) {
-        return (monorepo && option.monorepoSuffix) ? `${option.value} ${option.monorepoSuffix}` : option.value;
+        return monorepo && option.monorepoSuffix
+          ? `${option.value} ${option.monorepoSuffix}`
+          : option.value;
       }
     }
 
@@ -34,13 +48,15 @@ export const packageManager = {
 
   select: async () => {
     const monorepo = await isMonorepo();
-  
+
     const value = await select({
       initialValue: 'pnpm',
       message: 'Which package manager do you use?',
       options: options.map((option) => ({
         label: option.label,
-        value: monorepo ? `${option.value} ${option.monorepoSuffix}` : option.value,
+        value: monorepo
+          ? `${option.value} ${option.monorepoSuffix}`
+          : option.value,
       })),
     });
 

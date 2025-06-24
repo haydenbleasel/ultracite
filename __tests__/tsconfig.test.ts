@@ -116,4 +116,4 @@ describe('tsconfig configuration', () => {
       expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
     });
   });
-}); 
+});

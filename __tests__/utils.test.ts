@@ -63,7 +63,9 @@ describe('utils', () => {
         }
         return Promise.resolve(undefined);
       });
-      mockReadFile.mockResolvedValue(JSON.stringify({ workspaces: ['packages/*'] }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ workspaces: ['packages/*'] })
+      );
 
       const result = await isMonorepo();
 

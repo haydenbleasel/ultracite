@@ -76,7 +76,10 @@ describe('vscode configuration', () => {
 
       await vscode.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('./.vscode/settings.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        'utf-8'
+      );
 
       // Verify that writeFile was called with merged configuration
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -135,26 +138,30 @@ describe('vscode configuration', () => {
         './.vscode/settings.json',
         'utf-8'
       );
-      
-      // When parsing fails, jsonc-parser returns undefined, 
+
+      // When parsing fails, jsonc-parser returns undefined,
       // so deepmerge treats it as merging with undefined (effectively just using defaultConfig)
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.vscode/settings.json',
-        JSON.stringify({
-          'editor.defaultFormatter': 'esbenp.prettier-vscode',
-          '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
-            {
-              'editor.defaultFormatter': 'biomejs.biome',
+        JSON.stringify(
+          {
+            'editor.defaultFormatter': 'esbenp.prettier-vscode',
+            '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
+              {
+                'editor.defaultFormatter': 'biomejs.biome',
+              },
+            'typescript.tsdk': 'node_modules/typescript/lib',
+            'editor.formatOnSave': true,
+            'editor.formatOnPaste': true,
+            'emmet.showExpandedAbbreviation': 'never',
+            'editor.codeActionsOnSave': {
+              'source.fixAll.biome': 'explicit',
+              'source.organizeImports.biome': 'explicit',
             },
-          'typescript.tsdk': 'node_modules/typescript/lib',
-          'editor.formatOnSave': true,
-          'editor.formatOnPaste': true,
-          'emmet.showExpandedAbbreviation': 'never',
-          'editor.codeActionsOnSave': {
-            'source.fixAll.biome': 'explicit',
-            'source.organizeImports.biome': 'explicit',
           },
-        }, null, 2)
+          null,
+          2
+        )
       );
     });
 
@@ -174,7 +181,10 @@ describe('vscode configuration', () => {
 
       await vscode.update();
 
-      expect(mockReadFile).toHaveBeenCalledWith('./.vscode/settings.json', 'utf-8');
+      expect(mockReadFile).toHaveBeenCalledWith(
+        './.vscode/settings.json',
+        'utf-8'
+      );
 
       // Verify that the JSONC content was properly parsed and merged
       // Note: Comments are not preserved in the output (limitation of JSON.stringify)

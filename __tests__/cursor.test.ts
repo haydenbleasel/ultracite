@@ -46,7 +46,9 @@ describe('cursor configuration', () => {
     it('should create .cursor/rules directory and ultracite.mdc with rules content', async () => {
       await cursor.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
         'mock rules content'
@@ -57,7 +59,9 @@ describe('cursor configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(cursor.create()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', {
+        recursive: true,
+      });
     });
   });
 
@@ -65,7 +69,9 @@ describe('cursor configuration', () => {
     it('should create .cursor/rules directory and update ultracite.mdc with rules content', async () => {
       await cursor.update();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
         'mock rules content'
@@ -76,7 +82,9 @@ describe('cursor configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(cursor.update()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', {
+        recursive: true,
+      });
     });
   });
-}); 
+});

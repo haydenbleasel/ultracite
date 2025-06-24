@@ -14,4 +14,4 @@ export const vscodeCopilot = {
     await mkdir('.github', { recursive: true });
     await writeFile(path, rulesFile);
   },
-}; 
+};

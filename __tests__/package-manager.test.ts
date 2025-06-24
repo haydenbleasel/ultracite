@@ -283,9 +283,11 @@ describe('package-manager', () => {
     it('should handle isMonorepo rejection', async () => {
       mockIsMonorepo.mockRejectedValue(new Error('File system error'));
 
-      await expect(packageManager.select()).rejects.toThrow('File system error');
+      await expect(packageManager.select()).rejects.toThrow(
+        'File system error'
+      );
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockSelect).not.toHaveBeenCalled();
     });
   });
-}); 
+});

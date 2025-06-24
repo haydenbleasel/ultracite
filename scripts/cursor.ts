@@ -14,4 +14,4 @@ export const cursor = {
     await mkdir('.cursor/rules', { recursive: true });
     await writeFile(path, rulesFile);
   },
-}; 
+};

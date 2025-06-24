@@ -26,13 +26,13 @@ describe('CLI index', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Create a fresh program instance for each test
     program = new Command();
     program
       .name('Ultracite')
       .description('Ship code faster and with more confidence.');
-    
+
     // Reset process.argv
     process.argv = [...originalArgv];
   });
@@ -45,7 +45,9 @@ describe('CLI index', () => {
   it('should verify the command line interface is properly configured', () => {
     // Test that we can set up the program correctly
     expect(program.name()).toBe('Ultracite');
-    expect(program.description()).toBe('Ship code faster and with more confidence.');
+    expect(program.description()).toBe(
+      'Ship code faster and with more confidence.'
+    );
   });
 
   it('should define multiple commands', async () => {
@@ -74,8 +76,8 @@ describe('CLI index', () => {
     // Check that commands were registered
     const commands = program.commands;
     expect(commands).toHaveLength(3);
-    
-    const commandNames = commands.map(cmd => cmd.name());
+
+    const commandNames = commands.map((cmd) => cmd.name());
     expect(commandNames).toContain('init');
     expect(commandNames).toContain('lint');
     expect(commandNames).toContain('format');
@@ -99,22 +101,28 @@ describe('CLI index', () => {
       .action(format);
 
     // Check that commands with arguments are configured properly
-    const lintCommand = program.commands.find(cmd => cmd.name() === 'lint');
-    const formatCommand = program.commands.find(cmd => cmd.name() === 'format');
+    const lintCommand = program.commands.find((cmd) => cmd.name() === 'lint');
+    const formatCommand = program.commands.find(
+      (cmd) => cmd.name() === 'format'
+    );
 
     expect(lintCommand).toBeDefined();
     expect(formatCommand).toBeDefined();
-    
+
     // Test that the commands have the expected descriptions
-    expect(lintCommand?.description()).toBe('Run Biome linter without fixing files');
-    expect(formatCommand?.description()).toBe('Run Biome linter and fixes files');
+    expect(lintCommand?.description()).toBe(
+      'Run Biome linter without fixing files'
+    );
+    expect(formatCommand?.description()).toBe(
+      'Run Biome linter and fixes files'
+    );
   });
 
   it('should import and execute the CLI setup', async () => {
     // Test that the CLI module can be imported without errors
     const indexModule = await import('../scripts/index');
-    
+
     // The import should not throw any errors
     expect(indexModule).toBeDefined();
   });
-}); 
+});

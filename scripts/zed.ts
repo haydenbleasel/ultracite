@@ -17,7 +17,7 @@ export const zed = {
     }
 
     const existingContents = await readFile(path, 'utf-8');
-    
+
     // Check if rules are already present to avoid duplicates
     if (existingContents.includes(rulesFile.trim())) {
       return;
@@ -25,4 +25,4 @@ export const zed = {
 
     await writeFile(path, `${existingContents}\n\n${rulesFile}`);
   },
-}; 
+};

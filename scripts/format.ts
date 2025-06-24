@@ -7,7 +7,7 @@ export const format = (files: string[]) => {
     execSync(`npx biome check --write ${target}`, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    
+
     // biome-ignore lint/suspicious/noConsole: "We want to log the error to the console"
     console.error('Failed to run Ultracite:', message);
     process.exit(1);

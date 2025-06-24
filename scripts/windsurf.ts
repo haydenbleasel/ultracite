@@ -14,4 +14,4 @@ export const windsurf = {
     await mkdir('.windsurf/rules', { recursive: true });
     await writeFile(path, rulesFile);
   },
-}; 
+};

@@ -46,7 +46,9 @@ describe('windsurf configuration', () => {
     it('should create .windsurf/rules directory and ultracite.md with rules content', async () => {
       await windsurf.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.windsurf/rules/ultracite.md',
         'mock rules content'
@@ -57,7 +59,9 @@ describe('windsurf configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(windsurf.create()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', {
+        recursive: true,
+      });
     });
   });
 
@@ -65,7 +69,9 @@ describe('windsurf configuration', () => {
     it('should create .windsurf/rules directory and update ultracite.md with rules content', async () => {
       await windsurf.update();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.windsurf/rules/ultracite.md',
         'mock rules content'
@@ -76,7 +82,9 @@ describe('windsurf configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(windsurf.update()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', {
+        recursive: true,
+      });
     });
   });
-}); 
+});

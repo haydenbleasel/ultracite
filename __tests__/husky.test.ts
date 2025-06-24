@@ -94,4 +94,4 @@ describe('husky configuration', () => {
       );
     });
   });
-}); 
+});
