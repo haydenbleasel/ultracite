@@ -21,6 +21,8 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   ◯ Cursor
   ◯ Windsurf  
   ◯ Zed
+  ◯ Claude Code
+  ◯ OpenAI Codex
 ```
 
 This will create the relevant file in your project directory.
@@ -32,6 +34,9 @@ If you want to manually create the rules file, you can do so by creating the rel
 - `.cursor/rules/ultracite.mdc` for Cursor
 - `.windsurf/rules/ultracite.md` for Windsurf
 - `.rules` for Zed
+- `.github/copilot-instructions.md` for GitHub Copilot
+- `.claude/CLAUDE.md` for Claude Code
+- `./AGENTS.md` for OpenAI Codex
 
 Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
 
@@ -56,6 +61,14 @@ As part of the Ultracite automatic setup, you can opt to create a `.cursor/rules
 ### Zed
 
 [Zed](https://zed.dev) is a high-performance, multiplayer code editor. During the setup process, you can opt to create a `.rules` file in your project root. Zed uses the `.rules` file to understand project-specific coding conventions and applies them when providing AI-powered code assistance.
+
+### Claude Code
+
+[Claude Code](https://claude.ai) is a command-line AI bringing Claude’s raw power directly in your terminal. It lets you search million-line codebases instantly and turn hours-long workflows into a single command. During the setup process, you can opt to create a `.claude/CLAUDE.md` file with the same comprehensive rule set.
+
+### OpenAI Codex
+
+[OpenAI Codex](https://openai.com) is an open-source local coding agent that runs in your command line interface. Pair with it to write, edit, and understand code. During the setup process, you can opt to create a `./AGENTS.md` file with the same comprehensive rule set.
 
 ## Benefits
 
