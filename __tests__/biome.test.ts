@@ -95,5 +95,43 @@ describe('biome configuration', () => {
         expect.stringContaining('"extends": [\n    "ultracite"\n  ]')
       );
     });
+
+    it('should handle JSONC files with comments', async () => {
+      const existingConfigWithComments = `{
+  // Biome configuration with comments
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  
+  /* Custom property */
+  "customProperty": "value",
+  
+  // Existing extends array
+  "extends": ["other-config"]
+}`;
+
+      mockReadFile.mockResolvedValue(existingConfigWithComments);
+
+      await biome.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
+
+      // Verify that the JSONC content was properly parsed and merged
+      // Note: Comments are not preserved in the output (limitation of JSON.stringify)
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './biome.jsonc',
+        expect.stringContaining('"customProperty": "value"')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './biome.jsonc',
+        expect.stringContaining(
+          '"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"'
+        )
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './biome.jsonc',
+        expect.stringContaining(
+          '"extends": [\n    "other-config",\n    "ultracite"\n  ]'
+        )
+      );
+    });
   });
 });

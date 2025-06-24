@@ -138,6 +138,65 @@ describe('utils', () => {
       expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf-8');
     });
 
+    it('should handle JSONC files with comments in package.json', async () => {
+      mockAccess.mockImplementation((path) => {
+        if (path === 'pnpm-workspace.yaml') {
+          return Promise.reject(new Error('ENOENT'));
+        }
+        return Promise.resolve(undefined);
+      });
+
+      const packageJsonWithComments = `{
+  // Package configuration with comments
+  "name": "test-package",
+  "version": "1.0.0",
+  
+  /* Workspaces configuration */
+  "workspaces": [
+    // Package directories
+    "packages/*",
+    "apps/*"
+  ]
+}`;
+
+      mockReadFile.mockResolvedValue(packageJsonWithComments);
+
+      const result = await isMonorepo();
+
+      expect(result).toBe(true);
+      expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf-8');
+    });
+
+    it('should handle JSONC files with comments but no workspaces', async () => {
+      mockAccess.mockImplementation((path) => {
+        if (path === 'pnpm-workspace.yaml') {
+          return Promise.reject(new Error('ENOENT'));
+        }
+        return Promise.resolve(undefined);
+      });
+
+      const packageJsonWithComments = `{
+  // Package configuration with comments
+  "name": "test-package",
+  "version": "1.0.0",
+  
+  /* Dependencies */
+  "dependencies": {
+    // Core dependencies
+    "react": "^18.0.0"
+  }
+}`;
+
+      mockReadFile.mockResolvedValue(packageJsonWithComments);
+
+      const result = await isMonorepo();
+
+      expect(result).toBe(false);
+      expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf-8');
+    });
+
     it('should prioritize pnpm-workspace.yaml over package.json workspaces', async () => {
       mockAccess.mockResolvedValue(undefined);
       // mockReadFile should not be called when pnpm-workspace.yaml exists

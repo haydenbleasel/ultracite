@@ -344,5 +344,72 @@ describe('lint-staged configuration', () => {
         '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:'
       );
     });
+
+    it('should handle JSONC files with comments in JSON config', async () => {
+      const existingConfigWithComments = `{
+  // Lint-staged configuration with comments
+  "*.js": [
+    /* ESLint and prettier for JS files */
+    "eslint --fix"
+  ],
+  
+  // CSS formatting
+  "*.css": ["prettier --write"]
+}`;
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(true); // .lintstagedrc.json
+
+      mockReadFile.mockResolvedValue(existingConfigWithComments);
+
+      await lintStaged.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith(
+        './.lintstagedrc.json',
+        'utf-8'
+      );
+      
+      // Verify the JSONC content was properly parsed and merged
+      const writtenContent = mockWriteFile.mock.calls[0][1] as string;
+      const parsedContent = parse(writtenContent);
+
+      expect(parsedContent['*.js']).toEqual(['eslint --fix']);
+      expect(parsedContent['*.css']).toEqual(['prettier --write']);
+      expect(
+        parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
+      ).toEqual(['npx ultracite format']);
+    });
+
+    it('should handle JSONC files with comments in package.json', async () => {
+      const existingPackageJsonWithComments = `{
+  // Package configuration
+  "name": "test-project",
+  "version": "1.0.0",
+  
+  /* Lint-staged configuration */
+  "lint-staged": {
+    // JavaScript files
+    "*.js": ["eslint --fix"]
+  }
+}`;
+
+      mockExists.mockResolvedValueOnce(true); // package.json exists
+      mockReadFile.mockResolvedValue(existingPackageJsonWithComments);
+
+      await lintStaged.update();
+
+      // Verify the JSONC content was properly parsed and merged
+      const writtenContent = mockWriteFile.mock.calls[0][1] as string;
+      const parsedContent = parse(writtenContent);
+
+      expect(parsedContent.name).toBe('test-project');
+      expect(parsedContent.version).toBe('1.0.0');
+      expect(parsedContent['lint-staged']).toBeDefined();
+      expect(parsedContent['lint-staged']['*.js']).toEqual(['eslint --fix']);
+      expect(
+        parsedContent['lint-staged']['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
+      ).toEqual(['npx ultracite format']);
+    });
   });
 });

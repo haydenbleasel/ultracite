@@ -122,5 +122,45 @@ describe('tsconfig configuration', () => {
         expect.stringContaining('"strictNullChecks": true')
       );
     });
+
+    it('should handle JSONC files with comments', async () => {
+      const existingConfigWithComments = `{
+  // TypeScript configuration with comments
+  "compilerOptions": {
+    /* Existing compiler options */
+    "target": "ES2020",
+    "module": "commonjs"
+  },
+  
+  // Include and exclude patterns
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}`;
+
+      mockReadFile.mockResolvedValue(existingConfigWithComments);
+
+      await tsconfig.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
+
+      // Verify that the JSONC content was properly parsed and merged
+      // Note: Comments are not preserved in the output (limitation of JSON.stringify)
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './tsconfig.json',
+        expect.stringContaining('"target": "ES2020"')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './tsconfig.json',
+        expect.stringContaining('"strictNullChecks": true')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './tsconfig.json',
+        expect.stringContaining('"include"')
+      );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './tsconfig.json',
+        expect.stringContaining('"exclude"')
+      );
+    });
   });
 });
