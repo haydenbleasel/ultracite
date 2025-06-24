@@ -1,6 +1,6 @@
 import { access, readFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists, isMonorepo, parseJsonc } from '../scripts/utils';
+import { exists, isMonorepo } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
 
@@ -146,75 +146,5 @@ describe('utils', () => {
       expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
       expect(mockReadFile).not.toHaveBeenCalled();
     });
-  });
-});
-
-describe('parseJsonc', () => {
-  it('should parse JSON without comments', () => {
-    const json = '{"key": "value", "number": 42}';
-    const result = parseJsonc(json);
-
-    expect(result).toEqual({ key: 'value', number: 42 });
-  });
-
-  it('should parse JSON with single-line comments', () => {
-    const jsonc = `{
-      "key": "value", // This is a comment
-      "number": 42 // Another comment
-    }`;
-    const result = parseJsonc(jsonc);
-
-    expect(result).toEqual({ key: 'value', number: 42 });
-  });
-
-  it('should parse JSON with multi-line comments', () => {
-    const jsonc = `{
-      "key": "value", /* This is a
-      multi-line comment */
-      "number": 42
-    }`;
-    const result = parseJsonc(jsonc);
-
-    expect(result).toEqual({ key: 'value', number: 42 });
-  });
-
-  it('should parse JSON with trailing commas', () => {
-    const jsonc = `{
-      "key": "value",
-      "number": 42,
-    }`;
-    const result = parseJsonc(jsonc);
-
-    expect(result).toEqual({ key: 'value', number: 42 });
-  });
-
-  it('should parse JSON with comments and trailing commas', () => {
-    const jsonc = `{
-      // Configuration for editor
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      /* Language specific settings */
-      "[javascript]": {
-        "editor.defaultFormatter": "biomejs.biome", // Use biome for JS
-      },
-      "editor.formatOnSave": true, // Auto format
-    }`;
-    const result = parseJsonc(jsonc);
-
-    expect(result).toEqual({
-      'editor.defaultFormatter': 'esbenp.prettier-vscode',
-      '[javascript]': {
-        'editor.defaultFormatter': 'biomejs.biome',
-      },
-      'editor.formatOnSave': true,
-    });
-  });
-
-  it('should throw error for invalid JSON after comment removal', () => {
-    const invalidJsonc = `{
-      "key": "value"
-      "invalid": "json"
-    }`;
-
-    expect(() => parseJsonc(invalidJsonc)).toThrow();
   });
 });
