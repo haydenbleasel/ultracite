@@ -1,15 +1,47 @@
 import Image from 'next/image';
 import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Assistant } from './assistant';
 import { Editor } from './editor';
+import Claude from './logos/claude.jpg';
 import Cursor from './logos/cursor.jpg';
+import OpenAI from './logos/openai.jpg';
 import VSCode from './logos/vscode.jpg';
 import Windsurf from './logos/windsurf.jpg';
 import Zed from './logos/zed.jpg';
 import { Problems } from './problems';
 import { Sidebar } from './sidebar';
 
-const logos = [VSCode, Cursor, Windsurf, Zed];
+const logos = [
+  {
+    name: 'Visual Studio Code',
+    src: VSCode,
+  },
+  {
+    name: 'Cursor',
+    src: Cursor,
+  },
+  {
+    name: 'Windsurf',
+    src: Windsurf,
+  },
+  {
+    name: 'Zed',
+    src: Zed,
+  },
+  {
+    name: 'Claude Code',
+    src: Claude,
+  },
+  {
+    name: 'OpenAI Codex',
+    src: OpenAI,
+  },
+];
 
 export const IDE = () => (
   <div className="grid gap-8">
@@ -85,20 +117,24 @@ export const IDE = () => (
         </div>
       </div>
     </div>
-    <div className="flex items-center justify-center gap-4">
+    <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center'>
       <p className="text-muted-foreground text-sm">
-        Works with all your favourite IDEs.
+        Works with all your favourite IDEs and agents.
       </p>
       <AvatarStack className="inline-flex" size={32}>
         {logos.map((logo) => (
-          <Image
-            alt=""
-            className="size-8 overflow-hidden rounded-full border"
-            height={32}
-            key={logo.src}
-            src={logo}
-            width={32}
-          />
+          <Tooltip key={logo.name}>
+            <TooltipTrigger>
+              <Image
+                alt=""
+                className="size-8 overflow-hidden rounded-full border"
+                height={32}
+                src={logo.src}
+                width={32}
+              />
+            </TooltipTrigger>
+            <TooltipContent>{logo.name}</TooltipContent>
+          </Tooltip>
         ))}
       </AvatarStack>
     </div>
