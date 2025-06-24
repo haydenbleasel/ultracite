@@ -111,7 +111,12 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectESM = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile('./package.json', 'utf-8'));
+    const packageJson = parse(await readFile('./package.json', 'utf-8')) as Record<string, unknown> | undefined;
+
+    if (!packageJson) {
+      return false;
+    }
+
     return packageJson.type === 'module';
   } catch {
     return false;
@@ -120,7 +125,11 @@ const isProjectESM = async (): Promise<boolean> => {
 
 // Update package.json lint-staged config
 const updatePackageJson = async (): Promise<void> => {
-  const packageJson = parse(await readFile('./package.json', 'utf-8'));
+  const packageJson = parse(await readFile('./package.json', 'utf-8')) as Record<string, unknown> | undefined;
+
+  if (!packageJson) {
+    throw new Error('Invalid package.json file');
+  }
 
   if (packageJson['lint-staged']) {
     packageJson['lint-staged'] = deepmerge(
@@ -137,7 +146,12 @@ const updatePackageJson = async (): Promise<void> => {
 // Update JSON config files
 const updateJsonConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
-  const existingConfig = parse(content);
+  const existingConfig = parse(content) as Record<string, unknown> | undefined;
+
+  if (!existingConfig) {
+    throw new Error('Invalid JSON file');
+  }
+
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
   await writeFile(filename, JSON.stringify(mergedConfig, null, 2));
 };
@@ -145,7 +159,12 @@ const updateJsonConfig = async (filename: string): Promise<void> => {
 // Update YAML config files
 const updateYamlConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
-  const existingConfig = parseSimpleYaml(content);
+  const existingConfig = parseSimpleYaml(content) as Record<string, unknown> | undefined;
+
+  if (!existingConfig) {
+    throw new Error('Invalid YAML file');
+  }
+
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
   await writeFile(filename, stringifySimpleYaml(mergedConfig));
 };

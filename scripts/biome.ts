@@ -15,10 +15,14 @@ export const biome = {
   create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents);
+    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+
+    if (!existingConfig) {
+      throw new Error('Invalid biome.jsonc file');
+    }
 
     // Check if ultracite is already in the extends array
-    const existingExtends = existingConfig.extends || [];
+    const existingExtends = existingConfig.extends && Array.isArray(existingConfig.extends) ? existingConfig.extends : [];
     if (!existingExtends.includes('ultracite')) {
       existingConfig.extends = [...existingExtends, 'ultracite'];
     }

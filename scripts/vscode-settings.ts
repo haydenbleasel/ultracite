@@ -29,7 +29,12 @@ export const vscode = {
   },
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents);
+    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+
+    if (!existingConfig) {
+      throw new Error('Invalid .vscode/settings.json file');
+    }
+
     const newConfig = deepmerge(existingConfig, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));

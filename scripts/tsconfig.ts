@@ -16,7 +16,11 @@ export const tsconfig = {
   create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents);
+    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+
+    if (!existingConfig) {
+      throw new Error('Invalid tsconfig.json file');
+    }
 
     const newConfig = deepmerge(existingConfig, defaultConfig);
 
