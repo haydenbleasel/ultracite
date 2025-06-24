@@ -1,3 +1,15 @@
+# v5.0.19 (Tue Jun 24 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.18 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`
