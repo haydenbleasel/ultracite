@@ -2,6 +2,8 @@ import { execSync } from 'node:child_process';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
 import { biome } from './biome';
+import { claude } from './claude';
+import { codex } from './codex';
 import { cursor } from './cursor';
 import { husky } from './husky';
 import { lintStaged } from './lint-staged';
@@ -176,6 +178,38 @@ const upsertZedRules = async () => {
   s.stop('Zed rules created.');
 };
 
+const upsertClaudeRules = async () => {
+  const s = spinner();
+  s.start('Checking for Claude Code rules...');
+
+  if (await claude.exists()) {
+    s.message('Claude Code rules found, updating...');
+    await claude.update();
+    s.stop('Claude Code rules updated.');
+    return;
+  }
+
+  s.message('Claude Code rules not found, creating...');
+  await claude.create();
+  s.stop('Claude Code rules created.');
+};
+
+const upsertCodexRules = async () => {
+  const s = spinner();
+  s.start('Checking for OpenAI Codex rules...');
+
+  if (await codex.exists()) {
+    s.message('OpenAI Codex rules found, updating...');
+    await codex.update();
+    s.stop('OpenAI Codex rules updated.');
+    return;
+  }
+
+  s.message('OpenAI Codex rules not found, creating...');
+  await codex.create();
+  s.stop('OpenAI Codex rules created.');
+};
+
 export const initialize = async () => {
   intro(title);
 
@@ -195,6 +229,8 @@ export const initialize = async () => {
         { label: 'Cursor', value: 'cursor' },
         { label: 'Windsurf', value: 'windsurf' },
         { label: 'Zed', value: 'zed' },
+        { label: 'Claude Code', value: 'claude' },
+        { label: 'OpenAI Codex', value: 'codex' },
       ],
       required: false,
     });
@@ -225,6 +261,12 @@ export const initialize = async () => {
       }
       if (editorRules.includes('zed')) {
         await upsertZedRules();
+      }
+      if (editorRules.includes('claude')) {
+        await upsertClaudeRules();
+      }
+      if (editorRules.includes('codex')) {
+        await upsertCodexRules();
       }
     }
 
