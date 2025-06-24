@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
+import { parse } from 'jsonc-parser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lintStaged } from '../scripts/lint-staged';
 import { exists } from '../scripts/utils';
@@ -120,7 +121,7 @@ describe('lint-staged configuration', () => {
       expect(mockReadFile).toHaveBeenCalledWith('./package.json', 'utf-8');
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
-      const parsedContent = JSON.parse(writtenContent);
+      const parsedContent = parse(writtenContent);
 
       expect(parsedContent['lint-staged']['*.js']).toEqual(['eslint --fix']);
       expect(
@@ -149,7 +150,7 @@ describe('lint-staged configuration', () => {
       );
       // Verify the merged configuration is written
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
-      const parsedContent = JSON.parse(writtenContent);
+      const parsedContent = parse(writtenContent);
 
       expect(parsedContent['*.js']).toEqual(['eslint --fix']);
       expect(
@@ -264,7 +265,7 @@ describe('lint-staged configuration', () => {
 
       // Verify the lint-staged configuration is added
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
-      const parsedContent = JSON.parse(writtenContent);
+      const parsedContent = parse(writtenContent);
 
       expect(parsedContent['lint-staged']).toBeDefined();
       expect(

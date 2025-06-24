@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import deepmerge from 'deepmerge';
+import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const lintStagedConfig = {
@@ -110,7 +111,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectESM = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile('./package.json', 'utf-8'));
+    const packageJson = parse(await readFile('./package.json', 'utf-8'));
     return packageJson.type === 'module';
   } catch {
     return false;
@@ -119,7 +120,7 @@ const isProjectESM = async (): Promise<boolean> => {
 
 // Update package.json lint-staged config
 const updatePackageJson = async (): Promise<void> => {
-  const packageJson = JSON.parse(await readFile('./package.json', 'utf-8'));
+  const packageJson = parse(await readFile('./package.json', 'utf-8'));
 
   if (packageJson['lint-staged']) {
     packageJson['lint-staged'] = deepmerge(
@@ -136,7 +137,7 @@ const updatePackageJson = async (): Promise<void> => {
 // Update JSON config files
 const updateJsonConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
-  const existingConfig = JSON.parse(content);
+  const existingConfig = parse(content);
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
   await writeFile(filename, JSON.stringify(mergedConfig, null, 2));
 };

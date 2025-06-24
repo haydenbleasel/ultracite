@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
+import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
@@ -15,7 +16,7 @@ export const tsconfig = {
   create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = JSON.parse(existingContents);
+    const existingConfig = parse(existingContents);
 
     const newConfig = deepmerge(existingConfig, defaultConfig);
 

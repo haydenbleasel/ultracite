@@ -1,4 +1,5 @@
 import { access, readFile } from 'node:fs/promises';
+import { parse } from 'jsonc-parser';
 
 export const exists = async (path: string) => {
   try {
@@ -15,7 +16,7 @@ export const isMonorepo = async () => {
   }
 
   try {
-    const pkgJson = JSON.parse(await readFile('package.json', 'utf-8'));
+    const pkgJson = parse(await readFile('package.json', 'utf-8'));
     return !!pkgJson.workspaces;
   } catch {
     return false;
