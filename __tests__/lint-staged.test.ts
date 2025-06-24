@@ -244,11 +244,16 @@ describe('lint-staged configuration', () => {
       global.require = originalRequire;
     });
 
-    it('should throw error when no config file exists', async () => {
+    it('should create fallback config when no config file exists', async () => {
       mockExists.mockResolvedValue(false); // All files
 
-      await expect(lintStaged.update()).rejects.toThrow(
-        'No config file found.'
+      // Should not throw, but create fallback config gracefully
+      await expect(lintStaged.update()).resolves.not.toThrow();
+      
+      // Should create fallback config
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        '.lintstagedrc.json',
+        JSON.stringify(defaultConfig, null, 2)
       );
     });
 
@@ -275,10 +280,17 @@ describe('lint-staged configuration', () => {
       ).toEqual(['npx ultracite format']);
     });
 
-    it('should throw error when no config file exists for update', async () => {
+    it('should create fallback config when no config file exists for update', async () => {
       mockExists.mockResolvedValue(false); // All files don't exist
 
-      await expect(lintStaged.update()).rejects.toThrow();
+      // Should not throw, but create fallback config gracefully
+      await expect(lintStaged.update()).resolves.not.toThrow();
+      
+      // Should create fallback config
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        '.lintstagedrc.json',
+        JSON.stringify(defaultConfig, null, 2)
+      );
     });
 
     it('should handle .lintstagedrc file (no extension)', async () => {

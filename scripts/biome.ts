@@ -17,21 +17,20 @@ export const biome = {
     const existingContents = await readFile(path, 'utf-8');
     const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
 
-    if (!existingConfig) {
-      throw new Error('Invalid biome.jsonc file');
-    }
+    // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
+    const configToWork = existingConfig || {};
 
     // Check if ultracite is already in the extends array
-    const existingExtends = existingConfig.extends && Array.isArray(existingConfig.extends) ? existingConfig.extends : [];
+    const existingExtends = configToWork.extends && Array.isArray(configToWork.extends) ? configToWork.extends : [];
     if (!existingExtends.includes('ultracite')) {
-      existingConfig.extends = [...existingExtends, 'ultracite'];
+      configToWork.extends = [...existingExtends, 'ultracite'];
     }
 
     // Merge other properties from defaultConfig
     const configToMerge = {
       $schema: defaultConfig.$schema,
     };
-    const newConfig = deepmerge(existingConfig, configToMerge);
+    const newConfig = deepmerge(configToWork, configToMerge);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
   },

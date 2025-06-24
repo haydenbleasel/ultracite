@@ -188,6 +188,11 @@ export const initialize = async () => {
       packageManagerAdd = await packageManager.select();
     }
 
+    // Validate that a package manager was selected
+    if (!packageManagerAdd || typeof packageManagerAdd !== 'string') {
+      throw new Error('No package manager selected');
+    }
+
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
       options: [

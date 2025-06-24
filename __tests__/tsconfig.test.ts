@@ -112,8 +112,15 @@ describe('tsconfig configuration', () => {
     it('should handle JSON parsing errors gracefully', async () => {
       mockReadFile.mockResolvedValue('invalid json');
 
-      await expect(tsconfig.update()).rejects.toThrow();
+      // Should not throw, but handle gracefully by treating as empty config
+      await expect(tsconfig.update()).resolves.not.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
+      
+      // Should write the default config when parsing fails
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './tsconfig.json',
+        expect.stringContaining('"strictNullChecks": true')
+      );
     });
   });
 });

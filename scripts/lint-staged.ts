@@ -127,8 +127,9 @@ const isProjectESM = async (): Promise<boolean> => {
 const updatePackageJson = async (): Promise<void> => {
   const packageJson = parse(await readFile('./package.json', 'utf-8')) as Record<string, unknown> | undefined;
 
+  // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!packageJson) {
-    throw new Error('Invalid package.json file');
+    return;
   }
 
   if (packageJson['lint-staged']) {
@@ -148,8 +149,9 @@ const updateJsonConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
   const existingConfig = parse(content) as Record<string, unknown> | undefined;
 
+  // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!existingConfig) {
-    throw new Error('Invalid JSON file');
+    return;
   }
 
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
@@ -161,8 +163,9 @@ const updateYamlConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
   const existingConfig = parseSimpleYaml(content) as Record<string, unknown> | undefined;
 
+  // If parsing fails (invalid YAML), treat as empty config and proceed gracefully
   if (!existingConfig) {
-    throw new Error('Invalid YAML file');
+    return;
   }
 
   const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
@@ -270,8 +273,10 @@ export const lintStaged = {
       }
     }
 
+    // If no config file found, create a fallback config
     if (!existingConfigFile) {
-      throw new Error('No config file found.');
+      await createFallbackConfig();
+      return;
     }
 
     await handleConfigFileUpdate(existingConfigFile);

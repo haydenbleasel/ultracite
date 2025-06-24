@@ -228,31 +228,28 @@ describe('package-manager', () => {
       );
     });
 
-    it('should throw error when no package manager is selected', async () => {
+    it('should return null when no package manager is selected', async () => {
       mockIsMonorepo.mockResolvedValue(false);
       mockSelect.mockResolvedValue(null);
 
-      await expect(packageManager.select()).rejects.toThrow(
-        'No package manager selected'
-      );
+      const result = await packageManager.select();
+      expect(result).toBeNull();
     });
 
-    it('should throw error when undefined is returned', async () => {
+    it('should return null when undefined is returned', async () => {
       mockIsMonorepo.mockResolvedValue(false);
       mockSelect.mockResolvedValue(undefined);
 
-      await expect(packageManager.select()).rejects.toThrow(
-        'No package manager selected'
-      );
+      const result = await packageManager.select();
+      expect(result).toBeNull();
     });
 
-    it('should throw error when non-string value is returned', async () => {
+    it('should return null when non-string value is returned', async () => {
       mockIsMonorepo.mockResolvedValue(false);
       mockSelect.mockResolvedValue(123);
 
-      await expect(packageManager.select()).rejects.toThrow(
-        'No package manager selected'
-      );
+      const result = await packageManager.select();
+      expect(result).toBeNull();
     });
 
     it('should handle select function rejection', async () => {

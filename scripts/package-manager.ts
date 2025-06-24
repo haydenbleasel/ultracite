@@ -61,7 +61,7 @@ export const packageManager = {
     });
 
     if (typeof value !== 'string') {
-      throw new Error('No package manager selected');
+      return null;
     }
 
     return value;

@@ -85,8 +85,15 @@ describe('biome configuration', () => {
     it('should handle JSON parsing errors gracefully', async () => {
       mockReadFile.mockResolvedValue('invalid json');
 
-      await expect(biome.update()).rejects.toThrow();
+      // Should not throw, but handle gracefully by treating as empty config
+      await expect(biome.update()).resolves.not.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
+      
+      // Should write the default config when parsing fails
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './biome.jsonc',
+        expect.stringContaining('"extends": [\n    "ultracite"\n  ]')
+      );
     });
   });
 });

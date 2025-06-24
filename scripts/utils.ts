@@ -19,7 +19,7 @@ export const isMonorepo = async () => {
     const pkgJson = parse(await readFile('package.json', 'utf-8')) as Record<string, unknown> | undefined;
 
     if (!pkgJson) {
-      throw new Error('Invalid package.json file');
+      return false;
     }
 
     return !!pkgJson.workspaces;
