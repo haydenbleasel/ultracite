@@ -1,3 +1,15 @@
+# v5.0.16 (Tue Jun 24 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Add more unit tests for jsonc files ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.15 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`
