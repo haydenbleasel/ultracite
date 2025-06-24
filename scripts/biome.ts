@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
+import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
@@ -14,14 +15,14 @@ export const biome = {
   create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = JSON.parse(existingContents);
-    
+    const existingConfig = parse(existingContents);
+
     // Check if ultracite is already in the extends array
     const existingExtends = existingConfig.extends || [];
     if (!existingExtends.includes('ultracite')) {
       existingConfig.extends = [...existingExtends, 'ultracite'];
     }
-    
+
     // Merge other properties from defaultConfig
     const configToMerge = {
       $schema: defaultConfig.$schema,
