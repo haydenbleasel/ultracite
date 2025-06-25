@@ -7,9 +7,10 @@ type FormatOptions = {
 
 export const format = (files: string[], options: FormatOptions) => {
   try {
-    const target = files.length > 0 ? files.join(' ') : './';
+    const target = files.length > 0 ? files.map(file => `"${file}"`).join(' ') : './';
     const unsafeFlag = options.unsafe ? '--unsafe' : '';
-    execSync(`npx @biomejs/biome check --write ${unsafeFlag} ${target}`, { stdio: 'inherit' });
+    const command = `npx @biomejs/biome check --write${unsafeFlag ? ` ${unsafeFlag}` : ''} ${target}`;
+    execSync(command, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
 
