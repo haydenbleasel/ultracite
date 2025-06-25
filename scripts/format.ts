@@ -1,10 +1,15 @@
 import { execSync } from 'node:child_process';
 import process from 'node:process';
 
-export const format = (files: string[]) => {
+type FormatOptions = {
+  unsafe: boolean;
+};
+
+export const format = (files: string[], options: FormatOptions) => {
   try {
     const target = files.length > 0 ? files.join(' ') : './';
-    execSync(`npx biome check --write ${target}`, { stdio: 'inherit' });
+    const unsafeFlag = options.unsafe ? '--unsafe' : '';
+    execSync(`npx biome check --write ${unsafeFlag} ${target}`, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
 

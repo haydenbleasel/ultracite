@@ -26,6 +26,7 @@ program
   .command('format')
   .description('Run Biome linter and fixes files')
   .argument('[files...]', 'specific files to format (optional)')
+  .option('--unsafe', 'apply unsafe fixes')
   .action(format);
 
 program.parse();
