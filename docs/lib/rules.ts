@@ -1,4 +1,4 @@
-export const rules = [
+const accessibilityRules = [
   `Don't use \`accessKey\` attribute on any HTML element.`,
   `Don't set \`aria-hidden="true"\` on focusable elements.`,
   `Don't add ARIA roles, states, and properties to elements that don't support them.`,
@@ -8,8 +8,8 @@ export const rules = [
   'Make sure label elements have text content and are associated with an input.',
   `Don't assign interactive ARIA roles to non-interactive HTML elements.`,
   `Don't assign \`tabIndex\` to non-interactive HTML elements.`,
-  `Don't use positive integers for \`tabIndex\` property.`,
-  `Don't include "image", "picture", or "photo" in img \`alt\` prop.`,
+  `Don't use positive integers for \`tabIndex\` property.\`,
+  `Don't include "image", "picture", or "photo" in img alt prop.`,
   `Don't use explicit role property that's the same as the implicit/default role.`,
   'Make static elements with click handlers use a valid role attribute.',
   'Always include a `title` element for SVG elements.',
@@ -33,6 +33,10 @@ export const rules = [
   'Use valid ARIA state and property values.',
   'Use valid values for the `autocomplete` attribute on input elements.',
   'Use correct ISO language/country codes for the `lang` attribute.',
+];
+
+// Code complexity and quality rules
+const complexityRules = [
   `Don't use consecutive spaces in regular expression literals.`,
   `Don't use the \`arguments\` object.`,
   `Don't use primitive type aliases or misleading types.`,
@@ -61,7 +65,7 @@ export const rules = [
   `Don't use useless \`this\` aliasing.`,
   `Don't use any or unknown as type constraints.`,
   `Don't initialize variables to undefined.`,
-  `Don't use void operators (they're not familiar).`,
+  `Don't use the void operators (they're not familiar).`,
   'Use arrow functions instead of function expressions.',
   'Use Date.now() to get milliseconds since the Unix Epoch.',
   'Use .flatMap() instead of map().flat() when possible.',
@@ -86,7 +90,30 @@ export const rules = [
   `Don't use variables and function parameters before they're declared.`,
   `Don't use 8 and 9 escape sequences in string literals.`,
   `Don't use literal numbers that lose precision.`,
+];
+
+// React and JSX specific rules
+const reactRules = [
   `Don't use the return value of React.render.`,
+  'Make sure all dependencies are correctly specified in React hooks.',
+  'Make sure all React hooks are called from the top level of component functions.',
+  `Don't forget key props in iterators and collection literals.`,
+  `Don't destructure props inside JSX components in Solid projects.`,
+  `Don't define React components inside other components.`,
+  `Don't use event handlers on non-interactive elements.`,
+  `Don't assign to React component props.`,
+  `Don't use both \`children\` and \`dangerouslySetInnerHTML\` props on the same element.`,
+  `Don't use dangerous JSX props.`,
+  `Don't use Array index in keys.`,
+  `Don't insert comments as text nodes.`,
+  `Don't assign JSX properties multiple times.`,
+  `Don't add extra closing tags for components without children.`,
+  'Use `<>...</>` instead of `<Fragment>...</Fragment>`.',
+  `Watch out for possible "wrong" semicolons inside JSX elements.`,
+];
+
+// Correctness and safety rules
+const correctnessRules = [
   `Don't assign a value to itself.`,
   `Don't return a value from a setter.`,
   `Don't compare expressions that modify string case with non-compliant values.`,
@@ -102,24 +129,20 @@ export const rules = [
   `Don't have unused private class members.`,
   `Don't have unused variables.`,
   `Make sure void (self-closing) elements don't have children.`,
-  `Don't return a value from a function that has a 'void' return type.`,
+  `Don't return a value from a function with the return type 'void'`,
   'Make sure all dependencies are correctly specified in React hooks.',
   'Make sure all React hooks are called from the top level of component functions.',
   'Use isNaN() when checking for NaN.',
   `Don't forget key props in iterators and collection literals.`,
-  `Make sure "for" loop update clauses move the counter in the right direction.`,
+  'Make sure "for" loop update clauses move the counter in the right direction.',
   'Make sure typeof expressions are compared to valid values.',
   'Make sure generator functions contain yield.',
   `Don't use await inside loops.`,
   `Don't use bitwise operators.`,
   `Don't use expressions where the operation doesn't change the value.`,
-  `Don't destructure props inside JSX components in Solid projects.`,
   'Make sure Promise-like statements are handled appropriately.',
   `Don't use __dirname and __filename in the global scope.`,
   'Prevent import cycles.',
-  `Don't define React components inside other components.`,
-  `Don't use event handlers on non-interactive elements.`,
-  `Don't assign to React component props.`,
   `Don't use configured elements.`,
   `Don't hardcode sensitive data like API keys and tokens.`,
   `Don't let variable declarations shadow variables from outer scopes.`,
@@ -144,55 +167,66 @@ export const rules = [
   `Don't use spread (\`...\`) syntax on accumulators.`,
   `Don't use the \`delete\` operator.`,
   `Don't access namespace imports dynamically.`,
-  `Don't use \`<img>\` elements in Next.js projects.`,
   `Don't use namespace imports.`,
   'Declare regex literals at the top level.',
   `Don't use \`target="_blank"\` without \`rel="noopener"\`.`,
-  `Don't use dangerous JSX props.`,
-  `Don't use both \`children\` and \`dangerouslySetInnerHTML\` props on the same element.`,
-  `Don't use global \`eval()\`.`,
-  `Don't use callbacks in asynchronous tests and hooks.`,
+];
+
+// TypeScript specific rules
+const typeScriptRules = [
   `Don't use TypeScript enums.`,
   `Don't export imported variables.`,
-  `Don't use \`<head>\` elements in Next.js projects.`,
   `Don't add type annotations to variables, parameters, and class properties that are initialized with literal expressions.`,
   `Don't use TypeScript namespaces.`,
+  `Don't use non-null assertions with the \`!\` postfix operator.`,
+  `Don't use parameter properties in class constructors.`,
+  `Don't use user-defined types.`,
+  'Use `as const` instead of literal types and type annotations.',
+  'Use either `T[]` or `Array<T>` consistently.',
+  'Initialize each enum member value explicitly.',
+  'Use `export type` for types.',
+  'Use `import type` for types.',
+  'Make sure all enum members are literal values.',
+  `Don't use TypeScript const enum.`,
+  `Don't declare empty interfaces.`,
+  `Don't let variables evolve into any type through reassignments.`,
+  `Don't use the any type.`,
+  `Don't misuse the non-null assertion operator (!) in TypeScript files.`,
+  `Don't use implicit any type on variable declarations.`,
+  `Don't merge interfaces and classes unsafely.`,
+  `Don't use overload signatures that aren't next to each other.`,
+  'Use the namespace keyword instead of the module keyword to declare TypeScript namespaces.',
+];
+
+// Style and consistency rules
+const styleRules = [
+  `Don't use global \`eval()\`.`,
+  `Don't use callbacks in asynchronous tests and hooks.`,
   `Don't use negation in \`if\` statements that have \`else\` clauses.`,
   `Don't use nested ternary expressions.`,
-  `Don't use non-null assertions with the \`!\` postfix operator.`,
   `Don't reassign function parameters.`,
-  `Don't use parameter properties in class constructors.`,
   `This rule lets you specify global variable names you don't want to use in your application.`,
   `Don't use specified modules when loaded by import or require.`,
-  `Don't use user-defined types.`,
   `Don't use constants whose value is the upper-case version of their name.`,
   'Use `String.slice()` instead of `String.substr()` and `String.substring()`.',
   `Don't use template literals if you don't need interpolation or special-character handling.`,
   `Don't use \`else\` blocks when the \`if\` block breaks early.`,
   `Don't use yoda expressions.`,
   `Don't use Array constructors.`,
-  'Use `as const` instead of literal types and type annotations.',
   'Use `at()` instead of integer index access.',
   'Follow curly brace conventions.',
   'Use `else if` instead of nested `if` statements in `else` clauses.',
   'Use single `if` statements instead of nested `if` clauses.',
-  'Use either `T[]` or `Array<T>` consistently.',
   'Use `new` for all builtins except `String`, `Number`, and `Boolean`.',
   'Use consistent accessibility modifiers on class properties and methods.',
   'Use `const` declarations for variables that are only assigned once.',
   'Put default function parameters and optional function parameters last.',
   'Include a `default` clause in switch statements.',
-  'Initialize each enum member value explicitly.',
   'Use the `**` operator instead of `Math.pow`.',
-  'Use `export type` for types.',
   'Use `for-of` loops when you need the index to extract an item from the iterated array.',
-  'Use `<>...</>` instead of `<Fragment>...</Fragment>`.',
-  'Use `import type` for types.',
-  'Make sure all enum members are literal values.',
   'Use `node:assert/strict` over `node:assert`.',
   'Use the `node:` protocol for Node.js builtin modules.',
   'Use Number properties instead of global ones.',
-  `Don't add extra closing tags for components without children.`,
   'Use assignment operator shorthand where possible.',
   'Use function types instead of object types with call signatures.',
   'Use template literals over string concatenation.',
@@ -200,49 +234,35 @@ export const rules = [
   `Don't throw non-Error values.`,
   'Use `String.trimStart()` and `String.trimEnd()` over `String.trimLeft()` and `String.trimRight()`.',
   'Use standard constants instead of approximated literals.',
-  `Don't use Array index in keys.`,
   `Don't assign values in expressions.`,
   `Don't use async functions as Promise executors.`,
   `Don't reassign exceptions in catch clauses.`,
   `Don't reassign class members.`,
-  `Don't insert comments as text nodes.`,
   `Don't compare against -0.`,
   `Don't use labeled statements that aren't loops.`,
   `Don't use void type outside of generic or return types.`,
   `Don't use console.`,
-  `Don't use TypeScript const enum.`,
   `Don't use control characters and escape sequences that match control characters in regular expression literals.`,
   `Don't use debugger.`,
   `Don't assign directly to document.cookie.`,
-  `Don't import next/document outside of pages/_document.jsx in Next.js projects.`,
   'Use `===` and `!==`.',
   `Don't use duplicate case labels.`,
   `Don't use duplicate class members.`,
   `Don't use duplicate conditions in if-else-if chains.`,
-  `Don't assign JSX properties multiple times.`,
   `Don't use two keys with the same name inside objects.`,
   `Don't use duplicate function parameter names.`,
   `Don't have duplicate hooks in describe blocks.`,
   `Don't use empty block statements and static blocks.`,
-  `Don't declare empty interfaces.`,
-  `Don't let variables evolve into any type through reassignments.`,
-  `Don't use the any type.`,
-  `Don't use export or module.exports in test files.`,
-  `Don't misuse the non-null assertion operator (!) in TypeScript files.`,
   `Don't let switch clauses fall through.`,
-  `Don't use focused tests.`,
   `Don't reassign function declarations.`,
   `Don't allow assignments to native objects and read-only global variables.`,
   'Use Number.isFinite instead of global isFinite.',
   'Use Number.isNaN instead of global isNaN.',
-  `Don't use the next/head module in pages/_document.js on Next.js projects.`,
-  `Don't use implicit any type on variable declarations.`,
   `Don't assign to imported bindings.`,
   `Don't use irregular whitespace characters.`,
   `Don't use labels that share a name with a variable.`,
   `Don't use characters made with multiple code points in character class syntax.`,
   'Make sure to use new and constructor properly.',
-  'Make sure the assertion function, like expect, is placed inside an it() function call.',
   `Don't use shorthand assign when the variable appears on both sides.`,
   `Don't use octal escape sequences in string literals.`,
   `Don't use Object.prototype builtins directly.`,
@@ -250,16 +270,12 @@ export const rules = [
   `Don't have redundant "use strict".`,
   `Don't compare things where both sides are exactly the same.`,
   `Don't let identifiers shadow restricted names.`,
-  `Don't use disabled tests.`,
   `Don't use sparse arrays (arrays with holes).`,
-  `Watch out for possible "wrong" semicolons inside JSX elements.`,
   `Don't use template literal placeholder syntax in regular strings.`,
   `Don't use the then property.`,
-  `Don't merge interfaces and classes unsafely.`,
   `Don't use unsafe negation.`,
   `Don't use var.`,
   `Don't use with statements in non-strict contexts.`,
-  `Don't use overload signatures that aren't next to each other.`,
   'Make sure async functions actually use await.',
   'Make sure default clauses in switch statements come last.',
   'Make sure to pass a message value when creating a built-in error.',
@@ -267,15 +283,105 @@ export const rules = [
   'Use a recommended display strategy with Google Fonts.',
   'Make sure for-in loops include an if statement.',
   'Use Array.isArray() instead of instanceof Array.',
-  'Use the namespace keyword instead of the module keyword to declare TypeScript namespaces.',
   'Make sure to use the digits argument with Number#toFixed().',
   `Make sure to use the "use strict" directive in script files.`,
 ];
 
+// Next.js specific rules
+const nextJsRules = [
+  `Don't use \`<img>\` elements in Next.js projects.`,
+  `Don't use \`<head>\` elements in Next.js projects.`,
+  `Don't import next/document outside of pages/_document.jsx in Next.js projects.`,
+  `Don't use the next/head module in pages/_document.js on Next.js projects.`,
+];
+
+// Testing specific rules
+const testingRules = [
+  `Don't use export or module.exports in test files.`,
+  `Don't use focused tests.`,
+  'Make sure the assertion function, like expect, is placed inside an it() function call.',
+  `Don't use disabled tests.`,
+];
+
+// Combine all rules for backward compatibility
+export const rules = [
+  ...accessibilityRules,
+  ...complexityRules,
+  ...reactRules,
+  ...correctnessRules,
+  ...typeScriptRules,
+  ...styleRules,
+  ...nextJsRules,
+  ...testingRules,
+];
+
 export const rulesFile = `---
-description: Ultracite Rules
+description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx}"
 alwaysApply: true
 ---
 
-${rules.map((rule) => `- ${rule}`).join('\n')}`;
+# Project Context
+Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
+
+## Key Principles
+- Zero configuration required
+- Subsecond performance
+- Maximum type safety
+- AI-friendly code generation
+
+## Before Writing Code
+1. Analyze existing patterns in the codebase
+2. Consider edge cases and error scenarios
+3. Follow the rules below strictly
+5. Validate accessibility requirements
+
+## Rules
+
+### Accessibility (a11y)
+${accessibilityRules.map((rule) => `- ${rule}`).join('\n')}
+
+### Code Complexity and Quality
+${complexityRules.map((rule) => `- ${rule}`).join('\n')}
+
+### React and JSX Best Practices
+${reactRules.map((rule) => `- ${rule}`).join('\n')}
+
+### Correctness and Safety
+${correctnessRules.map((rule) => `- ${rule}`).join('\n')}
+
+### TypeScript Best Practices
+${typeScriptRules.map((rule) => `- ${rule}`).join('\n')}
+
+### Style and Consistency
+${styleRules.map((rule) => `- ${rule}`).join('\n')}
+
+### Next.js Specific Rules
+${nextJsRules.map((rule) => `- ${rule}`).join('\n')}
+
+### Testing Best Practices
+${testingRules.map((rule) => `- ${rule}`).join('\n')}
+
+## Common Tasks
+- \`npx ultracite init\` - Initialize Ultracite in your project
+- \`npx ultracite format\` - Format and fix code automatically
+- \`npx ultracite lint\` - Check for issues without fixing
+
+## Example: Error Handling
+\`\`\`typescript
+// ✅ Good: Comprehensive error handling
+try {
+  const result = await fetchData();
+  return { success: true, data: result };
+} catch (error) {
+  console.error('API call failed:', error);
+  return { success: false, error: error.message };
+}
+
+// ❌ Bad: Swallowing errors
+try {
+  return await fetchData();
+} catch (e) {
+  console.log(e);
+}
+\`\`\``;
