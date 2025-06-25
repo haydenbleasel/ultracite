@@ -2,14 +2,14 @@ import { execSync } from 'node:child_process';
 import process from 'node:process';
 
 type FormatOptions = {
-  unsafe: boolean;
+  unsafe?: boolean;
 };
 
-export const format = (files: string[], options: FormatOptions) => {
+export const format = (files: string[], options: FormatOptions = {}) => {
   try {
     const target = files.length > 0 ? files.join(' ') : './';
-    const unsafeFlag = options.unsafe ? '--unsafe' : '';
-    execSync(`npx @biomejs/biome check --write ${unsafeFlag} ${target}`, { stdio: 'inherit' });
+    const unsafeFlag = options.unsafe ? ' --unsafe' : '';
+    execSync(`npx @biomejs/biome check --write${unsafeFlag} ${target}`, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
 
