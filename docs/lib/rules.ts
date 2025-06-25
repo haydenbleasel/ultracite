@@ -61,7 +61,7 @@ export const rules = [
   `Don't use useless \`this\` aliasing.`,
   `Don't use any or unknown as type constraints.`,
   `Don't initialize variables to undefined.`,
-  `Don't use void operators (they're not familiar).`,
+  `Don't use the void operators (they're not familiar).`,
   'Use arrow functions instead of function expressions.',
   'Use Date.now() to get milliseconds since the Unix Epoch.',
   'Use .flatMap() instead of map().flat() when possible.',
@@ -102,12 +102,12 @@ export const rules = [
   `Don't have unused private class members.`,
   `Don't have unused variables.`,
   `Make sure void (self-closing) elements don't have children.`,
-  `Don't return a value from a function that has a 'void' return type.`,
+  `Don't return a value from a function with the return type 'void'`,
   'Make sure all dependencies are correctly specified in React hooks.',
   'Make sure all React hooks are called from the top level of component functions.',
   'Use isNaN() when checking for NaN.',
   `Don't forget key props in iterators and collection literals.`,
-  `Make sure "for" loop update clauses move the counter in the right direction.`,
+  'Make sure "for" loop update clauses move the counter in the right direction.',
   'Make sure typeof expressions are compared to valid values.',
   'Make sure generator functions contain yield.',
   `Don't use await inside loops.`,
@@ -273,9 +273,70 @@ export const rules = [
 ];
 
 export const rulesFile = `---
-description: Ultracite Rules
+description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx}"
 alwaysApply: true
 ---
 
-${rules.map((rule) => `- ${rule}`).join('\n')}`;
+# Project Context
+Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
+
+## Key Principles
+- Zero configuration required
+- Subsecond performance
+- Maximum type safety
+- AI-friendly code generation
+
+## Before Writing Code
+1. Analyze existing patterns in the codebase
+2. Consider edge cases and error scenarios
+3. Follow the rules below strictly
+4. Write comprehensive tests
+5. Validate accessibility requirements
+
+## Rules
+
+### Accessibility (a11y)
+${rules.slice(0, 35).map((rule) => `- ${rule}`).join('\n')}
+
+### Code Complexity and Quality
+${rules.slice(35, 89).map((rule) => `- ${rule}`).join('\n')}
+
+### Correctness and Safety
+${rules.slice(89, 152).map((rule) => `- ${rule}`).join('\n')}
+
+### Style and Consistency
+${rules.slice(152, 214).map((rule) => `- ${rule}`).join('\n')}
+
+### Performance
+${rules.slice(214, 220).map((rule) => `- ${rule}`).join('\n')}
+
+### Security
+${rules.slice(220, 224).map((rule) => `- ${rule}`).join('\n')}
+
+### Testing and Reliability
+${rules.slice(224).map((rule) => `- ${rule}`).join('\n')}
+
+## Common Tasks
+- \`npx ultracite init\` - Initialize Ultracite in your project
+- \`npx ultracite format\` - Format and fix code automatically
+- \`npx ultracite lint\` - Check for issues without fixing
+
+## Example: Error Handling
+\`\`\`typescript
+// ✅ Good: Comprehensive error handling
+try {
+  const result = await fetchData();
+  return { success: true, data: result };
+} catch (error) {
+  console.error('API call failed:', error);
+  return { success: false, error: error.message };
+}
+
+// ❌ Bad: Swallowing errors
+try {
+  return await fetchData();
+} catch (e) {
+  console.log(e);
+}
+\`\`\``;
