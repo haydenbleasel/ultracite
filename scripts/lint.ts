@@ -4,7 +4,7 @@ import process from 'node:process';
 export const lint = (files: string[]) => {
   try {
     const target = files.length > 0 ? files.join(' ') : './';
-    execSync(`npx biome check ${target}`, { stdio: 'inherit' });
+    execSync(`npx @biomejs/biome check ${target}`, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     // biome-ignore lint/suspicious/noConsole: "We want to log the error to the console"
