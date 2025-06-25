@@ -17,7 +17,7 @@ If you want to modify Ultracite or test changes:
 2. Run pnpm install (the project uses pnpm for managing dependencies and a lockfile, as indicated in the repo).
 3. The config is in `biome.jsonc` and related files. The CLI command (like `ultracite init`) likely has a script in the repo – check the `package.json` bin field or the `scripts/` directory for implementation.
 4. You can link your local Ultracite into a test project by using npm/yarn/pnpm link or npm pack to create a tarball and install it. This way, you can try your version of Ultracite on a sample project to see the effect of changes.
-5. If you adjust rules in the config, test them by running npx biome lint or similar in the context of that config.
+5. If you adjust rules in the config, test them by running npx @biomejs/biome lint or similar in the context of that config.
 
 ## Project structure
 

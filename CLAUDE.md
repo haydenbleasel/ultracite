@@ -132,10 +132,10 @@ export const integration = {
 ### Development
 ```bash
 # Run Biome formatter on this project
-npx biome check --write ./
+npx @biomejs/biome check --write ./
 
 # Run Biome linter without fixes
-npx biome check ./
+npx @biomejs/biome check ./
 
 # Test the CLI locally
 node ./dist/index.js init
@@ -174,7 +174,7 @@ The `docs/` directory contains a Next.js website:
 3. Users will get updated rules on next `ultracite init`
 
 ### Debugging Issues
-1. Check if it's a Biome issue first: `npx biome check`
+1. Check if it's a Biome issue first: `npx @biomejs/biome check`
 2. Enable verbose output in the scripts
 3. Check test files for expected behavior
 

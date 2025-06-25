@@ -15,7 +15,7 @@ describe('format command', () => {
   it('should run biome check with --write flag for all files when no files specified', () => {
     format([]);
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx biome check --write ./', {
+    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check --write ./', {
       stdio: 'inherit',
     });
   });
@@ -25,7 +25,7 @@ describe('format command', () => {
     format(files);
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx biome check --write src/index.ts src/utils.ts',
+      'npx @biomejs/biome check --write src/index.ts src/utils.ts',
       { stdio: 'inherit' }
     );
   });
@@ -35,7 +35,7 @@ describe('format command', () => {
     format(files);
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx biome check --write src/index.ts',
+      'npx @biomejs/biome check --write src/index.ts',
       { stdio: 'inherit' }
     );
   });

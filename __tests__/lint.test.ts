@@ -15,7 +15,7 @@ describe('lint command', () => {
   it('should run biome check without --write flag for all files when no files specified', () => {
     lint([]);
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx biome check ./', {
+    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check ./', {
       stdio: 'inherit',
     });
   });
@@ -25,7 +25,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx biome check src/index.ts src/utils.ts',
+      'npx @biomejs/biome check src/index.ts src/utils.ts',
       { stdio: 'inherit' }
     );
   });
@@ -34,7 +34,7 @@ describe('lint command', () => {
     const files = ['src/index.ts'];
     lint(files);
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx biome check src/index.ts', {
+    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check src/index.ts', {
       stdio: 'inherit',
     });
   });
