@@ -1,3 +1,36 @@
+# v5.0.20 (Wed Jun 25 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: null[@tommideso](https://github.com/tommideso)
+
+:heart: Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
+
+#### 🐛 Bug Fix
+
+- feat: Add TanStack Router file convention support to useFilenamingConvention rule [#174](https://github.com/haydenbleasel/ultracite/pull/174) ([@Copilot](https://github.com/Copilot))
+- Fix Yarn 4.9.2 compatibility by replacing --save-exact with -E flag [#173](https://github.com/haydenbleasel/ultracite/pull/173) ([@Copilot](https://github.com/Copilot))
+- fix: replace 'npx biome' with 'npx @biomejs/biome' [#170](https://github.com/haydenbleasel/ultracite/pull/170) ([@tommideso](https://github.com/tommideso))
+- feat: Add "tv" to allowed functions in linter options [#169](https://github.com/haydenbleasel/ultracite/pull/169) ([@harryevans1997](https://github.com/harryevans1997))
+
+#### ⚠️ Pushed to `main`
+
+- Update format.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #167 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 4
+
+- [@Copilot](https://github.com/Copilot)
+- [@tommideso](https://github.com/tommideso)
+- Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.19 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`
