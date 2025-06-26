@@ -263,8 +263,8 @@ export const initialize = async () => {
     const extraFeatures = await multiselect({
       message: 'Would you like any of the following (optional)?',
       options: [
-        { label: 'Pre-commit hook with Husky', value: 'precommit-hooks' },
-        { label: 'Pre-commit hook with lefthook', value: 'lefthook' },
+        { label: 'Husky pre-commit hook', value: 'precommit-hooks' },
+        { label: 'Lefthook pre-commit hook', value: 'lefthook' },
         { label: 'Lint-staged', value: 'lint-staged' },
       ],
       required: false,
