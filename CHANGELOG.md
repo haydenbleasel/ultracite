@@ -1,3 +1,15 @@
+# v5.0.21 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Fix Yarn monorepo support by removing invalid -W flag [#180](https://github.com/haydenbleasel/ultracite/pull/180) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.20 (Wed Jun 25 2025)
 
 :tada: This release contains work from new contributors! :tada:
