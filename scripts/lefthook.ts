@@ -6,9 +6,17 @@ const lefthookCommand = 'npx ultracite format';
 const path = './lefthook.yml';
 
 const lefthookConfig = `pre-commit:
-  commands:
-    ultracite:
-      run: ${lefthookCommand}
+  jobs:
+    - run: ${lefthookCommand}
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
 `;
 
 export const lefthook = {
@@ -28,14 +36,45 @@ export const lefthook = {
       return;
     }
 
-    // Parse existing YAML and add ultracite command
+    // Parse existing YAML and add ultracite job
     if (existingContents.includes('pre-commit:')) {
-      // Add ultracite command to existing pre-commit section
-      const updatedConfig = existingContents.replace(
-        /(pre-commit:\s*\n\s*commands:\s*\n)/,
-        `$1    ultracite:\n      run: ${lefthookCommand}\n`
-      );
-      await writeFile(path, updatedConfig);
+      // Check if jobs section exists
+      if (existingContents.includes('jobs:')) {
+        // Add ultracite job to existing jobs array
+        const ultraciteJob = `    - run: ${lefthookCommand}
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true`;
+        const updatedConfig = existingContents.replace(
+          /(pre-commit:\s*\n\s*jobs:\s*\n)/,
+          `$1${ultraciteJob}\n`
+        );
+        await writeFile(path, updatedConfig);
+      } else {
+        // Add jobs section to existing pre-commit
+        const jobsSection = `  jobs:
+    - run: ${lefthookCommand}
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true`;
+        const updatedConfig = existingContents.replace(
+          /(pre-commit:\s*\n)/,
+          `$1${jobsSection}\n`
+        );
+        await writeFile(path, updatedConfig);
+      }
     } else {
       // Append new pre-commit section
       await writeFile(path, `${existingContents}\n${lefthookConfig}`);

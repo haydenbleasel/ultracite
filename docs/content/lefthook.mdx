@@ -116,20 +116,41 @@ Here's what the `lefthook.yml` configuration looks like:
 
 ```yaml
 pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
 ```
 
-You can extend this configuration to include additional commands:
+This configuration:
+- Only runs on JavaScript, TypeScript, JSON, and CSS files
+- Automatically stages any files that were fixed by the formatter
+- Uses the efficient `jobs` syntax for better performance
+
+You can extend this configuration to include additional jobs:
 
 ```yaml
 pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
-    tests:
-      run: npm test
-    typecheck:
-      run: tsc --noEmit
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
 ```

@@ -67,9 +67,17 @@ describe('lefthook configuration', () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         './lefthook.yml',
         `pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
 `
       );
     });
@@ -78,11 +86,18 @@ describe('lefthook configuration', () => {
   describe('update', () => {
     it('should not modify config if ultracite command already exists', async () => {
       const existingContent = `pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
-    other:
-      run: npm test`;
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
       await lefthook.update();
@@ -91,7 +106,34 @@ describe('lefthook configuration', () => {
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
-    it('should add ultracite command to existing pre-commit section', async () => {
+    it('should add ultracite job to existing pre-commit jobs section', async () => {
+      const existingContent = `pre-commit:
+  jobs:
+    - run: npm run lint`;
+      mockReadFile.mockResolvedValue(existingContent);
+
+      await lefthook.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './lefthook.yml',
+        `pre-commit:
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm run lint`
+      );
+    });
+
+    it('should add jobs section to existing pre-commit without jobs', async () => {
       const existingContent = `pre-commit:
   commands:
     lint:
@@ -104,9 +146,18 @@ describe('lefthook configuration', () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         './lefthook.yml',
         `pre-commit:
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
   commands:
-    ultracite:
-      run: npx ultracite format
     lint:
       run: npm run lint`
       );
@@ -129,9 +180,17 @@ describe('lefthook configuration', () => {
     lint:
       run: npm run lint
 pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
 `
       );
     });
@@ -145,9 +204,17 @@ pre-commit:
         './lefthook.yml',
         `
 pre-commit:
-  commands:
-    ultracite:
-      run: npx ultracite format
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
 `
       );
     });
