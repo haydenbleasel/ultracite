@@ -1,3 +1,15 @@
+# v5.0.23 (Thu Jun 26 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update meta.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.22 (Thu Jun 26 2025)
 
 #### 🐛 Bug Fix
