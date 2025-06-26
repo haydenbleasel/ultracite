@@ -94,8 +94,8 @@ describe('lefthook configuration', () => {
     it('should add ultracite command to existing pre-commit section', async () => {
       const existingContent = `pre-commit:
   commands:
-    test:
-      run: npm test`;
+    lint:
+      run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
       await lefthook.update();
@@ -107,8 +107,8 @@ describe('lefthook configuration', () => {
   commands:
     ultracite:
       run: npx ultracite format
-    test:
-      run: npm test`
+    lint:
+      run: npm run lint`
       );
     });
 
