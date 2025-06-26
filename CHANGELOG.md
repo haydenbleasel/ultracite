@@ -1,3 +1,15 @@
+# v5.0.22 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Add support for lefthook as git hooks manager [#178](https://github.com/haydenbleasel/ultracite/pull/178) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.21 (Thu Jun 26 2025)
 
 #### 🐛 Bug Fix
