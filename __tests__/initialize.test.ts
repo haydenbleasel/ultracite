@@ -17,6 +17,7 @@ vi.mock('@clack/prompts');
 vi.mock('../scripts/utils');
 vi.mock('../scripts/biome');
 vi.mock('../scripts/husky');
+vi.mock('../scripts/lefthook');
 vi.mock('../scripts/lint-staged');
 vi.mock('../scripts/tsconfig');
 vi.mock('../scripts/vscode-settings');
