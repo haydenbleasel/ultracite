@@ -1,3 +1,20 @@
+# v5.0.25 (Fri Jun 27 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create v5 migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add ESLint and Prettier migration guides ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create biome migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create llms.txt ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.24 (Fri Jun 27 2025)
 
 #### 🐛 Bug Fix
