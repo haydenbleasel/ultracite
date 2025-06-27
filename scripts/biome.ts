@@ -28,13 +28,18 @@ export const biome = {
   update: async () => {
     const path = await getBiomeConfigPath();
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+    const existingConfig = parse(existingContents) as
+      | Record<string, unknown>
+      | undefined;
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToWork = existingConfig || {};
 
     // Check if ultracite is already in the extends array
-    const existingExtends = configToWork.extends && Array.isArray(configToWork.extends) ? configToWork.extends : [];
+    const existingExtends =
+      configToWork.extends && Array.isArray(configToWork.extends)
+        ? configToWork.extends
+        : [];
     if (!existingExtends.includes('ultracite')) {
       configToWork.extends = [...existingExtends, 'ultracite'];
     }
