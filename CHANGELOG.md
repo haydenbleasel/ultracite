@@ -1,3 +1,15 @@
+# v5.0.24 (Fri Jun 27 2025)
+
+#### 🐛 Bug Fix
+
+- Improve biome update flow to support both biome.json and biome.jsonc [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.23 (Thu Jun 26 2025)
 
 #### ⚠️ Pushed to `main`
