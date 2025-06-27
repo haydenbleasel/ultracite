@@ -1,3 +1,16 @@
+# v5.0.26 (Fri Jun 27 2025)
+
+#### 🐛 Bug Fix
+
+- Fix file path quoting for special characters in biome commands [#176](https://github.com/haydenbleasel/ultracite/pull/176) ([@Copilot](https://github.com/Copilot) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- [@Copilot](https://github.com/Copilot)
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.25 (Fri Jun 27 2025)
 
 #### ⚠️ Pushed to `main`
