@@ -7,7 +7,7 @@ type FormatOptions = {
 
 export const format = (files: string[], options: FormatOptions = {}) => {
   try {
-    const target = files.length > 0 ? files.join(' ') : './';
+    const target = files.length > 0 ? files.map(file => `"${file}"`).join(' ') : './';
     const unsafeFlag = options.unsafe ? ' --unsafe' : '';
     execSync(`npx @biomejs/biome check --write${unsafeFlag} ${target}`, { stdio: 'inherit' });
   } catch (error) {
