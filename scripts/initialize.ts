@@ -60,18 +60,18 @@ const upsertVSCodeSettings = async () => {
 
 const upsertBiomeConfig = async () => {
   const s = spinner();
-  s.start('Checking for biome.jsonc...');
+  s.start('Checking for Biome configuration...');
 
   if (await biome.exists()) {
-    s.message('biome.jsonc found, updating...');
+    s.message('Biome configuration found, updating...');
     await biome.update();
-    s.stop('biome.jsonc updated.');
+    s.stop('Biome configuration updated.');
     return;
   }
 
-  s.message('biome.jsonc not found, creating...');
+  s.message('Biome configuration not found, creating...');
   await biome.create();
-  s.stop('biome.jsonc created.');
+  s.stop('Biome configuration created.');
 };
 
 const initializePrecommitHook = async (packageManagerAdd: string) => {

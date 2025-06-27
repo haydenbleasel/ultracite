@@ -8,12 +8,25 @@ const defaultConfig = {
   extends: ['ultracite'],
 };
 
-const path = './biome.jsonc';
+const getBiomeConfigPath = async (): Promise<string> => {
+  // Check for biome.json first, then fall back to biome.jsonc
+  if (await exists('./biome.json')) {
+    return './biome.json';
+  }
+  return './biome.jsonc';
+};
 
 export const biome = {
-  exists: () => exists(path),
-  create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
+  exists: async () => {
+    const path = await getBiomeConfigPath();
+    return exists(path);
+  },
+  create: async () => {
+    const path = await getBiomeConfigPath();
+    return writeFile(path, JSON.stringify(defaultConfig, null, 2));
+  },
   update: async () => {
+    const path = await getBiomeConfigPath();
     const existingContents = await readFile(path, 'utf-8');
     const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
 
