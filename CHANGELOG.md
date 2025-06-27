@@ -1,3 +1,101 @@
+# v5.0.25 (Fri Jun 27 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create v5 migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add ESLint and Prettier migration guides ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create biome migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create llms.txt ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.24 (Fri Jun 27 2025)
+
+#### 🐛 Bug Fix
+
+- Improve biome update flow to support both biome.json and biome.jsonc [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.23 (Thu Jun 26 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update meta.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.22 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Add support for lefthook as git hooks manager [#178](https://github.com/haydenbleasel/ultracite/pull/178) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.21 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Fix Yarn monorepo support by removing invalid -W flag [#180](https://github.com/haydenbleasel/ultracite/pull/180) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.20 (Wed Jun 25 2025)
+
+:tada: This release contains work from new contributors! :tada:
+
+Thanks for all your work!
+
+:heart: null[@tommideso](https://github.com/tommideso)
+
+:heart: Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
+
+#### 🐛 Bug Fix
+
+- feat: Add TanStack Router file convention support to useFilenamingConvention rule [#174](https://github.com/haydenbleasel/ultracite/pull/174) ([@Copilot](https://github.com/Copilot))
+- Fix Yarn 4.9.2 compatibility by replacing --save-exact with -E flag [#173](https://github.com/haydenbleasel/ultracite/pull/173) ([@Copilot](https://github.com/Copilot))
+- fix: replace 'npx biome' with 'npx @biomejs/biome' [#170](https://github.com/haydenbleasel/ultracite/pull/170) ([@tommideso](https://github.com/tommideso))
+- feat: Add "tv" to allowed functions in linter options [#169](https://github.com/haydenbleasel/ultracite/pull/169) ([@harryevans1997](https://github.com/harryevans1997))
+
+#### ⚠️ Pushed to `main`
+
+- Update format.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #167 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 4
+
+- [@Copilot](https://github.com/Copilot)
+- [@tommideso](https://github.com/tommideso)
+- Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.19 (Tue Jun 24 2025)
 
 #### ⚠️ Pushed to `main`

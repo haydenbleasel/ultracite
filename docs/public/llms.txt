@@ -1,0 +1,107 @@
+# Ultracite
+
+Ultracite is a zero-config preset for the Biome formatter/linter.  It packages an opinionated set of rules, editor integrations, and Git-hook helpers so JavaScript / TypeScript projects can adopt fast, consistent code quality checks without manually tuning every setting.  The site explains how to install Ultracite, tailor it when needed, and contribute to its open-source codebase.
+
+## Introduction  
+Gives a high-level picture of what Ultracite is and why it exists.  It contrasts Ultracite (a curated configuration) with Biome (the underlying engine) and tools like ESLint + Prettier, highlighting Biome’s Rust-powered speed and the “one tool, one config” philosophy.
+
+## Setup  
+Step-by-step installation instructions:
+
+- **Automatic:** `npx ultracite init` installs Ultracite, Biome, VS Code settings, and optional Git-hook integrations in one command.  
+- **Manual:** shows the exact `npm/yarn/pnpm` commands, the minimal `biome.jsonc` that must include `"extends": ["ultracite"]`, and recommended `.vscode/settings.json` for on-save formatting.  
+- Advises enabling `strictNullChecks` in `tsconfig.json` and installing the Biome VS Code extension.
+
+### Links  
+- Configuration schema: `https://biomejs.dev/schemas/`  
+- VS Code extension: marketplace link in page
+
+## Usage  
+Covers day-to-day workflows:
+
+- Instant formatting and auto-fix on save via editor integration.  
+- Problems panel & quick-fix light-bulbs in VS Code.  
+- CLI commands: `ultracite lint` (check only) and `ultracite format` (check + write).  
+- Example pre-commit script calling the CLI.
+
+## Configuration  
+Explains how to tweak defaults:
+
+- Lists major defaults (strict TypeScript, React + a11y, Node/Next.js env, 2-space indent, 80-char width, etc.).  
+- Shows how to disable or change rule severity in `biome.jsonc`.  
+- Demonstrates per-line suppression with `// biome-ignore` comments.
+
+## Examples  
+Before/after code snippets illustrate:
+
+- Automatic code formatting  
+- Strict equality enforcement  
+- Organising/removing imports  
+- React button accessibility fix
+
+Each example includes what Ultracite changes and why it improves reliability.
+
+## FAQ  
+Answers common questions such as:
+
+- “Do I still need ESLint or Prettier?” (No)  
+- “What files does it handle?” (JS/TS/JSX/CSS/GraphQL)  
+- Update cadence, how to view all enabled rules, and how to disable a rule or opt out for a project.  
+- Editor-agnostic usage without VS Code.
+
+## Troubleshooting  
+Solutions for typical problems:
+
+- Biome not running on save  
+- Conflicts with ESLint/Prettier  
+- Ignoring third-party code with `ignore` patterns  
+- Duplicate diagnostics, pre-commit or CI failures, and strict-null-checks errors  
+- Notes on current Biome limitations (e.g., CSS lint coverage)
+
+## Husky Integration  
+Shows how `ultracite init` can wire up a Husky pre-commit hook that runs `npx ultracite format` on staged files, ensuring consistent style before every commit.  Details automatic installation, how existing hooks are preserved, and troubleshooting tips (file permissions, skipping hooks).
+
+## lint-staged Integration  
+Describes optional lint-staged setup:
+
+- Creates a config that runs `npx ultracite format` only on staged files for fast commits.  
+- Supports all config file types (`package.json`, `.lintstagedrc.*`, YAML, JS, MJS).  
+- Explains smart merging with existing configs and how to customise patterns.
+
+## Editor Rules  
+Explains Ultracite’s AI-assistant rule files that guide code-generation tools:
+
+- Automatic prompt during `ultracite init` to add rules for GitHub Copilot, Cursor, Windsurf, or Zed.  
+- Manual file locations and benefits (consistent, secure, accessible AI-generated code).  
+- How to customise or extend rule files.
+
+## MCP Integration  
+Shows how to expose Ultracite docs to AI assistants via the Model Context Protocol:
+
+- JSON config snippet pointing to the Ultracite MCP server.  
+- Works with Claude Desktop, Cursor, Windsurf, etc.  
+- Security notes (only public docs served, no user code sent).
+
+## Goals  
+Outlines guiding principles:
+
+- Lightning-fast performance (inherit Rust speed from Biome)  
+- Zero-config by default, but extensible  
+- Intuitive, type-safe, and compatible with other tools
+
+## Contributing  
+Guides potential contributors:
+
+- Source resides on GitHub (`haydenbleasel/ultracite`).  
+- Local setup with `pnpm install`, linking a dev build to a sample project, running tests/fixtures.  
+- Editing docs (Fumadocs app in `/docs`).  
+- Release automation via Intuit Auto and semantic PR labels.  
+- Community channels: GitHub issues & discussions.
+
+### Links  
+- Repo: https://github.com/haydenbleasel/ultracite  
+- Issue tracker and discussions sections on GitHub
+
+---
+
+This `llms.txt` provides language models a concise map of Ultracite’s documentation: why the project exists, how to install and use it, ways to customise or extend it, and where to find support or contribute.

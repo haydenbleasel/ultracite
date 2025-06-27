@@ -85,7 +85,7 @@ describe('package-manager', () => {
       expect(mockExists).toHaveBeenCalledWith('yarn.lock');
     });
 
-    it('should return yarn add -W when yarn.lock exists and is a monorepo', async () => {
+    it('should return yarn add when yarn.lock exists and is a monorepo', async () => {
       mockIsMonorepo.mockResolvedValue(true);
       mockExists.mockImplementation((path: string) => {
         return Promise.resolve(path === 'yarn.lock');
@@ -93,10 +93,25 @@ describe('package-manager', () => {
 
       const result = await packageManager.get();
 
-      expect(result).toBe('yarn add -W');
+      expect(result).toBe('yarn add');
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
+      expect(mockExists).toHaveBeenCalledWith('yarn.lock');
+    });
+
+    it('should not add -W flag to yarn for monorepo (regression test for issue #179)', async () => {
+      mockIsMonorepo.mockResolvedValue(true);
+      mockExists.mockImplementation((path: string) => {
+        return Promise.resolve(path === 'yarn.lock');
+      });
+
+      const result = await packageManager.get();
+
+      // Yarn should not have the -W flag even in monorepos
+      expect(result).toBe('yarn add');
+      expect(result).not.toContain('-W');
+      expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('yarn.lock');
     });
 
@@ -197,19 +212,19 @@ describe('package-manager', () => {
 
     it('should return selected package manager command for monorepo', async () => {
       mockIsMonorepo.mockResolvedValue(true);
-      mockSelect.mockResolvedValue('yarn add -W');
+      mockSelect.mockResolvedValue('yarn add');
 
       const result = await packageManager.select();
 
-      expect(result).toBe('yarn add -W');
+      expect(result).toBe('yarn add');
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockSelect).toHaveBeenCalledWith({
         initialValue: 'pnpm',
         message: 'Which package manager do you use?',
         options: [
           { label: 'pnpm', value: 'pnpm add -w' },
-          { label: 'bun', value: 'bun add ' },
-          { label: 'yarn', value: 'yarn add -W' },
+          { label: 'bun', value: 'bun add' },
+          { label: 'yarn', value: 'yarn add' },
           { label: 'npm', value: 'npm install --workspace .' },
         ],
       });
@@ -269,8 +284,8 @@ describe('package-manager', () => {
         expect.objectContaining({
           options: expect.arrayContaining([
             { label: 'pnpm', value: 'pnpm add -w' },
-            { label: 'bun', value: 'bun add ' },
-            { label: 'yarn', value: 'yarn add -W' },
+            { label: 'bun', value: 'bun add' },
+            { label: 'yarn', value: 'yarn add' },
             { label: 'npm', value: 'npm install --workspace .' },
           ]),
         })

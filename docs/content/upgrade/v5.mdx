@@ -1,0 +1,49 @@
+---
+title: Upgrade to v5
+description: How to upgrade your project from Ultracite v4 to v5.
+---
+
+Ultracite v5 is a major release with significant improvements and breaking changes. This guide will help you upgrade your existing v4 setup to v5.
+
+## What's New in v5
+
+- **Updated Biome**: Upgraded from v1.x to v2.x
+- **New Configuration Format**: Switch from `biome.json` to `biome.jsonc`
+- **Enhanced CLI**: Rewritten in TypeScript with better error handling
+- **Editor Integrations**: Built-in support for Cursor, Windsurf, Zed, and GitHub Copilot
+- **Git Hooks**: Optional integrations including Husky, lint-staged and lefthook
+- **Improved Schema**: New schema URL with better validation
+- **Simplified VS Code Settings**: Combined filetype overrides into a single line
+
+## Migration Steps
+
+### Automatic Migration (Recommended)
+
+The easiest way to migrate is to run the new initialization command:
+
+```package-install
+npx ultracite@latest init
+```
+
+This will:
+- Update your dependencies to the latest versions
+- Update your `biome.json` or `biome.jsonc`  
+- Update your VS Code settings
+- Offer to set up AI editor rules (Cursor, Windsurf, Zed, etc.)
+- Offer to set up new integrations (Git hooks, lint-staged, etc.)
+
+After the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+
+Additionally, please review the Biome [v2 upgrade guide](https://biomejs.dev/guides/upgrade-to-biome-v2/) for more information on schema / rule changes.
+
+### Manual Migration
+
+If you prefer more control over the process, follow the [Manual Migration](/setup#manual-installation) steps by:
+
+- Installing the updated versions of Ultracite and Biome manually
+- Updating your `biome.json` file to the new schema version
+- Updating the `.vscode/settings.json` file (optional)
+- Adding an AI editor rules file (optional)
+- Adding new integrations (optional)
+
+After the migration, restart your editor to ensure the new configuration is applied.

@@ -6,6 +6,7 @@ import { claude } from './claude';
 import { codex } from './codex';
 import { cursor } from './cursor';
 import { husky } from './husky';
+import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
 import { packageManager } from './package-manager';
 import { title } from './title';
@@ -59,18 +60,18 @@ const upsertVSCodeSettings = async () => {
 
 const upsertBiomeConfig = async () => {
   const s = spinner();
-  s.start('Checking for biome.jsonc...');
+  s.start('Checking for Biome configuration...');
 
   if (await biome.exists()) {
-    s.message('biome.jsonc found, updating...');
+    s.message('Biome configuration found, updating...');
     await biome.update();
-    s.stop('biome.jsonc updated.');
+    s.stop('Biome configuration updated.');
     return;
   }
 
-  s.message('biome.jsonc not found, creating...');
+  s.message('Biome configuration not found, creating...');
   await biome.create();
-  s.stop('biome.jsonc created.');
+  s.stop('Biome configuration created.');
 };
 
 const initializePrecommitHook = async (packageManagerAdd: string) => {
@@ -92,6 +93,25 @@ const initializePrecommitHook = async (packageManagerAdd: string) => {
   s.message('Pre-commit hook not found, creating...');
   await husky.create();
   s.stop('Pre-commit hook created.');
+};
+
+const initializeLefthook = async (packageManagerAdd: string) => {
+  const s = spinner();
+  s.start('Initializing lefthook...');
+
+  s.message('Installing lefthook...');
+  lefthook.install(packageManagerAdd);
+
+  if (await lefthook.exists()) {
+    s.message('lefthook.yml found, updating...');
+    await lefthook.update();
+    s.stop('lefthook.yml updated.');
+    return;
+  }
+
+  s.message('lefthook.yml not found, creating...');
+  await lefthook.create();
+  s.stop('lefthook.yml created.');
 };
 
 const initializeLintStaged = async (packageManagerAdd: string) => {
@@ -243,7 +263,8 @@ export const initialize = async () => {
     const extraFeatures = await multiselect({
       message: 'Would you like any of the following (optional)?',
       options: [
-        { label: 'Pre-commit hook with Husky', value: 'precommit-hooks' },
+        { label: 'Husky pre-commit hook', value: 'precommit-hooks' },
+        { label: 'Lefthook pre-commit hook', value: 'lefthook' },
         { label: 'Lint-staged', value: 'lint-staged' },
       ],
       required: false,
@@ -278,6 +299,9 @@ export const initialize = async () => {
     if (Array.isArray(extraFeatures)) {
       if (extraFeatures.includes('precommit-hooks')) {
         await initializePrecommitHook(packageManagerAdd);
+      }
+      if (extraFeatures.includes('lefthook')) {
+        await initializeLefthook(packageManagerAdd);
       }
       if (extraFeatures.includes('lint-staged')) {
         await initializeLintStaged(packageManagerAdd);
