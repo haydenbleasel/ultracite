@@ -14,7 +14,8 @@ import { tsconfig } from './tsconfig';
 import { vscodeCopilot } from './vscode-copilot';
 import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
-import { zed } from './zed';
+import { zedCopilot } from './zed-copilot';
+import { zed } from './zed-settings';
 
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
@@ -49,6 +50,22 @@ const upsertVSCodeSettings = async () => {
   if (await vscode.exists()) {
     s.message('settings.json found, updating...');
     await vscode.update();
+    s.stop('settings.json updated.');
+    return;
+  }
+
+  s.message('settings.json not found, creating...');
+  await vscode.create();
+  s.stop('settings.json created.');
+};
+
+const upsertZedSettings = async () => {
+  const s = spinner();
+  s.start('Checking for .zed/settings.json...');
+
+  if (await zed.exists()) {
+    s.message('settings.json found, updating...');
+    await zed.update();
     s.stop('settings.json updated.');
     return;
   }
@@ -186,9 +203,9 @@ const upsertZedRules = async () => {
   const s = spinner();
   s.start('Checking for Zed rules...');
 
-  if (await zed.exists()) {
+  if (await zedCopilot.exists()) {
     s.message('Zed rules found, updating...');
-    await zed.update();
+    await zedCopilot.update();
     s.stop('Zed rules updated.');
     return;
   }
@@ -272,26 +289,31 @@ export const initialize = async () => {
 
     installDependencies(packageManagerAdd);
     await upsertTsConfig();
-    await upsertVSCodeSettings();
     await upsertBiomeConfig();
 
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('vscode-copilot')) {
+        await upsertVSCodeSettings();
         await upsertVSCodeCopilotRules();
       }
       if (editorRules.includes('cursor')) {
+        await upsertVSCodeSettings();
         await upsertCursorRules();
       }
       if (editorRules.includes('windsurf')) {
+        await upsertVSCodeSettings();
         await upsertWindsurfRules();
       }
       if (editorRules.includes('zed')) {
+        await upsertZedSettings();
         await upsertZedRules();
       }
       if (editorRules.includes('claude')) {
+        await upsertVSCodeSettings();
         await upsertClaudeRules();
       }
       if (editorRules.includes('codex')) {
+        await upsertVSCodeSettings();
         await upsertCodexRules();
       }
     }
