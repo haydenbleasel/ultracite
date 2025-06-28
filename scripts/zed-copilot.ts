@@ -4,7 +4,7 @@ import { exists } from './utils';
 
 const path = './.rules';
 
-export const zed = {
+export const zedCopilot = {
   exists: () => exists(path),
   create: async () => {
     await writeFile(path, rulesFile);
