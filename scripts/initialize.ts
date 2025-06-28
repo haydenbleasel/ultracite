@@ -21,9 +21,7 @@ const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(
-    `${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.5`
-  );
+  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.5`);
   s.stop('Dependencies installed.');
 };
 
@@ -291,29 +289,29 @@ export const initialize = async () => {
     await upsertTsConfig();
     await upsertBiomeConfig();
 
+    if (Array.isArray(editorRules) && editorRules.includes('zed')) {
+      await upsertZedSettings();
+    } else {
+      await upsertVSCodeSettings();
+    }
+
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('vscode-copilot')) {
-        await upsertVSCodeSettings();
         await upsertVSCodeCopilotRules();
       }
       if (editorRules.includes('cursor')) {
-        await upsertVSCodeSettings();
         await upsertCursorRules();
       }
       if (editorRules.includes('windsurf')) {
-        await upsertVSCodeSettings();
         await upsertWindsurfRules();
       }
       if (editorRules.includes('zed')) {
-        await upsertZedSettings();
         await upsertZedRules();
       }
       if (editorRules.includes('claude')) {
-        await upsertVSCodeSettings();
         await upsertClaudeRules();
       }
       if (editorRules.includes('codex')) {
-        await upsertVSCodeSettings();
         await upsertCodexRules();
       }
     }
