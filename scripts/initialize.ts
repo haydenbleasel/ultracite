@@ -69,7 +69,7 @@ const upsertZedSettings = async () => {
   }
 
   s.message('settings.json not found, creating...');
-  await vscode.create();
+  await zed.create();
   s.stop('settings.json created.');
 };
 
@@ -209,7 +209,7 @@ const upsertZedRules = async () => {
   }
 
   s.message('Zed rules not found, creating...');
-  await zed.create();
+  await zedCopilot.create();
   s.stop('Zed rules created.');
 };
 
