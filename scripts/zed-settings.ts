@@ -4,76 +4,65 @@ import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
-  "formatter": "language_server",
-  "format_on_save": "on",
-  "languages": {
-    "TypeScript": {
-      "formatter": {
-        "language_server": {
-          "name": "biome"
+  formatter: 'language_server',
+  format_on_save: 'on',
+  languages: {
+    JavaScript: {
+      formatter: {
+        language_server: {
+          name: 'biome',
         },
-        "code_actions_on_format": {
-          "source.fixAll.biome": true,
-          "source.organizeImports.biome": true
-        }
-      }
+      },
+      code_actions_on_format: {
+        'source.fixAll.biome': true,
+        'source.organizeImports.biome': true,
+      },
     },
-    "JavaScript": {
-      "formatter": {
-        "language_server": {
-          "name": "biome"
+    TypeScript: {
+      formatter: {
+        language_server: {
+          name: 'biome',
         },
-        "code_actions_on_format": {
-          "source.fixAll.biome": true,
-          "source.organizeImports.biome": true
-        }
-      }
+      },
+      code_actions_on_format: {
+        'source.fixAll.biome': true,
+        'source.organizeImports.biome': true,
+      },
     },
-    "TSX": {
-      "formatter": {
-        "language_server": {
-          "name": "biome"
+    JSX: {
+      formatter: {
+        language_server: {
+          name: 'biome',
         },
-        "code_actions_on_format": {
-          "source.fixAll.biome": true,
-          "source.organizeImports.biome": true
-        }
-      }
+      },
+      code_actions_on_format: {
+        'source.fixAll.biome': true,
+        'source.organizeImports.biome': true,
+      },
     },
-    "JSON": {
-      "formatter": {
-        "language_server": {
-          "name": "biome"
+    TSX: {
+      formatter: {
+        language_server: {
+          name: 'biome',
         },
-        "code_actions_on_format": {
-          "source.fixAll.biome": true,
-          "source.organizeImports.biome": true
-        }
-      }
+      },
+      code_actions_on_format: {
+        'source.fixAll.biome': true,
+        'source.organizeImports.biome': true,
+      },
     },
-    "JSONC": {
-      "formatter": {
-        "language_server": {
-          "name": "biome"
-        },
-        "code_actions_on_format": {
-          "source.fixAll.biome": true,
-          "source.organizeImports.biome": true
-        }
-      }
-    }
   },
-  "lsp": {
-    "typescript-language-server": {
-      "settings": {
-        "typescript": {
-          "preferences": {
-            "includePackageJsonAutoImports": "on"
-          }
-        }
-      }
-    }
-  }
+  lsp: {
+    'typescript-language-server': {
+      settings: {
+        typescript: {
+          preferences: {
+            includePackageJsonAutoImports: 'on',
+          },
+        },
+      },
+    },
+  },
 };
 
 const path = './.zed/settings.json';
@@ -86,7 +75,9 @@ export const zed = {
   },
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+    const existingConfig = parse(existingContents) as
+      | Record<string, unknown>
+      | undefined;
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToMerge = existingConfig || {};
