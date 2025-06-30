@@ -42,76 +42,65 @@ describe('zed configuration', () => {
       await zed.create();
 
       const expectedConfig = {
-        "formatter": "language_server",
-        "format_on_save": "on",
-        "languages": {
-          "TypeScript": {
-            "formatter": {
-              "language_server": {
-                "name": "biome"
+        formatter: 'language_server',
+        format_on_save: 'on',
+        languages: {
+          JavaScript: {
+            formatter: {
+              language_server: {
+                name: 'biome',
               },
-              "code_actions_on_format": {
-                "source.fixAll.biome": true,
-                "source.organizeImports.biome": true
-              }
-            }
+            },
+            code_actions_on_format: {
+              'source.fixAll.biome': true,
+              'source.organizeImports.biome': true,
+            },
           },
-          "JavaScript": {
-            "formatter": {
-              "language_server": {
-                "name": "biome"
+          TypeScript: {
+            formatter: {
+              language_server: {
+                name: 'biome',
               },
-              "code_actions_on_format": {
-                "source.fixAll.biome": true,
-                "source.organizeImports.biome": true
-              }
-            }
+            },
+            code_actions_on_format: {
+              'source.fixAll.biome': true,
+              'source.organizeImports.biome': true,
+            },
           },
-          "TSX": {
-            "formatter": {
-              "language_server": {
-                "name": "biome"
+          JSX: {
+            formatter: {
+              language_server: {
+                name: 'biome',
               },
-              "code_actions_on_format": {
-                "source.fixAll.biome": true,
-                "source.organizeImports.biome": true
-              }
-            }
+            },
+            code_actions_on_format: {
+              'source.fixAll.biome': true,
+              'source.organizeImports.biome': true,
+            },
           },
-          "JSON": {
-            "formatter": {
-              "language_server": {
-                "name": "biome"
+          TSX: {
+            formatter: {
+              language_server: {
+                name: 'biome',
               },
-              "code_actions_on_format": {
-                "source.fixAll.biome": true,
-                "source.organizeImports.biome": true
-              }
-            }
+            },
+            code_actions_on_format: {
+              'source.fixAll.biome': true,
+              'source.organizeImports.biome': true,
+            },
           },
-          "JSONC": {
-            "formatter": {
-              "language_server": {
-                "name": "biome"
-              },
-              "code_actions_on_format": {
-                "source.fixAll.biome": true,
-                "source.organizeImports.biome": true
-              }
-            }
-          }
         },
-        "lsp": {
-          "typescript-language-server": {
-            "settings": {
-              "typescript": {
-                "preferences": {
-                  "includePackageJsonAutoImports": "on"
-                }
-              }
-            }
-          }
-        }
+        lsp: {
+          'typescript-language-server': {
+            settings: {
+              typescript: {
+                preferences: {
+                  includePackageJsonAutoImports: 'on',
+                },
+              },
+            },
+          },
+        },
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -124,9 +113,9 @@ describe('zed configuration', () => {
   describe('update', () => {
     it('should merge existing configuration with default configuration', async () => {
       const existingConfig = {
-        "ui_font_size": 16,
-        "vim_mode": true,
-        "restore_on_startup": "none",
+        ui_font_size: 16,
+        vim_mode: true,
+        restore_on_startup: 'none',
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
@@ -155,9 +144,9 @@ describe('zed configuration', () => {
 
     it('should preserve existing biome configuration while adding missing parts', async () => {
       const existingConfig = {
-        "ui_font_size": 16,
-        "vim_mode": true,
-        "restore_on_startup": "none",
+        ui_font_size: 16,
+        vim_mode: true,
+        restore_on_startup: 'none',
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
@@ -191,76 +180,65 @@ describe('zed configuration', () => {
         './.zed/settings.json',
         JSON.stringify(
           {
-            "formatter": "language_server",
-            "format_on_save": "on",
-            "languages": {
-              "TypeScript": {
-                "formatter": {
-                  "language_server": {
-                    "name": "biome"
+            formatter: 'language_server',
+            format_on_save: 'on',
+            languages: {
+              JavaScript: {
+                formatter: {
+                  language_server: {
+                    name: 'biome',
                   },
-                  "code_actions_on_format": {
-                    "source.fixAll.biome": true,
-                    "source.organizeImports.biome": true
-                  }
-                }
+                },
+                code_actions_on_format: {
+                  'source.fixAll.biome': true,
+                  'source.organizeImports.biome': true,
+                },
               },
-              "JavaScript": {
-                "formatter": {
-                  "language_server": {
-                    "name": "biome"
+              TypeScript: {
+                formatter: {
+                  language_server: {
+                    name: 'biome',
                   },
-                  "code_actions_on_format": {
-                    "source.fixAll.biome": true,
-                    "source.organizeImports.biome": true
-                  }
-                }
+                },
+                code_actions_on_format: {
+                  'source.fixAll.biome': true,
+                  'source.organizeImports.biome': true,
+                },
               },
-              "TSX": {
-                "formatter": {
-                  "language_server": {
-                    "name": "biome"
+              JSX: {
+                formatter: {
+                  language_server: {
+                    name: 'biome',
                   },
-                  "code_actions_on_format": {
-                    "source.fixAll.biome": true,
-                    "source.organizeImports.biome": true
-                  }
-                }
+                },
+                code_actions_on_format: {
+                  'source.fixAll.biome': true,
+                  'source.organizeImports.biome': true,
+                },
               },
-              "JSON": {
-                "formatter": {
-                  "language_server": {
-                    "name": "biome"
+              TSX: {
+                formatter: {
+                  language_server: {
+                    name: 'biome',
                   },
-                  "code_actions_on_format": {
-                    "source.fixAll.biome": true,
-                    "source.organizeImports.biome": true
-                  }
-                }
+                },
+                code_actions_on_format: {
+                  'source.fixAll.biome': true,
+                  'source.organizeImports.biome': true,
+                },
               },
-              "JSONC": {
-                "formatter": {
-                  "language_server": {
-                    "name": "biome"
-                  },
-                  "code_actions_on_format": {
-                    "source.fixAll.biome": true,
-                    "source.organizeImports.biome": true
-                  }
-                }
-              }
             },
-            "lsp": {
-              "typescript-language-server": {
-                "settings": {
-                  "typescript": {
-                    "preferences": {
-                      "includePackageJsonAutoImports": "on"
-                    }
-                  }
-                }
-              }
-            }
+            lsp: {
+              'typescript-language-server': {
+                settings: {
+                  typescript: {
+                    preferences: {
+                      includePackageJsonAutoImports: 'on',
+                    },
+                  },
+                },
+              },
+            },
           },
           null,
           2
@@ -301,9 +279,7 @@ describe('zed configuration', () => {
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.zed/settings.json',
-        expect.stringContaining(
-          '"formatter": "language_server"'
-        )
+        expect.stringContaining('"formatter": "language_server"')
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.zed/settings.json',

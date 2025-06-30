@@ -237,6 +237,10 @@ describe('initialize command', () => {
 
     await initialize();
 
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      './.zed/settings.json',
+      expect.any(String)
+    );
     expect(mockWriteFile).toHaveBeenCalledWith('./.rules', expect.any(String));
   });
 
