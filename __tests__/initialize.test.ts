@@ -72,7 +72,7 @@ describe('initialize command', () => {
       'Detected lockfile, using pnpm add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'pnpm add -D -E ultracite @biomejs/biome@2.0.5'
+      'pnpm add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -88,7 +88,7 @@ describe('initialize command', () => {
       'Detected lockfile, using yarn add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'yarn add -D -E ultracite @biomejs/biome@2.0.5'
+      'yarn add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -104,7 +104,7 @@ describe('initialize command', () => {
       'Detected lockfile, using npm install'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npm install -D -E ultracite @biomejs/biome@2.0.5'
+      'npm install -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -120,7 +120,7 @@ describe('initialize command', () => {
       'Detected lockfile, using bun add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'bun add -D -E ultracite @biomejs/biome@2.0.5'
+      'bun add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 

@@ -15,9 +15,12 @@ describe('format command', () => {
   it('should run biome check with --write flag for all files when no files specified', () => {
     format([], { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check --write ./', {
-      stdio: 'inherit',
-    });
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check --write ./',
+      {
+        stdio: 'inherit',
+      }
+    );
   });
 
   it('should run biome check with --write flag for specific files when files are provided', () => {
@@ -53,7 +56,7 @@ describe('format command', () => {
   it('should handle files with special characters by quoting them', () => {
     const files = [
       '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
-      'src/components/Button.tsx'
+      'src/components/Button.tsx',
     ];
     format(files, { unsafe: false });
 

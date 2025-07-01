@@ -1,3 +1,42 @@
+# v5.0.29 (Tue Jul 01 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #195 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.28 (Tue Jul 01 2025)
+
+#### 🐛 Bug Fix
+
+- Bump @types/node from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v5.0.27 (Tue Jul 01 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.26 (Fri Jun 27 2025)
 
 #### 🐛 Bug Fix
