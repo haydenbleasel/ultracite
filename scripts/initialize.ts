@@ -21,7 +21,7 @@ const installDependencies = (packageManagerAdd: string) => {
 
   s.start('Installing dependencies...');
   execSync(
-    `${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.5`
+    `${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.6`
   );
   s.stop('Dependencies installed.');
 };
