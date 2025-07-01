@@ -249,7 +249,7 @@ describe('lint-staged configuration', () => {
 
       // Should not throw, but create fallback config gracefully
       await expect(lintStaged.update()).resolves.not.toThrow();
-      
+
       // Should create fallback config
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -285,7 +285,7 @@ describe('lint-staged configuration', () => {
 
       // Should not throw, but create fallback config gracefully
       await expect(lintStaged.update()).resolves.not.toThrow();
-      
+
       // Should create fallback config
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -369,7 +369,7 @@ describe('lint-staged configuration', () => {
         './.lintstagedrc.json',
         'utf-8'
       );
-      
+
       // Verify the JSONC content was properly parsed and merged
       const writtenContent = mockWriteFile.mock.calls[0][1] as string;
       const parsedContent = parse(writtenContent);
@@ -408,7 +408,9 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['lint-staged']).toBeDefined();
       expect(parsedContent['lint-staged']['*.js']).toEqual(['eslint --fix']);
       expect(
-        parsedContent['lint-staged']['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
+        parsedContent['lint-staged'][
+          '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
+        ]
       ).toEqual(['npx ultracite format']);
     });
   });

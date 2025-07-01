@@ -16,7 +16,9 @@ export const tsconfig = {
   create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+    const existingConfig = parse(existingContents) as
+      | Record<string, unknown>
+      | undefined;
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToMerge = existingConfig || {};

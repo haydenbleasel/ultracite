@@ -168,7 +168,7 @@ describe('biome configuration', () => {
       // Should not throw, but handle gracefully by treating as empty config
       await expect(biome.update()).resolves.not.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
-      
+
       // Should write the default config when parsing fails
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
@@ -178,9 +178,15 @@ describe('biome configuration', () => {
 
     it('should handle JSONC files with comments', async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === './biome.json') return false;
-        if (path === './biome.jsonc') return true;
-        return false;
+        if (path === './biome.json') {
+          return await Promise.resolve(false);
+        }
+
+        if (path === './biome.jsonc') {
+          return await Promise.resolve(true);
+        }
+
+        return await Promise.resolve(false);
       });
 
       const existingConfigWithComments = `{
