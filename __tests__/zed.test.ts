@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { exists } from '../scripts/utils';
-import { zed } from '../scripts/zed';
+import { zedCopilot } from '../scripts/zed';
 
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
@@ -11,7 +11,7 @@ vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
 }));
 
-describe('zed configuration', () => {
+describe('zed rules configuration', () => {
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
@@ -25,7 +25,7 @@ describe('zed configuration', () => {
     it('should return true when .rules exists', async () => {
       mockExists.mockResolvedValue(true);
 
-      const result = await zed.exists();
+      const result = await zedCopilot.exists();
 
       expect(result).toBe(true);
       expect(mockExists).toHaveBeenCalledWith('./.rules');
@@ -34,7 +34,7 @@ describe('zed configuration', () => {
     it('should return false when .rules does not exist', async () => {
       mockExists.mockResolvedValue(false);
 
-      const result = await zed.exists();
+      const result = await zedCopilot.exists();
 
       expect(result).toBe(false);
       expect(mockExists).toHaveBeenCalledWith('./.rules');
@@ -43,7 +43,7 @@ describe('zed configuration', () => {
 
   describe('create', () => {
     it('should create .rules with rules content', async () => {
-      await zed.create();
+      await zedCopilot.create();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.rules',
@@ -56,7 +56,7 @@ describe('zed configuration', () => {
     it('should create .rules with rules content when file does not exist', async () => {
       mockExists.mockResolvedValue(false);
 
-      await zed.update();
+      await zedCopilot.update();
 
       expect(mockExists).toHaveBeenCalledWith('./.rules');
       expect(mockReadFile).not.toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe('zed configuration', () => {
       mockExists.mockResolvedValue(true);
       mockReadFile.mockResolvedValue(existingContent);
 
-      await zed.update();
+      await zedCopilot.update();
 
       expect(mockExists).toHaveBeenCalledWith('./.rules');
       expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
@@ -87,7 +87,7 @@ describe('zed configuration', () => {
       mockExists.mockResolvedValue(true);
       mockReadFile.mockResolvedValue(existingContent);
 
-      await zed.update();
+      await zedCopilot.update();
 
       expect(mockExists).toHaveBeenCalledWith('./.rules');
       expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
@@ -98,7 +98,7 @@ describe('zed configuration', () => {
       mockExists.mockResolvedValue(true);
       mockReadFile.mockRejectedValue(new Error('Permission denied'));
 
-      await expect(zed.update()).rejects.toThrow('Permission denied');
+      await expect(zedCopilot.update()).rejects.toThrow('Permission denied');
       expect(mockExists).toHaveBeenCalledWith('./.rules');
       expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
     });
@@ -106,7 +106,7 @@ describe('zed configuration', () => {
     it('should handle exists check errors gracefully', async () => {
       mockExists.mockRejectedValue(new Error('Permission denied'));
 
-      await expect(zed.update()).rejects.toThrow('Permission denied');
+      await expect(zedCopilot.update()).rejects.toThrow('Permission denied');
       expect(mockExists).toHaveBeenCalledWith('./.rules');
     });
   });
