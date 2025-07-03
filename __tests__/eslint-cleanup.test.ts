@@ -38,6 +38,37 @@ describe('eslint-cleanup', () => {
       expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf-8');
     });
 
+    it('should return true when eslint-prefixed packages exist', async () => {
+      const packageJson = {
+        devDependencies: {
+          'eslint-plugin-github': '^4.0.0',
+          'eslint-config-fbjs': '^3.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
+
+      const result = await eslintCleanup.hasESLint();
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when eslint is in package name but not at start', async () => {
+      const packageJson = {
+        devDependencies: {
+          'some-other-eslint-tool': '^1.0.0',
+          'remark-preset-eslint': '^1.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
+      mockExists.mockResolvedValue(false);
+
+      const result = await eslintCleanup.hasESLint();
+
+      expect(result).toBe(false);
+    });
+
     it('should return true when eslint config files exist', async () => {
       mockReadFile.mockRejectedValue(new Error('No package.json'));
       mockExists.mockImplementation(async (path: string) => {
@@ -96,6 +127,35 @@ describe('eslint-cleanup', () => {
       expect(mockExecSync).toHaveBeenCalledWith('npm uninstall eslint @typescript-eslint/parser', { stdio: 'pipe' });
       expect(mockUnlink).toHaveBeenCalledWith('.eslintrc.js');
       expect(mockUnlink).toHaveBeenCalledWith('.eslintignore');
+    });
+
+    it('should only remove packages that start with eslint', async () => {
+      const packageJson = {
+        devDependencies: {
+          eslint: '^8.0.0',
+          'eslint-plugin-github': '^4.0.0',
+          'eslint-config-fbjs': '^3.0.0',
+          'some-other-eslint-tool': '^1.0.0', // Should NOT be removed
+          '@typescript-eslint/parser': '^5.0.0',
+          typescript: '^4.0.0',
+        },
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === 'package.json') {
+          return JSON.stringify(packageJson);
+        }
+        return '{}';
+      });
+
+      mockExists.mockResolvedValue(false);
+      mockExecSync.mockReturnValue(Buffer.from(''));
+
+      const result = await eslintCleanup.remove('npm install');
+
+      // Should only include packages that start with 'eslint' or are in the specific exceptions list
+      expect(result.packagesRemoved).toEqual(['eslint', 'eslint-plugin-github', 'eslint-config-fbjs', '@typescript-eslint/parser']);
+      expect(mockExecSync).toHaveBeenCalledWith('npm uninstall eslint eslint-plugin-github eslint-config-fbjs @typescript-eslint/parser', { stdio: 'pipe' });
     });
 
     it('should handle different package managers', async () => {

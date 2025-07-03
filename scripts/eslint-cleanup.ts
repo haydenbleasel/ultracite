@@ -33,7 +33,7 @@ const detectESLintPackages = async (): Promise<string[]> => {
     const allDeps = { ...dependencies, ...devDependencies };
     
     return Object.keys(allDeps).filter(dep => 
-      dep.includes('eslint') || 
+      dep.startsWith('eslint') || 
       dep === '@eslint/js' ||
       dep === '@typescript-eslint/parser' ||
       dep === '@typescript-eslint/eslint-plugin'

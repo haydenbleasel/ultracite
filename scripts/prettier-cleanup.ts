@@ -32,7 +32,7 @@ const detectPrettierPackages = async (): Promise<string[]> => {
     const allDeps = { ...dependencies, ...devDependencies };
     
     return Object.keys(allDeps).filter(dep => 
-      dep.includes('prettier') || 
+      dep.startsWith('prettier') || 
       dep === 'eslint-config-prettier' ||
       dep === 'eslint-plugin-prettier'
     );
