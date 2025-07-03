@@ -262,6 +262,15 @@ export const initialize = async () => {
       throw new Error('No package manager selected');
     }
 
+    const editorConfig = await multiselect({
+      message: 'Which editors do you want to configure (recommended)?',
+      options: [
+        { label: 'VSCode / Cursor / Windsurf', value: 'vscode' },
+        { label: 'Zed', value: 'zed' }
+      ],
+      required: false,
+    });
+
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
       options: [
@@ -289,10 +298,13 @@ export const initialize = async () => {
     await upsertTsConfig();
     await upsertBiomeConfig();
 
-    if (Array.isArray(editorRules) && editorRules.includes('zed')) {
-      await upsertZedSettings();
-    } else {
-      await upsertVSCodeSettings();
+    if (Array.isArray(editorConfig)) {
+      if (editorConfig.includes('zed')) {
+        await upsertZedSettings();
+      }
+      if (editorConfig.includes('vscode')) {
+        await upsertVSCodeSettings();
+      }
     }
 
     if (Array.isArray(editorRules)) {
