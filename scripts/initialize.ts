@@ -245,6 +245,7 @@ const upsertCodexRules = async () => {
   s.stop('OpenAI Codex rules created.');
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "This function is complex, but it's a one-time setup script"
 export const initialize = async () => {
   intro(title);
 
