@@ -1,3 +1,15 @@
+# v5.0.31 (Thu Jul 03 2025)
+
+#### 🐛 Bug Fix
+
+- Add monorepos docs [#201](https://github.com/haydenbleasel/ultracite/pull/201) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.30 (Thu Jul 03 2025)
 
 :tada: This release contains work from a new contributor! :tada:
