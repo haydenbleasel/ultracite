@@ -1,3 +1,20 @@
+# v5.0.30 (Thu Jul 03 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Zed Settings [#191](https://github.com/haydenbleasel/ultracite/pull/191) ([@luizvergennes](https://github.com/luizvergennes) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes))
+
+---
+
 # v5.0.29 (Tue Jul 01 2025)
 
 #### ⚠️ Pushed to `main`
