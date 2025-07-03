@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { exists } from '../scripts/utils';
-import { zedCopilot } from '../scripts/zed-copilot';
+import { zedCopilot } from '../scripts/zed';
 
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({

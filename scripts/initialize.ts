@@ -14,7 +14,7 @@ import { tsconfig } from './tsconfig';
 import { vscodeCopilot } from './vscode-copilot';
 import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
-import { zedCopilot } from './zed-copilot';
+import { zedCopilot } from './zed';
 import { zed } from './zed-settings';
 
 const installDependencies = (packageManagerAdd: string) => {
