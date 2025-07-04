@@ -1,3 +1,15 @@
+# v5.0.32 (Fri Jul 04 2025)
+
+#### 🐛 Bug Fix
+
+- Bump next from 15.3.1 to 15.3.3 in /docs in the npm_and_yarn group across 1 directory [#204](https://github.com/haydenbleasel/ultracite/pull/204) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v5.0.31 (Thu Jul 03 2025)
 
 #### 🐛 Bug Fix
