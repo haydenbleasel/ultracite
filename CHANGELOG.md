@@ -1,3 +1,19 @@
+# v5.0.34 (Sun Jul 13 2025)
+
+#### 🐛 Bug Fix
+
+- Upgrade to Biome 2.1.1 [#209](https://github.com/haydenbleasel/ultracite/pull/209) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add option to remove other formatters during init [#198](https://github.com/haydenbleasel/ultracite/pull/198) ([@Copilot](https://github.com/Copilot) [@haydenbleasel](https://github.com/haydenbleasel))
+- feat: Optimize AI assistant rules with structured markdown format [#183](https://github.com/haydenbleasel/ultracite/pull/183) ([@haydenbleasel](https://github.com/haydenbleasel) [@lnittman](https://github.com/lnittman))
+
+#### Authors: 3
+
+- [@Copilot](https://github.com/Copilot)
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Luke Nittmann ([@lnittman](https://github.com/lnittman))
+
+---
+
 # v5.0.33 (Sun Jul 13 2025)
 
 :tada: This release contains work from a new contributor! :tada:
