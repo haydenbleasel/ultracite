@@ -115,9 +115,22 @@ const initializePrecommitHook = async (packageManagerAdd: string) => {
   s.stop('Pre-commit hook created.');
 };
 
-const initializeLefthook = async (packageManagerAdd: string) => {
+const initializeLefthook = async (packageManagerAdd: string, isHuskyAlsoSelected = false) => {
   const s = spinner();
   s.start('Initializing lefthook...');
+
+  // If husky is not also selected, clean up any existing husky installation
+  // to prevent lefthook from creating compatibility hooks in .husky/_/
+  if (!isHuskyAlsoSelected && await husky.exists()) {
+    s.message('Cleaning up existing husky installation...');
+    try {
+      const { rm } = await import('node:fs/promises');
+      await rm('.husky', { recursive: true, force: true });
+    } catch (error) {
+      // If cleanup fails, continue anyway
+      s.message('Warning: Could not clean up existing husky files');
+    }
+  }
 
   s.message('Installing lefthook...');
   lefthook.install(packageManagerAdd);
@@ -418,7 +431,8 @@ export const initialize = async () => {
         await initializePrecommitHook(packageManagerAdd);
       }
       if (extraFeatures.includes('lefthook')) {
-        await initializeLefthook(packageManagerAdd);
+        const isHuskyAlsoSelected = extraFeatures.includes('precommit-hooks');
+        await initializeLefthook(packageManagerAdd, isHuskyAlsoSelected);
       }
       if (extraFeatures.includes('lint-staged')) {
         await initializeLintStaged(packageManagerAdd);
