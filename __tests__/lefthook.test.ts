@@ -218,5 +218,41 @@ pre-commit:
 `
       );
     });
+
+    it('should replace template file created by npx lefthook install', async () => {
+      const templateContent = `# EXAMPLE USAGE:
+#
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+#
+# pre-push:
+#   jobs:
+#     - name: packages audit
+#       tags:
+#         - frontend
+#         - security
+#       run: yarn audit`;
+      mockReadFile.mockResolvedValue(templateContent);
+
+      await lefthook.update();
+
+      expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './lefthook.yml',
+        `pre-commit:
+  jobs:
+    - run: npx ultracite format
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+`
+      );
+    });
   });
 });

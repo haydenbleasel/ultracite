@@ -36,6 +36,14 @@ export const lefthook = {
       return;
     }
 
+    // Check if this is a template file created by 'npx lefthook install'
+    // Template files start with "# EXAMPLE USAGE:" and have all examples commented out
+    if (existingContents.startsWith('# EXAMPLE USAGE:')) {
+      // Replace the entire template with our configuration
+      await writeFile(path, lefthookConfig);
+      return;
+    }
+
     // Parse existing YAML and add ultracite job
     if (existingContents.includes('pre-commit:')) {
       // Check if jobs section exists
