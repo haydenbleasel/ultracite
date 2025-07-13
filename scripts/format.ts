@@ -9,7 +9,9 @@ type FormatOptions = {
 export const format = (files: string[], options: FormatOptions = {}) => {
   try {
     const target =
-      files.length > 0 ? files.map((file) => `"${escapeShellPath(file)}"`).join(' ') : './';
+      files.length > 0
+        ? files.map((file) => `"${escapeShellPath(file)}"`).join(' ')
+        : './';
     const unsafeFlag = options.unsafe ? ' --unsafe' : '';
     execSync(`npx @biomejs/biome check --write${unsafeFlag} ${target}`, {
       stdio: 'inherit',

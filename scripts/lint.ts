@@ -5,7 +5,9 @@ import { escapeShellPath } from './utils';
 export const lint = (files: string[]) => {
   try {
     const target =
-      files.length > 0 ? files.map((file) => `"${escapeShellPath(file)}"`).join(' ') : './';
+      files.length > 0
+        ? files.map((file) => `"${escapeShellPath(file)}"`).join(' ')
+        : './';
     execSync(`npx @biomejs/biome check ${target}`, { stdio: 'inherit' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
