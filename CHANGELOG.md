@@ -1,3 +1,15 @@
+# v5.0.35 (Sun Jul 13 2025)
+
+#### 🐛 Bug Fix
+
+- Fix npm peer dependency conflicts when initializing Ultracite in Shadcn projects [#212](https://github.com/haydenbleasel/ultracite/pull/212) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.34 (Sun Jul 13 2025)
 
 #### 🐛 Bug Fix
