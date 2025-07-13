@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import process from 'node:process';
+import { escapeShellPath } from './utils';
 
 type FormatOptions = {
   unsafe?: boolean;
@@ -8,7 +9,7 @@ type FormatOptions = {
 export const format = (files: string[], options: FormatOptions = {}) => {
   try {
     const target =
-      files.length > 0 ? files.map((file) => `"${file}"`).join(' ') : './';
+      files.length > 0 ? files.map((file) => `"${escapeShellPath(file)}"`).join(' ') : './';
     const unsafeFlag = options.unsafe ? ' --unsafe' : '';
     execSync(`npx @biomejs/biome check --write${unsafeFlag} ${target}`, {
       stdio: 'inherit',

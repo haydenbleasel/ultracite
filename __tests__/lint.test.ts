@@ -55,6 +55,33 @@ describe('lint command', () => {
     );
   });
 
+  it('should escape dollar signs in file paths to prevent shell interpolation', () => {
+    const files = [
+      '/Users/epogue/Code/apps/team/app/routes/_app/appointments/$appointmentId.tsx',
+      'src/components/$dynamic.tsx',
+    ];
+    lint(files);
+
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check "/Users/epogue/Code/apps/team/app/routes/_app/appointments/\\$appointmentId.tsx" "src/components/\\$dynamic.tsx"',
+      { stdio: 'inherit' }
+    );
+  });
+
+  it('should escape other shell special characters in file paths', () => {
+    const files = [
+      '/path/with"quotes".txt',
+      '/path/with`backticks`.txt',
+      'C:\\Windows\\file.txt',
+    ];
+    lint(files);
+
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check "/path/with\\"quotes\\".txt" "/path/with\\`backticks\\`.txt" "C:\\\\Windows\\\\file.txt"',
+      { stdio: 'inherit' }
+    );
+  });
+
   it('should handle errors and exit with code 1', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')

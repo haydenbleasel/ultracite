@@ -29,3 +29,16 @@ export const isMonorepo = async () => {
     return false;
   }
 };
+
+/**
+ * Escapes shell special characters in a file path for use in double-quoted strings.
+ * Primarily handles dollar signs, backticks, and backslashes that could cause
+ * shell interpolation issues.
+ */
+export const escapeShellPath = (path: string) => {
+  return path
+    .replace(/\\/g, '\\\\') // Escape backslashes first
+    .replace(/\$/g, '\\$') // Escape dollar signs to prevent variable interpolation
+    .replace(/`/g, '\\`') // Escape backticks to prevent command substitution
+    .replace(/"/g, '\\"'); // Escape double quotes
+};

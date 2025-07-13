@@ -1,6 +1,6 @@
 import { access, readFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists, isMonorepo } from '../scripts/utils';
+import { exists, isMonorepo, escapeShellPath } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
 
@@ -206,6 +206,62 @@ describe('utils', () => {
       expect(result).toBe(true);
       expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
       expect(mockReadFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('escapeShellPath', () => {
+    it('should escape dollar signs to prevent variable interpolation', () => {
+      const path = '/Users/user/file$variable.tsx';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/Users/user/file\\$variable.tsx');
+    });
+
+    it('should escape multiple dollar signs', () => {
+      const path = '$var1/file$var2/$var3.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('\\$var1/file\\$var2/\\$var3.txt');
+    });
+
+    it('should escape backticks to prevent command substitution', () => {
+      const path = '/path/with`command`.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/path/with\\`command\\`.txt');
+    });
+
+    it('should escape backslashes', () => {
+      const path = 'C:\\Users\\user\\file.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('C:\\\\Users\\\\user\\\\file.txt');
+    });
+
+    it('should escape double quotes', () => {
+      const path = '/path/with"quotes"in.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/path/with\\"quotes\\"in.txt');
+    });
+
+    it('should handle paths with multiple special characters', () => {
+      const path = '/path/$var/with"quotes"/and`backticks`/and\\backslashes.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/path/\\$var/with\\"quotes\\"/and\\`backticks\\`/and\\\\backslashes.txt');
+    });
+
+    it('should handle the specific case from the bug report', () => {
+      const path = '/Users/epogue/Code/apps/team/app/routes/_app/appointments/$appointmentId.tsx';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/Users/epogue/Code/apps/team/app/routes/_app/appointments/\\$appointmentId.tsx');
+    });
+
+    it('should return the same string for paths without special characters', () => {
+      const path = '/simple/path/file.txt';
+      const result = escapeShellPath(path);
+      expect(result).toBe('/simple/path/file.txt');
+    });
+
+    it('should handle empty string', () => {
+      const path = '';
+      const result = escapeShellPath(path);
+      expect(result).toBe('');
     });
   });
 });
