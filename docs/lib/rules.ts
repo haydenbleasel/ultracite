@@ -8,7 +8,7 @@ const accessibilityRules = [
   'Make sure label elements have text content and are associated with an input.',
   `Don't assign interactive ARIA roles to non-interactive HTML elements.`,
   `Don't assign \`tabIndex\` to non-interactive HTML elements.`,
-  `Don't use positive integers for \`tabIndex\` property.\`,
+  `Don't use positive integers for \`tabIndex\` property.`,
   `Don't include "image", "picture", or "photo" in img alt prop.`,
   `Don't use explicit role property that's the same as the implicit/default role.`,
   'Make static elements with click handlers use a valid role attribute.',
