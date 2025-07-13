@@ -22,7 +22,34 @@ Make sure you have:
 - Node.js v14.18+ (Node 18+ recommended)
 - A `package.json` file
 
-## Migration Steps
+## Automatic Setup
+
+Run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+This will:
+
+- Install Ultracite as a dependency
+- Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Preserve your custom rules and settings
+- Set up editor integrations
+
+Ensure you choose to remove the existing `ESLint` configuration. This will:
+
+- Remove ESLint and any related dependencies
+- Remove any ESLint configuration files
+- Remove any ESLint related commands from your `.vscode/settings.json` file
+
+Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+
+## Manual Setup
+
+If you prefer to install step by step or use a specific package manager, follow these steps.
 
 ### 1. Remove ESLint Dependencies
 
@@ -75,8 +102,6 @@ This will:
 - Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
 - Preserve your custom rules and settings
 - Set up editor integrations
-
-Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
 
 ### 5. Update scripts in `package.json`
 
