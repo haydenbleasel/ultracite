@@ -117,7 +117,7 @@ export const IDE = () => (
         </div>
       </div>
     </div>
-    <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center'>
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
       <p className="text-muted-foreground text-sm">
         Works with all your favourite IDEs and agents.
       </p>

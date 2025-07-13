@@ -111,7 +111,9 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectESM = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile('./package.json', 'utf-8')) as Record<string, unknown> | undefined;
+    const packageJson = parse(await readFile('./package.json', 'utf-8')) as
+      | Record<string, unknown>
+      | undefined;
 
     if (!packageJson) {
       return false;
@@ -125,7 +127,9 @@ const isProjectESM = async (): Promise<boolean> => {
 
 // Update package.json lint-staged config
 const updatePackageJson = async (): Promise<void> => {
-  const packageJson = parse(await readFile('./package.json', 'utf-8')) as Record<string, unknown> | undefined;
+  const packageJson = parse(await readFile('./package.json', 'utf-8')) as
+    | Record<string, unknown>
+    | undefined;
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!packageJson) {
@@ -161,7 +165,9 @@ const updateJsonConfig = async (filename: string): Promise<void> => {
 // Update YAML config files
 const updateYamlConfig = async (filename: string): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
-  const existingConfig = parseSimpleYaml(content) as Record<string, unknown> | undefined;
+  const existingConfig = parseSimpleYaml(content) as
+    | Record<string, unknown>
+    | undefined;
 
   // If parsing fails (invalid YAML), treat as empty config and proceed gracefully
   if (!existingConfig) {

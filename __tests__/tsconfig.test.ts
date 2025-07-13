@@ -115,7 +115,7 @@ describe('tsconfig configuration', () => {
       // Should not throw, but handle gracefully by treating as empty config
       await expect(tsconfig.update()).resolves.not.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith('./tsconfig.json', 'utf-8');
-      
+
       // Should write the default config when parsing fails
       expect(mockWriteFile).toHaveBeenCalledWith(
         './tsconfig.json',

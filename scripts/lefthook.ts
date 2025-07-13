@@ -30,7 +30,7 @@ export const lefthook = {
   },
   update: async () => {
     const existingContents = await readFile(path, 'utf-8');
-    
+
     // Check if ultracite command is already present
     if (existingContents.includes(lefthookCommand)) {
       return;

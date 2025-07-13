@@ -72,7 +72,7 @@ describe('initialize command', () => {
       'Detected lockfile, using pnpm add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'pnpm add -D -E ultracite @biomejs/biome@2.0.5'
+      'pnpm add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -88,7 +88,7 @@ describe('initialize command', () => {
       'Detected lockfile, using yarn add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'yarn add -D -E ultracite @biomejs/biome@2.0.5'
+      'yarn add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -104,7 +104,7 @@ describe('initialize command', () => {
       'Detected lockfile, using npm install'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npm install -D -E ultracite @biomejs/biome@2.0.5'
+      'npm install -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -120,7 +120,7 @@ describe('initialize command', () => {
       'Detected lockfile, using bun add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'bun add -D -E ultracite @biomejs/biome@2.0.5'
+      'bun add -D -E ultracite @biomejs/biome@2.0.6'
     );
   });
 
@@ -146,7 +146,10 @@ describe('initialize command', () => {
   it('should initialize cursor rules when selected', async () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect.mockResolvedValueOnce(['cursor']).mockResolvedValueOnce([]);
+    mockMultiselect
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce(['cursor']) // editorRules
+      .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();
 
@@ -163,8 +166,9 @@ describe('initialize command', () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
     mockMultiselect
-      .mockResolvedValueOnce(['windsurf'])
-      .mockResolvedValueOnce([]);
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce(['windsurf']) // editorRules
+      .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();
 
@@ -181,8 +185,9 @@ describe('initialize command', () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
     mockMultiselect
-      .mockResolvedValueOnce(['vscode-copilot'])
-      .mockResolvedValueOnce([]);
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce(['vscode-copilot']) // editorRules
+      .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();
 
@@ -233,10 +238,17 @@ describe('initialize command', () => {
   it('should initialize zed rules when selected', async () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect.mockResolvedValueOnce(['zed']).mockResolvedValueOnce([]);
+    mockMultiselect
+      .mockResolvedValueOnce(['zed']) // editorConfig - creates .zed/settings.json
+      .mockResolvedValueOnce(['zed']) // editorRules - creates .rules
+      .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();
 
+    expect(mockWriteFile).toHaveBeenCalledWith(
+      './.zed/settings.json',
+      expect.any(String)
+    );
     expect(mockWriteFile).toHaveBeenCalledWith('./.rules', expect.any(String));
   });
 
@@ -244,8 +256,9 @@ describe('initialize command', () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
     mockMultiselect
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce(['precommit-hooks']);
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce([]) // editorRules
+      .mockResolvedValueOnce(['precommit-hooks']); // extraFeatures
 
     await initialize();
 
@@ -259,8 +272,9 @@ describe('initialize command', () => {
     mockExists.mockResolvedValue(false);
     mockSelect.mockResolvedValue('pnpm add');
     mockMultiselect
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce(['lint-staged']);
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce([]) // editorRules
+      .mockResolvedValueOnce(['lint-staged']); // extraFeatures
 
     await initialize();
 
@@ -315,7 +329,10 @@ describe('initialize command', () => {
     });
 
     mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect.mockResolvedValueOnce(['zed']).mockResolvedValueOnce([]);
+    mockMultiselect
+      .mockResolvedValueOnce([]) // editorConfig
+      .mockResolvedValueOnce(['zed']) // editorRules
+      .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();
 

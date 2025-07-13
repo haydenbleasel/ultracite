@@ -16,15 +16,14 @@ import { tsconfig } from './tsconfig';
 import { vscodeCopilot } from './vscode-copilot';
 import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
-import { zed } from './zed';
+import { zedCopilot } from './zed';
+import { zed } from './zed-settings';
 
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(
-    `${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.5`
-  );
+  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.6`);
   s.stop('Dependencies installed.');
 };
 
@@ -57,6 +56,22 @@ const upsertVSCodeSettings = async () => {
 
   s.message('settings.json not found, creating...');
   await vscode.create();
+  s.stop('settings.json created.');
+};
+
+const upsertZedSettings = async () => {
+  const s = spinner();
+  s.start('Checking for .zed/settings.json...');
+
+  if (await zed.exists()) {
+    s.message('settings.json found, updating...');
+    await zed.update();
+    s.stop('settings.json updated.');
+    return;
+  }
+
+  s.message('settings.json not found, creating...');
+  await zed.create();
   s.stop('settings.json created.');
 };
 
@@ -188,15 +203,15 @@ const upsertZedRules = async () => {
   const s = spinner();
   s.start('Checking for Zed rules...');
 
-  if (await zed.exists()) {
+  if (await zedCopilot.exists()) {
     s.message('Zed rules found, updating...');
-    await zed.update();
+    await zedCopilot.update();
     s.stop('Zed rules updated.');
     return;
   }
 
   s.message('Zed rules not found, creating...');
-  await zed.create();
+  await zedCopilot.create();
   s.stop('Zed rules created.');
 };
 
@@ -319,6 +334,15 @@ export const initialize = async () => {
       });
     }
 
+    const editorConfig = await multiselect({
+      message: 'Which editors do you want to configure (recommended)?',
+      options: [
+        { label: 'VSCode / Cursor / Windsurf', value: 'vscode' },
+        { label: 'Zed', value: 'zed' }
+      ],
+      required: false,
+    });
+
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
       options: [
@@ -354,8 +378,16 @@ export const initialize = async () => {
 
     installDependencies(packageManagerAdd);
     await upsertTsConfig();
-    await upsertVSCodeSettings();
     await upsertBiomeConfig();
+
+    if (Array.isArray(editorConfig)) {
+      if (editorConfig.includes('zed')) {
+        await upsertZedSettings();
+      }
+      if (editorConfig.includes('vscode')) {
+        await upsertVSCodeSettings();
+      }
+    }
 
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('vscode-copilot')) {

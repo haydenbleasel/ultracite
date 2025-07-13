@@ -56,7 +56,7 @@ describe('biome configuration', () => {
       await biome.create();
 
       const expectedConfig = {
-        $schema: 'https://biomejs.dev/schemas/2.0.5/schema.json',
+        $schema: 'https://biomejs.dev/schemas/2.0.6/schema.json',
         extends: ['ultracite'],
       };
 
@@ -75,7 +75,7 @@ describe('biome configuration', () => {
       await biome.create();
 
       const expectedConfig = {
-        $schema: 'https://biomejs.dev/schemas/2.0.5/schema.json',
+        $schema: 'https://biomejs.dev/schemas/2.0.6/schema.json',
         extends: ['ultracite'],
       };
 
@@ -113,7 +113,7 @@ describe('biome configuration', () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
         expect.stringContaining(
-          '"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"'
+          '"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json"'
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -149,7 +149,7 @@ describe('biome configuration', () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.json',
         expect.stringContaining(
-          '"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"'
+          '"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json"'
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -168,7 +168,7 @@ describe('biome configuration', () => {
       // Should not throw, but handle gracefully by treating as empty config
       await expect(biome.update()).resolves.not.toThrow();
       expect(mockReadFile).toHaveBeenCalledWith('./biome.jsonc', 'utf-8');
-      
+
       // Should write the default config when parsing fails
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
@@ -178,14 +178,20 @@ describe('biome configuration', () => {
 
     it('should handle JSONC files with comments', async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === './biome.json') return false;
-        if (path === './biome.jsonc') return true;
-        return false;
+        if (path === './biome.json') {
+          return await Promise.resolve(false);
+        }
+
+        if (path === './biome.jsonc') {
+          return await Promise.resolve(true);
+        }
+
+        return await Promise.resolve(false);
       });
 
       const existingConfigWithComments = `{
   // Biome configuration with comments
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
   
   /* Custom property */
   "customProperty": "value",
@@ -209,7 +215,7 @@ describe('biome configuration', () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         './biome.jsonc',
         expect.stringContaining(
-          '"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json"'
+          '"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json"'
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(

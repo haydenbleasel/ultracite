@@ -54,9 +54,10 @@ export const packageManager = {
       message: 'Which package manager do you use?',
       options: options.map((option) => ({
         label: option.label,
-        value: monorepo && option.monorepoSuffix
-          ? `${option.value} ${option.monorepoSuffix}`
-          : option.value,
+        value:
+          monorepo && option.monorepoSuffix
+            ? `${option.value} ${option.monorepoSuffix}`
+            : option.value,
       })),
     });
 

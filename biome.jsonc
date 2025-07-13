@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
   "formatter": {
     "enabled": true,
     "formatWithErrors": true,
@@ -502,13 +502,13 @@
         // Promotes the use of export type for types.
         "useExportType": "error",
         // Enforce naming conventions for JavaScript and TypeScript filenames.
-        // Supports TanStack Router convention: allows - prefixed files (e.g., -hooks.ts, -components.tsx)
+        // Supports TanStack Router convention: allows - prefixed files (e.g., -hooks.ts, $slug)
         "useFilenamingConvention": {
           "level": "error",
           "options": {
             "requireAscii": true,
             "filenameCases": ["kebab-case"],
-            "match": "[-?%]?(.+?)[.](.+)"
+            "match": "[\\-$]?(.+?)[.](.+)"
           }
         },
         // This rule recommends a for-of loop when in a for loop, the index used to extract an item from the iterated array.
