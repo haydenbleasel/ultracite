@@ -13,29 +13,55 @@ describe('format command', () => {
   });
 
   it('should run biome check with --write flag for all files when no files specified', () => {
-    format([]);
+    format([], { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check --write ./', {
-      stdio: 'inherit',
-    });
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check --write ./',
+      {
+        stdio: 'inherit',
+      }
+    );
   });
 
   it('should run biome check with --write flag for specific files when files are provided', () => {
     const files = ['src/index.ts', 'src/utils.ts'];
-    format(files);
+    format(files, { unsafe: false });
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write src/index.ts src/utils.ts',
+      'npx @biomejs/biome check --write "src/index.ts" "src/utils.ts"',
       { stdio: 'inherit' }
     );
   });
 
   it('should handle single file', () => {
     const files = ['src/index.ts'];
-    format(files);
+    format(files, { unsafe: false });
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write src/index.ts',
+      'npx @biomejs/biome check --write "src/index.ts"',
+      { stdio: 'inherit' }
+    );
+  });
+
+  it('should handle unsafe flag when enabled', () => {
+    const files = ['src/index.ts'];
+    format(files, { unsafe: true });
+
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check --write --unsafe "src/index.ts"',
+      { stdio: 'inherit' }
+    );
+  });
+
+  it('should handle files with special characters by quoting them', () => {
+    const files = [
+      '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
+      'src/components/Button.tsx',
+    ];
+    format(files, { unsafe: false });
+
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check --write "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx" "src/components/Button.tsx"',
       { stdio: 'inherit' }
     );
   });
@@ -51,7 +77,7 @@ describe('format command', () => {
       throw error;
     });
 
-    format([]);
+    format([], { unsafe: false });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to run Ultracite:',
@@ -72,7 +98,7 @@ describe('format command', () => {
       throw new Error('String error');
     });
 
-    format([]);
+    format([], { unsafe: false });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to run Ultracite:',

@@ -1,0 +1,94 @@
+---
+title: Migrate from ESLint
+description: How to migrate your project from ESLint to Ultracite.
+---
+
+If you're using ESLint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while maintaining code quality standards.
+
+## Why Migrate to Ultracite?
+
+- **Lightning Speed**: Biome (Ultracite's foundation) is based on Rust, much faster than ESLint
+- **Zero Configuration**: Hundreds of preconfigured rules vs manual ESLint setup
+- **Combined Tool**: Replaces both ESLint and Prettier with a single tool
+- **AI Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Type Safety**: Comprehensive TypeScript rules with strict null checks
+- **Modern Standards**: Latest JavaScript/TypeScript best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using ESLint
+- Node.js v14.18+ (Node 18+ recommended)
+- A `package.json` file
+
+## Migration Steps
+
+### 1. Remove ESLint Dependencies
+
+Remove ESLint and related packages from your project:
+
+```package-install
+npm uninstall $(npm ls --depth=0 --json | jq -r '.dependencies | keys[]' | grep eslint)
+```
+
+This command will remove all dependencies containing the word "eslint" i.e. plugins, presets, etc.
+
+### 2. Remove ESLint Configuration Files
+
+Delete your existing ESLint configuration files. These might include:
+
+- `.eslintrc.js`
+- `.eslintrc.json`
+- `.eslintrc.yml`
+- `.eslintignore`
+- `eslint.config.js`
+
+etc.
+
+### 3. Update VS Code Settings
+
+If you have ESLint configured in your `.vscode/settings.json`, remove any references to it. For example, you might have configuration like this:
+
+```json title=".vscode/settings.json"
+{
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
+
+### 4. Install Ultracite
+
+Run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+This will:
+
+- Install Ultracite as a dependency
+- Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Preserve your custom rules and settings
+- Set up editor integrations
+
+Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+
+### 5. Update scripts in `package.json`
+
+If you have ESLint related scripts in your `package.json`, you can replace them with Ultracite equivalents. For example, you might want scripts like this:
+
+```json title="package.json"
+{
+  "scripts": {
+    "lint": "npx ultracite@latest lint",
+    "format": "npx ultracite@latest format"
+  }
+}
+```
+
+Your project should now be running with Ultracite's fast, comprehensive linting and formatting!

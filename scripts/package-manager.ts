@@ -14,7 +14,7 @@ const options = [
     label: 'yarn',
     value: 'yarn add',
     lockfile: 'yarn.lock',
-    monorepoSuffix: '-W',
+    monorepoSuffix: '',
   },
   {
     label: 'npm',
@@ -54,9 +54,10 @@ export const packageManager = {
       message: 'Which package manager do you use?',
       options: options.map((option) => ({
         label: option.label,
-        value: monorepo
-          ? `${option.value} ${option.monorepoSuffix}`
-          : option.value,
+        value:
+          monorepo && option.monorepoSuffix
+            ? `${option.value} ${option.monorepoSuffix}`
+            : option.value,
       })),
     });
 

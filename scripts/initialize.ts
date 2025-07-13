@@ -6,6 +6,7 @@ import { claude } from './claude';
 import { codex } from './codex';
 import { cursor } from './cursor';
 import { husky } from './husky';
+import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
 import { packageManager } from './package-manager';
 import { title } from './title';
@@ -13,15 +14,14 @@ import { tsconfig } from './tsconfig';
 import { vscodeCopilot } from './vscode-copilot';
 import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
-import { zed } from './zed';
+import { zedCopilot } from './zed';
+import { zed } from './zed-settings';
 
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(
-    `${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.5`
-  );
+  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.6`);
   s.stop('Dependencies installed.');
 };
 
@@ -57,20 +57,36 @@ const upsertVSCodeSettings = async () => {
   s.stop('settings.json created.');
 };
 
-const upsertBiomeConfig = async () => {
+const upsertZedSettings = async () => {
   const s = spinner();
-  s.start('Checking for biome.jsonc...');
+  s.start('Checking for .zed/settings.json...');
 
-  if (await biome.exists()) {
-    s.message('biome.jsonc found, updating...');
-    await biome.update();
-    s.stop('biome.jsonc updated.');
+  if (await zed.exists()) {
+    s.message('settings.json found, updating...');
+    await zed.update();
+    s.stop('settings.json updated.');
     return;
   }
 
-  s.message('biome.jsonc not found, creating...');
+  s.message('settings.json not found, creating...');
+  await zed.create();
+  s.stop('settings.json created.');
+};
+
+const upsertBiomeConfig = async () => {
+  const s = spinner();
+  s.start('Checking for Biome configuration...');
+
+  if (await biome.exists()) {
+    s.message('Biome configuration found, updating...');
+    await biome.update();
+    s.stop('Biome configuration updated.');
+    return;
+  }
+
+  s.message('Biome configuration not found, creating...');
   await biome.create();
-  s.stop('biome.jsonc created.');
+  s.stop('Biome configuration created.');
 };
 
 const initializePrecommitHook = async (packageManagerAdd: string) => {
@@ -92,6 +108,25 @@ const initializePrecommitHook = async (packageManagerAdd: string) => {
   s.message('Pre-commit hook not found, creating...');
   await husky.create();
   s.stop('Pre-commit hook created.');
+};
+
+const initializeLefthook = async (packageManagerAdd: string) => {
+  const s = spinner();
+  s.start('Initializing lefthook...');
+
+  s.message('Installing lefthook...');
+  lefthook.install(packageManagerAdd);
+
+  if (await lefthook.exists()) {
+    s.message('lefthook.yml found, updating...');
+    await lefthook.update();
+    s.stop('lefthook.yml updated.');
+    return;
+  }
+
+  s.message('lefthook.yml not found, creating...');
+  await lefthook.create();
+  s.stop('lefthook.yml created.');
 };
 
 const initializeLintStaged = async (packageManagerAdd: string) => {
@@ -166,15 +201,15 @@ const upsertZedRules = async () => {
   const s = spinner();
   s.start('Checking for Zed rules...');
 
-  if (await zed.exists()) {
+  if (await zedCopilot.exists()) {
     s.message('Zed rules found, updating...');
-    await zed.update();
+    await zedCopilot.update();
     s.stop('Zed rules updated.');
     return;
   }
 
   s.message('Zed rules not found, creating...');
-  await zed.create();
+  await zedCopilot.create();
   s.stop('Zed rules created.');
 };
 
@@ -210,6 +245,7 @@ const upsertCodexRules = async () => {
   s.stop('OpenAI Codex rules created.');
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "This function is complex, but it's a one-time setup script"
 export const initialize = async () => {
   intro(title);
 
@@ -227,6 +263,15 @@ export const initialize = async () => {
       throw new Error('No package manager selected');
     }
 
+    const editorConfig = await multiselect({
+      message: 'Which editors do you want to configure (recommended)?',
+      options: [
+        { label: 'VSCode / Cursor / Windsurf', value: 'vscode' },
+        { label: 'Zed', value: 'zed' }
+      ],
+      required: false,
+    });
+
     const editorRules = await multiselect({
       message: 'Which editor rules do you want to enable (optional)?',
       options: [
@@ -243,7 +288,8 @@ export const initialize = async () => {
     const extraFeatures = await multiselect({
       message: 'Would you like any of the following (optional)?',
       options: [
-        { label: 'Pre-commit hook with Husky', value: 'precommit-hooks' },
+        { label: 'Husky pre-commit hook', value: 'precommit-hooks' },
+        { label: 'Lefthook pre-commit hook', value: 'lefthook' },
         { label: 'Lint-staged', value: 'lint-staged' },
       ],
       required: false,
@@ -251,8 +297,16 @@ export const initialize = async () => {
 
     installDependencies(packageManagerAdd);
     await upsertTsConfig();
-    await upsertVSCodeSettings();
     await upsertBiomeConfig();
+
+    if (Array.isArray(editorConfig)) {
+      if (editorConfig.includes('zed')) {
+        await upsertZedSettings();
+      }
+      if (editorConfig.includes('vscode')) {
+        await upsertVSCodeSettings();
+      }
+    }
 
     if (Array.isArray(editorRules)) {
       if (editorRules.includes('vscode-copilot')) {
@@ -278,6 +332,9 @@ export const initialize = async () => {
     if (Array.isArray(extraFeatures)) {
       if (extraFeatures.includes('precommit-hooks')) {
         await initializePrecommitHook(packageManagerAdd);
+      }
+      if (extraFeatures.includes('lefthook')) {
+        await initializeLefthook(packageManagerAdd);
       }
       if (extraFeatures.includes('lint-staged')) {
         await initializeLintStaged(packageManagerAdd);

@@ -25,7 +25,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check src/index.ts src/utils.ts',
+      'npx @biomejs/biome check "src/index.ts" "src/utils.ts"',
       { stdio: 'inherit' }
     );
   });
@@ -34,9 +34,25 @@ describe('lint command', () => {
     const files = ['src/index.ts'];
     lint(files);
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check src/index.ts', {
-      stdio: 'inherit',
-    });
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check "src/index.ts"',
+      {
+        stdio: 'inherit',
+      }
+    );
+  });
+
+  it('should handle files with special characters by quoting them', () => {
+    const files = [
+      '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
+      'src/components/Button.tsx',
+    ];
+    lint(files);
+
+    expect(mockExecSync).toHaveBeenCalledWith(
+      'npx @biomejs/biome check "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx" "src/components/Button.tsx"',
+      { stdio: 'inherit' }
+    );
   });
 
   it('should handle errors and exit with code 1', () => {

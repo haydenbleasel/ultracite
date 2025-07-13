@@ -4,24 +4,42 @@ import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
-  $schema: 'https://biomejs.dev/schemas/2.0.5/schema.json',
+  $schema: 'https://biomejs.dev/schemas/2.0.6/schema.json',
   extends: ['ultracite'],
 };
 
-const path = './biome.jsonc';
+const getBiomeConfigPath = async (): Promise<string> => {
+  // Check for biome.json first, then fall back to biome.jsonc
+  if (await exists('./biome.json')) {
+    return './biome.json';
+  }
+  return './biome.jsonc';
+};
 
 export const biome = {
-  exists: () => exists(path),
-  create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
+  exists: async () => {
+    const path = await getBiomeConfigPath();
+    return exists(path);
+  },
+  create: async () => {
+    const path = await getBiomeConfigPath();
+    return writeFile(path, JSON.stringify(defaultConfig, null, 2));
+  },
   update: async () => {
+    const path = await getBiomeConfigPath();
     const existingContents = await readFile(path, 'utf-8');
-    const existingConfig = parse(existingContents) as Record<string, unknown> | undefined;
+    const existingConfig = parse(existingContents) as
+      | Record<string, unknown>
+      | undefined;
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToWork = existingConfig || {};
 
     // Check if ultracite is already in the extends array
-    const existingExtends = configToWork.extends && Array.isArray(configToWork.extends) ? configToWork.extends : [];
+    const existingExtends =
+      configToWork.extends && Array.isArray(configToWork.extends)
+        ? configToWork.extends
+        : [];
     if (!existingExtends.includes('ultracite')) {
       configToWork.extends = [...existingExtends, 'ultracite'];
     }

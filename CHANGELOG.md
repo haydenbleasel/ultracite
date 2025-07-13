@@ -1,3 +1,177 @@
+# v5.0.33 (Sun Jul 13 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Rabah Tahraoui ([@rabah](https://github.com/rabah)), for all your work!
+
+#### 🐛 Bug Fix
+
+- feat: update filename convention rule to support $ prefix [#206](https://github.com/haydenbleasel/ultracite/pull/206) ([@rabah](https://github.com/rabah))
+
+#### Authors: 1
+
+- Rabah Tahraoui ([@rabah](https://github.com/rabah))
+
+---
+
+# v5.0.32 (Fri Jul 04 2025)
+
+#### 🐛 Bug Fix
+
+- Bump next from 15.3.1 to 15.3.3 in /docs in the npm_and_yarn group across 1 directory [#204](https://github.com/haydenbleasel/ultracite/pull/204) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v5.0.31 (Thu Jul 03 2025)
+
+#### 🐛 Bug Fix
+
+- Add monorepos docs [#201](https://github.com/haydenbleasel/ultracite/pull/201) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.30 (Thu Jul 03 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Zed Settings [#191](https://github.com/haydenbleasel/ultracite/pull/191) ([@luizvergennes](https://github.com/luizvergennes) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes))
+
+---
+
+# v5.0.29 (Tue Jul 01 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #195 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.28 (Tue Jul 01 2025)
+
+#### 🐛 Bug Fix
+
+- Bump @types/node from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v5.0.27 (Tue Jul 01 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.26 (Fri Jun 27 2025)
+
+#### 🐛 Bug Fix
+
+- Fix file path quoting for special characters in biome commands [#176](https://github.com/haydenbleasel/ultracite/pull/176) ([@Copilot](https://github.com/Copilot) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- [@Copilot](https://github.com/Copilot)
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.25 (Fri Jun 27 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create v5 migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add ESLint and Prettier migration guides ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create biome migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create llms.txt ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.24 (Fri Jun 27 2025)
+
+#### 🐛 Bug Fix
+
+- Improve biome update flow to support both biome.json and biome.jsonc [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.23 (Thu Jun 26 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update meta.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.22 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Add support for lefthook as git hooks manager [#178](https://github.com/haydenbleasel/ultracite/pull/178) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.21 (Thu Jun 26 2025)
+
+#### 🐛 Bug Fix
+
+- Fix Yarn monorepo support by removing invalid -W flag [#180](https://github.com/haydenbleasel/ultracite/pull/180) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.20 (Wed Jun 25 2025)
 
 :tada: This release contains work from new contributors! :tada:
