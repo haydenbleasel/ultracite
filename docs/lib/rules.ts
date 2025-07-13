@@ -130,10 +130,7 @@ const correctnessRules = [
   `Don't have unused variables.`,
   `Make sure void (self-closing) elements don't have children.`,
   `Don't return a value from a function with the return type 'void'`,
-  'Make sure all dependencies are correctly specified in React hooks.',
-  'Make sure all React hooks are called from the top level of component functions.',
   'Use isNaN() when checking for NaN.',
-  `Don't forget key props in iterators and collection literals.`,
   'Make sure "for" loop update clauses move the counter in the right direction.',
   'Make sure typeof expressions are compared to valid values.',
   'Make sure generator functions contain yield.',
@@ -334,7 +331,7 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 1. Analyze existing patterns in the codebase
 2. Consider edge cases and error scenarios
 3. Follow the rules below strictly
-5. Validate accessibility requirements
+4. Validate accessibility requirements
 
 ## Rules
 
