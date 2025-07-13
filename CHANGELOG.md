@@ -1,3 +1,19 @@
+# v5.0.33 (Sun Jul 13 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Rabah Tahraoui ([@rabah](https://github.com/rabah)), for all your work!
+
+#### 🐛 Bug Fix
+
+- feat: update filename convention rule to support $ prefix [#206](https://github.com/haydenbleasel/ultracite/pull/206) ([@rabah](https://github.com/rabah))
+
+#### Authors: 1
+
+- Rabah Tahraoui ([@rabah](https://github.com/rabah))
+
+---
+
 # v5.0.32 (Fri Jul 04 2025)
 
 #### 🐛 Bug Fix
