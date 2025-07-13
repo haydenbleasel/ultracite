@@ -5,10 +5,12 @@ import { biome } from './biome';
 import { claude } from './claude';
 import { codex } from './codex';
 import { cursor } from './cursor';
+import { eslintCleanup } from './eslint-cleanup';
 import { husky } from './husky';
 import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
 import { packageManager } from './package-manager';
+import { prettierCleanup } from './prettier-cleanup';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
 import { vscodeCopilot } from './vscode-copilot';
@@ -245,7 +247,56 @@ const upsertCodexRules = async () => {
   s.stop('OpenAI Codex rules created.');
 };
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "This function is complex, but it's a one-time setup script"
+const removePrettier = async (packageManagerAdd: string) => {
+  const s = spinner();
+  s.start('Removing Prettier dependencies and configuration...');
+
+  try {
+    const result = await prettierCleanup.remove(packageManagerAdd);
+    
+    if (result.packagesRemoved.length > 0) {
+      s.message(`Removed Prettier packages: ${result.packagesRemoved.join(', ')}`);
+    }
+    
+    if (result.filesRemoved.length > 0) {
+      s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
+    }
+    
+    if (result.vsCodeCleaned) {
+      s.message('Cleaned VS Code settings');
+    }
+    
+    s.stop('Prettier removed successfully.');
+  } catch (error) {
+    s.stop('Failed to remove Prettier completely, but continuing...');
+  }
+};
+
+const removeESLint = async (packageManagerAdd: string) => {
+  const s = spinner();
+  s.start('Removing ESLint dependencies and configuration...');
+
+  try {
+    const result = await eslintCleanup.remove(packageManagerAdd);
+    
+    if (result.packagesRemoved.length > 0) {
+      s.message(`Removed ESLint packages: ${result.packagesRemoved.join(', ')}`);
+    }
+    
+    if (result.filesRemoved.length > 0) {
+      s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
+    }
+    
+    if (result.vsCodeCleaned) {
+      s.message('Cleaned VS Code settings');
+    }
+    
+    s.stop('ESLint removed successfully.');
+  } catch (error) {
+    s.stop('Failed to remove ESLint completely, but continuing...');
+  }
+};
+
 export const initialize = async () => {
   intro(title);
 
@@ -261,6 +312,26 @@ export const initialize = async () => {
     // Validate that a package manager was selected
     if (!packageManagerAdd || typeof packageManagerAdd !== 'string') {
       throw new Error('No package manager selected');
+    }
+
+    // Check if migration is needed
+    const migrationOptions = [];
+    
+    if (await prettierCleanup.hasPrettier()) {
+      migrationOptions.push({ label: 'Remove Prettier (dependencies, config files, VS Code settings)', value: 'prettier' });
+    }
+    
+    if (await eslintCleanup.hasESLint()) {
+      migrationOptions.push({ label: 'Remove ESLint (dependencies, config files, VS Code settings)', value: 'eslint' });
+    }
+
+    let migrationChoices = [];
+    if (migrationOptions.length > 0) {
+      migrationChoices = await multiselect({
+        message: 'Remove existing formatters/linters (recommended for clean migration)?',
+        options: migrationOptions,
+        required: false,
+      });
     }
 
     const editorConfig = await multiselect({
@@ -294,6 +365,16 @@ export const initialize = async () => {
       ],
       required: false,
     });
+
+    // Execute migration if requested
+    if (Array.isArray(migrationChoices)) {
+      if (migrationChoices.includes('prettier')) {
+        await removePrettier(packageManagerAdd);
+      }
+      if (migrationChoices.includes('eslint')) {
+        await removeESLint(packageManagerAdd);
+      }
+    }
 
     installDependencies(packageManagerAdd);
     await upsertTsConfig();
