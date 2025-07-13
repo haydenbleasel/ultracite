@@ -18,7 +18,7 @@ const options = [
   },
   {
     label: 'npm',
-    value: 'npm install',
+    value: 'npm install --legacy-peer-deps',
     lockfile: 'package-lock.json',
     monorepoSuffix: '--workspace .',
   },
