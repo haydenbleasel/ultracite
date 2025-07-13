@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
+import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { claude } from './claude';
 import { codex } from './codex';
@@ -18,7 +19,6 @@ import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
 import { zedCopilot } from './zed';
 import { zed } from './zed-settings';
-import packageJson from '../package.json' with { type: 'json' };
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 
@@ -26,7 +26,9 @@ const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`);
+  execSync(
+    `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
+  );
   s.stop('Dependencies installed.');
 };
 
@@ -256,19 +258,21 @@ const removePrettier = async (packageManagerAdd: string) => {
 
   try {
     const result = await prettierCleanup.remove(packageManagerAdd);
-    
+
     if (result.packagesRemoved.length > 0) {
-      s.message(`Removed Prettier packages: ${result.packagesRemoved.join(', ')}`);
+      s.message(
+        `Removed Prettier packages: ${result.packagesRemoved.join(', ')}`
+      );
     }
-    
+
     if (result.filesRemoved.length > 0) {
       s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
     }
-    
+
     if (result.vsCodeCleaned) {
       s.message('Cleaned VS Code settings');
     }
-    
+
     s.stop('Prettier removed successfully.');
   } catch (error) {
     s.stop('Failed to remove Prettier completely, but continuing...');
@@ -281,19 +285,21 @@ const removeESLint = async (packageManagerAdd: string) => {
 
   try {
     const result = await eslintCleanup.remove(packageManagerAdd);
-    
+
     if (result.packagesRemoved.length > 0) {
-      s.message(`Removed ESLint packages: ${result.packagesRemoved.join(', ')}`);
+      s.message(
+        `Removed ESLint packages: ${result.packagesRemoved.join(', ')}`
+      );
     }
-    
+
     if (result.filesRemoved.length > 0) {
       s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
     }
-    
+
     if (result.vsCodeCleaned) {
       s.message('Cleaned VS Code settings');
     }
-    
+
     s.stop('ESLint removed successfully.');
   } catch (error) {
     s.stop('Failed to remove ESLint completely, but continuing...');
@@ -319,19 +325,26 @@ export const initialize = async () => {
 
     // Check if migration is needed
     const migrationOptions = [];
-    
+
     if (await prettierCleanup.hasPrettier()) {
-      migrationOptions.push({ label: 'Remove Prettier (dependencies, config files, VS Code settings)', value: 'prettier' });
+      migrationOptions.push({
+        label: 'Remove Prettier (dependencies, config files, VS Code settings)',
+        value: 'prettier',
+      });
     }
-    
+
     if (await eslintCleanup.hasESLint()) {
-      migrationOptions.push({ label: 'Remove ESLint (dependencies, config files, VS Code settings)', value: 'eslint' });
+      migrationOptions.push({
+        label: 'Remove ESLint (dependencies, config files, VS Code settings)',
+        value: 'eslint',
+      });
     }
 
     let migrationChoices = [];
     if (migrationOptions.length > 0) {
       migrationChoices = await multiselect({
-        message: 'Remove existing formatters/linters (recommended for clean migration)?',
+        message:
+          'Remove existing formatters/linters (recommended for clean migration)?',
         options: migrationOptions,
         required: false,
       });
@@ -341,7 +354,7 @@ export const initialize = async () => {
       message: 'Which editors do you want to configure (recommended)?',
       options: [
         { label: 'VSCode / Cursor / Windsurf', value: 'vscode' },
-        { label: 'Zed', value: 'zed' }
+        { label: 'Zed', value: 'zed' },
       ],
       required: false,
     });

@@ -122,9 +122,15 @@ describe('prettier-cleanup', () => {
 
       const result = await prettierCleanup.remove('npm install');
 
-      expect(result.packagesRemoved).toEqual(['prettier', 'eslint-plugin-prettier']);
+      expect(result.packagesRemoved).toEqual([
+        'prettier',
+        'eslint-plugin-prettier',
+      ]);
       expect(result.filesRemoved).toEqual(['.prettierrc', '.prettierignore']);
-      expect(mockExecSync).toHaveBeenCalledWith('npm uninstall prettier eslint-plugin-prettier', { stdio: 'pipe' });
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'npm uninstall prettier eslint-plugin-prettier',
+        { stdio: 'pipe' }
+      );
       expect(mockUnlink).toHaveBeenCalledWith('.prettierrc');
       expect(mockUnlink).toHaveBeenCalledWith('.prettierignore');
     });
@@ -153,17 +159,28 @@ describe('prettier-cleanup', () => {
       const result = await prettierCleanup.remove('npm install');
 
       // Should only include packages that start with 'prettier' or are in the specific exceptions list
-      expect(result.packagesRemoved).toEqual(['prettier', 'prettier-plugin-tailwindcss', 'eslint-plugin-prettier']);
-      expect(mockExecSync).toHaveBeenCalledWith('npm uninstall prettier prettier-plugin-tailwindcss eslint-plugin-prettier', { stdio: 'pipe' });
+      expect(result.packagesRemoved).toEqual([
+        'prettier',
+        'prettier-plugin-tailwindcss',
+        'eslint-plugin-prettier',
+      ]);
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'npm uninstall prettier prettier-plugin-tailwindcss eslint-plugin-prettier',
+        { stdio: 'pipe' }
+      );
     });
 
     it('should handle different package managers', async () => {
-      mockReadFile.mockResolvedValue('{"devDependencies":{"prettier":"^2.0.0"}}');
+      mockReadFile.mockResolvedValue(
+        '{"devDependencies":{"prettier":"^2.0.0"}}'
+      );
       mockExists.mockResolvedValue(false);
 
       await prettierCleanup.remove('pnpm add');
 
-      expect(mockExecSync).toHaveBeenCalledWith('pnpm remove prettier', { stdio: 'pipe' });
+      expect(mockExecSync).toHaveBeenCalledWith('pnpm remove prettier', {
+        stdio: 'pipe',
+      });
     });
 
     it('should clean VS Code settings', async () => {
@@ -192,14 +209,20 @@ describe('prettier-cleanup', () => {
       expect(result.vsCodeCleaned).toBe(true);
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.vscode/settings.json',
-        JSON.stringify({
-          'typescript.tsdk': 'node_modules/typescript/lib',
-        }, null, 2)
+        JSON.stringify(
+          {
+            'typescript.tsdk': 'node_modules/typescript/lib',
+          },
+          null,
+          2
+        )
       );
     });
 
     it('should handle execution errors gracefully', async () => {
-      mockReadFile.mockResolvedValue('{"devDependencies":{"prettier":"^2.0.0"}}');
+      mockReadFile.mockResolvedValue(
+        '{"devDependencies":{"prettier":"^2.0.0"}}'
+      );
       mockExists.mockResolvedValue(false);
       mockExecSync.mockImplementation(() => {
         throw new Error('Command failed');

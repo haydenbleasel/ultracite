@@ -122,9 +122,15 @@ describe('eslint-cleanup', () => {
 
       const result = await eslintCleanup.remove('npm install');
 
-      expect(result.packagesRemoved).toEqual(['eslint', '@typescript-eslint/parser']);
+      expect(result.packagesRemoved).toEqual([
+        'eslint',
+        '@typescript-eslint/parser',
+      ]);
       expect(result.filesRemoved).toEqual(['.eslintrc.js', '.eslintignore']);
-      expect(mockExecSync).toHaveBeenCalledWith('npm uninstall eslint @typescript-eslint/parser', { stdio: 'pipe' });
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'npm uninstall eslint @typescript-eslint/parser',
+        { stdio: 'pipe' }
+      );
       expect(mockUnlink).toHaveBeenCalledWith('.eslintrc.js');
       expect(mockUnlink).toHaveBeenCalledWith('.eslintignore');
     });
@@ -154,8 +160,16 @@ describe('eslint-cleanup', () => {
       const result = await eslintCleanup.remove('npm install');
 
       // Should only include packages that start with 'eslint' or are in the specific exceptions list
-      expect(result.packagesRemoved).toEqual(['eslint', 'eslint-plugin-github', 'eslint-config-fbjs', '@typescript-eslint/parser']);
-      expect(mockExecSync).toHaveBeenCalledWith('npm uninstall eslint eslint-plugin-github eslint-config-fbjs @typescript-eslint/parser', { stdio: 'pipe' });
+      expect(result.packagesRemoved).toEqual([
+        'eslint',
+        'eslint-plugin-github',
+        'eslint-config-fbjs',
+        '@typescript-eslint/parser',
+      ]);
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'npm uninstall eslint eslint-plugin-github eslint-config-fbjs @typescript-eslint/parser',
+        { stdio: 'pipe' }
+      );
     });
 
     it('should handle different package managers', async () => {
@@ -164,7 +178,9 @@ describe('eslint-cleanup', () => {
 
       await eslintCleanup.remove('yarn add');
 
-      expect(mockExecSync).toHaveBeenCalledWith('yarn remove eslint', { stdio: 'pipe' });
+      expect(mockExecSync).toHaveBeenCalledWith('yarn remove eslint', {
+        stdio: 'pipe',
+      });
     });
 
     it('should clean VS Code settings', async () => {
@@ -197,12 +213,16 @@ describe('eslint-cleanup', () => {
       expect(result.vsCodeCleaned).toBe(true);
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.vscode/settings.json',
-        JSON.stringify({
-          'editor.codeActionsOnSave': {
-            'source.organizeImports.biome': 'explicit',
+        JSON.stringify(
+          {
+            'editor.codeActionsOnSave': {
+              'source.organizeImports.biome': 'explicit',
+            },
+            'typescript.tsdk': 'node_modules/typescript/lib',
           },
-          'typescript.tsdk': 'node_modules/typescript/lib',
-        }, null, 2)
+          null,
+          2
+        )
       );
     });
 

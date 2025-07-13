@@ -21,7 +21,9 @@ describe('package-manager', () => {
   describe('get', () => {
     it('should prioritize packageManager field over lockfile detection for pnpm', async () => {
       mockIsMonorepo.mockResolvedValue(false);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'pnpm@10.12.2' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'pnpm@10.12.2' })
+      );
       mockExists.mockResolvedValue(false); // No lockfiles
 
       const result = await packageManager.get();
@@ -33,7 +35,9 @@ describe('package-manager', () => {
 
     it('should prioritize packageManager field over lockfile detection for bun', async () => {
       mockIsMonorepo.mockResolvedValue(false);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'bun@1.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'bun@1.0.0' })
+      );
       mockExists.mockImplementation((path: string) => {
         return Promise.resolve(path === 'pnpm-lock.yaml'); // pnpm lockfile exists but should be ignored
       });
@@ -46,7 +50,9 @@ describe('package-manager', () => {
 
     it('should use packageManager field with monorepo suffix when in monorepo', async () => {
       mockIsMonorepo.mockResolvedValue(true);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'pnpm@8.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'pnpm@8.0.0' })
+      );
 
       const result = await packageManager.get();
 
@@ -56,7 +62,9 @@ describe('package-manager', () => {
 
     it('should handle bun packageManager in monorepo (no suffix)', async () => {
       mockIsMonorepo.mockResolvedValue(true);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'bun@1.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'bun@1.0.0' })
+      );
 
       const result = await packageManager.get();
 
@@ -66,7 +74,9 @@ describe('package-manager', () => {
 
     it('should handle yarn packageManager in monorepo (no suffix)', async () => {
       mockIsMonorepo.mockResolvedValue(true);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'yarn@3.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'yarn@3.0.0' })
+      );
 
       const result = await packageManager.get();
 
@@ -76,7 +86,9 @@ describe('package-manager', () => {
 
     it('should handle npm packageManager in monorepo (with workspace suffix)', async () => {
       mockIsMonorepo.mockResolvedValue(true);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'npm@9.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'npm@9.0.0' })
+      );
 
       const result = await packageManager.get();
 
@@ -86,7 +98,9 @@ describe('package-manager', () => {
 
     it('should fall back to lockfile detection when packageManager is unknown', async () => {
       mockIsMonorepo.mockResolvedValue(false);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: 'unknown@1.0.0' }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: 'unknown@1.0.0' })
+      );
       mockExists.mockImplementation((path: string) => {
         return Promise.resolve(path === 'yarn.lock');
       });
@@ -134,7 +148,9 @@ describe('package-manager', () => {
 
     it('should fall back to lockfile detection when packageManager field is not a string', async () => {
       mockIsMonorepo.mockResolvedValue(false);
-      mockReadFile.mockResolvedValue(JSON.stringify({ packageManager: { name: 'pnpm' } }));
+      mockReadFile.mockResolvedValue(
+        JSON.stringify({ packageManager: { name: 'pnpm' } })
+      );
       mockExists.mockImplementation((path: string) => {
         return Promise.resolve(path === 'yarn.lock');
       });

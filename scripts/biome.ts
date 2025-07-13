@@ -1,8 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
-import { exists } from './utils';
 import packageJson from '../package.json' with { type: 'json' };
+import { exists } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 
