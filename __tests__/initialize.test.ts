@@ -104,10 +104,10 @@ describe('initialize command', () => {
     await initialize();
 
     expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected lockfile, using npm install'
+      'Detected lockfile, using npm install --legacy-peer-deps'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      `npm install -D -E ultracite @biomejs/biome@${schemaVersion}`
+      `npm install --legacy-peer-deps -D -E ultracite @biomejs/biome@${schemaVersion}`
     );
   });
 
@@ -141,7 +141,7 @@ describe('initialize command', () => {
         { label: 'pnpm', value: 'pnpm add' },
         { label: 'bun', value: 'bun add' },
         { label: 'yarn', value: 'yarn add' },
-        { label: 'npm', value: 'npm install' },
+        { label: 'npm', value: 'npm install --legacy-peer-deps' },
       ],
     });
   });

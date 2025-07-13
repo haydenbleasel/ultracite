@@ -123,7 +123,7 @@ describe('package-manager', () => {
 
       const result = await packageManager.get();
 
-      expect(result).toBe('npm install');
+      expect(result).toBe('npm install --legacy-peer-deps');
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
@@ -139,7 +139,7 @@ describe('package-manager', () => {
 
       const result = await packageManager.get();
 
-      expect(result).toBe('npm install --workspace .');
+      expect(result).toBe('npm install --legacy-peer-deps --workspace .');
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
@@ -205,7 +205,7 @@ describe('package-manager', () => {
           { label: 'pnpm', value: 'pnpm add' },
           { label: 'bun', value: 'bun add' },
           { label: 'yarn', value: 'yarn add' },
-          { label: 'npm', value: 'npm install' },
+          { label: 'npm', value: 'npm install --legacy-peer-deps' },
         ],
       });
     });
@@ -225,7 +225,7 @@ describe('package-manager', () => {
           { label: 'pnpm', value: 'pnpm add -w' },
           { label: 'bun', value: 'bun add' },
           { label: 'yarn', value: 'yarn add' },
-          { label: 'npm', value: 'npm install --workspace .' },
+          { label: 'npm', value: 'npm install --legacy-peer-deps --workspace .' },
         ],
       });
     });
@@ -286,7 +286,7 @@ describe('package-manager', () => {
             { label: 'pnpm', value: 'pnpm add -w' },
             { label: 'bun', value: 'bun add' },
             { label: 'yarn', value: 'yarn add' },
-            { label: 'npm', value: 'npm install --workspace .' },
+            { label: 'npm', value: 'npm install --legacy-peer-deps --workspace .' },
           ]),
         })
       );
