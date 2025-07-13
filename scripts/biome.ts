@@ -4,7 +4,7 @@ import { parse } from 'jsonc-parser';
 import { exists } from './utils';
 
 const defaultConfig = {
-  $schema: 'https://biomejs.dev/schemas/2.0.6/schema.json',
+  $schema: 'https://biomejs.dev/schemas/2.1.1/schema.json',
   extends: ['ultracite'],
 };
 
