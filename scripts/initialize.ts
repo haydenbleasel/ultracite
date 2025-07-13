@@ -18,12 +18,15 @@ import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
 import { zedCopilot } from './zed';
 import { zed } from './zed-settings';
+import packageJson from '../package.json' with { type: 'json' };
+
+const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 
 const installDependencies = (packageManagerAdd: string) => {
   const s = spinner();
 
   s.start('Installing dependencies...');
-  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@2.0.6`);
+  execSync(`${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`);
   s.stop('Dependencies installed.');
 };
 

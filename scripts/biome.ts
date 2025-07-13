@@ -2,9 +2,12 @@ import { readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
 import { exists } from './utils';
+import packageJson from '../package.json' with { type: 'json' };
+
+const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 
 const defaultConfig = {
-  $schema: 'https://biomejs.dev/schemas/2.0.6/schema.json',
+  $schema: `https://biomejs.dev/schemas/${schemaVersion}/schema.json`,
   extends: ['ultracite'],
 };
 

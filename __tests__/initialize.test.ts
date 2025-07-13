@@ -3,8 +3,11 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import packageJson from '../package.json' with { type: 'json' };
 import { initialize } from '../scripts/initialize';
 import { exists } from '../scripts/utils';
+
+const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 
 vi.mock('node:child_process');
 vi.mock('node:fs/promises');
@@ -72,7 +75,7 @@ describe('initialize command', () => {
       'Detected lockfile, using pnpm add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'pnpm add -D -E ultracite @biomejs/biome@2.0.6'
+      `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
     );
   });
 
@@ -88,7 +91,7 @@ describe('initialize command', () => {
       'Detected lockfile, using yarn add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'yarn add -D -E ultracite @biomejs/biome@2.0.6'
+      `yarn add -D -E ultracite @biomejs/biome@${schemaVersion}`
     );
   });
 
@@ -104,7 +107,7 @@ describe('initialize command', () => {
       'Detected lockfile, using npm install'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'npm install -D -E ultracite @biomejs/biome@2.0.6'
+      `npm install -D -E ultracite @biomejs/biome@${schemaVersion}`
     );
   });
 
@@ -120,7 +123,7 @@ describe('initialize command', () => {
       'Detected lockfile, using bun add'
     );
     expect(mockExecSync).toHaveBeenCalledWith(
-      'bun add -D -E ultracite @biomejs/biome@2.0.6'
+      `bun add -D -E ultracite @biomejs/biome@${schemaVersion}`
     );
   });
 
