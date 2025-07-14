@@ -59,7 +59,13 @@ const router = t.router({
     .meta({
       description: "Run Biome linter without fixing files",
     })
-    .input(z.array(z.string()).describe("specific files to lint"))
+    .input(
+      z
+        .array(z.string())
+        .optional()
+        .default([])
+        .describe("specific files to lint"),
+    )
     .query(({ input }) => {
       lint(input);
     }),
