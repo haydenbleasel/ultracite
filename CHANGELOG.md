@@ -1,3 +1,15 @@
+# v5.0.36 (Mon Jul 14 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update sidebar.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.35 (Sun Jul 13 2025)
 
 #### 🐛 Bug Fix
