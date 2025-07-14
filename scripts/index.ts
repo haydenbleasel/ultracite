@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { createCli, type TrpcCliMeta, trpcServer, zod as z } from "trpc-cli";
+import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
+import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { format } from "./format";
 import { initialize } from "./initialize";
@@ -69,7 +70,11 @@ const router = t.router({
     })
     .input(
       z.tuple([
-        z.array(z.string()).describe("specific files to format"),
+        z
+          .array(z.string())
+          .optional()
+          .default([])
+          .describe("specific files to format"),
         z.object({
           unsafe: z.boolean().optional().describe("apply unsafe fixes"),
         }),
