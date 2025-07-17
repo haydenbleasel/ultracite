@@ -21,6 +21,7 @@ const handler = createMcpHandler(
   },
   {},
   {
+    disableSse: true,
     basePath: '/api/mcp',
     maxDuration: 60,
     verboseLogs: true,
