@@ -1,3 +1,15 @@
+# v5.0.39 (Thu Jul 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update route.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.38 (Thu Jul 17 2025)
 
 #### ⚠️ Pushed to `main`
