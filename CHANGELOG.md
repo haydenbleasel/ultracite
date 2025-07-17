@@ -1,3 +1,17 @@
+# v5.0.38 (Thu Jul 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Upgrade Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.37 (Thu Jul 17 2025)
 
 #### ⚠️ Pushed to `main`
