@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('cursor configuration', () => {
@@ -51,7 +53,7 @@ describe('cursor configuration', () => {
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
-        'mock rules content'
+        'mock cursor rules content'
       );
     });
 
@@ -74,7 +76,7 @@ describe('cursor configuration', () => {
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
-        'mock rules content'
+        'mock cursor rules content'
       );
     });
 

@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('claude configuration', () => {
@@ -49,7 +51,7 @@ describe('claude configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.claude', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.claude/CLAUDE.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -68,7 +70,7 @@ describe('claude configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.claude', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.claude/CLAUDE.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
