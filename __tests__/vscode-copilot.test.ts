@@ -10,6 +10,7 @@ vi.mock('../scripts/utils', () => ({
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
   cursorRulesFile: 'mock cursor rules content',
+  vscodeRulesFile: 'mock vscode rules content',
   aiRulesContent: 'mock ai rules content',
 }));
 
@@ -55,7 +56,7 @@ describe('vscodeCopilot configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.github/copilot-instructions.md',
-        'mock ai rules content'
+        'mock vscode rules content'
       );
     });
 
@@ -74,7 +75,7 @@ describe('vscodeCopilot configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.github/copilot-instructions.md',
-        'mock ai rules content'
+        'mock vscode rules content'
       );
     });
 

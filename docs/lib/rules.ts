@@ -321,6 +321,13 @@ alwaysApply: true
 
 `;
 
+// VS Code-specific frontmatter for GitHub Copilot
+const vscodeFrontmatter = `---
+applyTo: "**/*.{ts,tsx,js,jsx}"
+---
+
+`;
+
 // Main rules content (without frontmatter)
 const rulesContent = `# Project Context
 Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
@@ -389,6 +396,9 @@ try {
 
 // Cursor-specific rules file (with frontmatter)
 export const cursorRulesFile = cursorFrontmatter + rulesContent;
+
+// VS Code-specific rules file (with frontmatter)
+export const vscodeRulesFile = vscodeFrontmatter + rulesContent;
 
 // Rules content for all other AI editors (without frontmatter)
 export const aiRulesContent = rulesContent;
