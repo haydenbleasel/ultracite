@@ -1,3 +1,15 @@
+# v5.0.44 (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- Add Kiro IDE support with steering files integration [#220](https://github.com/haydenbleasel/ultracite/pull/220) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.0.43 (Fri Jul 18 2025)
 
 #### ⚠️ Pushed to `main`
