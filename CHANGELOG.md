@@ -1,3 +1,15 @@
+# v5.0.41 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Revert "Update vercel.json" ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.40 (Fri Jul 18 2025)
 
 #### ⚠️ Pushed to `main`
