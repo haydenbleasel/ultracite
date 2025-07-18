@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('codex configuration', () => {
@@ -46,7 +48,7 @@ describe('codex configuration', () => {
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './AGENTS.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -56,7 +58,7 @@ describe('codex configuration', () => {
       await expect(codex.create()).rejects.toThrow('Permission denied');
       expect(mockWriteFile).toHaveBeenCalledWith(
         './AGENTS.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
   });
@@ -67,7 +69,7 @@ describe('codex configuration', () => {
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './AGENTS.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -77,7 +79,7 @@ describe('codex configuration', () => {
       await expect(codex.update()).rejects.toThrow('Permission denied');
       expect(mockWriteFile).toHaveBeenCalledWith(
         './AGENTS.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
   });

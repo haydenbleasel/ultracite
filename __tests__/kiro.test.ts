@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('kiro configuration', () => {
@@ -49,7 +51,7 @@ describe('kiro configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.kiro/steering/linting-and-formatting.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -68,7 +70,7 @@ describe('kiro configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.kiro/steering/linting-and-formatting.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 

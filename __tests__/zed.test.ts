@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('zed rules configuration', () => {
@@ -47,7 +49,7 @@ describe('zed rules configuration', () => {
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.rules',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
   });
@@ -62,7 +64,7 @@ describe('zed rules configuration', () => {
       expect(mockReadFile).not.toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.rules',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -77,13 +79,13 @@ describe('zed rules configuration', () => {
       expect(mockReadFile).toHaveBeenCalledWith('./.rules', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.rules',
-        `${existingContent}\n\nmock rules content`
+        `${existingContent}\n\nmock ai rules content`
       );
     });
 
     it('should not append rules when they already exist in the file', async () => {
       const existingContent =
-        'existing content\nmock rules content\nmore content';
+        'existing content\nmock ai rules content\nmore content';
       mockExists.mockResolvedValue(true);
       mockReadFile.mockResolvedValue(existingContent);
 

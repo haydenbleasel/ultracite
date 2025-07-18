@@ -9,6 +9,8 @@ vi.mock('../scripts/utils', () => ({
 }));
 vi.mock('../docs/lib/rules', () => ({
   rulesFile: 'mock rules content',
+  cursorRulesFile: 'mock cursor rules content',
+  aiRulesContent: 'mock ai rules content',
 }));
 
 describe('windsurf configuration', () => {
@@ -51,7 +53,7 @@ describe('windsurf configuration', () => {
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.windsurf/rules/ultracite.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 
@@ -74,7 +76,7 @@ describe('windsurf configuration', () => {
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.windsurf/rules/ultracite.md',
-        'mock rules content'
+        'mock ai rules content'
       );
     });
 

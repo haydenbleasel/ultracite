@@ -312,13 +312,24 @@ export const rules = [
   ...testingRules,
 ];
 
-export const rulesFile = `---
+// Cursor-specific frontmatter for .mdc files
+const cursorFrontmatter = `---
 description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx}"
 alwaysApply: true
 ---
 
-# Project Context
+`;
+
+// VS Code-specific frontmatter for GitHub Copilot
+const vscodeFrontmatter = `---
+applyTo: "**/*.{ts,tsx,js,jsx}"
+---
+
+`;
+
+// Main rules content (without frontmatter)
+const rulesContent = `# Project Context
 Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
 
 ## Key Principles
@@ -382,3 +393,15 @@ try {
   console.log(e);
 }
 \`\`\``;
+
+// Cursor-specific rules file (with frontmatter)
+export const cursorRulesFile = cursorFrontmatter + rulesContent;
+
+// VS Code-specific rules file (with frontmatter)
+export const vscodeRulesFile = vscodeFrontmatter + rulesContent;
+
+// Rules content for all other AI editors (without frontmatter)
+export const aiRulesContent = rulesContent;
+
+// Backward compatibility export (with frontmatter - deprecated)
+export const rulesFile = cursorFrontmatter + rulesContent;
