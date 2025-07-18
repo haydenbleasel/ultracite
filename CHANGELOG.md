@@ -1,3 +1,15 @@
+# v5.0.42 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix skip-ci file path ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.41 (Fri Jul 18 2025)
 
 #### ⚠️ Pushed to `main`
