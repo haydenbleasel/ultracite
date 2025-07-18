@@ -1,3 +1,15 @@
+# v5.0.46 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update rules.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.45 (Fri Jul 18 2025)
 
 #### ⚠️ Pushed to `main`
