@@ -1,6 +1,6 @@
 import { access, readFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists, isMonorepo } from '../scripts/utils';
+import { exists, isMonorepo, getPackageExecutor } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
 
@@ -206,6 +206,32 @@ describe('utils', () => {
       expect(result).toBe(true);
       expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
       expect(mockReadFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getPackageExecutor', () => {
+    it('should return "pnpm exec" for pnpm package manager', () => {
+      expect(getPackageExecutor('pnpm add')).toBe('pnpm exec');
+      expect(getPackageExecutor('pnpm add -w')).toBe('pnpm exec');
+    });
+
+    it('should return "bunx" for bun package manager', () => {
+      expect(getPackageExecutor('bun add')).toBe('bunx');
+    });
+
+    it('should return "yarn" for yarn package manager', () => {
+      expect(getPackageExecutor('yarn add')).toBe('yarn');
+    });
+
+    it('should return "npx" for npm package manager', () => {
+      expect(getPackageExecutor('npm install')).toBe('npx');
+      expect(getPackageExecutor('npm install --legacy-peer-deps')).toBe('npx');
+      expect(getPackageExecutor('npm install --legacy-peer-deps --workspace .')).toBe('npx');
+    });
+
+    it('should return "npx" for unknown package managers', () => {
+      expect(getPackageExecutor('some-unknown-manager install')).toBe('npx');
+      expect(getPackageExecutor('')).toBe('npx');
     });
   });
 });

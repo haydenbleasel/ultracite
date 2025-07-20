@@ -29,3 +29,17 @@ export const isMonorepo = async () => {
     return false;
   }
 };
+
+export const getPackageExecutor = (packageManagerAdd: string) => {
+  if (packageManagerAdd.startsWith('pnpm')) {
+    return 'pnpm exec';
+  }
+  if (packageManagerAdd.startsWith('bun')) {
+    return 'bunx';
+  }
+  if (packageManagerAdd.startsWith('yarn')) {
+    return 'yarn';
+  }
+  // Default to npx for npm and any other package manager
+  return 'npx';
+};
