@@ -312,13 +312,7 @@ export const rules = [
   ...testingRules,
 ];
 
-export const rulesFile = `---
-description: Ultracite Rules - AI-Ready Formatter and Linter
-globs: "**/*.{ts,tsx,js,jsx}"
-alwaysApply: true
----
-
-# Project Context
+export const rulesFile = `# Project Context
 Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
 
 ## Key Principles
