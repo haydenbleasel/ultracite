@@ -1,3 +1,19 @@
+# v5.0.48 (Wed Jul 23 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, aditya ([@adiadd](https://github.com/adiadd)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix: updating claude desktop mcp file path [#225](https://github.com/haydenbleasel/ultracite/pull/225) ([@adiadd](https://github.com/adiadd))
+
+#### Authors: 1
+
+- aditya ([@adiadd](https://github.com/adiadd))
+
+---
+
 # v5.0.47 (Sun Jul 20 2025)
 
 #### ⚠️ Pushed to `main`
