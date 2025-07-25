@@ -337,5 +337,20 @@ describe('package-manager', () => {
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockSelect).not.toHaveBeenCalled();
     });
+
+    it('should return bun add when both bun lockfiles exist', async () => {
+      mockIsMonorepo.mockResolvedValue(false);
+      mockExists.mockImplementation((path: string) => {
+        return Promise.resolve(path === 'bun.lockb' || path === 'bun.lock');
+      });
+
+      const result = await packageManager.get();
+
+      expect(result).toBe('bun add');
+      expect(mockIsMonorepo).toHaveBeenCalled();
+      expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
+      expect(mockExists).toHaveBeenCalledWith('bun.lockb');
+      expect(mockExists).toHaveBeenCalledWith('bun.lock');
+    });
   });
 });
