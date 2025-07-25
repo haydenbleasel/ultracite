@@ -54,7 +54,8 @@ describe('package-manager', () => {
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
-      expect(mockExists).toHaveBeenCalledWith('bun.lock');
+      // Should not check bun.lock since bun.lockb was found first
+      expect(mockExists).not.toHaveBeenCalledWith('bun.lock');
     });
 
     it('should return bun add when bun.lockb exists and is a monorepo', async () => {
@@ -69,7 +70,8 @@ describe('package-manager', () => {
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
-      expect(mockExists).toHaveBeenCalledWith('bun.lock');
+      // Should not check bun.lock since bun.lockb was found first
+      expect(mockExists).not.toHaveBeenCalledWith('bun.lock');
     });
 
     it('should return bun add when bun.lock exists and not a monorepo', async () => {
@@ -350,7 +352,8 @@ describe('package-manager', () => {
       expect(mockIsMonorepo).toHaveBeenCalled();
       expect(mockExists).toHaveBeenCalledWith('pnpm-lock.yaml');
       expect(mockExists).toHaveBeenCalledWith('bun.lockb');
-      expect(mockExists).toHaveBeenCalledWith('bun.lock');
+      // Should not check bun.lock since bun.lockb was found first
+      expect(mockExists).not.toHaveBeenCalledWith('bun.lock');
     });
   });
 });
