@@ -35,8 +35,21 @@ export const packageManager = {
     }
 
     for (const option of options) {
-      // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
-      if (await exists(option.lockfile)) {
+      let lockfileExists = false;
+
+      // Special case for Bun: check both lockfile formats
+      if (option.label === 'bun') {
+        // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
+        const bunLockbExists = await exists('bun.lockb');
+        // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
+        const bunLockExists = await exists('bun.lock');
+        lockfileExists = bunLockbExists || bunLockExists;
+      } else {
+        // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
+        lockfileExists = await exists(option.lockfile);
+      }
+
+      if (lockfileExists) {
         return monorepo && option.monorepoSuffix
           ? `${option.value} ${option.monorepoSuffix}`
           : option.value;
