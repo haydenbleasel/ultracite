@@ -1,3 +1,15 @@
+# v5.0.49 (Fri Jul 25 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update faq.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.48 (Wed Jul 23 2025)
 
 :tada: This release contains work from a new contributor! :tada:
