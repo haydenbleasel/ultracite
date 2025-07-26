@@ -53,7 +53,11 @@ describe('vscodeCopilot configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.github/copilot-instructions.md',
-        'mock rules content'
+        `---
+applyTo: "**/*.{ts,tsx,js,jsx}"
+---
+
+mock rules content`
       );
     });
 
@@ -72,7 +76,11 @@ describe('vscodeCopilot configuration', () => {
       expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.github/copilot-instructions.md',
-        'mock rules content'
+        `---
+applyTo: "**/*.{ts,tsx,js,jsx}"
+---
+
+mock rules content`
       );
     });
 

@@ -7,6 +7,7 @@ import { codex } from './codex';
 import { cursor } from './cursor';
 import { eslintCleanup } from './eslint-cleanup';
 import { husky } from './husky';
+import { kiro } from './kiro';
 import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
 import { packageManager } from './package-manager';
@@ -262,6 +263,22 @@ const upsertCodexRules = async () => {
   s.message('OpenAI Codex rules not found, creating...');
   await codex.create();
   s.stop('OpenAI Codex rules created.');
+};
+
+const upsertKiroRules = async () => {
+  const s = spinner();
+  s.start('Checking for Kiro IDE steering files...');
+
+  if (await kiro.exists()) {
+    s.message('Kiro IDE steering files found, updating...');
+    await kiro.update();
+    s.stop('Kiro IDE steering files updated.');
+    return;
+  }
+
+  s.message('Kiro IDE steering files not found, creating...');
+  await kiro.create();
+  s.stop('Kiro IDE steering files created.');
 };
 
 const removePrettier = async (packageManagerAdd: string) => {

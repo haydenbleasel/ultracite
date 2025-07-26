@@ -1,3 +1,177 @@
+# v5.0.49 (Fri Jul 25 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update faq.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.48 (Wed Jul 23 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, aditya ([@adiadd](https://github.com/adiadd)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix: updating claude desktop mcp file path [#225](https://github.com/haydenbleasel/ultracite/pull/225) ([@adiadd](https://github.com/adiadd))
+
+#### Authors: 1
+
+- aditya ([@adiadd](https://github.com/adiadd))
+
+---
+
+# v5.0.47 (Sun Jul 20 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #221, resolves #222 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.46 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update rules.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.45 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update global.css ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.44 (Fri Jul 18 2025)
+
+#### 🐛 Bug Fix
+
+- Add Kiro IDE support with steering files integration [#220](https://github.com/haydenbleasel/ultracite/pull/220) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
+# v5.0.43 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update shadcn/ui ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.42 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix skip-ci file path ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.41 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Revert "Update vercel.json" ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.40 (Fri Jul 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update vercel.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.39 (Thu Jul 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update route.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.38 (Thu Jul 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Upgrade Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.37 (Thu Jul 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #217 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.0.36 (Mon Jul 14 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update sidebar.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.35 (Sun Jul 13 2025)
 
 #### 🐛 Bug Fix

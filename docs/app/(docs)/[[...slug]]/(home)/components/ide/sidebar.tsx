@@ -1,6 +1,7 @@
 import {
   SiCss,
   SiJson,
+  SiMarkdown,
   SiReact,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
@@ -52,7 +53,7 @@ export const Sidebar = () => (
     <div className="flex flex-col gap-px">
       <FileItem icon={FolderIcon} name=".cursor" />
       <FileItem className="ml-2" icon={FolderIcon} name=".rules" />
-      <FileItem className="ml-4" icon={FolderIcon} name="ultracite.mdc" />
+      <FileItem className="ml-4" icon={SiMarkdown} name="ultracite.mdc" />
     </div>
     {files.map((file) => (
       <FileItem icon={file.icon} key={file.name} name={file.name} />
