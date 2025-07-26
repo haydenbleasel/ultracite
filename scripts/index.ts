@@ -1,55 +1,55 @@
 #!/usr/bin/env node
 
-import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
-import z from "zod";
-import packageJson from "../package.json" with { type: "json" };
-import { format } from "./format";
-import { initialize } from "./initialize";
-import { lint } from "./lint";
+import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
+import z from 'zod';
+import packageJson from '../package.json' with { type: 'json' };
+import { format } from './format';
+import { initialize } from './initialize';
+import { lint } from './lint';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
 const router = t.router({
   init: t.procedure
     .meta({
-      description: "Initialize Ultracite in the current directory",
+      description: 'Initialize Ultracite in the current directory',
     })
     .input(
       z.object({
         pm: z
-          .enum(["pnpm", "bun", "yarn", "npm"])
+          .enum(['pnpm', 'bun', 'yarn', 'npm'])
           .optional()
-          .describe("Package manager to use"),
+          .describe('Package manager to use'),
         editors: z
-          .array(z.enum(["vscode", "zed"]))
+          .array(z.enum(['vscode', 'zed']))
           .optional()
-          .describe("Editors to configure"),
+          .describe('Editors to configure'),
         rules: z
           .array(
             z.enum([
-              "vscode-copilot",
-              "cursor",
-              "windsurf",
-              "zed",
-              "claude",
-              "codex",
-            ]),
+              'vscode-copilot',
+              'cursor',
+              'windsurf',
+              'zed',
+              'claude',
+              'codex',
+            ])
           )
           .optional()
-          .describe("Editor rules to enable"),
+          .describe('Editor rules to enable'),
         features: z
-          .array(z.enum(["husky", "lefthook", "lint-staged"]))
+          .array(z.enum(['husky', 'lefthook', 'lint-staged']))
           .optional()
-          .describe("Additional features to enable"),
+          .describe('Additional features to enable'),
         removePrettier: z
           .boolean()
           .optional()
-          .describe("Remove Prettier dependencies and configuration"),
+          .describe('Remove Prettier dependencies and configuration'),
         removeEslint: z
           .boolean()
           .optional()
-          .describe("Remove ESLint dependencies and configuration"),
-      }),
+          .describe('Remove ESLint dependencies and configuration'),
+      })
     )
     .mutation(async ({ input }) => {
       await initialize(input);
@@ -57,14 +57,14 @@ const router = t.router({
 
   lint: t.procedure
     .meta({
-      description: "Run Biome linter without fixing files",
+      description: 'Run Biome linter without fixing files',
     })
     .input(
       z
         .array(z.string())
         .optional()
         .default([])
-        .describe("specific files to lint"),
+        .describe('specific files to lint')
     )
     .query(({ input }) => {
       lint(input);
@@ -72,7 +72,7 @@ const router = t.router({
 
   format: t.procedure
     .meta({
-      description: "Run Biome linter and fixes files",
+      description: 'Run Biome linter and fixes files',
     })
     .input(
       z.tuple([
@@ -80,11 +80,11 @@ const router = t.router({
           .array(z.string())
           .optional()
           .default([])
-          .describe("specific files to format"),
+          .describe('specific files to format'),
         z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+          unsafe: z.boolean().optional().describe('apply unsafe fixes'),
         }),
-      ]),
+      ])
     )
     .mutation(({ input }) => {
       const [files, options] = input;
@@ -94,9 +94,9 @@ const router = t.router({
 
 const cli = createCli({
   router,
-  name: "ultracite",
+  name: 'ultracite',
   version: packageJson.version,
-  description: "Ship code faster and with more confidence.",
+  description: 'Ship code faster and with more confidence.',
 });
 
 if (!process.env.VITEST) {

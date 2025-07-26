@@ -1,26 +1,26 @@
-import { log, select } from "@clack/prompts";
-import { exists, isMonorepo } from "./utils";
+import { log, select } from '@clack/prompts';
+import { exists, isMonorepo } from './utils';
 
 const options = [
   {
-    hint: "Recommended",
-    label: "pnpm",
-    value: "pnpm add",
-    lockfile: "pnpm-lock.yaml",
-    monorepoSuffix: "-w",
+    hint: 'Recommended',
+    label: 'pnpm',
+    value: 'pnpm add',
+    lockfile: 'pnpm-lock.yaml',
+    monorepoSuffix: '-w',
   },
-  { label: "bun", value: "bun add", lockfile: "bun.lockb", monorepoSuffix: "" },
+  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '' },
   {
-    label: "yarn",
-    value: "yarn add",
-    lockfile: "yarn.lock",
-    monorepoSuffix: "",
+    label: 'yarn',
+    value: 'yarn add',
+    lockfile: 'yarn.lock',
+    monorepoSuffix: '',
   },
   {
-    label: "npm",
-    value: "npm install --legacy-peer-deps",
-    lockfile: "package-lock.json",
-    monorepoSuffix: "--workspace .",
+    label: 'npm',
+    value: 'npm install --legacy-peer-deps',
+    lockfile: 'package-lock.json',
+    monorepoSuffix: '--workspace .',
   },
 ];
 
@@ -30,7 +30,7 @@ export const packageManager = {
 
     if (monorepo) {
       log.info(
-        "Monorepo detected, updating install command to include workspace flag",
+        'Monorepo detected, updating install command to include workspace flag'
       );
     }
 
@@ -50,8 +50,8 @@ export const packageManager = {
     const monorepo = await isMonorepo();
 
     const value = await select({
-      initialValue: "pnpm",
-      message: "Which package manager do you use?",
+      initialValue: 'pnpm',
+      message: 'Which package manager do you use?',
       options: options.map((option) => ({
         label: option.label,
         value:
@@ -61,7 +61,7 @@ export const packageManager = {
       })),
     });
 
-    if (typeof value !== "string") {
+    if (typeof value !== 'string') {
       return null;
     }
 
