@@ -6,20 +6,20 @@ const options = [
     hint: 'Recommended',
     label: 'pnpm',
     value: 'pnpm add',
-    lockfile: 'pnpm-lock.yaml',
+    lockfiles: ['pnpm-lock.yaml'],
     monorepoSuffix: '-w',
   },
-  { label: 'bun', value: 'bun add', lockfile: 'bun.lockb', monorepoSuffix: '' },
+  { label: 'bun', value: 'bun add', lockfiles: ['bun.lockb', 'bun.lock'], monorepoSuffix: '' },
   {
     label: 'yarn',
     value: 'yarn add',
-    lockfile: 'yarn.lock',
+    lockfiles: ['yarn.lock'],
     monorepoSuffix: '',
   },
   {
     label: 'npm',
     value: 'npm install --legacy-peer-deps',
-    lockfile: 'package-lock.json',
+    lockfiles: ['package-lock.json'],
     monorepoSuffix: '--workspace .',
   },
 ];
@@ -35,8 +35,17 @@ export const packageManager = {
     }
 
     for (const option of options) {
-      // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
-      if (await exists(option.lockfile)) {
+      let lockfileExists = false;
+
+      for (const lockfile of option.lockfiles) {
+        // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
+        if (await exists(lockfile)) {
+          lockfileExists = true;
+          break;
+        }
+      }
+
+      if (lockfileExists) {
         return monorepo && option.monorepoSuffix
           ? `${option.value} ${option.monorepoSuffix}`
           : option.value;
