@@ -76,4 +76,6 @@ export const packageManager = {
 
     return value;
   },
+  isMonorepo,
+  options,
 };
