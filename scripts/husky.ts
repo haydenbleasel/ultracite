@@ -1,8 +1,7 @@
 import { execSync } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { exists } from './utils';
+import { exists, getPackageExecutor } from './utils';
 
-const huskyCommand = 'npx ultracite format';
 const path = './.husky/pre-commit';
 
 export const husky = {
@@ -10,11 +9,15 @@ export const husky = {
   install: (packageManagerAdd: string) => {
     execSync(`${packageManagerAdd} -D husky`);
   },
-  create: async () => {
+  create: async (packageManagerAdd: string) => {
+    const executor = getPackageExecutor(packageManagerAdd);
+    const huskyCommand = `${executor} ultracite format`;
     await mkdir('.husky', { recursive: true });
     await writeFile(path, huskyCommand);
   },
-  update: async () => {
+  update: async (packageManagerAdd: string) => {
+    const executor = getPackageExecutor(packageManagerAdd);
+    const huskyCommand = `${executor} ultracite format`;
     const existingContents = await readFile(path, 'utf-8');
 
     await writeFile(path, `${existingContents}\n${huskyCommand}`);
