@@ -1,3 +1,15 @@
+# v5.1.1 (Sat Jul 26 2025)
+
+#### 🐛 Bug Fix
+
+- Fix CLI to not prompt for features when other options are provided [#230](https://github.com/haydenbleasel/ultracite/pull/230) ([@Copilot](https://github.com/Copilot))
+
+#### Authors: 1
+
+- [@Copilot](https://github.com/Copilot)
+
+---
+
 # v5.1.0 (Sat Jul 26 2025)
 
 :tada: This release contains work from a new contributor! :tada:
