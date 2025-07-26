@@ -22,7 +22,7 @@ vi.mock('../scripts/lint', () => ({
 // Mock package.json
 vi.mock('../package.json', () => ({
   default: {
-    version: '5.0.49',
+    version: 'test-version',
   },
 }));
 

@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
+// Regex for semantic versioning validation
+const SEMANTIC_VERSION_REGEX = /^\d+\.\d+\.\d+$/;
+
 // Mock the command modules
 const mockFormat = vi.fn();
 const mockInitialize = vi.fn();
@@ -21,7 +24,7 @@ vi.mock('../scripts/lint', () => ({
 vi.mock('../package.json', () => ({
   default: {
     name: 'ultracite',
-    version: '5.0.49',
+    version: 'test-version',
   },
 }));
 
@@ -64,11 +67,19 @@ describe('CLI Index', () => {
   });
 
   it('should use correct package information', async () => {
-    // Test that the mocked package.json values are what we expect
-    const packageJson = await import('../package.json');
-    
-    expect(packageJson.default.name).toBe('ultracite');
-    expect(packageJson.default.version).toBe('5.0.49');
+    // Import actual package.json to test real values (bypassing the mock)
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const packageJsonPath = path.resolve(__dirname, '../package.json');
+    const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
+    const actualPackageJson = JSON.parse(packageJsonContent) as {
+      name: string;
+      version: string;
+    };
+
+    expect(actualPackageJson.name).toBe('ultracite');
+    expect(actualPackageJson.version).toMatch(SEMANTIC_VERSION_REGEX); // Semantic versioning pattern
+    expect(typeof actualPackageJson.version).toBe('string');
   });
 
   it('should have access to required command functions', () => {
@@ -76,7 +87,7 @@ describe('CLI Index', () => {
     expect(mockFormat).toBeDefined();
     expect(mockInitialize).toBeDefined();
     expect(mockLint).toBeDefined();
-    
+
     expect(typeof mockFormat).toBe('function');
     expect(typeof mockInitialize).toBe('function');
     expect(typeof mockLint).toBe('function');
@@ -87,4 +98,4 @@ describe('CLI Index', () => {
     expect(mockCreateCli).toBeDefined();
     expect(typeof mockCreateCli).toBe('function');
   });
-}); 
+});
