@@ -1,3 +1,31 @@
+# v5.1.0 (Sat Jul 26 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01)), for all your work!
+
+#### 🚀 Enhancement
+
+- 5.1 [#228](https://github.com/haydenbleasel/ultracite/pull/228) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🐛 Bug Fix
+
+- feat: migrate cli from commander.js to trpc-cli with flag support [#215](https://github.com/haydenbleasel/ultracite/pull/215) ([@AmanVarshney01](https://github.com/AmanVarshney01) [@haydenbleasel](https://github.com/haydenbleasel))
+- Fix Bun detection for projects using bun.lock lockfile format [#227](https://github.com/haydenbleasel/ultracite/pull/227) ([@Copilot](https://github.com/Copilot))
+
+#### ⚠️ Pushed to `main`
+
+- Update vscode-settings.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 3
+
+- [@Copilot](https://github.com/Copilot)
+- Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01))
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.0.49 (Fri Jul 25 2025)
 
 #### ⚠️ Pushed to `main`
