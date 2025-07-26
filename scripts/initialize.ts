@@ -445,16 +445,25 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     let extraFeatures = opts.features;
-    if (!extraFeatures) {
-      extraFeatures = (await multiselect({
-        message: 'Would you like any of the following (optional)?',
-        options: [
-          { label: 'Husky pre-commit hook', value: 'husky' },
-          { label: 'Lefthook pre-commit hook', value: 'lefthook' },
-          { label: 'Lint-staged', value: 'lint-staged' },
-        ],
-        required: false,
-      })) as ('husky' | 'lefthook' | 'lint-staged')[];
+    if (extraFeatures === undefined) {
+      // If other CLI options are provided, default to empty array to avoid prompting
+      // This allows programmatic usage without interactive prompts
+      const hasOtherCliOptions = opts.pm || opts.editors || opts.rules || 
+        opts.removePrettier !== undefined || opts.removeEslint !== undefined;
+      
+      if (hasOtherCliOptions) {
+        extraFeatures = [];
+      } else {
+        extraFeatures = (await multiselect({
+          message: 'Would you like any of the following (optional)?',
+          options: [
+            { label: 'Husky pre-commit hook', value: 'husky' },
+            { label: 'Lefthook pre-commit hook', value: 'lefthook' },
+            { label: 'Lint-staged', value: 'lint-staged' },
+          ],
+          required: false,
+        })) as ('husky' | 'lefthook' | 'lint-staged')[];
+      }
     }
 
     if (shouldRemovePrettier) {

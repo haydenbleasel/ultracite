@@ -342,4 +342,48 @@ describe('initialize command', () => {
     // Should not create .rules file since it exists
     expect(mockExecSync).not.toHaveBeenCalledWith('touch .rules');
   });
+
+  it('should not prompt for features when other CLI options are provided', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+
+    // When CLI options are provided but features is undefined, it should default to empty array
+    await initialize({
+      pm: 'pnpm',
+      editors: ['vscode'],
+      rules: ['cursor'],
+      // features not provided (undefined) - should default to [] due to other CLI options
+    });
+
+    // multiselect should not be called for features since other CLI options are provided
+    expect(mockMultiselect).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Would you like any of the following (optional)?',
+      })
+    );
+
+    expect(mockLog.success).toHaveBeenCalledWith(
+      'Successfully initialized Ultracite configuration!'
+    );
+  });
+
+  it('should still prompt for features when no CLI options are provided', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect.mockResolvedValue([]);
+
+    // When no CLI options are provided, it should still prompt for features
+    await initialize();
+
+    // multiselect should be called for features in interactive mode
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Would you like any of the following (optional)?',
+      })
+    );
+
+    expect(mockLog.success).toHaveBeenCalledWith(
+      'Successfully initialized Ultracite configuration!'
+    );
+  });
 });
