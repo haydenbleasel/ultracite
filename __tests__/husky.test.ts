@@ -8,6 +8,18 @@ vi.mock('node:child_process');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  getPackageExecutor: vi.fn().mockImplementation((packageManagerAdd: string) => {
+    if (packageManagerAdd.startsWith('pnpm')) {
+      return 'pnpm exec';
+    }
+    if (packageManagerAdd.startsWith('bun')) {
+      return 'bunx';
+    }
+    if (packageManagerAdd.startsWith('yarn')) {
+      return 'yarn';
+    }
+    return 'npx';
+  }),
 }));
 
 describe('husky configuration', () => {
@@ -59,22 +71,49 @@ describe('husky configuration', () => {
   });
 
   describe('create', () => {
-    it('should create .husky/pre-commit with ultracite format command', async () => {
-      await husky.create();
+    it('should create .husky/pre-commit with npm command', async () => {
+      await husky.create('npm install');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.husky/pre-commit',
         'npx ultracite format'
       );
     });
+
+    it('should create .husky/pre-commit with pnpm command', async () => {
+      await husky.create('pnpm add');
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.husky/pre-commit',
+        'pnpm exec ultracite format'
+      );
+    });
+
+    it('should create .husky/pre-commit with yarn command', async () => {
+      await husky.create('yarn add');
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.husky/pre-commit',
+        'yarn ultracite format'
+      );
+    });
+
+    it('should create .husky/pre-commit with bun command', async () => {
+      await husky.create('bun add');
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.husky/pre-commit',
+        'bunx ultracite format'
+      );
+    });
   });
 
   describe('update', () => {
-    it('should append ultracite format command to existing pre-commit hook', async () => {
+    it('should append npm ultracite format command to existing pre-commit hook', async () => {
       const existingContent = '#!/bin/sh\nnpm test';
       mockReadFile.mockResolvedValue(existingContent);
 
-      await husky.update();
+      await husky.update('npm install');
 
       expect(mockReadFile).toHaveBeenCalledWith('./.husky/pre-commit', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -83,14 +122,27 @@ describe('husky configuration', () => {
       );
     });
 
+    it('should append pnpm ultracite format command to existing pre-commit hook', async () => {
+      const existingContent = '#!/bin/sh\npnpm test';
+      mockReadFile.mockResolvedValue(existingContent);
+
+      await husky.update('pnpm add');
+
+      expect(mockReadFile).toHaveBeenCalledWith('./.husky/pre-commit', 'utf-8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        './.husky/pre-commit',
+        '#!/bin/sh\npnpm test\npnpm exec ultracite format'
+      );
+    });
+
     it('should handle empty existing content', async () => {
       mockReadFile.mockResolvedValue('');
 
-      await husky.update();
+      await husky.update('yarn add');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.husky/pre-commit',
-        '\nnpx ultracite format'
+        '\nyarn ultracite format'
       );
     });
   });
