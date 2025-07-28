@@ -1,3 +1,16 @@
+# v5.1.2 (Mon Jul 28 2025)
+
+#### 🐛 Bug Fix
+
+- feat: add --skip-install flag to skip installing dependencies [#231](https://github.com/haydenbleasel/ultracite/pull/231) ([@AmanVarshney01](https://github.com/AmanVarshney01) [@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01))
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.1 (Sat Jul 26 2025)
 
 #### 🐛 Bug Fix
