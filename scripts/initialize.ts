@@ -1,6 +1,8 @@
 import { execSync } from 'node:child_process';
+import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
+import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { claude } from './claude';
 import { codex } from './codex';
@@ -19,9 +21,9 @@ import { vscode } from './vscode-settings';
 import { windsurf } from './windsurf';
 import { zedCopilot } from './zed';
 import { zed } from './zed-settings';
-import packageJson from '../package.json' with { type: 'json' };
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
+const ultraciteVersion = packageJson.version;
 
 type Initialize = {
   pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
@@ -37,14 +39,39 @@ type Initialize = {
   features?: ('husky' | 'lefthook' | 'lint-staged')[];
   removePrettier?: boolean;
   removeEslint?: boolean;
+  skipInstall?: boolean;
 };
 
-const installDependencies = (packageManagerAdd: string) => {
+const installDependencies = async (
+  packageManagerAdd: string,
+  install = true
+) => {
   const s = spinner();
   s.start('Installing dependencies...');
-  execSync(
-    `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
-  );
+
+  if (install) {
+    execSync(
+      `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
+    );
+  } else {
+    const packageJsonContent = await readFile('package.json', 'utf8');
+    const packageJsonObject = JSON.parse(packageJsonContent);
+
+    const newPackageJsonObject = {
+      ...packageJsonObject,
+      devDependencies: {
+        ...packageJsonObject.devDependencies,
+        '@biomejs/biome': schemaVersion,
+        ultracite: `^${ultraciteVersion}`,
+      },
+    };
+
+    await writeFile(
+      'package.json',
+      JSON.stringify(newPackageJsonObject, null, 2)
+    );
+  }
+
   s.stop('Dependencies installed.');
 };
 
@@ -112,12 +139,34 @@ const upsertBiomeConfig = async () => {
   s.stop('Biome configuration created.');
 };
 
-const initializePrecommitHook = async (packageManagerAdd: string) => {
+const initializePrecommitHook = async (
+  packageManagerAdd: string,
+  install = true
+) => {
   const s = spinner();
   s.start('Initializing pre-commit hooks...');
 
   s.message('Installing Husky...');
-  husky.install(packageManagerAdd);
+
+  if (install) {
+    husky.install(packageManagerAdd);
+  } else {
+    const packageJsonContent = await readFile('package.json', 'utf8');
+    const packageJsonObject = JSON.parse(packageJsonContent);
+
+    const newPackageJsonObject = {
+      ...packageJsonObject,
+      devDependencies: {
+        ...packageJsonObject.devDependencies,
+        husky: 'latest',
+      },
+    };
+
+    await writeFile(
+      'package.json',
+      JSON.stringify(newPackageJsonObject, null, 2)
+    );
+  }
 
   if (await husky.exists()) {
     s.message('Pre-commit hook found, updating...');
@@ -131,12 +180,34 @@ const initializePrecommitHook = async (packageManagerAdd: string) => {
   s.stop('Pre-commit hook created.');
 };
 
-const initializeLefthook = async (packageManagerAdd: string) => {
+const initializeLefthook = async (
+  packageManagerAdd: string,
+  install = true
+) => {
   const s = spinner();
   s.start('Initializing lefthook...');
 
   s.message('Installing lefthook...');
-  lefthook.install(packageManagerAdd);
+
+  if (install) {
+    lefthook.install(packageManagerAdd);
+  } else {
+    const packageJsonContent = await readFile('package.json', 'utf8');
+    const packageJsonObject = JSON.parse(packageJsonContent);
+
+    const newPackageJsonObject = {
+      ...packageJsonObject,
+      devDependencies: {
+        ...packageJsonObject.devDependencies,
+        lefthook: 'latest',
+      },
+    };
+
+    await writeFile(
+      'package.json',
+      JSON.stringify(newPackageJsonObject, null, 2)
+    );
+  }
 
   if (await lefthook.exists()) {
     s.message('lefthook.yml found, updating...');
@@ -150,12 +221,34 @@ const initializeLefthook = async (packageManagerAdd: string) => {
   s.stop('lefthook.yml created.');
 };
 
-const initializeLintStaged = async (packageManagerAdd: string) => {
+const initializeLintStaged = async (
+  packageManagerAdd: string,
+  install = true
+) => {
   const s = spinner();
   s.start('Initializing lint-staged...');
 
   s.message('Installing lint-staged...');
-  lintStaged.install(packageManagerAdd);
+
+  if (install) {
+    lintStaged.install(packageManagerAdd);
+  } else {
+    const packageJsonContent = await readFile('package.json', 'utf8');
+    const packageJsonObject = JSON.parse(packageJsonContent);
+
+    const newPackageJsonObject = {
+      ...packageJsonObject,
+      devDependencies: {
+        ...packageJsonObject.devDependencies,
+        'lint-staged': 'latest',
+      },
+    };
+
+    await writeFile(
+      'package.json',
+      JSON.stringify(newPackageJsonObject, null, 2)
+    );
+  }
 
   if (await lintStaged.exists()) {
     s.message('lint-staged found, updating...');
@@ -367,6 +460,7 @@ export const initialize = async (flags?: Initialize) => {
 
   try {
     const opts = flags ?? {};
+
     const packageManagerAdd = await getPackageManagerCommand(opts.pm);
 
     let shouldRemovePrettier = opts.removePrettier;
@@ -376,7 +470,7 @@ export const initialize = async (flags?: Initialize) => {
       shouldRemovePrettier === undefined ||
       shouldRemoveEslint === undefined
     ) {
-      const migrationOptions = [];
+      const migrationOptions: Array<{ label: string; value: string }> = [];
 
       if (
         shouldRemovePrettier === undefined &&
@@ -448,9 +542,13 @@ export const initialize = async (flags?: Initialize) => {
     if (extraFeatures === undefined) {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
-      const hasOtherCliOptions = opts.pm || opts.editors || opts.rules || 
-        opts.removePrettier !== undefined || opts.removeEslint !== undefined;
-      
+      const hasOtherCliOptions =
+        opts.pm ||
+        opts.editors ||
+        opts.rules ||
+        opts.removePrettier !== undefined ||
+        opts.removeEslint !== undefined;
+
       if (hasOtherCliOptions) {
         extraFeatures = [];
       } else {
@@ -473,7 +571,8 @@ export const initialize = async (flags?: Initialize) => {
       await removeESLint(packageManagerAdd);
     }
 
-    installDependencies(packageManagerAdd);
+    await installDependencies(packageManagerAdd, !opts.skipInstall);
+
     await upsertTsConfig();
     await upsertBiomeConfig();
 
@@ -504,13 +603,13 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     if (extraFeatures?.includes('husky')) {
-      await initializePrecommitHook(packageManagerAdd);
+      await initializePrecommitHook(packageManagerAdd, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lefthook')) {
-      await initializeLefthook(packageManagerAdd);
+      await initializeLefthook(packageManagerAdd, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lint-staged')) {
-      await initializeLintStaged(packageManagerAdd);
+      await initializeLintStaged(packageManagerAdd, !opts.skipInstall);
     }
 
     log.success('Successfully initialized Ultracite configuration!');
