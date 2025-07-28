@@ -571,7 +571,7 @@ export const initialize = async (flags?: Initialize) => {
       await removeESLint(packageManagerAdd);
     }
 
-    installDependencies(packageManagerAdd, !opts.skipInstall);
+    await installDependencies(packageManagerAdd, !opts.skipInstall);
 
     await upsertTsConfig();
     await upsertBiomeConfig();
