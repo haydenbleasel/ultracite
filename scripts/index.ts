@@ -49,6 +49,10 @@ const router = t.router({
           .boolean()
           .optional()
           .describe('Remove ESLint dependencies and configuration'),
+        skipInstall: z
+          .boolean()
+          .default(false)
+          .describe('Skip installing dependencies'),
       })
     )
     .mutation(async ({ input }) => {
