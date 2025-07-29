@@ -374,12 +374,12 @@ const upsertKiroRules = async () => {
   s.stop('Kiro IDE steering files created.');
 };
 
-const removePrettier = async (packageManagerAdd: string) => {
+const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing Prettier dependencies and configuration...');
 
   try {
-    const result = await prettierCleanup.remove(packageManagerAdd);
+    const result = await prettierCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -536,7 +536,7 @@ export const initialize = async (flags: Initialize) => {
     }
 
     if (shouldRemovePrettier) {
-      await removePrettier(packageManagerAdd);
+      await removePrettier(opts.pm);
     }
     if (shouldRemoveEslint) {
       await removeESLint(packageManagerAdd);
