@@ -1,5 +1,5 @@
+import { type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { trpcServer, type TrpcCliMeta } from 'trpc-cli';
 import z from 'zod';
 
 // Mock the command modules
@@ -28,7 +28,7 @@ vi.mock('../package.json', () => ({
 
 function createTestRouter() {
   const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
-  
+
   return t.router({
     init: t.procedure
       .meta({
@@ -53,6 +53,7 @@ function createTestRouter() {
                 'zed',
                 'claude',
                 'codex',
+                'kiro',
               ])
             )
             .optional()
@@ -149,9 +150,7 @@ describe('CLI Router', () => {
     it('should validate package manager enum', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.init({ pm: 'invalid' as never })
-      ).rejects.toThrow();
+      await expect(caller.init({ pm: 'invalid' as never })).rejects.toThrow();
     });
 
     it('should validate editors array', async () => {
@@ -200,9 +199,7 @@ describe('CLI Router', () => {
     it('should validate that input is array of strings', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.lint([123] as never)
-      ).rejects.toThrow();
+      await expect(caller.lint([123] as never)).rejects.toThrow();
     });
   });
 
@@ -237,9 +234,7 @@ describe('CLI Router', () => {
     it('should validate input format', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.format(['invalid'] as never)
-      ).rejects.toThrow();
+      await expect(caller.format(['invalid'] as never)).rejects.toThrow();
     });
   });
-}); 
+});

@@ -32,6 +32,7 @@ const router = t.router({
               'zed',
               'claude',
               'codex',
+              'kiro',
             ])
           )
           .optional()
