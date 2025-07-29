@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { cursor } from '../scripts/cursor';
+import { cursor } from '../scripts/rules/cursor';
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');

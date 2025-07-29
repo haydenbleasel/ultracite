@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 const defaultConfig = {
   'editor.defaultFormatter': 'esbenp.prettier-vscode',

@@ -1,26 +1,25 @@
-import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
 import { addDevDependency, type PackageManagerName } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
-import { claude } from './claude';
-import { codex } from './codex';
-import { cursor } from './cursor';
+import { vscode } from './configs/vscode';
+import { zed } from './configs/zed';
 import { eslintCleanup } from './eslint-cleanup';
 import { husky } from './husky';
-import { kiro } from './kiro';
 import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
 import { prettierCleanup } from './prettier-cleanup';
+import { claude } from './rules/claude';
+import { codex } from './rules/codex';
+import { cursor } from './rules/cursor';
+import { kiro } from './rules/kiro';
+import { vscodeCopilot } from './rules/vscode';
+import { windsurf } from './rules/windsurf';
+import { zedCopilot } from './rules/zed';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
-import { vscodeCopilot } from './vscode-copilot';
-import { vscode } from './vscode-settings';
-import { windsurf } from './windsurf';
-import { zedCopilot } from './zed';
-import { zed } from './zed-settings';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
@@ -428,7 +427,7 @@ const removeESLint = async (packageManager: PackageManagerName) => {
     }
 
     s.stop('ESLint removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove ESLint completely, but continuing...');
   }
 };
