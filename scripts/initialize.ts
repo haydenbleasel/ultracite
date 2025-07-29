@@ -13,7 +13,6 @@ import { husky } from './husky';
 import { kiro } from './kiro';
 import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
-import { packageManager } from './package-manager';
 import { prettierCleanup } from './prettier-cleanup';
 import { title } from './title';
 import { tsconfig } from './tsconfig';
@@ -429,41 +428,11 @@ const removeESLint = async (packageManagerAdd: string) => {
   }
 };
 
-const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
-  if (pmFlag) {
-    const option = packageManager.options.find((opt) => opt.label === pmFlag);
-    if (!option) {
-      throw new Error(`Unsupported package manager: ${pmFlag}`);
-    }
-
-    const monorepo = await packageManager.isMonorepo();
-    return monorepo && option.monorepoSuffix
-      ? `${option.value} ${option.monorepoSuffix}`
-      : option.value;
-  }
-
-  const detected = await packageManager.get();
-  if (detected) {
-    log.info(`Detected lockfile, using ${detected}`);
-    return detected;
-  }
-
-  const selected = await packageManager.select();
-  if (!selected) {
-    throw new Error('No package manager selected');
-  }
-
-  return selected;
-};
-
 export const initialize = async (flags: Initialize) => {
   intro(title);
 
   try {
     const opts = flags ?? { pm: 'npm' };
-
-    const packageManagerAdd = await getPackageManagerCommand(opts.pm);
-
     let shouldRemovePrettier = opts.removePrettier;
     let shouldRemoveEslint = opts.removeEslint;
 
