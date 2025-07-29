@@ -17,8 +17,7 @@ const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(['pnpm', 'bun', 'yarn', 'npm'])
-          .optional()
+          .enum(['pnpm', 'bun', 'yarn', 'npm', 'deno'])
           .describe('Package manager to use'),
         editors: z
           .array(z.enum(['vscode', 'zed']))

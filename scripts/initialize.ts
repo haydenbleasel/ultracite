@@ -456,11 +456,11 @@ const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
   return selected;
 };
 
-export const initialize = async (flags?: Initialize) => {
+export const initialize = async (flags: Initialize) => {
   intro(title);
 
   try {
-    const opts = flags ?? {};
+    const opts = flags ?? { pm: 'pnpm' };
 
     const packageManagerAdd = await getPackageManagerCommand(opts.pm);
 
