@@ -18,8 +18,8 @@ import { kiro } from './rules/kiro';
 import { vscodeCopilot } from './rules/vscode';
 import { windsurf } from './rules/windsurf';
 import { zedCopilot } from './rules/zed';
-import { title } from './title';
 import { tsconfig } from './tsconfig';
+import { title } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
