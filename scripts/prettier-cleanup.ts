@@ -177,15 +177,9 @@ export const prettierCleanup = {
 
     // Remove dependencies
     for (const pkg of packages) {
-      // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
-      const result = await removeDependency(pkg, { packageManager });
-
-      if (!result.exec) {
-        throw new Error(`Failed to generate uninstall command for ${pkg}`);
-      }
-
       try {
-        execSync(result.exec.command, { stdio: 'pipe' });
+        // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
+        await removeDependency(pkg, { packageManager });
       } catch (_error) {
         // Silently handle errors - dependencies might already be removed
       }
