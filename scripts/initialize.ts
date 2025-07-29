@@ -27,7 +27,7 @@ const ultraciteVersion = packageJson.version;
 
 type Initialize = {
   pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
-  editors?: ('vscode' | 'zed')[];
+  editors?: ('vscode' | 'zed' | 'none')[];
   rules?: (
     | 'vscode-copilot'
     | 'cursor'
@@ -35,8 +35,9 @@ type Initialize = {
     | 'zed'
     | 'claude'
     | 'codex'
+    | 'none'
   )[];
-  features?: ('husky' | 'lefthook' | 'lint-staged')[];
+  features?: ('husky' | 'lefthook' | 'lint-staged' | 'none')[];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
@@ -520,6 +521,8 @@ export const initialize = async (flags?: Initialize) => {
         ],
         required: false,
       })) as ('vscode' | 'zed')[];
+    } else if (editorConfig.includes('none')) {
+      editorConfig = [];
     }
 
     let editorRules = opts.rules;
@@ -536,6 +539,8 @@ export const initialize = async (flags?: Initialize) => {
         ],
         required: false,
       })) as Initialize['rules'];
+    } else if (editorRules.includes('none')) {
+      editorRules = [];
     }
 
     let extraFeatures = opts.features;
@@ -562,6 +567,8 @@ export const initialize = async (flags?: Initialize) => {
           required: false,
         })) as ('husky' | 'lefthook' | 'lint-staged')[];
       }
+    } else if (extraFeatures.includes('none')) {
+      extraFeatures = [];
     }
 
     if (shouldRemovePrettier) {
