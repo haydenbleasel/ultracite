@@ -460,7 +460,7 @@ export const initialize = async (flags: Initialize) => {
   intro(title);
 
   try {
-    const opts = flags ?? { pm: 'pnpm' };
+    const opts = flags ?? { pm: 'npm' };
 
     const packageManagerAdd = await getPackageManagerCommand(opts.pm);
 
