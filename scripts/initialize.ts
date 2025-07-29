@@ -534,6 +534,7 @@ export const initialize = async (flags: Initialize) => {
           { label: 'Zed', value: 'zed' },
           { label: 'Claude Code', value: 'claude' },
           { label: 'OpenAI Codex', value: 'codex' },
+          { label: 'Kiro IDE', value: 'kiro' },
         ],
         required: false,
       })) as Initialize['rules'];
@@ -601,6 +602,9 @@ export const initialize = async (flags: Initialize) => {
     }
     if (editorRules?.includes('codex')) {
       await upsertCodexRules();
+    }
+    if (editorRules?.includes('kiro')) {
+      await upsertKiroRules();
     }
 
     if (extraFeatures?.includes('husky')) {
