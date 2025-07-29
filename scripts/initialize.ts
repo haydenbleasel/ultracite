@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
-import type { PackageManagerName } from 'nypm';
+import { addDevDependency, type PackageManagerName } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { claude } from './claude';
@@ -43,16 +43,20 @@ type Initialize = {
 };
 
 const installDependencies = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
   s.start('Installing dependencies...');
 
   if (install) {
-    execSync(
-      `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
-    );
+    for (const dep of [
+      `@biomejs/biome@${schemaVersion}`,
+      `ultracite@${ultraciteVersion}`,
+    ]) {
+      // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
+      await addDevDependency(dep, { packageManager });
+    }
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -62,7 +66,7 @@ const installDependencies = async (
       devDependencies: {
         ...packageJsonObject.devDependencies,
         '@biomejs/biome': schemaVersion,
-        ultracite: `^${ultraciteVersion}`,
+        ultracite: ultraciteVersion,
       },
     };
 
@@ -542,7 +546,7 @@ export const initialize = async (flags: Initialize) => {
       await removeESLint(opts.pm);
     }
 
-    await installDependencies(packageManagerAdd, !opts.skipInstall);
+    await installDependencies(opts.pm, !opts.skipInstall);
 
     await upsertTsConfig();
     await upsertBiomeConfig();
