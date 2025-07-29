@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
+import type { PackageManagerName } from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lintStaged } from '../scripts/lint-staged';
 import { exists } from '../scripts/utils';
@@ -75,17 +76,17 @@ describe('lint-staged configuration', () => {
 
   describe('install', () => {
     it('should install lint-staged as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+      const packageManager: PackageManagerName = 'npm';
 
-      lintStaged.install(packageManagerAdd);
+      lintStaged.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('npm install -D lint-staged');
     });
 
     it('should work with different package managers', () => {
-      const packageManagerAdd = 'pnpm add';
+      const packageManager: PackageManagerName = 'pnpm';
 
-      lintStaged.install(packageManagerAdd);
+      lintStaged.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('pnpm add -D lint-staged');
     });

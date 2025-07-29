@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
+import type { PackageManagerName } from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lefthook } from '../scripts/lefthook';
 import { exists } from '../scripts/utils';
@@ -42,18 +43,18 @@ describe('lefthook configuration', () => {
 
   describe('install', () => {
     it('should install lefthook as dev dependency and run install', () => {
-      const packageManagerAdd = 'npm install';
+      const packageManager: PackageManagerName = 'npm';
 
-      lefthook.install(packageManagerAdd);
+      lefthook.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('npm install -D lefthook');
       expect(mockExecSync).toHaveBeenCalledWith('npx lefthook install');
     });
 
     it('should work with different package managers', () => {
-      const packageManagerAdd = 'yarn add';
+      const packageManager: PackageManagerName = 'yarn';
 
-      lefthook.install(packageManagerAdd);
+      lefthook.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('yarn add -D lefthook');
       expect(mockExecSync).toHaveBeenCalledWith('npx lefthook install');

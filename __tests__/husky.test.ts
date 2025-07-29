@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
+import type { PackageManagerName } from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { husky } from '../scripts/husky';
 import { exists } from '../scripts/utils';
@@ -42,17 +43,17 @@ describe('husky configuration', () => {
 
   describe('install', () => {
     it('should install husky as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+      const packageManager: PackageManagerName = 'npm';
 
-      husky.install(packageManagerAdd);
+      husky.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('npm install -D husky');
     });
 
     it('should work with different package managers', () => {
-      const packageManagerAdd = 'yarn add';
+      const packageManager: PackageManagerName = 'yarn';
 
-      husky.install(packageManagerAdd);
+      husky.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('yarn add -D husky');
     });
