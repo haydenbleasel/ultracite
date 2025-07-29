@@ -1,8 +1,7 @@
-import { execSync } from 'node:child_process';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
 import { type PackageManagerName, removeDependency } from 'nypm';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 // Common ESLint configuration files
 const eslintConfigFiles = [
