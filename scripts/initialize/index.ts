@@ -2,24 +2,24 @@ import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
 import { addDevDependency, type PackageManagerName } from 'nypm';
-import packageJson from '../package.json' with { type: 'json' };
-import { vscode } from './configs/vscode';
-import { zed } from './configs/zed';
-import { biome } from './files/biome';
-import { tsconfig } from './files/tsconfig';
-import { husky } from './integrations/husky';
-import { lefthook } from './integrations/lefthook';
-import { lintStaged } from './integrations/lint-staged';
-import { eslint } from './migrations/eslint';
-import { prettier } from './migrations/prettier';
-import { claude } from './rules/claude';
-import { codex } from './rules/codex';
-import { cursor } from './rules/cursor';
-import { kiro } from './rules/kiro';
-import { vscodeCopilot } from './rules/vscode';
-import { windsurf } from './rules/windsurf';
-import { zedCopilot } from './rules/zed';
-import { title } from './utils';
+import packageJson from '../../package.json' with { type: 'json' };
+import { vscode } from '../configs/vscode';
+import { zed } from '../configs/zed';
+import { biome } from '../files/biome';
+import { eslint } from '../migrations/eslint';
+import { prettier } from '../migrations/prettier';
+import { claude } from '../rules/claude';
+import { codex } from '../rules/codex';
+import { cursor } from '../rules/cursor';
+import { kiro } from '../rules/kiro';
+import { vscodeCopilot } from '../rules/vscode';
+import { windsurf } from '../rules/windsurf';
+import { zedCopilot } from '../rules/zed';
+import { title } from '../title';
+import { tsconfig } from '../tsconfig';
+import { husky } from './configs/integrations/husky';
+import { lefthook } from './configs/integrations/lefthook';
+import { lintStaged } from './configs/integrations/lint-staged';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
@@ -256,13 +256,13 @@ const initializeLintStaged = async (
 
   if (await lintStaged.exists()) {
     s.message('lint-staged found, updating...');
-    await lintStaged.update(packageManager);
+    await lintStaged.update();
     s.stop('lint-staged updated.');
     return;
   }
 
   s.message('lint-staged not found, creating...');
-  await lintStaged.create(packageManager);
+  await lintStaged.create();
   s.stop('lint-staged created.');
 };
 
