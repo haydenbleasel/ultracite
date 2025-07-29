@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { addDependency, type PackageManagerName } from 'nypm';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 const huskyCommand = 'npx ultracite format';
 const path = './.husky/pre-commit';
