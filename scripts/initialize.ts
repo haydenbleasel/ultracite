@@ -401,12 +401,12 @@ const removePrettier = async (pm: PackageManagerName) => {
   }
 };
 
-const removeESLint = async (packageManagerAdd: string) => {
+const removeESLint = async (packageManager: PackageManagerName) => {
   const s = spinner();
   s.start('Removing ESLint dependencies and configuration...');
 
   try {
-    const result = await eslintCleanup.remove(packageManagerAdd);
+    const result = await eslintCleanup.remove(packageManager);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -539,7 +539,7 @@ export const initialize = async (flags: Initialize) => {
       await removePrettier(opts.pm);
     }
     if (shouldRemoveEslint) {
-      await removeESLint(packageManagerAdd);
+      await removeESLint(opts.pm);
     }
 
     await installDependencies(packageManagerAdd, !opts.skipInstall);
