@@ -145,7 +145,7 @@ const upsertBiomeConfig = async () => {
 };
 
 const initializePrecommitHook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -154,7 +154,7 @@ const initializePrecommitHook = async (
   s.message('Installing Husky...');
 
   if (install) {
-    husky.install(packageManagerAdd);
+    husky.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -186,7 +186,7 @@ const initializePrecommitHook = async (
 };
 
 const initializeLefthook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -195,7 +195,7 @@ const initializeLefthook = async (
   s.message('Installing lefthook...');
 
   if (install) {
-    lefthook.install(packageManagerAdd);
+    lefthook.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -227,7 +227,7 @@ const initializeLefthook = async (
 };
 
 const initializeLintStaged = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -236,7 +236,7 @@ const initializeLintStaged = async (
   s.message('Installing lint-staged...');
 
   if (install) {
-    lintStaged.install(packageManagerAdd);
+    lintStaged.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -582,13 +582,13 @@ export const initialize = async (flags: Initialize) => {
     }
 
     if (extraFeatures?.includes('husky')) {
-      await initializePrecommitHook(packageManagerAdd, !opts.skipInstall);
+      await initializePrecommitHook(opts.pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lefthook')) {
-      await initializeLefthook(packageManagerAdd, !opts.skipInstall);
+      await initializeLefthook(opts.pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lint-staged')) {
-      await initializeLintStaged(packageManagerAdd, !opts.skipInstall);
+      await initializeLintStaged(opts.pm, !opts.skipInstall);
     }
 
     log.success('Successfully initialized Ultracite configuration!');
