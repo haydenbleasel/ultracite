@@ -157,7 +157,7 @@ const hasESLint = async (): Promise<boolean> => {
   return false;
 };
 
-export const eslintCleanup = {
+export const eslint = {
   hasESLint,
 
   remove: async (

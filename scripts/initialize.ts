@@ -6,11 +6,11 @@ import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './configs/vscode';
 import { zed } from './configs/zed';
-import { eslintCleanup } from './eslint-cleanup';
 import { husky } from './husky';
 import { lefthook } from './lefthook';
 import { lintStaged } from './lint-staged';
-import { prettierCleanup } from './prettier-cleanup';
+import { eslint } from './migrations/eslint';
+import { prettier } from './migrations/prettier';
 import { claude } from './rules/claude';
 import { codex } from './rules/codex';
 import { cursor } from './rules/cursor';
@@ -383,7 +383,7 @@ const removePrettier = async (pm: PackageManagerName) => {
   s.start('Removing Prettier dependencies and configuration...');
 
   try {
-    const result = await prettierCleanup.remove(pm);
+    const result = await prettier.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -410,7 +410,7 @@ const removeESLint = async (packageManager: PackageManagerName) => {
   s.start('Removing ESLint dependencies and configuration...');
 
   try {
-    const result = await eslintCleanup.remove(packageManager);
+    const result = await eslint.remove(packageManager);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -448,7 +448,7 @@ export const initialize = async (flags: Initialize) => {
 
       if (
         shouldRemovePrettier === undefined &&
-        (await prettierCleanup.hasPrettier())
+        (await prettier.hasPrettier())
       ) {
         migrationOptions.push({
           label:
@@ -457,10 +457,7 @@ export const initialize = async (flags: Initialize) => {
         });
       }
 
-      if (
-        shouldRemoveEslint === undefined &&
-        (await eslintCleanup.hasESLint())
-      ) {
+      if (shouldRemoveEslint === undefined && (await eslint.hasESLint())) {
         migrationOptions.push({
           label: 'Remove ESLint (dependencies, config files, VS Code settings)',
           value: 'eslint',

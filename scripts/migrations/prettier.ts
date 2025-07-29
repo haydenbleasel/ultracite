@@ -163,7 +163,7 @@ const hasPrettier = async (): Promise<boolean> => {
   return false;
 };
 
-export const prettierCleanup = {
+export const prettier = {
   hasPrettier,
 
   remove: async (
