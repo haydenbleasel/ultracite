@@ -173,17 +173,12 @@
   }
 
   /* Hide the sidebar on the landing page on desktop */
-  .home #nd-sidebar {
-    @apply md:hidden;
+  #nd-docs-layout.home #nd-sidebar {
+    @apply md:hidden!;
   }
 
-  .home#nd-docs-layout {
-    @apply px-4!;
-  }
-
-  #nd-subnav > div,
-  #nd-docs-layout {
-    @apply container mx-auto pl-0;
+  #nd-docs-layout.home {
+    @apply px-4! ml-auto! mr-auto! container!;
   }
 
   #nd-subnav > div,

@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, select, spinner } from '@clack/prompts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -28,6 +28,7 @@ vi.mock('../scripts/vscode-settings');
 describe('initialize command', () => {
   const mockExecSync = vi.mocked(execSync);
   const mockMkdir = vi.mocked(mkdir);
+  const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockIntro = vi.mocked(intro);
   const mockSelect = vi.mocked(select);
@@ -341,5 +342,261 @@ describe('initialize command', () => {
 
     // Should not create .rules file since it exists
     expect(mockExecSync).not.toHaveBeenCalledWith('touch .rules');
+  });
+
+  it('should not prompt for features when other CLI options are provided', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+
+    // When CLI options are provided but features is undefined, it should default to empty array
+    await initialize({
+      pm: 'pnpm',
+      editors: ['vscode'],
+      rules: ['cursor'],
+      // features not provided (undefined) - should default to [] due to other CLI options
+    });
+
+    // multiselect should not be called for features since other CLI options are provided
+    expect(mockMultiselect).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Would you like any of the following (optional)?',
+      })
+    );
+
+    expect(mockLog.success).toHaveBeenCalledWith(
+      'Successfully initialized Ultracite configuration!'
+    );
+  });
+
+  it('should still prompt for features when no CLI options are provided', async () => {
+    mockExists.mockResolvedValue(false);
+    mockSelect.mockResolvedValue('pnpm add');
+    mockMultiselect.mockResolvedValue([]);
+
+    // When no CLI options are provided, it should still prompt for features
+    await initialize();
+
+    // multiselect should be called for features in interactive mode
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Would you like any of the following (optional)?',
+      })
+    );
+
+    expect(mockLog.success).toHaveBeenCalledWith(
+      'Successfully initialized Ultracite configuration!'
+    );
+  });
+
+  describe('skipInstall flag', () => {
+    const mockPackageJsonContent = JSON.stringify({
+      name: 'test-project',
+      version: '1.0.0',
+      devDependencies: {
+        typescript: '^5.0.0',
+      },
+    });
+
+    beforeEach(() => {
+      mockReadFile.mockResolvedValue(mockPackageJsonContent);
+    });
+
+    it('should modify package.json instead of running install commands when skipInstall is true', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: true,
+      });
+
+      // Should not run execSync for installation
+      expect(mockExecSync).not.toHaveBeenCalledWith(
+        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+      );
+
+      // Should read package.json
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+
+      // Should write updated package.json with new dependencies
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            name: 'test-project',
+            version: '1.0.0',
+            devDependencies: {
+              typescript: '^5.0.0',
+              '@biomejs/biome': schemaVersion,
+              ultracite: `^${packageJson.version}`,
+            },
+          },
+          null,
+          2
+        )
+      );
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should install husky in package.json when skipInstall is true and husky feature is selected', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: true,
+        features: ['husky'],
+      });
+
+      // Should read package.json for husky installation
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+
+      // Should write package.json with husky dependency
+      const huskyWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"husky": "latest"')
+      );
+      expect(huskyWriteCall).toBeDefined();
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should install lefthook in package.json when skipInstall is true and lefthook feature is selected', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: true,
+        features: ['lefthook'],
+      });
+
+      // Should read package.json for lefthook installation
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+
+      // Should write package.json with lefthook dependency
+      const lefthookWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"lefthook": "latest"')
+      );
+      expect(lefthookWriteCall).toBeDefined();
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should install lint-staged in package.json when skipInstall is true and lint-staged feature is selected', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: true,
+        features: ['lint-staged'],
+      });
+
+      // Should read package.json for lint-staged installation
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+
+      // Should write package.json with lint-staged dependency
+      const lintStagedWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"lint-staged": "latest"')
+      );
+      expect(lintStagedWriteCall).toBeDefined();
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should install all dependencies in package.json when skipInstall is true and multiple features are selected', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: true,
+        features: ['husky', 'lefthook', 'lint-staged'],
+      });
+
+      // Should read package.json multiple times for each feature
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+
+      // Should write package.json with all feature dependencies
+      const huskyWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"husky": "latest"')
+      );
+      const lefthookWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"lefthook": "latest"')
+      );
+      const lintStagedWriteCall = mockWriteFile.mock.calls.find(
+        (call) =>
+          call[0] === 'package.json' &&
+          typeof call[1] === 'string' &&
+          call[1].includes('"lint-staged": "latest"')
+      );
+
+      expect(huskyWriteCall).toBeDefined();
+      expect(lefthookWriteCall).toBeDefined();
+      expect(lintStagedWriteCall).toBeDefined();
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should run normal install commands when skipInstall is false', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        skipInstall: false,
+        features: ['husky'],
+      });
+
+      // Should run execSync for main installation
+      expect(mockExecSync).toHaveBeenCalledWith(
+        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+      );
+
+      // The main installation shouldn't read package.json when skipInstall is false
+      // but features might still read it depending on their implementation
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
+
+    it('should run normal install commands when skipInstall is undefined (default)', async () => {
+      mockExists.mockResolvedValue(false);
+
+      await initialize({
+        pm: 'pnpm',
+        // skipInstall not provided, should default to false
+      });
+
+      // Should run execSync for main installation
+      expect(mockExecSync).toHaveBeenCalledWith(
+        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+      );
+
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
   });
 });

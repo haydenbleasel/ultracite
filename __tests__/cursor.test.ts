@@ -51,7 +51,13 @@ describe('cursor configuration', () => {
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
-        'mock rules content'
+        `---
+description: Ultracite Rules - AI-Ready Formatter and Linter
+globs: "**/*.{ts,tsx,js,jsx}"
+alwaysApply: true
+---
+
+mock rules content`
       );
     });
 

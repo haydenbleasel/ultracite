@@ -43,10 +43,14 @@ describe('vscode configuration', () => {
 
       const expectedConfig = {
         'editor.defaultFormatter': 'esbenp.prettier-vscode',
-        '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
-          {
-            'editor.defaultFormatter': 'biomejs.biome',
-          },
+        '[javascript]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[typescript]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[javascriptreact]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[typescriptreact]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[json]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[jsonc]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[css]': { 'editor.defaultFormatter': 'biomejs.biome' },
+        '[graphql]': { 'editor.defaultFormatter': 'biomejs.biome' },
         'typescript.tsdk': 'node_modules/typescript/lib',
         'editor.formatOnSave': true,
         'editor.formatOnPaste': true,
@@ -146,10 +150,14 @@ describe('vscode configuration', () => {
         JSON.stringify(
           {
             'editor.defaultFormatter': 'esbenp.prettier-vscode',
-            '[javascript][typescript][javascriptreact][typescriptreact][json][jsonc][css][graphql]':
-              {
-                'editor.defaultFormatter': 'biomejs.biome',
-              },
+            '[javascript]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[typescript]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[javascriptreact]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[typescriptreact]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[json]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[jsonc]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[css]': { 'editor.defaultFormatter': 'biomejs.biome' },
+            '[graphql]': { 'editor.defaultFormatter': 'biomejs.biome' },
             'typescript.tsdk': 'node_modules/typescript/lib',
             'editor.formatOnSave': true,
             'editor.formatOnPaste': true,

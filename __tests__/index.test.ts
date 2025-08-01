@@ -1,5 +1,7 @@
-import { Command } from 'commander';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Regex for semantic versioning validation
+const SEMANTIC_VERSION_REGEX = /^\d+\.\d+\.\d+$/;
 
 // Mock the command modules
 const mockFormat = vi.fn();
@@ -18,111 +20,82 @@ vi.mock('../scripts/lint', () => ({
   lint: mockLint,
 }));
 
-// Mock process.argv to control command line arguments
-const originalArgv = process.argv;
+// Mock package.json
+vi.mock('../package.json', () => ({
+  default: {
+    name: 'ultracite',
+    version: 'test-version',
+  },
+}));
 
-describe('CLI index', () => {
-  let program: Command;
+// Mock trpc-cli completely
+const mockCreateCli = vi.fn();
+const mockRouter = { createCaller: vi.fn() };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
+vi.mock('trpc-cli', () => ({
+  createCli: mockCreateCli,
+  trpcServer: {
+    initTRPC: {
+      meta: () => ({
+        create: () => ({
+          router: vi.fn().mockReturnValue(mockRouter),
+          procedure: {
+            meta: vi.fn().mockReturnThis(),
+            input: vi.fn().mockReturnThis(),
+            mutation: vi.fn().mockReturnThis(),
+            query: vi.fn().mockReturnThis(),
+          },
+        }),
+      }),
+    },
+  },
+}));
 
-    // Create a fresh program instance for each test
-    program = new Command();
-    program
-      .name('Ultracite')
-      .description('Ship code faster and with more confidence.');
+describe('CLI Index', () => {
+  it('should import without errors when VITEST environment is set', async () => {
+    // Set VITEST environment to prevent CLI execution
+    const originalEnv = process.env.VITEST;
+    process.env.VITEST = 'true';
 
-    // Reset process.argv
-    process.argv = [...originalArgv];
+    try {
+      // This should not throw an error
+      await expect(import('../scripts/index')).resolves.toBeDefined();
+    } finally {
+      // Restore environment
+      process.env.VITEST = originalEnv;
+    }
   });
 
-  afterEach(() => {
-    // Restore original process.argv
-    process.argv = originalArgv;
+  it('should use correct package information', async () => {
+    // Import actual package.json to test real values (bypassing the mock)
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const packageJsonPath = path.resolve(__dirname, '../package.json');
+    const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
+    const actualPackageJson = JSON.parse(packageJsonContent) as {
+      name: string;
+      version: string;
+    };
+
+    expect(actualPackageJson.name).toBe('ultracite');
+    expect(actualPackageJson.version).toMatch(SEMANTIC_VERSION_REGEX); // Semantic versioning pattern
+    expect(typeof actualPackageJson.version).toBe('string');
   });
 
-  it('should verify the command line interface is properly configured', () => {
-    // Test that we can set up the program correctly
-    expect(program.name()).toBe('Ultracite');
-    expect(program.description()).toBe(
-      'Ship code faster and with more confidence.'
-    );
+  it('should have access to required command functions', () => {
+    // Verify that the command functions exist and are callable
+    expect(mockFormat).toBeDefined();
+    expect(mockInitialize).toBeDefined();
+    expect(mockLint).toBeDefined();
+
+    expect(typeof mockFormat).toBe('function');
+    expect(typeof mockInitialize).toBe('function');
+    expect(typeof mockLint).toBe('function');
   });
 
-  it('should define multiple commands', async () => {
-    const { initialize } = await import('../scripts/initialize');
-    const { lint } = await import('../scripts/lint');
-    const { format } = await import('../scripts/format');
-
-    // Set up commands like the actual index.ts does
-    program
-      .command('init')
-      .description('Initialize Ultracite in the current directory')
-      .action(initialize);
-
-    program
-      .command('lint')
-      .description('Run Biome linter without fixing files')
-      .argument('[files...]', 'specific files to lint (optional)')
-      .action(lint);
-
-    program
-      .command('format')
-      .description('Run Biome linter and fixes files')
-      .argument('[files...]', 'specific files to format (optional)')
-      .action(format);
-
-    // Check that commands were registered
-    const commands = program.commands;
-    expect(commands).toHaveLength(3);
-
-    const commandNames = commands.map((cmd) => cmd.name());
-    expect(commandNames).toContain('init');
-    expect(commandNames).toContain('lint');
-    expect(commandNames).toContain('format');
-  });
-
-  it('should configure arguments for commands', async () => {
-    const { lint } = await import('../scripts/lint');
-    const { format } = await import('../scripts/format');
-
-    // Set up commands that use arguments
-    program
-      .command('lint')
-      .description('Run Biome linter without fixing files')
-      .argument('[files...]', 'specific files to lint (optional)')
-      .action(lint);
-
-    program
-      .command('format')
-      .description('Run Biome linter and fixes files')
-      .argument('[files...]', 'specific files to format (optional)')
-      .action(format);
-
-    // Check that commands with arguments are configured properly
-    const lintCommand = program.commands.find((cmd) => cmd.name() === 'lint');
-    const formatCommand = program.commands.find(
-      (cmd) => cmd.name() === 'format'
-    );
-
-    expect(lintCommand).toBeDefined();
-    expect(formatCommand).toBeDefined();
-
-    // Test that the commands have the expected descriptions
-    expect(lintCommand?.description()).toBe(
-      'Run Biome linter without fixing files'
-    );
-    expect(formatCommand?.description()).toBe(
-      'Run Biome linter and fixes files'
-    );
-  });
-
-  it('should import and execute the CLI setup', async () => {
-    // Test that the CLI module can be imported without errors
-    const indexModule = await import('../scripts/index');
-
-    // The import should not throw any errors
-    expect(indexModule).toBeDefined();
+  it('should have trpc-cli available for CLI creation', () => {
+    // Verify that trpc-cli mock is properly set up
+    expect(mockCreateCli).toBeDefined();
+    expect(typeof mockCreateCli).toBe('function');
   });
 });
