@@ -128,6 +128,7 @@ const cleanVSCodePrettierSettings = async (): Promise<boolean> => {
         'editor.defaultFormatter' in langConfig &&
         langConfig['editor.defaultFormatter'] === 'esbenp.prettier-vscode'
       ) {
+        // biome-ignore lint/performance/noDelete: "it's fine"
         delete langConfig['editor.defaultFormatter'];
         changed = true;
 
@@ -152,11 +153,16 @@ const cleanVSCodePrettierSettings = async (): Promise<boolean> => {
 const hasPrettier = async (): Promise<boolean> => {
   // Check for dependencies
   const packages = await detectPrettierPackages();
-  if (packages.length > 0) return true;
+  if (packages.length > 0) {
+    return true;
+  }
 
   // Check for config files
   for (const file of prettierConfigFiles) {
-    if (await exists(file)) return true;
+    // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
+    if (await exists(file)) {
+      return true;
+    }
   }
 
   return false;

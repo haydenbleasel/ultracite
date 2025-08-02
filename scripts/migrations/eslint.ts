@@ -51,6 +51,7 @@ const removeESLintConfigFiles = async (): Promise<string[]> => {
   const removedFiles: string[] = [];
 
   for (const file of eslintConfigFiles) {
+    // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
     if (await exists(file)) {
       try {
         await unlink(file);
@@ -127,6 +128,7 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 
         // Remove the entire codeActionsOnSave if it's now empty
         if (Object.keys(codeActions).length === 0) {
+          // biome-ignore lint/performance/noDelete: "it's fine"
           delete newConfig['editor.codeActionsOnSave'];
         }
       }
@@ -146,11 +148,16 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 const hasESLint = async (): Promise<boolean> => {
   // Check for dependencies
   const packages = await detectESLintPackages();
-  if (packages.length > 0) return true;
+  if (packages.length > 0) {
+    return true;
+  }
 
   // Check for config files
   for (const file of eslintConfigFiles) {
-    if (await exists(file)) return true;
+    // biome-ignore lint/nursery/noAwaitInLoop: "it's fine"
+    if (await exists(file)) {
+      return true;
+    }
   }
 
   return false;
