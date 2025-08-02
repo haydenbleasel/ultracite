@@ -9,6 +9,50 @@ import { initialize } from './initialize';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
+const packageManager = z
+  .enum(['pnpm', 'bun', 'yarn', 'npm', 'deno'])
+  .describe('Package manager to use');
+
+const editors = z
+  .array(z.enum(['vscode', 'zed']))
+  .optional()
+  .describe('Editors to configure');
+
+const rules = z
+  .array(
+    z.enum([
+      'vscode-copilot',
+      'cursor',
+      'windsurf',
+      'zed',
+      'claude',
+      'codex',
+      'kiro',
+    ])
+  )
+  .optional()
+  .describe('Editor rules to enable');
+
+const features = z
+  .array(z.enum(['husky', 'lefthook', 'lint-staged']))
+  .optional()
+  .describe('Additional features to enable');
+
+const removePrettier = z
+  .boolean()
+  .optional()
+  .describe('Remove Prettier dependencies and configuration');
+
+const removeEslint = z
+  .boolean()
+  .optional()
+  .describe('Remove ESLint dependencies and configuration');
+
+const skipInstall = z
+  .boolean()
+  .optional()
+  .describe('Skip installing dependencies');
+
 const router = t.router({
   init: t.procedure
     .meta({
@@ -16,43 +60,13 @@ const router = t.router({
     })
     .input(
       z.object({
-        pm: z
-          .enum(['pnpm', 'bun', 'yarn', 'npm', 'deno'])
-          .describe('Package manager to use'),
-        editors: z
-          .array(z.enum(['vscode', 'zed']))
-          .optional()
-          .describe('Editors to configure'),
-        rules: z
-          .array(
-            z.enum([
-              'vscode-copilot',
-              'cursor',
-              'windsurf',
-              'zed',
-              'claude',
-              'codex',
-              'kiro',
-            ])
-          )
-          .optional()
-          .describe('Editor rules to enable'),
-        features: z
-          .array(z.enum(['husky', 'lefthook', 'lint-staged']))
-          .optional()
-          .describe('Additional features to enable'),
-        removePrettier: z
-          .boolean()
-          .optional()
-          .describe('Remove Prettier dependencies and configuration'),
-        removeEslint: z
-          .boolean()
-          .optional()
-          .describe('Remove ESLint dependencies and configuration'),
-        skipInstall: z
-          .boolean()
-          .default(false)
-          .describe('Skip installing dependencies'),
+        pm: packageManager,
+        editors,
+        rules,
+        features,
+        removePrettier,
+        removeEslint,
+        skipInstall,
       })
     )
     .mutation(async ({ input }) => {
