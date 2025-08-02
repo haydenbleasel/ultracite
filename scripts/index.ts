@@ -6,12 +6,19 @@ import packageJson from '../package.json' with { type: 'json' };
 import { format } from './commands/format';
 import { lint } from './commands/lint';
 import { initialize } from './initialize';
+import { detectMonorepo } from './utils';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
 const packageManager = z
   .enum(['pnpm', 'bun', 'yarn', 'npm', 'deno'])
   .describe('Package manager to use');
+
+const isMonorepo = z
+  .boolean()
+  .optional()
+  .describe('Is the project a monorepo?')
+  .default(await detectMonorepo());
 
 const editors = z
   .array(z.enum(['vscode', 'zed']))
@@ -61,6 +68,7 @@ const router = t.router({
     .input(
       z.object({
         pm: packageManager,
+        isMonorepo,
         editors,
         rules,
         features,

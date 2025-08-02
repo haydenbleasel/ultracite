@@ -10,7 +10,7 @@ export const exists = async (path: string) => {
   }
 };
 
-export const isMonorepo = async () => {
+export const detectMonorepo = async () => {
   if (await exists('pnpm-workspace.yaml')) {
     return true;
   }
