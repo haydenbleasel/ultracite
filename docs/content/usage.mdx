@@ -36,7 +36,7 @@ Ultracite comes with a convenient CLI (invoked as `ultracite` when installed). H
 The `lint` command wraps the Biome `check` command, which runs the linter without fixing files.
 
 ```bash title="Terminal"
-npx ultracite lint
+npx ultracite check
 ```
 
 ### Formatting
@@ -44,32 +44,32 @@ npx ultracite lint
 The `format` command wraps the Biome `check --write` command, which runs the linter and fixes files.
 
 ```bash title="Terminal"
-npx ultracite format
+npx ultracite fix
 ```
 
 You can also apply unsafe fixes by running:
 
 ```bash title="Terminal"
-npx ultracite format --unsafe
+npx ultracite fix --unsafe
 ```
 
 
 ## Pre-commit hooks
 
-If needed, you can use a Git pre-commit hook that runs `npx ultracite format` to auto-format code before it’s committed. This isn’t as instantaneous as an editor integration, but it ensures consistency.
+If needed, you can use a Git pre-commit hook that runs `npx ultracite fix` to auto-format code before it’s committed. This isn’t as instantaneous as an editor integration, but it ensures consistency.
 
 ```bash title=".git/hooks/pre-commit"
 #!/bin/bash
 echo "Running pre-commit checks..."
 
 # Check for linting errors
-if ! npx ultracite lint; then
+if ! npx ultracite check; then
   echo "Linting errors found. Please fix them before committing."
   exit 1
 fi
 
 # Check for formatting issues
-if ! npx ultracite format; then
+if ! npx ultracite fix; then
   echo "Formatting issues found. Please format your code before committing."
   exit 1
 fi

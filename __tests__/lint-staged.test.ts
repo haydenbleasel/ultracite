@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
+import type { PackageManagerName } from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lintStaged } from '../scripts/lint-staged';
 import { exists } from '../scripts/utils';
@@ -18,7 +19,7 @@ describe('lint-staged configuration', () => {
   const mockExists = vi.mocked(exists);
 
   const defaultConfig = {
-    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
+    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite fix'],
   };
 
   beforeEach(() => {
@@ -75,17 +76,17 @@ describe('lint-staged configuration', () => {
 
   describe('install', () => {
     it('should install lint-staged as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+      const packageManager: PackageManagerName = 'npm';
 
-      lintStaged.install(packageManagerAdd);
+      lintStaged.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('npm install -D lint-staged');
     });
 
     it('should work with different package managers', () => {
-      const packageManagerAdd = 'pnpm add';
+      const packageManager: PackageManagerName = 'pnpm';
 
-      lintStaged.install(packageManagerAdd);
+      lintStaged.install(packageManager);
 
       expect(mockExecSync).toHaveBeenCalledWith('pnpm add -D lint-staged');
     });
@@ -128,7 +129,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should update JSON configuration file', async () => {
@@ -155,7 +156,7 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['*.js']).toEqual(['eslint --fix']);
       expect(
         parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should handle YAML configuration file', async () => {
@@ -190,7 +191,7 @@ describe('lint-staged configuration', () => {
       expect(writtenContent).toContain(
         '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:'
       );
-      expect(writtenContent).toContain('npx ultracite format');
+      expect(writtenContent).toContain('npx ultracite fix');
     });
 
     it('should create fallback config when ESM update fails', async () => {
@@ -277,7 +278,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should create fallback config when no config file exists for update', async () => {
@@ -378,7 +379,7 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['*.css']).toEqual(['prettier --write']);
       expect(
         parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should handle JSONC files with comments in package.json', async () => {
@@ -411,7 +412,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
   });
 });

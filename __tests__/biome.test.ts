@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import packageJson from '../package.json' with { type: 'json' };
-import { biome } from '../scripts/biome';
+import { biome } from '../scripts/files/biome';
 import { exists } from '../scripts/utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];

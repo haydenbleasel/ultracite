@@ -23,7 +23,7 @@ When you initialize Ultracite in your project, it can automatically configure le
 Ultracite's lefthook integration creates a pre-commit hook that runs the following command:
 
 ```bash
-npx ultracite format
+npx ultracite fix
 ```
 
 This command:
@@ -51,7 +51,7 @@ The lefthook integration includes several smart features:
 - Runs `lefthook install` to initialize Git hooks
 
 ### Configuration Management
-- **New Projects**: Creates a new `lefthook.yml` file with the Ultracite format command
+- **New Projects**: Creates a new `lefthook.yml` file with the Ultracite `fix` command
 - **Existing Projects**: Adds the Ultracite command to your existing lefthook configuration, preserving other hooks you may have configured
 
 ### File Structure
@@ -117,7 +117,7 @@ Here's what the `lefthook.yml` configuration looks like:
 ```yaml
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -139,7 +139,7 @@ You can extend this configuration to include additional jobs:
 ```yaml
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"

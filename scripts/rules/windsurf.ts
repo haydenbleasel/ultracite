@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import { rulesFile } from '../docs/lib/rules';
-import { exists } from './utils';
+import { rulesFile } from '../../docs/lib/rules';
+import { exists } from '../utils';
 
 const path = './.windsurf/rules/ultracite.md';
 

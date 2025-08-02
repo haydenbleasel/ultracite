@@ -21,7 +21,7 @@ Covers day-to-day workflows:
 
 - Instant formatting and auto-fix on save via editor integration.  
 - Problems panel & quick-fix light-bulbs in VS Code.  
-- CLI commands: `ultracite lint` (check only) and `ultracite format` (check + write).  
+- CLI commands: `ultracite check` (check only) and `ultracite fix` (check + write).  
 - Example pre-commit script calling the CLI.
 
 ## Configuration  
@@ -59,12 +59,12 @@ Solutions for typical problems:
 - Notes on current Biome limitations (e.g., CSS lint coverage)
 
 ## Husky Integration  
-Shows how `ultracite init` can wire up a Husky pre-commit hook that runs `npx ultracite format` on staged files, ensuring consistent style before every commit.  Details automatic installation, how existing hooks are preserved, and troubleshooting tips (file permissions, skipping hooks).
+Shows how `ultracite init` can wire up a Husky pre-commit hook that runs `npx ultracite fix` on staged files, ensuring consistent style before every commit.  Details automatic installation, how existing hooks are preserved, and troubleshooting tips (file permissions, skipping hooks).
 
 ## lint-staged Integration  
 Describes optional lint-staged setup:
 
-- Creates a config that runs `npx ultracite format` only on staged files for fast commits.  
+- Creates a config that runs `npx ultracite fix` only on staged files for fast commits.  
 - Supports all config file types (`package.json`, `.lintstagedrc.*`, YAML, JS, MJS).  
 - Explains smart merging with existing configs and how to customise patterns.
 
