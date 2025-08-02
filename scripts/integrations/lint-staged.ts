@@ -6,7 +6,7 @@ import { addDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists } from '../utils';
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => {
-  const command = dlxCommand(packageManager, 'ultracite format', { args: [] });
+  const command = dlxCommand(packageManager, 'ultracite fix', { args: [] });
 
   return {
     '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': [command],

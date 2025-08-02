@@ -22,7 +22,7 @@ When you run `npx ultracite init`, if you select the lint-staged option, Ultraci
 2. **Creates or updates** your lint-staged configuration
 3. **Configures the formatter** to run on relevant file types
 
-The default configuration runs `npx ultracite format` on these file types:
+The default configuration runs `npx ultracite fix` on these file types:
 - JavaScript/TypeScript files (`.js`, `.jsx`, `.ts`, `.tsx`)
 - JSON files (`.json`, `.jsonc`)
 - CSS files (`.css`, `.scss`)
@@ -36,7 +36,7 @@ Ultracite's lint-staged integration supports all standard lint-staged configurat
 ```json
 {
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
   }
 }
 ```
@@ -44,28 +44,28 @@ Ultracite's lint-staged integration supports all standard lint-staged configurat
 ### .lintstagedrc.json
 ```json
 {
-  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 }
 ```
 
 ### .lintstagedrc.js (CommonJS)
 ```javascript
 module.exports = {
-  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 };
 ```
 
 ### .lintstagedrc.mjs (ES Modules)
 ```javascript
 export default {
-  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite format"]
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 };
 ```
 
 ### .lintstagedrc.yaml
 ```yaml
 "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
-  - 'npx ultracite format'
+  - 'npx ultracite fix'
 ```
 
 ## Smart Configuration Merging
@@ -83,7 +83,7 @@ This means you can safely run `npx ultracite init` even if you already have lint
 
 1. **Pre-commit Hook**: lint-staged runs before each commit via Husky
 2. **File Detection**: Only staged files matching the patterns are processed
-3. **Format Command**: `npx ultracite format` runs on each matching file
+3. **Format Command**: `npx ultracite fix` runs on each matching file
 4. **Auto-fixing**: Biome automatically fixes issues where possible
 5. **Re-staging**: Fixed files are automatically re-staged for commit
 
@@ -94,10 +94,10 @@ If you need to customize your lint-staged setup, you can modify the configuratio
 ```json
 {
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["npx ultracite format", "npm run test:unit"],
-    "*.{json,jsonc}": ["npx ultracite format"],
-    "*.{css,scss}": ["npx ultracite format", "npm run test:styles"],
-    "*.{md,mdx}": ["npx ultracite format"]
+    "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite fix"],
+    "*.{css,scss}": ["npx ultracite fix", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite fix"]
   }
 }
 ```
@@ -106,8 +106,8 @@ If you need to customize your lint-staged setup, you can modify the configuratio
 
 The lint-staged integration works with Ultracite's command structure:
 
-- **`npx ultracite format`**: Runs Biome with auto-fixing (used by lint-staged)
-- **`npx ultracite lint`**: Runs Biome without auto-fixing (for CI/manual checks)
+- **`npx ultracite fix`**: Runs Biome with auto-fixing (used by lint-staged)
+- **`npx ultracite check`**: Runs Biome without auto-fixing (for CI/manual checks)
 
 ## Troubleshooting
 

@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { addDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists } from '../utils';
 
-const lefthookCommand = 'npx ultracite format';
+const lefthookCommand = 'npx ultracite fix';
 const path = './lefthook.yml';
 
 const lefthookConfig = `pre-commit:

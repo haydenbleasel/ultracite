@@ -58,11 +58,11 @@ Because Biome is extremely fast, even on large projects, running Ultracite's che
 ## Command Line Usage
 
 ```sh
-# Format your code
-npx ultracite format
+# Check your code for linting and formatting issues
+npx ultracite check
 
-# Check for lint issues
-npx ultracite lint
+# Fix your code's linting and formatting issues
+npx ultracite fix
 ```
 
 ## Why Ultracite?

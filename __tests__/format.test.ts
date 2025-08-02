@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { format } from '../scripts/commands/format';
+import { format } from '../scripts/commands/fix';
 
 vi.mock('node:child_process');
 

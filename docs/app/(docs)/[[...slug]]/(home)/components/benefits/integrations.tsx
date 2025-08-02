@@ -9,7 +9,7 @@ const lines = [
   '  ❯ packages / frontend /.lintstagedrc.json — 1 file',
   '    ↓ *.js — no files[SKIPPED]',
   '    ❯ *.{ ts, tsx, js, jsx } — 1 file',
-  '      ⠹ npx ultracite format',
+  '      ⠹ npx ultracite fix',
   '◼ Applying modifications from tasks...',
   '◼ Cleaning up temporary files...',
 ];

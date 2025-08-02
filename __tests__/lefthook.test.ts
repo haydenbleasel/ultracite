@@ -62,14 +62,14 @@ describe('lefthook configuration', () => {
   });
 
   describe('create', () => {
-    it('should create lefthook.yml with ultracite format command', async () => {
+    it('should create lefthook.yml with ultracite fix command', async () => {
       await lefthook.create();
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './lefthook.yml',
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -88,7 +88,7 @@ describe('lefthook configuration', () => {
     it('should not modify config if ultracite command already exists', async () => {
       const existingContent = `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -120,7 +120,7 @@ describe('lefthook configuration', () => {
         './lefthook.yml',
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -148,7 +148,7 @@ describe('lefthook configuration', () => {
         './lefthook.yml',
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -182,7 +182,7 @@ describe('lefthook configuration', () => {
       run: npm run lint
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -206,7 +206,7 @@ pre-commit:
         `
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"

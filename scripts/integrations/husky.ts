@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { addDependency, type PackageManagerName } from 'nypm';
 import { exists } from '../utils';
 
-const huskyCommand = 'npx ultracite format';
+const huskyCommand = 'npx ultracite fix';
 const path = './.husky/pre-commit';
 
 export const husky = {

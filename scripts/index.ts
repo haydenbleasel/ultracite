@@ -3,8 +3,8 @@
 import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
-import { format } from './commands/format';
-import { lint } from './commands/lint';
+import { check } from './commands/check';
+import { fix } from './commands/fix';
 import { initialize } from './initialize';
 import { detectMonorepo } from './utils';
 
@@ -81,24 +81,25 @@ const router = t.router({
       await initialize(input);
     }),
 
-  lint: t.procedure
+  check: t.procedure
     .meta({
-      description: 'Run Biome linter without fixing files',
+      description:
+        'Run Ultracite checks (linting and formatting) without fixing files',
     })
     .input(
       z
         .array(z.string())
         .optional()
         .default([])
-        .describe('specific files to lint')
+        .describe('specific files to check')
     )
     .query(({ input }) => {
-      lint(input);
+      check(input);
     }),
 
-  format: t.procedure
+  fix: t.procedure
     .meta({
-      description: 'Run Biome linter and fixes files',
+      description: 'Run Ultracite fixes (linting and formatting) and fix files',
     })
     .input(
       z.tuple([
@@ -106,7 +107,7 @@ const router = t.router({
           .array(z.string())
           .optional()
           .default([])
-          .describe('specific files to format'),
+          .describe('specific files to fix'),
         z.object({
           unsafe: z.boolean().optional().describe('apply unsafe fixes'),
         }),
@@ -114,7 +115,7 @@ const router = t.router({
     )
     .mutation(({ input }) => {
       const [files, options] = input;
-      format(files, { unsafe: options.unsafe });
+      fix(files, { unsafe: options.unsafe });
     }),
 });
 

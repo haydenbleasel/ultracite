@@ -19,7 +19,7 @@ describe('lint-staged configuration', () => {
   const mockExists = vi.mocked(exists);
 
   const defaultConfig = {
-    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
+    '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite fix'],
   };
 
   beforeEach(() => {
@@ -129,7 +129,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should update JSON configuration file', async () => {
@@ -156,7 +156,7 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['*.js']).toEqual(['eslint --fix']);
       expect(
         parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should handle YAML configuration file', async () => {
@@ -191,7 +191,7 @@ describe('lint-staged configuration', () => {
       expect(writtenContent).toContain(
         '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}:'
       );
-      expect(writtenContent).toContain('npx ultracite format');
+      expect(writtenContent).toContain('npx ultracite fix');
     });
 
     it('should create fallback config when ESM update fails', async () => {
@@ -278,7 +278,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should create fallback config when no config file exists for update', async () => {
@@ -379,7 +379,7 @@ describe('lint-staged configuration', () => {
       expect(parsedContent['*.css']).toEqual(['prettier --write']);
       expect(
         parsedContent['*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}']
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
 
     it('should handle JSONC files with comments in package.json', async () => {
@@ -412,7 +412,7 @@ describe('lint-staged configuration', () => {
         parsedContent['lint-staged'][
           '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}'
         ]
-      ).toEqual(['npx ultracite format']);
+      ).toEqual(['npx ultracite fix']);
     });
   });
 });
