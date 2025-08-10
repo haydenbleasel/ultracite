@@ -12,7 +12,8 @@ const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
 const packageManager = z
   .enum(['pnpm', 'bun', 'yarn', 'npm', 'deno'])
-  .describe('Package manager to use');
+  .describe('Package manager to use')
+  .default('pnpm');
 
 const isMonorepo = z
   .boolean()
@@ -123,7 +124,7 @@ const cli = createCli({
   router,
   name: 'ultracite',
   version: packageJson.version,
-  description: 'Ship code faster and with more confidence.',
+  description: packageJson.description,
 });
 
 if (!process.env.VITEST) {
