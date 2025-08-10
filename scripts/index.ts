@@ -18,8 +18,7 @@ const packageManager = z
 const isMonorepo = z
   .boolean()
   .optional()
-  .describe('Is the project a monorepo?')
-  .default(await detectMonorepo());
+  .describe('Is the project a monorepo?');
 
 const editors = z
   .array(z.enum(['vscode', 'zed']))
@@ -128,5 +127,14 @@ const cli = createCli({
 });
 
 if (!process.env.VITEST) {
-  cli.run();
+  const run = async () => {
+    const isMonorepoResult = await detectMonorepo();
+
+    if (isMonorepoResult) {
+      process.argv.push('--isMonorepo', 'true');
+    }
+
+    cli.run();
+  };
+  run();
 }
