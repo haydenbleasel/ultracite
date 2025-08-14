@@ -1,3 +1,15 @@
+# v5.1.3 (Thu Aug 14 2025)
+
+#### 🐛 Bug Fix
+
+- Upgrade to Biome 2.2.0 [#245](https://github.com/haydenbleasel/ultracite/pull/245) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.2 (Mon Jul 28 2025)
 
 #### 🐛 Bug Fix
