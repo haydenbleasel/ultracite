@@ -237,6 +237,8 @@
         "noSelfAssign": "error",
         // Disallow returning a value from a setter
         "noSetterReturn": "error",
+        // Enforce JSDoc comment lines to start with a single asterisk, except for the first one.
+        "useSingleJsDocAsterisk": "error",
         // Disallow comparison of expressions modifying the string case with non-compliant value.
         "noStringCaseMismatch": "error",
         // Disallow destructuring props inside JSX components in Solid projects.
@@ -279,6 +281,8 @@
         "useJsonImportAttributes": "error",
         // Disallow missing key props in iterators/collection literals.
         "useJsxKeyInIterable": "error",
+        // Enforce the consistent use of the radix argument when using parseInt().
+        "useParseIntRadix": "error",
         // Enforce "for" loop update clause moving the counter in the right direction.
         "useValidForDirection": "error",
         // This rule checks that the result of a typeof expression is compared to a valid value.
@@ -288,14 +292,16 @@
 
         // Disallow the use of dependencies that aren't specified in the package.json.
         "noUndeclaredDependencies": "off",
-        // Enforce file extensions for relative imports.
-        "useImportExtensions": "off",
         // Disallow the use of process global.
         "noProcessGlobal": "off",
         // Forbid the use of Node.js builtin modules.
         "noNodejsModules": "off",
         // Restrict imports of private exports.
         "noPrivateImports": "off",
+        // Enforce file extensions for relative imports.
+        "useImportExtensions": "off",
+        // Prevent the usage of static string literal id attribute on elements.
+        "useUniqueElementIds": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         // Disallow non-standard direction values for linear gradient functions.
@@ -366,10 +372,6 @@
         "useNumericSeparators": "error",
         // Prefer object spread over Object.assign() when constructing new objects.
         "useObjectSpread": "error",
-        // Enforce the consistent use of the radix argument when using parseInt().
-        "useParseIntRadix": "error",
-        // Enforce JSDoc comment lines to start with a single asterisk, except for the first one.
-        "useSingleJsDocAsterisk": "error",
         // Require a description parameter for the Symbol().
         "useSymbolDescription": "error",
 
@@ -392,8 +394,6 @@
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
           }
         },
-        // Prevent the usage of static string literal id attribute on elements.
-        "useUniqueElementIds": "off",
 
         /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
         // Require Promise-like statements to be handled appropriately.
