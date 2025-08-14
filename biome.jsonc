@@ -340,8 +340,6 @@
         "noShadow": "error",
         // Disallow useless backreferences in regular expression literals that always match an empty string.
         "noUselessBackrefInRegex": "error",
-        // Disallow unnecessary escapes in string literals.
-        "noUselessEscapeInString": "error",
         // Disallow the use of useless undefined.
         "noUselessUndefined": "error",
         // Use static Response methods instead of new Response() constructor when possible.
@@ -696,10 +694,16 @@
         "noThenProperty": "error",
         // Prevents the use of the TypeScript directive @ts-ignore.
         "noTsIgnore": "error",
+        // Disallow let or var variables that are read but never assigned.
+        "noUnassignedVariables": "error",
         // Disallow unsafe declaration merging between interfaces and classes.
         "noUnsafeDeclarationMerging": "error",
         // Disallow using unsafe negation.
         "noUnsafeNegation": "error",
+        // Disallow unnecessary escapes in string literals.
+        "noUselessEscapeInString": "error",
+        // Disallow useless backreferences in regular expression literals that always match an empty string.
+        "noUselessRegexBackrefs": "error",
         // Disallow the use of var
         "noVar": "error",
         // Disallow with statements in non-strict contexts.
