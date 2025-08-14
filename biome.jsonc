@@ -227,8 +227,12 @@
         "noNonoctalDecimalEscape": "error",
         // Disallow literal numbers that lose precision
         "noPrecisionLoss": "error",
+        // Disallow assigning to React component props.
+        "noReactPropAssignments": "error",
         // Prevent the usage of the return value of React.render.
         "noRenderReturnValue": "error",
+        // Disallow the use of configured elements.
+        "noRestrictedElements": "error",
         // Disallow assignments where both sides are exactly the same.
         "noSelfAssign": "error",
         // Disallow returning a value from a setter
@@ -282,6 +286,8 @@
         "noUndeclaredDependencies": "off",
         // Enforce file extensions for relative imports.
         "useImportExtensions": "off",
+        // Disallow the use of process global.
+        "noProcessGlobal": "off",
         // Forbid the use of Node.js builtin modules.
         "noNodejsModules": "off",
         // Restrict imports of private exports.
@@ -326,8 +332,6 @@
         "noNoninteractiveElementInteractions": "error",
         // Disallow assigning to React component props.
         "noReactPropAssign": "error",
-        // Disallow the use of configured elements.
-        "noRestrictedElements": "error",
         // Disallow variable declarations from shadowing variables declared in the outer scope.
         "noShadow": "error",
         // Prevents the use of the TypeScript directive @ts-ignore.
@@ -367,8 +371,6 @@
 
         // Disallow destructuring props inside JSX components in Solid projects.
         "noDestructuredProps": "off",
-        // Disallow the use of process global.
-        "noProcessGlobal": "off",
         // Disallow usage of sensitive data such as API keys and tokens.
         "noSecrets": "off",
         // Enforce types in functions, methods, variables, and parameters.
