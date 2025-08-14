@@ -332,8 +332,6 @@
       "nursery": {
         /** ------------------------ JavaScript Rules ------------------------ **/
 
-        // Disallow await inside loops.
-        "noAwaitInLoop": "error",
         // Disallow bitwise operators.
         "noBitwiseOperators": "error",
         // Disallow expressions where the operation doesn't affect the value
@@ -346,8 +344,6 @@
         "noShadow": "error",
         // Prevents the use of the TypeScript directive @ts-ignore.
         "noTsIgnore": "error",
-        // Prevent duplicate polyfills from Polyfill.io.
-        "noUnwantedPolyfillio": "error",
         // Disallow useless backreferences in regular expression literals that always match an empty string.
         "noUselessBackrefInRegex": "error",
         // Disallow unnecessary escapes in string literals.
@@ -416,9 +412,13 @@
         "noImgElement": "error",
         // Disallow the use of namespace imports.
         "noNamespaceImport": "error",
+        // Prevent duplicate polyfills from Polyfill.io.
+        "noUnwantedPolyfillio": "error",
         // Require regex literals to be declared at the top level.
         "useTopLevelRegex": "error",
 
+        // Disallow await inside loops.
+        "noAwaitInLoop": "off",
         // Disallow the use of barrel file.
         "noBarrelFile": "off",
         // Avoid re-export all.
