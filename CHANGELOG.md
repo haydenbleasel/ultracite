@@ -1,3 +1,16 @@
+# v5.1.4 (Thu Aug 14 2025)
+
+#### 🐛 Bug Fix
+
+- Bump trpc-cli from 0.10.0 to 0.10.2 [#238](https://github.com/haydenbleasel/ultracite/pull/238) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump zod from 4.0.5 to 4.0.14 [#239](https://github.com/haydenbleasel/ultracite/pull/239) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v5.1.3 (Thu Aug 14 2025)
 
 #### 🐛 Bug Fix
