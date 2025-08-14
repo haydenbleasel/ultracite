@@ -389,13 +389,7 @@
         // Warn when importing non-existing exports.
         "noUnresolvedImports": "off",
         // Prevent import cycles.
-        "noImportCycles": "off",
-
-        /** ------------------------ CSS Rules ------------------------ **/
-        // Disallow the use of the !important style.
-        "noImportantStyles": "error",
-        // Disallow unknown at-rules.
-        "noUnknownAtRule": "error"
+        "noImportCycles": "off"
       },
       "performance": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -729,8 +723,12 @@
         "noEmptyBlock": "error",
         // Disallow invalid !important within keyframe declarations
         "noImportantInKeyframe": "error",
+        // Disallow the use of the !important style.
+        "noImportantStyles": "error",
         // Disallow shorthand properties that override related longhand properties.
-        "noShorthandPropertyOverrides": "error"
+        "noShorthandPropertyOverrides": "error",
+        // Disallow unknown at-rules.
+        "noUnknownAtRule": "error"
       }
     }
   },
