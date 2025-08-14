@@ -1,3 +1,15 @@
+# v5.1.5 (Thu Aug 14 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update zero-config.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.4 (Thu Aug 14 2025)
 
 #### 🐛 Bug Fix
