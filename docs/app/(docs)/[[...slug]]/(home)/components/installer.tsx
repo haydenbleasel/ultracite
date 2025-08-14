@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
 const command = 'npx ultracite@latest init';
+const COPY_TIMEOUT = 2000;
 
 export const Installer = () => {
   const [copied, setCopied] = useState(false);
@@ -18,7 +19,7 @@ export const Installer = () => {
     track('Copied installer command');
     setTimeout(() => {
       setCopied(false);
-    }, 2000);
+    }, COPY_TIMEOUT);
   };
 
   const Icon = copied ? CheckIcon : CopyIcon;

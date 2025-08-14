@@ -336,12 +336,45 @@
         "noUnmatchableAnbSelector": "error"
       },
       "nursery": {
+        // Disallow Promises to be used in places where they are almost certainly a mistake.
+        "noMisusedPromises": "error",
+        // Prevent client components from being async functions.
+        "noNextAsyncClientComponent": "error",
+        // Disallow non-null assertions after optional chaining expressions.
+        "noNonNullAssertedOptionalChain": "error",
+        // Disallow useVisibleTask$() functions in Qwik components.
+        "noQwikUseVisibleTask": "error",
         // Disallow variable declarations from shadowing variables declared in the outer scope.
         "noShadow": "error",
+        // Disallow unnecessary type-based conditions that can be statically determined as redundant.
+        "noUnnecessaryConditions": "error",
         // Disallow the use of useless undefined.
         "noUselessUndefined": "error",
+        // Enforce that Vue component data options are declared as functions.
+        "noVueDataObjectDeclaration": "error",
+        // Disallow reserved keys in Vue component data and computed properties.
+        "noVueReservedKeys": "error",
+        // Disallow reserved names to be used as props.
+        "noVueReservedProps": "error",
+        // Enforces href attribute for <a> elements.
+        "useAnchorHref": "error",
+        //Enforce type definitions to consistently use either interface or type.
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "type"
+          }
+        },
         // Require switch-case statements to be exhaustive.
         "useExhaustiveSwitchCases": "error",
+        // Enforces that <img> elements have both width and height attributes.
+        "useImageSize": "error",
+        // Enforce a maximum number of parameters in function definitions.
+        "useMaxParams": "error",
+        // Prefer using the class prop as a classlist over the classnames helper.
+        "useQwikClasslist": "error",
+        // Enforce that components are defined as functions and never as classes.
+        "useReactFunctionComponents": "error",
 
         // Disallow usage of sensitive data such as API keys and tokens.
         "noSecrets": "off",
