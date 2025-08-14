@@ -175,6 +175,8 @@
         "useDateNow": "error",
         // Promotes the use of .flatMap() when map().flat() are used together.
         "useFlatMap": "error",
+        // Prefer Array#{indexOf,lastIndexOf}() over Array#{findIndex,findLastIndex}() when looking for the index of an item.
+        "useIndexOf": "error",
         // Enforce the usage of a literal access to properties over computed property access.
         "useLiteralKeys": "error",
         // Disallow parseInt() and Number.parseInt() in favor of binary, octal, and hexadecimal literals
@@ -207,6 +209,8 @@
         "noEmptyCharacterClassInRegex": "error",
         // Disallows empty destructuring patterns.
         "noEmptyPattern": "error",
+        // Disallow the use of __dirname and __filename in the global scope.
+        "noGlobalDirnameFilename": "error",
         // Disallow calling global object properties as functions
         "noGlobalObjectCalls": "error",
         // Disallow function and var declarations that are accessible outside their block.
@@ -217,6 +221,8 @@
         "noInvalidConstructorSuper": "error",
         // Disallow the use of variables and function parameters before their declaration
         "noInvalidUseBeforeDeclaration": "error",
+        // Disallows defining React components inside other components.
+        "noNestedComponentDefinitions": "error",
         // Disallow \8 and \9 escape sequences in string literals.
         "noNonoctalDecimalEscape": "error",
         // Disallow literal numbers that lose precision
@@ -316,10 +322,6 @@
         "noBitwiseOperators": "error",
         // Disallow expressions where the operation doesn't affect the value
         "noConstantBinaryExpression": "error",
-        // Disallow the use of __dirname and __filename in the global scope.
-        "noGlobalDirnameFilename": "error",
-        // Disallows defining React components inside other components.
-        "noNestedComponentDefinitions": "error",
         // Disallow use event handlers on non-interactive elements.
         "noNoninteractiveElementInteractions": "error",
         // Disallow assigning to React component props.
@@ -348,8 +350,6 @@
         "useExhaustiveSwitchCases": "error",
         // Ensure the preconnect attribute is used when using Google Fonts.
         "useGoogleFontPreconnect": "error",
-        // Prefer Array#{indexOf,lastIndexOf}() over Array#{findIndex,findLastIndex}() when looking for the index of an item.
-        "useIndexOf": "error",
         // Enforce consistent return values in iterable callbacks.
         "useIterableCallbackReturn": "error",
         // Enforces the use of with { type: "json" } for JSON module imports.
