@@ -6,7 +6,7 @@ const config = `{
   "extends": ["ultracite"]
 }`;
 
-const ZeroConfig = async () => {
+export const ZeroConfig = async () => {
   const highlightedCode = await codeToHtml(config, {
     lang: 'jsonc',
     theme: 'vesper',
@@ -41,5 +41,3 @@ const ZeroConfig = async () => {
     </div>
   );
 };
-
-export { ZeroConfig };
