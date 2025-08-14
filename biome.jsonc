@@ -358,8 +358,6 @@
         "useConsistentResponse": "error",
         // Require switch-case statements to be exhaustive.
         "useExhaustiveSwitchCases": "error",
-        // Ensure the preconnect attribute is used when using Google Fonts.
-        "useGoogleFontPreconnect": "error",
         // Enforce consistent return values in iterable callbacks.
         "useIterableCallbackReturn": "error",
         // Enforces the use of with { type: "json" } for JSON module imports.
@@ -414,6 +412,8 @@
         "noNamespaceImport": "error",
         // Prevent duplicate polyfills from Polyfill.io.
         "noUnwantedPolyfillio": "error",
+        // Ensure the preconnect attribute is used when using Google Fonts.
+        "useGoogleFontPreconnect": "error",
         // Require regex literals to be declared at the top level.
         "useTopLevelRegex": "error",
 
@@ -422,7 +422,9 @@
         // Disallow the use of barrel file.
         "noBarrelFile": "off",
         // Avoid re-export all.
-        "noReExportAll": "off"
+        "noReExportAll": "off",
+        // Enforce using Solid’s <For /> component for mapping an array to JSX elements.
+        "useSolidForComponent": "off"
       },
       "security": {
         /** ------------------------ JavaScript Rules ------------------------ **/
