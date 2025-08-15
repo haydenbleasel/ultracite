@@ -121,8 +121,6 @@
         "noEmptyTypeParameters": "error",
         // Disallow functions that exceed a given Cognitive Complexity score.
         "noExcessiveCognitiveComplexity": "error",
-        // Restrict the number of lines of code in a function.
-        "noExcessiveLinesPerFunction": "error",
         // This rule enforces a maximum depth to nested describe() in test files.
         "noExcessiveNestedTestSuites": "error",
         // Disallow unnecessary boolean casts
@@ -194,6 +192,9 @@
         // Enforce the use of while loops instead of for loops when the initializer and update expressions are not needed.
         "useWhile": "error",
 
+        // Restrict the number of lines of code in a function.
+        "noExcessiveLinesPerFunction": "off",
+
         /** ------------------------ CSS Rules ------------------------ **/
         // Disallow the use of the !important style.
         "noImportantStyles": "off"
@@ -247,8 +248,6 @@
         "useSingleJsDocAsterisk": "error",
         // Disallow comparison of expressions modifying the string case with non-compliant value.
         "noStringCaseMismatch": "error",
-        // Disallow destructuring props inside JSX components in Solid projects.
-        "noSolidDestructuredProps": "error",
         // Disallow lexical declarations in switch clauses.
         "noSwitchDeclarations": "error",
         // Prevents the usage of variables that haven't been declared inside the document.
@@ -296,6 +295,8 @@
         // Require generator functions to contain yield.
         "useYield": "error",
 
+        // Disallow destructuring props inside JSX components in Solid projects.
+        "noSolidDestructuredProps": "off",
         // Disallow the use of dependencies that aren't specified in the package.json.
         "noUndeclaredDependencies": "off",
         // Disallow the use of process global.
