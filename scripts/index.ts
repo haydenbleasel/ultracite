@@ -21,7 +21,7 @@ const router = t.router({
           .optional()
           .describe('Package manager to use'),
         editors: z
-          .array(z.enum(['vscode', 'zed']))
+          .array(z.enum(['vscode', 'zed', 'none']))
           .optional()
           .describe('Editors to configure'),
         rules: z
@@ -33,12 +33,13 @@ const router = t.router({
               'zed',
               'claude',
               'codex',
+              'none',
             ])
           )
           .optional()
           .describe('Editor rules to enable'),
         features: z
-          .array(z.enum(['husky', 'lefthook', 'lint-staged']))
+          .array(z.enum(['husky', 'lefthook', 'lint-staged', 'none']))
           .optional()
           .describe('Additional features to enable'),
         removePrettier: z
