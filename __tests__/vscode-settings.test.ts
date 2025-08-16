@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { vscode } from '../scripts/editor-config/vscode';
 import { exists } from '../scripts/utils';
-import { vscode } from '../scripts/vscode-settings';
 
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({

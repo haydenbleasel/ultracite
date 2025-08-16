@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 const lintStagedConfig = {
   '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],

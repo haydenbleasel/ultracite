@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { husky } from '../scripts/husky';
+import { husky } from '../scripts/integrations/husky';
 import { exists } from '../scripts/utils';
 
 vi.mock('node:child_process');

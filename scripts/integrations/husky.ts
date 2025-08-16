@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 const huskyCommand = 'npx ultracite format';
 const path = './.husky/pre-commit';

@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { kiro } from '../scripts/kiro';
+import { kiro } from '../scripts/editor-rules/kiro';
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
@@ -29,7 +29,9 @@ describe('kiro configuration', () => {
       const result = await kiro.exists();
 
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith('./.kiro/steering/linting-and-formatting.md');
+      expect(mockExists).toHaveBeenCalledWith(
+        './.kiro/steering/linting-and-formatting.md'
+      );
     });
 
     it('should return false when .kiro/steering/linting-and-formatting.md does not exist', async () => {
@@ -38,7 +40,9 @@ describe('kiro configuration', () => {
       const result = await kiro.exists();
 
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith('./.kiro/steering/linting-and-formatting.md');
+      expect(mockExists).toHaveBeenCalledWith(
+        './.kiro/steering/linting-and-formatting.md'
+      );
     });
   });
 
@@ -46,7 +50,9 @@ describe('kiro configuration', () => {
     it('should create .kiro/steering directory and linting-and-formatting.md with rules content', async () => {
       await kiro.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.kiro/steering/linting-and-formatting.md',
         'mock rules content'
@@ -57,7 +63,9 @@ describe('kiro configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(kiro.create()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', {
+        recursive: true,
+      });
     });
   });
 
@@ -65,7 +73,9 @@ describe('kiro configuration', () => {
     it('should create .kiro/steering directory and update linting-and-formatting.md with rules content', async () => {
       await kiro.update();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', {
+        recursive: true,
+      });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.kiro/steering/linting-and-formatting.md',
         'mock rules content'
@@ -76,7 +86,9 @@ describe('kiro configuration', () => {
       mockMkdir.mockRejectedValueOnce(new Error('Permission denied'));
 
       await expect(kiro.update()).rejects.toThrow('Permission denied');
-      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith('.kiro/steering', {
+        recursive: true,
+      });
     });
   });
 });

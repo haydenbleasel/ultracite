@@ -3,9 +3,9 @@
 import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
-import { format } from './format';
+import { format } from './commands/format';
+import { lint } from './commands/lint';
 import { initialize } from './initialize';
-import { lint } from './lint';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 

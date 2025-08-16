@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { lintStaged } from '../scripts/lint-staged';
+import { lintStaged } from '../scripts/integrations/lint-staged';
 import { exists } from '../scripts/utils';
 
 vi.mock('node:child_process');

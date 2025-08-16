@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
-import { exists } from './utils';
+import { exists } from '../utils';
 
 const lefthookCommand = 'npx ultracite format';
 const path = './lefthook.yml';

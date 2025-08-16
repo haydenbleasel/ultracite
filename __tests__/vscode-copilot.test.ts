@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { vscodeCopilot } from '../scripts/editor-rules/vscode';
 import { exists } from '../scripts/utils';
-import { vscodeCopilot } from '../scripts/vscode-copilot';
 
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
