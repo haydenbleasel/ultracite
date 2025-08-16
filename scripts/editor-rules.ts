@@ -9,7 +9,9 @@ export const createEditorRules = (
   name: (typeof options.editorRules)[number]
 ) => {
   const config = EDITOR_RULES[name];
-  const content = config.content ?? rulesFile;
+  const content = config.header
+    ? `${config.header}\n\n${rulesFile}`
+    : rulesFile;
 
   const ensureDirectory = async () => {
     const dir = dirname(config.path);
@@ -41,11 +43,11 @@ export const createEditorRules = (
         const existingContents = await readFile(config.path, 'utf-8');
 
         // Check if rules are already present to avoid duplicates
-        if (existingContents.includes(content.trim())) {
+        if (existingContents.includes(rulesFile.trim())) {
           return;
         }
 
-        await writeFile(config.path, `${existingContents}\n\n${content}`);
+        await writeFile(config.path, `${existingContents}\n\n${rulesFile}`);
       } else {
         await writeFile(config.path, content);
       }

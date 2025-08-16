@@ -1,9 +1,8 @@
-import { rulesFile } from '../../docs/lib/rules';
 import type { options } from './options';
 
 export type EditorRuleConfig = {
   path: string;
-  content?: string;
+  header?: string;
   appendMode?: boolean;
 };
 
@@ -13,21 +12,17 @@ export const EDITOR_RULES: Record<
 > = {
   'vscode-copilot': {
     path: './.github/copilot-instructions.md',
-    content: `---
+    header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
----
-
-${rulesFile}`,
+---`,
   },
   cursor: {
     path: './.cursor/rules/ultracite.mdc',
-    content: `---
+    header: `---
 description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx}"
 alwaysApply: true
----
-
-${rulesFile}`,
+---`,
   },
   windsurf: {
     path: './.windsurf/rules/ultracite.md',
