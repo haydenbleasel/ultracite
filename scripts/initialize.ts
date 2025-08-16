@@ -23,7 +23,7 @@ import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { tsconfig } from './tsconfig';
-import { type options, title } from './utils';
+import { isMonorepo, type options, title } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
@@ -51,7 +51,10 @@ const installDependencies = async (
 
   if (install) {
     for (const pkg of packages) {
-      await addDevDependency(pkg, { packageManager });
+      await addDevDependency(pkg, {
+        packageManager,
+        workspace: await isMonorepo(),
+      });
     }
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');

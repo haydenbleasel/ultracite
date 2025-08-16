@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
-import { exists } from '../utils';
+import { exists, isMonorepo } from '../utils';
 
 const lefthookCommand = 'npx ultracite format';
 const path = './lefthook.yml';
@@ -23,7 +23,10 @@ const lefthookConfig = `pre-commit:
 export const lefthook = {
   exists: () => exists(path),
   install: async (packageManager: PackageManagerName) => {
-    await addDevDependency('lefthook', { packageManager });
+    await addDevDependency('lefthook', {
+      packageManager,
+      workspace: await isMonorepo(),
+    });
 
     const installCommand = dlxCommand(packageManager, 'lefthook', {
       args: ['install'],

@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
 import { addDevDependency, type PackageManagerName } from 'nypm';
-import { exists } from '../utils';
+import { exists, isMonorepo } from '../utils';
 
 const lintStagedConfig = {
   '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
@@ -260,7 +260,10 @@ export const lintStaged = {
     return false;
   },
   install: async (packageManager: PackageManagerName) => {
-    await addDevDependency('lint-staged', { packageManager });
+    await addDevDependency('lint-staged', {
+      packageManager,
+      workspace: await isMonorepo(),
+    });
   },
   create: async () => {
     await writeFile(

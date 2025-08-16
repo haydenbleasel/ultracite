@@ -25,7 +25,7 @@ export const isMonorepo = async () => {
       return false;
     }
 
-    return !!pkgJson.workspaces;
+    return !!pkgJson.workspaces || !!pkgJson.workspace;
   } catch {
     return false;
   }

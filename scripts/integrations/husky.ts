@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { addDevDependency, type PackageManagerName } from 'nypm';
-import { exists } from '../utils';
+import { exists, isMonorepo } from '../utils';
 
 const huskyCommand = 'npx ultracite format';
 const path = './.husky/pre-commit';
@@ -8,7 +8,10 @@ const path = './.husky/pre-commit';
 export const husky = {
   exists: () => exists(path),
   install: async (packageManager: PackageManagerName) => {
-    await addDevDependency('husky', { packageManager });
+    await addDevDependency('husky', {
+      packageManager,
+      workspace: await isMonorepo(),
+    });
   },
   create: async () => {
     await mkdir('.husky', { recursive: true });
