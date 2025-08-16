@@ -1,5 +1,6 @@
 import { log, select } from '@clack/prompts';
-import { exists, isMonorepo } from './utils';
+import { detectPackageManager } from 'nypm';
+import { isMonorepo } from './utils';
 
 const options = [
   {
@@ -30,36 +31,6 @@ const options = [
 ];
 
 export const packageManager = {
-  get: async () => {
-    const monorepo = await isMonorepo();
-
-    if (monorepo) {
-      log.info(
-        'Monorepo detected, updating install command to include workspace flag'
-      );
-    }
-
-    for (const option of options) {
-      let lockfileExists = false;
-
-      for (const lockfile of option.lockfiles) {
-        // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
-        if (await exists(lockfile)) {
-          lockfileExists = true;
-          break;
-        }
-      }
-
-      if (lockfileExists) {
-        return monorepo && option.monorepoSuffix
-          ? `${option.value} ${option.monorepoSuffix}`
-          : option.value;
-      }
-    }
-
-    return null;
-  },
-
   select: async () => {
     const monorepo = await isMonorepo();
 

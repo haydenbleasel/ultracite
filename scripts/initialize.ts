@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
-import type { PackageManagerName } from 'nypm';
+import { detectPackageManager, type PackageManagerName } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './editor-config/vscode';
@@ -422,31 +422,18 @@ const removeESLint = async (packageManagerAdd: string) => {
   }
 };
 
-const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
-  if (pmFlag) {
-    const option = packageManager.options.find((opt) => opt.label === pmFlag);
-    if (!option) {
-      throw new Error(`Unsupported package manager: ${pmFlag}`);
-    }
-
-    const monorepo = await packageManager.isMonorepo();
-    return monorepo && option.monorepoSuffix
-      ? `${option.value} ${option.monorepoSuffix}`
-      : option.value;
+const getPackageManagerCommand = async (
+  pmFlag: PackageManagerName
+): Promise<string> => {
+  const option = packageManager.options.find((opt) => opt.label === pmFlag);
+  if (!option) {
+    throw new Error(`Unsupported package manager: ${pmFlag}`);
   }
 
-  const detected = await packageManager.get();
-  if (detected) {
-    log.info(`Detected lockfile, using ${detected}`);
-    return detected;
-  }
-
-  const selected = await packageManager.select();
-  if (!selected) {
-    throw new Error('No package manager selected');
-  }
-
-  return selected;
+  const monorepo = await packageManager.isMonorepo();
+  return monorepo && option.monorepoSuffix
+    ? `${option.value} ${option.monorepoSuffix}`
+    : option.value;
 };
 
 export const initialize = async (flags?: InitializeFlags) => {
@@ -454,8 +441,20 @@ export const initialize = async (flags?: InitializeFlags) => {
 
   try {
     const opts = flags ?? {};
+    let { pm } = opts;
 
-    const packageManagerAdd = await getPackageManagerCommand(opts.pm);
+    if (!pm) {
+      const detected = await detectPackageManager(process.cwd());
+
+      if (!detected) {
+        throw new Error('No package manager specified or detected');
+      }
+
+      log.info(`Detected lockfile, using ${detected.name}`);
+      pm = detected.name;
+    }
+
+    const packageManagerAdd = await getPackageManagerCommand(pm);
 
     let shouldRemovePrettier = opts.removePrettier;
     let shouldRemoveEslint = opts.removeEslint;
