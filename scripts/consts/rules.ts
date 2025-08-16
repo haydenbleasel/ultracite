@@ -40,4 +40,34 @@ alwaysApply: true
   kiro: {
     path: './.kiro/steering/linting-and-formatting.md',
   },
+  cline: {
+    path: './.clinerules',
+  },
+  amp: {
+    path: './AGENT.md',
+  },
+  aider: {
+    path: './ruler_aider_instructions.md',
+  },
+  'firebase-studio': {
+    path: './.idx/airules.md',
+  },
+  'open-hands': {
+    path: './.openhands/microagents/repo.md',
+  },
+  'gemini-cli': {
+    path: './GEMINI.md',
+  },
+  junie: {
+    path: './.junie/guidelines.md',
+  },
+  augmentcode: {
+    path: './.augment/rules/ruler_augment_instructions.md',
+  },
+  'kilo-code': {
+    path: './.kilocode/rules/ruler_kilocode_instructions.md',
+  },
+  goose: {
+    path: './.goosehints',
+  },
 } as const;
