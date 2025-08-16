@@ -129,8 +129,6 @@
         "noFlatMapIdentity": "error",
         // Prefer for...of statement instead of Array.forEach.
         "noForEach": "error",
-        // Disallow shorthand type conversions.
-        "noImplicitCoercions": "error",
         // This rule reports when a class has no non-static members, such as for a class used exclusively as a static namespace.
         "noStaticOnlyClass": "error",
         // Disallow this and super in static contexts.
@@ -192,8 +190,10 @@
         // Enforce the use of while loops instead of for loops when the initializer and update expressions are not needed.
         "useWhile": "error",
 
-        // Restrict the number of lines of code in a function.
+        // Restrict the number of lines of code in a function. (disabled because of https://github.com/microsoft/TypeScript/issues/16655)
         "noExcessiveLinesPerFunction": "off",
+        // Disallow shorthand type conversions.
+        "noImplicitCoercions": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         // Disallow the use of the !important style.
