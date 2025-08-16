@@ -29,10 +29,10 @@ const router = t.router({
           .array(z.enum(options.editorRules))
           .optional()
           .describe('Editor rules to enable'),
-        features: z
+        integrations: z
           .array(z.enum(options.integrations))
           .optional()
-          .describe('Additional features to enable'),
+          .describe('Additional integrations to enable'),
         removePrettier: z
           .boolean()
           .optional()

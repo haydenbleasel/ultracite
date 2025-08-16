@@ -29,7 +29,7 @@ vi.mock('../scripts/utils', async () => {
       const { readFile, writeFile } = await import('node:fs/promises');
       const packageJsonContent = await readFile('package.json', 'utf8');
       const packageJsonObject = JSON.parse(packageJsonContent);
-      
+
       const newPackageJsonObject = {
         ...packageJsonObject,
         devDependencies: {
@@ -38,7 +38,7 @@ vi.mock('../scripts/utils', async () => {
         },
         dependencies: { ...packageJsonObject.dependencies, ...dependencies },
       };
-      
+
       await writeFile(
         'package.json',
         JSON.stringify(newPackageJsonObject, null, 2)
@@ -466,7 +466,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['husky'],
+        integrations: ['husky'],
       });
 
       // Should read package.json for husky installation
@@ -492,7 +492,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['lefthook'],
+        integrations: ['lefthook'],
       });
 
       // Should read package.json for lefthook installation
@@ -518,7 +518,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['lint-staged'],
+        integrations: ['lint-staged'],
       });
 
       // Should read package.json for lint-staged installation
@@ -544,7 +544,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['husky', 'lefthook', 'lint-staged'],
+        integrations: ['husky', 'lefthook', 'lint-staged'],
       });
 
       // Should read package.json multiple times for each feature
@@ -585,7 +585,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: false,
-        features: ['husky'],
+        integrations: ['husky'],
       });
 
       // Should run addDevDependency for main installation

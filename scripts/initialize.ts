@@ -26,7 +26,7 @@ type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
   rules?: (typeof options.editorRules)[number][];
-  features?: (typeof options.integrations)[number][];
+  integrations?: (typeof options.integrations)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
@@ -385,8 +385,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       })) as InitializeFlags['rules'];
     }
 
-    let extraFeatures = opts.features;
-    if (extraFeatures === undefined) {
+    let integrations = opts.integrations;
+    if (integrations === undefined) {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
@@ -397,9 +397,9 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.removeEslint !== undefined;
 
       if (hasOtherCliOptions) {
-        extraFeatures = [];
+        integrations = [];
       } else {
-        extraFeatures = (await multiselect({
+        integrations = (await multiselect({
           message: 'Would you like any of the following (optional)?',
           options: [
             { label: 'Husky pre-commit hook', value: 'husky' },
@@ -447,13 +447,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       );
     }
 
-    if (extraFeatures?.includes('husky')) {
+    if (integrations?.includes('husky')) {
       await initializePrecommitHook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lefthook')) {
+    if (integrations?.includes('lefthook')) {
       await initializeLefthook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lint-staged')) {
+    if (integrations?.includes('lint-staged')) {
       await initializeLintStaged(pm, !opts.skipInstall);
     }
 
