@@ -173,13 +173,13 @@ const initializePrecommitHook = async (
 
   if (await husky.exists()) {
     s.message('Pre-commit hook found, updating...');
-    await husky.update();
+    await husky.update(packageManager);
     s.stop('Pre-commit hook updated.');
     return;
   }
 
   s.message('Pre-commit hook not found, creating...');
-  await husky.create();
+  await husky.create(packageManager);
   s.stop('Pre-commit hook created.');
 };
 
