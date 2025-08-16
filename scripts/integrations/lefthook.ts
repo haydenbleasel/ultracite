@@ -3,12 +3,18 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists, isMonorepo } from '../utils';
 
-const lefthookCommand = 'npx ultracite format';
+const createLefthookCommand = (packageManager: PackageManagerName) =>
+  dlxCommand(packageManager, 'lefthook', {
+    args: ['install'],
+  });
+
 const path = './lefthook.yml';
 
-const lefthookConfig = `pre-commit:
+const createLefthookConfig = (
+  packageManager: PackageManagerName
+) => `pre-commit:
   jobs:
-    - run: ${lefthookCommand}
+    - run: ${createLefthookCommand(packageManager)}
       glob: 
         - "*.js"
         - "*.jsx"
@@ -34,11 +40,14 @@ export const lefthook = {
 
     execSync(installCommand);
   },
-  create: async () => {
-    await writeFile(path, lefthookConfig);
+  create: async (packageManager: PackageManagerName) => {
+    const config = createLefthookConfig(packageManager);
+    await writeFile(path, config);
   },
-  update: async () => {
+  update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, 'utf-8');
+    const lefthookCommand = createLefthookCommand(packageManager);
+    const lefthookConfig = createLefthookConfig(packageManager);
 
     // Check if ultracite command is already present
     if (existingContents.includes(lefthookCommand)) {

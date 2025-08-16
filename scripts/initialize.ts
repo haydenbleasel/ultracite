@@ -214,13 +214,13 @@ const initializeLefthook = async (
 
   if (await lefthook.exists()) {
     s.message('lefthook.yml found, updating...');
-    await lefthook.update();
+    await lefthook.update(packageManager);
     s.stop('lefthook.yml updated.');
     return;
   }
 
   s.message('lefthook.yml not found, creating...');
-  await lefthook.create();
+  await lefthook.create(packageManager);
   s.stop('lefthook.yml created.');
 };
 
