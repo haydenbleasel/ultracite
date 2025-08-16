@@ -83,8 +83,8 @@ const router = t.router({
       ])
     )
     .mutation(({ input }) => {
-      const [files, options] = input;
-      format(files, { unsafe: options.unsafe });
+      const [files, opts] = input;
+      format(files, { unsafe: opts.unsafe });
     }),
 });
 
