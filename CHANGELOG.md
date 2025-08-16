@@ -1,3 +1,16 @@
+# v5.1.8 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- More kiro fixes ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix missing Kiro option ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.7 (Fri Aug 15 2025)
 
 #### ⚠️ Pushed to `main`
