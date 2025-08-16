@@ -90,9 +90,9 @@ const router = t.router({
 
 const cli = createCli({
   router,
-  name: 'ultracite',
+  name: packageJson.name,
   version: packageJson.version,
-  description: 'Ship code faster and with more confidence.',
+  description: packageJson.description,
 });
 
 if (!process.env.VITEST) {
