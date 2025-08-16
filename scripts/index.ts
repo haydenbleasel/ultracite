@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { type PackageManagerName, packageManagers } from 'nypm';
 import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
@@ -17,7 +18,7 @@ const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(['pnpm', 'bun', 'yarn', 'npm'])
+          .enum(packageManagers.map((pm) => pm.name) as PackageManagerName[])
           .optional()
           .describe('Package manager to use'),
         editors: z

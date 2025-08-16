@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
+import type { PackageManagerName } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './editor-config/vscode';
@@ -26,7 +27,7 @@ const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
 
 type InitializeFlags = {
-  pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
+  pm?: PackageManagerName;
   editors?: ('vscode' | 'zed')[];
   rules?: (
     | 'vscode-copilot'
