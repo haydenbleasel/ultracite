@@ -58,8 +58,10 @@ const installDependencies = async (
     }
   } else {
     await updatePackageJson({
-      '@biomejs/biome': schemaVersion,
-      ultracite: ultraciteVersion,
+      devDependencies: {
+        '@biomejs/biome': schemaVersion,
+        ultracite: ultraciteVersion,
+      },
     });
   }
 
@@ -142,7 +144,9 @@ const initializePrecommitHook = async (
   if (install) {
     await husky.install(packageManager);
   } else {
-    await updatePackageJson({ husky: 'latest' });
+    await updatePackageJson({
+      devDependencies: { husky: 'latest' },
+    });
   }
 
   if (await husky.exists()) {
@@ -169,7 +173,9 @@ const initializeLefthook = async (
   if (install) {
     await lefthook.install(packageManager);
   } else {
-    await updatePackageJson({ lefthook: 'latest' });
+    await updatePackageJson({
+      devDependencies: { lefthook: 'latest' },
+    });
   }
 
   if (await lefthook.exists()) {
@@ -196,7 +202,9 @@ const initializeLintStaged = async (
   if (install) {
     await lintStaged.install(packageManager);
   } else {
-    await updatePackageJson({ 'lint-staged': 'latest' });
+    await updatePackageJson({
+      devDependencies: { 'lint-staged': 'latest' },
+    });
   }
 
   if (await lintStaged.exists()) {

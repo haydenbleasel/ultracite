@@ -57,9 +57,13 @@ export const options = {
   integrations: ['husky', 'lefthook', 'lint-staged'],
 };
 
-export const updatePackageJson = async (
-  dependencies: Record<string, string>
-) => {
+export const updatePackageJson = async ({
+  dependencies,
+  devDependencies,
+}: {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+}) => {
   const packageJsonContent = await readFile('package.json', 'utf8');
   const packageJsonObject = JSON.parse(packageJsonContent);
 
@@ -67,8 +71,9 @@ export const updatePackageJson = async (
     ...packageJsonObject,
     devDependencies: {
       ...packageJsonObject.devDependencies,
-      ...dependencies,
+      ...devDependencies,
     },
+    dependencies: { ...packageJsonObject.dependencies, ...dependencies },
   };
 
   await writeFile(

@@ -19,7 +19,33 @@ vi.mock('node:process', () => ({
   },
 }));
 vi.mock('@clack/prompts');
-vi.mock('../scripts/utils');
+vi.mock('../scripts/utils', async () => {
+  const actual = await vi.importActual('../scripts/utils');
+  return {
+    ...actual,
+    exists: vi.fn(),
+    isMonorepo: vi.fn(),
+    updatePackageJson: vi.fn(async ({ dependencies, devDependencies }) => {
+      const { readFile, writeFile } = await import('node:fs/promises');
+      const packageJsonContent = await readFile('package.json', 'utf8');
+      const packageJsonObject = JSON.parse(packageJsonContent);
+      
+      const newPackageJsonObject = {
+        ...packageJsonObject,
+        devDependencies: {
+          ...packageJsonObject.devDependencies,
+          ...devDependencies,
+        },
+        dependencies: { ...packageJsonObject.dependencies, ...dependencies },
+      };
+      
+      await writeFile(
+        'package.json',
+        JSON.stringify(newPackageJsonObject, null, 2)
+      );
+    }),
+  };
+});
 vi.mock('../scripts/biome');
 vi.mock('../scripts/integrations/husky');
 vi.mock('../scripts/integrations/lefthook');
@@ -425,8 +451,9 @@ describe('initialize command', () => {
             devDependencies: {
               typescript: '^5.0.0',
               '@biomejs/biome': schemaVersion,
-              ultracite: `^${ultraciteVersion}`,
+              ultracite: ultraciteVersion,
             },
+            dependencies: {},
           },
           null,
           2
