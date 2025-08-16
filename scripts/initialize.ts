@@ -21,24 +21,16 @@ import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { packageManager } from './package-manager';
 import { tsconfig } from './tsconfig';
-import { title } from './utils';
+import { type options, title } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
 
 type InitializeFlags = {
   pm?: PackageManagerName;
-  editors?: ('vscode' | 'zed')[];
-  rules?: (
-    | 'vscode-copilot'
-    | 'cursor'
-    | 'windsurf'
-    | 'zed'
-    | 'claude'
-    | 'codex'
-    | 'kiro'
-  )[];
-  features?: ('husky' | 'lefthook' | 'lint-staged')[];
+  editors?: (typeof options.editorConfigs)[number][];
+  rules?: (typeof options.editorRules)[number][];
+  features?: (typeof options.integrations)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;

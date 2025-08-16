@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { type PackageManagerName, packageManagers } from 'nypm';
 import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
 import { format } from './commands/format';
 import { lint } from './commands/lint';
 import { initialize } from './initialize';
+import { options } from './utils';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
@@ -18,29 +18,19 @@ const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(packageManagers.map((pm) => pm.name) as PackageManagerName[])
+          .enum(options.packageManagers)
           .optional()
           .describe('Package manager to use'),
         editors: z
-          .array(z.enum(['vscode', 'zed']))
+          .array(z.enum(options.editorConfigs))
           .optional()
           .describe('Editors to configure'),
         rules: z
-          .array(
-            z.enum([
-              'vscode-copilot',
-              'cursor',
-              'windsurf',
-              'zed',
-              'claude',
-              'codex',
-              'kiro',
-            ])
-          )
+          .array(z.enum(options.editorRules))
           .optional()
           .describe('Editor rules to enable'),
         features: z
-          .array(z.enum(['husky', 'lefthook', 'lint-staged']))
+          .array(z.enum(options.integrations))
           .optional()
           .describe('Additional features to enable'),
         removePrettier: z
