@@ -1,4 +1,4 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
 import { type PackageManagerName, packageManagers } from 'nypm';
 
@@ -55,4 +55,24 @@ export const options = {
     'kiro',
   ],
   integrations: ['husky', 'lefthook', 'lint-staged'],
+};
+
+export const updatePackageJson = async (
+  dependencies: Record<string, string>
+) => {
+  const packageJsonContent = await readFile('package.json', 'utf8');
+  const packageJsonObject = JSON.parse(packageJsonContent);
+
+  const newPackageJsonObject = {
+    ...packageJsonObject,
+    devDependencies: {
+      ...packageJsonObject.devDependencies,
+      ...dependencies,
+    },
+  };
+
+  await writeFile(
+    'package.json',
+    JSON.stringify(newPackageJsonObject, null, 2)
+  );
 };

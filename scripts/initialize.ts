@@ -23,7 +23,7 @@ import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { tsconfig } from './tsconfig';
-import { isMonorepo, type options, title } from './utils';
+import { isMonorepo, type options, title, updatePackageJson } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
@@ -57,22 +57,10 @@ const installDependencies = async (
       });
     }
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        '@biomejs/biome': schemaVersion,
-        ultracite: `^${ultraciteVersion}`,
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({
+      '@biomejs/biome': schemaVersion,
+      ultracite: ultraciteVersion,
+    });
   }
 
   s.stop('Dependencies installed.');
@@ -154,21 +142,7 @@ const initializePrecommitHook = async (
   if (install) {
     await husky.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        husky: 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({ husky: 'latest' });
   }
 
   if (await husky.exists()) {
@@ -195,21 +169,7 @@ const initializeLefthook = async (
   if (install) {
     await lefthook.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        lefthook: 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({ lefthook: 'latest' });
   }
 
   if (await lefthook.exists()) {
@@ -236,21 +196,7 @@ const initializeLintStaged = async (
   if (install) {
     await lintStaged.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        'lint-staged': 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({ 'lint-staged': 'latest' });
   }
 
   if (await lintStaged.exists()) {
