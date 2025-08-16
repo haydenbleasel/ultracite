@@ -1,3 +1,18 @@
+# v5.1.9 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
+- Improve file organization ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #233 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #247 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.8 (Sat Aug 16 2025)
 
 #### ⚠️ Pushed to `main`
