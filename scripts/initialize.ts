@@ -140,7 +140,7 @@ const upsertBiomeConfig = async () => {
 };
 
 const initializePrecommitHook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -149,7 +149,7 @@ const initializePrecommitHook = async (
   s.message('Installing Husky...');
 
   if (install) {
-    husky.install(packageManagerAdd);
+    husky.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -596,7 +596,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (extraFeatures?.includes('husky')) {
-      await initializePrecommitHook(packageManagerAdd, !opts.skipInstall);
+      await initializePrecommitHook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lefthook')) {
       await initializeLefthook(packageManagerAdd, !opts.skipInstall);
