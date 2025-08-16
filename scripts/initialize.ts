@@ -390,17 +390,17 @@ const removePrettier = async (pm: PackageManagerName) => {
     }
 
     s.stop('Prettier removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove Prettier completely, but continuing...');
   }
 };
 
-const removeESLint = async (packageManagerAdd: string) => {
+const removeESLint = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing ESLint dependencies and configuration...');
 
   try {
-    const result = await eslintCleanup.remove(packageManagerAdd);
+    const result = await eslintCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -417,23 +417,9 @@ const removeESLint = async (packageManagerAdd: string) => {
     }
 
     s.stop('ESLint removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove ESLint completely, but continuing...');
   }
-};
-
-const getPackageManagerCommand = async (
-  pmFlag: PackageManagerName
-): Promise<string> => {
-  const option = packageManager.options.find((opt) => opt.label === pmFlag);
-  if (!option) {
-    throw new Error(`Unsupported package manager: ${pmFlag}`);
-  }
-
-  const monorepo = await packageManager.isMonorepo();
-  return monorepo && option.monorepoSuffix
-    ? `${option.value} ${option.monorepoSuffix}`
-    : option.value;
 };
 
 export const initialize = async (flags?: InitializeFlags) => {
@@ -566,7 +552,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await removePrettier(pm);
     }
     if (shouldRemoveEslint) {
-      await removeESLint(packageManagerAdd);
+      await removeESLint(pm);
     }
 
     await installDependencies(packageManagerAdd, !opts.skipInstall);

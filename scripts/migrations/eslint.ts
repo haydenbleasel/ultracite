@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
+import { type PackageManagerName, removeDependency } from 'nypm';
 import { exists } from '../utils';
 
 // Common ESLint configuration files
@@ -47,17 +48,19 @@ const detectESLintPackages = async (): Promise<string[]> => {
   }
 };
 
-const removeESLintDependencies = (
-  packageManagerRemove: string,
+const removeESLintDependencies = async (
+  packageManager: PackageManagerName,
   packages: string[]
 ) => {
-  if (packages.length === 0) return;
-
-  const packageList = packages.join(' ');
+  if (packages.length === 0) {
+    return;
+  }
 
   try {
-    execSync(`${packageManagerRemove} ${packageList}`, { stdio: 'pipe' });
-  } catch (error) {
+    for (const pkg of packages) {
+      await removeDependency(pkg, { packageManager });
+    }
+  } catch (_error) {
     // Silently handle errors - dependencies might already be removed
   }
 };
@@ -161,49 +164,34 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 const hasESLint = async (): Promise<boolean> => {
   // Check for dependencies
   const packages = await detectESLintPackages();
-  if (packages.length > 0) return true;
+  if (packages.length > 0) {
+    return true;
+  }
 
   // Check for config files
   for (const file of eslintConfigFiles) {
-    if (await exists(file)) return true;
+    if (await exists(file)) {
+      return true;
+    }
   }
 
   return false;
-};
-
-const getPackageManagerRemove = (packageManagerAdd: string): string => {
-  if (packageManagerAdd.startsWith('npm')) {
-    return 'npm uninstall';
-  }
-  if (packageManagerAdd.startsWith('yarn')) {
-    return 'yarn remove';
-  }
-  if (packageManagerAdd.startsWith('pnpm')) {
-    return 'pnpm remove';
-  }
-  if (packageManagerAdd.startsWith('bun')) {
-    return 'bun remove';
-  }
-
-  // Default fallback
-  return 'npm uninstall';
 };
 
 export const eslintCleanup = {
   hasESLint,
 
   remove: async (
-    packageManagerAdd: string
+    pm: PackageManagerName
   ): Promise<{
     packagesRemoved: string[];
     filesRemoved: string[];
     vsCodeCleaned: boolean;
   }> => {
     const packages = await detectESLintPackages();
-    const packageManagerRemove = getPackageManagerRemove(packageManagerAdd);
 
     // Remove dependencies
-    removeESLintDependencies(packageManagerRemove, packages);
+    removeESLintDependencies(pm, packages);
 
     // Remove config files
     const filesRemoved = await removeESLintConfigFiles();
