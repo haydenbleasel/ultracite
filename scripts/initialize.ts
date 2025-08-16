@@ -181,7 +181,7 @@ const initializePrecommitHook = async (
 };
 
 const initializeLefthook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -190,7 +190,7 @@ const initializeLefthook = async (
   s.message('Installing lefthook...');
 
   if (install) {
-    lefthook.install(packageManagerAdd);
+    lefthook.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -599,7 +599,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await initializePrecommitHook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lefthook')) {
-      await initializeLefthook(packageManagerAdd, !opts.skipInstall);
+      await initializeLefthook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lint-staged')) {
       await initializeLintStaged(packageManagerAdd, !opts.skipInstall);

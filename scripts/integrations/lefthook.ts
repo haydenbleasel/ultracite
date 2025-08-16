@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
+import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists } from '../utils';
 
 const lefthookCommand = 'npx ultracite format';
@@ -21,9 +22,14 @@ const lefthookConfig = `pre-commit:
 
 export const lefthook = {
   exists: () => exists(path),
-  install: (packageManagerAdd: string) => {
-    execSync(`${packageManagerAdd} -D lefthook`);
-    execSync('npx lefthook install');
+  install: async (packageManager: PackageManagerName) => {
+    await addDevDependency('lefthook', { packageManager });
+
+    const installCommand = dlxCommand(packageManager, 'lefthook', {
+      args: ['install'],
+    });
+
+    execSync(installCommand);
   },
   create: async () => {
     await writeFile(path, lefthookConfig);
