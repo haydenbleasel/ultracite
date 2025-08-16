@@ -29,7 +29,7 @@ vi.mock('../scripts/utils', async () => {
       const { readFile, writeFile } = await import('node:fs/promises');
       const packageJsonContent = await readFile('package.json', 'utf8');
       const packageJsonObject = JSON.parse(packageJsonContent);
-      
+
       const newPackageJsonObject = {
         ...packageJsonObject,
         devDependencies: {
@@ -38,7 +38,7 @@ vi.mock('../scripts/utils', async () => {
         },
         dependencies: { ...packageJsonObject.dependencies, ...dependencies },
       };
-      
+
       await writeFile(
         'package.json',
         JSON.stringify(newPackageJsonObject, null, 2)
@@ -53,13 +53,13 @@ vi.mock('../scripts/integrations/lint-staged');
 vi.mock('../scripts/tsconfig');
 vi.mock('../scripts/editor-config/vscode');
 vi.mock('../scripts/editor-config/zed');
-vi.mock('../scripts/editor-rules/cursor');
-vi.mock('../scripts/editor-rules/windsurf');
-vi.mock('../scripts/editor-rules/vscode');
-vi.mock('../scripts/editor-rules/zed');
-vi.mock('../scripts/editor-rules/claude');
-vi.mock('../scripts/editor-rules/codex');
-vi.mock('../scripts/editor-rules/kiro');
+vi.mock('../scripts/editor-rules', () => ({
+  createEditorRules: vi.fn(() => ({
+    exists: vi.fn(() => Promise.resolve(false)),
+    create: vi.fn(() => Promise.resolve()),
+    update: vi.fn(() => Promise.resolve()),
+  })),
+}));
 vi.mock('../scripts/migrations/eslint');
 vi.mock('../scripts/migrations/prettier');
 
@@ -71,12 +71,7 @@ describe('initialize command', () => {
   const mockWriteFile = vi.mocked(writeFile);
   const mockIntro = vi.mocked(intro);
   const mockMultiselect = vi.mocked(multiselect);
-  const mockLog = {
-    info: vi.fn(),
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-  };
+  const mockLog = vi.mocked(log);
   const mockSpinner = vi.mocked(spinner);
   const mockExists = vi.mocked(exists);
   const mockIsMonorepo = vi.mocked(isMonorepo);
@@ -471,7 +466,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['husky'],
+        integrations: ['husky'],
       });
 
       // Should read package.json for husky installation
@@ -497,7 +492,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['lefthook'],
+        integrations: ['lefthook'],
       });
 
       // Should read package.json for lefthook installation
@@ -523,7 +518,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['lint-staged'],
+        integrations: ['lint-staged'],
       });
 
       // Should read package.json for lint-staged installation
@@ -549,7 +544,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: true,
-        features: ['husky', 'lefthook', 'lint-staged'],
+        integrations: ['husky', 'lefthook', 'lint-staged'],
       });
 
       // Should read package.json multiple times for each feature
@@ -590,7 +585,7 @@ describe('initialize command', () => {
       await initialize({
         pm: 'pnpm',
         skipInstall: false,
-        features: ['husky'],
+        integrations: ['husky'],
       });
 
       // Should run addDevDependency for main installation

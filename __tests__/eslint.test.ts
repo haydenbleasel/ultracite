@@ -1,6 +1,6 @@
 import { readFile, unlink, writeFile } from 'node:fs/promises';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as nypm from 'nypm';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { eslintCleanup } from '../scripts/migrations/eslint';
 import { exists } from '../scripts/utils';
 
@@ -130,9 +130,12 @@ describe('eslint-cleanup', () => {
       expect(mockRemoveDependency).toHaveBeenCalledWith('eslint', {
         packageManager: 'npm',
       });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('@typescript-eslint/parser', {
-        packageManager: 'npm',
-      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        '@typescript-eslint/parser',
+        {
+          packageManager: 'npm',
+        }
+      );
       expect(mockUnlink).toHaveBeenCalledWith('.eslintrc.js');
       expect(mockUnlink).toHaveBeenCalledWith('.eslintignore');
     });
@@ -171,15 +174,21 @@ describe('eslint-cleanup', () => {
       expect(mockRemoveDependency).toHaveBeenCalledWith('eslint', {
         packageManager: 'npm',
       });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-github', {
-        packageManager: 'npm',
-      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        'eslint-plugin-github',
+        {
+          packageManager: 'npm',
+        }
+      );
       expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-config-fbjs', {
         packageManager: 'npm',
       });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('@typescript-eslint/parser', {
-        packageManager: 'npm',
-      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        '@typescript-eslint/parser',
+        {
+          packageManager: 'npm',
+        }
+      );
     });
 
     it('should handle different package managers', async () => {

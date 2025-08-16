@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as nypm from 'nypm';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lintStaged } from '../scripts/integrations/lint-staged';
 import { exists, isMonorepo } from '../scripts/utils';
 
@@ -103,7 +103,7 @@ describe('lint-staged configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      
+
       // Test with pnpm
       await lintStaged.install('pnpm');
       expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {

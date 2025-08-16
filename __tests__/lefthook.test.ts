@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as nypm from 'nypm';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lefthook } from '../scripts/integrations/lefthook';
 import { exists, isMonorepo } from '../scripts/utils';
 
@@ -81,7 +81,7 @@ describe('lefthook configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      
+
       // Test with yarn
       await lefthook.install('yarn');
       expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
@@ -112,7 +112,9 @@ describe('lefthook configuration', () => {
         packageManager: 'deno',
         workspace: false,
       });
-      expect(mockExecSync).toHaveBeenCalledWith('deno run -A npm:lefthook install');
+      expect(mockExecSync).toHaveBeenCalledWith(
+        'deno run -A npm:lefthook install'
+      );
     });
   });
 

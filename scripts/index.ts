@@ -5,8 +5,8 @@ import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
 import { format } from './commands/format';
 import { lint } from './commands/lint';
+import { options } from './consts/options';
 import { initialize } from './initialize';
-import { options } from './utils';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
@@ -29,10 +29,10 @@ const router = t.router({
           .array(z.enum(options.editorRules))
           .optional()
           .describe('Editor rules to enable'),
-        features: z
+        integrations: z
           .array(z.enum(options.integrations))
           .optional()
-          .describe('Additional features to enable'),
+          .describe('Additional integrations to enable'),
         removePrettier: z
           .boolean()
           .optional()

@@ -1,4 +1,3 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
 import {
@@ -8,22 +7,17 @@ import {
 } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
+import type { options } from './consts/options';
 import { vscode } from './editor-config/vscode';
 import { zed } from './editor-config/zed';
-import { claude } from './editor-rules/claude';
-import { codex } from './editor-rules/codex';
-import { cursor } from './editor-rules/cursor';
-import { kiro } from './editor-rules/kiro';
-import { vscodeCopilot } from './editor-rules/vscode';
-import { windsurf } from './editor-rules/windsurf';
-import { zedCopilot } from './editor-rules/zed';
+import { createEditorRules } from './editor-rules';
 import { husky } from './integrations/husky';
 import { lefthook } from './integrations/lefthook';
 import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { tsconfig } from './tsconfig';
-import { isMonorepo, type options, title, updatePackageJson } from './utils';
+import { isMonorepo, title, updatePackageJson } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
@@ -32,7 +26,7 @@ type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
   rules?: (typeof options.editorRules)[number][];
-  features?: (typeof options.integrations)[number][];
+  integrations?: (typeof options.integrations)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
@@ -219,116 +213,25 @@ const initializeLintStaged = async (
   s.stop('lint-staged created.');
 };
 
-const upsertVSCodeCopilotRules = async () => {
+const upsertEditorRules = async (
+  name: (typeof options.editorRules)[number],
+  displayName: string
+) => {
   const s = spinner();
-  s.start('Checking for GitHub Copilot rules...');
+  s.start(`Checking for ${displayName}...`);
 
-  if (await vscodeCopilot.exists()) {
-    s.message('GitHub Copilot rules found, updating...');
-    await vscodeCopilot.update();
-    s.stop('GitHub Copilot rules updated.');
+  const rules = createEditorRules(name);
+
+  if (await rules.exists()) {
+    s.message(`${displayName} found, updating...`);
+    await rules.update();
+    s.stop(`${displayName} updated.`);
     return;
   }
 
-  s.message('GitHub Copilot rules not found, creating...');
-  await vscodeCopilot.create();
-  s.stop('GitHub Copilot rules created.');
-};
-
-const upsertCursorRules = async () => {
-  const s = spinner();
-  s.start('Checking for Cursor rules...');
-
-  if (await cursor.exists()) {
-    s.message('Cursor rules found, updating...');
-    await cursor.update();
-    s.stop('Cursor rules updated.');
-    return;
-  }
-
-  s.message('Cursor rules not found, creating...');
-  await cursor.create();
-  s.stop('Cursor rules created.');
-};
-
-const upsertWindsurfRules = async () => {
-  const s = spinner();
-  s.start('Checking for Windsurf rules...');
-
-  if (await windsurf.exists()) {
-    s.message('Windsurf rules found, updating...');
-    await windsurf.update();
-    s.stop('Windsurf rules updated.');
-    return;
-  }
-
-  s.message('Windsurf rules not found, creating...');
-  await windsurf.create();
-  s.stop('Windsurf rules created.');
-};
-
-const upsertZedRules = async () => {
-  const s = spinner();
-  s.start('Checking for Zed rules...');
-
-  if (await zedCopilot.exists()) {
-    s.message('Zed rules found, updating...');
-    await zedCopilot.update();
-    s.stop('Zed rules updated.');
-    return;
-  }
-
-  s.message('Zed rules not found, creating...');
-  await zedCopilot.create();
-  s.stop('Zed rules created.');
-};
-
-const upsertClaudeRules = async () => {
-  const s = spinner();
-  s.start('Checking for Claude Code rules...');
-
-  if (await claude.exists()) {
-    s.message('Claude Code rules found, updating...');
-    await claude.update();
-    s.stop('Claude Code rules updated.');
-    return;
-  }
-
-  s.message('Claude Code rules not found, creating...');
-  await claude.create();
-  s.stop('Claude Code rules created.');
-};
-
-const upsertCodexRules = async () => {
-  const s = spinner();
-  s.start('Checking for OpenAI Codex rules...');
-
-  if (await codex.exists()) {
-    s.message('OpenAI Codex rules found, updating...');
-    await codex.update();
-    s.stop('OpenAI Codex rules updated.');
-    return;
-  }
-
-  s.message('OpenAI Codex rules not found, creating...');
-  await codex.create();
-  s.stop('OpenAI Codex rules created.');
-};
-
-const upsertKiroRules = async () => {
-  const s = spinner();
-  s.start('Checking for Kiro IDE steering files...');
-
-  if (await kiro.exists()) {
-    s.message('Kiro IDE steering files found, updating...');
-    await kiro.update();
-    s.stop('Kiro IDE steering files updated.');
-    return;
-  }
-
-  s.message('Kiro IDE steering files not found, creating...');
-  await kiro.create();
-  s.stop('Kiro IDE steering files created.');
+  s.message(`${displayName} not found, creating...`);
+  await rules.create();
+  s.stop(`${displayName} created.`);
 };
 
 const removePrettier = async (pm: PackageManagerName) => {
@@ -469,24 +372,43 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let editorRules = opts.rules;
+
+    const editorRulesOptions: Record<
+      (typeof options.editorRules)[number],
+      string
+    > = {
+      'vscode-copilot': 'GitHub Copilot (VSCode)',
+      cursor: 'Cursor',
+      windsurf: 'Windsurf',
+      zed: 'Zed',
+      claude: 'Claude Code',
+      codex: 'OpenAI Codex / Jules / OpenCode',
+      kiro: 'Kiro IDE',
+      cline: 'Cline',
+      amp: 'AMP',
+      aider: 'Aider',
+      'firebase-studio': 'Firebase Studio',
+      'open-hands': 'Open Hands',
+      'gemini-cli': 'Gemini CLI',
+      junie: 'Junie',
+      augmentcode: 'Augment Code',
+      'kilo-code': 'Kilo Code',
+      goose: 'Goose',
+    };
+
     if (!editorRules) {
       editorRules = (await multiselect({
         message: 'Which editor rules do you want to enable (optional)?',
-        options: [
-          { label: 'GitHub Copilot (VSCode)', value: 'vscode-copilot' },
-          { label: 'Cursor', value: 'cursor' },
-          { label: 'Windsurf', value: 'windsurf' },
-          { label: 'Zed', value: 'zed' },
-          { label: 'Claude Code', value: 'claude' },
-          { label: 'OpenAI Codex', value: 'codex' },
-          { label: 'Kiro IDE', value: 'kiro' },
-        ],
+        options: Object.entries(editorRulesOptions).map(([value, label]) => ({
+          value,
+          label,
+        })),
         required: false,
       })) as InitializeFlags['rules'];
     }
 
-    let extraFeatures = opts.features;
-    if (extraFeatures === undefined) {
+    let integrations = opts.integrations;
+    if (integrations === undefined) {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
@@ -497,9 +419,9 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.removeEslint !== undefined;
 
       if (hasOtherCliOptions) {
-        extraFeatures = [];
+        integrations = [];
       } else {
-        extraFeatures = (await multiselect({
+        integrations = (await multiselect({
           message: 'Would you like any of the following (optional)?',
           options: [
             { label: 'Husky pre-commit hook', value: 'husky' },
@@ -530,35 +452,17 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    if (editorRules?.includes('vscode-copilot')) {
-      await upsertVSCodeCopilotRules();
-    }
-    if (editorRules?.includes('cursor')) {
-      await upsertCursorRules();
-    }
-    if (editorRules?.includes('windsurf')) {
-      await upsertWindsurfRules();
-    }
-    if (editorRules?.includes('zed')) {
-      await upsertZedRules();
-    }
-    if (editorRules?.includes('claude')) {
-      await upsertClaudeRules();
-    }
-    if (editorRules?.includes('codex')) {
-      await upsertCodexRules();
-    }
-    if (editorRules?.includes('kiro')) {
-      await upsertKiroRules();
+    for (const ruleName of editorRules ?? []) {
+      await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
     }
 
-    if (extraFeatures?.includes('husky')) {
+    if (integrations?.includes('husky')) {
       await initializePrecommitHook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lefthook')) {
+    if (integrations?.includes('lefthook')) {
       await initializeLefthook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lint-staged')) {
+    if (integrations?.includes('lint-staged')) {
       await initializeLintStaged(pm, !opts.skipInstall);
     }
 

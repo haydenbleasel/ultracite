@@ -57,10 +57,10 @@ function createTestRouter() {
             )
             .optional()
             .describe('Editor rules to enable'),
-          features: z
+          integrations: z
             .array(z.enum(['husky', 'lefthook', 'lint-staged']))
             .optional()
-            .describe('Additional features to enable'),
+            .describe('Additional integrations to enable'),
           removePrettier: z
             .boolean()
             .optional()
@@ -128,7 +128,7 @@ describe('CLI Router', () => {
         pm: 'pnpm' as const,
         editors: ['vscode' as const],
         rules: ['cursor' as const],
-        features: ['husky' as const],
+        integrations: ['husky' as const],
         removePrettier: true,
         removeEslint: false,
       };
@@ -168,11 +168,11 @@ describe('CLI Router', () => {
       ).rejects.toThrow();
     });
 
-    it('should validate features array', async () => {
+    it('should validate integrations array', async () => {
       const caller = router.createCaller({});
 
       await expect(
-        caller.init({ features: ['invalid'] as never })
+        caller.init({ integrations: ['invalid'] as never })
       ).rejects.toThrow();
     });
   });
