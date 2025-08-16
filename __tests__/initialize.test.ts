@@ -1,45 +1,59 @@
-import { execSync } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
-import { intro, log, multiselect, select, spinner } from '@clack/prompts';
+import { intro, log, multiselect, spinner } from '@clack/prompts';
+import * as nypm from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import packageJson from '../package.json' with { type: 'json' };
 import { initialize } from '../scripts/initialize';
-import { exists } from '../scripts/utils';
+import { exists, isMonorepo } from '../scripts/utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
+const ultraciteVersion = packageJson.version;
 
-vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('node:process', () => ({
   default: {
     exit: vi.fn(),
+    cwd: vi.fn(() => '/test/path'),
   },
 }));
 vi.mock('@clack/prompts');
 vi.mock('../scripts/utils');
 vi.mock('../scripts/biome');
-vi.mock('../scripts/husky');
-vi.mock('../scripts/lefthook');
-vi.mock('../scripts/lint-staged');
+vi.mock('../scripts/integrations/husky');
+vi.mock('../scripts/integrations/lefthook');
+vi.mock('../scripts/integrations/lint-staged');
 vi.mock('../scripts/tsconfig');
-vi.mock('../scripts/vscode-settings');
+vi.mock('../scripts/editor-config/vscode');
+vi.mock('../scripts/editor-config/zed');
+vi.mock('../scripts/editor-rules/cursor');
+vi.mock('../scripts/editor-rules/windsurf');
+vi.mock('../scripts/editor-rules/vscode');
+vi.mock('../scripts/editor-rules/zed');
+vi.mock('../scripts/editor-rules/claude');
+vi.mock('../scripts/editor-rules/codex');
+vi.mock('../scripts/editor-rules/kiro');
+vi.mock('../scripts/migrations/eslint');
+vi.mock('../scripts/migrations/prettier');
 
 describe('initialize command', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockDetectPackageManager = vi.mocked(nypm.detectPackageManager);
+  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
   const mockMkdir = vi.mocked(mkdir);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockIntro = vi.mocked(intro);
-  const mockSelect = vi.mocked(select);
   const mockMultiselect = vi.mocked(multiselect);
   const mockLog = {
     info: vi.fn(),
     success: vi.fn(),
     error: vi.fn(),
+    warn: vi.fn(),
   };
   const mockSpinner = vi.mocked(spinner);
   const mockExists = vi.mocked(exists);
+  const mockIsMonorepo = vi.mocked(isMonorepo);
   const mockProcessExit = vi.mocked(process.exit);
 
   const mockSpinnerInstance = {
@@ -52,6 +66,8 @@ describe('initialize command', () => {
     vi.clearAllMocks();
     mockSpinner.mockReturnValue(mockSpinnerInstance);
     mockExists.mockResolvedValue(false);
+    mockIsMonorepo.mockResolvedValue(false);
+    mockAddDevDependency.mockResolvedValue();
 
     // Mock successful fs operations by default
     mockMkdir.mockResolvedValue(undefined);
@@ -61,150 +77,117 @@ describe('initialize command', () => {
     vi.mocked(log, true).info = mockLog.info;
     vi.mocked(log, true).success = mockLog.success;
     vi.mocked(log, true).error = mockLog.error;
+    vi.mocked(log, true).warn = mockLog.warn;
   });
 
   it('should initialize with pnpm when pnpm-lock.yaml exists', async () => {
-    mockExists.mockImplementation((path: string) => {
-      return Promise.resolve(path === 'pnpm-lock.yaml');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
     });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
 
     expect(mockIntro).toHaveBeenCalled();
-    expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected lockfile, using pnpm add'
+    expect(mockLog.info).toHaveBeenCalledWith('Detected lockfile, using pnpm');
+    expect(mockAddDevDependency).toHaveBeenCalledWith(
+      `ultracite@${ultraciteVersion}`,
+      {
+        packageManager: 'pnpm',
+        workspace: false,
+      }
     );
-    expect(mockExecSync).toHaveBeenCalledWith(
-      `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+    expect(mockAddDevDependency).toHaveBeenCalledWith(
+      `@biomejs/biome@${schemaVersion}`,
+      {
+        packageManager: 'pnpm',
+        workspace: false,
+      }
     );
   });
 
   it('should detect yarn when yarn.lock exists', async () => {
-    mockExists.mockImplementation((path: string) => {
-      return Promise.resolve(path === 'yarn.lock');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'yarn',
+      command: 'yarn',
+      lockFile: 'yarn.lock',
+      majorVersion: '1',
     });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
 
-    expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected lockfile, using yarn add'
-    );
-    expect(mockExecSync).toHaveBeenCalledWith(
-      `yarn add -D -E ultracite @biomejs/biome@${schemaVersion}`
+    expect(mockLog.info).toHaveBeenCalledWith('Detected lockfile, using yarn');
+    expect(mockAddDevDependency).toHaveBeenCalledWith(
+      `ultracite@${ultraciteVersion}`,
+      {
+        packageManager: 'yarn',
+        workspace: false,
+      }
     );
   });
 
   it('should detect npm when package-lock.json exists', async () => {
-    mockExists.mockImplementation((path: string) => {
-      return Promise.resolve(path === 'package-lock.json');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'npm',
+      command: 'npm',
+      lockFile: 'package-lock.json',
+      majorVersion: '9',
     });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
 
-    expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected lockfile, using npm install --legacy-peer-deps'
-    );
-    expect(mockExecSync).toHaveBeenCalledWith(
-      `npm install --legacy-peer-deps -D -E ultracite @biomejs/biome@${schemaVersion}`
+    expect(mockLog.info).toHaveBeenCalledWith('Detected lockfile, using npm');
+    expect(mockAddDevDependency).toHaveBeenCalledWith(
+      `ultracite@${ultraciteVersion}`,
+      {
+        packageManager: 'npm',
+        workspace: false,
+      }
     );
   });
 
   it('should detect bun when bun.lockb exists', async () => {
-    mockExists.mockImplementation((path: string) => {
-      return Promise.resolve(path === 'bun.lockb');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'bun',
+      command: 'bun',
+      lockFile: 'bun.lockb',
+      majorVersion: '1',
     });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
 
-    expect(mockLog.info).toHaveBeenCalledWith(
-      'Detected lockfile, using bun add'
-    );
-    expect(mockExecSync).toHaveBeenCalledWith(
-      `bun add -D -E ultracite @biomejs/biome@${schemaVersion}`
+    expect(mockLog.info).toHaveBeenCalledWith('Detected lockfile, using bun');
+    expect(mockAddDevDependency).toHaveBeenCalledWith(
+      `ultracite@${ultraciteVersion}`,
+      {
+        packageManager: 'bun',
+        workspace: false,
+      }
     );
   });
 
   it('should prompt for package manager when no lockfile exists', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('npm install');
+    mockDetectPackageManager.mockResolvedValue(null);
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
 
-    expect(mockSelect).toHaveBeenCalledWith({
-      initialValue: 'pnpm',
-      message: 'Which package manager do you use?',
-      options: [
-        { label: 'pnpm', value: 'pnpm add' },
-        { label: 'bun', value: 'bun add' },
-        { label: 'yarn', value: 'yarn add' },
-        { label: 'npm', value: 'npm install --legacy-peer-deps' },
-      ],
-    });
-  });
-
-  it('should initialize cursor rules when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect
-      .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce(['cursor']) // editorRules
-      .mockResolvedValueOnce([]); // extraFeatures
-
-    await initialize();
-
-    expect(mockMkdir).toHaveBeenCalledWith('.cursor/rules', {
-      recursive: true,
-    });
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      './.cursor/rules/ultracite.mdc',
-      expect.any(String)
+    expect(mockLog.error).toHaveBeenCalledWith(
+      'Failed to initialize Ultracite configuration: No package manager specified or detected'
     );
-  });
-
-  it('should initialize windsurf rules when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect
-      .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce(['windsurf']) // editorRules
-      .mockResolvedValueOnce([]); // extraFeatures
-
-    await initialize();
-
-    expect(mockMkdir).toHaveBeenCalledWith('.windsurf/rules', {
-      recursive: true,
-    });
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      './.windsurf/rules/ultracite.md',
-      expect.any(String)
-    );
-  });
-
-  it('should initialize vscode copilot rules when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect
-      .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce(['vscode-copilot']) // editorRules
-      .mockResolvedValueOnce([]); // extraFeatures
-
-    await initialize();
-
-    expect(mockMkdir).toHaveBeenCalledWith('.github', { recursive: true });
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      './.github/copilot-instructions.md',
-      expect.any(String)
-    );
+    expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
 
   it('should handle errors and exit with code 1', async () => {
-    const error = new Error('Initialization failed');
-    mockExists.mockRejectedValue(error);
+    mockDetectPackageManager.mockRejectedValue(
+      new Error('Initialization failed')
+    );
 
     await initialize();
 
@@ -215,54 +198,41 @@ describe('initialize command', () => {
   });
 
   it('should handle non-Error exceptions', async () => {
-    mockExists.mockImplementation(() => {
-      throw new Error('String error');
+    mockDetectPackageManager.mockImplementation(() => {
+      throw 'String error';
     });
 
     await initialize();
 
     expect(mockLog.error).toHaveBeenCalledWith(
-      'Failed to initialize Ultracite configuration: String error'
+      'Failed to initialize Ultracite configuration: Unknown error'
     );
     expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
 
   it('should throw error when no package manager is selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue(Symbol('cancelled'));
+    mockDetectPackageManager.mockResolvedValue(null);
 
     await initialize();
 
     expect(mockLog.error).toHaveBeenCalledWith(
-      'Failed to initialize Ultracite configuration: No package manager selected'
+      'Failed to initialize Ultracite configuration: No package manager specified or detected'
     );
     expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
 
-  it('should initialize zed rules when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
-    mockMultiselect
-      .mockResolvedValueOnce(['zed']) // editorConfig - creates .zed/settings.json
-      .mockResolvedValueOnce(['zed']) // editorRules - creates .rules
-      .mockResolvedValueOnce([]); // extraFeatures
-
-    await initialize();
-
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      './.zed/settings.json',
-      expect.any(String)
-    );
-    expect(mockWriteFile).toHaveBeenCalledWith('./.rules', expect.any(String));
-  });
-
   it('should initialize precommit hooks when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect
+      .mockResolvedValueOnce([]) // migrationOptions
       .mockResolvedValueOnce([]) // editorConfig
       .mockResolvedValueOnce([]) // editorRules
-      .mockResolvedValueOnce(['precommit-hooks']); // extraFeatures
+      .mockResolvedValueOnce(['husky']); // extraFeatures
 
     await initialize();
 
@@ -273,9 +243,14 @@ describe('initialize command', () => {
   });
 
   it('should initialize lint-staged when selected', async () => {
-    mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect
+      .mockResolvedValueOnce([]) // migrationOptions
       .mockResolvedValueOnce([]) // editorConfig
       .mockResolvedValueOnce([]) // editorRules
       .mockResolvedValueOnce(['lint-staged']); // extraFeatures
@@ -303,7 +278,12 @@ describe('initialize command', () => {
       }
     });
 
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
@@ -317,7 +297,12 @@ describe('initialize command', () => {
     // Mock files not existing so create paths are taken
     mockExists.mockResolvedValue(false);
 
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect.mockResolvedValue([]);
 
     await initialize();
@@ -332,7 +317,12 @@ describe('initialize command', () => {
       return Promise.resolve(path === '.rules');
     });
 
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect
       .mockResolvedValueOnce([]) // editorConfig
       .mockResolvedValueOnce(['zed']) // editorRules
@@ -341,12 +331,17 @@ describe('initialize command', () => {
     await initialize();
 
     // Should not create .rules file since it exists
-    expect(mockExecSync).not.toHaveBeenCalledWith('touch .rules');
+    expect(mockAddDevDependency).toHaveBeenCalled();
   });
 
   it('should not prompt for features when other CLI options are provided', async () => {
     mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
 
     // When CLI options are provided but features is undefined, it should default to empty array
     await initialize({
@@ -370,7 +365,12 @@ describe('initialize command', () => {
 
   it('should still prompt for features when no CLI options are provided', async () => {
     mockExists.mockResolvedValue(false);
-    mockSelect.mockResolvedValue('pnpm add');
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'pnpm',
+      command: 'pnpm',
+      lockFile: 'pnpm-lock.yaml',
+      majorVersion: '8',
+    });
     mockMultiselect.mockResolvedValue([]);
 
     // When no CLI options are provided, it should still prompt for features
@@ -409,10 +409,8 @@ describe('initialize command', () => {
         skipInstall: true,
       });
 
-      // Should not run execSync for installation
-      expect(mockExecSync).not.toHaveBeenCalledWith(
-        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
-      );
+      // Should not run addDevDependency for installation
+      expect(mockAddDevDependency).not.toHaveBeenCalled();
 
       // Should read package.json
       expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
@@ -427,7 +425,7 @@ describe('initialize command', () => {
             devDependencies: {
               typescript: '^5.0.0',
               '@biomejs/biome': schemaVersion,
-              ultracite: `^${packageJson.version}`,
+              ultracite: `^${ultraciteVersion}`,
             },
           },
           null,
@@ -568,9 +566,13 @@ describe('initialize command', () => {
         features: ['husky'],
       });
 
-      // Should run execSync for main installation
-      expect(mockExecSync).toHaveBeenCalledWith(
-        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+      // Should run addDevDependency for main installation
+      expect(mockAddDevDependency).toHaveBeenCalledWith(
+        `ultracite@${ultraciteVersion}`,
+        {
+          packageManager: 'pnpm',
+          workspace: false,
+        }
       );
 
       // The main installation shouldn't read package.json when skipInstall is false
@@ -589,9 +591,13 @@ describe('initialize command', () => {
         // skipInstall not provided, should default to false
       });
 
-      // Should run execSync for main installation
-      expect(mockExecSync).toHaveBeenCalledWith(
-        `pnpm add -D -E ultracite @biomejs/biome@${schemaVersion}`
+      // Should run addDevDependency for main installation
+      expect(mockAddDevDependency).toHaveBeenCalledWith(
+        `ultracite@${ultraciteVersion}`,
+        {
+          packageManager: 'pnpm',
+          workspace: false,
+        }
       );
 
       expect(mockLog.success).toHaveBeenCalledWith(

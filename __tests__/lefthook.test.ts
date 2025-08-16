@@ -1,23 +1,30 @@
 import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as nypm from 'nypm';
 import { lefthook } from '../scripts/integrations/lefthook';
-import { exists } from '../scripts/utils';
+import { exists, isMonorepo } from '../scripts/utils';
 
 vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  isMonorepo: vi.fn(),
 }));
 
 describe('lefthook configuration', () => {
   const mockExecSync = vi.mocked(execSync);
+  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
+  const mockDlxCommand = vi.mocked(nypm.dlxCommand);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
+  const mockIsMonorepo = vi.mocked(isMonorepo);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockIsMonorepo.mockResolvedValue(false);
   });
 
   describe('exists', () => {
@@ -41,22 +48,38 @@ describe('lefthook configuration', () => {
   });
 
   describe('install', () => {
-    it('should install lefthook as dev dependency and run install', () => {
-      const packageManagerAdd = 'npm install';
+    it('should install lefthook as dev dependency and run install', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      mockDlxCommand.mockReturnValue('npx lefthook install');
+      const packageManager = 'npm';
 
-      lefthook.install(packageManagerAdd);
+      await lefthook.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('npm install -D lefthook');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
+        packageManager: 'npm',
+        workspace: false,
+      });
+      expect(mockDlxCommand).toHaveBeenCalledWith('npm', 'lefthook', {
+        args: ['install'],
+      });
       expect(mockExecSync).toHaveBeenCalledWith('npx lefthook install');
     });
 
-    it('should work with different package managers', () => {
-      const packageManagerAdd = 'yarn add';
+    it('should work with different package managers', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      mockDlxCommand.mockReturnValue('yarn dlx lefthook install');
+      const packageManager = 'yarn';
 
-      lefthook.install(packageManagerAdd);
+      await lefthook.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('yarn add -D lefthook');
-      expect(mockExecSync).toHaveBeenCalledWith('npx lefthook install');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
+        packageManager: 'yarn',
+        workspace: false,
+      });
+      expect(mockDlxCommand).toHaveBeenCalledWith('yarn', 'lefthook', {
+        args: ['install'],
+      });
+      expect(mockExecSync).toHaveBeenCalledWith('yarn dlx lefthook install');
     });
   });
 

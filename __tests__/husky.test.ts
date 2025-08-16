@@ -1,23 +1,27 @@
-import { execSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as nypm from 'nypm';
 import { husky } from '../scripts/integrations/husky';
-import { exists } from '../scripts/utils';
+import { exists, isMonorepo } from '../scripts/utils';
 
-vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  isMonorepo: vi.fn(),
 }));
 
 describe('husky configuration', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
+  const mockMkdir = vi.mocked(mkdir);
   const mockExists = vi.mocked(exists);
+  const mockIsMonorepo = vi.mocked(isMonorepo);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockIsMonorepo.mockResolvedValue(false);
   });
 
   describe('exists', () => {
@@ -41,27 +45,39 @@ describe('husky configuration', () => {
   });
 
   describe('install', () => {
-    it('should install husky as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+    it('should install husky as dev dependency', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      const packageManager = 'npm';
 
-      husky.install(packageManagerAdd);
+      await husky.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('npm install -D husky');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
+        packageManager: 'npm',
+        workspace: false,
+      });
     });
 
-    it('should work with different package managers', () => {
-      const packageManagerAdd = 'yarn add';
+    it('should work with different package managers', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      const packageManager = 'yarn';
 
-      husky.install(packageManagerAdd);
+      await husky.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('yarn add -D husky');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
+        packageManager: 'yarn',
+        workspace: false,
+      });
     });
   });
 
   describe('create', () => {
     it('should create .husky/pre-commit with ultracite format command', async () => {
+      mockMkdir.mockResolvedValue();
+      mockWriteFile.mockResolvedValue();
+
       await husky.create();
 
+      expect(mockMkdir).toHaveBeenCalledWith('.husky', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.husky/pre-commit',
         'npx ultracite format'

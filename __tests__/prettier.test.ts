@@ -1,17 +1,17 @@
-import { execSync } from 'node:child_process';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as nypm from 'nypm';
 import { prettierCleanup } from '../scripts/migrations/prettier';
 import { exists } from '../scripts/utils';
 
-vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
 }));
 
 describe('prettier-cleanup', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockRemoveDependency = vi.mocked(nypm.removeDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockUnlink = vi.mocked(unlink);
@@ -118,19 +118,21 @@ describe('prettier-cleanup', () => {
       });
 
       mockUnlink.mockResolvedValue();
-      mockExecSync.mockReturnValue(Buffer.from(''));
+      mockRemoveDependency.mockResolvedValue();
 
-      const result = await prettierCleanup.remove('npm install');
+      const result = await prettierCleanup.remove('npm');
 
       expect(result.packagesRemoved).toEqual([
         'prettier',
         'eslint-plugin-prettier',
       ]);
       expect(result.filesRemoved).toEqual(['.prettierrc', '.prettierignore']);
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'npm uninstall prettier eslint-plugin-prettier',
-        { stdio: 'pipe' }
-      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith('prettier', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-prettier', {
+        packageManager: 'npm',
+      });
       expect(mockUnlink).toHaveBeenCalledWith('.prettierrc');
       expect(mockUnlink).toHaveBeenCalledWith('.prettierignore');
     });
@@ -154,9 +156,9 @@ describe('prettier-cleanup', () => {
       });
 
       mockExists.mockResolvedValue(false);
-      mockExecSync.mockReturnValue(Buffer.from(''));
+      mockRemoveDependency.mockResolvedValue();
 
-      const result = await prettierCleanup.remove('npm install');
+      const result = await prettierCleanup.remove('npm');
 
       // Should only include packages that start with 'prettier' or are in the specific exceptions list
       expect(result.packagesRemoved).toEqual([
@@ -164,10 +166,15 @@ describe('prettier-cleanup', () => {
         'prettier-plugin-tailwindcss',
         'eslint-plugin-prettier',
       ]);
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'npm uninstall prettier prettier-plugin-tailwindcss eslint-plugin-prettier',
-        { stdio: 'pipe' }
-      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith('prettier', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('prettier-plugin-tailwindcss', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-prettier', {
+        packageManager: 'npm',
+      });
     });
 
     it('should handle different package managers', async () => {
@@ -175,11 +182,12 @@ describe('prettier-cleanup', () => {
         '{"devDependencies":{"prettier":"^2.0.0"}}'
       );
       mockExists.mockResolvedValue(false);
+      mockRemoveDependency.mockResolvedValue();
 
-      await prettierCleanup.remove('pnpm add');
+      await prettierCleanup.remove('pnpm');
 
-      expect(mockExecSync).toHaveBeenCalledWith('pnpm remove prettier', {
-        stdio: 'pipe',
+      expect(mockRemoveDependency).toHaveBeenCalledWith('prettier', {
+        packageManager: 'pnpm',
       });
     });
 
@@ -224,11 +232,9 @@ describe('prettier-cleanup', () => {
         '{"devDependencies":{"prettier":"^2.0.0"}}'
       );
       mockExists.mockResolvedValue(false);
-      mockExecSync.mockImplementation(() => {
-        throw new Error('Command failed');
-      });
+      mockRemoveDependency.mockRejectedValue(new Error('Command failed'));
 
-      const result = await prettierCleanup.remove('npm install');
+      const result = await prettierCleanup.remove('npm');
 
       expect(result.packagesRemoved).toEqual(['prettier']);
       expect(result.filesRemoved).toEqual([]);

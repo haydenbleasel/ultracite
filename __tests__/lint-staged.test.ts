@@ -1,21 +1,23 @@
-import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as nypm from 'nypm';
 import { lintStaged } from '../scripts/integrations/lint-staged';
-import { exists } from '../scripts/utils';
+import { exists, isMonorepo } from '../scripts/utils';
 
-vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  isMonorepo: vi.fn(),
 }));
 
 describe('lint-staged configuration', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
+  const mockIsMonorepo = vi.mocked(isMonorepo);
 
   const defaultConfig = {
     '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
@@ -23,6 +25,7 @@ describe('lint-staged configuration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockIsMonorepo.mockResolvedValue(false);
   });
 
   describe('exists', () => {
@@ -74,20 +77,28 @@ describe('lint-staged configuration', () => {
   });
 
   describe('install', () => {
-    it('should install lint-staged as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+    it('should install lint-staged as dev dependency', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      const packageManager = 'npm';
 
-      lintStaged.install(packageManagerAdd);
+      await lintStaged.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('npm install -D lint-staged');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'npm',
+        workspace: false,
+      });
     });
 
-    it('should work with different package managers', () => {
-      const packageManagerAdd = 'pnpm add';
+    it('should work with different package managers', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      const packageManager = 'pnpm';
 
-      lintStaged.install(packageManagerAdd);
+      await lintStaged.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('pnpm add -D lint-staged');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'pnpm',
+        workspace: false,
+      });
     });
   });
 
