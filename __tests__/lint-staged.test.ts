@@ -5,7 +5,15 @@ import * as nypm from 'nypm';
 import { lintStaged } from '../scripts/integrations/lint-staged';
 import { exists, isMonorepo } from '../scripts/utils';
 
-vi.mock('nypm');
+vi.mock('nypm', () => ({
+  addDevDependency: vi.fn(),
+  dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
+    if (pkg === 'ultracite' && options?.args?.includes('format')) {
+      return 'npx ultracite format';
+    }
+    return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
+  }),
+}));
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
@@ -104,7 +112,7 @@ describe('lint-staged configuration', () => {
 
   describe('create', () => {
     it('should create .lintstagedrc.json with default configuration', async () => {
-      await lintStaged.create();
+      await lintStaged.create('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -127,7 +135,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./package.json', 'utf-8');
       // Verify the merged configuration is written
@@ -153,7 +161,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.json',
@@ -188,7 +196,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(yamlContent);
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.yaml',
@@ -219,7 +227,7 @@ describe('lint-staged configuration', () => {
         .mockResolvedValueOnce(packageJsonContent) // For ESM check
         .mockRejectedValueOnce(new Error('Import failed')); // ESM config import fails
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -244,7 +252,7 @@ describe('lint-staged configuration', () => {
         throw new Error('Require failed');
       });
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -324,7 +332,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc', 'utf-8');
     });
@@ -374,7 +382,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(existingConfigWithComments);
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.json',

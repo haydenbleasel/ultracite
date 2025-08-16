@@ -3,9 +3,9 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists, isMonorepo } from '../utils';
 
-const createLefthookCommand = (packageManager: PackageManagerName) =>
-  dlxCommand(packageManager, 'lefthook', {
-    args: ['install'],
+const createUltraciteCommand = (packageManager: PackageManagerName) =>
+  dlxCommand(packageManager, 'ultracite', {
+    args: ['format'],
   });
 
 const path = './lefthook.yml';
@@ -14,7 +14,7 @@ const createLefthookConfig = (
   packageManager: PackageManagerName
 ) => `pre-commit:
   jobs:
-    - run: ${createLefthookCommand(packageManager)}
+    - run: ${createUltraciteCommand(packageManager)}
       glob: 
         - "*.js"
         - "*.jsx"
@@ -46,11 +46,11 @@ export const lefthook = {
   },
   update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, 'utf-8');
-    const lefthookCommand = createLefthookCommand(packageManager);
+    const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 
     // Check if ultracite command is already present
-    if (existingContents.includes(lefthookCommand)) {
+    if (existingContents.includes(ultraciteCommand)) {
       return;
     }
 
@@ -59,7 +59,7 @@ export const lefthook = {
       // Check if jobs section exists
       if (existingContents.includes('jobs:')) {
         // Add ultracite job to existing jobs array
-        const ultraciteJob = `    - run: ${lefthookCommand}
+        const ultraciteJob = `    - run: ${ultraciteCommand}
       glob: 
         - "*.js"
         - "*.jsx"
@@ -77,7 +77,7 @@ export const lefthook = {
       } else {
         // Add jobs section to existing pre-commit
         const jobsSection = `  jobs:
-    - run: ${lefthookCommand}
+    - run: ${ultraciteCommand}
       glob: 
         - "*.js"
         - "*.jsx"

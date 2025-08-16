@@ -4,7 +4,15 @@ import * as nypm from 'nypm';
 import { husky } from '../scripts/integrations/husky';
 import { exists, isMonorepo } from '../scripts/utils';
 
-vi.mock('nypm');
+vi.mock('nypm', () => ({
+  addDevDependency: vi.fn(),
+  dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
+    if (options?.args?.includes('format')) {
+      return 'npx ultracite format';
+    }
+    return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
+  }),
+}));
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
@@ -75,7 +83,7 @@ describe('husky configuration', () => {
       mockMkdir.mockResolvedValue();
       mockWriteFile.mockResolvedValue();
 
-      await husky.create();
+      await husky.create('npm');
 
       expect(mockMkdir).toHaveBeenCalledWith('.husky', { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -90,7 +98,7 @@ describe('husky configuration', () => {
       const existingContent = '#!/bin/sh\nnpm test';
       mockReadFile.mockResolvedValue(existingContent);
 
-      await husky.update();
+      await husky.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./.husky/pre-commit', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -102,7 +110,7 @@ describe('husky configuration', () => {
     it('should handle empty existing content', async () => {
       mockReadFile.mockResolvedValue('');
 
-      await husky.update();
+      await husky.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.husky/pre-commit',

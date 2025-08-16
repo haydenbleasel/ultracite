@@ -6,7 +6,24 @@ import { lefthook } from '../scripts/integrations/lefthook';
 import { exists, isMonorepo } from '../scripts/utils';
 
 vi.mock('node:child_process');
-vi.mock('nypm');
+vi.mock('nypm', () => ({
+  addDevDependency: vi.fn(),
+  dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
+    if (pkg === 'ultracite' && options?.args?.includes('format')) {
+      if (pm === 'npm') return 'npx ultracite format';
+      if (pm === 'yarn') return 'yarn dlx ultracite format';
+      if (pm === 'pnpm') return 'pnpm dlx ultracite format';
+      if (pm === 'bun') return 'bunx ultracite format';
+    }
+    if (pkg === 'lefthook' && options?.args?.includes('install')) {
+      if (pm === 'npm') return 'npx lefthook install';
+      if (pm === 'yarn') return 'yarn dlx lefthook install';
+      if (pm === 'pnpm') return 'pnpm dlx lefthook install';
+      if (pm === 'bun') return 'bunx lefthook install';
+    }
+    return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
+  }),
+}));
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
@@ -16,7 +33,6 @@ vi.mock('../scripts/utils', () => ({
 describe('lefthook configuration', () => {
   const mockExecSync = vi.mocked(execSync);
   const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
-  const mockDlxCommand = vi.mocked(nypm.dlxCommand);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
@@ -50,7 +66,6 @@ describe('lefthook configuration', () => {
   describe('install', () => {
     it('should install lefthook as dev dependency and run install', async () => {
       mockAddDevDependency.mockResolvedValue();
-      mockDlxCommand.mockReturnValue('npx lefthook install');
       const packageManager = 'npm';
 
       await lefthook.install(packageManager);
@@ -59,15 +74,11 @@ describe('lefthook configuration', () => {
         packageManager: 'npm',
         workspace: false,
       });
-      expect(mockDlxCommand).toHaveBeenCalledWith('npm', 'lefthook', {
-        args: ['install'],
-      });
       expect(mockExecSync).toHaveBeenCalledWith('npx lefthook install');
     });
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      mockDlxCommand.mockReturnValue('yarn dlx lefthook install');
       const packageManager = 'yarn';
 
       await lefthook.install(packageManager);
@@ -76,16 +87,13 @@ describe('lefthook configuration', () => {
         packageManager: 'yarn',
         workspace: false,
       });
-      expect(mockDlxCommand).toHaveBeenCalledWith('yarn', 'lefthook', {
-        args: ['install'],
-      });
       expect(mockExecSync).toHaveBeenCalledWith('yarn dlx lefthook install');
     });
   });
 
   describe('create', () => {
     it('should create lefthook.yml with ultracite format command', async () => {
-      await lefthook.create();
+      await lefthook.create('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './lefthook.yml',
@@ -123,7 +131,7 @@ describe('lefthook configuration', () => {
     - run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
-      await lefthook.update();
+      await lefthook.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
       expect(mockWriteFile).not.toHaveBeenCalled();
@@ -135,7 +143,7 @@ describe('lefthook configuration', () => {
     - run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
-      await lefthook.update();
+      await lefthook.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -163,7 +171,7 @@ describe('lefthook configuration', () => {
       run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
-      await lefthook.update();
+      await lefthook.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -193,7 +201,7 @@ describe('lefthook configuration', () => {
       run: npm run lint`;
       mockReadFile.mockResolvedValue(existingContent);
 
-      await lefthook.update();
+      await lefthook.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./lefthook.yml', 'utf-8');
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -221,7 +229,7 @@ pre-commit:
     it('should handle empty existing content', async () => {
       mockReadFile.mockResolvedValue('');
 
-      await lefthook.update();
+      await lefthook.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         './lefthook.yml',
