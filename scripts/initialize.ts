@@ -25,7 +25,7 @@ import { title } from './utils';
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
 
-type Initialize = {
+type InitializeFlags = {
   pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
   editors?: ('vscode' | 'zed')[];
   rules?: (
@@ -456,7 +456,7 @@ const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
   return selected;
 };
 
-export const initialize = async (flags?: Initialize) => {
+export const initialize = async (flags?: InitializeFlags) => {
   intro(title);
 
   try {
@@ -537,7 +537,7 @@ export const initialize = async (flags?: Initialize) => {
           { label: 'Kiro IDE', value: 'kiro' },
         ],
         required: false,
-      })) as Initialize['rules'];
+      })) as InitializeFlags['rules'];
     }
 
     let extraFeatures = opts.features;
