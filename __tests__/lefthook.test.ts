@@ -14,12 +14,14 @@ vi.mock('nypm', () => ({
       if (pm === 'yarn') return 'yarn dlx ultracite format';
       if (pm === 'pnpm') return 'pnpm dlx ultracite format';
       if (pm === 'bun') return 'bunx ultracite format';
+      if (pm === 'deno') return 'deno run -A npm:ultracite format';
     }
     if (pkg === 'lefthook' && options?.args?.includes('install')) {
       if (pm === 'npm') return 'npx lefthook install';
       if (pm === 'yarn') return 'yarn dlx lefthook install';
       if (pm === 'pnpm') return 'pnpm dlx lefthook install';
       if (pm === 'bun') return 'bunx lefthook install';
+      if (pm === 'deno') return 'deno run -A npm:lefthook install';
     }
     return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
   }),
@@ -79,15 +81,38 @@ describe('lefthook configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      const packageManager = 'yarn';
-
-      await lefthook.install(packageManager);
-
+      
+      // Test with yarn
+      await lefthook.install('yarn');
       expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
         packageManager: 'yarn',
         workspace: false,
       });
       expect(mockExecSync).toHaveBeenCalledWith('yarn dlx lefthook install');
+
+      // Test with pnpm
+      await lefthook.install('pnpm');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
+        packageManager: 'pnpm',
+        workspace: false,
+      });
+      expect(mockExecSync).toHaveBeenCalledWith('pnpm dlx lefthook install');
+
+      // Test with bun
+      await lefthook.install('bun');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
+        packageManager: 'bun',
+        workspace: false,
+      });
+      expect(mockExecSync).toHaveBeenCalledWith('bunx lefthook install');
+
+      // Test with deno
+      await lefthook.install('deno');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lefthook', {
+        packageManager: 'deno',
+        workspace: false,
+      });
+      expect(mockExecSync).toHaveBeenCalledWith('deno run -A npm:lefthook install');
     });
   });
 

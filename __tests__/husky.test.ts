@@ -8,7 +8,11 @@ vi.mock('nypm', () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
     if (options?.args?.includes('format')) {
-      return 'npx ultracite format';
+      if (pm === 'npm') return 'npx ultracite format';
+      if (pm === 'yarn') return 'yarn dlx ultracite format';
+      if (pm === 'pnpm') return 'pnpm dlx ultracite format';
+      if (pm === 'bun') return 'bunx ultracite format';
+      if (pm === 'deno') return 'deno run -A npm:ultracite format';
     }
     return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
   }),
@@ -67,12 +71,32 @@ describe('husky configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      const packageManager = 'yarn';
-
-      await husky.install(packageManager);
-
+      
+      // Test with yarn
+      await husky.install('yarn');
       expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
         packageManager: 'yarn',
+        workspace: false,
+      });
+
+      // Test with pnpm
+      await husky.install('pnpm');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
+        packageManager: 'pnpm',
+        workspace: false,
+      });
+
+      // Test with bun
+      await husky.install('bun');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
+        packageManager: 'bun',
+        workspace: false,
+      });
+
+      // Test with deno
+      await husky.install('deno');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {
+        packageManager: 'deno',
         workspace: false,
       });
     });

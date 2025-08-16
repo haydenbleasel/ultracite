@@ -9,7 +9,11 @@ vi.mock('nypm', () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
     if (pkg === 'ultracite' && options?.args?.includes('format')) {
-      return 'npx ultracite format';
+      if (pm === 'npm') return 'npx ultracite format';
+      if (pm === 'yarn') return 'yarn dlx ultracite format';
+      if (pm === 'pnpm') return 'pnpm dlx ultracite format';
+      if (pm === 'bun') return 'bunx ultracite format';
+      if (pm === 'deno') return 'deno run -A npm:ultracite format';
     }
     return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
   }),
@@ -99,12 +103,32 @@ describe('lint-staged configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      const packageManager = 'pnpm';
-
-      await lintStaged.install(packageManager);
-
+      
+      // Test with pnpm
+      await lintStaged.install('pnpm');
       expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
         packageManager: 'pnpm',
+        workspace: false,
+      });
+
+      // Test with yarn
+      await lintStaged.install('yarn');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'yarn',
+        workspace: false,
+      });
+
+      // Test with bun
+      await lintStaged.install('bun');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'bun',
+        workspace: false,
+      });
+
+      // Test with deno
+      await lintStaged.install('deno');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'deno',
         workspace: false,
       });
     });
