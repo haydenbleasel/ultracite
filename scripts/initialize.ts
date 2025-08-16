@@ -1,8 +1,11 @@
-import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
-import { detectPackageManager, type PackageManagerName } from 'nypm';
+import {
+  addDevDependency,
+  detectPackageManager,
+  type PackageManagerName,
+} from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './editor-config/vscode';
@@ -19,7 +22,6 @@ import { lefthook } from './integrations/lefthook';
 import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
-import { packageManager } from './package-manager';
 import { tsconfig } from './tsconfig';
 import { type options, title } from './utils';
 
@@ -37,16 +39,20 @@ type InitializeFlags = {
 };
 
 const installDependencies = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
   s.start('Installing dependencies...');
+  const packages = [
+    `ultracite@${ultraciteVersion}`,
+    `@biomejs/biome@${schemaVersion}`,
+  ];
 
   if (install) {
-    execSync(
-      `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
-    );
+    for (const pkg of packages) {
+      await addDevDependency(pkg, { packageManager });
+    }
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -555,7 +561,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await removeESLint(pm);
     }
 
-    await installDependencies(packageManagerAdd, !opts.skipInstall);
+    await installDependencies(pm, !opts.skipInstall);
 
     await upsertTsConfig();
     await upsertBiomeConfig();
