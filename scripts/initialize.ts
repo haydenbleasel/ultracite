@@ -213,11 +213,14 @@ const initializeLintStaged = async (
   s.stop('lint-staged created.');
 };
 
-const upsertEditorRules = async (name: string, displayName: string) => {
+const upsertEditorRules = async (
+  name: (typeof options.editorRules)[number],
+  displayName: string
+) => {
   const s = spinner();
   s.start(`Checking for ${displayName}...`);
 
-  const rules = createEditorRules(name as any);
+  const rules = createEditorRules(name);
 
   if (await rules.exists()) {
     s.message(`${displayName} found, updating...`);
