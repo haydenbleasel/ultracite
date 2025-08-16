@@ -1,6 +1,6 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as nypm from 'nypm';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { husky } from '../scripts/integrations/husky';
 import { exists, isMonorepo } from '../scripts/utils';
 
@@ -71,7 +71,7 @@ describe('husky configuration', () => {
 
     it('should work with different package managers', async () => {
       mockAddDevDependency.mockResolvedValue();
-      
+
       // Test with yarn
       await husky.install('yarn');
       expect(mockAddDevDependency).toHaveBeenCalledWith('husky', {

@@ -1,6 +1,6 @@
 import { readFile, unlink, writeFile } from 'node:fs/promises';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as nypm from 'nypm';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { prettierCleanup } from '../scripts/migrations/prettier';
 import { exists } from '../scripts/utils';
 
@@ -130,9 +130,12 @@ describe('prettier-cleanup', () => {
       expect(mockRemoveDependency).toHaveBeenCalledWith('prettier', {
         packageManager: 'npm',
       });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-prettier', {
-        packageManager: 'npm',
-      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        'eslint-plugin-prettier',
+        {
+          packageManager: 'npm',
+        }
+      );
       expect(mockUnlink).toHaveBeenCalledWith('.prettierrc');
       expect(mockUnlink).toHaveBeenCalledWith('.prettierignore');
     });
@@ -169,12 +172,18 @@ describe('prettier-cleanup', () => {
       expect(mockRemoveDependency).toHaveBeenCalledWith('prettier', {
         packageManager: 'npm',
       });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('prettier-plugin-tailwindcss', {
-        packageManager: 'npm',
-      });
-      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-prettier', {
-        packageManager: 'npm',
-      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        'prettier-plugin-tailwindcss',
+        {
+          packageManager: 'npm',
+        }
+      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        'eslint-plugin-prettier',
+        {
+          packageManager: 'npm',
+        }
+      );
     });
 
     it('should handle different package managers', async () => {
