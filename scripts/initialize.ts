@@ -393,7 +393,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       junie: 'Junie',
       augmentcode: 'Augment Code',
       'kilo-code': 'Kilo Code',
-      goose: 'Goose',
+      goose: 'Codename Goose',
     };
 
     if (!editorRules) {

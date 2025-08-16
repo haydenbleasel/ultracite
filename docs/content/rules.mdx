@@ -19,61 +19,39 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
 ? Which editor rules do you want to enable (optional)?
   ◯ GitHub Copilot (VSCode)
   ◯ Cursor
-  ◯ Windsurf  
-  ◯ Zed
-  ◯ Claude Code
-  ◯ OpenAI Codex
-  ◯ Kiro IDE
+  ◯ Windsurf
+  # ... etcetera
 ```
 
 This will create the relevant file in your project directory.
 
 ### Manual Setup
 
-If you want to manually create the rules file, you can do so by creating the relevant file in your project directory.
-
-- `.cursor/rules/ultracite.mdc` for Cursor
-- `.windsurf/rules/ultracite.md` for Windsurf
-- `.rules` for Zed
-- `.github/copilot-instructions.md` for GitHub Copilot
-- `.claude/CLAUDE.md` for Claude Code
-- `./AGENTS.md` for OpenAI Codex
+If you want to manually create the rules file, you can do so by creating the relevant file in your project directory e.g. `.cursor/rules/ultracite.mdc` for Cursor, `.rules` for Zed, etc.
 
 Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
 
 ## Supported Editors
 
-### GitHub Copilot (VSCode)
-
-Visual Studio Code automatically detects and applies rules from the `.github/copilot-instructions.md` file. The rules are written in Markdown format and guide GitHub Copilot's AI to follow specific coding conventions.
-
-As part of the Ultracite automatic setup, you can opt to create this file.
-
-### Cursor
-
-[Cursor](https://cursor.com) is an AI-powered code editor built on top of Visual Studio Code. Cursor automatically detects and applies rules from the `.cursor/rules/` directory. The rules are written in Markdown format and guide Cursor's AI to follow specific coding conventions.
-
-As part of the Ultracite automatic setup, you can opt to create a `.cursor/rules/ultracite.mdc` file that contains all the coding rules and conventions.
-
-### Windsurf
-
-[Windsurf](https://windsurf.com) is another AI-powered development environment. During the setup process, you can opt to create a `.windsurf/rules/ultracite.md` file with the same comprehensive rule set. Similar to Cursor, Windsurf reads rules from the `.windsurf/rules/` directory and applies them when generating code suggestions.
-
-### Zed
-
-[Zed](https://zed.dev) is a high-performance, multiplayer code editor. During the setup process, you can opt to create a `.rules` file in your project root. Zed uses the `.rules` file to understand project-specific coding conventions and applies them when providing AI-powered code assistance.
-
-### Claude Code
-
-[Claude Code](https://claude.ai) is a command-line AI bringing Claude’s raw power directly in your terminal. It lets you search million-line codebases instantly and turn hours-long workflows into a single command. During the setup process, you can opt to create a `.claude/CLAUDE.md` file with the same comprehensive rule set.
-
-### OpenAI Codex
-
-[OpenAI Codex](https://openai.com) is an open-source local coding agent that runs in your command line interface. Pair with it to write, edit, and understand code. During the setup process, you can opt to create a `./AGENTS.md` file with the same comprehensive rule set.
-
-### Kiro IDE
-
-[Kiro IDE](https://kiro.ai) is an AI-powered code editor by Amazon, designed to bring vibe coding to the Enterprise. During the setup process, you can opt to create a `.kiro/steering/linting-and-formatting.md` file with the same comprehensive rule set.
+| Editor            | Rule File Location                        |
+|-------------------|-------------------------------------------|
+| GitHub Copilot    | `.github/copilot-instructions.md`         |
+| Cursor            | `.cursor/rules/ultracite.mdc`             |
+| Windsurf          | `.windsurf/rules/ultracite.md`            |
+| Zed               | `.rules`                                  |
+| Claude Code       | `.claude/CLAUDE.md`                       |
+| OpenAI Codex      | `AGENTS.md`                               |
+| Kiro IDE          | `.kiro/steering/ultracite.md`             |
+| Cline             | `.clinerules`                             |
+| AMP               | `AGENT.md`                                |
+| Aider             | `ultracite.md`                            |
+| Firebase Studio   | `.idx/airules.md`                         |
+| Open Hands        | `.openhands/microagents/repo.md`          |
+| Gemini CLI        | `GEMINI.md`                               |
+| Junie             | `.junie/guidelines.md`                    |
+| Augment Code      | `.augment/rules/ultracite.md`             |
+| Kilo Code         | `.kilocode/rules/ultracite.md`            |
+| Codename Goose    | `.goosehints`                             |
 
 ## Benefits
 
