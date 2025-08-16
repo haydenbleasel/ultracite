@@ -35,6 +35,7 @@ type Initialize = {
     | 'zed'
     | 'claude'
     | 'codex'
+    | 'kiro'
   )[];
   features?: ('husky' | 'lefthook' | 'lint-staged')[];
   removePrettier?: boolean;
