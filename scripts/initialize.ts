@@ -222,7 +222,7 @@ const initializeLefthook = async (
 };
 
 const initializeLintStaged = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -231,7 +231,7 @@ const initializeLintStaged = async (
   s.message('Installing lint-staged...');
 
   if (install) {
-    lintStaged.install(packageManagerAdd);
+    lintStaged.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -602,7 +602,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await initializeLefthook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lint-staged')) {
-      await initializeLintStaged(packageManagerAdd, !opts.skipInstall);
+      await initializeLintStaged(pm, !opts.skipInstall);
     }
 
     log.success('Successfully initialized Ultracite configuration!');
