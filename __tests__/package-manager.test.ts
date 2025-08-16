@@ -263,7 +263,10 @@ describe('package-manager', () => {
           { label: 'pnpm', value: 'pnpm add -w' },
           { label: 'bun', value: 'bun add' },
           { label: 'yarn', value: 'yarn add' },
-          { label: 'npm', value: 'npm install --legacy-peer-deps --workspace .' },
+          {
+            label: 'npm',
+            value: 'npm install --legacy-peer-deps --workspace .',
+          },
         ],
       });
     });
@@ -324,7 +327,10 @@ describe('package-manager', () => {
             { label: 'pnpm', value: 'pnpm add -w' },
             { label: 'bun', value: 'bun add' },
             { label: 'yarn', value: 'yarn add' },
-            { label: 'npm', value: 'npm install --legacy-peer-deps --workspace .' },
+            {
+              label: 'npm',
+              value: 'npm install --legacy-peer-deps --workspace .',
+            },
           ]),
         })
       );

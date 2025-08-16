@@ -9,7 +9,12 @@ const options = [
     lockfiles: ['pnpm-lock.yaml'],
     monorepoSuffix: '-w',
   },
-  { label: 'bun', value: 'bun add', lockfiles: ['bun.lockb', 'bun.lock'], monorepoSuffix: '' },
+  {
+    label: 'bun',
+    value: 'bun add',
+    lockfiles: ['bun.lockb', 'bun.lock'],
+    monorepoSuffix: '',
+  },
   {
     label: 'yarn',
     value: 'yarn add',

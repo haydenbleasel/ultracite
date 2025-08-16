@@ -1,5 +1,5 @@
 import { track } from '@vercel/analytics/server';
-import { createMcpHandler } from "mcp-handler";
+import { createMcpHandler } from 'mcp-handler';
 import { rules } from '@/lib/rules';
 
 const handler = createMcpHandler(
