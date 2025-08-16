@@ -1,4 +1,3 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
 import {
@@ -8,6 +7,7 @@ import {
 } from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
+import type { options } from './consts/options';
 import { vscode } from './editor-config/vscode';
 import { zed } from './editor-config/zed';
 import { createEditorRules } from './editor-rules';
@@ -17,7 +17,7 @@ import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { tsconfig } from './tsconfig';
-import { isMonorepo, type options, title, updatePackageJson } from './utils';
+import { isMonorepo, title, updatePackageJson } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;

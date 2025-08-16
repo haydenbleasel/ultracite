@@ -5,8 +5,8 @@ import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
 import { format } from './commands/format';
 import { lint } from './commands/lint';
+import { options } from './consts/options';
 import { initialize } from './initialize';
-import { options } from './utils';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
