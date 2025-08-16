@@ -2,7 +2,7 @@ import { type PackageManagerName, packageManagers } from 'nypm';
 
 export const options = {
   packageManagers: packageManagers.map((pm) => pm.name) as PackageManagerName[],
-  editorConfigs: ['vscode', 'zed'],
+  editorConfigs: ['vscode', 'zed'] as const,
   editorRules: [
     'vscode-copilot',
     'cursor',
@@ -11,6 +11,6 @@ export const options = {
     'claude',
     'codex',
     'kiro',
-  ],
-  integrations: ['husky', 'lefthook', 'lint-staged'],
+  ] as const,
+  integrations: ['husky', 'lefthook', 'lint-staged'] as const,
 };

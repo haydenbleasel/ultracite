@@ -430,7 +430,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    const ruleNameMap = {
+    const ruleNameMap: Record<(typeof options.editorRules)[number], string> = {
       'vscode-copilot': 'GitHub Copilot rules',
       cursor: 'Cursor rules',
       windsurf: 'Windsurf rules',

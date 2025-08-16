@@ -1,4 +1,5 @@
 import { rulesFile } from '../../docs/lib/rules';
+import type { options } from './options';
 
 export type EditorRuleConfig = {
   path: string;
@@ -6,7 +7,10 @@ export type EditorRuleConfig = {
   appendMode?: boolean;
 };
 
-export const EDITOR_RULES: Record<string, EditorRuleConfig> = {
+export const EDITOR_RULES: Record<
+  (typeof options.editorRules)[number],
+  EditorRuleConfig
+> = {
   'vscode-copilot': {
     path: './.github/copilot-instructions.md',
     content: `---
@@ -42,5 +46,3 @@ ${rulesFile}`,
     path: './.kiro/steering/linting-and-formatting.md',
   },
 } as const;
-
-export type EditorRuleName = keyof typeof EDITOR_RULES;
