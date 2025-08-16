@@ -6,6 +6,7 @@ import { exists, isMonorepo } from '../utils';
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, 'ultracite', {
     args: ['format'],
+    short: packageManager === 'npm',
   });
 
 const path = './lefthook.yml';
@@ -36,6 +37,7 @@ export const lefthook = {
 
     const installCommand = dlxCommand(packageManager, 'lefthook', {
       args: ['install'],
+      short: packageManager === 'npm',
     });
 
     execSync(installCommand);

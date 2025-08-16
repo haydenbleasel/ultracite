@@ -17,6 +17,7 @@ export const husky = {
 
     const command = dlxCommand(packageManager, 'ultracite', {
       args: ['format'],
+      short: packageManager === 'npm',
     });
 
     await writeFile(path, command);
@@ -26,6 +27,7 @@ export const husky = {
 
     const command = dlxCommand(packageManager, 'ultracite', {
       args: ['format'],
+      short: packageManager === 'npm',
     });
 
     await writeFile(path, `${existingContents}\n${command}`);
