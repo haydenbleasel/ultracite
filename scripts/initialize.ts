@@ -372,28 +372,37 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let editorRules = opts.rules;
+
+    const editorRulesOptions: Record<
+      (typeof options.editorRules)[number],
+      string
+    > = {
+      'vscode-copilot': 'GitHub Copilot (VSCode)',
+      cursor: 'Cursor',
+      windsurf: 'Windsurf',
+      zed: 'Zed',
+      claude: 'Claude Code',
+      codex: 'OpenAI Codex / Jules / OpenCode',
+      kiro: 'Kiro IDE',
+      cline: 'Cline',
+      amp: 'AMP',
+      aider: 'Aider',
+      'firebase-studio': 'Firebase Studio',
+      'open-hands': 'Open Hands',
+      'gemini-cli': 'Gemini CLI',
+      junie: 'Junie',
+      augmentcode: 'Augment Code',
+      'kilo-code': 'Kilo Code',
+      goose: 'Goose',
+    };
+
     if (!editorRules) {
       editorRules = (await multiselect({
         message: 'Which editor rules do you want to enable (optional)?',
-        options: [
-          { label: 'GitHub Copilot (VSCode)', value: 'vscode-copilot' },
-          { label: 'Cursor', value: 'cursor' },
-          { label: 'Windsurf', value: 'windsurf' },
-          { label: 'Zed', value: 'zed' },
-          { label: 'Claude Code', value: 'claude' },
-          { label: 'OpenAI Codex / Jules / OpenCode', value: 'codex' },
-          { label: 'Kiro IDE', value: 'kiro' },
-          { label: 'Cline', value: 'cline' },
-          { label: 'AMP', value: 'amp' },
-          { label: 'Aider', value: 'aider' },
-          { label: 'Firebase Studio', value: 'firebase-studio' },
-          { label: 'Open Hands', value: 'open-hands' },
-          { label: 'Gemini CLI', value: 'gemini-cli' },
-          { label: 'Junie', value: 'junie' },
-          { label: 'Augment Code', value: 'augmentcode' },
-          { label: 'Kilo Code', value: 'kilo-code' },
-          { label: 'Goose', value: 'goose' },
-        ],
+        options: Object.entries(editorRulesOptions).map(([value, label]) => ({
+          value,
+          label,
+        })),
         required: false,
       })) as InitializeFlags['rules'];
     }
@@ -443,21 +452,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    const ruleNameMap: Record<(typeof options.editorRules)[number], string> = {
-      'vscode-copilot': 'GitHub Copilot rules',
-      cursor: 'Cursor rules',
-      windsurf: 'Windsurf rules',
-      zed: 'Zed rules',
-      claude: 'Claude Code rules',
-      codex: 'OpenAI Codex rules',
-      kiro: 'Kiro IDE steering files',
-    };
-
     for (const ruleName of editorRules ?? []) {
-      await upsertEditorRules(
-        ruleName,
-        ruleNameMap[ruleName as keyof typeof ruleNameMap]
-      );
+      await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
     }
 
     if (integrations?.includes('husky')) {

@@ -15,6 +15,7 @@ export const EDITOR_RULES: Record<
     header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
+    appendMode: true,
   },
   cursor: {
     path: './.cursor/rules/ultracite.mdc',
@@ -33,41 +34,50 @@ alwaysApply: true
   },
   claude: {
     path: './.claude/CLAUDE.md',
+    appendMode: true,
   },
   codex: {
     path: './AGENTS.md',
+    appendMode: true,
   },
   kiro: {
-    path: './.kiro/steering/linting-and-formatting.md',
+    path: './.kiro/steering/ultracite.md',
   },
   cline: {
     path: './.clinerules',
+    appendMode: true,
   },
   amp: {
     path: './AGENT.md',
+    appendMode: true,
   },
   aider: {
-    path: './ruler_aider_instructions.md',
+    path: './ultracite.md',
   },
   'firebase-studio': {
     path: './.idx/airules.md',
+    appendMode: true,
   },
   'open-hands': {
     path: './.openhands/microagents/repo.md',
+    appendMode: true,
   },
   'gemini-cli': {
     path: './GEMINI.md',
+    appendMode: true,
   },
   junie: {
     path: './.junie/guidelines.md',
+    appendMode: true,
   },
   augmentcode: {
-    path: './.augment/rules/ruler_augment_instructions.md',
+    path: './.augment/rules/ultracite.md',
   },
   'kilo-code': {
-    path: './.kilocode/rules/ruler_kilocode_instructions.md',
+    path: './.kilocode/rules/ultracite.md',
   },
   goose: {
     path: './.goosehints',
+    appendMode: true,
   },
 } as const;
