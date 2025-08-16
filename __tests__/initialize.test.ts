@@ -53,13 +53,13 @@ vi.mock('../scripts/integrations/lint-staged');
 vi.mock('../scripts/tsconfig');
 vi.mock('../scripts/editor-config/vscode');
 vi.mock('../scripts/editor-config/zed');
-vi.mock('../scripts/editor-rules/cursor');
-vi.mock('../scripts/editor-rules/windsurf');
-vi.mock('../scripts/editor-rules/vscode');
-vi.mock('../scripts/editor-rules/zed');
-vi.mock('../scripts/editor-rules/claude');
-vi.mock('../scripts/editor-rules/codex');
-vi.mock('../scripts/editor-rules/kiro');
+vi.mock('../scripts/editor-rules', () => ({
+  createEditorRules: vi.fn(() => ({
+    exists: vi.fn(() => Promise.resolve(false)),
+    create: vi.fn(() => Promise.resolve()),
+    update: vi.fn(() => Promise.resolve()),
+  })),
+}));
 vi.mock('../scripts/migrations/eslint');
 vi.mock('../scripts/migrations/prettier');
 
@@ -71,12 +71,7 @@ describe('initialize command', () => {
   const mockWriteFile = vi.mocked(writeFile);
   const mockIntro = vi.mocked(intro);
   const mockMultiselect = vi.mocked(multiselect);
-  const mockLog = {
-    info: vi.fn(),
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-  };
+  const mockLog = vi.mocked(log);
   const mockSpinner = vi.mocked(spinner);
   const mockExists = vi.mocked(exists);
   const mockIsMonorepo = vi.mocked(isMonorepo);

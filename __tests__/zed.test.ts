@@ -1,6 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { zedCopilot } from '../scripts/editor-rules/zed';
+import { createEditorRules } from '../scripts/editor-rules';
+
+const zedCopilot = createEditorRules('zed');
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');

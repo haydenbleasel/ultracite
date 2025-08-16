@@ -1,6 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { kiro } from '../scripts/editor-rules/kiro';
+import { createEditorRules } from '../scripts/editor-rules';
+
+const kiro = createEditorRules('kiro');
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');

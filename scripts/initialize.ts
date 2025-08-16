@@ -10,13 +10,7 @@ import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './editor-config/vscode';
 import { zed } from './editor-config/zed';
-import { claude } from './editor-rules/claude';
-import { codex } from './editor-rules/codex';
-import { cursor } from './editor-rules/cursor';
-import { kiro } from './editor-rules/kiro';
-import { vscodeCopilot } from './editor-rules/vscode';
-import { windsurf } from './editor-rules/windsurf';
-import { zedCopilot } from './editor-rules/zed';
+import { createEditorRules } from './editor-rules';
 import { husky } from './integrations/husky';
 import { lefthook } from './integrations/lefthook';
 import { lintStaged } from './integrations/lint-staged';
@@ -219,116 +213,22 @@ const initializeLintStaged = async (
   s.stop('lint-staged created.');
 };
 
-const upsertVSCodeCopilotRules = async () => {
+const upsertEditorRules = async (name: string, displayName: string) => {
   const s = spinner();
-  s.start('Checking for GitHub Copilot rules...');
+  s.start(`Checking for ${displayName}...`);
 
-  if (await vscodeCopilot.exists()) {
-    s.message('GitHub Copilot rules found, updating...');
-    await vscodeCopilot.update();
-    s.stop('GitHub Copilot rules updated.');
+  const rules = createEditorRules(name as any);
+
+  if (await rules.exists()) {
+    s.message(`${displayName} found, updating...`);
+    await rules.update();
+    s.stop(`${displayName} updated.`);
     return;
   }
 
-  s.message('GitHub Copilot rules not found, creating...');
-  await vscodeCopilot.create();
-  s.stop('GitHub Copilot rules created.');
-};
-
-const upsertCursorRules = async () => {
-  const s = spinner();
-  s.start('Checking for Cursor rules...');
-
-  if (await cursor.exists()) {
-    s.message('Cursor rules found, updating...');
-    await cursor.update();
-    s.stop('Cursor rules updated.');
-    return;
-  }
-
-  s.message('Cursor rules not found, creating...');
-  await cursor.create();
-  s.stop('Cursor rules created.');
-};
-
-const upsertWindsurfRules = async () => {
-  const s = spinner();
-  s.start('Checking for Windsurf rules...');
-
-  if (await windsurf.exists()) {
-    s.message('Windsurf rules found, updating...');
-    await windsurf.update();
-    s.stop('Windsurf rules updated.');
-    return;
-  }
-
-  s.message('Windsurf rules not found, creating...');
-  await windsurf.create();
-  s.stop('Windsurf rules created.');
-};
-
-const upsertZedRules = async () => {
-  const s = spinner();
-  s.start('Checking for Zed rules...');
-
-  if (await zedCopilot.exists()) {
-    s.message('Zed rules found, updating...');
-    await zedCopilot.update();
-    s.stop('Zed rules updated.');
-    return;
-  }
-
-  s.message('Zed rules not found, creating...');
-  await zedCopilot.create();
-  s.stop('Zed rules created.');
-};
-
-const upsertClaudeRules = async () => {
-  const s = spinner();
-  s.start('Checking for Claude Code rules...');
-
-  if (await claude.exists()) {
-    s.message('Claude Code rules found, updating...');
-    await claude.update();
-    s.stop('Claude Code rules updated.');
-    return;
-  }
-
-  s.message('Claude Code rules not found, creating...');
-  await claude.create();
-  s.stop('Claude Code rules created.');
-};
-
-const upsertCodexRules = async () => {
-  const s = spinner();
-  s.start('Checking for OpenAI Codex rules...');
-
-  if (await codex.exists()) {
-    s.message('OpenAI Codex rules found, updating...');
-    await codex.update();
-    s.stop('OpenAI Codex rules updated.');
-    return;
-  }
-
-  s.message('OpenAI Codex rules not found, creating...');
-  await codex.create();
-  s.stop('OpenAI Codex rules created.');
-};
-
-const upsertKiroRules = async () => {
-  const s = spinner();
-  s.start('Checking for Kiro IDE steering files...');
-
-  if (await kiro.exists()) {
-    s.message('Kiro IDE steering files found, updating...');
-    await kiro.update();
-    s.stop('Kiro IDE steering files updated.');
-    return;
-  }
-
-  s.message('Kiro IDE steering files not found, creating...');
-  await kiro.create();
-  s.stop('Kiro IDE steering files created.');
+  s.message(`${displayName} not found, creating...`);
+  await rules.create();
+  s.stop(`${displayName} created.`);
 };
 
 const removePrettier = async (pm: PackageManagerName) => {
@@ -530,26 +430,21 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    if (editorRules?.includes('vscode-copilot')) {
-      await upsertVSCodeCopilotRules();
-    }
-    if (editorRules?.includes('cursor')) {
-      await upsertCursorRules();
-    }
-    if (editorRules?.includes('windsurf')) {
-      await upsertWindsurfRules();
-    }
-    if (editorRules?.includes('zed')) {
-      await upsertZedRules();
-    }
-    if (editorRules?.includes('claude')) {
-      await upsertClaudeRules();
-    }
-    if (editorRules?.includes('codex')) {
-      await upsertCodexRules();
-    }
-    if (editorRules?.includes('kiro')) {
-      await upsertKiroRules();
+    const ruleNameMap = {
+      'vscode-copilot': 'GitHub Copilot rules',
+      cursor: 'Cursor rules',
+      windsurf: 'Windsurf rules',
+      zed: 'Zed rules',
+      claude: 'Claude Code rules',
+      codex: 'OpenAI Codex rules',
+      kiro: 'Kiro IDE steering files',
+    };
+
+    for (const ruleName of editorRules ?? []) {
+      await upsertEditorRules(
+        ruleName,
+        ruleNameMap[ruleName as keyof typeof ruleNameMap]
+      );
     }
 
     if (extraFeatures?.includes('husky')) {

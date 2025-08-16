@@ -1,6 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { windsurf } from '../scripts/editor-rules/windsurf';
+import { createEditorRules } from '../scripts/editor-rules';
+
+const windsurf = createEditorRules('windsurf');
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');

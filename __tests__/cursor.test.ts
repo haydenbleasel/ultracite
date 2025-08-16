@@ -1,6 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { cursor } from '../scripts/editor-rules/cursor';
+import { createEditorRules } from '../scripts/editor-rules';
+
+const cursor = createEditorRules('cursor');
 import { exists } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
@@ -80,7 +82,13 @@ mock rules content`
       });
       expect(mockWriteFile).toHaveBeenCalledWith(
         './.cursor/rules/ultracite.mdc',
-        'mock rules content'
+        `---
+description: Ultracite Rules - AI-Ready Formatter and Linter
+globs: "**/*.{ts,tsx,js,jsx}"
+alwaysApply: true
+---
+
+mock rules content`
       );
     });
 
