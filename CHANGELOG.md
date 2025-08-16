@@ -1,3 +1,15 @@
+# v5.2.0 (Sat Aug 16 2025)
+
+#### 🚀 Enhancement
+
+- nypm [#249](https://github.com/haydenbleasel/ultracite/pull/249) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.9 (Sat Aug 16 2025)
 
 #### ⚠️ Pushed to `main`
