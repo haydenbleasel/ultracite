@@ -19,8 +19,8 @@ import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
 import { packageManager } from './package-manager';
-import { title } from './title';
 import { tsconfig } from './tsconfig';
+import { title } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
