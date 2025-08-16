@@ -149,7 +149,7 @@ const initializePrecommitHook = async (
   s.message('Installing Husky...');
 
   if (install) {
-    husky.install(packageManager);
+    await husky.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -190,7 +190,7 @@ const initializeLefthook = async (
   s.message('Installing lefthook...');
 
   if (install) {
-    lefthook.install(packageManager);
+    await lefthook.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -231,7 +231,7 @@ const initializeLintStaged = async (
   s.message('Installing lint-staged...');
 
   if (install) {
-    lintStaged.install(packageManager);
+    await lintStaged.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
