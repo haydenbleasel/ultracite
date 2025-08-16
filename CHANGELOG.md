@@ -1,3 +1,15 @@
+# v5.2.3 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update editor rules docs ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.2 (Sat Aug 16 2025)
 
 #### 🐛 Bug Fix
