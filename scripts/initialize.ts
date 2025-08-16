@@ -368,12 +368,12 @@ const upsertKiroRules = async () => {
   s.stop('Kiro IDE steering files created.');
 };
 
-const removePrettier = async (packageManagerAdd: string) => {
+const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing Prettier dependencies and configuration...');
 
   try {
-    const result = await prettierCleanup.remove(packageManagerAdd);
+    const result = await prettierCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -459,8 +459,6 @@ export const initialize = async (flags?: InitializeFlags) => {
       log.info(`Detected lockfile, using ${detected.name}`);
       pm = detected.name;
     }
-
-    const packageManagerAdd = await getPackageManagerCommand(pm);
 
     let shouldRemovePrettier = opts.removePrettier;
     let shouldRemoveEslint = opts.removeEslint;
@@ -565,7 +563,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (shouldRemovePrettier) {
-      await removePrettier(packageManagerAdd);
+      await removePrettier(pm);
     }
     if (shouldRemoveEslint) {
       await removeESLint(packageManagerAdd);
