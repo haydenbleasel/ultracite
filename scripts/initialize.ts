@@ -450,6 +450,12 @@ export const initialize = async (flags?: InitializeFlags) => {
         throw new Error('No package manager specified or detected');
       }
 
+      if (detected.warnings) {
+        for (const warning of detected.warnings) {
+          log.warn(warning);
+        }
+      }
+
       log.info(`Detected lockfile, using ${detected.name}`);
       pm = detected.name;
     }
