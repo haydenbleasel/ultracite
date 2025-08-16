@@ -1,22 +1,35 @@
-import { execSync } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { exists } from '../utils';
+import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
+import { exists, isMonorepo } from '../utils';
 
-const huskyCommand = 'npx ultracite format';
 const path = './.husky/pre-commit';
 
 export const husky = {
   exists: () => exists(path),
-  install: (packageManagerAdd: string) => {
-    execSync(`${packageManagerAdd} -D husky`);
+  install: async (packageManager: PackageManagerName) => {
+    await addDevDependency('husky', {
+      packageManager,
+      workspace: await isMonorepo(),
+    });
   },
-  create: async () => {
+  create: async (packageManager: PackageManagerName) => {
     await mkdir('.husky', { recursive: true });
-    await writeFile(path, huskyCommand);
+
+    const command = dlxCommand(packageManager, 'ultracite', {
+      args: ['format'],
+      short: packageManager === 'npm',
+    });
+
+    await writeFile(path, command);
   },
-  update: async () => {
+  update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, 'utf-8');
 
-    await writeFile(path, `${existingContents}\n${huskyCommand}`);
+    const command = dlxCommand(packageManager, 'ultracite', {
+      args: ['format'],
+      short: packageManager === 'npm',
+    });
+
+    await writeFile(path, `${existingContents}\n${command}`);
   },
 };

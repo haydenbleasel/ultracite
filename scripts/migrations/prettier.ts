@@ -1,6 +1,6 @@
-import { execSync } from 'node:child_process';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
+import { type PackageManagerName, removeDependency } from 'nypm';
 import { exists } from '../utils';
 
 // Common Prettier configuration files
@@ -45,16 +45,18 @@ const detectPrettierPackages = async (): Promise<string[]> => {
   }
 };
 
-const removePrettierDependencies = (
-  packageManagerRemove: string,
+const removePrettierDependencies = async (
+  packageManager: PackageManagerName,
   packages: string[]
 ) => {
-  if (packages.length === 0) return;
-
-  const packageList = packages.join(' ');
+  if (packages.length === 0) {
+    return;
+  }
 
   try {
-    execSync(`${packageManagerRemove} ${packageList}`, { stdio: 'pipe' });
+    for (const pkg of packages) {
+      await removeDependency(pkg, { packageManager });
+    }
   } catch (error) {
     // Silently handle errors - dependencies might already be removed
   }
@@ -167,49 +169,34 @@ const cleanVSCodePrettierSettings = async (): Promise<boolean> => {
 const hasPrettier = async (): Promise<boolean> => {
   // Check for dependencies
   const packages = await detectPrettierPackages();
-  if (packages.length > 0) return true;
+  if (packages.length > 0) {
+    return true;
+  }
 
   // Check for config files
   for (const file of prettierConfigFiles) {
-    if (await exists(file)) return true;
+    if (await exists(file)) {
+      return true;
+    }
   }
 
   return false;
-};
-
-const getPackageManagerRemove = (packageManagerAdd: string): string => {
-  if (packageManagerAdd.startsWith('npm')) {
-    return 'npm uninstall';
-  }
-  if (packageManagerAdd.startsWith('yarn')) {
-    return 'yarn remove';
-  }
-  if (packageManagerAdd.startsWith('pnpm')) {
-    return 'pnpm remove';
-  }
-  if (packageManagerAdd.startsWith('bun')) {
-    return 'bun remove';
-  }
-
-  // Default fallback
-  return 'npm uninstall';
 };
 
 export const prettierCleanup = {
   hasPrettier,
 
   remove: async (
-    packageManagerAdd: string
+    pm: PackageManagerName
   ): Promise<{
     packagesRemoved: string[];
     filesRemoved: string[];
     vsCodeCleaned: boolean;
   }> => {
     const packages = await detectPrettierPackages();
-    const packageManagerRemove = getPackageManagerRemove(packageManagerAdd);
 
     // Remove dependencies
-    removePrettierDependencies(packageManagerRemove, packages);
+    removePrettierDependencies(pm, packages);
 
     // Remove config files
     const filesRemoved = await removePrettierConfigFiles();

@@ -1,17 +1,17 @@
-import { execSync } from 'node:child_process';
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import * as nypm from 'nypm';
 import { eslintCleanup } from '../scripts/migrations/eslint';
 import { exists } from '../scripts/utils';
 
-vi.mock('node:child_process');
+vi.mock('nypm');
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
 }));
 
 describe('eslint-cleanup', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockRemoveDependency = vi.mocked(nypm.removeDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockUnlink = vi.mocked(unlink);
@@ -118,19 +118,21 @@ describe('eslint-cleanup', () => {
       });
 
       mockUnlink.mockResolvedValue();
-      mockExecSync.mockReturnValue(Buffer.from(''));
+      mockRemoveDependency.mockResolvedValue();
 
-      const result = await eslintCleanup.remove('npm install');
+      const result = await eslintCleanup.remove('npm');
 
       expect(result.packagesRemoved).toEqual([
         'eslint',
         '@typescript-eslint/parser',
       ]);
       expect(result.filesRemoved).toEqual(['.eslintrc.js', '.eslintignore']);
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'npm uninstall eslint @typescript-eslint/parser',
-        { stdio: 'pipe' }
-      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('@typescript-eslint/parser', {
+        packageManager: 'npm',
+      });
       expect(mockUnlink).toHaveBeenCalledWith('.eslintrc.js');
       expect(mockUnlink).toHaveBeenCalledWith('.eslintignore');
     });
@@ -155,9 +157,9 @@ describe('eslint-cleanup', () => {
       });
 
       mockExists.mockResolvedValue(false);
-      mockExecSync.mockReturnValue(Buffer.from(''));
+      mockRemoveDependency.mockResolvedValue();
 
-      const result = await eslintCleanup.remove('npm install');
+      const result = await eslintCleanup.remove('npm');
 
       // Should only include packages that start with 'eslint' or are in the specific exceptions list
       expect(result.packagesRemoved).toEqual([
@@ -166,20 +168,29 @@ describe('eslint-cleanup', () => {
         'eslint-config-fbjs',
         '@typescript-eslint/parser',
       ]);
-      expect(mockExecSync).toHaveBeenCalledWith(
-        'npm uninstall eslint eslint-plugin-github eslint-config-fbjs @typescript-eslint/parser',
-        { stdio: 'pipe' }
-      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-plugin-github', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint-config-fbjs', {
+        packageManager: 'npm',
+      });
+      expect(mockRemoveDependency).toHaveBeenCalledWith('@typescript-eslint/parser', {
+        packageManager: 'npm',
+      });
     });
 
     it('should handle different package managers', async () => {
       mockReadFile.mockResolvedValue('{"devDependencies":{"eslint":"^8.0.0"}}');
       mockExists.mockResolvedValue(false);
+      mockRemoveDependency.mockResolvedValue();
 
-      await eslintCleanup.remove('yarn add');
+      await eslintCleanup.remove('yarn');
 
-      expect(mockExecSync).toHaveBeenCalledWith('yarn remove eslint', {
-        stdio: 'pipe',
+      expect(mockRemoveDependency).toHaveBeenCalledWith('eslint', {
+        packageManager: 'yarn',
       });
     });
 
@@ -229,11 +240,9 @@ describe('eslint-cleanup', () => {
     it('should handle execution errors gracefully', async () => {
       mockReadFile.mockResolvedValue('{"devDependencies":{"eslint":"^8.0.0"}}');
       mockExists.mockResolvedValue(false);
-      mockExecSync.mockImplementation(() => {
-        throw new Error('Command failed');
-      });
+      mockRemoveDependency.mockRejectedValue(new Error('Command failed'));
 
-      const result = await eslintCleanup.remove('npm install');
+      const result = await eslintCleanup.remove('npm');
 
       expect(result.packagesRemoved).toEqual(['eslint']);
       expect(result.filesRemoved).toEqual([]);

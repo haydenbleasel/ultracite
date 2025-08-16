@@ -1,7 +1,11 @@
-import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
+import {
+  addDevDependency,
+  detectPackageManager,
+  type PackageManagerName,
+} from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
 import { vscode } from './editor-config/vscode';
@@ -18,42 +22,40 @@ import { lefthook } from './integrations/lefthook';
 import { lintStaged } from './integrations/lint-staged';
 import { eslintCleanup } from './migrations/eslint';
 import { prettierCleanup } from './migrations/prettier';
-import { packageManager } from './package-manager';
-import { title } from './title';
 import { tsconfig } from './tsconfig';
+import { isMonorepo, type options, title } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
 
-type Initialize = {
-  pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
-  editors?: ('vscode' | 'zed')[];
-  rules?: (
-    | 'vscode-copilot'
-    | 'cursor'
-    | 'windsurf'
-    | 'zed'
-    | 'claude'
-    | 'codex'
-    | 'kiro'
-  )[];
-  features?: ('husky' | 'lefthook' | 'lint-staged')[];
+type InitializeFlags = {
+  pm?: PackageManagerName;
+  editors?: (typeof options.editorConfigs)[number][];
+  rules?: (typeof options.editorRules)[number][];
+  features?: (typeof options.integrations)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
 };
 
 const installDependencies = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
   s.start('Installing dependencies...');
+  const packages = [
+    `ultracite@${ultraciteVersion}`,
+    `@biomejs/biome@${schemaVersion}`,
+  ];
 
   if (install) {
-    execSync(
-      `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
-    );
+    for (const pkg of packages) {
+      await addDevDependency(pkg, {
+        packageManager,
+        workspace: await isMonorepo(),
+      });
+    }
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -141,7 +143,7 @@ const upsertBiomeConfig = async () => {
 };
 
 const initializePrecommitHook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -150,7 +152,7 @@ const initializePrecommitHook = async (
   s.message('Installing Husky...');
 
   if (install) {
-    husky.install(packageManagerAdd);
+    await husky.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -171,18 +173,18 @@ const initializePrecommitHook = async (
 
   if (await husky.exists()) {
     s.message('Pre-commit hook found, updating...');
-    await husky.update();
+    await husky.update(packageManager);
     s.stop('Pre-commit hook updated.');
     return;
   }
 
   s.message('Pre-commit hook not found, creating...');
-  await husky.create();
+  await husky.create(packageManager);
   s.stop('Pre-commit hook created.');
 };
 
 const initializeLefthook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -191,7 +193,7 @@ const initializeLefthook = async (
   s.message('Installing lefthook...');
 
   if (install) {
-    lefthook.install(packageManagerAdd);
+    await lefthook.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -212,18 +214,18 @@ const initializeLefthook = async (
 
   if (await lefthook.exists()) {
     s.message('lefthook.yml found, updating...');
-    await lefthook.update();
+    await lefthook.update(packageManager);
     s.stop('lefthook.yml updated.');
     return;
   }
 
   s.message('lefthook.yml not found, creating...');
-  await lefthook.create();
+  await lefthook.create(packageManager);
   s.stop('lefthook.yml created.');
 };
 
 const initializeLintStaged = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -232,7 +234,7 @@ const initializeLintStaged = async (
   s.message('Installing lint-staged...');
 
   if (install) {
-    lintStaged.install(packageManagerAdd);
+    await lintStaged.install(packageManager);
   } else {
     const packageJsonContent = await readFile('package.json', 'utf8');
     const packageJsonObject = JSON.parse(packageJsonContent);
@@ -253,13 +255,13 @@ const initializeLintStaged = async (
 
   if (await lintStaged.exists()) {
     s.message('lint-staged found, updating...');
-    await lintStaged.update();
+    await lintStaged.update(packageManager);
     s.stop('lint-staged updated.');
     return;
   }
 
   s.message('lint-staged not found, creating...');
-  await lintStaged.create();
+  await lintStaged.create(packageManager);
   s.stop('lint-staged created.');
 };
 
@@ -375,12 +377,12 @@ const upsertKiroRules = async () => {
   s.stop('Kiro IDE steering files created.');
 };
 
-const removePrettier = async (packageManagerAdd: string) => {
+const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing Prettier dependencies and configuration...');
 
   try {
-    const result = await prettierCleanup.remove(packageManagerAdd);
+    const result = await prettierCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -397,17 +399,17 @@ const removePrettier = async (packageManagerAdd: string) => {
     }
 
     s.stop('Prettier removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove Prettier completely, but continuing...');
   }
 };
 
-const removeESLint = async (packageManagerAdd: string) => {
+const removeESLint = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing ESLint dependencies and configuration...');
 
   try {
-    const result = await eslintCleanup.remove(packageManagerAdd);
+    const result = await eslintCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -424,45 +426,34 @@ const removeESLint = async (packageManagerAdd: string) => {
     }
 
     s.stop('ESLint removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove ESLint completely, but continuing...');
   }
 };
 
-const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
-  if (pmFlag) {
-    const option = packageManager.options.find((opt) => opt.label === pmFlag);
-    if (!option) {
-      throw new Error(`Unsupported package manager: ${pmFlag}`);
-    }
-
-    const monorepo = await packageManager.isMonorepo();
-    return monorepo && option.monorepoSuffix
-      ? `${option.value} ${option.monorepoSuffix}`
-      : option.value;
-  }
-
-  const detected = await packageManager.get();
-  if (detected) {
-    log.info(`Detected lockfile, using ${detected}`);
-    return detected;
-  }
-
-  const selected = await packageManager.select();
-  if (!selected) {
-    throw new Error('No package manager selected');
-  }
-
-  return selected;
-};
-
-export const initialize = async (flags?: Initialize) => {
+export const initialize = async (flags?: InitializeFlags) => {
   intro(title);
 
   try {
     const opts = flags ?? {};
+    let { pm } = opts;
 
-    const packageManagerAdd = await getPackageManagerCommand(opts.pm);
+    if (!pm) {
+      const detected = await detectPackageManager(process.cwd());
+
+      if (!detected) {
+        throw new Error('No package manager specified or detected');
+      }
+
+      if (detected.warnings) {
+        for (const warning of detected.warnings) {
+          log.warn(warning);
+        }
+      }
+
+      log.info(`Detected lockfile, using ${detected.name}`);
+      pm = detected.name;
+    }
 
     let shouldRemovePrettier = opts.removePrettier;
     let shouldRemoveEslint = opts.removeEslint;
@@ -537,7 +528,7 @@ export const initialize = async (flags?: Initialize) => {
           { label: 'Kiro IDE', value: 'kiro' },
         ],
         required: false,
-      })) as Initialize['rules'];
+      })) as InitializeFlags['rules'];
     }
 
     let extraFeatures = opts.features;
@@ -567,13 +558,13 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     if (shouldRemovePrettier) {
-      await removePrettier(packageManagerAdd);
+      await removePrettier(pm);
     }
     if (shouldRemoveEslint) {
-      await removeESLint(packageManagerAdd);
+      await removeESLint(pm);
     }
 
-    await installDependencies(packageManagerAdd, !opts.skipInstall);
+    await installDependencies(pm, !opts.skipInstall);
 
     await upsertTsConfig();
     await upsertBiomeConfig();
@@ -608,13 +599,13 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     if (extraFeatures?.includes('husky')) {
-      await initializePrecommitHook(packageManagerAdd, !opts.skipInstall);
+      await initializePrecommitHook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lefthook')) {
-      await initializeLefthook(packageManagerAdd, !opts.skipInstall);
+      await initializeLefthook(pm, !opts.skipInstall);
     }
     if (extraFeatures?.includes('lint-staged')) {
-      await initializeLintStaged(packageManagerAdd, !opts.skipInstall);
+      await initializeLintStaged(pm, !opts.skipInstall);
     }
 
     log.success('Successfully initialized Ultracite configuration!');
