@@ -2,12 +2,16 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import deepmerge from 'deepmerge';
 import { parse } from 'jsonc-parser';
-import { addDevDependency, type PackageManagerName } from 'nypm';
+import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists, isMonorepo } from '../utils';
 
-const lintStagedConfig = {
-  '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
-};
+const createLintStagedConfig = (packageManager: PackageManagerName) => ({
+  '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': [
+    dlxCommand(packageManager, 'ultracite', {
+      args: ['format'],
+    }),
+  ],
+});
 
 // Check for existing configuration files in order of preference
 const configFiles = [
@@ -126,7 +130,9 @@ const isProjectESM = async (): Promise<boolean> => {
 };
 
 // Update package.json lint-staged config
-const updatePackageJson = async (): Promise<void> => {
+const updatePackageJson = async (
+  packageManager: PackageManagerName
+): Promise<void> => {
   const packageJson = parse(await readFile('./package.json', 'utf-8')) as
     | Record<string, unknown>
     | undefined;
@@ -139,17 +145,20 @@ const updatePackageJson = async (): Promise<void> => {
   if (packageJson['lint-staged']) {
     packageJson['lint-staged'] = deepmerge(
       packageJson['lint-staged'],
-      lintStagedConfig
+      createLintStagedConfig(packageManager)
     );
   } else {
-    packageJson['lint-staged'] = lintStagedConfig;
+    packageJson['lint-staged'] = createLintStagedConfig(packageManager);
   }
 
   await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
 };
 
 // Update JSON config files
-const updateJsonConfig = async (filename: string): Promise<void> => {
+const updateJsonConfig = async (
+  filename: string,
+  packageManager: PackageManagerName
+): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
   const existingConfig = parse(content) as Record<string, unknown> | undefined;
 
@@ -158,12 +167,18 @@ const updateJsonConfig = async (filename: string): Promise<void> => {
     return;
   }
 
-  const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
+  const mergedConfig = deepmerge(
+    existingConfig,
+    createLintStagedConfig(packageManager)
+  );
   await writeFile(filename, JSON.stringify(mergedConfig, null, 2));
 };
 
 // Update YAML config files
-const updateYamlConfig = async (filename: string): Promise<void> => {
+const updateYamlConfig = async (
+  filename: string,
+  packageManager: PackageManagerName
+): Promise<void> => {
   const content = await readFile(filename, 'utf-8');
   const existingConfig = parseSimpleYaml(content) as
     | Record<string, unknown>
@@ -174,16 +189,25 @@ const updateYamlConfig = async (filename: string): Promise<void> => {
     return;
   }
 
-  const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
+  const mergedConfig = deepmerge(
+    existingConfig,
+    createLintStagedConfig(packageManager)
+  );
   await writeFile(filename, stringifySimpleYaml(mergedConfig));
 };
 
 // Update ESM config files
-const updateEsmConfig = async (filename: string): Promise<void> => {
+const updateEsmConfig = async (
+  filename: string,
+  packageManager: PackageManagerName
+): Promise<void> => {
   const fileUrl = pathToFileURL(filename).href;
   const module = await import(fileUrl);
   const existingConfig = module.default || {};
-  const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
+  const mergedConfig = deepmerge(
+    existingConfig,
+    createLintStagedConfig(packageManager)
+  );
 
   const esmContent = `export default ${JSON.stringify(mergedConfig, null, 2)};
 `;
@@ -191,12 +215,18 @@ const updateEsmConfig = async (filename: string): Promise<void> => {
 };
 
 // Update CommonJS config files
-const updateCjsConfig = async (filename: string): Promise<void> => {
+const updateCjsConfig = async (
+  filename: string,
+  packageManager: PackageManagerName
+): Promise<void> => {
   // For CommonJS, we need to be more careful about imports
   // Let's create a temporary file and require it
   delete require.cache[require.resolve(`./${filename}`)];
   const existingConfig = require(`./${filename}`);
-  const mergedConfig = deepmerge(existingConfig, lintStagedConfig);
+  const mergedConfig = deepmerge(
+    existingConfig,
+    createLintStagedConfig(packageManager)
+  );
 
   const cjsContent = `module.exports = ${JSON.stringify(mergedConfig, null, 2)};
 `;
@@ -204,27 +234,32 @@ const updateCjsConfig = async (filename: string): Promise<void> => {
 };
 
 // Create fallback config file
-const createFallbackConfig = async (): Promise<void> => {
+const createFallbackConfig = async (
+  packageManager: PackageManagerName
+): Promise<void> => {
   await writeFile(
     '.lintstagedrc.json',
-    JSON.stringify(lintStagedConfig, null, 2)
+    JSON.stringify(createLintStagedConfig(packageManager), null, 2)
   );
 };
 
 // Handle updating different config file types
-const handleConfigFileUpdate = async (filename: string): Promise<void> => {
+const handleConfigFileUpdate = async (
+  filename: string,
+  packageManager: PackageManagerName
+): Promise<void> => {
   if (filename === './package.json') {
-    await updatePackageJson();
+    await updatePackageJson(packageManager);
     return;
   }
 
   if (filename.endsWith('.json') || filename === './.lintstagedrc') {
-    await updateJsonConfig(filename);
+    await updateJsonConfig(filename, packageManager);
     return;
   }
 
   if (filename.endsWith('.yaml') || filename.endsWith('.yml')) {
-    await updateYamlConfig(filename);
+    await updateYamlConfig(filename, packageManager);
     return;
   }
 
@@ -232,18 +267,18 @@ const handleConfigFileUpdate = async (filename: string): Promise<void> => {
 
   if (filename.endsWith('.mjs') || (filename.endsWith('.js') && isEsm)) {
     try {
-      await updateEsmConfig(filename);
+      await updateEsmConfig(filename, packageManager);
     } catch {
-      await createFallbackConfig();
+      await createFallbackConfig(packageManager);
     }
     return;
   }
 
   if (filename.endsWith('.cjs') || (filename.endsWith('.js') && !isEsm)) {
     try {
-      await updateCjsConfig(filename);
+      await updateCjsConfig(filename, packageManager);
     } catch {
-      await createFallbackConfig();
+      await createFallbackConfig(packageManager);
     }
   }
 };
@@ -251,7 +286,6 @@ const handleConfigFileUpdate = async (filename: string): Promise<void> => {
 export const lintStaged = {
   exists: async () => {
     for (const file of configFiles) {
-      // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(file)) {
         return true;
       }
@@ -265,17 +299,16 @@ export const lintStaged = {
       workspace: await isMonorepo(),
     });
   },
-  create: async () => {
+  create: async (packageManager: PackageManagerName) => {
     await writeFile(
       '.lintstagedrc.json',
-      JSON.stringify(lintStagedConfig, null, 2)
+      JSON.stringify(createLintStagedConfig(packageManager), null, 2)
     );
   },
-  update: async () => {
+  update: async (packageManager: PackageManagerName) => {
     let existingConfigFile: string | null = null;
 
     for (const file of configFiles) {
-      // biome-ignore lint/nursery/noAwaitInLoop: "this is fine."
       if (await exists(file)) {
         existingConfigFile = file;
         break;
@@ -284,10 +317,10 @@ export const lintStaged = {
 
     // If no config file found, create a fallback config
     if (!existingConfigFile) {
-      await createFallbackConfig();
+      await createFallbackConfig(packageManager);
       return;
     }
 
-    await handleConfigFileUpdate(existingConfigFile);
+    await handleConfigFileUpdate(existingConfigFile, packageManager);
   },
 };

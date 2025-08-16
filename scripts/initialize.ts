@@ -255,13 +255,13 @@ const initializeLintStaged = async (
 
   if (await lintStaged.exists()) {
     s.message('lint-staged found, updating...');
-    await lintStaged.update();
+    await lintStaged.update(packageManager);
     s.stop('lint-staged updated.');
     return;
   }
 
   s.message('lint-staged not found, creating...');
-  await lintStaged.create();
+  await lintStaged.create(packageManager);
   s.stop('lint-staged created.');
 };
 
