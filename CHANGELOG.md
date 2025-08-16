@@ -1,3 +1,16 @@
+# v5.2.1 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create util for updating package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.0 (Sat Aug 16 2025)
 
 #### 🚀 Enhancement
