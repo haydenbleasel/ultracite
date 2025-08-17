@@ -1,3 +1,19 @@
+# v5.2.4 (Sun Aug 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Melvyn ([@Melvynx](https://github.com/Melvynx)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Docs: Fix the docs with the latest version in biome [#252](https://github.com/haydenbleasel/ultracite/pull/252) ([@Melvynx](https://github.com/Melvynx))
+
+#### Authors: 1
+
+- Melvyn ([@Melvynx](https://github.com/Melvynx))
+
+---
+
 # v5.2.3 (Sat Aug 16 2025)
 
 #### ⚠️ Pushed to `main`
