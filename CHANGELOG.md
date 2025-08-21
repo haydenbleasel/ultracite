@@ -1,3 +1,15 @@
+# v5.2.5 (Thu Aug 21 2025)
+
+#### 🐛 Bug Fix
+
+- DOCS : Fix error in the troubleshooting page [#257](https://github.com/haydenbleasel/ultracite/pull/257) ([@Melvynx](https://github.com/Melvynx))
+
+#### Authors: 1
+
+- Melvyn ([@Melvynx](https://github.com/Melvynx))
+
+---
+
 # v5.2.4 (Sun Aug 17 2025)
 
 :tada: This release contains work from a new contributor! :tada:
