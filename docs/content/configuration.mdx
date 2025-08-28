@@ -23,12 +23,10 @@ All these defaults aim to enforce consistent style and prevent common errors wit
 
 You can disable rules by modifying the `biome.jsonc` file.
 
-For example, to disable the `noAutofocus` rule, you can do the following:
+For example, to disable the `noAutofocus` rule, you can add the following:
 
 ```jsonc title="biome.jsonc"
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
-  "extends": ["ultracite"],
   "linter": {
     "rules": {
       "a11y": {
