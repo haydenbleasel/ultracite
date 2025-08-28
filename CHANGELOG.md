@@ -1,3 +1,15 @@
+# v5.2.10 (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- Replace execSync commands with spawnSync [#259](https://github.com/haydenbleasel/ultracite/pull/259) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.9 (Thu Aug 28 2025)
 
 #### ⚠️ Pushed to `main`
