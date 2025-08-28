@@ -3,6 +3,9 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
 import { exists, isMonorepo } from '../utils';
 
+const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
+const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/;
+
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, 'ultracite', {
     args: ['format'],
@@ -56,6 +59,15 @@ export const lefthook = {
       return;
     }
 
+    // Check if this is the default commented template from lefthook install
+    const isDefaultTemplate = existingContents.startsWith('# EXAMPLE USAGE:');
+
+    if (isDefaultTemplate) {
+      // Replace the entire default template with our config
+      await writeFile(path, lefthookConfig);
+      return;
+    }
+
     // Parse existing YAML and add ultracite job
     if (existingContents.includes('pre-commit:')) {
       // Check if jobs section exists
@@ -72,7 +84,7 @@ export const lefthook = {
         - "*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
-          /(pre-commit:\s*\n\s*jobs:\s*\n)/,
+          PRE_COMMIT_JOBS_REGEX,
           `$1${ultraciteJob}\n`
         );
         await writeFile(path, updatedConfig);
@@ -90,7 +102,7 @@ export const lefthook = {
         - "*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
-          /(pre-commit:\s*\n)/,
+          PRE_COMMIT_REGEX,
           `$1${jobsSection}\n`
         );
         await writeFile(path, updatedConfig);
