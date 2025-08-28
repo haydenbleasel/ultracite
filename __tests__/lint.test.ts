@@ -1,32 +1,46 @@
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lint } from '../scripts/commands/lint';
 
 vi.mock('node:child_process');
 
 describe('lint command', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockSpawnSync = vi.mocked(spawnSync);
   const mockProcessExit = vi.mocked(process.exit);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSpawnSync.mockReturnValue({
+      status: 0,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+    } as any);
   });
 
   it('should run biome check without --write flag for all files when no files specified', () => {
     lint([]);
 
-    expect(mockExecSync).toHaveBeenCalledWith('npx @biomejs/biome check ./', {
-      stdio: 'inherit',
-    });
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', './'],
+      {
+        stdio: 'inherit',
+        shell: false,
+      }
+    );
   });
 
   it('should run biome check without --write flag for specific files when files are provided', () => {
     const files = ['src/index.ts', 'src/utils.ts'];
     lint(files);
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check "src/index.ts" "src/utils.ts"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', 'src/index.ts', 'src/utils.ts'],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -34,10 +48,12 @@ describe('lint command', () => {
     const files = ['src/index.ts'];
     lint(files);
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check "src/index.ts"',
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', 'src/index.ts'],
       {
         stdio: 'inherit',
+        shell: false,
       }
     );
   });
@@ -49,9 +65,15 @@ describe('lint command', () => {
     ];
     lint(files);
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx" "src/components/Button.tsx"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      [
+        '@biomejs/biome',
+        'check',
+        '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
+        'src/components/Button.tsx',
+      ],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -62,9 +84,15 @@ describe('lint command', () => {
         // Mock implementation
       });
     const error = new Error('Biome failed');
-    mockExecSync.mockImplementation(() => {
-      throw error;
-    });
+    mockSpawnSync.mockReturnValue({
+      status: null,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+      error,
+    } as any);
 
     lint([]);
 
@@ -77,24 +105,18 @@ describe('lint command', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('should handle non-Error exceptions', () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {
-        // Mock implementation
-      });
-    mockExecSync.mockImplementation(() => {
-      throw new Error('String error');
-    });
+  it('should handle non-zero exit status', () => {
+    mockSpawnSync.mockReturnValue({
+      status: 2,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+    } as any);
 
     lint([]);
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to run Ultracite:',
-      'String error'
-    );
-    expect(mockProcessExit).toHaveBeenCalledWith(1);
-
-    consoleErrorSpy.mockRestore();
+    expect(mockProcessExit).toHaveBeenCalledWith(2);
   });
 });
