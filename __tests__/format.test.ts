@@ -1,24 +1,34 @@
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { format } from '../scripts/commands/format';
 
 vi.mock('node:child_process');
 
 describe('format command', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockSpawnSync = vi.mocked(spawnSync);
   const mockProcessExit = vi.mocked(process.exit);
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSpawnSync.mockReturnValue({
+      status: 0,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+    } as any);
   });
 
   it('should run biome check with --write flag for all files when no files specified', () => {
     format([], { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write ./',
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', '--write', './'],
       {
         stdio: 'inherit',
+        shell: false,
       }
     );
   });
@@ -27,9 +37,10 @@ describe('format command', () => {
     const files = ['src/index.ts', 'src/utils.ts'];
     format(files, { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write "src/index.ts" "src/utils.ts"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', '--write', 'src/index.ts', 'src/utils.ts'],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -37,9 +48,10 @@ describe('format command', () => {
     const files = ['src/index.ts'];
     format(files, { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write "src/index.ts"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', '--write', 'src/index.ts'],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -47,9 +59,10 @@ describe('format command', () => {
     const files = ['src/index.ts'];
     format(files, { unsafe: true });
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write --unsafe "src/index.ts"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      ['@biomejs/biome', 'check', '--write', '--unsafe', 'src/index.ts'],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -60,9 +73,16 @@ describe('format command', () => {
     ];
     format(files, { unsafe: false });
 
-    expect(mockExecSync).toHaveBeenCalledWith(
-      'npx @biomejs/biome check --write "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx" "src/components/Button.tsx"',
-      { stdio: 'inherit' }
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      'npx',
+      [
+        '@biomejs/biome',
+        'check',
+        '--write',
+        '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
+        'src/components/Button.tsx',
+      ],
+      { stdio: 'inherit', shell: false }
     );
   });
 
@@ -73,9 +93,15 @@ describe('format command', () => {
         // Mock implementation
       });
     const error = new Error('Biome failed');
-    mockExecSync.mockImplementation(() => {
-      throw error;
-    });
+    mockSpawnSync.mockReturnValue({
+      status: null,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+      error,
+    } as any);
 
     format([], { unsafe: false });
 
@@ -88,24 +114,18 @@ describe('format command', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('should handle non-Error exceptions', () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {
-        // Mock implementation
-      });
-    mockExecSync.mockImplementation(() => {
-      throw new Error('String error');
-    });
+  it('should handle non-zero exit status', () => {
+    mockSpawnSync.mockReturnValue({
+      status: 2,
+      signal: null,
+      output: [],
+      pid: 123,
+      stdout: Buffer.from(''),
+      stderr: Buffer.from(''),
+    } as any);
 
     format([], { unsafe: false });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to run Ultracite:',
-      'String error'
-    );
-    expect(mockProcessExit).toHaveBeenCalledWith(1);
-
-    consoleErrorSpy.mockRestore();
+    expect(mockProcessExit).toHaveBeenCalledWith(2);
   });
 });
