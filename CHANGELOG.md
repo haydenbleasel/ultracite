@@ -1,3 +1,16 @@
+# v5.2.6 (Thu Aug 28 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Upgrade Biome to 2.2.2 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.5 (Thu Aug 21 2025)
 
 #### 🐛 Bug Fix
