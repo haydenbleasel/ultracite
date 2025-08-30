@@ -24,11 +24,10 @@ describe('format command', () => {
     format([], { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', '--write', './'],
+      '@biomejs/biome check --write ./',
       {
         stdio: 'inherit',
-        shell: false,
+        shell: true,
       }
     );
   });
@@ -38,9 +37,8 @@ describe('format command', () => {
     format(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', '--write', 'src/index.ts', 'src/utils.ts'],
-      { stdio: 'inherit', shell: false }
+      '@biomejs/biome check --write src/index.ts src/utils.ts',
+      { stdio: 'inherit', shell: true }
     );
   });
 
@@ -49,9 +47,8 @@ describe('format command', () => {
     format(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', '--write', 'src/index.ts'],
-      { stdio: 'inherit', shell: false }
+      '@biomejs/biome check --write src/index.ts',
+      { stdio: 'inherit', shell: true }
     );
   });
 
@@ -60,9 +57,8 @@ describe('format command', () => {
     format(files, { unsafe: true });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', '--write', '--unsafe', 'src/index.ts'],
-      { stdio: 'inherit', shell: false }
+      '@biomejs/biome check --write --unsafe src/index.ts',
+      { stdio: 'inherit', shell: true }
     );
   });
 
@@ -74,15 +70,28 @@ describe('format command', () => {
     format(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      [
-        '@biomejs/biome',
-        'check',
-        '--write',
-        '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
-        'src/components/Button.tsx',
-      ],
-      { stdio: 'inherit', shell: false }
+      "@biomejs/biome check --write '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
+      { stdio: 'inherit', shell: true }
+    );
+  });
+
+  it('should handle files with dollar signs by quoting them', () => {
+    const files = ['$HOME/file.ts', 'file with spaces.ts'];
+    format(files, { unsafe: false });
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "@biomejs/biome check --write '$HOME/file.ts'  'file with spaces.ts' ",
+      { stdio: 'inherit', shell: true }
+    );
+  });
+
+  it('should handle files with single quotes by escaping them', () => {
+    const files = ["file'with'quotes.ts", 'normal.ts'];
+    format(files, { unsafe: false });
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "@biomejs/biome check --write 'file'\\''with'\\''quotes.ts'  normal.ts",
+      { stdio: 'inherit', shell: true }
     );
   });
 

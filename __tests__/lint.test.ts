@@ -24,11 +24,10 @@ describe('lint command', () => {
     lint([]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', './'],
+      '@biomejs/biome check ./',
       {
         stdio: 'inherit',
-        shell: false,
+        shell: true,
       }
     );
   });
@@ -38,9 +37,8 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', 'src/index.ts', 'src/utils.ts'],
-      { stdio: 'inherit', shell: false }
+      '@biomejs/biome check src/index.ts src/utils.ts',
+      { stdio: 'inherit', shell: true }
     );
   });
 
@@ -49,11 +47,10 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      ['@biomejs/biome', 'check', 'src/index.ts'],
+      '@biomejs/biome check src/index.ts',
       {
         stdio: 'inherit',
-        shell: false,
+        shell: true,
       }
     );
   });
@@ -66,14 +63,28 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      'npx',
-      [
-        '@biomejs/biome',
-        'check',
-        '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
-        'src/components/Button.tsx',
-      ],
-      { stdio: 'inherit', shell: false }
+      "@biomejs/biome check '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
+      { stdio: 'inherit', shell: true }
+    );
+  });
+
+  it('should handle files with dollar signs by quoting them', () => {
+    const files = ['$HOME/file.ts', 'file with spaces.ts'];
+    lint(files);
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "@biomejs/biome check '$HOME/file.ts'  'file with spaces.ts' ",
+      { stdio: 'inherit', shell: true }
+    );
+  });
+
+  it('should handle files with single quotes by escaping them', () => {
+    const files = ["file'with'quotes.ts", 'normal.ts'];
+    lint(files);
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "@biomejs/biome check 'file'\\''with'\\''quotes.ts'  normal.ts",
+      { stdio: 'inherit', shell: true }
     );
   });
 

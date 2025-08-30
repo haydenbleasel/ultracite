@@ -1,6 +1,6 @@
 import { access, readFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists, isMonorepo, title } from '../scripts/utils';
+import { exists, isMonorepo, parseFilePaths, title } from '../scripts/utils';
 
 vi.mock('node:fs/promises');
 
@@ -233,6 +233,98 @@ describe('utils', () => {
       expect(result).toBe(true);
       expect(mockAccess).toHaveBeenCalledWith('pnpm-workspace.yaml');
       expect(mockReadFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('parseFilePaths', () => {
+    it('should not quote regular file paths', () => {
+      const paths = ['src/index.ts', 'lib/utils.js', '/home/user/file.tsx'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(['src/index.ts', 'lib/utils.js', '/home/user/file.tsx']);
+    });
+
+    it('should quote paths with spaces', () => {
+      const paths = ['file with spaces.ts', 'another file.js'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'file with spaces.ts' ", "'another file.js' "]);
+    });
+
+    it('should quote paths with dollar signs', () => {
+      const paths = ['$HOME/file.ts', 'test/$VAR/script.js'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'$HOME/file.ts' ", "'test/$VAR/script.js' "]);
+    });
+
+    it('should quote paths with parentheses', () => {
+      const paths = ['file(1).ts', 'test(copy).js', '(draft)file.tsx'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'file(1).ts' ", "'test(copy).js' ", "'(draft)file.tsx' "]);
+    });
+
+    it('should quote paths with brackets', () => {
+      const paths = ['[locale]/page.tsx', 'file[id].ts', 'test[1].js'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'[locale]/page.tsx' ", "'file[id].ts' ", "'test[1].js' "]);
+    });
+
+    it('should quote paths with curly braces', () => {
+      const paths = ['{slug}/page.tsx', 'file{id}.ts'];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'{slug}/page.tsx' ", "'file{id}.ts' "]);
+    });
+
+    it('should escape single quotes in file paths', () => {
+      const paths = ["file'with'quotes.ts", "it's-a-file.js"];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual(["'file'\\''with'\\''quotes.ts' ", "'it'\\''s-a-file.js' "]);
+    });
+
+    it('should handle mixed special characters', () => {
+      const paths = [
+        "file with spaces and $VAR.ts",
+        "(draft) [id] {slug}.tsx",
+        "it's a complex file!.js"
+      ];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual([
+        "'file with spaces and $VAR.ts' ",
+        "'(draft) [id] {slug}.tsx' ",
+        "'it'\\''s a complex file!.js' "
+      ]);
+    });
+
+    it('should handle Next.js route patterns', () => {
+      const paths = [
+        '/app/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx',
+        '/app/api/[...slug]/route.ts'
+      ];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual([
+        "'/app/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx' ",
+        "'/app/api/[...slug]/route.ts' "
+      ]);
+    });
+
+    it('should handle empty array', () => {
+      const paths: string[] = [];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual([]);
+    });
+
+    it('should handle mix of regular and special character paths', () => {
+      const paths = [
+        'normal.ts',
+        'file with spaces.js',
+        '/regular/path/file.tsx',
+        '$HOME/special.ts'
+      ];
+      const result = parseFilePaths(paths);
+      expect(result).toEqual([
+        'normal.ts',
+        "'file with spaces.js' ",
+        '/regular/path/file.tsx',
+        "'$HOME/special.ts' "
+      ]);
     });
   });
 });
