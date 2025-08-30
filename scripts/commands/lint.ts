@@ -1,19 +1,22 @@
 import { spawnSync } from 'node:child_process';
 import process from 'node:process';
+import { parseFilePaths } from '../utils';
 
 export const lint = (files: string[]) => {
   const args = ['@biomejs/biome', 'check'];
 
   // Add files or default to current directory
   if (files.length > 0) {
-    args.push(...files);
+    args.push(...parseFilePaths(files));
   } else {
     args.push('./');
   }
 
-  const result = spawnSync('npx', args, {
+  const fullCommand = args.join(' ');
+
+  const result = spawnSync(fullCommand, {
     stdio: 'inherit',
-    shell: false,
+    shell: true,
   });
 
   if (result.error) {

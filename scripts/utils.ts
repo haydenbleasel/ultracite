@@ -65,3 +65,19 @@ export const updatePackageJson = async ({
     JSON.stringify(newPackageJsonObject, null, 2)
   );
 };
+
+// Regex patterns for special characters that need escaping
+const SPECIAL_CHARS_PATTERN = /[ $(){}[\]&|;<>!"'`*?#~]/;
+const SINGLE_QUOTE_PATTERN = /'/g;
+
+// Parse and escape file paths to handle special characters
+export const parseFilePaths = (files: string[]): string[] => {
+  return files.map((file) => {
+    // Check if the path needs escaping (contains special shell characters)
+    if (SPECIAL_CHARS_PATTERN.test(file)) {
+      // Escape single quotes by replacing ' with '\'' and wrap in single quotes
+      return `'${file.replace(SINGLE_QUOTE_PATTERN, "'\\''")}' `;
+    }
+    return file;
+  });
+};
