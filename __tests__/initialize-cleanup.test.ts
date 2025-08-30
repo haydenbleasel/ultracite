@@ -314,6 +314,28 @@ describe('initialize - cleanup features', () => {
       expect(mockPrettierCleanup.remove).toHaveBeenCalledWith('npm');
       expect(mockEslintCleanup.remove).toHaveBeenCalledWith('npm');
     });
+
+    it('should handle Prettier removal errors gracefully', async () => {
+      mockPrettierCleanup.remove.mockRejectedValue(new Error('Failed to remove Prettier'));
+
+      await initialize({
+        pm: 'yarn',
+        removePrettier: true,
+        removeEslint: false,
+        editors: [],
+        rules: [],
+        integrations: [],
+      });
+
+      expect(mockPrettierCleanup.remove).toHaveBeenCalledWith('yarn');
+      expect(mockSpinnerInstance.stop).toHaveBeenCalledWith(
+        'Failed to remove Prettier completely, but continuing...'
+      );
+      // Should continue with initialization
+      expect(mockLog.success).toHaveBeenCalledWith(
+        'Successfully initialized Ultracite configuration!'
+      );
+    });
   });
 
   describe('Zed editor configuration', () => {

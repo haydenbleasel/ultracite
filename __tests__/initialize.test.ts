@@ -172,6 +172,29 @@ describe('initialize command', () => {
     );
   });
 
+  it('should display warnings when package manager detection has warnings', async () => {
+    mockDetectPackageManager.mockResolvedValue({
+      name: 'npm',
+      command: 'npm',
+      lockFile: 'package-lock.json',
+      majorVersion: '9',
+      warnings: [
+        'Multiple lock files detected',
+        'Consider removing duplicate lock files',
+      ],
+    });
+    mockMultiselect.mockResolvedValue([]);
+
+    await initialize();
+
+    expect(mockLog.warn).toHaveBeenCalledWith('Multiple lock files detected');
+    expect(mockLog.warn).toHaveBeenCalledWith('Consider removing duplicate lock files');
+    expect(mockLog.info).toHaveBeenCalledWith('Detected lockfile, using npm');
+    expect(mockLog.success).toHaveBeenCalledWith(
+      'Successfully initialized Ultracite configuration!'
+    );
+  });
+
   it('should detect bun when bun.lockb exists', async () => {
     mockDetectPackageManager.mockResolvedValue({
       name: 'bun',

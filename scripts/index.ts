@@ -10,7 +10,7 @@ import { initialize } from './initialize';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
-const router = t.router({
+export const router = t.router({
   init: t.procedure
     .meta({
       description: 'Initialize Ultracite in the current directory',
