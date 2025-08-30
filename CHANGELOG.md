@@ -1,3 +1,19 @@
+# v5.2.11 (Sat Aug 30 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Increase test coverage lines from 93.61% to 94.18% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Increase test coverage lines from 88.43% to 93.61% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Increase test coverage lines from 87.22% to 88.43% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #260 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.10 (Thu Aug 28 2025)
 
 #### 🐛 Bug Fix
