@@ -1,75 +1,62 @@
-import { execSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 import { intro, log, multiselect, spinner } from '@clack/prompts';
+import {
+  addDevDependency,
+  detectPackageManager,
+  type PackageManagerName,
+} from 'nypm';
 import packageJson from '../package.json' with { type: 'json' };
 import { biome } from './biome';
-import { claude } from './claude';
-import { codex } from './codex';
-import { cursor } from './cursor';
-import { eslintCleanup } from './eslint-cleanup';
-import { husky } from './husky';
-import { kiro } from './kiro';
-import { lefthook } from './lefthook';
-import { lintStaged } from './lint-staged';
-import { packageManager } from './package-manager';
-import { prettierCleanup } from './prettier-cleanup';
-import { title } from './title';
+import type { options } from './consts/options';
+import { vscode } from './editor-config/vscode';
+import { zed } from './editor-config/zed';
+import { createEditorRules } from './editor-rules';
+import { husky } from './integrations/husky';
+import { lefthook } from './integrations/lefthook';
+import { lintStaged } from './integrations/lint-staged';
+import { eslintCleanup } from './migrations/eslint';
+import { prettierCleanup } from './migrations/prettier';
 import { tsconfig } from './tsconfig';
-import { vscodeCopilot } from './vscode-copilot';
-import { vscode } from './vscode-settings';
-import { windsurf } from './windsurf';
-import { zedCopilot } from './zed';
-import { zed } from './zed-settings';
+import { isMonorepo, title, updatePackageJson } from './utils';
 
 const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
 const ultraciteVersion = packageJson.version;
 
-type Initialize = {
-  pm?: 'pnpm' | 'bun' | 'yarn' | 'npm';
-  editors?: ('vscode' | 'zed')[];
-  rules?: (
-    | 'vscode-copilot'
-    | 'cursor'
-    | 'windsurf'
-    | 'zed'
-    | 'claude'
-    | 'codex'
-  )[];
-  features?: ('husky' | 'lefthook' | 'lint-staged')[];
+type InitializeFlags = {
+  pm?: PackageManagerName;
+  editors?: (typeof options.editorConfigs)[number][];
+  rules?: (typeof options.editorRules)[number][];
+  integrations?: (typeof options.integrations)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
 };
 
 const installDependencies = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
   s.start('Installing dependencies...');
+  const packages = [
+    `ultracite@${ultraciteVersion}`,
+    `@biomejs/biome@${schemaVersion}`,
+  ];
 
   if (install) {
-    execSync(
-      `${packageManagerAdd} -D -E ultracite @biomejs/biome@${schemaVersion}`
-    );
+    for (const pkg of packages) {
+      await addDevDependency(pkg, {
+        packageManager,
+        workspace: await isMonorepo(),
+      });
+    }
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
+    await updatePackageJson({
       devDependencies: {
-        ...packageJsonObject.devDependencies,
         '@biomejs/biome': schemaVersion,
-        ultracite: `^${ultraciteVersion}`,
+        ultracite: ultraciteVersion,
       },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    });
   }
 
   s.stop('Dependencies installed.');
@@ -140,7 +127,7 @@ const upsertBiomeConfig = async () => {
 };
 
 const initializePrecommitHook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -149,39 +136,27 @@ const initializePrecommitHook = async (
   s.message('Installing Husky...');
 
   if (install) {
-    husky.install(packageManagerAdd);
+    await husky.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        husky: 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({
+      devDependencies: { husky: 'latest' },
+    });
   }
 
   if (await husky.exists()) {
     s.message('Pre-commit hook found, updating...');
-    await husky.update();
+    await husky.update(packageManager);
     s.stop('Pre-commit hook updated.');
     return;
   }
 
   s.message('Pre-commit hook not found, creating...');
-  await husky.create();
+  await husky.create(packageManager);
   s.stop('Pre-commit hook created.');
 };
 
 const initializeLefthook = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -190,39 +165,27 @@ const initializeLefthook = async (
   s.message('Installing lefthook...');
 
   if (install) {
-    lefthook.install(packageManagerAdd);
+    await lefthook.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        lefthook: 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({
+      devDependencies: { lefthook: 'latest' },
+    });
   }
 
   if (await lefthook.exists()) {
     s.message('lefthook.yml found, updating...');
-    await lefthook.update();
+    await lefthook.update(packageManager);
     s.stop('lefthook.yml updated.');
     return;
   }
 
   s.message('lefthook.yml not found, creating...');
-  await lefthook.create();
+  await lefthook.create(packageManager);
   s.stop('lefthook.yml created.');
 };
 
 const initializeLintStaged = async (
-  packageManagerAdd: string,
+  packageManager: PackageManagerName,
   install = true
 ) => {
   const s = spinner();
@@ -231,155 +194,52 @@ const initializeLintStaged = async (
   s.message('Installing lint-staged...');
 
   if (install) {
-    lintStaged.install(packageManagerAdd);
+    await lintStaged.install(packageManager);
   } else {
-    const packageJsonContent = await readFile('package.json', 'utf8');
-    const packageJsonObject = JSON.parse(packageJsonContent);
-
-    const newPackageJsonObject = {
-      ...packageJsonObject,
-      devDependencies: {
-        ...packageJsonObject.devDependencies,
-        'lint-staged': 'latest',
-      },
-    };
-
-    await writeFile(
-      'package.json',
-      JSON.stringify(newPackageJsonObject, null, 2)
-    );
+    await updatePackageJson({
+      devDependencies: { 'lint-staged': 'latest' },
+    });
   }
 
   if (await lintStaged.exists()) {
     s.message('lint-staged found, updating...');
-    await lintStaged.update();
+    await lintStaged.update(packageManager);
     s.stop('lint-staged updated.');
     return;
   }
 
   s.message('lint-staged not found, creating...');
-  await lintStaged.create();
+  await lintStaged.create(packageManager);
   s.stop('lint-staged created.');
 };
 
-const upsertVSCodeCopilotRules = async () => {
+const upsertEditorRules = async (
+  name: (typeof options.editorRules)[number],
+  displayName: string
+) => {
   const s = spinner();
-  s.start('Checking for GitHub Copilot rules...');
+  s.start(`Checking for ${displayName}...`);
 
-  if (await vscodeCopilot.exists()) {
-    s.message('GitHub Copilot rules found, updating...');
-    await vscodeCopilot.update();
-    s.stop('GitHub Copilot rules updated.');
+  const rules = createEditorRules(name);
+
+  if (await rules.exists()) {
+    s.message(`${displayName} found, updating...`);
+    await rules.update();
+    s.stop(`${displayName} updated.`);
     return;
   }
 
-  s.message('GitHub Copilot rules not found, creating...');
-  await vscodeCopilot.create();
-  s.stop('GitHub Copilot rules created.');
+  s.message(`${displayName} not found, creating...`);
+  await rules.create();
+  s.stop(`${displayName} created.`);
 };
 
-const upsertCursorRules = async () => {
-  const s = spinner();
-  s.start('Checking for Cursor rules...');
-
-  if (await cursor.exists()) {
-    s.message('Cursor rules found, updating...');
-    await cursor.update();
-    s.stop('Cursor rules updated.');
-    return;
-  }
-
-  s.message('Cursor rules not found, creating...');
-  await cursor.create();
-  s.stop('Cursor rules created.');
-};
-
-const upsertWindsurfRules = async () => {
-  const s = spinner();
-  s.start('Checking for Windsurf rules...');
-
-  if (await windsurf.exists()) {
-    s.message('Windsurf rules found, updating...');
-    await windsurf.update();
-    s.stop('Windsurf rules updated.');
-    return;
-  }
-
-  s.message('Windsurf rules not found, creating...');
-  await windsurf.create();
-  s.stop('Windsurf rules created.');
-};
-
-const upsertZedRules = async () => {
-  const s = spinner();
-  s.start('Checking for Zed rules...');
-
-  if (await zedCopilot.exists()) {
-    s.message('Zed rules found, updating...');
-    await zedCopilot.update();
-    s.stop('Zed rules updated.');
-    return;
-  }
-
-  s.message('Zed rules not found, creating...');
-  await zedCopilot.create();
-  s.stop('Zed rules created.');
-};
-
-const upsertClaudeRules = async () => {
-  const s = spinner();
-  s.start('Checking for Claude Code rules...');
-
-  if (await claude.exists()) {
-    s.message('Claude Code rules found, updating...');
-    await claude.update();
-    s.stop('Claude Code rules updated.');
-    return;
-  }
-
-  s.message('Claude Code rules not found, creating...');
-  await claude.create();
-  s.stop('Claude Code rules created.');
-};
-
-const upsertCodexRules = async () => {
-  const s = spinner();
-  s.start('Checking for OpenAI Codex rules...');
-
-  if (await codex.exists()) {
-    s.message('OpenAI Codex rules found, updating...');
-    await codex.update();
-    s.stop('OpenAI Codex rules updated.');
-    return;
-  }
-
-  s.message('OpenAI Codex rules not found, creating...');
-  await codex.create();
-  s.stop('OpenAI Codex rules created.');
-};
-
-const upsertKiroRules = async () => {
-  const s = spinner();
-  s.start('Checking for Kiro IDE steering files...');
-
-  if (await kiro.exists()) {
-    s.message('Kiro IDE steering files found, updating...');
-    await kiro.update();
-    s.stop('Kiro IDE steering files updated.');
-    return;
-  }
-
-  s.message('Kiro IDE steering files not found, creating...');
-  await kiro.create();
-  s.stop('Kiro IDE steering files created.');
-};
-
-const removePrettier = async (packageManagerAdd: string) => {
+const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing Prettier dependencies and configuration...');
 
   try {
-    const result = await prettierCleanup.remove(packageManagerAdd);
+    const result = await prettierCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -396,17 +256,17 @@ const removePrettier = async (packageManagerAdd: string) => {
     }
 
     s.stop('Prettier removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove Prettier completely, but continuing...');
   }
 };
 
-const removeESLint = async (packageManagerAdd: string) => {
+const removeESLint = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start('Removing ESLint dependencies and configuration...');
 
   try {
-    const result = await eslintCleanup.remove(packageManagerAdd);
+    const result = await eslintCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
@@ -423,45 +283,34 @@ const removeESLint = async (packageManagerAdd: string) => {
     }
 
     s.stop('ESLint removed successfully.');
-  } catch (error) {
+  } catch (_error) {
     s.stop('Failed to remove ESLint completely, but continuing...');
   }
 };
 
-const getPackageManagerCommand = async (pmFlag?: string): Promise<string> => {
-  if (pmFlag) {
-    const option = packageManager.options.find((opt) => opt.label === pmFlag);
-    if (!option) {
-      throw new Error(`Unsupported package manager: ${pmFlag}`);
-    }
-
-    const monorepo = await packageManager.isMonorepo();
-    return monorepo && option.monorepoSuffix
-      ? `${option.value} ${option.monorepoSuffix}`
-      : option.value;
-  }
-
-  const detected = await packageManager.get();
-  if (detected) {
-    log.info(`Detected lockfile, using ${detected}`);
-    return detected;
-  }
-
-  const selected = await packageManager.select();
-  if (!selected) {
-    throw new Error('No package manager selected');
-  }
-
-  return selected;
-};
-
-export const initialize = async (flags?: Initialize) => {
+export const initialize = async (flags?: InitializeFlags) => {
   intro(title);
 
   try {
     const opts = flags ?? {};
+    let { pm } = opts;
 
-    const packageManagerAdd = await getPackageManagerCommand(opts.pm);
+    if (!pm) {
+      const detected = await detectPackageManager(process.cwd());
+
+      if (!detected) {
+        throw new Error('No package manager specified or detected');
+      }
+
+      if (detected.warnings) {
+        for (const warning of detected.warnings) {
+          log.warn(warning);
+        }
+      }
+
+      log.info(`Detected lockfile, using ${detected.name}`);
+      pm = detected.name;
+    }
 
     let shouldRemovePrettier = opts.removePrettier;
     let shouldRemoveEslint = opts.removeEslint;
@@ -523,23 +372,43 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     let editorRules = opts.rules;
+
+    const editorRulesOptions: Record<
+      (typeof options.editorRules)[number],
+      string
+    > = {
+      'vscode-copilot': 'GitHub Copilot (VSCode)',
+      cursor: 'Cursor',
+      windsurf: 'Windsurf',
+      zed: 'Zed',
+      claude: 'Claude Code',
+      codex: 'OpenAI Codex / Jules / OpenCode',
+      kiro: 'Kiro IDE',
+      cline: 'Cline',
+      amp: 'AMP',
+      aider: 'Aider',
+      'firebase-studio': 'Firebase Studio',
+      'open-hands': 'Open Hands',
+      'gemini-cli': 'Gemini CLI',
+      junie: 'Junie',
+      augmentcode: 'Augment Code',
+      'kilo-code': 'Kilo Code',
+      goose: 'Codename Goose',
+    };
+
     if (!editorRules) {
       editorRules = (await multiselect({
         message: 'Which editor rules do you want to enable (optional)?',
-        options: [
-          { label: 'GitHub Copilot (VSCode)', value: 'vscode-copilot' },
-          { label: 'Cursor', value: 'cursor' },
-          { label: 'Windsurf', value: 'windsurf' },
-          { label: 'Zed', value: 'zed' },
-          { label: 'Claude Code', value: 'claude' },
-          { label: 'OpenAI Codex', value: 'codex' },
-        ],
+        options: Object.entries(editorRulesOptions).map(([value, label]) => ({
+          value,
+          label,
+        })),
         required: false,
-      })) as Initialize['rules'];
+      })) as InitializeFlags['rules'];
     }
 
-    let extraFeatures = opts.features;
-    if (extraFeatures === undefined) {
+    let integrations = opts.integrations;
+    if (integrations === undefined) {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
@@ -550,9 +419,9 @@ export const initialize = async (flags?: Initialize) => {
         opts.removeEslint !== undefined;
 
       if (hasOtherCliOptions) {
-        extraFeatures = [];
+        integrations = [];
       } else {
-        extraFeatures = (await multiselect({
+        integrations = (await multiselect({
           message: 'Would you like any of the following (optional)?',
           options: [
             { label: 'Husky pre-commit hook', value: 'husky' },
@@ -565,13 +434,13 @@ export const initialize = async (flags?: Initialize) => {
     }
 
     if (shouldRemovePrettier) {
-      await removePrettier(packageManagerAdd);
+      await removePrettier(pm);
     }
     if (shouldRemoveEslint) {
-      await removeESLint(packageManagerAdd);
+      await removeESLint(pm);
     }
 
-    await installDependencies(packageManagerAdd, !opts.skipInstall);
+    await installDependencies(pm, !opts.skipInstall);
 
     await upsertTsConfig();
     await upsertBiomeConfig();
@@ -583,33 +452,18 @@ export const initialize = async (flags?: Initialize) => {
       await upsertZedSettings();
     }
 
-    if (editorRules?.includes('vscode-copilot')) {
-      await upsertVSCodeCopilotRules();
-    }
-    if (editorRules?.includes('cursor')) {
-      await upsertCursorRules();
-    }
-    if (editorRules?.includes('windsurf')) {
-      await upsertWindsurfRules();
-    }
-    if (editorRules?.includes('zed')) {
-      await upsertZedRules();
-    }
-    if (editorRules?.includes('claude')) {
-      await upsertClaudeRules();
-    }
-    if (editorRules?.includes('codex')) {
-      await upsertCodexRules();
+    for (const ruleName of editorRules ?? []) {
+      await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
     }
 
-    if (extraFeatures?.includes('husky')) {
-      await initializePrecommitHook(packageManagerAdd, !opts.skipInstall);
+    if (integrations?.includes('husky')) {
+      await initializePrecommitHook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lefthook')) {
-      await initializeLefthook(packageManagerAdd, !opts.skipInstall);
+    if (integrations?.includes('lefthook')) {
+      await initializeLefthook(pm, !opts.skipInstall);
     }
-    if (extraFeatures?.includes('lint-staged')) {
-      await initializeLintStaged(packageManagerAdd, !opts.skipInstall);
+    if (integrations?.includes('lint-staged')) {
+      await initializeLintStaged(pm, !opts.skipInstall);
     }
 
     log.success('Successfully initialized Ultracite configuration!');

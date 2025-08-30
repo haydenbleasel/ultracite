@@ -2,11 +2,11 @@ import { FileIcon } from 'lucide-react';
 import { codeToHtml } from 'shiki';
 
 const config = `{
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "extends": ["ultracite"]
 }`;
 
-const ZeroConfig = async () => {
+export const ZeroConfig = async () => {
   const highlightedCode = await codeToHtml(config, {
     lang: 'jsonc',
     theme: 'vesper',
@@ -41,5 +41,3 @@ const ZeroConfig = async () => {
     </div>
   );
 };
-
-export { ZeroConfig };

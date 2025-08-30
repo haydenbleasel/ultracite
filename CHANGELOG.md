@@ -1,3 +1,246 @@
+# v5.2.11 (Sat Aug 30 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Increase test coverage lines from 93.61% to 94.18% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Increase test coverage lines from 88.43% to 93.61% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Increase test coverage lines from 87.22% to 88.43% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #260 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.10 (Thu Aug 28 2025)
+
+#### 🐛 Bug Fix
+
+- Replace execSync commands with spawnSync [#259](https://github.com/haydenbleasel/ultracite/pull/259) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.9 (Thu Aug 28 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #205 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.8 (Thu Aug 28 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix recharts dep ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.7 (Thu Aug 28 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.6 (Thu Aug 28 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Upgrade Biome to 2.2.2 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.5 (Thu Aug 21 2025)
+
+#### 🐛 Bug Fix
+
+- DOCS : Fix error in the troubleshooting page [#257](https://github.com/haydenbleasel/ultracite/pull/257) ([@Melvynx](https://github.com/Melvynx))
+
+#### Authors: 1
+
+- Melvyn ([@Melvynx](https://github.com/Melvynx))
+
+---
+
+# v5.2.4 (Sun Aug 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Melvyn ([@Melvynx](https://github.com/Melvynx)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Docs: Fix the docs with the latest version in biome [#252](https://github.com/haydenbleasel/ultracite/pull/252) ([@Melvynx](https://github.com/Melvynx))
+
+#### Authors: 1
+
+- Melvyn ([@Melvynx](https://github.com/Melvynx))
+
+---
+
+# v5.2.3 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update editor rules docs ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.2 (Sat Aug 16 2025)
+
+#### 🐛 Bug Fix
+
+- Support more AI agents [#250](https://github.com/haydenbleasel/ultracite/pull/250) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.1 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create util for updating package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.2.0 (Sat Aug 16 2025)
+
+#### 🚀 Enhancement
+
+- nypm [#249](https://github.com/haydenbleasel/ultracite/pull/249) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.9 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
+- Improve file organization ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #233 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #247 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.8 (Sat Aug 16 2025)
+
+#### ⚠️ Pushed to `main`
+
+- More kiro fixes ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix missing Kiro option ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.7 (Fri Aug 15 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #248 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.6 (Fri Aug 15 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #246 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.5 (Thu Aug 14 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update zero-config.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
+# v5.1.4 (Thu Aug 14 2025)
+
+#### 🐛 Bug Fix
+
+- Bump trpc-cli from 0.10.0 to 0.10.2 [#238](https://github.com/haydenbleasel/ultracite/pull/238) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump zod from 4.0.5 to 4.0.14 [#239](https://github.com/haydenbleasel/ultracite/pull/239) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v5.1.3 (Thu Aug 14 2025)
+
+#### 🐛 Bug Fix
+
+- Upgrade to Biome 2.2.0 [#245](https://github.com/haydenbleasel/ultracite/pull/245) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.1.2 (Mon Jul 28 2025)
 
 #### 🐛 Bug Fix

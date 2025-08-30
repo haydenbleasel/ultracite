@@ -3,13 +3,14 @@
 import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import z from 'zod';
 import packageJson from '../package.json' with { type: 'json' };
-import { format } from './format';
+import { format } from './commands/format';
+import { lint } from './commands/lint';
+import { options } from './consts/options';
 import { initialize } from './initialize';
-import { lint } from './lint';
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
-const router = t.router({
+export const router = t.router({
   init: t.procedure
     .meta({
       description: 'Initialize Ultracite in the current directory',
@@ -17,30 +18,21 @@ const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(['pnpm', 'bun', 'yarn', 'npm'])
+          .enum(options.packageManagers)
           .optional()
           .describe('Package manager to use'),
         editors: z
-          .array(z.enum(['vscode', 'zed']))
+          .array(z.enum(options.editorConfigs))
           .optional()
           .describe('Editors to configure'),
         rules: z
-          .array(
-            z.enum([
-              'vscode-copilot',
-              'cursor',
-              'windsurf',
-              'zed',
-              'claude',
-              'codex',
-            ])
-          )
+          .array(z.enum(options.editorRules))
           .optional()
           .describe('Editor rules to enable'),
-        features: z
-          .array(z.enum(['husky', 'lefthook', 'lint-staged']))
+        integrations: z
+          .array(z.enum(options.integrations))
           .optional()
-          .describe('Additional features to enable'),
+          .describe('Additional integrations to enable'),
         removePrettier: z
           .boolean()
           .optional()
@@ -91,16 +83,16 @@ const router = t.router({
       ])
     )
     .mutation(({ input }) => {
-      const [files, options] = input;
-      format(files, { unsafe: options.unsafe });
+      const [files, opts] = input;
+      format(files, { unsafe: opts.unsafe });
     }),
 });
 
 const cli = createCli({
   router,
-  name: 'ultracite',
+  name: packageJson.name,
   version: packageJson.version,
-  description: 'Ship code faster and with more confidence.',
+  description: packageJson.description,
 });
 
 if (!process.env.VITEST) {

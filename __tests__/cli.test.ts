@@ -1,5 +1,5 @@
+import { type TrpcCliMeta, trpcServer } from 'trpc-cli';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { trpcServer, type TrpcCliMeta } from 'trpc-cli';
 import z from 'zod';
 
 // Mock the command modules
@@ -28,7 +28,7 @@ vi.mock('../package.json', () => ({
 
 function createTestRouter() {
   const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
-  
+
   return t.router({
     init: t.procedure
       .meta({
@@ -57,10 +57,10 @@ function createTestRouter() {
             )
             .optional()
             .describe('Editor rules to enable'),
-          features: z
+          integrations: z
             .array(z.enum(['husky', 'lefthook', 'lint-staged']))
             .optional()
-            .describe('Additional features to enable'),
+            .describe('Additional integrations to enable'),
           removePrettier: z
             .boolean()
             .optional()
@@ -128,7 +128,7 @@ describe('CLI Router', () => {
         pm: 'pnpm' as const,
         editors: ['vscode' as const],
         rules: ['cursor' as const],
-        features: ['husky' as const],
+        integrations: ['husky' as const],
         removePrettier: true,
         removeEslint: false,
       };
@@ -149,9 +149,7 @@ describe('CLI Router', () => {
     it('should validate package manager enum', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.init({ pm: 'invalid' as never })
-      ).rejects.toThrow();
+      await expect(caller.init({ pm: 'invalid' as never })).rejects.toThrow();
     });
 
     it('should validate editors array', async () => {
@@ -170,11 +168,11 @@ describe('CLI Router', () => {
       ).rejects.toThrow();
     });
 
-    it('should validate features array', async () => {
+    it('should validate integrations array', async () => {
       const caller = router.createCaller({});
 
       await expect(
-        caller.init({ features: ['invalid'] as never })
+        caller.init({ integrations: ['invalid'] as never })
       ).rejects.toThrow();
     });
   });
@@ -200,9 +198,7 @@ describe('CLI Router', () => {
     it('should validate that input is array of strings', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.lint([123] as never)
-      ).rejects.toThrow();
+      await expect(caller.lint([123] as never)).rejects.toThrow();
     });
   });
 
@@ -237,9 +233,7 @@ describe('CLI Router', () => {
     it('should validate input format', async () => {
       const caller = router.createCaller({});
 
-      await expect(
-        caller.format(['invalid'] as never)
-      ).rejects.toThrow();
+      await expect(caller.format(['invalid'] as never)).rejects.toThrow();
     });
   });
-}); 
+});

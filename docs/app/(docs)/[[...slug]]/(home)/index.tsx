@@ -1,3 +1,4 @@
+import { Agents } from './components/agents';
 import { Benefits } from './components/benefits';
 import { CallToAction } from './components/cta';
 import { Footer } from './components/footer';
@@ -12,6 +13,7 @@ const Home = () => (
     <Benefits />
     <ZeroConfig />
     <IDE />
+    <Agents />
     <Tweets />
     <CallToAction />
     <Footer />

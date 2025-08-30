@@ -1,21 +1,35 @@
-import { execSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { parse } from 'jsonc-parser';
+import * as nypm from 'nypm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { lintStaged } from '../scripts/lint-staged';
-import { exists } from '../scripts/utils';
+import { lintStaged } from '../scripts/integrations/lint-staged';
+import { exists, isMonorepo } from '../scripts/utils';
 
-vi.mock('node:child_process');
+vi.mock('nypm', () => ({
+  addDevDependency: vi.fn(),
+  dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
+    if (pkg === 'ultracite' && options?.args?.includes('format')) {
+      if (pm === 'npm') return 'npx ultracite format';
+      if (pm === 'yarn') return 'yarn dlx ultracite format';
+      if (pm === 'pnpm') return 'pnpm dlx ultracite format';
+      if (pm === 'bun') return 'bunx ultracite format';
+      if (pm === 'deno') return 'deno run -A npm:ultracite format';
+    }
+    return `npx ${pkg} ${options?.args?.join(' ') || ''}`;
+  }),
+}));
 vi.mock('node:fs/promises');
 vi.mock('../scripts/utils', () => ({
   exists: vi.fn(),
+  isMonorepo: vi.fn(),
 }));
 
 describe('lint-staged configuration', () => {
-  const mockExecSync = vi.mocked(execSync);
+  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
+  const mockIsMonorepo = vi.mocked(isMonorepo);
 
   const defaultConfig = {
     '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': ['npx ultracite format'],
@@ -23,6 +37,7 @@ describe('lint-staged configuration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockIsMonorepo.mockResolvedValue(false);
   });
 
   describe('exists', () => {
@@ -74,26 +89,54 @@ describe('lint-staged configuration', () => {
   });
 
   describe('install', () => {
-    it('should install lint-staged as dev dependency', () => {
-      const packageManagerAdd = 'npm install';
+    it('should install lint-staged as dev dependency', async () => {
+      mockAddDevDependency.mockResolvedValue();
+      const packageManager = 'npm';
 
-      lintStaged.install(packageManagerAdd);
+      await lintStaged.install(packageManager);
 
-      expect(mockExecSync).toHaveBeenCalledWith('npm install -D lint-staged');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'npm',
+        workspace: false,
+      });
     });
 
-    it('should work with different package managers', () => {
-      const packageManagerAdd = 'pnpm add';
+    it('should work with different package managers', async () => {
+      mockAddDevDependency.mockResolvedValue();
 
-      lintStaged.install(packageManagerAdd);
+      // Test with pnpm
+      await lintStaged.install('pnpm');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'pnpm',
+        workspace: false,
+      });
 
-      expect(mockExecSync).toHaveBeenCalledWith('pnpm add -D lint-staged');
+      // Test with yarn
+      await lintStaged.install('yarn');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'yarn',
+        workspace: false,
+      });
+
+      // Test with bun
+      await lintStaged.install('bun');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'bun',
+        workspace: false,
+      });
+
+      // Test with deno
+      await lintStaged.install('deno');
+      expect(mockAddDevDependency).toHaveBeenCalledWith('lint-staged', {
+        packageManager: 'deno',
+        workspace: false,
+      });
     });
   });
 
   describe('create', () => {
     it('should create .lintstagedrc.json with default configuration', async () => {
-      await lintStaged.create();
+      await lintStaged.create('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -116,7 +159,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./package.json', 'utf-8');
       // Verify the merged configuration is written
@@ -142,7 +185,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.json',
@@ -177,7 +220,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(yamlContent);
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.yaml',
@@ -208,7 +251,7 @@ describe('lint-staged configuration', () => {
         .mockResolvedValueOnce(packageJsonContent) // For ESM check
         .mockRejectedValueOnce(new Error('Import failed')); // ESM config import fails
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -233,7 +276,7 @@ describe('lint-staged configuration', () => {
         throw new Error('Require failed');
       });
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         '.lintstagedrc.json',
@@ -313,7 +356,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith('./.lintstagedrc', 'utf-8');
     });
@@ -363,7 +406,7 @@ describe('lint-staged configuration', () => {
 
       mockReadFile.mockResolvedValue(existingConfigWithComments);
 
-      await lintStaged.update();
+      await lintStaged.update('npm');
 
       expect(mockReadFile).toHaveBeenCalledWith(
         './.lintstagedrc.json',
