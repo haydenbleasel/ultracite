@@ -1,6 +1,12 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, writeFile } from 'node:fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { exists, isMonorepo, parseFilePaths, title } from '../scripts/utils';
+import {
+  exists,
+  isMonorepo,
+  parseFilePaths,
+  title,
+  updatePackageJson,
+} from '../scripts/utils';
 
 vi.mock('node:fs/promises');
 
@@ -11,6 +17,7 @@ const DIGIT_PATTERN = /\d+/;
 describe('utils', () => {
   const mockAccess = vi.mocked(access);
   const mockReadFile = vi.mocked(readFile);
+  const mockWriteFile = vi.mocked(writeFile);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -325,6 +332,229 @@ describe('utils', () => {
         '/regular/path/file.tsx',
         "'$HOME/special.ts' "
       ]);
+    });
+  });
+
+  describe('updatePackageJson', () => {
+    it('should update package.json with new dependencies', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        version: '1.0.0',
+        dependencies: {
+          react: '^18.0.0',
+        },
+        devDependencies: {
+          typescript: '^5.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        dependencies: {
+          lodash: '^4.17.21',
+        },
+      });
+
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            dependencies: {
+              react: '^18.0.0',
+              lodash: '^4.17.21',
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it('should update package.json with new devDependencies', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        version: '1.0.0',
+        dependencies: {
+          react: '^18.0.0',
+        },
+        devDependencies: {
+          typescript: '^5.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        devDependencies: {
+          vitest: '^1.0.0',
+          '@types/node': '^20.0.0',
+        },
+      });
+
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            devDependencies: {
+              typescript: '^5.0.0',
+              vitest: '^1.0.0',
+              '@types/node': '^20.0.0',
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it('should update both dependencies and devDependencies', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        version: '1.0.0',
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        dependencies: {
+          react: '^18.0.0',
+        },
+        devDependencies: {
+          typescript: '^5.0.0',
+        },
+      });
+
+      expect(mockReadFile).toHaveBeenCalledWith('package.json', 'utf8');
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            devDependencies: {
+              typescript: '^5.0.0',
+            },
+            dependencies: {
+              react: '^18.0.0',
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it('should handle package.json without existing dependencies', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        version: '1.0.0',
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        dependencies: {
+          lodash: '^4.17.21',
+        },
+        devDependencies: {
+          vitest: '^1.0.0',
+        },
+      });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            devDependencies: {
+              vitest: '^1.0.0',
+            },
+            dependencies: {
+              lodash: '^4.17.21',
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it('should override existing dependencies with same names', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        dependencies: {
+          react: '^17.0.0',
+          lodash: '^3.0.0',
+        },
+        devDependencies: {
+          typescript: '^4.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        dependencies: {
+          react: '^18.0.0',
+        },
+        devDependencies: {
+          typescript: '^5.0.0',
+        },
+      });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            name: 'test-package',
+            dependencies: {
+              react: '^18.0.0',
+              lodash: '^3.0.0',
+            },
+            devDependencies: {
+              typescript: '^5.0.0',
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it('should handle empty update objects', async () => {
+      const existingPackageJson = {
+        name: 'test-package',
+        version: '1.0.0',
+        dependencies: {
+          react: '^18.0.0',
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({});
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        'package.json',
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            devDependencies: {},
+          },
+          null,
+          2
+        )
+      );
     });
   });
 });
