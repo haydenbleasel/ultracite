@@ -824,5 +824,139 @@
     "clientKind": "git",
     "useIgnoreFile": true,
     "defaultBranch": "main"
-  }
+  },
+  "overrides": [
+    {
+      // Configuration files that often need default exports
+      "includes": [
+        "*.config.{js,ts,mjs,cjs,mts,cts}",
+        "vite.config.*",
+        "vitest.config.*",
+        "jest.config.*",
+        "rollup.config.*",
+        "webpack.config.*",
+        "eslint.config.*",
+        "prettier.config.*",
+        "stylelint.config.*",
+        "commitlint.config.*",
+        "lint-staged.config.*",
+        "postcss.config.*",
+        "tailwind.config.*",
+        "playwright.config.*",
+        "cypress.config.*",
+        "babel.config.*",
+        "metro.config.*",
+        "next.config.*",
+        "nuxt.config.*",
+        "astro.config.*",
+        "svelte.config.*",
+        "tsup.config.*"
+      ]
+    },
+    {
+      // Test files
+      "includes": ["**/*.{test,spec}.{ts,tsx,js,jsx}", "**/__tests__/**/*"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "suspicious": {
+            "noConsole": "off",
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      // Scripts and CLI tools
+      "includes": ["**/scripts/**/*", "**/bin/**/*", "*.mjs", "*.cjs"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          },
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      // Storybook files
+      "includes": ["**/*.{stories,story}.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      // Environment and type definition files
+      "includes": ["**/*.d.ts", "**/{env,global,types}.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUndeclaredVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      // Files that should not be processed (build output, generated files, non-JS files)
+      "includes": [
+        "**/dist/**/*",
+        "**/build/**/*",
+        "**/.next/**/*",
+        "**/.nuxt/**/*",
+        "**/out/**/*",
+        "**/coverage/**/*",
+        "**/*.min.js",
+        "**/*.min.css",
+        "**/*.md",
+        "**/*.mdx",
+        "**/*.graphql",
+        "**/*.gql",
+        ".env",
+        ".env.*"
+      ],
+      "formatter": {
+        "enabled": false
+      },
+      "linter": {
+        "enabled": false
+      }
+    },
+    {
+      // Package.json and similar JSON config files
+      "includes": [
+        "package.json",
+        "{tsconfig,jsconfig}.json",
+        "tsconfig.*.json",
+        ".vscode/*.json",
+        ".github/**/*.json"
+      ],
+      "json": {
+        "parser": {
+          "allowComments": true,
+          "allowTrailingCommas": true
+        }
+      }
+    },
+    {
+      // Router files (TanStack Router, Remix)
+      "includes": ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
+    }
+  ]
 }
