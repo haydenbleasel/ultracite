@@ -86,6 +86,51 @@ export const router = t.router({
       const [files, opts] = input;
       fix(files, { unsafe: opts.unsafe });
     }),
+
+  // Deprecated commands for backwards compatibility
+  lint: t.procedure
+    .meta({
+      description:
+        "⚠️ DEPRECATED: Use 'check' instead - Run Biome linter without fixing files",
+    })
+    .input(
+      z
+        .array(z.string())
+        .optional()
+        .default([])
+        .describe("specific files to lint")
+    )
+    .query(({ input }) => {
+      console.warn(
+        "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
+      );
+      check(input);
+    }),
+
+  format: t.procedure
+    .meta({
+      description:
+        "⚠️ DEPRECATED: Use 'fix' instead - Run Biome linter and fixes files",
+    })
+    .input(
+      z.tuple([
+        z
+          .array(z.string())
+          .optional()
+          .default([])
+          .describe("specific files to format"),
+        z.object({
+          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+        }),
+      ])
+    )
+    .mutation(({ input }) => {
+      const [files, opts] = input;
+      console.warn(
+        "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
+      );
+      fix(files, { unsafe: opts.unsafe });
+    }),
 });
 
 const cli = createCli({
