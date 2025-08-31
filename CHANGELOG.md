@@ -1,3 +1,15 @@
+# v5.2.16 (Sun Aug 31 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.12 (Sun Aug 31 2025)
 
 :tada: This release contains work from a new contributor! :tada:
