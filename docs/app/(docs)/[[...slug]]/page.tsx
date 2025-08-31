@@ -1,17 +1,17 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
-import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { DocsLayout } from "fumadocs-ui/layouts/notebook";
+import { createRelativeLink } from "fumadocs-ui/mdx";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { baseOptions } from '@/lib/layout.config';
-import { source } from '@/lib/source';
-import { getMDXComponents } from '@/mdx-components';
-import Home from './(home)';
+} from "fumadocs-ui/page";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { baseOptions } from "@/lib/layout.config";
+import { source } from "@/lib/source";
+import { getMDXComponents } from "@/mdx-components";
+import Home from "./(home)";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -25,8 +25,8 @@ const Page = async (props: PageProps) => {
     return (
       <DocsLayout
         {...baseOptions}
-        containerProps={{ className: 'home' }}
-        nav={{ ...baseOptions.nav, mode: 'top' }}
+        containerProps={{ className: "home" }}
+        nav={{ ...baseOptions.nav, mode: "top" }}
         sidebar={{ hidden: false, collapsible: false }}
         tree={source.pageTree}
       >
@@ -46,7 +46,7 @@ const Page = async (props: PageProps) => {
       {...baseOptions}
       nav={{
         ...baseOptions.nav,
-        mode: 'top',
+        mode: "top",
       }}
       sidebar={{ collapsible: false, tabs: false }}
       tree={source.pageTree}
@@ -76,9 +76,9 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
   if (!params.slug) {
     return {
       title:
-        'The AI-ready formatter that helps you write and generate code faster. | Ultracite',
+        "The AI-ready formatter that helps you write and generate code faster. | Ultracite",
       description:
-        'Ultracite is a zero- config Biome preset that provides a robust linting and formatting experience for your team and your AI integrations.',
+        "Ultracite is a zero- config Biome preset that provides a robust linting and formatting experience for your team and your AI integrations.",
     };
   }
 
@@ -86,7 +86,7 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
     return {};
   }
 
-  const image = ['/og', ...(params.slug || []), 'image.png'].join('/');
+  const image = ["/og", ...(params.slug || []), "image.png"].join("/");
 
   return {
     title: page.data.title,
@@ -99,8 +99,8 @@ export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
     twitter: {
       title: page.data.title,
       description: page.data.description,
-      creator: '@haydenbleasel',
-      card: 'summary_large_image',
+      creator: "@haydenbleasel",
+      card: "summary_large_image",
       images: image,
     },
   };

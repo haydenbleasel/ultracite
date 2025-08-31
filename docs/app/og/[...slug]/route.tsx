@@ -1,8 +1,8 @@
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { notFound } from 'next/navigation';
-import { ImageResponse } from 'next/og';
-import { source } from '@/lib/source';
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { notFound } from "next/navigation";
+import { ImageResponse } from "next/og";
+import { source } from "@/lib/source";
 
 export const GET = async (
   _req: Request,
@@ -16,18 +16,18 @@ export const GET = async (
   }
 
   const geistBold = await readFile(
-    join(process.cwd(), 'app/og/[...slug]/Geist-Bold.ttf')
+    join(process.cwd(), "app/og/[...slug]/Geist-Bold.ttf")
   );
   const geistRegular = await readFile(
-    join(process.cwd(), 'app/og/[...slug]/Geist-Regular.ttf')
+    join(process.cwd(), "app/og/[...slug]/Geist-Regular.ttf")
   );
 
   return new ImageResponse(
     <div
       style={{
-        backgroundSize: '80px 80px',
+        backgroundSize: "80px 80px",
         backgroundImage:
-          'linear-gradient(to right, #FF781A 1px, transparent 1px), linear-gradient(to bottom, #FF781A 1px, transparent 1px)',
+          "linear-gradient(to right, #FF781A 1px, transparent 1px), linear-gradient(to bottom, #FF781A 1px, transparent 1px)",
       }}
       tw="flex flex-col justify-between items-start w-full h-full bg-[#ff6900] p-12 text-white"
     >
@@ -62,15 +62,15 @@ export const GET = async (
       height: 630,
       fonts: [
         {
-          name: 'Geist',
+          name: "Geist",
           data: geistBold,
-          style: 'normal',
+          style: "normal",
           weight: 700,
         },
         {
-          name: 'Geist',
+          name: "Geist",
           data: geistRegular,
-          style: 'normal',
+          style: "normal",
           weight: 400,
         },
       ],
@@ -81,6 +81,6 @@ export const GET = async (
 export const generateStaticParams = () => {
   return source.generateParams().map((page) => ({
     ...page,
-    slug: [...page.slug, 'image.png'],
+    slug: [...page.slug, "image.png"],
   }));
 };

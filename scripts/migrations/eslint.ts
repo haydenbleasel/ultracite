@@ -1,31 +1,31 @@
-import { execSync } from 'node:child_process';
-import { readFile, unlink, writeFile } from 'node:fs/promises';
-import { parse } from 'jsonc-parser';
-import { type PackageManagerName, removeDependency } from 'nypm';
-import { exists } from '../utils';
+import { execSync } from "node:child_process";
+import { readFile, unlink, writeFile } from "node:fs/promises";
+import { parse } from "jsonc-parser";
+import { type PackageManagerName, removeDependency } from "nypm";
+import { exists } from "../utils";
 
 // Common ESLint configuration files
 const eslintConfigFiles = [
-  '.eslintrc',
-  '.eslintrc.js',
-  '.eslintrc.json',
-  '.eslintrc.yml',
-  '.eslintrc.yaml',
-  '.eslintrc.config.js',
-  'eslint.config.js',
-  'eslint.config.mjs',
-  'eslint.config.cjs',
-  '.eslintignore',
+  ".eslintrc",
+  ".eslintrc.js",
+  ".eslintrc.json",
+  ".eslintrc.yml",
+  ".eslintrc.yaml",
+  ".eslintrc.config.js",
+  "eslint.config.js",
+  "eslint.config.mjs",
+  "eslint.config.cjs",
+  ".eslintignore",
 ];
 
 const detectESLintPackages = async (): Promise<string[]> => {
   try {
-    const packageJsonContent = await readFile('package.json', 'utf-8');
+    const packageJsonContent = await readFile("package.json", "utf-8");
     const packageJson = parse(packageJsonContent) as
       | Record<string, unknown>
       | undefined;
 
-    if (!packageJson || typeof packageJson !== 'object') {
+    if (!packageJson || typeof packageJson !== "object") {
       return [];
     }
 
@@ -38,10 +38,10 @@ const detectESLintPackages = async (): Promise<string[]> => {
 
     return Object.keys(allDeps).filter(
       (dep) =>
-        dep.startsWith('eslint') ||
-        dep.startsWith('@eslint/') ||
-        dep === '@typescript-eslint/parser' ||
-        dep === '@typescript-eslint/eslint-plugin'
+        dep.startsWith("eslint") ||
+        dep.startsWith("@eslint/") ||
+        dep === "@typescript-eslint/parser" ||
+        dep === "@typescript-eslint/eslint-plugin"
     );
   } catch {
     return [];
@@ -83,19 +83,19 @@ const removeESLintConfigFiles = async (): Promise<string[]> => {
 };
 
 const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
-  const settingsPath = './.vscode/settings.json';
+  const settingsPath = "./.vscode/settings.json";
 
   if (!(await exists(settingsPath))) {
     return false;
   }
 
   try {
-    const existingContents = await readFile(settingsPath, 'utf-8');
+    const existingContents = await readFile(settingsPath, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
 
-    if (!existingConfig || typeof existingConfig !== 'object') {
+    if (!existingConfig || typeof existingConfig !== "object") {
       return false;
     }
 
@@ -104,17 +104,17 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 
     // Remove ESLint-specific settings
     const eslintSettings = [
-      'eslint.enable',
-      'eslint.format.enable',
-      'eslint.validate',
-      'eslint.workingDirectories',
-      'eslint.codeAction.showDocumentation',
-      'eslint.run',
-      'eslint.autoFixOnSave',
-      'eslint.quiet',
-      'eslint.packageManager',
-      'eslint.options',
-      'eslint.trace.server',
+      "eslint.enable",
+      "eslint.format.enable",
+      "eslint.validate",
+      "eslint.workingDirectories",
+      "eslint.codeAction.showDocumentation",
+      "eslint.run",
+      "eslint.autoFixOnSave",
+      "eslint.quiet",
+      "eslint.packageManager",
+      "eslint.options",
+      "eslint.trace.server",
     ];
 
     for (const setting of eslintSettings) {
@@ -125,15 +125,15 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
     }
 
     // Clean up codeActionsOnSave to remove ESLint actions
-    if ('editor.codeActionsOnSave' in newConfig) {
-      const codeActions = newConfig['editor.codeActionsOnSave'] as Record<
+    if ("editor.codeActionsOnSave" in newConfig) {
+      const codeActions = newConfig["editor.codeActionsOnSave"] as Record<
         string,
         unknown
       >;
-      if (codeActions && typeof codeActions === 'object') {
+      if (codeActions && typeof codeActions === "object") {
         const eslintActions = [
-          'source.fixAll.eslint',
-          'source.organizeImports.eslint',
+          "source.fixAll.eslint",
+          "source.organizeImports.eslint",
         ];
 
         for (const action of eslintActions) {
@@ -145,7 +145,7 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 
         // Remove the entire codeActionsOnSave if it's now empty
         if (Object.keys(codeActions).length === 0) {
-          delete newConfig['editor.codeActionsOnSave'];
+          delete newConfig["editor.codeActionsOnSave"];
         }
       }
     }

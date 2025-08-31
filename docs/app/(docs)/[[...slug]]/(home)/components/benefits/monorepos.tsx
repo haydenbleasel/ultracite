@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion } from 'motion/react';
+import { motion } from "motion/react";
 
 export const MonoreposGraphic = () => {
   // Helper function to generate random delay between min and max seconds

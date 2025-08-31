@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { track } from '@vercel/analytics';
-import { CheckIcon, CopyIcon } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
+import { track } from "@vercel/analytics";
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
-const command = 'npx ultracite@latest init';
+const command = "npx ultracite@latest init";
 const COPY_TIMEOUT = 2000;
 
 export const Installer = () => {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     navigator.clipboard.writeText(command);
-    toast.success('Copied to clipboard');
+    toast.success("Copied to clipboard");
     setCopied(true);
 
-    track('Copied installer command');
+    track("Copied installer command");
     setTimeout(() => {
       setCopied(false);
     }, COPY_TIMEOUT);

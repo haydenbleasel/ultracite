@@ -1,28 +1,28 @@
-import { type TrpcCliMeta, trpcServer } from 'trpc-cli';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import z from 'zod';
+import { type TrpcCliMeta, trpcServer } from "trpc-cli";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import z from "zod";
 
 // Mock the command modules
 const mockFormat = vi.fn();
 const mockInitialize = vi.fn();
 const mockLint = vi.fn();
 
-vi.mock('../scripts/format', () => ({
+vi.mock("../scripts/format", () => ({
   format: mockFormat,
 }));
 
-vi.mock('../scripts/initialize', () => ({
+vi.mock("../scripts/initialize", () => ({
   initialize: mockInitialize,
 }));
 
-vi.mock('../scripts/lint', () => ({
+vi.mock("../scripts/lint", () => ({
   lint: mockLint,
 }));
 
 // Mock package.json
-vi.mock('../package.json', () => ({
+vi.mock("../package.json", () => ({
   default: {
-    version: 'test-version',
+    version: "test-version",
   },
 }));
 
@@ -32,43 +32,43 @@ function createTestRouter() {
   return t.router({
     init: t.procedure
       .meta({
-        description: 'Initialize Ultracite in the current directory',
+        description: "Initialize Ultracite in the current directory",
       })
       .input(
         z.object({
           pm: z
-            .enum(['pnpm', 'bun', 'yarn', 'npm'])
+            .enum(["pnpm", "bun", "yarn", "npm"])
             .optional()
-            .describe('Package manager to use'),
+            .describe("Package manager to use"),
           editors: z
-            .array(z.enum(['vscode', 'zed']))
+            .array(z.enum(["vscode", "zed"]))
             .optional()
-            .describe('Editors to configure'),
+            .describe("Editors to configure"),
           rules: z
             .array(
               z.enum([
-                'vscode-copilot',
-                'cursor',
-                'windsurf',
-                'zed',
-                'claude',
-                'codex',
+                "vscode-copilot",
+                "cursor",
+                "windsurf",
+                "zed",
+                "claude",
+                "codex",
               ])
             )
             .optional()
-            .describe('Editor rules to enable'),
+            .describe("Editor rules to enable"),
           integrations: z
-            .array(z.enum(['husky', 'lefthook', 'lint-staged']))
+            .array(z.enum(["husky", "lefthook", "lint-staged"]))
             .optional()
-            .describe('Additional integrations to enable'),
+            .describe("Additional integrations to enable"),
           removePrettier: z
             .boolean()
             .optional()
-            .describe('Remove Prettier dependencies and configuration'),
+            .describe("Remove Prettier dependencies and configuration"),
           removeEslint: z
             .boolean()
             .optional()
-            .describe('Remove ESLint dependencies and configuration'),
+            .describe("Remove ESLint dependencies and configuration"),
         })
       )
       .mutation(async ({ input }) => {
@@ -77,14 +77,14 @@ function createTestRouter() {
 
     lint: t.procedure
       .meta({
-        description: 'Run Biome linter without fixing files',
+        description: "Run Biome linter without fixing files",
       })
       .input(
         z
           .array(z.string())
           .optional()
           .default([])
-          .describe('specific files to lint')
+          .describe("specific files to lint")
       )
       .query(({ input }) => {
         mockLint(input);
@@ -92,7 +92,7 @@ function createTestRouter() {
 
     format: t.procedure
       .meta({
-        description: 'Run Biome linter and fixes files',
+        description: "Run Biome linter and fixes files",
       })
       .input(
         z.tuple([
@@ -100,9 +100,9 @@ function createTestRouter() {
             .array(z.string())
             .optional()
             .default([])
-            .describe('specific files to format'),
+            .describe("specific files to format"),
           z.object({
-            unsafe: z.boolean().optional().describe('apply unsafe fixes'),
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
           }),
         ])
       )
@@ -113,7 +113,7 @@ function createTestRouter() {
   });
 }
 
-describe('CLI Router', () => {
+describe("CLI Router", () => {
   let router: ReturnType<typeof createTestRouter>;
 
   beforeEach(() => {
@@ -121,14 +121,14 @@ describe('CLI Router', () => {
     router = createTestRouter();
   });
 
-  describe('init procedure', () => {
-    it('should call initialize with provided options', async () => {
+  describe("init procedure", () => {
+    it("should call initialize with provided options", async () => {
       const caller = router.createCaller({});
       const input = {
-        pm: 'pnpm' as const,
-        editors: ['vscode' as const],
-        rules: ['cursor' as const],
-        integrations: ['husky' as const],
+        pm: "pnpm" as const,
+        editors: ["vscode" as const],
+        rules: ["cursor" as const],
+        integrations: ["husky" as const],
         removePrettier: true,
         removeEslint: false,
       };
@@ -138,7 +138,7 @@ describe('CLI Router', () => {
       expect(mockInitialize).toHaveBeenCalledWith(input);
     });
 
-    it('should call initialize with empty object when no options provided', async () => {
+    it("should call initialize with empty object when no options provided", async () => {
       const caller = router.createCaller({});
 
       await caller.init({});
@@ -146,48 +146,48 @@ describe('CLI Router', () => {
       expect(mockInitialize).toHaveBeenCalledWith({});
     });
 
-    it('should validate package manager enum', async () => {
+    it("should validate package manager enum", async () => {
       const caller = router.createCaller({});
 
-      await expect(caller.init({ pm: 'invalid' as never })).rejects.toThrow();
+      await expect(caller.init({ pm: "invalid" as never })).rejects.toThrow();
     });
 
-    it('should validate editors array', async () => {
+    it("should validate editors array", async () => {
       const caller = router.createCaller({});
 
       await expect(
-        caller.init({ editors: ['invalid'] as never })
+        caller.init({ editors: ["invalid"] as never })
       ).rejects.toThrow();
     });
 
-    it('should validate rules array', async () => {
+    it("should validate rules array", async () => {
       const caller = router.createCaller({});
 
       await expect(
-        caller.init({ rules: ['invalid'] as never })
+        caller.init({ rules: ["invalid"] as never })
       ).rejects.toThrow();
     });
 
-    it('should validate integrations array', async () => {
+    it("should validate integrations array", async () => {
       const caller = router.createCaller({});
 
       await expect(
-        caller.init({ integrations: ['invalid'] as never })
+        caller.init({ integrations: ["invalid"] as never })
       ).rejects.toThrow();
     });
   });
 
-  describe('lint procedure', () => {
-    it('should call lint with provided files', async () => {
+  describe("lint procedure", () => {
+    it("should call lint with provided files", async () => {
       const caller = router.createCaller({});
-      const files = ['src/index.ts', 'src/utils.ts'];
+      const files = ["src/index.ts", "src/utils.ts"];
 
       await caller.lint(files);
 
       expect(mockLint).toHaveBeenCalledWith(files);
     });
 
-    it('should call lint with empty array when no files provided', async () => {
+    it("should call lint with empty array when no files provided", async () => {
       const caller = router.createCaller({});
 
       await caller.lint();
@@ -195,17 +195,17 @@ describe('CLI Router', () => {
       expect(mockLint).toHaveBeenCalledWith([]);
     });
 
-    it('should validate that input is array of strings', async () => {
+    it("should validate that input is array of strings", async () => {
       const caller = router.createCaller({});
 
       await expect(caller.lint([123] as never)).rejects.toThrow();
     });
   });
 
-  describe('format procedure', () => {
-    it('should call format with provided files and options', async () => {
+  describe("format procedure", () => {
+    it("should call format with provided files and options", async () => {
       const caller = router.createCaller({});
-      const files = ['src/index.ts'];
+      const files = ["src/index.ts"];
       const options = { unsafe: true };
 
       await caller.format([files, options]);
@@ -213,7 +213,7 @@ describe('CLI Router', () => {
       expect(mockFormat).toHaveBeenCalledWith(files, options);
     });
 
-    it('should call format with empty files and default options', async () => {
+    it("should call format with empty files and default options", async () => {
       const caller = router.createCaller({});
 
       await caller.format([[], {}]);
@@ -221,19 +221,19 @@ describe('CLI Router', () => {
       expect(mockFormat).toHaveBeenCalledWith([], {});
     });
 
-    it('should handle unsafe option being undefined', async () => {
+    it("should handle unsafe option being undefined", async () => {
       const caller = router.createCaller({});
-      const files = ['src/index.ts'];
+      const files = ["src/index.ts"];
 
       await caller.format([files, {}]);
 
       expect(mockFormat).toHaveBeenCalledWith(files, {});
     });
 
-    it('should validate input format', async () => {
+    it("should validate input format", async () => {
       const caller = router.createCaller({});
 
-      await expect(caller.format(['invalid'] as never)).rejects.toThrow();
+      await expect(caller.format(["invalid"] as never)).rejects.toThrow();
     });
   });
 });

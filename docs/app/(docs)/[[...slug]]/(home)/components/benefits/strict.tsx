@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { CheckCircleIcon } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
-import { useRef } from 'react';
+import { CheckCircleIcon } from "lucide-react";
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
 
 const lines = [
   "Don't use `accessKey` attribute on any HTML element.",
   'Don\'t set `aria-hidden="true"` on focusable elements.',
   "Don't add ARIA roles, states, and properties to elements that don't support them.",
   "Don't use distracting elements like `<marquee>` or `<blink>`.",
-  'Only use the`scope` prop on`<th>` elements.',
+  "Only use the`scope` prop on`<th>` elements.",
   "Don't assign non-interactive ARIA roles to interactive HTML elements.",
-  'Make sure label elements have text content and are associated with an input.',
+  "Make sure label elements have text content and are associated with an input.",
   "Don't assign interactive ARIA roles to non-interactive HTML elements.",
   "Don't assign `tabIndex` to non-interactive HTML elements.",
   "Don't use positive integers for `tabIndex` property.",
@@ -37,7 +37,7 @@ export const StrictGraphic = () => {
             transition={{
               duration: 0.1,
               delay: index * 0.1,
-              ease: 'easeOut',
+              ease: "easeOut",
             }}
           >
             <CheckCircleIcon className="size-3 shrink-0" />

@@ -1,22 +1,22 @@
-import { readFile, writeFile } from 'node:fs/promises';
-import deepmerge from 'deepmerge';
-import { parse } from 'jsonc-parser';
-import packageJson from '../package.json' with { type: 'json' };
-import { exists } from './utils';
+import { readFile, writeFile } from "node:fs/promises";
+import deepmerge from "deepmerge";
+import { parse } from "jsonc-parser";
+import packageJson from "../package.json" with { type: "json" };
+import { exists } from "./utils";
 
-const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
+const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 
 const defaultConfig = {
   $schema: `https://biomejs.dev/schemas/${schemaVersion}/schema.json`,
-  extends: ['ultracite'],
+  extends: ["ultracite"],
 };
 
 const getBiomeConfigPath = async (): Promise<string> => {
   // Check for biome.json first, then fall back to biome.jsonc
-  if (await exists('./biome.json')) {
-    return './biome.json';
+  if (await exists("./biome.json")) {
+    return "./biome.json";
   }
-  return './biome.jsonc';
+  return "./biome.jsonc";
 };
 
 export const biome = {
@@ -30,7 +30,7 @@ export const biome = {
   },
   update: async () => {
     const path = await getBiomeConfigPath();
-    const existingContents = await readFile(path, 'utf-8');
+    const existingContents = await readFile(path, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
@@ -43,8 +43,8 @@ export const biome = {
       configToWork.extends && Array.isArray(configToWork.extends)
         ? configToWork.extends
         : [];
-    if (!existingExtends.includes('ultracite')) {
-      configToWork.extends = [...existingExtends, 'ultracite'];
+    if (!existingExtends.includes("ultracite")) {
+      configToWork.extends = [...existingExtends, "ultracite"];
     }
 
     // Merge other properties from defaultConfig

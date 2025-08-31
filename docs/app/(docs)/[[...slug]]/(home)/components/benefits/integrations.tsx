@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'motion/react';
-import { useRef } from 'react';
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
 
 const lines = [
-  '✔ Backed up original state in git stash(5bda95f)',
-  '❯ Running tasks for staged files...',
-  '  ❯ packages / frontend /.lintstagedrc.json — 1 file',
-  '    ↓ *.js — no files[SKIPPED]',
-  '    ❯ *.{ ts, tsx, js, jsx } — 1 file',
-  '      ⠹ npx ultracite format',
-  '◼ Applying modifications from tasks...',
-  '◼ Cleaning up temporary files...',
+  "✔ Backed up original state in git stash(5bda95f)",
+  "❯ Running tasks for staged files...",
+  "  ❯ packages / frontend /.lintstagedrc.json — 1 file",
+  "    ↓ *.js — no files[SKIPPED]",
+  "    ❯ *.{ ts, tsx, js, jsx } — 1 file",
+  "      ⠹ npx ultracite format",
+  "◼ Applying modifications from tasks...",
+  "◼ Cleaning up temporary files...",
 ];
 
 export const IntegrationsGraphic = () => {
@@ -32,7 +32,7 @@ export const IntegrationsGraphic = () => {
             transition={{
               duration: 0.3,
               delay: index * 0.3,
-              ease: 'easeOut',
+              ease: "easeOut",
             }}
           >
             {line}

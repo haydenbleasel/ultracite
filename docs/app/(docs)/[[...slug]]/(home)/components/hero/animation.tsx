@@ -1,6 +1,6 @@
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
-import { ExtrudeGeometry, type Group, Shape } from 'three';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import { ExtrudeGeometry, type Group, Shape } from "three";
 
 type BoxProps = {
   position: [number, number, number];

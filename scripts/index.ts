@@ -1,50 +1,50 @@
 #!/usr/bin/env node
 
-import { createCli, type TrpcCliMeta, trpcServer } from 'trpc-cli';
-import z from 'zod';
-import packageJson from '../package.json' with { type: 'json' };
-import { format } from './commands/format';
-import { lint } from './commands/lint';
-import { options } from './consts/options';
-import { initialize } from './initialize';
+import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
+import z from "zod";
+import packageJson from "../package.json" with { type: "json" };
+import { format } from "./commands/format";
+import { lint } from "./commands/lint";
+import { options } from "./consts/options";
+import { initialize } from "./initialize";
 
 const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
 
 export const router = t.router({
   init: t.procedure
     .meta({
-      description: 'Initialize Ultracite in the current directory',
+      description: "Initialize Ultracite in the current directory",
     })
     .input(
       z.object({
         pm: z
           .enum(options.packageManagers)
           .optional()
-          .describe('Package manager to use'),
+          .describe("Package manager to use"),
         editors: z
           .array(z.enum(options.editorConfigs))
           .optional()
-          .describe('Editors to configure'),
+          .describe("Editors to configure"),
         rules: z
           .array(z.enum(options.editorRules))
           .optional()
-          .describe('Editor rules to enable'),
+          .describe("Editor rules to enable"),
         integrations: z
           .array(z.enum(options.integrations))
           .optional()
-          .describe('Additional integrations to enable'),
+          .describe("Additional integrations to enable"),
         removePrettier: z
           .boolean()
           .optional()
-          .describe('Remove Prettier dependencies and configuration'),
+          .describe("Remove Prettier dependencies and configuration"),
         removeEslint: z
           .boolean()
           .optional()
-          .describe('Remove ESLint dependencies and configuration'),
+          .describe("Remove ESLint dependencies and configuration"),
         skipInstall: z
           .boolean()
           .default(false)
-          .describe('Skip installing dependencies'),
+          .describe("Skip installing dependencies"),
       })
     )
     .mutation(async ({ input }) => {
@@ -53,14 +53,14 @@ export const router = t.router({
 
   lint: t.procedure
     .meta({
-      description: 'Run Biome linter without fixing files',
+      description: "Run Biome linter without fixing files",
     })
     .input(
       z
         .array(z.string())
         .optional()
         .default([])
-        .describe('specific files to lint')
+        .describe("specific files to lint")
     )
     .query(({ input }) => {
       lint(input);
@@ -68,7 +68,7 @@ export const router = t.router({
 
   format: t.procedure
     .meta({
-      description: 'Run Biome linter and fixes files',
+      description: "Run Biome linter and fixes files",
     })
     .input(
       z.tuple([
@@ -76,9 +76,9 @@ export const router = t.router({
           .array(z.string())
           .optional()
           .default([])
-          .describe('specific files to format'),
+          .describe("specific files to format"),
         z.object({
-          unsafe: z.boolean().optional().describe('apply unsafe fixes'),
+          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
         }),
       ])
     )

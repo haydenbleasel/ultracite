@@ -4,29 +4,29 @@ import {
   SiMarkdown,
   SiReact,
   SiTypescript,
-} from '@icons-pack/react-simple-icons';
-import { FolderIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "@icons-pack/react-simple-icons";
+import { FolderIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const files = [
   {
-    name: 'index.tsx',
+    name: "index.tsx",
     icon: SiReact,
   },
   {
-    name: 'layout.tsx',
+    name: "layout.tsx",
     icon: SiReact,
   },
   {
-    name: 'utils.ts',
+    name: "utils.ts",
     icon: SiTypescript,
   },
   {
-    name: 'globals.css',
+    name: "globals.css",
     icon: SiCss,
   },
   {
-    name: 'biome.jsonc',
+    name: "biome.jsonc",
     icon: SiJson,
   },
 ];
@@ -41,7 +41,7 @@ const FileItem = ({
   className?: string;
 }) => (
   <div
-    className={cn('flex items-center gap-2 rounded-md px-2 py-1', className)}
+    className={cn("flex items-center gap-2 rounded-md px-2 py-1", className)}
   >
     <Icon className="size-3 shrink-0" />
     <p className="font-medium">{name}</p>

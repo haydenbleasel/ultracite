@@ -1,5 +1,5 @@
-import { access, readFile, writeFile } from 'node:fs/promises';
-import { parse } from 'jsonc-parser';
+import { access, readFile, writeFile } from "node:fs/promises";
+import { parse } from "jsonc-parser";
 
 export const exists = async (path: string) => {
   try {
@@ -11,12 +11,12 @@ export const exists = async (path: string) => {
 };
 
 export const isMonorepo = async () => {
-  if (await exists('pnpm-workspace.yaml')) {
+  if (await exists("pnpm-workspace.yaml")) {
     return true;
   }
 
   try {
-    const pkgJson = parse(await readFile('package.json', 'utf-8')) as
+    const pkgJson = parse(await readFile("package.json", "utf-8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -48,7 +48,7 @@ export const updatePackageJson = async ({
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
 }) => {
-  const packageJsonContent = await readFile('package.json', 'utf8');
+  const packageJsonContent = await readFile("package.json", "utf8");
   const packageJsonObject = JSON.parse(packageJsonContent);
 
   const newPackageJsonObject = {
@@ -61,7 +61,7 @@ export const updatePackageJson = async ({
   };
 
   await writeFile(
-    'package.json',
+    "package.json",
     JSON.stringify(newPackageJsonObject, null, 2)
   );
 };

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { motion, useAnimationControls, useInView } from 'motion/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { motion, useAnimationControls, useInView } from "motion/react";
+import { useCallback, useEffect, useRef } from "react";
 
 export const PerformanceGraphic = () => {
   const ref = useRef(null);
@@ -48,7 +48,7 @@ export const PerformanceGraphic = () => {
           rotate: percentToAngle(randomTarget),
           transition: {
             duration: 0.05 + Math.random() * 0.1, // Much faster: 0.05-0.15s
-            ease: 'easeOut', // More abrupt easing for engine-like behavior
+            ease: "easeOut", // More abrupt easing for engine-like behavior
           },
         });
 
@@ -103,7 +103,7 @@ export const PerformanceGraphic = () => {
               initial={{ opacity: 0 }}
               key={`mark-${markValue}`}
               style={{
-                height: '90%',
+                height: "90%",
                 transform: `translateX(-50%) rotate(${markAngle}deg)`,
               }}
               transition={{
@@ -125,8 +125,8 @@ export const PerformanceGraphic = () => {
           className="absolute bottom-0 left-1/2 origin-bottom"
           initial={{ rotate: percentToAngle(0) }}
           style={{
-            height: '100%',
-            transform: 'translateX(-50%)',
+            height: "100%",
+            transform: "translateX(-50%)",
           }}
         >
           <div className="relative h-full w-px bg-primary" />

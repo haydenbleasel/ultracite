@@ -1,32 +1,32 @@
-import { readFile, writeFile } from 'node:fs/promises';
-import { pathToFileURL } from 'node:url';
-import deepmerge from 'deepmerge';
-import { parse } from 'jsonc-parser';
-import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
-import { exists, isMonorepo } from '../utils';
+import { readFile, writeFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
+import deepmerge from "deepmerge";
+import { parse } from "jsonc-parser";
+import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+import { exists, isMonorepo } from "../utils";
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
-  '*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}': [
-    dlxCommand(packageManager, 'ultracite', {
-      args: ['format'],
-      short: packageManager === 'npm',
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+    dlxCommand(packageManager, "ultracite", {
+      args: ["format"],
+      short: packageManager === "npm",
     }),
   ],
 });
 
 // Check for existing configuration files in order of preference
 const configFiles = [
-  './package.json',
-  './.lintstagedrc.json',
-  './.lintstagedrc.js',
-  './.lintstagedrc.cjs',
-  './.lintstagedrc.mjs',
-  './lint-staged.config.js',
-  './lint-staged.config.cjs',
-  './lint-staged.config.mjs',
-  './.lintstagedrc.yaml',
-  './.lintstagedrc.yml',
-  './.lintstagedrc',
+  "./package.json",
+  "./.lintstagedrc.json",
+  "./.lintstagedrc.js",
+  "./.lintstagedrc.cjs",
+  "./.lintstagedrc.mjs",
+  "./lint-staged.config.js",
+  "./lint-staged.config.cjs",
+  "./lint-staged.config.mjs",
+  "./.lintstagedrc.yaml",
+  "./.lintstagedrc.yml",
+  "./.lintstagedrc",
 ];
 
 // Helper function to process YAML lines
@@ -38,35 +38,35 @@ const processYamlLine = (
 ): { newCurrentKey: string | null; newCurrentArray: string[] } => {
   const trimmed = line.trim();
 
-  if (trimmed.includes(':') && !trimmed.startsWith('-')) {
+  if (trimmed.includes(":") && !trimmed.startsWith("-")) {
     // Save previous array if exists
     if (currentKey && currentArray.length > 0) {
       result[currentKey] = currentArray;
     }
 
-    const [key, ...valueParts] = trimmed.split(':');
-    const value = valueParts.join(':').trim();
-    const newCurrentKey = key.trim().replace(/['"]/g, '');
+    const [key, ...valueParts] = trimmed.split(":");
+    const value = valueParts.join(":").trim();
+    const newCurrentKey = key.trim().replace(/['"]/g, "");
 
-    if (value && value !== '') {
-      if (value.startsWith('[') && value.endsWith(']')) {
+    if (value && value !== "") {
+      if (value.startsWith("[") && value.endsWith("]")) {
         // Handle inline arrays
         result[newCurrentKey] = value
           .slice(1, -1)
-          .split(',')
-          .map((v) => v.trim().replace(/['"]/g, ''));
+          .split(",")
+          .map((v) => v.trim().replace(/['"]/g, ""));
       } else {
-        result[newCurrentKey] = value.replace(/['"]/g, '');
+        result[newCurrentKey] = value.replace(/['"]/g, "");
       }
       return { newCurrentKey: null, newCurrentArray: [] };
     }
     return { newCurrentKey, newCurrentArray: [] };
   }
 
-  if (trimmed.startsWith('-') && currentKey) {
+  if (trimmed.startsWith("-") && currentKey) {
     const newCurrentArray = [
       ...currentArray,
-      trimmed.slice(1).trim().replace(/['"]/g, ''),
+      trimmed.slice(1).trim().replace(/['"]/g, ""),
     ];
     return { newCurrentKey: currentKey, newCurrentArray };
   }
@@ -77,8 +77,8 @@ const processYamlLine = (
 // Simple YAML parser for basic objects (limited but functional)
 const parseSimpleYaml = (content: string): Record<string, unknown> => {
   const lines = content
-    .split('\n')
-    .filter((line) => line.trim() && !line.trim().startsWith('#'));
+    .split("\n")
+    .filter((line) => line.trim() && !line.trim().startsWith("#"));
   const result: Record<string, unknown> = {};
   let currentKey: string | null = null;
   let currentArray: string[] = [];
@@ -99,7 +99,7 @@ const parseSimpleYaml = (content: string): Record<string, unknown> => {
 
 // Convert object to simple YAML format
 const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
-  let yaml = '';
+  let yaml = "";
   for (const [key, value] of Object.entries(obj)) {
     if (Array.isArray(value)) {
       yaml += `${key}:\n`;
@@ -116,7 +116,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectESM = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile('./package.json', 'utf-8')) as
+    const packageJson = parse(await readFile("./package.json", "utf-8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -124,7 +124,7 @@ const isProjectESM = async (): Promise<boolean> => {
       return false;
     }
 
-    return packageJson.type === 'module';
+    return packageJson.type === "module";
   } catch {
     return false;
   }
@@ -134,7 +134,7 @@ const isProjectESM = async (): Promise<boolean> => {
 const updatePackageJson = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const packageJson = parse(await readFile('./package.json', 'utf-8')) as
+  const packageJson = parse(await readFile("./package.json", "utf-8")) as
     | Record<string, unknown>
     | undefined;
 
@@ -143,16 +143,16 @@ const updatePackageJson = async (
     return;
   }
 
-  if (packageJson['lint-staged']) {
-    packageJson['lint-staged'] = deepmerge(
-      packageJson['lint-staged'],
+  if (packageJson["lint-staged"]) {
+    packageJson["lint-staged"] = deepmerge(
+      packageJson["lint-staged"],
       createLintStagedConfig(packageManager)
     );
   } else {
-    packageJson['lint-staged'] = createLintStagedConfig(packageManager);
+    packageJson["lint-staged"] = createLintStagedConfig(packageManager);
   }
 
-  await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
+  await writeFile("./package.json", JSON.stringify(packageJson, null, 2));
 };
 
 // Update JSON config files
@@ -160,7 +160,7 @@ const updateJsonConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, 'utf-8');
+  const content = await readFile(filename, "utf-8");
   const existingConfig = parse(content) as Record<string, unknown> | undefined;
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
@@ -180,7 +180,7 @@ const updateYamlConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, 'utf-8');
+  const content = await readFile(filename, "utf-8");
   const existingConfig = parseSimpleYaml(content) as
     | Record<string, unknown>
     | undefined;
@@ -239,7 +239,7 @@ const createFallbackConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
   await writeFile(
-    '.lintstagedrc.json',
+    ".lintstagedrc.json",
     JSON.stringify(createLintStagedConfig(packageManager), null, 2)
   );
 };
@@ -249,24 +249,24 @@ const handleConfigFileUpdate = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  if (filename === './package.json') {
+  if (filename === "./package.json") {
     await updatePackageJson(packageManager);
     return;
   }
 
-  if (filename.endsWith('.json') || filename === './.lintstagedrc') {
+  if (filename.endsWith(".json") || filename === "./.lintstagedrc") {
     await updateJsonConfig(filename, packageManager);
     return;
   }
 
-  if (filename.endsWith('.yaml') || filename.endsWith('.yml')) {
+  if (filename.endsWith(".yaml") || filename.endsWith(".yml")) {
     await updateYamlConfig(filename, packageManager);
     return;
   }
 
   const isEsm = await isProjectESM();
 
-  if (filename.endsWith('.mjs') || (filename.endsWith('.js') && isEsm)) {
+  if (filename.endsWith(".mjs") || (filename.endsWith(".js") && isEsm)) {
     try {
       await updateEsmConfig(filename, packageManager);
     } catch {
@@ -275,7 +275,7 @@ const handleConfigFileUpdate = async (
     return;
   }
 
-  if (filename.endsWith('.cjs') || (filename.endsWith('.js') && !isEsm)) {
+  if (filename.endsWith(".cjs") || (filename.endsWith(".js") && !isEsm)) {
     try {
       await updateCjsConfig(filename, packageManager);
     } catch {
@@ -295,14 +295,14 @@ export const lintStaged = {
     return false;
   },
   install: async (packageManager: PackageManagerName) => {
-    await addDevDependency('lint-staged', {
+    await addDevDependency("lint-staged", {
       packageManager,
       workspace: await isMonorepo(),
     });
   },
   create: async (packageManager: PackageManagerName) => {
     await writeFile(
-      '.lintstagedrc.json',
+      ".lintstagedrc.json",
       JSON.stringify(createLintStagedConfig(packageManager), null, 2)
     );
   },

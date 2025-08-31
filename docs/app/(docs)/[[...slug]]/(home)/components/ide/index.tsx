@@ -1,14 +1,14 @@
-import Image from 'next/image';
-import { AvatarStack } from '@/components/ui/kibo-ui/avatar-stack';
+import Image from "next/image";
+import { AvatarStack } from "@/components/ui/kibo-ui/avatar-stack";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Assistant } from './assistant';
-import { Editor } from './editor';
-import { Problems } from './problems';
-import { Sidebar } from './sidebar';
+} from "@/components/ui/tooltip";
+import { Assistant } from "./assistant";
+import { Editor } from "./editor";
+import { Problems } from "./problems";
+import { Sidebar } from "./sidebar";
 
 export const IDE = () => (
   <div className="grid gap-8">

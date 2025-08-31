@@ -1,94 +1,94 @@
-import Image from 'next/image';
+import Image from "next/image";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import aider from './logos/aider.svg';
-import amp from './logos/amp.svg';
-import augment from './logos/augment-code.svg';
-import claude from './logos/claude.svg';
-import cline from './logos/cline.svg';
-import codex from './logos/codex.svg';
-import cursor from './logos/cursor.svg';
-import firebase from './logos/firebase-studio.svg';
-import gemini from './logos/gemini.svg';
-import goose from './logos/goose.svg';
-import junie from './logos/junie.svg';
-import kilo from './logos/kilo-code.svg';
-import kiro from './logos/kiro.svg';
-import open from './logos/open-hands.svg';
-import vscode from './logos/vscode.svg';
-import windsurf from './logos/windsurf.svg';
-import zed from './logos/zed.svg';
+} from "@/components/ui/tooltip";
+import aider from "./logos/aider.svg";
+import amp from "./logos/amp.svg";
+import augment from "./logos/augment-code.svg";
+import claude from "./logos/claude.svg";
+import cline from "./logos/cline.svg";
+import codex from "./logos/codex.svg";
+import cursor from "./logos/cursor.svg";
+import firebase from "./logos/firebase-studio.svg";
+import gemini from "./logos/gemini.svg";
+import goose from "./logos/goose.svg";
+import junie from "./logos/junie.svg";
+import kilo from "./logos/kilo-code.svg";
+import kiro from "./logos/kiro.svg";
+import open from "./logos/open-hands.svg";
+import vscode from "./logos/vscode.svg";
+import windsurf from "./logos/windsurf.svg";
+import zed from "./logos/zed.svg";
 
 const logos = [
   {
-    name: 'Visual Studio Code',
+    name: "Visual Studio Code",
     src: vscode,
   },
   {
-    name: 'Cursor',
+    name: "Cursor",
     src: cursor,
   },
   {
-    name: 'Windsurf',
+    name: "Windsurf",
     src: windsurf,
   },
   {
-    name: 'Zed',
+    name: "Zed",
     src: zed,
   },
   {
-    name: 'Claude Code',
+    name: "Claude Code",
     src: claude,
   },
   {
-    name: 'OpenAI Codex',
+    name: "OpenAI Codex",
     src: codex,
   },
   {
-    name: 'Firebase Studio',
+    name: "Firebase Studio",
     src: firebase,
   },
   {
-    name: 'Gemini CLI',
+    name: "Gemini CLI",
     src: gemini,
   },
   {
-    name: 'Junie',
+    name: "Junie",
     src: junie,
   },
   {
-    name: 'Kilo Code',
+    name: "Kilo Code",
     src: kilo,
   },
   {
-    name: 'Kiro',
+    name: "Kiro",
     src: kiro,
   },
   {
-    name: 'Open Hands',
+    name: "Open Hands",
     src: open,
   },
   {
-    name: 'Augment Code',
+    name: "Augment Code",
     src: augment,
   },
   {
-    name: 'Cline',
+    name: "Cline",
     src: cline,
   },
   {
-    name: 'AMP',
+    name: "AMP",
     src: amp,
   },
   {
-    name: 'Aider',
+    name: "Aider",
     src: aider,
   },
   {
-    name: 'Codename Goose',
+    name: "Codename Goose",
     src: goose,
   },
 ];

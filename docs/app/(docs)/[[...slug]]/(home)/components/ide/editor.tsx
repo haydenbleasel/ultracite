@@ -1,4 +1,4 @@
-import { codeToHtml } from 'shiki';
+import { codeToHtml } from "shiki";
 
 const mockCode = `import React from 'react';
 
@@ -21,8 +21,8 @@ export default UserCard;`;
 
 export const Editor = async () => {
   const code = await codeToHtml(mockCode, {
-    lang: 'tsx',
-    theme: 'vesper',
+    lang: "tsx",
+    theme: "vesper",
   });
 
   return (

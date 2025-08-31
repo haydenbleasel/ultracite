@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from "vitest";
 
 // Regex for semantic versioning validation
 const SEMANTIC_VERSION_REGEX = /^\d+\.\d+\.\d+$/;
@@ -8,23 +8,23 @@ const mockFormat = vi.fn();
 const mockInitialize = vi.fn();
 const mockLint = vi.fn();
 
-vi.mock('../scripts/format', () => ({
+vi.mock("../scripts/format", () => ({
   format: mockFormat,
 }));
 
-vi.mock('../scripts/initialize', () => ({
+vi.mock("../scripts/initialize", () => ({
   initialize: mockInitialize,
 }));
 
-vi.mock('../scripts/lint', () => ({
+vi.mock("../scripts/lint", () => ({
   lint: mockLint,
 }));
 
 // Mock package.json
-vi.mock('../package.json', () => ({
+vi.mock("../package.json", () => ({
   default: {
-    name: 'ultracite',
-    version: 'test-version',
+    name: "ultracite",
+    version: "test-version",
   },
 }));
 
@@ -32,7 +32,7 @@ vi.mock('../package.json', () => ({
 const mockCreateCli = vi.fn();
 const mockRouter = { createCaller: vi.fn() };
 
-vi.mock('trpc-cli', () => ({
+vi.mock("trpc-cli", () => ({
   createCli: mockCreateCli,
   trpcServer: {
     initTRPC: {
@@ -51,51 +51,51 @@ vi.mock('trpc-cli', () => ({
   },
 }));
 
-describe('CLI Index', () => {
-  it('should import without errors when VITEST environment is set', async () => {
+describe("CLI Index", () => {
+  it("should import without errors when VITEST environment is set", async () => {
     // Set VITEST environment to prevent CLI execution
     const originalEnv = process.env.VITEST;
-    process.env.VITEST = 'true';
+    process.env.VITEST = "true";
 
     try {
       // This should not throw an error
-      await expect(import('../scripts/index')).resolves.toBeDefined();
+      await expect(import("../scripts/index")).resolves.toBeDefined();
     } finally {
       // Restore environment
       process.env.VITEST = originalEnv;
     }
   });
 
-  it('should use correct package information', async () => {
+  it("should use correct package information", async () => {
     // Import actual package.json to test real values (bypassing the mock)
-    const fs = await import('node:fs');
-    const path = await import('node:path');
-    const packageJsonPath = path.resolve(__dirname, '../package.json');
-    const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const packageJsonPath = path.resolve(__dirname, "../package.json");
+    const packageJsonContent = fs.readFileSync(packageJsonPath, "utf8");
     const actualPackageJson = JSON.parse(packageJsonContent) as {
       name: string;
       version: string;
     };
 
-    expect(actualPackageJson.name).toBe('ultracite');
+    expect(actualPackageJson.name).toBe("ultracite");
     expect(actualPackageJson.version).toMatch(SEMANTIC_VERSION_REGEX); // Semantic versioning pattern
-    expect(typeof actualPackageJson.version).toBe('string');
+    expect(typeof actualPackageJson.version).toBe("string");
   });
 
-  it('should have access to required command functions', () => {
+  it("should have access to required command functions", () => {
     // Verify that the command functions exist and are callable
     expect(mockFormat).toBeDefined();
     expect(mockInitialize).toBeDefined();
     expect(mockLint).toBeDefined();
 
-    expect(typeof mockFormat).toBe('function');
-    expect(typeof mockInitialize).toBe('function');
-    expect(typeof mockLint).toBe('function');
+    expect(typeof mockFormat).toBe("function");
+    expect(typeof mockInitialize).toBe("function");
+    expect(typeof mockLint).toBe("function");
   });
 
-  it('should have trpc-cli available for CLI creation', () => {
+  it("should have trpc-cli available for CLI creation", () => {
     // Verify that trpc-cli mock is properly set up
     expect(mockCreateCli).toBeDefined();
-    expect(typeof mockCreateCli).toBe('function');
+    expect(typeof mockCreateCli).toBe("function");
   });
 });
