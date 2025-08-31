@@ -31,17 +31,17 @@ In many cases, the VS Code extension for Biome provides quick fix suggestions. I
 
 Ultracite comes with a convenient CLI (invoked as `ultracite` when installed). Here are common ways to use it.
 
-### Linting
+### Checking Code
 
-The `lint` command wraps the Biome `check` command, which runs the linter without fixing files.
+The `check` command wraps the Biome `check` command, which runs the linter without fixing files.
 
 ```bash title="Terminal"
 npx ultracite check
 ```
 
-### Formatting
+### Fixing Code
 
-The `format` command wraps the Biome `check --write` command, which runs the linter and fixes files.
+The `fix` command wraps the Biome `check --write` command, which runs the linter and fixes files.
 
 ```bash title="Terminal"
 npx ultracite fix
@@ -53,6 +53,13 @@ You can also apply unsafe fixes by running:
 npx ultracite fix --unsafe
 ```
 
+### Validating Setup
+
+The `doctor` command checks your setup for issues and provides recommendations. This is useful to run after installing Ultracite to ensure everything is configured correctly.
+
+```bash title="Terminal"
+npx ultracite doctor
+```
 
 ## Pre-commit hooks
 
