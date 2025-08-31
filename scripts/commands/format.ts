@@ -7,7 +7,7 @@ type FormatOptions = {
 };
 
 export const format = (files: string[], options: FormatOptions = {}) => {
-  const args = ['@biomejs/biome', 'check', '--write'];
+  const args = ['npx', '@biomejs/biome', 'check', '--write'];
 
   if (options.unsafe) {
     args.push('--unsafe');
