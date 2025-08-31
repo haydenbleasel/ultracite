@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
