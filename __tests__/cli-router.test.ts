@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { format } from "../scripts/commands/format";
-import { lint } from "../scripts/commands/lint";
+import { check } from "../scripts/commands/check";
+import { fix } from "../scripts/commands/fix";
 import { initialize } from "../scripts/initialize";
 
 // Mock the command modules
-vi.mock("../scripts/commands/format");
-vi.mock("../scripts/commands/lint");
+vi.mock("../scripts/commands/fix");
+vi.mock("../scripts/commands/check");
 vi.mock("../scripts/initialize");
 
 // Mock process.env to prevent CLI execution
 vi.stubEnv("VITEST", "true");
 
 describe("CLI Router", () => {
-  const mockFormat = vi.mocked(format);
-  const mockLint = vi.mocked(lint);
+  const mockFix = vi.mocked(fix);
+  const mockCheck = vi.mocked(check);
   const mockInitialize = vi.mocked(initialize);
 
   beforeEach(() => {
@@ -30,8 +30,8 @@ describe("CLI Router", () => {
 
     const procedures = Object.keys(router._def.procedures);
     expect(procedures).toContain("init");
-    expect(procedures).toContain("lint");
-    expect(procedures).toContain("format");
+    expect(procedures).toContain("check");
+    expect(procedures).toContain("fix");
   });
 
   it("should have correct metadata for all procedures", async () => {
@@ -43,18 +43,18 @@ describe("CLI Router", () => {
       description: "Initialize Ultracite in the current directory",
     });
 
-    // Check lint procedure metadata - this covers line 56
-    expect(procedures.lint._def.meta).toEqual({
+    // Check check procedure metadata - this covers line 56
+    expect(procedures.check._def.meta).toEqual({
       description: "Run Biome linter without fixing files",
     });
 
-    // Check format procedure metadata
-    expect(procedures.format._def.meta).toEqual({
+    // Check fix procedure metadata
+    expect(procedures.fix._def.meta).toEqual({
       description: "Run Biome linter and fixes files",
     });
   });
 
-  it("should call format with correct parameters when invoked", async () => {
+  it("should call fix with correct parameters when invoked", async () => {
     const { router } = await import("../scripts/index");
     const caller = router.createCaller({});
 
@@ -62,12 +62,12 @@ describe("CLI Router", () => {
     const opts = { unsafe: true };
 
     // This covers lines 86-87
-    await caller.format([files, opts]);
+    await caller.fix([files, opts]);
 
-    expect(mockFormat).toHaveBeenCalledWith(files, { unsafe: true });
+    expect(mockFix).toHaveBeenCalledWith(files, { unsafe: true });
   });
 
-  it("should call format with undefined unsafe option", async () => {
+  it("should call fix with undefined unsafe option", async () => {
     const { router } = await import("../scripts/index");
     const caller = router.createCaller({});
 
@@ -75,16 +75,16 @@ describe("CLI Router", () => {
     const opts = {};
 
     // This also covers lines 86-87 with a different case
-    await caller.format([files, opts]);
+    await caller.fix([files, opts]);
 
-    expect(mockFormat).toHaveBeenCalledWith(["test.ts"], { unsafe: undefined });
+    expect(mockFix).toHaveBeenCalledWith(["test.ts"], { unsafe: undefined });
   });
 
-  it("should call lint with correct parameters", () => {
-    // Note: lint is a query, not a mutation, so it doesn't actually call the function
+  it("should call check with correct parameters", () => {
+    // Note: check is a query, not a mutation, so it doesn't actually call the function
     // The router just defines the procedure - the actual execution happens via CLI
     // This test verifies the router structure is correct
-    expect(mockLint).toBeDefined();
+    expect(mockCheck).toBeDefined();
   });
 
   it("should call initialize with correct parameters", async () => {

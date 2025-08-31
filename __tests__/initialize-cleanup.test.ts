@@ -364,8 +364,9 @@ describe("initialize - cleanup features", () => {
       expect(mockSpinnerInstance.start).toHaveBeenCalledWith(
         "Checking for .zed/settings.json..."
       );
-      expect(mockSpinnerInstance.stop).toHaveBeenCalledWith(
-        "settings.json created."
+      // For Zed creation, it uses message() not stop()
+      expect(mockSpinnerInstance.message).toHaveBeenCalledWith(
+        "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
       );
     });
 
@@ -384,9 +385,12 @@ describe("initialize - cleanup features", () => {
       expect(mockZed.exists).toHaveBeenCalled();
       expect(mockZed.update).toHaveBeenCalled();
       expect(mockZed.create).not.toHaveBeenCalled();
-      expect(mockSpinnerInstance.stop).toHaveBeenCalledWith(
-        "settings.json updated."
+      // Find the specific call for Zed settings update
+      const stopCalls = mockSpinnerInstance.stop.mock.calls;
+      const zedSettingsCall = stopCalls.find(
+        (call) => call[0] === "settings.json updated."
       );
+      expect(zedSettingsCall).toBeDefined();
     });
 
     it("should configure both VSCode and Zed when both are selected", async () => {

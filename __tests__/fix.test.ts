@@ -1,10 +1,10 @@
 import { spawnSync } from "node:child_process";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { lint } from "../scripts/commands/lint";
+import { fix } from "../scripts/commands/fix";
 
 vi.mock("node:child_process");
 
-describe("lint command", () => {
+describe("fix command", () => {
   const mockSpawnSync = vi.mocked(spawnSync);
   const mockProcessExit = vi.mocked(process.exit);
 
@@ -20,35 +20,45 @@ describe("lint command", () => {
     } as any);
   });
 
-  it("should run biome check without --write flag for all files when no files specified", () => {
-    lint([]);
-
-    expect(mockSpawnSync).toHaveBeenCalledWith("npx @biomejs/biome check ./", {
-      stdio: "inherit",
-      shell: true,
-    });
-  });
-
-  it("should run biome check without --write flag for specific files when files are provided", () => {
-    const files = ["src/index.ts", "src/utils.ts"];
-    lint(files);
+  it("should run biome check with --write flag for all files when no files specified", () => {
+    fix([], { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check src/index.ts src/utils.ts",
+      "npx @biomejs/biome check --write ./",
+      {
+        stdio: "inherit",
+        shell: true,
+      }
+    );
+  });
+
+  it("should run biome check with --write flag for specific files when files are provided", () => {
+    const files = ["src/index.ts", "src/utils.ts"];
+    fix(files, { unsafe: false });
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "npx @biomejs/biome check --write src/index.ts src/utils.ts",
       { stdio: "inherit", shell: true }
     );
   });
 
   it("should handle single file", () => {
     const files = ["src/index.ts"];
-    lint(files);
+    fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check src/index.ts",
-      {
-        stdio: "inherit",
-        shell: true,
-      }
+      "npx @biomejs/biome check --write src/index.ts",
+      { stdio: "inherit", shell: true }
+    );
+  });
+
+  it("should handle unsafe flag when enabled", () => {
+    const files = ["src/index.ts"];
+    fix(files, { unsafe: true });
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "npx @biomejs/biome check --write --unsafe src/index.ts",
+      { stdio: "inherit", shell: true }
     );
   });
 
@@ -57,30 +67,30 @@ describe("lint command", () => {
       "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx",
       "src/components/Button.tsx",
     ];
-    lint(files);
+    fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
+      "npx @biomejs/biome check --write '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
       { stdio: "inherit", shell: true }
     );
   });
 
   it("should handle files with dollar signs by quoting them", () => {
     const files = ["$HOME/file.ts", "file with spaces.ts"];
-    lint(files);
+    fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check '$HOME/file.ts'  'file with spaces.ts' ",
+      "npx @biomejs/biome check --write '$HOME/file.ts'  'file with spaces.ts' ",
       { stdio: "inherit", shell: true }
     );
   });
 
   it("should handle files with single quotes by escaping them", () => {
     const files = ["file'with'quotes.ts", "normal.ts"];
-    lint(files);
+    fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check 'file'\\''with'\\''quotes.ts'  normal.ts",
+      "npx @biomejs/biome check --write 'file'\\''with'\\''quotes.ts'  normal.ts",
       { stdio: "inherit", shell: true }
     );
   });
@@ -102,7 +112,7 @@ describe("lint command", () => {
       error,
     } as any);
 
-    lint([]);
+    fix([], { unsafe: false });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to run Ultracite:",
@@ -123,7 +133,7 @@ describe("lint command", () => {
       stderr: Buffer.from(""),
     } as any);
 
-    lint([]);
+    fix([], { unsafe: false });
 
     expect(mockProcessExit).toHaveBeenCalledWith(2);
   });

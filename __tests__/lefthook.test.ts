@@ -1,6 +1,6 @@
 import { execSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
-import * as nypm from "nypm";
+import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { lefthook } from "../scripts/integrations/lefthook";
 import { exists, isMonorepo } from "../scripts/utils";
@@ -9,21 +9,21 @@ vi.mock("node:child_process");
 vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
-    if (pkg === "ultracite" && options?.args?.includes("format")) {
+    if (pkg === "ultracite" && options?.args?.includes("fix")) {
       if (pm === "npm") {
-        return "npx ultracite format";
+        return "npx ultracite fix";
       }
       if (pm === "yarn") {
-        return "yarn dlx ultracite format";
+        return "yarn dlx ultracite fix";
       }
       if (pm === "pnpm") {
-        return "pnpm dlx ultracite format";
+        return "pnpm dlx ultracite fix";
       }
       if (pm === "bun") {
-        return "bunx ultracite format";
+        return "bunx ultracite fix";
       }
       if (pm === "deno") {
-        return "deno run -A npm:ultracite format";
+        return "deno run -A npm:ultracite fix";
       }
     }
     if (pkg === "lefthook" && options?.args?.includes("install")) {
@@ -54,7 +54,7 @@ vi.mock("../scripts/utils", () => ({
 
 describe("lefthook configuration", () => {
   const mockExecSync = vi.mocked(execSync);
-  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
+  const mockAddDevDependency = vi.mocked(addDevDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
@@ -139,14 +139,14 @@ describe("lefthook configuration", () => {
   });
 
   describe("create", () => {
-    it("should create lefthook.yml with ultracite format command", async () => {
+    it("should create lefthook.yml with ultracite fix command", async () => {
       await lefthook.create("npm");
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./lefthook.yml",
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -165,7 +165,7 @@ describe("lefthook configuration", () => {
     it("should not modify config if ultracite command already exists", async () => {
       const existingContent = `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -197,7 +197,7 @@ describe("lefthook configuration", () => {
         "./lefthook.yml",
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -225,7 +225,7 @@ describe("lefthook configuration", () => {
         "./lefthook.yml",
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -259,7 +259,7 @@ describe("lefthook configuration", () => {
       run: npm run lint
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -283,7 +283,7 @@ pre-commit:
         `
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
@@ -349,7 +349,7 @@ pre-commit:
         "./lefthook.yml",
         `pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: npx ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"

@@ -7,25 +7,25 @@ import { exists, isMonorepo } from "../scripts/utils";
 vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
-    if (options?.args?.includes("format")) {
+    if (options?.args?.includes("fix")) {
       if (pm === "npm") {
-        return "npx ultracite format";
+        return "npx ultracite fix";
       }
 
       if (pm === "yarn") {
-        return "yarn dlx ultracite format";
+        return "yarn dlx ultracite fix";
       }
 
       if (pm === "pnpm") {
-        return "pnpm dlx ultracite format";
+        return "pnpm dlx ultracite fix";
       }
 
       if (pm === "bun") {
-        return "bunx ultracite format";
+        return "bunx ultracite fix";
       }
 
       if (pm === "deno") {
-        return "deno run -A npm:ultracite format";
+        return "deno run -A npm:ultracite fix";
       }
     }
     return `npx ${pkg} ${options?.args?.join(" ") || ""}`;
@@ -117,7 +117,7 @@ describe("husky configuration", () => {
   });
 
   describe("create", () => {
-    it("should create .husky/pre-commit with ultracite format command", async () => {
+    it("should create .husky/pre-commit with ultracite fix command", async () => {
       mockMkdir.mockResolvedValue();
       mockWriteFile.mockResolvedValue();
 
@@ -126,13 +126,13 @@ describe("husky configuration", () => {
       expect(mockMkdir).toHaveBeenCalledWith(".husky", { recursive: true });
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.husky/pre-commit",
-        "npx ultracite format"
+        "npx ultracite fix"
       );
     });
   });
 
   describe("update", () => {
-    it("should append ultracite format command to existing pre-commit hook", async () => {
+    it("should append ultracite fix command to existing pre-commit hook", async () => {
       const existingContent = "#!/bin/sh\nnpm test";
       mockReadFile.mockResolvedValue(existingContent);
 
@@ -141,7 +141,7 @@ describe("husky configuration", () => {
       expect(mockReadFile).toHaveBeenCalledWith("./.husky/pre-commit", "utf-8");
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.husky/pre-commit",
-        "#!/bin/sh\nnpm test\nnpx ultracite format"
+        "#!/bin/sh\nnpm test\nnpx ultracite fix"
       );
     });
 
@@ -152,7 +152,7 @@ describe("husky configuration", () => {
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.husky/pre-commit",
-        "\nnpx ultracite format"
+        "\nnpx ultracite fix"
       );
     });
   });
