@@ -91,7 +91,15 @@ const upsertVSCodeSettings = async () => {
 
   s.message('settings.json not found, creating...');
   await vscode.create();
-  s.stop('settings.json created.');
+  s.message('settings.json created.');
+
+  s.message('Installing Biome extension...');
+  try {
+    vscode.extension();
+    s.stop('settings.json created.');
+  } catch (error) {
+    s.stop(`Failed to install Biome extension (${error}), but continuing...`);
+  }
 };
 
 const upsertZedSettings = async () => {
@@ -107,7 +115,9 @@ const upsertZedSettings = async () => {
 
   s.message('settings.json not found, creating...');
   await zed.create();
-  s.stop('settings.json created.');
+  s.message(
+    'settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/'
+  );
 };
 
 const upsertBiomeConfig = async () => {

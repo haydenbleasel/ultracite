@@ -43,4 +43,9 @@ export const vscode = {
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
   },
+  extension: () =>
+    spawnSync("code --install-extension biomejs.biome", {
+      stdio: "inherit",
+      shell: true,
+    }),
 };
