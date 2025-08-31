@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import process from "node:process";
 import { intro, log, multiselect, spinner } from "@clack/prompts";
-import * as nypm from "nypm";
+import { addDevDependency, detectPackageManager } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import packageJson from "../package.json" with { type: "json" };
 import { initialize } from "../scripts/initialize";
@@ -64,8 +64,8 @@ vi.mock("../scripts/migrations/eslint");
 vi.mock("../scripts/migrations/prettier");
 
 describe("initialize command", () => {
-  const mockDetectPackageManager = vi.mocked(nypm.detectPackageManager);
-  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
+  const mockDetectPackageManager = vi.mocked(detectPackageManager);
+  const mockAddDevDependency = vi.mocked(addDevDependency);
   const mockMkdir = vi.mocked(mkdir);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);

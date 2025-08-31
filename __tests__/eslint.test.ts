@@ -1,5 +1,5 @@
 import { readFile, unlink, writeFile } from "node:fs/promises";
-import * as nypm from "nypm";
+import { removeDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { eslintCleanup } from "../scripts/migrations/eslint";
 import { exists } from "../scripts/utils";
@@ -11,7 +11,7 @@ vi.mock("../scripts/utils", () => ({
 }));
 
 describe("eslint-cleanup", () => {
-  const mockRemoveDependency = vi.mocked(nypm.removeDependency);
+  const mockRemoveDependency = vi.mocked(removeDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockUnlink = vi.mocked(unlink);
@@ -284,7 +284,7 @@ describe("eslint-cleanup", () => {
       const result = await eslintCleanup.remove("npm install");
 
       expect(result.vsCodeCleaned).toBe(true);
-      
+
       // The codeActionsOnSave should be removed entirely since it would be empty
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.vscode/settings.json",
@@ -323,7 +323,7 @@ describe("eslint-cleanup", () => {
       const result = await eslintCleanup.remove("npm install");
 
       expect(result.vsCodeCleaned).toBe(true);
-      
+
       // The entire codeActionsOnSave should be removed
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.vscode/settings.json",

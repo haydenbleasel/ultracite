@@ -1,5 +1,5 @@
 import { readFile, unlink, writeFile } from "node:fs/promises";
-import * as nypm from "nypm";
+import { removeDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { prettierCleanup } from "../scripts/migrations/prettier";
 import { exists } from "../scripts/utils";
@@ -11,7 +11,7 @@ vi.mock("../scripts/utils", () => ({
 }));
 
 describe("prettier-cleanup", () => {
-  const mockRemoveDependency = vi.mocked(nypm.removeDependency);
+  const mockRemoveDependency = vi.mocked(removeDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockUnlink = vi.mocked(unlink);
