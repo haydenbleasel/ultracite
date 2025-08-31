@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import * as nypm from "nypm";
+import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { husky } from "../scripts/integrations/husky";
 import { exists, isMonorepo } from "../scripts/utils";
@@ -8,11 +8,25 @@ vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
     if (options?.args?.includes("format")) {
-      if (pm === "npm") return "npx ultracite format";
-      if (pm === "yarn") return "yarn dlx ultracite format";
-      if (pm === "pnpm") return "pnpm dlx ultracite format";
-      if (pm === "bun") return "bunx ultracite format";
-      if (pm === "deno") return "deno run -A npm:ultracite format";
+      if (pm === "npm") {
+        return "npx ultracite format";
+      }
+
+      if (pm === "yarn") {
+        return "yarn dlx ultracite format";
+      }
+
+      if (pm === "pnpm") {
+        return "pnpm dlx ultracite format";
+      }
+
+      if (pm === "bun") {
+        return "bunx ultracite format";
+      }
+
+      if (pm === "deno") {
+        return "deno run -A npm:ultracite format";
+      }
     }
     return `npx ${pkg} ${options?.args?.join(" ") || ""}`;
   }),
@@ -24,7 +38,7 @@ vi.mock("../scripts/utils", () => ({
 }));
 
 describe("husky configuration", () => {
-  const mockAddDevDependency = vi.mocked(nypm.addDevDependency);
+  const mockAddDevDependency = vi.mocked(addDevDependency);
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockMkdir = vi.mocked(mkdir);
