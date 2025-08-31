@@ -1,3 +1,16 @@
+# v5.2.17 (Sun Aug 31 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #263 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.16 (Sun Aug 31 2025)
 
 #### ⚠️ Pushed to `main`
