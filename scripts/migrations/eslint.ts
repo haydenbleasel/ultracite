@@ -4,7 +4,7 @@ import { type PackageManagerName, removeDependency } from "nypm";
 import { exists } from "../utils";
 
 // Common ESLint configuration files
-const eslintConfigFiles = [
+export const eslintConfigFiles = [
   ".eslintrc",
   ".eslintrc.js",
   ".eslintrc.json",

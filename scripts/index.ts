@@ -4,6 +4,7 @@ import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
+import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { options } from "./consts/options";
 import { initialize } from "./initialize";
@@ -85,6 +86,14 @@ export const router = t.router({
     .mutation(({ input }) => {
       const [files, opts] = input;
       fix(files, { unsafe: opts.unsafe });
+    }),
+
+  doctor: t.procedure
+    .meta({
+      description: "Verify your Ultracite setup and check for issues",
+    })
+    .query(async () => {
+      await doctor();
     }),
 
   // Deprecated commands for backwards compatibility

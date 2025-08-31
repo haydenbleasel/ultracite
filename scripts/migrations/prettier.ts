@@ -4,7 +4,7 @@ import { type PackageManagerName, removeDependency } from "nypm";
 import { exists } from "../utils";
 
 // Common Prettier configuration files
-const prettierConfigFiles = [
+export const prettierConfigFiles = [
   ".prettierrc",
   ".prettierrc.js",
   ".prettierrc.json",
