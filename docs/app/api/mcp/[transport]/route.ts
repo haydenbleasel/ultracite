@@ -1,19 +1,19 @@
-import { track } from '@vercel/analytics/server';
-import { createMcpHandler } from 'mcp-handler';
-import { rules } from '@/lib/rules';
+import { track } from "@vercel/analytics/server";
+import { createMcpHandler } from "mcp-handler";
+import { rules } from "@/lib/rules";
 
 const handler = createMcpHandler(
   (server) => {
     server.tool(
-      'getRules',
-      'Provides a list of all Ultracite rules.',
+      "getRules",
+      "Provides a list of all Ultracite rules.",
       {},
       async () => {
-        await track('MCP: Get rules');
+        await track("MCP: Get rules");
 
         return {
           content: [
-            { type: 'text', text: rules.map((rule) => `- ${rule}`).join('\n') },
+            { type: "text", text: rules.map((rule) => `- ${rule}`).join("\n") },
           ],
         };
       }
@@ -22,7 +22,7 @@ const handler = createMcpHandler(
   {},
   {
     disableSse: true,
-    basePath: '/api/mcp',
+    basePath: "/api/mcp",
     maxDuration: 60,
     verboseLogs: true,
   }

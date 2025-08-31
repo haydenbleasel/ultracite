@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 // React-компонент обертка
-import { forwardRef, type HTMLAttributes, useEffect } from 'react';
+import { forwardRef, type HTMLAttributes, useEffect } from "react";
 
 // Сначала определяем класс Pixel
 class Pixel {
@@ -119,27 +119,27 @@ class Pixel {
 
 // Затем определяем веб-компонент
 class PixelCanvasElement extends HTMLElement {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D | null;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly ctx: CanvasRenderingContext2D | null;
   private pixels: Pixel[] = [];
   private animation: number | null = null;
-  private timeInterval: number = 1000 / 60;
+  private readonly timeInterval: number = 1000 / 60;
   private timePrevious: number = performance.now();
-  private reducedMotion: boolean;
+  private readonly reducedMotion: boolean;
   private _initialized = false;
   private _resizeObserver: ResizeObserver | null = null;
   private _parent: Element | null = null;
 
   constructor() {
     super();
-    this.canvas = document.createElement('canvas');
-    this.ctx = this.canvas.getContext('2d');
+    this.canvas = document.createElement("canvas");
+    this.ctx = this.canvas.getContext("2d");
     this.reducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
+      "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    const shadow = this.attachShadow({ mode: 'open' });
-    const style = document.createElement('style');
+    const shadow = this.attachShadow({ mode: "open" });
+    const style = document.createElement("style");
     style.textContent = `
       :host {
         display: grid;
@@ -153,7 +153,7 @@ class PixelCanvasElement extends HTMLElement {
   }
 
   get colors() {
-    return this.dataset.colors?.split(',') || ['#f8fafc', '#f1f5f9', '#cbd5e1'];
+    return this.dataset.colors?.split(",") || ["#f8fafc", "#f1f5f9", "#cbd5e1"];
   }
 
   get gap() {
@@ -167,11 +167,11 @@ class PixelCanvasElement extends HTMLElement {
   }
 
   get noFocus() {
-    return this.hasAttribute('data-no-focus');
+    return this.hasAttribute("data-no-focus");
   }
 
   get variant() {
-    return this.dataset.variant || 'default';
+    return this.dataset.variant || "default";
   }
 
   connectedCallback() {
@@ -194,22 +194,22 @@ class PixelCanvasElement extends HTMLElement {
       this._resizeObserver = ro;
     });
 
-    this._parent?.addEventListener('mouseenter', () =>
-      this.handleAnimation('appear')
+    this._parent?.addEventListener("mouseenter", () =>
+      this.handleAnimation("appear")
     );
-    this._parent?.addEventListener('mouseleave', () =>
-      this.handleAnimation('disappear')
+    this._parent?.addEventListener("mouseleave", () =>
+      this.handleAnimation("disappear")
     );
 
     if (!this.noFocus) {
       this._parent?.addEventListener(
-        'focus',
-        () => this.handleAnimation('appear'),
+        "focus",
+        () => this.handleAnimation("appear"),
         { capture: true }
       );
       this._parent?.addEventListener(
-        'blur',
-        () => this.handleAnimation('disappear'),
+        "blur",
+        () => this.handleAnimation("disappear"),
         { capture: true }
       );
     }
@@ -219,19 +219,19 @@ class PixelCanvasElement extends HTMLElement {
     this._initialized = false;
     this._resizeObserver?.disconnect();
 
-    this._parent?.removeEventListener('mouseenter', () =>
-      this.handleAnimation('appear')
+    this._parent?.removeEventListener("mouseenter", () =>
+      this.handleAnimation("appear")
     );
-    this._parent?.removeEventListener('mouseleave', () =>
-      this.handleAnimation('disappear')
+    this._parent?.removeEventListener("mouseleave", () =>
+      this.handleAnimation("disappear")
     );
 
     if (!this.noFocus) {
-      this._parent?.removeEventListener('focus', () =>
-        this.handleAnimation('appear')
+      this._parent?.removeEventListener("focus", () =>
+        this.handleAnimation("appear")
       );
-      this._parent?.removeEventListener('blur', () =>
-        this.handleAnimation('disappear')
+      this._parent?.removeEventListener("blur", () =>
+        this.handleAnimation("disappear")
       );
     }
 
@@ -292,7 +292,7 @@ class PixelCanvasElement extends HTMLElement {
           this.colors[Math.floor(Math.random() * this.colors.length)];
         let delay = 0;
 
-        if (this.variant === 'icon') {
+        if (this.variant === "icon") {
           delay = this.reducedMotion ? 0 : this.getDistanceToCenter(x, y);
         } else {
           delay = this.reducedMotion ? 0 : this.getDistanceToBottomLeft(x, y);
@@ -305,7 +305,7 @@ class PixelCanvasElement extends HTMLElement {
     }
   }
 
-  handleAnimation(name: 'appear' | 'disappear') {
+  handleAnimation(name: "appear" | "disappear") {
     if (this.animation) {
       cancelAnimationFrame(this.animation);
     }
@@ -349,7 +349,7 @@ export interface PixelCanvasProps extends HTMLAttributes<HTMLDivElement> {
   gap?: number;
   speed?: number;
   colors?: string[];
-  variant?: 'default' | 'icon';
+  variant?: "default" | "icon";
   noFocus?: boolean;
 }
 
@@ -358,28 +358,28 @@ const PixelCanvas = forwardRef<HTMLDivElement, PixelCanvasProps>(
     useEffect(() => {
       // Регистрируем веб-компонент при первом рендере
       if (
-        typeof window !== 'undefined' &&
-        !customElements.get('pixel-canvas')
+        typeof window !== "undefined" &&
+        !customElements.get("pixel-canvas")
       ) {
-        customElements.define('pixel-canvas', PixelCanvasElement);
+        customElements.define("pixel-canvas", PixelCanvasElement);
       }
     }, []);
 
     return (
       // @ts-expect-error - Custom element
       <pixel-canvas
-        data-colors={colors?.join(',')}
+        data-colors={colors?.join(",")}
         data-gap={gap}
         data-speed={speed}
         data-variant={variant}
         ref={ref}
-        {...(noFocus && { 'data-no-focus': '' })}
+        {...(noFocus && { "data-no-focus": "" })}
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          pointerEvents: 'none',
-          width: '100%',
-          height: '100%',
+          pointerEvents: "none",
+          width: "100%",
+          height: "100%",
           ...style,
         }}
         {...props}
@@ -387,6 +387,6 @@ const PixelCanvas = forwardRef<HTMLDivElement, PixelCanvasProps>(
     );
   }
 );
-PixelCanvas.displayName = 'PixelCanvas';
+PixelCanvas.displayName = "PixelCanvas";
 
 export { PixelCanvas };

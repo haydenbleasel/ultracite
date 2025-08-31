@@ -1,18 +1,18 @@
-import { execSync } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
-import { addDevDependency, dlxCommand, type PackageManagerName } from 'nypm';
-import { exists, isMonorepo } from '../utils';
+import { execSync } from "node:child_process";
+import { readFile, writeFile } from "node:fs/promises";
+import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+import { exists, isMonorepo } from "../utils";
 
 const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
 const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
-  dlxCommand(packageManager, 'ultracite', {
-    args: ['format'],
-    short: packageManager === 'npm',
+  dlxCommand(packageManager, "ultracite", {
+    args: ["fix"],
+    short: packageManager === "npm",
   });
 
-const path = './lefthook.yml';
+const path = "./lefthook.yml";
 
 const createLefthookConfig = (
   packageManager: PackageManagerName
@@ -33,14 +33,14 @@ const createLefthookConfig = (
 export const lefthook = {
   exists: () => exists(path),
   install: async (packageManager: PackageManagerName) => {
-    await addDevDependency('lefthook', {
+    await addDevDependency("lefthook", {
       packageManager,
       workspace: await isMonorepo(),
     });
 
-    const installCommand = dlxCommand(packageManager, 'lefthook', {
-      args: ['install'],
-      short: packageManager === 'npm',
+    const installCommand = dlxCommand(packageManager, "lefthook", {
+      args: ["install"],
+      short: packageManager === "npm",
     });
 
     execSync(installCommand);
@@ -50,7 +50,7 @@ export const lefthook = {
     await writeFile(path, config);
   },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, 'utf-8');
+    const existingContents = await readFile(path, "utf-8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 
@@ -60,7 +60,7 @@ export const lefthook = {
     }
 
     // Check if this is the default commented template from lefthook install
-    const isDefaultTemplate = existingContents.startsWith('# EXAMPLE USAGE:');
+    const isDefaultTemplate = existingContents.startsWith("# EXAMPLE USAGE:");
 
     if (isDefaultTemplate) {
       // Replace the entire default template with our config
@@ -69,9 +69,9 @@ export const lefthook = {
     }
 
     // Parse existing YAML and add ultracite job
-    if (existingContents.includes('pre-commit:')) {
+    if (existingContents.includes("pre-commit:")) {
       // Check if jobs section exists
-      if (existingContents.includes('jobs:')) {
+      if (existingContents.includes("jobs:")) {
         // Add ultracite job to existing jobs array
         const ultraciteJob = `    - run: ${ultraciteCommand}
       glob: 

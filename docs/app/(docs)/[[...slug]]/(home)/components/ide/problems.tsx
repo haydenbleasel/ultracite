@@ -1,5 +1,5 @@
-import { SiReact } from '@icons-pack/react-simple-icons';
-import { XCircleIcon } from 'lucide-react';
+import { SiReact } from "@icons-pack/react-simple-icons";
+import { XCircleIcon } from "lucide-react";
 
 export const Problems = () => (
   <div className="flex flex-col gap-2 overflow-y-auto p-4 text-muted-foreground text-xs">

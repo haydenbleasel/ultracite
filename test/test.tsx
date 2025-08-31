@@ -23,7 +23,7 @@ if (true) {
   z();
 }
 
-fetch('google.com');
+fetch("google.com");
 
 // Instantiate PaymentRequest
 const req = new PaymentRequest();
@@ -38,10 +38,10 @@ const regex = /[a-z0-9_]/i;
 const clone = JSON.parse(JSON.stringify(foo));
 
 useQuery({
-  queryKey: ['todo'],
+  queryKey: ["todo"],
   queryFn: () => api.getTodo(todoId),
 });
 
 const todoQueries = {
-  detail: (id) => ({ queryKey: ['todo'], queryFn: () => api.getTodo(id) }),
+  detail: (id) => ({ queryKey: ["todo"], queryFn: () => api.getTodo(id) }),
 };

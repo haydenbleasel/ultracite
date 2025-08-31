@@ -1,4 +1,4 @@
-import type { options } from './options';
+import type { options } from "./options";
 
 export type EditorRuleConfig = {
   path: string;
@@ -10,15 +10,15 @@ export const EDITOR_RULES: Record<
   (typeof options.editorRules)[number],
   EditorRuleConfig
 > = {
-  'vscode-copilot': {
-    path: './.github/copilot-instructions.md',
+  "vscode-copilot": {
+    path: "./.github/copilot-instructions.md",
     header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
     appendMode: true,
   },
   cursor: {
-    path: './.cursor/rules/ultracite.mdc',
+    path: "./.cursor/rules/ultracite.mdc",
     header: `---
 description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx}"
@@ -26,58 +26,58 @@ alwaysApply: true
 ---`,
   },
   windsurf: {
-    path: './.windsurf/rules/ultracite.md',
+    path: "./.windsurf/rules/ultracite.md",
   },
   zed: {
-    path: './.rules',
+    path: "./.rules",
     appendMode: true,
   },
   claude: {
-    path: './.claude/CLAUDE.md',
+    path: "./.claude/CLAUDE.md",
     appendMode: true,
   },
   codex: {
-    path: './AGENTS.md',
+    path: "./AGENTS.md",
     appendMode: true,
   },
   kiro: {
-    path: './.kiro/steering/ultracite.md',
+    path: "./.kiro/steering/ultracite.md",
   },
   cline: {
-    path: './.clinerules',
+    path: "./.clinerules",
     appendMode: true,
   },
   amp: {
-    path: './AGENT.md',
+    path: "./AGENT.md",
     appendMode: true,
   },
   aider: {
-    path: './ultracite.md',
+    path: "./ultracite.md",
   },
-  'firebase-studio': {
-    path: './.idx/airules.md',
+  "firebase-studio": {
+    path: "./.idx/airules.md",
     appendMode: true,
   },
-  'open-hands': {
-    path: './.openhands/microagents/repo.md',
+  "open-hands": {
+    path: "./.openhands/microagents/repo.md",
     appendMode: true,
   },
-  'gemini-cli': {
-    path: './GEMINI.md',
+  "gemini-cli": {
+    path: "./GEMINI.md",
     appendMode: true,
   },
   junie: {
-    path: './.junie/guidelines.md',
+    path: "./.junie/guidelines.md",
     appendMode: true,
   },
   augmentcode: {
-    path: './.augment/rules/ultracite.md',
+    path: "./.augment/rules/ultracite.md",
   },
-  'kilo-code': {
-    path: './.kilocode/rules/ultracite.md',
+  "kilo-code": {
+    path: "./.kilocode/rules/ultracite.md",
   },
   goose: {
-    path: './.goosehints',
+    path: "./.goosehints",
     appendMode: true,
   },
 } as const;

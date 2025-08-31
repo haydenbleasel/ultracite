@@ -1,63 +1,63 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import deepmerge from 'deepmerge';
-import { parse } from 'jsonc-parser';
-import { exists } from '../utils';
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import deepmerge from "deepmerge";
+import { parse } from "jsonc-parser";
+import { exists } from "../utils";
 
 const defaultConfig = {
-  formatter: 'language_server',
-  format_on_save: 'on',
+  formatter: "language_server",
+  format_on_save: "on",
   languages: {
     JavaScript: {
       formatter: {
         language_server: {
-          name: 'biome',
+          name: "biome",
         },
       },
       code_actions_on_format: {
-        'source.fixAll.biome': true,
-        'source.organizeImports.biome': true,
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
       },
     },
     TypeScript: {
       formatter: {
         language_server: {
-          name: 'biome',
+          name: "biome",
         },
       },
       code_actions_on_format: {
-        'source.fixAll.biome': true,
-        'source.organizeImports.biome': true,
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
       },
     },
     JSX: {
       formatter: {
         language_server: {
-          name: 'biome',
+          name: "biome",
         },
       },
       code_actions_on_format: {
-        'source.fixAll.biome': true,
-        'source.organizeImports.biome': true,
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
       },
     },
     TSX: {
       formatter: {
         language_server: {
-          name: 'biome',
+          name: "biome",
         },
       },
       code_actions_on_format: {
-        'source.fixAll.biome': true,
-        'source.organizeImports.biome': true,
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
       },
     },
   },
   lsp: {
-    'typescript-language-server': {
+    "typescript-language-server": {
       settings: {
         typescript: {
           preferences: {
-            includePackageJsonAutoImports: 'on',
+            includePackageJsonAutoImports: "on",
           },
         },
       },
@@ -65,16 +65,16 @@ const defaultConfig = {
   },
 };
 
-const path = './.zed/settings.json';
+const path = "./.zed/settings.json";
 
 export const zed = {
   exists: () => exists(path),
   create: async () => {
-    await mkdir('.zed', { recursive: true });
+    await mkdir(".zed", { recursive: true });
     await writeFile(path, JSON.stringify(defaultConfig, null, 2));
   },
   update: async () => {
-    const existingContents = await readFile(path, 'utf-8');
+    const existingContents = await readFile(path, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

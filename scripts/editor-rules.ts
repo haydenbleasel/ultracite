@@ -1,9 +1,9 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
-import { rulesFile } from '../docs/lib/rules';
-import type { options } from './consts/options';
-import { EDITOR_RULES } from './consts/rules';
-import { exists } from './utils';
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
+import { rulesFile } from "../docs/lib/rules";
+import type { options } from "./consts/options";
+import { EDITOR_RULES } from "./consts/rules";
+import { exists } from "./utils";
 
 export const createEditorRules = (
   name: (typeof options.editorRules)[number]
@@ -16,9 +16,9 @@ export const createEditorRules = (
   const ensureDirectory = async () => {
     const dir = dirname(config.path);
     // Only create directory if it's not the current directory
-    if (dir !== '.') {
+    if (dir !== ".") {
       // Remove leading './' if present for consistency with test expectations
-      const cleanDir = dir.startsWith('./') ? dir.slice(2) : dir;
+      const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
       await mkdir(cleanDir, { recursive: true });
     }
   };
@@ -40,7 +40,7 @@ export const createEditorRules = (
           return;
         }
 
-        const existingContents = await readFile(config.path, 'utf-8');
+        const existingContents = await readFile(config.path, "utf-8");
 
         // Check if rules are already present to avoid duplicates
         if (existingContents.includes(rulesFile.trim())) {

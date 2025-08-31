@@ -1,5 +1,5 @@
-import { FileIcon } from 'lucide-react';
-import { codeToHtml } from 'shiki';
+import { FileIcon } from "lucide-react";
+import { codeToHtml } from "shiki";
 
 const config = `{
   "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
@@ -8,8 +8,8 @@ const config = `{
 
 export const ZeroConfig = async () => {
   const highlightedCode = await codeToHtml(config, {
-    lang: 'jsonc',
-    theme: 'vesper',
+    lang: "jsonc",
+    theme: "vesper",
   });
 
   return (

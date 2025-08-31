@@ -1,36 +1,36 @@
-import claude from './claude.jpg';
-import deepseek from './deepseek.jpg';
-import haydenbleasel from './haydenbleasel.jpg';
-import openai from './openai.jpg';
-import piersonmarks from './piersonmarks.jpg';
-import shadcn from './shadcn.jpg';
+import claude from "./claude.jpg";
+import deepseek from "./deepseek.jpg";
+import haydenbleasel from "./haydenbleasel.jpg";
+import openai from "./openai.jpg";
+import piersonmarks from "./piersonmarks.jpg";
+import shadcn from "./shadcn.jpg";
 
 export const people = [
   {
-    name: 'Hayden Bleasel',
+    name: "Hayden Bleasel",
     avatar: haydenbleasel,
   },
   {
-    name: 'Shadcn',
+    name: "Shadcn",
     avatar: shadcn,
   },
   {
-    name: 'Pierson Marks',
+    name: "Pierson Marks",
     avatar: piersonmarks,
   },
 ];
 
 export const providers = [
   {
-    name: 'OpenAI',
+    name: "OpenAI",
     avatar: openai,
   },
   {
-    name: 'Claude',
+    name: "Claude",
     avatar: claude,
   },
   {
-    name: 'DeepSeek',
+    name: "DeepSeek",
     avatar: deepseek,
   },
 ];

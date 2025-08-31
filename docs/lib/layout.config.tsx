@@ -1,24 +1,24 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
 export const baseOptions: BaseLayoutProps = {
   links: [
     {
-      text: 'Home',
-      url: '/',
-      active: 'none',
+      text: "Home",
+      url: "/",
+      active: "none",
     },
     {
-      text: 'Docs',
-      url: '/introduction',
-      active: 'none',
+      text: "Docs",
+      url: "/introduction",
+      active: "none",
     },
     {
-      text: 'Releases',
-      url: 'https://github.com/haydenbleasel/ultracite/releases',
-      active: 'none',
+      text: "Releases",
+      url: "https://github.com/haydenbleasel/ultracite/releases",
+      active: "none",
     },
   ],
-  githubUrl: 'https://github.com/haydenbleasel/ultracite',
+  githubUrl: "https://github.com/haydenbleasel/ultracite",
   themeSwitch: {
     enabled: false,
   },

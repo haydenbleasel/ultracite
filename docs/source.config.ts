@@ -1,8 +1,8 @@
-import { remarkInstall } from 'fumadocs-docgen';
-import { defineConfig, defineDocs } from 'fumadocs-mdx/config';
+import { remarkInstall } from "fumadocs-docgen";
+import { defineConfig, defineDocs } from "fumadocs-mdx/config";
 
 export const docs = defineDocs({
-  dir: 'content',
+  dir: "content",
 });
 
 export default defineConfig({
@@ -10,8 +10,8 @@ export default defineConfig({
     remarkPlugins: [remarkInstall],
     rehypeCodeOptions: {
       themes: {
-        light: 'vesper',
-        dark: 'vesper',
+        light: "vesper",
+        dark: "vesper",
       },
     },
   },

@@ -1,25 +1,25 @@
-import process from 'node:process';
-import { intro, log, multiselect, spinner } from '@clack/prompts';
+import process from "node:process";
+import { intro, log, multiselect, spinner } from "@clack/prompts";
 import {
   addDevDependency,
   detectPackageManager,
   type PackageManagerName,
-} from 'nypm';
-import packageJson from '../package.json' with { type: 'json' };
-import { biome } from './biome';
-import type { options } from './consts/options';
-import { vscode } from './editor-config/vscode';
-import { zed } from './editor-config/zed';
-import { createEditorRules } from './editor-rules';
-import { husky } from './integrations/husky';
-import { lefthook } from './integrations/lefthook';
-import { lintStaged } from './integrations/lint-staged';
-import { eslintCleanup } from './migrations/eslint';
-import { prettierCleanup } from './migrations/prettier';
-import { tsconfig } from './tsconfig';
-import { isMonorepo, title, updatePackageJson } from './utils';
+} from "nypm";
+import packageJson from "../package.json" with { type: "json" };
+import { biome } from "./biome";
+import type { options } from "./consts/options";
+import { vscode } from "./editor-config/vscode";
+import { zed } from "./editor-config/zed";
+import { createEditorRules } from "./editor-rules";
+import { husky } from "./integrations/husky";
+import { lefthook } from "./integrations/lefthook";
+import { lintStaged } from "./integrations/lint-staged";
+import { eslintCleanup } from "./migrations/eslint";
+import { prettierCleanup } from "./migrations/prettier";
+import { tsconfig } from "./tsconfig";
+import { isMonorepo, title, updatePackageJson } from "./utils";
 
-const schemaVersion = packageJson.devDependencies['@biomejs/biome'];
+const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
 type InitializeFlags = {
@@ -37,7 +37,7 @@ const installDependencies = async (
   install = true
 ) => {
   const s = spinner();
-  s.start('Installing dependencies...');
+  s.start("Installing dependencies...");
   const packages = [
     `ultracite@${ultraciteVersion}`,
     `@biomejs/biome@${schemaVersion}`,
@@ -53,77 +53,87 @@ const installDependencies = async (
   } else {
     await updatePackageJson({
       devDependencies: {
-        '@biomejs/biome': schemaVersion,
+        "@biomejs/biome": schemaVersion,
         ultracite: ultraciteVersion,
       },
     });
   }
 
-  s.stop('Dependencies installed.');
+  s.stop("Dependencies installed.");
 };
 
 const upsertTsConfig = async () => {
   const s = spinner();
-  s.start('Checking for tsconfig.json...');
+  s.start("Checking for tsconfig.json...");
 
   if (await tsconfig.exists()) {
-    s.message('tsconfig.json found, updating...');
+    s.message("tsconfig.json found, updating...");
     await tsconfig.update();
-    s.stop('tsconfig.json updated.');
+    s.stop("tsconfig.json updated.");
     return;
   }
 
-  s.message('tsconfig.json not found, creating...');
+  s.message("tsconfig.json not found, creating...");
   await tsconfig.create();
-  s.stop('tsconfig.json created.');
+  s.stop("tsconfig.json created.");
 };
 
 const upsertVSCodeSettings = async () => {
   const s = spinner();
-  s.start('Checking for .vscode/settings.json...');
+  s.start("Checking for .vscode/settings.json...");
 
   if (await vscode.exists()) {
-    s.message('settings.json found, updating...');
+    s.message("settings.json found, updating...");
     await vscode.update();
-    s.stop('settings.json updated.');
+    s.stop("settings.json updated.");
     return;
   }
 
-  s.message('settings.json not found, creating...');
+  s.message("settings.json not found, creating...");
   await vscode.create();
-  s.stop('settings.json created.');
+  s.message("settings.json created.");
+
+  s.message("Installing Biome extension...");
+  try {
+    vscode.extension();
+    s.stop("settings.json created.");
+  } catch (error) {
+    s.stop(`Failed to install Biome extension (${error}), but continuing...`);
+  }
 };
 
 const upsertZedSettings = async () => {
   const s = spinner();
-  s.start('Checking for .zed/settings.json...');
+  s.start("Checking for .zed/settings.json...");
 
   if (await zed.exists()) {
-    s.message('settings.json found, updating...');
+    s.message("settings.json found, updating...");
     await zed.update();
-    s.stop('settings.json updated.');
+    s.stop("settings.json updated.");
     return;
   }
 
-  s.message('settings.json not found, creating...');
+  s.message("settings.json not found, creating...");
   await zed.create();
-  s.stop('settings.json created.');
+  s.message(
+    "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
+  );
 };
 
 const upsertBiomeConfig = async () => {
   const s = spinner();
-  s.start('Checking for Biome configuration...');
+  s.start("Checking for Biome configuration...");
 
   if (await biome.exists()) {
-    s.message('Biome configuration found, updating...');
+    s.message("Biome configuration found, updating...");
     await biome.update();
-    s.stop('Biome configuration updated.');
+    s.stop("Biome configuration updated.");
     return;
   }
 
-  s.message('Biome configuration not found, creating...');
+  s.message("Biome configuration not found, creating...");
   await biome.create();
-  s.stop('Biome configuration created.');
+  s.stop("Biome configuration created.");
 };
 
 const initializePrecommitHook = async (
@@ -131,28 +141,28 @@ const initializePrecommitHook = async (
   install = true
 ) => {
   const s = spinner();
-  s.start('Initializing pre-commit hooks...');
+  s.start("Initializing pre-commit hooks...");
 
-  s.message('Installing Husky...');
+  s.message("Installing Husky...");
 
   if (install) {
     await husky.install(packageManager);
   } else {
     await updatePackageJson({
-      devDependencies: { husky: 'latest' },
+      devDependencies: { husky: "latest" },
     });
   }
 
   if (await husky.exists()) {
-    s.message('Pre-commit hook found, updating...');
+    s.message("Pre-commit hook found, updating...");
     await husky.update(packageManager);
-    s.stop('Pre-commit hook updated.');
+    s.stop("Pre-commit hook updated.");
     return;
   }
 
-  s.message('Pre-commit hook not found, creating...');
+  s.message("Pre-commit hook not found, creating...");
   await husky.create(packageManager);
-  s.stop('Pre-commit hook created.');
+  s.stop("Pre-commit hook created.");
 };
 
 const initializeLefthook = async (
@@ -160,28 +170,28 @@ const initializeLefthook = async (
   install = true
 ) => {
   const s = spinner();
-  s.start('Initializing lefthook...');
+  s.start("Initializing lefthook...");
 
-  s.message('Installing lefthook...');
+  s.message("Installing lefthook...");
 
   if (install) {
     await lefthook.install(packageManager);
   } else {
     await updatePackageJson({
-      devDependencies: { lefthook: 'latest' },
+      devDependencies: { lefthook: "latest" },
     });
   }
 
   if (await lefthook.exists()) {
-    s.message('lefthook.yml found, updating...');
+    s.message("lefthook.yml found, updating...");
     await lefthook.update(packageManager);
-    s.stop('lefthook.yml updated.');
+    s.stop("lefthook.yml updated.");
     return;
   }
 
-  s.message('lefthook.yml not found, creating...');
+  s.message("lefthook.yml not found, creating...");
   await lefthook.create(packageManager);
-  s.stop('lefthook.yml created.');
+  s.stop("lefthook.yml created.");
 };
 
 const initializeLintStaged = async (
@@ -189,28 +199,28 @@ const initializeLintStaged = async (
   install = true
 ) => {
   const s = spinner();
-  s.start('Initializing lint-staged...');
+  s.start("Initializing lint-staged...");
 
-  s.message('Installing lint-staged...');
+  s.message("Installing lint-staged...");
 
   if (install) {
     await lintStaged.install(packageManager);
   } else {
     await updatePackageJson({
-      devDependencies: { 'lint-staged': 'latest' },
+      devDependencies: { "lint-staged": "latest" },
     });
   }
 
   if (await lintStaged.exists()) {
-    s.message('lint-staged found, updating...');
+    s.message("lint-staged found, updating...");
     await lintStaged.update(packageManager);
-    s.stop('lint-staged updated.');
+    s.stop("lint-staged updated.");
     return;
   }
 
-  s.message('lint-staged not found, creating...');
+  s.message("lint-staged not found, creating...");
   await lintStaged.create(packageManager);
-  s.stop('lint-staged created.');
+  s.stop("lint-staged created.");
 };
 
 const upsertEditorRules = async (
@@ -236,55 +246,55 @@ const upsertEditorRules = async (
 
 const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
-  s.start('Removing Prettier dependencies and configuration...');
+  s.start("Removing Prettier dependencies and configuration...");
 
   try {
     const result = await prettierCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
-        `Removed Prettier packages: ${result.packagesRemoved.join(', ')}`
+        `Removed Prettier packages: ${result.packagesRemoved.join(", ")}`
       );
     }
 
     if (result.filesRemoved.length > 0) {
-      s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
+      s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
     }
 
     if (result.vsCodeCleaned) {
-      s.message('Cleaned VS Code settings');
+      s.message("Cleaned VS Code settings");
     }
 
-    s.stop('Prettier removed successfully.');
+    s.stop("Prettier removed successfully.");
   } catch (_error) {
-    s.stop('Failed to remove Prettier completely, but continuing...');
+    s.stop("Failed to remove Prettier completely, but continuing...");
   }
 };
 
 const removeESLint = async (pm: PackageManagerName) => {
   const s = spinner();
-  s.start('Removing ESLint dependencies and configuration...');
+  s.start("Removing ESLint dependencies and configuration...");
 
   try {
     const result = await eslintCleanup.remove(pm);
 
     if (result.packagesRemoved.length > 0) {
       s.message(
-        `Removed ESLint packages: ${result.packagesRemoved.join(', ')}`
+        `Removed ESLint packages: ${result.packagesRemoved.join(", ")}`
       );
     }
 
     if (result.filesRemoved.length > 0) {
-      s.message(`Removed config files: ${result.filesRemoved.join(', ')}`);
+      s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
     }
 
     if (result.vsCodeCleaned) {
-      s.message('Cleaned VS Code settings');
+      s.message("Cleaned VS Code settings");
     }
 
-    s.stop('ESLint removed successfully.');
+    s.stop("ESLint removed successfully.");
   } catch (_error) {
-    s.stop('Failed to remove ESLint completely, but continuing...');
+    s.stop("Failed to remove ESLint completely, but continuing...");
   }
 };
 
@@ -299,7 +309,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       const detected = await detectPackageManager(process.cwd());
 
       if (!detected) {
-        throw new Error('No package manager specified or detected');
+        throw new Error("No package manager specified or detected");
       }
 
       if (detected.warnings) {
@@ -327,8 +337,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       ) {
         migrationOptions.push({
           label:
-            'Remove Prettier (dependencies, config files, VS Code settings)',
-          value: 'prettier',
+            "Remove Prettier (dependencies, config files, VS Code settings)",
+          value: "prettier",
         });
       }
 
@@ -337,24 +347,24 @@ export const initialize = async (flags?: InitializeFlags) => {
         (await eslintCleanup.hasESLint())
       ) {
         migrationOptions.push({
-          label: 'Remove ESLint (dependencies, config files, VS Code settings)',
-          value: 'eslint',
+          label: "Remove ESLint (dependencies, config files, VS Code settings)",
+          value: "eslint",
         });
       }
 
       if (migrationOptions.length > 0) {
         const migrationChoices = (await multiselect({
           message:
-            'Remove existing formatters/linters (recommended for clean migration)?',
+            "Remove existing formatters/linters (recommended for clean migration)?",
           options: migrationOptions,
           required: false,
         })) as string[];
 
         if (shouldRemovePrettier === undefined) {
-          shouldRemovePrettier = migrationChoices.includes('prettier');
+          shouldRemovePrettier = migrationChoices.includes("prettier");
         }
         if (shouldRemoveEslint === undefined) {
-          shouldRemoveEslint = migrationChoices.includes('eslint');
+          shouldRemoveEslint = migrationChoices.includes("eslint");
         }
       }
     }
@@ -362,13 +372,13 @@ export const initialize = async (flags?: InitializeFlags) => {
     let editorConfig = opts.editors;
     if (!editorConfig) {
       editorConfig = (await multiselect({
-        message: 'Which editors do you want to configure (recommended)?',
+        message: "Which editors do you want to configure (recommended)?",
         options: [
-          { label: 'VSCode / Cursor / Windsurf', value: 'vscode' },
-          { label: 'Zed', value: 'zed' },
+          { label: "VSCode / Cursor / Windsurf", value: "vscode" },
+          { label: "Zed", value: "zed" },
         ],
         required: false,
-      })) as ('vscode' | 'zed')[];
+      })) as ("vscode" | "zed")[];
     }
 
     let editorRules = opts.rules;
@@ -377,34 +387,34 @@ export const initialize = async (flags?: InitializeFlags) => {
       (typeof options.editorRules)[number],
       string
     > = {
-      'vscode-copilot': 'GitHub Copilot (VSCode)',
-      cursor: 'Cursor',
-      windsurf: 'Windsurf',
-      zed: 'Zed',
-      claude: 'Claude Code',
-      codex: 'OpenAI Codex / Jules / OpenCode',
-      kiro: 'Kiro IDE',
-      cline: 'Cline',
-      amp: 'AMP',
-      aider: 'Aider',
-      'firebase-studio': 'Firebase Studio',
-      'open-hands': 'Open Hands',
-      'gemini-cli': 'Gemini CLI',
-      junie: 'Junie',
-      augmentcode: 'Augment Code',
-      'kilo-code': 'Kilo Code',
-      goose: 'Codename Goose',
+      "vscode-copilot": "GitHub Copilot (VSCode)",
+      cursor: "Cursor",
+      windsurf: "Windsurf",
+      zed: "Zed",
+      claude: "Claude Code",
+      codex: "OpenAI Codex / Jules / OpenCode",
+      kiro: "Kiro IDE",
+      cline: "Cline",
+      amp: "AMP",
+      aider: "Aider",
+      "firebase-studio": "Firebase Studio",
+      "open-hands": "Open Hands",
+      "gemini-cli": "Gemini CLI",
+      junie: "Junie",
+      augmentcode: "Augment Code",
+      "kilo-code": "Kilo Code",
+      goose: "Codename Goose",
     };
 
     if (!editorRules) {
       editorRules = (await multiselect({
-        message: 'Which editor rules do you want to enable (optional)?',
+        message: "Which editor rules do you want to enable (optional)?",
         options: Object.entries(editorRulesOptions).map(([value, label]) => ({
           value,
           label,
         })),
         required: false,
-      })) as InitializeFlags['rules'];
+      })) as InitializeFlags["rules"];
     }
 
     let integrations = opts.integrations;
@@ -422,14 +432,14 @@ export const initialize = async (flags?: InitializeFlags) => {
         integrations = [];
       } else {
         integrations = (await multiselect({
-          message: 'Would you like any of the following (optional)?',
+          message: "Would you like any of the following (optional)?",
           options: [
-            { label: 'Husky pre-commit hook', value: 'husky' },
-            { label: 'Lefthook pre-commit hook', value: 'lefthook' },
-            { label: 'Lint-staged', value: 'lint-staged' },
+            { label: "Husky pre-commit hook", value: "husky" },
+            { label: "Lefthook pre-commit hook", value: "lefthook" },
+            { label: "Lint-staged", value: "lint-staged" },
           ],
           required: false,
-        })) as ('husky' | 'lefthook' | 'lint-staged')[];
+        })) as ("husky" | "lefthook" | "lint-staged")[];
       }
     }
 
@@ -445,10 +455,10 @@ export const initialize = async (flags?: InitializeFlags) => {
     await upsertTsConfig();
     await upsertBiomeConfig();
 
-    if (editorConfig?.includes('vscode')) {
+    if (editorConfig?.includes("vscode")) {
       await upsertVSCodeSettings();
     }
-    if (editorConfig?.includes('zed')) {
+    if (editorConfig?.includes("zed")) {
       await upsertZedSettings();
     }
 
@@ -456,19 +466,19 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
     }
 
-    if (integrations?.includes('husky')) {
+    if (integrations?.includes("husky")) {
       await initializePrecommitHook(pm, !opts.skipInstall);
     }
-    if (integrations?.includes('lefthook')) {
+    if (integrations?.includes("lefthook")) {
       await initializeLefthook(pm, !opts.skipInstall);
     }
-    if (integrations?.includes('lint-staged')) {
+    if (integrations?.includes("lint-staged")) {
       await initializeLintStaged(pm, !opts.skipInstall);
     }
 
-    log.success('Successfully initialized Ultracite configuration!');
+    log.success("Successfully initialized Ultracite configuration!");
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    const message = error instanceof Error ? error.message : "Unknown error";
     log.error(`Failed to initialize Ultracite configuration: ${message}`);
     process.exit(1);
   }

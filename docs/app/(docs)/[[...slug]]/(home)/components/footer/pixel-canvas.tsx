@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { type HTMLAttributes, useCallback, useEffect, useRef } from 'react';
+import { type HTMLAttributes, useCallback, useEffect, useRef } from "react";
 
 class Pixel {
   width: number;
@@ -119,15 +119,15 @@ export interface PixelCanvasProps extends HTMLAttributes<HTMLDivElement> {
   gap?: number;
   speed?: number;
   colors?: string[];
-  variant?: 'default' | 'icon';
+  variant?: "default" | "icon";
   noFocus?: boolean;
 }
 
 export function PixelCanvas({
   gap = 5,
   speed = 35,
-  colors = ['#f8fafc', '#f1f5f9', '#cbd5e1'],
-  variant = 'default',
+  colors = ["#f8fafc", "#f1f5f9", "#cbd5e1"],
+  variant = "default",
   noFocus = false,
   style,
   ...props
@@ -170,7 +170,7 @@ export function PixelCanvas({
         return 0;
       }
 
-      if (variant === 'icon') {
+      if (variant === "icon") {
         return getDistanceToCenter(x, y, canvas);
       }
 
@@ -181,7 +181,7 @@ export function PixelCanvas({
 
   const createPixels = useCallback(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
 
     if (!(canvas && ctx)) {
       return;
@@ -203,7 +203,7 @@ export function PixelCanvas({
 
   const handleResize = useCallback(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
 
     if (!(canvas && ctx)) {
       return;
@@ -230,9 +230,9 @@ export function PixelCanvas({
     createPixels();
   }, [createPixels]);
 
-  const animateFrame = useCallback((name: 'appear' | 'disappear') => {
+  const animateFrame = useCallback((name: "appear" | "disappear") => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
 
     if (!(canvas && ctx)) {
       return true;
@@ -252,7 +252,7 @@ export function PixelCanvas({
   }, []);
 
   const handleAnimation = useCallback(
-    (name: 'appear' | 'disappear') => {
+    (name: "appear" | "disappear") => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -284,35 +284,35 @@ export function PixelCanvas({
   );
 
   const handleMouseEnter = useCallback(() => {
-    handleAnimation('appear');
+    handleAnimation("appear");
   }, [handleAnimation]);
 
   const handleMouseLeave = useCallback(() => {
-    handleAnimation('disappear');
+    handleAnimation("disappear");
   }, [handleAnimation]);
 
   const handleFocus = useCallback(() => {
-    handleAnimation('appear');
+    handleAnimation("appear");
   }, [handleAnimation]);
 
   const handleBlur = useCallback(() => {
-    handleAnimation('disappear');
+    handleAnimation("disappear");
   }, [handleAnimation]);
 
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
+      "(prefers-reduced-motion: reduce)"
     ).matches;
   }, []);
 
   const setupEventListeners = useCallback(
     (container: HTMLDivElement) => {
-      container.addEventListener('mouseenter', handleMouseEnter);
-      container.addEventListener('mouseleave', handleMouseLeave);
+      container.addEventListener("mouseenter", handleMouseEnter);
+      container.addEventListener("mouseleave", handleMouseLeave);
 
       if (!noFocus) {
-        container.addEventListener('focus', handleFocus, { capture: true });
-        container.addEventListener('blur', handleBlur, { capture: true });
+        container.addEventListener("focus", handleFocus, { capture: true });
+        container.addEventListener("blur", handleBlur, { capture: true });
       }
     },
     [handleMouseEnter, handleMouseLeave, handleFocus, handleBlur, noFocus]
@@ -320,14 +320,14 @@ export function PixelCanvas({
 
   const cleanupEventListeners = useCallback(
     (container: HTMLDivElement) => {
-      container.removeEventListener('mouseenter', handleMouseEnter);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      container.removeEventListener("mouseenter", handleMouseEnter);
+      container.removeEventListener("mouseleave", handleMouseLeave);
 
       if (!noFocus) {
-        container.removeEventListener('focus', handleFocus, {
+        container.removeEventListener("focus", handleFocus, {
           capture: true,
         });
-        container.removeEventListener('blur', handleBlur, { capture: true });
+        container.removeEventListener("blur", handleBlur, { capture: true });
       }
     },
     [handleMouseEnter, handleMouseLeave, handleFocus, handleBlur, noFocus]
@@ -367,11 +367,11 @@ export function PixelCanvas({
     <div
       ref={containerRef}
       style={{
-        position: 'absolute',
+        position: "absolute",
         inset: 0,
-        pointerEvents: 'none',
-        width: '100%',
-        height: '100%',
+        pointerEvents: "none",
+        width: "100%",
+        height: "100%",
         ...style,
       }}
       {...props}
@@ -379,10 +379,10 @@ export function PixelCanvas({
       <canvas
         ref={canvasRef}
         style={{
-          display: 'grid',
-          inlineSize: '100%',
-          blockSize: '100%',
-          overflow: 'hidden',
+          display: "grid",
+          inlineSize: "100%",
+          blockSize: "100%",
+          overflow: "hidden",
         }}
       />
     </div>

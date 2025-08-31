@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'motion/react';
-import { useRef } from 'react';
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
 
-const command = 'npx ultracite format';
+const command = "npx ultracite fix";
 const lines = [
-  'Diagnostics not shown: 35.',
-  'Checked 1740 files in 214ms.',
-  'Found 2 errors.',
-  'Found 53 warnings.',
-  'Done in 312ms.',
+  "Diagnostics not shown: 35.",
+  "Checked 1740 files in 214ms.",
+  "Found 2 errors.",
+  "Found 53 warnings.",
+  "Done in 312ms.",
 ];
 
 export const IntuitiveGraphic = () => {
@@ -32,7 +32,7 @@ export const IntuitiveGraphic = () => {
           transition={{
             duration: 0.3,
             delay: 0,
-            ease: 'easeOut',
+            ease: "easeOut",
           }}
         >
           <span className="text-muted-foreground/50">$ </span>
@@ -45,7 +45,7 @@ export const IntuitiveGraphic = () => {
                 delay: 0.05,
               }}
             >
-              {command.split('').map((char, charIndex) => (
+              {command.split("").map((char, charIndex) => (
                 <motion.span
                   animate={{ opacity: 1 }}
                   initial={{ opacity: 0 }}
@@ -53,7 +53,7 @@ export const IntuitiveGraphic = () => {
                   transition={{
                     duration: 0.05,
                     delay: charIndex * 0.05,
-                    ease: 'linear',
+                    ease: "linear",
                   }}
                 >
                   {char}
@@ -72,7 +72,7 @@ export const IntuitiveGraphic = () => {
               transition={{
                 duration: 0.05,
                 delay: firstLineDuration + index * 0.05,
-                ease: 'easeOut',
+                ease: "easeOut",
               }}
             >
               {line}

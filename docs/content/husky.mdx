@@ -23,7 +23,7 @@ When you initialize Ultracite in your project, it can automatically configure Hu
 Ultracite's Husky integration creates a pre-commit hook that runs the following command:
 
 ```bash
-npx ultracite format
+npx ultracite fix
 ```
 
 This command:
@@ -49,7 +49,7 @@ The Husky integration includes several smart features:
 - Uses the appropriate package manager command (`npm install -D`, `yarn add -D`, `pnpm add -D`, etc.)
 
 ### Hook Management
-- **New Projects**: Creates a new `.husky/pre-commit` file with the Ultracite format command
+- **New Projects**: Creates a new `.husky/pre-commit` file with the ultracite fix command
 - **Existing Projects**: Appends the Ultracite command to your existing pre-commit hook, preserving other hooks you may have configured
 
 ### File Structure
