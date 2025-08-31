@@ -17,7 +17,7 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
 
 1. **CLI (`scripts/index.ts`)**
    - Entry point for the `ultracite` command
-   - Three commands: `init`, `format`, and `lint`
+   - Three commands: `check`, `fix`, and `doctor`
    - Built with Commander.js
 
 2. **Biome Configuration (`biome.jsonc`)**
