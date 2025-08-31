@@ -1,3 +1,26 @@
+# v5.2.12 (Sun Aug 31 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Kevin Wolf ([@kvnwolf](https://github.com/kvnwolf)), for all your work!
+
+#### 🐛 Bug Fix
+
+- feat: ignore generated files [#216](https://github.com/haydenbleasel/ultracite/pull/216) ([@kvnwolf](https://github.com/kvnwolf) [@haydenbleasel](https://github.com/haydenbleasel))
+- Potential fix for code scanning alert no. 8: Workflow does not contain permissions [#261](https://github.com/haydenbleasel/ultracite/pull/261) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### ⚠️ Pushed to `main`
+
+- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #255 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 2
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Kevin Wolf ([@kvnwolf](https://github.com/kvnwolf))
+
+---
+
 # v5.2.11 (Sat Aug 30 2025)
 
 #### ⚠️ Pushed to `main`
