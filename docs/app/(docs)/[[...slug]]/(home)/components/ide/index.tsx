@@ -1,10 +1,3 @@
-import Image from "next/image";
-import { AvatarStack } from "@/components/ui/kibo-ui/avatar-stack";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Assistant } from "./assistant";
 import { Editor } from "./editor";
 import { Problems } from "./problems";

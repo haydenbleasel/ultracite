@@ -119,13 +119,13 @@ class Pixel {
 
 // Затем определяем веб-компонент
 class PixelCanvasElement extends HTMLElement {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D | null;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly ctx: CanvasRenderingContext2D | null;
   private pixels: Pixel[] = [];
   private animation: number | null = null;
-  private timeInterval: number = 1000 / 60;
+  private readonly timeInterval: number = 1000 / 60;
   private timePrevious: number = performance.now();
-  private reducedMotion: boolean;
+  private readonly reducedMotion: boolean;
   private _initialized = false;
   private _resizeObserver: ResizeObserver | null = null;
   private _parent: Element | null = null;

@@ -144,7 +144,7 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
 
         // Remove the entire codeActionsOnSave if it's now empty
         if (Object.keys(codeActions).length === 0) {
-          delete newConfig["editor.codeActionsOnSave"];
+          newConfig["editor.codeActionsOnSave"] = undefined;
         }
       }
     }

@@ -9,11 +9,21 @@ vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
     if (pkg === "ultracite" && options?.args?.includes("format")) {
-      if (pm === "npm") return "npx ultracite format";
-      if (pm === "yarn") return "yarn dlx ultracite format";
-      if (pm === "pnpm") return "pnpm dlx ultracite format";
-      if (pm === "bun") return "bunx ultracite format";
-      if (pm === "deno") return "deno run -A npm:ultracite format";
+      if (pm === "npm") {
+        return "npx ultracite format";
+      }
+      if (pm === "yarn") {
+        return "yarn dlx ultracite format";
+      }
+      if (pm === "pnpm") {
+        return "pnpm dlx ultracite format";
+      }
+      if (pm === "bun") {
+        return "bunx ultracite format";
+      }
+      if (pm === "deno") {
+        return "deno run -A npm:ultracite format";
+      }
     }
     return `npx ${pkg} ${options?.args?.join(" ") || ""}`;
   }),

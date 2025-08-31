@@ -22,7 +22,9 @@ describe("biome configuration", () => {
   describe("exists", () => {
     it("should return true when biome.json exists", async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") return true;
+        if (path === "./biome.json") {
+          return true;
+        }
         return false;
       });
 
@@ -33,8 +35,12 @@ describe("biome configuration", () => {
 
     it("should return true when biome.jsonc exists and biome.json does not", async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") return false;
-        if (path === "./biome.jsonc") return true;
+        if (path === "./biome.json") {
+          return false;
+        }
+        if (path === "./biome.jsonc") {
+          return true;
+        }
         return false;
       });
 
@@ -71,7 +77,9 @@ describe("biome configuration", () => {
 
     it("should create biome.json with default configuration when biome.json exists", async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") return true;
+        if (path === "./biome.json") {
+          return true;
+        }
         return false;
       });
 
@@ -92,8 +100,12 @@ describe("biome configuration", () => {
   describe("update", () => {
     it("should merge existing configuration with default configuration for biome.jsonc", async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") return false;
-        if (path === "./biome.jsonc") return true;
+        if (path === "./biome.json") {
+          return false;
+        }
+        if (path === "./biome.jsonc") {
+          return true;
+        }
         return false;
       });
 
@@ -129,7 +141,9 @@ describe("biome configuration", () => {
 
     it("should merge existing configuration with default configuration for biome.json", async () => {
       vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") return true;
+        if (path === "./biome.json") {
+          return true;
+        }
         return false;
       });
 
