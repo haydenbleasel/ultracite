@@ -249,5 +249,94 @@ describe("prettier-cleanup", () => {
       expect(result.filesRemoved).toEqual([]);
       expect(result.vsCodeCleaned).toBe(false);
     });
+
+    it("should clean VS Code settings with prettier in language formatters", async () => {
+      const vscodeSettings = {
+        "[javascriptreact][typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.wordWrap": "on",
+        },
+        "editor.formatOnSave": true,
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          return JSON.stringify(vscodeSettings);
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await prettierCleanup.remove("npm install");
+
+      expect(result.vsCodeCleaned).toBe(true);
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./.vscode/settings.json",
+        JSON.stringify(
+          {
+            "[javascriptreact][typescriptreact]": {
+              "editor.wordWrap": "on",
+            },
+            "editor.formatOnSave": true,
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it("should handle VS Code settings read error gracefully", async () => {
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          throw new Error("File read error");
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await prettierCleanup.remove("npm install");
+
+      // Should handle error gracefully and return false for vsCodeCleaned
+      expect(result.vsCodeCleaned).toBe(false);
+    });
+
+    it("should handle when VS Code settings don't need changes", async () => {
+      const vscodeSettings = {
+        "editor.formatOnSave": true,
+        "typescript.tsdk": "node_modules/typescript/lib",
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          return JSON.stringify(vscodeSettings);
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await prettierCleanup.remove("npm install");
+
+      // Should return false since no changes were made
+      expect(result.vsCodeCleaned).toBe(false);
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
   });
 });

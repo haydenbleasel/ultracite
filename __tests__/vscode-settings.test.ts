@@ -1,9 +1,11 @@
+import { spawnSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { vscode } from "../scripts/editor-config/vscode";
 import { exists } from "../scripts/utils";
 
 vi.mock("node:fs/promises");
+vi.mock("node:child_process");
 vi.mock("../scripts/utils", () => ({
   exists: vi.fn(),
 }));
@@ -12,6 +14,7 @@ describe("vscode configuration", () => {
   const mockReadFile = vi.mocked(readFile);
   const mockWriteFile = vi.mocked(writeFile);
   const mockExists = vi.mocked(exists);
+  const mockSpawnSync = vi.mocked(spawnSync);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -213,6 +216,51 @@ describe("vscode configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.vscode/settings.json",
         expect.stringContaining('"editor.formatOnSave": true')
+      );
+    });
+  });
+
+  describe("extension", () => {
+    it("should install the biomejs.biome extension", () => {
+      mockSpawnSync.mockReturnValue({
+        pid: 123,
+        output: [],
+        stdout: Buffer.from("Extension installed successfully"),
+        stderr: Buffer.from(""),
+        status: 0,
+        signal: null,
+      });
+
+      vscode.extension();
+
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        "code --install-extension biomejs.biome",
+        {
+          stdio: "inherit",
+          shell: true,
+        }
+      );
+    });
+
+    it("should handle extension installation failure", () => {
+      mockSpawnSync.mockReturnValue({
+        pid: 123,
+        output: [],
+        stdout: Buffer.from(""),
+        stderr: Buffer.from("Failed to install extension"),
+        status: 1,
+        signal: null,
+      });
+
+      // Should not throw, just execute the command
+      vscode.extension();
+
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        "code --install-extension biomejs.biome",
+        {
+          stdio: "inherit",
+          shell: true,
+        }
       );
     });
   });

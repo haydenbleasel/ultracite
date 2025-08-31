@@ -257,5 +257,126 @@ describe("eslint-cleanup", () => {
       expect(result.filesRemoved).toEqual([]);
       expect(result.vsCodeCleaned).toBe(false);
     });
+
+    it("should remove empty codeActionsOnSave object from VS Code settings", async () => {
+      const vscodeSettings = {
+        "eslint.enable": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+        },
+        "typescript.tsdk": "node_modules/typescript/lib",
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          return JSON.stringify(vscodeSettings);
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await eslintCleanup.remove("npm install");
+
+      expect(result.vsCodeCleaned).toBe(true);
+      
+      // The codeActionsOnSave should be removed entirely since it would be empty
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./.vscode/settings.json",
+        JSON.stringify(
+          {
+            "typescript.tsdk": "node_modules/typescript/lib",
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it("should handle VS Code settings with only eslint codeActionsOnSave", async () => {
+      const vscodeSettings = {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+          "source.organizeImports.eslint": true,
+        },
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          return JSON.stringify(vscodeSettings);
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await eslintCleanup.remove("npm install");
+
+      expect(result.vsCodeCleaned).toBe(true);
+      
+      // The entire codeActionsOnSave should be removed
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./.vscode/settings.json",
+        JSON.stringify({}, null, 2)
+      );
+    });
+
+    it("should handle VS Code settings read error gracefully", async () => {
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          throw new Error("File read error");
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await eslintCleanup.remove("npm install");
+
+      // Should handle error gracefully and return false for vsCodeCleaned
+      expect(result.vsCodeCleaned).toBe(false);
+    });
+
+    it("should handle when VS Code settings don't need changes", async () => {
+      const vscodeSettings = {
+        "editor.formatOnSave": true,
+        "typescript.tsdk": "node_modules/typescript/lib",
+      };
+
+      mockReadFile.mockImplementation(async (path: string) => {
+        if (path === "package.json") {
+          return "{}";
+        }
+        if (path === "./.vscode/settings.json") {
+          return JSON.stringify(vscodeSettings);
+        }
+        return "{}";
+      });
+
+      mockExists.mockImplementation(async (path: string) => {
+        return path === "./.vscode/settings.json";
+      });
+
+      const result = await eslintCleanup.remove("npm install");
+
+      // Should return false since no changes were made
+      expect(result.vsCodeCleaned).toBe(false);
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
   });
 });
