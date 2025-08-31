@@ -1,4 +1,3 @@
-import { execSync } from "node:child_process";
 import { readFile, unlink, writeFile } from "node:fs/promises";
 import { parse } from "jsonc-parser";
 import { type PackageManagerName, removeDependency } from "nypm";
@@ -60,8 +59,8 @@ const removeESLintDependencies = async (
     for (const pkg of packages) {
       await removeDependency(pkg, { packageManager });
     }
-  } catch (_error) {
-    // Silently handle errors - dependencies might already be removed
+  } catch (error) {
+    console.warn(error);
   }
 };
 
@@ -73,8 +72,8 @@ const removeESLintConfigFiles = async (): Promise<string[]> => {
       try {
         await unlink(file);
         removedFiles.push(file);
-      } catch {
-        // Silently handle errors - file might be read-only or already deleted
+      } catch (error) {
+        console.warn(error);
       }
     }
   }
@@ -156,7 +155,8 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
     }
 
     return false;
-  } catch {
+  } catch (error) {
+    console.warn(error);
     return false;
   }
 };

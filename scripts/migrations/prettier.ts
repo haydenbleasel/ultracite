@@ -58,7 +58,7 @@ const removePrettierDependencies = async (
       await removeDependency(pkg, { packageManager });
     }
   } catch (error) {
-    // Silently handle errors - dependencies might already be removed
+    console.warn(error);
   }
 };
 
@@ -70,8 +70,8 @@ const removePrettierConfigFiles = async (): Promise<string[]> => {
       try {
         await unlink(file);
         removedFiles.push(file);
-      } catch {
-        // Silently handle errors - file might be read-only or already deleted
+      } catch (error) {
+        console.warn(error);
       }
     }
   }
@@ -161,7 +161,8 @@ const cleanVSCodePrettierSettings = async (): Promise<boolean> => {
     }
 
     return false;
-  } catch {
+  } catch (error) {
+    console.warn(error);
     return false;
   }
 };
