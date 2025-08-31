@@ -1,3 +1,19 @@
+# v5.3.0 (Sun Aug 31 2025)
+
+#### 🚀 Enhancement
+
+- Update docs, misc fixes [#272](https://github.com/haydenbleasel/ultracite/pull/272) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🐛 Bug Fix
+
+- Release 5.3 [#270](https://github.com/haydenbleasel/ultracite/pull/270) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.2.17 (Sun Aug 31 2025)
 
 #### ⚠️ Pushed to `main`
