@@ -2,8 +2,16 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { parseFilePaths } from "../utils";
 
-export const lint = (files: string[]) => {
-  const args = ["npx", "@biomejs/biome", "check"];
+type FixOptions = {
+  unsafe?: boolean;
+};
+
+export const fix = (files: string[], options: FixOptions = {}) => {
+  const args = ["npx", "@biomejs/biome", "check", "--write"];
+
+  if (options.unsafe) {
+    args.push("--unsafe");
+  }
 
   // Add files or default to current directory
   if (files.length > 0) {
@@ -20,7 +28,6 @@ export const lint = (files: string[]) => {
   });
 
   if (result.error) {
-    // biome-ignore lint/suspicious/noConsole: "We want to log the error to the console"
     console.error("Failed to run Ultracite:", result.error.message);
     process.exit(1);
   }

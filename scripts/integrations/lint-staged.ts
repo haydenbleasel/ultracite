@@ -8,7 +8,7 @@ import { exists, isMonorepo } from "../utils";
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
     dlxCommand(packageManager, "ultracite", {
-      args: ["format"],
+      args: ["fix"],
       short: packageManager === "npm",
     }),
   ],

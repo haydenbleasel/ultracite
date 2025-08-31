@@ -3,8 +3,8 @@
 import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
-import { format } from "./commands/format";
-import { lint } from "./commands/lint";
+import { check } from "./commands/check";
+import { fix } from "./commands/fix";
 import { options } from "./consts/options";
 import { initialize } from "./initialize";
 
@@ -51,7 +51,7 @@ export const router = t.router({
       await initialize(input);
     }),
 
-  lint: t.procedure
+  check: t.procedure
     .meta({
       description: "Run Biome linter without fixing files",
     })
@@ -63,10 +63,10 @@ export const router = t.router({
         .describe("specific files to lint")
     )
     .query(({ input }) => {
-      lint(input);
+      check(input);
     }),
 
-  format: t.procedure
+  fix: t.procedure
     .meta({
       description: "Run Biome linter and fixes files",
     })
@@ -84,7 +84,7 @@ export const router = t.router({
     )
     .mutation(({ input }) => {
       const [files, opts] = input;
-      format(files, { unsafe: opts.unsafe });
+      fix(files, { unsafe: opts.unsafe });
     }),
 });
 

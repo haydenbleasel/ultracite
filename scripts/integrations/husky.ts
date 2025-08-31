@@ -16,7 +16,7 @@ export const husky = {
     await mkdir(".husky", { recursive: true });
 
     const command = dlxCommand(packageManager, "ultracite", {
-      args: ["format"],
+      args: ["fix"],
       short: packageManager === "npm",
     });
 
@@ -26,7 +26,7 @@ export const husky = {
     const existingContents = await readFile(path, "utf-8");
 
     const command = dlxCommand(packageManager, "ultracite", {
-      args: ["format"],
+      args: ["fix"],
       short: packageManager === "npm",
     });
 

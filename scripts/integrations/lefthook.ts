@@ -8,7 +8,7 @@ const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, "ultracite", {
-    args: ["format"],
+    args: ["fix"],
     short: packageManager === "npm",
   });
 

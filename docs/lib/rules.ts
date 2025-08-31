@@ -355,8 +355,8 @@ ${testingRules.map((rule) => `- ${rule}`).join("\n")}
 
 ## Common Tasks
 - \`npx ultracite init\` - Initialize Ultracite in your project
-- \`npx ultracite format\` - Format and fix code automatically
-- \`npx ultracite lint\` - Check for issues without fixing
+- \`npx ultracite fix\` - Format and fix code automatically
+- \`npx ultracite check\` - Check for issues without fixing
 
 ## Example: Error Handling
 \`\`\`typescript

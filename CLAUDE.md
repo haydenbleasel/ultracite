@@ -38,23 +38,6 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
    - Current integrations: Cursor, GitHub Copilot, Windsurf, Zed
    - New integrations: Claude Code, OpenAI Codex (being added)
 
-### Directory Structure
-
-```
-ultracite/
-├── scripts/           # CLI implementation
-│   ├── index.ts      # CLI entry point
-│   ├── initialize.ts # Setup wizard
-│   ├── format.ts     # Format command
-│   ├── lint.ts       # Lint command
-│   └── *.ts          # IDE integration modules
-├── __tests__/        # Test files
-├── docs/             # Documentation website (Next.js)
-│   └── lib/rules.ts  # AI/IDE rules definition
-├── biome.jsonc       # Biome configuration
-└── package.json      # NPM package definition
-```
-
 ## Development Workflow
 
 ### Setup
