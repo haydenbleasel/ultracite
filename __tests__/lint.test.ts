@@ -24,7 +24,7 @@ describe('lint command', () => {
     lint([]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      '@biomejs/biome check ./',
+      'npx @biomejs/biome check ./',
       {
         stdio: 'inherit',
         shell: true,
@@ -37,7 +37,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      '@biomejs/biome check src/index.ts src/utils.ts',
+      'npx @biomejs/biome check src/index.ts src/utils.ts',
       { stdio: 'inherit', shell: true }
     );
   });
@@ -47,7 +47,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      '@biomejs/biome check src/index.ts',
+      'npx @biomejs/biome check src/index.ts',
       {
         stdio: 'inherit',
         shell: true,
@@ -63,7 +63,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "@biomejs/biome check '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
+      "npx @biomejs/biome check '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
       { stdio: 'inherit', shell: true }
     );
   });
@@ -73,7 +73,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "@biomejs/biome check '$HOME/file.ts'  'file with spaces.ts' ",
+      "npx @biomejs/biome check '$HOME/file.ts'  'file with spaces.ts' ",
       { stdio: 'inherit', shell: true }
     );
   });
@@ -83,7 +83,7 @@ describe('lint command', () => {
     lint(files);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "@biomejs/biome check 'file'\\''with'\\''quotes.ts'  normal.ts",
+      "npx @biomejs/biome check 'file'\\''with'\\''quotes.ts'  normal.ts",
       { stdio: 'inherit', shell: true }
     );
   });
