@@ -3,7 +3,7 @@ import process from "node:process";
 import { parseFilePaths } from "../utils";
 
 export const check = (files: string[]) => {
-  const args = ["npx", "@biomejs/biome", "check"];
+  const args = ["npx", "@biomejs/biome", "check", "--no-errors-on-unmatched"];
 
   // Add files or default to current directory
   if (files.length > 0) {

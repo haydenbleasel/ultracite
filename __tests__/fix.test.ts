@@ -24,7 +24,7 @@ describe("fix command", () => {
     fix([], { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write ./",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched ./",
       {
         stdio: "inherit",
         shell: true,
@@ -37,7 +37,7 @@ describe("fix command", () => {
     fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write src/index.ts src/utils.ts",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched src/index.ts src/utils.ts",
       { stdio: "inherit", shell: true }
     );
   });
@@ -47,7 +47,7 @@ describe("fix command", () => {
     fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write src/index.ts",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched src/index.ts",
       { stdio: "inherit", shell: true }
     );
   });
@@ -57,7 +57,7 @@ describe("fix command", () => {
     fix(files, { unsafe: true });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --unsafe src/index.ts",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched --unsafe src/index.ts",
       { stdio: "inherit", shell: true }
     );
   });
@@ -70,7 +70,7 @@ describe("fix command", () => {
     fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
       { stdio: "inherit", shell: true }
     );
   });
@@ -80,7 +80,7 @@ describe("fix command", () => {
     fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write '$HOME/file.ts'  'file with spaces.ts' ",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched '$HOME/file.ts'  'file with spaces.ts' ",
       { stdio: "inherit", shell: true }
     );
   });
@@ -90,7 +90,7 @@ describe("fix command", () => {
     fix(files, { unsafe: false });
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write 'file'\\''with'\\''quotes.ts'  normal.ts",
+      "npx @biomejs/biome check --write --no-errors-on-unmatched 'file'\\''with'\\''quotes.ts'  normal.ts",
       { stdio: "inherit", shell: true }
     );
   });
