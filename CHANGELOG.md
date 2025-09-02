@@ -1,3 +1,21 @@
+# v5.3.1 (Tue Sep 02 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #262 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update dependabot.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump actions/checkout from 4 to 5 [#275](https://github.com/haydenbleasel/ultracite/pull/275) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.0 (Sun Aug 31 2025)
 
 #### 🚀 Enhancement
