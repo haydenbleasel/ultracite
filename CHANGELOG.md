@@ -1,3 +1,15 @@
+# v5.3.2 (Tue Sep 02 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Resolves #240 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.1 (Tue Sep 02 2025)
 
 #### ⚠️ Pushed to `main`
