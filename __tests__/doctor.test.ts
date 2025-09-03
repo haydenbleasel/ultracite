@@ -175,7 +175,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            $schema: "https://biomejs.dev/schemas/2.2.2/schema.json",
+            $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
           })
         );
       }

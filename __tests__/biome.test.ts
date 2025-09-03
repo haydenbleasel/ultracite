@@ -1,10 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import packageJson from "../package.json" with { type: "json" };
 import { biome } from "../scripts/biome";
 import { exists } from "../scripts/utils";
-
-const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 
 vi.mock("node:fs/promises");
 vi.mock("../scripts/utils", () => ({
@@ -65,7 +62,7 @@ describe("biome configuration", () => {
       await biome.create();
 
       const expectedConfig = {
-        $schema: `https://biomejs.dev/schemas/${schemaVersion}/schema.json`,
+        $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
         extends: ["ultracite"],
       };
 
@@ -86,7 +83,7 @@ describe("biome configuration", () => {
       await biome.create();
 
       const expectedConfig = {
-        $schema: `https://biomejs.dev/schemas/${schemaVersion}/schema.json`,
+        $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
         extends: ["ultracite"],
       };
 
@@ -128,7 +125,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
         expect.stringContaining(
-          `"$schema": "https://biomejs.dev/schemas/${schemaVersion}/schema.json"`
+          `"$schema": "./node_modules/@biomejs/biome/configuration_schema.json"`
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -166,7 +163,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.json",
         expect.stringContaining(
-          `"$schema": "https://biomejs.dev/schemas/${schemaVersion}/schema.json"`
+          `"$schema": "./node_modules/@biomejs/biome/configuration_schema.json"`
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -208,7 +205,7 @@ describe("biome configuration", () => {
 
       const existingConfigWithComments = `{
   // Biome configuration with comments
-  "$schema": "https://biomejs.dev/schemas/${schemaVersion}/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   
   /* Custom property */
   "customProperty": "value",
@@ -232,7 +229,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
         expect.stringContaining(
-          `"$schema": "https://biomejs.dev/schemas/${schemaVersion}/schema.json"`
+          `"$schema": "./node_modules/@biomejs/biome/configuration_schema.json"`
         )
       );
       expect(mockWriteFile).toHaveBeenCalledWith(

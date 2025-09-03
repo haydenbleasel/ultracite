@@ -35,12 +35,12 @@ In the root of your project, create a file named `biome.jsonc` (or `biome.json`)
 
 ```json title="biome.jsonc"
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite"]
 }
 ```
 
-This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors, but you can use the latest schema URL corresponding to the Biome version you installed (e.g., adjust the `$schema` version to the current Biome version if different).
+This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors.
 
 ### 3. Create a `.vscode/settings.json` file
 

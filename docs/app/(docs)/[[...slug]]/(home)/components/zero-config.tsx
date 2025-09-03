@@ -2,7 +2,7 @@ import { FileIcon } from "lucide-react";
 import { codeToHtml } from "shiki";
 
 const config = `{
-  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite"]
 }`;
 
