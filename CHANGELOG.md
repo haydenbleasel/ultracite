@@ -1,3 +1,16 @@
+# v5.3.3 (Wed Sep 03 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Use local Biome schema ([@haydenbleasel](https://github.com/haydenbleasel))
+- Don't emit diagnostics on unhandled files ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.2 (Tue Sep 02 2025)
 
 #### ⚠️ Pushed to `main`
