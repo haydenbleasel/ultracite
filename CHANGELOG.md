@@ -1,3 +1,19 @@
+# v5.3.4 (Fri Sep 05 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, David ([@thedevdavid](https://github.com/thedevdavid)), for all your work!
+
+#### 🐛 Bug Fix
+
+- Update monorepos.mdx turbo task names [#277](https://github.com/haydenbleasel/ultracite/pull/277) ([@thedevdavid](https://github.com/thedevdavid))
+
+#### Authors: 1
+
+- David ([@thedevdavid](https://github.com/thedevdavid))
+
+---
+
 # v5.3.3 (Wed Sep 03 2025)
 
 #### ⚠️ Pushed to `main`
