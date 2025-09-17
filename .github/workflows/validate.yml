@@ -14,17 +14,17 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Checkout
+        uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -41,11 +41,8 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      - name: Checkout
+        uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -53,11 +50,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build CLI
-        run: pnpm build
 
       - name: Run tests
         run: pnpm test
