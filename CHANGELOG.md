@@ -1,3 +1,15 @@
+# v5.3.7 (Wed Sep 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update build.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.6 (Wed Sep 17 2025)
 
 #### ⚠️ Pushed to `main`
