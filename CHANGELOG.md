@@ -1,3 +1,19 @@
+# v5.3.5 (Wed Sep 17 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Piotr Kulpinski ([@piotrkulpinski](https://github.com/piotrkulpinski)), for all your work!
+
+#### 🐛 Bug Fix
+
+- update docs with correct cli option for integrations [#281](https://github.com/haydenbleasel/ultracite/pull/281) ([@piotrkulpinski](https://github.com/piotrkulpinski))
+
+#### Authors: 1
+
+- Piotr Kulpinski ([@piotrkulpinski](https://github.com/piotrkulpinski))
+
+---
+
 # v5.3.4 (Fri Sep 05 2025)
 
 :tada: This release contains work from a new contributor! :tada:
