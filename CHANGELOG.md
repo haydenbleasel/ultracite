@@ -1,3 +1,15 @@
+# v5.3.6 (Wed Sep 17 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update workflows ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.5 (Wed Sep 17 2025)
 
 :tada: This release contains work from a new contributor! :tada:
