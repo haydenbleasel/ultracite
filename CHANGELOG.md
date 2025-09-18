@@ -1,3 +1,15 @@
+# v5.3.9 (Thu Sep 18 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update validate.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.8 (Wed Sep 17 2025)
 
 #### ⚠️ Pushed to `main`
