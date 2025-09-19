@@ -1,3 +1,20 @@
+# v5.3.10 (Fri Sep 19 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update ultracite.mdc ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### 🔩 Dependency Updates
+
+- Bump vite from 6.3.5 to 7.1.5 in the npm_and_yarn group across 1 directory [#279](https://github.com/haydenbleasel/ultracite/pull/279) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.3.9 (Thu Sep 18 2025)
 
 #### ⚠️ Pushed to `main`
