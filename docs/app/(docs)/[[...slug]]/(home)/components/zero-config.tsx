@@ -31,7 +31,7 @@ export const ZeroConfig = async () => {
         </p>
       </div>
       <div className="relative mx-auto w-full max-w-2xl">
-        <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground">
+        <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-secondary/50 to-transparent p-4 pb-8 font-mono text-muted-foreground">
           <div className="flex items-center gap-3">
             <FileIcon className="size-4" />
             <p className="font-medium">biome.jsonc</p>
