@@ -4,12 +4,14 @@ import { CallToAction } from "./components/cta";
 import { Footer } from "./components/footer";
 import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
+import { Logos } from "./components/logos";
 import { Tweets } from "./components/tweets";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="relative divide-y grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-8 sm:pb-8 md:gap-32 border-x border-dotted divide-dotted">
+  <div className="relative divide-y grid pt-8 pb-4 sm:pt-8 sm:pb-8 border-x border-dotted divide-dotted">
     <Hero />
+    <Logos />
     <Benefits />
     <ZeroConfig />
     <IDE />
