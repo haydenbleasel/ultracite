@@ -161,9 +161,13 @@
 }
 
 /* Fix Fumadocs theme toggle icons */
-  [data-theme-toggle] svg {
-    @apply fill-none;
-  }
+[data-theme-toggle] svg {
+  @apply fill-none;
+}
+
+:root {
+  --fd-layout-width: 1368px;
+}
 
 @layer base {
   article h1,
@@ -181,7 +185,10 @@
     @apply px-4! ml-auto! mr-auto! container!;
   }
 
-  #nd-subnav > div,
+  #nd-subnav > div {
+    @apply border-x border-dotted;
+  }
+
   #nd-sidebar > div {
     @apply border-none!;
   }

@@ -8,7 +8,7 @@ import { Tweets } from "./components/tweets";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="relative grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-8 sm:pb-8 md:gap-32">
+  <div className="relative divide-y grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-8 sm:pb-8 md:gap-32 border-x border-dotted divide-dotted">
     <Hero />
     <Benefits />
     <ZeroConfig />
