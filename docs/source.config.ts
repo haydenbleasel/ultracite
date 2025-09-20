@@ -8,8 +8,8 @@ export default defineConfig({
   mdxOptions: {
     rehypeCodeOptions: {
       themes: {
-        light: "vesper",
-        dark: "vesper",
+        light: "vitesse-light",
+        dark: "vitesse-dark",
       },
     },
   },
