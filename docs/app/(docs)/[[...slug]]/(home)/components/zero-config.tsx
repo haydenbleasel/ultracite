@@ -7,13 +7,19 @@ const config = `{
 }`;
 
 export const ZeroConfig = async () => {
-  const highlightedCode = await codeToHtml(config, {
-    lang: "jsonc",
-    theme: "vesper",
-  });
+  const [light, dark] = await Promise.all([
+    codeToHtml(config, {
+      lang: "jsonc",
+      theme: "vitesse-light",
+    }),
+      codeToHtml(config, {
+      lang: "jsonc",
+      theme: "vitesse-dark",
+    }),
+  ]);
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 py-16 px-8">
       <div className="mx-auto grid max-w-2xl gap-4 text-center">
         <h2 className="font-semibold text-4xl tracking-tight">
           Zero-config by design
@@ -31,9 +37,14 @@ export const ZeroConfig = async () => {
             <p className="font-medium">biome.jsonc</p>
           </div>
           <div
-            className="text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"
+            className="dark:hidden text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"
             // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
-            dangerouslySetInnerHTML={{ __html: highlightedCode }}
+            dangerouslySetInnerHTML={{ __html: light }}
+          />
+          <div
+            className="hidden dark:block text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
+            dangerouslySetInnerHTML={{ __html: dark }}
           />
         </div>
         <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-background to-transparent" />

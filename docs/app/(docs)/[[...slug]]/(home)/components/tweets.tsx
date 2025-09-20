@@ -40,7 +40,7 @@ const tweets = [
 ];
 
 export const Tweets = () => (
-  <div className="grid gap-8">
+  <div className="grid gap-8 p-16">
     <div>
       <h2 className="font-semibold text-4xl tracking-tight">
         What the community is saying

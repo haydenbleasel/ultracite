@@ -20,16 +20,28 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 export default UserCard;`;
 
 export const Editor = async () => {
-  const code = await codeToHtml(mockCode, {
-    lang: "tsx",
-    theme: "vesper",
-  });
+  const [light, dark] = await Promise.all([
+    codeToHtml(mockCode, {
+      lang: "tsx",
+      theme: "vitesse-light",
+    }),
+      codeToHtml(mockCode, {
+      lang: "tsx",
+      theme: "vitesse-dark",
+    }),
+  ]);
 
   return (
     // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
-    <div
-      className="overflow-auto p-4 text-sm [&_pre]:bg-transparent!"
-      dangerouslySetInnerHTML={{ __html: code }}
-    />
+    <>
+      <div
+        className="dark:hidden overflow-auto p-4 text-sm [&_pre]:bg-transparent!"
+        dangerouslySetInnerHTML={{ __html: light }}
+      />
+      <div
+        className="hidden dark:block overflow-auto p-4 text-sm [&_pre]:bg-transparent!"
+        dangerouslySetInnerHTML={{ __html: dark }}
+      />
+    </>
   );
 };
