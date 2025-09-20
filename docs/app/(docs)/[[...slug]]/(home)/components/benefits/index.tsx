@@ -52,7 +52,7 @@ const benefits = [
 ];
 
 export const Benefits = () => (
-  <section className="grid gap-6 md:gap-12 p-16">
+  <section className="grid gap-6 md:gap-12 px-8 py-16 sm:px-16">
     <p className="max-w-6xl text-balance font-semibold text-3xl tracking-tighter sm:text-4xl md:text-5xl">
       Finally &mdash; a ⚡ lightning-fast formatter that ensures you, your team
       and your AI agents are writing code in harmony.

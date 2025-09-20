@@ -7,7 +7,7 @@ import { Installer } from "./installer";
 
 export const Hero = () => (
   <div className="bg-gradient-to-b from-secondary/50 to-transparent">
-    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center">
+    <div className="relative z-10 mx-auto grid max-w-4xl gap-6 px-8 py-24 text-center">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
         The AI-ready formatter that helps you{" "}
         <span className="mr-2 ml-1 hidden sm:inline-flex">
