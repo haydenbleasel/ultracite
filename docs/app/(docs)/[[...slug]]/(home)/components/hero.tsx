@@ -7,7 +7,7 @@ import { Installer } from "./installer";
 
 export const Hero = () => (
   <div>
-    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center sm:py-32">
+    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
         The AI-ready formatter that helps you{" "}
         <span className="mr-2 ml-1 hidden sm:inline-flex">
@@ -51,22 +51,10 @@ export const Hero = () => (
         <Installer />
         <Button
           asChild
-          className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs hover:text-background"
           size="lg"
         >
           <Link href="/introduction">Read the docs</Link>
         </Button>
-      </div>
-      <div className="mt-4 flex flex-col items-center gap-4">
-        <p className="text-muted-foreground text-sm">
-          Used by over{" "}
-          <a
-            className="underline"
-            href="https://github.com/haydenbleasel/ultracite/network/dependents"
-          >
-            500 developers
-          </a>
-        </p>
       </div>
     </div>
   </div>

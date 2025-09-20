@@ -8,7 +8,7 @@ import { Tweets } from "./components/tweets";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="relative mt-[var(--fd-nav-height)] grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-8 sm:pb-8 md:gap-32">
+  <div className="relative grid gap-16 pt-8 pb-4 sm:gap-24 sm:pt-8 sm:pb-8 md:gap-32">
     <Hero />
     <Benefits />
     <ZeroConfig />
