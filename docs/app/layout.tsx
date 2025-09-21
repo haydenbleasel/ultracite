@@ -35,7 +35,10 @@ const Layout = ({ children }: LayoutProps) => (
     suppressHydrationWarning
   >
     <body className="flex min-h-screen flex-col">
-      <RootProvider>
+      <RootProvider theme={{
+        defaultTheme: undefined,
+        enableSystem: true,
+      }}>
         {children}
       </RootProvider>
       <Toaster />
