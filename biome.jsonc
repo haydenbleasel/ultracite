@@ -444,6 +444,7 @@
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
           }
         },
+        "useVueMultiWordComponentNames": "off",
 
         /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
         // Require Promise-like statements to be handled appropriately.
@@ -561,6 +562,8 @@
         "useDefaultParameterLast": "error",
         // Require the default clause in switch statements.
         "useDefaultSwitchClause": "error",
+        // Require specifying the reason argument when using @deprecated directive
+        "useDeprecatedReason": "error",
         // Require that each enum member value be explicitly initialized.
         "useEnumInitializers": "error",
         // Disallow the use of Math.pow in favor of the ** operator.
@@ -591,6 +594,8 @@
         "useLiteralEnumMembers": "error",
         // Reports usage of “magic numbers” — numbers used directly instead of being assigned to named constants.
         "noMagicNumbers": "error",
+        // Enforce naming conventions for everything across a codebase.
+        "useNamingConvention": "error",
         // Promotes the usage of node:assert/strict over node:assert.
         "useNodeAssertStrict": "error",
         // Enforces using the node: protocol for Node.js builtin modules.
@@ -650,6 +655,8 @@
       "suspicious": {
         /** ------------------------ JavaScript Rules ------------------------ **/
 
+        // Disallow the use of alert, confirm, and prompt.
+        "noAlert": "error",
         // Use standard constants instead of approximated literals.
         "noApproximativeNumericConstant": "error",
         // Discourage the usage of Array index in keys.
@@ -658,6 +665,8 @@
         "noAssignInExpressions": "error",
         // Disallows using an async function as a Promise executor.
         "noAsyncPromiseExecutor": "error",
+        // Prevents the use of the ! pattern in the first position of files.includes in the configuration file.
+        "noBiomeFirstException": "error",
         // Disallow bitwise operators.
         "noBitwiseOperators": "error",
         // Disallow expressions where the operation doesn't affect the value
@@ -694,6 +703,8 @@
         "noDuplicateClassMembers": "error",
         // Disallow duplicate conditions in if-else-if chains
         "noDuplicateElseIf": "error",
+        // Disallow duplicated fields in GraphQL operations.
+        "noDuplicateFields": "error",
         // Prevents JSX properties to be assigned multiple times.
         "noDuplicateJsxProps": "error",
         // Disallow two keys with the same name inside objects.
@@ -748,6 +759,8 @@
         "noOctalEscape": "error",
         // Disallow direct use of Object.prototype builtins.
         "noPrototypeBuiltins": "error",
+        // Disallow the use if quickfix.biome inside editor settings file.
+        "noQuickfixBiome": "error",
         // Disallow variable, function, class, and type redeclarations in the same scope.
         "noRedeclare": "error",
         // Prevents from having redundant "use strict".
@@ -786,6 +799,8 @@
         "useAdjacentOverloadSignatures": "error",
         // Ensure async functions utilize await.
         "useAwait": "error",
+        // Promotes the correct usage for ignoring folders in the configuration file.
+        "useBiomeIgnoreFolder": "error",
         // Enforce consistent return values in iterable callbacks.
         "useIterableCallbackReturn": "error",
         // Enforce default clauses in switch statements to be last
