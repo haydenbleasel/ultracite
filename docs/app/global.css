@@ -160,16 +160,20 @@
   }
 }
 
+/* Fix Fumadocs theme toggle icons */
+[data-theme-toggle] svg {
+  @apply fill-none;
+}
+
+:root {
+  --fd-layout-width: 1368px;
+}
+
 @layer base {
   article h1,
   article h2,
   article h3 {
     @apply tracking-tight font-semibold!;
-  }
-
-  /* Fix Fumadocs theme toggle icons */
-  [data-theme-toggle] svg {
-    @apply fill-none;
   }
 
   /* Hide the sidebar on the landing page on desktop */
@@ -178,10 +182,17 @@
   }
 
   #nd-docs-layout.home {
-    @apply px-4! ml-auto! mr-auto! container!;
+    @apply pl-0!;
   }
 
-  #nd-subnav > div,
+  #nd-docs-layout {
+    @apply border-x border-dotted;
+  }
+
+  #nd-subnav > div {
+    @apply border-x border-dotted;
+  }
+
   #nd-sidebar > div {
     @apply border-none!;
   }
@@ -196,5 +207,21 @@
 
   article h1 + p {
     @apply -mt-2!;
+  }
+
+  #nd-sidebar {
+    @apply bg-transparent!;
+  }
+
+  article .prose > div[data-orientation="horizontal"] {
+    @apply rounded-md overflow-hidden!;
+  }
+
+  article .prose > div[data-orientation="horizontal"] figure {
+    @apply rounded-none!;
+  }
+
+  article .prose > figure[dir="ltr"] {
+    @apply shadow-none!;
   }
 }

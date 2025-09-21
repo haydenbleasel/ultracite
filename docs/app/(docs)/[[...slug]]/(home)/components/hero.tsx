@@ -1,24 +1,13 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AvatarStack } from "@/components/ui/kibo-ui/avatar-stack";
-import { people, providers } from "../avatars";
-import { Installer } from "../installer";
-
-const Animation = dynamic(
-  () => import("./animation").then((mod) => mod.Animation),
-  { ssr: false }
-);
+import { people, providers } from "./avatars";
+import { Installer } from "./installer";
 
 export const Hero = () => (
-  <div className="relative isolate overflow-hidden rounded-3xl border bg-linear-to-br from-background to-secondary/40 px-4 sm:px-8">
-    <div className="-top-24 -left-[20%] absolute z-0 h-[50rem] w-[120%] opacity-50">
-      <Animation />
-    </div>
-    <div className="relative z-10 mx-auto grid max-w-3xl gap-6 py-24 text-center sm:py-32">
+  <div className="bg-gradient-to-b from-secondary/50 to-transparent">
+    <div className="relative z-10 mx-auto grid max-w-4xl gap-6 px-8 py-24 text-center">
       <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
         The AI-ready formatter that helps you{" "}
         <span className="mr-2 ml-1 hidden sm:inline-flex">
@@ -62,22 +51,10 @@ export const Hero = () => (
         <Installer />
         <Button
           asChild
-          className="border border-foreground/10 bg-foreground/5 text-foreground backdrop-blur-xs hover:text-background"
           size="lg"
         >
           <Link href="/introduction">Read the docs</Link>
         </Button>
-      </div>
-      <div className="mt-4 flex flex-col items-center gap-4">
-        <p className="text-muted-foreground text-sm">
-          Used by over{" "}
-          <a
-            className="underline"
-            href="https://github.com/haydenbleasel/ultracite/network/dependents"
-          >
-            500 developers
-          </a>
-        </p>
       </div>
     </div>
   </div>

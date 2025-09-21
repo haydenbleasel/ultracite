@@ -1,5 +1,5 @@
-import { FileIcon } from "lucide-react";
-import { codeToHtml } from "shiki";
+import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
+import { SiJson } from "@icons-pack/react-simple-icons";
 
 const config = `{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
@@ -7,13 +7,9 @@ const config = `{
 }`;
 
 export const ZeroConfig = async () => {
-  const highlightedCode = await codeToHtml(config, {
-    lang: "jsonc",
-    theme: "vesper",
-  });
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 py-16 px-8">
       <div className="mx-auto grid max-w-2xl gap-4 text-center">
         <h2 className="font-semibold text-4xl tracking-tight">
           Zero-config by design
@@ -24,20 +20,11 @@ export const ZeroConfig = async () => {
           when needed.
         </p>
       </div>
-      <div className="relative mx-auto w-full max-w-2xl">
-        <div className="grid gap-4 overflow-hidden rounded-2xl border bg-gradient-to-b from-foreground/2 to-transparent p-4 pb-8 font-mono text-muted-foreground">
-          <div className="flex items-center gap-3">
-            <FileIcon className="size-4" />
-            <p className="font-medium">biome.jsonc</p>
-          </div>
-          <div
-            className="text-xs leading-relaxed sm:text-sm md:text-base [&_pre]:bg-transparent!"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
-            dangerouslySetInnerHTML={{ __html: highlightedCode }}
-          />
-        </div>
-        <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-background to-transparent" />
-      </div>
+      <DynamicCodeBlock code={config} lang="json" codeblock={{
+        title: "biome.jsonc",
+        icon: <SiJson className="size-4" />,
+        className: "[&_pre]:text-base max-w-fit mx-auto shadow-none bg-gradient-to-b from-secondary/50 to-transparent",
+      }} />
     </div>
   );
 };

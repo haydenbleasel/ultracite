@@ -12,6 +12,7 @@ import { baseOptions } from "@/lib/layout.config";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import Home from "./(home)";
+import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -54,6 +55,13 @@ const Page = async (props: PageProps) => {
       <DocsPage full={page.data.full} toc={page.data.toc}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>
+        <div className="flex flex-row gap-2 items-center -mt-6 mb-6">
+          <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
+          <ViewOptions
+            markdownUrl={`${page.url}.mdx`}
+            githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/docs/content/${page.path}`}
+          />
+        </div>
         <DocsBody>
           <MDXContent
             components={getMDXComponents({

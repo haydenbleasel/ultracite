@@ -12,16 +12,8 @@ export const baseOptions: BaseLayoutProps = {
       url: "/introduction",
       active: "none",
     },
-    {
-      text: "Releases",
-      url: "https://github.com/haydenbleasel/ultracite/releases",
-      active: "none",
-    },
   ],
   githubUrl: "https://github.com/haydenbleasel/ultracite",
-  themeSwitch: {
-    enabled: false,
-  },
   nav: {
     title: (
       <div className="flex items-center gap-2">

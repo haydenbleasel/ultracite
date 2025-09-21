@@ -39,7 +39,7 @@ export const IntegrationsGraphic = () => {
           </motion.code>
         ))}
       </pre>
-      <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-secondary to-transparent" />
     </div>
   );
 };

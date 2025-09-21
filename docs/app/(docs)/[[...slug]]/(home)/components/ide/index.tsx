@@ -4,7 +4,7 @@ import { Problems } from "./problems";
 import { Sidebar } from "./sidebar";
 
 export const IDE = () => (
-  <div className="grid gap-8">
+  <div className="grid gap-8 py-16 px-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="font-semibold text-4xl tracking-tight">
         Designed for humans and AI
@@ -46,9 +46,9 @@ export const IDE = () => (
           </p>
         </div>
       </div>
-      <div className="hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-foreground/5 md:grid">
+      <div className="hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-gradient-to-b from-secondary/50 to-transparent md:grid">
         <Sidebar />
-        <div className="grid grid-rows-[2fr_1fr] divide-y overflow-hidden">
+        <div className="grid grid-rows-[2fr_1fr] overflow-hidden">
           <Editor />
           <Problems />
         </div>

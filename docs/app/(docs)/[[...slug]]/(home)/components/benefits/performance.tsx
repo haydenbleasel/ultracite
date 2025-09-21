@@ -132,7 +132,7 @@ export const PerformanceGraphic = () => {
           <div className="relative h-full w-px bg-primary" />
         </motion.div>
       </div>
-      <div className="absolute right-0 bottom-0 left-0 h-5 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute right-0 bottom-0 left-0 h-5 bg-gradient-to-t from-secondary to-transparent" />
     </div>
   );
 };

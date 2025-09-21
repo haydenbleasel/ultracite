@@ -1,4 +1,4 @@
-import { codeToHtml } from "shiki";
+import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
 
 const mockCode = `import React from 'react';
 
@@ -19,17 +19,8 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 
 export default UserCard;`;
 
-export const Editor = async () => {
-  const code = await codeToHtml(mockCode, {
-    lang: "tsx",
-    theme: "vesper",
-  });
-
-  return (
-    // biome-ignore lint/security/noDangerouslySetInnerHtml: "required for shiki"
-    <div
-      className="overflow-auto p-4 text-sm [&_pre]:bg-transparent!"
-      dangerouslySetInnerHTML={{ __html: code }}
-    />
-  );
-};
+export const Editor = () => (
+  <DynamicCodeBlock code={mockCode} lang="tsx" codeblock={{
+    className: "rounded-none border-none shadow-none bg-transparent",
+  }} />
+);
