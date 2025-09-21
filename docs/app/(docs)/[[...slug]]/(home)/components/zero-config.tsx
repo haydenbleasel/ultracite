@@ -10,11 +10,11 @@ export const ZeroConfig = async () => {
   const [light, dark] = await Promise.all([
     codeToHtml(config, {
       lang: "jsonc",
-      theme: "vitesse-light",
+      theme: "github-light",
     }),
       codeToHtml(config, {
       lang: "jsonc",
-      theme: "vitesse-dark",
+      theme: "github-dark",
     }),
   ]);
 

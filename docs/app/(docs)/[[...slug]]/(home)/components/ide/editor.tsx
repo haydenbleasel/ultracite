@@ -23,11 +23,11 @@ export const Editor = async () => {
   const [light, dark] = await Promise.all([
     codeToHtml(mockCode, {
       lang: "tsx",
-      theme: "vitesse-light",
+      theme: "github-light",
     }),
       codeToHtml(mockCode, {
       lang: "tsx",
-      theme: "vitesse-dark",
+      theme: "github-dark",
     }),
   ]);
 

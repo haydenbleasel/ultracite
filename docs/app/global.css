@@ -212,4 +212,16 @@
   #nd-sidebar {
     @apply bg-transparent!;
   }
+
+  article .prose > div[data-orientation="horizontal"] {
+    @apply rounded-md overflow-hidden!;
+  }
+
+  article .prose > div[data-orientation="horizontal"] figure {
+    @apply rounded-none!;
+  }
+
+  article .prose > figure[dir="ltr"] {
+    @apply shadow-none!;
+  }
 }
