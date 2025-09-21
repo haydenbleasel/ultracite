@@ -23,10 +23,13 @@ describe("check command", () => {
   it("should run biome check without --write flag for all files when no files specified", () => {
     check([]);
 
-    expect(mockSpawnSync).toHaveBeenCalledWith("npx @biomejs/biome check --no-errors-on-unmatched ./", {
-      stdio: "inherit",
-      shell: true,
-    });
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "npx @biomejs/biome check --no-errors-on-unmatched ./",
+      {
+        stdio: "inherit",
+        shell: true,
+      }
+    );
   });
 
   it("should run biome check without --write flag for specific files when files are provided", () => {

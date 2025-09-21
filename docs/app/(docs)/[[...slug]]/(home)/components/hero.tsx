@@ -49,10 +49,7 @@ export const Hero = () => (
       </p>
       <div className="mx-auto flex w-full max-w-lg flex-col items-center gap-2 sm:flex-row">
         <Installer />
-        <Button
-          asChild
-          size="lg"
-        >
+        <Button asChild size="lg">
           <Link href="/introduction">Read the docs</Link>
         </Button>
       </div>

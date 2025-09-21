@@ -1,6 +1,5 @@
-#!/usr/bin/env node
-
-import { createCli, type TrpcCliMeta, trpcServer } from "trpc-cli";
+import { initTRPC } from "@trpc/server";
+import { createCli, type TrpcCliMeta } from "trpc-cli";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
@@ -9,7 +8,7 @@ import { fix } from "./commands/fix";
 import { options } from "./consts/options";
 import { initialize } from "./initialize";
 
-const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
+const t = initTRPC.meta<TrpcCliMeta>().create();
 
 export const router = t.router({
   init: t.procedure

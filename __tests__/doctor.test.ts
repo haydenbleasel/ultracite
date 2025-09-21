@@ -17,6 +17,9 @@ vi.mock("node:fs/promises", () => ({
   readFile: vi.fn(),
 }));
 
+// Regex for summary counts
+const PASSED_SUMMARY_REGEX = /2 passed, 2 warnings, 0 failed/;
+
 describe("doctor command", () => {
   let consoleLogSpy: ReturnType<typeof vi.spyOn>;
   let processExitSpy: ReturnType<typeof vi.spyOn>;
@@ -514,7 +517,7 @@ describe("doctor command", () => {
     // Check summary output
     expect(consoleLogSpy).toHaveBeenCalledWith("\n📊 Summary:");
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/2 passed, 2 warnings, 0 failed/)
+      expect.stringMatching(PASSED_SUMMARY_REGEX)
     );
     expect(consoleLogSpy).toHaveBeenCalledWith(
       expect.stringContaining("💡 Some optional improvements available")

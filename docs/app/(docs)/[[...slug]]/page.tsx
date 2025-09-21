@@ -8,11 +8,11 @@ import {
 } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
 import { baseOptions } from "@/lib/layout.config";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import Home from "./(home)";
-import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
 
 type PageProps = {
   params: Promise<{ slug?: string[] }>;
@@ -40,7 +40,7 @@ const Page = async (props: PageProps) => {
     return notFound();
   }
 
-  const MDXContent = page.data.body;
+  const MdxContent = page.data.body;
 
   return (
     <DocsLayout
@@ -55,15 +55,15 @@ const Page = async (props: PageProps) => {
       <DocsPage full={page.data.full} toc={page.data.toc}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>
-        <div className="flex flex-row gap-2 items-center -mt-6 mb-6">
+        <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
           <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
           <ViewOptions
-            markdownUrl={`${page.url}.mdx`}
             githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/docs/content/${page.path}`}
+            markdownUrl={`${page.url}.mdx`}
           />
         </div>
         <DocsBody>
-          <MDXContent
+          <MdxContent
             components={getMDXComponents({
               // this allows you to link to other pages with relative file paths
               a: createRelativeLink(source, page),

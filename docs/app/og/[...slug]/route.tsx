@@ -78,9 +78,8 @@ export const GET = async (
   );
 };
 
-export const generateStaticParams = () => {
-  return source.generateParams().map((page) => ({
+export const generateStaticParams = () =>
+  source.generateParams().map((page) => ({
     ...page,
     slug: [...page.slug, "image.png"],
   }));
-};

@@ -17,7 +17,7 @@ export const eslintConfigFiles = [
   ".eslintignore",
 ];
 
-const detectESLintPackages = async (): Promise<string[]> => {
+const detectEsLintPackages = async () => {
   try {
     const packageJsonContent = await readFile("package.json", "utf-8");
     const packageJson = parse(packageJsonContent) as
@@ -47,7 +47,7 @@ const detectESLintPackages = async (): Promise<string[]> => {
   }
 };
 
-const removeESLintDependencies = async (
+const removeEsLintDependencies = async (
   packageManager: PackageManagerName,
   packages: string[]
 ) => {
@@ -64,7 +64,7 @@ const removeESLintDependencies = async (
   }
 };
 
-const removeESLintConfigFiles = async (): Promise<string[]> => {
+const removeEsLintConfigFiles = async () => {
   const removedFiles: string[] = [];
 
   for (const file of eslintConfigFiles) {
@@ -81,7 +81,8 @@ const removeESLintConfigFiles = async (): Promise<string[]> => {
   return removedFiles;
 };
 
-const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
+const cleanVsCodeEsLintSettings = async () => {
   const settingsPath = "./.vscode/settings.json";
 
   if (!(await exists(settingsPath))) {
@@ -161,9 +162,9 @@ const cleanVSCodeESLintSettings = async (): Promise<boolean> => {
   }
 };
 
-const hasESLint = async (): Promise<boolean> => {
+const hasEsLint = async (): Promise<boolean> => {
   // Check for dependencies
-  const packages = await detectESLintPackages();
+  const packages = await detectEsLintPackages();
   if (packages.length > 0) {
     return true;
   }
@@ -179,7 +180,7 @@ const hasESLint = async (): Promise<boolean> => {
 };
 
 export const eslintCleanup = {
-  hasESLint,
+  hasEsLint,
 
   remove: async (
     pm: PackageManagerName
@@ -188,16 +189,16 @@ export const eslintCleanup = {
     filesRemoved: string[];
     vsCodeCleaned: boolean;
   }> => {
-    const packages = await detectESLintPackages();
+    const packages = await detectEsLintPackages();
 
     // Remove dependencies
-    removeESLintDependencies(pm, packages);
+    removeEsLintDependencies(pm, packages);
 
     // Remove config files
-    const filesRemoved = await removeESLintConfigFiles();
+    const filesRemoved = await removeEsLintConfigFiles();
 
     // Clean VS Code settings
-    const vsCodeCleaned = await cleanVSCodeESLintSettings();
+    const vsCodeCleaned = await cleanVsCodeEsLintSettings();
 
     return {
       packagesRemoved: packages,

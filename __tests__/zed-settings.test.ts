@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: "Zed config uses snake_case" */
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { zed } from "../scripts/editor-config/zed";

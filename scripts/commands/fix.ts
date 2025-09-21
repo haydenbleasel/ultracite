@@ -7,7 +7,13 @@ type FixOptions = {
 };
 
 export const fix = (files: string[], options: FixOptions = {}) => {
-  const args = ["npx", "@biomejs/biome", "check", "--write", "--no-errors-on-unmatched"];
+  const args = [
+    "npx",
+    "@biomejs/biome",
+    "check",
+    "--write",
+    "--no-errors-on-unmatched",
+  ];
 
   if (options.unsafe) {
     args.push("--unsafe");

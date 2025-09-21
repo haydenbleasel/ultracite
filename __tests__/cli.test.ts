@@ -1,4 +1,5 @@
-import { type TrpcCliMeta, trpcServer } from "trpc-cli";
+import { initTRPC } from "@trpc/server";
+import type { TrpcCliMeta } from "trpc-cli";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import z from "zod";
 
@@ -27,7 +28,7 @@ vi.mock("../package.json", () => ({
 }));
 
 function createTestRouter() {
-  const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
+  const t = initTRPC.meta<TrpcCliMeta>().create();
 
   return t.router({
     init: t.procedure
@@ -112,6 +113,8 @@ function createTestRouter() {
       }),
   });
 }
+
+const TEST_NUMBER = 123;
 
 describe("CLI Router", () => {
   let router: ReturnType<typeof createTestRouter>;
@@ -198,7 +201,7 @@ describe("CLI Router", () => {
     it("should validate that input is array of strings", async () => {
       const caller = router.createCaller({});
 
-      await expect(caller.lint([123] as never)).rejects.toThrow();
+      await expect(caller.lint([TEST_NUMBER] as never)).rejects.toThrow();
     });
   });
 

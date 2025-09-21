@@ -35,6 +35,7 @@ const mockRouter = { createCaller: vi.fn() };
 vi.mock("trpc-cli", () => ({
   createCli: mockCreateCli,
   trpcServer: {
+    // biome-ignore lint/style/useNamingConvention: "trpc-cli requires this naming convention"
     initTRPC: {
       meta: () => ({
         create: () => ({

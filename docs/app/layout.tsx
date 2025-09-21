@@ -35,10 +35,12 @@ const Layout = ({ children }: LayoutProps) => (
     suppressHydrationWarning
   >
     <body>
-      <RootProvider theme={{
-        defaultTheme: undefined,
-        enableSystem: true,
-      }}>
+      <RootProvider
+        theme={{
+          defaultTheme: undefined,
+          enableSystem: true,
+        }}
+      >
         {children}
       </RootProvider>
       <Toaster />

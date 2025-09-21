@@ -71,9 +71,9 @@ describe("prettier-cleanup", () => {
 
     it("should return true when prettier config files exist", async () => {
       mockReadFile.mockRejectedValue(new Error("No package.json"));
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".prettierrc";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === ".prettierrc"
+      );
 
       const result = await prettierCleanup.hasPrettier();
 
@@ -106,16 +106,19 @@ describe("prettier-cleanup", () => {
         },
       };
 
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return JSON.stringify(packageJson);
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return JSON.stringify(packageJson);
+          }
+          return await Promise.resolve("{}");
         }
-        return "{}";
-      });
+      );
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".prettierrc" || path === ".prettierignore";
-      });
+      mockExists.mockImplementation(
+        async (path: Parameters<typeof exists>[0]) =>
+          path === ".prettierrc" || path === ".prettierignore"
+      );
 
       mockUnlink.mockResolvedValue();
       mockRemoveDependency.mockResolvedValue();
@@ -151,12 +154,14 @@ describe("prettier-cleanup", () => {
         },
       };
 
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return JSON.stringify(packageJson);
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return JSON.stringify(packageJson);
+          }
+          return await Promise.resolve("{}");
         }
-        return "{}";
-      });
+      );
 
       mockExists.mockResolvedValue(false);
       mockRemoveDependency.mockResolvedValue();
@@ -207,21 +212,23 @@ describe("prettier-cleanup", () => {
         "typescript.tsdk": "node_modules/typescript/lib",
       };
 
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return "{}";
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return JSON.stringify(vscodeSettings);
+          }
+          return await Promise.resolve("{}");
         }
-        if (path === "./.vscode/settings.json") {
-          return JSON.stringify(vscodeSettings);
-        }
-        return "{}";
-      });
+      );
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
-      const result = await prettierCleanup.remove("npm install");
+      const result = await prettierCleanup.remove("npm");
 
       expect(result.vsCodeCleaned).toBe(true);
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -259,21 +266,25 @@ describe("prettier-cleanup", () => {
         "editor.formatOnSave": true,
       };
 
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return "{}";
-        }
-        if (path === "./.vscode/settings.json") {
-          return JSON.stringify(vscodeSettings);
-        }
-        return "{}";
-      });
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            const result = JSON.stringify(vscodeSettings);
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+            return await Promise.resolve(result);
+          }
+          return await Promise.resolve("{}");
+        }
+      );
 
-      const result = await prettierCleanup.remove("npm install");
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
+
+      const result = await prettierCleanup.remove("npm");
 
       expect(result.vsCodeCleaned).toBe(true);
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -292,21 +303,23 @@ describe("prettier-cleanup", () => {
     });
 
     it("should handle VS Code settings read error gracefully", async () => {
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return "{}";
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            throw new Error("File read error");
+          }
+          return await Promise.resolve("{}");
         }
-        if (path === "./.vscode/settings.json") {
-          throw new Error("File read error");
-        }
-        return "{}";
-      });
+      );
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
-      const result = await prettierCleanup.remove("npm install");
+      const result = await prettierCleanup.remove("npm");
 
       // Should handle error gracefully and return false for vsCodeCleaned
       expect(result.vsCodeCleaned).toBe(false);
@@ -318,21 +331,23 @@ describe("prettier-cleanup", () => {
         "typescript.tsdk": "node_modules/typescript/lib",
       };
 
-      mockReadFile.mockImplementation(async (path: string) => {
-        if (path === "package.json") {
-          return "{}";
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return JSON.stringify(vscodeSettings);
+          }
+          return await Promise.resolve("{}");
         }
-        if (path === "./.vscode/settings.json") {
-          return JSON.stringify(vscodeSettings);
-        }
-        return "{}";
-      });
+      );
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
-      const result = await prettierCleanup.remove("npm install");
+      const result = await prettierCleanup.remove("npm");
 
       // Should return false since no changes were made
       expect(result.vsCodeCleaned).toBe(false);
