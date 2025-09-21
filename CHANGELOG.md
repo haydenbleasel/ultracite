@@ -1,3 +1,16 @@
+# v5.4.3 (Sun Sep 21 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Fix docs layout ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix SVG attributes ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.4.2 (Sun Sep 21 2025)
 
 #### ⚠️ Pushed to `main`
