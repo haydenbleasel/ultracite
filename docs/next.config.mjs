@@ -9,6 +9,15 @@ const config = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+
+  async rewrites() {
+    return [
+      {
+        source: '/docs/:path*.mdx',
+        destination: '/llms.mdx/:path*',
+      },
+    ];
+  },
 };
 
 export default withMDX(config);
