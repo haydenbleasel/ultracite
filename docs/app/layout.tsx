@@ -34,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => (
     lang="en"
     suppressHydrationWarning
   >
-    <body className="flex min-h-screen flex-col">
+    <body>
       <RootProvider theme={{
         defaultTheme: undefined,
         enableSystem: true,
