@@ -57,6 +57,7 @@ export function LLMCopyButton({
       disabled={isLoading}
       variant="secondary"
       onClick={onClick}
+      className="shadow-none"
     >
       <Icon />
       Copy Markdown
@@ -212,7 +213,7 @@ export function ViewOptions({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="secondary">
+        <Button variant="secondary" className="shadow-none">
           Open
           <ChevronDown className="size-3.5 text-fd-muted-foreground" />
         </Button>
