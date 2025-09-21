@@ -177,16 +177,16 @@
   }
 
   /* Hide the sidebar on the landing page on desktop */
-  #nd-docs-layout.home #nd-sidebar {
+  .home #nd-docs-layout #nd-sidebar {
     @apply md:hidden!;
   }
 
-  #nd-docs-layout.home {
+  .home #nd-docs-layout {
     @apply pl-0!;
   }
 
   #nd-docs-layout {
-    @apply border-x border-dotted;
+    @apply border-x border-dotted transition-none!;
   }
 
   #nd-subnav > div {
@@ -210,7 +210,7 @@
   }
 
   #nd-sidebar {
-    @apply bg-transparent!;
+    @apply bg-transparent! transition-none!;
   }
 
   article .prose > div[data-orientation="horizontal"] {
