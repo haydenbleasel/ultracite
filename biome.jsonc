@@ -385,8 +385,6 @@
       "nursery": {
         // Prevent the listing of duplicate dependencies.
         "noDuplicateDependencies": "error",
-        // Disallow string literals inside JSX elements.
-        "noJsxLiterals": "off",
         // Disallow Promises to be used in places where they are almost certainly a mistake.
         "noMisusedPromises": "error",
         // Prevent client components from being async functions.
@@ -427,6 +425,8 @@
         // Enforce that components are defined as functions and never as classes.
         "useReactFunctionComponents": "error",
 
+        // Disallow string literals inside JSX elements.
+        "noJsxLiterals": "off",
         // Disallow unused catch bindings.
         "noUselessCatchBinding": "off",
         // Disallow unnecessary type-based conditions that can be statically determined as redundant.
