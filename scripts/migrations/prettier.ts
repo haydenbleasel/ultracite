@@ -16,7 +16,7 @@ export const prettierConfigFiles = [
   ".prettierignore",
 ];
 
-const detectPrettierPackages = async (): Promise<string[]> => {
+const detectPrettierPackages = async () => {
   try {
     const packageJsonContent = await readFile("package.json", "utf-8");
     const packageJson = parse(packageJsonContent) as
@@ -62,7 +62,7 @@ const removePrettierDependencies = async (
   }
 };
 
-const removePrettierConfigFiles = async (): Promise<string[]> => {
+const removePrettierConfigFiles = async () => {
   const removedFiles: string[] = [];
 
   for (const file of prettierConfigFiles) {
@@ -79,7 +79,8 @@ const removePrettierConfigFiles = async (): Promise<string[]> => {
   return removedFiles;
 };
 
-const cleanVsCodePrettierSettings = async (): Promise<boolean> => {
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
+const cleanVsCodePrettierSettings = async () => {
   const settingsPath = "./.vscode/settings.json";
 
   if (!(await exists(settingsPath))) {
@@ -167,7 +168,7 @@ const cleanVsCodePrettierSettings = async (): Promise<boolean> => {
   }
 };
 
-const hasPrettier = async (): Promise<boolean> => {
+const hasPrettier = async () => {
   // Check for dependencies
   const packages = await detectPrettierPackages();
   if (packages.length > 0) {

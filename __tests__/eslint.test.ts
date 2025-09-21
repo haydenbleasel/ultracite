@@ -21,7 +21,7 @@ describe("eslint-cleanup", () => {
     vi.clearAllMocks();
   });
 
-  describe("hasESLint", () => {
+  describe("hasEsLint", () => {
     it("should return true when eslint dependencies exist", async () => {
       const packageJson = {
         devDependencies: {
@@ -32,7 +32,7 @@ describe("eslint-cleanup", () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
 
-      const result = await eslintCleanup.hasESLint();
+      const result = await eslintCleanup.hasEsLint();
 
       expect(result).toBe(true);
       expect(mockReadFile).toHaveBeenCalledWith("package.json", "utf-8");
@@ -48,7 +48,7 @@ describe("eslint-cleanup", () => {
 
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
 
-      const result = await eslintCleanup.hasESLint();
+      const result = await eslintCleanup.hasEsLint();
 
       expect(result).toBe(true);
     });
@@ -64,7 +64,7 @@ describe("eslint-cleanup", () => {
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
       mockExists.mockResolvedValue(false);
 
-      const result = await eslintCleanup.hasESLint();
+      const result = await eslintCleanup.hasEsLint();
 
       expect(result).toBe(false);
     });
@@ -75,7 +75,7 @@ describe("eslint-cleanup", () => {
         async (path: string) => path === ".eslintrc.js"
       );
 
-      const result = await eslintCleanup.hasESLint();
+      const result = await eslintCleanup.hasEsLint();
 
       expect(result).toBe(true);
     });
@@ -90,7 +90,7 @@ describe("eslint-cleanup", () => {
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
       mockExists.mockResolvedValue(false);
 
-      const result = await eslintCleanup.hasESLint();
+      const result = await eslintCleanup.hasEsLint();
 
       expect(result).toBe(false);
     });

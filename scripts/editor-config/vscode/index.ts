@@ -2,27 +2,8 @@ import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { exists } from "../utils";
-
-const defaultConfig = {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[css]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[graphql]": { "editor.defaultFormatter": "biomejs.biome" },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "emmet.showExpandedAbbreviation": "never",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "explicit",
-    "source.organizeImports.biome": "explicit",
-  },
-};
+import { exists } from "../../utils";
+import { defaultConfig } from "./default-config";
 
 const path = "./.vscode/settings.json";
 

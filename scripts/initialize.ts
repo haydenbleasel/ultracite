@@ -298,6 +298,7 @@ const removeEsLint = async (pm: PackageManagerName) => {
   }
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
 export const initialize = async (flags?: InitializeFlags) => {
   intro(title);
 
@@ -344,7 +345,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
       if (
         shouldRemoveEslint === undefined &&
-        (await eslintCleanup.hasESLint())
+        (await eslintCleanup.hasEsLint())
       ) {
         migrationOptions.push({
           label: "Remove ESLint (dependencies, config files, VS Code settings)",

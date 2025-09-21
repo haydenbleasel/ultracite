@@ -85,7 +85,7 @@ vi.mock("../scripts/integrations/lint-staged", () => ({
 
 vi.mock("../scripts/migrations/eslint", () => ({
   eslintCleanup: {
-    hasESLint: vi.fn(),
+    hasEsLint: vi.fn(),
     remove: vi.fn(),
   },
 }));
@@ -125,7 +125,7 @@ describe("initialize - cleanup features", () => {
 
     // Default: no existing Prettier/ESLint
     mockPrettierCleanup.hasPrettier.mockResolvedValue(false);
-    mockEslintCleanup.hasESLint.mockResolvedValue(false);
+    mockEslintCleanup.hasEsLint.mockResolvedValue(false);
   });
 
   describe("ESLint removal", () => {
@@ -154,8 +154,8 @@ describe("initialize - cleanup features", () => {
       );
     });
 
-    it("should prompt for ESLint removal when hasESLint is true and flag is undefined", async () => {
-      mockEslintCleanup.hasESLint.mockResolvedValue(true);
+    it("should prompt for ESLint removal when hasEsLint is true and flag is undefined", async () => {
+      mockEslintCleanup.hasEsLint.mockResolvedValue(true);
       mockMultiselect.mockResolvedValue(["eslint"]);
 
       mockEslintCleanup.remove.mockResolvedValue({
@@ -172,7 +172,7 @@ describe("initialize - cleanup features", () => {
         integrations: [],
       });
 
-      expect(mockEslintCleanup.hasESLint).toHaveBeenCalled();
+      expect(mockEslintCleanup.hasEsLint).toHaveBeenCalled();
       expect(mockMultiselect).toHaveBeenCalledWith(
         expect.objectContaining({
           message:
@@ -214,7 +214,7 @@ describe("initialize - cleanup features", () => {
     });
 
     it("should not prompt for ESLint removal when explicitly set to false", async () => {
-      mockEslintCleanup.hasESLint.mockResolvedValue(true);
+      mockEslintCleanup.hasEsLint.mockResolvedValue(true);
 
       await initialize({
         pm: "npm",
@@ -225,7 +225,7 @@ describe("initialize - cleanup features", () => {
         integrations: [],
       });
 
-      expect(mockEslintCleanup.hasESLint).not.toHaveBeenCalled();
+      expect(mockEslintCleanup.hasEsLint).not.toHaveBeenCalled();
       expect(mockMultiselect).not.toHaveBeenCalled();
       expect(mockEslintCleanup.remove).not.toHaveBeenCalled();
     });
@@ -294,7 +294,7 @@ describe("initialize - cleanup features", () => {
 
     it("should handle both Prettier and ESLint removal together", async () => {
       mockPrettierCleanup.hasPrettier.mockResolvedValue(true);
-      mockEslintCleanup.hasESLint.mockResolvedValue(true);
+      mockEslintCleanup.hasEsLint.mockResolvedValue(true);
       mockMultiselect.mockResolvedValue(["prettier", "eslint"]);
 
       mockPrettierCleanup.remove.mockResolvedValue({

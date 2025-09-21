@@ -17,7 +17,7 @@ export const eslintConfigFiles = [
   ".eslintignore",
 ];
 
-const detectEsLintPackages = async (): Promise<string[]> => {
+const detectEsLintPackages = async () => {
   try {
     const packageJsonContent = await readFile("package.json", "utf-8");
     const packageJson = parse(packageJsonContent) as
@@ -64,7 +64,7 @@ const removeEsLintDependencies = async (
   }
 };
 
-const removeEsLintConfigFiles = async (): Promise<string[]> => {
+const removeEsLintConfigFiles = async () => {
   const removedFiles: string[] = [];
 
   for (const file of eslintConfigFiles) {
@@ -81,7 +81,8 @@ const removeEsLintConfigFiles = async (): Promise<string[]> => {
   return removedFiles;
 };
 
-const cleanVsCodeEsLintSettings = async (): Promise<boolean> => {
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
+const cleanVsCodeEsLintSettings = async () => {
   const settingsPath = "./.vscode/settings.json";
 
   if (!(await exists(settingsPath))) {
@@ -179,7 +180,7 @@ const hasEsLint = async (): Promise<boolean> => {
 };
 
 export const eslintCleanup = {
-  hasESLint: hasEsLint,
+  hasEsLint,
 
   remove: async (
     pm: PackageManagerName
