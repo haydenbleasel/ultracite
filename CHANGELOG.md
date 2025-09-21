@@ -1,3 +1,15 @@
+# v5.4.5 (Sun Sep 21 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update open-in-chat.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.4.4 (Sun Sep 21 2025)
 
 #### ⚠️ Pushed to `main`
