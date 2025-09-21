@@ -79,7 +79,7 @@ const removePrettierConfigFiles = async (): Promise<string[]> => {
   return removedFiles;
 };
 
-const cleanVSCodePrettierSettings = async (): Promise<boolean> => {
+const cleanVsCodePrettierSettings = async (): Promise<boolean> => {
   const settingsPath = "./.vscode/settings.json";
 
   if (!(await exists(settingsPath))) {
@@ -203,7 +203,7 @@ export const prettierCleanup = {
     const filesRemoved = await removePrettierConfigFiles();
 
     // Clean VS Code settings
-    const vsCodeCleaned = await cleanVSCodePrettierSettings();
+    const vsCodeCleaned = await cleanVsCodePrettierSettings();
 
     return {
       packagesRemoved: packages,

@@ -114,7 +114,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 };
 
 // Check if project uses ESM
-const isProjectESM = async (): Promise<boolean> => {
+const isProjectEsm = async (): Promise<boolean> => {
   try {
     const packageJson = parse(await readFile("./package.json", "utf-8")) as
       | Record<string, unknown>
@@ -264,7 +264,7 @@ const handleConfigFileUpdate = async (
     return;
   }
 
-  const isEsm = await isProjectESM();
+  const isEsm = await isProjectEsm();
 
   if (filename.endsWith(".mjs") || (filename.endsWith(".js") && isEsm)) {
     try {

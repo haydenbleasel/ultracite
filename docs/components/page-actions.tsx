@@ -1,28 +1,23 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import {
-  Check,
-  ChevronDownIcon,
-  Copy,
-  ExternalLinkIcon,
-} from 'lucide-react';
-import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
-import { Button } from './ui/button';
+import { SiGithub } from "@icons-pack/react-simple-icons";
+import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
+import { Check, ChevronDownIcon, Copy, ExternalLinkIcon } from "lucide-react";
+import { useState } from "react";
+import { providers } from "@/app/(docs)/[[...slug]]/(home)/components/avatars";
 import {
   OpenIn,
   OpenInChatGPT,
   OpenInClaude,
   OpenInContent,
+  OpenInItem,
   OpenInScira,
+  OpenInSeparator,
   OpenInT3,
   OpenInTrigger,
   OpenInv0,
-  OpenInSeparator,
-  OpenInItem
-} from '@/components/ai-elements/open-in-chat';
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { providers } from '@/app/(docs)/[[...slug]]/(home)/components/avatars';
+} from "@/components/ai-elements/open-in-chat";
+import { Button } from "./ui/button";
 
 const cache = new Map<string, string>();
 
@@ -44,7 +39,7 @@ export function LLMCopyButton({
     try {
       await navigator.clipboard.write([
         new ClipboardItem({
-          'text/plain': fetch(markdownUrl).then(async (res) => {
+          "text/plain": fetch(markdownUrl).then(async (res) => {
             const content = await res.text();
             cache.set(markdownUrl, content);
 
@@ -61,10 +56,10 @@ export function LLMCopyButton({
 
   return (
     <Button
-      disabled={isLoading}
-      variant="secondary"
-      onClick={onClick}
       className="shadow-none"
+      disabled={isLoading}
+      onClick={onClick}
+      variant="secondary"
     >
       <Icon />
       Copy Markdown
@@ -75,16 +70,19 @@ export function LLMCopyButton({
 type ViewOptionsProps = {
   markdownUrl: string;
   githubUrl: string;
-}
+};
 
 export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
-  const fullMarkdownUrl = typeof window === 'undefined' ? markdownUrl : new URL(markdownUrl, window.location.origin);
+  const fullMarkdownUrl =
+    typeof window === "undefined"
+      ? markdownUrl
+      : new URL(markdownUrl, window.location.origin);
   const query = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
   return (
     <OpenIn query={query}>
       <OpenInTrigger>
-        <Button variant="secondary" className="shadow-none">
+        <Button className="shadow-none" variant="secondary">
           Open in...
           <ChevronDownIcon className="size-4 text-muted-foreground" />
         </Button>
@@ -103,7 +101,9 @@ export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
             rel="noopener"
             target="_blank"
           >
-            <span className="shrink-0"><SiGithub /></span>
+            <span className="shrink-0">
+              <SiGithub />
+            </span>
             <span className="flex-1">Open in GitHub</span>
             <ExternalLinkIcon className="size-4 shrink-0 text-muted-foreground" />
           </a>
@@ -111,4 +111,4 @@ export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
       </OpenInContent>
     </OpenIn>
   );
-}
+};

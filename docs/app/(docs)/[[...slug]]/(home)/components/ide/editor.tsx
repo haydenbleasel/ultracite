@@ -20,7 +20,11 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 export default UserCard;`;
 
 export const Editor = () => (
-  <DynamicCodeBlock code={mockCode} lang="tsx" codeblock={{
-    className: "rounded-none border-none shadow-none bg-transparent",
-  }} />
+  <DynamicCodeBlock
+    code={mockCode}
+    codeblock={{
+      className: "rounded-none border-none shadow-none bg-transparent",
+    }}
+    lang="tsx"
+  />
 );

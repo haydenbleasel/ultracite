@@ -4,7 +4,7 @@ import { Problems } from "./problems";
 import { Sidebar } from "./sidebar";
 
 export const IDE = () => (
-  <div className="grid gap-8 py-16 px-8">
+  <div className="grid gap-8 px-8 py-16">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="font-semibold text-4xl tracking-tight">
         Designed for humans and AI

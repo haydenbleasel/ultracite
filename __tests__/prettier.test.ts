@@ -71,9 +71,9 @@ describe("prettier-cleanup", () => {
 
     it("should return true when prettier config files exist", async () => {
       mockReadFile.mockRejectedValue(new Error("No package.json"));
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".prettierrc";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === ".prettierrc"
+      );
 
       const result = await prettierCleanup.hasPrettier();
 
@@ -113,9 +113,10 @@ describe("prettier-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".prettierrc" || path === ".prettierignore";
-      });
+      mockExists.mockImplementation(
+        async (path: string) =>
+          path === ".prettierrc" || path === ".prettierignore"
+      );
 
       mockUnlink.mockResolvedValue();
       mockRemoveDependency.mockResolvedValue();
@@ -217,9 +218,9 @@ describe("prettier-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await prettierCleanup.remove("npm install");
 
@@ -269,9 +270,9 @@ describe("prettier-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await prettierCleanup.remove("npm install");
 
@@ -302,9 +303,9 @@ describe("prettier-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await prettierCleanup.remove("npm install");
 
@@ -328,9 +329,9 @@ describe("prettier-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await prettierCleanup.remove("npm install");
 

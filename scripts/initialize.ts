@@ -78,7 +78,7 @@ const upsertTsConfig = async () => {
   s.stop("tsconfig.json created.");
 };
 
-const upsertVSCodeSettings = async () => {
+const upsertVsCodeSettings = async () => {
   const s = spinner();
   s.start("Checking for .vscode/settings.json...");
 
@@ -271,7 +271,7 @@ const removePrettier = async (pm: PackageManagerName) => {
   }
 };
 
-const removeESLint = async (pm: PackageManagerName) => {
+const removeEsLint = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start("Removing ESLint dependencies and configuration...");
 
@@ -447,7 +447,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await removePrettier(pm);
     }
     if (shouldRemoveEslint) {
-      await removeESLint(pm);
+      await removeEsLint(pm);
     }
 
     await installDependencies(pm, !opts.skipInstall);
@@ -456,7 +456,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     await upsertBiomeConfig();
 
     if (editorConfig?.includes("vscode")) {
-      await upsertVSCodeSettings();
+      await upsertVsCodeSettings();
     }
     if (editorConfig?.includes("zed")) {
       await upsertZedSettings();

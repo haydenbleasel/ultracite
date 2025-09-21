@@ -1,6 +1,6 @@
 import { createMDX } from "fumadocs-mdx/next";
 
-const withMDX = createMDX();
+const withMdx = createMDX();
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -13,11 +13,11 @@ const config = {
   async rewrites() {
     return [
       {
-        source: '/:path*.mdx',
-        destination: '/llms.mdx/:path*',
+        source: "/:path*.mdx",
+        destination: "/llms.mdx/:path*",
       },
     ];
   },
 };
 
-export default withMDX(config);
+export default withMdx(config);

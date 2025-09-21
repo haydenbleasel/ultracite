@@ -71,9 +71,9 @@ describe("eslint-cleanup", () => {
 
     it("should return true when eslint config files exist", async () => {
       mockReadFile.mockRejectedValue(new Error("No package.json"));
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".eslintrc.js";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === ".eslintrc.js"
+      );
 
       const result = await eslintCleanup.hasESLint();
 
@@ -113,9 +113,10 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === ".eslintrc.js" || path === ".eslintignore";
-      });
+      mockExists.mockImplementation(
+        async (path: string) =>
+          path === ".eslintrc.js" || path === ".eslintignore"
+      );
 
       mockUnlink.mockResolvedValue();
       mockRemoveDependency.mockResolvedValue();
@@ -224,9 +225,9 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await eslintCleanup.remove("npm install");
 
@@ -277,9 +278,9 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await eslintCleanup.remove("npm install");
 
@@ -316,9 +317,9 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await eslintCleanup.remove("npm install");
 
@@ -342,9 +343,9 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await eslintCleanup.remove("npm install");
 
@@ -368,9 +369,9 @@ describe("eslint-cleanup", () => {
         return "{}";
       });
 
-      mockExists.mockImplementation(async (path: string) => {
-        return path === "./.vscode/settings.json";
-      });
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
 
       const result = await eslintCleanup.remove("npm install");
 

@@ -359,9 +359,9 @@ describe("initialize command", () => {
   });
 
   it("should test zed rules when .rules file exists", async () => {
-    mockExists.mockImplementation((path: string) => {
-      return Promise.resolve(path === ".rules");
-    });
+    mockExists.mockImplementation((path: string) =>
+      Promise.resolve(path === ".rules")
+    );
 
     mockDetectPackageManager.mockResolvedValue({
       name: "pnpm",
