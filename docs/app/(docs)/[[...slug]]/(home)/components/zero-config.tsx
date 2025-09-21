@@ -23,7 +23,7 @@ export const ZeroConfig = async () => (
         title: "biome.jsonc",
         icon: <SiJson className="size-4" />,
         className:
-          "[&_pre]:text-base max-w-fit mx-auto shadow-none bg-gradient-to-b from-secondary/50 to-transparent",
+          "[&_pre]:text-base w-full max-w-fit mx-auto shadow-none bg-gradient-to-b from-secondary/50 to-transparent",
       }}
       lang="json"
     />
