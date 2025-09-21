@@ -383,6 +383,10 @@
         "noUnmatchableAnbSelector": "error"
       },
       "nursery": {
+        // Prevent the listing of duplicate dependencies.
+        "noDuplicateDependencies": "error",
+        // Disallow string literals inside JSX elements.
+        "noJsxLiterals": "error",
         // Disallow Promises to be used in places where they are almost certainly a mistake.
         "noMisusedPromises": "error",
         // Prevent client components from being async functions.
@@ -395,6 +399,8 @@
         "noShadow": "error",
         // Disallow unnecessary type-based conditions that can be statically determined as redundant.
         "noUnnecessaryConditions": "error",
+        // Disallow unused catch bindings.
+        "noUselessCatchBinding": "error",
         // Disallow the use of useless undefined.
         "noUselessUndefined": "error",
         // Enforce that Vue component data options are declared as functions.
@@ -405,6 +411,8 @@
         "noVueReservedProps": "error",
         // Enforces href attribute for <a> elements.
         "useAnchorHref": "error",
+        // Enforce consistent arrow function bodies.
+        "useConsistentArrowReturn": "error",
         //Enforce type definitions to consistently use either interface or type.
         "useConsistentTypeDefinitions": {
           "level": "error",
