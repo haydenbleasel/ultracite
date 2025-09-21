@@ -5,7 +5,6 @@
 Ultracite is a zero-config [Biome](https://biomejs.dev) preset that provides a robust linting and formatting experience for your team and your AI integrations. Built in Rust for lightning-fast performance, it automatically formats your code and fixes lint issues on save without interrupting your workflow.
 
 <div>
-  <img src="https://img.shields.io/github/actions/workflow/status/haydenbleasel/ultracite/push.yaml" alt="" />
   <img src="https://img.shields.io/npm/dy/ultracite" alt="" />
   <img src="https://img.shields.io/npm/v/ultracite" alt="" />
   <img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
