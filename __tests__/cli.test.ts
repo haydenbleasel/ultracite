@@ -1,4 +1,5 @@
-import { type TrpcCliMeta, trpcServer } from "trpc-cli";
+import { initTRPC } from "@trpc/server";
+import type { TrpcCliMeta } from "trpc-cli";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import z from "zod";
 
@@ -27,7 +28,7 @@ vi.mock("../package.json", () => ({
 }));
 
 function createTestRouter() {
-  const t = trpcServer.initTRPC.meta<TrpcCliMeta>().create();
+  const t = initTRPC.meta<TrpcCliMeta>().create();
 
   return t.router({
     init: t.procedure
