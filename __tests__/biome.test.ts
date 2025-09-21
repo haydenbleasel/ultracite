@@ -18,12 +18,14 @@ describe("biome configuration", () => {
 
   describe("exists", () => {
     it("should return true when biome.json exists", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
-          return true;
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(true);
+          }
+          return await Promise.resolve(false);
         }
-        return false;
-      });
+      );
 
       const result = await biome.exists();
 
@@ -31,15 +33,17 @@ describe("biome configuration", () => {
     });
 
     it("should return true when biome.jsonc exists and biome.json does not", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
-          return false;
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(false);
+          }
+          if (path === "./biome.jsonc") {
+            return await Promise.resolve(true);
+          }
+          return await Promise.resolve(false);
         }
-        if (path === "./biome.jsonc") {
-          return true;
-        }
-        return false;
-      });
+      );
 
       const result = await biome.exists();
 
@@ -73,12 +77,14 @@ describe("biome configuration", () => {
     });
 
     it("should create biome.json with default configuration when biome.json exists", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
-          return true;
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(true);
+          }
+          return await Promise.resolve(false);
         }
-        return false;
-      });
+      );
 
       await biome.create();
 
@@ -96,15 +102,17 @@ describe("biome configuration", () => {
 
   describe("update", () => {
     it("should merge existing configuration with default configuration for biome.jsonc", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
-          return false;
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(false);
+          }
+          if (path === "./biome.jsonc") {
+            return await Promise.resolve(true);
+          }
+          return await Promise.resolve(false);
         }
-        if (path === "./biome.jsonc") {
-          return true;
-        }
-        return false;
-      });
+      );
 
       const existingConfig = {
         customProperty: "value",
@@ -137,12 +145,14 @@ describe("biome configuration", () => {
     });
 
     it("should merge existing configuration with default configuration for biome.json", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
-          return true;
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(true);
+          }
+          return await Promise.resolve(false);
         }
-        return false;
-      });
+      );
 
       const existingConfig = {
         customProperty: "value",
@@ -191,17 +201,19 @@ describe("biome configuration", () => {
     });
 
     it("should handle JSONC files with comments", async () => {
-      vi.mocked(exists).mockImplementation(async (path: string) => {
-        if (path === "./biome.json") {
+      vi.mocked(exists).mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => {
+          if (path === "./biome.json") {
+            return await Promise.resolve(false);
+          }
+
+          if (path === "./biome.jsonc") {
+            return await Promise.resolve(true);
+          }
+
           return await Promise.resolve(false);
         }
-
-        if (path === "./biome.jsonc") {
-          return await Promise.resolve(true);
-        }
-
-        return await Promise.resolve(false);
-      });
+      );
 
       const existingConfigWithComments = `{
   // Biome configuration with comments

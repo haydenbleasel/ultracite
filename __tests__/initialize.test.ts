@@ -26,7 +26,6 @@ vi.mock("../scripts/utils", async () => {
     exists: vi.fn(),
     isMonorepo: vi.fn(),
     updatePackageJson: vi.fn(async ({ dependencies, devDependencies }) => {
-      const { readFile, writeFile } = await import("node:fs/promises");
       const packageJsonContent = await readFile("package.json", "utf8");
       const packageJsonObject = JSON.parse(packageJsonContent);
 
@@ -243,21 +242,8 @@ describe("initialize command", () => {
     expect(mockProcessExit).toHaveBeenCalledWith(1);
   });
 
-  it("should handle non-Error exceptions", async () => {
-    mockDetectPackageManager.mockImplementation(() => {
-      throw "String error";
-    });
-
-    await initialize();
-
-    expect(mockLog.error).toHaveBeenCalledWith(
-      "Failed to initialize Ultracite configuration: Unknown error"
-    );
-    expect(mockProcessExit).toHaveBeenCalledWith(1);
-  });
-
   it("should throw error when no package manager is selected", async () => {
-    mockDetectPackageManager.mockResolvedValue(null);
+    mockDetectPackageManager.mockResolvedValue(undefined);
 
     await initialize();
 

@@ -114,6 +114,8 @@ function createTestRouter() {
   });
 }
 
+const TEST_NUMBER = 123;
+
 describe("CLI Router", () => {
   let router: ReturnType<typeof createTestRouter>;
 
@@ -199,7 +201,7 @@ describe("CLI Router", () => {
     it("should validate that input is array of strings", async () => {
       const caller = router.createCaller({});
 
-      await expect(caller.lint([123] as never)).rejects.toThrow();
+      await expect(caller.lint([TEST_NUMBER] as never)).rejects.toThrow();
     });
   });
 
