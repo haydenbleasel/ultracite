@@ -1,10 +1,4 @@
 import type { SVGProps } from "react";
-import {
-  Marquee,
-  MarqueeContent,
-  MarqueeFade,
-  MarqueeItem,
-} from "@/components/ui/kibo-ui/marquee";
 
 const Vercel = (props: SVGProps<SVGSVGElement>) => (
   <svg
