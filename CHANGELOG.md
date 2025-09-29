@@ -1,3 +1,19 @@
+# v5.4.6 (Mon Sep 29 2025)
+
+:tada: This release contains work from a new contributor! :tada:
+
+Thank you, Daniel Costrasel ([@ohkimur](https://github.com/ohkimur)), for all your work!
+
+#### 🐛 Bug Fix
+
+- fix: disable useNamingConvention; improve comments consistency [#289](https://github.com/haydenbleasel/ultracite/pull/289) ([@ohkimur](https://github.com/ohkimur))
+
+#### Authors: 1
+
+- Daniel Costrasel ([@ohkimur](https://github.com/ohkimur))
+
+---
+
 # v5.4.5 (Sun Sep 21 2025)
 
 #### ⚠️ Pushed to `main`
