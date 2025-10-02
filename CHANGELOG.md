@@ -1,3 +1,19 @@
+# v5.5.0 (Thu Oct 02 2025)
+
+#### 🚀 Enhancement
+
+- Bump @types/node from 24.5.2 to 24.6.1 [#292](https://github.com/haydenbleasel/ultracite/pull/292) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### 🔩 Dependency Updates
+
+- Bump @trpc/server from 11.5.1 to 11.6.0 [#291](https://github.com/haydenbleasel/ultracite/pull/291) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v5.4.7 (Thu Oct 02 2025)
 
 #### ⚠️ Pushed to `main`
