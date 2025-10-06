@@ -1,3 +1,15 @@
+# v5.5.1 (Mon Oct 06 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Upgrade Biome to 2.2.5 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.5.0 (Thu Oct 02 2025)
 
 #### 🚀 Enhancement
