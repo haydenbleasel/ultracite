@@ -64,12 +64,6 @@ npx ultracite fix
 npx ultracite check
 ```
 
-## Why Ultracite?
-
-Finally — a lightning-fast formatter that ensures you, your team, and your AI agents are writing code in harmony. Stop spending time on code style debates and formatting fixes. Let Ultracite handle the mundane so you can focus on building and shipping.
-
-Used by over [500 developers](https://github.com/haydenbleasel/ultracite/network/dependents)
-
 ## Tests
 
 Tests are written in [Vitest](https://vitest.dev). You can run them with:
