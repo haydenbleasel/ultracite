@@ -1,4 +1,13 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["./packages/cli/biome.jsonc"]
+  "extends": ["./packages/cli/biome.jsonc"],
+  "files": {
+    "includes": [
+      "**/*",
+      "!apps/docs/components/ai-elements",
+      "!apps/docs/components/ui",
+      "!apps/docs/lib/utils.ts",
+      "!apps/docs/hooks/use-mobile.ts"
+    ]
+  }
 }
