@@ -33,7 +33,8 @@ The default configuration runs `npx ultracite fix` on these file types:
 Ultracite's lint-staged integration supports all standard lint-staged configuration formats:
 
 ### package.json
-```json
+
+```json title="package.json"
 {
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
@@ -42,28 +43,32 @@ Ultracite's lint-staged integration supports all standard lint-staged configurat
 ```
 
 ### .lintstagedrc.json
-```json
+
+```json title=".lintstagedrc.json"
 {
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 }
 ```
 
 ### .lintstagedrc.js (CommonJS)
-```javascript
+
+```javascript title=".lintstagedrc.js"
 module.exports = {
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 };
 ```
 
 ### .lintstagedrc.mjs (ES Modules)
-```javascript
+
+```javascript title=".lintstagedrc.mjs"
 export default {
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 };
 ```
 
 ### .lintstagedrc.yaml
-```yaml
+
+```yaml title=".lintstagedrc.yaml"
 "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
   - 'npx ultracite fix'
 ```
@@ -91,7 +96,7 @@ This means you can safely run `npx ultracite init` even if you already have lint
 
 If you need to customize your lint-staged setup, you can modify the configuration after initialization:
 
-```json
+```json title="package.json"
 {
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
