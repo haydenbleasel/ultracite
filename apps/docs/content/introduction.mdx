@@ -1,0 +1,60 @@
+---
+title: Introduction
+description: A brief overview of Ultracite and how it works.
+---
+
+Ultracite is a fast, intuitive and simple development tool that brings automated code formatting and linting to your JavaScript / TypeScript projects. Built on top of [Biome](https://biomejs.dev/) (a Rust-based code formatter and linter), Ultracite provides a robust, preconfigured setup optimized for modern web development.
+
+Install Ultracite quickly by running:
+
+```package-install
+npx ultracite init
+```
+
+Then follow the [Usage](/usage) guide to get started.
+
+You can pass the following flags to the `init` command:
+
+| Flag                | Description                                      | Options                                                                 |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | The package manager to use.                      | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--editors`         | The editors to configure.                        | Comma-separated: `vscode`, `zed`                                        |
+| `--rules`           | The AI Editor rule files to create.              | Comma-separated: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex` |
+| `--integrations`    | Additional integrations to setup.                | Comma-separated: `husky`, `lefthook`, `lint-staged`                     |
+| `--remove-prettier` | Remove Prettier dependencies and configuration.  | (no value needed)                                                       |
+| `--remove-eslint`   | Remove ESLint dependencies and configuration.    | (no value needed)                                                       |
+| `--skip-install`    | Skip installing dependencies.                    | (no value needed)                                                       |
+
+## How does Ultracite work?
+
+Once set up, Ultracite runs mostly in the background — automatically formatting your code and applying fixes every time you save your files. Because Biome is so fast, even on large projects, running Ultracite’s checks is extremely fast and can comfortably run on every save without lag. This means you can focus on building and shipping instead of manually correcting style issues or debugging runtime errors.
+
+## What is Biome?
+
+[Biome](https://biomejs.dev/) is an all-in-one toolchain for code formatting and linting. Biome, written in Rust, combines the functionality of tools like [Prettier](https://prettier.io/) (code formatter), [ESLint](https://eslint.org/) (linter), and [Stylelint](https://stylelint.io/) into a single fast binary. Ultracite leverages Biome’s speed and capabilities, providing a preset of rules and settings tailored for modern TypeScript projects.
+
+## Goals
+
+Ultracite's goals are effectively represented in the [Benefits](/benefits) we provide to users, but here's how we can think about them from a development perspective:
+
+### Lightning-fast performance
+
+Ultracite benefits from the performance of [Biome](https://biomejs.dev/) and the Rust implementation and we should endevour to keep it that way.
+
+### Zero-config by design
+
+Ultracite is designed to be zero-config by default. This allows new users to get started quickly and without the need to configure the linter/formatter; and saves teams time when onboarding new developers.
+
+The goal is to provide a default configuration that is good for most projects, but also provide a way to customize the configuration for those who need it.
+
+### Intuitive and simple
+
+Ultracite should be as invisible as possible. Preferably, it should not require any configuration or action from the user. If required, it should provide feedback in a way that is easy to understand and act on.
+
+### Maximum type safety
+
+Ultracite should be designed to be as type safe as possible. It should use TypeScript's strict mode and additional lint rules to catch errors and provide suggestions for improvements.
+
+### Plays nice with others
+
+Ultracite should be able to work with other tools and libraries and not conflict with them.

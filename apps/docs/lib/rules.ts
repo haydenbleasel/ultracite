@@ -1,0 +1,1 @@
+../../../packages/cli/src/editor-rules/rules.ts
