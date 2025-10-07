@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 5.6.1
+
+### Patch Changes
+
+- 44917fd: Fix package readme, move vitest to devDeps
+
 ### Minor Changes
 
 - 762ef70: Workflow improvements
