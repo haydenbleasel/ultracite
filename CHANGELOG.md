@@ -1,3 +1,16 @@
+# v5.5.4 (Tue Oct 07 2025)
+
+#### 🐛 Bug Fix
+
+- Potential fix for code scanning alert no. 13: Workflow does not contain permissions [#297](https://github.com/haydenbleasel/ultracite/pull/297) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Potential fix for code scanning alert no. 12: Workflow does not contain permissions [#298](https://github.com/haydenbleasel/ultracite/pull/298) ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.5.3 (Tue Oct 07 2025)
 
 #### ⚠️ Pushed to `main`
