@@ -8,7 +8,7 @@ vi.mock("node:fs/promises");
 vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
-vi.mock("../docs/lib/rules", () => ({
+vi.mock("../src/editor-rules/rules", () => ({
   rulesFile: "mock rules content",
 }));
 
