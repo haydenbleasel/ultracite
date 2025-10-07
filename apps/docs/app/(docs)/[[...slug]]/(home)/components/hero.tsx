@@ -42,7 +42,7 @@ export const Hero = () => {
         </p>
         <div className="flex w-full max-w-lg flex-col items-center gap-4 sm:flex-row">
           <Installer />
-          <Button asChild size="lg" variant="outline">
+          <Button asChild className="px-4" size="lg" variant="outline">
             <Link href="/introduction">Read the docs</Link>
           </Button>
         </div>
