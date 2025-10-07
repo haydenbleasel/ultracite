@@ -6,7 +6,7 @@ import {
   parseFilePaths,
   title,
   updatePackageJson,
-} from "../scripts/utils";
+} from "../src/utils";
 
 vi.mock("node:fs/promises");
 

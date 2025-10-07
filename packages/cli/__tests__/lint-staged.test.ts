@@ -2,8 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { parse } from "jsonc-parser";
 import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { lintStaged } from "../scripts/integrations/lint-staged";
-import { exists, isMonorepo } from "../scripts/utils";
+import { lintStaged } from "../src/integrations/lint-staged";
+import { exists, isMonorepo } from "../src/utils";
 
 vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
@@ -29,7 +29,7 @@ vi.mock("nypm", () => ({
   }),
 }));
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
   isMonorepo: vi.fn(),
 }));

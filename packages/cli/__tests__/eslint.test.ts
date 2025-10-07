@@ -1,12 +1,12 @@
 import { readFile, unlink, writeFile } from "node:fs/promises";
 import { removeDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { eslintCleanup } from "../scripts/migrations/eslint";
-import { exists } from "../scripts/utils";
+import { eslintCleanup } from "../src/migrations/eslint";
+import { exists } from "../src/utils";
 
 vi.mock("nypm");
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 

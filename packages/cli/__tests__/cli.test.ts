@@ -8,15 +8,15 @@ const mockFormat = vi.fn();
 const mockInitialize = vi.fn();
 const mockLint = vi.fn();
 
-vi.mock("../scripts/format", () => ({
+vi.mock("../src/format", () => ({
   format: mockFormat,
 }));
 
-vi.mock("../scripts/initialize", () => ({
+vi.mock("../src/initialize", () => ({
   initialize: mockInitialize,
 }));
 
-vi.mock("../scripts/lint", () => ({
+vi.mock("../src/lint", () => ({
   lint: mockLint,
 }));
 

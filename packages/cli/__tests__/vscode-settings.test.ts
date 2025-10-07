@@ -1,12 +1,12 @@
 import { spawnSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { vscode } from "../scripts/editor-config/vscode";
-import { exists } from "../scripts/utils";
+import { vscode } from "../src/editor-config/vscode";
+import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
 vi.mock("node:child_process");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 

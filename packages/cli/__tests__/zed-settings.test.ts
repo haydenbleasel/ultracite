@@ -1,11 +1,11 @@
 /** biome-ignore-all lint/style/useNamingConvention: "Zed config uses snake_case" */
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { zed } from "../scripts/editor-config/zed";
-import { exists } from "../scripts/utils";
+import { zed } from "../src/editor-config/zed";
+import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 

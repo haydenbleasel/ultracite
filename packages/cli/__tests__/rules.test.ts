@@ -1,11 +1,11 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EDITOR_RULES } from "../scripts/consts/rules";
-import { createEditorRules } from "../scripts/editor-rules";
-import { exists } from "../scripts/utils";
+import { EDITOR_RULES } from "../src/consts/rules";
+import { createEditorRules } from "../src/editor-rules";
+import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 vi.mock("../docs/lib/rules", () => ({

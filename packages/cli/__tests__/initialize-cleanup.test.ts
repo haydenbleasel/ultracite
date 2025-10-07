@@ -1,11 +1,11 @@
 import { log, multiselect, spinner } from "@clack/prompts";
 import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { vscode } from "../scripts/editor-config/vscode";
-import { zed } from "../scripts/editor-config/zed";
-import { initialize } from "../scripts/initialize";
-import { eslintCleanup } from "../scripts/migrations/eslint";
-import { prettierCleanup } from "../scripts/migrations/prettier";
+import { vscode } from "../src/editor-config/vscode";
+import { zed } from "../src/editor-config/zed";
+import { initialize } from "../src/initialize";
+import { eslintCleanup } from "../src/migrations/eslint";
+import { prettierCleanup } from "../src/migrations/prettier";
 
 // Mock all dependencies
 vi.mock("nypm");
@@ -17,48 +17,48 @@ vi.mock("node:process", () => ({
   },
 }));
 vi.mock("@clack/prompts");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
   isMonorepo: vi.fn(() => Promise.resolve(false)),
   title: "test-title",
   updatePackageJson: vi.fn(),
 }));
-vi.mock("../scripts/biome", () => ({
+vi.mock("../src/biome", () => ({
   biome: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/tsconfig", () => ({
+vi.mock("../src/tsconfig", () => ({
   tsconfig: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/editor-config/vscode", () => ({
+vi.mock("../src/editor-config/vscode", () => ({
   vscode: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/editor-config/zed", () => ({
+vi.mock("../src/editor-config/zed", () => ({
   zed: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/editor-rules", () => ({
+vi.mock("../src/editor-rules", () => ({
   createEditorRules: vi.fn(() => ({
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   })),
 }));
-vi.mock("../scripts/integrations/husky", () => ({
+vi.mock("../src/integrations/husky", () => ({
   husky: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
@@ -66,7 +66,7 @@ vi.mock("../scripts/integrations/husky", () => ({
     install: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/integrations/lefthook", () => ({
+vi.mock("../src/integrations/lefthook", () => ({
   lefthook: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
@@ -74,7 +74,7 @@ vi.mock("../scripts/integrations/lefthook", () => ({
     install: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../scripts/integrations/lint-staged", () => ({
+vi.mock("../src/integrations/lint-staged", () => ({
   lintStaged: {
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
@@ -83,14 +83,14 @@ vi.mock("../scripts/integrations/lint-staged", () => ({
   },
 }));
 
-vi.mock("../scripts/migrations/eslint", () => ({
+vi.mock("../src/migrations/eslint", () => ({
   eslintCleanup: {
     hasEsLint: vi.fn(),
     remove: vi.fn(),
   },
 }));
 
-vi.mock("../scripts/migrations/prettier", () => ({
+vi.mock("../src/migrations/prettier", () => ({
   prettierCleanup: {
     hasPrettier: vi.fn(),
     remove: vi.fn(),

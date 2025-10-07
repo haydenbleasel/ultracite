@@ -1,10 +1,10 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { tsconfig } from "../scripts/tsconfig";
-import { exists } from "../scripts/utils";
+import { tsconfig } from "../src/tsconfig";
+import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 

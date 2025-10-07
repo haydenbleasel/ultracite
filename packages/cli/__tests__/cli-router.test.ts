@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { check } from "../scripts/commands/check";
-import { fix } from "../scripts/commands/fix";
-import { initialize } from "../scripts/initialize";
+import { check } from "../src/commands/check";
+import { fix } from "../src/commands/fix";
+import { initialize } from "../src/initialize";
 
 // Mock the command modules
-vi.mock("../scripts/commands/fix");
-vi.mock("../scripts/commands/check");
-vi.mock("../scripts/initialize");
+vi.mock("../src/commands/fix");
+vi.mock("../src/commands/check");
+vi.mock("../src/initialize");
 
 // Mock process.env to prevent CLI execution
 vi.stubEnv("VITEST", "true");
@@ -23,7 +23,7 @@ describe("CLI Router", () => {
   });
 
   it("should export router with proper procedures", async () => {
-    const { router } = await import("../scripts/index");
+    const { router } = await import("../src/index");
 
     expect(router).toBeDefined();
     expect(router._def.procedures).toBeDefined();
@@ -35,7 +35,7 @@ describe("CLI Router", () => {
   });
 
   it("should have correct metadata for all procedures", async () => {
-    const { router } = await import("../scripts/index");
+    const { router } = await import("../src/index");
     const procedures = router._def.procedures as any;
 
     // Check init procedure metadata
@@ -55,7 +55,7 @@ describe("CLI Router", () => {
   });
 
   it("should call fix with correct parameters when invoked", async () => {
-    const { router } = await import("../scripts/index");
+    const { router } = await import("../src/index");
     const caller = router.createCaller({});
 
     const files = ["src/index.ts", "src/utils.ts"];
@@ -68,7 +68,7 @@ describe("CLI Router", () => {
   });
 
   it("should call fix with undefined unsafe option", async () => {
-    const { router } = await import("../scripts/index");
+    const { router } = await import("../src/index");
     const caller = router.createCaller({});
 
     const files = ["test.ts"];
@@ -88,7 +88,7 @@ describe("CLI Router", () => {
   });
 
   it("should call initialize with correct parameters", async () => {
-    const { router } = await import("../scripts/index");
+    const { router } = await import("../src/index");
     const caller = router.createCaller({});
 
     const options = {

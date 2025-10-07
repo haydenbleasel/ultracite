@@ -1,8 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { husky } from "../scripts/integrations/husky";
-import { exists, isMonorepo } from "../scripts/utils";
+import { husky } from "../src/integrations/husky";
+import { exists, isMonorepo } from "../src/utils";
 
 vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
@@ -32,7 +32,7 @@ vi.mock("nypm", () => ({
   }),
 }));
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
   isMonorepo: vi.fn(),
 }));

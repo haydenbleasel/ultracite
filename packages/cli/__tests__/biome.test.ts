@@ -1,10 +1,10 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { biome } from "../scripts/biome";
-import { exists } from "../scripts/utils";
+import { biome } from "../src/biome";
+import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
-vi.mock("../scripts/utils", () => ({
+vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 

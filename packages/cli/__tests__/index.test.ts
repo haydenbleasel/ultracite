@@ -8,15 +8,15 @@ const mockFormat = vi.fn();
 const mockInitialize = vi.fn();
 const mockLint = vi.fn();
 
-vi.mock("../scripts/format", () => ({
+vi.mock("../src/format", () => ({
   format: mockFormat,
 }));
 
-vi.mock("../scripts/initialize", () => ({
+vi.mock("../src/initialize", () => ({
   initialize: mockInitialize,
 }));
 
-vi.mock("../scripts/lint", () => ({
+vi.mock("../src/lint", () => ({
   lint: mockLint,
 }));
 
@@ -60,7 +60,7 @@ describe("CLI Index", () => {
 
     try {
       // This should not throw an error
-      await expect(import("../scripts/index")).resolves.toBeDefined();
+      await expect(import("../src/index")).resolves.toBeDefined();
     } finally {
       // Restore environment
       process.env.VITEST = originalEnv;

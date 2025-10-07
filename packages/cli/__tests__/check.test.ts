@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { check } from "../scripts/commands/check";
+import { check } from "../src/commands/check";
 
 vi.mock("node:child_process");
 

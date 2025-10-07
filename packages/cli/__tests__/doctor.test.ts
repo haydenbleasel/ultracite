@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { doctor } from "../scripts/commands/doctor";
+import { doctor } from "../src/commands/doctor";
 
 // Mock the modules
 vi.mock("node:child_process", () => ({

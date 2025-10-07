@@ -4,8 +4,8 @@ import { intro, log, multiselect, spinner } from "@clack/prompts";
 import { addDevDependency, detectPackageManager } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import packageJson from "../package.json" with { type: "json" };
-import { initialize } from "../scripts/initialize";
-import { exists, isMonorepo } from "../scripts/utils";
+import { initialize } from "../src/initialize";
+import { exists, isMonorepo } from "../src/utils";
 
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
@@ -19,8 +19,8 @@ vi.mock("node:process", () => ({
   },
 }));
 vi.mock("@clack/prompts");
-vi.mock("../scripts/utils", async () => {
-  const actual = await vi.importActual("../scripts/utils");
+vi.mock("../src/utils", async () => {
+  const actual = await vi.importActual("../src/utils");
   return {
     ...actual,
     exists: vi.fn(),
@@ -45,22 +45,22 @@ vi.mock("../scripts/utils", async () => {
     }),
   };
 });
-vi.mock("../scripts/biome");
-vi.mock("../scripts/integrations/husky");
-vi.mock("../scripts/integrations/lefthook");
-vi.mock("../scripts/integrations/lint-staged");
-vi.mock("../scripts/tsconfig");
-vi.mock("../scripts/editor-config/vscode");
-vi.mock("../scripts/editor-config/zed");
-vi.mock("../scripts/editor-rules", () => ({
+vi.mock("../src/biome");
+vi.mock("../src/integrations/husky");
+vi.mock("../src/integrations/lefthook");
+vi.mock("../src/integrations/lint-staged");
+vi.mock("../src/tsconfig");
+vi.mock("../src/editor-config/vscode");
+vi.mock("../src/editor-config/zed");
+vi.mock("../src/editor-rules", () => ({
   createEditorRules: vi.fn(() => ({
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   })),
 }));
-vi.mock("../scripts/migrations/eslint");
-vi.mock("../scripts/migrations/prettier");
+vi.mock("../src/migrations/eslint");
+vi.mock("../src/migrations/prettier");
 
 describe("initialize command", () => {
   const mockDetectPackageManager = vi.mocked(detectPackageManager);

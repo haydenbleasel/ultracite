@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   dts: true,
-  entry: ["scripts/index.ts"],
+  entry: ["src/index.ts"],
   format: ["esm"],
   minify: true,
   outDir: "dist",
