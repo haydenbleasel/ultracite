@@ -1,43 +1,156 @@
-# Contributing to This Project
+# Contributing to Ultracite
 
-Thank you for your interest in contributing! This document outlines the process for contributing to our project.
+Thank you for your interest in contributing! Ultracite is an open-source project, and contributions are welcome! Whether you want to improve the documentation, adjust the configuration presets, or contribute code, here's how you can get involved.
+
+## Source Code
+
+Ultracite's source code is hosted on GitHub at [haydenbleasel/ultracite](https://github.com/haydenbleasel/ultracite). The repository contains all configuration files, build scripts, CLI implementation, and documentation.
+
+## Monorepo Structure
+
+Ultracite is a monorepo managed with pnpm workspaces and Turbo:
+
+- `packages/cli` - The main Ultracite CLI package and Biome configuration
+  - `biome.jsonc` - The core Biome configuration with all rules
+  - `src/` - CLI implementation for `ultracite init`, `check`, `fix`, etc.
+  - `src/editor-rules/` - AI/IDE integration rules (273+ rules)
+- `apps/docs` - Documentation website built with [Fumadocs](https://fumadocs.dev/)
 
 ## Getting Started
 
-1. Fork the repository
-2. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature-name`
-3. Make your changes
-4. Test your changes thoroughly
-5. Commit your changes with clear, descriptive commit messages
-6. Push to your fork
-7. Submit a Pull Request
+1. Fork the repository on GitHub
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/ultracite.git`
+3. Install dependencies: `pnpm install`
+4. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature-name`
+5. Make your changes
+6. Run tests: `pnpm test`
+7. Build packages: `pnpm build`
+8. Commit your changes with clear, descriptive commit messages
+9. Push to your fork
+10. Submit a Pull Request
+
+### Testing Your Changes Locally
+
+To test your local version of Ultracite on a sample project:
+
+1. Build the CLI: `cd packages/cli && pnpm build`
+2. Link it locally: `pnpm link --global` (from `packages/cli`)
+3. In your test project: `pnpm link --global ultracite`
+4. Run `npx ultracite init` or other commands to test your changes
+5. Alternatively, use `npm pack` to create a tarball and install it in your test project
+
+### Editing Documentation
+
+To work on the documentation site:
+
+```bash
+cd apps/docs
+pnpm install
+pnpm dev
+```
+
+This will start the Fumadocs app on [http://localhost:3000](http://localhost:3000). Documentation content is in `apps/docs/content/`.
+
+## Changesets
+
+We use [Changesets](https://github.com/changesets/changesets) to manage versions and changelogs. When you make changes that should be released, you need to create a changeset:
+
+1. Run `pnpm changeset` in the root directory
+2. Select the packages you've changed (use space to select, enter to confirm)
+3. Choose the appropriate version bump:
+   - `patch` - Bug fixes and minor changes
+   - `minor` - New features that don't break existing functionality
+   - `major` - Breaking changes
+4. Write a clear description of your changes (this will appear in the changelog)
+5. Commit the generated changeset file in `.changeset/` with your changes
+
+**When to create a changeset:**
+- Bug fixes
+- New features
+- Breaking changes
+- Performance improvements
+- Documentation updates that affect usage
+
+**When NOT to create a changeset:**
+- Internal refactoring with no user-facing changes
+- Test updates
+- Build configuration changes
+- README or contributing guide updates
+
+## Testing Rule Changes
+
+If you modify Biome rules in `packages/cli/biome.jsonc`:
+
+1. Test on various sample code to ensure no unexpected side effects
+2. Run Ultracite on real projects to check for false positives
+3. Consider backward compatibility - will this break existing users' workflows?
+4. Run `pnpm check` on the Ultracite codebase itself
+5. Update AI/IDE rules in `packages/cli/src/editor-rules/rules.ts` if needed
+
+**Biome vs Ultracite Contributions:**
+- To add or change how a rule works internally → Contribute to [Biome's repository](https://github.com/biomejs/biome)
+- To adjust which rules are enabled or their severity → Contribute to Ultracite
+- Once Biome releases a new rule version, Ultracite can bump the dependency and enable it
 
 ## Pull Request Guidelines
 
 - Ensure your PR addresses a specific issue or adds value to the project
-- Include a clear description of the changes
+- Include a clear description of the changes and rationale
+  - Example: "Rule X causes too many false positives, turning it off by default"
+  - Example: "Adding support for Y framework"
 - Keep changes focused and atomic
 - Follow existing code style and conventions
 - Include tests if applicable
+- **Add a changeset if your changes affect the published package**
 - Update documentation as needed
-- Ensure your PR follows the [project's philosophy](/docs/overview.mdx)
+- Ensure all tests pass: `pnpm test`
+- Write clear commit messages
+- Keep consistency with the project's coding style
+
+## Working in the Monorepo
+
+### Running Commands
+
+From the root directory:
+- `pnpm test` - Run all tests across all packages
+- `pnpm build` - Build all packages
+- `pnpm check` - Run Ultracite linter on the codebase
+- `pnpm fix` - Auto-fix linting issues
+
+From a specific package (e.g., `packages/cli`):
+- `pnpm test` - Run tests for that package only
+- `pnpm build` - Build that package only
+
+### Package Dependencies
+
+- Use `pnpm add <package>` to add dependencies to the root
+- Use `pnpm add <package> --filter ultracite` to add to the CLI package
+- Use `pnpm add <package> --filter docs` to add to the docs site
 
 ## Code Style
 
-- Follow the existing code formatting in the project (ensure you have Biome installed)
+- Run `pnpm fix` before committing to auto-format your code with Ultracite
 - Write clear, self-documenting code
 - Add comments only when necessary to explain complex logic
 - Use meaningful variable and function names
+- Follow TypeScript best practices (the linter will guide you)
 
-## Reporting Issues
+## Reporting Issues and Discussions
 
-- Use the GitHub issue tracker
+### Bugs and Issues
+
+Use the GitHub [issue tracker](https://github.com/haydenbleasel/ultracite/issues) to report bugs:
+
 - Check if the issue already exists before creating a new one
-- Provide a clear description of the issue
+- Provide a clear description with examples
 - Include steps to reproduce if applicable
 - Add relevant labels
 
-## Questions or Need Help?
+### Feature Requests and Discussions
+
+For potential changes, feature requests, or general discussions (e.g., "Ultracite should have an option to...", or "Rule X is too strict..."), please open a [discussion](https://github.com/haydenbleasel/ultracite/discussions).
+
+### Questions or Need Help?
 
 Feel free to open an issue for questions or join our discussions. We're here to help!
 
