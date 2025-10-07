@@ -1,0 +1,60 @@
+{
+  "name": "ultracite",
+  "description": "The AI-ready formatter that helps you write and generate code faster.",
+  "version": "5.5.4",
+  "type": "module",
+  "bin": {
+    "ultracite": "dist/index.js"
+  },
+  "files": [
+    "biome.jsonc",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "main": "./biome.jsonc",
+  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
+  "bugs": {
+    "url": "https://github.com/haydenbleasel/ultracite/issues"
+  },
+  "homepage": "https://github.com/haydenbleasel/ultracite#readme",
+  "keywords": [
+    "ultracite",
+    "biome",
+    "linter",
+    "formatter",
+    "fixer"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haydenbleasel/ultracite.git"
+  },
+  "devDependencies": {
+    "@auto-it/all-contributors": "^11.3.0",
+    "@auto-it/first-time-contributor": "^11.3.0",
+    "@biomejs/biome": "2.2.5",
+    "@types/node": "^24.5.2",
+    "@vitest/coverage-v8": "3.2.4",
+    "tsup": "^8.5.0",
+    "turbo": "^2.5.8"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "@trpc/server": "^11.5.1",
+    "deepmerge": "^4.3.1",
+    "jsonc-parser": "^3.3.1",
+    "nypm": "^0.6.2",
+    "trpc-cli": "^0.11.0",
+    "vitest": "^3.2.4",
+    "zod": "^4.1.11"
+  },
+  "packageManager": "pnpm@10.17.0"
+}
