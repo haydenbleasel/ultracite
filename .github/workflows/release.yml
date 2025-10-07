@@ -51,7 +51,7 @@ jobs:
         run: pnpm test
 
       - name: Build CLI
-        run: pnpm build
+        run: pnpm build --filter ultracite
 
       - name: Create Release PR or Publish to NPM
         id: changesets
