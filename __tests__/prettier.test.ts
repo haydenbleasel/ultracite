@@ -63,6 +63,15 @@ describe("prettier-cleanup", () => {
 
       expect(result).toBe(false);
     });
+
+    it("should return false when package.json is invalid", async () => {
+      mockReadFile.mockResolvedValue("null");
+      mockExists.mockResolvedValue(false);
+
+      const result = await prettierCleanup.hasPrettier();
+
+      expect(result).toBe(false);
+    });
   });
 
   describe("remove", () => {
@@ -298,6 +307,29 @@ describe("prettier-cleanup", () => {
       const result = await prettierCleanup.remove("npm");
 
       // Should handle error gracefully and return false for vsCodeCleaned
+      expect(result.vsCodeCleaned).toBe(false);
+    });
+
+    it("should handle invalid VS Code settings gracefully", async () => {
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return await Promise.resolve("null");
+          }
+          return await Promise.resolve("{}");
+        }
+      );
+
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
+
+      const result = await prettierCleanup.remove("npm");
+
+      // Should handle invalid config gracefully
       expect(result.vsCodeCleaned).toBe(false);
     });
 
