@@ -1,5 +1,4 @@
 import { Agents } from "./components/agents";
-import { Benefits } from "./components/benefits";
 import { Comparison } from "./components/comparison";
 import { CallToAction } from "./components/cta";
 import { Footer } from "./components/footer";
@@ -14,7 +13,6 @@ const Home = () => (
     <Hero />
     <Logos />
     <Comparison />
-    <Benefits />
     <ZeroConfig />
     <IDE />
     <Agents />

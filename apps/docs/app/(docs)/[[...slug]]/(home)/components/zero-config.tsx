@@ -27,5 +27,8 @@ export const ZeroConfig = async () => (
       }}
       lang="json"
     />
+    <p className="text-center text-muted-foreground text-sm">
+      👆 Yes this is literally all you need.
+    </p>
   </div>
 );
