@@ -1,3 +1,24 @@
+# v5.5.3 (Tue Oct 07 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Increase branch test coverage from 89.21% → 91.02% ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add Videos section to homepage ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #280 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Make migration dep parsing lazier ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #287 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #290 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Resolves #294 ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.5.2 (Tue Oct 07 2025)
 
 #### ⚠️ Pushed to `main`
