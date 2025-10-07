@@ -1,5 +1,15 @@
 # v5.5.5 (Tue Oct 07 2025)
 
+## 5.6.0
+
+### Minor Changes
+
+- 762ef70: Workflow improvements
+
+### Patch Changes
+
+- f3ec41b: Backport changelog
+
 #### ⚠️ Pushed to `main`
 
 - Remove unused deps ([@haydenbleasel](https://github.com/haydenbleasel))
