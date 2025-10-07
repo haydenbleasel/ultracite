@@ -60,7 +60,7 @@ jobs:
           version: pnpm changeset version
           publish: pnpm changeset publish
           createGithubReleases: true
-          setupGitUser: false
+          setupGitUser: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
