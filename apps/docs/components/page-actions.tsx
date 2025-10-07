@@ -4,7 +4,6 @@ import { SiGithub } from "@icons-pack/react-simple-icons";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { Check, ChevronDownIcon, Copy, ExternalLinkIcon } from "lucide-react";
 import { useState } from "react";
-import { providers } from "@/app/(docs)/[[...slug]]/(home)/components/avatars";
 import {
   OpenIn,
   OpenInChatGPT,
