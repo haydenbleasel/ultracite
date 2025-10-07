@@ -1,3 +1,15 @@
+# v5.5.2 (Tue Oct 07 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update logos ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.5.1 (Mon Oct 06 2025)
 
 #### ⚠️ Pushed to `main`
