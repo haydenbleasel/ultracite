@@ -1,0 +1,5 @@
+---
+"ultracite": patch
+---
+
+Bump deps
