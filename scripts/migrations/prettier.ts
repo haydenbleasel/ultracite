@@ -193,7 +193,7 @@ export const prettierCleanup = {
     const packages = await detectPrettierPackages();
 
     // Remove dependencies
-    removePrettierDependencies(pm, packages);
+    await removePrettierDependencies(pm, packages);
 
     // Remove config files
     const filesRemoved = await removePrettierConfigFiles();

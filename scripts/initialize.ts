@@ -1,5 +1,12 @@
 import process from "node:process";
-import { intro, log, multiselect, spinner } from "@clack/prompts";
+import {
+  cancel,
+  intro,
+  isCancel,
+  log,
+  multiselect,
+  spinner,
+} from "@clack/prompts";
 import {
   addDevDependency,
   detectPackageManager,
@@ -354,12 +361,17 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
 
       if (migrationOptions.length > 0) {
-        const migrationChoices = (await multiselect({
+        const migrationChoices = await multiselect({
           message:
             "Remove existing formatters/linters (recommended for clean migration)?",
           options: migrationOptions,
           required: false,
-        })) as string[];
+        });
+
+        if (isCancel(migrationChoices)) {
+          cancel("Operation cancelled.");
+          process.exit(0);
+        }
 
         if (shouldRemovePrettier === undefined) {
           shouldRemovePrettier = migrationChoices.includes("prettier");
@@ -372,14 +384,21 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     let editorConfig = opts.editors;
     if (!editorConfig) {
-      editorConfig = (await multiselect({
+      const editorConfigResult = await multiselect({
         message: "Which editors do you want to configure (recommended)?",
         options: [
           { label: "VSCode / Cursor / Windsurf", value: "vscode" },
           { label: "Zed", value: "zed" },
         ],
         required: false,
-      })) as ("vscode" | "zed")[];
+      });
+
+      if (isCancel(editorConfigResult)) {
+        cancel("Operation cancelled.");
+        process.exit(0);
+      }
+
+      editorConfig = editorConfigResult;
     }
 
     let editorRules = opts.rules;
@@ -405,17 +424,24 @@ export const initialize = async (flags?: InitializeFlags) => {
       augmentcode: "Augment Code",
       "kilo-code": "Kilo Code",
       goose: "Codename Goose",
-    };
+    } as const;
 
     if (!editorRules) {
-      editorRules = (await multiselect({
+      const editorRulesResult = await multiselect({
         message: "Which editor rules do you want to enable (optional)?",
         options: Object.entries(editorRulesOptions).map(([value, label]) => ({
           value,
           label,
         })),
         required: false,
-      })) as InitializeFlags["rules"];
+      });
+
+      if (isCancel(editorRulesResult)) {
+        cancel("Operation cancelled.");
+        process.exit(0);
+      }
+
+      editorRules = editorRulesResult as (typeof options.editorRules)[number][];
     }
 
     let integrations = opts.integrations;
@@ -432,7 +458,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       if (hasOtherCliOptions) {
         integrations = [];
       } else {
-        integrations = (await multiselect({
+        const integrationsResult = await multiselect({
           message: "Would you like any of the following (optional)?",
           options: [
             { label: "Husky pre-commit hook", value: "husky" },
@@ -440,7 +466,14 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Lint-staged", value: "lint-staged" },
           ],
           required: false,
-        })) as ("husky" | "lefthook" | "lint-staged")[];
+        });
+
+        if (isCancel(integrationsResult)) {
+          cancel("Operation cancelled.");
+          process.exit(0);
+        }
+
+        integrations = integrationsResult;
       }
     }
 

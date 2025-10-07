@@ -186,7 +186,7 @@ export const eslintCleanup = {
     const packages = await detectEsLintPackages();
 
     // Remove dependencies
-    removeEsLintDependencies(pm, packages);
+    await removeEsLintDependencies(pm, packages);
 
     // Remove config files
     const filesRemoved = await removeEsLintConfigFiles();
