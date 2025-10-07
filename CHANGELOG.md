@@ -1,3 +1,15 @@
+# v5.5.5 (Tue Oct 07 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Remove unused deps ([@haydenbleasel](https://github.com/haydenbleasel))
+
+#### Authors: 1
+
+- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+
+---
+
 # v5.5.4 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
