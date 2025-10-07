@@ -1,9 +1,9 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { rulesFile } from "../../../apps/docs/lib/rules";
-import type { options } from "./consts/options";
-import { EDITOR_RULES } from "./consts/rules";
-import { exists } from "./utils";
+import { rulesFile } from "./rules";
+import type { options } from "../consts/options";
+import { EDITOR_RULES } from "../consts/rules";
+import { exists } from "../utils";
 
 export const createEditorRules = (
   name: (typeof options.editorRules)[number]
