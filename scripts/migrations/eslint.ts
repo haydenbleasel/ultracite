@@ -35,13 +35,7 @@ const detectEsLintPackages = async () => {
 
     const allDeps = { ...dependencies, ...devDependencies };
 
-    return Object.keys(allDeps).filter(
-      (dep) =>
-        dep.startsWith("eslint") ||
-        dep.startsWith("@eslint/") ||
-        dep === "@typescript-eslint/parser" ||
-        dep === "@typescript-eslint/eslint-plugin"
-    );
+    return Object.keys(allDeps).filter((dep) => dep.includes("eslint"));
   } catch {
     return [];
   }
