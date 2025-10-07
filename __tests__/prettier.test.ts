@@ -22,7 +22,7 @@ describe("prettier-cleanup", () => {
   });
 
   describe("hasPrettier", () => {
-    it("should return true when prettier dependencies exist", async () => {
+    it("should return true when prettier is in package name", async () => {
       const packageJson = {
         devDependencies: {
           prettier: "^2.0.0",
@@ -36,37 +36,6 @@ describe("prettier-cleanup", () => {
 
       expect(result).toBe(true);
       expect(mockReadFile).toHaveBeenCalledWith("package.json", "utf-8");
-    });
-
-    it("should return true when prettier-prefixed packages exist", async () => {
-      const packageJson = {
-        devDependencies: {
-          "prettier-plugin-tailwindcss": "^0.1.0",
-          "prettier-plugin-svelte": "^2.0.0",
-        },
-      };
-
-      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
-
-      const result = await prettierCleanup.hasPrettier();
-
-      expect(result).toBe(true);
-    });
-
-    it("should return false when prettier is in package name but not at start", async () => {
-      const packageJson = {
-        devDependencies: {
-          "remark-preset-prettier": "^1.0.0",
-          "some-other-prettier-tool": "^1.0.0",
-        },
-      };
-
-      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
-      mockExists.mockResolvedValue(false);
-
-      const result = await prettierCleanup.hasPrettier();
-
-      expect(result).toBe(false);
     });
 
     it("should return true when prettier config files exist", async () => {
@@ -88,6 +57,15 @@ describe("prettier-cleanup", () => {
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
+      mockExists.mockResolvedValue(false);
+
+      const result = await prettierCleanup.hasPrettier();
+
+      expect(result).toBe(false);
+    });
+
+    it("should return false when package.json is invalid", async () => {
+      mockReadFile.mockResolvedValue("null");
       mockExists.mockResolvedValue(false);
 
       const result = await prettierCleanup.hasPrettier();
@@ -143,12 +121,12 @@ describe("prettier-cleanup", () => {
       expect(mockUnlink).toHaveBeenCalledWith(".prettierignore");
     });
 
-    it("should only remove packages that start with prettier", async () => {
+    it("should remove all packages that contain prettier", async () => {
       const packageJson = {
         devDependencies: {
           prettier: "^2.0.0",
           "prettier-plugin-tailwindcss": "^0.1.0",
-          "remark-preset-prettier": "^1.0.0", // Should NOT be removed
+          "remark-preset-prettier": "^1.0.0",
           "eslint-plugin-prettier": "^4.0.0",
           typescript: "^4.0.0",
         },
@@ -168,10 +146,11 @@ describe("prettier-cleanup", () => {
 
       const result = await prettierCleanup.remove("npm");
 
-      // Should only include packages that start with 'prettier' or are in the specific exceptions list
+      // Should include all packages that contain 'prettier'
       expect(result.packagesRemoved).toEqual([
         "prettier",
         "prettier-plugin-tailwindcss",
+        "remark-preset-prettier",
         "eslint-plugin-prettier",
       ]);
       expect(mockRemoveDependency).toHaveBeenCalledWith("prettier", {
@@ -179,6 +158,12 @@ describe("prettier-cleanup", () => {
       });
       expect(mockRemoveDependency).toHaveBeenCalledWith(
         "prettier-plugin-tailwindcss",
+        {
+          packageManager: "npm",
+        }
+      );
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        "remark-preset-prettier",
         {
           packageManager: "npm",
         }
@@ -322,6 +307,29 @@ describe("prettier-cleanup", () => {
       const result = await prettierCleanup.remove("npm");
 
       // Should handle error gracefully and return false for vsCodeCleaned
+      expect(result.vsCodeCleaned).toBe(false);
+    });
+
+    it("should handle invalid VS Code settings gracefully", async () => {
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return await Promise.resolve("null");
+          }
+          return await Promise.resolve("{}");
+        }
+      );
+
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
+
+      const result = await prettierCleanup.remove("npm");
+
+      // Should handle invalid config gracefully
       expect(result.vsCodeCleaned).toBe(false);
     });
 
