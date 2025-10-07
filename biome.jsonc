@@ -309,7 +309,10 @@
         // Disallow unused function parameters.
         "noUnusedFunctionParameters": "error",
         // Disallow unused imports.
-        "noUnusedImports": "error",
+        "noUnusedImports": {
+          "fix": "safe",
+          "level": "error"
+        },
         // Disallow unused labels.
         "noUnusedLabels": "error",
         // Disallow unused private class members
