@@ -5,10 +5,16 @@
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
-    "test:coverage": "turbo test:coverage"
+    "test:coverage": "turbo test:coverage",
+    "check": "npx ultracite@latest check",
+    "fix": "npx ultracite@latest fix",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
+    "@changesets/cli": "^2.29.7",
     "@types/node": "^24.5.2",
     "@vitest/coverage-v8": "3.2.4",
     "turbo": "^2.5.8"
