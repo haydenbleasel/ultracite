@@ -11,13 +11,14 @@ const lines = [
   "Found 53 warnings.",
   "Done in 312ms.",
 ];
+const CHAR_DELAY = 0.05;
 
 export const IntuitiveGraphic = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   // Calculate the total duration for the first line typing animation
-  const firstLineDuration = lines[0].length * 0.05;
+  const firstLineDuration = lines[0].length * CHAR_DELAY;
 
   return (
     <div className="relative">
@@ -49,10 +50,10 @@ export const IntuitiveGraphic = () => {
                 <motion.span
                   animate={{ opacity: 1 }}
                   initial={{ opacity: 0 }}
-                  key={charIndex}
+                  key={`${charIndex}-${char}`}
                   transition={{
                     duration: 0.05,
-                    delay: charIndex * 0.05,
+                    delay: charIndex * CHAR_DELAY,
                     ease: "linear",
                   }}
                 >
@@ -71,7 +72,7 @@ export const IntuitiveGraphic = () => {
               key={line}
               transition={{
                 duration: 0.05,
-                delay: firstLineDuration + index * 0.05,
+                delay: firstLineDuration + index * CHAR_DELAY,
                 ease: "easeOut",
               }}
             >
