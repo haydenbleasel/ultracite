@@ -9,6 +9,7 @@ import {
   OpenInChatGPT,
   OpenInClaude,
   OpenInContent,
+  OpenInCursor,
   OpenInItem,
   OpenInScira,
   OpenInSeparator,
@@ -94,6 +95,7 @@ export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
         <OpenInT3 />
         <OpenInScira />
         <OpenInv0 />
+        <OpenInCursor />
         <OpenInSeparator />
         <OpenInItem asChild>
           <a
