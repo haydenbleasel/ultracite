@@ -6,6 +6,7 @@ import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
 import { Logos } from "./components/logos";
 import { Tweets } from "./components/tweets";
+import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
@@ -16,6 +17,7 @@ const Home = () => (
     <ZeroConfig />
     <IDE />
     <Agents />
+    <Videos />
     <Tweets />
     <CallToAction />
     <Footer />
