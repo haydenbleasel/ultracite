@@ -12,7 +12,8 @@
     "fix": "npx ultracite@latest fix",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:publish": "pnpm build && changeset publish"
+    "changeset:publish": "pnpm build && changeset publish",
+    "bump-deps": "npx npm-check-updates --deep -u -x react-day-picker,recharts && pnpm install"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
