@@ -468,6 +468,110 @@ describe("doctor command", () => {
     expect(processExitSpy).toHaveBeenCalledWith(1);
   });
 
+  it("should check biome.jsonc when biome.json doesn't exist", async () => {
+    // Mock Biome installation check
+    vi.mocked(spawnSync).mockReturnValue({
+      status: 0,
+      stdout: "Version: 2.2.2",
+      stderr: "",
+      pid: 1234,
+      output: ["", "Version: 2.2.2", ""],
+      signal: null,
+    });
+
+    // Mock file existence - only biome.jsonc exists
+    vi.mocked(existsSync).mockImplementation((path) => {
+      const pathStr = path.toString();
+      if (pathStr.includes("biome.jsonc")) {
+        return true;
+      }
+      if (pathStr.includes("biome.json") && !pathStr.includes("biome.jsonc")) {
+        return false;
+      }
+      if (pathStr.includes("package.json")) {
+        return true;
+      }
+      return false;
+    });
+
+    // Mock file reading
+    vi.mocked(readFile).mockImplementation((path) => {
+      const pathStr = path.toString();
+      if (pathStr.includes("biome.jsonc")) {
+        return Promise.resolve(
+          JSON.stringify({
+            extends: ["ultracite"],
+          })
+        );
+      }
+      if (pathStr.includes("package.json")) {
+        return Promise.resolve(
+          JSON.stringify({
+            devDependencies: {
+              ultracite: "^5.0.0",
+            },
+          })
+        );
+      }
+      return Promise.reject(new Error("File not found"));
+    });
+
+    await doctor();
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("✅ Biome configuration:")
+    );
+  });
+
+  it("should warn when package.json cannot be parsed", async () => {
+    // Mock Biome installation check
+    vi.mocked(spawnSync).mockReturnValue({
+      status: 0,
+      stdout: "Version: 2.2.2",
+      stderr: "",
+      pid: 1234,
+      output: ["", "Version: 2.2.2", ""],
+      signal: null,
+    });
+
+    // Mock file existence
+    vi.mocked(existsSync).mockImplementation((path) => {
+      const pathStr = path.toString();
+      if (pathStr.includes("biome.json")) {
+        return true;
+      }
+      if (pathStr.includes("package.json")) {
+        return true;
+      }
+      return false;
+    });
+
+    // Mock file reading - invalid JSON for package.json
+    vi.mocked(readFile).mockImplementation((path) => {
+      const pathStr = path.toString();
+      if (pathStr.includes("biome.json")) {
+        return Promise.resolve(
+          JSON.stringify({
+            extends: ["ultracite"],
+          })
+        );
+      }
+      if (pathStr.includes("package.json")) {
+        return Promise.resolve("{ invalid json }");
+      }
+      return Promise.reject(new Error("File not found"));
+    });
+
+    await doctor();
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("⚠️ Ultracite dependency:")
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Could not parse package.json")
+    );
+  });
+
   it("should display correct summary counts", async () => {
     // Mock mixed results
     vi.mocked(spawnSync).mockReturnValue({

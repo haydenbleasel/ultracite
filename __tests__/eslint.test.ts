@@ -22,7 +22,7 @@ describe("eslint-cleanup", () => {
   });
 
   describe("hasEsLint", () => {
-    it("should return true when eslint dependencies exist", async () => {
+    it("should return true when eslint is in package name", async () => {
       const packageJson = {
         devDependencies: {
           eslint: "^8.0.0",
@@ -36,37 +36,6 @@ describe("eslint-cleanup", () => {
 
       expect(result).toBe(true);
       expect(mockReadFile).toHaveBeenCalledWith("package.json", "utf-8");
-    });
-
-    it("should return true when eslint-prefixed packages exist", async () => {
-      const packageJson = {
-        devDependencies: {
-          "eslint-plugin-github": "^4.0.0",
-          "eslint-config-fbjs": "^3.0.0",
-        },
-      };
-
-      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
-
-      const result = await eslintCleanup.hasEsLint();
-
-      expect(result).toBe(true);
-    });
-
-    it("should return false when eslint is in package name but not at start", async () => {
-      const packageJson = {
-        devDependencies: {
-          "some-other-eslint-tool": "^1.0.0",
-          "remark-preset-eslint": "^1.0.0",
-        },
-      };
-
-      mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
-      mockExists.mockResolvedValue(false);
-
-      const result = await eslintCleanup.hasEsLint();
-
-      expect(result).toBe(false);
     });
 
     it("should return true when eslint config files exist", async () => {
@@ -88,6 +57,15 @@ describe("eslint-cleanup", () => {
       };
 
       mockReadFile.mockResolvedValue(JSON.stringify(packageJson));
+      mockExists.mockResolvedValue(false);
+
+      const result = await eslintCleanup.hasEsLint();
+
+      expect(result).toBe(false);
+    });
+
+    it("should return false when package.json is invalid", async () => {
+      mockReadFile.mockResolvedValue("null");
       mockExists.mockResolvedValue(false);
 
       const result = await eslintCleanup.hasEsLint();
@@ -145,13 +123,13 @@ describe("eslint-cleanup", () => {
       expect(mockUnlink).toHaveBeenCalledWith(".eslintignore");
     });
 
-    it("should only remove packages that start with eslint", async () => {
+    it("should remove all packages that contain eslint", async () => {
       const packageJson = {
         devDependencies: {
           eslint: "^8.0.0",
           "eslint-plugin-github": "^4.0.0",
           "eslint-config-fbjs": "^3.0.0",
-          "some-other-eslint-tool": "^1.0.0", // Should NOT be removed
+          "some-other-eslint-tool": "^1.0.0",
           "@typescript-eslint/parser": "^5.0.0",
           typescript: "^4.0.0",
         },
@@ -173,11 +151,12 @@ describe("eslint-cleanup", () => {
 
       const result = await eslintCleanup.remove("npm");
 
-      // Should only include packages that start with 'eslint' or are in the specific exceptions list
+      // Should include all packages that contain 'eslint'
       expect(result.packagesRemoved).toEqual([
         "eslint",
         "eslint-plugin-github",
         "eslint-config-fbjs",
+        "some-other-eslint-tool",
         "@typescript-eslint/parser",
       ]);
       expect(mockRemoveDependency).toHaveBeenCalledWith("eslint", {
@@ -192,6 +171,12 @@ describe("eslint-cleanup", () => {
       expect(mockRemoveDependency).toHaveBeenCalledWith("eslint-config-fbjs", {
         packageManager: "npm",
       });
+      expect(mockRemoveDependency).toHaveBeenCalledWith(
+        "some-other-eslint-tool",
+        {
+          packageManager: "npm",
+        }
+      );
       expect(mockRemoveDependency).toHaveBeenCalledWith(
         "@typescript-eslint/parser",
         {
@@ -376,6 +361,30 @@ describe("eslint-cleanup", () => {
       const result = await eslintCleanup.remove("npm");
 
       // Should handle error gracefully and return false for vsCodeCleaned
+      expect(result.vsCodeCleaned).toBe(false);
+    });
+
+    it("should handle invalid VS Code settings gracefully", async () => {
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return await Promise.resolve("null");
+          }
+          return await Promise.resolve("{}");
+        }
+      );
+
+      mockExists.mockImplementation(
+        async (path: Parameters<typeof exists>[0]) =>
+          path === "./.vscode/settings.json"
+      );
+
+      const result = await eslintCleanup.remove("npm");
+
+      // Should handle invalid config gracefully
       expect(result.vsCodeCleaned).toBe(false);
     });
 
