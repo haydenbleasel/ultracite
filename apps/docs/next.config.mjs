@@ -8,8 +8,15 @@ const config = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "github.com",
+      },
+    ],
   },
 
+  // biome-ignore lint/suspicious/useAwait: "redirects is async"
   async rewrites() {
     return [
       {
