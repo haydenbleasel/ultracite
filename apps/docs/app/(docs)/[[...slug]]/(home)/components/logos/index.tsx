@@ -1,10 +1,17 @@
 import Image from "next/image";
+import {
+  Marquee,
+  MarqueeContent,
+  MarqueeFade,
+  MarqueeItem,
+} from "@/components/kibo-ui/marquee";
 import Adobe from "./adobe.svg";
 import Arcade from "./arcade.svg";
 import AlanTuringInstitute from "./ati.svg";
 import Axiom from "./axiom.svg";
 import Consent from "./consent.svg";
 import FrenchGovernment from "./french-government.svg";
+import MagicUI from "./magic-ui.svg";
 import Profound from "./profound.svg";
 import Tencent from "./tencent.svg";
 import VA from "./va.svg";
@@ -51,12 +58,16 @@ const logos = [
     name: "Axiom",
     src: Axiom,
   },
+  {
+    name: "Magic UI",
+    src: MagicUI,
+  },
 ];
 
 export const Logos = () => (
-  <div className="grid gap-8 px-8 py-16">
+  <div className="grid gap-12 px-8">
     <p className="text-center text-muted-foreground text-sm">
-      Used by these amazing companies and{" "}
+      Used by these organizations and{" "}
       <a
         className="underline"
         href="https://github.com/haydenbleasel/ultracite/network/dependents"
@@ -67,15 +78,22 @@ export const Logos = () => (
       </a>{" "}
       of open source projects.
     </p>
-    <div className="mx-auto grid max-w-5xl grid-cols-2 flex-col items-center gap-16 sm:grid-cols-3 md:grid-cols-5">
-      {logos.map((item) => (
-        <Image
-          alt=""
-          className="w-full dark:brightness-0 dark:invert"
-          key={item.name}
-          src={item.src}
-        />
-      ))}
+    <div className="flex size-full items-center justify-center bg-background">
+      <Marquee>
+        <MarqueeFade side="left" />
+        <MarqueeFade side="right" />
+        <MarqueeContent pauseOnHover={false}>
+          {logos.map((item) => (
+            <MarqueeItem key={item.name}>
+              <Image
+                alt={item.name}
+                className="mx-8 h-8 w-auto dark:brightness-0 dark:invert"
+                src={item.src}
+              />
+            </MarqueeItem>
+          ))}
+        </MarqueeContent>
+      </Marquee>
     </div>
   </div>
 );

@@ -6,18 +6,16 @@ import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
 import { Logos } from "./components/logos";
 import { Tweets } from "./components/tweets";
-import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="relative grid divide-y divide-dotted">
+  <div className="container relative mx-auto grid gap-24 py-16">
     <Hero />
     <Logos />
     <Benefits />
     <ZeroConfig />
     <IDE />
     <Agents />
-    <Videos />
     <Tweets />
     <CallToAction />
     <Footer />
