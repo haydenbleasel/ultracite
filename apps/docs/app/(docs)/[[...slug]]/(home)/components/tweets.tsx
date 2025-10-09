@@ -40,17 +40,17 @@ const tweets = [
 ];
 
 export const Tweets = () => (
-  <div className="grid gap-8">
-    <div>
-      <h2 className="font-semibold text-4xl tracking-tight">
+  <div className="grid gap-16">
+    <div className="mx-auto grid max-w-3xl gap-4 text-center">
+      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
         What the community is saying
       </h2>
-      <p className="mt-4 text-balance text-muted-foreground sm:text-lg">
-        Here's what some of the most FORWARD-THINKING, 1000 IQ developers in the
-        React ecosystem have to say about Ultracite.
+      <p className="text-balance text-lg text-muted-foreground sm:text-xl">
+        Here's what some of the most in the most forward-thinking developers in
+        the React ecosystem have to say about Ultracite.
       </p>
     </div>
-    <div className="sm:col-span-2 lg:columns-2 xl:columns-3">
+    <div className="lg:columns-2 xl:columns-3">
       {tweets.map((tweet, index) => (
         <div
           className={cn(

@@ -9,10 +9,10 @@ const config = `{
 export const ZeroConfig = async () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-2xl gap-4 text-center">
-      <h2 className="font-semibold text-4xl tracking-tight">
+      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
         Zero-config by design
       </h2>
-      <p className="text-muted-foreground text-xl">
+      <p className="text-lg text-muted-foreground sm:text-xl">
         Ultracite preconfigures over 300 rules to optimize your Next.js, React
         and TypeScript code, while still allowing you to customize when needed.
       </p>

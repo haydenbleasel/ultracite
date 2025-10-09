@@ -9,7 +9,7 @@ import { Tweets } from "./components/tweets";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="container relative mx-auto grid gap-32 py-16">
+  <div className="container relative mx-auto grid gap-24 py-16 sm:gap-32">
     <Hero />
     <Logos />
     <Comparison />

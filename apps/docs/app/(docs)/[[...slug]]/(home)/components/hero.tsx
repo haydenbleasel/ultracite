@@ -27,9 +27,9 @@ export const Hero = () => {
   const activeVideo = videos.find((v) => v.id === video);
 
   return (
-    <div className="grid grid-cols-2 items-center gap-8">
+    <div className="grid items-center gap-8 lg:grid-cols-2">
       <div className="grid gap-6">
-        <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! sm:text-5xl! md:text-6xl!">
+        <h1 className="mb-0 text-balance font-semibold text-4xl! tracking-tighter! md:text-5xl! xl:text-6xl!">
           A highly opinionated, zero-configuration linter and formatter
         </h1>
         <p className="max-w-xl text-muted-foreground md:text-xl">
@@ -40,7 +40,7 @@ export const Hero = () => {
           , designed to help you and your AI models write consistent and
           type-safe code without the hassle of configuration.
         </p>
-        <div className="flex w-full max-w-lg flex-col items-center gap-4 sm:flex-row">
+        <div className="flex w-full max-w-lg items-center gap-4">
           <Installer />
           <Button asChild className="px-4" size="lg" variant="outline">
             <Link href="/introduction">Read the docs</Link>
