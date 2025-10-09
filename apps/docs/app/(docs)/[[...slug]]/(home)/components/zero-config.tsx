@@ -7,14 +7,14 @@ const config = `{
 }`;
 
 export const ZeroConfig = async () => (
-  <div className="grid gap-8 px-8 py-16">
+  <div className="grid gap-8">
     <div className="mx-auto grid max-w-2xl gap-4 text-center">
-      <h2 className="font-semibold text-4xl tracking-tight">
+      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
         Zero-config by design
       </h2>
-      <p className="text-muted-foreground text-xl">
-        Preconfigured rules optimized for Next.js, React and TypeScript projects
-        with sensible defaults, while still allowing customization when needed.
+      <p className="text-lg text-muted-foreground sm:text-xl">
+        Ultracite preconfigures over 300 rules to optimize your Next.js, React
+        and TypeScript code, while still allowing you to customize when needed.
       </p>
     </div>
     <DynamicCodeBlock
@@ -27,5 +27,8 @@ export const ZeroConfig = async () => (
       }}
       lang="json"
     />
+    <p className="text-center text-muted-foreground text-sm">
+      👆 Yes this is literally all you need.
+    </p>
   </div>
 );

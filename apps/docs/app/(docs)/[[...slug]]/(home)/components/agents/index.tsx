@@ -98,12 +98,12 @@ const row1 = logos.slice(0, HALF);
 const row2 = logos.slice(HALF);
 
 export const Agents = () => (
-  <div className="grid gap-16 px-8 py-16">
+  <div className="grid gap-16">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="font-semibold text-4xl tracking-tight">
+      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
         Works with all your favourite agents
       </h2>
-      <p className="text-balance text-muted-foreground text-xl">
+      <p className="text-balance text-lg text-muted-foreground sm:text-xl">
         Ultracite can generate rules files for all these popular IDEs and
         agents, so you can get the most of out of your AI integrations.
       </p>
