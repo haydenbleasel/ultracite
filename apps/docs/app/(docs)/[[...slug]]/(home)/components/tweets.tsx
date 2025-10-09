@@ -1,4 +1,7 @@
-import { Tweet } from "react-tweet";
+import { unstable_cache } from "next/cache";
+import { Suspense } from "react";
+import { EmbeddedTweet, TweetNotFound, TweetSkeleton } from "react-tweet";
+import { getTweet as _getTweet } from "react-tweet/api";
 import { cn } from "@/lib/utils";
 
 const tweets = [
@@ -37,7 +40,90 @@ const tweets = [
   "1938493510736335220",
   "1939794667484156350",
   "1940543658333499717",
+  "1976056982823153764",
+  "1975063806620667993",
+  "1975059814242988520",
+  "1974825753675235805",
+  "1974601753514696795",
+  "1973841395170619679",
+  "1973479795548889562",
+  "1972834428759196113",
+  "1972530565321781720",
+  "1972530006405603501",
+  "1971244568147325438",
+  "1970850976174362652",
+  "1970785098875457672",
+  "1970700608719241725",
+  "1970603186575810806",
+  "1970560665518776702",
+  "1970087571859410966",
+  "1969799814066971077",
+  "1969727618237820980",
+  "1969425185922302213",
+  "1968013078643245208",
+  "1964779171236004162",
+  "1964776512160403462",
+  "1964380227511132318",
+  "1963608887661400244",
+  "1963034609203241096",
+  "1961867198424850756",
+  "1961703060360581174",
+  "1961565347493842993",
+  "1961354988786983341",
+  "1961199901737439518",
+  "1961198608402808872",
+  "1960997961711677659",
+  "1959409721053446340",
+  "1959306835741090279",
+  "1958045598252491251",
+  "1957248609105199349",
+  "1957189301545877911",
+  "1957129283492810970",
+  "1956309638762074403",
+  "1956173868420534665",
+  "1955716115025551511",
+  "1955631737826119936",
+  "1955630606102167895",
+  "1955626222840648072",
+  "1955312886265368856",
+  "1954559694955045063",
+  "1953784139444007350",
+  "1951513091625074849",
+  "1950835367902679471",
+  "1950129278147850354",
+  "1949953704070701468",
+  "1948134106933387586",
+  "1948134103297237467",
+  "1946689071033565282",
+  "1946566402959192360",
+  "1946123055048110168",
+  "1945701700612010277",
+  "1945366961514508684",
+  "1945296786077229295",
+  "1944409462145499557",
+  "1944387854131442123",
+  "1955313141786583080",
+  "1943690477112348694",
+  "1942114477488374069",
+  "1941908759174918376",
+  "1941620408781803815",
 ];
+
+const getTweet = unstable_cache(
+  async (id: string) => _getTweet(id),
+  ["tweet"],
+  { revalidate: 3600 * 24 }
+);
+
+const Tweet = async ({ id }: { id: string }) => {
+  try {
+    const tweet = await getTweet(id);
+    return tweet ? <EmbeddedTweet tweet={tweet} /> : <TweetNotFound />;
+  } catch (error) {
+    console.error(error);
+    return <TweetNotFound error={error} />;
+  }
+};
 
 export const Tweets = () => (
   <div className="grid gap-16">
@@ -52,17 +138,18 @@ export const Tweets = () => (
     </div>
     <div className="lg:columns-2 xl:columns-3">
       {tweets.map((tweet, index) => (
-        <div
-          className={cn(
-            "[&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:bg-transparent!",
-            index
-              ? "[&_.react-tweet-theme]:border-border!"
-              : "[&_.react-tweet-theme]:border-foreground! [&_.react-tweet-theme]:shadow-foreground/20! [&_.react-tweet-theme]:shadow-lg!"
-          )}
-          key={tweet}
-        >
-          <Tweet id={tweet} key={tweet} />
-        </div>
+        <Suspense fallback={<TweetSkeleton />} key={tweet}>
+          <div
+            className={cn(
+              "[&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:bg-transparent!",
+              index
+                ? "[&_.react-tweet-theme]:border-border!"
+                : "[&_.react-tweet-theme]:border-foreground! [&_.react-tweet-theme]:shadow-foreground/20! [&_.react-tweet-theme]:shadow-lg!"
+            )}
+          >
+            <Tweet id={tweet} />
+          </div>
+        </Suspense>
       ))}
     </div>
   </div>
