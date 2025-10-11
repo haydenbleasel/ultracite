@@ -10,8 +10,6 @@ Ultracite is a zero-config [Biome](https://biomejs.dev) preset that provides a r
   <img src="https://img.shields.io/github/license/haydenbleasel/ultracite" alt="" />
 </div>
 
-![Ultracite](./docs/app/opengraph-image.jpg)
-
 ## Quick Start
 
 Install and initialize Ultracite in your project:
