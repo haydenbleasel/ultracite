@@ -1,8 +1,8 @@
 # Ultracite
 
-**The AI-ready formatter that helps you write and generate code _faster_.**
+**A highly opinionated, zero-configuration linter and formatter.**
 
-Ultracite is a zero-config [Biome](https://biomejs.dev) preset that provides a robust linting and formatting experience for your team and your AI integrations. Built in Rust for lightning-fast performance, it automatically formats your code and fixes lint issues on save without interrupting your workflow.
+Ultracite is a highly opinionated preset for [Biome](https://biomejs.dev), designed to help you and your AI models write consistent and type-safe code without the hassle of configuration.
 
 <div>
   <img src="https://img.shields.io/npm/dy/ultracite" alt="" />
