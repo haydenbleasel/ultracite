@@ -80,4 +80,8 @@ alwaysApply: true
     path: "./.goosehints",
     appendMode: true,
   },
+  "roo-code": {
+    path: "./.roo/rules/ultracite.md",
+    appendMode: true,
+  },
 } as const;

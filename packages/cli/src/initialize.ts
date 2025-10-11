@@ -424,6 +424,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       augmentcode: "Augment Code",
       "kilo-code": "Kilo Code",
       goose: "Codename Goose",
+      "roo-code": "Roo Code",
     } as const;
 
     if (!editorRules) {

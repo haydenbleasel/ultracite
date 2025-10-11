@@ -21,6 +21,7 @@ export const options = {
     "augmentcode",
     "kilo-code",
     "goose",
+    "roo-code",
   ] as const,
   integrations: ["husky", "lefthook", "lint-staged"] as const,
 };
