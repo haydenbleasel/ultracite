@@ -1,5 +1,14 @@
 ## 5.6.0
 
+## 5.6.2
+
+### Patch Changes
+
+- 7b515fe: Disable useAwait rule in next config files
+- 7b515fe: Improve test coverage
+- c3a9dad: Bump deps
+- 3faa8c2: Add Roo Code editor rules support
+
 ## 5.6.1
 
 ### Patch Changes
