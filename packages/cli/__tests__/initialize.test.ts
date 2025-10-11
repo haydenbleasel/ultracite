@@ -638,4 +638,148 @@ describe("initialize command", () => {
       );
     });
   });
+
+  describe("user cancellation handling", () => {
+    it("should handle user canceling migration options prompt", async () => {
+      const { cancel, isCancel } = await import("@clack/prompts");
+      const mockCancel = vi.mocked(cancel);
+      const mockIsCancel = vi.mocked(isCancel);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "npm",
+        command: "npm",
+        lockFile: "package-lock.json",
+        majorVersion: "9",
+      });
+
+      // Mock Prettier and ESLint as existing so prompt is shown
+      const { prettierCleanup } = await import("../src/migrations/prettier");
+      const { eslintCleanup } = await import("../src/migrations/eslint");
+      vi.mocked(prettierCleanup.hasPrettier).mockResolvedValue(true);
+      vi.mocked(eslintCleanup.hasEsLint).mockResolvedValue(true);
+
+      // User cancels the migration options prompt
+      mockMultiselect.mockResolvedValueOnce(Symbol.for("cancel"));
+      mockIsCancel.mockReturnValueOnce(true);
+
+      await initialize();
+
+      expect(mockCancel).toHaveBeenCalledWith("Operation cancelled.");
+      expect(mockProcessExit).toHaveBeenCalledWith(0);
+    });
+
+    it("should handle user canceling editor config prompt", async () => {
+      const { cancel, isCancel } = await import("@clack/prompts");
+      const mockCancel = vi.mocked(cancel);
+      const mockIsCancel = vi.mocked(isCancel);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "npm",
+        command: "npm",
+        lockFile: "package-lock.json",
+        majorVersion: "9",
+      });
+
+      // First prompt succeeds (or is not shown)
+      mockMultiselect
+        .mockResolvedValueOnce([]) // migration options
+        .mockResolvedValueOnce(Symbol.for("cancel")); // editor config - user cancels
+
+      mockIsCancel.mockReturnValueOnce(false).mockReturnValueOnce(true);
+
+      await initialize();
+
+      expect(mockCancel).toHaveBeenCalledWith("Operation cancelled.");
+      expect(mockProcessExit).toHaveBeenCalledWith(0);
+    });
+
+    it("should handle user canceling editor rules prompt", async () => {
+      const { cancel, isCancel } = await import("@clack/prompts");
+      const mockCancel = vi.mocked(cancel);
+      const mockIsCancel = vi.mocked(isCancel);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "npm",
+        command: "npm",
+        lockFile: "package-lock.json",
+        majorVersion: "9",
+      });
+
+      mockMultiselect
+        .mockResolvedValueOnce([]) // migration options
+        .mockResolvedValueOnce([]) // editor config
+        .mockResolvedValueOnce(Symbol.for("cancel")); // editor rules - user cancels
+
+      mockIsCancel
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true);
+
+      await initialize();
+
+      expect(mockCancel).toHaveBeenCalledWith("Operation cancelled.");
+      expect(mockProcessExit).toHaveBeenCalledWith(0);
+    });
+
+    it("should handle user canceling integrations prompt", async () => {
+      const { cancel, isCancel } = await import("@clack/prompts");
+      const mockCancel = vi.mocked(cancel);
+      const mockIsCancel = vi.mocked(isCancel);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "npm",
+        command: "npm",
+        lockFile: "package-lock.json",
+        majorVersion: "9",
+      });
+
+      mockMultiselect
+        .mockResolvedValueOnce([]) // migration options
+        .mockResolvedValueOnce([]) // editor config
+        .mockResolvedValueOnce([]) // editor rules
+        .mockResolvedValueOnce(Symbol.for("cancel")); // integrations - user cancels
+
+      mockIsCancel
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true);
+
+      await initialize();
+
+      expect(mockCancel).toHaveBeenCalledWith("Operation cancelled.");
+      expect(mockProcessExit).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe("VSCode extension installation", () => {
+    it("should handle VSCode extension installation failure gracefully", async () => {
+      const { vscode } = await import("../src/editor-config/vscode");
+      vi.mocked(vscode.extension).mockImplementation(() => {
+        throw new Error("Extension installation failed");
+      });
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "npm",
+        command: "npm",
+        lockFile: "package-lock.json",
+        majorVersion: "9",
+      });
+
+      await initialize({
+        pm: "npm",
+        editors: ["vscode"],
+        rules: [],
+        integrations: [],
+      });
+
+      // Should continue despite extension installation failure
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+      expect(mockSpinnerInstance.stop).toHaveBeenCalledWith(
+        expect.stringContaining("Failed to install Biome extension")
+      );
+    });
+  });
 });

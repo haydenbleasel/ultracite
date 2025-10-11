@@ -118,4 +118,55 @@ describe("CLI Router", () => {
     // The fact that we can import the module without errors
     // and that our other tests work proves that line 99 is not executed
   });
+
+  it("should have deprecated lint command with warning", async () => {
+    const { router } = await import("../src/index");
+    const procedures = router._def.procedures as any;
+
+    // Check lint procedure metadata (deprecated)
+    expect(procedures.lint._def.meta.description).toContain("DEPRECATED");
+    expect(procedures.lint._def.meta.description).toContain("check");
+  });
+
+  it("should have deprecated format command with warning", async () => {
+    const { router } = await import("../src/index");
+    const procedures = router._def.procedures as any;
+
+    // Check format procedure metadata (deprecated)
+    expect(procedures.format._def.meta.description).toContain("DEPRECATED");
+    expect(procedures.format._def.meta.description).toContain("fix");
+  });
+
+  it("should call check when deprecated lint command is used", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+    const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
+
+    const files = ["src/index.ts"];
+    await caller.lint(files);
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
+    );
+    expect(mockCheck).toHaveBeenCalledWith(files);
+
+    consoleWarnSpy.mockRestore();
+  });
+
+  it("should call fix when deprecated format command is used", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+    const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
+
+    const files = ["src/index.ts"];
+    const opts = { unsafe: true };
+    await caller.format([files, opts]);
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
+    );
+    expect(mockFix).toHaveBeenCalledWith(files, { unsafe: true });
+
+    consoleWarnSpy.mockRestore();
+  });
 });

@@ -439,7 +439,7 @@ describe("lint-staged configuration", () => {
   // Package configuration
   "name": "test-project",
   "version": "1.0.0",
-  
+
   /* Lint-staged configuration */
   "lint-staged": {
     // JavaScript files
@@ -465,6 +465,182 @@ describe("lint-staged configuration", () => {
           "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}"
         ]
       ).toEqual(["npx ultracite fix"]);
+    });
+
+    it("should handle invalid JSON in package.json gracefully", async () => {
+      mockExists.mockResolvedValueOnce(true); // package.json exists
+      mockReadFile.mockResolvedValue("null");
+
+      await lintStaged.update("npm");
+
+      // Should not throw, but not write anything either since parsing failed
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    it("should handle invalid JSON in .lintstagedrc.json gracefully", async () => {
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(true); // .lintstagedrc.json
+
+      mockReadFile.mockResolvedValue("null");
+
+      await lintStaged.update("npm");
+
+      // Should not throw, but not write anything either since parsing failed
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    it("should handle invalid YAML gracefully", async () => {
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(false) // lint-staged.config.cjs
+        .mockResolvedValueOnce(false) // lint-staged.config.mjs
+        .mockResolvedValueOnce(true); // .lintstagedrc.yaml
+
+      mockReadFile.mockResolvedValue("null");
+
+      await lintStaged.update("npm");
+
+      // The simple YAML parser will still parse "null" as a string value
+      // which will be written. The parser doesn't validate YAML structure deeply.
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    it("should handle .yml extension for YAML files", async () => {
+      const yamlContent = `'*.js':
+  - 'eslint --fix'`;
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(false) // lint-staged.config.cjs
+        .mockResolvedValueOnce(false) // lint-staged.config.mjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.yaml
+        .mockResolvedValueOnce(true); // .lintstagedrc.yml
+
+      mockReadFile.mockResolvedValue(yamlContent);
+
+      await lintStaged.update("npm");
+
+      expect(mockReadFile).toHaveBeenCalledWith("./.lintstagedrc.yml", "utf-8");
+      const writtenContent = mockWriteFile.mock.calls[0][1] as string;
+      expect(writtenContent).toContain("*.js:");
+    });
+
+    it("should handle .js file in CommonJS project", async () => {
+      // Mock project as CommonJS
+      const packageJsonContent = JSON.stringify({ type: "commonjs" });
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(true); // .lintstagedrc.js
+
+      mockReadFile.mockResolvedValueOnce(packageJsonContent); // For ESM check
+
+      await lintStaged.update("npm");
+
+      // Should create fallback config due to require error
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        ".lintstagedrc.json",
+        JSON.stringify(defaultConfig, null, 2)
+      );
+    });
+
+    it("should handle .mjs file in CommonJS project", async () => {
+      // Mock project as CommonJS (no type field = commonjs)
+      const packageJsonContent = JSON.stringify({});
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(true); // .lintstagedrc.mjs (ESM file)
+
+      mockReadFile.mockResolvedValueOnce(packageJsonContent); // For ESM check
+
+      await lintStaged.update("npm");
+
+      // Should try to update the .mjs file via ESM import
+      // If it fails, will fall back to creating .lintstagedrc.json
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    it("should handle .cjs file explicitly", async () => {
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(true); // .lintstagedrc.cjs
+
+      await lintStaged.update("npm");
+
+      // Should create fallback config due to require error
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    it("should handle lint-staged.config.js", async () => {
+      const packageJsonContent = JSON.stringify({});
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(true); // lint-staged.config.js
+
+      mockReadFile.mockResolvedValueOnce(packageJsonContent);
+
+      await lintStaged.update("npm");
+
+      // Should fall back to creating .lintstagedrc.json
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    it("should handle lint-staged.config.cjs", async () => {
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(true); // lint-staged.config.cjs
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    it("should handle lint-staged.config.mjs", async () => {
+      const packageJsonContent = JSON.stringify({});
+
+      mockExists
+        .mockResolvedValueOnce(false) // package.json (for config check)
+        .mockResolvedValueOnce(false) // .lintstagedrc.json
+        .mockResolvedValueOnce(false) // .lintstagedrc.js
+        .mockResolvedValueOnce(false) // .lintstagedrc.cjs
+        .mockResolvedValueOnce(false) // .lintstagedrc.mjs
+        .mockResolvedValueOnce(false) // lint-staged.config.js
+        .mockResolvedValueOnce(false) // lint-staged.config.cjs
+        .mockResolvedValueOnce(true); // lint-staged.config.mjs
+
+      mockReadFile.mockResolvedValueOnce(packageJsonContent);
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).toHaveBeenCalled();
     });
   });
 });
