@@ -18,6 +18,7 @@ import junie from "./logos/junie.svg";
 import kilo from "./logos/kilo-code.svg";
 import kiro from "./logos/kiro.svg";
 import open from "./logos/open-hands.svg";
+import roo from "./logos/roo-code.svg";
 import vscode from "./logos/vscode.svg";
 import windsurf from "./logos/windsurf.svg";
 import zed from "./logos/zed.svg";
@@ -90,6 +91,10 @@ const logos = [
   {
     name: "Codename Goose",
     src: goose,
+  },
+  {
+    name: "Roo Code",
+    src: roo,
   },
 ];
 
