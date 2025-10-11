@@ -2,13 +2,22 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "root": true,
   "extends": ["./packages/cli/biome.jsonc"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        // Needed for CLI
+        "noConsole": "off"
+      }
+    }
+  },
   "files": {
     "includes": [
       "**/*",
       "!apps/docs/components/ai-elements",
       "!apps/docs/components/ui",
       "!apps/docs/lib/utils.ts",
-      "!apps/docs/hooks/use-mobile.ts"
+      "!apps/docs/hooks/use-mobile.ts",
+      "!test/*"
     ]
   }
 }

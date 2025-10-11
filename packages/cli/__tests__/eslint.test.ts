@@ -417,5 +417,37 @@ describe("eslint-cleanup", () => {
       expect(result.vsCodeCleaned).toBe(false);
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
+
+    it("should handle file deletion errors gracefully", async () => {
+      const packageJson = {
+        devDependencies: {
+          eslint: "^8.0.0",
+        },
+      };
+
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return JSON.stringify(packageJson);
+          }
+          return await Promise.resolve("{}");
+        }
+      );
+
+      mockExists.mockImplementation(
+        async (path: Parameters<typeof exists>[0]) => path === ".eslintrc.js"
+      );
+
+      mockUnlink.mockRejectedValue(new Error("Permission denied"));
+      mockRemoveDependency.mockResolvedValue();
+
+      const result = await eslintCleanup.remove("npm");
+
+      // Should continue despite file deletion error
+      expect(result.packagesRemoved).toEqual(["eslint"]);
+      // File wasn't removed due to error, but error was caught
+      expect(result.filesRemoved).toEqual([]);
+      expect(mockUnlink).toHaveBeenCalledWith(".eslintrc.js");
+    });
   });
 });
