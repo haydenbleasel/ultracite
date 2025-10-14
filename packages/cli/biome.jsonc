@@ -434,14 +434,16 @@
         "useImageSize": "error",
         // Enforce a maximum number of parameters in function definitions.
         "useMaxParams": "error",
-        // Prefer using the class prop as a classlist over the classnames helper.
-        "useQwikClasslist": "error",
-        // Disallow unserializable expressions in Qwik dollar ($) scopes.
-        "useQwikValidLexicalScope": "error",
-        // Disallow use* hooks outside of component$ or other use* hooks in Qwik applications.
-        "useQwikMethodUsage": "error",
         // Enforce that components are defined as functions and never as classes.
         "useReactFunctionComponents": "error",
+
+        /* Temporarily disabled until we have framework rules */
+        // Prefer using the class prop as a classlist over the classnames helper.
+        "useQwikClasslist": "off",
+        // Disallow unserializable expressions in Qwik dollar ($) scopes.
+        "useQwikValidLexicalScope": "off",
+        // Disallow use* hooks outside of component$ or other use* hooks in Qwik applications.
+        "useQwikMethodUsage": "off",
 
         // Disallow string literals inside JSX elements.
         "noJsxLiterals": "off",
