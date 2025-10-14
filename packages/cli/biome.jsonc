@@ -426,6 +426,8 @@
             "style": "type"
           }
         },
+        // Require the @deprecated directive to specify a deletion date.
+        "useDeprecatedDate": "error",
         // Require switch-case statements to be exhaustive.
         "useExhaustiveSwitchCases": "error",
         // Enforces that <img> elements have both width and height attributes.
@@ -434,6 +436,10 @@
         "useMaxParams": "error",
         // Prefer using the class prop as a classlist over the classnames helper.
         "useQwikClasslist": "error",
+        // Disallow unserializable expressions in Qwik dollar ($) scopes.
+        "useQwikValidLexicalScope": "error",
+        // Disallow use* hooks outside of component$ or other use* hooks in Qwik applications.
+        "useQwikMethodUsage": "error",
         // Enforce that components are defined as functions and never as classes.
         "useReactFunctionComponents": "error",
 
