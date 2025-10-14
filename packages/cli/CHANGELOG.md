@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 5.6.3
+
+### Patch Changes
+
+- a167b1c: Update Biome to 2.2.6
+
 ## 5.6.2
 
 ### Patch Changes
