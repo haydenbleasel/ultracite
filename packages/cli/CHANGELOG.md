@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 5.6.4
+
+### Patch Changes
+
+- 679719b: Temporarily disable Qwik rules
+
 ## 5.6.3
 
 ### Patch Changes
