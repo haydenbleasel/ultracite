@@ -1,0 +1,212 @@
+---
+title: Next.js
+description: Next.js-specific linting rules for Ultracite.
+---
+
+The Next.js configuration (`ultracite/next`) extends the base Ultracite preset with Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+
+## Installation
+
+Add the Next.js configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/next"]
+}
+```
+
+Note: The Next.js configuration automatically includes React rules, so you don't need to add `ultracite/react` separately.
+
+## Overview
+
+This configuration adds rules specific to Next.js development:
+
+- **Image Optimization**: Enforce use of Next.js Image component
+- **Document Structure**: Prevent improper usage of Next.js special components
+- **Client Components**: Ensure async client components are handled correctly
+- **Configuration Files**: Special handling for `next.config.*` files
+
+## Next.js-Specific Rules
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Prevent async client components in Next.js. Client components should be synchronous; use server components for async operations. |
+
+### Performance
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noImgElement` | `error` | Disallow use of `<img>` HTML element. Use Next.js `<Image>` component instead for automatic image optimization. |
+
+### Style
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Disallow use of `<head>` HTML element. Use Next.js `next/head` or App Router metadata API instead. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Prevent importing `next/document` in page files. `_document.tsx` should only exist in `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Prevent importing `next/head` in `_document.tsx`. Use `<Head>` from `next/document` instead. |
+
+## Configuration File Overrides
+
+The Next.js preset includes special handling for `next.config.*` files:
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+This allows for Next.js configuration patterns that might not typically pass linting rules.
+
+## Usage Examples
+
+### Image Component
+
+```tsx
+// Bad: HTML img element
+export const Avatar = ({ src, alt }: AvatarProps) => {
+  return <img src={src} alt={alt} />;
+};
+
+// Good: Next.js Image component
+import Image from 'next/image';
+
+export const Avatar = ({ src, alt }: AvatarProps) => {
+  return <Image src={src} alt={alt} width={100} height={100} />;
+};
+```
+
+### Metadata API (App Router)
+
+```tsx
+// Bad: Using HTML head element
+export const MyPage = () => {
+  return (
+    <>
+      <head>
+        <title>My Page</title>
+      </head>
+      <main>Content</main>
+    </>
+  );
+};
+
+// Good: Using Next.js metadata
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'My Page',
+};
+
+export const MyPage = () => {
+  return <main>Content</main>;
+};
+```
+
+### Client Components
+
+```tsx
+// Bad: Async client component
+'use client';
+
+export const UserProfile = async ({ userId }: UserProfileProps) => {
+  const user = await fetchUser(userId);
+  return <div>{user.name}</div>;
+};
+
+// Good: Keep server components async, client components sync
+// app/user/[userId]/page.tsx (Server Component)
+export const UserPage = async ({ params }: { params: { userId: string } }) => {
+  const user = await fetchUser(params.userId);
+  return <UserProfile user={user} />;
+};
+
+// components/user-profile.tsx (Client Component)
+'use client';
+
+export const UserProfile = ({ user }: { user: User }) => {
+  return <div>{user.name}</div>;
+};
+```
+
+### Document Structure
+
+```tsx
+// Bad: Importing next/document in a page
+// pages/index.tsx
+import Document from 'next/document';
+
+export const HomePage = () => {
+  return <div>Home</div>;
+};
+
+// Good: Only use next/document in _document.tsx
+// pages/_document.tsx
+import { Html, Head, Main, NextScript } from 'next/document';
+
+const Document = () => {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+};
+
+export default Document;
+```
+
+## Combining with Other Configurations
+
+The Next.js configuration works well with router configurations:
+
+```jsonc title="biome.jsonc"
+{
+  // Next.js with TanStack Router
+  "extends": ["ultracite", "ultracite/next", "ultracite/router"]
+}
+```
+
+## Customization
+
+To override specific Next.js rules:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/next"],
+  "linter": {
+    "rules": {
+      "performance": {
+        "noImgElement": "warn"
+      }
+    }
+  }
+}
+```
+
+## Related Configurations
+
+- [Core Configuration](/core) - Base Ultracite rules
+- [React Configuration](/react) - React-specific rules (included automatically)
+- [Configuration Guide](/configuration) - General configuration options

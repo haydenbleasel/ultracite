@@ -1,0 +1,196 @@
+---
+title: Remix
+description: Remix-specific linting rules for Ultracite (also compatible with TanStack Router and React Router).
+---
+
+The Remix configuration (`ultracite/remix`) extends the base Ultracite preset with file naming conventions for route files. This configuration is also compatible with TanStack Router, React Router, and other file-based routing systems.
+
+## Installation
+
+Add the Remix configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/remix"]
+}
+```
+
+For React Router or TanStack Router projects, you can also use the `router` alias:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/router"]
+}
+```
+
+## Overview
+
+This configuration provides special handling for route files that use filesystem-based routing conventions:
+
+- **Route File Naming**: Disables strict filename conventions for route files
+- **Flexible Patterns**: Supports Remix's route naming patterns (dots, dollars, underscores)
+- **Framework Agnostic**: Works with Remix, TanStack Router, React Router, and similar systems
+
+## File Pattern Overrides
+
+The configuration applies overrides to route files in these patterns:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Disabled Rules for Route Files
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Disable kebab-case filename enforcement for route files. Allows special route naming patterns. |
+
+## Why This Configuration Exists
+
+File-based routing systems use special characters in filenames to represent routing patterns:
+
+- `.` (dot) - Represents path segments (e.g., `posts.new.tsx` → `/posts/new`)
+- `$` (dollar) - Represents dynamic segments (e.g., `posts.$id.tsx` → `/posts/:id`)
+- `_` (underscore) - Represents layout routes or pathless routes
+
+These naming conventions conflict with Ultracite's default kebab-case filename requirement, so this configuration disables that rule specifically for route files.
+
+## Usage Examples
+
+### Remix Route Files
+
+```tsx
+// app/routes/_index.tsx
+// Route: /
+export default function Index() {
+  return <h1>Home</h1>;
+}
+
+// app/routes/posts._index.tsx
+// Route: /posts
+export default function PostsIndex() {
+  return <h1>All Posts</h1>;
+}
+
+// app/routes/posts.$postId.tsx
+// Route: /posts/:postId
+export default function Post() {
+  return <h1>Post Detail</h1>;
+}
+
+// app/routes/posts.$postId.edit.tsx
+// Route: /posts/:postId/edit
+export default function EditPost() {
+  return <h1>Edit Post</h1>;
+}
+
+// app/routes/_auth.login.tsx
+// Nested under _auth layout, route: /login
+export default function Login() {
+  return <h1>Login</h1>;
+}
+```
+
+### TanStack Router Files
+
+```tsx
+// src/routes/index.tsx
+// Route: /
+export const Route = createFileRoute('/')({
+  component: Index,
+});
+
+// src/routes/posts/$postId.tsx
+// Route: /posts/:postId
+export const Route = createFileRoute('/posts/$postId')({
+  component: PostDetail,
+});
+
+// src/routes/posts/$postId.edit.tsx
+// Route: /posts/:postId/edit
+export const Route = createFileRoute('/posts/$postId/edit')({
+  component: EditPost,
+});
+```
+
+### React Router Files
+
+```tsx
+// src/routes/posts/[id].tsx
+// Route: /posts/:id
+export default function Post() {
+  return <h1>Post</h1>;
+}
+
+// src/routes/posts/[id]/edit.tsx
+// Route: /posts/:id/edit
+export default function EditPost() {
+  return <h1>Edit Post</h1>;
+}
+```
+
+## Custom Route Patterns
+
+If your project uses different route patterns, you can customize the configuration:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/remix"],
+  "overrides": [
+    {
+      // Add your custom route patterns
+      "includes": [
+        "**/pages/**/*.{tsx,ts}",
+        "**/src/routes/**/*.{tsx,ts}"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+## Combining with Other Configurations
+
+This configuration works well with framework-specific configs:
+
+```jsonc title="biome.jsonc"
+{
+  // Remix with React rules
+  "extends": ["ultracite", "ultracite/react", "ultracite/remix"]
+}
+```
+
+```jsonc title="biome.jsonc"
+{
+  // TanStack Router with React rules
+  "extends": ["ultracite", "ultracite/react", "ultracite/router"]
+}
+```
+
+## File Naming Outside Routes
+
+This configuration only affects files in the `routes` directory. Other files in your project still follow the standard kebab-case naming convention:
+
+```
+✓ app/routes/posts.$postId.tsx       (route file - flexible naming)
+✓ app/components/post-card.tsx       (component - kebab-case)
+✓ app/utils/format-date.ts           (utility - kebab-case)
+✗ app/components/PostCard.tsx        (component - should be kebab-case)
+```
+
+## Related Configurations
+
+- [Core Configuration](/core) - Base Ultracite rules
+- [React Configuration](/react) - React-specific rules
+- [Configuration Guide](/configuration) - General configuration options
+
+## Learn More
+
+- [Remix Route File Naming](https://remix.run/docs/en/main/file-conventions/routes)
+- [TanStack Router File Routes](https://tanstack.com/router/latest/docs/framework/react/guide/file-based-routing)
+- [React Router v6 Routes](https://reactrouter.com/en/main/route/route)

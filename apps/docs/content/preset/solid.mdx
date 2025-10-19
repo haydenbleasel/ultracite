@@ -1,0 +1,212 @@
+---
+title: Solid
+description: Solid.js-specific linting rules for Ultracite.
+---
+
+The Solid configuration (`ultracite/solid`) extends the base Ultracite preset with Solid.js-specific linting rules for reactivity, component patterns, and JSX handling.
+
+## Installation
+
+Add the Solid configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/solid"]
+}
+```
+
+## Overview
+
+This configuration adds rules specific to Solid.js development:
+
+- **Reactivity Rules**: Enforce proper use of Solid's reactive primitives
+- **Component Patterns**: Ensure Solid components follow best practices
+- **Props Handling**: Prevent destructuring props (breaks reactivity)
+- **React-Specific Props**: Disallow React-specific props in Solid components
+
+## Solid-Specific Rules
+
+### Correctness
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Prevent destructuring props in Solid components. Destructuring breaks Solid's reactivity system. Access props directly instead. |
+
+### Performance
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Enforce using `<For>` component for iterating over arrays in Solid. The `<For>` component is optimized for Solid's reactivity. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Disallow React-specific props like `className` and `htmlFor` in Solid. Use `class` and `for` instead. |
+
+## Usage Examples
+
+### Props Destructuring
+
+```tsx
+// Bad: Destructuring props breaks reactivity
+import { Component } from 'solid-js';
+
+type UserProps = {
+  name: string;
+  age: number;
+};
+
+export const User: Component<UserProps> = ({ name, age }) => {
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>Age: {age}</p>
+    </div>
+  );
+};
+
+// Good: Access props directly
+import { Component } from 'solid-js';
+
+type UserProps = {
+  name: string;
+  age: number;
+};
+
+export const User: Component<UserProps> = (props) => {
+  return (
+    <div>
+      <h1>{props.name}</h1>
+      <p>Age: {props.age}</p>
+    </div>
+  );
+};
+```
+
+### List Rendering
+
+```tsx
+// Bad: Using .map() directly
+import { Component } from 'solid-js';
+
+type TodoListProps = {
+  items: string[];
+};
+
+export const TodoList: Component<TodoListProps> = (props) => {
+  return (
+    <ul>
+      {props.items.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  );
+};
+
+// Good: Using <For> component
+import { Component, For } from 'solid-js';
+
+type TodoListProps = {
+  items: string[];
+};
+
+export const TodoList: Component<TodoListProps> = (props) => {
+  return (
+    <ul>
+      <For each={props.items}>
+        {(item) => <li>{item}</li>}
+      </For>
+    </ul>
+  );
+};
+```
+
+### React vs Solid Props
+
+```tsx
+// Bad: Using React-specific props
+import { Component } from 'solid-js';
+
+export const MyComponent: Component = () => {
+  return (
+    <div className="container">
+      <label htmlFor="email">Email</label>
+      <input id="email" type="email" />
+    </div>
+  );
+};
+
+// Good: Using Solid props
+import { Component } from 'solid-js';
+
+export const MyComponent: Component = () => {
+  return (
+    <div class="container">
+      <label for="email">Email</label>
+      <input id="email" type="email" />
+    </div>
+  );
+};
+```
+
+## Why These Rules Matter
+
+### Reactivity in Solid
+
+Solid's reactivity system is fundamentally different from React's. In Solid:
+
+- Props are **getter functions** that track dependencies
+- Destructuring props converts them to static values, breaking reactivity
+- Direct prop access maintains the reactive connection
+
+```tsx
+// This breaks reactivity - `name` is now a static value
+const { name } = props;
+console.log(name); // Won't update when props.name changes
+
+// This maintains reactivity - `props.name` is still a getter
+console.log(props.name); // Will always get the latest value
+```
+
+### Performance with `<For>`
+
+Solid's `<For>` component:
+
+- Only updates items that change
+- Maintains proper keying automatically
+- Is optimized for Solid's fine-grained reactivity
+
+Using `.map()` creates new elements on every update, while `<For>` efficiently updates only what changed.
+
+## Combining with Other Configurations
+
+```jsonc title="biome.jsonc"
+{
+  // Solid with TanStack Router
+  "extends": ["ultracite", "ultracite/solid", "ultracite/router"]
+}
+```
+
+## Customization
+
+To override specific Solid rules:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/solid"],
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noSolidDestructuredProps": "warn"
+      }
+    }
+  }
+}
+```
+
+## Related Configurations
+
+- [Core Configuration](/core) - Base Ultracite rules
+- [Vue Configuration](/vue) - Similar reactive framework
+- [Configuration Guide](/configuration) - General configuration options

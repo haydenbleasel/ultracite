@@ -1,0 +1,148 @@
+---
+title: React
+description: React-specific linting rules for Ultracite.
+---
+
+The React configuration (`ultracite/react`) extends the base Ultracite preset with React-specific linting rules for JSX, hooks, and component patterns.
+
+## Installation
+
+Add the React configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/react"]
+}
+```
+
+## Overview
+
+This configuration adds rules specific to React development:
+
+- **JSX Rules**: Enforce proper JSX syntax and patterns
+- **Hooks Rules**: Ensure React hooks are used correctly
+- **Component Rules**: Enforce React component best practices
+- **Children Handling**: Prevent improper children prop usage
+
+## React-Specific Rules
+
+### Correctness
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Prevent passing children as props. Children should be nested between the opening and closing tags. |
+| `noNestedComponentDefinitions` | `error` | Prevent component definitions inside other components. This causes unnecessary re-renders. |
+| `noReactPropAssignments` | `error` | Prevent reassigning props in React components. Props should be treated as immutable. |
+| `noRenderReturnValue` | `error` | Prevent usage of the return value from `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Prevent void elements (like `<img>`, `<br>`) from having children. |
+| `useExhaustiveDependencies` | `error` | Enforce all dependencies are correctly specified in React hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Enforce that all React hooks are called from the top level of component functions, not inside loops, conditions, or nested functions. |
+| `useJsxKeyInIterable` | `error` | Enforce that elements in iterables have a `key` prop for React's reconciliation. |
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Prevent usage of legacy `React.forwardRef`. Use ref as a prop instead (React 19+). |
+| `useReactFunctionComponents` | `error` | Enforce using function components over class components in React. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Prevent using array indices as keys. Array indices are not stable identifiers and can cause issues with component state. |
+| `noDuplicateJsxProps` | `error` | Prevent duplicate properties in JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Prevent semicolons that change the semantic of JSX elements. |
+| `noReactSpecificProps` | `off` | Allow React-specific props like `className` and `htmlFor`. |
+
+## Usage Example
+
+```tsx
+// Good: Function component with proper hooks usage
+import { useState, useEffect } from 'react';
+
+type UserProps = {
+  userId: string;
+};
+
+export const UserProfile = ({ userId }: UserProps) => {
+  const [user, setUser] = useState(null);
+
+  // ✓ Hooks at top level
+  // ✓ All dependencies included
+  useEffect(() => {
+    fetchUser(userId).then(setUser);
+  }, [userId]);
+
+  return (
+    <div>
+      {/* ✓ Children nested properly */}
+      <h1>{user?.name}</h1>
+      {/* ✓ Key prop on list items */}
+      {user?.posts.map((post) => (
+        <article key={post.id}>{post.title}</article>
+      ))}
+    </div>
+  );
+};
+
+// Bad: Common mistakes
+export const BadComponent = ({ items }) => {
+  // ✗ Hook inside condition
+  if (items.length > 0) {
+    const [selected, setSelected] = useState(null);
+  }
+
+  return (
+    <div>
+      {/* ✗ Array index as key */}
+      {items.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
+      {/* ✗ Void element with children */}
+      <img src="photo.jpg"><span>Photo</span></img>
+    </div>
+  );
+};
+```
+
+## Combining with Other Configurations
+
+You can combine the React configuration with other framework configs:
+
+```jsonc title="biome.jsonc"
+{
+  // React with TanStack Router
+  "extends": ["ultracite", "ultracite/react", "ultracite/router"]
+}
+```
+
+```jsonc title="biome.jsonc"
+{
+  // Next.js (automatically includes React rules)
+  "extends": ["ultracite", "ultracite/next"]
+}
+```
+
+## Customization
+
+To override specific React rules:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/react"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noArrayIndexKey": "warn"
+      }
+    }
+  }
+}
+```
+
+## Related Configurations
+
+- [Core Configuration](/core) - Base Ultracite rules
+- [Next.js Configuration](/next) - Next.js-specific rules (includes React)
+- [Configuration Guide](/configuration) - General configuration options
