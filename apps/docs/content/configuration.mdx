@@ -5,13 +5,24 @@ description: Ultracite's default linting configuration and how to modify it.
 
 One of Ultracite's best features is that it's zero-config out of the box – you can just extend the `ultracite` preset and get going. However, every project is a bit different, and you might want to customize certain rules or adapt Ultracite for different frameworks. This section explains the default configuration and how to extend or override it.
 
+## Default configuration
+
+The default configuration for Ultracite is designed for Next.js projects. It includes all the rules relevant to [React](/preset/react) and [Next.js](/preset/next). You can use it by extending the `ultracite` preset:
+
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite"]
+}
+```
+
 ## Framework-specific configurations
 
-Ultracite provides framework-specific configurations that you can extend in addition to the base configuration. This allows you to add framework-specific linting rules without bloating the base config.
+Ultracite provides framework-specific configurations that you can extend in addition to the base configuration. This allows you to add framework-specific linting rules without bloating the base config or dealing with irrelevant rules.
 
 ### Available framework configs
 
-- **[`ultracite/core`](/preset/core)** - Base configuration (framework-agnostic)
+- **[`ultracite/core`](/preset/core)** - Base configuration for JavaScript / TypeScript projects
 - **[`ultracite/react`](/preset/react)** - React-specific rules
 - **[`ultracite/next`](/preset/next)** - Next.js-specific rules (extends React)
 - **[`ultracite/solid`](/preset/solid)** - Solid-specific rules
@@ -20,21 +31,17 @@ Ultracite provides framework-specific configurations that you can extend in addi
 - **[`ultracite/angular`](/preset/angular)** - Angular-specific configuration
 - **[`ultracite/remix`](/preset/remix)** - Remix/Router configuration for TanStack Router, React Router, etc.
 
-<Callout>
-For legacy projects, the `ultracite` preset extends Core, React and Next.js.
-</Callout>
-
 ### Usage
 
 To use a framework-specific configuration, add it to your `extends` array:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite/core", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/solid"]
 }
 ```
 
-You can combine multiple configurations:
+You can combine multiple configurations if you're working on a multi-framework project or using something like Astro which supports multiple frameworks.
 
 ```jsonc title="biome.jsonc"
 {
