@@ -16,8 +16,9 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
-  "main": "./config/core.jsonc",
+  "main": "./config/legacy.jsonc",
   "exports": {
+    ".": "./config/legacy.jsonc",
     "./*": "./config/*.jsonc"
   },
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
