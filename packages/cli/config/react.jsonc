@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noChildrenProp": "error",
+        "noNestedComponentDefinitions": "error",
+        "noReactPropAssignments": "error",
+        "noRenderReturnValue": "error",
+        "noVoidElementsWithChildren": "error",
+        "useJsxKeyInIterable": "error"
+      },
+      "nursery": {
+        "noReactForwardRef": "error",
+        "useReactFunctionComponents": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "error",
+        "noDuplicateJsxProps": "error",
+        "noSuspiciousSemicolonInJsx": "error",
+
+        "noReactSpecificProps": "off"
+      }
+    }
+  }
+}
