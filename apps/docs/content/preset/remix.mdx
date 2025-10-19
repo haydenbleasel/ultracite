@@ -11,7 +11,7 @@ Add the Remix configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/remix"]
+  "extends": ["ultracite/core", "ultracite/remix"]
 }
 ```
 
@@ -19,7 +19,7 @@ For React Router or TanStack Router projects, you can also use the `router` alia
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/router"]
 }
 ```
 
@@ -134,7 +134,7 @@ If your project uses different route patterns, you can customize the configurati
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/remix"],
+  "extends": ["ultracite/core", "ultracite/remix"],
   "overrides": [
     {
       // Add your custom route patterns
@@ -161,14 +161,14 @@ This configuration works well with framework-specific configs:
 ```jsonc title="biome.jsonc"
 {
   // Remix with React rules
-  "extends": ["ultracite", "ultracite/react", "ultracite/remix"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
 }
 ```
 
 ```jsonc title="biome.jsonc"
 {
   // TanStack Router with React rules
-  "extends": ["ultracite", "ultracite/react", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/router"]
 }
 ```
 

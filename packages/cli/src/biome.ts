@@ -6,7 +6,7 @@ import { exists } from "./utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-  extends: ["ultracite"],
+  extends: ["ultracite/core"],
 };
 
 const getBiomeConfigPath = async (): Promise<string> => {
@@ -28,7 +28,7 @@ export const biome = {
   },
   create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
-    const extendsList = ["ultracite"];
+    const extendsList = ["ultracite/core"];
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
@@ -62,9 +62,9 @@ export const biome = {
 
     const newExtends = [...existingExtends];
 
-    // Add ultracite if not present
-    if (!newExtends.includes("ultracite")) {
-      newExtends.push("ultracite");
+    // Add ultracite/core if not present
+    if (!newExtends.includes("ultracite/core")) {
+      newExtends.push("ultracite/core");
     }
 
     // Add framework-specific configs if provided

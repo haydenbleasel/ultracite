@@ -3,7 +3,7 @@ import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
 
 const config = `{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite"]
+  "extends": ["ultracite/core"]
 }`;
 
 export const ZeroConfig = async () => (

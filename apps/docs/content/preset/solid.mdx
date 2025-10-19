@@ -11,7 +11,7 @@ Add the Solid configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/solid"]
+  "extends": ["ultracite/core", "ultracite/solid"]
 }
 ```
 
@@ -184,7 +184,7 @@ Using `.map()` creates new elements on every update, while `<For>` efficiently u
 ```jsonc title="biome.jsonc"
 {
   // Solid with TanStack Router
-  "extends": ["ultracite", "ultracite/solid", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/solid", "ultracite/router"]
 }
 ```
 
@@ -194,7 +194,7 @@ To override specific Solid rules:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/solid"],
+  "extends": ["ultracite/core", "ultracite/solid"],
   "linter": {
     "rules": {
       "correctness": {

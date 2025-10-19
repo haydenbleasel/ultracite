@@ -60,19 +60,19 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
 
     if (
       Array.isArray(config?.extends) &&
-      config.extends.includes("ultracite")
+      config.extends.includes("ultracite/core")
     ) {
       return {
         name: "Biome configuration",
         status: "pass",
-        message: "biome.json(c) extends ultracite",
+        message: "biome.json(c) extends ultracite/core",
       };
     }
 
     return {
       name: "Biome configuration",
       status: "warn",
-      message: "biome.json(c) exists but doesn't extend ultracite",
+      message: "biome.json(c) exists but doesn't extend ultracite/core",
     };
   } catch {
     return {

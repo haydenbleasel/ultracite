@@ -11,7 +11,7 @@ Add the Qwik configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/qwik"]
+  "extends": ["ultracite/core", "ultracite/qwik"]
 }
 ```
 
@@ -221,7 +221,7 @@ For most reactive logic, use `useTask$` or `useResource$` instead.
 ```jsonc title="biome.jsonc"
 {
   // Qwik with TanStack Router
-  "extends": ["ultracite", "ultracite/qwik", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/qwik", "ultracite/router"]
 }
 ```
 
@@ -231,7 +231,7 @@ To override specific Qwik rules:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/qwik"],
+  "extends": ["ultracite/core", "ultracite/qwik"],
   "linter": {
     "rules": {
       "nursery": {

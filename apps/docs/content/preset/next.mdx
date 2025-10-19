@@ -11,7 +11,7 @@ Add the Next.js configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/next"]
 }
 ```
 
@@ -184,7 +184,7 @@ The Next.js configuration works well with router configurations:
 ```jsonc title="biome.jsonc"
 {
   // Next.js with TanStack Router
-  "extends": ["ultracite", "ultracite/next", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/next", "ultracite/router"]
 }
 ```
 
@@ -194,7 +194,7 @@ To override specific Next.js rules:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/next"],
+  "extends": ["ultracite/core", "ultracite/next"],
   "linter": {
     "rules": {
       "performance": {

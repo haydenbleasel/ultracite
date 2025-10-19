@@ -67,7 +67,7 @@ describe("biome configuration", () => {
 
       const expectedConfig = {
         $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-        extends: ["ultracite"],
+        extends: ["ultracite/core"],
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -90,7 +90,7 @@ describe("biome configuration", () => {
 
       const expectedConfig = {
         $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-        extends: ["ultracite"],
+        extends: ["ultracite/core"],
       };
 
       expect(mockWriteFile).toHaveBeenCalledWith(
@@ -139,7 +139,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
         expect.stringContaining(
-          '"extends": [\n    "other-config",\n    "ultracite"\n  ]'
+          '"extends": [\n    "other-config",\n    "ultracite/core"\n  ]'
         )
       );
     });
@@ -179,7 +179,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.json",
         expect.stringContaining(
-          '"extends": [\n    "other-config",\n    "ultracite"\n  ]'
+          '"extends": [\n    "other-config",\n    "ultracite/core"\n  ]'
         )
       );
     });
@@ -196,7 +196,7 @@ describe("biome configuration", () => {
       // Should write the default config when parsing fails
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
-        expect.stringContaining('"extends": [\n    "ultracite"\n  ]')
+        expect.stringContaining('"extends": [\n    "ultracite/core"\n  ]')
       );
     });
 
@@ -247,7 +247,7 @@ describe("biome configuration", () => {
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
         expect.stringContaining(
-          '"extends": [\n    "other-config",\n    "ultracite"\n  ]'
+          '"extends": [\n    "other-config",\n    "ultracite/core"\n  ]'
         )
       );
     });

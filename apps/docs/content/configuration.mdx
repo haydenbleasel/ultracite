@@ -26,7 +26,7 @@ To use a framework-specific configuration, add it to your `extends` array:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/next"]
 }
 ```
 
@@ -34,7 +34,7 @@ You can combine multiple configurations:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/react", "ultracite/remix"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
 }
 ```
 
@@ -52,7 +52,7 @@ Each framework configuration includes rules specific to that framework. Click th
 
 ## Default configuration
 
-When you include `"extends": ["ultracite"]` in your `biome.jsonc`, you are pulling in Ultracite's base preset configuration. This preset includes framework-agnostic rules and configurations. Some notable aspects of the default config:
+When you include `"extends": ["ultracite/core"]` in your `biome.jsonc`, you are pulling in Ultracite's base preset configuration. This preset includes framework-agnostic rules and configurations. Some notable aspects of the default config:
 
 - **TypeScript strictness**: Ultracite enables TypeScript's strict checks and lint rules requiring robust typing. For instance, it discourages use of `any`, requires handling of `null/undefined`, and prefers explicit types in certain situations to avoid ambiguity.
 - **ESLint "Recommended" equivalents**: Common best-practice rules (no unused vars, no explicit eval, no proto pollution, etc.) are included.

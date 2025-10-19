@@ -11,7 +11,7 @@ Add the Vue configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/vue"]
+  "extends": ["ultracite/core", "ultracite/vue"]
 }
 ```
 
@@ -234,7 +234,7 @@ Vue uses certain property names internally (like `$data`, `$props`, `$el`). Usin
 ```jsonc title="biome.jsonc"
 {
   // Vue with TanStack Router
-  "extends": ["ultracite", "ultracite/vue", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/vue", "ultracite/router"]
 }
 ```
 
@@ -244,7 +244,7 @@ To override specific Vue rules:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/vue"],
+  "extends": ["ultracite/core", "ultracite/vue"],
   "linter": {
     "rules": {
       "nursery": {

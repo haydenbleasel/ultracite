@@ -11,7 +11,7 @@ Add the React configuration to your `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/react"]
+  "extends": ["ultracite/core", "ultracite/react"]
 }
 ```
 
@@ -113,14 +113,14 @@ You can combine the React configuration with other framework configs:
 ```jsonc title="biome.jsonc"
 {
   // React with TanStack Router
-  "extends": ["ultracite", "ultracite/react", "ultracite/router"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/router"]
 }
 ```
 
 ```jsonc title="biome.jsonc"
 {
   // Next.js (automatically includes React rules)
-  "extends": ["ultracite", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/next"]
 }
 ```
 
@@ -130,7 +130,7 @@ To override specific React rules:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite", "ultracite/react"],
+  "extends": ["ultracite/core", "ultracite/react"],
   "linter": {
     "rules": {
       "suspicious": {
