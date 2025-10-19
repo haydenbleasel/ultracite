@@ -24,4 +24,5 @@ export const options = {
     "roo-code",
   ] as const,
   integrations: ["husky", "lefthook", "lint-staged"] as const,
+  frameworks: ["react", "next", "solid", "vue", "qwik", "remix"] as const,
 };
