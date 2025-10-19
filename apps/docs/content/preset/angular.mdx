@@ -1,0 +1,237 @@
+---
+title: Angular Configuration
+description: Angular-specific configuration for Ultracite.
+---
+
+The Angular configuration (`ultracite/angular`) extends the base Ultracite preset with Angular-specific HTML parser settings to support Angular template syntax.
+
+## Installation
+
+Add the Angular configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/angular"]
+}
+```
+
+## Overview
+
+This configuration adds support for Angular's template syntax:
+
+- **HTML Interpolation**: Enables parsing of Angular template interpolation syntax (`{{ }}`)
+- **Template Directives**: Supports Angular directives like `*ngIf`, `*ngFor`, etc.
+- **Property Binding**: Handles Angular property binding syntax `[property]="value"`
+- **Event Binding**: Supports event binding syntax `(event)="handler()"`
+
+## Configuration
+
+The Angular preset configures the HTML parser to recognize Angular's template interpolation:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+This allows Biome to properly parse and format Angular component templates without treating the interpolation syntax as errors.
+
+## Usage Examples
+
+### Component Templates
+
+With the Angular configuration enabled, Biome will correctly parse Angular templates:
+
+```typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-user-profile',
+  template: `
+    <div class="user-profile">
+      <!-- Interpolation -->
+      <h1>{{ user.name }}</h1>
+      <p>{{ user.email }}</p>
+
+      <!-- Property binding -->
+      <img [src]="user.avatar" [alt]="user.name" />
+
+      <!-- Event binding -->
+      <button (click)="editUser()">Edit Profile</button>
+
+      <!-- Structural directives -->
+      <div *ngIf="isLoggedIn">
+        <p>Welcome back!</p>
+      </div>
+
+      <ul>
+        <li *ngFor="let post of user.posts">
+          {{ post.title }}
+        </li>
+      </ul>
+
+      <!-- Two-way binding -->
+      <input [(ngModel)]="user.name" />
+    </div>
+  `,
+})
+export class UserProfileComponent {
+  user = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    avatar: '/avatar.jpg',
+    posts: [],
+  };
+
+  isLoggedIn = true;
+
+  editUser() {
+    // Edit user logic
+  }
+}
+```
+
+### Template Files
+
+The configuration also works with external template files (`.html`):
+
+```html
+<!-- user-profile.component.html -->
+<div class="user-profile">
+  <h1>{{ user.name }}</h1>
+
+  <div *ngIf="user.posts.length > 0">
+    <h2>Recent Posts</h2>
+    <article *ngFor="let post of user.posts" [class.featured]="post.featured">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.excerpt }}</p>
+      <time [dateTime]="post.date">{{ post.date | date }}</time>
+    </article>
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="name">Name:</label>
+    <input id="name" [(ngModel)]="user.name" name="name" />
+
+    <button type="submit">Save</button>
+  </form>
+</div>
+```
+
+### Pipes and Expressions
+
+Angular pipes and complex expressions are also supported:
+
+```typescript
+@Component({
+  selector: 'app-product-list',
+  template: `
+    <div class="product-list">
+      <!-- Pipes -->
+      <p>Price: {{ product.price | currency:'USD':'symbol':'1.2-2' }}</p>
+      <p>Updated: {{ product.updatedAt | date:'medium' }}</p>
+
+      <!-- Expressions -->
+      <p>Total: {{ product.price * quantity }}</p>
+      <p>Status: {{ product.inStock ? 'Available' : 'Out of Stock' }}</p>
+
+      <!-- Method calls -->
+      <button (click)="addToCart(product.id)">
+        {{ getButtonText() }}
+      </button>
+    </div>
+  `,
+})
+export class ProductListComponent {
+  product = {
+    price: 99.99,
+    updatedAt: new Date(),
+    inStock: true,
+    id: '123',
+  };
+
+  quantity = 1;
+
+  getButtonText(): string {
+    return 'Add to Cart';
+  }
+
+  addToCart(productId: string): void {
+    // Add to cart logic
+  }
+}
+```
+
+## Why This Configuration Matters
+
+Without the Angular configuration, Biome's HTML parser would treat Angular's template syntax as invalid HTML:
+
+- `{{ }}` interpolation would be seen as invalid
+- `*ngIf` and `*ngFor` directives might cause parsing errors
+- `[property]` and `(event)` bindings could be misinterpreted
+
+With `interpolation: true`, Biome understands that these are valid Angular template constructs and will format them correctly.
+
+## Combining with Other Tools
+
+The Angular configuration works seamlessly with Angular CLI and other Angular tooling:
+
+```json title="angular.json"
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "linter": "biome"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+You can also add Ultracite to your npm scripts:
+
+```json title="package.json"
+{
+  "scripts": {
+    "lint": "ultracite check",
+    "format": "ultracite fix",
+    "lint:templates": "ultracite check '**/*.html'"
+  }
+}
+```
+
+## Customization
+
+To override or extend the Angular configuration:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite", "ultracite/angular"],
+  "html": {
+    "formatter": {
+      "enabled": true,
+      "indentWidth": 2
+    }
+  }
+}
+```
+
+## Related Configurations
+
+- [Core Configuration](/core) - Base Ultracite rules
+- [Configuration Guide](/configuration) - General configuration options
+
+## Learn More
+
+- [Angular Template Syntax](https://angular.dev/guide/templates)
+- [Angular Components](https://angular.dev/guide/components)
+- [Biome HTML Parser](https://biomejs.dev/reference/configuration/#htmlparser)

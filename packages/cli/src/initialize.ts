@@ -408,6 +408,7 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Solid", value: "solid" },
             { label: "Vue", value: "vue" },
             { label: "Qwik", value: "qwik" },
+            { label: "Angular", value: "angular" },
             { label: "Remix / TanStack Router / React Router", value: "remix" },
           ],
           required: false,
