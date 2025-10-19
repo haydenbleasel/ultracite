@@ -7,7 +7,7 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
 **Key Features:**
 - Lightning-fast formatting and linting (built on Rust-based Biome)
 - Zero-config setup with `npx ultracite init`
-- 273+ strict linting rules for type safety and code quality
+- Hundreds of strict linting rules for type safety and code quality
 - AI/IDE integration for consistent code generation
 - Monorepo support
 

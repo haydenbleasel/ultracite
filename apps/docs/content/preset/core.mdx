@@ -3,7 +3,7 @@ title: Core
 description: Ultracite's base configuration with framework-agnostic linting rules.
 ---
 
-The core Ultracite configuration (`ultracite`) provides a comprehensive set of framework-agnostic linting rules and formatting settings. This is the foundation that all other framework-specific configurations extend.
+The core Ultracite configuration provides a comprehensive set of framework-agnostic linting rules and formatting settings. This is the foundation that all other framework-specific configurations extend.
 
 ## Installation
 
@@ -23,7 +23,7 @@ Or add it manually to your `biome.jsonc`:
 
 ## Overview
 
-The core configuration includes 273+ strict linting rules covering:
+The core configuration includes hundreds of strict linting rules covering:
 
 - **Accessibility (a11y)**: Enforce ARIA attributes, semantic HTML, and keyboard navigation
 - **Complexity**: Reduce cognitive complexity and enforce best practices
@@ -454,26 +454,3 @@ Environment-specific handling:
 | `useNumberToFixedDigitsArgument` | `error` | Enforce using the digits argument with `Number#toFixed()`. |
 | `useStaticResponseMethods` | `error` | Use static `Response` methods instead of `new Response()` constructor when possible. |
 | `useStrictMode` | `error` | Enforce the use of the directive `use strict` in script files. |
-
-## Customization
-
-To override any rules, modify your `biome.jsonc`:
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite/core"],
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noConsole": "off"
-      }
-    }
-  }
-}
-```
-
-## Next Steps
-
-- [React Configuration](/react) - Add React-specific rules
-- [Next.js Configuration](/next) - Add Next.js-specific rules
-- [Configuration Guide](/configuration) - Learn more about customization

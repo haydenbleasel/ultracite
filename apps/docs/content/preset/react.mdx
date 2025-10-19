@@ -3,7 +3,7 @@ title: React
 description: React-specific linting rules for Ultracite.
 ---
 
-The React configuration (`ultracite/react`) extends the base Ultracite preset with React-specific linting rules for JSX, hooks, and component patterns.
+The React configuration has React-specific linting rules for JSX, hooks, and component patterns.
 
 ## Installation
 
@@ -54,95 +54,3 @@ This configuration adds rules specific to React development:
 | `noDuplicateJsxProps` | `error` | Prevent duplicate properties in JSX. |
 | `noSuspiciousSemicolonInJsx` | `error` | Prevent semicolons that change the semantic of JSX elements. |
 | `noReactSpecificProps` | `off` | Allow React-specific props like `className` and `htmlFor`. |
-
-## Usage Example
-
-```tsx
-// Good: Function component with proper hooks usage
-import { useState, useEffect } from 'react';
-
-type UserProps = {
-  userId: string;
-};
-
-export const UserProfile = ({ userId }: UserProps) => {
-  const [user, setUser] = useState(null);
-
-  // ✓ Hooks at top level
-  // ✓ All dependencies included
-  useEffect(() => {
-    fetchUser(userId).then(setUser);
-  }, [userId]);
-
-  return (
-    <div>
-      {/* ✓ Children nested properly */}
-      <h1>{user?.name}</h1>
-      {/* ✓ Key prop on list items */}
-      {user?.posts.map((post) => (
-        <article key={post.id}>{post.title}</article>
-      ))}
-    </div>
-  );
-};
-
-// Bad: Common mistakes
-export const BadComponent = ({ items }) => {
-  // ✗ Hook inside condition
-  if (items.length > 0) {
-    const [selected, setSelected] = useState(null);
-  }
-
-  return (
-    <div>
-      {/* ✗ Array index as key */}
-      {items.map((item, index) => (
-        <div key={index}>{item}</div>
-      ))}
-      {/* ✗ Void element with children */}
-      <img src="photo.jpg"><span>Photo</span></img>
-    </div>
-  );
-};
-```
-
-## Combining with Other Configurations
-
-You can combine the React configuration with other framework configs:
-
-```jsonc title="biome.jsonc"
-{
-  // React with TanStack Router
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/router"]
-}
-```
-
-```jsonc title="biome.jsonc"
-{
-  // Next.js (automatically includes React rules)
-  "extends": ["ultracite/core", "ultracite/next"]
-}
-```
-
-## Customization
-
-To override specific React rules:
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite/core", "ultracite/react"],
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noArrayIndexKey": "warn"
-      }
-    }
-  }
-}
-```
-
-## Related Configurations
-
-- [Core Configuration](/core) - Base Ultracite rules
-- [Next.js Configuration](/next) - Next.js-specific rules (includes React)
-- [Configuration Guide](/configuration) - General configuration options
