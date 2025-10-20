@@ -24,31 +24,7 @@ const DocLayout = async (props: DocsLayoutProps) => (
         ...baseOptions.nav,
         mode: "top",
       }}
-      sidebar={{
-        collapsible: false,
-        tabs: [
-          {
-            title: "Overview",
-            url: "/introduction",
-          },
-          {
-            title: "Presets",
-            url: "/preset/core",
-          },
-          {
-            title: "Integrations",
-            url: "/integration/husky",
-          },
-          {
-            title: "Migrations",
-            url: "/migrate/eslint",
-          },
-          {
-            title: "Upgrade",
-            url: "/upgrade/v6",
-          },
-        ],
-      }}
+      sidebar={{ collapsible: false }}
       tabMode="navbar"
       tree={source.pageTree}
     >
