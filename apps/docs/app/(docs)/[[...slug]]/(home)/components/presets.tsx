@@ -49,8 +49,8 @@ const Astro = (props: ComponentProps<"svg">) => (
         y1="107"
         y2="84.9468"
       >
-        <stop stop-color="#D83333" />
-        <stop offset="1" stop-color="#F041FF" />
+        <stop stopColor="#D83333" />
+        <stop offset="1" stopColor="#F041FF" />
       </linearGradient>
     </defs>
   </svg>
@@ -138,9 +138,9 @@ const Solid = (props: ComponentProps<"svg">) => (
         y1="3"
         y2="63.5"
       >
-        <stop offset=".1" stop-color="#76b3e1" />
-        <stop offset=".3" stop-color="#dcf2fd" />
-        <stop offset="1" stop-color="#76b3e1" />
+        <stop offset=".1" stopColor="#76b3e1" />
+        <stop offset=".3" stopColor="#dcf2fd" />
+        <stop offset="1" stopColor="#76b3e1" />
       </linearGradient>
       <linearGradient
         gradientUnits="userSpaceOnUse"
@@ -150,9 +150,9 @@ const Solid = (props: ComponentProps<"svg">) => (
         y1="32.6"
         y2="105.2"
       >
-        <stop offset="0" stop-color="#76b3e1" />
-        <stop offset=".5" stop-color="#4377bb" />
-        <stop offset="1" stop-color="#1f3b77" />
+        <stop offset="0" stopColor="#76b3e1" />
+        <stop offset=".5" stopColor="#4377bb" />
+        <stop offset="1" stopColor="#1f3b77" />
       </linearGradient>
       <linearGradient
         gradientUnits="userSpaceOnUse"
@@ -162,9 +162,9 @@ const Solid = (props: ComponentProps<"svg">) => (
         y1="64.2"
         y2="149.8"
       >
-        <stop offset="0" stop-color="#315aa9" />
-        <stop offset=".5" stop-color="#518ac8" />
-        <stop offset="1" stop-color="#315aa9" />
+        <stop offset="0" stopColor="#315aa9" />
+        <stop offset=".5" stopColor="#518ac8" />
+        <stop offset="1" stopColor="#315aa9" />
       </linearGradient>
       <linearGradient
         gradientUnits="userSpaceOnUse"
@@ -174,9 +174,9 @@ const Solid = (props: ComponentProps<"svg">) => (
         y1="74.5"
         y2="260.8"
       >
-        <stop offset="0" stop-color="#4377bb" />
-        <stop offset=".5" stop-color="#1a336b" />
-        <stop offset="1" stop-color="#1a336b" />
+        <stop offset="0" stopColor="#4377bb" />
+        <stop offset=".5" stopColor="#1a336b" />
+        <stop offset="1" stopColor="#1a336b" />
       </linearGradient>
     </defs>
     <path
