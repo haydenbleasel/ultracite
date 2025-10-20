@@ -25,7 +25,7 @@ export const router = t.router({
           .array(z.enum(options.editorConfigs))
           .optional()
           .describe("Editors to configure"),
-        rules: z
+        agents: z
           .array(z.enum(options.agents))
           .optional()
           .describe("Agents to enable"),

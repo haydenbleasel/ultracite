@@ -32,7 +32,7 @@ const ultraciteVersion = packageJson.version;
 type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
-  rules?: (typeof options.agents)[number][];
+  agents?: (typeof options.agents)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
   removePrettier?: boolean;
@@ -233,24 +233,24 @@ const initializeLintStaged = async (
   s.stop("lint-staged created.");
 };
 
-const upsertagents = async (
+const upsertAgents = async (
   name: (typeof options.agents)[number],
   displayName: string
 ) => {
   const s = spinner();
   s.start(`Checking for ${displayName}...`);
 
-  const rules = createAgents(name);
+  const agents = createAgents(name);
 
-  if (await rules.exists()) {
+  if (await agents.exists()) {
     s.message(`${displayName} found, updating...`);
-    await rules.update();
+    await agents.update();
     s.stop(`${displayName} updated.`);
     return;
   }
 
   s.message(`${displayName} not found, creating...`);
-  await rules.create();
+  await agents.create();
   s.stop(`${displayName} created.`);
 };
 
@@ -392,7 +392,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       const hasOtherCliOptions =
         opts.pm ||
         opts.editors ||
-        opts.rules ||
+        opts.agents ||
         opts.integrations !== undefined ||
         opts.removePrettier !== undefined ||
         opts.removeEslint !== undefined;
@@ -443,7 +443,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       editorConfig = editorConfigResult;
     }
 
-    let agents = opts.rules;
+    let agents = opts.agents;
 
     const agentsOptions: Record<(typeof options.agents)[number], string> = {
       "vscode-copilot": "GitHub Copilot (VSCode)",
@@ -491,7 +491,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       const hasOtherCliOptions =
         opts.pm ||
         opts.editors ||
-        opts.rules ||
+        opts.agents ||
         opts.removePrettier !== undefined ||
         opts.removeEslint !== undefined;
 
@@ -537,7 +537,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const ruleName of agents ?? []) {
-      await upsertagents(ruleName, agentsOptions[ruleName]);
+      await upsertAgents(ruleName, agentsOptions[ruleName]);
     }
 
     if (integrations?.includes("husky")) {
