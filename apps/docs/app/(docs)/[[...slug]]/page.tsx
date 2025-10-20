@@ -37,7 +37,7 @@ const Page = async (props: PageProps) => {
       <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
         <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
         <ViewOptions
-          githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/docs/content/${page.path}`}
+          githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/apps/docs/content/${page.path}`}
           markdownUrl={`${page.url}.mdx`}
         />
       </div>
