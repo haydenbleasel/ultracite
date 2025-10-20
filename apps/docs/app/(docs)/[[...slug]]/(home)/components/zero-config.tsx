@@ -13,8 +13,9 @@ export const ZeroConfig = async () => (
         Zero-config by design
       </h2>
       <p className="text-lg text-muted-foreground sm:text-xl">
-        Ultracite preconfigures over 300 rules to optimize your Next.js, React
-        and TypeScript code, while still allowing you to customize when needed.
+        Ultracite preconfigures hundreds of rules to optimize your Next.js,
+        React and TypeScript code, while still allowing you to customize when
+        needed.
       </p>
     </div>
     <DynamicCodeBlock
