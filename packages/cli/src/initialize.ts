@@ -13,11 +13,11 @@ import {
   type PackageManagerName,
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
+import { createAgents } from "./agents";
 import { biome } from "./biome";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
-import { createEditorRules } from "./editor-rules";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
@@ -32,7 +32,7 @@ const ultraciteVersion = packageJson.version;
 type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
-  rules?: (typeof options.editorRules)[number][];
+  agents?: (typeof options.agents)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
   removePrettier?: boolean;
@@ -233,24 +233,25 @@ const initializeLintStaged = async (
   s.stop("lint-staged created.");
 };
 
-const upsertEditorRules = async (
-  name: (typeof options.editorRules)[number],
-  displayName: string
+const upsertAgents = async (
+  name: (typeof options.agents)[number],
+  displayName: string,
+  frameworks?: (typeof options.frameworks)[number][]
 ) => {
   const s = spinner();
   s.start(`Checking for ${displayName}...`);
 
-  const rules = createEditorRules(name);
+  const agents = createAgents(name, frameworks);
 
-  if (await rules.exists()) {
+  if (await agents.exists()) {
     s.message(`${displayName} found, updating...`);
-    await rules.update();
+    await agents.update();
     s.stop(`${displayName} updated.`);
     return;
   }
 
   s.message(`${displayName} not found, creating...`);
-  await rules.create();
+  await agents.create();
   s.stop(`${displayName} created.`);
 };
 
@@ -392,7 +393,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       const hasOtherCliOptions =
         opts.pm ||
         opts.editors ||
-        opts.rules ||
+        opts.agents ||
         opts.integrations !== undefined ||
         opts.removePrettier !== undefined ||
         opts.removeEslint !== undefined;
@@ -443,12 +444,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       editorConfig = editorConfigResult;
     }
 
-    let editorRules = opts.rules;
+    let agents = opts.agents;
 
-    const editorRulesOptions: Record<
-      (typeof options.editorRules)[number],
-      string
-    > = {
+    const agentsOptions: Record<(typeof options.agents)[number], string> = {
       "vscode-copilot": "GitHub Copilot (VSCode)",
       cursor: "Cursor",
       windsurf: "Windsurf",
@@ -469,22 +467,22 @@ export const initialize = async (flags?: InitializeFlags) => {
       "roo-code": "Roo Code",
     } as const;
 
-    if (!editorRules) {
-      const editorRulesResult = await multiselect({
-        message: "Which editor rules do you want to enable (optional)?",
-        options: Object.entries(editorRulesOptions).map(([value, label]) => ({
+    if (!agents) {
+      const agentsResult = await multiselect({
+        message: "Which agents do you want to enable (optional)?",
+        options: Object.entries(agentsOptions).map(([value, label]) => ({
           value,
           label,
         })),
         required: false,
       });
 
-      if (isCancel(editorRulesResult)) {
+      if (isCancel(agentsResult)) {
         cancel("Operation cancelled.");
         process.exit(0);
       }
 
-      editorRules = editorRulesResult as (typeof options.editorRules)[number][];
+      agents = agentsResult as (typeof options.agents)[number][];
     }
 
     let integrations = opts.integrations;
@@ -494,7 +492,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       const hasOtherCliOptions =
         opts.pm ||
         opts.editors ||
-        opts.rules ||
+        opts.agents ||
         opts.removePrettier !== undefined ||
         opts.removeEslint !== undefined;
 
@@ -539,8 +537,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    for (const ruleName of editorRules ?? []) {
-      await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
+    for (const ruleName of agents ?? []) {
+      await upsertAgents(ruleName, agentsOptions[ruleName], frameworks);
     }
 
     if (integrations?.includes("husky")) {

@@ -25,10 +25,14 @@ export const router = t.router({
           .array(z.enum(options.editorConfigs))
           .optional()
           .describe("Editors to configure"),
-        rules: z
-          .array(z.enum(options.editorRules))
+        agents: z
+          .array(z.enum(options.agents))
           .optional()
-          .describe("Editor rules to enable"),
+          .describe("Agents to enable"),
+        frameworks: z
+          .array(z.enum(options.frameworks))
+          .optional()
+          .describe("Frameworks being used"),
         integrations: z
           .array(z.enum(options.integrations))
           .optional()

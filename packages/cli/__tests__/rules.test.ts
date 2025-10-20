@@ -1,18 +1,26 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EDITOR_RULES } from "../src/consts/rules";
-import { createEditorRules } from "../src/editor-rules";
+import { createAgents } from "../src/agents";
+import { AGENTS } from "../src/consts/rules";
 import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
 vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
-vi.mock("../src/editor-rules/rules", () => ({
-  rulesFile: "mock rules content",
+vi.mock("../src/agents/rules", () => ({
+  core: ["core rule 1", "core rule 2"],
+  react: ["react rule 1"],
+  next: ["next rule 1"],
+  qwik: ["qwik rule 1"],
+  solid: ["solid rule 1"],
+  svelte: ["svelte rule 1"],
+  vue: ["vue rule 1"],
+  angular: [],
+  remix: [],
 }));
 
-describe("editor rules configurations", () => {
+describe("agent configurations", () => {
   const mockWriteFile = vi.mocked(writeFile);
   const mockReadFile = vi.mocked(readFile);
   const mockMkdir = vi.mocked(mkdir);
@@ -25,7 +33,7 @@ describe("editor rules configurations", () => {
     mockReadFile.mockResolvedValue("existing content");
   });
 
-  const editorConfigs = Object.entries(EDITOR_RULES).map(([name, config]) => ({
+  const editorConfigs = Object.entries(AGENTS).map(([name, config]) => ({
     name,
     ...config,
   }));
@@ -33,10 +41,11 @@ describe("editor rules configurations", () => {
   describe.each(editorConfigs)(
     "$name configuration",
     ({ name, path, header, appendMode }) => {
-      const editor = createEditorRules(name as keyof typeof EDITOR_RULES);
+      const editor = createAgents(name as keyof typeof AGENTS);
+      const mockRulesContent = "core rule 1\ncore rule 2";
       const expectedContent = header
-        ? `${header}\n\nmock rules content`
-        : "mock rules content";
+        ? `${header}\n\n${mockRulesContent}`
+        : mockRulesContent;
       const expectedDir = path.includes("/")
         ? path.substring(0, path.lastIndexOf("/"))
         : ".";
@@ -111,14 +120,14 @@ describe("editor rules configurations", () => {
             expect(mockReadFile).toHaveBeenCalledWith(path, "utf-8");
             expect(mockWriteFile).toHaveBeenCalledWith(
               path,
-              "existing content\n\nmock rules content"
+              `existing content\n\n${mockRulesContent}`
             );
           });
 
           it(`should not duplicate content in ${path} when already present`, async () => {
             mockExists.mockResolvedValue(true);
             mockReadFile.mockResolvedValue(
-              "existing content\n\nmock rules content"
+              `existing content\n\n${mockRulesContent}`
             );
 
             await editor.update();

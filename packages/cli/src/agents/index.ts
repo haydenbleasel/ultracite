@@ -1,14 +1,61 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { options } from "../consts/options";
-import { EDITOR_RULES } from "../consts/rules";
+import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
-import { rulesFile } from "./rules";
+import {
+  angular,
+  core,
+  next,
+  qwik,
+  react,
+  remix,
+  solid,
+  svelte,
+  vue,
+} from "./rules";
 
-export const createEditorRules = (
-  name: (typeof options.editorRules)[number]
+const generateAgentsContext = (
+  frameworks?: (typeof options.frameworks)[number][]
 ) => {
-  const config = EDITOR_RULES[name];
+  const context = [...core];
+
+  if (frameworks) {
+    if (frameworks.includes("react")) {
+      context.push(...react);
+    }
+    if (frameworks.includes("next")) {
+      context.push(...next);
+    }
+    if (frameworks.includes("qwik")) {
+      context.push(...qwik);
+    }
+    if (frameworks.includes("solid")) {
+      context.push(...solid);
+    }
+    if (frameworks.includes("svelte")) {
+      context.push(...svelte);
+    }
+    if (frameworks.includes("vue")) {
+      context.push(...vue);
+    }
+    if (frameworks.includes("angular")) {
+      context.push(...angular);
+    }
+    if (frameworks.includes("remix")) {
+      context.push(...remix);
+    }
+  }
+
+  return context.join("\n");
+};
+
+export const createAgents = (
+  name: (typeof options.agents)[number],
+  frameworks?: (typeof options.frameworks)[number][]
+) => {
+  const config = AGENTS[name];
+  const rulesFile = generateAgentsContext(frameworks);
   const content = config.header
     ? `${config.header}\n\n${rulesFile}`
     : rulesFile;

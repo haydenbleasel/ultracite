@@ -1,6 +1,8 @@
 import { track } from "@vercel/analytics/server";
 import { createMcpHandler } from "mcp-handler";
-import { rules } from "@/lib/rules";
+
+// biome-ignore lint/performance/noNamespaceImport: We need to import the rules as an object to avoid type errors
+import * as rules from "@/lib/rules";
 
 const handler = createMcpHandler(
   (server) => {
@@ -13,7 +15,12 @@ const handler = createMcpHandler(
 
         return {
           content: [
-            { type: "text", text: rules.map((rule) => `- ${rule}`).join("\n") },
+            {
+              type: "text",
+              text: Object.values(rules)
+                .map((rule) => `- ${rule}`)
+                .join("\n"),
+            },
           ],
         };
       }
