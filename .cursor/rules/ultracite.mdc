@@ -4,10 +4,9 @@ globs: "**/*.{ts,tsx,js,jsx}"
 alwaysApply: true
 ---
 
-- Avoid `accessKey` attr
+- Avoid `accessKey` attr and distracting els
 - No `aria-hidden="true"` on focusable els
 - No ARIA roles, states, props on unsupported els
-- Avoid distracting els
 - Use `scope` prop only on `<th>` els
 - No non-interactive ARIA roles on interactive els
 - Label els need text and associated input
@@ -34,34 +33,25 @@ alwaysApply: true
 - Add caption tracks to audio and video els
 - Use semantic els vs role attrs
 - All anchors must be valid and navigable
-- Use valid ARIA props
-- Use valid, non-abstract ARIA roles
-- Use valid ARIA state and prop values
+- Use valid, non-abstract ARIA props, roles, states, and values
 - Use valid values for `autocomplete` attr
 - Use correct ISO language codes in `lang` attr
 - Include generic font family in font families
 - No consecutive spaces in regex literals
-- Avoid `arguments`
-- No primitive type aliases or misleading types
-- Avoid comma operator
+- Avoid `arguments`, comma op, and primitive type aliases
 - No empty type params in type aliases and interfaces
 - Keep fns under Cognitive Complexity limit
 - Limit nesting depth of `describe()` in tests
-- No unnecessary boolean casts
-- No unnecessary callbacks on `flatMap`
+- No unnecessary boolean casts or callbacks on `flatMap`
 - Use `for...of` vs `Array.forEach`
 - No classes w/ only static members
 - No `this` and `super` in static contexts
 - No unnecessary catch clauses, ctors, `continue`, escape sequences in regex literals, fragments, labels, or nested blocks
 - No empty exports
 - No renaming imports, exports, or destructured assignments to same name
-- No unnecessary string or template literal concatenation
-- No `String.raw` without escape sequences
-- No useless cases in switch stmts
+"No unnecessary string/template literal concatenation or useless cases in switch stmts, `this` aliasing, or `String.raw` without - scape sequences
 - Use simpler alternatives to ternary ops if possible
-- No useless `this` aliasing
-- No `any` or `unknown` as type constraints
-- No initializing vars to `undefined`
+- No `any` or `unknown` as type constraints or initializing vars to `undefined`
 - Avoid `void` op
 - Use arrow fns vs function exprs
 - Use `Date.now()` for milliseconds since Unix Epoch
@@ -74,14 +64,12 @@ alwaysApply: true
 - Use base 10 or underscore separators for number literal object member names
 - Remove redundant terms from logical exprs
 - Use `while` loops vs `for` loops if initializer and update aren't needed
-- No reassigning `const` vars
-- No constant exprs in conditions
+- No reassigning `const` vars or constant exprs in conditions
 - No `Math.min`/`Math.max` to clamp values where result is constant
-- No return values from ctors
+- No return values from ctors or setters
 - No empty character classes in regex literals or destructuring patterns
 - No `__dirname` and `__filename` in global scope
-- No calling global object props as fns
-- No declaring fns and `var` accessible outside their block
+- No calling global object props as fns or declaring fns and `var` accessible outside their block
 - Instantiate builtins correctly
 - Use `super()` correctly in classes
 - Use standard direction values for linear gradient fns
@@ -90,23 +78,17 @@ alwaysApply: true
 - No vars and params before their decl
 - Include `var` fn for CSS vars
 - No `\\8` and `\\9` escape sequences in strings
-- No literal numbers that lose precision
-- No configured els
-- No assigning where both sides are same
-- No return values from setters
+- No literal numbers that lose precision, configured els, or assigning where both sides are same
 - Compare string case modifications w/ compliant values
-- No lexical decls in switch clauses
-- No undeclared vars
+- No lexical decls in switch clauses or undeclared vars
 - No unknown CSS value fns, media feature names, props, pseudo-class/pseudo-element selectors, type selectors, or units
-- No unmatchable An+B selectors
-- No unreachable code
+- No unmatchable An+B selectors or unreachable code
 - Call `super()` exactly once before accessing `this` in ctors
 - No control flow stmts in `finally` blocks
 - No optional chaining where `undefined` is not allowed
 - No unused fn params, imports, labels, private class members, or vars
 - No return values from fns w/ return type `void`
-- Specify all dependencies correctly in React hooks
-- Specify names for GraphQL operations
+- Specify all dependencies correctly in React hooks and names for GraphQL operations
 - Call React hooks from top level of component fns
 - Use `isNaN()` when checking for NaN
 - Use `{ type: "json" }` for JSON module imports
@@ -115,59 +97,29 @@ alwaysApply: true
 - Move `for` loop counters in right direction
 - Compare `typeof` exprs to valid values
 - Include `yield` in generator fns
-- No importing deprecated exports
-- No duplicate dependencies
-- No Promises where they're likely a mistake
-- No non-null assertions after optional chaining
-- No shadowing vars from outer scope
-- No expr stmts that aren't fn calls or assignments
-- No useless `undefined`
-- Add `href` attr to `<a>` els
-- Use consistent arrow fn bodies
-- Use either `interface` or `type` consistently
+- No importing deprecated exports, duplicate dependencies, or Promises where they're likely a mistake
+- No non-null assertions after optional chaining or shadowing vars from outer scope
+- No expr stmts that aren't fn calls or assignments or useless `undefined`
+- Add `href` attr to `<a>` els and `width`/`height` attrs to `<img>` els
+- Use consistent arrow fn bodies and either `interface` or `type` consistently
 - Specify deletion date w/ `@deprecated` directive
-- Make switch-case stmts exhaustive
-- Add `width` and `height` attrs to `<img>` els
-- Limit number of fn params
+- Make switch-case stmts exhaustive and limit number of fn params
 - Sort CSS utility classes
-- No spread syntax on accumulators
-- No barrel files
-- No `delete` op
-- No dynamic namespace import access
-- No namespace imports
-- No duplicate polyfills from Polyfill.io
+"No spread syntax on accumulators, barrel files, `delete` op, dynamic namespace import access, namespace imports, or duplicate - olyfills from Polyfill.io
 - Use `preconnect` attr w/ Google Fonts
 - Declare regex literals at top level
 - Add `rel="noopener"` when using `target="_blank"`
 - No dangerous JSX props
 - No both `children` and `dangerouslySetInnerHTML` props
 - No global `eval()`
-- No callbacks in async tests and hooks
-- No TS enums
-- No exporting imported vars
-- No type annotations for vars initialized w/ literals
-- No magic numbers without named constants
-- No TS namespaces
-- No negating `if` conditions when there's an `else` clause
-- No nested ternary exprs
-- No non-null assertions (`!`)
-- No reassigning fn params
-- No parameter props in class ctors
-- No specified global var names
-- No importing specified modules
-- No specified user-defined types
-- No constants where value is upper-case version of name
+"No callbacks in async tests and hooks, TS enums, exporting imported vars, type annotations for vars initialized w/ literals, - agic numbers without named constants, or TS namespaces
+"No negating `if` conditions when there's an `else` clause, nested ternary exprs, non-null assertions (`!`), reassigning fn - arams, parameter props in class ctors, specified global var names, importing specified modules, or specified user-defined types
+"No constants where value is upper-case version of name, template literals without interpolation or special chars, `else` blocks - hen `if` block breaks early, yoda exprs, or `Array` ctors
 - Use `String.slice()` vs `String.substr()` and `String.substring()`
-- No template literals without interpolation or special chars
-- No `else` blocks when `if` block breaks early
-- No yoda exprs
-- No `Array` ctors
-- Use `as const` vs literal type annotations
-- Use `at()` vs integer index access
+- Use `as const` vs literal type annotations and `at()` vs integer index access
 - Follow curly brace conventions
-- Use `else if` vs nested `if` in `else` clauses
-- Use single `if` vs nested `if` clauses
-- Use either `T[]` or `Array<T>` consistently
+- Use `else if` vs nested `if` in `else` clauses and single `if` vs nested `if` clauses
+- Use `T[]` vs `Array<T>`
 - Use `new` for all builtins except `String`, `Number`, and `Boolean`
 - Use consistent accessibility modifiers on class props and methods
 - Declare object literals consistently
@@ -220,7 +172,7 @@ alwaysApply: true
 - No `debugger`
 - No assigning directly to `document.cookie`
 - Use `===` and `!==`
-- No duplicate `@import` rules, case labels, class members, custom props, conditions in if-else-if chains, GraphQL fields, font - amily names, object keys, fn param names, decl block props, keyframe selectors, or describe hooks
+"No duplicate `@import` rules, case labels, class members, custom props, conditions in if-else-if chains, GraphQL fields, font - amily names, object keys, fn param names, decl block props, keyframe selectors, or describe hooks
 - No empty CSS blocks, block stmts, static blocks, or interfaces
 - No letting vars evolve into `any` type through reassignments
 - No `any` type
