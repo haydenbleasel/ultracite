@@ -122,7 +122,8 @@ describe("CLI Router", () => {
     const options = {
       pm: "npm" as const,
       editors: ["vscode"] as const,
-      rules: ["cursor"] as const,
+      agents: ["cursor"] as const,
+      frameworks: [] as const,
       integrations: ["husky"] as const,
       removePrettier: true,
       removeEslint: false,

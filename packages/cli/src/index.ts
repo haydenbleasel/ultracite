@@ -29,6 +29,10 @@ export const router = t.router({
           .array(z.enum(options.agents))
           .optional()
           .describe("Agents to enable"),
+        frameworks: z
+          .array(z.enum(options.frameworks))
+          .optional()
+          .describe("Frameworks being used"),
         integrations: z
           .array(z.enum(options.integrations))
           .optional()

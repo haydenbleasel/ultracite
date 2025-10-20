@@ -2,7 +2,7 @@ export const core = [
   // Accessibility (a11y)
 
   "Don't use the `accessKey` attribute.",
-  "Don't set `aria-hidden=\"true\"` on focusable elements.",
+  'Don\'t set `aria-hidden="true"` on focusable elements.',
   "Don't use ARIA roles, states, and properties on elements that don't support them.",
   "Don't use distracting elements.",
   "Use the `scope` prop only on `<th>` elements.",
@@ -129,7 +129,7 @@ export const core = [
   "Specify names for GraphQL operations.",
   "Call React hooks from the top level of component functions.",
   "Use `isNaN()` when checking for NaN.",
-  "Use `{ type: \"json\" }` for JSON module imports.",
+  'Use `{ type: "json" }` for JSON module imports.',
   "Use the radix argument with `parseInt()`.",
   "Start JSDoc comment lines with a single asterisk.",
   "Move `for` loop counters in the right direction.",
@@ -419,17 +419,3 @@ export const vue = [
 
 export const angular: string[] = [];
 export const remix: string[] = [];
-
-export const rules = [
-  ...core,
-  ...react,
-  ...next,
-  ...qwik,
-  ...solid,
-  ...svelte,
-  ...vue,
-  ...angular,
-  ...remix,
-];
-
-export const rulesFile = rules.join("\n");

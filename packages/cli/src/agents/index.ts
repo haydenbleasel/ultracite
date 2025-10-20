@@ -3,10 +3,59 @@ import { dirname } from "node:path";
 import type { options } from "../consts/options";
 import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
-import { rulesFile } from "./rules";
+import {
+  angular,
+  core,
+  next,
+  qwik,
+  react,
+  remix,
+  solid,
+  svelte,
+  vue,
+} from "./rules";
 
-export const createAgents = (name: (typeof options.agents)[number]) => {
+const generateRulesFile = (
+  frameworks?: (typeof options.frameworks)[number][]
+): string => {
+  const rules = [...core];
+
+  if (frameworks) {
+    if (frameworks.includes("react")) {
+      rules.push(...react);
+    }
+    if (frameworks.includes("next")) {
+      rules.push(...next);
+    }
+    if (frameworks.includes("qwik")) {
+      rules.push(...qwik);
+    }
+    if (frameworks.includes("solid")) {
+      rules.push(...solid);
+    }
+    if (frameworks.includes("svelte")) {
+      rules.push(...svelte);
+    }
+    if (frameworks.includes("vue")) {
+      rules.push(...vue);
+    }
+    if (frameworks.includes("angular")) {
+      rules.push(...angular);
+    }
+    if (frameworks.includes("remix")) {
+      rules.push(...remix);
+    }
+  }
+
+  return rules.join("\n");
+};
+
+export const createAgents = (
+  name: (typeof options.agents)[number],
+  frameworks?: (typeof options.frameworks)[number][]
+) => {
   const config = AGENTS[name];
+  const rulesFile = generateRulesFile(frameworks);
   const content = config.header
     ? `${config.header}\n\n${rulesFile}`
     : rulesFile;

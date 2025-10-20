@@ -141,7 +141,8 @@ describe("initialize - cleanup features", () => {
         removeEslint: true,
         removePrettier: false,
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -168,7 +169,8 @@ describe("initialize - cleanup features", () => {
         pm: "yarn",
         // removeEslint is undefined, should prompt
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -199,7 +201,8 @@ describe("initialize - cleanup features", () => {
         removeEslint: true,
         removePrettier: false,
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -221,7 +224,8 @@ describe("initialize - cleanup features", () => {
         removeEslint: false,
         removePrettier: false,
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -244,7 +248,8 @@ describe("initialize - cleanup features", () => {
         removePrettier: true,
         removeEslint: false,
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -271,7 +276,8 @@ describe("initialize - cleanup features", () => {
         pm: "npm",
         // removePrettier is undefined, should prompt
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -313,7 +319,8 @@ describe("initialize - cleanup features", () => {
         pm: "npm",
         // Both undefined, should prompt for both
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -331,7 +338,8 @@ describe("initialize - cleanup features", () => {
         removePrettier: true,
         removeEslint: false,
         editors: [],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
       });
 
@@ -353,7 +361,8 @@ describe("initialize - cleanup features", () => {
       await initialize({
         pm: "npm",
         editors: ["zed"],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
         removeEslint: false,
         removePrettier: false,
@@ -376,7 +385,8 @@ describe("initialize - cleanup features", () => {
       await initialize({
         pm: "pnpm",
         editors: ["zed"],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
         removeEslint: false,
         removePrettier: false,
@@ -400,7 +410,8 @@ describe("initialize - cleanup features", () => {
       await initialize({
         pm: "npm",
         editors: ["vscode", "zed"],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
         removeEslint: false,
         removePrettier: false,
@@ -414,7 +425,8 @@ describe("initialize - cleanup features", () => {
       await initialize({
         pm: "npm",
         editors: ["vscode"],
-        rules: [],
+        agents: [],
+        frameworks: [],
         integrations: [],
         removeEslint: false,
         removePrettier: false,

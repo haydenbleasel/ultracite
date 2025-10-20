@@ -9,7 +9,15 @@ vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 vi.mock("../src/agents/rules", () => ({
-  rulesFile: "mock rules content",
+  core: ["core rule 1", "core rule 2"],
+  react: ["react rule 1"],
+  next: ["next rule 1"],
+  qwik: ["qwik rule 1"],
+  solid: ["solid rule 1"],
+  svelte: ["svelte rule 1"],
+  vue: ["vue rule 1"],
+  angular: [],
+  remix: [],
 }));
 
 describe("agent configurations", () => {
@@ -34,9 +42,10 @@ describe("agent configurations", () => {
     "$name configuration",
     ({ name, path, header, appendMode }) => {
       const editor = createAgents(name as keyof typeof AGENTS);
+      const mockRulesContent = "core rule 1\ncore rule 2";
       const expectedContent = header
-        ? `${header}\n\nmock rules content`
-        : "mock rules content";
+        ? `${header}\n\n${mockRulesContent}`
+        : mockRulesContent;
       const expectedDir = path.includes("/")
         ? path.substring(0, path.lastIndexOf("/"))
         : ".";
@@ -111,14 +120,14 @@ describe("agent configurations", () => {
             expect(mockReadFile).toHaveBeenCalledWith(path, "utf-8");
             expect(mockWriteFile).toHaveBeenCalledWith(
               path,
-              "existing content\n\nmock rules content"
+              `existing content\n\n${mockRulesContent}`
             );
           });
 
           it(`should not duplicate content in ${path} when already present`, async () => {
             mockExists.mockResolvedValue(true);
             mockReadFile.mockResolvedValue(
-              "existing content\n\nmock rules content"
+              `existing content\n\n${mockRulesContent}`
             );
 
             await editor.update();
