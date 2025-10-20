@@ -3,7 +3,7 @@ title: Svelte
 description: Svelte-specific configuration for Ultracite.
 ---
 
-The Svelte configuration has Svelte-specific configuration. Currently, this is a minimal preset as Biome doesn't yet have dedicated Svelte-specific linting rules.
+The Svelte configuration has Svelte-specific configuration. This is a minimal preset as Biome doesn't yet have dedicated Svelte-specific linting rules, but it includes important overrides to prevent false positive linting errors in `.svelte` files.
 
 ## Installation
 
@@ -17,12 +17,33 @@ Add the Svelte configuration to your `biome.jsonc`:
 
 ## Overview
 
-This configuration ensures that React-specific props like `className` and `htmlFor` are flagged in Svelte components, as Svelte uses standard HTML attributes (`class` and `for`).
+This configuration:
 
-## Current Rules
+- **React-Specific Props**: Flags React-specific props like `className` and `htmlFor` since Svelte uses standard HTML attributes (`class` and `for`)
+- **Svelte File Overrides**: Relaxed rules for `.svelte` files to handle Svelte's component structure
+
+## Svelte-Specific Rules
 
 ### Suspicious
 
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noReactSpecificProps` | `error` | Disallow React-specific props like `className` and `htmlFor` in Svelte. Use `class` and `for` instead. |
+
+## Svelte File Overrides
+
+The following rules are disabled for `.svelte` files to prevent false positives due to Biome's partial support for Svelte components:
+
+### Correctness
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Allow unused variables in `.svelte` files. Variables in the script section may only be used in the template. |
+| `noUnusedImports` | `off` | Allow unused imports in `.svelte` files. Imports may only be used in the template section. |
+
+### Style
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `useConst` | `off` | Allow `let` and `var` declarations in `.svelte` files for reactive statements. |
+| `useImportType` | `off` | Disable explicit import type requirements for better compatibility with Svelte's build system. |

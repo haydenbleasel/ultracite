@@ -3,7 +3,7 @@ title: Vue
 description: Vue.js-specific linting rules for Ultracite.
 ---
 
-The Vue configuration has Vue.js-specific linting rules for component structure, data options, computed properties, and reserved keywords.
+The Vue configuration has Vue.js-specific linting rules for component structure, data options, computed properties, and reserved keywords. It also includes overrides to prevent false positive linting errors in `.vue` files.
 
 ## Installation
 
@@ -24,6 +24,7 @@ This configuration adds rules specific to Vue.js development:
 - **Reserved Keywords**: Disallow use of Vue reserved props and keys
 - **Duplicate Keys**: Prevent duplicate keys in component options
 - **React-Specific Props**: Disallow React-specific props in Vue components
+- **Vue File Overrides**: Relaxed rules for `.vue` files to handle Single File Component structure
 
 ## Vue-Specific Rules
 
@@ -42,3 +43,21 @@ This configuration adds rules specific to Vue.js development:
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noReactSpecificProps` | `error` | Disallow React-specific props like `className` and `htmlFor` in Vue. Use `class` and `for` instead. |
+
+## Vue File Overrides
+
+The following rules are disabled for `.vue` files to prevent false positives due to Biome's partial support for Vue Single File Components:
+
+### Correctness
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Allow unused variables in `.vue` files. Variables in the script section may only be used in the template. |
+| `noUnusedImports` | `off` | Allow unused imports in `.vue` files. Imports may only be used in the template section. |
+
+### Style
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `useConst` | `off` | Allow `let` and `var` declarations in `.vue` files for reactive data patterns. |
+| `useImportType` | `off` | Disable explicit import type requirements for better compatibility with Vue's build system. |
