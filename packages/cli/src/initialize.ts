@@ -412,6 +412,7 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Qwik", value: "qwik" },
             { label: "Angular", value: "angular" },
             { label: "Remix / TanStack Router / React Router", value: "remix" },
+            { label: "Astro", value: "astro" },
           ],
           required: false,
         });

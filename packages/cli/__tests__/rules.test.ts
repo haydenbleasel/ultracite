@@ -18,6 +18,7 @@ vi.mock("../src/agents/rules", () => ({
   vue: ["vue rule 1"],
   angular: [],
   remix: [],
+  astro: ["astro rule 1"],
 }));
 
 describe("agent configurations", () => {

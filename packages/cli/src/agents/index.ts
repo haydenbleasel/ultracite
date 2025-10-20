@@ -5,6 +5,7 @@ import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
 import {
   angular,
+  astro,
   core,
   next,
   qwik,
@@ -44,6 +45,9 @@ const generateAgentsContext = (
     }
     if (frameworks.includes("remix")) {
       context.push(...remix);
+    }
+    if (frameworks.includes("astro")) {
+      context.push(...astro);
     }
   }
 
