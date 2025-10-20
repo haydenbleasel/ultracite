@@ -8,6 +8,7 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CopyMarkdown } from "@/components/copy-markdown";
+import { Feedback } from "@/components/feedback";
 import { ViewOptions } from "@/components/page-actions";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
@@ -50,6 +51,7 @@ const Page = async (props: PageProps) => {
           })}
         />
       </DocsBody>
+      <Feedback className="mt-12" />
     </DocsPage>
   );
 };
