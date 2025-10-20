@@ -1,9 +1,7 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { Check, ChevronDownIcon, Copy, ExternalLinkIcon } from "lucide-react";
-import { useState } from "react";
+import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import {
   OpenIn,
   OpenInChatGPT,
@@ -18,56 +16,6 @@ import {
   OpenInv0,
 } from "@/components/ai-elements/open-in-chat";
 import { Button } from "./ui/button";
-
-const cache = new Map<string, string>();
-
-export function LLMCopyButton({
-  /**
-   * A URL to fetch the raw Markdown/MDX content of page
-   */
-  markdownUrl,
-}: {
-  markdownUrl: string;
-}) {
-  const [isLoading, setLoading] = useState(false);
-  const [checked, onClick] = useCopyButton(async () => {
-    const cached = cache.get(markdownUrl);
-    if (cached) {
-      return navigator.clipboard.writeText(cached);
-    }
-
-    setLoading(true);
-
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          "text/plain": fetch(markdownUrl).then(async (res) => {
-            const content = await res.text();
-            cache.set(markdownUrl, content);
-
-            return content;
-          }),
-        }),
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  });
-
-  const Icon = checked ? Check : Copy;
-
-  return (
-    <Button
-      className="shadow-none"
-      disabled={isLoading}
-      onClick={onClick}
-      variant="secondary"
-    >
-      <Icon />
-      Copy Markdown
-    </Button>
-  );
-}
 
 type ViewOptionsProps = {
   markdownUrl: string;

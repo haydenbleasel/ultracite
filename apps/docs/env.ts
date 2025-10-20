@@ -3,10 +3,12 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    REDIS_URL: z.string().url(),
+    GITHUB_APP_ID: z.string(),
+    GITHUB_APP_PRIVATE_KEY: z.string(),
   },
   client: {},
   runtimeEnv: {
-    REDIS_URL: process.env.REDIS_URL,
+    GITHUB_APP_ID: process.env.GITHUB_APP_ID,
+    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
   },
 });

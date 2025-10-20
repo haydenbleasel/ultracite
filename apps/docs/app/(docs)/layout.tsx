@@ -24,7 +24,8 @@ const DocLayout = async (props: DocsLayoutProps) => (
         ...baseOptions.nav,
         mode: "top",
       }}
-      sidebar={{ collapsible: false, tabs: false }}
+      sidebar={{ collapsible: false }}
+      tabMode="navbar"
       tree={source.pageTree}
     >
       {props.children}
