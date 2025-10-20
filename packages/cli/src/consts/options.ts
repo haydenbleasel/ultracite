@@ -33,5 +33,6 @@ export const options = {
     "qwik",
     "remix",
     "angular",
+    "astro",
   ] as const,
 };

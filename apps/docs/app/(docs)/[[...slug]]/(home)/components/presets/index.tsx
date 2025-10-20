@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Angular from "./logos/angular.svg";
+import Astro from "./logos/astro.svg";
 import Nextjs from "./logos/nextjs.svg";
 import Qwik from "./logos/qwik.svg";
 import React from "./logos/react.svg";
@@ -49,6 +50,11 @@ const logos = [
     id: "svelte",
     name: "Svelte",
     src: Svelte,
+  },
+  {
+    id: "astro",
+    name: "Astro",
+    src: Astro,
   },
 ];
 

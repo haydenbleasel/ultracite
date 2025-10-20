@@ -337,3 +337,18 @@ export const vue = [
 
 export const angular: string[] = [];
 export const remix: string[] = [];
+
+export const astro = [
+  // Style
+
+  "Use `let` or `var` when variables are reassigned in Astro comp frontmatter",
+  "Avoid explicit import types in Astro files for better compat",
+
+  // Correctness
+
+  "Unused vars and imports are allowed in Astro files due to frontmatter constraints",
+
+  // Suspicious
+
+  "No React-specific props like `className` and `htmlFor`. Use `class` and `for` instead",
+];
