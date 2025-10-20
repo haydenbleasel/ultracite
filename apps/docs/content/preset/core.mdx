@@ -227,7 +227,7 @@ Environment-specific handling:
 | `useHookAtTopLevel` | `error` | Enforce that all React hooks are being called from the Top Level component functions. |
 | `useImportExtensions` | `off` | Enforce file extensions for relative imports. |
 | `useIsNan` | `error` | Require calls to `isNaN()` when checking for NaN. |
-| `useJsonImportAttributes` | `error` | Enforces the use of with `{ type: "json" }` for JSON module imports. |
+| `useJsonImportAttributes` | `off` | Enforces the use of with `{ type: "json" }` for JSON module imports. |
 | `useParseIntRadix` | `error` | Enforce the consistent use of the radix argument when using `parseInt()`. |
 | `useSingleJsDocAsterisk` | `error` | Enforce JSDoc comment lines to start with a single asterisk, except for the first one. |
 | `useUniqueElementIds` | `off` | Prevent the usage of static string literal id attribute on elements. |
@@ -239,12 +239,12 @@ Environment-specific handling:
 
 | Rule | Setting | Description |
 |------|---------|-------------|
-| `noDeprecatedImports` | `error` | Restrict imports of deprecated exports. |
+| `noDeprecatedImports` | `off` | Restrict imports of deprecated exports. |
 | `noDuplicateDependencies` | `error` | Prevent the listing of duplicate dependencies. |
 | `noFloatingPromises` | `off` | Require Promise-like statements to be handled appropriately. |
 | `noImportCycles` | `off` | Prevent import cycles. |
 | `noJsxLiterals` | `off` | Disallow string literals inside JSX elements. |
-| `noMisusedPromises` | `error` | Disallow Promises to be used in places where they are almost certainly a mistake. |
+| `noMisusedPromises` | `off` | Disallow Promises to be used in places where they are almost certainly a mistake. |
 | `noNonNullAssertedOptionalChain` | `error` | Disallow non-null assertions after optional chaining expressions. |
 | `noSecrets` | `off` | Disallow usage of sensitive data such as API keys and tokens. |
 | `noShadow` | `error` | Disallow variable declarations from shadowing variables declared in the outer scope. |
@@ -257,7 +257,7 @@ Environment-specific handling:
 | `useConsistentArrowReturn` | `error` | Enforce consistent arrow function bodies. |
 | `useConsistentTypeDefinitions` | `error` (type) | Enforce type definitions to consistently use either interface or type. |
 | `useDeprecatedDate` | `error` | Require the `@deprecated` directive to specify a deletion date. |
-| `useExhaustiveSwitchCases` | `error` | Require switch-case statements to be exhaustive. |
+| `useExhaustiveSwitchCases` | `off` | Require switch-case statements to be exhaustive. |
 | `useExplicitType` | `off` | Enforce types in functions, methods, variables, and parameters. |
 | `useImageSize` | `error` | Enforces that `<img>` elements have both width and height attributes. |
 | `useMaxParams` | `error` | Enforce a maximum number of parameters in function definitions. |
@@ -454,3 +454,9 @@ Environment-specific handling:
 | `useNumberToFixedDigitsArgument` | `error` | Enforce using the digits argument with `Number#toFixed()`. |
 | `useStaticResponseMethods` | `error` | Use static `Response` methods instead of `new Response()` constructor when possible. |
 | `useStrictMode` | `error` | Enforce the use of the directive `use strict` in script files. |
+
+## Notes
+
+Certain rules are disabled because they are too slow to run with the Scanner. As noted in the [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first), project rules enabled are known to cause performance overhead in return for more advanced analysis.
+
+In our testing, we have found these rules can make the difference between a 300ms and a 13s lint.
