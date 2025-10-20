@@ -98,6 +98,38 @@ describe("biome configuration", () => {
         JSON.stringify(expectedConfig, null, 2)
       );
     });
+
+    it("should create biome.jsonc with framework-specific extends when frameworks are provided", async () => {
+      vi.mocked(exists).mockResolvedValue(false);
+
+      await biome.create({ frameworks: ["react", "next"] });
+
+      const expectedConfig = {
+        $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+        extends: ["ultracite/core", "ultracite/react", "ultracite/next"],
+      };
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./biome.jsonc",
+        JSON.stringify(expectedConfig, null, 2)
+      );
+    });
+
+    it("should handle empty frameworks array", async () => {
+      vi.mocked(exists).mockResolvedValue(false);
+
+      await biome.create({ frameworks: [] });
+
+      const expectedConfig = {
+        $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+        extends: ["ultracite/core"],
+      };
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./biome.jsonc",
+        JSON.stringify(expectedConfig, null, 2)
+      );
+    });
   });
 
   describe("update", () => {
@@ -244,6 +276,66 @@ describe("biome configuration", () => {
           `"$schema": "./node_modules/@biomejs/biome/configuration_schema.json"`
         )
       );
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./biome.jsonc",
+        expect.stringContaining(
+          '"extends": [\n    "other-config",\n    "ultracite/core"\n  ]'
+        )
+      );
+    });
+
+    it("should add framework-specific extends when frameworks are provided in update", async () => {
+      vi.mocked(exists).mockResolvedValue(false);
+
+      const existingConfig = {
+        extends: ["other-config"],
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+
+      await biome.update({ frameworks: ["react", "vue"] });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./biome.jsonc",
+        expect.stringContaining(
+          '"extends": [\n    "other-config",\n    "ultracite/core",\n    "ultracite/react",\n    "ultracite/vue"\n  ]'
+        )
+      );
+    });
+
+    it("should not duplicate framework extends if they already exist", async () => {
+      vi.mocked(exists).mockResolvedValue(false);
+
+      const existingConfig = {
+        extends: ["ultracite/core", "ultracite/react"],
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+
+      await biome.update({ frameworks: ["react", "next"] });
+
+      // Should only add next, not duplicate react
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./biome.jsonc",
+        expect.stringContaining("ultracite/next")
+      );
+      // Should not have duplicate react entries
+      const writeCall = mockWriteFile.mock.calls[0]?.[1] as string;
+      const matches = writeCall.match(/ultracite\/react/g);
+      expect(matches).toHaveLength(1);
+    });
+
+    it("should handle empty frameworks array in update", async () => {
+      vi.mocked(exists).mockResolvedValue(false);
+
+      const existingConfig = {
+        extends: ["other-config"],
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingConfig));
+
+      await biome.update({ frameworks: [] });
+
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./biome.jsonc",
         expect.stringContaining(

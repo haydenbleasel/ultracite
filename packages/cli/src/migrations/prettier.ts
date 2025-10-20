@@ -141,7 +141,7 @@ const cleanVsCodePrettierSettings = async () => {
         "editor.defaultFormatter" in langConfig &&
         langConfig["editor.defaultFormatter"] === "esbenp.prettier-vscode"
       ) {
-        langConfig["editor.defaultFormatter"] = undefined;
+        delete langConfig["editor.defaultFormatter"];
         changed = true;
 
         // Remove the language key if it's now empty

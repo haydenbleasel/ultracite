@@ -1,11 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { check } from "../src/commands/check";
+import { doctor } from "../src/commands/doctor";
 import { fix } from "../src/commands/fix";
 import { initialize } from "../src/initialize";
 
 // Mock the command modules
 vi.mock("../src/commands/fix");
 vi.mock("../src/commands/check");
+vi.mock("../src/commands/doctor");
 vi.mock("../src/initialize");
 
 // Mock process.env to prevent CLI execution
@@ -14,6 +16,7 @@ vi.stubEnv("VITEST", "true");
 describe("CLI Router", () => {
   const mockFix = vi.mocked(fix);
   const mockCheck = vi.mocked(check);
+  const mockDoctor = vi.mocked(doctor);
   const mockInitialize = vi.mocked(initialize);
 
   beforeEach(() => {
@@ -80,11 +83,36 @@ describe("CLI Router", () => {
     expect(mockFix).toHaveBeenCalledWith(["test.ts"], { unsafe: undefined });
   });
 
-  it("should call check with correct parameters", () => {
-    // Note: check is a query, not a mutation, so it doesn't actually call the function
-    // The router just defines the procedure - the actual execution happens via CLI
-    // This test verifies the router structure is correct
-    expect(mockCheck).toBeDefined();
+  it("should call check with correct parameters", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    const files = ["src/index.ts", "src/utils.ts"];
+
+    // This covers line 66
+    await caller.check(files);
+
+    expect(mockCheck).toHaveBeenCalledWith(files);
+  });
+
+  it("should call check with empty array when no files provided", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    // This also covers line 66
+    await caller.check(undefined);
+
+    expect(mockCheck).toHaveBeenCalledWith([]);
+  });
+
+  it("should call doctor when invoked", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    // This covers line 95
+    await caller.doctor();
+
+    expect(mockDoctor).toHaveBeenCalled();
   });
 
   it("should call initialize with correct parameters", async () => {

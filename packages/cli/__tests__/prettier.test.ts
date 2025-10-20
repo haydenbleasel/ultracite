@@ -272,6 +272,7 @@ describe("prettier-cleanup", () => {
       const result = await prettierCleanup.remove("npm");
 
       expect(result.vsCodeCleaned).toBe(true);
+      // The prettier formatter should be removed but other settings should remain
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.vscode/settings.json",
         JSON.stringify(
@@ -279,6 +280,46 @@ describe("prettier-cleanup", () => {
             "[javascriptreact][typescriptreact]": {
               "editor.wordWrap": "on",
             },
+            "editor.formatOnSave": true,
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it("should remove empty language formatter config after removing prettier", async () => {
+      const vscodeSettings = {
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+        },
+        "editor.formatOnSave": true,
+      };
+
+      mockReadFile.mockImplementation(
+        async (path: Parameters<typeof readFile>[0]) => {
+          if (path === "package.json") {
+            return await Promise.resolve("{}");
+          }
+          if (path === "./.vscode/settings.json") {
+            return JSON.stringify(vscodeSettings);
+          }
+          return await Promise.resolve("{}");
+        }
+      );
+
+      mockExists.mockImplementation(
+        async (path: string) => path === "./.vscode/settings.json"
+      );
+
+      const result = await prettierCleanup.remove("npm");
+
+      expect(result.vsCodeCleaned).toBe(true);
+      // The language config should be completely removed since it only had the prettier formatter
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "./.vscode/settings.json",
+        JSON.stringify(
+          {
             "editor.formatOnSave": true,
           },
           null,
@@ -420,11 +461,10 @@ describe("prettier-cleanup", () => {
       const result = await prettierCleanup.remove("npm");
 
       expect(result.vsCodeCleaned).toBe(true);
-      // The language config becomes empty but is not removed entirely
-      // because checking for zero keys would require additional logic
+      // The language config becomes empty after removing prettier, so the entire config is empty
       expect(mockWriteFile).toHaveBeenCalledWith(
         "./.vscode/settings.json",
-        expect.stringContaining("[javascript]")
+        JSON.stringify({}, null, 2)
       );
     });
 
