@@ -148,7 +148,7 @@
     text-rendering: optimizelegibility;
   }
   body {
-    @apply min-h-[100dvh];
+    @apply min-h-dvh;
   }
   input::placeholder,
   textarea::placeholder {
@@ -186,7 +186,7 @@
   }
 
   #nd-sidebar {
-    @apply bg-transparent!;
+    @apply bg-transparent! pt-6!;
   }
 
   #nd-page {
@@ -199,5 +199,9 @@
 
   #nd-subnav > div {
     @apply border-b-0!;
+  }
+
+  #nd-sidebar [class*="empty:hidden"] {
+    @apply hidden!;
   }
 }
