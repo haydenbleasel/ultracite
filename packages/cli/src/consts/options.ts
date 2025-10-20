@@ -29,6 +29,7 @@ export const options = {
     "next",
     "solid",
     "vue",
+    "svelte",
     "qwik",
     "remix",
     "angular",
