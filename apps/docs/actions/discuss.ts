@@ -8,13 +8,7 @@ const repo = "ultracite";
 const owner = "haydenbleasel";
 const DocsCategory = "Docs Feedback";
 
-let instance: Octokit | undefined;
-
-async function getOctokit(): Promise<Octokit> {
-  if (instance) {
-    return instance;
-  }
-
+const getOctokit = async (): Promise<Octokit> => {
   const appId = env.GITHUB_APP_ID;
   const privateKey = env.GITHUB_APP_PRIVATE_KEY;
 
@@ -43,9 +37,8 @@ async function getOctokit(): Promise<Octokit> {
     }
   );
 
-  instance = await app.getInstallationOctokit(data.id);
-  return instance;
-}
+  return await app.getInstallationOctokit(data.id);
+};
 
 type RepositoryInfo = {
   id: string;
@@ -57,12 +50,7 @@ type RepositoryInfo = {
   };
 };
 
-let cachedDestination: RepositoryInfo | undefined;
-async function getFeedbackDestination() {
-  if (cachedDestination) {
-    return cachedDestination;
-  }
-
+const getFeedbackDestination = async () => {
   const octokit = await getOctokit();
 
   const {
@@ -80,10 +68,8 @@ async function getFeedbackDestination() {
   }
 `);
 
-  cachedDestination = repository;
-
-  return cachedDestination;
-}
+  return repository;
+};
 
 export const discuss = async (
   url: string,
