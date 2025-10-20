@@ -1,0 +1,44 @@
+---
+title: Vue
+description: Vue.js-specific linting rules for Ultracite.
+---
+
+The Vue configuration has Vue.js-specific linting rules for component structure, data options, computed properties, and reserved keywords.
+
+## Installation
+
+Add the Vue configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Overview
+
+This configuration adds rules specific to Vue.js development:
+
+- **Component Naming**: Enforce multi-word component names
+- **Data Structure**: Prevent improper data option declarations
+- **Reserved Keywords**: Disallow use of Vue reserved props and keys
+- **Duplicate Keys**: Prevent duplicate keys in component options
+- **React-Specific Props**: Disallow React-specific props in Vue components
+
+## Vue-Specific Rules
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Prevent using object declaration for the `data` option in Vue components. The `data` option must be a function that returns an object. |
+| `noVueDuplicateKeys` | `error` | Prevent duplicate keys in Vue component options. Keys in `data`, `computed`, `methods`, etc. must be unique. |
+| `noVueReservedKeys` | `error` | Disallow Vue reserved keys like `$data`, `$props`, `$el`, etc. in component options. |
+| `noVueReservedProps` | `error` | Disallow Vue reserved props like `key`, `ref`, and `is` as custom component props. |
+| `useVueMultiWordComponentNames` | `error` | Enforce multi-word component names to avoid conflicts with HTML elements. Single-word names like `Button` or `Card` should be avoided. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Disallow React-specific props like `className` and `htmlFor` in Vue. Use `class` and `for` instead. |

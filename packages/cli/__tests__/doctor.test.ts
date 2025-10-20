@@ -79,7 +79,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -136,7 +136,7 @@ describe("doctor command", () => {
     vi.mocked(existsSync).mockReturnValue(true);
     vi.mocked(readFile).mockResolvedValue(
       JSON.stringify({
-        extends: ["ultracite"],
+        extends: ["ultracite/core"],
         devDependencies: { ultracite: "^5.0.0" },
       })
     );
@@ -200,7 +200,7 @@ describe("doctor command", () => {
       expect.stringContaining("⚠️ Biome configuration:")
     );
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining("doesn't extend ultracite")
+      expect.stringContaining("doesn't extend ultracite/core")
     );
   });
 
@@ -233,7 +233,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -292,7 +292,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -350,7 +350,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -500,7 +500,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.jsonc")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -552,7 +552,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }
@@ -602,7 +602,7 @@ describe("doctor command", () => {
       if (pathStr.includes("biome.json")) {
         return Promise.resolve(
           JSON.stringify({
-            extends: ["ultracite"],
+            extends: ["ultracite/core"],
           })
         );
       }

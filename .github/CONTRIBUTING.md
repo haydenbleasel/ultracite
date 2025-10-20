@@ -13,7 +13,7 @@ Ultracite is a monorepo managed with pnpm workspaces and Turbo:
 - `packages/cli` - The main Ultracite CLI package and Biome configuration
   - `biome.jsonc` - The core Biome configuration with all rules
   - `src/` - CLI implementation for `ultracite init`, `check`, `fix`, etc.
-  - `src/editor-rules/` - AI/IDE integration rules (273+ rules)
+  - `src/editor-rules/` - AI/IDE integration rules
 - `apps/docs` - Documentation website built with [Fumadocs](https://fumadocs.dev/)
 
 ## Getting Started

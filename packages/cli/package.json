@@ -7,7 +7,7 @@
     "ultracite": "dist/index.js"
   },
   "files": [
-    "biome.jsonc",
+    "config/*",
     "dist",
     "README.md"
   ],
@@ -16,7 +16,11 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
-  "main": "./biome.jsonc",
+  "main": "./config/ultracite/biome.jsonc",
+  "exports": {
+    ".": "./config/ultracite/biome.jsonc",
+    "./*": "./config/*/biome.jsonc"
+  },
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "bugs": {
     "url": "https://github.com/haydenbleasel/ultracite/issues"

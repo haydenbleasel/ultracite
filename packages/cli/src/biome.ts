@@ -1,11 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import type { options } from "./consts/options";
 import { exists } from "./utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-  extends: ["ultracite"],
+  extends: ["ultracite/core"],
 };
 
 const getBiomeConfigPath = async (): Promise<string> => {
@@ -16,16 +17,34 @@ const getBiomeConfigPath = async (): Promise<string> => {
   return "./biome.jsonc";
 };
 
+type BiomeOptions = {
+  frameworks?: (typeof options.frameworks)[number][];
+};
+
 export const biome = {
   exists: async () => {
     const path = await getBiomeConfigPath();
     return exists(path);
   },
-  create: async () => {
+  create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
-    return writeFile(path, JSON.stringify(defaultConfig, null, 2));
+    const extendsList = ["ultracite/core"];
+
+    // Add framework-specific configs
+    if (opts?.frameworks && opts.frameworks.length > 0) {
+      for (const framework of opts.frameworks) {
+        extendsList.push(`ultracite/${framework}`);
+      }
+    }
+
+    const config = {
+      ...defaultConfig,
+      extends: extendsList,
+    };
+
+    return writeFile(path, JSON.stringify(config, null, 2));
   },
-  update: async () => {
+  update: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
     const existingContents = await readFile(path, "utf-8");
     const existingConfig = parse(existingContents) as
@@ -40,9 +59,25 @@ export const biome = {
       configToWork.extends && Array.isArray(configToWork.extends)
         ? configToWork.extends
         : [];
-    if (!existingExtends.includes("ultracite")) {
-      configToWork.extends = [...existingExtends, "ultracite"];
+
+    const newExtends = [...existingExtends];
+
+    // Add ultracite/core if not present
+    if (!newExtends.includes("ultracite/core")) {
+      newExtends.push("ultracite/core");
     }
+
+    // Add framework-specific configs if provided
+    if (opts?.frameworks && opts.frameworks.length > 0) {
+      for (const framework of opts.frameworks) {
+        const frameworkConfig = `ultracite/${framework}`;
+        if (!newExtends.includes(frameworkConfig)) {
+          newExtends.push(frameworkConfig);
+        }
+      }
+    }
+
+    configToWork.extends = newExtends;
 
     // Merge other properties from defaultConfig
     const configToMerge = {

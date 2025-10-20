@@ -1,0 +1,77 @@
+---
+title: Next.js
+description: Next.js-specific linting rules for Ultracite.
+---
+
+The Next.js configuration has Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+
+## Installation
+
+Add the Next.js configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Note: The Next.js configuration automatically includes React rules, so you don't need to add `ultracite/react` separately.
+
+## Overview
+
+This configuration adds rules specific to Next.js development:
+
+- **Image Optimization**: Enforce use of Next.js Image component
+- **Document Structure**: Prevent improper usage of Next.js special components
+- **Client Components**: Ensure async client components are handled correctly
+- **Configuration Files**: Special handling for `next.config.*` files
+
+## Next.js-Specific Rules
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Prevent async client components in Next.js. Client components should be synchronous; use server components for async operations. |
+
+### Performance
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noImgElement` | `error` | Disallow use of `<img>` HTML element. Use Next.js `<Image>` component instead for automatic image optimization. |
+
+### Style
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Disallow use of `<head>` HTML element. Use Next.js `next/head` or App Router metadata API instead. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Prevent importing `next/document` in page files. `_document.tsx` should only exist in `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Prevent importing `next/head` in `_document.tsx`. Use `<Head>` from `next/document` instead. |
+
+## Configuration File Overrides
+
+The Next.js preset includes special handling for `next.config.*` files:
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+This allows for Next.js configuration patterns that might not typically pass linting rules.

@@ -34,6 +34,7 @@ type InitializeFlags = {
   editors?: (typeof options.editorConfigs)[number][];
   rules?: (typeof options.editorRules)[number][];
   integrations?: (typeof options.integrations)[number][];
+  frameworks?: (typeof options.frameworks)[number][];
   removePrettier?: boolean;
   removeEslint?: boolean;
   skipInstall?: boolean;
@@ -127,19 +128,21 @@ const upsertZedSettings = async () => {
   );
 };
 
-const upsertBiomeConfig = async () => {
+const upsertBiomeConfig = async (
+  frameworks?: (typeof options.frameworks)[number][]
+) => {
   const s = spinner();
   s.start("Checking for Biome configuration...");
 
   if (await biome.exists()) {
     s.message("Biome configuration found, updating...");
-    await biome.update();
+    await biome.update({ frameworks });
     s.stop("Biome configuration updated.");
     return;
   }
 
   s.message("Biome configuration not found, creating...");
-  await biome.create();
+  await biome.create({ frameworks });
   s.stop("Biome configuration created.");
 };
 
@@ -382,6 +385,45 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
+    let frameworks = opts.frameworks;
+    if (frameworks === undefined) {
+      // If other CLI options are provided, default to empty array to avoid prompting
+      // This allows programmatic usage without interactive prompts
+      const hasOtherCliOptions =
+        opts.pm ||
+        opts.editors ||
+        opts.rules ||
+        opts.integrations !== undefined ||
+        opts.removePrettier !== undefined ||
+        opts.removeEslint !== undefined;
+
+      if (hasOtherCliOptions) {
+        frameworks = [];
+      } else {
+        const frameworksResult = await multiselect({
+          message: "Which frameworks are you using (optional)?",
+          options: [
+            { label: "React", value: "react" },
+            { label: "Next.js", value: "next" },
+            { label: "Solid", value: "solid" },
+            { label: "Vue", value: "vue" },
+            { label: "Svelte", value: "svelte" },
+            { label: "Qwik", value: "qwik" },
+            { label: "Angular", value: "angular" },
+            { label: "Remix / TanStack Router / React Router", value: "remix" },
+          ],
+          required: false,
+        });
+
+        if (isCancel(frameworksResult)) {
+          cancel("Operation cancelled.");
+          process.exit(0);
+        }
+
+        frameworks = frameworksResult as (typeof options.frameworks)[number][];
+      }
+    }
+
     let editorConfig = opts.editors;
     if (!editorConfig) {
       const editorConfigResult = await multiselect({
@@ -488,7 +530,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     await installDependencies(pm, !opts.skipInstall);
 
     await upsertTsConfig();
-    await upsertBiomeConfig();
+    await upsertBiomeConfig(frameworks);
 
     if (editorConfig?.includes("vscode")) {
       await upsertVsCodeSettings();

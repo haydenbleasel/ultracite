@@ -25,6 +25,27 @@ const config = {
       },
     ];
   },
+
+  // biome-ignore lint/suspicious/useAwait: "redirects is async"
+  async redirects() {
+    return [
+      {
+        source: "/husky",
+        destination: "/integration/husky",
+        permanent: true,
+      },
+      {
+        source: "/lint-staged",
+        destination: "/integration/lint-staged",
+        permanent: true,
+      },
+      {
+        source: "/lefthook",
+        destination: "/integration/lefthook",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withMdx(config);

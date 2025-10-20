@@ -1,6 +1,6 @@
 {
   "root": false,
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "$schema": "../node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
     "includes": [
@@ -169,7 +169,6 @@
       "correctness": {
         /** ------------------------ JavaScript Rules ------------------------ **/
 
-        "noChildrenProp": "error",
         "noConstantCondition": "error",
         "noConstantMathMinMaxClamp": "error",
         "noConstAssign": "error",
@@ -182,11 +181,8 @@
         "noInvalidBuiltinInstantiation": "error",
         "noInvalidConstructorSuper": "error",
         "noInvalidUseBeforeDeclaration": "error",
-        "noNestedComponentDefinitions": "error",
         "noNonoctalDecimalEscape": "error",
         "noPrecisionLoss": "error",
-        "noReactPropAssignments": "error",
-        "noRenderReturnValue": "error",
         "noRestrictedElements": "error",
         "noSelfAssign": "error",
         "noSetterReturn": "error",
@@ -205,14 +201,10 @@
         "noUnusedLabels": "error",
         "noUnusedPrivateClassMembers": "error",
         "noUnusedVariables": "error",
-        "noVoidElementsWithChildren": "error",
         "noVoidTypeReturn": "error",
-        "useExhaustiveDependencies": "error",
         "useGraphqlNamedOperations": "error",
-        "useHookAtTopLevel": "error",
         "useIsNan": "error",
         "useJsonImportAttributes": "error",
-        "useJsxKeyInIterable": "error",
         "useParseIntRadix": "error",
         "useSingleJsDocAsterisk": "error",
         "useValidForDirection": "error",
@@ -222,7 +214,6 @@
         "noNodejsModules": "off",
         "noPrivateImports": "off",
         "noProcessGlobal": "off",
-        "noSolidDestructuredProps": "off",
         "noUndeclaredDependencies": "off",
         "useImportExtensions": "off",
         "useUniqueElementIds": "off",
@@ -245,17 +236,10 @@
         "noDeprecatedImports": "error",
         "noDuplicateDependencies": "error",
         "noMisusedPromises": "error",
-        "noNextAsyncClientComponent": "error",
         "noNonNullAssertedOptionalChain": "error",
-        "noQwikUseVisibleTask": "error",
-        "noReactForwardRef": "error",
         "noShadow": "error",
         "noUnusedExpressions": "error",
         "noUselessUndefined": "error",
-        "noVueDataObjectDeclaration": "error",
-        "noVueDuplicateKeys": "error",
-        "noVueReservedKeys": "error",
-        "noVueReservedProps": "error",
         "useAnchorHref": "error",
         "useConsistentArrowReturn": "error",
         //Enforce type definitions to consistently use either interface or type.
@@ -269,12 +253,6 @@
         "useExhaustiveSwitchCases": "error",
         "useImageSize": "error",
         "useMaxParams": "error",
-        "useReactFunctionComponents": "error",
-
-        /* Temporarily disabled until we have framework rules */
-        "useQwikClasslist": "off",
-        "useQwikValidLexicalScope": "off",
-        "useQwikMethodUsage": "off",
 
         "noJsxLiterals": "off",
         "noUselessCatchBinding": "off",
@@ -289,7 +267,6 @@
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
           }
         },
-        "useVueMultiWordComponentNames": "off",
 
         /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
         "noFloatingPromises": "off",
@@ -303,15 +280,13 @@
         "noBarrelFile": "error",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
-        "noImgElement": "error",
         "noNamespaceImport": "error",
         "noUnwantedPolyfillio": "error",
         "useGoogleFontPreconnect": "error",
         "useTopLevelRegex": "error",
 
         "noAwaitInLoops": "off",
-        "noReExportAll": "off",
-        "useSolidForComponent": "off"
+        "noReExportAll": "off"
       },
       "security": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -327,7 +302,6 @@
         "noDoneCallback": "error",
         "noEnum": "error",
         "noExportedImports": "error",
-        "noHeadElement": "error",
         "noInferrableTypes": "error",
         "noMagicNumbers": "error",
         "noNamespace": "error",
@@ -410,7 +384,6 @@
 
         "noAlert": "error",
         "noApproximativeNumericConstant": "error",
-        "noArrayIndexKey": "error",
         "noAssignInExpressions": "error",
         "noAsyncPromiseExecutor": "error",
         "noBiomeFirstException": "error",
@@ -427,13 +400,11 @@
         "noControlCharactersInRegex": "error",
         "noDebugger": "error",
         "noDocumentCookie": "error",
-        "noDocumentImportInPage": "error",
         "noDoubleEquals": "error",
         "noDuplicateCase": "error",
         "noDuplicateClassMembers": "error",
         "noDuplicateElseIf": "error",
         "noDuplicateFields": "error",
-        "noDuplicateJsxProps": "error",
         "noDuplicateObjectKeys": "error",
         "noDuplicateParameters": "error",
         "noDuplicateTestHooks": "error",
@@ -449,7 +420,6 @@
         "noGlobalAssign": "error",
         "noGlobalIsFinite": "error",
         "noGlobalIsNan": "error",
-        "noHeadImportInDocument": "error",
         "noImplicitAnyLet": "error",
         "noImportAssign": "error",
         "noIrregularWhitespace": "error",
@@ -467,7 +437,6 @@
         "noShadowRestrictedNames": "error",
         "noSkippedTests": "error",
         "noSparseArray": "error",
-        "noSuspiciousSemicolonInJsx": "error",
         "noTemplateCurlyInString": "error",
         "noThenProperty": "error",
         "noTsIgnore": "error",
@@ -492,8 +461,6 @@
         "useNumberToFixedDigitsArgument": "error",
         "useStaticResponseMethods": "error",
         "useStrictMode": "error",
-
-        "noReactSpecificProps": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDuplicateAtImportRules": "error",
@@ -586,17 +553,6 @@
       ]
     },
     {
-      // Next.js config files often return promises without await
-      "includes": ["next.config.*"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "useAwait": "off"
-          }
-        }
-      }
-    },
-    {
       // Test files
       "includes": ["**/*.{test,spec}.{ts,tsx,js,jsx}", "**/__tests__/**/*"],
       "linter": {
@@ -687,17 +643,6 @@
         "parser": {
           "allowComments": true,
           "allowTrailingCommas": true
-        }
-      }
-    },
-    {
-      // Router files (TanStack Router, Remix)
-      "includes": ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useFilenamingConvention": "off"
-          }
         }
       }
     }

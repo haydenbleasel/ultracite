@@ -1,0 +1,56 @@
+---
+title: React
+description: React-specific linting rules for Ultracite.
+---
+
+The React configuration has React-specific linting rules for JSX, hooks, and component patterns.
+
+## Installation
+
+Add the React configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Overview
+
+This configuration adds rules specific to React development:
+
+- **JSX Rules**: Enforce proper JSX syntax and patterns
+- **Hooks Rules**: Ensure React hooks are used correctly
+- **Component Rules**: Enforce React component best practices
+- **Children Handling**: Prevent improper children prop usage
+
+## React-Specific Rules
+
+### Correctness
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Prevent passing children as props. Children should be nested between the opening and closing tags. |
+| `noNestedComponentDefinitions` | `error` | Prevent component definitions inside other components. This causes unnecessary re-renders. |
+| `noReactPropAssignments` | `error` | Prevent reassigning props in React components. Props should be treated as immutable. |
+| `noRenderReturnValue` | `error` | Prevent usage of the return value from `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Prevent void elements (like `<img>`, `<br>`) from having children. |
+| `useExhaustiveDependencies` | `error` | Enforce all dependencies are correctly specified in React hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Enforce that all React hooks are called from the top level of component functions, not inside loops, conditions, or nested functions. |
+| `useJsxKeyInIterable` | `error` | Enforce that elements in iterables have a `key` prop for React's reconciliation. |
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Prevent usage of legacy `React.forwardRef`. Use ref as a prop instead (React 19+). |
+| `useReactFunctionComponents` | `error` | Enforce using function components over class components in React. |
+
+### Suspicious
+
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Prevent using array indices as keys. Array indices are not stable identifiers and can cause issues with component state. |
+| `noDuplicateJsxProps` | `error` | Prevent duplicate properties in JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Prevent semicolons that change the semantic of JSX elements. |
+| `noReactSpecificProps` | `off` | Allow React-specific props like `className` and `htmlFor`. |
