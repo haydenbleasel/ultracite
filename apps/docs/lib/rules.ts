@@ -1,1 +1,1 @@
-../../../packages/cli/src/editor-rules/rules.ts
+../../../packages/cli/src/agents/rules.ts
