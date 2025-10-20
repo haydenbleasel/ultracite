@@ -204,7 +204,6 @@
         "noVoidTypeReturn": "error",
         "useGraphqlNamedOperations": "error",
         "useIsNan": "error",
-        "useJsonImportAttributes": "error",
         "useParseIntRadix": "error",
         "useSingleJsDocAsterisk": "error",
         "useValidForDirection": "error",
@@ -217,6 +216,9 @@
         "noUndeclaredDependencies": "off",
         "useImportExtensions": "off",
         "useUniqueElementIds": "off",
+
+        /** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/
+        "useJsonImportAttributes": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noInvalidDirectionInLinearGradient": "error",
@@ -233,9 +235,7 @@
         "noUnmatchableAnbSelector": "error"
       },
       "nursery": {
-        "noDeprecatedImports": "error",
         "noDuplicateDependencies": "error",
-        "noMisusedPromises": "error",
         "noNonNullAssertedOptionalChain": "error",
         "noShadow": "error",
         "noUnusedExpressions": "error",
@@ -250,7 +250,6 @@
           }
         },
         "useDeprecatedDate": "error",
-        "useExhaustiveSwitchCases": "error",
         "useImageSize": "error",
         "useMaxParams": "error",
 
@@ -268,10 +267,13 @@
           }
         },
 
-        /** ------ These rules should be enabled but Scanner makes them too slow ------ **/
+        /** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/
+        "noDeprecatedImports": "off",
         "noFloatingPromises": "off",
+        "noMisusedPromises": "off",
         "noUnresolvedImports": "off",
-        "noImportCycles": "off"
+        "noImportCycles": "off",
+        "useExhaustiveSwitchCases": "off"
       },
       "performance": {
         /** ------------------------ JavaScript Rules ------------------------ **/
