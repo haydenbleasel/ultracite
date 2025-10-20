@@ -13,7 +13,7 @@ Ultracite is a monorepo managed with pnpm workspaces and Turbo:
 - `packages/cli` - The main Ultracite CLI package and Biome configuration
   - `biome.jsonc` - The core Biome configuration with all rules
   - `src/` - CLI implementation for `ultracite init`, `check`, `fix`, etc.
-  - `src/editor-rules/` - AI/IDE integration rules
+  - `src/agents/` - AI/IDE agents rules
 - `apps/docs` - Documentation website built with [Fumadocs](https://fumadocs.dev/)
 
 ## Getting Started
@@ -85,7 +85,7 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 2. Run Ultracite on real projects to check for false positives
 3. Consider backward compatibility - will this break existing users' workflows?
 4. Run `pnpm check` on the Ultracite codebase itself
-5. Update AI/IDE rules in `packages/cli/src/editor-rules/rules.ts` if needed
+5. Update AI/IDE rules in `packages/cli/src/agents/rules.ts` if needed
 
 **Biome vs Ultracite Contributions:**
 - To add or change how a rule works internally → Contribute to [Biome's repository](https://github.com/biomejs/biome)

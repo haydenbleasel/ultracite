@@ -51,8 +51,8 @@ vi.mock("../src/editor-config/zed", () => ({
     update: vi.fn(() => Promise.resolve()),
   },
 }));
-vi.mock("../src/editor-rules", () => ({
-  createEditorRules: vi.fn(() => ({
+vi.mock("../src/agents", () => ({
+  createAgents: vi.fn(() => ({
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),

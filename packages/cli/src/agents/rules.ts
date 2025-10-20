@@ -431,3 +431,5 @@ export const rules = [
   ...angular,
   ...remix,
 ];
+
+export const rulesFile = rules.join("\n");

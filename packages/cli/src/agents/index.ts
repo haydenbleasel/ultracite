@@ -1,14 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { options } from "../consts/options";
-import { EDITOR_RULES } from "../consts/rules";
+import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
 import { rulesFile } from "./rules";
 
-export const createEditorRules = (
-  name: (typeof options.editorRules)[number]
-) => {
-  const config = EDITOR_RULES[name];
+export const createAgents = (name: (typeof options.agents)[number]) => {
+  const config = AGENTS[name];
   const content = config.header
     ? `${config.header}\n\n${rulesFile}`
     : rulesFile;

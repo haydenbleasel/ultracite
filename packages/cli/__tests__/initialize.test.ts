@@ -52,8 +52,8 @@ vi.mock("../src/integrations/lint-staged");
 vi.mock("../src/tsconfig");
 vi.mock("../src/editor-config/vscode");
 vi.mock("../src/editor-config/zed");
-vi.mock("../src/editor-rules", () => ({
-  createEditorRules: vi.fn(() => ({
+vi.mock("../src/agents", () => ({
+  createAgents: vi.fn(() => ({
     exists: vi.fn(() => Promise.resolve(false)),
     create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
@@ -263,7 +263,7 @@ describe("initialize command", () => {
     mockMultiselect
       .mockResolvedValueOnce([]) // migrationOptions
       .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce([]) // editorRules
+      .mockResolvedValueOnce([]) // agents
       .mockResolvedValueOnce(["husky"]); // extraFeatures
 
     await initialize();
@@ -284,7 +284,7 @@ describe("initialize command", () => {
     mockMultiselect
       .mockResolvedValueOnce([]) // migrationOptions
       .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce([]) // editorRules
+      .mockResolvedValueOnce([]) // agents
       .mockResolvedValueOnce(["lint-staged"]); // extraFeatures
 
     await initialize();
@@ -357,7 +357,7 @@ describe("initialize command", () => {
     });
     mockMultiselect
       .mockResolvedValueOnce([]) // editorConfig
-      .mockResolvedValueOnce(["zed"]) // editorRules
+      .mockResolvedValueOnce(["zed"]) // agents
       .mockResolvedValueOnce([]); // extraFeatures
 
     await initialize();

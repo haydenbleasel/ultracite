@@ -13,11 +13,11 @@ import {
   type PackageManagerName,
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
+import { createAgents } from "./agents";
 import { biome } from "./biome";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
-import { createEditorRules } from "./editor-rules";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
@@ -32,7 +32,7 @@ const ultraciteVersion = packageJson.version;
 type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
-  rules?: (typeof options.editorRules)[number][];
+  rules?: (typeof options.agents)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
   removePrettier?: boolean;
@@ -233,14 +233,14 @@ const initializeLintStaged = async (
   s.stop("lint-staged created.");
 };
 
-const upsertEditorRules = async (
-  name: (typeof options.editorRules)[number],
+const upsertagents = async (
+  name: (typeof options.agents)[number],
   displayName: string
 ) => {
   const s = spinner();
   s.start(`Checking for ${displayName}...`);
 
-  const rules = createEditorRules(name);
+  const rules = createAgents(name);
 
   if (await rules.exists()) {
     s.message(`${displayName} found, updating...`);
@@ -443,12 +443,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       editorConfig = editorConfigResult;
     }
 
-    let editorRules = opts.rules;
+    let agents = opts.rules;
 
-    const editorRulesOptions: Record<
-      (typeof options.editorRules)[number],
-      string
-    > = {
+    const agentsOptions: Record<(typeof options.agents)[number], string> = {
       "vscode-copilot": "GitHub Copilot (VSCode)",
       cursor: "Cursor",
       windsurf: "Windsurf",
@@ -469,22 +466,22 @@ export const initialize = async (flags?: InitializeFlags) => {
       "roo-code": "Roo Code",
     } as const;
 
-    if (!editorRules) {
-      const editorRulesResult = await multiselect({
-        message: "Which editor rules do you want to enable (optional)?",
-        options: Object.entries(editorRulesOptions).map(([value, label]) => ({
+    if (!agents) {
+      const agentsResult = await multiselect({
+        message: "Which agents do you want to enable (optional)?",
+        options: Object.entries(agentsOptions).map(([value, label]) => ({
           value,
           label,
         })),
         required: false,
       });
 
-      if (isCancel(editorRulesResult)) {
+      if (isCancel(agentsResult)) {
         cancel("Operation cancelled.");
         process.exit(0);
       }
 
-      editorRules = editorRulesResult as (typeof options.editorRules)[number][];
+      agents = agentsResult as (typeof options.agents)[number][];
     }
 
     let integrations = opts.integrations;
@@ -539,8 +536,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertZedSettings();
     }
 
-    for (const ruleName of editorRules ?? []) {
-      await upsertEditorRules(ruleName, editorRulesOptions[ruleName]);
+    for (const ruleName of agents ?? []) {
+      await upsertagents(ruleName, agentsOptions[ruleName]);
     }
 
     if (integrations?.includes("husky")) {

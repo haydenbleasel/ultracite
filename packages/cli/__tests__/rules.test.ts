@@ -1,18 +1,18 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EDITOR_RULES } from "../src/consts/rules";
-import { createEditorRules } from "../src/editor-rules";
+import { createAgents } from "../src/agents";
+import { AGENTS } from "../src/consts/rules";
 import { exists } from "../src/utils";
 
 vi.mock("node:fs/promises");
 vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
-vi.mock("../src/editor-rules/rules", () => ({
+vi.mock("../src/agents/rules", () => ({
   rulesFile: "mock rules content",
 }));
 
-describe("editor rules configurations", () => {
+describe("agent configurations", () => {
   const mockWriteFile = vi.mocked(writeFile);
   const mockReadFile = vi.mocked(readFile);
   const mockMkdir = vi.mocked(mkdir);
@@ -25,7 +25,7 @@ describe("editor rules configurations", () => {
     mockReadFile.mockResolvedValue("existing content");
   });
 
-  const editorConfigs = Object.entries(EDITOR_RULES).map(([name, config]) => ({
+  const editorConfigs = Object.entries(AGENTS).map(([name, config]) => ({
     name,
     ...config,
   }));
@@ -33,7 +33,7 @@ describe("editor rules configurations", () => {
   describe.each(editorConfigs)(
     "$name configuration",
     ({ name, path, header, appendMode }) => {
-      const editor = createEditorRules(name as keyof typeof EDITOR_RULES);
+      const editor = createAgents(name as keyof typeof AGENTS);
       const expectedContent = header
         ? `${header}\n\nmock rules content`
         : "mock rules content";

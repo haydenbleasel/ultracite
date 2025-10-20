@@ -3,7 +3,7 @@ import { type PackageManagerName, packageManagers } from "nypm";
 export const options = {
   packageManagers: packageManagers.map((pm) => pm.name) as PackageManagerName[],
   editorConfigs: ["vscode", "zed"] as const,
-  editorRules: [
+  agents: [
     "vscode-copilot",
     "cursor",
     "windsurf",
