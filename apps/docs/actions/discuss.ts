@@ -1,10 +1,12 @@
+"use server";
+
 import { App, type Octokit } from "octokit";
 import type { ActionResponse, Feedback } from "@/components/feedback";
 import { env } from "@/env";
 
-export const repo = "ultracite";
-export const owner = "haydenbleasel";
-export const DocsCategory = "Docs Feedback";
+const repo = "ultracite";
+const owner = "haydenbleasel";
+const DocsCategory = "Docs Feedback";
 
 let instance: Octokit | undefined;
 
@@ -22,9 +24,12 @@ async function getOctokit(): Promise<Octokit> {
     );
   }
 
+  // Fix private key formatting - replace escaped newlines with actual newlines
+  const formattedPrivateKey = privateKey.replace(/\\n/g, "\n");
+
   const app = new App({
     appId,
-    privateKey,
+    privateKey: formattedPrivateKey,
   });
 
   const { data } = await app.octokit.request(
@@ -84,7 +89,6 @@ export const discuss = async (
   url: string,
   feedback: Feedback
 ): Promise<ActionResponse> => {
-  "use server";
   const octokit = await getOctokit();
   const destination = await getFeedbackDestination();
 
