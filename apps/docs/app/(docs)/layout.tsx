@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 const DocLayout = async (props: DocsLayoutProps) => (
   <ConditionalContainer>
     <DocsLayout
