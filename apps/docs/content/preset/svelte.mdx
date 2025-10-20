@@ -3,7 +3,7 @@ title: Svelte
 description: Svelte-specific configuration for Ultracite.
 ---
 
-The Svelte configuration (`ultracite/svelte`) extends the base Ultracite preset with Svelte-specific rules. Currently, this is a minimal preset as Biome doesn't yet have dedicated Svelte-specific linting rules.
+The Svelte configuration has Svelte-specific configuration. Currently, this is a minimal preset as Biome doesn't yet have dedicated Svelte-specific linting rules.
 
 ## Installation
 
@@ -26,78 +26,3 @@ This configuration ensures that React-specific props like `className` and `htmlF
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noReactSpecificProps` | `error` | Disallow React-specific props like `className` and `htmlFor` in Svelte. Use `class` and `for` instead. |
-
-## Usage Examples
-
-### Standard HTML Attributes
-
-```svelte
-<!-- Bad: Using React-specific props -->
-<script>
-  let email = '';
-</script>
-
-<div className="container">
-  <label htmlFor="email">Email</label>
-  <input id="email" type="email" bind:value={email} />
-</div>
-
-<!-- Good: Using standard HTML attributes -->
-<script>
-  let email = '';
-</script>
-
-<div class="container">
-  <label for="email">Email</label>
-  <input id="email" type="email" bind:value={email} />
-</div>
-```
-
-## Future Enhancements
-
-As Biome adds Svelte-specific linting rules, this preset will be updated to include:
-
-- Component structure validation
-- Reactive statement patterns
-- Store usage best practices
-- Slot usage validation
-- Event handler patterns
-- Accessibility rules for Svelte components
-
-## Combining with Other Configurations
-
-The Svelte configuration works well with SvelteKit and routing configurations:
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite/core", "ultracite/svelte"]
-}
-```
-
-## Customization
-
-To override or extend the Svelte configuration:
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite/core", "ultracite/svelte"],
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noReactSpecificProps": "warn"
-      }
-    }
-  }
-}
-```
-
-## Related Configurations
-
-- [Core Configuration](/preset/core) - Base Ultracite rules
-- [Configuration Guide](/configuration) - General configuration options
-
-## Learn More
-
-- [Svelte Documentation](https://svelte.dev/docs)
-- [SvelteKit Documentation](https://kit.svelte.dev/docs)
-- [Biome Roadmap](https://biomejs.dev/internals/roadmap/) - Track upcoming Svelte support
