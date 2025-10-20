@@ -1,378 +1,433 @@
-const accessibilityRules = [
-  `Don't use \`accessKey\` attribute on any HTML element.`,
-  `Don't set \`aria-hidden="true"\` on focusable elements.`,
-  `Don't add ARIA roles, states, and properties to elements that don't support them.`,
-  `Don't use distracting elements like \`<marquee>\` or \`<blink>\`.`,
-  "Only use the `scope` prop on `<th>` elements.",
-  `Don't assign non-interactive ARIA roles to interactive HTML elements.`,
-  "Make sure label elements have text content and are associated with an input.",
-  `Don't assign interactive ARIA roles to non-interactive HTML elements.`,
-  `Don't assign \`tabIndex\` to non-interactive HTML elements.`,
-  `Don't use positive integers for \`tabIndex\` property.`,
-  `Don't include "image", "picture", or "photo" in img alt prop.`,
-  `Don't use explicit role property that's the same as the implicit/default role.`,
-  "Make static elements with click handlers use a valid role attribute.",
-  "Always include a `title` element for SVG elements.",
-  "Give all elements requiring alt text meaningful information for screen readers.",
-  `Make sure anchors have content that's accessible to screen readers.`,
-  "Assign `tabIndex` to non-interactive HTML elements with `aria-activedescendant`.",
-  "Include all required ARIA attributes for elements with ARIA roles.",
-  `Make sure ARIA properties are valid for the element's supported roles.`,
-  "Always include a `type` attribute for button elements.",
-  "Make elements with interactive roles and handlers focusable.",
-  `Give heading elements content that's accessible to screen readers (not hidden with \`aria-hidden\`).`,
-  "Always include a `lang` attribute on the html element.",
-  "Always include a `title` attribute for iframe elements.",
-  "Accompany `onClick` with at least one of: `onKeyUp`, `onKeyDown`, or `onKeyPress`.",
-  "Accompany `onMouseOver`/`onMouseOut` with `onFocus`/`onBlur`.",
-  "Include caption tracks for audio and video elements.",
-  "Use semantic elements instead of role attributes in JSX.",
-  "Make sure all anchors are valid and navigable.",
-  "Ensure all ARIA properties (`aria-*`) are valid.",
-  "Use valid, non-abstract ARIA roles for elements with ARIA roles.",
-  "Use valid ARIA state and property values.",
-  "Use valid values for the `autocomplete` attribute on input elements.",
-  "Use correct ISO language/country codes for the `lang` attribute.",
-];
+export const core = [
+  // Accessibility (a11y)
 
-// Code complexity and quality rules
-const complexityRules = [
-  `Don't use consecutive spaces in regular expression literals.`,
-  `Don't use the \`arguments\` object.`,
-  `Don't use primitive type aliases or misleading types.`,
-  `Don't use the comma operator.`,
-  `Don't use empty type parameters in type aliases and interfaces.`,
-  `Don't write functions that exceed a given Cognitive Complexity score.`,
-  `Don't nest describe() blocks too deeply in test files.`,
-  `Don't use unnecessary boolean casts.`,
-  `Don't use unnecessary callbacks with flatMap.`,
-  "Use for...of statements instead of Array.forEach.",
-  `Don't create classes that only have static members (like a static namespace).`,
-  `Don't use this and super in static contexts.`,
-  `Don't use unnecessary catch clauses.`,
-  `Don't use unnecessary constructors.`,
-  `Don't use unnecessary continue statements.`,
-  `Don't export empty modules that don't change anything.`,
-  `Don't use unnecessary escape sequences in regular expression literals.`,
-  `Don't use unnecessary fragments.`,
-  `Don't use unnecessary labels.`,
-  `Don't use unnecessary nested block statements.`,
-  `Don't rename imports, exports, and destructured assignments to the same name.`,
-  `Don't use unnecessary string or template literal concatenation.`,
-  `Don't use String.raw in template literals when there are no escape sequences.`,
-  `Don't use useless case statements in switch statements.`,
-  `Don't use ternary operators when simpler alternatives exist.`,
-  `Don't use useless \`this\` aliasing.`,
-  `Don't use any or unknown as type constraints.`,
-  `Don't initialize variables to undefined.`,
-  `Don't use the void operators (they're not familiar).`,
-  "Use arrow functions instead of function expressions.",
-  "Use Date.now() to get milliseconds since the Unix Epoch.",
-  "Use .flatMap() instead of map().flat() when possible.",
-  "Use literal property access instead of computed property access.",
-  `Don't use parseInt() or Number.parseInt() when binary, octal, or hexadecimal literals work.`,
-  "Use concise optional chaining instead of chained logical expressions.",
-  "Use regular expression literals instead of the RegExp constructor when possible.",
-  `Don't use number literal object member names that aren't base 10 or use underscore separators.`,
-  "Remove redundant terms from logical expressions.",
-  `Use while loops instead of for loops when you don't need initializer and update expressions.`,
-  `Don't pass children as props.`,
-  `Don't reassign const variables.`,
-  `Don't use constant expressions in conditions.`,
-  `Don't use \`Math.min\` and \`Math.max\` to clamp values when the result is constant.`,
-  `Don't return a value from a constructor.`,
-  `Don't use empty character classes in regular expression literals.`,
-  `Don't use empty destructuring patterns.`,
-  `Don't call global object properties as functions.`,
-  `Don't declare functions and vars that are accessible outside their block.`,
-  "Make sure builtins are correctly instantiated.",
-  `Don't use super() incorrectly inside classes. Also check that super() is called in classes that extend other constructors.`,
-  `Don't use variables and function parameters before they're declared.`,
-  `Don't use 8 and 9 escape sequences in string literals.`,
-  `Don't use literal numbers that lose precision.`,
-];
+  "Enforce that the `accessKey` attribute is not used on any HTML element.",
+  'Enforce that `aria-hidden="true"` is not set on focusable elements.',
+  "Enforce that elements that do not support ARIA roles, states, and properties do not have those attributes.",
+  "Enforces that no distracting elements are used.",
+  "The scope prop should be used only on `<th>` elements.",
+  "Enforce that non-interactive ARIA roles are not assigned to interactive HTML elements.",
+  "Enforce that a label element or component has a text label and an associated input.",
+  "Disallow use event handlers on non-interactive elements.",
+  "Enforce that interactive ARIA roles are not assigned to non-interactive HTML elements.",
+  "Enforce that `tabIndex` is not assigned to non-interactive HTML elements.",
+  "Prevent the usage of positive integers on `tabIndex` property.",
+  "Enforce img alt prop does not contain the word `image`, `picture`, or `photo`.",
+  "Enforce explicit role property is not the same as implicit/default role property on an element.",
+  "Enforce that static, visible elements (such as `<div>`) that have click handlers use the valid role attribute.",
+  "Enforces the usage of the title element for the `svg` element.",
+  "Enforce that all elements that require alternative text have meaningful information to relay back to the end user.",
+  "Enforce that anchors have content and that the content is accessible to screen readers.",
+  "Enforce that `tabIndex` is assigned to non-interactive HTML elements with aria-activedescendant.",
+  "Enforce that elements with ARIA roles must have all required ARIA attributes for that role.",
+  "Enforce that ARIA properties are valid for the roles that are supported by the element.",
+  "Enforces the usage of the attribute `type` for the element button.",
+  "Elements with an interactive role and interaction handlers must be focusable.",
+  "Enforce that heading elements (`h1`, `h2`, etc.) have content and that the content is accessible to screen readers.",
+  "Enforce that `html` element has `lang` attribute.",
+  "Enforces the usage of the attribute title for the element iframe.",
+  "Enforce `onClick` is accompanied by at least one of the following: `onKeyUp`, `onKeyDown`, `onKeyPress`.",
+  "Enforce `onMouseOver` / `onMouseOut` are accompanied by `onFocus` / `onBlur`.",
+  "Enforces that audio and video elements must have a track for captions.",
+  "It detects the use of role attributes in JSX elements and suggests using semantic elements instead.",
+  "Enforce that all anchors are valid, and they are navigable elements.",
+  "Ensures that ARIA properties `aria-*` are all valid.",
+  "Elements with ARIA roles must use a valid, non-abstract ARIA role.",
+  "Enforce that ARIA state and property values are valid.",
+  "Use valid values for the autocomplete attribute on input elements.",
+  "Ensure that the attribute passed to the `lang` attribute is a correct ISO language and/or country.",
+  "Disallow a missing generic family keyword within font families (CSS).",
 
-// React and JSX specific rules
-const reactRules = [
-  `Don't use the return value of React.render.`,
-  "Make sure all dependencies are correctly specified in React hooks.",
-  "Make sure all React hooks are called from the top level of component functions.",
-  `Don't forget key props in iterators and collection literals.`,
-  `Don't destructure props inside JSX components in Solid projects.`,
-  `Don't define React components inside other components.`,
-  `Don't use event handlers on non-interactive elements.`,
-  `Don't assign to React component props.`,
-  `Don't use both \`children\` and \`dangerouslySetInnerHTML\` props on the same element.`,
-  `Don't use dangerous JSX props.`,
-  `Don't use Array index in keys.`,
-  `Don't insert comments as text nodes.`,
-  `Don't assign JSX properties multiple times.`,
-  `Don't add extra closing tags for components without children.`,
-  "Use `<>...</>` instead of `<Fragment>...</Fragment>`.",
-  `Watch out for possible "wrong" semicolons inside JSX elements.`,
-];
+  // Complexity
 
-// Correctness and safety rules
-const correctnessRules = [
-  `Don't assign a value to itself.`,
-  `Don't return a value from a setter.`,
-  `Don't compare expressions that modify string case with non-compliant values.`,
-  `Don't use lexical declarations in switch clauses.`,
-  `Don't use variables that haven't been declared in the document.`,
-  `Don't write unreachable code.`,
-  "Make sure super() is called exactly once on every code path in a class constructor before this is accessed if the class has a superclass.",
-  `Don't use control flow statements in finally blocks.`,
-  `Don't use optional chaining where undefined values aren't allowed.`,
-  `Don't have unused function parameters.`,
-  `Don't have unused imports.`,
-  `Don't have unused labels.`,
-  `Don't have unused private class members.`,
-  `Don't have unused variables.`,
-  `Make sure void (self-closing) elements don't have children.`,
-  `Don't return a value from a function with the return type 'void'`,
-  "Use isNaN() when checking for NaN.",
-  'Make sure "for" loop update clauses move the counter in the right direction.',
-  "Make sure typeof expressions are compared to valid values.",
-  "Make sure generator functions contain yield.",
-  `Don't use await inside loops.`,
-  `Don't use bitwise operators.`,
-  `Don't use expressions where the operation doesn't change the value.`,
-  "Make sure Promise-like statements are handled appropriately.",
-  `Don't use __dirname and __filename in the global scope.`,
-  "Prevent import cycles.",
-  `Don't use configured elements.`,
-  `Don't hardcode sensitive data like API keys and tokens.`,
-  `Don't let variable declarations shadow variables from outer scopes.`,
-  `Don't use the TypeScript directive @ts-ignore.`,
+  "Disallow unclear usage of consecutive space characters in regular expression literals.",
+  "Disallow the use of arguments.",
+  "Disallow primitive type aliases and misleading types.",
+  "Disallow comma operator.",
+  "Disallow empty type parameters in type aliases and interfaces.",
+  "Disallow functions that exceed a given Cognitive Complexity score.",
+  "This rule enforces a maximum depth to nested `describe()` in test files.",
+  "Disallow unnecessary boolean casts.",
+  "Disallow to use unnecessary callback on flatMap.",
+  "Prefer `for...of` statement instead of `Array.forEach`.",
+  "This rule reports when a class has no non-static members.",
+  "Disallow `this` and `super` in static contexts.",
+  "Disallow unnecessary catch clauses.",
+  "Disallow unnecessary constructors.",
+  "Avoid using unnecessary continue.",
+  "Disallow empty exports that don't change anything in a module file.",
+  "Disallow unnecessary escape sequence in regular expression literals.",
+  "Disallow unnecessary fragments.",
+  "Disallow unnecessary labels.",
+  "Disallow unnecessary nested block statements.",
+  "Disallow renaming import, export, and destructured assignments to the same name.",
+  "Disallow unnecessary concatenation of string or template literals.",
+  "Disallow unnecessary `String.raw` function in template string literals without any escape sequence.",
+  "Disallow useless case in switch statements.",
+  "Disallow ternary operators when simpler alternatives exist.",
+  "Disallow useless `this` aliasing.",
+  "Disallow using `any` or `unknown` as type constraint.",
+  "Disallow initializing variables to `undefined`.",
+  "Disallow the use of `void` operators, which is not a familiar operator.",
+  "Use arrow functions over function expressions.",
+  "Use `Date.now()` to get the number of milliseconds since the Unix Epoch.",
+  "Promotes the use of `.flatMap()` when `map().flat()` are used together.",
+  "Prefer `Array#{indexOf,lastIndexOf}()` over `Array#{findIndex,findLastIndex}()` when looking for the index of an item.",
+  "Enforce the usage of a literal access to properties over computed property access.",
+  "Disallow `parseInt()` and `Number.parseInt()` in favor of binary, octal, and hexadecimal literals.",
+  "Enforce using concise optional chain instead of chained logical expressions.",
+  "Enforce the use of the regular expression literals instead of the `RegExp` constructor if possible.",
+  "Disallow number literal object member names which are not base 10 or use underscore as separator.",
+  "Discard redundant terms from logical expressions.",
+  "Enforce the use of while loops instead of for loops when the initializer and update expressions are not needed.",
+
+  // Correctness
+
+  "Prevents from having const variables being re-assigned.",
+  "Disallow constant expressions in conditions.",
+  "Disallow the use of `Math.min` and `Math.max` to clamp a value where the result itself is constant.",
+  "Disallow returning a value from a constructor.",
+  "Disallow empty character classes in regular expression literals.",
+  "Disallows empty destructuring patterns.",
+  "Disallow the use of `__dirname` and `__filename` in the global scope.",
+  "Disallow calling global object properties as functions.",
+  "Disallow function and `var` declarations that are accessible outside their block.",
+  "Ensure that builtins are correctly instantiated.",
+  "Prevents the incorrect use of `super()` inside classes.",
+  "Disallow non-standard direction values for linear gradient functions (CSS).",
+  "Disallows invalid named grid areas in CSS Grid Layouts (CSS).",
+  "Disallow the use of `@import` at-rules in invalid positions (CSS).",
+  "Disallow the use of variables and function parameters before their declaration.",
+  "Disallow missing `var` function for css variables (CSS).",
+  "Disallow `\\8` and `\\9` escape sequences in string literals.",
+  "Disallow literal numbers that lose precision.",
+  "Disallow the use of configured elements.",
+  "Disallow assignments where both sides are exactly the same.",
+  "Disallow returning a value from a setter.",
+  "Disallow comparison of expressions modifying the string case with non-compliant value.",
+  "Disallow lexical declarations in switch clauses.",
+  "Prevents the usage of variables that haven't been declared inside the document.",
+  "Disallow unknown CSS value functions (CSS).",
+  "Disallow unknown media feature names (CSS).",
+  "Disallow unknown properties (CSS).",
+  "Disallow unknown pseudo-class selectors (CSS).",
+  "Disallow unknown pseudo-element selectors (CSS).",
+  "Disallow unknown type selectors (CSS).",
+  "Disallow unknown CSS units (CSS).",
+  "Disallow unmatchable An+B selectors (CSS).",
+  "Disallow unreachable code.",
+  "Ensures the `super()` constructor is called exactly once on every code path in a class constructor before this is accessed.",
+  "Disallow control flow statements in finally blocks.",
+  "Disallow the use of optional chaining in contexts where the undefined value is not allowed.",
+  "Disallow unused function parameters.",
+  "Disallow unused imports.",
+  "Disallow unused labels.",
+  "Disallow unused private class members.",
+  "Disallow unused variables.",
+  "Disallow returning a value from a function with the return type `void`.",
+  "Enforce all dependencies are correctly specified in a React hook.",
+  "Enforce specifying the name of GraphQL operations.",
+  "Enforce that all React hooks are being called from the Top Level component functions.",
+  "Require calls to `isNaN()` when checking for NaN.",
+  'Enforces the use of with `{ type: "json" }` for JSON module imports.',
+  "Enforce the consistent use of the radix argument when using `parseInt()`.",
+  "Enforce JSDoc comment lines to start with a single asterisk, except for the first one.",
+  "Enforce `for` loop update clause moving the counter in the right direction.",
+  "This rule checks that the result of a `typeof` expression is compared to a valid value.",
+  "Require generator functions to contain `yield`.",
+
+  // Nursery
+
+  "Restrict imports of deprecated exports.",
+  "Prevent the listing of duplicate dependencies.",
+  "Disallow Promises to be used in places where they are almost certainly a mistake.",
+  "Disallow non-null assertions after optional chaining expressions.",
+  "Disallow variable declarations from shadowing variables declared in the outer scope.",
+  "Disallow expression statements that are neither a function call nor an assignment.",
+  "Disallow the use of useless `undefined`.",
+  "Enforces href attribute for `<a>` elements.",
+  "Enforce consistent arrow function bodies.",
+  "Enforce type definitions to consistently use either interface or type.",
+  "Require the `@deprecated` directive to specify a deletion date.",
+  "Require switch-case statements to be exhaustive.",
+  "Enforces that `<img>` elements have both width and height attributes.",
+  "Enforce a maximum number of parameters in function definitions.",
+  "Enforce the sorting of CSS utility classes.",
+
+  // Performance
+
+  "Disallow the use of spread (`...`) syntax on accumulators.",
+  "Disallow the use of barrel file.",
+  "Disallow the use of the `delete` operator.",
+  "Disallow accessing namespace imports dynamically.",
+  "Disallow the use of namespace imports.",
   "Prevent duplicate polyfills from Polyfill.io.",
-  `Don't use useless backreferences in regular expressions that always match empty strings.`,
-  `Don't use unnecessary escapes in string literals.`,
-  `Don't use useless undefined.`,
-  "Make sure getters and setters for the same property are next to each other in class and object definitions.",
-  "Make sure object literals are declared consistently (defaults to explicit definitions).",
-  "Use static Response methods instead of new Response() constructor when possible.",
-  "Make sure switch-case statements are exhaustive.",
-  "Make sure the `preconnect` attribute is used when using Google Fonts.",
-  "Use `Array#{indexOf,lastIndexOf}()` instead of `Array#{findIndex,findLastIndex}()` when looking for the index of an item.",
-  "Make sure iterable callbacks return consistent values.",
-  `Use \`with { type: "json" }\` for JSON module imports.`,
-  "Use numeric separators in numeric literals.",
-  "Use object spread instead of `Object.assign()` when constructing new objects.",
-  "Always use the radix argument when using `parseInt()`.",
-  "Make sure JSDoc comment lines start with a single asterisk, except for the first one.",
-  "Include a description parameter for `Symbol()`.",
-  `Don't use spread (\`...\`) syntax on accumulators.`,
-  `Don't use the \`delete\` operator.`,
-  `Don't access namespace imports dynamically.`,
-  `Don't use namespace imports.`,
-  "Declare regex literals at the top level.",
-  `Don't use \`target="_blank"\` without \`rel="noopener"\`.`,
-];
+  "Ensure the `preconnect` attribute is used when using Google Fonts.",
+  "Require regex literals to be declared at the top level.",
 
-// TypeScript specific rules
-const typeScriptRules = [
-  `Don't use TypeScript enums.`,
-  `Don't export imported variables.`,
-  `Don't add type annotations to variables, parameters, and class properties that are initialized with literal expressions.`,
-  `Don't use TypeScript namespaces.`,
-  `Don't use non-null assertions with the \`!\` postfix operator.`,
-  `Don't use parameter properties in class constructors.`,
-  `Don't use user-defined types.`,
-  "Use `as const` instead of literal types and type annotations.",
-  "Use either `T[]` or `Array<T>` consistently.",
-  "Initialize each enum member value explicitly.",
-  "Use `export type` for types.",
-  "Use `import type` for types.",
-  "Make sure all enum members are literal values.",
-  `Don't use TypeScript const enum.`,
-  `Don't declare empty interfaces.`,
-  `Don't let variables evolve into any type through reassignments.`,
-  `Don't use the any type.`,
-  `Don't misuse the non-null assertion operator (!) in TypeScript files.`,
-  `Don't use implicit any type on variable declarations.`,
-  `Don't merge interfaces and classes unsafely.`,
-  `Don't use overload signatures that aren't next to each other.`,
-  "Use the namespace keyword instead of the module keyword to declare TypeScript namespaces.",
-];
+  // Security
 
-// Style and consistency rules
-const styleRules = [
-  `Don't use global \`eval()\`.`,
-  `Don't use callbacks in asynchronous tests and hooks.`,
-  `Don't use negation in \`if\` statements that have \`else\` clauses.`,
-  `Don't use nested ternary expressions.`,
-  `Don't reassign function parameters.`,
-  `This rule lets you specify global variable names you don't want to use in your application.`,
-  `Don't use specified modules when loaded by import or require.`,
-  `Don't use constants whose value is the upper-case version of their name.`,
-  "Use `String.slice()` instead of `String.substr()` and `String.substring()`.",
-  `Don't use template literals if you don't need interpolation or special-character handling.`,
-  `Don't use \`else\` blocks when the \`if\` block breaks early.`,
-  `Don't use yoda expressions.`,
-  `Don't use Array constructors.`,
+  'Disallow `target="_blank"` attribute without `rel="noopener"`.',
+  "Prevent the usage of dangerous JSX props.",
+  "Report when a DOM element or a component uses both children and `dangerouslySetInnerHTML` prop.",
+  "Disallow the use of global `eval()`.",
+
+  // Style
+
+  "Disallow using a callback in asynchronous tests and hooks.",
+  "Disallow TypeScript enum.",
+  "Disallow exporting an imported variable.",
+  "Disallow type annotations for variables, parameters, and class properties initialized with a literal expression.",
+  'Reports usage of "magic numbers" — numbers used directly instead of being assigned to named constants.',
+  "Disallow the use of TypeScript's namespaces.",
+  "Disallow negation in the condition of an if statement if it has an else clause.",
+  "Disallow nested ternary expressions.",
+  "Disallow non-null assertions using the `!` postfix operator.",
+  "Disallow reassigning function parameters.",
+  "Disallow the use of parameter properties in class constructors.",
+  "This rule allows you to specify global variable names that you don't want to use in your application.",
+  "Disallow specified modules when loaded by import or require.",
+  "Disallow user defined types.",
+  "Disallow the use of constants which its value is the upper-case version of its name.",
+  "Enforce the use of `String.slice()` over `String.substr()` and `String.substring()`.",
+  "Disallow template literals if interpolation and special-character handling are not needed.",
+  "Disallow else block when the if block breaks early.",
+  "Disallow the use of yoda expressions.",
+  "Disallow `Array` constructors.",
+  "Enforce the use of as const over literal type and type annotation.",
   "Use `at()` instead of integer index access.",
-  "Follow curly brace conventions.",
-  "Use `else if` instead of nested `if` statements in `else` clauses.",
-  "Use single `if` statements instead of nested `if` clauses.",
-  "Use `new` for all builtins except `String`, `Number`, and `Boolean`.",
-  "Use consistent accessibility modifiers on class properties and methods.",
-  "Use `const` declarations for variables that are only assigned once.",
-  "Put default function parameters and optional function parameters last.",
-  "Include a `default` clause in switch statements.",
-  "Use the `**` operator instead of `Math.pow`.",
-  "Use `for-of` loops when you need the index to extract an item from the iterated array.",
-  "Use `node:assert/strict` over `node:assert`.",
-  "Use the `node:` protocol for Node.js builtin modules.",
-  "Use Number properties instead of global ones.",
-  "Use assignment operator shorthand where possible.",
-  "Use function types instead of object types with call signatures.",
-  "Use template literals over string concatenation.",
-  "Use `new` when throwing an error.",
-  `Don't throw non-Error values.`,
-  "Use `String.trimStart()` and `String.trimEnd()` over `String.trimLeft()` and `String.trimRight()`.",
+  "Requires following curly brace conventions.",
+  "Enforce using `else if` instead of nested `if` in `else` clauses.",
+  "Enforce using single `if` instead of nested `if` clauses.",
+  "Require consistently using either `T[]` or `Array<T>`.",
+  "Enforce the use of new for all builtins, except `String`, `Number` and `Boolean`.",
+  "Require consistent accessibility modifiers on class properties and methods.",
+  "Require the consistent declaration of object literals.",
+  "Require const declarations for variables that are only assigned once.",
+  "Enforce default function parameters and optional function parameters to be last.",
+  "Require the `default` clause in switch statements.",
+  "Require specifying the reason argument when using `@deprecated` directive.",
+  "Require that each enum member value be explicitly initialized.",
+  "Disallow the use of `Math.pow` in favor of the `**` operator.",
+  "Promotes the use of export type for types.",
+  "Enforce naming conventions for JavaScript and TypeScript filenames (kebab-case, ASCII).",
+  "This rule recommends a for-of loop when in a for loop, the index used to extract an item from the iterated array.",
+  "This rule enforces the use of `<>...</>` over `<Fragment>...</Fragment>`.",
+  "Validates that all enum values are capitalized.",
+  "Enforce that getters and setters for the same property are adjacent in class and object definitions.",
+  "Promotes the use of `import type` for types.",
+  "Require all enum members to be literal values.",
+  "Promotes the usage of `node:assert/strict` over `node:assert`.",
+  "Enforces using the `node:` protocol for Node.js builtin modules.",
+  "Use the `Number` properties instead of global ones.",
+  "Enforce the use of numeric separators in numeric literals.",
+  "Prefer object spread over `Object.assign()` when constructing new objects.",
+  "Enforce marking members as readonly if they are never modified outside the constructor.",
+  "Prevent extra closing tags for components without children.",
+  "Require assignment operator shorthand where possible.",
+  "Enforce using function types instead of object type with call signatures.",
+  "Require a description parameter for the `Symbol()`.",
+  "Prefer template literals over string concatenation.",
+  "Require new when throwing an error.",
+  "Disallow throwing non-`Error` values.",
+  "Enforce the use of `String.trimStart()` and `String.trimEnd()` over `String.trimLeft()` and `String.trimRight()`.",
+  "Disallow overload signatures that can be unified into a single signature.",
+  "Disallow a lower specificity selector from coming after a higher specificity selector (CSS).",
+  "Disallow use of `@value` rule in css modules (CSS).",
+
+  // Suspicious
+
+  "Disallow the use of `alert`, `confirm`, and `prompt`.",
   "Use standard constants instead of approximated literals.",
-  `Don't assign values in expressions.`,
-  `Don't use async functions as Promise executors.`,
-  `Don't reassign exceptions in catch clauses.`,
-  `Don't reassign class members.`,
-  `Don't compare against -0.`,
-  `Don't use labeled statements that aren't loops.`,
-  `Don't use void type outside of generic or return types.`,
-  `Don't use console.`,
-  `Don't use control characters and escape sequences that match control characters in regular expression literals.`,
-  `Don't use debugger.`,
-  `Don't assign directly to document.cookie.`,
-  "Use `===` and `!==`.",
-  `Don't use duplicate case labels.`,
-  `Don't use duplicate class members.`,
-  `Don't use duplicate conditions in if-else-if chains.`,
-  `Don't use two keys with the same name inside objects.`,
-  `Don't use duplicate function parameter names.`,
-  `Don't have duplicate hooks in describe blocks.`,
-  `Don't use empty block statements and static blocks.`,
-  `Don't let switch clauses fall through.`,
-  `Don't reassign function declarations.`,
-  `Don't allow assignments to native objects and read-only global variables.`,
-  "Use Number.isFinite instead of global isFinite.",
-  "Use Number.isNaN instead of global isNaN.",
-  `Don't assign to imported bindings.`,
-  `Don't use irregular whitespace characters.`,
-  `Don't use labels that share a name with a variable.`,
-  `Don't use characters made with multiple code points in character class syntax.`,
-  "Make sure to use new and constructor properly.",
-  `Don't use shorthand assign when the variable appears on both sides.`,
-  `Don't use octal escape sequences in string literals.`,
-  `Don't use Object.prototype builtins directly.`,
-  `Don't redeclare variables, functions, classes, and types in the same scope.`,
-  `Don't have redundant "use strict".`,
-  `Don't compare things where both sides are exactly the same.`,
-  `Don't let identifiers shadow restricted names.`,
-  `Don't use sparse arrays (arrays with holes).`,
-  `Don't use template literal placeholder syntax in regular strings.`,
-  `Don't use the then property.`,
-  `Don't use unsafe negation.`,
-  `Don't use var.`,
-  `Don't use with statements in non-strict contexts.`,
-  "Make sure async functions actually use await.",
-  "Make sure default clauses in switch statements come last.",
-  "Make sure to pass a message value when creating a built-in error.",
-  "Make sure get methods always return a value.",
-  "Use a recommended display strategy with Google Fonts.",
-  "Make sure for-in loops include an if statement.",
-  "Use Array.isArray() instead of instanceof Array.",
-  "Make sure to use the digits argument with Number#toFixed().",
-  `Make sure to use the "use strict" directive in script files.`,
+  "Disallow assignments in expressions.",
+  "Disallows using an async function as a Promise executor.",
+  "Prevents the use of the `!` pattern in the first position of `files.includes` in the configuration file.",
+  "Disallow bitwise operators.",
+  "Disallow reassigning exceptions in catch clauses.",
+  "Disallow reassigning class members.",
+  "Prevent comments from being inserted as text nodes.",
+  "Disallow comparing against `-0`.",
+  "Disallow labeled statements that are not loops.",
+  "Disallow void type outside of generic or return types.",
+  "Disallow the use of `console`.",
+  "Disallow TypeScript const enum.",
+  "Disallow expressions where the operation doesn't affect the value.",
+  "Prevents from having control characters and some escape sequences that match control characters in regular expression literals.",
+  "Disallow the use of debugger.",
+  "Disallow direct assignments to document.cookie.",
+  "Require the use of `===` and `!==`.",
+  "Disallow duplicate `@import` rules (CSS).",
+  "Disallow duplicate case labels.",
+  "Disallow duplicate class members.",
+  "Disallow duplicate custom properties within declaration blocks (CSS).",
+  "Disallow duplicate conditions in if-else-if chains.",
+  "Disallow duplicated fields in GraphQL operations.",
+  "Disallow duplicate names within font families (CSS).",
+  "Disallow two keys with the same name inside objects.",
+  "Disallow duplicate function parameter name.",
+  "Disallow duplicate properties within declaration blocks (CSS).",
+  "Disallow duplicate selectors within keyframe blocks (CSS).",
+  "A describe block should not contain duplicate hooks.",
+  "Disallow CSS empty blocks (CSS).",
+  "Disallow empty block statements and static blocks.",
+  "Disallow the declaration of empty interfaces.",
+  "Disallow variables from evolving into any type through reassignments.",
+  "Disallow the any type usage.",
+  "Disallow using export or module.exports in files containing tests.",
+  "Prevents the wrong usage of the non-null assertion operator `!` in TypeScript files.",
+  "Disallow fallthrough of switch clauses.",
+  "Disallow focused tests.",
+  "Disallow reassigning function declarations.",
+  "Disallow assignments to native objects and read-only global variables.",
+  "Use `Number.isFinite` instead of global `isFinite`.",
+  "Use `Number.isNaN` instead of global `isNaN`.",
+  "Disallow use of implicit any type on variable declarations.",
+  "Disallow assigning to imported bindings.",
+  "Disallow invalid `!important` within keyframe declarations (CSS).",
+  "Disallows the use of irregular whitespace characters.",
+  "Disallow labels that share a name with a variable.",
+  "Disallow characters made with multiple code points in character class syntax.",
+  "Enforce proper usage of `new` and `constructor`.",
+  "Checks that the assertion function, for example expect, is placed inside an `it()` function call.",
+  "Disallow shorthand assign when variable appears on both sides.",
+  "Disallow octal escape sequences in string literals.",
+  "Disallow direct use of `Object.prototype` builtins.",
+  "Disallow the use if `quickfix.biome` inside editor settings file.",
+  "Disallow variable, function, class, and type redeclarations in the same scope.",
+  "Prevents from having redundant `use strict`.",
+  "Disallow comparisons where both sides are exactly the same.",
+  "Disallow identifiers from shadowing restricted names.",
+  "Disallow shorthand properties that override related longhand properties (CSS).",
+  "Disallow disabled tests.",
+  "Prevents the use of sparse arrays (arrays with holes).",
+  "Disallow template literal placeholder syntax in regular strings.",
+  "Disallow then property.",
+  "Prevents the use of the TypeScript directive `@ts-ignore`.",
+  "Disallow let or var variables that are read but never assigned.",
+  "Disallow unknown at-rules (CSS).",
+  "Disallow unsafe declaration merging between interfaces and classes.",
+  "Disallow using unsafe negation (`!`).",
+  "Disallow unnecessary escapes in string literals.",
+  "Disallow useless backreferences in regular expression literals that always match an empty string.",
+  "Disallow the use of `var`.",
+  "Disallow `with` statements in non-strict contexts.",
+  "Disallow the use of overload signatures that are not next to each other.",
+  "Ensure async functions utilize `await`.",
+  "Promotes the correct usage for ignoring folders in the configuration file.",
+  "Enforce default clauses in switch statements to be last.",
+  "Enforce passing a message value when creating a built-in error.",
+  "Enforce get methods to always return a value.",
+  "Enforces the use of a recommended display strategy with Google Fonts.",
+  "Require for-in loops to include an `if` statement.",
+  "Use `Array.isArray()` instead of `instanceof Array`.",
+  "Enforce consistent return values in iterable callbacks.",
+  "Require using the namespace keyword over the `module` keyword to declare TypeScript namespaces.",
+  "Enforce using the digits argument with `Number#toFixed()`.",
+  "Use static `Response` methods instead of `new Response()` constructor when possible.",
+  "Enforce the use of the directive `use strict` in script files.",
 ];
 
-// Next.js specific rules
-const nextJsRules = [
-  `Don't use \`<img>\` elements in Next.js projects.`,
-  `Don't use \`<head>\` elements in Next.js projects.`,
-  `Don't import next/document outside of pages/_document.jsx in Next.js projects.`,
-  `Don't use the next/head module in pages/_document.js on Next.js projects.`,
+export const react = [
+  // Correctness
+
+  "Prevent passing children as props. Children should be nested between the opening and closing tags.",
+  "Prevent component definitions inside other components. This causes unnecessary re-renders.",
+  "Prevent reassigning props in React components. Props should be treated as immutable.",
+  "Prevent usage of the return value from `ReactDOM.render()`.",
+  "Prevent void elements (like `<img>`, `<br>`) from having children.",
+  "Enforce all dependencies are correctly specified in React hooks (useEffect, useCallback, useMemo).",
+  "Enforce that all React hooks are called from the top level of component functions, not inside loops, conditions, or nested functions.",
+  "Enforce that elements in iterables have a `key` prop for React's reconciliation.",
+
+  // Nursery
+
+  "Prevent usage of legacy `React.forwardRef`. Use ref as a prop instead (React 19+).",
+  "Enforce using function components over class components in React.",
+
+  // Suspicious
+
+  "Prevent using array indices as keys. Array indices are not stable identifiers and can cause issues with component state.",
+  "Prevent duplicate properties in JSX.",
+  "Prevent semicolons that change the semantic of JSX elements.",
 ];
 
-// Testing specific rules
-const testingRules = [
-  `Don't use export or module.exports in test files.`,
-  `Don't use focused tests.`,
-  "Make sure the assertion function, like expect, is placed inside an it() function call.",
-  `Don't use disabled tests.`,
+export const next = [
+  // Nursery
+
+  "Prevent async client components in Next.js. Client components should be synchronous; use server components for async operations.",
+
+  // Performance
+
+  "Disallow use of `<img>` HTML element. Use Next.js `<Image>` component instead for automatic image optimization.",
+
+  // Style
+
+  "Disallow use of `<head>` HTML element. Use Next.js `next/head` or App Router metadata API instead.",
+
+  // Suspicious
+
+  "Prevent importing `next/document` in page files. `_document.tsx` should only exist in `pages/_document.tsx`.",
+  "Prevent importing `next/head` in `_document.tsx`. Use `<Head>` from `next/document` instead.",
 ];
 
-// Combine all rules for backward compatibility
+export const qwik = [
+  // Nursery
+
+  "Prevent usage of `useVisibleTask$`. This hook runs code eagerly on the client, defeating Qwik's resumability. Use `useTask$` or `useResource$` instead when possible.",
+  "Enforce using `class` object syntax instead of string concatenation for dynamic classes in Qwik.",
+  "Enforce valid lexical scope in Qwik's `$` functions. Variables from outer scopes must be explicitly captured.",
+  "Enforce correct usage of Qwik-specific methods and APIs.",
+
+  // Suspicious
+
+  "Disallow React-specific props like `className` and `htmlFor` in Qwik. Use `class` and `for` instead.",
+];
+
+export const solid = [
+  // Correctness
+
+  "Prevent destructuring props in Solid components. Destructuring breaks Solid's reactivity system. Access props directly instead.",
+
+  // Performance
+
+  "Enforce using `<For>` component for iterating over arrays in Solid. The `<For>` component is optimized for Solid's reactivity.",
+
+  // Suspicious
+
+  "Disallow React-specific props like `className` and `htmlFor` in Solid. Use `class` and `for` instead.",
+];
+
+export const svelte = [
+  // Suspicious
+
+  "Disallow React-specific props like `className` and `htmlFor` in Svelte. Use `class` and `for` instead.",
+];
+
+export const vue = [
+  // Nursery
+
+  "Prevent using object declaration for the `data` option in Vue components. The `data` option must be a function that returns an object.",
+  "Prevent duplicate keys in Vue component options. Keys in `data`, `computed`, `methods`, etc. must be unique.",
+  "Disallow Vue reserved keys like `$data`, `$props`, `$el`, etc. in component options.",
+  "Disallow Vue reserved props like `key`, `ref`, and `is` as custom component props.",
+  "Enforce multi-word component names to avoid conflicts with HTML elements. Single-word names like `Button` or `Card` should be avoided.",
+
+  // Suspicious
+
+  "Disallow React-specific props like `className` and `htmlFor` in Vue. Use `class` and `for` instead.",
+];
+
+export const angular: string[] = [];
+export const remix: string[] = [];
+
 export const rules = [
-  ...accessibilityRules,
-  ...complexityRules,
-  ...reactRules,
-  ...correctnessRules,
-  ...typeScriptRules,
-  ...styleRules,
-  ...nextJsRules,
-  ...testingRules,
+  ...core,
+  ...react,
+  ...next,
+  ...qwik,
+  ...solid,
+  ...svelte,
+  ...vue,
+  ...angular,
+  ...remix,
 ];
-
-export const rulesFile = `# Project Context
-Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
-
-## Key Principles
-- Zero configuration required
-- Subsecond performance
-- Maximum type safety
-- AI-friendly code generation
-
-## Before Writing Code
-1. Analyze existing patterns in the codebase
-2. Consider edge cases and error scenarios
-3. Follow the rules below strictly
-4. Validate accessibility requirements
-
-## Rules
-
-### Accessibility (a11y)
-${accessibilityRules.map((rule) => `- ${rule}`).join("\n")}
-
-### Code Complexity and Quality
-${complexityRules.map((rule) => `- ${rule}`).join("\n")}
-
-### React and JSX Best Practices
-${reactRules.map((rule) => `- ${rule}`).join("\n")}
-
-### Correctness and Safety
-${correctnessRules.map((rule) => `- ${rule}`).join("\n")}
-
-### TypeScript Best Practices
-${typeScriptRules.map((rule) => `- ${rule}`).join("\n")}
-
-### Style and Consistency
-${styleRules.map((rule) => `- ${rule}`).join("\n")}
-
-### Next.js Specific Rules
-${nextJsRules.map((rule) => `- ${rule}`).join("\n")}
-
-### Testing Best Practices
-${testingRules.map((rule) => `- ${rule}`).join("\n")}
-
-## Common Tasks
-- \`npx ultracite init\` - Initialize Ultracite in your project
-- \`npx ultracite fix\` - Format and fix code automatically
-- \`npx ultracite check\` - Check for issues without fixing
-
-## Example: Error Handling
-\`\`\`typescript
-// ✅ Good: Comprehensive error handling
-try {
-  const result = await fetchData();
-  return { success: true, data: result };
-} catch (error) {
-  console.error('API call failed:', error);
-  return { success: false, error: error.message };
-}
-
-// ❌ Bad: Swallowing errors
-try {
-  return await fetchData();
-} catch (e) {
-  console.log(e);
-}
-\`\`\``;
