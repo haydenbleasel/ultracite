@@ -15,39 +15,39 @@ import {
   vue,
 } from "./rules";
 
-const generateRulesFile = (
+const generateAgentsContext = (
   frameworks?: (typeof options.frameworks)[number][]
-): string => {
-  const rules = [...core];
+) => {
+  const context = [...core];
 
   if (frameworks) {
     if (frameworks.includes("react")) {
-      rules.push(...react);
+      context.push(...react);
     }
     if (frameworks.includes("next")) {
-      rules.push(...next);
+      context.push(...next);
     }
     if (frameworks.includes("qwik")) {
-      rules.push(...qwik);
+      context.push(...qwik);
     }
     if (frameworks.includes("solid")) {
-      rules.push(...solid);
+      context.push(...solid);
     }
     if (frameworks.includes("svelte")) {
-      rules.push(...svelte);
+      context.push(...svelte);
     }
     if (frameworks.includes("vue")) {
-      rules.push(...vue);
+      context.push(...vue);
     }
     if (frameworks.includes("angular")) {
-      rules.push(...angular);
+      context.push(...angular);
     }
     if (frameworks.includes("remix")) {
-      rules.push(...remix);
+      context.push(...remix);
     }
   }
 
-  return rules.join("\n");
+  return context.join("\n");
 };
 
 export const createAgents = (
@@ -55,7 +55,7 @@ export const createAgents = (
   frameworks?: (typeof options.frameworks)[number][]
 ) => {
   const config = AGENTS[name];
-  const rulesFile = generateRulesFile(frameworks);
+  const rulesFile = generateAgentsContext(frameworks);
   const content = config.header
     ? `${config.header}\n\n${rulesFile}`
     : rulesFile;
