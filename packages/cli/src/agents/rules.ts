@@ -175,11 +175,11 @@ export const core = [
   // Style
 
   "Don't use callbacks in asynchronous tests and hooks.",
-  "Don't use TypeScript enums.",
+  "Don't use TS enums.",
   "Don't export imported variables.",
   "Don't use type annotations for variables initialized with literals.",
   "Don't use magic numbers without named constants.",
-  "Don't use TypeScript namespaces.",
+  "Don't use TS namespaces.",
   "Don't negate `if` conditions when there's an `else` clause.",
   "Don't use nested ternary expressions.",
   "Don't use non-null assertions (`!`).",
@@ -250,7 +250,7 @@ export const core = [
   "Don't use labeled statements that aren't loops.",
   "Don't use `void` type outside of generic or return types.",
   "Don't use `console`.",
-  "Don't use TypeScript const enums.",
+  "Don't use TS const enums.",
   "Don't use expressions where the operation doesn't affect the value.",
   "Don't use control characters in regex literals.",
   "Don't use `debugger`.",
