@@ -7,7 +7,8 @@ import {
 } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
+import { CopyMarkdown } from "@/components/copy-markdown";
+import { ViewOptions } from "@/components/page-actions";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import Home from "./(home)";
@@ -35,7 +36,7 @@ const Page = async (props: PageProps) => {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
-        <LLMCopyButton markdownUrl={`${page.url}.mdx`} />
+        <CopyMarkdown markdownUrl={`${page.url}.mdx`} />
         <ViewOptions
           githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/apps/docs/content/${page.path}`}
           markdownUrl={`${page.url}.mdx`}
