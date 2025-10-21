@@ -27,7 +27,7 @@ export const IDE = () => (
             your AI responses consistent with your coding style.
           </p>
         </div>
-        <div className="flex flex-col gap-1 xl:mt-12">
+        <div className="flex flex-col gap-1 xl:mt-6">
           <div className="flex items-center gap-2">
             <p className="shrink-0 font-medium xl:text-sm">Configurable spec</p>
             <div className="hidden h-px flex-1 bg-muted xl:block" />
