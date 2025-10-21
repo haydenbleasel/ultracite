@@ -176,6 +176,10 @@
     @apply tracking-tight font-semibold!;
   }
 
+  .home {
+    --fd-nav-height: 64px !important;
+  }
+
   /* Hide the sidebar on the landing page on desktop */
   .home #nd-docs-layout #nd-sidebar {
     @apply md:hidden!;
@@ -183,6 +187,10 @@
 
   .home #nd-docs-layout {
     @apply pl-0!;
+  }
+
+  .home #nd-subnav > div:last-child {
+    @apply hidden!;
   }
 
   #nd-sidebar {
