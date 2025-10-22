@@ -317,7 +317,7 @@ export const ZeroConfig = async () => (
             value={config.label}
           >
             <config.logo className="size-4" />
-            {config.label}
+            <span className="hidden lg:block">{config.label}</span>
           </TabsTrigger>
         ))}
       </TabsList>

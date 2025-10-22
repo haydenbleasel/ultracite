@@ -230,11 +230,12 @@ export const Comparison = () => (
       </p>
     </div>
 
-    <div className="-space-x-px isolate mx-auto flex w-full flex-col items-center gap-4 md:flex-row md:gap-0">
+    <div className="-space-x-px isolate mx-auto flex w-full flex-col items-center gap-4 lg:flex-row lg:gap-0">
       {features.map((feature, index) => (
         <Card
           className={cn(
-            "z-10 flex-1 rounded-xl border p-12 shadow-xl first:rounded-r-none last:rounded-l-none",
+            "z-10 flex-1 rounded-xl border p-12 shadow-xl",
+            "lg:last:rounded-l-none lg:first:rounded-r-none",
             index === 1 && "z-20 border-emerald-500"
           )}
           key={feature.label}

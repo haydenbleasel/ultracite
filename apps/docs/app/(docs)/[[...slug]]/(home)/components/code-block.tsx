@@ -19,7 +19,7 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
 
   return (
     <div
-      className={cn("py-4", className)}
+      className={cn("overflow-x-auto py-4", className)}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: Shiki generates safe HTML
       dangerouslySetInnerHTML={{ __html: html }}
     />
