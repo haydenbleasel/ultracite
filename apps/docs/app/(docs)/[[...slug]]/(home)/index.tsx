@@ -5,7 +5,6 @@ import { Footer } from "./components/footer";
 import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
 import { Logos } from "./components/logos";
-import { Presets } from "./components/presets";
 import { Tweets } from "./components/tweets";
 import { ZeroConfig } from "./components/zero-config";
 
@@ -15,7 +14,6 @@ const Home = () => (
     <Logos />
     <Comparison />
     <ZeroConfig />
-    <Presets />
     <IDE />
     <Agents />
     <Tweets />
