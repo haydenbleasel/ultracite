@@ -1,6 +1,6 @@
-import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
 import type { ComponentProps } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CodeBlock } from "./code-block";
 
 const Angular = (props: ComponentProps<"svg">) => (
   <svg
@@ -305,8 +305,11 @@ export const ZeroConfig = async () => (
         TypeScript code, while still allowing you to customize when needed.
       </p>
     </div>
-    <Tabs className="mx-auto w-full max-w-4xl" defaultValue={configs[0].label}>
-      <TabsList className="w-full">
+    <Tabs
+      className="mx-auto w-full max-w-4xl gap-0 rounded-lg border bg-sidebar"
+      defaultValue={configs[0].label}
+    >
+      <TabsList className="w-full rounded-none bg-transparent">
         {configs.map((config) => (
           <TabsTrigger
             className="flex-auto p-0"
@@ -320,14 +323,11 @@ export const ZeroConfig = async () => (
       </TabsList>
       {configs.map((config) => (
         <TabsContent className="p-0" key={config.label} value={config.label}>
-          <DynamicCodeBlock
+          <CodeBlock
             code={`{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": [${config.presets.map((preset) => `"ultracite/${preset}"`).join(", ")}]
 }`}
-            codeblock={{
-              className: "[&_pre]:text-base w-full w-full shadow-none m-0!",
-            }}
             lang="json"
           />
         </TabsContent>
