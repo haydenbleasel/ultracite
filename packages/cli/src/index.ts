@@ -37,14 +37,12 @@ export const router = t.router({
           .array(z.enum(options.integrations))
           .optional()
           .describe("Additional integrations to enable"),
-        removePrettier: z
-          .boolean()
+        migrate: z
+          .array(z.enum(options.migrations))
           .optional()
-          .describe("Remove Prettier dependencies and configuration"),
-        removeEslint: z
-          .boolean()
-          .optional()
-          .describe("Remove ESLint dependencies and configuration"),
+          .describe(
+            "Migration tools to remove (e.g., eslint, prettier). Removes dependencies, config files, and editor settings."
+          ),
         skipInstall: z
           .boolean()
           .default(false)
