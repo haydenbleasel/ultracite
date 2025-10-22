@@ -1,5 +1,4 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import Link from "next/link";
 import { Logo } from "@/app/(docs)/[[...slug]]/(home)/components/logo";
 import { Button } from "@/components/ui/button";
 
@@ -20,10 +19,10 @@ export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <Button asChild variant="ghost">
-        <Link href="/">
+        <span>
           <Logo className="size-4" />
           <p className="font-semibold text-lg tracking-tight">Ultracite</p>
-        </Link>
+        </span>
       </Button>
     ),
   },
