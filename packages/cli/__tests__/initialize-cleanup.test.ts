@@ -129,7 +129,7 @@ describe("initialize - cleanup features", () => {
   });
 
   describe("ESLint removal", () => {
-    it("should remove ESLint when removeEslint flag is true", async () => {
+    it("should remove ESLint when migrate flag includes eslint", async () => {
       mockEslintCleanup.remove.mockResolvedValue({
         packagesRemoved: ["eslint", "eslint-config-prettier"],
         filesRemoved: [".eslintrc.js", ".eslintignore"],
@@ -138,8 +138,7 @@ describe("initialize - cleanup features", () => {
 
       await initialize({
         pm: "npm",
-        removeEslint: true,
-        removePrettier: false,
+        migrate: ["eslint"],
         editors: [],
         agents: [],
         frameworks: [],
@@ -198,8 +197,7 @@ describe("initialize - cleanup features", () => {
 
       await initialize({
         pm: "pnpm",
-        removeEslint: true,
-        removePrettier: false,
+        migrate: ["eslint"],
         editors: [],
         agents: [],
         frameworks: [],
@@ -216,13 +214,12 @@ describe("initialize - cleanup features", () => {
       );
     });
 
-    it("should not prompt for ESLint removal when explicitly set to false", async () => {
+    it("should not prompt for ESLint removal when migrate flag does not include eslint", async () => {
       mockEslintCleanup.hasEsLint.mockResolvedValue(true);
 
       await initialize({
         pm: "npm",
-        removeEslint: false,
-        removePrettier: false,
+        migrate: [],
         editors: [],
         agents: [],
         frameworks: [],
@@ -236,7 +233,7 @@ describe("initialize - cleanup features", () => {
   });
 
   describe("Prettier removal", () => {
-    it("should remove Prettier when removePrettier flag is true", async () => {
+    it("should remove Prettier when migrate flag includes prettier", async () => {
       mockPrettierCleanup.remove.mockResolvedValue({
         packagesRemoved: ["prettier", "prettier-plugin-tailwindcss"],
         filesRemoved: [".prettierrc", ".prettierignore"],
@@ -245,8 +242,7 @@ describe("initialize - cleanup features", () => {
 
       await initialize({
         pm: "bun",
-        removePrettier: true,
-        removeEslint: false,
+        migrate: ["prettier"],
         editors: [],
         agents: [],
         frameworks: [],
@@ -335,8 +331,7 @@ describe("initialize - cleanup features", () => {
 
       await initialize({
         pm: "yarn",
-        removePrettier: true,
-        removeEslint: false,
+        migrate: ["prettier"],
         editors: [],
         agents: [],
         frameworks: [],
@@ -364,8 +359,7 @@ describe("initialize - cleanup features", () => {
         agents: [],
         frameworks: [],
         integrations: [],
-        removeEslint: false,
-        removePrettier: false,
+        migrate: [],
       });
 
       expect(mockZed.exists).toHaveBeenCalled();
@@ -388,8 +382,7 @@ describe("initialize - cleanup features", () => {
         agents: [],
         frameworks: [],
         integrations: [],
-        removeEslint: false,
-        removePrettier: false,
+        migrate: [],
       });
 
       expect(mockZed.exists).toHaveBeenCalled();
@@ -413,8 +406,7 @@ describe("initialize - cleanup features", () => {
         agents: [],
         frameworks: [],
         integrations: [],
-        removeEslint: false,
-        removePrettier: false,
+        migrate: [],
       });
 
       expect(mockVscode.create).toHaveBeenCalled();
@@ -428,8 +420,7 @@ describe("initialize - cleanup features", () => {
         agents: [],
         frameworks: [],
         integrations: [],
-        removeEslint: false,
-        removePrettier: false,
+        migrate: [],
       });
 
       expect(mockZed.exists).not.toHaveBeenCalled();

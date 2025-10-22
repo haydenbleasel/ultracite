@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Player = dynamic(
   () => import("react-player").then((mod) => mod.default),
@@ -12,7 +13,8 @@ type VideoProps = {
 };
 
 export const Video = ({ video }: VideoProps) => (
-  <div className="relative aspect-video overflow-hidden rounded-lg">
+  <div className="relative isolate aspect-video overflow-hidden rounded-lg">
+    <Skeleton className="size-full" />
     <Player
       controls
       src={video}
@@ -22,6 +24,7 @@ export const Video = ({ video }: VideoProps) => (
         left: 0,
         width: "100%",
         height: "100%",
+        zIndex: 1,
       }}
     />
   </div>

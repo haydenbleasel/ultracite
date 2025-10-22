@@ -35,8 +35,7 @@ type InitializeFlags = {
   agents?: (typeof options.agents)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
-  removePrettier?: boolean;
-  removeEslint?: boolean;
+  migrate?: (typeof options.migrations)[number][];
   skipInstall?: boolean;
 };
 
@@ -334,8 +333,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       pm = detected.name;
     }
 
-    let shouldRemovePrettier = opts.removePrettier;
-    let shouldRemoveEslint = opts.removeEslint;
+    let shouldRemovePrettier = opts.migrate?.includes("prettier");
+    let shouldRemoveEslint = opts.migrate?.includes("eslint");
 
     if (
       shouldRemovePrettier === undefined ||
@@ -395,8 +394,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.integrations !== undefined ||
-        opts.removePrettier !== undefined ||
-        opts.removeEslint !== undefined;
+        opts.migrate !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -494,8 +492,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.pm ||
         opts.editors ||
         opts.agents ||
-        opts.removePrettier !== undefined ||
-        opts.removeEslint !== undefined;
+        opts.migrate !== undefined;
 
       if (hasOtherCliOptions) {
         integrations = [];

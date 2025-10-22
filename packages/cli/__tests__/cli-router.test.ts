@@ -125,8 +125,7 @@ describe("CLI Router", () => {
       agents: ["cursor"] as const,
       frameworks: [] as const,
       integrations: ["husky"] as const,
-      removePrettier: true,
-      removeEslint: false,
+      migrate: ["prettier"] as const,
       skipInstall: false,
     };
 

@@ -35,4 +35,5 @@ export const options = {
     "angular",
     "astro",
   ] as const,
+  migrations: ["eslint", "prettier"] as const,
 };
