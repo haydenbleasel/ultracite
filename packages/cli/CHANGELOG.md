@@ -1,5 +1,24 @@
 ## 5.6.0
 
+## 6.0.0
+
+### Major Changes
+
+- 86ee61e: Add specific Ultracite configurations
+
+### Minor Changes
+
+- d704b5c: Add first-class support for Astro
+
+### Patch Changes
+
+- c5c7ca1: Disable project rules
+- ff83b52: Compress Ultracite agent rules
+- 8987c58: Upgrade to Biome 2.3.0
+- acd8c42: Brand and docs update
+- ed1bcb6: Docs updates and bump deps
+- d0ba90b: Tie framework selection to agent context
+
 ## 5.6.4
 
 ### Patch Changes
