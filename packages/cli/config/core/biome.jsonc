@@ -203,6 +203,7 @@
         "noUnusedVariables": "error",
         "noVoidTypeReturn": "error",
         "useGraphqlNamedOperations": "error",
+        "useImageSize": "error",
         "useIsNan": "error",
         "useParseIntRadix": "error",
         "useSingleJsDocAsterisk": "error",
@@ -237,27 +238,16 @@
       "nursery": {
         "noDuplicateDependencies": "error",
         "noEmptySource": "error",
-        "noNonNullAssertedOptionalChain": "error",
         "noShadow": "error",
         "noUnusedExpressions": "error",
         "noUselessUndefined": "error",
-        "useAnchorHref": "error",
         "useConsistentArrowReturn": "error",
-        //Enforce type definitions to consistently use either interface or type.
-        "useConsistentTypeDefinitions": {
-          "level": "error",
-          "options": {
-            "style": "type"
-          }
-        },
         "useDeprecatedDate": "error",
-        "useImageSize": "error",
         "useMaxParams": "error",
 
         "noJsxLiterals": "off",
         "noUselessCatchBinding": "off",
         "noUnnecessaryConditions": "off",
-        "noSecrets": "off",
         "useExplicitType": "off",
         "useSortedClasses": {
           "fix": "safe",
@@ -297,7 +287,9 @@
         "noBlankTarget": "error",
         "noDangerouslySetInnerHtml": "error",
         "noDangerouslySetInnerHtmlWithChildren": "error",
-        "noGlobalEval": "error"
+        "noGlobalEval": "error",
+
+        "noSecrets": "off"
       },
       "style": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -331,6 +323,12 @@
         "useConsistentBuiltinInstantiation": "error",
         "useConsistentMemberAccessibility": "error",
         "useConsistentObjectDefinitions": "error",
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "type"
+          }
+        },
         "useConst": "error",
         "useDefaultParameterLast": "error",
         "useDefaultSwitchClause": "error",
@@ -464,6 +462,7 @@
         "useNumberToFixedDigitsArgument": "error",
         "useStaticResponseMethods": "error",
         "useStrictMode": "error",
+        "noNonNullAssertedOptionalChain": "error",
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDuplicateAtImportRules": "error",
@@ -496,7 +495,8 @@
     },
     "parser": {
       "allowWrongLineComments": false,
-      "cssModules": false
+      "cssModules": false,
+      "tailwindDirectives": true
     }
   },
   "json": {
