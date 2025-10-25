@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.0.1
+
+### Patch Changes
+
+- 5848800: Fix legacy ultracite config
+
 ## 6.0.0
 
 ### Major Changes
