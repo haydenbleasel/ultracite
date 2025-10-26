@@ -126,11 +126,11 @@ const features = [
           "Ultracite uses Biome, which is built in Rust and is lightning fast.",
       },
       {
-        text: "AI Rules",
+        text: "Agent Rules",
         icon: CheckIcon,
         color: "text-emerald-500",
         caption:
-          "Ultracite comes with AI rules for Claude, Copilot, Codex and more out of the box.",
+          "Ultracite comes with rules for agents like Claude, Copilot, Codex and more out of the box.",
       },
       {
         text: "Editor Configuration",
@@ -159,6 +159,13 @@ const features = [
         color: "text-emerald-500",
         caption:
           "You can setup and configure Ultracite in seconds with the `init` command.",
+      },
+      {
+        text: "Framework presets",
+        icon: CheckIcon,
+        color: "text-emerald-500",
+        caption:
+          "Ultracite comes with framework presets for React, Next.js, Solid, Vue, Svelte, Qwik, Angular, Remix and more out of the box.",
       },
     ],
   },
