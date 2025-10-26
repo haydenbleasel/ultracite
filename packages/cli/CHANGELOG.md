@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.0.3
+
+### Patch Changes
+
+- 82e5353: Drop legacy ultracite preset
+
 ## 6.0.2
 
 ### Patch Changes
