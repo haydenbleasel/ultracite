@@ -5,19 +5,6 @@ description: Ultracite's default linting configuration and how to modify it.
 
 One of Ultracite's best features is that it's zero-config out of the box – you can just extend the `ultracite` preset and get going. However, every project is a bit different, and you might want to customize certain rules or adapt Ultracite for different frameworks. This section explains the default configuration and how to extend or override it.
 
-## Default configuration
-
-The default configuration for Ultracite is designed for Next.js projects. It includes all the rules relevant to [React](/preset/react) and [Next.js](/preset/next). You can use it by extending the `ultracite` preset:
-
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite"]
-}
-```
-
-## Framework-specific configurations
-
 Ultracite provides framework-specific configurations that you can extend in addition to the base configuration. This allows you to add framework-specific linting rules without bloating the base config or dealing with irrelevant rules.
 
 ### Available framework configs

@@ -7,19 +7,7 @@ Ultracite v6 introduces framework-specific presets that give you more control ov
 
 ## What Changed
 
-The default `ultracite` preset now includes React and Next.js rules, optimized for the most common use case:
-
-```jsonc title="biome.jsonc"
-{
-  "extends": ["ultracite"]
-  // ↑ in v5, this included almost all rules across all presets
-
-  "extends": ["ultracite"]
-  // ↑ in v6, this extends core + react + next rules
-}
-```
-
-v6 also introduces [framework-specific presets](/configuration#framework-specific-configurations):
+v6 introduces [framework-specific presets](/configuration#framework-specific-configurations):
 
 - [`ultracite/core`](/preset/core) - Base JavaScript/TypeScript rules
 - [`ultracite/react`](/preset/react) - React-specific rules
@@ -35,14 +23,10 @@ v6 also introduces [framework-specific presets](/configuration#framework-specifi
 
 ### Next.js/React Projects
 
-No action required. The default preset now includes everything you need:
+Update your `biome.jsonc` to extend the appropriate presets:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite"]
-
-  // OR
-
   "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
 }
 ```
