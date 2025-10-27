@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.0.4
+
+### Patch Changes
+
+- b0a7281: setting cursor rule context to glob pattern instead of always apply
+
 ## 6.0.3
 
 ### Patch Changes
