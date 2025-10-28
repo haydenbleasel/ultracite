@@ -79,3 +79,13 @@ pnpm test:coverage
 ---
 
 Read the [docs](https://www.ultracite.ai/) for detailed setup instructions, configuration options, and examples.
+
+## Sponsors
+
+Thank you to all our sponsors!
+
+### CodeRabbit
+
+![CodeRabbit](./apps/docs/public/sponsors/coderabbit.png)
+
+[CodeRabbit](https://www.coderabbit.ai/) helps you cut code review time & bugs in half. Supercharge your entire team with AI-driven contextual feedback. Supports all languages!
