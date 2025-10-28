@@ -86,6 +86,6 @@ Thank you to all our sponsors!
 
 ### CodeRabbit
 
-![CodeRabbit](./apps/docs/public/sponsors/coderabbit.png)
+![CodeRabbit](./apps/docs/public/coderabbit.png)
 
 [CodeRabbit](https://www.coderabbit.ai/) helps you cut code review time & bugs in half. Supercharge your entire team with AI-driven contextual feedback. Supports all languages!
