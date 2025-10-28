@@ -1,41 +1,37 @@
 {
-  "root": false,
-  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
-  "linter": {
-    "rules": {
-      "nursery": {
-        "noVueDataObjectDeclaration": "error",
-        "noVueDuplicateKeys": "error",
-        "noVueReservedKeys": "error",
-        "noVueReservedProps": "error",
-        "useVueMultiWordComponentNames": "error"
-      },
-      "suspicious": {
-        "noReactSpecificProps": "error"
-      }
-    }
-  },
-  "html": {
-    "experimentalFullSupportEnabled": true,
-    "formatter": {
-      "indentScriptAndStyle": true
-    }
-  },
-  "overrides": [
-    {
-      "includes": ["*.vue"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedVariables": "off",
-            "noUnusedImports": "off"
-          },
-          "style": {
-            "useConst": "off",
-            "useImportType": "off"
-          }
-        }
-      }
-    }
-  ]
+	"root": false,
+	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"html": {
+		"experimentalFullSupportEnabled": true,
+		"formatter": {
+			"indentScriptAndStyle": true
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["*.vue"],
+			"linter": {
+				"rules": {
+					"nursery": {
+						"noVueDataObjectDeclaration": "error",
+						"noVueDuplicateKeys": "error",
+						"noVueReservedKeys": "error",
+						"noVueReservedProps": "error",
+						"useVueMultiWordComponentNames": "error"
+					},
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					},
+					"style": {
+						"useConst": "off",
+						"useImportType": "off"
+					},
+					"suspicious": {
+						"noReactSpecificProps": "error"
+					}
+				}
+			}
+		}
+	]
 }

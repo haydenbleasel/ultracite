@@ -1,26 +1,26 @@
 {
-	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"root": true,
-	"extends": [
-		"./packages/cli/config/core/biome.jsonc",
-		"./packages/cli/config/react/biome.jsonc",
-		"./packages/cli/config/next/biome.jsonc"
-	],
-	"linter": {
-		"rules": {
-			"suspicious": {
-				// Needed for CLI
-				"noConsole": "off"
-			}
-		}
-	},
-	"files": {
-		"includes": [
-			"**/*",
-			"!apps/docs/components/ai-elements",
-			"!apps/docs/components/ui",
-			"!apps/docs/lib/utils.ts",
-			"!apps/docs/hooks/use-mobile.ts"
-		]
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": true,
+  "extends": [
+    "./packages/cli/config/core/biome.jsonc",
+    "./packages/cli/config/react/biome.jsonc",
+    "./packages/cli/config/next/biome.jsonc"
+  ],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        // Needed for CLI
+        "noConsole": "off"
+      }
+    }
+  },
+  "files": {
+    "includes": [
+      "**/*",
+      "!apps/docs/components/ai-elements",
+      "!apps/docs/components/ui",
+      "!apps/docs/lib/utils.ts",
+      "!apps/docs/hooks/use-mobile.ts"
+    ]
+  }
 }

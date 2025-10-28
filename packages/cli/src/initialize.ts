@@ -489,10 +489,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
-        opts.pm ||
-        opts.editors ||
-        opts.agents ||
-        opts.migrate !== undefined;
+        opts.pm || opts.editors || opts.agents || opts.migrate !== undefined;
 
       if (hasOtherCliOptions) {
         integrations = [];

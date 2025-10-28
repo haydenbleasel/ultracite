@@ -1,34 +1,30 @@
 {
-  "root": false,
-  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noReactSpecificProps": "error"
-      }
-    }
-  },
-  "html": {
-    "experimentalFullSupportEnabled": true,
-    "formatter": {
-      "indentScriptAndStyle": true
-    }
-  },
-  "overrides": [
-    {
-      "includes": ["*.svelte"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedVariables": "off",
-            "noUnusedImports": "off"
-          },
-          "style": {
-            "useConst": "off",
-            "useImportType": "off"
-          }
-        }
-      }
-    }
-  ]
+	"root": false,
+	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"html": {
+		"experimentalFullSupportEnabled": true,
+		"formatter": {
+			"indentScriptAndStyle": true
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["*.svelte"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off"
+					},
+					"style": {
+						"useConst": "off",
+						"useImportType": "off"
+					},
+					"suspicious": {
+						"noReactSpecificProps": "error"
+					}
+				}
+			}
+		}
+	]
 }
