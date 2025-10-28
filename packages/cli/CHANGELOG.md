@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 6.0.5
+
+### Patch Changes
+
+- 5f00bd3: Use overrides in presets
+- 30f488e: Upgrade Biome to 2.3.2, add "noIncrementDecrement"
+
 ## 6.0.4
 
 ### Patch Changes
