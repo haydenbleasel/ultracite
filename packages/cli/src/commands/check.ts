@@ -2,8 +2,21 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { parseFilePaths } from "../utils";
 
-export const check = (files: string[]) => {
+type CheckOptions = [
+  string[],
+  {
+    "diagnostic-level"?: "info" | "warn" | "error";
+  },
+];
+
+export const check = (opts: CheckOptions | undefined) => {
+  const files = opts?.[0] || [];
+  const diagnostic_level = opts?.[1]["diagnostic-level"];
+
   const args = ["npx", "@biomejs/biome", "check", "--no-errors-on-unmatched"];
+  if (diagnostic_level) {
+    args.push(`--diagnostic-level=${diagnostic_level}`);
+  }
 
   // Add files or default to current directory
   if (files.length > 0) {
