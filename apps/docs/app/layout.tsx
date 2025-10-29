@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
