@@ -159,8 +159,12 @@ const initializePrecommitHook = async (
   } else {
     await updatePackageJson({
       devDependencies: { husky: "latest" },
+      scripts: { prepare: "husky" },
     });
   }
+
+  s.message("Initializing Husky...");
+  husky.init(packageManager);
 
   if (await husky.exists()) {
     s.message("Pre-commit hook found, updating...");

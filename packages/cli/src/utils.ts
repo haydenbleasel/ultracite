@@ -44,21 +44,42 @@ Y88b. .d88P 888        888     888  T88b   d8888888888 Y88b  d88P  888       888
 export const updatePackageJson = async ({
   dependencies,
   devDependencies,
+  scripts,
 }: {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
+  scripts?: Record<string, string>;
 }) => {
   const packageJsonContent = await readFile("package.json", "utf8");
   const packageJsonObject = JSON.parse(packageJsonContent);
 
   const newPackageJsonObject = {
     ...packageJsonObject,
-    devDependencies: {
+  };
+
+  // Only add devDependencies if they exist in the original package.json or are being added
+  if (packageJsonObject.devDependencies || devDependencies) {
+    newPackageJsonObject.devDependencies = {
       ...packageJsonObject.devDependencies,
       ...devDependencies,
-    },
-    dependencies: { ...packageJsonObject.dependencies, ...dependencies },
-  };
+    };
+  }
+
+  // Only add dependencies if they exist in the original package.json or are being added
+  if (packageJsonObject.dependencies || dependencies) {
+    newPackageJsonObject.dependencies = {
+      ...packageJsonObject.dependencies,
+      ...dependencies,
+    };
+  }
+
+  // Only add scripts if they exist in the original package.json or are being added
+  if (packageJsonObject.scripts || scripts) {
+    newPackageJsonObject.scripts = {
+      ...packageJsonObject.scripts,
+      ...scripts,
+    };
+  }
 
   await writeFile(
     "package.json",

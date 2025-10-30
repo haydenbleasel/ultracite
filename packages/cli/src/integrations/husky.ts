@@ -1,6 +1,7 @@
+import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
-import { exists, isMonorepo } from "../utils";
+import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const createHookScript = (command: string) => `#!/bin/sh
 # Exit on any error
@@ -81,6 +82,26 @@ export const husky = {
       packageManager,
       workspace: await isMonorepo(),
     });
+
+    // Add prepare script to package.json to ensure husky is initialized
+    await updatePackageJson({
+      scripts: {
+        prepare: "husky",
+      },
+    });
+  },
+  init: (packageManager: PackageManagerName) => {
+    // Initialize husky - this sets up git hooks infrastructure
+    const initCommand = dlxCommand(packageManager, "husky", {
+      args: ["init"],
+    });
+
+    try {
+      execSync(initCommand, { stdio: "inherit" });
+    } catch (error) {
+      // If init fails, it might be because it's already initialized
+      // Continue anyway as we'll create the hook file next
+    }
   },
   create: async (packageManager: PackageManagerName) => {
     await mkdir(".husky", { recursive: true });

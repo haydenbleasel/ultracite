@@ -561,10 +561,110 @@ describe("utils", () => {
 
       expect(mockWriteFile).toHaveBeenCalledWith(
         "package.json",
+        JSON.stringify(existingPackageJson, null, 2)
+      );
+    });
+
+    it("should add scripts when provided even if they don't exist", async () => {
+      const existingPackageJson = {
+        name: "test-package",
+        version: "1.0.0",
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        scripts: {
+          prepare: "husky",
+          test: "vitest",
+        },
+      });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "package.json",
         JSON.stringify(
           {
             ...existingPackageJson,
-            devDependencies: {},
+            scripts: {
+              prepare: "husky",
+              test: "vitest",
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it("should preserve existing scripts when updating dependencies", async () => {
+      const existingPackageJson = {
+        name: "test-package",
+        version: "1.0.0",
+        scripts: {
+          build: "tsc",
+          test: "jest",
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        dependencies: {
+          react: "^18.0.0",
+        },
+      });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "package.json",
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            scripts: {
+              build: "tsc",
+              test: "jest",
+            },
+            dependencies: {
+              react: "^18.0.0",
+            },
+          },
+          null,
+          2
+        )
+      );
+    });
+
+    it("should merge new scripts with existing scripts", async () => {
+      const existingPackageJson = {
+        name: "test-package",
+        version: "1.0.0",
+        scripts: {
+          build: "tsc",
+          test: "jest",
+        },
+      };
+
+      mockReadFile.mockResolvedValue(JSON.stringify(existingPackageJson));
+      mockWriteFile.mockResolvedValue();
+
+      await updatePackageJson({
+        scripts: {
+          prepare: "husky",
+          test: "vitest", // Override existing test script
+        },
+      });
+
+      expect(mockWriteFile).toHaveBeenCalledWith(
+        "package.json",
+        JSON.stringify(
+          {
+            ...existingPackageJson,
+            scripts: {
+              build: "tsc",
+              test: "vitest",
+              prepare: "husky",
+            },
           },
           null,
           2

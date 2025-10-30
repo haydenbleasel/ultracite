@@ -1,9 +1,13 @@
+import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { addDevDependency } from "nypm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { husky } from "../src/integrations/husky";
-import { exists, isMonorepo } from "../src/utils";
+import { exists, isMonorepo, updatePackageJson } from "../src/utils";
 
+vi.mock("node:child_process", () => ({
+  execSync: vi.fn(),
+}));
 vi.mock("nypm", () => ({
   addDevDependency: vi.fn(),
   dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
@@ -28,6 +32,23 @@ vi.mock("nypm", () => ({
         return "deno run -A npm:ultracite fix";
       }
     }
+    if (options?.args?.includes("init")) {
+      if (pm === "npm") {
+        return "npx husky init";
+      }
+      if (pm === "yarn") {
+        return "yarn dlx husky init";
+      }
+      if (pm === "pnpm") {
+        return "pnpm dlx husky init";
+      }
+      if (pm === "bun") {
+        return "bunx husky init";
+      }
+      if (pm === "deno") {
+        return "deno run -A npm:husky init";
+      }
+    }
     return `npx ${pkg} ${options?.args?.join(" ") || ""}`;
   }),
 }));
@@ -35,6 +56,7 @@ vi.mock("node:fs/promises");
 vi.mock("../src/utils", () => ({
   exists: vi.fn(),
   isMonorepo: vi.fn(),
+  updatePackageJson: vi.fn(),
 }));
 
 // Helper to create the expected hook script
@@ -115,6 +137,8 @@ describe("husky configuration", () => {
   const mockMkdir = vi.mocked(mkdir);
   const mockExists = vi.mocked(exists);
   const mockIsMonorepo = vi.mocked(isMonorepo);
+  const mockUpdatePackageJson = vi.mocked(updatePackageJson);
+  const mockExecSync = vi.mocked(execSync);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -142,8 +166,9 @@ describe("husky configuration", () => {
   });
 
   describe("install", () => {
-    it("should install husky as dev dependency", async () => {
+    it("should install husky as dev dependency and add prepare script", async () => {
       mockAddDevDependency.mockResolvedValue();
+      mockUpdatePackageJson.mockResolvedValue();
       const packageManager = "npm";
 
       await husky.install(packageManager);
@@ -152,16 +177,27 @@ describe("husky configuration", () => {
         packageManager: "npm",
         workspace: false,
       });
+      expect(mockUpdatePackageJson).toHaveBeenCalledWith({
+        scripts: {
+          prepare: "husky",
+        },
+      });
     });
 
     it("should work with different package managers", async () => {
       mockAddDevDependency.mockResolvedValue();
+      mockUpdatePackageJson.mockResolvedValue();
 
       // Test with yarn
       await husky.install("yarn");
       expect(mockAddDevDependency).toHaveBeenCalledWith("husky", {
         packageManager: "yarn",
         workspace: false,
+      });
+      expect(mockUpdatePackageJson).toHaveBeenCalledWith({
+        scripts: {
+          prepare: "husky",
+        },
       });
 
       // Test with pnpm
@@ -183,6 +219,51 @@ describe("husky configuration", () => {
       expect(mockAddDevDependency).toHaveBeenCalledWith("husky", {
         packageManager: "deno",
         workspace: false,
+      });
+    });
+  });
+
+  describe("init", () => {
+    it("should run husky init command", () => {
+      mockExecSync.mockReturnValue(Buffer.from(""));
+
+      husky.init("npm");
+
+      expect(mockExecSync).toHaveBeenCalledWith("npx husky init", {
+        stdio: "inherit",
+      });
+    });
+
+    it("should handle init failures gracefully", () => {
+      mockExecSync.mockImplementation(() => {
+        throw new Error("Init failed");
+      });
+
+      // Should not throw
+      expect(() => husky.init("npm")).not.toThrow();
+    });
+
+    it("should work with different package managers", () => {
+      mockExecSync.mockReturnValue(Buffer.from(""));
+
+      husky.init("yarn");
+      expect(mockExecSync).toHaveBeenCalledWith("yarn dlx husky init", {
+        stdio: "inherit",
+      });
+
+      husky.init("pnpm");
+      expect(mockExecSync).toHaveBeenCalledWith("pnpm dlx husky init", {
+        stdio: "inherit",
+      });
+
+      husky.init("bun");
+      expect(mockExecSync).toHaveBeenCalledWith("bunx husky init", {
+        stdio: "inherit",
+      });
+
+      husky.init("deno");
+      expect(mockExecSync).toHaveBeenCalledWith("deno run -A npm:husky init", {
+        stdio: "inherit",
       });
     });
   });
