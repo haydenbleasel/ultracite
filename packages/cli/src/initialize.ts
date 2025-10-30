@@ -464,6 +464,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       "kilo-code": "Kilo Code",
       goose: "Codename Goose",
       "roo-code": "Roo Code",
+      warp: "Warp",
     } as const;
 
     if (!agents) {
