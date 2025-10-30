@@ -22,6 +22,7 @@ import roo from "./logos/roo-code.svg";
 import vscode from "./logos/vscode.svg";
 import windsurf from "./logos/windsurf.svg";
 import zed from "./logos/zed.svg";
+import warp from "./logos/warp.svg";
 
 const logos = [
   {
@@ -95,6 +96,10 @@ const logos = [
   {
     name: "Roo Code",
     src: roo,
+  },
+  {
+    name: "Warp",
+    src: warp,
   },
 ];
 

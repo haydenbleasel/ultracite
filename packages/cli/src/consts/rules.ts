@@ -82,4 +82,8 @@ alwaysApply: false
       path: "./.roo/rules/ultracite.md",
       appendMode: true,
     },
+    warp: {
+      path: "./WARP.md",
+      appendMode: true,
+    },
   } as const;
