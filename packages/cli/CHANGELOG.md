@@ -1,5 +1,18 @@
 ## 5.6.0
 
+## 6.1.0
+
+### Minor Changes
+
+- b6bdc8e: Introduce Warp agentic terminal support
+
+### Patch Changes
+
+- ba72503: Fix husky initialization
+- b038a60: Fix overrides in Astro, Svelte, Vue presets having no effect
+- b7451ee: Improve core glob
+- f7ebeb8: Improve test coverage for agents
+
 ## 6.0.5
 
 ### Patch Changes
