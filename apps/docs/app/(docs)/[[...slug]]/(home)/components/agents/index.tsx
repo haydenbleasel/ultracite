@@ -20,9 +20,9 @@ import kiro from "./logos/kiro.svg";
 import open from "./logos/open-hands.svg";
 import roo from "./logos/roo-code.svg";
 import vscode from "./logos/vscode.svg";
+import warp from "./logos/warp.svg";
 import windsurf from "./logos/windsurf.svg";
 import zed from "./logos/zed.svg";
-import warp from "./logos/warp.svg";
 
 const logos = [
   {
