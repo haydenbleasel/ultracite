@@ -27,16 +27,25 @@ This will create the relevant file in your project directory.
 
 ### Manual Setup
 
-If you want to manually create the rules file, you can do so by creating the relevant file in your project directory e.g. `.cursor/rules/ultracite.mdc` for Cursor, `.rules` for Zed, etc.
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/hooks.json` for Cursor or `.rules` for Zed).
 
-Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+```json title=".cursor/hooks.json"
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [{ "command": "npx ultracite fix" }]
+  }
+}
+```
+
+> The hook ensures Cursor runs `npx ultracite fix` after each edit. If you already have hooks configured, just append the Ultracite command to `afterFileEdit`.
 
 ## Supported Editors
 
 | Editor          | Rule File Location                |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
-| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Cursor          | `.cursor/hooks.json`              |
 | Windsurf        | `.windsurf/rules/ultracite.md`    |
 | Zed             | `.rules`                          |
 | Claude Code     | `.claude/CLAUDE.md`               |
