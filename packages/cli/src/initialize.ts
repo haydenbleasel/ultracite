@@ -71,18 +71,16 @@ const installDependencies = async (
 
 const upsertTsConfig = async () => {
   const s = spinner();
-  s.start("Checking for tsconfig.json...");
+  s.start("Checking for tsconfig.json files...");
 
   if (await tsconfig.exists()) {
-    s.message("tsconfig.json found, updating...");
+    s.message("Found tsconfig.json files, updating with strictNullChecks...");
     await tsconfig.update();
-    s.stop("tsconfig.json updated.");
+    s.stop("tsconfig.json files updated.");
     return;
   }
 
-  s.message("tsconfig.json not found, creating...");
-  await tsconfig.create();
-  s.stop("tsconfig.json created.");
+  s.stop("No tsconfig.json files found, skipping.");
 };
 
 const upsertVsCodeSettings = async () => {

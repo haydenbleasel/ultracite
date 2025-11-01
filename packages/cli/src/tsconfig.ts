@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
+import { glob } from "glob";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { exists } from "./utils";
 
 const defaultConfig = {
   compilerOptions: {
@@ -9,13 +9,27 @@ const defaultConfig = {
   },
 };
 
-const path = "./tsconfig.json";
+/**
+ * Find all tsconfig.json files in the project
+ */
+const findTsConfigFiles = async (): Promise<string[]> => {
+  try {
+    const files = await glob("**/tsconfig*.json", {
+      ignore: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.next/**"],
+      absolute: false,
+    });
+    return files;
+  } catch {
+    return [];
+  }
+};
 
-export const tsconfig = {
-  exists: () => exists(path),
-  create: () => writeFile(path, JSON.stringify(defaultConfig, null, 2)),
-  update: async () => {
-    const existingContents = await readFile(path, "utf-8");
+/**
+ * Update a single tsconfig.json file with strictNullChecks
+ */
+const updateTsConfigFile = async (filePath: string): Promise<void> => {
+  try {
+    const existingContents = await readFile(filePath, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
@@ -24,6 +38,32 @@ export const tsconfig = {
     const configToMerge = existingConfig || {};
     const newConfig = deepmerge(configToMerge, defaultConfig);
 
-    await writeFile(path, JSON.stringify(newConfig, null, 2));
+    await writeFile(filePath, JSON.stringify(newConfig, null, 2));
+  } catch (error) {
+    // Log error but don't fail the entire operation
+    console.warn(`Failed to update ${filePath}:`, error);
+  }
+};
+
+export const tsconfig = {
+  /**
+   * Check if any tsconfig.json files exist in the project
+   */
+  exists: async (): Promise<boolean> => {
+    const files = await findTsConfigFiles();
+    return files.length > 0;
+  },
+  /**
+   * Find and update all tsconfig.json files in the project
+   */
+  update: async (): Promise<void> => {
+    const files = await findTsConfigFiles();
+
+    if (files.length === 0) {
+      console.warn("No tsconfig.json files found in the project");
+      return;
+    }
+
+    await Promise.all(files.map((file) => updateTsConfigFile(file)));
   },
 };

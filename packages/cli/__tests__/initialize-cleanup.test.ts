@@ -33,7 +33,6 @@ vi.mock("../src/biome", () => ({
 vi.mock("../src/tsconfig", () => ({
   tsconfig: {
     exists: vi.fn(() => Promise.resolve(false)),
-    create: vi.fn(() => Promise.resolve()),
     update: vi.fn(() => Promise.resolve()),
   },
 }));
