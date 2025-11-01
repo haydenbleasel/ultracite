@@ -39,6 +39,16 @@ The `check` command wraps the Biome `check` command, which runs the linter witho
 npx ultracite check
 ```
 
+You can pass `--diagnostic-level` filter to show only errors or warnings:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
 ### Fixing Code
 
 The `fix` command wraps the Biome `check --write` command, which runs the linter and fixes files.

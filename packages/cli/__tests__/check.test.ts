@@ -21,7 +21,7 @@ describe("check command", () => {
   });
 
   it("should run biome check without --write flag for all files when no files specified", () => {
-    check([]);
+    check(undefined);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched ./",
@@ -32,9 +32,22 @@ describe("check command", () => {
     );
   });
 
+  it("should run biome check with diagnostic-level option when provided", () => {
+    const options = { "diagnostic-level": "warn" as const };
+    check([[], options]);
+
+    expect(mockSpawnSync).toHaveBeenCalledWith(
+      "npx @biomejs/biome check --no-errors-on-unmatched --diagnostic-level=warn ./",
+      {
+        stdio: "inherit",
+        shell: true,
+      }
+    );
+  });
+
   it("should run biome check without --write flag for specific files when files are provided", () => {
     const files = ["src/index.ts", "src/utils.ts"];
-    check(files);
+    check([files, {}]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched src/index.ts src/utils.ts",
@@ -44,7 +57,7 @@ describe("check command", () => {
 
   it("should handle single file", () => {
     const files = ["src/index.ts"];
-    check(files);
+    check([files, {}]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched src/index.ts",
@@ -60,7 +73,7 @@ describe("check command", () => {
       "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx",
       "src/components/Button.tsx",
     ];
-    check(files);
+    check([files, {}]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
@@ -70,7 +83,7 @@ describe("check command", () => {
 
   it("should handle files with dollar signs by quoting them", () => {
     const files = ["$HOME/file.ts", "file with spaces.ts"];
-    check(files);
+    check([files, {}]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched '$HOME/file.ts'  'file with spaces.ts' ",
@@ -80,7 +93,7 @@ describe("check command", () => {
 
   it("should handle files with single quotes by escaping them", () => {
     const files = ["file'with'quotes.ts", "normal.ts"];
-    check(files);
+    check([files, {}]);
 
     expect(mockSpawnSync).toHaveBeenCalledWith(
       "npx @biomejs/biome check --no-errors-on-unmatched 'file'\\''with'\\''quotes.ts'  normal.ts",
@@ -105,7 +118,7 @@ describe("check command", () => {
       error,
     } as any);
 
-    check([]);
+    check([[], {}]);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to run Ultracite:",
@@ -126,7 +139,7 @@ describe("check command", () => {
       stderr: Buffer.from(""),
     } as any);
 
-    check([]);
+    check([[], {}]);
 
     expect(mockProcessExit).toHaveBeenCalledWith(2);
   });

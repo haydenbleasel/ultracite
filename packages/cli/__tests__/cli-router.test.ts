@@ -90,9 +90,9 @@ describe("CLI Router", () => {
     const files = ["src/index.ts", "src/utils.ts"];
 
     // This covers line 66
-    await caller.check(files);
+    await caller.check([files, {}]);
 
-    expect(mockCheck).toHaveBeenCalledWith(files);
+    expect(mockCheck).toHaveBeenCalledWith([files, {}]);
   });
 
   it("should call check with empty array when no files provided", async () => {
@@ -100,9 +100,53 @@ describe("CLI Router", () => {
     const caller = router.createCaller({});
 
     // This also covers line 66
+    await caller.check([undefined, {}]);
+
+    expect(mockCheck).toHaveBeenCalledWith([[], {}]);
+  });
+
+  it("should call check with undefined when no files or options provided", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
     await caller.check(undefined);
 
-    expect(mockCheck).toHaveBeenCalledWith([]);
+    expect(mockCheck).toHaveBeenCalledWith(undefined);
+  });
+
+  it("should call check with tuple when files are provided, but no options", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    const files = ["src/index.ts", "src/utils.ts"];
+
+    await caller.check([files, { "diagnostic-level": undefined }]);
+
+    expect(mockCheck).toHaveBeenCalledWith([files, {}]);
+  });
+
+  it("should call check with tuple when files and diagnostic-level option are provided", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    const files = ["src/index.ts", "src/utils.ts"];
+    const options = { "diagnostic-level": "warn" as const };
+
+    await caller.check([files, options]);
+
+    expect(mockCheck).toHaveBeenCalledWith([files, options]);
+  });
+
+  it("should fail if diagnostic-level option is wrong", async () => {
+    const { router } = await import("../src/index");
+    const caller = router.createCaller({});
+
+    const files = ["src/index.ts", "src/utils.ts"];
+    const options = { "diagnostic-level": "unknown" as any };
+
+    expect(caller.check([files, options])).rejects.toThrowError();
+
+    expect(mockCheck).not.toHaveBeenCalled();
   });
 
   it("should call doctor when invoked", async () => {
@@ -176,7 +220,7 @@ describe("CLI Router", () => {
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
     );
-    expect(mockCheck).toHaveBeenCalledWith(files);
+    expect(mockCheck).toHaveBeenCalledWith([files, {}]);
 
     consoleWarnSpy.mockRestore();
   });
