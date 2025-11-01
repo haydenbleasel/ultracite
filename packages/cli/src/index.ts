@@ -59,10 +59,22 @@ export const router = t.router({
     })
     .input(
       z
-        .array(z.string())
+        .tuple([
+          z
+            .array(z.string())
+            .optional()
+            .default([])
+            .describe("specific files to lint"),
+          z.object({
+            "diagnostic-level": z
+              .enum(["info", "warn", "error"])
+              .optional()
+              .describe(
+                "level of diagnostics to show. In order, from the lowest to the most important: info, warn, error."
+              ),
+          }),
+        ])
         .optional()
-        .default([])
-        .describe("specific files to lint")
     )
     .query(({ input }) => {
       check(input);
@@ -114,7 +126,7 @@ export const router = t.router({
       console.warn(
         "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
       );
-      check(input);
+      check([input, {}]);
     }),
 
   format: t.procedure
