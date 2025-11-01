@@ -58,6 +58,108 @@ export const createAgents = (
   name: (typeof options.agents)[number],
   frameworks?: (typeof options.frameworks)[number][]
 ) => {
+  if (name === "cursor") {
+    const config = AGENTS.cursor;
+    const hookCommand = "npx ultracite fix";
+
+    type CursorHooksConfig = {
+      version?: number;
+      hooks?: {
+        afterFileEdit?: Array<Record<string, unknown>>;
+        [key: string]: unknown;
+      };
+      [key: string]: unknown;
+    };
+
+    const ensureDirectory = async () => {
+      const dir = dirname(config.path);
+      if (dir !== ".") {
+        const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
+        await mkdir(cleanDir, { recursive: true });
+      }
+    };
+
+    const writeHookFile = async () => {
+      const defaultConfig: CursorHooksConfig = {
+        version: 1,
+        hooks: {
+          afterFileEdit: [{ command: hookCommand }],
+        },
+      };
+
+      await writeFile(
+        config.path,
+        `${JSON.stringify(defaultConfig, null, 2)}\n`
+      );
+    };
+
+    const upsertHookFile = async () => {
+      if (!(await exists(config.path))) {
+        await writeHookFile();
+        return;
+      }
+
+      let parsed: CursorHooksConfig = {};
+      try {
+        const existing = await readFile(config.path, "utf-8");
+        parsed = JSON.parse(existing) as CursorHooksConfig;
+      } catch {
+        parsed = {};
+      }
+
+      if (!parsed || typeof parsed !== "object") {
+        parsed = {};
+      }
+
+      const hooksValue = parsed.hooks;
+      const hooks =
+        hooksValue && typeof hooksValue === "object"
+          ? (hooksValue as Record<string, unknown>)
+          : {};
+
+      const afterFileEditValue = hooks.afterFileEdit;
+      const afterFileEdit = Array.isArray(afterFileEditValue)
+        ? [...afterFileEditValue]
+        : [];
+
+      const hasHook = afterFileEdit.some(
+        (hook) =>
+          hook &&
+          typeof hook === "object" &&
+          "command" in hook &&
+          hook.command === hookCommand
+      );
+
+      if (!hasHook) {
+        afterFileEdit.push({ command: hookCommand });
+      }
+
+      hooks.afterFileEdit = afterFileEdit;
+      parsed.hooks = hooks;
+
+      if (typeof parsed.version !== "number") {
+        parsed.version = 1;
+      }
+
+      await writeFile(
+        config.path,
+        `${JSON.stringify(parsed, null, 2)}\n`
+      );
+    };
+
+    return {
+      exists: () => exists(config.path),
+      create: async () => {
+        await ensureDirectory();
+        await writeHookFile();
+      },
+      update: async () => {
+        await ensureDirectory();
+        await upsertHookFile();
+      },
+    };
+  }
+
   const config = AGENTS[name];
   const rulesFile = generateAgentsContext(frameworks);
   const content = config.header

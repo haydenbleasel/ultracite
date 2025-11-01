@@ -44,9 +44,22 @@ describe("agent configurations", () => {
     ({ name, path, header, appendMode }) => {
       const editor = createAgents(name as keyof typeof AGENTS);
       const mockRulesContent = "core rule 1\ncore rule 2";
-      const expectedContent = header
-        ? `${header}\n\n${mockRulesContent}`
-        : mockRulesContent;
+      const isCursor = name === "cursor";
+      const expectedCursorContent = `${JSON.stringify(
+        {
+          version: 1,
+          hooks: {
+            afterFileEdit: [{ command: "npx ultracite fix" }],
+          },
+        },
+        null,
+        2
+      )}\n`;
+      const expectedContent = isCursor
+        ? expectedCursorContent
+        : header
+          ? `${header}\n\n${mockRulesContent}`
+          : mockRulesContent;
       const expectedDir = path.includes("/")
         ? path.substring(0, path.lastIndexOf("/"))
         : ".";

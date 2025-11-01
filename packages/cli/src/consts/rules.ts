@@ -16,12 +16,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     cursor: {
-      path: "./.cursor/rules/ultracite.mdc",
-      header: `---
-description: Ultracite Rules - AI-Ready Formatter and Linter
-globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
-alwaysApply: false
----`,
+      path: "./.cursor/hooks.json",
     },
     windsurf: {
       path: "./.windsurf/rules/ultracite.md",
