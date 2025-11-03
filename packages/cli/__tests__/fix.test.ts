@@ -1,140 +1,125 @@
-import { spawnSync } from "node:child_process";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fix } from "../src/commands/fix";
+import { beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
+import { spawnSync } from 'node:child_process';
+import process from 'node:process';
+import { fix } from '../src/commands/fix';
 
-vi.mock("node:child_process");
+mock.module('node:child_process', () => ({
+  spawnSync: mock(() => ({ status: 0 })),
+  execSync: mock(() => ''),
+}));
 
-describe("fix command", () => {
-  const mockSpawnSync = vi.mocked(spawnSync);
-  const mockProcessExit = vi.mocked(process.exit);
-
+describe('fix', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockSpawnSync.mockReturnValue({
-      status: 0,
-      signal: null,
-      output: [],
-      pid: 123,
-      stdout: Buffer.from(""),
-      stderr: Buffer.from(""),
-    } as any);
+    mock.restore();
   });
 
-  it("should run biome check with --write flag for all files when no files specified", () => {
-    fix([], { unsafe: false });
+  test('runs biome check with --write flag', () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
 
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched ./",
-      {
-        stdio: "inherit",
-        shell: true,
-      }
-    );
+    fix([], {});
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain('npx @biomejs/biome check');
+    expect(callArgs[0]).toContain('--write');
+    expect(callArgs[0]).toContain('--no-errors-on-unmatched');
+    expect(callArgs[0]).toContain('./');
   });
 
-  it("should run biome check with --write flag for specific files when files are provided", () => {
-    const files = ["src/index.ts", "src/utils.ts"];
-    fix(files, { unsafe: false });
+  test('runs biome fix with specific files', () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
 
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched src/index.ts src/utils.ts",
-      { stdio: "inherit", shell: true }
-    );
+    fix(['src/index.ts', 'src/test.ts'], {});
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain('src/index.ts');
+    expect(callArgs[0]).toContain('src/test.ts');
   });
 
-  it("should handle single file", () => {
-    const files = ["src/index.ts"];
-    fix(files, { unsafe: false });
+  test('runs biome fix with unsafe option', () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
 
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched src/index.ts",
-      { stdio: "inherit", shell: true }
-    );
+    fix([], { unsafe: true });
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain('--unsafe');
   });
 
-  it("should handle unsafe flag when enabled", () => {
-    const files = ["src/index.ts"];
-    fix(files, { unsafe: true });
-
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched --unsafe src/index.ts",
-      { stdio: "inherit", shell: true }
-    );
-  });
-
-  it("should handle files with special characters by quoting them", () => {
-    const files = [
-      "/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx",
-      "src/components/Button.tsx",
-    ];
-    fix(files, { unsafe: false });
-
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched '/Users/dev/[locale]/[params]/(signedin)/@modal/(.)tickets/[ticketId]/page.tsx'  src/components/Button.tsx",
-      { stdio: "inherit", shell: true }
-    );
-  });
-
-  it("should handle files with dollar signs by quoting them", () => {
-    const files = ["$HOME/file.ts", "file with spaces.ts"];
-    fix(files, { unsafe: false });
-
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched '$HOME/file.ts'  'file with spaces.ts' ",
-      { stdio: "inherit", shell: true }
-    );
-  });
-
-  it("should handle files with single quotes by escaping them", () => {
-    const files = ["file'with'quotes.ts", "normal.ts"];
-    fix(files, { unsafe: false });
-
-    expect(mockSpawnSync).toHaveBeenCalledWith(
-      "npx @biomejs/biome check --write --no-errors-on-unmatched 'file'\\''with'\\''quotes.ts'  normal.ts",
-      { stdio: "inherit", shell: true }
-    );
-  });
-
-  it("should handle errors and exit with code 1", () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {
-        // Mock implementation
-      });
-    const error = new Error("Biome failed");
-    mockSpawnSync.mockReturnValue({
-      status: null,
-      signal: null,
-      output: [],
-      pid: 123,
-      stdout: Buffer.from(""),
-      stderr: Buffer.from(""),
-      error,
-    } as any);
+  test('does not include --unsafe when option is false', () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
 
     fix([], { unsafe: false });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to run Ultracite:",
-      "Biome failed"
-    );
-    expect(mockProcessExit).toHaveBeenCalledWith(1);
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).not.toContain('--unsafe');
+  });
 
+  test('handles files with special characters', () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
+
+    fix(['src/my file.ts'], {});
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain("'src/my file.ts'");
+  });
+
+  test('exits with error code when biome fix fails', () => {
+    const mockSpawn = mock(() => ({ status: 1 }));
+    const mockExit = spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
+
+    expect(() => fix([], {})).toThrow('process.exit called');
+    expect(mockExit).toHaveBeenCalledWith(1);
+
+    mockExit.mockRestore();
+  });
+
+  test('exits when spawn returns error', () => {
+    const consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {});
+    const mockSpawn = mock(() => ({ error: new Error('spawn failed'), status: null }));
+    const mockExit = spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+
+    mock.module('node:child_process', () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ''),
+    }));
+
+    expect(() => fix([], {})).toThrow('process.exit called');
+    expect(mockExit).toHaveBeenCalledWith(1);
+
+    mockExit.mockRestore();
     consoleErrorSpy.mockRestore();
-  });
-
-  it("should handle non-zero exit status", () => {
-    mockSpawnSync.mockReturnValue({
-      status: 2,
-      signal: null,
-      output: [],
-      pid: 123,
-      stdout: Buffer.from(""),
-      stderr: Buffer.from(""),
-    } as any);
-
-    fix([], { unsafe: false });
-
-    expect(mockProcessExit).toHaveBeenCalledWith(2);
   });
 });

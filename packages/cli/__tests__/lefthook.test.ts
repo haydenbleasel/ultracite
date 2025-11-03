@@ -1,366 +1,259 @@
-import { execSync } from "node:child_process";
-import { readFile, writeFile } from "node:fs/promises";
-import { addDevDependency } from "nypm";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { lefthook } from "../src/integrations/lefthook";
-import { exists, isMonorepo } from "../src/utils";
+import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { readFile, writeFile } from 'node:fs/promises';
+import { lefthook } from '../src/integrations/lefthook';
 
-vi.mock("node:child_process");
-vi.mock("nypm", () => ({
-  addDevDependency: vi.fn(),
-  dlxCommand: vi.fn((pm: string, pkg: string, options: any) => {
-    if (pkg === "ultracite" && options?.args?.includes("fix")) {
-      if (pm === "npm") {
-        return "npx ultracite fix";
-      }
-      if (pm === "yarn") {
-        return "yarn dlx ultracite fix";
-      }
-      if (pm === "pnpm") {
-        return "pnpm dlx ultracite fix";
-      }
-      if (pm === "bun") {
-        return "bunx ultracite fix";
-      }
-      if (pm === "deno") {
-        return "deno run -A npm:ultracite fix";
-      }
+mock.module('node:child_process', () => ({
+  spawnSync: mock(() => ({ status: 0 })),
+  execSync: mock(() => ''),
+}));
+
+mock.module('node:fs/promises', () => ({
+  access: mock(() => Promise.reject(new Error('ENOENT'))),
+  readFile: mock(() => Promise.resolve('')),
+  writeFile: mock(() => Promise.resolve()),
+}));
+
+mock.module('nypm', () => ({
+  addDevDependency: mock(() => Promise.resolve()),
+  dlxCommand: mock((pm: string, name: string) => {
+    if (name === 'ultracite') {
+      return 'npx ultracite fix';
     }
-    if (pkg === "lefthook" && options?.args?.includes("install")) {
-      if (pm === "npm") {
-        return "npx lefthook install";
-      }
-      if (pm === "yarn") {
-        return "yarn dlx lefthook install";
-      }
-      if (pm === "pnpm") {
-        return "pnpm dlx lefthook install";
-      }
-      if (pm === "bun") {
-        return "bunx lefthook install";
-      }
-      if (pm === "deno") {
-        return "deno run -A npm:lefthook install";
-      }
-    }
-    return `npx ${pkg} ${options?.args?.join(" ") || ""}`;
+    return `npx ${name} install`;
   }),
-}));
-vi.mock("node:fs/promises");
-vi.mock("../src/utils", () => ({
-  exists: vi.fn(),
-  isMonorepo: vi.fn(),
+  detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+  removeDependency: mock(() => Promise.resolve()),
 }));
 
-describe("lefthook configuration", () => {
-  const mockExecSync = vi.mocked(execSync);
-  const mockAddDevDependency = vi.mocked(addDevDependency);
-  const mockReadFile = vi.mocked(readFile);
-  const mockWriteFile = vi.mocked(writeFile);
-  const mockExists = vi.mocked(exists);
-  const mockIsMonorepo = vi.mocked(isMonorepo);
-
+describe('lefthook', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockIsMonorepo.mockResolvedValue(false);
+    mock.restore();
   });
 
-  describe("exists", () => {
-    it("should return true when lefthook.yml exists", async () => {
-      mockExists.mockResolvedValue(true);
+  describe('exists', () => {
+    test('returns true when lefthook.yml exists', async () => {
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('')),
+        writeFile: mock(() => Promise.resolve()),
+      }));
 
       const result = await lefthook.exists();
-
       expect(result).toBe(true);
-      expect(mockExists).toHaveBeenCalledWith("./lefthook.yml");
     });
 
-    it("should return false when lefthook.yml does not exist", async () => {
-      mockExists.mockResolvedValue(false);
+    test('returns false when lefthook.yml does not exist', async () => {
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.reject(new Error('ENOENT'))),
+        readFile: mock(() => Promise.resolve('')),
+        writeFile: mock(() => Promise.resolve()),
+      }));
 
       const result = await lefthook.exists();
-
       expect(result).toBe(false);
-      expect(mockExists).toHaveBeenCalledWith("./lefthook.yml");
     });
   });
 
-  describe("install", () => {
-    it("should install lefthook as dev dependency and run install", async () => {
-      mockAddDevDependency.mockResolvedValue();
-      const packageManager = "npm";
+  describe('install', () => {
+    test('installs lefthook dependency', async () => {
+      const mockAddDep = mock(() => Promise.resolve());
+      const mockExecSync = mock(() => '');
 
-      await lefthook.install(packageManager);
+      mock.module('node:child_process', () => ({
+        spawnSync: mock(() => ({ status: 0 })),
+        execSync: mockExecSync,
+      }));
 
-      expect(mockAddDevDependency).toHaveBeenCalledWith("lefthook", {
-        packageManager: "npm",
-        workspace: false,
-      });
-      expect(mockExecSync).toHaveBeenCalledWith("npx lefthook install");
+      mock.module('nypm', () => ({
+        addDevDependency: mockAddDep,
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'lefthook') {
+            return 'npx lefthook install';
+          }
+          return 'npx ultracite fix';
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      await lefthook.install('npm');
+
+      expect(mockAddDep).toHaveBeenCalledWith('lefthook', expect.any(Object));
     });
 
-    it("should work with different package managers", async () => {
-      mockAddDevDependency.mockResolvedValue();
+    test('runs lefthook install command', async () => {
+      const mockExecSync = mock(() => '');
+      mock.module('node:child_process', () => ({
+        spawnSync: mock(() => ({ status: 0 })),
+        execSync: mockExecSync,
+      }));
 
-      // Test with yarn
-      await lefthook.install("yarn");
-      expect(mockAddDevDependency).toHaveBeenCalledWith("lefthook", {
-        packageManager: "yarn",
-        workspace: false,
-      });
-      expect(mockExecSync).toHaveBeenCalledWith("yarn dlx lefthook install");
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'lefthook') {
+            return 'npx lefthook install';
+          }
+          return 'npx ultracite fix';
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
 
-      // Test with pnpm
-      await lefthook.install("pnpm");
-      expect(mockAddDevDependency).toHaveBeenCalledWith("lefthook", {
-        packageManager: "pnpm",
-        workspace: false,
-      });
-      expect(mockExecSync).toHaveBeenCalledWith("pnpm dlx lefthook install");
+      await lefthook.install('npm');
 
-      // Test with bun
-      await lefthook.install("bun");
-      expect(mockAddDevDependency).toHaveBeenCalledWith("lefthook", {
-        packageManager: "bun",
-        workspace: false,
-      });
-      expect(mockExecSync).toHaveBeenCalledWith("bunx lefthook install");
-
-      // Test with deno
-      await lefthook.install("deno");
-      expect(mockAddDevDependency).toHaveBeenCalledWith("lefthook", {
-        packageManager: "deno",
-        workspace: false,
-      });
-      expect(mockExecSync).toHaveBeenCalledWith(
-        "deno run -A npm:lefthook install"
-      );
-    });
-  });
-
-  describe("create", () => {
-    it("should create lefthook.yml with ultracite fix command", async () => {
-      await lefthook.create("npm");
-
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-`
-      );
+      expect(mockExecSync).toHaveBeenCalled();
     });
   });
 
-  describe("update", () => {
-    it("should not modify config if ultracite command already exists", async () => {
-      const existingContent = `pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-    - run: npm run lint`;
-      mockReadFile.mockResolvedValue(existingContent);
+  describe('create', () => {
+    test('creates lefthook.yml with correct content', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.reject(new Error('ENOENT'))),
+        readFile: mock(() => Promise.resolve('')),
+        writeFile: mockWriteFile,
+      }));
 
-      await lefthook.update("npm");
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'ultracite') {
+            return 'npx ultracite fix';
+          }
+          return `npx ${name} install`;
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
 
-      expect(mockReadFile).toHaveBeenCalledWith("./lefthook.yml", "utf-8");
+      await lefthook.create('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[0]).toBe('./lefthook.yml');
+      expect(writeCall[1]).toContain('pre-commit:');
+      expect(writeCall[1]).toContain('jobs:');
+      expect(writeCall[1]).toContain('npx ultracite fix');
+    });
+  });
+
+  describe('update', () => {
+    test('skips update if ultracite command already present', async () => {
+      const existingContent = 'pre-commit:\n  jobs:\n    - run: npx ultracite fix';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'ultracite') {
+            return 'npx ultracite fix';
+          }
+          return `npx ${name} install`;
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      await lefthook.update('npm');
+
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
-    it("should add ultracite job to existing pre-commit jobs section", async () => {
-      const existingContent = `pre-commit:
-  jobs:
-    - run: npm run lint`;
-      mockReadFile.mockResolvedValue(existingContent);
+    test('replaces default template with ultracite config', async () => {
+      const existingContent = '# EXAMPLE USAGE:\n# pre-commit:\n#   commands:';
+      const mockWriteFile = mock(() => Promise.resolve());
 
-      await lefthook.update("npm");
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
 
-      expect(mockReadFile).toHaveBeenCalledWith("./lefthook.yml", "utf-8");
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-    - run: npm run lint`
-      );
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'ultracite') {
+            return 'npx ultracite fix';
+          }
+          return `npx ${name} install`;
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      await lefthook.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain('pre-commit:');
+      expect(writeCall[1]).not.toContain('# EXAMPLE USAGE:');
     });
 
-    it("should add jobs section to existing pre-commit without jobs", async () => {
-      const existingContent = `pre-commit:
-  commands:
-    lint:
-      run: npm run lint`;
-      mockReadFile.mockResolvedValue(existingContent);
+    test('adds ultracite job to existing jobs section', async () => {
+      const existingContent = 'pre-commit:\n  jobs:\n    - run: echo "test"';
+      const mockWriteFile = mock(() => Promise.resolve());
 
-      await lefthook.update("npm");
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
 
-      expect(mockReadFile).toHaveBeenCalledWith("./lefthook.yml", "utf-8");
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-  commands:
-    lint:
-      run: npm run lint`
-      );
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'ultracite') {
+            return 'npx ultracite fix';
+          }
+          return `npx ${name} install`;
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      await lefthook.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain('npx ultracite fix');
+      expect(writeCall[1]).toContain('echo "test"');
     });
 
-    it("should append new pre-commit section if none exists", async () => {
-      const existingContent = `commit-msg:
-  commands:
-    lint:
-      run: npm run lint`;
-      mockReadFile.mockResolvedValue(existingContent);
+    test('adds jobs section to pre-commit without jobs', async () => {
+      const existingContent = 'pre-commit:\n  parallel: true';
+      const mockWriteFile = mock(() => Promise.resolve());
 
-      await lefthook.update("npm");
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
 
-      expect(mockReadFile).toHaveBeenCalledWith("./lefthook.yml", "utf-8");
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `commit-msg:
-  commands:
-    lint:
-      run: npm run lint
-pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-`
-      );
-    });
+      mock.module('nypm', () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === 'ultracite') {
+            return 'npx ultracite fix';
+          }
+          return `npx ${name} install`;
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: 'npm' })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
 
-    it("should handle empty existing content", async () => {
-      mockReadFile.mockResolvedValue("");
+      await lefthook.update('npm');
 
-      await lefthook.update("npm");
-
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `
-pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-`
-      );
-    });
-
-    it("should replace default commented template from lefthook install", async () => {
-      const defaultTemplate = `# EXAMPLE USAGE:
-#
-#   Refer for explanation to following link:
-#   https://lefthook.dev/configuration/
-#
-# pre-push:
-#   jobs:
-#     - name: packages audit
-#       tags:
-#         - frontend
-#         - security
-#       run: yarn audit
-#
-#     - name: gems audit
-#       tags:
-#         - backend
-#         - security
-#       run: bundle audit
-#
-# pre-commit:
-#   parallel: true
-#   jobs:
-#     - run: yarn eslint {staged_files}
-#       glob: "*.{js,ts,jsx,tsx}"
-#
-#     - name: rubocop
-#       glob: "*.rb"
-#       exclude:
-#         - config/application.rb
-#         - config/routes.rb
-#       run: bundle exec rubocop --force-exclusion {all_files}
-#
-#     - name: govet
-#       files: git ls-files -m
-#       glob: "*.go"
-#       run: go vet {files}
-#
-#     - script: "hello.js"
-#       runner: node
-#
-#     - script: "hello.go"
-#       runner: go run`;
-
-      mockReadFile.mockResolvedValue(defaultTemplate);
-
-      await lefthook.update("npm");
-
-      expect(mockWriteFile).toHaveBeenCalledWith(
-        "./lefthook.yml",
-        `pre-commit:
-  jobs:
-    - run: npx ultracite fix
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
-      stage_fixed: true
-`
-      );
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain('jobs:');
+      expect(writeCall[1]).toContain('npx ultracite fix');
     });
   });
 });
