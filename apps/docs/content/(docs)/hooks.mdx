@@ -1,0 +1,64 @@
+---
+title: Hooks
+description: How to integrate Ultracite with AI agents and editor hooks.
+---
+
+Ultracite can automatically format and fix code after AI agents make edits through editor hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
+
+## Cursor Integration
+
+When you select **Cursor** during the initialization process, Ultracite automatically configures a hook to run after every file edit made by the Cursor agent.
+
+### What Gets Configured
+
+Ultracite creates or updates `.cursor/hooks.json` in your project root with the following configuration:
+
+```json title=".cursor/hooks.json"
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [{ "command": "npx ultracite fix" }]
+  }
+}
+```
+
+### How It Works
+
+1. **Automatic Execution**: After Cursor's agent edits a file, the hook automatically runs `npx ultracite fix`
+2. **Code Formatting**: Ultracite formats the edited code according to your Biome configuration
+3. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
+4. **Seamless Integration**: The process happens transparently without interrupting your workflow
+
+### Existing Hooks
+
+If you already have hooks configured in `.cursor/hooks.json`, Ultracite intelligently merges the configuration:
+
+- Preserves all existing hooks and their commands
+- Appends the Ultracite command to the `afterFileEdit` array
+- Avoids duplicate entries if Ultracite is already configured
+
+Example with existing hooks:
+
+```json title=".cursor/hooks.json"
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      { "command": "npm run test:affected" },
+      { "command": "npx ultracite fix" }
+    ]
+  }
+}
+```
+
+### Manual Configuration
+
+If you skipped the Cursor integration during initialization, you can manually add the hook:
+
+1. Create or edit `.cursor/hooks.json` in your project root
+2. Add the `afterFileEdit` hook with the Ultracite command
+3. Run `npx ultracite fix` to verify the setup
+
+### Learn More
+
+For more information about Cursor hooks and advanced configuration options, see the [official Cursor hooks documentation](https://cursor.com/docs/agent/hooks).

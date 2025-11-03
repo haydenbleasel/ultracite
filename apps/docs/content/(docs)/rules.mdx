@@ -1,9 +1,9 @@
 ---
-title: Editor Rules
-description: How to use Ultracite with Cursor, Windsurf or Zed.
+title: Rules
+description: How to integrate Ultracite with AI agents and editor rules.
 ---
 
-Ultracite provides seamless integration with modern AI-powered code editors by automatically generating editor-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
+Ultracite provides seamless integration with AI agents by automatically generating agent-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
 
 The editor rules work alongside Biome's linting and formatting. While Biome handles code formatting and catches syntax errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
 
@@ -27,25 +27,14 @@ This will create the relevant file in your project directory.
 
 ### Manual Setup
 
-If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/hooks.json` for Cursor or `.rules` for Zed).
-
-```json title=".cursor/hooks.json"
-{
-  "version": 1,
-  "hooks": {
-    "afterFileEdit": [{ "command": "npx ultracite fix" }]
-  }
-}
-```
-
-> The hook ensures Cursor runs `npx ultracite fix` after each edit. If you already have hooks configured, just append the Ultracite command to `afterFileEdit`.
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
 
 ## Supported Editors
 
 | Editor          | Rule File Location                |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
-| Cursor          | `.cursor/hooks.json`              |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
 | Windsurf        | `.windsurf/rules/ultracite.md`    |
 | Zed             | `.rules`                          |
 | Claude Code     | `.claude/CLAUDE.md`               |
