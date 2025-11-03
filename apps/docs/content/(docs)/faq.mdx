@@ -67,8 +67,20 @@ Additionally, there are blog posts and community articles about Biome’s rise a
 
 If you have a project where you temporarily don't want Ultracite, you can simply not include the `extends: ["ultracite/core"]` in `biome.jsonc` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome's defaults.
 
-To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it’s not configured, it won’t run (Biome itself might still run formatting if triggered, but not linting rules).
+To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it's not configured, it won't run (Biome itself might still run formatting if triggered, but not linting rules).
+
+## Q: I'm getting a corepack error during installation – what should I do?
+
+Some users have encountered signature verification errors when running `pnpm dlx ultracite init` with corepack, particularly on Node.js v22 with older corepack versions. The error typically looks like "Cannot find matching keyid" during package installation.
+
+Here are the recommended solutions:
+
+- **Update corepack**: Upgrade to corepack version 0.34.0 or later. You can do this with `corepack prepare pnpm@latest --activate` or by following the [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
+- **Update Node.js**: If you're on Node.js v20.x, consider upgrading to v22 or later, which includes a more recent corepack version.
+- **Use npx instead**: If corepack continues to cause issues, you can use `npx ultracite init` instead of `pnpm dlx ultracite init`.
+
+If none of these work, please open an issue on the [Ultracite GitHub repo](https://github.com/haydenbleasel/ultracite/issues) with details about your Node.js and corepack versions.
 
 ---
 
-We hope these FAQs clear up common points of confusion. If you have a question that isn’t answered here, feel free to reach out on the project’s GitHub or community channels. Ultracite is here to make your developer life easier – so feedback and questions are always welcome to help improve it!
+We hope these FAQs clear up common points of confusion. If you have a question that isn't answered here, feel free to reach out on the project's GitHub or community channels. Ultracite is here to make your developer life easier – so feedback and questions are always welcome to help improve it!
