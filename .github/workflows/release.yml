@@ -28,37 +28,32 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v6
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - uses: oven-sh/setup-bun@v2
+        name: Install Bun
 
       - uses: actions/cache@v4
-        name: Setup pnpm cache
+        name: Setup Bun cache
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-bun-
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
 
       - name: Run tests
-        run: pnpm test
+        run: bun test
 
       - name: Build CLI
-        run: pnpm build --filter ultracite
+        run: bun run build --filter ultracite
 
       - name: Create Release PR or Publish to NPM
         id: changesets
         uses: changesets/action@v1
         with:
-          version: pnpm changeset version
-          publish: pnpm changeset publish
+          version: bun changeset version
+          publish: bun changeset publish
           createGithubReleases: true
           setupGitUser: true
         env:

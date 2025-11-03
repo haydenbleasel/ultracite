@@ -42,18 +42,18 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
 
 ### Setup
 ```bash
-pnpm install
+bun install
 ```
 
 ### Testing
 ```bash
-pnpm test              # Run all tests
-pnpm test:coverage     # Run tests with coverage
+bun test              # Run all tests
+bun test:coverage     # Run tests with coverage
 ```
 
 ### Building
 ```bash
-pnpm build             # Build the CLI with tsup
+bun build             # Build the CLI with tsup
 ```
 
 ### Adding New IDE Integrations
@@ -134,7 +134,7 @@ node ./dist/index.js init
 The `docs/` directory contains a Next.js website:
 - Documentation content in `docs/content/`
 - Rules definition in `docs/lib/rules.ts`
-- To run locally: `cd docs && pnpm dev`
+- To run locally: `cd docs && bun dev`
 
 ## Notes for AI Assistants
 
@@ -153,7 +153,7 @@ The `docs/` directory contains a Next.js website:
 
 ### Updating AI/IDE Rules
 1. Modify `docs/lib/rules.ts`
-2. Run `pnpm test` to ensure all integrations still work
+2. Run `bun test` to ensure all integrations still work
 3. Users will get updated rules on next `ultracite init`
 
 ### Debugging Issues
