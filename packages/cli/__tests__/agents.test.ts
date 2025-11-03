@@ -191,6 +191,28 @@ describe('createAgents', () => {
       const writeCall = mockWriteFile.mock.calls[0];
       expect(writeCall[1]).toContain('Existing zed rules');
     });
+
+    test('update creates file when it does not exist in append mode', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          // File doesn't exist
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents('zed');
+      await agents.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      // Should write the content since file doesn't exist
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[0]).toBe('./.rules');
+    });
   });
 
   describe('claude agent', () => {

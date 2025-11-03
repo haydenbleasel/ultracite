@@ -164,5 +164,137 @@ describe('lintStaged', () => {
       const writeCall = mockWriteFile.mock.calls[0];
       expect(writeCall[0]).toBe('.lintstagedrc.json');
     });
+
+    test('handles YAML config files', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yaml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('*.js:\n  - eslint --fix')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      // YAML format should be written
+      expect(typeof writeCall[1]).toBe('string');
+      expect(writeCall[1]).toContain('*.js');
+    });
+
+    test('handles .lintstagedrc file (JSON without extension)', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('{"*.js": ["eslint"]}')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles ESM config files (.mjs)', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './lint-staged.config.mjs') {
+            return Promise.resolve();
+          }
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve('{"type": "module"}');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      // This will try to import the .mjs file, which will fail
+      // It should fall back to creating a .lintstagedrc.json
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles CommonJS config files (.cjs)', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './lint-staged.config.cjs') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('{}')),
+        writeFile: mockWriteFile,
+      }));
+
+      // This will try to require the .cjs file, which will fail
+      // It should fall back to creating a .lintstagedrc.json
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles .js files in ESM projects', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './lint-staged.config.js') {
+            return Promise.resolve();
+          }
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve('{"type": "module"}');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles .js files in CommonJS projects', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.js') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('{}')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
   });
 });
