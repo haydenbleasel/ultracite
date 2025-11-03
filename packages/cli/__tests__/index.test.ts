@@ -4,20 +4,25 @@ import { describe, expect, it, vi } from "vitest";
 const SEMANTIC_VERSION_REGEX = /^\d+\.\d+\.\d+$/;
 
 // Mock the command modules
-const mockFormat = vi.fn();
+const mockCheck = vi.fn();
+const mockDoctor = vi.fn();
+const mockFix = vi.fn();
 const mockInitialize = vi.fn();
-const mockLint = vi.fn();
 
-vi.mock("../src/format", () => ({
-  format: mockFormat,
+vi.mock("../src/commands/check", () => ({
+  check: mockCheck,
+}));
+
+vi.mock("../src/commands/doctor", () => ({
+  doctor: mockDoctor,
+}));
+
+vi.mock("../src/commands/fix", () => ({
+  fix: mockFix,
 }));
 
 vi.mock("../src/initialize", () => ({
   initialize: mockInitialize,
-}));
-
-vi.mock("../src/lint", () => ({
-  lint: mockLint,
 }));
 
 // Mock package.json
@@ -25,11 +30,15 @@ vi.mock("../package.json", () => ({
   default: {
     name: "ultracite",
     version: "test-version",
+    description: "Zero-config Biome preset for AI-ready formatting and linting",
   },
 }));
 
 // Mock trpc-cli completely
-const mockCreateCli = vi.fn();
+const mockRun = vi.fn();
+const mockCreateCli = vi.fn().mockReturnValue({
+  run: mockRun,
+});
 const mockRouter = { createCaller: vi.fn() };
 
 vi.mock("trpc-cli", () => ({
@@ -67,6 +76,19 @@ describe("CLI Index", () => {
     }
   });
 
+  it("should create CLI with correct configuration", async () => {
+    // Verify that createCli was called with the router and package info
+    expect(mockCreateCli).toHaveBeenCalled();
+    const callArgs = mockCreateCli.mock.calls[0][0];
+
+    expect(callArgs.name).toBe("ultracite");
+    expect(callArgs.version).toBe("test-version");
+    expect(callArgs.description).toBe(
+      "Zero-config Biome preset for AI-ready formatting and linting"
+    );
+    expect(callArgs.router).toBeDefined();
+  });
+
   it("should use correct package information", async () => {
     // Import actual package.json to test real values (bypassing the mock)
     const fs = await import("node:fs");
@@ -85,13 +107,15 @@ describe("CLI Index", () => {
 
   it("should have access to required command functions", () => {
     // Verify that the command functions exist and are callable
-    expect(mockFormat).toBeDefined();
+    expect(mockCheck).toBeDefined();
+    expect(mockDoctor).toBeDefined();
+    expect(mockFix).toBeDefined();
     expect(mockInitialize).toBeDefined();
-    expect(mockLint).toBeDefined();
 
-    expect(typeof mockFormat).toBe("function");
+    expect(typeof mockCheck).toBe("function");
+    expect(typeof mockDoctor).toBe("function");
+    expect(typeof mockFix).toBe("function");
     expect(typeof mockInitialize).toBe("function");
-    expect(typeof mockLint).toBe("function");
   });
 
   it("should have trpc-cli available for CLI creation", () => {

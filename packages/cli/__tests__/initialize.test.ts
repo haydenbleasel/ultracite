@@ -782,4 +782,189 @@ describe("initialize command", () => {
       );
     });
   });
+
+  describe("Update branches", () => {
+    it("should update tsconfig.json when it exists", async () => {
+      const { tsconfig } = await import("../src/tsconfig");
+      vi.mocked(tsconfig.exists).mockResolvedValue(true);
+      vi.mocked(tsconfig.update).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm" });
+
+      expect(tsconfig.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update vscode settings when they exist", async () => {
+      const { vscode } = await import("../src/editor-config/vscode");
+      vi.mocked(vscode.exists).mockResolvedValue(true);
+      vi.mocked(vscode.update).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", editors: ["vscode"] });
+
+      expect(vscode.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update biome config when it exists", async () => {
+      const { biome } = await import("../src/biome");
+      vi.mocked(biome.exists).mockResolvedValue(true);
+      vi.mocked(biome.update).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", frameworks: ["react"] });
+
+      expect(biome.update).toHaveBeenCalledWith({ frameworks: ["react"] });
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update husky pre-commit hook when it exists", async () => {
+      const { husky } = await import("../src/integrations/husky");
+      vi.mocked(husky.exists).mockResolvedValue(true);
+      vi.mocked(husky.update).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", integrations: ["husky"] });
+
+      expect(husky.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update agents when they exist", async () => {
+      const mockAgentInstance = {
+        exists: vi.fn().mockResolvedValue(true),
+        create: vi.fn().mockResolvedValue(undefined),
+        update: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const { createAgents } = await import("../src/agents");
+      vi.mocked(createAgents).mockReturnValue(mockAgentInstance);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", agents: ["cursor"] });
+
+      expect(mockAgentInstance.exists).toHaveBeenCalled();
+      expect(mockAgentInstance.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update lint-staged when it exists", async () => {
+      const { lintStaged } = await import("../src/integrations/lint-staged");
+      vi.mocked(lintStaged.exists).mockResolvedValue(true);
+      vi.mocked(lintStaged.update).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", integrations: ["lint-staged"] });
+
+      expect(lintStaged.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should update lefthook when it exists (install mode)", async () => {
+      const { lefthook } = await import("../src/integrations/lefthook");
+      vi.mocked(lefthook.exists).mockResolvedValue(true);
+      vi.mocked(lefthook.update).mockResolvedValue();
+      vi.mocked(lefthook.install).mockResolvedValue();
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", integrations: ["lefthook"] });
+
+      expect(lefthook.install).toHaveBeenCalled();
+      expect(lefthook.update).toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+
+    it("should create agents when they don't exist", async () => {
+      const mockAgentInstance = {
+        exists: vi.fn().mockResolvedValue(false),
+        create: vi.fn().mockResolvedValue(undefined),
+        update: vi.fn().mockResolvedValue(undefined),
+      };
+
+      const { createAgents } = await import("../src/agents");
+      vi.mocked(createAgents).mockReturnValue(mockAgentInstance);
+
+      mockDetectPackageManager.mockResolvedValue({
+        name: "pnpm",
+        command: "pnpm",
+        lockFile: "pnpm-lock.yaml",
+        majorVersion: "8",
+      });
+      mockMultiselect.mockResolvedValue([]);
+
+      await initialize({ pm: "pnpm", agents: ["github-copilot"] });
+
+      expect(mockAgentInstance.exists).toHaveBeenCalled();
+      expect(mockAgentInstance.create).toHaveBeenCalled();
+      expect(mockAgentInstance.update).not.toHaveBeenCalled();
+      expect(mockLog.success).toHaveBeenCalledWith(
+        "Successfully initialized Ultracite configuration!"
+      );
+    });
+  });
 });
