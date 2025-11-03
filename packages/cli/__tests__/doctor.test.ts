@@ -1,55 +1,55 @@
-import { beforeEach, describe, expect, mock, spyOn, test } from 'bun:test';
-import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
-import process from 'node:process';
-import { doctor } from '../src/commands/doctor';
+import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+import process from "node:process";
+import { doctor } from "../src/commands/doctor";
 
-mock.module('node:child_process', () => ({
-  spawnSync: mock(() => ({ status: 0, stdout: 'v1.0.0' })),
-  execSync: mock(() => ''),
+mock.module("node:child_process", () => ({
+  spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
+  execSync: mock(() => ""),
 }));
 
-mock.module('node:fs', () => ({
+mock.module("node:fs", () => ({
   existsSync: mock(() => false),
 }));
 
-mock.module('node:fs/promises', () => ({
+mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
-  readFile: mock(() => Promise.resolve('{}')),
+  readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
 }));
 
-describe('doctor', () => {
+describe("doctor", () => {
   beforeEach(() => {
     mock.restore();
   });
 
-  test('passes when everything is configured correctly', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("passes when everything is configured correctly", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.json') || pathStr.includes('package.json');
+        return (
+          pathStr.includes("biome.json") || pathStr.includes("package.json")
+        );
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/core"]}');
         }
-        if (pathStr.includes('package.json')) {
+        if (pathStr.includes("package.json")) {
           return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
         }
-        return Promise.resolve('{}');
+        return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -60,52 +60,56 @@ describe('doctor', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('fails when Biome is not installed', async () => {
-    const mockExit = spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit called');
+  test("fails when Biome is not installed", async () => {
+    const mockExit = spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("process.exit called");
     });
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 1, stdout: '' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 1, stdout: "" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock(() => false),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
-      readFile: mock(() => Promise.resolve('{}')),
+      readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow('process.exit called');
+    expect(async () => await doctor()).toThrow("process.exit called");
     expect(mockExit).toHaveBeenCalledWith(1);
 
     mockExit.mockRestore();
   });
 
-  test('warns when conflicting tools are present', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("warns when conflicting tools are present", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('.prettierrc') || pathStr.includes('biome.json') || pathStr.includes('package.json');
+        return (
+          pathStr.includes(".prettierrc") ||
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json")
+        );
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/core"]}');
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
@@ -119,52 +123,54 @@ describe('doctor', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('fails when biome config is missing', async () => {
-    const mockExit = spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit called');
+  test("fails when biome config is missing", async () => {
+    const mockExit = spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("process.exit called");
     });
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock(() => false),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
-      readFile: mock(() => Promise.resolve('{}')),
+      readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow('process.exit called');
+    expect(async () => await doctor()).toThrow("process.exit called");
     expect(mockExit).toHaveBeenCalledWith(1);
 
     mockExit.mockRestore();
   });
 
-  test('warns when biome config exists but does not extend ultracite', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("warns when biome config exists but does not extend ultracite", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.json') || pathStr.includes('package.json');
+        return (
+          pathStr.includes("biome.json") || pathStr.includes("package.json")
+        );
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"formatter": {"indentStyle": "space"}}');
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
@@ -177,67 +183,67 @@ describe('doctor', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('fails when biome config cannot be parsed', async () => {
-    const mockExit = spyOn(process, 'exit').mockImplementation(() => {
-      throw new Error('process.exit called');
+  test("fails when biome config cannot be parsed", async () => {
+    const mockExit = spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("process.exit called");
     });
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.jsonc');
+        return pathStr.includes("biome.jsonc");
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.jsonc')) {
-          throw new Error('Read error');
+        if (pathStr.includes("biome.jsonc")) {
+          throw new Error("Read error");
         }
-        return Promise.resolve('{}');
+        return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow('process.exit called');
+    expect(async () => await doctor()).toThrow("process.exit called");
     expect(mockExit).toHaveBeenCalledWith(1);
 
     mockExit.mockRestore();
   });
 
-  test('warns when package.json is missing', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("warns when package.json is missing", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.json');
+        return pathStr.includes("biome.json");
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/core"]}');
         }
-        if (pathStr.includes('package.json')) {
-          throw new Error('File not found');
+        if (pathStr.includes("package.json")) {
+          throw new Error("File not found");
         }
-        return Promise.resolve('{}');
+        return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -247,32 +253,34 @@ describe('doctor', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('warns when ultracite package cannot be parsed from package.json', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("warns when ultracite package cannot be parsed from package.json", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.json') || pathStr.includes('package.json');
+        return (
+          pathStr.includes("biome.json") || pathStr.includes("package.json")
+        );
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/core"]}');
         }
-        if (pathStr.includes('package.json')) {
-          return Promise.resolve('invalid json {');
+        if (pathStr.includes("package.json")) {
+          return Promise.resolve("invalid json {");
         }
-        return Promise.resolve('{}');
+        return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -282,33 +290,37 @@ describe('doctor', () => {
     consoleLogSpy.mockRestore();
   });
 
-  test('warns when ultracite is not in package.json dependencies', async () => {
-    const consoleLogSpy = spyOn(console, 'log').mockImplementation(() => {});
+  test("warns when ultracite is not in package.json dependencies", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 
-    mock.module('node:child_process', () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: '1.0.0' })),
-      execSync: mock(() => ''),
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
     }));
 
-    mock.module('node:fs', () => ({
+    mock.module("node:fs", () => ({
       existsSync: mock((path: string) => {
         const pathStr = String(path);
-        return pathStr.includes('biome.json') || pathStr.includes('package.json');
+        return (
+          pathStr.includes("biome.json") || pathStr.includes("package.json")
+        );
       }),
     }));
 
-    mock.module('node:fs/promises', () => ({
+    mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         const pathStr = String(path);
-        if (pathStr.includes('biome.json')) {
+        if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/core"]}');
         }
-        if (pathStr.includes('package.json')) {
+        if (pathStr.includes("package.json")) {
           // Package.json without ultracite in dependencies or devDependencies
-          return Promise.resolve('{"name": "test", "dependencies": {}, "devDependencies": {}}');
+          return Promise.resolve(
+            '{"name": "test", "dependencies": {}, "devDependencies": {}}'
+          );
         }
-        return Promise.resolve('{}');
+        return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
     }));

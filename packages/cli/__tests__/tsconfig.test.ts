@@ -1,34 +1,33 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test';
-import { readFile, writeFile } from 'node:fs/promises';
-import { tsconfig } from '../src/tsconfig';
+import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { tsconfig } from "../src/tsconfig";
 
-mock.module('glob', () => ({
+mock.module("glob", () => ({
   glob: mock(() => Promise.resolve([])),
 }));
 
-mock.module('node:fs/promises', () => ({
+mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
-  readFile: mock(() => Promise.resolve('{}')),
+  readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
 }));
 
-describe('tsconfig', () => {
+describe("tsconfig", () => {
   beforeEach(() => {
     mock.restore();
   });
 
-  describe('exists', () => {
-    test('returns true when tsconfig files are found', async () => {
-      mock.module('glob', () => ({
-        glob: mock(() => Promise.resolve(['tsconfig.json'])),
+  describe("exists", () => {
+    test("returns true when tsconfig files are found", async () => {
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
 
       const result = await tsconfig.exists();
       expect(result).toBe(true);
     });
 
-    test('returns false when no tsconfig files are found', async () => {
-      mock.module('glob', () => ({
+    test("returns false when no tsconfig files are found", async () => {
+      mock.module("glob", () => ({
         glob: mock(() => Promise.resolve([])),
       }));
 
@@ -37,15 +36,17 @@ describe('tsconfig', () => {
     });
   });
 
-  describe('update', () => {
-    test('adds strictNullChecks to tsconfig', async () => {
+  describe("update", () => {
+    test("adds strictNullChecks to tsconfig", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('glob', () => ({
-        glob: mock(() => Promise.resolve(['tsconfig.json'])),
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('{"compilerOptions": {"strict": true}}')),
+        readFile: mock(() =>
+          Promise.resolve('{"compilerOptions": {"strict": true}}')
+        ),
         writeFile: mockWriteFile,
       }));
 
@@ -58,14 +59,16 @@ describe('tsconfig', () => {
       expect(writtenContent.compilerOptions.strict).toBe(true);
     });
 
-    test('updates multiple tsconfig files', async () => {
+    test("updates multiple tsconfig files", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('glob', () => ({
-        glob: mock(() => Promise.resolve(['tsconfig.json', 'tsconfig.base.json'])),
+      mock.module("glob", () => ({
+        glob: mock(() =>
+          Promise.resolve(["tsconfig.json", "tsconfig.base.json"])
+        ),
       }));
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('{}')),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
       }));
 
@@ -74,14 +77,14 @@ describe('tsconfig', () => {
       expect(mockWriteFile).toHaveBeenCalledTimes(2);
     });
 
-    test('handles invalid JSON gracefully', async () => {
+    test("handles invalid JSON gracefully", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('glob', () => ({
-        glob: mock(() => Promise.resolve(['tsconfig.json'])),
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('invalid json')),
+        readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
       }));
 
@@ -93,14 +96,14 @@ describe('tsconfig', () => {
       expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
     });
 
-    test('does nothing when no tsconfig files found', async () => {
+    test("does nothing when no tsconfig files found", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('glob', () => ({
+      mock.module("glob", () => ({
         glob: mock(() => Promise.resolve([])),
       }));
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('{}')),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
       }));
 

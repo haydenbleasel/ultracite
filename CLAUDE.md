@@ -96,7 +96,7 @@ export const integration = {
 - Explicit type annotations avoided when TypeScript can infer
 
 ### Testing
-- Tests use Vitest
+- Tests use `bun:test`
 - Mock file system operations with `vi.mock`
 - Test both success and failure cases
 - Follow existing test patterns

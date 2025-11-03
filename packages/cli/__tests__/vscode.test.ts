@@ -1,34 +1,33 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { vscode } from '../src/editor-config/vscode';
+import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { vscode } from "../src/editor-config/vscode";
 
-mock.module('node:child_process', () => ({
+mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0 })),
-  execSync: mock(() => ''),
+  execSync: mock(() => ""),
 }));
 
-mock.module('node:fs/promises', () => ({
-  access: mock(() => Promise.reject(new Error('ENOENT'))),
-  readFile: mock(() => Promise.resolve('{}')),
+mock.module("node:fs/promises", () => ({
+  access: mock(() => Promise.reject(new Error("ENOENT"))),
+  readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
   mkdir: mock(() => Promise.resolve()),
 }));
 
-describe('vscode', () => {
+describe("vscode", () => {
   beforeEach(() => {
     mock.restore();
   });
 
-  describe('exists', () => {
-    test('returns true when settings.json exists', async () => {
-      mock.module('node:fs/promises', () => ({
+  describe("exists", () => {
+    test("returns true when settings.json exists", async () => {
+      mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === './.vscode/settings.json') {
+          if (path === "./.vscode/settings.json") {
             return Promise.resolve();
           }
-          return Promise.reject(new Error('ENOENT'));
+          return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock(() => Promise.resolve('{}')),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -37,10 +36,10 @@ describe('vscode', () => {
       expect(result).toBe(true);
     });
 
-    test('returns false when settings.json does not exist', async () => {
-      mock.module('node:fs/promises', () => ({
-        access: mock(() => Promise.reject(new Error('ENOENT'))),
-        readFile: mock(() => Promise.resolve('{}')),
+    test("returns false when settings.json does not exist", async () => {
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -50,26 +49,26 @@ describe('vscode', () => {
     });
   });
 
-  describe('create', () => {
-    test('creates .vscode directory', async () => {
+  describe("create", () => {
+    test("creates .vscode directory", async () => {
       const mockMkdir = mock(() => Promise.resolve());
-      mock.module('node:fs/promises', () => ({
-        access: mock(() => Promise.reject(new Error('ENOENT'))),
-        readFile: mock(() => Promise.resolve('{}')),
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
         mkdir: mockMkdir,
       }));
 
       await vscode.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith('.vscode', { recursive: true });
+      expect(mockMkdir).toHaveBeenCalledWith(".vscode", { recursive: true });
     });
 
-    test('creates settings.json with default config', async () => {
+    test("creates settings.json with default config", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('node:fs/promises', () => ({
-        access: mock(() => Promise.reject(new Error('ENOENT'))),
-        readFile: mock(() => Promise.resolve('{}')),
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -78,20 +77,20 @@ describe('vscode', () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe('./.vscode/settings.json');
+      expect(writeCall[0]).toBe("./.vscode/settings.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       // The default config includes various VS Code settings
       // Just verify it's a valid object with some expected keys
-      expect(typeof writtenContent).toBe('object');
+      expect(typeof writtenContent).toBe("object");
       expect(Object.keys(writtenContent).length).toBeGreaterThan(0);
     });
   });
 
-  describe('update', () => {
-    test('merges with existing settings', async () => {
+  describe("update", () => {
+    test("merges with existing settings", async () => {
       const existingSettings = '{"editor.tabSize": 4}';
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
@@ -104,16 +103,16 @@ describe('vscode', () => {
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Verify the existing setting is preserved
-      expect(writtenContent['editor.tabSize']).toBe(4);
+      expect(writtenContent["editor.tabSize"]).toBe(4);
       // Verify new settings are added
       expect(Object.keys(writtenContent).length).toBeGreaterThan(1);
     });
 
-    test('handles invalid JSON gracefully', async () => {
+    test("handles invalid JSON gracefully", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module('node:fs/promises', () => ({
+      mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('invalid json')),
+        readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -124,24 +123,24 @@ describe('vscode', () => {
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Should still create valid config even with invalid input
-      expect(typeof writtenContent).toBe('object');
+      expect(typeof writtenContent).toBe("object");
       expect(Object.keys(writtenContent).length).toBeGreaterThan(0);
     });
   });
 
-  describe('extension', () => {
-    test('attempts to install Biome extension', () => {
+  describe("extension", () => {
+    test("attempts to install Biome extension", () => {
       const mockSpawn = mock(() => ({ status: 0 }));
-      mock.module('node:child_process', () => ({
+      mock.module("node:child_process", () => ({
         spawnSync: mockSpawn,
-        execSync: mock(() => ''),
+        execSync: mock(() => ""),
       }));
 
       vscode.extension();
 
       expect(mockSpawn).toHaveBeenCalled();
       const spawnCall = mockSpawn.mock.calls[0];
-      expect(spawnCall[0]).toContain('code --install-extension biomejs.biome');
+      expect(spawnCall[0]).toContain("code --install-extension biomejs.biome");
     });
   });
 });

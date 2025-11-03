@@ -162,6 +162,6 @@ const cli = createCli({
   description: packageJson.description,
 });
 
-if (!process.env.VITEST) {
+if (!process.env.TEST) {
   cli.run();
 }
