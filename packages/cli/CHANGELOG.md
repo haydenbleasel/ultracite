@@ -1,5 +1,17 @@
 ## 5.6.0
 
+## 6.2.0
+
+### Minor Changes
+
+- 4035389: add cursor hooks functionality
+- 18ed1f3: Refactor rules based on hooks and feedback from Cursor team
+
+### Patch Changes
+
+- 7aa5fd8: pass diagnostic-level filter option (stop-gap)
+- f9e2141: Update existing tsconfig files instead of creating a new root one
+
 ## 6.1.0
 
 ### Minor Changes
