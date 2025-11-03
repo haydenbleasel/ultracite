@@ -29,17 +29,30 @@ describe("agents/index", () => {
           await agent.create();
 
           expect(existsResult).toBe(false);
-          expect(mockExists).toHaveBeenCalledWith("./.cursor/hooks.json");
-          expect(mockMkdir).toHaveBeenCalledWith(".cursor", {
+          expect(mockExists).toHaveBeenCalledWith("./.cursor/rules/ultracite.mdc");
+          expect(mockMkdir).toHaveBeenCalledWith(".cursor/rules", {
             recursive: true,
           });
-          expect(mockWriteFile).toHaveBeenCalledWith(
+
+          // Should write both the rules file and hooks file
+          expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+          // First call writes the rules file
+          expect(mockWriteFile).toHaveBeenNthCalledWith(
+            1,
+            "./.cursor/rules/ultracite.mdc",
+            expect.any(String)
+          );
+
+          // Second call writes the hooks file
+          expect(mockWriteFile).toHaveBeenNthCalledWith(
+            2,
             "./.cursor/hooks.json",
             expect.stringContaining('"afterFileEdit"')
           );
 
-          const [, content] = mockWriteFile.mock.calls[0];
-          const parsed = JSON.parse(content as string);
+          const [, hooksContent] = mockWriteFile.mock.calls[1];
+          const parsed = JSON.parse(hooksContent as string);
           expect(parsed).toEqual({
             version: 1,
             hooks: {
@@ -330,7 +343,7 @@ describe("agents/index", () => {
         const result = await agent.exists();
 
         expect(result).toBe(true);
-        expect(mockExists).toHaveBeenCalledWith("./.cursor/hooks.json");
+        expect(mockExists).toHaveBeenCalledWith("./.cursor/rules/ultracite.mdc");
       });
     });
 
@@ -558,6 +571,12 @@ describe("agents/index", () => {
 
       it("should handle leading ./ in directory paths", async () => {
         mockExists.mockResolvedValue(false);
+        mockReadFile.mockResolvedValue(
+          JSON.stringify({
+            version: 1,
+            hooks: { afterFileEdit: [] },
+          })
+        );
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
@@ -565,10 +584,23 @@ describe("agents/index", () => {
         await agent.update();
 
         // Should strip leading ./ from directory path
-        expect(mockMkdir).toHaveBeenCalledWith(".cursor", {
+        expect(mockMkdir).toHaveBeenCalledWith(".cursor/rules", {
           recursive: true,
         });
-        expect(mockWriteFile).toHaveBeenCalledWith(
+
+        // Should write both the rules file and hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+        // First call writes the rules file
+        expect(mockWriteFile).toHaveBeenNthCalledWith(
+          1,
+          "./.cursor/rules/ultracite.mdc",
+          expect.any(String)
+        );
+
+        // Second call writes the hooks file
+        expect(mockWriteFile).toHaveBeenNthCalledWith(
+          2,
           "./.cursor/hooks.json",
           expect.stringContaining('"afterFileEdit"')
         );
@@ -606,8 +638,13 @@ describe("agents/index", () => {
           "./.cursor/hooks.json",
           "utf-8"
         );
-        const [, written] = mockWriteFile.mock.calls[0];
-        const parsed = JSON.parse(written as string);
+
+        // Should write both the rules file and hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+        // Second call writes the hooks file with the new hook appended
+        const [, hooksWritten] = mockWriteFile.mock.calls[1];
+        const parsed = JSON.parse(hooksWritten as string);
         expect(parsed.hooks.afterFileEdit).toEqual([
           { command: "echo hi" },
           { command: "npx ultracite fix" },
@@ -628,12 +665,17 @@ describe("agents/index", () => {
         const agent = createAgents("cursor");
         await agent.update();
 
-        const [, written] = mockWriteFile.mock.calls[0];
-        const parsed = JSON.parse(written as string);
-        expect(parsed.version).toBe(2);
-        expect(parsed.hooks.afterFileEdit).toEqual([
-          { command: "npx ultracite fix" },
-        ]);
+        expect(mockReadFile).toHaveBeenCalledWith(
+          "./.cursor/hooks.json",
+          "utf-8"
+        );
+
+        // Should only write the rules file (1 call), not the hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(1);
+        expect(mockWriteFile).toHaveBeenCalledWith(
+          "./.cursor/rules/ultracite.mdc",
+          expect.any(String)
+        );
       });
     });
   });
