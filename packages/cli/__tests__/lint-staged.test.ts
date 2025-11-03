@@ -416,5 +416,175 @@ describe('lintStaged', () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('handles YAML with multiline arrays', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yaml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('*.js:\n  - eslint\n  - prettier')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('gracefully handles package.json with invalid JSON that cannot be parsed', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './package.json') {
+            // Return completely invalid JSON that json5 cannot parse
+            return Promise.resolve('not json at all { [');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      // Should fallback to creating .lintstagedrc.json
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('gracefully handles .lintstagedrc.json with unparseable content', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('completely broken json content')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      // Should gracefully skip update when JSON is completely broken
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test('gracefully handles .lintstagedrc.yaml with completely broken content', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yaml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('this is not yaml at all')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      // parseSimpleYaml returns empty object {}, which is truthy, so updateYamlConfig will write
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles ESM config file successfully', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      // Create a temporary ESM config module that can be imported
+      const mockModule = {
+        default: {
+          '*.js': ['echo test'],
+        },
+      };
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './lint-staged.config.mjs') {
+            return Promise.resolve();
+          }
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve('{"type": "module"}');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      // Mock the dynamic import to return our mock module
+      const originalImport = globalThis.import;
+      (globalThis as any).import = async (path: string) => {
+        if (path.includes('lint-staged.config.mjs')) {
+          return mockModule;
+        }
+        return originalImport?.(path);
+      };
+
+      try {
+        await lintStaged.update('npm');
+        expect(mockWriteFile).toHaveBeenCalled();
+      } finally {
+        // Restore original import
+        (globalThis as any).import = originalImport;
+      }
+    });
+
+    test('handles ESM config import error by creating fallback', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          // Only the .mjs config exists, not package.json
+          if (path === './lint-staged.config.mjs') {
+            return Promise.resolve();
+          }
+          // For ESM detection, need to check if package.json exists
+          if (path === 'package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === 'package.json') {
+            return Promise.resolve('{"type": "module"}');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      // Mock the dynamic import to throw an error
+      const originalImport = globalThis.import;
+      (globalThis as any).import = async () => {
+        throw new Error('Cannot import ESM module');
+      };
+
+      try {
+        await lintStaged.update('npm');
+        // Should fallback to creating .lintstagedrc.json when ESM import fails
+        expect(mockWriteFile).toHaveBeenCalled();
+        const writeCall = mockWriteFile.mock.calls[0];
+        expect(writeCall[0]).toBe('.lintstagedrc.json');
+      } finally {
+        // Restore original import
+        (globalThis as any).import = originalImport;
+      }
+    });
   });
 });

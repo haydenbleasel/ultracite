@@ -516,6 +516,36 @@ describe('helper functions', () => {
       await upsertVsCodeSettings();
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('handles vscode extension install error gracefully', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.reject(new Error('ENOENT'))),
+        readFile: mock(() => Promise.resolve('{}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      // Mock extension install to throw error
+      mock.module('node:child_process', () => ({
+        spawnSync: mock(() => {
+          throw new Error('Extension install failed');
+        }),
+        execSync: mock(() => ''),
+      }));
+
+      mock.module('@clack/prompts', () => ({
+        spinner: mock(() => ({
+          start: mock(() => {}),
+          stop: mock(() => {}),
+          message: mock(() => {}),
+        })),
+      }));
+
+      // Should not throw, just continue
+      await upsertVsCodeSettings();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
   });
 
   describe('upsertZedSettings', () => {
@@ -524,6 +554,32 @@ describe('helper functions', () => {
       mock.module('node:fs/promises', () => ({
         access: mock(() => Promise.reject(new Error('ENOENT'))),
         readFile: mock(() => Promise.resolve('{}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module('@clack/prompts', () => ({
+        spinner: mock(() => ({
+          start: mock(() => {}),
+          stop: mock(() => {}),
+          message: mock(() => {}),
+        })),
+      }));
+
+      await upsertZedSettings();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('updates existing zed settings', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.zed/settings.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('{"theme": "dark"}')),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -696,6 +752,38 @@ describe('helper functions', () => {
       expect(mockAddDep).toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('updates existing lefthook config', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './lefthook.yml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === 'package.json') {
+            return Promise.resolve('{"name": "test"}');
+          }
+          return Promise.resolve('pre-commit:\n  commands:\n    test:\n      run: echo test');
+        }),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module('@clack/prompts', () => ({
+        spinner: mock(() => ({
+          start: mock(() => {}),
+          stop: mock(() => {}),
+          message: mock(() => {}),
+        })),
+      }));
+
+      await initializeLefthook('npm', false);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
   });
 
   describe('initializeLintStaged', () => {
@@ -729,6 +817,38 @@ describe('helper functions', () => {
       expect(mockAddDep).toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('updates existing lint-staged config', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === 'package.json') {
+            return Promise.resolve('{"name": "test"}');
+          }
+          return Promise.resolve('{"*.js": ["eslint"]}');
+        }),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module('@clack/prompts', () => ({
+        spinner: mock(() => ({
+          start: mock(() => {}),
+          stop: mock(() => {}),
+          message: mock(() => {}),
+        })),
+      }));
+
+      await initializeLintStaged('npm', false);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
   });
 
   describe('upsertAgents', () => {
@@ -738,6 +858,41 @@ describe('helper functions', () => {
       mock.module('node:fs/promises', () => ({
         access: mock(() => Promise.reject(new Error('ENOENT'))),
         readFile: mock(() => Promise.resolve('{}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module('@clack/prompts', () => ({
+        spinner: mock(() => ({
+          start: mock(() => {}),
+          stop: mock(() => {}),
+          message: mock(() => {}),
+        })),
+      }));
+
+      await upsertAgents('cursor', 'Cursor');
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('updates existing agent config', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.cursor/rules/ultracite.mdc') {
+            return Promise.resolve();
+          }
+          if (path === './.cursor/hooks.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './.cursor/hooks.json') {
+            return Promise.resolve('{"version": 1, "hooks": {"afterFileEdit": []}}');
+          }
+          return Promise.resolve('# existing rules');
+        }),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
