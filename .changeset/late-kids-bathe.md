@@ -1,5 +1,5 @@
 ---
-"ultracite": patch
+"ultracite": minor
 ---
 
 add cursor hooks functionality
