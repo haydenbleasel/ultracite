@@ -13,16 +13,29 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        runtime: [node-18, node-20, node-22, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
+        if: matrix.runtime == 'node-18'
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
+
+      - name: Use Node.js 20.x
+        if: matrix.runtime == 'node-20'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.x
+
+      - name: Use Node.js 22.x
+        if: matrix.runtime == 'node-22'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
 
       - uses: oven-sh/setup-bun@v2
         name: Install Bun
@@ -39,16 +52,29 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        runtime: [node-18, node-20, node-22, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
+        if: matrix.runtime == 'node-18'
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
+
+      - name: Use Node.js 20.x
+        if: matrix.runtime == 'node-20'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.x
+
+      - name: Use Node.js 22.x
+        if: matrix.runtime == 'node-22'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
 
       - uses: oven-sh/setup-bun@v2
         name: Install Bun
