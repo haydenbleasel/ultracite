@@ -98,7 +98,7 @@ export const husky = {
 
     try {
       execSync(initCommand, { stdio: "inherit" });
-    } catch (error) {
+    } catch (_error) {
       // If init fails, it might be because it's already initialized
       // Continue anyway as we'll create the hook file next
     }

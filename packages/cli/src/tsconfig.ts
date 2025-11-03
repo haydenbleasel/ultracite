@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { glob } from "glob";
 import deepmerge from "deepmerge";
+import { glob } from "glob";
 import { parse } from "jsonc-parser";
 
 const defaultConfig = {
@@ -15,7 +15,12 @@ const defaultConfig = {
 const findTsConfigFiles = async (): Promise<string[]> => {
   try {
     const files = await glob("**/tsconfig*.json", {
-      ignore: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.next/**"],
+      ignore: [
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/.next/**",
+      ],
       absolute: false,
     });
     return files;

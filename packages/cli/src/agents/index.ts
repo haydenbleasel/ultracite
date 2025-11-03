@@ -3,66 +3,11 @@ import { dirname } from "node:path";
 import type { options } from "../consts/options";
 import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
-import {
-  angular,
-  astro,
-  core,
-  next,
-  qwik,
-  react,
-  remix,
-  solid,
-  svelte,
-  vue,
-} from "./rules";
+import { rules } from "./rules";
 
-const generateAgentsContext = (
-  frameworks?: (typeof options.frameworks)[number][]
-) => {
-  const context = [...core];
-
-  if (frameworks) {
-    if (frameworks.includes("react")) {
-      context.push(...react);
-    }
-    if (frameworks.includes("next")) {
-      context.push(...next);
-    }
-    if (frameworks.includes("qwik")) {
-      context.push(...qwik);
-    }
-    if (frameworks.includes("solid")) {
-      context.push(...solid);
-    }
-    if (frameworks.includes("svelte")) {
-      context.push(...svelte);
-    }
-    if (frameworks.includes("vue")) {
-      context.push(...vue);
-    }
-    if (frameworks.includes("angular")) {
-      context.push(...angular);
-    }
-    if (frameworks.includes("remix")) {
-      context.push(...remix);
-    }
-    if (frameworks.includes("astro")) {
-      context.push(...astro);
-    }
-  }
-
-  return context.join("\n");
-};
-
-export const createAgents = (
-  name: (typeof options.agents)[number],
-  frameworks?: (typeof options.frameworks)[number][]
-) => {
+export const createAgents = (name: (typeof options.agents)[number]) => {
   const config = AGENTS[name];
-  const rulesFile = generateAgentsContext(frameworks);
-  const content = config.header
-    ? `${config.header}\n\n${rulesFile}`
-    : rulesFile;
+  const content = config.header ? `${config.header}\n\n${rules}` : rules;
 
   const ensureDirectory = async () => {
     const dir = dirname(config.path);
@@ -110,11 +55,11 @@ export const createAgents = (
         const existingContents = await readFile(config.path, "utf-8");
 
         // Check if rules are already present to avoid duplicates
-        if (existingContents.includes(rulesFile.trim())) {
+        if (existingContents.includes(rules.trim())) {
           return;
         }
 
-        await writeFile(config.path, `${existingContents}\n\n${rulesFile}`);
+        await writeFile(config.path, `${existingContents}\n\n${rules}`);
       } else {
         await writeFile(config.path, content);
       }

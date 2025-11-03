@@ -236,13 +236,12 @@ const initializeLintStaged = async (
 
 const upsertAgents = async (
   name: (typeof options.agents)[number],
-  displayName: string,
-  frameworks?: (typeof options.frameworks)[number][]
+  displayName: string
 ) => {
   const s = spinner();
   s.start(`Checking for ${displayName}...`);
 
-  const agents = createAgents(name, frameworks);
+  const agents = createAgents(name);
 
   if (await agents.exists()) {
     s.message(`${displayName} found, updating...`);
@@ -536,7 +535,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const ruleName of agents ?? []) {
-      await upsertAgents(ruleName, agentsOptions[ruleName], frameworks);
+      await upsertAgents(ruleName, agentsOptions[ruleName]);
     }
 
     if (integrations?.includes("husky")) {

@@ -141,6 +141,7 @@ const cleanVsCodePrettierSettings = async () => {
         "editor.defaultFormatter" in langConfig &&
         langConfig["editor.defaultFormatter"] === "esbenp.prettier-vscode"
       ) {
+        // biome-ignore lint/performance/noDelete: Need to actually remove the key to check if object is empty
         delete langConfig["editor.defaultFormatter"];
         changed = true;
 

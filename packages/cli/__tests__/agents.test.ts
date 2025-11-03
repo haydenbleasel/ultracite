@@ -72,10 +72,10 @@ describe("agents/index", () => {
         expect(mockMkdir).toHaveBeenCalledWith(".windsurf/rules", {
           recursive: true,
         });
-        expect(mockWriteFile).toHaveBeenCalledWith(
-          "./.windsurf/rules/ultracite.md",
-          expect.not.stringContaining("---\n")
-        );
+        const writeCall = mockWriteFile.mock.calls[0];
+        expect(writeCall[0]).toBe("./.windsurf/rules/ultracite.md");
+        // Should start with # Ultracite, not with --- frontmatter
+        expect(writeCall[1]).toMatch(/^# Ultracite/);
       });
 
       it("should create agents for vscode-copilot in append mode", async () => {
@@ -372,6 +372,7 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
         expect(writeCall[1]).toContain("Next.js");
       });
 
@@ -385,6 +386,7 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
         expect(writeCall[1]).toContain("Qwik");
       });
 
@@ -398,6 +400,7 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
         expect(writeCall[1]).toContain("Solid");
       });
 
@@ -411,7 +414,8 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
-        expect(writeCall[1]).toContain("className");
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
+        expect(writeCall[1]).toContain("Svelte");
       });
 
       it("should include vue rules when vue framework is specified", async () => {
@@ -424,6 +428,7 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
         expect(writeCall[1]).toContain("Vue");
       });
 
@@ -438,7 +443,7 @@ describe("agents/index", () => {
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
         // Angular has no specific rules yet, so just verify it doesn't error
-        expect(writeCall[1]).toContain("Avoid `accessKey`");
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
       });
 
       it("should include remix rules when remix framework is specified", async () => {
@@ -452,7 +457,7 @@ describe("agents/index", () => {
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
         // Remix has no specific rules yet, so just verify it doesn't error
-        expect(writeCall[1]).toContain("Avoid `accessKey`");
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
       });
 
       it("should include astro rules when astro framework is specified", async () => {
@@ -465,7 +470,7 @@ describe("agents/index", () => {
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
-        expect(writeCall[1]).toContain("Astro");
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
       });
 
       it("should include multiple framework rules when multiple frameworks are specified", async () => {
@@ -526,7 +531,7 @@ describe("agents/index", () => {
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
         expect(writeCall[1]).toContain("# Existing content");
-        expect(writeCall[1]).toContain("Avoid `accessKey` attr");
+        expect(writeCall[1]).toContain("Ultracite Code Standards");
       });
 
       it("should not append rules when they already exist", async () => {

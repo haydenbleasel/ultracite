@@ -9,16 +9,7 @@ vi.mock("../src/utils", () => ({
   exists: vi.fn(),
 }));
 vi.mock("../src/agents/rules", () => ({
-  core: ["core rule 1", "core rule 2"],
-  react: ["react rule 1"],
-  next: ["next rule 1"],
-  qwik: ["qwik rule 1"],
-  solid: ["solid rule 1"],
-  svelte: ["svelte rule 1"],
-  vue: ["vue rule 1"],
-  angular: [],
-  remix: [],
-  astro: ["astro rule 1"],
+  rules: "core rule 1\ncore rule 2",
 }));
 
 describe("agent configurations", () => {
