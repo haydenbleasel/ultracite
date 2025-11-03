@@ -65,7 +65,7 @@ export const createAgents = (
     type CursorHooksConfig = {
       version?: number;
       hooks?: {
-        afterFileEdit?: Array<Record<string, unknown>>;
+        afterFileEdit?: Record<string, unknown>[];
         [key: string]: unknown;
       };
       [key: string]: unknown;
@@ -141,10 +141,7 @@ export const createAgents = (
         parsed.version = 1;
       }
 
-      await writeFile(
-        config.path,
-        `${JSON.stringify(parsed, null, 2)}\n`
-      );
+      await writeFile(config.path, `${JSON.stringify(parsed, null, 2)}\n`);
     };
 
     return {
