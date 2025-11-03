@@ -39,7 +39,7 @@ type InitializeFlags = {
   skipInstall?: boolean;
 };
 
-const installDependencies = async (
+export const installDependencies = async (
   packageManager: PackageManagerName,
   install = true
 ) => {
@@ -69,7 +69,7 @@ const installDependencies = async (
   s.stop("Dependencies installed.");
 };
 
-const upsertTsConfig = async () => {
+export const upsertTsConfig = async () => {
   const s = spinner();
   s.start("Checking for tsconfig.json files...");
 
@@ -83,7 +83,7 @@ const upsertTsConfig = async () => {
   s.stop("No tsconfig.json files found, skipping.");
 };
 
-const upsertVsCodeSettings = async () => {
+export const upsertVsCodeSettings = async () => {
   const s = spinner();
   s.start("Checking for .vscode/settings.json...");
 
@@ -107,7 +107,7 @@ const upsertVsCodeSettings = async () => {
   }
 };
 
-const upsertZedSettings = async () => {
+export const upsertZedSettings = async () => {
   const s = spinner();
   s.start("Checking for .zed/settings.json...");
 
@@ -125,7 +125,7 @@ const upsertZedSettings = async () => {
   );
 };
 
-const upsertBiomeConfig = async (
+export const upsertBiomeConfig = async (
   frameworks?: (typeof options.frameworks)[number][]
 ) => {
   const s = spinner();
@@ -143,7 +143,7 @@ const upsertBiomeConfig = async (
   s.stop("Biome configuration created.");
 };
 
-const initializePrecommitHook = async (
+export const initializePrecommitHook = async (
   packageManager: PackageManagerName,
   install = true
 ) => {
@@ -176,7 +176,7 @@ const initializePrecommitHook = async (
   s.stop("Pre-commit hook created.");
 };
 
-const initializeLefthook = async (
+export const initializeLefthook = async (
   packageManager: PackageManagerName,
   install = true
 ) => {
@@ -205,7 +205,7 @@ const initializeLefthook = async (
   s.stop("lefthook.yml created.");
 };
 
-const initializeLintStaged = async (
+export const initializeLintStaged = async (
   packageManager: PackageManagerName,
   install = true
 ) => {
@@ -234,7 +234,7 @@ const initializeLintStaged = async (
   s.stop("lint-staged created.");
 };
 
-const upsertAgents = async (
+export const upsertAgents = async (
   name: (typeof options.agents)[number],
   displayName: string
 ) => {
@@ -255,7 +255,7 @@ const upsertAgents = async (
   s.stop(`${displayName} created.`);
 };
 
-const removePrettier = async (pm: PackageManagerName) => {
+export const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start("Removing Prettier dependencies and configuration...");
 
@@ -282,7 +282,7 @@ const removePrettier = async (pm: PackageManagerName) => {
   }
 };
 
-const removeEsLint = async (pm: PackageManagerName) => {
+export const removeEsLint = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start("Removing ESLint dependencies and configuration...");
 

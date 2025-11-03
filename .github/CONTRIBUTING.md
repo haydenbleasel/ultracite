@@ -8,7 +8,7 @@ Ultracite's source code is hosted on GitHub at [haydenbleasel/ultracite](https:/
 
 ## Monorepo Structure
 
-Ultracite is a monorepo managed with pnpm workspaces and Turbo:
+Ultracite is a monorepo managed with bun workspaces and Turbo:
 
 - `packages/cli` - The main Ultracite CLI package and Biome configuration
   - `biome.jsonc` - The core Biome configuration with all rules
@@ -20,11 +20,11 @@ Ultracite is a monorepo managed with pnpm workspaces and Turbo:
 
 1. Fork the repository on GitHub
 2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/ultracite.git`
-3. Install dependencies: `pnpm install`
+3. Install dependencies: `bun install`
 4. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature-name`
 5. Make your changes
-6. Run tests: `pnpm test`
-7. Build packages: `pnpm build`
+6. Run tests: `bun test`
+7. Build packages: `bun run build`
 8. Commit your changes with clear, descriptive commit messages
 9. Push to your fork
 10. Submit a Pull Request
@@ -33,9 +33,9 @@ Ultracite is a monorepo managed with pnpm workspaces and Turbo:
 
 To test your local version of Ultracite on a sample project:
 
-1. Build the CLI: `cd packages/cli && pnpm build`
-2. Link it locally: `pnpm link --global` (from `packages/cli`)
-3. In your test project: `pnpm link --global ultracite`
+1. Build the CLI: `cd packages/cli && bun run build`
+2. Link it locally: `bun link --global` (from `packages/cli`)
+3. In your test project: `bun link --global ultracite`
 4. Run `npx ultracite init` or other commands to test your changes
 5. Alternatively, use `npm pack` to create a tarball and install it in your test project
 
@@ -45,8 +45,8 @@ To work on the documentation site:
 
 ```bash
 cd apps/docs
-pnpm install
-pnpm dev
+bun install
+bun dev
 ```
 
 This will start the Fumadocs app on [http://localhost:3000](http://localhost:3000). Documentation content is in `apps/docs/content/`.
@@ -55,7 +55,7 @@ This will start the Fumadocs app on [http://localhost:3000](http://localhost:300
 
 We use [Changesets](https://github.com/changesets/changesets) to manage versions and changelogs. When you make changes that should be released, you need to create a changeset:
 
-1. Run `pnpm changeset` in the root directory
+1. Run `bun changeset` in the root directory
 2. Select the packages you've changed (use space to select, enter to confirm)
 3. Choose the appropriate version bump:
    - `patch` - Bug fixes and minor changes
@@ -84,7 +84,7 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 1. Test on various sample code to ensure no unexpected side effects
 2. Run Ultracite on real projects to check for false positives
 3. Consider backward compatibility - will this break existing users' workflows?
-4. Run `pnpm check` on the Ultracite codebase itself
+4. Run `bun check` on the Ultracite codebase itself
 5. Update AI/IDE rules in `packages/cli/src/agents/rules.ts` if needed
 
 **Biome vs Ultracite Contributions:**
@@ -103,7 +103,7 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 - Include tests if applicable
 - **Add a changeset if your changes affect the published package**
 - Update documentation as needed
-- Ensure all tests pass: `pnpm test`
+- Ensure all tests pass: `bun test`
 - Write clear commit messages
 - Keep consistency with the project's coding style
 
@@ -112,24 +112,24 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 ### Running Commands
 
 From the root directory:
-- `pnpm test` - Run all tests across all packages
-- `pnpm build` - Build all packages
-- `pnpm check` - Run Ultracite linter on the codebase
-- `pnpm fix` - Auto-fix linting issues
+- `bun test` - Run all tests across all packages
+- `bun run build` - Build all packages
+- `bun check` - Run Ultracite linter on the codebase
+- `bun fix` - Auto-fix linting issues
 
 From a specific package (e.g., `packages/cli`):
-- `pnpm test` - Run tests for that package only
-- `pnpm build` - Build that package only
+- `bun test` - Run tests for that package only
+- `bun run build` - Build that package only
 
 ### Package Dependencies
 
-- Use `pnpm add <package>` to add dependencies to the root
-- Use `pnpm add <package> --filter ultracite` to add to the CLI package
-- Use `pnpm add <package> --filter docs` to add to the docs site
+- Use `bun add <package>` to add dependencies to the root
+- Use `bun add <package> --filter ultracite` to add to the CLI package
+- Use `bun add <package> --filter docs` to add to the docs site
 
 ## Code Style
 
-- Run `pnpm fix` before committing to auto-format your code with Ultracite
+- Run `bun fix` before committing to auto-format your code with Ultracite
 - Write clear, self-documenting code
 - Add comments only when necessary to explain complex logic
 - Use meaningful variable and function names

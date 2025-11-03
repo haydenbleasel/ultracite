@@ -67,13 +67,13 @@ npx ultracite check
 Tests are written in [Vitest](https://vitest.dev). You can run them with:
 
 ```bash
-pnpm test
+bun test
 ```
 
 Check the coverage of the CLI with:
 
 ```bash
-pnpm test:coverage
+bun test:coverage
 ```
 
 ---
