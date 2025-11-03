@@ -28,7 +28,7 @@ jobs:
         name: Install Bun
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Build CLI
         run: bun run build --filter ultracite
@@ -54,7 +54,7 @@ jobs:
         name: Install Bun
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Run tests
-        run: bun test --filter ultracite
+        run: bun test
