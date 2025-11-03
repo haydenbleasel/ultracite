@@ -17,29 +17,49 @@ describe("agents/index", () => {
     vi.clearAllMocks();
   });
 
-  describe("createAgents", () => {
-    describe("without frameworks", () => {
-      it("should create agents for cursor with only core rules", async () => {
-        mockExists.mockResolvedValue(false);
-        mockWriteFile.mockResolvedValue();
-        mockMkdir.mockResolvedValue(undefined);
+    describe("createAgents", () => {
+      describe("without frameworks", () => {
+        it("should create Cursor hooks configuration", async () => {
+          mockExists.mockResolvedValue(false);
+          mockWriteFile.mockResolvedValue();
+          mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor");
-        const existsResult = await agent.exists();
-        await agent.create();
+          const agent = createAgents("cursor");
+          const existsResult = await agent.exists();
+          await agent.create();
 
-        expect(existsResult).toBe(false);
-        expect(mockExists).toHaveBeenCalledWith(
-          "./.cursor/rules/ultracite.mdc"
-        );
-        expect(mockMkdir).toHaveBeenCalledWith(".cursor/rules", {
-          recursive: true,
+          expect(existsResult).toBe(false);
+          expect(mockExists).toHaveBeenCalledWith("./.cursor/rules/ultracite.mdc");
+          expect(mockMkdir).toHaveBeenCalledWith(".cursor/rules", {
+            recursive: true,
+          });
+
+          // Should write both the rules file and hooks file
+          expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+          // First call writes the rules file
+          expect(mockWriteFile).toHaveBeenNthCalledWith(
+            1,
+            "./.cursor/rules/ultracite.mdc",
+            expect.any(String)
+          );
+
+          // Second call writes the hooks file
+          expect(mockWriteFile).toHaveBeenNthCalledWith(
+            2,
+            "./.cursor/hooks.json",
+            expect.stringContaining('"afterFileEdit"')
+          );
+
+          const [, hooksContent] = mockWriteFile.mock.calls[1];
+          const parsed = JSON.parse(hooksContent as string);
+          expect(parsed).toEqual({
+            version: 1,
+            hooks: {
+              afterFileEdit: [{ command: "npx ultracite fix" }],
+            },
+          });
         });
-        expect(mockWriteFile).toHaveBeenCalledWith(
-          "./.cursor/rules/ultracite.mdc",
-          expect.stringContaining("---\ndescription:")
-        );
-      });
 
       it("should create agents for windsurf without header", async () => {
         mockExists.mockResolvedValue(false);
@@ -323,9 +343,7 @@ describe("agents/index", () => {
         const result = await agent.exists();
 
         expect(result).toBe(true);
-        expect(mockExists).toHaveBeenCalledWith(
-          "./.cursor/rules/ultracite.mdc"
-        );
+        expect(mockExists).toHaveBeenCalledWith("./.cursor/rules/ultracite.mdc");
       });
     });
 
@@ -335,11 +353,11 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["react"]);
+        const agent = createAgents("windsurf", ["react"]);
         await agent.create();
 
         expect(mockWriteFile).toHaveBeenCalledWith(
-          "./.cursor/rules/ultracite.mdc",
+          "./.windsurf/rules/ultracite.md",
           expect.stringMatching(/react/i)
         );
       });
@@ -349,7 +367,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["next"]);
+        const agent = createAgents("windsurf", ["next"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -362,7 +380,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["qwik"]);
+        const agent = createAgents("windsurf", ["qwik"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -375,7 +393,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["solid"]);
+        const agent = createAgents("windsurf", ["solid"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -388,7 +406,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["svelte"]);
+        const agent = createAgents("windsurf", ["svelte"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -401,7 +419,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["vue"]);
+        const agent = createAgents("windsurf", ["vue"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -414,13 +432,13 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["angular"]);
+        const agent = createAgents("windsurf", ["angular"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
         // Angular has no specific rules yet, so just verify it doesn't error
-        expect(writeCall[1]).toContain("---\ndescription:");
+        expect(writeCall[1]).toContain("Avoid `accessKey`");
       });
 
       it("should include remix rules when remix framework is specified", async () => {
@@ -428,13 +446,13 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["remix"]);
+        const agent = createAgents("windsurf", ["remix"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
         expect(writeCall).toBeDefined();
         // Remix has no specific rules yet, so just verify it doesn't error
-        expect(writeCall[1]).toContain("---\ndescription:");
+        expect(writeCall[1]).toContain("Avoid `accessKey`");
       });
 
       it("should include astro rules when astro framework is specified", async () => {
@@ -442,7 +460,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["astro"]);
+        const agent = createAgents("windsurf", ["astro"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -455,7 +473,7 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["react", "next", "vue"]);
+        const agent = createAgents("windsurf", ["react", "next", "vue"]);
         await agent.create();
 
         const writeCall = mockWriteFile.mock.calls[0];
@@ -486,11 +504,11 @@ describe("agents/index", () => {
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
-        const agent = createAgents("cursor", ["react"]);
+        const agent = createAgents("windsurf", ["react"]);
         await agent.update();
 
         expect(mockWriteFile).toHaveBeenCalledWith(
-          "./.cursor/rules/ultracite.mdc",
+          "./.windsurf/rules/ultracite.md",
           expect.stringContaining("React")
         );
       });
@@ -553,6 +571,12 @@ describe("agents/index", () => {
 
       it("should handle leading ./ in directory paths", async () => {
         mockExists.mockResolvedValue(false);
+        mockReadFile.mockResolvedValue(
+          JSON.stringify({
+            version: 1,
+            hooks: { afterFileEdit: [] },
+          })
+        );
         mockWriteFile.mockResolvedValue();
         mockMkdir.mockResolvedValue(undefined);
 
@@ -563,6 +587,23 @@ describe("agents/index", () => {
         expect(mockMkdir).toHaveBeenCalledWith(".cursor/rules", {
           recursive: true,
         });
+
+        // Should write both the rules file and hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+        // First call writes the rules file
+        expect(mockWriteFile).toHaveBeenNthCalledWith(
+          1,
+          "./.cursor/rules/ultracite.mdc",
+          expect.any(String)
+        );
+
+        // Second call writes the hooks file
+        expect(mockWriteFile).toHaveBeenNthCalledWith(
+          2,
+          "./.cursor/hooks.json",
+          expect.stringContaining('"afterFileEdit"')
+        );
       });
 
       it("should not create directory when path is current directory", async () => {
@@ -575,6 +616,64 @@ describe("agents/index", () => {
         expect(mockMkdir).not.toHaveBeenCalled();
         expect(mockWriteFile).toHaveBeenCalledWith(
           "./.rules",
+          expect.any(String)
+        );
+      });
+
+      it("should append Cursor hook when hooks file exists without Ultracite command", async () => {
+        mockExists.mockResolvedValue(true);
+        mockReadFile.mockResolvedValue(
+          JSON.stringify({
+            version: 1,
+            hooks: { afterFileEdit: [{ command: "echo hi" }] },
+          })
+        );
+        mockWriteFile.mockResolvedValue();
+        mockMkdir.mockResolvedValue(undefined);
+
+        const agent = createAgents("cursor");
+        await agent.update();
+
+        expect(mockReadFile).toHaveBeenCalledWith(
+          "./.cursor/hooks.json",
+          "utf-8"
+        );
+
+        // Should write both the rules file and hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+        // Second call writes the hooks file with the new hook appended
+        const [, hooksWritten] = mockWriteFile.mock.calls[1];
+        const parsed = JSON.parse(hooksWritten as string);
+        expect(parsed.hooks.afterFileEdit).toEqual([
+          { command: "echo hi" },
+          { command: "npx ultracite fix" },
+        ]);
+      });
+
+      it("should not duplicate Cursor hook when Ultracite command already exists", async () => {
+        mockExists.mockResolvedValue(true);
+        mockReadFile.mockResolvedValue(
+          JSON.stringify({
+            version: 2,
+            hooks: { afterFileEdit: [{ command: "npx ultracite fix" }] },
+          })
+        );
+        mockWriteFile.mockResolvedValue();
+        mockMkdir.mockResolvedValue(undefined);
+
+        const agent = createAgents("cursor");
+        await agent.update();
+
+        expect(mockReadFile).toHaveBeenCalledWith(
+          "./.cursor/hooks.json",
+          "utf-8"
+        );
+
+        // Should only write the rules file (1 call), not the hooks file
+        expect(mockWriteFile).toHaveBeenCalledTimes(1);
+        expect(mockWriteFile).toHaveBeenCalledWith(
+          "./.cursor/rules/ultracite.mdc",
           expect.any(String)
         );
       });

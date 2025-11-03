@@ -31,6 +31,7 @@ describe("agent configurations", () => {
     vi.clearAllMocks();
     mockMkdir.mockResolvedValue(undefined);
     mockWriteFile.mockResolvedValue(undefined);
+    // Default mock for non-cursor files
     mockReadFile.mockResolvedValue("existing content");
   });
 
@@ -44,9 +45,22 @@ describe("agent configurations", () => {
     ({ name, path, header, appendMode }) => {
       const editor = createAgents(name as keyof typeof AGENTS);
       const mockRulesContent = "core rule 1\ncore rule 2";
-      const expectedContent = header
-        ? `${header}\n\n${mockRulesContent}`
-        : mockRulesContent;
+      const isCursor = name === "cursor";
+      const expectedCursorContent = JSON.stringify(
+        {
+          version: 1,
+          hooks: {
+            afterFileEdit: [{ command: "npx ultracite fix" }],
+          },
+        },
+        null,
+        2
+      );
+      const expectedContent = isCursor
+        ? expectedCursorContent
+        : header
+          ? `${header}\n\n${mockRulesContent}`
+          : mockRulesContent;
       const expectedDir = path.includes("/")
         ? path.substring(0, path.lastIndexOf("/"))
         : ".";
@@ -83,7 +97,23 @@ describe("agent configurations", () => {
               recursive: true,
             });
           }
-          expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+
+          if (isCursor) {
+            // Cursor writes both the rules file and hooks file
+            expect(mockWriteFile).toHaveBeenCalledTimes(2);
+            expect(mockWriteFile).toHaveBeenNthCalledWith(
+              1,
+              path,
+              header ? `${header}\n\n${mockRulesContent}` : mockRulesContent
+            );
+            expect(mockWriteFile).toHaveBeenNthCalledWith(
+              2,
+              "./.cursor/hooks.json",
+              expectedCursorContent
+            );
+          } else {
+            expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+          }
         });
 
         if (cleanDir !== ".") {
@@ -101,7 +131,16 @@ describe("agent configurations", () => {
           mockWriteFile.mockRejectedValueOnce(new Error("Permission denied"));
 
           await expect(editor.create()).rejects.toThrow("Permission denied");
-          expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+
+          if (isCursor) {
+            // For cursor, the first writeFile call is for the rules file
+            expect(mockWriteFile).toHaveBeenCalledWith(
+              path,
+              header ? `${header}\n\n${mockRulesContent}` : mockRulesContent
+            );
+          } else {
+            expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+          }
         });
       });
 
@@ -156,6 +195,16 @@ describe("agent configurations", () => {
           });
         } else {
           it(`should overwrite ${path} with rules content`, async () => {
+            // For cursor, mock the hooks.json file read
+            if (isCursor) {
+              mockReadFile.mockResolvedValueOnce(
+                JSON.stringify({
+                  version: 1,
+                  hooks: { afterFileEdit: [] },
+                })
+              );
+            }
+
             await editor.update();
 
             if (cleanDir !== ".") {
@@ -163,7 +212,23 @@ describe("agent configurations", () => {
                 recursive: true,
               });
             }
-            expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+
+            if (isCursor) {
+              // Cursor writes both the rules file and hooks file
+              expect(mockWriteFile).toHaveBeenCalledTimes(2);
+              expect(mockWriteFile).toHaveBeenNthCalledWith(
+                1,
+                path,
+                header ? `${header}\n\n${mockRulesContent}` : mockRulesContent
+              );
+              expect(mockWriteFile).toHaveBeenNthCalledWith(
+                2,
+                "./.cursor/hooks.json",
+                expect.stringContaining('"afterFileEdit"')
+              );
+            } else {
+              expect(mockWriteFile).toHaveBeenCalledWith(path, expectedContent);
+            }
           });
         }
 

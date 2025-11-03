@@ -1,5 +1,6 @@
 import { Assistant } from "./assistant";
 import { Editor } from "./editor";
+import { Indicator } from "./indicator";
 import { Problems } from "./problems";
 import { Sidebar } from "./sidebar";
 
@@ -15,36 +16,23 @@ export const IDE = () => (
         friction.
       </p>
     </div>
-    <div className="grid gap-8 xl:grid-cols-[200px_1fr_200px]">
+    <div className="grid items-start gap-8 xl:grid-cols-[200px_1fr_200px]">
       <div className="order-1 grid gap-8 xl:order-0 xl:gap-0">
-        <div className="flex flex-col gap-1 xl:mt-18">
-          <div className="flex items-center gap-2">
-            <p className="shrink-0 font-medium xl:text-sm">AI Editor Rules</p>
-            <div className="hidden h-px flex-1 bg-muted xl:block" />
-          </div>
-          <p className="text-muted-foreground xl:text-xs">
-            Synchronized rule files for VS Code, Cursor, Windsurf and Zed keeps
-            your AI responses consistent with your coding style.
-          </p>
-        </div>
-        <div className="flex flex-col gap-1 xl:mt-6">
-          <div className="flex items-center gap-2">
-            <p className="shrink-0 font-medium xl:text-sm">Configurable spec</p>
-            <div className="hidden h-px flex-1 bg-muted xl:block" />
-          </div>
-          <p className="text-muted-foreground xl:text-xs">
-            Extend the Ultracite spec to your liking.
-          </p>
-        </div>
-        <div className="flex flex-col gap-1 xl:mt-32">
-          <div className="flex items-center gap-2">
-            <p className="shrink-0 font-medium xl:text-sm">Output panel</p>
-            <div className="hidden h-px flex-1 bg-muted xl:block" />
-          </div>
-          <p className="text-muted-foreground xl:text-xs">
-            Biome uses the VS Code output panel to show problems.
-          </p>
-        </div>
+        <Indicator
+          className="xl:mt-5"
+          description="Add formatting rules for AI agents and run Ultracite in agent loops."
+          title="Agent Integration"
+        />
+        <Indicator
+          className="xl:mt-10"
+          description="Automatically generate editor-specific rule files to work with Ultracite."
+          title="Editor configuration"
+        />
+        <Indicator
+          className="xl:mt-24"
+          description="Zero configuration Biome configuration out of the box."
+          title="Configurable spec"
+        />
       </div>
       <div className="hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-gradient-to-b from-secondary/50 to-transparent md:grid">
         <Sidebar />
@@ -55,26 +43,18 @@ export const IDE = () => (
         <Assistant />
       </div>
       <div className="grid gap-8 xl:gap-0 xl:text-right">
-        <div className="flex flex-col gap-1 xl:mt-38">
-          <div className="flex items-center gap-2">
-            <div className="hidden h-px flex-1 bg-muted xl:block" />
-            <p className="shrink-0 font-medium xl:text-sm">MCP Support</p>
-          </div>
-          <p className="text-muted-foreground xl:text-xs">
-            Run external code through the Ultracite MCP server to lint without
-            needing to install it locally, or connect it to an Agent for
-            consistent code quality in background jobs.
-          </p>
-        </div>
-        <div className="flex flex-col gap-1 xl:mt-24">
-          <div className="flex items-center gap-2">
-            <div className="hidden h-px flex-1 bg-muted xl:block" />
-            <p className="shrink-0 font-medium xl:text-sm">Format on save</p>
-          </div>
-          <p className="text-muted-foreground xl:text-xs">
-            Format your code on save with Ultracite.
-          </p>
-        </div>
+        <Indicator
+          className="xl:mt-38"
+          description="Lint and format code without needing to run Ultracite locally."
+          reverse
+          title="MCP Support"
+        />
+        <Indicator
+          className="xl:mt-24"
+          description="Biome uses the VS Code output panel to show problems."
+          reverse
+          title="Output panel"
+        />
       </div>
     </div>
   </div>
