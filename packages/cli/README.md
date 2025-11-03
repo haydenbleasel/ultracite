@@ -64,7 +64,7 @@ npx ultracite check
 
 ## Tests
 
-Tests are written in [Vitest](https://vitest.dev). You can run them with:
+You can run tests with:
 
 ```bash
 bun test
