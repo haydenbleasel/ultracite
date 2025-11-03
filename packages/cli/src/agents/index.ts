@@ -122,13 +122,21 @@ export const createAgents = (
       if (name === "cursor") {
         const existingHooks = await readFile("./.cursor/hooks.json", "utf-8");
         const existingHooksJson = JSON.parse(existingHooks);
-        existingHooksJson.hooks.afterFileEdit.push({
-          command: "npx ultracite fix",
-        });
-        await writeFile(
-          "./.cursor/hooks.json",
-          JSON.stringify(existingHooksJson, null, 2)
+
+        // Check if ultracite hook already exists to avoid duplicates
+        const hasUltraciteHook = existingHooksJson.hooks.afterFileEdit.some(
+          (hook: { command: string }) => hook.command.includes("ultracite")
         );
+
+        if (!hasUltraciteHook) {
+          existingHooksJson.hooks.afterFileEdit.push({
+            command: "npx ultracite fix",
+          });
+          await writeFile(
+            "./.cursor/hooks.json",
+            JSON.stringify(existingHooksJson, null, 2)
+          );
+        }
       }
     },
   };
