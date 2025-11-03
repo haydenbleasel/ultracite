@@ -296,5 +296,125 @@ describe('lintStaged', () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('handles YAML with inline arrays', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yaml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('*.js: [eslint, prettier]')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles YAML with string values', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('*.js: eslint --fix')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(typeof writeCall[1]).toBe('string');
+    });
+
+    test('handles invalid JSON in .lintstagedrc', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('invalid json {')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      // Should create fallback config when JSON is invalid
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles invalid YAML in .lintstagedrc.yaml', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './.lintstagedrc.yaml') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('invalid:\n  yaml:\n    - - -')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      // Should create fallback config when YAML is invalid
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test('handles package.json without lint-staged key', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock(() => Promise.resolve('{"name": "test", "version": "1.0.0"}')),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent['lint-staged']).toBeDefined();
+    });
+
+    test('handles package.json type module for ESM detection', async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module('node:fs/promises', () => ({
+        access: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error('ENOENT'));
+        }),
+        readFile: mock((path: string) => {
+          if (path === './package.json') {
+            return Promise.resolve('{"name": "test", "type": "module"}');
+          }
+          return Promise.resolve('{}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update('npm');
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
   });
 });

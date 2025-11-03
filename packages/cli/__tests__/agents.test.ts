@@ -94,6 +94,62 @@ describe('createAgents', () => {
       // (only hooks.json is updated)
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test('update adds ultracite hook when not present in hooks.json', async () => {
+      const existingHooks = '{"version": 1, "hooks": {"afterFileEdit": [{"command": "echo test"}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock((path: string) => {
+          if (path === './.cursor/hooks.json') {
+            return Promise.resolve(existingHooks);
+          }
+          return Promise.resolve('# Existing rules');
+        }),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents('cursor');
+      await agents.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      // Find the hooks.json write call
+      const hooksWrite = mockWriteFile.mock.calls.find((call: unknown[]) =>
+        call[0] === './.cursor/hooks.json'
+      );
+      expect(hooksWrite).toBeDefined();
+      const hooksContent = JSON.parse(hooksWrite[1] as string);
+      expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
+      expect(hooksContent.hooks.afterFileEdit[1].command).toBe('npx ultracite fix');
+    });
+
+    test('update skips adding hook when ultracite hook already exists in hooks.json', async () => {
+      const existingHooks = '{"version": 1, "hooks": {"afterFileEdit": [{"command": "npx ultracite fix"}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module('node:fs/promises', () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock((path: string) => {
+          if (path === './.cursor/hooks.json') {
+            return Promise.resolve(existingHooks);
+          }
+          return Promise.resolve('# Existing rules');
+        }),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents('cursor');
+      await agents.update();
+
+      // Should only write the rules file, not hooks.json since hook already exists
+      const hooksWrite = mockWriteFile.mock.calls.find((call: unknown[]) =>
+        call[0] === './.cursor/hooks.json'
+      );
+      expect(hooksWrite).toBeUndefined();
+    });
   });
 
   describe('windsurf agent', () => {
