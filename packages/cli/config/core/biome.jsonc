@@ -238,7 +238,12 @@
       "nursery": {
         "noDuplicateDependencies": "error",
         "noEmptySource": "error",
-        "noIncrementDecrement": "error",
+        "noIncrementDecrement": {
+          "level": "error",
+          "options": {
+            "allowForLoopAfterthoughts": true
+          }
+        },
         "noShadow": "error",
         "noUnusedExpressions": "error",
         "noUselessUndefined": "error",
