@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 6.2.1
+
+### Patch Changes
+
+- 527e737: Update to Biome 2.3.3
+- d5f9d64: Disable useAwait on page.tsx and layout.tsx files in Next.js
+- eb77e3f: add allowForLoopAfterthoughts to noIncrementDecrement
+
 ## 6.2.0
 
 ### Minor Changes
