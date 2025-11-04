@@ -643,9 +643,9 @@
     {
       // Package.json and similar JSON config files
       "includes": [
-        "package.json",
-        "{tsconfig,jsconfig}.json",
-        "tsconfig.*.json",
+        "**/package.json",
+        "**/{tsconfig,jsconfig}.json",
+        "**/tsconfig.*.json",
         ".vscode/*.json",
         ".github/**/*.json"
       ],
