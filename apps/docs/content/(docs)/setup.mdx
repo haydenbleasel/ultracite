@@ -3,19 +3,15 @@ title: Setup
 description: How to install Ultracite in your project.
 ---
 
-Ultracite can be installed with all major package managers. You have two main options for installation: [automatic (one-step setup)](/setup#automatic-installation) or [manual (granular control)](/setup#manual-installation). In all cases, you’ll need Node.js v14.18+ (Node 18+ recommended) and a project with a `package.json` file.
+Ultracite can be installed with all major package managers. You'll need Node.js v14.18+ (Node 18+ recommended) and a project with a `package.json` file.
 
-## Automatic Installation
+## Installation
 
-The easiest way to get started is to run Ultracite’s `init` script, which will install the necessary packages and set up the config file for you. In your project directory, run:
+The easiest way to get started is to run Ultracite's `init` script, which will install the necessary packages and set up the config file for you. In your project directory, run:
 
 ```package-install
 npx ultracite init
 ```
-
-This single command will run everything below automatically.
-
-### Flags
 
 You can optionally pass the following flags to the `init` command:
 
@@ -29,90 +25,6 @@ You can optionally pass the following flags to the `init` command:
 | `--integrations`    | Additional integrations to setup.                | Comma-separated: `husky`, `lefthook`, `lint-staged`                     |
 | `--migrate`         | Migration tools to remove.                       | Comma-separated: `eslint`, `prettier` (removes dependencies, config files, and editor settings) |
 | `--skip-install`    | Skip installing dependencies.                    | (no value needed)                                                       |
-
-## Manual Installation
-
-If you prefer to install step by step or use a specific package manager, follow these steps.
-
-### 1. Install dependencies
-
-Run the command below to install Ultracite:
-
-```package-install
-npm install -D -E ultracite @biomejs/biome
-```
-
-We pin an exact version (`-E`) to ensure consistency across environments. Biome (and Ultracite) are under active development, so locking versions avoids unexpected changes on updates.
-
-### 2. Create a `biome.jsonc` file
-
-In the root of your project, create a file named `biome.jsonc` (or `biome.json`). This is where you tell Biome to use Ultracite’s rules. For example, a minimal `biome.jsonc` should include:
-
-```json title="biome.jsonc"
-{
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/core"]
-}
-```
-
-This extends Ultracite’s preset configuration. The JSON schema reference helps with IntelliSense and validation in editors.
-
-### 3. Create a `.vscode/settings.json` file
-
-Ultracite is designed to work best with VS Code and VS Code-based editors (like Cursor and Windsurf) with on-save formatting enabled. Create or update your workspace `.vscode/settings.json` with the following configuration:
-
-```json title=".vscode/settings.json"
-{
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.defaultFormatter": "biomejs.biome",
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "emmet.showExpandedAbbreviation": "never",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "explicit",
-    "source.organizeImports.biome": "explicit"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  }
-}
-```
-
-This setup does a few important things:
-
-- Makes Biome the formatter for JS / TS / JSON files (so Prettier or other formatters won’t interfere).
-- Turns on Format on Save and Fix All on Save for Biome. The `source.fixAll.biome` and `source.organizeImports.biome` settings ensure that on each save, Biome will not only format the file but also apply any quick fixes (like lint fixes) and sort your imports automatically.
-
-If you use a different editor, you can still use Ultracite but the integration steps will differ. Ultracite relies on Biome’s capabilities, so any editor with Biome support (or generic Language Server Protocol support) can work. For example, in NeoVim you might configure the Biome LSP, and in JetBrains IDEs you could run the Ultracite CLI on file save via a file-watcher. The setup above is the most straightforward, but Ultracite’s core (Biome) is editor-agnostic and can be used anywhere you can run its CLI or LSP.
-
-
-### 4. Enable `strictNullChecks`
-
-If your project is using TypeScript, it’s strongly recommended to enable `strictNullChecks` (or full strict mode) in your `tsconfig.json`. Ultracite’s rules assume strict type checking to catch potential null/undefined issues.
-
-In your `tsconfig.json`, ensure:
-
-```json title="tsconfig.json"
-{
-  "compilerOptions": {
-    "strictNullChecks": true
-  }
-}
-```
-
-This allows Ultracite’s type-safety lint rules to function correctly and aligns with its goal of maximal type safety.
 
 ## Extensions
 
