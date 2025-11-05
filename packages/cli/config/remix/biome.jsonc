@@ -1,6 +1,16 @@
 {
 	"root": false,
 	"$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+	"linter": {
+		"rules": {
+			"style": {
+				"noMagicNumbers": "off"
+			},
+			"suspicious": {
+				"noConsole": "off"
+			}
+		}
+	},
 	"overrides": [
 		{
 			"includes": ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
