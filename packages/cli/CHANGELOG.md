@@ -1,5 +1,17 @@
 ## 5.6.0
 
+## 6.3.0
+
+### Minor Changes
+
+- a5a1510: Add new hooks flag, add Claude hooks support
+
+### Patch Changes
+
+- 0fed52b: Upgrade Biome to 2.3.4
+- a9347c8: Disable noMagicNumbers and noConsole
+- aa7f769: Updated tsconfig, package.json selector
+
 ## 6.2.1
 
 ### Patch Changes
