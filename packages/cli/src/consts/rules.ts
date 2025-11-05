@@ -98,4 +98,8 @@ export const HOOKS: Record<(typeof options.hooks)[number], HookConfig> = {
     path: "./.cursor/hooks.json",
     command: "npx ultracite fix",
   },
+  claude: {
+    path: "./.claude/settings.json",
+    command: "npx ultracite fix",
+  },
 } as const;

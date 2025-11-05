@@ -37,6 +37,29 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
             2
           )
         );
+      } else if (name === "claude") {
+        await writeFile(
+          config.path,
+          JSON.stringify(
+            {
+              hooks: {
+                PostToolUse: [
+                  {
+                    matcher: "Edit|Write",
+                    hooks: [
+                      {
+                        type: "command",
+                        command: config.command,
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            null,
+            2
+          )
+        );
       }
     },
 
@@ -75,6 +98,68 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
             command: config.command,
           });
           await writeFile(config.path, JSON.stringify(existingHooksJson, null, 2));
+        }
+      } else if (name === "claude") {
+        if (!(await exists(config.path))) {
+          // If settings.json doesn't exist, create it
+          await writeFile(
+            config.path,
+            JSON.stringify(
+              {
+                hooks: {
+                  PostToolUse: [
+                    {
+                      matcher: "Edit|Write",
+                      hooks: [
+                        {
+                          type: "command",
+                          command: config.command,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+              null,
+              2
+            )
+          );
+          return;
+        }
+
+        const existingSettings = await readFile(config.path, "utf-8");
+        const existingSettingsJson = JSON.parse(existingSettings);
+
+        // Initialize hooks structure if it doesn't exist
+        if (!existingSettingsJson.hooks) {
+          existingSettingsJson.hooks = {};
+        }
+        if (!existingSettingsJson.hooks.PostToolUse) {
+          existingSettingsJson.hooks.PostToolUse = [];
+        }
+
+        // Check if ultracite hook already exists to avoid duplicates
+        const hasUltraciteHook = existingSettingsJson.hooks.PostToolUse.some(
+          (hookConfig: { matcher: string; hooks: Array<{ command: string }> }) =>
+            hookConfig.hooks?.some((hook: { command: string }) =>
+              hook.command.includes("ultracite")
+            )
+        );
+
+        if (!hasUltraciteHook) {
+          existingSettingsJson.hooks.PostToolUse.push({
+            matcher: "Edit|Write",
+            hooks: [
+              {
+                type: "command",
+                command: config.command,
+              },
+            ],
+          });
+          await writeFile(
+            config.path,
+            JSON.stringify(existingSettingsJson, null, 2)
+          );
         }
       }
     },

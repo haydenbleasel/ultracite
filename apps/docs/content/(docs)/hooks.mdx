@@ -5,11 +5,11 @@ description: How to integrate Ultracite with AI agents and editor hooks.
 
 Ultracite can automatically format and fix code after AI agents make edits through editor hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
+> **Note:** Hooks are separate from agent rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+
 ## Cursor Integration
 
 When you select **Cursor** in the hooks option during the initialization process, Ultracite automatically configures a hook to run after every file edit made by the Cursor agent.
-
-> **Note:** Hooks are separate from agent rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
 
 ### What Gets Configured
 
@@ -70,3 +70,91 @@ Alternatively, you can manually create or edit `.cursor/hooks.json` in your proj
 ### Learn More
 
 For more information about Cursor hooks and advanced configuration options, see the [official Cursor hooks documentation](https://cursor.com/docs/agent/hooks).
+
+## Claude Code Integration
+
+When you select **Claude Code** in the hooks option during the initialization process, Ultracite automatically configures a hook to run after every file edit made by Claude Code.
+
+### What Gets Configured
+
+Ultracite creates or updates `.claude/settings.json` in your project root with the following configuration:
+
+```json title=".claude/settings.json"
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx ultracite fix"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### How It Works
+
+1. **Automatic Execution**: After Claude Code uses the Edit or Write tools, the hook automatically runs `npx ultracite fix`
+2. **Code Formatting**: Ultracite formats the edited code according to your Biome configuration
+3. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
+4. **Seamless Integration**: The process happens transparently without interrupting your workflow
+
+### Existing Hooks
+
+If you already have hooks configured in `.claude/settings.json`, Ultracite intelligently merges the configuration:
+
+- Preserves all existing hooks and their commands
+- Appends the Ultracite hook to the `PostToolUse` array
+- Avoids duplicate entries if Ultracite is already configured
+
+Example with existing hooks:
+
+```json title=".claude/settings.json"
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run test"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx ultracite fix"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Manual Configuration
+
+If you skipped the hooks integration during initialization, you can add it later by running:
+
+```bash
+npx ultracite init --hooks claude
+```
+
+Alternatively, you can manually create or edit `.claude/settings.json` in your project root:
+
+1. Create or edit `.claude/settings.json` in your project root
+2. Add the `PostToolUse` hook with the Ultracite command as shown above
+3. Run `npx ultracite fix` to verify the setup
+
+### Learn More
+
+For more information about Claude Code hooks and advanced configuration options, see the [official Claude Code hooks documentation](https://docs.claude.com/en/docs/claude-code/hooks).

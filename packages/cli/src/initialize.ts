@@ -513,6 +513,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     const hooksOptions: Record<(typeof options.hooks)[number], string> = {
       cursor: "Cursor",
+      claude: "Claude Code",
     } as const;
 
     if (!hooks) {

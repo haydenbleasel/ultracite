@@ -25,7 +25,7 @@ export const options = {
     "warp",
   ] as const,
   integrations: ["husky", "lefthook", "lint-staged"] as const,
-  hooks: ["cursor"] as const,
+  hooks: ["cursor", "claude"] as const,
   frameworks: [
     "react",
     "next",
