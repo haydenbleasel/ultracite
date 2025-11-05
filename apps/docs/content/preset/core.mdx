@@ -222,9 +222,8 @@ Environment-specific handling:
 | `noUnusedPrivateClassMembers` | `error` | Disallow unused private class members. |
 | `noUnusedVariables` | `error` | Disallow unused variables. |
 | `noVoidTypeReturn` | `error` | Disallow returning a value from a function with the return type `void`. |
-| `useExhaustiveDependencies` | `error` | Enforce all dependencies are correctly specified in a React hook. |
 | `useGraphqlNamedOperations` | `error` | Enforce specifying the name of GraphQL operations. |
-| `useHookAtTopLevel` | `error` | Enforce that all React hooks are being called from the Top Level component functions. |
+| `useImageSize` | `error` | Enforces that `<img>` elements have both width and height attributes. |
 | `useImportExtensions` | `off` | Enforce file extensions for relative imports. |
 | `useIsNan` | `error` | Require calls to `isNaN()` when checking for NaN. |
 | `useJsonImportAttributes` | `off` | Enforces the use of with `{ type: "json" }` for JSON module imports. |
@@ -239,27 +238,26 @@ Environment-specific handling:
 
 | Rule | Setting | Description |
 |------|---------|-------------|
+| `noContinue` | `off` | Disallow continue statements. |
 | `noDeprecatedImports` | `off` | Restrict imports of deprecated exports. |
 | `noDuplicateDependencies` | `error` | Prevent the listing of duplicate dependencies. |
+| `noEmptySource` | `error` | Disallow empty source files. |
 | `noFloatingPromises` | `off` | Require Promise-like statements to be handled appropriately. |
 | `noImportCycles` | `off` | Prevent import cycles. |
+| `noIncrementDecrement` | `error` | Disallow the use of `++` and `--` operators (except in for loop afterthoughts). |
 | `noJsxLiterals` | `off` | Disallow string literals inside JSX elements. |
 | `noMisusedPromises` | `off` | Disallow Promises to be used in places where they are almost certainly a mistake. |
-| `noNonNullAssertedOptionalChain` | `error` | Disallow non-null assertions after optional chaining expressions. |
-| `noSecrets` | `off` | Disallow usage of sensitive data such as API keys and tokens. |
+| `noParametersOnlyUsedInRecursion` | `error` | Disallow parameters that are only used in recursive calls. |
 | `noShadow` | `error` | Disallow variable declarations from shadowing variables declared in the outer scope. |
 | `noUnnecessaryConditions` | `off` | Disallow unnecessary type-based conditions that can be statically determined as redundant. |
 | `noUnresolvedImports` | `off` | Warn when importing non-existing exports. |
 | `noUnusedExpressions` | `error` | Disallow expression statements that are neither a function call nor an assignment. |
 | `noUselessCatchBinding` | `off` | Disallow unused `catch` bindings. |
 | `noUselessUndefined` | `error` | Disallow the use of useless `undefined`. |
-| `useAnchorHref` | `error` | Enforces href attribute for `<a>` elements. |
 | `useConsistentArrowReturn` | `error` | Enforce consistent arrow function bodies. |
-| `useConsistentTypeDefinitions` | `error` (type) | Enforce type definitions to consistently use either interface or type. |
 | `useDeprecatedDate` | `error` | Require the `@deprecated` directive to specify a deletion date. |
 | `useExhaustiveSwitchCases` | `off` | Require switch-case statements to be exhaustive. |
 | `useExplicitType` | `off` | Enforce types in functions, methods, variables, and parameters. |
-| `useImageSize` | `error` | Enforces that `<img>` elements have both width and height attributes. |
 | `useMaxParams` | `error` | Enforce a maximum number of parameters in function definitions. |
 | `useSortedClasses` | `error` (safe fix override) | Enforce the sorting of CSS utility classes. |
 
@@ -298,7 +296,7 @@ Environment-specific handling:
 | `noExportedImports` | `error` | Disallow exporting an imported variable. |
 | `noImplicitBoolean` | `off` | Disallow implicit true values on JSX boolean attributes. |
 | `noInferrableTypes` | `error` | Disallow type annotations for variables, parameters, and class properties initialized with a literal expression. |
-| `noMagicNumbers` | `error` | Reports usage of "magic numbers" — numbers used directly instead of being assigned to named constants. |
+| `noMagicNumbers` | `off` | Reports usage of "magic numbers" — numbers used directly instead of being assigned to named constants. |
 | `noNamespace` | `error` | Disallow the use of TypeScript's namespaces. |
 | `noNegationElse` | `error` | Disallow negation in the condition of an if statement if it has an else clause. |
 | `noNestedTernary` | `error` | Disallow nested ternary expressions. |
@@ -378,7 +376,7 @@ Environment-specific handling:
 | `noCompareNegZero` | `error` | Disallow comparing against `-0`. |
 | `noConfusingLabels` | `error` | Disallow labeled statements that are not loops. |
 | `noConfusingVoidType` | `error` | Disallow void type outside of generic or return types. |
-| `noConsole` | `error` | Disallow the use of `console`. |
+| `noConsole` | `off` | Disallow the use of `console`. |
 | `noConstEnum` | `error` | Disallow TypeScript const enum. |
 | `noConstantBinaryExpressions` | `error` | Disallow expressions where the operation doesn't affect the value. |
 | `noControlCharactersInRegex` | `error` | Prevents from having control characters and some escape sequences that match control characters in regular expression literals. |
