@@ -70,27 +70,3 @@ The `doctor` command checks your setup for issues and provides recommendations. 
 ```bash title="Terminal"
 npx ultracite doctor
 ```
-
-## Pre-commit hooks
-
-If needed, you can use a Git pre-commit hook that runs `npx ultracite fix` to auto-format code before it’s committed. This isn’t as instantaneous as an editor integration, but it ensures consistency.
-
-```bash title=".git/hooks/pre-commit"
-#!/bin/bash
-echo "Running pre-commit checks..."
-
-# Check for linting errors
-if ! npx ultracite check; then
-  echo "Linting errors found. Please fix them before committing."
-  exit 1
-fi
-
-# Check for formatting issues
-if ! npx ultracite fix; then
-  echo "Formatting issues found. Please format your code before committing."
-  exit 1
-fi
-
-echo "Pre-commit checks passed."
-exit 0
-```
