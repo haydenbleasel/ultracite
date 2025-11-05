@@ -27,12 +27,17 @@ This configuration adds rules specific to Qwik development:
 
 ## Qwik-Specific Rules
 
-### Nursery
+### Correctness
 
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noQwikUseVisibleTask` | `error` | Prevent usage of `useVisibleTask$`. This hook runs code eagerly on the client, defeating Qwik's resumability. Use `useTask$` or `useResource$` instead when possible. |
 | `useQwikClasslist` | `error` | Enforce using `class` object syntax instead of string concatenation for dynamic classes in Qwik. |
+
+### Nursery
+
+| Rule | Setting | Description |
+|------|---------|-------------|
 | `useQwikValidLexicalScope` | `error` | Enforce valid lexical scope in Qwik's `$` functions. Variables from outer scopes must be explicitly captured. |
 | `useQwikMethodUsage` | `error` | Enforce correct usage of Qwik-specific methods and APIs. |
 

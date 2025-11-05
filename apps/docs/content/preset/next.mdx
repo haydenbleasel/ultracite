@@ -55,7 +55,9 @@ This configuration adds rules specific to Next.js development:
 
 ## Configuration File Overrides
 
-The Next.js preset includes special handling for `next.config.*` files:
+The Next.js preset includes special handling for configuration files and App Router components:
+
+### Next.js Configuration Files
 
 ```jsonc
 {
@@ -75,3 +77,24 @@ The Next.js preset includes special handling for `next.config.*` files:
 ```
 
 This allows for Next.js configuration patterns that might not typically pass linting rules.
+
+### App Router Pages and Layouts
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router page and layout components are allowed to be async without requiring `await`, as Next.js handles these specially for server-side rendering and data fetching.
