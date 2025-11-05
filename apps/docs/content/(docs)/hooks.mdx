@@ -7,7 +7,9 @@ Ultracite can automatically format and fix code after AI agents make edits throu
 
 ## Cursor Integration
 
-When you select **Cursor** during the initialization process, Ultracite automatically configures a hook to run after every file edit made by the Cursor agent.
+When you select **Cursor** in the hooks option during the initialization process, Ultracite automatically configures a hook to run after every file edit made by the Cursor agent.
+
+> **Note:** Hooks are separate from agent rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
 
 ### What Gets Configured
 
@@ -53,7 +55,13 @@ Example with existing hooks:
 
 ### Manual Configuration
 
-If you skipped the Cursor integration during initialization, you can manually add the hook:
+If you skipped the hooks integration during initialization, you can add it later by running:
+
+```bash
+npx ultracite init --hooks cursor
+```
+
+Alternatively, you can manually create or edit `.cursor/hooks.json` in your project root:
 
 1. Create or edit `.cursor/hooks.json` in your project root
 2. Add the `afterFileEdit` hook with the Ultracite command
