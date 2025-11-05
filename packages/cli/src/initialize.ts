@@ -15,6 +15,7 @@ import {
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
 import { biome } from "./biome";
+import { createHooks } from "./hooks";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
@@ -33,6 +34,7 @@ type InitializeFlags = {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
   agents?: (typeof options.agents)[number][];
+  hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
   migrate?: (typeof options.migrations)[number][];
@@ -255,6 +257,27 @@ export const upsertAgents = async (
   s.stop(`${displayName} created.`);
 };
 
+export const upsertHooks = async (
+  name: (typeof options.hooks)[number],
+  displayName: string
+) => {
+  const s = spinner();
+  s.start(`Checking for ${displayName} hooks...`);
+
+  const hooks = createHooks(name);
+
+  if (await hooks.exists()) {
+    s.message(`${displayName} hooks found, updating...`);
+    await hooks.update();
+    s.stop(`${displayName} hooks updated.`);
+    return;
+  }
+
+  s.message(`${displayName} hooks not found, creating...`);
+  await hooks.create();
+  s.stop(`${displayName} hooks created.`);
+};
+
 export const removePrettier = async (pm: PackageManagerName) => {
   const s = spinner();
   s.start("Removing Prettier dependencies and configuration...");
@@ -394,6 +417,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.pm ||
         opts.editors ||
         opts.agents ||
+        opts.hooks ||
         opts.integrations !== undefined ||
         opts.migrate !== undefined;
 
@@ -445,6 +469,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let agents = opts.agents;
+    let hooks = opts.hooks;
 
     const agentsOptions: Record<(typeof options.agents)[number], string> = {
       "vscode-copilot": "GitHub Copilot (VSCode)",
@@ -486,12 +511,35 @@ export const initialize = async (flags?: InitializeFlags) => {
       agents = agentsResult as (typeof options.agents)[number][];
     }
 
+    const hooksOptions: Record<(typeof options.hooks)[number], string> = {
+      cursor: "Cursor",
+      claude: "Claude Code",
+    } as const;
+
+    if (!hooks) {
+      const hooksResult = await multiselect({
+        message: "Which agent hooks do you want to enable (optional)?",
+        options: Object.entries(hooksOptions).map(([value, label]) => ({
+          value,
+          label,
+        })),
+        required: false,
+      });
+
+      if (isCancel(hooksResult)) {
+        cancel("Operation cancelled.");
+        process.exit(0);
+      }
+
+      hooks = hooksResult as (typeof options.hooks)[number][];
+    }
+
     let integrations = opts.integrations;
     if (integrations === undefined) {
       // If other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
-        opts.pm || opts.editors || opts.agents || opts.migrate !== undefined;
+        opts.pm || opts.editors || opts.agents || opts.hooks || opts.migrate !== undefined;
 
       if (hasOtherCliOptions) {
         integrations = [];
@@ -536,6 +584,10 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     for (const ruleName of agents ?? []) {
       await upsertAgents(ruleName, agentsOptions[ruleName]);
+    }
+
+    for (const hookName of hooks ?? []) {
+      await upsertHooks(hookName, hooksOptions[hookName]);
     }
 
     if (integrations?.includes("husky")) {

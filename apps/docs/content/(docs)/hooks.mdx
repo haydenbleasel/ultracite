@@ -5,60 +5,64 @@ description: How to integrate Ultracite with AI agents and editor hooks.
 
 Ultracite can automatically format and fix code after AI agents make edits through editor hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
-## Cursor Integration
+The hooks work alongside Biome's linting and formatting. After an AI agent edits a file, the hook automatically runs `npx ultracite fix` to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through agent rules) and automated code quality (through hooks).
 
-When you select **Cursor** during the initialization process, Ultracite automatically configures a hook to run after every file edit made by the Cursor agent.
+> **Note:** Hooks are separate from agent rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
 
-### What Gets Configured
+## Setup
 
-Ultracite creates or updates `.cursor/hooks.json` in your project root with the following configuration:
+### Automatic Setup
 
-```json title=".cursor/hooks.json"
-{
-  "version": 1,
-  "hooks": {
-    "afterFileEdit": [{ "command": "npx ultracite fix" }]
-  }
-}
+When you run `npx ultracite init`, you'll be prompted to select which agent hooks you want to enable:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
 ```
 
-### How It Works
+This will create the relevant hook configuration file in your project directory.
 
-1. **Automatic Execution**: After Cursor's agent edits a file, the hook automatically runs `npx ultracite fix`
+### Manual Setup
+
+If you want to manually set things up or add hooks after initialization, run:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
+
+## Supported Editors
+
+| Editor      | Hook File Location          | Documentation                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Cursor Hooks](https://cursor.com/docs/agent/hooks)                    |
+| Claude Code | `.claude/settings.json`     | [Claude Code Hooks](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## How It Works
+
+1. **Automatic Execution**: After the AI agent edits a file, the hook automatically runs `npx ultracite fix`
 2. **Code Formatting**: Ultracite formats the edited code according to your Biome configuration
 3. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
 4. **Seamless Integration**: The process happens transparently without interrupting your workflow
 
-### Existing Hooks
+## Benefits
 
-If you already have hooks configured in `.cursor/hooks.json`, Ultracite intelligently merges the configuration:
+Using Ultracite editor hooks provides several advantages:
 
-- Preserves all existing hooks and their commands
-- Appends the Ultracite command to the `afterFileEdit` array
-- Avoids duplicate entries if Ultracite is already configured
+- **Consistency**: All AI-generated code is automatically formatted to match your style
+- **Quality**: Linting issues are fixed immediately after code generation
+- **Efficiency**: No need to manually run formatters or linters after AI edits
+- **Standards**: Ensures AI-generated code always adheres to project standards
+- **Clean Commits**: Code is properly formatted before you even review it
 
-Example with existing hooks:
+## Customization
 
-```json title=".cursor/hooks.json"
-{
-  "version": 1,
-  "hooks": {
-    "afterFileEdit": [
-      { "command": "npm run test:affected" },
-      { "command": "npx ultracite fix" }
-    ]
-  }
-}
-```
+Ultracite intelligently merges with existing hook configurations:
 
-### Manual Configuration
+- **Preserves existing hooks**: All existing hooks and their commands remain intact
+- **Avoids duplicates**: If Ultracite is already configured, it won't be added again
+- **Non-destructive**: Your existing hook configuration structure is maintained
 
-If you skipped the Cursor integration during initialization, you can manually add the hook:
-
-1. Create or edit `.cursor/hooks.json` in your project root
-2. Add the `afterFileEdit` hook with the Ultracite command
-3. Run `npx ultracite fix` to verify the setup
-
-### Learn More
-
-For more information about Cursor hooks and advanced configuration options, see the [official Cursor hooks documentation](https://cursor.com/docs/agent/hooks).
+You can also customize the hook behavior by modifying the hook configuration files directly if you need different formatting commands or additional post-edit actions.

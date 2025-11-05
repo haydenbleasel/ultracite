@@ -47,7 +47,7 @@ describe("createAgents", () => {
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
-      expect(mockWriteFile).toHaveBeenCalledTimes(2); // rules file + hooks.json
+      expect(mockWriteFile).toHaveBeenCalledTimes(1); // rules file only
     });
 
     test("create writes rules with header", async () => {
@@ -69,21 +69,12 @@ describe("createAgents", () => {
       expect(writeCall[1]).toContain("description: Ultracite Rules");
     });
 
-    test("update checks for duplicate rules", async () => {
+    test("update overwrites rules file (not in append mode)", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      // Create content that already contains the rules to trigger the duplicate check
-      const existingContent = "# Ultracite Code Standards";
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock((path: string) => {
-          if (path === "./.cursor/hooks.json") {
-            return Promise.resolve(
-              '{"version": 1, "hooks": {"afterFileEdit": []}}'
-            );
-          }
-          return Promise.resolve(existingContent);
-        }),
+        readFile: mock(() => Promise.resolve("# Existing rules")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -91,69 +82,10 @@ describe("createAgents", () => {
       const agents = createAgents("cursor");
       await agents.update();
 
-      // When rules already exist, writeFile should not be called for the rules file
-      // (only hooks.json is updated)
+      // Cursor is not in append mode, so it always overwrites
       expect(mockWriteFile).toHaveBeenCalled();
-    });
-
-    test("update adds ultracite hook when not present in hooks.json", async () => {
-      const existingHooks =
-        '{"version": 1, "hooks": {"afterFileEdit": [{"command": "echo test"}]}}';
-      const mockWriteFile = mock(() => Promise.resolve());
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock((path: string) => {
-          if (path === "./.cursor/hooks.json") {
-            return Promise.resolve(existingHooks);
-          }
-          return Promise.resolve("# Existing rules");
-        }),
-        writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
-      }));
-
-      const agents = createAgents("cursor");
-      await agents.update();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      // Find the hooks.json write call
-      const hooksWrite = mockWriteFile.mock.calls.find(
-        (call: unknown[]) => call[0] === "./.cursor/hooks.json"
-      );
-      expect(hooksWrite).toBeDefined();
-      const hooksContent = JSON.parse(hooksWrite[1] as string);
-      expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
-      expect(hooksContent.hooks.afterFileEdit[1].command).toBe(
-        "npx ultracite fix"
-      );
-    });
-
-    test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {
-      const existingHooks =
-        '{"version": 1, "hooks": {"afterFileEdit": [{"command": "npx ultracite fix"}]}}';
-      const mockWriteFile = mock(() => Promise.resolve());
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock((path: string) => {
-          if (path === "./.cursor/hooks.json") {
-            return Promise.resolve(existingHooks);
-          }
-          return Promise.resolve("# Existing rules");
-        }),
-        writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
-      }));
-
-      const agents = createAgents("cursor");
-      await agents.update();
-
-      // Should only write the rules file, not hooks.json since hook already exists
-      const hooksWrite = mockWriteFile.mock.calls.find(
-        (call: unknown[]) => call[0] === "./.cursor/hooks.json"
-      );
-      expect(hooksWrite).toBeUndefined();
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[0]).toBe("./.cursor/rules/ultracite.mdc");
     });
   });
 
