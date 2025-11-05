@@ -19,8 +19,28 @@ Add the Svelte configuration to your `biome.jsonc`:
 
 This configuration:
 
+- **HTML Support**: Enables experimental full HTML support with script and style indentation
 - **React-Specific Props**: Flags React-specific props like `className` and `htmlFor` since Svelte uses standard HTML attributes (`class` and `for`)
 - **Svelte File Overrides**: Relaxed rules for `.svelte` files to handle Svelte's component structure
+
+## HTML Formatter Configuration
+
+The Svelte preset enables experimental HTML support with special formatting for embedded scripts and styles:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+This configuration:
+- **Experimental Full Support**: Enables Biome's experimental HTML parsing and formatting capabilities for `.svelte` files
+- **Indent Script and Style**: Properly indents code inside `<script>` and `<style>` tags in Svelte components
 
 ## Svelte-Specific Rules
 

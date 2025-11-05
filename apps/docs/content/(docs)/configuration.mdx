@@ -7,17 +7,7 @@ One of Ultracite's best features is that it's zero-config out of the box – you
 
 Ultracite provides framework-specific configurations that you can extend in addition to the base configuration. This allows you to add framework-specific linting rules without bloating the base config or dealing with irrelevant rules.
 
-### Available framework configs
-
-- **[`ultracite/core`](/preset/core)** - Base configuration for JavaScript / TypeScript projects
-- **[`ultracite/react`](/preset/react)** - React-specific rules
-- **[`ultracite/next`](/preset/next)** - Next.js-specific rules (extends React)
-- **[`ultracite/solid`](/preset/solid)** - Solid-specific rules
-- **[`ultracite/vue`](/preset/vue)** - Vue-specific rules
-- **[`ultracite/svelte`](/preset/svelte)** - Svelte-specific rules
-- **[`ultracite/qwik`](/preset/qwik)** - Qwik-specific rules
-- **[`ultracite/angular`](/preset/angular)** - Angular-specific configuration
-- **[`ultracite/remix`](/preset/remix)** - Remix/Router configuration for TanStack Router, React Router, etc.
+You can find the full list of available framework configurations in the [Presets](/preset) section.
 
 ### Usage
 
@@ -37,19 +27,6 @@ You can combine multiple configurations if you're working on a multi-framework p
 }
 ```
 
-### Framework-specific rules
-
-Each framework configuration includes rules specific to that framework. Click the links above to see detailed documentation for each configuration:
-
-- **[React](/preset/react)**: JSX rules, hooks rules, component rules
-- **[Next.js](/preset/next)**: Image optimization, document structure, client components
-- **[Solid](/preset/solid)**: Reactivity rules, component patterns, props handling
-- **[Vue](/preset/vue)**: Component structure, computed properties, data options
-- **[Svelte](/preset/svelte)**: Standard HTML attributes, no React-specific props
-- **[Qwik](/preset/qwik)**: Serialization, visible tasks, dollar scopes
-- **[Angular](/preset/angular)**: HTML parser with interpolation support for templates
-- **[Remix](/preset/remix)**: Filename conventions for route files
-
 ## Default configuration
 
 When you include `"extends": ["ultracite/core"]` in your `biome.jsonc`, you are pulling in Ultracite's base preset configuration. This preset includes framework-agnostic rules and configurations. Some notable aspects of the default config:
@@ -62,7 +39,7 @@ When you include `"extends": ["ultracite/core"]` in your `biome.jsonc`, you are 
 
 All these defaults aim to enforce consistent style and prevent common errors without you having to manually configure each rule.
 
-For a comprehensive reference of all linting rules configured in Ultracite's base configuration, see the [Core Configuration](/core) documentation.
+For a comprehensive reference of all linting rules configured in Ultracite's base configuration, see the [Core Configuration](/preset/core) documentation.
 
 ## Overriding the configuration
 

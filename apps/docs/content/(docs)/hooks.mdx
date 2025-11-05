@@ -1,19 +1,19 @@
 ---
 title: Hooks
-description: How to integrate Ultracite with AI agents and editor hooks.
+description: How to integrate Ultracite with AI coding assistants through editor hooks.
 ---
 
-Ultracite can automatically format and fix code after AI agents make edits through editor hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
+Ultracite can automatically format and fix code after AI coding assistants make edits through editor hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
-The hooks work alongside Biome's linting and formatting. After an AI agent edits a file, the hook automatically runs `npx ultracite fix` to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through agent rules) and automated code quality (through hooks).
+The hooks work alongside Biome's linting and formatting. After an AI coding assistant edits a file, the hook automatically runs `npx ultracite fix` to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
 
-> **Note:** Hooks are separate from agent rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+> **Note:** Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
 
 ## Setup
 
 ### Automatic Setup
 
-When you run `npx ultracite init`, you'll be prompted to select which agent hooks you want to enable:
+When you run `npx ultracite init`, you'll be prompted to select which editor hooks you want to enable:
 
 ```bash
 ? Which agent hooks do you want to enable (optional)?
