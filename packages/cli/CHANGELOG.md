@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.1
+
+### Patch Changes
+
+- 908ac57: Add missing hooks cli definition
+
 ## 6.3.0
 
 ### Minor Changes
