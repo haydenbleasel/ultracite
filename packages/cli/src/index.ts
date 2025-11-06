@@ -51,6 +51,12 @@ export const router = t.router({
           .boolean()
           .default(false)
           .describe("Skip installing dependencies"),
+        quiet: z
+          .boolean()
+          .default(process.env.CI === "true" || process.env.CI === "1")
+          .describe(
+            "Suppress all interactive prompts and visual output. Automatically enabled in CI environments."
+          ),
       })
     )
     .mutation(async ({ input }) => {
