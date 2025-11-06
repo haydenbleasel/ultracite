@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.2
+
+### Patch Changes
+
+- 7537f01: Improve CI support
+
 ## 6.3.1
 
 ### Patch Changes
