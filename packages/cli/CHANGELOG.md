@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.3
+
+### Patch Changes
+
+- 9132af5: Upgrade to Biome 2.3.5
+
 ## 6.3.2
 
 ### Patch Changes
