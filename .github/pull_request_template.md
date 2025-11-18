@@ -8,12 +8,10 @@ Closes #<issue_number>
 
 ## Checklist
 
-- [ ] My code follows the code style of this project.
-- [ ] I have performed a self-review of my code.
-- [ ] I have commented my code, particularly in hard-to-understand areas.
-- [ ] I have updated the documentation, if necessary.
-- [ ] I have added tests that prove my fix is effective or my feature works.
-- [ ] New and existing tests pass locally with my changes.
+- [ ] I've reviewed my code
+- [ ] I've written tests
+- [ ] I've generated a change set file
+- [ ] I've updated the docs, if necessary
 
 ## Screenshots (if applicable)
 

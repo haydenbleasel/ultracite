@@ -9,6 +9,7 @@ import Adobe from "./adobe.svg";
 import Arcade from "./arcade.svg";
 import AlanTuringInstitute from "./ati.svg";
 import Axiom from "./axiom.svg";
+import Clerk from "./clerk.svg";
 import Consent from "./consent.svg";
 import FrenchGovernment from "./french-government.svg";
 import MagicUI from "./magic-ui.svg";
@@ -29,6 +30,10 @@ const logos = [
   {
     name: "Adobe",
     src: Adobe,
+  },
+  {
+    name: "Clerk",
+    src: Clerk,
   },
   {
     name: "Alan Turing Institite",
@@ -74,7 +79,7 @@ export const Logos = () => (
         rel="noreferrer"
         target="_blank"
       >
-        hundreds
+        thousands
       </a>{" "}
       of open source projects.
     </p>
