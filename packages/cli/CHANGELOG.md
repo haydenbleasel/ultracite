@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 6.3.4
+
+### Patch Changes
+
+- 3edc530: Bump glob to resolve dependency vulnerability
+- 30ac12c: Update Biome to 2.3.6
+
 ## 6.3.3
 
 ### Patch Changes
