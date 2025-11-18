@@ -56,7 +56,15 @@ This configuration:
 | `noVueDuplicateKeys` | `error` | Prevent duplicate keys in Vue component options. Keys in `data`, `computed`, `methods`, etc. must be unique. |
 | `noVueReservedKeys` | `error` | Disallow Vue reserved keys like `$data`, `$props`, `$el`, etc. in component options. |
 | `noVueReservedProps` | `error` | Disallow Vue reserved props like `key`, `ref`, and `is` as custom component props. |
+| `noVueVIfWithVFor` | `error` | Disallow `v-for` and `v-if` on the same element. |
+| `useVueHyphenatedAttributes` | `error` | Encourage using kebab-case for attribute names, per the Vue style guide's recommendations. |
 | `useVueMultiWordComponentNames` | `error` | Enforce multi-word component names to avoid conflicts with HTML elements. Single-word names like `Button` or `Card` should be avoided. |
+| `useVueValidVBind` | `error` | Enforce the validity of `v-bind` directives in Vue files. |
+| `useVueValidVElseIf` | `error` | Enforce valid `v-else-if` directives in Vue templates. Reports invalid directives with missing conditional expressions or when not preceded by a `v-if` or `v-else-if` directive. |
+| `useVueValidVElse` | `error` | Enforce valid `v-else` directives in Vue templates. Reports directives that are not preceded by a `v-if` or `v-else-if` directive. |
+| `useVueValidVHtml` | `error` | Enforce valid usage of the `v-html` directive in Vue templates. Reports directives with missing expressions, unexpected arguments, or unexpected modifiers. |
+| `useVueValidVIf` | `error` | Enforce valid `v-if` directives in Vue templates. Disallows arguments and modifiers, and ensures a value is provided. |
+| `useVueValidVOn` | `error` | Enforce valid `v-on` directives in Vue templates. Reports invalid `v-on` / shorthand `@` directives with missing event names, invalid modifiers, or missing handler expressions. |
 
 ### Suspicious
 

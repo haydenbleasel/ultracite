@@ -243,12 +243,14 @@ Environment-specific handling:
 | `noDuplicateDependencies` | `error` | Prevent the listing of duplicate dependencies. |
 | `noEmptySource` | `error` | Disallow empty source files. |
 | `noFloatingPromises` | `off` | Require Promise-like statements to be handled appropriately. |
+| `noForIn` | `off` | Disallow iterating using a for-in loop. |
 | `noImportCycles` | `off` | Prevent import cycles. |
 | `noIncrementDecrement` | `error` | Disallow the use of `++` and `--` operators (except in for loop afterthoughts). |
 | `noJsxLiterals` | `off` | Disallow string literals inside JSX elements. |
 | `noMisusedPromises` | `off` | Disallow Promises to be used in places where they are almost certainly a mistake. |
 | `noParametersOnlyUsedInRecursion` | `error` | Disallow parameters that are only used in recursive calls. |
 | `noShadow` | `error` | Disallow variable declarations from shadowing variables declared in the outer scope. |
+| `noSyncScripts` | `error` | Prevent the usage of synchronous scripts. |
 | `noUnnecessaryConditions` | `off` | Disallow unnecessary type-based conditions that can be statically determined as redundant. |
 | `noUnresolvedImports` | `off` | Warn when importing non-existing exports. |
 | `noUnusedExpressions` | `error` | Disallow expression statements that are neither a function call nor an assignment. |
@@ -256,11 +258,15 @@ Environment-specific handling:
 | `noUselessUndefined` | `error` | Disallow the use of useless `undefined`. |
 | `useArraySortCompare` | `off` | Enforce the use of a compare function in `Array.prototype.sort()`. |
 | `useConsistentArrowReturn` | `error` | Enforce consistent arrow function bodies. |
+| `useConsistentGraphqlDescriptions` | `error` | Require all descriptions to follow the same style (either block or inline) inside GraphQL files. |
 | `useDeprecatedDate` | `error` | Require the `@deprecated` directive to specify a deletion date. |
 | `useExhaustiveSwitchCases` | `off` | Require switch-case statements to be exhaustive. |
 | `useExplicitType` | `off` | Enforce types in functions, methods, variables, and parameters. |
+| `useFind` | `error` | Enforce the use of `Array.prototype.find()` over `Array.prototype.filter()` followed by `[0]` when looking for a single result. |
 | `useMaxParams` | `error` | Enforce a maximum number of parameters in function definitions. |
 | `useSortedClasses` | `error` (safe fix override) | Enforce the sorting of CSS utility classes. |
+| `useSpread` | `error` | Enforce the use of the spread operator over `Function.prototype.apply()`. |
+| `useUniqueGraphqlOperationName` | `error` | Ensure that all GraphQL operations within a document have unique names. |
 
 ### Performance
 
