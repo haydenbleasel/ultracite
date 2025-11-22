@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 6.3.5
+
+### Patch Changes
+
+- 1bccc30: Upgrade Biome to 2.3.7
+- 3837d19: Fix Zed config
+- 06a8871: Use force-ignore pattern
+
 ## 6.3.4
 
 ### Patch Changes
