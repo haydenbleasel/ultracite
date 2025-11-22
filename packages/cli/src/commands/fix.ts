@@ -39,11 +39,10 @@ export const fix = (files: string[], options: FixOptions = {}) => {
   });
 
   if (result.error) {
-    console.error("Failed to run Ultracite:", result.error.message);
-    process.exit(1);
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
   }
 
   if (result.status !== 0) {
-    process.exit(result.status ?? 1);
+    throw new Error(`Ultracite fix failed with status ${result.status ?? 1}`);
   }
 };

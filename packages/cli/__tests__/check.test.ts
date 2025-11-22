@@ -73,43 +73,27 @@ describe("check", () => {
 
   test("exits with error code when biome check fails", () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
 
-    expect(() => check(undefined)).toThrow("process.exit called");
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
+    expect(() => check(undefined)).toThrow("Ultracite check failed with status 1");
   });
 
   test("exits when spawn returns error", () => {
-    const consoleErrorSpy = spyOn(console, "error").mockImplementation(
-      () => {}
-    );
     const mockSpawn = mock(() => ({
       error: new Error("spawn failed"),
       status: null,
     }));
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
 
-    expect(() => check(undefined)).toThrow("process.exit called");
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
-    consoleErrorSpy.mockRestore();
+    expect(() => check(undefined)).toThrow("Failed to run Ultracite: spawn failed");
   });
 
   test("passes through arbitrary Biome flags", () => {

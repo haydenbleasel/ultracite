@@ -61,10 +61,6 @@ describe("doctor", () => {
   });
 
   test("fails when Biome is not installed", async () => {
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
-
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 1, stdout: "" })),
       execSync: mock(() => ""),
@@ -80,10 +76,7 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow("process.exit called");
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
+    expect(async () => await doctor()).toThrow("Doctor checks failed");
   });
 
   test("warns when conflicting tools are present", async () => {
@@ -124,10 +117,6 @@ describe("doctor", () => {
   });
 
   test("fails when biome config is missing", async () => {
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
-
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
@@ -143,10 +132,7 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow("process.exit called");
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
+    expect(async () => await doctor()).toThrow("Doctor checks failed");
   });
 
   test("warns when biome config exists but does not extend ultracite", async () => {
@@ -184,10 +170,6 @@ describe("doctor", () => {
   });
 
   test("fails when biome config cannot be parsed", async () => {
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
-
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
@@ -212,10 +194,7 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    expect(async () => await doctor()).toThrow("process.exit called");
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
+    expect(async () => await doctor()).toThrow("Doctor checks failed");
   });
 
   test("warns when package.json is missing", async () => {

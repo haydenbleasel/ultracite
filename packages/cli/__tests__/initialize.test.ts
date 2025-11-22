@@ -315,10 +315,6 @@ describe("initialize", () => {
   });
 
   test("exits with error on failure", async () => {
-    const mockExit = spyOn(process, "exit").mockImplementation(() => {
-      throw new Error("process.exit called");
-    });
-
     const mockLog = {
       info: mock(() => {}),
       success: mock(() => {}),
@@ -359,12 +355,9 @@ describe("initialize", () => {
         frameworks: [],
         migrate: [],
       });
-    }).toThrow("process.exit called");
+    }).toThrow("Install failed");
 
     expect(mockLog.error).toHaveBeenCalled();
-    expect(mockExit).toHaveBeenCalledWith(1);
-
-    mockExit.mockRestore();
   });
 });
 

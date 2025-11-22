@@ -195,7 +195,7 @@ export const doctor = async (): Promise<void> => {
 
   if (failCount > 0) {
     console.log("\n💡 To fix issues, run: npx ultracite init");
-    process.exit(1);
+    throw new Error("Doctor checks failed");
   }
 
   if (warnCount > 0) {

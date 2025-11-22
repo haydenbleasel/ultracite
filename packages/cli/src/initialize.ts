@@ -538,7 +538,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(migrationChoices)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         if (shouldRemovePrettier === undefined) {
@@ -594,7 +594,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(frameworksResult)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         frameworks = frameworksResult as (typeof options.frameworks)[number][];
@@ -618,7 +618,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(editorConfigResult)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         editorConfig = editorConfigResult;
@@ -666,7 +666,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(agentsResult)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         agents = agentsResult as (typeof options.agents)[number][];
@@ -694,7 +694,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(hooksResult)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         hooks = hooksResult as (typeof options.hooks)[number][];
@@ -728,7 +728,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(integrationsResult)) {
           cancel("Operation cancelled.");
-          process.exit(0);
+          return;
         }
 
         integrations = integrationsResult;
@@ -780,6 +780,6 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (!quiet) {
       log.error(`Failed to initialize Ultracite configuration: ${message}`);
     }
-    process.exit(1);
+    throw error;
   }
 };
