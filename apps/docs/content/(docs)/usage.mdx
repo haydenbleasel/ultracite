@@ -39,7 +39,7 @@ The `check` command wraps the Biome `check` command, which runs the linter witho
 npx ultracite check
 ```
 
-You can pass any Biome CLI flags to customize the behavior:
+You can pass `--diagnostic-level` filter to show only errors or warnings:
 
 ```bash title="Terminal"
 # Show only errors
@@ -47,15 +47,6 @@ npx ultracite check --diagnostic-level error
 
 # Show warnings and above (errors)
 npx ultracite check --diagnostic-level warn
-
-# Enable verbose output
-npx ultracite check --verbose
-
-# Limit the number of diagnostics shown
-npx ultracite check --max-diagnostics 50
-
-# Check specific files
-npx ultracite check src/index.ts src/utils.ts
 ```
 
 ### Fixing Code
@@ -66,20 +57,11 @@ The `fix` command wraps the Biome `check --write` command, which runs the linter
 npx ultracite fix
 ```
 
-You can pass any Biome CLI flags to customize the behavior:
+You can also apply unsafe fixes by running:
 
 ```bash title="Terminal"
-# Apply unsafe fixes
 npx ultracite fix --unsafe
-
-# Enable verbose output
-npx ultracite fix --verbose
-
-# Fix specific files
-npx ultracite fix src/index.ts src/utils.ts
 ```
-
-For a complete list of available flags, see the [Biome CLI documentation](https://biomejs.dev/reference/cli/).
 
 ### Validating Setup
 

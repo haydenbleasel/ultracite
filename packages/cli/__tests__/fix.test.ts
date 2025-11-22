@@ -110,34 +110,4 @@ describe("fix", () => {
 
     expect(() => fix([], {})).toThrow("Failed to run Ultracite: spawn failed");
   });
-
-  test("passes through arbitrary Biome flags", () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-
-    fix([], { verbose: true, "max-diagnostics": 50 });
-
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("--verbose");
-    expect(callArgs[0]).toContain("--max-diagnostics=50");
-  });
-
-  test("ignores false boolean flags", () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-
-    fix([], { verbose: false, unsafe: true });
-
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).not.toContain("--verbose");
-    expect(callArgs[0]).toContain("--unsafe");
-  });
 });
