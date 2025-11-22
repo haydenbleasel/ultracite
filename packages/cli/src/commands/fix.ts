@@ -13,6 +13,7 @@ export const fix = (files: string[], options: FixOptions = {}) => {
     "check",
     "--write",
     "--no-errors-on-unmatched",
+    "--max-diagnostics=none",
   ];
 
   if (options.unsafe) {

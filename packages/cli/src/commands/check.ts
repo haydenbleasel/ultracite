@@ -13,7 +13,13 @@ export const check = (opts: CheckOptions | undefined) => {
   const files = opts?.[0] || [];
   const diagnostic_level = opts?.[1]["diagnostic-level"];
 
-  const args = ["npx", "@biomejs/biome", "check", "--no-errors-on-unmatched"];
+  const args = [
+    "npx",
+    "@biomejs/biome",
+    "check",
+    "--no-errors-on-unmatched",
+    "--max-diagnostics=none",
+  ];
   if (diagnostic_level) {
     args.push(`--diagnostic-level=${diagnostic_level}`);
   }

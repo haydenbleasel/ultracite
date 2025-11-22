@@ -26,6 +26,7 @@ describe("fix", () => {
     expect(callArgs[0]).toContain("npx @biomejs/biome check");
     expect(callArgs[0]).toContain("--write");
     expect(callArgs[0]).toContain("--no-errors-on-unmatched");
+    expect(callArgs[0]).toContain("--max-diagnostics=none");
     expect(callArgs[0]).toContain("./");
   });
 
