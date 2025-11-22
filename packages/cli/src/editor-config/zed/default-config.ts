@@ -26,17 +26,6 @@ export const defaultConfig = {
         "source.organizeImports.biome": true,
       },
     },
-    JSX: {
-      formatter: {
-        language_server: {
-          name: "biome",
-        },
-      },
-      code_actions_on_format: {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true,
-      },
-    },
     TSX: {
       formatter: {
         language_server: {
