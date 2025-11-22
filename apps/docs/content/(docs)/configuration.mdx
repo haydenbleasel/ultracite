@@ -35,7 +35,7 @@ When you include `"extends": ["ultracite/core"]` in your `biome.jsonc`, you are 
 - **ESLint "Recommended" equivalents**: Common best-practice rules (no unused vars, no explicit eval, no proto pollution, etc.) are included.
 - **Accessibility**: Rules equivalent to accessibility standards are on by default (ARIA attributes, semantic HTML, keyboard navigation, etc.).
 - **Node.js**: Environment-specific quirks are handled. For example, global variables provided by Node (like `module`, `process`) are recognized so they won't be incorrectly flagged as undefined.
-- **Formatting conventions**: Ultracite's formatter settings (largely inherited from Biome/Prettier defaults) include 2-space indentation, a max line width of 80 characters, semicolons at ends of statements, trailing commas where valid (e.g., in multi-line arrays/objects), single quotes for strings (except JSON, which uses double quotes), etc. These are chosen to match common conventions and ensure diff cleanliness.
+- **Formatting conventions**: Ultracite's formatter settings (largely inherited from Biome/Prettier defaults) include 2-space indentation, a max line width of 80 characters, semicolons at ends of statements, trailing commas where valid (e.g., in multi-line arrays/objects), double quotes for strings, etc. These are chosen to match common conventions and ensure diff cleanliness.
 
 All these defaults aim to enforce consistent style and prevent common errors without you having to manually configure each rule.
 
