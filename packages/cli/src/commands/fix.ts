@@ -2,9 +2,7 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { parseFilePaths } from "../utils";
 
-type FixOptions = {
-  unsafe?: boolean;
-};
+type FixOptions = Record<string, unknown>;
 
 export const fix = (files: string[], options: FixOptions = {}) => {
   const args = [
@@ -15,8 +13,15 @@ export const fix = (files: string[], options: FixOptions = {}) => {
     "--no-errors-on-unmatched",
   ];
 
-  if (options.unsafe) {
-    args.push("--unsafe");
+  // Convert all flag options to command line arguments
+  for (const [key, value] of Object.entries(options)) {
+    if (value === true) {
+      // Boolean flags like --unsafe
+      args.push(`--${key}`);
+    } else if (value !== false && value !== undefined) {
+      // Flags with values like --diagnostic-level=error
+      args.push(`--${key}=${String(value)}`);
+    }
   }
 
   // Add files or default to current directory

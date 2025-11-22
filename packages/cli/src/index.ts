@@ -75,14 +75,11 @@ export const router = t.router({
             .optional()
             .default([])
             .describe("specific files to lint"),
-          z.object({
-            "diagnostic-level": z
-              .enum(["info", "warn", "error"])
-              .optional()
-              .describe(
-                "level of diagnostics to show. In order, from the lowest to the most important: info, warn, error."
-              ),
-          }),
+          z
+            .record(z.unknown())
+            .optional()
+            .default({})
+            .describe("any Biome CLI flags (e.g., diagnostic-level, verbose)"),
         ])
         .optional()
     )
@@ -101,14 +98,16 @@ export const router = t.router({
           .optional()
           .default([])
           .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-        }),
+        z
+          .record(z.unknown())
+          .optional()
+          .default({})
+          .describe("any Biome CLI flags (e.g., unsafe, verbose)"),
       ])
     )
     .mutation(({ input }) => {
       const [files, opts] = input;
-      fix(files, { unsafe: opts.unsafe });
+      fix(files, opts);
     }),
 
   doctor: t.procedure

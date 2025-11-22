@@ -2,20 +2,23 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { parseFilePaths } from "../utils";
 
-type CheckOptions = [
-  string[],
-  {
-    "diagnostic-level"?: "info" | "warn" | "error";
-  },
-];
+type CheckOptions = [string[], Record<string, unknown>];
 
 export const check = (opts: CheckOptions | undefined) => {
   const files = opts?.[0] || [];
-  const diagnostic_level = opts?.[1]["diagnostic-level"];
+  const flags = opts?.[1] || {};
 
   const args = ["npx", "@biomejs/biome", "check", "--no-errors-on-unmatched"];
-  if (diagnostic_level) {
-    args.push(`--diagnostic-level=${diagnostic_level}`);
+
+  // Convert all flag options to command line arguments
+  for (const [key, value] of Object.entries(flags)) {
+    if (value === true) {
+      // Boolean flags like --unsafe
+      args.push(`--${key}`);
+    } else if (value !== false && value !== undefined) {
+      // Flags with values like --diagnostic-level=error
+      args.push(`--${key}=${String(value)}`);
+    }
   }
 
   // Add files or default to current directory
