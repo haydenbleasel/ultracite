@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 6.3.6
+
+### Patch Changes
+
+- 99a417c: Fix docs on quotes
+- 5fb7031: Add support for max diagnostics flag
+- c66c232: Remove process.exit from CLI
+
 ## 6.3.5
 
 ### Patch Changes
