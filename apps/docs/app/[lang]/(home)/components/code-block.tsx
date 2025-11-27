@@ -19,13 +19,22 @@ type CodeBlockProps = {
   className?: string;
 };
 
+let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
+
+const getHighlighter = () => {
+  if (!highlighterPromise) {
+    highlighterPromise = createHighlighterCore({
+      themes: [lightTheme, darkTheme],
+      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
+      // `shiki/wasm` contains the wasm binary inlined as base64 string.
+      engine: createOnigurumaEngine(shikiWasm),
+    });
+  }
+  return highlighterPromise;
+};
+
 export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
-  const highlighter = await createHighlighterCore({
-    themes: [lightTheme, darkTheme],
-    langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
-    // `shiki/wasm` contains the wasm binary inlined as base64 string.
-    engine: createOnigurumaEngine(shikiWasm),
-  });
+  const highlighter = await getHighlighter();
 
   const result = highlighter.codeToTokens(code, {
     lang,
@@ -34,8 +43,6 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
       dark: darkTheme,
     },
   });
-
-  highlighter.dispose();
 
   return (
     <pre
