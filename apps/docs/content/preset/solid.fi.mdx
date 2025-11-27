@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Solid.js-spesifisiä lint-sääntöjä Ultracitelle.
+---
+
+Solid-konfiguraatiossa on Solid.js-spesifisiä lint-sääntöjä reaktiivisuudelle, komponenttimalleille ja JSX-käsittelylle.
+
+## Asennus
+
+Lisää Solid-konfiguraatio `biome.jsonc`-tiedostoosi:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Yleiskatsaus
+
+Tämä konfiguraatio lisää Solid.js-kehitykseen liittyviä sääntöjä:
+
+- **Reaktiivisuussäännöt**: Varmistaa Solidin reaktiivisten primitiivien oikean käytön
+- **Komponenttimallit**: Varmistaa, että Solid-komponentit noudattavat parhaita käytäntöjä
+- **Propien käsittely**: Estä propien destrukturointi (se rikkoo reaktiivisuuden)
+- **React-spesifiset propit**: Älä salli React-spesifisiä propseja Solid-komponenteissa
+
+## Solid-spesifiset säännöt
+
+### Oikeellisuus
+
+| Sääntö | Asetus | Kuvaus |
+|-------:|:------:|--------|
+| `noSolidDestructuredProps` | `error` | Estä propien destrukturointi Solid-komponenteissa. Destrukturointi rikkoo Solidin reaktiivisuusjärjestelmän. Sen sijaan käytä propseja suoraan. |
+
+### Suorituskyky
+
+| Sääntö | Asetus | Kuvaus |
+|-------:|:------:|--------|
+| `useSolidForComponent` | `error` | Pakota käyttämään `<For>`-komponenttia taulukoiden läpikäyntiin Solidissa. `<For>`-komponentti on optimoitu Solidin reaktiivisuutta varten. |
+
+### Epäilyttävät
+
+| Sääntö | Asetus | Kuvaus |
+|-------:|:------:|--------|
+| `noReactSpecificProps` | `error` | Kieltäytyy React-spesifisistä propseista kuten `className` ja `htmlFor` Solidissa. Käytä sen sijaan `class` ja `for`. |

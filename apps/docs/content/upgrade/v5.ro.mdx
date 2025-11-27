@@ -1,0 +1,49 @@
+---
+title: Actualizare la v5
+description: Cum să-ți actualizezi proiectul de la Ultracite v4 la v5.
+---
+
+Ultracite v5 este o versiune majoră cu îmbunătățiri semnificative și schimbări care pot afecta compatibilitatea. Acest ghid te va ajuta să-ți actualizezi configurația existentă v4 la v5.
+
+## Noutăți în v5
+
+- **Biome actualizat**: Actualizat de la v1.x la v2.x
+- **Noul format de configurare**: Trecere de la `biome.json` la `biome.jsonc`
+- **CLI îmbunătățit**: Rescris în TypeScript cu gestionare a erorilor îmbunătățită
+- **Integrări pentru editor**: Suport încorporat pentru Cursor, Windsurf, Zed și GitHub Copilot
+- **Git Hooks**: Integrări opționale incluzând Husky, lint-staged și lefthook
+- **Schema îmbunătățită**: Nou URL pentru schema cu validare îmbunătățită
+- **Setări VS Code simplificate**: Suprascrieri pentru tipurile de fișiere combinate pe o singură linie
+
+## Pași de migrare
+
+### Migrare automată (Recomandată)
+
+Cea mai simplă metodă de migrare este să rulezi noua comandă de inițializare:
+
+```package-install
+npx ultracite@latest init
+```
+
+Aceasta va:
+- Actualizează dependențele la cele mai recente versiuni
+- Actualizează `biome.json` sau `biome.jsonc`  
+- Actualizează setările VS Code
+- Oferă configurarea regulilor pentru editor AI (Cursor, Windsurf, Zed etc.)
+- Oferă configurarea noilor integrări (Git hooks, lint-staged etc.)
+
+După actualizare, poate dorești să verifici fișierul `biome.json` / `biome.jsonc` pentru a elimina orice suprascrieri. În plus, repornește editorul pentru a te asigura că noua configurație este aplicată.
+
+De asemenea, te rugăm să consulți Biome [ghidul de upgrade pentru v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) pentru mai multe informații despre schimbările de schemă / reguli.
+
+### Migrare manuală
+
+Dacă preferi mai mult control asupra procesului, urmează pașii de [Migrare manuală](/setup#manual-installation) prin:
+
+- Instalarea manuală a versiunilor actualizate ale Ultracite și Biome
+- Actualizarea fișierului `biome.json` la noua versiune a schemei
+- Actualizarea fișierului `.vscode/settings.json` (opțional)
+- Adăugarea unui fișier de reguli pentru editor AI (opțional)
+- Adăugarea de noi integrări (opțional)
+
+După migrare, repornește editorul pentru a te asigura că noua configurație este aplicată.

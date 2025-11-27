@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Aturan linting spesifik Qwik untuk Ultracite.
+---
+
+Konfigurasi Qwik mencakup aturan linting khusus untuk serialisasi, tugas terlihat, ruang lingkup leksikal, dan penggunaan metode.
+
+## Instalasi
+
+Tambahkan konfigurasi Qwik ke `biome.jsonc` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Ikhtisar
+
+Konfigurasi ini menambahkan aturan khusus untuk pengembangan Qwik:
+
+- **Serialisasi**: Menegakkan penggunaan model resumability Qwik yang tepat
+- **Tugas Terlihat**: Mencegah penggunaan yang tidak tepat dari `useVisibleTask$`
+- **Ruang Lingkup Leksikal**: Memastikan cakupan variabel yang tepat dalam fungsi `$`
+- **Penggunaan Metode**: Menegakkan pola metode Qwik yang benar
+- **Props Khusus React**: Melarang props khusus React dalam komponen Qwik
+
+## Aturan Khusus Qwik
+
+### Kebenaran
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noQwikUseVisibleTask` | `error` | Mencegah penggunaan `useVisibleTask$`. Hook ini menjalankan kode secara langsung di sisi klien, sehingga merusak resumability Qwik. Gunakan `useTask$` atau `useResource$` jika memungkinkan. |
+| `useQwikClasslist` | `error` | Menegakkan penggunaan sintaks objek `class` alih-alih penggabungan string untuk kelas dinamis di Qwik. |
+
+### Nurseri
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `useQwikValidLexicalScope` | `error` | Menegakkan ruang lingkup leksikal yang valid dalam fungsi `$` Qwik. Variabel dari ruang lingkup luar harus ditangkap secara eksplisit. |
+| `useQwikMethodUsage` | `error` | Menegakkan penggunaan metode dan API khusus Qwik yang benar. |
+
+### Mencurigakan
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noReactSpecificProps` | `error` | Melarang props khusus React seperti `className` dan `htmlFor` di Qwik. Gunakan `class` dan `for` sebagai gantinya. |

@@ -1,0 +1,467 @@
+---
+title: Nucleu
+description: Configurația de bază a Ultracite cu reguli de linting indiferente față de framework.
+---
+
+Configurația principală Ultracite oferă un set cuprinzător de reguli de linting și setări de formatare care nu depind de un framework. Aceasta este fundația pe care se bazează toate celelalte configurații specifice framework-ului.
+
+## Instalare
+
+Configurația de bază este inclusă automat când rulezi:
+
+```bash
+npx ultracite init
+```
+
+Sau adaug-o manual în `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+## Prezentare generală
+
+Configurația de bază include sute de reguli stricte de linting care acoperă:
+
+- **Accesibilitate (a11y)**: Impune atribute ARIA valide, HTML semantic și navigare de la tastatură
+- **Complexitate**: Reduce complexitatea cognitivă și impune bune practici
+- **Corectitudine**: Previne erorile comune și impune siguranța tipurilor
+- **Performanță**: Optimizează codul pentru o performanță mai bună la rulare
+- **Securitate**: Previne vulnerabilități de securitate
+- **Stil**: Impune un stil de cod consistent
+- **Suspicios**: Depistează modele suspecte care ar putea indica bug-uri
+
+## Setări formatare
+
+- **Indentare**: 2 spații
+- **Lățime linie**: 80 de caractere
+- **Sfârșit de linie**: LF (stil Unix)
+- **Punct și virgulă**: Întotdeauna obligatorii
+- **Ghilimele**: Ghilimele duble pentru JavaScript/TypeScript și JSON
+- **Virgule finale**: Stil ES5 (array/obiecte multi-linie)
+- **Paranteze pentru arrow**: Include întotdeauna parantezele
+
+## Caracteristici cheie
+
+### Rigorozitate TypeScript
+
+Configurația de bază activează verificările stricte TypeScript:
+
+- Descurajează utilizarea lui `any` (`noExplicitAny: error`)
+- Solicită tratarea valorilor `null/undefined`
+- Preferă tipuri explicite în anumite situații
+- Impune siguranța tipurilor în întregul codebase
+
+### Echivalente recomandate ESLint
+
+Reguli comune de bune practici sunt incluse:
+
+- Fără variabile neutilizate (`noUnusedVariables: error`)
+- Fără importuri neutilizate (`noUnusedImports: error`)
+- Fără eval explicit (`noGlobalEval: error`)
+- Fără poluare a prototipurilor (`noPrototypeBuiltins: error`)
+
+### Accesibilitate implicită
+
+Reguli echivalente standardelor de accesibilitate:
+
+- Atributele ARIA trebuie să fie valide
+- Se preferă elementele HTML semantice
+- Suport pentru navigare de la tastatură necesar
+- Text alternativ pentru imagini obligatoriu
+
+### Suport Node.js
+
+Tratament specific pentru mediu:
+
+- Recunoaște globale Node.js (`module`, `process`)
+- Impune protocolul `node:` pentru modulele încorporate
+- Suportă atât CommonJS, cât și ESM
+
+## Referință completă a regulilor
+
+### Accesibilitate (a11y)
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noAccessKey` | `error` | Impune ca atributul `accessKey` să nu fie utilizat pe niciun element HTML. |
+| `noAriaHiddenOnFocusable` | `error` | Impune ca `aria-hidden="true"` să nu fie setat pe elemente focusabile. |
+| `noAriaUnsupportedElements` | `error` | Impune ca elementele care nu suportă roluri, stări și proprietăți ARIA să nu aibă astfel de atribute. |
+| `noAutofocus` | `off` | Impune ca prop-ul `autoFocus` să nu fie folosit pe elemente. |
+| `noDistractingElements` | `error` | Impune să nu fie folosite elemente care distrag. |
+| `noHeaderScope` | `error` | Prop-ul scope ar trebui folosit doar pe elementele `<th>`. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Impune ca rolurile ARIA non-interactive să nu fie atribuite elementelor HTML interactive. |
+| `noLabelWithoutControl` | `error` | Impune ca un element sau componentă label să aibă un text și un input asociat. |
+| `noNoninteractiveElementInteractions` | `error` | Interzice utilizarea handlerelor de evenimente pe elemente non-interactive. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Impune ca rolurile ARIA interactive să nu fie atribuite elementelor HTML non-interactive. |
+| `noNoninteractiveTabindex` | `error` | Impune ca `tabIndex` să nu fie atribuit elementelor HTML non-interactive. |
+| `noPositiveTabindex` | `error` | Previne utilizarea numerelor pozitive pe proprietatea `tabIndex`. |
+| `noRedundantAlt` | `error` | Impune ca prop-ul alt al imaginii să nu conțină cuvintele `image`, `picture` sau `photo`. |
+| `noRedundantRoles` | `error` | Impune ca proprietatea role explicită să nu fie aceeași cu rolul implicit/implicit al elementului. |
+| `noStaticElementInteractions` | `error` | Impune ca elementele statice, vizibile (cum ar fi `<div>`) care au handler-e de click să folosească atributul role valid. |
+| `noSvgWithoutTitle` | `error` | Impune utilizarea elementului title pentru elementul `svg`. |
+| `useAltText` | `error` | Impune ca toate elementele care necesită text alternativ să transmită informații semnificative utilizatorului final. |
+| `useAnchorContent` | `error` | Impune ca ancorele să aibă conținut și ca acesta să fie accesibil cititoarelor de ecran. |
+| `useAriaActivedescendantWithTabindex` | `error` | Impune ca `tabIndex` să fie atribuit elementelor HTML non-interactive cu aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Impune ca elementele cu roluri ARIA să aibă toate atributele ARIA cerute pentru acel rol. |
+| `useAriaPropsSupportedByRole` | `error` | Impune ca proprietățile ARIA să fie valide pentru rolurile suportate de element. |
+| `useButtonType` | `error` | Impune utilizarea atributului `type` pentru elementul button. |
+| `useFocusableInteractive` | `error` | Elementele cu un rol interactiv și handler-e trebuie să fie focusabile. |
+| `useHeadingContent` | `error` | Impune ca elementele heading (`h1`, `h2`, etc.) să aibă conținut accesibil cititoarelor de ecran. |
+| `useHtmlLang` | `error` | Impune ca elementul `html` să aibă atributul `lang`. |
+| `useIframeTitle` | `error` | Impune utilizarea atributului title pentru elementul iframe. |
+| `useKeyWithClickEvents` | `error` | Impune ca `onClick` să fie însoțit de cel puțin unul dintre următoarele: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Impune ca `onMouseOver` / `onMouseOut` să fie însoțite de `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Impune ca elementele audio și video să aibă un track pentru subtitrări. |
+| `useSemanticElements` | `error` | Detectează folosirea atributelor role în elementele JSX și sugerează utilizarea elementelor semantice în schimb. |
+| `useValidAnchor` | `error` | Impune ca toate ancorele să fie valide și navigabile. |
+| `useValidAriaProps` | `error` | Asigură că proprietățile ARIA `aria-*` sunt toate valide. |
+| `useValidAriaRole` | `error` | Elementele cu roluri ARIA trebuie să folosească un rol ARIA valid, ne-abstract. |
+| `useValidAriaValues` | `error` | Impune ca valorile stării și proprietăților ARIA să fie valide. |
+| `useValidAutocomplete` | `error` | Folosește valori valide pentru atributul autocomplete pe elementele input. |
+| `useValidLang` | `error` | Asigură că atributul transmis la `lang` este un cod ISO corect pentru limbă și/sau țară. |
+| `useGenericFontNames` | `error` | Interzice lipsa cuvântului cheie generic pentru familie de fonturi (CSS). |
+
+### Complexitate
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noAdjacentSpacesInRegex` | `error` | Interzice utilizarea neclară a caracterelor spațiu consecutive în literalii expresiilor regulate. |
+| `noArguments` | `error` | Interzice utilizarea obiectului arguments. |
+| `noBannedTypes` | `error` | Interzice aliasurile de tip primitiv și tipurile înșelătoare. |
+| `noCommaOperator` | `error` | Interzice operatorul virgulă. |
+| `noEmptyTypeParameters` | `error` | Interzice parametrii de tip goi în aliasuri de tip și interfețe. |
+| `noExcessiveCognitiveComplexity` | `error` | Interzice funcțiile care depășesc un anumit scor de Complexitate Cognitivă. |
+| `noExcessiveLinesPerFunction` | `off` | Restricționează numărul de linii de cod dintr-o funcție. |
+| `noExcessiveNestedTestSuites` | `error` | Regula impune o adâncime maximă pentru `describe()` imbricate în fișierele de test. |
+| `noExtraBooleanCast` | `error` | Interzice conversiile booleene inutile. |
+| `noFlatMapIdentity` | `error` | Interzice utilizarea callback-ului inutil la flatMap. |
+| `noForEach` | `error` | Preferă instrucțiunea `for...of` în loc de `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Interzice conversiile scurte de tip. |
+| `noImportantStyles` | `off` | Interzice utilizarea stilului `!important` (CSS). |
+| `noStaticOnlyClass` | `error` | Regula raportează când o clasă nu are membri non-statici. |
+| `noThisInStatic` | `error` | Interzice `this` și `super` în contexte statice. |
+| `noUselessCatch` | `error` | Interzice blocurile catch inutile. |
+| `noUselessConstructor` | `error` | Interzice constructorii inutili. |
+| `noUselessContinue` | `error` | Evită utilizarea continue inutile. |
+| `noUselessEmptyExport` | `error` | Interzice exporturile goale care nu schimbă nimic într-un fișier modul. |
+| `noUselessEscapeInRegex` | `error` | Interzice secvențele de escape inutile în literalii expresiilor regulate. |
+| `noUselessFragments` | `error` | Interzice fragmentele inutile. |
+| `noUselessLabel` | `error` | Interzice etichetele inutile. |
+| `noUselessLoneBlockStatements` | `error` | Interzice blocurile de cod imbricate inutile. |
+| `noUselessRename` | `error` | Interzice redenumirea importurilor, exporturilor și a asigurărilor destrucurate la același nume. |
+| `noUselessStringConcat` | `error` | Interzice concatenarea inutilă de string-uri sau template literals. |
+| `noUselessStringRaw` | `error` | Interzice utilizarea inutilă a `String.raw` în template string-uri fără secvențe de escape. |
+| `noUselessSwitchCase` | `error` | Interzice cazurile inutile din instrucțiunile switch. |
+| `noUselessTernary` | `error` | Interzice operatorii ternari când există alternative mai simple. |
+| `noUselessThisAlias` | `error` | Interzice aliasarea inutilă a lui `this`. |
+| `noUselessTypeConstraint` | `error` | Interzice utilizarea `any` sau `unknown` ca restricție de tip. |
+| `noUselessUndefinedInitialization` | `error` | Interzice inițializarea variabilelor cu `undefined`. |
+| `noVoid` | `error` | Interzice utilizarea operatorilor `void`, care nu sunt familiari. |
+| `useArrowFunction` | `error` | Folosește funcții arrow în locul expresiilor funcție. |
+| `useDateNow` | `error` | Folosește `Date.now()` pentru a obține numărul de milisecunde de la Unix Epoch. |
+| `useFlatMap` | `error` | Promovează utilizarea `.flatMap()` când se folosesc împreună `map().flat()`. |
+| `useIndexOf` | `error` | Preferă `Array#{indexOf,lastIndexOf}()` în loc de `Array#{findIndex,findLastIndex}()` când cauți indexul unui element. |
+| `useLiteralKeys` | `error` | Impune utilizarea accesului literal la proprietăți în loc de accesul calculat. |
+| `useNumericLiterals` | `error` | Interzice `parseInt()` și `Number.parseInt()` în favoarea literaliilor binari, octal și hexazecimali. |
+| `useOptionalChain` | `error` | Impune folosirea lanțului opțional concis în locul expresiilor logice înlănțuite. |
+| `useRegexLiterals` | `error` | Impune utilizarea literaliilor expresiilor regulate în locul constructorului `RegExp` dacă este posibil. |
+| `useSimpleNumberKeys` | `error` | Interzice numele membrilor obiect care nu sunt în baza 10 sau folosesc underscore ca separator. |
+| `useSimplifiedLogicExpression` | `error` | Elimină termeni redundanți din expresiile logice. |
+| `useWhile` | `error` | Impune utilizarea buclelor while în locul for când expresiile de inițializare și actualizare nu sunt necesare. |
+
+### Corectitudine
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noConstAssign` | `error` | Previne re-asignarea variabilelor declarate cu const. |
+| `noConstantCondition` | `error` | Interzice expresiile constante în condiții. |
+| `noConstantMathMinMaxClamp` | `error` | Interzice utilizarea `Math.min` și `Math.max` pentru a fixa o valoare când rezultatul este constant. |
+| `noConstructorReturn` | `error` | Interzice returnarea unei valori dintr-un constructor. |
+| `noEmptyCharacterClassInRegex` | `error` | Interzice clasele de caractere goale în literalii expresiilor regulate. |
+| `noEmptyPattern` | `error` | Interzice pattern-urile goale de destructurare. |
+| `noGlobalDirnameFilename` | `error` | Interzice utilizarea `__dirname` și `__filename` în scope global. |
+| `noGlobalObjectCalls` | `error` | Interzice apelarea proprietăților obiectului global ca funcții. |
+| `noInnerDeclarations` | `error` | Interzice declarațiile de funcții și `var` care sunt accesibile în afara blocului lor. |
+| `noInvalidBuiltinInstantiation` | `error` | Asigură că built-in-urile sunt instanțiate corect. |
+| `noInvalidConstructorSuper` | `error` | Previne utilizarea incorectă a `super()` în interiorul claselor. |
+| `noInvalidDirectionInLinearGradient` | `error` | Interzice valori de direcție non-standard pentru funcțiile linear-gradient (CSS). |
+| `noInvalidGridAreas` | `error` | Interzice arii de grid cu nume invalide în CSS Grid Layouts (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Interzice utilizarea regulilor `@import` în poziții invalide (CSS). |
+| `noInvalidUseBeforeDeclaration` | `error` | Interzice utilizarea variabilelor și parametrilor înainte de declarație. |
+| `noMissingVarFunction` | `error` | Interzice lipsa funcției var pentru variabile CSS (CSS). |
+| `noNodejsModules` | `off` | Interzice utilizarea modulelor builtin Node.js. |
+| `noNonoctalDecimalEscape` | `error` | Interzice secvențele de escape `\8` și `\9` în literalii string. |
+| `noPrecisionLoss` | `error` | Interzice numere literale care pierd precizie. |
+| `noPrivateImports` | `off` | Restricționează importurile de exporturi private. |
+| `noProcessGlobal` | `off` | Interzice utilizarea globalului `process`. |
+| `noRestrictedElements` | `error` | Interzice utilizarea elementelor configurate. |
+| `noSelfAssign` | `error` | Interzice atribuiri unde ambele părți sunt exact la fel. |
+| `noSetterReturn` | `error` | Interzice returnarea unei valori dintr-un setter. |
+| `noStringCaseMismatch` | `error` | Interzice compararea expresiilor ce modifică cazul string-ului cu o valoare neconformă. |
+| `noSwitchDeclarations` | `error` | Interzice declarațiile lexicale în clausele switch. |
+| `noUndeclaredDependencies` | `off` | Interzice utilizarea dependențelor care nu sunt specificate în `package.json`. |
+| `noUndeclaredVariables` | `error` | Previne utilizarea variabilelor care nu au fost declarate în document. |
+| `noUnknownFunction` | `error` | Interzice funcțiile CSS value necunoscute (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Interzice nume necunoscute de media feature (CSS). |
+| `noUnknownProperty` | `error` | Interzice proprietăți necunoscute (CSS). |
+| `noUnknownPseudoClass` | `error` | Interzice pseudo-clase selectoare necunoscute (CSS). |
+| `noUnknownPseudoElement` | `error` | Interzice pseudo-elemente selectoare necunoscute (CSS). |
+| `noUnknownTypeSelector` | `error` | Interzice selectori de tip necunoscuți (CSS). |
+| `noUnknownUnit` | `error` | Interzice unități CSS necunoscute (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Interzice selectori An+B care nu se potrivesc (CSS). |
+| `noUnreachable` | `error` | Interzice codul inaccesibil. |
+| `noUnreachableSuper` | `error` | Asigură că `super()` este apelat exact o dată pe fiecare cale de execuție dintr-un constructor înainte de a fi accesat `this`. |
+| `noUnsafeFinally` | `error` | Interzice instrucțiunile de control al fluxului în blocuri finally. |
+| `noUnsafeOptionalChaining` | `error` | Interzice folosirea optional chaining în contexte unde valoarea undefined nu este permisă. |
+| `noUnusedFunctionParameters` | `error` | Interzice parametrii de funcție neutilizați. |
+| `noUnusedImports` | `error` (safe fix override) | Interzice importurile neutilizate. |
+| `noUnusedLabels` | `error` | Interzice etichetele neutilizate. |
+| `noUnusedPrivateClassMembers` | `error` | Interzice membrii privați de clasă neutilizați. |
+| `noUnusedVariables` | `error` | Interzice variabilele neutilizate. |
+| `noVoidTypeReturn` | `error` | Interzice returnarea unei valori dintr-o funcție cu tipul de retur `void`. |
+| `useGraphqlNamedOperations` | `error` | Impune specificarea numelui operațiunilor GraphQL. |
+| `useImageSize` | `error` | Impune ca elementele `<img>` să aibă atributele width și height. |
+| `useImportExtensions` | `off` | Impune extensii de fișier pentru importurile relative. |
+| `useIsNan` | `error` | Solicită apeluri la `isNaN()` când se verifică NaN. |
+| `useJsonImportAttributes` | `off` | Impune utilizarea cu `{ type: "json" }` pentru importurile de module JSON. |
+| `useParseIntRadix` | `error` | Impune utilizarea consistentă a argumentului radix când se folosește `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Impune ca liniile comentariilor JSDoc să înceapă cu un singur asterisc, cu excepția primului. |
+| `useUniqueElementIds` | `off` | Previne utilizarea unui id static literal pe elemente. |
+| `useValidForDirection` | `error` | Impune ca clauza de actualizare a buclei `for` să miște contorul în direcția corectă. |
+| `useValidTypeof` | `error` | Regula verifică că rezultatul unei expresii `typeof` este comparat cu o valoare validă. |
+| `useYield` | `error` | Solicita ca funcțiile generator să conțină `yield`. |
+
+### Nursery
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noContinue` | `off` | Interzice instrucțiunile continue. |
+| `noDeprecatedImports` | `off` | Restricționează importurile de exporturi depreciate. |
+| `noDuplicateDependencies` | `error` | Previne listarea dependențelor duplicate. |
+| `noEmptySource` | `error` | Interzice fișierele sursă goale. |
+| `noFloatingPromises` | `off` | Solicită tratarea corespunzătoare a declarațiilor de tip Promise-like. |
+| `noForIn` | `off` | Interzice iterarea folosind for-in. |
+| `noImportCycles` | `off` | Previne ciclurile de import. |
+| `noIncrementDecrement` | `error` | Interzice utilizarea operatorilor `++` și `--` (cu excepția expresiilor afterthought din for). |
+| `noJsxLiterals` | `off` | Interzice literalele string în interiorul elementelor JSX. |
+| `noMisusedPromises` | `off` | Interzice utilizarea promisiunilor în locuri unde sunt aproape sigur o greșeală. |
+| `noParametersOnlyUsedInRecursion` | `error` | Interzice parametrii folosiți doar în apeluri recursive. |
+| `noShadow` | `error` | Interzice declarațiile de variabile care ascund variabile declarate în scope-ul exterior. |
+| `noSyncScripts` | `error` | Previne utilizarea scripturilor sincrone. |
+| `noUnnecessaryConditions` | `off` | Interzice condițiile de tip inutile care pot fi determinate static ca redundante. |
+| `noUnresolvedImports` | `off` | Avertizează la importarea exporturilor inexistente. |
+| `noUnusedExpressions` | `error` | Interzice expresiile care nu sunt apeluri de funcție sau atribuiri. |
+| `noUselessCatchBinding` | `off` | Interzice binding-urile `catch` neutilizate. |
+| `noUselessUndefined` | `error` | Interzice utilizarea inutilă a `undefined`. |
+| `useArraySortCompare` | `off` | Impune utilizarea unei funcții de comparare în `Array.prototype.sort()`. |
+| `useConsistentArrowReturn` | `error` | Impune corpurile funcțiilor arrow consistente. |
+| `useConsistentGraphqlDescriptions` | `error` | Solicită ca toate descrierile să urmeze același stil (bloc sau inline) în fișierele GraphQL. |
+| `useDeprecatedDate` | `error` | Solicită ca directiva `@deprecated` să specifice o dată de ștergere. |
+| `useExhaustiveSwitchCases` | `off` | Solicită ca instrucțiunile switch-case să fie exhaustive. |
+| `useExplicitType` | `off` | Impune tipuri în funcții, metode, variabile și parametri. |
+| `useFind` | `error` | Impune utilizarea `Array.prototype.find()` în locul `Array.prototype.filter()` urmat de `[0]` când se caută un singur rezultat. |
+| `useMaxParams` | `error` | Impune un număr maxim de parametri în definițiile de funcții. |
+| `useSortedClasses` | `error` (safe fix override) | Impune sortarea claselor utilitare CSS. |
+| `useSpread` | `error` | Impune utilizarea operatorului spread în locul `Function.prototype.apply()`. |
+| `useUniqueGraphqlOperationName` | `error` | Asigură că toate operațiunile GraphQL dintr-un document au nume unice. |
+
+### Performanță
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noAccumulatingSpread` | `error` | Interzice utilizarea sintaxei spread (`...`) pe acumulatoare. |
+| `noAwaitInLoops` | `off` | Interzice `await` în interiorul buclelor. |
+| `noBarrelFile` | `error` | Interzice utilizarea fișierelor barrel. |
+| `noDelete` | `error` | Interzice utilizarea operatorului `delete`. |
+| `noDynamicNamespaceImportAccess` | `error` | Interzice accesul dinamic la importuri de namespace. |
+| `noNamespaceImport` | `error` | Interzice utilizarea importurilor de tip namespace. |
+| `noReExportAll` | `off` | Evită re-exportarea totală. |
+| `noUnwantedPolyfillio` | `error` | Previne polyfill-urile duplicate de la Polyfill.io. |
+| `useGoogleFontPreconnect` | `error` | Asigură utilizarea atributului `preconnect` când se folosesc Google Fonts. |
+| `useTopLevelRegex` | `error` | Solicită declararea literaliilor regex la nivel top-level. |
+
+### Securitate
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noBlankTarget` | `error` | Interzice atributul `target="_blank"` fără `rel="noopener"`. |
+| `noDangerouslySetInnerHtml` | `error` | Previne utilizarea prop-urilor JSX periculoase. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Raportează când un element DOM sau o componentă folosește atât children, cât și prop-ul `dangerouslySetInnerHTML`. |
+| `noGlobalEval` | `error` | Interzice utilizarea `eval()` global. |
+
+### Stil
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noCommonJs` | `off` | Interzice folosirea sistemului de module Common JS în favoarea importurilor ESM. |
+| `noDefaultExport` | `off` | Interzice exporturile default. |
+| `noDoneCallback` | `error` | Interzice folosirea unui callback în testele asincrone și hook-uri. |
+| `noEnum` | `error` | Interzice enum-urile TypeScript. |
+| `noExportedImports` | `error` | Interzice exportarea unei variabile importate. |
+| `noImplicitBoolean` | `off` | Interzice valorile implicite true pe atributele booleene JSX. |
+| `noInferrableTypes` | `error` | Interzice anotările de tip pentru variabile, parametri și proprietăți de clasă inițializate cu o expresie literală. |
+| `noMagicNumbers` | `off` | Raportează utilizarea „numerelor magice” — numere folosite direct în loc să fie atribuite unor constante denumite. |
+| `noNamespace` | `error` | Interzice folosirea namespace-urilor TypeScript. |
+| `noNegationElse` | `error` | Interzice negația în condiția unui if dacă există un else. |
+| `noNestedTernary` | `error` | Interzice expresiile ternare imbricate. |
+| `noNonNullAssertion` | `error` | Interzice assertările non-null folosind operatorul postfix `!`. |
+| `noParameterAssign` | `error` | Interzice re-asignarea parametrilor funcțiilor. |
+| `noParameterProperties` | `error` | Interzice folosirea proprietăților parametrilor în constructorii de clasă. |
+| `noProcessEnv` | `off` | Interzice utilizarea `process.env`. |
+| `noRestrictedGlobals` | `error` | Regula îți permite să specifici numele variabilelor globale pe care nu vrei să le folosești în aplicație. |
+| `noRestrictedImports` | `error` | Interzice modulele specificate când sunt încărcate prin import sau require. |
+| `noRestrictedTypes` | `error` | Interzice tipuri definite de utilizator. |
+| `noShoutyConstants` | `error` | Interzice folosirea constantelor al căror valoare este versiunea cu majuscule a numelui său. |
+| `noSubstr` | `error` | Impune utilizarea `String.slice()` în locul `String.substr()` și `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Interzice template literals dacă interpolarea și tratarea caracterelor speciale nu sunt necesare. |
+| `noUselessElse` | `error` | Interzice blocul else când blocul if întrerupe execuția devreme. |
+| `noYodaExpression` | `error` | Interzice utilizarea expresiilor Yoda. |
+| `useArrayLiterals` | `error` | Interzice constructorii `Array`. |
+| `useAsConstAssertion` | `error` | Impune utilizarea as const în locul tipului literal și a anotării de tip. |
+| `useAtIndex` | `error` | Folosește `at()` în locul accesului prin index integer. |
+| `useBlockStatements` | `error` | Solicită respectarea convențiilor cu acolade. |
+| `useCollapsedElseIf` | `error` | Impune utilizarea `else if` în loc de if imbricat în clauzele `else`. |
+| `useCollapsedIf` | `error` | Impune utilizarea unui singur `if` în loc de if-uri imbricate. |
+| `useComponentExportOnlyModules` | `off` | Impune declararea componentelor doar în module care exportă exclusiv componente React. |
+| `useConsistentArrayType` | `error` | Solicită utilizarea consistentă a `T[]` sau `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Impune utilizarea new pentru toate built-in-urile, cu excepția `String`, `Number` și `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Regula impune utilizarea consistentă a acoladelor în atributele și copiii JSX. |
+| `useConsistentMemberAccessibility` | `error` | Solicită modificatori de accesibilitate consistenți pentru proprietățile și metodele de clasă. |
+| `useConsistentObjectDefinitions` | `error` | Solicită declarații consistente ale literaliilor de obiect. |
+| `useConst` | `error` | Solicită declarații const pentru variabilele care sunt atribuite o singură dată. |
+| `useDefaultParameterLast` | `error` | Impune ca parametrii funcțiilor cu valori implicite și parametrii opționali să fie ultimii. |
+| `useDefaultSwitchClause` | `error` | Solicită clauza `default` în instrucțiunile switch. |
+| `useDeprecatedReason` | `error` | Solicită specificarea argumentului reason când se folosește `@deprecated`. |
+| `useEnumInitializers` | `error` | Solicită ca fiecare membru enum să fie inițializat explicit. |
+| `useExplicitLengthCheck` | `off` | Impune compararea explicită a proprietăților `length`, `size`, `byteLength` sau `byteOffset`. |
+| `useExponentiationOperator` | `error` | Interzice utilizarea `Math.pow` în favoarea operatorului `**`. |
+| `useExportType` | `error` | Promovează utilizarea export type pentru tipuri. |
+| `useExportsLast` | `off` | Solicită ca toate exporturile să fie declarate după toate instrucțiunile non-export. |
+| `useFilenamingConvention` | `error` | Impune convenții de denumire pentru fișiere JavaScript și TypeScript (kebab-case, ASCII). |
+| `useForOf` | `error` | Această regulă recomandă o buclă for-of când într-un for se folosește indexul pentru a extrage un element dintr-un array iterat. |
+| `useFragmentSyntax` | `error` | Regula impune utilizarea `<>...</>` în loc de `<Fragment>...</Fragment>`. |
+| `useGraphqlNamingConvention` | `error` | Validează că toate valorile enum sunt scrise cu majuscule. |
+| `useGroupedAccessorPairs` | `error` | Impune ca getter-ele și setter-ele pentru aceeași proprietate să fie vecine în definițiile de clase și obiecte. |
+| `useImportType` | `error` | Promovează utilizarea `import type` pentru tipuri. |
+| `useLiteralEnumMembers` | `error` | Solicită ca toate membrii enum să fie valori literale. |
+| `useNamingConvention` | `off` | Regula pentru convenții de denumire (dezactivată). |
+| `useNodeAssertStrict` | `error` | Promovează utilizarea `node:assert/strict` în loc de `node:assert`. |
+| `useNodejsImportProtocol` | `error` | Impune folosirea protocolului `node:` pentru modulele builtin Node.js. |
+| `useNumberNamespace` | `error` | Folosește proprietățile `Number` în locul celor globale. |
+| `useNumericSeparators` | `error` | Impune utilizarea separatoarelor numerice în literalii numerici. |
+| `useObjectSpread` | `error` | Preferă object spread în locul `Object.assign()` când construiești obiecte noi. |
+| `useReadonlyClassProperties` | `error` | Impune marcare membrilor ca readonly dacă nu sunt modificați în afara constructorului. |
+| `useSelfClosingElements` | `error` | Previne tag-urile de închidere suplimentare pentru componente fără copii. |
+| `useShorthandAssign` | `error` | Solicită shorthand pentru operatorul de atribuire acolo unde este posibil. |
+| `useShorthandFunctionType` | `error` | Impune folosirea tipurilor de funcție în locul tipului obiect cu semnături call. |
+| `useSingleVarDeclarator` | `off` | Interzice declarațiile multiple de variabile în aceeași instrucțiune. |
+| `useSymbolDescription` | `error` | Solicită un parametru de descriere pentru `Symbol()`. |
+| `useTemplate` | `error` | Preferă template literals în locul concatenării string-urilor. |
+| `useThrowNewError` | `error` | Solicita folosirea new când arunci o eroare. |
+| `useThrowOnlyError` | `error` | Interzice aruncarea valorilor non-`Error`. |
+| `useTrimStartEnd` | `error` | Impune utilizarea `String.trimStart()` și `String.trimEnd()` în locul `String.trimLeft()` și `String.trimRight()`. |
+| `useUnifiedTypeSignatures` | `error` | Interzice semnăturile de overload care pot fi unificate într-o singură semnătură. |
+| `noDescendingSpecificity` | `error` | Interzice ca un selector cu specificitate mai mică să apară după unul cu specificitate mai mare (CSS). |
+| `noValueAtRule` | `error` | Interzice utilizarea regulii `@value` în module CSS (CSS). |
+
+### Suspicios
+
+| Regulă | Setare | Descriere |
+|------|---------|-------------|
+| `noAlert` | `error` | Interzice utilizarea `alert`, `confirm` și `prompt`. |
+| `noApproximativeNumericConstant` | `error` | Folosește constante standard în locul literaliilor aproximativi. |
+| `noAssignInExpressions` | `error` | Interzice atribuiri în expresii. |
+| `noAsyncPromiseExecutor` | `error` | Interzice utilizarea unei funcții async ca executor de Promise. |
+| `noBiomeFirstException` | `error` | Previne utilizarea pattern-ului `!` pe prima poziție în `files.includes` din fișierul de configurare. |
+| `noBitwiseOperators` | `error` | Interzice operatorii bitwise. |
+| `noCatchAssign` | `error` | Interzice re-asignarea excepțiilor în blocurile catch. |
+| `noClassAssign` | `error` | Interzice re-asignarea membrilor de clasă. |
+| `noCommentText` | `error` | Previne inserarea comentariilor ca noduri text. |
+| `noCompareNegZero` | `error` | Interzice compararea cu `-0`. |
+| `noConfusingLabels` | `error` | Interzice declarațiile etichetate care nu sunt loop-uri. |
+| `noConfusingVoidType` | `error` | Interzice tipul void în afara genericilor sau tipurilor de retur. |
+| `noConsole` | `off` | Interzice utilizarea `console`. |
+| `noConstEnum` | `error` | Interzice const enum TypeScript. |
+| `noConstantBinaryExpressions` | `error` | Interzice expresiile unde operația nu modifică valoarea. |
+| `noControlCharactersInRegex` | `error` | Previnesă folosirea caracterelor de control și a unor secvențe de escape care pot corespunde caracterelor de control în literalii regex. |
+| `noDebugger` | `error` | Interzice utilizarea debugger. |
+| `noDocumentCookie` | `error` | Interzice atribuiri directe la document.cookie. |
+| `noDoubleEquals` | `error` | Solicită utilizarea `===` și `!==`. |
+| `noDuplicateAtImportRules` | `error` | Interzice regulile duplicate `@import` (CSS). |
+| `noDuplicateCase` | `error` | Interzice etichetele case duplicate. |
+| `noDuplicateClassMembers` | `error` | Interzice membrii de clasă duplicat. |
+| `noDuplicateCustomProperties` | `error` | Interzice proprietățile personalizate duplicate în blocuri de declarații (CSS). |
+| `noDuplicateElseIf` | `error` | Interzice condițiile duplicate în chain-uri if-else-if. |
+| `noDuplicateFields` | `error` | Interzice câmpurile duplicate în operațiuni GraphQL. |
+| `noDuplicateFontNames` | `error` | Interzice numele duplicate în familiile de fonturi (CSS). |
+| `noDuplicateObjectKeys` | `error` | Interzice două chei cu același nume din interiorul obiectelor. |
+| `noDuplicateParameters` | `error` | Interzice parametri de funcție cu nume duplicate. |
+| `noDuplicateProperties` | `error` | Interzice proprietăți duplicate în blocuri de declarații (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Interzice selectori duplicat în blocuri keyframe (CSS). |
+| `noDuplicateTestHooks` | `error` | Un bloc describe nu ar trebui să conțină hook-uri duplicate. |
+| `noEmptyBlock` | `error` | Interzice blocurile CSS goale (CSS). |
+| `noEmptyBlockStatements` | `error` | Interzice blocurile de cod goale și blocurile statice. |
+| `noEmptyInterface` | `error` | Interzice declararea interfețelor goale. |
+| `noEvolvingTypes` | `error` | Interzice evoluția variabilelor spre tipul any prin re-asignări. |
+| `noExplicitAny` | `error` | Interzice utilizarea tipului any. |
+| `noExportsInTest` | `error` | Interzice folosirea export sau module.exports în fișiere care conțin teste. |
+| `noExtraNonNullAssertion` | `error` | Previne utilizarea greșită a operatorului de assertare non-null `!` în fișiere TypeScript. |
+| `noFallthroughSwitchClause` | `error` | Interzice trecerea (fallthrough) în clausele switch. |
+| `noFocusedTests` | `error` | Interzice testele focusate. |
+| `noFunctionAssign` | `error` | Interzice re-asignarea declarațiilor de funcții. |
+| `noGlobalAssign` | `error` | Interzice atribuțiile către obiecte native și variabile globale doar-read. |
+| `noGlobalIsFinite` | `error` | Folosește `Number.isFinite` în locul globalului `isFinite`. |
+| `noGlobalIsNan` | `error` | Folosește `Number.isNaN` în locul globalului `isNaN`. |
+| `noImplicitAnyLet` | `error` | Interzice utilizarea tipului implicit any pe declarațiile de variabile. |
+| `noImportAssign` | `error` | Interzice atribuirea legăturilor importate. |
+| `noImportantInKeyframe` | `error` | Interzice `!important` invalid în declarațiile keyframe (CSS). |
+| `noIrregularWhitespace` | `error` | Interzice utilizarea caracterelor de spațiu neregulate. |
+| `noLabelVar` | `error` | Interzice etichetele care au același nume cu o variabilă. |
+| `noMisleadingCharacterClass` | `error` | Interzice caracterele create cu multiple puncte de cod în sintaxa class a regex-ului. |
+| `noMisleadingInstantiator` | `error` | Impune utilizarea corectă a `new` și `constructor`. |
+| `noMisplacedAssertion` | `error` | Verifică că funcția de assert, de exemplu expect, este plasată în interiorul unui apel `it()`. |
+| `noMisrefactoredShorthandAssign` | `error` | Interzice assign shorthand când variabila apare pe ambele părți. |
+| `noOctalEscape` | `error` | Interzice secvențele de escape octale în literalii string. |
+| `noPrototypeBuiltins` | `error` | Interzice utilizarea directă a built-in-urilor de pe `Object.prototype`. |
+| `noQuickfixBiome` | `error` | Interzice utilizarea `quickfix.biome` în fișierul de setări al editorului. |
+| `noRedeclare` | `error` | Interzice redeclarările de variabile, funcții, clase și tipuri în același scope. |
+| `noRedundantUseStrict` | `error` | Previne existența directivei `use strict` redundante. |
+| `noSelfCompare` | `error` | Interzice comparațiile unde ambele părți sunt exact la fel. |
+| `noShadowRestrictedNames` | `error` | Interzice identificatorilor să umbrească nume restricționate. |
+| `noShorthandPropertyOverrides` | `error` | Interzice proprietățile shorthand care suprascriu proprietăți longhand conexe (CSS). |
+| `noSkippedTests` | `error` | Interzice testele dezactivate. |
+| `noSparseArray` | `error` | Previne utilizarea array-urilor sparse (array-uri cu goluri). |
+| `noTemplateCurlyInString` | `error` | Interzice sintaxa placeholder-ului template literal în string-uri obișnuite. |
+| `noThenProperty` | `error` | Interzice proprietatea then. |
+| `noTsIgnore` | `error` | Previne utilizarea directivei TypeScript `@ts-ignore`. |
+| `noUnassignedVariables` | `error` | Interzice variabilele let sau var care sunt citite dar niciodată atribuite. |
+| `noUnknownAtRules` | `error` | Interzice at-rule-urile necunoscute (CSS). |
+| `noUnsafeDeclarationMerging` | `error` | Interzice fuziunea nesigură a declarațiilor între interfețe și clase. |
+| `noUnsafeNegation` | `error` | Interzice utilizarea negației nesigure (`!`). |
+| `noUselessEscapeInString` | `error` | Interzice escape-urile inutile în literalii string. |
+| `noUselessRegexBackrefs` | `error` | Interzice backreference-urile inutile în literalii regex care întotdeauna se potrivesc cu un string gol. |
+| `noVar` | `error` | Interzice utilizarea `var`. |
+| `noWith` | `error` | Interzice instrucțiunile `with` în contexte non-stricte. |
+| `useAdjacentOverloadSignatures` | `error` | Interzice utilizarea semnăturilor de overload care nu sunt alăturate. |
+| `useAwait` | `error` | Asigură că funcțiile async utilizează `await`. |
+| `useBiomeIgnoreFolder` | `error` | Promovează utilizarea corectă pentru ignorarea folderelor în fișierul de configurare. |
+| `useDefaultSwitchClauseLast` | `error` | Impune ca clauzele default din switch să fie ultimele. |
+| `useErrorMessage` | `error` | Impune transmiterea unui mesaj atunci când se creează o eroare built-in. |
+| `useGetterReturn` | `error` | Impune ca metodele get să returneze întotdeauna o valoare. |
+| `useGoogleFontDisplay` | `error` | Impune utilizarea unei strategii display recomandate pentru Google Fonts. |
+| `useGuardForIn` | `error` | Solicită ca buclele for-in să includă o instrucțiune `if`. |
+| `useIsArray` | `error` | Folosește `Array.isArray()` în loc de `instanceof Array`. |
+| `useIterableCallbackReturn` | `error` | Impune valori de retur consistente în callback-urile iterable. |
+| `useNamespaceKeyword` | `error` | Solicită utilizarea cuvântului cheie namespace în loc de `module` pentru a declara namespace-urile TypeScript. |
+| `useNumberToFixedDigitsArgument` | `error` | Impune utilizarea argumentului digits cu `Number#toFixed()`. |
+| `useStaticResponseMethods` | `error` | Folosește metode statice `Response` în locul constructorului `new Response()` când este posibil. |
+| `useStrictMode` | `error` | Impune utilizarea directivei `use strict` în fișierele script. |
+
+## Note
+
+Anumite reguli sunt dezactivate deoarece sunt prea lente pentru rulare cu Scanner-ul. Așa cum este menționat în documentația [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first), regulile activate la nivel de proiect sunt cunoscute că pot cauza overhead de performanță în schimbul unei analize mai avansate.
+
+În testările noastre, am constatat că aceste reguli pot face diferența între 300ms și 13s de lint.

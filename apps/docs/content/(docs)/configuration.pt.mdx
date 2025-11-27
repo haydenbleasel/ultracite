@@ -1,0 +1,71 @@
+---
+title: Configuração
+description: A configuração de lint padrão do Ultracite e como modificá-la.
+---
+
+Uma das melhores características do Ultracite é que ele funciona sem configuração inicial — você pode simplesmente estender a predefinição `ultracite` e começar. No entanto, cada projeto é um pouco diferente, e talvez você queira personalizar certas regras ou adaptar o Ultracite para diferentes frameworks. Esta seção explica a configuração padrão e como estendê-la ou sobrescrevê-la.
+
+O Ultracite fornece configurações específicas de framework que você pode estender além da configuração base. Isso permite que você adicione regras de lint específicas do framework sem inflar a configuração base ou lidar com regras irrelevantes.
+
+Você pode encontrar a lista completa de configurações de framework disponíveis na seção [Predefinições](/preset/core).
+
+### Uso
+
+Para usar uma configuração específica de framework, adicione-a ao seu array `extends`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Você pode combinar múltiplas configurações se estiver trabalhando em um projeto com múltiplos frameworks ou usando algo como Astro, que suporta vários frameworks.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Configuração padrão
+
+Quando você inclui `"extends": ["ultracite/core"]` no seu `biome.jsonc`, você está incorporando a predefinição base de configuração do Ultracite. Esta predefinição inclui regras e configurações independentes de framework. Alguns aspectos notáveis da configuração padrão:
+
+- **Rigor do TypeScript**: O Ultracite habilita as verificações estritas do TypeScript e regras de lint que exigem tipagem robusta. Por exemplo, desencoraja o uso de `any`, exige o tratamento de `null/undefined` e prefere tipos explícitos em certas situações para evitar ambiguidade.
+- **Equivalentes do "Recommended" do ESLint**: Regras comuns de melhores práticas (no unused vars, no explicit eval, no proto pollution, etc.) estão incluídas.
+- **Acessibilidade**: Regras equivalentes aos padrões de acessibilidade estão ativadas por padrão (atributos ARIA, HTML semântico, navegação por teclado, etc.).
+- **Node.js**: Particularidades específicas do ambiente são tratadas. Por exemplo, variáveis globais fornecidas pelo Node (como `module`, `process`) são reconhecidas para que não sejam marcadas incorretamente como indefinidas.
+- **Convenções de formatação**: As configurações do formatador do Ultracite (em grande parte herdadas dos padrões do Biome/Prettier) incluem indentação de 2 espaços, largura máxima de linha de 80 caracteres, ponto e vírgula ao final das instruções, vírgulas finais onde válidas (por exemplo, em arrays/objetos multilinha), aspas duplas para strings, etc. Essas escolhas buscam corresponder às convenções comuns e garantir diffs limpos.
+
+Todos esses padrões têm como objetivo impor um estilo consistente e prevenir erros comuns sem que você precise configurar manualmente cada regra.
+
+Para uma referência abrangente de todas as regras de lint configuradas na configuração base do Ultracite, consulte a documentação da [Configuração principal](/preset/core).
+
+## Sobrescrevendo a configuração
+
+### Modificando `biome.jsonc`
+
+Você pode desativar regras modificando o arquivo `biome.jsonc`.
+
+Por exemplo, para desativar a regra `noAutofocus`, você pode adicionar o seguinte:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Comentários em linha
+
+Você também pode desativar regras por linha adicionando um comentário ao final da linha:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

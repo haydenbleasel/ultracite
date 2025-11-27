@@ -1,0 +1,72 @@
+---
+title: Pravila
+description: Kako integrirati Ultracite s pomočniki za pisanje kode z AI preko pravil v urejevalniku.
+---
+
+Ultracite zagotavlja nemoteno integracijo s pomočniki za pisanje kode z AI z avtomatskim generiranjem datotek pravil, specifičnih za posamezen urejevalnik. Ta pravila pomagajo usmerjati AI pomočnike pri pisanju boljše, bolj dosledne kode, ki sledi najboljšim praksam.
+
+Pravila za urejevalnik delujejo vzporedno z lintanjem in oblikovanjem, ki ju izvaja Biome. Medtem ko Biome skrbi za oblikovanje kode in zaznava sintaktične napake, pravila za urejevalnik usmerjajo AI pomočnike, da že od začetka pišejo boljšo kodo, s čimer zmanjšajo potrebo po kasnejših popravkih.
+
+Ta dvojni pristop zagotavlja tako avtomatizirano kakovost kode (prek Biome) kot inteligentno generiranje kode (prek pravil za AI).
+
+## Namestitev
+
+### Samodejna namestitev
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+To bo ustvarilo ustrezno datoteko v mapi vašega projekta.
+
+### Ročna namestitev
+
+Če želite nastaviti ročno, ustvarite ustrezno datoteko v mapi vašega projekta (na primer `.cursor/rules` za Cursor ali `.rules` za Zed). Nato kopirajte in prilepite [to vsebino](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) v datoteko.
+
+## Podprti urejevalniki
+
+| Urejevalnik     | Lokacija datoteke pravil         |
+| --------------- | -------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+
+## Prednosti
+
+Uporaba pravil Ultracite za urejevalnik prinaša več prednosti:
+
+- **Doslednost**: Vsa koda, ustvarjena z AI, sledi istim konvencijam
+- **Kakovost**: Pravila uveljavljajo najboljše prakse in preprečujejo pogoste napake
+- **Dostopnost**: Vgrajene smernice za dostopnost zagotavljajo vključujočo kodo
+- **Zmogljivost**: Pravila spodbujajo učinkovite vzorce in preprečujejo antiprakse
+- **Varnost**: Smernice pomagajo preprečiti pogoste varnostne ranljivosti
+
+## Prilagajanje
+
+Čeprav so privzeta pravila obsežna, jih lahko prilagodite glede na svoje potrebe:
+
+1. **Spremenite obstoječa pravila**: Uredite datoteke s pravili neposredno
+2. **Dodajte pravila specifična za projekt**: Dodajte dodatne smernice
+3. **Onemogočite pravila**: Odstranite ali zakomentirajte pravila, ki se ne nanašajo na vaš projekt

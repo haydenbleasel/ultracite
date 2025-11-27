@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Reglas de lint específicas para Qwik en Ultracite.
+---
+
+La configuración de Qwik incluye reglas de lint específicas para serialización, tareas visibles, ámbito léxico y uso de métodos.
+
+## Instalación
+
+Agrega la configuración de Qwik a tu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Descripción general
+
+Esta configuración añade reglas específicas para el desarrollo con Qwik:
+
+- **Serialización**: Hacer cumplir el uso correcto del modelo de reanudabilidad de Qwik
+- **Tareas visibles**: Evitar el uso inapropiado de `useVisibleTask$`
+- **Ámbito léxico**: Garantizar el alcance adecuado de las variables en funciones `$`
+- **Uso de métodos**: Hacer cumplir los patrones correctos de métodos en Qwik
+- **Props específicos de React**: No permitir props específicos de React en componentes Qwik
+
+## Reglas específicas de Qwik
+
+### Corrección
+
+| Regla | Ajuste | Descripción |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Evitar el uso de `useVisibleTask$`. Este hook ejecuta código de forma inmediata en el cliente, lo que anula la reanudabilidad de Qwik. Use `useTask$` o `useResource$` en su lugar cuando sea posible. |
+| `useQwikClasslist` | `error` | Forzar el uso de la sintaxis de objeto `class` en lugar de la concatenación de cadenas para clases dinámicas en Qwik. |
+
+### Incubadora
+
+| Regla | Ajuste | Descripción |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Hacer cumplir un ámbito léxico válido en las funciones `$` de Qwik. Las variables de ámbitos externos deben capturarse explícitamente. |
+| `useQwikMethodUsage` | `error` | Hacer cumplir el uso correcto de métodos y APIs específicos de Qwik. |
+
+### Sospechosas
+
+| Regla | Ajuste | Descripción |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Prohibir props específicos de React como `className` y `htmlFor` en Qwik. Utilice `class` y `for` en su lugar. |

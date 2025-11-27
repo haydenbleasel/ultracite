@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Pravila za lintanje, specifična za Next.js v Ultracite.
+---
+
+Konfiguracija Next.js vsebuje pravila za lintanje, specifična za Next.js, za optimizacijo slik, strukturo dokumentov in vzorce App Routerja.
+
+## Namestitev
+
+Dodajte konfiguracijo Next.js v vašo `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Opomba: Konfiguracija Next.js samodejno vključuje pravila React, zato vam ni treba posebej dodajati `ultracite/react`.
+
+## Pregled
+
+Ta konfiguracija doda pravila, specifična za razvoj z Next.js:
+
+- **Optimizacija slik**: Zahtevaj uporabo Next.js komponente `Image`
+- **Struktura dokumenta**: Prepreči nepravilno uporabo posebnih komponent Next.js
+- **Komponente odjemalca**: Zagotovite pravilno ravnanje z asinhronimi komponentami odjemalca
+- **Konfiguracijske datoteke**: Posebna obravnava za datoteke `next.config.*`
+
+## Pravila, specifična za Next.js
+
+### Razvojno
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Prepreči asinhrone komponente odjemalca v Next.js. Komponente odjemalca naj bodo sinhrone; za asinhrone operacije uporabite strežniške komponente. |
+
+### Zmogljivost
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noImgElement` | `error` | Prepovedana uporaba `<img>` HTML elementa. Namesto tega uporabite Next.js `<Image>` komponento za samodejno optimizacijo slik. |
+
+### Slog
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Prepovedana uporaba `<head>` HTML elementa. Namesto tega uporabite `next/head` ali API za metadata App Routerja. |
+
+### Sumljivo
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Prepreči uvoz `next/document` v datotekah strani. `_document.tsx` bi moral obstajati samo v `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Prepreči uvoz `next/head` v `_document.tsx`. Namesto tega uporabite `<Head>` iz `next/document`. |
+
+## Preglasitve konfiguracijskih datotek
+
+Prednastavitev Next.js vključuje posebno obravnavo za konfiguracijske datoteke in komponente App Routerja:
+
+### Konfiguracijske datoteke Next.js
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+To omogoča vzorce konfiguracije Next.js, ki običajno morda ne bi prestali pravil lintanja.
+
+### Strani in postavitve App Routerja
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Komponentam strani in postavitve App Routerja je dovoljeno biti asinhrone brez zahteve po `await`, saj Next.js to posebej obravnava za renderiranje na strežniku in pridobivanje podatkov.

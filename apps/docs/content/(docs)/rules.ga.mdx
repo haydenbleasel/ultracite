@@ -1,0 +1,72 @@
+---
+title: Rialacha
+description: Conas Ultracite a chomhtháthú le cúntóirí códaithe AI trí rialacha eagarthóra.
+---
+
+Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI coding assistants to write better, more consistent code that follows best practices.
+
+Oibríonn na rialacha eagarthóra i gcomhar le frithliniú agus formáidiú Biome. Cé go bhféachann Biome le formáidiú an chóid agus go nglacann sé earráidí sintéise, treoraíonn na rialacha eagarthóra na cúntóirí códaithe AI chun cód níos fearr a scríobh ó thús, agus laghdaíonn siad an gá le socruithe ina dhiaidh sin.
+
+Coinníonn an cur chuige dúbailte seo an dá rud: cáilíocht chód uathoibrithe (trí Biome) agus giniúint chliste cód (trí rialacha códaithe AI).
+
+## Socrú
+
+### Socrú Uathoibríoch
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+This will create the relevant file in your project directory.
+
+### Socrú Láimhe
+
+Má tá tú ag iarraidh socruithe a dhéanamh de láimh, cruthaigh an comhad ábhartha i eolaire do thionscadail (mar shampla `.cursor/rules` do Cursor nó `.rules` do Zed). Ansin, cóipeáil agus greamaigh [an t-ábhar seo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) sa chomhad.
+
+## Eagarthóirí Tacaithe
+
+| Eagarthóir      | Suíomh Comhad Rialacha           |
+| --------------- | --------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+
+## Buntáistí
+
+Tugann úsáid rialacha eagarthóra Ultracite roinnt buntáistí:
+
+- **Comhsheasmhacht**: Leanann an cód uile a ghineann AI na coincheapa céanna
+- **Cáilíocht**: Cuireann rialacha cleachtais is fearr i bhfeidhm agus coscann siad earráidí coitianta
+- **Inrochtaineacht**: Déanann treoirlínte inrochtaineachta ionsuite cinnte go bhfuil an cód cuimsitheach
+- **Feidhmíocht**: Cothaíonn rialacha patrúin éifeachtacha agus seachnaíonn siad frithphatrúin
+- **Slándáil**: Cabhraíonn na treoirlínte le leochaileachtaí slándála coitianta a chosc
+
+## Saincheapadh
+
+Cé go bhfuil na rialacha réamhshocraithe cuimsitheach, is féidir leat iad a shaincheapadh do do riachtanais shonracha:
+
+1. **Athraigh rialacha atá ann cheana**: Cuir in eagar na comhaid rialacha go díreach
+2. **Cuir rialacha sonracha tionscadail leis**: Cuir treoirlínte bhreise leis
+3. **Díghníomhachtaigh rialacha**: Bain nó cuir tráchtaireacht ar na rialacha nach mbaineann le do thionscadal

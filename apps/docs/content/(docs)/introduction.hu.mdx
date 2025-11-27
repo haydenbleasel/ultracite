@@ -1,0 +1,48 @@
+---
+title: Bevezető
+description: Rövid áttekintés az Ultracite-ról és működéséről.
+---
+
+Ultracite egy gyors, intuitív és egyszerű fejlesztőeszköz, amely automatikus kódformázást és lintelést hoz a JavaScript / TypeScript projektjeidhez. A [Biome](https://biomejs.dev/) (Rust-alapú kódformázó és lintelő) tetejére építve az Ultracite egy robusztus, előre konfigurált beállítást kínál, amely a modern webfejlesztésre van optimalizálva.
+
+Install Ultracite quickly by running:
+
+```package-install
+npx ultracite init
+```
+
+Ezután kövesd a [Használat](/usage) útmutatót a kezdéshez, vagy nézd meg a [Beállítás](/setup) oldalt részletesebb vezérlésért.
+
+## Hogyan működik az Ultracite?
+
+A beállítás után az Ultracite többnyire a háttérben fut — automatikusan formázza a kódot és alkalmazza a javításokat minden alkalommal, amikor elmented a fájlokat. Mivel a Biome nagyon gyors, még nagy projektek esetén is, az Ultracite ellenőrzéseinek futtatása rendkívül gyors, és kényelmesen lefuthat minden mentésnél késés nélkül. Ez azt jelenti, hogy a fejlesztésre és a kiadásra koncentrálhatsz ahelyett, hogy kézzel korrigálnád a stílushibákat vagy hibakeresnél futásidejű hibákat.
+
+## Mi az a Biome?
+
+[Biome](https://biomejs.dev/) egy mindent egyben eszközkészlet kódformázáshoz és linteléshez. A Biome, amely Rustban íródott, egyesíti olyan eszközök funkcionalitását, mint a [Prettier](https://prettier.io/) (kódformázó), [ESLint](https://eslint.org/) (lintelő) és [Stylelint](https://stylelint.io/) egyetlen gyors bináris fájlban. Az Ultracite kihasználja a Biome sebességét és képességeit, és egy olyan szabály- és beállítás-előrebeállítást biztosít, amely a modern TypeScript projektekhez van igazítva.
+
+## Célok
+
+Az Ultracite fejlesztési szempontból kitűzött céljai:
+
+### Villámgyors teljesítmény
+
+Az Ultracite a [Biome](https://biomejs.dev/) és a Rust-implementáció teljesítményéből profitál, és törekednünk kell arra, hogy ez így is maradjon.
+
+### Tervezés szerint konfigurációmentes
+
+Az Ultracite úgy lett tervezve, hogy alapértelmezés szerint konfiguráció nélküli legyen. Ez lehetővé teszi az új felhasználók számára, hogy gyorsan kezdjenek, anélkül, hogy konfigurálniuk kellene a lintert/formázót; és időt takarít meg a csapatoknak az új fejlesztők betanítása során.
+
+A cél egy olyan alapértelmezett konfiguráció biztosítása, amely a legtöbb projekthez jó, ugyanakkor lehetőséget ad a konfiguráció testreszabására azok számára, akiknek erre szükségük van.
+
+### Intuitív és egyszerű
+
+Az Ultracite-nek a lehető leginkább láthatatlannak kell lennie. Lehetőleg ne igényeljen semmilyen konfigurációt vagy felhasználói beavatkozást. Ha mégis szükséges, olyan visszajelzést kell adnia, amely könnyen érthető és végrehajtható.
+
+### Maximális típusbiztonság
+
+Az Ultracite-t úgy kell megtervezni, hogy a lehető legnagyobb típusbiztonságot biztosítsa. Használja a TypeScript strict módját és további lint-szabályokat a hibák feltárására és fejlesztési javaslatok nyújtására.
+
+### Más eszközökkel való kompatibilitás
+
+Az Ultracite-nek képesnek kell lennie együttműködni más eszközökkel és könyvtárakkal, és nem szabad konfliktust okoznia velük.

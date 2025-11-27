@@ -1,0 +1,72 @@
+---
+title: Uso
+description: Esta secção explica como usar o Ultracite no dia-a-dia — cobrindo a interface de linha de comando, detalhes de integração com editores e fluxos de trabalho típicos.
+---
+
+## Integração com IDE
+
+Ultracite funciona melhor quando integrado no seu editor, para que obtenha feedback imediato enquanto escreve código. Foi desenhado para executar automaticamente ao guardar. Para testar, abra um projeto no seu IDE. Ao editar ficheiros, deverá ver a formatação aplicada ao guardar. Experimente introduzir um pequeno erro de estilo (como um ponto-e-vírgula extra ou uma linha mal indentada) e carregue em Guardar — o Ultracite (Biome) irá reformatar o ficheiro instantaneamente.
+
+Se introduzir um problema comum de lint (como uma variável não utilizada), pode ver um sublinhado ondulado ou um alerta no painel Problems; ao guardar, o Ultracite tentará corrigi-lo se for auto-corrigível (por exemplo, remover uma importação não utilizada) ou, caso contrário, deixará um aviso para tratar.
+
+### Formatação instantânea
+
+Sempre que guardar um ficheiro, o Biome (com a configuração do Ultracite) formata o ficheiro. Não precisa de correr um Prettier separado nem de se preocupar com a formatação — isso fica tratado.
+
+Graças às definições `codeActionsOnSave`, o VS Code também aplicará a ação “corrigir tudo” do Biome ao guardar. Isto significa que qualquer regra de lint que tenha auto-correção (como converter `!=` para `!==`, adicionar parêntesis em falta, corrigir a ordem de imports, etc.) será aplicada. É como se tivesse corrido `--fix` com o ESLint automaticamente.
+
+Também ativámos `formatOnPaste` — por isso, se colar código de outro local, será imediatamente formatado para corresponder ao seu estilo.
+
+A grande vantagem aqui é o feedback instantâneo. Escreve código no VS Code e o Ultracite mantém-no limpo continuamente. Com o tempo, irá reparar que passa pouco ou nenhum tempo a corrigir erros de lint — o Ultracite corrige-os por si ou aponta-os cedo. Isto conduz a um fluxo de trabalho de desenvolvimento suave onde o estilo de código e pequenos problemas nunca se acumulam.
+
+### Integração com o painel Problems
+
+Quaisquer problemas que permaneçam (e que exijam a sua atenção) aparecerão no painel Problems. Por exemplo, se o Ultracite tiver uma regra que proíba algo ou encontrar um erro que não consiga corrigir (por exemplo, utilizou uma API obsoleta ou se esqueceu de tratar a rejeição de uma Promise), irá listá-lo como erro ou aviso. Pode clicar nele para saltar para a localização no código.
+
+### Code lenses / Correções rápidas
+
+Em muitos casos, a extensão do VS Code para Biome fornece sugestões de correção rápida. Se vir uma lâmpada amarela ou um popup de sugestão, pode aplicar as correções manualmente também. Por exemplo, se uma importação estiver não utilizada, poderá obter uma correção rápida para a remover (caso não tenha sido já removida ao guardar).
+
+## Uso da CLI
+
+O Ultracite inclui uma CLI conveniente (invocada como `ultracite` quando instalada). Eis formas comuns de a usar.
+
+### Verificar código
+
+O comando `check` envolve o comando Biome `check`, que executa o linter sem corrigir ficheiros.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Pode passar o filtro `--diagnostic-level` para mostrar apenas erros ou avisos:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Corrigir código
+
+O comando `fix` envolve o comando Biome `check --write`, que executa o linter e corrige ficheiros.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Também pode aplicar correções inseguras executando:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Validar a configuração
+
+O comando `doctor` verifica a sua configuração à procura de problemas e fornece recomendações. Isto é útil de correr após instalar o Ultracite para garantir que tudo está configurado corretamente.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

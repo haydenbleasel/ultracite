@@ -1,0 +1,72 @@
+---
+title: Penggunaan
+description: Bagian ini membahas cara menggunakan Ultracite sehari-hari — mencakup antarmuka baris perintah, detail integrasi editor, dan alur kerja tipikal.
+---
+
+## Integrasi IDE
+
+Ultracite bekerja paling baik ketika diintegrasikan ke editor Anda, sehingga Anda mendapat umpan balik langsung saat menulis kode. Ia dirancang untuk berjalan otomatis saat menyimpan. Untuk mengujinya, buka proyek di IDE Anda. Saat Anda mengedit berkas, Anda akan melihat pemformatan diterapkan saat menyimpan. Cobalah memasukkan kesalahan gaya kode kecil (mis. titik koma ekstra atau baris dengan indentasi yang salah) dan tekan Simpan – Ultracite (Biome) akan segera merapikan berkas tersebut.
+
+Jika Anda memperkenalkan masalah lint umum (mis. variabel yang tidak digunakan), Anda mungkin melihat garis bergelombang di bawahnya atau peringatan di panel Problems; saat menyimpan, Ultracite akan mencoba memperbaikinya jika dapat diperbaiki secara otomatis (mis. menghapus import yang tidak terpakai) atau jika tidak, akan meninggalkan peringatan untuk Anda tangani.
+
+### Pemformatan instan
+
+Setiap kali Anda menyimpan berkas, Biome (dengan konfigurasi Ultracite) memformat berkas tersebut. Anda tidak perlu menjalankan Prettier terpisah atau khawatir tentang pemformatan — itu sudah ditangani.
+
+Berkat pengaturan `codeActionsOnSave`, VS Code juga akan menerapkan tindakan "fix all" Biome saat menyimpan. Ini berarti setiap aturan lint yang memiliki perbaikan otomatis (mis. mengubah `!=` menjadi `!==`, menambahkan tanda kurung yang hilang, memperbaiki urutan import, dll.) akan diterapkan. Seolah-olah Anda menjalankan `--fix` dengan ESLint secara otomatis.
+
+Kami bahkan mengaktifkan `formatOnPaste` – jadi jika Anda menempel kode dari sumber lain, itu akan langsung diformat agar sesuai dengan gaya Anda.
+
+Keuntungan utamanya adalah umpan balik instan. Anda menulis kode di VS Code, dan Ultracite terus menjaganya tetap rapi. Seiring waktu, Anda akan menyadari bahwa Anda menghabiskan sedikit atau tidak ada waktu untuk memperbaiki kesalahan lint — Ultracite akan memperbaikinya untuk Anda atau menunjukkannya sejak dini. Ini menghasilkan alur kerja pengembangan yang lancar di mana gaya kode dan masalah kecil tidak pernah menumpuk.
+
+### Integrasi panel Problems
+
+Setiap masalah yang tersisa (yang memerlukan perhatian Anda) akan muncul di panel Problems. Misalnya, jika Ultracite memiliki aturan yang melarang sesuatu atau menemukan kesalahan yang tidak bisa diperbaiki (mis. Anda menggunakan API yang sudah usang atau lupa menangani penolakan Promise), akan tercantum sebagai error atau warning. Anda dapat mengkliknya untuk melompat ke lokasi di kode.
+
+### Code lenses / Perbaikan cepat
+
+Dalam banyak kasus, ekstensi VS Code untuk Biome menyediakan saran perbaikan cepat. Jika Anda melihat ikon bola lampu kuning atau popup saran, Anda juga dapat menerapkan perbaikan secara manual. Misalnya, jika sebuah import tidak digunakan, Anda mungkin mendapatkan perbaikan cepat untuk menghapusnya (jika belum dihapus saat menyimpan).
+
+## Penggunaan CLI
+
+Ultracite datang dengan CLI yang nyaman (dipanggil sebagai `ultracite` saat terinstal). Berikut cara umum untuk menggunakannya.
+
+### Memeriksa Kode
+
+Perintah `check` membungkus perintah Biome `check`, yang menjalankan linter tanpa memperbaiki berkas.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Anda dapat memberikan filter `--diagnostic-level` untuk menampilkan hanya error atau warning:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Memperbaiki Kode
+
+Perintah `fix` membungkus perintah Biome `check --write`, yang menjalankan linter dan memperbaiki berkas.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Anda juga dapat menerapkan perbaikan tidak aman dengan menjalankan:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Memvalidasi Pengaturan
+
+Perintah `doctor` memeriksa pengaturan Anda untuk masalah dan memberikan rekomendasi. Ini berguna untuk dijalankan setelah menginstal Ultracite untuk memastikan semuanya dikonfigurasi dengan benar.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

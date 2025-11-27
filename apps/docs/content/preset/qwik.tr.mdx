@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Ultracite için Qwik'e özgü lint kuralları.
+---
+
+Qwik yapılandırması, serileştirme, görünür görevler, leksikal kapsam ve metot kullanımı için Qwik'e özgü lint kurallarına sahiptir.
+
+## Kurulum
+
+Qwik yapılandırmasını `biome.jsonc` dosyanıza ekleyin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Genel Bakış
+
+Bu yapılandırma Qwik geliştirmesine özgü kurallar ekler:
+
+- **Serileştirme**: Qwik'in yeniden başlatılabilirlik (resumability) modelinin doğru kullanılmasını zorunlu kılar
+- **Görünür Görevler**: `useVisibleTask$`'ın uygunsuz kullanımını engeller
+- **Leksikal Kapsam**: `$` fonksiyonlarında değişken kapsamının doğru olmasını sağlar
+- **Metot Kullanımı**: Doğru Qwik metot desenlerini zorunlu kılar
+- **React'e Özgü Prop'lar**: Qwik bileşenlerinde React'e özgü prop'ların kullanılmasını yasaklar
+
+## Qwik'e Özgü Kurallar
+
+### Doğruluk
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | `useVisibleTask$` kullanımını engeller. Bu hook istemci tarafında kodu hemen çalıştırır; bu durum Qwik'in yeniden başlatılabilirlik modelini zedeler. Mümkün olduğunda `useTask$` veya `useResource$` kullanın. |
+| `useQwikClasslist` | `error` | Qwik'te dinamik sınıflar için dize birleştirme yerine `class` nesne sözdiziminin kullanılmasını zorunlu kılar. |
+
+### Deneysel
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Qwik'in `$` fonksiyonlarında geçerli leksikal kapsamın sağlanmasını zorunlu kılar. Dış kapsamdan gelen değişkenler açıkça yakalanmalıdır. |
+| `useQwikMethodUsage` | `error` | Qwik'e özgü metotlar ve API'lerin doğru kullanımını zorunlu kılar. |
+
+### Şüpheli
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Qwik'te `className` ve `htmlFor` gibi React'e özgü prop'ların kullanımına izin vermez. Bunun yerine `class` ve `for` kullanın. |

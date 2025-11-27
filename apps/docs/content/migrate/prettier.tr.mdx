@@ -1,0 +1,48 @@
+---
+title: Prettier'den Geçiş
+description: Projenizi Prettier'dan Ultracite'e nasıl geçirileceği.
+---
+
+Eğer Prettier kullanıyorsanız ve Ultracite'in ön yapılandırılmış kurulumuna geçmek istiyorsanız, bu kılavuz kod kalitesi standartlarını koruyarak geçiş yapmanıza yardımcı olacaktır.
+
+## Neden Ultracite'e Geçmelisiniz?
+
+- **Yıldırım Hızı**: Biome (Ultracite'in temeli) Rust tabanlıdır, Prettier'dan çok daha hızlı
+- **Sıfır Yapılandırma**: Manuel Prettier kurulumu yerine yüzlerce önceden yapılandırılmış kural
+- **Birleşik Araç**: Hem ESLint hem Prettier'i tek bir araçla değiştirir
+- **Yapay Zeka Entegrasyonu**: Yapay zeka destekli editörler için yerleşik destek (Cursor, Windsurf, GitHub Copilot)
+- **Tür Güvenliği**: Katı null kontrolleri ile kapsamlı TypeScript kuralları
+- **Modern Standartlar**: En son JavaScript/TypeScript en iyi uygulamaları
+
+## Başlamadan Önce
+
+Aşağıdakilere sahip olduğunuzdan emin olun:
+
+- Prettier kullanan mevcut bir proje
+- Node.js v14.18+ (Node 18+ önerilir)
+- Bir `package.json` dosyası
+
+## Otomatik Kurulum
+
+Otomatik kurulum betiğini çalıştırın: [otomatik kurulum betiği](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Bu işlem şunları yapacaktır:
+
+- Ultracite'i bir bağımlılık olarak yükler
+- Mevcut `biome.json` / `biome.jsonc` dosyanızı Ultracite'in önayarı ile birleştirir
+- Mevcut `.vscode/settings.json` dosyanızı Ultracite'in önayarı ile birleştirir
+- `tsconfig.json` dosyanızda `strictNullChecks`'i etkinleştirir (yoksa bir tane oluşturur)
+- Özel kurallarınızı ve ayarlarınızı korur
+- Editör entegrasyonlarını ayarlar
+
+Mevcut `Prettier` yapılandırmasını kaldırmayı seçtiğinizden emin olun. Bu şunları yapacaktır:
+
+- Prettier'i ve ilgili tüm bağımlılıkları kaldırır
+- Herhangi bir Prettier yapılandırma dosyasını kaldırır
+- `.vscode/settings.json` dosyanızdan Prettier ile ilgili komutları kaldırır
+
+Yükseltmeden sonra `biome.json` / `biome.jsonc` dosyanızı olası geçersiz kılmaları kaldırmak için gözden geçirmek isteyebilirsiniz. Ayrıca, yeni yapılandırmanın uygulanmasını sağlamak için editörünüzü yeniden başlatın.

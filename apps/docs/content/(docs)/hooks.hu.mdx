@@ -1,0 +1,68 @@
+---
+title: Hookok
+description: Hogyan integráld az Ultracite-et AI kódolási asszisztensekkel szerkesztő hookokon keresztül.
+---
+
+Ultracite automatikusan formázhatja és javíthatja a kódot miután AI kódolási asszisztensek szerkesztéseket hajtanak végre szerkesztő hookokon keresztül. Ez biztosítja, hogy minden AI által generált kód megfeleljen a projekted szabványainak manuális beavatkozás nélkül.
+
+A hookok a Biome lintelésével és formázásával együtt működnek. Miután egy AI kódolási asszisztens szerkeszt egy fájlt, a hook automatikusan lefuttatja a `npx ultracite fix` parancsot a formázáshoz és az automatikusan javítható lint hibák orvoslásához. Ez a kettős megközelítés mind az intelligens kódgenerálást (AI szabályokon keresztül), mind az automatizált kódminőséget (hookokon keresztül) biztosítja.
+
+> **Megjegyzés:** A hookok különállnak az AI kódolási szabályoktól. A `--agents` flag az AI kódolási szabályokat konfigurálja, míg a `--hooks` flag a fájl-szerkesztések utáni automatikus formázást állítja be.
+
+## Beállítás
+
+### Automatikus beállítás
+
+When you run `npx ultracite init`, you'll be prompted to select which editor hooks you want to enable:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+This will create the relevant hook configuration file in your project directory.
+
+### Manuális beállítás
+
+If you want to manually set things up or add hooks after initialization, run:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
+
+## Támogatott szerkesztők
+
+| Szerkesztő  | Hook fájl helye            | Dokumentáció                                                            |
+| ----------- | -------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`       | [Cursor Hookok](https://cursor.com/docs/agent/hooks)                    |
+| Claude Code | `.claude/settings.json`    | [Claude Code Hookok](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Hogyan működik
+
+1. **Automatikus végrehajtás**: Miután az AI ügynök szerkeszt egy fájlt, a hook automatikusan lefuttatja a `npx ultracite fix`-et  
+2. **Kódformázás**: Az Ultracite a Biome konfigurációd szerint formázza a szerkesztett kódot  
+3. **Lint javítások**: Az automatikusan javítható lint hibák automatikusan megoldódnak  
+4. **Zökkenőmentes integráció**: A folyamat átláthatóan zajlik anélkül, hogy megszakítaná a munkafolyamatodat
+
+## Előnyök
+
+Az Ultracite szerkesztő hookok használata több előnnyel jár:
+
+- **Következetesség**: Minden AI által generált kód automatikusan formázva lesz, hogy megfeleljen a stílusodnak  
+- **Minőség**: A lint hibák azonnal javítva lesznek a kódgenerálás után  
+- **Hatékonyság**: Nincs szükség kézi formázók vagy linterek futtatására az AI szerkesztések után  
+- **Szabványok**: Biztosítja, hogy az AI által generált kód mindig megfeleljen a projekt szabványainak  
+- **Tiszta commitok**: A kód megfelelően formázva van még azelőtt, hogy átnéznéd
+
+## Testreszabás
+
+Az Ultracite intelligensen egyesíti a meglévő hook konfigurációkat:
+
+- **Megőrzi a meglévő hookokat**: Minden meglévő hook és azok parancsai érintetlenek maradnak  
+- **Elkerüli a duplikációkat**: Ha az Ultracite már konfigurálva van, nem kerül újra hozzáadásra  
+- **Nem destruktív**: A meglévő hook konfigurációs struktúrád megmarad
+
+A hook viselkedését közvetlenül a hook konfigurációs fájlok módosításával is testreszabhatod, ha más formázási parancsokra vagy további utó-szerkesztési műveletekre van szükséged.

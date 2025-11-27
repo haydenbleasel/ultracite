@@ -1,0 +1,61 @@
+---
+title: React
+description: React-kohtaiset linttaussäännöt Ultracitelle.
+---
+
+React-konfiguraatiossa on React-kohtaisia linttaussääntöjä JSX:lle, hookeille ja komponenttimalleille.
+
+## Asennus
+
+Lisää React-konfiguraatio tiedostoosi `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Yleiskatsaus
+
+Tämä konfiguraatio lisää React-kehitykseen liittyviä sääntöjä:
+
+- **JSX-säännöt**: Varmistaa oikean JSX-syntaksin ja -käytännöt
+- **Hooks-säännöt**: Varmistaa, että React-hookeja käytetään oikein
+- **Komponenttisäännöt**: Varmistaa React-komponenttien parhaat käytännöt
+- **Children-käsittely**: Estää children-propin virheellisen käytön
+
+## React-kohtaiset säännöt
+
+### Oikeellisuus
+
+| Sääntö | Asetus | Kuvaus |
+|-------:|--------|--------|
+| `noChildrenProp` | `error` | Estää children-propin välittämisen. children tulee sijoittaa avaus- ja sulkutägien väliin. |
+| `noNestedComponentDefinitions` | `error` | Estää komponenttimäärittelyt muiden komponenttien sisällä. Tämä aiheuttaa tarpeettomia uudelleenrenderöintejä. |
+| `noReactPropAssignments` | `error` | Estää propien uudelleenmäärittelyn React-komponenteissa. Propeja tulisi käsitellä muuttumattomina. |
+| `noRenderReturnValue` | `error` | Estää `ReactDOM.render()`-kutsun paluuarvon käyttämisen. |
+| `noVoidElementsWithChildren` | `error` | Estää tyhjien elementtien (kuten `<img>`, `<br>`) childrenien käytön. |
+| `useExhaustiveDependencies` | `error` | Varmistaa, että kaikki riippuvuudet on määritelty oikein React-hookeissa (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Varmistaa, että kaikki React-hookit kutsutaan komponenttifunktioiden ylimmällä tasolla, ei silmukoissa, ehdoissa tai sisäkkäisissä funktioissa. |
+| `useJsxKeyInIterable` | `error` | Varmistaa, että iteratiiviset elementit sisältävät `key`-propin Reactin reconciliota varten. |
+
+### Kokeelliset
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Estää legacy-muotoisen `React.forwardRef`-käytön. Käytä sen sijaan refiä propina (React 19+). |
+
+### Tyyli
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Varmistaa funktionaalisten komponenttien käytön luokkakomponenttien sijaan Reactissa. |
+
+### Epäilyttävät
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Estää taulukkoindeksien käyttämisen key-arvoina. Indeksit eivät ole vakaita tunnisteita ja voivat aiheuttaa ongelmia komponentin tilan kanssa. |
+| `noDuplicateJsxProps` | `error` | Estää duplikaattipropit JSX:ssä. |
+| `noSuspiciousSemicolonInJsx` | `error` | Estää puolipisteet, jotka muuttaisivat JSX-elementtien semantiikkaa. |
+| `noReactSpecificProps` | `off` | Salli React-spesifit propit, kuten `className` ja `htmlFor`. |

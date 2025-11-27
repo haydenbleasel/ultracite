@@ -1,0 +1,139 @@
+---
+title: Primeri
+description: Primeri pre i posle rada Ultracite.
+---
+
+To illustrate Ultracite’s capabilities, here are a few practical examples of issues it catches and fixes. Each example shows code before (with a problem) and after Ultracite is applied. These examples demonstrate how Ultracite improves code automatically.
+
+## Automatsko formatiranje koda
+
+### Pre (neuredno formatiranje)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+U ovom kodu, razmaci i stil konkatenacije su pogrešni. Takođe koristi spajanje stringova umesto template literal-a, i pomešani su dvostruki i jednokraki navodnici.
+
+### Posle (formatirano)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+Alat za formatiranje Ultracite-a je:
+
+- Formatirao funkciju sa ispravnim prelomima linija radi čitljivosti.
+- Konvertovao spajanje stringova u template literal (ovo može biti automatska ispravka zasnovana na pravilu lintera koje predlaže template stringove radi preglednosti).
+- Standardizovao navodnike na backtick-e za template (i koristio bi konzistentno dvostruke navodnike negde drugde ako nije template).
+- Dodao tačku-zarez na kraju `return` izraza.
+- Obezbedio pravilne razmake oko vitičastih zagrada i zagrada.
+
+Programer nije ručno preformatirao kod — samo je sačuvao fajl, a Ultracite je odradio ostalo. Rezultat je čišći i konzistentniji kod.
+
+Ultracite će takođe upozoriti da je `name` bez tipa i predložiće dodavanje tipa.
+
+## Sprovođenje stroge jednakosti
+
+### Pre (mogući problem zbog labave jednakosti)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Ovde se koristi labava jednakost (`==`) za poređenje `response.status` sa `200`. Korišćenje labave jednakosti može dovesti do grešaka zbog konverzije tipova (npr. `response.status` može biti string `"200"` i opet proći). Stroga pravila Ultracite-a verovatno nameću korišćenje `===` za poređenja.
+
+### Posle (primenjena Ultracite automatska ispravka)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite je automatski zamenio `== 200` sa `=== 200`. Ova mala promena sprečava suptilne greške. Ispravka je primenjena pri čuvanju kao deo `source.fixAll.biome` akcija. Takvo pravilo (slično ESLint-ovom `eqeqeq`) obezbeđuje da programeri koriste strogu proveru jednakosti.
+
+Pored toga, Ultracite će takođe upozoriti da se `isValid` nikada ne koristi i predložiti njegovo uklanjanje.
+
+## Organizovanje i čišćenje importova
+
+### Pre (neorganizovani importovi)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Importovi ovde nisu po abecedi, i import `helper` se nikada ne koristi u fajlu.
+
+### Posle (nakon čuvanja uz Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (kroz Biome-ovu funkciju za organizovanje importova) je poređao importove po abecedi prema imenu modula. Takođe je automatski uklonio neiskorišćeni import `helper`. Razlika pre/posle se dešava odmah pri čuvanju, što osigurava da je sekcija importova uvek uredna:
+
+- Nema neiskorišćenih importova koji zatrpavaju vrh fajla.
+- Deterministički redosled importova (tako da merge-i i diff-ovi ne budu zbrkani zbog različitih redosleda koje unose različiti programeri).
+
+Ovo dovodi do održivijeg koda, naročito u fajlovima sa mnogo importova.
+
+## Ispravka pristupačnosti
+
+### Pre
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+Podrazumevani tip dugmeta je `submit`, što izaziva slanje forme kada se nalazi unutar elementa forme. Verovatno to nije ponašanje koje želite u React aplikaciji. Ultracite će vas upozoriti na ovo i ponuditi brzu ispravku da se tip promeni u `button`.
+
+### Posle (ručna ili brza ispravka)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+Tip je sada `button`, što sprečava potencijalno slanje roditeljske forme kada se dugme klikne.
+
+---
+
+Ovi primeri pokazuju kako Ultracite poboljšava kvalitet koda:
+
+- Formatiranje i konzistentnost stila bez napora.
+- Automatske ispravke za mnoge uobičajene probleme (tako da retko morate ručno ispravljati trivijalne stvari).
+- Identifikacija stvarnih problema (da biste ih mogli popraviti rano u razvoju).
+
+Korišćenjem Ultracite-a, vaš kod ne samo da ostaje čist, već je i manje sklon greškama i pristupačniji, zahvaljujući kolektivnom znanju enkodiranom u njegovim pravilima.

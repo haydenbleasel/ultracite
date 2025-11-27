@@ -1,0 +1,72 @@
+---
+title: Uporaba
+description: Ta odsek pojasnjuje, kako vsakodnevno uporabljati Ultracite — vključuje vmesnik ukazne vrstice, podrobnosti o integraciji v urejevalnik in tipične poteke dela.
+---
+
+## Integracija z IDE
+
+Ultracite najboljše deluje, ko je integriran v vaš urejevalnik, saj dobite takojšnje povratne informacije med pisanjem kode. Namenjen je samodejnemu izvajanju ob shranjevanju. Če želite preizkusiti, odprite projekt v svojem IDE. Ko urejate datoteke, bi se morali ob shranjevanju videti učinki oblikovanja. Poskusite vstaviti manjšo napako v slogu kode (na primer dodaten podpič ali nepravilno zamaknjeno vrstico) in pritisnite Shrani — Ultracite (Biome) bo datoteko takoj preoblikoval.
+
+Če vnesete pogosto pojavljajočo se napako linterja (na primer nenačrtovano spremenljivko), boste morda videli vijugasto podčrtavanje ali opozorilo v panelu Problems; ob shranjevanju bo Ultracite poskušal to popraviti, če je samopopravljivo (na primer odstraniti neuporabljen import), sicer pa bo pustil opozorilo, da ga odpravite sami.
+
+### Takojšnje oblikovanje
+
+Vsakič, ko shranite datoteko, Biome (z Ultracitejevo konfiguracijo) oblikuje datoteko. Ni vam treba zagnati ločenega Prettierja ali skrbeti za oblikovanje — to je poskrbljeno.
+
+Zahvaljujoč nastavitvam `codeActionsOnSave` bo VS Code ob shranjevanju uporabil tudi Biomeovo dejanje "fix all". To pomeni, da se bo uporabila katerakoli pravila linterja, ki imajo samopopravilo (na primer pretvorba `!=` v `!==`, dodajanje manjkajočih oklepajev, popravek vrstnega reda uvozov itd.). To je, kot da bi samodejno zagnali `--fix` z ESLint.
+
+Omogočili smo tudi `formatOnPaste` — tako bo koda, prilepljena od drugod, takoj oblikovana, da ustreza vašemu slogu.
+
+Ključna prednost tukaj je takojšnje povratno sporočilo. Pišete kodo v VS Code in Ultracite jo nenehno ohranja čisto. Sčasoma boste opazili, da porabite zelo malo časa za odpravljanje napak linterja — Ultracite jih bodisi popravi namesto vas bodisi jih zgodaj opozori. To vodi v gladek razvojni potek dela, kjer se slog kode in manjše težave nikoli ne kopiči.
+
+### Integracija panela Problems
+
+Vse težave, ki ostanejo (in zahtevajo vašo pozornost), se bodo prikazale v panelu Problems. Na primer, če Ultracite ima pravilo, ki nekaj prepoveduje, ali najde napako, katere ne more popraviti (recimo, da ste uporabili zastarelo API ali pozabili obravnavati zavrnitev Promise), bo to navedel kot napako ali opozorilo. Kliknite nanjo, da skočite na lokacijo v kodi.
+
+### Code lenses / Hitri popravki
+
+V mnogih primerih razširitev VS Code za Biome ponuja predloge hitrih popravil. Če vidite rumeno žarnico ali pojav predloga, lahko popravke uporabite tudi ročno. Na primer, če je uvoz neuporabljen, boste morda dobili hitro popravilo za odstranitev (če ga ob shranjevanju ni že odstranilo).
+
+## Uporaba CLI
+
+Ultracite je opremljen z priročnim CLI (pokliče se kot `ultracite`, ko je nameščen). Tukaj so pogosti načini uporabe.
+
+### Preverjanje kode
+
+Ukaz `check` ovije Biomejev ukaz `check`, ki zažene linter brez popravila datotek.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Lahko podate filter `--diagnostic-level`, da prikažete samo napake ali opozorila:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Popravljanje kode
+
+Ukaz `fix` ovije Biomejev ukaz `check --write`, ki zažene linter in popravi datoteke.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Nevarne popravke lahko uporabite tudi z zagonom:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Preverjanje nastavitve
+
+Ukaz `doctor` pregleda vašo namestitev zaradi težav in ponudi priporočila. To je koristno zagnati po namestitvi Ultracite, da zagotovite, da je vse pravilno konfigurirano.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

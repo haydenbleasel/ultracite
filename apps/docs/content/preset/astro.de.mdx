@@ -1,0 +1,47 @@
+---
+title: Astro
+description: Astro-spezifische Konfiguration für Ultracite.
+---
+
+Die Astro-Konfiguration enthält Astro-spezifische Anpassungen von Linting-Regeln, um die einzigartige Struktur von Astro-Komponenten zu berücksichtigen, insbesondere im Hinblick auf Frontmatter-Skripte und Komponenten-Syntax.
+
+## Installation
+
+Füge die Astro-Konfiguration zu deiner `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/astro"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration passt Regeln für die Entwicklung mit Astro an:
+
+- **Unused Variables/Imports**: Erlaubt ungenutzte Variablen und Importe in Astro-Dateien aufgrund von Einschränkungen im Frontmatter, bei denen Variablen möglicherweise nur im Template verwendet werden
+- **Variable Declarations**: Lockert die Durchsetzung von `const`, da das Astro-Frontmatter wiederzuweisbare Variablen erfordern kann
+- **Import Types**: Deaktiviert Anforderungen an explizite Importtypen für bessere Kompatibilität
+- **React-Specific Props**: Markiert React-spezifische Props wie `className`, da Astro Standard-HTML-Attribute verwendet
+
+## Astro-spezifische Regeln
+
+### Korrektheit
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Erlaube ungenutzte Variablen in Astro-Dateien. In Frontmatter deklarierte Variablen werden möglicherweise nur im Template-Abschnitt verwendet. |
+| `noUnusedImports` | `off` | Erlaube ungenutzte Importe in Astro-Dateien. Im Frontmatter platzierte Importe werden möglicherweise nur im Template-Abschnitt verwendet. |
+
+### Stil
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `useConst` | `off` | Erlaube `let`- und `var`-Deklarationen. Das Frontmatter von Astro-Komponenten kann wiederzuweisbare Variablen erfordern. |
+| `useImportType` | `off` | Deaktiviere Anforderungen an explizite Importtypen für bessere Kompatibilität mit dem Build-System von Astro. |
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbiete React-spezifische Props wie `className` und `htmlFor` in Astro. Verwende stattdessen `class` und `for`. |

@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Execute automaticamente o Ultracite nos seus arquivos preparados (staged) do Git com o Husky
+---
+
+Ultracite fornece integração perfeita com [Husky](https://typicode.github.io/husky/), uma ferramenta popular para gerir ganchos do Git. Essa integração configura automaticamente ganchos de pre-commit para garantir que o seu código esteja devidamente formatado antes de cada commit.
+
+## O que é Husky?
+
+Husky é uma ferramenta que facilita o uso de ganchos do Git no seu projeto. Ganchos do Git são scripts que são executados automaticamente em certos pontos do fluxo de trabalho do Git, como antes de commitar ou enviar código. O Husky simplifica o processo de configuração e gestão desses ganchos.
+
+## Como o Ultracite usa o Husky
+
+Quando você inicializa o Ultracite no seu projeto, ele pode configurar automaticamente o Husky para executar a formatação de código antes de cada commit. Isso garante que:
+
+- Todo o código comitado segue padrões de formatação consistentes
+- Verificações de qualidade do código são aplicadas automaticamente
+- Os membros da equipa não precisam lembrar de formatar o código manualmente
+- O seu repositório mantém um estilo de código limpo e consistente
+
+## Comportamento do Gancho de Pre-commit
+
+A integração do Ultracite com o Husky cria um gancho de pre-commit que executa o seguinte comando:
+
+```bash
+npx ultracite fix
+```
+
+Este comando:
+- Executa o linter e o formatador do Biome na sua base de código
+- Corrige automaticamente problemas de formatação sempre que possível
+- Garante que todos os arquivos staged atendam aos padrões de código do seu projeto
+- Evita commits que introduzam inconsistências de formatação
+
+## Configuração Automática
+
+Durante o processo de inicialização (`ultracite init`), se você selecionar a opção Husky, o Ultracite:
+
+1. **Instala o Husky**: Adiciona o Husky como dependência de desenvolvimento ao seu projeto
+2. **Cria o Arquivo do Gancho**: Configura o arquivo `.husky/pre-commit` com o comando de formatação
+3. **Lida com Configurações Existentes**: Se você já tiver o Husky configurado, ele atualiza o seu gancho de pre-commit existente em vez de sobrescrevê-lo
+
+## Detalhes da Integração
+
+A integração com o Husky inclui várias funcionalidades inteligentes:
+
+### Gerenciamento de Dependências
+- Instala automaticamente o Husky como dependência de desenvolvimento usando o gestor de pacotes do seu projeto
+- Usa o comando apropriado do gestor de pacotes (`npm install -D`, `yarn add -D`, `pnpm add -D`, etc.)
+
+### Gerenciamento de Ganchos
+- **Novos projetos**: Cria um novo arquivo `.husky/pre-commit` com o comando `ultracite fix`
+- **Projetos existentes**: Anexa o comando do Ultracite ao seu gancho de pre-commit existente, preservando outros ganchos que você possa ter configurado
+
+### Estrutura de Arquivos
+A integração cria ou modifica:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Benefícios
+
+### Estilo de Código Consistente
+Cada commit segue automaticamente os padrões de formatação do seu projeto, eliminando discussões sobre estilo e inconsistências.
+
+### Controlo de Qualidade Automatizado
+Detecte problemas de formatação antes que eles entrem no repositório, mantendo um histórico de commits limpo.
+
+### Colaboração em Equipa
+Todos os membros da equipa seguem automaticamente os mesmos padrões de formatação sem intervenção manual.
+
+### Otimização de CI/CD
+Reduza falhas nas pipelines de CI/CD devido a problemas de formatação, já que o código é pré-formatado localmente.
+
+## Integração no Fluxo de Trabalho
+
+Com a integração do Husky ativada, o seu fluxo de trabalho típico com Git passa a ser:
+
+1. **Faça alterações** nos seus ficheiros de código
+2. **Prepare as alterações** com `git add`
+3. **Commite as alterações** com `git commit`
+4. **O gancho de pre-commit é executado** automaticamente, formatando os ficheiros staged
+5. **O commit prossegue** com o código devidamente formatado
+
+Se o formatador fizer alterações, será necessário preparar (stage) e commitar essas alterações também.
+
+## Personalização
+
+Embora o Ultracite configure padrões sensatos, você pode personalizar o comportamento:
+
+- Modifique `.husky/pre-commit` para adicionar comandos adicionais
+- Configure as definições do Biome para ajustar as regras de formatação
+- Adicione outras verificações de pre-commit juntamente com a formatação do Ultracite
+
+## Resolução de Problemas
+
+### Gancho não está sendo executado
+Se o gancho de pre-commit não estiver a ser executado:
+- Verifique se o Husky está instalado: `npm ls husky`
+- Verifique se `.husky/pre-commit` existe e é executável
+- Confirme que os ganchos do Git estão habilitados no seu repositório
+
+### Problemas de Permissão
+Em sistemas tipo Unix, assegure-se de que o ficheiro do gancho seja executável:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Ignorando Ganchos
+Em raros casos em que você precise ignorar o gancho de pre-commit:
+```bash
+git commit --no-verify
+```
+
+Use isto com parcimónia, pois contorna a formatação automatizada que mantém a consistência da sua base de código.

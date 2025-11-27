@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Rialacha lintiúcháin shonracha Qwik do Ultracite.
+---
+
+Tá sa chumraíocht Qwik rialacha lintiúcháin shonracha do Qwik maidir le sraitheáil, tascanna infheicthe, scóip leicsealach, agus úsáid mhodh.
+
+## Suiteáil
+
+Cuir an chumraíocht Qwik leis do `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Forbhreathnú
+
+Cuireann an chumraíocht seo rialacha sonracha do fhorbairt Qwik:
+
+- **Sraitheáil**: Forchuimsigh úsáid cheart an mhúnla in-athnuachana de Qwik
+- **Tascanna Infheicthe**: Cosc a chur ar úsáid míchuí de `useVisibleTask$`
+- **Scóip Leicsealach**: Déan cinnte den scóip athróg cheart i bhfeidhmeanna `$`
+- **Úsáid Mhodhanna**: Fórsaigh patrúin mhodha Qwik cheart
+- **Airíonna Sonracha React**: Diúltaítear airíonna sonracha React in chomhpháirteanna Qwik
+
+## Rialacha Sonracha Qwik
+
+### Ceartas
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Cosc ar úsáid `useVisibleTask$`. Rithann an crochán seo cód go fonnmhar ar an gcliant, ag cur as do mhúnla in-athnuachana Qwik. Úsáid `useTask$` nó `useResource$` ina ionad nuair is féidir. |
+| `useQwikClasslist` | `error` | Fórsaigh an úsáid ar shintéis réad `class` seachas comhcheangal téacs do ranganna dinimiciúla i Qwik. |
+
+### Forbairt
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Fórsaigh scóip leicsealach bhailí i bhfeidhmeanna `$` de chuid Qwik. Caithfear athróga ó scóipí seachtracha a ghabháil go soiléir. |
+| `useQwikMethodUsage` | `error` | Fórsaigh úsáid cheart de mhodhanna agus APIanna sonracha Qwik. |
+
+### Amhrasach
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Diúltaítear airíonna sonracha React cosúil le `className` agus `htmlFor` i Qwik. Úsáid `class` agus `for` ina ionad. |

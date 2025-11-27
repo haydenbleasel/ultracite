@@ -1,0 +1,48 @@
+---
+title: Migracija iz Prettier
+description: Kako migrirati vaš projekt iz Prettier v Ultracite.
+---
+
+Če uporabljate Prettier in želite preiti na vnaprej konfigurirano nastavitev Ultracite, vam bo ta vodnik pomagal pri migraciji ob ohranjanju standardov kakovosti kode.
+
+## Zakaj preiti na Ultracite?
+
+- **Izjemna hitrost**: Biome (osnova Ultracite) temelji na Rustu, veliko hitrejši od Prettier
+- **Brez konfiguracije**: Stotine vnaprej nastavljenih pravil v primerjavi z ročno nastavitvijo Prettierja
+- **Združeno orodje**: Nadomesti tako ESLint kot Prettier z enim samim orodjem
+- **Integracija AI**: Vgrajena podpora za urejevalnike na osnovi AI (Cursor, Windsurf, GitHub Copilot)
+- **Varnost tipov**: Celovit nabor pravil za TypeScript s strogim preverjanjem null vrednosti
+- **Sodobni standardi**: Najboljše prakse za najnovejši JavaScript/TypeScript
+
+## Preden začnete
+
+Prepričajte se, da imate:
+
+- Obstoječ projekt, ki uporablja Prettier
+- Node.js v14.18+ (priporočamo Node 18+)
+- Datoteko `package.json`
+
+## Samodejna nastavitev
+
+Zaženite [samodejni skript za namestitev](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+To bo:
+
+- Namestilo Ultracite kot odvisnost
+- Združilo vaš obstoječi `biome.json` / `biome.jsonc` s prednastavitvijo Ultracite
+- Združilo vaš obstoječi `.vscode/settings.json` s prednastavitvijo Ultracite
+- Omogočilo `strictNullChecks` v datoteki `tsconfig.json` (ali ustvarilo datoteko, če ne obstaja)
+- Ohranjalo vaše po meri nastavljena pravila in nastavitve
+- Nastavilo integracije za urejevalnik
+
+Poskrbite, da izberete odstranitev obstoječe konfiguracije Prettier. To bo:
+
+- Odstranilo Prettier in vse povezane odvisnosti
+- Odstranilo vse konfiguracijske datoteke Prettier
+- Odstranilo vse ukaze, povezane s Prettier, iz datoteke `.vscode/settings.json`
+
+Po nadgradnji boste morda želeli pregledati datoteko `biome.json` / `biome.jsonc`, da odstranite morebitne preglasitve. Poleg tega znova zaženite urejevalnik, da zagotovite uporabo nove konfiguracije.

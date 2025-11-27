@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Qwik-specifieke lintregels voor Ultracite.
+---
+
+De Qwik-configuratie bevat Qwik-specifieke lintregels voor serialisatie, zichtbare taken, lexicale scope en methodengebruik.
+
+## Installatie
+
+Voeg de Qwik-configuratie toe aan je `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Overzicht
+
+Deze configuratie voegt regels toe die specifiek zijn voor Qwik-ontwikkeling:
+
+- **Serialisatie**: Handhaaf correct gebruik van het resumability-model van Qwik
+- **Zichtbare taken**: Voorkom onjuist gebruik van `useVisibleTask$`
+- **Lexicale scope**: Zorg voor de juiste scope van variabelen in `$`-functies
+- **Methodengebruik**: Handhaaf correcte Qwik-methodepatronen
+- **React-specifieke props**: Verbied React-specifieke props in Qwik-componenten
+
+## Qwik-specifieke regels
+
+### Correctheid
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Voorkom gebruik van `useVisibleTask$`. Deze hook voert code direct op de client uit, waardoor het resumability-model van Qwik teniet wordt gedaan. Gebruik waar mogelijk `useTask$` of `useResource$`. |
+| `useQwikClasslist` | `error` | Dwing het gebruik van de `class`-objectsyntaxis af in plaats van stringconcatenatie voor dynamische klassen in Qwik. |
+
+### Nieuwe regels
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Waarborg geldige lexicale scope in Qwik's `$`-functies. Variabelen uit buitenliggende scopes moeten expliciet worden vastgelegd. |
+| `useQwikMethodUsage` | `error` | Handhaaf correct gebruik van Qwik-specifieke methoden en API's. |
+
+### Verdacht
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbied React-specifieke props zoals `className` en `htmlFor` in Qwik. Gebruik in plaats daarvan `class` en `for`. |

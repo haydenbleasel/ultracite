@@ -1,0 +1,72 @@
+---
+title: Aturan
+description: Cara mengintegrasikan Ultracite dengan asisten pengkodean AI melalui aturan editor.
+---
+
+Ultracite menyediakan integrasi mulus dengan asisten pengkodean AI dengan secara otomatis menghasilkan file aturan spesifik editor. Aturan-aturan ini membantu membimbing asisten pengkodean AI untuk menulis kode yang lebih baik, lebih konsisten, dan mengikuti praktik terbaik.
+
+Aturan editor bekerja berdampingan dengan linting dan pemformatan Biome. Sementara Biome menangani pemformatan kode dan menangkap kesalahan sintaks, aturan editor membimbing asisten pengkodean AI untuk menulis kode yang lebih baik sejak awal, sehingga mengurangi kebutuhan perbaikan di kemudian hari.
+
+Pendekatan ganda ini memastikan baik kualitas kode otomatis (melalui Biome) maupun pembuatan kode cerdas (melalui aturan pengkodean AI).
+
+## Pengaturan
+
+### Penyiapan Otomatis
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+This will create the relevant file in your project directory.
+
+### Penyiapan Manual
+
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [konten ini](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+
+## Editor yang Didukung
+
+| Editor          | Lokasi File Aturan                |
+| --------------- | --------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+
+## Manfaat
+
+Menggunakan aturan editor Ultracite memberikan beberapa keuntungan:
+
+- **Konsistensi**: Semua kode yang dihasilkan AI mengikuti konvensi yang sama
+- **Kualitas**: Aturan menegakkan praktik terbaik dan mencegah kesalahan umum
+- **Aksesibilitas**: Panduan aksesibilitas bawaan memastikan kode yang inklusif
+- **Performa**: Aturan mendorong pola yang efisien dan menghindari antipola
+- **Keamanan**: Panduan membantu mencegah kerentanan keamanan umum
+
+## Kustomisasi
+
+Meskipun aturan default bersifat komprehensif, Anda dapat menyesuaikannya untuk kebutuhan spesifik Anda:
+
+1. **Ubah aturan yang ada**: Sunting file aturan secara langsung
+2. **Tambahkan aturan khusus proyek**: Tambahkan pedoman tambahan
+3. **Nonaktifkan aturan**: Hapus atau beri komentar pada aturan yang tidak berlaku untuk proyek Anda

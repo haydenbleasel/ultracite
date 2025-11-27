@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Ultracite için Solid.js'e özgü lint kuralları.
+---
+
+The Solid configuration has Solid.js-specific linting rules for reactivity, component patterns, and JSX handling.
+
+## Kurulum
+
+Add the Solid configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Genel Bakış
+
+Bu yapılandırma Solid.js geliştirmeye özgü kurallar ekler:
+
+- **Reaktivite Kuralları**: Solid'in reaktif ilkel yapılarının doğru kullanımını zorunlu kılar
+- **Bileşen Desenleri**: Solid bileşenlerinin en iyi uygulamaları takip etmesini sağlar
+- **Props İşleme**: Props'ların ayrıştırılmasını engeller (reaktiviteyi bozar)
+- **React'e Özgü Props**: Solid bileşenlerinde React'e özgü props'ların kullanılmasını engeller
+
+## Solid'e Özgü Kurallar
+
+### Doğruluk
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Solid bileşenlerinde props'ların ayrıştırılmasını engeller. Ayrıştırma, Solid'in reaktivite sistemini bozar. Bunun yerine props'a doğrudan erişin. |
+
+### Performans
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Solid'de diziler üzerinde yineleme için `<For>` bileşeninin kullanılmasını zorunlu kılar. `<For>` bileşeni Solid'in reaktivitesi için optimize edilmiştir. |
+
+### Şüpheli
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Solid'de `className` ve `htmlFor` gibi React'e özgü props'ların kullanılmasını yasaklar. Bunun yerine `class` ve `for` kullanın. |

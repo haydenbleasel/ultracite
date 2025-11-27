@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Kør Ultracite automatisk på dine iscenesatte Git-filer med Husky
+---
+
+Ultracite tilbyder sømløs integration med [Husky](https://typicode.github.io/husky/), et populært værktøj til håndtering af Git-hooks. Denne integration opsætter automatisk pre-commit-hooks for at sikre, at din kode er korrekt formateret før hvert commit.
+
+## Hvad er Husky?
+
+Husky er et værktøj, der gør det nemt at bruge Git-hooks i dit projekt. Git-hooks er scripts, der kører automatisk på bestemte tidspunkter i Git-arbejdsgangen, for eksempel før commit eller push af kode. Husky forenkler processen med at opsætte og administrere disse hooks.
+
+## Hvordan Ultracite bruger Husky
+
+Når du initialiserer Ultracite i dit projekt, kan det automatisk konfigurere Husky til at køre kodeformatering før hvert commit. Det sikrer, at:
+
+- Al committet kode følger konsekvente formateringsstandarder
+- Kodekvalitetskontroller håndhæves automatisk
+- Teammedlemmer ikke behøver at huske at formatere kode manuelt
+- Dit repository bevarer en ren og konsistent kodestil
+
+## Adfærd for pre-commit-hook
+
+Ultracites Husky-integration opretter en pre-commit-hook, der kører følgende kommando:
+
+```bash
+npx ultracite fix
+```
+
+Denne kommando:
+- Kører Biome's linter og formatter på din kodebase
+- Retter automatisk formateringsproblemer, hvor det er muligt
+- Sikrer, at alle staged filer opfylder dit projekts kodestandarder
+- Forhindrer commits, der ville introducere formateringsinkonsistenser
+
+## Automatisk opsætning
+
+Under initialiseringsprocessen (`ultracite init`), hvis du vælger Husky-optionen, gør Ultracite følgende:
+
+1. **Installerer Husky**: Tilføjer Husky som en udviklingsafhængighed til dit projekt  
+2. **Opretter hook-fil**: Opsætter `.husky/pre-commit`-filen med formateringskommandoen  
+3. **Håndterer eksisterende opsætninger**: Hvis du allerede har Husky konfigureret, opdaterer det din eksisterende pre-commit-hook i stedet for at overskrive den
+
+## Integrationsdetaljer
+
+Husky-integrationen inkluderer flere intelligente funktioner:
+
+### Afhængighedsstyring
+- Installerer automatisk Husky som en dev-afhængighed ved hjælp af dit projekts pakkehåndtering
+- Bruger den relevante pakkehåndteringskommando (`npm install -D`, `yarn add -D`, `pnpm add -D`, osv.)
+
+### Håndtering af hooks
+- **Nye projekter**: Opretter en ny `.husky/pre-commit`-fil med ultracite fix-kommandoen  
+- **Eksisterende projekter**: Føjer Ultracite-kommandoen til din eksisterende pre-commit-hook og bevarer andre hooks, du måtte have konfigureret
+
+### Filstruktur
+Integrationen opretter eller ændrer:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Fordele
+
+### Konsistent kodestil
+Hvert commit følger automatisk dit projekts formateringsstandarder, hvilket eliminerer stil-debatter og inkonsistenser.
+
+### Automatiseret kvalitetskontrol
+Opdag formateringsproblemer, før de kommer ind i dit repository, og oprethold en ren commit-historik.
+
+### Samarbejde i teamet
+Alle teammedlemmer følger automatisk de samme formateringsstandarder uden manuel indgriben.
+
+### CI/CD-optimering
+Reducer CI/CD-pipeline-fejl på grund af formateringsproblemer, da koden er forformateret lokalt.
+
+## Integration i arbejdsgangen
+
+Med Husky-integration aktiveret bliver din typiske Git-arbejdsgang:
+
+1. **Foretag ændringer** i dine kodefiler  
+2. **Stag ændringer** med `git add`  
+3. **Commit ændringer** med `git commit`  
+4. **Pre-commit-hook kører** automatisk og formaterer staged filer  
+5. **Commit fortsætter** med korrekt formateret kode
+
+Hvis formatteren foretager ændringer, skal du stage og committe disse ændringer igen.
+
+## Tilpasning
+
+Selvom Ultracite opsætter fornuftige standarder, kan du tilpasse adfærden:
+
+- Redigér `.husky/pre-commit` for at tilføje yderligere kommandoer  
+- Konfigurer Biome-indstillinger for at justere formateringsregler  
+- Tilføj andre pre-commit-checks ved siden af Ultracites formatering
+
+## Fejlfinding
+
+### Hook kører ikke
+Hvis pre-commit-hook'en ikke eksekveres:
+- Sørg for, at Husky er installeret: `npm ls husky`
+- Kontroller, at `.husky/pre-commit` eksisterer og er eksekverbar
+- Verificer, at Git-hooks er aktiveret i dit repository
+
+### Tilladelsesproblemer
+På Unix-lignende systemer skal du sikre, at hook-filen er eksekverbar:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Omgå hooks
+I sjældne tilfælde, hvor du skal springe pre-commit-hook'en over:
+```bash
+git commit --no-verify
+```
+
+Brug dette sparsomt, da det omgår den automatiske formatering, som holder din kodebase konsistent.

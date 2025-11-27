@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Voer Ultracite automatisch uit op je staged Git-bestanden met lefthook
+---
+
+Ultracite biedt naadloze integratie met [lefthook](https://lefthook.dev/), een snelle en krachtige Git-hooks manager. Deze integratie zet automatisch pre-commit hooks op om ervoor te zorgen dat je code vóór elke commit correct geformatteerd is.
+
+## Wat is lefthook?
+
+lefthook is een snelle native Git-hooks manager voor Node.js- en Go-projecten. Het is ontworpen om eenvoudig, snel en krachtig te zijn, zodat je Git-hooks kunt beheren binnen je team met configuratiebestanden die in je repository kunnen worden gecommit.
+
+## Hoe Ultracite lefthook gebruikt
+
+Wanneer je Ultracite in je project initialiseert, kan het lefthook automatisch configureren om codevorming vóór elke commit uit te voeren. Dit zorgt ervoor dat:
+
+- Alle gecommitte code consistente formatteringsstandaarden volgt
+- Codekwaliteitscontroles automatisch worden afgedwongen
+- Teamleden niet hoeven te onthouden code handmatig te formatteren
+- Je repository een schone, consistente code-stijl behoudt
+
+## Gedrag van de pre-commit hook
+
+De lefthook-integratie van Ultracite maakt een pre-commit hook die het volgende commando draait:
+
+```bash
+npx ultracite fix
+```
+
+Dit commando:
+- Draait Biome's linter en formatter op je codebase
+- Lost formatteringsproblemen automatisch op waar mogelijk
+- Zorgt dat alle staged bestanden voldoen aan de code-standaarden van je project
+- Voorkomt commits die formatteringsinconsistenties zouden introduceren
+
+## Automatische installatie
+
+Tijdens het initialisatieproces (`ultracite init`), als je de lefthook-optie kiest, doet Ultracite het volgende:
+
+1. **Installeert lefthook**: Voegt lefthook toe als een development dependency aan je project
+2. **Initialiseert lefthook**: Voert `lefthook install` uit om Git-hooks in te stellen
+3. **Maakt configuratie aan**: Zet het `lefthook.yml` bestand op met het formatteringscommando
+4. **Gaat om met bestaande configuraties**: Als je al lefthook geconfigureerd hebt, werkt het je bestaande configuratie bij in plaats van deze te overschrijven
+
+## Integratiedetails
+
+De lefthook-integratie bevat verschillende slimme functies:
+
+### Dependencybeheer
+- Installeert lefthook automatisch als dev-dependency met de package manager van je project
+- Gebruikt het juiste package manager-commando (`npm install -D`, `yarn add -D`, `pnpm add -D`, enz.)
+- Voert `lefthook install` uit om Git-hooks te initialiseren
+
+### Configuratiebeheer
+- **Nieuwe projecten**: Maakt een nieuw `lefthook.yml` bestand met het ultracite fix-commando
+- **Bestaande projecten**: Voegt het Ultracite-commando toe aan je bestaande lefthook-configuratie en behoudt andere hooks die je mogelijk hebt geconfigureerd
+
+### Bestandsstructuur
+De integratie maakt of wijzigt:
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## Voordelen
+
+- **Teamconsistentie**: Elk teamlid krijgt automatisch dezelfde formattering toegepast
+- **Zero Configuration**: Werkt direct uit de doos met verstandige standaardinstellingen
+- **Snelle prestaties**: lefthook is geschreven in Go en is extreem snel
+- **Flexibiliteit**: Makkelijk uit te breiden met extra commando's en hooks
+- **Cross-platform**: Werkt consistent op verschillende besturingssystemen
+
+## Workflow-integratie
+
+De lefthook-integratie past naadloos in je ontwikkelworkflow:
+
+1. **Ontwikkelaar maakt wijzigingen** aan codebestanden
+2. **Staged bestanden** voor commit met `git add`
+3. **Poging tot commit** met `git commit`
+4. **lefthook activeert** automatisch de pre-commit hook
+5. **Ultracite draait** en formatteert de staged bestanden
+6. **Commit gaat door** als het formatteren slaagt, of **mislukt** als er problemen zijn die niet automatisch konden worden opgelost
+
+## Aanpassing
+
+Hoewel Ultracite verstandige standaardinstellingen configureert, kun je het gedrag aanpassen:
+
+- Pas `lefthook.yml` aan om extra commando's of hooks toe te voegen
+- Configureer Biome-instellingen om formatteringsregels aan te passen
+- Voeg andere pre-commit checks toe naast de formattering van Ultracite
+- Gebruik lefthook's krachtige parallelle uitvoering en conditionele logica-functies
+
+## Probleemoplossing
+
+### Hook draait niet
+Als de pre-commit hook niet wordt uitgevoerd:
+- Zorg dat lefthook is geïnstalleerd: `npm ls lefthook`
+- Controleer of `lefthook.yml` bestaat en het ultracite-commando bevat
+- Verifieer dat Git-hooks ingeschakeld zijn in je repository
+- Voer `lefthook install` uit om hooks opnieuw te installeren
+
+### Machtigingsproblemen
+lefthook handelt Git-hook permissies automatisch af, maar als je problemen tegenkomt:
+- Probeer `lefthook install` nogmaals uit te voeren
+- Controleer of je Git-configuratie hooks toestaat
+
+### Hooks omzeilen
+In zeldzame gevallen waarin je de pre-commit hook moet overslaan:
+```bash
+git commit --no-verify
+```
+
+Gebruik dit spaarzaam, omdat het de geautomatiseerde formattering omzeilt die je codebase consistent houdt.
+
+## Configuratievoorbeeld
+
+Dit is hoe de `lefthook.yml` configuratie eruitziet:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Deze configuratie:
+- Draait alleen op JavaScript-, TypeScript-, JSON- en CSS-bestanden
+- Staged automatisch alle bestanden die door de formatter zijn hersteld
+- Gebruikt de efficiënte `jobs`-syntaxis voor betere prestaties
+
+Je kunt deze configuratie uitbreiden met extra jobs:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Aturan linting khusus Vue.js untuk Ultracite.
+---
+
+Konfigurasi Vue berisi aturan linting khusus Vue.js untuk struktur komponen, opsi data, properti computed, dan kata kunci yang dicadangkan. Konfigurasi ini juga menyertakan override untuk mencegah kesalahan linting positif palsu pada berkas `.vue`.
+
+## Instalasi
+
+Tambahkan konfigurasi Vue ke `biome.jsonc` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Ikhtisar
+
+Konfigurasi ini menambahkan aturan yang spesifik untuk pengembangan Vue.js:
+
+- **Dukungan HTML**: Mengaktifkan dukungan HTML penuh eksperimental dengan indentasi untuk script dan style
+- **Penamaan Komponen**: Mewajibkan nama komponen terdiri dari beberapa kata
+- **Struktur Data**: Mencegah deklarasi opsi data yang tidak tepat
+- **Kata Kunci yang Dicadangkan**: Melarang penggunaan props dan kunci Vue yang dicadangkan
+- **Kunci Duplikat**: Mencegah kunci duplikat dalam opsi komponen
+- **Props Khusus React**: Melarang props khusus React pada komponen Vue
+- **Override Berkas Vue**: Aturan dilonggarkan untuk berkas `.vue` untuk menangani struktur Komponen Satu Berkas (Single File Component)
+
+## Konfigurasi Formatter HTML
+
+Preset Vue mengaktifkan dukungan HTML eksperimental dengan format khusus untuk skrip dan style yang disematkan:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Konfigurasi ini:
+- **Dukungan Penuh Eksperimental**: Mengaktifkan kemampuan parsing dan pemformatan HTML eksperimental Biome untuk berkas `.vue`
+- **Indent Script dan Style**: Mengindentasi dengan benar kode di dalam tag `<script>` dan `<style>` pada Komponen Satu Berkas Vue
+
+## Aturan Khusus Vue
+
+### Nursery
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noVueDataObjectDeclaration` | `error` | Mencegah penggunaan deklarasi objek untuk opsi `data` dalam komponen Vue. Opsi `data` harus berupa fungsi yang mengembalikan sebuah objek. |
+| `noVueDuplicateKeys` | `error` | Mencegah kunci duplikat dalam opsi komponen Vue. Kunci di `data`, `computed`, `methods`, dll. harus unik. |
+| `noVueReservedKeys` | `error` | Melarang kunci Vue yang dicadangkan seperti `$data`, `$props`, `$el`, dll. dalam opsi komponen. |
+| `noVueReservedProps` | `error` | Melarang props Vue yang dicadangkan seperti `key`, `ref`, dan `is` digunakan sebagai props komponen kustom. |
+| `noVueVIfWithVFor` | `error` | Melarang penggunaan `v-for` dan `v-if` pada elemen yang sama. |
+| `useVueHyphenatedAttributes` | `error` | Menganjurkan penggunaan kebab-case untuk nama atribut, sesuai rekomendasi panduan gaya Vue. |
+| `useVueMultiWordComponentNames` | `error` | Mewajibkan nama komponen terdiri dari banyak kata untuk menghindari konflik dengan elemen HTML. Nama satu kata seperti `Button` atau `Card` sebaiknya dihindari. |
+| `useVueValidVBind` | `error` | Menegakkan validitas direktif `v-bind` dalam berkas Vue. |
+| `useVueValidVElseIf` | `error` | Menegakkan validitas direktif `v-else-if` dalam template Vue. Melaporkan direktif yang tidak valid yang kehilangan ekspresi kondisional atau tidak didahului oleh direktif `v-if` atau `v-else-if`. |
+| `useVueValidVElse` | `error` | Menegakkan validitas direktif `v-else` dalam template Vue. Melaporkan direktif yang tidak didahului oleh direktif `v-if` atau `v-else-if`. |
+| `useVueValidVHtml` | `error` | Menegakkan penggunaan yang valid dari direktif `v-html` dalam template Vue. Melaporkan direktif yang kehilangan ekspresi, memiliki argumen tak terduga, atau modifier tak terduga. |
+| `useVueValidVIf` | `error` | Menegakkan validitas direktif `v-if` dalam template Vue. Melarang argumen dan modifier, serta memastikan sebuah nilai disediakan. |
+| `useVueValidVOn` | `error` | Menegakkan validitas direktif `v-on` dalam template Vue. Melaporkan direktif `v-on` / shorthand `@` yang tidak valid seperti nama event yang hilang, modifier yang tidak valid, atau ekspresi handler yang hilang. |
+| `useVueValidVText` | `error` | Menegakkan validitas direktif `v-text` dalam template Vue. Aturan ini melaporkan ketika `v-text` memiliki argumen, memiliki modifier, atau kehilangan nilai. |
+
+### Mencurigakan
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noReactSpecificProps` | `error` | Melarang props khusus React seperti `className` dan `htmlFor` di Vue. Gunakan `class` dan `for` sebagai gantinya. |
+
+## Override Berkas Vue
+
+Aturan berikut dinonaktifkan untuk berkas `.vue` untuk mencegah positif palsu akibat dukungan parsial Biome terhadap Komponen Satu Berkas Vue:
+
+### Kebenaran
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noUnusedVariables` | `off` | Mengizinkan variabel yang tidak digunakan dalam berkas `.vue`. Variabel di bagian script mungkin hanya digunakan di template. |
+| `noUnusedImports` | `off` | Mengizinkan import yang tidak digunakan dalam berkas `.vue`. Import mungkin hanya digunakan di bagian template. |
+
+### Gaya
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `useConst` | `off` | Mengizinkan deklarasi `let` dan `var` dalam berkas `.vue` untuk pola data reaktif. |
+| `useImportType` | `off` | Menonaktifkan persyaratan tipe import eksplisit demi kompatibilitas yang lebih baik dengan sistem build Vue. |

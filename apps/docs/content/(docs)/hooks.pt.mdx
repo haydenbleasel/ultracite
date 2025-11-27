@@ -1,0 +1,68 @@
+---
+title: Ganchos
+description: Como integrar o Ultracite com assistentes de codificação de IA por meio de ganchos do editor.
+---
+
+Ultracite pode formatar e corrigir código automaticamente depois que assistentes de codificação de IA fizerem edições por meio de ganchos do editor. Isso garante que todo o código gerado por IA adira aos padrões do seu projeto sem intervenção manual.
+
+Os ganchos funcionam em conjunto com a lintagem e formatação do Biome. Depois que um assistente de codificação de IA edita um arquivo, o gancho executa automaticamente `npx ultracite fix` para formatar e corrigir problemas de lint que podem ser autocorrigidos. Essa abordagem dupla assegura tanto a geração inteligente de código (por regras de IA) quanto a qualidade de código automatizada (por ganchos).
+
+> **Nota:** Ganchos são separados das regras de codificação de IA. A flag `--agents` configura as regras de codificação de IA, enquanto a flag `--hooks` configura a formatação automática após as edições de arquivo.
+
+## Configuração
+
+### Configuração Automática
+
+Quando você executa `npx ultracite init`, você será solicitado a selecionar quais ganchos do editor deseja habilitar:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+Isso criará o arquivo de configuração de gancho relevante no diretório do seu projeto.
+
+### Configuração Manual
+
+Se você quiser configurar manualmente ou adicionar ganchos depois da inicialização, execute:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternativamente, você pode criar ou editar manualmente os arquivos de configuração de ganchos no diretório do seu projeto e adicionar o comando de gancho apropriado.
+
+## Editores Suportados
+
+| Editor      | Hook File Location          | Documentation                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Ganchos do Cursor](https://cursor.com/docs/agent/hooks)                |
+| Claude Code | `.claude/settings.json`     | [Ganchos do Claude Code](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Como Funciona
+
+1. **Execução Automática**: Depois que o agente de IA edita um arquivo, o gancho executa automaticamente `npx ultracite fix`
+2. **Formatação de Código**: Ultracite formata o código editado de acordo com a sua configuração do Biome
+3. **Correções de Lint**: Problemas de lint que podem ser autocorrigidos são resolvidos automaticamente
+4. **Integração Transparente**: O processo acontece de forma transparente, sem interromper seu fluxo de trabalho
+
+## Benefícios
+
+Usar ganchos do editor Ultracite oferece várias vantagens:
+
+- **Consistência**: Todo o código gerado por IA é automaticamente formatado para corresponder ao seu estilo
+- **Qualidade**: Problemas de lint são corrigidos imediatamente após a geração do código
+- **Eficiência**: Não há necessidade de executar manualmente formatadores ou linters após edições de IA
+- **Padrões**: Garante que o código gerado por IA sempre adira aos padrões do projeto
+- **Commits limpos**: O código é devidamente formatado antes mesmo de você revisá-lo
+
+## Personalização
+
+Ultracite se integra inteligentemente com as configurações de gancho existentes:
+
+- **Preserva ganchos existentes**: Todos os ganchos existentes e seus comandos permanecem intactos
+- **Evita duplicatas**: Se Ultracite já estiver configurado, ele não será adicionado novamente
+- **Não destrutivo**: A estrutura da sua configuração de ganchos existente é mantida
+
+Você também pode personalizar o comportamento dos ganchos modificando diretamente os arquivos de configuração de ganchos, caso precise de comandos de formatação diferentes ou ações adicionais pós-edição.

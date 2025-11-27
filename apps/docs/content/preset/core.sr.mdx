@@ -1,0 +1,467 @@
+---
+title: Osnovno
+description: Osnovna konfiguracija Ultracite-a sa pravilima za lintovanje nezavisnim od frameworka.
+---
+
+Osnovna Ultracite konfiguracija pruža sveobuhvatan skup pravila za lintovanje i podešavanja formatiranja nezavisnih od frameworka. Ovo je osnova na kojoj se zasnivaju sve druge konfiguracije specifične za framework.
+
+## Instalacija
+
+Osnovna konfiguracija se automatski uključuje kada pokrenete:
+
+```bash
+npx ultracite init
+```
+
+Ili je dodajte ručno u vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+## Pregled
+
+Osnovna konfiguracija uključuje stotine strogih pravila za lintovanje koja pokrivaju:
+
+- **Pristupačnost (a11y)**: Sprovodi ARIA atribute, semantički HTML i navigaciju tastaturom
+- **Složenost**: Smanjuje kognitivnu složenost i sprovodi najbolje prakse
+- **Ispravnost**: Sprečava uobičajene greške i sprovodi bezbednost tipova
+- **Performanse**: Optimizuje kod za bolje performanse u toku izvođenja
+- **Bezbednost**: Sprečava bezbednosne ranjivosti
+- **Stil**: Sprovodi konzistentan stil koda
+- **Sumnjivo**: Uhvata sumnjive obrasce koji mogu ukazivati na greške
+
+## Podešavanja formatiranja
+
+- **Uvlačenje**: 2 razmaka
+- **Širina linije**: 80 karaktera
+- **Kraj linije**: LF (Unix-stil)
+- **Tačke-zarezi**: Uvek obavezni
+- **Navodnici**: Dupli navodnici za JavaScript/TypeScript i JSON
+- **Zarezi na kraju**: ES5 stil (višelinijski nizovi/objekti)
+- **Zagrade streličnih funkcija**: Uvek uključiti zagrade
+
+## Ključne karakteristike
+
+### Strogi režim TypeScripta
+
+Osnovna konfiguracija omogućava stroge TypeScript provere:
+
+- Ne podstiče korišćenje `any` (`noExplicitAny: error`)
+- Zahteva rukovanje `null/undefined`
+- Preferira eksplicitne tipove u određenim situacijama
+- Sprovodi bezbednost tipova kroz ceo kodni bazen
+
+### ESLint preporučeni ekvivalenti
+
+Uključena su uobičajena pravila najboljih praksi:
+
+- Ne koristi neiskorišćene promenljive (`noUnusedVariables: error`)
+- Ne koristi neiskorišćene import-e (`noUnusedImports: error`)
+- Ne koristi eksplicitni eval (`noGlobalEval: error`)
+- Ne koristi prototype pollution (`noPrototypeBuiltins: error`)
+
+### Pristupačnost po podrazumevanju
+
+Pravila koja odgovaraju standardima pristupačnosti:
+
+- ARIA atributi moraju biti validni
+- Preferiraju se semantički HTML elementi
+- Potrebna je podrška za navigaciju tastaturom
+- Obavezan alt tekst za slike
+
+### Podrška za Node.js
+
+Rukovanje specifično za okruženje:
+
+- Prepoznaje Node.js globalne vrednosti (`module`, `process`)
+- Zahteva `node:` protokol za ugrađene module
+- Podržava i CommonJS i ESM
+
+## Kompletna referenca pravila
+
+### Pristupačnost (a11y)
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noAccessKey` | `error` | Zahteva da atribut `accessKey` ne bude korišćen ni na jednom HTML elementu. |
+| `noAriaHiddenOnFocusable` | `error` | Zahteva da `aria-hidden="true"` nije postavljeno na fokusabilnim elementima. |
+| `noAriaUnsupportedElements` | `error` | Zahteva da elementi koji ne podržavaju ARIA role, stanja i osobine nemaju te atribute. |
+| `noAutofocus` | `off` | Zahteva da se `autoFocus` prop ne koristi na elementima. |
+| `noDistractingElements` | `error` | Sprovodi zabranu korišćenja ometajućih elemenata. |
+| `noHeaderScope` | `error` | Prop `scope` treba da se koristi samo na `<th>` elementima. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Zahteva da interaktivnim HTML elementima ne budu dodeljene ne-interaktivne ARIA role. |
+| `noLabelWithoutControl` | `error` | Zahteva da element ili komponenta label ima tekstualnu oznaku i odgovarajući input. |
+| `noNoninteractiveElementInteractions` | `error` | Zabranjuje korišćenje event handler-a na ne-interaktivnim elementima. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Zahteva da ne-interaktivnim HTML elementima ne budu dodeljene interaktivne ARIA role. |
+| `noNoninteractiveTabindex` | `error` | Zahteva da `tabIndex` nije dodeljen ne-interaktivnim HTML elementima. |
+| `noPositiveTabindex` | `error` | Sprečava korišćenje pozitivnih celih brojeva u `tabIndex` svojstvu. |
+| `noRedundantAlt` | `error` | Zahteva da `alt` prop za img ne sadrži reči `image`, `picture`, ili `photo`. |
+| `noRedundantRoles` | `error` | Zahteva da eksplicitna vrednost role nije ista kao implicitna/podrazumevana role elementa. |
+| `noStaticElementInteractions` | `error` | Zahteva da statični, vidljivi elementi (kao `<div>`) koji imaju click handlere koriste validan atribut role. |
+| `noSvgWithoutTitle` | `error` | Sprovodi korišćenje elementa title za `svg` element. |
+| `useAltText` | `error` | Zahteva da svi elementi kojima je potreban alternativni tekst imaju smislen sadržaj za krajnjeg korisnika. |
+| `useAnchorContent` | `error` | Zahteva da anchor-i imaju sadržaj i da taj sadržaj bude dostupan čitačima ekrana. |
+| `useAriaActivedescendantWithTabindex` | `error` | Zahteva da `tabIndex` bude dodeljen ne-interaktivnim HTML elementima sa `aria-activedescendant`. |
+| `useAriaPropsForRole` | `error` | Zahteva da elementi sa ARIA rolama imaju sve obavezne ARIA atribute za tu rolu. |
+| `useAriaPropsSupportedByRole` | `error` | Zahteva da ARIA osobine budu validne za role koje element podržava. |
+| `useButtonType` | `error` | Sprovodi korišćenje atributa `type` za element button. |
+| `useFocusableInteractive` | `error` | Elementi sa interaktivnom rolom i handler-ima moraju biti fokusabilni. |
+| `useHeadingContent` | `error` | Zahteva da heading elementi (`h1`, `h2`, itd.) imaju sadržaj koji je dostupan čitačima ekrana. |
+| `useHtmlLang` | `error` | Zahteva da `html` element ima atribut `lang`. |
+| `useIframeTitle` | `error` | Sprovodi korišćenje atributa title za iframe element. |
+| `useKeyWithClickEvents` | `error` | Zahteva da `onClick` bude praćen bar jednim od: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Zahteva da `onMouseOver` / `onMouseOut` budu praćeni sa `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Sprovodi da audio i video elementi imaju track za titlove. |
+| `useSemanticElements` | `error` | Detektuje upotrebu role atributa u JSX elementima i predlaže korišćenje semantičkih elemenata umesto toga. |
+| `useValidAnchor` | `error` | Zahteva da svi anchor-i budu validni i da budu navigabilni elementi. |
+| `useValidAriaProps` | `error` | Osigurava da ARIA osobine `aria-*` budu validne. |
+| `useValidAriaRole` | `error` | Elementi sa ARIA rolama moraju koristiti validnu, ne-apstraktnu ARIA rolu. |
+| `useValidAriaValues` | `error` | Zahteva da vrednosti ARIA stanja i osobina budu validne. |
+| `useValidAutocomplete` | `error` | Koristiti validne vrednosti za autocomplete atribut na input elementima. |
+| `useValidLang` | `error` | Osigurava da vrednost prosleđena atributu `lang` bude ispravan ISO jezik i/ili država. |
+| `useGenericFontNames` | `error` | Zabranjuje nedostatak generičke family ključne reči unutar font familija (CSS). |
+
+### Složenost
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noAdjacentSpacesInRegex` | `error` | Zabranjuje nejasnu upotrebu uzastopnih razmaka u regularnim izrazima. |
+| `noArguments` | `error` | Zabranjuje korišćenje arguments. |
+| `noBannedTypes` | `error` | Zabranjuje primitivne alias tipove i zbunjujuće tipove. |
+| `noCommaOperator` | `error` | Zabranjuje comma operator. |
+| `noEmptyTypeParameters` | `error` | Zabranjuje prazne tip parametre u type alias-ima i interfejsima. |
+| `noExcessiveCognitiveComplexity` | `error` | Zabranjuje funkcije koje prelaze zadati Cognitive Complexity skor. |
+| `noExcessiveLinesPerFunction` | `off` | Ograničava broj linija koda u funkciji. |
+| `noExcessiveNestedTestSuites` | `error` | Ovo pravilo nameće maksimalnu dubinu ugnježdenih `describe()` u test fajlovima. |
+| `noExtraBooleanCast` | `error` | Zabranjuje nepotrebne boolean kastove. |
+| `noFlatMapIdentity` | `error` | Zabranjuje upotrebu nepotrebnog callback-a u flatMap. |
+| `noForEach` | `error` | Preferira `for...of` umesto `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Zabranjuje skraćene konverzije tipova. |
+| `noImportantStyles` | `off` | Zabranjuje upotrebu `!important` stila (CSS). |
+| `noStaticOnlyClass` | `error` | Ovo pravilo prijavljuje kada klasa nema ne-static članove. |
+| `noThisInStatic` | `error` | Zabranjuje `this` i `super` u statičkim kontekstima. |
+| `noUselessCatch` | `error` | Zabranjuje nepotrebne catch blokove. |
+| `noUselessConstructor` | `error` | Zabranjuje nepotrebne konstruktore. |
+| `noUselessContinue` | `error` | Izbegava korišćenje nepotrebnog continue. |
+| `noUselessEmptyExport` | `error` | Zabranjuje prazne export-e koji ništa ne menjaju u modul fajlu. |
+| `noUselessEscapeInRegex` | `error` | Zabranjuje nepotrebne escape sekvence u regularnim izrazima. |
+| `noUselessFragments` | `error` | Zabranjuje nepotrebne fragmente. |
+| `noUselessLabel` | `error` | Zabranjuje nepotrebne labele. |
+| `noUselessLoneBlockStatements` | `error` | Zabranjuje nepotrebne ugnježdene blok izjave. |
+| `noUselessRename` | `error` | Zabranjuje preimenovanje import-a, export-a i destrukturisanih dodela u isto ime. |
+| `noUselessStringConcat` | `error` | Zabranjuje nepotrebno konkateniranje stringova ili template literal-a. |
+| `noUselessStringRaw` | `error` | Zabranjuje nepotrebnu `String.raw` funkciju u template literal-ima bez escape sekvenci. |
+| `noUselessSwitchCase` | `error` | Zabranjuje besmislene case blokove u switch izjavama. |
+| `noUselessTernary` | `error` | Zabranjuje ternarni operator kada postoje jednostavnije alternative. |
+| `noUselessThisAlias` | `error` | Zabranjuje besmislenu aliasing `this`. |
+| `noUselessTypeConstraint` | `error` | Zabranjuje korišćenje `any` ili `unknown` kao ograničenje tipa. |
+| `noUselessUndefinedInitialization` | `error` | Zabranjuje inicijalizaciju promenljivih sa `undefined`. |
+| `noVoid` | `error` | Zabranjuje korišćenje `void` operatora, jer nije poznat operator. |
+| `useArrowFunction` | `error` | Koristiti strelične funkcije umesto function izraza. |
+| `useDateNow` | `error` | Koristiti `Date.now()` za dobijanje milisekundi od Unix epohe. |
+| `useFlatMap` | `error` | Podstiče korišćenje `.flatMap()` kada se koriste `map().flat()` zajedno. |
+| `useIndexOf` | `error` | Preferirati `Array#{indexOf,lastIndexOf}()` umesto `Array#{findIndex,findLastIndex}()` pri traženju indeksa stavke. |
+| `useLiteralKeys` | `error` | Sprovodi korišćenje literalnog pristupa svojstvima umesto izračunatog pristupa. |
+| `useNumericLiterals` | `error` | Zabranjuje `parseInt()` i `Number.parseInt()` u korist binarnih, oktalnih i heksadecimalnih literal-a. |
+| `useOptionalChain` | `error` | Sprovodi korišćenje sažetog optional chaining umesto složenih logičkih izraza. |
+| `useRegexLiterals` | `error` | Sprovodi korišćenje regex literal-a umesto `RegExp` konstruktora kad je moguće. |
+| `useSimpleNumberKeys` | `error` | Zabranjuje numeričke literalne članove objekta koji nisu u osnovi 10 ili koriste donju crtu kao separator. |
+| `useSimplifiedLogicExpression` | `error` | Uklanja redundantne termine iz logičkih izraza. |
+| `useWhile` | `error` | Sprovodi korišćenje while petlji umesto for petlji kada inicijalizator i update izrazi nisu potrebni. |
+
+### Ispravnost
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noConstAssign` | `error` | Sprečava ponovno dodeljivanje const promenljivama. |
+| `noConstantCondition` | `error` | Zabranjuje konstante izraze u uslovima. |
+| `noConstantMathMinMaxClamp` | `error` | Zabranjuje korišćenje `Math.min` i `Math.max` za clamp gde je rezultat konstantan. |
+| `noConstructorReturn` | `error` | Zabranjuje vraćanje vrednosti iz konstruktora. |
+| `noEmptyCharacterClassInRegex` | `error` | Zabranjuje prazne karakter klase u regularnim izrazima. |
+| `noEmptyPattern` | `error` | Zabranjuje prazne destrukturisane obrasce. |
+| `noGlobalDirnameFilename` | `error` | Zabranjuje upotrebu `__dirname` i `__filename` u globalnom opsegu. |
+| `noGlobalObjectCalls` | `error` | Zabranjuje pozivanje globalnih objekata kao funkcija. |
+| `noInnerDeclarations` | `error` | Zabranjuje funkcijske i `var` deklaracije koje su dostupne izvan svog bloka. |
+| `noInvalidBuiltinInstantiation` | `error` | Osigurava ispravnu instancijaciju ugrađenih objekata. |
+| `noInvalidConstructorSuper` | `error` | Sprečava nepravilnu upotrebu `super()` unutar klasa. |
+| `noInvalidDirectionInLinearGradient` | `error` | Zabranjuje nestandardne vrednosti pravca za linear-gradient funkcije (CSS). |
+| `noInvalidGridAreas` | `error` | Zabranjuje nevalidne imenovane grid oblasti u CSS Grid Layout-u (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Zabranjuje upotrebu `@import` at-rula na nevalidnim mestima (CSS). |
+| `noInvalidUseBeforeDeclaration` | `error` | Zabranjuje upotrebu promenljivih i parametara pre njihove deklaracije. |
+| `noMissingVarFunction` | `error` | Zabranjuje nedostajući `var` funkciju za CSS varijable (CSS). |
+| `noNodejsModules` | `off` | Zabrani upotrebu Node.js ugrađenih modula. |
+| `noNonoctalDecimalEscape` | `error` | Zabranjuje `\8` i `\9` escape sekvence u string literalima. |
+| `noPrecisionLoss` | `error` | Zabranjuje literalne brojeve koji gube preciznost. |
+| `noPrivateImports` | `off` | Ograničava import privatnih export-a. |
+| `noProcessGlobal` | `off` | Zabranjuje upotrebu globalnog `process`. |
+| `noRestrictedElements` | `error` | Zabranjuje upotrebu konfigurisanih elemenata. |
+| `noSelfAssign` | `error` | Zabranjuje dodeljivanja gde su obe strane tačno iste. |
+| `noSetterReturn` | `error` | Zabranjuje vraćanje vrednosti iz seta (setter). |
+| `noStringCaseMismatch` | `error` | Zabranjuje poređenje izraza koji menjaju veličinu slova sa nekompatibilnom vrednošću. |
+| `noSwitchDeclarations` | `error` | Zabranjuje leksičke deklaracije u switch granama. |
+| `noUndeclaredDependencies` | `off` | Zabranjuje upotrebu dependencija koje nisu navedene u `package.json`. |
+| `noUndeclaredVariables` | `error` | Sprečava korišćenje promenljivih koje nisu deklarisane u dokumentu. |
+| `noUnknownFunction` | `error` | Zabranjuje nepoznate CSS funkcije vrednosti (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Zabranjuje nepoznata imena media feature-a (CSS). |
+| `noUnknownProperty` | `error` | Zabranjuje nepoznata svojstva (CSS). |
+| `noUnknownPseudoClass` | `error` | Zabranjuje nepoznate pseudo-class selektore (CSS). |
+| `noUnknownPseudoElement` | `error` | Zabranjuje nepoznate pseudo-element selektore (CSS). |
+| `noUnknownTypeSelector` | `error` | Zabranjuje nepoznate type selektore (CSS). |
+| `noUnknownUnit` | `error` | Zabranjuje nepoznate CSS jedinice (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Zabranjuje neodgovarajuće An+B selektore (CSS). |
+| `noUnreachable` | `error` | Zabranjuje nedostižan kod. |
+| `noUnreachableSuper` | `error` | Osigurava da se `super()` konstruktor pozove tačno jednom na svakom putu izvršavanja pre korišćenja `this`. |
+| `noUnsafeFinally` | `error` | Zabranjuje kontrolne tok izjave u finally blokovima. |
+| `noUnsafeOptionalChaining` | `error` | Zabranjuje optional chaining u kontekstima gde vrednost undefined nije dozvoljena. |
+| `noUnusedFunctionParameters` | `error` | Zabranjuje neiskorišćene parametre funkcije. |
+| `noUnusedImports` | `error` (safe fix override) | Zabranjuje neiskorišćene import-e. |
+| `noUnusedLabels` | `error` | Zabranjuje neiskorišćene labele. |
+| `noUnusedPrivateClassMembers` | `error` | Zabranjuje neiskorišćene privatne članove klase. |
+| `noUnusedVariables` | `error` | Zabranjuje neiskorišćene promenljive. |
+| `noVoidTypeReturn` | `error` | Zabranjuje vraćanje vrednosti iz funkcije koja ima povratni tip `void`. |
+| `useGraphqlNamedOperations` | `error` | Zahteva navođenje imena GraphQL operacija. |
+| `useImageSize` | `error` | Sprovodi da `<img>` elementi imaju i width i height atribute. |
+| `useImportExtensions` | `off` | Zahteva ekstenzije fajlova za relativne import-e. |
+| `useIsNan` | `error` | Zahteva pozive `isNaN()` pri proveri NaN. |
+| `useJsonImportAttributes` | `off` | Sprovodi korišćenje sa `{ type: "json" }` za JSON module import-e. |
+| `useParseIntRadix` | `error` | Zahteva doslednu upotrebu radix argumenta pri korišćenju `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Zahteva da JSDoc linije komentara počinju jednim asterisk-om, osim prve. |
+| `useUniqueElementIds` | `off` | Sprečava upotrebu statičkog string literalnog id atributa na elementima. |
+| `useValidForDirection` | `error` | Zahteva da `for` petlja update klauzula pomera brojač u ispravnom smeru. |
+| `useValidTypeof` | `error` | Ovo pravilo proverava da li se rezultat `typeof` izraza poredi sa validnom vrednošću. |
+| `useYield` | `error` | Zahteva da generator funkcije sadrže `yield`. |
+
+### Eksperimentalno
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noContinue` | `off` | Zabranjuje continue izjave. |
+| `noDeprecatedImports` | `off` | Ograničava import zastarelih export-a. |
+| `noDuplicateDependencies` | `error` | Sprečava navođenje duplikata dependencija. |
+| `noEmptySource` | `error` | Zabranjuje prazne izvorne fajlove. |
+| `noFloatingPromises` | `off` | Zahteva da Promise-like izrazi budu adekvatno obrađeni. |
+| `noForIn` | `off` | Zabranjuje iteriranje pomoću for-in petlje. |
+| `noImportCycles` | `off` | Sprečava import cikluse. |
+| `noIncrementDecrement` | `error` | Zabranjuje upotrebu `++` i `--` operatora (osim u for petljama nakon izraza). |
+| `noJsxLiterals` | `off` | Zabranjuje string literale unutar JSX elemenata. |
+| `noMisusedPromises` | `off` | Zabranjuje korišćenje Promises na mestima gde su verovatno greška. |
+| `noParametersOnlyUsedInRecursion` | `error` | Zabranjuje parametre koji se koriste samo u rekurzivnim pozivima. |
+| `noShadow` | `error` | Zabranjuje deklaracije promenljivih koje zasenčuju promenljive iz spoljnog opsega. |
+| `noSyncScripts` | `error` | Sprečava upotrebu sinhronih skripti. |
+| `noUnnecessaryConditions` | `off` | Zabranjuje nepotrebne tip-bazirane uslove koji se mogu statički odrediti kao redundantni. |
+| `noUnresolvedImports` | `off` | Upozorava pri importovanju nepostojećih export-a. |
+| `noUnusedExpressions` | `error` | Zabranjuje izraze koji nisu poziv funkcije niti dodela. |
+| `noUselessCatchBinding` | `off` | Zabranjuje neiskorišćene catch binding-e. |
+| `noUselessUndefined` | `error` | Zabranjuje upotrebu beskorisnog `undefined`. |
+| `useArraySortCompare` | `off` | Sprovodi upotrebu compare funkcije u `Array.prototype.sort()`. |
+| `useConsistentArrowReturn` | `error` | Sprovodi konzistentna tela streličnih funkcija. |
+| `useConsistentGraphqlDescriptions` | `error` | Zahteva da sve opise u GraphQL fajlovima slede isti stil (blok ili inline). |
+| `useDeprecatedDate` | `error` | Zahteva da `@deprecated` direktiva navede datum brisanja. |
+| `useExhaustiveSwitchCases` | `off` | Zahteva da switch-case izjave budu egzhaustivne. |
+| `useExplicitType` | `off` | Sprovodi tipove za funkcije, metode, promenljive i parametre. |
+| `useFind` | `error` | Sprovodi upotrebu `Array.prototype.find()` umesto `Array.prototype.filter()` praćeno `[0]` pri traženju jednog rezultata. |
+| `useMaxParams` | `error` | Sprovodi maksimalan broj parametara u definicijama funkcija. |
+| `useSortedClasses` | `error` (safe fix override) | Sprovodi sortiranje CSS utility klasa. |
+| `useSpread` | `error` | Sprovodi korišćenje spread operatora umesto `Function.prototype.apply()`. |
+| `useUniqueGraphqlOperationName` | `error` | Osigurava da sve GraphQL operacije unutar dokumenta imaju jedinstvena imena. |
+
+### Performanse
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noAccumulatingSpread` | `error` | Zabranjuje upotrebu spread (`...`) sintakse na akumulatorima. |
+| `noAwaitInLoops` | `off` | Zabranjuje `await` unutar petlji. |
+| `noBarrelFile` | `error` | Zabranjuje upotrebu barrel fajlova. |
+| `noDelete` | `error` | Zabranjuje upotrebu `delete` operatora. |
+| `noDynamicNamespaceImportAccess` | `error` | Zabranjuje dinamički pristup namespace import-ima. |
+| `noNamespaceImport` | `error` | Zabranjuje upotrebu namespace import-a. |
+| `noReExportAll` | `off` | Izbegava re-export all. |
+| `noUnwantedPolyfillio` | `error` | Sprečava dupliranje polyfill-ova iz Polyfill.io. |
+| `useGoogleFontPreconnect` | `error` | Osigurava upotrebu `preconnect` atributa pri korišćenju Google Fontova. |
+| `useTopLevelRegex` | `error` | Zahteva da regex literali budu deklarisani na vrhu nivoa. |
+
+### Bezbednost
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noBlankTarget` | `error` | Zabranjuje `target="_blank"` atribut bez `rel="noopener"`. |
+| `noDangerouslySetInnerHtml` | `error` | Sprečava upotrebu opasnih JSX prop-ova. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Prijavljuje kada DOM element ili komponenta koristi i children i `dangerouslySetInnerHTML` prop. |
+| `noGlobalEval` | `error` | Zabranjuje upotrebu globalnog `eval()`. |
+
+### Stil
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noCommonJs` | `off` | Zabranjuje upotrebu Common JS modula u korist ESM import-a. |
+| `noDefaultExport` | `off` | Zabranjuje default export-e. |
+| `noDoneCallback` | `error` | Zabranjuje korišćenje callback-a u asinhronim testovima i hook-ovima. |
+| `noEnum` | `error` | Zabranjuje TypeScript enum. |
+| `noExportedImports` | `error` | Zabranjuje export importovane promenljive. |
+| `noImplicitBoolean` | `off` | Zabranjuje implicitne true vrednosti na JSX boolean atributima. |
+| `noInferrableTypes` | `error` | Zabranjuje anotacije tipa za promenljive, parametre i svojstva klase inicijalizovana literalnim izrazom. |
+| `noMagicNumbers` | `off` | Prijavljuje upotrebu "magic numbers" — brojeva korišćenih direktno umesto dodeljivanja imenovanim konstantama. |
+| `noNamespace` | `error` | Zabranjuje upotrebu TypeScript namespace-a. |
+| `noNegationElse` | `error` | Zabranjuje negaciju u uslovu if izjave ako postoji else grana. |
+| `noNestedTernary` | `error` | Zabranjuje ugnježdene ternarne izraze. |
+| `noNonNullAssertion` | `error` | Zabranjuje non-null assertion koristeći `!` postfiks operator. |
+| `noParameterAssign` | `error` | Zabranjuje ponovno dodeljivanje parametara funkcije. |
+| `noParameterProperties` | `error` | Zabranjuje upotrebu parameter properties u konstruktocima klasa. |
+| `noProcessEnv` | `off` | Zabranjuje upotrebu `process.env`. |
+| `noRestrictedGlobals` | `error` | Ovo pravilo omogućava specifikovanje globalnih imena koje ne želite koristiti u aplikaciji. |
+| `noRestrictedImports` | `error` | Zabranjuje određene module kada se učitavaju preko import-a ili require-a. |
+| `noRestrictedTypes` | `error` | Zabranjuje korisnički definisane tipove. |
+| `noShoutyConstants` | `error` | Zabranjuje upotrebu konstanti čija je vrednost verzija imena u velikim slovima. |
+| `noSubstr` | `error` | Sprovodi upotrebu `String.slice()` umesto `String.substr()` i `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Zabranjuje template literale ako interpolacija i poseban tretman karaktera nisu potrebni. |
+| `noUselessElse` | `error` | Zabranjuje else blok kada if blok rano prekida izvršavanje. |
+| `noYodaExpression` | `error` | Zabranjuje korišćenje yoda izraza. |
+| `useArrayLiterals` | `error` | Zabranjuje `Array` konstruktore. |
+| `useAsConstAssertion` | `error` | Sprovodi korišćenje `as const` umesto literalnog tipa i anotacije tipa. |
+| `useAtIndex` | `error` | Koristiti `at()` umesto pristupa integer indeksom. |
+| `useBlockStatements` | `error` | Zahteva pridržavanje konvencija sa vitičastim zagradama. |
+| `useCollapsedElseIf` | `error` | Sprovodi korišćenje `else if` umesto ugnježdenih `if` unutar `else` grana. |
+| `useCollapsedIf` | `error` | Sprovodi korišćenje pojedinačnog `if` umesto ugnježdenih `if` grana. |
+| `useComponentExportOnlyModules` | `off` | Zahteva deklarisanje komponenti samo unutar modula koji izvozе isključivo React komponente. |
+| `useConsistentArrayType` | `error` | Zahteva dosledno korišćenje `T[]` ili `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Sprovodi upotrebu `new` za sve builtin-e, osim `String`, `Number` i `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Ovo pravilo sprovodi konzistentnu upotrebu vitičastih zagrada unutar JSX atributa i children. |
+| `useConsistentMemberAccessibility` | `error` | Zahteva konzistentne modifikatore pristupa za svojstva i metode klase. |
+| `useConsistentObjectDefinitions` | `error` | Zahteva konzistentnu deklaraciju objekt literal-a. |
+| `useConst` | `error` | Zahteva `const` deklaracije za promenljive koje se dodeljuju samo jednom. |
+| `useDefaultParameterLast` | `error` | Sprovodi da default parametri i opcioni parametri budu poslednji. |
+| `useDefaultSwitchClause` | `error` | Zahteva `default` klauzulu u switch izjavama. |
+| `useDeprecatedReason` | `error` | Zahteva navođenje razloga pri korišćenju `@deprecated` direktive. |
+| `useEnumInitializers` | `error` | Zahteva da svaki enum član bude eksplicitno inicijalizovan. |
+| `useExplicitLengthCheck` | `off` | Sprovodi eksplicitno poređenje `length`, `size`, `byteLength` ili `byteOffset` svojstava vrednosti. |
+| `useExponentiationOperator` | `error` | Zabranjuje upotrebu `Math.pow` u korist operatora `**`. |
+| `useExportType` | `error` | Podstiče upotrebu `export type` za tipove. |
+| `useExportsLast` | `off` | Zahteva da svi export-i budu deklarisani nakon svih ne-export izjava. |
+| `useFilenamingConvention` | `error` | Sprovodi konvenciju imenovanja fajlova za JavaScript i TypeScript (kebab-case, ASCII). |
+| `useForOf` | `error` | Ovo pravilo preporučuje for-of petlju kada u for petlji indeks služi za izdvajanje stavke iz iteriranog niza. |
+| `useFragmentSyntax` | `error` | Ovo pravilo sprovodi korišćenje `<>...</>` umesto `<Fragment>...</Fragment>`. |
+| `useGraphqlNamingConvention` | `error` | Proverava da su svi enum vrednosti u GraphQL-u kapitalizovane. |
+| `useGroupedAccessorPairs` | `error` | Zahteva da getter-i i setter-i za isto svojstvo budu susedni u definicijama klase i objekta. |
+| `useImportType` | `error` | Podstiče upotrebu `import type` za tipove. |
+| `useLiteralEnumMembers` | `error` | Zahteva da svi enum članovi budu literalne vrednosti. |
+| `useNamingConvention` | `off` | Pravilo imenovanja (onemogućeno). |
+| `useNodeAssertStrict` | `error` | Podstiče upotrebu `node:assert/strict` umesto `node:assert`. |
+| `useNodejsImportProtocol` | `error` | Sprovodi korišćenje `node:` protokola za Node.js ugrađene module. |
+| `useNumberNamespace` | `error` | Koristiti `Number` svojstva umesto globalnih. |
+| `useNumericSeparators` | `error` | Sprovodi upotrebu numeričkih separatora u numeričkim literalima. |
+| `useObjectSpread` | `error` | Preferira object spread umesto `Object.assign()` pri konstrukciji novih objekata. |
+| `useReadonlyClassProperties` | `error` | Sprovodi označavanje članova kao readonly ako se nikada ne menjaju van konstruktora. |
+| `useSelfClosingElements` | `error` | Sprečava dodatne zatvarajuće tagove za komponente bez children. |
+| `useShorthandAssign` | `error` | Zahteva skraćenu dodelu operatora gde je moguće. |
+| `useShorthandFunctionType` | `error` | Sprovodi upotrebu funkcijskih tipova umesto object tipa sa call potpisima. |
+| `useSingleVarDeclarator` | `off` | Zabranjuje više deklaracija promenljivih u istoj izjavi. |
+| `useSymbolDescription` | `error` | Zahteva parametar opisa za `Symbol()`. |
+| `useTemplate` | `error` | Preferira template literal-e umesto konkatenacije stringova. |
+| `useThrowNewError` | `error` | Zahteva `new` pri bacanju greške. |
+| `useThrowOnlyError` | `error` | Zabranjuje bacanje vrednosti koje nisu `Error`. |
+| `useTrimStartEnd` | `error` | Sprovodi upotrebu `String.trimStart()` i `String.trimEnd()` umesto `String.trimLeft()` i `String.trimRight()`. |
+| `useUnifiedTypeSignatures` | `error` | Zabranjuje overload potpise koji se mogu ujediniti u jedan potpis. |
+| `noDescendingSpecificity` | `error` | Zabranjuje da selektor nižeg specifičnosti dolazi nakon selektora više specifičnosti (CSS). |
+| `noValueAtRule` | `error` | Zabranjuje upotrebu `@value` rula u css modulima (CSS). |
+
+### Sumnjivo
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noAlert` | `error` | Zabranjuje upotrebu `alert`, `confirm`, i `prompt`. |
+| `noApproximativeNumericConstant` | `error` | Koristiti standardne konstante umesto aproksimativnih literal-a. |
+| `noAssignInExpressions` | `error` | Zabranjuje dodeljivanja unutar izraza. |
+| `noAsyncPromiseExecutor` | `error` | Zabranjuje korišćenje async funkcije kao Promise executor-a. |
+| `noBiomeFirstException` | `error` | Sprečava upotrebu `!` obrasca na prvoj poziciji `files.includes` u konfiguracionom fajlu. |
+| `noBitwiseOperators` | `error` | Zabranjuje bitwise operatore. |
+| `noCatchAssign` | `error` | Zabranjuje ponovno dodeljivanje izuzetaka u catch granama. |
+| `noClassAssign` | `error` | Zabranjuje ponovno dodeljivanje članova klase. |
+| `noCommentText` | `error` | Sprečava umetanje komentara kao tekstualnih nodova. |
+| `noCompareNegZero` | `error` | Zabranjuje poređenje sa `-0`. |
+| `noConfusingLabels` | `error` | Zabranjuje labele koje nisu petlje. |
+| `noConfusingVoidType` | `error` | Zabranjuje void tip van generičkih ili povratnih tipova. |
+| `noConsole` | `off` | Zabranjuje upotrebu `console`. |
+| `noConstEnum` | `error` | Zabranjuje TypeScript const enum. |
+| `noConstantBinaryExpressions` | `error` | Zabranjuje izraze gde operacija ne utiče na vrednost. |
+| `noControlCharactersInRegex` | `error` | Sprečava kontrolne karaktere i neke escape sekvence koje odgovaraju kontrolnim karakterima u regex literal-ima. |
+| `noDebugger` | `error` | Zabranjuje upotrebu debugger-a. |
+| `noDocumentCookie` | `error` | Zabranjuje direktne dodeljivanja `document.cookie`. |
+| `noDoubleEquals` | `error` | Zahteva upotrebu `===` i `!==`. |
+| `noDuplicateAtImportRules` | `error` | Zabranjuje duplikat `@import` pravila (CSS). |
+| `noDuplicateCase` | `error` | Zabranjuje duplikat case label-a. |
+| `noDuplicateClassMembers` | `error` | Zabranjuje duplikat članova klase. |
+| `noDuplicateCustomProperties` | `error` | Zabranjuje duplikat custom svojstava unutar deklaracionih blokova (CSS). |
+| `noDuplicateElseIf` | `error` | Zabranjuje duplikat uslova u if-else-if lancima. |
+| `noDuplicateFields` | `error` | Zabranjuje duplirane polja u GraphQL operacijama. |
+| `noDuplicateFontNames` | `error` | Zabranjuje duplirane nazive unutar font familija (CSS). |
+| `noDuplicateObjectKeys` | `error` | Zabranjuje dve iste ključeve unutar objekata. |
+| `noDuplicateParameters` | `error` | Zabranjuje duplikat imena parametara funkcije. |
+| `noDuplicateProperties` | `error` | Zabranjuje duplirane osobine unutar deklaracionih blokova (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Zabranjuje duplirane selektore unutar keyframe blokova (CSS). |
+| `noDuplicateTestHooks` | `error` | Describe blok ne bi trebao sadržati duplikat hook-ova. |
+| `noEmptyBlock` | `error` | Zabranjuje prazne CSS blokove (CSS). |
+| `noEmptyBlockStatements` | `error` | Zabranjuje prazne blok izjave i statičke blokove. |
+| `noEmptyInterface` | `error` | Zabranjuje deklaraciju praznih interfejsa. |
+| `noEvolvingTypes` | `error` | Zabranjuje da promenljive evoluiraju u any tip kroz reassignment. |
+| `noExplicitAny` | `error` | Zabranjuje korišćenje any tipa. |
+| `noExportsInTest` | `error` | Zabranjuje korišćenje export ili module.exports u fajlovima koji sadrže testove. |
+| `noExtraNonNullAssertion` | `error` | Sprečava pogrešnu upotrebu non-null assertion operatora `!` u TypeScript fajlovima. |
+| `noFallthroughSwitchClause` | `error` | Zabranjuje propadanje switch grana (fallthrough). |
+| `noFocusedTests` | `error` | Zabranjuje fokusirane testove. |
+| `noFunctionAssign` | `error` | Zabranjuje ponovno dodeljivanje funkcijskih deklaracija. |
+| `noGlobalAssign` | `error` | Zabranjuje dodeljivanje nativnim objektima i read-only globalnim varijablama. |
+| `noGlobalIsFinite` | `error` | Koristiti `Number.isFinite` umesto globalnog `isFinite`. |
+| `noGlobalIsNan` | `error` | Koristiti `Number.isNaN` umesto globalnog `isNaN`. |
+| `noImplicitAnyLet` | `error` | Zabranjuje implicitni any tip pri deklaraciji promenljivih. |
+| `noImportAssign` | `error` | Zabranjuje dodeljivanje import-ovanim binding-ovima. |
+| `noImportantInKeyframe` | `error` | Zabranjuje nevažeći `!important` unutar keyframe deklaracija (CSS). |
+| `noIrregularWhitespace` | `error` | Zabranjuje upotrebu nepravilnih whitespace karaktera. |
+| `noLabelVar` | `error` | Zabranjuje labele koje dele ime sa promenljivom. |
+| `noMisleadingCharacterClass` | `error` | Zabranjuje karaktere sastavljene od više code point-ova u character class sintaksi. |
+| `noMisleadingInstantiator` | `error` | Sprovodi pravilnu upotrebu `new` i konstruktora. |
+| `noMisplacedAssertion` | `error` | Proverava da je assertion funkcija, npr. expect, postavljena unutar `it()` poziva. |
+| `noMisrefactoredShorthandAssign` | `error` | Zabranjuje skraćenu dodelu kada promenljiva pojavljuje sa obe strane. |
+| `noOctalEscape` | `error` | Zabranjuje oktalne escape sekvence u string literalima. |
+| `noPrototypeBuiltins` | `error` | Zabranjuje direktnu upotrebu `Object.prototype` built-in-a. |
+| `noQuickfixBiome` | `error` | Zabranjuje upotrebu `quickfix.biome` unutar editor podešavanja fajla. |
+| `noRedeclare` | `error` | Zabranjuje redeklaracije promenljivih, funkcija, klasa i tipova u istom opsegu. |
+| `noRedundantUseStrict` | `error` | Sprečava redundantno korišćenje `use strict`. |
+| `noSelfCompare` | `error` | Zabranjuje poređenja gde su obe strane tačno iste. |
+| `noShadowRestrictedNames` | `error` | Zabranjuje identifikatore koji zasenčavaju restriktovana imena. |
+| `noShorthandPropertyOverrides` | `error` | Zabranjuje skraćena svojstva koja nadjačavaju povezana dugačka svojstva (CSS). |
+| `noSkippedTests` | `error` | Zabranjuje zaštićene (preskočene) testove. |
+| `noSparseArray` | `error` | Sprečava upotrebu sparse nizova (nizova sa rupama). |
+| `noTemplateCurlyInString` | `error` | Zabranjuje placeholder sintaksu template literal-a u običnim stringovima. |
+| `noThenProperty` | `error` | Zabranjuje then property. |
+| `noTsIgnore` | `error` | Sprečava upotrebu TypeScript direktive `@ts-ignore`. |
+| `noUnassignedVariables` | `error` | Zabranjuje let ili var promenljive koje se čitaju, ali nikada nisu dodeljene. |
+| `noUnknownAtRules` | `error` | Zabranjuje nepoznate at-rules (CSS). |
+| `noUnsafeDeclarationMerging` | `error` | Zabranjuje nesigurno spajanje deklaracija između interfejsa i klasa. |
+| `noUnsafeNegation` | `error` | Zabranjuje nesigurnu negaciju (`!`). |
+| `noUselessEscapeInString` | `error` | Zabranjuje nepotrebne escape sekvence u string literalima. |
+| `noUselessRegexBackrefs` | `error` | Zabranjuje besmislene backreference u regularnim izrazima koji uvek odgovaraju praznom stringu. |
+| `noVar` | `error` | Zabranjuje upotrebu `var`. |
+| `noWith` | `error` | Zabranjuje `with` izjave u non-strict kontekstima. |
+| `useAdjacentOverloadSignatures` | `error` | Zabranjuje overload potpise koji nisu jedan pored drugog. |
+| `useAwait` | `error` | Osigurava da asinhrone funkcije koriste `await`. |
+| `useBiomeIgnoreFolder` | `error` | Promoviše ispravnu upotrebu ignorisanja foldera u konfiguracionom fajlu. |
+| `useDefaultSwitchClauseLast` | `error` | Sprovodi da default klauzule u switch izjavama budu poslednje. |
+| `useErrorMessage` | `error` | Zahteva prosleđivanje poruke prilikom kreiranja ugrađene greške. |
+| `useGetterReturn` | `error` | Zahteva da get metode uvek vraćaju vrednost. |
+| `useGoogleFontDisplay` | `error` | Sprovodi preporučenu display strategiju za Google Fontove. |
+| `useGuardForIn` | `error` | Zahteva da for-in petlje uključuju if izjavu. |
+| `useIsArray` | `error` | Koristi `Array.isArray()` umesto `instanceof Array`. |
+| `useIterableCallbackReturn` | `error` | Sprovodi konzistentne povratne vrednosti u iterable callback-ovima. |
+| `useNamespaceKeyword` | `error` | Zahteva korišćenje namespace ključne reči umesto `module` za deklaraciju TypeScript namespace-a. |
+| `useNumberToFixedDigitsArgument` | `error` | Zahteva korišćenje digits argumenta sa `Number#toFixed()`. |
+| `useStaticResponseMethods` | `error` | Koristi statičke `Response` metode umesto `new Response()` konstruktora kada je moguće. |
+| `useStrictMode` | `error` | Sprovodi korišćenje direktive `use strict` u skript fajlovima. |
+
+## Napomene
+
+Neka pravila su onemogućena jer su previše spora za pokretanje sa Scanner-om. Kao što je navedeno u [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first), pravila omoguћena na nivou projekta su poznata po tome što uzrokuju performansni overhead u zamenu za napredniju analizu.
+
+U našim testiranjima, otkrili smo da ova pravila mogu napraviti razliku između 300 ms i 13 s pri lintovanju.

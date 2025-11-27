@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Aturan linting khusus Next.js untuk Ultracite.
+---
+
+Konfigurasi Next.js menyediakan aturan linting khusus untuk optimisasi gambar, struktur dokumen, dan pola App Router.
+
+## Instalasi
+
+Tambahkan konfigurasi Next.js ke `biome.jsonc` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Catatan: Konfigurasi Next.js secara otomatis menyertakan aturan React, jadi Anda tidak perlu menambahkan `ultracite/react` secara terpisah.
+
+## Ikhtisar
+
+Konfigurasi ini menambahkan aturan khusus untuk pengembangan Next.js:
+
+- **Optimisasi Gambar**: Mewajibkan penggunaan komponen Image Next.js
+- **Struktur Dokumen**: Mencegah penggunaan yang tidak tepat dari komponen khusus Next.js
+- **Komponen Klien**: Memastikan komponen klien asinkron ditangani dengan benar
+- **Berkas Konfigurasi**: Penanganan khusus untuk berkas `next.config.*`
+
+## Aturan Khusus Next.js
+
+### Eksperimental
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noNextAsyncClientComponent` | `error` | Mencegah komponen klien asinkron di Next.js. Komponen klien harus sinkron; gunakan komponen server untuk operasi asinkron. |
+
+### Kinerja
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noImgElement` | `error` | Melarang penggunaan elemen HTML `<img>`. Gunakan komponen `<Image>` Next.js sebagai gantinya untuk optimisasi gambar otomatis. |
+
+### Gaya
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noHeadElement` | `error` | Melarang penggunaan elemen HTML `<head>`. Gunakan `next/head` Next.js atau API metadata App Router sebagai gantinya. |
+
+### Mencurigakan
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|-----------|
+| `noDocumentImportInPage` | `error` | Mencegah impor `next/document` dalam berkas halaman. `_document.tsx` hanya boleh ada di `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Mencegah impor `next/head` di `_document.tsx`. Gunakan `<Head>` dari `next/document` sebagai gantinya. |
+
+## Penggantian Berkas Konfigurasi
+
+Preset Next.js menyertakan penanganan khusus untuk berkas konfigurasi dan komponen App Router:
+
+### Berkas Konfigurasi Next.js
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Ini memungkinkan pola konfigurasi Next.js yang mungkin biasanya tidak lulus aturan linting.
+
+### Halaman dan Layout App Router
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Komponen halaman dan layout App Router diizinkan menjadi asinkron tanpa memerlukan `await`, karena Next.js menangani ini secara khusus untuk rendering sisi server dan pengambilan data.

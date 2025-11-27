@@ -1,0 +1,48 @@
+---
+title: Migrasi dari Prettier
+description: Cara memigrasikan proyek Anda dari Prettier ke Ultracite.
+---
+
+Jika Anda menggunakan Prettier dan ingin beralih ke pengaturan pra-konfigurasi Ultracite, panduan ini akan membantu Anda bermigrasi sambil menjaga standar kualitas kode.
+
+## Mengapa Bermigrasi ke Ultracite?
+
+- **Kecepatan Kilat**: Biome (dasar Ultracite) berbasis Rust, jauh lebih cepat daripada Prettier
+- **Tanpa Konfigurasi**: Ratusan aturan pra-konfigurasi dibandingkan pengaturan Prettier secara manual
+- **Alat Gabungan**: Menggantikan ESLint dan Prettier dengan satu alat tunggal
+- **Integrasi AI**: Dukungan bawaan untuk editor bertenaga AI (Cursor, Windsurf, GitHub Copilot)
+- **Keamanan Tipe**: Aturan TypeScript yang komprehensif dengan strict null checks
+- **Standar Modern**: Praktik terbaik JavaScript/TypeScript terbaru
+
+## Sebelum Anda Mulai
+
+Pastikan Anda memiliki:
+
+- Proyek yang sudah menggunakan Prettier
+- Node.js v14.18+ (Node 18+ direkomendasikan)
+- File `package.json`
+
+## Pengaturan Otomatis
+
+Jalankan [skrip pengaturan otomatis](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Ini akan:
+
+- Menginstal Ultracite sebagai dependensi
+- Menggabungkan `biome.json` / `biome.jsonc` yang ada dengan preset Ultracite
+- Menggabungkan `.vscode/settings.json` yang ada dengan preset Ultracite
+- Mengaktifkan `strictNullChecks` di file `tsconfig.json` Anda (atau membuatnya jika belum ada)
+- Mempertahankan aturan dan pengaturan kustom Anda
+- Menyiapkan integrasi editor
+
+Pastikan Anda memilih untuk menghapus konfigurasi `Prettier` yang ada. Ini akan:
+
+- Menghapus Prettier dan semua dependensi terkait
+- Menghapus semua file konfigurasi Prettier
+- Menghapus perintah terkait Prettier dari file `.vscode/settings.json` Anda
+
+Setelah peningkatan, Anda mungkin ingin meninjau file `biome.json` / `biome.jsonc` Anda untuk menghapus penimpaan apa pun. Selain itu, mulai ulang editor Anda agar konfigurasi baru diterapkan.

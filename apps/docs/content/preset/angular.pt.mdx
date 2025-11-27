@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Configuração específica do Angular para o Ultracite.
+---
+
+A configuração do Angular contém definições específicas para o analisador HTML, para suportar a sintaxe de templates do Angular.
+
+## Instalação
+
+Adicione a configuração do Angular ao seu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Visão geral
+
+Esta configuração adiciona suporte à sintaxe de templates do Angular:
+
+- **Interpolação HTML**: Habilita a análise da sintaxe de interpolação de templates do Angular (`{{ }}`)
+- **Diretivas de template**: Suporta diretivas do Angular como `*ngIf`, `*ngFor`, etc.
+- **Ligação de propriedade**: Trata a sintaxe de binding de propriedade do Angular `[property]="value"`
+- **Ligação de eventos**: Suporta a sintaxe de ligação de eventos `(event)="handler()"`
+
+## Configuração
+
+O preset do Angular configura o analisador HTML para reconhecer a interpolação de templates do Angular:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Isso permite que o Biome analise e formate corretamente os templates de componentes Angular sem tratar a sintaxe de interpolação como erros.

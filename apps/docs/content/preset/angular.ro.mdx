@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Configurare specifică Angular pentru Ultracite.
+---
+
+Configurarea Angular include setări ale parserului HTML specifice Angular pentru a suporta sintaxa șabloanelor Angular.
+
+## Instalare
+
+Adăugați configurația Angular în `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Prezentare generală
+
+Această configurație adaugă suport pentru sintaxa șabloanelor Angular:
+
+- **Interpolare HTML**: Permite parsarea sintaxei de interpolare a șabloanelor Angular (`{{ }}`)
+- **Directive de șablon**: Suportă directive Angular precum `*ngIf`, `*ngFor`, etc.
+- **Legarea proprietăților**: Gestionează sintaxa de legare a proprietăților Angular `[property]="value"`
+- **Legarea evenimentelor**: Suportă sintaxa de legare a evenimentelor `(event)="handler()"`
+
+## Configurare
+
+Presetul Angular configurează parserul HTML pentru a recunoaște interpolarea șabloanelor Angular:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Acest lucru permite Biome să analizeze și să formateze corect șabloanele componentelor Angular fără a interpreta sintaxa de interpolare ca erori.

@@ -1,0 +1,61 @@
+---
+title: React
+description: Regras de linting específicas para React no Ultracite.
+---
+
+A configuração do React contém regras de linting específicas para JSX, hooks e padrões de componentes.
+
+## Instalação
+
+Adicione a configuração do React ao seu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Visão geral
+
+Esta configuração adiciona regras específicas para desenvolvimento em React:
+
+- **Regras de JSX**: Exigir sintaxe e padrões adequados para JSX
+- **Regras de Hooks**: Garantir que os hooks do React sejam usados corretamente
+- **Regras de Componentes**: Aplicar as melhores práticas para componentes React
+- **Tratamento de children**: Evitar uso indevido da prop children
+
+## Regras Específicas do React
+
+### Correção
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Impedir a passagem de children como props. children devem ser aninhados entre as tags de abertura e de fecho. |
+| `noNestedComponentDefinitions` | `error` | Impedir definições de componentes dentro de outros componentes. Isso causa re-renders desnecessários. |
+| `noReactPropAssignments` | `error` | Impedir reatribuições de props em componentes React. As props devem ser tratadas como imutáveis. |
+| `noRenderReturnValue` | `error` | Impedir o uso do valor de retorno de `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Impedir que elementos void (como `<img>`, `<br>`) tenham children. |
+| `useExhaustiveDependencies` | `error` | Garantir que todas as dependências estejam corretamente especificadas nos hooks do React (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Garantir que todos os hooks do React sejam chamados no nível superior das funções de componente, não dentro de loops, condicionais ou funções aninhadas. |
+| `useJsxKeyInIterable` | `error` | Garantir que elementos em iteráveis tenham uma prop `key` para a reconciliação do React. |
+
+### Experimental
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Impedir o uso do legado `React.forwardRef`. Use `ref` como prop em vez disso (React 19+). |
+
+### Estilo
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Exigir o uso de componentes funcionais em vez de componentes de classe no React. |
+
+### Suspeitas
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Impedir o uso de índices de array como `key`. Índices de array não são identificadores estáveis e podem causar problemas com o estado do componente. |
+| `noDuplicateJsxProps` | `error` | Impedir propriedades duplicadas em JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Impedir pontos e vírgula que alterem a semântica de elementos JSX. |
+| `noReactSpecificProps` | `off` | Permitir props específicas do React como `className` e `htmlFor`. |

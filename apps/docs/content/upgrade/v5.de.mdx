@@ -1,0 +1,49 @@
+---
+title: Upgrade auf v5
+description: Wie Sie Ihr Projekt von Ultracite v4 auf v5 aktualisieren.
+---
+
+Ultracite v5 ist eine größere Version mit erheblichen Verbesserungen und inkompatiblen Änderungen. Diese Anleitung hilft Ihnen dabei, Ihre bestehende v4-Konfiguration auf v5 zu aktualisieren.
+
+## Was ist neu in v5
+
+- **Aktualisiertes Biome**: Von v1.x auf v2.x aktualisiert
+- **Neues Konfigurationsformat**: Wechsel von `biome.json` zu `biome.jsonc`
+- **Verbesserte CLI**: In TypeScript neu geschrieben mit besserer Fehlerbehandlung
+- **Editor-Integrationen**: Integrierte Unterstützung für Cursor, Windsurf, Zed und GitHub Copilot
+- **Git-Hooks**: Optionale Integrationen einschließlich Husky, lint-staged und lefthook
+- **Verbessertes Schema**: Neue Schema-URL mit besserer Validierung
+- **Vereinfachte VS Code-Einstellungen**: Dateityp-Overrides in einer einzigen Zeile zusammengefasst
+
+## Migrationsschritte
+
+### Automatische Migration (empfohlen)
+
+Der einfachste Weg zu migrieren ist, den neuen Initialisierungsbefehl auszuführen:
+
+```package-install
+npx ultracite@latest init
+```
+
+Dies wird:
+- Aktualisiert Ihre Abhängigkeiten auf die neuesten Versionen
+- Aktualisiert Ihre `biome.json` oder `biome.jsonc`  
+- Aktualisiert Ihre VS Code-Einstellungen
+- Bietet an, KI-Editor-Regeln einzurichten (Cursor, Windsurf, Zed usw.)
+- Bietet an, neue Integrationen einzurichten (Git-Hooks, lint-staged usw.)
+
+Nach dem Upgrade sollten Sie Ihre `biome.json` / `biome.jsonc`-Datei prüfen, um gegebenenfalls Überschreibungen zu entfernen. Starten Sie außerdem Ihren Editor neu, um sicherzustellen, dass die neue Konfiguration angewendet wird.
+
+Bitte prüfen Sie außerdem die Biome [v2 Upgrade-Anleitung](https://biomejs.dev/guides/upgrade-to-biome-v2/) für weitere Informationen zu Schema- / Regeländerungen.
+
+### Manuelle Migration
+
+Wenn Sie mehr Kontrolle über den Prozess bevorzugen, folgen Sie den [Schritten zur manuellen Migration](/setup#manual-installation), indem Sie:
+
+- Installieren Sie die aktualisierten Versionen von Ultracite und Biome manuell
+- Aktualisieren Sie Ihre `biome.json`-Datei auf die neue Schema-Version
+- Aktualisieren Sie die Datei `.vscode/settings.json` (optional)
+- Hinzufügen einer Datei mit KI-Editor-Regeln (optional)
+- Hinzufügen neuer Integrationen (optional)
+
+Starten Sie nach der Migration Ihren Editor neu, um sicherzustellen, dass die neue Konfiguration angewendet wird.

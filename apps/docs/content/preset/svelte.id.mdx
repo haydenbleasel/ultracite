@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Konfigurasi khusus Svelte untuk Ultracite.
+---
+
+Konfigurasi Svelte memiliki pengaturan khusus untuk Svelte. Ini adalah preset minimal karena Biome belum memiliki aturan linting khusus Svelte yang didedikasikan, tetapi mencakup penggantian penting untuk mencegah kesalahan linting positif palsu dalam berkas `.svelte`.
+
+## Instalasi
+
+Tambahkan konfigurasi Svelte ke `biome.jsonc` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Ikhtisar
+
+Konfigurasi ini:
+
+- **Dukungan HTML**: Mengaktifkan dukungan HTML penuh eksperimental dengan indentasi untuk script dan style
+- **Properti Khusus React**: Menandai properti khusus React seperti `className` dan `htmlFor` karena Svelte menggunakan atribut HTML standar (`class` dan `for`)
+- **Penggantian untuk Berkas Svelte**: Aturan dilonggarkan untuk berkas `.svelte` untuk menangani struktur komponen Svelte
+
+## Konfigurasi Formatter HTML
+
+Preset Svelte mengaktifkan dukungan HTML eksperimental dengan format khusus untuk script dan style yang disematkan:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Konfigurasi ini:
+- **Dukungan Penuh Eksperimental**: Mengaktifkan kemampuan pem-parsing dan pemformatan HTML eksperimental Biome untuk berkas `.svelte`
+- **Indentasi Script dan Style**: Mengindentasi dengan benar kode di dalam tag `<script>` dan `<style>` pada komponen Svelte
+
+## Aturan Khusus Svelte
+
+### Mencurigakan
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|----------|
+| `noReactSpecificProps` | `error` | Melarang properti khusus React seperti `className` dan `htmlFor` dalam Svelte. Gunakan `class` dan `for` sebagai gantinya. |
+
+## Penggantian Berkas Svelte
+
+Aturan berikut dinonaktifkan untuk berkas `.svelte` untuk mencegah positif palsu akibat dukungan parsial Biome untuk komponen Svelte:
+
+### Kebenaran
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|----------|
+| `noUnusedVariables` | `off` | Memungkinkan variabel yang tidak terpakai di berkas `.svelte`. Variabel di bagian script mungkin hanya digunakan di template. |
+| `noUnusedImports` | `off` | Memungkinkan impor yang tidak terpakai di berkas `.svelte`. Impor mungkin hanya digunakan di bagian template. |
+
+### Gaya
+
+| Aturan | Pengaturan | Deskripsi |
+|--------|-----------|----------|
+| `useConst` | `off` | Mengizinkan deklarasi `let` dan `var` di berkas `.svelte` untuk pernyataan reaktif. |
+| `useImportType` | `off` | Menonaktifkan persyaratan tipe impor eksplisit untuk kompatibilitas yang lebih baik dengan sistem build Svelte. |

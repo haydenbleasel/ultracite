@@ -1,0 +1,50 @@
+---
+title: Átállás Biome-ról
+description: Hogyan migráld a projektedet az önálló Biome-ról az Ultracite-re.
+---
+
+Ha már a Biome-ot használod és át szeretnél térni az Ultracite előre konfigurált beállítására, ez az útmutató segít a migrációban úgy, hogy megőrizze a meglévő konfigurációdat.
+
+## Miért váltsunk Ultracite-re?
+
+- **Konfiguráció nélkül**: Az Ultracite egy erősen konfigurált szabályelőkészítést biztosít
+- **Szerkesztőintegráció**: Beépített támogatás AI-alapú szerkesztők számára (Cursor, Windsurf, GitHub Copilot)
+- **Konzisztens munkafolyamat**: Szabványosított beállítás projektek és csapatok között
+- **További eszközök**: Opcionális Git hookok, lint-staged integráció
+- **Karbantartott szabályok**: Rendszeres frissítések új legjobb gyakorlatokkal
+
+## Mielőtt elkezdenél
+
+Győződj meg róla, hogy rendelkezel:
+
+- Egy meglévő projekttel, amely Biome-ot használ
+- Node.js v14.18+ (javasolt Node 18+)
+- Egy `biome.json` vagy `biome.jsonc` fájllal
+
+## Migrációs lehetőségek
+
+### Opció 1: Gyors migráció (Ajánlott)
+
+A leggyorsabb mód a [automatikus telepítő script](/setup#automatic-installation) futtatása.
+
+Ez a következőket fogja elvégezni:
+
+- Telepíti az Ultracite-ot függőségként
+- Összeolvasztja a meglévő `biome.json` / `biome.jsonc` fájlodat Ultracite előbeállításával
+- Összeolvasztja a meglévő `.vscode/settings.json` fájlodat Ultracite előbeállításával
+- Engedélyezi a `strictNullChecks`-et a `tsconfig.json` fájlban (vagy létrehoz egyet, ha még nem létezik)
+- Megőrzi a saját szabályaidat és beállításaidat
+- Beállítja a szerkesztőintegrációkat
+
+A frissítést követően érdemes átnézni a `biome.json` / `biome.jsonc` fájlodat az esetleges felülírások eltávolításához. Emellett indítsd újra a szerkesztőt, hogy az új konfiguráció érvénybe lépjen.
+
+### Opció 2: Manuális migráció
+
+Ha inkább nagyobb kontrollt szeretnél a folyamat felett, kövesd a [Manuális migráció](/setup#manual-installation) lépéseit az alábbi módon:
+
+- Ultracite és Biome manuális telepítése
+- Frissítsd a `biome.json` fájlodat úgy, hogy kiterjessze az Ultracite-ot
+- Hozd létre vagy frissítsd a `.vscode/settings.json` fájlt a Biome kiterjesztés engedélyezéséhez
+- Engedélyezd a `strictNullChecks`-et a `tsconfig.json` fájlban (vagy hozz létre egyet, ha még nem létezik)
+
+A migráció után indítsd újra a szerkesztődet, hogy az új konfiguráció érvénybe lépjen.

@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Vue.js-re szabott lintelési szabályok az Ultracite számára.
+---
+
+A Vue konfiguráció Vue.js-re szabott lintelési szabályokat tartalmaz a komponens szerkezetre, data opciókra, computed tulajdonságokra és fenntartott kulcsszavakra vonatkozóan. Tartalmaz továbbá felülírásokat is, hogy megakadályozza a hamis pozitív lint hibákat a `.vue` fájlokban.
+
+## Telepítés
+
+Add hozzá a Vue konfigurációt a `biome.jsonc` fájlodhoz:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Áttekintés
+
+Ez a konfiguráció Vue.js fejlesztésre specifikus szabályokat ad hozzá:
+
+- **HTML támogatás**: Engedélyezi a kísérleti teljes HTML-támogatást, beleértve a script és style behúzását
+- **Komponens elnevezés**: Kényszeríti a több szóból álló komponensnevek használatát
+- **Adatszerkezet**: Megakadályozza a `data` opciók helytelen deklarálását
+- **Fenntartott kulcsszavak**: Megtiltja a Vue fenntartott props és kulcsok használatát
+- **Duplikált kulcsok**: Megakadályozza a duplikált kulcsokat a komponens opciókban
+- **React-specifikus propsok**: Megtiltja a React-specifikus propsok használatát Vue komponensekben
+- **Vue fájlokra vonatkozó felülírások**: Enyhített szabályok a `.vue` fájlokhoz a Single File Component struktúra kezeléséhez
+
+## HTML formázó konfiguráció
+
+A Vue preset engedélyezi a kísérleti HTML-támogatást különleges formázással a beágyazott script-ek és style-ok számára:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Ez a konfiguráció:
+- **Kísérleti teljes támogatás**: Engedélyezi a Biome kísérleti HTML elemzését és formázási képességeit a `.vue` fájlokhoz
+- **Script és style behúzás**: Megfelelően behúzza a kódot a `<script>` és `<style>` tagek belsejében a Vue Single File Componentek esetén
+
+## Vue-specifikus szabályok
+
+### Kísérleti
+
+| Szabály | Beállítás | Leírás |
+|--------:|:---------:|--------|
+| `noVueDataObjectDeclaration` | `error` | Megakadályozza a `data` opció objektum deklarációjának használatát Vue komponensekben. A `data` opciónak függvénynek kell lennie, amely egy objektumot ad vissza. |
+| `noVueDuplicateKeys` | `error` | Megakadályozza a duplikált kulcsokat a Vue komponens opcióiban. A `data`, `computed`, `methods` stb. kulcsai egyediek kell legyenek. |
+| `noVueReservedKeys` | `error` | Megtiltja a Vue fenntartott kulcsok, például `$data`, `$props`, `$el` stb. használatát a komponens opciókban. |
+| `noVueReservedProps` | `error` | Megtiltja a Vue fenntartott props-ok, például `key`, `ref` és `is` használatát egyedi komponens props-ként. |
+| `noVueVIfWithVFor` | `error` | Megtiltja a `v-for` és `v-if` ugyanazon az elemen történő használatát. |
+| `useVueHyphenatedAttributes` | `error` | Javasolja a kebab-case használatát az attribútumnevekhez a Vue stílus útmutatója alapján. |
+| `useVueMultiWordComponentNames` | `error` | Kényszeríti a több szóból álló komponensneveket, hogy elkerülje az ütközést a HTML elemekkel. Az egy szóból álló neveket, mint például `Button` vagy `Card`, kerülni kell. |
+| `useVueValidVBind` | `error` | Kényszeríti a `v-bind` direktívák érvényességét Vue fájlokban. |
+| `useVueValidVElseIf` | `error` | Kényszeríti az érvényes `v-else-if` direktívákat Vue sablonokban. Hibát jelez, ha hiányzik a feltételes kifejezés, vagy ha nincs megelőzve `v-if` vagy `v-else-if` direktívával. |
+| `useVueValidVElse` | `error` | Kényszeríti az érvényes `v-else` direktívákat Vue sablonokban. Hibát jelez, ha a direktívát nem előzi meg `v-if` vagy `v-else-if` direktíva. |
+| `useVueValidVHtml` | `error` | Kényszeríti a `v-html` direktíva érvényes használatát Vue sablonokban. Hibát jelez, ha hiányzik a kifejezés, váratlan argumentumok vagy módosítók találhatók. |
+| `useVueValidVIf` | `error` | Kényszeríti az érvényes `v-if` direktívákat Vue sablonokban. Megtiltja az argumentumokat és módosítókat, és biztosítja, hogy érték legyen megadva. |
+| `useVueValidVOn` | `error` | Kényszeríti az érvényes `v-on` direktívákat Vue sablonokban. Hibát jelez érvénytelen `v-on` / rövidített `@` direktívák esetén hiányzó eseménynévvel, érvénytelen módosítókkal vagy hiányzó handler kifejezéssel. |
+| `useVueValidVText` | `error` | Kényszeríti az érvényes `v-text` direktívákat Vue sablonokban. A szabály hibát jelez, ha a v-textnek van argumentuma, vannak módosítói, vagy hiányzik az értéke. |
+
+### Gyanús
+
+| Szabály | Beállítás | Leírás |
+|--------:|:---------:|--------|
+| `noReactSpecificProps` | `error` | Megtiltja a React-specifikus propsokat, mint a `className` és a `htmlFor`, Vue-ban. Használja helyett a `class` és `for` attribútumokat. |
+
+## Vue fájlokra vonatkozó felülírások
+
+A következő szabályok ki vannak kapcsolva a `.vue` fájlok esetén, hogy elkerüljük a hamis pozitív találatokat a Biome részleges Vue Single File Component támogatása miatt:
+
+### Helyesség
+
+| Szabály | Beállítás | Leírás |
+|--------:|:---------:|--------|
+| `noUnusedVariables` | `off` | Engedélyezi a nem használt változókat `.vue` fájlokban, mivel a script szekció változói előfordulhat, hogy csak a template-ben használatosak. |
+| `noUnusedImports` | `off` | Engedélyezi a nem használt importokat `.vue` fájlokban. Az importok előfordulhat, hogy csak a template szekcióban használatosak. |
+
+### Stílus
+
+| Szabály | Beállítás | Leírás |
+|--------:|:---------:|--------|
+| `useConst` | `off` | Engedélyezi a `let` és `var` deklarációkat `.vue` fájlokban a reaktív adatminták támogatása érdekében. |
+| `useImportType` | `off` | Kikapcsolja a kifejezett importtípus-követelményeket a jobb kompatibilitás érdekében a Vue build rendszerével. |

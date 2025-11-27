@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Samodejno zažene Ultracite na vaših datotekah, pripravljenih za commit v Gitu, z lefthook
+---
+
+Ultracite provides seamless integration with [lefthook](https://lefthook.dev/), a fast and powerful Git hooks manager. This integration automatically sets up pre-commit hooks to ensure your code is properly formatted before every commit.
+
+## Kaj je lefthook?
+
+lefthook je hiter nativen upravljalec Git hookov za Node.js in Go projekte. Namenjen je enostavni, hitri in zmogljivi uporabi, kar vam omogoča upravljanje Git hookov v ekipi z uporabo konfiguracijskih datotek, ki jih lahko vključite v svoj repozitorij.
+
+## Kako Ultracite uporablja lefthook
+
+Ko inicializirate Ultracite v svojem projektu, lahko samodejno konfigurira lefthook za zagon oblikovanja kode pred vsakim commitom. To zagotavlja, da:
+
+- **Vsa koda, vključena v commit** sledi doslednim standardom oblikovanja
+- **Preverjanja kakovosti kode** se izvajajo samodejno
+- **Člani ekipe se ne rabijo spomniti** na ročno formatiranje kode
+- **Vaš repozitorij ohranja čist, dosleden slog kode**
+
+## Vedenje pre-commit hooka
+
+Integracija Ultracite z lefthook ustvari pre-commit hook, ki zažene naslednji ukaz:
+
+```bash
+npx ultracite fix
+```
+
+Ta ukaz:
+- Zažene Biomeov linter in formatter na vaši kodi
+- Samodejno odpravi težave z oblikovanjem, kjer je mogoče
+- Zagotovi, da vse staged datoteke izpolnjujejo standarde kode vašega projekta
+- Onemogoči commite, ki bi uvedli neskladnosti v oblikovanju
+
+## Samodejna nastavitev
+
+Med postopkom inicializacije (`ultracite init`), če izberete možnost lefthook, Ultracite:
+
+1. **Namesti lefthook**: Doda lefthook kot razvojno odvisnost v vaš projekt
+2. **Inicializira lefthook**: Zažene `lefthook install` za nastavitev Git hookov
+3. **Ustvari konfiguracijo**: Ustvari datoteko `lefthook.yml` z ukazom za oblikovanje
+4. **Obravnava obstoječe nastavitve**: Če že imate konfiguriran lefthook, posodobi obstoječo konfiguracijo namesto, da jo prepiše
+
+## Podrobnosti integracije
+
+Integracija z lefthook vključuje več pametnih funkcij:
+
+### Upravljanje odvisnosti
+- Samodejno namesti lefthook kot dev odvisnost z uporabo upravljalca paketov vašega projekta
+- Uporabi ustrezen ukaz upravljalca paketov (`npm install -D`, `yarn add -D`, `pnpm add -D`, itd.)
+- Za inicializacijo Git hookov zažene `lefthook install`
+
+### Upravljanje konfiguracije
+- **Novi projekti**: Ustvari novo datoteko `lefthook.yml` z ukazom ultracite fix
+- **Obstoječi projekti**: Doda ukaz Ultracite v vašo obstoječo lefthook konfiguracijo ter ohrani druge hooke, ki ste jih morda konfigurirali
+
+### Struktura datotek
+Integracija ustvari ali spremeni:
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## Prednosti
+
+- **Doslednost ekipe**: Vsak član ekipe ima samodejno uporabljeno enako oblikovanje
+- **Brez potrebe po konfiguraciji**: Deluje iz škatle z razumnimi privzetimi nastavitvami
+- **Hitrost**: lefthook je napisan v Go in je izjemno hiter
+- **Fleksibilnost**: Enostavno razširljiv z dodatnimi ukazi in hooki
+- **Večplatformno**: Deluje dosledno na različnih operacijskih sistemih
+
+## Integracija v delovni tok
+
+Integracija lefthook se brezhibno prilega vašemu razvojnemu delovnemu toku:
+
+1. **Razvijalec naredi spremembe** v datotekah s kodo
+2. **Označi datoteke** za commit z `git add`
+3. **Poskusi izvesti commit** z `git commit`
+4. **lefthook sproži** pre-commit hook samodejno
+5. **Ultracite zažene** in formatira staged datoteke
+6. **Commit se izvede**, če oblikovanje uspe, ali **ne uspe**, če obstajajo težave, ki jih ni mogoče samodejno popraviti
+
+## Prilagoditev
+
+Medtem ko Ultracite nastavi smiselne privzete nastavitve, lahko prilagodite vedenje:
+
+- Spremenite `lefthook.yml`, da dodate dodatne ukaze ali hooke
+- Konfigurirajte nastavitve Biome za prilagoditev pravil oblikovanja
+- Dodajte druge pre-commit preveritve poleg Ultraciteovega oblikovanja
+- Uporabite zmogljive funkcije lefthook za vzporedno izvajanje in pogojno logiko
+
+## Odpravljanje težav
+
+### Hook se ne izvaja
+Če se pre-commit hook ne izvaja:
+- Prepričajte se, da je lefthook nameščen: `npm ls lefthook`
+- Preverite, da datoteka `lefthook.yml` obstaja in vsebuje ukaz ultracite
+- Preverite, da so Git hooki omogočeni v vašem repozitoriju
+- Za ponovno namestitev hookov zaženite `lefthook install`
+
+### Težave z dovoljenji
+lefthook samodejno upravlja dovoljenja Git hookov, vendar če naletite na težave:
+- Poskusite znova zagnati `lefthook install`
+- Preverite, ali vaša Git konfiguracija dopušča hooke
+
+### Preskakovanje hookov
+V redkih primerih, ko morate preskočiti pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+Uporabljajte to redko, saj to zaobide samodejno formatiranje, ki ohranja skladnost vaše kode.
+
+## Primer konfiguracije
+
+Tako izgleda konfiguracija `lefthook.yml`:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Ta konfiguracija:
+- Se izvaja samo na JavaScript, TypeScript, JSON in CSS datotekah
+- Samodejno označi (stage) datoteke, ki jih je formatter popravil
+- Uporablja učinkovit zapis `jobs` za boljšo zmogljivost
+
+Konfiguracijo lahko razširite, da vključuje dodatne naloge:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

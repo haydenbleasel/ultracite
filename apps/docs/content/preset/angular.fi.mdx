@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Angular-spesifinen konfiguraatio Ultracitelle.
+---
+
+Angular-konfiguraatiossa on Angular-spesifisiä HTML-jäsentäjäasetuksia Angularin templaattisyntaksin tukemiseksi.
+
+## Asennus
+
+Lisää Angular-konfiguraatio tiedostoon `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Yleiskatsaus
+
+Tämä konfiguraatio lisää tuen Angularin templaattisyntaksille:
+
+- **HTML-interpolaatio**: Mahdollistaa Angular-templaatin interpolointisyntaksin (`{{ }}`) jäsentämisen
+- **Templaattidirektiivit**: Tukee Angular-direktiivejä kuten `*ngIf`, `*ngFor`, jne.
+- **Ominaisuussidonta**: Käsittelee Angularin ominaisuussidontasyntaksin `[property]="value"`
+- **Tapahtumasidonta**: Tukee tapahtumasidontasyntaksia `(event)="handler()"`
+
+## Konfiguraatio
+
+Angular-esiasetus konfiguroi HTML-jäsentäjän tunnistamaan Angularin templaattien interpoloinnin:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Tämä mahdollistaa Biomelle Angular-komponenttien templaattien oikean jäsentämisen ja muotoilun ilman, että interpolointisyntaksia käsitellään virheinä.

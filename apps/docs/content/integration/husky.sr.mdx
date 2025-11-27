@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Automatsko pokretanje Ultracite-a na vašim staged Git fajlovima uz Husky
+---
+
+Ultracite pruža besprekornu integraciju sa [Husky](https://typicode.github.io/husky/), popularnim alatom za upravljanje Git hookovima. Ova integracija automatski postavlja pre-commit hookove kako bi se osiguralo da je vaš kod pravilno formatiran pre svakog commita.
+
+## Šta je Husky?
+
+Husky je alat koji olakšava korišćenje Git hookova u vašem projektu. Git hookovi su skripte koje se automatski izvršavaju u određenim tačkama Git radnog toka, kao što je pre commitovanja ili pushovanja koda. Husky pojednostavljuje proces podešavanja i upravljanja tim hookovima.
+
+## Kako Ultracite koristi Husky
+
+Kada inicijalizujete Ultracite u svom projektu, on može automatski konfigurisati Husky da pokreće formatiranje koda pre svakog commita. Ovo osigurava da:
+
+- Sav kod koji se commituje prati dosledne standarde formatiranja
+- Provere kvaliteta koda se automatski primenjuju
+- Članovi tima ne moraju da se sećaju da ručno formatiraju kod
+- Vaš repozitorijum zadržava čist i dosledan stil koda
+
+## Ponašanje pre-commit hooka
+
+Ultracite-ova Husky integracija kreira pre-commit hook koji izvršava sledeću komandu:
+
+```bash
+npx ultracite fix
+```
+
+Ova komanda:
+- Pokreće Biome-ov linter i formatter nad vašom bazom koda
+- Automatski ispravlja probleme formatiranja gde je to moguće
+- Osigurava da svi staged fajlovi zadovoljavaju standarde koda vašeg projekta
+- Sprečava commitove koji bi uveli nedoslednosti u formatiranju
+
+## Automatsko podešavanje
+
+Tokom procesa inicijalizacije (`ultracite init`), ako izaberete opciju Husky, Ultracite:
+
+1. **Instalira Husky**: Dodaje Husky kao razvojnu zavisnost u vaš projekat
+2. **Kreira fajl hooka**: Postavlja `.husky/pre-commit` fajl sa komandom za formatiranje
+3. **Rukuje postojećim podešavanjima**: Ako već imate konfigurisani Husky, ažurira vaš postojeći pre-commit hook umesto da ga prepiše
+
+## Detalji integracije
+
+Husky integracija uključuje nekoliko pametnih funkcija:
+
+### Upravljanje zavisnostima
+- Automatski instalira Husky kao dev zavisnost koristeći paket menadžer vašeg projekta
+- Koristi odgovarajuću komandu paket menadžera (`npm install -D`, `yarn add -D`, `pnpm add -D`, itd.)
+
+### Upravljanje hookovima
+- **Novi projekti**: Kreira novi `.husky/pre-commit` fajl sa `ultracite fix` komandom
+- **Postojeći projekti**: Dodaje Ultracite komandu u vaš postojeći pre-commit hook, zadržavajući ostale hookove koje ste možda konfigurisali
+
+### Struktura fajlova
+Integracija kreira ili modifikuje:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Prednosti
+
+### Dosledan stil koda
+Svaki commit automatski prati standarde formatiranja vašeg projekta, eliminišući rasprave o stilu i nedoslednosti.
+
+### Automatska kontrola kvaliteta
+Uhvatajte probleme formatiranja pre nego što uđu u vaš repozitorijum, održavajući čist istorijat commitova.
+
+### Saradnja u timu
+Svi članovi tima automatski prate iste standarde formatiranja bez ručne intervencije.
+
+### Optimizacija CI/CD
+Smanjite greške u CI/CD pipeline-u zbog problema sa formatiranjem, jer je kod prethodno formatiran lokalno.
+
+## Integracija u tok rada
+
+Sa omogućenim Husky integracijama, vaš tipični Git tok rada postaje:
+
+1. **Napravite izmene** u fajlovima koda
+2. **Označite izmene** sa `git add`
+3. **Commit-ujete izmene** sa `git commit`
+4. **Pre-commit hook se automatski pokreće**, formatirajući staged fajlove
+5. **Commit se nastavlja** sa pravilno formatiranim kodom
+
+Ako formatter napravi izmene, moraćete ponovo da stage-ujete i commit-ujete te izmene.
+
+## Prilagođavanje
+
+Iako Ultracite postavlja razumna podrazumevana podešavanja, možete prilagoditi ponašanje:
+
+- Izmenite `.husky/pre-commit` da dodate dodatne komande
+- Konfigurišite Biome podešavanja da prilagodite pravila formatiranja
+- Dodajte druge provere pre-commita pored Ultracite-ovog formatiranja
+
+## Otklanjanje poteškoća
+
+### Hook se ne pokreće
+Ako se pre-commit hook ne izvršava:
+- Proverite da li je Husky instaliran: `npm ls husky`
+- Proverite da li `.husky/pre-commit` postoji i da je izvršan
+- Potvrdite da su Git hookovi omogućeni u vašem repozitorijumu
+
+### Problemi sa dozvolama
+Na Unix-sličnim sistemima, obezbedite da fajl hooka bude izvršan:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Zaobilaženje hookova
+U retkim slučajevima kada trebate da preskočite pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+Koristite ovo štedljivo, jer zaobilazi automatizovano formatiranje koje održava doslednost vaše baze koda.

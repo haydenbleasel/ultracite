@@ -1,0 +1,87 @@
+---
+title: Upgrade ke v6
+description: Panduan untuk meningkatkan dari Ultracite v5 ke v6 dengan sistem preset baru.
+---
+
+Ultracite v6 memperkenalkan [preset khusus framework](/configuration#framework-specific-configurations): 
+
+- [`ultracite/core`](/preset/core) - Aturan dasar JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Aturan khusus React
+- [`ultracite/next`](/preset/next) - Aturan khusus Next.js
+- [`ultracite/solid`](/preset/solid) - Aturan Solid.js
+- [`ultracite/vue`](/preset/vue) - Aturan Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Aturan Svelte
+- [`ultracite/qwik`](/preset/qwik) - Aturan Qwik
+- [`ultracite/angular`](/preset/angular) - Parser HTML untuk Angular
+- [`ultracite/remix`](/preset/remix) - Dukungan routing berbasis file
+
+## Apa yang Berubah
+
+v6 memperkenalkan [framework-specific presets](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Aturan dasar JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Aturan khusus React
+- [`ultracite/next`](/preset/next) - Aturan khusus Next.js
+- [`ultracite/solid`](/preset/solid) - Aturan Solid.js
+- [`ultracite/vue`](/preset/vue) - Aturan Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Aturan Svelte
+- [`ultracite/qwik`](/preset/qwik) - Aturan Qwik
+- [`ultracite/angular`](/preset/angular) - Parser HTML untuk Angular
+- [`ultracite/remix`](/preset/remix) - Dukungan routing berbasis file
+
+**Pembaruan ini tidak memutus kompatibilitas** untuk pengguna Next.js/React.
+
+## Migrasi
+
+### Proyek Next.js/React
+
+Perbarui `biome.jsonc` Anda untuk memperluas preset yang sesuai:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Proyek Non-React
+
+Beralih ke preset core jika Anda tidak menggunakan React:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Framework Lainnya
+
+Gunakan preset yang sesuai untuk framework Anda:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Proyek Multi-Framework
+
+Gabungkan preset sesuai kebutuhan:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

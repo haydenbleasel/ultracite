@@ -1,0 +1,72 @@
+---
+title: Gebruik
+description: Deze sectie behandelt hoe u Ultracite dagelijks gebruikt — inclusief de commandoregelinterface, editor-integratiedetails en typische workflows.
+---
+
+## IDE-integratie
+
+Ultracite werkt het beste wanneer het in uw editor is geïntegreerd, zodat u onmiddellijke feedback krijgt terwijl u code schrijft. Het is ontworpen om automatisch bij het opslaan te draaien. Om het te testen, opent u een project in uw IDE. Terwijl u bestanden bewerkt, zou u moeten zien dat formattering bij het opslaan wordt toegepast. Probeer een kleine code-stijlfout in te voeren (zoals een extra puntkomma of een verkeerd ingesprongen regel) en druk op Opslaan – Ultracite (Biome) zal het bestand direct opnieuw formatteren.
+
+Als u een veelvoorkomend lintprobleem introduceert (zoals een ongebruikte variabele), ziet u mogelijk een gekromde onderstreping of een waarschuwing in het Problemen-paneel; bij het opslaan zal Ultracite proberen het te verhelpen als het automatisch kan worden hersteld (bijvoorbeeld het verwijderen van een ongebruikte import) of anders een waarschuwing achterlaten die u moet oplossen.
+
+### Direct formatteren
+
+Elke keer dat u een bestand opslaat, formatteert Biome (met Ultracite-config) het bestand. U hoeft geen aparte Prettier uit te voeren of u zorgen te maken over formattering — dat wordt automatisch verzorgd.
+
+Dankzij de `codeActionsOnSave`-instellingen zal VS Code bij het opslaan ook Biome’s "fix all"-actie toepassen. Dit betekent dat elke lintregel die een automatische fix heeft (zoals het omzetten van `!=` naar `!==`, het toevoegen van ontbrekende haakjes, het corrigeren van importvolgorde, enz.) wordt toegepast. Het is alsof u automatisch `--fix` met ESLint hebt uitgevoerd.
+
+We hebben zelfs `formatOnPaste` ingeschakeld — dus als u code ergens vandaan plakt, wordt deze onmiddellijk geformatteerd om bij uw stijl te passen.
+
+Het belangrijkste voordeel hier is directe feedback. U schrijft code in VS Code en Ultracite houdt het continu netjes. Na verloop van tijd zult u merken dat u weinig tot geen tijd besteedt aan het oplossen van lintfouten — Ultracite lost ze ofwel automatisch voor u op of signaleert ze vroegtijdig. Dit leidt tot een soepel ontwikkelproces waarin code-stijl en kleine problemen zich niet opstapelen.
+
+### Integratie met het Problemen-paneel
+
+Alle resterende problemen (die uw aandacht vereisen) verschijnen in het Problemen-paneel. Bijvoorbeeld, als Ultracite een regel heeft die iets verbiedt of een fout vindt die het niet kan verhelpen (stel, u gebruikte een verouderde API of vergat een Promise-afwijzing af te handelen), zal het dit als een fout of waarschuwing vermelden. U kunt erop klikken om naar de locatie in de code te springen.
+
+### Code lenses / Snelle oplossingen
+
+In veel gevallen biedt de VS Code-extensie voor Biome suggesties voor snelle fixes. Als u een gele gloeilamp of een suggestie-popup ziet, kunt u fixes ook handmatig toepassen. Bijvoorbeeld, als een import niet wordt gebruikt, kunt u een snelle oplossing krijgen om deze te verwijderen (als deze niet al bij het opslaan was verwijderd).
+
+## CLI-gebruik
+
+Ultracite wordt geleverd met een handige CLI (op te roepen als `ultracite` wanneer geïnstalleerd). Hieronder staan de gebruikelijke manieren om het te gebruiken.
+
+### Code controleren
+
+Het `check`-commando wikkelt het Biome `check`-commando in, dat de linter uitvoert zonder bestanden te wijzigen.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+U kunt de `--diagnostic-level`-filter gebruiken om alleen fouten of waarschuwingen te tonen:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Code herstellen
+
+Het `fix`-commando wikkelt het Biome `check --write`-commando in, dat de linter uitvoert en bestanden herstelt.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+U kunt ook onveilige fixes toepassen door het volgende uit te voeren:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Configuratie valideren
+
+Het `doctor`-commando controleert uw configuratie op problemen en geeft aanbevelingen. Dit is handig om uit te voeren nadat u Ultracite hebt geïnstalleerd om te controleren of alles correct is geconfigureerd.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

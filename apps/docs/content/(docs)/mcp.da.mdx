@@ -1,0 +1,118 @@
+---
+title: MCP
+description: Sådan bruger du Ultracite med MCP
+---
+
+Den **Model Context Protocol (MCP)** er en åben standard, der giver AI-assistenter som Claude, Cursor og andre AI-drevne værktøjer mulighed for sikkert at oprette forbindelse til eksterne datakilder og systemer. Tænk på det som en "universal fjernbetjening", der giver dine AI-værktøjer adgang til real-world data og funktionalitet.
+
+Ultracite understøtter MCP for at give ekstra kraft til din AI-udviklingsworkflow.
+
+## Installationsvejledning
+
+### Trin 1: Vælg dit AI-værktøj
+
+Først skal du sikre dig, at du bruger et AI-udviklingsværktøj, der understøtter MCP:
+
+- [Claude Desktop](https://claude.ai/download) (Gratis - anbefales til begyndere)
+- [Cursor](https://www.cursor.com/) (AI-drevet kodeeditor)
+- [Windsurf by Codeium](https://windsurf.com/) (AI-udviklingsplatform)
+- Andre MCP-kompatible værktøjer
+
+### Trin 2: Find din konfigurationsfil
+
+Afhængigt af dit AI-værktøj skal du redigere en af disse filer:
+
+- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` til macOS og `%APPDATA%\Claude\claude_desktop_config.json` til Windows
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **Andre værktøjer**: Tjek dit værktøjs MCP-dokumentation
+
+### Trin 3: Tilføj Ultracite-konfiguration
+
+Kopier og indsæt denne konfiguration i din MCP-konfigurationsfil:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### Trin 4: Genstart dit AI-værktøj
+
+Luk og genåbn din AI-applikation for at ændringerne træder i kraft.
+
+### Trin 5: Bekræft forbindelsen
+
+Test integrationen ved at spørge din AI-assistent:
+
+> Hvilke Ultracite-regler er tilgængelige?
+
+Hvis det lykkes, bør din AI kunne liste og forklare Ultracite-reglerne!
+
+## Flere MCP-servere
+
+Du kan bruge Ultracite sammen med andre MCP-servere:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## Brugseksempler
+
+### Udforsk tilgængelige regler
+
+Spørg din AI-assistent:
+
+> Hvilke regler har Ultracite for React-hooks?
+
+Det forventede svar vil inkludere relevante lint-regler for React-hooks og deres beskrivelser.
+
+### Forstå kategorier af regler
+
+> Vis mig alle tilgængelighedsregler i Ultracite
+
+Din AI kan liste og forklare de a11y-regler, der er konfigureret i Ultracite.
+
+### Sammenligning af forudindstillinger
+
+> Hvad er forskellen mellem ultracite/core og ultracite/react?
+
+Få detaljerede oplysninger om forskellige forudindstillede konfigurationer og hvornår de bør bruges.
+
+## Sikkerhed og Privatliv
+
+### Håndtering af data
+
+- Ultracite MCP-serveren leverer kun offentlig dokumentation om lint-regler og konfigurationsinformation
+- Ingen personlige data eller kode overføres til vores servere
+- Al kommunikation sker gennem dit valgte AI-værktøjs sikkerhedslag
+
+### Godkendelse
+
+- Ingen godkendelse kræves for adgang til offentlig dokumentation
+- Fremtidige premiumfunktioner kan kræve API-nøgler
+- Brug altid officielle Ultracite MCP-endpoints

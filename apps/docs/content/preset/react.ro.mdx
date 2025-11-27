@@ -1,0 +1,61 @@
+---
+title: React
+description: Reguli de linting specifice React pentru Ultracite.
+---
+
+Configurația React conține reguli de linting specifice pentru JSX, hook-uri și tipare de componente.
+
+## Instalare
+
+Adăugați configurația React în `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Prezentare generală
+
+Această configurație adaugă reguli specifice dezvoltării cu React:
+
+- **Reguli JSX**: Impun sintaxă și modele JSX corecte
+- **Reguli pentru Hooks**: Asigură utilizarea corectă a hook-urilor React
+- **Reguli pentru componente**: Impun bune practici pentru componentele React
+- **Gestionarea proprietății children**: Prevines utilizarea necorespunzătoare a props-ului children
+
+## Reguli specifice React
+
+### Corectitudine
+
+| Regulă | Setare | Descriere |
+|--------|--------|----------|
+| `noChildrenProp` | `error` | Prevines transmiterea children ca props. children ar trebui să fie imbricate între tag-urile de deschidere și de închidere. |
+| `noNestedComponentDefinitions` | `error` | Prevines definirea componentelor în interiorul altor componente. Acest lucru cauzează re-renderizări inutile. |
+| `noReactPropAssignments` | `error` | Prevines reatribuirea props în componentele React. Props ar trebui tratate ca fiind imuabile. |
+| `noRenderReturnValue` | `error` | Prevines utilizarea valorii returnate de `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Prevines ca elementele void (de exemplu `<img>`, `<br>`) să aibă children. |
+| `useExhaustiveDependencies` | `error` | Asigură că toate dependențele sunt specificate corect în hook-urile React (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Asigură că toate hook-urile React sunt apelate la nivelul superior al funcțiilor componentelor, nu în interiorul buclelor, condițiilor sau funcțiilor închise. |
+| `useJsxKeyInIterable` | `error` | Asigură că elementele din iterabile au o proprietate `key` pentru reconcilierea React. |
+
+### Zona experimentală
+
+| Regulă | Setare | Descriere |
+|--------|--------|----------|
+| `noReactForwardRef` | `error` | Prevines utilizarea versiunii vechi `React.forwardRef`. Folosiți ref ca prop în schimb (React 19+). |
+
+### Stil
+
+| Regulă | Setare | Descriere |
+|--------|--------|----------|
+| `useReactFunctionComponents` | `error` | Impune utilizarea componentelor funcționale în locul componentelor de clasă în React. |
+
+### Suspecte
+
+| Regulă | Setare | Descriere |
+|--------|--------|----------|
+| `noArrayIndexKey` | `error` | Prevines folosirea indicilor din array ca și chei. Indicii din array nu sunt identificatori stabili și pot cauza probleme cu starea componentelor. |
+| `noDuplicateJsxProps` | `error` | Prevines proprietăți duplicate în JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Prevines punctele și virgulele care schimbă semantica elementelor JSX. |
+| `noReactSpecificProps` | `off` | Permite props specifice React precum `className` și `htmlFor`. |

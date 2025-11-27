@@ -1,0 +1,49 @@
+---
+title: Uasghrádú go v5
+description: Conas do thionscadal a uasghrádú ó Ultracite v4 go v5.
+---
+
+Ultracite v5 is eisiúint mhór le feabhsuithe suntasacha agus athruithe a bhriseann comhoiriúnacht. Cuidíonn an treoir seo leat do shocraithe v4 reatha a uasghrádú go v5.
+
+## Cad atá Nua i v5
+
+- **Nuashonraithe Biome**: Uasghrádaithe ó v1.x go v2.x
+- **Formáid Chumraíochta Nua**: Aistrigh ó `biome.json` go `biome.jsonc`
+- **CLI Feabhsaithe**: Scriobhadh arís i TypeScript le láimhseáil earráide níos fearr
+- **Comhtháthaithe Eagarthóra**: Tacaíocht ionsuite do Cursor, Windsurf, Zed, agus GitHub Copilot
+- **Git Hooks**: Comhtháthuithe roghnacha lena n-áirítear Husky, lint-staged agus lefthook
+- **Scéim Feabhsaithe**: URL scéime nua le bailíochtú níos fearr
+- **Socruithe VS Code Simplithe**: Forchoigeartuithe cineál comhaid comhcheangailte i líne amháin
+
+## Céimeanna Inimirce
+
+### Inimirce Uathoibríoch (Moltar)
+
+Is é an bealach is éasca chun inimirce a dhéanamh ná an t-ordú tosaíochta nua a rith:
+
+```package-install
+npx ultracite@latest init
+```
+
+Déanfaidh sé seo:
+- Do spleáchais a nuashonrú chuig na leaganacha is déanaí
+- Do `biome.json` nó `biome.jsonc` a nuashonrú  
+- Do shocruithe VS Code a nuashonrú
+- Moladh a thabhairt chun rialacha eagarthóra AI a shocrú (Cursor, Windsurf, Zed, srl.)
+- Moladh a thabhairt chun comhtháthuithe nua a shocrú (greamáin Git, lint-staged, srl.)
+
+Tar éis an uasghrádaithe, b'fhéidir gur mhaith leat do chomhad `biome.json` / `biome.jsonc` a athbhreithniú chun aon forchoigeartuithe a bhaint. Ina theannta sin, atosú do eagarthóra chun a chinntiú go bhfuil an chumraíocht nua curtha i bhfeidhm.
+
+Ina theannta sin, le do thoil déan athbhreithniú ar Biome [treoir uasghrádaíochta v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) chun tuilleadh eolais a fháil faoi athruithe scéime / rialacha.
+
+### Inimirce Láimhe
+
+Má theastaíonn uait níos mó rialaithe ar an bpróiseas, lean na céimeanna [Inimirce Láimhe](/setup#manual-installation) trí:
+
+- Ag suiteáil de láimh na leaganacha nuashonraithe de Ultracite agus Biome
+- Ag nuashonrú do chomhad `biome.json` go dtí an leagan scéime nua
+- Ag nuashonrú an chomhaid `.vscode/settings.json` (roghnach)
+- Comhad rialacha eagarthóra AI a chur leis (roghnach)
+- Comhtháthuithe nua a chur leis (roghnach)
+
+Tar éis na hinimirce, atosú do eagarthóra chun a chinntiú go bhfuil an chumraíocht nua curtha i bhfeidhm.

@@ -1,0 +1,47 @@
+---
+title: Astro
+description: Astro-specifik konfiguration för Ultracite.
+---
+
+Astro-konfigurationen innehåller Astro-specifika justeringar av lintregler för att hantera den unika strukturen hos Astro-komponenter, särskilt kring frontmatter-skript och komponentsyntax.
+
+## Installation
+
+Lägg till Astro-konfigurationen i din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/astro"]
+}
+```
+
+## Översikt
+
+Denna konfiguration justerar regler för Astro-utveckling:
+
+- **Oanvända variabler/importer**: Tillåter oanvända variabler och importer i Astro-filer på grund av frontmatter-begränsningar där variabler kanske endast används i mallsektionen
+- **Variabeldeklarationer**: Minskar striktheten kring `const` eftersom Astro-frontmatter kan kräva omtilldelningsbara variabler
+- **Importtyper**: Inaktiverar krav på explicita importtyper för bättre kompatibilitet
+- **React-specifika props**: Markerar React-specifika props som `className` eftersom Astro använder standard HTML-attribut
+
+## Astro-specifika regler
+
+### Korrekthet
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Tillåt oanvända variabler i Astro-filer. Variabler deklarerade i frontmatter kanske endast används i mallsektionen. |
+| `noUnusedImports` | `off` | Tillåt oanvända importer i Astro-filer. Importer i frontmatter kanske endast används i mallsektionen. |
+
+### Stil
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `useConst` | `off` | Tillåt `let` och `var`-deklarationer. Astro-komponentens frontmatter kan kräva omtilldelningsbara variabler. |
+| `useImportType` | `off` | Inaktivera krav på explicita importtyper för bättre kompatibilitet med Astros byggsystem. |
+
+### Misstänkta
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Förhindra React-specifika props som `className` och `htmlFor` i Astro. Använd `class` och `for` istället. |

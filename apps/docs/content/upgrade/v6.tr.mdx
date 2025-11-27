@@ -1,0 +1,75 @@
+---
+title: v6'ya Yükseltme
+description: Ultracite v5'ten v6'ya yeni ön ayar sistemi ile yükseltme rehberi.
+---
+
+Ultracite v6, projenizde hangi kuralların uygulanacağını daha iyi kontrol etmenizi sağlayan çerçeveye özgü ön ayarlar sunar. **Bu yükseltme Next.js/React kullanıcıları için geriye dönük uyumludur.**
+
+## Neler Değişti
+
+v6, [çerçeveye özgü ön ayarlar](/configuration#framework-specific-configurations) getirir:
+
+- [`ultracite/core`](/preset/core) - Temel JavaScript/TypeScript kuralları
+- [`ultracite/react`](/preset/react) - React'e özel kurallar
+- [`ultracite/next`](/preset/next) - Next.js'e özel kurallar
+- [`ultracite/solid`](/preset/solid) - Solid.js için kurallar
+- [`ultracite/vue`](/preset/vue) - Vue.js için kurallar
+- [`ultracite/svelte`](/preset/svelte) - Svelte için kurallar
+- [`ultracite/qwik`](/preset/qwik) - Qwik için kurallar
+- [`ultracite/angular`](/preset/angular) - Angular HTML ayrıştırıcısı
+- [`ultracite/remix`](/preset/remix) - Dosya tabanlı yönlendirme desteği
+
+## Geçiş
+
+### Next.js/React Projeleri
+
+Uygun ön ayarları genişletmek için `biome.jsonc` dosyanızı güncelleyin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### React Kullanmayan Projeler
+
+React kullanmıyorsanız core ön ayarına geçin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Diğer Framework'ler
+
+Kullandığınız çerçeve için uygun ön ayarı kullanın:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Çoklu Framework Projeleri
+
+Gerektiği şekilde ön ayarları birleştirin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

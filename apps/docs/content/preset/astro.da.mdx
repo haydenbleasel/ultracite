@@ -1,0 +1,47 @@
+---
+title: Astro
+description: Konfiguration for Astro-specifikke indstillinger til Ultracite.
+---
+
+Astro-konfigurationen indeholder Astro-specifikke justeringer af lint-regler for at håndtere den unikke struktur i Astro-komponenter, især omkring frontmatter-scripts og komponent-syntaks.
+
+## Installation
+
+Tilføj Astro-konfigurationen til din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/astro"]
+}
+```
+
+## Oversigt
+
+Denne konfiguration justerer regler for Astro-udvikling:
+
+- **Ubrugte variable/imports**: Tillader ubrugte variable og imports i Astro-filer på grund af frontmatter-begrænsninger, hvor variabler kun kan bruges i templatesektionen
+- **Variabeldeklarationer**: Løsner håndhævelsen af `const`, da Astro-frontmatter kan kræve variabler, der kan tildeles igen
+- **Importtyper**: Deaktiverer krav om eksplicit importtype for bedre kompatibilitet
+- **React-specifikke props**: Marker React-specifikke props som `className`, da Astro bruger standard HTML-attributter
+
+## Astro-specifikke regler
+
+### Korrekthed
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Tillad ubrugte variable i Astro-filer. Variable erklæret i frontmatter kan kun bruges i templatesektionen. |
+| `noUnusedImports` | `off` | Tillad ubrugte imports i Astro-filer. Imports i frontmatter kan kun bruges i templatesektionen. |
+
+### Stil
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `useConst` | `off` | Tillad `let`- og `var`-deklarationer. Astro-komponenters frontmatter kan kræve variabler, der kan tildeles igen. |
+| `useImportType` | `off` | Deaktiver krav om eksplicit importtype for bedre kompatibilitet med Astros buildsystem. |
+
+### Mistænkeligt
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Forbyd React-specifikke props som `className` og `htmlFor` i Astro. Brug `class` og `for` i stedet. |

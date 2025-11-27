@@ -1,0 +1,118 @@
+---
+title: MCP
+description: Cómo usar Ultracite con MCP
+---
+
+El **Protocolo de Contexto de Modelo (MCP)** es un estándar abierto que permite que asistentes de IA como Claude, Cursor y otras herramientas impulsadas por IA se conecten de forma segura con fuentes de datos y sistemas externos. Piénsalo como un "control remoto universal" que permite a tus herramientas de IA acceder a datos y funcionalidades del mundo real.
+
+Ultracite es compatible con MCP para potenciar tu flujo de trabajo de desarrollo de IA.
+
+## Guía de instalación
+
+### Paso 1: Elige tu herramienta de IA
+
+Primero, asegúrate de que estés usando una herramienta de desarrollo de IA que soporte MCP:
+
+- [Claude Desktop](https://claude.ai/download) (Gratis - recomendado para principiantes)
+- [Cursor](https://www.cursor.com/) (editor de código potenciado por IA)
+- [Windsurf by Codeium](https://windsurf.com/) (plataforma de desarrollo de IA)
+- Otras herramientas compatibles con MCP
+
+### Paso 2: Localiza tu archivo de configuración
+
+Dependiendo de tu herramienta de IA, tendrás que editar uno de estos archivos:
+
+- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` para macOS y `%APPDATA%\Claude\claude_desktop_config.json` para Windows
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **Otras herramientas**: Consulta la documentación MCP de tu herramienta
+
+### Paso 3: Añade la configuración de Ultracite
+
+Copia y pega esta configuración en tu archivo de configuración MCP:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### Paso 4: Reinicia tu herramienta de IA
+
+Cierra y vuelve a abrir tu aplicación de IA para que los cambios surtan efecto.
+
+### Paso 5: Verifica la conexión
+
+Prueba la integración preguntándole a tu asistente de IA:
+
+> ¿Qué reglas de Ultracite están disponibles?
+
+Si tiene éxito, tu IA debería poder listar y explicar las reglas de Ultracite.
+
+## Múltiples servidores MCP
+
+Puedes usar Ultracite junto con otros servidores MCP:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## Ejemplos de uso
+
+### Explorar reglas disponibles
+
+Pregunta a tu asistente de IA:
+
+> ¿Qué reglas tiene Ultracite para los hooks de React?
+
+La respuesta esperada incluirá reglas de linting relevantes para hooks de React y sus descripciones.
+
+### Comprender las categorías de reglas
+
+> Muéstrame todas las reglas de accesibilidad en Ultracite
+
+Tu IA puede listar y explicar las reglas de accesibilidad (a11y) configuradas en Ultracite.
+
+### Comparar preajustes
+
+> ¿Cuál es la diferencia entre ultracite/core y ultracite/react?
+
+Obtén información detallada sobre las diferentes configuraciones preajustadas y cuándo utilizarlas.
+
+## Seguridad y privacidad
+
+### Manejo de datos
+
+- El servidor MCP de Ultracite solo proporciona documentación pública de reglas de linting e información de configuración
+- No se transmite información personal ni código a nuestros servidores
+- Toda la comunicación ocurre a través de la capa de seguridad de la herramienta de IA que elijas
+
+### Autenticación
+
+- No se requiere autenticación para el acceso a la documentación pública
+- Funciones premium futuras pueden requerir claves API
+- Usa siempre los endpoints MCP oficiales de Ultracite

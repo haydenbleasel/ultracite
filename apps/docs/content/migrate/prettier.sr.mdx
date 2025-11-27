@@ -1,0 +1,48 @@
+---
+title: Prelazak sa Prettier na Ultracite
+description: Kako da migrirate svoj projekat sa Prettier na Ultracite.
+---
+
+Ako koristite Prettier i želite da pređete na unapred konfigurisano Ultracite okruženje, ovaj vodič će vam pomoći da migrirate uz održavanje standarda kvaliteta koda.
+
+## Zašto preći na Ultracite?
+
+- **Munjevita brzina**: Biome (osnova Ultracite-a) je zasnovan na Rustu, znatno brži od Prettier-a
+- **Bez konfiguracije**: Stotine unapred konfigurisanih pravila naspram ručne Prettier konfiguracije
+- **Kombinovani alat**: Zamenjuje i ESLint i Prettier jednim alatom
+- **Integracija sa AI**: Ugrađena podrška za uređivače koji koriste AI (Cursor, Windsurf, GitHub Copilot)
+- **Bezbednost tipova**: Sveobuhvatna TypeScript pravila sa strogom proverom null vrednosti
+- **Moderni standardi**: Najnovije najbolje prakse za JavaScript/TypeScript
+
+## Pre nego što počnete
+
+Uverite se da imate:
+
+- Postojeći projekat koji koristi Prettier
+- Node.js v14.18+ (preporučuje se Node 18+)
+- Datoteku `package.json`
+
+## Automatsko podešavanje
+
+Pokrenite [skriptu za automatsko podešavanje](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Ovo će:
+
+- Instalira Ultracite kao zavisnost
+- Spojiće vaš postojeći `biome.json` / `biome.jsonc` sa Ultracite-ovim presetom
+- Spojiće vaš postojeći `.vscode/settings.json` sa Ultracite-ovim presetom
+- Omogućiće `strictNullChecks` u vašem `tsconfig.json` fajlu (ili će ga kreirati ako ne postoji)
+- Sačuvaće vaša prilagođena pravila i podešavanja
+- Podesiće integracije uređivača
+
+Obavezno odaberite uklanjanje postojeće `Prettier` konfiguracije. Ovo će:
+
+- Ukloniti Prettier i sve povezane zavisnosti
+- Ukloniti sve konfiguracione fajlove vezane za Prettier
+- Ukloniti sve komande vezane za Prettier iz vašeg `.vscode/settings.json` fajla
+
+Nakon nadogradnje, možda ćete želeti da pregledate vaš `biome.json` / `biome.jsonc` fajl kako biste uklonili eventualna nadjačavanja. Dodatno, restartujte vaš uređivač kako biste osigurali da je nova konfiguracija primenjena.

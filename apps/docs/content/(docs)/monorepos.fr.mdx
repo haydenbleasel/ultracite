@@ -1,0 +1,48 @@
+---
+title: Monorepos
+description: Comment utiliser Ultracite dans un monorepo.
+---
+
+Ultracite est conçu pour fonctionner immédiatement avec les monorepos. Voici comment l'utiliser avec Turborepo.
+
+## Configuration
+
+Lors de l'initialisation d'Ultracite, il créera un fichier `biome.jsonc` à la racine de votre dépôt. Ce fichier sera utilisé pour configurer Ultracite pour l'ensemble de votre monorepo.
+
+```
+my-turborepo/
+├── apps
+├── packages
+├── turbo.json
+└── biome.jsonc
+```
+
+## Ajout de scripts
+
+Parce que Biome est si rapide, vous pouvez utiliser un script racine plutôt que de créer des scripts séparés dans chacun de vos packages.
+
+Vous pouvez ajouter les scripts `check` et `fix` à votre fichier `package.json`.
+
+```json title="package.json"
+{
+  "scripts": {
+    "check": "npx ultracite@latest check",
+    "fix": "npx ultracite@latest fix"
+  }
+}
+```
+
+En option, vous pouvez également ajouter les scripts `check` et `fix` à votre fichier `turbo.json`.
+
+```json title="turbo.json"
+{
+  "tasks": {
+    "//#check": {},
+    "//#fix": {
+      "cache": false
+    }
+  }
+}
+```
+
+Vous pourrez désormais exécuter ces scripts en utilisant `turbo run check` et `turbo run fix`.

@@ -1,0 +1,63 @@
+---
+title: Configurare
+description: Cum să instalezi Ultracite în proiectul tău.
+---
+
+Ultracite poate fi instalat cu toți managerii de pachete principali. Vei avea nevoie de Node.js v14.18+ (se recomandă Node 18+) și de un proiect care conține un fișier `package.json`.
+
+## Instalare
+
+Cel mai simplu mod de a începe este să rulezi scriptul `init` al Ultracite, care va instala pachetele necesare și va configura fișierul de configurare pentru tine. În directorul proiectului tău, rulează:
+
+```package-install
+npx ultracite init
+```
+
+Opțional poți transmite următoarele flag-uri comenzii `init`:
+
+| Flag                | Descriere                                       | Opțiuni                                                                 |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Managerul de pachete care va fi folosit.         | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Framework-urile care vor fi configurate.         | Separate prin virgulă: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Editorii care vor fi configurați.                 | Separate prin virgulă: `vscode`, `zed`                                  |
+| `--agents`          | Agenții AI care vor fi configurați.               | Separate prin virgulă: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Hook-urile agenților care vor fi configurate.     | Separate prin virgulă: `cursor`, `claude`                                |
+| `--integrations`    | Integrări adiționale de configurat.               | Separate prin virgulă: `husky`, `lefthook`, `lint-staged`                |
+| `--migrate`         | Instrumente de migrare care vor fi eliminate.     | Separate prin virgulă: `eslint`, `prettier` (elimină dependențele, fișierele de configurare și setările editorului) |
+| `--skip-install`    | Sari peste instalarea dependențelor.               | (nu este necesară nicio valoare)                                        |
+| `--quiet`           | Suprimă prompturile interactive și ieșirea vizuală. | (nu este necesară nicio valoare, activat automat în CI)                 |
+
+### Utilizare programatică
+
+Pentru instrumente care trebuie să apeleze Ultracite programatic (de exemplu CLI-uri de scaffolding), poți folosi flag-ul `--quiet` pentru a suprima toate prompturile interactive și ieșirea vizuală:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+Flag-ul `--quiet` este activat automat când variabila de mediu `CI` este setată la `true` sau `1`, făcându-l potrivit pentru pipeline-urile CI/CD:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+În modul quiet, Ultracite va:
+- Sări peste toate prompturile interactive
+- Folosi valori implicite rezonabile pentru toate opțiunile
+- Suprima arta ASCII, indicatorii de progres și mesajele de jurnal
+- Creează doar configurația de bază Biome
+- Se termină curat cu codul 0 în caz de succes sau 1 în caz de eșec
+
+## Extensii
+
+Dacă folosești Visual Studio Code, instalează extensia oficială [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome), care permite formatare/corectare la salvare:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+În plus, dacă folosești Tailwind CSS, este recomandat să instalezi extensia [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) pentru sortarea claselor și sugestii:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

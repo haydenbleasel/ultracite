@@ -1,0 +1,71 @@
+---
+title: Konfiguracija
+description: Privzeta konfiguracija linterja Ultracite in kako jo prilagoditi.
+---
+
+Ena najboljših lastnosti Ultracite je, da deluje brez konfiguracije iz škatle – lahko preprosto razširite prednastavitev `ultracite` in začnete. Vendar pa je vsak projekt nekoliko drugačen, zato boste morda želeli prilagoditi določena pravila ali prilagoditi Ultracite različnim ogrodjem. Ta razdelek pojasnjuje privzeto konfiguracijo in kako jo razširiti ali preglasiti.
+
+Ultracite zagotavlja konfiguracije specifične za ogrodja, ki jih lahko razširite poleg osnovne konfiguracije. To vam omogoča dodajanje pravil za lintanje, specifičnih za posamezno ogrodje, brez napihovanja osnovne konfiguracije ali ukvarjanja z nepomembnimi pravili.
+
+Celoten seznam razpoložljivih konfiguracij za ogrodja najdete v razdelku [Prednastavitve](/preset/core).
+
+### Uporaba
+
+Za uporabo konfiguracije specifične za ogrodje jo dodajte v polje `extends`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Lahko združite več konfiguracij, če delate na projektu z več ogrodji ali uporabljate nekaj, kot je Astro, ki podpira več ogrodij.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Privzeta konfiguracija
+
+Ko v `biome.jsonc` vključite `"extends": ["ultracite/core"]`, potegnete osnovno prednastavitev Ultracite. Ta prednastavitev vključuje pravila in konfiguracije, ki niso vezane na specifično ogrodje. Nekatere pomembne značilnosti privzete konfiguracije:
+
+- **Strogost TypeScripta**: Ultracite omogoča stroge TypeScriptove kontrole in pravila linterja, ki zahtevajo robustno tipizacijo. Na primer, odsvetuje uporabo `any`, zahteva obravnavo `null/undefined` in v določenih primerih raje uporablja eksplicitne tipe, da se izognemo nejasnostim.
+- **Ekvivalenti ESLint-ovega "Recommended"**: Vključena so pogosta pravila najboljših praks (npr. brez neuporabljenih spremenljivk, brez eksplicitnega eval, brez proto onesnaževanja itd.).
+- **Dostopnost**: Pravila, ekvivalentna standardom dostopnosti, so privzeto omogočena (atributi ARIA, semantični HTML, navigacija s tipkovnico itd.).
+- **Node.js**: Obravnavane so posebnosti okolja. Na primer globalne spremenljivke, ki jih zagotavlja Node (kot `module`, `process`), so prepoznane, zato ne bodo napačno označene kot nedefinirane.
+- **Konvencije oblikovanja**: Nastavitve formatirnika Ultracite (večinoma podedovane iz Biome/Prettier privzetkov) vključujejo zamik z 2 presledkoma, največjo dolžino vrstice 80 znakov, podpičja na koncu stavkov, zaključne vejice tam, kjer so veljavne (npr. v večvrstičnih poljih/objektih), dvojne narekovaje za nize itd. Izbrane so za skladnost s pogostimi konvencami in za zagotavljanje čistejših diff-ov.
+
+Vse te privzete nastavitve si prizadevajo uveljaviti enoten slog in preprečiti pogoste napake, ne da bi morali ročno nastavljati vsako pravilo.
+
+Za celovit referenčni seznam vseh pravil lintanja, konfiguriranih v osnovni konfiguraciji Ultracite, si oglejte dokumentacijo [Osnovna konfiguracija](/preset/core).
+
+## Prepisovanje konfiguracije
+
+### Spreminjanje `biome.jsonc`
+
+Pravila lahko onemogočite s spreminjanjem datoteke `biome.jsonc`.
+
+Na primer, za onemogočanje pravila `noAutofocus` lahko dodate naslednje:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Vrstični komentarji
+
+Pravila lahko tudi onemogočite za posamezno vrstico tako, da na konec vrstice dodate komentar:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

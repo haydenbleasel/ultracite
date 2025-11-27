@@ -1,0 +1,86 @@
+---
+title: Pertanyaan yang Sering Diajukan
+description: Berikut adalah jawaban untuk beberapa pertanyaan yang sering diajukan tentang Ultracite.
+---
+
+## Q: Apa sebenarnya Ultracite – bagaimana bedanya dengan Biome atau ESLint?
+
+Ultracite pada dasarnya adalah sebuah preset konfigurasi yang dibangun di atas Biome. Anggap Ultracite sebagai bundel aturan dan pengaturan yang dikurasi, sementara Biome adalah mesin yang benar-benar memformat / melakukan lint pada kode. Anda bisa menggunakan Biome sendiri, tetapi Anda harus memutuskan aturan mana yang akan diaktifkan dan mengonfigurasi opsinya secara manual. Ultracite menghemat usaha itu dengan menyediakan konfigurasi siap-pakai yang menggunakan praktik terbaik dari seluruh ekosistem.
+
+Dibandingkan dengan ESLint + Prettier, Biome lebih cepat berkat implementasinya dalam Rust dan sifatnya yang terintegrasi (satu alat alih-alih dua atau tiga). Jika Anda suka mengutak-atik setiap aturan ESLint, Ultracite mungkin terasa membatasi; tapi tujuannya adalah menghilangkan kebutuhan itu dan mengadopsi default yang masuk akal.
+
+Singkatnya: Biome adalah mesin (linter/formatter), Ultracite adalah konfigurasi.
+
+## Q: Apakah saya masih perlu ESLint atau Prettier jika menggunakan Ultracite?
+
+Tidak – Ultracite (melalui Biome) menggantikan fungsionalitas ESLint dan Prettier untuk kode JavaScript / TypeScript Anda. Anda tidak perlu menjalankan ESLint atau Prettier sama sekali. Bahkan, disarankan untuk menghapus konfigurasi tersebut untuk menghindari konflik. Output Ultracite akan menutupi sebagian besar pemformatan dan linting yang dilakukan oleh alat-alat itu, biasanya dengan aturan yang setara atau lebih ketat.
+
+Satu-satunya kasus Anda mungkin masih menggunakannya adalah jika Anda memiliki plugin kasus tepi yang tidak didukung oleh Biome (misalnya, aturan ESLint yang sangat khusus). Namun idealnya, Anda bekerja sepenuhnya dalam ekosistem Ultracite.
+
+## Q: Bagaimana dengan file non-JS/TS saya? Apakah Ultracite menanganinya?
+
+Ultracite, melalui Biome, menyediakan berbagai tingkat dukungan linting dan pemformatan untuk JavaScript, TypeScript, JSX, CSS, dan GraphQL.
+
+## Q: Seberapa sering Ultracite diperbarui?
+
+Ultracite diperbarui sesuai kebutuhan, seringkali mengikuti siklus rilis Biome. Karena Biome masih berkembang, Anda mungkin melihat rilis minor yang sering untuk Ultracite. Pembaruan ini bisa membawa aturan baru, perbaikan bug, atau penyesuaian default. Karena versi dikunci melalui `-E`, Anda tidak akan mendapatkan pembaruan mengejutkan kecuali Anda memilih untuk meng-upgrade.
+
+Sebaiknya pantau repo Ultracite untuk rilis atau periksa halaman [Rilis](https://github.com/haydenbleasel/ultracite/releases). Saat memperbarui Ultracite, baca catatan rilis – kadang-kadang aturan baru diaktifkan yang bisa memunculkan peringatan baru di proyek Anda (yang sebenarnya baik untuk menemukan masalah, tetapi penting untuk menyadarinya). Meng-upgrade Biome bersama Ultracite biasanya mudah dilakukan melalui package manager.
+
+## Q: Jika saya tidak setuju dengan suatu aturan yang ditegakkan Ultracite, apa yang harus saya lakukan?
+
+Anda memiliki beberapa opsi:
+
+- **Nonaktifkan atau ubah levelnya** di `biome.jsonc` Anda (perbaikan cepat untuk proyek Anda).
+- **Buka sebuah [diskusi](https://github.com/haydenbleasel/ultracite/discussions/)** di repo GitHub jika aturan tersebut sebaiknya disesuaikan untuk semua orang. Mungkin para pemelihara akan setuju bahwa aturannya terlalu ketat atau bisa dibuat opsional.
+- **Jika ini masalah gaya**, ingat tujuan Ultracite adalah konvensi dibanding konfigurasi – kadang-kadang layak menyesuaikan diri dengan gaya alat demi konsistensi antar proyek. Namun tentu saja, kebutuhan proyek Anda tetap yang utama.
+
+Pada akhirnya, Anda mengendalikan konfigurasi lint proyek Anda. Ultracite adalah titik awal; silakan bentuk sesuai kebutuhan, tetapi sebaiknya dengan cara yang minor. Jika Anda mendapati diri Anda mematikan mayoritas aturan, maka Ultracite mungkin bukan preset yang tepat untuk preferensi tim Anda (walaupun itu tidak umum).
+
+Dalam kasus tersebut, Anda bisa membangun konfigurasi Biome sendiri dari awal, tetapi Anda akan kehilangan banyak kenyamanan. Biasanya, beberapa penyesuaian sudah cukup agar Ultracite cocok.
+
+## Q: Bisakah saya menggunakan Ultracite tanpa VS Code / Cursor / Windsurf?
+
+Ya — kami fokus pada VS Code dan fork-nya karena mereka adalah IDE paling populer untuk pengembangan web modern, tetapi Biome dapat digunakan murni melalui CLI atau dengan IDE lain.
+
+Lihat integrasi editor [pihak pertama](https://biomejs.dev/guides/editors/first-party-extensions/) dan [pihak ketiga](https://biomejs.dev/guides/editors/third-party-extensions/) Biome untuk mempelajari lebih lanjut.
+
+## Q: Bagaimana saya tahu aturan apa yang ditegakkan Ultracite? Apakah ada daftar?
+
+Ya, periksa file [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) di repo GitHub untuk melihat aturan yang diaktifkan.
+
+## Q: Bisakah Ultracite memperbaiki semua masalah yang ditemukannya?
+
+Tidak semua, tetapi banyak. Ultracite akan memperbaiki secara otomatis masalah yang aman dan deterministik untuk diperbaiki. Ini termasuk masalah pemformatan dan banyak kesalahan lint (terutama gaya atau transformasi kode sederhana seperti menghapus import yang tidak digunakan, menambahkan tanda kurung yang hilang, mengubah `==` menjadi `===`, dll.).
+
+Masalah yang lebih kompleks (logika bisnis atau hal-hal yang memerlukan niat pengembang) dibiarkan untuk Anda perbaiki. Misalnya, ia tidak akan secara ajaib mengganti nama variabel untuk mengikuti konvensi penamaan atau menambahkan penanganan error yang hilang – ia hanya akan memperingatkan Anda.
+
+Filosofinya mirip dengan ESLint: berikan perbaikan bila memungkinkan, tetapi jangan mengambil risiko mengubah perilaku kode. Selalu tinjau panel Problems atau output CLI untuk sisa peringatan setelah auto-fix.
+
+## Q: Di mana saya bisa belajar lebih banyak tentang Biome (alat yang dipakai Ultracite)?
+
+[Biome](https://biomejs.dev/) memiliki situs sendiri dengan dokumentasi, dan Anda dapat menemukan lebih banyak detail teknis di sana. Jika Anda penasaran tentang bagaimana ia memformat kode atau filosofi di balik pilihan tertentu, dokumentasi Biome adalah sumber terbaik.
+
+Selain itu, ada tulisan blog dan artikel komunitas tentang kebangkitan Biome sebagai penerus Rome. Memahami Biome dapat membantu Anda lebih memahami kemampuan Ultracite. Namun, Anda tidak perlu mempelajari Biome secara mendalam untuk menggunakan Ultracite secara efektif – tujuan Ultracite adalah mengabstraksi detail tersebut bagi kebanyakan pengguna.
+
+## Q: Bagaimana cara menonaktifkan Ultracite untuk proyek atau file tertentu?
+
+Jika Anda memiliki proyek di mana Anda sementara tidak ingin Ultracite, Anda bisa cukup tidak menyertakan `extends: ["ultracite/core"]` di `biome.jsonc` (atau menghapus file konfigurasi). Jika ekstensi VS Code terpasang, itu mungkin masih mencoba memformat saat menyimpan menggunakan default Biome.
+
+Untuk menonaktifkan sepenuhnya, Anda bisa mematikan `formatOnSave` atau meng-uninstall ekstensi Biome untuk workspace tersebut. Untuk file tertentu, seperti disebutkan, gunakan komentar atau pola ignore. Pada dasarnya, Ultracite bersifat opt-in per proyek melalui konfigurasi. Jika tidak dikonfigurasi, ia tidak akan berjalan (Biome sendiri mungkin masih menjalankan pemformatan jika dipicu, tetapi bukan aturan linting).
+
+## Q: Saya mendapatkan error corepack selama instalasi – apa yang harus saya lakukan?
+
+Beberapa pengguna menemui error verifikasi tanda tangan saat menjalankan `pnpm dlx ultracite init` dengan corepack, terutama pada Node.js v22 dengan versi corepack yang lebih tua. Error biasanya terlihat seperti "Cannot find matching keyid" selama instalasi paket.
+
+Berikut solusi yang direkomendasikan:
+
+- **Perbarui corepack**: Tingkatkan ke corepack versi 0.34.0 atau lebih baru. Anda dapat melakukan ini dengan `corepack prepare pnpm@latest --activate` atau dengan mengikuti panduan [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
+- **Perbarui Node.js**: Jika Anda menjalankan Node.js v20.x, pertimbangkan untuk meningkatkan ke v22 atau lebih baru, yang menyertakan versi corepack yang lebih mutakhir.
+- **Gunakan npx sebagai gantinya**: Jika corepack terus menyebabkan masalah, Anda bisa menggunakan `npx ultracite init` sebagai pengganti `pnpm dlx ultracite init`.
+
+Jika tidak ada yang berhasil, silakan buka issue di [repositori GitHub Ultracite](https://github.com/haydenbleasel/ultracite/issues) dengan detail tentang versi Node.js dan corepack Anda.
+
+---
+
+Kami berharap FAQ ini menjawab poin-poin kebingungan yang umum. Jika Anda memiliki pertanyaan yang tidak terjawab di sini, jangan ragu untuk menghubungi melalui GitHub proyek atau saluran komunitas. Ultracite hadir untuk mempermudah kehidupan pengembang Anda – jadi masukan dan pertanyaan selalu diterima untuk membantu meningkatkan proyek!

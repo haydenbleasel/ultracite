@@ -1,0 +1,86 @@
+---
+title: Ofte stilte spørsmål
+description: Her er svar på noen ofte stilte spørsmål om Ultracite.
+---
+
+## Q: Hva er egentlig Ultracite – hvordan skiller det seg fra Biome eller ESLint?
+
+Ultracite er i bunn og grunn en forhåndskonfigurert preset bygget på Biome. Tenk på Ultracite som en kuratert pakke med regler og innstillinger, mens Biome er motoren som faktisk formaterer / lint-er koden. Du kan bruke Biome alene, men da må du selv avgjøre hvilke regler som skal aktiveres og konfigurere alternativene manuelt. Ultracite sparer deg for denne jobben ved å gi en klar-til-bruk-oppsett som bruker beste praksis fra hele økosystemet.
+
+Sammenlignet med ESLint + Prettier er Biome raskere takket være sin Rust-implementering og det faktum at det er et samlet verktøy (ett verktøy i stedet for to eller tre). Hvis du allerede elsker å finjustere hver ESLint-regel, kan Ultracite føles begrensende; men målet er å eliminere behovet for det og anta fornuftige standarder.
+
+Kort sagt: Biome er motoren (linter / formatter), Ultracite er konfigurasjonen.
+
+## Q: Trenger jeg fortsatt ESLint eller Prettier hvis jeg bruker Ultracite?
+
+Nei – Ultracite (via Biome) erstatter funksjonaliteten til ESLint og Prettier for din JavaScript / TypeScript-kode. Du trenger ikke å kjøre ESLint eller Prettier i det hele tatt. Faktisk anbefales det å fjerne disse konfigurasjonene for å unngå konflikter. Ultracite sitt output vil dekke det meste av formatering og linting som disse verktøyene gjorde, vanligvis med tilsvarende eller strengere regler.
+
+Det eneste tilfellet hvor du kanskje fortsatt bruker dem, er hvis du har en spesiell plugin som ikke støttes av Biome (for eksempel en veldig spesialisert ESLint-regel). Men ideelt sett vil du jobbe helt innenfor Ultracite-økosystemet.
+
+## Q: Hva med mine filer som ikke er JS/TS? Håndterer Ultracite dem?
+
+Ultracite, via Biome, gir ulike nivåer av linting og formatteringsstøtte for JavaScript, TypeScript, JSX, CSS og GraphQL.
+
+## Q: Hvor ofte oppdateres Ultracite?
+
+Ultracite oppdateres etter behov, ofte i takt med Biome sin utgivelsessyklus. Siden Biome fortsatt utvikler seg, kan du se hyppige mindre utgivelser for Ultracite. Disse oppdateringene kan introdusere nye regler, feilrettinger eller justeringer av standarder. Gitt at det er festet via `-E`, vil du ikke få overraskende oppdateringer med mindre du selv velger å oppgradere.
+
+Det er en god idé å følge Ultracite-repoet for utgivelser eller sjekke [Utgivelser](https://github.com/haydenbleasel/ultracite/releases)-siden. Når du oppdaterer Ultracite, les utgivelsesnotatene – av og til kan en ny regel bli aktivert som kan gi nye advarsler i prosjektet ditt (noe som er bra for å fange problemer, men du bør være klar over det). Å oppgradere Biome sammen med Ultracite er vanligvis greit via pakkehåndtereren.
+
+## Q: Hvis jeg er uenig i en regel Ultracite håndhever, hva bør jeg gjøre?
+
+Du har noen valg:
+
+- Konfigurer den av eller til et annet nivå i din `biome.jsonc` (rask løsning for prosjektet ditt).
+- Åpne en [diskusjon](https://github.com/haydenbleasel/ultracite/discussions/) i GitHub-repoet hvis regelen bør justeres for alle. Kanskje vedlikeholderne vil være enige i at den er for streng eller burde være valgfri.
+- Hvis det er en stilistisk sak, husk at målet med Ultracite er konvensjon over konfigurasjon – noen ganger er det verdt å tilpasse seg verktøyets stil for konsistens på tvers av prosjekter. Men selvfølgelig kommer prosjektets behov først.
+
+Til syvende og sist kontrollerer du prosjektets lint-konfigurasjon. Ultracite er et utgangspunkt; føl deg fri til å forme det, men helst i små grep. Hvis du finner ut at du må slå av flertallet av reglene, er kanskje ikke Ultracite den rette preseten for teamets preferanser (selv om det ville være uvanlig).
+
+I så fall kan du bygge din egen Biome-konfig fra bunnen av, men da mister du mye av bekvemmeligheten. Vanligvis er et par justeringer alt som trengs for å få Ultracite til å passe fint.
+
+## Q: Kan jeg bruke Ultracite uten VS Code / Cursor / Windsurf?
+
+Ja — vi fokuserer på VS Code og dets forks siden de er de mest populære IDE-ene for moderne webutvikling, men Biome kan brukes ren via CLI eller med andre IDE-er.
+
+Se Biome sine [førstepartsutvidelser](https://biomejs.dev/guides/editors/first-party-extensions/) og [tredjepartsutvidelser](https://biomejs.dev/guides/editors/third-party-extensions/) for å lære mer.
+
+## Q: Hvordan vet jeg hvilke regler Ultracite håndhever? Finnes det en liste?
+
+Ja, sjekk filen `biome.jsonc` i GitHub-repoet for reglene som er aktivert.
+
+## Q: Kan Ultracite fikse alle problemer den finner?
+
+Ikke alle, men mange. Ultracite vil autofikse problemer som er trygge og deterministiske å rette. Dette inkluderer formateringsproblemer og mange lint-feil (spesielt stilistiske eller enkle kodeomforminger som å fjerne ubrukte imports, legge til manglende parenteser, endre `==` til `===`, osv.).
+
+Mer komplekse problemer (forretningslogikk eller ting som krever utviklerintensjon) blir overlatt til deg å fikse. For eksempel vil det ikke magisk endre variabelnavn for å følge en navnekonvensjon eller legge til manglende feilhåndtering – det vil bare advare deg.
+
+Filosofien ligner på ESLint sin: tilby fikser der det er mulig, men ikke risikere å endre kodeatferd. Se alltid gjennom Problems-panelet eller CLI-output for eventuelle gjenværende advarsler etter autofiks.
+
+## Q: Hvor kan jeg lære mer om Biome (verktøyet Ultracite bruker)?
+
+[Biome](https://biomejs.dev/) har sitt eget nettsted med dokumentasjon, og du kan finne mer tekniske detaljer der. Hvis du er nysgjerrig på hvordan det formaterer kode eller filosofien bak visse valg, er Biome-dokumentasjonen den beste ressursen.
+
+I tillegg finnes det blogginnlegg og community-artikler om Biome sin vekst som en etterfølger til Rome. Å forstå Biome kan hjelpe deg å bedre forstå Ultracite sine kapasiteter. Du trenger imidlertid ikke å lære Biome i dybden for å bruke Ultracite effektivt – Ultracite har som mål å abstrahere bort de detaljene for de fleste brukere.
+
+## Q: Hvordan deaktiverer jeg Ultracite for et spesifikt prosjekt eller fil?
+
+Hvis du har et prosjekt hvor du midlertidig ikke ønsker Ultracite, kan du rett og slett la være å inkludere `extends: ["ultracite/core"]` i `biome.jsonc` (eller fjerne konfigurasjonsfilen). Hvis VS Code-utvidelsen er installert, kan den fortsatt prøve å formatere ved lagring ved bruk av Biome sine standarder.
+
+For å deaktivere helt kan du slå av `formatOnSave` eller avinstallere Biome-utvidelsen for det workspace. For en spesifikk fil, som nevnt, bruk ignore-kommentarer eller mønstre. I praksis er Ultracite per prosjekt opt-in via konfigurasjonen. Hvis det ikke er konfigurert, vil det ikke kjøre (Biome selv kan fortsatt kjøre formatering hvis det trigges, men ikke lint-reglene).
+
+## Q: Jeg får en corepack-feil under installasjon – hva bør jeg gjøre?
+
+Noen brukere har støtt på signaturverifiseringsfeil når de kjører `pnpm dlx ultracite init` med corepack, spesielt på Node.js v22 med eldre corepack-versjoner. Feilen ser typisk ut som "Cannot find matching keyid" under pakkeinstallasjon.
+
+Her er anbefalte løsninger:
+
+- **Oppdater corepack**: Oppgrader til corepack versjon 0.34.0 eller nyere. Du kan gjøre dette med `corepack prepare pnpm@latest --activate` eller ved å følge [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
+- **Oppdater Node.js**: Hvis du kjører Node.js v20.x, vurder å oppgradere til v22 eller nyere, som inkluderer en nyere corepack-versjon.
+- **Bruk npx i stedet**: Hvis corepack fortsatt skaper problemer, kan du bruke `npx ultracite init` i stedet for `pnpm dlx ultracite init`.
+
+Hvis ingen av disse fungerer, åpne gjerne en sak på [Ultracite GitHub repoet](https://github.com/haydenbleasel/ultracite/issues) med detaljer om dine Node.js- og corepack-versjoner.
+
+---
+
+Vi håper disse FAQ-ene oppklarer vanlige uklarheter. Hvis du har et spørsmål som ikke er besvart her, ta gjerne kontakt via prosjektets GitHub eller community-kanaler. Ultracite er her for å gjøre utviklerhverdagen enklere – så tilbakemeldinger og spørsmål er alltid velkomne for å hjelpe med å forbedre det!

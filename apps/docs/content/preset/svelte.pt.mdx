@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Configuração específica do Svelte para Ultracite.
+---
+
+A configuração do Svelte contém configurações específicas para Svelte. Este é um preset mínimo, pois o Biome ainda não possui regras de linting dedicadas para Svelte, mas inclui overrides importantes para evitar falsos positivos de linting em arquivos `.svelte`.
+
+## Instalação
+
+Adicione a configuração do Svelte ao seu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Visão geral
+
+Esta configuração:
+
+- **Suporte HTML**: Ativa suporte HTML experimental completo com indentação de script e style
+- **Props específicas do React**: Marca props específicas do React como `className` e `htmlFor`, já que Svelte usa atributos HTML padrão (`class` e `for`)
+- **Overrides para arquivos Svelte**: Regras relaxadas para arquivos `.svelte` para lidar com a estrutura de componentes do Svelte
+
+## Configuração do Formatador HTML
+
+O preset do Svelte habilita suporte HTML experimental com formatação especial para scripts e estilos embutidos:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Esta configuração:
+- **Suporte Experimental Completo**: Ativa as capacidades experimentais de análise e formatação HTML do Biome para arquivos `.svelte`
+- **Indentar Script e Style**: Indenta corretamente o código dentro das tags `<script>` e `<style>` em componentes Svelte
+
+## Regras Específicas do Svelte
+
+### Suspeitas
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Proíbe props específicas do React como `className` e `htmlFor` em Svelte. Use `class` e `for` em vez disso. |
+
+## Substituições para Arquivos `.svelte`
+
+As seguintes regras estão desabilitadas para arquivos `.svelte` para evitar falsos positivos devido ao suporte parcial do Biome a componentes Svelte:
+
+### Correção
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Permitir variáveis não utilizadas em arquivos `.svelte`. Variáveis na seção de script podem ser usadas apenas no template. |
+| `noUnusedImports` | `off` | Permitir imports não utilizados em arquivos `.svelte`. Imports podem ser usados apenas na seção de template. |
+
+### Estilo
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `useConst` | `off` | Permitir declarações `let` e `var` em arquivos `.svelte` para declarações reativas. |
+| `useImportType` | `off` | Desativa requisitos explícitos de import type para melhor compatibilidade com o sistema de build do Svelte. |

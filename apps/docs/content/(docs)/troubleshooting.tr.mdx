@@ -1,0 +1,89 @@
+---
+title: Sorun Giderme
+description: Bu bölüm Ultracite ile ilgili sorun gidermeyi kapsar.
+---
+
+Ultracite lintleme/formatlamayı basitleştirmeyi amaçlasa da, kurulum ve kullanım sırasında bazı sorunlarla karşılaşabilir veya sorularınız olabilir. İşte bazı yaygın sorunlar ve çözümleri:
+
+## “Ultracite VS Code'da kaydederken biçimlendirme yapmıyor.”
+
+Biome VS Code uzantısının yüklü ve etkin olduğundan emin olun. `.vscode/settings.json` dosyanızın [Kurulum](/setup) bölümünde gösterildiği gibi `"editor.defaultFormatter": "biomejs.biome"` ve `"editor.codeActionsOnSave"` girdilerini içerdiğini doğrulayın.
+
+Ayrıca çakışan bir biçimlendirici veya linter uzantısının etkin olmadığından emin olun (örneğin, hâlâ Prettier uzantısı veya ESLint uzantısı etkinse bunlar müdahale edebilir veya öncelik alabilir).
+
+Başka bir biçimlendirici dosyayı ele geçiriyorsa VS Code’un yerleşik Format On Save özelliğini devre dışı bırakmanız gerekebilir. Doğru ayarlarla ve Biome uzantısıyla, Ultracite’nin kapsadığı bir dosyayı (js/ts/jsx/tsx/json/css) kaydetmek biçimlendirmeyi tetiklemesi gerekir. Tetkik etmezse, manuel olarak “Format Document” komutunu çalıştırmayı deneyin ve Biome’in kullanılıp kullanılmadığını veya herhangi bir hata görünüp görünmediğini kontrol edin.
+
+## “Ultracite’yi kurdum ama VS Code hâlâ ESLint veya Prettier kullanıyor.”
+
+Eski yapılandırmalarınızı kaldırdığınızdan veya devre dışı bıraktığınızdan emin olun. Örneğin, projede bir `.eslintrc` veya `.prettierrc` varsa, VS Code’un ESLint uzantısı hâlâ etkin olabilir ve tekrar eden tanılar (diagnostics) oluşturuyor olabilir.
+
+Karışıklığı önlemek için Ultracite’ye geçerken bu yapılandırmaları kaldırmanız (veya en azından uzantıları devre dışı bırakmanız) önerilir. Temelde Ultracite/Biome’un tek linter/formatter olarak devralmasına izin verin.
+
+Herhangi bir nedenle ESLint’i tutmak isterseniz, ESLint için “fix on save” özelliğini etkinleştirmeyin – aksi halde her ikisi de kodu düzeltmeye çalışabilir (doğru yapılandırılmışsa, Biome çatışmayı önlemek için Prettier’ın stilini takip etmelidir).
+
+Genel olarak, tamamen Ultracite’ye geçmek ESLint / Prettier yapılandırmalarına artık ihtiyaç duymayacağınız anlamına gelir.
+
+## “Ultracite (Biome) kontrol etmesini istemediğim dosyalar için parse hatası veriyor.”
+
+Buna iyi bir örnek, [`shadcn/ui`](https://ui.shadcn.com/) gibi bir UI kütüphanesinden bileşenler kurmaktır. Bu bileşenler değiştirilmeye uygun tasarlanmış olsa da, güncellemeler için orijinal kaynak kodunu korumak isteyebilirsiniz. Bu durumda bu dosyalar için lintlemeyi devre dışı bırakmak isteyebilirsiniz.
+
+Bunu yapmak için, bu dosyaları hariç tutmak üzere `biome.jsonc` dosyanıza desenler ekleyin, örneğin:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Varsayılan olarak Biome `node_modules`'u görmezden gelmelidir, ancak oradan bir dosyayı manuel olarak açtıysanız, uzantı yine de lintlemeye çalışabilir. Genel olarak, ağır üretilmiş dosyaları veya üçüncü taraf kodu yok sayın – bu dosyaları lintlemenize gerek yoktur.
+
+Başka bir neden, Biome’in ayrıştıramadığı deneysel bir sözdizimi içeren bir dosya olabilir (ör. Biome’de henüz olmayan bir stage-3 önerisi). Bu durumda ya o sözdiziminden kaçının ya da Biome’in yapılandırılabilir olup olmadığına bakın (bazı durumlarda yapılandırmaya `"parser.allowSomething": true` eklemek mümkün olabilir).
+
+Bu sözdizimi desteği için Biome’in issue izleyicisini kontrol edin.
+
+## “Aynı sorun için çift hata görüyorum.”
+
+Bu, birden fazla linter aynı anda çalışıyorsa (örneğin hem ESLint hem Ultracite) meydana gelebilir. Ayrıca VS Code’un TypeScript denetleyicisi ve Biome’in aynı TS hatasını bildirmesi durumunda da oluşabilir. Çözüm olarak, denetim türü başına tek bir araca standartlaştırın.
+
+Ultracite kullanıyorsanız diğer linterları devre dışı bırakın. TypeScript tip hataları için VS Code’un dahili TS sunucusu bunları gösterecektir (örneğin tip sorunları için kırmızı dalgalı çizgiler) – Biome de tip kaynaklı lint sorunlarını gösterebilir. Genellikle her ikisi de aynı problemi vurguladığı için sorun olmaz. Eğer rahatsız ediyorsa, VS Code’un TS doğrulayıcısını (`"typescript.validate.enable": false` ayarı) kapatıp Biome’a güvenebilir veya tam tersini yapabilirsiniz.
+
+Çoğu kuruluma göre her ikisini açık bırakmak sorun yaratmaz; genelde birbirlerini tamamlarlar (tip hataları vs lint hataları). Sadece çakışan işlevselliğe sahip iki linter’ın (ör. ESLint ve Biome) aynı anda etkin olmadığından emin olun.
+
+## “Ön-commit hook/CI Ultracite nedeniyle başarısız oluyor.”
+
+Ön-commit hook’unuz `ultracite` çalıştırıyorsa ve başarısız oluyorsa, otomatik düzeltilmeyen hatalar (veya birinin çalıştırmayı atlaması) var demektir. Bunu düzeltmenin en iyi yolu yerel olarak `npx ultracite` çalıştırıp çıktıyı incelemektir. Ya sorunları düzeltecektir (bu durumda değişiklikleri stage’leyip yeniden commit edin) ya da elle düzeltilmesi gereken hataları raporlayacaktır.
+
+Bunları düzeltin ve ardından commit yapın. CI `ultracite --check` üzerinde başarısız oluyorsa aynı işlemi yapın: yerelde `--check` ile çalıştırıp hangi sorunları bulduğunu görün veya otomatik düzeltme için `--check` olmadan çalıştırıp sonuçları commit edin. Kısacası, Ultracite hatalarını başarısız testler gibi ele alın – kodda düzeltilmesi gereken şeyler var.
+
+## “Ultracite’yi etkinleştirdikten sonra `strictNullChecks` veya tip sorunları hakkında hata alıyorum.”
+
+Ultracite TypeScript sıkılığı bekler. Eğer `strictNullChecks` (veya tam strict) etkin değilse, TypeScript’in yakalamadığı bir dizi TypeScript ile ilgili lint uyarısı alabilirsiniz (örneğin, TS’nin gevşek ayarlar nedeniyle yakalamadığı potansiyel undefined kullanımı hakkında şikayetler).
+
+Çözüm önerilen şekilde `tsconfig` içinde bu strict bayraklarını etkinleştirmektir. Bir sebepten dolayı bunu yapamıyorsanız (miras nedenleri gibi), Ultracite’de sıkılığı varsayan bazı kuralları devre dışı bırakmanız gerekebilir. Ancak TS strict moduna geçmek şiddetle tavsiye edilir – kod kalitenizi yükseltir ve Ultracite’nin felsefesiyle uyumludur.
+
+## “Ultracite ekibimiz için çok katı (çok fazla kural) — bunu hafifletebilir miyiz?”
+
+Evet. Ultracite’nin değeri katı olmakta olsa da kuralları geçersiz kılma özgürlüğünüz var. Geliştiriciler uyarılardan bunalmışsa, hangi kuralların sürtünme yarattığını belirleyin. Belki stilistik bir tercih ya da bağlamınız için anlamlı olmayan bir şeydir. Bu kuralları konfigürasyonda `warn` veya `off` yapabilirsiniz.
+
+Örneğin, erişilebilirlik kuralları dahili bir araç için çok gürültülü ise bazılarını devre dışı bırakabilirsiniz. Veya zorunlu kılınan bir kod stiline katılmıyorsanız bunu ayarlayabilirsiniz (stil anlaşmazlıkları Ultracite’nin ortadan kaldırmaya çalıştığı şeylerden biridir).
+
+Anahtar nokta ekip içi iletişimdir — bir kuralın neden var olduğunu açıklamak ve hâlâ istenmiyorsa yapılandırmayı özelleştirmek; Ultracite bir kara kutu değildir – `biome.jsonc` aracılığıyla tam kontrol sizdedir.
+
+Kuralları nasıl geçersiz kılacağınız hakkında daha fazla bilgi için [yapılandırma](/configuration) bölümüne bakın.
+
+## “Ultracite ile ilgili bilmem gereken bilinen sınırlamalar veya hatalar var mı?”
+
+Ultracite (özellikle Biome) ESLint + Prettier + Stylelint’in sunduğu her şeyi kapsamayabilir, özellikle belirli eklentileri kullanıyorsanız. Örneğin, Stylelint kapsamlı CSS lint kurallarına sahipti; Biome şu anda CSS için biçimlendirme ve temel lint sağlıyor, ancak Stylelint’in tüm kural setini sunmuyor.
+
+Projeniz belirli Stylelint kontrollerine (ör. özellik sıralaması veya CSS’de belirli adlandırma) dayanıyorsa, Ultracite bunları zorlamıyor olabilir. Kesinlikle gerekliyse Stylelint’i ayrı olarak dahil edebilir veya Biome’in daha fazla CSS linting sunmasını bekleyebilirsiniz.
+
+---
+
+Burada ele alınmayan bir sorunla karşılaşırsanız, Ultracite’nin GitHub issues sayfasını veya Biome’in dokümantasyonunu kontrol etmeyi düşünün. Bir düzeltme veya geçici çözüm bulunuyor olabilir. Topluluk büyüyor, dolayısıyla destek zamanla iyileşiyor.

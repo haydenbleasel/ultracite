@@ -1,0 +1,49 @@
+---
+title: Nadogradnja na v5
+description: Kako nadograditi vaš projekat sa Ultracite v4 na v5.
+---
+
+Ultracite v5 je veliko izdanje sa značajnim poboljšanjima i promenama koje lome kompatibilnost. Ovaj vodič će vam pomoći da nadogradite postojeću v4 konfiguraciju na v5.
+
+## Šta je novo u v5
+
+- **Ažuriran Biome**: Nadograđen sa v1.x na v2.x
+- **Novi format konfiguracije**: Prelaz sa `biome.json` na `biome.jsonc`
+- **Poboljšani CLI**: Prepisan u TypeScript sa boljim upravljanjem greškama
+- **Integracije editora**: Ugrađena podrška za Cursor, Windsurf, Zed i GitHub Copilot
+- **Git Hooks**: Opcione integracije uključujući Husky, lint-staged i lefthook
+- **Poboljšana šema**: Novi URL šeme sa boljom validacijom
+- **Pojednostavljena VS Code podešavanja**: Spojene postavke za tip fajla u jednu liniju
+
+## Koraci migracije
+
+### Automatska migracija (Preporučeno)
+
+Najlakši način za migriranje je pokretanje nove inicijalizacione komande:
+
+```package-install
+npx ultracite@latest init
+```
+
+Ovo će:
+- Ažurirati vaše zavisnosti na najnovije verzije
+- Ažurirati vaš `biome.json` ili `biome.jsonc`  
+- Ažurirati vaša VS Code podešavanja
+- Ponuditi podešavanje pravila AI editora (Cursor, Windsurf, Zed, itd.)
+- Ponuditi podešavanje novih integracija (Git hooks, lint-staged, itd.)
+
+Nakon nadogradnje, možda ćete želeti da pregledate svoj `biome.json` / `biome.jsonc` fajl kako biste uklonili bilo kakva preklapanja. Takođe, restartujte editor da biste osigurali da je nova konfiguracija primenjena.
+
+Pored toga, molimo vas da pregledate Biome [v2 vodič za nadogradnju](https://biomejs.dev/guides/upgrade-to-biome-v2/) za više informacija o promenama u šemi / pravilima.
+
+### Ručna migracija
+
+Ako želite veću kontrolu nad procesom, sledite korake iz [Ručne migracije](/setup#manual-installation) tako što ćete:
+
+- Ručno instalirati ažurirane verzije Ultracite i Biome
+- Ažurirati vaš `biome.json` fajl na novu verziju šeme
+- Ažurirati `.vscode/settings.json` fajl (opciono)
+- Dodati fajl sa pravilima AI editora (opciono)
+- Dodati nove integracije (opciono)
+
+Nakon migracije, restartujte editor da biste osigurali da je nova konfiguracija primenjena.

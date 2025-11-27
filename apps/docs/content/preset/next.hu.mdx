@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Next.js-specifikus lintelési szabályok az Ultracite számára.
+---
+
+A Next.js konfiguráció Next.js-specifikus lintelési szabályokat tartalmaz a képek optimalizálásához, a dokumentum szerkezetéhez és az App Router mintákhoz.
+
+## Telepítés
+
+Add hozzá a Next.js konfigurációt a `biome.jsonc` fájlodhoz:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Megjegyzés: A Next.js konfiguráció automatikusan tartalmazza a React szabályokat, ezért nem kell külön hozzáadnod az `ultracite/react`-et.
+
+## Áttekintés
+
+Ez a konfiguráció a Next.js fejlesztéséhez specifikus szabályokat ad hozzá:
+
+- **Képoptimalizálás**: Kötelező a Next.js Image komponens használata
+- **Dokumentum szerkezete**: Megakadályozza a Next.js speciális komponensek helytelen használatát
+- **Kliens komponensek**: Biztosítja, hogy az aszinkron kliens komponenseket helyesen kezeljék
+- **Konfigurációs fájlok**: Különleges kezelés a `next.config.*` fájlokhoz
+
+## Next.js-specifikus szabályok
+
+### Kísérleti
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Megakadályozza az aszinkron kliens komponenseket Next.js-ben. A kliens komponenseknek szinkronnak kell lenniük; aszinkron műveletekhez használj szerver komponenseket. |
+
+### Teljesítmény
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noImgElement` | `error` | Megtiltja a `<img>` HTML elem használatát. Használj helyette a Next.js `<Image>` komponenst az automatikus képoptimalizálás érdekében. |
+
+### Stílus
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Megtiltja a `<head>` HTML elem használatát. Használd helyette a Next.js `next/head`-et vagy az App Router metadata API-ját. |
+
+### Gyanús
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Megakadályozza a `next/document` importálását oldal fájlokban. A `_document.tsx` csak a `pages/_document.tsx`-ben létezzen. |
+| `noHeadImportInDocument` | `error` | Megakadályozza a `next/head` importálását `_document.tsx`-ben. Használd helyette a `next/document`-ből származó `<Head>`-et. |
+
+## Konfigurációs fájl felülírások
+
+A Next.js előbeállítás különleges kezelést tartalmaz a konfigurációs fájlok és az App Router komponensei számára:
+
+### Next.js konfigurációs fájlok
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Ez lehetővé teszi olyan Next.js konfigurációs minták használatát, amelyek egyébként nem felelnének meg a lintelési szabályoknak.
+
+### App Router oldalak és elrendezések
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Az App Router oldal- és elrendezés komponensek engedélyezettek aszinkronként anélkül, hogy `await`-et igényelnének, mivel a Next.js ezeket külön kezeli a szerveroldali renderelés és az adatlekérés során.

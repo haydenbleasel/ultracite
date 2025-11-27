@@ -1,0 +1,151 @@
+---
+title: lint-staged
+description: Samodejno zaženite Ultracite na vaših pripravljenih (staged) Git datotekah z lint-staged
+---
+
+Ultracite se brezhibno integrira z [lint-staged](https://github.com/okonet/lint-staged), da samodejno formatira in lint-a vašo kodo pred vsakim commitom. To zagotavlja, da v repozitorij pride samo čista, pravilno formatirana koda.
+
+## Kaj je lint-staged?
+
+lint-staged je orodje, ki zažene linterje in formatterje nad pripravljenimi Git datotekami. Zlasti je uporabno, ker:
+
+- Obdeluje le datoteke, ki so dejansko vključene v commit
+- Preprečuje vnos slabo formatirane kode v vaš repozitorij
+- Teče hitro, saj preveri le spremenjene datoteke
+- Se popolnoma integrira z Git hooki
+
+## Kako Ultracite uporablja lint-staged
+
+Ko zaženete `npx ultracite init`, če izberete možnost lint-staged, Ultracite samodejno:
+
+1. **Namesti lint-staged** kot razvojno odvisnost
+2. **Ustvari ali posodobi** vašo konfiguracijo lint-staged
+3. **Konfigurira formatter** za zagon na ustreznih vrstah datotek
+
+Privzeta konfiguracija zažene `npx ultracite fix` na teh vrstah datotek:
+- JavaScript/TypeScript datoteke (`.js`, `.jsx`, `.ts`, `.tsx`)
+- JSON datoteke (`.json`, `.jsonc`)
+- CSS datoteke (`.css`, `.scss`)
+- Markdown datoteke (`.md`, `.mdx`)
+
+## Podprti formati konfiguracije
+
+Ultraciteova integracija z lint-staged podpira vse standardne formate konfiguracije lint-staged:
+
+### package.json
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+### .lintstagedrc.json
+
+```json title=".lintstagedrc.json"
+{
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+}
+```
+
+### .lintstagedrc.js (CommonJS)
+
+```javascript title=".lintstagedrc.js"
+module.exports = {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.mjs (ES Modules)
+
+```javascript title=".lintstagedrc.mjs"
+export default {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.yaml
+
+```yaml title=".lintstagedrc.yaml"
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - 'npx ultracite fix'
+```
+
+## Pametno združevanje konfiguracije
+
+Če že imate konfiguracijo lint-staged, bo Ultracite:
+
+- **Zazna** obstoječi format vaše konfiguracije
+- **Združi** Ultracite pravila z vašimi obstoječimi pravili
+- **Ohrani** vaše prilagojene nastavitve
+- **Posodobi** datoteko na mestu
+
+To pomeni, da lahko varno zaženete `npx ultracite init` tudi, če že imate nastavljen lint-staged.
+
+## Kako deluje
+
+1. **Pred-commit hook**: lint-staged se zažene pred vsakim commitom preko Husky
+2. **Zaznavanje datotek**: Obdelane so le pripravljene datoteke, ki ustrezajo vzorcem
+3. **Ukaz za formatiranje**: `npx ultracite fix` se zažene za vsako ujemajočo se datoteko
+4. **Samodejno popravljanje**: Biome samodejno odpravi težave, kjer je mogoče
+5. **Ponovno označevanje (re-staging)**: Popravljene datoteke se samodejno ponovno dodajo v staging za commit
+
+## Ročna konfiguracija
+
+Če potrebujete prilagoditi svojo nastavitev lint-staged, lahko konfiguracijo spremenite po inicializaciji:
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite fix"],
+    "*.{css,scss}": ["npx ultracite fix", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+## Integracija ukazov
+
+Integracija z lint-staged deluje z ukazno strukturo Ultracite:
+
+- **`npx ultracite fix`**: Zažene Biome s samodejnim popravljanjem (uporabljeno s strani lint-staged)
+- **`npx ultracite check`**: Zažene Biome brez samodejnih popravkov (za CI/ročne preverbe)
+
+## Odpravljanje težav
+
+### Konfiguracija ni bila najdena
+Če vidite napake o manjkajoči konfiguraciji lint-staged:
+
+```bash
+npx ultracite init  # Re-run initialization
+```
+
+### Težave z ESM/CommonJS
+Ultracite samodejno zazna tip vašega projekta in ustvari ustrezen format konfiguracije:
+
+- **ESM projekti** (z `"type": "module"` v package.json) dobijo `.mjs` konfiguracije
+- **CommonJS projekti** dobijo `.cjs` konfiguracije
+- **Rezervna možnost**: Ustvari `.lintstagedrc.json`, če zaznavanje modulov ne uspe
+
+### Konflikti z obstoječo konfiguracijo
+Če imate zapletene obstoječe konfiguracije, boste morda morali ročno združiti:
+
+1. Naredite varnostno kopijo obstoječe konfiguracije lint-staged
+2. Zaženite `npx ultracite init`
+3. Ročno združite vsa prilagojena pravila, ki jih želite ohraniti
+
+## Najboljše prakse
+
+1. **Naj bo hitro**: V lint-staged zaženite le bistvene preverbe
+2. **Uporabljajte specifične vzorce**: Ciljajte le datoteke, ki jih je treba obdelati
+3. **Kombinirajte s CI**: Uporabite lint-staged za hitre lokalne preverbe, celovito lintanje pa v CI
+4. **Preizkusite nastavitve**: Naredite testni commit, da zagotovite, da vse deluje
+
+## Sorodno
+
+- [Integracija Husky](/integration/husky) - Nastavitev Git hookov
+- [Konfiguracija](/configuration) - Možnosti konfiguracije Biome
+- [Nastavitev](/setup) - Začetna nastavitev projekta

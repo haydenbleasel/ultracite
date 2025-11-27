@@ -1,0 +1,50 @@
+---
+title: Migrare de la Biome
+description: Cum să migrezi proiectul tău de la Biome independent la Ultracite.
+---
+
+Dacă folosești deja Biome și vrei să treci la configurația preconfigurată oferită de Ultracite, acest ghid te va ajuta să migrezi păstrând configurația existentă.
+
+## De ce să migrezi la Ultracite?
+
+- **Fără configurare**: Ultracite oferă un preset foarte bine configurat de reguli
+- **Integrare cu editorul**: Suport încorporat pentru editoare alimentate de AI (Cursor, Windsurf, GitHub Copilot)
+- **Flux de lucru consecvent**: Configurare standardizată între proiecte și echipe
+- **Instrumente suplimentare**: Hook-uri Git opționale, integrare lint-staged
+- **Reguli întreținute**: Actualizări regulate cu cele mai bune practici noi
+
+## Înainte de a începe
+
+Asigură-te că ai:
+
+- Un proiect existent care folosește Biome
+- Node.js v14.18+ (se recomandă Node 18+)
+- Un fișier `biome.json` sau `biome.jsonc`
+
+## Opțiuni de migrare
+
+### Opțiunea 1: Migrare rapidă (Recomandată)
+
+Cea mai rapidă metodă este să rulezi [scriptul de configurare automat](/setup#automatic-installation).
+
+Acest lucru va:
+
+- Instalează Ultracite ca dependență
+- Îmbină fișierul tău `biome.json` / `biome.jsonc` existent cu presetul Ultracite
+- Îmbină fișierul tău `.vscode/settings.json` existent cu presetul Ultracite
+- Activează `strictNullChecks` în fișierul tău `tsconfig.json` (sau creează unul dacă nu există)
+- Păstrează regulile și setările personalizate
+- Configurează integrările editorului
+
+După upgrade, s-ar putea să vrei să revizuiești fișierul `biome.json` / `biome.jsonc` pentru a elimina orice suprascrieri. În plus, repornește editorul pentru a te asigura că noua configurație este aplicată.
+
+### Opțiunea 2: Migrare manuală
+
+Dacă preferi mai mult control asupra procesului, urmează pașii de [Migrare manuală](/setup#manual-installation) prin:
+
+- Instalând Ultracite și Biome manual
+- Actualizând fișierul tău `biome.json` pentru a extinde Ultracite
+- Creând sau actualizând un fișier `.vscode/settings.json` pentru a activa extensia Biome
+- Activând `strictNullChecks` în fișierul tău `tsconfig.json` (sau creând unul dacă nu există)
+
+După migrare, repornește editorul pentru a te asigura că noua configurație este aplicată.

@@ -1,0 +1,48 @@
+---
+title: Migrar do Prettier
+description: Como migrar o seu projeto do Prettier para o Ultracite.
+---
+
+Se estiver a usar o Prettier e quiser mudar para a configuração pré-definida do Ultracite, este guia irá ajudá-lo a migrar mantendo os padrões de qualidade do código.
+
+## Porque Migrar para o Ultracite?
+
+- **Velocidade Relâmpago**: Biome (base do Ultracite) é baseada em Rust, muito mais rápida que o Prettier
+- **Configuração Zero**: Centenas de regras pré-configuradas em vez de configuração manual do Prettier
+- **Ferramenta Combinada**: Substitui tanto o ESLint quanto o Prettier por uma única ferramenta
+- **Integração com IA**: Suporte integrado para editores com IA (Cursor, Windsurf, GitHub Copilot)
+- **Segurança de Tipos**: Regras TypeScript abrangentes com verificação estrita de nulos
+- **Padrões Modernos**: Melhores práticas mais recentes para JavaScript/TypeScript
+
+## Antes de Começar
+
+Certifique-se de que tem:
+
+- Um projeto existente que use o Prettier
+- Node.js v14.18+ (Node 18+ recomendado)
+- Um ficheiro `package.json`
+
+## Configuração Automática
+
+Execute o [script de configuração automática](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Isto fará o seguinte:
+
+- Instalar o Ultracite como uma dependência
+- Mesclar o seu `biome.json` / `biome.jsonc` existente com o preset do Ultracite
+- Mesclar o seu `.vscode/settings.json` existente com o preset do Ultracite
+- Ativar `strictNullChecks` no seu ficheiro `tsconfig.json` (ou criar um se não existir)
+- Preservar as suas regras e definições personalizadas
+- Configurar integrações do editor
+
+Assegure-se de que opta por remover a configuração existente do `Prettier`. Isto irá:
+
+- Remover o Prettier e quaisquer dependências relacionadas
+- Remover quaisquer ficheiros de configuração do Prettier
+- Remover quaisquer comandos relacionados com o Prettier do seu ficheiro `.vscode/settings.json`
+
+Após a atualização, poderá querer rever o seu ficheiro `biome.json` / `biome.jsonc` para remover quaisquer sobrescritas. Além disso, reinicie o seu editor para garantir que a nova configuração é aplicada.

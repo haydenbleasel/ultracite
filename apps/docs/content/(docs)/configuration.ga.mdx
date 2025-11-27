@@ -1,0 +1,71 @@
+---
+title: Cumraíocht
+description: Cumraíocht iniúchta réamhshocraithe Ultracite agus conas í a mhodhnú.
+---
+
+Ceann de na gnéithe is fearr de Ultracite ná nach gá aon chumraíochta a dhéanamh ón tús — is féidir leat an réamhshocrú `ultracite` a leathnú agus tosú láithreach. Mar sin féin, tá gach tionscadal beagáinín difriúil, agus b’fhéidir gur mhaith leat sonraí áirithe a shaincheapadh nó Ultracite a oiriúnú do fhrámaí éagsúla. Míníonn an chuid seo an cumraíocht réamhshocraithe agus conas í a leathnú nó a shárú.
+
+Cuireann Ultracite cumraíochtaí sonracha do fhrámaí ar fáil gur féidir leat a leathnú seachas an cumraíocht bhunúsach. Ligeann sé seo duit rialacha iniúchta sainiúla do fhráma a chur leis gan an chumraíocht bhunúsach a bhláthú nó déileáil le rialacha neamhriachtanacha.
+
+Is féidir leat an liosta iomlán de chumraíochtaí fhráma atá ar fáil a aimsiú sa chuid [Réamhshocruithe](/preset/core).
+
+### Úsáid
+
+Chun cumraíocht shonrach do fhráma a úsáid, cuir í le do eagar `extends`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Is féidir leat cumraíochtaí éagsúla a chomhcheangal má tá tú ag obair ar thionscadal il-fhráma nó má tá tú ag úsáid rud éigin cosúil le Astro a thacaíonn le roinnt fhrámaí.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Cumraíocht réamhshocraithe
+
+Nuair a chuimsíonn tú `"extends": ["ultracite/core"]` i do `biome.jsonc`, tá tú ag tarraingt isteach cumraíocht réamhshocraithe bhunúsach Ultracite. Cuimsíonn an réamhshocrú seo rialacha agus cumraíochtaí neamhspleácha ar fhráma. Tá roinnt gnéithe suntasacha sa chumraíocht réamhshocraithe:
+
+- **Dianriachtanais TypeScript**: Cuireann Ultracite seiceálacha dian TypeScript agus rialacha lint i bhfeidhm a éilíonn cineálú láidir. Mar shampla, spreagann sé seachaint úsáid `any`, éilíonn sé láimhseáil `null/undefined`, agus is fearr leis cineálacha soiléire i gcásanna áirithe chun neamhchinnteacht a sheachaint.
+- **Ionadaithe "Molta" de ESLint**: Tá rialacha cleachtas is fearr coitianta lena n-áirítear (ní athróg neamhúsáide, gan eval sainráite, gan truailliú proto, srl.) curtha san áireamh.
+- **Inrochtaineacht**: Tá rialacha comhionann le caighdeáin inrochtaineachta cumasaithe de réir réamhshocraithe (tréithe ARIA, HTML seimiciúil, nascleanúint méarchláir, srl.).
+- **Node.js**: Déantar quirkanna sonracha don timpeallacht a láimhseáil. Mar shampla, aithnítear athróga domhanda a sholáthraíonn Node (cosúil le `module`, `process`) ionas nach gcuirfear fógraí míchearta orthu mar neamhshainithe.
+- **Coinbhinsiúin formáidithe**: Cuimsíonn socruithe formáidithe Ultracite (go mór iasaithe ó réamhshocruithe Biome/Prettier) ionchur dhá spás, leithead líne uasta 80 carachtar, seimicolóin ag deireadh ráitis, camóga trailing áit a bhfuil siad bailí (m.sh. in eagraíochtaí/obair iolrach iolraithe), comharthaí dúbailte do shreingeanna, srl. Roghnaíodh na socruithe seo chun comhréir choitianta a mheaitseáil agus glanadh diff a chinntiú.
+
+Tá cuspóir leis na réamhshocruithe seo go léir stíl chomhsheasmhach a fhorfheidhmiú agus earráidí coitianta a chosc gan duit gach riail a chumrú de láimh.
+
+Le tagairt chuimsitheach do gach riail iniúchta atá cumraithe i gcumraíocht bhun Ultracite, féach an doiciméadú [Cumraíocht Chroí](/preset/core).
+
+## Ag sárú na cumraíochta
+
+### Ag modhnú `biome.jsonc`
+
+Is féidir leat rialacha a dhíchumasú trí chomhad `biome.jsonc` a mhodhnú.
+
+Mar shampla, chun an riail `noAutofocus` a dhíchumasú, is féidir leat an méid seo a leanas a chur leis:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Tráchtanna Inlíne
+
+Is féidir leat rialacha a dhíchumasú freisin de réir líne trí thráchtaireacht a chur ag deireadh na linne:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

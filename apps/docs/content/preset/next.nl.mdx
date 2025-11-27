@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Next.js-specifieke lintregels voor Ultracite.
+---
+
+De Next.js-configuratie bevat Next.js-specifieke lintregels voor afbeeldingsoptimalisatie, documentstructuur en App Router-patronen.
+
+## Installatie
+
+Voeg de Next.js-configuratie toe aan je `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Opmerking: De Next.js-configuratie bevat automatisch React-regels, dus je hoeft `ultracite/react` niet afzonderlijk toe te voegen.
+
+## Overzicht
+
+Deze configuratie voegt regels toe die specifiek zijn voor Next.js-ontwikkeling:
+
+- **Afbeeldingsoptimalisatie**: Dwing het gebruik van de Next.js `<Image>`-component af
+- **Documentstructuur**: Voorkom onjuist gebruik van speciale Next.js-componenten
+- **Clientcomponenten**: Zorg dat asynchrone clientcomponenten correct worden afgehandeld
+- **Configuratiebestanden**: Speciale behandeling voor `next.config.*`-bestanden
+
+## Next.js-specifieke regels
+
+### Kweekvijver
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Voorkom asynchrone clientcomponenten in Next.js. Clientcomponenten moeten synchroon zijn; gebruik servercomponenten voor asynchrone bewerkingen. |
+
+### Prestaties
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noImgElement` | `error` | Verbied het gebruik van het `<img>` HTML-element. Gebruik in plaats daarvan de Next.js `<Image>`-component voor automatische afbeeldingsoptimalisatie. |
+
+### Stijl
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Verbied het gebruik van het `<head>` HTML-element. Gebruik in plaats daarvan Next.js `next/head` of de metadata-API van de App Router. |
+
+### Verdacht
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Voorkom het importeren van `next/document` in pagina-bestanden. `_document.tsx` mag alleen bestaan in `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Voorkom het importeren van `next/head` in `_document.tsx`. Gebruik in plaats daarvan `<Head>` van `next/document`. |
+
+## Overschrijvingen voor configuratiebestanden
+
+De Next.js-preset bevat speciale verwerking voor configuratiebestanden en App Router-componenten:
+
+### Next.js-configuratiebestanden
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet zouden voldoen aan lintregels.
+
+### App Router-pagina's en -layouts
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router-pagina- en layoutcomponenten mogen asynchroon zijn zonder dat `await` vereist is, omdat Next.js deze speciaal afhandelt voor server-side rendering en gegevensopvraging.

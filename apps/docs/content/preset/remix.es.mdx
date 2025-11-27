@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Reglas de linting específicas de Remix para Ultracite (también compatible con TanStack Router y React Router).
+---
+
+La configuración de Remix establece convenciones de nomenclatura de archivos para los archivos de rutas. Esta configuración también es compatible con TanStack Router, React Router y otros sistemas de enrutamiento basados en archivos.
+
+## Installation
+
+Agrega la configuración de Remix a tu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Overview
+
+Esta configuración proporciona un manejo especial para los archivos de rutas que usan convenciones de enrutamiento basadas en el sistema de archivos:
+
+- **Nomenclatura de archivos de ruta**: Desactiva las convenciones estrictas de nombres de archivo para archivos de rutas
+- **Patrones flexibles**: Admite los patrones de nomenclatura de rutas de Remix (puntos, signos de dólar, guiones bajos)
+- **Independiente del framework**: Funciona con Remix, TanStack Router, React Router y sistemas similares
+
+## File Pattern Overrides
+
+La configuración aplica anulaciones a los archivos de rutas con estos patrones:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Disabled Rules for Route Files
+
+| Regla | Configuración | Descripción |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Desactiva la exigencia de nombres de archivo en kebab-case para archivos de rutas. Permite patrones especiales de nomenclatura de rutas. |
+
+## Why This Configuration Exists
+
+Los sistemas de enrutamiento basados en archivos usan caracteres especiales en los nombres de archivo para representar patrones de enrutamiento:
+
+- `.` (punto) - Representa segmentos de ruta (p. ej., `posts.new.tsx` → `/posts/new`)
+- `$` (signo de dólar) - Representa segmentos dinámicos (p. ej., `posts.$id.tsx` → `/posts/:id`)
+- `_` (guion bajo) - Representa rutas de diseño o rutas sin segmento de ruta
+
+Estas convenciones de nomenclatura entran en conflicto con el requisito predeterminado de Ultracite de nombres de archivo en kebab-case, por lo que esta configuración desactiva esa regla específicamente para los archivos de rutas.

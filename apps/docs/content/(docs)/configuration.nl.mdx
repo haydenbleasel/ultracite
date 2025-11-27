@@ -1,0 +1,71 @@
+---
+title: Configuratie
+description: De standaard lintingconfiguratie van Ultracite en hoe u deze kunt aanpassen.
+---
+
+Een van de beste functies van Ultracite is dat het direct zonder configuratie werkt – u kunt eenvoudig de preset `ultracite` uitbreiden en aan de slag. Elk project is echter anders, en u wilt mogelijk bepaalde regels aanpassen of Ultracite afstemmen op verschillende frameworks. Deze sectie legt de standaardconfiguratie uit en hoe u deze kunt uitbreiden of overschrijven.
+
+Ultracite biedt framework-specifieke configuraties die u naast de basisconfiguratie kunt uitbreiden. Hiermee kunt u framework-specifieke lintregels toevoegen zonder de basisconfiguratie op te blazen of te moeten omgaan met irrelevante regels.
+
+U vindt de volledige lijst van beschikbare frameworkconfiguraties in de sectie [Voorinstellingen](/preset/core).
+
+### Gebruik
+
+Om een framework-specifieke configuratie te gebruiken, voegt u deze toe aan uw `extends`-array:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+U kunt meerdere configuraties combineren als u aan een multi-frameworkproject werkt of iets als Astro gebruikt dat meerdere frameworks ondersteunt.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Standaardconfiguratie
+
+Wanneer u `"extends": ["ultracite/core"]` in uw `biome.jsonc` opneemt, haalt u Ultracite's basispresetconfiguratie binnen. Deze preset bevat framework-agnostische regels en configuraties. Enkele opvallende aspecten van de standaardconfiguratie:
+
+- **TypeScript-striktheid**: Ultracite schakelt de strikte controles van TypeScript en bijbehorende lintregels in die robuuste typering vereisen. Zo ontraadt het bijvoorbeeld het gebruik van `any`, vereist het de afhandeling van `null/undefined`, en geeft het de voorkeur aan expliciete types in bepaalde situaties om ambiguïteit te vermijden.
+- **ESLint "Recommended"-equivalenten**: Algemene best-practice regels (no unused vars, no explicit eval, no proto pollution, etc.) zijn inbegrepen.
+- **Toegankelijkheid**: Regels gelijkwaardig aan toegankelijkheidsnormen zijn standaard ingeschakeld (ARIA-attributen, semantische HTML, toetsenbordnavigatie, enz.).
+- **Node.js**: Omgevingsspecifieke eigenaardigheden worden afgehandeld. Bijvoorbeeld, globale variabelen die door Node worden geleverd (zoals `module`, `process`) worden herkend zodat ze niet ten onrechte als undefined worden aangemerkt.
+- **Formatteringsconventies**: De formatteringsinstellingen van Ultracite (voornamelijk overgenomen van Biome/Prettier-standaarden) omvatten inspringing van 2 spaties, een maximale regelbreedte van 80 tekens, puntkomma's aan het einde van statements, trailing commas waar geldig (bijv. in meerregelige arrays/objecten), dubbele aanhalingstekens voor strings, enz. Deze instellingen zijn gekozen om aan gangbare conventies te voldoen en om schone diffs te waarborgen.
+
+Al deze standaarden zijn bedoeld om een consistente stijl af te dwingen en veelvoorkomende fouten te voorkomen zonder dat u elke regel handmatig hoeft te configureren.
+
+Voor een uitgebreide referentie van alle lintregels die in de basisconfiguratie van Ultracite zijn geconfigureerd, raadpleeg de [Kernconfiguratie](/preset/core)-documentatie.
+
+## Configuratie overschrijven
+
+### Het aanpassen van `biome.jsonc`
+
+U kunt regels uitschakelen door het bestand `biome.jsonc` aan te passen.
+
+Bijvoorbeeld, om de regel `noAutofocus` uit te schakelen, kunt u het volgende toevoegen:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Inline opmerkingen
+
+U kunt regels ook per regel uitschakelen door een opmerking aan het einde van de regel toe te voegen:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

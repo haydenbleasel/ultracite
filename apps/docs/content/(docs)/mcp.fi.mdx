@@ -1,0 +1,118 @@
+---
+title: MCP
+description: Kuinka käyttää Ultracitea MCP:n kanssa
+---
+
+The **Mallin kontekstiprotokolla (MCP)** on avoin standardi, joka mahdollistaa tekoälyavustajien kuten Claude, Cursor ja muiden tekoälyä hyödyntävien työkalujen turvallisen yhdistämisen ulkoisiin tietolähteisiin ja järjestelmiin. Ajattele sitä "yleiskaukosäätimenä", joka antaa tekoälytyökaluillesi pääsyn todellisen maailman dataan ja toiminnallisuuksiin.
+
+Ultracite tukee MCP:tä tehostaakseen tekoälykehitystyötäsi.
+
+## Asennusopas
+
+### Vaihe 1: Valitse tekoälytyökalusi
+
+Varmista ensin, että käytössäsi on MCP:tä tukeva tekoälykehitystyökalu:
+
+- [Claude Desktop](https://claude.ai/download) (Ilmainen - suositeltu aloittelijoille)
+- [Cursor](https://www.cursor.com/) (tekoälyllä toimiva koodieditori)
+- [Windsurf by Codeium](https://windsurf.com/) (tekoälykehitysalusta)
+- Muut MCP-yhteensopivat työkalut
+
+### Vaihe 2: Etsi kokoonpanotiedostosi
+
+AI-työkalustasi riippuen sinun täytyy muokata yhtä näistä tiedostoista:
+
+- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` macOS:lle ja `%APPDATA%\Claude\claude_desktop_config.json` Windowsille
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **Muut työkalut**: Tarkista työkalusi MCP-dokumentaatio
+
+### Vaihe 3: Lisää Ultracite-konfiguraatio
+
+Kopioi ja liitä tämä konfiguraatio MCP-kokoonpanotiedostoosi:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### Vaihe 4: Käynnistä tekoälytyökalusi uudelleen
+
+Sulje ja avaa tekoälysovelluksesi uudelleen, jotta muutokset tulevat voimaan.
+
+### Vaihe 5: Vahvista yhteys
+
+Testaa integraatioa kysymällä tekoälyavustajaltasi:
+
+> Mitkä Ultracite-säännöt ovat saatavilla?
+
+Onnistuneessa tapauksessa tekoälysi pitäisi pystyä listaamaan ja selittämään Ultracite-säännöt!
+
+## Useita MCP-palvelimia
+
+Voit käyttää Ultracitea yhdessä muiden MCP-palvelimien kanssa:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## Käyttöesimerkit
+
+### Saatavilla olevien sääntöjen tutkiminen
+
+Kysy tekoälyavustajaltasi:
+
+> Mitä sääntöjä Ultracitella on Reactin hookeille?
+
+Odotettu vastaus sisältää asiaankuuluvat React-hookkien linttaussäännöt ja niiden kuvaukset.
+
+### Sääntökategorioiden ymmärtäminen
+
+> Näytä kaikki Ultraciten saavutettavuussäännöt
+
+Tekoälysi voi listata ja selittää Ultraciteen konfiguroidut saavutettavuussäännöt (a11y).
+
+### Esiasetusten vertailu
+
+> Mikä ero on ultracite/core:n ja ultracite/reactin välillä?
+
+Saat yksityiskohtaista tietoa eri esiasetuskonfiguraatioista ja siitä, milloin käyttää niitä.
+
+## Tietoturva ja yksityisyys
+
+### Tiedon käsittely
+
+- Ultracite MCP -palvelin tarjoaa vain julkista linttaussääntöjen dokumentaatiota ja kokoonpanotietoa
+- Henkilötietoja tai koodia ei lähetetä palvelimillemme
+- Kaikki viestintä tapahtuu valitsemasi tekoälytyökalun suojauskerroksen kautta
+
+### Autentikointi
+
+- Julkisen dokumentaation käyttö ei vaadi todennusta
+- Tulevat premium-ominaisuudet saattavat vaatia API-avaimia
+- Käytä aina virallisia Ultracite MCP -päätepisteitä

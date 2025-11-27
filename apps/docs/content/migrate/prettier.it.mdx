@@ -1,0 +1,48 @@
+---
+title: Migrare da Prettier
+description: Come migrare il tuo progetto da Prettier a Ultracite.
+---
+
+Se stai usando Prettier e vuoi passare alla configurazione preconfigurata di Ultracite, questa guida ti aiuterà a migrare mantenendo gli standard di qualità del codice.
+
+## Perché migrare a Ultracite?
+
+- **Velocità fulminea**: Biome (la base di Ultracite) è basato su Rust, molto più veloce di Prettier
+- **Nessuna configurazione**: Centinaia di regole preconfigurate rispetto alla configurazione manuale di Prettier
+- **Strumento combinato**: Sostituisce sia ESLint che Prettier con un unico strumento
+- **Integrazione con l'IA**: Supporto integrato per editor basati su IA (Cursor, Windsurf, GitHub Copilot)
+- **Sicurezza dei tipi**: Regole TypeScript complete con controlli rigorosi sui valori null
+- **Standard moderni**: Le più recenti migliori pratiche per JavaScript/TypeScript
+
+## Prima di iniziare
+
+Assicurati di avere:
+
+- Un progetto esistente che utilizza Prettier
+- Node.js v14.18+ (consigliato Node 18+)
+- Un file `package.json`
+
+## Configurazione automatica
+
+Esegui lo [script di installazione automatico](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Questo farà:
+
+- Installare Ultracite come dipendenza
+- Unire il tuo `biome.json` / `biome.jsonc` con il preset di Ultracite
+- Unire il tuo `.vscode/settings.json` con il preset di Ultracite
+- Abilitare `strictNullChecks` nel file `tsconfig.json` (o crearne uno se non esiste)
+- Mantenere le tue regole e impostazioni personalizzate
+- Configurare le integrazioni dell'editor
+
+Assicurati di scegliere di rimuovere la configurazione esistente di Prettier. Questo comporterà:
+
+- Rimuovere Prettier e tutte le dipendenze correlate
+- Rimuovere eventuali file di configurazione di Prettier
+- Rimuovere eventuali comandi relativi a Prettier dal file `.vscode/settings.json`
+
+Dopo l'aggiornamento, potresti voler rivedere il tuo file `biome.json` / `biome.jsonc` per rimuovere eventuali sovrascritture. Inoltre, riavvia il tuo editor per assicurarti che la nuova configurazione sia applicata.

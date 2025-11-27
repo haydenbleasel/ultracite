@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Pravila linterja, specifična za Qwik, za Ultracite.
+---
+
+Konfiguracija Qwik vsebuje pravila linterja, specifična za Qwik, za serializacijo, vidne naloge, leksikalni obseg in uporabo metod.
+
+## Namestitev
+
+Dodajte Qwik konfiguracijo v vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Pregled
+
+Ta konfiguracija doda pravila, specifična za razvoj v Qwik:
+
+- **Serializacija**: Zagotovite pravilno uporabo Qwikovega modela obnovitve stanja
+- **Vidne naloge**: Preprečite neprimerno uporabo `useVisibleTask$`
+- **Leksikalni obseg**: Zagotovite pravilni obseg spremenljivk v `$` funkcijah
+- **Uporaba metod**: Uveljavljajte pravilne vzorce uporabe Qwik metod
+- **Propsi specifični za React**: Prepoved uporabe propov, specifičnih za React, v Qwik komponentah
+
+## Pravila specifična za Qwik
+
+### Pravilnost
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Preprečite uporabo `useVisibleTask$`. Ta hook izvaja kodo takoj na odjemalcu, kar onemogoči Qwikovo obnovitev stanja. Po možnosti uporabite `useTask$` ali `useResource$`. |
+| `useQwikClasslist` | `error` | Uveljavljajte uporabo sintakse objekta `class` namesto združevanja nizov za dinamične razrede v Qwik. |
+
+### Eksperimentalno
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Zagotovite veljaven leksikalni obseg v Qwikovih `$` funkcijah. Spremenljivke iz zunanjih obsegov morajo biti izrecno zajete. |
+| `useQwikMethodUsage` | `error` | Uveljavljajte pravilno uporabo metod in API-jev, specifičnih za Qwik. |
+
+### Sumljivo
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Prepoveduje uporabo propov, specifičnih za React, kot so `className` in `htmlFor`, v Qwik. Namesto njih uporabite `class` in `for`. |

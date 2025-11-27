@@ -1,0 +1,72 @@
+---
+title: Regels
+description: Hoe Ultracite te integreren met AI-codeassistenten via editorregels.
+---
+
+Ultracite biedt naadloze integratie met AI-codeassistenten door automatisch editorspecifieke regelbestanden te genereren. Deze regels helpen AI-codeassistenten te sturen zodat ze betere, consistenter geschreven code produceren die de beste praktijken volgt.
+
+De editorregels werken naast Biome's linting en formattering. Terwijl Biome zorgt voor codeformattering en syntaxfouten opvangt, begeleiden de editorregels AI-codeassistenten om vanaf het begin betere code te schrijven, waardoor de behoefte aan latere correcties afneemt.
+
+Deze dubbele aanpak zorgt zowel voor geautomatiseerde codekwaliteit (via Biome) als voor intelligente codegeneratie (via AI-coderegels).
+
+## Installatie
+
+### Automatische installatie
+
+Wanneer je `npx ultracite init` uitvoert, wordt je gevraagd welke editorregels je wilt inschakelen:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+Dit maakt het relevante bestand aan in je projectmap.
+
+### Handmatige installatie
+
+Als je de zaken handmatig wilt instellen, maak dan het relevante bestand aan in je projectmap (bijvoorbeeld `.cursor/rules` voor Cursor of `.rules` voor Zed). Kopieer en plak vervolgens [deze inhoud](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) in het bestand.
+
+## Ondersteunde editors
+
+| Editor          | Locatie van regelbestand          |
+| --------------- | --------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+
+## Voordelen
+
+Het gebruik van Ultracite-editorregels biedt verschillende voordelen:
+
+- **Consistentie**: Alle door AI gegenereerde code volgt dezelfde conventies
+- **Kwaliteit**: Regels handhaven best practices en helpen veelvoorkomende fouten te voorkomen
+- **Toegankelijkheid**: Ingebouwde toegankelijkheidsrichtlijnen zorgen voor inclusieve code
+- **Prestaties**: Regels bevorderen efficiënte patronen en vermijden antipatterns
+- **Beveiliging**: Richtlijnen helpen veelvoorkomende beveiligingslekken te voorkomen
+
+## Aanpassing
+
+Hoewel de standaardregels uitgebreid zijn, kun je ze aanpassen aan je specifieke behoeften:
+
+1. **Bestaande regels aanpassen**: Bewerk de regelbestanden rechtstreeks
+2. **Project-specifieke regels toevoegen**: Voeg aanvullende richtlijnen toe
+3. **Regels uitschakelen**: Verwijder of commentarieer regels die niet op je project van toepassing zijn

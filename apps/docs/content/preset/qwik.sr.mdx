@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Pravila lintovanja specifična za Qwik za Ultracite.
+---
+
+Qwik konfiguracija sadrži pravila za lintovanje specifična za Qwik za serijalizaciju, vidljive zadatke, leksički opseg i korišćenje metoda.
+
+## Instalacija
+
+Dodajte Qwik konfiguraciju u vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Pregled
+
+Ova konfiguracija dodaje pravila specifična za razvoj u Qwik-u:
+
+- **Serijalizacija**: Nalaže pravilnu upotrebu Qwik-ovog modela resumabilnosti
+- **Vidljivi zadaci**: Sprečava neprimerenu upotrebu `useVisibleTask$`
+- **Leksički opseg**: Osigurava ispravan opseg promenljivih u `$` funkcijama
+- **Korišćenje metoda**: Nalaže ispravne obrasce korišćenja Qwik metoda
+- **Propovi specifični za React**: Zabranjuje React-specifične propove u Qwik komponentama
+
+## Pravila specifična za Qwik
+
+### Ispravnost
+
+| Pravilo | Podešavanje | Opis |
+|--------|------------|------|
+| `noQwikUseVisibleTask` | `error` | Sprečava korišćenje `useVisibleTask$`. Ovaj hook pokreće kod odmah na klijentu, čime se potkopava resumabilnost Qwik-a. Kada je moguće, koristite `useTask$` ili `useResource$` umesto toga. |
+| `useQwikClasslist` | `error` | Zahteva upotrebu sintakse `class` kao objekta umesto konkatenacije stringova za dinamičke klase u Qwik-u. |
+
+### Eksperimentalno
+
+| Pravilo | Podešavanje | Opis |
+|--------|------------|------|
+| `useQwikValidLexicalScope` | `error` | Nalaže važeći leksički opseg u Qwik-ovim `$` funkcijama. Promenljive iz spoljnjih opsega moraju biti eksplicitno uhvaćene. |
+| `useQwikMethodUsage` | `error` | Nalaže ispravnu upotrebu metoda i API-ja specifičnih za Qwik. |
+
+### Sumnjivo
+
+| Pravilo | Podešavanje | Opis |
+|--------|------------|------|
+| `noReactSpecificProps` | `error` | Zabranjuje React-specifične propove kao što su `className` i `htmlFor` u Qwik-u. Umesto njih koristite `class` i `for`. |

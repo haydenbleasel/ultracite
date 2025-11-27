@@ -1,0 +1,48 @@
+---
+title: Migrar do ESLint
+description: Como migrar o seu projeto do ESLint para o Ultracite.
+---
+
+Se estiver a usar o ESLint e quiser mudar para a configuração pré-configurada do Ultracite, este guia irá ajudá-lo a migrar mantendo os padrões de qualidade de código.
+
+## Porque Migrar para o Ultracite?
+
+- **Velocidade relâmpago**: Biome (a base do Ultracite) é baseado em Rust, muito mais rápido do que o ESLint
+- **Configuração zero**: Centenas de regras pré-configuradas versus configuração manual do ESLint
+- **Ferramenta combinada**: Substitui tanto o ESLint como o Prettier por uma única ferramenta
+- **Integração com IA**: Suporte incorporado para editores com IA (Cursor, Windsurf, GitHub Copilot)
+- **Segurança de tipos**: Regras abrangentes de TypeScript com verificações estritas de nulos
+- **Padrões modernos**: Melhores práticas mais recentes de JavaScript/TypeScript
+
+## Antes de Começar
+
+Certifique-se de ter:
+
+- Um projeto existente a usar o ESLint
+- Node.js v14.18+ (Node 18+ recomendado)
+- Um ficheiro `package.json`
+
+## Configuração automática
+
+Execute o [script de configuração automática](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Isto irá:
+
+- Instalar o Ultracite como dependência
+- Mesclar o seu `biome.json` / `biome.jsonc` existente com a predefinição do Ultracite
+- Mesclar o seu `.vscode/settings.json` existente com a predefinição do Ultracite
+- Ativar `strictNullChecks` no seu ficheiro `tsconfig.json` (ou criar um se não existir)
+- Preservar as suas regras e definições personalizadas
+- Configurar integrações do editor
+
+Certifique-se de optar por remover a configuração existente do `ESLint`. Isto irá:
+
+- Remover o ESLint e quaisquer dependências relacionadas
+- Remover quaisquer ficheiros de configuração do ESLint
+- Remover quaisquer comandos relacionados com o ESLint do seu ficheiro `.vscode/settings.json`
+
+Após a atualização, poderá querer rever o seu ficheiro `biome.json` / `biome.jsonc` para remover quaisquer sobrescritas. Além disso, reinicie o seu editor para garantir que a nova configuração é aplicada.

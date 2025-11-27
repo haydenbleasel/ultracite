@@ -1,0 +1,48 @@
+---
+title: Áttérés a Prettier-ről
+description: Hogyan migrálhatod a projektedet Prettier-ről Ultracite-re.
+---
+
+Ha Prettier-t használsz, és át szeretnél váltani az Ultracite előkonfigurált beállítására, ez az útmutató segít átállni úgy, hogy megőrizd a kódminőségi szabványokat.
+
+## Miért érdemes átállni az Ultracite-re?
+
+- **Villámgyors**: Biome (az Ultracite alapja) Rust nyelven íródott, sokkal gyorsabb, mint a Prettier
+- **Konfiguráció nélküli**: Százszámra előkonfigurált szabályok a manuális Prettier-beállításokkal szemben
+- **Kombinált eszköz**: Kiváltja az ESLintet és a Prettier-t egyetlen eszközzel
+- **AI-integráció**: Beépített támogatás AI-alapú szerkesztők számára (Cursor, Windsurf, GitHub Copilot)
+- **Típusbiztonság**: Átfogó TypeScript szabályok szigorú null ellenőrzésekkel
+- **Modern szabványok**: A legújabb JavaScript/TypeScript legjobb gyakorlatok
+
+## Mielőtt elkezded
+
+Győződj meg róla, hogy rendelkezel:
+
+- Egy meglévő projekttel, amely Prettier-t használ
+- Node.js v14.18+ (Node 18+ ajánlott)
+- Egy `package.json` fájllal
+
+## Automatikus beállítás
+
+Futtasd a [automatikus telepítő szkriptet](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Ez a következőket fogja tenni:
+
+- Telepíti az Ultracite-et függőségként
+- Összeolvasztja a meglévő `biome.json` / `biome.jsonc` fájlodat az Ultracite előbeállításával
+- Összeolvasztja a meglévő `.vscode/settings.json` fájlodat az Ultracite előbeállításával
+- Bekapcsolja a `strictNullChecks`-et a `tsconfig.json` fájlodban (vagy létrehoz egyet, ha még nincs)
+- Megőrzi az egyéni szabályaidat és beállításaidat
+- Beállítja a szerkesztő integrációkat
+
+Győződj meg róla, hogy kiválasztod a meglévő `Prettier` konfiguráció eltávolítását. Ez a következőket fogja eredményezni:
+
+- Eltávolítja a Prettier-t és az összes kapcsolódó függőséget
+- Eltávolítja az összes Prettier konfigurációs fájlt
+- Eltávolítja az összes Prettier-rel kapcsolatos parancsot a `.vscode/settings.json` fájlodból
+
+A frissítést követően érdemes lehet áttekintened a `biome.json` / `biome.jsonc` fájlodat, és eltávolítani az esetleges felülírásokat. Emellett indítsd újra a szerkesztőt, hogy az új konfiguráció érvénybe lépjen.

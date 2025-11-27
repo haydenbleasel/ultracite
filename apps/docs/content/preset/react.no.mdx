@@ -1,0 +1,61 @@
+---
+title: React
+description: React-spesifikke linteregler for Ultracite.
+---
+
+React-konfigurasjonen har React-spesifikke linteregler for JSX, hooks og komponentmønstre.
+
+## Installasjon
+
+Legg til React-konfigurasjonen i din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Oversikt
+
+Denne konfigurasjonen legger til regler som er spesifikke for React-utvikling:
+
+- **JSX-regler**: Håndhev riktig JSX-syntaks og mønstre
+- **Hooks-regler**: Sikre at React-hooks brukes riktig
+- **Komponentregler**: Håndhev beste praksis for React-komponenter
+- **Håndtering av children**: Forhindre feilaktig bruk av children-propen
+
+## React-spesifikke regler
+
+### Korrekthet
+
+| Regel | Innstilling | Beskrivelse |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Forhindre å sende children som props. Children bør være nestet mellom åpning- og lukketagger. |
+| `noNestedComponentDefinitions` | `error` | Forhindre komponentdefinisjoner inne i andre komponenter. Dette forårsaker unødvendige re-renders. |
+| `noReactPropAssignments` | `error` | Forhindre at props blir overskrevet i React-komponenter. Props skal behandles som uforanderlige. |
+| `noRenderReturnValue` | `error` | Forhindre bruk av returverdien fra `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Forhindre at void-elementer (som `<img>`, `<br>`) har children. |
+| `useExhaustiveDependencies` | `error` | Håndhev at alle avhengigheter er korrekt spesifisert i React-hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Håndhev at alle React-hooks blir kalt på toppnivå i komponentfunksjoner, ikke inne i løkker, betingelser eller nestede funksjoner. |
+| `useJsxKeyInIterable` | `error` | Håndhev at elementer i iterables har en `key`-prop for Reacts rekonsiliering. |
+
+### Eksperimentell
+
+| Regel | Innstilling | Beskrivelse |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Forhindre bruk av eldre `React.forwardRef`. Bruk ref som en prop i stedet (React 19+). |
+
+### Stil
+
+| Regel | Innstilling | Beskrivelse |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Håndhev bruk av funksjonskomponenter fremfor klassekomponenter i React. |
+
+### Mistenkelig
+
+| Regel | Innstilling | Beskrivelse |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Forhindre bruk av arrayindekser som keys. Arrayindekser er ikke stabile identifikatorer og kan forårsake problemer med komponenttilstand. |
+| `noDuplicateJsxProps` | `error` | Forhindre dupliserte egenskaper i JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Forhindre semikoloner som endrer semantikken til JSX-elementer. |
+| `noReactSpecificProps` | `off` | Tillat React-spesifikke props som `className` og `htmlFor`. |

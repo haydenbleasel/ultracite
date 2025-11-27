@@ -1,0 +1,86 @@
+---
+title: GYIK
+description: Itt találhatók válaszok néhány gyakran ismételt kérdésre az Ultracite-tal kapcsolatban.
+---
+
+## K: Mi pontosan az Ultracite — miben különbözik a Biome-tól vagy az ESLint-től?
+
+Az Ultracite lényegében egy előre elkészített konfiguráció, amely a Biome-ra épül. Gondolj az Ultracite-re úgy, mint egy gondosan összeválogatott szabály- és beállításcsomagra, míg a Biome maga a motor, amely ténylegesen formázza / linteli a kódot. A Biome-ot önmagában is használhatod, de neked kell eldöntened, mely szabályokat engedélyezed és kézzel konfigurálnod az opciókat. Az Ultracite megspórolja ezt a munkát azzal, hogy kész, indulásra kész beállítást ad, amely az ökoszisztéma legjobb gyakorlatait használja.
+
+Az ESLint + Prettier-hez képest a Biome gyorsabb a Rust alapú megvalósításának és az egységes (egy eszköz a kettő vagy három helyett) megközelítésének köszönhetően. Ha szeretsz minden egyes ESLint-szabályon módosítani, az Ultracite szűknek tűnhet; azonban az a célja, hogy megszüntesse az ilyen finomhangolás szükségességét, és értelmes alapértelmezetteket alkalmazzon.
+
+Röviden: a Biome a motor (linter / formázó), az Ultracite a konfiguráció.
+
+## K: Szükségem van még ESLint-re vagy Prettier-re, ha Ultracite-ot használok?
+
+Nem – az Ultracite (a Biome révén) helyettesíti az ESLint és a Prettier funkcionalitását a JavaScript / TypeScript kódodhoz. Nem kell futtatnod ESLint-et vagy Prettier-t. Valójában javasolt eltávolítani azokat a konfigurációkat az ütközések elkerülése érdekében. Az Ultracite kimenete lefedi a legtöbb olyan formázási és lintelési feladatot, amelyet ezek az eszközök végeztek, általában egyenértékű vagy szigorúbb szabályokkal.
+
+Az egyetlen eset, amikor még használhatod őket, ha van egy nagyon speciális pluginod, amelyet a Biome nem támogat (például egy rendkívül specializált ESLint-szabály). De ideálisan teljesen az Ultracite ökoszisztémájával dolgoznál.
+
+## K: Mi a helyzet a nem JS/TS fájljaimmal? Kezeli ezeket az Ultracite?
+
+Az Ultracite, a Biome-on keresztül, különböző szintű lintelési és formázási támogatást nyújt JavaScript, TypeScript, JSX, CSS és GraphQL fájlokhoz.
+
+## K: Milyen gyakran frissül az Ultracite?
+
+Az Ultracite szükség szerint frissül, gyakran követi a Biome kiadási ciklusát. Mivel a Biome még fejlődik, előfordulhat, hogy gyakori kisebb kiadások jelennek meg az Ultracite-ban. Ezek a frissítések új szabályokat, hibajavításokat vagy alapértelmezések módosítását hozhatják. Mivel az verzió rögzítve van `-E`-vel, nem kapsz váratlan frissítéseket, hacsak nem döntesz a frissítés mellett.
+
+Érdemes figyelemmel kísérni az Ultracite repót a kiadások miatt, vagy ellenőrizni a [Kiadások](https://github.com/haydenbleasel/ultracite/releases) oldalt. Az Ultracite frissítésekor olvasd el a kiadási megjegyzéseket — időnként új szabály lehet engedélyezve, amely új figyelmeztetéseket jelezhet a projektedben (ami jó a hibák felderítéséhez, de érdemes tisztában lenni vele). A Biome frissítése az Ultracite-tal együtt általában egyszerű a csomagkezelőn keresztül.
+
+## K: Ha nem értek egyet egy Ultracite által érvényesített szabállyal, mit tehetek?
+
+Néhány lehetőséged van:
+
+- Állítsd ki vagy módosítsd a szintjét a `biome.jsonc`-ben (gyors javítás a projektedhez).
+- Nyiss egy [megbeszélést](https://github.com/haydenbleasel/ultracite/discussions/) a GitHub repóban, ha úgy gondolod, hogy a szabályt mindenki számára módosítani kellene. Lehet, hogy a karbantartók egyetértenek azzal, hogy túl szigorú vagy opcionális lehetne.
+- Ha stilisztikai kérdésről van szó, tartsd szem előtt, hogy az Ultracite célja a konvenciók előtérbe helyezése a konfigurációval szemben — néha érdemes alkalmazkodni az eszköz stílusához a projektek közötti következetesség miatt. Természetesen a projekted igényei az elsődlegesek.
+
+Végső soron te irányítod a projekted lint konfigurációját. Az Ultracite egy kiindulópont; bátran alakítsd, de lehetőleg kisebb módosításokkal. Ha azt veszed észre, hogy a szabályok többségét kikapcsolod, akkor az Ultracite valószínűleg nem a megfelelő preset a csapatod preferenciáihoz (bár ez ritka).
+
+Ebben az esetben építhetsz saját Biome konfigurációt nulláról, de elveszíted a sok kényelmi előnyt. Általában néhány finomhangolás elegendő ahhoz, hogy az Ultracite jól illeszkedjen.
+
+## K: Használhatom-e az Ultracite-ot VS Code / Cursor / Windsurf nélkül?
+
+Igen — a fókuszunk a VS Code-on és annak fork-jain van, mivel ezek a legnépszerűbb IDE-k modern webfejlesztésben, de a Biome tisztán CLI-n keresztül vagy más IDE-kkel is használható.
+
+Nézd meg a Biome [első féltől származó](https://biomejs.dev/guides/editors/first-party-extensions/) és [harmadik féltől származó](https://biomejs.dev/guides/editors/third-party-extensions/) szerkesztőintegrációit további információért.
+
+## K: Honnan tudhatom, hogy mely szabályokat érvényesíti az Ultracite? Van listája?
+
+Igen, nézd meg a GitHub repóban található [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) fájlt az engedélyezett szabályokért.
+
+## K: Ki tudja javítani az Ultracite az összes talált problémát?
+
+Nem mindet, de sokat. Az Ultracite automatikusan javítja azokat a problémákat, amelyek biztonságosan és determinisztikusan javíthatók. Ezek közé tartoznak a formázási problémák és sok lint hiba (különösen a stilisztikai vagy egyszerű kódt átalakítások, mint például a nem használt importok eltávolítása, hiányzó zárójelek hozzáadása, `==` `===`-re cserélése stb.).
+
+A bonyolultabb problémák (üzleti logika vagy olyan dolgok, amelyek fejlesztői szándékot igényelnek) a te kezedben maradnak. Például nem fog automatikusan átnevezni változókat, hogy megfeleljenek egy névadási konvenciónak, vagy hozzáadni hiányzó hibakezelést – ezekre csak figyelmeztetni fog.
+
+A filozófia hasonló az ESLint-hez: ott ad javításokat, ahol lehetséges, de nem kockáztatja a kód viselkedésének megváltoztatását. Mindig nézd át a Problems panel vagy a CLI output figyelmeztetéseit az automatikus javítás után fennmaradó figyelmeztetésekért.
+
+## K: Hol tudok többet megtudni a Biome-ról (az eszközről, amit az Ultracite használ)?
+
+A [Biome](https://biomejs.dev/) saját weboldallal és dokumentációval rendelkezik, ahol műszaki részleteket találsz. Ha kíváncsi vagy arra, hogyan formázza a kódot vagy mi áll bizonyos döntések mögött, a Biome dokumentációja a legjobb forrás.
+
+Ezen túl blogbejegyzéseket és közösségi cikkeket is találsz Biome felemelkedéséről, mint a Rome utódjáról. A Biome megértése segíthet jobban megérteni az Ultracite képességeit. Ugyanakkor nem szükséges mélyrehatóan megtanulnod a Biome-ot az Ultracite hatékony használatához – az Ultracite célja, hogy a legtöbb felhasználó számára elvonja ezeket a részleteket.
+
+## K: Hogyan tilthatom le az Ultracite-ot egy konkrét projektre vagy fájlra?
+
+Ha van egy projekted, ahol ideiglenesen nem akarod az Ultracite-ot, egyszerűen ne add meg az `extends: ["ultracite/core"]` sort a `biome.jsonc`-ben (vagy távolítsd el a konfigurációs fájlt). Ha a VS Code bővítmény telepítve van, még előfordulhat, hogy a Biome alapértelmezői szerint próbál formázni mentéskor.
+
+A teljes letiltáshoz kikapcsolhatod a `formatOnSave`-t vagy eltávolíthatod a Biome bővítményt az adott munkaterületről. Egy konkrét fájl esetén használj figyelmen kívül hagyási kommenteket vagy mintákat. Lényegében az Ultracite projektenként opt-in a konfiguráción keresztül. Ha nincs konfigurálva, nem fog futni (a Biome maga előfordulhat, hogy futtat formázást, ha azt kézzel elindítják, de a lint szabályok nem fognak lefutni).
+
+## K: Corepack hibát kapok telepítés közben – mit tegyek?
+
+Néhány felhasználó aláírás-ellenőrzési hibákat tapasztalt, amikor a `pnpm dlx ultracite init` parancsot futtatták corepack-kal, különösen Node.js v22-n régebbi corepack verziók esetén. A hiba tipikusan úgy néz ki, hogy "Cannot find matching keyid" a csomag telepítése során.
+
+Ajánlott megoldások:
+
+- **corepack frissítése**: Frissítsd a corepack-et 0.34.0 vagy újabb verzióra. Ezt megteheted a `corepack prepare pnpm@latest --activate` paranccsal, vagy követheted a [pnpm corepack beállítási útmutatóját](https://pnpm.io/installation#using-corepack).
+- **Node.js frissítése**: Ha Node.js v20.x-et használsz, fontold meg a v22-re vagy újabbra való frissítést, amely tartalmazza a frissebb corepack verziót.
+- **Használj inkább npx-et**: Ha a corepack továbbra is problémát okoz, használhatod a `npx ultracite init` parancsot a `pnpm dlx ultracite init` helyett.
+
+Ha egyik sem segít, kérlek nyiss egy issue-t az [Ultracite GitHub-tárhelyen](https://github.com/haydenbleasel/ultracite/issues) a Node.js és a corepack verzióid részleteivel.
+
+---
+
+Reméljük, ezek a GYIK válaszok tisztázzák a gyakori félreértéseket. Ha van olyan kérdésed, amelyre itt nem találtál választ, nyugodtan fordulj a projekt GitHub-jához vagy a közösségi csatornákhoz. Az Ultracite azért van, hogy megkönnyítse a fejlesztői életed — ezért a visszajelzések és kérdések mindig szívesen látottak a továbbfejlesztéséhez!

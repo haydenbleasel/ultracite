@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Konfigurasi khusus Angular untuk Ultracite.
+---
+
+Konfigurasi Angular memiliki pengaturan parser HTML khusus Angular untuk mendukung sintaks template Angular.
+
+## Instalasi
+
+Tambahkan konfigurasi Angular ke `biome.jsonc` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Ikhtisar
+
+Konfigurasi ini menambahkan dukungan untuk sintaks template Angular:
+
+- **Interpolasi HTML**: Mengaktifkan parsing sintaks interpolasi template Angular (`{{ }}`)
+- **Direktif Template**: Mendukung direktif Angular seperti `*ngIf`, `*ngFor`, dll.
+- **Binding Properti**: Menangani sintaks binding properti Angular `[property]="value"`
+- **Pengikatan Peristiwa**: Mendukung sintaks pengikatan peristiwa `(event)="handler()"`
+
+## Konfigurasi
+
+Preset Angular mengonfigurasi parser HTML untuk mengenali interpolasi template Angular:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Ini memungkinkan Biome untuk mengurai dan memformat template komponen Angular dengan benar tanpa memperlakukan sintaks interpolasi sebagai kesalahan.

@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Next.js-kohtaiset lint-säännöt Ultracitelle.
+---
+
+Next.js-konfiguraatio sisältää Next.js-kohtaisia lint-sääntöjä kuvan optimointiin, dokumentin rakenteeseen ja App Router -malleihin.
+
+## Asennus
+
+Lisää Next.js-konfiguraatio tiedostoon `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Huomautus: Next.js-konfiguraatio sisältää automaattisesti React-säännöt, joten sinun ei tarvitse lisätä `ultracite/react`-laajennusta erikseen.
+
+## Yleiskatsaus
+
+Tämä konfiguraatio lisää Next.js-kehitykseen liittyviä sääntöjä:
+
+- **Kuvan optimointi**: Pakota Next.jsin <Image>-komponentin käyttö
+- **Dokumentin rakenne**: Estä Next.jsin erikoiskomponenttien virheellinen käyttö
+- **Asiakaskomponentit**: Varmista, että asynkroniset asiakaskomponentit käsitellään oikein
+- **Konfiguraatiotiedostot**: Erityiskäsittely `next.config.*`-tiedostoille
+
+## Next.js-kohtaiset säännöt
+
+### Kokeelliset
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Estä asynkroniset asiakaskomponentit Next.js:ssä. Asiakaskomponenttien tulisi olla synkronisia; käytä palvelin-komponentteja asynkronisiin operaatioihin. |
+
+### Suorituskyky
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noImgElement` | `error` | Estä `<img>`-HTML-elementin käyttö. Käytä Next.js:n `<Image>`-komponenttia automaattista kuvien optimointia varten. |
+
+### Tyyli
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Estä `<head>`-HTML-elementin käyttö. Käytä Next.js:n `next/head`-moduulia tai App Routerin metadata-APIa sen sijaan. |
+
+### Epäilyttävät
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Estä `next/document`-tuonnit sivutiedostoissa. `_document.tsx`-tiedoston tulisi sijaita vain `pages/_document.tsx`-polussa. |
+| `noHeadImportInDocument` | `error` | Estä `next/head`-tuonnin käyttö `_document.tsx`-tiedostossa. Käytä sen sijaan `<Head>`-komponenttia `next/document`-kirjastosta. |
+
+## Konfiguraatiotiedostojen ylikirjoitukset
+
+Next.js-esiasetus sisältää erityiskäsittelyn konfiguraatiotiedostoille ja App Router -komponenteille:
+
+### Next.js-konfiguraatiotiedostot
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Tämä sallii Next.js-konfiguraatiomallit, jotka eivät välttämättä täytä tavallisia lint-sääntöjä.
+
+### App Router -sivut ja asettelut
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Routerin sivu- ja layout-komponentit voivat olla asynkronisia ilman `await`-vaatimusta, koska Next.js käsittelee näitä erityisesti palvelinpuolen renderöintiä ja datan hakua varten.

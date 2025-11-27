@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Rialacha lintithe sonracha do Vue.js le haghaidh Ultracite.
+---
+
+Tá sa chumraíocht Vue rialacha lintithe sonracha do Vue.js le haghaidh struchtúir comhpháirte, roghanna sonraí, airíonna ríofa, agus eochracha coinnithe. Cuimsíonn sé freisin seachruithe chun earráidí lintála dearfacha bréige a chosc i gcomhaid `.vue`.
+
+## Suiteáil
+
+Cuir an chumraíocht Vue leis an `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Forbhreathnú
+
+Cuirfidh an chumraíocht seo rialacha sonracha i bhfeidhm do fhorbairt Vue.js:
+
+- **Tacaíocht HTML**: Cumasaíonn tacaíocht HTML iomlán turgnamhach lena n-áirítear ionduchtú do script agus style
+- **Ainmniú Comhpháirte**: Forchuireann ainmneacha comhpháirte ilfhocail
+- **Struchtúr Sonraí**: Cosc ar fógraí míchearta maidir le roghanna sonraí
+- **Eochracha Coinnithe**: Cuireann toirmeasc ar úsáid props agus eochracha coinnithe Vue
+- **Eochracha Dúblacha**: Cosc ar eochracha dúblacha i roghanna comhpháirte
+- **Props Sonracha React**: Cuireann toirmeasc ar props sonracha React i gcomhpháirteanna Vue
+- **Seachruithe Comhaid Vue**: Rialacha faoisimhe do chomhaid `.vue` chun struchtúr Single File Component a láimhseáil
+
+## Cumraíocht Formáidóra HTML
+
+Cumasaíonn réamhshocrú Vue tacaíocht HTML turgnamhach le formáidiú speisialta do scriptí agus stíleanna atá ionsuite:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Tá an chumraíocht seo:
+- **Tacaíocht Iomlán Turgnamhach**: Cumasaíonn cumais parseála agus formáidithe HTML turgnamhach Biome do chomhaid `.vue`
+- **Ionduchtú Script agus Style**: Ionduchtann sé cód laistigh de thaganna `<script>` agus `<style>` i Single File Components Vue
+
+## Rialacha Sonracha Vue
+
+### Naíonra
+
+| Rialacha | Socrú | Cur Síos |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Cosc ar úsáid dearbhú réada don rogha `data` i gcomhpháirteanna Vue. Ní mór don rogha `data` a bheith ina fheidhm a fhilleann réad. |
+| `noVueDuplicateKeys` | `error` | Cosc ar eochracha dúblacha i roghanna comhpháirte Vue. Ní mór go mbeadh eochracha i `data`, `computed`, `methods`, srl. uathúil. |
+| `noVueReservedKeys` | `error` | Cuireann sé toirmeasc ar eochracha coinnithe Vue cosúil le `$data`, `$props`, `$el`, srl. i roghanna comhpháirte. |
+| `noVueReservedProps` | `error` | Cuireann sé toirmeasc ar props coinnithe Vue cosúil le `key`, `ref`, agus `is` mar props shaincheaptha comhpháirte. |
+| `noVueVIfWithVFor` | `error` | Cuireann sé toirmeasc ar `v-for` agus `v-if` ar an eilimint chéanna. |
+| `useVueHyphenatedAttributes` | `error` | Molann sé úsáid kebab-case do ainmneacha airíonna, de réir moltaí threoirlínte stíle Vue. |
+| `useVueMultiWordComponentNames` | `error` | Forchuireann sé ainmneacha comhpháirte ilfhocail chun coimhlintí le heilimintí HTML a sheachaint. Ba chóir ainmneacha aonfhocail mar `Button` nó `Card` a sheachaint. |
+| `useVueValidVBind` | `error` | Forchuireann sé bailíocht dtreoracha `v-bind` i gcomhaid Vue. |
+| `useVueValidVElseIf` | `error` | Forchuireann sé treoracha `v-else-if` bailí i dteimpléid Vue. Tuairiscíonn sé treoracha neamhbhailí le nathanna coinníollacha in easnamh nó nuair nach bhfuil siad réamhdhéanaithe ag treoir `v-if` nó `v-else-if`. |
+| `useVueValidVElse` | `error` | Forchuireann sé treoracha `v-else` bailí i dteimpléid Vue. Tuairiscíonn sé treoracha nach bhfuil réamhdhéanaithe ag treoir `v-if` nó `v-else-if`. |
+| `useVueValidVHtml` | `error` | Forchuireann sé úsáid bhailí an threoirlínte `v-html` i dteimpléid Vue. Tuairiscíonn sé treoracha le nathanna in easnamh, argóintí gan choinne, nó modhnóirí gan choinne. |
+| `useVueValidVIf` | `error` | Forchuireann sé treoracha `v-if` bailí i dteimpléid Vue. Cuireann sé toirmeasc ar argóintí agus modhnóirí, agus cinntíonn sé go soláthraítear luach. |
+| `useVueValidVOn` | `error` | Forchuireann sé treoracha `v-on` bailí i dteimpléid Vue. Tuairiscíonn sé treoracha `v-on` / gearrthréith `@` neamhbhailí le hainmneacha imeachtaí in easnamh, modhnóirí neamhbhailí, nó nathanna láimhseora in easnamh. |
+| `useVueValidVText` | `error` | Forchuireann sé treoracha `v-text` bailí i dteimpléid Vue. Tuairiscíonn an riail nuair a bhíonn argóint ag v-text, má tá modhnóirí ann, nó má tá luach in easnamh. |
+
+### Amhrasach
+
+| Rialacha | Socrú | Cur Síos |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Cuireann sé toirmeasc ar props sonracha React cosúil le `className` agus `htmlFor` i Vue. Úsáid `class` agus `for` ina ionad. |
+
+## Seachruithe do Chomhaid Vue
+
+Tá na rialacha seo a leanas díghníomhachtaithe do chomhaid `.vue` chun dearfacha bréige a chosc mar gheall ar thacaíocht pháirteach Biome do Single File Components Vue:
+
+### Ceartas
+
+| Rialacha | Socrú | Cur Síos |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Ligeann sé athranna nach n-úsáidtear i gcomhaid `.vue`. D’fhéadfadh athranna sa chuid script a úsáidtear a bheith á n-úsáid ach sa teimpléad. |
+| `noUnusedImports` | `off` | Ligeann sé allmhaireachtaí nach n-úsáidtear i gcomhaid `.vue`. Féadfar allmhaireachtaí a úsáid ach sa chuid teimpléid. |
+
+### Stíl
+
+| Rialacha | Socrú | Cur Síos |
+|------|---------|-------------|
+| `useConst` | `off` | Ligeann sé ráitis `let` agus `var` i gcomhaid `.vue` do phatrúin sonraí imoibriúla. |
+| `useImportType` | `off` | Múchann sé na riachtanais shonracha do chineál ionchuir le haghaidh comhoiriúnachta níos fearr le córas tógála Vue. |

@@ -1,0 +1,139 @@
+---
+title: Voorbeelden
+description: Voor- en na-voorbeelden van Ultracite in actie.
+---
+
+Om de mogelijkheden van Ultracite te illustreren, volgen hier een paar praktische voorbeelden van problemen die het detecteert en oplost. Elk voorbeeld toont code vóór (met een probleem) en nádat Ultracite is toegepast. Deze voorbeelden laten zien hoe Ultracite code automatisch verbetert.
+
+## Automatische code-opmaak
+
+### Voor (rommelige opmaak)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+In deze code kloppen de spatiëring en de concatenatiestijl niet. Er wordt ook stringconcatenatie gebruikt in plaats van template literals, en er staan dubbele aanhalingstekens door enkelvoudige aanhalingstekens gemixt.
+
+### Na (geformatteerd)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+De formatter van Ultracite heeft:
+
+- De functie geformatteerd met correcte regeleinden voor leesbaarheid.
+- De stringconcatenatie omgezet naar een template literal (dit kan een automatische fix zijn van een lint-regel die template strings voor leesbaarheid aanbeveelt).
+- Aanhalingstekens gestandaardiseerd naar backticks voor de template (en zou elders consequent dubbele aanhalingstekens gebruiken als het geen template is).
+- Een puntkomma toegevoegd aan het einde van de `return`-instructie.
+- Gewaarborgd dat de spatiëring rond accolades en haakjes correct is.
+
+De ontwikkelaar heeft de code niet handmatig geformatteerd — ze hebben alleen het bestand opgeslagen en Ultracite heeft de rest gedaan. Het resultaat is schonere, consistentere code.
+
+Ultracite waarschuwt ook dat `name` niet is getypt en zal voorstellen een type toe te voegen.
+
+## Het afdwingen van strikte gelijkheid
+
+### Voor (potentiële bug door losse gelijkheid)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Hier gebruikt de code losse gelijkheid (`==`) om `response.status` te vergelijken met `200`. Het gebruik van losse gelijkheid kan foutgevoelig zijn door typecoërcie (bijv. `response.status` zou een string `“200”` kunnen zijn en toch slagen). De strikte regels van Ultracite zullen waarschijnlijk afdwingen dat `===` wordt gebruikt voor vergelijkingen.
+
+### Na (Ultracite auto-fix toegepast)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite verving automatisch `== 200` door `=== 200`. Deze kleine wijziging voorkomt subtiele bugs. De fix werd bij het opslaan toegepast als onderdeel van de `source.fixAll.biome`-acties. Zo’n regel (vergelijkbaar met ESLint’s `eqeqeq`) zorgt ervoor dat ontwikkelaars strikte gelijkheidscontrole gebruiken.
+
+Daarnaast zal Ultracite ook waarschuwen dat `isValid` nooit wordt gebruikt en zal het voorstellen deze te verwijderen.
+
+## Imports organiseren en opschonen
+
+### Voor (ongeorganiseerde imports)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+De imports zijn hier niet alfabetisch gesorteerd en de import van `helper` wordt in het bestand nooit gebruikt.
+
+### Na (na opslaan met Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (via Biome’s functie voor het organiseren van imports) heeft de imports alfabetisch gesorteerd op moduulnaam. Het heeft ook de ongebruikte `helper`-import automatisch verwijderd. Het voor/na-verschil gebeurt onmiddellijk bij het opslaan, zodat je imports altijd netjes blijven:
+
+- Geen ongebruikte imports die de bovenkant van je bestand rommelig maken.
+- Deterministische volgorde van imports (zodat merges en diffs niet in de war raken door verschillende importvolgordes van verschillende ontwikkelaars).
+
+Dit leidt tot beter beheersbare code, vooral in bestanden met veel imports.
+
+## Toegankelijkheidsverbetering
+
+### Voor
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+Het standaardtype van een button is `submit`, wat ervoor zorgt dat een formulier wordt verzonden wanneer de knop binnen een form-element staat. Dit is waarschijnlijk niet het gedrag dat je wilt in een React-applicatie. Ultracite zal je hierop waarschuwen en een snelle fix aanbieden om het type te wijzigen naar `button`.
+
+### Na (handmatige of snelle fix)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+Het type is nu `button`, waardoor wordt voorkomen dat een eventueel ouderlijk formulier wordt verzonden wanneer op de knop wordt geklikt.
+
+---
+
+Deze voorbeelden tonen aan hoe Ultracite de codekwaliteit verbetert:
+
+- Opmaak- en stijlconsistentie zonder moeite.
+- Automatische fixes voor veelvoorkomende problemen (zodat je zelden triviale dingen handmatig hoeft te repareren).
+- Identificatie van echte problemen (zodat je deze vroeg in de ontwikkeling kunt oplossen).
+
+Door Ultracite te gebruiken blijft je code niet alleen schoon, maar ook minder foutgevoelig en toegankelijker, dankzij de collectieve kennis die in zijn regels is gecodeerd.

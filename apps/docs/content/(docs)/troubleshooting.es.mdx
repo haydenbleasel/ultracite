@@ -1,0 +1,89 @@
+---
+title: Solución de problemas
+description: Esta sección explica cómo solucionar problemas con Ultracite.
+---
+
+Aunque Ultracite pretende simplificar el linting/formateo, es posible que encuentres algunos problemas o tengas preguntas durante la configuración y el uso. Aquí tienes algunos problemas comunes y sus soluciones:
+
+## “Ultracite isn’t formatting on save in VS Code.”
+
+Verifica que tengas instalada y habilitada la extensión Biome para VS Code. Confirma que tu `.vscode/settings.json` contiene las entradas `"editor.defaultFormatter": "biomejs.biome"` y `"editor.codeActionsOnSave"` como se muestra en [Configuración](/setup).
+
+También asegúrate de que no haya ninguna otra extensión formateadora o linter en conflicto habilitada (por ejemplo, si todavía tienes la extensión Prettier o la extensión ESLint activas, podrían interferir o tener prioridad).
+
+Puede que necesites desactivar el Format On Save integrado de VS Code si otro formateador está capturando el archivo. Con la configuración correcta y la extensión Biome, guardar un archivo que Ultracite cubre (js/ts/jsx/tsx/json/css) debería desencadenar el formateo. Si no lo hace, intenta ejecutar manualmente el comando “Format Document” y comprueba si se usa Biome o si aparece algún error.
+
+## “I installed Ultracite, but VS Code still uses ESLint or Prettier.”
+
+Asegúrate de haber eliminado o desactivado tus configuraciones antiguas. Por ejemplo, si tienes un `.eslintrc` o `.prettierrc` en tu proyecto, la extensión ESLint de VS Code podría seguir activa y causar diagnósticos duplicados.
+
+Se recomienda eliminar esas configuraciones (o al menos desactivar las extensiones) al cambiar a Ultracite para evitar confusiones. Esencialmente, deja que Ultracite/Biome se haga cargo como el único linter/formateador.
+
+Si prefieres mantener ESLint por alguna razón, no habilites el “fix on save” para ESLint – de lo contrario ambos podrían intentar corregir el código (aunque si están bien configurados, Biome debería coincidir con el estilo de Prettier para evitar conflictos).
+
+En general, migrar completamente a Ultracite significa que ya no necesitas las configuraciones de ESLint / Prettier.
+
+## “Ultracite (Biome) is throwing parse errors for files I don’t want it to check.”
+
+Un buen ejemplo es instalar componentes de una librería de UI como [`shadcn/ui`](https://ui.shadcn.com/). Aunque están diseñados para ser modificados, puede que quieras preservar el código fuente original para actualizaciones. En ese caso, querrás desactivar el linting para esos archivos.
+
+Para hacerlo, añade patrones a tu `biome.jsonc` para excluir esos archivos, por ejemplo:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Por defecto, Biome debería ignorar `node_modules`, pero si abriste un archivo manualmente desde allí, la extensión aún podría intentar lintarlo. En general, ignora archivos generados pesados o código de terceros: no necesitas linting para esos.
+
+Otra causa podría ser si tienes sintaxis experimental en un archivo que Biome no puede parsear (por ejemplo, una propuesta stage-3 que aún no está en Biome). En ese caso, evita esa sintaxis o mira si Biome se puede configurar (a veces añadiendo `"parser.allowSomething": true` en la configuración si está disponible).
+
+Consulta el issue tracker de Biome para ver si esa sintaxis tiene soporte.
+
+## “I see double errors for the same issue.”
+
+Esto puede ocurrir si tienes múltiples linters ejecutándose a la vez (por ejemplo, ESLint y Ultracite). También puede suceder si el verificador TypeScript de VS Code y Biome informan el mismo error de TS. Para resolverlo, estandariza una herramienta por tipo de comprobación.
+
+Si usas Ultracite, desactiva otros linters. Para errores de tipos de TypeScript, el servidor TS integrado de VS Code los mostrará (por ejemplo, subrayados rojos para problemas de tipos) – Biome también puede mostrar problemas de lint impulsados por tipos. Normalmente está bien porque ambos resaltan el mismo problema. Pero si te molesta, puedes desactivar el validador TS de VS Code (`"typescript.validate.enable": false` en la configuración) y confiar en Biome, o viceversa.
+
+En la mayoría de configuraciones, dejar ambos activados está bien; normalmente se complementan (errores de tipo vs errores de lint). Solo asegúrate de no tener dos linters con funcionalidades solapadas habilitados (como ESLint y Biome haciendo ambos linting).
+
+## “Pre-commit hook/CI is failing due to Ultracite.”
+
+Si tu pre-commit hook ejecuta `ultracite` y falla, significa que todavía hay problemas que no se autoarreglaron (o alguien omitió ejecutarlo). La mejor forma de arreglar esto es ejecutar `npx ultracite` localmente e inspeccionar la salida. O bien arreglará cosas (en cuyo caso solo añade los cambios al stage y haz commit otra vez) o reportará errores que necesitan solución manual.
+
+Aborda esos problemas y luego haz commit. Si la CI falla en `ultracite --check`, haz lo mismo: ejecútalo localmente con `--check` para ver qué problemas encontró, o ejecútalo sin `--check` para autoarreglar y luego commitear los resultados. En resumen, trata las fallas de Ultracite como tests que fallan: algo que corregir en el código.
+
+## “I get an error about `strictNullChecks` or type issues after enabling Ultracite.”
+
+Ultracite espera la estricta configuración de TypeScript. Si no habilitaste strictNullChecks (o strict completo), podrías recibir muchas advertencias relacionadas con TypeScript (por ejemplo, quejándose de un posible uso de undefined que TS no está detectando debido a configuraciones laxas).
+
+La solución es habilitar esas banderas estrictas en `tsconfig` como se recomienda. Si por alguna razón no puedes (motivos legacy), quizá tengas que desactivar ciertas reglas en Ultracite que asumen estricticidad. Pero se recomienda encarecidamente activar el modo estricto de TS: mejorará la calidad del código y está en línea con la filosofía de Ultracite.
+
+## “Ultracite is too strict for our team (too many rules) – can I tone it down?”
+
+Sí. Aunque el valor de Ultracite está en ser estricto, puedes anular reglas. Si los desarrolladores están abrumados por advertencias, identifica qué reglas están causando fricción. Puede ser una preferencia de estilo o algo que no tenga sentido en tu contexto. Puedes poner esas reglas en `warn` o `off` en la configuración.
+
+Por ejemplo, si encuentras que las reglas de accesibilidad son demasiado ruidosas para una herramienta interna, podrías desactivar algunas. O si no estás de acuerdo con un estilo de código impuesto, puedes ajustarlo (aunque los desacuerdos de estilo son lo que Ultracite intenta eliminar).
+
+La clave es comunicarlo con el equipo – quizás educar sobre por qué existe una regla antes de desactivarla; si aún no se quiere, personaliza la configuración. Ultracite no es una caja negra: tienes control total vía `biome.jsonc`.
+
+Consulta la sección de [configuración](/configuration) para más información sobre cómo anular reglas.
+
+## “Are there known limitations or bugs with Ultracite I should be aware of?”
+
+Ultracite (específicamente Biome) no cubre todo lo que hacen ESLint + Prettier + Stylelint, especialmente si usas ciertos plugins. Por ejemplo, Stylelint tenía reglas exhaustivas de lint para CSS; Biome actualmente ofrece formateo para CSS y lint básico, pero no todo el conjunto de reglas de Stylelint.
+
+Si tu proyecto depende de comprobaciones específicas de Stylelint (como el orden de propiedades o nombres concretos en CSS), ten en cuenta que Ultracite no las aplica. Podrías incorporar Stylelint por separado si es absolutamente necesario, o esperar a que Biome introduzca más linting para CSS.
+
+---
+
+Si te encuentras con un problema que no aparece aquí, considera revisar la página de issues de Ultracite en GitHub o la documentación de Biome. Puede que exista una solución o un workaround disponible. La comunidad está creciendo, así que el soporte mejora con el tiempo.

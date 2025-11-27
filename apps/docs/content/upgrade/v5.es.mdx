@@ -1,0 +1,49 @@
+---
+title: Actualizar a v5
+description: Cómo actualizar tu proyecto de Ultracite v4 a v5.
+---
+
+Ultracite v5 es una versión mayor con mejoras significativas y cambios incompatibles. Esta guía te ayudará a actualizar tu configuración existente de v4 a v5.
+
+## Novedades en v5
+
+- **Biome actualizado**: Actualizado de v1.x a v2.x
+- **Nuevo formato de configuración**: Cambiar de `biome.json` a `biome.jsonc`
+- **CLI mejorada**: Reescrita en TypeScript con mejor manejo de errores
+- **Integraciones del editor**: Soporte incorporado para Cursor, Windsurf, Zed y GitHub Copilot
+- **Hooks de Git**: Integraciones opcionales que incluyen Husky, lint-staged y lefthook
+- **Esquema mejorado**: Nueva URL de esquema con mejor validación
+- **Configuración de VS Code simplificada**: Combinadas las anulaciones de tipo de archivo en una sola línea
+
+## Pasos de migración
+
+### Migración automática (recomendada)
+
+La forma más fácil de migrar es ejecutar el nuevo comando de inicialización:
+
+```package-install
+npx ultracite@latest init
+```
+
+Esto hará:
+- Actualizar tus dependencias a las últimas versiones
+- Actualizar tu `biome.json` o `biome.jsonc`  
+- Actualizar la configuración de VS Code
+- Ofrecer configurar reglas de IA para el editor (Cursor, Windsurf, Zed, etc.)
+- Ofrecer configurar nuevas integraciones (hooks de Git, lint-staged, etc.)
+
+Después de la actualización, es posible que desees revisar tu archivo `biome.json` / `biome.jsonc` para eliminar cualquier anulaciones. Además, reinicia tu editor para asegurarte de que la nueva configuración se aplique.
+
+Además, revisa la [guía de actualización de Biome v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) para obtener más información sobre los cambios en el esquema / las reglas.
+
+### Migración manual
+
+Si prefieres tener más control sobre el proceso, sigue los pasos de [Migración manual](/setup#manual-installation) realizando:
+
+- Instalar manualmente las versiones actualizadas de Ultracite y Biome
+- Actualizar tu archivo `biome.json` a la nueva versión del esquema
+- Actualizar el archivo `.vscode/settings.json` (opcional)
+- Agregar un archivo de reglas de IA del editor (opcional)
+- Agregar nuevas integraciones (opcional)
+
+Después de la migración, reinicia tu editor para asegurarte de que la nueva configuración se aplique.

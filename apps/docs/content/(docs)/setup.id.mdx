@@ -1,0 +1,63 @@
+---
+title: Pengaturan
+description: Cara menginstal Ultracite dalam proyek Anda.
+---
+
+Ultracite dapat diinstal dengan semua pengelola paket utama. Anda memerlukan Node.js v14.18+ (disarankan Node 18+) dan sebuah proyek dengan berkas `package.json`.
+
+## Instalasi
+
+Cara termudah untuk memulai adalah menjalankan skrip `init` Ultracite, yang akan menginstal paket yang diperlukan dan menyiapkan berkas konfigurasi untuk Anda. Di direktori proyek Anda, jalankan:
+
+```package-install
+npx ultracite init
+```
+
+Anda dapat memilih untuk menyertakan flag berikut pada perintah `init`:
+
+| Flag                | Deskripsi                                       | Opsi                                                                    |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Pengelola paket yang akan digunakan.             | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Framework yang akan dikonfigurasi.               | Dipisahkan dengan koma: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Editor yang akan dikonfigurasi.                  | Dipisahkan dengan koma: `vscode`, `zed`                                 |
+| `--agents`          | Agen AI yang akan dikonfigurasi.                 | Dipisahkan dengan koma: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Hook agen yang akan dikonfigurasi.               | Dipisahkan dengan koma: `cursor`, `claude`                              |
+| `--integrations`    | Integrasi tambahan yang akan disiapkan.          | Dipisahkan dengan koma: `husky`, `lefthook`, `lint-staged`              |
+| `--migrate`         | Alat migrasi untuk dihapus.                      | Dipisahkan dengan koma: `eslint`, `prettier` (menghapus dependensi, berkas konfigurasi, dan pengaturan editor) |
+| `--skip-install`    | Lewati pemasangan dependensi.                    | (tidak memerlukan nilai)                                                |
+| `--quiet`           | Menyembunyikan prompt interaktif dan output visual. | (tidak memerlukan nilai, otomatis diaktifkan di CI)                     |
+
+### Penggunaan Programatik
+
+Untuk alat yang perlu memanggil Ultracite secara programatik (seperti CLI scaffolding), Anda dapat menggunakan flag `--quiet` untuk menyembunyikan semua prompt interaktif dan output visual:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+Flag `--quiet` diaktifkan secara otomatis ketika variabel lingkungan `CI` disetel ke `true` atau `1`, sehingga cocok untuk pipeline CI/CD:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+Dalam mode quiet, Ultracite akan:
+- Melewati semua prompt interaktif
+- Menggunakan default yang masuk akal untuk semua opsi
+- Menyembunyikan ASCII art, spinners, dan pesan log
+- Hanya membuat konfigurasi Biome inti
+- Keluar bersih dengan kode 0 saat sukses atau 1 saat gagal
+
+## Ekstensi
+
+Jika Anda menggunakan Visual Studio Code, instal ekstensi resmi [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome), yang memungkinkan pemformatan/perbaikan saat penyimpanan:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+Selain itu, jika Anda menggunakan Tailwind CSS, disarankan untuk menginstal ekstensi [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) untuk pengurutan kelas dan saran:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

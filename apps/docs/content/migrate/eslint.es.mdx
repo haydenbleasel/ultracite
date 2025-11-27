@@ -1,0 +1,48 @@
+---
+title: Migrar desde ESLint
+description: Cómo migrar tu proyecto de ESLint a Ultracite.
+---
+
+Si estás usando ESLint y deseas cambiar al conjunto preconfigurado de Ultracite, esta guía te ayudará a migrar manteniendo los estándares de calidad del código.
+
+## ¿Por qué migrar a Ultracite?
+
+- **Velocidad relámpago**: Biome (la base de Ultracite) está basada en Rust, mucho más rápida que ESLint
+- **Cero configuración**: Cientos de reglas preconfiguradas frente a la configuración manual de ESLint
+- **Herramienta combinada**: Sustituye tanto ESLint como Prettier con una única herramienta
+- **Integración con IA**: Soporte integrado para editores impulsados por IA (Cursor, Windsurf, GitHub Copilot)
+- **Seguridad de tipos**: Reglas completas de TypeScript con comprobaciones estrictas de nulos
+- **Estándares modernos**: Mejores prácticas más recientes de JavaScript/TypeScript
+
+## Antes de empezar
+
+Asegúrate de tener:
+
+- Un proyecto existente que use ESLint
+- Node.js v14.18+ (se recomienda Node 18+)
+- Un archivo `package.json`
+
+## Configuración automática
+
+Ejecuta el [script de configuración automática](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Esto hará:
+
+- Instalar Ultracite como dependencia
+- Fusionar tu `biome.json` / `biome.jsonc` existente con el preset de Ultracite
+- Fusionar tu `.vscode/settings.json` existente con el preset de Ultracite
+- Habilitar `strictNullChecks` en tu archivo `tsconfig.json` (o crear uno si no existe)
+- Conservar tus reglas y ajustes personalizados
+- Configurar integraciones del editor
+
+Asegúrate de elegir eliminar la configuración existente de `ESLint`. Esto hará:
+
+- Eliminar ESLint y cualquier dependencia relacionada
+- Eliminar cualquier archivo de configuración de ESLint
+- Eliminar cualquier comando relacionado con ESLint de tu archivo `.vscode/settings.json`
+
+Tras la actualización, es posible que desees revisar tu archivo `biome.json` / `biome.jsonc` para eliminar cualquier anulación. Además, reinicia tu editor para asegurarte de que la nueva configuración se aplique.

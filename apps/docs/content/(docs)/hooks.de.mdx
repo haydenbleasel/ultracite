@@ -1,0 +1,68 @@
+---
+title: Hooks
+description: Wie Sie Ultracite mit KI-Coding-Assistenten über Editor-Hooks integrieren.
+---
+
+Ultracite kann Code automatisch formatieren und reparieren, nachdem KI-Coding-Assistenten Änderungen über Editor-Hooks vorgenommen haben. So wird sichergestellt, dass aller von der KI erzeugte Code ohne manuelles Eingreifen den Standards Ihres Projekts entspricht.
+
+Die Hooks arbeiten zusammen mit Biome's Linting und Formatierung. Nachdem ein KI-Coding-Assistent eine Datei bearbeitet hat, führt der Hook automatisch `npx ultracite fix` aus, um formatieren und automatisch behebbare Linting-Probleme zu korrigieren. Dieser doppelte Ansatz stellt sowohl intelligente Codegenerierung (durch KI-Regeln) als auch automatisierte Codequalität (durch Hooks) sicher.
+
+> **Hinweis:** Hooks sind getrennt von KI-Coding-Regeln. Das `--agents` Flag konfiguriert KI-Coding-Regeln, während das `--hooks` Flag die automatische Formatierung nach Dateibearbeitungen einrichtet.
+
+## Einrichtung
+
+### Automatische Einrichtung
+
+When you run `npx ultracite init`, you'll be prompted to select which editor hooks you want to enable:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+This will create the relevant hook configuration file in your project directory.
+
+### Manuelle Einrichtung
+
+If you want to manually set things up or add hooks after initialization, run:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
+
+## Unterstützte Editoren
+
+| Editor      | Speicherort der Hook-Datei | Dokumentation                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Cursor-Hooks](https://cursor.com/docs/agent/hooks)                    |
+| Claude Code | `.claude/settings.json`     | [Claude Code-Hooks](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Funktionsweise
+
+1. **Automatische Ausführung**: Nachdem der KI-Agent eine Datei bearbeitet hat, führt der Hook automatisch `npx ultracite fix` aus  
+2. **Code-Formatierung**: Ultracite formatiert den bearbeiteten Code gemäß Ihrer Biome-Konfiguration  
+3. **Linting-Fehlerbehebung**: Automatisch behebbar Linting-Probleme werden automatisch gelöst  
+4. **Nahtlose Integration**: Der Prozess erfolgt transparent, ohne Ihren Workflow zu unterbrechen
+
+## Vorteile
+
+Die Verwendung von Ultracite-Editor-Hooks bietet mehrere Vorteile:
+
+- **Konsistenz**: Der von der KI erzeugte Code wird automatisch formatiert, sodass er Ihrem Stil entspricht  
+- **Qualität**: Linting-Probleme werden unmittelbar nach der Codegenerierung behoben  
+- **Effizienz**: Es ist nicht notwendig, nach KI-Änderungen Formatierer oder Linter manuell auszuführen  
+- **Standards**: Stellt sicher, dass von KI generierter Code stets den Projektstandards entspricht  
+- **Saubere Commits**: Der Code ist korrekt formatiert, bevor Sie ihn überhaupt überprüfen
+
+## Anpassung
+
+Ultracite integriert sich intelligent in vorhandene Hook-Konfigurationen:
+
+- **Bewahrt vorhandene Hooks**: Alle vorhandenen Hooks und deren Befehle bleiben erhalten  
+- **Vermeidet Duplikate**: Wenn Ultracite bereits konfiguriert ist, wird es nicht erneut hinzugefügt  
+- **Nicht-destruktiv**: Die Struktur Ihrer bestehenden Hook-Konfiguration bleibt erhalten
+
+Sie können das Verhalten der Hooks auch anpassen, indem Sie die Hook-Konfigurationsdateien direkt bearbeiten, falls Sie andere Formatierungsbefehle oder zusätzliche Aktionen nach der Bearbeitung benötigen.

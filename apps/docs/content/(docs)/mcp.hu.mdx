@@ -1,0 +1,118 @@
+---
+title: MCP
+description: Hogyan használjuk az Ultracite-et MCP-vel
+---
+
+A **Model Context Protocol (MCP)** egy nyílt szabvány, amely lehetővé teszi, hogy olyan AI asszisztensek, mint a Claude, a Cursor és más AI-alapú eszközök biztonságosan csatlakozzanak külső adatforrásokhoz és rendszerekhez. Gondoljon rá úgy, mint egy "univerzális távirányítóra", amely lehetővé teszi az AI-eszközeinek a valós adatokhoz és funkcionalitáshoz való hozzáférését.
+
+Az Ultracite támogatja az MCP-t, hogy felgyorsítsa az AI-fejlesztési munkafolyamatát.
+
+## Telepítési útmutató
+
+### 1. lépés: Válassza ki az AI-eszközét
+
+Először győződjön meg róla, hogy olyan AI fejlesztőeszközt használ, amely támogatja az MCP-t:
+
+- [Claude Desktop](https://claude.ai/download) (**Ingyenes** – kezdőknek ajánlott)
+- [Cursor](https://www.cursor.com/) (AI-alapú kódszerkesztő)
+- [Windsurf by Codeium](https://windsurf.com/) (AI fejlesztési platform)
+- Egyéb MCP-kompatibilis eszközök
+
+### 2. lépés: Keresse meg a konfigurációs fájlt
+
+AI-eszközétől függően az alábbi fájlok egyikét kell szerkesztenie:
+
+- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` macOS-hez és `%APPDATA%\Claude\claude_desktop_config.json` Windows-hoz
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **Egyéb eszközök**: Ellenőrizze az adott eszköz MCP dokumentációját
+
+### 3. lépés: Adja hozzá az Ultracite konfigurációt
+
+Másolja és illessze be ezt a konfigurációt az MCP konfigurációs fájljába:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### 4. lépés: Indítsa újra az AI-eszközét
+
+Zárja be és nyissa meg újra az AI alkalmazását, hogy a változtatások érvénybe lépjenek.
+
+### 5. lépés: Ellenőrizze a kapcsolatot
+
+Tesztelje az integrációt az AI-asszisztensének feltett kérdéssel:
+
+> Milyen Ultracite szabályok érhetők el?
+
+Ha sikeres a kapcsolat, az AI képes lesz felsorolni és elmagyarázni az Ultracite szabályait!
+
+## Több MCP szerver
+
+Az Ultracite-et más MCP szerverekkel is együtt használhatja:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## Használati példák
+
+### Elérhető szabályok áttekintése
+
+Kérdezze meg az AI-asszisztensét:
+
+> Milyen szabályai vannak az Ultracite-nek a React hookokhoz?
+
+A várt válasz tartalmazni fogja a releváns React hook lintelési szabályokat és azok leírásait.
+
+### Szabálykategóriák áttekintése
+
+> Mutasd meg az Ultracite összes hozzáférhetőségi szabályát
+
+Az AI felsorolhatja és elmagyarázhatja az Ultracite-ben konfigurált a11y szabályokat.
+
+### Presetek összehasonlítása
+
+> Mi a különbség az ultracite/core és az ultracite/react között?
+
+Részletes információkat kaphat a különböző preset konfigurációkról és arról, hogy mikor érdemes melyiket használni.
+
+## Biztonság és adatvédelem
+
+### Adatkezelés
+
+- Az Ultracite MCP szerver csak nyilvános lintelési szabályok dokumentációját és konfigurációs információkat szolgáltat
+- Semmilyen személyes adat vagy kód nem kerül továbbításra a szervereinkre
+- Minden kommunikáció az Ön által választott AI-eszköz biztonsági rétegén keresztül történik
+
+### Hitelesítés
+
+- A nyilvános dokumentáció eléréséhez nem szükséges hitelesítés
+- A jövőbeni prémium funkciókhoz előfordulhat, hogy API-kulcsok szükségesek
+- Mindig az Ultracite hivatalos MCP végpontjait használja

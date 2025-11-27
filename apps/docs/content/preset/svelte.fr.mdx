@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Configuration spécifique à Svelte pour Ultracite.
+---
+
+La configuration Svelte contient des paramètres spécifiques à Svelte. Il s'agit d'un préréglage minimal car Biome ne dispose pas encore de règles de linting dédiées à Svelte, mais il inclut des remplacements importants pour éviter des faux positifs de linting dans les fichiers `.svelte`.
+
+## Installation
+
+Ajoutez la configuration Svelte à votre `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Aperçu
+
+Cette configuration :
+
+- **Prise en charge HTML** : Active la prise en charge HTML complète expérimentale avec indentation des contenus des balises `<script>` et `<style>`
+- **Props spécifiques à React** : Signale les props spécifiques à React comme `className` et `htmlFor` puisque Svelte utilise les attributs HTML standard (`class` et `for`)
+- **Remplacements pour les fichiers Svelte** : Règles assouplies pour les fichiers `.svelte` afin de gérer la structure des composants Svelte
+
+## Configuration du formatteur HTML
+
+Le préréglage Svelte active la prise en charge HTML expérimentale avec un formatage spécial pour les scripts et styles intégrés :
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Cette configuration :
+- **Prise en charge complète expérimentale** : Active les capacités expérimentales d'analyse et de formatage HTML de Biome pour les fichiers `.svelte`
+- **Indentation des scripts et styles** : Indente correctement le code à l'intérieur des balises `<script>` et `<style>` dans les composants Svelte
+
+## Règles spécifiques à Svelte
+
+### Suspicieux
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Interdire les props spécifiques à React comme `className` et `htmlFor` dans Svelte. Utilisez `class` et `for` à la place. |
+
+## Remplacements pour les fichiers Svelte
+
+Les règles suivantes sont désactivées pour les fichiers `.svelte` afin d'éviter des faux positifs dus au support partiel de Biome pour les composants Svelte :
+
+### Correction
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Autoriser les variables non utilisées dans les fichiers `.svelte`. Les variables dans la section `<script>` peuvent n'être utilisées que dans le gabarit. |
+| `noUnusedImports` | `off` | Autoriser les imports non utilisés dans les fichiers `.svelte`. Les imports peuvent n'être utilisés que dans la section du gabarit. |
+
+### Style
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `useConst` | `off` | Autoriser les déclarations `let` et `var` dans les fichiers `.svelte` pour les instructions réactives. |
+| `useImportType` | `off` | Désactiver l'exigence de type d'import explicite pour une meilleure compatibilité avec le système de build de Svelte. |

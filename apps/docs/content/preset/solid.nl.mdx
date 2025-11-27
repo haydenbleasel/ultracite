@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Solid.js-specifieke lintregels voor Ultracite.
+---
+
+De Solid-configuratie bevat Solid.js-specifieke lintregels voor reactiviteit, componentpatronen en JSX-afhandeling.
+
+## Installatie
+
+Voeg de Solid-configuratie toe aan uw `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Overzicht
+
+Deze configuratie voegt regels toe die specifiek zijn voor Solid.js-ontwikkeling:
+
+- **Reactiviteitsregels**: Handhaaf het juiste gebruik van de reactieve primitieven van Solid
+- **Componentpatronen**: Zorg dat Solid-componenten de best practices volgen
+- **Props-afhandeling**: Voorkom het destructureren van props (doorbreekt reactiviteit)
+- **React-specifieke props**: Verbied React-specifieke props in Solid-componenten
+
+## Solid-specifieke regels
+
+### Correctheid
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Voorkom het destructureren van props in Solid-componenten. Destructureren doorbreekt het reactiviteitssysteem van Solid. Benader props in plaats daarvan rechtstreeks. |
+
+### Prestaties
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Dwing het gebruik van het `<For>`-component af voor het itereren over arrays in Solid. Het `<For>`-component is geoptimaliseerd voor het reactiviteitssysteem van Solid. |
+
+### Verdacht
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbied React-specifieke props zoals `className` en `htmlFor` in Solid. Gebruik in plaats daarvan `class` en `for`. |

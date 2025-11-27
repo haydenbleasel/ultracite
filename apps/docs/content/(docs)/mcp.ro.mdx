@@ -1,0 +1,118 @@
+---
+title: MCP
+description: Cum să folosești Ultracite cu MCP
+---
+
+The **Protocolul de Context al Modelului (MCP)** este un standard deschis care permite asistenților AI precum Claude, Cursor și altor instrumente bazate pe AI să se conecteze în siguranță la surse de date și sisteme externe. Gândește-te la el ca la o "telecomandă universală" care permite instrumentelor tale AI să acceseze date și funcționalități din lumea reală.
+
+Ultracite acceptă MCP pentru a accelera fluxul tău de lucru în dezvoltarea AI.
+
+## Ghid de instalare
+
+### Pasul 1: Alege-ți instrumentul AI
+
+Mai întâi, asigură-te că folosești un instrument de dezvoltare AI care suportă MCP:
+
+- [Claude Desktop](https://claude.ai/download) (Gratuit - recomandat începătorilor)
+- [Cursor](https://www.cursor.com/) (editor de cod alimentat de AI)
+- [Windsurf by Codeium](https://windsurf.com/) (platformă de dezvoltare AI)
+- Alte instrumente compatibile MCP
+
+### Pasul 2: Găsește fișierul de configurare
+
+În funcție de instrumentul tău AI, va trebui să editezi unul dintre aceste fișiere:
+
+- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` pentru macOS și `%APPDATA%\Claude\claude_desktop_config.json` pentru Windows
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **Alte instrumente**: Verifică documentația MCP a instrumentului tău
+
+### Pasul 3: Adaugă configurația Ultracite
+
+Copiază și lipește această configurație în fișierul tău de configurare MCP:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### Pasul 4: Repornește instrumentul tău AI
+
+Închide și redeschide aplicația ta AI pentru ca modificările să aibă efect.
+
+### Pasul 5: Verifică conexiunea
+
+Testează integrarea întrebând asistentul tău AI:
+
+> Ce reguli Ultracite sunt disponibile?
+
+Dacă reușește, AI-ul tău ar trebui să poată lista și explica regulile Ultracite!
+
+## Mai multe servere MCP
+
+Poți folosi Ultracite alături de alte servere MCP:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## Exemple de utilizare
+
+### Explorarea regulilor disponibile
+
+Întreabă asistentul tău AI:
+
+> Ce reguli are Ultracite pentru hook-urile React?
+
+Răspunsul așteptat va include regulile relevante de lint pentru hook-urile React și descrierile acestora.
+
+### Înțelegerea categoriilor de reguli
+
+> Arată-mi toate regulile de accesibilitate din Ultracite
+
+AI-ul tău poate lista și explica regulile a11y configurate în Ultracite.
+
+### Compararea presetărilor
+
+> Care este diferența dintre ultracite/core și ultracite/react?
+
+Obține informații detaliate despre diferitele configurații presetate și când să le folosești.
+
+## Securitate și confidențialitate
+
+### Gestionarea datelor
+
+- Serverul MCP Ultracite furnizează doar documentație publică despre regulile de linting și informații de configurare
+- Nu se transmit date personale sau cod către serverele noastre
+- Toată comunicarea se realizează prin stratul de securitate al instrumentului AI ales
+
+### Autentificare
+
+- Nu este necesară autentificarea pentru accesul la documentația publică
+- Funcțiile premium viitoare pot necesita chei API
+- Folosește întotdeauna endpoint-urile MCP oficiale Ultracite

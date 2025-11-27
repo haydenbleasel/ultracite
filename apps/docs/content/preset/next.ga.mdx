@@ -1,0 +1,100 @@
+---
+title: Next.js
+description: Rialacha linteála sonracha do Next.js le haghaidh Ultracite.
+---
+
+Tá rialacha linteála sonracha do Next.js sa chumraíocht do optamú íomhá, struchtúr doiciméid, agus patrúin App Router.
+
+## Suiteáil
+
+Cuir an chumraíocht Next.js leis do `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+Nóta: Cuimsíonn an chumraíocht Next.js rialacha React go huathoibríoch, mar sin níl ort `ultracite/react` a chur leis go leith.
+
+## Forbhreathnú
+
+Cuirfidh an chumraíocht seo rialacha atá sonrach do fhorbairt Next.js leis:
+
+- **Optamú Íomhá**: Déan úsáid an chomhpháirt Íomhá de Next.js a fhorfheidhmiú
+- **Struchtúr Doiciméid**: Cosc a chur ar úsáid míchuí ar chomhpháirteanna speisialta Next.js
+- **Comhpháirteanna Cliant**: Déan cinnte go ndéantar comhpháirteanna cliant asynchronach a láimhseáil i gceart
+- **Comhaid Cumraíochta**: Láimhseáil speisialta do chomhaid `next.config.*`
+
+## Rialacha Sonracha do Next.js
+
+### Tosach
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Cosc a chur ar chompháirteanna cliant asynchronach i Next.js. Ba chóir go mbeadh comhpháirteanna cliant síncronach; bain úsáid as comhpháirteanna freastalaí le haghaidh oibríochtaí asynchronacha. |
+
+### Feidhmíocht
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noImgElement` | `error` | Cosc ar úsáid an eilimint HTML `<img>`. Bain úsáid as an gcomhpháirt `<Image>` de Next.js ina áit le haghaidh optamaithe uathoibríoch íomhá. |
+
+### Stíl
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Cosc ar úsáid an eilimint HTML `<head>`. Bain úsáid as `next/head` de Next.js nó an API metadata de App Router ina áit. |
+
+### Amhrasach
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Cosc ar `next/document` a allmhairiú i gcomhaid leathanach. Ba chóir go mbeadh `_document.tsx` ann amháin i `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Cosc ar `next/head` a allmhairiú i `_document.tsx`. Úsáid `<Head>` ó `next/document` ina áit. |
+
+## Sáruithe Comhad Cumraíochta
+
+Cuimsíonn réamhshocrú Next.js láimhseáil speisialta do chomhaid chumraíochta agus do chomhpháirteanna App Router:
+
+### Comhaid Cumraíochta Next.js
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Ligeann sé seo patrúin chumraíochta Next.js nach n-éireoidh leo de ghnáth pas a fháil trí rialacha linteála.
+
+### Leathanaigh agus Leaganacha App Router
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Ceadaítear go mbeidh comhpháirteanna leathanach agus leagan App Router asynchronach gan gá le `await`, mar go láimhseálann Next.js iad seo go speisialta chun rindreáil ar thaobh an fhreastalaí agus chun sonraí a fháil.

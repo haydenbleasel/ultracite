@@ -1,0 +1,49 @@
+---
+title: Mise à niveau vers v5
+description: Comment mettre à niveau votre projet d'Ultracite v4 vers v5.
+---
+
+Ultracite v5 est une version majeure avec des améliorations significatives et des changements incompatibles. Ce guide vous aidera à mettre à niveau votre configuration existante v4 vers v5.
+
+## Nouveautés de v5
+
+- **Biome mis à jour**: Mise à niveau de v1.x à v2.x
+- **Nouveau format de configuration**: Passage de `biome.json` à `biome.jsonc`
+- **CLI améliorée**: Réécrite en TypeScript avec une gestion des erreurs améliorée
+- **Intégrations éditeur**: Prise en charge intégrée pour Cursor, Windsurf, Zed et GitHub Copilot
+- **Git Hooks**: Intégrations optionnelles incluant Husky, lint-staged et lefthook
+- **Schéma amélioré**: Nouvelle URL de schéma avec une validation améliorée
+- **Paramètres VS Code simplifiés**: Regroupement des surcharges de type de fichier en une seule ligne
+
+## Étapes de migration
+
+### Migration automatique (recommandée)
+
+La manière la plus simple de migrer est d'exécuter la nouvelle commande d'initialisation :
+
+```package-install
+npx ultracite@latest init
+```
+
+Cela fera :
+- Mettre à jour vos dépendances vers les dernières versions
+- Mettre à jour votre `biome.json` ou `biome.jsonc`  
+- Mettre à jour les paramètres de VS Code
+- Proposer de configurer des règles d'éditeur IA (Cursor, Windsurf, Zed, etc.)
+- Proposer de configurer de nouvelles intégrations (Git hooks, lint-staged, etc.)
+
+Après la mise à niveau, vous pouvez vouloir examiner votre fichier `biome.json` / `biome.jsonc` pour supprimer toutes les surcharges. De plus, redémarrez votre éditeur pour vous assurer que la nouvelle configuration est appliquée.
+
+De plus, consultez le guide de mise à niveau Biome [guide de mise à niveau vers v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) pour plus d'informations sur les modifications du schéma et des règles.
+
+### Migration manuelle
+
+Si vous préférez avoir plus de contrôle sur le processus, suivez les étapes de la [Migration manuelle](/setup#manual-installation) en :
+
+- Installer manuellement les versions mises à jour d'Ultracite et de Biome
+- Mettre à jour votre fichier `biome.json` vers la nouvelle version du schéma
+- Mettre à jour le fichier `.vscode/settings.json` (facultatif)
+- Ajouter un fichier de règles d'éditeur IA (facultatif)
+- Ajouter de nouvelles intégrations (facultatif)
+
+Après la migration, redémarrez votre éditeur pour vous assurer que la nouvelle configuration est appliquée.

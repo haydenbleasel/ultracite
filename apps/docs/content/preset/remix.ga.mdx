@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Rialacha lintála sonracha do Remix do Ultracite (comhoiriúnach freisin le TanStack Router agus React Router).
+---
+
+Tá coinbhinnte ainmniú comhad ag an chumraíocht Remix do chomhaid bealaí. Tá an chumraíocht seo comhoiriúnach freisin le TanStack Router, React Router, agus córais rianaithe eile atá bunaithe ar chomhaid.
+
+## Suiteáil
+
+Cuir an chumraíocht Remix le do `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Forbhreathnú
+
+Soláthraíonn an chumraíocht seo láimhseáil speisialta do chomhaid bealaí a úsáideann coinbhinnte rianaithe bunaithe ar chóras comhaid:
+
+- **Ainmniú Comhad Bealaí**: Cuireann sé as na coinbhinnte ainmneacha comhad dian do chomhaid bealaí
+- **Pátrúin Sholúbtha**: Tacaíonn sé le pátrúin ainmniúcháin Remix (poncanna (.), dollar ($), agus underscore (_))
+- **Neamhspleách ar Fhráma**: Oibríonn sé le Remix, TanStack Router, React Router, agus córais cosúil leo
+
+## Eisceachtaí Pátrún Comhad
+
+Cuirtear eisceachtaí i bhfeidhm ar chomhaid bealaí sna patrúin seo:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Rialacha Díchumasaithe do Chomhaid Bealaí
+
+| Riail | Socrú | Cur síos |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Cuireann sé as an fhorfheidhmiú ar ainmneacha comhad i stíl kebab-case do chomhaid bealaí. Ligeann sé pátrúin ainmniúcháin speisialta do bhealaí. |
+
+## Cén fáth a bhfuil an chumraíocht seo ann
+
+Úsáideann córais rianaithe bunaithe ar chomhaid carachtair speisialta i ainmneacha comhad chun patrúin rianaithe a léiriú:
+
+- `.` (dot) - Léiríonn sé earnálacha an chosáin (m.sh., `posts.new.tsx` → `/posts/new`)
+- `$` (dollar) - Léiríonn sé earnálacha dinimiciúla (m.sh., `posts.$id.tsx` → `/posts/:id`)
+- `_` (underscore) - Léiríonn sé bealaí le leagan amach nó bealaí gan chosán
+
+Bíonn coimhlint idir na coinbhinnte ainmniúcháin seo agus riachtanas réamhshocraithe Ultracite maidir le hainmneacha comhaid i stíl kebab-case, mar sin cuireann an chumraíocht seo an riail sin as go sonrach do chomhaid bealaí.

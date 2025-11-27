@@ -1,0 +1,72 @@
+---
+title: Säännöt
+description: Kuinka integroida Ultracite tekoälykoodausavustimiin editorisääntöjen kautta.
+---
+
+Ultracite tarjoaa saumatonta integraatiota tekoälykoodausavustimiin luomalla automaattisesti editorikohtaisia sääntötiedostoja. Nämä säännöt auttavat ohjaamaan tekoälykoodausavustimia kirjoittamaan parempaa, johdonmukaisempaa koodia, joka noudattaa parhaita käytäntöjä.
+
+Editorisäännöt toimivat yhdessä Biomen linttaus- ja muotoilutoimintojen kanssa. Kun Biome huolehtii koodin muotoilusta ja havaitsee syntaksivirheet, editorisäännöt ohjaavat tekoälykoodausavustimia kirjoittamaan parempaa koodia alusta lähtien, mikä vähentää myöhempien korjausten tarvetta.
+
+Tämä kaksijakoinen lähestymistapa varmistaa sekä automatisoidun koodin laadun (Biome:n kautta) että älykkään koodin generoinnin (tekoälysääntöjen kautta).
+
+## Asetus
+
+### Automaattinen asennus
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+Tämä luo vastaavan tiedoston projektihakemistooni.
+
+### Manuaalinen asennus
+
+Jos haluat määrittää asiat manuaalisesti, luo vastaava tiedosto projektihakemistooni (esimerkiksi `.cursor/rules` Cursorille tai `.rules` Zedille). Kopioi sitten ja liitä [tämä sisältö](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) tiedostoon.
+
+## Tuetut editorit
+
+| Editorit         | Sääntötiedoston sijainti        |
+| ---------------- | -------------------------------- |
+| GitHub Copilot   | `.github/copilot-instructions.md` |
+| Cursor           | `.cursor/rules/ultracite.mdc`     |
+| Windsurf         | `.windsurf/rules/ultracite.md`    |
+| Zed              | `.rules`                          |
+| Claude Code      | `.claude/CLAUDE.md`               |
+| OpenAI Codex     | `AGENTS.md`                       |
+| Kiro IDE         | `.kiro/steering/ultracite.md`     |
+| Cline            | `.clinerules`                     |
+| AMP              | `AGENT.md`                        |
+| Aider            | `ultracite.md`                    |
+| Firebase Studio  | `.idx/airules.md`                 |
+| Open Hands       | `.openhands/microagents/repo.md`  |
+| Gemini CLI       | `GEMINI.md`                       |
+| Junie            | `.junie/guidelines.md`            |
+| Augment Code     | `.augment/rules/ultracite.md`     |
+| Kilo Code        | `.kilocode/rules/ultracite.md`    |
+| Codename Goose   | `.goosehints`                     |
+| Roo Code         | `.roo/rules/ultracite.md`         |
+| Warp             | `WARP.md`                         |
+
+## Hyödyt
+
+Ultraciten editorisääntöjen käyttäminen tarjoaa useita etuja:
+
+- **Johdonmukaisuus**: Kaikki tekoälyn generoima koodi noudattaa samoja käytäntöjä
+- **Laatu**: Säännöt edistävät parhaita käytäntöjä ja estävät yleisiä virheitä
+- **Esteettömyys**: Sisäänrakennetut esteettömyysohjeet varmistavat saavutettavan koodin
+- **Suorituskyky**: Säännöt edistävät tehokkaita malleja ja välttävät anti-malleja
+- **Turvallisuus**: Ohjeet auttavat estämään yleisiä turvallisuusheikkouksia
+
+## Mukauttaminen
+
+Vaikka oletussäännöt ovat kattavat, voit mukauttaa niitä omiin tarpeisiisi:
+
+1. **Muokkaa olemassa olevia sääntöjä**: Muokkaa sääntötiedostoja suoraan
+2. **Lisää projektikohtaisia sääntöjä**: Lisää lisäohjeita
+3. **Poista säännöt käytöstä**: Poista tai kommentoi pois säännöt, jotka eivät sovellu projektiisi

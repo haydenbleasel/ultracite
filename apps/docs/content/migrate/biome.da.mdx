@@ -1,0 +1,50 @@
+---
+title: Migrer fra Biome
+description: Sådan migrerer du dit projekt fra den selvstændige Biome til Ultracite.
+---
+
+Hvis du allerede bruger Biome og vil skifte til Ultracites forkonfigurerede setup, vil denne vejledning hjælpe dig med at migrere samtidig med, at din eksisterende konfiguration bevares.
+
+## Hvorfor migrere til Ultracite?
+
+- **Ingen konfiguration**: Ultracite leverer en stærkt konfigureret forudindstilling af regler
+- **Integration med editorer**: Indbygget support til AI-drevne editorer (Cursor, Windsurf, GitHub Copilot)
+- **Ensartet arbejdsgang**: Standardiseret setup på tværs af projekter og teams
+- **Yderligere værktøjer**: Valgfri Git hooks, lint-staged-integration
+- **Vedligeholdte regler**: Regelmæssige opdateringer med nye bedste praksis
+
+## Før du går i gang
+
+Sørg for, at du har:
+
+- Et eksisterende projekt, der bruger Biome
+- Node.js v14.18+ (Node 18+ anbefales)
+- En `biome.json` eller `biome.jsonc` fil
+
+## Migreringsmuligheder
+
+### Mulighed 1: Hurtig migrering (Anbefalet)
+
+Den hurtigste måde er at køre [det automatiske installationsscript](/setup#automatic-installation).
+
+Dette vil:
+
+- Installere Ultracite som en dependency
+- Flette din eksisterende `biome.json` / `biome.jsonc` med Ultracites preset
+- Flette din eksisterende `.vscode/settings.json` med Ultracites preset
+- Aktivere `strictNullChecks` i din `tsconfig.json` fil (eller oprette en, hvis den ikke findes)
+- Bevare dine tilpassede regler og indstillinger
+- Sætte editorintegrationer op
+
+Efter opgraderingen kan det være en god idé at gennemgå din `biome.json` / `biome.jsonc` fil for at fjerne eventuelle overrides. Genstart desuden din editor for at sikre, at den nye konfiguration anvendes.
+
+### Mulighed 2: Manuel migrering
+
+Hvis du foretrækker mere kontrol over processen, følg trinnene i [Manuel migrering](/setup#manual-installation) ved at:
+
+- Installere Ultracite og Biome manuelt
+- Opdatere din `biome.json` fil til at extend'e Ultracite
+- Oprette eller opdatere en `.vscode/settings.json` fil for at aktivere Biome-udvidelsen
+- Aktivere `strictNullChecks` i din `tsconfig.json` fil (eller oprette en, hvis den ikke findes)
+
+Efter migreringen genstart din editor for at sikre, at den nye konfiguration anvendes.

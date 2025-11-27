@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Svelte-spezifische Konfiguration für Ultracite.
+---
+
+Die Svelte-Konfiguration enthält Svelte-spezifische Einstellungen. Dies ist ein minimales Preset, da Biome noch keine dedizierten Svelte-spezifischen Linting-Regeln hat, aber es enthält wichtige Overrides, um falsch-positive Linting-Fehler in `.svelte`-Dateien zu verhindern.
+
+## Installation
+
+Fügen Sie die Svelte-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration:
+
+- **HTML-Unterstützung**: Aktiviert experimentelle vollständige HTML-Unterstützung mit Einrückung für script und style
+- **React-spezifische Props**: Kennzeichnet React-spezifische Props wie `className` und `htmlFor`, da Svelte standardmäßige HTML-Attribute (`class` und `for`) verwendet
+- **Overrides für `.svelte`-Dateien**: Gelockerte Regeln für `.svelte`-Dateien, um mit der Komponentenstruktur von Svelte umzugehen
+
+## HTML-Formatter-Konfiguration
+
+Das Svelte-Preset aktiviert experimentelle HTML-Unterstützung mit spezieller Formatierung für eingebettete Scripts und Styles:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Diese Konfiguration:
+- **Experimentelle vollständige Unterstützung**: Aktiviert Biome's experimentelle HTML-Parsing- und Formatierungsfunktionen für `.svelte`-Dateien
+- **Script und Style einrücken**: Bezieht den Code innerhalb von `<script>`- und `<style>`-Tags in Svelte-Komponenten korrekt in die Einrückung ein
+
+## Svelte-spezifische Regeln
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|--------------|
+| `noReactSpecificProps` | `error` | Verhindert React-spezifische Props wie `className` und `htmlFor` in Svelte. Verwenden Sie stattdessen `class` und `for`. |
+
+## Overrides für `.svelte`-Dateien
+
+Die folgenden Regeln sind für `.svelte`-Dateien deaktiviert, um falsch-positive Ergebnisse aufgrund von Biome's teilweiser Unterstützung für Svelte-Komponenten zu verhindern:
+
+### Korrektheit
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|--------------|
+| `noUnusedVariables` | `off` | Erlaubt ungenutzte Variablen in `.svelte`-Dateien. Variablen im Script-Abschnitt können nur im Template verwendet werden. |
+| `noUnusedImports` | `off` | Erlaubt ungenutzte Imports in `.svelte`-Dateien. Imports können ausschließlich im Template-Abschnitt verwendet werden. |
+
+### Stil
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|--------------|
+| `useConst` | `off` | Erlaubt `let`- und `var`-Deklarationen in `.svelte`-Dateien für reaktive Statements. |
+| `useImportType` | `off` | Deaktiviert Anforderungen an explizite Importtypen zur besseren Kompatibilität mit Sveltes Build-System. |

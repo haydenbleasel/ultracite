@@ -1,0 +1,89 @@
+---
+title: Probleemoplossing
+description: Deze sectie behandelt hoe je problemen met Ultracite kunt oplossen.
+---
+
+Hoewel Ultracite linten en formatteren probeert te vereenvoudigen, kun je tijdens de installatie en het gebruik toch tegen problemen aanlopen of vragen hebben. Hieronder staan enkele veelvoorkomende problemen en hun oplossingen:
+
+## “Ultracite isn’t formatting on save in VS Code.”
+
+Controleer of je de Biome VS Code-extensie hebt geïnstalleerd en ingeschakeld. Verifieer dat je `.vscode/settings.json` de `"editor.defaultFormatter": "biomejs.biome"` en `"editor.codeActionsOnSave"` vermeldingen bevat zoals weergegeven in [Installatie](/setup).
+
+Zorg er ook voor dat er geen conflicterende formatter- of linter-extensie is ingeschakeld (bijvoorbeeld als je nog de Prettier-extensie of ESLint-extensie actief hebt, kunnen die interfereren of voorrang krijgen).
+
+Het kan nodig zijn om VS Code’s ingebouwde Format On Save uit te schakelen als een andere formatter het bestand pakt. Met de juiste instellingen en de Biome-extensie zou het opslaan van een bestand dat door Ultracite wordt gedekt (js/ts/jsx/tsx/json/css) formattering moeten activeren. Als dat niet gebeurt, probeer dan handmatig het “Format Document” commando uit te voeren en kijk of Biome wordt gebruikt of dat er een foutmelding verschijnt.
+
+## “I installed Ultracite, but VS Code still uses ESLint or Prettier.”
+
+Zorg dat je oude configuraties hebt verwijderd of uitgeschakeld. Als je bijvoorbeeld een `.eslintrc` of `.prettierrc` in je project hebt, kan de ESLint-extensie van VS Code nog actief zijn en dubbele diagnostiek veroorzaken.
+
+Het is aan te raden die configuraties te verwijderen (of in ieder geval de extensies uit te schakelen) bij de overstap naar Ultracite om verwarring te voorkomen. Laat Ultracite/Biome in wezen fungeren als de enige linter/formatter.
+
+Als je om welke reden dan ook ESLint wilt behouden, schakel dan niet “fix on save” voor ESLint in – anders kunnen beide proberen code te repareren (hoewel, indien correct geconfigureerd, Biome meestal overeenkomt met Prettier’s stijl om conflicten te vermijden).
+
+Over het algemeen betekent volledig migreren naar Ultracite dat je geen ESLint / Prettier-configs meer nodig hebt.
+
+## “Ultracite (Biome) is throwing parse errors for files I don’t want it to check.”
+
+Een goed voorbeeld hiervan is het installeren van componenten uit een UI-bibliotheek zoals [`shadcn/ui`](https://ui.shadcn.com/). Hoewel ze bedoeld zijn om aangepast te worden, wil je mogelijk de originele broncode behouden voor updates. In dat geval wil je linting voor die bestanden uitschakelen.
+
+Om dit te doen, voeg patronen toe aan je `biome.jsonc` om die bestanden uit te sluiten, bijvoorbeeld:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Standaard zou Biome `node_modules` moeten negeren, maar als je een bestand daar handmatig hebt geopend, kan de extensie nog steeds proberen het te linten. Over het algemeen: negeer zware gegenereerde bestanden of code van derden – je hoeft die niet te linten.
+
+Een andere oorzaak kan zijn dat je experimentele syntax in een bestand hebt staan die Biome niet kan parsen (bijv. een stage-3 voorstel dat nog niet in Biome zit). In dat geval kun je die syntax vermijden of kijken of Biome configureerbaar is (soms door bijvoorbeeld `"parser.allowSomething": true` toe te voegen in de config als dat beschikbaar is).
+
+Controleer Biome’s issue tracker voor ondersteuning van die syntax.
+
+## “I see double errors for the same issue.”
+
+Dit kan gebeuren als je meerdere linters tegelijk laat draaien (bijvoorbeeld zowel ESLint als Ultracite). Het kan ook voorkomen als VS Code’s TypeScript-checker en Biome allebei dezelfde TS-fout rapporteren. Los dit op door je te standaardiseren op één tool per type controle.
+
+Als je Ultracite gebruikt, schakel dan andere linters uit. Voor TypeScript typefouten zal VS Code’s ingebouwde TS-server ze tonen (bijv. rode zigzaglijnen voor typeproblemen) – Biome kan ook typegedreven lintproblemen tonen. Meestal is dat prima omdat ze hetzelfde probleem belichten. Als het je echter stoort, kun je de TS-validator van VS Code uitschakelen (`"typescript.validate.enable": false` in instellingen) en op Biome vertrouwen, of andersom.
+
+In de meeste setups is het prima om beiden aan te laten; ze vullen elkaar meestal aan (typefouten versus lintfouten). Zorg er gewoon voor dat je niet twee linters met overlappende functionaliteit ingeschakeld hebt (zoals ESLint en Biome die beide linting uitvoeren).
+
+## “Pre-commit hook/CI is failing due to Ultracite.”
+
+Als je pre-commit hook `ultracite` uitvoert en faalt, betekent dit dat er nog issues zijn die niet automatisch zijn gefixed (of iemand heeft het overschreven zonder het te draaien). De beste manier om dit op te lossen is lokaal `npx ultracite` uit te voeren en de output te inspecteren. Het zal ofwel dingen fixen (in dat geval voeg je de wijzigingen toe aan de staging area en commit je opnieuw) of fouten rapporteren die handmatig moeten worden opgelost.
+
+Los die issues op en commit daarna opnieuw. Als CI faalt op `ultracite --check`, doe dan hetzelfde: draai het lokaal met `--check` om te zien welke problemen het vond, of draai zonder `--check` om automatisch te fixen en commit vervolgens de resultaten. Behandel Ultracite-fouten kort gezegd alsof het mislukte tests zijn – iets om in de code te corrigeren.
+
+## “I get an error about `strictNullChecks` or type issues after enabling Ultracite.”
+
+Ultracite verwacht TypeScript-strictheid. Als je `strictNullChecks` (of volledige `strict`) niet hebt ingeschakeld, kun je veel TypeScript-gerelateerde lintwaarschuwingen krijgen (bijvoorbeeld klachten over eventueel undefined gebruik dat TS niet opvangt door losse instellingen).
+
+De oplossing is om die strict-flags in `tsconfig` in te schakelen zoals aanbevolen. Als je om legacy-redenen niet kunt, moet je mogelijk bepaalde regels in Ultracite uitschakelen die striktheid veronderstellen. Maar het is sterk aanbevolen om de stap te zetten naar TS strict mode – dit verbetert je codekwaliteit en sluit aan bij Ultracite’s filosofie.
+
+## “Ultracite is too strict for our team (too many rules) – can I tone it down?”
+
+Ja. Hoewel de waarde van Ultracite ligt in strengheid, kun je regels overschrijven. Als ontwikkelaars worden overstelpt met waarschuwingen, identificeer dan welke regels wrijving veroorzaken. Misschien is het een stilistische voorkeur of iets dat niet logisch is in jouw context. Je kunt die regels op `warn` zetten of uitschakelen in de config.
+
+Bijvoorbeeld, als je vindt dat de toegankelijkheidsregels te luidruchtig zijn voor een intern hulpmiddel, kun je sommige daarvan uitschakelen. Of als je het oneens bent met een afgedwongen code-stijl, kun je die aanpassen (hoewel stijlverschillen juist zijn wat Ultracite probeert te elimineren).
+
+Het belangrijkste is communicatie met het team – leg mogelijk uit waarom een regel er is voordat je hem uitschakelt; als hij toch ongewenst is, pas dan de config aan. Ultracite is geen black box – je hebt volledige controle via `biome.jsonc`.
+
+Bekijk de [configuratie](/configuration) sectie voor meer informatie over hoe je regels kunt overschrijven.
+
+## “Are there known limitations or bugs with Ultracite I should be aware of?”
+
+Ultracite (specifiek Biome) dekt niet alles wat ESLint + Prettier + Stylelint dekken, zeker als je bepaalde plugins gebruikt. Bijvoorbeeld: Stylelint had uitgebreide CSS-lintregels; Biome biedt momenteel formattering voor CSS en basale linting, maar niet de volledige Stylelint-regelset.
+
+Als je project afhankelijk is van specifieke Stylelint-checks (zoals property ordering of specifieke naamgevingsconventies in CSS), houd er dan rekening mee dat Ultracite die niet afdwingt. Je kunt Stylelint afzonderlijk opnemen indien absoluut nodig, of wachten totdat Biome mogelijk meer CSS-linting introduceert.
+
+---
+
+Als je tegen een probleem aanloopt dat hier niet behandeld wordt, overweeg dan Ultracite’s GitHub-issuespagina of Biome’s documentatie te raadplegen. Er kan een oplossing of workaround beschikbaar zijn. De community groeit, dus de ondersteuning verbetert in de loop van de tijd.

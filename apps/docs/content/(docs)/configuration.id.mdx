@@ -1,0 +1,71 @@
+---
+title: Konfigurasi
+description: Konfigurasi linting bawaan Ultracite dan cara memodifikasinya.
+---
+
+Salah satu fitur terbaik Ultracite adalah bahwa ia tidak memerlukan konfigurasi — Anda cukup memperluas preset `ultracite` dan langsung menggunakan. Namun, setiap proyek sedikit berbeda, dan Anda mungkin ingin menyesuaikan aturan tertentu atau mengadaptasi Ultracite untuk framework yang berbeda. Bagian ini menjelaskan konfigurasi bawaan dan cara memperluas atau menimpanya.
+
+Ultracite menyediakan konfigurasi khusus framework yang dapat Anda perluas selain dari konfigurasi dasar. Ini memungkinkan Anda menambahkan aturan linting spesifik framework tanpa membuat konfigurasi dasar menjadi bengkak atau harus menangani aturan yang tidak relevan.
+
+Anda dapat menemukan daftar lengkap konfigurasi framework yang tersedia di bagian [Presets](/preset/core).
+
+### Penggunaan
+
+Untuk menggunakan konfigurasi khusus framework, tambahkan ke array `extends` Anda:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Anda dapat menggabungkan beberapa konfigurasi jika Anda bekerja pada proyek multi-framework atau menggunakan sesuatu seperti Astro yang mendukung beberapa framework.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Konfigurasi bawaan
+
+Saat Anda menyertakan `"extends": ["ultracite/core"]` di `biome.jsonc` Anda, Anda menarik konfigurasi preset dasar Ultracite. Preset ini mencakup aturan dan konfigurasi yang tidak bergantung pada framework. Beberapa aspek penting dari konfigurasi bawaan:
+
+- **Ketatnya TypeScript**: Ultracite mengaktifkan pemeriksaan ketat TypeScript dan aturan lint yang mengharuskan pengetikan yang kuat. Misalnya, ia tidak menganjurkan penggunaan `any`, mengharuskan penanganan `null/undefined`, dan lebih memilih tipe eksplisit dalam situasi tertentu untuk menghindari ambiguitas.
+- **Padanan ESLint "Recommended"**: Aturan praktik terbaik umum (no unused vars, no explicit eval, no proto pollution, etc.) disertakan.
+- **Aksesibilitas**: Aturan yang setara dengan standar aksesibilitas diaktifkan secara default (atribut ARIA, HTML semantik, navigasi keyboard, dll.).
+- **Node.js**: Keunikan spesifik lingkungan ditangani. Misalnya, variabel global yang disediakan oleh Node (seperti `module`, `process`) dikenali sehingga tidak akan salah ditandai sebagai undefined.
+- **Konvensi pemformatan**: Pengaturan formatter Ultracite (sebagian besar diwarisi dari default Biome/Prettier) meliputi indentasi 2-spasi, lebar baris maksimum 80 karakter, titik koma di akhir pernyataan, trailing commas di mana valid (mis. pada array/objek multi-baris), tanda kutip ganda untuk string, dll. Ini dipilih untuk cocok dengan konvensi umum dan memastikan kebersihan diff.
+
+Semua pengaturan bawaan ini bertujuan untuk menegakkan gaya yang konsisten dan mencegah kesalahan umum tanpa Anda harus mengonfigurasi setiap aturan secara manual.
+
+Untuk referensi lengkap semua aturan lint yang dikonfigurasi dalam konfigurasi dasar Ultracite, lihat dokumentasi [Konfigurasi Inti](/preset/core).
+
+## Menimpa konfigurasi
+
+### Memodifikasi `biome.jsonc`
+
+Anda dapat menonaktifkan aturan dengan memodifikasi file `biome.jsonc`.
+
+Misalnya, untuk menonaktifkan aturan `noAutofocus`, Anda dapat menambahkan berikut ini:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Komentar inline
+
+Anda juga dapat menonaktifkan aturan per-baris dengan menambahkan komentar di akhir baris:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

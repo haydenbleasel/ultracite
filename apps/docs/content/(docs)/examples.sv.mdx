@@ -1,0 +1,139 @@
+---
+title: Exempel
+description: Före- och efterexempel som visar Ultracite i praktiken.
+---
+
+To illustrate Ultracite’s capabilities, here are a few practical examples of issues it catches and fixes. Each example shows code before (with a problem) and after Ultracite is applied. These examples demonstrate how Ultracite improves code automatically.
+
+## Automatisk kodformatering
+
+### Före (rörig formatering)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+I den här koden är mellanslag och sammanfogningsstil felaktiga. Den använder också strängsammanfogning istället för template literals, och blandar dubbla och enkla citattecken.
+
+### Efter (formaterad)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+Ultracites formatterare har:
+
+- Format:erat funktionen med korrekta radbrytningar för läsbarhet.
+- Konverterat strängsammanfogningen till en template literal (detta kan vara en automatisk rättning från en lintregel som föreslår template strings för bättre läsbarhet).
+- Standardiserat citattecken till backticks för templaten (och skulle använda dubbla citattecken konsekvent i andra sammanhang om det inte är en template).
+- Lagt till ett semikolon i slutet av `return`-satsen.
+- Säkerställt korrekt placering av mellanslag runt måsvingar och parenteser.
+
+Utvecklaren formaterade inte koden manuellt – hen sparade bara filen, och Ultracite tog hand om resten. Resultatet är renare och mer konsekvent kod.
+
+Ultracite kommer också att varna för att `name` saknar typ och föreslå att en typ läggs till.
+
+## Tillämpning av strikt likhet
+
+### Före (potentiell bugg med lös likhet)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Här använder koden lös likhet (`==`) för att jämföra `response.status` med `200`. Att använda lös likhet kan vara felbenäget på grund av typkonvertering (t.ex. kan `response.status` vara en sträng `"200"` och ändå passera). Ultracites strikta regler kräver sannolikt att `===` används för jämförelser.
+
+### Efter (Ultracite auto-fix applied)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite ersatte automatiskt `== 200` med `=== 200`. Denna lilla ändring förhindrar subtila buggar. Rättningen tillämpades vid sparning som en del av `source.fixAll.biome`-åtgärderna. En sådan regel (liknande ESLint’s `eqeqeq`) säkerställer att utvecklare använder strikt likhetskontroll.
+
+Dessutom kommer Ultracite också att varna för att `isValid` aldrig används och föreslå att den tas bort.
+
+## Organisering och rensning av importerna
+
+### Före (oorganiserade importer)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Importerna här ligger inte i alfabetisk ordning, och importen `helper` används aldrig i filen.
+
+### Efter (efter sparning med Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (via Biome’s organize imports-funktion) sorterade importerna alfabetiskt efter modulnamn. Den tog också automatiskt bort den oanvända helper-importen. Före/efter-skillnaden sker omedelbart vid sparning, vilket säkerställer att din importsektion alltid är prydlig:
+
+- Inga oanvända imports som ställer till det högst upp i filen.
+- Deterministisk ordning på imports (så merges och diffar inte förvirras av olika importordningar som olika utvecklare lagt till).
+
+Detta leder till mer underhållbar kod, särskilt i filer med många imports.
+
+## Tillgänglighetsåtgärd
+
+### Före
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+Standardtypen för en knapp är `submit`, vilket orsakar att ett formulär skickas när knappen placeras inuti ett form-element. Detta är sannolikt inte det beteende du vill ha i en React-applikation. Ultracite kommer att varna för detta och erbjuda en snabb rättning för att ändra typen till `button`.
+
+### Efter (manuell eller snabb åtgärd)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+Typen är nu `button`, vilket förhindrar att ett överordnat formulär potentiellt skickas när knappen klickas.
+
+---
+
+Dessa exempel visar hur Ultracite förbättrar kodkvaliteten:
+
+- Formatering och stilkonsekvens utan ansträngning.
+- Automatiska rättningar för många vanliga problem (så att du sällan behöver åtgärda trivialiteter manuellt).
+- Identifiering av verkliga problem (så att du kan åtgärda dem tidigt i utvecklingen).
+
+Genom att använda Ultracite håller sig din kod inte bara ren utan blir även mindre buggig och mer tillgänglig, tack vare den kollektiva kunskap som är inbyggd i dess regler.

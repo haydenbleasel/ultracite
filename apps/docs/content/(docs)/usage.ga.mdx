@@ -1,0 +1,72 @@
+---
+title: Úsáid
+description: Clúdaíonn an rannán seo conas Ultracite a úsáid go laethúil — lena n-áirítear comhéadan líne ordaithe, sonraí comhtháthaithe eagarthóra, agus sreafaí oibre tipiciúla.
+---
+
+## Comhtháthú IDE
+
+Oibríonn Ultracite is fearr nuair a bhíonn sé comhtháite in do eagarthóir, ionas go bhfaighidh tú aiseolas láithreach agus tú ag scríobh cód. Tá sé deartha chun rith go huathoibríoch ar shábháil. Chun é a thástáil, oscail tionscadal i do IDE. Agus tú ag eagarthóireacht comhad, ba chóir duit a fheiceáil go bhfeidhmíonn an formáidiú nuair a shábhálann tú. Déan botún beag stíle cód a chur isteach (mar shampla seimicolón breise nó líne le mí-innmheánú) agus brúigh Sábháil — athformáidíonn Ultracite (Biome) an comhad láithreach.
+
+Má chuireann tú isteach saincheist choitianta lint (mar shampla, athróg nach n-úsáidtear), d’fhéadfá faoi-líne tonnacha nó rabhadh sa phainéal Fadhbanna a fheiceáil; ar shábháil, déanfadh Ultracite iarracht é a cheartú más féidir é a cheartú go huathoibríoch (mar shampla, bain import nach nglacfar leis) nó fágfadh sé rabhadh duit le réiteach de láimh.
+
+### Formáidiú láithreach
+
+Gach uair a shábháil tú comhad, formáidíonn Biome (le cumraíocht Ultracite) an comhad. Ní gá duit Prettier ar leith a rith ná a bheith buartha faoi fhormáidiú — tá sé curtha i bhfeidhm cheana féin.
+
+Buíochas leis na socruithe `codeActionsOnSave`, cuirfidh VS Code gníomh “fix all” Biome i bhfeidhm freisin ar shábháil. Ciallaíonn sé seo go mbeifear ag cur i bhfeidhm aon rialach lint a bhfuil réiteach uathoibríoch air (mar shampla, `!=` a thiontú go `!==`, cuirtear lúibíní ar falt, ordú imports a cheartú, srl.). Is cosúil gur rith tú `--fix` le ESLint go huathoibríoch.
+
+Chomh maith leis sin, tá `formatOnPaste` cumasaithe againn — mar sin má ghreamaíonn tú cód ó áit eile, beidh sé formáidithe láithreach chun teacht le do stíl.
+
+Is é an buntáiste is mó anseo ná aiseolas láithreach. Scríobhann tú cód i VS Code, agus coinneoidh Ultracite é glan go leanúnach. Le himeacht ama, tabharfaidh tú faoi deara nach gcaitheann tú ach beagán ama nó aon am ag socrú earráidí lint — de ghnáth déanann Ultracite iad a cheartú duit nó léiríonn sé iad go luath. Mar thoradh air sin tá sreabhadh oibre réidh ina líonann dearcadh stíle cód agus saincheisteanna beaga riamh.
+
+### Comhtháthú painéil Fadhbanna
+
+Aon cheisteanna a fhanann ann (a éilíonn d’aird) taispeánfar sa Phainéal Fadhbanna iad. Mar shampla, má tá rialach ag Ultracite a chuireann cosc ar rud éigin nó má aimsíonn sé earráid nach féidir léi a cheartú (mar shampla, d’úsáid tú API atá as feidhm nó rinne tú dearmad glacadh le fulacht Promise), liostóidh sé é mar earráid nó mar rabhadh. Is féidir leat cliceáil air chun dul chuig an láthair sa chód.
+
+### Léasanna cód / Deisiúcháin thapa
+
+I go leor cásanna, soláthraíonn síneadh VS Code do Biome moltaí deisiúcháin thapa. Má fheiceann tú bolgán solais buí nó pop-up moltaí, is féidir leat na deisiúcháin a chur i bhfeidhm de láimh freisin. Mar shampla, má tá import neamhúsáidte, d’fhéadfá deisiúchán tapa a fháil chun é a bhaint (mura ndearnadh é cheana ar shábháil).
+
+## Úsáid CLI
+
+Tagann Ultracite le CLI áisiúil (ar a ghlaoitear `ultracite` nuair a shuiteáiltear é). Seo roinnt bealaí coitianta chun é a úsáid.
+
+### Ag seiceáil cód
+
+Cuimsíonn an t-ordú `check` ordú Biome `check`, a ritheann an linter gan comhaid a cheartú.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Is féidir leat an scagaire `--diagnostic-level` a chur isteach chun earráidí nó rabhracha a thaispeáint amháin:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Ag déanamh deisiúcháin ar chód
+
+Cuimsíonn an t-ordú `fix` ordú Biome `check --write`, a ritheann an linter agus a cheartíonn comhaid.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Is féidir leat deisiúcháin nach bhfuil sábháilte a chur i bhfeidhm freisin trí rith:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Bailíochtú an tsocraithe
+
+Seiceálann an t-ordú `doctor` do shocrú le haghaidh fadhbanna agus tugann sé moltaí. Tá sé úsáideach é a rith tar éis Ultracite a shuiteáil chun a chinntiú go bhfuil gach rud cumraithe i gceart.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

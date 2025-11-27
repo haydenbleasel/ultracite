@@ -1,0 +1,63 @@
+---
+title: Asennus
+description: Miten asentaa Ultracite projektiisi.
+---
+
+Ultracite voidaan asentaa kaikilla yleisillä pakettienhallinoilla. Tarvitset Node.js v14.18+ (Node 18+ suositeltu) ja projektin, jossa on `package.json`-tiedosto.
+
+## Asennus
+
+Helpoin tapa aloittaa on suorittaa Ultraciten `init`-skripti, joka asentaa tarvittavat paketit ja luo konfiguraatiotiedoston puolestasi. Projektihakemistossasi suorita:
+
+```package-install
+npx ultracite init
+```
+
+Voit halutessasi antaa seuraavat liput `init`-komennolle:
+
+| Valitsin            | Kuvaus                                           | Vaihtoehdot                                                              |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Käytettävä pakettienhallinta.                    | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Konfiguroitavat kehykset.                        | Pilkuin eroteltu: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Konfiguroitavat editorit.                        | Pilkuin eroteltu: `vscode`, `zed`                                        |
+| `--agents`          | Konfiguroitavat tekoälyagentit.                  | Pilkuin eroteltu: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Konfiguroitavat agenttien hookit.                | Pilkuin eroteltu: `cursor`, `claude`                                     |
+| `--integrations`    | Lisäintegraatiot, jotka otetaan käyttöön.        | Pilkuin eroteltu: `husky`, `lefthook`, `lint-staged`                     |
+| `--migrate`         | Poistettavat migraatiotyökalut.                   | Pilkuin eroteltu: `eslint`, `prettier` (poistaa riippuvuudet, konfiguraatiotiedostot ja editoriasetukset) |
+| `--skip-install`    | Ohita riippuvuuksien asennus.                    | (arvoa ei tarvita)                                                       |
+| `--quiet`           | Estä interaktiiviset kehotteet ja visuaalinen tulostus. | (arvoa ei tarvita, otetaan automaattisesti käyttöön CI:ssä)              |
+
+### Ohjelmallinen käyttö
+
+Työkaluille, jotka kutsuvat Ultracitea ohjelmallisesti (esim. scaffold-CLI:t), voit käyttää `--quiet`-lippua estääksesi kaikki interaktiiviset kehotteet ja visuaalisen tulostuksen:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+`--quiet`-lippu otetaan automaattisesti käyttöön, kun ympäristömuuttuja `CI` on asetettu arvoon `true` tai `1`, joten se soveltuu CI/CD-putkistoihin:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+Hiljaisessa tilassa Ultracite:
+- Ohittaa kaikki interaktiiviset kehotteet
+- Käyttää järkeviä oletusarvoja kaikille asetuksille
+- Piilottaa ASCII-taiteen, spinnereitä ja lokiviestit
+- Luo vain Biomen ydinkonfiguraation
+- Poistuu siististi koodilla 0 onnistumisen yhteydessä tai koodilla 1 epäonnistumisen yhteydessä
+
+## Laajennukset
+
+Jos käytät Visual Studio Codea, asenna virallinen [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) -laajennus, joka mahdollistaa tallennettaessa suoritettavan muotoilun ja korjaamisen:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+Lisäksi, jos käytät Tailwind CSS:ää, suositeltavaa on asentaa [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) -laajennus luokkien lajittelua ja vihjeitä varten:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```
