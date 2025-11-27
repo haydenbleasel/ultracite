@@ -14,11 +14,7 @@ import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import Home from "./(home)";
 
-type PageProps = {
-  params: Promise<{ slug?: string[] }>;
-};
-
-const Page = async (props: PageProps) => {
+const Page = async (props: PageProps<"/[[...slug]]">) => {
   const params = await props.params;
   const page = source.getPage(params.slug);
 
@@ -58,7 +54,9 @@ const Page = async (props: PageProps) => {
 
 export const generateStaticParams = () => source.generateParams();
 
-export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+export const generateMetadata = async (
+  props: PageProps<"/[[...slug]]">
+): Promise<Metadata> => {
   const params = await props.params;
   const page = source.getPage(params.slug);
 

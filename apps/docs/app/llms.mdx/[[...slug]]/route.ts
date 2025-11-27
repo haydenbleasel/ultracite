@@ -1,15 +1,13 @@
 import { notFound } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
-import { getLLMText } from "@/lib/get-llm-text";
-import { source } from "@/lib/source";
+import { getLLMText, source } from "@/lib/source";
 
 export const revalidate = false;
 
-type GetProps = {
-  params: Promise<{ slug?: string[] }>;
-};
-
-export const GET = async (_req: NextRequest, { params }: GetProps) => {
+export const GET = async (
+  _req: NextRequest,
+  { params }: RouteContext<"/llms.mdx/[[...slug]]">
+) => {
   const { slug } = await params;
   const page = source.getPage(slug);
 
