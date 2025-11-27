@@ -26,9 +26,11 @@ export const Navbar = () => (
       </div>
 
       <div className="flex items-center gap-2">
+        <div className="flex items-center gap-px">
+          <LanguageSelector />
+          <ThemeToggle />
+        </div>
         <SearchButton />
-        <LanguageSelector />
-        <ThemeToggle />
       </div>
     </div>
   </div>
