@@ -57,15 +57,37 @@ async function translateContent(
     model: "openai/gpt-5-mini",
     prompt: `You are a professional technical translator. Translate the following MDX documentation content to ${languageName} (locale: ${targetLocale}).
 
-IMPORTANT INSTRUCTIONS:
-- Preserve ALL MDX frontmatter (the content between --- markers at the top)
-- Preserve ALL code blocks exactly as they are (do not translate code)
-- Preserve ALL MDX components and their syntax (e.g., <Callout>, <Card>, etc.)
-- Preserve ALL links and URLs
-- Preserve ALL file paths and technical identifiers
-- Only translate the natural language text content
-- Maintain the same formatting and structure
-- Keep the same tone (technical documentation)
+CRITICAL INSTRUCTIONS:
+1. TRANSLATE ALL natural language text, including:
+   - Regular text content
+   - Text inside bold markers (**text**)
+   - Text inside italic markers (*text*)
+   - List item labels (including text before colons in lists)
+   - Headings and subheadings
+   - Link text (but NOT the URL itself)
+
+2. DO NOT TRANSLATE:
+   - Code blocks and inline code (\`code\`)
+   - URLs and file paths
+   - Technical identifiers, package names, command names
+   - MDX frontmatter (content between --- markers)
+   - MDX component syntax
+
+3. PRESERVE:
+   - All markdown formatting (**, *, -, etc.)
+   - All code block syntax and fences
+   - All MDX components and their syntax
+   - All link structures [text](url)
+   - The exact same document structure
+
+4. MAINTAIN:
+   - Technical documentation tone
+   - Professional terminology
+   - Same formatting and indentation
+
+EXAMPLE - List items with labels:
+English: - **Updated Biome**: Upgraded from v1.x to v2.x
+${languageName}: - **[Translate "Updated Biome"]**: [Translate "Upgraded from v1.x to v2.x"]
 
 Content to translate:
 
