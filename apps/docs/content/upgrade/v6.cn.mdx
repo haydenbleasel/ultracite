@@ -1,0 +1,75 @@
+---
+title: 升级到 v6
+description: 从 Ultracite v5 升级到 v6 并使用新的预设系统的指南。
+---
+
+Ultracite v6 引入了针对框架的预设，让你可以更精确地控制哪些规则适用于你的项目。**此次升级对 Next.js/React 用户不会造成破坏性变更**。
+
+## 发生了什么变化
+
+v6 引入了[针对框架的预设](/configuration#framework-specific-configurations)：
+
+- [`ultracite/core`](/preset/core) - 基础的 JavaScript/TypeScript 规则
+- [`ultracite/react`](/preset/react) - React 专用规则
+- [`ultracite/next`](/preset/next) - Next.js 专用规则
+- [`ultracite/solid`](/preset/solid) - Solid.js 规则
+- [`ultracite/vue`](/preset/vue) - Vue.js 规则
+- [`ultracite/svelte`](/preset/svelte) - Svelte 规则
+- [`ultracite/qwik`](/preset/qwik) - Qwik 规则
+- [`ultracite/angular`](/preset/angular) - Angular HTML 解析器
+- [`ultracite/remix`](/preset/remix) - 基于文件的路由支持
+
+## 迁移
+
+### Next.js/React 项目
+
+更新你的 `biome.jsonc`，以扩展相应的预设：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### 非 React 项目
+
+如果不使用 React，请切换到 core 预设：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### 其他框架
+
+为你的框架使用相应的预设：
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### 多框架项目
+
+根据需要组合预设：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

@@ -1,0 +1,116 @@
+---
+title: Husky
+description: 使用 Husky 在已暂存的 Git 文件上自动运行 Ultracite
+---
+
+Ultracite 提供与 [Husky](https://typicode.github.io/husky/) 的无缝集成，Husky 是一个用于管理 Git 钩子的流行工具。此集成会自动设置 pre-commit 钩子，以确保在每次提交之前你的代码已正确格式化。
+
+## 什么是 Husky？
+
+Husky 是一个让在项目中使用 Git 钩子变得简单的工具。Git 钩子是在 Git 工作流中的某些时点自动运行的脚本，例如在提交或推送代码之前。Husky 简化了设置和管理这些钩子的过程。
+
+## Ultracite 如何使用 Husky
+
+当你在项目中初始化 Ultracite 时，它可以自动配置 Husky 在每次提交之前运行代码格式化。这可以确保：
+
+- 所有提交的代码遵循一致的格式化标准
+- 自动强制执行代码质量检查
+- 团队成员无需记得手动格式化代码
+- 你的代码仓库保持干净、一致的代码风格
+
+## Pre-commit 钩子行为
+
+Ultracite 的 Husky 集成会创建一个 pre-commit 钩子，运行以下命令：
+
+```bash
+npx ultracite fix
+```
+
+该命令会：
+- 在你的代码库上运行 Biome 的 linter 和 formatter
+- 在可能的情况下自动修复格式问题
+- 确保所有已暂存的文件符合你的项目代码标准
+- 防止引入格式不一致的提交
+
+## 自动设置
+
+在初始化过程 (`ultracite init`) 中，如果你选择了 Husky 选项，Ultracite 会：
+
+1. **安装 Husky**：将 Husky 添加为你的项目的开发依赖
+2. **创建钩子文件**：使用格式化命令设置 `.husky/pre-commit` 文件
+3. **处理已有设置**：如果你已经配置了 Husky，它会更新你现有的 pre-commit 钩子，而不是覆盖它
+
+## 集成细节
+
+Husky 集成包含若干智能功能：
+
+### 依赖管理
+- 自动使用你项目的包管理器将 Husky 安装为 dev 依赖
+- 使用适当的包管理器命令（`npm install -D`、`yarn add -D`、`pnpm add -D` 等）
+
+### 钩子管理
+- **新项目**：创建一个包含 ultracite fix 命令的新 `.husky/pre-commit` 文件
+- **已有项目**：将 Ultracite 命令追加到你现有的 pre-commit 钩子中，保留你可能已配置的其他钩子
+
+### 文件结构
+该集成会创建或修改：
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## 好处
+
+### 一致的代码风格
+每次提交都会自动遵循你项目的格式化标准，消除风格争论和不一致性。
+
+### 自动化质量控制
+在格式问题进入你的仓库之前捕获它们，保持干净的提交历史。
+
+### 团队协作
+所有团队成员无需手动干预即可自动遵循相同的格式化标准。
+
+### CI/CD 优化
+由于代码在本地已预先格式化，可减少因格式问题导致的 CI/CD 流水线失败。
+
+## 工作流集成
+
+启用 Husky 集成后，你的典型 Git 工作流变为：
+
+1. **修改** 你的代码文件
+2. **暂存更改** 使用 `git add`
+3. **提交更改** 使用 `git commit`
+4. **pre-commit 钩子自动运行**，格式化已暂存的文件
+5. **提交继续进行**，提交的是已正确格式化的代码
+
+如果格式化工具进行了更改，你需要对这些更改再次暂存并提交。
+
+## 自定义
+
+虽然 Ultracite 提供了合理的默认设置，但你可以自定义其行为：
+
+- 修改 `.husky/pre-commit` 以添加额外命令
+- 配置 Biome 设置以调整格式化规则
+- 在 Ultracite 的格式化之外添加其他 pre-commit 检查
+
+## 故障排除
+
+### 钩子未运行
+如果 pre-commit 钩子未执行：
+- 确保 Husky 已安装：`npm ls husky`
+- 检查 `.husky/pre-commit` 是否存在且可执行
+- 验证仓库中是否启用了 Git 钩子
+
+### 权限问题
+在类 Unix 系统上，确保钩子文件具有可执行权限：
+```bash
+chmod +x .husky/pre-commit
+```
+
+### 绕过钩子
+在极少数需要跳过 pre-commit 钩子的情况下：
+```bash
+git commit --no-verify
+```
+
+请谨慎使用此方式，因为它会绕过保持代码库一致性的自动格式化。

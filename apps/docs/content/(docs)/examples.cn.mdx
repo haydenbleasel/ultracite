@@ -1,0 +1,139 @@
+---
+title: 示例
+description: 展示 Ultracite 工作前后的对比示例。
+---
+
+To illustrate Ultracite’s capabilities, here are a few practical examples of issues it catches and fixes. Each example shows code before (with a problem) and after Ultracite is applied. These examples demonstrate how Ultracite improves code automatically.
+
+## 自动代码格式化
+
+### 之前（格式混乱）
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+在这段代码中，空格和连接字符串的风格不正确。它还使用了字符串拼接而不是模板字面量，并且混用了双引号和单引号。
+
+### 之后（已格式化）
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+Ultracite 的格式化器已执行：
+
+- 将函数格式化为适当的换行以提高可读性。
+- 将字符串拼接转换为模板字面量（这可能是来自某条 lint 规则的自动修复，该规则建议使用模板字符串以便于阅读）。
+- 将引号标准化为模板所需的反引号（并且在非模板情况下会在其他地方一致地使用双引号）。
+- 在 `return` 语句末尾添加了分号。
+- 确保大括号和括号周围的空格正确。
+
+开发者并没有手动重新格式化代码——他们只是保存了文件，Ultracite 处理了其余部分。结果是更整洁、更一致的代码。
+
+Ultracite 还会提示 `name` 未指定类型并建议添加类型。
+
+## 强制使用严格相等
+
+### 之前（使用宽松相等可能导致的错误）
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+这里代码使用了宽松相等（`==`）来比较 `response.status` 与 `200`。使用宽松相等可能由于类型强制转换而导致错误（例如，`response.status` 可能是字符串 `"200"`，仍然会通过）。Ultracite 的严格规则可能会强制使用 `===` 进行比较。
+
+### 之后（已应用 Ultracite 的自动修复）
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite 自动将 `== 200` 替换为 `=== 200`。这个小改动可以防止细微的错误。该修复作为 `source.fixAll.biome` 操作的一部分在保存时应用。类似于 ESLint 的 `eqeqeq` 的这类规则确保开发者使用严格相等检查。
+
+此外，Ultracite 还会提示 `isValid` 从未被使用，并建议将其移除。
+
+## 组织和清理导入
+
+### 之前（导入未排序）
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+这里的导入没有按字母顺序排列，并且 `helper` 导入在文件中从未被使用。
+
+### 之后（使用 Ultracite 保存后）
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite（通过 Biome 的 organize imports 功能）按模块名对导入进行了字母排序。它还自动移除了未使用的 `helper` 导入。保存时即刻显示前后差异，确保你的导入部分始终整洁：
+
+- 没有未使用的导入杂乱文件顶部。
+- 导入的确定性排序（这样合并和差异不会因为不同开发者添加不同顺序的导入而混淆）。
+
+这使代码更易维护，尤其是在包含许多导入的文件中。
+
+## 可访问性修复
+
+### 之前
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+button 的默认 type 是 `submit`，当它被放置在表单元素内时会触发表单提交。在 React 应用中这很可能不是你想要的行为。Ultracite 会就此发出警告并提供快速修复，将类型改为 `button`。
+
+### 之后（手动或快速修复）
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+现在类型为 `button`，这可以防止在点击按钮时意外提交父表单。
+
+---
+
+这些示例演示了 Ultracite 如何提升代码质量：
+
+- 轻松实现格式化和风格一致性。
+- 自动修复许多常见问题（因此你很少需要手动修复琐碎的问题）。
+- 识别真实问题（便于在开发早期修复它们）。
+
+通过使用 Ultracite，你的代码不仅保持干净，而且由于其规则中编码的集体知识，还更少错误且更容易访问。

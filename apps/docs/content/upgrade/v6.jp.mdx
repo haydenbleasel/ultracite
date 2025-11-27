@@ -1,0 +1,75 @@
+---
+title: v6 へのアップグレード
+description: 新しいプリセットシステムを用いた Ultracite v5 から v6 へのアップグレードガイド。
+---
+
+Ultracite v6 は、プロジェクトに適用されるルールをより細かく制御できる[フレームワーク固有のプリセット](/configuration#framework-specific-configurations)を導入します。**このアップグレードは Next.js/React ユーザーに対して破壊的変更ではありません**。
+
+## 変更点
+
+v6 は [フレームワーク固有のプリセット](/configuration#framework-specific-configurations) を導入します:
+
+- [`ultracite/core`](/preset/core) - 基本的な JavaScript/TypeScript のルール
+- [`ultracite/react`](/preset/react) - React 固有のルール
+- [`ultracite/next`](/preset/next) - Next.js 固有のルール
+- [`ultracite/solid`](/preset/solid) - Solid.js のルール
+- [`ultracite/vue`](/preset/vue) - Vue.js のルール
+- [`ultracite/svelte`](/preset/svelte) - Svelte のルール
+- [`ultracite/qwik`](/preset/qwik) - Qwik のルール
+- [`ultracite/angular`](/preset/angular) - Angular の HTML パーサー
+- [`ultracite/remix`](/preset/remix) - ファイルベースのルーティングのサポート
+
+## 移行
+
+### Next.js/React プロジェクト
+
+適切なプリセットを拡張するように `biome.jsonc` を更新してください:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### 非 React プロジェクト
+
+React を使用していない場合は core プリセットに切り替えてください:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### その他のフレームワーク
+
+使用するフレームワークに応じたプリセットを使用してください:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### マルチフレームワークプロジェクト
+
+必要に応じてプリセットを組み合わせてください:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

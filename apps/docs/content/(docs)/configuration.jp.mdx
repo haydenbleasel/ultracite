@@ -1,0 +1,71 @@
+---
+title: 設定
+description: Ultraciteのデフォルトのリンティング設定とその変更方法。
+---
+
+Ultraciteの優れた機能の一つは、初期設定が不要であることです — `ultracite` プリセットを拡張するだけで開始できます。しかし、プロジェクトごとに要件は異なるため、特定のルールをカスタマイズしたり、異なるフレームワーク向けにUltraciteを適応させたい場合があります。本セクションではデフォルト設定と、それを拡張／上書きする方法を説明します。
+
+Ultraciteは、ベース設定に加えて拡張可能なフレームワーク固有の設定を提供します。これにより、ベース設定を不必要に肥大化させることなく、フレームワーク固有のリンティングルールを追加できます。
+
+利用可能なフレームワーク設定の完全な一覧は、[Presets](/preset/core) セクションで確認できます。
+
+### 使用方法
+
+フレームワーク固有の設定を使用するには、それを `extends` 配列に追加してください:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+マルチフレームワークのプロジェクトに取り組んでいる場合や、複数のフレームワークをサポートする Astro のような環境を使っている場合、複数の設定を組み合わせることができます。
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## デフォルト設定
+
+`biome.jsonc` に `"extends": ["ultracite/core"]` を含めると、Ultraciteのベースプリセット設定が読み込まれます。このプリセットにはフレームワークに依存しないルールや設定が含まれます。デフォルト設定の主な点は以下の通りです:
+
+- **TypeScript の厳格さ**: Ultracite は TypeScript の厳格なチェックと堅牢な型付けを要求するリンティングルールを有効にします。例えば、`any` の使用を抑制し、`null/undefined` の扱いを明確にし、曖昧さを避けるために特定の状況では明示的な型を推奨します。
+- **ESLint 「Recommended」に相当するルール**: 一般的なベストプラクティス（no unused vars、no explicit eval、no proto pollution など）が含まれます。
+- **アクセシビリティ**: アクセシビリティ基準に相当するルールがデフォルトで有効です（ARIA 属性、セマンティック HTML、キーボード操作など）。
+- **Node.js**: 環境固有の挙動が考慮されています。例えば、Node が提供するグローバル変数（`module`、`process` のような）が認識され、未定義として誤ってフラグされることがありません。
+- **フォーマット規約**: Ultracite のフォーマッタ設定（主に Biome/Prettier のデフォルトを継承）は、2スペースのインデント、最大行幅80文字、文末のセミコロン、有効な箇所での末尾カンマ（例：複数行の配列/オブジェクト）、文字列にダブルクオート等を含みます。これらは一般的な慣習に合わせ、差分が分かりやすくなるよう選ばれています。
+
+これらのデフォルトは、各ルールを個別に手動で設定することなく、一貫したスタイルを強制し、一般的なエラーを防ぐことを目的としています。
+
+Ultracite のベース設定で構成されているすべてのリンティングルールの詳細な参照は、[Core Configuration](/preset/core) ドキュメントを参照してください。
+
+## 設定の上書き
+
+### `biome.jsonc` の変更
+
+ルールは `biome.jsonc` を変更することで無効化できます。
+
+例えば、`noAutofocus` ルールを無効化するには、次のように追加します:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### インラインコメント
+
+行単位でルールを無効化することもできます。行末にコメントを追加してください:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

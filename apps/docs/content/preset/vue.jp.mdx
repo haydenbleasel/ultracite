@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Ultracite の Vue.js 固有のリンティングルール。
+---
+
+Vue 設定には、コンポーネント構造、data オプション、computed プロパティ、および予約語に対する Vue.js 固有のリンティングルールが含まれています。また、`.vue` ファイルでの誤検知を防ぐためのオーバーライドも含まれます。
+
+## インストール
+
+Vue 設定を `biome.jsonc` に追加します:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## 概要
+
+この設定は Vue.js 開発に特化したルールを追加します:
+
+- **HTML サポート**: スクリプトおよびスタイルのインデントを伴う実験的なフル HTML サポートを有効にします
+- **コンポーネント命名**: 複数単語のコンポーネント名を強制します
+- **データ構造**: 不適切な data オプションの宣言を防ぎます
+- **予約語**: Vue の予約済み props やキーの使用を禁止します
+- **重複キー**: コンポーネントオプション内の重複キーを防止します
+- **React 固有の props**: Vue コンポーネント内での React 固有の props を禁止します
+- **Vue ファイル上書き**: シングルファイルコンポーネント構造を扱うために `.vue` ファイルに対して緩和されたルール
+
+## HTML フォーマッター設定
+
+Vue プリセットは、埋め込みスクリプトやスタイルに対して特別なフォーマットを行う実験的な HTML サポートを有効にします:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+この設定は次のとおりです:
+- **実験的な完全サポート**: `.vue` ファイルに対する Biome の実験的な HTML パースおよびフォーマット機能を有効にします
+- **スクリプトとスタイルのインデント**: Vue シングルファイルコンポーネント内の `<script>` および `<style>` タグ内のコードを適切にインデントします
+
+## Vue 固有のルール
+
+### ナーサリー
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Vue コンポーネントで `data` オプションにオブジェクト宣言を使うことを防ぎます。`data` オプションはオブジェクトを返す関数でなければなりません。 |
+| `noVueDuplicateKeys` | `error` | Vue コンポーネントオプションでの重複キーを防ぎます。`data`、`computed`、`methods` などのキーは一意でなければなりません。 |
+| `noVueReservedKeys` | `error` | コンポーネントオプション内で `$data`、`$props`、`$el` などの Vue の予約済みキーの使用を禁止します。 |
+| `noVueReservedProps` | `error` | カスタムコンポーネントの props として `key`、`ref`、`is` といった Vue の予約済み props を使用することを禁止します。 |
+| `noVueVIfWithVFor` | `error` | 同じ要素に対して `v-for` と `v-if` を併用することを禁止します。 |
+| `useVueHyphenatedAttributes` | `error` | 属性名には kebab-case を使用することを推奨します（Vue スタイルガイドの推奨に従います）。 |
+| `useVueMultiWordComponentNames` | `error` | HTML 要素と競合しないように、複数単語のコンポーネント名を強制します。`Button` や `Card` のような単語のみの名前は避けるべきです。 |
+| `useVueValidVBind` | `error` | Vue ファイル内の `v-bind` ディレクティブの妥当性を強制します。 |
+| `useVueValidVElseIf` | `error` | Vue テンプレート内の有効な `v-else-if` ディレクティブを強制します。条件式が欠如している場合や `v-if` / `v-else-if` が先行していない場合に無効なディレクティブとして報告します。 |
+| `useVueValidVElse` | `error` | Vue テンプレート内の有効な `v-else` ディレクティブを強制します。`v-if` または `v-else-if` が先行していないディレクティブは報告されます。 |
+| `useVueValidVHtml` | `error` | Vue テンプレート内での `v-html` ディレクティブの正しい使用を強制します。式が欠如している、予期しない引数がある、または予期しないモディファイアがあるディレクティブを報告します。 |
+| `useVueValidVIf` | `error` | Vue テンプレート内の有効な `v-if` ディレクティブを強制します。引数やモディファイアを許可せず、値が提供されていることを確認します。 |
+| `useVueValidVOn` | `error` | Vue テンプレート内の有効な `v-on` ディレクティブを強制します。イベント名が欠如している、無効なモディファイアがある、またはハンドラ式が欠如している `v-on` / 省略形の `@` ディレクティブを報告します。 |
+| `useVueValidVText` | `error` | Vue テンプレート内の有効な `v-text` ディレクティブを強制します。`v-text` に引数がある、モディファイアがある、または値が欠如している場合に報告します。 |
+
+### 疑わしい
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Vue で `className` や `htmlFor` のような React 固有の props を禁止します。代わりに `class` と `for` を使用してください。 |
+
+## Vue ファイルのオーバーライド
+
+Biome の Vue シングルファイルコンポーネントに対する部分的なサポートによる誤検知を防ぐため、以下のルールは `.vue` ファイルでは無効化されています:
+
+### 正確性
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | `.vue` ファイル内で未使用の変数を許可します。スクリプトセクションの変数はテンプレートでのみ使用される場合があります。 |
+| `noUnusedImports` | `off` | `.vue` ファイル内で未使用のインポートを許可します。インポートはテンプレートセクションでのみ使用される場合があります。 |
+
+### スタイル
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `useConst` | `off` | リアクティブデータパターンのために `.vue` ファイルでの `let` や `var` 宣言を許可します。 |
+| `useImportType` | `off` | Vue のビルドシステムとの互換性を高めるために、明示的な import タイプ要件を無効にします。 |

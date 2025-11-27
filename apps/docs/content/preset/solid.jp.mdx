@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Ultracite の Solid.js 固有のリンティングルール。
+---
+
+この Solid の設定には、リアクティビティ、コンポーネントパターン、JSX の取り扱いに関する Solid.js 固有のリンティングルールが含まれています。
+
+## インストール
+
+あなたの `biome.jsonc` に Solid 設定を追加します:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## 概要
+
+この設定は Solid.js 開発に特有のルールを追加します:
+
+- **リアクティビティルール**: Solid のリアクティブプリミティブの適切な使用を強制する
+- **コンポーネントパターン**: Solid コンポーネントがベストプラクティスに従っていることを保証する
+- **Props の取り扱い**: props の分割代入を防ぐ（リアクティビティを壊す）
+- **React 固有の Props**: Solid コンポーネントで React 固有の props を禁止する
+
+## Solid 固有のルール
+
+### 正確性
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Solid コンポーネントで props の分割代入を防ぎます。分割代入は Solid のリアクティビティシステムを壊します。代わりに props に直接アクセスしてください。 |
+
+### パフォーマンス
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Solid で配列を反復処理する際に `<For>` コンポーネントの使用を強制します。`<For>` コンポーネントは Solid のリアクティビティに最適化されています。 |
+
+### 疑わしい
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Solid では `className` や `htmlFor` のような React 固有の props を禁止します。代わりに `class` と `for` を使用してください。 |

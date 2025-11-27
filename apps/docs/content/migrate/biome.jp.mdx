@@ -1,0 +1,50 @@
+---
+title: BiomeからUltraciteへ移行する
+description: スタンドアロンのBiomeからUltraciteへプロジェクトを移行する方法。
+---
+
+もし既にBiomeを使用していてUltraciteの事前設定されたセットアップに切り替えたい場合、このガイドは既存の設定を保持しながら移行する手順を案内します。
+
+## Ultraciteに移行する理由
+
+- **ゼロ設定**: Ultraciteは高度に構成されたルールのプリセットを提供します
+- **エディタ統合**: AI搭載エディタ（Cursor、Windsurf、GitHub Copilot）向けの組み込みサポート
+- **一貫したワークフロー**: プロジェクトやチーム全体で標準化されたセットアップ
+- **追加ツール**: オプションのGitフック、lint-staged統合
+- **維持されるルール**: 新しいベストプラクティスに基づく定期的な更新
+
+## 開始前に
+
+以下を確認してください:
+
+- Biomeを使用している既存のプロジェクト
+- Node.js v14.18+（Node 18+ を推奨）
+- `biome.json` または `biome.jsonc` ファイル
+
+## 移行オプション
+
+### オプション1: クイック移行（推奨）
+
+最速の方法は、[自動セットアップスクリプト](/setup#automatic-installation)を実行することです。
+
+これにより以下が行われます:
+
+- Ultraciteを依存関係としてインストールする
+- 既存の`biome.json` / `biome.jsonc`をUltraciteのプリセットとマージする
+- 既存の`.vscode/settings.json`をUltraciteのプリセットとマージする
+- `tsconfig.json`ファイルで`strictNullChecks`を有効にする（存在しない場合は作成する）
+- カスタムルールと設定を保持する
+- エディタ統合を設定する
+
+アップグレード後は、`biome.json` / `biome.jsonc`ファイルを見直してオーバーライドを削除することをお勧めします。加えて、新しい設定を適用するためにエディタを再起動してください。
+
+### オプション2: 手動移行
+
+プロセスをより細かく制御したい場合は、[手動移行](/setup#manual-installation)の手順に従ってください:
+
+- UltraciteとBiomeを手動でインストールする
+- `biome.json`ファイルを更新してUltraciteを拡張する
+- Biome拡張機能を有効にするために`.vscode/settings.json`ファイルを作成または更新する
+- `tsconfig.json`ファイルで`strictNullChecks`を有効にする（存在しない場合は作成する）
+
+移行後は、新しい設定を適用するためにエディタを再起動してください。

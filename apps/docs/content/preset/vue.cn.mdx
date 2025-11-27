@@ -1,0 +1,92 @@
+---
+title: Vue
+description: 适用于 Vue.js 的 Ultracite 特定 lint 规则。
+---
+
+Vue 配置包含针对组件结构、data 选项、computed 属性和保留关键字的 Vue.js 特定 lint 规则。它还包括针对 `.vue` 文件以防止误报的覆盖规则。
+
+## 安装
+
+将 Vue 配置添加到你的 `biome.jsonc`：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## 概述
+
+此配置添加了针对 Vue.js 开发的特定规则：
+
+- **HTML 支持**: 启用带有脚本和样式缩进的实验性完整 HTML 支持
+- **组件命名**: 强制使用多词组件名称
+- **数据结构**: 防止不正确的 data 选项声明
+- **保留关键字**: 禁止在组件属性和键中使用 Vue 的保留关键字
+- **重复键**: 防止组件选项中出现重复键
+- **React 专用 Props**: 在 Vue 组件中禁止使用 React 专用的 props
+- **Vue 文件覆盖**: 对 `.vue` 文件放宽规则以处理单文件组件结构
+
+## HTML 格式化配置
+
+Vue 预设启用了实验性的 HTML 支持，并对嵌入脚本和样式做了特殊格式化：
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+此配置：
+- **实验性完整支持**: 为 `.vue` 文件启用 Biome 的实验性 HTML 解析和格式化功能
+- **缩进脚本和样式**: 正确缩进 Vue 单文件组件中 `<script>` 和 `<style>` 标签内的代码
+
+## Vue 特定规则
+
+### 试验性
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | 防止在 Vue 组件中对 `data` 选项使用对象声明。`data` 选项必须是一个返回对象的函数。 |
+| `noVueDuplicateKeys` | `error` | 防止 Vue 组件选项中出现重复键。`data`、`computed`、`methods` 等中的键必须唯一。 |
+| `noVueReservedKeys` | `error` | 在组件选项中禁止使用 Vue 的保留键，如 `$data`、`$props`、`$el` 等。 |
+| `noVueReservedProps` | `error` | 禁止将 Vue 的保留 props（如 `key`、`ref`、`is`）作为自定义组件 props 使用。 |
+| `noVueVIfWithVFor` | `error` | 禁止在同一元素上同时使用 `v-for` 和 `v-if`。 |
+| `useVueHyphenatedAttributes` | `error` | 鼓励根据 Vue 风格指南的建议使用 kebab-case（连字符命名）作为属性名。 |
+| `useVueMultiWordComponentNames` | `error` | 强制使用多词组件名称以避免与 HTML 元素冲突。应避免使用单词名称（如 `Button` 或 `Card`）。 |
+| `useVueValidVBind` | `error` | 强制在 Vue 文件中使用有效的 `v-bind` 指令。 |
+| `useVueValidVElseIf` | `error` | 强制在 Vue 模板中使用有效的 `v-else-if` 指令。会报告缺少条件表达式或未在 `v-if` 或 `v-else-if` 指令之后使用的无效指令。 |
+| `useVueValidVElse` | `error` | 强制在 Vue 模板中使用有效的 `v-else` 指令。会报告未在 `v-if` 或 `v-else-if` 指令之后出现的指令。 |
+| `useVueValidVHtml` | `error` | 强制在 Vue 模板中正确使用 `v-html` 指令。会报告缺少表达式、意外的参数或意外的修饰符的指令。 |
+| `useVueValidVIf` | `error` | 强制在 Vue 模板中使用有效的 `v-if` 指令。不允许参数和修饰符，并确保提供了值。 |
+| `useVueValidVOn` | `error` | 强制在 Vue 模板中使用有效的 `v-on` 指令。会报告缺少事件名、无效修饰符或缺少处理函数表达式的无效 `v-on` / 简写 `@` 指令。 |
+| `useVueValidVText` | `error` | 强制在 Vue 模板中使用有效的 `v-text` 指令。该规则会报告 v-text 带有参数、带有修饰符或缺少值的情况。 |
+
+### 可疑
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | 在 Vue 中禁止使用 React 专用的 props（如 `className` 和 `htmlFor`）。请改用 `class` 和 `for`。 |
+
+## Vue 文件覆盖
+
+为了防止由于 Biome 对 Vue 单文件组件的部分支持而产生的误报，以下规则在 `.vue` 文件中被禁用：
+
+### 正确性
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | 允许在 `.vue` 文件中存在未使用的变量。脚本部分中的变量可能仅在模板中使用。 |
+| `noUnusedImports` | `off` | 允许在 `.vue` 文件中存在未使用的导入。某些导入可能仅在模板部分使用。 |
+
+### 样式
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `useConst` | `off` | 允许在 `.vue` 文件中使用 `let` 和 `var` 声明以适应响应式数据模式。 |
+| `useImportType` | `off` | 禁用显式的 import 类型要求，以更好地兼容 Vue 的构建系统。 |

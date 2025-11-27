@@ -1,0 +1,48 @@
+---
+title: モノレポ
+description: モノレポ内で Ultracite を使用する方法。
+---
+
+Ultracite はモノレポでそのまま使えるように設計されています。以下は Turborepo と一緒に使う方法です。
+
+## 設定
+
+Ultracite を初期化すると、リポジトリのルートに `biome.jsonc` ファイルが作成されます。このファイルはモノレポ全体の Ultracite の設定に使用されます。
+
+```
+my-turborepo/
+├── apps
+├── packages
+├── turbo.json
+└── biome.jsonc
+```
+
+## スクリプトの追加
+
+Biome は非常に高速なため、各パッケージごとに別々のスクリプトを作成する代わりにルートスクリプトを使用できます。
+
+`check` と `fix` スクリプトを `package.json` に追加できます。
+
+```json title="package.json"
+{
+  "scripts": {
+    "check": "npx ultracite@latest check",
+    "fix": "npx ultracite@latest fix"
+  }
+}
+```
+
+任意で、`check` と `fix` スクリプトを `turbo.json` に追加することもできます。
+
+```json title="turbo.json"
+{
+  "tasks": {
+    "//#check": {},
+    "//#fix": {
+      "cache": false
+    }
+  }
+}
+```
+
+これで `turbo run check` と `turbo run fix` を使ってこれらのスクリプトを実行できるようになります。

@@ -1,0 +1,45 @@
+---
+title: Solid
+description: 适用于 Solid.js 的 Ultracite lint 规则。
+---
+
+该 Solid 配置包含针对 Solid.js 的专用 lint 规则，涵盖响应性、组件模式和 JSX 处理。
+
+## 安装
+
+将 Solid 配置添加到你的 `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## 概览
+
+此配置添加了针对 Solid.js 开发的特定规则：
+
+- **响应性规则**: 强制正确使用 Solid 的响应式原语
+- **组件模式**: 确保 Solid 组件遵循最佳实践
+- **Props 处理**: 阻止对 props 进行解构（会破坏响应性）
+- **React 专用 props**: 禁止在 Solid 组件中使用 React 专用的 props
+
+## Solid 专用规则
+
+### 正确性
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | 阻止在 Solid 组件中对 props 进行解构。解构会破坏 Solid 的响应性系统。请直接访问 props。 |
+
+### 性能
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | 强制在 Solid 中使用 `<For>` 组件来遍历数组。`<For>` 组件针对 Solid 的响应性进行了优化。 |
+
+### 可疑
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | 禁止在 Solid 中使用像 `className` 和 `htmlFor` 这样的 React 特定 props。请改用 `class` 和 `for`。 |

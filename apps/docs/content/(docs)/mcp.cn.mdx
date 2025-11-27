@@ -1,0 +1,118 @@
+---
+title: MCP
+description: 如何将 Ultracite 与 MCP 一起使用
+---
+
+The **模型上下文协议（MCP）** 是一个开放标准，允许像 Claude、Cursor 等 AI 助手以及其他 AI 驱动的工具安全地连接外部数据源和系统。可以把它想象成一个“万用遥控器”，让您的 AI 工具访问真实世界的数据和功能。
+
+Ultracite 支持 MCP，以增强您的 AI 开发工作流程。
+
+## 安装指南
+
+### 步骤 1：选择您的 AI 工具
+
+首先，确保您正在使用支持 MCP 的 AI 开发工具：
+
+- [Claude 桌面版](https://claude.ai/download) (免费 - 推荐初学者)
+- [Cursor](https://www.cursor.com/)（AI 驱动的代码编辑器）
+- [Codeium 的 Windsurf](https://windsurf.com/)（AI 开发平台）
+- 其他支持 MCP 的工具
+
+### 步骤 2：定位您的配置文件
+
+根据您使用的 AI 工具，您需要编辑以下文件之一：
+
+- **Claude 桌面版**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` 适用于 macOS，`%APPDATA%\Claude\claude_desktop_config.json` 适用于 Windows
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+- **其他工具**: 请查看您所用工具的 MCP 文档
+
+### 步骤 3：添加 Ultracite 配置
+
+将此配置复制并粘贴到您的 MCP 配置文件中：
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://www.ultracite.ai/api/mcp/mcp"
+      ]
+    }
+  }
+}
+```
+
+### 步骤 4：重启您的 AI 工具
+
+关闭并重新打开您的 AI 应用以使更改生效。
+
+### 步骤 5：验证连接
+
+通过向您的 AI 助手提问来测试集成：
+
+> 有哪些 Ultracite 规则可用？
+
+如果成功，您的 AI 应该能够列出并解释 Ultracite 规则！
+
+## 多个 MCP 服务器
+
+您可以在其他 MCP 服务器旁使用 Ultracite：
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "filesystem": {
+      "command": "npx", 
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
+    }
+  }
+}
+```
+
+## 使用示例
+
+### 探索可用规则
+
+向您的 AI 助手提问：
+
+> Ultracite 对 React Hooks 有哪些规则？
+
+预计响应将包含相关的 React Hooks lint 规则及其描述。
+
+### 理解规则类别
+
+> 显示 Ultracite 中的所有可访问性 (a11y) 规则
+
+您的 AI 可以列出并解释 Ultracite 中配置的可访问性规则。
+
+### 比较预设
+
+> ultracite/core 和 ultracite/react 有什么不同？
+
+获取有关不同预设配置的详细信息以及何时使用它们的建议。
+
+## 安全与隐私
+
+### 数据处理
+
+- Ultracite MCP 服务器仅提供公开的 lint 规则文档和配置信息
+- 不会将任何个人数据或代码传输到我们的服务器
+- 所有通信都通过您选择的 AI 工具的安全层进行
+
+### 身份验证
+
+- 访问公共文档无需身份验证
+- 未来的高级功能可能需要 API 密钥
+- 始终使用官方的 Ultracite MCP 端点

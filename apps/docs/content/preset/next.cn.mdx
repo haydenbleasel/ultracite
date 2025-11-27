@@ -1,0 +1,98 @@
+---
+title: Next.js
+description: 针对 Ultracite 的 Next.js 特定 lint 规则。
+---
+
+The Next.js configuration has Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+
+## 安装
+
+将 Next.js 配置添加到你的 `biome.jsonc`：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+## 概览
+
+此配置添加了针对 Next.js 开发的特定规则：
+
+- **图像优化**：强制使用 Next.js `<Image>` 组件
+- **文档结构**：防止不当使用 Next.js 的特殊组件
+- **客户端组件**：确保异步客户端组件得到正确处理
+- **配置文件**：对 `next.config.*` 文件的特殊处理
+
+## Next.js 特定规则
+
+### 试验
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | 阻止在 Next.js 中使用异步客户端组件。客户端组件应为同步；对于异步操作请使用服务端组件。 |
+
+### 性能
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noImgElement` | `error` | 禁止使用 `<img>` HTML 元素。请改用 Next.js 的 `<Image>` 组件以实现自动图像优化。 |
+
+### 风格
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noHeadElement` | `error` | 禁止使用 `<head>` HTML 元素。请改用 Next.js 的 `next/head` 或 App Router 的元数据 (metadata) API。 |
+
+### 可疑
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | 阻止在页面文件中导入 `next/document`。`_document.tsx` 只应出现在 `pages/_document.tsx`。 |
+| `noHeadImportInDocument` | `error` | 阻止在 `_document.tsx` 中导入 `next/head`。应改为使用来自 `next/document` 的 `<Head>`。 |
+
+## 配置文件覆盖
+
+Next.js 预设对配置文件和 App Router 组件提供特殊处理：
+
+### Next.js 配置文件
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+这允许某些 Next.js 配置模式通过，这些模式在通常情况下可能无法通过 lint 规则。
+
+### App Router 页面和布局
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router 的页面和布局组件允许为异步（async），且不需要使用 `await`，因为 Next.js 会为服务端渲染和数据获取对这些情况做特殊处理。

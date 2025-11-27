@@ -1,0 +1,72 @@
+---
+title: 使用方法
+description: 本节介绍如何在日常开发中使用 Ultracite —— 涵盖命令行界面、编辑器集成细节和典型工作流程。
+---
+
+## IDE 集成
+
+Ultracite 在集成到你的编辑器中时效果最佳，这样在你编写代码时就能获得即时反馈。它被设计为在保存时自动运行。要试用它，请在你的 IDE 中打开一个项目。编辑文件时，你应该会在保存时看到格式化生效。尝试引入一个小的代码风格错误（例如多余的分号或错误缩进的行）并点击保存 —— Ultracite（Biome）会立即重新格式化该文件。
+
+如果你引入了常见的 lint 问题（例如未使用的变量），你可能会看到波浪下划线或在 Problems 面板中看到警告；在保存时，如果该问题可以自动修复，Ultracite 会尝试修复（例如删除未使用的 import），否则会留下一个警告供你处理。
+
+### 即时格式化
+
+每次保存文件时，Biome（使用 Ultracite 的配置）都会格式化该文件。你不需要单独运行 Prettier 或担心格式化问题 —— 这些都会被处理。
+
+得益于 `codeActionsOnSave` 设置，VS Code 在保存时还会应用 Biome 的 “fix all” 操作。这意味着任何具有自动修复功能的 lint 规则（例如将 `!=` 转为 `!==`、添加缺失的括号、修正导入顺序等）都会被应用。这就像你自动运行了带 `--fix` 的 ESLint 一样。
+
+我们甚至启用了 `formatOnPaste` —— 因此如果你从其他地方粘贴代码，它会立即根据你的风格格式化。
+
+这里的关键优势是即时反馈。你在 VS Code 中写代码，Ultracite 持续保持代码整洁。随着时间推移，你会发现自己几乎不需要花时间去修复 lint 错误 —— Ultracite 要么为你修复，要么及早指出问题。这会带来流畅的开发工作流，使代码风格和小问题不会积累。
+
+### Problems 面板集成
+
+任何仍然存在（需要你关注）的问题都会显示在 Problems 面板中。例如，如果 Ultracite 有一条规则禁止某些用法，或发现一个它无法修复的错误（例如，你使用了已弃用的 API 或忘记处理 Promise 拒绝），它会将其列为错误或警告。你可以点击它以跳转到代码中的位置。
+
+### Code lenses / 快速修复
+
+在许多情况下，Biome 的 VS Code 扩展会提供快速修复建议。如果你看到黄色灯泡或建议弹窗，你也可以手动应用修复。例如，如果某个 import 未被使用，你可能会获得一个快速修复以删除它（如果它在保存时尚未被删除）。
+
+## CLI 使用
+
+Ultracite 附带一个方便的 CLI（安装后可作为 `ultracite` 调用）。以下是常见的使用方式。
+
+### 检查代码
+
+`check` 命令封装了 Biome 的 `check` 命令，该命令运行 linter 但不修改文件。
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+你可以传递 `--diagnostic-level` 过滤器以仅显示错误或警告：
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### 修复代码
+
+`fix` 命令封装了 Biome 的 `check --write` 命令，该命令运行 linter 并修复文件。
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+你也可以通过运行以下命令应用不安全的修复：
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### 验证设置
+
+`doctor` 命令会检查你的设置是否存在问题并提供建议。在安装 Ultracite 后运行此命令以确保一切配置正确非常有用。
+
+```bash title="Terminal"
+npx ultracite doctor
+```

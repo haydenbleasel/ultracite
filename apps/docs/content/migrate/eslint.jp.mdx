@@ -1,0 +1,48 @@
+---
+title: ESLint から Ultracite へ移行
+description: ESLint から Ultracite へプロジェクトを移行する方法。
+---
+
+If you're using ESLint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while maintaining code quality standards.
+
+## なぜ Ultracite に移行するのか？
+
+- **圧倒的な高速性**: Biome（Ultracite の基盤）は Rust に基づいており、ESLint よりはるかに高速です
+- **設定不要**: 手動での ESLint 設定に比べ数百の事前設定済みルールを提供します
+- **単一ツール**: ESLint と Prettier の両方を単一のツールで置き換えます
+- **AI 統合**: Cursor、Windsurf、GitHub Copilot などの AI 搭載エディタを組み込みでサポートします
+- **型安全性**: 厳密な null チェックを含む包括的な TypeScript ルール
+- **最新の標準**: 最新の JavaScript/TypeScript のベストプラクティス
+
+## 開始前に
+
+次のものを用意してください:
+
+- ESLint を使用している既存のプロジェクト
+- Node.js v14.18+（Node 18+ を推奨）
+- `package.json` ファイル
+
+## 自動セットアップ
+
+[自動セットアップスクリプト](/setup#automatic-installation) を実行してください。
+
+```package-install
+npx ultracite init
+```
+
+これにより:
+
+- Ultracite を依存関係としてインストールする
+- 既存の `biome.json` / `biome.jsonc` を Ultracite のプリセットとマージする
+- 既存の `.vscode/settings.json` を Ultracite のプリセットとマージする
+- `tsconfig.json` ファイルで `strictNullChecks` を有効化する（存在しない場合は作成する）
+- カスタムルールと設定を保持する
+- エディタ統合を設定する
+
+既存の `ESLint` 設定を削除するオプションを選択することを確認してください。これにより:
+
+- ESLint と関連する依存関係を削除する
+- すべての ESLint 設定ファイルを削除する
+- `.vscode/settings.json` ファイルから ESLint 関連のコマンドを削除する
+
+アップグレード後、オーバーライドを削除するために `biome.json` / `biome.jsonc` ファイルを確認することをおすすめします。さらに、新しい設定が適用されるようにエディタを再起動してください。
