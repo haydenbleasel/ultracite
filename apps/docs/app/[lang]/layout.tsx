@@ -30,12 +30,59 @@ const mono = Geist_Mono({
 
 const { provider } = defineI18nUI(i18n, {
   translations: {
-    en: {
-      displayName: "English",
+    da: {
+      displayName: "🇩🇰 Danish",
     },
-    cn: {
-      displayName: "Chinese",
-      search: "搜尋文檔",
+    nl: {
+      displayName: "🇳🇱 Dutch",
+    },
+    fi: {
+      displayName: "🇫🇮 Finnish",
+    },
+    fr: {
+      displayName: "🇫🇷 French",
+    },
+    hu: {
+      displayName: "🇭🇺 Hungarian",
+    },
+    id: {
+      displayName: "🇮🇩 Indonesian",
+    },
+    ga: {
+      displayName: "🇮🇪 Irish",
+    },
+    it: {
+      displayName: "🇮🇹 Italian",
+    },
+    no: {
+      displayName: "🇳🇴 Norwegian",
+    },
+    pt: {
+      displayName: "🇵🇹 Portuguese",
+    },
+    ro: {
+      displayName: "🇷🇴 Romanian",
+    },
+    sr: {
+      displayName: "🇷🇸 Serbian",
+    },
+    sl: {
+      displayName: "🇸🇱 Slovenian",
+    },
+    es: {
+      displayName: "🇪🇸 Spanish",
+    },
+    sv: {
+      displayName: "🇸🇪 Swedish",
+    },
+    tr: {
+      displayName: "🇹🇷 Turkish",
+    },
+    de: {
+      displayName: "🇩🇪 German",
+    },
+    en: {
+      displayName: "🇬🇧 English",
     },
   },
 });

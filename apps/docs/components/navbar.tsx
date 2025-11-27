@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/app/[lang]/(home)/components/logo";
 import { SearchButton } from "@/components/search";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSelector } from "./language-selector";
 
 export const Navbar = () => (
   <div className="sticky top-0 z-50 w-full bg-background/90 py-3 backdrop-blur-sm">
@@ -26,6 +27,7 @@ export const Navbar = () => (
 
       <div className="flex items-center gap-2">
         <SearchButton />
+        <LanguageSelector />
         <ThemeToggle />
       </div>
     </div>
