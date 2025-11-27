@@ -142,24 +142,35 @@ async function main(): Promise<void> {
   let failed = 0;
   const total = mdxFiles.length * locales.length;
 
+  const BATCH_SIZE = 10;
+
   for (const locale of locales) {
     const languageName = LOCALE_NAMES[locale] || locale;
     console.log(`\n${"=".repeat(50)}`);
     console.log(`Translating to ${languageName} (${locale})`);
     console.log("=".repeat(50));
 
-    for (const filePath of mdxFiles) {
-      try {
-        await translateFile(filePath, locale);
-        completed += 1;
-        console.log(
-          `Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`
-        );
-      } catch (error) {
-        failed += 1;
-        console.error(`✗ Failed to translate ${filePath} to ${locale}:`);
-        console.error(error instanceof Error ? error.message : error);
-      }
+    for (let i = 0; i < mdxFiles.length; i += BATCH_SIZE) {
+      const batch = mdxFiles.slice(i, i + BATCH_SIZE);
+      console.log(
+        `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(mdxFiles.length / BATCH_SIZE)} (${batch.length} files)...`
+      );
+
+      const promises = batch.map(async (filePath) => {
+        try {
+          await translateFile(filePath, locale);
+          completed += 1;
+          console.log(
+            `✓ ${filePath} → Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`
+          );
+        } catch (error) {
+          failed += 1;
+          console.error(`✗ Failed to translate ${filePath} to ${locale}:`);
+          console.error(error instanceof Error ? error.message : error);
+        }
+      });
+
+      await Promise.all(promises);
     }
   }
 
