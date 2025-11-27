@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
-import "./global.css";
+import "../global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { defineI18nUI } from "fumadocs-ui/i18n";
 import { RootProvider } from "fumadocs-ui/provider/next";
