@@ -296,17 +296,17 @@ const configs = [
 
 export const ZeroConfig = async () => (
   <div className="grid gap-8">
-    <div className="mx-auto grid max-w-2xl gap-4 text-center">
-      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
+    <div className="mx-auto grid max-w-xl gap-4 text-center">
+      <h2 className="text-balance font-medium text-3xl tracking-tighter">
         Zero-config by design
       </h2>
-      <p className="text-lg text-muted-foreground sm:text-xl">
+      <p className="text-balance text-lg text-muted-foreground">
         Hundreds of rules for your framework to optimize your JavaScript /
         TypeScript code, while still allowing you to customize when needed.
       </p>
     </div>
     <Tabs
-      className="mx-auto w-full max-w-4xl gap-0 rounded-lg border bg-sidebar"
+      className="mx-auto w-full max-w-4xl gap-0 overflow-hidden rounded-lg border bg-sidebar"
       defaultValue={configs[0].label}
     >
       <TabsList className="w-full rounded-none bg-transparent">
