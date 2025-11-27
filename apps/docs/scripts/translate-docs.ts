@@ -59,6 +59,7 @@ async function translateContent(
 
 CRITICAL INSTRUCTIONS:
 1. TRANSLATE ALL natural language text, including:
+   - MDX frontmatter: Translate the VALUES of "title" and "description" fields (keep field names in English)
    - Regular text content
    - Text inside bold markers (**text**)
    - Text inside italic markers (*text*)
@@ -70,7 +71,7 @@ CRITICAL INSTRUCTIONS:
    - Code blocks and inline code (\`code\`)
    - URLs and file paths
    - Technical identifiers, package names, command names
-   - MDX frontmatter (content between --- markers)
+   - Frontmatter field names (title:, description:, etc.)
    - MDX component syntax
 
 3. PRESERVE:
@@ -79,13 +80,29 @@ CRITICAL INSTRUCTIONS:
    - All MDX components and their syntax
    - All link structures [text](url)
    - The exact same document structure
+   - Frontmatter structure (--- markers and field names)
 
 4. MAINTAIN:
    - Technical documentation tone
    - Professional terminology
    - Same formatting and indentation
 
-EXAMPLE - List items with labels:
+EXAMPLES:
+
+Frontmatter:
+English:
+---
+title: Angular
+description: Angular-specific configuration for Ultracite.
+---
+
+${languageName}:
+---
+title: [Translate "Angular" if it's descriptive, or keep as-is if it's a proper noun]
+description: [Translate "Angular-specific configuration for Ultracite."]
+---
+
+List items with labels:
 English: - **Updated Biome**: Upgraded from v1.x to v2.x
 ${languageName}: - **[Translate "Updated Biome"]**: [Translate "Upgraded from v1.x to v2.x"]
 
