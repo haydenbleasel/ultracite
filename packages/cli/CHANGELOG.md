@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.7
+
+### Patch Changes
+
+- fec49ac: added cloudflare wrangler generated file to the ignore list
+
 ## 6.3.6
 
 ### Patch Changes
