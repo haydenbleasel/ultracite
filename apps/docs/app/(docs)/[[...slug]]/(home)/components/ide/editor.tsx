@@ -1,4 +1,4 @@
-import { DynamicCodeBlock } from "fumadocs-ui/components/dynamic-codeblock";
+import { CodeBlock } from "../code-block";
 
 const mockCode = `import React from 'react';
 
@@ -20,11 +20,11 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 export default UserCard;`;
 
 export const Editor = () => (
-  <DynamicCodeBlock
-    code={mockCode}
-    codeblock={{
-      className: "rounded-none border-none shadow-none bg-transparent",
-    }}
-    lang="tsx"
-  />
+  <div className="overflow-hidden">
+    <CodeBlock
+      className="rounded-none border-none bg-transparent"
+      code={mockCode}
+      lang="tsx"
+    />
+  </div>
 );
