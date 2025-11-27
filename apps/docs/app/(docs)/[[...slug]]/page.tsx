@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 import { CopyMarkdown } from "@/components/copy-markdown";
 import { Feedback } from "@/components/feedback";
 import { ViewOptions } from "@/components/page-actions";
-import { source } from "@/lib/source";
+import { getLLMText, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import Home from "./(home)";
 
@@ -27,13 +27,14 @@ const Page = async (props: PageProps<"/[[...slug]]">) => {
   }
 
   const MdxContent = page.data.body;
+  const markdown = await getLLMText(page);
 
   return (
     <DocsPage full={page.data.full} toc={page.data.toc}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
-        <CopyMarkdown markdownUrl={`${page.url}.mdx`} />
+        <CopyMarkdown markdown={markdown} />
         <ViewOptions
           githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/apps/docs/content/${page.path}`}
           markdownUrl={`${page.url}.mdx`}
