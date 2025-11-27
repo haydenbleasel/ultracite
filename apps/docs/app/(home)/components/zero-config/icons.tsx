@@ -1,8 +1,6 @@
 import type { ComponentProps } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeBlock } from "./code-block";
 
-const Angular = (props: ComponentProps<"svg">) => (
+export const Angular = (props: ComponentProps<"svg">) => (
   <svg
     fill="none"
     viewBox="0 0 188 200"
@@ -21,7 +19,8 @@ const Angular = (props: ComponentProps<"svg">) => (
     />
   </svg>
 );
-const Astro = (props: ComponentProps<"svg">) => (
+
+export const Astro = (props: ComponentProps<"svg">) => (
   <svg
     fill="none"
     viewBox="0 0 85 107"
@@ -56,7 +55,8 @@ const Astro = (props: ComponentProps<"svg">) => (
     </defs>
   </svg>
 );
-const Nextjs = (props: ComponentProps<"svg">) => (
+
+export const Nextjs = (props: ComponentProps<"svg">) => (
   <svg
     fill="currentColor"
     preserveAspectRatio="xMidYMid"
@@ -68,7 +68,8 @@ const Nextjs = (props: ComponentProps<"svg">) => (
     <path d="m119.616813.06889051c-.550537.05004153-2.302248.22518685-3.878788.35029066-36.3605079 3.2777197-70.4187679 22.89399633-91.9898334 53.04401343-12.0117302 16.7639099-19.69423266 35.7796883-22.59706746 55.9214004-1.02600195 7.030834-1.15112414 9.107558-1.15112414 18.640467 0 9.53291.12512219 11.609634 1.15112414 18.640467 6.95679375 48.064882 41.16520036 88.448391 87.56050836 103.410806 8.3081133 2.677221 17.0666665 4.503737 27.0263925 5.60465 3.878788.425353 20.645162.425353 24.52395 0 17.191788-1.901578 31.756011-6.155107 46.120039-13.48619 2.20215-1.125934 2.627566-1.426183 2.327272-1.676391-.200195-.150124-9.584359-12.735567-20.845356-27.94819l-20.469991-27.647941-25.650048-37.956494c-14.113783-20.867315-25.7251227-37.931474-25.8252204-37.931474-.1000978-.025021-.2001955 16.838972-.2502444 37.431058-.0750733 36.054917-.1000978 37.506121-.5505376 38.356827-.6506354 1.226017-1.1511242 1.726433-2.2021506 2.276889-.800782.400332-1.5014663.475395-5.2801564.475395h-4.3292277l-1.1511242-.725602c-.7507331-.475395-1.3012708-1.100914-1.6766373-1.826516l-.5255132-1.125934.0500489-50.166626.0750733-50.1916467.7757575-.9758096c.4003911-.525436 1.2512219-1.2009966 1.8518085-1.5262665 1.0260019-.5004152 1.4263929-.5504567 5.7556207-.5504567 5.1049853 0 5.9558162.2001661 7.2821114 1.6513702.3753666.4003322 14.2639295 21.3176883 30.8801565 46.5135943 16.616227 25.195907 39.338416 59.599453 50.499316 76.488467l20.269794 30.700474 1.026002-.675561c9.083871-5.904899 18.693255-14.311875 26.300685-23.069141 16.190811-18.590426 26.626002-41.259235 30.129423-65.429291 1.026002-7.030833 1.151124-9.107557 1.151124-18.640467 0-9.532909-.125122-11.609633-1.151124-18.640467-6.956794-48.0648815-41.165201-88.4483898-87.560508-103.41080488-8.182992-2.65220067-16.891496-4.47871623-26.651027-5.57962971-2.402346-.25020761-18.943499-.52543598-21.020528-.3252699zm52.401173 77.41423469c1.201173.6004982 2.177126 1.7514532 2.527469 2.9524498.200195.6505398.250244 14.5620829.200195 45.913096l-.075073 44.987329-7.932747-12.16009-7.957771-12.16009v-32.702135c0-21.1425427.100097-33.0274042.250244-33.6028817.400391-1.4011626 1.276246-2.5020761 2.477419-3.1526158 1.026002-.525436 1.401369-.5754775 5.330206-.5754775 3.703616 0 4.354252.0500415 5.180058.5004152z" />
   </svg>
 );
-const Qwik = (props: ComponentProps<"svg">) => (
+
+export const Qwik = (props: ComponentProps<"svg">) => (
   <svg
     fill="none"
     viewBox="0 0 154 165"
@@ -86,7 +87,8 @@ const Qwik = (props: ComponentProps<"svg">) => (
     />
   </svg>
 );
-const React = (props: ComponentProps<"svg">) => (
+
+export const React = (props: ComponentProps<"svg">) => (
   <svg
     viewBox="-11.5 -10.23174 23 20.46348"
     xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +111,8 @@ const React = (props: ComponentProps<"svg">) => (
     </g>
   </svg>
 );
-const Remix = (props: ComponentProps<"svg">) => (
+
+export const Remix = (props: ComponentProps<"svg">) => (
   <svg
     fill="none"
     viewBox="0 0 411 473"
@@ -127,7 +130,8 @@ const Remix = (props: ComponentProps<"svg">) => (
     </g>
   </svg>
 );
-const Solid = (props: ComponentProps<"svg">) => (
+
+export const Solid = (props: ComponentProps<"svg">) => (
   <svg viewBox="0 0 166 155.3" xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>Solid</title>
     <defs>
@@ -208,7 +212,8 @@ const Solid = (props: ComponentProps<"svg">) => (
     />
   </svg>
 );
-const Svelte = (props: ComponentProps<"svg">) => (
+
+export const Svelte = (props: ComponentProps<"svg">) => (
   <svg
     enableBackground="new 0 0 98.1 118"
     viewBox="0 0 98.1 118"
@@ -226,7 +231,8 @@ const Svelte = (props: ComponentProps<"svg">) => (
     />
   </svg>
 );
-const Vue = (props: ComponentProps<"svg">) => (
+
+export const Vue = (props: ComponentProps<"svg">) => (
   <svg
     viewBox="0 0 261.76 226.69"
     xmlns="http://www.w3.org/2000/svg"
@@ -244,97 +250,4 @@ const Vue = (props: ComponentProps<"svg">) => (
       />
     </g>
   </svg>
-);
-
-const configs = [
-  {
-    label: "Next.js",
-    logo: Nextjs,
-    presets: ["core", "react", "next"],
-  },
-  {
-    label: "React",
-    logo: React,
-    presets: ["core", "react"],
-  },
-  {
-    label: "Solid",
-    logo: Solid,
-    presets: ["core", "solid"],
-  },
-  {
-    label: "Vue",
-    logo: Vue,
-    presets: ["core", "vue"],
-  },
-  {
-    label: "Svelte",
-    logo: Svelte,
-    presets: ["core", "svelte"],
-  },
-  {
-    label: "Qwik",
-    logo: Qwik,
-    presets: ["core", "qwik"],
-  },
-  {
-    label: "Angular",
-    logo: Angular,
-    presets: ["core", "angular"],
-  },
-  {
-    label: "Remix",
-    logo: Remix,
-    presets: ["core", "remix"],
-  },
-  {
-    label: "Astro",
-    logo: Astro,
-    presets: ["core", "astro"],
-  },
-];
-
-export const ZeroConfig = async () => (
-  <div className="grid gap-8">
-    <div className="mx-auto grid max-w-xl gap-4 text-center">
-      <h2 className="text-balance font-medium text-3xl tracking-tighter">
-        Zero-config by design
-      </h2>
-      <p className="text-balance text-lg text-muted-foreground">
-        Hundreds of rules for your framework to optimize your JavaScript /
-        TypeScript code, while still allowing you to customize when needed.
-      </p>
-    </div>
-    <Tabs
-      className="mx-auto w-full max-w-4xl gap-0 overflow-hidden rounded-lg border bg-sidebar"
-      defaultValue={configs[0].label}
-    >
-      <TabsList className="w-full rounded-none bg-transparent">
-        {configs.map((config) => (
-          <TabsTrigger
-            className="flex-auto p-0"
-            key={config.label}
-            value={config.label}
-          >
-            <config.logo className="size-4" />
-            <span className="hidden lg:block">{config.label}</span>
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      {configs.map((config) => (
-        <TabsContent className="p-0" key={config.label} value={config.label}>
-          <CodeBlock
-            code={`{
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [${config.presets.map((preset) => `"ultracite/${preset}"`).join(", ")}]
-}`}
-            lang="json"
-          />
-        </TabsContent>
-      ))}
-    </Tabs>
-    <p className="text-center text-muted-foreground text-sm">
-      👆 Yes this is literally all you need.
-    </p>
-  </div>
 );

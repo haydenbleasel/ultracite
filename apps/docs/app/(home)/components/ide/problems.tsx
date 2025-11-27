@@ -5,7 +5,7 @@ export const Problems = () => (
   <div className="flex flex-col gap-2 overflow-y-auto border-t p-4 text-muted-foreground text-xs">
     <div className="flex items-center justify-between gap-2">
       <p className="font-medium">Problems</p>
-      <div className="-mx-1 -mt-1 rounded-full bg-secondary px-2.5 py-1">
+      <div className="-mx-1 -mt-1 rounded-full bg-sidebar px-2.5 py-1">
         <p>Biome (Ultracite)</p>
       </div>
     </div>

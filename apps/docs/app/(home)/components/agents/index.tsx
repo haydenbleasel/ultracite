@@ -4,31 +4,16 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import aider from "./logos/aider.svg";
-import amp from "./logos/amp.svg";
-import augment from "./logos/augment-code.svg";
+import { cn } from "@/lib/utils";
 import claude from "./logos/claude.svg";
-import cline from "./logos/cline.svg";
 import codex from "./logos/codex.svg";
 import cursor from "./logos/cursor.svg";
-import firebase from "./logos/firebase-studio.svg";
 import gemini from "./logos/gemini.svg";
-import goose from "./logos/goose.svg";
-import junie from "./logos/junie.svg";
-import kilo from "./logos/kilo-code.svg";
-import kiro from "./logos/kiro.svg";
-import open from "./logos/open-hands.svg";
-import roo from "./logos/roo-code.svg";
-import vscode from "./logos/vscode.svg";
 import warp from "./logos/warp.svg";
 import windsurf from "./logos/windsurf.svg";
 import zed from "./logos/zed.svg";
 
 const logos = [
-  {
-    name: "Visual Studio Code",
-    src: vscode,
-  },
   {
     name: "Cursor",
     src: cursor,
@@ -50,52 +35,8 @@ const logos = [
     src: codex,
   },
   {
-    name: "Firebase Studio",
-    src: firebase,
-  },
-  {
     name: "Gemini CLI",
     src: gemini,
-  },
-  {
-    name: "Junie",
-    src: junie,
-  },
-  {
-    name: "Kilo Code",
-    src: kilo,
-  },
-  {
-    name: "Kiro",
-    src: kiro,
-  },
-  {
-    name: "Open Hands",
-    src: open,
-  },
-  {
-    name: "Augment Code",
-    src: augment,
-  },
-  {
-    name: "Cline",
-    src: cline,
-  },
-  {
-    name: "AMP",
-    src: amp,
-  },
-  {
-    name: "Aider",
-    src: aider,
-  },
-  {
-    name: "Codename Goose",
-    src: goose,
-  },
-  {
-    name: "Roo Code",
-    src: roo,
   },
   {
     name: "Warp",
@@ -103,51 +44,36 @@ const logos = [
   },
 ];
 
-const HALF = Math.ceil(logos.length / 2);
-const row1 = logos.slice(0, HALF);
-const row2 = logos.slice(HALF);
-
 export const Agents = () => (
-  <div className="grid gap-16">
+  <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="font-semibold text-3xl tracking-tight sm:text-4xl">
+      <h2 className="text-balance font-medium text-3xl tracking-tighter">
         Works with all your favourite agents
       </h2>
-      <p className="text-balance text-lg text-muted-foreground sm:text-xl">
+      <p className="text-balance text-lg text-muted-foreground">
         Ultracite can generate rules files for all these popular IDEs and
         agents, so you can get the most of out of your AI integrations.
       </p>
     </div>
-    <div className="flex flex-col gap-4">
-      <div className="mx-auto flex items-center justify-center gap-4">
-        {row1.map((logo) => (
-          <Tooltip delayDuration={0} key={logo.name}>
-            <TooltipTrigger>
-              <Image
-                alt={logo.name}
-                className="overflow-hidden rounded-full ring-1 ring-foreground/10"
-                key={logo.name}
-                src={logo.src}
-              />
-            </TooltipTrigger>
-            <TooltipContent>{logo.name}</TooltipContent>
-          </Tooltip>
-        ))}
-      </div>
-      <div className="mx-auto flex items-center justify-center gap-4">
-        {row2.map((logo) => (
-          <Tooltip delayDuration={0} key={logo.name}>
-            <TooltipTrigger>
-              <Image
-                alt={logo.name}
-                className="overflow-hidden rounded-full ring-1 ring-foreground/10"
-                key={logo.name}
-                src={logo.src}
-              />
-            </TooltipTrigger>
-            <TooltipContent>{logo.name}</TooltipContent>
-          </Tooltip>
-        ))}
+    <div className="-space-x-1 mx-auto flex items-center justify-center">
+      {logos.map((logo, index) => (
+        <Tooltip delayDuration={0} key={logo.name}>
+          <TooltipTrigger>
+            <Image
+              alt={logo.name}
+              className={cn(
+                "hover:-translate-y-2 size-10 overflow-hidden rounded-sm ring-2 ring-background transition-transform will-change-transform",
+                index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
+              )}
+              key={logo.name}
+              src={logo.src}
+            />
+          </TooltipTrigger>
+          <TooltipContent>{logo.name}</TooltipContent>
+        </Tooltip>
+      ))}
+      <div className="flex size-10 items-center justify-center overflow-hidden rounded-sm bg-sidebar text-muted-foreground ring-2 ring-background">
+        <span className="font-medium text-[10px] tracking-tighter">+ 12</span>
       </div>
     </div>
   </div>

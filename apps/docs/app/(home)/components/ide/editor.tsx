@@ -20,11 +20,9 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 export default UserCard;`;
 
 export const Editor = () => (
-  <div className="overflow-hidden">
-    <CodeBlock
-      className="rounded-none border-none bg-transparent"
-      code={mockCode}
-      lang="tsx"
-    />
-  </div>
+  <CodeBlock
+    className="overflow-auto overflow-auto rounded-none border-none bg-transparent"
+    code={mockCode}
+    lang="tsx"
+  />
 );

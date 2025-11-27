@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 export const Assistant = () => (
   <div className="relative isolate flex h-full flex-col items-start gap-4 overflow-hidden p-4 text-muted-foreground text-xs">
     <Textarea
-      className="h-auto w-full resize-none overflow-hidden bg-transparent p-3 text-xs shadow-none md:text-xs"
+      className="h-auto w-full resize-none overflow-hidden p-3 text-xs shadow-none md:text-xs"
       readOnly
       value="Generate me a new UserCard component."
     />
