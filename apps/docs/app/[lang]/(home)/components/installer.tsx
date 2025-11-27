@@ -35,7 +35,7 @@ export const Installer = ({ command }: InstallerProps) => {
   const Icon = copied ? CheckIcon : CopyIcon;
 
   return (
-    <InputGroup className="border-none bg-secondary font-mono shadow-none">
+    <InputGroup className="h-10 bg-card font-mono shadow-none">
       <InputGroupAddon>
         <InputGroupText className="font-normal text-muted-foreground">
           $

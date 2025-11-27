@@ -9,14 +9,14 @@ export const SearchButton = () => {
 
   return (
     <Button
-      className="justify-between gap-8 pr-1.5 font-normal text-muted-foreground shadow-none"
+      className="justify-between gap-8 bg-card pr-1.5 font-normal text-muted-foreground shadow-none"
       onClick={() => setOpenSearch(true)}
       size="sm"
       type="button"
       variant="outline"
     >
       <span>Search...</span>
-      <Kbd className="border bg-background font-medium">⌘K</Kbd>
+      <Kbd className="border bg-transparent font-medium">⌘K</Kbd>
     </Button>
   );
 };

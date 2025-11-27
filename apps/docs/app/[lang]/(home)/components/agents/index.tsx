@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
@@ -72,6 +73,16 @@ export const Agents = () => (
           <TooltipContent>{logo.name}</TooltipContent>
         </Tooltip>
       ))}
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger>
+          <Link href="/rules">
+            <div className="hover:-translate-y-2 hover:-rotate-3 flex size-10 items-center justify-center overflow-hidden rounded-sm bg-muted-foreground ring-2 ring-background transition-transform will-change-transform">
+              <span className="text-background text-sm">+ 11</span>
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent>+ 11 more agents</TooltipContent>
+      </Tooltip>
     </div>
   </div>
 );
