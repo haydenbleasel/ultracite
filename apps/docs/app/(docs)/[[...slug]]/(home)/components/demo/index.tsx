@@ -378,7 +378,7 @@ export const Demo = () => (
       width={1000}
     />
     <div className="size-full px-16 pt-16">
-      <div className="max-h-128 overflow-y-auto rounded-x-2xl rounded-t-2xl bg-black/80 p-6 backdrop-blur-sm">
+      <div className="max-h-128 overflow-y-auto rounded-x-2xl rounded-t-2xl bg-black/80 p-8 backdrop-blur-sm">
         <pre className="font-mono text-sm">
           <code>
             <span className="text-white">npx ultracite@latest fix</span>
