@@ -4,13 +4,23 @@ import { track } from "@vercel/analytics";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
 
-const command = "npx ultracite@latest init";
 const COPY_TIMEOUT = 2000;
 
-export const Installer = () => {
+type InstallerProps = {
+  command: string;
+};
+
+export const Installer = ({ command }: InstallerProps) => {
   const [copied, setCopied] = useState(false);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(command);
     toast.success("Copied to clipboard");
@@ -25,23 +35,23 @@ export const Installer = () => {
   const Icon = copied ? CheckIcon : CopyIcon;
 
   return (
-    <div className="flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary py-2 pr-0.5 pl-4 text-foreground text-sm backdrop-blur-sm">
-      <p className="pointer-events-none shrink-0 select-none text-muted-foreground">
-        $
-      </p>
-      <div className="flex-1 truncate text-left font-mono">{command}</div>
-      <div className="flex shrink-0 items-center gap-2">
-        <Button
+    <InputGroup className="border-none bg-secondary font-mono shadow-none">
+      <InputGroupAddon>
+        <InputGroupText className="font-normal text-muted-foreground">
+          $
+        </InputGroupText>
+      </InputGroupAddon>
+      <InputGroupInput readOnly value={command} />
+      <InputGroupAddon align="inline-end">
+        <InputGroupButton
           aria-label="Copy"
-          className="cursor-pointer rounded-[6px] hover:bg-background/50"
-          disabled={copied}
           onClick={handleCopy}
-          size="icon"
-          variant="ghost"
+          size="icon-xs"
+          title="Copy"
         >
-          <Icon className="text-muted-foreground" size={14} />
-        </Button>
-      </div>
-    </div>
+          <Icon className="size-3.5" size={14} />
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
   );
 };

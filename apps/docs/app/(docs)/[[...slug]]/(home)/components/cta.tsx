@@ -13,7 +13,7 @@ export const CallToAction = () => (
       </p>
     </div>
     <div className="mx-auto w-full max-w-md">
-      <Installer />
+      <Installer command="npx ultracite@latest init" />
     </div>
   </div>
 );
