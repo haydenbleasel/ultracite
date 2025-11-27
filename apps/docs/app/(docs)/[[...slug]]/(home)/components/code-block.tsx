@@ -35,6 +35,8 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
     },
   });
 
+  highlighter.dispose();
+
   return (
     <pre
       className={cn(className, "p-4 text-sm dark:bg-(--shiki-dark-bg)!")}
