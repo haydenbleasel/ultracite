@@ -1,5 +1,5 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { Logo } from "@/app/(docs)/[[...slug]]/(home)/components/logo";
+import { Logo } from "@/app/(home)/components/logo";
 import { Button } from "@/components/ui/button";
 
 export const baseOptions: BaseLayoutProps = {

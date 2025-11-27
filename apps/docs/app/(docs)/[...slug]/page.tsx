@@ -12,9 +12,9 @@ import { Feedback } from "@/components/feedback";
 import { ViewOptions } from "@/components/page-actions";
 import { getLLMText, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
-import Home from "./(home)";
+import Home from "../../(home)/page";
 
-const Page = async (props: PageProps<"/[[...slug]]">) => {
+const Page = async (props: PageProps<"/[...slug]">) => {
   const params = await props.params;
   const page = source.getPage(params.slug);
 
@@ -56,7 +56,7 @@ const Page = async (props: PageProps<"/[[...slug]]">) => {
 export const generateStaticParams = () => source.generateParams();
 
 export const generateMetadata = async (
-  props: PageProps<"/[[...slug]]">
+  props: PageProps<"/[...slug]">
 ): Promise<Metadata> => {
   const params = await props.params;
   const page = source.getPage(params.slug);
