@@ -1,4 +1,16 @@
-import { type BundledLanguage, codeToTokens } from "shiki";
+import bash from "@shikijs/langs/bash";
+import javascript from "@shikijs/langs/javascript";
+import json from "@shikijs/langs/json";
+import jsonc from "@shikijs/langs/jsonc";
+import tsx from "@shikijs/langs/tsx";
+import typescript from "@shikijs/langs/typescript";
+import yaml from "@shikijs/langs/yaml";
+import darkTheme from "@shikijs/themes/vitesse-dark";
+import lightTheme from "@shikijs/themes/vitesse-light";
+import type { BundledLanguage } from "shiki";
+import { createHighlighterCore } from "shiki/core";
+import { createOnigurumaEngine } from "shiki/engine/oniguruma";
+import shikiWasm from "shiki/wasm";
 import { cn } from "@/lib/utils";
 
 type CodeBlockProps = {
@@ -8,11 +20,18 @@ type CodeBlockProps = {
 };
 
 export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
-  const result = await codeToTokens(code, {
+  const highlighter = await createHighlighterCore({
+    themes: [lightTheme, darkTheme],
+    langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
+    // `shiki/wasm` contains the wasm binary inlined as base64 string.
+    engine: createOnigurumaEngine(shikiWasm),
+  });
+
+  const result = highlighter.codeToTokens(code, {
     lang,
     themes: {
-      light: "github-light-default",
-      dark: "github-dark-default",
+      light: lightTheme,
+      dark: darkTheme,
     },
   });
 
