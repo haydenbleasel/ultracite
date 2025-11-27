@@ -22,6 +22,8 @@ export const i18n = defineI18n({
     "es",
     "sv",
     "tr",
+    "cn",
+    "jp",
   ],
   hideLocale: "default-locale",
 });

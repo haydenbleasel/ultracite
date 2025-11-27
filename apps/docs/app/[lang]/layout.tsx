@@ -84,6 +84,12 @@ const { provider } = defineI18nUI(i18n, {
     en: {
       displayName: "🇬🇧 English",
     },
+    cn: {
+      displayName: "🇨🇳 Chinese (Mandarin)",
+    },
+    jp: {
+      displayName: "🇯🇵 Japanese",
+    },
   },
 });
 
