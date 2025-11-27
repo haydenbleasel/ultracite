@@ -72,9 +72,6 @@ export const Agents = () => (
           <TooltipContent>{logo.name}</TooltipContent>
         </Tooltip>
       ))}
-      <div className="flex size-10 items-center justify-center overflow-hidden rounded-sm bg-sidebar text-muted-foreground ring-2 ring-background">
-        <span className="font-medium text-[10px] tracking-tighter">+ 12</span>
-      </div>
     </div>
   </div>
 );
