@@ -1,8 +1,10 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { Logo } from "@/app/(home)/components/logo";
+import { Logo } from "@/app/[lang]/(home)/components/logo";
 import { Button } from "@/components/ui/button";
+import { i18n } from "./i18n";
 
 export const baseOptions: BaseLayoutProps = {
+  i18n,
   links: [
     {
       text: "Home",

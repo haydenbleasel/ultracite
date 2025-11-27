@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "@/app/(home)/components/logo";
+import { Logo } from "@/app/[lang]/(home)/components/logo";
 import { SearchButton } from "@/components/search";
 import { ThemeToggle } from "@/components/theme-toggle";
 

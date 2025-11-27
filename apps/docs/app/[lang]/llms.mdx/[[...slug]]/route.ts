@@ -6,10 +6,10 @@ export const revalidate = false;
 
 export const GET = async (
   _req: NextRequest,
-  { params }: RouteContext<"/llms.mdx/[[...slug]]">
+  { params }: RouteContext<"/[lang]/llms.mdx/[[...slug]]">
 ) => {
-  const { slug } = await params;
-  const page = source.getPage(slug);
+  const { slug, lang } = await params;
+  const page = source.getPage(slug, lang);
 
   if (!page) {
     notFound();

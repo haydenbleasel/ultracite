@@ -6,10 +6,10 @@ import { source } from "@/lib/source";
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<"/og/[...slug]">
+  { params }: RouteContext<"/[lang]/og/[...slug]">
 ) => {
-  const { slug } = await params;
-  const page = source.getPage(slug.slice(0, -1));
+  const { slug, lang } = await params;
+  const page = source.getPage(slug.slice(0, -1), lang);
 
   if (!page) {
     notFound();
