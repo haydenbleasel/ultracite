@@ -103,7 +103,7 @@ export const Feedback = ({ className }: FeedbackProps) => {
         <div className="flex items-center gap-1">
           <Button
             className={cn(
-              "rounded-full",
+              "rounded-full bg-card",
               activeOpinion === "good" &&
                 "border-green-500 bg-green-50 text-green-500 hover:bg-green-100 hover:text-green-600"
             )}
@@ -118,7 +118,7 @@ export const Feedback = ({ className }: FeedbackProps) => {
           </Button>
           <Button
             className={cn(
-              "rounded-full",
+              "rounded-full bg-card",
               activeOpinion === "bad" &&
                 "border-red-500 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600"
             )}
@@ -135,7 +135,7 @@ export const Feedback = ({ className }: FeedbackProps) => {
       </div>
       <CollapsibleContent className="mt-3 overflow-visible">
         {previous ? (
-          <div className="flex flex-col items-center gap-3 rounded-xl bg-sidebar px-3 py-6 text-center text-sm">
+          <div className="flex flex-col items-center gap-3 px-3 py-6 text-center text-sm">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
               <Button asChild size="sm">
@@ -163,7 +163,7 @@ export const Feedback = ({ className }: FeedbackProps) => {
           </div>
         ) : (
           <form className="flex flex-col gap-3" onSubmit={submit}>
-            <InputGroup className="bg-sidebar shadow-none">
+            <InputGroup className="bg-card shadow-none">
               <InputGroupTextarea
                 autoFocus
                 onChange={(e) => setMessage(e.target.value)}

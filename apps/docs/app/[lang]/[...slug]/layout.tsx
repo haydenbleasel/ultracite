@@ -14,9 +14,10 @@ const DocLayout = async (props: LayoutProps<"/[lang]/[...slug]">) => {
 
   return (
     <DocsLayout
-      nav={{
-        enabled: false,
+      containerProps={{
+        className: "pt-[40px]",
       }}
+      nav={{ enabled: false, mode: "top" }}
       sidebar={{ collapsible: false }}
       tabMode="navbar"
       tree={source.pageTree[lang]}
