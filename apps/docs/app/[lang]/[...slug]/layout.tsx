@@ -1,6 +1,5 @@
 import { DocsLayout } from "fumadocs-ui/layouts/notebook";
 import type { Metadata } from "next";
-import { baseOptions } from "@/lib/layout.config";
 import { source } from "@/lib/source";
 
 export const metadata: Metadata = {
@@ -15,10 +14,8 @@ const DocLayout = async (props: LayoutProps<"/[lang]/[...slug]">) => {
 
   return (
     <DocsLayout
-      {...baseOptions}
       nav={{
-        ...baseOptions.nav,
-        mode: "top",
+        enabled: false,
       }}
       sidebar={{ collapsible: false }}
       tabMode="navbar"
