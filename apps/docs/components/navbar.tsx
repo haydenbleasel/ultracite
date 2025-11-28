@@ -11,9 +11,9 @@ import { LanguageSelector } from "./language-selector";
 import { Button } from "./ui/button";
 
 const links = [
-  { href: "/", label: "Home", exact: true },
-  { href: "/introduction", label: "Docs", exact: false },
-  { href: "/social", label: "Social", exact: false },
+  { href: "/[lang]", label: "Home", exact: true },
+  { href: "/[lang]/introduction", label: "Docs", exact: false },
+  { href: "/[lang]/social", label: "Social", exact: false },
 ];
 
 export const Navbar = () => {
