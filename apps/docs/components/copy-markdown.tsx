@@ -27,7 +27,7 @@ export const CopyMarkdown = ({ markdown }: CopyMarkdownProps) => {
   const Icon = checked ? CheckIcon : CopyIcon;
 
   return (
-    <Button className="shadow-none" onClick={onClick} variant="secondary">
+    <Button className="shadow-none" onClick={onClick} variant="outline">
       <Icon className="size-4" />
       Copy Markdown
     </Button>
