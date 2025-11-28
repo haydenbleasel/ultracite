@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 6.3.8
+
+### Patch Changes
+
+- e5e48db: Bump Biome to 2.3.8
+- 0a525d9: Update docs
+
 ## 6.3.7
 
 ### Patch Changes
