@@ -157,7 +157,7 @@ const tweets = [
 
 export default function SocialPage() {
   return (
-    <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20">
+    <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20 px-4">
       <div className="grid gap-20">
         <div className="grid gap-4">
           <h1 className="mb-0 max-w-lg text-balance font-medium text-5xl tracking-tighter">

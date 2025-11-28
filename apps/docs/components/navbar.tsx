@@ -19,7 +19,7 @@ export const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-50 w-full bg-background/90 py-3 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-8">
           <Link className="flex items-center gap-2" href="/">
             <Logo className="size-4" />
