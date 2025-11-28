@@ -11,7 +11,7 @@ import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
 const Home = () => (
-  <div className="relative mx-auto grid w-full max-w-7xl gap-24 px-4 py-16 sm:gap-32">
+  <div className="relative mx-auto grid w-full max-w-7xl gap-24 px-4 sm:gap-32">
     <Hero>
       <Demo />
     </Hero>
