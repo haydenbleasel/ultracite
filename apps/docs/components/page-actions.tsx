@@ -32,7 +32,7 @@ export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
   return (
     <OpenIn query={query}>
       <OpenInTrigger>
-        <Button className="shadow-none" variant="secondary">
+        <Button className="shadow-none" variant="outline">
           Open in...
           <ChevronDownIcon className="size-4 text-muted-foreground" />
         </Button>

@@ -1,0 +1,139 @@
+---
+title: Contoh
+description: Contoh sebelum dan sesudah penerapan Ultracite.
+---
+
+To illustrate Ultracite’s capabilities, here are a few practical examples of issues it catches and fixes. Each example shows code before (with a problem) and after Ultracite is applied. These examples demonstrate how Ultracite improves code automatically.
+
+## Automatic Code Formatting
+
+### Before (messy formatting)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+In this code, spacing and concatenation style are off. It’s also using string concatenation instead of template literals, and has double quotes mixed with single quotes.
+
+### After (formatted)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+Ultracite's formatter has:
+
+- Memformat fungsi dengan pemisahan baris yang tepat untuk keterbacaan.
+- Mengubah penggabungan string menjadi template literal (ini bisa menjadi perbaikan otomatis dari sebuah aturan lint yang menyarankan template string demi keterbacaan).
+- Menstandarisasi tanda kutip ke backtick untuk template (dan akan menggunakan double quotes secara konsisten di tempat lain jika bukan template).
+- Menambahkan titik koma pada akhir pernyataan `return`.
+- Menjamin spasi yang benar di sekitar kurung kurawal dan tanda kurung.
+
+Pengembang tidak secara manual memformat ulang kode — mereka hanya menyimpan file, dan Ultracite menangani sisanya. Hasilnya adalah kode yang lebih bersih dan konsisten.
+
+Ultracite juga akan memperingatkan bahwa `name` tidak bertipe dan akan menyarankan menambahkan tipe.
+
+## Enforcing Strict Equality
+
+### Before (potential bug with loose equality)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Here, the code is using loose equality (`==`) to compare `response.status` to `200`. Using loose equality can be error-prone due to type coercion (e.g., `response.status` could be a string `“200”` and still pass). Ultracite’s strict rules likely enforce using `===` for comparisons.
+
+### After (Ultracite auto-fix applied)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite automatically replaced `== 200` with `=== 200`. This small change prevents subtle bugs. The fix was applied on save as part of the `source.fixAll.biome` actions. Such a rule (similar to ESLint’s `eqeqeq`) ensures developers use strict equality checking.
+
+Additionally, Ultracite will also warn that `isValid` is never used, and will suggest removing it.
+
+## Organizing and Cleaning Imports
+
+### Before (unorganized imports)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+The imports here are out of alphabetical order, and the helper import is never used in the file.
+
+### After (after save with Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (via Biome’s organize imports feature) sorted the imports alphabetically by module name. It also removed the unused helper import automatically. The before/after difference happens immediately on save, ensuring that your imports section is always tidy:
+
+- Tidak ada impor yang tidak terpakai yang mengacaukan bagian atas file Anda.
+- Urutan impor yang deterministik (sehingga merge dan diff tidak bingung oleh urutan impor yang berbeda yang ditambahkan oleh pengembang yang berbeda).
+
+This leads to more maintainable code, especially in files with many imports.
+
+## Accessibility Fix
+
+### Before
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+The default type of a button is `submit`, which causes the submission of a form when placed inside a form element. This is likely not the behaviour that you want inside a React application. Ultracite will warn you about this and offer a quick fix to change the type to `button`.
+
+### After (manual or quick fix)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+The type is now `button`, which prevents a potential parent form from being submitted when the button is clicked.
+
+---
+
+These examples demonstrate how Ultracite improves code quality:
+
+- Pemformatan dan konsistensi gaya tanpa usaha.
+- Perbaikan otomatis untuk banyak masalah umum (sehingga Anda jarang harus memperbaiki hal-hal sepele secara manual).
+- Identifikasi masalah nyata (sehingga Anda dapat memperbaikinya lebih awal dalam pengembangan).
+
+By using Ultracite, your code not only stays clean but also less buggy and more accessible, thanks to the collective knowledge encoded in its rules.

@@ -1,0 +1,71 @@
+---
+title: Konfiguration
+description: Ultracites standard lint-konfiguration og hvordan du ændrer den.
+---
+
+En af Ultracites bedste funktioner er, at den er zero-config ud af boksen – du kan blot extend'e `ultracite`-preset'et og komme i gang. Dog er hvert projekt lidt forskelligt, og du vil måske tilpasse visse regler eller tilpasse Ultracite til forskellige rammeværk. Dette afsnit forklarer standardkonfigurationen og hvordan du udvider eller overskriver den.
+
+Ultracite leverer rammeværksspecifikke konfigurationer, som du kan extend'e ud over basis-konfigurationen. Dette gør det muligt at tilføje rammeværksspecifikke lint-regler uden at oppuste basis-konfigurationen eller håndtere irrelevante regler.
+
+Du kan finde den fulde liste over tilgængelige rammeværkskonfigurationer i [Forudindstillinger](/preset/core)-sektionen.
+
+### Brug
+
+For at bruge en rammeværksspecifik konfiguration, tilføj den til din `extends`-array:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Du kan kombinere flere konfigurationer, hvis du arbejder på et multi-rammeværksprojekt eller bruger noget som Astro, der understøtter flere rammeværk.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Standardkonfiguration
+
+Når du inkluderer `"extends": ["ultracite/core"]` i din `biome.jsonc`, henter du Ultracites basis-presetkonfiguration. Dette preset indeholder rammeværks-agnostiske regler og konfigurationer. Nogle bemærkelsesværdige aspekter af standardkonfigurationen:
+
+- **TypeScript-strenghed**: Ultracite aktiverer TypeScripts strenge kontroller og lint-regler, der kræver robust typning. For eksempel frarådes brug af `any`, håndtering af `null/undefined` kræves, og eksplicitte typer foretrækkes i visse situationer for at undgå tvetydighed.
+- **ESLint "Recommended" ækvivalenter**: Almindelige bedste-praksis regler (no unused vars, no explicit eval, no proto pollution, osv.) er inkluderet.
+- **Tilgængelighed**: Regler svarende til tilgængelighedsstandarder er slået til som standard (ARIA-attributter, semantisk HTML, tastaturnavigation, osv.).
+- **Node.js**: Miljøspecifikke særheder håndteres. For eksempel genkendes globale variable leveret af Node (som `module`, `process`), så de ikke forkert markeres som undefined.
+- **Formatkonventioner**: Ultracites formatter-indstillinger (i høj grad arvet fra Biome/Prettier-defaults) inkluderer 2-spors indrykning, en maksimal linjebredde på 80 tegn, semikolon i slutningen af statements, trailing commas hvor gyldigt (f.eks. i multiline arrays/objects), dobbelt anførselstegn til strenge osv. Disse er valgt for at matche almindelige konventioner og sikre rene diffs.
+
+Alle disse default-indstillinger har til formål at håndhæve ensartet stil og forhindre almindelige fejl uden at du behøver at konfigurere hver regel manuelt.
+
+For en omfattende reference af alle lint-regler konfigureret i Ultracites basis-konfiguration, se [Kernekonfiguration](/preset/core)-dokumentationen.
+
+## Overskrivning af konfigurationen
+
+### Ændring af `biome.jsonc`
+
+Du kan deaktivere regler ved at ændre `biome.jsonc`-filen.
+
+For eksempel, for at deaktivere reglen `noAutofocus`, kan du tilføje følgende:
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Inline-kommentarer
+
+Du kan også deaktivere regler per linje ved at tilføje en kommentar i slutningen af linjen:
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

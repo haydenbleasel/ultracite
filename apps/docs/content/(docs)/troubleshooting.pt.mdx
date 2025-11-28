@@ -1,0 +1,89 @@
+---
+title: Resolução de Problemas
+description: Esta secção descreve como resolver problemas com o Ultracite.
+---
+
+Apesar de o Ultracite pretender simplificar lint e formatação, poderá encontrar alguns problemas ou ter dúvidas durante a configuração e utilização. Aqui estão alguns problemas comuns e as suas soluções:
+
+## “O Ultracite não está a formatar ao guardar no VS Code.”
+
+Verifique se tem a extensão Biome para VS Code instalada e ativada. Certifique-se de que o seu `.vscode/settings.json` contém as entradas `"editor.defaultFormatter": "biomejs.biome"` e `"editor.codeActionsOnSave"` como mostrado em [Configuração](/setup).
+
+Também confirme que não existe outra extensão de formatador ou linter em conflito ativada (por exemplo, se ainda tiver a extensão Prettier ou a extensão ESLint ativas, estas podem interferir ou ter prioridade).
+
+Pode ser necessário desativar o “Format On Save” integrado do VS Code se outro formatador estiver a apanhar o ficheiro. Com as definições corretas e a extensão Biome, guardar um ficheiro que o Ultracite abrange (js/ts/jsx/tsx/json/css) deverá desencadear a formatação. Se não acontecer, experimente executar o comando “Format Document” manualmente e verifique se o Biome é usado ou se aparece algum erro.
+
+## “Instalei o Ultracite, mas o VS Code ainda usa ESLint ou Prettier.”
+
+Certifique-se de que removeu ou desativou as suas configurações antigas. Por exemplo, se tiver um `.eslintrc` ou `.prettierrc` no seu projeto, a extensão ESLint do VS Code pode continuar ativa e causar diagnósticos duplicados.
+
+Recomenda-se remover essas configurações (ou pelo menos desativar as extensões) ao migrar para o Ultracite para evitar confusão. Essencialmente, deixe o Ultracite/Biome assumir como o único linter/formatador.
+
+Se preferir manter o ESLint por alguma razão, não ative o “fix on save” para o ESLint – caso contrário ambos podem tentar corrigir o código (embora, se configurados corretamente, o Biome deva coincidir com o estilo do Prettier para evitar conflitos).
+
+Em geral, migrar totalmente para o Ultracite significa que já não precisa das configurações do ESLint / Prettier.
+
+## “O Ultracite (Biome) está a lançar erros de parse em ficheiros que não quero que verifique.”
+
+Um bom exemplo disto é instalar componentes de uma biblioteca UI como [`shadcn/ui`](https://ui.shadcn.com/). Embora sejam desenhados para serem modificados, pode querer preservar o código-fonte original para actualizações. Neste caso, deverá desativar o linting desses ficheiros.
+
+Para fazer isso, adicione padrões ao seu `biome.jsonc` para excluir esses ficheiros, por exemplo:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Por padrão, o Biome deve ignorar `node_modules`, mas se abriu um ficheiro manualmente a partir daí, a extensão ainda pode tentar lintá-lo. Geralmente, ignore ficheiros gerados pesados ou código de terceiros – não precisa de lintar esses.
+
+Outra causa pode ser ter sintaxe experimental num ficheiro que o Biome não consegue parsear (por exemplo, uma proposta stage-3 ainda não suportada pelo Biome). Nesse caso, ou evite essa sintaxe ou veja se o Biome pode ser configurado (por vezes adicionando `"parser.allowSomething": true` na configuração, se disponível).
+
+Consulte o rastreador de issues do Biome para suporte a essa sintaxe.
+
+## “Vejo erros duplicados para o mesmo problema.”
+
+Isto pode acontecer se tiver múltiplos linters a correr ao mesmo tempo (por exemplo, ESLint e Ultracite). Também pode ocorrer se o verificador TypeScript do VS Code e o Biome reportarem o mesmo erro de TS. Para resolver, padronize numa ferramenta por tipo de verificação.
+
+Se estiver a usar o Ultracite, desative outros linters. Para erros de tipos TypeScript, o servidor TS integrado do VS Code irá mostrá-los (por exemplo, sublinhados vermelhos para problemas de tipos) – o Biome também pode mostrar problemas de lint derivados de tipos. Normalmente isto é aceitável porque destacam o mesmo problema. Mas se o incomodar, pode desligar o validador TS do VS Code (`"typescript.validate.enable": false` nas definições) e confiar no Biome, ou vice-versa.
+
+Na maioria das configurações, deixar ambos ligados está bem; normalmente complementam-se (erros de tipos vs erros de lint). Apenas assegure que não tem dois linters com funcionalidades sobrepostas ativados (como ESLint e Biome a fazer linting ao mesmo tempo).
+
+## “O gancho pre-commit/CI está a falhar devido ao Ultracite.”
+
+Se o seu gancho pre-commit executa `ultracite` e falha, significa que ainda existem problemas que não foram corrigidos automaticamente (ou alguém ignorou a execução). A melhor forma de corrigir isto é executar `npx ultracite` localmente e inspeccionar a saída. Ele ou corrige as coisas (nesse caso basta adicionar as alterações ao stage e commitar novamente) ou reporta erros que precisam de correção manual.
+
+Resolva-os e, em seguida, faça o commit. Se o CI estiver a falhar em `ultracite --check`, faça o mesmo: execute localmente com `--check` para ver quais os problemas encontrados, ou execute sem `--check` para auto-corrigir e commitar os resultados. Em suma, trate falhas do Ultracite como testes falhados – algo a corrigir no código.
+
+## “Recebo um erro sobre `strictNullChecks` ou problemas de tipos depois de ativar o Ultracite.”
+
+O Ultracite espera rigor no TypeScript. Se não ativou `strictNullChecks` (ou o modo `strict` completo), pode receber muitos avisos de lint relacionados com TypeScript (por exemplo, queixando-se de utilização potencial de undefined que o TS não está a apanhar devido às definições permissivas).
+
+A solução é ativar essas flags de rigor no `tsconfig`, conforme recomendado. Se por alguma razão não puder (por motivos de legado), poderá ter de desativar certas regras no Ultracite que assumem rigor. Mas é fortemente recomendado adotar o modo estrito do TS – vai melhorar a qualidade do seu código e está alinhado com a filosofia do Ultracite.
+
+## “O Ultracite é demasiado rigoroso para a nossa equipa (regras a mais) – posso torná-lo menos rigoroso?”
+
+Sim. Embora o valor do Ultracite esteja em ser rigoroso, pode sobrepor regras livremente. Se os desenvolvedores se sentirem sobrecarregados por avisos, identifique quais regras estão a causar fricção. Talvez seja uma preferência estilística ou algo que não faça sentido no seu contexto. Pode definir essas regras para `warn` ou `off` na configuração.
+
+Por exemplo, se achar as regras de acessibilidade demasiado ruidosas para uma ferramenta interna, pode desativar algumas delas. Ou, se discordar de um estilo de código aplicado, pode ajustá-lo (apesar de disputas de estilo serem precisamente o que o Ultracite tenta eliminar).
+
+A chave é a comunicação com a equipa – talvez explique porque é que uma regra existe antes de a desativar; se ainda assim não for desejada, personalize a configuração. O Ultracite não é uma caixa preta – tem controlo total via `biome.jsonc`.
+
+Consulte a secção de [configuração](/configuration) para mais informações sobre como sobrepor regras.
+
+## “Existem limitações conhecidas ou bugs do Ultracite que devo ter em atenção?”
+
+O Ultracite (especificamente o Biome) não cobre tudo o que ESLint + Prettier + Stylelint fazem, especialmente se utilizar certos plugins. Por exemplo, o Stylelint tem um conjunto exaustivo de regras de lint para CSS; o Biome actualmente fornece formatação para CSS e lint básico, mas não o conjunto completo de regras do Stylelint.
+
+Se o seu projeto depende de verificações específicas do Stylelint (como ordenação de propriedades ou nomenclatura específica em CSS), note que o Ultracite não aplica essas regras. Poderá incorporar o Stylelint separadamente se for absolutamente necessário, ou aguardar que o Biome introduza mais linting para CSS.
+
+---
+
+Se se deparar com um problema não coberto aqui, considere verificar a página de issues do GitHub do Ultracite ou a documentação do Biome. Pode haver uma correção ou uma solução alternativa disponível. A comunidade está a crescer, por isso o suporte está a melhorar com o tempo.

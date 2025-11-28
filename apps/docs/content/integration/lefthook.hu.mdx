@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Automatikusan futtatja az Ultracite-ot a staged Git fájljaidon lefthook segítségével
+---
+
+Ultracite zökkenőmentes integrációt biztosít a [lefthook](https://lefthook.dev/)-kal, egy gyors és erőteljes Git hook-kezelővel. Ez az integráció automatikusan beállítja a pre-commit hookokat, hogy minden commit előtt biztosítsa a kód megfelelő formázását.
+
+## Mi az a lefthook?
+
+lefthook egy gyors natív Git hook-kezelő Node.js és Go projektekhez. Az egyszerűségre, sebességre és hatékonyságra tervezték, lehetővé téve, hogy konfigurációs fájlokkal kezeljétek a Git hookokat a csapaton belül, melyek commitálhatók a tárolóba.
+
+## Hogyan használja az Ultracite a lefthookot
+
+Amikor inicializálod az Ultracite-ot a projektedben, automatikusan konfigurálhatja a lefthookot úgy, hogy minden commit előtt futtassa a kódformázást. Ez biztosítja, hogy:
+
+- Minden committolt kód következetes formázási szabványoknak feleljen meg
+- A kódminőség ellenőrzések automatikusan érvényesüljenek
+- A csapattagoknak ne kelljen manuálisan emlékezniük a kód formázására
+- A tárolód tiszta, egységes kódstílust tartson fenn
+
+## Pre-commit hook viselkedése
+
+Az Ultracite lefthook integrációja létrehoz egy pre-commit hookot, amely a következő parancsot futtatja:
+
+```bash
+npx ultracite fix
+```
+
+Ez a parancs:
+- Futtatja a Biome lintelőjét és formázóját a kódbázison
+- Automatikusan javítja a formázási problémákat, ahol lehetséges
+- Biztosítja, hogy minden staged fájl megfeleljen a projekt kódstandardjainak
+- Megakadályozza az olyan commitokat, amelyek formázási inkonzisztenciákat hoznának be
+
+## Automatikus beállítás
+
+Az inicializálási folyamat során (`ultracite init`), ha kiválasztod a lefthook opciót, az Ultracite:
+
+1. **Telepíti a lefthookot**: Hozzáadja a lefthookot fejlesztési függőségként a projektedhez
+2. **Inicializálja a lefthookot**: Lefuttatja a `lefthook install` parancsot a Git hookok beállításához
+3. **Létrehozza a konfigurációt**: Beállítja a `lefthook.yml` fájlt a formázó paranccsal
+4. **Kezeli a már meglévő beállításokat**: Ha már van lefthook konfigurációd, a meglévő konfigurációt frissíti az felülírás helyett
+
+## Integrációs részletek
+
+A lefthook integráció több okos funkciót tartalmaz:
+
+### Függőségkezelés
+- Automatikusan telepíti a lefthookot fejlesztési függőségként a projekt csomagkezelőjével
+- A megfelelő csomagkezelő parancsot használja (`npm install -D`, `yarn add -D`, `pnpm add -D`, stb.)
+- Lefuttatja a `lefthook install` parancsot a Git hookok inicializálásához
+
+### Konfigurációkezelés
+- **Új projektek**: Létrehoz egy új `lefthook.yml` fájlt az ultracite fix paranccsal
+- **Meglévő projektek**: Hozzáadja az Ultracite parancsot a meglévő lefthook konfigurációdhoz, megőrizve az egyéb, esetlegesen beállított hookokat
+
+### Fájlszerkezet
+Az integráció létrehozza vagy módosítja a következőket:
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## Előnyök
+
+- **Csapatkonzisztencia**: Minden csapattag ugyanazt a formázást kapja automatikusan
+- **Konfiguráció nélküli használat**: Azonnal működik ésszerű alapbeállításokkal
+- **Gyors teljesítmény**: A lefthook Go-ban íródott és rendkívül gyors
+- **Rugalmasság**: Könnyen bővíthető további parancsokkal és hookokkal
+- **Platformfüggetlenség**: Különböző operációs rendszereken egyaránt megbízhatóan működik
+
+## Munkafolyamat integrációja
+
+A lefthook integráció zökkenőmentesen illeszkedik a fejlesztési munkafolyamatba:
+
+1. A fejlesztő módosításokat végez a kód fájlokon
+2. Hozzáadja a fájlokat a staging területhez `git add` segítségével
+3. Megpróbál commitolni `git commit`-tel
+4. A lefthook automatikusan elindítja a pre-commit hookot
+5. Az Ultracite lefut, és formázza a stagingre jelölt fájlokat
+6. A commit folytatódik, ha a formázás sikeres, vagy meghiúsul, ha vannak olyan problémák, amelyeket nem lehet automatikusan javítani
+
+## Testreszabás
+
+Bár az Ultracite ésszerű alapbeállításokat konfigurál, testreszabhatod a működést:
+
+- Módosítsd a `lefthook.yml`-t további parancsok vagy hookok hozzáadásához
+- Állítsd be a Biome beállításait a formázási szabályok alakításához
+- Adj hozzá más pre-commit ellenőrzéseket az Ultracite formázása mellé
+- Használd a lefthook erőteljes párhuzamos végrehajtási és feltételes logikai funkcióit
+
+## Hibaelhárítás
+
+### A hook nem fut
+Ha a pre-commit hook nem hajtódik végre:
+- Győződj meg róla, hogy a lefthook telepítve van: `npm ls lefthook`
+- Ellenőrizd, hogy a `lefthook.yml` létezik és tartalmazza az ultracite parancsot
+- Ellenőrizd, hogy a Git hookok engedélyezve vannak-e a tárolódban
+- Futtasd újra a `lefthook install` parancsot a hookok újratelepítéséhez
+
+### Engedélyezési problémák
+A lefthook automatikusan kezeli a Git hook jogosultságokat, de ha problémába ütközöl:
+- Próbáld meg újra futtatni a `lefthook install` parancsot
+- Ellenőrizd, hogy a Git konfigurációd engedélyezi-e a hookokat
+
+### Hookok megkerülése
+Olyan ritka esetekben, amikor át kell ugrani a pre-commit hookot:
+```bash
+git commit --no-verify
+```
+
+Használd ezt ritkán, mivel megkerüli az automatikus formázást, amely a kódbázis egységességét biztosítja.
+
+## Konfigurációs példa
+
+Így néz ki a `lefthook.yml` konfiguráció:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Ez a konfiguráció:
+- Csak JavaScript, TypeScript, JSON és CSS fájlokon fut
+- Automatikusan hozzáadja a staginghez azokat a fájlokat, amelyeket a formázó javított
+- A hatékony `jobs` szintaxist használja jobb teljesítményért
+
+Kiterjesztheted ezt a konfigurációt további jobokkal:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

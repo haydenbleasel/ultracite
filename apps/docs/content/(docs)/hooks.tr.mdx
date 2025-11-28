@@ -1,0 +1,68 @@
+---
+title: Hook'lar
+description: Ultracite'i düzenleyici hook'ları aracılığıyla yapay zeka kodlama asistanlarıyla nasıl entegre edeceğiniz.
+---
+
+Ultracite, AI kodlama asistanlarının düzenleyici hook'ları aracılığıyla yaptığı düzenlemelerden sonra kodu otomatik olarak biçimlendirebilir ve düzeltebilir. Bu, tüm AI tarafından üretilen kodun proje standartlarınıza elle müdahale olmadan uymasını sağlar.
+
+Hook'lar, Biome'ın lint denetimi ve biçimlendirmesi ile birlikte çalışır. Bir AI kodlama asistanı bir dosyayı düzenledikten sonra, hook otomatik olarak `npx ultracite fix` çalıştırarak otomatik düzeltilebilir lint sorunlarını biçimlendirir ve düzeltir. Bu çift yönlü yaklaşım, hem akıllı kod üretimini (AI kuralları aracılığıyla) hem de otomatik kod kalitesini (hook'lar aracılığıyla) garanti eder.
+
+> **Not:** Hook'lar AI kodlama kurallarından ayrıdır. `--agents` bayrağı AI kodlama kurallarını yapılandırırken, `--hooks` bayrağı dosya düzenlemelerinden sonra otomatik biçimlendirmeyi ayarlar.
+
+## Kurulum
+
+### Otomatik Kurulum
+
+`npx ultracite init` çalıştırdığınızda, hangi editör hook'larını etkinleştirmek istediğinizi seçmeniz istenir:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+Bu, proje dizininizde ilgili hook yapılandırma dosyasını oluşturacaktır.
+
+### Manuel Kurulum
+
+Eğer işleri elle ayarlamak veya başlatmadan sonra hook eklemek istiyorsanız, çalıştırın:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternatif olarak, proje dizininizde hook yapılandırma dosyalarını manuel olarak oluşturabilir veya düzenleyebilir ve uygun hook komutunu ekleyebilirsiniz.
+
+## Desteklenen Editörler
+
+| Editör      | Hook Dosya Konumu          | Dokümantasyon                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Cursor Hook'ları](https://cursor.com/docs/agent/hooks)                |
+| Claude Code | `.claude/settings.json`     | [Claude Code Hook'ları](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Nasıl Çalışır
+
+1. **Otomatik Çalıştırma**: AI ajanı bir dosyayı düzenledikten sonra, hook otomatik olarak `npx ultracite fix` çalıştırır  
+2. **Kod Biçimlendirme**: Ultracite, düzenlenen kodu Biome yapılandırmanıza göre biçimlendirir  
+3. **Lint Düzeltmeleri**: Otomatik düzeltilebilir lint sorunları otomatik olarak çözülür  
+4. **Kesintisiz Entegrasyon**: Süreç iş akışınızı kesintiye uğratmadan şeffaf bir şekilde gerçekleşir
+
+## Faydalar
+
+Ultracite editör hook'larını kullanmanın birkaç avantajı vardır:
+
+- **Tutarlılık**: Tüm AI tarafından oluşturulan kod otomatik olarak stilinize uygun biçimde düzenlenir  
+- **Kalite**: Kod üretiminden hemen sonra lint sorunları düzeltilir  
+- **Verimlilik**: AI düzenlemelerinden sonra formatlayıcıları veya linter'ları manuel olarak çalıştırmaya gerek yoktur  
+- **Standartlar**: AI tarafından oluşturulan kodun her zaman proje standartlarına uymasını sağlar  
+- **Temiz Commit'ler**: Kod, inceleme yapmadan önce düzgün biçimlendirilmiş olur
+
+## Özelleştirme
+
+Ultracite, mevcut hook yapılandırmalarıyla akıllıca birleştirilir:
+
+- **Mevcut hook'ları korur**: Tüm mevcut hook'lar ve komutları olduğu gibi kalır  
+- **Yinelenmeleri önler**: Ultracite zaten yapılandırılmışsa, tekrar eklenmez  
+- **Yıkıcı değil**: Mevcut hook yapılandırma yapısı korunur
+
+Farklı biçimlendirme komutlarına veya ek düzenleme sonrası işlemlere ihtiyacınız varsa, hook yapılandırma dosyalarını doğrudan düzenleyerek hook davranışını özelleştirebilirsiniz.

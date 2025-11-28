@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Angular-specifik konfiguration for Ultracite.
+---
+
+Angular-konfigurationen har Angular-specifikke HTML-parserindstillinger for at understøtte Angular-skabelonsyntaks.
+
+## Installation
+
+Tilføj Angular-konfigurationen til din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Oversigt
+
+Denne konfiguration tilføjer understøttelse af Angulars skabelonsyntaks:
+
+- **HTML-interpolering**: Muliggør parsing af Angular-skabelonernes interpolationssyntaks (`{{ }}`)
+- **Skabelondirektiver**: Understøtter Angular-direktiver som `*ngIf`, `*ngFor`, osv.
+- **Egenskabsbinding**: Håndterer Angulars syntaks for egenskabsbinding `[property]="value"`
+- **Hændelsesbinding**: Understøtter syntaksen for hændelsesbinding `(event)="handler()"`
+
+## Konfiguration
+
+Angular-preset'et konfigurerer HTML-parseren til at genkende Angulars skabeloninterpolering:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Dette gør det muligt for Biome at korrekt parse og formatere Angular-komponenters skabeloner uden at behandle interpolationssyntaksen som fejl.

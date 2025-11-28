@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Règles de lint spécifiques à Solid.js pour Ultracite.
+---
+
+La configuration Solid inclut des règles de lint spécifiques à Solid.js pour la réactivité, les modèles de composants et la gestion du JSX.
+
+## Installation
+
+Ajoutez la configuration Solid à votre `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Aperçu
+
+Cette configuration ajoute des règles spécifiques au développement Solid.js :
+
+- **Règles de réactivité**: Imposent une utilisation correcte des primitives réactives de Solid
+- **Modèles de composants**: Assurent que les composants Solid suivent les meilleures pratiques
+- **Gestion des props**: Empêche la déstructuration des props (ce qui casse la réactivité)
+- **Props spécifiques à React**: Interdire les props spécifiques à React dans les composants Solid
+
+## Règles spécifiques à Solid
+
+### Exactitude
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Empêcher la déstructuration des props dans les composants Solid. La déstructuration casse le système de réactivité de Solid. Accédez aux props directement à la place. |
+
+### Performance
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Imposer l'utilisation du composant `<For>` pour itérer sur des tableaux dans Solid. Le composant `<For>` est optimisé pour la réactivité de Solid. |
+
+### Suspicieux
+
+| Règle | Paramètre | Description |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Interdire les props spécifiques à React comme `className` et `htmlFor` dans Solid. Utilisez `class` et `for` à la place. |

@@ -1,0 +1,49 @@
+---
+title: 升级到 v5
+description: 如何将您的项目从 Ultracite v4 升级到 v5。
+---
+
+Ultracite v5 是一个包含重大改进和破坏性变更的主要版本。此指南将帮助您将现有的 v4 配置升级到 v5。
+
+## v5 的新特性
+
+- **已更新的 Biome**: 从 v1.x 升级到 v2.x
+- **新的配置格式**: 将 `biome.json` 切换为 `biome.jsonc`
+- **增强的 CLI**: 用 TypeScript 重写，具有更好的错误处理
+- **编辑器集成**: 内置支持 Cursor、Windsurf、Zed 和 GitHub Copilot
+- **Git 钩子**: 可选集成，包括 Husky、lint-staged 和 lefthook
+- **改进的模式**: 新的模式 URL，具有更好的验证
+- **简化的 VS Code 设置**: 将文件类型覆盖合并为一行
+
+## 迁移步骤
+
+### 自动迁移（推荐）
+
+迁移最简单的方法是运行新的初始化命令：
+
+```package-install
+npx ultracite@latest init
+```
+
+这将会：
+- 更新您的依赖到最新版本
+- 更新您的 `biome.json` 或 `biome.jsonc`
+- 更新您的 VS Code 设置
+- 提示是否设置 AI 编辑器规则（Cursor、Windsurf、Zed 等）
+- 提示是否设置新集成（Git 钩子、lint-staged 等）
+
+升级后，您可能需要检查您的 `biome.json` / `biome.jsonc` 文件以移除任何覆盖。此外，重启编辑器以确保新配置生效。
+
+另外，请查看 Biome 的 [v2 升级指南](https://biomejs.dev/guides/upgrade-to-biome-v2/) 以了解有关模式 / 规则更改的更多信息。
+
+### 手动迁移
+
+如果您希望对过程有更多控制，请按照 [手动迁移](/setup#manual-installation) 步骤执行：
+
+- 手动安装更新版本的 Ultracite 和 Biome
+- 将您的 `biome.json` 文件更新为新的 schema 版本
+- 更新 `.vscode/settings.json` 文件（可选）
+- 添加 AI 编辑器规则文件（可选）
+- 添加新集成（可选）
+
+迁移完成后，重启编辑器以确保新配置生效。

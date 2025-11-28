@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Svelte-specifik konfiguration for Ultracite.
+---
+
+Svelte-konfigurationen indeholder Svelte-specifikke indstillinger. Dette er en minimal forudindstilling, da Biome endnu ikke har dedikerede Svelte-specifikke lint-regler, men den inkluderer vigtige overskrivelser for at forhindre falske-positive lint-fejl i `.svelte`-filer.
+
+## Installation
+
+Tilføj Svelte-konfigurationen til din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Oversigt
+
+Denne konfiguration:
+
+- **HTML-understøttelse**: Aktiverer eksperimentel fuld HTML-understøttelse med indrykning af script og style
+- **React-specifikke props**: Marker React-specifikke props som `className` og `htmlFor`, da Svelte bruger standard HTML-attributter (`class` og `for`)
+- **Overskrivelser for Svelte-filer**: Lempede regler for `.svelte`-filer for at håndtere Sveltes komponentstruktur
+
+## HTML-formatteringskonfiguration
+
+Svelte-forudindstillingen aktiverer eksperimentel HTML-understøttelse med særlig formatering for indlejrede scripts og styles:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Denne konfiguration:
+- **Eksperimentel fuld understøttelse**: Aktiverer Biomes eksperimentelle HTML-parsnings- og formateringsfunktioner for `.svelte`-filer
+- **Indryk script og style**: Indrykker korrekt kode inden i `<script>` og `<style>`-tags i Svelte-komponenter
+
+## Svelte-specifikke regler
+
+### Mistænkelige
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Forbyder React-specifikke props som `className` og `htmlFor` i Svelte. Brug `class` og `for` i stedet. |
+
+## Overskrivelser for Svelte-filer
+
+Følgende regler er deaktiveret for `.svelte`-filer for at forhindre falske positiver på grund af Biomes delvise understøttelse af Svelte-komponenter:
+
+### Korrekthed
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Tillader ubrugte variabler i `.svelte`-filer. Variabler i script-sektionen kan kun bruges i skabelonen. |
+| `noUnusedImports` | `off` | Tillader ubrugte imports i `.svelte`-filer. Importer kan kun bruges i skabelonsektionen. |
+
+### Stil
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `useConst` | `off` | Tillader `let` og `var`-deklarationer i `.svelte`-filer til reaktive erklæringer. |
+| `useImportType` | `off` | Deaktiverer krav om eksplicit importtype for bedre kompatibilitet med Sveltes build-system. |

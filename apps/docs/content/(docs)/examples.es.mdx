@@ -1,0 +1,139 @@
+---
+title: Ejemplos
+description: Ejemplos de antes y después de Ultracite en acción.
+---
+
+Para ilustrar las capacidades de Ultracite, aquí hay algunos ejemplos prácticos de problemas que detecta y corrige. Cada ejemplo muestra el código antes (con un problema) y después de aplicar Ultracite. Estos ejemplos demuestran cómo Ultracite mejora el código automáticamente.
+
+## Formateo automático de código
+
+### Antes (formateo desordenado)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+En este código, el espaciado y el estilo de concatenación están fuera de lugar. También está usando concatenación de cadenas en lugar de literales de plantilla, y mezcla comillas dobles con comillas simples.
+
+### Después (formateado)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+El formateador de Ultracite ha:
+
+- Formateado la función con saltos de línea adecuados para mejorar la legibilidad.
+- Convertido la concatenación de cadenas en un literal de plantilla (esto podría ser una corrección automática de una regla de lint que sugiere strings template para mayor legibilidad).
+- Estandarizado las comillas a backticks para la plantilla (y usaría comillas dobles de forma consistente en otros lugares si no fuese una plantilla).
+- Añadido un punto y coma al final de la sentencia `return`.
+- Asegurado el espaciado correcto alrededor de llaves y paréntesis.
+
+El desarrollador no reformateó el código manualmente: simplemente guardó el archivo y Ultracite se encargó del resto. El resultado es código más limpio y consistente.
+
+Ultracite también advertirá que `name` no tiene tipo y sugerirá añadir un tipo.
+
+## Aplicar igualdad estricta
+
+### Antes (posible error por igualdad laxa)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Aquí, el código está usando igualdad laxa (`==`) para comparar `response.status` con `200`. Usar igualdad laxa puede ser propenso a errores debido a la coerción de tipos (por ejemplo, `response.status` podría ser la cadena "200" y aun así pasar). Las reglas estrictas de Ultracite probablemente exigen usar `===` para las comparaciones.
+
+### Después (corrección automática de Ultracite aplicada)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite reemplazó automáticamente `== 200` por `=== 200`. Este pequeño cambio evita errores sutiles. La corrección se aplicó al guardar como parte de las acciones `source.fixAll.biome`. Una regla así (similar a `eqeqeq` de ESLint) asegura que los desarrolladores usen comprobaciones de igualdad estricta.
+
+Además, Ultracite también advertirá que `isValid` nunca se usa y sugerirá eliminarla.
+
+## Organizar y limpiar importaciones
+
+### Antes (importaciones desorganizadas)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Las importaciones aquí no están en orden alfabético, y la importación `helper` nunca se usa en el archivo.
+
+### Después (tras guardar con Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (a través de la función de organizar importaciones de Biome) ordenó las importaciones alfabéticamente por nombre de módulo. También eliminó automáticamente la importación no usada `helper`. La diferencia entre antes y después ocurre inmediatamente al guardar, garantizando que la sección de importaciones esté siempre ordenada:
+
+- No hay importaciones sin usar que desordenen la parte superior de tu archivo.
+- Orden determinista de las importaciones (para que los merges y diffs no se vean afectados por distintos órdenes de importación añadidos por diferentes desarrolladores).
+
+Esto conduce a un código más mantenible, especialmente en archivos con muchas importaciones.
+
+## Corrección de accesibilidad
+
+### Antes
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+El tipo por defecto de un botón es `submit`, lo que provoca el envío de un formulario cuando se coloca dentro de un elemento form. Probablemente este no sea el comportamiento que deseas en una aplicación React. Ultracite te advertirá sobre esto y ofrecerá una corrección rápida para cambiar el tipo a `button`.
+
+### Después (manual o corrección rápida)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+El tipo ahora es `button`, lo que evita que un formulario padre potencial se envíe cuando se hace clic en el botón.
+
+---
+
+Estos ejemplos demuestran cómo Ultracite mejora la calidad del código:
+
+- Consistencia de formato y estilo sin esfuerzo.
+- Correcciones automáticas para muchos problemas comunes (así que rara vez tendrás que arreglar cosas triviales a mano).
+- Identificación de problemas reales (para que puedas arreglarlos temprano en el desarrollo).
+
+Al usar Ultracite, tu código no solo se mantiene limpio, sino también menos propenso a errores y más accesible, gracias al conocimiento colectivo codificado en sus reglas.

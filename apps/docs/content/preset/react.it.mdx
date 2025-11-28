@@ -1,0 +1,61 @@
+---
+title: React
+description: Regole di lint specifiche per React per Ultracite.
+---
+
+La configurazione React include regole di lint specifiche per JSX, gli hook e i pattern dei componenti.
+
+## Installazione
+
+Aggiungi la configurazione React al tuo `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Panoramica
+
+Questa configurazione aggiunge regole specifiche per lo sviluppo con React:
+
+- **Regole JSX**: Imporre la sintassi e i pattern corretti per JSX
+- **Regole per gli hook**: Assicurare che gli hook di React siano usati correttamente
+- **Regole dei componenti**: Applicare le migliori pratiche per i componenti React
+- **Gestione della prop children**: Evitare l'uso improprio della prop children
+
+## Regole specifiche di React
+
+### Correttezza
+
+| Regola | Impostazione | Descrizione |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Impedire il passaggio di children come prop. I children dovrebbero essere nidificati tra i tag di apertura e chiusura. |
+| `noNestedComponentDefinitions` | `error` | Impedire definizioni di componenti all'interno di altri componenti. Questo causa render non necessari. |
+| `noReactPropAssignments` | `error` | Impedire la riassegnazione delle props nei componenti React. Le props devono essere trattate come immutabili. |
+| `noRenderReturnValue` | `error` | Impedire l'uso del valore di ritorno di `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Impedire che elementi void (come `<img>`, `<br>`) abbiano children. |
+| `useExhaustiveDependencies` | `error` | Forzare che tutte le dipendenze siano specificate correttamente negli hook React (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Garantire che tutti gli hook React siano chiamati dal livello superiore delle funzioni componente, non all'interno di cicli, condizioni o funzioni annidate. |
+| `useJsxKeyInIterable` | `error` | Assicurare che gli elementi negli iterable abbiano una prop `key` per il processo di reconciliation di React. |
+
+### Nursery
+
+| Regola | Impostazione | Descrizione |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Impedire l'uso della legacy `React.forwardRef`. Utilizzare ref come prop invece (React 19+). |
+
+### Stile
+
+| Regola | Impostazione | Descrizione |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Imporre l'uso di componenti funzionali anziché componenti basati su classi in React. |
+
+### Sospetti
+
+| Regola | Impostazione | Descrizione |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Evitare l'uso degli indici degli array come key. Gli indici non sono identificatori stabili e possono causare problemi con lo stato dei componenti. |
+| `noDuplicateJsxProps` | `error` | Impedire proprietà duplicate in JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Evitare punti e virgola che cambiano la semantica degli elementi JSX. |
+| `noReactSpecificProps` | `off` | Consentire prop specifiche di React come `className` e `htmlFor`. |

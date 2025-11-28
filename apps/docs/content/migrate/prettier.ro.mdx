@@ -1,0 +1,48 @@
+---
+title: Migrare de la Prettier
+description: Cum să migrați proiectul de la Prettier la Ultracite.
+---
+
+Dacă utilizați Prettier și doriți să treceți la configurația preconfigurată a Ultracite, acest ghid vă va ajuta să migrați menținând standardele de calitate ale codului.
+
+## De ce să migrați la Ultracite?
+
+- **Viteză fulgerătoare**: Biome (baza Ultracite) este construit pe Rust, mult mai rapid decât Prettier
+- **Fără configurare**: Sute de reguli preconfigurate, în locul configurării manuale a Prettier
+- **Instrument combinat**: Înlocuiește atât ESLint cât și Prettier cu un singur instrument
+- **Integrare AI**: Suport încorporat pentru editoare alimentate de AI (Cursor, Windsurf, GitHub Copilot)
+- **Siguranța tipurilor**: Reguli TypeScript cu controale stricte pentru null
+- **Standarde moderne**: Cele mai recente bune practici JavaScript/TypeScript
+
+## Înainte de a începe
+
+Asigurați-vă că aveți:
+
+- Un proiect existent care folosește Prettier
+- Node.js v14.18+ (se recomandă Node 18+)
+- Un fișier `package.json`
+
+## Configurare automată
+
+Executați [scriptul de configurare automat](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Acest lucru va:
+
+- Instalează Ultracite ca dependență
+- Îmbină fișierul tău `biome.json` / `biome.jsonc` existent cu presetul Ultracite
+- Îmbină fișierul tău `.vscode/settings.json` existent cu presetul Ultracite
+- Activează `strictNullChecks` în fișierul tău `tsconfig.json` (sau creează unul dacă nu există)
+- Păstrează regulile și setările personalizate
+- Configurează integrările pentru editor
+
+Asigurați-vă că alegeți să eliminați configurația existentă Prettier. Acest lucru va:
+
+- Elimină Prettier și orice dependențe asociate
+- Elimină orice fișiere de configurare Prettier
+- Elimină orice comenzi legate de Prettier din fișierul tău `.vscode/settings.json`
+
+După actualizare, s-ar putea să doriți să revizuiți fișierul `biome.json` / `biome.jsonc` pentru a elimina orice suprascrieri. În plus, reporniți editorul pentru a vă asigura că noua configurație este aplicată.

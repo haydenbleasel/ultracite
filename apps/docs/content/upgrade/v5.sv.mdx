@@ -1,0 +1,49 @@
+---
+title: Uppgradera till v5
+description: Hur du uppgraderar ditt projekt från Ultracite v4 till v5.
+---
+
+Ultracite v5 är en större utgåva med betydande förbättringar och kompatibilitetsbrytande ändringar. Denna guide hjälper dig att uppgradera din befintliga v4-konfiguration till v5.
+
+## Nyheter i v5
+
+- **Uppdaterat Biome**: Uppgraderat från v1.x till v2.x
+- **Nytt konfigurationsformat**: Byt från `biome.json` till `biome.jsonc`
+- **Förbättrad CLI**: Omskriven i TypeScript med bättre felhantering
+- **Editorintegrationer**: Inbyggt stöd för Cursor, Windsurf, Zed och GitHub Copilot
+- **Git Hooks**: Valfria integrationer inklusive Husky, lint-staged och lefthook
+- **Förbättrat schema**: Ny URL för schemat med bättre validering
+- **Förenklade VS Code-inställningar**: Sammanfogade filtyp-överskrifter till en enda rad
+
+## Migreringssteg
+
+### Automatisk migrering (rekommenderas)
+
+Det enklaste sättet att migrera är att köra det nya initieringskommandot:
+
+```package-install
+npx ultracite@latest init
+```
+
+Detta kommer att:
+- Uppdatera dina beroenden till de senaste versionerna
+- Uppdatera din `biome.json` eller `biome.jsonc`  
+- Uppdatera dina VS Code-inställningar
+- Erbjuda att ställa in AI-editorregler (Cursor, Windsurf, Zed, osv.)
+- Erbjuda att ställa in nya integrationer (Git hooks, lint-staged, osv.)
+
+Efter uppgraderingen kanske du vill granska din `biome.json` / `biome.jsonc`-fil för att ta bort eventuella överrider. Starta dessutom om din editor för att säkerställa att den nya konfigurationen tillämpas.
+
+Granska även Biome [uppgraderingsguide för v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) för mer information om schema- / regeländringar.
+
+### Manuell migrering
+
+Om du föredrar mer kontroll över processen, följ stegen i [Manuell migrering](/setup#manual-installation) genom att:
+
+- Installera de uppdaterade versionerna av Ultracite och Biome manuellt
+- Uppdatera din `biome.json`-fil till den nya schemaversionen
+- Uppdatera `.vscode/settings.json`-filen (valfritt)
+- Lägga till en fil med AI-redigeringsregler (valfritt)
+- Lägga till nya integrationer (valfritt)
+
+Efter migreringen, starta om din editor för att säkerställa att den nya konfigurationen tillämpas.

@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Regras de lint específicas do Remix para o Ultracite (também compatível com TanStack Router e React Router).
+---
+
+A configuração do Remix tem convenções de nomenclatura de ficheiros para ficheiros de rota. Esta configuração também é compatível com TanStack Router, React Router e outros sistemas de roteamento baseados em ficheiros.
+
+## Instalação
+
+Adicione a configuração do Remix ao seu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Visão geral
+
+Esta configuração fornece tratamento especial para ficheiros de rota que usam convenções de roteamento baseadas no sistema de ficheiros:
+
+- **Nomenclatura de Ficheiros de Rota**: Desativa convenções estritas de nomes de ficheiros para ficheiros de rota
+- **Padrões Flexíveis**: Suporta os padrões de nomenclatura de rotas do Remix (pontos, cifrões, sublinhados)
+- **Independente de Framework**: Funciona com Remix, TanStack Router, React Router e sistemas semelhantes
+
+## Substituições de Padrões de Ficheiros
+
+A configuração aplica substituições a ficheiros de rota com estes padrões:
+
+- `**/routes/**/*.{tsx,ts}` - rotas do Remix v1
+- `**/app/routes/**/*.{tsx,ts}` - rotas do Remix v2
+
+### Regras desativadas para ficheiros de rota
+
+| Regra | Definição | Descrição |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Desativa a aplicação obrigatória de nomes de ficheiro em kebab-case para ficheiros de rota. Permite padrões especiais de nomenclatura de rotas. |
+
+## Por que esta configuração existe
+
+Sistemas de roteamento baseados em ficheiros usam caracteres especiais nos nomes de ficheiros para representar padrões de roteamento:
+
+- `.` (ponto) - Representa segmentos de caminho (por exemplo, `posts.new.tsx` → `/posts/new`)
+- `$` (cifrão) - Representa segmentos dinâmicos (por exemplo, `posts.$id.tsx` → `/posts/:id`)
+- `_` (sublinhado) - Representa rotas de layout ou rotas sem caminho
+
+Estas convenções de nomenclatura entram em conflito com o requisito padrão do Ultracite de nomes de ficheiro em kebab-case, por isso esta configuração desativa essa regra especificamente para ficheiros de rota.

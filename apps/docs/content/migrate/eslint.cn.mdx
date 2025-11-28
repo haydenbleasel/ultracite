@@ -1,0 +1,48 @@
+---
+title: 从 ESLint 迁移
+description: 如何将您的项目从 ESLint 迁移到 Ultracite。
+---
+
+如果您正在使用 ESLint 并希望切换到 Ultracite 的预配置设置，本指南将帮助您在保持代码质量标准的同时完成迁移。
+
+## 为什么迁移到 Ultracite？
+
+- **闪电般的速度**：Biome（Ultracite 的基础）基于 Rust，比 ESLint 快得多
+- **零配置**：数百条预配置规则，避免手动设置 ESLint
+- **合并工具**：用单一工具替代 ESLint 和 Prettier
+- **AI 集成**：内置对 AI 驱动编辑器的支持（Cursor、Windsurf、GitHub Copilot）
+- **类型安全**：全面的 TypeScript 规则并启用 `strictNullChecks`
+- **现代标准**：最新的 JavaScript/TypeScript 最佳实践
+
+## 开始之前
+
+请确保您具备：
+
+- 已使用 ESLint 的现有项目
+- Node.js v14.18+（推荐 Node 18+）
+- 一个 `package.json` 文件
+
+## 自动设置
+
+运行 [自动设置脚本](/setup#automatic-installation)。
+
+```package-install
+npx ultracite init
+```
+
+这将：
+
+- 将 Ultracite 安装为依赖项
+- 将您现有的 `biome.json` / `biome.jsonc` 与 Ultracite 的预设合并
+- 将您现有的 `.vscode/settings.json` 与 Ultracite 的预设合并
+- 在您的 `tsconfig.json` 文件中启用 `strictNullChecks`（如果不存在则创建一个）
+- 保留您的自定义规则和设置
+- 设置编辑器集成
+
+请确保选择移除现有的 `ESLint` 配置。这将：
+
+- 移除 ESLint 及其相关依赖
+- 删除任何 ESLint 配置文件
+- 从您的 `.vscode/settings.json` 文件中删除任何与 ESLint 相关的命令
+
+升级完成后，您可能需要查看您的 `biome.json` / `biome.jsonc` 文件以移除任何覆盖项。此外，重启编辑器以确保新配置生效。

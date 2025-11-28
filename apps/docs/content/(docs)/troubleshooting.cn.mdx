@@ -1,0 +1,89 @@
+---
+title: 故障排除
+description: 本节介绍如何对 Ultracite 进行故障排查。
+---
+
+尽管 Ultracite 的目标是简化 linting/格式化，但在设置和使用过程中你可能会遇到一些问题或有疑问。以下是一些常见问题及其解决方案：
+
+## “Ultracite 在 VS Code 中保存时没有格式化。”
+
+请再次确认你已安装并启用 Biome VS Code 扩展。验证你的 `.vscode/settings.json` 包含 `"editor.defaultFormatter": "biomejs.biome"` 和 `"editor.codeActionsOnSave"` 条目，如 [设置](/setup) 所示。
+
+还要确保没有冲突的格式化或 lint 扩展被启用（例如，如果你仍然启用 Prettier 扩展或 ESLint 扩展，它们可能会干扰或优先处理）。
+
+如果另一个格式化程序抢占了文件，你可能需要禁用 VS Code 的内置 Format On Save。配置正确并启用 Biome 扩展后，保存 Ultracite 覆盖的文件（js/ts/jsx/tsx/json/css）应触发格式化。如果没有，尝试手动运行 “Format Document” 命令，查看是否使用了 Biome 或是否出现任何错误。
+
+## “我安装了 Ultracite，但 VS Code 仍然使用 ESLint 或 Prettier。”
+
+确保你已删除或关闭旧的配置。例如，如果项目中有 `.eslintrc` 或 `.prettierrc`，VS Code 的 ESLint 扩展可能仍然处于活动状态并导致重复的诊断信息。
+
+切换到 Ultracite 时，建议移除这些配置（或至少禁用相应扩展）以避免混淆。基本上，让 Ultracite/Biome 作为唯一的 linter/formatter 接管。
+
+如果你出于某种原因想保留 ESLint，不要为 ESLint 启用 “fix on save” ——否则两者都可能尝试修复代码（尽管如果配置得当，Biome 应该与 Prettier 的风格一致以避免冲突）。
+
+总的来说，完全迁移到 Ultracite 意味着你不再需要 ESLint / Prettier 的配置文件。
+
+## “Ultracite (Biome) 对我不想检查的文件抛出解析错误。”
+
+一个常见示例是安装像 [`shadcn/ui`](https://ui.shadcn.com/) 这样的 UI 库组件。虽然这些组件设计上可修改，但你可能希望保留原始源码以便更新。在这种情况下，你会想要禁用这些文件的 lint。
+
+为此，在你的 `biome.jsonc` 中添加模式以排除这些文件，例如：
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+默认情况下，Biome 会忽略 `node_modules`，但如果你是从那里手动打开了某个文件，扩展可能仍会尝试对其进行 lint。通常，忽略体积大、由生成器生成的文件或第三方代码 —— 这些不必 lint。
+
+另一个原因可能是文件中使用了 Biome 无法解析的实验性语法（例如尚未被 Biome 支持的 stage-3 提案）。在这种情况下，要么避免使用该语法，要么查看是否可以配置 Biome（有时在配置中添加 `"parser.allowSomething": true` 如果可用的话）。
+
+查看 Biome 的 issue 跟踪器以获取该语法的支持情况。
+
+## “我看到同一个问题出现双重错误。”
+
+如果同时运行多个 linter（例如 ESLint 和 Ultracite），可能会发生这种情况。也可能是 VS Code 的 TypeScript 检查器和 Biome 同时报告相同的 TS 错误。为了解决，针对每类检查标准化使用一个工具。
+
+如果使用 Ultracite，请禁用其他 linter。对于 TypeScript 类型错误，VS Code 内置的 TS 服务器会显示它们（例如类型问题的红色波浪线）——Biome 也可以显示基于类型的 lint 问题。通常两者都显示相同的问题是可以的。但如果你觉得烦人，可以关闭 VS Code 的 TS 验证器（在设置中 `"typescript.validate.enable": false`）并依赖 Biome，或反之亦然。
+
+在大多数设置中，保持两者开启是可以的；它们通常是互补的（类型错误 vs lint 错误）。只需确保你没有同时启用两个具有重叠功能的 linter（比如 ESLint 和 Biome 同时做 lint）。
+
+## “由于 Ultracite，pre-commit 钩子/CI 失败。”
+
+如果你的 pre-commit 钩子运行 `ultracite` 并失败，说明仍有未自动修复的问题（或者有人绕过了运行它）。解决此问题的最佳方法是在本地运行 `npx ultracite` 并检查输出。它要么会修复问题（这时只需暂存更改并重新提交），要么报告需要手动修复的错误。
+
+修复这些问题，然后提交。如果 CI 在运行 `ultracite --check` 时失败，同样在本地使用 `--check` 运行以查看发现的问题，或不使用 `--check` 运行以自动修复并提交结果。简而言之，将 Ultracite 的失败视为测试失败 —— 需要在代码中修正。
+
+## “启用 Ultracite 后我收到关于 `strictNullChecks` 或类型问题的错误。”
+
+Ultracite 假定 TypeScript 的严格性已启用。如果你没有启用 strictNullChecks（或完整的 strict），你可能会收到大量与 TypeScript 相关的 lint 警告（例如，抱怨潜在的未定义使用，而由于松散的设置，TS 无法捕获）。
+
+解决方法是按照建议在 `tsconfig` 中启用这些严格标志。如果出于某些原因无法启用（遗留原因），你可能需要在 Ultracite 中禁用某些假定严格性的规则。但强烈建议启用 TS strict 模式 —— 这将提升代码质量，也符合 Ultracite 的理念。
+
+## “Ultracite 对我们团队来说太严格（规则太多）——我可以放宽吗？”
+
+可以。虽然 Ultracite 的价值在于严格性，但你可以覆盖规则。如果开发者被警告淹没了，先找出哪些规则造成了摩擦。可能是风格偏好，或者对你们的场景没有意义。你可以在配置中将这些规则设置为 `warn` 或 `off`。
+
+例如，如果你觉得无障碍（accessibility）规则对内部工具来说噪音太大，可以禁用其中的一些。或者如果你不同意某种被强制的代码风格，也可以进行调整（尽管风格分歧正是 Ultracite 试图消除的）。
+
+关键在于与团队沟通 —— 在禁用规则之前解释规则存在的原因；如果仍然不想要，再自定义配置。Ultracite 不是一个黑箱 —— 你可以通过 `biome.jsonc` 完全控制。
+
+更多关于如何覆盖规则的信息，请查看 [配置](/configuration) 部分。
+
+## “Ultracite 有哪些已知限制或错误需要注意？”
+
+Ultracite（具体为 Biome）并不覆盖 ESLint + Prettier + Stylelint 所能提供的一切，尤其是如果你依赖某些插件。例如，Stylelint 曾经提供了非常全面的 CSS lint 规则；Biome 当前为 CSS 提供格式化和基础 lint，但并未包含完整的 Stylelint 规则集。
+
+如果你的项目依赖特定的 Stylelint 检查（比如属性排序或 CSS 的特定命名规则），请注意 Ultracite 不会强制这些规则。你可以在绝对必要时单独整合 Stylelint，或者等待 Biome 未来可能引入更多的 CSS lint 功能。
+
+---
+
+如果遇到此处未涵盖的问题，考虑查看 Ultracite 的 GitHub 问题页面或 Biome 的文档。可能已有修复或变通方法可用。社区正在成长，因此支持也会随着时间变得更好。

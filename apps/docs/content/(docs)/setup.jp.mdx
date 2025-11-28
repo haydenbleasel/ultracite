@@ -1,0 +1,63 @@
+---
+title: セットアップ
+description: プロジェクトに Ultracite をインストールする方法。
+---
+
+Ultracite は主要なパッケージマネージャーすべてでインストールできます。Node.js v14.18+（Node 18+ 推奨）と `package.json` ファイルを含むプロジェクトが必要です。
+
+## インストール
+
+開始する最も簡単な方法は Ultracite の `init` スクリプトを実行することで、必要なパッケージをインストールし、設定ファイルをセットアップします。プロジェクトのディレクトリで、次を実行してください:
+
+```package-install
+npx ultracite init
+```
+
+`init` コマンドには任意で次のフラグを渡せます:
+
+| Flag                | 説明                                             | オプション                                                                 |
+|---------------------|--------------------------------------------------|---------------------------------------------------------------------------|
+| `--pm`              | 使用するパッケージマネージャー。                 | `pnpm`, `bun`, `yarn`, `npm`                                              |
+| `--frameworks`      | 設定するフレームワーク。                         | カンマ区切り: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | 設定するエディタ。                               | カンマ区切り: `vscode`, `zed`                                              |
+| `--agents`          | 設定する AI エージェント。                       | カンマ区切り: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | 設定するエージェントフック。                     | カンマ区切り: `cursor`, `claude`                                           |
+| `--integrations`    | 追加でセットアップする統合。                     | カンマ区切り: `husky`, `lefthook`, `lint-staged`                           |
+| `--migrate`         | 削除するマイグレーションツール。                 | カンマ区切り: `eslint`, `prettier`（依存関係、設定ファイル、エディタ設定を削除します） |
+| `--skip-install`    | 依存関係のインストールをスキップします。         | （値は不要）                                                               |
+| `--quiet`           | 対話プロンプトや表示出力を抑制します。            | （値は不要、CI 環境では自動的に有効）                                     |
+
+### プログラムによる使用
+
+Ultracite をプログラム的に呼び出す必要があるツール（スキャフォールディング CLI など）では、すべての対話型プロンプトと表示出力を抑制するために `--quiet` フラグを使用できます:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+`CI` 環境変数が `true` または `1` に設定されていると `--quiet` フラグは自動的に有効になり、CI/CD パイプラインでの使用に適しています:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+静かモードでは、Ultracite は次のことを行います:
+- すべての対話型プロンプトをスキップする
+- すべてのオプションに対して妥当なデフォルトを使用する
+- ASCII アート、スピナー、およびログメッセージを抑制する
+- コアの Biome 設定のみを作成する
+- 成功時はコード 0、失敗時はコード 1 でクリーンに終了する
+
+## 拡張機能
+
+Visual Studio Code を使用している場合は、保存時のフォーマット/修正を可能にする公式の [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) 拡張機能をインストールしてください:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+さらに、Tailwind CSS を使用している場合は、クラスのソートやヒントのために [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) 拡張機能をインストールすることをおすすめします:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

@@ -1,0 +1,72 @@
+---
+title: Bruk
+description: Denne seksjonen beskriver hvordan du bruker Ultracite i det daglige — og dekker kommandolinjegrensesnittet, redaktørintegrasjon og typiske arbeidsflyter.
+---
+
+## IDE-integrasjon
+
+Ultracite fungerer best når det er integrert i redaktøren din, slik at du får umiddelbar tilbakemelding mens du skriver kode. Det er designet for å kjøre automatisk ved lagring. For å teste det, åpne et prosjekt i IDE-en din. Når du redigerer filer, bør du se at formateringen trer i kraft ved lagring. Prøv å introdusere en liten kode-stilfeil (som et ekstra semikolon eller en feil innrykket linje) og trykk Lagre – Ultracite (Biome) vil umiddelbart reformattere filen.
+
+Hvis du introduserer et vanlig lint-problem (for eksempel en ubrukt variabel), kan du se en bølgete understrek eller en advarsel i Problempanelet; ved lagring vil Ultracite forsøke å fikse det hvis det kan auto-rettes (for eksempel fjerne en ubrukt import) eller ellers la en advarsel stå for at du skal ta tak i det.
+
+### Øyeblikkelig formatering
+
+Hver gang du lagrer en fil, formaterer Biome (med Ultracite sin konfigurasjon) filen. Du trenger ikke å kjøre en separat Prettier eller bekymre deg for formatering – det blir tatt hånd om.
+
+Takket være `codeActionsOnSave`-innstillingene vil VS Code også bruke Biome sin handling «fix all» ved lagring. Dette betyr at enhver lint-regel som har en automatisk fiks (som å konvertere `!=` til `!==`, legge til manglende parenteser, fikse importrekkefølge, osv.) vil bli anvendt. Det er som om du kjørte `--fix` med ESLint automatisk.
+
+Vi har til og med aktivert `formatOnPaste` – så hvis du limer inn kode fra andre steder, vil den umiddelbart bli formatert for å matche stilen din.
+
+Hovedfordelen her er umiddelbar tilbakemelding. Du skriver kode i VS Code, og Ultracite holder den kontinuerlig ren. Over tid vil du merke at du bruker lite eller ingen tid på å fikse lint-feil – Ultracite enten fikser dem for deg eller påpeker dem tidlig. Dette gir en smidig utviklingsflyt der kode-stil og mindre problemer aldri hoper seg opp.
+
+### Integrasjon med Problempanelet
+
+Alle problemer som gjenstår (som krever din oppmerksomhet) vil vises i Problempanelet. For eksempel, hvis Ultracite har en regel som forbyr noe eller finner en feil den ikke kan fikse (si, du brukte et avskrudd API eller glemte å håndtere en Promise-rejection), vil det listes som en feil eller advarsel. Du kan klikke på den for å hoppe til stedet i koden.
+
+### Code lenses / Hurtigfikser
+
+I mange tilfeller gir VS Code-utvidelsen for Biome hurtigfikser. Hvis du ser et gult lyspæreikon eller et forslagsprompt, kan du også bruke fikser manuelt. For eksempel, hvis en import er ubrukt, kan du få en hurtigfiks for å fjerne den (hvis den ikke allerede ble fjernet ved lagring).
+
+## CLI-bruk
+
+Ultracite leveres med et praktisk CLI (kalt `ultracite` når det er installert). Her er vanlige måter å bruke det på.
+
+### Sjekke kode
+
+`check`-kommandoen pakker inn Biome sin `check`-kommando, som kjører linting uten å fikse filer.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Du kan bruke `--diagnostic-level`-filteret for å vise kun feil eller advarsler:
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Fikse kode
+
+`fix`-kommandoen pakker inn Biome sin `check --write`-kommando, som kjører linting og fikser filer.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Du kan også bruke usikre fikser ved å kjøre:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Validere oppsettet
+
+`doctor`-kommandoen sjekker oppsettet ditt for problemer og gir anbefalinger. Dette er nyttig å kjøre etter installasjon av Ultracite for å sikre at alt er konfigurert riktig.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

@@ -1,0 +1,68 @@
+---
+title: Hócaí
+description: Conas Ultracite a chomhtháthú le cúntóirí códaithe AI trí hócaí eagarthóra.
+---
+
+Is féidir le Ultracite cód a fhormáidiú agus a shocrú go huathoibríoch tar éis do chúntóirí códaithe AI eagruithe a dhéanamh trí hócaí eagarthóra. Cinntíonn sé seo go cloíonn gach cód a ghineann an AI le caighdeáin do thionscadail gan idirghabháil láimhe.
+
+Oibríonn na hócaí i dteannta le linting agus formáidiú Biome. Tar éis do chúntóir códaithe AI comhad a eagarthóireacht, rithfidh an hóc go huathoibríoch `npx ultracite fix` chun an cód a fhormáidiú agus chun saincheisteanna linting inaitheanta atá in ann a dheisiú a shocrú. Cinntíonn an cur chuige dúbailte seo giniúint chliste cód (trí rialacha AI) agus cáilíocht chód uathoibrithe (trí hócaí).
+
+> **Nóta:** Tá hócaí scartha ó rialacha códaithe AI. Socraíonn an fflag `--agents` rialacha códaithe AI, agus leagann an fflag `--hooks` formáidiú uathoibríoch i bhfeidhm tar éis eagruithe comhaid.
+
+## Socrú
+
+### Socrú Uathoibríoch
+
+Nuair a rithfidh tú `npx ultracite init`, cuirfear ar do chumas roghnú cé na hócaí eagarthóra atá uait a ghníomhachtú:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+Cruthóidh sé seo an comhad cumraíochta hóca cuí i bhfillteán do thionscadail.
+
+### Socrú Láimhe
+
+Más mian leat socruithe a dhéanamh de láimh nó hócaí a chur leis tar éis an tosaigh, rith:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Ar shlí eile, is féidir leat comhaid chumraíochta hóca a chruthú nó a chur in eagar de láimh i bhfillteán do thionscadail agus an t-ordú hóca cuí a chur leis.
+
+## Eagarthóirí Tacaithe
+
+| Eagarthóir  | Suíomh Comhaid Hóca       | Doiciméadú                                                              |
+| ----------- | ------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`      | [Hócaí Cursor](https://cursor.com/docs/agent/hooks)                     |
+| Claude Code | `.claude/settings.json`   | [Hócaí Claude Code](https://docs.claude.com/en/docs/claude-code/hooks)  |
+
+## Conas a Oibríonn sé
+
+1. **Rith Uathoibríoch**: Tar éis don ghníomhaire AI comhad a eagarthóireacht, rithfidh an hóc go huathoibríoch `npx ultracite fix`
+2. **Formáidiú Chóid**: Formáidíonn Ultracite an cód eagarthaithe de réir do chumraíochta Biome
+3. **Deisiúcháin Linting**: Réiteofar saincheisteanna linting inaitheanta le haghaidh uathoibriú go huathoibríoch
+4. **Comhtháthú Réidh**: Tarlaíonn an próiseas go trédhearcach gan do shruth oibre a chur isteach
+
+## Buntáistí
+
+Soláthraíonn úsáid hócaí eagarthóra Ultracite roinnt buntáistí:
+
+- **Comhsheasmhacht**: Formáidítear gach cód a ghineann an AI go huathoibríoch chun teacht le do stíl
+- **Cáilíocht**: Déantar saincheisteanna linting a shocrú láithreach tar éis giniúint chód
+- **Éifeachtúlacht**: Níl gá formáidóirí nó linters a rith de láimh tar éis eagruithe AI
+- **Caighdeáin**: Cinntíonn sé i gcónaí go gcomhlíonann cód a ghineann an AI caighdeáin an tionscadail
+- **Commitanna Glana**: Tá an cód formáidithe i gceart sula bhféachann tú air fiú
+
+## Saincheapadh
+
+Comhtháthaíonn Ultracite go cliste le cumraíochtaí hóca atá ann cheana:
+
+- **Coinníonn sé na hócaí atá ann cheana**: Fanann na hócaí agus a n-orduithe uile mar atá
+- **Seachnaíonn sé cóipeanna dúblacha**: Má tá Ultracite cumraithe cheana, ní chuirfear é leis arís
+- **Neamhscriosach**: Coinnítear struchtúr do chumraíochta hóca atá ann cheana
+
+Is féidir leat freisin iompar na hóca a shaincheapadh trí chomhaid chumraíochta na hócaí a mhodhnú go díreach má theastaíonn uait orduithe formáideoireachta difriúla nó gníomhartha breise i ndiaidh eagruithe.

@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Konfiguracija, specifična za Angular, za Ultracite.
+---
+
+Konfiguracija za Angular vsebuje nastavitve HTML-parserja, specifične za Angular, ki podpirajo sintakso Angularovih predlog.
+
+## Namestitev
+
+Dodajte konfiguracijo za Angular v vašo datoteko `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Pregled
+
+Ta konfiguracija doda podporo sintaksi Angularovih predlog:
+
+- **HTML interpolacija**: Omogoča parsiranje interpolacijske sintakse Angularovih predlog (`{{ }}`)
+- **Direktive predlog**: Podpira Angularjeve direktive, kot so `*ngIf`, `*ngFor`, itd.
+- **Vezava lastnosti**: Obdeluje sintakso vezave lastnosti `[property]="value"`
+- **Vezava dogodkov**: Podpira sintakso vezave dogodkov `(event)="handler()"`
+
+## Konfiguracija
+
+Prednastavitev za Angular konfigurira HTML-parser, da prepozna interpolacijo Angularovih predlog:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+To omogoča Biomeu, da pravilno razčleni in formatira predloge Angular komponent, ne da bi interpolacijske sintakse obravnaval kot napake.

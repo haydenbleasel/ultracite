@@ -1,0 +1,61 @@
+---
+title: React
+description: React-spezifische Linting-Regeln für Ultracite.
+---
+
+Die React-Konfiguration enthält React-spezifische Linting-Regeln für JSX, Hooks und Komponentenmuster.
+
+## Installation
+
+Fügen Sie die React-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration fügt Regeln hinzu, die speziell für die React-Entwicklung gelten:
+
+- **JSX-Regeln**: Erzwingt korrekte JSX-Syntax und -Muster
+- **Hooks-Regeln**: Stellt sicher, dass React-Hooks korrekt verwendet werden
+- **Komponenten-Regeln**: Erzwingt Best Practices für React-Komponenten
+- **Umgang mit Children**: Verhindert unsachgemäße Verwendung der children-Prop
+
+## React-spezifische Regeln
+
+### Korrektheit
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Verhindert das Weitergeben von children als Props. children sollten zwischen dem öffnenden und schließenden Tag verschachtelt werden. |
+| `noNestedComponentDefinitions` | `error` | Verhindert Komponenten-Definitionen innerhalb anderer Komponenten. Dies verursacht unnötige erneute Renderings. |
+| `noReactPropAssignments` | `error` | Verhindert das Neu-Zuweisen von props in React-Komponenten. Props sollten als unveränderlich behandelt werden. |
+| `noRenderReturnValue` | `error` | Verhindert die Verwendung des Rückgabewerts von `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Verhindert, dass void-Elemente (wie `<img>`, `<br>`) Kinder haben. |
+| `useExhaustiveDependencies` | `error` | Stellt sicher, dass alle Abhängigkeiten in React-Hooks (useEffect, useCallback, useMemo) korrekt angegeben sind. |
+| `useHookAtTopLevel` | `error` | Stellt sicher, dass alle React-Hooks auf der obersten Ebene von Komponentenfunktionen aufgerufen werden, nicht innerhalb von Schleifen, Bedingungen oder verschachtelten Funktionen. |
+| `useJsxKeyInIterable` | `error` | Stellt sicher, dass Elemente in Iterables eine `key`-Prop für die Reconciliation von React haben. |
+
+### Experimentell
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Verhindert die Verwendung des veralteten `React.forwardRef`. Verwenden Sie stattdessen ref als Prop (React 19+). |
+
+### Stil
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Erzwingt die Verwendung von Funktionskomponenten gegenüber Klassenkomponenten in React. |
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Verhindert die Verwendung von Array-Indizes als Keys. Array-Indizes sind keine stabilen Bezeichner und können Probleme mit dem Komponentenstatus verursachen. |
+| `noDuplicateJsxProps` | `error` | Verhindert doppelte Eigenschaften in JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Verhindert Semikolons, die die Semantik von JSX-Elementen verändern. |
+| `noReactSpecificProps` | `off` | Erlaubt React-spezifische Props wie `className` und `htmlFor`. |

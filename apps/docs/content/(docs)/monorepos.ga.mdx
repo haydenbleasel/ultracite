@@ -1,0 +1,48 @@
+---
+title: Monorepos
+description: Conas Ultracite a úsáid laistigh de monorepo.
+---
+
+Tá Ultracite deartha chun oibriú láithreach le monorepos. Seo conas é a úsáid le Turborepo.
+
+## Cumraíocht
+
+Nuair a bheidh tú ag tosú Ultracite, cruthóidh sé comhad `biome.jsonc` i fréamh do stór. Úsáidfear an comhad seo chun Ultracite a chumrú do do mhonorepo iomlán.
+
+```
+my-turborepo/
+├── apps
+├── packages
+├── turbo.json
+└── biome.jsonc
+```
+
+## Scripteanna a chur leis
+
+Mar gheall ar cé chomh tapa is atá Biome, is féidir leat script fréimhe a úsáid seachas scripteanna ar leith a chruthú i ngach ceann de do phacáistí.
+
+Is féidir leat na scripteanna `check` agus `fix` a chur le do chomhad `package.json`.
+
+```json title="package.json"
+{
+  "scripts": {
+    "check": "npx ultracite@latest check",
+    "fix": "npx ultracite@latest fix"
+  }
+}
+```
+
+Go roghnach, is féidir leat na scripteanna `check` agus `fix` a chur freisin le do chomhad `turbo.json`.
+
+```json title="turbo.json"
+{
+  "tasks": {
+    "//#check": {},
+    "//#fix": {
+      "cache": false
+    }
+  }
+}
+```
+
+Beidh tú in ann na scripteanna seo a rith anois ag úsáid `turbo run check` agus `turbo run fix`.

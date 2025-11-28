@@ -1,0 +1,72 @@
+---
+title: Kurallar
+description: Ultracite'i düzenleyici kuralları aracılığıyla yapay zeka kodlama asistanlarıyla nasıl entegre edeceğiniz.
+---
+
+Ultracite, düzenleyiciye özgü kural dosyalarını otomatik olarak oluşturarak yapay zeka kodlama asistanlarıyla sorunsuz entegrasyon sağlar. Bu kurallar, yapay zeka kodlama asistanlarının en iyi uygulamalara uyan, daha tutarlı ve daha kaliteli kod yazmasına yardımcı olur.
+
+Düzenleyici kuralları, Biome'un linting ve biçimlendirmesiyle birlikte çalışır. Biome kod biçimlendirmesini sağlar ve sözdizimi hatalarını yakalarken, düzenleyici kuralları yapay zeka kodlama asistanlarını baştan daha iyi kod yazmaları için yönlendirir ve sonradan düzeltme gereksinimini azaltır.
+
+Bu çift yönlü yaklaşım hem otomatik kod kalitesini (Biome aracılığıyla) hem de akıllı kod üretimini (yapay zeka kodlama kuralları aracılığıyla) garanti eder.
+
+## Kurulum
+
+### Otomatik Kurulum
+
+When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+Bu, proje dizininizde ilgili dosyayı oluşturacaktır.
+
+### Manuel Kurulum
+
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [bu içeriği](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+
+## Desteklenen Editörler
+
+| Editör           | Kural Dosyası Konumu             |
+| ---------------  | -------------------------------- |
+| GitHub Copilot   | `.github/copilot-instructions.md`|
+| Cursor           | `.cursor/rules/ultracite.mdc`    |
+| Windsurf         | `.windsurf/rules/ultracite.md`   |
+| Zed              | `.rules`                         |
+| Claude Code      | `.claude/CLAUDE.md`              |
+| OpenAI Codex     | `AGENTS.md`                      |
+| Kiro IDE         | `.kiro/steering/ultracite.md`    |
+| Cline            | `.clinerules`                    |
+| AMP              | `AGENT.md`                       |
+| Aider            | `ultracite.md`                   |
+| Firebase Studio  | `.idx/airules.md`                |
+| Open Hands       | `.openhands/microagents/repo.md` |
+| Gemini CLI       | `GEMINI.md`                      |
+| Junie            | `.junie/guidelines.md`           |
+| Augment Code     | `.augment/rules/ultracite.md`    |
+| Kilo Code        | `.kilocode/rules/ultracite.md`   |
+| Codename Goose   | `.goosehints`                    |
+| Roo Code         | `.roo/rules/ultracite.md`        |
+| Warp             | `WARP.md`                        |
+
+## Faydalar
+
+Ultracite düzenleyici kurallarını kullanmanın çeşitli avantajları vardır:
+
+- **Tutarlılık**: Tüm yapay zeka tarafından üretilen kod aynı konvansiyonları takip eder
+- **Kalite**: Kurallar en iyi uygulamaları uygular ve yaygın hataları önler
+- **Erişilebilirlik**: Yerleşik erişilebilirlik yönergeleri kapsayıcı kod sağlamayı garanti eder
+- **Performans**: Kurallar verimli desenleri teşvik eder ve anti-desenlerden kaçınır
+- **Güvenlik**: Yönergeler yaygın güvenlik açıklarının önlenmesine yardımcı olur
+
+## Özelleştirme
+
+Varsayılan kurallar kapsamlı olsa da, özel ihtiyaçlarınıza göre bunları özelleştirebilirsiniz:
+
+1. **Mevcut kuralları düzenleyin**: Kural dosyalarını doğrudan düzenleyin
+2. **Proje-özgü kurallar ekleyin**: Ek yönergeler ekleyin
+3. **Kuralları devre dışı bırakın**: Projenize uymayan kuralları kaldırın veya yorum satırı yapın

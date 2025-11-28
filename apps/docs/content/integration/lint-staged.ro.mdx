@@ -1,0 +1,151 @@
+---
+title: lint-staged
+description: Rulează automat Ultracite pe fișierele Git staged folosind lint-staged
+---
+
+Ultracite se integrează perfect cu [lint-staged](https://github.com/okonet/lint-staged) pentru a formata și a verifica automat codul tău înainte de fiecare commit. Astfel se asigură că doar cod curat, formatat corect, ajunge în repository-ul tău.
+
+## Ce este lint-staged?
+
+lint-staged este un instrument care rulează linters și formatoare pe fișierele Git aflate în staging. Este deosebit de util deoarece:
+
+- Procesează doar fișierele care sunt efectiv comise
+- Previne intrarea în repository a codului formatat necorespunzător
+- Rulează rapid deoarece verifică doar fișierele modificate
+- Se integrează perfect cu hook-urile Git
+
+## Cum folosește Ultracite lint-staged
+
+Când rulezi `npx ultracite init`, dacă selectezi opțiunea lint-staged, Ultracite automat:
+
+1. **Instalează lint-staged** ca dependență de dezvoltare
+2. **Creează sau actualizează** configurația ta lint-staged
+3. **Configurează formatorul** să ruleze pe tipurile de fișiere relevante
+
+Configurația implicită rulează `npx ultracite fix` pentru următoarele tipuri de fișiere:
+- Fișiere JavaScript/TypeScript (`.js`, `.jsx`, `.ts`, `.tsx`)
+- Fișiere JSON (`.json`, `.jsonc`)
+- Fișiere CSS (`.css`, `.scss`)
+- Fișiere Markdown (`.md`, `.mdx`)
+
+## Formate de configurare acceptate
+
+Integrarea Ultracite cu lint-staged acceptă toate formatele standard de configurare lint-staged:
+
+### package.json
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+### .lintstagedrc.json
+
+```json title=".lintstagedrc.json"
+{
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+}
+```
+
+### .lintstagedrc.js (CommonJS)
+
+```javascript title=".lintstagedrc.js"
+module.exports = {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.mjs (ES Modules)
+
+```javascript title=".lintstagedrc.mjs"
+export default {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.yaml
+
+```yaml title=".lintstagedrc.yaml"
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - 'npx ultracite fix'
+```
+
+## Combinare inteligentă a configurațiilor
+
+Dacă ai deja o configurație lint-staged, Ultracite va:
+
+- **Detecta** formatul configurației tale existente
+- **Îmbina** regulile Ultracite cu regulile tale existente
+- **Păstra** configurațiile tale personalizate
+- **Actualiza** fișierul direct în loc
+
+Asta înseamnă că poți rula în siguranță `npx ultracite init` chiar dacă ai deja lint-staged configurat.
+
+## Cum funcționează
+
+1. **Hook pre-commit**: lint-staged rulează înainte de fiecare commit prin Husky  
+2. **Detectarea fișierelor**: Doar fișierele staged care se potrivesc pattern-urilor sunt procesate  
+3. **Comanda de formatare**: `npx ultracite fix` rulează pentru fiecare fișier care se potrivește  
+4. **Remediere automată**: Biome remediază automat problemele acolo unde este posibil  
+5. **Re-adăugare în staging**: Fișierele corectate sunt re-adăugate automat pentru commit
+
+## Configurare manuală
+
+Dacă ai nevoie să personalizezi setup-ul lint-staged, poți modifica configurația după inițializare:
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite fix"],
+    "*.{css,scss}": ["npx ultracite fix", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+## Integrarea comenzilor
+
+Integrarea cu lint-staged funcționează cu structura de comenzi Ultracite:
+
+- **`npx ultracite fix`**: Rulează Biome cu remediere automată (folosit de lint-staged)  
+- **`npx ultracite check`**: Rulează Biome fără remediere automată (pentru CI/verificări manuale)
+
+## Depanare
+
+### Configurație negăsită
+Dacă vezi erori legate de lipsa configurației lint-staged:
+
+```bash
+npx ultracite init  # Re-run initialization
+```
+
+### Probleme ESM/CommonJS
+Ultracite detectează automat tipul proiectului tău și creează formatul de configurație potrivit:
+
+- **Proiecte ESM** (cu `"type": "module"` în package.json) primesc configurații `.mjs`  
+- **Proiecte CommonJS** primesc configurații `.cjs`  
+- **Soluție de rezervă**: Creează `.lintstagedrc.json` dacă detectarea modulului eșuează
+
+### Conflicte cu configurațiile existente
+Dacă ai configurații existente complexe, s-ar putea să fie nevoie să le îmbini manual:
+
+1. Fă un backup al configurației lint-staged existente  
+2. Rulează `npx ultracite init`  
+3. Îmbină manual orice reguli personalizate pe care trebuie să le păstrezi
+
+## Bune practici
+
+1. **Păstreaz-o rapidă**: Rulează în lint-staged doar verificările esențiale  
+2. **Folosește pattern-uri specifice**: Vizează doar fișierele care necesită procesare  
+3. **Combină cu CI**: Folosește lint-staged pentru verificări locale rapide, iar verificări complete în CI  
+4. **Testează setup-ul**: Fă un commit de test pentru a te asigura că totul funcționează
+
+## Relaționat
+
+- [Integrare Husky](/integration/husky) - configurare hook-urilor Git  
+- [Configurare](/configuration) - opțiuni de configurare Biome  
+- [Configurare inițială](/setup) - configurarea inițială a proiectului

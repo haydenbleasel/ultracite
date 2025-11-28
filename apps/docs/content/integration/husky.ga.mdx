@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Rith Ultracite go huathoibríoch ar do chomhaid Git atá ar stáitse le Husky
+---
+
+Ultracite provides seamless integration with [Husky](https://typicode.github.io/husky/), a popular tool for managing Git hooks. This integration automatically sets up pre-commit hooks to ensure your code is properly formatted before every commit.
+
+## Cad is Husky ann?
+
+Is uirlis é Husky a dhéanann é éasca hooks Git a úsáid i do thionscadal. Is scripteanna iad hooks Git a rithtear go huathoibríoch ag pointí áirithe sa sreabhadh oibre Git, mar shampla sula ndéantar commit nó push ar chód. Simplíonn Husky an próiseas chun na hooks seo a shocrú agus a bhainistiú.
+
+## Conas a Úsáideann Ultracite Husky
+
+Nuair a dhéanann tú Ultracite a thionscnamh i do thionscadal, is féidir leis Husky a chumrú go huathoibríoch chun formáidiú chód a rith sula ndéantar gach commit. Cinntíonn sé seo:
+
+- Go leanann an cód uile a dhearnadh commit caighdeáin fhormáidithe comhsheasmhacha
+- Go gcuirtear seiceálacha cáilíochta cód i bhfeidhm go huathoibríoch
+- Ní gá do bhaill fhoirne cuimhneamh cód a fhormáidiú de láimh
+- Go coinníonn do stór stíl chód ghlan agus comhsheasmhach
+
+## Iompar an Hook Réamh-commit
+
+Cruthaíonn comhtháthú Husky le Ultracite hook réamh-commit a rithfidh an t-ordú seo a leanas:
+
+```bash
+npx ultracite fix
+```
+
+Déantar leis an ordú seo:
+- Rith linter agus formáiditheoir Biome ar do bhunachar cód
+- Déanann sé deisiúcháin fhormáidithe go huathoibríoch nuair is féidir
+- Cinntíonn sé go gcomhlíonann na comhaid atá ar stáitse caighdeáin chód do thionscadail
+- Coscann sé commits a d’fhéadfadh neamhchoibhneasanna formáidithe a chur isteach
+
+## Socrú Uathoibríoch
+
+Le linn an phróisis tosaigh (`ultracite init`), má roghnaíonn tú an rogha Husky, déanann Ultracite:
+
+1. **Suiteáil Husky**: Cuireann sé Husky le do thionscadal mar spleáchas forbartha
+2. **Cruthaíonn Comhad Hook**: Socraíonn sé an comhad `.husky/pre-commit` leis an ordú formáidithe
+3. **Bainistítear Socruithe atá Ann Cheana**: Má tá Husky cumraithe agat cheana, nuashonraíonn sé do hook réamh-commit reatha seachas é a scríobh thar
+
+## Sonraí Comhtháthaithe
+
+Tá roinnt gnéithe cliste san chomhtháthú Husky:
+
+### Bainistíocht Spleáchais
+- Suiteálann sé Husky go huathoibríoch mar spleáchas forbartha ag úsáid bainisteora pacáistíochta do thionscadail
+- Úsáideann sé an t-ordú bainisteora pacáistíochta cuí (`npm install -D`, `yarn add -D`, `pnpm add -D`, srl.)
+
+### Bainistíocht Hook
+- **Tionscadail Nua**: Cruthaíonn sé comhad nua `.husky/pre-commit` leis an ordú ultracite fix
+- **Tionscadail atá ann cheana**: Cuirtear an t-ordú Ultracite leis an hook réamh-commit atá agat cheana, ag coimeád slán ar na hooks eile a bhféadfadh tú a bheith cumraithe
+
+### Struchtúr Comhad
+Cruthaíonn nó modhnóidh an comhtháthú an struchtúr seo:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Sochair
+
+### Stíl Chód Chomhleanúnach
+Leanann gach commit caighdeáin fhormáidithe do thionscadail go huathoibríoch, ag deireadh a chur le díospóireachtaí faoi stíl agus le neamhchoibhneasachtaí.
+
+### Rialú Cáilíochta Uathoibríoch
+Gabhann tú deacrachtaí formáidithe sula mbaintear iad isteach i do stór, ag cothabháil stair commit ghlan.
+
+### Comhoibriú Fhoirne
+Leanann gach ball foirne na caighdeáin formáidithe chéanna go huathoibríoch gan idirghníomhú láimhe.
+
+### Optamú CI/CD
+Laghdaíonn sé teip sa phíblíne CI/CD mar gheall ar cheisteanna formáidithe, ós rud é go bhfuil an cód formáidithe roimh-phacáisteáil go háitiúil.
+
+## Comhtháthú Sreabhadh Oibre
+
+Le comhtháthú Husky cumasaithe, éiríonn do shruth oibre Git tipiciúil mar seo:
+
+1. **Déan athruithe** ar do chomhaid chód
+2. **Cuir athruithe ar stáitse** le `git add`
+3. **Déanaigh commit ar na hathruithe** le `git commit`
+4. **Rithtear an hook réamh-commit** go huathoibríoch, ag formáidiú na gcomhad atá ar stáitse
+5. **Leanann an commit ar aghaidh** leis an gcód formáidithe i gceart
+
+Má dhéanann an formáidítróir athruithe, beidh ort na hathruithe sin a chur ar stáitse agus a dhearbhú arís.
+
+## Saincheapadh
+
+Cé go socraíonn Ultracite réamhshocruithe réasúnta, is féidir leat iompar a shaincheapadh:
+
+- Athraigh `.husky/pre-commit` chun orduithe breise a chur leis
+- Cumraigh socruithe Biome chun rialacha formáidithe a choigeartú
+- Cuir seiceálacha réamh-commit eile leis in éineacht le formáidithe Ultracite
+
+## Réitigh Fadhbanna
+
+### Ní oibríonn an Hook
+Má nach bhfuil an hook réamh-commit ag rith:
+- Déan cinnte go bhfuil Husky suiteáilte: `npm ls husky`
+- Seiceáil go bhfuil `.husky/pre-commit` ann agus go bhfuil sé in-rith
+- Deimhníonn tú go bhfuil hooks Git cumasaithe i do stór
+
+### Fadhbanna Ceadanna
+Ar chórais cosúil le Unix, déan cinnte go bhfuil an comhad hook in-rith:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Ag Sleamhnú Thar Hooks
+I gcásanna annamh nuair is gá duit an hook réamh-commit a sheachaint:
+```bash
+git commit --no-verify
+```
+
+Bain úsáid as seo go caolchúiseach, mar seachnaíonn sé an formáidiú uathoibríoch a choinníonn do bhunachar cód comhsheasmhach.

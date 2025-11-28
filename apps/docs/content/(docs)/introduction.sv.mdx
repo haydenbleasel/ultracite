@@ -1,0 +1,48 @@
+---
+title: Introduktion
+description: En kort översikt av Ultracite och hur det fungerar.
+---
+
+Ultracite är ett snabbt, intuitivt och enkelt utvecklingsverktyg som tillför automatiserad kodformatter­ing och lintning till dina JavaScript / TypeScript-projekt. Byggt ovanpå [Biome](https://biomejs.dev/) (en Rust-baserad kodformatterare och linter) erbjuder Ultracite en robust, förkonfigurerad uppsättning optimerad för modern webbutveckling.
+
+Installera Ultracite snabbt genom att köra:
+
+```package-install
+npx ultracite init
+```
+
+Följ sedan guiden [Användning](/usage) för att komma igång, eller kolla [Konfiguration](/setup) för mer detaljerad kontroll.
+
+## Hur fungerar Ultracite?
+
+När det väl är uppsatt körs Ultracite mest i bakgrunden — formaterar automatiskt din kod och tillämpar korrigeringar varje gång du sparar dina filer. Eftersom Biome är så snabbt, även i stora projekt, är det mycket snabbt att köra Ultracites kontroller och kan lugnt köras vid varje sparning utan fördröjning. Det betyder att du kan fokusera på att bygga och leverera istället för att manuellt rätta stilproblem eller felsöka körtidsfel.
+
+## Vad är Biome?
+
+[Biome](https://biomejs.dev/) är en allt-i-ett-verktygskedja för kodformatter­ing och lintning. Biome, skrivet i Rust, kombinerar funktionaliteten hos verktyg som [Prettier](https://prettier.io/) (kodformatterare), [ESLint](https://eslint.org/) (linter) och [Stylelint](https://stylelint.io/) till en enda snabb binär fil. Ultracite utnyttjar Biomes hastighet och kapabiliteter och tillhandahåller en förinställd uppsättning regler och inställningar skräddarsydd för moderna TypeScript-projekt.
+
+## Mål
+
+Ultracites mål ur ett utvecklingsperspektiv är:
+
+### Blixtrande snabb prestanda
+
+Ultracite drar nytta av prestandan hos [Biome](https://biomejs.dev/) och Rust-implementationen, och vi bör sträva efter att behålla det så.
+
+### Nollkonfiguration som standard
+
+Ultracite är utformat för att vara nollkonfigurerat som standard. Detta gör att nya användare snabbt kan komma igång utan att behöva konfigurera linter/formatter; och sparar tid för team vid onboarding av nya utvecklare.
+
+Målet är att tillhandahålla en standardkonfiguration som är bra för de flesta projekt, men även erbjuda ett sätt att anpassa konfigurationen för de som behöver det.
+
+### Intuitiv och enkel
+
+Ultracite bör vara så osynligt som möjligt. Helst ska det inte kräva någon konfiguration eller åtgärd från användaren. Om det krävs, ska det ge återkoppling på ett sätt som är lätt att förstå och agera på.
+
+### Maximal typsäkerhet
+
+Ultracite bör utformas för att vara så typsäkert som möjligt. Det bör använda TypeScripts strict-läge och ytterligare lintregler för att fånga fel och ge förslag på förbättringar.
+
+### Fungerar bra tillsammans med andra
+
+Ultracite bör kunna fungera med andra verktyg och bibliotek och inte konfliktera med dem.

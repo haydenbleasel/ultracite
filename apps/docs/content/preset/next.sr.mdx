@@ -1,0 +1,98 @@
+---
+title: Next.js
+description: Pravila lintovanja specifična za Next.js za Ultracite.
+---
+
+Next.js konfiguracija sadrži pravila za lintovanje specifična za Next.js za optimizaciju slika, strukturu dokumenta i obrasce App Router-a.
+
+## Instalacija
+
+Dodajte Next.js konfiguraciju u vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+## Pregled
+
+Ova konfiguracija dodaje pravila specifična za razvoj u Next.js:
+
+- **Optimizacija slika**: Primorava upotrebu Next.js Image komponente
+- **Struktura dokumenta**: Sprečava nepravilnu upotrebu specijalnih Next.js komponenti
+- **Klijentske komponente**: Osigurava da se asinhrone klijentske komponente pravilno obrađuju
+- **Konfiguracione datoteke**: Posebno rukovanje za `next.config.*` datoteke
+
+## Pravila specifična za Next.js
+
+### Inkubator
+
+| Pravilo | Postavka | Opis |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Sprečava asinhrone klijentske komponente u Next.js. Klijentske komponente treba da budu sinhrone; za asinhrone operacije koristite serverske komponente. |
+
+### Performanse
+
+| Pravilo | Postavka | Opis |
+|------|---------|-------------|
+| `noImgElement` | `error` | Zabranjuje upotrebu HTML elementa `<img>`. Umesto toga koristite Next.js `<Image>` komponentu za automatsku optimizaciju slika. |
+
+### Stil
+
+| Pravilo | Postavka | Opis |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Zabranjuje upotrebu HTML elementa `<head>`. Koristite Next.js `next/head` ili App Router metadata API umesto toga. |
+
+### Sumnjivo
+
+| Pravilo | Postavka | Opis |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Sprečava uvoz `next/document` u fajlovima stranica. `_document.tsx` bi trebalo da postoji samo u `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Sprečava uvoz `next/head` u `_document.tsx`. Umesto toga koristite `<Head>` iz `next/document`. |
+
+## Preklapanja konfiguracionih datoteka
+
+Next.js preset uključuje posebno rukovanje za konfiguracione datoteke i App Router komponente:
+
+### Next.js konfiguracione datoteke
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Ovo omogućava Next.js konfiguracione obrasce koji inače možda ne bi prošli lint pravila.
+
+### App Router stranice i layout-ovi
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router komponente stranica i layout-ova su dozvoljene da budu asinhrone bez potrebe za `await`, jer Next.js obrađuje ove slučajeve posebno za renderovanje na strani servera i dobavljanje podataka.

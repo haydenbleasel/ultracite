@@ -1,0 +1,71 @@
+---
+title: Configuration
+description: La configuration de linting par défaut d'Ultracite et comment la modifier.
+---
+
+L'un des meilleurs atouts d'Ultracite est qu'il est *zero-config* dès la sortie de la boîte – vous pouvez simplement étendre le préréglage `ultracite` et commencer. Cependant, chaque projet est un peu différent, et vous pouvez vouloir personnaliser certaines règles ou adapter Ultracite à différents frameworks. Cette section explique la configuration par défaut et comment l'étendre ou la remplacer.
+
+Ultracite fournit des configurations spécifiques aux frameworks que vous pouvez étendre en plus de la configuration de base. Cela vous permet d'ajouter des règles de lint spécifiques à un framework sans alourdir la configuration de base ni avoir à gérer des règles non pertinentes.
+
+Vous pouvez trouver la liste complète des configurations de framework disponibles dans la section [Préréglages](/preset/core).
+
+### Utilisation
+
+Pour utiliser une configuration spécifique à un framework, ajoutez-la à votre tableau `extends` :
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+Vous pouvez combiner plusieurs configurations si vous travaillez sur un projet multi-framework ou utilisez quelque chose comme Astro qui supporte plusieurs frameworks.
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## Configuration par défaut
+
+Lorsque vous incluez `"extends": ["ultracite/core"]` dans votre `biome.jsonc`, vous importez la configuration de préréglage de base d'Ultracite. Ce préréglage inclut des règles et des configurations agnostiques au framework. Quelques aspects notables de la configuration par défaut :
+
+- **Rigueur TypeScript**: Ultracite active les vérifications strictes de TypeScript et les règles de lint qui exigent un typage robuste. Par exemple, il décourage l'utilisation de `any`, exige la gestion de `null/undefined`, et privilégie les types explicites dans certaines situations pour éviter les ambiguïtés.
+- **Équivalents "Recommended" d'ESLint**: Les règles courantes de bonnes pratiques (pas de variables non utilisées, pas d'utilisation explicite d'eval, pas de pollution du prototype, etc.) sont incluses.
+- **Accessibilité**: Des règles équivalentes aux normes d'accessibilité sont activées par défaut (attributs ARIA, HTML sémantique, navigation au clavier, etc.).
+- **Node.js**: Les particularités spécifiques à l'environnement sont prises en charge. Par exemple, les variables globales fournies par Node (comme `module`, `process`) sont reconnues afin qu'elles ne soient pas incorrectement signalées comme indéfinies.
+- **Conventions de formatage**: Les paramètres du formateur d'Ultracite (largement hérités des valeurs par défaut de Biome/Prettier) incluent une indentation de 2 espaces, une longueur maximale de ligne de 80 caractères, des points-virgules en fin d'instruction, des virgules finales lorsque valides (p. ex., dans les tableaux/objets multi-lignes), des guillemets doubles pour les chaînes, etc. Ces choix visent à correspondre aux conventions courantes et à assurer des diff propres.
+
+Tous ces réglages par défaut visent à imposer un style cohérent et à prévenir les erreurs courantes sans que vous ayez à configurer manuellement chaque règle.
+
+Pour une référence complète de toutes les règles de lint configurées dans la configuration de base d'Ultracite, consultez la documentation [Configuration de base](/preset/core).
+
+## Surcharger la configuration
+
+### Modification de `biome.jsonc`
+
+Vous pouvez désactiver des règles en modifiant le fichier `biome.jsonc`.
+
+Par exemple, pour désactiver la règle `noAutofocus`, vous pouvez ajouter ce qui suit :
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### Commentaires en ligne
+
+Vous pouvez également désactiver des règles au niveau d'une ligne en ajoutant un commentaire à la fin de la ligne :
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

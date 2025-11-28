@@ -1,0 +1,50 @@
+---
+title: Siirtyminen Biomesta
+description: Kuinka siirtää projektisi erillisestä Biomeista Ultraciteen.
+---
+
+Jos käytät jo Biomea ja haluat vaihtaa Ultraciten valmiiksi konfiguroituun asetukseen, tämä opas auttaa siirtämään kokoonpanosi säilyttäen olemassa olevat asetukset.
+
+## Miksi siirtyä Ultraciteen?
+
+- **Ei konfigurointia**: Ultracite tarjoaa valmiiksi konfiguroidun sääntöjoukon
+- **Editorintegraatio**: Sisäänrakennettu tuki tekoälyllä varustetuille editoreille (Cursor, Windsurf, GitHub Copilot)
+- **Yhtenäinen työnkulku**: Vakioitu asetus projekteissa ja tiimeissä
+- **Lisätyökalut**: Valinnaiset Git-hookit, lint-staged-integraatio
+- **Ylläpidetyt säännöt**: Säännölliset päivitykset uusilla parhailla käytännöillä
+
+## Ennen kuin aloitat
+
+Varmista, että sinulla on:
+
+- Olemassa oleva projekti, joka käyttää Biomea
+- Node.js v14.18+ (Node 18+ suositeltu)
+- `biome.json`- tai `biome.jsonc`-tiedosto
+
+## Siirtymisvaihtoehdot
+
+### Vaihtoehto 1: Pikasiirto (suositeltu)
+
+Nopein tapa on suorittaa [automaattinen asennusskripti](/setup#automatic-installation).
+
+Tämä tekee:
+
+- Asentaa Ultraciten riippuvuudeksi
+- Yhdistää olemassa olevan `biome.json` / `biome.jsonc`-tiedostosi Ultraciten esiasetuksiin
+- Yhdistää olemassa olevan `.vscode/settings.json`-tiedostosi Ultraciten esiasetuksiin
+- Ottaa `strictNullChecks`-asetuksen käyttöön `tsconfig.json`-tiedostossasi (tai luo tiedoston, jos sitä ei ole)
+- Säilyttää mukautetut sääntösi ja asetuksesi
+- Ota käyttöön editorintegraatiot
+
+Päivityksen jälkeen saatat haluta tarkistaa `biome.json` / `biome.jsonc`-tiedostosi poistaaksesi mahdolliset ylikirjoitukset. Lisäksi käynnistä editorisi uudelleen varmistaaksesi, että uusi konfiguraatio otetaan käyttöön.
+
+### Vaihtoehto 2: Manuaalinen siirto
+
+Jos haluat enemmän hallintaa prosessista, noudata [Manuaalinen siirto](/setup#manual-installation) -ohjeita tekemällä:
+
+- Asentamalla Ultraciten ja Biomen manuaalisesti
+- Päivittämällä `biome.json`-tiedostosi laajentaaksesi Ultraciten esiasetusta
+- Luomalla tai päivittämällä `.vscode/settings.json`-tiedoston ottaaksesi Biome-laajennuksen käyttöön
+- Ottamalla `strictNullChecks` käyttöön `tsconfig.json`-tiedostossasi (tai luo tiedosto, jos sitä ei ole)
+
+Migraation jälkeen käynnistä editorisi uudelleen varmistaaksesi, että uusi konfiguraatio otetaan käyttöön.

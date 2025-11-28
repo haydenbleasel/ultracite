@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Reguli de linting specifice pentru Vue.js în Ultracite.
+---
+
+Configurația Vue are reguli de linting specifice pentru structura componentelor Vue.js, opțiunile data, proprietățile compute și cuvintele rezervate. De asemenea, include suprascrieri pentru a preveni erori false pozitive de linting în fișierele `.vue`.
+
+## Instalare
+
+Adaugă configurația Vue în `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Prezentare generală
+
+Această configurație adaugă reguli specifice dezvoltării cu Vue.js:
+
+- **Suport HTML**: Activează suportul experimental complet pentru HTML, cu indentare pentru script și style
+- **Nume componente**: Impune nume de componente cu mai multe cuvinte
+- **Structura data**: Previne declarațiile necorespunzătoare pentru opțiunea data
+- **Cuvinte rezervate**: Interzice utilizarea props-urilor și cheilor rezervate de Vue
+- **Chei duplicate**: Previne cheile duplicate în opțiunile componentelor
+- **Props specifice React**: Interzice props specifice React în componente Vue
+- **Suprascrieri pentru fișiere Vue**: Reguli relaxate pentru fișierele `.vue` pentru a gestiona structura Single File Component
+
+## Configurare formatter HTML
+
+Presetul Vue activează suportul experimental pentru HTML cu formatare specială pentru script-uri și style încorporate:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Această configurație:
+- **Suport complet experimental**: Activează capabilitățile experimentale de parsare și formatare HTML ale Biome pentru fișierele `.vue`
+- **Indentare pentru script și style**: Indentează corect codul din interiorul tag-urilor `<script>` și `<style>` în Single File Components Vue
+
+## Reguli specifice Vue
+
+### Stadiu inițial
+
+| Regula | Setare | Descriere |
+|--------|--------|-----------|
+| `noVueDataObjectDeclaration` | `error` | Previne utilizarea declarațiilor de obiect pentru opțiunea `data` în componentele Vue. Opțiunea `data` trebuie să fie o funcție care returnează un obiect. |
+| `noVueDuplicateKeys` | `error` | Previne cheile duplicate în opțiunile componentelor Vue. Cheile din `data`, `computed`, `methods` etc. trebuie să fie unice. |
+| `noVueReservedKeys` | `error` | Interzice cheile rezervate Vue precum `$data`, `$props`, `$el` etc. în opțiunile componentelor. |
+| `noVueReservedProps` | `error` | Interzice props rezervate Vue precum `key`, `ref` și `is` ca props personalizate ale componentelor. |
+| `noVueVIfWithVFor` | `error` | Interzice utilizarea simultană a `v-for` și `v-if` pe același element. |
+| `useVueHyphenatedAttributes` | `error` | Încurajează folosirea kebab-case pentru numele atributelor, conform recomandărilor din ghidul de stil Vue. |
+| `useVueMultiWordComponentNames` | `error` | Impune nume de componente cu mai multe cuvinte pentru a evita conflictele cu elementele HTML. Numele cu un singur cuvânt precum `Button` sau `Card` ar trebui evitate. |
+| `useVueValidVBind` | `error` | Asigură valabilitatea directivelor `v-bind` în fișierele Vue. |
+| `useVueValidVElseIf` | `error` | Asigură validitatea directivelor `v-else-if` în template-urile Vue. Raportează directive invalide cu expresii condiționale lipsă sau atunci când nu sunt precedate de o directivă `v-if` sau `v-else-if`. |
+| `useVueValidVElse` | `error` | Asigură validitatea directivelor `v-else` în template-urile Vue. Raportează directive care nu sunt precedate de o directivă `v-if` sau `v-else-if`. |
+| `useVueValidVHtml` | `error` | Asigură utilizarea corectă a directivei `v-html` în template-urile Vue. Raportează directive cu expresii lipsă, argumente neașteptate sau modificatori neașteptați. |
+| `useVueValidVIf` | `error` | Asigură validitatea directivelor `v-if` în template-urile Vue. Interzice argumentele și modificatorii și se asigură că se furnizează o valoare. |
+| `useVueValidVOn` | `error` | Asigură validitatea directivelor `v-on` în template-urile Vue. Raportează directive `v-on` / forma prescurtată `@` invalide cu nume de eveniment lipsă, modificatori invalizi sau expresii handler lipsă. |
+| `useVueValidVText` | `error` | Asigură validitatea directivelor `v-text` în template-urile Vue. Regula raportează când `v-text` are un argument, are modificatori sau îi lipsește o valoare. |
+
+### Suspicios
+
+| Regula | Setare | Descriere |
+|--------|--------|-----------|
+| `noReactSpecificProps` | `error` | Interzice props specifice React precum `className` și `htmlFor` în Vue. Folosește `class` și `for` în schimb. |
+
+## Suprascrieri pentru fișiere Vue
+
+Următoarele reguli sunt dezactivate pentru fișierele `.vue` pentru a preveni false pozitive din cauza suportului parțial al Biome pentru Single File Components:
+
+### Corectitudine
+
+| Regula | Setare | Descriere |
+|--------|--------|-----------|
+| `noUnusedVariables` | `off` | Permite variabile neutilizate în fișierele `.vue`. Variabilele din secțiunea script pot fi folosite doar în template. |
+| `noUnusedImports` | `off` | Permite importuri neutilizate în fișierele `.vue`. Importurile pot fi folosite doar în secțiunea template. |
+
+### Stil
+
+| Regula | Setare | Descriere |
+|--------|--------|-----------|
+| `useConst` | `off` | Permite declarațiile `let` și `var` în fișierele `.vue` pentru modele reactive de date. |
+| `useImportType` | `off` | Dezactivează cerințele explicite pentru `import type` pentru o mai bună compatibilitate cu sistemul de build al Vue. |

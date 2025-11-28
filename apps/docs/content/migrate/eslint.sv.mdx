@@ -1,0 +1,48 @@
+---
+title: Migrera från ESLint
+description: Hur du migrerar ditt projekt från ESLint till Ultracite.
+---
+
+Om du använder ESLint och vill byta till Ultracites förkonfigurerade inställningar, hjälper denna guide dig att migrera samtidigt som kodkvalitetsstandarderna upprätthålls.
+
+## Varför migrera till Ultracite?
+
+- **Blixtrande hastighet**: Biome (Ultracites grund) är baserat på Rust, mycket snabbare än ESLint
+- **Ingen konfiguration**: Hundratals förkonfigurerade regler jämfört med manuell ESLint-inställning
+- **Kombinerat verktyg**: Ersätter både ESLint och Prettier med ett enda verktyg
+- **AI-integration**: Inbyggt stöd för AI-drivna editorer (Cursor, Windsurf, GitHub Copilot)
+- **Typsäkerhet**: Omfattande TypeScript-regler med strikt nullkontroll
+- **Moderna standarder**: Senaste bästa praxis för JavaScript/TypeScript
+
+## Innan du börjar
+
+Se till att du har:
+
+- Ett befintligt projekt som använder ESLint
+- Node.js v14.18+ (Node 18+ rekommenderas)
+- En `package.json`-fil
+
+## Automatisk installation
+
+Kör [det automatiska installationsskriptet](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Detta kommer att:
+
+- Installera Ultracite som ett beroende
+- Slå samman din befintliga `biome.json` / `biome.jsonc` med Ultracites förinställning
+- Slå samman din befintliga `.vscode/settings.json` med Ultracites förinställning
+- Aktivera `strictNullChecks` i din `tsconfig.json`-fil (eller skapa en om den inte finns)
+- Bevara dina anpassade regler och inställningar
+- Konfigurera integrationer för din redigerare
+
+Se till att du väljer att ta bort den befintliga `ESLint`-konfigurationen. Detta kommer att:
+
+- Ta bort ESLint och alla relaterade beroenden
+- Ta bort eventuella ESLint-konfigurationsfiler
+- Ta bort eventuella ESLint-relaterade kommandon från din `.vscode/settings.json`-fil
+
+Efter uppgraderingen kanske du vill granska din `biome.json` / `biome.jsonc`-fil för att ta bort eventuella överskrivningar. Starta dessutom om din redigerare för att säkerställa att den nya konfigurationen tillämpas.

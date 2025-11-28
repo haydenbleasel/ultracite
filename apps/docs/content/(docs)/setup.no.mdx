@@ -1,0 +1,63 @@
+---
+title: Oppsett
+description: Hvordan installere Ultracite i prosjektet ditt.
+---
+
+Ultracite kan installeres med alle større pakkebehandlere. Du trenger Node.js v14.18+ (Node 18+ anbefales) og et prosjekt med en `package.json`-fil.
+
+## Installasjon
+
+Den enkleste måten å komme i gang på er å kjøre Ultracites `init`-skript, som vil installere nødvendige pakker og sette opp konfigurasjonsfilen for deg. I prosjektmappen din, kjør:
+
+```package-install
+npx ultracite init
+```
+
+Du kan valgfritt sende følgende flagg til `init`-kommandoen:
+
+| Flagg               | Beskrivelse                                     | Valg                                                                    |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Pakkebehandleren som skal brukes.                | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Rammeverkene som skal konfigureres.              | Komma-separert: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Editorene som skal konfigureres.                 | Komma-separert: `vscode`, `zed`                                         |
+| `--agents`          | AI-agentene som skal konfigureres.               | Komma-separert: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Agent-hookene som skal konfigureres.             | Komma-separert: `cursor`, `claude`                                      |
+| `--integrations`    | Ytterligere integrasjoner som skal settes opp.   | Komma-separert: `husky`, `lefthook`, `lint-staged`                      |
+| `--migrate`         | Migreringsverktøy som skal fjernes.              | Komma-separert: `eslint`, `prettier` (fjerner avhengigheter, konfigurasjonsfiler og editorinnstillinger) |
+| `--skip-install`    | Hopp over installering av avhengigheter.         | (ingen verdi nødvendig)                                                 |
+| `--quiet`           | Undertrykk interaktive spørsmål og visuell utdata. | (ingen verdi nødvendig, automatisk aktivert i CI)                       |
+
+### Programmatisk bruk
+
+For verktøy som trenger å kalle Ultracite programmessig (som CLI-er for scaffolding), kan du bruke `--quiet`-flagget for å undertrykke alle interaktive spørsmål og visuell utdata:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+`--quiet`-flagget aktiveres automatisk når miljøvariabelen `CI` er satt til `true` eller `1`, noe som gjør det egnet for CI/CD-pipelines:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+I stille modus vil Ultracite:
+- Hopp over alle interaktive spørsmål
+- Bruke fornuftige standardvalg for alle alternativer
+- Undertrykke ASCII-kunst, spinner-animasjoner og loggmeldinger
+- Kun opprette den grunnleggende Biome-konfigurasjonen
+- Avslutte ryddig med kode 0 ved suksess eller 1 ved feil
+
+## Utvidelser
+
+Hvis du bruker Visual Studio Code, installer den offisielle [Biome]-utvidelsen, som tillater formatering/fiksing ved lagring:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+I tillegg, hvis du bruker Tailwind CSS, anbefales det å installere [Tailwind CSS IntelliSense]-utvidelsen for klassesortering og forslag:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

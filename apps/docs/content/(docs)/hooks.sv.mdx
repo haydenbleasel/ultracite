@@ -1,0 +1,68 @@
+---
+title: Hookar
+description: Hur du integrerar Ultracite med AI-kodassistenter via editorhooks.
+---
+
+Ultracite kan automatiskt formatera och åtgärda kod efter att AI-kodassistenter har gjort ändringar via editorhooks. Detta säkerställer att all AI-genererad kod följer ditt projekts standarder utan manuell inblandning.
+
+Hookarna fungerar tillsammans med Biome:s linting och formatering. Efter att en AI-kodassistent redigerat en fil kör hooken automatiskt `npx ultracite fix` för att formatera och åtgärda lintningsproblem som kan auto-fixas. Denna dubbla metod säkerställer både intelligent kodgenerering (genom AI-regler) och automatiserad kodkvalitet (genom hookar).
+
+> **Obs:** Hookar är separata från AI-kodregler. Flaggan `--agents` konfigurerar AI-kodregler, medan flaggan `--hooks` ställer in automatisk formatering efter filändringar.
+
+## Setup
+
+### Automatisk installation
+
+När du kör `npx ultracite init` kommer du att bli ombedd att välja vilka editorhooks du vill aktivera:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+Detta skapar den relevanta hookkonfigurationsfilen i din projektmapp.
+
+### Manuell installation
+
+Om du vill ställa in saker manuellt eller lägga till hookar efter initialiseringen, kör:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+Alternativt kan du manuellt skapa eller redigera hookkonfigurationsfilerna i din projektmapp och lägga till lämpligt hook-kommando.
+
+## Stödda redigerare
+
+| Editor      | Hook File Location          | Documentation                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Cursor-hookar](https://cursor.com/docs/agent/hooks)                    |
+| Claude Code | `.claude/settings.json`     | [Claude Code-hookar](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Hur det fungerar
+
+1. **Automatisk körning**: Efter att AI-agenten redigerat en fil kör hooken automatiskt `npx ultracite fix`
+2. **Kodformatering**: Ultracite formaterar den redigerade koden enligt din Biome-konfiguration
+3. **Lint-åtgärder**: Lintningsproblem som kan auto-fixas åtgärdas automatiskt
+4. **Sömlös integration**: Processen sker transparent utan att störa ditt arbetsflöde
+
+## Fördelar
+
+Att använda Ultracite editorhooks ger flera fördelar:
+
+- **Konsistens**: All AI-genererad kod formateras automatiskt för att matcha din stil
+- **Kvalitet**: Lintningsproblem åtgärdas omedelbart efter kodgenerering
+- **Effektivitet**: Ingen behov av att manuellt köra formateringsverktyg eller linters efter AI-ändringar
+- **Standarder**: Säkerställer att AI-genererad kod alltid följer projektets standarder
+- **Rena commits**: Koden är korrekt formaterad innan du ens granskar den
+
+## Anpassning
+
+Ultracite slår intelligent samman med befintliga hookkonfigurationer:
+
+- **Bevarar befintliga hookar**: Alla befintliga hookar och deras kommandon förblir intakta
+- **Undviker duplicering**: Om Ultracite redan är konfigurerat kommer det inte att läggas till igen
+- **Icke-destruktiv**: Din befintliga hookkonfigurationsstruktur bibehålls
+
+Du kan också anpassa hookbeteendet genom att modifiera hookkonfigurationsfilerna direkt om du behöver andra formateringskommandon eller ytterligare åtgärder efter redigering.

@@ -1,0 +1,63 @@
+---
+title: Installation
+description: Comment installer Ultracite dans votre projet.
+---
+
+Ultracite peut être installé avec tous les gestionnaires de paquets majeurs. Vous aurez besoin de Node.js v14.18+ (Node 18+ recommandé) et d'un projet avec un fichier `package.json`.
+
+## Installation
+
+Le moyen le plus simple pour commencer est d'exécuter le script `init` d'Ultracite, qui installera les paquets nécessaires et configurera le fichier de configuration pour vous. Dans le répertoire de votre projet, exécutez :
+
+```package-install
+npx ultracite init
+```
+
+Vous pouvez éventuellement passer les flags suivants à la commande `init` :
+
+| Flag                | Description                                      | Options                                                                 |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Le gestionnaire de paquets à utiliser.           | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Les frameworks à configurer.                     | Séparés par des virgules : `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Les éditeurs à configurer.                       | Séparés par des virgules : `vscode`, `zed`                              |
+| `--agents`          | Les agents IA à configurer.                      | Séparés par des virgules : `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Les hooks d'agent à configurer.                  | Séparés par des virgules : `cursor`, `claude`                           |
+| `--integrations`    | Intégrations supplémentaires à configurer.       | Séparés par des virgules : `husky`, `lefthook`, `lint-staged`           |
+| `--migrate`         | Outils de migration à supprimer.                 | Séparés par des virgules : `eslint`, `prettier` (supprime les dépendances, les fichiers de configuration et les paramètres d'éditeur) |
+| `--skip-install`    | Ignorer l'installation des dépendances.          | (aucune valeur requise)                                                 |
+| `--quiet`           | Supprimer les invites interactives et la sortie visuelle. | (aucune valeur requise, activé automatiquement dans CI)                 |
+
+### Utilisation programmatique
+
+Pour les outils qui doivent appeler Ultracite de manière programmatique (comme des CLI de scaffolding), vous pouvez utiliser le flag `--quiet` pour supprimer toutes les invites interactives et la sortie visuelle :
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+Le flag `--quiet` est activé automatiquement lorsque la variable d'environnement `CI` est définie sur `true` ou `1`, ce qui le rend adapté aux pipelines CI/CD :
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+En mode silencieux, Ultracite :
+- Ignorer toutes les invites interactives
+- Utiliser des valeurs par défaut judicieuses pour toutes les options
+- Supprimer l'art ASCII, les spinners et les messages de journalisation
+- Créer uniquement la configuration Biome de base
+- Quitter proprement avec le code 0 en cas de succès ou 1 en cas d'échec
+
+## Extensions
+
+Si vous utilisez Visual Studio Code, installez l'extension officielle [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome), qui permet le formatage/correction à l'enregistrement :
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+De plus, si vous utilisez Tailwind CSS, il est recommandé d'installer l'extension [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) pour le tri des classes et les suggestions :
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

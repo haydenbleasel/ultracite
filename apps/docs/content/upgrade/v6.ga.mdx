@@ -1,0 +1,75 @@
+---
+title: Uasghráigh go v6
+description: Treoir chun uasghrádú ó Ultracite v5 go v6 leis an gcóras réamhshocraithe nua.
+---
+
+Ultracite v6 cuireann réamhshocruithe sonracha do fhráma ar fáil a thugann níos mó smachta duit ar na rialacha a bhíonn i bhfeidhm i do thionscadal. **Ní bhriseann an uasghrádú seo d'úsáideoirí Next.js/React.**
+
+## Cad a athraíodh
+
+v6 cuireann [réamhshocruithe sonracha do fhráma](/configuration#framework-specific-configurations) ar fáil:
+
+- [`ultracite/core`](/preset/core) - Rialacha bunúsacha JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Rialacha shonracha do React
+- [`ultracite/next`](/preset/next) - Rialacha shonracha do Next.js
+- [`ultracite/solid`](/preset/solid) - Rialacha Solid.js
+- [`ultracite/vue`](/preset/vue) - Rialacha Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Rialacha Svelte
+- [`ultracite/qwik`](/preset/qwik) - Rialacha Qwik
+- [`ultracite/angular`](/preset/angular) - Parsálaí HTML Angular
+- [`ultracite/remix`](/preset/remix) - Tacaíocht do rianú bunaithe ar chomhaid
+
+## Aistriú
+
+### Tionscadail Next.js/React
+
+Nuashonraigh do `biome.jsonc` chun na réamhshocruithe cuí a shíneadh:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Tionscadail Neamh-React
+
+Bog go dtí an réamhshocrú lárnach má nach bhfuil tú ag úsáid React:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Frámaí Eile
+
+Úsáid an réamhshocrú cuí do do fhráma:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Tionscadail Il-Fráma
+
+Comhcheangail réamhshocruithe de réir mar is gá:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

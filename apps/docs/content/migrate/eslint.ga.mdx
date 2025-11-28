@@ -1,0 +1,48 @@
+---
+title: Aistrigh ó ESLint
+description: Conas do thionscadal a aistriú ó ESLint go Ultracite.
+---
+
+Má tá tú ag úsáid ESLint agus má tá tú ag iarraidh lasc a dhéanamh chuig an suíomh réamhchumraithe de chuid Ultracite, cabhróidh an treoir seo leat aistriú agus caighdeáin cháilíochta an chóid a chothabháil.
+
+## Cén Fáth Aistriú go Ultracite?
+
+- **Luais Tapa**: Tá Biome (bunús Ultracite) bunaithe ar Rust, i bhfad níos gasta ná ESLint
+- **Gan Cumraíocht**: Na céadta rialacha réamhchumraithe i gcomparáid le cumrú láimhe ESLint
+- **Uirlis Aontaithe**: Athsholáthraíonn sé an dá ESLint agus Prettier le huirlis amháin
+- **Comhtháthú AI**: Tacaíocht ionsuite do eagarthóirí a bhfuil cumhacht AI acu (Cursor, Windsurf, GitHub Copilot)
+- **Sábháilteacht Sorta**: Rialacha cuimsitheacha TypeScript le seiceálacha nul dian (`strictNullChecks`)
+- **Caighdeáin Nua-aimseartha**: Na cleachtais is fearr is déanaí do JavaScript/TypeScript
+
+## Sula dtosaíonn tú
+
+Déan cinnte go bhfuil:
+
+- Tionscadal atá ann cheana a úsáideann ESLint
+- Node.js v14.18+ (moltar Node 18+)
+- Comhad `package.json`
+
+## Socrú Uathoibríoch
+
+Rith an [script socraithe uathoibríoch](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Déanfaidh sé seo:
+
+- Suiteáil Ultracite mar spleáchas
+- Measc do `biome.json` / `biome.jsonc` atá ann cheana le réamhshocrú Ultracite
+- Measc do `.vscode/settings.json` atá ann cheana le réamhshocrú Ultracite
+- Cumasaigh `strictNullChecks` i do chomhad `tsconfig.json` (nó cruthaigh ceann má tá sé in easnamh)
+- Coinnigh do rialacha agus socruithe saincheaptha
+- Socrú comhtháthaithe eagarthóra
+
+Déan cinnte go roghnaíonn tú an chumraíocht `ESLint` atá ann cheana a bhaint. Déanfaidh sé seo:
+
+- Bainfidh sé `ESLint` agus aon spleáchais ghaolmhara
+- Bainfidh sé aon chomhaid chumraíochta `ESLint`
+- Bainfidh sé aon orduithe gaolmhara le `ESLint` as do chomhad `.vscode/settings.json`
+
+Tar éis an uasghrádaithe, b'fhéidir gur mhaith leat do chomhad `biome.json` / `biome.jsonc` a athbhreithniú chun aon athshocruithe a bhaint. Ina theannta sin, atosóidh do eagarthóir chun a chinntiú go bhfeidhmítear an chumraíocht nua.

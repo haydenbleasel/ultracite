@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Remix-specifikke lint-regler for Ultracite (kompatibel med TanStack Router og React Router).
+---
+
+Remix-konfigurationen har filnavngivningskonventioner for rutefiler. Denne konfiguration er også kompatibel med TanStack Router, React Router og andre filbaserede routingsystemer.
+
+## Installation
+
+Tilføj Remix-konfigurationen til din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Oversigt
+
+Denne konfiguration giver særlig håndtering af rutefiler, der bruger filsystem-baserede routingkonventioner:
+
+- **Navngivning af rute-filer**: Deaktiverer strenge filnavnekonventioner for rutefiler
+- **Fleksible mønstre**: Understøtter Remix' rutenavngivningsmønstre (punktum, dollartegn, understregningstegn)
+- **Framework-agnostisk**: Virker med Remix, TanStack Router, React Router og lignende systemer
+
+## Overstyring af filmønstre
+
+Konfigurationen anvender overstyringer på rutefiler i disse mønstre:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Deaktiverede regler for rutefiler
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Deaktiverer håndhævelse af kebab-case filnavne for rutefiler. Tillader særlige rutenavngivningsmønstre. |
+
+## Hvorfor denne konfiguration findes
+
+Filbaserede routingsystemer bruger specialtegn i filnavne til at repræsentere routingmønstre:
+
+- `.` (punktum) - Repræsenterer stisegmenter (f.eks. `posts.new.tsx` → `/posts/new`)
+- `$` (dollartegn) - Repræsenterer dynamiske segmenter (f.eks. `posts.$id.tsx` → `/posts/:id`)
+- `_` (understregningstegn) - Repræsenterer layout-ruter eller ruter uden sti
+
+Disse navngivningskonventioner er i konflikt med Ultracite's standardkrav om kebab-case filnavne, så denne konfiguration deaktiverer den regel specifikt for rutefiler.

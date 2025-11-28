@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Vue.js-specifika lintregler för Ultracite.
+---
+
+Vue-konfigurationen innehåller Vue.js-specifika lintregler för komponentstruktur, dataalternativ, beräknade egenskaper och reserverade nyckelord. Den inkluderar också överstyrningar för att förhindra falskt positiva lintfel i `.vue`-filer.
+
+## Installation
+
+Lägg till Vue-konfigurationen i din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Översikt
+
+Denna konfiguration lägger till regler som är specifika för Vue.js-utveckling:
+
+- **HTML-stöd**: Aktiverar experimentellt fullständigt HTML-stöd med indragning för script och style
+- **Komponentnamngivning**: Kräver flerordiga komponentnamn
+- **Datastruktur**: Förhindrar felaktiga deklarationer av dataalternativ
+- **Reserverade nyckelord**: Förbjuder användning av Vue-reserverade props och nycklar
+- **Duplicerade nycklar**: Förhindrar duplicerade nycklar i komponentalternativ
+- **React-specifika props**: Förhindrar React-specifika props i Vue-komponenter
+- **Överstyrningar för Vue-filer**: Lättade regler för `.vue`-filer för att hantera Single File Component-strukturen
+
+## HTML-formateringskonfiguration
+
+Vue-presetet aktiverar experimentellt HTML-stöd med särskild formatering för inbäddade script och styles:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Denna konfiguration:
+- **Experimentellt fullständigt stöd**: Aktiverar Biome:s experimentella HTML-parsnings- och formateringsfunktioner för `.vue`-filer
+- **Indragning av script och style**: Indenterar korrekt kod inuti `<script>`- och `<style>`-taggar i Vue Single File Components
+
+## Vue-specifika regler
+
+### Experimentellt
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Förhindra användning av objektdeklaration för `data`-alternativet i Vue-komponenter. `data`-alternativet måste vara en funktion som returnerar ett objekt. |
+| `noVueDuplicateKeys` | `error` | Förhindra duplicerade nycklar i Vue-komponenters alternativ. Nycklar i `data`, `computed`, `methods` osv. måste vara unika. |
+| `noVueReservedKeys` | `error` | Förbjud Vue-reserverade nycklar som `$data`, `$props`, `$el` osv. i komponentalternativ. |
+| `noVueReservedProps` | `error` | Förbjud Vue-reserverade props som `key`, `ref` och `is` som egna komponentprops. |
+| `noVueVIfWithVFor` | `error` | Förbjud `v-for` och `v-if` på samma element. |
+| `useVueHyphenatedAttributes` | `error` | Uppmuntra användning av kebab-case för attributnamn, enligt Vue-stilguidens rekommendationer. |
+| `useVueMultiWordComponentNames` | `error` | Kräver flerordiga komponentnamn för att undvika konflikter med HTML-element. Enkelordiga namn som `Button` eller `Card` bör undvikas. |
+| `useVueValidVBind` | `error` | Säkerställ giltigheten av `v-bind`-direktiv i Vue-filer. |
+| `useVueValidVElseIf` | `error` | Säkerställ giltiga `v-else-if`-direktiv i Vue-mallar. Rapporterar ogiltiga direktiv med saknade villkorsuttryck eller när de inte föregås av ett `v-if` eller `v-else-if`-direktiv. |
+| `useVueValidVElse` | `error` | Säkerställ giltiga `v-else`-direktiv i Vue-mallar. Rapporterar direktiv som inte föregås av ett `v-if` eller `v-else-if`-direktiv. |
+| `useVueValidVHtml` | `error` | Säkerställ korrekt användning av `v-html`-direktivet i Vue-mallar. Rapporterar direktiv med saknade uttryck, oväntade argument eller oväntade modifiers. |
+| `useVueValidVIf` | `error` | Säkerställ giltiga `v-if`-direktiv i Vue-mallar. Förbjuder argument och modifiers, och ser till att ett värde anges. |
+| `useVueValidVOn` | `error` | Säkerställ giltiga `v-on`-direktiv i Vue-mallar. Rapporterar ogiltiga `v-on` / kortform `@`-direktiv med saknade händelsenamn, ogiltiga modifiers eller saknade handler-uttryck. |
+| `useVueValidVText` | `error` | Säkerställ giltiga `v-text`-direktiv i Vue-mallar. Regeln rapporterar när `v-text` har ett argument, har modifiers, eller saknar ett värde. |
+
+### Misstänkta
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Förbjud React-specifika props som `className` och `htmlFor` i Vue. Använd `class` och `for` istället. |
+
+## Överstyrningar för Vue-filer
+
+Följande regler är inaktiverade för `.vue`-filer för att förhindra falskt positiva resultat på grund av Biome:s begränsade stöd för Vue Single File Components:
+
+### Korrekthet
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Tillåt oanvända variabler i `.vue`-filer. Variabler i script-sektionen kan användas endast i templaten. |
+| `noUnusedImports` | `off` | Tillåt oanvända imports i `.vue`-filer. Imports kan endast användas i template-sektionen. |
+
+### Stil
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `useConst` | `off` | Tillåt `let`- och `var`-deklarationer i `.vue`-filer för reaktiva datapatterns. |
+| `useImportType` | `off` | Inaktivera krav på explicit importtyp för bättre kompatibilitet med Vues byggsystem. |

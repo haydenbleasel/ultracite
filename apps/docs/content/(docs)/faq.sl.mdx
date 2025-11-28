@@ -1,0 +1,86 @@
+---
+title: Pogosta vprašanja
+description: Tukaj so odgovori na nekatera pogosto zastavljena vprašanja o Ultracite.
+---
+
+## Q: Kaj natančno je Ultracite – v čem se razlikuje od Biome ali ESLint?
+
+Ultracite je v bistvu prednastavljena konfiguracija zgrajena na Biome. Razmišljajte o Ultracite kot o skrbno izbranem paketu pravil in nastavitev, medtem ko je Biome pogon, ki dejansko formatira / preverja kodo. Biome lahko uporabljate samostojno, vendar bi morali sami določiti, katera pravila omogočiti in ročno konfigurirati njegove možnosti. Ultracite vam to delo prihrani z zagotavljanjem vnaprej pripravljenega sistema, ki uporablja priporočene prakse iz celotnega ekosistema.
+
+V primerjavi z ESLint + Prettier je Biome hitrejši zahvaljujoč svoji implementaciji v Rustu in združitvi funkcij (eno orodje namesto dveh ali treh). Če radi natančno prilagajate vsako ESLint pravilo, se vam lahko Ultracite zdi omejujoč; vendar je njegov cilj odpraviti potrebo po tem in sprejeti smiselne privzete nastavitve.
+
+Na kratko: Biome je pogon (linter / formatter), Ultracite pa je konfiguracija.
+
+## Q: Ali še vedno potrebujem ESLint ali Prettier, če uporabljam Ultracite?
+
+Ne – Ultracite (prek Biome) nadomesti funkcionalnost ESLint in Prettier za vašo Javascript / Typescript kodo. Ni treba poganjati ESLint ali Prettier. Pravzaprav je priporočljivo odstraniti te konfiguracije, da se izognete konfliktom. Izhod Ultracite bo pokril večino formatiranja in lintanja, ki sta ju ta orodja izvajala, običajno z enakovrednimi ali strožjimi pravili.
+
+Edini primer, kjer bi jih morda še uporabljali, je, če imate kakšno robno vtičnico, ki je Biome ne podpira (na primer zelo specializirano ESLint pravilo). Idealno bi bilo, da bi delali v celotnem ekosistemu Ultracite.
+
+## Q: Kaj pa moje datoteke, ki niso JS/TS? Ali Ultracite obravnava te?
+
+Ultracite, prek Biome, nudi različne ravni podpore za lintanje in formatiranje za JavaScript, TypeScript, JSX, CSS in GraphQL.
+
+## Q: Kako pogosto se Ultracite posodablja?
+
+Ultracite se posodablja po potrebi, pogosto v skladu s ciklom izdaj Biome. Ker se Biome še razvija, lahko pri Ultracite pogosto opazite manjše izdaje. Te posodobitve lahko prinesejo nova pravila, popravke napak ali prilagoditve privzetih nastavitev. Ker je Ultracite zaklenjen z `-E`, ne boste dobili presenetljivih posodobitev, razen če se odločite za nadgradnjo.
+
+Dobro je spremljati repozitorij Ultracite za izdaje ali preveriti stran z [Izdajami](https://github.com/haydenbleasel/ultracite/releases). Pri posodabljanju Ultracite preberite opombe ob izdaji – občasno se lahko omogoči novo pravilo, ki bi v vašem projektu povzročilo nova opozorila (kar je dobro za odkrivanje težav, vendar je treba biti tega zavesten). Nadgradnja Biome skupaj z Ultracite je običajno preprosta preko upravitelja paketov.
+
+## Q: Če se ne strinjam s pravilom, ki ga Ultracite izvaja, kaj naj naredim?
+
+Imate več možnosti:
+
+- Konfigurirajte ga kot izklopljeno ali spremenite raven v `biome.jsonc` (hitro popravilo za vaš projekt).
+- Odprite [razpravo](https://github.com/haydenbleasel/ultracite/discussions/) na GitHub repozitoriju, če bi bilo pravilo treba prilagoditi za vse. Morda se vzdrževalci strinjajo, da je pravilo prestrogo ali bi bilo lahko opcijsko.
+- Če gre za stilistično zadevo, se spomnite, da je cilj Ultracite konvencija pred konfiguracijo – včasih je smiselno prilagoditi se slogu orodja za doslednost med projekti. Seveda pa so potrebe vašega projekta vedno na prvem mestu.
+
+Končno vi nadzirate lint konfiguracijo vašega projekta. Ultracite je izhodišče; prosto ga oblikujte, vendar je najbolje v manjših prilagoditvah. Če ugotovite, da izklapljate večino pravil, morda Ultracite ni pravi preset za preference vaše ekipe (čeprav je to redko).
+
+V tem primeru lahko zgradite svojo lastno Biome konfiguracijo iz nič, vendar boste izgubili veliko priročnosti. Običajno je potrebnih le nekaj prilagoditev, da Ultracite lepo ustreza.
+
+## Q: Ali lahko uporabljam Ultracite brez VS Code / Cursor / Windsurf?
+
+Da — osredotočamo se na VS Code in njegove forke, saj so to najbolj priljubljeni IDE-ji za sodoben spletni razvoj, vendar se Biome lahko uporablja čisto prek CLI ali z drugimi IDE-ji.
+
+Oglejte si Biomejeve [uradne integracije za urejevalnike](https://biomejs.dev/guides/editors/first-party-extensions/) in [integracije za urejevalnike tretjih oseb](https://biomejs.dev/guides/editors/third-party-extensions/), da se več naučite.
+
+## Q: Kako naj vem, katera pravila Ultracite izvaja? Ali obstaja seznam?
+
+Da, preverite datoteko [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) v GitHub repozitoriju za pravila, ki so omogočena.
+
+## Q: Ali Ultracite lahko popravi vse težave, ki jih najde?
+
+Ne vse, vendar veliko. Ultracite bo samodejno popravil težave, ki jih je varno in deterministično popraviti. To vključuje težave z oblikovanjem in mnoge lint napake (predvsem slogovne ali preproste pretvorbe kode, kot so odstranjevanje neuporabljenih uvozov, dodajanje manjkajočih oklepajev, zamenjava `==` z `===` itd.).
+
+Bolj zapletene težave (poslovna logika ali tiste, ki zahtevajo namero razvijalca) bodo prepuščene vam za popravilo. Na primer, ne bo samodejno preimenoval spremenljivk, da bi sledile konvenciji imenovanja ali dodal manjkajočo obravnavo napak – le opozoril vas bo.
+
+Filozofija je podobna ESLintovi: nuditi popravke, kjer je mogoče, vendar ne tvegati spremembe vedenja kode. Vedno preglejte ploščo Problems ali izhod CLI za morebitna preostala opozorila po samodejnem popravilu.
+
+## Q: Kje se lahko naučim več o Biome (orodju, ki ga uporablja Ultracite)?
+
+[Biome](https://biomejs.dev/) ima lastno spletno stran z dokumentacijo, kjer najdete več tehničnih podrobnosti. Če vas zanima, kako formatira kodo ali kakšna je filozofija za nekaterimi odločitvami, so Biome dokumenti najboljši vir.
+
+Poleg tega obstajajo blogi in članki skupnosti o vzponu Biome kot naslednika Rome. Razumevanje Biome vam lahko pomaga bolje razumeti zmožnosti Ultracite. Vendar pa ni nujno, da Biome poglobljeno spoznate, da bi učinkovito uporabljali Ultracite – cilj Ultracite je večino teh podrobnosti skriti za večino uporabnikov.
+
+## Q: Kako izklopim Ultracite za določen projekt ali datoteko?
+
+Če imate projekt, kjer začasno ne želite Ultracite, preprosto ne vključite `extends: ["ultracite/core"]` v `biome.jsonc` (ali odstranite datoteko konfiguracije). Če je nameščen vtičnik za VS Code, bo ta morda še vedno poskušal formatirati ob shranjevanju z Biomejevimi privzetimi nastavitvami.
+
+Da ga popolnoma onemogočite, lahko izklopite `formatOnSave` ali odstranite Biome razširitev za to delovno okolje. Za določeno datoteko uporabite komentarje za ignoriranje ali vzorce. V bistvu je Ultracite vklopljen za projekt prek konfiguracije. Če ni konfiguriran, se ne bo zagnal (Biome sam lahko še vedno zažene formatiranje, če ga sprožite, vendar ne linting pravil).
+
+## Q: Pri namestitvi dobim napako corepack – kaj naj naredim?
+
+Nekateri uporabniki so naleteli na napake pri preverjanju podpisa pri zaganjanju `pnpm dlx ultracite init` s corepack, zlasti na Node.js v22 s starejšimi različicami corepack. Napaka običajno izgleda kot "Cannot find matching keyid" med namestitvijo paketa.
+
+Tu so priporočene rešitve:
+
+- **Posodobite corepack**: Nadgradite na corepack različico 0.34.0 ali novejšo. To lahko storite z `corepack prepare pnpm@latest --activate` ali sledite [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
+- **Posodobite Node.js**: Če uporabljate Node.js v20.x, razmislite o nadgradnji na v22 ali novejšo različico, ki vključuje novejšo različico corepack.
+- **Uporabite npx namesto tega**: Če corepack še vedno povzroča težave, lahko uporabite `npx ultracite init` namesto `pnpm dlx ultracite init`.
+
+Če nobena od teh rešitev ne deluje, odprite problem na [GitHub repozitoriju Ultracite](https://github.com/haydenbleasel/ultracite/issues) z informacijami o vaši različici Node.js in corepack.
+
+---
+
+Upamo, da ta pogosta vprašanja razjasnijo običajne točke zmede. Če imate vprašanje, na katerega tukaj ni odgovora, se obrnite na projektov GitHub ali kanale skupnosti. Ultracite je tu, da vam olajša delo razvijalca – povratne informacije in vprašanja so vedno dobrodošla za izboljšave!

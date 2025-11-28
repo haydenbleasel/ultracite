@@ -1,0 +1,50 @@
+---
+title: Migracija z Biome
+description: Kako migrirati svoj projekt iz samostojnega Biome v Ultracite.
+---
+
+Če že uporabljate Biome in želite preiti na vnaprej konfigurirano nastavitev Ultracite, vam bo ta vodnik pomagal pri migraciji ob ohranitvi obstoječe konfiguracije.
+
+## Zakaj preiti na Ultracite?
+
+- **Brez konfiguracije**: Ultracite zagotavlja obsežno vnaprej nastavljeno zbirko pravil
+- **Integracija z urejevalniki**: Vgrajena podpora za urejevalnike z AI (Cursor, Windsurf, GitHub Copilot)
+- **Dosleden delovni tok**: Standardizirana nastavitev med projekti in ekipami
+- **Dodatna orodja**: Izbirni Git hooki, integracija z lint-staged
+- **Vzdrževana pravila**: Redne posodobitve z novimi najboljšimi praksami
+
+## Preden začnete
+
+Prepričajte se, da imate:
+
+- Obstoječ projekt, ki uporablja Biome
+- Node.js v14.18+ (priporočeno Node 18+)
+- Datoteko `biome.json` ali `biome.jsonc`
+
+## Možnosti migracije
+
+### Možnost 1: Hitra migracija (priporočeno)
+
+Najhitrejši način je zagnati [samodejni namestitveni skript](/setup#automatic-installation).
+
+To bo:
+
+- Namestilo Ultracite kot odvisnost
+- Združilo vaš obstoječi `biome.json` / `biome.jsonc` s prednastavitvijo Ultracite
+- Združilo vaš obstoječi `.vscode/settings.json` s prednastavitvijo Ultracite
+- Omogočilo `strictNullChecks` v datoteki `tsconfig.json` (ali ustvarilo datoteko, če ne obstaja)
+- Ohranjalo vaše prilagojene nastavitve in pravila
+- Nastavilo integracije z urejevalniki
+
+Po nadgradnji boste morda želeli pregledati datoteko `biome.json` / `biome.jsonc` in odstraniti morebitne presežke (overrides). Prav tako znova zaženite urejevalnik, da se nova konfiguracija uveljavi.
+
+### Možnost 2: Ročna migracija
+
+Če želite več nadzora nad postopkom, sledite korakom v [Ročni migraciji](/setup#manual-installation) tako, da:
+
+- Ročno namestite Ultracite in Biome
+- Posodobite datoteko `biome.json`, da razširite konfiguracijo z Ultracite
+- Ustvarite ali posodobite datoteko `.vscode/settings.json`, da omogočite razširitev Biome
+- Omogočite `strictNullChecks` v datoteki `tsconfig.json` (ali ustvarite datoteko, če ne obstaja)
+
+Po migraciji znova zaženite urejevalnik, da se nova konfiguracija uveljavi.

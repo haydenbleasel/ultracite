@@ -1,0 +1,49 @@
+---
+title: Päivitys versioon v5
+description: Kuinka päivität projektisi Ultracite v4:stä v5:een.
+---
+
+Ultracite v5 on merkittävä julkaisu, joka sisältää huomattavia parannuksia ja rikkomuksia aiheuttavia muutoksia. Tämä opas auttaa sinua päivittämään nykyisen v4-asetuksesi v5:een.
+
+## Mitä uutta v5:ssä
+
+- **Päivitetty Biome**: Päivitetty v1.x:stä v2.x:ään
+- **Uusi konfiguraatiomuoto**: Vaihda `biome.json` -> `biome.jsonc`
+- **Parannettu CLI**: Uudelleenkirjoitettu TypeScriptillä paremmalla virheenkäsittelyllä
+- **Editorin integraatiot**: Sisäänrakennettu tuki Cursorille, Windsurfille, Zedille ja GitHub Copilotille
+- **Git-hookit**: Valinnaisia integraatioita, mukaan lukien Husky, lint-staged ja lefthook
+- **Parannettu skeema**: Uusi skeeman URL paremmalla validoinnilla
+- **Yksinkertaistetut VS Code -asetukset**: Tiedostotyyppien ohitukset yhdistetty yhdeksi riviksi
+
+## Migraation vaiheet
+
+### Automaattinen migraatio (suositeltavaa)
+
+Helpoin tapa siirtyä on suorittaa uusi alustamiskomento:
+
+```package-install
+npx ultracite@latest init
+```
+
+Tämä tekee:
+- Päivittää riippuvuutesi uusimpiin versioihin
+- Päivittää `biome.json` tai `biome.jsonc`  
+- Päivittää VS Code -asetuksesi
+- Tarjoaa mahdollisuuden ottaa käyttöön tekoälyeditorin säännöt (Cursor, Windsurf, Zed jne.)
+- Tarjoaa mahdollisuuden ottaa käyttöön uusia integraatioita (Git-hookit, lint-staged jne.)
+
+Päivityksen jälkeen saatat haluta tarkistaa `biome.json` / `biome.jsonc` -tiedoston poistaaksesi mahdolliset ohitukset. Lisäksi käynnistä editorisi uudelleen varmistaaksesi, että uusi konfiguraatio otetaan käyttöön.
+
+Lisäksi tutustu Biomen [v2 päivitysohjeeseen](https://biomejs.dev/guides/upgrade-to-biome-v2/) saadaksesi lisätietoja skeema- / sääntömuutoksista.
+
+### Manuaalinen migraatio
+
+Jos haluat enemmän hallintaa prosessista, noudata [Manuaalinen migraatio](/setup#manual-installation) -ohjeita tekemällä:
+
+- Asentamalla Ultraciten ja Biomen päivitetyt versiot manuaalisesti
+- Päivittämällä `biome.json`-tiedostosi uuteen skeemaversioon
+- Päivittämällä `.vscode/settings.json` -tiedoston (valinnainen)
+- Lisäämällä tekoälyeditorin sääntötiedoston (valinnainen)
+- Lisäämällä uusia integraatioita (valinnainen)
+
+Migraation jälkeen käynnistä editorisi uudelleen varmistaaksesi, että uusi konfiguraatio otetaan käyttöön.

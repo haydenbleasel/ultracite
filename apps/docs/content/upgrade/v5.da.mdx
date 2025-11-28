@@ -1,0 +1,49 @@
+---
+title: Opgradering til v5
+description: Hvordan du opgraderer dit projekt fra Ultracite v4 til v5.
+---
+
+Ultracite v5 er en større udgivelse med betydelige forbedringer og brydende ændringer. Denne vejledning hjælper dig med at opgradere din eksisterende v4-opsætning til v5.
+
+## Hvad er nyt i v5
+
+- **Opdateret Biome**: Opgraderet fra v1.x til v2.x
+- **Nyt konfigurationsformat**: Skift fra `biome.json` til `biome.jsonc`
+- **Forbedret CLI**: Omskrevet i TypeScript med bedre fejlbehandling
+- **Editorintegrationer**: Indbygget understøttelse af Cursor, Windsurf, Zed og GitHub Copilot
+- **Git-hooks**: Valgfrie integrationer inklusive Husky, lint-staged og lefthook
+- **Forbedret skema**: Ny skema-URL med bedre validering
+- **Forenklede VS Code-indstillinger**: Samlede filtype-overskrivelser i én enkelt linje
+
+## Migreringstrin
+
+### Automatisk migrering (Anbefalet)
+
+Den nemmeste måde at migrere på er at køre den nye initialiseringskommando:
+
+```package-install
+npx ultracite@latest init
+```
+
+Dette vil:
+- Opdatere dine afhængigheder til de nyeste versioner
+- Opdatere din `biome.json` eller `biome.jsonc`  
+- Opdatere dine VS Code-indstillinger
+- Tilbyde at opsætte AI-editorregler (Cursor, Windsurf, Zed osv.)
+- Tilbyde at opsætte nye integrationer (Git-hooks, lint-staged osv.)
+
+Efter opgraderingen vil du måske gennemgå din `biome.json` / `biome.jsonc`-fil for at fjerne eventuelle overskrivelser. Genstart desuden din editor for at sikre, at den nye konfiguration anvendes.
+
+Gennemgå også Biome [v2-opgraderingsvejledning](https://biomejs.dev/guides/upgrade-to-biome-v2/) for mere information om skema / regelændringer.
+
+### Manuel migrering
+
+Hvis du foretrækker mere kontrol over processen, følg trinnene i [Manuel migrering](/setup#manual-installation) ved at:
+
+- Installere de opdaterede versioner af Ultracite og Biome manuelt
+- Opdatere din `biome.json`-fil til den nye skemaversion
+- Opdatere filen `.vscode/settings.json` (valgfrit)
+- Tilføje en regelfil til AI-editoren (valgfrit)
+- Tilføje nye integrationer (valgfrit)
+
+Efter migreringen genstart din editor for at sikre, at den nye konfiguration anvendes.

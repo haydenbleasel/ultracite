@@ -1,0 +1,48 @@
+---
+title: Migrer depuis Prettier
+description: Comment migrer votre projet de Prettier vers Ultracite.
+---
+
+Si vous utilisez Prettier et souhaitez passer à la configuration préconfigurée d'Ultracite, ce guide vous aidera à migrer tout en maintenant les standards de qualité du code.
+
+## Pourquoi migrer vers Ultracite ?
+
+- **Vitesse fulgurante** : Biome (la fondation d'Ultracite) est basé sur Rust, beaucoup plus rapide que Prettier
+- **Zéro configuration** : Des centaines de règles préconfigurées par rapport à une configuration manuelle de Prettier
+- **Outil combiné** : Remplace à la fois ESLint et Prettier par un seul outil
+- **Intégration de l'IA** : Prise en charge intégrée des éditeurs alimentés par l'IA (Cursor, Windsurf, GitHub Copilot)
+- **Sécurité des types** : Règles TypeScript complètes avec vérifications strictes des nulls
+- **Normes modernes** : Dernières bonnes pratiques JavaScript/TypeScript
+
+## Avant de commencer
+
+Assurez-vous d'avoir :
+
+- Un projet existant utilisant Prettier
+- Node.js v14.18+ (Node 18+ recommandé)
+- Un fichier `package.json`
+
+## Configuration automatique
+
+Exécutez le [script d'installation automatique](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Ceci va :
+
+- Installer Ultracite en tant que dépendance
+- Fusionner votre `biome.json` / `biome.jsonc` existant avec le préréglage d'Ultracite
+- Fusionner votre `.vscode/settings.json` existant avec le préréglage d'Ultracite
+- Activer `strictNullChecks` dans votre fichier `tsconfig.json` (ou en créer un si celui-ci n'existe pas)
+- Conserver vos règles et paramètres personnalisés
+- Configurer les intégrations d'éditeur
+
+Assurez-vous de choisir de supprimer la configuration `Prettier` existante. Cela entraînera :
+
+- La suppression de Prettier et de toutes les dépendances associées
+- La suppression de tous les fichiers de configuration Prettier
+- La suppression de toutes les commandes liées à Prettier de votre fichier `.vscode/settings.json`
+
+Après la mise à niveau, vous pouvez vouloir passer en revue votre fichier `biome.json` / `biome.jsonc` pour supprimer toute surcharge. De plus, redémarrez votre éditeur pour vous assurer que la nouvelle configuration est bien appliquée.

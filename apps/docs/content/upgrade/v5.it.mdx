@@ -1,0 +1,49 @@
+---
+title: Aggiornamento a v5
+description: Come aggiornare il tuo progetto da Ultracite v4 a v5.
+---
+
+Ultracite v5 è una release importante con miglioramenti significativi e breaking change. Questa guida ti aiuterà ad aggiornare la tua configurazione esistente da v4 a v5.
+
+## Novità in v5
+
+- **Biome aggiornato**: Aggiornato da v1.x a v2.x
+- **Nuovo formato di configurazione**: Passaggio da `biome.json` a `biome.jsonc`
+- **CLI migliorata**: Riscritta in TypeScript con una gestione degli errori migliorata
+- **Integrazioni editor**: Supporto integrato per Cursor, Windsurf, Zed e GitHub Copilot
+- **Hook di Git**: Integrazioni opzionali inclusi Husky, lint-staged e lefthook
+- **Schema migliorato**: Nuovo URL dello schema con validazione migliorata
+- **Impostazioni di VS Code semplificate**: Sovrascritture dei tipi di file combinate in un'unica riga
+
+## Passaggi di migrazione
+
+### Migrazione automatica (consigliata)
+
+Il modo più semplice per migrare è eseguire il nuovo comando di inizializzazione:
+
+```package-install
+npx ultracite@latest init
+```
+
+Questo farà:
+- Aggiorna le dipendenze alle versioni più recenti
+- Aggiorna il tuo `biome.json` o `biome.jsonc`  
+- Aggiorna le impostazioni di VS Code
+- Offrirà la possibilità di impostare le regole AI per l'editor (Cursor, Windsurf, Zed, ecc.)
+- Offrirà la possibilità di configurare nuove integrazioni (Git hooks, lint-staged, ecc.)
+
+Dopo l'aggiornamento, potresti voler rivedere il file `biome.json` / `biome.jsonc` per rimuovere eventuali override. Inoltre, riavvia il tuo editor per assicurarti che la nuova configurazione sia applicata.
+
+Inoltre, consulta la Biome [guida di aggiornamento a v2](https://biomejs.dev/guides/upgrade-to-biome-v2/) per ulteriori informazioni sulle modifiche di schema e regole.
+
+### Migrazione manuale
+
+Se preferisci avere un maggiore controllo sul processo, segui i passaggi di [Migrazione manuale](/setup#manual-installation) eseguendo:
+
+- Installare manualmente le versioni aggiornate di Ultracite e Biome
+- Aggiornare il file `biome.json` alla nuova versione dello schema
+- Aggiornare il file `.vscode/settings.json` (opzionale)
+- Aggiungere un file di regole AI per l'editor (opzionale)
+- Aggiungere nuove integrazioni (opzionale)
+
+Dopo la migrazione, riavvia il tuo editor per assicurarti che la nuova configurazione sia applicata.

@@ -1,0 +1,63 @@
+---
+title: Installazione
+description: Come installare Ultracite nel tuo progetto.
+---
+
+Ultracite può essere installato con tutti i principali package manager. Avrai bisogno di Node.js v14.18+ (consigliato Node 18+) e di un progetto con un file `package.json`.
+
+## Installazione
+
+Il modo più semplice per iniziare è eseguire lo script `init` di Ultracite, che installerà i pacchetti necessari e configurerà il file di configurazione per te. Nella directory del tuo progetto, esegui:
+
+```package-install
+npx ultracite init
+```
+
+Puoi opzionalmente passare i seguenti flag al comando `init`:
+
+| Flag                | Descrizione                                      | Opzioni                                                                 |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Il package manager da utilizzare.                | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | I framework da configurare.                      | Valori separati da virgola: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Gli editor da configurare.                       | Valori separati da virgola: `vscode`, `zed`                             |
+| `--agents`          | Gli agenti AI da configurare.                    | Valori separati da virgola: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | I hook degli agenti da configurare.              | Valori separati da virgola: `cursor`, `claude`                          |
+| `--integrations`    | Integrazioni aggiuntive da impostare.            | Valori separati da virgola: `husky`, `lefthook`, `lint-staged`          |
+| `--migrate`         | Strumenti di migrazione da rimuovere.            | Valori separati da virgola: `eslint`, `prettier` (rimuove dipendenze, file di configurazione e impostazioni dell'editor) |
+| `--skip-install`    | Salta l'installazione delle dipendenze.          | (nessun valore richiesto)                                               |
+| `--quiet`           | Sopprime richieste interattive e output visivo.  | (nessun valore richiesto, abilitato automaticamente in CI)              |
+
+### Utilizzo programmatico
+
+Per strumenti che devono chiamare Ultracite in modo programmatico (come CLI di scaffolding), puoi usare il flag `--quiet` per sopprimere tutte le richieste interattive e l'output visivo:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+Il flag `--quiet` viene abilitato automaticamente quando la variabile d'ambiente `CI` è impostata su `true` o `1`, rendendolo adatto per pipeline CI/CD:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+In modalità silenziosa, Ultracite:
+- Ignora tutte le richieste interattive
+- Usa valori predefiniti sensati per tutte le opzioni
+- Sopprime l'ASCII art, gli spinner e i messaggi di log
+- Crea solo la configurazione core di Biome
+- Esce correttamente con codice 0 in caso di successo o 1 in caso di errore
+
+## Estensioni
+
+Se stai usando Visual Studio Code, installa l'estensione ufficiale [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome), che consente il formatting/fixing al salvataggio:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+Inoltre, se usi Tailwind CSS, è consigliato installare l'estensione [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) per l'ordinamento delle classi e i suggerimenti:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

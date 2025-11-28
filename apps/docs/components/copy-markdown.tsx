@@ -1,59 +1,34 @@
 "use client";
 
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
-import { CheckIcon, CopyIcon, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 type CopyMarkdownProps = {
-  markdownUrl: string;
+  markdown: string;
 };
 
-const cache = new Map<string, string>();
-
-export const CopyMarkdown = ({ markdownUrl }: CopyMarkdownProps) => {
-  const [isLoading, setLoading] = useState(false);
-  const [checked, onClick] = useCopyButton(async () => {
-    const cached = cache.get(markdownUrl);
-
-    if (cached) {
-      return navigator.clipboard.writeText(cached);
-    }
-
-    setLoading(true);
-
+export const CopyMarkdown = ({ markdown }: CopyMarkdownProps) => {
+  const [checked, onClick] = useCopyButton(() => {
     try {
-      const response = await fetch(markdownUrl);
-      const content = await response.text();
-
-      cache.set(markdownUrl, content);
-
       navigator.clipboard.write([
         new ClipboardItem({
-          "text/plain": content,
+          "text/plain": markdown,
         }),
       ]);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      toast.error("Failed to copy markdown", {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
     }
   });
 
-  let Icon = <CopyIcon className="size-4" />;
-
-  if (isLoading) {
-    Icon = <Loader2 className="size-4 animate-spin" />;
-  } else if (checked) {
-    Icon = <CheckIcon className="size-4" />;
-  }
+  const Icon = checked ? CheckIcon : CopyIcon;
 
   return (
-    <Button
-      className="shadow-none"
-      disabled={isLoading}
-      onClick={onClick}
-      variant="secondary"
-    >
-      {Icon}
+    <Button className="shadow-none" onClick={onClick} variant="outline">
+      <Icon className="size-4" />
       Copy Markdown
     </Button>
   );

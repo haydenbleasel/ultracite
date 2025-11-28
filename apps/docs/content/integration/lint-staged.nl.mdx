@@ -1,0 +1,151 @@
+---
+title: lint-staged
+description: Voer Ultracite automatisch uit op uw in staging geplaatste Git-bestanden met lint-staged
+---
+
+Ultracite integreert naadloos met [lint-staged](https://github.com/okonet/lint-staged) om uw code automatisch te formatteren en te linten voordat u commit. Dit zorgt ervoor dat alleen schone, correct opgemaakte code in uw repository terechtkomt.
+
+## Wat is lint-staged?
+
+lint-staged is een tool die linters en formatters uitvoert op gestage Git-bestanden. Het is bijzonder nuttig omdat het:
+
+- Verwerkt alleen bestanden die daadwerkelijk gecommit worden
+- Voorkomt dat slecht opgemaakte code in uw repository terechtkomt
+- Snel draait omdat het alleen gewijzigde bestanden controleert
+- Perfect integreert met Git-hooks
+
+## Hoe Ultracite lint-staged gebruikt
+
+Wanneer u `npx ultracite init` uitvoert en de lint-staged-optie selecteert, doet Ultracite automatisch het volgende:
+
+1. **Installeert lint-staged** als een ontwikkelingsafhankelijkheid  
+2. **Maakt aan of werkt bij** uw lint-staged-configuratie  
+3. **Configureert de formatter** om op relevante bestandstypen te draaien
+
+De standaardconfiguratie voert `npx ultracite fix` uit op deze bestandstypen:
+- JavaScript/TypeScript-bestanden (`.js`, `.jsx`, `.ts`, `.tsx`)
+- JSON-bestanden (`.json`, `.jsonc`)
+- CSS-bestanden (`.css`, `.scss`)
+- Markdown-bestanden (`.md`, `.mdx`)
+
+## Ondersteunde configuratie-indelingen
+
+De lint-staged-integratie van Ultracite ondersteunt alle standaard lint-staged-configuratie-indelingen:
+
+### package.json
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+### .lintstagedrc.json
+
+```json title=".lintstagedrc.json"
+{
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+}
+```
+
+### .lintstagedrc.js (CommonJS)
+
+```javascript title=".lintstagedrc.js"
+module.exports = {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.mjs (ES Modules)
+
+```javascript title=".lintstagedrc.mjs"
+export default {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.yaml
+
+```yaml title=".lintstagedrc.yaml"
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - 'npx ultracite fix'
+```
+
+## Slimme samenvoeging van configuraties
+
+Als u al een lint-staged-configuratie heeft, zal Ultracite:
+
+- **Detecteert** uw bestaande configuratie-indeling  
+- **Voegt samen** de Ultracite-regels met uw bestaande regels  
+- **Behoudt** uw aangepaste configuraties  
+- **Bijwerkt** het bestand op zijn plaats
+
+Dit betekent dat u `npx ultracite init` veilig kunt uitvoeren, zelfs als u lint-staged al hebt ingesteld.
+
+## Hoe het werkt
+
+1. **Pre-commit-hook**: lint-staged wordt vóór elke commit uitgevoerd via Husky  
+2. **Bestandsdetectie**: Alleen gestage bestanden die aan de patronen voldoen worden verwerkt  
+3. **Format-commando**: `npx ultracite fix` wordt op elk overeenkomend bestand uitgevoerd  
+4. **Automatisch oplossen**: Biome verhelpt automatisch problemen waar mogelijk  
+5. **Opnieuw toevoegen aan staging**: Herstelde bestanden worden automatisch opnieuw in staging geplaatst voor commit
+
+## Handmatige configuratie
+
+Als u uw lint-staged-setup wilt aanpassen, kunt u de configuratie na initialisatie wijzigen:
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite fix"],
+    "*.{css,scss}": ["npx ultracite fix", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+## Integratie van commando's
+
+De lint-staged-integratie werkt met Ultracite's commando-structuur:
+
+- **`npx ultracite fix`**: Voert Biome uit met automatisch oplossen (gebruikt door lint-staged)  
+- **`npx ultracite check`**: Voert Biome uit zonder automatisch oplossen (voor CI/handmatige controles)
+
+## Probleemoplossing
+
+### Configuratie niet gevonden
+Als u fouten ziet over ontbrekende lint-staged-configuratie:
+
+```bash
+npx ultracite init  # Voer initialisatie opnieuw uit
+```
+
+### ESM/CommonJS-problemen
+Ultracite detecteert automatisch uw projecttype en maakt het passende configuratieformaat aan:
+
+- **ESM-projecten** (met `"type": "module"` in package.json) krijgen `.mjs`-configuraties  
+- **CommonJS-projecten** krijgen `.cjs`-configuraties  
+- **Terugval**: Maakt `.lintstagedrc.json` aan als module-detectie faalt
+
+### Conflicten met bestaande configuratie
+Als u complexe bestaande configuraties heeft, moet u mogelijk handmatig samenvoegen:
+
+1. Maak een back-up van uw bestaande lint-staged-configuratie  
+2. Voer `npx ultracite init` uit  
+3. Voeg handmatig eventuele aangepaste regels samen die u wilt behouden
+
+## Beste praktijken
+
+1. **Houd het snel**: Voer alleen essentiële controles uit in lint-staged  
+2. **Gebruik specifieke patronen**: Richt u alleen op de bestanden die verwerking nodig hebben  
+3. **Combineer met CI**: Gebruik lint-staged voor snelle lokale controles, volledige linting in CI  
+4. **Test uw setup**: Maak een testcommit om te controleren of alles werkt
+
+## Gerelateerd
+
+- [Husky-integratie](/integration/husky) - Instellen van Git-hooks  
+- [Configuratie](/configuration) - Biome-configuratie-opties  
+- [Installatie](/setup) - Beginprojectopzet

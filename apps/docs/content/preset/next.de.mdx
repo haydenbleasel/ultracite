@@ -1,0 +1,98 @@
+---
+title: Next.js
+description: Next.js-spezifische Linting-Regeln für Ultracite.
+---
+
+Die Next.js-Konfiguration enthält Next.js-spezifische Linting-Regeln für Bildoptimierung, Dokumentstruktur und App Router-Muster.
+
+## Installation
+
+Fügen Sie die Next.js-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration fügt Regeln hinzu, die speziell für die Next.js-Entwicklung gelten:
+
+- **Bildoptimierung**: Erzwingt die Verwendung der Next.js Image-Komponente
+- **Dokumentstruktur**: Verhindert unsachgemäße Verwendung von Next.js-Spezialkomponenten
+- **Client-Komponenten**: Stellt sicher, dass asynchrone Client-Komponenten korrekt behandelt werden
+- **Konfigurationsdateien**: Spezielle Behandlung für `next.config.*`-Dateien
+
+## Next.js-spezifische Regeln
+
+### Vorstufe
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Verhindert asynchrone Client-Komponenten in Next.js. Client-Komponenten sollten synchron sein; verwenden Sie Server-Komponenten für asynchrone Operationen. |
+
+### Performance
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noImgElement` | `error` | Verbot der Verwendung des `<img>`-HTML-Elements. Verwenden Sie stattdessen die Next.js-`<Image>`-Komponente für automatische Bildoptimierung. |
+
+### Stil
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Verbot der Verwendung des `<head>`-HTML-Elements. Verwenden Sie stattdessen `next/head` von Next.js oder die Metadata-API des App Router. |
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Verhindert das Importieren von `next/document` in Seiten-Dateien. `_document.tsx` sollte nur in `pages/_document.tsx` existieren. |
+| `noHeadImportInDocument` | `error` | Verhindert das Importieren von `next/head` in `_document.tsx`. Verwenden Sie stattdessen `<Head>` aus `next/document`. |
+
+## Konfigurationsdatei-Überschreibungen
+
+Das Next.js-Preset enthält spezielle Behandlung für Konfigurationsdateien und App Router-Komponenten:
+
+### Next.js-Konfigurationsdateien
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Dies ermöglicht Next.js-Konfigurationsmuster, die normalerweise möglicherweise die Linting-Regeln nicht bestehen würden.
+
+### App Router-Seiten und Layouts
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router-Seiten- und Layout-Komponenten dürfen asynchron sein, ohne ein `await` zu erfordern, da Next.js diese speziell für serverseitiges Rendering und Datenabruf behandelt.

@@ -1,0 +1,98 @@
+---
+title: Next.js
+description: Next.js-specifika lintningsregler för Ultracite.
+---
+
+Next.js-konfigurationen innehåller Next.js-specifika lintningsregler för bildoptimering, dokumentstruktur och App Router-mönster.
+
+## Installation
+
+Lägg till Next.js-konfigurationen i din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+## Översikt
+
+Denna konfiguration lägger till regler specifika för Next.js-utveckling:
+
+- **Bildoptimering**: Tvinga användning av Next.js Image-komponenten
+- **Dokumentstruktur**: Förhindra felaktig användning av Next.js-specialkomponenter
+- **Klientkomponenter**: Säkerställ att asynkrona klientkomponenter hanteras korrekt
+- **Konfigurationsfiler**: Särskild hantering för `next.config.*`-filer
+
+## Next.js-specifika regler
+
+### Förstadium
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Förhindra asynkrona klientkomponenter i Next.js. Klientkomponenter bör vara synkrona; använd serverkomponenter för asynkrona operationer. |
+
+### Prestanda
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noImgElement` | `error` | Tillåt inte användning av `<img>`-HTML-elementet. Använd Next.js `<Image>`-komponenten istället för automatisk bildoptimering. |
+
+### Stil
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Tillåt inte användning av `<head>`-HTML-elementet. Använd Next.js `next/head` eller App Router:s metadata-API istället. |
+
+### Misstänkt
+
+| Regel | Inställning | Beskrivning |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | Förhindra import av `next/document` i sidfiler. `_document.tsx` ska endast finnas i `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Förhindra import av `next/head` i `_document.tsx`. Använd `<Head>` från `next/document` istället. |
+
+## Överstyrningar för konfigurationsfiler
+
+Next.js-presetet inkluderar särskild hantering för konfigurationsfiler och App Router-komponenter:
+
+### Next.js-konfigurationsfiler
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Detta tillåter Next.js-konfigurationsmönster som kanske normalt inte skulle klara lintningsreglerna.
+
+### App Router-sidor och layouter
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+App Router-sid- och layoutkomponenter får vara asynkrona utan att kräva `await`, eftersom Next.js hanterar dessa särskilt för serversidig renderering och datahämtning.

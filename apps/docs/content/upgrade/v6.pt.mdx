@@ -1,0 +1,75 @@
+---
+title: Atualizar para v6
+description: Guia para atualizar do Ultracite v5 para o v6 com o novo sistema de predefinições.
+---
+
+Ultracite v6 introduz predefinições específicas por framework que lhe dão mais controlo sobre quais regras se aplicam ao seu projeto. **Esta atualização não é incompatível** para utilizadores de Next.js/React.
+
+## O que mudou
+
+v6 apresenta [predefinições específicas de framework](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Regras base para JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Regras específicas para React
+- [`ultracite/next`](/preset/next) - Regras específicas para Next.js
+- [`ultracite/solid`](/preset/solid) - Regras do Solid.js
+- [`ultracite/vue`](/preset/vue) - Regras do Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Regras do Svelte
+- [`ultracite/qwik`](/preset/qwik) - Regras do Qwik
+- [`ultracite/angular`](/preset/angular) - Analisador HTML do Angular
+- [`ultracite/remix`](/preset/remix) - Suporte a roteamento baseado em ficheiros
+
+## Migração
+
+### Projetos Next.js/React
+
+Atualize o seu `biome.jsonc` para estender as predefinições apropriadas:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Projetos sem React
+
+Mude para a predefinição core se não estiver a usar React:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Outros frameworks
+
+Use a predefinição apropriada para o seu framework:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Projetos multi-framework
+
+Combine as predefinições conforme necessário:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

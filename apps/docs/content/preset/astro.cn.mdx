@@ -1,0 +1,47 @@
+---
+title: Astro
+description: 适用于 Astro 的 Ultracite 配置。
+---
+
+Astro 配置对 lint 规则进行了针对 Astro 的调整，以处理 Astro 组件的独特结构，特别是围绕 frontmatter（文件头）脚本和组件语法的部分。
+
+## 安装
+
+将 Astro 配置添加到你的 `biome.jsonc`：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/astro"]
+}
+```
+
+## 概览
+
+此配置针对 Astro 开发调整了规则：
+
+- **未使用的变量/导入**: 允许在 Astro 文件中存在未使用的变量和导入，因为 frontmatter（文件头）的限制，变量可能仅在模板中使用
+- **变量声明**: 放宽对 `const` 的强制，因为 Astro frontmatter（文件头）可能需要可重新赋值的变量
+- **导入类型**: 禁用显式的导入类型要求以获得更好的兼容性
+- **React 特定属性**: 标记像 `className` 这样的 React 专用属性，因为 Astro 使用标准的 HTML 属性
+
+## Astro 特定规则
+
+### 正确性
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | 允许在 Astro 文件中出现未使用的变量。frontmatter（文件头）中声明的变量可能仅在模板部分使用。 |
+| `noUnusedImports` | `off` | 允许在 Astro 文件中出现未使用的导入。frontmatter（文件头）中的导入可能仅在模板部分使用。 |
+
+### 风格
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `useConst` | `off` | 允许使用 `let` 和 `var` 声明。Astro 组件的 frontmatter（文件头）可能需要可重新赋值的变量。 |
+| `useImportType` | `off` | 禁用显式的 import type 要求，以便与 Astro 的构建系统获得更好的兼容性。 |
+
+### 可疑
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | 在 Astro 中禁止使用像 `className` 和 `htmlFor` 这样的 React 专用属性。请改用 `class` 和 `for`。 |

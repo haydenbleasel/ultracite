@@ -1,0 +1,61 @@
+---
+title: React
+description: Ultracite için React'e özgü lint kuralları.
+---
+
+React yapılandırması, JSX, hook'lar ve bileşen kalıpları için React'e özgü lint kuralları içerir.
+
+## Kurulum
+
+React yapılandırmasını `biome.jsonc` dosyanıza ekleyin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Genel Bakış
+
+Bu yapılandırma React geliştirmeye özgü kurallar ekler:
+
+- **JSX Kuralları**: Doğru JSX sözdizimi ve kalıplarını zorunlu kılar
+- **Hook Kuralları**: React hook'larının doğru kullanılmasını sağlar
+- **Bileşen Kuralları**: React bileşenleri için en iyi uygulamaları uygular
+- **Children Kullanımı**: Uygunsuz children prop kullanımını engeller
+
+## React'e Özgü Kurallar
+
+### Doğruluk
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | children'ın prop olarak geçirilmesini engeller. children açılış ve kapanış etiketleri arasına yerleştirilmelidir. |
+| `noNestedComponentDefinitions` | `error` | Bileşen tanımlarının diğer bileşenlerin içinde yapılmasını engeller. Bu gereksiz yeniden renderlara neden olur. |
+| `noReactPropAssignments` | `error` | React bileşenlerinde prop'ların yeniden atanmasını engeller. Props değiştirilemez (immutable) olarak ele alınmalıdır. |
+| `noRenderReturnValue` | `error` | `ReactDOM.render()`'ın dönüş değerinin kullanılmasını engeller. |
+| `noVoidElementsWithChildren` | `error` | Void öğelerin (örn. `<img>`, `<br>`) children içermesini engeller. |
+| `useExhaustiveDependencies` | `error` | React hook'larında (useEffect, useCallback, useMemo) tüm bağımlılıkların doğru şekilde belirtildiğini zorunlu kılar. |
+| `useHookAtTopLevel` | `error` | Tüm React hook'larının bileşen fonksiyonlarının en üst seviyesinden çağrılmasını, döngüler, koşullar veya iç içe fonksiyonlar içinde çağrılmamasını zorunlu kılar. |
+| `useJsxKeyInIterable` | `error` | Yineleyici içindeki öğelerin React'in reconciliation işlemi için bir `key` prop'una sahip olmasını zorunlu kılar. |
+
+### Deneysel
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Eski `React.forwardRef` kullanımını engeller. Bunun yerine ref'i bir prop olarak kullanın (React 19+). |
+
+### Stil
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | React'te sınıf bileşenleri yerine fonksiyon bileşenlerinin kullanılmasını zorunlu kılar. |
+
+### Şüpheli
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Dizi indekslerinin key olarak kullanılmasını engeller. Dizi indeksleri kararlı tanımlayıcılar değildir ve bileşen durumunda sorunlara yol açabilir. |
+| `noDuplicateJsxProps` | `error` | JSX'te yinelenen özelliklerin kullanılmasını engeller. |
+| `noSuspiciousSemicolonInJsx` | `error` | JSX öğelerinin anlamını değiştiren noktalı virgüllerin kullanılmasını engeller. |
+| `noReactSpecificProps` | `off` | `className` ve `htmlFor` gibi React'e özgü prop'lara izin verir. |

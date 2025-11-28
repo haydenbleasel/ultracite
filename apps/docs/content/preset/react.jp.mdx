@@ -1,0 +1,61 @@
+---
+title: React
+description: Ultracite 向けの React 固有のリンティングルール。
+---
+
+この React 設定は JSX、hooks、コンポーネントパターンに関する React 固有のリンティングルールを提供します。
+
+## インストール
+
+React 設定を `biome.jsonc` に追加します:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## 概要
+
+この設定は React 開発に特化したルールを追加します:
+
+- **JSX ルール**: 適切な JSX 構文とパターンを強制します
+- **Hooks ルール**: React の hooks が正しく使用されていることを保証します
+- **コンポーネントルール**: React コンポーネントのベストプラクティスを強制します
+- **children の取り扱い**: children プロップの不適切な使用を防ぎます
+
+## React 固有のルール
+
+### 正確性
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | children を props として渡すことを防ぎます。children は開始タグと終了タグの間にネストするべきです。 |
+| `noNestedComponentDefinitions` | `error` | コンポーネントの内部で他のコンポーネントを定義することを防ぎます。これは不要な再レンダリングを引き起こします。 |
+| `noReactPropAssignments` | `error` | React コンポーネント内で props を再代入することを防ぎます。props は不変として扱うべきです。 |
+| `noRenderReturnValue` | `error` | `ReactDOM.render()` の返り値の使用を防ぎます。 |
+| `noVoidElementsWithChildren` | `error` | void 要素（例: `<img>`, `<br>`）に children が存在することを防ぎます。 |
+| `useExhaustiveDependencies` | `error` | React の hooks（useEffect、useCallback、useMemo）で、すべての依存関係が正しく指定されていることを強制します。 |
+| `useHookAtTopLevel` | `error` | React の hooks がループ、条件文、ネストした関数の内部ではなく、コンポーネント関数の最上位で呼び出されることを強制します。 |
+| `useJsxKeyInIterable` | `error` | イテラブル内の要素が React の差分更新（reconciliation）のために `key` プロップを持つことを強制します。 |
+
+### 試験的ルール
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | 古い `React.forwardRef` の使用を防ぎます。代わりに ref をプロップとして使用してください（React 19+）。 |
+
+### スタイル
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | React ではクラスコンポーネントではなく関数コンポーネントを使用することを強制します。 |
+
+### 疑わしい
+
+| ルール | 設定 | 説明 |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | 配列インデックスを key として使用することを防ぎます。配列インデックスは安定した識別子ではなく、コンポーネントの状態に問題を引き起こす可能性があります。 |
+| `noDuplicateJsxProps` | `error` | JSX 内で重複したプロパティを防ぎます。 |
+| `noSuspiciousSemicolonInJsx` | `error` | JSX 要素の意味を変えるようなセミコロンの使用を防ぎます。 |
+| `noReactSpecificProps` | `off` | `className` や `htmlFor` のような React 固有のプロップを許可します。 |

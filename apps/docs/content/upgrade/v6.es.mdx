@@ -1,0 +1,75 @@
+---
+title: Actualizar a v6
+description: Guía para actualizar de Ultracite v5 a v6 con el nuevo sistema de presets.
+---
+
+Ultracite v6 introduce presets específicos por framework que te dan más control sobre qué reglas se aplican a tu proyecto. **Esta actualización no introduce cambios incompatibles** para usuarios de Next.js/React.
+
+## Qué cambió
+
+v6 introduce [presets específicos por framework](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Reglas base de JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Reglas específicas de React
+- [`ultracite/next`](/preset/next) - Reglas específicas de Next.js
+- [`ultracite/solid`](/preset/solid) - Reglas de Solid.js
+- [`ultracite/vue`](/preset/vue) - Reglas de Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Reglas de Svelte
+- [`ultracite/qwik`](/preset/qwik) - Reglas de Qwik
+- [`ultracite/angular`](/preset/angular) - Analizador HTML de Angular
+- [`ultracite/remix`](/preset/remix) - Soporte para enrutamiento basado en archivos
+
+## Migración
+
+### Proyectos Next.js/React
+
+Actualiza tu `biome.jsonc` para extender los presets apropiados:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Proyectos sin React
+
+Cambia al preset core si no usas React:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Otros frameworks
+
+Usa el preset apropiado para tu framework:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Proyectos con múltiples frameworks
+
+Combina los presets según sea necesario:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

@@ -1,0 +1,47 @@
+---
+title: Astro
+description: Astro-specifieke configuratie voor Ultracite.
+---
+
+De Astro-configuratie bevat Astro-specifieke aanpassingen van lintregels om de unieke structuur van Astro-componenten af te handelen, met name rond frontmatter-scripts en component-syntaxis.
+
+## Installatie
+
+Voeg de Astro-configuratie toe aan je `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/astro"]
+}
+```
+
+## Overzicht
+
+Deze configuratie past regels aan voor Astro-ontwikkeling:
+
+- **Ongebruikte variabelen/imports**: Sta ongebruikte variabelen en imports toe in Astro-bestanden vanwege frontmatter-beperkingen waarbij variabelen mogelijk alleen in de template worden gebruikt
+- **Variabele declaraties**: Versoepelt de handhaving van `const` aangezien Astro-frontmatter mogelijk hertoewijsbare variabelen vereist
+- **Importtypes**: Schakelt expliciete importtype-eisen uit voor betere compatibiliteit
+- **React-specifieke props**: Signaleert React-specifieke props zoals `className` aangezien Astro standaard HTML-attributen gebruikt
+
+## Astro-specifieke regels
+
+### Correctheid
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Sta ongebruikte variabelen toe in Astro-bestanden. Variabelen die in de frontmatter zijn gedeclareerd, kunnen mogelijk alleen in het template-gedeelte worden gebruikt. |
+| `noUnusedImports` | `off` | Sta ongebruikte imports toe in Astro-bestanden. Imports in de frontmatter kunnen mogelijk alleen in het template-gedeelte worden gebruikt. |
+
+### Stijl
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `useConst` | `off` | Sta `let` en `var` declaraties toe. Astro-componentfrontmatter kan hertoewijsbare variabelen vereisen. |
+| `useImportType` | `off` | Schakel expliciete importtype-eisen uit voor betere compatibiliteit met Astro's buildsysteem. |
+
+### Verdacht
+
+| Regel | Instelling | Beschrijving |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbied React-specifieke props zoals `className` en `htmlFor` in Astro. Gebruik in plaats daarvan `class` en `for`. |

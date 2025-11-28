@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Solid.js-spezifische Linting-Regeln für Ultracite.
+---
+
+Die Solid-Konfiguration enthält Solid.js-spezifische Linting-Regeln für Reaktivität, Komponentenmuster und den Umgang mit JSX.
+
+## Installation
+
+Fügen Sie die Solid-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration fügt Regeln hinzu, die speziell für die Entwicklung mit Solid.js gelten:
+
+- **Reaktivitätsregeln**: Erzwingt die korrekte Verwendung der reaktiven Primitiven von Solid
+- **Komponentenmuster**: Stellt sicher, dass Solid-Komponenten bewährte Praktiken einhalten
+- **Props-Verarbeitung**: Verhindert das Destructuring von Props (unterbricht die Reaktivität)
+- **React-spezifische Props**: Untersagt React-spezifische Props in Solid-Komponenten
+
+## Solid-spezifische Regeln
+
+### Korrektheit
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Verhindert das Destructuring von Props in Solid-Komponenten. Das Destructuring beeinträchtigt das Reaktivitätssystem von Solid. Greifen Sie stattdessen direkt auf die Props zu. |
+
+### Leistung
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Erzwingt die Verwendung der `<For>`-Komponente zum Iterieren über Arrays in Solid. Die `<For>`-Komponente ist für die Reaktivität von Solid optimiert. |
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbietet React-spezifische Props wie `className` und `htmlFor` in Solid. Verwenden Sie stattdessen `class` und `for`. |

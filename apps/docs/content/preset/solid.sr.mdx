@@ -1,0 +1,45 @@
+---
+title: Solid
+description: Pravila lintovanja specifična za Solid.js za Ultracite.
+---
+
+Konfiguracija za Solid sadrži pravila za lintovanje specifična za Solid.js koja se tiču reaktivnosti, obrazaca komponenti i rukovanja JSX-om.
+
+## Instalacija
+
+Dodajte konfiguraciju za Solid u svoj `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+## Pregled
+
+Ova konfiguracija dodaje pravila specifična za razvoj u Solid.js:
+
+- **Pravila reaktivnosti**: Nalaže pravilnu upotrebu Solid-ovih reaktivnih primitiva
+- **Obrasci komponenti**: Osigurava da Solid komponente slede najbolje prakse
+- **Rukovanje props-ima**: Sprečava destrukturiranje props-a (narušava Solid-ov sistem reaktivnosti)
+- **React-specifični props**: Zabranjuje React-specifične props u Solid komponentama
+
+## Solid-specifična pravila
+
+### Ispravnost
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noSolidDestructuredProps` | `error` | Sprečava destrukturiranje props-a u Solid komponentama. Destrukturiranje narušava Solid-ov sistem reaktivnosti. Umesto toga pristupajte props direktno. |
+
+### Performanse
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `useSolidForComponent` | `error` | Nalaže korišćenje `<For>` komponente za iteriranje kroz nizove u Solid-u. `<For>` komponenta je optimizovana za Solid-ov sistem reaktivnosti. |
+
+### Sumnjivo
+
+| Pravilo | Podešavanje | Opis |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Zabranjuje React-specifične props kao što su `className` i `htmlFor` u Solid-u. Koristite umesto toga `class` i `for`. |

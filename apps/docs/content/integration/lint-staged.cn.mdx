@@ -1,0 +1,151 @@
+---
+title: lint-staged
+description: 在暂存的 Git 文件上使用 lint-staged 自动运行 Ultracite
+---
+
+Ultracite 无缝集成了 [lint-staged](https://github.com/okonet/lint-staged)，以在每次提交前自动格式化和 lint 你的代码。这可确保只有干净、格式正确的代码进入你的代码库。
+
+## 什么是 lint-staged？
+
+lint-staged 是一个针对暂存的 Git 文件运行 linters 和格式化工具的工具。它特别有用，因为它：
+
+- 仅处理实际上将被提交的文件
+- 防止格式不良的代码进入你的代码库
+- 运行速度快，因为只检查更改过的文件
+- 与 Git 钩子完美集成
+
+## Ultracite 如何使用 lint-staged
+
+当你运行 `npx ultracite init`，并选择 lint-staged 选项时，Ultracite 会自动：
+
+1. **安装 lint-staged** 作为开发依赖
+2. **创建或更新** 你的 lint-staged 配置
+3. **配置格式化工具** 在相关文件类型上运行
+
+默认配置会在以下文件类型上运行 `npx ultracite fix`：
+- JavaScript/TypeScript 文件（`.js`, `.jsx`, `.ts`, `.tsx`）
+- JSON 文件（`.json`, `.jsonc`）
+- CSS 文件（`.css`, `.scss`）
+- Markdown 文件（`.md`, `.mdx`）
+
+## 支持的配置格式
+
+Ultracite 的 lint-staged 集成支持所有标准的 lint-staged 配置格式：
+
+### package.json
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+### .lintstagedrc.json
+
+```json title=".lintstagedrc.json"
+{
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+}
+```
+
+### .lintstagedrc.js (CommonJS)
+
+```javascript title=".lintstagedrc.js"
+module.exports = {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.mjs (ES Modules)
+
+```javascript title=".lintstagedrc.mjs"
+export default {
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+};
+```
+
+### .lintstagedrc.yaml
+
+```yaml title=".lintstagedrc.yaml"
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - 'npx ultracite fix'
+```
+
+## 智能配置合并
+
+如果你已经有 lint-staged 配置，Ultracite 会：
+
+- **检测** 你现有的配置格式
+- **合并** Ultracite 的规则与现有规则
+- **保留** 你的自定义配置
+- **就地更新** 该文件
+
+这意味着即便你已经设置了 lint-staged，也可以放心运行 `npx ultracite init`。
+
+## 工作原理
+
+1. **预提交钩子**：lint-staged 通过 Husky 在每次提交之前运行
+2. **文件检测**：仅处理与模式匹配的暂存文件
+3. **格式化命令**：在每个匹配的文件上运行 `npx ultracite fix`
+4. **自动修复**：Biome 在可能的情况下自动修复问题
+5. **重新暂存**：修复后的文件会被自动重新暂存以便提交
+
+## 手动配置
+
+如果你需要自定义 lint-staged 设置，可以在初始化后修改配置：
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["npx ultracite fix", "npm run test:unit"],
+    "*.{json,jsonc}": ["npx ultracite fix"],
+    "*.{css,scss}": ["npx ultracite fix", "npm run test:styles"],
+    "*.{md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+## 命令集成
+
+lint-staged 集成与 Ultracite 的命令结构协同工作：
+
+- **`npx ultracite fix`**：运行 Biome 并自动修复（被 lint-staged 使用）
+- **`npx ultracite check`**：运行 Biome 但不自动修复（用于 CI/手动检查）
+
+## 故障排除
+
+### 未找到配置
+如果你看到关于缺少 lint-staged 配置的错误：
+
+```bash
+npx ultracite init  # Re-run initialization
+```
+
+### ESM/CommonJS 问题
+Ultracite 会自动检测你的项目类型并创建相应的配置格式：
+
+- **ESM 项目**（在 package.json 中带有 `"type": "module"`）会得到 `.mjs` 配置
+- **CommonJS 项目** 会得到 `.cjs` 配置
+- **回退**：如果模块检测失败，则创建 `.lintstagedrc.json`
+
+### 现有配置冲突
+如果你有复杂的现有配置，可能需要手动合并：
+
+1. 备份你现有的 lint-staged 配置
+2. 运行 `npx ultracite init`
+3. 手动合并你需要保留的自定义规则
+
+## 最佳实践
+
+1. **保持快速**：在 lint-staged 中只运行必要的检查
+2. **使用具体模式**：只针对需要处理的文件
+3. **与 CI 结合**：在本地使用 lint-staged 进行快速检查，在 CI 中进行完整的 lint
+4. **测试你的设置**：进行一次测试提交以确保一切正常
+
+## 相关
+
+- [Husky 集成](/integration/husky) - Git 钩子设置
+- [配置](/configuration) - Biome 配置选项
+- [初始化](/setup) - 项目初始设置

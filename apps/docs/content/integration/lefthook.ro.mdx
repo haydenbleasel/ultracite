@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Rulează automat Ultracite pe fișierele Git pregătite (staged) cu lefthook
+---
+
+Ultracite oferă integrare perfectă cu [lefthook](https://lefthook.dev/), un manager de Git hooks rapid și puternic. Această integrare configurează automat hook-uri pre-commit pentru a se asigura că codul tău este formatat corespunzător înainte de fiecare commit.
+
+## Ce este lefthook?
+
+lefthook este un manager nativ de Git hooks, rapid, pentru proiecte Node.js și Go. Este conceput să fie simplu, rapid și puternic, permițându-ți să gestionezi hook-urile Git pentru întreaga echipă folosind fișiere de configurare care pot fi comise în repository-ul tău.
+
+## Cum folosește Ultracite lefthook
+
+Când inițializezi Ultracite în proiectul tău, acesta poate configura automat lefthook pentru a rula formatarea codului înainte de fiecare commit. Acest lucru asigură că:
+
+- Tot codul comis respectă standarde consistente de formatare
+- Verificările de calitate a codului sunt aplicate automat
+- Membrii echipei nu trebuie să-și mai amintească să formateze codul manual
+- Repository-ul tău păstrează un stil de cod curat și consistent
+
+## Comportamentul hook-ului pre-commit
+
+Integrarea lefthook a Ultracite creează un hook pre-commit care rulează următoarea comandă:
+
+```bash
+npx ultracite fix
+```
+
+Această comandă:
+- Rulează linter-ul și formatter-ul Biome pe baza de cod
+- Corectează automat problemele de formatare acolo unde este posibil
+- Se asigură că toate fișierele pregătite (staged) respectă standardele de cod ale proiectului tău
+- Previne commit-urile care ar introduce inconsistențe de formatare
+
+## Configurare automată
+
+În timpul procesului de inițializare (`ultracite init`), dacă selectezi opțiunea lefthook, Ultracite:
+
+1. **Instalează lefthook**: Adaugă lefthook ca dependență de dezvoltare în proiectul tău
+2. **Inițializează lefthook**: Rulează `lefthook install` pentru a configura hook-urile Git
+3. **Creează configurația**: Configurează fișierul `lefthook.yml` cu comanda de formatare
+4. **Gestionează configurațiile existente**: Dacă ai deja lefthook configurat, actualizează configurația existentă în loc să o suprascrie
+
+## Detalii despre integrare
+
+Integrarea lefthook include mai multe caracteristici inteligente:
+
+### Gestionarea dependențelor
+- Instalează automat lefthook ca dependență de dezvoltare folosind managerul de pachete al proiectului tău
+- Folosește comanda corespunzătoare a managerului de pachete (`npm install -D`, `yarn add -D`, `pnpm add -D`, etc.)
+- Rulează `lefthook install` pentru a inițializa hook-urile Git
+
+### Gestionarea configurației
+- **Proiecte noi**: Creează un nou fișier `lefthook.yml` cu comanda ultracite fix
+- **Proiecte existente**: Adaugă comanda Ultracite la configurația lefthook existentă, păstrând celelalte hook-uri pe care le-ai configurat
+
+### Structura fișierelor
+Integrarea creează sau modifică:
+```
+lefthook.yml    # Conține configurația comenzii de formatare
+```
+
+## Beneficii
+
+- **Coerență în echipă**: Fiecare membru al echipei primește aceeași formatare aplicată automat
+- **Fără configurare**: Funcționează din prima cu valori implicite rezonabile
+- **Performanță ridicată**: lefthook este scris în Go și este extrem de rapid
+- **Flexibilitate**: Ușor de extins cu comenzi și hook-uri adiționale
+- **Compatibilitate multiplatformă**: Funcționează constant pe diferite sisteme de operare
+
+## Integrarea în fluxul de lucru
+
+Integrarea lefthook se potrivește perfect în fluxul tău de dezvoltare:
+
+1. **Dezvoltatorul face modificări** în fișierele de cod
+2. **Pregătește fișierele** pentru commit cu `git add`
+3. **Încearcă să facă commit** cu `git commit`
+4. **lefthook declanșează** hook-ul pre-commit automat
+5. **Ultracite rulează** și formatează fișierele pregătite
+6. **Commit-ul continuă** dacă formatarea reușește, sau **eșuează** dacă există probleme care nu au putut fi corectate automat
+
+## Personalizare
+
+Deși Ultracite setează valori implicite rezonabile, poți personaliza comportamentul:
+
+- Modifică `lefthook.yml` pentru a adăuga comenzi sau hook-uri adiționale
+- Configurează setările Biome pentru a ajusta regulile de formatare
+- Adaugă alte verificări pre-commit pe lângă formatarea Ultracite
+- Folosește execuția paralelă și logica condițională puternică oferite de lefthook
+
+## Depanare
+
+### Hook-ul nu se execută
+Dacă hook-ul pre-commit nu se execută:
+- Asigură-te că lefthook este instalat: `npm ls lefthook`
+- Verifică că `lefthook.yml` există și conține comanda ultracite
+- Confirmă că hook-urile Git sunt activate în repository-ul tău
+- Rulează `lefthook install` pentru a reinstala hook-urile
+
+### Probleme de permisiuni
+lefthook gestionează automat permisiunile pentru hook-urile Git, dar dacă întâmpini probleme:
+- Încearcă să rulezi din nou `lefthook install`
+- Verifică că configurația ta Git permite hook-urile
+
+### Ocolirea hook-urilor
+În cazuri rare în care ai nevoie să sari peste hook-ul pre-commit:
+```bash
+git commit --no-verify
+```
+
+Folosește aceasta cu moderație, deoarece ocolește formatarea automatizată care menține consistența bazei tale de cod.
+
+## Exemplu de configurare
+
+Iată cum arată configurația `lefthook.yml`:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Această configurație:
+- Rulează doar pe fișiere JavaScript, TypeScript, JSON și CSS
+- Etapează automat orice fișiere care au fost fixate de formatter
+- Folosește sintaxa eficientă `jobs` pentru performanță mai bună
+
+Poți extinde această configurație pentru a include job-uri adiționale:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

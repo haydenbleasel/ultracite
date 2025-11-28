@@ -1,0 +1,89 @@
+---
+title: Pemecahan Masalah
+description: Bagian ini membahas cara memecahkan masalah Ultracite.
+---
+
+Meskipun Ultracite bertujuan menyederhanakan linting/formatting, Anda mungkin menemui beberapa masalah atau memiliki pertanyaan saat pengaturan dan penggunaan. Berikut beberapa masalah umum dan solusinya:
+
+## “Ultracite tidak memformat saat menyimpan di VS Code.”
+
+Periksa kembali bahwa Anda telah menginstal dan mengaktifkan ekstensi Biome untuk VS Code. Pastikan `.vscode/settings.json` Anda berisi entri `"editor.defaultFormatter": "biomejs.biome"` dan `"editor.codeActionsOnSave"` seperti yang ditunjukkan di [Pengaturan](/setup).
+
+Pastikan juga tidak ada ekstensi formatter atau linter yang konflik aktif (misalnya, jika Anda masih memiliki ekstensi Prettier atau ESLint aktif, mereka mungkin mengganggu atau mengambil prioritas).
+
+Anda mungkin perlu menonaktifkan fitur Format On Save bawaan VS Code jika formatter lain mengambil file tersebut. Dengan pengaturan yang benar dan ekstensi Biome, menyimpan file yang dicakup Ultracite (js/ts/jsx/tsx/json/css) seharusnya memicu pemformatan. Jika tidak, coba jalankan perintah “Format Document” secara manual dan lihat apakah Biome digunakan atau ada kesalahan yang muncul.
+
+## “Saya menginstal Ultracite, tetapi VS Code masih menggunakan ESLint atau Prettier.”
+
+Pastikan Anda menghapus atau menonaktifkan konfigurasi lama Anda. Misalnya, jika Anda memiliki `.eslintrc` atau `.prettierrc` di proyek, ekstensi ESLint di VS Code mungkin masih aktif dan menyebabkan diagnostik duplikat.
+
+Disarankan untuk menghapus konfigurasi tersebut (atau setidaknya menonaktifkan ekstensi) saat beralih ke Ultracite untuk menghindari kebingungan. Pada dasarnya, biarkan Ultracite/Biome mengambil alih sebagai satu-satunya linter/formatter.
+
+Jika Anda memilih untuk tetap menggunakan ESLint karena alasan tertentu, jangan aktifkan opsi “fix on save” untuk ESLint — jika tidak, keduanya mungkin mencoba memperbaiki kode (meskipun jika dikonfigurasi dengan benar, Biome seharusnya selaras dengan gaya Prettier untuk menghindari konflik).
+
+Secara umum, bermigrasi sepenuhnya ke Ultracite berarti Anda tidak lagi membutuhkan konfigurasi ESLint / Prettier.
+
+## “Ultracite (Biome) memberikan parse error untuk file yang tidak ingin saya periksa.”
+
+Contoh yang baik adalah saat menginstal komponen dari pustaka UI seperti [`shadcn/ui`](https://ui.shadcn.com/). Meskipun dirancang untuk dimodifikasi, Anda mungkin ingin mempertahankan kode sumber asli untuk pembaruan. Dalam kasus ini, Anda ingin menonaktifkan linting untuk file-file tersebut.
+
+Untuk melakukan ini, tambahkan pola ke `biome.jsonc` Anda untuk mengecualikan file-file tersebut, misalnya:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Secara default, Biome seharusnya mengabaikan `node_modules`, tetapi jika Anda membuka file dari sana secara manual, ekstensi mungkin tetap mencoba melintnya. Secara umum, abaikan file yang dihasilkan dalam jumlah besar atau kode pihak ketiga – Anda tidak perlu melintnya.
+
+Penyebab lain bisa jadi jika Anda menggunakan sintaks eksperimental dalam sebuah file yang Biome tidak dapat parse (mis., proposal stage-3 yang belum didukung oleh Biome). Dalam kasus tersebut, hindari sintaks itu atau lihat apakah Biome dapat dikonfigurasi (terkadang menambahkan `"parser.allowSomething": true` di konfigurasi jika tersedia).
+
+Periksa tracker issue Biome untuk dukungan terhadap sintaks tersebut.
+
+## “Saya melihat error ganda untuk masalah yang sama.”
+
+Ini bisa terjadi jika Anda menjalankan beberapa linter sekaligus (misalnya, baik ESLint dan Ultracite). Hal ini juga dapat terjadi jika pemeriksa TypeScript bawaan VS Code dan Biome keduanya melaporkan kesalahan TS yang sama. Untuk menyelesaikannya, standarisasi pada satu alat per jenis pemeriksaan.
+
+Jika menggunakan Ultracite, nonaktifkan linter lain. Untuk kesalahan tipe TypeScript, server TS bawaan VS Code akan menunjukkannya (mis., garis bergelombang merah untuk masalah tipe) – Biome juga dapat menampilkan masalah lint yang dipengaruhi tipe. Biasanya tidak masalah karena keduanya menyoroti masalah yang sama. Tetapi jika mengganggu, Anda dapat mematikan validator TS VS Code (`"typescript.validate.enable": false` di pengaturan) dan mengandalkan Biome, atau sebaliknya.
+
+Dalam sebagian besar konfigurasi, membiarkan keduanya aktif tidak apa-apa; mereka biasanya saling melengkapi (kesalahan tipe vs kesalahan lint). Pastikan saja Anda tidak memiliki dua linter dengan fungsi yang tumpang tindih aktif (seperti ESLint dan Biome yang keduanya melakukan linting).
+
+## “Hook pre-commit/CI gagal karena Ultracite.”
+
+Jika hook pre-commit Anda menjalankan `ultracite` dan gagal, itu berarti masih ada masalah yang tidak terperbaiki otomatis (atau seseorang melewatkan menjalankannya). Cara terbaik untuk memperbaiki ini adalah menjalankan `npx ultracite` secara lokal dan memeriksa outputnya. Ia akan memperbaiki hal-hal (jika demikian cukup stage perubahan dan commit lagi) atau melaporkan error yang perlu diperbaiki secara manual.
+
+Atasi itu, lalu commit. Jika CI gagal pada `ultracite --check`, lakukan hal yang sama: jalankan secara lokal dengan `--check` untuk melihat masalah yang ditemukan, atau jalankan tanpa `--check` untuk memperbaiki otomatis dan commit hasilnya. Singkatnya, perlakukan kegagalan Ultracite seperti tes yang gagal – sesuatu yang harus diperbaiki di kode.
+
+## “Saya mendapatkan error tentang `strictNullChecks` atau masalah tipe setelah mengaktifkan Ultracite.”
+
+Ultracite mengharapkan strictness TypeScript. Jika Anda belum mengaktifkan strictNullChecks (atau mode strict penuh), Anda mungkin akan mendapatkan banyak peringatan terkait TypeScript (mis., mengeluh tentang kemungkinan penggunaan undefined yang TS tidak tangkap karena pengaturan longgar).
+
+Solusinya adalah mengaktifkan flag strict tersebut di `tsconfig` seperti yang direkomendasikan. Jika karena alasan tertentu Anda tidak bisa (mis., alasan legacy), Anda mungkin harus menonaktifkan aturan tertentu di Ultracite yang mengasumsikan strictness. Namun sangat disarankan untuk beralih ke mode strict TS — ini akan meningkatkan kualitas kode Anda dan sesuai dengan filosofi Ultracite.
+
+## “Ultracite terlalu ketat untuk tim kami (terlalu banyak aturan) – bisakah saya menguranginya?”
+
+Bisa. Meskipun nilai Ultracite ada pada keketatannya, Anda bebas menimpa aturan. Jika pengembang merasa kewalahan oleh peringatan, identifikasi aturan mana yang menyebabkan gesekan. Mungkin itu preferensi gaya atau sesuatu yang tidak masuk akal untuk konteks Anda. Anda dapat mengatur aturan tersebut menjadi `warn` atau `off` di konfigurasi.
+
+Misalnya, jika Anda menemukan aturan aksesibilitas terlalu berisik untuk alat internal, Anda mungkin menonaktifkan beberapa dari mereka. Atau jika Anda tidak setuju dengan gaya kode yang diberlakukan, Anda bisa menyesuaikannya (meskipun perselisihan gaya adalah hal yang Ultracite coba hilangkan).
+
+Kuncinya adalah komunikasi dengan tim – mungkin edukasi mengapa suatu aturan ada sebelum menonaktifkannya; jika tetap tidak diinginkan, sesuaikan konfigurasi. Ultracite bukan kotak hitam – Anda memiliki kontrol penuh melalui `biome.jsonc`.
+
+Periksa [konfigurasi](/configuration) untuk informasi lebih lanjut tentang cara menimpa aturan.
+
+## “Apakah ada keterbatasan atau bug yang diketahui pada Ultracite yang harus saya ketahui?”
+
+Ultracite (khususnya Biome) tidak mencakup semua yang dilakukan gabungan ESLint + Prettier + Stylelint, terutama jika Anda menggunakan plugin tertentu. Misalnya, Stylelint memiliki aturan lint CSS yang sangat lengkap; Biome saat ini menyediakan pemformatan untuk CSS dan lint dasar, tetapi bukan seluruh set aturan Stylelint.
+
+Jika proyek Anda bergantung pada pemeriksaan Stylelint tertentu (seperti pengurutan properti atau penamaan spesifik di CSS), perhatikan bahwa Ultracite tidak menegakkan itu. Anda mungkin perlu menggabungkan Stylelint secara terpisah jika benar-benar diperlukan, atau menunggu karena Biome mungkin akan menambahkan lebih banyak linting CSS.
+
+---
+
+Jika Anda menemui masalah yang tidak dibahas di sini, pertimbangkan untuk memeriksa halaman isu GitHub Ultracite atau dokumentasi Biome. Mungkin ada perbaikan atau solusi sementara yang tersedia. Komunitas terus berkembang, jadi dukungan juga semakin membaik seiring waktu.

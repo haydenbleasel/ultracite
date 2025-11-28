@@ -1,0 +1,72 @@
+---
+title: Kullanım
+description: Bu bölüm, Ultracite'i günlük kullanımda nasıl kullanacağınızı kapsar — komut satırı arayüzü, editör entegrasyon detayları ve tipik iş akışlarını içerir.
+---
+
+## IDE Entegrasyonu
+
+Ultracite, kod yazarken anında geri bildirim alabilmeniz için editörünüze entegre edildiğinde en iyi şekilde çalışır. Kaydetme işlemiyle otomatik olarak çalışacak şekilde tasarlanmıştır. Denemek için bir projeyi IDE'nizde açın. Dosyaları düzenlerken, kaydetme sırasında biçimlendirmenin uygulandığını görmelisiniz. Küçük bir kod stili hatası (örneğin fazladan bir noktalı virgül veya yanlış girintilenmiş bir satır) ekleyip Kaydet'e basarak deneyin — Ultracite (Biome) dosyayı anında yeniden biçimlendirir.
+
+Yaygın bir lint sorunu (örneğin kullanılmayan bir değişken) oluşturursanız, dalgalı alt çizgi veya Problems panelinde bir uyarı görebilirsiniz; kaydetme sırasında Ultracite, otomatik düzeltilebiliyorsa düzeltmeyi deneyecektir (örneğin kullanılmayan bir import'u kaldırmak) veya aksi takdirde sizin çözmeniz için bir uyarı bırakacaktır.
+
+### Anlık biçimlendirme
+
+Her dosya kaydettiğinizde, Biome (Ultracite’in yapılandırmasıyla) dosyayı biçimlendirir. Ayrı bir Prettier çalıştırmanıza veya biçimlendirme konusunda endişelenmenize gerek yok — bu halledilir.
+
+`codeActionsOnSave` ayarları sayesinde, VS Code kaydetme sırasında Biome’ın “fix all” eylemini de uygular. Bu, otomatik düzeltmesi olan herhangi bir lint kuralının (örneğin `!=`'yi `!==`'e dönüştürmek, eksik parantezleri eklemek, import sırasını düzeltmek vb.) uygulanacağı anlamına gelir. Sanki ESLint ile otomatik olarak `--fix` çalıştırmışsınız gibidir.
+
+Hatta `formatOnPaste`'ı etkinleştirdik – bu nedenle başka bir yerden kod yapıştırırsanız, stilinize uygun şekilde anında biçimlendirilir.
+
+Buradaki temel avantaj anlık geri bildirimdir. VS Code'ta kod yazarsınız ve Ultracite sürekli olarak temiz tutar. Zamanla, lint hatalarını düzeltmek için neredeyse hiç zaman harcamadığınızı fark edeceksiniz — Ultracite ya bunları sizin için düzeltir ya da erken dönemde işaretler. Bu, kod stili ve küçük sorunların birikmediği, sorunsuz bir geliştirme iş akışına yol açar.
+
+### Problems paneli entegrasyonu
+
+Dikkatinizi gerektiren herhangi bir problem, Problems panelinde görünecektir. Örneğin, Ultracite bir şeyi yasaklayan bir kural tespit ederse veya düzeltemediği bir hata bulursa (örneğin, kullanımdan kalkmış bir API kullandıysanız veya bir Promise reddini ele almayı unuttuysanız), bunu hata veya uyarı olarak listeler. Üzerine tıklayarak koddaki konuma atlayabilirsiniz.
+
+### Kod lensleri / Hızlı düzeltmeler
+
+Birçok durumda, Biome için VS Code uzantısı hızlı düzeltme önerileri sunar. Sarı bir ampul simgesi veya bir öneri açılır penceresi görürseniz, düzeltmeleri manuel olarak da uygulayabilirsiniz. Örneğin, bir import kullanılmıyorsa, onu kaldırmak için bir hızlı düzeltme alabilirsiniz (eğer kaydetme sırasında zaten kaldırılmadıysa).
+
+## CLI kullanımı
+
+Ultracite, kullanışlı bir CLI ile birlikte gelir (yüklendiğinde `ultracite` olarak çağrılır). İşte yaygın kullanım şekilleri.
+
+### Kodu kontrol etme
+
+`check` komutu, dosyaları düzeltmeden linter'ı çalıştıran Biome `check` komutunu sarar.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Sadece hataları veya uyarıları göstermek için `--diagnostic-level` filtresi verebilirsiniz:
+
+```bash title="Terminal"
+# Sadece hataları göster
+npx ultracite check --diagnostic-level error
+
+# Uyarıları ve üzerini göster (hatalar)
+npx ultracite check --diagnostic-level warn
+```
+
+### Kodu düzeltme
+
+`fix` komutu, linter'ı çalıştıran ve dosyaları düzelten Biome `check --write` komutunu sarar.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Ayrıca güvenli olmayan düzeltmeleri uygulamak için şu komutu çalıştırabilirsiniz:
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Kurulumu doğrulama
+
+`doctor` komutu, kurulumu sorunlar açısından kontrol eder ve öneriler sunar. Bu, Ultracite'i yükledikten sonra her şeyin doğru yapılandırıldığından emin olmak için çalıştırmak için faydalıdır.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

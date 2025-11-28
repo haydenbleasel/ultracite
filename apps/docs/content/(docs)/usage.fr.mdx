@@ -1,0 +1,72 @@
+---
+title: Utilisation
+description: Cette section explique comment utiliser Ultracite au quotidien — elle couvre l'interface en ligne de commande, l'intégration dans l'éditeur et les flux de travail typiques.
+---
+
+## Intégration dans l'IDE
+
+Ultracite fonctionne au mieux lorsqu'il est intégré à votre éditeur, afin que vous receviez un retour immédiat pendant que vous écrivez du code. Il est conçu pour s'exécuter automatiquement à l'enregistrement. Pour l'essayer, ouvrez un projet dans votre IDE. Au fur et à mesure que vous modifiez des fichiers, vous devriez voir la mise en forme s'appliquer à l'enregistrement. Essayez d'introduire une petite erreur de style de code (comme un point-virgule en trop ou une ligne mal indentée) et appuyez sur Enregistrer — Ultracite (Biome) reformatera instantanément le fichier.
+
+Si vous introduisez un problème de lint courant (comme une variable non utilisée), vous pouvez voir un soulignement ondulé ou un avertissement dans le panneau Problèmes ; à l'enregistrement, Ultracite tentera de le corriger s'il est auto-corrigeable (par exemple, supprimer un import non utilisé) ou laissera sinon un avertissement pour que vous le traitiez.
+
+### Formatage instantané
+
+Chaque fois que vous enregistrez un fichier, Biome (avec la configuration d'Ultracite) formate le fichier. Vous n'avez pas besoin d'exécuter un Prettier séparé ni de vous soucier du formatage — c'est pris en charge.
+
+Grâce aux paramètres `codeActionsOnSave`, VS Code appliquera également l'action Biome « fix all » à l'enregistrement. Cela signifie que toute règle de lint qui dispose d'une correction automatique (comme convertir `!=` en `!==`, ajouter les parenthèses manquantes, corriger l'ordre des imports, etc.) sera appliquée. C'est comme si vous aviez exécuté `--fix` avec ESLint automatiquement.
+
+Nous avons même activé `formatOnPaste` — donc si vous collez du code depuis ailleurs, il sera immédiatement formaté pour correspondre à votre style.
+
+L'avantage clé ici est le retour instantané. Vous écrivez du code dans VS Code, et Ultracite le garde continuellement propre. Avec le temps, vous remarquerez que vous passez peu ou pas de temps à corriger les erreurs de lint — Ultracite les corrige pour vous ou les signale tôt. Cela conduit à un flux de travail de développement fluide où le style de code et les petites erreurs ne s'accumulent jamais.
+
+### Intégration au panneau Problèmes
+
+Les problèmes qui subsistent (et qui nécessitent votre attention) apparaîtront dans le panneau Problèmes. Par exemple, si Ultracite applique une règle qui interdit quelque chose ou trouve une erreur qu'il ne peut pas corriger (par exemple, si vous avez utilisé une API obsolète ou oublié de gérer le rejet d'une Promise), il la listera comme une erreur ou un avertissement. Vous pouvez cliquer dessus pour aller à l'emplacement dans le code.
+
+### Lentilles de code / Corrections rapides
+
+Dans de nombreux cas, l'extension VS Code pour Biome propose des suggestions de corrections rapides. Si vous voyez une ampoule jaune ou une popup de suggestion, vous pouvez appliquer les corrections manuellement également. Par exemple, si un import est inutilisé, vous pourriez obtenir une correction rapide pour le supprimer (si ce n'était pas déjà supprimé à l'enregistrement).
+
+## Utilisation de la CLI
+
+Ultracite est fourni avec une CLI pratique (appelée `ultracite` une fois installée). Voici les façons courantes de l'utiliser.
+
+### Vérification du code
+
+La commande `check` enveloppe la commande Biome `check`, qui exécute le linter sans corriger les fichiers.
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+Vous pouvez passer le filtre `--diagnostic-level` pour n'afficher que les erreurs ou les avertissements :
+
+```bash title="Terminal"
+# Show only errors
+npx ultracite check --diagnostic-level error
+
+# Show warnings and above (errors)
+npx ultracite check --diagnostic-level warn
+```
+
+### Correction du code
+
+La commande `fix` enveloppe la commande Biome `check --write`, qui exécute le linter et corrige les fichiers.
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+Vous pouvez également appliquer des corrections non sécurisées en exécutant :
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+### Validation de la configuration
+
+La commande `doctor` vérifie votre configuration pour détecter des problèmes et fournit des recommandations. Il est utile de l'exécuter après l'installation d'Ultracite pour vous assurer que tout est correctement configuré.
+
+```bash title="Terminal"
+npx ultracite doctor
+```

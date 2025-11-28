@@ -1,0 +1,75 @@
+---
+title: Aggiornamento a v6
+description: Guida per l'aggiornamento da Ultracite v5 a v6 con il nuovo sistema di preset.
+---
+
+Ultracite v6 introduce [preset specifici per framework](/configuration#framework-specific-configurations) che ti danno maggiore controllo su quali regole si applicano al tuo progetto. **Questo aggiornamento non interrompe la compatibilità** per gli utenti Next.js/React.
+
+## Cosa è cambiato
+
+v6 introduce [framework-specific presets](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Regole base per JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - Regole specifiche per React
+- [`ultracite/next`](/preset/next) - Regole specifiche per Next.js
+- [`ultracite/solid`](/preset/solid) - Regole per Solid.js
+- [`ultracite/vue`](/preset/vue) - Regole per Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Regole per Svelte
+- [`ultracite/qwik`](/preset/qwik) - Regole per Qwik
+- [`ultracite/angular`](/preset/angular) - Parser HTML per Angular
+- [`ultracite/remix`](/preset/remix) - Supporto per il routing basato sui file
+
+## Migrazione
+
+### Progetti Next.js/React
+
+Aggiorna il tuo `biome.jsonc` per estendere i preset appropriati:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Progetti non React
+
+Passa al preset core se non usi React:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Altri framework
+
+Usa il preset appropriato per il tuo framework:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Progetti multi-framework
+
+Combina i preset secondo necessità:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

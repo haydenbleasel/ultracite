@@ -1,0 +1,48 @@
+---
+title: Siirtyminen Prettieristä
+description: Kuinka siirtää projektisi Prettieristä Ultraciteen.
+---
+
+Jos käytät Prettieriä ja haluat vaihtaa Ultraciten valmiiksi konfiguroituun asetukseen, tämä opas auttaa sinua siirtymässä samalla kun säilytät koodin laatuvaatimukset.
+
+## Miksi siirtyä Ultraciteen?
+
+- **Salamannopeus**: Biome (Ultraciten perusta) perustuu Rustiin, paljon nopeampi kuin Prettier
+- **Ei konfiguraatiota**: Satoja valmiiksi määriteltyjä sääntöjä verrattuna manuaaliseen Prettier-asetukseen
+- **Yhdistetty työkalu**: Korvaa sekä ESLintin että Prettierin yhdellä työkalulla
+- **AI-integraatio**: Sisäänrakennettu tuki tekoälyllä varustetuille editoreille (Cursor, Windsurf, GitHub Copilot)
+- **Tyyppiturvallisuus**: Laajat TypeScript-säännöt tiukoilla null-tarkistuksilla
+- **Modernit standardit**: Uusimmat JavaScript/TypeScript parhaat käytännöt
+
+## Ennen kuin aloitat
+
+Varmista, että sinulla on:
+
+- Olemassa oleva projekti, joka käyttää Prettieriä
+- Node.js v14.18+ (Node 18+ suositeltavaa)
+- `package.json`-tiedosto
+
+## Automaattinen asennus
+
+Suorita [automaattinen asennusskripti](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Tämä tekee:
+
+- Asentaa Ultraciten riippuvuudeksi
+- Yhdistää olemassa olevan `biome.json` / `biome.jsonc` -tiedostosi Ultraciten oletusasetuksiin
+- Yhdistää olemassa olevan `.vscode/settings.json` -tiedostosi Ultraciten oletusasetuksiin
+- Ottaa `strictNullChecks`-asetuksen käyttöön `tsconfig.json`-tiedostossasi (tai luo tiedosto, jos sitä ei ole)
+- Säilyttää mukautetut sääntösi ja asetuksesi
+- Ota editorin integraatiot käyttöön
+
+Varmista, että valitset olemassa olevan `Prettier`-konfiguraation poistamisen. Tämä tekee:
+
+- Poistaa Prettierin ja siihen liittyvät riippuvuudet
+- Poistaa kaikki Prettierin konfiguraatiotiedostot
+- Poistaa kaikki Prettieriin liittyvät komennot `.vscode/settings.json`-tiedostostasi
+
+Päivityksen jälkeen kannattaa tarkistaa `biome.json` / `biome.jsonc` -tiedostosi mahdollisten ylikirjoitusten poistamiseksi. Lisäksi käynnistä editorisi uudelleen, jotta uusi konfiguraatio tulee voimaan.

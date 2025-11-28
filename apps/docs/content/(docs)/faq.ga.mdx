@@ -1,0 +1,86 @@
+---
+title: Ceisteanna Coitianta
+description: Seo freagraí ar roinnt ceisteanna a chuirtear go minic faoi Ultracite.
+---
+
+## Ceist: Cad é go díreach Ultracite – cén difríocht idir é agus Biome nó ESLint?
+
+Is réamhshocraithe cumraíochta é Ultracite atá bunaithe ar Biome. Smaoinigh ar Ultracite mar bhailiú curtha le chéile de rialacha agus socruithe, agus is é Biome an inneall a fomatálann / a lintaíonn an cód i ndáiríre. Is féidir leat Biome a úsáid leat féin, ach bheadh ort cinneadh a dhéanamh faoi na rialacha a chur i bhfeidhm agus a roghanna a chumrú de láimh. Sábhálann Ultracite an iarracht sin trí shocrú réamhullmhaithe a sholáthar a úsáideann dea-chleachtais ón eacnamaíocht iomlán.
+
+I gcomparáid le ESLint + Prettier, tá Biome níos gasta mar gheall ar a chur i bhfeidhm i Rust agus toisc go bhfuil sé comhtháite (uimhir amháin uirlis in ionad dhá nó trí). Má thaitníonn leat gach riail ESLint a mhodhnú go mion, d’fhéadfadh Ultracite a bheith teoranta; ach tá sé mar aidhm aige an gá sin a bhaint agus glacadh le réamhshocruithe ciallmhara.
+
+Go hachomair: is é Biome an inneall (linter / formatter), is é Ultracite an cumraíocht.
+
+## Ceist: An bhfuil gá agam le ESLint nó Prettier fós más úsáidim Ultracite?
+
+Níl – cuireann Ultracite (trí Biome) ionadacht ar fáil do fheidhmiúlacht ESLint agus Prettier do do chód JavaScript / TypeScript. Níl ort rith ESLint nó Prettier ar chor ar bith. I ndáiríre, moltar na cumraíochtaí sin a bhaint chun coinbhleachtaí a sheachaint. Clúdóidh aschur Ultracite formáidiú agus lintiú mórán den rud a rinne na huirlisí sin, go coitianta le rialacha comhionanna nó níos déine.
+
+Is é an t-aon chás a bhféadfadh tú fós iad a úsáid ná má tá breiseán cás-úchais agat nach dtacaíonn Biome leis (mar shampla, riail ESLint an-speisialaithe). Ach go ginearálta, oibreodh tú go hiomlán i dtimpeallacht Ultracite.
+
+## Ceist: Cad faoi mo chomhaid nach bhfuil JS/TS iad? An bhfuil Ultracite ag láimhseáil iad sin?
+
+Soláthraíonn Ultracite, trí Biome, leibhéil éagsúla de thacaíocht lintiúcháin agus formáidithe do JavaScript, TypeScript, JSX, CSS agus GraphQL.
+
+## Ceist: Cén minic a nuashonraítear Ultracite?
+
+Nuashonraítear Ultracite de réir mar is gá, go minic i ndiaidh timthriall scaoilte Biome. Ós rud é go bhfuil Biome fós ag éabhlóidiú, d’fhéadfadh sé go bhfeicfeá nuashonruithe beaga minic do Ultracite. Is féidir leis na nuashonruithe sin rialacha nua, socruithe fabhtanna, nó coigeartuithe ar réamhshocruithe a thabhairt. Ós rud é go bhfuil sé sealbhaithe trí `-E`, ní bhfaighidh tú nuashonruithe iontasacha mura roghnaíonn tú uasghrádú.
+
+Is dea-smaoineamh faire ar theachtaireacht an repo Ultracite le haghaidh scaoilteanna nó seiceáil an leathanach [Eisiúintí](https://github.com/haydenbleasel/ultracite/releases). Nuair a bhíonn tú ag nuashonrú Ultracite, léigh na nótaí scaoilte – uaireanta d’fhéadfadh riail nua a bheith cumasaithe a d’fhéadfadh rabhadh nua a thaispeáint i do thionscadal (rud dea-chúnta chun saincheisteanna a ghabháil, ach bí ar an eolas faoi). Is minic go mbíonn uasghrádú Biome in éineacht le Ultracite sách díreach tríd bainisteoir pacáistí.
+
+## Ceist: Má aontaím nach bhfuil le riail a fhorchoimeádann Ultracite, cad ba chóir dom a dhéanamh?
+
+Tá cúpla rogha agat:
+
+- **Cumraigh í as nó go leibhéal difriúil i do `biome.jsonc`** (réiteach tapa do do thionscadal).
+- **Oscail plé** ar an repo GitHub má chreideann tú gur chóir an riail a choigeartú do chách. D’fhéadfadh na coimeádaí aontú go bhfuil sé rómhín nó gur cheart go mbeadh sé roghnach.
+- Má tá sé ina chás stíle, cuimhnigh gur sprioc de chuid Ultracite ná coinbhéinsiún thar chumrú – uaireanta is fiú cloí le stíl an uirlis chun comhsheasmhacht idir tionscadail. Ach ar ndóigh, tagann riachtanais do thionscadail ar dtús.
+
+Faoi dheireadh, tá tú i gceannas ar chumraíocht lintiúcháin do thionscadail. Is pointe tosaigh é Ultracite; bíodh sásta é a mhúnlú, ach go hiondúil i mbeagán beart. Má tá tú ag casadh as an tromlach rialacha, ansin b’fhéidir nach é Ultracite an réamhshocrú ceart do roghanna do fhoireann (cé nach mbíonn sé sin coitianta).
+
+Sa chás sin, d’fhéadfá do chumraíocht Biome féin a thógáil ó thús, ach chaillfeá a lán den áisiúlacht. De ghnáth, níl le déanamh ach roinnt oiriúnuithe chun Ultracite a dhéanamh oiriúnach duit.
+
+## Ceist: An féidir liom Ultracite a úsáid gan VS Code / Cursor / Windsurf?
+
+Sea — dírímid ar VS Code agus a fhoirne toisc gurb iad na IDEanna is coitianta do fhorbairt gréasáin nua-aimseartha, ach is féidir Biome a úsáid trí CLI amháin nó le IDEanna eile.
+
+Féach ar chomhtháthuithe eagarthóra Biome [breiseáin oifigiúla](https://biomejs.dev/guides/editors/first-party-extensions/) agus [breiseáin tríú pháirtí](https://biomejs.dev/guides/editors/third-party-extensions/) chun tuilleadh a fhoghlaim.
+
+## Ceist: Conas a fhios agam cé na rialacha atá Ultracite ag cur i bhfeidhm? An bhfuil liosta ann?
+
+Sea, seiceáil an comhad [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) sa repo GitHub chun na rialacha atá cumasaithe a fheiceáil.
+
+## Ceist: An féidir le Ultracite na fadhbanna go léir a aimsíonn sé a réiteach?
+
+Ní gach ceann, ach go leor acu. Déanfaidh Ultracite uaireanta deisiúcháin uathoibríocha ar fhadhbanna atá sábháilte agus cinntitheach a shocrú. Áirítear leo sin saincheisteanna formáidithe agus go leor earráidí lintiúcháin (go háirithe stíle nó trasfhoirmíochtaí cóid shimplí cosúil le hionchur neamhúsáidte a bhaint, lúibíní easnaimh a chur leis, `==` a athrú go `===`, srl.).
+
+Fágtar fadhbanna níos casta (loighic ghnó nó rudaí a éilíonn intinn forbróra) le do láimh. Mar shampla, ní athróidh sé athríonn ainmneacha athróg go draíochta chun coinbhá ainmniúcháin a leanúint nó ní chuirfidh sé cód láimhseála earráidí atá ar iarraidh leis – tabharfaidh sé foláirimh amháin duit.
+
+Is cosúil an fealsúnacht le ESLint: cuir deisiúcháin ar fáil nuair is féidir, ach ná cuir i mbaol iompraíocht an chóid. Athbhreithnigh an painéal Fadhbanna nó aschur an CLI i gcónaí le haghaidh aon rabhaidh atá fágtha tar éis uathoibriú a dhéanamh.
+
+## Ceist: Cá bhfaighim tuilleadh eolais faoi Biome (an uirlis a úsáideann Ultracite)?
+
+Tá suíomh féin le doiciméadú ag [Biome](https://biomejs.dev/), agus is féidir leat sonraí teicniúla níos mó a fháil ansin. Má tá tú fiosrach faoi conas a fhomatálann sé cód nó faoin bhfealsúnacht taobh thiar de roghanna áirithe, is é doiciméid Biome an acmhainn is fearr.
+
+Ina theannta sin, tá postálacha blag agus ailt pobail ann faoi éirí Biome mar oidhre Rome. Cabhróidh tuiscint ar Biome leat tuiscint níos fearr a fháil ar chumas Ultracite. Mar sin féin, ní gá duit foghlaim mionsonraithe Biome chun Ultracite a úsáid go héifeachtach – is é sprioc Ultracite sonraí sin a shíneadh thar formhór na n-úsáideoirí.
+
+## Ceist: Conas Ultracite a dhíghníomhachtú do thionscadal nó comhad ar leith?
+
+Mura dteastaíonn Ultracite uait go sealadach i dtionscadal, ní gá duit an `extends: ["ultracite/core"]` a áireamh i do `biome.jsonc` (nó bain an comhad cumraíochta). Má tá an síneadh VS Code suiteáilte, d’fhéadfadh sé fós iarracht a dhéanamh formáidiú a dhéanamh ar shábháil ag úsáid réamhshocruithe Biome.
+
+Chun é a dhíchumasú go hiomlán, d’fhéadfá `formatOnSave` a dhíchumasú nó an síneadh Biome a dhíshuiteáil don spásobair sin. Maidir le comhad ar leith, mar a luaigh muid, bain úsáid as tuairimí neamhaird nó patrúin neamhaird. Go bunúsach, tá Ultracite opt-in de réir an tionscadail tríd an gcumraíocht. Mura bhfuil sé cumraithe, ní rithfidh sé (d’fhéadfadh Biome féin fós formáidiú a rith má spreagtar é, ach ní rialacha lintiúcháin).
+
+## Ceist: Tá earráid corepack agam le linn an tsuiteála – cad ba chóir dom a dhéanamh?
+
+Tá roinnt úsáideoirí tar éis earráidí fíoraithe sínithe a fhulaingt nuair a rith siad `pnpm dlx ultracite init` le corepack, go háirithe ar Node.js v22 le leaganacha níos sine de corepack. Mothaíonn an earráid go minic mar "Cannot find matching keyid" le linn suiteála pacáiste.
+
+Seo na réitigh molta:
+
+- **Nuashonraigh corepack**: Uasghrádaigh go leagan corepack 0.34.0 nó níos déanaí. Is féidir é seo a dhéanamh le `corepack prepare pnpm@latest --activate` nó trí leanúint leis an [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
+- **Nuashonraigh Node.js**: Má tá tú ar Node.js v20.x, smaoinigh ar uasghrádú go v22 nó níos déanaí, atá ina leagan a chuimsíonn corepack níos nuaí.
+- **Bain úsáid as npx ina ionad**: Má leanann corepack ag cruthú fadhbanna, is féidir leat `npx ultracite init` a úsáid in ionad `pnpm dlx ultracite init`.
+
+Má n-oibríonn aon cheann de na roghanna seo, oscail eagrán ar an [Ultracite GitHub repo](https://github.com/haydenbleasel/ultracite/issues) le sonraí faoi do leaganacha Node.js agus corepack.
+
+---
+
+Tá súil againn go soiléiríonn na Ceisteanna Coitianta seo pointí coitianta mearbhall. Má tá ceist agat nach bhfuil freagra uirthi anseo, bíodh drogall ort teagmháil a dhéanamh ar GitHub an tionscadail nó ar chainéil phobail. Tá Ultracite anseo chun saol an fhorbróra a éascú – mar sin tá fáilte i gcónaí roimh aiseolas agus ceisteanna chun cabhrú leis feabhas a chur air!

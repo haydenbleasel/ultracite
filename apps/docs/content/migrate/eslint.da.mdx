@@ -1,0 +1,48 @@
+---
+title: Migrer fra ESLint
+description: Hvordan du migrerer dit projekt fra ESLint til Ultracite.
+---
+
+Hvis du bruger ESLint og ønsker at skifte til Ultracites forkonfigurerede opsætning, vil denne vejledning hjælpe dig med at migrere samtidig med, at du bevarer kodekvalitetsstandarder.
+
+## Hvorfor migrere til Ultracite?
+
+- **Lynhurtig ydeevne**: Biome (Ultracites fundament) er baseret på Rust, hvilket er meget hurtigere end ESLint
+- **Ingen konfiguration**: Hundreder af forudkonfigurerede regler i stedet for manuel ESLint-opsætning
+- **Kombineret værktøj**: Erstatter både ESLint og Prettier med ét værktøj
+- **AI-integration**: Indbygget support for AI-drevne editorer (Cursor, Windsurf, GitHub Copilot)
+- **Typesikkerhed**: Omfattende TypeScript-regler med strenge nullkontroller
+- **Moderne standarder**: Nyeste bedste praksis for JavaScript/TypeScript
+
+## Før du begynder
+
+Sørg for, at du har:
+
+- Et eksisterende projekt der bruger ESLint
+- Node.js v14.18+ (Node 18+ anbefales)
+- En `package.json`-fil
+
+## Automatisk opsætning
+
+Kør [automatisk opsætningsscript](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Dette vil:
+
+- Installere Ultracite som en afhængighed
+- Flette din eksisterende `biome.json` / `biome.jsonc` med Ultracites forudindstilling
+- Flette din eksisterende `.vscode/settings.json` med Ultracites forudindstilling
+- Aktivere `strictNullChecks` i din `tsconfig.json`-fil (eller oprette en, hvis den ikke findes)
+- Bevare dine egne regler og indstillinger
+- Opsætte editorintegrationer
+
+Sørg for, at du vælger at fjerne den eksisterende `ESLint`-konfiguration. Dette vil:
+
+- Fjerne ESLint og eventuelle relaterede afhængigheder
+- Fjerne eventuelle ESLint-konfigurationsfiler
+- Fjerne eventuelle ESLint-relaterede kommandoer fra din `.vscode/settings.json`-fil
+
+Efter opgraderingen kan du gennemgå din `biome.json` / `biome.jsonc`-fil for at fjerne eventuelle overstyringer. Genstart desuden din editor for at sikre, at den nye konfiguration anvendes.

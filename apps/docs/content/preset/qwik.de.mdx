@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Qwik-spezifische Linting-Regeln für Ultracite.
+---
+
+Die Qwik-Konfiguration enthält Qwik-spezifische Linting-Regeln für Serialisierung, sichtbare Tasks, lexikalischen Scope und Methodenverwendung.
+
+## Installation
+
+Fügen Sie die Qwik-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration fügt Regeln hinzu, die speziell für die Qwik-Entwicklung gelten:
+
+- **Serialisierung**: Durchsetzung der korrekten Verwendung von Qwiks Resumability-Modell
+- **Sichtbare Tasks**: Verhindere unangemessene Verwendung von `useVisibleTask$`
+- **Lexikalischer Scope**: Sicherstellen des korrekten Variablenbereichs in `$`-Funktionen
+- **Methodenverwendung**: Durchsetzung korrekter Qwik-Methodenmuster
+- **React-spezifische Props**: Verbot von React-spezifischen Props in Qwik-Komponenten
+
+## Qwik-spezifische Regeln
+
+### Korrektheit
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|-------------|
+| `noQwikUseVisibleTask` | `error` | Verhindert die Verwendung von `useVisibleTask$`. Dieser Hook führt Code auf dem Client sofort aus und untergräbt Qwiks Resumability. Verwenden Sie stattdessen wenn möglich `useTask$` oder `useResource$`. |
+| `useQwikClasslist` | `error` | Erzwingt die Verwendung der `class`-Objektsyntax statt String-Verkettung für dynamische Klassen in Qwik. |
+
+### Vorstufe
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|-------------|
+| `useQwikValidLexicalScope` | `error` | Erzwingt gültigen lexikalischen Scope in Qwiks `$`-Funktionen. Variablen aus äußeren Scopes müssen explizit erfasst werden. |
+| `useQwikMethodUsage` | `error` | Erzwingt die korrekte Verwendung Qwik-spezifischer Methoden und APIs. |
+
+### Verdächtig
+
+| Regel | Einstellung | Beschreibung |
+|------|-------------|-------------|
+| `noReactSpecificProps` | `error` | Verbietet React-spezifische Props wie `className` und `htmlFor` in Qwik. Verwenden Sie stattdessen `class` und `for`. |

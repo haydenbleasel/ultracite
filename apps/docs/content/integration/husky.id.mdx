@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Jalankan Ultracite secara otomatis pada file Git yang di-stage menggunakan Husky
+---
+
+Ultracite menyediakan integrasi mulus dengan [Husky](https://typicode.github.io/husky/), sebuah alat populer untuk mengelola Git hooks. Integrasi ini secara otomatis mengatur pre-commit hook untuk memastikan kode Anda diformat dengan benar sebelum setiap commit.
+
+## Apa itu Husky?
+
+Husky adalah alat yang memudahkan penggunaan Git hooks dalam proyek Anda. Git hooks adalah skrip yang dijalankan secara otomatis pada titik-titik tertentu dalam alur kerja Git, seperti sebelum melakukan commit atau push kode. Husky menyederhanakan proses pengaturan dan pengelolaan hook-hook ini.
+
+## Bagaimana Ultracite Menggunakan Husky
+
+Ketika Anda menginisialisasi Ultracite di proyek Anda, ia dapat secara otomatis mengonfigurasi Husky untuk menjalankan pemformatan kode sebelum setiap commit. Ini memastikan bahwa:
+
+- Semua kode yang di-commit mengikuti standar format yang konsisten
+- Pemeriksaan kualitas kode ditegakkan secara otomatis
+- Anggota tim tidak perlu mengingat untuk memformat kode secara manual
+- Repositori Anda mempertahankan gaya kode yang bersih dan konsisten
+
+## Perilaku Hook pre-commit
+
+Integrasi Husky Ultracite membuat pre-commit hook yang menjalankan perintah berikut:
+
+```bash
+npx ultracite fix
+```
+
+Perintah ini:
+- Menjalankan linter dan formatter Biome pada basis kode Anda
+- Secara otomatis memperbaiki masalah format bila memungkinkan
+- Memastikan semua file yang di-stage memenuhi standar kode proyek Anda
+- Mencegah commit yang akan memperkenalkan ketidakkonsistenan format
+
+## Pengaturan Otomatis
+
+Selama proses inisialisasi (`ultracite init`), jika Anda memilih opsi Husky, Ultracite:
+
+1. **Menginstal Husky**: Menambahkan Husky sebagai dependensi pengembangan ke proyek Anda
+2. **Membuat File Hook**: Mengatur file `.husky/pre-commit` dengan perintah pemformatan
+3. **Menangani Pengaturan yang Ada**: Jika Anda sudah mengonfigurasi Husky, ia memperbarui pre-commit hook yang ada alih-alih menimpanya
+
+## Rincian Integrasi
+
+Integrasi Husky mencakup beberapa fitur pintar:
+
+### Manajemen Dependensi
+- Menginstal Husky secara otomatis sebagai dev dependency menggunakan package manager proyek Anda
+- Menggunakan perintah package manager yang sesuai (`npm install -D`, `yarn add -D`, `pnpm add -D`, dll.)
+
+### Manajemen Hook
+- **Proyek Baru**: Membuat file `.husky/pre-commit` baru dengan perintah `ultracite fix`
+- **Proyek yang Sudah Ada**: Menambahkan perintah Ultracite ke pre-commit hook yang sudah ada, mempertahankan hook lain yang mungkin sudah Anda konfigurasikan
+
+### Struktur File
+Integrasi membuat atau memodifikasi:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Manfaat
+
+### Gaya Kode Konsisten
+Setiap commit secara otomatis mengikuti standar format proyek Anda, menghilangkan perdebatan gaya dan ketidakkonsistenan.
+
+### Kontrol Kualitas Otomatis
+Tangkap masalah format sebelum masuk ke repositori Anda, menjaga riwayat commit tetap bersih.
+
+### Kolaborasi Tim
+Semua anggota tim secara otomatis mengikuti standar format yang sama tanpa intervensi manual.
+
+### Optimisasi CI/CD
+Mengurangi kegagalan pipeline CI/CD akibat masalah format, karena kode sudah diformat sebelumnya secara lokal.
+
+## Integrasi Alur Kerja
+
+Dengan integrasi Husky diaktifkan, alur kerja Git tipikal Anda menjadi:
+
+1. **Lakukan perubahan** pada file kode Anda
+2. **Stage perubahan** dengan `git add`
+3. **Commit perubahan** dengan `git commit`
+4. **Pre-commit hook berjalan** secara otomatis, memformat file yang di-stage
+5. **Commit dilanjutkan** dengan kode yang telah diformat dengan benar
+
+Jika formatter membuat perubahan, Anda perlu meng-stage dan meng-commit perubahan tersebut juga.
+
+## Kustomisasi
+
+Sementara Ultracite mengatur nilai default yang masuk akal, Anda dapat menyesuaikan perilakunya:
+
+- Modifikasi `.husky/pre-commit` untuk menambahkan perintah tambahan
+- Konfigurasikan pengaturan Biome untuk menyesuaikan aturan pemformatan
+- Tambahkan pemeriksaan pre-commit lain bersamaan dengan pemformatan Ultracite
+
+## Pemecahan Masalah
+
+### Hook Tidak Berjalan
+Jika pre-commit hook tidak dijalankan:
+- Pastikan Husky terinstal: `npm ls husky`
+- Periksa bahwa `.husky/pre-commit` ada dan dapat dieksekusi
+- Verifikasi Git hooks diaktifkan di repositori Anda
+
+### Masalah Izin
+Pada sistem mirip Unix, pastikan file hook dapat dieksekusi:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Melewati Hook
+Dalam kasus langka di mana Anda perlu melewati pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+Gunakan ini secara hemat, karena ini melewati pemformatan otomatis yang menjaga konsistensi basis kode Anda.

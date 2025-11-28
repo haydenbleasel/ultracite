@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Qwik-specifikus lintelési szabályok az Ultracite-hez.
+---
+
+A Qwik konfiguráció Qwik-specifikus lintelési szabályokat tartalmaz a serializációra, a látható feladatokra, a lexikális hatókörre és a metódushasználatra vonatkozóan.
+
+## Telepítés
+
+Add hozzá a Qwik konfigurációt a `biome.jsonc` fájlodhoz:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Áttekintés
+
+Ez a konfiguráció Qwik fejlesztéséhez specifikus szabályokat ad hozzá:
+
+- **Serializáció**: Kényszeríti a Qwik folytathatósági modelljének helyes használatát
+- **Látható feladatok**: Megakadályozza a `useVisibleTask$` nem megfelelő használatát
+- **Lexikális hatókör**: Biztosítja a változók helyes hatókörét a `$` függvényekben
+- **Metódushasználat**: Kényszeríti a helyes Qwik metódusmintákat
+- **React-specifikus props**: Megtiltja a React-specifikus props használatát Qwik komponensekben
+
+## Qwik-specifikus szabályok
+
+### Helyesség
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Megakadályozza a `useVisibleTask$` használatát. Ez a hook kliensoldalon azonnal futtatja a kódot, ami aláássa a Qwik folytathatóságát. Ha lehetséges, használja helyette a `useTask$` vagy a `useResource$`-t. |
+| `useQwikClasslist` | `error` | Kötelezővé teszi a `class` objektumszintaxis használatát a stringösszefűzés helyett dinamikus osztályok esetén Qwikben. |
+
+### Kísérleti
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Érvényesíti a helyes lexikális hatókört a Qwik `$` függvényeiben. A külső hatókörökből származó változókat kifejezetten fel kell venni. |
+| `useQwikMethodUsage` | `error` | Kényszeríti a Qwik-specifikus metódusok és API-k helyes használatát. |
+
+### Gyanús
+
+| Szabály | Beállítás | Leírás |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Megtiltja a React-specifikus propsokat, mint a `className` és `htmlFor`, Qwikben. Használja helyettük a `class` és a `for`-t. |

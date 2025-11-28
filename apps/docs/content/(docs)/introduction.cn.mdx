@@ -1,0 +1,48 @@
+---
+title: 介绍
+description: Ultracite 及其工作原理的简要概述。
+---
+
+Ultracite 是一个快速、直观且简洁的开发工具，为你的 JavaScript / TypeScript 项目带来自动化的代码格式化和 lint 检查。它构建在 [Biome](https://biomejs.dev/) 之上（一个基于 Rust 的代码格式化器和 linter），Ultracite 提供了为现代 Web 开发优化的稳健预配置设置。
+
+通过运行以下命令快速安装 Ultracite：
+
+```package-install
+npx ultracite init
+```
+
+然后按照 [使用指南](/usage) 开始，或查看 [设置](/setup) 以获取更细粒度的控制。
+
+## Ultracite 是如何工作的？
+
+一旦设置完成，Ultracite 大多在后台运行 —— 每次保存文件时会自动格式化代码并应用修复。由于 Biome 非常快速，即使在大型项目中，运行 Ultracite 的检查也极其迅速，可以舒适地在每次保存时运行而不会出现延迟。这意味着你可以专注于构建和交付，而不是手动修正样式问题或调试运行时错误。
+
+## Biome 是什么？
+
+[Biome](https://biomejs.dev/) 是一个一体化的代码格式化与 lint 工具链。Biome 使用 Rust 编写，将像 [Prettier](https://prettier.io/)（代码格式化器）、[ESLint](https://eslint.org/)（静态检查器）和 [Stylelint](https://stylelint.io/)（样式检查器）等工具的功能合并为一个快速的可执行二进制。Ultracite 利用 Biome 的速度和能力，提供针对现代 TypeScript 项目量身定制的规则和设置预设。
+
+## 目标
+
+从开发角度来看，Ultracite 的目标是：
+
+### 极快的性能
+
+Ultracite 受益于 [Biome](https://biomejs.dev/) 及其 Rust 实现带来的性能优势，我们应努力保持这一点。
+
+### 设计为零配置
+
+Ultracite 默认设计为零配置。此设计使新用户能够快速上手，无需配置 linter/格式化器；并在团队引入新开发者时节省时间。
+
+目标是提供一个适用于大多数项目的默认配置，同时也为有需要的人提供自定义配置的方式。
+
+### 直观且简单
+
+Ultracite 应尽可能保持“隐形”。理想情况下，它不应要求用户进行任何配置或操作。如有必要，它应以易于理解和采取行动的方式提供反馈。
+
+### 最大化类型安全
+
+Ultracite 的设计应尽可能保证类型安全。它应使用 TypeScript 的 strict 模式和额外的 lint 规则来捕获错误并提供改进建议。
+
+### 与其他工具友好相处
+
+Ultracite 应能与其他工具和库协同工作，不与它们发生冲突。

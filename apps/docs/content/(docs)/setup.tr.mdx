@@ -1,0 +1,63 @@
+---
+title: Kurulum
+description: Ultracite'ı projenize nasıl kuracağınız.
+---
+
+Ultracite tüm yaygın paket yöneticileriyle kurulabilir. Node.js v14.18+ (Node 18+ önerilir) ve bir `package.json` dosyasına sahip bir proje gerekir.
+
+## Kurulum
+
+Başlamak için en kolay yol Ultracite'ın `init` betiğini çalıştırmaktır; bu gerekli paketleri yükler ve yapılandırma dosyasını sizin için ayarlar. Proje dizininizde çalıştırın:
+
+```package-install
+npx ultracite init
+```
+
+İsteğe bağlı olarak `init` komutuna aşağıdaki bayrakları geçebilirsiniz:
+
+| Bayrak               | Açıklama                                         | Seçenekler                                                               |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Kullanılacak paket yöneticisi.                    | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Yapılandırılacak frameworkler.                    | Virgülle ayrılmış: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Yapılandırılacak editörler.                       | Virgülle ayrılmış: `vscode`, `zed`                                       |
+| `--agents`          | Yapılandırılacak AI ajanları.                     | Virgülle ayrılmış: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Yapılandırılacak ajan hook'ları.                  | Virgülle ayrılmış: `cursor`, `claude`                                     |
+| `--integrations`    | Kurulacak ek entegrasyonlar.                      | Virgülle ayrılmış: `husky`, `lefthook`, `lint-staged`                     |
+| `--migrate`         | Kaldırılacak migrasyon araçları.                  | Virgülle ayrılmış: `eslint`, `prettier` (bağımlılıkları, yapılandırma dosyalarını ve editör ayarlarını kaldırır) |
+| `--skip-install`    | Bağımlılıkların yüklenmesini atla.                | (değer gerekmez)                                                          |
+| `--quiet`           | Etkileşimli istemleri ve görsel çıktıyı bastır.   | (değer gerekmez, CI'de otomatik olarak etkinleştirilir)                  |
+
+### Programatik Kullanım
+
+Ultracite'ı programlı olarak çağırması gereken araçlar (ör. scaffolding CLI'ları) için tüm etkileşimli istemleri ve görsel çıktıyı bastırmak amacıyla `--quiet` bayrağını kullanabilirsiniz:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+`--quiet` bayrağı, `CI` ortam değişkeni `true` veya `1` olarak ayarlandığında otomatik olarak etkinleştirilir; bu nedenle CI/CD işlem hatları için uygundur:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+Sessiz modda, Ultracite şunları yapar:
+- Tüm etkileşimli istemleri atlar
+- Tüm seçenekler için makul varsayılanları kullanır
+- ASCII sanatını, spinner'ları ve günlük mesajlarını bastırır
+- Sadece çekirdek Biome yapılandırmasını oluşturur
+- Başarılıysa 0, başarısızsa 1 çıkış kodu ile temiz şekilde sonlanır
+
+## Uzantılar
+
+Visual Studio Code kullanıyorsanız, kaydetme sırasında biçimlendirme/düzeltme yapılmasına olanak tanıyan resmi [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) uzantısını yükleyin:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+Ek olarak, Tailwind CSS kullanıyorsanız, sınıf sıralama ve ipuçları için [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) uzantısını yüklemeniz önerilir:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

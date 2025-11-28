@@ -1,0 +1,48 @@
+---
+title: Migrere fra ESLint
+description: Hvordan migrere prosjektet ditt fra ESLint til Ultracite.
+---
+
+Hvis du bruker ESLint og vil bytte til Ultracite sitt forhåndskonfigurerte oppsett, vil denne guiden hjelpe deg med å migrere samtidig som du opprettholder kodekvalitetsstandarder.
+
+## Hvorfor migrere til Ultracite?
+
+- **Lynrask ytelse**: Biome (Ultracites grunnlag) er skrevet i Rust, mye raskere enn ESLint
+- **Ingen konfigurasjon**: Hundrevis av forhåndskonfigurerte regler kontra manuell ESLint-oppsett
+- **Kombinert verktøy**: Ersetter både ESLint og Prettier med ett enkelt verktøy
+- **AI-integrasjon**: Innebygd støtte for AI-drevne editorer (Cursor, Windsurf, GitHub Copilot)
+- **Typesikkerhet**: Omfattende TypeScript-regler med strenge nullsjekker
+- **Moderne standarder**: Siste beste praksis for JavaScript/TypeScript
+
+## Før du begynner
+
+Sørg for at du har:
+
+- Et eksisterende prosjekt som bruker ESLint
+- Node.js v14.18+ (Node 18+ anbefales)
+- En `package.json`-fil
+
+## Automatisk oppsett
+
+Kjør [det automatiske oppsettskriptet](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Dette vil:
+
+- Installere Ultracite som en avhengighet
+- Slå sammen din eksisterende `biome.json` / `biome.jsonc` med Ultracites forhåndsinnstilling
+- Slå sammen din eksisterende `.vscode/settings.json` med Ultracites forhåndsinnstilling
+- Aktivere `strictNullChecks` i din `tsconfig.json`-fil (eller opprette en hvis den ikke finnes)
+- Bevare dine tilpassede regler og innstillinger
+- Sette opp editorintegrasjoner
+
+Sørg for at du velger å fjerne den eksisterende `ESLint`-konfigurasjonen. Dette vil:
+
+- Fjerne ESLint og eventuelle relaterte avhengigheter
+- Fjerne alle ESLint-konfigurasjonsfiler
+- Fjerne alle ESLint-relaterte kommandoer fra din `.vscode/settings.json`-fil
+
+Etter oppgraderingen bør du vurdere å gjennomgå din `biome.json` / `biome.jsonc`-fil for å fjerne eventuelle overstyringer. I tillegg, start editoren på nytt for å sikre at den nye konfigurasjonen blir tatt i bruk.

@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Remix-spesifiset linttaussäännöt Ultraciteä varten (yhteensopiva myös TanStack Routerin ja React Routerin kanssa).
+---
+
+The Remix configuration has file naming conventions for route files. This configuration is also compatible with TanStack Router, React Router, and other file-based routing systems.
+
+## Asennus
+
+Add the Remix configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Yleiskatsaus
+
+Tämä konfiguraatio tarjoaa erityiskäsittelyn reittitiedostoille, jotka käyttävät tiedostojärjestelmäpohjaisia reitityskonventioita:
+
+- **Reittitiedostojen nimeäminen**: Poistaa tiukat tiedostonimeämiskonventiot reittitiedostoille
+- **Joustavat kuvioinnit**: Tukee Remixin reittinimeämismalleja (pisteet, dollarit, alaviivat)
+- **Kehysriippumaton**: Toimii Remixin, TanStack Routerin, React Routerin ja vastaavien järjestelmien kanssa
+
+## Tiedostokuvioiden korvaukset
+
+Konfiguraatio käyttää korvauksia reittitiedostoihin näissä kuvioissa:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Reittitiedostoille pois käytöstä olevat säännöt
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Poistaa reittitiedostoille asetetun kebab-case-tiedostonimien pakollisuuden. Sallii erityiset reittinimeämismallit. |
+
+## Miksi tämä konfiguraatio on olemassa
+
+Tiedostopohjaiset reititysjärjestelmät käyttävät erikoismerkkejä tiedostonimissä ilmaistakseen reititysmalleja:
+
+- `.` (dot) - Edustaa polkusegmenttejä (esim. `posts.new.tsx` → `/posts/new`)
+- `$` (dollar) - Edustaa dynaamisia segmenttejä (esim. `posts.$id.tsx` → `/posts/:id`)
+- `_` (underscore) - Edustaa layout-reittejä tai poluttomia reittejä
+
+Nämä nimeämiskonventiot ovat ristiriidassa Ultraciten oletusvaatimuksen kanssa, joka edellyttää kebab-case-tiedostonimiä, joten tämä konfiguraatio poistaa kyseisen säännön käytöstä nimenomaan reittitiedostoille.

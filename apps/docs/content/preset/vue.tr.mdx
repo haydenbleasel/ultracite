@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Ultracite için Vue.js'e özel lint kuralları.
+---
+
+Vue yapılandırması, bileşen yapısı, data seçenekleri, computed özellikleri ve rezerve anahtar kelimeler için Vue.js'e özel lint kurallarını içerir. Ayrıca `.vue` dosyalarındaki yanlış pozitif lint hatalarını önlemek için bazı geçersiz kılmaları da içerir.
+
+## Kurulum
+
+Vue yapılandırmasını `biome.jsonc` dosyanıza ekleyin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Genel Bakış
+
+Bu yapılandırma, Vue.js geliştirmeye özgü kurallar ekler:
+
+- **HTML Desteği**: Script ve style girintilemesi ile deneysel tam HTML desteğini etkinleştirir
+- **Bileşen İsimlendirmesi**: Çok kelimeli bileşen isimlerini zorunlu kılar
+- **Veri Yapısı**: Yanlış data seçenek bildirilerini engeller
+- **Rezerve Edilmiş Anahtar Kelimeler**: Vue rezerve edilmiş props ve anahtarların kullanılmasını yasaklar
+- **Yinelenen Anahtarlar**: Bileşen seçeneklerinde yinelenen anahtarları engeller
+- **React'e Özel Özellikler**: Vue bileşenlerinde React'e özgü props kullanımını yasaklar
+- **Vue Dosyası Geçersiz Kılmaları**: Tek Dosya Bileşen yapısını (Single File Component) düzgün ele almak için `.vue` dosyalarında gevşetilmiş kurallar
+
+## HTML Biçimlendirici Yapılandırması
+
+Vue ön ayarı, gömülü scriptler ve stiller için özel biçimlendirme ile deneysel HTML desteğini etkinleştirir:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Bu yapılandırma:
+- **Deneysel Tam Destek**: Biome'ın `.vue` dosyaları için deneysel HTML ayrıştırma ve biçimlendirme yeteneklerini etkinleştirir
+- **Script ve Style Girintilemesi**: Vue Tek Dosya Bileşenlerindeki `<script>` ve `<style>` etiketleri içindeki kodu düzgün şekilde girintiler
+
+## Vue'ye Özgü Kurallar
+
+### Deneysel
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Vue bileşenlerinde `data` seçeneği için nesne bildirimi kullanılmasını engeller. `data` seçeneği bir nesne döndüren bir fonksiyon olmalıdır. |
+| `noVueDuplicateKeys` | `error` | Vue bileşen seçeneklerinde yinelenen anahtarların olmasını engeller. `data`, `computed`, `methods` vb. içindeki anahtarlar benzersiz olmalıdır. |
+| `noVueReservedKeys` | `error` | Bileşen seçeneklerinde `$data`, `$props`, `$el` gibi Vue rezerve anahtarlarının kullanılmasını yasaklar. |
+| `noVueReservedProps` | `error` | `key`, `ref`, `is` gibi Vue rezerve prop'larının özel bileşen prop'ları olarak kullanılmasını yasaklar. |
+| `noVueVIfWithVFor` | `error` | Aynı elementte `v-for` ve `v-if` kullanımını yasaklar. |
+| `useVueHyphenatedAttributes` | `error` | Vue stil rehberinin önerilerine göre attribute isimlerinde kebab-case (tireli) kullanımını teşvik eder. |
+| `useVueMultiWordComponentNames` | `error` | HTML elementleriyle çakışmayı önlemek için çok kelimeli bileşen isimlerini zorunlu kılar. `Button` veya `Card` gibi tek kelimeli isimlerden kaçınılmalıdır. |
+| `useVueValidVBind` | `error` | Vue dosyalarındaki `v-bind` direktiflerinin geçerliliğini zorunlu kılar. |
+| `useVueValidVElseIf` | `error` | Vue şablonlarındaki geçerli `v-else-if` direktiflerini zorunlu kılar. Koşul ifadelerinin eksik olduğu veya bir `v-if` ya da `v-else-if` direktifini takip etmediği durumlarda geçersiz direktifleri raporlar. |
+| `useVueValidVElse` | `error` | Vue şablonlarındaki geçerli `v-else` direktiflerini zorunlu kılar. Bir `v-if` ya da `v-else-if` direktifinden önce gelmeyen direktifleri raporlar. |
+| `useVueValidVHtml` | `error` | Vue şablonlarında `v-html` direktifinin geçerli kullanımını zorunlu kılar. İfadelerin eksik olduğu, beklenmeyen argümanlar veya beklenmeyen modifiyerler bulunan direktifleri raporlar. |
+| `useVueValidVIf` | `error` | Vue şablonlarındaki geçerli `v-if` direktiflerini zorunlu kılar. Argümanlar ve modifiyerlerin kullanımını yasaklar ve bir değer sağlanmasını garanti eder. |
+| `useVueValidVOn` | `error` | Vue şablonlarındaki geçerli `v-on` direktiflerini zorunlu kılar. Etkinlik isimleri eksik, modifiyerler geçersiz veya handler ifadeleri eksik olan `v-on` / kısaltma `@` direktiflerini raporlar. |
+| `useVueValidVText` | `error` | Vue şablonlarındaki geçerli `v-text` direktiflerini zorunlu kılar. `v-text`'in argümanının olması, modifiyerlere sahip olması veya değerin eksik olması durumlarını raporlar. |
+
+### Şüpheli
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Vue'da `className` ve `htmlFor` gibi React'e özgü prop'ların kullanılmasını yasaklar. Bunun yerine `class` ve `for` kullanılmalıdır. |
+
+## Vue Dosyası Geçersiz Kılmaları
+
+Aşağıdaki kurallar, Biome'ın Vue Tek Dosya Bileşenleri için kısmi desteğinden kaynaklanan yanlış pozitifleri önlemek amacıyla `.vue` dosyaları için devre dışı bırakılmıştır:
+
+### Doğruluk
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | `.vue` dosyalarında kullanılmayan değişkenlere izin verin. Script bölümündeki değişkenler yalnızca template içinde kullanılabilir. |
+| `noUnusedImports` | `off` | `.vue` dosyalarında kullanılmayan importlara izin verin. Import'lar yalnızca template bölümünde kullanılabilir. |
+
+### Stil
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `useConst` | `off` | Reactif veri kalıpları için `.vue` dosyalarında `let` ve `var` bildirimlerine izin verin. |
+| `useImportType` | `off` | Vue'nun derleme sistemiyle daha iyi uyumluluk için açık import tipi gereksinimlerini devre dışı bırakır. |

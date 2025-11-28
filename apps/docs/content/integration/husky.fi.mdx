@@ -1,0 +1,116 @@
+---
+title: Husky
+description: Aja Ultracite automaattisesti stagingiin lisätyille Git-tiedostoille Huskyn avulla
+---
+
+Ultracite tarjoaa saumatonta integraatiota [Husky](https://typicode.github.io/husky/):n kanssa, suositun työkalun Git-hookkien hallintaan. Tämä integraatio asettaa automaattisesti pre-commit-hookit varmistaakseen, että koodisi on asianmukaisesti muotoiltu ennen jokaista commitia.
+
+## Mikä on Husky?
+
+Husky on työkalu, joka tekee Git-hookkien käytöstä helppoa projektissasi. Git-hookit ovat skriptejä, jotka suorittavat automaattisesti tiettyinä pisteinä Git-työnkulussa, kuten ennen commitin tai pushin tekemistä. Husky yksinkertaistaa näiden hookkien asettamisen ja hallinnan prosessia.
+
+## Miten Ultracite käyttää Huskyä
+
+Kun alustat Ultraciten projektissasi, se voi automaattisesti konfiguroida Huskyn suorittamaan koodin muotoilun ennen jokaista commitia. Tämä varmistaa, että:
+
+- Kaikki commitoitu koodi noudattaa yhtenäisiä muotoilustandardeja
+- Koodin laatuun liittyvät tarkistukset toteutetaan automaattisesti
+- Tiimin jäsenien ei tarvitse muistaa muotoilla koodia manuaalisesti
+- Repositoriesi säilyy siistinä ja yhtenäisen koodityylin mukaisena
+
+## Pre-commit-hookin toiminta
+
+Ultraciten Husky-integraatio luo pre-commit-hookin, joka suorittaa seuraavan komennon:
+
+```bash
+npx ultracite fix
+```
+
+Tämä komento:
+- Suorittaa Biomen linterin ja muotoilijan koodikannassasi
+- Korjaa automaattisesti muotoiluongelmat mahdollisuuksien mukaan
+- Varmistaa, että kaikki stagingiin lisätyt tiedostot täyttävät projektisi koodistandardit
+- Estää commitit, jotka toisisivat muotoilu-epäjohdonmukaisuuksia
+
+## Automaattinen asennus
+
+Alustuksen aikana (`ultracite init`), jos valitset Husky-vaihtoehdon, Ultracite:
+
+1. **Asentaa Husky**: Lisää Huskyn projektisi kehitysriippuvuudeksi
+2. **Luo hook-tiedoston**: Asettaa `.husky/pre-commit`-tiedoston sisältämään muotoilukomennon
+3. **Käsittelee olemassa olevat asetukset**: Jos sinulla on jo Husky konfiguroituna, se päivittää olemassa olevan pre-commit-hookisi sen sijaan, että korvaisi sen
+
+## Integraation yksityiskohdat
+
+Husky-integraatio sisältää useita älykkäitä ominaisuuksia:
+
+### Riippuvuuksien hallinta
+- Asentaa automaattisesti Huskyn dev-riippuvuudeksi käyttäen projektisi pakettienhallintaa
+- Käyttää sopivaa pakettienhallinnan komentoa (`npm install -D`, `yarn add -D`, `pnpm add -D`, jne.)
+
+### Hookien hallinta
+- **Uudet projektit**: Luo uuden `.husky/pre-commit`-tiedoston, joka sisältää ultracite fix -komennon
+- **Olemassa olevat projektit**: Liittää Ultracite-komennon olemassa olevaan pre-commit-hookiisi, säilyttäen muut mahdollisesti konfiguroidut hookit
+
+### Tiedostorakenne
+Integraatio luo tai muokkaa:
+```
+.husky/
+└── pre-commit    # Contains the formatting command
+```
+
+## Hyödyt
+
+### Yhtenäinen koodityyli
+Jokainen commit noudattaa automaattisesti projektisi muotoilustandardeja, mikä poistaa tyyliriidat ja epäjohdonmukaisuudet.
+
+### Automaattinen laadunvalvonta
+Löydä muotoiluongelmat ennen kuin ne päätyvät repositorioon, säilyttäen siisti commit-historia.
+
+### Tiimiyhteistyö
+Kaikki tiimin jäsenet noudattavat automaattisesti samoja muotoilustandardeja ilman manuaalista väliintuloa.
+
+### CI/CD-optimointi
+Vähennä CI/CD-putken epäonnistumisia muotoiluongelmien takia, sillä koodi on esimuotoiltu paikallisesti.
+
+## Työnkulun integrointi
+
+Husky-integraation ollessa käytössä tavallinen Git-työnkulkuosi muuttuu seuraavaksi:
+
+1. **Tee muutoksia** kooditiedostoihisi
+2. **Lisää muutokset stagingiin** komennolla `git add`
+3. **Commitoi muutokset** komennolla `git commit`
+4. **Pre-commit-hook suoritetaan** automaattisesti, ja stageatut tiedostot muotoillaan
+5. **Commit jatkuu** asianmukaisesti muotoillun koodin kanssa
+
+Jos muotoilutyökalu tekee muutoksia, sinun täytyy stageata ja commitata ne myös.
+
+## Mukauttaminen
+
+Vaikka Ultracite asettaa järkevät oletukset, voit mukauttaa toimintaa:
+
+- Muokkaa `.husky/pre-commit`-tiedostoa lisätäksesi ylimääräisiä komentoja
+- Konfiguroi Biome-asetuksia muuttaaksesi muotoilusääntöjä
+- Lisää muita pre-commit-tarkistuksia rinnalle Ultraciten muotoilulle
+
+## Vianmääritys
+
+### Hook ei käynnisty
+Jos pre-commit-hook ei suoritudu:
+- Varmista, että Husky on asennettu: `npm ls husky`
+- Tarkista, että `.husky/pre-commit` on olemassa ja suoritettavissa
+- Varmista, että Git-hookit ovat käytössä repositoriossasi
+
+### Oikeusongelmat
+Unix-tyyppisissä järjestelmissä varmista, että hook-tiedosto on suoritettavissa:
+```bash
+chmod +x .husky/pre-commit
+```
+
+### Hookien ohittaminen
+Harvinaisissa tapauksissa, joissa sinun täytyy ohittaa pre-commit-hook:
+```bash
+git commit --no-verify
+```
+
+Käytä tätä säästeliäästi, sillä se ohittaa automatisoidun muotoilun, joka pitää koodipohjasi yhtenäisenä.

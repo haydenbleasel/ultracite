@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Remix-specifična linter pravila za Ultracite (prav tako združljiva s TanStack Router in React Router).
+---
+
+The Remix configuration has file naming conventions for route files. This configuration is also compatible with TanStack Router, React Router, and other file-based routing systems.
+
+## Namestitev
+
+Add the Remix configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Pregled
+
+This configuration provides special handling for route files that use filesystem-based routing conventions:
+
+- **Route File Naming**: Onemogoči stroge konvencije poimenovanja datotek za datoteke poti
+- **Flexible Patterns**: Podpira Remix-ove vzorce poimenovanja poti (pike, dolarji, podčrtaji)
+- **Framework Agnostic**: Deluje z Remix, TanStack Router, React Router in podobnimi sistemi
+
+## Preglasitve vzorcev datotek
+
+The configuration applies overrides to route files in these patterns:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 poti
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 poti
+
+### Onemogočena pravila za datoteke poti
+
+| Pravilo | Nastavitev | Opis |
+|--------|-----------|------|
+| `useFilenamingConvention` | `off` | Onemogoči uveljavljanje kebab-case za imena datotek za datoteke poti. Dovoli posebne vzorce poimenovanja poti. |
+
+## Zakaj ta konfiguracija obstaja
+
+File-based routing systems use special characters in filenames to represent routing patterns:
+
+- `.` (pika) - Predstavlja segmente poti (npr. `posts.new.tsx` → `/posts/new`)
+- `$` (dolar) - Predstavlja dinamične segmente (npr. `posts.$id.tsx` → `/posts/:id`)
+- `_` (podčrtaj) - Predstavlja layout rute ali poti brez poti
+
+These naming conventions conflict with Ultracite's default kebab-case filename requirement, so this configuration disables that rule specifically for route files.

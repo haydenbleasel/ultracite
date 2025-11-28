@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Pravila lintanja, specifična za Vue.js za Ultracite.
+---
+
+Konfiguracija za Vue vsebuje pravila lintanja, specifična za Vue.js glede strukture komponent, možnosti podatkov, izpeljanih lastnosti in rezerviranih ključev. Vključuje tudi preglase za preprečevanje lažnih pozitivnih napak pri lintanju v `.vue` datotekah.
+
+## Namestitev
+
+Dodajte Vue konfiguracijo v vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Pregled
+
+Ta konfiguracija doda pravila, specifična za razvoj Vue.js:
+
+- **Podpora za HTML**: Omogoči eksperimentalno celotno podporo za HTML z zamikom za skripte in stile
+- **Poimenovanje komponent**: Uveljavlja večbesedna imena komponent
+- **Struktura podatkov**: Prepreči nepravilne deklaracije možnosti `data`
+- **Rezervirani ključi**: Prepove uporabo Vue rezerviranih props in ključev
+- **Podvojeni ključi**: Prepreči podvojene ključe v možnostih komponent
+- **React-specifične props**: Prepove React-specifične props v Vue komponentah
+- **Preglasi za `.vue` datoteke**: Odlahčana pravila za `.vue` datoteke za obravnavo strukture Single File Components
+
+## Konfiguracija HTML oblikovalnika
+
+Vue prednastavitev omogoča eksperimentalno podporo za HTML s posebno obliko za vgrajene skripte in stile:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Ta konfiguracija:
+- **Eksperimentalna celotna podpora**: Omogoči Biome-ove eksperimentalne sposobnosti razčlenjevanja in oblikovanja HTML za `.vue` datoteke
+- **Zamik za skripte in stile**: Pravilno zamakne kodo znotraj `<script>` in `<style>` oznak v Vue Single File Components
+
+## Pravila, specifična za Vue
+
+### Začetno
+
+| Pravilo | Nastavitev | Opis |
+|--------|-----------|------|
+| `noVueDataObjectDeclaration` | `error` | Prepreči uporabo deklaracije objekta za možnost `data` v Vue komponentah. Možnost `data` mora biti funkcija, ki vrača objekt. |
+| `noVueDuplicateKeys` | `error` | Prepreči podvojene ključe v možnostih Vue komponent. Ključi v `data`, `computed`, `methods` itd. morajo biti enolični. |
+| `noVueReservedKeys` | `error` | Prepove Vue rezervirane ključe, kot so `$data`, `$props`, `$el` itd., v možnostih komponent. |
+| `noVueReservedProps` | `error` | Prepove Vue rezervirane props, kot so `key`, `ref` in `is`, kot lastne props komponent. |
+| `noVueVIfWithVFor` | `error` | Prepove `v-for` in `v-if` na istem elementu. |
+| `useVueHyphenatedAttributes` | `error` | Spodbuja uporabo kebab-case za imena atributov, v skladu s priporočili Vue stilskega vodiča. |
+| `useVueMultiWordComponentNames` | `error` | Uveljavlja večbesedna imena komponent, da se izogne konfliktom z HTML elementi. Enobesedna imena, kot `Button` ali `Card`, naj se izogibajo. |
+| `useVueValidVBind` | `error` | Uveljavlja veljavnost `v-bind` direktiv v Vue datotekah. |
+| `useVueValidVElseIf` | `error` | Uveljavlja veljavne `v-else-if` direktive v Vue predlogah. Poročila o neveljavnih direktivah vključujejo manjkajoče pogojne izraze ali ko niso predhodno sledene z `v-if` ali `v-else-if` direktivo. |
+| `useVueValidVElse` | `error` | Uveljavlja veljavne `v-else` direktive v Vue predlogah. Poročila o direktivah, ki jim ne sledijo `v-if` ali `v-else-if` direktive. |
+| `useVueValidVHtml` | `error` | Uveljavlja veljavno uporabo `v-html` direktive v Vue predlogah. Poročila o direktivah z manjkajočimi izrazi, nepričakovanimi argumenti ali nepričakovanimi modifikatorji. |
+| `useVueValidVIf` | `error` | Uveljavlja veljavne `v-if` direktive v Vue predlogah. Prepoveduje argumente in modifikatorje ter zagotavlja, da je vrednost navedena. |
+| `useVueValidVOn` | `error` | Uveljavlja veljavne `v-on` direktive v Vue predlogah. Poročila o neveljavnih `v-on` / okrajšanih `@` direktivah z manjkajočimi imeni dogodkov, neveljavnimi modifikatorji ali manjkajočimi izrazi za obdelovalce. |
+| `useVueValidVText` | `error` | Uveljavlja veljavne `v-text` direktive v Vue predlogah. Pravilo poroča, ko ima `v-text` argument, modifikatorje ali pa mu manjka vrednost. |
+
+### Sumljivo
+
+| Pravilo | Nastavitev | Opis |
+|--------|-----------|------|
+| `noReactSpecificProps` | `error` | Prepove React-specifične props, kot so `className` in `htmlFor`, v Vue. Namesto tega uporabite `class` in `for`. |
+
+## Preglasi za `.vue` datoteke
+
+Naslednja pravila so v `.vue` datotekah onemogočena, da preprečijo lažne pozitivne ugotovitve zaradi delne podpore Biome za Vue Single File Components:
+
+### Pravilnost
+
+| Pravilo | Nastavitev | Opis |
+|--------|-----------|------|
+| `noUnusedVariables` | `off` | Dovoli neuporabljene spremenljivke v `.vue` datotekah. Spremenljivke v skript sekciji so lahko uporabljene samo v predlogi. |
+| `noUnusedImports` | `off` | Dovoli neuporabljene uvoze v `.vue` datotekah. Uvozi so lahko uporabljeni le v predlogi. |
+
+### Slog
+
+| Pravilo | Nastavitev | Opis |
+|--------|-----------|------|
+| `useConst` | `off` | Dovoli `let` in `var` deklaracije v `.vue` datotekah za reaktivne vzorce podatkov. |
+| `useImportType` | `off` | Onemogoči zahteve po eksplicitnih tipih uvoza za boljšo združljivost z Vue-ovim gradbenim sistemom. |

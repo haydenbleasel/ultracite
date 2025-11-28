@@ -1,0 +1,47 @@
+---
+title: Remix
+description: Remix-spezifische Linting-Regeln für Ultracite (auch kompatibel mit TanStack Router und React Router).
+---
+
+Die Remix-Konfiguration enthält Dateinamenskonventionen für Routen-Dateien. Diese Konfiguration ist auch kompatibel mit TanStack Router, React Router und anderen dateibasierten Routing-Systemen.
+
+## Installation
+
+Fügen Sie die Remix-Konfiguration zu Ihrer `biome.jsonc` hinzu:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/remix"]
+}
+```
+
+## Übersicht
+
+Diese Konfiguration bietet spezielle Behandlung für Routen-Dateien, die dateisystembasierte Routing-Konventionen verwenden:
+
+- **Benennung von Routen-Dateien**: Deaktiviert strikte Dateinamenskonventionen für Routen-Dateien
+- **Flexible Muster**: Unterstützt Remixes Routen-Benennungsmuster (Punkte, Dollarzeichen, Unterstriche)
+- **Framework-agnostisch**: Funktioniert mit Remix, TanStack Router, React Router und ähnlichen Systemen
+
+## Dateimuster-Überschreibungen
+
+Die Konfiguration wendet Überschreibungen auf Routen-Dateien in diesen Mustern an:
+
+- `**/routes/**/*.{tsx,ts}` - Remix v1 routes
+- `**/app/routes/**/*.{tsx,ts}` - Remix v2 routes
+
+### Deaktivierte Regeln für Routen-Dateien
+
+| Regel | Einstellung | Beschreibung |
+|------|---------|-------------|
+| `useFilenamingConvention` | `off` | Deaktiviert die Durchsetzung der kebab-case-Dateinamenskonvention für Routen-Dateien. Erlaubt spezielle Routen-Benennungsmuster. |
+
+## Warum diese Konfiguration existiert
+
+Dateibasierte Routing-Systeme verwenden besondere Zeichen in Dateinamen, um Routing-Muster darzustellen:
+
+- `.` (Punkt) - Repräsentiert Pfadsegmente (z. B. `posts.new.tsx` → `/posts/new`)
+- `$` (Dollar) - Repräsentiert dynamische Segmente (z. B. `posts.$id.tsx` → `/posts/:id`)
+- `_` (Unterstrich) - Repräsentiert Layout-Routen oder pfadlose Routen
+
+Diese Benennungsregeln stehen im Konflikt mit Ultracites standardmäßiger Anforderung an kebab-case-Dateinamen, daher deaktiviert diese Konfiguration diese Regel speziell für Routen-Dateien.

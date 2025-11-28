@@ -1,0 +1,61 @@
+---
+title: React
+description: React-specifična pravila lintanja za Ultracite.
+---
+
+Konfiguracija za React vsebuje React-specifična pravila linterja za JSX, hooks in vzorce komponent.
+
+## Namestitev
+
+Dodajte React konfiguracijo v vašo `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react"]
+}
+```
+
+## Pregled
+
+Ta konfiguracija doda pravila, specifična za razvoj z Reactom:
+
+- **Pravila JSX**: Uveljavljajo pravilno sintakso in vzorce JSX
+- **Pravila Hooks**: Zagotavljajo pravilno uporabo React hooks
+- **Pravila komponent**: Uveljavljajo najboljše prakse za React komponente
+- **Ravnanje z children**: Preprečuje nepravilno uporabo propsa `children`
+
+## React-specifična pravila
+
+### Pravilnost
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noChildrenProp` | `error` | Preprečuje posredovanje prop-a `children`. Vsebina `children` naj bo vnešena med odpirajoči in zapirajoči element. |
+| `noNestedComponentDefinitions` | `error` | Preprečuje definicije komponent znotraj drugih komponent. To povzroča nepotrebne ponovne upodobitve. |
+| `noReactPropAssignments` | `error` | Preprečuje ponovno dodeljevanje props v React komponentah. Props je treba obravnavati kot nespremenljive. |
+| `noRenderReturnValue` | `error` | Preprečuje uporabo vrnjene vrednosti iz `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Preprečuje, da bi void elementi (npr. `<img>`, `<br>`) imeli `children`. |
+| `useExhaustiveDependencies` | `error` | Zahteva, da so vse odvisnosti pravilno navedene v React hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Zahteva, da so vsi React hooks klicani na vrhnji ravni funkcij komponent, ne znotraj zank, pogojnih stavkov ali gnezdenih funkcij. |
+| `useJsxKeyInIterable` | `error` | Zahteva, da imajo elementi v iterabilnih strukturah prop `key` za Reactovo uskladitev. |
+
+### Eksperimentalno
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noReactForwardRef` | `error` | Preprečuje uporabo zastarelega `React.forwardRef`. Namesto tega uporabite ref kot prop (React 19+). |
+
+### Slog
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `useReactFunctionComponents` | `error` | Zahteva uporabo funkcijskih komponent namesto razrednih komponent v Reactu. |
+
+### Sumljivo
+
+| Pravilo | Nastavitev | Opis |
+|------|---------|-------------|
+| `noArrayIndexKey` | `error` | Preprečuje uporabo indeksov polja kot prop-a `key`. Indeksi niso stabilni identifikatorji in lahko povzročijo težave s stanjem komponent. |
+| `noDuplicateJsxProps` | `error` | Preprečuje podvojene lastnosti v JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Preprečuje podpičja, ki spremenijo semantiko JSX elementov. |
+| `noReactSpecificProps` | `off` | Dovoli React-specifične propse, kot sta `className` in `htmlFor`. |

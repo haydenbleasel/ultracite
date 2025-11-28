@@ -1,0 +1,48 @@
+---
+title: Migrirajte iz ESLint
+description: Kako migrirati vaš projekt iz ESLint v Ultracite.
+---
+
+Če uporabljate ESLint in želite preiti na vnaprej konfiguriran Ultracite, vam bo ta vodnik pomagal pri migraciji ob ohranjanju standardov kakovosti kode.
+
+## Zakaj migrirati na Ultracite?
+
+- **Bliskovita hitrost**: Biome (osnova Ultracite) temelji na Rustu, zato je bistveno hitrejši od ESLint
+- **Brez konfiguracije**: Stotine vnaprej nastavljenih pravil v primerjavi z ročno nastavitvijo ESLint
+- **Združeno orodje**: Nadomesti tako ESLint kot Prettier z enim samim orodjem
+- **Integracija z AI**: Vgrajena podpora za urejevalnike, podprte z AI (Cursor, Windsurf, GitHub Copilot)
+- **Tipna varnost**: Izčrpna pravila za TypeScript s strogimi preverjanji null
+- **Sodobni standardi**: Najnovejše najboljše prakse za JavaScript/TypeScript
+
+## Preden začnete
+
+Prepričajte se, da imate:
+
+- Obstoječ projekt, ki uporablja ESLint
+- Node.js v14.18+ (priporočamo Node 18+)
+- Datoteko `package.json`
+
+## Samodejna nastavitev
+
+Zaženite [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+To bo:
+
+- Namestilo Ultracite kot odvisnost
+- Združilo vašo obstoječo `biome.json` / `biome.jsonc` s prednastavitvijo Ultracite
+- Združilo vašo obstoječo `.vscode/settings.json` s prednastavitvijo Ultracite
+- Omogočilo `strictNullChecks` v vaši datoteki `tsconfig.json` (ali jo ustvarilo, če ne obstaja)
+- Ohranjalo vaše prilagojena pravila in nastavitve
+- Nastavilo integracije urejevalnika
+
+Poskrbite, da izberete odstranitev obstoječe konfiguracije `ESLint`. To bo:
+
+- Odstranilo ESLint in vse povezane odvisnosti
+- Odstranilo vse datoteke konfiguracije ESLint
+- Odstranilo vse ukaze, povezane z ESLint, iz vaše datoteke `.vscode/settings.json`
+
+Po nadgradnji boste morda želeli pregledati datoteko `biome.json` / `biome.jsonc` in odstraniti morebitne preglasitve. Prav tako znova zaženite urejevalnik, da zagotovite uporabo nove konfiguracije.

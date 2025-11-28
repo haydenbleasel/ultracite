@@ -1,0 +1,71 @@
+---
+title: 配置
+description: Ultracite 的默认 lint 配置以及如何修改它。
+---
+
+Ultracite 的一个最佳特性是开箱即用的零配置 —— 你只需扩展 `ultracite` 预设即可开始使用。然而，每个项目都有所不同，你可能想自定义某些规则或针对不同框架调整 Ultracite。本节解释了默认配置以及如何扩展或覆盖它。
+
+Ultracite 提供了可扩展的框架特定配置，除了基础配置之外你也可以扩展这些配置。这允许你添加框架特定的 lint 规则，而不会膨胀基础配置或处理无关的规则。
+
+你可以在 [预设](/preset/core) 部分找到所有可用框架配置的完整列表。
+
+### 用法
+
+要使用框架特定的配置，请将其添加到你的 `extends` 数组中：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/solid"]
+}
+```
+
+如果你在一个多框架项目中工作，或使用像 Astro 这样支持多框架的东西，你可以组合多个配置。
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/remix"]
+}
+```
+
+## 默认配置
+
+当你在 `biome.jsonc` 中包含 `"extends": ["ultracite/core"]` 时，你会引入 Ultracite 的基础预设配置。该预设包含与框架无关的规则和配置。默认配置的一些显著方面包括：
+
+- **TypeScript 严格性**: Ultracite 启用 TypeScript 的严格检查和需要强类型的 lint 规则。例如，它不鼓励使用 `any`，要求处理 `null/undefined`，并在某些情况下偏好显式类型以避免歧义。
+- **ESLint "Recommended" 等效规则**: 常见的最佳实践规则（无未使用变量、禁止显式 eval、禁止原型污染等）已包含在内。
+- **可访问性**: 等同于可访问性标准的规则默认启用（ARIA 属性、语义化 HTML、键盘导航等）。
+- **Node.js**: 处理了环境特有的差异。例如，Node 提供的全局变量（如 `module`、`process`）会被识别，因此不会被错误地标记为未定义。
+- **格式化约定**: Ultracite 的格式化器设置（在很大程度上继承自 Biome/Prettier 的默认值）包括 2 空格缩进、最大行宽 80 字符、语句末尾的分号、在合法位置使用尾随逗号（例如多行数组/对象中）、字符串使用双引号等。这些选择旨在符合常见约定并确保 diff 的整洁。
+
+所有这些默认设置旨在在不需要你手动配置每条规则的情况下，强制统一风格并防止常见错误。
+
+有关在 Ultracite 基础配置中配置的所有 lint 规则的完整参考，请参阅 [核心配置](/preset/core) 文档。
+
+## 覆盖配置
+
+### 修改 `biome.jsonc`
+
+你可以通过修改 `biome.jsonc` 文件来禁用规则。
+
+例如，要禁用 `noAutofocus` 规则，你可以添加以下内容：
+
+```jsonc title="biome.jsonc"
+{
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off"
+      }
+    }
+  }
+}
+```
+
+### 行内注释
+
+你也可以通过在行尾添加注释按行禁用规则：
+
+```tsx title="page.tsx"
+// biome-ignore lint/security/noDangerouslySetInnerHtml: This is a valid use case.
+<div dangerouslySetInnerHTML={{ ... }} />
+```

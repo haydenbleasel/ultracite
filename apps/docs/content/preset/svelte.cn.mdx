@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Ultracite 的 Svelte 专用配置。
+---
+
+Svelte 配置包含针对 Svelte 的特定设置。这是一个最小预设，因为 Biome 还没有专门的 Svelte lint 规则，但它包含重要的覆盖规则以防止在 `.svelte` 文件中出现误报的 lint 错误。
+
+## 安装
+
+将 Svelte 配置添加到你的 `biome.jsonc`：
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## 概览
+
+此配置包括：
+
+- **HTML 支持**: 启用实验性的完整 HTML 支持，并对 script 和 style 进行缩进
+- **React 特有属性**: 标记 React 特有的属性，例如 `className` 和 `htmlFor`，因为 Svelte 使用标准的 HTML 属性（`class` 和 `for`）
+- **Svelte 文件覆盖**: 对 `.svelte` 文件放宽规则以适应 Svelte 的组件结构
+
+## HTML 格式化 配置
+
+Svelte 预设启用了实验性的 HTML 支持，并对嵌入的 script 和 style 提供特殊格式化：
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+此配置：
+- **实验性完整支持**: 为 `.svelte` 文件启用 Biome 的实验性 HTML 解析和格式化功能
+- **缩进 script 和 style**: 在 Svelte 组件中正确缩进 `<script>` 和 `<style>` 标签内的代码
+
+## Svelte 特定规则
+
+### 可疑
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | 禁止在 Svelte 中使用 React 特有的属性，如 `className` 和 `htmlFor`。请改用 `class` 和 `for`。 |
+
+## Svelte 文件覆盖
+
+以下规则在 `.svelte` 文件中被禁用，以防止由于 Biome 对 Svelte 组件的部分支持而导致的误报：
+
+### 正确性
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | 允许 `.svelte` 文件中存在未使用的变量。script 部分的变量可能仅在模板中使用。 |
+| `noUnusedImports` | `off` | 允许 `.svelte` 文件中存在未使用的导入。导入可能仅在模板部分使用。 |
+
+### 风格
+
+| 规则 | 设置 | 描述 |
+|------|---------|-------------|
+| `useConst` | `off` | 允许在 `.svelte` 文件中使用 `let` 和 `var` 声明以支持响应式语句。 |
+| `useImportType` | `off` | 禁用对显式 import 类型的要求，以便更好地兼容 Svelte 的构建系统。 |

@@ -1,0 +1,139 @@
+---
+title: Beispiele
+description: Vorher- und Nachher-Beispiele, die Ultracite in Aktion zeigen.
+---
+
+Um die Fähigkeiten von Ultracite zu veranschaulichen, hier einige praktische Beispiele von Problemen, die es erkennt und behebt. Jedes Beispiel zeigt den Code vorher (mit einem Problem) und danach, nachdem Ultracite angewendet wurde. Diese Beispiele demonstrieren, wie Ultracite den Code automatisch verbessert.
+
+## Automatische Code-Formatierung
+
+### Vorher (unordentliches Format)
+
+```tsx title="page.tsx"
+function greet(name) { return 'Hello, '+ name + "!!" }
+```
+
+In diesem Code sind Einrückungen und Verkettungsstil nicht korrekt. Es wird außerdem Zeichenkettenverkettung anstelle von Template-Literalen verwendet, und es sind doppelte Anführungszeichen mit einfachen vermischt.
+
+### Nachher (formatiert)
+
+```tsx title="page.tsx"
+function greet(name) {
+  return `Hello, ${name}!!`;
+}
+```
+
+Der Formatter von Ultracite hat:
+
+- Die Funktion mit geeigneten Zeilenumbrüchen für bessere Lesbarkeit formatiert.
+- Die Zeichenkettenverkettung in ein Template-Literal umgewandelt (dies könnte eine automatische Korrektur durch eine Lint-Regel sein, die Template-Strings aus Lesbarkeitsgründen empfiehlt).
+- Die Anführungszeichen für das Template auf Backticks vereinheitlicht (und würde anderswo konsistent doppelte Anführungszeichen verwenden, wenn es kein Template wäre).
+- Ein Semikolon am Ende der `return`-Anweisung hinzugefügt.
+- Für richtigen Abstand um geschweifte Klammern und Klammern gesorgt.
+
+Der Entwickler hat den Code nicht manuell umformatiert – er hat einfach die Datei gespeichert, und Ultracite hat den Rest übernommen. Das Ergebnis ist saubererer, konsistenterer Code.
+
+Ultracite wird außerdem warnen, dass `name` nicht typisiert ist und vorschlagen, einen Typ hinzuzufügen.
+
+## Durchsetzung strikter Gleichheit
+
+### Vorher (potentieller Fehler durch lose Gleichheit)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status == 200) {
+  isValid = true;
+}
+```
+
+Hier verwendet der Code lose Gleichheit (`==`), um `response.status` mit `200` zu vergleichen. Lose Gleichheit kann aufgrund von Typumwandlung fehleranfällig sein (z. B. könnte `response.status` eine Zeichenkette `“200”` sein und dennoch als gleich gelten). Ultracite’s strenge Regeln erzwingen wahrscheinlich die Verwendung von `===` für Vergleiche.
+
+### Nachher (Ultracite-Auto-Fix angewendet)
+
+```tsx title="validate.ts"
+let isValid = false;
+const response = getResponse();
+if (response.status === 200) { // [!code highlight]
+  isValid = true;
+}
+```
+
+Ultracite hat `== 200` automatisch durch `=== 200` ersetzt. Diese kleine Änderung verhindert subtile Fehler. Die Korrektur wurde beim Speichern als Teil der `source.fixAll.biome`-Aktionen angewendet. Eine solche Regel (ähnlich zu ESLint’s `eqeqeq`) stellt sicher, dass Entwickler strikte Gleichheitsprüfung verwenden.
+
+Zusätzlich wird Ultracite auch darauf hinweisen, dass `isValid` nie verwendet wird, und vorschlagen, es zu entfernen.
+
+## Importe organisieren und bereinigen
+
+### Vorher (unorganisierte Importe)
+
+```tsx title="index.tsx"
+import Z from './z-module';
+import A from './a-module';
+import React from 'react';
+import { helper } from './util';
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Die Importe hier sind nicht alphabetisch sortiert, und der `helper`-Import wird in der Datei nie verwendet.
+
+### Nachher (nach dem Speichern mit Ultracite)
+
+```tsx title="index.tsx"
+import React from 'react'; // [!code highlight]
+import A from './a-module'; // [!code highlight]
+import Z from './z-module'; // [!code highlight]
+import { helper } from './util'; // [!code --]
+
+const MyComponent = () => (
+  <>
+    <Z />
+    <A />
+  </>
+);
+```
+
+Ultracite (über Biome’s Funktion zum Organisieren von Imports) hat die Importe alphabetisch nach Modulnamen sortiert. Außerdem wurde der ungenutzte `helper`-Import automatisch entfernt. Der Vorher/Nachher-Unterschied tritt sofort beim Speichern auf und sorgt dafür, dass der Importbereich immer ordentlich bleibt:
+
+- Keine ungenutzten Importe, die den Anfang Ihrer Datei verstopfen.
+- Deterministische Reihenfolge der Importe (damit Merges und Diffs nicht durch unterschiedliche Importreihenfolgen verunsichert werden).
+
+Das führt zu besser wartbarem Code, besonders in Dateien mit vielen Importen.
+
+## Barrierefreiheitskorrektur
+
+### Vorher
+
+```tsx title="Button.tsx"
+<button onClick={submitForm}>
+  Open modal
+</button>
+```
+
+Der Standardtyp eines Buttons ist `submit`, was dazu führt, dass ein Formular abgesendet wird, wenn sich der Button innerhalb eines Form-Elements befindet. Das ist wahrscheinlich nicht das Verhalten, das Sie in einer React-Anwendung möchten. Ultracite wird Sie darauf hinweisen und eine Schnellkorrektur anbieten, den Typ auf `button` zu ändern.
+
+### Nachher (manuell oder per Schnellkorrektur)
+
+```tsx title="Button.tsx"
+<button onClick={submitForm} type="button">
+  Open modal
+</button>
+```
+
+Der Typ ist jetzt `button`, was verhindert, dass ein potenzielles übergeordnetes Formular beim Klicken des Buttons abgesendet wird.
+
+---
+
+Diese Beispiele zeigen, wie Ultracite die Codequalität verbessert:
+
+- Formatierung und Stilkonstanz ohne Aufwand.
+- Automatische Korrekturen für viele häufige Probleme (so dass Sie selten triviale Dinge manuell beheben müssen).
+- Erkennung realer Probleme (damit Sie sie früh in der Entwicklung beheben können).
+
+Durch die Verwendung von Ultracite bleibt Ihr Code nicht nur sauber, sondern auch weniger fehleranfällig und zugänglicher, dank des kollektiven Wissens, das in seinen Regeln kodiert ist.

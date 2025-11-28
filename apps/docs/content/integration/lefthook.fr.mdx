@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Exécute automatiquement Ultracite sur vos fichiers Git mis en index avec lefthook
+---
+
+Ultracite propose une intégration transparente avec [lefthook](https://lefthook.dev/), un gestionnaire de hooks Git rapide et puissant. Cette intégration configure automatiquement des hooks pre-commit pour s'assurer que votre code est correctement formaté avant chaque commit.
+
+## Qu'est-ce que lefthook ?
+
+lefthook est un gestionnaire natif de hooks Git rapide pour les projets Node.js et Go. Il est conçu pour être simple, rapide et puissant, vous permettant de gérer les hooks Git au sein de votre équipe avec des fichiers de configuration qui peuvent être commités dans votre dépôt.
+
+## Comment Ultracite utilise lefthook
+
+Lorsque vous initialisez Ultracite dans votre projet, il peut configurer automatiquement lefthook pour exécuter le formatage du code avant chaque commit. Cela garantit que :
+
+- Tout le code commit suit des standards de formatage cohérents
+- Les vérifications de qualité de code sont appliquées automatiquement
+- Les membres de l'équipe n'ont pas besoin de se souvenir de formater le code manuellement
+- Votre dépôt conserve un style de code propre et cohérent
+
+## Comportement du hook pre-commit
+
+L'intégration lefthook d'Ultracite crée un hook pre-commit qui exécute la commande suivante :
+
+```bash
+npx ultracite fix
+```
+
+Cette commande :
+- Exécute le linter de Biome et l'outil de formatage sur votre base de code
+- Corrige automatiquement les problèmes de formatage lorsque c'est possible
+- S'assure que tous les fichiers indexés respectent les normes de code de votre projet
+- Empêche des commits qui introduiraient des incohérences de formatage
+
+## Configuration automatique
+
+Lors du processus d'initialisation (`ultracite init`), si vous sélectionnez l'option lefthook, Ultracite :
+
+1. **Installs lefthook**: Ajoute lefthook en tant que dépendance de développement à votre projet
+2. **Initializes lefthook**: Exécute `lefthook install` pour configurer les hooks Git
+3. **Creates Configuration**: Configure le fichier `lefthook.yml` avec la commande de formatage
+4. **Handles Existing Setups**: Si vous avez déjà lefthook configuré, il met à jour votre configuration existante plutôt que de l'écraser
+
+## Détails de l'intégration
+
+L'intégration lefthook inclut plusieurs fonctionnalités intelligentes :
+
+### Gestion des dépendances
+- Installe automatiquement lefthook comme dépendance de développement en utilisant le gestionnaire de paquets de votre projet
+- Utilise la commande appropriée du gestionnaire de paquets (`npm install -D`, `yarn add -D`, `pnpm add -D`, etc.)
+- Exécute `lefthook install` pour initialiser les hooks Git
+
+### Gestion de la configuration
+- **Nouveaux projets**: Crée un nouveau `lefthook.yml` avec la commande ultracite fix
+- **Projets existants**: Ajoute la commande Ultracite à votre configuration lefthook existante, en préservant les autres hooks que vous avez pu configurer
+
+### Structure des fichiers
+L'intégration crée ou modifie :
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## Avantages
+
+- **Cohérence d'équipe**: Chaque membre de l'équipe bénéficie automatiquement du même formatage
+- **Aucune configuration**: Fonctionne immédiatement avec des valeurs par défaut judicieuses
+- **Performances élevées**: lefthook est écrit en Go et est extrêmement rapide
+- **Flexibilité**: Facile à étendre avec des commandes et des hooks supplémentaires
+- **Multi-plateforme**: Fonctionne de manière cohérente sur différents systèmes d'exploitation
+
+## Intégration au flux de travail
+
+L'intégration lefthook s'intègre parfaitement à votre flux de travail de développement :
+
+1. **Le développeur effectue des modifications** dans les fichiers de code
+2. **Indexe les fichiers** pour le commit avec `git add`
+3. **Tente de valider le commit** avec `git commit`
+4. **lefthook déclenche** automatiquement le hook pre-commit
+5. **Ultracite s'exécute** et formatte les fichiers indexés
+6. **Le commit est effectué** si le formatage réussit, ou **échoue** s'il y a des problèmes qui n'ont pas pu être corrigés automatiquement
+
+## Personnalisation
+
+Bien qu'Ultracite configure des valeurs par défaut sensées, vous pouvez personnaliser le comportement :
+
+- Modifiez `lefthook.yml` pour ajouter des commandes ou des hooks supplémentaires
+- Configurez les paramètres de Biome pour ajuster les règles de formatage
+- Ajoutez d'autres vérifications pre-commit en parallèle au formatage d'Ultracite
+- Utilisez les puissantes fonctionnalités d'exécution parallèle et de logique conditionnelle de lefthook
+
+## Dépannage
+
+### Hook non exécuté
+Si le hook pre-commit ne s'exécute pas :
+- Assurez-vous que lefthook est installé : `npm ls lefthook`
+- Vérifiez que `lefthook.yml` existe et contient la commande ultracite
+- Vérifiez que les hooks Git sont activés dans votre dépôt
+- Exécutez `lefthook install` pour réinstaller les hooks
+
+### Problèmes d'autorisation
+lefthook gère automatiquement les permissions des hooks Git, mais si vous rencontrez des problèmes :
+- Essayez d'exécuter `lefthook install` à nouveau
+- Vérifiez que la configuration Git autorise les hooks
+
+### Contourner les hooks
+Dans de rares cas où vous devez ignorer le hook pre-commit :
+```bash
+git commit --no-verify
+```
+
+Utilisez ceci avec parcimonie, car cela contourne le formatage automatisé qui maintient la cohérence de votre base de code.
+
+## Exemple de configuration
+
+Voici à quoi ressemble la configuration `lefthook.yml` :
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Cette configuration :
+- Ne s'exécute que sur les fichiers JavaScript, TypeScript, JSON et CSS
+- Indexe automatiquement tous les fichiers corrigés par l'outil de formatage
+- Utilise la syntaxe `jobs` efficace pour de meilleures performances
+
+Vous pouvez étendre cette configuration pour inclure des jobs supplémentaires :
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

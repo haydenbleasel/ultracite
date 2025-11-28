@@ -1,0 +1,48 @@
+---
+title: Von ESLint migrieren
+description: Wie Sie Ihr Projekt von ESLint zu Ultracite migrieren.
+---
+
+Wenn Sie ESLint verwenden und zu Ultracites vorkonfiguriertem Setup wechseln möchten, hilft Ihnen dieses Handbuch bei der Migration, während die Codequalitätsstandards beibehalten werden.
+
+## Warum zu Ultracite migrieren?
+
+- **Blitzschnell**: Biome (Ultracites Grundlage) basiert auf Rust, viel schneller als ESLint
+- **Keine Konfiguration erforderlich**: Hunderte vorkonfigurierter Regeln im Gegensatz zur manuellen ESLint-Konfiguration
+- **Kombiniertes Tool**: Ersetzt sowohl ESLint als auch Prettier durch ein einziges Tool
+- **KI-Integration**: Eingebaute Unterstützung für KI-basierte Editoren (Cursor, Windsurf, GitHub Copilot)
+- **Typensicherheit**: Umfassende TypeScript-Regeln mit strikten Nullprüfungen
+- **Moderne Standards**: Aktuelle Best Practices für JavaScript/TypeScript
+
+## Bevor Sie beginnen
+
+Stellen Sie sicher, dass Sie Folgendes haben:
+
+- Ein bestehendes Projekt, das ESLint verwendet
+- Node.js v14.18+ (Node 18+ empfohlen)
+- Eine `package.json`-Datei
+
+## Automatische Einrichtung
+
+Führen Sie das [automatische Setup-Skript](/setup#automatic-installation) aus.
+
+```package-install
+npx ultracite init
+```
+
+Dies wird:
+
+- Ultracite als Abhängigkeit installieren
+- Ihre bestehende `biome.json` / `biome.jsonc` mit dem Ultracite-Preset zusammenführen
+- Ihre bestehende `.vscode/settings.json` mit dem Ultracite-Preset zusammenführen
+- `strictNullChecks` in Ihrer `tsconfig.json`-Datei aktivieren (oder eine erstellen, falls noch nicht vorhanden)
+- Ihre benutzerdefinierten Regeln und Einstellungen beibehalten
+- Editor-Integrationen einrichten
+
+Stellen Sie sicher, dass Sie die bestehende ESLint-Konfiguration entfernen. Dies wird:
+
+- ESLint und alle zugehörigen Abhängigkeiten entfernen
+- Alle ESLint-Konfigurationsdateien entfernen
+- Alle ESLint-bezogenen Befehle aus Ihrer `.vscode/settings.json`-Datei entfernen
+
+Nach dem Upgrade sollten Sie möglicherweise Ihre `biome.json` / `biome.jsonc`-Datei überprüfen, um gegebenenfalls Überschreibungen zu entfernen. Starten Sie außerdem Ihren Editor neu, um sicherzustellen, dass die neue Konfiguration angewendet wird.

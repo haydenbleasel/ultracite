@@ -1,0 +1,92 @@
+---
+title: Vue
+description: Regras de lint específicas do Vue.js para o Ultracite.
+---
+
+A configuração do Vue tem regras de lint específicas do Vue.js para a estrutura de componentes, opções de dados, propriedades computadas e palavras-chave reservadas. Também inclui sobrescritas para evitar falsos positivos de lint em arquivos `.vue`.
+
+## Instalação
+
+Adicione a configuração do Vue ao seu `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/vue"]
+}
+```
+
+## Visão geral
+
+Esta configuração adiciona regras específicas para desenvolvimento com Vue.js:
+
+- **Suporte HTML**: Habilita suporte HTML experimental completo com indentação de script e style
+- **Nomeação de Componentes**: Aplicar nomes de componentes com múltiplas palavras
+- **Estrutura de Dados**: Evitar declarações incorretas da opção `data`
+- **Palavras Reservadas**: Proibir o uso de props e chaves reservadas do Vue
+- **Chaves Duplicadas**: Prevenir chaves duplicadas nas opções do componente
+- **Props Específicas do React**: Proibir props específicas do React em componentes Vue
+- **Sobrescritas para Arquivos Vue**: Regras relaxadas para arquivos `.vue` para lidar com a estrutura de Single File Component
+
+## Configuração do Formatador HTML
+
+O preset Vue habilita suporte HTML experimental com formatação especial para scripts e styles embutidos:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Esta configuração:
+- **Suporte Experimental Completo**: Habilita as capacidades experimentais de parsing e formatação HTML do Biome para arquivos `.vue`
+- **Indentar Script e Style**: Indenta corretamente o código dentro das tags `<script>` e `<style>` em Vue Single File Components
+
+## Regras Específicas do Vue
+
+### Incubação
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noVueDataObjectDeclaration` | `error` | Evita usar declaração de objeto para a opção `data` em componentes Vue. A opção `data` deve ser uma função que retorne um objeto. |
+| `noVueDuplicateKeys` | `error` | Evita chaves duplicadas nas opções de componentes Vue. Chaves em `data`, `computed`, `methods`, etc. devem ser únicas. |
+| `noVueReservedKeys` | `error` | Proíbe chaves reservadas do Vue como `$data`, `$props`, `$el`, etc. nas opções do componente. |
+| `noVueReservedProps` | `error` | Proíbe props reservadas do Vue como `key`, `ref` e `is` como props customizadas de componentes. |
+| `noVueVIfWithVFor` | `error` | Proíbe `v-for` e `v-if` no mesmo elemento. |
+| `useVueHyphenatedAttributes` | `error` | Incentiva o uso de kebab-case para nomes de atributos, conforme as recomendações do guia de estilo do Vue. |
+| `useVueMultiWordComponentNames` | `error` | Exige nomes de componentes com múltiplas palavras para evitar conflitos com elementos HTML. Nomes de palavra única como `Button` ou `Card` devem ser evitados. |
+| `useVueValidVBind` | `error` | Exige a validade das diretivas `v-bind` em arquivos Vue. |
+| `useVueValidVElseIf` | `error` | Exige diretivas `v-else-if` válidas em templates do Vue. Reporta diretivas inválidas com expressões condicionais ausentes ou quando não precedidas por uma diretiva `v-if` ou `v-else-if`. |
+| `useVueValidVElse` | `error` | Exige diretivas `v-else` válidas em templates do Vue. Reporta diretivas que não são precedidas por uma diretiva `v-if` ou `v-else-if`. |
+| `useVueValidVHtml` | `error` | Exige uso válido da diretiva `v-html` em templates do Vue. Reporta diretivas com expressões ausentes, argumentos inesperados ou modificadores inesperados. |
+| `useVueValidVIf` | `error` | Exige diretivas `v-if` válidas em templates do Vue. Proíbe argumentos e modificadores, e garante que um valor seja fornecido. |
+| `useVueValidVOn` | `error` | Exige diretivas `v-on` válidas em templates do Vue. Reporta diretivas `v-on` / atalho `@` inválidas com nomes de evento ausentes, modificadores inválidos ou expressões de handler ausentes. |
+| `useVueValidVText` | `error` | Exige diretivas `v-text` válidas em templates do Vue. A regra reporta quando `v-text` tem um argumento, possui modificadores ou está sem valor. |
+
+### Suspeitas
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Proíbe props específicas do React como `className` e `htmlFor` no Vue. Use `class` e `for` em vez disso. |
+
+## Sobrescritas para arquivos Vue
+
+As seguintes regras são desativadas para arquivos `.vue` para evitar falsos positivos devido ao suporte parcial do Biome para Vue Single File Components:
+
+### Correção
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Permite variáveis não utilizadas em arquivos `.vue`. Variáveis na seção script podem ser usadas apenas no template. |
+| `noUnusedImports` | `off` | Permite imports não utilizados em arquivos `.vue`. Imports podem ser utilizados apenas na seção template. |
+
+### Estilo
+
+| Regra | Configuração | Descrição |
+|------|---------|-------------|
+| `useConst` | `off` | Permite declarações `let` e `var` em arquivos `.vue` para padrões reativos de dados. |
+| `useImportType` | `off` | Desativa requisitos explícitos de tipo de import para melhor compatibilidade com o sistema de build do Vue. |

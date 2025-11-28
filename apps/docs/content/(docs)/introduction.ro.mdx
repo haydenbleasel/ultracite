@@ -1,0 +1,48 @@
+---
+title: Introducere
+description: O scurtă prezentare a Ultracite și a modului în care funcționează.
+---
+
+Ultracite este un instrument de dezvoltare rapid, intuitiv și simplu care aduce formatare și linting automatizat în proiectele tale JavaScript / TypeScript. Construit deasupra [Biome](https://biomejs.dev/) (un formatator și linter pentru cod bazat pe Rust), Ultracite oferă o configurație robustă, preconfigurată, optimizată pentru dezvoltarea web modernă.
+
+Instalează Ultracite rapid executând:
+
+```package-install
+npx ultracite init
+```
+
+Apoi urmează ghidul [Utilizare](/usage) pentru a începe, sau consultă [Configurare](/setup) pentru un control mai granular.
+
+## Cum funcționează Ultracite?
+
+Odată configurat, Ultracite rulează în mare parte în fundal — formatând automat codul și aplicând corecturi de fiecare dată când salvezi fișierele. Deoarece Biome este foarte rapid, chiar și în proiecte mari, rularea verificărilor Ultracite este extrem de rapidă și poate rula confortabil la fiecare salvare fără întârziere. Aceasta înseamnă că te poți concentra pe construirea și livrarea funcționalităților, în loc să corectezi manual probleme de stil sau să depanezi erori de runtime.
+
+## Ce este Biome?
+
+[Biome](https://biomejs.dev/) este un lanț de instrumente „all-in-one” pentru formatarea și linting-ul codului. Biome, scris în Rust, combină funcționalitatea unor unelte precum [Prettier](https://prettier.io/) (formatator de cod), [ESLint](https://eslint.org/) (linter) și [Stylelint](https://stylelint.io/) într-un singur binar rapid. Ultracite valorifică viteza și capabilitățile Biome, oferind un set predefinit de reguli și setări adaptate pentru proiecte moderne TypeScript.
+
+## Obiective
+
+Obiectivele Ultracite din perspectiva dezvoltării sunt:
+
+### Performanță extrem de rapidă
+
+Ultracite beneficiază de performanța [Biome](https://biomejs.dev/) și de implementarea în Rust și trebuie să ne străduim să menținem acest avantaj.
+
+### Fără configurare din proiectare
+
+Ultracite este proiectat pentru a funcționa fără configurare implicită. Acest lucru permite utilizatorilor noi să înceapă rapid, fără a fi nevoie să configureze linter-ul/formatatorul; și economisește echipelor timp la integrarea noilor dezvoltatori.
+
+Scopul este de a oferi o configurație implicită care este potrivită pentru majoritatea proiectelor, dar și de a oferi o modalitate de a personaliza configurația pentru cei care au nevoie.
+
+### Intuitiv și simplu
+
+Ultracite ar trebui să fie cât mai invizibil posibil. Ideal, nu ar trebui să necesite nicio configurare sau acțiune din partea utilizatorului. Dacă este necesar, ar trebui să ofere feedback într-un mod ușor de înțeles și de acționat.
+
+### Siguranță maximă a tipurilor
+
+Ultracite ar trebui proiectat pentru a fi cât mai sigur din punctul de vedere al tipurilor. Ar trebui să folosească modul strict al TypeScript și reguli suplimentare de lint pentru a detecta erorile și a oferi sugestii de îmbunătățire.
+
+### Se integrează bine cu altele
+
+Ultracite ar trebui să poată funcționa cu alte instrumente și biblioteci și să nu intre în conflict cu acestea.

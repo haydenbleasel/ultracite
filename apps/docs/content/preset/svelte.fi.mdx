@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Svelte-spesifinen konfiguraatio Ultracitea varten.
+---
+
+Svelte-konfiguraatio sisältää Svelte-spesifisiä asetuksia. Tämä on minimaalinen esiasetus, koska Biomella ei vielä ole omia Svelte-spesifejä linttaus-sääntöjä, mutta se sisältää tärkeitä ylikirjoituksia estämään väärän positiiviset linttausvirheet `.svelte`-tiedostoissa.
+
+## Asennus
+
+Lisää Svelte-konfiguraatio `biome.jsonc`-tiedostoosi:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Yleiskatsaus
+
+Tämä konfiguraatio:
+
+- **HTML-tuki**: Ottaa käyttöön kokeellisen täydellisen HTML-tuen, joka sisältää skriptien ja tyylien sisennyksen
+- **React-spesifit propit**: Ilmoittaa React-spesifit propit kuten `className` ja `htmlFor`, koska Svelte käyttää standardeja HTML-attribuutteja (`class` ja `for`)
+- **Svelte-tiedostojen ylikirjoitukset**: Löysempiä sääntöjä `.svelte`-tiedostoille Svelten komponenttirakenteen käsittelyyn
+
+## HTML-muotoilijan konfiguraatio
+
+Svelte-esiasetus ottaa käyttöön kokeellisen HTML-tuen ja erikoismuotoilun upotetuille skripteille ja tyyleille:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Tämä konfiguraatio:
+- **Kokeellinen täydellinen tuki**: Ottaa käyttöön Biomen kokeellisen HTML-parsinnan ja -muotoilun mahdollisuudet `.svelte`-tiedostoille
+- **Sisennä skriptit ja tyylit**: Sisentää oikein koodin `<script>`- ja `<style>`-tageissa Svelte-komponenteissa
+
+## Svelte-spesifiset säännöt
+
+### Epäilyttävät
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Estä React-spesifit propit kuten `className` ja `htmlFor` Sveltessä. Käytä sen sijaan `class` ja `for`. |
+
+## Svelte-tiedostojen ylikirjoitukset
+
+Seuraavat säännöt ovat pois käytöstä `.svelte`-tiedostoissa estääkseen väärän positiiviset havainnot Biomen osittaisen tuen vuoksi Svelte-komponenteille:
+
+### Oikeellisuus
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Salli käyttämättömät muuttujat `.svelte`-tiedostoissa. Skriptiosion muuttujia voidaan käyttää vain templatessa. |
+| `noUnusedImports` | `off` | Salli käyttämättömät importit `.svelte`-tiedostoissa. Importteja voidaan käyttää vain template-osiossa. |
+
+### Tyyli
+
+| Sääntö | Asetus | Kuvaus |
+|------|---------|-------------|
+| `useConst` | `off` | Salli `let` ja `var` -määrittelyt `.svelte`-tiedostoissa reaktiivisia lausumia varten. |
+| `useImportType` | `off` | Poista eksplisiittiset import-tyypin vaatimukset paremman yhteensopivuuden vuoksi Svelten build-järjestelmän kanssa. |

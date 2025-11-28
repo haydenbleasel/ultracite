@@ -1,0 +1,41 @@
+---
+title: Angular
+description: Angular-specifična konfiguracija za Ultracite.
+---
+
+Angular konfiguracija sadrži podešavanja HTML parsera specifična za Angular kako bi podržala sintaksu Angular šablona.
+
+## Instalacija
+
+Dodajte Angular konfiguraciju u vaš `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+## Pregled
+
+Ova konfiguracija dodaje podršku za sintaksu Angular šablona:
+
+- **HTML interpolacija**: Omogućava parsiranje Angular sintakse interpolacije u šablonima (`{{ }}`)
+- **Direktive šablona**: Podržava Angular direktive kao što su `*ngIf`, `*ngFor` itd.
+- **Povezivanje svojstava**: Rukuje sintaksom Angular povezivanja svojstava `[property]="value"`
+- **Povezivanje događaja**: Podržava sintaksu povezivanja događaja `(event)="handler()"`
+
+## Konfiguracija
+
+Angular preset konfiguriše HTML parser da prepozna Angular interpolaciju u šablonima:
+
+```jsonc
+{
+  "html": {
+    "parser": {
+      "interpolation": true
+    }
+  }
+}
+```
+
+Ovo omogućava Biome-u da pravilno parsira i formatira šablone Angular komponenti, bez tretiranja sintakse interpolacije kao greške.

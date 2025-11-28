@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: Execute automaticamente o Ultracite nos seus ficheiros Git staged com o lefthook
+---
+
+Ultracite oferece integração perfeita com [lefthook](https://lefthook.dev/), um gestor de Git hooks rápido e poderoso. Esta integração configura automaticamente hooks pre-commit para garantir que o seu código está corretamente formatado antes de cada commit.
+
+## O que é o lefthook?
+
+lefthook é um gestor de Git hooks nativo e rápido para projetos Node.js e Go. Foi desenhado para ser simples, rápido e poderoso, permitindo gerir Git hooks em toda a sua equipa com ficheiros de configuração que podem ser commitados no seu repositório.
+
+## Como o Ultracite usa o lefthook
+
+Ao inicializar o Ultracite no seu projeto, ele pode configurar automaticamente o lefthook para executar a formatação de código antes de cada commit. Isto garante que:
+
+- Todo o código incluído no commit segue padrões de formatação consistentes
+- As verificações de qualidade de código são aplicadas automaticamente
+- Os membros da equipa não precisam de se lembrar de formatar o código manualmente
+- O seu repositório mantém um estilo de código limpo e consistente
+
+## Comportamento do hook pre-commit
+
+A integração do Ultracite com o lefthook cria um hook pre-commit que executa o seguinte comando:
+
+```bash
+npx ultracite fix
+```
+
+Este comando:
+- Executa o linter e o formatador do Biome na sua base de código
+- Corrige automaticamente problemas de formatação sempre que possível
+- Garante que todos os ficheiros staged cumprem os padrões de código do seu projeto
+- Impede commits que introduzam inconsistências de formatação
+
+## Configuração automática
+
+Durante o processo de inicialização (`ultracite init`), se selecionar a opção lefthook, o Ultracite:
+
+1. **Instala o lefthook**: Adiciona o lefthook como dependência de desenvolvimento ao seu projeto
+2. **Inicializa o lefthook**: Executa `lefthook install` para configurar os Git hooks
+3. **Cria a configuração**: Cria o ficheiro `lefthook.yml` com o comando de formatação
+4. **Trata configurações existentes**: Se já tiver o lefthook configurado, atualiza a sua configuração existente em vez de a sobrescrever
+
+## Detalhes da integração
+
+A integração com o lefthook inclui várias funcionalidades inteligentes:
+
+### Gestão de dependências
+- Instala automaticamente o lefthook como dependência de dev usando o gestor de pacotes do seu projeto
+- Usa o comando apropriado do gestor de pacotes (`npm install -D`, `yarn add -D`, `pnpm add -D`, etc.)
+- Executa `lefthook install` para inicializar os Git hooks
+
+### Gestão de configuração
+- **Projetos novos**: Cria um novo ficheiro `lefthook.yml` com o comando ultracite fix
+- **Projetos existentes**: Adiciona o comando do Ultracite à sua configuração lefthook existente, preservando outros hooks que possa ter configurado
+
+### Estrutura de ficheiros
+A integração cria ou modifica:
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## Benefícios
+
+- **Consistência da equipa**: Cada membro da equipa tem a mesma formatação aplicada automaticamente
+- **Zero configuração**: Funciona imediatamente com padrões sensatos
+- **Alto desempenho**: lefthook é escrito em Go e é extremamente rápido
+- **Flexibilidade**: Fácil de estender com comandos e hooks adicionais
+- **Multi-plataforma**: Funciona de forma consistente em diferentes sistemas operativos
+
+## Integração no fluxo de trabalho
+
+A integração com o lefthook encaixa-se perfeitamente no seu fluxo de desenvolvimento:
+
+1. **O programador faz alterações** nos ficheiros de código
+2. **Adiciona ficheiros ao stage** para commit com `git add`
+3. **Tenta efetuar um commit** com `git commit`
+4. **lefthook dispara** o hook pre-commit automaticamente
+5. **Ultracite é executado** e formata os ficheiros staged
+6. **O commit prossegue** se a formatação tiver sucesso, ou **falha** se houver problemas que não puderam ser corrigidos automaticamente
+
+## Personalização
+
+Embora o Ultracite configure padrões sensatos, pode personalizar o comportamento:
+
+- Modifique `lefthook.yml` para adicionar comandos ou hooks adicionais
+- Configure as definições do Biome para ajustar as regras de formatação
+- Adicione outras verificações pre-commit juntamente com a formatação do Ultracite
+- Utilize as funcionalidades avançadas do lefthook, como execução paralela e lógica condicional
+
+## Resolução de problemas
+
+### Hook não está a executar
+Se o hook pre-commit não estiver a ser executado:
+- Verifique se o lefthook está instalado: `npm ls lefthook`
+- Verifique se `lefthook.yml` existe e contém o comando ultracite
+- Confirme que os Git hooks estão habilitados no seu repositório
+- Execute `lefthook install` para reinstalar os hooks
+
+### Problemas de permissões
+O lefthook trata automaticamente as permissões dos Git hooks, mas se encontrar problemas:
+- Tente executar `lefthook install` novamente
+- Verifique se a sua configuração Git permite hooks
+
+### Ignorar hooks
+Em casos raros onde precisa de saltar o pre-commit hook:
+```bash
+git commit --no-verify
+```
+
+Use isto com parcimónia, pois ignora a formatação automática que mantém a consistência da sua base de código.
+
+## Exemplo de configuração
+
+Eis como fica a configuração `lefthook.yml`:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+Esta configuração:
+- Só é executada em ficheiros JavaScript, TypeScript, JSON e CSS
+- Adiciona automaticamente ao stage quaisquer ficheiros que tenham sido corrigidos pelo formatador
+- Usa a sintaxe eficiente `jobs` para melhor desempenho
+
+Pode estender esta configuração para incluir jobs adicionais:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

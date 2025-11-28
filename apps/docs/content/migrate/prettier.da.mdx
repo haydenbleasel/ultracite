@@ -1,0 +1,48 @@
+---
+title: Migrer fra Prettier
+description: Hvordan du migrerer dit projekt fra Prettier til Ultracite.
+---
+
+Hvis du bruger Prettier og vil skifte til Ultracite's forkonfigurerede opsætning, vil denne vejledning hjælpe dig med at migrere samtidig med at du opretholder kodekvalitetsstandarder.
+
+## Hvorfor migrere til Ultracite?
+
+- **Lynhurtig**: Biome (Ultracites fundament) er skrevet i Rust og er meget hurtigere end Prettier
+- **Nul konfiguration**: Hundreder af forkonfigurerede regler i stedet for manuel Prettier-opsætning
+- **Kombineret værktøj**: Erstatter både ESLint og Prettier med ét værktøj
+- **AI-integration**: Indbygget support til AI-drevne editorer (Cursor, Windsurf, GitHub Copilot)
+- **Typesikkerhed**: Omfattende TypeScript-regler med strenge nullkontroller
+- **Moderne standarder**: De nyeste bedste praksisser for JavaScript/TypeScript
+
+## Før du går i gang
+
+Sørg for at du har:
+
+- Et eksisterende projekt, der bruger Prettier
+- Node.js v14.18+ (Node 18+ anbefales)
+- En `package.json`-fil
+
+## Automatisk opsætning
+
+Kør [det automatiske installationsskript](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Dette vil:
+
+- Installere Ultracite som en afhængighed
+- Flette din eksisterende `biome.json` / `biome.jsonc` med Ultracites forudindstilling
+- Flette din eksisterende `.vscode/settings.json` med Ultracites forudindstilling
+- Aktivere `strictNullChecks` i din `tsconfig.json` (eller oprette en, hvis den ikke findes)
+- Bevare dine egne regler og indstillinger
+- Opsætte editor-integrationer
+
+Sørg for at vælge at fjerne den eksisterende `Prettier`-konfiguration. Dette vil:
+
+- Fjerne Prettier og alle relaterede afhængigheder
+- Fjerne eventuelle Prettier-konfigurationsfiler
+- Fjerne eventuelle Prettier-relaterede kommandoer fra din `.vscode/settings.json`-fil
+
+Efter opgraderingen kan du gennemgå din `biome.json` / `biome.jsonc` for at fjerne eventuelle overstyringer. Genstart desuden din editor for at sikre, at den nye konfiguration anvendes.

@@ -1,0 +1,50 @@
+---
+title: Biome'den Geçiş
+description: Projenizi bağımsız Biome'den Ultracite'e nasıl taşıyacağınız.
+---
+
+Zaten Biome kullanıyorsanız ve Ultracite'in önceden yapılandırılmış ayarına geçmek istiyorsanız, bu kılavuz mevcut yapılandırmanızı koruyarak geçiş yapmanıza yardımcı olacaktır.
+
+## Neden Ultracite'e Geçilmeli?
+
+- **Sıfır Yapılandırma**: Ultracite, önceden yapılandırılmış kapsamlı bir kural seti sağlar
+- **Editör Entegrasyonu**: Yapay zekâ destekli editörler için yerleşik destek (Cursor, Windsurf, GitHub Copilot)
+- **Tutarlı İş Akışı**: Projeler ve ekipler arasında standartlaştırılmış yapılandırma
+- **Ek Araçlar**: İsteğe bağlı Git hooks, lint-staged entegrasyonu
+- **Güncel Tutulan Kurallar**: Yeni en iyi uygulamalarla düzenli güncellemeler
+
+## Başlamadan Önce
+
+Şunlara sahip olduğunuzdan emin olun:
+
+- Biome kullanan mevcut bir proje
+- Node.js v14.18+ (Node 18+ önerilir)
+- A `biome.json` or `biome.jsonc` file
+
+## Geçiş Seçenekleri
+
+### Seçenek 1: Hızlı Geçiş (Önerilen)
+
+En hızlı yol, [otomatik kurulum betiğini](/setup#automatic-installation) çalıştırmaktır.
+
+Bu şunları yapacaktır:
+
+- Ultracite'i bir bağımlılık olarak yükler
+- Mevcut `biome.json` / `biome.jsonc` dosyanızı Ultracite'in önayarıyla birleştirir
+- Mevcut `.vscode/settings.json` dosyanızı Ultracite'in önayarıyla birleştirir
+- `tsconfig.json` dosyanızda `strictNullChecks`'i etkinleştirir (yoksa bir tane oluşturur)
+- Özel kural ve ayarlarınızı korur
+- Editör entegrasyonlarını kurar
+
+Yükseltme sonrasında, geçersiz kılmaları kaldırmak için `biome.json` / `biome.jsonc` dosyanızı gözden geçirmek isteyebilirsiniz. Ayrıca, yeni yapılandırmanın uygulanmasını sağlamak için editörünüzü yeniden başlatın.
+
+### Seçenek 2: Manuel Geçiş
+
+Süreç üzerinde daha fazla kontrol tercih ediyorsanız, [Manuel Geçiş](/setup#manual-installation) adımlarını izleyin:
+
+- Ultracite ve Biome'u manuel olarak yüklemek
+- `biome.json` dosyanızı Ultracite'i extend edecek şekilde güncellemek
+- Biome uzantısını etkinleştirmek için `.vscode/settings.json` dosyası oluşturmak veya güncellemek
+- `tsconfig.json` dosyanızda `strictNullChecks`'i etkinleştirmek (yoksa bir tane oluşturmak)
+
+Geçişten sonra, yeni yapılandırmanın uygulanmasını sağlamak için editörünüzü yeniden başlatın.

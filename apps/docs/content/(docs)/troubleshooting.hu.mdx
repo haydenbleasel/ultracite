@@ -1,0 +1,89 @@
+---
+title: Hibaelhárítás
+description: Ez a szakasz az Ultracite hibakeresését ismerteti.
+---
+
+Bár az Ultracite célja a lintelés/formázás egyszerűsítése, előfordulhatnak problémák vagy felmerülhetnek kérdések a beállítás és használat során. Íme néhány gyakori probléma és lehetséges megoldásuk:
+
+## “Ultracite isn’t formatting on save in VS Code.”
+
+Ellenőrizze, hogy a Biome VS Code kiterjesztés telepítve és engedélyezve van-e. Győződjön meg arról, hogy a `.vscode/settings.json` tartalmazza a `"editor.defaultFormatter": "biomejs.biome"` és a `"editor.codeActionsOnSave"` bejegyzéseket, ahogy a [Beállítás](/setup) részben látható.
+
+Gondoskodjon arról is, hogy ne legyen engedélyezve ütköző formázó vagy linter kiterjesztés (például ha még mindig aktív a Prettier vagy az ESLint kiterjesztés, azok zavarhatják vagy elsőbbséget élvezhetnek).
+
+Előfordulhat, hogy ki kell kapcsolnia a VS Code beépített Format On Save funkcióját, ha egy másik formázó megragadja a fájlt. A megfelelő beállításokkal és a Biome kiterjesztéssel egy Ultracite által kezelt fájl (js/ts/jsx/tsx/json/css) mentése formázást kell, hogy indítson. Ha ez nem történik meg, próbálja meg kézzel futtatni a “Format Document” parancsot, és nézze meg, hogy a Biome használatban van-e, vagy megjelenik-e hiba.
+
+## “I installed Ultracite, but VS Code still uses ESLint or Prettier.”
+
+Győződjön meg róla, hogy eltávolította vagy kikapcsolta a régi konfigurációkat. Például, ha van a projektben `.eslintrc` vagy `.prettierrc`, a VS Code ESLint kiterjesztése még aktív lehet és duplikált diagnosztikát okozhat.
+
+Ajánlott ezeket a konfigurációkat eltávolítani (vagy legalábbis a kiterjesztéseket letiltani), amikor Ultracite-re vált, hogy elkerülje a zavart. Lényegében engedje, hogy az Ultracite/Biome legyen az egyetlen linter/formázó.
+
+Ha valamiért meg szeretné tartani az ESLint-et, ne engedélyezze az ESLint “fix on save” opcióját – különben mindkettő megpróbálhatja javítani a kódot (bár megfelelő konfiguráció esetén a Biome össze kell, hogy egyezzen a Prettier stílussal, hogy elkerülje az ütközést).
+
+Általában, ha teljesen átáll Ultracite-re, nincs szükség többé ESLint / Prettier konfigurációkra.
+
+## “Ultracite (Biome) is throwing parse errors for files I don’t want it to check.”
+
+Ennek jó példája, ha egy UI könyvtárból telepített komponenseket használ, mint a [`shadcn/ui`](https://ui.shadcn.com/). Bár ezek módosításra vannak tervezve, előfordulhat, hogy meg szeretné őrizni az eredeti forráskódot a frissítésekhez. Ilyenkor érdemes letiltani a lintelést ezekre a fájlokra.
+
+Ehhez adjon mintákat a `biome.jsonc`-hez azok kizárásához, pl.:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": [
+      "**/*",
+      "!components/ui",
+      "!lib",
+      "!hooks",
+    ]
+  },
+}
+```
+
+Alapértelmezés szerint a Biome-nak ki kell hagynia a `node_modules`-t, de ha onnan manuálisan nyitott meg egy fájlt, a kiterjesztés még próbálhatja lintelni azt. Általánosságban véve hagyjon figyelmen kívül nagy, generált fájlokat vagy harmadik féltől származó kódot – ezeket nem szükséges lintelni.
+
+Egy másik ok lehet, ha a fájlban kísérleti szintaxist használ, amit a Biome nem tud feldolgozni (pl. egy stage-3 javaslat, ami még nincs benne a Biome-ban). Ilyen esetben vagy kerülje ezt a szintaxist, vagy nézze meg, hogy a Biome konfigurálható-e (néha elérhető, hogy hozzáadjon egy `"parser.allowSomething": true` beállítást a konfigurációhoz).
+
+Ellenőrizze a Biome hibakövetőjét (issue tracker) az adott szintaxis támogatásáért.
+
+## “I see double errors for the same issue.”
+
+Ez előfordulhat, ha egyszerre több linter fut (például ESLint és Ultracite). Az is megtörténhet, hogy a VS Code TypeScript ellenőrzője és a Biome is ugyanazt a TypeScript hibát jelenti. A megoldás: egységesítse az egyes ellenőrzéstípusokra használt eszközöket.
+
+Ha Ultracite-et használ, tiltsa le a többi lintert. TypeScript típushibák esetén a VS Code beépített TS szervere is megmutatja őket (pl. piros hullámos aláhúzás típushibák esetén) – a Biome szintén mutathat típusvezérelt lint hibákat. Általában ez rendben van, mivel ugyanazt a problémát emelik ki. Ha azonban zavarónak találja, kikapcsolhatja a VS Code TS validátort (`"typescript.validate.enable": false` a beállításokban) és a Biome-ra támaszkodhat, vagy fordítva.
+
+A legtöbb beállításnál mindkettő engedélyezése is elfogadható; általában kiegészítik egymást (típushibák vs lint hibák). Ügyeljen azonban arra, hogy ne legyen két átfedő funkciójú linter egyszerre engedélyezve (például ESLint és Biome egyszerre lintelnek).
+
+## “Pre-commit hook/CI is failing due to Ultracite.”
+
+Ha a pre-commit hook-ja `ultracite`-et futtat és az megbukik, az azt jelenti, hogy vannak olyan problémák, amiket nem javított automatikusan (vagy valaki megkerülte a futtatását). A legegyszerűbb megoldás, ha helyben lefuttatja a `npx ultracite` parancsot és megnézi a kimenetet. Vagy javítja a dolgokat (ebben az esetben csak adja hozzá a változásokat a staginghez és próbálja meg újra a commitot), vagy riportál hibákat, amiket manuálisan kell orvosolni.
+
+Javítsa ezeket, majd commit-olja. Ha a CI a `ultracite --check` miatt bukik, tegye ugyanezt: futtassa helyben `--check`-kel, hogy lássa, milyen problémákat talál, vagy futtassa `--check` nélkül az automatikus javításhoz és commit-olja az eredményt. Röviden: kezelje az Ultracite hibákat úgy, mint a sikertelen teszteket — kódjavítást igényelnek.
+
+## “I get an error about `strictNullChecks` or type issues after enabling Ultracite.”
+
+Az Ultracite a TypeScript szigorúságát feltételezi. Ha nem engedélyezte a `strictNullChecks`-et (vagy a teljes `strict` módot), sok TypeScript-hez kapcsolódó lint figyelmeztetés jelenhet meg (például arról, hogy potenciálisan undefined értéket használhat, amit a TS nem fog észrevenni laza beállítások mellett).
+
+A megoldás az, hogy engedélyezze ezeket a szigorúbb flag-eket a `tsconfig`-ban az ajánlások szerint. Ha valami miatt (például legacy okokból) ez nem lehetséges, előfordulhat, hogy bizonyos Ultracite szabályokat kell letiltania, amelyek a szigorúságot feltételezik. Ugyanakkor erősen javasolt belevágni és használni a TS strict módot – javítja a kód minőségét, és összhangban áll az Ultracite filozófiájával.
+
+## “Ultracite is too strict for our team (too many rules) – can I tone it down?”
+
+Igen. Bár az Ultracite értéke a szigorúságban rejlik, szabadon felülírhatja a szabályokat. Ha a fejlesztők túlterheltek a figyelmeztetésektől, azonosítsa, mely szabályok okoznak problémát. Lehet, hogy stilisztikai preferenciáról van szó, vagy valami, ami az Önök kontextusában nem értelmes. Ezeket a szabályokat `warn`-ra vagy `off`-ra állíthatja a konfigurációban.
+
+Például, ha az akadálymentességi szabályokat túl zajosnak találja egy belső eszköznél, letilthat néhányat. Vagy ha nem ért egyet egy érvényesített kódstílussal, módosíthatja azt (bár a stílusbeli nézeteltérések éppen azt próbálják megszüntetni, amit az Ultracite ajánl).
+
+A kulcs a csapaton belüli kommunikáció — esetleg oktassa is a szabály célját mielőtt letiltaná; ha továbbra sem kívánatos, testreszabhatja a konfigurációt. Az Ultracite nem egy fekete doboz — teljes kontrollja van a `biome.jsonc` segítségével.
+
+Nézze meg a [konfiguráció](/configuration) részt további információkért a szabályok felülírásáról.
+
+## “Are there known limitations or bugs with Ultracite I should be aware of?”
+
+Az Ultracite (kifejezetten a Biome) nem fed le mindent, amit az ESLint + Prettier + Stylelint kombinációja tud, különösen ha bizonyos plugineket használ. Például a Stylelint kiterjedt CSS lint szabályokkal rendelkezett; a Biome jelenleg biztosít CSS formázást és alapvető lintelést, de nem a teljes Stylelint szabálykészletet.
+
+Ha a projektje specifikus Stylelint ellenőrzésekre támaszkodik (például tulajdonságok sorrendje vagy adott elnevezési konvenciók a CSS-ben), vegye figyelembe, hogy az Ultracite ezeket nem feltétlenül érvényesíti. Szükség esetén külön integrálhatja a Stylelint-et, vagy várhat, mivel a Biome később bővítheti a CSS lintelést.
+
+---
+
+Ha olyan problémába ütközik, amely itt nincs lefedve, érdemes megnézni az Ultracite GitHub issue oldalát vagy a Biome dokumentációját. Lehet, hogy van rá javítás vagy kerülő megoldás. A közösség növekszik, így a támogatás idővel egyre jobb lesz.

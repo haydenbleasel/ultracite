@@ -1,0 +1,68 @@
+---
+title: Hook dell'editor
+description: Come integrare Ultracite con assistenti di codifica AI tramite hook dell'editor.
+---
+
+Ultracite può formattare e correggere automaticamente il codice dopo che gli assistenti di codifica AI effettuano modifiche tramite hook dell'editor. Questo garantisce che tutto il codice generato dall'AI rispetti gli standard del tuo progetto senza intervento manuale.
+
+Gli hook funzionano insieme al linting e alla formattazione di Biome. Dopo che un assistente di codifica AI modifica un file, l'hook esegue automaticamente `npx ultracite fix` per formattare e risolvere i problemi di linting risolvibili automaticamente. Questo approccio duplice assicura sia la generazione di codice intelligente (attraverso regole AI) sia la qualità automatizzata del codice (attraverso gli hook).
+
+> **Nota:** Gli hook sono separati dalle regole di codifica AI. Il flag `--agents` configura le regole di codifica AI, mentre il flag `--hooks` imposta la formattazione automatica dopo le modifiche ai file.
+
+## Configurazione
+
+### Configurazione automatica
+
+Quando esegui `npx ultracite init`, ti verrà chiesto di selezionare quali hook dell'editor vuoi abilitare:
+
+```bash
+? Which agent hooks do you want to enable (optional)?
+  ◯ Cursor
+  ◯ Claude Code
+```
+
+Questo creerà il file di configurazione dell'hook pertinente nella directory del tuo progetto.
+
+### Configurazione manuale
+
+Se vuoi configurare manualmente o aggiungere hook dopo l'inizializzazione, esegui:
+
+```bash
+npx ultracite init --hooks cursor,claude
+```
+
+In alternativa, puoi creare o modificare manualmente i file di configurazione degli hook nella directory del tuo progetto e aggiungere il comando dell'hook appropriato.
+
+## Editor supportati
+
+| Editor      | Hook File Location          | Documentation                                                           |
+| ----------- | --------------------------- | ----------------------------------------------------------------------- |
+| Cursor      | `.cursor/hooks.json`        | [Hook di Cursor](https://cursor.com/docs/agent/hooks)                   |
+| Claude Code | `.claude/settings.json`     | [Hook di Claude Code](https://docs.claude.com/en/docs/claude-code/hooks) |
+
+## Come funziona
+
+1. **Esecuzione automatica**: Dopo che l'agente AI modifica un file, l'hook esegue automaticamente `npx ultracite fix`
+2. **Formattazione del codice**: Ultracite formatta il codice modificato secondo la configurazione di Biome
+3. **Correzioni di linting**: I problemi di linting risolvibili automaticamente vengono corretti
+4. **Integrazione senza soluzione di continuità**: Il processo avviene in modo trasparente senza interrompere il tuo flusso di lavoro
+
+## Vantaggi
+
+Usare gli hook dell'editor di Ultracite offre vari vantaggi:
+
+- **Coerenza**: Tutto il codice generato dall'AI viene automaticamente formattato per corrispondere al tuo stile
+- **Qualità**: I problemi di linting vengono risolti immediatamente dopo la generazione del codice
+- **Efficienza**: Non è necessario eseguire manualmente formatter o linter dopo le modifiche dell'AI
+- **Standard**: Garantisce che il codice generato dall'AI rispetti sempre gli standard del progetto
+- **Commit puliti**: Il codice è correttamente formattato prima ancora che tu lo riveda
+
+## Personalizzazione
+
+Ultracite si integra in modo intelligente con le configurazioni di hook esistenti:
+
+- **Preserva gli hook esistenti**: Tutti gli hook esistenti e i loro comandi rimangono intatti
+- **Evita duplicati**: Se Ultracite è già configurato, non verrà aggiunto nuovamente
+- **Non distruttivo**: La struttura della configurazione degli hook esistente viene mantenuta
+
+Puoi anche personalizzare il comportamento degli hook modificando direttamente i file di configurazione degli hook se hai bisogno di comandi di formattazione diversi o di azioni aggiuntive post-modifica.

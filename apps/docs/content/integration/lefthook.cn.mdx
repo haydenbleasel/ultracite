@@ -1,0 +1,156 @@
+---
+title: lefthook
+description: 使用 lefthook 在暂存的 Git 文件上自动运行 Ultracite
+---
+
+Ultracite 提供与 [lefthook](https://lefthook.dev/) 的无缝集成，lefthook 是一个快速且强大的 Git 钩子管理器。此集成会自动设置 pre-commit 钩子，以确保每次提交之前代码已正确格式化。
+
+## 什么是 lefthook？
+
+lefthook 是一个针对 Node.js 和 Go 项目的原生快速 Git 钩子管理器。它的设计目标是简单、快速且强大，允许你通过可以提交到仓库的配置文件来在团队中管理 Git 钩子。
+
+## Ultracite 如何使用 lefthook
+
+当你在项目中初始化 Ultracite 时，它可以自动配置 lefthook 在每次提交之前运行代码格式化。这可确保：
+
+- **所有已提交的代码遵循一致的格式标准**
+- **代码质量检查被自动执行**
+- **团队成员无需记得手动格式化代码**
+- **你的仓库保持干净、一致的代码风格**
+
+## pre-commit 钩子的行为
+
+Ultracite 的 lefthook 集成会创建一个 pre-commit 钩子，运行以下命令：
+
+```bash
+npx ultracite fix
+```
+
+该命令：
+- 在你的代码库上运行 Biome 的 linter 和格式化器
+- 在可能的情况下自动修复格式问题
+- 确保所有暂存的文件符合你项目的代码标准
+- 阻止会引入格式不一致的提交
+
+## 自动设置
+
+在初始化流程中（`ultracite init`），如果你选择 lefthook 选项，Ultracite 会：
+
+1. **安装 lefthook**：将 lefthook 添加为你的项目的开发依赖
+2. **初始化 lefthook**：运行 `lefthook install` 来设置 Git 钩子
+3. **创建配置**：设置 `lefthook.yml` 文件并包含格式化命令
+4. **处理已有设置**：如果你已经配置了 lefthook，它会更新现有配置而不是覆盖它
+
+## 集成详情
+
+lefthook 集成包含几个智能功能：
+
+### 依赖管理
+- 自动使用你项目的包管理器将 lefthook 安装为开发依赖
+- 使用适当的包管理器命令（`npm install -D`、`yarn add -D`、`pnpm add -D` 等）
+- 运行 `lefthook install` 来初始化 Git 钩子
+
+### 配置管理
+- **新项目**：创建一个新的 `lefthook.yml` 文件，内含 ultracite fix 命令
+- **已有项目**：将 Ultracite 命令添加到你现有的 lefthook 配置中，同时保留你可能已配置的其他钩子
+
+### 文件结构
+该集成会创建或修改：
+```
+lefthook.yml    # Contains the formatting command configuration
+```
+
+## 优点
+
+- **团队一致性**：每个团队成员都会自动应用相同的格式化
+- **零配置**：开箱即用，具有合理的默认值
+- **快速性能**：lefthook 使用 Go 编写，性能非常快
+- **灵活性**：可以轻松扩展以添加额外的命令和钩子
+- **跨平台**：在不同操作系统上表现一致
+
+## 工作流集成
+
+lefthook 集成可以无缝融入你的开发工作流：
+
+1. **开发者对代码文件进行更改**
+2. **将文件暂存**，使用 `git add`
+3. **尝试提交**，使用 `git commit`
+4. **lefthook 自动触发** pre-commit 钩子
+5. **Ultracite 运行** 并格式化暂存的文件
+6. 如果格式化成功则 **提交继续**，如果有无法自动修复的问题则 **提交失败**
+
+## 自定义
+
+虽然 Ultracite 设置了合理的默认值，但你可以自定义其行为：
+
+- 修改 `lefthook.yml` 以添加额外的命令或钩子
+- 配置 Biome 设置以调整格式化规则
+- 在 Ultracite 的格式化之外添加其他 pre-commit 检查
+- 使用 lefthook 的强大并行执行与条件逻辑功能
+
+## 故障排除
+
+### 钩子未运行
+如果 pre-commit 钩子未执行：
+- 确认 lefthook 已安装：`npm ls lefthook`
+- 检查 `lefthook.yml` 是否存在并包含 ultracite 命令
+- 验证你的仓库中已启用 Git 钩子
+- 运行 `lefthook install` 以重新安装钩子
+
+### 权限问题
+lefthook 会自动处理 Git 钩子权限，但如果遇到问题：
+- 尝试再次运行 `lefthook install`
+- 检查你的 Git 配置是否允许钩子
+
+### 绕过钩子
+在需要跳过 pre-commit 钩子的罕见情况下：
+```bash
+git commit --no-verify
+```
+
+请谨慎使用此方式，因为它会绕过保持代码库一致性的自动格式化。
+
+## 配置示例
+
+下面是 `lefthook.yml` 配置的示例：
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+```
+
+该配置：
+- 仅在 JavaScript、TypeScript、JSON 和 CSS 文件上运行
+- 会自动将格式化后被修复的文件再次暂存
+- 使用高效的 `jobs` 语法以获得更好的性能
+
+你可以扩展此配置以包含额外的 job：
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob: 
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+    - run: npm test
+      glob: "*.{js,ts}"
+    - run: tsc --noEmit
+      glob: "*.{ts,tsx}"
+```

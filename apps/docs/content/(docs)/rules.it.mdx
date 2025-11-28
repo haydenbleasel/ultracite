@@ -1,0 +1,72 @@
+---
+title: Regole
+description: Come integrare Ultracite con assistenti di codifica AI tramite regole per l'editor.
+---
+
+Ultracite offre un'integrazione senza soluzione di continuità con gli assistenti di codifica AI generando automaticamente file di regole specifici per l'editor. Queste regole aiutano a guidare gli assistenti di codifica AI a scrivere codice migliore e più coerente che segua le migliori pratiche.
+
+Le regole per l'editor lavorano insieme al linting e al formatting di Biome. Mentre Biome gestisce la formattazione del codice e rileva errori di sintassi, le regole per l'editor guidano gli assistenti di codifica AI a scrivere codice migliore fin dall'inizio, riducendo la necessità di correzioni successive.
+
+Questo approccio duplice garantisce sia la qualità del codice automatizzata (tramite Biome) sia la generazione intelligente del codice (tramite regole per la codifica AI).
+
+## Configurazione
+
+### Configurazione automatica
+
+Quando esegui `npx ultracite init`, ti verrà chiesto di selezionare quali regole per l'editor vuoi abilitare:
+
+```bash
+? Which editor rules do you want to enable (optional)?
+  ◯ GitHub Copilot (VSCode)
+  ◯ Cursor
+  ◯ Windsurf
+  # ... etcetera
+```
+
+Questo creerà il file pertinente nella directory del tuo progetto.
+
+### Configurazione manuale
+
+Se vuoi configurare manualmente, crea il file pertinente nella directory del tuo progetto (per esempio `.cursor/rules` per Cursor o `.rules` per Zed). Poi, copia e incolla [questo contenuto](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) nel file.
+
+## Editor supportati
+
+| Editor          | Posizione del file delle regole    |
+| --------------- | --------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+
+## Vantaggi
+
+L'uso delle regole per l'editor di Ultracite offre diversi vantaggi:
+
+- **Coerenza**: Tutto il codice generato dall'AI segue le stesse convenzioni
+- **Qualità**: Le regole applicano le migliori pratiche e prevengono errori comuni
+- **Accessibilità**: Linee guida integrate per l'accessibilità assicurano codice inclusivo
+- **Prestazioni**: Le regole favoriscono pattern efficienti ed evitano anti-pattern
+- **Sicurezza**: Le linee guida aiutano a prevenire vulnerabilità di sicurezza comuni
+
+## Personalizzazione
+
+Sebbene le regole predefinite siano complete, puoi personalizzarle in base alle tue esigenze specifiche:
+
+1. **Modifica le regole esistenti**: Modifica direttamente i file delle regole
+2. **Aggiungi regole specifiche del progetto**: Aggiungi linee guida aggiuntive
+3. **Disabilita regole**: Rimuovi o commenta le regole che non si applicano al tuo progetto

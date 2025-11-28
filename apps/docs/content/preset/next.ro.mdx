@@ -1,0 +1,98 @@
+---
+title: Next.js
+description: Reguli de linting specifice Next.js pentru Ultracite.
+---
+
+The Next.js configuration has Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+
+## Instalare
+
+Add the Next.js configuration to your `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/next"]
+}
+```
+
+## Prezentare generală
+
+Această configurație adaugă reguli specifice dezvoltării Next.js:
+
+- **Optimizare imagini**: Aplică utilizarea componentului Next.js Image
+- **Structura documentului**: Previne utilizarea necorespunzătoare a componentelor speciale Next.js
+- **Componente client**: Asigură tratarea corectă a componentelor client asincrone
+- **Fișiere de configurare**: Tratare specială pentru fișierele `next.config.*`
+
+## Reguli specifice Next.js
+
+### Incubator
+
+| Regulă | Setare | Descriere |
+|--------|--------|-----------|
+| `noNextAsyncClientComponent` | `error` | Previne componente client async în Next.js. Componentele client ar trebui să fie sincron; folosiți componente server pentru operațiuni asincrone. |
+
+### Performanță
+
+| Regulă | Setare | Descriere |
+|--------|--------|-----------|
+| `noImgElement` | `error` | Interzice utilizarea elementului HTML `<img>`. Folosiți în schimb componentul `<Image>` din Next.js pentru optimizare automată a imaginilor. |
+
+### Stil
+
+| Regulă | Setare | Descriere |
+|--------|--------|-----------|
+| `noHeadElement` | `error` | Interzice utilizarea elementului HTML `<head>`. Folosiți în schimb `next/head` din Next.js sau API-ul de metadata al App Router. |
+
+### Suspecte
+
+| Regulă | Setare | Descriere |
+|--------|--------|-----------|
+| `noDocumentImportInPage` | `error` | Previne importarea `next/document` în fișierele de pagină. `_document.tsx` ar trebui să existe doar în `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Previne importarea `next/head` în `_document.tsx`. Folosiți în schimb `<Head>` din `next/document`. |
+
+## Suprapuneri pentru fișiere de configurare
+
+Presetul Next.js include tratare specială pentru fișierele de configurare și componentele App Router:
+
+### Fișierele de configurare Next.js
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["next.config.*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Aceasta permite modele de configurare Next.js care în mod normal nu ar trece regulile de linting.
+
+### Pagini și layout-uri App Router
+
+```jsonc
+{
+  "overrides": [
+    {
+      "includes": ["**/page.{ts,tsx,js,jsx}", "**/layout.{ts,tsx,js,jsx}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+Componentele de pagină și layout din App Router pot fi async fără a necesita `await`, deoarece Next.js le tratează special pentru redarea pe server și preluarea datelor.

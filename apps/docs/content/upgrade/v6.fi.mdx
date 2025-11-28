@@ -1,0 +1,75 @@
+---
+title: Päivitys v6:aan
+description: Opas Ultracite v5:stä v6:een päivitykseen uuden preset-järjestelmän avulla.
+---
+
+Ultracite v6 tuo käyttöön kehyskohtaiset presetit, jotka antavat sinulle enemmän hallintaa siitä, mitkä säännöt sovelletaan projektiisi. **Tämä päivitys ei riko taaksepäin yhteensopivuutta** Next.js/React-käyttäjille.
+
+## Mitä muuttui
+
+v6 esittelee [kehyskohtaiset presetit](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Perussäännöt JavaScriptille/TypeScriptille
+- [`ultracite/react`](/preset/react) - React-spesifiset säännöt
+- [`ultracite/next`](/preset/next) - Next.js-spesifiset säännöt
+- [`ultracite/solid`](/preset/solid) - Solid.js-säännöt
+- [`ultracite/vue`](/preset/vue) - Vue.js-säännöt
+- [`ultracite/svelte`](/preset/svelte) - Svelte-säännöt
+- [`ultracite/qwik`](/preset/qwik) - Qwik-säännöt
+- [`ultracite/angular`](/preset/angular) - Angularin HTML-parseri
+- [`ultracite/remix`](/preset/remix) - Tiedostopohjaisen reitityksen tuki
+
+## Migraatio
+
+### Next.js/React-projektit
+
+Päivitä `biome.jsonc` käyttämään asianmukaisia presettejä:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Ei-React-projektit
+
+Vaihda core-presettiin, jos et käytä Reactia:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Muut kehykset
+
+Käytä kehykseesi sopivaa presettiä:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Monikehysprojektit
+
+Yhdistä presettejä tarpeen mukaan:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```

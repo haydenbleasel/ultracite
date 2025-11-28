@@ -1,0 +1,50 @@
+---
+title: 从 Biome 迁移
+description: 如何将项目从独立的 Biome 迁移到 Ultracite。
+---
+
+如果您已经在使用 Biome 并且想切换到 Ultracite 的预配置设置，本指南将帮助您在保留现有配置的同时完成迁移。
+
+## 为什么要迁移到 Ultracite？
+
+- **零配置**：Ultracite 提供高度配置的规则预设
+- **编辑器集成**：内置对 AI 编辑器（Cursor、Windsurf、GitHub Copilot）的支持
+- **一致的工作流**：在项目和团队之间提供标准化的设置
+- **附加工具**：可选的 Git hooks、lint-staged 集成
+- **维护的规则**：定期更新以包含新的最佳实践
+
+## 在开始之前
+
+请确保您具备：
+
+- 一个已经使用 Biome 的现有项目
+- Node.js v14.18+（推荐 Node 18+）
+- 一个 `biome.json` 或 `biome.jsonc` 文件
+
+## 迁移选项
+
+### 选项 1：快速迁移（推荐）
+
+最快的方法是运行[自动设置脚本](/setup#automatic-installation)。
+
+这将：
+
+- 将 Ultracite 安装为依赖项
+- 将您现有的 `biome.json` / `biome.jsonc` 与 Ultracite 的预设合并
+- 将您现有的 `.vscode/settings.json` 与 Ultracite 的预设合并
+- 在您的 `tsconfig.json` 文件中启用 `strictNullChecks`（如果不存在则创建该文件）
+- 保留您自定义的规则和设置
+- 设置编辑器集成
+
+升级完成后，您可能需要检查 `biome.json` / `biome.jsonc` 文件以移除任何覆盖项。此外，重启编辑器以确保新的配置生效。
+
+### 选项 2：手动迁移
+
+如果您希望对迁移过程有更多控制，请按照[手动迁移](/setup#manual-installation) 步骤进行：
+
+- 手动安装 Ultracite 和 Biome
+- 更新您的 `biome.json` 文件以扩展 Ultracite
+- 创建或更新 `.vscode/settings.json` 文件以启用 Biome 扩展
+- 在您的 `tsconfig.json` 文件中启用 `strictNullChecks`（如果不存在则创建该文件）
+
+迁移完成后，重启编辑器以确保新的配置已应用。

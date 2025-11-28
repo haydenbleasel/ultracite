@@ -1,0 +1,48 @@
+---
+title: Migracija sa ESLint-a
+description: Kako da migrirate vaš projekat sa ESLint-a na Ultracite.
+---
+
+Ako koristite ESLint i želite da pređete na unapred konfigurisano Ultracite okruženje, ovaj vodič će vam pomoći da izvršite migraciju uz očuvanje standarda kvaliteta koda.
+
+## Zašto preći na Ultracite?
+
+- **Munjevita brzina**: Biome (osnova Ultracite-a) je zasnovan na Rustu i znatno je brži od ESLint-a
+- **Nulta konfiguracija**: Stotine unapred konfigurisana pravila naspram ručnog podešavanja ESLint-a
+- **Kombinovani alat**: Zamenjuje i ESLint i Prettier jednim alatom
+- **Integracija sa AI**: Ugrađena podrška za uređivače pokretane AI (Cursor, Windsurf, GitHub Copilot)
+- **Sigurnost tipova**: Sveobuhvatna TypeScript pravila sa strogim proverama null vrednosti
+- **Moderni standardi**: Najnovije najbolje prakse za JavaScript/TypeScript
+
+## Pre nego što počnete
+
+Proverite da imate:
+
+- Postojeći projekat koji koristi ESLint
+- Node.js v14.18+ (preporučuje se Node 18+)
+- `package.json` fajl
+
+## Automatsko podešavanje
+
+Pokrenite [skriptu za automatsko podešavanje](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+Ovo će:
+
+- Instalira Ultracite kao zavisnost
+- Spojiće vaše postojeće `biome.json` / `biome.jsonc` sa podrazumevanim podešavanjem Ultracite-a
+- Spojiće vaše postojeće `.vscode/settings.json` sa podrazumevanim podešavanjem Ultracite-a
+- Omogućiće `strictNullChecks` u vašem `tsconfig.json` fajlu (ili će kreirati jedan ako ne postoji)
+- Sačuvaće vaša prilagođena pravila i podešavanja
+- Podesiće integracije za uređivače
+
+Pobrinite se da odaberete uklanjanje postojeće `ESLint` konfiguracije. Ovo će:
+
+- Ukloniti ESLint i sve povezane zavisnosti
+- Ukloniti bilo koje ESLint konfiguracione fajlove
+- Ukloniti sve komande vezane za ESLint iz vašeg `.vscode/settings.json` fajla
+
+Nakon nadogradnje, možda ćete želeti da pregledate vaš `biome.json` / `biome.jsonc` fajl kako biste uklonili sve override-ove. Takođe, restartujte uređivač da biste osigurali da je nova konfiguracija primenjena.

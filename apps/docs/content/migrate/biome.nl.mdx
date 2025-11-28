@@ -1,0 +1,50 @@
+---
+title: Migreren van Biome
+description: Hoe u uw project migreert van een op zichzelf staande Biome naar Ultracite.
+---
+
+Als u Biome al gebruikt en wilt overstappen op Ultracite's vooraf geconfigureerde setup, helpt deze gids u te migreren terwijl uw bestaande configuratie behouden blijft.
+
+## Waarom overstappen naar Ultracite?
+
+- **Geen configuratie**: Ultracite biedt een vooraf geconfigureerde preset met regels
+- **Editorintegratie**: Ingebouwde ondersteuning voor AI-aangedreven editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistente workflow**: Gestandaardiseerde setup voor projecten en teams
+- **Aanvullende tooling**: Optionele Git-hooks, lint-staged-integratie
+- **Onderhouden regels**: Regelmatige updates met nieuwe best practices
+
+## Voordat u begint
+
+Zorg ervoor dat u het volgende hebt:
+
+- Een bestaand project dat Biome gebruikt
+- Node.js v14.18+ (Node 18+ aanbevolen)
+- Een `biome.json` of `biome.jsonc` bestand
+
+## Migratie-opties
+
+### Optie 1: Snelle migratie (aanbevolen)
+
+De snelste manier is het uitvoeren van het [automatisch installatiescript](/setup#automatic-installation).
+
+Dit zal:
+
+- Installeert Ultracite als dependency
+- Voegt uw bestaande `biome.json` / `biome.jsonc` samen met de preset van Ultracite
+- Voegt uw bestaande `.vscode/settings.json` samen met de preset van Ultracite
+- Zet `strictNullChecks` aan in uw `tsconfig.json` bestand (of maak er een aan als deze niet bestaat)
+- Behoudt uw aangepaste regels en instellingen
+- Stelt editorintegraties in
+
+Na de upgrade wilt u misschien uw `biome.json` / `biome.jsonc` bestand herzien om eventuele overrides te verwijderen. Start daarnaast uw editor opnieuw om ervoor te zorgen dat de nieuwe configuratie wordt toegepast.
+
+### Optie 2: Handmatige migratie
+
+Als u meer controle over het proces wilt, volgt u de stappen van de [Handmatige migratie](/setup#manual-installation) door:
+
+- Ultracite en Biome handmatig te installeren
+- Uw `biome.json` bestand bij te werken om Ultracite uit te breiden
+- Een `.vscode/settings.json` bestand aan te maken of bij te werken om de Biome-extensie in te schakelen
+- `strictNullChecks` in uw `tsconfig.json` bestand in te schakelen (of maak er een aan als deze niet bestaat)
+
+Start na de migratie uw editor opnieuw om ervoor te zorgen dat de nieuwe configuratie wordt toegepast.

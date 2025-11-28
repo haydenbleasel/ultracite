@@ -1,0 +1,63 @@
+---
+title: Namestitev
+description: Kako namestiti Ultracite v vaš projekt.
+---
+
+Ultracite lahko namestite z vsemi glavnimi upravljalniki paketov. Potrebovali boste Node.js v14.18+ (priporočeno Node 18+) in projekt z datoteko `package.json`.
+
+## Namestitev
+
+Najlažji način za začetek je zagnati Ultraciteov `init` skript, ki bo namestil potrebne pakete in za vas nastavil konfiguracijsko datoteko. V imeniku vašega projekta zaženite:
+
+```package-install
+npx ultracite init
+```
+
+Neobvezno lahko ukazu `init` posredujete naslednje preklopne možnosti:
+
+| Zastavica           | Opis                                             | Možnosti                                                                 |
+|---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--pm`              | Upravljalnik paketov, ki ga želite uporabiti.     | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--frameworks`      | Okviri, ki jih želite konfigurirati.              | Ločeno z vejico: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | Urejevalniki, ki jih želite konfigurirati.        | Ločeno z vejico: `vscode`, `zed`                                        |
+| `--agents`          | AI agenti, ki jih želite konfigurirati.          | Ločeno z vejico: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp` |
+| `--hooks`           | Hooki agentov za konfiguracijo.                  | Ločeno z vejico: `cursor`, `claude`                                     |
+| `--integrations`    | Dodatne integracije za nastavitev.                | Ločeno z vejico: `husky`, `lefthook`, `lint-staged`                     |
+| `--migrate`         | Orodja za migracijo, ki jih želite odstraniti.   | Ločeno z vejico: `eslint`, `prettier` (odstrani odvisnosti, konfiguracijske datoteke in nastavitve urejevalnika) |
+| `--skip-install`    | Preskoči nameščanje odvisnosti.                  | (ni potrebe po vrednosti)                                               |
+| `--quiet`           | Onemogoči interaktivne pozive in vizualni izhod.  | (ni potrebe po vrednosti, samodejno omogočeno v CI)                     |
+
+### Programatična uporaba
+
+Za orodja, ki morajo klicati Ultracite programatično (kot orodja za ustvarjanje projektov), lahko uporabite preklop `--quiet`, da onemogočite vse interaktivne pozive in vizualni izhod:
+
+```bash title="Terminal"
+npx ultracite init --quiet --pm npm
+```
+
+Preklop `--quiet` se samodejno omogoči, ko je okoljska spremenljivka `CI` nastavljena na `true` ali `1`, zaradi česar je primeren za CI/CD pipelines:
+
+```bash title="Terminal"
+CI=true npx ultracite init --pm npm
+```
+
+V tihem načinu bo Ultracite:
+- Preskočil vse interaktivne pozive
+- Uporabil smiselne privzete nastavitve za vse možnosti
+- Ugasnil ASCII-art, merilnike (spinners) in log sporočila
+- Ustvaril le osnovno Biome konfiguracijo
+- Zapustil se čisto z izhodno kodo 0 ob uspehu ali 1 ob napaki
+
+## Razširitve
+
+Če uporabljate Visual Studio Code, namestite uradno razširitev [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome), ki omogoča formatiranje in popravljanje ob shranjevanju:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```
+
+Prav tako, če uporabljate Tailwind CSS, je priporočljivo namestiti razširitev [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) za urejanje vrstnega reda razredov in namige:
+
+```bash title="Terminal"
+code --install-extension bradlc.vscode-tailwindcss
+```

@@ -1,0 +1,48 @@
+---
+title: Qwik
+description: Qwik-specifikke lint-regler for Ultracite.
+---
+
+Qwik-konfigurationen indeholder Qwik-specifikke lint-regler for serialisering, synlige opgaver, leksikalsk scope og metodebrug.
+
+## Installation
+
+Tilføj Qwik-konfigurationen til din `biome.jsonc`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/qwik"]
+}
+```
+
+## Oversigt
+
+Denne konfiguration tilføjer regler, der er specifikke for Qwik-udvikling:
+
+- **Serialisering**: Håndhæv korrekt brug af Qwiks resumability-model
+- **Synlige opgaver**: Forhindre upassende brug af `useVisibleTask$`
+- **Leksikalsk scope**: Sikre korrekt variabelomfang i `$`-funktioner
+- **Metodebrug**: Håndhæv korrekte Qwik-metodemønstre
+- **React-specifikke props**: Forbyd React-specifikke props i Qwik-komponenter
+
+## Qwik-specifikke regler
+
+### Korrekthed
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Forhindre brug af `useVisibleTask$`. Denne hook kører kode straks på klienten, hvilket underminerer Qwiks resumability. Brug `useTask$` eller `useResource$` i stedet, når det er muligt. |
+| `useQwikClasslist` | `error` | Håndhæv brug af `class`-objektsyntaks i stedet for strengkonkatenering for dynamiske klasser i Qwik. |
+
+### Nursery
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `useQwikValidLexicalScope` | `error` | Håndhæv gyldigt leksikalsk scope i Qwiks `$`-funktioner. Variabler fra ydre scopes skal eksplicit fanges. |
+| `useQwikMethodUsage` | `error` | Håndhæv korrekt brug af Qwik-specifikke metoder og API'er. |
+
+### Mistænkeligt
+
+| Regel | Indstilling | Beskrivelse |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Forbyd React-specifikke props som `className` og `htmlFor` i Qwik. Brug `class` og `for` i stedet. |

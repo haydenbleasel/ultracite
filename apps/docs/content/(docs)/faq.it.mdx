@@ -1,0 +1,86 @@
+---
+title: Domande frequenti
+description: Ecco le risposte ad alcune domande frequenti su Ultracite.
+---
+
+## D: Che cos'è esattamente Ultracite – in cosa si differenzia da Biome o ESLint?
+
+Ultracite è essenzialmente una configurazione preset basata su Biome. Pensate a Ultracite come a un pacchetto curato di regole e impostazioni, mentre Biome è il motore che effettivamente formatta / effettua il lint del codice. Puoi usare Biome da solo, ma dovresti decidere quali regole abilitare e configurare le sue opzioni manualmente. Ultracite ti evita questo sforzo fornendo una configurazione pronta all'uso che incorpora le migliori pratiche dell'ecosistema.
+
+Rispetto a ESLint + Prettier, Biome è più veloce grazie alla sua implementazione in Rust e alla sua natura unificata (uno strumento invece di due o tre). Se ti piace già modificare ogni singola regola di ESLint, Ultracite potrebbe risultare restrittivo; tuttavia mira a eliminare la necessità di farlo adottando impostazioni predefinite sensate.
+
+In breve: Biome è il motore (linter / formatter), Ultracite è la configurazione.
+
+## D: Ho ancora bisogno di ESLint o Prettier se uso Ultracite?
+
+No — Ultracite (tramite Biome) sostituisce le funzionalità di ESLint e Prettier per il tuo codice JavaScript / TypeScript. Non è necessario eseguire ESLint o Prettier. Anzi, si consiglia di rimuovere quelle configurazioni per evitare conflitti. L'output di Ultracite coprirà la maggior parte della formattazione e del linting che questi strumenti offrivano, solitamente con regole equivalenti o più rigorose.
+
+L'unico caso in cui potresti ancora usarli è se hai qualche plugin di nicchia non supportato da Biome (ad esempio, una regola ESLint molto specializzata). Ma idealmente dovresti lavorare interamente con l'ecosistema di Ultracite.
+
+## D: Che ne è dei miei file non JS/TS? Ultracite li gestisce?
+
+Ultracite, tramite Biome, fornisce vari livelli di supporto per linting e formattazione per JavaScript, TypeScript, JSX, CSS e GraphQL.
+
+## D: Con quale frequenza viene aggiornato Ultracite?
+
+Ultracite viene aggiornato secondo necessità, spesso seguendo il ciclo di rilascio di Biome. Poiché Biome è ancora in evoluzione, potresti vedere rilasci minori frequenti di Ultracite. Questi aggiornamenti possono introdurre nuove regole, correzioni di bug o aggiustamenti delle impostazioni predefinite. Dato che è bloccato tramite `-E`, non riceverai aggiornamenti inattesi a meno che non decida di eseguire l'upgrade.
+
+È una buona idea seguire il repository di Ultracite per i rilasci o controllare la pagina [Rilasci](https://github.com/haydenbleasel/ultracite/releases). Quando aggiorni Ultracite, leggi le note di rilascio: occasionalmente una nuova regola potrebbe essere abilitata e far emergere nuovi avvisi nel tuo progetto (il che è positivo per individuare problemi, ma è bene esserne consapevoli). Aggiornare Biome insieme a Ultracite è solitamente semplice tramite il gestore di pacchetti.
+
+## D: Se non sono d'accordo con una regola imposta da Ultracite, cosa devo fare?
+
+Hai diverse opzioni:
+
+- Configurarla come disabilitata o impostarla a un livello diverso in `biome.jsonc` (soluzione rapida per il tuo progetto).
+- Apri una [discussione](https://github.com/haydenbleasel/ultracite/discussions/) sul repository GitHub se la regola dovrebbe essere modificata per tutti. Forse i manutentori concorderanno che è troppo restrittiva o che potrebbe essere opzionale.
+- Se è una questione di stile, ricorda che l'obiettivo di Ultracite è la convenzione anziché la configurazione – a volte vale la pena adattarsi allo stile dello strumento per coerenza tra i progetti. Ma ovviamente le esigenze del tuo progetto vengono prima.
+
+Alla fine, controlli la configurazione di lint del tuo progetto. Ultracite è un punto di partenza; sentiti libero di modellarla, preferibilmente in modo minimale. Se ti ritrovi a disabilitare la maggior parte delle regole, allora Ultracite potrebbe non essere il preset giusto per le preferenze del tuo team (anche se sarebbe insolito).
+
+In tal caso, potresti costruire la tua configurazione Biome da zero, ma perderesti molta comodità. Di solito, poche modifiche sono sufficienti per adattare Ultracite.
+
+## D: Posso usare Ultracite senza VS Code / Cursor / Windsurf?
+
+Sì — ci concentriamo su VS Code e i suoi fork poiché sono gli IDE più diffusi per lo sviluppo web moderno, ma Biome può essere utilizzato esclusivamente tramite CLI o con altri IDE.
+
+Consulta le integrazioni per editor di Biome [ufficiali](https://biomejs.dev/guides/editors/first-party-extensions/) e [di terze parti](https://biomejs.dev/guides/editors/third-party-extensions/) per saperne di più.
+
+## D: Come faccio a sapere quali regole Ultracite applica? Esiste una lista?
+
+Sì, consulta il file [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/main/biome.jsonc) nel repository GitHub per le regole abilitate.
+
+## D: Ultracite può correggere tutti i problemi che trova?
+
+Non tutti, ma molti. Ultracite correggerà automaticamente i problemi che sono sicuri e deterministici da risolvere. Questi includono problemi di formattazione e molti errori di lint (in particolare trasformazioni stilistiche o semplici del codice come rimuovere import non usati, aggiungere parentesi mancanti, cambiare `==` in `===`, ecc.).
+
+Problemi più complessi (logica aziendale o aspetti che richiedono l'intenzione del sviluppatore) sono lasciati a te da correggere. Ad esempio, non rinominerà magicamente le variabili per seguire una convenzione di nomenclatura o aggiungere codice di gestione degli errori mancante: ti segnalerà semplicemente l'avviso.
+
+La filosofia è simile a quella di ESLint: fornire correzioni quando possibile, ma non rischiare di modificare il comportamento del codice. Controlla sempre il pannello Problemi o l'output CLI per eventuali avvisi rimanenti dopo l'auto-fix.
+
+## D: Dove posso imparare di più su Biome (lo strumento che usa Ultracite)?
+
+[Biome](https://biomejs.dev/) ha un sito con documentazione dedicata, dove puoi trovare dettagli tecnici. Se sei curioso di come formatta il codice o della filosofia dietro certe scelte, la documentazione di Biome è la risorsa migliore.
+
+Inoltre ci sono post del blog e articoli della community sulla crescita di Biome come successore di Rome. Capire Biome può aiutarti a comprendere meglio le capacità di Ultracite. Tuttavia, non è necessario apprendere Biome in profondità per usare Ultracite efficacemente: l'obiettivo di Ultracite è astrarre quei dettagli per la maggior parte degli utenti.
+
+## D: Come disabilito Ultracite per un progetto o un file specifico?
+
+Se hai un progetto in cui temporaneamente non vuoi Ultracite, puoi semplicemente non includere `extends: ["ultracite/core"]` in `biome.jsonc` (o rimuovere il file di config). Se l'estensione per VS Code è installata, potrebbe comunque provare a formattare al salvataggio utilizzando i valori predefiniti di Biome.
+
+Per disabilitarlo completamente, puoi disattivare `formatOnSave` o disinstallare l'estensione Biome per quel workspace. Per un file specifico, come menzionato, usa commenti di ignore o pattern. Essenzialmente, Ultracite è attivabile per progetto tramite la configurazione. Se non è configurato, non verrà eseguito (Biome stesso potrebbe comunque eseguire la formattazione se attivato, ma non le regole di lint).
+
+## D: Ricevo un errore di corepack durante l'installazione – cosa devo fare?
+
+Alcuni utenti hanno riscontrato errori di verifica della firma eseguendo `pnpm dlx ultracite init` con corepack, particolarmente su Node.js v22 con versioni più vecchie di corepack. L'errore tipicamente appare come "Cannot find matching keyid" durante l'installazione del pacchetto.
+
+Ecco le soluzioni consigliate:
+
+- **Aggiorna corepack**: Aggiorna a corepack versione 0.34.0 o successiva. Puoi farlo con `corepack prepare pnpm@latest --activate` o seguendo la [guida di setup corepack di pnpm](https://pnpm.io/installation#using-corepack).
+- **Aggiorna Node.js**: Se stai usando Node.js v20.x, considera l'aggiornamento a v22 o successiva, che include una versione più recente di corepack.
+- **Usa npx invece**: Se corepack continua a causare problemi, puoi usare `npx ultracite init` invece di `pnpm dlx ultracite init`.
+
+Se nessuna di queste soluzioni funziona, apri un issue sul [repository GitHub di Ultracite](https://github.com/haydenbleasel/ultracite/issues) con i dettagli sulle versioni di Node.js e corepack in uso.
+
+---
+
+Speriamo che queste domande frequenti chiariscano i punti di confusione più comuni. Se hai una domanda che non è stata risposta qui, sentiti libero di contattare il progetto su GitHub o sui canali della community. Ultracite è qui per rendere la vita dello sviluppatore più semplice – feedback e domande sono sempre graditi per aiutarci a migliorarlo!

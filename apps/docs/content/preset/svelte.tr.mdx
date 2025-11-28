@@ -1,0 +1,69 @@
+---
+title: Svelte
+description: Ultracite için Svelte'e özgü yapılandırma.
+---
+
+Svelte yapılandırması Svelte'e özgü ayarlar içerir. Bu, Biome'nin henüz Svelte'e özgü özel lint kurallarına sahip olmaması nedeniyle minimal bir ön ayardır, ancak `.svelte` dosyalarında yanlış pozitif lint hatalarını önlemek için önemli geçersiz kılmaları içerir.
+
+## Kurulum
+
+Svelte yapılandırmasını `biome.jsonc` dosyanıza ekleyin:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/svelte"]
+}
+```
+
+## Genel Bakış
+
+Bu yapılandırma:
+
+- **HTML Desteği**: script ve style girintilemesi ile deneysel tam HTML desteğini etkinleştirir
+- **React'e Özgü Props**: Svelte standart HTML özniteliklerini (`class` ve `for`) kullandığı için `className` ve `htmlFor` gibi React'e özgü prop'ları işaretler
+- **Svelte Dosyası Geçersiz Kılmaları**: Svelte'in bileşen yapısını ele almak için `.svelte` dosyalarında kurallar gevşetilmiştir
+
+## HTML Biçimleyici Yapılandırması
+
+Svelte ön ayarı, gömülü script'ler ve style'lar için özel biçimlendirme ile deneysel HTML desteğini etkinleştirir:
+
+```jsonc
+{
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "indentScriptAndStyle": true
+    }
+  }
+}
+```
+
+Bu yapılandırma:
+- **Deneysel Tam Destek**: Biome'nin `.svelte` dosyaları için deneysel HTML ayrıştırma ve biçimlendirme yeteneklerini etkinleştirir
+- **Script ve Style Girintileme**: Svelte bileşenlerindeki `<script>` ve `<style>` etiketleri içindeki kodu düzgün şekilde girintiler
+
+## Svelte'e Özgü Kurallar
+
+### Şüpheli
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Svelte'de `className` ve `htmlFor` gibi React'e özgü prop'lara izin vermez. Bunun yerine `class` ve `for` kullanın. |
+
+## Svelte Dosyası Geçersiz Kılmaları
+
+Aşağıdaki kurallar, Biome'nin Svelte bileşenleri için kısmi desteği nedeniyle yanlış pozitifleri önlemek için `.svelte` dosyalarında devre dışı bırakılmıştır:
+
+### Doğruluk
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | `.svelte` dosyalarında kullanılmayan değişkenlere izin verilir. Script bölümündeki değişkenler yalnızca şablonda kullanılabilir. |
+| `noUnusedImports` | `off` | `.svelte` dosyalarında kullanılmayan importlara izin verilir. Importlar yalnızca şablon bölümünde kullanılabilir. |
+
+### Stil
+
+| Kural | Ayar | Açıklama |
+|------|---------|-------------|
+| `useConst` | `off` | Reaktif ifadeler için `.svelte` dosyalarında `let` ve `var` bildirimlerine izin verin. |
+| `useImportType` | `off` | Svelte'in derleme sistemiyle daha iyi uyumluluk için açık import tipi gereksinimlerini devre dışı bırakın. |

@@ -1,0 +1,75 @@
+---
+title: Nadgradnja na v6
+description: Vodnik za nadgradnjo iz Ultracite v5 na v6 z novim sistemom prednastavitev.
+---
+
+Ultracite v6 uvaja [prednastavitve, specifične za ogrodja](/configuration#framework-specific-configurations), ki vam dajejo več nadzora nad tem, katera pravila veljajo za vaš projekt. **Ta nadgradnja ne uvaja prelomnih sprememb** za uporabnike Next.js/React.
+
+## Kaj se je spremenilo
+
+v6 uvaja [prednastavitve, specifične za ogrodja](/configuration#framework-specific-configurations):
+
+- [`ultracite/core`](/preset/core) - Osnovna pravila za JavaScript/TypeScript
+- [`ultracite/react`](/preset/react) - React-specifična pravila
+- [`ultracite/next`](/preset/next) - Next.js-specifična pravila
+- [`ultracite/solid`](/preset/solid) - Pravila za Solid.js
+- [`ultracite/vue`](/preset/vue) - Pravila za Vue.js
+- [`ultracite/svelte`](/preset/svelte) - Pravila za Svelte
+- [`ultracite/qwik`](/preset/qwik) - Pravila za Qwik
+- [`ultracite/angular`](/preset/angular) - Razčlenjevalnik HTML za Angular
+- [`ultracite/remix`](/preset/remix) - Podpora datotečnemu usmerjanju
+
+## Migracija
+
+### Projekti Next.js/React
+
+Posodobite svoj `biome.jsonc`, da vključite ustrezne prednastavitve:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+}
+```
+
+### Projekti, ki ne uporabljajo Reacta
+
+Preklopite na osnovno prednastavitev, če ne uporabljate Reacta:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core"]
+}
+```
+
+### Druga ogrodja
+
+Uporabite ustrezno prednastavitev za vaše ogrodje:
+
+```jsonc title="biome.jsonc"
+{
+  // Solid.js
+  "extends": ["ultracite/core", "ultracite/solid"]
+
+  // Vue.js
+  "extends": ["ultracite/core", "ultracite/vue"]
+
+  // Svelte
+  "extends": ["ultracite/core", "ultracite/svelte"]
+
+  // Qwik
+  "extends": ["ultracite/core", "ultracite/qwik"]
+
+  // Angular
+  "extends": ["ultracite/core", "ultracite/angular"]
+}
+```
+
+### Projekti z več ogrodji
+
+Kombinirajte prednastavitve po potrebi:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+}
+```
