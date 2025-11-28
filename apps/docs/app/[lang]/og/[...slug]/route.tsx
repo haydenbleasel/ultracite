@@ -16,10 +16,10 @@ export const GET = async (
   }
 
   const geistBold = await readFile(
-    join(process.cwd(), "app/og/[...slug]/Geist-Bold.ttf")
+    join(process.cwd(), "app/[lang]/og/[...slug]/Geist-Bold.ttf")
   );
   const geistRegular = await readFile(
-    join(process.cwd(), "app/og/[...slug]/Geist-Regular.ttf")
+    join(process.cwd(), "app/[lang]/og/[...slug]/Geist-Regular.ttf")
   );
 
   return new ImageResponse(
