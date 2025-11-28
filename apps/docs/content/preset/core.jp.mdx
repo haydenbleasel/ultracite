@@ -3,17 +3,17 @@ title: コア
 description: フレームワークに依存しないリンティングルールを備えた Ultracite の基本設定。
 ---
 
-Ultracite のコア設定は、フレームワークに依存しない包括的なリンティングルールとフォーマット設定を提供します。これは他のすべてのフレームワーク固有の設定が拡張する基盤です。
+Ultracite のコア設定は、フレームワークに依存しない包括的なリンティングルールとフォーマット設定のセットを提供します。これは他のすべてのフレームワーク固有の設定が拡張する基盤です。
 
 ## インストール
 
-コア設定は次のコマンドを実行すると自動的に含まれます:
+コア設定は次を実行すると自動的に含まれます:
 
 ```bash
 npx ultracite init
 ```
 
-または手動で `biome.jsonc` に追加します:
+または手動で `biome.jsonc` に追加してください:
 
 ```jsonc title="biome.jsonc"
 {
@@ -23,36 +23,36 @@ npx ultracite init
 
 ## 概要
 
-コア設定には、数百に及ぶ厳格なリンティングルールが含まれており、次の分野を網羅しています:
+コア設定は数百に及ぶ厳格なリンティングルールを含み、以下をカバーします:
 
-- **アクセシビリティ (a11y)**: ARIA 属性、セマンティック HTML、キーボード操作を強制
-- **複雑性**: 認知的複雑さを削減しベストプラクティスを強制
-- **正確性**: 一般的な誤りを防ぎ型安全性を強制
-- **パフォーマンス**: 実行時パフォーマンスの最適化
-- **セキュリティ**: セキュリティの脆弱性を防止
-- **スタイル**: 一貫したコードスタイルを強制
-- **疑わしいパターン**: バグを示唆する疑わしいパターンを検出
+- **アクセシビリティ (a11y)**: ARIA 属性、セマンティック HTML、キーボードナビゲーションを強制します
+- **複雑さ**: 認知的複雑さを削減しベストプラクティスを強制します
+- **正確性**: 一般的なエラーを防ぎ型安全性を強制します
+- **パフォーマンス**: 実行時パフォーマンスを最適化します
+- **セキュリティ**: セキュリティ脆弱性を防ぎます
+- **スタイル**: 一貫したコードスタイルを強制します
+- **疑わしいパターン**: バグを示唆する可能性のある疑わしいパターンを検出します
 
 ## フォーマッタ設定
 
 - **インデント**: 2 スペース
 - **行幅**: 80 文字
-- **行末**: LF（Unix 形式）
-- **セミコロン**: 常に必須
-- **クォート**: JavaScript/TypeScript と JSON ではダブルクォート
-- **末尾カンマ**: ES5 スタイル（複数行の配列/オブジェクト）
+- **行末**: LF (Unix スタイル)
+- **セミコロン**: 常に必要
+- **引用符**: JavaScript/TypeScript と JSON はダブルクォート
+- **末尾カンマ**: ES5 スタイル (複数行の配列/オブジェクト)
 - **アロー関数の括弧**: 常に括弧を含める
 
-## 主要な特徴
+## 主な機能
 
 ### TypeScript の厳格さ
 
-コア設定は TypeScript の厳格チェックを有効にします:
+コア設定は TypeScript の厳格なチェックを有効にします:
 
-- `any` の使用を抑制 (`noExplicitAny: error`)
-- `null/undefined` の取り扱いを要求
-- 特定の状況では明示的な型を推奨
-- コードベース全体で型安全性を強制
+- `any` の使用を抑制します (`noExplicitAny: error`)
+- `null/undefined` の扱いを必須にします
+- 特定の状況では明示的な型を優先します
+- コードベース全体で型安全性を強制します
 
 ### ESLint 推奨相当ルール
 
@@ -60,25 +60,25 @@ npx ultracite init
 
 - 未使用変数の禁止 (`noUnusedVariables: error`)
 - 未使用インポートの禁止 (`noUnusedImports: error`)
-- `eval` の明示的使用禁止 (`noGlobalEval: error`)
-- プロトタイプ汚染の防止 (`noPrototypeBuiltins: error`)
+- 明示的な eval の禁止 (`noGlobalEval: error`)
+- プロトタイプ汚染の禁止 (`noPrototypeBuiltins: error`)
 
 ### デフォルトでのアクセシビリティ
 
 アクセシビリティ基準に相当するルール:
 
-- ARIA 属性は有効であること
-- セマンティックな HTML 要素の優先
-- キーボード操作のサポートを要求
-- 画像に対する代替テキストを要求
+- ARIA 属性は有効である必要があります
+- セマンティックな HTML 要素を優先します
+- キーボードナビゲーションのサポートが必要です
+- 画像には代替テキストが必要です
 
 ### Node.js サポート
 
-環境固有の取り扱い:
+環境固有の処理:
 
-- Node.js のグローバル（`module`, `process`）を認識
-- 組み込みモジュールに対して `node:` プロトコルを強制
-- CommonJS と ESM の両方をサポート
+- Node.js のグローバル（`module`, `process`）を認識します
+- 組み込みモジュールに対して `node:` プロトコルの使用を強制します
+- CommonJS と ESM の両方をサポートします
 
 ## 完全なルール参照
 
@@ -86,186 +86,192 @@ npx ultracite init
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noAccessKey` | `error` | HTML 要素に `accessKey` 属性が使用されていないことを強制します。 |
+| `noAccessKey` | `error` | どの HTML 要素にも `accessKey` 属性を使用しないことを強制します。 |
 | `noAriaHiddenOnFocusable` | `error` | フォーカス可能な要素に `aria-hidden="true"` が設定されていないことを強制します。 |
 | `noAriaUnsupportedElements` | `error` | ARIA ロール、状態、プロパティをサポートしない要素にそれらの属性が付与されていないことを強制します。 |
-| `noAutofocus` | `off` | 要素で `autoFocus` プロップが使用されていないことを強制します。 |
+| `noAutofocus` | `off` | 要素に `autoFocus` プロップを使用しないことを強制します。 |
 | `noDistractingElements` | `error` | 気を散らす要素が使用されていないことを強制します。 |
-| `noHeaderScope` | `error` | `scope` プロップは `<th>` 要素のみに使用されるべきであることを強制します。 |
-| `noInteractiveElementToNoninteractiveRole` | `error` | インタラクティブな HTML 要素に非インタラクティブな ARIA ロールが割り当てられていないことを強制します。 |
-| `noLabelWithoutControl` | `error` | label 要素やコンポーネントにテキストラベルと関連する入力が存在することを強制します。 |
+| `noHeaderScope` | `error` | scope プロップは `<th>` 要素でのみ使用するべきであることを強制します。 |
+| `noInteractiveElementToNoninteractiveRole` | `error` | インタラクティブでない ARIA ロールがインタラクティブな HTML 要素に割り当てられていないことを強制します。 |
+| `noLabelWithoutControl` | `error` | label 要素またはコンポーネントがテキストラベルと関連する input を持っていることを強制します。 |
 | `noNoninteractiveElementInteractions` | `error` | 非インタラクティブ要素でのイベントハンドラの使用を禁止します。 |
-| `noNoninteractiveElementToInteractiveRole` | `error` | 非インタラクティブな HTML 要素にインタラクティブな ARIA ロールが割り当てられていないことを強制します。 |
-| `noNoninteractiveTabindex` | `error` | 非インタラクティブ要素に `tabIndex` が割り当てられていないことを強制します。 |
+| `noNoninteractiveElementToInteractiveRole` | `error` | インタラクティブな ARIA ロールが非インタラクティブな HTML 要素に割り当てられていないことを強制します。 |
+| `noNoninteractiveTabindex` | `error` | 非インタラクティブな HTML 要素に `tabIndex` が割り当てられていないことを強制します。 |
 | `noPositiveTabindex` | `error` | `tabIndex` プロパティに正の整数を使用することを防ぎます。 |
-| `noRedundantAlt` | `error` | img の alt プロップに `image`、`picture`、`photo` といった語が含まれていないことを強制します。 |
-| `noRedundantRoles` | `error` | 要素の明示的な role プロパティが暗黙の/デフォルトの role と同じでないことを強制します。 |
-| `noStaticElementInteractions` | `error` | クリックハンドラを持つ静的で表示される要素（例えば `<div>`）には適切な role 属性が使用されていることを強制します。 |
+| `noRedundantAlt` | `error` | img の alt プロップに `image`、`picture`、`photo` という単語が含まれないことを強制します。 |
+| `noRedundantRoles` | `error` | 明示的な role プロパティが要素の暗黙的/デフォルトの role と同じでないことを強制します。 |
+| `noStaticElementInteractions` | `error` | クリックハンドラを持つ静的で可視な要素（例: `<div>`）が有効な role 属性を使用することを強制します。 |
 | `noSvgWithoutTitle` | `error` | `svg` 要素に対して title 要素の使用を強制します。 |
-| `useAltText` | `error` | 代替テキストが必要なすべての要素に意味のある情報が提供されていることを強制します。 |
+| `useAltText` | `error` | 代替テキストが必要なすべての要素が、エンドユーザーに意味のある情報を伝えることを強制します。 |
 | `useAnchorContent` | `error` | アンカーにコンテンツがあり、そのコンテンツがスクリーンリーダーでアクセス可能であることを強制します。 |
-| `useAriaActivedescendantWithTabindex` | `error` | `aria-activedescendant` を使用する非インタラクティブ要素に `tabIndex` が割り当てられていることを強制します。 |
-| `useAriaPropsForRole` | `error` | ARIA ロールを持つ要素には、そのロールに必要なすべての ARIA 属性があることを強制します。 |
-| `useAriaPropsSupportedByRole` | `error` | 要素がサポートするロールに対して有効な ARIA プロパティのみが使われていることを強制します。 |
-| `useButtonType` | `error` | button 要素に `type` 属性を付与することを強制します。 |
-| `useFocusableInteractive` | `error` | インタラクティブなロールと操作ハンドラを持つ要素はフォーカス可能であることを強制します。 |
-| `useHeadingContent` | `error` | 見出し要素（`h1`, `h2` 等）にコンテンツがあり、そのコンテンツがスクリーンリーダーでアクセス可能であることを強制します。 |
-| `useHtmlLang` | `error` | `html` 要素に `lang` 属性があることを強制します。 |
-| `useIframeTitle` | `error` | `iframe` 要素に title 属性を使用することを強制します。 |
-| `useKeyWithClickEvents` | `error` | `onClick` には少なくとも `onKeyUp`、`onKeyDown`、`onKeyPress` のいずれかが伴うことを強制します。 |
-| `useKeyWithMouseEvents` | `error` | `onMouseOver` / `onMouseOut` には `onFocus` / `onBlur` が伴うことを強制します。 |
-| `useMediaCaption` | `error` | audio および video 要素はキャプション用の track を持つことを強制します。 |
-| `useSemanticElements` | `error` | JSX 要素での role 属性の使用を検出し、セマンティック要素の使用を推奨します。 |
-| `useValidAnchor` | `error` | すべてのアンカーが有効でナビゲート可能な要素であることを強制します。 |
+| `useAriaActivedescendantWithTabindex` | `error` | aria-activedescendant を持つ非インタラクティブ HTML 要素に `tabIndex` が割り当てられていることを強制します。 |
+| `useAriaPropsForRole` | `error` | ARIA ロールを持つ要素がそのロールに必要な ARIA 属性をすべて持っていることを強制します。 |
+| `useAriaPropsSupportedByRole` | `error` | ARIA プロパティが要素がサポートするロールに対して有効であることを強制します。 |
+| `useButtonType` | `error` | button 要素に `type` 属性の使用を強制します。 |
+| `useFocusableInteractive` | `error` | インタラクティブなロールとインタラクションハンドラを持つ要素はフォーカス可能でなければなりません。 |
+| `useHeadingContent` | `error` | 見出し要素（`h1`, `h2` など）がコンテンツを持ち、そのコンテンツがスクリーンリーダーでアクセス可能であることを強制します。 |
+| `useHtmlLang` | `error` | `html` 要素が `lang` 属性を持っていることを強制します。 |
+| `useIframeTitle` | `error` | iframe 要素に title 属性の使用を強制します。 |
+| `useKeyWithClickEvents` | `error` | `onClick` は少なくとも次のいずれかを伴うことを強制します: `onKeyUp`, `onKeyDown`, `onKeyPress`。 |
+| `useKeyWithMouseEvents` | `error` | `onMouseOver` / `onMouseOut` は `onFocus` / `onBlur` を伴うことを強制します。 |
+| `useMediaCaption` | `error` | audio および video 要素はキャプション用のトラックを持つことを強制します。 |
+| `useSemanticElements` | `error` | JSX 要素での role 属性の使用を検出し、代わりにセマンティック要素を使用することを推奨します。 |
+| `useValidAnchor` | `error` | すべてのアンカーが有効で、ナビゲーション可能な要素であることを強制します。 |
 | `useValidAriaProps` | `error` | `aria-*` の ARIA プロパティがすべて有効であることを保証します。 |
-| `useValidAriaRole` | `error` | ARIA ロールを持つ要素は有効で抽象的でない ARIA ロールを使用することを強制します。 |
+| `useValidAriaRole` | `error` | ARIA ロールを持つ要素は有効で抽象的でない ARIA ロールを使用する必要があります。 |
 | `useValidAriaValues` | `error` | ARIA の状態およびプロパティ値が有効であることを強制します。 |
-| `useValidAutocomplete` | `error` | input 要素の autocomplete 属性に対して有効な値を使用することを強制します。 |
+| `useValidAutocomplete` | `error` | input 要素の autocomplete 属性に有効な値を使用することを強制します。 |
 | `useValidLang` | `error` | `lang` 属性に渡される値が正しい ISO 言語および/または国コードであることを保証します。 |
-| `useGenericFontNames` | `error` | フォントファミリ内で汎用ファミリキーワードが欠落していないことを禁止します（CSS）。 |
+| `useGenericFontNames` | `error` | フォントファミリ（CSS）内でジェネリックファミリキーワードが欠落していないことを禁止します。 |
 
-### 複雑性
+### 複雑さ
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
 | `noAdjacentSpacesInRegex` | `error` | 正規表現リテラル内で連続する空白文字の不明瞭な使用を禁止します。 |
 | `noArguments` | `error` | `arguments` の使用を禁止します。 |
-| `noBannedTypes` | `error` | 原始型のエイリアスや誤解を招く型の使用を禁止します。 |
+| `noBannedTypes` | `error` | プリミティブの型エイリアスや誤解を招く型の使用を禁止します。 |
 | `noCommaOperator` | `error` | カンマ演算子の使用を禁止します。 |
 | `noEmptyTypeParameters` | `error` | 型エイリアスやインターフェースでの空の型パラメータを禁止します。 |
-| `noExcessiveCognitiveComplexity` | `error` | 指定された認知的複雑度を超える関数を禁止します。 |
+| `noExcessiveCognitiveComplexity` | `error` | 指定された認知複雑度スコアを超える関数を禁止します。 |
 | `noExcessiveLinesPerFunction` | `off` | 関数内のコード行数を制限します。 |
-| `noExcessiveNestedTestSuites` | `error` | テストファイル内のネストされた `describe()` の深さに最大値を強制します。 |
-| `noExtraBooleanCast` | `error` | 不要な真偽値キャストを禁止します。 |
-| `noFlatMapIdentity` | `error` | `flatMap` に不要なコールバックを使用することを禁止します。 |
-| `noForEach` | `error` | `Array.forEach` の代わりに `for...of` を推奨します。 |
+| `noExcessiveNestedTestSuites` | `error` | テストファイル内の `describe()` のネスト深度に最大値を強制します。 |
+| `noExtraBooleanCast` | `error` | 不要なブール型キャストを禁止します。 |
+| `noFlatMapIdentity` | `error` | 不要なコールバックを `flatMap` に渡すことを禁止します。 |
+| `noForEach` | `error` | `Array.forEach` より `for...of` を推奨します。 |
 | `noImplicitCoercions` | `off` | 省略形の型変換を禁止します。 |
-| `noImportantStyles` | `off` | `!important` スタイルの使用を禁止します（CSS）。 |
-| `noStaticOnlyClass` | `error` | 非静的メンバーを持たないクラスが報告されます。 |
-| `noThisInStatic` | `error` | static コンテキストでの `this` および `super` の使用を禁止します。 |
-| `noUselessCatch` | `error` | 不要な catch 句を禁止します。 |
+| `noImportantStyles` | `off` | `!important` スタイル（CSS）の使用を禁止します。 |
+| `noStaticOnlyClass` | `error` | クラスに非 static メンバがない場合に報告します。 |
+| `noThisInStatic` | `error` | static コンテキストでの `this` と `super` の使用を禁止します。 |
+| `noUselessCatch` | `error` | 不要な catch 節を禁止します。 |
 | `noUselessConstructor` | `error` | 不要なコンストラクタを禁止します。 |
 | `noUselessContinue` | `error` | 不要な continue の使用を避けます。 |
-| `noUselessEmptyExport` | `error` | モジュールファイルで何も変更しない空の export を禁止します。 |
-| `noUselessEscapeInRegex` | `error` | 正規表現リテラル内の不要なエスケープを禁止します。 |
-| `noUselessFragments` | `error` | 不要なフラグメントの使用を禁止します。 |
+| `noUselessEmptyExport` | `error` | モジュールファイルで何も変更しない空のエクスポートを禁止します。 |
+| `noUselessEscapeInRegex` | `error` | 正規表現リテラル内の不要なエスケープシーケンスを禁止します。 |
+| `noUselessFragments` | `error` | 不要なフラグメントを禁止します。 |
 | `noUselessLabel` | `error` | 不要なラベルを禁止します。 |
-| `noUselessLoneBlockStatements` | `error` | 不要な入れ子ブロック文を禁止します。 |
-| `noUselessRename` | `error` | 同じ名前への import/export/分割代入でのリネームを禁止します。 |
-| `noUselessStringConcat` | `error` | 文字列またはテンプレートリテラルの不要な連結を禁止します。 |
-| `noUselessStringRaw` | `error` | エスケープシーケンスがないテンプレート文字列での不要な `String.raw` を禁止します。 |
+| `noUselessLoneBlockStatements` | `error` | 不要なネストされたブロックステートメントを禁止します。 |
+| `noUselessRename` | `error` | インポート、エクスポート、分割代入で同名へのリネームを禁止します。 |
+| `noUselessStringConcat` | `error` | 不要な文字列やテンプレートの連結を禁止します。 |
+| `noUselessStringRaw` | `error` | エスケープシーケンスのないテンプレート文字列での `String.raw` の不要な使用を禁止します。 |
 | `noUselessSwitchCase` | `error` | switch 文での無意味な case を禁止します。 |
-| `noUselessTernary` | `error` | より単純な代替が存在する場合の三項演算子を禁止します。 |
+| `noUselessTernary` | `error` | より単純な代替手段がある場合の三項演算子を禁止します。 |
 | `noUselessThisAlias` | `error` | 無意味な `this` のエイリアス化を禁止します。 |
-| `noUselessTypeConstraint` | `error` | 型制約に `any` や `unknown` を使うことを禁止します。 |
-| `noUselessUndefinedInitialization` | `error` | 変数を `undefined` に初期化することを禁止します。 |
+| `noUselessTypeConstraint` | `error` | 型制約として `any` や `unknown` を使用することを禁止します。 |
+| `noUselessUndefinedInitialization` | `error` | 変数を `undefined` で初期化することを禁止します。 |
 | `noVoid` | `error` | 親しみのない演算子である `void` 演算子の使用を禁止します。 |
-| `useArrowFunction` | `error` | 関数式よりもアロー関数の使用を推奨します。 |
-| `useDateNow` | `error` | Unix エポックからのミリ秒を取得するには `Date.now()` を使用することを推奨します。 |
-| `useFlatMap` | `error` | `map().flat()` を併用している場合に `.flatMap()` の使用を推奨します。 |
-| `useIndexOf` | `error` | 項目のインデックスを探す場合は `Array#{indexOf,lastIndexOf}()` を `Array#{findIndex,findLastIndex}()` より優先します。 |
-| `useLiteralKeys` | `error` | 計算プロパティアクセスよりもリテラルアクセスを使用することを強制します。 |
-| `useNumericLiterals` | `error` | `parseInt()` や `Number.parseInt()` の代わりに二進数・八進数・十六進数リテラルを使用することを推奨します。 |
-| `useOptionalChain` | `error` | 連鎖する論理式の代わりに簡潔な optional chain を使用することを強制します。 |
-| `useRegexLiterals` | `error` | 可能な場合は `RegExp` コンストラクタの代わりに正規表現リテラルを使用することを強制します。 |
-| `useSimpleNumberKeys` | `error` | 10 進以外の数値リテラルやアンダースコア区切りをメンバー名に使用することを禁止します。 |
-| `useSimplifiedLogicExpression` | `error` | 論理式から冗長な項を排除します。 |
-| `useWhile` | `error` | 初期化式と更新式が不要な場合は for ループの代わりに while ループを使用することを強制します。 |
+| `useArrowFunction` | `error` | 関数式よりアロー関数を使用することを推奨します。 |
+| `useDateNow` | `error` | Unix エポックからのミリ秒数を取得するには `Date.now()` を使用することを推奨します。 |
+| `useFlatMap` | `error` | `map().flat()` が一緒に使われている場合は `.flatMap()` の使用を推奨します。 |
+| `useIndexOf` | `error` | 要素のインデックス検索では `Array#{indexOf,lastIndexOf}()` を `Array#{findIndex,findLastIndex}()` より優先します。 |
+| `useLiteralKeys` | `error` | 計算されたプロパティアクセスよりリテラルアクセスを強制します。 |
+| `useNumericLiterals` | `error` | `parseInt()` と `Number.parseInt()` の代わりに 2/8/16 進のリテラルを使用することを禁止します。 |
+| `useOptionalChain` | `error` | 連続した論理式の代わりに簡潔なオプショナルチェーンを使用することを強制します。 |
+| `useRegexLiterals` | `error` | 可能であれば `RegExp` コンストラクタの代わりに正規表現リテラルを使用することを強制します。 |
+| `useSimpleNumberKeys` | `error` | 10 進以外の数値リテラルやアンダースコア区切りの数値をオブジェクトのメンバー名に使用することを禁止します。 |
+| `useSimplifiedLogicExpression` | `error` | 論理式から冗長な項を削除します。 |
+| `useWhile` | `error` | 初期化式と更新式が不要な場合は for ループより while ループの使用を強制します。 |
 
 ### 正確性
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noConstAssign` | `error` | const 変数の再代入を防ぎます。 |
-| `noConstantCondition` | `error` | 条件における定数式を禁止します。 |
-| `noConstantMathMinMaxClamp` | `error` | 結果自体が定数となる `Math.min` / `Math.max` による値のクランプを禁止します。 |
+| `noConstAssign` | `error` | const 変数への再代入を防ぎます。 |
+| `noConstantCondition` | `error` | 条件式に定数式を使用することを禁止します。 |
+| `noConstantMathMinMaxClamp` | `error` | 結果自体が定数となるような値のクランプに `Math.min` と `Math.max` を使用することを禁止します。 |
 | `noConstructorReturn` | `error` | コンストラクタから値を返すことを禁止します。 |
-| `noEmptyCharacterClassInRegex` | `error` | 正規表現リテラルでの空の文字クラスを禁止します。 |
+| `noEmptyCharacterClassInRegex` | `error` | 正規表現リテラル内の空の文字クラスを禁止します。 |
 | `noEmptyPattern` | `error` | 空の分割代入パターンを禁止します。 |
-| `noGlobalDirnameFilename` | `error` | グローバルスコープでの `__dirname` および `__filename` の使用を禁止します。 |
+| `noGlobalDirnameFilename` | `error` | グローバルスコープでの `__dirname` と `__filename` の使用を禁止します。 |
 | `noGlobalObjectCalls` | `error` | グローバルオブジェクトのプロパティを関数として呼び出すことを禁止します。 |
-| `noInnerDeclarations` | `error` | ブロック外からアクセス可能な関数宣言や `var` 宣言を禁止します。 |
+| `noInnerDeclarations` | `error` | ブロック外からアクセス可能な関数および `var` 宣言を禁止します。 |
 | `noInvalidBuiltinInstantiation` | `error` | 組み込みオブジェクトが正しくインスタンス化されていることを保証します。 |
-| `noInvalidConstructorSuper` | `error` | クラス内での不正な `super()` の使用を防ぎます。 |
+| `noInvalidConstructorSuper` | `error` | クラス内での `super()` の誤用を防ぎます。 |
 | `noInvalidDirectionInLinearGradient` | `error` | 線形グラデーション関数（CSS）での非標準の方向値を禁止します。 |
-| `noInvalidGridAreas` | `error` | CSS Grid Layout（CSS）での無効な命名済みグリッドエリアを禁止します。 |
-| `noInvalidPositionAtImportRule` | `error` | 無効な位置での `@import` ルールの使用を禁止します（CSS）。 |
-| `noInvalidUseBeforeDeclaration` | `error` | 変数および関数パラメータの宣言前使用を禁止します。 |
-| `noMissingVarFunction` | `error` | CSS 変数に対する `var` 関数の欠如を禁止します（CSS）。 |
+| `noInvalidGridAreas` | `error` | CSS グリッドレイアウトでの無効な名前付きグリッド領域を禁止します（CSS）。 |
+| `noInvalidPositionAtImportRule` | `error` | 無効な位置での `@import` アットルールの使用を禁止します（CSS）。 |
+| `noInvalidUseBeforeDeclaration` | `error` | 変数や関数パラメータが宣言前に使用されることを禁止します。 |
+| `noMissingVarFunction` | `error` | css 変数に対する欠落した `var` 関数を禁止します（CSS）。 |
 | `noNodejsModules` | `off` | Node.js 組み込みモジュールの使用を禁止します。 |
 | `noNonoctalDecimalEscape` | `error` | 文字列リテラル内の `\8` および `\9` エスケープシーケンスを禁止します。 |
 | `noPrecisionLoss` | `error` | 精度を失うリテラル数値の使用を禁止します。 |
 | `noPrivateImports` | `off` | プライベートエクスポートのインポートを制限します。 |
 | `noProcessGlobal` | `off` | `process` グローバルの使用を禁止します。 |
 | `noRestrictedElements` | `error` | 設定された要素の使用を禁止します。 |
-| `noSelfAssign` | `error` | 両辺が完全に同一である代入を禁止します。 |
+| `noSelfAssign` | `error` | 両辺がまったく同じである代入を禁止します。 |
 | `noSetterReturn` | `error` | セッターから値を返すことを禁止します。 |
-| `noStringCaseMismatch` | `error` | 文字列ケースを変更した式と非準拠の値を比較することを禁止します。 |
+| `noStringCaseMismatch` | `error` | 文字列の大文字小文字を変更した式を非準拠な値と比較することを禁止します。 |
 | `noSwitchDeclarations` | `error` | switch 節内でのレキシカル宣言を禁止します。 |
-| `noUndeclaredDependencies` | `off` | `package.json` に指定されていない依存関係の使用を禁止します。 |
-| `noUndeclaredVariables` | `error` | 文書内で宣言されていない変数の使用を防ぎます。 |
-| `noUnknownFunction` | `error` | 未知の CSS 値関数を禁止します（CSS）。 |
-| `noUnknownMediaFeatureName` | `error` | 未知のメディア機能名を禁止します（CSS）。 |
-| `noUnknownProperty` | `error` | 未知のプロパティを禁止します（CSS）。 |
-| `noUnknownPseudoClass` | `error` | 未知の擬似クラスセレクタを禁止します（CSS）。 |
-| `noUnknownPseudoElement` | `error` | 未知の擬似要素セレクタを禁止します（CSS）。 |
-| `noUnknownTypeSelector` | `error` | 未知のタイプセレクタを禁止します（CSS）。 |
-| `noUnknownUnit` | `error` | 未知の CSS 単位を禁止します（CSS）。 |
-| `noUnmatchableAnbSelector` | `error` | マッチ不可能な An+B セレクタを禁止します（CSS）。 |
+| `noUndeclaredDependencies` | `off` | `package.json` に記載されていない依存関係の使用を禁止します。 |
+| `noUndeclaredVariables` | `error` | ドキュメント内で宣言されていない変数の使用を防ぎます。 |
+| `noUnknownFunction` | `error` | 不明な CSS 値関数の使用を禁止します（CSS）。 |
+| `noUnknownMediaFeatureName` | `error` | 不明なメディア特徴名の使用を禁止します（CSS）。 |
+| `noUnknownProperty` | `error` | 不明なプロパティの使用を禁止します（CSS）。 |
+| `noUnknownPseudoClass` | `error` | 不明な擬似クラスセレクタの使用を禁止します（CSS）。 |
+| `noUnknownPseudoElement` | `error` | 不明な擬似要素セレクタの使用を禁止します（CSS）。 |
+| `noUnknownTypeSelector` | `error` | 不明なタイプセレクタの使用を禁止します（CSS）。 |
+| `noUnknownUnit` | `error` | 不明な CSS 単位の使用を禁止します（CSS）。 |
+| `noUnmatchableAnbSelector` | `error` | マッチ不可能な An+B セレクタの使用を禁止します（CSS）。 |
 | `noUnreachable` | `error` | 到達不能コードを禁止します。 |
-| `noUnreachableSuper` | `error` | クラスのコンストラクタ内で `super()` がすべてのコードパスでちょうど一度呼ばれることを保証します。 |
-| `noUnsafeFinally` | `error` | finally ブロック内での制御フロー文を禁止します。 |
-| `noUnsafeOptionalChaining` | `error` | undefined 値が許されない文脈での optional chaining の使用を禁止します。 |
+| `noUnreachableSuper` | `error` | クラスコンストラクタ内で `super()` がアクセスされる前に各コードパスで正確に一度呼ばれることを保証します。 |
+| `noUnsafeFinally` | `error` | finally ブロック内の制御フロー文を禁止します。 |
+| `noUnsafeOptionalChaining` | `error` | undefined 値が許可されない文脈でのオプショナルチェイニングの使用を禁止します。 |
 | `noUnusedFunctionParameters` | `error` | 未使用の関数パラメータを禁止します。 |
-| `noUnusedImports` | `error` (safe fix override) | 未使用のインポートを禁止します。 |
-| `noUnusedLabels` | `error` | 未使用のラベルを禁止します。 |
-| `noUnusedPrivateClassMembers` | `error` | 未使用の private クラスメンバーを禁止します。 |
-| `noUnusedVariables` | `error` | 未使用の変数を禁止します。 |
+| `noUnusedImports` | `error` (safe fix override) | 未使用インポートを禁止します。 |
+| `noUnusedLabels` | `error` | 未使用ラベルを禁止します。 |
+| `noUnusedPrivateClassMembers` | `error` | 未使用のプライベートクラスメンバを禁止します。 |
+| `noUnusedVariables` | `error` | 未使用変数を禁止します。 |
 | `noVoidTypeReturn` | `error` | 返り値の型が `void` の関数から値を返すことを禁止します。 |
-| `useGraphqlNamedOperations` | `error` | GraphQL の操作に名前を指定することを強制します。 |
-| `useImageSize` | `error` | `<img>` 要素に幅と高さの両方の属性があることを強制します。 |
-| `useImportExtensions` | `off` | 相対インポートにファイル拡張子を要求します。 |
-| `useIsNan` | `error` | NaN をチェックする場合は `isNaN()` の呼び出しを要求します。 |
-| `useJsonImportAttributes` | `off` | JSON モジュールのインポートに `{ type: "json" }` を使用することを強制します。 |
-| `useParseIntRadix` | `error` | `parseInt()` 使用時に基数引数の一貫した使用を強制します。 |
-| `useSingleJsDocAsterisk` | `error` | JSDoc コメント行は先頭を除き単一のアスタリスクで始まることを強制します。 |
-| `useUniqueElementIds` | `off` | 要素に静的な文字列リテラル id 属性を使用することを防ぎます。 |
-| `useValidForDirection` | `error` | `for` ループの更新句がカウンタを正しい方向に移動させていることを強制します。 |
-| `useValidTypeof` | `error` | `typeof` 式の結果が有効な値と比較されていることをチェックします。 |
-| `useYield` | `error` | ジェネレータ関数に `yield` を含めることを要求します。 |
+| `useGraphqlNamedOperations` | `error` | GraphQL 操作に名前を指定することを強制します。 |
+| `useImageSize` | `error` | `<img>` 要素が幅と高さの両方の属性を持つことを強制します。 |
+| `useImportExtensions` | `off` | 相対インポートのファイル拡張子を強制します。 |
+| `useIsNan` | `error` | NaN チェック時に `isNaN()` の呼び出しを要求します。 |
+| `useJsonImportAttributes` | `off` | JSON モジュールインポートに `{ type: "json" }` を使用することを強制します。 |
+| `useParseIntRadix` | `error` | `parseInt()` 使用時に基数引数を一貫して使用することを強制します。 |
+| `useSingleJsDocAsterisk` | `error` | JSDoc コメント行は最初を除き単一のアスタリスクで始めることを強制します。 |
+| `useUniqueElementIds` | `off` | 要素の静的な文字列リテラル id 属性の使用を防ぎます。 |
+| `useValidForDirection` | `error` | `for` ループの更新節がカウンタを正しい方向に移動させることを強制します。 |
+| `useValidTypeof` | `error` | `typeof` 式の結果が有効な値と比較されているかをチェックします。 |
+| `useYield` | `error` | ジェネレータ関数が `yield` を含むことを要求します。 |
 
-### Nursery
+### Nursery（実験的）
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
 | `noContinue` | `off` | `continue` 文を禁止します。 |
-| `noDeprecatedImports` | `off` | 非推奨のエクスポートのインポートを制限します。 |
+| `noDeprecatedImports` | `off` | 廃止予定のエクスポートのインポートを制限します。 |
 | `noDuplicateDependencies` | `error` | 重複した依存関係の列挙を防ぎます。 |
+| `noDuplicatedSpreadProps` | `error` | スプレッドプロップ内の重複プロパティを禁止します。 |
 | `noEmptySource` | `error` | 空のソースファイルを禁止します。 |
-| `noFloatingPromises` | `off` | Promise に類する式を適切に扱うことを要求します。 |
+| `noEqualsToNull` | `error` | `null` との比較に `==` または `!=` を使うことを禁止します。代わりに `===` または `!==` を使用してください。 |
+| `noFloatingPromises` | `off` | Promise ライクな式は適切に処理することを要求します。 |
 | `noForIn` | `off` | for-in ループによる反復を禁止します。 |
 | `noImportCycles` | `off` | インポートサイクルを防ぎます。 |
-| `noIncrementDecrement` | `error` | `++` および `--` 演算子の使用を禁止します（for ループの後置を除く）。 |
-| `noJsxLiterals` | `off` | JSX 要素内での文字列リテラルを禁止します。 |
-| `noMisusedPromises` | `off` | 誤用されそうな場所での Promise の使用を禁止します。 |
+| `noIncrementDecrement` | `error` | `++` と `--` 演算子の使用を禁止します（for ループの後置句は例外）。 |
+| `noJsxLiterals` | `off` | JSX 要素内の文字列リテラルを禁止します。 |
+| `noLeakedRender` | `error` | JSX にレンダリングされる問題ある値（例: 0 や NaN）の流出を防ぎます。 |
+| `noMisusedPromises` | `off` | 誤用されやすい場所での Promise の使用を禁止します。 |
+| `noMultiStr` | `error` | バックスラッシュ継続による複数行文字列を禁止します。 |
 | `noParametersOnlyUsedInRecursion` | `error` | 再帰呼び出しでのみ使用されるパラメータを禁止します。 |
-| `noShadow` | `error` | 外側スコープで宣言された変数をシャドウイングする宣言を禁止します。 |
+| `noProto` | `error` | `__proto__` プロパティの使用を禁止します。 |
+| `noShadow` | `error` | 外側のスコープで宣言された変数をシャドウする宣言を禁止します。 |
 | `noSyncScripts` | `error` | 同期スクリプトの使用を防ぎます。 |
-| `noUnnecessaryConditions` | `off` | 静的に冗長と判定できる型に基づく不要な条件を禁止します。 |
-| `noUnresolvedImports` | `off` | 存在しないエクスポートをインポートすると警告します。 |
+| `noTernary` | `off` | 三項演算子を禁止します。 |
+| `noUnnecessaryConditions` | `off` | 静的に冗長であると判断できる型ベースの不要な条件を禁止します。 |
+| `noUnresolvedImports` | `off` | 存在しないエクスポートのインポート時に警告します。 |
 | `noUnusedExpressions` | `error` | 関数呼び出しでも代入でもない式文を禁止します。 |
 | `noUselessCatchBinding` | `off` | 未使用の `catch` バインディングを禁止します。 |
 | `noUselessUndefined` | `error` | 無意味な `undefined` の使用を禁止します。 |
-| `useArraySortCompare` | `off` | `Array.prototype.sort()` で比較関数の使用を強制します。 |
-| `useConsistentArrowReturn` | `error` | アロー関数の本体の一貫性を強制します。 |
+| `useArraySortCompare` | `off` | `Array.prototype.sort()` に比較関数の使用を強制します。 |
+| `useConsistentArrowReturn` | `error` | アロー関数の本文の一貫性を強制します。 |
 | `useConsistentGraphqlDescriptions` | `error` | GraphQL ファイル内のすべての説明が同じスタイル（ブロックまたはインライン）に従うことを要求します。 |
-| `useDeprecatedDate` | `error` | `@deprecated` ディレクティブには削除日を指定することを要求します。 |
-| `useExhaustiveSwitchCases` | `off` | switch-case が網羅的であることを要求します。 |
-| `useExplicitType` | `off` | 関数・メソッド・変数・パラメータに型を強制します。 |
-| `useFind` | `error` | 単一の結果を探す場合は `Array.prototype.filter()` に続く `[0]` よりも `Array.prototype.find()` を使用することを強制します。 |
-| `useMaxParams` | `error` | 関数定義のパラメータ数に最大値を強制します。 |
-| `useSortedClasses` | `error` (safe fix override) | CSS ユーティリティクラスの並び替えを強制します。 |
-| `useSpread` | `error` | `Function.prototype.apply()` よりもスプレッド演算子の使用を強制します。 |
+| `useDeprecatedDate` | `error` | `@deprecated` ディレクティブに削除日を指定することを要求します。 |
+| `useExhaustiveSwitchCases` | `off` | switch-case 文を網羅的にすることを要求します。 |
+| `useExplicitType` | `off` | 関数、メソッド、変数、パラメータに型を強制します。 |
+| `useFind` | `error` | 単一の結果を探す際に `filter()[0]` の代わりに `Array.prototype.find()` を使用することを強制します。 |
+| `useMaxParams` | `error` | 関数定義のパラメータ数の最大値を強制します。 |
+| `useSortedClasses` | `error` (safe fix override) | CSS ユーティリティクラスのソートを強制します。 |
+| `useSpread` | `error` | `Function.prototype.apply()` の代わりにスプレッド演算子の使用を強制します。 |
 | `useUniqueGraphqlOperationName` | `error` | ドキュメント内のすべての GraphQL 操作が一意の名前を持つことを保証します。 |
 
 ### パフォーマンス
@@ -273,195 +279,195 @@ npx ultracite init
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
 | `noAccumulatingSpread` | `error` | アキュムレータに対するスプレッド（`...`）構文の使用を禁止します。 |
-| `noAwaitInLoops` | `off` | ループ内での `await` の使用を禁止します。 |
+| `noAwaitInLoops` | `off` | ループ内での `await` を禁止します。 |
 | `noBarrelFile` | `error` | バレルファイルの使用を禁止します。 |
 | `noDelete` | `error` | `delete` 演算子の使用を禁止します。 |
-| `noDynamicNamespaceImportAccess` | `error` | 名前空間インポートへの動的アクセスを禁止します。 |
+| `noDynamicNamespaceImportAccess` | `error` | 名前空間インポートを動的にアクセスすることを禁止します。 |
 | `noNamespaceImport` | `error` | 名前空間インポートの使用を禁止します。 |
-| `noReExportAll` | `off` | すべてを再エクスポートすることを避けます。 |
-| `noUnwantedPolyfillio` | `error` | Polyfill.io による重複ポリフィルを防ぎます。 |
-| `useGoogleFontPreconnect` | `error` | Google Fonts を使用する際に `preconnect` 属性を使用することを保証します。 |
+| `noReExportAll` | `off` | 全ての再エクスポートを避けます。 |
+| `noUnwantedPolyfillio` | `error` | Polyfill.io からの重複ポリフィルを防ぎます。 |
+| `useGoogleFontPreconnect` | `error` | Google Fonts 使用時に `preconnect` 属性を使用することを保証します。 |
 | `useTopLevelRegex` | `error` | 正規表現リテラルをトップレベルで宣言することを要求します。 |
 
 ### セキュリティ
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noBlankTarget` | `error` | `rel="noopener"` なしの `target="_blank"` 属性を禁止します。 |
+| `noBlankTarget` | `error` | `rel="noopener"` なしでの `target="_blank"` 属性を禁止します。 |
 | `noDangerouslySetInnerHtml` | `error` | 危険な JSX プロップの使用を防ぎます。 |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | DOM 要素またはコンポーネントが children と `dangerouslySetInnerHTML` の両方を使用している場合に報告します。 |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | DOM 要素やコンポーネントが children と `dangerouslySetInnerHTML` を両方使用する場合に報告します。 |
 | `noGlobalEval` | `error` | グローバルな `eval()` の使用を禁止します。 |
 
 ### スタイル
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noCommonJs` | `off` | ESM スタイルのインポートを推奨し CommonJS の使用を禁止します。 |
+| `noCommonJs` | `off` | ESM スタイルのインポートを推奨し、Common JS モジュールシステムの使用を禁止します。 |
 | `noDefaultExport` | `off` | デフォルトエクスポートを禁止します。 |
 | `noDoneCallback` | `error` | 非同期テストやフックでのコールバック使用を禁止します。 |
 | `noEnum` | `error` | TypeScript の enum を禁止します。 |
-| `noExportedImports` | `error` | インポートされた変数をエクスポートすることを禁止します。 |
-| `noImplicitBoolean` | `off` | JSX の真偽値属性で暗黙の true 値を禁止します。 |
-| `noInferrableTypes` | `error` | リテラル式で初期化された変数やパラメータ、クラスプロパティへの型注釈を禁止します。 |
-| `noMagicNumbers` | `off` | 直接使用される「マジックナンバー」の使用を報告します（名前付き定数にすることを推奨）。 |
+| `noExportedImports` | `error` | インポートした変数をエクスポートすることを禁止します。 |
+| `noImplicitBoolean` | `off` | JSX ブール属性での暗黙的 true を禁止します。 |
+| `noInferrableTypes` | `error` | リテラル式で初期化された変数、パラメータ、クラスプロパティに対する型注釈を禁止します。 |
+| `noMagicNumbers` | `off` | "マジックナンバー"（名前付き定数に割り当てられていない直接使用された数値）の使用を報告します。 |
 | `noNamespace` | `error` | TypeScript の namespace の使用を禁止します。 |
-| `noNegationElse` | `error` | else 節を持つ if 文の条件で否定を使うことを禁止します。 |
+| `noNegationElse` | `error` | else 節がある if 文の条件で否定を使用することを禁止します。 |
 | `noNestedTernary` | `error` | ネストされた三項演算子を禁止します。 |
-| `noNonNullAssertion` | `error` | postfix `!` を使った non-null アサーションを禁止します。 |
+| `noNonNullAssertion` | `error` | postfix 演算子 `!` による非 null 断言を禁止します。 |
 | `noParameterAssign` | `error` | 関数パラメータの再代入を禁止します。 |
-| `noParameterProperties` | `error` | クラスコンストラクタのパラメータプロパティの使用を禁止します。 |
+| `noParameterProperties` | `error` | クラスコンストラクタでのパラメータプロパティの使用を禁止します。 |
 | `noProcessEnv` | `off` | `process.env` の使用を禁止します。 |
-| `noRestrictedGlobals` | `error` | アプリケーションで使用したくないグローバル変数名を指定することを可能にします。 |
-| `noRestrictedImports` | `error` | インポートまたは require による指定モジュールの使用を禁止します。 |
+| `noRestrictedGlobals` | `error` | アプリケーションで使用したくないグローバル変数名を指定できるルールです。 |
+| `noRestrictedImports` | `error` | インポートや require による指定モジュールの読み込みを禁止します。 |
 | `noRestrictedTypes` | `error` | ユーザー定義型の使用を禁止します。 |
-| `noShoutyConstants` | `error` | 名前の大文字版が値になっている定数の使用を禁止します。 |
-| `noSubstr` | `error` | `String.substr()` および `String.substring()` の代わりに `String.slice()` を使用することを強制します。 |
+| `noShoutyConstants` | `error` | 値が名前の大文字バージョンである定数の使用を禁止します。 |
+| `noSubstr` | `error` | `String.substr()` と `String.substring()` の代わりに `String.slice()` を使用することを強制します。 |
 | `noUnusedTemplateLiteral` | `error` | 補間や特殊文字処理が不要な場合のテンプレートリテラルを禁止します。 |
 | `noUselessElse` | `error` | if ブロックが早期に終了する場合の else ブロックを禁止します。 |
-| `noYodaExpression` | `error` | ヨーダ式（Yoda expressions）の使用を禁止します。 |
-| `useArrayLiterals` | `error` | `Array` コンストラクタの使用を禁止します。 |
-| `useAsConstAssertion` | `error` | リテラル型と型注釈よりも `as const` の使用を強制します。 |
+| `noYodaExpression` | `error` | ヨーダ式の使用を禁止します。 |
+| `useArrayLiterals` | `error` | `Array` コンストラクタを禁止します。 |
+| `useAsConstAssertion` | `error` | リテラル型や型注釈より `as const` の使用を強制します。 |
 | `useAtIndex` | `error` | 整数インデックスアクセスの代わりに `at()` を使用することを推奨します。 |
-| `useBlockStatements` | `error` | 中括弧の慣習に従うことを要求します。 |
-| `useCollapsedElseIf` | `error` | else 節内でのネストされた if の代わりに `else if` を使用することを強制します。 |
-| `useCollapsedIf` | `error` | ネストされた if 節の代わりに単一の if を使用することを強制します。 |
-| `useComponentExportOnlyModules` | `off` | React コンポーネントのみをエクスポートするモジュールでコンポーネントを宣言することを強制します。 |
-| `useConsistentArrayType` | `error` | `T[]` と `Array<T>` のいずれかを一貫して使用することを要求します。 |
-| `useConsistentBuiltinInstantiation` | `error` | `String`, `Number`, `Boolean` を除き、すべての組み込みには `new` を使用することを強制します。 |
-| `useConsistentCurlyBraces` | `off` | JSX 属性および子要素内での中括弧の一貫使用を強制します。 |
-| `useConsistentMemberAccessibility` | `error` | クラスのプロパティとメソッドに一貫したアクセス修飾子を要求します。 |
-| `useConsistentObjectDefinitions` | `error` | オブジェクトリテラルの宣言を一貫させることを要求します。 |
-| `useConst` | `error` | 一度だけ代入される変数には const 宣言を要求します。 |
-| `useDefaultParameterLast` | `error` | デフォルトパラメータとオプショナルパラメータは最後に配置することを強制します。 |
-| `useDefaultSwitchClause` | `error` | switch 文に `default` 節を要求します。 |
-| `useDeprecatedReason` | `error` | `@deprecated` 指示子を使用する際に理由引数を指定することを要求します。 |
-| `useEnumInitializers` | `error` | 各 enum メンバーの値を明示的に初期化することを要求します。 |
-| `useExplicitLengthCheck` | `off` | `length`, `size`, `byteLength`, `byteOffset` の明示比較を強制します。 |
-| `useExponentiationOperator` | `error` | `Math.pow` の使用を避け `**` 演算子を推奨します。 |
-| `useExportType` | `error` | 型には export type の使用を推奨します。 |
-| `useExportsLast` | `off` | すべてのエクスポートが非エクスポート文の後に宣言されることを要求します。 |
-| `useFilenamingConvention` | `error` | JavaScript および TypeScript のファイル名規約（kebab-case, ASCII）を強制します。 |
-| `useForOf` | `error` | 配列からアイテムを取り出すためにインデックスを使用している場合は for-of ループを推奨します。 |
+| `useBlockStatements` | `error` | 中括弧の規約に従うことを要求します。 |
+| `useCollapsedElseIf` | `error` | else 節内でネストした if の代わりに `else if` を使用することを強制します。 |
+| `useCollapsedIf` | `error` | ネストした if 節の代わりに単一の `if` を使用することを強制します。 |
+| `useComponentExportOnlyModules` | `off` | React コンポーネントのみをエクスポートするモジュール内でコンポーネントを宣言することを強制します。 |
+| `useConsistentArrayType` | `error` | `T[]` と `Array<T>` のどちらかを一貫して使用することを要求します。 |
+| `useConsistentBuiltinInstantiation` | `error` | `String`, `Number`, `Boolean` を除くすべての組み込みに対して new の使用を強制します。 |
+| `useConsistentCurlyBraces` | `off` | JSX 属性および子要素内での中括弧の一貫した使用を強制します。 |
+| `useConsistentMemberAccessibility` | `error` | クラスのプロパティとメソッドに対して一貫したアクセシビリティ修飾子を要求します。 |
+| `useConsistentObjectDefinitions` | `error` | オブジェクトリテラルの宣言方法を一貫させることを要求します。 |
+| `useConst` | `error` | 一度しか代入されない変数には const 宣言を要求します。 |
+| `useDefaultParameterLast` | `error` | デフォルト関数パラメータとオプショナル関数パラメータを末尾にすることを強制します。 |
+| `useDefaultSwitchClause` | `error` | switch 文で `default` 節を要求します。 |
+| `useDeprecatedReason` | `error` | `@deprecated` ディレクティブ使用時に理由引数を指定することを要求します。 |
+| `useEnumInitializers` | `error` | 各 enum メンバー値が明示的に初期化されていることを要求します。 |
+| `useExplicitLengthCheck` | `off` | 値の `length`, `size`, `byteLength`, `byteOffset` を明示的に比較することを強制します。 |
+| `useExponentiationOperator` | `error` | `Math.pow` の代わりに `**` 演算子の使用を推奨します。 |
+| `useExportType` | `error` | 型には export type の使用を促進します。 |
+| `useExportsLast` | `off` | すべてのエクスポートは非エクスポート文の後に宣言することを要求します。 |
+| `useFilenamingConvention` | `error` | JavaScript/TypeScript のファイル名規約（ケバブケース、ASCII）を強制します。 |
+| `useForOf` | `error` | for ループで配列から要素を取り出すインデックスが使われている場合は for-of を推奨します。 |
 | `useFragmentSyntax` | `error` | `<Fragment>...</Fragment>` の代わりに `<>...</>` の使用を強制します。 |
 | `useGraphqlNamingConvention` | `error` | すべての enum 値が大文字であることを検証します。 |
-| `useGroupedAccessorPairs` | `error` | 同じプロパティの getter と setter がクラスやオブジェクト定義で隣接していることを強制します。 |
-| `useImportType` | `error` | 型に対して `import type` の使用を推奨します。 |
-| `useLiteralEnumMembers` | `error` | すべての enum メンバーがリテラル値であることを要求します。 |
-| `useNamingConvention` | `off` | 命名規約ルール（無効化）。 |
+| `useGroupedAccessorPairs` | `error` | 同一プロパティの getter と setter がクラス・オブジェクト定義で隣接していることを強制します。 |
+| `useImportType` | `error` | 型に対して `import type` の使用を促進します。 |
+| `useLiteralEnumMembers` | `error` | すべての enum メンバーをリテラル値にすることを要求します。 |
+| `useNamingConvention` | `off` | 命名規約ルール（無効）。 |
 | `useNodeAssertStrict` | `error` | `node:assert/strict` の使用を `node:assert` より推奨します。 |
-| `useNodejsImportProtocol` | `error` | Node.js 組み込みモジュールに対して `node:` プロトコルの使用を強制します。 |
-| `useNumberNamespace` | `error` | グローバルなものの代わりに `Number` プロパティを使用することを推奨します。 |
-| `useNumericSeparators` | `error` | 数値リテラルに数値区切り文字を使用することを強制します。 |
-| `useObjectSpread` | `error` | 新しいオブジェクトを構築する際は `Object.assign()` よりオブジェクトスプレッドを優先します。 |
-| `useReadonlyClassProperties` | `error` | コンストラクタ外で変更されないメンバーを readonly としてマークすることを強制します。 |
-| `useSelfClosingElements` | `error` | 子要素を持たないコンポーネントでの余分な閉じタグを防ぎます。 |
-| `useShorthandAssign` | `error` | 可能な場合は代入演算子の短縮形を要求します。 |
-| `useShorthandFunctionType` | `error` | 呼び出しシグネチャを持つオブジェクト型の代わりに関数型を使用することを強制します。 |
-| `useSingleVarDeclarator` | `off` | 同一の変数文での複数変数宣言を禁止します。 |
+| `useNodejsImportProtocol` | `error` | Node.js 組み込みモジュールに `node:` プロトコルを使用することを強制します。 |
+| `useNumberNamespace` | `error` | グローバルの代わりに `Number` プロパティを使用することを推奨します。 |
+| `useNumericSeparators` | `error` | 数値リテラルでの数値区切り記法の使用を強制します。 |
+| `useObjectSpread` | `error` | 新しいオブジェクト構築時に `Object.assign()` よりオブジェクトスプレッドを優先します。 |
+| `useReadonlyClassProperties` | `error` | コンストラクタ外で変更されないメンバーには readonly を付けることを強制します。 |
+| `useSelfClosingElements` | `error` | 子を持たないコンポーネントに対する余分な閉じタグを防ぎます。 |
+| `useShorthandAssign` | `error` | 可能な場合に代入演算子の短縮形を要求します。 |
+| `useShorthandFunctionType` | `error` | call シグネチャを持つオブジェクト型の代わりに関数型を使用することを強制します。 |
+| `useSingleVarDeclarator` | `off` | 同じ変数宣言文内での複数変数宣言を禁止します。 |
 | `useSymbolDescription` | `error` | `Symbol()` に説明パラメータを要求します。 |
-| `useTemplate` | `error` | 文字列連結よりテンプレートリテラルを優先します。 |
-| `useThrowNewError` | `error` | エラーをスローする際は new を付けることを要求します。 |
-| `useThrowOnlyError` | `error` | 非 `Error` 値のスローを禁止します。 |
-| `useTrimStartEnd` | `error` | `String.trimLeft()` / `String.trimRight()` の代わりに `String.trimStart()` / `String.trimEnd()` の使用を強制します。 |
-| `useUnifiedTypeSignatures` | `error` | 単一のシグネチャに統一できるオーバーロードシグネチャを禁止します。 |
-| `noDescendingSpecificity` | `error` | 高い特異性のセレクタの後に低い特異性のセレクタが来ることを禁止します（CSS）。 |
-| `noValueAtRule` | `error` | css modules における `@value` ルールの使用を禁止します（CSS）。 |
+| `useTemplate` | `error` | 文字列連結よりテンプレートリテラルを推奨します。 |
+| `useThrowNewError` | `error` | エラーを投げる際に new を使うことを要求します。 |
+| `useThrowOnlyError` | `error` | 非 `Error` 値の投げを禁止します。 |
+| `useTrimStartEnd` | `error` | `String.trimLeft()` / `String.trimRight()` の代わりに `String.trimStart()` / `String.trimEnd()` を使用することを強制します。 |
+| `useUnifiedTypeSignatures` | `error` | 単一の署名に統合できるオーバーロード署名を禁止します。 |
+| `noDescendingSpecificity` | `error` | より高い特異性セレクタの後により低い特異性セレクタが来ることを禁止します（CSS）。 |
+| `noValueAtRule` | `error` | css modules の `@value` ルールの使用を禁止します（CSS）。 |
 
-### 疑わしいパターン (Suspicious)
+### 疑わしいパターン
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
 | `noAlert` | `error` | `alert`, `confirm`, `prompt` の使用を禁止します。 |
-| `noApproximativeNumericConstant` | `error` | 近似リテラルではなく標準的な定数を使用することを推奨します。 |
+| `noApproximativeNumericConstant` | `error` | 近似リテラルではなく標準定数を使用することを推奨します。 |
 | `noAssignInExpressions` | `error` | 式内での代入を禁止します。 |
-| `noAsyncPromiseExecutor` | `error` | Promise の実行者として async 関数を使うことを禁止します。 |
-| `noBiomeFirstException` | `error` | 設定ファイルの `files.includes` において先頭位置に `!` パターンを使用することを禁止します。 |
+| `noAsyncPromiseExecutor` | `error` | Promise のエグゼキュータとして async 関数を使うことを禁止します。 |
+| `noBiomeFirstException` | `error` | 設定ファイルの `files.includes` で先頭に `!` パターンを使用することを禁止します。 |
 | `noBitwiseOperators` | `error` | ビット演算子の使用を禁止します。 |
-| `noCatchAssign` | `error` | catch 節内での例外の再代入を禁止します。 |
-| `noClassAssign` | `error` | クラスメンバーの再代入を禁止します。 |
+| `noCatchAssign` | `error` | catch 節内で例外を再代入することを禁止します。 |
+| `noClassAssign` | `error` | クラスメンバの再代入を禁止します。 |
 | `noCommentText` | `error` | コメントがテキストノードとして挿入されることを防ぎます。 |
-| `noCompareNegZero` | `error` | `-0` との比較を禁止します。 |
-| `noConfusingLabels` | `error` | ループではないラベル付き文を禁止します。 |
-| `noConfusingVoidType` | `error` | ジェネリクスや戻り値以外での void 型の使用を禁止します。 |
+| `noCompareNegZero` | `error` | `-0` と比較することを禁止します。 |
+| `noConfusingLabels` | `error` | ループでないラベル付き文を禁止します。 |
+| `noConfusingVoidType` | `error` | ジェネリックや戻り値の型以外での void 型を禁止します。 |
 | `noConsole` | `off` | `console` の使用を禁止します。 |
 | `noConstEnum` | `error` | TypeScript の const enum を禁止します。 |
 | `noConstantBinaryExpressions` | `error` | 演算が値に影響を与えない式を禁止します。 |
-| `noControlCharactersInRegex` | `error` | 正規表現リテラル内の制御文字や制御文字にマッチする一部のエスケープを禁止します。 |
+| `noControlCharactersInRegex` | `error` | 正規表現リテラルでの制御文字や一部のエスケープシーケンスの使用を防ぎます。 |
 | `noDebugger` | `error` | `debugger` の使用を禁止します。 |
-| `noDocumentCookie` | `error` | document.cookie への直接代入を禁止します。 |
-| `noDoubleEquals` | `error` | `==` と `!=` の代わりに `===` と `!==` の使用を要求します。 |
+| `noDocumentCookie` | `error` | `document.cookie` への直接代入を禁止します。 |
+| `noDoubleEquals` | `error` | `===` および `!==` の使用を要求します。 |
 | `noDuplicateAtImportRules` | `error` | `@import` ルールの重複を禁止します（CSS）。 |
 | `noDuplicateCase` | `error` | 重複する case ラベルを禁止します。 |
-| `noDuplicateClassMembers` | `error` | 重複するクラスメンバーを禁止します。 |
-| `noDuplicateCustomProperties` | `error` | 宣言ブロック内での重複カスタムプロパティを禁止します（CSS）。 |
+| `noDuplicateClassMembers` | `error` | 重複するクラスメンバを禁止します。 |
+| `noDuplicateCustomProperties` | `error` | 宣言ブロック内のカスタムプロパティの重複を禁止します（CSS）。 |
 | `noDuplicateElseIf` | `error` | if-else-if チェーンでの重複条件を禁止します。 |
-| `noDuplicateFields` | `error` | GraphQL 操作での重複フィールドを禁止します。 |
+| `noDuplicateFields` | `error` | GraphQL 操作内での重複フィールドを禁止します。 |
 | `noDuplicateFontNames` | `error` | フォントファミリ内での重複名を禁止します（CSS）。 |
-| `noDuplicateObjectKeys` | `error` | オブジェクト内で同名のキーが二つあることを禁止します。 |
-| `noDuplicateParameters` | `error` | 重複する関数パラメータ名を禁止します。 |
-| `noDuplicateProperties` | `error` | 宣言ブロック内での重複プロパティを禁止します（CSS）。 |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | keyframe ブロック内での重複セレクタを禁止します（CSS）。 |
-| `noDuplicateTestHooks` | `error` | describe ブロック内に重複するフックがあってはなりません。 |
+| `noDuplicateObjectKeys` | `error` | オブジェクト内で同名のキーが二つ存在することを禁止します。 |
+| `noDuplicateParameters` | `error` | 関数パラメータ名の重複を禁止します。 |
+| `noDuplicateProperties` | `error` | 宣言ブロック内の重複プロパティを禁止します（CSS）。 |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | キーフレームブロック内での重複セレクタを禁止します（CSS）。 |
+| `noDuplicateTestHooks` | `error` | describe ブロック内でフックが重複してはなりません。 |
 | `noEmptyBlock` | `error` | CSS の空ブロックを禁止します（CSS）。 |
-| `noEmptyBlockStatements` | `error` | 空のブロック文および static ブロックを禁止します。 |
+| `noEmptyBlockStatements` | `error` | 空のブロックステートメントおよび static ブロックを禁止します。 |
 | `noEmptyInterface` | `error` | 空のインターフェース宣言を禁止します。 |
-| `noEvolvingTypes` | `error` | 再代入によって any 型に変化する変数を禁止します。 |
+| `noEvolvingTypes` | `error` | 再代入を通じて any 型に進化する変数を禁止します。 |
 | `noExplicitAny` | `error` | any 型の使用を禁止します。 |
-| `noExportsInTest` | `error` | テストを含むファイル内での export や module.exports の使用を禁止します。 |
-| `noExtraNonNullAssertion` | `error` | TypeScript ファイルでの非 null アサーション演算子 `!` の誤用を防ぎます。 |
+| `noExportsInTest` | `error` | テストを含むファイルでの export または module.exports の使用を禁止します。 |
+| `noExtraNonNullAssertion` | `error` | TypeScript ファイルでの非 null 断言演算子 `!` の誤用を防ぎます。 |
 | `noFallthroughSwitchClause` | `error` | switch 節のフォールスルーを禁止します。 |
-| `noFocusedTests` | `error` | 焦点化されたテスト（focused tests）を禁止します。 |
+| `noFocusedTests` | `error` | フォーカスされたテスト（focused tests）を禁止します。 |
 | `noFunctionAssign` | `error` | 関数宣言の再代入を禁止します。 |
 | `noGlobalAssign` | `error` | ネイティブオブジェクトや読み取り専用グローバル変数への代入を禁止します。 |
-| `noGlobalIsFinite` | `error` | グローバルの `isFinite` の代わりに `Number.isFinite` を使用することを推奨します。 |
-| `noGlobalIsNan` | `error` | グローバルの `isNaN` の代わりに `Number.isNaN` を使用することを推奨します。 |
-| `noImplicitAnyLet` | `error` | 変数宣言での暗黙的 any 型の使用を禁止します。 |
-| `noImportAssign` | `error` | インポートバインディングへの代入を禁止します。 |
-| `noImportantInKeyframe` | `error` | keyframe 宣言内での無効な `!important` を禁止します（CSS）。 |
+| `noGlobalIsFinite` | `error` | グローバル `isFinite` の代わりに `Number.isFinite` を使用することを推奨します。 |
+| `noGlobalIsNan` | `error` | グローバル `isNaN` の代わりに `Number.isNaN` を使用することを推奨します。 |
+| `noImplicitAnyLet` | `error` | 変数宣言での暗黙の any 型の使用を禁止します。 |
+| `noImportAssign` | `error` | インポートされたバインディングへの代入を禁止します。 |
+| `noImportantInKeyframe` | `error` | キーフレーム宣言内での無効な `!important` を禁止します（CSS）。 |
 | `noIrregularWhitespace` | `error` | 不規則な空白文字の使用を禁止します。 |
 | `noLabelVar` | `error` | 変数と同名のラベルを禁止します。 |
-| `noMisleadingCharacterClass` | `error` | 文字クラス構文で複数コードポイントから作られた文字を禁止します。 |
-| `noMisleadingInstantiator` | `error` | `new` とコンストラクタの正しい使用を強制します。 |
-| `noMisplacedAssertion` | `error` | 例えば expect のようなアサーション関数が `it()` の内部に配置されていることをチェックします。 |
+| `noMisleadingCharacterClass` | `error` | 文字クラス構文で複数コードポイントから構成される文字の使用を禁止します。 |
+| `noMisleadingInstantiator` | `error` | `new` とコンストラクタの適切な使用を強制します。 |
+| `noMisplacedAssertion` | `error` | 例: expect のような断言関数が `it()` の内部に配置されていることをチェックします。 |
 | `noMisrefactoredShorthandAssign` | `error` | 変数が両辺に現れる場合の短縮代入を禁止します。 |
-| `noOctalEscape` | `error` | 文字列リテラルでの八進エスケープシーケンスを禁止します。 |
+| `noOctalEscape` | `error` | 文字列リテラル内の八進エスケープシーケンスを禁止します。 |
 | `noPrototypeBuiltins` | `error` | `Object.prototype` のビルトインを直接使用することを禁止します。 |
 | `noQuickfixBiome` | `error` | エディタ設定ファイル内での `quickfix.biome` の使用を禁止します。 |
-| `noRedeclare` | `error` | 同一スコープ内での変数・関数・クラス・型の重複宣言を禁止します。 |
-| `noRedundantUseStrict` | `error` | 冗長な `use strict` の使用を防ぎます。 |
-| `noSelfCompare` | `error` | 両辺が完全に同一である比較を禁止します。 |
+| `noRedeclare` | `error` | 同一スコープ内での変数・関数・クラス・型の再宣言を禁止します。 |
+| `noRedundantUseStrict` | `error` | 冗長な `use strict` を防ぎます。 |
+| `noSelfCompare` | `error` | 両辺がまったく同一の比較を禁止します。 |
 | `noShadowRestrictedNames` | `error` | 制限された名前をシャドウする識別子を禁止します。 |
-| `noShorthandPropertyOverrides` | `error` | 関連する longhand プロパティを上書きする短縮プロパティを禁止します（CSS）。 |
+| `noShorthandPropertyOverrides` | `error` | 関連するロングハンドプロパティを上書きする短縮プロパティを禁止します（CSS）。 |
 | `noSkippedTests` | `error` | 無効化されたテストを禁止します。 |
-| `noSparseArray` | `error` | 穴あき配列（sparse arrays）の使用を防ぎます。 |
-| `noTemplateCurlyInString` | `error` | 通常の文字列内でテンプレートリテラルのプレースホルダ構文の使用を禁止します。 |
-| `noThenProperty` | `error` | then プロパティの使用を禁止します。 |
+| `noSparseArray` | `error` | ホールのあるスパース配列の使用を防ぎます。 |
+| `noTemplateCurlyInString` | `error` | 通常の文字列内でのテンプレートリテラルのプレースホルダ構文を禁止します。 |
+| `noThenProperty` | `error` | then プロパティを禁止します。 |
 | `noTsIgnore` | `error` | TypeScript ディレクティブ `@ts-ignore` の使用を防ぎます。 |
-| `noUnassignedVariables` | `error` | 読み取られるが決して代入されない let や var 変数を禁止します。 |
-| `noUnknownAtRules` | `error` | 未知の at-rule を禁止します（CSS）。 |
-| `noUnsafeDeclarationMerging` | `error` | インターフェースとクラス間での安全でない宣言マージを禁止します。 |
-| `noUnsafeNegation` | `error` | 安全でない否定演算子（`!`）の使用を禁止します。 |
+| `noUnassignedVariables` | `error` | 読み取りはするが代入されない let/var 変数を禁止します。 |
+| `noUnknownAtRules` | `error` | 不明なアットルールを禁止します（CSS）。 |
+| `noUnsafeDeclarationMerging` | `error` | インターフェースとクラス間の安全でない宣言マージを禁止します。 |
+| `noUnsafeNegation` | `error` | 安全でない否定（`!`）の使用を禁止します。 |
 | `noUselessEscapeInString` | `error` | 文字列リテラル内の不要なエスケープを禁止します。 |
-| `noUselessRegexBackrefs` | `error` | 常に空文字列にマッチする不要な正規表現の後方参照を禁止します。 |
+| `noUselessRegexBackrefs` | `error` | 常に空文字列にマッチする正規表現リテラル内の無意味な後方参照を禁止します。 |
 | `noVar` | `error` | `var` の使用を禁止します。 |
 | `noWith` | `error` | 非 strict コンテキストでの `with` 文を禁止します。 |
-| `useAdjacentOverloadSignatures` | `error` | 隣接していないオーバーロードシグネチャの使用を禁止します。 |
+| `useAdjacentOverloadSignatures` | `error` | 隣接していないオーバーロード署名の使用を禁止します。 |
 | `useAwait` | `error` | async 関数が `await` を利用していることを保証します。 |
 | `useBiomeIgnoreFolder` | `error` | 設定ファイルでフォルダを無視する正しい使用法を促進します。 |
-| `useDefaultSwitchClauseLast` | `error` | switch 文で default 節を最後に配置することを強制します。 |
-| `useErrorMessage` | `error` | 組み込みのエラーを作成する際にメッセージ値を渡すことを強制します。 |
+| `useDefaultSwitchClauseLast` | `error` | switch 文で default 節を末尾にすることを強制します。 |
+| `useErrorMessage` | `error` | 組み込みエラーを作成する際にメッセージ値を渡すことを強制します。 |
 | `useGetterReturn` | `error` | getter メソッドが常に値を返すことを強制します。 |
-| `useGoogleFontDisplay` | `error` | Google Fonts の推奨表示戦略の使用を強制します。 |
-| `useGuardForIn` | `error` | for-in ループに if 文を含めることを要求します。 |
+| `useGoogleFontDisplay` | `error` | Google Fonts に推奨される表示戦略の使用を強制します。 |
+| `useGuardForIn` | `error` | for-in ループに `if` 文を含めることを要求します。 |
 | `useIsArray` | `error` | `instanceof Array` の代わりに `Array.isArray()` を使用することを推奨します。 |
-| `useIterableCallbackReturn` | `error` | イテレータコールバック内で一貫した返り値を強制します。 |
-| `useNamespaceKeyword` | `error` | TypeScript の namespace 宣言に `module` キーワードの代わりに `namespace` キーワードを使用することを要求します。 |
+| `useIterableCallbackReturn` | `error` | イテラブルコールバックにおける一貫した戻り値を強制します。 |
+| `useNamespaceKeyword` | `error` | TypeScript の namespace を宣言する際に `module` キーワードの代わりに namespace キーワードを使用することを要求します。 |
 | `useNumberToFixedDigitsArgument` | `error` | `Number#toFixed()` に桁数引数を使用することを強制します。 |
-| `useStaticResponseMethods` | `error` | 可能な場合は `new Response()` の代わりに static `Response` メソッドを使用することを推奨します。 |
-| `useStrictMode` | `error` | スクリプトファイルで `use strict` ディレクティブの使用を強制します。 |
+| `useStaticResponseMethods` | `error` | 可能な場合は `new Response()` の代わりに静的な `Response` メソッドを使用することを推奨します。 |
+| `useStrictMode` | `error` | スクリプトファイルでディレクティブ `use strict` の使用を強制します。 |
 
-## 注意
+## 注記
 
-一部のルールは Scanner で実行するには遅すぎるため無効にされています。[Biome のドキュメント](https://biomejs.dev/guides/investigate-slowness/#first-things-first) にも記載されているように、プロジェクトで有効化されたルールは、より高度な解析の代償としてパフォーマンスに影響を与えることが知られています。
+Scanner と併用すると遅すぎるため無効にしているルールがあります。[Biome ドキュメント](https://biomejs.dev/guides/investigate-slowness/#first-things-first) にあるように、有効にしたプロジェクトルールはより高度な解析の代償としてパフォーマンスオーバーヘッドを引き起こすことが知られています。
 
-我々のテストでは、これらのルールが有効かどうかで 300ms と 13s の差が生じることが確認されています。
+我々のテストでは、これらのルールは 300ms と 13s のリント時間の差を生む可能性があることがわかっています。

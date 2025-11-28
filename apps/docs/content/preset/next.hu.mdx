@@ -3,7 +3,7 @@ title: Next.js
 description: Next.js-specifikus lintelési szabályok az Ultracite számára.
 ---
 
-A Next.js konfiguráció Next.js-specifikus lintelési szabályokat tartalmaz a képek optimalizálásához, a dokumentum szerkezetéhez és az App Router mintákhoz.
+A Next.js konfiguráció Next.js-specifikus lintelési szabályokat tartalmaz a képek optimalizálására, a dokumentumszerkezetre és az App Router mintákra vonatkozóan.
 
 ## Telepítés
 
@@ -17,43 +17,43 @@ Add hozzá a Next.js konfigurációt a `biome.jsonc` fájlodhoz:
 
 ## Áttekintés
 
-Ez a konfiguráció a Next.js fejlesztéséhez specifikus szabályokat ad hozzá:
+Ez a konfiguráció Next.js fejlesztésre vonatkozó szabályokat ad hozzá:
 
 - **Képoptimalizálás**: Kötelező a Next.js Image komponens használata
-- **Dokumentum szerkezete**: Megakadályozza a Next.js speciális komponensek helytelen használatát
+- **Dokumentumszerkezet**: Megakadályozza a Next.js speciális komponenseinek helytelen használatát
 - **Kliens komponensek**: Biztosítja, hogy az aszinkron kliens komponenseket helyesen kezeljék
-- **Konfigurációs fájlok**: Különleges kezelés a `next.config.*` fájlokhoz
+- **Konfigurációs fájlok**: Speciális kezelés a `next.config.*` fájlokhoz
 
 ## Next.js-specifikus szabályok
 
-### Kísérleti
+### Nursery
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
+|--------|-----------|--------|
 | `noNextAsyncClientComponent` | `error` | Megakadályozza az aszinkron kliens komponenseket Next.js-ben. A kliens komponenseknek szinkronnak kell lenniük; aszinkron műveletekhez használj szerver komponenseket. |
 
 ### Teljesítmény
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noImgElement` | `error` | Megtiltja a `<img>` HTML elem használatát. Használj helyette a Next.js `<Image>` komponenst az automatikus képoptimalizálás érdekében. |
+|--------|-----------|--------|
+| `noImgElement` | `error` | Tiltja a `<img>` HTML elem használatát. Használd helyette a Next.js `<Image>` komponenst az automatikus képoptimalizálás érdekében. |
 
 ### Stílus
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noHeadElement` | `error` | Megtiltja a `<head>` HTML elem használatát. Használd helyette a Next.js `next/head`-et vagy az App Router metadata API-ját. |
+|--------|-----------|--------|
+| `noHeadElement` | `error` | Tiltja a `<head>` HTML elem használatát. Használd helyette a Next.js `next/head`-et vagy az App Router metadata API-t. |
 
 ### Gyanús
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Megakadályozza a `next/document` importálását oldal fájlokban. A `_document.tsx` csak a `pages/_document.tsx`-ben létezzen. |
-| `noHeadImportInDocument` | `error` | Megakadályozza a `next/head` importálását `_document.tsx`-ben. Használd helyette a `next/document`-ből származó `<Head>`-et. |
+|--------|-----------|--------|
+| `noDocumentImportInPage` | `error` | Megakadályozza a `next/document` importálását oldal fájlokban. A `_document.tsx`-nek csak a `pages/_document.tsx`-ben szabad léteznie. |
+| `noHeadImportInDocument` | `error` | Megakadályozza a `next/head` importálását `_document.tsx`-ben. Használd helyette a `<Head>`-et a `next/document`-ból. |
 
 ## Konfigurációs fájl felülírások
 
-A Next.js előbeállítás különleges kezelést tartalmaz a konfigurációs fájlok és az App Router komponensei számára:
+A Next.js előbeállítás speciális kezelést tartalmaz a konfigurációs fájlokhoz és az App Router komponensekhez:
 
 ### Next.js konfigurációs fájlok
 
@@ -74,9 +74,9 @@ A Next.js előbeállítás különleges kezelést tartalmaz a konfigurációs f�
 }
 ```
 
-Ez lehetővé teszi olyan Next.js konfigurációs minták használatát, amelyek egyébként nem felelnének meg a lintelési szabályoknak.
+Ez lehetővé teszi olyan Next.js konfigurációs mintákat, amelyek egyébként nem feltétlenül mennének át a lintelési szabályokon.
 
-### App Router oldalak és elrendezések
+### App Router oldalak és layoutek
 
 ```jsonc
 {
@@ -95,4 +95,4 @@ Ez lehetővé teszi olyan Next.js konfigurációs minták használatát, amelyek
 }
 ```
 
-Az App Router oldal- és elrendezés komponensek engedélyezettek aszinkronként anélkül, hogy `await`-et igényelnének, mivel a Next.js ezeket külön kezeli a szerveroldali renderelés és az adatlekérés során.
+Az App Router oldal- és layout komponensek megengedettek aszinkronnak `await` nélkül, mivel a Next.js ezeket külön kezeli a szerveroldali renderelés és adatlekérés során.

@@ -3,11 +3,11 @@ title: Next.js
 description: Next.js-specifikke lintregler for Ultracite.
 ---
 
-The Next.js configuration has Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+Next.js-konfigurationen indeholder Next.js-specifikke lintregler for billedoptimering, dokumentstruktur og App Router-mønstre.
 
 ## Installation
 
-Add the Next.js configuration to your `biome.jsonc`:
+Tilføj Next.js-konfigurationen til din `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,32 +17,32 @@ Add the Next.js configuration to your `biome.jsonc`:
 
 ## Oversigt
 
-This configuration adds rules specific to Next.js development:
+Denne konfiguration tilføjer regler specifikke for Next.js-udvikling:
 
-- **Billedoptimering**: Enforcer brugen af Next.js Image-komponenten
-- **Dokumentstruktur**: Forhindre forkert brug af specielle Next.js-komponenter
-- **Client-komponenter**: Sikre, at asynkrone client-komponenter håndteres korrekt
-- **Konfigurationsfiler**: Særlig håndtering for `next.config.*` filer
+- **Billedoptimering**: Håndhæv brugen af Next.js Image-komponenten
+- **Dokumentstruktur**: Forhindre ukorrekt brug af Next.js specielle komponenter
+- **Client-komponenter**: Sikre at async client-komponenter håndteres korrekt
+- **Konfigurationsfiler**: Speciel håndtering for `next.config.*`-filer
 
 ## Next.js-specifikke regler
 
-### Eksperimentelle
+### Nyudviklet
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Forhindre asynkrone client-komponenter i Next.js. Client-komponenter bør være synkrone; brug server-komponenter til asynkrone operationer. |
+| `noNextAsyncClientComponent` | `error` | Forhindre async client-komponenter i Next.js. Client-komponenter bør være synkrone; brug serverkomponenter til async-operationer. |
 
-### Ydelse
+### Ydeevne
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noImgElement` | `error` | Forbyd brugen af `<img>` HTML-elementet. Brug Next.js `<Image>`-komponenten i stedet for automatisk billedoptimering. |
+| `noImgElement` | `error` | Forbyd brug af `<img>` HTML-element. Brug Next.js `<Image>`-komponenten i stedet for automatisk billedoptimering. |
 
 ### Stil
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Forbyd brugen af `<head>` HTML-elementet. Brug Next.js `next/head` eller App Router metadata-API'en i stedet. |
+| `noHeadElement` | `error` | Forbyd brug af `<head>` HTML-element. Brug Next.js `next/head` eller App Router metadata-API i stedet. |
 
 ### Mistænkelige
 
@@ -51,9 +51,9 @@ This configuration adds rules specific to Next.js development:
 | `noDocumentImportInPage` | `error` | Forhindre import af `next/document` i sidefiler. `_document.tsx` bør kun eksistere i `pages/_document.tsx`. |
 | `noHeadImportInDocument` | `error` | Forhindre import af `next/head` i `_document.tsx`. Brug `<Head>` fra `next/document` i stedet. |
 
-## Overskrivelser for konfigurationsfiler
+## Overskrivelser af konfigurationsfiler
 
-The Next.js preset includes special handling for configuration files and App Router components:
+Next.js-preset inkluderer speciel håndtering for konfigurationsfiler og App Router-komponenter:
 
 ### Next.js-konfigurationsfiler
 
@@ -74,7 +74,7 @@ The Next.js preset includes special handling for configuration files and App Rou
 }
 ```
 
-Dette tillader Next.js-konfigurationsmønstre, som normalt måske ikke ville bestå lint-reglerne.
+Dette tillader Next.js-konfigurationsmønstre, som normalt måske ikke ville bestå lint-regler.
 
 ### App Router-sider og layouts
 
@@ -95,4 +95,4 @@ Dette tillader Next.js-konfigurationsmønstre, som normalt måske ikke ville bes
 }
 ```
 
-App Router side- og layoutkomponenter må være asynkrone uden at kræve `await`, da Next.js håndterer disse særligt for server-side rendering og datahentning.
+App Router-side- og layoutkomponenter må være async uden krav om `await`, da Next.js håndterer disse særligt for server-side rendering og datahentning.

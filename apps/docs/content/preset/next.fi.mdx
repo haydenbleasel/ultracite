@@ -1,13 +1,13 @@
 ---
 title: Next.js
-description: Next.js-kohtaiset lint-säännöt Ultracitelle.
+description: Next.js-kohtaiset linttaussäännöt Ultracitea varten.
 ---
 
-Next.js-konfiguraatio sisältää Next.js-kohtaisia lint-sääntöjä kuvan optimointiin, dokumentin rakenteeseen ja App Router -malleihin.
+Next.js-konfiguraatio sisältää Next.js-kohtaisia linttaussääntöjä kuvan optimointiin, dokumentin rakenteeseen ja App Router -malleihin.
 
 ## Asennus
 
-Lisää Next.js-konfiguraatio tiedostoon `biome.jsonc`:
+Lisää Next.js-konfiguraatio `biome.jsonc`-tiedostoosi:
 
 ```jsonc title="biome.jsonc"
 {
@@ -19,43 +19,43 @@ Lisää Next.js-konfiguraatio tiedostoon `biome.jsonc`:
 
 Tämä konfiguraatio lisää Next.js-kehitykseen liittyviä sääntöjä:
 
-- **Kuvan optimointi**: Pakota Next.jsin Image komponentin käyttö
-- **Dokumentin rakenne**: Estä Next.jsin erikoiskomponenttien virheellinen käyttö
-- **Asiakaskomponentit**: Varmista, että asynkroniset asiakaskomponentit käsitellään oikein
+- **Kuvien optimointi**: Pakottaa käyttämään Next.jsin `<Image>`-komponenttia
+- **Dokumentin rakenne**: Estää Next.js:n erityiskomponenttien virheellistä käyttöä
+- **Client-komponentit**: Varmistaa, että asynkroniset client-komponentit käsitellään oikein
 - **Konfiguraatiotiedostot**: Erityiskäsittely `next.config.*`-tiedostoille
 
 ## Next.js-kohtaiset säännöt
 
-### Kokeelliset
+### Alku
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Estä asynkroniset asiakaskomponentit Next.js:ssä. Asiakaskomponenttien tulisi olla synkronisia; käytä palvelin-komponentteja asynkronisiin operaatioihin. |
+| `noNextAsyncClientComponent` | `error` | Estä asynkroniset client-komponentit Next.js:ssä. Client-komponenttien tulisi olla synkronisia; käytä palvelinkomponentteja asynkronisiin operaatioihin. |
 
 ### Suorituskyky
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noImgElement` | `error` | Estä `<img>`-HTML-elementin käyttö. Käytä Next.js:n `<Image>`-komponenttia automaattista kuvien optimointia varten. |
+| `noImgElement` | `error` | Estä `<img>`-HTML-elementin käyttö. Käytä sen sijaan Next.js:n `<Image>`-komponenttia automaattiseen kuvan optimointiin. |
 
 ### Tyyli
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Estä `<head>`-HTML-elementin käyttö. Käytä Next.js:n `next/head`-moduulia tai App Routerin metadata-APIa sen sijaan. |
+| `noHeadElement` | `error` | Estä `<head>`-HTML-elementin käyttö. Käytä sen sijaan Next.js:n `next/head`-moduulia tai App Routerin metadata-APIa. |
 
 ### Epäilyttävät
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Estä `next/document`-tuonnit sivutiedostoissa. `_document.tsx`-tiedoston tulisi sijaita vain `pages/_document.tsx`-polussa. |
-| `noHeadImportInDocument` | `error` | Estä `next/head`-tuonnin käyttö `_document.tsx`-tiedostossa. Käytä sen sijaan `<Head>`-komponenttia `next/document`-kirjastosta. |
+| `noDocumentImportInPage` | `error` | Estä `next/document`-tuonti sivutiedostoissa. `_document.tsx`-tiedoston tulisi olla olemassa vain polussa `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Estä `next/head`-tuonti `_document.tsx`-tiedostossa. Käytä sen sijaan `<Head>`-komponenttia `next/document`-moduulista. |
 
 ## Konfiguraatiotiedostojen ylikirjoitukset
 
 Next.js-esiasetus sisältää erityiskäsittelyn konfiguraatiotiedostoille ja App Router -komponenteille:
 
-### Next.js-konfiguraatiotiedostot
+### Next.js:n konfiguraatiotiedostot
 
 ```jsonc
 {
@@ -74,9 +74,9 @@ Next.js-esiasetus sisältää erityiskäsittelyn konfiguraatiotiedostoille ja Ap
 }
 ```
 
-Tämä sallii Next.js-konfiguraatiomallit, jotka eivät välttämättä täytä tavallisia lint-sääntöjä.
+Tämä mahdollistaa Next.js-konfiguraatiomallit, jotka eivät tavallisesti läpäise linttaussääntöjä.
 
-### App Router -sivut ja asettelut
+### App Router -sivut ja -asettelut
 
 ```jsonc
 {
@@ -95,4 +95,4 @@ Tämä sallii Next.js-konfiguraatiomallit, jotka eivät välttämättä täytä 
 }
 ```
 
-App Routerin sivu- ja layout-komponentit voivat olla asynkronisia ilman `await`-vaatimusta, koska Next.js käsittelee näitä erityisesti palvelinpuolen renderöintiä ja datan hakua varten.
+App Routerin sivu- ja asettelukomponentit voivat olla asynkronisia ilman `await`-vaatimusta, koska Next.js käsittelee nämä erikoisesti palvelinpuolen renderöintiä ja datan hakua varten.

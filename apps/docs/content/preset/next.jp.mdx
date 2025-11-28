@@ -1,13 +1,13 @@
 ---
 title: Next.js
-description: Next.js 固有の Ultracite 用リンティングルール。
+description: Ultracite向けの Next.js 固有のリンティングルール。
 ---
 
-Next.js の設定は、画像最適化、ドキュメント構造、App Router パターンに関する Next.js 固有のリンティングルールを含みます。
+The Next.js 構成には、画像最適化、ドキュメント構造、App Router のパターンに関する Next.js 固有のリンティングルールが含まれます。
 
 ## インストール
 
-Next.js の設定を `biome.jsonc` に追加してください:
+Next.js 構成をあなたの `biome.jsonc` に追加してください:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,45 +17,45 @@ Next.js の設定を `biome.jsonc` に追加してください:
 
 ## 概要
 
-この設定は Next.js 開発に特化した以下のルールを追加します:
+この構成は Next.js 開発に特化したルールを追加します:
 
-- **Image Optimization**: Next.js の Image コンポーネントの使用を強制します
-- **Document Structure**: Next.js の特別なコンポーネントの不適切な使用を防ぎます
-- **Client Components**: 非同期のクライアントコンポーネントが正しく扱われることを保証します
-- **Configuration Files**: `next.config.*` ファイルの特別な取り扱い
+- **画像の最適化**: Next.js の Image コンポーネントの使用を強制する
+- **ドキュメント構造**: Next.js の特殊コンポーネントの不適切な使用を防ぐ
+- **クライアントコンポーネント**: 非同期のクライアントコンポーネントが正しく扱われることを保証する
+- **設定ファイル**: `next.config.*` ファイルに対する特別な扱い
 
 ## Next.js 固有のルール
 
-### 実験的
+### ナーサリー
 
 | ルール | 設定 | 説明 |
-|--------|------|------|
-| `noNextAsyncClientComponent` | `error` | Next.js での非同期クライアントコンポーネントを防ぎます。クライアントコンポーネントは同期であるべきであり、非同期処理にはサーバーコンポーネントを使用してください。 |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Next.js における非同期のクライアントコンポーネントを防止します。クライアントコンポーネントは同期であるべきで、非同期の処理はサーバーコンポーネントを使用してください。 |
 
 ### パフォーマンス
 
 | ルール | 設定 | 説明 |
-|--------|------|------|
-| `noImgElement` | `error` | `<img>` HTML 要素の使用を禁止します。自動画像最適化のために Next.js の `<Image>` コンポーネントを使用してください。 |
+|------|---------|-------------|
+| `noImgElement` | `error` | `<img>` HTML 要素の使用を禁止します。自動画像最適化のため、代わりに Next.js の `<Image>` コンポーネントを使用してください。 |
 
 ### スタイル
 
 | ルール | 設定 | 説明 |
-|--------|------|------|
-| `noHeadElement` | `error` | `<head>` HTML 要素の使用を禁止します。代わりに `next/head` または App Router のメタデータ API を使用してください。 |
+|------|---------|-------------|
+| `noHeadElement` | `error` | `<head>` HTML 要素の使用を禁止します。代わりに Next.js の `next/head` または App Router の metadata API を使用してください。 |
 
 ### 疑わしい
 
 | ルール | 設定 | 説明 |
-|--------|------|------|
-| `noDocumentImportInPage` | `error` | ページファイル内で `next/document` をインポートすることを防ぎます。`_document.tsx` は `pages/_document.tsx` にのみ存在するべきです。 |
-| `noHeadImportInDocument` | `error` | `_document.tsx` 内で `next/head` をインポートすることを防ぎます。代わりに `next/document` からの `<Head>` を使用してください。 |
+|------|---------|-------------|
+| `noDocumentImportInPage` | `error` | ページファイルで `next/document` をインポートすることを防ぎます。`_document.tsx` は `pages/_document.tsx` にのみ存在するべきです。 |
+| `noHeadImportInDocument` | `error` | `_document.tsx` で `next/head` をインポートすることを防ぎます。代わりに `next/document` からの `<Head>` を使用してください。 |
 
 ## 設定ファイルのオーバーライド
 
-Next.js プリセットは、設定ファイルと App Router コンポーネントに対する特別な扱いを含みます:
+Next.js プリセットには設定ファイルや App Router コンポーネントに対する特別な扱いが含まれます:
 
-### Next.js 設定ファイル
+### Next.js 構成ファイル
 
 ```jsonc
 {
@@ -74,9 +74,9 @@ Next.js プリセットは、設定ファイルと App Router コンポーネン
 }
 ```
 
-これは、通常のリンティングルールでは通らない可能性がある Next.js の設定パターンを許可します。
+これは通常のリンティングルールを通過しない可能性のある Next.js の設定パターンを許容します。
 
-### App Router ページとレイアウト
+### App Router のページとレイアウト
 
 ```jsonc
 {
@@ -95,4 +95,4 @@ Next.js プリセットは、設定ファイルと App Router コンポーネン
 }
 ```
 
-App Router のページおよびレイアウトコンポーネントは、Next.js がサーバーサイドレンダリングとデータフェッチを特別に扱うため、`await` を必須とせずに非同期であることが許可されています。
+App Router のページおよびレイアウトコンポーネントは、`await` を要求されることなく非同期にすることが許可されます。Next.js はこれらをサーバーサイドレンダリングやデータフェッチ用に特別に処理します。

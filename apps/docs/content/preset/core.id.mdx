@@ -1,13 +1,13 @@
 ---
 title: Inti
-description: Konfigurasi dasar Ultracite dengan aturan linting yang tidak tergantung pada kerangka kerja.
+description: Konfigurasi dasar Ultracite dengan aturan linting yang tidak tergantung pada framework.
 ---
 
-Konfigurasi inti Ultracite menyediakan serangkaian aturan linting dan pengaturan pemformatan yang komprehensif dan tidak bergantung pada kerangka kerja. Ini adalah dasar yang diperluas oleh semua konfigurasi spesifik kerangka kerja lainnya.
+Konfigurasi inti Ultracite menyediakan sekumpulan aturan linting dan pengaturan format yang tidak tergantung pada framework secara menyeluruh. Ini adalah fondasi yang diperluas oleh semua konfigurasi spesifik framework lainnya.
 
 ## Instalasi
 
-Konfigurasi inti otomatis disertakan ketika Anda menjalankan:
+Konfigurasi inti disertakan secara otomatis saat Anda menjalankan:
 
 ```bash
 npx ultracite init
@@ -21,7 +21,7 @@ Atau tambahkan secara manual ke `biome.jsonc` Anda:
 }
 ```
 
-## Gambaran Umum
+## Ikhtisar
 
 Konfigurasi inti mencakup ratusan aturan linting ketat yang meliputi:
 
@@ -31,17 +31,17 @@ Konfigurasi inti mencakup ratusan aturan linting ketat yang meliputi:
 - **Performa**: Mengoptimalkan kode untuk performa runtime yang lebih baik
 - **Keamanan**: Mencegah kerentanan keamanan
 - **Gaya**: Menegakkan gaya kode yang konsisten
-- **Mencurigakan**: Menangkap pola mencurigakan yang mungkin menunjukkan bug
+- **Mencurigakan**: Menangkap pola mencurigakan yang mungkin mengindikasikan bug
 
 ## Pengaturan Formatter
 
 - **Indentasi**: 2 spasi
 - **Lebar Baris**: 80 karakter
 - **Akhir Baris**: LF (gaya Unix)
-- **Titik koma**: Selalu diperlukan
-- **Tanda kutip**: Tanda kutip ganda untuk JavaScript/TypeScript dan JSON
-- **Koma akhir**: Gaya ES5 (array/objek multi-baris)
-- **Kurung untuk Arrow**: Selalu sertakan kurung
+- **Titik Koma**: Selalu diperlukan
+- **Kutipan**: Kutipan ganda untuk JavaScript/TypeScript dan JSON
+- **Koma Akhir**: Gaya ES5 (array/objek multi-baris)
+- **Kata Kunci Panah (Arrow Parentheses)**: Selalu sertakan tanda kurung
 
 ## Fitur Utama
 
@@ -50,27 +50,27 @@ Konfigurasi inti mencakup ratusan aturan linting ketat yang meliputi:
 Konfigurasi inti mengaktifkan pemeriksaan ketat TypeScript:
 
 - Menganjurkan untuk tidak menggunakan `any` (`noExplicitAny: error`)
-- Memerlukan penanganan `null/undefined`
-- Memilih tipe eksplisit dalam situasi tertentu
+- Memerlukan penanganan untuk `null/undefined`
+- Memprioritaskan tipe eksplisit dalam situasi tertentu
 - Menegakkan keselamatan tipe di seluruh basis kode
 
-### Padanan yang Direkomendasikan ESLint
+### Ekivalen Rekomendasi ESLint
 
 Aturan praktik terbaik umum disertakan:
 
-- Tidak ada variabel tak terpakai (`noUnusedVariables: error`)
-- Tidak ada impor tak terpakai (`noUnusedImports: error`)
-- Tidak ada eval eksplisit (`noGlobalEval: error`)
+- Tidak ada variabel yang tidak terpakai (`noUnusedVariables: error`)
+- Tidak ada impor yang tidak terpakai (`noUnusedImports: error`)
+- Tidak ada penggunaan eval secara eksplisit (`noGlobalEval: error`)
 - Tidak ada prototype pollution (`noPrototypeBuiltins: error`)
 
 ### Aksesibilitas Secara Default
 
-Aturan yang setara dengan standar aksesibilitas:
+Aturan setara dengan standar aksesibilitas:
 
 - Atribut ARIA harus valid
-- Elemen HTML semantik lebih disarankan
-- Dukungan navigasi keyboard diperlukan
-- Teks alt untuk gambar diperlukan
+- Elemen HTML semantik lebih disukai
+- Dukungan navigasi keyboard diwajibkan
+- Teks alt untuk gambar diwajibkan
 
 ### Dukungan Node.js
 
@@ -78,56 +78,56 @@ Penanganan khusus lingkungan:
 
 - Mengenali global Node.js (`module`, `process`)
 - Menegakkan protokol `node:` untuk modul bawaan
-- Mendukung baik CommonJS maupun ESM
+- Mendukung CommonJS dan ESM
 
 ## Referensi Aturan Lengkap
 
 ### Aksesibilitas (a11y)
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noAccessKey` | `error` | Menegakkan bahwa atribut `accessKey` tidak digunakan pada elemen HTML mana pun. |
 | `noAriaHiddenOnFocusable` | `error` | Menegakkan bahwa `aria-hidden="true"` tidak disetel pada elemen yang dapat difokuskan. |
-| `noAriaUnsupportedElements` | `error` | Menegakkan bahwa elemen yang tidak mendukung peran, status, dan properti ARIA tidak memiliki atribut tersebut. |
+| `noAriaUnsupportedElements` | `error` | Menegakkan bahwa elemen yang tidak mendukung peran, status, dan properti ARIA tidak memiliki atribut-atribut tersebut. |
 | `noAutofocus` | `off` | Menegakkan bahwa properti `autoFocus` tidak digunakan pada elemen. |
 | `noDistractingElements` | `error` | Menegakkan bahwa tidak ada elemen yang mengganggu yang digunakan. |
 | `noHeaderScope` | `error` | Properti scope harus digunakan hanya pada elemen `<th>`. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Menegakkan bahwa peran ARIA non-interaktif tidak ditetapkan pada elemen HTML interaktif. |
-| `noLabelWithoutControl` | `error` | Menegakkan bahwa elemen atau komponen label memiliki teks label dan input terkait. |
-| `noNoninteractiveElementInteractions` | `error` | Melarang penggunaan event handler pada elemen non-interaktif. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Menegakkan bahwa peran ARIA interaktif tidak ditetapkan pada elemen HTML non-interaktif. |
-| `noNoninteractiveTabindex` | `error` | Menegakkan bahwa `tabIndex` tidak ditetapkan ke elemen HTML non-interaktif. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Menegakkan bahwa peran ARIA non-interaktif tidak diberikan pada elemen HTML interaktif. |
+| `noLabelWithoutControl` | `error` | Menegakkan bahwa elemen atau komponen label memiliki label teks dan input terkait. |
+| `noNoninteractiveElementInteractions` | `error` | Melarang penggunaan handler event pada elemen non-interaktif. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Menegakkan bahwa peran ARIA interaktif tidak diberikan pada elemen HTML non-interaktif. |
+| `noNoninteractiveTabindex` | `error` | Menegakkan bahwa `tabIndex` tidak diberikan pada elemen HTML non-interaktif. |
 | `noPositiveTabindex` | `error` | Mencegah penggunaan bilangan bulat positif pada properti `tabIndex`. |
-| `noRedundantAlt` | `error` | Menegakkan bahwa properti alt pada img tidak mengandung kata `image`, `picture`, atau `photo`. |
-| `noRedundantRoles` | `error` | Menegakkan bahwa properti role eksplisit tidak sama dengan peran implisit/default pada sebuah elemen. |
+| `noRedundantAlt` | `error` | Menegakkan bahwa properti alt pada img tidak berisi kata `image`, `picture`, atau `photo`. |
+| `noRedundantRoles` | `error` | Menegakkan bahwa properti role eksplisit tidak sama dengan role implisit/default pada sebuah elemen. |
 | `noStaticElementInteractions` | `error` | Menegakkan bahwa elemen statis yang terlihat (seperti `<div>`) yang memiliki handler klik menggunakan atribut role yang valid. |
 | `noSvgWithoutTitle` | `error` | Menegakkan penggunaan elemen title untuk elemen `svg`. |
 | `useAltText` | `error` | Menegakkan bahwa semua elemen yang memerlukan teks alternatif memiliki informasi bermakna untuk disampaikan kepada pengguna akhir. |
-| `useAnchorContent` | `error` | Menegakkan bahwa anchor memiliki konten dan kontennya dapat diakses oleh screen reader. |
-| `useAriaActivedescendantWithTabindex` | `error` | Menegakkan bahwa `tabIndex` ditetapkan ke elemen HTML non-interaktif dengan aria-activedescendant. |
-| `useAriaPropsForRole` | `error` | Menegakkan bahwa elemen dengan peran ARIA harus memiliki semua atribut ARIA yang diwajibkan untuk peran tersebut. |
+| `useAnchorContent` | `error` | Menegakkan bahwa anchor memiliki konten dan bahwa konten dapat diakses oleh pembaca layar. |
+| `useAriaActivedescendantWithTabindex` | `error` | Menegakkan bahwa `tabIndex` diberikan pada elemen HTML non-interaktif yang menggunakan aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Menegakkan bahwa elemen dengan peran ARIA harus memiliki semua atribut ARIA yang diperlukan untuk peran tersebut. |
 | `useAriaPropsSupportedByRole` | `error` | Menegakkan bahwa properti ARIA valid untuk peran yang didukung oleh elemen. |
 | `useButtonType` | `error` | Menegakkan penggunaan atribut `type` untuk elemen button. |
 | `useFocusableInteractive` | `error` | Elemen dengan peran interaktif dan handler interaksi harus dapat difokuskan. |
-| `useHeadingContent` | `error` | Menegakkan bahwa elemen heading (`h1`, `h2`, dll.) memiliki konten dan konten tersebut dapat diakses oleh screen reader. |
+| `useHeadingContent` | `error` | Menegakkan bahwa elemen heading (`h1`, `h2`, dll.) memiliki konten dan bahwa konten dapat diakses oleh pembaca layar. |
 | `useHtmlLang` | `error` | Menegakkan bahwa elemen `html` memiliki atribut `lang`. |
 | `useIframeTitle` | `error` | Menegakkan penggunaan atribut title untuk elemen iframe. |
 | `useKeyWithClickEvents` | `error` | Menegakkan bahwa `onClick` disertai setidaknya salah satu dari: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
 | `useKeyWithMouseEvents` | `error` | Menegakkan bahwa `onMouseOver` / `onMouseOut` disertai oleh `onFocus` / `onBlur`. |
 | `useMediaCaption` | `error` | Menegakkan bahwa elemen audio dan video harus memiliki track untuk caption. |
 | `useSemanticElements` | `error` | Mendeteksi penggunaan atribut role di elemen JSX dan menyarankan penggunaan elemen semantik sebagai gantinya. |
-| `useValidAnchor` | `error` | Menegakkan bahwa semua anchor valid dan dapat dinavigasi. |
+| `useValidAnchor` | `error` | Menegakkan bahwa semua anchor valid, dan merupakan elemen yang dapat dinavigasi. |
 | `useValidAriaProps` | `error` | Memastikan bahwa properti ARIA `aria-*` semuanya valid. |
-| `useValidAriaRole` | `error` | Elemen dengan peran ARIA harus menggunakan peran ARIA yang valid dan bukan abstrak. |
+| `useValidAriaRole` | `error` | Elemen dengan peran ARIA harus menggunakan peran ARIA yang valid dan non-abstract. |
 | `useValidAriaValues` | `error` | Menegakkan bahwa nilai status dan properti ARIA valid. |
 | `useValidAutocomplete` | `error` | Gunakan nilai yang valid untuk atribut autocomplete pada elemen input. |
-| `useValidLang` | `error` | Memastikan bahwa atribut yang diberikan pada atribut `lang` adalah kode bahasa ISO dan/atau negara yang benar. |
-| `useGenericFontNames` | `error` | Melarang tidak adanya kata kunci family generik dalam keluarga font (CSS). |
+| `useValidLang` | `error` | Memastikan bahwa atribut yang diberikan pada atribut `lang` adalah kode bahasa dan/atau negara ISO yang benar. |
+| `useGenericFontNames` | `error` | Melarang tidak adanya kata kunci family generik dalam daftar family font (CSS). |
 
 ### Kompleksitas
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noAdjacentSpacesInRegex` | `error` | Melarang penggunaan yang tidak jelas dari karakter spasi berturut-turut dalam literal ekspresi reguler. |
 | `noArguments` | `error` | Melarang penggunaan arguments. |
 | `noBannedTypes` | `error` | Melarang alias tipe primitif dan tipe yang menyesatkan. |
@@ -135,63 +135,63 @@ Penanganan khusus lingkungan:
 | `noEmptyTypeParameters` | `error` | Melarang parameter tipe kosong dalam alias tipe dan interface. |
 | `noExcessiveCognitiveComplexity` | `error` | Melarang fungsi yang melebihi skor Cognitive Complexity tertentu. |
 | `noExcessiveLinesPerFunction` | `off` | Membatasi jumlah baris kode dalam sebuah fungsi. |
-| `noExcessiveNestedTestSuites` | `error` | Aturan ini menegakkan kedalaman maksimum untuk nested `describe()` dalam berkas pengujian. |
-| `noExtraBooleanCast` | `error` | Melarang cast boolean yang tidak perlu. |
+| `noExcessiveNestedTestSuites` | `error` | Aturan ini menegakkan kedalaman maksimal untuk nested `describe()` di file test. |
+| `noExtraBooleanCast` | `error` | Melarang casting boolean yang tidak perlu. |
 | `noFlatMapIdentity` | `error` | Melarang penggunaan callback yang tidak perlu pada flatMap. |
-| `noForEach` | `error` | Lebih menyukai pernyataan `for...of` daripada `Array.forEach`. |
-| `noImplicitCoercions` | `off` | Melarang konversi tipe singkat. |
-| `noImportantStyles` | `off` | Melarang penggunaan gaya `!important` (CSS). |
-| `noStaticOnlyClass` | `error` | Aturan ini melaporkan ketika sebuah kelas tidak memiliki anggota non-statik. |
-| `noThisInStatic` | `error` | Melarang `this` dan `super` dalam konteks statis. |
+| `noForEach` | `error` | Menganjurkan `for...of` daripada `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Melarang konversi tipe shorthand. |
+| `noImportantStyles` | `off` | Melarang penggunaan style `!important` (CSS). |
+| `noStaticOnlyClass` | `error` | Aturan ini melaporkan ketika sebuah kelas tidak memiliki anggota non-static. |
+| `noThisInStatic` | `error` | Melarang `this` dan `super` dalam konteks static. |
 | `noUselessCatch` | `error` | Melarang klausa catch yang tidak perlu. |
 | `noUselessConstructor` | `error` | Melarang konstruktor yang tidak perlu. |
 | `noUselessContinue` | `error` | Menghindari penggunaan continue yang tidak perlu. |
-| `noUselessEmptyExport` | `error` | Melarang ekspor kosong yang tidak mengubah apa pun dalam berkas modul. |
+| `noUselessEmptyExport` | `error` | Melarang ekspor kosong yang tidak mengubah apa pun di file modul. |
 | `noUselessEscapeInRegex` | `error` | Melarang urutan escape yang tidak perlu dalam literal ekspresi reguler. |
-| `noUselessFragments` | `error` | Melarang fragmen yang tidak perlu. |
+| `noUselessFragments` | `error` | Melarang fragment yang tidak perlu. |
 | `noUselessLabel` | `error` | Melarang label yang tidak perlu. |
 | `noUselessLoneBlockStatements` | `error` | Melarang pernyataan blok bersarang yang tidak perlu. |
-| `noUselessRename` | `error` | Melarang penggantian nama import, export, dan penugasan destrukturisasi ke nama yang sama. |
-| `noUselessStringConcat` | `error` | Melarang konkatenasi string atau template literal yang tidak perlu. |
-| `noUselessStringRaw` | `error` | Melarang penggunaan `String.raw` yang tidak perlu pada template string tanpa urutan escape. |
-| `noUselessSwitchCase` | `error` | Melarang case yang tidak berguna pada pernyataan switch. |
+| `noUselessRename` | `error` | Melarang mengganti nama impor, ekspor, dan penugasan destrukturisasi menjadi nama yang sama. |
+| `noUselessStringConcat` | `error` | Melarang penggabungan string atau template literal yang tidak perlu. |
+| `noUselessStringRaw` | `error` | Melarang penggunaan fungsi `String.raw` yang tidak perlu dalam template string tanpa escape sequence. |
+| `noUselessSwitchCase` | `error` | Melarang case yang tidak berguna dalam pernyataan switch. |
 | `noUselessTernary` | `error` | Melarang operator ternary ketika alternatif yang lebih sederhana tersedia. |
 | `noUselessThisAlias` | `error` | Melarang alias `this` yang tidak berguna. |
-| `noUselessTypeConstraint` | `error` | Melarang penggunaan `any` atau `unknown` sebagai batas tipe. |
-| `noUselessUndefinedInitialization` | `error` | Melarang menginisialisasi variabel ke `undefined`. |
+| `noUselessTypeConstraint` | `error` | Melarang penggunaan `any` atau `unknown` sebagai batasan tipe. |
+| `noUselessUndefinedInitialization` | `error` | Melarang inisialisasi variabel ke `undefined`. |
 | `noVoid` | `error` | Melarang penggunaan operator `void`, yang bukan operator yang umum. |
-| `useArrowFunction` | `error` | Gunakan arrow function daripada function expression. |
+| `useArrowFunction` | `error` | Gunakan arrow function daripada function expressions. |
 | `useDateNow` | `error` | Gunakan `Date.now()` untuk mendapatkan jumlah milidetik sejak Unix Epoch. |
 | `useFlatMap` | `error` | Menganjurkan penggunaan `.flatMap()` ketika `map().flat()` digunakan bersama. |
-| `useIndexOf` | `error` | Lebih memilih `Array#{indexOf,lastIndexOf}()` dibanding `Array#{findIndex,findLastIndex}()` saat mencari indeks item. |
+| `useIndexOf` | `error` | Memilih `Array#{indexOf,lastIndexOf}()` daripada `Array#{findIndex,findLastIndex}()` saat mencari indeks item. |
 | `useLiteralKeys` | `error` | Menegakkan penggunaan akses literal ke properti daripada akses properti terkomputasi. |
 | `useNumericLiterals` | `error` | Melarang `parseInt()` dan `Number.parseInt()` demi literal biner, oktal, dan heksadesimal. |
-| `useOptionalChain` | `error` | Menegakkan penggunaan optional chain yang ringkas daripada ekspresi logika berantai. |
+| `useOptionalChain` | `error` | Menegakkan penggunaan optional chaining yang ringkas daripada ekspresi logika berantai. |
 | `useRegexLiterals` | `error` | Menegakkan penggunaan literal ekspresi reguler daripada konstruktor `RegExp` jika memungkinkan. |
-| `useSimpleNumberKeys` | `error` | Melarang nama anggota objek literal angka yang bukan basis 10 atau menggunakan underscore sebagai pemisah. |
-| `useSimplifiedLogicExpression` | `error` | Menghapus istilah redundan dari ekspresi logika. |
-| `useWhile` | `error` | Menegakkan penggunaan while daripada for ketika ekspresi inisialisasi dan pembaruan tidak diperlukan. |
+| `useSimpleNumberKeys` | `error` | Melarang nama anggota objek berupa literal angka yang bukan basis 10 atau menggunakan underscore sebagai pemisah. |
+| `useSimplifiedLogicExpression` | `error` | Menghapus istilah yang berlebihan dari ekspresi logika. |
+| `useWhile` | `error` | Menegakkan penggunaan while daripada for ketika inisialisator dan ekspresi pembaruan tidak diperlukan. |
 
 ### Ketepatan
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
-| `noConstAssign` | `error` | Mencegah variabel const di-assign ulang. |
-| `noConstantCondition` | `error` | Melarang ekspresi konstanta dalam kondisi. |
-| `noConstantMathMinMaxClamp` | `error` | Melarang penggunaan `Math.min` dan `Math.max` untuk membatasi nilai ketika hasilnya sendiri konstan. |
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
+| `noConstAssign` | `error` | Mencegah variabel const di-reassign. |
+| `noConstantCondition` | `error` | Melarang ekspresi konstan dalam kondisi. |
+| `noConstantMathMinMaxClamp` | `error` | Melarang penggunaan `Math.min` dan `Math.max` untuk meng-clamp nilai ketika hasilnya sendiri konstan. |
 | `noConstructorReturn` | `error` | Melarang mengembalikan nilai dari konstruktor. |
 | `noEmptyCharacterClassInRegex` | `error` | Melarang kelas karakter kosong dalam literal ekspresi reguler. |
 | `noEmptyPattern` | `error` | Melarang pola destrukturisasi kosong. |
 | `noGlobalDirnameFilename` | `error` | Melarang penggunaan `__dirname` dan `__filename` di scope global. |
 | `noGlobalObjectCalls` | `error` | Melarang memanggil properti objek global sebagai fungsi. |
 | `noInnerDeclarations` | `error` | Melarang deklarasi function dan `var` yang dapat diakses di luar bloknya. |
-| `noInvalidBuiltinInstantiation` | `error` | Memastikan bahwa builtin diinstansiasi dengan benar. |
-| `noInvalidConstructorSuper` | `error` | Mencegah penggunaan `super()` yang salah di dalam kelas. |
+| `noInvalidBuiltinInstantiation` | `error` | Memastikan bahwa builtins diinstansiasi dengan benar. |
+| `noInvalidConstructorSuper` | `error` | Mencegah penggunaan `super()` yang tidak benar di dalam kelas. |
 | `noInvalidDirectionInLinearGradient` | `error` | Melarang nilai arah non-standar untuk fungsi linear gradient (CSS). |
 | `noInvalidGridAreas` | `error` | Melarang area grid bernama yang tidak valid dalam CSS Grid Layouts (CSS). |
-| `noInvalidPositionAtImportRule` | `error` | Melarang penggunaan at-rule `@import` pada posisi yang tidak valid (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Melarang penggunaan at-rule `@import` di posisi yang tidak valid (CSS). |
 | `noInvalidUseBeforeDeclaration` | `error` | Melarang penggunaan variabel dan parameter fungsi sebelum deklarasinya. |
-| `noMissingVarFunction` | `error` | Melarang fungsi var yang hilang untuk variabel css (CSS). |
+| `noMissingVarFunction` | `error` | Melarang ketiadaan fungsi var untuk variabel CSS (CSS). |
 | `noNodejsModules` | `off` | Melarang penggunaan modul bawaan Node.js. |
 | `noNonoctalDecimalEscape` | `error` | Melarang urutan escape `\8` dan `\9` dalam literal string. |
 | `noPrecisionLoss` | `error` | Melarang angka literal yang kehilangan presisi. |
@@ -200,268 +200,274 @@ Penanganan khusus lingkungan:
 | `noRestrictedElements` | `error` | Melarang penggunaan elemen yang dikonfigurasi. |
 | `noSelfAssign` | `error` | Melarang penugasan di mana kedua sisi persis sama. |
 | `noSetterReturn` | `error` | Melarang mengembalikan nilai dari setter. |
-| `noStringCaseMismatch` | `error` | Melarang perbandingan ekspresi yang memodifikasi case string dengan nilai yang tidak sesuai. |
-| `noSwitchDeclarations` | `error` | Melarang deklarasi leksikal dalam klausul switch. |
+| `noStringCaseMismatch` | `error` | Melarang perbandingan ekspresi yang memodifikasi kasus string dengan nilai yang tidak sesuai. |
+| `noSwitchDeclarations` | `error` | Melarang deklarasi leksikal di clause switch. |
 | `noUndeclaredDependencies` | `off` | Melarang penggunaan dependensi yang tidak tercantum di `package.json`. |
 | `noUndeclaredVariables` | `error` | Mencegah penggunaan variabel yang belum dideklarasikan di dalam dokumen. |
-| `noUnknownFunction` | `error` | Melarang fungsi nilai CSS yang tidak diketahui (CSS). |
-| `noUnknownMediaFeatureName` | `error` | Melarang nama fitur media yang tidak diketahui (CSS). |
-| `noUnknownProperty` | `error` | Melarang properti yang tidak diketahui (CSS). |
-| `noUnknownPseudoClass` | `error` | Melarang selector pseudo-class yang tidak diketahui (CSS). |
-| `noUnknownPseudoElement` | `error` | Melarang selector pseudo-element yang tidak diketahui (CSS). |
-| `noUnknownTypeSelector` | `error` | Melarang selector tipe yang tidak diketahui (CSS). |
-| `noUnknownUnit` | `error` | Melarang unit CSS yang tidak diketahui (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Melarang selector An+B yang tidak dapat dipasangkan (CSS). |
+| `noUnknownFunction` | `error` | Melarang fungsi nilai CSS yang tidak dikenal (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Melarang nama fitur media yang tidak dikenal (CSS). |
+| `noUnknownProperty` | `error` | Melarang properti yang tidak dikenal (CSS). |
+| `noUnknownPseudoClass` | `error` | Melarang selector pseudo-class yang tidak dikenal (CSS). |
+| `noUnknownPseudoElement` | `error` | Melarang selector pseudo-element yang tidak dikenal (CSS). |
+| `noUnknownTypeSelector` | `error` | Melarang type selector yang tidak dikenal (CSS). |
+| `noUnknownUnit` | `error` | Melarang unit CSS yang tidak dikenal (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Melarang selector An+B yang tidak bisa dicocokkan (CSS). |
 | `noUnreachable` | `error` | Melarang kode yang tidak dapat dijangkau. |
-| `noUnreachableSuper` | `error` | Memastikan `super()` dipanggil tepat satu kali pada setiap jalur kode dalam konstruktor kelas sebelum ini diakses. |
-| `noUnsafeFinally` | `error` | Melarang pernyataan alur kontrol di blok finally. |
-| `noUnsafeOptionalChaining` | `error` | Melarang penggunaan optional chaining pada konteks di mana nilai undefined tidak diperbolehkan. |
-| `noUnusedFunctionParameters` | `error` | Melarang parameter fungsi yang tidak digunakan. |
-| `noUnusedImports` | `error` (safe fix override) | Melarang impor yang tidak digunakan. |
-| `noUnusedLabels` | `error` | Melarang label yang tidak digunakan. |
-| `noUnusedPrivateClassMembers` | `error` | Melarang anggota kelas privat yang tidak digunakan. |
-| `noUnusedVariables` | `error` | Melarang variabel yang tidak digunakan. |
+| `noUnreachableSuper` | `error` | Memastikan `super()` dipanggil tepat sekali pada setiap jalur kode di konstruktor kelas sebelum ini diakses. |
+| `noUnsafeFinally` | `error` | Melarang pernyataan kontrol alur di blok finally. |
+| `noUnsafeOptionalChaining` | `error` | Melarang penggunaan optional chaining di konteks di mana nilai undefined tidak diperbolehkan. |
+| `noUnusedFunctionParameters` | `error` | Melarang parameter fungsi yang tidak terpakai. |
+| `noUnusedImports` | `error` (safe fix override) | Melarang impor yang tidak terpakai. |
+| `noUnusedLabels` | `error` | Melarang label yang tidak terpakai. |
+| `noUnusedPrivateClassMembers` | `error` | Melarang anggota kelas privat yang tidak terpakai. |
+| `noUnusedVariables` | `error` | Melarang variabel yang tidak terpakai. |
 | `noVoidTypeReturn` | `error` | Melarang mengembalikan nilai dari fungsi dengan tipe return `void`. |
 | `useGraphqlNamedOperations` | `error` | Menegakkan penentuan nama operasi GraphQL. |
 | `useImageSize` | `error` | Menegakkan bahwa elemen `<img>` memiliki atribut width dan height. |
-| `useImportExtensions` | `off` | Menegakkan ekstensi berkas untuk impor relatif. |
-| `useIsNan` | `error` | Mewajibkan pemanggilan `isNaN()` saat memeriksa NaN. |
+| `useImportExtensions` | `off` | Menegakkan ekstensi file untuk impor relatif. |
+| `useIsNan` | `error` | Memerlukan pemanggilan `isNaN()` saat memeriksa NaN. |
 | `useJsonImportAttributes` | `off` | Menegakkan penggunaan dengan `{ type: "json" }` untuk impor modul JSON. |
-| `useParseIntRadix` | `error` | Menegakkan penggunaan argumen radix saat menggunakan `parseInt()`. |
-| `useSingleJsDocAsterisk` | `error` | Menegakkan baris komentar JSDoc dimulai dengan satu asterisk, kecuali yang pertama. |
+| `useParseIntRadix` | `error` | Menegakkan penggunaan konsisten argumen radix saat menggunakan `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Menegakkan baris komentar JSDoc dimulai dengan satu asterisk, kecuali baris pertama. |
 | `useUniqueElementIds` | `off` | Mencegah penggunaan atribut id literal string statis pada elemen. |
-| `useValidForDirection` | `error` | Menegakkan bahwa klausa pembaruan `for` memindahkan penghitung ke arah yang benar. |
-| `useValidTypeof` | `error` | Aturan ini memeriksa bahwa hasil ekspresi `typeof` dibandingkan dengan nilai yang valid. |
-| `useYield` | `error` | Memerlukan fungsi generator untuk mengandung `yield`. |
+| `useValidForDirection` | `error` | Menegakkan bahwa klausa pembaruan `for` memindahkan counter ke arah yang benar. |
+| `useValidTypeof` | `error` | Aturan ini memeriksa bahwa hasil dari ekspresi `typeof` dibandingkan dengan nilai yang valid. |
+| `useYield` | `error` | Memrequire fungsi generator untuk mengandung `yield`. |
 
-### Tahap Percobaan
+### Eksperimental
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noContinue` | `off` | Melarang pernyataan continue. |
-| `noDeprecatedImports` | `off` | Membatasi impor dari ekspor yang deprecated. |
-| `noDuplicateDependencies` | `error` | Mencegah pencantuman dependensi duplikat. |
-| `noEmptySource` | `error` | Melarang berkas sumber kosong. |
-| `noFloatingPromises` | `off` | Memerlukan penanganan yang tepat untuk pernyataan mirip Promise. |
+| `noDeprecatedImports` | `off` | Membatasi impor ekspor yang sudah deprecated. |
+| `noDuplicateDependencies` | `error` | Mencegah pencantuman dependensi yang duplikat. |
+| `noDuplicatedSpreadProps` | `error` | Melarang properti duplikat dalam spread props. |
+| `noEmptySource` | `error` | Melarang file sumber kosong. |
+| `noEqualsToNull` | `error` | Melarang penggunaan `==` atau `!=` untuk membandingkan dengan `null`. Gunakan `===` atau `!==` sebagai gantinya. |
+| `noFloatingPromises` | `off` | Memrequire pernyataan mirip Promise untuk ditangani dengan tepat. |
 | `noForIn` | `off` | Melarang iterasi menggunakan for-in loop. |
 | `noImportCycles` | `off` | Mencegah siklus impor. |
-| `noIncrementDecrement` | `error` | Melarang penggunaan operator `++` dan `--` (kecuali pada afterthought for loop). |
+| `noIncrementDecrement` | `error` | Melarang penggunaan operator `++` dan `--` (kecuali dalam afterthought for loop). |
 | `noJsxLiterals` | `off` | Melarang literal string di dalam elemen JSX. |
-| `noMisusedPromises` | `off` | Melarang penggunaan Promise di tempat yang sangat mungkin keliru. |
-| `noParametersOnlyUsedInRecursion` | `error` | Melarang parameter yang hanya digunakan pada pemanggilan rekursif. |
-| `noShadow` | `error` | Melarang deklarasi variabel yang menimpa variabel di scope luar. |
+| `noLeakedRender` | `error` | Mencegah nilai yang bocor dalam JSX (mis. 0 atau NaN) yang bermasalah untuk dirender. |
+| `noMisusedPromises` | `off` | Melarang penggunaan Promise di tempat yang hampir pasti merupakan kesalahan. |
+| `noMultiStr` | `error` | Melarang string multi-baris menggunakan backslash continuation. |
+| `noParametersOnlyUsedInRecursion` | `error` | Melarang parameter yang hanya digunakan dalam panggilan rekursif. |
+| `noProto` | `error` | Melarang penggunaan properti `__proto__`. |
+| `noShadow` | `error` | Melarang deklarasi variabel yang menutupi variabel yang dideklarasikan di scope luar. |
 | `noSyncScripts` | `error` | Mencegah penggunaan skrip sinkron. |
-| `noUnnecessaryConditions` | `off` | Melarang kondisi berbasis tipe yang tidak perlu dan dapat ditentukan statis sebagai redundan. |
+| `noTernary` | `off` | Melarang operator ternary. |
+| `noUnnecessaryConditions` | `off` | Melarang kondisi berbasis tipe yang tidak perlu yang dapat ditentukan secara statis sebagai redundan. |
 | `noUnresolvedImports` | `off` | Memberi peringatan saat mengimpor ekspor yang tidak ada. |
 | `noUnusedExpressions` | `error` | Melarang pernyataan ekspresi yang bukan pemanggilan fungsi atau penugasan. |
-| `noUselessCatchBinding` | `off` | Melarang binding `catch` yang tidak digunakan. |
+| `noUselessCatchBinding` | `off` | Melarang binding `catch` yang tidak terpakai. |
 | `noUselessUndefined` | `error` | Melarang penggunaan `undefined` yang tidak berguna. |
-| `useArraySortCompare` | `off` | Menegakkan penggunaan fungsi pembanding di `Array.prototype.sort()`. |
+| `useArraySortCompare` | `off` | Menegakkan penggunaan fungsi compare di `Array.prototype.sort()`. |
 | `useConsistentArrowReturn` | `error` | Menegakkan konsistensi badan arrow function. |
-| `useConsistentGraphqlDescriptions` | `error` | Memerlukan semua deskripsi mengikuti gaya yang sama (blok atau inline) di berkas GraphQL. |
-| `useDeprecatedDate` | `error` | Memerlukan direktif `@deprecated` untuk menentukan tanggal penghapusan. |
-| `useExhaustiveSwitchCases` | `off` | Memerlukan switch-case yang bersifat exhaustive. |
+| `useConsistentGraphqlDescriptions` | `error` | Memrequire semua deskripsi mengikuti gaya yang sama (block atau inline) di dalam file GraphQL. |
+| `useDeprecatedDate` | `error` | Memrequire directive `@deprecated` untuk menentukan tanggal penghapusan. |
+| `useExhaustiveSwitchCases` | `off` | Memrequire pernyataan switch-case untuk bersifat exhaustif. |
 | `useExplicitType` | `off` | Menegakkan tipe pada fungsi, metode, variabel, dan parameter. |
-| `useFind` | `error` | Menegakkan penggunaan `Array.prototype.find()` daripada `Array.prototype.filter()` diikuti oleh `[0]` saat mencari satu hasil. |
-| `useMaxParams` | `error` | Menegakkan jumlah maksimum parameter dalam definisi fungsi. |
+| `useFind` | `error` | Menegakkan penggunaan `Array.prototype.find()` ketimbang `Array.prototype.filter()` yang diikuti oleh `[0]` saat mencari satu hasil. |
+| `useMaxParams` | `error` | Menegakkan jumlah parameter maksimum dalam definisi fungsi. |
 | `useSortedClasses` | `error` (safe fix override) | Menegakkan pengurutan kelas utilitas CSS. |
 | `useSpread` | `error` | Menegakkan penggunaan operator spread daripada `Function.prototype.apply()`. |
-| `useUniqueGraphqlOperationName` | `error` | Memastikan semua operasi GraphQL dalam sebuah dokumen memiliki nama yang unik. |
+| `useUniqueGraphqlOperationName` | `error` | Memastikan semua operasi GraphQL dalam sebuah dokumen memiliki nama unik. |
 
 ### Performa
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noAccumulatingSpread` | `error` | Melarang penggunaan sintaks spread (`...`) pada akumulator. |
 | `noAwaitInLoops` | `off` | Melarang `await` di dalam loop. |
 | `noBarrelFile` | `error` | Melarang penggunaan barrel file. |
 | `noDelete` | `error` | Melarang penggunaan operator `delete`. |
-| `noDynamicNamespaceImportAccess` | `error` | Melarang mengakses import namespace secara dinamis. |
-| `noNamespaceImport` | `error` | Melarang penggunaan import namespace. |
-| `noReExportAll` | `off` | Menghindari ekspor ulang semua. |
-| `noUnwantedPolyfillio` | `error` | Mencegah duplikasi polyfill dari Polyfill.io. |
-| `useGoogleFontPreconnect` | `error` | Memastikan atribut `preconnect` digunakan saat memakai Google Fonts. |
-| `useTopLevelRegex` | `error` | Mengharuskan literal regex dideklarasikan pada level atas. |
+| `noDynamicNamespaceImportAccess` | `error` | Melarang mengakses namespace import secara dinamis. |
+| `noNamespaceImport` | `error` | Melarang penggunaan namespace imports. |
+| `noReExportAll` | `off` | Menghindari re-export semua. |
+| `noUnwantedPolyfillio` | `error` | Mencegah duplikasi polyfills dari Polyfill.io. |
+| `useGoogleFontPreconnect` | `error` | Memastikan atribut `preconnect` digunakan saat menggunakan Google Fonts. |
+| `useTopLevelRegex` | `error` | Memrequire literal regex dideklarasikan di level atas. |
 
 ### Keamanan
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noBlankTarget` | `error` | Melarang atribut `target="_blank"` tanpa `rel="noopener"`. |
 | `noDangerouslySetInnerHtml` | `error` | Mencegah penggunaan properti JSX yang berbahaya. |
 | `noDangerouslySetInnerHtmlWithChildren` | `error` | Melaporkan ketika elemen DOM atau komponen menggunakan children dan properti `dangerouslySetInnerHTML` sekaligus. |
-| `noGlobalEval` | `error` | Melarang penggunaan global `eval()`. |
+| `noGlobalEval` | `error` | Melarang penggunaan `eval()` global. |
 
 ### Gaya
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noCommonJs` | `off` | Melarang penggunaan sistem modul Common JS demi impor gaya ESM. |
-| `noDefaultExport` | `off` | Melarang ekspor default. |
-| `noDoneCallback` | `error` | Melarang penggunaan callback pada pengujian dan hook asinkron. |
+| `noDefaultExport` | `off` | Melarang default export. |
+| `noDoneCallback` | `error` | Melarang penggunaan callback pada test dan hook asinkron. |
 | `noEnum` | `error` | Melarang enum TypeScript. |
 | `noExportedImports` | `error` | Melarang mengekspor variabel yang diimpor. |
 | `noImplicitBoolean` | `off` | Melarang nilai true implisit pada atribut boolean JSX. |
 | `noInferrableTypes` | `error` | Melarang anotasi tipe untuk variabel, parameter, dan properti kelas yang diinisialisasi dengan ekspresi literal. |
-| `noMagicNumbers` | `off` | Melaporkan penggunaan "magic numbers" — angka yang digunakan langsung alih-alih ditetapkan ke konstanta bernama. |
+| `noMagicNumbers` | `off` | Melaporkan penggunaan "magic numbers" — angka yang digunakan langsung alih-alih diberi konstanta bernama. |
 | `noNamespace` | `error` | Melarang penggunaan namespace TypeScript. |
-| `noNegationElse` | `error` | Melarang negasi dalam kondisi if jika memiliki klausa else. |
+| `noNegationElse` | `error` | Melarang negasi di kondisi if jika memiliki else clause. |
 | `noNestedTernary` | `error` | Melarang ekspresi ternary bersarang. |
 | `noNonNullAssertion` | `error` | Melarang non-null assertion menggunakan operator postfix `!`. |
 | `noParameterAssign` | `error` | Melarang reassign parameter fungsi. |
-| `noParameterProperties` | `error` | Melarang penggunaan parameter properties dalam konstruktor kelas. |
+| `noParameterProperties` | `error` | Melarang penggunaan parameter properties di konstruktor kelas. |
 | `noProcessEnv` | `off` | Melarang penggunaan `process.env`. |
 | `noRestrictedGlobals` | `error` | Aturan ini memungkinkan Anda menentukan nama variabel global yang tidak ingin digunakan dalam aplikasi. |
-| `noRestrictedImports` | `error` | Melarang modul tertentu saat dimuat dengan import atau require. |
+| `noRestrictedImports` | `error` | Melarang modul tertentu saat dimuat oleh import atau require. |
 | `noRestrictedTypes` | `error` | Melarang tipe yang didefinisikan pengguna. |
-| `noShoutyConstants` | `error` | Melarang penggunaan konstanta yang nilainya versi huruf besar dari namanya. |
+| `noShoutyConstants` | `error` | Melarang penggunaan konstanta yang nilainya adalah versi huruf besar dari namanya. |
 | `noSubstr` | `error` | Menegakkan penggunaan `String.slice()` daripada `String.substr()` dan `String.substring()`. |
 | `noUnusedTemplateLiteral` | `error` | Melarang template literal jika interpolasi dan penanganan karakter khusus tidak diperlukan. |
 | `noUselessElse` | `error` | Melarang blok else ketika blok if keluar lebih awal. |
 | `noYodaExpression` | `error` | Melarang penggunaan yoda expressions. |
 | `useArrayLiterals` | `error` | Melarang konstruktor `Array`. |
-| `useAsConstAssertion` | `error` | Menegakkan penggunaan as const daripada tipe literal dan anotasi tipe. |
-| `useAtIndex` | `error` | Gunakan `at()` daripada akses indeks integer. |
-| `useBlockStatements` | `error` | Memerlukan konvensi kurung kurawal yang diikuti. |
-| `useCollapsedElseIf` | `error` | Menegakkan penggunaan `else if` daripada `if` bersarang di klausa `else`. |
-| `useCollapsedIf` | `error` | Menegakkan penggunaan `if` tunggal daripada klausa `if` bersarang. |
-| `useComponentExportOnlyModules` | `off` | Menegakkan deklarasi komponen hanya di dalam modul yang mengekspor Komponen React saja. |
-| `useConsistentArrayType` | `error` | Memerlukan konsistensi penggunaan antara `T[]` atau `Array<T>`. |
-| `useConsistentBuiltinInstantiation` | `error` | Menegakkan penggunaan new untuk semua builtin, kecuali `String`, `Number` dan `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Aturan ini menegakkan penggunaan kurung kurawal konsisten di atribut JSX dan children JSX. |
-| `useConsistentMemberAccessibility` | `error` | Memerlukan modifier aksesibilitas yang konsisten pada properti dan metode kelas. |
-| `useConsistentObjectDefinitions` | `error` | Memerlukan deklarasi literal objek yang konsisten. |
-| `useConst` | `error` | Memerlukan deklarasi const untuk variabel yang hanya diassign sekali. |
-| `useDefaultParameterLast` | `error` | Menegakkan parameter default fungsi dan parameter opsional berada di posisi terakhir. |
-| `useDefaultSwitchClause` | `error` | Memerlukan klausa `default` dalam pernyataan switch. |
-| `useDeprecatedReason` | `error` | Memerlukan penjelasan alasan saat menggunakan direktif `@deprecated`. |
-| `useEnumInitializers` | `error` | Memerlukan setiap anggota enum diinisialisasi dengan nilai eksplisit. |
-| `useExplicitLengthCheck` | `off` | Menegakkan perbandingan eksplisit untuk properti `length`, `size`, `byteLength` atau `byteOffset`. |
+| `useAsConstAssertion` | `error` | Menegakkan penggunaan as const daripada literal type dan anotasi tipe. |
+| `useAtIndex` | `error` | Gunakan `at()` alih-alih akses indeks integer. |
+| `useBlockStatements` | `error` | Memerlukan konvensi kurung kurawal yang mengikuti aturan. |
+| `useCollapsedElseIf` | `error` | Menegakkan penggunaan `else if` daripada if bersarang di clause `else`. |
+| `useCollapsedIf` | `error` | Menegakkan penggunaan single `if` daripada klausa if bersarang. |
+| `useComponentExportOnlyModules` | `off` | Menegakkan deklarasi komponen hanya di dalam modul yang mengekspor React Components secara eksklusif. |
+| `useConsistentArrayType` | `error` | Memrequire konsistensi penggunaan `T[]` atau `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Menegakkan penggunaan new untuk semua builtins, kecuali `String`, `Number` dan `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Aturan ini menegakkan penggunaan kurung kurawal yang konsisten di dalam atribut JSX dan children JSX. |
+| `useConsistentMemberAccessibility` | `error` | Memrequire modifier aksesibilitas yang konsisten pada properti dan metode kelas. |
+| `useConsistentObjectDefinitions` | `error` | Memrequire deklarasi literal objek yang konsisten. |
+| `useConst` | `error` | Memrequire deklarasi const untuk variabel yang hanya diassign sekali. |
+| `useDefaultParameterLast` | `error` | Menegakkan parameter default dan parameter opsional berada di akhir. |
+| `useDefaultSwitchClause` | `error` | Memrequire clause `default` dalam pernyataan switch. |
+| `useDeprecatedReason` | `error` | Memrequire penyebutan alasan saat menggunakan directive `@deprecated`. |
+| `useEnumInitializers` | `error` | Memrequire setiap member enum diinisialisasi secara eksplisit. |
+| `useExplicitLengthCheck` | `off` | Menegakkan perbandingan eksplisit terhadap properti `length`, `size`, `byteLength` atau `byteOffset`. |
 | `useExponentiationOperator` | `error` | Melarang penggunaan `Math.pow` demi operator `**`. |
 | `useExportType` | `error` | Menganjurkan penggunaan export type untuk tipe. |
-| `useExportsLast` | `off` | Memerlukan semua ekspor dideklarasikan setelah semua pernyataan non-ekspor. |
-| `useFilenamingConvention` | `error` | Menegakkan konvensi penamaan untuk nama berkas JavaScript dan TypeScript (kebab-case, ASCII). |
-| `useForOf` | `error` | Aturan ini merekomendasikan for-of ketika pada for loop indeks digunakan untuk mengambil item dari array yang diiterasi. |
+| `useExportsLast` | `off` | Memrequire semua ekspor dideklarasikan setelah semua pernyataan non-ekspor. |
+| `useFilenamingConvention` | `error` | Menegakkan konvensi penamaan untuk file JavaScript dan TypeScript (kebab-case, ASCII). |
+| `useForOf` | `error` | Aturan ini merekomendasikan for-of ketika dalam for loop, indeks digunakan untuk mengambil item dari array yang diiterasi. |
 | `useFragmentSyntax` | `error` | Aturan ini menegakkan penggunaan `<>...</>` daripada `<Fragment>...</Fragment>`. |
-| `useGraphqlNamingConvention` | `error` | Memvalidasi bahwa semua nilai enum ditulis dengan huruf kapital. |
+| `useGraphqlNamingConvention` | `error` | Memvalidasi bahwa semua nilai enum dikapitalisasi. |
 | `useGroupedAccessorPairs` | `error` | Menegakkan bahwa getter dan setter untuk properti yang sama berdekatan dalam definisi kelas dan objek. |
 | `useImportType` | `error` | Menganjurkan penggunaan `import type` untuk tipe. |
-| `useLiteralEnumMembers` | `error` | Mengharuskan semua anggota enum berupa nilai literal. |
+| `useLiteralEnumMembers` | `error` | Memrequire semua member enum berupa nilai literal. |
 | `useNamingConvention` | `off` | Aturan konvensi penamaan (dinonaktifkan). |
 | `useNodeAssertStrict` | `error` | Menganjurkan penggunaan `node:assert/strict` daripada `node:assert`. |
 | `useNodejsImportProtocol` | `error` | Menegakkan penggunaan protokol `node:` untuk modul bawaan Node.js. |
 | `useNumberNamespace` | `error` | Gunakan properti `Number` daripada yang global. |
-| `useNumericSeparators` | `error` | Menegakkan penggunaan pemisah numerik pada literal numerik. |
-| `useObjectSpread` | `error` | Lebih memilih object spread daripada `Object.assign()` saat membuat objek baru. |
+| `useNumericSeparators` | `error` | Menegakkan penggunaan pemisah numerik dalam literal angka. |
+| `useObjectSpread` | `error` | Memprioritaskan object spread daripada `Object.assign()` saat membuat objek baru. |
 | `useReadonlyClassProperties` | `error` | Menegakkan penandaan anggota sebagai readonly jika tidak dimodifikasi di luar konstruktor. |
-| `useSelfClosingElements` | `error` | Mencegah tag penutup tambahan untuk komponen tanpa children. |
-| `useShorthandAssign` | `error` | Memerlukan shorthand operator penugasan jika memungkinkan. |
+| `useSelfClosingElements` | `error` | Mencegah tag penutup ekstra untuk komponen tanpa children. |
+| `useShorthandAssign` | `error` | Memrequire shorthand assignment ketika memungkinkan. |
 | `useShorthandFunctionType` | `error` | Menegakkan penggunaan function types daripada object type dengan call signatures. |
-| `useSingleVarDeclarator` | `off` | Melarang deklarasi variabel berganda dalam pernyataan variabel yang sama. |
-| `useSymbolDescription` | `error` | Memerlukan parameter deskripsi untuk `Symbol()`. |
-| `useTemplate` | `error` | Lebih memilih template literal daripada konkatenasi string. |
-| `useThrowNewError` | `error` | Memerlukan new saat melempar error. |
+| `useSingleVarDeclarator` | `off` | Melarang deklarasi variabel banyak dalam satu pernyataan variabel. |
+| `useSymbolDescription` | `error` | Memrequire parameter deskripsi untuk `Symbol()`. |
+| `useTemplate` | `error` | Memprioritaskan template literals daripada penggabungan string. |
+| `useThrowNewError` | `error` | Memrequire new saat melempar error. |
 | `useThrowOnlyError` | `error` | Melarang melempar nilai non-`Error`. |
 | `useTrimStartEnd` | `error` | Menegakkan penggunaan `String.trimStart()` dan `String.trimEnd()` daripada `String.trimLeft()` dan `String.trimRight()`. |
-| `useUnifiedTypeSignatures` | `error` | Melarang overload signatures yang bisa disatukan menjadi satu signature. |
-| `noDescendingSpecificity` | `error` | Melarang selector dengan spesifisitas lebih rendah datang setelah selector dengan spesifisitas lebih tinggi (CSS). |
+| `useUnifiedTypeSignatures` | `error` | Melarang overload signatures yang dapat disatukan menjadi satu signature. |
+| `noDescendingSpecificity` | `error` | Melarang selector dengan spesifisitas lebih rendah muncul setelah selector dengan spesifisitas lebih tinggi (CSS). |
 | `noValueAtRule` | `error` | Melarang penggunaan aturan `@value` di css modules (CSS). |
 
 ### Mencurigakan
 
-| Rule | Setting | Deskripsi |
-|------|---------|-----------|
+| Aturan | Pengaturan | Deskripsi |
+|------|---------|-------------|
 | `noAlert` | `error` | Melarang penggunaan `alert`, `confirm`, dan `prompt`. |
 | `noApproximativeNumericConstant` | `error` | Gunakan konstanta standar daripada literal yang diaproksimasi. |
 | `noAssignInExpressions` | `error` | Melarang penugasan dalam ekspresi. |
 | `noAsyncPromiseExecutor` | `error` | Melarang penggunaan fungsi async sebagai executor Promise. |
-| `noBiomeFirstException` | `error` | Mencegah penggunaan pola `!` pada posisi pertama `files.includes` dalam berkas konfigurasi. |
+| `noBiomeFirstException` | `error` | Mencegah penggunaan pola `!` di posisi pertama `files.includes` dalam file konfigurasi. |
 | `noBitwiseOperators` | `error` | Melarang operator bitwise. |
-| `noCatchAssign` | `error` | Melarang penugasan ulang exception di klausa catch. |
-| `noClassAssign` | `error` | Melarang penugasan ulang anggota kelas. |
-| `noCommentText` | `error` | Mencegah komentar disisipkan sebagai node teks. |
+| `noCatchAssign` | `error` | Melarang reassign exception di clause catch. |
+| `noClassAssign` | `error` | Melarang reassign anggota kelas. |
+| `noCommentText` | `error` | Mencegah komentar dimasukkan sebagai node teks. |
 | `noCompareNegZero` | `error` | Melarang perbandingan terhadap `-0`. |
-| `noConfusingLabels` | `error` | Melarang pernyataan berlabel yang bukan loop. |
-| `noConfusingVoidType` | `error` | Melarang tipe void di luar generic atau tipe return. |
+| `noConfusingLabels` | `error` | Melarang labeled statements yang bukan loop. |
+| `noConfusingVoidType` | `error` | Melarang void type di luar generic atau return types. |
 | `noConsole` | `off` | Melarang penggunaan `console`. |
 | `noConstEnum` | `error` | Melarang const enum TypeScript. |
-| `noConstantBinaryExpressions` | `error` | Melarang ekspresi di mana operasi tidak mempengaruhi nilai. |
-| `noControlCharactersInRegex` | `error` | Mencegah adanya karakter kontrol dan beberapa urutan escape yang cocok karakter kontrol dalam literal ekspresi reguler. |
+| `noConstantBinaryExpressions` | `error` | Melarang ekspresi dimana operasi tidak memengaruhi nilai. |
+| `noControlCharactersInRegex` | `error` | Mencegah karakter kontrol dan beberapa escape sequence yang cocok dengan karakter kontrol dalam literal ekspresi reguler. |
 | `noDebugger` | `error` | Melarang penggunaan debugger. |
 | `noDocumentCookie` | `error` | Melarang penugasan langsung ke document.cookie. |
-| `noDoubleEquals` | `error` | Memerlukan penggunaan `===` dan `!==`. |
-| `noDuplicateAtImportRules` | `error` | Melarang aturan `@import` duplikat (CSS). |
+| `noDoubleEquals` | `error` | Memrequire penggunaan `===` dan `!==`. |
+| `noDuplicateAtImportRules` | `error` | Melarang duplikat aturan `@import` (CSS). |
 | `noDuplicateCase` | `error` | Melarang label case duplikat. |
 | `noDuplicateClassMembers` | `error` | Melarang anggota kelas duplikat. |
-| `noDuplicateCustomProperties` | `error` | Melarang properti kustom duplikat dalam blok deklarasi (CSS). |
+| `noDuplicateCustomProperties` | `error` | Melarang custom property duplikat dalam declaration block (CSS). |
 | `noDuplicateElseIf` | `error` | Melarang kondisi duplikat dalam rantai if-else-if. |
-| `noDuplicateFields` | `error` | Melarang field duplikat dalam operasi GraphQL. |
-| `noDuplicateFontNames` | `error` | Melarang nama duplikat dalam keluarga font (CSS). |
-| `noDuplicateObjectKeys` | `error` | Melarang dua kunci dengan nama sama di dalam objek. |
-| `noDuplicateParameters` | `error` | Melarang nama parameter fungsi duplikat. |
-| `noDuplicateProperties` | `error` | Melarang properti duplikat dalam blok deklarasi (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Melarang selector duplikat dalam blok keyframe (CSS). |
-| `noDuplicateTestHooks` | `error` | Sebuah blok describe tidak boleh berisi hook duplikat. |
+| `noDuplicateFields` | `error` | Melarang field yang duplikat dalam operasi GraphQL. |
+| `noDuplicateFontNames` | `error` | Melarang nama duplikat dalam family font (CSS). |
+| `noDuplicateObjectKeys` | `error` | Melarang dua kunci dengan nama yang sama di dalam objek. |
+| `noDuplicateParameters` | `error` | Melarang nama parameter fungsi yang duplikat. |
+| `noDuplicateProperties` | `error` | Melarang properti duplikat dalam declaration block (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Melarang selector duplikat dalam keyframe blocks (CSS). |
+| `noDuplicateTestHooks` | `error` | Sebuah blok describe tidak boleh mengandung hook yang duplikat. |
 | `noEmptyBlock` | `error` | Melarang blok CSS kosong (CSS). |
-| `noEmptyBlockStatements` | `error` | Melarang pernyataan blok kosong dan blok statis. |
+| `noEmptyBlockStatements` | `error` | Melarang block statements dan static blocks yang kosong. |
 | `noEmptyInterface` | `error` | Melarang deklarasi interface kosong. |
-| `noEvolvingTypes` | `error` | Melarang variabel berevolusi menjadi tipe any melalui penugasan ulang. |
+| `noEvolvingTypes` | `error` | Melarang variabel berubah menjadi tipe any melalui reassign. |
 | `noExplicitAny` | `error` | Melarang penggunaan tipe any. |
-| `noExportsInTest` | `error` | Melarang penggunaan export atau module.exports dalam berkas yang berisi pengujian. |
-| `noExtraNonNullAssertion` | `error` | Mencegah penggunaan operator non-null assertion `!` yang salah di berkas TypeScript. |
-| `noFallthroughSwitchClause` | `error` | Melarang fallthrough pada klausul switch. |
-| `noFocusedTests` | `error` | Melarang pengujian yang difokuskan. |
-| `noFunctionAssign` | `error` | Melarang penugasan ulang deklarasi fungsi. |
-| `noGlobalAssign` | `error` | Melarang penugasan pada objek native dan variabel global yang read-only. |
+| `noExportsInTest` | `error` | Melarang penggunaan export atau module.exports di file yang berisi test. |
+| `noExtraNonNullAssertion` | `error` | Mencegah penggunaan operator non-null `!` yang salah di file TypeScript. |
+| `noFallthroughSwitchClause` | `error` | Melarang fallthrough pada clause switch. |
+| `noFocusedTests` | `error` | Melarang test yang difokuskan. |
+| `noFunctionAssign` | `error` | Melarang reassign deklarasi function. |
+| `noGlobalAssign` | `error` | Melarang penugasan ke objek native dan variabel global yang read-only. |
 | `noGlobalIsFinite` | `error` | Gunakan `Number.isFinite` daripada global `isFinite`. |
 | `noGlobalIsNan` | `error` | Gunakan `Number.isNaN` daripada global `isNaN`. |
 | `noImplicitAnyLet` | `error` | Melarang penggunaan implicit any pada deklarasi variabel. |
 | `noImportAssign` | `error` | Melarang penugasan pada binding yang diimpor. |
 | `noImportantInKeyframe` | `error` | Melarang `!important` yang tidak valid dalam deklarasi keyframe (CSS). |
-| `noIrregularWhitespace` | `error` | Melarang penggunaan karakter spasi yang tidak reguler. |
-| `noLabelVar` | `error` | Melarang label yang memiliki nama sama dengan variabel. |
+| `noIrregularWhitespace` | `error` | Melarang penggunaan karakter whitespace yang tidak teratur. |
+| `noLabelVar` | `error` | Melarang label yang berbagi nama dengan variabel. |
 | `noMisleadingCharacterClass` | `error` | Melarang karakter yang dibuat dengan beberapa code point dalam sintaks kelas karakter. |
-| `noMisleadingInstantiator` | `error` | Menegakkan penggunaan `new` dan `constructor` yang tepat. |
-| `noMisplacedAssertion` | `error` | Memeriksa bahwa fungsi assertion, mis. expect, ditempatkan di dalam pemanggilan fungsi `it()`. |
+| `noMisleadingInstantiator` | `error` | Menegakkan penggunaan `new` dan `constructor` yang benar. |
+| `noMisplacedAssertion` | `error` | Memeriksa bahwa fungsi assertion, misalnya expect, ditempatkan di dalam pemanggilan `it()`. |
 | `noMisrefactoredShorthandAssign` | `error` | Melarang shorthand assign ketika variabel muncul di kedua sisi. |
 | `noOctalEscape` | `error` | Melarang urutan escape oktal dalam literal string. |
 | `noPrototypeBuiltins` | `error` | Melarang penggunaan langsung builtins `Object.prototype`. |
-| `noQuickfixBiome` | `error` | Melarang penggunaan `quickfix.biome` di dalam berkas pengaturan editor. |
-| `noRedeclare` | `error` | Melarang redeclare variabel, fungsi, kelas, dan tipe dalam scope yang sama. |
+| `noQuickfixBiome` | `error` | Melarang penggunaan `quickfix.biome` di dalam file pengaturan editor. |
+| `noRedeclare` | `error` | Melarang redeclare variabel, function, class, dan tipe di scope yang sama. |
 | `noRedundantUseStrict` | `error` | Mencegah adanya `use strict` yang redundan. |
 | `noSelfCompare` | `error` | Melarang perbandingan di mana kedua sisi persis sama. |
-| `noShadowRestrictedNames` | `error` | Melarang identifier yang menimpa nama-nama terbatas. |
-| `noShorthandPropertyOverrides` | `error` | Melarang properti shorthand yang menimpa properti longhand terkait (CSS). |
-| `noSkippedTests` | `error` | Melarang pengujian yang dinonaktifkan. |
-| `noSparseArray` | `error` | Mencegah penggunaan array jarang (array dengan lubang). |
+| `noShadowRestrictedNames` | `error` | Melarang identifier yang menutupi nama-nama yang dibatasi. |
+| `noShorthandPropertyOverrides` | `error` | Melarang shorthand property yang menimpa properti longhand terkait (CSS). |
+| `noSkippedTests` | `error` | Melarang test yang dinonaktifkan. |
+| `noSparseArray` | `error` | Mencegah penggunaan array dengan lubang (sparse arrays). |
 | `noTemplateCurlyInString` | `error` | Melarang sintaks placeholder template literal di string biasa. |
 | `noThenProperty` | `error` | Melarang properti then. |
-| `noTsIgnore` | `error` | Mencegah penggunaan direktif TypeScript `@ts-ignore`. |
+| `noTsIgnore` | `error` | Mencegah penggunaan directive TypeScript `@ts-ignore`. |
 | `noUnassignedVariables` | `error` | Melarang variabel let atau var yang dibaca tetapi tidak pernah diassign. |
-| `noUnknownAtRules` | `error` | Melarang at-rule yang tidak diketahui (CSS). |
+| `noUnknownAtRules` | `error` | Melarang at-rule yang tidak dikenal (CSS). |
 | `noUnsafeDeclarationMerging` | `error` | Melarang penggabungan deklarasi yang tidak aman antara interface dan kelas. |
 | `noUnsafeNegation` | `error` | Melarang penggunaan negasi yang tidak aman (`!`). |
 | `noUselessEscapeInString` | `error` | Melarang escape yang tidak perlu dalam literal string. |
-| `noUselessRegexBackrefs` | `error` | Melarang backreference regex yang selalu cocok dengan string kosong. |
+| `noUselessRegexBackrefs` | `error` | Melarang backreference regex yang tidak berguna yang selalu mencocokkan string kosong. |
 | `noVar` | `error` | Melarang penggunaan `var`. |
-| `noWith` | `error` | Melarang pernyataan `with` di konteks non-strict. |
-| `useAdjacentOverloadSignatures` | `error` | Melarang penggunaan overload signatures yang tidak berdekatan. |
+| `noWith` | `error` | Melarang pernyataan `with` dalam konteks non-strict. |
+| `useAdjacentOverloadSignatures` | `error` | Melarang penggunaan overload signatures yang tidak berdekatan satu sama lain. |
 | `useAwait` | `error` | Memastikan fungsi async memanfaatkan `await`. |
-| `useBiomeIgnoreFolder` | `error` | Menganjurkan penggunaan yang benar untuk mengabaikan folder dalam berkas konfigurasi. |
-| `useDefaultSwitchClauseLast` | `error` | Menegakkan agar klausa default pada pernyataan switch berada di posisi terakhir. |
-| `useErrorMessage` | `error` | Menegakkan pemberian nilai pesan saat membuat built-in error. |
-| `useGetterReturn` | `error` | Menegakkan getter untuk selalu mengembalikan nilai. |
-| `useGoogleFontDisplay` | `error` | Menegakkan penggunaan strategi tampilan yang direkomendasikan dengan Google Fonts. |
-| `useGuardForIn` | `error` | Memerlukan for-in loop untuk menyertakan pernyataan `if`. |
+| `useBiomeIgnoreFolder` | `error` | Menganjurkan penggunaan yang benar untuk mengabaikan folder dalam file konfigurasi. |
+| `useDefaultSwitchClauseLast` | `error` | Menegakkan clause default dalam switch berada di urutan terakhir. |
+| `useErrorMessage` | `error` | Menegakkan pemberian nilai message saat membuat error built-in. |
+| `useGetterReturn` | `error` | Menegakkan getter selalu mengembalikan nilai. |
+| `useGoogleFontDisplay` | `error` | Menegakkan penggunaan strategi display yang direkomendasikan dengan Google Fonts. |
+| `useGuardForIn` | `error` | Memrequire for-in loop untuk menyertakan pernyataan `if`. |
 | `useIsArray` | `error` | Gunakan `Array.isArray()` daripada `instanceof Array`. |
-| `useIterableCallbackReturn` | `error` | Menegakkan nilai return yang konsisten dalam callback iterable. |
-| `useNamespaceKeyword` | `error` | Memerlukan penggunaan keyword namespace daripada `module` untuk mendeklarasikan namespace TypeScript. |
+| `useIterableCallbackReturn` | `error` | Menegakkan nilai return yang konsisten pada callback iterable. |
+| `useNamespaceKeyword` | `error` | Memrequire penggunaan keyword namespace daripada keyword `module` untuk mendeklarasikan namespace TypeScript. |
 | `useNumberToFixedDigitsArgument` | `error` | Menegakkan penggunaan argumen digits dengan `Number#toFixed()`. |
-| `useStaticResponseMethods` | `error` | Gunakan metode statis `Response` daripada konstruktor `new Response()` saat memungkinkan. |
-| `useStrictMode` | `error` | Menegakkan penggunaan direktif `use strict` di berkas skrip. |
+| `useStaticResponseMethods` | `error` | Gunakan metode static `Response` daripada konstruktor `new Response()` bila memungkinkan. |
+| `useStrictMode` | `error` | Menegakkan penggunaan directive `use strict` di file script. |
 
 ## Catatan
 
-Beberapa aturan dinonaktifkan karena terlalu lambat dijalankan dengan Scanner. Seperti yang dicatat dalam [Dokumentasi Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), aturan proyek yang diaktifkan diketahui dapat menyebabkan overhead performa sebagai pertukaran untuk analisis yang lebih mendalam.
+Aturan tertentu dinonaktifkan karena terlalu lambat dijalankan bersama Scanner. Seperti yang dicatat dalam [dokumentasi Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), aturan proyek yang diaktifkan diketahui menyebabkan overhead performa dengan imbalan analisis yang lebih mendalam.
 
-Dalam pengujian kami, kami menemukan aturan-aturan ini dapat membuat perbedaan antara 300ms dan 13s untuk linting.
+Dalam pengujian kami, kami menemukan bahwa aturan-aturan ini dapat membuat perbedaan antara lint selama 300ms dan 13s.

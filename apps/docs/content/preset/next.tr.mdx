@@ -3,7 +3,7 @@ title: Next.js
 description: Ultracite için Next.js'e özgü lint kuralları.
 ---
 
-Next.js yapılandırması, görüntü optimizasyonu, belge yapısı ve App Router desenleri için Next.js'e özgü lint kuralları içerir.
+Next.js yapılandırması, görüntü optimizasyonu, belge yapısı ve App Router kalıpları için Next.js'e özgü lint kuralları içerir.
 
 ## Kurulum
 
@@ -17,38 +17,38 @@ Next.js yapılandırmasını `biome.jsonc` dosyanıza ekleyin:
 
 ## Genel Bakış
 
-Bu yapılandırma Next.js geliştirmeye özgü kurallar ekler:
+Bu yapılandırma, Next.js geliştirmeye özgü kurallar ekler:
 
-- **Görüntü Optimizasyonu**: Next.js `<Image>` bileşeninin kullanımını zorunlu kılar
-- **Belge Yapısı**: Next.js özel bileşenlerinin yanlış kullanımını engeller
-- **İstemci Bileşenleri**: Async istemci bileşenlerinin doğru şekilde ele alındığından emin olur
+- **Görüntü Optimizasyonu**: Next.js Image bileşeninin kullanılmasını zorunlu kılar
+- **Belge Yapısı**: Next.js özel bileşenlerinin uygunsuz kullanımını engeller
+- **İstemci Bileşenleri**: Asenkron istemci bileşenlerin doğru şekilde ele alındığından emin olur
 - **Yapılandırma Dosyaları**: `next.config.*` dosyaları için özel muamele
 
-## Next.js'e Özel Kurallar
+## Next.js'e Özgü Kurallar
 
 ### Deneysel
 
 | Kural | Ayar | Açıklama |
 |------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Next.js içinde asenkron istemci bileşenlerini engeller. İstemci bileşenleri senkron olmalıdır; asenkron işlemler için sunucu bileşenlerini kullanın. |
+| `noNextAsyncClientComponent` | `error` | Next.js'te asenkron istemci bileşenlerini engeller. İstemci bileşenleri eşzamanlı olmalıdır; asenkron işlemler için sunucu bileşenlerini kullanın. |
 
 ### Performans
 
 | Kural | Ayar | Açıklama |
 |------|---------|-------------|
-| `noImgElement` | `error` | `<img>` HTML öğesinin kullanımını yasaklar. Otomatik görüntü optimizasyonu için bunun yerine Next.js `<Image>` bileşenini kullanın. |
+| `noImgElement` | `error` | HTML `<img>` öğesinin kullanılmasını yasaklar. Otomatik görüntü optimizasyonu için bunun yerine Next.js `<Image>` bileşenini kullanın. |
 
 ### Stil
 
 | Kural | Ayar | Açıklama |
 |------|---------|-------------|
-| `noHeadElement` | `error` | `<head>` HTML öğesinin kullanımını yasaklar. Bunun yerine Next.js `next/head` veya App Router metadata API'sini kullanın. |
+| `noHeadElement` | `error` | HTML `<head>` öğesinin kullanılmasını yasaklar. Bunun yerine Next.js `next/head` veya App Router metadata API'sini kullanın. |
 
 ### Şüpheli
 
 | Kural | Ayar | Açıklama |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Sayfa dosyalarında `next/document` içe aktarılmasını engeller. `_document.tsx` yalnızca `pages/_document.tsx` içinde bulunmalıdır. |
+| `noDocumentImportInPage` | `error` | Sayfa dosyalarında `next/document` içe aktarılmasını önler. `_document.tsx` yalnızca `pages/_document.tsx` içinde bulunmalıdır. |
 | `noHeadImportInDocument` | `error` | `_document.tsx` içinde `next/head` içe aktarılmasını engeller. Bunun yerine `next/document` içindeki `<Head>`'i kullanın. |
 
 ## Yapılandırma Dosyası Geçersiz Kılmaları
@@ -74,7 +74,7 @@ Next.js ön ayarı, yapılandırma dosyaları ve App Router bileşenleri için �
 }
 ```
 
-Bu, tipik olarak lint kurallarını geçemeyebilecek Next.js yapılandırma desenlerine izin verir.
+Bu, tipik olarak lint kurallarını geçmeyebilecek Next.js yapılandırma kalıplarına izin verir.
 
 ### App Router Sayfaları ve Düzenleri
 
@@ -95,4 +95,4 @@ Bu, tipik olarak lint kurallarını geçemeyebilecek Next.js yapılandırma dese
 }
 ```
 
-App Router sayfa ve layout bileşenlerinin `await` gerektirmeden asenkron olmasına izin verilir; çünkü Next.js bunları sunucu tarafı render ve veri getirme için özel olarak işler.
+App Router sayfa ve layout bileşenlerinin `await` gerektirmeden asenkron olmasına izin verilir, çünkü Next.js bunları sunucu tarafı render ve veri alma için özel olarak ele alır.

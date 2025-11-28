@@ -1,13 +1,13 @@
 ---
-title: Temel
-description: Ultracite'in çerçeveden bağımsız lint kurallarına sahip temel yapılandırması.
+title: Çekirdek
+description: Ultracite'in çerçeveden bağımsız lint kurallarını içeren temel yapılandırması.
 ---
 
-Core yapılandırması, çerçeveye bağımsız kapsamlı bir lint kuralları ve biçimlendirme ayarları seti sağlar. Bu, diğer tüm çerçeveye özel yapılandırmaların genişlettiği temel yapılandırmadır.
+Core Ultracite yapılandırması, çerçeveden bağımsız kapsamlı bir lint kuralları ve biçimlendirme ayarları seti sağlar. Bu, diğer tüm çerçeveye özgü yapılandırmaların genişlettiği temel yapılandırmadır.
 
 ## Kurulum
 
-Core yapılandırması aşağıdaki komutu çalıştırdığınızda otomatik olarak dahil edilir:
+Core yapılandırma şu komutu çalıştırdığınızda otomatik olarak dahil edilir:
 
 ```bash
 npx ultracite init
@@ -23,36 +23,36 @@ Veya elle `biome.jsonc` dosyanıza ekleyin:
 
 ## Genel Bakış
 
-Core yapılandırması yüzlerce sıkı lint kuralı kapsar:
+Core yapılandırma, yüzlerce katı lint kuralını kapsar:
 
-- **Erişilebilirlik (a11y)**: ARIA özniteliklerini, semantik HTML'i ve klavye gezintisini zorunlu kılar
-- **Karmaşıklık**: Bilişsel karmaşıklığı azaltır ve en iyi uygulamaları zorunlu kılar
-- **Doğruluk**: Yaygın hataları önler ve tip güvenliğini zorunlu kılar
-- **Performans**: Kodun çalışma zamanı performansını optimize eder
+- **Erişilebilirlik (a11y)**: ARIA özniteliklerini, semantik HTML'i ve klavye navigasyonunu zorunlu kılar
+- **Karmaşıklık**: Bilişsel karmaşıklığı azaltır ve en iyi uygulamaları uygular
+- **Doğruluk**: Yaygın hataları önler ve tür güvenliğini zorunlu kılar
+- **Performans**: Çalışma zamanı performansını optimize eder
 - **Güvenlik**: Güvenlik açıklarını önler
 - **Stil**: Tutarlı kod stilini zorunlu kılar
-- **Şüpheli**: Hatalara işaret edebilecek şüpheli kalıpları yakalar
+- **Şüpheli**: Hata işaretleyebilecek şüpheli desenleri yakalar
 
 ## Biçimlendirici Ayarları
 
 - **Girintileme**: 2 boşluk
 - **Satır Genişliği**: 80 karakter
-- **Satır Sonu**: LF (Unix stili)
-- **Noktalı Virgül**: Her zaman gerekli
-- **Tırnak İşaretleri**: JavaScript/TypeScript ve JSON için çift tırnak
-- **Sondaki Virgüller**: ES5 stili (çok satırlı dizi/nesneler)
+- **Satır Sonu**: LF (Unix tarzı)
+- **Noktalı Virgüller**: Her zaman gerekli
+- **Tırnaklar**: JavaScript/TypeScript ve JSON için çift tırnak
+- **Sondaki Virgüller**: ES5 tarzı (çok satırlı diziler/nesneler)
 - **Ok Parantezleri**: Parantezler her zaman dahil edilir
 
-## Temel Özellikler
+## Ana Özellikler
 
-### TypeScript Sıkı Denetimleri
+### TypeScript Katılığı
 
-Core yapılandırması TypeScript'in sıkı kontrollerini etkinleştirir:
+Core yapılandırma, TypeScript'in katı denetimlerini etkinleştirir:
 
 - `any` kullanımını caydırır (`noExplicitAny: error`)
-- `null/undefined` durumlarının ele alınmasını gerektirir
-- Belirli durumlarda açık tipleri tercih eder
-- Kod tabanı genelinde tip güvenliğini zorunlu kılar
+- `null/undefined` ile başa çıkılmasını gerektirir
+- Bazı durumlarda açık türleri tercih eder
+- Kod tabanı genelinde tür güvenliğini zorunlu kılar
 
 ### ESLint Önerilen Eşdeğerleri
 
@@ -65,19 +65,19 @@ Yaygın en iyi uygulama kuralları dahildir:
 
 ### Varsayılan Olarak Erişilebilirlik
 
-Erişilebilirlik standartlarına karşılık gelen kurallar:
+Erişilebilirlik standartlerine eşdeğer kurallar:
 
 - ARIA öznitelikleri geçerli olmalıdır
 - Semantik HTML öğeleri tercih edilir
-- Klavye gezinmesi desteği gereklidir
-- Görseller için alt metin gereklidir
+- Klavye navigasyon desteği gereklidir
+- Resimler için alt metin zorunludur
 
 ### Node.js Desteği
 
-Ortam-a özgü işleme:
+Ortam özelinde işleme:
 
 - Node.js global değişkenlerini tanır (`module`, `process`)
-- Yerleşik modüller için `node:` protokolünü zorunlu kılar
+- Dahili modüller için `node:` protokolünü zorunlu kılar
 - Hem CommonJS hem de ESM'i destekler
 
 ## Tam Kural Referansı
@@ -90,85 +90,85 @@ Ortam-a özgü işleme:
 | `noAriaHiddenOnFocusable` | `error` | Odaklanılabilir öğelerde `aria-hidden="true"` kullanılmamasını zorunlu kılar. |
 | `noAriaUnsupportedElements` | `error` | ARIA rolleri, durumları ve özelliklerini desteklemeyen öğelerin bu özniteliklere sahip olmamasını zorunlu kılar. |
 | `noAutofocus` | `off` | `autoFocus` prop'unun öğelerde kullanılmamasını zorunlu kılar. |
-| `noDistractingElements` | `error` | Dikkat dağıtan öğelerin kullanılmamasını sağlar. |
-| `noHeaderScope` | `error` | `scope` propunun yalnızca `<th>` öğelerinde kullanılmasını önerir. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Etkileşimli HTML öğelerine etkileşimli olmayan ARIA rollerinin atanmasını engeller. |
-| `noLabelWithoutControl` | `error` | Bir label öğesi veya bileşeninin metin etiketi ve ilişkili bir input'a sahip olmasını zorunlu kılar. |
-| `noNoninteractiveElementInteractions` | `error` | Etkileşimli olmayan öğelerde olay işleyicisi kullanımına izin vermez. |
+| `noDistractingElements` | `error` | Dikkat dağıtan öğelerin kullanılmamasını zorunlu kılar. |
+| `noHeaderScope` | `error` | `scope` prop'unun yalnızca `<th>` öğelerinde kullanılmasını zorunlu kılar. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Etkileşimli HTML öğelerine etkileşimli olmayan ARIA rolleri atanmasını engeller. |
+| `noLabelWithoutControl` | `error` | Bir label öğesi veya bileşenin bir metin etiketi ve ilişkili bir input'a sahip olmasını zorunlu kılar. |
+| `noNoninteractiveElementInteractions` | `error` | Etkileşimli olmayan öğelerde olay işleyicileri kullanımını yasaklar. |
 | `noNoninteractiveElementToInteractiveRole` | `error` | Etkileşimli ARIA rollerinin etkileşimli olmayan HTML öğelerine atanmasını engeller. |
 | `noNoninteractiveTabindex` | `error` | Etkileşimli olmayan HTML öğelerine `tabIndex` atanmasını engeller. |
-| `noPositiveTabindex` | `error` | `tabIndex` özelliğinde pozitif tam sayıların kullanılmasını engeller. |
-| `noRedundantAlt` | `error` | `img` alt prop'unun `image`, `picture` veya `photo` kelimesini içermemesini zorunlu kılar. |
-| `noRedundantRoles` | `error` | Açıkça belirtilen role property'sinin, bir öğenin örtük/varsayılan rolüyle aynı olmamasını zorunlu kılar. |
-| `noStaticElementInteractions` | `error` | Tıklama işleyicisine sahip statik, görünür öğelerin (örn. `<div>`) geçerli role özniteliğini kullanmasını zorunlu kılar. |
-| `noSvgWithoutTitle` | `error` | `svg` öğesi için `title` öğesinin kullanımını zorunlu kılar. |
-| `useAltText` | `error` | Alternatif metin gerektiren tüm öğelerin son kullanıcıya anlamlı bilgi iletmesini zorunlu kılar. |
+| `noPositiveTabindex` | `error` | `tabIndex` özelliğinde pozitif tam sayı kullanımını engeller. |
+| `noRedundantAlt` | `error` | `img` alt prop'unun `image`, `picture` veya `photo` kelimelerini içermemesini zorunlu kılar. |
+| `noRedundantRoles` | `error` | Açıkça belirtilen role property'sinin bir öğenin dolaylı/varsayılan rolüyle aynı olmamasını zorunlu kılar. |
+| `noStaticElementInteractions` | `error` | Tıklama işleyicisi olan statik, görünür öğelerin (ör. `<div>`) geçerli `role` özniteliğini kullanmasını zorunlu kılar. |
+| `noSvgWithoutTitle` | `error` | `svg` öğesi için `title` öğesinin kullanılmasını zorunlu kılar. |
+| `useAltText` | `error` | Alternatif metne ihtiyaç duyan tüm öğelerin kullanıcıya anlamlı bilgi iletmesini zorunlu kılar. |
 | `useAnchorContent` | `error` | Anchor'ların içerik sahibi olmasını ve içeriğin ekran okuyucular tarafından erişilebilir olmasını zorunlu kılar. |
-| `useAriaActivedescendantWithTabindex` | `error` | `aria-activedescendant` ile birlikte `tabIndex` atanan etkileşimli olmayan HTML öğelerini zorunlu kılar. |
-| `useAriaPropsForRole` | `error` | ARIA rollerine sahip öğelerin, o rol için gerekli tüm ARIA özniteliklerine sahip olmasını zorunlu kılar. |
-| `useAriaPropsSupportedByRole` | `error` | ARIA özniteliklerinin, öğe tarafından desteklenen roller için geçerli olmasını zorunlu kılar. |
+| `useAriaActivedescendantWithTabindex` | `error` | `aria-activedescendant` ile birlikte olmayan etkileşimli olmayan HTML öğelerine `tabIndex` atanmasını zorunlu kılar. |
+| `useAriaPropsForRole` | `error` | ARIA rolleri olan öğelerin o rol için gerekli tüm ARIA özniteliklerine sahip olmasını zorunlu kılar. |
+| `useAriaPropsSupportedByRole` | `error` | ARIA özelliklerinin, öğenin desteklediği rollere uygun olmasını zorunlu kılar. |
 | `useButtonType` | `error` | `button` öğesi için `type` özniteliğinin kullanılmasını zorunlu kılar. |
 | `useFocusableInteractive` | `error` | Etkileşimli role ve etkileşim işleyicilerine sahip öğelerin odaklanabilir olmasını zorunlu kılar. |
 | `useHeadingContent` | `error` | Başlık öğelerinin (`h1`, `h2`, vb.) içerik sahibi olmasını ve içeriğin ekran okuyucular tarafından erişilebilir olmasını zorunlu kılar. |
 | `useHtmlLang` | `error` | `html` öğesinin `lang` özniteliğine sahip olmasını zorunlu kılar. |
-| `useIframeTitle` | `error` | `iframe` öğesi için `title` özniteliğinin kullanımını zorunlu kılar. |
-| `useKeyWithClickEvents` | `error` | `onClick` olayının en az şu olaylarla birlikte olmasını zorunlu kılar: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useIframeTitle` | `error` | `iframe` öğesi için `title` özniteliğinin kullanılmasını zorunlu kılar. |
+| `useKeyWithClickEvents` | `error` | `onClick` olayının en azından şu olaylardan biriyle birlikte olmasını zorunlu kılar: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
 | `useKeyWithMouseEvents` | `error` | `onMouseOver` / `onMouseOut` olaylarının `onFocus` / `onBlur` ile birlikte olmasını zorunlu kılar. |
 | `useMediaCaption` | `error` | Ses ve video öğelerinin altyazı için bir track içermesini zorunlu kılar. |
-| `useSemanticElements` | `error` | JSX öğelerinde role özniteliklerinin kullanımını tespit eder ve semantik öğelerin kullanılmasını önerir. |
-| `useValidAnchor` | `error` | Tüm anchor'ların geçerli ve gezilebilir öğeler olmasını zorunlu kılar. |
-| `useValidAriaProps` | `error` | `aria-*` ARIA özniteliklerinin tümünün geçerli olmasını sağlar. |
-| `useValidAriaRole` | `error` | ARIA rollerine sahip öğelerin geçerli, soyut olmayan bir ARIA rolü kullanmasını zorunlu kılar. |
+| `useSemanticElements` | `error` | JSX öğelerinde `role` özniteliklerinin kullanımını tespit eder ve semantik öğelerin kullanılmasını önerir. |
+| `useValidAnchor` | `error` | Tüm anchor'ların geçerli ve gezinilebilir öğeler olmasını zorunlu kılar. |
+| `useValidAriaProps` | `error` | `aria-*` ARIA özelliklerinin tümünün geçerli olmasını sağlar. |
+| `useValidAriaRole` | `error` | ARIA rolleri olan öğelerin geçerli, soyut olmayan bir ARIA rolü kullanmasını zorunlu kılar. |
 | `useValidAriaValues` | `error` | ARIA durum ve özellik değerlerinin geçerli olmasını zorunlu kılar. |
-| `useValidAutocomplete` | `error` | Input öğelerindeki `autocomplete` özniteliği için geçerli değerlerin kullanılmasını zorunlu kılar. |
-| `useValidLang` | `error` | `lang` özniteliğine geçirilen değerin doğru bir ISO dil veya ülke kodu olmasını sağlar. |
-| `useGenericFontNames` | `error` | Yazı tipi ailelerinde (CSS) genel bir familya anahtar kelimesinin eksik olmasını engeller. |
+| `useValidAutocomplete` | `error` | Input öğelerinin autocomplete özniteliğinde geçerli değerlerin kullanılmasını zorunlu kılar. |
+| `useValidLang` | `error` | `lang` özniteliğine geçirilen değerin doğru bir ISO dil ve/veya ülke kodu olmasını sağlar. |
+| `useGenericFontNames` | `error` | Yazı ailelerinde (CSS) genel familya anahtar kelimesinin eksik olmasını yasaklar. |
 
 ### Karmaşıklık
 
 | Rule | Setting | Description |
 |------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Düzenli ifade literal'lerinde ardışık boşluk karakterlerinin belirsiz kullanımına izin vermez. |
+| `noAdjacentSpacesInRegex` | `error` | Düzenli ifade literal'lerinde ardışık boşluk karakterlerinin belirsiz kullanımını yasaklar. |
 | `noArguments` | `error` | `arguments` kullanımını yasaklar. |
-| `noBannedTypes` | `error` | İlkel tip takma adlarını ve yanıltıcı tipleri yasaklar. |
-| `noCommaOperator` | `error` | Virgül operatörünün kullanılmasını engeller. |
-| `noEmptyTypeParameters` | `error` | Tip alias ve interface'lerde boş tip parametrelerinin kullanılmasını engeller. |
-| `noExcessiveCognitiveComplexity` | `error` | Belirli bir Bilişsel Karmaşıklık puanını aşan fonksiyonları yasaklar. |
+| `noBannedTypes` | `error` | İlkel tür alias'larını ve yanıltıcı türleri yasaklar. |
+| `noCommaOperator` | `error` | Virgül operatörünün kullanılmasını yasaklar. |
+| `noEmptyTypeParameters` | `error` | Tür alias'larında ve arayüzlerde boş tür parametrelerini yasaklar. |
+| `noExcessiveCognitiveComplexity` | `error` | Belirlenen Bilişsel Karmaşıklık skorunu aşan fonksiyonları yasaklar. |
 | `noExcessiveLinesPerFunction` | `off` | Bir fonksiyondaki kod satırı sayısını kısıtlar. |
-| `noExcessiveNestedTestSuites` | `error` | Test dosyalarında iç içe `describe()` derinliği için maksimum derinlik uygular. |
+| `noExcessiveNestedTestSuites` | `error` | Test dosyalarında iç içe `describe()` derinliğine maksimum sınır uygular. |
 | `noExtraBooleanCast` | `error` | Gereksiz boolean dönüşümlerini yasaklar. |
 | `noFlatMapIdentity` | `error` | `flatMap` içinde gereksiz callback kullanımını yasaklar. |
-| `noForEach` | `error` | `Array.forEach` yerine `for...of` kullanılmasını önerir. |
-| `noImplicitCoercions` | `off` | Kısa biçimli tip dönüşümlerini yasaklar. |
+| `noForEach` | `error` | `Array.forEach` yerine `for...of` ifadesini tercih eder. |
+| `noImplicitCoercions` | `off` | Kısa yazım tür dönüşümlerini yasaklar. |
 | `noImportantStyles` | `off` | `!important` stilinin (CSS) kullanılmasını yasaklar. |
-| `noStaticOnlyClass` | `error` | Bir sınıfın yalnızca statik üyeleri olduğunda rapor verir. |
+| `noStaticOnlyClass` | `error` | Bir sınıfın hiçbir statik olmayan üyesi yoksa bunu raporlar. |
 | `noThisInStatic` | `error` | Statik bağlamlarda `this` ve `super` kullanımını yasaklar. |
-| `noUselessCatch` | `error` | Gereksiz `catch` bloklarını yasaklar. |
+| `noUselessCatch` | `error` | Gereksiz catch bloklarını yasaklar. |
 | `noUselessConstructor` | `error` | Gereksiz constructor kullanımını yasaklar. |
-| `noUselessContinue` | `error` | Gereksiz `continue` kullanımından kaçınmayı önerir. |
-| `noUselessEmptyExport` | `error` | Modül dosyasında herhangi bir şey değiştirmeyen boş export'ları yasaklar. |
+| `noUselessContinue` | `error` | Gereksiz `continue` kullanımından kaçınılmasını sağlar. |
+| `noUselessEmptyExport` | `error` | Modül dosyasında hiçbir şey değiştirmeyen boş export'ları yasaklar. |
 | `noUselessEscapeInRegex` | `error` | Düzenli ifade literal'lerinde gereksiz escape dizilerini yasaklar. |
 | `noUselessFragments` | `error` | Gereksiz fragment kullanımını yasaklar. |
 | `noUselessLabel` | `error` | Gereksiz label kullanımını yasaklar. |
 | `noUselessLoneBlockStatements` | `error` | Gereksiz iç içe blok ifadelerini yasaklar. |
-| `noUselessRename` | `error` | Import, export ve yapı bozma (destructuring) atamalarını aynı isimle yeniden adlandırmayı yasaklar. |
-| `noUselessStringConcat` | `error` | Gereksiz string veya şablon literal birleştirmesini yasaklar. |
-| `noUselessStringRaw` | `error` | Kaçış dizisi içermeyen şablon literal'lerinde gereksiz `String.raw` kullanımını yasaklar. |
-| `noUselessSwitchCase` | `error` | Switch ifadelerinde gereksiz case kullanımını yasaklar. |
-| `noUselessTernary` | `error` | Daha basit alternatifler varken ternary operatörlerini yasaklar. |
-| `noUselessThisAlias` | `error` | Anlamsız `this` takma adı kullanımını yasaklar. |
-| `noUselessTypeConstraint` | `error` | Tip kısıtlaması olarak `any` veya `unknown` kullanımını yasaklar. |
-| `noUselessUndefinedInitialization` | `error` | Değişkenleri `undefined` ile başlatmayı yasaklar. |
-| `noVoid` | `error` | Yaygın olmayan bir operatör olan `void` operatörünün kullanımını yasaklar. |
-| `useArrowFunction` | `error` | Fonksiyon ifadeleri yerine ok fonksiyonlarının kullanılmasını zorunlu kılar. |
-| `useDateNow` | `error` | Unix Epoch'ten beri geçen milisaniye sayısını almak için `Date.now()` kullanılmasını zorunlu kılar. |
+| `noUselessRename` | `error` | Import, export ve yapılandırılmış atamalarda aynı ada yeniden adlandırmayı yasaklar. |
+| `noUselessStringConcat` | `error` | String veya template literal'ların gereksiz birleştirilmesini yasaklar. |
+| `noUselessStringRaw` | `error` | Kaçış dizisi içermeyen template string literal'larda gereksiz `String.raw` kullanımını yasaklar. |
+| `noUselessSwitchCase` | `error` | Switch ifadelerindeki gereksiz case'leri yasaklar. |
+| `noUselessTernary` | `error` | Daha basit alternatifler varken ternary operatörlerinin kullanılmasını yasaklar. |
+| `noUselessThisAlias` | `error` | Gereksiz `this` aliaslamasını yasaklar. |
+| `noUselessTypeConstraint` | `error` | Tür kısıtlaması olarak `any` veya `unknown` kullanımını yasaklar. |
+| `noUselessUndefinedInitialization` | `error` | Değişkenlerin `undefined` ile başlatılmasını yasaklar. |
+| `noVoid` | `error` | Yaygın olmayan bir operatör olan `void` operatörünün kullanılmasını yasaklar. |
+| `useArrowFunction` | `error` | Fonksiyon ifadeleri yerine ok (arrow) fonksiyonları kullanmayı zorunlu kılar. |
+| `useDateNow` | `error` | Unix Epoch'tan bu yana geçen milisaniyeyi almak için `Date.now()` kullanılmasını zorunlu kılar. |
 | `useFlatMap` | `error` | `map().flat()` birlikte kullanıldığında `.flatMap()` kullanımını teşvik eder. |
-| `useIndexOf` | `error` | Bir öğenin indeksini ararken `Array#{indexOf,lastIndexOf}()` kullanımını `Array#{findIndex,findLastIndex}()` yerine tercih eder. |
-| `useLiteralKeys` | `error` | Hesaplanan özellik erişimi yerine literal erişim kullanılmasını zorunlu kılar. |
-| `useNumericLiterals` | `error` | `parseInt()` ve `Number.parseInt()` yerine ikili, sekizli ve onaltılı literal'leri tercih eder. |
+| `useIndexOf` | `error` | Bir öğenin indeksini ararken `Array#{indexOf,lastIndexOf}()` kullanımını, `Array#{findIndex,findLastIndex}()` yerine tercih eder. |
+| `useLiteralKeys` | `error` | Hesaplanmış özellik erişimi yerine sabit (literal) özellik erişiminin kullanılmasını zorunlu kılar. |
+| `useNumericLiterals` | `error` | `parseInt()` ve `Number.parseInt()` yerine ikili, sekizli ve onaltılık literal'lerin kullanılmasını tercih eder. |
 | `useOptionalChain` | `error` | Zincirlenmiş mantıksal ifadeler yerine kısa optional chain kullanımını zorunlu kılar. |
-| `useRegexLiterals` | `error` | Mümkünse `RegExp` constructor'ı yerine düzenli ifade literal'lerinin kullanılmasını zorunlu kılar. |
-| `useSimpleNumberKeys` | `error` | On tabanlı olmayan veya alt çizgi ayırıcı kullanan sayı literal'lerinin nesne üye adları olarak kullanılmasını yasaklar. |
+| `useRegexLiterals` | `error` | Mümkünse `RegExp` constructor yerine düzenli ifade literal'larının kullanılmasını zorunlu kılar. |
+| `useSimpleNumberKeys` | `error` | Base 10 olmayan veya alt çizgi ayıracı kullanan sayı literal'ı nesne üye isimlerini yasaklar. |
 | `useSimplifiedLogicExpression` | `error` | Mantıksal ifadelerden gereksiz terimleri çıkarır. |
 | `useWhile` | `error` | Başlatıcı ve güncelleme ifadelerinin gerekmediği durumlarda `for` yerine `while` döngülerinin kullanılmasını zorunlu kılar. |
 
@@ -176,33 +176,33 @@ Ortam-a özgü işleme:
 
 | Rule | Setting | Description |
 |------|---------|-------------|
-| `noConstAssign` | `error` | `const` değişkenlerinin yeniden atanmasını engeller. |
+| `noConstAssign` | `error` | `const` değişkenlerinin yeniden atanmaması gerektiğini sağlar. |
 | `noConstantCondition` | `error` | Koşullarda sabit ifadelerin kullanılmasını yasaklar. |
-| `noConstantMathMinMaxClamp` | `error` | Sonucun sabit olduğu durumlarda `Math.min` ve `Math.max` ile clamp yapmayı yasaklar. |
-| `noConstructorReturn` | `error` | Constructor'dan değer döndürmeyi yasaklar. |
+| `noConstantMathMinMaxClamp` | `error` | Sonucun kendisi sabit olduğu durumlarda bir değeri sınırlamak için `Math.min` ve `Math.max` kullanılmasını yasaklar. |
+| `noConstructorReturn` | `error` | Constructor'dan değer döndürülmesini yasaklar. |
 | `noEmptyCharacterClassInRegex` | `error` | Düzenli ifade literal'lerinde boş karakter sınıflarını yasaklar. |
-| `noEmptyPattern` | `error` | Boş destructuring desenlerini yasaklar. |
+| `noEmptyPattern` | `error` | Boş yapılandırma (destructuring) pattern'lerini yasaklar. |
 | `noGlobalDirnameFilename` | `error` | Global kapsamda `__dirname` ve `__filename` kullanımını yasaklar. |
-| `noGlobalObjectCalls` | `error` | Global nesne özelliklerinin fonksiyon gibi çağrılmasını yasaklar. |
-| `noInnerDeclarations` | `error` | Bloğun dışından erişilebilen fonksiyon ve `var` bildirimlerini yasaklar. |
+| `noGlobalObjectCalls` | `error` | Global nesne özelliklerinin fonksiyon olarak çağrılmasını yasaklar. |
+| `noInnerDeclarations` | `error` | Bloğun dışında erişilebilir olan fonksiyon ve `var` deklarasyonlarını yasaklar. |
 | `noInvalidBuiltinInstantiation` | `error` | Yerleşik nesnelerin doğru şekilde örneklendiğinden emin olur. |
-| `noInvalidConstructorSuper` | `error` | Sınıflarda `super()`'ün yanlış kullanılmasını engeller. |
+| `noInvalidConstructorSuper` | `error` | Sınıflarda `super()`'ün yanlış kullanımını engeller. |
 | `noInvalidDirectionInLinearGradient` | `error` | Linear gradient fonksiyonları için standart dışı yön değerlerini yasaklar (CSS). |
-| `noInvalidGridAreas` | `error` | CSS Grid Layout'larda geçersiz adlandırılmış grid alanlarını yasaklar (CSS). |
+| `noInvalidGridAreas` | `error` | CSS Grid Layout'larda geçersiz isimlendirilmiş grid alanlarını yasaklar (CSS). |
 | `noInvalidPositionAtImportRule` | `error` | `@import` at-kuralının geçersiz pozisyonlarda kullanılmasını yasaklar (CSS). |
-| `noInvalidUseBeforeDeclaration` | `error` | Değişkenlerin ve fonksiyon parametrelerinin deklarasyonlarından önce kullanılmasını yasaklar. |
+| `noInvalidUseBeforeDeclaration` | `error` | Değişkenlerin ve fonksiyon parametrelerinin deklarasyonundan önce kullanılmasını yasaklar. |
 | `noMissingVarFunction` | `error` | CSS değişkenleri için eksik `var` fonksiyonunu yasaklar (CSS). |
 | `noNodejsModules` | `off` | Node.js yerleşik modüllerinin kullanımını yasaklar. |
 | `noNonoctalDecimalEscape` | `error` | String literal'lerinde `\8` ve `\9` escape dizilerini yasaklar. |
-| `noPrecisionLoss` | `error` | Kesinlik kaybına uğrayan literal sayıların kullanımını yasaklar. |
+| `noPrecisionLoss` | `error` | Hassasiyet kaybı olan literal sayıların kullanılmasını yasaklar. |
 | `noPrivateImports` | `off` | Özel export'ların import edilmesini kısıtlar. |
-| `noProcessGlobal` | `off` | `process` global'inin kullanımını yasaklar. |
+| `noProcessGlobal` | `off` | `process` global'inin kullanılmasını yasaklar. |
 | `noRestrictedElements` | `error` | Yapılandırılmış öğelerin kullanımını yasaklar. |
-| `noSelfAssign` | `error` | Her iki tarafı da tam olarak aynı olan atamaları yasaklar. |
-| `noSetterReturn` | `error` | Setter'dan değer döndürmeyi yasaklar. |
-| `noStringCaseMismatch` | `error` | String büyük/küçük harf değiştirildiğinde uyumsuz değerle karşılaştırmayı yasaklar. |
-| `noSwitchDeclarations` | `error` | Switch bloklarında leksikal bildirimleri yasaklar. |
-| `noUndeclaredDependencies` | `off` | `package.json`'da belirtilmeyen bağımlılıkların kullanımını yasaklar. |
+| `noSelfAssign` | `error` | Her iki tarafı tam olarak aynı olan atamaları yasaklar. |
+| `noSetterReturn` | `error` | Setter'dan değer döndürülmesini yasaklar. |
+| `noStringCaseMismatch` | `error` | String durumunu değiştiren ifadelerin uyumsuz değerlerle karşılaştırılmasını yasaklar. |
+| `noSwitchDeclarations` | `error` | Switch kısımlarında leksikal deklarasyonları yasaklar. |
+| `noUndeclaredDependencies` | `off` | `package.json`'da belirtilmemiş bağımlılıkların kullanılmasını yasaklar. |
 | `noUndeclaredVariables` | `error` | Doküman içinde deklarasyonu olmayan değişkenlerin kullanılmasını engeller. |
 | `noUnknownFunction` | `error` | Bilinmeyen CSS değer fonksiyonlarını yasaklar (CSS). |
 | `noUnknownMediaFeatureName` | `error` | Bilinmeyen medya özelliği isimlerini yasaklar (CSS). |
@@ -212,57 +212,63 @@ Ortam-a özgü işleme:
 | `noUnknownTypeSelector` | `error` | Bilinmeyen tip seçicilerini yasaklar (CSS). |
 | `noUnknownUnit` | `error` | Bilinmeyen CSS birimlerini yasaklar (CSS). |
 | `noUnmatchableAnbSelector` | `error` | Eşleşmeyen An+B seçicilerini yasaklar (CSS). |
-| `noUnreachable` | `error` | Ulaşılamayan kodu yasaklar. |
-| `noUnreachableSuper` | `error` | Bir sınıf constructor'ında `super()` çağrısının her kod yolunda tam olarak bir kez çağrıldığından emin olur. |
-| `noUnsafeFinally` | `error` | `finally` bloklarında kontrol akışı ifadelerini yasaklar. |
-| `noUnsafeOptionalChaining` | `error` | Undefined değerin izinli olmadığı bağlamlarda optional chaining kullanımını yasaklar. |
+| `noUnreachable` | `error` | Ulaşılamaz kodu yasaklar. |
+| `noUnreachableSuper` | `error` | Bir sınıf constructor'ında `super()`'ün her kod yolunda tam olarak bir kez çağrıldığından emin olur. |
+| `noUnsafeFinally` | `error` | Finally bloklarında kontrol akışı ifadelerini yasaklar. |
+| `noUnsafeOptionalChaining` | `error` | Undefined değerin izin verilmediği bağlamlarda optional chaining kullanımını yasaklar. |
 | `noUnusedFunctionParameters` | `error` | Kullanılmayan fonksiyon parametrelerini yasaklar. |
 | `noUnusedImports` | `error` (safe fix override) | Kullanılmayan import'ları yasaklar. |
 | `noUnusedLabels` | `error` | Kullanılmayan label'ları yasaklar. |
 | `noUnusedPrivateClassMembers` | `error` | Kullanılmayan özel sınıf üyelerini yasaklar. |
 | `noUnusedVariables` | `error` | Kullanılmayan değişkenleri yasaklar. |
-| `noVoidTypeReturn` | `error` | Dönüş tipi `void` olan bir fonksiyondan değer döndürmeyi yasaklar. |
-| `useGraphqlNamedOperations` | `error` | GraphQL operasyonlarının isimlendirilmesini zorunlu kılar. |
-| `useImageSize` | `error` | `<img>` öğelerinin hem width hem de height özniteliğine sahip olmasını zorunlu kılar. |
+| `noVoidTypeReturn` | `error` | Dönüş türü `void` olan bir fonksiyondan değer döndürülmesini yasaklar. |
+| `useGraphqlNamedOperations` | `error` | GraphQL operasyonlarının adlandırılmasını zorunlu kılar. |
+| `useImageSize` | `error` | `<img>` öğelerinin hem genişlik hem de yükseklik özniteliklerine sahip olmasını zorunlu kılar. |
 | `useImportExtensions` | `off` | Göreli import'lar için dosya uzantılarını zorunlu kılar. |
-| `useIsNan` | `error` | NaN kontrolü yaparken `isNaN()` çağrısının kullanılmasını zorunlu kılar. |
+| `useIsNan` | `error` | NaN kontrolü yaparken `isNaN()` çağrısını gerektirir. |
 | `useJsonImportAttributes` | `off` | JSON modül import'ları için `{ type: "json" }` kullanımını zorunlu kılar. |
-| `useParseIntRadix` | `error` | `parseInt()` kullanırken radix argümanının tutarlı kullanılmasını zorunlu kılar. |
-| `useSingleJsDocAsterisk` | `error` | JSDoc yorum satırlarının ilk satır hariç her satırının tek yıldızla başlamasını zorunlu kılar. |
-| `useUniqueElementIds` | `off` | Öğelerde statik string literal id özniteliği kullanımını önler. |
+| `useParseIntRadix` | `error` | `parseInt()` kullanılırken radix argümanının tutarlı kullanılmasını zorunlu kılar. |
+| `useSingleJsDocAsterisk` | `error` | JSDoc yorum satırlarının (ilk satır hariç) tek bir yıldızla başlamasını zorunlu kılar. |
+| `useUniqueElementIds` | `off` | Öğelerde sabit string literal id özniteliği kullanımını engeller. |
 | `useValidForDirection` | `error` | `for` döngüsü güncelleme ifadesinin sayacı doğru yönde hareket ettirmesini zorunlu kılar. |
 | `useValidTypeof` | `error` | `typeof` ifadesinin sonucunun geçerli bir değerle karşılaştırıldığını kontrol eder. |
-| `useYield` | `error` | Generator fonksiyonlarının `yield` içermesini zorunlu kılar. |
+| `useYield` | `error` | Jeneratör fonksiyonlarının `yield` içermesini zorunlu kılar. |
 
-### Deneysel (Nursery)
+### Deneysel
 
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noContinue` | `off` | `continue` ifadelerini yasaklar. |
-| `noDeprecatedImports` | `off` | Kullanımdan kalkmış export'ların import edilmesini kısıtlar. |
+| `noDeprecatedImports` | `off` | Kullanımdan kaldırılmış export'ların import edilmesini kısıtlar. |
 | `noDuplicateDependencies` | `error` | Yinelenen bağımlılıkların listelenmesini engeller. |
+| `noDuplicatedSpreadProps` | `error` | Spread props içinde yinelenen özellikleri yasaklar. |
 | `noEmptySource` | `error` | Boş kaynak dosyalarını yasaklar. |
+| `noEqualsToNull` | `error` | `null` ile karşılaştırmak için `==` veya `!=` kullanımını yasaklar. Bunun yerine `===` veya `!==` kullanın. |
 | `noFloatingPromises` | `off` | Promise-benzeri ifadelerin uygun şekilde ele alınmasını gerektirir. |
 | `noForIn` | `off` | `for-in` döngüsü ile yinelemeyi yasaklar. |
-| `noImportCycles` | `off` | Import döngülerini engeller. |
-| `noIncrementDecrement` | `error` | `++` ve `--` operatörlerinin kullanımını yasaklar (for döngüsündeki afterthought'lar hariç). |
-| `noJsxLiterals` | `off` | JSX öğeleri içinde string literal kullanılmasını yasaklar. |
-| `noMisusedPromises` | `off` | Muhtemelen yanlış yerde kullanılan Promise'leri yasaklar. |
-| `noParametersOnlyUsedInRecursion` | `error` | Sadece özyineleme çağrılarında kullanılan parametreleri yasaklar. |
-| `noShadow` | `error` | Dış kapsamda tanımlanmış değişkenleri gölgeleyen bildirimleri yasaklar. |
+| `noImportCycles` | `off` | Import döngülerini önler. |
+| `noIncrementDecrement` | `error` | `++` ve `--` operatörlerinin kullanımını yasaklar (for döngüsü afterthought'ları hariç). |
+| `noJsxLiterals` | `off` | JSX öğeleri içinde string literal kullanımını yasaklar. |
+| `noLeakedRender` | `error` | JSX'te problemli sızdırılmış değerlerin (ör. 0 veya NaN) render edilmesini önler. |
+| `noMisusedPromises` | `off` | Promise'lerin neredeyse kesinlikle hata olacağı yerlerde kullanılmasını yasaklar. |
+| `noMultiStr` | `error` | Backslash devamıyla çok satırlı string kullanımını yasaklar. |
+| `noParametersOnlyUsedInRecursion` | `error` | Yalnızca özyinelemeli çağrılarda kullanılan parametreleri yasaklar. |
+| `noProto` | `error` | `__proto__` özelliğinin kullanımını yasaklar. |
+| `noShadow` | `error` | Dış kapsamda deklar edilmiş değişkenlerin gölgelenmesini yasaklar. |
 | `noSyncScripts` | `error` | Senkron script kullanımını engeller. |
+| `noTernary` | `off` | Ternary operatörlerini yasaklar. |
 | `noUnnecessaryConditions` | `off` | Statik olarak gereksiz olduğu belirlenebilen tip tabanlı gereksiz koşulları yasaklar. |
 | `noUnresolvedImports` | `off` | Var olmayan export'ları import ederken uyarı verir. |
-| `noUnusedExpressions` | `error` | Fonksiyon çağrısı veya atama olmayan ifade bildirimlerini yasaklar. |
-| `noUselessCatchBinding` | `off` | Kullanılmayan `catch` bağlamalarını yasaklar. |
-| `noUselessUndefined` | `error` | Anlamsız `undefined` kullanımını yasaklar. |
-| `useArraySortCompare` | `off` | `Array.prototype.sort()` içinde bir karşılaştırma fonksiyonu kullanılmasını zorunlu kılar. |
-| `useConsistentArrowReturn` | `error` | Ok fonksiyonlarında tutarlı dönüş yapılarını zorunlu kılar. |
-| `useConsistentGraphqlDescriptions` | `error` | GraphQL dosyalarında tüm açıklamaların aynı stil (blok veya inline) takip etmesini zorunlu kılar. |
-| `useDeprecatedDate` | `error` | `@deprecated` yönergesi için bir silme tarihi belirtilmesini zorunlu kılar. |
-| `useExhaustiveSwitchCases` | `off` | Switch-case ifadelerinin kapsamlı olmasını gerektirir. |
-| `useExplicitType` | `off` | Fonksiyonlarda, metotlarda, değişkenlerde ve parametrelerde tiplerin kullanılmasını zorunlu kılar. |
-| `useFind` | `error` | Tek bir sonuç ararken `Array.prototype.filter()` + `[0]` yerine `Array.prototype.find()` kullanımını zorunlu kılar. |
+| `noUnusedExpressions` | `error` | Ne bir fonksiyon çağrısı ne de atama olan ifade ifadelerini yasaklar. |
+| `noUselessCatchBinding` | `off` | Kullanılmayan `catch` bağlamlarını yasaklar. |
+| `noUselessUndefined` | `error` | Gereksiz `undefined` kullanımını yasaklar. |
+| `useArraySortCompare` | `off` | `Array.prototype.sort()` içinde karşılaştırma fonksiyonunun kullanılmasını zorunlu kılar. |
+| `useConsistentArrowReturn` | `error` | Ok (arrow) fonksiyon gövdelerinde tutarlı dönüşleri zorunlu kılar. |
+| `useConsistentGraphqlDescriptions` | `error` | GraphQL dosyalarında tüm açıklamaların aynı stilde (blok veya inline) olmasını gerektirir. |
+| `useDeprecatedDate` | `error` | `@deprecated` direktifi kullanıldığında bir silinme tarihinin belirtilmesini gerektirir. |
+| `useExhaustiveSwitchCases` | `off` | Switch-case ifadelerinin kapsamlı (exhaustive) olmasını gerektirir. |
+| `useExplicitType` | `off` | Fonksiyonlarda, metodlarda, değişkenlerde ve parametrelerde türlerin zorunlu olmasını sağlar. |
+| `useFind` | `error` | Tek bir sonuç ararken `Array.prototype.filter()` sonrası `[0]` yerine `Array.prototype.find()` kullanılmasını zorunlu kılar. |
 | `useMaxParams` | `error` | Fonksiyon tanımlarında maksimum parametre sayısını zorunlu kılar. |
 | `useSortedClasses` | `error` (safe fix override) | CSS yardımcı sınıflarının sıralanmasını zorunlu kılar. |
 | `useSpread` | `error` | `Function.prototype.apply()` yerine spread operatörünün kullanılmasını zorunlu kılar. |
@@ -272,24 +278,24 @@ Ortam-a özgü işleme:
 
 | Rule | Setting | Description |
 |------|---------|-------------|
-| `noAccumulatingSpread` | `error` | Biriktirenler üzerinde spread (`...`) sözdiziminin kullanılmasını yasaklar. |
+| `noAccumulatingSpread` | `error` | Birikimlerde spread (`...`) sözdiziminin kullanılmasını yasaklar. |
 | `noAwaitInLoops` | `off` | Döngüler içinde `await` kullanımını yasaklar. |
 | `noBarrelFile` | `error` | Barrel dosyası kullanımını yasaklar. |
-| `noDelete` | `error` | `delete` operatörünün kullanımını yasaklar. |
-| `noDynamicNamespaceImportAccess` | `error` | Namespace import'lara dinamik erişimi yasaklar. |
+| `noDelete` | `error` | `delete` operatörünün kullanılmasını yasaklar. |
+| `noDynamicNamespaceImportAccess` | `error` | Namespace import'larına dinamik erişimi yasaklar. |
 | `noNamespaceImport` | `error` | Namespace import kullanımını yasaklar. |
-| `noReExportAll` | `off` | Tümünü yeniden-export etme kullanımından kaçınmayı sağlar. |
-| `noUnwantedPolyfillio` | `error` | Polyfill.io'dan çift polyfill kullanımını önler. |
-| `useGoogleFontPreconnect` | `error` | Google Fonts kullanıldığında `preconnect` özniteliğinin kullanılmasını sağlar. |
-| `useTopLevelRegex` | `error` | Düzenli ifade literal'lerinin üst düzeyde tanımlanmasını zorunlu kılar. |
+| `noReExportAll` | `off` | Tümünü yeniden export etme işleminden kaçınır. |
+| `noUnwantedPolyfillio` | `error` | Polyfill.io'dan yinelenen polyfill'leri önler. |
+| `useGoogleFontPreconnect` | `error` | Google Fonts kullanıldığında `preconnect` özniteliğinin kullanılmasını zorunlu kılar. |
+| `useTopLevelRegex` | `error` | Düzenli ifade literal'lerinin üst düzeyde tanımlanmasını gerektirir. |
 
 ### Güvenlik
 
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noBlankTarget` | `error` | `rel="noopener"` olmadan `target="_blank"` kullanımını yasaklar. |
-| `noDangerouslySetInnerHtml` | `error` | Tehlikeli JSX prop'larının kullanımını engeller. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Bir DOM öğesi veya bileşenin hem children hem de `dangerouslySetInnerHTML` prop'u kullanmasını raporlar. |
+| `noDangerouslySetInnerHtml` | `error` | Tehlikeli JSX prop'larının kullanılmasını önler. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Hem children hem de `dangerouslySetInnerHTML` prop'u kullanan DOM elementi veya bileşen raporlanır. |
 | `noGlobalEval` | `error` | Global `eval()` kullanımını yasaklar. |
 
 ### Stil
@@ -297,171 +303,171 @@ Ortam-a özgü işleme:
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noCommonJs` | `off` | ESM tarzı import'lar lehine Common JS modül sisteminin kullanımını yasaklar. |
-| `noDefaultExport` | `off` | Default export kullanımını yasaklar. |
+| `noDefaultExport` | `off` | Default export'ları yasaklar. |
 | `noDoneCallback` | `error` | Asenkron testlerde ve hook'larda callback kullanımını yasaklar. |
 | `noEnum` | `error` | TypeScript enum kullanımını yasaklar. |
 | `noExportedImports` | `error` | Import edilmiş bir değişkenin export edilmesini yasaklar. |
-| `noImplicitBoolean` | `off` | JSX boolean özniteliklerinde örtük true değerlerini yasaklar. |
-| `noInferrableTypes` | `error` | Literal ifadeyle başlatılan değişken, parametre ve sınıf özellikleri için tip anotasyonlarını yasaklar. |
-| `noMagicNumbers` | `off` | "Sihirli sayılar" kullanımını raporlar — isimlendirilmiş sabitlere atanmak yerine doğrudan kullanılan sayılar. |
+| `noImplicitBoolean` | `off` | JSX boolean özniteliğinde örtük true değerlerini yasaklar. |
+| `noInferrableTypes` | `error` | Literal ifadeyle başlatılan değişkenler, parametreler ve sınıf özellikleri için tür anotasyonlarını yasaklar. |
+| `noMagicNumbers` | `off` | "Magic numbers" kullanımını raporlar — doğrudan kullanılan sayılar yerine isimlendirilmiş sabitler kullanılmalıdır. |
 | `noNamespace` | `error` | TypeScript namespace kullanımını yasaklar. |
-| `noNegationElse` | `error` | Eğer bir if ifadesinin else bloğu varsa koşulda negasyon kullanılmasını yasaklar. |
+| `noNegationElse` | `error` | Eğer bir if ifadesinin else bloğu varsa, koşulda negasyon kullanılmasını yasaklar. |
 | `noNestedTernary` | `error` | İç içe ternary ifadelerini yasaklar. |
-| `noNonNullAssertion` | `error` | `!` postfix operatörü ile yapılan non-null assertion kullanımını yasaklar. |
+| `noNonNullAssertion` | `error` | `!` son ek operatörü ile yapılan non-null assertion kullanımını yasaklar. |
 | `noParameterAssign` | `error` | Fonksiyon parametrelerinin yeniden atanmasını yasaklar. |
-| `noParameterProperties` | `error` | Sınıf constructor'larında parametre özellikleri kullanımını yasaklar. |
+| `noParameterProperties` | `error` | Sınıf constructor'larında parametre property'lerinin kullanılmasını yasaklar. |
 | `noProcessEnv` | `off` | `process.env` kullanımını yasaklar. |
 | `noRestrictedGlobals` | `error` | Uygulamanızda kullanılmasını istemediğiniz global değişken isimlerini belirtmenizi sağlar. |
-| `noRestrictedImports` | `error` | Import veya require ile yüklenen belirli modüllerin kullanılmasını yasaklar. |
-| `noRestrictedTypes` | `error` | Kullanıcı tanımlı tipleri yasaklar. |
-| `noShoutyConstants` | `error` | Değerinin adıyla aynı olan büyük harfli sabitlerin kullanımını yasaklar. |
-| `noSubstr` | `error` | `String.substr()` ve `String.substring()` yerine `String.slice()` kullanılmasını zorunlu kılar. |
-| `noUnusedTemplateLiteral` | `error` | Interpolasyon ve özel karakter işleme gerekmiyorsa template literal kullanımını yasaklar. |
-| `noUselessElse` | `error` | If bloğu erken kırılıyorsa else bloğunun kullanılmasını yasaklar. |
+| `noRestrictedImports` | `error` | Import veya require ile yüklenen belirli modülleri yasaklar. |
+| `noRestrictedTypes` | `error` | Kullanıcı tanımlı türleri yasaklar. |
+| `noShoutyConstants` | `error` | Değeri adının büyük harfli versiyonu olan sabitlerin kullanılmasını yasaklar. |
+| `noSubstr` | `error` | `String.substr()` ve `String.substring()` yerine `String.slice()` kullanımını zorunlu kılar. |
+| `noUnusedTemplateLiteral` | `error` | Interpolasyon ve özel karakter işlemi gerekmiyorsa template literal kullanımını yasaklar. |
+| `noUselessElse` | `error` | If bloğu erken kırıyorsa else bloğunu yasaklar. |
 | `noYodaExpression` | `error` | Yoda ifadelerinin kullanılmasını yasaklar. |
-| `useArrayLiterals` | `error` | `Array` constructor kullanımını yasaklar. |
-| `useAsConstAssertion` | `error` | Literal tip ve tip anotasyonu yerine `as const` kullanılmasını zorunlu kılar. |
-| `useAtIndex` | `error` | Tam sayı indeks erişimi yerine `at()` kullanılmasını zorunlu kılar. |
-| `useBlockStatements` | `error` | Süslü parantez kurallarına uyulmasını zorunlu kılar. |
-| `useCollapsedElseIf` | `error` | `else` bloklarında iç içe `if` yerine `else if` kullanılmasını zorunlu kılar. |
-| `useCollapsedIf` | `error` | İç içe `if` blokları yerine tek `if` kullanılmasını zorunlu kılar. |
-| `useComponentExportOnlyModules` | `off` | Sadece React Bileşenleri dışa aktaran modüller içinde bileşen bildirimini zorunlu kılar. |
-| `useConsistentArrayType` | `error` | `T[]` veya `Array<T>` kullanımının tutarlı olmasını zorunlu kılar. |
-| `useConsistentBuiltinInstantiation` | `error` | `String`, `Number` ve `Boolean` hariç tüm yerleşiklerde `new` kullanımını zorunlu kılar. |
-| `useConsistentCurlyBraces` | `off` | JSX öznitelikleri ve JSX çocuklarında süslü parantez kullanımında tutarlılığı zorunlu kılar. |
-| `useConsistentMemberAccessibility` | `error` | Sınıf özellikleri ve metotları için tutarlı erişim belirleyicileri kullanımını zorunlu kılar. |
-| `useConsistentObjectDefinitions` | `error` | Nesne literal'larının tutarlı bildirimini zorunlu kılar. |
-| `useConst` | `error` | Yalnızca bir kez atanan değişkenler için `const` bildirimini zorunlu kılar. |
-| `useDefaultParameterLast` | `error` | Varsayılan fonksiyon parametreleri ve opsiyonel parametrelerin son sırada olmasını zorunlu kılar. |
-| `useDefaultSwitchClause` | `error` | Switch ifadelerinde `default` kılasının bulunmasını zorunlu kılar. |
-| `useDeprecatedReason` | `error` | `@deprecated` kullanımında neden argümanının belirtilmesini zorunlu kılar. |
+| `useArrayLiterals` | `error` | `Array` constructor'larını yasaklar. |
+| `useAsConstAssertion` | `error` | Literal tür ve tür anotasyonu yerine `as const` kullanımını zorunlu kılar. |
+| `useAtIndex` | `error` | Tamsayı indeks erişimi yerine `at()` kullanımını zorunlu kılar. |
+| `useBlockStatements` | `error` | Süslü parantez konvansiyonlarına uyulmasını zorunlu kılar. |
+| `useCollapsedElseIf` | `error` | `else` bloklarındaki iç içe `if` yerine `else if` kullanımını zorunlu kılar. |
+| `useCollapsedIf` | `error` | İç içe `if` blokları yerine tek `if` kullanımını zorunlu kılar. |
+| `useComponentExportOnlyModules` | `off` | Sadece React Bileşenleri dışa aktaran modüllerde bileşenlerin tanımlanmasını zorunlu kılar. |
+| `useConsistentArrayType` | `error` | `T[]` veya `Array<T>` kullanımında tutarlılığı zorunlu kılar. |
+| `useConsistentBuiltinInstantiation` | `error` | `String`, `Number` ve `Boolean` hariç tüm yerleşiklerin `new` ile örneklendirilmesini zorunlu kılar. |
+| `useConsistentCurlyBraces` | `off` | JSX öznitelikleri ve JSX çocukları içinde süslü parantezlerin tutarlı kullanımını zorunlu kılar. |
+| `useConsistentMemberAccessibility` | `error` | Sınıf özellikleri ve metodlarında erişilebilirlik belirteçlerinin tutarlı olmasını zorunlu kılar. |
+| `useConsistentObjectDefinitions` | `error` | Nesne literal deklarasyonlarının tutarlı olmasını zorunlu kılar. |
+| `useConst` | `error` | Sadece bir kez atanan değişkenler için `const` deklarasyonunu zorunlu kılar. |
+| `useDefaultParameterLast` | `error` | Varsayılan fonksiyon parametreleri ve isteğe bağlı parametrelerin son sırada olmasını zorunlu kılar. |
+| `useDefaultSwitchClause` | `error` | Switch ifadelerinde `default` kısmının bulunmasını zorunlu kılar. |
+| `useDeprecatedReason` | `error` | `@deprecated` direktifi kullanıldığında neden argümanının belirtilmesini zorunlu kılar. |
 | `useEnumInitializers` | `error` | Her enum üyesinin değerinin açıkça başlatılmasını zorunlu kılar. |
 | `useExplicitLengthCheck` | `off` | Bir değerin `length`, `size`, `byteLength` veya `byteOffset` özelliklerinin açıkça karşılaştırılmasını zorunlu kılar. |
 | `useExponentiationOperator` | `error` | `Math.pow` yerine `**` operatörünün kullanılmasını zorunlu kılar. |
-| `useExportType` | `error` | Tipler için `export type` kullanımını teşvik eder. |
-| `useExportsLast` | `off` | Tüm export'ların export olmayan bildirimlerden sonra gelmesini zorunlu kılar. |
-| `useFilenamingConvention` | `error` | JavaScript ve TypeScript dosya adlandırma kurallarını zorunlu kılar (kebab-case, ASCII). |
-| `useForOf` | `error` | Bir for döngüsünde, diziden öğe çıkarmak için kullanılan indeks varsa for-of döngüsü kullanılmasını önerir. |
-| `useFragmentSyntax` | `error` | `<Fragment>...</Fragment>` yerine `<>...</>` kullanımını zorunlu kılar. |
-| `useGraphqlNamingConvention` | `error` | Tüm enum değerlerinin büyük harfle yazıldığını doğrular. |
+| `useExportType` | `error` | Türler için `export type` kullanımını teşvik eder. |
+| `useExportsLast` | `off` | Tüm export'ların tüm export olmayan ifadelerden sonra bildirilmesini zorunlu kılar. |
+| `useFilenamingConvention` | `error` | JavaScript ve TypeScript dosya adlandırma kurallarını (kebab-case, ASCII) zorunlu kılar. |
+| `useForOf` | `error` | For döngüsünde, yinelemeli diziden bir öğe almak için kullanılan indeks varsa for-of döngüsünü önerir. |
+| `useFragmentSyntax` | `error` | `<>...</>` kullanımını `<Fragment>...</Fragment>` yerine zorunlu kılar. |
+| `useGraphqlNamingConvention` | `error` | Tüm enum değerlerinin büyük harfle başladığını doğrular. |
 | `useGroupedAccessorPairs` | `error` | Aynı özellik için getter ve setter'ların sınıf ve nesne tanımlarında bitişik olmasını zorunlu kılar. |
-| `useImportType` | `error` | Tipler için `import type` kullanımını teşvik eder. |
+| `useImportType` | `error` | Türler için `import type` kullanımını teşvik eder. |
 | `useLiteralEnumMembers` | `error` | Tüm enum üyelerinin literal değerler olmasını zorunlu kılar. |
 | `useNamingConvention` | `off` | İsimlendirme kuralı (devre dışı). |
 | `useNodeAssertStrict` | `error` | `node:assert/strict` kullanımını `node:assert` yerine teşvik eder. |
 | `useNodejsImportProtocol` | `error` | Node.js yerleşik modülleri için `node:` protokolünün kullanılmasını zorunlu kılar. |
 | `useNumberNamespace` | `error` | Global yerine `Number` özelliklerinin kullanılmasını zorunlu kılar. |
-| `useNumericSeparators` | `error` | Sayısal literal'lerde sayısal ayırıcıların kullanılmasını zorunlu kılar. |
-| `useObjectSpread` | `error` | Yeni nesne oluştururken `Object.assign()` yerine object spread kullanımını tercih eder. |
-| `useReadonlyClassProperties` | `error` | Yapıcı dışında hiç değiştirilmemiş üyelere `readonly` işaretlenmesini zorunlu kılar. |
-| `useSelfClosingElements` | `error` | Çocuğu olmayan bileşenler için fazladan kapanış etiketlerini engeller. |
-| `useShorthandAssign` | `error` | Mümkün olduğunda atama operatörü kısa gösterimini zorunlu kılar. |
-| `useShorthandFunctionType` | `error` | Çağrı imzaları içeren obje tipi yerine fonksiyon tipleri kullanılmasını zorunlu kılar. |
-| `useSingleVarDeclarator` | `off` | Aynı değişken bildiriminde birden fazla değişkeni yasaklar. |
-| `useSymbolDescription` | `error` | `Symbol()` için açıklama parametresi gerektirir. |
+| `useNumericSeparators` | `error` | Sayısal literal'larda sayı ayırıcılarının kullanılmasını zorunlu kılar. |
+| `useObjectSpread` | `error` | Yeni nesne oluştururken `Object.assign()` yerine obje spread kullanımını tercih eder. |
+| `useReadonlyClassProperties` | `error` | Yapılandırıcı dışındaki yerlerde hiç değiştirilmemiş üyelerin `readonly` olarak işaretlenmesini zorunlu kılar. |
+| `useSelfClosingElements` | `error` | Çocuğu olmayan bileşenler için gereksiz kapanış etiketlerini önler. |
+| `useShorthandAssign` | `error` | Mümkün olduğunda atama operatörü kısaltmasını zorunlu kılar. |
+| `useShorthandFunctionType` | `error` | Çağrı imzalarına sahip nesne tipi yerine fonksiyon tipi kullanılmasını zorunlu kılar. |
+| `useSingleVarDeclarator` | `off` | Aynı değişken bildirimi içinde birden çok değişken bildirimini yasaklar. |
+| `useSymbolDescription` | `error` | `Symbol()` için bir açıklama parametresi gerektirir. |
 | `useTemplate` | `error` | String birleştirme yerine template literal kullanımını tercih eder. |
-| `useThrowNewError` | `error` | Hata fırlatırken `new` kullanımını zorunlu kılar. |
+| `useThrowNewError` | `error` | Hata fırlatırken `new` kullanılmasını zorunlu kılar. |
 | `useThrowOnlyError` | `error` | `Error` olmayan değerlerin fırlatılmasını yasaklar. |
 | `useTrimStartEnd` | `error` | `String.trimLeft()` ve `String.trimRight()` yerine `String.trimStart()` ve `String.trimEnd()` kullanımını zorunlu kılar. |
-| `useUnifiedTypeSignatures` | `error` | Tek bir imzaya birleştirilebilecek aşırı yükleme imzalarını yasaklar. |
-| `noDescendingSpecificity` | `error` | Daha yüksek özgüllüğe sahip bir seçiciden sonra daha düşük özgüllüğe sahip bir seçicinin gelmesini yasaklar (CSS). |
-| `noValueAtRule` | `error` | css module'larda `@value` kuralının kullanılmasını yasaklar (CSS). |
+| `useUnifiedTypeSignatures` | `error` | Tek bir imzaya birleştirilebilen overload imzalarını yasaklar. |
+| `noDescendingSpecificity` | `error` | Yüksek özgüllüğe sahip seçiciden sonra daha düşük özgüllüğe sahip seçicinin gelmesini yasaklar (CSS). |
+| `noValueAtRule` | `error` | CSS modüllerinde `@value` kuralının kullanımını yasaklar (CSS). |
 
 ### Şüpheli
 
 | Rule | Setting | Description |
 |------|---------|-------------|
 | `noAlert` | `error` | `alert`, `confirm` ve `prompt` kullanımını yasaklar. |
-| `noApproximativeNumericConstant` | `error` | Yaklaşık literal'ler yerine standart sabitlerin kullanılmasını önerir. |
-| `noAssignInExpressions` | `error` | İfadelerde atama yapılmasını yasaklar. |
+| `noApproximativeNumericConstant` | `error` | Yaklaşık literal'lar yerine standart sabitleri kullanmayı zorunlu kılar. |
+| `noAssignInExpressions` | `error` | İfadelerde atamaları yasaklar. |
 | `noAsyncPromiseExecutor` | `error` | Promise yürütücüsü olarak async fonksiyon kullanılmasını yasaklar. |
-| `noBiomeFirstException` | `error` | Yapılandırma dosyasında `files.includes`'in ilk pozisyonunda `!` deseninin kullanılmasını engeller. |
-| `noBitwiseOperators` | `error` | Bit düzey operatörlerin kullanılmasını yasaklar. |
-| `noCatchAssign` | `error` | Catch bloklarındaki istisnaların yeniden atanmasını yasaklar. |
-| `noClassAssign` | `error` | Sınıf bildirimlerinin yeniden atanmasını yasaklar. |
-| `noCommentText` | `error` | Yorumların metin düğümleri olarak eklenmesini engeller. |
-| `noCompareNegZero` | `error` | `-0` ile karşılaştırma yapılmasını yasaklar. |
-| `noConfusingLabels` | `error` | Döngü olmayan etiketlenmiş ifadeleri yasaklar. |
-| `noConfusingVoidType` | `error` | Genel veya dönüş tipi dışındaki yerlerde void tip kullanımını yasaklar. |
+| `noBiomeFirstException` | `error` | Konfigürasyon dosyasındaki `files.includes` içinde `!` deseninin ilk konumda kullanılmasını engeller. |
+| `noBitwiseOperators` | `error` | Bit düzeyindeki operatörleri yasaklar. |
+| `noCatchAssign` | `error` | Catch bloklarında istisnaların yeniden atanmasını yasaklar. |
+| `noClassAssign` | `error` | Sınıf üyelerinin yeniden atanmasını yasaklar. |
+| `noCommentText` | `error` | Yorumların metin düğümü olarak eklenmesini engeller. |
+| `noCompareNegZero` | `error` | `-0` ile karşılaştırmayı yasaklar. |
+| `noConfusingLabels` | `error` | Döngü olmayan labeled ifadeleri yasaklar. |
+| `noConfusingVoidType` | `error` | Void türünün generic veya dönüş türleri dışında kullanılmasını yasaklar. |
 | `noConsole` | `off` | `console` kullanımını yasaklar. |
 | `noConstEnum` | `error` | TypeScript const enum kullanımını yasaklar. |
 | `noConstantBinaryExpressions` | `error` | İşlemin değeri etkilemediği ifadeleri yasaklar. |
-| `noControlCharactersInRegex` | `error` | Düzenli ifade literal'lerinde kontrol karakterleri ve bazı escape dizilerinin kullanılmasını engeller. |
+| `noControlCharactersInRegex` | `error` | Düzenli ifade literal'lerinde kontrol karakterleri ve bazı escape dizilerinin kullanımını engeller. |
 | `noDebugger` | `error` | `debugger` kullanımını yasaklar. |
 | `noDocumentCookie` | `error` | `document.cookie`'ye doğrudan atamaları yasaklar. |
-| `noDoubleEquals` | `error` | `===` ve `!==` kullanımını zorunlu kılar. |
-| `noDuplicateAtImportRules` | `error` | `@import` kurallarında tekrarları yasaklar (CSS). |
-| `noDuplicateCase` | `error` | Tekrarlı case etiketlerini yasaklar. |
-| `noDuplicateClassMembers` | `error` | Tekrarlı sınıf üyelerini yasaklar. |
-| `noDuplicateCustomProperties` | `error` | Beyan bloklarında tekrar eden özel özellikleri yasaklar (CSS). |
-| `noDuplicateElseIf` | `error` | If-else-if zincirlerinde tekrar eden koşulları yasaklar. |
-| `noDuplicateFields` | `error` | GraphQL operasyonlarında tekrar eden alanları yasaklar. |
-| `noDuplicateFontNames` | `error` | Yazı tipi aileleri içinde tekrar eden isimleri yasaklar (CSS). |
-| `noDuplicateObjectKeys` | `error` | Nesneler içinde aynı ada sahip iki anahtar olmasını yasaklar. |
-| `noDuplicateParameters` | `error` | Tekrarlı fonksiyon parametre isimlerini yasaklar. |
-| `noDuplicateProperties` | `error` | Beyan blokları içinde tekrar eden özellikleri yasaklar (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Keyframe blokları içinde tekrar eden seçicileri yasaklar (CSS). |
-| `noDuplicateTestHooks` | `error` | Bir describe bloğunda tekrar eden hook'ların bulunmamasını sağlar. |
+| `noDoubleEquals` | `error` | `===` ve `!==` kullanımını gerektirir. |
+| `noDuplicateAtImportRules` | `error` | Yinelenen `@import` kurallarını yasaklar (CSS). |
+| `noDuplicateCase` | `error` | Yinelenen case etiketlerini yasaklar. |
+| `noDuplicateClassMembers` | `error` | Yinelenen sınıf üyelerini yasaklar. |
+| `noDuplicateCustomProperties` | `error` | Deklarasyon blokları içinde yinelenen özel özellikleri yasaklar (CSS). |
+| `noDuplicateElseIf` | `error` | If-else-if zincirlerinde yinelenen koşulları yasaklar. |
+| `noDuplicateFields` | `error` | GraphQL operasyonlarında yinelenen alanları yasaklar. |
+| `noDuplicateFontNames` | `error` | Yazı aileleri içinde yinelenen isimleri yasaklar (CSS). |
+| `noDuplicateObjectKeys` | `error` | Nesneler içinde aynı isimli iki anahtarın bulunmasını yasaklar. |
+| `noDuplicateParameters` | `error` | Fonksiyon parametre isimlerinin tekrarını yasaklar. |
+| `noDuplicateProperties` | `error` | Deklarasyon blokları içinde yinelenen özellikleri yasaklar (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Keyframe blokları içinde yinelenen seçicileri yasaklar (CSS). |
+| `noDuplicateTestHooks` | `error` | Bir describe bloğu içinde tekrar eden hook'ların bulunmamasını sağlar. |
 | `noEmptyBlock` | `error` | CSS boş bloklarını yasaklar (CSS). |
 | `noEmptyBlockStatements` | `error` | Boş blok ifadelerini ve statik blokları yasaklar. |
-| `noEmptyInterface` | `error` | Boş interface bildirimlerini yasaklar. |
-| `noEvolvingTypes` | `error` | Yeniden atamalar yoluyla değişkenlerin `any` tipine evrilmesini yasaklar. |
-| `noExplicitAny` | `error` | `any` tipinin kullanımını yasaklar. |
+| `noEmptyInterface` | `error` | Boş arayüz deklarasyonlarını yasaklar. |
+| `noEvolvingTypes` | `error` | Yeniden atamalar yoluyla türlerin `any`'e dönüşmesini yasaklar. |
+| `noExplicitAny` | `error` | `any` türü kullanımını yasaklar. |
 | `noExportsInTest` | `error` | Test içeren dosyalarda export veya module.exports kullanımını yasaklar. |
-| `noExtraNonNullAssertion` | `error` | TypeScript dosyalarında non-null assertion `!` operatörünün yanlış kullanımını önler. |
-| `noFallthroughSwitchClause` | `error` | Switch dallarının fallthrough olmasını yasaklar. |
-| `noFocusedTests` | `error` | Odaklanmış testlerin kullanılmasını yasaklar. |
+| `noExtraNonNullAssertion` | `error` | TypeScript dosyalarında non-null assertion operatörü `!`'ın yanlış kullanımını engeller. |
+| `noFallthroughSwitchClause` | `error` | Switch kısımlarında fallthrough'u yasaklar. |
+| `noFocusedTests` | `error` | Odaklanmış (focused) testleri yasaklar. |
 | `noFunctionAssign` | `error` | Fonksiyon deklarasyonlarının yeniden atanmasını yasaklar. |
-| `noGlobalAssign` | `error` | Yerel olmayan nesnelere ve salt okunur global değişkenlere atamaları yasaklar. |
-| `noGlobalIsFinite` | `error` | Global `isFinite` yerine `Number.isFinite` kullanılmasını önerir. |
-| `noGlobalIsNan` | `error` | Global `isNaN` yerine `Number.isNaN` kullanılmasını önerir. |
-| `noImplicitAnyLet` | `error` | Değişken deklarasyonlarında örtük any tipinin kullanılmasını yasaklar. |
-| `noImportAssign` | `error` | Import edilmiş bağlamlara atamayı yasaklar. |
-| `noImportantInKeyframe` | `error` | Keyframe bildirimlerinde geçersiz `!important` kullanımını yasaklar (CSS). |
-| `noIrregularWhitespace` | `error` | Düzensiz boşluk karakterlerinin kullanımını engeller. |
-| `noLabelVar` | `error` | Bir değişkenle aynı adı paylaşan etiketleri yasaklar. |
-| `noMisleadingCharacterClass` | `error` | Karakter sınıfı sözdiziminde birden fazla kod noktası ile oluşturulan karakterleri yasaklar. |
+| `noGlobalAssign` | `error` | Yerel nesnelere ve salt okunur global değişkenlere atama yapılmasını yasaklar. |
+| `noGlobalIsFinite` | `error` | Global `isFinite` yerine `Number.isFinite` kullanımını zorunlu kılar. |
+| `noGlobalIsNan` | `error` | Global `isNaN` yerine `Number.isNaN` kullanımını zorunlu kılar. |
+| `noImplicitAnyLet` | `error` | Değişken deklarasyonlarında örtük any tür kullanımını yasaklar. |
+| `noImportAssign` | `error` | Import edilmiş bağlamlara atama yapılmasını yasaklar. |
+| `noImportantInKeyframe` | `error` | Keyframe deklarasyonlarında geçersiz `!important` kullanımını yasaklar (CSS). |
+| `noIrregularWhitespace` | `error` | Düzensiz boşluk karakterlerinin kullanımını yasaklar. |
+| `noLabelVar` | `error` | Bir değişkenle aynı adı paylaşan label'ları yasaklar. |
+| `noMisleadingCharacterClass` | `error` | Karakter sınıfı sözdiziminde birden fazla kod noktasından oluşan karakterleri yasaklar. |
 | `noMisleadingInstantiator` | `error` | `new` ve `constructor` kullanımının doğru olmasını zorunlu kılar. |
-| `noMisplacedAssertion` | `error` | Örneğin `expect` gibi assertion fonksiyonunun `it()` fonksiyon çağrısı içinde olmasını kontrol eder. |
-| `noMisrefactoredShorthandAssign` | `error` | Değişken her iki tarafta da görünüyorsa kısa atama kullanımını yasaklar. |
+| `noMisplacedAssertion` | `error` | Assertion fonksiyonunun (ör. expect) `it()` fonksiyon çağrısı içinde yer almasını kontrol eder. |
+| `noMisrefactoredShorthandAssign` | `error` | Değişken her iki tarafta da görünüyorsa shorthand assign kullanımını yasaklar. |
 | `noOctalEscape` | `error` | String literal'lerinde sekizlik escape dizilerini yasaklar. |
-| `noPrototypeBuiltins` | `error` | `Object.prototype` yerleşiklerinin doğrudan kullanılmasını yasaklar. |
+| `noPrototypeBuiltins` | `error` | `Object.prototype` builtin'lerinin doğrudan kullanımını yasaklar. |
 | `noQuickfixBiome` | `error` | Editor ayar dosyasında `quickfix.biome` kullanımını yasaklar. |
-| `noRedeclare` | `error` | Aynı kapsamda değişken, fonksiyon, sınıf ve tip yeniden bildirimlerini yasaklar. |
+| `noRedeclare` | `error` | Aynı kapsamda değişken, fonksiyon, sınıf ve tür yeniden deklarasyonlarını yasaklar. |
 | `noRedundantUseStrict` | `error` | Gereksiz `use strict` kullanımını engeller. |
-| `noSelfCompare` | `error` | Her iki tarafı da tam olarak aynı olan karşılaştırmaları yasaklar. |
-| `noShadowRestrictedNames` | `error` | Kısıtlı isimleri gölgeleyen tanımlamaları yasaklar. |
-| `noShorthandPropertyOverrides` | `error` | Uzun el yazımı özellikleri geçersiz kılan kısa özelliklerin kullanımını yasaklar (CSS). |
+| `noSelfCompare` | `error` | Her iki tarafın tam olarak aynı olduğu karşılaştırmaları yasaklar. |
+| `noShadowRestrictedNames` | `error` | Kısıtlı isimleri gölgeleyen tanımlayıcıları yasaklar. |
+| `noShorthandPropertyOverrides` | `error` | İlgili longhand özellikleri geçersiz kılan shorthand özellikleri yasaklar (CSS). |
 | `noSkippedTests` | `error` | Devre dışı bırakılmış testleri yasaklar. |
-| `noSparseArray` | `error` | Delikli (holes) dizilerin kullanılmasını engeller. |
-| `noTemplateCurlyInString` | `error` | Normal string'lerde şablon literal yer tutucu sözdizimini yasaklar. |
+| `noSparseArray` | `error` | Delikli (holes) dizilerin kullanımını engeller. |
+| `noTemplateCurlyInString` | `error` | Normal stringlerde template literal yer tutucu sözdizimini yasaklar. |
 | `noThenProperty` | `error` | `then` özelliğini yasaklar. |
-| `noTsIgnore` | `error` | TypeScript yönergesi `@ts-ignore` kullanımını engeller. |
-| `noUnassignedVariables` | `error` | Okunan ama asla atanmayan let veya var değişkenlerini yasaklar. |
+| `noTsIgnore` | `error` | TypeScript direktifi `@ts-ignore` kullanımını engeller. |
+| `noUnassignedVariables` | `error` | Okunan fakat hiç atanmış olmayan let veya var değişkenlerini yasaklar. |
 | `noUnknownAtRules` | `error` | Bilinmeyen at-kurallarını yasaklar (CSS). |
-| `noUnsafeDeclarationMerging` | `error` | Interface ve sınıflar arasında güvensiz bildirim birleştirmesini yasaklar. |
+| `noUnsafeDeclarationMerging` | `error` | Arayüzler ve sınıflar arasında güvensiz deklarasyon birleştirmesini yasaklar. |
 | `noUnsafeNegation` | `error` | Güvensiz negasyon (`!`) kullanımını yasaklar. |
 | `noUselessEscapeInString` | `error` | String literal'lerinde gereksiz escape kullanımını yasaklar. |
 | `noUselessRegexBackrefs` | `error` | Her zaman boş string ile eşleşen gereksiz geri referansları düzenli ifade literal'lerinde yasaklar. |
 | `noVar` | `error` | `var` kullanımını yasaklar. |
-| `noWith` | `error` | Non-strict bağlamlarda `with` ifadelerini yasaklar. |
-| `useAdjacentOverloadSignatures` | `error` | Birbiriyle bitişik olmayan aşırı yükleme imzalarının kullanılmasını yasaklar. |
+| `noWith` | `error` | Gayri-sıkı bağlamlarda `with` ifadelerini yasaklar. |
+| `useAdjacentOverloadSignatures` | `error` | Birbiri yanında olmayan overload imzalarının kullanılmasını yasaklar. |
 | `useAwait` | `error` | Asenkron fonksiyonların `await` kullanmasını sağlar. |
-| `useBiomeIgnoreFolder` | `error` | Yapılandırma dosyasında klasörleri doğru şekilde yoksayma kullanımını teşvik eder. |
-| `useDefaultSwitchClauseLast` | `error` | Switch ifadelerinde default kılasının son sırada olmasını zorunlu kılar. |
-| `useErrorMessage` | `error` | Yerleşik bir hata oluştururken bir mesaj değeri geçirilmesini zorunlu kılar. |
+| `useBiomeIgnoreFolder` | `error` | Yapılandırma dosyasında klasörleri ignore etme için doğru kullanımı teşvik eder. |
+| `useDefaultSwitchClauseLast` | `error` | Switch ifadelerinde default kısımlarının son olmasını zorunlu kılar. |
+| `useErrorMessage` | `error` | Yerleşik bir hata oluştururken mesaj değeri geçirilmesini zorunlu kılar. |
 | `useGetterReturn` | `error` | Getter metodlarının her zaman bir değer döndürmesini zorunlu kılar. |
-| `useGoogleFontDisplay` | `error` | Google Fonts ile önerilen bir display stratejisinin kullanılmasını zorunlu kılar. |
+| `useGoogleFontDisplay` | `error` | Google Fonts ile önerilen display stratejisinin kullanılmasını zorunlu kılar. |
 | `useGuardForIn` | `error` | For-in döngülerinin bir `if` ifadesi içermesini zorunlu kılar. |
-| `useIsArray` | `error` | `instanceof Array` yerine `Array.isArray()` kullanılmasını önerir. |
-| `useIterableCallbackReturn` | `error` | Yineleyici callback'lerinde tutarlı dönüş değerlerini zorunlu kılar. |
+| `useIsArray` | `error` | `instanceof Array` yerine `Array.isArray()` kullanılmasını zorunlu kılar. |
+| `useIterableCallbackReturn` | `error` | Yinelemeli callback'lerde tutarlı dönüş değerlerini zorunlu kılar. |
 | `useNamespaceKeyword` | `error` | TypeScript namespace bildirimleri için `module` yerine `namespace` anahtar kelimesinin kullanılmasını zorunlu kılar. |
-| `useNumberToFixedDigitsArgument` | `error` | `Number#toFixed()` ile digits argümanının kullanılmasını zorunlu kılar. |
-| `useStaticResponseMethods` | `error` | Mümkün olduğunda `new Response()` constructor'ı yerine statik `Response` metotlarının kullanılmasını önerir. |
+| `useNumberToFixedDigitsArgument` | `error` | `Number#toFixed()` ile birlikte digits argümanının kullanılmasını zorunlu kılar. |
+| `useStaticResponseMethods` | `error` | Mümkün olduğunda `new Response()` constructor'ı yerine statik `Response` metodlarının kullanılmasını sağlar. |
 | `useStrictMode` | `error` | Script dosyalarında `use strict` direktifinin kullanılmasını zorunlu kılar. |
 
 ## Notlar
 
-Bazı kurallar Scanner ile çalıştırmak için çok yavaş oldukları nedeniyle devre dışı bırakılmıştır. [Biome dokümanlarında](https://biomejs.dev/guides/investigate-slowness/#first-things-first) belirtildiği gibi, etkinleştirilen proje kuralları daha gelişmiş analiz karşılığında performans yükü oluşturmasıyla bilinir.
+Bazı kurallar Scanner ile çalıştırıldığında çok yavaş olduğu için devre dışıdır. [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first)'da belirtildiği gibi, etkinleştirilen proje kurallarının daha gelişmiş analiz karşılığında performans yüküne neden olduğu bilinmektedir.
 
-Testlerimizde, bu kuralların lint süresini 300ms ile 13s arasında değiştirebileceğini gördük.
+Testlerimizde, bu kuralların lint süresinde 300ms ile 13s arasında fark yaratabildiğini gördük.

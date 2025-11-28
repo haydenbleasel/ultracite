@@ -19,14 +19,14 @@ Voeg de Next.js-configuratie toe aan je `biome.jsonc`:
 
 Deze configuratie voegt regels toe die specifiek zijn voor Next.js-ontwikkeling:
 
-- **Afbeeldingsoptimalisatie**: Dwing het gebruik van de Next.js `<Image>`-component af
-- **Documentstructuur**: Voorkom onjuist gebruik van speciale Next.js-componenten
+- **Afbeeldingsoptimalisatie**: Forceer het gebruik van de Next.js `<Image>`-component
+- **Documentstructuur**: Voorkom onjuist gebruik van Next.js-speciale componenten
 - **Clientcomponenten**: Zorg dat asynchrone clientcomponenten correct worden afgehandeld
 - **Configuratiebestanden**: Speciale behandeling voor `next.config.*`-bestanden
 
 ## Next.js-specifieke regels
 
-### Kweekvijver
+### Nursery
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
@@ -42,7 +42,7 @@ Deze configuratie voegt regels toe die specifiek zijn voor Next.js-ontwikkeling:
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Verbied het gebruik van het `<head>` HTML-element. Gebruik in plaats daarvan Next.js `next/head` of de metadata-API van de App Router. |
+| `noHeadElement` | `error` | Verbied het gebruik van het `<head>` HTML-element. Gebruik in plaats daarvan Next.js `next/head` of de App Router metadata-API. |
 
 ### Verdacht
 
@@ -53,7 +53,7 @@ Deze configuratie voegt regels toe die specifiek zijn voor Next.js-ontwikkeling:
 
 ## Overschrijvingen voor configuratiebestanden
 
-De Next.js-preset bevat speciale verwerking voor configuratiebestanden en App Router-componenten:
+De Next.js-preset bevat speciale behandeling voor configuratiebestanden en App Router-componenten:
 
 ### Next.js-configuratiebestanden
 
@@ -74,9 +74,9 @@ De Next.js-preset bevat speciale verwerking voor configuratiebestanden en App Ro
 }
 ```
 
-Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet zouden voldoen aan lintregels.
+Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet door lintregels zouden komen.
 
-### App Router-pagina's en -layouts
+### App Router-pagina's en lay-outs
 
 ```jsonc
 {
@@ -95,4 +95,4 @@ Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet z
 }
 ```
 
-App Router-pagina- en layoutcomponenten mogen asynchroon zijn zonder dat `await` vereist is, omdat Next.js deze speciaal afhandelt voor server-side rendering en gegevensopvraging.
+App Router-pagina- en lay-outcomponenten mogen asynchroon zijn zonder `await` te vereisen, omdat Next.js deze speciaal afhandelt voor server-side rendering en dataopvraging.

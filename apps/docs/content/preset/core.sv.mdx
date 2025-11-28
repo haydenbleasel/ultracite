@@ -3,7 +3,7 @@ title: Kärna
 description: Ultracites grundkonfiguration med ramverksoberoende lint-regler.
 ---
 
-Kärnkonfigurationen för Ultracite tillhandahåller en omfattande uppsättning ramverksoberoende lint-regler och formateringsinställningar. Detta är grunden som alla andra ramverksspecifika konfigurationer bygger på.
+Kärnkonfigurationen för Ultracite tillhandahåller ett omfattande sett med ramverksoberoende lint-regler och formateringsinställningar. Detta är grunden som alla andra ramverksspecifika konfigurationer bygger vidare på.
 
 ## Installation
 
@@ -23,15 +23,15 @@ Eller lägg till den manuellt i din `biome.jsonc`:
 
 ## Översikt
 
-Kärnkonfigurationen inkluderar hundratals strikta lint-regler som täcker:
+Kärnkonfigurationen innehåller hundratals strikta lint-regler som täcker:
 
-- **Åtkomlighet (a11y)**: Tvinga ARIA-attribut, semantisk HTML och tangentbordsnavigering
-- **Komplexitet**: Minska kognitiv komplexitet och säkerställ bästa praxis
-- **Korrekthet**: Förhindra vanliga fel och upprätthålla typesäkerhet
-- **Prestanda**: Optimera kod för bättre körningstidsprestanda
+- **Tillgänglighet (a11y)**: Tvinga fram ARIA-attribut, semantisk HTML och tangentbordsnavigering
+- **Komplexitet**: Minska kognitiv komplexitet och tvinga fram bästa praxis
+- **Korrekthet**: Förhindra vanliga fel och säkerställ typ-säkerhet
+- **Prestanda**: Optimera kod för bättre körtidsprestanda
 - **Säkerhet**: Förhindra säkerhetssårbarheter
-- **Stil**: Säkerställ en konsekvent kodstil
-- **Misstänkt**: Fånga misstänkta mönster som kan tyda på buggar
+- **Stil**: Tvinga fram en konsekvent kodstil
+- **Misstänkt**: Fånga misstänkta mönster som kan indikera buggar
 
 ## Formatteringsinställningar
 
@@ -39,33 +39,33 @@ Kärnkonfigurationen inkluderar hundratals strikta lint-regler som täcker:
 - **Radbredd**: 80 tecken
 - **Radslut**: LF (Unix-stil)
 - **Semikolon**: Alltid obligatoriskt
-- **Citattecken**: Dubbla citationstecken för JavaScript/TypeScript och JSON
-- **Efterföljande kommatecken**: ES5-stil (flerradiga arrayer/objekt)
-- **Parenteser i arrow-funktioner**: Inkludera alltid parenteser
+- **Citattecken**: Dubbelcitat för JavaScript/TypeScript och JSON
+- **Avslutande kommatecken**: ES5-stil (flerradiga arrayer/objekt)
+- **Pilparenteser**: Inkludera alltid parenteser
 
-## Nyckelfunktioner
+## Huvudfunktioner
 
 ### TypeScript-strikthet
 
 Kärnkonfigurationen aktiverar TypeScripts strikta kontroller:
 
-- Avråder från att använda `any` (`noExplicitAny: error`)
+- Avråder från användning av `any` (`noExplicitAny: error`)
 - Kräver hantering av `null/undefined`
 - Föredrar explicita typer i vissa situationer
-- Upprätthåller typesäkerhet över hela kodbasen
+- Tvingar typ-säkerhet över hela kodbasen
 
-### ESLint rekommenderade ekvivalenter
+### ESLint-rekommenderade motsvarigheter
 
 Vanliga bästa-praktik-regler ingår:
 
 - Inga oanvända variabler (`noUnusedVariables: error`)
-- Inga oanvända importeringar (`noUnusedImports: error`)
+- Inga oanvända importer (`noUnusedImports: error`)
 - Ingen explicit eval (`noGlobalEval: error`)
 - Ingen prototype-förorening (`noPrototypeBuiltins: error`)
 
-### Åtkomlighet som standard
+### Tillgänglighet som standard
 
-Regler motsvarande åtkomststandarder:
+Regler motsvarande tillgänglighetsstandarder:
 
 - ARIA-attribut måste vara giltiga
 - Semantiska HTML-element föredras
@@ -77,200 +77,206 @@ Regler motsvarande åtkomststandarder:
 Miljöspecifik hantering:
 
 - Känner igen Node.js-globals (`module`, `process`)
-- Kräver `node:`-protokollet för inbyggda moduler
+- Tvingar `node:`-protokoll för inbyggda moduler
 - Stöder både CommonJS och ESM
 
-## Komplett regelreferens
+## Fullständig regelreferens
 
-### Åtkomlighet (a11y)
+### Tillgänglighet (a11y)
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noAccessKey` | `error` | Tvinga att attributet `accessKey` inte används på någon HTML-element. |
-| `noAriaHiddenOnFocusable` | `error` | Tvinga att `aria-hidden="true"` inte sätts på fokuserbara element. |
-| `noAriaUnsupportedElements` | `error` | Tvinga att element som inte stöder ARIA-roller, -tillstånd och -egenskaper inte har dessa attribut. |
-| `noAutofocus` | `off` | Tvinga att prop:en `autoFocus` inte används på element. |
+| `noAccessKey` | `error` | Tvinga att attributet `accessKey` inte används på något HTML-element. |
+| `noAriaHiddenOnFocusable` | `error` | Tvinga att `aria-hidden="true"` inte sätts på fokusbara element. |
+| `noAriaUnsupportedElements` | `error` | Tvinga att element som inte stödjer ARIA-roller, tillstånd och egenskaper inte har dessa attribut. |
+| `noAutofocus` | `off` | Tvinga att `autoFocus`-prop inte används på element. |
 | `noDistractingElements` | `error` | Tvingar att inga distraherande element används. |
-| `noHeaderScope` | `error` | Prop:en scope bör endast användas på `<th>`-element. |
+| `noHeaderScope` | `error` | `scope`-prop bör endast användas på `<th>`-element. |
 | `noInteractiveElementToNoninteractiveRole` | `error` | Tvinga att icke-interaktiva ARIA-roller inte tilldelas interaktiva HTML-element. |
 | `noLabelWithoutControl` | `error` | Tvinga att ett label-element eller komponent har en textetikett och ett associerat input. |
-| `noNoninteractiveElementInteractions` | `error` | Förbjud användning av eventhanterare på icke-interaktiva element. |
+| `noNoninteractiveElementInteractions` | `error` | Förbjud användning av event-hanterare på icke-interaktiva element. |
 | `noNoninteractiveElementToInteractiveRole` | `error` | Tvinga att interaktiva ARIA-roller inte tilldelas icke-interaktiva HTML-element. |
 | `noNoninteractiveTabindex` | `error` | Tvinga att `tabIndex` inte tilldelas icke-interaktiva HTML-element. |
 | `noPositiveTabindex` | `error` | Förhindra användning av positiva heltal på `tabIndex`-egenskapen. |
-| `noRedundantAlt` | `error` | Tvinga att img alt-prop inte innehåller orden `image`, `picture`, eller `photo`. |
-| `noRedundantRoles` | `error` | Tvinga att en explicit role-prop inte är samma som elementets implicita/standard-roll. |
-| `noStaticElementInteractions` | `error` | Tvinga att statiska, synliga element (såsom `<div>`) som har klickhanterare använder giltigt role-attribut. |
-| `noSvgWithoutTitle` | `error` | Kräver användning av title-elementet för `svg`-elementet. |
-| `useAltText` | `error` | Tvinga att alla element som kräver alternativ text har meningsfull information för slutanvändaren. |
-| `useAnchorContent` | `error` | Tvinga att anchors har innehåll och att innehållet är tillgängligt för skärmläsare. |
+| `noRedundantAlt` | `error` | Tvinga att img alt-prop inte innehåller orden `image`, `picture` eller `photo`. |
+| `noRedundantRoles` | `error` | Tvinga att explicit role-egenskap inte är samma som det implicita/default-rolen på ett element. |
+| `noStaticElementInteractions` | `error` | Tvinga att statiska, synliga element (såsom `<div>`) som har klick-hanterare använder ett giltigt role-attribut. |
+| `noSvgWithoutTitle` | `error` | Kräftar användningen av title-elementet för `svg`-elementet. |
+| `useAltText` | `error` | Tvinga att alla element som kräver alternativ text har meningsfull information att förmedla till slutanvändaren. |
+| `useAnchorContent` | `error` | Tvinga att länkar har innehåll och att innehållet är tillgängligt för skärmläsare. |
 | `useAriaActivedescendantWithTabindex` | `error` | Tvinga att `tabIndex` tilldelas icke-interaktiva HTML-element med aria-activedescendant. |
 | `useAriaPropsForRole` | `error` | Tvinga att element med ARIA-roller måste ha alla obligatoriska ARIA-attribut för den rollen. |
-| `useAriaPropsSupportedByRole` | `error` | Tvinga att ARIA-egenskaper är giltiga för de roller som stöds av elementet. |
-| `useButtonType` | `error` | Kräver användning av attributet `type` för elementet button. |
-| `useFocusableInteractive` | `error` | Element med en interaktiv roll och interaktionshanterare måste vara fokusbara. |
+| `useAriaPropsSupportedByRole` | `error` | Tvinga att ARIA-egenskaper är giltiga för de roller som elementet stödjer. |
+| `useButtonType` | `error` | Tvingar användningen av attributet `type` för elementet button. |
+| `useFocusableInteractive` | `error` | Element med en interaktiv roll och interaktionshanterare måste vara fokuserbara. |
 | `useHeadingContent` | `error` | Tvinga att rubrikelement (`h1`, `h2`, osv.) har innehåll och att innehållet är tillgängligt för skärmläsare. |
 | `useHtmlLang` | `error` | Tvinga att `html`-elementet har attributet `lang`. |
-| `useIframeTitle` | `error` | Kräver användning av attributet title för elementet iframe. |
-| `useKeyWithClickEvents` | `error` | Tvinga att `onClick` kompletteras med minst en av följande: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Tvinga att `onMouseOver` / `onMouseOut` kompletteras med `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Kräver att audio- och videoelement har ett spår för undertexter (captions). |
+| `useIframeTitle` | `error` | Kräver användning av attributet title för iframe-element. |
+| `useKeyWithClickEvents` | `error` | Tvinga att `onClick` åtföljs av minst en av följande: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Tvinga att `onMouseOver` / `onMouseOut` åtföljs av `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Kräver att audio- och videoelement har en spårning för undertexter. |
 | `useSemanticElements` | `error` | Upptäcker användning av role-attribut i JSX-element och föreslår att använda semantiska element istället. |
-| `useValidAnchor` | `error` | Tvinga att alla anchors är giltiga och att de är navigerbara element. |
+| `useValidAnchor` | `error` | Tvinga att alla länkar är giltiga och att de är navigerbara element. |
 | `useValidAriaProps` | `error` | Säkerställer att ARIA-egenskaper `aria-*` är giltiga. |
 | `useValidAriaRole` | `error` | Element med ARIA-roller måste använda en giltig, icke-abstrakt ARIA-roll. |
 | `useValidAriaValues` | `error` | Tvinga att ARIA-tillstånds- och egenskapsvärden är giltiga. |
 | `useValidAutocomplete` | `error` | Använd giltiga värden för autocomplete-attributet på input-element. |
-| `useValidLang` | `error` | Säkerställ att värdet som anges för `lang`-attributet är en korrekt ISO-språk- och/eller landskod. |
-| `useGenericFontNames` | `error` | Förbjuder avsaknad av generiskt familjenyckelord inom font-familjer (CSS). |
+| `useValidLang` | `error` | Säkerställ att värdet som skickas till `lang`-attributet är ett korrekt ISO-språk- och/eller landsvärde. |
+| `useGenericFontNames` | `error` | Förbjud avsaknad av generellt familjenyckelord inom fontfamiljer (CSS). |
 
 ### Komplexitet
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Förbjud oklar användning av på varandra följande blanksteg i reguljära uttryckslitteraler. |
-| `noArguments` | `error` | Förbjud användning av `arguments`. |
+| `noAdjacentSpacesInRegex` | `error` | Förbjud oklar användning av på varandra följande blanktecken i reguljära uttryckslitteraler. |
+| `noArguments` | `error` | Förbjud användning av arguments. |
 | `noBannedTypes` | `error` | Förbjud primitiva typalias och vilseledande typer. |
 | `noCommaOperator` | `error` | Förbjud kommaoperatorn. |
-| `noEmptyTypeParameters` | `error` | Förbjud tomma type parameters i type aliases och interfaces. |
-| `noExcessiveCognitiveComplexity` | `error` | Förbjud funktioner som överskrider ett angivet Cognitive Complexity-poäng. |
+| `noEmptyTypeParameters` | `error` | Förbjud tomma type-parameter i type alias och interfaces. |
+| `noExcessiveCognitiveComplexity` | `error` | Förbjud funktioner som överstiger en given kognitiv komplexitetspoäng. |
 | `noExcessiveLinesPerFunction` | `off` | Begränsa antalet kodrader i en funktion. |
 | `noExcessiveNestedTestSuites` | `error` | Denna regel tvingar en maximal djupnivå för nästlade `describe()` i testfiler. |
 | `noExtraBooleanCast` | `error` | Förbjud onödiga boolean-casts. |
 | `noFlatMapIdentity` | `error` | Förbjud att använda onödig callback i flatMap. |
-| `noForEach` | `error` | Föredra `for...of` istället för `Array.forEach`. |
-| `noImplicitCoercions` | `off` | Förbjud kortformade typomvandlingar. |
-| `noImportantStyles` | `off` | Förbjud användning av `!important` i CSS. |
+| `noForEach` | `error` | Föredra `for...of`-satsen istället för `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Förbjud förkortade typkonverteringar. |
+| `noImportantStyles` | `off` | Förbjud användning av `!important`-stil (CSS). |
 | `noStaticOnlyClass` | `error` | Denna regel rapporterar när en klass inte har några icke-statiska medlemmar. |
 | `noThisInStatic` | `error` | Förbjud `this` och `super` i statiska kontexter. |
 | `noUselessCatch` | `error` | Förbjud onödiga catch-klasuler. |
 | `noUselessConstructor` | `error` | Förbjud onödiga konstruktörer. |
-| `noUselessContinue` | `error` | Undvik att använda onödiga continue. |
-| `noUselessEmptyExport` | `error` | Förbjud tomma exports som inte förändrar något i en modulfil. |
+| `noUselessContinue` | `error` | Undvik användning av onödiga continue. |
+| `noUselessEmptyExport` | `error` | Förbjud tomma exports som inte ändrar något i en modulfil. |
 | `noUselessEscapeInRegex` | `error` | Förbjud onödiga escape-sekvenser i reguljära uttryckslitteraler. |
 | `noUselessFragments` | `error` | Förbjud onödiga fragments. |
-| `noUselessLabel` | `error` | Förbjud onödiga labels. |
+| `noUselessLabel` | `error` | Förbjud onödiga etiketter. |
 | `noUselessLoneBlockStatements` | `error` | Förbjud onödiga nästlade blocksatser. |
 | `noUselessRename` | `error` | Förbjud att byta namn på import, export och destrukturering till samma namn. |
-| `noUselessStringConcat` | `error` | Förbjud onödig sammanfogning av sträng- eller template-literals. |
-| `noUselessStringRaw` | `error` | Förbjud onödig `String.raw` i template-strings utan escape-sekvens. |
+| `noUselessStringConcat` | `error` | Förbjud onödig sammanslagning av sträng- eller templatelitteraler. |
+| `noUselessStringRaw` | `error` | Förbjud onödig `String.raw` i template-string-litteraler utan escape-sekvenser. |
 | `noUselessSwitchCase` | `error` | Förbjud onödiga case i switch-satser. |
 | `noUselessTernary` | `error` | Förbjud ternära operatorer när enklare alternativ finns. |
 | `noUselessThisAlias` | `error` | Förbjud onödig aliasering av `this`. |
 | `noUselessTypeConstraint` | `error` | Förbjud att använda `any` eller `unknown` som typbegränsning. |
-| `noUselessUndefinedInitialization` | `error` | Förbjud att initiera variabler till `undefined`. |
-| `noVoid` | `error` | Förbjud användning av `void`-operatorn, som är en ovanlig operator. |
-| `useArrowFunction` | `error` | Använd arrow-funktioner istället för funktionsuttryck. |
+| `noUselessUndefinedInitialization` | `error` | Förbjud initiering av variabler till `undefined`. |
+| `noVoid` | `error` | Förbjud användning av `void`-operatorer, vilket inte är en välkänd operator. |
+| `useArrowFunction` | `error` | Använd arrow-funktioner istället för function expressions. |
 | `useDateNow` | `error` | Använd `Date.now()` för att få antalet millisekunder sedan Unix-epoken. |
 | `useFlatMap` | `error` | Främjar användning av `.flatMap()` när `map().flat()` används tillsammans. |
-| `useIndexOf` | `error` | Föredra `Array#{indexOf,lastIndexOf}()` över `Array#{findIndex,findLastIndex}()` när du letar efter ett elements index. |
-| `useLiteralKeys` | `error` | Tvinga användning av litteral access till egenskaper istället för beräknad property access. |
+| `useIndexOf` | `error` | Föredra `Array#{indexOf,lastIndexOf}()` framför `Array#{findIndex,findLastIndex}()` när man söker efter ett elements index. |
+| `useLiteralKeys` | `error` | Tvinga att man använder literal access till egenskaper istället för beräknad property access. |
 | `useNumericLiterals` | `error` | Förbjud `parseInt()` och `Number.parseInt()` till förmån för binära, oktala och hexadecimala literaler. |
-| `useOptionalChain` | `error` | Tvinga användning av den kortfattade optional chain istället för kedjade logiska uttryck. |
-| `useRegexLiterals` | `error` | Tvinga användning av reguljära uttryckslitteraler istället för `RegExp`-konstruktorn om möjligt. |
-| `useSimpleNumberKeys` | `error` | Förbjud numeriska literal-medlemsnamn som inte är bas 10 eller använder understreck som separator. |
+| `useOptionalChain` | `error` | Tvinga användning av koncis optional chaining istället för kedjade logiska uttryck. |
+| `useRegexLiterals` | `error` | Tvinga användning av reguljära uttryckslitteraler istället för `RegExp`-konstruktorn när möjligt. |
+| `useSimpleNumberKeys` | `error` | Förbjud nummer-literal objektmedlemsnamn som inte är bas 10 eller använder underscore som separator. |
 | `useSimplifiedLogicExpression` | `error` | Ta bort redundanta termer från logiska uttryck. |
-| `useWhile` | `error` | Tvinga användning av while-loopar istället för for-loopar när initialiserings- och uppdateringsuttrycken inte behövs. |
+| `useWhile` | `error` | Tvinga användning av while-loopar istället för for-loopar när initierings- och uppdateringsuttryck inte behövs. |
 
 ### Korrekthet
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
 | `noConstAssign` | `error` | Förhindrar att const-variabler tilldelas om. |
-| `noConstantCondition` | `error` | Förbjud konstanta uttryck i villkor. |
-| `noConstantMathMinMaxClamp` | `error` | Förbjud användning av `Math.min` och `Math.max` för att klampa ett värde där resultatet är konstant. |
+| `noConstantCondition` | `error` | Förbjud konstanter i villkorsuttryck. |
+| `noConstantMathMinMaxClamp` | `error` | Förbjud användning av `Math.min` och `Math.max` för att clampa ett värde där resultatet själv är konstant. |
 | `noConstructorReturn` | `error` | Förbjud att returnera ett värde från en konstruktor. |
 | `noEmptyCharacterClassInRegex` | `error` | Förbjud tomma teckenuppsättningar i reguljära uttryckslitteraler. |
 | `noEmptyPattern` | `error` | Förbjud tomma destruktureringsmönster. |
-| `noGlobalDirnameFilename` | `error` | Förbjud användning av `__dirname` och `__filename` i globalt scope. |
-| `noGlobalObjectCalls` | `error` | Förbjud att kalla globala objektsegenskaper som funktioner. |
-| `noInnerDeclarations` | `error` | Förbjud funktions- och `var`-deklarationer som är åtkomliga utanför sitt block. |
-| `noInvalidBuiltinInstantiation` | `error` | Säkerställ att inbyggda objekt instansieras korrekt. |
-| `noInvalidConstructorSuper` | `error` | Förhindra felaktig användning av `super()` i klasser. |
-| `noInvalidDirectionInLinearGradient` | `error` | Förbjud icke-standard värden för riktning i linear-gradient-funktioner (CSS). |
+| `noGlobalDirnameFilename` | `error` | Förbjud användning av `__dirname` och `__filename` i global scope. |
+| `noGlobalObjectCalls` | `error` | Förbjud att anropa globala objektsegenskaper som funktioner. |
+| `noInnerDeclarations` | `error` | Förbjud function- och `var`-deklarationer som är åtkomliga utanför deras block. |
+| `noInvalidBuiltinInstantiation` | `error` | Säkerställ att inbyggda typer instansieras korrekt. |
+| `noInvalidConstructorSuper` | `error` | Förhindrar felaktig användning av `super()` inuti klasser. |
+| `noInvalidDirectionInLinearGradient` | `error` | Förbjud icke-standard riktvärden för linear-gradient-funktioner (CSS). |
 | `noInvalidGridAreas` | `error` | Förbjud ogiltiga namngivna grid-områden i CSS Grid Layouts (CSS). |
-| `noInvalidPositionAtImportRule` | `error` | Förbjud användning av `@import` at-rules på ogiltiga platser (CSS). |
-| `noInvalidUseBeforeDeclaration` | `error` | Förbjud användning av variabler och funktionsparametrar innan deras deklaration. |
+| `noInvalidPositionAtImportRule` | `error` | Förbjud användning av `@import` at-regler på ogiltiga positioner (CSS). |
+| `noInvalidUseBeforeDeclaration` | `error` | Förbjud användning av variabler och funktionsparametrar före deras deklaration. |
 | `noMissingVarFunction` | `error` | Förbjud saknad `var`-funktion för css-variabler (CSS). |
 | `noNodejsModules` | `off` | Förbjud användning av Node.js inbyggda moduler. |
-| `noNonoctalDecimalEscape` | `error` | Förbjud `\8` och `\9` escape-sekvenser i stränglitteraler. |
-| `noPrecisionLoss` | `error` | Förbjud litterala tal som förlorar precision. |
-| `noPrivateImports` | `off` | Begränsa import av privata exports. |
-| `noProcessGlobal` | `off` | Förbjud användning av `process` globalen. |
+| `noNonoctalDecimalEscape` | `error` | Förbjud `\8` och `\9` escape-sekvenser i strängliteraler. |
+| `noPrecisionLoss` | `error` | Förbjud literala nummer som förlorar precision. |
+| `noPrivateImports` | `off` | Begränsa importer av privata exports. |
+| `noProcessGlobal` | `off` | Förbjud användning av `process`-globalen. |
 | `noRestrictedElements` | `error` | Förbjud användning av konfigurerade element. |
 | `noSelfAssign` | `error` | Förbjud tilldelningar där båda sidor är exakt samma. |
 | `noSetterReturn` | `error` | Förbjud att returnera ett värde från en setter. |
 | `noStringCaseMismatch` | `error` | Förbjud jämförelse av uttryck som ändrar strängens case med ett icke-kompatibelt värde. |
-| `noSwitchDeclarations` | `error` | Förbjud lexikala deklarationer i switch-klasuler. |
-| `noUndeclaredDependencies` | `off` | Förbjud användning av beroenden som inte är specificerade i `package.json`. |
-| `noUndeclaredVariables` | `error` | Förhindra användning av variabler som inte har deklarerats i dokumentet. |
-| `noUnknownFunction` | `error` | Förbjud okända CSS-value-funktioner (CSS). |
+| `noSwitchDeclarations` | `error` | Förbjud lexikala deklarationer i switch-klasser. |
+| `noUndeclaredDependencies` | `off` | Förbjud användning av beroenden som inte anges i `package.json`. |
+| `noUndeclaredVariables` | `error` | Förhindra användning av variabler som inte deklarerats i dokumentet. |
+| `noUnknownFunction` | `error` | Förbjud okända CSS-värdefunktioner (CSS). |
 | `noUnknownMediaFeatureName` | `error` | Förbjud okända media feature-namn (CSS). |
 | `noUnknownProperty` | `error` | Förbjud okända egenskaper (CSS). |
 | `noUnknownPseudoClass` | `error` | Förbjud okända pseudo-klass-selektorer (CSS). |
 | `noUnknownPseudoElement` | `error` | Förbjud okända pseudo-element-selektorer (CSS). |
-| `noUnknownTypeSelector` | `error` | Förbjud okända type-selektorer (CSS). |
+| `noUnknownTypeSelector` | `error` | Förbjud okända typ-selektorer (CSS). |
 | `noUnknownUnit` | `error` | Förbjud okända CSS-enheter (CSS). |
 | `noUnmatchableAnbSelector` | `error` | Förbjud omatchbara An+B-selektorer (CSS). |
-| `noUnreachable` | `error` | Förbjud oåtkomlig kod. |
-| `noUnreachableSuper` | `error` | Säkerställer att `super()` konstruktorn anropas exakt en gång på varje kodväg i en klasskonstruktor innan detta används. |
+| `noUnreachable` | `error` | Förbjud ohämtbar kod. |
+| `noUnreachableSuper` | `error` | Säkerställer att `super()`-konstruktorn anropas exakt en gång på varje kodväg i en klasskonstruktor innan detta nås. |
 | `noUnsafeFinally` | `error` | Förbjud kontrollflödessatser i finally-block. |
 | `noUnsafeOptionalChaining` | `error` | Förbjud användning av optional chaining i kontexter där undefined-värde inte är tillåtet. |
 | `noUnusedFunctionParameters` | `error` | Förbjud oanvända funktionsparametrar. |
-| `noUnusedImports` | `error` (safe fix override) | Förbjud oanvända importeringar. |
-| `noUnusedLabels` | `error` | Förbjud oanvända labels. |
+| `noUnusedImports` | `error` (safe fix override) | Förbjud oanvända importer. |
+| `noUnusedLabels` | `error` | Förbjud oanvända etiketter. |
 | `noUnusedPrivateClassMembers` | `error` | Förbjud oanvända privata klassmedlemmar. |
 | `noUnusedVariables` | `error` | Förbjud oanvända variabler. |
-| `noVoidTypeReturn` | `error` | Förbjud att returnera ett värde från en funktion med returtypen `void`. |
+| `noVoidTypeReturn` | `error` | Förbjud att returnera ett värde från en funktion med returtyp `void`. |
 | `useGraphqlNamedOperations` | `error` | Tvinga att namnge GraphQL-operationer. |
-| `useImageSize` | `error` | Kräver att `<img>`-element har både width och height-attribut. |
-| `useImportExtensions` | `off` | Tvinga filändelser för relativa imports. |
-| `useIsNan` | `error` | Kräver anrop till `isNaN()` vid kontroll för NaN. |
+| `useImageSize` | `error` | Kräver att `<img>`-element har både width- och height-attribut. |
+| `useImportExtensions` | `off` | Tvinga filändelser för relativa importer. |
+| `useIsNan` | `error` | Kräver anrop till `isNaN()` när man kontrollerar för NaN. |
 | `useJsonImportAttributes` | `off` | Kräver användning av `{ type: "json" }` för JSON-modulimporter. |
-| `useParseIntRadix` | `error` | Tvinga konsekvent användning av radix-argumentet vid `parseInt()`. |
-| `useSingleJsDocAsterisk` | `error` | Tvinga JSDoc-kommentarsrader att börja med en enda asterisk, utom den första. |
-| `useUniqueElementIds` | `off` | Förhindra användning av statiska strängliteral-id-attribut på element. |
-| `useValidForDirection` | `error` | Tvinga att `for`-loopens uppdateringsklasul flyttar räknaren i rätt riktning. |
+| `useParseIntRadix` | `error` | Tvinga konsekvent användning av radix-argumentet vid användning av `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Tvinga att JSDoc-kommentarsrader börjar med en enda asterisk, förutom den första. |
+| `useUniqueElementIds` | `off` | Förhindra användning av statisk strängliteral som id-attribut på element. |
+| `useValidForDirection` | `error` | Tvinga att `for`-loopens uppdateringsuttryck flyttar räknaren i rätt riktning. |
 | `useValidTypeof` | `error` | Denna regel kontrollerar att resultatet av ett `typeof`-uttryck jämförs med ett giltigt värde. |
-| `useYield` | `error` | Kräver att generatorfunktioner innehåller `yield`. |
+| `useYield` | `error` | Kräver generatorfunktioner att innehålla `yield`. |
 
-### Nursery
+### Experimentella (Nursery)
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
 | `noContinue` | `off` | Förbjud continue-satser. |
-| `noDeprecatedImports` | `off` | Begränsa import av deprecated exports. |
-| `noDuplicateDependencies` | `error` | Förhindra listning av duplicerade beroenden. |
+| `noDeprecatedImports` | `off` | Begränsa importer av föråldrade exports. |
+| `noDuplicateDependencies` | `error` | Förhindra uppräkning av dubblettberoenden. |
+| `noDuplicatedSpreadProps` | `error` | Förbjud dubblettpregenskaper i spread-props. |
 | `noEmptySource` | `error` | Förbjud tomma källfiler. |
-| `noFloatingPromises` | `off` | Kräver att Promise-liknande uttryck hanteras på rätt sätt. |
+| `noEqualsToNull` | `error` | Förbjud att använda `==` eller `!=` för att jämföra med `null`. Använd `===` eller `!==` istället. |
+| `noFloatingPromises` | `off` | Kräver att Promise-liknande uttryck hanteras korrekt. |
 | `noForIn` | `off` | Förbjud iteration med for-in-loop. |
 | `noImportCycles` | `off` | Förhindra importcykler. |
-| `noIncrementDecrement` | `error` | Förbjud användning av `++` och `--`-operatorerna (utom i for-loopens afterthought). |
+| `noIncrementDecrement` | `error` | Förbjud användning av `++` och `--` (utom i for-loops afterthoughts). |
 | `noJsxLiterals` | `off` | Förbjud strängliteraler inuti JSX-element. |
-| `noMisusedPromises` | `off` | Förbjud att Promises används där de sannolikt är ett misstag. |
+| `noLeakedRender` | `error` | Förhindra problematiska läckta värden i JSX (t.ex. 0 eller NaN) från att renderas. |
+| `noMisusedPromises` | `off` | Förbjud att Promises används på platser där de sannolikt är ett misstag. |
+| `noMultiStr` | `error` | Förbjud flerradiga strängar med backslash-kontinuitet. |
 | `noParametersOnlyUsedInRecursion` | `error` | Förbjud parametrar som endast används i rekursiva anrop. |
-| `noShadow` | `error` | Förbjud variabeldeklarationer som skuggar variabler deklarerade i yttre scope. |
+| `noProto` | `error` | Förbjud användning av `__proto__`-egenskapen. |
+| `noShadow` | `error` | Förbjud deklarationer som skuggar variabler deklarerade i yttre scope. |
 | `noSyncScripts` | `error` | Förhindra användning av synkrona skript. |
-| `noUnnecessaryConditions` | `off` | Förbjud onödiga typbaserade villkor som statiskt kan bestämmas vara redundanta. |
+| `noTernary` | `off` | Förbjud ternära operatorer. |
+| `noUnnecessaryConditions` | `off` | Förbjud onödiga typbaserade villkor som kan fastställas statiskt som redundanta. |
 | `noUnresolvedImports` | `off` | Varnar vid import av icke-existerande exports. |
-| `noUnusedExpressions` | `error` | Förbjud uttryckssatser som varken är funktionsanrop eller tilldelningar. |
-| `noUselessCatchBinding` | `off` | Förbjud oanvänt `catch`-bindning. |
-| `noUselessUndefined` | `error` | Förbjud användning av meningslös `undefined`. |
-| `useArraySortCompare` | `off` | Tvinga användning av jämförelsefunktion i `Array.prototype.sort()`. |
-| `useConsistentArrowReturn` | `error` | Tvinga konsekventa kroppar i arrow-funktioner. |
-| `useConsistentGraphqlDescriptions` | `error` | Kräver att alla beskrivningar följer samma stil (block eller inline) i GraphQL-filer. |
-| `useDeprecatedDate` | `error` | Kräver att `@deprecated`-direktivet anger ett borttagningsdatum. |
+| `noUnusedExpressions` | `error` | Förbjud uttrycks-satser som varken är funktionsanrop eller en tilldelning. |
+| `noUselessCatchBinding` | `off` | Förbjud oanvända `catch`-bindningar. |
+| `noUselessUndefined` | `error` | Förbjud användning av onödigt `undefined`. |
+| `useArraySortCompare` | `off` | Tvinga användning av en jämförelsefunktion i `Array.prototype.sort()`. |
+| `useConsistentArrowReturn` | `error` | Tvinga konsekventa arrow-funktionskroppar. |
+| `useConsistentGraphqlDescriptions` | `error` | Kräver att alla beskrivningar följer samma stil (antingen block eller inline) i GraphQL-filer. |
+| `useDeprecatedDate` | `error` | Kräver att `@deprecated`-direktivet anger ett raderingsdatum. |
 | `useExhaustiveSwitchCases` | `off` | Kräver att switch-case-satser är uttömmande. |
 | `useExplicitType` | `off` | Tvinga typer i funktioner, metoder, variabler och parametrar. |
-| `useFind` | `error` | Tvinga användning av `Array.prototype.find()` över `Array.prototype.filter()` följt av `[0]` när man letar efter ett enda resultat. |
-| `useMaxParams` | `error` | Tvinga ett maximalt antal parametrar i funktionsdefinitioner. |
+| `useFind` | `error` | Tvinga användning av `Array.prototype.find()` framför `Array.prototype.filter()` följt av `[0]` när man söker ett enda resultat. |
+| `useMaxParams` | `error` | Tvinga ett maxantal parametrar i funktionsdefinitioner. |
 | `useSortedClasses` | `error` (safe fix override) | Tvinga sortering av CSS utility-klasser. |
-| `useSpread` | `error` | Tvinga användning av spread-operatorn över `Function.prototype.apply()`. |
-| `useUniqueGraphqlOperationName` | `error` | Säkerställ att alla GraphQL-operationer i ett dokument har unika namn. |
+| `useSpread` | `error` | Tvinga användning av spread-operatorn framför `Function.prototype.apply()`. |
+| `useUniqueGraphqlOperationName` | `error` | Säkerställ att alla GraphQL-operationer inom ett dokument har unika namn. |
 
 ### Prestanda
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
 | `noAccumulatingSpread` | `error` | Förbjud användning av spread (`...`) på ackumulatorer. |
 | `noAwaitInLoops` | `off` | Förbjud `await` inuti loopar. |
@@ -280,188 +286,188 @@ Miljöspecifik hantering:
 | `noNamespaceImport` | `error` | Förbjud användning av namespace-importer. |
 | `noReExportAll` | `off` | Undvik att re-exportera allt. |
 | `noUnwantedPolyfillio` | `error` | Förhindra duplicerade polyfills från Polyfill.io. |
-| `useGoogleFontPreconnect` | `error` | Säkerställ att `preconnect`-attributet används vid användning av Google Fonts. |
-| `useTopLevelRegex` | `error` | Kräver att regex-litteraler deklareras på top-level. |
+| `useGoogleFontPreconnect` | `error` | Säkerställ att `preconnect`-attribut används vid Google Fonts. |
+| `useTopLevelRegex` | `error` | Kräver att regex-litteraler deklareras på top-nivå. |
 
 ### Säkerhet
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noBlankTarget` | `error` | Förbjud `target="_blank"` utan `rel="noopener"`. |
+| `noBlankTarget` | `error` | Förbjud `target="_blank"`-attribut utan `rel="noopener"`. |
 | `noDangerouslySetInnerHtml` | `error` | Förhindra användning av farliga JSX-props. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Rapportera när ett DOM-element eller en komponent använder både children och prop:en `dangerouslySetInnerHTML`. |
-| `noGlobalEval` | `error` | Förbjud användning av globala `eval()`. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Rapportera när ett DOM-element eller en komponent använder både children och `dangerouslySetInnerHTML`-prop. |
+| `noGlobalEval` | `error` | Förbjud användning av global `eval()`. |
 
 ### Stil
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
 | `noCommonJs` | `off` | Förbjud användning av Common JS-modulsystem till förmån för ESM-importer. |
-| `noDefaultExport` | `off` | Förbjud default exports. |
-| `noDoneCallback` | `error` | Förbjud användning av callback i asynkrona tester och hooks. |
+| `noDefaultExport` | `off` | Förbjud default-exports. |
+| `noDoneCallback` | `error` | Förbjud användning av callbacks i asynkrona tester och hooks. |
 | `noEnum` | `error` | Förbjud TypeScript-enum. |
 | `noExportedImports` | `error` | Förbjud att exportera en importerad variabel. |
 | `noImplicitBoolean` | `off` | Förbjud implicita true-värden på JSX boolean-attribut. |
-| `noInferrableTypes` | `error` | Förbjud typannoteringar för variabler, parametrar och klass-egenskaper initialiserade med ett literaluttryck. |
-| `noMagicNumbers` | `off` | Rapporterar användning av "magic numbers" — siffror som används direkt istället för att tilldelas namngivna konstanter. |
+| `noInferrableTypes` | `error` | Förbjud typannoteringar för variabler, parametrar och klass-egenskaper initierade med en literal. |
+| `noMagicNumbers` | `off` | Rapporterar användning av "magic numbers" — tal som används direkt istället för att tilldelas namngivna konstanter. |
 | `noNamespace` | `error` | Förbjud användning av TypeScripts namespaces. |
-| `noNegationElse` | `error` | Förbjud negation i if-villkor om det finns en else-klasul. |
+| `noNegationElse` | `error` | Förbjud negation i if-villkor om det finns en else-sats. |
 | `noNestedTernary` | `error` | Förbjud nästlade ternära uttryck. |
-| `noNonNullAssertion` | `error` | Förbjud non-null-assertions med postfix-operatorn `!`. |
-| `noParameterAssign` | `error` | Förbjud omtilldelning av funktionsparametrar. |
+| `noNonNullAssertion` | `error` | Förbjud icke-null assertion med postfix-operatorn `!`. |
+| `noParameterAssign` | `error` | Förbjud att tilldela om funktionsparametrar. |
 | `noParameterProperties` | `error` | Förbjud användning av parameter properties i klasskonstruktörer. |
 | `noProcessEnv` | `off` | Förbjud användning av `process.env`. |
 | `noRestrictedGlobals` | `error` | Denna regel låter dig specificera globala variabelnamn som du inte vill använda i din applikation. |
-| `noRestrictedImports` | `error` | Förbjud angivna moduler när de laddas via import eller require. |
+| `noRestrictedImports` | `error` | Förbjud specificerade moduler när de laddas via import eller require. |
 | `noRestrictedTypes` | `error` | Förbjud användardefinierade typer. |
-| `noShoutyConstants` | `error` | Förbjud användning av konstanter vars värde är den versala versionen av dess namn. |
-| `noSubstr` | `error` | Tvinga användning av `String.slice()` över `String.substr()` och `String.substring()`. |
-| `noUnusedTemplateLiteral` | `error` | Förbjud template literals om interpolation och specialteckenhantering inte behövs. |
+| `noShoutyConstants` | `error` | Förbjud användning av konstanter där värdet är den versala versionen av namnet. |
+| `noSubstr` | `error` | Tvinga användning av `String.slice()` istället för `String.substr()` och `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Förbjud template-litteraler om interpolering och specialteckenhantering inte behövs. |
 | `noUselessElse` | `error` | Förbjud else-block när if-blocket bryter tidigt. |
 | `noYodaExpression` | `error` | Förbjud användning av yoda-uttryck. |
 | `useArrayLiterals` | `error` | Förbjud `Array`-konstruktörer. |
-| `useAsConstAssertion` | `error` | Tvinga användning av `as const` över litteraltyp och typannotering. |
-| `useAtIndex` | `error` | Använd `at()` istället för heltalsindexåtkomst. |
-| `useBlockStatements` | `error` | Kräver efterlevnad av måsvinge-syntax (curly brace) konventioner. |
-| `useCollapsedElseIf` | `error` | Tvinga användning av `else if` istället för nästlade `if` i `else`-klasuler. |
-| `useCollapsedIf` | `error` | Tvinga användning av enkel `if` istället för nästlade `if`-klasuler. |
-| `useComponentExportOnlyModules` | `off` | Tvinga deklarering av komponenter endast i moduler som exporterar React-komponenter exklusivt. |
-| `useConsistentArrayType` | `error` | Kräver konsekvent användning av antingen `T[]` eller `Array<T>`. |
-| `useConsistentBuiltinInstantiation` | `error` | Tvinga användning av new för alla inbyggda, utom `String`, `Number` och `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Denna regel tvingar konsekvent användning av måsvingar i JSX-attribut och JSX-children. |
-| `useConsistentMemberAccessibility` | `error` | Kräver konsekventa accessibility-modifiers på klassens egenskaper och metoder. |
+| `useAsConstAssertion` | `error` | Tvinga användning av as const istället för literal typ och typannotering. |
+| `useAtIndex` | `error` | Använd `at()` istället för indexåtkomst med heltal. |
+| `useBlockStatements` | `error` | Kräver efterlevnad av måsvinge-syntax för måsvingparenteser. |
+| `useCollapsedElseIf` | `error` | Tvinga användning av `else if` istället för nästlade `if` i `else`-klamrar. |
+| `useCollapsedIf` | `error` | Tvinga användning av enstaka `if` istället för nästlade `if`-klamrar. |
+| `useComponentExportOnlyModules` | `off` | Tvinga deklarera komponenter endast inom moduler som enbart exporterar React-komponenter. |
+| `useConsistentArrayType` | `error` | Kräver konsekvent användning antingen `T[]` eller `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Tvinga användning av new för alla inbyggda typer, utom `String`, `Number` och `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Denna regel tvingar konsekvent användning av måsvingparenteser i JSX-attribut och JSX-children. |
+| `useConsistentMemberAccessibility` | `error` | Kräver konsekventa accessmodifierare på klassens egenskaper och metoder. |
 | `useConsistentObjectDefinitions` | `error` | Kräver konsekvent deklaration av objektliteraler. |
-| `useConst` | `error` | Kräver const-deklarationer för variabler som bara tilldelas en gång. |
-| `useDefaultParameterLast` | `error` | Tvinga att default- och optionala funktionsparametrar kommer sist. |
-| `useDefaultSwitchClause` | `error` | Kräver `default`-klasul i switch-satser. |
-| `useDeprecatedReason` | `error` | Kräver att orsaksargument anges när `@deprecated`-direktivet används. |
-| `useEnumInitializers` | `error` | Kräver att varje enum-medlemsvärde initialiseras explicit. |
-| `useExplicitLengthCheck` | `off` | Tvinga explicit jämförelse av `length`, `size`, `byteLength` eller `byteOffset`-egenskaper. |
+| `useConst` | `error` | Kräver const-deklarationer för variabler som endast tilldelas en gång. |
+| `useDefaultParameterLast` | `error` | Tvinga standardfunktionparametrar och valfria parametrar att vara sist. |
+| `useDefaultSwitchClause` | `error` | Kräver `default`-klasulen i switch-satser. |
+| `useDeprecatedReason` | `error` | Kräver att anledningsargument anges när man använder `@deprecated`-direktivet. |
+| `useEnumInitializers` | `error` | Kräver att varje enum-medlemsvärde initieras explicit. |
+| `useExplicitLengthCheck` | `off` | Tvinga jämförelse av `length`, `size`, `byteLength` eller `byteOffset` uttryckligen. |
 | `useExponentiationOperator` | `error` | Förbjud användning av `Math.pow` till förmån för `**`-operatorn. |
 | `useExportType` | `error` | Främjar användning av export type för typer. |
-| `useExportsLast` | `off` | Kräver att alla exports deklareras efter alla icke-export-satser. |
+| `useExportsLast` | `off` | Kräver att alla exports deklareras efter icke-export-satser. |
 | `useFilenamingConvention` | `error` | Tvinga namngivningskonventioner för JavaScript- och TypeScript-filnamn (kebab-case, ASCII). |
-| `useForOf` | `error` | Regeln rekommenderar for-of-loop när en for-loop använder index för att extrahera ett element från den itererade arrayen. |
-| `useFragmentSyntax` | `error` | Regeln tvingar användning av `<>...</>` istället för `<Fragment>...</Fragment>`. |
-| `useGraphqlNamingConvention` | `error` | Validerar att alla enum-värden är versaliserade. |
-| `useGroupedAccessorPairs` | `error` | Tvinga att getters och setters för samma property är intill varandra i klass- och objektdefinitioner. |
+| `useForOf` | `error` | Denna regel rekommenderar en for-of-loop när man i en for-loop använder indexet för att extrahera ett element från den itererade arrayen. |
+| `useFragmentSyntax` | `error` | Denna regel tvingar användning av `<>...</>` istället för `<Fragment>...</Fragment>`. |
+| `useGraphqlNamingConvention` | `error` | Validerar att alla enum-värden är versalerade. |
+| `useGroupedAccessorPairs` | `error` | Tvinga att getters och setters för samma egenskap är intilliggande i klass- och objektdefinitioner. |
 | `useImportType` | `error` | Främjar användning av `import type` för typer. |
-| `useLiteralEnumMembers` | `error` | Kräver att alla enum-medlemmar är litterala värden. |
-| `useNamingConvention` | `off` | Regel för namngivningskonvention (inaktiverad). |
+| `useLiteralEnumMembers` | `error` | Kräver att alla enum-medlemmar är literalvärden. |
+| `useNamingConvention` | `off` | Regel för namngivningskonvention (avaktiverad). |
 | `useNodeAssertStrict` | `error` | Främjar användning av `node:assert/strict` över `node:assert`. |
 | `useNodejsImportProtocol` | `error` | Tvingar användning av `node:`-protokollet för Node.js inbyggda moduler. |
 | `useNumberNamespace` | `error` | Använd `Number`-egenskaper istället för globala. |
 | `useNumericSeparators` | `error` | Tvinga användning av numeriska separatorer i numeriska literaler. |
-| `useObjectSpread` | `error` | Föredra object spread över `Object.assign()` vid skapande av nya objekt. |
-| `useReadonlyClassProperties` | `error` | Tvinga märkning av medlemmar som readonly om de aldrig ändras utanför konstruktorn. |
-| `useSelfClosingElements` | `error` | Förhindra extra stängningstaggar för komponenter utan children. |
-| `useShorthandAssign` | `error` | Kräver shorthand-operator där möjligt. |
-| `useShorthandFunctionType` | `error` | Tvinga användning av funktionstyper istället för objekttyp med call-signaturer. |
-| `useSingleVarDeclarator` | `off` | Förbjud flera variabeldeklarationer i samma variabel-sats. |
-| `useSymbolDescription` | `error` | Kräver en beskrivningsparameter för `Symbol()`. |
-| `useTemplate` | `error` | Föredra template literals över strängkonkatenering. |
-| `useThrowNewError` | `error` | Kräver `new` vid kast av fel. |
+| `useObjectSpread` | `error` | Föredra object spread framför `Object.assign()` när nya objekt skapas. |
+| `useReadonlyClassProperties` | `error` | Tvinga markering av medlemmar som readonly om de aldrig ändras utanför konstruktorn. |
+| `useSelfClosingElements` | `error` | Förhindra extra sluttaggar för komponenter utan children. |
+| `useShorthandAssign` | `error` | Kräver användning av shorthand-assign där möjligt. |
+| `useShorthandFunctionType` | `error` | Tvinga användning av function types istället för object type med call-signaturer. |
+| `useSingleVarDeclarator` | `off` | Förbjud flera variabeldeklarationer i samma variabelsats. |
+| `useSymbolDescription` | `error` | Kräver ett beskrivningsargument för `Symbol()`. |
+| `useTemplate` | `error` | Föredra template-litteraler framför strängkonkatenering. |
+| `useThrowNewError` | `error` | Kräver new vid kast av ett fel. |
 | `useThrowOnlyError` | `error` | Förbjud att kasta icke-`Error`-värden. |
 | `useTrimStartEnd` | `error` | Tvinga användning av `String.trimStart()` och `String.trimEnd()` över `String.trimLeft()` och `String.trimRight()`. |
-| `useUnifiedTypeSignatures` | `error` | Förbjud överlagrade signaturer som kan förenas till en enda signatur. |
+| `useUnifiedTypeSignatures` | `error` | Förbjud overload-signaturer som kan förenas till en enda signatur. |
 | `noDescendingSpecificity` | `error` | Förbjud att en selektor med lägre specificitet kommer efter en med högre specificitet (CSS). |
-| `noValueAtRule` | `error` | Förbjud användning av `@value`-regel i css modules (CSS). |
+| `noValueAtRule` | `error` | Förbjud användning av `@value`-regel i css-moduler (CSS). |
 
 ### Misstänkt
 
-| Rule | Setting | Description |
+| Regel | Inställning | Beskrivning |
 |------|---------|-------------|
 | `noAlert` | `error` | Förbjud användning av `alert`, `confirm` och `prompt`. |
-| `noApproximativeNumericConstant` | `error` | Använd standardkonstanter istället för approximativa literaler. |
+| `noApproximativeNumericConstant` | `error` | Använd standardkonstanter istället för approximerade literaler. |
 | `noAssignInExpressions` | `error` | Förbjud tilldelningar i uttryck. |
-| `noAsyncPromiseExecutor` | `error` | Förbjud att använda en async-funktion som Promise-executor. |
-| `noBiomeFirstException` | `error` | Förhindrar användning av `!`-mönstret i första positionen av `files.includes` i konfigurationsfilen. |
+| `noAsyncPromiseExecutor` | `error` | Förbjud att använda en async-funktion som en Promise-exekutor. |
+| `noBiomeFirstException` | `error` | Förhindrar användning av `!`-mönstret i första position i `files.includes` i konfigurationsfilen. |
 | `noBitwiseOperators` | `error` | Förbjud bitvisa operatorer. |
 | `noCatchAssign` | `error` | Förbjud omtilldelning av undantag i catch-klasuler. |
 | `noClassAssign` | `error` | Förbjud omtilldelning av klassmedlemmar. |
 | `noCommentText` | `error` | Förhindra att kommentarer infogas som textnoder. |
 | `noCompareNegZero` | `error` | Förbjud jämförelse mot `-0`. |
-| `noConfusingLabels` | `error` | Förbjud label-satser som inte är loopar. |
+| `noConfusingLabels` | `error` | Förbjud etiketterade satser som inte är loopar. |
 | `noConfusingVoidType` | `error` | Förbjud void-typ utanför generiska eller returtyper. |
 | `noConsole` | `off` | Förbjud användning av `console`. |
 | `noConstEnum` | `error` | Förbjud TypeScript const enum. |
 | `noConstantBinaryExpressions` | `error` | Förbjud uttryck där operationen inte påverkar värdet. |
-| `noControlCharactersInRegex` | `error` | Förhindrar kontrolltecken och vissa escape-sekvenser som matchar kontrolltecken i reguljära uttryckslitteraler. |
+| `noControlCharactersInRegex` | `error` | Förhindra kontrolltecken och vissa escape-sekvenser som matchar kontrolltecken i reguljära uttryckslitteraler. |
 | `noDebugger` | `error` | Förbjud användning av debugger. |
-| `noDocumentCookie` | `error` | Förbjud direkta tilldelningar till document.cookie. |
+| `noDocumentCookie` | `error` | Förbjud direkt tilldelning till document.cookie. |
 | `noDoubleEquals` | `error` | Kräver användning av `===` och `!==`. |
-| `noDuplicateAtImportRules` | `error` | Förbjud duplicerade `@import`-regler (CSS). |
-| `noDuplicateCase` | `error` | Förbjud duplicerade case-etiketter. |
-| `noDuplicateClassMembers` | `error` | Förbjud duplicerade klassmedlemmar. |
-| `noDuplicateCustomProperties` | `error` | Förbjud duplicerade custom properties inom deklarationsblock (CSS). |
+| `noDuplicateAtImportRules` | `error` | Förbjud dubbletter av `@import`-regler (CSS). |
+| `noDuplicateCase` | `error` | Förbjud dubblett case-etiketter. |
+| `noDuplicateClassMembers` | `error` | Förbjud dubblett klassmedlemmar. |
+| `noDuplicateCustomProperties` | `error` | Förbjud dubblett custom properties inom deklarationsblock (CSS). |
 | `noDuplicateElseIf` | `error` | Förbjud duplicerade villkor i if-else-if-kedjor. |
 | `noDuplicateFields` | `error` | Förbjud duplicerade fält i GraphQL-operationer. |
-| `noDuplicateFontNames` | `error` | Förbjud duplicerade namn inom font-familjer (CSS). |
+| `noDuplicateFontNames` | `error` | Förbjud dubblettnamn inom fontfamiljer (CSS). |
 | `noDuplicateObjectKeys` | `error` | Förbjud två nycklar med samma namn i objekt. |
 | `noDuplicateParameters` | `error` | Förbjud duplicerade funktionsparameternamn. |
-| `noDuplicateProperties` | `error` | Förbjud duplicerade properties inom deklarationsblock (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Förbjud duplicerade selektorer inom keyframe-block (CSS). |
-| `noDuplicateTestHooks` | `error` | Ett describe-block bör inte innehålla duplicerade hooks. |
-| `noEmptyBlock` | `error` | Förbjud CSS-tomma block (CSS). |
+| `noDuplicateProperties` | `error` | Förbjud duplicerade egenskaper inom deklarationsblock (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Förbjud dubblettselektorer inom keyframe-block (CSS). |
+| `noDuplicateTestHooks` | `error` | Ett describe-block bör inte innehålla dubbletthooks. |
+| `noEmptyBlock` | `error` | Förbjud tomma CSS-block (CSS). |
 | `noEmptyBlockStatements` | `error` | Förbjud tomma blocksatser och statiska block. |
 | `noEmptyInterface` | `error` | Förbjud deklaration av tomma interfaces. |
-| `noEvolvingTypes` | `error` | Förbjud variabler från att utvecklas till any-typ genom omtilldelningar. |
+| `noEvolvingTypes` | `error` | Förbjud variabler att utvecklas till any-typ genom omtilldelningar. |
 | `noExplicitAny` | `error` | Förbjud användning av any-typen. |
 | `noExportsInTest` | `error` | Förbjud användning av export eller module.exports i filer som innehåller tester. |
-| `noExtraNonNullAssertion` | `error` | Förhindrar felaktig användning av non-null-assertion-operatorn `!` i TypeScript-filer. |
+| `noExtraNonNullAssertion` | `error` | Förhindrar felaktig användning av non-null assertion-operatorn `!` i TypeScript-filer. |
 | `noFallthroughSwitchClause` | `error` | Förbjud fallthrough i switch-klasuler. |
 | `noFocusedTests` | `error` | Förbjud fokuserade tester. |
 | `noFunctionAssign` | `error` | Förbjud omtilldelning av funktionsdeklarationer. |
 | `noGlobalAssign` | `error` | Förbjud tilldelningar till inbyggda objekt och skrivskyddade globala variabler. |
 | `noGlobalIsFinite` | `error` | Använd `Number.isFinite` istället för globala `isFinite`. |
 | `noGlobalIsNan` | `error` | Använd `Number.isNaN` istället för globala `isNaN`. |
-| `noImplicitAnyLet` | `error` | Förbjud implicit any-typ vid variabeldeklarationer. |
-| `noImportAssign` | `error` | Förbjud att tilldela importerade bindings. |
+| `noImplicitAnyLet` | `error` | Förbjud implicit any-typ på variabeldeklarationer. |
+| `noImportAssign` | `error` | Förbjud tilldelning till importerade bindings. |
 | `noImportantInKeyframe` | `error` | Förbjud ogiltigt `!important` inom keyframe-deklarationer (CSS). |
-| `noIrregularWhitespace` | `error` | Förbjud användning av oregelbundna blankstegstecken. |
-| `noLabelVar` | `error` | Förbjud labels som delar namn med en variabel. |
-| `noMisleadingCharacterClass` | `error` | Förbjud tecken skapade med flera kodpunkter i teckenuppsättningssyntax. |
+| `noIrregularWhitespace` | `error` | Förbjud användning av oregelbundna blanktecken. |
+| `noLabelVar` | `error` | Förbjud etiketter som delar namn med en variabel. |
+| `noMisleadingCharacterClass` | `error` | Förbjud tecken skapade med flera kodpunkter i teckenklass-syntax. |
 | `noMisleadingInstantiator` | `error` | Tvinga korrekt användning av `new` och `constructor`. |
-| `noMisplacedAssertion` | `error` | Kontrollerar att assertionsfunktionen, exempelvis expect, är placerad inuti en `it()`-funktion. |
-| `noMisrefactoredShorthandAssign` | `error` | Förbjud shorthand assign när variabeln förekommer på båda sidor. |
-| `noOctalEscape` | `error` | Förbjud oktala escape-sekvenser i stränglitteraler. |
-| `noPrototypeBuiltins` | `error` | Förbjud direkt användning av `Object.prototype`-builtins. |
+| `noMisplacedAssertion` | `error` | Kontrollerar att assertionsfunktionen, till exempel expect, placeras inuti ett `it()`-anrop. |
+| `noMisrefactoredShorthandAssign` | `error` | Förbjud shorthand-assign när variabeln förekommer på båda sidor. |
+| `noOctalEscape` | `error` | Förbjud oktala escape-sekvenser i strängliteraler. |
+| `noPrototypeBuiltins` | `error` | Förbjud direkt användning av `Object.prototype`-inbyggare. |
 | `noQuickfixBiome` | `error` | Förbjud användning av `quickfix.biome` i editorinställningsfilen. |
 | `noRedeclare` | `error` | Förbjud variabel-, funktions-, klass- och typdeklarationer med samma namn i samma scope. |
 | `noRedundantUseStrict` | `error` | Förhindrar redundant `use strict`. |
 | `noSelfCompare` | `error` | Förbjud jämförelser där båda sidor är exakt samma. |
-| `noShadowRestrictedNames` | `error` | Förbjud identifierare från att skugga begränsade namn. |
-| `noShorthandPropertyOverrides` | `error` | Förbjud shorthand properties som skriver över relaterade longhand-properties (CSS). |
-| `noSkippedTests` | `error` | Förbjud disabled tester. |
+| `noShadowRestrictedNames` | `error` | Förbjud identifierare som skuggar begränsade namn. |
+| `noShorthandPropertyOverrides` | `error` | Förbjud shorthand-egenskaper som skriver över relaterade longhand-egenskaper (CSS). |
+| `noSkippedTests` | `error` | Förbjud avaktiverade tester. |
 | `noSparseArray` | `error` | Förhindra användning av sparsamma arrayer (arrayer med hål). |
-| `noTemplateCurlyInString` | `error` | Förbjud template-literal-placholder-syntax i vanliga strängar. |
-| `noThenProperty` | `error` | Förbjud then-property. |
+| `noTemplateCurlyInString` | `error` | Förbjud placeholder-syntax för template-litteraler i vanliga strängar. |
+| `noThenProperty` | `error` | Förbjud then-egenskapen. |
 | `noTsIgnore` | `error` | Förhindrar användning av TypeScript-direktivet `@ts-ignore`. |
 | `noUnassignedVariables` | `error` | Förbjud let eller var-variabler som läses men aldrig tilldelas. |
-| `noUnknownAtRules` | `error` | Förbjud okända at-rules (CSS). |
+| `noUnknownAtRules` | `error` | Förbjud okända at-regler (CSS). |
 | `noUnsafeDeclarationMerging` | `error` | Förbjud osäker deklarationssammanfogning mellan interfaces och klasser. |
 | `noUnsafeNegation` | `error` | Förbjud användning av osäker negation (`!`). |
-| `noUselessEscapeInString` | `error` | Förbjud onödiga escapes i stränglitteraler. |
+| `noUselessEscapeInString` | `error` | Förbjud onödiga escapes i strängliteraler. |
 | `noUselessRegexBackrefs` | `error` | Förbjud onödiga backreferences i reguljära uttryckslitteraler som alltid matchar en tom sträng. |
 | `noVar` | `error` | Förbjud användning av `var`. |
 | `noWith` | `error` | Förbjud `with`-satser i icke-strikta kontexter. |
-| `useAdjacentOverloadSignatures` | `error` | Förbjud användning av overload-signaturer som inte ligger intill varandra. |
+| `useAdjacentOverloadSignatures` | `error` | Förbjud overload-signaturer som inte ligger intill varandra. |
 | `useAwait` | `error` | Säkerställ att async-funktioner använder `await`. |
 | `useBiomeIgnoreFolder` | `error` | Främjar korrekt användning för att ignorera mappar i konfigurationsfilen. |
-| `useDefaultSwitchClauseLast` | `error` | Tvinga att default-klasuler i switch-satser kommer sist. |
-| `useErrorMessage` | `error` | Tvinga att ett meddelande skickas vid skapande av ett inbyggt fel. |
+| `useDefaultSwitchClauseLast` | `error` | Tvinga att default-klasuler i switch-satser är sist. |
+| `useErrorMessage` | `error` | Tvinga att skicka ett meddelande när en inbyggd error skapas. |
 | `useGetterReturn` | `error` | Tvinga get-metoder att alltid returnera ett värde. |
-| `useGoogleFontDisplay` | `error` | Kräver användning av en rekommenderad display-strategi med Google Fonts. |
-| `useGuardForIn` | `error` | Kräver att for-in-loopar inkluderar en `if`-sats. |
+| `useGoogleFontDisplay` | `error` | Kräver rekommenderad display-strategi vid användning av Google Fonts. |
+| `useGuardForIn` | `error` | Kräver att for-in-loopar inkluderar ett `if`-uttalande. |
 | `useIsArray` | `error` | Använd `Array.isArray()` istället för `instanceof Array`. |
-| `useIterableCallbackReturn` | `error` | Tvinga konsekventa returvärden i iterable-callbacks. |
+| `useIterableCallbackReturn` | `error` | Tvinga konsekventa returvärden i iterable callbacks. |
 | `useNamespaceKeyword` | `error` | Kräver användning av namespace-nyckelordet istället för `module` för att deklarera TypeScript-namespaces. |
 | `useNumberToFixedDigitsArgument` | `error` | Tvinga användning av digits-argumentet med `Number#toFixed()`. |
-| `useStaticResponseMethods` | `error` | Använd statiska `Response`-metoder istället för `new Response()` där det är möjligt. |
+| `useStaticResponseMethods` | `error` | Använd statiska `Response`-metoder istället för `new Response()`-konstruktorn när möjligt. |
 | `useStrictMode` | `error` | Tvinga användning av direktivet `use strict` i script-filer. |
 
-## Noteringar
+## Anteckningar
 
-Vissa regler är inaktiverade eftersom de är för långsamma att köra med Scanner. Som nämnt i [Biome-dokumentationen](https://biomejs.dev/guides/investigate-slowness/#first-things-first), är det känt att aktiverade projektsregler kan orsaka prestandaöverhead i utbyte mot mer avancerad analys.
+Vissa regler är inaktiverade eftersom de är för långsamma att köra med Scanner. Som nämnts i [Biome-dokumentationen](https://biomejs.dev/guides/investigate-slowness/#first-things-first) är projektregler som är aktiverade kända för att orsaka prestandaöverhead i utbyte mot mer avancerad analys.
 
-I våra tester har vi funnit att dessa regler kan göra skillnaden mellan en lint som tar 300 ms och en som tar 13 s.
+I våra tester har vi funnit att dessa regler kan göra skillnaden mellan en 300 ms och en 13 s lint.

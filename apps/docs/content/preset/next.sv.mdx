@@ -19,14 +19,14 @@ Lägg till Next.js-konfigurationen i din `biome.jsonc`:
 
 Denna konfiguration lägger till regler specifika för Next.js-utveckling:
 
-- **Bildoptimering**: Tvinga användning av Next.js Image-komponenten
-- **Dokumentstruktur**: Förhindra felaktig användning av Next.js-specialkomponenter
+- **Bildoptimering**: Tvingar användning av Next.js `<Image>`-komponenten
+- **Dokumentstruktur**: Förhindra felaktig användning av Next.js specialkomponenter
 - **Klientkomponenter**: Säkerställ att asynkrona klientkomponenter hanteras korrekt
-- **Konfigurationsfiler**: Särskild hantering för `next.config.*`-filer
+- **Konfigurationsfiler**: Speciell hantering för `next.config.*`-filer
 
 ## Next.js-specifika regler
 
-### Förstadium
+### Experimentell
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
@@ -36,19 +36,19 @@ Denna konfiguration lägger till regler specifika för Next.js-utveckling:
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noImgElement` | `error` | Tillåt inte användning av `<img>`-HTML-elementet. Använd Next.js `<Image>`-komponenten istället för automatisk bildoptimering. |
+| `noImgElement` | `error` | Förhindra användning av `<img>` HTML-elementet. Använd istället Next.js `<Image>`-komponenten för automatisk bildoptimering. |
 
 ### Stil
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Tillåt inte användning av `<head>`-HTML-elementet. Använd Next.js `next/head` eller App Router:s metadata-API istället. |
+| `noHeadElement` | `error` | Förhindra användning av `<head>` HTML-elementet. Använd Next.js `next/head` eller App Router metadata API istället. |
 
 ### Misstänkt
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Förhindra import av `next/document` i sidfiler. `_document.tsx` ska endast finnas i `pages/_document.tsx`. |
+| `noDocumentImportInPage` | `error` | Förhindra import av `next/document` i sidfiler. `_document.tsx` bör endast finnas i `pages/_document.tsx`. |
 | `noHeadImportInDocument` | `error` | Förhindra import av `next/head` i `_document.tsx`. Använd `<Head>` från `next/document` istället. |
 
 ## Överstyrningar för konfigurationsfiler
@@ -74,7 +74,7 @@ Next.js-presetet inkluderar särskild hantering för konfigurationsfiler och App
 }
 ```
 
-Detta tillåter Next.js-konfigurationsmönster som kanske normalt inte skulle klara lintningsreglerna.
+Detta tillåter Next.js-konfigurationsmönster som normalt kanske inte skulle klara lintningsreglerna.
 
 ### App Router-sidor och layouter
 
@@ -95,4 +95,4 @@ Detta tillåter Next.js-konfigurationsmönster som kanske normalt inte skulle kl
 }
 ```
 
-App Router-sid- och layoutkomponenter får vara asynkrona utan att kräva `await`, eftersom Next.js hanterar dessa särskilt för serversidig renderering och datahämtning.
+App Router-sid- och layoutkomponenter tillåts vara asynkrona utan att kräva `await`, eftersom Next.js hanterar dessa särskilt för rendering på serversidan och datahämtning.

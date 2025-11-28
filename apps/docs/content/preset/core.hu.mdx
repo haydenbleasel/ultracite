@@ -1,19 +1,19 @@
 ---
-title: Alap
-description: Az Ultracite alapkonfigurációja, keretfüggetlen lintelési szabályokkal.
+title: Mag
+description: Az Ultracite alapkonfigurációja keretfüggetlen lintelési szabályokkal.
 ---
 
-Az Ultracite alapkonfigurációja átfogó, keretfüggetlen lintelési szabályokat és formázási beállításokat biztosít. Ez az az alap, amelyre minden egyéb, keret-specifikus konfiguráció épül.
+A core Ultracite konfiguráció átfogó, keretfüggetlen lintelési szabályok és formázási beállítások készletét biztosítja. Ez az alap, amire minden egyéb, keret-specifikus konfiguráció épül.
 
 ## Telepítés
 
-A core konfiguráció automatikusan beillesztődik, amikor futtatod:
+A core konfiguráció automatikusan hozzáadódik, amikor futtatod:
 
 ```bash
 npx ultracite init
 ```
 
-Vagy add hozzá kézzel a `biome.jsonc`-dhoz:
+Vagy manuálisan add hozzá a `biome.jsonc` fájlodhoz:
 
 ```jsonc title="biome.jsonc"
 {
@@ -23,24 +23,24 @@ Vagy add hozzá kézzel a `biome.jsonc`-dhoz:
 
 ## Áttekintés
 
-A core konfiguráció több száz szigorú lintelési szabályt tartalmaz, amelyek lefedik:
+A core konfiguráció számos szigorú lintelési szabályt foglal magában, többek között:
 
-- **Akadálymentesség (a11y)**: Követeli az ARIA attribútumokat, a szemantikus HTML-t és a billentyűzetes navigációt
-- **Bonyolultság**: Csökkenti a kognitív komplexitást és érvényesíti a legjobb gyakorlatokat
-- **Helyesség**: Megelőzi a gyakori hibákat és biztosítja a típusbiztonságot
+- **Hozzáférhetőség (a11y)**: Kötelező ARIA attribútumok, szemantikus HTML és billentyűzet alapú navigáció
+- **Bonyolultság**: Csökkenti a kognitív komplexitást és érvényesíti a bevált gyakorlatokat
+- **Helyesség**: Megakadályozza a gyakori hibákat és érvényesíti a típusbiztonságot
 - **Teljesítmény**: Optimalizálja a kódot a jobb futásidejű teljesítmény érdekében
-- **Biztonság**: Megelőzi a biztonsági sebezhetőségeket
-- **Stílus**: Következetes kódstílust ír elő
-- **Gyanús**: Elkapja azokat a gyanús mintázatokat, amelyek hibára utalhatnak
+- **Biztonság**: Megakadályozza a biztonsági sérülékenységeket
+- **Stílus**: Következetes kódstílust érvényesít
+- **Gyanús**: Felismeri a hibára utaló gyanús mintákat
 
 ## Formázó beállítások
 
 - **Behúzás**: 2 szóköz
 - **Sorszélesség**: 80 karakter
-- **Sorszakvége**: LF (Unix-stílus)
-- **Pontosvesszők**: Mindig kötelezők
+- **Sorvég**: LF (Unix-stílus)
+- **Pontokként**: Mindig kötelező
 - **Idézőjelek**: Dupla idézőjelek JavaScript/TypeScript és JSON esetén
-- **Végző vesszők**: ES5 stílus (többsoros tömbök/objektumok)
+- **Vessző a végén**: ES5 stílus (többsoros tömbök/objektumok)
 - **Nyílfüggvény zárójelek**: Mindig tartalmazza a zárójeleket
 
 ## Főbb jellemzők
@@ -49,419 +49,425 @@ A core konfiguráció több száz szigorú lintelési szabályt tartalmaz, amely
 
 A core konfiguráció engedélyezi a TypeScript szigorú ellenőrzéseit:
 
-- Nem javasolja az `any` használatát (`noExplicitAny: error`)
-- Követeli a `null/undefined` kezelést
-- Bizonyos helyzetekben előnyben részesíti a kötelező típusmegadást
-- Érvényesíti a típusbiztonságot a teljes kódbázison át
+- Kerüli az `any` használatát (`noExplicitAny: error`)
+- Kötelező a `null`/`undefined` kezelése
+- Bizonyos esetekben előnyben részesíti a explicit típusokat
+- Érvényesíti a típusbiztonságot az egész kódbázison
 
-### ESLint javasolt egyenértékek
+### ESLint ajánlott megfelelői
 
-A gyakori legjobb gyakorlat szabályok benne vannak:
+Gyakori, bevált gyakorlatokra vonatkozó szabályok:
 
-- Nincsenek nem használt változók (`noUnusedVariables: error`)
-- Nincsenek nem használt importok (`noUnusedImports: error`)
-- Nincs explicit eval (`noGlobalEval: error`)
-- Nincs prototype pollution (`noPrototypeBuiltins: error`)
+- Nem használt változók tilalma (`noUnusedVariables: error`)
+- Nem használt importok tilalma (`noUnusedImports: error`)
+- Explicit eval használatának tilalma (`noGlobalEval: error`)
+- Prototype szennyezés elleni védelem (`noPrototypeBuiltins: error`)
 
-### Alapértelmezett akadálymentesség
+### Alapértelmezett hozzáférhetőség
 
-A szabályok megfelelnek az akadálymentességi szabványoknak:
+A hozzáférhetőségre vonatkozó standardoknak megfelelő szabályok:
 
 - Az ARIA attribútumoknak érvényesnek kell lenniük
-- Előnyben részesülnek a szemantikus HTML elemek
-- Kötelező a billentyűzetes navigáció támogatása
-- Kötelező a képek alternatív szövege
+- Szemantikus HTML elemek előnyben részesítése
+- Billentyűzetes navigáció támogatása kötelező
+- Képekhez kötelező az alt szöveg
 
 ### Node.js támogatás
 
-Környezet-specifikus kezelés:
+Környezetspecifikus kezelés:
 
 - Felismeri a Node.js globális változókat (`module`, `process`)
-- Követeli a `node:` protokollt beépített modulokhoz
+- Kötelezővé teszi a `node:` protokoll használatát beépített modulokhoz
 - Támogatja a CommonJS-t és az ESM-et is
 
 ## Teljes szabályreferencia
 
-### Akadálymentesség (a11y)
+### Hozzáférhetőség (a11y)
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noAccessKey` | `error` | Követeli, hogy az `accessKey` attribútum ne legyen használva semelyik HTML elemen. |
-| `noAriaHiddenOnFocusable` | `error` | Követeli, hogy a `aria-hidden="true"` ne legyen beállítva fókuszálható elemekre. |
-| `noAriaUnsupportedElements` | `error` | Követeli, hogy azok az elemek, amelyek nem támogatják az ARIA szerepeket, állapotokat és tulajdonságokat, ne tartalmazzanak ilyen attribútumokat. |
-| `noAutofocus` | `off` | Követeli, hogy az `autoFocus` prop ne legyen használva elemeknél. |
-| `noDistractingElements` | `error` | Követeli, hogy ne legyenek zavaró elemek használatban. |
-| `noHeaderScope` | `error` | A scope prop csak `<th>` elemekre legyen használva. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Követeli, hogy nem-interaktív ARIA szerepek ne legyenek hozzárendelve interaktív HTML elemekhez. |
-| `noLabelWithoutControl` | `error` | Követeli, hogy egy label elemnek vagy komponensnek legyen szöveges címkéje és kapcsolódó inputja. |
+|--------|----------|--------|
+| `noAccessKey` | `error` | Kötelezi, hogy az `accessKey` attribútumot ne használják semelyik HTML elemen. |
+| `noAriaHiddenOnFocusable` | `error` | Kötelezi, hogy `aria-hidden="true"` ne legyen beállítva fókuszálható elemekre. |
+| `noAriaUnsupportedElements` | `error` | Kötelezi, hogy azokra az elemekre, amelyek nem támogatják az ARIA szerepeket, állapotokat és tulajdonságokat, ne legyenek ilyen attribútumok beállítva. |
+| `noAutofocus` | `off` | Kötelezi, hogy az `autoFocus` prop ne legyen használatban elemeknél. |
+| `noDistractingElements` | `error` | Biztosítja, hogy ne használjanak zavaró elemeket. |
+| `noHeaderScope` | `error` | A scope prop-ot csak `<th>` elemeknél szabad használni. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Kötelezi, hogy interaktív HTML elemekhez ne rendeljenek nem-interaktív ARIA szerepeket. |
+| `noLabelWithoutControl` | `error` | Kötelezi, hogy egy label elem vagy komponens rendelkezzen szöveges címkével és kapcsolódó inputtal. |
 | `noNoninteractiveElementInteractions` | `error` | Megtiltja eseménykezelők használatát nem-interaktív elemeken. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Követeli, hogy interaktív ARIA szerepek ne legyenek hozzárendelve nem-interaktív HTML elemekhez. |
-| `noNoninteractiveTabindex` | `error` | Követeli, hogy `tabIndex` ne legyen hozzárendelve nem-interaktív HTML elemekhez. |
-| `noPositiveTabindex` | `error` | Megakadályozza pozitív egész számok használatát a `tabIndex` tulajdonságon. |
-| `noRedundantAlt` | `error` | Követeli, hogy az img alt prop ne tartalmazza az `image`, `picture`, vagy `photo` szavakat. |
-| `noRedundantRoles` | `error` | Követeli, hogy a kifejezett role tulajdonság ne legyen azonos az elem implicit/alapértelmezett szerepével. |
-| `noStaticElementInteractions` | `error` | Követeli, hogy a statikus, látható elemek (például `<div>`) amelyek kattintáskezelővel rendelkeznek, használjanak érvényes role attribútumot. |
-| `noSvgWithoutTitle` | `error` | Kötelezi a `title` elem használatát az `svg` elem esetében. |
-| `useAltText` | `error` | Követeli, hogy minden olyan elem, amely alternatív szöveget igényel, értelmes információt közvetítsen a végfelhasználó számára. |
-| `useAnchorContent` | `error` | Követeli, hogy az anchoroknak legyen tartalmuk és az hozzáférhető legyen a képernyőolvasók számára. |
-| `useAriaActivedescendantWithTabindex` | `error` | Követeli, hogy `tabIndex` legyen hozzárendelve nem-interaktív HTML elemekhez, amelyeknél `aria-activedescendant` van. |
-| `useAriaPropsForRole` | `error` | Követeli, hogy az ARIA szereppel rendelkező elemek rendelkezzenek az adott szerephez szükséges összes ARIA attribútummal. |
-| `useAriaPropsSupportedByRole` | `error` | Követeli, hogy az ARIA tulajdonságok érvényesek legyenek az elem által támogatott szerepekre. |
-| `useButtonType` | `error` | Kötelezi a `type` attribútum használatát a button elemen. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Kötelezi, hogy nem-interaktív HTML elemekhez ne rendeljenek interaktív ARIA szerepeket. |
+| `noNoninteractiveTabindex` | `error` | Kötelezi, hogy `tabIndex` ne legyen hozzárendelve nem-interaktív HTML elemekhez. |
+| `noPositiveTabindex` | `error` | Megakadályozza a pozitív egész számok használatát a `tabIndex` tulajdonságon. |
+| `noRedundantAlt` | `error` | Kötelezi, hogy az img alt prop ne tartalmazza az `image`, `picture` vagy `photo` szavakat. |
+| `noRedundantRoles` | `error` | Kötelezi, hogy egy explicit role tulajdonság ne egyezzen meg az elem implicit/alkalmazott alapértelmezett szerepével. |
+| `noStaticElementInteractions` | `error` | Kötelezi, hogy a statikus, látható elemek (például `<div>`), amelyek kattintáskezelővel rendelkeznek, érvényes role attribútumot használjanak. |
+| `noSvgWithoutTitle` | `error` | Kötelezi a `title` elem használatát az `svg` elemen. |
+| `useAltText` | `error` | Kötelezi, hogy minden olyan elem, amely alternatív szöveget igényel, értelmes információt közvetítsen a végfelhasználó felé. |
+| `useAnchorContent` | `error` | Kötelezi, hogy az anchoroknak legyen tartalmuk és az hozzáférhető legyen a képernyőolvasók számára. |
+| `useAriaActivedescendantWithTabindex` | `error` | Kötelezi, hogy `tabIndex` legyen hozzárendelve nem-interaktív HTML elemekhez, amelyek rendelkeznek aria-activedescendant-tel. |
+| `useAriaPropsForRole` | `error` | Kötelezi, hogy az ARIA szereppel rendelkező elemek rendelkezzenek a szerephez szükséges összes ARIA attribútummal. |
+| `useAriaPropsSupportedByRole` | `error` | Kötelezi, hogy az ARIA tulajdonságok érvényesek legyenek az adott elemet támogató szerepekhez. |
+| `useButtonType` | `error` | Kötelezi a `type` attribútum használatát a button elemnél. |
 | `useFocusableInteractive` | `error` | Az interaktív szereppel és interakciós kezelőkkel rendelkező elemeknek fókuszálhatónak kell lenniük. |
-| `useHeadingContent` | `error` | Követeli, hogy a heading elemeknek (`h1`, `h2`, stb.) legyen tartalmuk és az hozzáférhető legyen a képernyőolvasók számára. |
-| `useHtmlLang` | `error` | Követeli, hogy az `html` elemnek legyen `lang` attribútuma. |
-| `useIframeTitle` | `error` | Kötelezi a `title` attribútum használatát az iframe elemen. |
-| `useKeyWithClickEvents` | `error` | Követeli, hogy az `onClick` mellé legalább az egyik legyen: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Követeli, hogy az `onMouseOver` / `onMouseOut` mellé legyen `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Kötelezi, hogy az audio és video elemekhez legyen feliratokért felelős track. |
+| `useHeadingContent` | `error` | Kötelezi, hogy a heading elemeknek (`h1`, `h2`, stb.) legyen tartalmuk, és az hozzáférhető legyen a képernyőolvasók számára. |
+| `useHtmlLang` | `error` | Kötelezi, hogy az `html` elem rendelkezzen `lang` attribútummal. |
+| `useIframeTitle` | `error` | Kötelezi a `title` attribútum használatát az iframe elemnél. |
+| `useKeyWithClickEvents` | `error` | Kötelezi, hogy az `onClick`-hez legalább az egyik kövesse: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Kötelezi, hogy az `onMouseOver` / `onMouseOut` kísérje a `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Kötelezi, hogy az audio és video elemek rendelkezzenek feliratozó track-kel. |
 | `useSemanticElements` | `error` | Észleli a role attribútumok használatát JSX elemekben és javasolja a szemantikus elemek használatát. |
-| `useValidAnchor` | `error` | Követeli, hogy minden anchor érvényes és navigálható elem legyen. |
-| `useValidAriaProps` | `error` | Biztosítja, hogy az ARIA `aria-*` tulajdonságok mind érvényesek legyenek. |
+| `useValidAnchor` | `error` | Kötelezi, hogy minden anchor érvényes és navigálható elem legyen. |
+| `useValidAriaProps` | `error` | Biztosítja, hogy az ARIA tulajdonságok (`aria-*`) érvényesek legyenek. |
 | `useValidAriaRole` | `error` | Az ARIA szereppel rendelkező elemeknek érvényes, nem-absztrakt ARIA szerepet kell használniuk. |
-| `useValidAriaValues` | `error` | Követeli, hogy az ARIA állapot- és tulajdonságértékek érvényesek legyenek. |
-| `useValidAutocomplete` | `error` | Használj érvényes értékeket az autocomplete attribútumhoz input elemeknél. |
+| `useValidAriaValues` | `error` | Kötelezi, hogy az ARIA állapot- és tulajdonságértékek érvényesek legyenek. |
+| `useValidAutocomplete` | `error` | Érvényes értékek használata az autocomplete attribútumnál input elemeknél. |
 | `useValidLang` | `error` | Biztosítja, hogy a `lang` attribútumnak átadott érték helyes ISO nyelv- és/vagy országkód legyen. |
-| `useGenericFontNames` | `error` | Megtiltja a generikus betűcsalád kulcsszó hiányát a betűcsaládoknál (CSS). |
+| `useGenericFontNames` | `error` | Megtiltja a generikus családkulcsszó hiányát betűcsaládoknál (CSS). |
 
 ### Bonyolultság
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Megtiltja a egymás után álló szóköz karakterek félreérthető használatát reguláris kifejezésekben. |
+|--------|----------|--------|
+| `noAdjacentSpacesInRegex` | `error` | Megtiltja az egymást követő szóközök bizonytalan használatát reguláris kifejezés literálokban. |
 | `noArguments` | `error` | Megtiltja az arguments használatát. |
-| `noBannedTypes` | `error` | Megtiltja az primitív típus-álneveket és félrevezető típusokat. |
+| `noBannedTypes` | `error` | Megtiltja primitív típus aliasok és félrevezető típusok használatát. |
 | `noCommaOperator` | `error` | Megtiltja a vessző operátort. |
-| `noEmptyTypeParameters` | `error` | Megtiltja az üres típusparamétereket típus-álnevekben és interfészekben. |
-| `noExcessiveCognitiveComplexity` | `error` | Megtiltja azokat a függvényeket, amelyek meghaladják a megadott kognitív komplexitási pontszámot. |
-| `noExcessiveLinesPerFunction` | `off` | Korlátozza egy függvény kódsorainak számát. |
-| `noExcessiveNestedTestSuites` | `error` | Ez a szabály korlátozza a beágyazott `describe()` maximum mélységét tesztfájlokban. |
-| `noExtraBooleanCast` | `error` | Megtiltja a szükségtelen boolean kasztolásokat. |
-| `noFlatMapIdentity` | `error` | Megtiltja a felesleges callback használatát flatMap esetén. |
-| `noForEach` | `error` | A `for...of` használatát preferálja az `Array.forEach` helyett. |
+| `noEmptyTypeParameters` | `error` | Megtiltja az üres típusparamétereket típus-aliasekben és interfészekben. |
+| `noExcessiveCognitiveComplexity` | `error` | Megtiltja a megadott kognitív komplexitás pontot meghaladó függvényeket. |
+| `noExcessiveLinesPerFunction` | `off` | Korlátozza a függvényben lévő kódsorok számát. |
+| `noExcessiveNestedTestSuites` | `error` | Ez a szabály korlátozza a `describe()` függvények egymásba ágyazásának maximális mélységét tesztfájlokban. |
+| `noExtraBooleanCast` | `error` | Megtiltja a szükségtelen boolean típusokra történő kényszerítéseket. |
+| `noFlatMapIdentity` | `error` | Megtiltja a felesleges callback használatát a flatMap-nél. |
+| `noForEach` | `error` | A `for...of` szerkezetet preferálja az `Array.forEach` helyett. |
 | `noImplicitCoercions` | `off` | Megtiltja a rövidített típuskonverziókat. |
-| `noImportantStyles` | `off` | Megtiltja az `!important` stílus használatát (CSS). |
-| `noStaticOnlyClass` | `error` | Jelenti, ha egy osztálynak nincsenek nem-statikus tagjai. |
-| `noThisInStatic` | `error` | Megtiltja a `this` és `super` használatát statikus kontextusban. |
+| `noImportantStyles` | `off` | Megtiltja az `!important` stílus (CSS) használatát. |
+| `noStaticOnlyClass` | `error` | Jelenti, ha egy osztálynak nincs nem-statikus tagja. |
+| `noThisInStatic` | `error` | Megtiltja a `this` és `super` használatát statikus kontextusokban. |
 | `noUselessCatch` | `error` | Megtiltja a szükségtelen catch ágakat. |
 | `noUselessConstructor` | `error` | Megtiltja a szükségtelen konstruktorokat. |
 | `noUselessContinue` | `error` | Kerüli a szükségtelen continue használatát. |
 | `noUselessEmptyExport` | `error` | Megtiltja az üres exportokat, amelyek nem változtatnak semmit egy modul fájlban. |
-| `noUselessEscapeInRegex` | `error` | Megtiltja a szükségtelen escape szekvenciákat reguláris kifejezésekben. |
+| `noUselessEscapeInRegex` | `error` | Megtiltja a szükségtelen escape szekvenciákat reguláris kifejezés literálokban. |
 | `noUselessFragments` | `error` | Megtiltja a szükségtelen fragmenteket. |
-| `noUselessLabel` | `error` | Megtiltja a szükségtelen címkéket. |
-| `noUselessLoneBlockStatements` | `error` | Megtiltja a szükségtelen, beágyazott blokk utasításokat. |
-| `noUselessRename` | `error` | Megtiltja az importok, exportok és destruktúrálások ugyanarra a névre történő átnevezését. |
-| `noUselessStringConcat` | `error` | Megtiltja a felesleges string vagy template literal konkatenációt. |
-| `noUselessStringRaw` | `error` | Megtiltja a felesleges `String.raw` függvény használatát template string literáloknál escape szekvencia nélkül. |
+| `noUselessLabel` | `error` | Megtiltja a szükségtelen label-eket. |
+| `noUselessLoneBlockStatements` | `error` | Megtiltja a szükségtelen egymásba ágyazott blokk utasításokat. |
+| `noUselessRename` | `error` | Megtiltja az import, export és destrukturált hozzárendelések átnevezését ugyanarra a névre. |
+| `noUselessStringConcat` | `error` | Megtiltja a szükségtelen string vagy template literálok konkatenációját. |
+| `noUselessStringRaw` | `error` | Megtiltja a szükségtelen `String.raw` használatát template string literálokban escape szekvencia nélkül. |
 | `noUselessSwitchCase` | `error` | Megtiltja a haszontalan case ágakat switch utasításokban. |
 | `noUselessTernary` | `error` | Megtiltja a ternáris operátorokat, ha egyszerűbb alternatívák léteznek. |
 | `noUselessThisAlias` | `error` | Megtiltja a haszontalan `this` aliasolást. |
-| `noUselessTypeConstraint` | `error` | Megtiltja az `any` vagy `unknown` használatát típuskonstraintként. |
-| `noUselessUndefinedInitialization` | `error` | Megtiltja a változók `undefined`-re történő inicializálását. |
-| `noVoid` | `error` | Megtiltja a `void` operátorok használatát, amely nem egy megszokott operátor. |
-| `useArrowFunction` | `error` | Használj nyílfüggvényeket a function expression-ök helyett. |
-| `useDateNow` | `error` | Használd a `Date.now()`-t az Unix epoch óta eltelt milliszekundumok lekéréséhez. |
-| `useFlatMap` | `error` | Elősegíti a `.flatMap()` használatát, amikor `map().flat()` van együtt használva. |
-| `useIndexOf` | `error` | Preferáld az `Array#{indexOf,lastIndexOf}()`-t az `Array#{findIndex,findLastIndex}()` helyett, amikor egy elem indexét keresed. |
-| `useLiteralKeys` | `error` | Követeli, hogy tulajdonságokhoz literális hozzáférést használjunk a számított tulajdonság-hozzáférés helyett. |
+| `noUselessTypeConstraint` | `error` | Megtiltja `any` vagy `unknown` használatát típusmegkötésként. |
+| `noUselessUndefinedInitialization` | `error` | Megtiltja a változók `undefined`-re inicializálását. |
+| `noVoid` | `error` | Megtiltja a `void` operátorok használatát, amely nem egy kézenfekvő operátor. |
+| `useArrowFunction` | `error` | Nyílfüggvények használatát írja elő a függvénykifejezések helyett. |
+| `useDateNow` | `error` | A Unix Epoch óta eltelt milliszekundumok lekéréséhez a `Date.now()` használatát írja elő. |
+| `useFlatMap` | `error` | Előnyben részesíti a `.flatMap()` használatát, amikor `map().flat()` együtt használatos. |
+| `useIndexOf` | `error` | Az `Array#{indexOf,lastIndexOf}()` használatát preferálja az `Array#{findIndex,findLastIndex}()` helyett, ha egy elem indexét keressük. |
+| `useLiteralKeys` | `error` | Kötelezi a literális property hozzáférést a számított property hozzáférés helyett. |
 | `useNumericLiterals` | `error` | Megtiltja a `parseInt()` és `Number.parseInt()` használatát bináris, oktális és hexadecimális literálok helyett. |
-| `useOptionalChain` | `error` | Követeli a tömörebb optional chaining használatát láncolt logikai kifejezések helyett. |
-| `useRegexLiterals` | `error` | Követeli a reguláris kifejezés literálok használatát a `RegExp` konstruktor helyett, ha lehetséges. |
-| `useSimpleNumberKeys` | `error` | Megtiltja a szám literál objektum tagneveket, amelyek nem tízes alapúak vagy "_" elválasztót használnak. |
-| `useSimplifiedLogicExpression` | `error` | Eltávolítja a redundáns tagokat logikai kifejezésekből. |
-| `useWhile` | `error` | Követeli a while ciklusok használatát for helyett, ha az inicializáló és frissítő kifejezésekre nincs szükség. |
+| `useOptionalChain` | `error` | Rövidebb optional chaining használatát írja elő láncolt logikai kifejezések helyett. |
+| `useRegexLiterals` | `error` | Előnyben részesíti a reguláris kifejezés literálok használatát a `RegExp` konstruktorral szemben, ha lehetséges. |
+| `useSimpleNumberKeys` | `error` | Megtiltja olyan szám literál objektum tagneveket, amelyek nem tízes alapúak vagy alulvonást használnak elválasztóként. |
+| `useSimplifiedLogicExpression` | `error` | Elveti a logikai kifejezések redundáns tagjait. |
+| `useWhile` | `error` | A while ciklusok használatát írja elő for ciklusok helyett, amikor az inicializáló és frissítő kifejezések nem szükségesek. |
 
 ### Helyesség
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noConstAssign` | `error` | Megakadályozza, hogy const változók újra legyenek hozzárendelve. |
-| `noConstantCondition` | `error` | Megtiltja az állandó kifejezések használatát feltételekben. |
-| `noConstantMathMinMaxClamp` | `error` | Megtiltja a `Math.min` és `Math.max` használatát érték korlátozására olyan esetekben, ahol az eredmény maga állandó. |
-| `noConstructorReturn` | `error` | Megtiltja érték visszaadását egy konstruktorból. |
-| `noEmptyCharacterClassInRegex` | `error` | Megtiltja az üres karakterosztályokat reguláris kifejezés literálokban. |
-| `noEmptyPattern` | `error` | Megtiltja az üres destruktúrálási mintákat. |
-| `noGlobalDirnameFilename` | `error` | Megtiltja a `__dirname` és `__filename` használatát globális scope-ban. |
+|--------|----------|--------|
+| `noConstAssign` | `error` | Megakadályozza, hogy const változókat újra hozzárendeljenek. |
+| `noConstantCondition` | `error` | Megtiltja a konstans kifejezéseket feltételekben. |
+| `noConstantMathMinMaxClamp` | `error` | Megtiltja a `Math.min` és `Math.max` használatát érték befogására, ha az eredmény konstans. |
+| `noConstructorReturn` | `error` | Megtiltja érték visszaadását a konstruktorból. |
+| `noEmptyCharacterClassInRegex` | `error` | Megtiltja az üres karakterosztályok használatát reguláris kifejezés literálokban. |
+| `noEmptyPattern` | `error` | Megtiltja az üres destrukturáló mintákat. |
+| `noGlobalDirnameFilename` | `error` | Megtiltja az `__dirname` és `__filename` használatát globális scope-ban. |
 | `noGlobalObjectCalls` | `error` | Megtiltja a globális objektum tulajdonságainak függvényként való meghívását. |
-| `noInnerDeclarations` | `error` | Megtiltja a függvény- és `var` deklarációkat, amelyek elérhetők a blokkjukon kívül. |
+| `noInnerDeclarations` | `error` | Megtiltja a blokk hatókörén kívül elérhető függvény- és `var` deklarációkat. |
 | `noInvalidBuiltinInstantiation` | `error` | Biztosítja, hogy a beépítettek helyesen legyenek példányosítva. |
-| `noInvalidConstructorSuper` | `error` | Megakadályozza a `super()` hibás használatát osztályokon belül. |
-| `noInvalidDirectionInLinearGradient` | `error` | Megtiltja a nem szabványos irányértékeket a linear gradient függvényeknél (CSS). |
-| `noInvalidGridAreas` | `error` | Megtiltja az érvénytelen nevű grid területeket a CSS Grid elrendezésekben (CSS). |
-| `noInvalidPositionAtImportRule` | `error` | Megtiltja az `@import` at-rule-ok érvénytelen helyeken történő használatát (CSS). |
-| `noInvalidUseBeforeDeclaration` | `error` | Megtiltja a változók és függvényparaméterek használatát azok deklarálása előtt. |
-| `noMissingVarFunction` | `error` | Megtiltja a hiányzó `var` funkciót css változókhoz (CSS). |
+| `noInvalidConstructorSuper` | `error` | Megakadályozza a `super()` helytelen használatát osztályokban. |
+| `noInvalidDirectionInLinearGradient` | `error` | Megtiltja a nem szabványos irányértékeket lineáris gradient függvényekben (CSS). |
+| `noInvalidGridAreas` | `error` | Megtiltja az érvénytelen elnevezett grid területeket CSS Grid Layout-ban (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Megtiltja az `@import` at-rule használatát érvénytelen pozíciókban (CSS). |
+| `noInvalidUseBeforeDeclaration` | `error` | Megtiltja a változók és függvényparaméterek használatát deklarációjuk előtt. |
+| `noMissingVarFunction` | `error` | Megtiltja a hiányzó `var` függvényt CSS változók esetén (CSS). |
 | `noNodejsModules` | `off` | Megtiltja a Node.js beépített modulok használatát. |
 | `noNonoctalDecimalEscape` | `error` | Megtiltja a `\8` és `\9` escape szekvenciákat string literálokban. |
-| `noPrecisionLoss` | `error` | Megtiltja az olyan literál számokat, amelyek precizitást veszítenek. |
+| `noPrecisionLoss` | `error` | Megtiltja olyan literál számok használatát, amelyek pontosságot veszítenek. |
 | `noPrivateImports` | `off` | Korlátozza a privát exportok importálását. |
 | `noProcessGlobal` | `off` | Megtiltja a `process` globális használatát. |
 | `noRestrictedElements` | `error` | Megtiltja a konfigurált elemek használatát. |
-| `noSelfAssign` | `error` | Megtiltja az olyan hozzárendeléseket, ahol mindkét oldal pontosan ugyanaz. |
+| `noSelfAssign` | `error` | Megtiltja az olyan hozzárendeléseket, ahol mindkét oldal pontosan megegyezik. |
 | `noSetterReturn` | `error` | Megtiltja érték visszaadását egy setterből. |
-| `noStringCaseMismatch` | `error` | Megtiltja az olyan kifejezésösszehasonlításokat, amelyek során az egyik oldal string case módosításon megy keresztül, a másik pedig nem kompatibilis érték. |
-| `noSwitchDeclarations` | `error` | Megtiltja a lexikális deklarációkat switch ágakban. |
-| `noUndeclaredDependencies` | `off` | Megtiltja olyan függőségek használatát, amelyek nincsenek felsorolva a `package.json`-ban. |
+| `noStringCaseMismatch` | `error` | Megtiltja az olyan összehasonlításokat, ahol a string eset-módosítás miatt az érték nem felel meg. |
+| `noSwitchDeclarations` | `error` | Megtiltja lexikális deklarációkat switch ágakban. |
+| `noUndeclaredDependencies` | `off` | Megtiltja a `package.json`-ban nem szereplő függőségek használatát. |
 | `noUndeclaredVariables` | `error` | Megakadályozza olyan változók használatát, amelyek nincsenek deklarálva a dokumentumban. |
-| `noUnknownFunction` | `error` | Megtiltja az ismeretlen CSS értékfüggvényeket (CSS). |
-| `noUnknownMediaFeatureName` | `error` | Megtiltja az ismeretlen media feature neveket (CSS). |
-| `noUnknownProperty` | `error` | Megtiltja az ismeretlen tulajdonságokat (CSS). |
-| `noUnknownPseudoClass` | `error` | Megtiltja az ismeretlen pseudo-class szelektorokat (CSS). |
-| `noUnknownPseudoElement` | `error` | Megtiltja az ismeretlen pseudo-element szelektorokat (CSS). |
+| `noUnknownFunction` | `error` | Megtiltja ismeretlen CSS érték függvények használatát (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Megtiltja az ismeretlen media feature nevek használatát (CSS). |
+| `noUnknownProperty` | `error` | Megtiltja az ismeretlen tulajdonságok használatát (CSS). |
+| `noUnknownPseudoClass` | `error` | Megtiltja az ismeretlen pszeudo-osztály szelektorokat (CSS). |
+| `noUnknownPseudoElement` | `error` | Megtiltja az ismeretlen pszeudo-elemek szelektorait (CSS). |
 | `noUnknownTypeSelector` | `error` | Megtiltja az ismeretlen típus szelektorokat (CSS). |
-| `noUnknownUnit` | `error` | Megtiltja az ismeretlen CSS egységeket (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Megtiltja az illesztetlen An+B szelektorokat (CSS). |
+| `noUnknownUnit` | `error` | Megtiltja az ismeretlen CSS mértékegységek használatát (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Megtiltja az illeszkedhetetlen An+B szelektorokat (CSS). |
 | `noUnreachable` | `error` | Megtiltja az elérhetetlen kódot. |
-| `noUnreachableSuper` | `error` | Biztosítja, hogy a `super()` konstruktor minden kódfutási úton pontosan egyszer legyen meghívva egy osztály konstruktorában, mielőtt ez elérhetővé válik. |
-| `noUnsafeFinally` | `error` | Megtiltja vezérlési szerkezetek használatát finally blokkokban. |
+| `noUnreachableSuper` | `error` | Biztosítja, hogy a `super()` konstruktor minden útvonalon pontosan egyszer kerüljön meghívásra osztálykonstruktorban, mielőtt erre hivatkoznának. |
+| `noUnsafeFinally` | `error` | Megtiltja vezérlési áramlás utasítások használatát finally blokkokban. |
 | `noUnsafeOptionalChaining` | `error` | Megtiltja az optional chaining használatát olyan kontextusokban, ahol az undefined érték nem megengedett. |
 | `noUnusedFunctionParameters` | `error` | Megtiltja a nem használt függvényparamétereket. |
-| `noUnusedImports` | `error` (biztonságos javítás felülírása) | Megtiltja a nem használt importokat. |
-| `noUnusedLabels` | `error` | Megtiltja a nem használt címkéket. |
+| `noUnusedImports` | `error` (safe fix override) | Megtiltja a nem használt importokat. |
+| `noUnusedLabels` | `error` | Megtiltja a nem használt label-eket. |
 | `noUnusedPrivateClassMembers` | `error` | Megtiltja a nem használt privát osztálytagokat. |
 | `noUnusedVariables` | `error` | Megtiltja a nem használt változókat. |
 | `noVoidTypeReturn` | `error` | Megtiltja érték visszaadását olyan függvényből, amelynek visszatérési típusa `void`. |
-| `useGraphqlNamedOperations` | `error` | Követeli a GraphQL műveletek nevének megadását. |
-| `useImageSize` | `error` | Kötelezi, hogy a `<img>` elemeknek legyen mind szélesség, mind magasság attribútuma. |
-| `useImportExtensions` | `off` | Kötelezi a fájlkiterjesztések használatát relatív importoknál. |
-| `useIsNan` | `error` | Követeli az `isNaN()` hívást NaN ellenőrzésekor. |
-| `useJsonImportAttributes` | `off` | Kötelezi a JSON modul importálásánál a `{ type: "json" }` használatát. |
-| `useParseIntRadix` | `error` | Követeli a radix argumentum következetes használatát `parseInt()` esetén. |
-| `useSingleJsDocAsterisk` | `error` | Követeli, hogy a JSDoc komment sorai egyetlen csillaggal kezdődjenek, kivéve az első sort. |
-| `useUniqueElementIds` | `off` | Megakadályozza statikus string literál id attribútum használatát elemeknél. |
-| `useValidForDirection` | `error` | Követeli, hogy a `for` ciklus frissítő záradéka a számlálót a megfelelő irányba mozgassa. |
-| `useValidTypeof` | `error` | Ez a szabály ellenőrzi, hogy egy `typeof` kifejezés eredményét érvényes értékkel hasonlítják-e össze. |
-| `useYield` | `error` | Követeli, hogy a generátor függvények tartalmazzanak `yield`-t. |
+| `useGraphqlNamedOperations` | `error` | Kötelezi a GraphQL műveletek nevének megadását. |
+| `useImageSize` | `error` | Kötelezi, hogy `<img>` elemek rendelkezzenek mind szélesség, mind magasság attribútummal. |
+| `useImportExtensions` | `off` | Kötelezi a relatív importok fájlkiterjesztésének használatát. |
+| `useIsNan` | `error` | Kötelezi az `isNaN()` hívásokat NaN ellenőrzésnél. |
+| `useJsonImportAttributes` | `off` | Kötelezi a `{ type: "json" }` használatát JSON modul importoknál. |
+| `useParseIntRadix` | `error` | Kötelezi a radix argumentum következetes használatát `parseInt()` esetén. |
+| `useSingleJsDocAsterisk` | `error` | Kötelezi, hogy a JSDoc komment sorok egyetlen csillaggal kezdődjenek, kivéve az első sort. |
+| `useUniqueElementIds` | `off` | Megakadályozza statikus string literal id attribútum használatát az elemeknél. |
+| `useValidForDirection` | `error` | Kötelezi, hogy a `for` ciklus update része a számlálót a helyes irányba mozgassa. |
+| `useValidTypeof` | `error` | Ellenőrzi, hogy a `typeof` kifejezés eredményét érvényes értékkel hasonlítják-e össze. |
+| `useYield` | `error` | Kötelezi, hogy a generátor függvények tartalmazzanak `yield`-t. |
 
 ### Kísérleti
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
+|--------|----------|--------|
 | `noContinue` | `off` | Megtiltja a continue utasításokat. |
-| `noDeprecatedImports` | `off` | Korlátozza az elavult exportok importálását. |
-| `noDuplicateDependencies` | `error` | Megakadályozza az ismétlődő függőségek felsorolását. |
+| `noDeprecatedImports` | `off` | Korlátozza a elavult exportok importálását. |
+| `noDuplicateDependencies` | `error` | Megakadályozza a duplikált függőségek felsorolását. |
+| `noDuplicatedSpreadProps` | `error` | Megtiltja a duplikált tulajdonságokat spread prop-okban. |
 | `noEmptySource` | `error` | Megtiltja az üres forrásfájlokat. |
-| `noFloatingPromises` | `off` | Megköveteli, hogy a Promise-szerű kifejezéseket megfelelően kezeljék. |
-| `noForIn` | `off` | Megtiltja a for-in ciklussal történő iterálást. |
-| `noImportCycles` | `off` | Megelőzi az import ciklusokat. |
-| `noIncrementDecrement` | `error` | Megtiltja a `++` és `--` operátorok használatát (kivéve for ciklus utánthoughts). |
+| `noEqualsToNull` | `error` | Megtiltja a `==` vagy `!=` használatát `null` összehasonlításához. Használd helyette a `===` vagy `!==`. |
+| `noFloatingPromises` | `off` | Kötelezi, hogy a Promise-szerű kifejezéseket megfelelően kezeljék. |
+| `noForIn` | `off` | Megtiltja a for-in ciklus használatát iteráláshoz. |
+| `noImportCycles` | `off` | Megakadályozza az import ciklusokat. |
+| `noIncrementDecrement` | `error` | Megtiltja a `++` és `--` operátorok használatát (kivéve for ciklus utó-kifejezésében). |
 | `noJsxLiterals` | `off` | Megtiltja a string literálokat JSX elemekben. |
-| `noMisusedPromises` | `off` | Megtiltja a Promise-ok hibás használatát olyan helyeken, ahol valószínűleg hiba. |
+| `noLeakedRender` | `error` | Megakadályozza, hogy problémás, kiszivárgott értékek (pl. 0 vagy NaN) kerüljenek renderelésre JSX-ben. |
+| `noMisusedPromises` | `off` | Megtiltja a Promise-ok használatát olyan helyeken, ahol azok valószínűleg hibás használatra utalnak. |
+| `noMultiStr` | `error` | Megtiltja több soros stringek használatát backslash folytatással. |
 | `noParametersOnlyUsedInRecursion` | `error` | Megtiltja azokat a paramétereket, amelyeket csak rekurzív hívásokban használnak. |
-| `noShadow` | `error` | Megtiltja, hogy belső scope változók elfedjék a külső scope-ban deklarált változókat. |
-| `noSyncScripts` | `error` | Megelőzi a szinkron szkriptek használatát. |
-| `noUnnecessaryConditions` | `off` | Megtiltja az olyan típus-alapú feltételeket, amelyek statikusan meghatározhatóan feleslegesek. |
-| `noUnresolvedImports` | `off` | Figyelmeztet, amikor nem létező exportokat importálsz. |
-| `noUnusedExpressions` | `error` | Megtiltja az olyan kifejezés utasításokat, amelyek nem függvényhívások vagy hozzárendelések. |
+| `noProto` | `error` | Megtiltja a `__proto__` property használatát. |
+| `noShadow` | `error` | Megtiltja a belső scope változók árnyékolását külső scope-ban deklarált változók által. |
+| `noSyncScripts` | `error` | Megakadályozza a szinkron szkriptek használatát. |
+| `noTernary` | `off` | Megtiltja a ternáris operátorokat. |
+| `noUnnecessaryConditions` | `off` | Megtiltja az olyan típus alapú feltételeket, amelyek statikusan redundánsnak határozhatók meg. |
+| `noUnresolvedImports` | `off` | Figyelmeztet, ha nem létező exportot importálnak. |
+| `noUnusedExpressions` | `error` | Megtiltja az olyan kifejezés statemanteket, amelyek nem függvényhívások és nem hozzárendelések. |
 | `noUselessCatchBinding` | `off` | Megtiltja a nem használt `catch` kötéseket. |
 | `noUselessUndefined` | `error` | Megtiltja a haszontalan `undefined` használatát. |
-| `useArraySortCompare` | `off` | Követeli a compare függvény használatát `Array.prototype.sort()`-ban. |
-| `useConsistentArrowReturn` | `error` | Követeli a nyílfüggvények testének következetességét. |
-| `useConsistentGraphqlDescriptions` | `error` | Követeli, hogy minden leírás ugyanazt a stílust kövesse (blokkszerű vagy inline) GraphQL fájlokon belül. |
-| `useDeprecatedDate` | `error` | Követeli, hogy az `@deprecated` direktíva megadjon törlési dátumot. |
+| `useArraySortCompare` | `off` | Kötelezi a compare függvény használatát `Array.prototype.sort()`-nál. |
+| `useConsistentArrowReturn` | `error` | Kötelezi az egyöntetű arrow függvény törzsformátumot. |
+| `useConsistentGraphqlDescriptions` | `error` | Követeli, hogy minden leírás ugyanazt a stílust használja (blokkszerű vagy inline) GraphQL fájlokon belül. |
+| `useDeprecatedDate` | `error` | Követeli, hogy az `@deprecated` direktívához megadják a törlés dátumát. |
 | `useExhaustiveSwitchCases` | `off` | Követeli, hogy a switch-case szerkezetek kimerítőek legyenek. |
-| `useExplicitType` | `off` | Követeli a típusok használatát függvényekben, metódusokban, változókban és paraméterekben. |
-| `useFind` | `error` | Követeli az `Array.prototype.find()` használatát az `Array.prototype.filter()` + `[0]` helyett, amikor egyetlen találatot keresel. |
-| `useMaxParams` | `error` | Követeli a maximális paraméterszámot függvénydefiníciókban. |
-| `useSortedClasses` | `error` (biztonságos javítás felülírása) | Követeli a CSS utility osztályok rendezését. |
-| `useSpread` | `error` | Követeli a spread operátor használatát a `Function.prototype.apply()` helyett. |
-| `useUniqueGraphqlOperationName` | `error` | Biztosítja, hogy egy dokumentumon belül minden GraphQL műveletnek egyedi neve legyen. |
+| `useExplicitType` | `off` | Kötelezi a típusok használatát függvényekben, metódusokban, változókban és paramétereknél. |
+| `useFind` | `error` | Kötelezi az `Array.prototype.find()` használatát az `Array.prototype.filter()` + `[0]` helyett, ha egyetlen eredményt keresünk. |
+| `useMaxParams` | `error` | Kötelezi a függvénydefiníciók paramétereinek maximális számát. |
+| `useSortedClasses` | `error` (safe fix override) | Kötelezi a CSS util osztályok rendezését. |
+| `useSpread` | `error` | Kötelezi a spread operátor használatát a `Function.prototype.apply()` helyett. |
+| `useUniqueGraphqlOperationName` | `error` | Biztosítja, hogy egy dokumentumon belül minden GraphQL művelet egyedi névvel rendelkezzen. |
 
 ### Teljesítmény
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noAccumulatingSpread` | `error` | Megtiltja a spread (`...`) operátor használatát akkumulátorokon. |
-| `noAwaitInLoops` | `off` | Megtiltja az `await` használatát ciklusokon belül. |
+|--------|----------|--------|
+| `noAccumulatingSpread` | `error` | Megtiltja a spread (`...`) szintaxis használatát akkumulátorokon. |
+| `noAwaitInLoops` | `off` | Megtiltja az `await` használatát ciklusokban. |
 | `noBarrelFile` | `error` | Megtiltja barrel fájlok használatát. |
 | `noDelete` | `error` | Megtiltja a `delete` operátor használatát. |
-| `noDynamicNamespaceImportAccess` | `error` | Megtiltja a névtér importok dinamikus elérését. |
-| `noNamespaceImport` | `error` | Megtiltja a névtér importok használatát. |
-| `noReExportAll` | `off` | Kerüld a teljes újraexportálást. |
-| `noUnwantedPolyfillio` | `error` | Megakadályozza a duplikált polyfillek használatát Polyfill.io esetén. |
-| `useGoogleFontPreconnect` | `error` | Biztosítja, hogy a `preconnect` attribútum használatban legyen Google Fonts esetén. |
-| `useTopLevelRegex` | `error` | Megköveteli, hogy a reguláris kifejezés literálok top-levelen legyenek deklarálva. |
+| `noDynamicNamespaceImportAccess` | `error` | Megtiltja a namespace importok dinamikus elérését. |
+| `noNamespaceImport` | `error` | Megtiltja a namespace importok használatát. |
+| `noReExportAll` | `off` | Kerüli az összes újraexportálás használatát. |
+| `noUnwantedPolyfillio` | `error` | Megakadályozza a Polyfill.io duplikált polyfillek betöltését. |
+| `useGoogleFontPreconnect` | `error` | Biztosítja a `preconnect` attribútum használatát Google Fonts használatakor. |
+| `useTopLevelRegex` | `error` | Követeli, hogy a regex literálok legyenek deklarálva a top-level-en. |
 
 ### Biztonság
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noBlankTarget` | `error` | Megtiltja a `target="_blank"` attribútum használatát `rel="noopener"` nélkül. |
-| `noDangerouslySetInnerHtml` | `error` | Megakadályozza a veszélyes JSX propok használatát. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Jelenti, amikor egy DOM elem vagy komponens egyszerre használ gyermekeket és `dangerouslySetInnerHTML` propot. |
+|--------|----------|--------|
+| `noBlankTarget` | `error` | Megtiltja a `target="_blank"` attribútumot `rel="noopener"` nélkül. |
+| `noDangerouslySetInnerHtml` | `error` | Megakadályozza veszélyes JSX prop-ok használatát. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Jelenti, ha egy DOM elem vagy komponens egyszerre használ children-t és `dangerouslySetInnerHTML` prop-ot. |
 | `noGlobalEval` | `error` | Megtiltja a globális `eval()` használatát. |
 
 ### Stílus
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
-| `noCommonJs` | `off` | Megtiltja a Common JS modulrendszer használatát az ESM stílusú importok helyett. |
+|--------|----------|--------|
+| `noCommonJs` | `off` | Megtiltja a Common JS modulrendszer használatát az ESM importok javára. |
 | `noDefaultExport` | `off` | Megtiltja az alapértelmezett exportokat. |
 | `noDoneCallback` | `error` | Megtiltja a callback használatát aszinkron tesztekben és hook-okban. |
 | `noEnum` | `error` | Megtiltja a TypeScript enum használatát. |
 | `noExportedImports` | `error` | Megtiltja importált változó exportálását. |
 | `noImplicitBoolean` | `off` | Megtiltja az implicit true értékeket JSX boolean attribútumoknál. |
-| `noInferrableTypes` | `error` | Megtiltja a típus annotációkat olyan változók, paraméterek és osztálytulajdonságok esetén, amelyek literál kifejezéssel vannak inicializálva. |
-| `noMagicNumbers` | `off` | Jelenti a "magic number"-ök használatát — számok közvetlen használatát névvel ellátott konstansok helyett. |
-| `noNamespace` | `error` | Megtiltja a TypeScript namespace-ek használatát. |
-| `noNegationElse` | `error` | Megtiltja a negációt egy if feltételében, ha van else ág. |
+| `noInferrableTypes` | `error` | Megtiltja a típusannotációkat olyan változók, paraméterek és osztálytulajdonságok esetén, amelyek literál kifejezéssel inicializálva vannak. |
+| `noMagicNumbers` | `off` | Jelenti a "magic numbers" használatát — közvetlenül használt számok helyett nevekkel ellátott konstansokat javasol. |
+| `noNamespace` | `error` | Megtiltja a TypeScript namespace használatát. |
+| `noNegationElse` | `error` | Megtiltja a negáció használatát egy if feltételben, ha van else ág. |
 | `noNestedTernary` | `error` | Megtiltja a beágyazott ternáris kifejezéseket. |
-| `noNonNullAssertion` | `error` | Megtiltja a nem-null assertion használatát `!` posztfix operátorral. |
-| `noParameterAssign` | `error` | Megtiltja a függvényparaméterek újraassignálását. |
-| `noParameterProperties` | `error` | Megtiltja a paraméter tulajdonságok használatát osztály konstruktorokban. |
+| `noNonNullAssertion` | `error` | Megtiltja a nem-null assertions `!` használatát. |
+| `noParameterAssign` | `error` | Megtiltja a függvényparaméterek újra-assignálását. |
+| `noParameterProperties` | `error` | Megtiltja a parameter properties használatát osztálykonstruktorokban. |
 | `noProcessEnv` | `off` | Megtiltja a `process.env` használatát. |
-| `noRestrictedGlobals` | `error` | Ez a szabály lehetővé teszi globális változónevek megadását, amelyeket nem akarsz használni az alkalmazásban. |
-| `noRestrictedImports` | `error` | Megtiltja megadott modulok importálását import vagy require útján. |
+| `noRestrictedGlobals` | `error` | Lehetővé teszi globális változónevek megadását, amelyeket nem kívánsz használni az alkalmazásban. |
+| `noRestrictedImports` | `error` | Megtiltja a megadott modulok importálását import vagy require által. |
 | `noRestrictedTypes` | `error` | Megtiltja a felhasználó által definiált típusokat. |
-| `noShoutyConstants` | `error` | Megtiltja olyan konstansok használatát, amelyek értéke nagybetűs változata a nevének. |
-| `noSubstr` | `error` | Követeli a `String.slice()` használatát a `String.substr()` és `String.substring()` helyett. |
-| `noUnusedTemplateLiteral` | `error` | Megtiltja a template literalokat, ha nincs szükség interpolációra vagy speciális karakterkezelésre. |
-| `noUselessElse` | `error` | Megtiltja az else blokkot, amikor az if blokk korán megszakít. |
+| `noShoutyConstants` | `error` | Megtiltja olyan konstansok használatát, ahol az érték a neve nagybetűs változata. |
+| `noSubstr` | `error` | Kötelezi a `String.slice()` használatát a `String.substr()` és `String.substring()` helyett. |
+| `noUnusedTemplateLiteral` | `error` | Megtiltja a template literálokat, ha nincs szükség interpolációra és speciális karakterkezelésre. |
+| `noUselessElse` | `error` | Megtiltja az else blokkot, ha az if ág korán megszakít. |
 | `noYodaExpression` | `error` | Megtiltja a yoda kifejezések használatát. |
-| `useArrayLiterals` | `error` | Megtiltja az `Array` konstruktorokat. |
-| `useAsConstAssertion` | `error` | Követeli az `as const` használatát literál típus és típus annotáció helyett. |
-| `useAtIndex` | `error` | Használd az `at()`-ot egész index hozzáférés helyett. |
-| `useBlockStatements` | `error` | Követeli a kapcsos zárójel konvenciók betartását. |
-| `useCollapsedElseIf` | `error` | Követeli az `else if` használatát a beágyazott `if` helyett `else` ágakban. |
-| `useCollapsedIf` | `error` | Követeli egyetlen `if` használatát a beágyazott `if` helyett. |
-| `useComponentExportOnlyModules` | `off` | Követeli, hogy a komponenseket csak olyan modulokban deklaráld, amelyek kizárólag React komponenseket exportálnak. |
-| `useConsistentArrayType` | `error` | Követeli a következetes `T[]` vagy `Array<T>` használatot. |
-| `useConsistentBuiltinInstantiation` | `error` | Követeli az új (new) használatát minden beépített esetén, kivéve `String`, `Number` és `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Ez a szabály a kapcsos zárójelek következetes használatát írja elő JSX attribútumok és JSX gyerekek esetén. |
-| `useConsistentMemberAccessibility` | `error` | Követeli az osztály tulajdonságok és metódusok következetes hozzáférési módjait. |
-| `useConsistentObjectDefinitions` | `error` | Követeli az objektum literálok következetes deklarálását. |
-| `useConst` | `error` | Követeli a const deklarációkat olyan változók esetén, amelyek csak egyszer vannak hozzárendelve. |
-| `useDefaultParameterLast` | `error` | Követeli, hogy az alapértelmezett és opcionális paraméterek legyenek legutoljára. |
-| `useDefaultSwitchClause` | `error` | Követeli a `default` ágat switch utasításokban. |
-| `useDeprecatedReason` | `error` | Követeli a reason argumentum megadását az `@deprecated` használatakor. |
-| `useEnumInitializers` | `error` | Követeli, hogy minden enum tag értéke explicit legyen inicializálva. |
-| `useExplicitLengthCheck` | `off` | Követeli a `length`, `size`, `byteLength` vagy `byteOffset` explicitt ellenőrzését. |
-| `useExponentiationOperator` | `error` | Megtiltja a `Math.pow` használatát a `**` operátor helyett. |
+| `useArrayLiterals` | `error` | Megtiltja az `Array` konstruktorok használatát. |
+| `useAsConstAssertion` | `error` | Kötelezi az `as const` használatát literál típusok és típusannotációk helyett. |
+| `useAtIndex` | `error` | Használd az `at()`-t egész index hozzáférés helyett. |
+| `useBlockStatements` | `error` | Követeli a kapcsos zárójel konvenciók követését. |
+| `useCollapsedElseIf` | `error` | Kötelezi az `else if` használatát a beágyazott `if` az else ágakban. |
+| `useCollapsedIf` | `error` | Kötelezi egyetlen `if` használatát a beágyazott `if` helyett. |
+| `useComponentExportOnlyModules` | `off` | Kötelezi a komponensek deklarálását csak olyan modulokban, amelyek kizárólag React komponenseket exportálnak. |
+| `useConsistentArrayType` | `error` | Követeli az egységes használatát `T[]` vagy `Array<T>` formátumnak. |
+| `useConsistentBuiltinInstantiation` | `error` | Kötelezi a new használatát az összes beépített konstruktorhoz, kivéve `String`, `Number` és `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Ez a szabály a kapcsos zárójelek konzisztens használatát erőlteti JSX attribútumokban és gyermekeknél. |
+| `useConsistentMemberAccessibility` | `error` | Követeli a konzisztens hozzáférhetőségi módosítókat osztálytulajdonságok és metódusok esetén. |
+| `useConsistentObjectDefinitions` | `error` | Követeli az objektum literálok konzisztens deklarációját. |
+| `useConst` | `error` | Kötelezi a const deklarációkat olyan változók esetén, amelyeket csak egyszer rendelnek hozzá. |
+| `useDefaultParameterLast` | `error` | Kötelezi, hogy az opcionális és alapértelmezett paraméterek legyenek a paraméterlista végén. |
+| `useDefaultSwitchClause` | `error` | Követeli a `default` ág jelenlétét a switch utasításokban. |
+| `useDeprecatedReason` | `error` | Követeli az ok megadását, amikor az `@deprecated` direktívát használják. |
+| `useEnumInitializers` | `error` | Követeli, hogy minden enum tag értéke legyen explicit inicializálva. |
+| `useExplicitLengthCheck` | `off` | Kötelezi a `length`, `size`, `byteLength` vagy `byteOffset` tulajdonság explicitt összehasonlítását. |
+| `useExponentiationOperator` | `error` | Megtiltja a `Math.pow` használatát a `**` operátorral szemben. |
 | `useExportType` | `error` | Elősegíti az export type használatát típusokhoz. |
-| `useExportsLast` | `off` | Követeli, hogy minden export a nem-export állítások után legyen deklarálva. |
-| `useFilenamingConvention` | `error` | Követeli a JavaScript és TypeScript fájlnevek elnevezési konvencióját (kebab-case, ASCII). |
-| `useForOf` | `error` | Ez a szabály egy for-of ciklust javasol, amikor egy for ciklusban az indexet használják egy elem kinyerésére a tömbből. |
-| `useFragmentSyntax` | `error` | Követeli a `<>...</>` használatát a `<Fragment>...</Fragment>` helyett. |
-| `useGraphqlNamingConvention` | `error` | Ellenőrzi, hogy minden enum érték nagybetűs-e. |
-| `useGroupedAccessorPairs` | `error` | Követeli, hogy egy property getterei és setterei egymás mellett legyenek osztály- és objektumdefiníciókban. |
+| `useExportsLast` | `off` | Követeli, hogy minden export deklaráció a nem-export utasítások után szerepeljen. |
+| `useFilenamingConvention` | `error` | Kötelezi a JavaScript és TypeScript fájlnevek nevezéktanát (kebab-case, ASCII). |
+| `useForOf` | `error` | A for-of ciklust javasolja, amikor a for ciklus indexét használják egy elem kinyerésére a tömbből. |
+| `useFragmentSyntax` | `error` | Kötelezi az `<>...</>` használatát a `<Fragment>...</Fragment>` helyett. |
+| `useGraphqlNamingConvention` | `error` | Ellenőrzi, hogy minden enum érték nagybetűvel kezdődjön. |
+| `useGroupedAccessorPairs` | `error` | Kötelezi, hogy azonos tulajdonság getterei és setterei egymás mellett legyenek osztály- és objektumdefiníciókban. |
 | `useImportType` | `error` | Elősegíti az `import type` használatát típusokhoz. |
 | `useLiteralEnumMembers` | `error` | Követeli, hogy minden enum tag literál érték legyen. |
-| `useNamingConvention` | `off` | Névkonvenciós szabály (letiltva). |
+| `useNamingConvention` | `off` | Nevezéktan szabály (tiltva). |
 | `useNodeAssertStrict` | `error` | Elősegíti a `node:assert/strict` használatát a `node:assert` helyett. |
-| `useNodejsImportProtocol` | `error` | Kötelezi a `node:` protokoll használatát Node.js beépített moduloknál. |
-| `useNumberNamespace` | `error` | Használd a `Number` tulajdonságokat a globális helyett. |
-| `useNumericSeparators` | `error` | Követeli a numerikus szeparátorok használatát numerikus literálokban. |
-| `useObjectSpread` | `error` | Preferáld az object spread-et az `Object.assign()` helyett új objektumok létrehozásakor. |
-| `useReadonlyClassProperties` | `error` | Követeli a readonly jelölést a tagokon, ha soha nem módosulnak a konstruktoron kívül. |
-| `useSelfClosingElements` | `error` | Megelőzi a felesleges záró tageket komponenseknél, amelyeknek nincs gyereke. |
-| `useShorthandAssign` | `error` | Követeli a hozzárendelés rövidített operátorának használatát, ahol lehetséges. |
-| `useShorthandFunctionType` | `error` | Követeli a függvénytípusok használatát objektum típus helyett, amely call signature-t tartalmaz. |
-| `useSingleVarDeclarator` | `off` | Megtiltja több változó deklarálását ugyanabban a változó utasításban. |
-| `useSymbolDescription` | `error` | Követeli a leírás paramétert a `Symbol()`-hoz. |
-| `useTemplate` | `error` | Preferálja a template literálokat string konkatenáció helyett. |
-| `useThrowNewError` | `error` | Követeli a new használatát hibák dobásakor. |
+| `useNodejsImportProtocol` | `error` | Kötelezi a `node:` protokoll használatát Node.js beépített modulokhoz. |
+| `useNumberNamespace` | `error` | Használd a `Number` tulajdonságokat a globálisak helyett. |
+| `useNumericSeparators` | `error` | Kötelezi a numerikus elválasztók használatát számliterálokban. |
+| `useObjectSpread` | `error` | Előnyben részesíti az object spread-et az `Object.assign()` helyett új objektumok létrehozásakor. |
+| `useReadonlyClassProperties` | `error` | Kötelezi a readonly jelölést a tagokon, ha sosem módosulnak a konstruktoron kívül. |
+| `useSelfClosingElements` | `error` | Megakadályozza a többlet záró tageket a gyermektelen komponenseknél. |
+| `useShorthandAssign` | `error` | Kötelezi az asszign operátor rövidített használatát, ahol lehetséges. |
+| `useShorthandFunctionType` | `error` | Kötelezi a függvénytípusok használatát objektum típusok helyett, ahol call signature-k vannak. |
+| `useSingleVarDeclarator` | `off` | Megtiltja több változó deklarációját ugyanabban a deklarációs utasításban. |
+| `useSymbolDescription` | `error` | Követeli a leíró paramétert a `Symbol()`-hoz. |
+| `useTemplate` | `error` | Előnyben részesíti a template literálokat string konkatenáció helyett. |
+| `useThrowNewError` | `error` | Követeli a new használatát exception dobásakor. |
 | `useThrowOnlyError` | `error` | Megtiltja nem-`Error` értékek dobását. |
-| `useTrimStartEnd` | `error` | Követeli a `String.trimStart()` és `String.trimEnd()` használatát a `String.trimLeft()` és `String.trimRight()` helyett. |
-| `useUnifiedTypeSignatures` | `error` | Megtiltja az overload signatúrákat, amelyek egyesíthetők egyetlen signatúrává. |
-| `noDescendingSpecificity` | `error` | Megtiltja, hogy alacsonyabb specificitású szelektor jelenjen meg magasabb specificitású után (CSS). |
+| `useTrimStartEnd` | `error` | Kötelezi a `String.trimStart()` és `String.trimEnd()` használatát a `String.trimLeft()` és `String.trimRight()` helyett. |
+| `useUnifiedTypeSignatures` | `error` | Megtiltja az olyan overload aláírásokat, amelyek egyesíthetők lennének egyetlen aláírássá. |
+| `noDescendingSpecificity` | `error` | Megtiltja, hogy egy alacsonyabb specifikusságú szelektor egy magasabb után szerepeljen (CSS). |
 | `noValueAtRule` | `error` | Megtiltja az `@value` szabály használatát css modulokban (CSS). |
 
 ### Gyanús
 
 | Szabály | Beállítás | Leírás |
-|------|---------|-------------|
+|--------|----------|--------|
 | `noAlert` | `error` | Megtiltja az `alert`, `confirm` és `prompt` használatát. |
-| `noApproximativeNumericConstant` | `error` | Használj szabványos konstansokat a közelítő literálok helyett. |
+| `noApproximativeNumericConstant` | `error` | Használj szabványos konstansokat közelítő literálok helyett. |
 | `noAssignInExpressions` | `error` | Megtiltja a hozzárendeléseket kifejezésekben. |
-| `noAsyncPromiseExecutor` | `error` | Megtiltja az async függvények használatát Promise executor-ként. |
-| `noBiomeFirstException` | `error` | Megakadályozza az `!` minta használatát a `files.includes` első pozíciójában a konfigurációs fájlban. |
-| `noBitwiseOperators` | `error` | Megtiltja a bitműveleti operátorokat. |
-| `noCatchAssign` | `error` | Megtiltja a kivételek újraassignálását catch ágakban. |
-| `noClassAssign` | `error` | Megtiltja az osztálytagok újraassignálását. |
-| `noCommentText` | `error` | Megakadályozza, hogy kommentek szövegcsomóként legyenek beszúrva. |
-| `noCompareNegZero` | `error` | Megtiltja a `-0` ellen való összehasonlítást. |
-| `noConfusingLabels` | `error` | Megtiltja az olyan címkézett utasításokat, amelyek nem ciklusok. |
+| `noAsyncPromiseExecutor` | `error` | Megtiltja aszinkron függvény használatát Promise executor-ként. |
+| `noBiomeFirstException` | `error` | Megakadályozza a `!` minta használatát a `files.includes` első pozíciójában a konfigurációs fájlban. |
+| `noBitwiseOperators` | `error` | Megtiltja a bitwise operátorokat. |
+| `noCatchAssign` | `error` | Megtiltja a kivételek újra-assignálását catch ágakban. |
+| `noClassAssign` | `error` | Megtiltja az osztálytagok újra-assignálását. |
+| `noCommentText` | `error` | Megakadályozza, hogy kommentek szöveges csomópontként legyenek beszúrva. |
+| `noCompareNegZero` | `error` | Megtiltja a `-0` ellen történő összehasonlítást. |
+| `noConfusingLabels` | `error` | Megtiltja a nem-ciklus jellegű labeled utasításokat. |
 | `noConfusingVoidType` | `error` | Megtiltja a void típus használatát generikus vagy visszatérési típusokon kívül. |
-| `noConsole` | `off` | Megtiltja a `console` használatát. |
+| `noConsole` | `off` | Megtiltja a console használatát. |
 | `noConstEnum` | `error` | Megtiltja a TypeScript const enum használatát. |
-| `noConstantBinaryExpressions` | `error` | Megtiltja az olyan kifejezéseket, ahol a művelet nem befolyásolja az értéket. |
-| `noControlCharactersInRegex` | `error` | Megakadályozza vezérlő karakterek és néhány escape szekvencia használatát reguláris kifejezés literálokban. |
+| `noConstantBinaryExpressions` | `error` | Megtiltja az olyan kifejezéseket, ahol a művelet nem változtatja meg az értéket. |
+| `noControlCharactersInRegex` | `error` | Megakadályozza vezérlőkarakterek és bizonyos escape-ek használatát reguláris kifejezés literálokban. |
 | `noDebugger` | `error` | Megtiltja a debugger használatát. |
 | `noDocumentCookie` | `error` | Megtiltja a document.cookie közvetlen módosítását. |
-| `noDoubleEquals` | `error` | Követeli a `===` és `!==` használatát. |
+| `noDoubleEquals` | `error` | Kötelezi a `===` és `!==` használatát. |
 | `noDuplicateAtImportRules` | `error` | Megtiltja az ismétlődő `@import` szabályokat (CSS). |
-| `noDuplicateCase` | `error` | Megtiltja az ismétlődő case címkéket. |
-| `noDuplicateClassMembers` | `error` | Megtiltja az ismétlődő osztálytagokat. |
-| `noDuplicateCustomProperties` | `error` | Megtiltja az ismétlődő egyedi tulajdonságokat deklarációs blokkokon belül (CSS). |
-| `noDuplicateElseIf` | `error` | Megtiltja az ismétlődő feltételeket if-else-if láncokban. |
-| `noDuplicateFields` | `error` | Megtiltja az ismétlődő mezőket GraphQL műveletekben. |
-| `noDuplicateFontNames` | `error` | Megtiltja az ismétlődő neveket betűcsaládokon belül (CSS). |
-| `noDuplicateObjectKeys` | `error` | Megtiltja két azonos nevű kulcsot objektumokon belül. |
-| `noDuplicateParameters` | `error` | Megtiltja az ismétlődő függvényparaméter neveket. |
-| `noDuplicateProperties` | `error` | Megtiltja az ismétlődő tulajdonságokat deklarációs blokkokon belül (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Megtiltja az ismétlődő szelektorokat keyframe blokkokon belül (CSS). |
-| `noDuplicateTestHooks` | `error` | Egy describe blokk nem tartalmazhat ismétlődő hook-okat. |
-| `noEmptyBlock` | `error` | Megtiltja a CSS üres blokkokat (CSS). |
+| `noDuplicateCase` | `error` | Megtiltja a duplikált case címkéket. |
+| `noDuplicateClassMembers` | `error` | Megtiltja a duplikált osztálytagokat. |
+| `noDuplicateCustomProperties` | `error` | Megtiltja a duplikált egyedi tulajdonságokat deklaráció blokkokon belül (CSS). |
+| `noDuplicateElseIf` | `error` | Megtiltja a duplikált feltételeket if-else-if láncokban. |
+| `noDuplicateFields` | `error` | Megtiltja a duplikált mezőket GraphQL műveletekben. |
+| `noDuplicateFontNames` | `error` | Megtiltja a duplikált neveket betűcsaládokon belül (CSS). |
+| `noDuplicateObjectKeys` | `error` | Megtiltja két azonos nevű kulcs használatát objektumokban. |
+| `noDuplicateParameters` | `error` | Megtiltja a duplikált függvényparaméter neveket. |
+| `noDuplicateProperties` | `error` | Megtiltja a duplikált tulajdonságokat deklaráció blokkokon belül (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Megtiltja a duplikált szelektorokat keyframe blokkokon belül (CSS). |
+| `noDuplicateTestHooks` | `error` | Egy describe blokk nem tartalmazhat duplikált hook-okat. |
+| `noEmptyBlock` | `error` | Megtiltja az üres CSS blokkokat (CSS). |
 | `noEmptyBlockStatements` | `error` | Megtiltja az üres blokk utasításokat és statikus blokkokat. |
-| `noEmptyInterface` | `error` | Megtiltja az üres interfészek deklarálását. |
-| `noEvolvingTypes` | `error` | Megtiltja, hogy a változók újraassignálással `any` típussá fejlődjenek. |
+| `noEmptyInterface` | `error` | Megtiltja üres interfészek deklarálását. |
+| `noEvolvingTypes` | `error` | Megtiltja, hogy változók a hozzárendelések útján `any` típussá fejlődjenek. |
 | `noExplicitAny` | `error` | Megtiltja az `any` típus használatát. |
-| `noExportsInTest` | `error` | Megtiltja az export vagy module.exports használatát teszteket tartalmazó fájlokban. |
-| `noExtraNonNullAssertion` | `error` | Megakadályozza a nem-null assertion operátor `!` hibás használatát TypeScript fájlokban. |
-| `noFallthroughSwitchClause` | `error` | Megtiltja a switch ágak átesését. |
+| `noExportsInTest` | `error` | Megtiltja az export vagy module.exports használatát tesztfájlokban. |
+| `noExtraNonNullAssertion` | `error` | Megakadályozza a nem-null assertion operátor `!` helytelen használatát TypeScript fájlokban. |
+| `noFallthroughSwitchClause` | `error` | Megtiltja a switch ágak áthullását. |
 | `noFocusedTests` | `error` | Megtiltja a fókuszált teszteket. |
-| `noFunctionAssign` | `error` | Megtiltja a függvénydeklarációk újraassignálását. |
-| `noGlobalAssign` | `error` | Megtiltja a natív objektumokra és csak-olvasott globális változókra történő hozzárendelést. |
+| `noFunctionAssign` | `error` | Megtiltja a függvénydeklarációk újra-assignálását. |
+| `noGlobalAssign` | `error` | Megtiltja natív objektumoknak és olvasható globális változóknak történő hozzárendelést. |
 | `noGlobalIsFinite` | `error` | Használd a `Number.isFinite`-t a globális `isFinite` helyett. |
 | `noGlobalIsNan` | `error` | Használd a `Number.isNaN`-t a globális `isNaN` helyett. |
-| `noImplicitAnyLet` | `error` | Megtiltja az implicit any típus használatát változó deklarációkon. |
-| `noImportAssign` | `error` | Megtiltja az importált kötéshez való hozzárendelést. |
-| `noImportantInKeyframe` | `error` | Megtiltja az érvénytelen `!important` használatát keyframe deklarációkban (CSS). |
-| `noIrregularWhitespace` | `error` | Megtiltja a szabálytalan szóköz karakterek használatát. |
-| `noLabelVar` | `error` | Megtiltja a címkéket, amelyek ugyanazt a nevet használják, mint egy változó. |
-| `noMisleadingCharacterClass` | `error` | Megtiltja az olyan karaktereket, amelyek több kódpontból állnak, karakterosztály szintaxisban. |
-| `noMisleadingInstantiator` | `error` | Követeli a `new` és konstruktor helyes használatát. |
-| `noMisplacedAssertion` | `error` | Ellenőrzi, hogy az assertion függvény, például expect, az `it()` függvényhíváson belül legyen elhelyezve. |
+| `noImplicitAnyLet` | `error` | Megtiltja az implicit any típus használatát változódeklarációknál. |
+| `noImportAssign` | `error` | Megtiltja importált kötésekhez való hozzárendelést. |
+| `noImportantInKeyframe` | `error` | Megtiltja érvénytelen `!important` használatát keyframe deklarációkban (CSS). |
+| `noIrregularWhitespace` | `error` | Megtiltja szabálytalan fehérköz karakterek használatát. |
+| `noLabelVar` | `error` | Megtiltja a label-eket, amelyek neve megegyezik egy változó nevével. |
+| `noMisleadingCharacterClass` | `error` | Megtiltja azokat a karaktereket, amelyek több kódpontból állnak karakterosztály szintaxisban. |
+| `noMisleadingInstantiator` | `error` | Kötelezi a `new` és a konstruktor helyes használatát. |
+| `noMisplacedAssertion` | `error` | Ellenőrzi, hogy az assertion függvény (pl. expect) az `it()` híváson belül legyen elhelyezve. |
 | `noMisrefactoredShorthandAssign` | `error` | Megtiltja a rövidített hozzárendelést, amikor a változó mindkét oldalon megjelenik. |
 | `noOctalEscape` | `error` | Megtiltja az oktális escape szekvenciákat string literálokban. |
-| `noPrototypeBuiltins` | `error` | Megtiltja az `Object.prototype` beépítettek közvetlen használatát. |
-| `noQuickfixBiome` | `error` | Megtiltja a `quickfix.biome` használatát a szerkesztő beállításfájlban. |
-| `noRedeclare` | `error` | Megtiltja a változó, függvény, osztály és típus újradeklarálását ugyanabban a scope-ban. |
-| `noRedundantUseStrict` | `error` | Megakadályozza a felesleges `use strict`-ot. |
-| `noSelfCompare` | `error` | Megtiltja az összehasonlításokat, ahol mindkét oldal pontosan ugyanaz. |
-| `noShadowRestrictedNames` | `error` | Megtiltja az olyan identifikátorokat, amelyek korlátozott neveket árnyékolnak. |
-| `noShorthandPropertyOverrides` | `error` | Megtiltja a rövidített tulajdonságokat, amelyek felülírják a kapcsolódó hosszú formájú tulajdonságokat (CSS). |
-| `noSkippedTests` | `error` | Megtiltja a letiltott teszteket. |
-| `noSparseArray` | `error` | Megakadályozza a lyukas tömbök használatát. |
-| `noTemplateCurlyInString` | `error` | Megtiltja a template literal helyőrző szintaxis használatát normál stringekben. |
+| `noPrototypeBuiltins` | `error` | Megtiltja az `Object.prototype` beépítettjeinek közvetlen használatát. |
+| `noQuickfixBiome` | `error` | Megtiltja a `quickfix.biome` használatát editor beállítás fájlban. |
+| `noRedeclare` | `error` | Megtiltja a változó, függvény, osztály és típus újradeklarációját ugyanabban a scope-ban. |
+| `noRedundantUseStrict` | `error` | Megakadályozza a felesleges `use strict` használatát. |
+| `noSelfCompare` | `error` | Megtiltja az összehasonlításokat, ahol mindkét oldal pontosan megegyezik. |
+| `noShadowRestrictedNames` | `error` | Megtiltja identifier-ek árnyékolását korlátozott nevekkel. |
+| `noShorthandPropertyOverrides` | `error` | Megtiltja rövidített tulajdonságokat, amelyek felülírják a kapcsolódó hosszú tulajdonságokat (CSS). |
+| `noSkippedTests` | `error` | Megtiltja letiltott teszteket. |
+| `noSparseArray` | `error` | Megakadályozza a ritka tömbök (lyukas tömbök) használatát. |
+| `noTemplateCurlyInString` | `error` | Megtiltja a template literal helyőrző szintaxis használatát sima stringekben. |
 | `noThenProperty` | `error` | Megtiltja a then property használatát. |
 | `noTsIgnore` | `error` | Megakadályozza a TypeScript `@ts-ignore` direktíva használatát. |
-| `noUnassignedVariables` | `error` | Megtiltja a let vagy var változókat, amelyek beolvasásra kerülnek, de soha nem kapnak hozzárendelést. |
+| `noUnassignedVariables` | `error` | Megtiltja a let vagy var változókat, amelyeket elolvasnak, de soha nem rendelnek hozzá. |
 | `noUnknownAtRules` | `error` | Megtiltja az ismeretlen at-rule-okat (CSS). |
-| `noUnsafeDeclarationMerging` | `error` | Megtiltja a veszélyes deklaráció egyesítést interfészek és osztályok között. |
+| `noUnsafeDeclarationMerging` | `error` | Megtiltja az unsafe deklaráció egyesítést interfészek és osztályok között. |
 | `noUnsafeNegation` | `error` | Megtiltja a veszélyes negáció (`!`) használatát. |
 | `noUselessEscapeInString` | `error` | Megtiltja a szükségtelen escape-eket string literálokban. |
 | `noUselessRegexBackrefs` | `error` | Megtiltja a haszontalan visszahivatkozásokat reguláris kifejezés literálokban, amelyek mindig üres stringgel egyeznek. |
 | `noVar` | `error` | Megtiltja a `var` használatát. |
-| `noWith` | `error` | Megtiltja a `with` utasításokat nem-szigorú kontextusokban. |
-| `useAdjacentOverloadSignatures` | `error` | Megtiltja az overload signatúrák használatát, amelyek nincsenek egymás mellett. |
+| `noWith` | `error` | Megtiltja a `with` utasításokat nem-strikt kontextusokban. |
+| `useAdjacentOverloadSignatures` | `error` | Megtiltja olyan overload aláírások használatát, amelyek nincsenek egymás mellett. |
 | `useAwait` | `error` | Biztosítja, hogy az async függvények használják az `await`-et. |
 | `useBiomeIgnoreFolder` | `error` | Elősegíti a mappák helyes figyelmen kívül hagyását a konfigurációs fájlban. |
-| `useDefaultSwitchClauseLast` | `error` | Követeli, hogy a default ág legyen utolsó a switch utasításokban. |
-| `useErrorMessage` | `error` | Követeli egy üzenet érték átadását beépített hiba létrehozásakor. |
-| `useGetterReturn` | `error` | Követeli, hogy a getter metódusok mindig adjanak vissza értéket. |
-| `useGoogleFontDisplay` | `error` | Kötelezi egy ajánlott display stratégiát Google Fonts használatakor. |
-| `useGuardForIn` | `error` | Megköveteli, hogy a for-in ciklusok tartalmazzanak egy `if` utasítást. |
+| `useDefaultSwitchClauseLast` | `error` | Kötelezi, hogy a switch statemenetek default ága legyen az utolsó. |
+| `useErrorMessage` | `error` | Kötelezi, hogy üzenet értéket adjunk át beépített hiba létrehozásakor. |
+| `useGetterReturn` | `error` | Kötelezi, hogy a getter metódusok mindig visszaadjanak egy értéket. |
+| `useGoogleFontDisplay` | `error` | Kötelezi a Google Fonts esetén egy ajánlott display stratégia használatát. |
+| `useGuardForIn` | `error` | Követeli, hogy a for-in ciklusok tartalmazzanak if utasítást. |
 | `useIsArray` | `error` | Használd az `Array.isArray()`-t az `instanceof Array` helyett. |
-| `useIterableCallbackReturn` | `error` | Követeli a konzisztens visszatérési értékeket iterálható callback-ekben. |
-| `useNamespaceKeyword` | `error` | Követeli a namespace kulcsszó használatát a `module` helyett TypeScript namespace deklarálásakor. |
-| `useNumberToFixedDigitsArgument` | `error` | Követeli a digits argument használatát a `Number#toFixed()` esetén. |
-| `useStaticResponseMethods` | `error` | Használd a statikus `Response` metódusokat a `new Response()` konstruktor helyett, ha lehetséges. |
-| `useStrictMode` | `error` | Követeli a `use strict` direktíva használatát script fájlokban. |
+| `useIterableCallbackReturn` | `error` | Kötelezi az iterálható callback-ek konzisztens visszatérési értékeit. |
+| `useNamespaceKeyword` | `error` | Követeli a `namespace` kulcsszó használatát a `module` kulcsszó helyett TypeScript namespace deklarációkhoz. |
+| `useNumberToFixedDigitsArgument` | `error` | Kötelezi a digits argumentum használatát a `Number#toFixed()`-nél. |
+| `useStaticResponseMethods` | `error` | Használd a statikus `Response` metódusokat `new Response()` helyett, ha lehetséges. |
+| `useStrictMode` | `error` | Kötelezi a `use strict` direktíva használatát script fájlokban. |
 
 ## Megjegyzések
 
-Bizonyos szabályok le vannak tiltva, mert túl lassúak a Scanner-rel történő futtatáshoz. Ahogy a [Biome dokumentáció](https://biomejs.dev/guides/investigate-slowness/#first-things-first) is jelzi, a projektben engedélyezett szabályok ismerten teljesítménybeli többletterhelést okoznak a fejlettebb elemzésért cserébe.
+Bizonyos szabályok ki vannak kapcsolva, mert túl lassúak a Scanner futtatásához. Ahogy a [Biome dokumentációja](https://biomejs.dev/guides/investigate-slowness/#first-things-first) is megjegyzi, a projekt szintű bekapcsolt szabályok teljesítménybeli többletterhet okozhatnak a fejlettebb elemzésért cserébe.
 
-Tesztelésünk során azt tapasztaltuk, hogy ezek a szabályok 300 ms és 13 s közötti lint futtatási idő-különbséget eredményezhetnek.
+Teszteléseink során azt találtuk, hogy ezek a szabályok 300 ms és 13 s közötti lint futási idő-különbséget okozhatnak.

@@ -17,41 +17,41 @@ Fügen Sie die Next.js-Konfiguration zu Ihrer `biome.jsonc` hinzu:
 
 ## Übersicht
 
-Diese Konfiguration fügt Regeln hinzu, die speziell für die Next.js-Entwicklung gelten:
+Diese Konfiguration fügt Regeln hinzu, die speziell auf die Next.js-Entwicklung ausgerichtet sind:
 
-- **Bildoptimierung**: Erzwingt die Verwendung der Next.js Image-Komponente
-- **Dokumentstruktur**: Verhindert unsachgemäße Verwendung von Next.js-Spezialkomponenten
+- **Bildoptimierung**: Erzwingt die Verwendung der Next.js `<Image>`-Komponente
+- **Dokumentenstruktur**: Verhindert unsachgemäße Verwendung spezieller Next.js-Komponenten
 - **Client-Komponenten**: Stellt sicher, dass asynchrone Client-Komponenten korrekt behandelt werden
 - **Konfigurationsdateien**: Spezielle Behandlung für `next.config.*`-Dateien
 
 ## Next.js-spezifische Regeln
 
-### Vorstufe
+### Experimentell
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Verhindert asynchrone Client-Komponenten in Next.js. Client-Komponenten sollten synchron sein; verwenden Sie Server-Komponenten für asynchrone Operationen. |
+| `noNextAsyncClientComponent` | `error` | Verhindern Sie asynchrone Client-Komponenten in Next.js. Client-Komponenten sollten synchron sein; verwenden Sie Server-Komponenten für asynchrone Vorgänge. |
 
-### Performance
+### Leistung
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noImgElement` | `error` | Verbot der Verwendung des `<img>`-HTML-Elements. Verwenden Sie stattdessen die Next.js-`<Image>`-Komponente für automatische Bildoptimierung. |
+| `noImgElement` | `error` | Verbot der Verwendung des HTML-Elements `<img>`. Verwenden Sie stattdessen die Next.js `<Image>`-Komponente zur automatischen Bildoptimierung. |
 
 ### Stil
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Verbot der Verwendung des `<head>`-HTML-Elements. Verwenden Sie stattdessen `next/head` von Next.js oder die Metadata-API des App Router. |
+| `noHeadElement` | `error` | Verbot der Verwendung des HTML-Elements `<head>`. Verwenden Sie stattdessen `next/head` oder die Metadata-API des App Routers. |
 
 ### Verdächtig
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Verhindert das Importieren von `next/document` in Seiten-Dateien. `_document.tsx` sollte nur in `pages/_document.tsx` existieren. |
-| `noHeadImportInDocument` | `error` | Verhindert das Importieren von `next/head` in `_document.tsx`. Verwenden Sie stattdessen `<Head>` aus `next/document`. |
+| `noDocumentImportInPage` | `error` | Verhindern Sie das Importieren von `next/document` in Seiten-Dateien. `_document.tsx` darf nur in `pages/_document.tsx` existieren. |
+| `noHeadImportInDocument` | `error` | Verhindern Sie das Importieren von `next/head` in `_document.tsx`. Verwenden Sie stattdessen `<Head>` aus `next/document`. |
 
-## Konfigurationsdatei-Überschreibungen
+## Überschreibungen für Konfigurationsdateien
 
 Das Next.js-Preset enthält spezielle Behandlung für Konfigurationsdateien und App Router-Komponenten:
 
@@ -74,7 +74,7 @@ Das Next.js-Preset enthält spezielle Behandlung für Konfigurationsdateien und 
 }
 ```
 
-Dies ermöglicht Next.js-Konfigurationsmuster, die normalerweise möglicherweise die Linting-Regeln nicht bestehen würden.
+Dies ermöglicht Next.js-Konfigurationsmuster, die normalerweise nicht die Linting-Regeln bestehen würden.
 
 ### App Router-Seiten und Layouts
 
@@ -95,4 +95,4 @@ Dies ermöglicht Next.js-Konfigurationsmuster, die normalerweise möglicherweise
 }
 ```
 
-App Router-Seiten- und Layout-Komponenten dürfen asynchron sein, ohne ein `await` zu erfordern, da Next.js diese speziell für serverseitiges Rendering und Datenabruf behandelt.
+App Router-Seiten- und Layout-Komponenten dürfen asynchron sein, ohne dass `await` erforderlich ist, da Next.js diese speziell für serverseitiges Rendering und Datenabruf behandelt.

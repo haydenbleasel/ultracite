@@ -1,9 +1,9 @@
 ---
 title: Next.js
-description: Reglas de linting específicas de Next.js para Ultracite.
+description: Reglas de lint específicas para Next.js en Ultracite.
 ---
 
-La configuración de Next.js contiene reglas de linting específicas de Next.js para la optimización de imágenes, la estructura de documentos y los patrones del App Router.
+La configuración de Next.js incluye reglas de lint específicas para la optimización de imágenes, la estructura del documento y los patrones del App Router.
 
 ## Instalación
 
@@ -19,39 +19,39 @@ Agrega la configuración de Next.js a tu `biome.jsonc`:
 
 Esta configuración añade reglas específicas para el desarrollo con Next.js:
 
-- **Optimización de imágenes**: Hacer cumplir el uso del componente Image de Next.js
-- **Estructura de documentos**: Prevenir el uso indebido de componentes especiales de Next.js
-- **Componentes cliente**: Asegurar que los componentes cliente asíncronos se manejen correctamente
+- **Optimización de imágenes**: Forzar el uso del componente Image de Next.js
+- **Estructura del documento**: Evitar el uso indebido de componentes especiales de Next.js
+- **Componentes de cliente**: Asegurar que los componentes de cliente asíncronos se gestionen correctamente
 - **Archivos de configuración**: Manejo especial para archivos `next.config.*`
 
 ## Reglas específicas de Next.js
 
-### Experimental
+### Incubadora
 
 | Regla | Configuración | Descripción |
-|------|---------------|-------------|
-| `noNextAsyncClientComponent` | `error` | Evita componentes cliente asíncronos en Next.js. Los componentes cliente deben ser sincrónicos; utiliza componentes de servidor para operaciones asíncronas. |
+|------|---------|-------------|
+| `noNextAsyncClientComponent` | `error` | Evita componentes de cliente asíncronos en Next.js. Los componentes de cliente deben ser síncronos; utiliza componentes de servidor para operaciones asíncronas. |
 
 ### Rendimiento
 
 | Regla | Configuración | Descripción |
-|------|---------------|-------------|
-| `noImgElement` | `error` | Prohíbe el uso del elemento HTML `<img>`. Usa el componente `<Image>` de Next.js en su lugar para la optimización automática de imágenes. |
+|------|---------|-------------|
+| `noImgElement` | `error` | Prohibir el uso del elemento HTML <img>. Utiliza el componente <Image> de Next.js en su lugar para la optimización automática de imágenes. |
 
 ### Estilo
 
 | Regla | Configuración | Descripción |
-|------|---------------|-------------|
-| `noHeadElement` | `error` | Prohíbe el uso del elemento HTML `<head>`. Utiliza `next/head` de Next.js o la API de metadatos del App Router en su lugar. |
+|------|---------|-------------|
+| `noHeadElement` | `error` | Prohibir el uso del elemento HTML <head>. Usa `next/head` de Next.js o la API de metadatos del App Router en su lugar. |
 
 ### Sospechosas
 
 | Regla | Configuración | Descripción |
-|------|---------------|-------------|
+|------|---------|-------------|
 | `noDocumentImportInPage` | `error` | Evita importar `next/document` en archivos de página. `_document.tsx` solo debe existir en `pages/_document.tsx`. |
 | `noHeadImportInDocument` | `error` | Evita importar `next/head` en `_document.tsx`. Usa `<Head>` de `next/document` en su lugar. |
 
-## Sobrescrituras de archivos de configuración
+## Anulaciones de archivos de configuración
 
 El preset de Next.js incluye un manejo especial para archivos de configuración y componentes del App Router:
 
@@ -95,4 +95,4 @@ Esto permite patrones de configuración de Next.js que normalmente podrían no p
 }
 ```
 
-Los componentes de página y layout del App Router pueden ser asíncronos sin requerir `await`, ya que Next.js los maneja de forma especial para el renderizado del lado del servidor y la obtención de datos.
+Los componentes de página y layout del App Router pueden ser asíncronos sin requerir `await`, ya que Next.js los gestiona de forma especial para el renderizado del lado del servidor y la obtención de datos.
