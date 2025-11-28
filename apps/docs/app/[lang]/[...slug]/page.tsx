@@ -37,7 +37,7 @@ const Page = async (props: PageProps<"/[lang]/[...slug]">) => {
       </div>
       <DocsBody>
         <MdxContent
-          components={getMDXComponents({
+          components={getMDXComponents(lang, {
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
           })}
