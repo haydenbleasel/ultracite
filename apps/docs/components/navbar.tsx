@@ -1,8 +1,8 @@
 "use client";
 
+import { DynamicLink } from "fumadocs-core/dynamic-link";
 import { NavbarSidebarTrigger } from "fumadocs-ui/layouts/notebook-client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Logo } from "@/app/[lang]/(home)/components/logo";
 import { SearchButton } from "@/components/search";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,29 +18,30 @@ const links = [
 
 export const Navbar = () => {
   const pathname = usePathname();
+  const { lang } = useParams();
 
   return (
     <div className="sticky top-0 z-50 w-full bg-background/90 py-3 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
         <div className="flex items-center gap-8">
-          <Link className="flex items-center gap-2" href="/">
+          <DynamicLink className="flex items-center gap-2" href="/[lang]">
             <Logo className="size-4" />
             <p className="font-semibold text-lg tracking-tight">Ultracite</p>
-          </Link>
+          </DynamicLink>
           <div className="hidden items-center gap-4 font-medium text-sm md:flex">
             {links.map((link) => (
-              <Link
+              <DynamicLink
                 className={cn(
                   "text-muted-foreground hover:text-primary",
                   (link.exact
                     ? pathname === link.href
                     : pathname.startsWith(link.href)) && "text-primary"
                 )}
-                href={link.href}
+                href={`/${lang}${link.href}`}
                 key={link.href}
               >
                 {link.label}
-              </Link>
+              </DynamicLink>
             ))}
           </div>
         </div>
@@ -55,7 +56,7 @@ export const Navbar = () => {
         <div className="sm:hidden">
           {pathname === "/" ? (
             <Button asChild size="sm" variant="outline">
-              <Link href="/introduction">Docs</Link>
+              <DynamicLink href="/[lang]/introduction">Docs</DynamicLink>
             </Button>
           ) : (
             <NavbarSidebarTrigger />

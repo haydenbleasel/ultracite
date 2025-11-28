@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { DynamicLink } from "fumadocs-core/dynamic-link";
 import { Button } from "@/components/ui/button";
 import { Tweets } from "./tweets";
 
@@ -22,7 +22,7 @@ export const Social = () => (
       ]}
     />
     <Button asChild variant="link">
-      <Link href="/social">See all tweets</Link>
+      <DynamicLink href="/[lang]/social">See all tweets</DynamicLink>
     </Button>
   </div>
 );

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { DynamicLink } from "fumadocs-core/dynamic-link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Installer } from "./installer";
@@ -29,7 +29,7 @@ export const Hero = ({ children }: HeroProps) => (
       <div className="flex w-full max-w-md items-center gap-4">
         <Installer command="npx ultracite@latest init" />
         <Button asChild className="px-4" size="lg" variant="link">
-          <Link href="/introduction">Read the docs</Link>
+          <DynamicLink href="/[lang]/introduction">Read the docs</DynamicLink>
         </Button>
       </div>
     </div>
