@@ -78,7 +78,7 @@ export const ZeroConfig = () => (
       <TabsList className="w-full rounded-none bg-transparent">
         {configs.map((config) => (
           <TabsTrigger
-            className="flex-auto p-0"
+            className="flex-auto p-0 data-[state=active]:border data-[state=active]:bg-secondary data-[state=active]:shadow-none"
             key={config.label}
             value={config.label}
           >

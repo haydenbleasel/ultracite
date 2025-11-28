@@ -155,21 +155,21 @@ const tweets = [
   "1977425792360427797",
 ];
 
-export default function SocialPage() {
-  return (
-    <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20 px-4">
-      <div className="grid gap-20">
-        <div className="grid gap-4">
-          <h1 className="mb-0 max-w-lg text-balance font-medium text-5xl tracking-tighter">
-            See what the community is saying about Ultracite
-          </h1>
-          <p className="max-w-lg text-balance text-muted-foreground">
-            Here's what some of the most in the most forward-thinking developers
-            in the React ecosystem have to say about Ultracite.
-          </p>
-        </div>
+const SocialPage = () => (
+  <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20 px-4">
+    <div className="grid gap-20">
+      <div className="grid gap-4">
+        <h1 className="mb-0 max-w-lg text-balance font-medium text-5xl tracking-tighter">
+          See what the community is saying about Ultracite
+        </h1>
+        <p className="max-w-lg text-balance text-muted-foreground">
+          Here's what some of the most in the most forward-thinking developers
+          in the React ecosystem have to say about Ultracite.
+        </p>
       </div>
-      <Tweets tweets={tweets} />
     </div>
-  );
-}
+    <Tweets tweets={tweets} />
+  </div>
+);
+
+export default SocialPage;
