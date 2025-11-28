@@ -8,9 +8,9 @@ type HeroProps = {
 };
 
 export const Hero = ({ children }: HeroProps) => (
-  <div className="grid gap-20 pt-20">
+  <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
     <div className="grid gap-4">
-      <h1 className="mb-0 max-w-md text-balance font-medium text-5xl tracking-tighter">
+      <h1 className="mb-0 max-w-md text-balance font-medium text-3xl tracking-tighter sm:text-4xl md:text-5xl">
         A highly opinionated, zero-configuration linter and formatter
       </h1>
       <p className="max-w-md text-balance text-muted-foreground">
@@ -26,7 +26,7 @@ export const Hero = ({ children }: HeroProps) => (
         , designed to help you and your AI models write consistent and type-safe
         code without the hassle of configuration.
       </p>
-      <div className="flex w-full max-w-md items-center gap-4">
+      <div className="flex w-full max-w-md flex-col items-center gap-4 sm:flex-row">
         <Installer command="npx ultracite@latest init" />
         <Button asChild className="px-4" size="lg" variant="link">
           <DynamicLink href="/[lang]/introduction">Read the docs</DynamicLink>

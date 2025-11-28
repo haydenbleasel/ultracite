@@ -17,7 +17,7 @@ export const IDE = () => (
       </p>
     </div>
     <div className="grid items-start gap-8 xl:grid-cols-[200px_1fr_200px]">
-      <div className="order-1 grid gap-8 xl:order-0 xl:gap-0">
+      <div className="order-1 grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:order-0 xl:grid-cols-1 xl:gap-0">
         <Indicator
           className="xl:mt-5"
           description="Add formatting rules for AI agents and run Ultracite in agent loops."
@@ -42,7 +42,7 @@ export const IDE = () => (
         </div>
         <Assistant />
       </div>
-      <div className="grid gap-8 xl:gap-0 xl:text-right">
+      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-1 xl:gap-0 xl:text-right">
         <Indicator
           className="xl:mt-38"
           description="Lint and format code without needing to run Ultracite locally."

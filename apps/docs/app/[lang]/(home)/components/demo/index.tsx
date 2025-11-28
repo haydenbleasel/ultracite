@@ -187,7 +187,7 @@ Found 3 errors.
 Found 17 warnings.`;
 
 export const Demo = () => (
-  <div className="relative isolate overflow-hidden rounded-3xl">
+  <div className="relative isolate overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl">
     <Image
       alt=""
       className="absolute top-0 left-0 size-full object-cover"
@@ -195,8 +195,8 @@ export const Demo = () => (
       src={Background}
       width={1000}
     />
-    <div className="size-full px-16 pt-16">
-      <div className="max-h-128 overflow-y-auto rounded-x-2xl rounded-t-2xl bg-black/80 p-8 backdrop-blur-sm">
+    <div className="size-full sm:px-16 sm:pt-16">
+      <div className="max-h-128 overflow-y-auto bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
         <pre className="font-mono text-sm">
           <code>
             <span className="text-white">npx ultracite@latest fix</span>

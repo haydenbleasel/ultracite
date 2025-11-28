@@ -11,7 +11,7 @@ export const Videos = () => (
         code.
       </p>
     </div>
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid gap-8 sm:grid-cols-2">
       <Video video="https://www.youtube.com/watch?v=lEkXbneUnWg" />
       <Video video="https://www.youtube.com/watch?v=b_F4LaycQcE" />
     </div>
