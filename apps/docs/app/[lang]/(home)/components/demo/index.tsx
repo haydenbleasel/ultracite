@@ -199,7 +199,7 @@ export const Demo = () => (
       <div className="max-h-128 overflow-y-auto bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
         <pre className="font-mono text-sm">
           <code>
-            <span className="text-white">npx ultracite@latest fix</span>
+            <span className="text-white">ultracite fix</span>
             <br />
             <br />
             <br />
