@@ -2,7 +2,7 @@
 
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import { NavbarSidebarTrigger } from "fumadocs-ui/layouts/notebook-client";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/app/[lang]/(home)/components/logo";
 import { SearchButton } from "@/components/search";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,7 +18,6 @@ const links = [
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const { lang } = useParams();
 
   return (
     <div className="sticky top-0 z-50 w-full bg-background/90 py-3 backdrop-blur-sm">
@@ -37,7 +36,7 @@ export const Navbar = () => {
                     ? pathname === link.href
                     : pathname.startsWith(link.href)) && "text-primary"
                 )}
-                href={`/${lang}${link.href}`}
+                href={link.href}
                 key={link.href}
               >
                 {link.label}
