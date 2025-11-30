@@ -1,5 +1,4 @@
 import DynamicLink from "fumadocs-core/dynamic-link";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 import type { ComponentProps } from "react";
@@ -11,8 +10,6 @@ export function getMDXComponents(
 ): MDXComponents {
   return {
     ...defaultMdxComponents,
-    Tab,
-    Tabs,
     ...components,
 
     a: ({ href, ...props }: ComponentProps<typeof DynamicLink>) =>
