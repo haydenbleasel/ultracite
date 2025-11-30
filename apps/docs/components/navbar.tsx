@@ -18,7 +18,14 @@ const links = [
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const { lang } = useParams();
+  const params = useParams();
+  const langParam = params?.lang;
+  const lang =
+    typeof langParam === "string"
+      ? langParam
+      : Array.isArray(langParam)
+        ? langParam.join("/")
+        : undefined;
 
   return (
     <div className="sticky top-0 z-50 w-full bg-background/90 py-3 backdrop-blur-sm">
@@ -33,11 +40,19 @@ export const Navbar = () => {
               <DynamicLink
                 className={cn(
                   "text-muted-foreground hover:text-primary",
-                  (link.exact
-                    ? pathname === link.href
-                    : pathname.startsWith(link.href)) && "text-primary"
+                  (() => {
+                    const resolvedHref = lang
+                      ? link.href.replace("[lang]", lang)
+                      : link.href;
+                    if (!pathname) {
+                      return false;
+                    }
+                    return link.exact
+                      ? pathname === resolvedHref
+                      : pathname.startsWith(resolvedHref);
+                  })() && "text-primary"
                 )}
-                href={`/${lang}${link.href}`}
+                href={link.href}
                 key={link.href}
               >
                 {link.label}
