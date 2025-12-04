@@ -6,7 +6,6 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
-import { Navbar } from "@/components/navbar";
 import { i18n } from "@/lib/i18n";
 
 type LayoutProps = {
@@ -114,7 +113,6 @@ const Layout = async ({ children, params }: LayoutProps) => {
             enableSystem: true,
           }}
         >
-          <Navbar />
           {children}
         </RootProvider>
         <Toaster />

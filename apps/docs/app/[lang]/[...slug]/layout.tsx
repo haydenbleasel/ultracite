@@ -1,5 +1,6 @@
 import { DocsLayout } from "fumadocs-ui/layouts/notebook";
 import type { Metadata } from "next";
+import { baseOptions } from "@/lib/layout";
 import { source } from "@/lib/source";
 
 export const metadata: Metadata = {
@@ -14,11 +15,9 @@ const DocLayout = async (props: LayoutProps<"/[lang]/[...slug]">) => {
 
   return (
     <DocsLayout
-      containerProps={{
-        className: "pt-[40px]",
-      }}
-      nav={{ enabled: false, mode: "top" }}
-      sidebar={{ collapsible: false }}
+      {...baseOptions()}
+      nav={{ ...baseOptions().nav, mode: "top" }}
+      sidebar={{ collapsible: false, className: "bg-card! border-r" }}
       tabMode="navbar"
       tree={source.pageTree[lang]}
     >

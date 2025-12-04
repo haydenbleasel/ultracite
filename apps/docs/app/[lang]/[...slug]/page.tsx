@@ -1,10 +1,10 @@
-import { createRelativeLink } from "fumadocs-ui/mdx";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from "fumadocs-ui/page";
+} from "fumadocs-ui/layouts/notebook/page";
+import { createRelativeLink } from "fumadocs-ui/mdx";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CopyMarkdown } from "@/components/copy-markdown";
