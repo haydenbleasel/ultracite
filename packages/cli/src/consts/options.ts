@@ -23,6 +23,7 @@ export const options = {
     "goose",
     "roo-code",
     "warp",
+    "droid",
   ] as const,
   integrations: ["husky", "lefthook", "lint-staged"] as const,
   hooks: ["cursor", "claude"] as const,
