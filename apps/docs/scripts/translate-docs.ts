@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { readdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join, parse } from "node:path";
 import { generateText } from "ai";
 import { i18n } from "../lib/i18n";
@@ -304,7 +304,9 @@ async function main(): Promise<void> {
   if (failed > 0) {
     console.log(`✗ Failed: ${failed}`);
   }
-  console.log(`\n✓ Translation process complete! Cache saved to ${HASH_CACHE_FILE}`);
+  console.log(
+    `\n✓ Translation process complete! Cache saved to ${HASH_CACHE_FILE}`
+  );
 }
 
 main().catch((error) => {
