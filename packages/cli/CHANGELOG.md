@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.9
+
+### Patch Changes
+
+- a13eb72: Add support for Factory Droid AI assistant
+
 ## 6.3.8
 
 ### Patch Changes
