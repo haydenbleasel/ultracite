@@ -91,6 +91,10 @@ alwaysApply: false
       path: "./WARP.md",
       appendMode: true,
     },
+    droid: {
+      path: "./AGENTS.md",
+      appendMode: true,
+    },
   } as const;
 
 export const HOOKS: Record<(typeof options.hooks)[number], HookConfig> = {
