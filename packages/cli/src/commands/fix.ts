@@ -1,14 +1,14 @@
 import { spawnSync } from "node:child_process";
+import process from "node:process";
+import { detectPackageManager, dlxCommand } from "nypm";
 import { parseFilePaths } from "../utils";
 
 type FixOptions = {
   unsafe?: boolean;
 };
 
-export const fix = (files: string[], options: FixOptions = {}) => {
+export const fix = async (files: string[], options: FixOptions = {}) => {
   const args = [
-    "npx",
-    "@biomejs/biome",
     "check",
     "--write",
     "--no-errors-on-unmatched",
@@ -26,7 +26,13 @@ export const fix = (files: string[], options: FixOptions = {}) => {
     args.push("./");
   }
 
-  const fullCommand = args.join(" ");
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "@biomejs/biome", {
+    args,
+    short: pm === "npm",
+  });
 
   const result = spawnSync(fullCommand, {
     stdio: "inherit",

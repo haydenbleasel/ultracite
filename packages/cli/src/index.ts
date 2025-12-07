@@ -86,8 +86,8 @@ export const router = t.router({
         ])
         .optional()
     )
-    .query(({ input }) => {
-      check(input);
+    .query(async ({ input }) => {
+      await check(input);
     }),
 
   fix: t.procedure
@@ -106,9 +106,9 @@ export const router = t.router({
         }),
       ])
     )
-    .mutation(({ input }) => {
+    .mutation(async ({ input }) => {
       const [files, opts] = input;
-      fix(files, { unsafe: opts.unsafe });
+      await fix(files, { unsafe: opts.unsafe });
     }),
 
   doctor: t.procedure
@@ -132,11 +132,11 @@ export const router = t.router({
         .default([])
         .describe("specific files to lint")
     )
-    .query(({ input }) => {
+    .query(async ({ input }) => {
       console.warn(
         "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
       );
-      check([input, {}]);
+      await check([input, {}]);
     }),
 
   format: t.procedure
@@ -156,12 +156,12 @@ export const router = t.router({
         }),
       ])
     )
-    .mutation(({ input }) => {
+    .mutation(async ({ input }) => {
       const [files, opts] = input;
       console.warn(
         "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
       );
-      fix(files, { unsafe: opts.unsafe });
+      await fix(files, { unsafe: opts.unsafe });
     }),
 });
 

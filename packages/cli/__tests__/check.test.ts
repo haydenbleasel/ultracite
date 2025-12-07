@@ -7,19 +7,26 @@ mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
 }));
 
+mock.module("nypm", () => ({
+  detectPackageManager: mock(async () => ({ name: "npm" })),
+}));
+
 describe("check", () => {
   beforeEach(() => {
     mock.restore();
   });
 
-  test("runs biome check with default options", () => {
+  test("runs biome check with default options", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    check(undefined);
+    await check(undefined);
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -29,14 +36,17 @@ describe("check", () => {
     expect(callArgs[0]).toContain("./");
   });
 
-  test("runs biome check with specific files", () => {
+  test("runs biome check with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    check([["src/index.ts", "src/test.ts"], {}]);
+    await check([["src/index.ts", "src/test.ts"], {}]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -44,46 +54,55 @@ describe("check", () => {
     expect(callArgs[0]).toContain("src/test.ts");
   });
 
-  test("runs biome check with diagnostic-level option", () => {
+  test("runs biome check with diagnostic-level option", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    check([[], { "diagnostic-level": "error" }]);
+    await check([[], { "diagnostic-level": "error" }]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).toContain("--diagnostic-level=error");
   });
 
-  test("handles files with special characters", () => {
+  test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    check([["src/my file.ts"], {}]);
+    await check([["src/my file.ts"], {}]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).toContain("'src/my file.ts'");
   });
 
-  test("exits with error code when biome check fails", () => {
+  test("exits with error code when biome check fails", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    expect(() => check(undefined)).toThrow("Ultracite check failed with status 1");
+    expect(async () => await check(undefined)).toThrow("Ultracite check failed with status 1");
   });
 
-  test("exits when spawn returns error", () => {
+  test("exits when spawn returns error", async () => {
     const mockSpawn = mock(() => ({
       error: new Error("spawn failed"),
       status: null,
@@ -93,7 +112,10 @@ describe("check", () => {
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+    }));
 
-    expect(() => check(undefined)).toThrow("Failed to run Ultracite: spawn failed");
+    expect(async () => await check(undefined)).toThrow("Failed to run Ultracite: spawn failed");
   });
 });

@@ -1,7 +1,9 @@
+import process from "node:process";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { detectPackageManager, dlxCommand } from "nypm";
 import { parse } from "jsonc-parser";
 import { eslintConfigFiles } from "../migrations/eslint";
 import { prettierConfigFiles } from "../migrations/prettier";
@@ -13,8 +15,16 @@ type DiagnosticCheck = {
 };
 
 // Check if Biome is installed
-const checkBiomeInstallation = (): DiagnosticCheck => {
-  const biomeCheck = spawnSync("npx @biomejs/biome --version", {
+const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const command = dlxCommand(pm, "@biomejs/biome", {
+    args: ["--version"],
+    short: pm === "npm",
+  });
+
+  const biomeCheck = spawnSync(command, {
     shell: true,
     encoding: "utf-8",
   });
@@ -166,7 +176,7 @@ export const doctor = async (): Promise<void> => {
   console.log("🩺 Running Ultracite doctor...\n");
 
   // Run all checks
-  checks.push(checkBiomeInstallation());
+  checks.push(await checkBiomeInstallation());
   checks.push(await checkBiomeConfig());
   checks.push(await checkUltraciteDependency());
   checks.push(checkConflictingTools());

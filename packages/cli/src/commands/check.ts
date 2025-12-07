@@ -1,4 +1,6 @@
 import { spawnSync } from "node:child_process";
+import process from "node:process";
+import { detectPackageManager, dlxCommand } from "nypm";
 import { parseFilePaths } from "../utils";
 
 type CheckOptions = [
@@ -8,17 +10,11 @@ type CheckOptions = [
   },
 ];
 
-export const check = (opts: CheckOptions | undefined) => {
+export const check = async (opts: CheckOptions | undefined) => {
   const files = opts?.[0] || [];
   const diagnostic_level = opts?.[1]["diagnostic-level"];
 
-  const args = [
-    "npx",
-    "@biomejs/biome",
-    "check",
-    "--no-errors-on-unmatched",
-    "--max-diagnostics=none",
-  ];
+  const args = ["check", "--no-errors-on-unmatched", "--max-diagnostics=none"];
   if (diagnostic_level) {
     args.push(`--diagnostic-level=${diagnostic_level}`);
   }
@@ -30,7 +26,13 @@ export const check = (opts: CheckOptions | undefined) => {
     args.push("./");
   }
 
-  const fullCommand = args.join(" ");
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "@biomejs/biome", {
+    args,
+    short: pm === "npm",
+  });
 
   const result = spawnSync(fullCommand, {
     stdio: "inherit",

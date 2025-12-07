@@ -7,19 +7,28 @@ mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
 }));
 
+mock.module("nypm", () => ({
+  detectPackageManager: mock(async () => ({ name: "npm" })),
+  dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+}));
+
 describe("fix", () => {
   beforeEach(() => {
     mock.restore();
   });
 
-  test("runs biome check with --write flag", () => {
+  test("runs biome check with --write flag", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    fix([], {});
+    await fix([], {});
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -30,14 +39,18 @@ describe("fix", () => {
     expect(callArgs[0]).toContain("./");
   });
 
-  test("runs biome fix with specific files", () => {
+  test("runs biome fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    fix(["src/index.ts", "src/test.ts"], {});
+    await fix(["src/index.ts", "src/test.ts"], {});
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -45,60 +58,76 @@ describe("fix", () => {
     expect(callArgs[0]).toContain("src/test.ts");
   });
 
-  test("runs biome fix with unsafe option", () => {
+  test("runs biome fix with unsafe option", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    fix([], { unsafe: true });
+    await fix([], { unsafe: true });
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).toContain("--unsafe");
   });
 
-  test("does not include --unsafe when option is false", () => {
+  test("does not include --unsafe when option is false", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    fix([], { unsafe: false });
+    await fix([], { unsafe: false });
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).not.toContain("--unsafe");
   });
 
-  test("handles files with special characters", () => {
+  test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    fix(["src/my file.ts"], {});
+    await fix(["src/my file.ts"], {});
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).toContain("'src/my file.ts'");
   });
 
-  test("exits with error code when biome fix fails", () => {
+  test("exits with error code when biome fix fails", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    expect(() => fix([], {})).toThrow("Ultracite fix failed with status 1");
+    expect(async () => await fix([], {})).toThrow("Ultracite fix failed with status 1");
   });
 
-  test("exits when spawn returns error", () => {
+  test("exits when spawn returns error", async () => {
     const mockSpawn = mock(() => ({
       error: new Error("spawn failed"),
       status: null,
@@ -108,7 +137,11 @@ describe("fix", () => {
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
     }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
 
-    expect(() => fix([], {})).toThrow("Failed to run Ultracite: spawn failed");
+    expect(async () => await fix([], {})).toThrow("Failed to run Ultracite: spawn failed");
   });
 });

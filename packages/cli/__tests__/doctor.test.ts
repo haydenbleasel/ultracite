@@ -17,6 +17,11 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
+mock.module("nypm", () => ({
+  detectPackageManager: mock(async () => ({ name: "npm" })),
+  dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+}));
+
 describe("doctor", () => {
   beforeEach(() => {
     mock.restore();
@@ -54,6 +59,11 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
+
     await doctor();
 
     // Doctor should complete without calling process.exit if successful
@@ -74,6 +84,11 @@ describe("doctor", () => {
       access: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     expect(async () => await doctor()).toThrow("Doctor checks failed");
@@ -110,6 +125,11 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
+
     await doctor();
 
     // Doctor should complete without error exit even with warnings
@@ -130,6 +150,11 @@ describe("doctor", () => {
       access: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     expect(async () => await doctor()).toThrow("Doctor checks failed");
@@ -164,6 +189,11 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+    }));
+
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -192,6 +222,11 @@ describe("doctor", () => {
         return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     expect(async () => await doctor()).toThrow("Doctor checks failed");
@@ -225,6 +260,11 @@ describe("doctor", () => {
         return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -262,6 +302,11 @@ describe("doctor", () => {
         return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -302,6 +347,11 @@ describe("doctor", () => {
         return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
