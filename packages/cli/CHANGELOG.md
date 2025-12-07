@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 6.3.10
+
+### Patch Changes
+
+- bc7d89f: Fix nested next.config.ts detection
+- d292922: Replace hardcoded npx commands
+
 ## 6.3.9
 
 ### Patch Changes
