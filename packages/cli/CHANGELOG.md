@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.11
+
+### Patch Changes
+
+- 84d1cef: Add lefthook prepare script
+
 ## 6.3.10
 
 ### Patch Changes
