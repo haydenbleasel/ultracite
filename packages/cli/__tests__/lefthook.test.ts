@@ -63,6 +63,12 @@ describe("lefthook", () => {
         execSync: mockExecSync,
       }));
 
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
         dlxCommand: mock((pm: string, name: string) => {
@@ -87,6 +93,12 @@ describe("lefthook", () => {
         execSync: mockExecSync,
       }));
 
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
         dlxCommand: mock((pm: string, name: string) => {
@@ -102,6 +114,41 @@ describe("lefthook", () => {
       await lefthook.install("npm");
 
       expect(mockExecSync).toHaveBeenCalled();
+    });
+
+    test("adds prepare script to package.json", async () => {
+      const mockReadFile = mock(() => Promise.resolve('{"name": "test"}'));
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mockReadFile,
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        dlxCommand: mock((pm: string, name: string) => {
+          if (name === "lefthook") {
+            return "npx lefthook install";
+          }
+          return "npx ultracite fix";
+        }),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:child_process", () => ({
+        spawnSync: mock(() => ({ status: 0 })),
+        execSync: mock(() => ""),
+      }));
+
+      await lefthook.install("npm");
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent.scripts?.prepare).toBe("lefthook install");
     });
   });
 
