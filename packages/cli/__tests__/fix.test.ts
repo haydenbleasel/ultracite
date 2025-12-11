@@ -8,7 +8,7 @@ mock.module("node:child_process", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+  dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
 }));
 
 describe("fix", () => {
@@ -24,7 +24,7 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await fix([], {});
@@ -46,7 +46,7 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await fix(["src/index.ts", "src/test.ts"], {});
@@ -65,7 +65,7 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await fix([], { unsafe: true });
@@ -83,7 +83,7 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await fix([], { unsafe: false });
@@ -101,7 +101,7 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await fix(["src/my file.ts"], {});
@@ -120,10 +120,10 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await fix([], {})).toThrow(
+    await expect(fix([], {})).rejects.toThrow(
       "Ultracite fix failed with status 1"
     );
   });
@@ -140,10 +140,10 @@ describe("fix", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await fix([], {})).toThrow(
+    await expect(fix([], {})).rejects.toThrow(
       "Failed to run Ultracite: spawn failed"
     );
   });

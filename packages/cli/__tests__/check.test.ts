@@ -8,7 +8,7 @@ mock.module("node:child_process", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+  dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
 }));
 
 describe("check", () => {
@@ -24,7 +24,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await check(undefined);
@@ -45,7 +45,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await check([["src/index.ts", "src/test.ts"], {}]);
@@ -64,7 +64,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await check([[], { "diagnostic-level": "error" }]);
@@ -82,7 +82,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await check([["src/my file.ts"], {}]);
@@ -101,10 +101,10 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await check(undefined)).toThrow(
+    await expect(check(undefined)).rejects.toThrow(
       "Ultracite check failed with status 1"
     );
   });
@@ -121,10 +121,10 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await check(undefined)).toThrow(
+    await expect(check(undefined)).rejects.toThrow(
       "Failed to run Ultracite: spawn failed"
     );
   });

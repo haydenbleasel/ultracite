@@ -541,11 +541,11 @@ describe("lintStaged", () => {
 
       // Mock the dynamic import to return our mock module
       const originalImport = globalThis.import;
-      (globalThis as any).import = async (path: string) => {
+      (globalThis as any).import = (path: string) => {
         if (path.includes("lint-staged.config.mjs")) {
-          return mockModule;
+          return Promise.resolve(mockModule);
         }
-        return originalImport?.(path);
+        return originalImport?.(path) ?? Promise.reject(new Error("No import"));
       };
 
       try {
@@ -583,9 +583,8 @@ describe("lintStaged", () => {
 
       // Mock the dynamic import to throw an error
       const originalImport = globalThis.import;
-      (globalThis as any).import = async () => {
-        throw new Error("Cannot import ESM module");
-      };
+      (globalThis as any).import = () =>
+        Promise.reject(new Error("Cannot import ESM module"));
 
       try {
         await lintStaged.update("npm");

@@ -51,7 +51,7 @@ async function loadCache(): Promise<TranslationCache> {
   try {
     const content = await readFile(HASH_CACHE_FILE, "utf-8");
     return JSON.parse(content);
-  } catch (error) {
+  } catch (_error) {
     console.warn("Failed to load translation cache, starting fresh");
     return {};
   }
@@ -68,10 +68,14 @@ function needsTranslation(
   currentHash: string
 ): boolean {
   const fileCache = cache[filePath];
-  if (!fileCache) return true;
+  if (!fileCache) {
+    return true;
+  }
 
   const localeCache = fileCache[locale];
-  if (!localeCache) return true;
+  if (!localeCache) {
+    return true;
+  }
 
   return localeCache.hash !== currentHash;
 }
@@ -191,51 +195,60 @@ async function translateFile(
   console.log(`✓ Translated: ${filePath} → ${newFilePath}`);
 }
 
-async function main(): Promise<void> {
+type TranslationItem = {
+  filePath: string;
+  locale: string;
+  hash: string;
+};
+
+function parseArgs(): {
+  targetLocales: string[] | null;
+  forceRetranslate: boolean;
+} {
   const args = process.argv.slice(2);
   const targetLocalesArg = args.find((arg) => arg.startsWith("--locales="));
   const forceRetranslate = args.includes("--force");
   const targetLocales = targetLocalesArg
     ? targetLocalesArg.split("=")[1].split(",")
     : null;
+  return { targetLocales, forceRetranslate };
+}
 
+function getLocales(targetLocales: string[] | null): string[] {
   const allLocales = i18n.languages.filter((lang) => lang !== DEFAULT_LOCALE);
-  const locales = targetLocales
+  return targetLocales
     ? allLocales.filter((lang) => targetLocales.includes(lang))
     : allLocales;
+}
 
-  if (locales.length === 0) {
-    throw new Error("No valid locales specified");
-  }
-
-  console.log("Loading translation cache...");
-  const cache = await loadCache();
-
-  console.log(`Finding all MDX files in ${CONTENT_DIR}...`);
-  const mdxFiles = await getAllMdxFiles(CONTENT_DIR);
-
+async function computeFileHashes(
+  mdxFiles: string[]
+): Promise<Map<string, string>> {
   const fileHashes = new Map<string, string>();
   for (const filePath of mdxFiles) {
     const content = await readFile(filePath, "utf-8");
     fileHashes.set(filePath, computeHash(content));
   }
+  return fileHashes;
+}
 
-  console.log(`Found ${mdxFiles.length} files to translate`);
-  console.log(`Target locales: ${locales.join(", ")}`);
-
+function collectFilesToTranslate(options: {
+  locales: string[];
+  mdxFiles: string[];
+  fileHashes: Map<string, string>;
+  cache: TranslationCache;
+  forceRetranslate: boolean;
+}): { filesToTranslate: TranslationItem[]; skipped: number } {
+  const { locales, mdxFiles, fileHashes, cache, forceRetranslate } = options;
+  const filesToTranslate: TranslationItem[] = [];
   let skipped = 0;
-  let completed = 0;
-  let failed = 0;
-
-  const filesToTranslate: Array<{
-    filePath: string;
-    locale: string;
-    hash: string;
-  }> = [];
 
   for (const locale of locales) {
     for (const filePath of mdxFiles) {
-      const hash = fileHashes.get(filePath)!;
+      const hash = fileHashes.get(filePath);
+      if (!hash) {
+        continue;
+      }
       if (forceRetranslate || needsTranslation(cache, filePath, locale, hash)) {
         filesToTranslate.push({ filePath, locale, hash });
       } else {
@@ -244,56 +257,51 @@ async function main(): Promise<void> {
     }
   }
 
-  const total = filesToTranslate.length;
-  console.log(`Translations needed: ${total}`);
-  if (skipped > 0) {
-    console.log(`Skipped (unchanged): ${skipped}`);
-  }
-  console.log();
+  return { filesToTranslate, skipped };
+}
 
-  const BATCH_SIZE = 10;
-
-  const localeGroups = new Map<string, typeof filesToTranslate>();
+function groupByLocale(
+  filesToTranslate: TranslationItem[]
+): Map<string, TranslationItem[]> {
+  const localeGroups = new Map<string, TranslationItem[]>();
   for (const item of filesToTranslate) {
     if (!localeGroups.has(item.locale)) {
       localeGroups.set(item.locale, []);
     }
-    localeGroups.get(item.locale)!.push(item);
+    localeGroups.get(item.locale)?.push(item);
   }
+  return localeGroups;
+}
 
-  for (const [locale, items] of localeGroups) {
-    const languageName = LOCALE_NAMES[locale] || locale;
-    console.log(`\n${"=".repeat(50)}`);
-    console.log(`Translating to ${languageName} (${locale})`);
-    console.log("=".repeat(50));
-
-    for (let i = 0; i < items.length; i += BATCH_SIZE) {
-      const batch = items.slice(i, i + BATCH_SIZE);
+async function processBatch(
+  batch: TranslationItem[],
+  cache: TranslationCache,
+  stats: { completed: number; failed: number },
+  total: number
+): Promise<void> {
+  const promises = batch.map(async ({ filePath, locale: itemLocale, hash }) => {
+    try {
+      await translateFile(filePath, itemLocale, cache, hash);
+      stats.completed += 1;
       console.log(
-        `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(items.length / BATCH_SIZE)} (${batch.length} files)...`
+        `✓ ${filePath} → Progress: ${stats.completed}/${total} (${Math.round((stats.completed / total) * 100)}%)`
       );
-
-      const promises = batch.map(async ({ filePath, locale, hash }) => {
-        try {
-          await translateFile(filePath, locale, cache, hash);
-          completed += 1;
-          console.log(
-            `✓ ${filePath} → Progress: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`
-          );
-        } catch (error) {
-          failed += 1;
-          console.error(`✗ Failed to translate ${filePath} to ${locale}:`);
-          console.error(error instanceof Error ? error.message : error);
-        }
-      });
-
-      await Promise.all(promises);
-      await saveCache(cache);
+    } catch (error) {
+      stats.failed += 1;
+      console.error(`✗ Failed to translate ${filePath} to ${itemLocale}:`);
+      console.error(error instanceof Error ? error.message : error);
     }
-  }
+  });
 
+  await Promise.all(promises);
   await saveCache(cache);
+}
 
+function printSummary(
+  completed: number,
+  skipped: number,
+  failed: number
+): void {
   console.log(`\n${"=".repeat(50)}`);
   console.log("Translation Summary");
   console.log("=".repeat(50));
@@ -307,6 +315,62 @@ async function main(): Promise<void> {
   console.log(
     `\n✓ Translation process complete! Cache saved to ${HASH_CACHE_FILE}`
   );
+}
+
+async function main(): Promise<void> {
+  const { targetLocales, forceRetranslate } = parseArgs();
+  const locales = getLocales(targetLocales);
+
+  if (locales.length === 0) {
+    throw new Error("No valid locales specified");
+  }
+
+  console.log("Loading translation cache...");
+  const cache = await loadCache();
+
+  console.log(`Finding all MDX files in ${CONTENT_DIR}...`);
+  const mdxFiles = await getAllMdxFiles(CONTENT_DIR);
+  const fileHashes = await computeFileHashes(mdxFiles);
+
+  console.log(`Found ${mdxFiles.length} files to translate`);
+  console.log(`Target locales: ${locales.join(", ")}`);
+
+  const { filesToTranslate, skipped } = collectFilesToTranslate({
+    locales,
+    mdxFiles,
+    fileHashes,
+    cache,
+    forceRetranslate,
+  });
+
+  const total = filesToTranslate.length;
+  console.log(`Translations needed: ${total}`);
+  if (skipped > 0) {
+    console.log(`Skipped (unchanged): ${skipped}`);
+  }
+  console.log();
+
+  const BATCH_SIZE = 10;
+  const localeGroups = groupByLocale(filesToTranslate);
+  const stats = { completed: 0, failed: 0 };
+
+  for (const [locale, items] of localeGroups) {
+    const languageName = LOCALE_NAMES[locale] || locale;
+    console.log(`\n${"=".repeat(50)}`);
+    console.log(`Translating to ${languageName} (${locale})`);
+    console.log("=".repeat(50));
+
+    for (let i = 0; i < items.length; i += BATCH_SIZE) {
+      const batch = items.slice(i, i + BATCH_SIZE);
+      console.log(
+        `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(items.length / BATCH_SIZE)} (${batch.length} files)...`
+      );
+      await processBatch(batch, cache, stats, total);
+    }
+  }
+
+  await saveCache(cache);
+  printSummary(stats.completed, skipped, stats.failed);
 }
 
 main().catch((error) => {

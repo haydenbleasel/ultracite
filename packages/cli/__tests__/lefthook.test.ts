@@ -14,7 +14,7 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
-  dlxCommand: mock((pm: string, name: string) => {
+  dlxCommand: mock((_pm: string, name: string) => {
     if (name === "ultracite") {
       return "npx ultracite fix";
     }
@@ -71,7 +71,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
@@ -101,7 +101,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
@@ -128,7 +128,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
@@ -163,7 +163,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
@@ -198,7 +198,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
@@ -225,7 +225,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
@@ -255,7 +255,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
@@ -285,7 +285,7 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock((pm: string, name: string) => {
+        dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
