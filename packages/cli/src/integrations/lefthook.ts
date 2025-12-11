@@ -50,7 +50,7 @@ export const lefthook = {
       short: packageManager === "npm",
     });
 
-    execSync(installCommand);
+    execSync(installCommand, { stdio: "inherit" });
   },
   create: async (packageManager: PackageManagerName) => {
     const config = createLefthookConfig(packageManager);
