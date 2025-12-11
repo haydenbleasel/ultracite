@@ -104,7 +104,7 @@ const separator = pc.dim("─".repeat(60));
 
 const formatHeader = (command: "check" | "fix"): string[] => [
   "",
-  `  ${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${purple(command)}`,
+  `  ${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${pc.magenta(command)}`,
 ];
 
 const formatSummary = (
