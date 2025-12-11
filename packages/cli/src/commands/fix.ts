@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+import { formatBiomeOutput } from "../reporter";
 import { parseFilePaths } from "../utils";
 
 type FixOptions = {
@@ -12,7 +13,7 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
     "check",
     "--write",
     "--no-errors-on-unmatched",
-    "--max-diagnostics=none",
+    "--reporter=json",
   ];
 
   if (options.unsafe) {
@@ -35,7 +36,7 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
+    stdio: "pipe",
     shell: true,
   });
 
@@ -43,7 +44,14 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
     throw new Error(`Failed to run Ultracite: ${result.error.message}`);
   }
 
-  if (result.status !== 0) {
-    throw new Error(`Ultracite fix failed with status ${result.status ?? 1}`);
+  // Get stdout (JSON output) - stderr contains the warning about JSON being unstable
+  const stdout = result.stdout?.toString() || "";
+
+  // Parse and format the output
+  const { output, hasErrors } = formatBiomeOutput(stdout, "fix");
+  console.log(output);
+
+  if (hasErrors) {
+    throw new Error("Ultracite fix completed with errors");
   }
 };

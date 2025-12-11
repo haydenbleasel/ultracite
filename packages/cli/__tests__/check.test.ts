@@ -1,8 +1,28 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 import { check } from "../src/commands/check";
 
+// Helper to create mock Biome JSON output
+const createMockBiomeOutput = (errors = 0) =>
+  JSON.stringify({
+    summary: {
+      changed: 0,
+      unchanged: 1,
+      matches: 0,
+      duration: { secs: 0, nanos: 1_000_000 },
+      scannerDuration: { secs: 0, nanos: 1_000_000 },
+      errors,
+      warnings: 0,
+      infos: 0,
+      skipped: 0,
+      suggestedFixesSkipped: 0,
+      diagnosticsNotPrinted: 0,
+    },
+    diagnostics: [],
+    command: "check",
+  });
+
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
+  spawnSync: mock(() => ({ status: 0, stdout: createMockBiomeOutput() })),
   execSync: mock(() => ""),
 }));
 
@@ -17,7 +37,10 @@ describe("check", () => {
   });
 
   test("runs biome check with default options", async () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
+    const mockSpawn = mock(() => ({
+      status: 0,
+      stdout: createMockBiomeOutput(),
+    }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -33,12 +56,15 @@ describe("check", () => {
     const callArgs = mockSpawn.mock.calls[0];
     expect(callArgs[0]).toContain("npx @biomejs/biome check");
     expect(callArgs[0]).toContain("--no-errors-on-unmatched");
-    expect(callArgs[0]).toContain("--max-diagnostics=none");
+    expect(callArgs[0]).toContain("--reporter=json");
     expect(callArgs[0]).toContain("./");
   });
 
   test("runs biome check with specific files", async () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
+    const mockSpawn = mock(() => ({
+      status: 0,
+      stdout: createMockBiomeOutput(),
+    }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -57,7 +83,10 @@ describe("check", () => {
   });
 
   test("runs biome check with diagnostic-level option", async () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
+    const mockSpawn = mock(() => ({
+      status: 0,
+      stdout: createMockBiomeOutput(),
+    }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -75,7 +104,10 @@ describe("check", () => {
   });
 
   test("handles files with special characters", async () => {
-    const mockSpawn = mock(() => ({ status: 0 }));
+    const mockSpawn = mock(() => ({
+      status: 0,
+      stdout: createMockBiomeOutput(),
+    }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -92,8 +124,11 @@ describe("check", () => {
     expect(callArgs[0]).toContain("'src/my file.ts'");
   });
 
-  test("exits with error code when biome check fails", async () => {
-    const mockSpawn = mock(() => ({ status: 1 }));
+  test("exits with error code when biome check finds errors", async () => {
+    const mockSpawn = mock(() => ({
+      status: 1,
+      stdout: createMockBiomeOutput(5),
+    }));
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -105,7 +140,7 @@ describe("check", () => {
     }));
 
     await expect(check(undefined)).rejects.toThrow(
-      "Ultracite check failed with status 1"
+      "Ultracite check completed with errors"
     );
   });
 
