@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
-import process from "node:process";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 import {
   initialize,
   initializeLefthook,

@@ -15,10 +15,10 @@ import {
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
 import { biome } from "./biome";
-import { createHooks } from "./hooks";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
+import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
@@ -393,10 +393,7 @@ export const upsertHooks = async (
   }
 };
 
-export const removePrettier = async (
-  pm: PackageManagerName,
-  quiet = false
-) => {
+export const removePrettier = async (pm: PackageManagerName, quiet = false) => {
   const s = spinner();
 
   if (!quiet) {
@@ -430,10 +427,7 @@ export const removePrettier = async (
   }
 };
 
-export const removeEsLint = async (
-  pm: PackageManagerName,
-  quiet = false
-) => {
+export const removeEsLint = async (pm: PackageManagerName, quiet = false) => {
   const s = spinner();
 
   if (!quiet) {

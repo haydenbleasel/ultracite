@@ -97,7 +97,10 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
           existingHooksJson.hooks.afterFileEdit.push({
             command: config.command,
           });
-          await writeFile(config.path, JSON.stringify(existingHooksJson, null, 2));
+          await writeFile(
+            config.path,
+            JSON.stringify(existingHooksJson, null, 2)
+          );
         }
       } else if (name === "claude") {
         if (!(await exists(config.path))) {
@@ -140,7 +143,10 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
 
         // Check if ultracite hook already exists to avoid duplicates
         const hasUltraciteHook = existingSettingsJson.hooks.PostToolUse.some(
-          (hookConfig: { matcher: string; hooks: Array<{ command: string }> }) =>
+          (hookConfig: {
+            matcher: string;
+            hooks: Array<{ command: string }>;
+          }) =>
             hookConfig.hooks?.some((hook: { command: string }) =>
               hook.command.includes("ultracite")
             )

@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
-import process from "node:process";
 import { doctor } from "../src/commands/doctor";
 
 mock.module("node:child_process", () => ({

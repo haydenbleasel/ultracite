@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
-import process from "node:process";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 import { check } from "../src/commands/check";
 
 mock.module("node:child_process", () => ({
@@ -105,7 +104,9 @@ describe("check", () => {
       dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await check(undefined)).toThrow("Ultracite check failed with status 1");
+    expect(async () => await check(undefined)).toThrow(
+      "Ultracite check failed with status 1"
+    );
   });
 
   test("exits when spawn returns error", async () => {
@@ -123,6 +124,8 @@ describe("check", () => {
       dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await check(undefined)).toThrow("Failed to run Ultracite: spawn failed");
+    expect(async () => await check(undefined)).toThrow(
+      "Failed to run Ultracite: spawn failed"
+    );
   });
 });

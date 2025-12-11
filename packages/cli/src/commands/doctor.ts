@@ -1,10 +1,10 @@
-import process from "node:process";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { detectPackageManager, dlxCommand } from "nypm";
+import process from "node:process";
 import { parse } from "jsonc-parser";
+import { detectPackageManager, dlxCommand } from "nypm";
 import { eslintConfigFiles } from "../migrations/eslint";
 import { prettierConfigFiles } from "../migrations/prettier";
 
