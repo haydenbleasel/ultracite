@@ -82,10 +82,10 @@ const getCodeSnippet = (
       );
       const pointer = "^".repeat(Math.max(1, spanLength));
       snippetLines.push(
-        `  ${pc.dim("     ")} ${pc.gray("|")} ${pointerPadding}${pc.red(pointer)}`
+        `${pc.dim("     ")} ${pc.gray("|")} ${pointerPadding}${pc.red(pointer)}`
       );
     } else {
-      snippetLines.push(`  ${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`);
+      snippetLines.push(`${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`);
     }
   }
 
@@ -104,7 +104,7 @@ const separator = pc.dim("─".repeat(60));
 
 const formatHeader = (command: "check" | "fix"): string[] => [
   "",
-  `  ${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${pc.magenta(command)}`,
+  `${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${pc.magenta(command)}`,
 ];
 
 const formatSummary = (
@@ -118,20 +118,18 @@ const formatSummary = (
 
   if (totalErrors > 0) {
     const errorWord = totalErrors !== 1 ? "errors" : "error";
-    lines.push(
-      `  ${pc.dim("Found")} ${totalErrors} ${errorWord}${pc.dim(".")}`
-    );
+    lines.push(`${pc.dim("Found")} ${totalErrors} ${errorWord}${pc.dim(".")}`);
   }
 
   const fileWord = totalFiles !== 1 ? "files" : "file";
   lines.push(
-    `  ${pc.green("✓")} ${pc.dim("Finished in")} ${duration} ${pc.dim("on")} ${totalFiles} ${fileWord}${pc.dim(".")}`
+    `${pc.green("✓")} ${pc.dim("Finished in")} ${duration} ${pc.dim("on")} ${totalFiles} ${fileWord}${pc.dim(".")}`
   );
 
   if (command === "fix" && summary.changed > 0) {
     const changedWord = summary.changed !== 1 ? "files" : "file";
     lines.push(
-      `  ${pc.dim("Fixed")} ${summary.changed} ${changedWord}${pc.dim(".")}`
+      `${pc.dim("Fixed")} ${summary.changed} ${changedWord}${pc.dim(".")}`
     );
   }
 
@@ -152,14 +150,14 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
     locationStr = `${filePath}:${line}:${column}`;
   }
 
-  lines.push(`  ${pc.cyan(locationStr)} ${pc.dim(category)}`);
-  lines.push(`  ${description}`);
+  lines.push(`${pc.cyan(locationStr)} ${pc.dim(category)}`);
+  lines.push(`${description}`);
 
   if (location.span && location.sourceCode) {
     lines.push("");
     const snippet = getCodeSnippet(location.sourceCode, location.span);
     for (const snippetLine of snippet) {
-      lines.push(`    ${snippetLine}`);
+      lines.push(`  ${snippetLine}`);
     }
   }
 
@@ -169,12 +167,12 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
       const icon = level === "info" ? pc.blue("i") : pc.yellow("!");
       const adviceText = messages.map((m) => m.content).join("");
       lines.push("");
-      lines.push(`    ${icon} ${adviceText}`);
+      lines.push(`  ${icon} ${adviceText}`);
     }
   }
 
   lines.push("");
-  lines.push(`  ${separator}`);
+  lines.push(`${separator}`);
   lines.push("");
 
   return lines;
@@ -198,7 +196,7 @@ const formatDiagnostics = (
     command === "fix"
       ? "Here are the issues we couldn't fix automatically:"
       : "Issues found:";
-  lines.push(`  ${pc.yellow(heading)}`);
+  lines.push(`${pc.yellow(heading)}`);
   lines.push("");
 
   for (const diagnostic of unfixableDiagnostics) {
