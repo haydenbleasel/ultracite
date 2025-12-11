@@ -1,4 +1,4 @@
-import process from "node:process";
+import pc from "picocolors";
 import packageJson from "../package.json" with { type: "json" };
 
 type BiomeDiagnostic = {
@@ -40,34 +40,8 @@ type BiomeOutput = {
   command: string;
 };
 
-const colors = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  cyan: "\x1b[36m",
-  gray: "\x1b[90m",
-};
-
-const isColorSupported = (): boolean => {
-  if (process.env.NO_COLOR || process.env.FORCE_COLOR === "0") {
-    return false;
-  }
-  if (process.env.FORCE_COLOR) {
-    return true;
-  }
-  return process.stdout.isTTY === true;
-};
-
-const c = (color: keyof typeof colors, text: string): string => {
-  if (!isColorSupported()) {
-    return text;
-  }
-  return `${colors[color]}${text}${colors.reset}`;
-};
+// Custom orange using 256-color ANSI code (color 208)
+const orange = (text: string) => `\x1b[38;5;208m${text}\x1b[39m`;
 
 const getLineAndColumn = (
   sourceCode: string,
@@ -98,7 +72,7 @@ const getCodeSnippet = (
 
     if (i === line) {
       snippetLines.push(
-        `${c("blue", ">")} ${c("dim", lineNum)} ${c("gray", "|")} ${lineContent}`
+        `${pc.blue(">")} ${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`
       );
       // Add the error pointer
       const pointerPadding = " ".repeat(8 + column - 1);
@@ -108,12 +82,10 @@ const getCodeSnippet = (
       );
       const pointer = "^".repeat(Math.max(1, spanLength));
       snippetLines.push(
-        `  ${c("dim", "     ")} ${c("gray", "|")} ${pointerPadding}${c("red", pointer)}`
+        `  ${pc.dim("     ")} ${pc.gray("|")} ${pointerPadding}${pc.red(pointer)}`
       );
     } else {
-      snippetLines.push(
-        `  ${c("dim", lineNum)} ${c("gray", "|")} ${lineContent}`
-      );
+      snippetLines.push(`  ${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`);
     }
   }
 
@@ -128,11 +100,11 @@ const formatDuration = (duration: { secs: number; nanos: number }): string => {
   return `${(totalMs / 1000).toFixed(2)}s`;
 };
 
-const separator = c("dim", "─".repeat(60));
+const separator = pc.dim("─".repeat(60));
 
 const formatHeader = (command: "check" | "fix"): string[] => [
   "",
-  `  ${c("bold", "Ultracite")} ${c("dim", `v${packageJson.version}`)} ${command}`,
+  `  ${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${purple(command)}`,
 ];
 
 const formatSummary = (
@@ -145,18 +117,21 @@ const formatSummary = (
   const duration = formatDuration(summary.duration);
 
   if (totalErrors > 0) {
+    const errorWord = totalErrors !== 1 ? "errors" : "error";
     lines.push(
-      `  ${c("red", `Found ${totalErrors} error${totalErrors !== 1 ? "s" : ""}.`)}`
+      `  ${pc.dim("Found")} ${totalErrors} ${errorWord}${pc.dim(".")}`
     );
   }
 
+  const fileWord = totalFiles !== 1 ? "files" : "file";
   lines.push(
-    `  ${c("green", "✓")} Finished in ${duration} on ${totalFiles} file${totalFiles !== 1 ? "s" : ""}.`
+    `  ${pc.green("✓")} ${pc.dim("Finished in")} ${duration} ${pc.dim("on")} ${totalFiles} ${fileWord}${pc.dim(".")}`
   );
 
   if (command === "fix" && summary.changed > 0) {
+    const changedWord = summary.changed !== 1 ? "files" : "file";
     lines.push(
-      `  ${c("cyan", `Fixed ${summary.changed} file${summary.changed !== 1 ? "s" : ""}.`)}`
+      `  ${pc.dim("Fixed")} ${summary.changed} ${changedWord}${pc.dim(".")}`
     );
   }
 
@@ -177,7 +152,7 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
     locationStr = `${filePath}:${line}:${column}`;
   }
 
-  lines.push(`  ${c("cyan", locationStr)} ${c("dim", category)}`);
+  lines.push(`  ${pc.cyan(locationStr)} ${pc.dim(category)}`);
   lines.push(`  ${description}`);
 
   if (location.span && location.sourceCode) {
@@ -191,7 +166,7 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
   for (const advice of advices.advices) {
     if (advice.log) {
       const [level, messages] = advice.log;
-      const icon = level === "info" ? c("blue", "i") : c("yellow", "!");
+      const icon = level === "info" ? pc.blue("i") : pc.yellow("!");
       const adviceText = messages.map((m) => m.content).join("");
       lines.push("");
       lines.push(`    ${icon} ${adviceText}`);
@@ -223,7 +198,7 @@ const formatDiagnostics = (
     command === "fix"
       ? "Here are the issues we couldn't fix automatically:"
       : "Issues found:";
-  lines.push(`  ${c("yellow", heading)}`);
+  lines.push(`  ${pc.yellow(heading)}`);
   lines.push("");
 
   for (const diagnostic of unfixableDiagnostics) {
