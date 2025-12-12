@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.3.12
+
+### Patch Changes
+
+- 635acd1: Fix "canceled" bug for realsies this time
+
 ## 6.3.11
 
 ### Patch Changes
