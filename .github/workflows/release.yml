@@ -26,6 +26,9 @@ jobs:
       - name: Prepare repository
         run: git fetch --unshallow --tags
 
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+
       - uses: oven-sh/setup-bun@v2
         name: Install Bun
 
@@ -35,6 +38,7 @@ jobs:
           path: ~/.bun/install/cache
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
           restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Install dependencies
         run: bun install
@@ -49,8 +53,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: bun changeset version
-          publish: bun changeset publish
+          version: npm run changeset version
+          publish: npm run changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
