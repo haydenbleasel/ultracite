@@ -57,6 +57,7 @@ jobs:
           publish: npm run changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: "" # Workaround for https://github.com/changesets/action/pull/545
 
       - name: Deploy to Vercel
         if: steps.changesets.outputs.published == 'true'
