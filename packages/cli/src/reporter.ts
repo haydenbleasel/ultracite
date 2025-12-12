@@ -71,21 +71,23 @@ const getCodeSnippet = (
     const lineContent = lines[i - 1] || "";
 
     if (i === line) {
+      // Error line: ">" + lineNum = 6 chars before " │ "
       snippetLines.push(
-        `${pc.blue(">")} ${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`
+        `${orange(">")}${pc.dim(lineNum)} ${pc.gray("│")} ${lineContent}`
       );
-      // Add the error pointer
-      const pointerPadding = " ".repeat(8 + column - 1);
+      // Pointer line: 6 spaces before " │ " to match
+      const pointerPadding = " ".repeat(column - 1);
       const spanLength = Math.min(
         span[1] - span[0],
         lineContent.length - column + 1
       );
       const pointer = "^".repeat(Math.max(1, spanLength));
       snippetLines.push(
-        `${pc.dim("     ")} ${pc.gray("|")} ${pointerPadding}${pc.red(pointer)}`
+        `${pc.dim("      ")} ${pc.gray("│")} ${pointerPadding}${orange(pointer)}`
       );
     } else {
-      snippetLines.push(`${pc.dim(lineNum)} ${pc.gray("|")} ${lineContent}`);
+      // Non-error line: " " + lineNum = 6 chars before " │ "
+      snippetLines.push(` ${pc.dim(lineNum)} ${pc.gray("│")} ${lineContent}`);
     }
   }
 
@@ -150,8 +152,8 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
     locationStr = `${filePath}:${line}:${column}`;
   }
 
-  lines.push(`${pc.cyan(locationStr)} ${pc.dim(category)}`);
-  lines.push(`${description}`);
+  lines.push(`${orange(locationStr)} ${pc.dim(category)}`);
+  lines.push(pc.dim(description));
 
   if (location.span && location.sourceCode) {
     lines.push("");
@@ -164,8 +166,8 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
   for (const advice of advices.advices) {
     if (advice.log) {
       const [level, messages] = advice.log;
-      const icon = level === "info" ? pc.blue("i") : pc.yellow("!");
-      const adviceText = messages.map((m) => m.content).join("");
+      const icon = level === "info" ? orange("i") : orange("!");
+      const adviceText = pc.dim(messages.map((m) => m.content).join(""));
       lines.push("");
       lines.push(`  ${icon} ${adviceText}`);
     }
