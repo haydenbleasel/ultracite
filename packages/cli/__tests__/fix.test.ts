@@ -146,7 +146,7 @@ describe("fix", () => {
     expect(callArgs[0]).toContain("'src/my file.ts'");
   });
 
-  test("exits with error code when biome fix finds errors", async () => {
+  test("returns hasErrors true when biome fix finds errors", async () => {
     const mockSpawn = mock(() => ({
       status: 1,
       stdout: createMockBiomeOutput(5),
@@ -161,9 +161,8 @@ describe("fix", () => {
       dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    await expect(fix([], {})).rejects.toThrow(
-      "Ultracite fix completed with errors"
-    );
+    const result = await fix([], {});
+    expect(result.hasErrors).toBe(true);
   });
 
   test("exits when spawn returns error", async () => {

@@ -210,6 +210,13 @@ export const formatBiomeOutput = (
   jsonOutput: string,
   command: "check" | "fix"
 ): { output: string; hasErrors: boolean } => {
+  if (!jsonOutput.trim()) {
+    return {
+      output: `${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${pc.magenta(command)}\n${pc.red("Error:")} No output received from Biome. The command may have failed silently.`,
+      hasErrors: true,
+    };
+  }
+
   try {
     const result: BiomeOutput = JSON.parse(jsonOutput);
     const { summary, diagnostics } = result;
@@ -226,7 +233,7 @@ export const formatBiomeOutput = (
     };
   } catch {
     return {
-      output: jsonOutput,
+      output: `${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${pc.magenta(command)}\n${pc.red("Error:")} Failed to parse Biome output.\n\nRaw output:\n${jsonOutput}`,
       hasErrors: true,
     };
   }
