@@ -21,7 +21,7 @@ export default UserCard;`;
 
 export const Editor = () => (
   <CodeBlock
-    className="overflow-auto overflow-auto rounded-none border-none bg-transparent"
+    className="overflow-auto rounded-none border-none bg-transparent!"
     code={mockCode}
     lang="tsx"
   />

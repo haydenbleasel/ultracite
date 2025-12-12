@@ -48,8 +48,8 @@ const logos = [
 export const Agents = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-medium text-3xl tracking-tighter">
-        Works with all your favourite agents
+      <h2 className="text-balance font-medium font-serif text-3xl md:text-4xl lg:text-5xl">
+        Works with all your favourite <span className="italic">agents</span>
       </h2>
       <p className="text-balance text-lg text-muted-foreground">
         Ultracite can generate rules files for all these popular IDEs and
