@@ -26,8 +26,14 @@ jobs:
       - name: Prepare repository
         run: git fetch --unshallow --tags
 
-      - name: Install Node.js
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
 
       - uses: oven-sh/setup-bun@v2
         name: Install Bun
