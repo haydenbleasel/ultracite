@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Tweets } from "../components/tweets";
 
 const tweets = [
@@ -155,16 +156,24 @@ const tweets = [
   "1977425792360427797",
 ];
 
+const title = "See what the community is saying about Ultracite";
+const description =
+  "Here's what some of the most in the most forward-thinking developers in the React ecosystem have to say about Ultracite.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+};
+
 const SocialPage = () => (
   <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
     <div className="grid gap-20">
       <div className="grid gap-4">
         <h1 className="mb-0 max-w-lg text-balance font-medium font-serif text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">
-          See what the community is saying about Ultracite
+          {title}
         </h1>
         <p className="max-w-lg text-balance text-lg text-muted-foreground">
-          Here's what some of the most in the most forward-thinking developers
-          in the React ecosystem have to say about Ultracite.
+          {description}
         </p>
       </div>
     </div>
