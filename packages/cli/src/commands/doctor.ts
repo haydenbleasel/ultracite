@@ -3,10 +3,12 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import process from "node:process";
+import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import { detectPackageManager, dlxCommand } from "nypm";
 import { eslintConfigFiles } from "../migrations/eslint";
 import { prettierConfigFiles } from "../migrations/prettier";
+import { title } from "../utils";
 
 type DiagnosticCheck = {
   name: string;
@@ -169,50 +171,62 @@ const checkConflictingTools = (): DiagnosticCheck => {
   };
 };
 
+const runCheck = async (
+  checkFn: () => DiagnosticCheck | Promise<DiagnosticCheck>,
+  checkName: string
+): Promise<DiagnosticCheck> => {
+  const s = spinner();
+  s.start(`Checking ${checkName}...`);
+
+  const result = await checkFn();
+
+  if (result.status === "pass") {
+    s.stop(result.message);
+  } else if (result.status === "warn") {
+    s.stop(result.message);
+  } else {
+    s.stop(result.message);
+  }
+
+  return result;
+};
+
 // Main doctor function
 export const doctor = async (): Promise<void> => {
+  intro(title);
+
   const checks: DiagnosticCheck[] = [];
 
-  console.log("🩺 Running Ultracite doctor...\n");
+  // Run all checks with spinners
+  checks.push(await runCheck(checkBiomeInstallation, "Biome installation"));
+  checks.push(await runCheck(checkBiomeConfig, "Biome configuration"));
+  checks.push(await runCheck(checkUltraciteDependency, "Ultracite dependency"));
+  checks.push(await runCheck(checkConflictingTools, "conflicting tools"));
 
-  // Run all checks
-  checks.push(await checkBiomeInstallation());
-  checks.push(await checkBiomeConfig());
-  checks.push(await checkUltraciteDependency());
-  checks.push(checkConflictingTools());
-
-  // Print results
+  // Calculate summary
   const passCount = checks.filter((c) => c.status === "pass").length;
   const failCount = checks.filter((c) => c.status === "fail").length;
   const warnCount = checks.filter((c) => c.status === "warn").length;
 
-  for (const check of checks) {
-    let icon: string;
-    if (check.status === "pass") {
-      icon = "✅";
-    } else if (check.status === "fail") {
-      icon = "❌";
-    } else {
-      icon = "⚠️";
-    }
-    console.log(`${icon} ${check.name}: ${check.message}`);
-  }
-
-  console.log("\n📊 Summary:");
-  console.log(
-    `   ${passCount} passed, ${warnCount} warnings, ${failCount} failed`
+  // Log results with appropriate styling
+  log.info(
+    `Summary: ${passCount} passed, ${warnCount} warnings, ${failCount} failed`
   );
 
   if (failCount > 0) {
-    console.log("\n💡 To fix issues, run: npx ultracite init");
+    log.error("Some checks failed. Run 'npx ultracite init' to fix issues.");
+    outro("Doctor complete");
     throw new Error("Doctor checks failed");
   }
 
   if (warnCount > 0) {
-    console.log(
-      "\n💡 Some optional improvements available. Run 'npx ultracite init' to configure."
+    log.warn(
+      "Some optional improvements available. Run 'npx ultracite init' to configure."
     );
-  } else {
-    console.log("\n✨ Everything looks good!");
+    outro("Doctor complete");
+    return;
   }
+
+  log.success("Everything looks good!");
+  outro("Doctor complete");
 };
