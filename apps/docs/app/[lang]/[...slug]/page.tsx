@@ -26,7 +26,9 @@ const Page = async (props: PageProps<"/[lang]/[...slug]">) => {
 
   return (
     <DocsPage full={page.data.full} toc={page.data.toc}>
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsTitle className="font-normal font-serif text-3xl md:text-4xl lg:text-5xl">
+        {page.data.title}
+      </DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
         <CopyMarkdown markdown={markdown} />

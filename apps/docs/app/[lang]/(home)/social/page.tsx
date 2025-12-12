@@ -1,4 +1,4 @@
-import { Tweets } from "../(home)/components/tweets";
+import { Tweets } from "../components/tweets";
 
 const tweets = [
   "1937342910519038142",
@@ -156,7 +156,7 @@ const tweets = [
 ];
 
 const SocialPage = () => (
-  <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20 px-4">
+  <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
     <div className="grid gap-20">
       <div className="grid gap-4">
         <h1 className="mb-0 max-w-lg text-balance font-medium font-serif text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">
