@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.4.0
+
+### Minor Changes
+
+- 6201822: Add custom reporter
+
 ## 6.3.12
 
 ### Patch Changes
