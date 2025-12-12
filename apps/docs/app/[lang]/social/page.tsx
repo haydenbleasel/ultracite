@@ -159,10 +159,10 @@ const SocialPage = () => (
   <div className="mx-auto mt-20 grid w-full max-w-7xl gap-20 px-4">
     <div className="grid gap-20">
       <div className="grid gap-4">
-        <h1 className="mb-0 max-w-lg text-balance font-medium text-5xl tracking-tighter">
+        <h1 className="mb-0 max-w-lg text-balance font-medium font-serif text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">
           See what the community is saying about Ultracite
         </h1>
-        <p className="max-w-lg text-balance text-muted-foreground">
+        <p className="max-w-lg text-balance text-lg text-muted-foreground">
           Here's what some of the most in the most forward-thinking developers
           in the React ecosystem have to say about Ultracite.
         </p>
