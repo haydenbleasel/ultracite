@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
-import process from "node:process";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 import {
   initialize,
   initializeLefthook,
@@ -40,23 +39,28 @@ mock.module("glob", () => ({
   glob: mock(() => Promise.resolve([])),
 }));
 
+// noop function to satisfy linter
+const noop = () => {
+  // intentionally empty mock
+};
+
 mock.module("@clack/prompts", () => ({
-  intro: mock(() => {}),
-  outro: mock(() => {}),
+  intro: mock(noop),
+  outro: mock(noop),
   spinner: mock(() => ({
-    start: mock(() => {}),
-    stop: mock(() => {}),
-    message: mock(() => {}),
+    start: mock(noop),
+    stop: mock(noop),
+    message: mock(noop),
   })),
   log: {
-    info: mock(() => {}),
-    success: mock(() => {}),
-    error: mock(() => {}),
-    warn: mock(() => {}),
+    info: mock(noop),
+    success: mock(noop),
+    error: mock(noop),
+    warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
   isCancel: mock(() => false),
-  cancel: mock(() => {}),
+  cancel: mock(noop),
 }));
 
 describe("initialize", () => {
@@ -66,24 +70,24 @@ describe("initialize", () => {
 
   test("completes successfully with minimal options", async () => {
     const mockLog = {
-      info: mock(() => {}),
-      success: mock(() => {}),
-      error: mock(() => {}),
-      warn: mock(() => {}),
+      info: mock(noop),
+      success: mock(noop),
+      error: mock(noop),
+      warn: mock(noop),
     };
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -104,10 +108,10 @@ describe("initialize", () => {
       Promise.resolve({ name: "pnpm", warnings: [] })
     );
     const mockLog = {
-      info: mock(() => {}),
-      success: mock(() => {}),
-      error: mock(() => {}),
-      warn: mock(() => {}),
+      info: mock(noop),
+      success: mock(noop),
+      error: mock(noop),
+      warn: mock(noop),
     };
 
     mock.module("nypm", () => ({
@@ -118,17 +122,17 @@ describe("initialize", () => {
     }));
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -157,22 +161,22 @@ describe("initialize", () => {
     }));
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: {
-        info: mock(() => {}),
-        success: mock(() => {}),
-        error: mock(() => {}),
-        warn: mock(() => {}),
+        info: mock(noop),
+        success: mock(noop),
+        error: mock(noop),
+        warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -199,22 +203,22 @@ describe("initialize", () => {
     }));
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: {
-        info: mock(() => {}),
-        success: mock(() => {}),
-        error: mock(() => {}),
-        warn: mock(() => {}),
+        info: mock(noop),
+        success: mock(noop),
+        error: mock(noop),
+        warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -241,22 +245,22 @@ describe("initialize", () => {
     }));
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: {
-        info: mock(() => {}),
-        success: mock(() => {}),
-        error: mock(() => {}),
-        warn: mock(() => {}),
+        info: mock(noop),
+        success: mock(noop),
+        error: mock(noop),
+        warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -283,22 +287,22 @@ describe("initialize", () => {
     }));
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: {
-        info: mock(() => {}),
-        success: mock(() => {}),
-        error: mock(() => {}),
-        warn: mock(() => {}),
+        info: mock(noop),
+        success: mock(noop),
+        error: mock(noop),
+        warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     await initialize({
@@ -316,24 +320,24 @@ describe("initialize", () => {
 
   test("exits with error on failure", async () => {
     const mockLog = {
-      info: mock(() => {}),
-      success: mock(() => {}),
-      error: mock(() => {}),
-      warn: mock(() => {}),
+      info: mock(noop),
+      success: mock(noop),
+      error: mock(noop),
+      warn: mock(noop),
     };
 
     mock.module("@clack/prompts", () => ({
-      intro: mock(() => {}),
-      outro: mock(() => {}),
+      intro: mock(noop),
+      outro: mock(noop),
       spinner: mock(() => ({
-        start: mock(() => {}),
-        stop: mock(() => {}),
-        message: mock(() => {}),
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
       })),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
       isCancel: mock(() => false),
-      cancel: mock(() => {}),
+      cancel: mock(noop),
     }));
 
     mock.module("nypm", () => ({
@@ -380,9 +384,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -401,9 +405,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -433,9 +437,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -457,9 +461,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -484,9 +488,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -510,9 +514,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -539,9 +543,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -563,9 +567,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -589,9 +593,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -612,9 +616,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -640,9 +644,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -679,9 +683,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -717,9 +721,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -751,9 +755,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -786,9 +790,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -820,9 +824,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -853,9 +857,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -877,9 +881,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -914,9 +918,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -956,9 +960,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 
@@ -999,9 +1003,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
-          start: mock(() => {}),
-          stop: mock(() => {}),
-          message: mock(() => {}),
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
         })),
       }));
 

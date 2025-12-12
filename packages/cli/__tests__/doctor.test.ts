@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
-import process from "node:process";
 import { doctor } from "../src/commands/doctor";
 
 mock.module("node:child_process", () => ({
@@ -19,7 +18,7 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+  dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
 }));
 
 describe("doctor", () => {
@@ -28,7 +27,9 @@ describe("doctor", () => {
   });
 
   test("passes when everything is configured correctly", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -61,7 +62,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -88,14 +89,16 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await doctor()).toThrow("Doctor checks failed");
+    await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
   test("warns when conflicting tools are present", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -127,7 +130,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -154,14 +157,16 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await doctor()).toThrow("Doctor checks failed");
+    await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
   test("warns when biome config exists but does not extend ultracite", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -191,7 +196,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -226,14 +231,16 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
-    expect(async () => await doctor()).toThrow("Doctor checks failed");
+    await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
   test("warns when package.json is missing", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -264,7 +271,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -273,7 +280,9 @@ describe("doctor", () => {
   });
 
   test("warns when ultracite package cannot be parsed from package.json", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -306,7 +315,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();
@@ -315,7 +324,9 @@ describe("doctor", () => {
   });
 
   test("warns when ultracite is not in package.json dependencies", async () => {
-    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
@@ -351,7 +362,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
     }));
 
     await doctor();

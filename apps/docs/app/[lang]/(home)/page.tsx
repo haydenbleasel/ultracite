@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 const Home = () => (
-  <div className="relative mx-auto grid w-full max-w-(--fd-layout-width) gap-24 px-4 sm:gap-32">
+  <>
     <Hero>
       <Demo />
     </Hero>
@@ -32,7 +32,7 @@ const Home = () => (
     <Social />
     <CallToAction />
     <Footer />
-  </div>
+  </>
 );
 
 export default Home;

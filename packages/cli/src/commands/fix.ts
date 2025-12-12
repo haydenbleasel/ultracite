@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+import { formatBiomeOutput } from "../reporter";
 import { parseFilePaths } from "../utils";
 
 type FixOptions = {
@@ -12,7 +13,7 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
     "check",
     "--write",
     "--no-errors-on-unmatched",
-    "--max-diagnostics=none",
+    "--reporter=json",
   ];
 
   if (options.unsafe) {
@@ -35,15 +36,26 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
+    stdio: "pipe",
     shell: true,
+    maxBuffer: 100 * 1024 * 1024, // 100MB buffer for large codebases
   });
 
   if (result.error) {
     throw new Error(`Failed to run Ultracite: ${result.error.message}`);
   }
 
-  if (result.status !== 0) {
-    throw new Error(`Ultracite fix failed with status ${result.status ?? 1}`);
-  }
+  // Get stdout (JSON output) and stderr
+  const stdout = result.stdout?.toString() || "";
+  const stderr = result.stderr?.toString() || "";
+
+  // Biome outputs JSON to stdout, but may output to stderr on certain errors
+  // Use stdout if it looks like JSON, otherwise try stderr
+  const jsonOutput = stdout.trim().startsWith("{") ? stdout : stderr;
+
+  // Parse and format the output
+  const { output, hasErrors } = formatBiomeOutput(jsonOutput, "fix");
+  console.log(output);
+
+  return { hasErrors };
 };

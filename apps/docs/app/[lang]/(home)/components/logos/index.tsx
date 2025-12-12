@@ -71,7 +71,7 @@ const logos = [
 
 export const Logos = () => (
   <div className="grid gap-12 px-8">
-    <p className="text-center text-muted-foreground text-sm">
+    <p className="text-center text-muted-foreground">
       Used by these organizations and{" "}
       <a
         className="underline"

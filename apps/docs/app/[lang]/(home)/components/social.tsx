@@ -5,8 +5,8 @@ import { Tweets } from "./tweets";
 export const Social = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-medium text-3xl tracking-tighter">
-        What the community is saying
+      <h2 className="text-balance font-medium font-serif text-3xl md:text-4xl lg:text-5xl">
+        What the community is <span className="italic">saying</span>
       </h2>
       <p className="text-balance text-lg text-muted-foreground">
         Here's what some of the most in the most forward-thinking developers in

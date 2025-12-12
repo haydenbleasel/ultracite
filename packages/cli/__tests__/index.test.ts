@@ -3,24 +3,29 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 // Set environment BEFORE any imports
 process.env.VITEST = "true";
 
+// noop function to satisfy linter
+const noop = () => {
+  // intentionally empty mock
+};
+
 // Mock all modules before importing
 mock.module("@clack/prompts", () => ({
-  intro: mock(() => {}),
-  outro: mock(() => {}),
+  intro: mock(noop),
+  outro: mock(noop),
   spinner: mock(() => ({
-    start: mock(() => {}),
-    stop: mock(() => {}),
-    message: mock(() => {}),
+    start: mock(noop),
+    stop: mock(noop),
+    message: mock(noop),
   })),
   log: {
-    info: mock(() => {}),
-    success: mock(() => {}),
-    error: mock(() => {}),
-    warn: mock(() => {}),
+    info: mock(noop),
+    success: mock(noop),
+    error: mock(noop),
+    warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
   isCancel: mock(() => false),
-  cancel: mock(() => {}),
+  cancel: mock(noop),
 }));
 
 mock.module("node:fs/promises", () => ({

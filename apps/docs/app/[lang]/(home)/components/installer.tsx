@@ -45,8 +45,9 @@ export const Installer = ({ command }: InstallerProps) => {
       <InputGroupAddon align="inline-end">
         <InputGroupButton
           aria-label="Copy"
+          className="rounded-sm"
           onClick={handleCopy}
-          size="icon-xs"
+          size="icon-sm"
           title="Copy"
         >
           <Icon className="size-3.5" size={14} />

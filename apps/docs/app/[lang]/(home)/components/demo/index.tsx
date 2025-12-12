@@ -1,190 +1,177 @@
 import Image from "next/image";
 import Background from "./background.jpg";
 
-const output = `./app/(authenticated)/welcome/components/welcome-demo.tsx:205:19 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━
+const Line = ({ children }: { children?: React.ReactNode }) => (
+  <div>{children}</div>
+);
 
-  ⚠ Excessive complexity of 20 detected (max: 15).
-  
-    204 │   const handleNodesChange = useCallback(() => {
-  > 205 │     setTimeout(() => {
-        │                   ^^^
-    206 │       const newEdges = getEdges();
-    207 │       const newNodes = getNodes();
-  
-  ℹ Please refactor this function to reduce its complexity score from 20 to the max allowed complexity 15.
-  
+const Gray = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-muted-foreground">{children}</span>
+);
 
-./scripts/skip-ci.js:1:30 lint/style/useNodejsImportProtocol  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const Orange = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-orange-400">{children}</span>
+);
 
-  ✖ A Node.js builtin module should be imported with the node: protocol.
-  
-  > 1 │ const { execSync } = require('child_process');
-      │                              ^^^^^^^^^^^^^^^
-    2 │ 
-    3 │ const commitMessage = execSync('git log -1 --pretty=%B').toString().trim();
-  
-  ℹ Using the node: protocol is more explicit and signals that the imported module belongs to Node.js.
-  
-  ℹ Unsafe fix: Add the node: protocol.
-  
-     1    │ - const·{·execSync·}·=·require('child_process');
-        1 │ + const·{·execSync·}·=·require('node:child_process');
-     2  2 │   
-     3  3 │   const commitMessage = execSync('git log -1 --pretty=%B').toString().trim();
-  
+const Green = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-green-400">{children}</span>
+);
 
-./scripts/skip-ci.js:6:3 lint/suspicious/noConsole  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const Yellow = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-yellow-400">{children}</span>
+);
 
-  ⚠ Don't use console.
-  
-    5 │ if (commitMessage.includes('[skip ci]')) {
-  > 6 │   console.log('Skipping build due to [skip ci] in commit message.');
-      │   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    7 │   process.exit(0); // this causes Vercel to skip the build
-    8 │ }
-  
-  ℹ The use of console is often reserved for debugging.
-  
-  ℹ Unsafe fix: Remove console.
-  
-     4  4 │   
-     5  5 │   if (commitMessage.includes('[skip ci]')) {
-     6    │ - ··console.log('Skipping·build·due·to·[skip·ci]·in·commit·message.');
-     7  6 │     process.exit(0); // this causes Vercel to skip the build
-     8  7 │   }
-  
-
-./scripts/skip-ci.js:6:3 lint/suspicious/noConsoleLog  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ⚠ Don't use console.log
-  
-    5 │ if (commitMessage.includes('[skip ci]')) {
-  > 6 │   console.log('Skipping build due to [skip ci] in commit message.');
-      │   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    7 │   process.exit(0); // this causes Vercel to skip the build
-    8 │ }
-  
-  ℹ console.log is usually a tool for debugging and you don't want to have that in production.
-  
-  ℹ If it is not for debugging purpose then using console.info might be more appropriate.
-  
-  ℹ Unsafe fix: Remove console.log
-  
-     4  4 │   
-     5  5 │   if (commitMessage.includes('[skip ci]')) {
-     6    │ - ··console.log('Skipping·build·due·to·[skip·ci]·in·commit·message.');
-     7  6 │     process.exit(0); // this causes Vercel to skip the build
-     8  7 │   }
-  
-
-./app/actions/tweet/get.ts:29:12 lint/correctness/noUnusedVariables  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━
-
-  ⚠ This variable is unused.
-  
-    27 │       date: tweet.created_at,
-    28 │     };
-  > 29 │   } catch (error) {
-       │            ^^^^^
-    30 │     return {
-    31 │       error: 'Error fetching tweet',
-  
-  ℹ Unused variables usually are result of incomplete refactoring, typos and other source of bugs.
-  
-  ℹ Unsafe fix: If this is intentional, prepend error with an underscore.
-  
-    27 27 │         date: tweet.created_at,
-    28 28 │       };
-    29    │ - ··}·catch·(error)·{
-       29 │ + ··}·catch·(_error)·{
-    30 30 │       return {
-    31 31 │         error: 'Error fetching tweet',
-  
-
-./app/api/code/route.ts:77:7 lint/suspicious/noConsole  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ⚠ Don't use console.
-  
-    75 │     messages: convertToModelMessages(messages),
-    76 │     onError: (error) => {
-  > 77 │       console.error(error);
-       │       ^^^^^^^^^^^^^^^^^^^^^
-    78 │     },
-    79 │     onFinish: async ({ usage }) => {
-  
-  ℹ The use of console is often reserved for debugging.
-  
-  ℹ Unsafe fix: Remove console.
-  
-    75 75 │       messages: convertToModelMessages(messages),
-    76 76 │       onError: (error) => {
-    77    │ - ······console.error(error);
-    78 77 │       },
-    79 78 │       onFinish: async ({ usage }) => {
-  
-
-./app/api/webhooks/stripe/route.ts:10:23 lint/complexity/noExcessiveCognitiveComplexity ━━━━━━━━━━━━
-
-  ⚠ Excessive complexity of 20 detected (max: 15).
-  
-     8 │ import type Stripe from 'stripe';
-     9 │ 
-  > 10 │ export async function POST(req: Request) {
-       │                       ^^^^
-    11 │   const body = await req.text();
-    12 │   const signature = req.headers.get('stripe-signature') as string;
-  
-  ℹ Please refactor this function to reduce its complexity score from 20 to the max allowed complexity 15.
-  
-
-./app/api/webhooks/stripe/route.ts:105:9 lint/suspicious/noConsole  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
-
-  ⚠ Don't use console.
-  
-    103 │       }
-    104 │       default:
-  > 105 │         console.log(\`Unhandled event type \${event.type}\`);
-        │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    106 │         break;
-    107 │     }
-  
-  ℹ The use of console is often reserved for debugging.
-  
-  ℹ Unsafe fix: Remove console.
-  
-    103 103 │         }
-    104 104 │         default:
-    105     │ - ········console.log(\`Unhandled·event·type·\${event.type}\`);
-    106 105 │           break;
-    107 106 │       }
-  
-
-./app/api/webhooks/stripe/route.ts:105:9 lint/suspicious/noConsoleLog  FIXABLE  ━━━━━━━━━━━━━━━━━━━━
-
-  ⚠ Don't use console.log
-  
-    103 │       }
-    104 │       default:
-  > 105 │         console.log(\`Unhandled event type \${event.type}\`);
-        │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    106 │         break;
-    107 │     }
-  
-  ℹ console.log is usually a tool for debugging and you don't want to have that in production.
-  
-  ℹ If it is not for debugging purpose then using console.info might be more appropriate.
-  
-  ℹ Unsafe fix: Remove console.log
-  
-    103 103 │         }
-    104 104 │         default:
-    105     │ - ········console.log(\`Unhandled·event·type·\${event.type}\`);
-    106 105 │           break;
-    107 106 │       }
-
-Skipped 9 suggested fixes.
-Checked 174 files in 111ms. Fixed 6 files.
-Found 3 errors.
-Found 17 warnings.`;
+const Output = () => (
+  <>
+    <Line>
+      <Gray>$</Gray> ultracite fix
+    </Line>
+    <br />
+    <Line>
+      <Orange>Ultracite v6.3.11</Orange> fix
+    </Line>
+    <Line>
+      <Gray>Found</Gray> 121 errors<Gray>.</Gray>
+    </Line>
+    <Line>
+      <Green>✓</Green> <Gray>Finished in</Gray> 121ms <Gray>on</Gray> 196 files
+      <Gray>.</Gray>
+    </Line>
+    <br />
+    <Line>
+      <Yellow>Here are the issues we couldn't fix automatically:</Yellow>
+    </Line>
+    <br />
+    <Line>
+      <Orange>apps/docs/app/og/[...slug]/route.tsx:39:8</Orange>{" "}
+      <Gray>suppressions/unused</Gray>
+    </Line>
+    <Line>
+      <Gray>
+        Suppression comment has no effect. Remove the suppression or make sure
+        you are suppressing the correct rule.
+      </Gray>
+    </Line>
+    <br />
+    <Line>
+      <Gray>{"       38 │"}</Gray>
+      {
+        '     <div style={{ fontFamily: "Geist" }} tw="flex h-full w-full bg-black">'
+      }
+    </Line>
+    <Line>
+      <Orange>{"   >"}</Orange>
+      <Gray>{"   39 │"}</Gray>
+      {
+        '       {/** biome-ignore lint/performance/noImgElement: "Required for Satori" */}'
+      }
+    </Line>
+    <Line>
+      <Gray>{"          │"}</Gray>
+      {"        "}
+      <Orange>
+        {
+          "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+        }
+      </Orange>
+    </Line>
+    <Line>
+      <Gray>{"       40 │"}</Gray>
+      {"       <img"}
+    </Line>
+    <Line>
+      <Gray>{"       41 │"}</Gray>
+      {'         alt="Vercel OpenGraph Background"'}
+    </Line>
+    <br />
+    <Line>
+      <Gray>────────────────────────────────────────────────────────────</Gray>
+    </Line>
+    <br />
+    <Line>
+      <Orange>apps/registry/app/[component]/route.ts:226:76</Orange>{" "}
+      <Gray>lint/complexity/noExcessiveCognitiveComplexity</Gray>
+    </Line>
+    <Line>
+      <Gray>Excessive complexity of 95 detected (max: 15).</Gray>
+    </Line>
+    <br />
+    <Line>
+      <Gray>{"      225 │"}</Gray>{" "}
+    </Line>
+    <Line>
+      <Orange>{"   >"}</Orange>
+      <Gray>{"  226 │"}</Gray>
+      {
+        " export const GET = async (_request: NextRequest, { params }: RequestProps) => {"
+      }
+    </Line>
+    <Line>
+      <Gray>{"          │"}</Gray>
+      {
+        "                                                                            "
+      }
+      <Orange>{"^^"}</Orange>
+    </Line>
+    <Line>
+      <Gray>{"      227 │"}</Gray>
+      {"   const { component } = await params;"}
+    </Line>
+    <Line>
+      <Gray>{"      228 │"}</Gray>
+      {'   const parsedComponent = component.replace(".json", "");'}
+    </Line>
+    <br />
+    <Line>
+      {"    "}
+      <Orange>i</Orange> Please refactor this function to reduce its complexity
+      score from 95 to the max allowed complexity 15.
+    </Line>
+    <br />
+    <Line>
+      <Gray>────────────────────────────────────────────────────────────</Gray>
+    </Line>
+    <br />
+    <Line>
+      <Orange>
+        packages/elements/__tests__/chain-of-thought.test.tsx:23:69
+      </Orange>{" "}
+      <Gray>lint/suspicious/noEmptyBlockStatements</Gray>
+    </Line>
+    <Line>Unexpected empty block.</Line>
+    <br />
+    <Line>
+      <Gray>{"       22 │"}</Gray>
+      {"     // Suppress console.error for this test"}
+    </Line>
+    <Line>
+      <Orange>{"   >"}</Orange>
+      <Gray>{"   23 │"}</Gray>
+      {
+        '     const spy = vi.spyOn(console, "error").mockImplementation(() => {});'
+      }
+    </Line>
+    <Line>
+      <Gray>{"          │"}</Gray>
+      {"                                                                     "}
+      <Orange>{"^^"}</Orange>
+    </Line>
+    <Line>
+      <Gray>{"       24 │"}</Gray>{" "}
+    </Line>
+    <Line>
+      <Gray>{"       25 │"}</Gray>
+      {"     expect(() =>"}
+    </Line>
+    <br />
+    <Line>
+      {"    "}
+      <Orange>i</Orange> Empty blocks are usually the result of an incomplete
+      refactoring. Remove the empty block or add a comment inside it if it is
+      intentional.
+    </Line>
+  </>
+);
 
 export const Demo = () => (
   <div className="relative isolate overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl">
@@ -197,13 +184,9 @@ export const Demo = () => (
     />
     <div className="size-full sm:px-16 sm:pt-16">
       <div className="max-h-128 overflow-y-auto bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
-        <pre className="font-mono text-sm">
+        <pre className="font-mono text-sm text-white">
           <code>
-            <span className="text-white">ultracite fix</span>
-            <br />
-            <br />
-            <br />
-            <span className="text-white">{output}</span>
+            <Output />
           </code>
         </pre>
       </div>

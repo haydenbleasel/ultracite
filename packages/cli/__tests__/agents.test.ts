@@ -189,7 +189,7 @@ describe("createAgents", () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
+        access: mock((_path: string) => {
           // File doesn't exist
           return Promise.reject(new Error("ENOENT"));
         }),

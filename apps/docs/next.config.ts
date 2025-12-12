@@ -16,8 +16,7 @@ const config: NextConfig = {
     ],
   },
 
-  // biome-ignore lint/suspicious/useAwait: "redirects is async"
-  async rewrites() {
+  rewrites() {
     return [
       {
         source: "/:path*.mdx",
@@ -26,8 +25,7 @@ const config: NextConfig = {
     ];
   },
 
-  // biome-ignore lint/suspicious/useAwait: "redirects is async"
-  async redirects() {
+  redirects() {
     return [
       {
         source: "/husky",

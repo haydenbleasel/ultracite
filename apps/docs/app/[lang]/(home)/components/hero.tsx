@@ -10,10 +10,11 @@ type HeroProps = {
 export const Hero = ({ children }: HeroProps) => (
   <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
     <div className="grid gap-4">
-      <h1 className="mb-0 max-w-md text-balance font-medium text-3xl tracking-tighter sm:text-4xl md:text-5xl">
-        A highly opinionated, zero-configuration linter and formatter
+      <h1 className="mb-0 max-w-md text-balance font-medium font-serif text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">
+        A highly opinionated, <span className="italic">zero-configuration</span>{" "}
+        linter and formatter
       </h1>
-      <p className="max-w-md text-balance text-muted-foreground">
+      <p className="max-w-lg text-balance text-lg text-muted-foreground">
         Ultracite is a highly opinionated preset for{" "}
         <a
           className="underline"

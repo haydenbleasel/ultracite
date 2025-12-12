@@ -4,7 +4,11 @@ import { Analytics } from "@vercel/analytics/next";
 import { defineI18nUI } from "fumadocs-ui/i18n";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist_Mono,
+  Instrument_Sans,
+  Instrument_Serif,
+} from "next/font/google";
 import type { ReactNode } from "react";
 import { i18n } from "@/lib/i18n";
 
@@ -13,11 +17,18 @@ type LayoutProps = {
   params: Promise<{ lang: string }>;
 };
 
-const sans = Geist({
+const sans = Instrument_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
   weight: "variable",
+});
+
+const serif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+  weight: "400",
 });
 
 const mono = Geist_Mono({
@@ -100,6 +111,7 @@ const Layout = async ({ children, params }: LayoutProps) => {
       className={cn(
         "touch-manipulation font-sans antialiased",
         sans.variable,
+        serif.variable,
         mono.variable
       )}
       lang={lang}

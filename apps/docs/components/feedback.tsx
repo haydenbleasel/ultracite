@@ -64,7 +64,7 @@ export const Feedback = ({ className }: FeedbackProps) => {
   }, [previous, url]);
 
   const submit = (e?: SyntheticEvent) => {
-    if (opinion == null) {
+    if (opinion === null) {
       return;
     }
 

@@ -228,7 +228,7 @@ const features = [
 export const Comparison = () => (
   <section className="grid gap-12">
     <div className="mx-auto grid max-w-2xl gap-4 text-center">
-      <h2 className="text-balance font-medium text-3xl tracking-tighter">
+      <h2 className="text-balance font-medium font-serif text-3xl sm:text-4xl md:text-5xl">
         Why choose Ultracite?
       </h2>
       <p className="text-balance text-lg text-muted-foreground">

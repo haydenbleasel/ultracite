@@ -280,9 +280,9 @@ describe("prettierCleanup", () => {
     });
 
     test("handles errors when removing config files", async () => {
-      const consoleWarnSpy = spyOn(console, "warn").mockImplementation(
-        () => {}
-      );
+      const consoleWarnSpy = spyOn(console, "warn").mockImplementation(() => {
+        // noop
+      });
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
@@ -313,9 +313,9 @@ describe("prettierCleanup", () => {
     });
 
     test("handles errors when removing dependencies", async () => {
-      const consoleWarnSpy = spyOn(console, "warn").mockImplementation(
-        () => {}
-      );
+      const consoleWarnSpy = spyOn(console, "warn").mockImplementation(() => {
+        // noop
+      });
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
