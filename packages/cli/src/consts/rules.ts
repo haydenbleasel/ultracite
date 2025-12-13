@@ -8,7 +8,6 @@ export type EditorRuleConfig = {
 
 export type HookConfig = {
   path: string;
-  command: string;
 };
 
 export const AGENTS: Record<(typeof options.agents)[number], EditorRuleConfig> =
@@ -100,10 +99,8 @@ alwaysApply: false
 export const HOOKS: Record<(typeof options.hooks)[number], HookConfig> = {
   cursor: {
     path: "./.cursor/hooks.json",
-    command: "npx ultracite fix",
   },
   claude: {
     path: "./.claude/settings.json",
-    command: "npx ultracite fix",
   },
 } as const;

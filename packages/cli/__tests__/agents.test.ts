@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 import { createAgents } from "../src/agents";
+import { getPackageRunner } from "../src/agents/rules";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -7,6 +8,29 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
   mkdir: mock(() => Promise.resolve()),
 }));
+
+describe("getPackageRunner", () => {
+  test("returns bunx for bun", () => {
+    expect(getPackageRunner("bun")).toBe("bunx");
+  });
+
+  test("returns yarn dlx for yarn", () => {
+    expect(getPackageRunner("yarn")).toBe("yarn dlx");
+  });
+
+  test("returns pnpm dlx for pnpm", () => {
+    expect(getPackageRunner("pnpm")).toBe("pnpm dlx");
+  });
+
+  test("returns npx for npm", () => {
+    expect(getPackageRunner("npm")).toBe("npx");
+  });
+
+  test("returns npx for unknown package managers", () => {
+    // @ts-expect-error testing unknown value
+    expect(getPackageRunner("unknown")).toBe("npx");
+  });
+});
 
 describe("createAgents", () => {
   beforeEach(() => {
@@ -27,7 +51,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor");
+      const agents = createAgents("cursor", "npm");
       const result = await agents.exists();
       expect(result).toBe(true);
     });
@@ -43,7 +67,7 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("cursor");
+      const agents = createAgents("cursor", "npm");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
@@ -60,13 +84,85 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor");
+      const agents = createAgents("cursor", "npm");
       await agents.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
       expect(writeCall[0]).toBe("./.cursor/rules/ultracite.mdc");
       expect(writeCall[1]).toContain("---");
       expect(writeCall[1]).toContain("description: Ultracite Rules");
+    });
+
+    test("uses correct package runner for npm", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents("cursor", "npm");
+      await agents.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain("`npx ultracite fix`");
+      expect(writeCall[1]).toContain("`npx ultracite check`");
+    });
+
+    test("uses correct package runner for bun", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents("cursor", "bun");
+      await agents.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain("`bunx ultracite fix`");
+      expect(writeCall[1]).toContain("`bunx ultracite check`");
+    });
+
+    test("uses correct package runner for yarn", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents("cursor", "yarn");
+      await agents.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain("`yarn dlx ultracite fix`");
+      expect(writeCall[1]).toContain("`yarn dlx ultracite check`");
+    });
+
+    test("uses correct package runner for pnpm", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const agents = createAgents("cursor", "pnpm");
+      await agents.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[1]).toContain("`pnpm dlx ultracite fix`");
+      expect(writeCall[1]).toContain("`pnpm dlx ultracite check`");
     });
 
     test("update overwrites rules file (not in append mode)", async () => {
@@ -79,7 +175,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor");
+      const agents = createAgents("cursor", "npm");
       await agents.update();
 
       // Cursor is not in append mode, so it always overwrites
@@ -100,7 +196,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("windsurf");
+      const agents = createAgents("windsurf", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -120,7 +216,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("vscode-copilot");
+      const agents = createAgents("vscode-copilot", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -140,7 +236,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("vscode-copilot");
+      const agents = createAgents("vscode-copilot", "npm");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -159,7 +255,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed");
+      const agents = createAgents("zed", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -178,7 +274,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed");
+      const agents = createAgents("zed", "npm");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -198,7 +294,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed");
+      const agents = createAgents("zed", "npm");
       await agents.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -219,7 +315,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("claude");
+      const agents = createAgents("claude", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -239,7 +335,7 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("windsurf");
+      const agents = createAgents("windsurf", "npm");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
@@ -257,7 +353,7 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("codex");
+      const agents = createAgents("codex", "npm");
       await agents.create();
 
       // Should not be called for root-level AGENTS.md

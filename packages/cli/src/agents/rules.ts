@@ -1,12 +1,30 @@
-export const rules = `# Ultracite Code Standards
+import type { PackageManagerName } from "nypm";
+
+/**
+ * Get the correct package runner command for a package manager
+ */
+export const getPackageRunner = (pm: PackageManagerName): string => {
+  switch (pm) {
+    case "bun":
+      return "bunx";
+    case "yarn":
+      return "yarn dlx";
+    case "pnpm":
+      return "pnpm dlx";
+    default:
+      return "npx";
+  }
+};
+
+export const getRules = (runner: string) => `# Ultracite Code Standards
 
 This project uses **Ultracite**, a zero-config Biome preset that enforces strict code quality standards through automated formatting and linting.
 
 ## Quick Reference
 
-- **Format code**: \`npx ultracite fix\`
-- **Check for issues**: \`npx ultracite check\`
-- **Diagnose setup**: \`npx ultracite doctor\`
+- **Format code**: \`${runner} ultracite fix\`
+- **Check for issues**: \`${runner} ultracite check\`
+- **Diagnose setup**: \`${runner} ultracite doctor\`
 
 Biome (the underlying engine) provides extremely fast Rust-based linting and formatting. Most issues are automatically fixable.
 
@@ -120,5 +138,5 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
-Most formatting and common issues are automatically fixed by Biome. Run \`npx ultracite fix\` before committing to ensure compliance.
+Most formatting and common issues are automatically fixed by Biome. Run \`${runner} ultracite fix\` before committing to ensure compliance.
 `;
