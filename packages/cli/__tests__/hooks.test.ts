@@ -27,7 +27,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       const result = await hooks.exists();
       expect(result).toBe(true);
     });
@@ -43,7 +43,7 @@ describe("createHooks", () => {
         mkdir: mockMkdir,
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       await hooks.create();
 
       expect(mockMkdir).toHaveBeenCalled();
@@ -60,7 +60,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       await hooks.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -81,7 +81,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -101,7 +101,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("cursor");
+      const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
       // Should not write anything since hook already exists
@@ -148,7 +148,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       const result = await hooks.exists();
       expect(result).toBe(true);
     });
@@ -164,7 +164,7 @@ describe("createHooks", () => {
         mkdir: mockMkdir,
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.create();
 
       expect(mockMkdir).toHaveBeenCalled();
@@ -181,7 +181,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -206,7 +206,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -234,7 +234,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -268,7 +268,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.update();
 
       // Should not write anything since hook already exists
@@ -288,7 +288,7 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const hooks = createHooks("claude");
+      const hooks = createHooks("claude", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
