@@ -195,6 +195,13 @@ const runCheck = async (
 export const doctor = async (): Promise<void> => {
   intro(title);
 
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+  const command = dlxCommand(pm, "ultracite", {
+    args: ["init"],
+    short: pm === "npm",
+  });
+
   const checks: DiagnosticCheck[] = [];
 
   // Run all checks with spinners
@@ -214,14 +221,14 @@ export const doctor = async (): Promise<void> => {
   );
 
   if (failCount > 0) {
-    log.error("Some checks failed. Run 'npx ultracite init' to fix issues.");
+    log.error(`Some checks failed. Run '${command}' to fix issues.`);
     outro("Doctor complete");
     throw new Error("Doctor checks failed");
   }
 
   if (warnCount > 0) {
     log.warn(
-      "Some optional improvements available. Run 'npx ultracite init' to configure."
+      `Some optional improvements available. Run '${command}' to configure.`
     );
     outro("Doctor complete");
     return;

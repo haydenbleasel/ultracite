@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
+import { dlxCommand, type PackageManagerName } from "nypm";
 import type { options } from "../consts/options";
 import { HOOKS } from "../consts/rules";
 import { exists } from "../utils";
@@ -90,8 +91,15 @@ const updateClaudeConfig = async (
   }
 };
 
-export const createHooks = (name: (typeof options.hooks)[number]) => {
+export const createHooks = (
+  name: (typeof options.hooks)[number],
+  packageManager: PackageManagerName
+) => {
   const config = HOOKS[name];
+  const command = dlxCommand(packageManager, "ultracite", {
+    args: ["fix"],
+    short: packageManager === "npm",
+  });
 
   const ensureDirectory = async () => {
     const dir = dirname(config.path);
@@ -110,12 +118,12 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
       if (name === "cursor") {
         await writeFile(
           config.path,
-          JSON.stringify(createCursorConfig(config.command), null, 2)
+          JSON.stringify(createCursorConfig(command), null, 2)
         );
       } else if (name === "claude") {
         await writeFile(
           config.path,
-          JSON.stringify(createClaudeConfig(config.command), null, 2)
+          JSON.stringify(createClaudeConfig(command), null, 2)
         );
       }
     },
@@ -124,9 +132,9 @@ export const createHooks = (name: (typeof options.hooks)[number]) => {
       await ensureDirectory();
 
       if (name === "cursor") {
-        await updateCursorConfig(config.path, config.command);
+        await updateCursorConfig(config.path, command);
       } else if (name === "claude") {
-        await updateClaudeConfig(config.path, config.command);
+        await updateClaudeConfig(config.path, command);
       }
     },
   };

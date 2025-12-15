@@ -330,6 +330,7 @@ export const initializeLintStaged = async (
 export const upsertAgents = async (
   name: (typeof options.agents)[number],
   displayName: string,
+  packageManager: PackageManagerName,
   quiet = false
 ) => {
   const s = spinner();
@@ -338,7 +339,7 @@ export const upsertAgents = async (
     s.start(`Checking for ${displayName}...`);
   }
 
-  const agents = createAgents(name);
+  const agents = createAgents(name, packageManager);
 
   if (await agents.exists()) {
     if (!quiet) {
@@ -363,6 +364,7 @@ export const upsertAgents = async (
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
   displayName: string,
+  packageManager: PackageManagerName,
   quiet = false
 ) => {
   const s = spinner();
@@ -371,7 +373,7 @@ export const upsertHooks = async (
     s.start(`Checking for ${displayName} hooks...`);
   }
 
-  const hooks = createHooks(name);
+  const hooks = createHooks(name, packageManager);
 
   if (await hooks.exists()) {
     if (!quiet) {
@@ -750,11 +752,11 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const ruleName of agents ?? []) {
-      await upsertAgents(ruleName, agentsOptions[ruleName], quiet);
+      await upsertAgents(ruleName, agentsOptions[ruleName], pm, quiet);
     }
 
     for (const hookName of hooks ?? []) {
-      await upsertHooks(hookName, hooksOptions[hookName], quiet);
+      await upsertHooks(hookName, hooksOptions[hookName], pm, quiet);
     }
 
     if (integrations?.includes("husky")) {
