@@ -28,7 +28,7 @@ mock.module("node:child_process", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+  dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
 }));
 
 describe("check", () => {
@@ -47,7 +47,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await check(undefined);
@@ -71,7 +71,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await check([["src/index.ts", "src/test.ts"], {}]);
@@ -93,7 +93,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await check([[], { "diagnostic-level": "error" }]);
@@ -114,7 +114,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await check([["src/my file.ts"], {}]);
@@ -136,7 +136,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     const result = await check(undefined);
@@ -155,7 +155,7 @@ describe("check", () => {
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await expect(check(undefined)).rejects.toThrow(

@@ -18,7 +18,7 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+  dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
 }));
 
 describe("doctor", () => {
@@ -62,7 +62,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
@@ -89,7 +89,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -130,7 +130,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
@@ -157,7 +157,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -196,7 +196,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
@@ -231,7 +231,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -271,7 +271,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
@@ -315,7 +315,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
@@ -362,7 +362,7 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx ${pkg} ${opts.args.join(" ")}`),
+      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
     }));
 
     await doctor();
