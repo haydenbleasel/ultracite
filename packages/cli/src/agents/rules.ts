@@ -1,21 +1,3 @@
-import type { PackageManagerName } from "nypm";
-
-/**
- * Get the correct package runner command for a package manager
- */
-export const getPackageRunner = (pm: PackageManagerName): string => {
-  switch (pm) {
-    case "bun":
-      return "bunx";
-    case "yarn":
-      return "yarn dlx";
-    case "pnpm":
-      return "pnpm dlx";
-    default:
-      return "npx";
-  }
-};
-
 export const getRules = (runner: string) => `# Ultracite Code Standards
 
 This project uses **Ultracite**, a zero-config Biome preset that enforces strict code quality standards through automated formatting and linting.

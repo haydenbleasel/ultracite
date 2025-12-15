@@ -1,18 +1,18 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import type { PackageManagerName } from "nypm";
+import { dlxCommand, type PackageManagerName } from "nypm";
 import type { options } from "../consts/options";
 import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
-import { getPackageRunner, getRules } from "./rules";
+import { getRules } from "./rules";
 
 export const createAgents = (
   name: (typeof options.agents)[number],
   packageManager: PackageManagerName
 ) => {
   const config = AGENTS[name];
-  const runner = getPackageRunner(packageManager);
-  const rules = getRules(runner);
+  const dlx = dlxCommand(packageManager, "");
+  const rules = getRules(dlx);
   const content = config.header ? `${config.header}\n\n${rules}` : rules;
 
   const ensureDirectory = async () => {

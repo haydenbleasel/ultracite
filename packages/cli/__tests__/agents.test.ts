@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 import { createAgents } from "../src/agents";
-import { getPackageRunner } from "../src/agents/rules";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -8,29 +7,6 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
   mkdir: mock(() => Promise.resolve()),
 }));
-
-describe("getPackageRunner", () => {
-  test("returns bunx for bun", () => {
-    expect(getPackageRunner("bun")).toBe("bunx");
-  });
-
-  test("returns yarn dlx for yarn", () => {
-    expect(getPackageRunner("yarn")).toBe("yarn dlx");
-  });
-
-  test("returns pnpm dlx for pnpm", () => {
-    expect(getPackageRunner("pnpm")).toBe("pnpm dlx");
-  });
-
-  test("returns npx for npm", () => {
-    expect(getPackageRunner("npm")).toBe("npx");
-  });
-
-  test("returns npx for unknown package managers", () => {
-    // @ts-expect-error testing unknown value
-    expect(getPackageRunner("unknown")).toBe("npx");
-  });
-});
 
 describe("createAgents", () => {
   beforeEach(() => {

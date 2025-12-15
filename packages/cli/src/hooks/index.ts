@@ -5,12 +5,6 @@ import type { options } from "../consts/options";
 import { HOOKS } from "../consts/rules";
 import { exists } from "../utils";
 
-const getUltraciteCommand = (packageManager: PackageManagerName): string =>
-  dlxCommand(packageManager, "ultracite", {
-    args: ["fix"],
-    short: packageManager === "npm",
-  });
-
 const createCursorConfig = (command: string) => ({
   version: 1,
   hooks: {
@@ -102,7 +96,10 @@ export const createHooks = (
   packageManager: PackageManagerName
 ) => {
   const config = HOOKS[name];
-  const command = getUltraciteCommand(packageManager);
+  const command = dlxCommand(packageManager, "ultracite", {
+    args: ["fix"],
+    short: packageManager === "npm",
+  });
 
   const ensureDirectory = async () => {
     const dir = dirname(config.path);
