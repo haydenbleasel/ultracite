@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.4.1
+
+### Patch Changes
+
+- a8570b3: respect package manager in generated rules and commands
+
 ## 6.4.0
 
 ### Minor Changes
