@@ -63,7 +63,7 @@ export const installDependencies = async (
       await addDevDependency(pkg, {
         packageManager,
         workspace: await isMonorepo(),
-        silent: quiet,
+        silent: true,
       });
     }
   } else {

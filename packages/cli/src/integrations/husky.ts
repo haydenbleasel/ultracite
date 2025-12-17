@@ -81,6 +81,7 @@ export const husky = {
     await addDevDependency("husky", {
       packageManager,
       workspace: await isMonorepo(),
+      silent: true,
     });
 
     // Add prepare script to package.json to ensure husky is initialized
@@ -97,7 +98,7 @@ export const husky = {
     });
 
     try {
-      execSync(initCommand, { stdio: "inherit" });
+      execSync(initCommand, { stdio: "pipe" });
     } catch (_error) {
       // If init fails, it might be because it's already initialized
       // Continue anyway as we'll create the hook file next

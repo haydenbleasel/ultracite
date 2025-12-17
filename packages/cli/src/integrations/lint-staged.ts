@@ -298,6 +298,7 @@ export const lintStaged = {
     await addDevDependency("lint-staged", {
       packageManager,
       workspace: await isMonorepo(),
+      silent: true,
     });
   },
   create: async (packageManager: PackageManagerName) => {

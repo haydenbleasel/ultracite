@@ -36,6 +36,7 @@ export const lefthook = {
     await addDevDependency("lefthook", {
       packageManager,
       workspace: await isMonorepo(),
+      silent: true,
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized
@@ -50,7 +51,7 @@ export const lefthook = {
       short: packageManager === "npm",
     });
 
-    execSync(installCommand, { stdio: "inherit" });
+    execSync(installCommand, { stdio: "pipe" });
   },
   create: async (packageManager: PackageManagerName) => {
     const config = createLefthookConfig(packageManager);
