@@ -250,14 +250,27 @@
         "noMultiStr": "error",
         "noParametersOnlyUsedInRecursion": "error",
         "noProto": "error",
+        "noScriptUrl": "error",
         "noShadow": "error",
         "noSyncScripts": "error",
         "noUnusedExpressions": "error",
         "noUselessUndefined": "error",
+        "useAwaitThenable": "error",
         "useConsistentArrowReturn": "error",
         "useConsistentGraphqlDescriptions": "error",
         "useDeprecatedDate": "error",
+        "useFind": "error",
         "useMaxParams": "error",
+        "useRegexpExec": "error",
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "error",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
+          }
+        },
+        "useSpread": "error",
         "useUniqueGraphqlOperationName": "error",
 
         "noContinue": "off",
@@ -268,16 +281,7 @@
         "noUnnecessaryConditions": "off",
         "useArraySortCompare": "off",
         "useExplicitType": "off",
-        "useFind": "error",
-        "useSortedClasses": {
-          "fix": "safe",
-          "level": "error",
-          "options": {
-            "attributes": ["className"],
-            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
-          }
-        },
-        "useSpread": "error",
+        "useRequiredScripts": "off",
 
         /** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/
         "noDeprecatedImports": "off",

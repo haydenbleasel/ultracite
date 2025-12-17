@@ -56,6 +56,7 @@ This configuration:
 | `noVueDuplicateKeys` | `error` | Prevent duplicate keys in Vue component options. Keys in `data`, `computed`, `methods`, etc. must be unique. |
 | `noVueReservedKeys` | `error` | Disallow Vue reserved keys like `$data`, `$props`, `$el`, etc. in component options. |
 | `noVueReservedProps` | `error` | Disallow Vue reserved props like `key`, `ref`, and `is` as custom component props. |
+| `noVueSetupPropsReactivityLoss` | `error` | Prevent usages that cause reactivity loss in Vue `setup` function props. |
 | `noVueVIfWithVFor` | `error` | Disallow `v-for` and `v-if` on the same element. |
 | `useVueHyphenatedAttributes` | `error` | Encourage using kebab-case for attribute names, per the Vue style guide's recommendations. |
 | `useVueMultiWordComponentNames` | `error` | Enforce multi-word component names to avoid conflicts with HTML elements. Single-word names like `Button` or `Card` should be avoided. |
