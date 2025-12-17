@@ -27,7 +27,7 @@ export const vscode = {
   },
   extension: () =>
     spawnSync("code --install-extension biomejs.biome", {
-      stdio: "inherit",
+      stdio: "pipe",
       shell: true,
     }),
 };

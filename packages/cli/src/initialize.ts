@@ -131,13 +131,17 @@ export const upsertVsCodeSettings = async (quiet = false) => {
   }
 
   try {
-    vscode.extension();
+    const result = vscode.extension();
     if (!quiet) {
-      s.stop("settings.json created.");
+      if (result.status === 0) {
+        s.stop("settings.json created and Biome extension installed.");
+      } else {
+        s.stop("settings.json created. Install Biome extension manually.");
+      }
     }
   } catch (error) {
     if (!quiet) {
-      s.stop(`Failed to install Biome extension (${error}), but continuing...`);
+      s.stop("settings.json created. Install Biome extension manually.");
     }
   }
 };
