@@ -1,13 +1,13 @@
 ---
 title: Kern
-description: De basisconfiguratie van Ultracite met framework-onafhankelijke lintregels.
+description: Ultracite's basisconfiguratie met framework-onafhankelijke lintregels.
 ---
 
-De core-configuratie van Ultracite biedt een uitgebreide set framework-onafhankelijke lintregels en formatteringsinstellingen. Dit is de basis waarop alle andere framework-specifieke configuraties voortbouwen.
+De kernconfiguratie van Ultracite biedt een uitgebreid pakket framework-onafhankelijke lintregels en formatteringsinstellingen. Dit is de basis waarop alle andere framework-specifieke configuraties voortbouwen.
 
 ## Installatie
 
-De core-configuratie wordt automatisch opgenomen wanneer je het volgende uitvoert:
+De kernconfiguratie wordt automatisch opgenomen wanneer je het volgende uitvoert:
 
 ```bash
 npx ultracite init
@@ -23,58 +23,58 @@ Of voeg het handmatig toe aan je `biome.jsonc`:
 
 ## Overzicht
 
-De core-configuratie bevat honderden strikte lintregels die betrekking hebben op:
+De kernconfiguratie bevat honderden strikte lintregels die betrekking hebben op:
 
 - **Toegankelijkheid (a11y)**: Handhaaf ARIA-attributen, semantische HTML en toetsenbordnavigatie
 - **Complexiteit**: Verminder cognitieve complexiteit en handhaaf best practices
 - **Correctheid**: Voorkom veelvoorkomende fouten en handhaaf typeveiligheid
 - **Prestaties**: Optimaliseer code voor betere runtime-prestaties
-- **Beveiliging**: Voorkom beveiligingslekken
-- **Stijl**: Handhaaf consistente code-stijl
+- **Beveiliging**: Voorkom beveiligingskwetsbaarheden
+- **Stijl**: Handhaaf een consistente code-stijl
 - **Verdacht**: Vang verdachte patronen die op bugs kunnen wijzen
 
-## Formatter-instellingen
+## Formatteringsinstellingen
 
 - **Inspringing**: 2 spaties
 - **Regelbreedte**: 80 tekens
-- **Regelafsluiting**: LF (Unix-stijl)
-- **Puntkomma's**: Altijd vereist
+- **Regelafbreking**: LF (Unix-stijl)
+- **Puntenkomma's**: Altijd vereist
 - **Aanhalingstekens**: Dubbele aanhalingstekens voor JavaScript/TypeScript en JSON
-- **Achtervoegende komma's**: ES5-stijl (meerregelige arrays/objecten)
-- **Haakjes bij pijlfuncties**: Altijd haakjes opnemen
+- **Achtervoegende komma's**: ES5-stijl (meerdere regels arrays/objecten)
+- **Pijltjes-argumenthaken**: Altijd haakjes opnemen
 
-## Belangrijkste kenmerken
+## Belangrijkste functies
 
-### TypeScript-strengheid
+### TypeScript-strictheid
 
-De core-configuratie schakelt TypeScript's strikte controles in:
+De kernconfiguratie schakelt TypeScript's strikte controles in:
 
-- ontmoedigt het gebruik van `any` (`noExplicitAny: error`)
-- vereist afhandeling van `null/undefined`
-- geeft de voorkeur aan expliciete types in bepaalde situaties
-- handhaaft typeveiligheid door de hele codebase
+- Maakt gebruik van `any` ontmoedigend (`noExplicitAny: error`)
+- Vereist afhandeling van `null/undefined`
+- Geeft de voorkeur aan expliciete types in bepaalde situaties
+- Handhaaft typeveiligheid door de hele codebase
 
 ### ESLint-aanbevolen equivalenten
 
-Veelvoorkomende best-practice regels zijn inbegrepen:
+Veelvoorkomende best-practice regels zijn opgenomen:
 
 - Geen ongebruikte variabelen (`noUnusedVariables: error`)
 - Geen ongebruikte imports (`noUnusedImports: error`)
 - Geen expliciete eval (`noGlobalEval: error`)
-- Geen prototype pollution (`noPrototypeBuiltins: error`)
+- Geen prototype-pollutie (`noPrototypeBuiltins: error`)
 
 ### Toegankelijkheid standaard
 
-Regels equivalent aan toegankelijkheidsnormen:
+Regels equivalent aan toegankelijkheidsstandaarden:
 
 - ARIA-attributen moeten geldig zijn
 - Semantische HTML-elementen hebben de voorkeur
-- Ondersteuning voor toetsenbordnavigatie vereist
-- Alt-tekst voor afbeeldingen vereist
+- Ondersteuning voor toetsenbordnavigatie is vereist
+- Alt-tekst voor afbeeldingen is vereist
 
 ### Node.js-ondersteuning
 
-Omgevingsspecifieke afhandeling:
+Omgevingsspecifieke behandeling:
 
 - Herkent Node.js-globals (`module`, `process`)
 - Handhaaft het `node:`-protocol voor ingebouwde modules
@@ -84,396 +84,396 @@ Omgevingsspecifieke afhandeling:
 
 ### Toegankelijkheid (a11y)
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noAccessKey` | `error` | Handhaaf dat het `accessKey`-attribuut niet wordt gebruikt op HTML-elementen. |
-| `noAriaHiddenOnFocusable` | `error` | Handhaaf dat `aria-hidden="true"` niet wordt ingesteld op focusbare elementen. |
-| `noAriaUnsupportedElements` | `error` | Handhaaf dat elementen die geen ARIA-rollen, -staten en -eigenschappen ondersteunen, deze attributen niet hebben. |
-| `noAutofocus` | `off` | Handhaaf dat de `autoFocus`-prop niet wordt gebruikt op elementen. |
-| `noDistractingElements` | `error` | Handhaaft dat er geen afleidende elementen worden gebruikt. |
+| `noAccessKey` | `error` | Dwing af dat het `accessKey`-attribuut niet op een HTML-element wordt gebruikt. |
+| `noAriaHiddenOnFocusable` | `error` | Dwing af dat `aria-hidden="true"` niet wordt ingesteld op focusbare elementen. |
+| `noAriaUnsupportedElements` | `error` | Dwing af dat elementen die ARIA-rollen, -staten en -eigenschappen niet ondersteunen, deze attributen niet hebben. |
+| `noAutofocus` | `off` | Dwing af dat de `autoFocus` prop niet op elementen wordt gebruikt. |
+| `noDistractingElements` | `error` | Dwing af dat er geen afleidende elementen worden gebruikt. |
 | `noHeaderScope` | `error` | De scope-prop mag alleen op `<th>`-elementen worden gebruikt. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Handhaaf dat niet-interactieve ARIA-rollen niet worden toegewezen aan interactieve HTML-elementen. |
-| `noLabelWithoutControl` | `error` | Handhaaf dat een label-element of -component een tekstlabel en een geassocieerde input heeft. |
-| `noNoninteractiveElementInteractions` | `error` | Verbiedt het gebruik van event handlers op niet-interactieve elementen. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Handhaaf dat interactieve ARIA-rollen niet worden toegewezen aan niet-interactieve HTML-elementen. |
-| `noNoninteractiveTabindex` | `error` | Handhaaf dat `tabIndex` niet wordt toegewezen aan niet-interactieve HTML-elementen. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Dwing af dat niet-interactieve ARIA-rollen niet aan interactieve HTML-elementen worden toegekend. |
+| `noLabelWithoutControl` | `error` | Dwing af dat een label-element of -component een tekstlabel en een bijbehorend input-element heeft. |
+| `noNoninteractiveElementInteractions` | `error` | Sta het gebruik van event handlers op niet-interactieve elementen niet toe. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Dwing af dat interactieve ARIA-rollen niet aan niet-interactieve HTML-elementen worden toegekend. |
+| `noNoninteractiveTabindex` | `error` | Dwing af dat `tabIndex` niet wordt toegekend aan niet-interactieve HTML-elementen. |
 | `noPositiveTabindex` | `error` | Voorkom het gebruik van positieve gehele getallen op de `tabIndex`-eigenschap. |
-| `noRedundantAlt` | `error` | Handhaaf dat de img alt-prop niet het woord `image`, `picture`, of `photo` bevat. |
-| `noRedundantRoles` | `error` | Handhaaf dat een expliciet rolattribuut niet gelijk is aan de impliciete/standaard rol van een element. |
-| `noStaticElementInteractions` | `error` | Handhaaf dat statische, zichtbare elementen (zoals `<div>`) met click-handlers een geldig role-attribuut gebruiken. |
-| `noSvgWithoutTitle` | `error` | Handhaaft het gebruik van het title-element voor het `svg`-element. |
-| `useAltText` | `error` | Handhaaf dat alle elementen die alternatieve tekst vereisen zinvolle informatie bevatten voor de eindgebruiker. |
-| `useAnchorContent` | `error` | Handhaaf dat anchors inhoud hebben en dat die inhoud toegankelijk is voor schermlezers. |
-| `useAriaActivedescendantWithTabindex` | `error` | Handhaaf dat `tabIndex` wordt toegewezen aan niet-interactieve HTML-elementen met aria-activedescendant. |
-| `useAriaPropsForRole` | `error` | Handhaaf dat elementen met ARIA-rollen alle vereiste ARIA-attributen voor die rol hebben. |
-| `useAriaPropsSupportedByRole` | `error` | Handhaaf dat ARIA-eigenschappen geldig zijn voor de rollen die door het element worden ondersteund. |
-| `useButtonType` | `error` | Handhaaft het gebruik van het attribuut `type` voor het button-element. |
-| `useFocusableInteractive` | `error` | Elementen met een interactieve rol en interactiehandlers moeten focusbaar zijn. |
-| `useHeadingContent` | `error` | Handhaaf dat heading-elementen (`h1`, `h2`, etc.) inhoud hebben en dat die inhoud toegankelijk is voor schermlezers. |
-| `useHtmlLang` | `error` | Handhaaf dat het `html`-element het `lang`-attribuut heeft. |
-| `useIframeTitle` | `error` | Handhaaft het gebruik van het title-attribuut voor het iframe-element. |
-| `useKeyWithClickEvents` | `error` | Handhaaf dat `onClick` vergezeld gaat van minstens één van de volgende: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Handhaaf dat `onMouseOver` / `onMouseOut` vergezeld zijn van `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Handhaaft dat audio- en video-elementen een track voor ondertiteling hebben. |
+| `noRedundantAlt` | `error` | Dwing af dat de img alt-prop niet de woorden `image`, `picture` of `photo` bevat. |
+| `noRedundantRoles` | `error` | Dwing af dat een expliciete role-eigenschap niet hetzelfde is als de impliciete/standaard role-eigenschap op een element. |
+| `noStaticElementInteractions` | `error` | Dwing af dat statische, zichtbare elementen (zoals `<div>`) met click-handlers het juiste role-attribuut gebruiken. |
+| `noSvgWithoutTitle` | `error` | Dwing het gebruik van het title-element voor het `svg`-element af. |
+| `useAltText` | `error` | Dwing af dat alle elementen die alternatieve tekst vereisen zinvolle informatie bevatten voor de eindgebruiker. |
+| `useAnchorContent` | `error` | Dwing af dat anchors content hebben en dat de content toegankelijk is voor schermlezers. |
+| `useAriaActivedescendantWithTabindex` | `error` | Dwing af dat `tabIndex` wordt toegekend aan niet-interactieve HTML-elementen met aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Dwing af dat elementen met ARIA-rollen alle vereiste ARIA-attributen voor die rol hebben. |
+| `useAriaPropsSupportedByRole` | `error` | Dwing af dat ARIA-eigenschappen geldig zijn voor de rollen die door het element worden ondersteund. |
+| `useButtonType` | `error` | Dwing het gebruik van het `type`-attribuut voor button-elementen af. |
+| `useFocusableInteractive` | `error` | Elementen met een interactieve rol en interactiehandlers moeten focusable zijn. |
+| `useHeadingContent` | `error` | Dwing af dat heading-elementen (`h1`, `h2`, enz.) content hebben en dat die content toegankelijk is voor schermlezers. |
+| `useHtmlLang` | `error` | Dwing af dat het `html`-element een `lang`-attribuut heeft. |
+| `useIframeTitle` | `error` | Dwing het gebruik van het title-attribuut voor het iframe-element af. |
+| `useKeyWithClickEvents` | `error` | Dwing af dat `onClick` vergezeld gaat van ten minste één van de volgende: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Dwing af dat `onMouseOver` / `onMouseOut` vergezeld gaan van `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Dwing af dat audio- en video-elementen een track voor ondertiteling hebben. |
 | `useSemanticElements` | `error` | Detecteert het gebruik van role-attributen in JSX-elementen en stelt voor semantische elementen te gebruiken. |
-| `useValidAnchor` | `error` | Handhaaf dat alle anchors geldig zijn en dat het navigeerbare elementen zijn. |
+| `useValidAnchor` | `error` | Dwing af dat alle anchors geldig en navigeerbare elementen zijn. |
 | `useValidAriaProps` | `error` | Zorgt ervoor dat ARIA-eigenschappen `aria-*` allemaal geldig zijn. |
 | `useValidAriaRole` | `error` | Elementen met ARIA-rollen moeten een geldige, niet-abstracte ARIA-rol gebruiken. |
-| `useValidAriaValues` | `error` | Handhaaf dat ARIA-status- en eigenschapswaarden geldig zijn. |
+| `useValidAriaValues` | `error` | Dwing af dat ARIA-state- en property-waarden geldig zijn. |
 | `useValidAutocomplete` | `error` | Gebruik geldige waarden voor het autocomplete-attribuut op input-elementen. |
 | `useValidLang` | `error` | Zorg dat de waarde die aan het `lang`-attribuut wordt doorgegeven een correcte ISO-taal- en/of landcode is. |
-| `useGenericFontNames` | `error` | Verbiedt het ontbreken van een generieke family-keyword binnen font-families (CSS). |
+| `useGenericFontNames` | `error` | Verbiedt het ontbreken van een generiek familie-woord binnen font-families (CSS). |
 
 ### Complexiteit
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Verbied onduidelijk gebruik van opeenvolgende spatiekarakters in reguliere expressies. |
+| `noAdjacentSpacesInRegex` | `error` | Verbied onduidelijk gebruik van opeenvolgende spaties in reguliere expressie-literals. |
 | `noArguments` | `error` | Verbied het gebruik van arguments. |
 | `noBannedTypes` | `error` | Verbied primitieve type-aliases en misleidende types. |
 | `noCommaOperator` | `error` | Verbied de comma-operator. |
 | `noEmptyTypeParameters` | `error` | Verbied lege typeparameters in type-aliases en interfaces. |
-| `noExcessiveCognitiveComplexity` | `error` | Verbied functies die een bepaalde Cognitive Complexity-score overschrijden. |
+| `noExcessiveCognitiveComplexity` | `error` | Verbied functies die een gegeven Cognitive Complexity-score overschrijden. |
 | `noExcessiveLinesPerFunction` | `off` | Beperk het aantal regels code in een functie. |
-| `noExcessiveNestedTestSuites` | `error` | Deze regel handhaaft een maximale diepte voor geneste `describe()` in testbestanden. |
+| `noExcessiveNestedTestSuites` | `error` | Deze regel handhaaft een maximale diepte voor geneste `describe()`-blokken in testbestanden. |
 | `noExtraBooleanCast` | `error` | Verbied onnodige boolean-casts. |
-| `noFlatMapIdentity` | `error` | Verbied het gebruik van een onnodige callback bij flatMap. |
+| `noFlatMapIdentity` | `error` | Verbied het gebruik van een onnodige callback op flatMap. |
 | `noForEach` | `error` | Geef de voorkeur aan `for...of` boven `Array.forEach`. |
 | `noImplicitCoercions` | `off` | Verbied verkorte typeconversies. |
 | `noImportantStyles` | `off` | Verbied het gebruik van de `!important`-stijl (CSS). |
-| `noStaticOnlyClass` | `error` | Deze regel meldt wanneer een klasse geen niet-statische leden heeft. |
+| `noStaticOnlyClass` | `error` | Deze regel rapporteert wanneer een klasse geen niet-statische leden heeft. |
 | `noThisInStatic` | `error` | Verbied `this` en `super` in statische contexten. |
 | `noUselessCatch` | `error` | Verbied onnodige catch-clauses. |
 | `noUselessConstructor` | `error` | Verbied onnodige constructors. |
-| `noUselessContinue` | `error` | Vermijd het gebruik van onnodige continue. |
-| `noUselessEmptyExport` | `error` | Verbied lege exports die niets in een modulebestand veranderen. |
-| `noUselessEscapeInRegex` | `error` | Verbied onnodige escape-sequenties in reguliere expressies. |
+| `noUselessContinue` | `error` | Vermijd het gebruik van onnodige continue-statements. |
+| `noUselessEmptyExport` | `error` | Verbied lege exports die niets wijzigen in een modulebestand. |
+| `noUselessEscapeInRegex` | `error` | Verbied onnodige escape-sequenties in reguliere expressie-literals. |
 | `noUselessFragments` | `error` | Verbied onnodige fragments. |
 | `noUselessLabel` | `error` | Verbied onnodige labels. |
-| `noUselessLoneBlockStatements` | `error` | Verbied onnodige geneste block-statements. |
-| `noUselessRename` | `error` | Verbied het hernoemen van import, export en gedestructureerde toewijzingen naar dezelfde naam. |
+| `noUselessLoneBlockStatements` | `error` | Verbied onnodige geneste blokstatements. |
+| `noUselessRename` | `error` | Verbied het hernoemen van import, export en destructuring naar dezelfde naam. |
 | `noUselessStringConcat` | `error` | Verbied onnodige concatenatie van string- of template-literals. |
-| `noUselessStringRaw` | `error` | Verbied onnodig gebruik van `String.raw` in template string literals zonder escape-sequenties. |
-| `noUselessSwitchCase` | `error` | Verbied zinloze case in switch-statements. |
+| `noUselessStringRaw` | `error` | Verbied onnodig gebruik van `String.raw` in template-literals zonder escape-sequenties. |
+| `noUselessSwitchCase` | `error` | Verbied nutteloze case in switch-statements. |
 | `noUselessTernary` | `error` | Verbied ternary-operatoren wanneer eenvoudigere alternatieven bestaan. |
-| `noUselessThisAlias` | `error` | Verbied zinloze `this`-aliasing. |
-| `noUselessTypeConstraint` | `error` | Verbied het gebruik van `any` of `unknown` als typebeperking. |
-| `noUselessUndefinedInitialization` | `error` | Verbied het initialiseren van variabelen naar `undefined`. |
-| `noVoid` | `error` | Verbied het gebruik van `void`-operators, een niet-veelgebruikt operator. |
-| `useArrowFunction` | `error` | Gebruik pijl-functies in plaats van functie-expressies. |
+| `noUselessThisAlias` | `error` | Verbied nutteloze aliasing van `this`. |
+| `noUselessTypeConstraint` | `error` | Verbied het gebruik van `any` of `unknown` als type-constraint. |
+| `noUselessUndefinedInitialization` | `error` | Verbied het initialiseren van variabelen met `undefined`. |
+| `noVoid` | `error` | Verbied het gebruik van `void`-operatoren, een niet-gangbare operator. |
+| `useArrowFunction` | `error` | Gebruik arrow functions in plaats van function expressions. |
 | `useDateNow` | `error` | Gebruik `Date.now()` om het aantal milliseconden sinds de Unix Epoch te verkrijgen. |
 | `useFlatMap` | `error` | Promoot het gebruik van `.flatMap()` wanneer `map().flat()` samen worden gebruikt. |
 | `useIndexOf` | `error` | Geef de voorkeur aan `Array#{indexOf,lastIndexOf}()` boven `Array#{findIndex,findLastIndex}()` bij het zoeken naar de index van een item. |
-| `useLiteralKeys` | `error` | Handhaaf het gebruik van literal-toegang tot eigenschappen boven computed property access. |
-| `useNumericLiterals` | `error` | Verbied `parseInt()` en `Number.parseInt()` ten gunste van binaire, octale en hexadecimale literals. |
-| `useOptionalChain` | `error` | Handhaaf het gebruik van beknopte optional chaining in plaats van geketende logische expressies. |
-| `useRegexLiterals` | `error` | Handhaaf het gebruik van reguliere expressie-literals in plaats van de `RegExp`-constructor indien mogelijk. |
-| `useSimpleNumberKeys` | `error` | Verbied nummer-literals als objectlidnamen die niet in base 10 zijn of underscores als scheidingsteken gebruiken. |
-| `useSimplifiedLogicExpression` | `error` | Verwijder overbodige termen uit logische expressies. |
-| `useWhile` | `error` | Handhaaf het gebruik van while-loops in plaats van for-loops wanneer initializer en update-expressies niet nodig zijn. |
+| `useLiteralKeys` | `error` | Dwing het gebruik af van letterlijke toegang tot eigenschappen boven computed property access. |
+| `useNumericLiterals` | `error` | Verbied `parseInt()` en `Number.parseInt()` ten gunste van binaire, octale en hexadecimale literalnotaties. |
+| `useOptionalChain` | `error` | Dwing het gebruik van beknopte optional chaining af in plaats van aaneengeschakelde logische expressies. |
+| `useRegexLiterals` | `error` | Dwing het gebruik van reguliere expressie-literals af in plaats van de `RegExp`-constructor indien mogelijk. |
+| `useSimpleNumberKeys` | `error` | Verbied numerieke literal object-sleutels die niet in base 10 zijn of underscores als scheidingsteken gebruiken. |
+| `useSimplifiedLogicExpression` | `error` | Verwijder redundante termen uit logische expressies. |
+| `useWhile` | `error` | Dwing het gebruik van while-loops af in plaats van for-loops wanneer initializer- en update-expressies niet nodig zijn. |
 
 ### Correctheid
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noConstAssign` | `error` | Voorkomt dat const-variabelen opnieuw worden toegewezen. |
-| `noConstantCondition` | `error` | Verbied constante expressies in voorwaarden. |
+| `noConstantCondition` | `error` | Verbied constante expressies in condities. |
 | `noConstantMathMinMaxClamp` | `error` | Verbied het gebruik van `Math.min` en `Math.max` om een waarde te clampen wanneer het resultaat constant is. |
 | `noConstructorReturn` | `error` | Verbied het retourneren van een waarde uit een constructor. |
-| `noEmptyCharacterClassInRegex` | `error` | Verbied lege karakterklassen in reguliere expressies. |
-| `noEmptyPattern` | `error` | Verbied lege destructuring-patronen. |
+| `noEmptyCharacterClassInRegex` | `error` | Verbied lege character classes in reguliere expressies. |
+| `noEmptyPattern` | `error` | Verbiedt lege destructuring-patronen. |
 | `noGlobalDirnameFilename` | `error` | Verbied het gebruik van `__dirname` en `__filename` in de globale scope. |
-| `noGlobalObjectCalls` | `error` | Verbied het aanroepen van global object-eigenschappen als functies. |
+| `noGlobalObjectCalls` | `error` | Verbied het aanroepen van globale objecteigenschappen als functies. |
 | `noInnerDeclarations` | `error` | Verbied functie- en `var`-declaraties die buiten hun block toegankelijk zijn. |
-| `noInvalidBuiltinInstantiation` | `error` | Zorg dat ingebouwde objecten correct worden geïnstantieerd. |
-| `noInvalidConstructorSuper` | `error` | Voorkomt incorrect gebruik van `super()` binnen klassen. |
-| `noInvalidDirectionInLinearGradient` | `error` | Verbied niet-standaard richtingwaarden voor linear gradient-functies (CSS). |
+| `noInvalidBuiltinInstantiation` | `error` | Zorg dat builtins correct worden geïnstantieerd. |
+| `noInvalidConstructorSuper` | `error` | Voorkomt het onjuiste gebruik van `super()` binnen classes. |
+| `noInvalidDirectionInLinearGradient` | `error` | Verbied niet-standaard richtingwaarden voor linear-gradient-functies (CSS). |
 | `noInvalidGridAreas` | `error` | Verbied ongeldige benoemde grid-areas in CSS Grid Layouts (CSS). |
 | `noInvalidPositionAtImportRule` | `error` | Verbied het gebruik van `@import` at-rules op ongeldige posities (CSS). |
-| `noInvalidUseBeforeDeclaration` | `error` | Verbied het gebruik van variabelen en functieparameters vóór hun declaratie. |
+| `noInvalidUseBeforeDeclaration` | `error` | Verbied het gebruik van variabelen en functiedeclaraties voordat ze zijn gedeclareerd. |
 | `noMissingVarFunction` | `error` | Verbied ontbrekende `var`-functie voor CSS-variabelen (CSS). |
 | `noNodejsModules` | `off` | Verbied het gebruik van Node.js ingebouwde modules. |
 | `noNonoctalDecimalEscape` | `error` | Verbied `\8` en `\9` escape-sequenties in string-literals. |
-| `noPrecisionLoss` | `error` | Verbied numerieke literals die precisie verliezen. |
+| `noPrecisionLoss` | `error` | Verbied literal-nummers die precisie verliezen. |
 | `noPrivateImports` | `off` | Beperk imports van private exports. |
 | `noProcessGlobal` | `off` | Verbied het gebruik van de globale `process`. |
 | `noRestrictedElements` | `error` | Verbied het gebruik van geconfigureerde elementen. |
 | `noSelfAssign` | `error` | Verbied toewijzingen waarbij beide zijden exact hetzelfde zijn. |
 | `noSetterReturn` | `error` | Verbied het retourneren van een waarde uit een setter. |
-| `noStringCaseMismatch` | `error` | Verbied vergelijking van expressies die de string-case wijzigen met een niet-conforme waarde. |
+| `noStringCaseMismatch` | `error` | Verbied het vergelijken van expressies die de string-case wijzigen met een niet-conforme waarde. |
 | `noSwitchDeclarations` | `error` | Verbied lexicale declaraties in switch-clausules. |
-| `noUndeclaredDependencies` | `off` | Verbied het gebruik van dependencies die niet in `package.json` zijn gespecificeerd. |
-| `noUndeclaredVariables` | `error` | Voorkomt het gebruik van variabelen die niet zijn gedeclareerd in het document. |
+| `noUndeclaredDependencies` | `off` | Verbied het gebruik van afhankelijkheden die niet in `package.json` zijn vermeld. |
+| `noUndeclaredVariables` | `error` | Voorkomt het gebruik van variabelen die niet in het document zijn gedeclareerd. |
 | `noUnknownFunction` | `error` | Verbied onbekende CSS value-functies (CSS). |
-| `noUnknownMediaFeatureName` | `error` | Verbied onbekende mediafeature-namen (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Verbied onbekende media feature-namen (CSS). |
 | `noUnknownProperty` | `error` | Verbied onbekende eigenschappen (CSS). |
 | `noUnknownPseudoClass` | `error` | Verbied onbekende pseudo-class selectors (CSS). |
 | `noUnknownPseudoElement` | `error` | Verbied onbekende pseudo-element selectors (CSS). |
 | `noUnknownTypeSelector` | `error` | Verbied onbekende type selectors (CSS). |
 | `noUnknownUnit` | `error` | Verbied onbekende CSS-eenheden (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Verbied onmatchbare An+B selectors (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Verbied onmatchable An+B selectors (CSS). |
 | `noUnreachable` | `error` | Verbied onbereikbare code. |
-| `noUnreachableSuper` | `error` | Zorg dat `super()` precies eenmaal op elk codepad in een class-constructor wordt aangeroepen voordat dit wordt gebruikt. |
-| `noUnsafeFinally` | `error` | Verbied control-flow statements in finally-blocks. |
-| `noUnsafeOptionalChaining` | `error` | Verbied optional chaining in contexten waar undefined niet is toegestaan. |
+| `noUnreachableSuper` | `error` | Zorg dat `super()` precies één keer op elk codepad in een class-constructor wordt aangeroepen voordat dit wordt gebruikt. |
+| `noUnsafeFinally` | `error` | Verbied control-flow statements in finally-blokken. |
+| `noUnsafeOptionalChaining` | `error` | Verbied het gebruik van optional chaining in contexten waar undefined niet is toegestaan. |
 | `noUnusedFunctionParameters` | `error` | Verbied ongebruikte functieparameters. |
-| `noUnusedImports` | `error` (override voor veilige fix) | Verbied ongebruikte imports. |
+| `noUnusedImports` | `error` (safe fix override) | Verbied ongebruikte imports. |
 | `noUnusedLabels` | `error` | Verbied ongebruikte labels. |
 | `noUnusedPrivateClassMembers` | `error` | Verbied ongebruikte private class-leden. |
 | `noUnusedVariables` | `error` | Verbied ongebruikte variabelen. |
-| `noVoidTypeReturn` | `error` | Verbied het teruggeven van een waarde uit een functie met returntype `void`. |
-| `useGraphqlNamedOperations` | `error` | Handhaaf het specificeren van de naam van GraphQL-operaties. |
-| `useImageSize` | `error` | Handhaaft dat `<img>`-elementen zowel width- als height-attributen hebben. |
-| `useImportExtensions` | `off` | Handhaaf bestandsextensies voor relatieve imports. |
+| `noVoidTypeReturn` | `error` | Verbied het retourneren van een waarde uit een functie met het return-type `void`. |
+| `useGraphqlNamedOperations` | `error` | Dwing het specificeren van de naam van GraphQL-operaties af. |
+| `useImageSize` | `error` | Dwing af dat `<img>`-elementen zowel width- als height-attributen hebben. |
+| `useImportExtensions` | `off` | Dwing bestandsuitbreidingen af voor relatieve imports. |
 | `useIsNan` | `error` | Vereist aanroepen van `isNaN()` bij het controleren op NaN. |
-| `useJsonImportAttributes` | `off` | Handhaaft het gebruik van `{ type: "json" }` voor JSON module-imports. |
-| `useParseIntRadix` | `error` | Handhaaf het consistente gebruik van het radix-argument bij `parseInt()`. |
-| `useSingleJsDocAsterisk` | `error` | Handhaaf dat JSDoc-commentaarregels beginnen met één asterisk, behalve de eerste. |
+| `useJsonImportAttributes` | `off` | Dwing het gebruik van `{ type: "json" }` bij JSON-module-imports af. |
+| `useParseIntRadix` | `error` | Dwing consistent gebruik van het radix-argument bij `parseInt()` af. |
+| `useSingleJsDocAsterisk` | `error` | Dwing JSDoc-commentaarregels af om te beginnen met één asterisk, behalve de eerste regel. |
 | `useUniqueElementIds` | `off` | Voorkom het gebruik van statische string-literal id-attributen op elementen. |
-| `useValidForDirection` | `error` | Handhaaf dat de update-clausule van een `for`-loop de teller in de juiste richting beweegt. |
-| `useValidTypeof` | `error` | Deze regel controleert dat het resultaat van een `typeof`-expressie wordt vergeleken met een geldige waarde. |
-| `useYield` | `error` | Vereist dat generatorfuncties `yield` bevatten. |
+| `useValidForDirection` | `error` | Dwing af dat de update-clausule van een `for`-loop de teller in de juiste richting beweegt. |
+| `useValidTypeof` | `error` | Controleert dat het resultaat van een `typeof`-expressie met een geldige waarde wordt vergeleken. |
+| `useYield` | `error` | Vereist dat generator-functies `yield` bevatten. |
 
-### Experimenteel
+### Incubatie
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | Verbied vage beschrijvingen van anchor-tekst. |
+| `noAmbiguousAnchorText` | `error` | Verbiedt ambigu anchor-tekstbeschrijvingen. |
 | `noContinue` | `off` | Verbied continue-statements. |
 | `noDeprecatedImports` | `off` | Beperk imports van verouderde exports. |
-| `noDuplicateDependencies` | `error` | Voorkom het vermelden van dubbele dependencies. |
-| `noDuplicatedSpreadProps` | `error` | Verbied dubbele eigenschappen in spread-props. |
-| `noEmptySource` | `error` | Verbied lege bronbestanden. |
-| `noEqualsToNull` | `error` | Verbied `==` of `!=` om met `null` te vergelijken. Gebruik `===` of `!==` in plaats daarvan. |
-| `noFloatingPromises` | `off` | Vereist dat Promise-achtige uitdrukkingen adequaat worden afgehandeld. |
+| `noDuplicateDependencies` | `error` | Voorkom het vermelden van dubbele afhankelijkheden. |
+| `noDuplicatedSpreadProps` | `error` | Verbied dubbele properties in spread-props. |
+| `noEmptySource` | `error` | Verbied lege source-bestanden. |
+| `noEqualsToNull` | `error` | Verbied het gebruik van `==` of `!=` om met `null` te vergelijken. Gebruik `===` of `!==` in plaats daarvan. |
+| `noFloatingPromises` | `off` | Vereist dat Promise-achtige expressies op de juiste manier worden afgehandeld. |
 | `noForIn` | `off` | Verbied itereren met een for-in loop. |
 | `noImportCycles` | `off` | Voorkom import-cycli. |
-| `noIncrementDecrement` | `error` | Verbied het gebruik van `++` en `--` operators (behalve in de for-loop afterthoughts). |
+| `noIncrementDecrement` | `error` | Verbied het gebruik van `++` en `--` operatoren (behalve in for-loop afterthoughts). |
 | `noJsxLiterals` | `off` | Verbied string-literals binnen JSX-elementen. |
 | `noLeakedRender` | `error` | Voorkom problematisch gelekte waarden in JSX (bijv. 0 of NaN) die gerenderd worden. |
-| `noMisusedPromises` | `off` | Verbied het gebruik van Promises op plaatsen waar ze vrijwel zeker een vergissing zijn. |
+| `noMisusedPromises` | `off` | Verbied dat Promises worden gebruikt op plekken waar ze vrijwel zeker een fout zijn. |
 | `noMultiStr` | `error` | Verbied meerregelige strings met backslash-continuatie. |
 | `noParametersOnlyUsedInRecursion` | `error` | Verbied parameters die alleen in recursieve aanroepen worden gebruikt. |
 | `noProto` | `error` | Verbied het gebruik van de `__proto__`-eigenschap. |
-| `noScriptUrl` | `error` | Verbied `javascript:`-URL's die beveiligingsrisico's zoals XSS veroorzaken. |
-| `noShadow` | `error` | Verbied variabele-declaraties die variabelen in de buitenste scope overschaduwen. |
+| `noScriptUrl` | `error` | Verbied `javascript:`-URL's die beveiligingsrisico's zoals XSS-kwetsbaarheden veroorzaken. |
+| `noShadow` | `error` | Verbied declaraties die variabelen uit de buitenste scope overschrijven. |
 | `noSyncScripts` | `error` | Voorkom het gebruik van synchrone scripts. |
 | `noTernary` | `off` | Verbied ternary-operatoren. |
 | `noUndeclaredEnvVars` | `error` | Verbied het gebruik van niet-gedeklarere omgevingsvariabelen in `turbo.json`. |
-| `noUnnecessaryConditions` | `off` | Verbied onnodige type-gebaseerde voorwaarden die statisch als redundant kunnen worden bepaald. |
+| `noUnnecessaryConditions` | `off` | Verbied onnodige type-gebaseerde condities die statisch als redundant kunnen worden bepaald. |
 | `noUnresolvedImports` | `off` | Waarschuw bij het importeren van niet-bestaande exports. |
 | `noUnusedExpressions` | `error` | Verbied expressiestatements die noch een functieaanroep noch een toewijzing zijn. |
 | `noUselessCatchBinding` | `off` | Verbied ongebruikte `catch`-bindings. |
-| `noUselessUndefined` | `error` | Verbied het gebruik van nutteloos `undefined`. |
-| `useArraySortCompare` | `off` | Handhaaf het gebruik van een compare-functie in `Array.prototype.sort()`. |
-| `useAwaitThenable` | `error` | Handhaaf dat `await` alleen op Promise-waarden wordt gebruikt. |
-| `useConsistentArrowReturn` | `error` | Handhaaf consistente arrow-functie bodies. |
+| `noUselessUndefined` | `error` | Verbied het gebruik van zinloze `undefined`. |
+| `useArraySortCompare` | `off` | Dwing het gebruik van een compare-functie in `Array.prototype.sort()` af. |
+| `useAwaitThenable` | `off` | Dwing dat `await` alleen op Promise-waarden wordt gebruikt. |
+| `useConsistentArrowReturn` | `error` | Dwing consistente body-stijl voor arrow functions af. |
 | `useConsistentGraphqlDescriptions` | `error` | Vereist dat alle beschrijvingen in GraphQL-bestanden dezelfde stijl volgen (block of inline). |
-| `useDeprecatedDate` | `error` | Vereist dat de `@deprecated`-directive een verwijderingsdatum specificeert. |
-| `useExhaustiveSwitchCases` | `off` | Vereist dat switch-case statements exhaustief zijn. |
+| `useDeprecatedDate` | `error` | Vereist dat de `@deprecated`-directive een verwijderdatum specificeert. |
+| `useExhaustiveSwitchCases` | `off` | Vereist dat switch-case-statements volledig zijn. |
 | `useExplicitType` | `off` | Handhaaf types in functies, methoden, variabelen en parameters. |
-| `useFind` | `error` | Handhaaf het gebruik van `Array.prototype.find()` boven `Array.prototype.filter()` gevolgd door `[0]` bij het zoeken naar een enkele resultaat. |
-| `useMaxParams` | `error` | Handhaaf een maximum aantal parameters in functiedefinities. |
-| `useRegexpExec` | `error` | Handhaaf `RegExp#exec` boven `String#match` wanneer er geen globale vlag is. |
-| `useRequiredScripts` | `off` | Handhaaf aanwezigheid van configureerbare entries in de `scripts`-sectie van `package.json`-bestanden. |
-| `useSortedClasses` | `error` (override voor veilige fix) | Handhaaf het sorteren van CSS utility classes. |
+| `useFind` | `off` | Dwing het gebruik van `Array.prototype.find()` af boven `Array.prototype.filter()` gevolgd door `[0]` bij het zoeken naar één resultaat. |
+| `useMaxParams` | `error` | Handhaaf een maximaal aantal parameters in functiedefinities. |
+| `useRegexpExec` | `off` | Dwing `RegExp#exec` af boven `String#match` wanneer geen globale vlag wordt gebruikt. |
+| `useRequiredScripts` | `off` | Dwing de aanwezigheid van configureerbare entries in de `scripts`-sectie van `package.json` af. |
+| `useSortedClasses` | `error` (safe fix override) | Handhaaf het sorteren van CSS utility-classes. |
 | `useSpread` | `error` | Handhaaf het gebruik van de spread-operator boven `Function.prototype.apply()`. |
 | `useUniqueGraphqlOperationName` | `error` | Zorg dat alle GraphQL-operaties binnen een document unieke namen hebben. |
 
 ### Prestaties
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noAccumulatingSpread` | `error` | Verbied het gebruik van spread (`...`) syntax op accumulators. |
+| `noAccumulatingSpread` | `error` | Verbied het gebruik van spread (`...`) op accumulators. |
 | `noAwaitInLoops` | `off` | Verbied `await` binnen loops. |
-| `noBarrelFile` | `error` | Verbied het gebruik van barrel-files. |
+| `noBarrelFile` | `error` | Verbied het gebruik van barrel files. |
 | `noDelete` | `error` | Verbied het gebruik van de `delete`-operator. |
 | `noDynamicNamespaceImportAccess` | `error` | Verbied het dynamisch benaderen van namespace-imports. |
 | `noNamespaceImport` | `error` | Verbied het gebruik van namespace-imports. |
-| `noReExportAll` | `off` | Vermijd het re-exporten van alles. |
+| `noReExportAll` | `off` | Vermijd het her-exporteren van alles. |
 | `noUnwantedPolyfillio` | `error` | Voorkom dubbele polyfills van Polyfill.io. |
 | `useGoogleFontPreconnect` | `error` | Zorg dat het `preconnect`-attribuut wordt gebruikt bij Google Fonts. |
-| `useTopLevelRegex` | `error` | Vereist dat regex-literals op topniveau worden gedeclareerd. |
+| `useTopLevelRegex` | `error` | Vereis dat regex-literals op topniveau worden gedeclareerd. |
 
 ### Beveiliging
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noBlankTarget` | `error` | Verbied `target="_blank"` zonder `rel="noopener"`. |
 | `noDangerouslySetInnerHtml` | `error` | Voorkom het gebruik van gevaarlijke JSX-props. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Meld wanneer een DOM-element of component zowel children als `dangerouslySetInnerHTML`-prop gebruikt. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Rapporteer wanneer een DOM-element of component zowel children als `dangerouslySetInnerHTML` gebruikt. |
 | `noGlobalEval` | `error` | Verbied het gebruik van globale `eval()`. |
 
 ### Stijl
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noCommonJs` | `off` | Verbied het gebruik van het Common JS-module-systeem ten gunste van ESM-imports. |
 | `noDefaultExport` | `off` | Verbied default exports. |
-| `noDoneCallback` | `error` | Verbied het gebruik van een callback in asynchrone tests en hooks. |
-| `noEnum` | `error` | Verbied TypeScript-enums. |
+| `noDoneCallback` | `error` | Verbied het gebruik van callbacks in asynchrone tests en hooks. |
+| `noEnum` | `error` | Verbied TypeScript enums. |
 | `noExportedImports` | `error` | Verbied het exporteren van een geïmporteerde variabele. |
-| `noImplicitBoolean` | `off` | Verbied impliciete true-waarden op JSX-boolean-attributen. |
-| `noInferrableTypes` | `error` | Verbied type-annotaties voor variabelen, parameters en klasse-eigenschappen die worden geïnitialiseerd met een literal-expressie. |
-| `noMagicNumbers` | `off` | Rapporteert gebruik van "magic numbers" — getallen die direct worden gebruikt in plaats van aan benoemde constanten toegewezen te worden. |
-| `noNamespace` | `error` | Verbied het gebruik van TypeScript-namespaces. |
+| `noImplicitBoolean` | `off` | Verbied impliciet true waarden op JSX-boolean-attributen. |
+| `noInferrableTypes` | `error` | Verbied type-annotaties voor variabelen, parameters en class-eigenschappen die met een literal zijn geïnitialiseerd. |
+| `noMagicNumbers` | `off` | Rapporteert gebruik van "magic numbers" — getallen die direct worden gebruikt in plaats van benoemde constanten. |
+| `noNamespace` | `error` | Verbied het gebruik van TypeScript namespaces. |
 | `noNegationElse` | `error` | Verbied negatie in de conditie van een if-statement als er een else-clausule is. |
 | `noNestedTernary` | `error` | Verbied geneste ternary-expressies. |
 | `noNonNullAssertion` | `error` | Verbied non-null assertions met de `!` postfix-operator. |
-| `noParameterAssign` | `error` | Verbied het hertoewijzen van functieparameters. |
+| `noParameterAssign` | `error` | Verbied het her toewijzen van functieparameters. |
 | `noParameterProperties` | `error` | Verbied het gebruik van parameter properties in class-constructors. |
 | `noProcessEnv` | `off` | Verbied het gebruik van `process.env`. |
 | `noRestrictedGlobals` | `error` | Deze regel stelt je in staat globale variabelen op te geven die je niet in je applicatie wilt gebruiken. |
-| `noRestrictedImports` | `error` | Verbied opgegeven modules wanneer ze via import of require worden geladen. |
-| `noRestrictedTypes` | `error` | Verbied door gebruikers gedefinieerde types. |
-| `noShoutyConstants` | `error` | Verbied het gebruik van constants waarvan de waarde de hoofdletterversie van de naam is. |
-| `noSubstr` | `error` | Handhaaf het gebruik van `String.slice()` boven `String.substr()` en `String.substring()`. |
-| `noUnusedTemplateLiteral` | `error` | Verbied template-literals als interpolatie en speciale-karakterverwerking niet nodig zijn. |
-| `noUselessElse` | `error` | Verbied else-blocks wanneer het if-block vroegtijdig breekt. |
+| `noRestrictedImports` | `error` | Verbied opgegeven modules wanneer geladen via import of require. |
+| `noRestrictedTypes` | `error` | Verbied gebruikersgedefinieerde types. |
+| `noShoutyConstants` | `error` | Verbied het gebruik van constanten waarvan de waarde de hoofdletterversie van de naam is. |
+| `noSubstr` | `error` | Dwing het gebruik van `String.slice()` af boven `String.substr()` en `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Verbied template-literals als interpolatie en speciale karakterverwerking niet nodig zijn. |
+| `noUselessElse` | `error` | Verbied else-blokken wanneer het if-blok vroegtijdig breekt. |
 | `noYodaExpression` | `error` | Verbied het gebruik van yoda-expressies. |
 | `useArrayLiterals` | `error` | Verbied `Array`-constructors. |
-| `useAsConstAssertion` | `error` | Handhaaf het gebruik van as const boven literal-typen en type-annotaties. |
-| `useAtIndex` | `error` | Gebruik `at()` in plaats van integer index-toegang. |
-| `useBlockStatements` | `error` | Vereist het volgen van accolades-conventies. |
-| `useCollapsedElseIf` | `error` | Handhaaf het gebruik van `else if` in plaats van geneste `if` in `else`-clausules. |
-| `useCollapsedIf` | `error` | Handhaaf het gebruik van een enkele `if` in plaats van geneste `if`-clausules. |
-| `useComponentExportOnlyModules` | `off` | Handhaaf het declareren van componenten alleen binnen modules die uitsluitend React Components exporteren. |
-| `useConsistentArrayType` | `error` | Vereist consistent gebruik van ofwel `T[]` of `Array<T>`. |
-| `useConsistentBuiltinInstantiation` | `error` | Handhaaf het gebruik van `new` voor alle builtins, behalve `String`, `Number` en `Boolean`. |
+| `useAsConstAssertion` | `error` | Dwing het gebruik van `as const` af boven literal types en type-annotaties. |
+| `useAtIndex` | `error` | Gebruik `at()` in plaats van index-toegang met gehele getallen. |
+| `useBlockStatements` | `error` | Vereist naleving van haakjesconventies. |
+| `useCollapsedElseIf` | `error` | Dwing het gebruik van `else if` af in plaats van geneste `if` in `else`-clausules. |
+| `useCollapsedIf` | `error` | Dwing het gebruik van een enkele `if` af in plaats van geneste `if`-clausules. |
+| `useComponentExportOnlyModules` | `off` | Dwing af dat componenten alleen worden gedeclareerd binnen modules die uitsluitend React Components exporteren. |
+| `useConsistentArrayType` | `error` | Vereist consistent gebruik van `T[]` of `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Dwing het gebruik van new voor alle builtins af, behalve `String`, `Number` en `Boolean`. |
 | `useConsistentCurlyBraces` | `off` | Deze regel handhaaft consistent gebruik van accolades binnen JSX-attributen en JSX-children. |
-| `useConsistentMemberAccessibility` | `error` | Vereist consistente accessibility-modifiers op klasse-eigenschappen en -methoden. |
+| `useConsistentMemberAccessibility` | `error` | Vereist consistente accessibility-modifiers op class-eigenschappen en -methoden. |
 | `useConsistentObjectDefinitions` | `error` | Vereist consistente declaratie van object-literals. |
-| `useConst` | `error` | Vereist const-declaraties voor variabelen die slechts eenmaal worden toegewezen. |
-| `useDefaultParameterLast` | `error` | Handhaaf dat default function-parameters en optionele parameters laatst komen. |
+| `useConst` | `error` | Vereist const-declaraties voor variabelen die slechts één keer worden toegewezen. |
+| `useDefaultParameterLast` | `error` | Dwing af dat default- en optionele functieparameters als laatste komen. |
 | `useDefaultSwitchClause` | `error` | Vereist de `default`-clausule in switch-statements. |
-| `useDeprecatedReason` | `error` | Vereist het opgeven van de reason-argument bij gebruik van de `@deprecated`-directive. |
-| `useEnumInitializers` | `error` | Vereist dat elk enum-lid expliciet wordt geïnitialiseerd. |
-| `useExplicitLengthCheck` | `off` | Handhaaf expliciete vergelijking van `length`, `size`, `byteLength` of `byteOffset`-eigenschappen. |
+| `useDeprecatedReason` | `error` | Vereist het specificeren van de reden-argument bij gebruik van de `@deprecated`-directive. |
+| `useEnumInitializers` | `error` | Vereist dat elke enum-member expliciet wordt geïnitialiseerd. |
+| `useExplicitLengthCheck` | `off` | Dwing expliciete vergelijking van `length`, `size`, `byteLength` of `byteOffset` af. |
 | `useExponentiationOperator` | `error` | Verbied het gebruik van `Math.pow` ten gunste van de `**`-operator. |
 | `useExportType` | `error` | Promoot het gebruik van export type voor types. |
-| `useExportsLast` | `off` | Vereist dat alle exports worden gedeclareerd na alle niet-export statements. |
-| `useFilenamingConvention` | `error` | Handhaaf naamgevingsconventies voor JavaScript- en TypeScript-bestandsnamen (kebab-case, ASCII). |
-| `useForOf` | `error` | Deze regel raadt een for-of loop aan wanneer in een for-loop de index wordt gebruikt om een item uit de geitereerde array te halen. |
-| `useFragmentSyntax` | `error` | Deze regel handhaaft het gebruik van `<>...</>` boven `<Fragment>...</Fragment>`. |
-| `useGraphqlNamingConvention` | `error` | Valideert dat alle enum-waarden gecapituleerd zijn. |
-| `useGroupedAccessorPairs` | `error` | Handhaaf dat getters en setters voor dezelfde property aaneengesloten staan in klassen en objectdefinities. |
+| `useExportsLast` | `off` | Vereist dat alle exports na alle niet-exportstatements worden gedeclareerd. |
+| `useFilenamingConvention` | `error` | Handhaaf benamingconventies voor JavaScript- en TypeScript-bestandsnamen (kebab-case, ASCII). |
+| `useForOf` | `error` | Deze regel beveelt een for-of loop aan wanneer in een for-loop de index wordt gebruikt om een item uit de geiterateerde array te halen. |
+| `useFragmentSyntax` | `error` | Deze regel dwingt het gebruik van `<>...</>` boven `<Fragment>...</Fragment>` af. |
+| `useGraphqlNamingConvention` | `error` | Valideert dat alle enum-waarden met hoofdletters worden geschreven. |
+| `useGroupedAccessorPairs` | `error` | Dwingt getters en setters voor dezelfde property naast elkaar te plaatsen in class- en objectdefinities. |
 | `useImportType` | `error` | Promoot het gebruik van `import type` voor types. |
-| `useLiteralEnumMembers` | `error` | Vereist dat alle enum-leden literal-waarden zijn. |
-| `useNamingConvention` | `off` | Regel voor naamgevingsconventies (uitgeschakeld). |
+| `useLiteralEnumMembers` | `error` | Vereist dat alle enum-members literal-waarden zijn. |
+| `useNamingConvention` | `off` | Naamgevingsconventie-regel (uitgeschakeld). |
 | `useNodeAssertStrict` | `error` | Promoot het gebruik van `node:assert/strict` boven `node:assert`. |
-| `useNodejsImportProtocol` | `error` | Handhaaf het gebruik van het `node:`-protocol voor Node.js ingebouwde modules. |
-| `useNumberNamespace` | `error` | Gebruik de `Number`-eigenschappen in plaats van globale varianten. |
-| `useNumericSeparators` | `error` | Handhaaf het gebruik van numerieke scheidingstekens in numerieke literals. |
-| `useObjectSpread` | `error` | Geef de voorkeur aan object spread boven `Object.assign()` bij het aanmaken van nieuwe objecten. |
-| `useReadonlyClassProperties` | `error` | Handhaaf het markeren van leden als readonly als ze buiten de constructor nooit worden gewijzigd. |
-| `useSelfClosingElements` | `error` | Voorkom extra sluitende tags voor componenten zonder children. |
-| `useShorthandAssign` | `error` | Vereist shorthand-toewijzing waar mogelijk. |
-| `useShorthandFunctionType` | `error` | Handhaaf het gebruik van function types in plaats van object types met call signatures. |
-| `useSingleVarDeclarator` | `off` | Verbied meerdere variabele-declaraties in dezelfde variabele-statement. |
-| `useSymbolDescription` | `error` | Vereist een beschrijvend argument voor `Symbol()`. |
+| `useNodejsImportProtocol` | `error` | Handhaaft het gebruik van het `node:`-protocol voor Node.js ingebouwde modules. |
+| `useNumberNamespace` | `error` | Gebruik de `Number`-eigenschappen in plaats van globale functies. |
+| `useNumericSeparators` | `error` | Dwing het gebruik van numerieke scheidingstekens in numerieke literals af. |
+| `useObjectSpread` | `error` | Geef de voorkeur aan object spread boven `Object.assign()` bij het construeren van nieuwe objecten. |
+| `useReadonlyClassProperties` | `error` | Dwing het markeren van leden als readonly af als ze buiten de constructor nooit worden gewijzigd. |
+| `useSelfClosingElements` | `error` | Voorkom extra sluit-tags voor componenten zonder children. |
+| `useShorthandAssign` | `error` | Vereist verkorte toewijzingsoperator waar mogelijk. |
+| `useShorthandFunctionType` | `error` | Dwing het gebruik van function types af in plaats van object types met call signatures. |
+| `useSingleVarDeclarator` | `off` | Verbied meerdere variabele-declaraties in dezelfde statement. |
+| `useSymbolDescription` | `error` | Vereist een beschrijving-parameter voor `Symbol()`. |
 | `useTemplate` | `error` | Geef de voorkeur aan template-literals boven string-concatenatie. |
 | `useThrowNewError` | `error` | Vereist `new` bij het gooien van een error. |
-| `useThrowOnlyError` | `error` | Verbied het gooien van niet-`Error`-waarden. |
-| `useTrimStartEnd` | `error` | Handhaaf het gebruik van `String.trimStart()` en `String.trimEnd()` boven `String.trimLeft()` en `String.trimRight()`. |
-| `useUnifiedTypeSignatures` | `error` | Verbied overload-signatures die kunnen worden samengevoegd tot één signature. |
+| `useThrowOnlyError` | `error` | Verbied het gooien van niet-`Error` waarden. |
+| `useTrimStartEnd` | `error` | Dwing het gebruik van `String.trimStart()` en `String.trimEnd()` af boven `String.trimLeft()` en `String.trimRight()`. |
+| `useUnifiedTypeSignatures` | `error` | Verbied overload-signatures die samengevoegd kunnen worden tot één signature. |
 | `noDescendingSpecificity` | `error` | Verbied dat een selector met lagere specificiteit na een selector met hogere specificiteit komt (CSS). |
-| `noValueAtRule` | `error` | Verbied het gebruik van de `@value`-regel in css-modules (CSS). |
+| `noValueAtRule` | `error` | Verbied het gebruik van `@value`-rule in CSS-modules (CSS). |
 
 ### Verdacht
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noAlert` | `error` | Verbied het gebruik van `alert`, `confirm` en `prompt`. |
-| `noApproximativeNumericConstant` | `error` | Gebruik standaardconstants in plaats van benaderde literals. |
+| `noApproximativeNumericConstant` | `error` | Gebruik standaardconstanten in plaats van benaderde literals. |
 | `noAssignInExpressions` | `error` | Verbied toewijzingen in expressies. |
-| `noAsyncPromiseExecutor` | `error` | Verbied het gebruik van een async-functie als Promise-executor. |
+| `noAsyncPromiseExecutor` | `error` | Verbied het gebruik van een async functie als Promise-executor. |
 | `noBiomeFirstException` | `error` | Voorkomt het gebruik van het `!`-patroon op de eerste positie van `files.includes` in het configuratiebestand. |
-| `noBitwiseOperators` | `error` | Verbied bitwise-operators. |
-| `noCatchAssign` | `error` | Verbied het hertoewijzen van exceptions in catch-clauses. |
-| `noClassAssign` | `error` | Verbied het hertoewijzen van klasse-variabelen. |
-| `noCommentText` | `error` | Voorkom dat comments als text nodes worden ingevoegd. |
+| `noBitwiseOperators` | `error` | Verbied bitwise-operatoren. |
+| `noCatchAssign` | `error` | Verbied het her toewijzen van exceptions in catch-clauses. |
+| `noClassAssign` | `error` | Verbied het her toewijzen van class-leden. |
+| `noCommentText` | `error` | Voorkom dat comments als tekstnodes worden ingevoegd. |
 | `noCompareNegZero` | `error` | Verbied vergelijken met `-0`. |
 | `noConfusingLabels` | `error` | Verbied gelabelde statements die geen loops zijn. |
-| `noConfusingVoidType` | `error` | Verbied void-type buiten generieke of return-types. |
+| `noConfusingVoidType` | `error` | Verbied void-type buiten generics of return-types. |
 | `noConsole` | `off` | Verbied het gebruik van `console`. |
-| `noConstEnum` | `error` | Verbied TypeScript const enum. |
-| `noConstantBinaryExpressions` | `error` | Verbied expressies waarbij de bewerking de waarde niet beïnvloedt. |
-| `noControlCharactersInRegex` | `error` | Voorkomt control-characters en bepaalde escape-sequenties die control-characters matchen in reguliere expressies. |
+| `noConstEnum` | `error` | Verbied TypeScript const enums. |
+| `noConstantBinaryExpressions` | `error` | Verbied expressies waarbij de operatie de waarde niet beïnvloedt. |
+| `noControlCharactersInRegex` | `error` | Voorkom controlekarakters en sommige escape-sequenties die controlekarakters matchen in reguliere expressies. |
 | `noDebugger` | `error` | Verbied het gebruik van debugger. |
 | `noDocumentCookie` | `error` | Verbied directe toewijzingen aan document.cookie. |
-| `noDoubleEquals` | `error` | Vereist het gebruik van `===` en `!==`. |
+| `noDoubleEquals` | `error` | Vereis het gebruik van `===` en `!==`. |
 | `noDuplicateAtImportRules` | `error` | Verbied dubbele `@import`-regels (CSS). |
 | `noDuplicateCase` | `error` | Verbied dubbele case-labels. |
-| `noDuplicateClassMembers` | `error` | Verbied dubbele klasleden. |
+| `noDuplicateClassMembers` | `error` | Verbied dubbele class-leden. |
 | `noDuplicateCustomProperties` | `error` | Verbied dubbele custom properties binnen declaration blocks (CSS). |
 | `noDuplicateElseIf` | `error` | Verbied dubbele condities in if-else-if-ketens. |
 | `noDuplicateFields` | `error` | Verbied gedupliceerde velden in GraphQL-operaties. |
 | `noDuplicateFontNames` | `error` | Verbied dubbele namen binnen font-families (CSS). |
 | `noDuplicateObjectKeys` | `error` | Verbied twee sleutels met dezelfde naam binnen objecten. |
-| `noDuplicateParameters` | `error` | Verbied dubbele functienaamparameters. |
-| `noDuplicateProperties` | `error` | Verbied dubbele eigenschappen binnen declaration blocks (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Verbied dubbele selectors binnen keyframe-blocks (CSS). |
-| `noDuplicateTestHooks` | `error` | Een describe-block mag geen dubbele hooks bevatten. |
+| `noDuplicateParameters` | `error` | Verbied dubbele functeparameter-namen. |
+| `noDuplicateProperties` | `error` | Verbied dubbele properties binnen declaration blocks (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Verbied dubbele selectors binnen keyframe-blokken (CSS). |
+| `noDuplicateTestHooks` | `error` | Een describe-blok mag geen dubbele hooks bevatten. |
 | `noEmptyBlock` | `error` | Verbied lege CSS-blocks (CSS). |
 | `noEmptyBlockStatements` | `error` | Verbied lege block-statements en static blocks. |
 | `noEmptyInterface` | `error` | Verbied de declaratie van lege interfaces. |
-| `noEvolvingTypes` | `error` | Verbied variabelen die door hertoewijzingen evolueren naar het type any. |
+| `noEvolvingTypes` | `error` | Verbied variabelen die door herassignments evolueren naar any. |
 | `noExplicitAny` | `error` | Verbied het gebruik van het any-type. |
 | `noExportsInTest` | `error` | Verbied het gebruik van export of module.exports in bestanden met tests. |
-| `noExtraNonNullAssertion` | `error` | Voorkomt onjuist gebruik van de non-null assertion-operator `!` in TypeScript-bestanden. |
+| `noExtraNonNullAssertion` | `error` | Voorkomt verkeerd gebruik van de non-null assertion-operator `!` in TypeScript-bestanden. |
 | `noFallthroughSwitchClause` | `error` | Verbied fallthrough in switch-clausules. |
 | `noFocusedTests` | `error` | Verbied gefocuste tests. |
-| `noFunctionAssign` | `error` | Verbied het hertoewijzen van functiedeclaraties. |
+| `noFunctionAssign` | `error` | Verbied het her toewijzen van functiedeclaraties. |
 | `noGlobalAssign` | `error` | Verbied toewijzingen aan native objects en read-only globale variabelen. |
 | `noGlobalIsFinite` | `error` | Gebruik `Number.isFinite` in plaats van globale `isFinite`. |
 | `noGlobalIsNan` | `error` | Gebruik `Number.isNaN` in plaats van globale `isNaN`. |
-| `noImplicitAnyLet` | `error` | Verbied het gebruik van impliciet any-type bij variabele-declaraties. |
-| `noImportAssign` | `error` | Verbied het toewijzen aan geïmporteerde bindings. |
+| `noImplicitAnyLet` | `error` | Verbied impliciet any-type bij variabele-declaraties. |
+| `noImportAssign` | `error` | Verbied toewijzen aan geïmporteerde bindings. |
 | `noImportantInKeyframe` | `error` | Verbied ongeldige `!important` binnen keyframe-declaraties (CSS). |
 | `noIrregularWhitespace` | `error` | Verbied het gebruik van onregelmatige whitespace-karakters. |
-| `noLabelVar` | `error` | Verbied labels die dezelfde naam als een variabele delen. |
-| `noMisleadingCharacterClass` | `error` | Verbied karakters gemaakt met meerdere codepoints in character class-syntax. |
-| `noMisleadingInstantiator` | `error` | Handhaaf correct gebruik van `new` en `constructor`. |
-| `noMisplacedAssertion` | `error` | Controleert dat de assertiefunctie, bijvoorbeeld expect, binnen een `it()`-functieaanroep staat. |
+| `noLabelVar` | `error` | Verbied labels die dezelfde naam delen als een variabele. |
+| `noMisleadingCharacterClass` | `error` | Verbied karakters die uit meerdere codepoints bestaan in character class-syntaxis. |
+| `noMisleadingInstantiator` | `error` | Dwing correct gebruik van `new` en `constructor` af. |
+| `noMisplacedAssertion` | `error` | Controleert dat de assertion-functie, bijv. expect, binnen een `it()`-aanroep staat. |
 | `noMisrefactoredShorthandAssign` | `error` | Verbied shorthand-assign wanneer de variabele aan beide zijden voorkomt. |
 | `noOctalEscape` | `error` | Verbied octale escape-sequenties in string-literals. |
 | `noPrototypeBuiltins` | `error` | Verbied direct gebruik van `Object.prototype` builtins. |
-| `noQuickfixBiome` | `error` | Verbied het gebruik van `quickfix.biome` in editor-instellingenbestanden. |
-| `noRedeclare` | `error` | Verbied variabele-, functie-, klasse- en type-redeclaraties in dezelfde scope. |
+| `noQuickfixBiome` | `error` | Verbied het gebruik van `quickfix.biome` binnen editor-settings bestanden. |
+| `noRedeclare` | `error` | Verbied herdeclaraties van variabelen, functies, classes en types in dezelfde scope. |
 | `noRedundantUseStrict` | `error` | Voorkomt redundante `use strict`. |
 | `noSelfCompare` | `error` | Verbied vergelijkingen waarbij beide zijden exact hetzelfde zijn. |
-| `noShadowRestrictedNames` | `error` | Verbied identifiers die restricted names overschaduwen. |
-| `noShorthandPropertyOverrides` | `error` | Verbied shorthand properties die gerelateerde longhand properties overschrijven (CSS). |
+| `noShadowRestrictedNames` | `error` | Verbied identifiers die restricted names overschrijven. |
+| `noShorthandPropertyOverrides` | `error` | Verbied shorthand-properties die gerelateerde longhand-properties overschrijven (CSS). |
 | `noSkippedTests` | `error` | Verbied uitgeschakelde tests. |
 | `noSparseArray` | `error` | Voorkomt het gebruik van sparse arrays (arrays met gaten). |
-| `noTemplateCurlyInString` | `error` | Verbied template-literal placeholder-syntaxis in gewone strings. |
-| `noThenProperty` | `error` | Verbied then-property. |
+| `noTemplateCurlyInString` | `error` | Verbied placeholder-syntaxis van template-literals in gewone strings. |
+| `noThenProperty` | `error` | Verbied the- property. |
 | `noTsIgnore` | `error` | Voorkomt het gebruik van de TypeScript-directive `@ts-ignore`. |
-| `noUnassignedVariables` | `error` | Verbied let- of var-variabelen die gelezen maar nooit toegewezen worden. |
+| `noUnassignedVariables` | `error` | Verbied let of var variabelen die worden gelezen maar nooit toegewezen. |
 | `noUnknownAtRules` | `error` | Verbied onbekende at-rules (CSS). |
 | `noUnsafeDeclarationMerging` | `error` | Verbied onveilige declaration merging tussen interfaces en classes. |
-| `noUnsafeNegation` | `error` | Verbied onveilige negatie (`!`). |
+| `noUnsafeNegation` | `error` | Verbied het gebruik van onveilige negatie (`!`). |
 | `noUselessEscapeInString` | `error` | Verbied onnodige escapes in string-literals. |
 | `noUselessRegexBackrefs` | `error` | Verbied nutteloze backreferences in reguliere expressies die altijd een lege string matchen. |
 | `noVar` | `error` | Verbied het gebruik van `var`. |
-| `noWith` | `error` | Verbied `with`-statements in niet-strikte contexten. |
+| `noWith` | `error` | Verbied `with`-statements in non-strict contexten. |
 | `useAdjacentOverloadSignatures` | `error` | Verbied overload-signatures die niet naast elkaar staan. |
 | `useAwait` | `error` | Zorg dat async-functies `await` gebruiken. |
 | `useBiomeIgnoreFolder` | `error` | Promoot correct gebruik van het negeren van mappen in het configuratiebestand. |
-| `useDefaultSwitchClauseLast` | `error` | Handhaaf dat default-clausules in switch-statements als laatste komen. |
-| `useErrorMessage` | `error` | Handhaaf het doorgeven van een message-waarde bij het aanmaken van een ingebouwde error. |
-| `useGetterReturn` | `error` | Handhaaf dat get-methoden altijd een waarde retourneren. |
-| `useGoogleFontDisplay` | `error` | Handhaaft het gebruik van een aanbevolen display-strategie met Google Fonts. |
-| `useGuardForIn` | `error` | Vereist dat for-in loops een `if`-statement bevatten. |
+| `useDefaultSwitchClauseLast` | `error` | Dwing af dat default-clausules in switch-statements als laatste komen. |
+| `useErrorMessage` | `error` | Dwing het doorgeven van een boodschap wanneer een ingebouwde error wordt aangemaakt. |
+| `useGetterReturn` | `error` | Dwing getters altijd een waarde te laten retourneren. |
+| `useGoogleFontDisplay` | `error` | Dwing het gebruik van een aanbevolen display-strategie voor Google Fonts af. |
+| `useGuardForIn` | `error` | Vereis dat for-in loops een `if`-statement bevatten. |
 | `useIsArray` | `error` | Gebruik `Array.isArray()` in plaats van `instanceof Array`. |
-| `useIterableCallbackReturn` | `error` | Handhaaf consistente return-waarden in iterable callbacks. |
-| `useNamespaceKeyword` | `error` | Vereist het gebruik van het namespace-keyword in plaats van het `module`-keyword om TypeScript-namespaces te declareren. |
-| `useNumberToFixedDigitsArgument` | `error` | Handhaaf het gebruik van het digits-argument met `Number#toFixed()`. |
-| `useStaticResponseMethods` | `error` | Gebruik statische `Response`-methoden in plaats van `new Response()` waar mogelijk. |
-| `useStrictMode` | `error` | Handhaaf het gebruik van de directive `use strict` in scriptbestanden. |
+| `useIterableCallbackReturn` | `error` | Dwing consistente return-waarden af in iterable callbacks. |
+| `useNamespaceKeyword` | `error` | Vereis het gebruik van het namespace-keyword boven het `module`-keyword voor TypeScript-namespaces. |
+| `useNumberToFixedDigitsArgument` | `error` | Dwing het gebruik van het digits-argument bij `Number#toFixed()` af. |
+| `useStaticResponseMethods` | `error` | Gebruik statische `Response`-methoden in plaats van de `new Response()`-constructor waar mogelijk. |
+| `useStrictMode` | `error` | Dwing het gebruik van de directive `use strict` in scriptbestanden af. |
 
 ## Opmerkingen
 
-Bepaalde regels zijn uitgeschakeld omdat ze te langzaam zijn om met de Scanner uit te voeren. Zoals aangegeven in de [Biome-documentatie](https://biomejs.dev/guides/investigate-slowness/#first-things-first), kunnen ingeschakelde projectregels prestatieoverhead veroorzaken in ruil voor geavanceerdere analyse.
+Bepaalde regels zijn uitgeschakeld omdat ze te traag zijn om met de Scanner uit te voeren. Zoals vermeld in de [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first), staan sommige ingeschakelde projectregels bekend om prestatie-overhead te veroorzaken in ruil voor geavanceerdere analyse.
 
-In onze tests hebben we vastgesteld dat deze regels het verschil kunnen maken tussen 300 ms en 13 s bij het linten.
+In onze tests hebben we vastgesteld dat deze regels het verschil kunnen maken tussen ongeveer 300ms en 13s lint-tijd.
