@@ -104,6 +104,23 @@ const formatDuration = (duration: { secs: number; nanos: number }): string => {
 
 const separator = pc.dim("─".repeat(60));
 
+// Convert camelCase to kebab-case (e.g., noUnusedVariables -> no-unused-variables)
+const toKebabCase = (str: string): string =>
+  str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+
+// Generate documentation URL from category (e.g., lint/correctness/noUnusedVariables)
+const getDocumentationUrl = (category: string): string | null => {
+  const parts = category.split("/");
+  if (parts.length < 3 || parts[0] !== "lint") {
+    return null;
+  }
+  const ruleName = parts.at(-1);
+  if (!ruleName) {
+    return null;
+  }
+  return `https://biomejs.dev/linter/rules/${toKebabCase(ruleName)}/`;
+};
+
 const formatHeader = (command: "check" | "fix"): string[] => [
   "",
   `${orange("Ultracite")} ${orange(`v${packageJson.version}`)} ${command}`,
@@ -173,6 +190,13 @@ const formatDiagnostic = (diagnostic: BiomeDiagnostic): string[] => {
     }
   }
 
+  // Add documentation link for lint rules
+  const docUrl = getDocumentationUrl(category);
+  if (docUrl) {
+    lines.push("");
+    lines.push(`  ${pc.cyan("→")} ${pc.dim("Docs:")} ${pc.cyan(docUrl)}`);
+  }
+
   lines.push("");
   lines.push(`${separator}`);
   lines.push("");
@@ -184,12 +208,8 @@ const formatDiagnostics = (
   diagnostics: BiomeDiagnostic[],
   command: "check" | "fix"
 ): string[] => {
-  const unfixableDiagnostics =
-    command === "fix"
-      ? diagnostics.filter((d) => !d.tags.includes("fixable"))
-      : diagnostics;
-
-  if (unfixableDiagnostics.length === 0) {
+  // Show all remaining diagnostics - if Biome fixed something, it won't be in the array
+  if (diagnostics.length === 0) {
     return [];
   }
 
@@ -201,7 +221,7 @@ const formatDiagnostics = (
   lines.push(`${pc.yellow(heading)}`);
   lines.push("");
 
-  for (const diagnostic of unfixableDiagnostics) {
+  for (const diagnostic of diagnostics) {
     lines.push(...formatDiagnostic(diagnostic));
   }
 
