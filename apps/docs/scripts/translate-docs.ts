@@ -332,19 +332,6 @@ function collectFilesToTranslate(options: {
   return { filesToTranslate, skipped };
 }
 
-function groupByLocale(
-  filesToTranslate: TranslationItem[]
-): Map<string, TranslationItem[]> {
-  const localeGroups = new Map<string, TranslationItem[]>();
-  for (const item of filesToTranslate) {
-    if (!localeGroups.has(item.locale)) {
-      localeGroups.set(item.locale, []);
-    }
-    localeGroups.get(item.locale)?.push(item);
-  }
-  return localeGroups;
-}
-
 async function processBatch(
   batch: TranslationItem[],
   cache: TranslationCache,
@@ -423,22 +410,18 @@ async function main(): Promise<void> {
   console.log();
 
   const BATCH_SIZE = 10;
-  const localeGroups = groupByLocale(filesToTranslate);
   const stats = { completed: 0, failed: 0 };
+  const totalBatches = Math.ceil(filesToTranslate.length / BATCH_SIZE);
 
-  for (const [locale, items] of localeGroups) {
-    const languageName = LOCALE_NAMES[locale] || locale;
-    console.log(`\n${"=".repeat(50)}`);
-    console.log(`Translating to ${languageName} (${locale})`);
-    console.log("=".repeat(50));
-
-    for (let i = 0; i < items.length; i += BATCH_SIZE) {
-      const batch = items.slice(i, i + BATCH_SIZE);
-      console.log(
-        `\nProcessing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(items.length / BATCH_SIZE)} (${batch.length} files)...`
-      );
-      await processBatch(batch, cache, stats, total);
+  for (let i = 0; i < filesToTranslate.length; i += BATCH_SIZE) {
+    const batch = filesToTranslate.slice(i, i + BATCH_SIZE);
+    const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+    console.log(`\nBatch ${batchNum}/${totalBatches} (${batch.length} items):`);
+    for (const item of batch) {
+      const languageName = LOCALE_NAMES[item.locale] || item.locale;
+      console.log(`  - ${item.filePath} → ${languageName}`);
     }
+    await processBatch(batch, cache, stats, total);
   }
 
   await saveCache(cache);
