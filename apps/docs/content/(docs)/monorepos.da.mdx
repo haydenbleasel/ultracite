@@ -3,11 +3,11 @@ title: Monorepoer
 description: Hvordan du bruger Ultracite i et monorepo.
 ---
 
-Ultracite er designet til at fungere direkte i monorepoer. Sådan bruger du det med Turborepo.
+Ultracite er designet til at fungere direkte med monorepos. Sådan bruger du det med Turborepo.
 
 ## Konfiguration
 
-Når du initialiserer Ultracite, opretter det en `biome.jsonc`-fil i roden af dit repository. Denne fil bruges til at konfigurere Ultracite for hele dit monorepo.
+Når du initialiserer Ultracite, vil det oprette en `biome.jsonc`-fil i roden af dit repository. Denne fil vil blive brugt til at konfigurere Ultracite for hele dit monorepo.
 
 ```
 my-turborepo/
@@ -17,9 +17,9 @@ my-turborepo/
 └── biome.jsonc
 ```
 
-## Tilføj scripts
+## Tilføjelse af scripts
 
-Fordi Biome er så hurtig, kan du bruge et script i roden i stedet for at oprette separate scripts i hver af dine pakker.
+Fordi Biome er så hurtigt, kan du bruge et root-script i stedet for at oprette separate scripts i hver af dine pakker.
 
 Du kan tilføje `check`- og `fix`-scripts til din `package.json`-fil.
 
@@ -45,4 +45,4 @@ Valgfrit kan du også tilføje `check`- og `fix`-scripts til din `turbo.json`-fi
 }
 ```
 
-Du vil nu kunne køre disse scripts med `turbo run check` og `turbo run fix`.
+Du kan nu køre disse scripts med `turbo run check` og `turbo run fix`.

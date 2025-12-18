@@ -3,20 +3,20 @@ title: Opgrader til v6
 description: Guide til opgradering fra Ultracite v5 til v6 med det nye preset-system.
 ---
 
-Ultracite v6 introducerer [framework-specifikke presets](/configuration#framework-specific-configurations), der giver dig mere kontrol over, hvilke regler der gælder for dit projekt. **Denne opgradering er bagudkompatibel** for Next.js/React-brugere.
+Ultracite v6 introducerer [framework-specifikke presets](/configuration#framework-specific-configurations), der giver dig mere kontrol over, hvilke regler der gælder for dit projekt.
 
-## Hvad er ændret
+## Hvad ændrede sig
 
 v6 introducerer [framework-specifikke presets](/configuration#framework-specific-configurations):
 
-- [`ultracite/core`](/preset/core) - Basale JavaScript/TypeScript-regler
+- [`ultracite/core`](/preset/core) - Grundlæggende JavaScript/TypeScript-regler
 - [`ultracite/react`](/preset/react) - React-specifikke regler
 - [`ultracite/next`](/preset/next) - Next.js-specifikke regler
-- [`ultracite/solid`](/preset/solid) - Regler for Solid.js
-- [`ultracite/vue`](/preset/vue) - Regler for Vue.js
-- [`ultracite/svelte`](/preset/svelte) - Regler for Svelte
-- [`ultracite/qwik`](/preset/qwik) - Regler for Qwik
-- [`ultracite/angular`](/preset/angular) - HTML-parser til Angular
+- [`ultracite/solid`](/preset/solid) - Solid.js-regler
+- [`ultracite/vue`](/preset/vue) - Vue.js-regler
+- [`ultracite/svelte`](/preset/svelte) - Svelte-regler
+- [`ultracite/qwik`](/preset/qwik) - Qwik-regler
+- [`ultracite/angular`](/preset/angular) - Angular HTML-parser
 - [`ultracite/remix`](/preset/remix) - Understøttelse af filbaseret routing
 
 ## Migrering
@@ -33,7 +33,7 @@ Opdater din `biome.jsonc` til at udvide de relevante presets:
 
 ### Ikke-React-projekter
 
-Skift til core-preset'et, hvis du ikke bruger React:
+Skift til core-presetet, hvis du ikke bruger React:
 
 ```jsonc title="biome.jsonc"
 {

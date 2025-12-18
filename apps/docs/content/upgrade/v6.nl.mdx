@@ -1,9 +1,9 @@
 ---
-title: Upgraden naar v6
+title: Upgrade naar v6
 description: Gids voor het upgraden van Ultracite v5 naar v6 met het nieuwe preset-systeem.
 ---
 
-Ultracite v6 introduceert [framework-specifieke presets](/configuration#framework-specific-configurations) die je meer controle geven over welke regels op je project van toepassing zijn. **Deze upgrade is niet breaking** voor Next.js/React-gebruikers.
+Ultracite v6 introduceert framework-specifieke presets die je meer controle geven over welke regels op je project van toepassing zijn.
 
 ## Wat is er veranderd
 
@@ -16,14 +16,14 @@ v6 introduceert [framework-specifieke presets](/configuration#framework-specific
 - [`ultracite/vue`](/preset/vue) - Vue.js-regels
 - [`ultracite/svelte`](/preset/svelte) - Svelte-regels
 - [`ultracite/qwik`](/preset/qwik) - Qwik-regels
-- [`ultracite/angular`](/preset/angular) - Angular HTML-parser
+- [`ultracite/angular`](/preset/angular) - HTML-parser voor Angular
 - [`ultracite/remix`](/preset/remix) - Ondersteuning voor bestandsgebaseerde routing
 
 ## Migratie
 
 ### Next.js/React-projecten
 
-Werk je `biome.jsonc` bij om de juiste presets op te nemen:
+Werk je `biome.jsonc` bij om de juiste presets uit te breiden:
 
 ```jsonc title="biome.jsonc"
 {
@@ -33,7 +33,7 @@ Werk je `biome.jsonc` bij om de juiste presets op te nemen:
 
 ### Niet-React-projecten
 
-Schakel over naar de core-preset als je geen React gebruikt:
+Schakel over naar de core-preset als je React niet gebruikt:
 
 ```jsonc title="biome.jsonc"
 {

@@ -3,17 +3,17 @@ title: Regler
 description: Hvordan man integrerer Ultracite med AI-kodeassistenter gennem editorregler.
 ---
 
-Ultracite tilbyder problemfri integration med AI-kodeassistenter ved automatisk at generere editor-specifikke regel-filer. Disse regler hjælper med at vejlede AI-kodeassistenter til at skrive bedre, mere konsekvent kode, der følger best practices.
+Ultracite leverer problemfri integration med AI-kodeassistenter ved automatisk at generere editor-specifikke regelfiler. Disse regler hjælper med at vejlede AI-kodeassistenter til at skrive bedre, mere konsistent kode, som følger bedste praksis.
 
-Editorreglerne fungerer sammen med Biome's linting og formatering. Mens Biome håndterer kodeformatering og opdager syntaksfejl, vejleder editorreglerne AI-kodeassistenter til at skrive bedre kode fra starten, hvilket reducerer behovet for rettelser senere.
+Editorreglerne fungerer sammen med Biomes linting og formatering. Mens Biome håndterer kodeformatering og fanger syntaksfejl, vejleder editorreglerne AI-kodeassistenter til at skrive bedre kode fra starten, hvilket reducerer behovet for rettelser senere.
 
-Denne dobbelte tilgang sikrer både automatiseret kodekvalitet (via Biome) og intelligent kodegenerering (gennem AI-kodningsregler).
+Denne dobbelte tilgang sikrer både automatiseret kodekvalitet (gennem Biome) og intelligent kodegenerering (gennem regler for AI-kodning).
 
 ## Opsætning
 
 ### Automatisk opsætning
 
-Når du kører `npx ultracite init`, bliver du bedt om at vælge, hvilke editorregler du vil aktivere:
+Når du kører `npx ultracite init`, vil du blive bedt om at vælge, hvilke editorregler du vil aktivere:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -23,43 +23,43 @@ Når du kører `npx ultracite init`, bliver du bedt om at vælge, hvilke editorr
   # ... etcetera
 ```
 
-Dette vil oprette den relevante fil i dit projektkatalog.
+Dette vil oprette den relevante fil i din projektmappe.
 
 ### Manuel opsætning
 
-Hvis du vil sætte tingene op manuelt, skal du oprette den relevante fil i dit projektkatalog (for eksempel `.cursor/rules` for Cursor eller `.rules` for Zed). Kopiér og indsæt derefter [dette indhold](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) i filen.
+Hvis du ønsker at opsætte ting manuelt, skal du oprette den relevante fil i din projektmappe (for eksempel `.cursor/rules` for Cursor eller `.rules` for Zed`). Kopier derefter og indsæt [dette indhold](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) i filen.
 
 ## Understøttede editorer
 
-| Editor          | Placering af regel-fil            |
-| --------------- | --------------------------------- |
-| GitHub Copilot  | `.github/copilot-instructions.md` |
-| Cursor          | `.cursor/rules/ultracite.mdc`     |
-| Windsurf        | `.windsurf/rules/ultracite.md`    |
-| Zed             | `.rules`                          |
-| Claude Code     | `.claude/CLAUDE.md`               |
-| OpenAI Codex    | `AGENTS.md`                       |
-| Kiro IDE        | `.kiro/steering/ultracite.md`     |
-| Cline           | `.clinerules`                     |
-| AMP             | `AGENT.md`                        |
-| Aider           | `ultracite.md`                    |
-| Firebase Studio | `.idx/airules.md`                 |
-| Open Hands      | `.openhands/microagents/repo.md`  |
-| Gemini CLI      | `GEMINI.md`                       |
-| Junie           | `.junie/guidelines.md`            |
-| Augment Code    | `.augment/rules/ultracite.md`     |
-| Kilo Code       | `.kilocode/rules/ultracite.md`    |
-| Codename Goose  | `.goosehints`                     |
-| Roo Code        | `.roo/rules/ultracite.md`         |
-| Warp            | `WARP.md`                         |
-| Droid           | `AGENTS.md`                       |
+| Redigeringsprogram          | Placering af regelfil               |
+| -------------------------- | ----------------------------------- |
+| GitHub Copilot             | `.github/copilot-instructions.md`   |
+| Cursor                     | `.cursor/rules/ultracite.mdc`       |
+| Windsurf                   | `.windsurf/rules/ultracite.md`      |
+| Zed                        | `.rules`                            |
+| Claude Code                | `.claude/CLAUDE.md`                 |
+| OpenAI Codex               | `AGENTS.md`                         |
+| Kiro IDE                   | `.kiro/steering/ultracite.md`       |
+| Cline                      | `.clinerules`                       |
+| AMP                        | `AGENT.md`                          |
+| Aider                      | `ultracite.md`                      |
+| Firebase Studio            | `.idx/airules.md`                   |
+| Open Hands                 | `.openhands/microagents/repo.md`    |
+| Gemini CLI                 | `GEMINI.md`                         |
+| Junie                      | `.junie/guidelines.md`              |
+| Augment Code               | `.augment/rules/ultracite.md`       |
+| Kilo Code                  | `.kilocode/rules/ultracite.md`      |
+| Codename Goose             | `.goosehints`                       |
+| Roo Code                   | `.roo/rules/ultracite.md`           |
+| Warp                       | `WARP.md`                           |
+| Droid                      | `AGENTS.md`                         |
 
 ## Fordele
 
-Brug af Ultracite-editorregler giver flere fordele:
+Brug af Ultracite editorregler giver flere fordele:
 
 - **Konsistens**: Al AI-genereret kode følger de samme konventioner
-- **Kvalitet**: Regler håndhæver best practices og forhindrer almindelige fejl
+- **Kvalitet**: Regler håndhæver bedste praksis og forebygger almindelige fejl
 - **Tilgængelighed**: Indbyggede retningslinjer for tilgængelighed sikrer inkluderende kode
 - **Ydeevne**: Regler fremmer effektive mønstre og undgår anti-mønstre
 - **Sikkerhed**: Retningslinjer hjælper med at forhindre almindelige sikkerhedssårbarheder
@@ -68,6 +68,6 @@ Brug af Ultracite-editorregler giver flere fordele:
 
 Selvom standardreglerne er omfattende, kan du tilpasse dem til dine specifikke behov:
 
-1. **Ændr eksisterende regler**: Rediger regel-filerne direkte
-2. **Tilføj projekt-specifikke regler**: Tilføj yderligere retningslinjer
+1. **Rediger eksisterende regler**: Rediger regelfilerne direkte
+2. **Tilføj projektspecifikke regler**: Tilføj yderligere retningslinjer
 3. **Deaktiver regler**: Fjern eller kommenter regler, som ikke gælder for dit projekt

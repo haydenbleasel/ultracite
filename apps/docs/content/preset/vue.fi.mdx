@@ -1,9 +1,9 @@
 ---
 title: Vue
-description: Vue.js-kohtaiset linttaussäännöt Ultraciteä varten.
+description: Vue.js-kohtaiset linttaussäännöt Ultraciten varten.
 ---
 
-Vue-konfiguraatio sisältää Vue.js-kohtaisia linttaussääntöjä komponenttirakenteelle, data-asetuksille, computed-ominaisuuksille ja varatuille avainsanoille. Se sisältää myös ylikirjoituksia estämään väärät positiiviset linttausvirheet `.vue`-tiedostoissa.
+Vue-konfiguraatio sisältää Vue.js-kohtaisia linttaussääntöjä komponenttirakenteelle, data-optioille, laskennallisille ominaisuuksille ja varatuille avainsanoille. Se sisältää myös poikkeukset väärien positiivisten linttivirheiden estämiseksi `.vue`-tiedostoissa.
 
 ## Asennus
 
@@ -19,17 +19,17 @@ Lisää Vue-konfiguraatio `biome.jsonc`-tiedostoosi:
 
 Tämä konfiguraatio lisää Vue.js-kehitykseen liittyviä sääntöjä:
 
-- **HTML-tuki**: Ota käyttöön kokeellinen täydellinen HTML-tuki sekä skriptien ja tyylien sisennys
-- **Komponenttien nimeäminen**: Pakottaa monisanaiset komponenttinimet
-- **Datan rakenne**: Estää virheelliset `data`-asetuksen ilmoitukset
-- **Varatut avainsanat**: Estää Vue:n varattujen propsien ja avainten käytön
-- **Kaksoisavaimet**: Estää duplikaattiavaimet komponenttien asetuksissa
-- **React-spesifiset propsit**: Estää React-spesifisten propsien käytön Vue-komponenteissa
-- **Vue-tiedostojen ylikirjoitukset**: Lievemmät säännöt `.vue`-tiedostoille Single File Component -rakenteen käsittelyä varten
+- **HTML-tuki**: Mahdollistaa kokeellisen täydellisen HTML-tuen, joka sisältää skriptien ja tyylien sisennyksen
+- **Komponenttien nimeäminen**: Varmistaa, että komponenttien nimet ovat monisanaisia
+- **Datan rakenne**: Estää virheelliset `data`-optiomäärittelyt
+- **Varaetut avainsanat**: Estää Vue-varattujen propien ja avainten käytön
+- **Kaksoisavaimet**: Estää päällekkäisten avainten käytön komponenttioptiokentissä
+- **React-spesifiset propit**: Estää React-spesifisten propien käytön Vue-komponenteissa
+- **Vue-tiedostojen poikkeukset**: Löyhempinä sääntöinä `.vue`-tiedostoille Single File Component -rakenteen käsittelyyn
 
 ## HTML-muotoilijan asetukset
 
-Vue-preset ottaa käyttöön kokeellisen HTML-tuen, jossa on erikoismuotoilu upotetuille skripteille ja tyyleille:
+Vue-esiasetus ottaa käyttöön kokeellisen HTML-tuen erityisellä muotoilulla upotetuille skripteille ja tyyleille:
 
 ```jsonc
 {
@@ -43,50 +43,51 @@ Vue-preset ottaa käyttöön kokeellisen HTML-tuen, jossa on erikoismuotoilu upo
 ```
 
 Tämä konfiguraatio:
-- **Kokeellinen täydellinen tuki**: Ota käyttöön Biomen kokeellinen HTML-jäsennys ja -muotoilu `.vue`-tiedostoille
-- **Sisennä skripti ja tyyli**: Sisentää oikein koodin `<script>`- ja `<style>`-tagejen sisällä Vue Single File Component -tiedostoissa
+- **Kokeellinen täydellinen tuki**: Mahdollistaa Biomen kokeellisen HTML-jäsennyksen ja muotoilun `.vue`-tiedostoille
+- **Sisennä skripti ja tyyli**: Sisentää oikein koodin `<script>`- ja `<style>`-tageissa Vue Single File Componenteissa
 
 ## Vue-kohtaiset säännöt
 
-### Kehitysvaihe
+### Kehitteillä
 
 | Sääntö | Asetus | Kuvaus |
-|-------|--------|--------|
-| `noVueDataObjectDeclaration` | `error` | Estä `data`-asetuksen objektinilmoituksen käyttäminen Vue-komponenteissa. `data`-asetuksen on oltava funktio, joka palauttaa objektin. |
-| `noVueDuplicateKeys` | `error` | Estä kaksoisavaimet Vue-komponenttien asetuksissa. Avainarvojen `data`, `computed`, `methods` jne. on oltava yksilöllisiä. |
-| `noVueReservedKeys` | `error` | Estä Vue:n varattujen avainten kuten `$data`, `$props`, `$el` jne. käyttö komponenttien asetuksissa. |
-| `noVueReservedProps` | `error` | Estä Vue:n varattujen propsien kuten `key`, `ref` ja `is` käyttö mukautettuina komponenttipropsina. |
-| `noVueVIfWithVFor` | `error` | Estä `v-for`- ja `v-if`-direktiivien käyttö samalla elementillä. |
-| `useVueHyphenatedAttributes` | `error` | Kannusta käyttämään kebab-casea attribuuttien nimissä Vue-tyyliohjeen suositusten mukaisesti. |
-| `useVueMultiWordComponentNames` | `error` | Pakota monisanaiset komponenttien nimet välttämään ristiriitoja HTML-elementtien kanssa. Yksisanaisia nimiä kuten `Button` tai `Card` tulisi välttää. |
-| `useVueValidVBind` | `error` | Varmistaa `v-bind`-direktiivien pätevyyden Vue-tiedostoissa. |
-| `useVueValidVElseIf` | `error` | Varmistaa `v-else-if`-direktiivien pätevyyden Vue-templaatissa. Raportoi virheellisistä direktiiveistä, joilla puuttuu ehdollinen lauseke tai joita ei edeltä `v-if`- tai `v-else-if`-direktiivi. |
-| `useVueValidVElse` | `error` | Varmistaa `v-else`-direktiivien pätevyyden Vue-templaatissa. Raportoi direktiivit, joita ei edeltää `v-if`- tai `v-else-if`-direktiivi. |
-| `useVueValidVHtml` | `error` | Varmistaa `v-html`-direktiivin oikean käytön Vue-templaatissa. Raportoi direktiivit, joilta puuttuu lauseke, joilla on odottamattomia argumentteja tai odottamattomia modifioijia. |
-| `useVueValidVIf` | `error` | Varmistaa `v-if`-direktiivien pätevyyden Vue-templaatissa. Kieltää argumentit ja modifioijat sekä varmistaa, että arvo on annettu. |
-| `useVueValidVOn` | `error` | Varmistaa `v-on`-direktiivien pätevyyden Vue-templaatissa. Raportoi virheelliset `v-on`-/lyhennetyt `@`-direktiivit, joilta puuttuu tapahtuman nimi, jotka sisältävät virheellisiä modifioijia tai joilta puuttuu käsittelijän lauseke. |
-| `useVueValidVText` | `error` | Varmistaa `v-text`-direktiivien pätevyyden Vue-templaatissa. Sääntö raportoi, kun `v-text`-direktiivillä on argumentti, modifioijia tai kun arvo puuttuu. |
+|-------:|:------:|--------|
+| `noVueDataObjectDeclaration` | `error` | Estää `data`-option objektimäärittelyn käytön Vue-komponenteissa. `data`-optiion tulee olla funktio, joka palauttaa objektin. |
+| `noVueDuplicateKeys` | `error` | Estää päällekkäisten avainten käytön Vue-komponenttien optioissa. Avainten `data`, `computed`, `methods` jne. tulee olla yksilöllisiä. |
+| `noVueReservedKeys` | `error` | Kieltää Vue:n varattujen avainten kuten `$data`, `$props`, `$el` jne. käytön komponenttien optioissa. |
+| `noVueReservedProps` | `error` | Kieltää Vue-varattujen propien kuten `key`, `ref` ja `is` käytön omina komponenttiproppeina. |
+| `noVueSetupPropsReactivityLoss` | `error` | Estää käyttötapoja, jotka aiheuttavat reaktiivisuuden menetyksen Vue `setup`-funktion propeissa. |
+| `noVueVIfWithVFor` | `error` | Kieltää `v-for` ja `v-if` saman elementin kohdalla. |
+| `useVueHyphenatedAttributes` | `error` | Kannustaa käyttämään attribuuttien nimissä kebab-casea Vue-tyyliohjeen suositusten mukaisesti. |
+| `useVueMultiWordComponentNames` | `error` | Varmistaa monisanaiset komponenttien nimet HTML-elementtien konfliktien välttämiseksi. Yksisanaisia nimiä kuten `Button` tai `Card` tulee välttää. |
+| `useVueValidVBind` | `error` | Varmistaa `v-bind`-direktiivien oikeellisuuden Vue-tiedostoissa. |
+| `useVueValidVElseIf` | `error` | Varmistaa `v-else-if`-direktiivien pätevyyden Vue-templaatissa. Raportoi virheellisistä direktiiveistä, joilta puuttuu ehtolauseke tai joita ei edellä `v-if`- tai `v-else-if`-direktiivi. |
+| `useVueValidVElse` | `error` | Varmistaa `v-else`-direktiivien pätevyyden Vue-templaatissa. Raportoi direktiivejä, joita ei edellä `v-if` tai `v-else-if`. |
+| `useVueValidVHtml` | `error` | Varmistaa `v-html`-direktiivin oikean käytön Vue-templaatissa. Raportoi direktiivejä, joilta puuttuu lauseke, joilla on odottamattomia argumentteja tai modifioijia. |
+| `useVueValidVIf` | `error` | Varmistaa `v-if`-direktiivien pätevyyden Vue-templaatissa. Kieltää argumenttien ja modifioijien käytön ja varmistaa, että arvo on annettu. |
+| `useVueValidVOn` | `error` | Varmistaa `v-on`-direktiivien pätevyyden Vue-templaatissa. Raportoi virheellisistä `v-on` / lyhennetystä `@`-syntaksista, joilta puuttuu tapahtuman nimi, joissa on virheellisiä modifioijia tai puuttuu käsittelijälauseke. |
+| `useVueValidVText` | `error` | Varmistaa `v-text`-direktiivien pätevyyden Vue-templaatissa. Sääntö raportoi, kun `v-text`illa on argumentti, modifioijia tai arvo puuttuu. |
 
 ### Epäilyttävät
 
 | Sääntö | Asetus | Kuvaus |
-|-------|--------|--------|
-| `noReactSpecificProps` | `error` | Estää React-spesifisten proppien kuten `className` ja `htmlFor` käytön Vue:ssa. Käytä sen sijaan `class` ja `for`. |
+|-------:|:------:|--------|
+| `noReactSpecificProps` | `error` | Kieltää React-spesifisten propien kuten `className` ja `htmlFor` käytön Vue:ssa. Käytä sen sijaan `class` ja `for`. |
 
-## Vue-tiedostojen ylikirjoitukset
+## Vue-tiedostojen poikkeukset
 
-Seuraavat säännöt on poistettu käytöstä `.vue`-tiedostoissa väärien positiivisten varoitusten estämiseksi Biomen osittaisen tuen vuoksi Vue Single File Componenteille:
+Seuraavat säännöt on poistettu käytöstä `.vue`-tiedostoissa virheellisten positiivisten ilmoitusten ehkäisemiseksi Biomen osittaisen tuen vuoksi Vue Single File Componenteille:
 
 ### Oikeellisuus
 
 | Sääntö | Asetus | Kuvaus |
-|-------|--------|--------|
-| `noUnusedVariables` | `off` | Salli käyttämättömät muuttujat `.vue`-tiedostoissa. Skriptiosiossa määritellyt muuttujat voivat olla käytössä vain templaattiosiossa. |
-| `noUnusedImports` | `off` | Salli käyttämättömät importit `.vue`-tiedostoissa. Importit voivat olla käytössä vain templaattiosiossa. |
+|-------:|:------:|--------|
+| `noUnusedVariables` | `off` | Salli käyttämättömät muuttujat `.vue`-tiedostoissa. Skriptiosion muuttujia voidaan käyttää vain templaattiosiossa. |
+| `noUnusedImports` | `off` | Salli käyttämättömät importit `.vue`-tiedostoissa. Importteja saatetaan käyttää vain templaattiosiossa. |
 
 ### Tyyli
 
 | Sääntö | Asetus | Kuvaus |
-|-------|--------|--------|
-| `useConst` | `off` | Salli `let`- ja `var`-määrittelyt `.vue`-tiedostoissa reaktiivisia data-käytäntöjä varten. |
-| `useImportType` | `off` | Poista eksplisiittisten import type -vaatimusten pakko käytöstä paremman yhteensopivuuden vuoksi Vuen build-järjestelmän kanssa. |
+|-------:|:------:|--------|
+| `useConst` | `off` | Salli `let`- ja `var`-määrittelyt `.vue`-tiedostoissa reaktiivisia datamalleja varten. |
+| `useImportType` | `off` | Poista käytöstä eksplisiittiset import-tyyppivaatimukset paremman yhteensopivuuden vuoksi Vuen build-järjestelmän kanssa. |

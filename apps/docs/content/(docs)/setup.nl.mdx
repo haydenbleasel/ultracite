@@ -3,60 +3,60 @@ title: Installatie
 description: Hoe Ultracite in je project te installeren.
 ---
 
-Ultracite kan worden geïnstalleerd met alle belangrijke package managers. Je hebt Node.js v14.18+ nodig (Node 18+ aanbevolen) en een project met een `package.json`-bestand.
+Ultracite kan worden geïnstalleerd met alle grote package managers. Je hebt Node.js v14.18+ nodig (Node 18+ aanbevolen) en een project met een `package.json`-bestand.
 
 ## Installatie
 
-De gemakkelijkste manier om aan de slag te gaan is het uitvoeren van Ultracite's `init`-script, dat de benodigde pakketten installeert en het configuratiebestand voor je aanmaakt. Voer in je projectmap het volgende uit:
+De eenvoudigste manier om te beginnen is het uitvoeren van het `init`-script van Ultracite, dat de benodigde pakketten installeert en het configbestand voor je aanmaakt. In je projectdirectory, voer uit:
 
 ```package-install
 npx ultracite init
 ```
 
-Je kunt optioneel de volgende flags doorgeven aan het `init`-commando:
+Je kunt optioneel de volgende flags meegeven aan het `init`-commando:
 
-| Flag                | Beschrijving                                    | Opties                                                                  |
+| Flag                | Beschrijving                                     | Opties                                                                  |
 |---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
-| `--pm`              | De te gebruiken package manager.                 | `pnpm`, `bun`, `yarn`, `npm`                                            |
+| `--pm`              | De te gebruiken pakketbeheerder.                 | `pnpm`, `bun`, `yarn`, `npm`                                            |
 | `--frameworks`      | De frameworks die geconfigureerd moeten worden.  | Komma-gescheiden: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
-| `--editors`         | De editors om te configureren.                   | Komma-gescheiden: `vscode`, `zed`                                        |
-| `--agents`          | De AI-agents om te configureren.                 | Komma-gescheiden: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp`, `droid` |
-| `--hooks`           | De agent hooks om te configureren.               | Komma-gescheiden: `cursor`, `claude`                                     |
-| `--integrations`    | Extra integraties om in te stellen.              | Komma-gescheiden: `husky`, `lefthook`, `lint-staged`                     |
-| `--migrate`         | Migratietools om te verwijderen.                 | Komma-gescheiden: `eslint`, `prettier` (verwijdert afhankelijkheden, configuratiebestanden en editorinstellingen) |
-| `--skip-install`    | Sla het installeren van afhankelijkheden over.    | (geen waarde nodig)                                                      |
-| `--quiet`           | Onderdrukt interactieve prompts en visuele output.| (geen waarde nodig, automatisch ingeschakeld in CI)                      |
+| `--editors`         | De editors die geconfigureerd moeten worden.     | Komma-gescheiden: `vscode`, `zed`                                       |
+| `--agents`          | De AI-agents die geconfigureerd moeten worden.   | Komma-gescheiden: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp`, `droid` |
+| `--hooks`           | De agent-hooks die geconfigureerd moeten worden. | Komma-gescheiden: `cursor`, `claude`                                    |
+| `--integrations`    | Aanvullende integraties om in te stellen.        | Komma-gescheiden: `husky`, `lefthook`, `lint-staged`                    |
+| `--migrate`         | Migratietools die verwijderd moeten worden.      | Komma-gescheiden: `eslint`, `prettier` (verwijdert afhankelijkheden, configuratiebestanden en editorinstellingen) |
+| `--skip-install`    | Het overslaan van het installeren van afhankelijkheden. | (geen waarde nodig)                                                       |
+| `--quiet`           | Interactieve prompts en visuele output onderdrukken. | (geen waarde nodig, automatisch ingeschakeld in CI)                          |
 
-### Programmatish gebruik
+### Programmematig gebruik
 
-Voor tools die Ultracite programmatisch moeten aanroepen (zoals CLI-tools voor scaffolding), kun je de `--quiet`-flag gebruiken om alle interactieve prompts en visuele output te onderdrukken:
+Voor tools die Ultracite programmeerbaar moeten aanroepen (zoals scaffolding-CLIs), kun je de `--quiet`-vlag gebruiken om alle interactieve prompts en visuele output te onderdrukken:
 
 ```bash title="Terminal"
 npx ultracite init --quiet --pm npm
 ```
 
-De `--quiet`-flag wordt automatisch ingeschakeld wanneer de omgevingsvariabele `CI` is ingesteld op `true` of `1`, waardoor deze geschikt is voor CI/CD-pijplijnen:
+De `--quiet`-vlag wordt automatisch ingeschakeld wanneer de omgevingsvariabele `CI` is ingesteld op `true` of `1`, waardoor het geschikt is voor CI/CD-pijplijnen:
 
 ```bash title="Terminal"
 CI=true npx ultracite init --pm npm
 ```
 
-In stille modus zal Ultracite:
+In de stille modus zal Ultracite:
 - Alle interactieve prompts overslaan
-- Zinnige standaardwaarden voor alle opties gebruiken
-- ASCII-kunst, spinners en logberichten onderdrukken
+- Verstandige standaardwaarden gebruiken voor alle opties
+- ASCII-art, spinners en logberichten onderdrukken
 - Alleen de kernconfiguratie voor Biome aanmaken
-- Netjes afsluiten met code 0 bij succes of 1 bij fout
+- Netjes afsluiten met code 0 bij succes of 1 bij falen
 
 ## Extensies
 
-Als je Visual Studio Code gebruikt, installeer dan de officiële [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extensie, die formatteren/fixen bij opslaan mogelijk maakt:
+Als je Visual Studio Code gebruikt, installeer dan de officiële [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extensie, die formatteren en correcties bij het opslaan mogelijk maakt:
 
 ```bash title="Terminal"
 code --install-extension biomejs.biome
 ```
 
-Daarnaast, als je Tailwind CSS gebruikt, wordt aanbevolen de [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extensie te installeren voor het sorteren van klassen en hints:
+Daarnaast, als je Tailwind CSS gebruikt, wordt aanbevolen de [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extensie te installeren om classes te sorteren en hints/suggesties te krijgen:
 
 ```bash title="Terminal"
 code --install-extension bradlc.vscode-tailwindcss

@@ -3,11 +3,11 @@ title: Monorepot
 description: Kuinka käyttää Ultracitea monorepossa.
 ---
 
-Ultracite on suunniteltu toimimaan heti käyttövalmiina monorepojen kanssa. Tässä ohjeet sen käyttämiseen Turborepon kanssa.
+Ultracite on suunniteltu toimimaan suoraan monorepojen kanssa. Tässä ohjeet sen käyttämiseen Turborepon kanssa.
 
 ## Konfigurointi
 
-Kun alustat Ultraciten, se luo `biome.jsonc`-tiedoston reposi juureen. Tätä tiedostoa käytetään konfiguroimaan Ultracite koko monorepollesi.
+Alustaessasi Ultracitea se luo `biome.jsonc`-tiedoston repositoriosi juureen. Tätä tiedostoa käytetään konfiguroimaan Ultracite koko monorepollesi.
 
 ```
 my-turborepo/
@@ -19,9 +19,9 @@ my-turborepo/
 
 ## Skriptien lisääminen
 
-Koska Biome on niin nopea, voit käyttää juuritason skriptiä sen sijaan, että loisit erillisiä skriptejä jokaiseen pakettiisi.
+Koska Biome on niin nopea, voit käyttää juuritason skriptiä sen sijaan, että loisit erilliset skriptit jokaiseen pakettiisi.
 
-Voit lisätä `check`- ja `fix`-skriptit `package.json`-tiedostoon.
+Voit lisätä `check`- ja `fix`-skriptit `package.json`-tiedostoosi.
 
 ```json title="package.json"
 {
@@ -32,7 +32,7 @@ Voit lisätä `check`- ja `fix`-skriptit `package.json`-tiedostoon.
 }
 ```
 
-Halutessasi voit myös lisätä `check`- ja `fix`-skriptit `turbo.json`-tiedostoon.
+Valinnaisesti voit myös lisätä `check`- ja `fix`-skriptit `turbo.json`-tiedostoosi.
 
 ```json title="turbo.json"
 {
@@ -45,4 +45,4 @@ Halutessasi voit myös lisätä `check`- ja `fix`-skriptit `turbo.json`-tiedosto
 }
 ```
 
-Voit nyt suorittaa nämä skriptit komentoilla `turbo run check` ja `turbo run fix`.
+Nyt voit suorittaa nämä skriptit komentoilla `turbo run check` ja `turbo run fix`.

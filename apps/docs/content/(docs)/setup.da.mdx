@@ -1,35 +1,35 @@
 ---
 title: Opsætning
-description: Sådan installeres Ultracite i dit projekt.
+description: Hvordan du installerer Ultracite i dit projekt.
 ---
 
-Ultracite kan installeres med alle større pakkestyringsværktøjer. Du skal bruge Node.js v14.18+ (Node 18+ anbefales) og et projekt med en `package.json`-fil.
+Ultracite kan installeres med alle større pakkehåndteringsværktøjer. Du skal bruge Node.js v14.18+ (Node 18+ anbefales) og et projekt med en `package.json`-fil.
 
 ## Installation
 
-Den nemmeste måde at komme i gang er at køre Ultracite's `init`-script, som installerer de nødvendige pakker og opsætter konfigurationsfilen for dig. I dit projektmappe, kør:
+Den nemmeste måde at komme i gang på er at køre Ultracites `init`-script, som installerer de nødvendige pakker og opsætter konfigurationsfilen for dig. I din projektmappe, kør:
 
 ```package-install
 npx ultracite init
 ```
 
-Du kan valgfrit angive følgende flags til `init`-kommandoen:
+Du kan valgfrit angive følgende flag til `init`-kommandoen:
 
-| Flag                | Beskrivelse                                      | Muligheder                                                               |
-|---------------------|--------------------------------------------------|---------------------------------------------------------------------------|
-| `--pm`              | Den pakkehåndtering, der skal bruges.            | `pnpm`, `bun`, `yarn`, `npm`                                              |
-| `--frameworks`      | De frameworks, der skal konfigureres.            | Adskilt med komma: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
-| `--editors`         | De editorer, der skal konfigureres.              | Adskilt med komma: `vscode`, `zed`                                        |
-| `--agents`          | De AI-agenter, der skal konfigureres.            | Adskilt med komma: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp`, `droid` |
-| `--hooks`           | De agent-hooks, der skal konfigureres.           | Adskilt med komma: `cursor`, `claude`                                     |
-| `--integrations`    | Yderligere integrationer, der skal opsættes.     | Adskilt med komma: `husky`, `lefthook`, `lint-staged`                     |
-| `--migrate`         | Migreringsværktøjer, der skal fjernes.           | Adskilt med komma: `eslint`, `prettier` (fjerner afhængigheder, konfigurationsfiler og editorindstillinger) |
-| `--skip-install`    | Spring installation af afhængigheder over.       | (ingen værdi nødvendig)                                                   |
-| `--quiet`           | Undertryk interaktive prompts og visuel output.  | (ingen værdi nødvendig, aktiveres automatisk i CI)                        |
+| Flag                | Beskrivelse                                      | Muligheder                                                                 |
+|---------------------|--------------------------------------------------|-----------------------------------------------------------------------------|
+| `--pm`              | Den pakkeadministrator, der skal bruges.         | `pnpm`, `bun`, `yarn`, `npm`                                                |
+| `--frameworks`      | De rammeværk, der skal konfigureres.             | Kommasepareret: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
+| `--editors`         | De kodeeditorer, der skal konfigureres.          | Kommasepareret: `vscode`, `zed`                                              |
+| `--agents`          | De AI-agenter, der skal konfigureres.            | Kommasepareret: `vscode-copilot`, `cursor`, `windsurf`, `zed`, `claude`, `codex`, `kiro`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini-cli`, `junie`, `augmentcode`, `kilo-code`, `goose`, `roo-code`, `warp`, `droid` |
+| `--hooks`           | De agent-hooks, der skal konfigureres.           | Kommasepareret: `cursor`, `claude`                                           |
+| `--integrations`    | Yderligere integrationer, der skal opsættes.     | Kommasepareret: `husky`, `lefthook`, `lint-staged`                           |
+| `--migrate`         | Migreringsværktøjer, der skal fjernes.           | Kommasepareret: `eslint`, `prettier` (fjerner afhængigheder, konfigurationsfiler og editorindstillinger) |
+| `--skip-install`    | Spring installation af afhængigheder over.       | (ingen værdi nødvendig)                                                      |
+| `--quiet`           | Undertrykker interaktive spørgsmål og visuel output. | (ingen værdi nødvendig, aktiveres automatisk i CI)                         |
 
 ### Programmatisk brug
 
-For værktøjer, der skal kalde Ultracite programmatisk (som scaffolding-CLIs), kan du bruge `--quiet`-flaget for at undertrykke alle interaktive prompts og visuel output:
+For værktøjer, der har brug for at kalde Ultracite programmatisk (som f.eks. scaffolding CLIs), kan du bruge `--quiet`-flaget til at undertrykke alle interaktive spørgsmål og visuel output:
 
 ```bash title="Terminal"
 npx ultracite init --quiet --pm npm
@@ -41,22 +41,22 @@ npx ultracite init --quiet --pm npm
 CI=true npx ultracite init --pm npm
 ```
 
-I stille tilstand vil Ultracite:
-- Springe alle interaktive prompts over
-- Bruge fornuftige standardindstillinger for alle valgmuligheder
-- Undertrykke ASCII-kunst, spinnere og logbeskeder
+I quiet-tilstand vil Ultracite:
+- Springe alle interaktive spørgsmål over
+- Bruge fornuftige standardværdier for alle indstillinger
+- Undertrykke ASCII-art, spinnere og logbeskeder
 - Kun oprette den grundlæggende Biome-konfiguration
-- Afslutte pænt med kode 0 ved succes eller 1 ved fejl
+- Afslutte rent med kode 0 ved succes eller 1 ved fejl
 
 ## Udvidelser
 
-Hvis du bruger Visual Studio Code, installer den officielle [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) udvidelse, som tillader formatering/fix ved gem:
+Hvis du bruger Visual Studio Code, installer den officielle [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) udvidelse, som tillader formatering/korrektion ved lagring:
 
 ```bash title="Terminal"
 code --install-extension biomejs.biome
 ```
 
-Derudover, hvis du bruger Tailwind CSS, anbefales det at installere [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) udvidelsen for klassesortering og hints:
+Derudover, hvis du bruger Tailwind CSS, anbefales det at installere [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) udvidelsen for klassesortering og forslag:
 
 ```bash title="Terminal"
 code --install-extension bradlc.vscode-tailwindcss

@@ -3,7 +3,7 @@ title: Vue
 description: Vue.js-specifieke lintregels voor Ultracite.
 ---
 
-De Vue-configuratie bevat Vue.js-specifieke lintregels voor componentstructuur, data-opties, computed-eigenschappen en gereserveerde sleutelwoorden. Het bevat ook uitzonderingen om valse positieve lintfouten in `.vue`-bestanden te voorkomen.
+De Vue-configuratie bevat Vue.js-specifieke lintregels voor componentstructuur, data-opties, computed properties en gereserveerde sleutelwoorden. Het bevat ook aanpassingen om fout-positieve lintfouten in `.vue`-bestanden te voorkomen.
 
 ## Installatie
 
@@ -19,13 +19,13 @@ Voeg de Vue-configuratie toe aan je `biome.jsonc`:
 
 Deze configuratie voegt regels toe die specifiek zijn voor Vue.js-ontwikkeling:
 
-- **HTML-ondersteuning**: Schakelt experimentele volledige HTML-ondersteuning in met inspringing voor script- en style-tags
-- **Naamgeving van componenten**: Dwingt componentnamen met meerdere woorden af
-- **Datastructuur**: Voorkomt onjuiste declaraties van de `data`-optie
-- **Gereserveerde sleutelwoorden**: Verbiedt het gebruik van door Vue gereserveerde props en sleutels
-- **Dubbele sleutels**: Voorkomt dubbele sleutels in componentopties
+- **HTML-ondersteuning**: Schakelt experimentele volledige HTML-ondersteuning in met inspringing voor script- en style-secties
+- **Componentnaamgeving**: Dwingt multi-woord componentnamen af
+- **Datastructuur**: Voorkomt onjuiste declaraties van de data-optie
+- **Gereserveerde sleutelwoorden**: Verbiedt het gebruik van Vue-gereserveerde props en keys
+- **Duplicaat-sleutels**: Voorkomt dubbele sleutels in componentopties
 - **React-specifieke props**: Verbiedt React-specifieke props in Vue-componenten
-- **Uitzonderingen voor Vue-bestanden**: Versoept regels voor `.vue`-bestanden om met de Single File Component-structuur om te gaan
+- **Aanpassingen voor Vue-bestanden**: Versoepelde regels voor `.vue`-bestanden om de Single File Component-structuur af te handelen
 
 ## HTML-formatteringsconfiguratie
 
@@ -43,50 +43,51 @@ De Vue-preset schakelt experimentele HTML-ondersteuning in met speciale opmaak v
 ```
 
 Deze configuratie:
-- **Experimentele volledige ondersteuning**: Schakelt de experimentele HTML-parsing- en formatteringsmogelijkheden van Biome in voor `.vue`-bestanden
-- **Inspringing voor script en style**: Lijnt code binnen `<script>`- en `<style>`-tags in Vue Single File Components correct uit
+- **Experimentele volledige ondersteuning**: Schakelt Biome's experimentele HTML-parsing en formatteringsmogelijkheden voor `.vue`-bestanden in
+- **Inspringen van script en style**: Sorgt voor correcte inspringing van code binnen `<script>`- en `<style>`-tags in Vue Single File Components
 
 ## Vue-specifieke regels
 
-### In ontwikkeling
+### Onder ontwikkeling
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noVueDataObjectDeclaration` | `error` | Voorkomt het gebruik van een objectdeclaratie voor de `data`-optie in Vue-componenten. De `data`-optie moet een functie zijn die een object retourneert. |
+| `noVueDataObjectDeclaration` | `error` | Voorkomt het gebruik van objectdeclaraties voor de `data`-optie in Vue-componenten. De `data`-optie moet een functie zijn die een object retourneert. |
 | `noVueDuplicateKeys` | `error` | Voorkomt dubbele sleutels in Vue-componentopties. Sleutels in `data`, `computed`, `methods`, enz. moeten uniek zijn. |
-| `noVueReservedKeys` | `error` | Verbiedt door Vue gereserveerde sleutels zoals `$data`, `$props`, `$el`, enz. in componentopties. |
-| `noVueReservedProps` | `error` | Verbiedt Vue-gereserveerde props zoals `key`, `ref` en `is` als aangepaste componentprops. |
+| `noVueReservedKeys` | `error` | Verbiedt Vue-gereserveerde sleutels zoals `$data`, `$props`, `$el`, enz. in componentopties. |
+| `noVueReservedProps` | `error` | Verbiedt Vue-gereserveerde props zoals `key`, `ref` en `is` als custom component props. |
+| `noVueSetupPropsReactivityLoss` | `error` | Voorkomt gebruikswijzen die reactieve functionaliteit doen verliezen in props van de Vue `setup`-functie. |
 | `noVueVIfWithVFor` | `error` | Verbiedt `v-for` en `v-if` op hetzelfde element. |
-| `useVueHyphenatedAttributes` | `error` | Bevordert het gebruik van kebab-case voor attribuutnamen, volgens de aanbevelingen van de Vue style guide. |
-| `useVueMultiWordComponentNames` | `error` | Dwingt componentnamen met meerdere woorden af om conflicten met HTML-elementen te vermijden. Enkelvoudige namen zoals `Button` of `Card` moeten vermeden worden. |
-| `useVueValidVBind` | `error` | Handhaaft de geldigheid van `v-bind`-directieven in Vue-bestanden. |
-| `useVueValidVElseIf` | `error` | Handhaaft geldige `v-else-if`-directieven in Vue-templates. Rapporteert ongeldige directieven met ontbrekende conditionele expressies of wanneer ze niet voorafgegaan worden door een `v-if` of `v-else-if`-directief. |
-| `useVueValidVElse` | `error` | Handhaaft geldige `v-else`-directieven in Vue-templates. Rapporteert directieven die niet voorafgegaan worden door een `v-if` of `v-else-if`-directief. |
-| `useVueValidVHtml` | `error` | Handhaaft correct gebruik van de `v-html`-directief in Vue-templates. Rapporteert directieven met ontbrekende expressies, onverwachte argumenten of onverwachte modifiers. |
-| `useVueValidVIf` | `error` | Handhaaft geldige `v-if`-directieven in Vue-templates. Verbiedt argumenten en modifiers en zorgt dat er een waarde is opgegeven. |
-| `useVueValidVOn` | `error` | Handhaaft geldige `v-on`-directieven in Vue-templates. Rapporteert ongeldige `v-on`/kort `@`-directieven met ontbrekende evenementnamen, ongeldige modifiers of ontbrekende handler-expressies. |
-| `useVueValidVText` | `error` | Handhaaft geldige `v-text`-directieven in Vue-templates. De regel rapporteert wanneer `v-text` een argument heeft, modifiers heeft of een waarde mist. |
+| `useVueHyphenatedAttributes` | `error` | Moedigt het gebruik van kebab-case voor attribuutnamen aan, volgens de aanbevelingen van de Vue style guide. |
+| `useVueMultiWordComponentNames` | `error` | Dwingt multi-woord componentnamen af om conflicten met HTML-elementen te vermijden. Enkelwoordnamen zoals `Button` of `Card` moeten vermeden worden. |
+| `useVueValidVBind` | `error` | Dwingt de geldigheid van `v-bind`-directieven in Vue-bestanden af. |
+| `useVueValidVElseIf` | `error` | Dwingt geldige `v-else-if`-directieven in Vue-templates af. Rapporteert ongeldige directieven met ontbrekende conditionele expressies of wanneer ze niet voorafgegaan worden door een `v-if` of `v-else-if` directief. |
+| `useVueValidVElse` | `error` | Dwingt geldige `v-else`-directieven in Vue-templates af. Rapporteert directieven die niet voorafgegaan worden door een `v-if` of `v-else-if` directief. |
+| `useVueValidVHtml` | `error` | Dwingt correct gebruik van de `v-html`-directief in Vue-templates af. Rapporteert directieven met ontbrekende expressies, onverwachte argumenten of onverwachte modifiers. |
+| `useVueValidVIf` | `error` | Dwingt geldige `v-if`-directieven in Vue-templates af. Verbetert het gebruik door argumenten en modifiers te verbieden en te controleren of er een waarde is opgegeven. |
+| `useVueValidVOn` | `error` | Dwingt geldige `v-on`-directieven in Vue-templates af. Rapporteert ongeldige `v-on` / shorthand `@`-directieven met ontbrekende event-namen, ongeldige modifiers of ontbrekende handler-expressies. |
+| `useVueValidVText` | `error` | Dwingt geldige `v-text`-directieven in Vue-templates af. De regel rapporteert wanneer v-text een argument heeft, modifiers heeft of een waarde mist. |
 
 ### Verdacht
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noReactSpecificProps` | `error` | Verbiedt React-specifieke props zoals `className` en `htmlFor` in Vue. Gebruik in plaats daarvan `class` en `for`. |
 
-## Uitzonderingen voor `.vue`-bestanden
+## Aanpassingen voor .vue-bestanden
 
-De volgende regels zijn uitgeschakeld voor `.vue`-bestanden om valse positieven te voorkomen door Biome's gedeeltelijke ondersteuning voor Vue Single File Components:
+De volgende regels zijn uitgeschakeld voor `.vue`-bestanden om fout-positieven te voorkomen vanwege Biome's gedeeltelijke ondersteuning voor Vue Single File Components:
 
 ### Correctheid
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noUnusedVariables` | `off` | Sta ongebruikte variabelen toe in `.vue`-bestanden. Variabelen in het scriptgedeelte kunnen alleen in de template worden gebruikt. |
-| `noUnusedImports` | `off` | Sta ongebruikte imports toe in `.vue`-bestanden. Imports kunnen alleen in het templategedeelte worden gebruikt. |
+| `noUnusedVariables` | `off` | Sta ongebruikte variabelen toe in `.vue`-bestanden. Variabelen in het script-gedeelte kunnen alleen in de template gebruikt worden. |
+| `noUnusedImports` | `off` | Sta ongebruikte imports toe in `.vue`-bestanden. Imports kunnen alleen in het template-gedeelte gebruikt worden. |
 
 ### Stijl
 
-| Regel | Instelling | Beschrijving |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `useConst` | `off` | Sta `let`- en `var`-declaraties toe in `.vue`-bestanden voor reactieve datapatronen. |
-| `useImportType` | `off` | Schakel expliciete importtype-eisen uit voor betere compatibiliteit met Vue's buildsysteem. |
+| `useConst` | `off` | Sta `let`- en `var`-declaraties toe in `.vue`-bestanden voor reactieve data-patronen. |
+| `useImportType` | `off` | Schakel expliciete import-type vereisten uit voor betere compatibiliteit met Vue's build-systeem. |

@@ -1,17 +1,17 @@
 ---
-title: Päivitys v6:aan
-description: Opas Ultracite v5:stä v6:een päivitykseen uuden preset-järjestelmän avulla.
+title: Päivitys v6:een
+description: Ohjeet Ultracite v5:stä v6:een päivittämiseen uuden preset-järjestelmän avulla.
 ---
 
-Ultracite v6 tuo käyttöön kehyskohtaiset presetit, jotka antavat sinulle enemmän hallintaa siitä, mitkä säännöt sovelletaan projektiisi. **Tämä päivitys ei riko taaksepäin yhteensopivuutta** Next.js/React-käyttäjille.
+Ultracite v6 tuo mukanaan [kehyskohtaiset presetit](/configuration#framework-specific-configurations), jotka antavat sinulle enemmän hallintaa siitä, mitkä säännöt koskevat projektiasi.
 
 ## Mitä muuttui
 
-v6 esittelee [kehyskohtaiset presetit](/configuration#framework-specific-configurations):
+v6 tuo mukanaan [kehyskohtaiset presetit](/configuration#framework-specific-configurations):
 
-- [`ultracite/core`](/preset/core) - Perussäännöt JavaScriptille/TypeScriptille
-- [`ultracite/react`](/preset/react) - React-spesifiset säännöt
-- [`ultracite/next`](/preset/next) - Next.js-spesifiset säännöt
+- [`ultracite/core`](/preset/core) - Perussäännöt JavaScript/TypeScriptille
+- [`ultracite/react`](/preset/react) - React-kohtaiset säännöt
+- [`ultracite/next`](/preset/next) - Next.js-kohtaiset säännöt
 - [`ultracite/solid`](/preset/solid) - Solid.js-säännöt
 - [`ultracite/vue`](/preset/vue) - Vue.js-säännöt
 - [`ultracite/svelte`](/preset/svelte) - Svelte-säännöt
@@ -23,7 +23,7 @@ v6 esittelee [kehyskohtaiset presetit](/configuration#framework-specific-configu
 
 ### Next.js/React-projektit
 
-Päivitä `biome.jsonc` käyttämään asianmukaisia presettejä:
+Päivitä `biome.jsonc` laajentaaksesi sopivia presettejä:
 
 ```jsonc title="biome.jsonc"
 {
@@ -64,7 +64,7 @@ Käytä kehykseesi sopivaa presettiä:
 }
 ```
 
-### Monikehysprojektit
+### Monikehyksiset projektit
 
 Yhdistä presettejä tarpeen mukaan:
 
