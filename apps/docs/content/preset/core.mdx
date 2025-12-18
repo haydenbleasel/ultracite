@@ -266,15 +266,15 @@ Environment-specific handling:
 | `noUselessCatchBinding` | `off` | Disallow unused `catch` bindings. |
 | `noUselessUndefined` | `error` | Disallow the use of useless `undefined`. |
 | `useArraySortCompare` | `off` | Enforce the use of a compare function in `Array.prototype.sort()`. |
-| `useAwaitThenable` | `error` | Enforce that `await` is only used on Promise values. |
+| `useAwaitThenable` | `off` | Enforce that `await` is only used on Promise values. |
 | `useConsistentArrowReturn` | `error` | Enforce consistent arrow function bodies. |
 | `useConsistentGraphqlDescriptions` | `error` | Require all descriptions to follow the same style (either block or inline) inside GraphQL files. |
 | `useDeprecatedDate` | `error` | Require the `@deprecated` directive to specify a deletion date. |
 | `useExhaustiveSwitchCases` | `off` | Require switch-case statements to be exhaustive. |
 | `useExplicitType` | `off` | Enforce types in functions, methods, variables, and parameters. |
-| `useFind` | `error` | Enforce the use of `Array.prototype.find()` over `Array.prototype.filter()` followed by `[0]` when looking for a single result. |
+| `useFind` | `off` | Enforce the use of `Array.prototype.find()` over `Array.prototype.filter()` followed by `[0]` when looking for a single result. |
 | `useMaxParams` | `error` | Enforce a maximum number of parameters in function definitions. |
-| `useRegexpExec` | `error` | Enforce `RegExp#exec` over `String#match` when no global flag is provided. |
+| `useRegexpExec` | `off` | Enforce `RegExp#exec` over `String#match` when no global flag is provided. |
 | `useRequiredScripts` | `off` | Enforce presence of configurable entries in the `scripts` section of `package.json` files. |
 | `useSortedClasses` | `error` (safe fix override) | Enforce the sorting of CSS utility classes. |
 | `useSpread` | `error` | Enforce the use of the spread operator over `Function.prototype.apply()`. |
