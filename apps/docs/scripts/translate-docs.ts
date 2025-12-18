@@ -36,12 +36,57 @@ function computeHash(content: string): string {
 
 type TranslationCache = {
   [filePath: string]: {
+    hash: string;
+    translations: {
+      [locale: string]: {
+        translatedAt: string;
+      };
+    };
+  };
+};
+
+type OldTranslationCache = {
+  [filePath: string]: {
     [locale: string]: {
       hash: string;
       translatedAt: string;
     };
   };
 };
+
+function migrateCache(oldCache: OldTranslationCache): TranslationCache {
+  const newCache: TranslationCache = {};
+
+  for (const [filePath, locales] of Object.entries(oldCache)) {
+    // Check if this is already in the new format
+    if ("hash" in locales && "translations" in locales) {
+      newCache[filePath] = locales as unknown as TranslationCache[string];
+      continue;
+    }
+
+    // Migrate from old format - get hash from any locale (they're all the same)
+    const localeEntries = Object.entries(locales);
+    if (localeEntries.length === 0) {
+      continue;
+    }
+
+    const firstLocale = localeEntries[0][1];
+    const hash = firstLocale.hash;
+
+    newCache[filePath] = {
+      hash,
+      translations: {},
+    };
+
+    for (const [locale, data] of localeEntries) {
+      newCache[filePath].translations[locale] = {
+        translatedAt: data.translatedAt,
+      };
+    }
+  }
+
+  return newCache;
+}
 
 async function loadCache(): Promise<TranslationCache> {
   if (!existsSync(HASH_CACHE_FILE)) {
@@ -50,7 +95,23 @@ async function loadCache(): Promise<TranslationCache> {
 
   try {
     const content = await readFile(HASH_CACHE_FILE, "utf-8");
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+
+    // Check if migration is needed (old format has locale objects with hash inside)
+    const firstEntry = Object.values(parsed)[0] as Record<string, unknown>;
+    if (
+      firstEntry &&
+      typeof firstEntry === "object" &&
+      !("hash" in firstEntry) &&
+      !("translations" in firstEntry)
+    ) {
+      console.log("Migrating translation cache to new format...");
+      const migrated = migrateCache(parsed as OldTranslationCache);
+      await saveCache(migrated);
+      return migrated;
+    }
+
+    return parsed;
   } catch (_error) {
     console.warn("Failed to load translation cache, starting fresh");
     return {};
@@ -72,12 +133,18 @@ function needsTranslation(
     return true;
   }
 
-  const localeCache = fileCache[locale];
+  // If the source file hash changed, all translations need updating
+  if (fileCache.hash !== currentHash) {
+    return true;
+  }
+
+  // Check if this specific locale has been translated
+  const localeCache = fileCache.translations?.[locale];
   if (!localeCache) {
     return true;
   }
 
-  return localeCache.hash !== currentHash;
+  return false;
 }
 
 const LOCALE_NAMES: Record<string, string> = {
@@ -184,11 +251,16 @@ async function translateFile(
 
   await writeFile(newFilePath, translatedContent, "utf-8");
 
-  if (!cache[filePath]) {
-    cache[filePath] = {};
+  if (cache[filePath]) {
+    // Update the hash in case it changed
+    cache[filePath].hash = contentHash;
+  } else {
+    cache[filePath] = {
+      hash: contentHash,
+      translations: {},
+    };
   }
-  cache[filePath][targetLocale] = {
-    hash: contentHash,
+  cache[filePath].translations[targetLocale] = {
     translatedAt: new Date().toISOString(),
   };
 
