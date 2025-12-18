@@ -1,5 +1,16 @@
 ## 5.6.0
 
+## 6.4.2
+
+### Patch Changes
+
+- 42fc700: Disable scanner rules
+- aff09df: Fix plugin install logging
+- 0f57252: Upgrade to Biome 2.3.9
+- c15b770: Fix reporter
+- 99dda79: Fix extension install logging
+- d759789: Bump Biome to 2.3.10
+
 ## 6.4.1
 
 ### Patch Changes
