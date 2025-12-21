@@ -8,8 +8,7 @@ export const IDE = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
-        Designed for <span className="italic">humans</span> and{" "}
-        <span className="italic">AI</span>
+        Designed for humans and AI
       </h2>
       <p className="text-balance text-lg text-muted-foreground tracking-tight">
         Ensure consistent code style and quality across all team members and AI

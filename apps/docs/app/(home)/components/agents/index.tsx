@@ -49,7 +49,7 @@ export const Agents = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
-        Works with all your favourite <span className="italic">agents</span>
+        Works with all your favourite agents
       </h2>
       <p className="text-balance text-lg text-muted-foreground tracking-tight">
         Ultracite can generate rules files for all these popular IDEs and
@@ -58,12 +58,12 @@ export const Agents = () => (
     </div>
     <div className="mx-auto flex items-center justify-center -space-x-1">
       {logos.map((logo, index) => (
-        <Tooltip delayDuration={0} key={logo.name}>
-          <TooltipTrigger>
+        <Tooltip key={logo.name}>
+          <TooltipTrigger delay={0}>
             <Image
               alt={logo.name}
               className={cn(
-                "size-10 overflow-hidden rounded-sm ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2",
+                "size-14 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2",
                 index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
               )}
               key={logo.name}
@@ -73,10 +73,10 @@ export const Agents = () => (
           <TooltipContent>{logo.name}</TooltipContent>
         </Tooltip>
       ))}
-      <Tooltip delayDuration={0}>
-        <TooltipTrigger>
+      <Tooltip>
+        <TooltipTrigger delay={0}>
           <DynamicLink href="/rules">
-            <div className="flex size-10 items-center justify-center overflow-hidden rounded-sm bg-muted-foreground ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
+            <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted-foreground ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
               <span className="text-background text-sm">+ 12</span>
             </div>
           </DynamicLink>

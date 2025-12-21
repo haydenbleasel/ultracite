@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Agents } from "./components/agents";
-import { Comparison } from "./components/comparison";
 import { CallToAction } from "./components/cta";
 import { Demo } from "./components/demo";
 import { Footer } from "./components/footer";
@@ -27,7 +26,6 @@ const Home = () => (
       <Demo />
     </Hero>
     <Logos />
-    <Comparison />
     <ZeroConfig />
     <IDE />
     <Agents />

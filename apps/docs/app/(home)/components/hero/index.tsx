@@ -36,8 +36,7 @@ export const Hero = ({ description, children }: HeroProps) => (
   <div className="grid gap-8 sm:gap-20">
     <div className="grid gap-4">
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-        A production-grade, <span className="italic">zero-configuration</span>{" "}
-        preset for{" "}
+        A production-grade, zero-configuration preset for{" "}
         <span className="inline-flex translate-y-1 items-center -space-x-1">
           {logos.map((logo) => (
             <Tooltip key={logo.name}>
