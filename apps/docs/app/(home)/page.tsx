@@ -11,7 +11,7 @@ import { Social } from "./components/social";
 import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
-const title = "A highly opinionated, zero-configuration preset for ESLint, Biome and Oxlint.";
+const title = "A highly opinionated, zero-configuration preset for ESLint, Biome and Oxlint. | Ultracite";
 const description = "Ultracite is a highly opinionated preset for ESLint, Biome and Oxlint; designed to help you and your AI models write consistent and type-safe code without the hassle of configuration.";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 const Home = () => (
   <>
-    <Hero title={title} description={description}>
+    <Hero description={description}>
       <Demo />
     </Hero>
     <Logos />

@@ -11,7 +11,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 type HeroProps = {
   children: ReactNode;
-  title: string;
   description: string;
 };
 
@@ -30,11 +29,11 @@ const logos = [
   },
 ];
 
-export const Hero = ({ title, description, children }: HeroProps) => (
+export const Hero = ({ description, children }: HeroProps) => (
   <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
     <div className="grid gap-4">
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl tracking-tighter">
-        {title.replace("ESLint, Biome and Oxlint.", "")}
+        A highly opinionated, <span className="italic">zero-configuration</span> preset for{" "}
         <span className="inline-flex items-center -space-x-1 translate-y-1">
         {logos.map((logo, index) => (
           <Tooltip key={index}>

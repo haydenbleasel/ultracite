@@ -14,6 +14,7 @@ import Consent from "./consent.svg";
 import FrenchGovernment from "./french-government.svg";
 import MagicUI from "./magic-ui.svg";
 import Profound from "./profound.svg";
+import Redpanda from "./redpanda.svg";
 import Tencent from "./tencent.svg";
 import VA from "./va.svg";
 import Vercel from "./vercel.svg";
@@ -66,6 +67,10 @@ const logos = [
   {
     name: "Magic UI",
     src: MagicUI,
+  },
+  {
+    name: "Redpanda",
+    src: Redpanda,
   },
 ];
 

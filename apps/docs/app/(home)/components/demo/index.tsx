@@ -102,7 +102,7 @@ export const Demo = () => (
       width={1000}
     />
     <div className="size-full sm:px-16 sm:pt-16">
-      <div className="max-h-128 overflow-y-auto border border-white/10 bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
+      <div className="max-h-128 overflow-hidden border border-white/10 bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
         <div className="grid grid-cols-3 mb-8 select-none pointer-events-none">
           <div className="flex items-center gap-2">
             <div className="size-2 rounded-full bg-muted-foreground" />

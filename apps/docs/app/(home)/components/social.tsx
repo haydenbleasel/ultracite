@@ -21,7 +21,7 @@ export const Social = () => (
         "1969727618237820980",
       ]}
     />
-    <Button variant="link" render={
+    <Button variant="link" nativeButton={false} render={
       <Link href="/social">See all tweets</Link>
     } />
   </div>
