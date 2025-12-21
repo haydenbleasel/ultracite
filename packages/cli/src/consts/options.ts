@@ -24,6 +24,7 @@ export const options = {
     "roo-code",
     "warp",
     "droid",
+    "antigravity",
   ] as const,
   integrations: ["husky", "lefthook", "lint-staged"] as const,
   hooks: ["cursor", "claude"] as const,

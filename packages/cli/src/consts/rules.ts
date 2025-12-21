@@ -94,6 +94,9 @@ alwaysApply: false
       path: "./AGENTS.md",
       appendMode: true,
     },
+    antigravity: {
+      path: "./.agent/rules/ultracite.md",
+    },
   } as const;
 
 export const HOOKS: Record<(typeof options.hooks)[number], HookConfig> = {
