@@ -17,7 +17,7 @@ const defaultConfig = {
 
 export const oxlint = {
   exists: async () => {
-    return exists(oxlintConfigPath);
+    return await exists(oxlintConfigPath);
   },
   create: async (opts?: OxlintOptions) => {
     const extendsList = ["ultracite/oxlint/core"];
@@ -34,7 +34,7 @@ export const oxlint = {
       extends: extendsList,
     };
 
-    return writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
+    return await writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
   },
   update: async (opts?: OxlintOptions) => {
     const existingContents = await readFile(oxlintConfigPath, "utf-8");

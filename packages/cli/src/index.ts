@@ -24,7 +24,7 @@ export const router = t.router({
         linters: z
           .array(z.enum(options.linters))
           .optional()
-          .describe("Linters to use (biome, eslint, oxlint)"),
+          .describe("Linter / formatter to use"),
         editors: z
           .array(z.enum(options.editorConfigs))
           .optional()

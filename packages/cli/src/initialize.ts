@@ -14,7 +14,6 @@ import {
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
-import { biome } from "./biome";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
@@ -23,7 +22,9 @@ import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
-import { eslint, oxlint } from "./linters";
+import { biome } from "./linters/biome";
+import { eslint } from "./linters/eslint";
+import { oxlint } from "./linters/oxlint";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";

@@ -1,8 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import type { options } from "./consts/options";
-import { exists } from "./utils";
+import type { options } from "../consts/options";
+import { exists } from "../utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
