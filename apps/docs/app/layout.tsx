@@ -3,29 +3,18 @@ import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
-import {
-  Geist_Mono,
-  Instrument_Sans,
-  Instrument_Serif,
-} from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
-const sans = Instrument_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
+const inter = Inter({
+  subsets:['latin'],
+  variable:'--font-sans',
   display: "swap",
   weight: "variable",
-});
-
-const serif = Instrument_Serif({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  display: "swap",
-  weight: "400",
 });
 
 const mono = Geist_Mono({
@@ -40,8 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
     <html
       className={cn(
         "touch-manipulation font-sans antialiased",
-        sans.variable,
-        serif.variable,
+        inter.variable,
         mono.variable
       )}
       lang="en"

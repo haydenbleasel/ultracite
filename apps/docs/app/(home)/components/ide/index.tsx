@@ -7,7 +7,7 @@ import { Sidebar } from "./sidebar";
 export const IDE = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-medium font-serif text-3xl md:text-4xl lg:text-5xl">
+      <h2 className="text-balance font-medium text-3xl md:text-4xl lg:text-5xl">
         Designed for <span className="italic">humans</span> and{" "}
         <span className="italic">AI</span>
       </h2>
