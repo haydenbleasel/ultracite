@@ -13,7 +13,7 @@ import {
   ExternalLinkIcon,
   MessageCircleIcon,
 } from "lucide-react";
-import { type ComponentProps, createContext, useContext } from "react";
+import { type ComponentProps, createContext, ReactElement, useContext } from "react";
 
 const providers = {
   github: {
@@ -232,14 +232,12 @@ export const OpenInSeparator = (props: OpenInSeparatorProps) => (
 export type OpenInTriggerProps = ComponentProps<typeof DropdownMenuTrigger>;
 
 export const OpenInTrigger = ({ children, ...props }: OpenInTriggerProps) => (
-  <DropdownMenuTrigger {...props} asChild>
-    {children ?? (
-      <Button type="button" variant="outline">
-        Open in chat
-        <ChevronDownIcon className="ml-2 size-4" />
-      </Button>
-    )}
-  </DropdownMenuTrigger>
+  <DropdownMenuTrigger {...props} nativeButton={false} render={children as ReactElement ?? (
+    <Button type="button" variant="outline">
+      Open in chat
+      <ChevronDownIcon className="ml-2 size-4" />
+    </Button>
+  )} />
 );
 
 export type OpenInChatGPTProps = ComponentProps<typeof DropdownMenuItem>;
@@ -247,7 +245,7 @@ export type OpenInChatGPTProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInChatGPT = (props: OpenInChatGPTProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.chatgpt.createUrl(query)}
@@ -258,7 +256,7 @@ export const OpenInChatGPT = (props: OpenInChatGPTProps) => {
         <span className="flex-1">{providers.chatgpt.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };
 
@@ -267,7 +265,7 @@ export type OpenInClaudeProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInClaude = (props: OpenInClaudeProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.claude.createUrl(query)}
@@ -278,7 +276,7 @@ export const OpenInClaude = (props: OpenInClaudeProps) => {
         <span className="flex-1">{providers.claude.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };
 
@@ -287,7 +285,7 @@ export type OpenInT3Props = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInT3 = (props: OpenInT3Props) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.t3.createUrl(query)}
@@ -298,7 +296,7 @@ export const OpenInT3 = (props: OpenInT3Props) => {
         <span className="flex-1">{providers.t3.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };
 
@@ -307,7 +305,7 @@ export type OpenInSciraProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInScira = (props: OpenInSciraProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.scira.createUrl(query)}
@@ -318,7 +316,7 @@ export const OpenInScira = (props: OpenInSciraProps) => {
         <span className="flex-1">{providers.scira.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };
 
@@ -327,7 +325,7 @@ export type OpenInv0Props = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInv0 = (props: OpenInv0Props) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.v0.createUrl(query)}
@@ -338,7 +336,7 @@ export const OpenInv0 = (props: OpenInv0Props) => {
         <span className="flex-1">{providers.v0.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };
 
@@ -347,7 +345,7 @@ export type OpenInCursorProps = ComponentProps<typeof DropdownMenuItem>;
 export const OpenInCursor = (props: OpenInCursorProps) => {
   const { query } = useOpenInContext();
   return (
-    <DropdownMenuItem asChild {...props}>
+    <DropdownMenuItem {...props} nativeButton={false} render={
       <a
         className="flex items-center gap-2"
         href={providers.cursor.createUrl(query)}
@@ -358,6 +356,6 @@ export const OpenInCursor = (props: OpenInCursorProps) => {
         <span className="flex-1">{providers.cursor.title}</span>
         <ExternalLinkIcon className="size-4 shrink-0" />
       </a>
-    </DropdownMenuItem>
+    } />
   );
 };

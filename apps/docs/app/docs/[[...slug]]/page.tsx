@@ -13,7 +13,7 @@ import { ViewOptions } from "@/components/page-actions";
 import { getLLMText, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
-const Page = async (props: PageProps<"/[...slug]">) => {
+const Page = async (props: PageProps<"/docs/[[...slug]]">) => {
   const { slug } = await props.params;
   const page = source.getPage(slug);
 
@@ -53,7 +53,7 @@ const Page = async (props: PageProps<"/[...slug]">) => {
 export const generateStaticParams = () => source.generateParams();
 
 export const generateMetadata = async (
-  props: PageProps<"/[...slug]">
+  props: PageProps<"/docs/[[...slug]]">
 ): Promise<Metadata> => {
   const { slug } = await props.params;
   const page = source.getPage(slug);
@@ -62,7 +62,7 @@ export const generateMetadata = async (
     return {};
   }
 
-  const image = ["/og", ...slug, "image.png"].join("/");
+  const image = ["/og", ...(slug ?? []), "image.png"].join("/");
 
   return {
     title: page.data.title,
