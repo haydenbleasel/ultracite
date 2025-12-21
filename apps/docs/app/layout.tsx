@@ -5,6 +5,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
 import { Geist_Mono, Geist } from "next/font/google";
 import type { ReactNode } from "react";
+import { Navbar } from "@/components/ultracite/navbar";
 
 type LayoutProps = {
   children: ReactNode;

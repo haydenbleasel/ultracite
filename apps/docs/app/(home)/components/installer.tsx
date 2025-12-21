@@ -37,15 +37,14 @@ export const Installer = ({ command }: InstallerProps) => {
   return (
     <InputGroup className="h-10 bg-card font-mono shadow-none">
       <InputGroupAddon>
-        <InputGroupText className="font-normal text-muted-foreground">
+        <InputGroupText className="font-normal text-muted-foreground pl-2">
           $
         </InputGroupText>
       </InputGroupAddon>
       <InputGroupInput readOnly value={command} />
-      <InputGroupAddon align="inline-end">
+      <InputGroupAddon align="inline-end" className="pr-2">
         <InputGroupButton
           aria-label="Copy"
-          className="rounded-sm"
           onClick={handleCopy}
           size="icon-sm"
           title="Copy"

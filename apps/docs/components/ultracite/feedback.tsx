@@ -10,13 +10,13 @@ import { usePathname } from "next/navigation";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
 import { discuss } from "@/actions/discuss";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "./ui/input-group";
+} from "@/components/ui/input-group";
 
 export type Feedback = {
   opinion: "good" | "bad";

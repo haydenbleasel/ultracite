@@ -15,7 +15,7 @@ import {
   OpenInTrigger,
   OpenInv0,
 } from "@/components/ai-elements/open-in-chat";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 type ViewOptionsProps = {
   markdownUrl: string;

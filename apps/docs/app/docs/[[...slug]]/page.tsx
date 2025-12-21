@@ -7,9 +7,9 @@ import {
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CopyMarkdown } from "@/components/copy-markdown";
-import { Feedback } from "@/components/feedback";
-import { ViewOptions } from "@/components/page-actions";
+import { CopyMarkdown } from "@/components/ultracite/copy-markdown";
+import { Feedback } from "@/components/ultracite/feedback";
+import { ViewOptions } from "@/components/ultracite/page-actions";
 import { getLLMText, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 

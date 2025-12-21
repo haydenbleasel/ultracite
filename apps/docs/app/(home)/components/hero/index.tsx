@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Installer } from "../installer";
-import Link from "fumadocs-core/link";
+import Link from "next/link";
 
 import Biome from './biome.jpg';
 import ESLint from './eslint.jpg';
@@ -30,7 +30,7 @@ const logos = [
 ];
 
 export const Hero = ({ description, children }: HeroProps) => (
-  <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
+  <div className="grid gap-8 sm:gap-20">
     <div className="grid gap-4">
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl tracking-tighter">
         A highly opinionated, <span className="italic">zero-configuration</span> preset for{" "}
@@ -51,7 +51,7 @@ export const Hero = ({ description, children }: HeroProps) => (
       <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
         <Installer command="npx ultracite@latest init" />
         <Button nativeButton={false} className="px-4" size="lg" variant="link" render={
-          <Link href="/introduction">Read the docs</Link>
+          <Link href="/docs">Read the docs</Link>
         } />
       </div>
     </div>
