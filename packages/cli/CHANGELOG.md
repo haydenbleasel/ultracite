@@ -1,5 +1,16 @@
 ## 5.6.0
 
+## 6.4.3
+
+### Patch Changes
+
+- 393a0d1: Explicitly enable css
+- 127c1c6: Fix reporter bug for --unsafe flag
+- 41a73ba: Fix file-based metadata
+- 43b07be: Fix tsconfig patching
+- 9d1d374: Add support for pre-commit (python)
+- f9256db: Add support for Antigravity
+
 ## 6.4.2
 
 ### Patch Changes
