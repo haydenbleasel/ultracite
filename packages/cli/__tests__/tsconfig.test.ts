@@ -37,7 +37,7 @@ describe("tsconfig", () => {
   });
 
   describe("update", () => {
-    test("adds strictNullChecks to tsconfig", async () => {
+    test("skips modification when strict: true is already set", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("glob", () => ({
         glob: mock(() => Promise.resolve(["tsconfig.json"])),
@@ -52,11 +52,75 @@ describe("tsconfig", () => {
 
       await tsconfig.update();
 
+      // Should not write because strict: true already enables strictNullChecks
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("skips modification when strictNullChecks: true is already set", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      }));
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve('{"compilerOptions": {"strictNullChecks": true}}')
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      await tsconfig.update();
+
+      // Should not write because strictNullChecks is already true
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("adds strictNullChecks when not present", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      }));
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve('{"compilerOptions": {"target": "ES2020"}}')
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      await tsconfig.update();
+
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
-      expect(writtenContent.compilerOptions.strict).toBe(true);
+      expect(writtenContent.compilerOptions.target).toBe("ES2020");
+    });
+
+    test("preserves comments when modifying tsconfig", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      const tsconfigWithComments = `{
+  // This is a comment
+  "compilerOptions": {
+    "target": "ES2020"
+  }
+}`;
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      }));
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(tsconfigWithComments)),
+        writeFile: mockWriteFile,
+      }));
+
+      await tsconfig.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const writeCall = mockWriteFile.mock.calls[0];
+      const writtenContent = writeCall[1] as string;
+      // Comments should be preserved
+      expect(writtenContent).toContain("// This is a comment");
     });
 
     test("updates multiple tsconfig files", async () => {

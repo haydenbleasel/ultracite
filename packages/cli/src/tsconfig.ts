@@ -1,13 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
-import deepmerge from "deepmerge";
 import { glob } from "glob";
-import { parse } from "jsonc-parser";
-
-const defaultConfig = {
-  compilerOptions: {
-    strictNullChecks: true,
-  },
-};
+import { type ModificationOptions, applyEdits, modify, parse } from "jsonc-parser";
 
 /**
  * Find all tsconfig.json files in the project
@@ -30,7 +23,39 @@ const findTsConfigFiles = async (): Promise<string[]> => {
 };
 
 /**
+ * Check if strictNullChecks is already enabled (directly or via strict: true)
+ */
+const hasStrictNullChecks = (
+  config: Record<string, unknown> | undefined
+): boolean => {
+  if (!config) {
+    return false;
+  }
+
+  const compilerOptions = config.compilerOptions as
+    | Record<string, unknown>
+    | undefined;
+
+  if (!compilerOptions) {
+    return false;
+  }
+
+  // strict: true enables strictNullChecks
+  if (compilerOptions.strict === true) {
+    return true;
+  }
+
+  // strictNullChecks is explicitly set
+  if (compilerOptions.strictNullChecks === true) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * Update a single tsconfig.json file with strictNullChecks
+ * Preserves comments and only modifies if necessary
  */
 const updateTsConfigFile = async (filePath: string): Promise<void> => {
   try {
@@ -39,11 +64,39 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
       | Record<string, unknown>
       | undefined;
 
-    // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
-    const configToMerge = existingConfig || {};
-    const newConfig = deepmerge(configToMerge, defaultConfig);
+    // Skip if strictNullChecks is already enabled (directly or via strict: true)
+    if (hasStrictNullChecks(existingConfig)) {
+      return;
+    }
 
-    await writeFile(filePath, JSON.stringify(newConfig, null, 2));
+    // If the file contains invalid JSON, write a fresh config
+    if (existingConfig === undefined) {
+      const freshConfig = {
+        compilerOptions: {
+          strictNullChecks: true,
+        },
+      };
+      await writeFile(filePath, JSON.stringify(freshConfig, null, 2));
+      return;
+    }
+
+    // Use jsonc-parser's modify to preserve comments
+    const modifyOptions: ModificationOptions = {
+      formattingOptions: {
+        tabSize: 2,
+        insertSpaces: true,
+      },
+    };
+
+    const edits = modify(
+      existingContents,
+      ["compilerOptions", "strictNullChecks"],
+      true,
+      modifyOptions
+    );
+
+    const newContents = applyEdits(existingContents, edits);
+    await writeFile(filePath, newContents);
   } catch (error) {
     // Log error but don't fail the entire operation
     console.warn(`Failed to update ${filePath}:`, error);
