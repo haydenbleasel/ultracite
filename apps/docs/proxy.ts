@@ -25,8 +25,10 @@ const proxy = (request: NextRequest, context: NextFetchEvent) => {
 };
 
 export const config = {
-  // Matcher ignoring `/_next/`, `/api/`, static assets, favicon, etc.
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  // Matcher ignoring `/_next/`, `/api/`, static assets, favicon, file-based metadata, etc.
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|icon\\.png|apple-icon\\.png|opengraph-image\\.png|twitter-image\\.png|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest).*)",
+  ],
 };
 
 export default proxy;
