@@ -21,6 +21,10 @@ export const router = t.router({
           .enum(options.packageManagers)
           .optional()
           .describe("Package manager to use"),
+        linters: z
+          .array(z.enum(options.linters))
+          .optional()
+          .describe("Linters to use (biome, eslint, oxlint)"),
         editors: z
           .array(z.enum(options.editorConfigs))
           .optional()
@@ -65,7 +69,7 @@ export const router = t.router({
 
   check: t.procedure
     .meta({
-      description: "Run Biome linter without fixing files",
+      description: "Run linter without fixing files",
     })
     .input(
       z
@@ -82,6 +86,10 @@ export const router = t.router({
               .describe(
                 "level of diagnostics to show. In order, from the lowest to the most important: info, warn, error."
               ),
+            linter: z
+              .enum(options.linters)
+              .optional()
+              .describe("linter to use (biome, eslint, or oxlint)"),
           }),
         ])
         .optional()
@@ -92,7 +100,7 @@ export const router = t.router({
 
   fix: t.procedure
     .meta({
-      description: "Run Biome linter and fixes files",
+      description: "Run linter and fix files",
     })
     .input(
       z.tuple([
@@ -103,12 +111,16 @@ export const router = t.router({
           .describe("specific files to format"),
         z.object({
           unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+          linter: z
+            .enum(options.linters)
+            .optional()
+            .describe("linter to use (biome, eslint, or oxlint)"),
         }),
       ])
     )
     .mutation(async ({ input }) => {
       const [files, opts] = input;
-      await fix(files, { unsafe: opts.unsafe });
+      await fix(files, { unsafe: opts.unsafe, linter: opts.linter });
     }),
 
   doctor: t.procedure

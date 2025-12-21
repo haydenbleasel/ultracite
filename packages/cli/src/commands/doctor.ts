@@ -46,6 +46,66 @@ const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
   };
 };
 
+// Check if ESLint is installed
+const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const command = dlxCommand(pm, "eslint", {
+    args: ["--version"],
+    short: pm === "npm",
+  });
+
+  const eslintCheck = spawnSync(command, {
+    shell: true,
+    encoding: "utf-8",
+  });
+
+  if (eslintCheck.status === 0 && eslintCheck.stdout) {
+    return {
+      name: "ESLint installation",
+      status: "pass",
+      message: `ESLint is installed (${eslintCheck.stdout.trim()})`,
+    };
+  }
+
+  return {
+    name: "ESLint installation",
+    status: "warn",
+    message: "ESLint is not installed (optional)",
+  };
+};
+
+// Check if Oxlint is installed
+const checkOxlintInstallation = async (): Promise<DiagnosticCheck> => {
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const command = dlxCommand(pm, "oxlint", {
+    args: ["--version"],
+    short: pm === "npm",
+  });
+
+  const oxlintCheck = spawnSync(command, {
+    shell: true,
+    encoding: "utf-8",
+  });
+
+  if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
+    return {
+      name: "Oxlint installation",
+      status: "pass",
+      message: `Oxlint is installed (${oxlintCheck.stdout.trim()})`,
+    };
+  }
+
+  return {
+    name: "Oxlint installation",
+    status: "warn",
+    message: "Oxlint is not installed (optional)",
+  };
+};
+
 // Check if biome.json exists and extends ultracite
 const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
   const biomeConfigPath = join(process.cwd(), "biome.json");
@@ -61,7 +121,7 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
   if (!configPath) {
     return {
       name: "Biome configuration",
-      status: "fail",
+      status: "warn",
       message: "No biome.json or biome.jsonc file found",
     };
   }
@@ -91,6 +151,100 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
       name: "Biome configuration",
       status: "fail",
       message: "Could not parse biome.json(c) file",
+    };
+  }
+};
+
+// Check if eslint.config.* exists and uses ultracite
+const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
+  const eslintConfigPaths = [
+    "eslint.config.mjs",
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.ts",
+    "eslint.config.mts",
+    "eslint.config.cts",
+  ];
+
+  let configPath: string | null = null;
+  for (const path of eslintConfigPaths) {
+    const fullPath = join(process.cwd(), path);
+    if (existsSync(fullPath)) {
+      configPath = fullPath;
+      break;
+    }
+  }
+
+  if (!configPath) {
+    return {
+      name: "ESLint configuration",
+      status: "warn",
+      message: "No eslint.config.* file found (optional)",
+    };
+  }
+
+  try {
+    const configContent = await readFile(configPath, "utf-8");
+
+    if (configContent.includes("ultracite/eslint")) {
+      return {
+        name: "ESLint configuration",
+        status: "pass",
+        message: "eslint.config.* imports ultracite/eslint",
+      };
+    }
+
+    return {
+      name: "ESLint configuration",
+      status: "warn",
+      message: "eslint.config.* exists but doesn't import ultracite/eslint",
+    };
+  } catch {
+    return {
+      name: "ESLint configuration",
+      status: "fail",
+      message: "Could not read eslint.config.* file",
+    };
+  }
+};
+
+// Check if .oxlintrc.json exists and extends ultracite
+const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
+  const oxlintConfigPath = join(process.cwd(), ".oxlintrc.json");
+
+  if (!existsSync(oxlintConfigPath)) {
+    return {
+      name: "Oxlint configuration",
+      status: "warn",
+      message: "No .oxlintrc.json file found (optional)",
+    };
+  }
+
+  try {
+    const configContent = await readFile(oxlintConfigPath, "utf-8");
+    const config = parse(configContent);
+
+    if (
+      Array.isArray(config?.extends) &&
+      config.extends.includes("ultracite/oxlint/core")
+    ) {
+      return {
+        name: "Oxlint configuration",
+        status: "pass",
+        message: ".oxlintrc.json extends ultracite/oxlint/core",
+      };
+    }
+
+    return {
+      name: "Oxlint configuration",
+      status: "warn",
+      message: ".oxlintrc.json exists but doesn't extend ultracite/oxlint/core",
+    };
+  } catch {
+    return {
+      name: "Oxlint configuration",
+      status: "fail",
+      message: "Could not parse .oxlintrc.json file",
     };
   }
 };
@@ -143,18 +297,21 @@ const checkConflictingTools = (): DiagnosticCheck => {
     existsSync(join(process.cwd(), file))
   );
 
-  // Check for ESLint config files
-  const hasEslint = eslintConfigFiles.some((file) =>
+  // Check for old ESLint config files (not flat config)
+  const oldEslintConfigs = eslintConfigFiles.filter(
+    (file) => !file.startsWith("eslint.config")
+  );
+  const hasOldEslint = oldEslintConfigs.some((file) =>
     existsSync(join(process.cwd(), file))
   );
 
-  if (hasPrettier || hasEslint) {
+  if (hasPrettier || hasOldEslint) {
     const conflicts: string[] = [];
     if (hasPrettier) {
       conflicts.push("Prettier");
     }
-    if (hasEslint) {
-      conflicts.push("ESLint");
+    if (hasOldEslint) {
+      conflicts.push("ESLint (legacy config)");
     }
 
     return {
@@ -206,7 +363,11 @@ export const doctor = async (): Promise<void> => {
 
   // Run all checks with spinners
   checks.push(await runCheck(checkBiomeInstallation, "Biome installation"));
+  checks.push(await runCheck(checkEslintInstallation, "ESLint installation"));
+  checks.push(await runCheck(checkOxlintInstallation, "Oxlint installation"));
   checks.push(await runCheck(checkBiomeConfig, "Biome configuration"));
+  checks.push(await runCheck(checkEslintConfig, "ESLint configuration"));
+  checks.push(await runCheck(checkOxlintConfig, "Oxlint configuration"));
   checks.push(await runCheck(checkUltraciteDependency, "Ultracite dependency"));
   checks.push(await runCheck(checkConflictingTools, "conflicting tools"));
 

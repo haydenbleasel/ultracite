@@ -17,7 +17,11 @@
     "test:coverage": "bun test --coverage"
   },
   "exports": {
-    "./*": "./config/*/biome.jsonc"
+    "./*": "./config/*/biome.jsonc",
+    "./biome/*": "./config/biome/*/biome.jsonc",
+    "./eslint": "./config/eslint/index.mjs",
+    "./eslint/*": "./config/eslint/*/index.mjs",
+    "./oxlint/*": "./config/oxlint/*/.oxlintrc.json"
   },
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "bugs": {

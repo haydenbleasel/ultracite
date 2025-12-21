@@ -1,25 +1,25 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+import type { options } from "../consts/options";
 import { parseFilePaths } from "../utils";
 
-type CheckOptions = [
-  string[],
-  {
-    "diagnostic-level"?: "info" | "warn" | "error";
-  },
-];
+type Linter = (typeof options.linters)[number];
 
-export const check = async (opts: CheckOptions | undefined) => {
-  const files = opts?.[0] || [];
-  const diagnostic_level = opts?.[1]["diagnostic-level"];
+interface CheckOptions {
+  "diagnostic-level"?: "info" | "warn" | "error";
+  linter?: Linter;
+}
 
+const runBiomeCheck = async (
+  files: string[],
+  diagnosticLevel?: string
+): Promise<{ hasErrors: boolean }> => {
   const args = ["check", "--no-errors-on-unmatched"];
-  if (diagnostic_level) {
-    args.push(`--diagnostic-level=${diagnostic_level}`);
+  if (diagnosticLevel) {
+    args.push(`--diagnostic-level=${diagnosticLevel}`);
   }
 
-  // Add files or default to current directory
   if (files.length > 0) {
     args.push(...parseFilePaths(files));
   } else {
@@ -44,4 +44,72 @@ export const check = async (opts: CheckOptions | undefined) => {
   }
 
   return { hasErrors: result.status !== 0 };
+};
+
+const runEslintCheck = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "eslint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runOxlintCheck = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "oxlint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+export const check = async (
+  opts: [string[], CheckOptions] | undefined
+): Promise<{ hasErrors: boolean }> => {
+  const files = opts?.[0] || [];
+  const diagnosticLevel = opts?.[1]["diagnostic-level"];
+  const linter = opts?.[1].linter || "biome";
+
+  switch (linter) {
+    case "eslint":
+      return runEslintCheck(files);
+    case "oxlint":
+      return runOxlintCheck(files);
+    case "biome":
+    default:
+      return runBiomeCheck(files, diagnosticLevel);
+  }
 };

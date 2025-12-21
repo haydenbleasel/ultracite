@@ -2,6 +2,7 @@ import { type PackageManagerName, packageManagers } from "nypm";
 
 export const options = {
   packageManagers: packageManagers.map((pm) => pm.name) as PackageManagerName[],
+  linters: ["biome", "eslint", "oxlint"] as const,
   editorConfigs: ["vscode", "zed"] as const,
   agents: [
     "vscode-copilot",

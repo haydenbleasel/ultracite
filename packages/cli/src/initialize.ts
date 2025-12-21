@@ -23,6 +23,7 @@ import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
+import { eslint, oxlint } from "./linters";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
@@ -31,8 +32,11 @@ import { isMonorepo, title, updatePackageJson } from "./utils";
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
+type Linter = (typeof options.linters)[number];
+
 interface InitializeFlags {
   pm?: PackageManagerName;
+  linters?: Linter[];
   editors?: (typeof options.editorConfigs)[number][];
   agents?: (typeof options.agents)[number][];
   hooks?: (typeof options.hooks)[number][];
@@ -45,6 +49,7 @@ interface InitializeFlags {
 
 export const installDependencies = async (
   packageManager: PackageManagerName,
+  linters: Linter[] = ["biome"],
   install = true,
   quiet = false
 ) => {
@@ -54,10 +59,18 @@ export const installDependencies = async (
     s.start("Installing dependencies...");
   }
 
-  const packages = [
-    `ultracite@${ultraciteVersion}`,
-    `@biomejs/biome@${schemaVersion}`,
-  ];
+  const packages: string[] = [`ultracite@${ultraciteVersion}`];
+
+  // Add linter-specific dependencies
+  if (linters.includes("biome")) {
+    packages.push(`@biomejs/biome@${schemaVersion}`);
+  }
+  if (linters.includes("eslint")) {
+    packages.push("eslint@latest");
+  }
+  if (linters.includes("oxlint")) {
+    packages.push("oxlint@latest");
+  }
 
   if (install) {
     for (const pkg of packages) {
@@ -68,12 +81,21 @@ export const installDependencies = async (
       });
     }
   } else {
-    await updatePackageJson({
-      devDependencies: {
-        "@biomejs/biome": schemaVersion,
-        ultracite: ultraciteVersion,
-      },
-    });
+    const devDependencies: Record<string, string> = {
+      ultracite: ultraciteVersion,
+    };
+
+    if (linters.includes("biome")) {
+      devDependencies["@biomejs/biome"] = schemaVersion;
+    }
+    if (linters.includes("eslint")) {
+      devDependencies.eslint = "latest";
+    }
+    if (linters.includes("oxlint")) {
+      devDependencies.oxlint = "latest";
+    }
+
+    await updatePackageJson({ devDependencies });
   }
 
   if (!quiet) {
@@ -203,6 +225,66 @@ export const upsertBiomeConfig = async (
   await biome.create({ frameworks });
   if (!quiet) {
     s.stop("Biome configuration created.");
+  }
+};
+
+export const upsertEslintConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for ESLint configuration...");
+  }
+
+  if (await eslint.exists()) {
+    if (!quiet) {
+      s.message("ESLint configuration found, updating...");
+    }
+    await eslint.update({ frameworks });
+    if (!quiet) {
+      s.stop("ESLint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("ESLint configuration not found, creating...");
+  }
+  await eslint.create({ frameworks });
+  if (!quiet) {
+    s.stop("ESLint configuration created.");
+  }
+};
+
+export const upsertOxlintConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Oxlint configuration...");
+  }
+
+  if (await oxlint.exists()) {
+    if (!quiet) {
+      s.message("Oxlint configuration found, updating...");
+    }
+    await oxlint.update({ frameworks });
+    if (!quiet) {
+      s.stop("Oxlint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Oxlint configuration not found, creating...");
+  }
+  await oxlint.create({ frameworks });
+  if (!quiet) {
+    s.stop("Oxlint configuration created.");
   }
 };
 
@@ -591,6 +673,56 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
+    let linters = opts.linters;
+    if (linters === undefined) {
+      // If quiet mode or other CLI options are provided, default to biome only
+      const hasOtherCliOptions =
+        quiet ||
+        opts.pm ||
+        opts.editors ||
+        opts.agents ||
+        opts.hooks ||
+        opts.integrations !== undefined ||
+        opts.migrate !== undefined ||
+        opts.frameworks !== undefined;
+
+      if (hasOtherCliOptions) {
+        linters = ["biome"];
+      } else {
+        const lintersResult = await multiselect({
+          message: "Which linters do you want to use?",
+          options: [
+            {
+              label: "Biome (recommended)",
+              value: "biome",
+              hint: "Fast Rust-based linter and formatter",
+            },
+            {
+              label: "ESLint",
+              value: "eslint",
+              hint: "Traditional JavaScript linter",
+            },
+            {
+              label: "Oxlint",
+              value: "oxlint",
+              hint: "Fast Rust-based linter",
+            },
+          ],
+          required: false,
+        });
+
+        if (isCancel(lintersResult)) {
+          cancel("Operation cancelled.");
+          return;
+        }
+
+        linters =
+          lintersResult.length > 0
+            ? (lintersResult as Linter[])
+            : (["biome"] as Linter[]);
+      }
+    }
+
     let frameworks = opts.frameworks;
     if (frameworks === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
@@ -772,14 +904,25 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (shouldRemovePrettier) {
       await removePrettier(pm, quiet);
     }
-    if (shouldRemoveEslint) {
+    // Only remove ESLint if not selected as a linter
+    if (shouldRemoveEslint && !linters.includes("eslint")) {
       await removeEsLint(pm, quiet);
     }
 
-    await installDependencies(pm, !opts.skipInstall, quiet);
+    await installDependencies(pm, linters, !opts.skipInstall, quiet);
 
     await upsertTsConfig(quiet);
-    await upsertBiomeConfig(frameworks, quiet);
+
+    // Create configs for selected linters
+    if (linters.includes("biome")) {
+      await upsertBiomeConfig(frameworks, quiet);
+    }
+    if (linters.includes("eslint")) {
+      await upsertEslintConfig(frameworks, quiet);
+    }
+    if (linters.includes("oxlint")) {
+      await upsertOxlintConfig(frameworks, quiet);
+    }
 
     if (editorConfig?.includes("vscode")) {
       await upsertVsCodeSettings(quiet);

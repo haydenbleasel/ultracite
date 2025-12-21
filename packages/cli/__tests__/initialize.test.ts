@@ -390,7 +390,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies("npm", true);
+      await installDependencies("npm", ["biome"], true);
       expect(mockAddDep).toHaveBeenCalled();
     });
 
@@ -411,7 +411,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies("npm", false);
+      await installDependencies("npm", ["biome"], false);
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });

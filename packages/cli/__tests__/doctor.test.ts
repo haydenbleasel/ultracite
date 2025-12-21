@@ -151,7 +151,11 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
-  test("fails when biome config is missing", async () => {
+  test("warns when biome config is missing", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
@@ -175,7 +179,10 @@ describe("doctor", () => {
       ),
     }));
 
-    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+    // Doctor should complete with warnings (not fail) when configs are missing
+    await doctor();
+
+    consoleLogSpy.mockRestore();
   });
 
   test("warns when biome config exists but does not extend ultracite", async () => {

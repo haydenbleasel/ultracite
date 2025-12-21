@@ -1,39 +1,31 @@
 import { readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import type { options } from "./consts/options";
-import { exists } from "./utils";
+import type { options } from "../consts/options";
+import { exists } from "../utils";
 
-const defaultConfig = {
-  $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-  extends: ["ultracite/biome/core"],
-};
+const oxlintConfigPath = "./.oxlintrc.json";
 
-const getBiomeConfigPath = async (): Promise<string> => {
-  // Check for biome.json first, then fall back to biome.jsonc
-  if (await exists("./biome.json")) {
-    return "./biome.json";
-  }
-  return "./biome.jsonc";
-};
-
-interface BiomeOptions {
+interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
 }
 
-export const biome = {
+const defaultConfig = {
+  $schema: "./node_modules/oxlint/configuration_schema.json",
+  extends: ["ultracite/oxlint/core"],
+};
+
+export const oxlint = {
   exists: async () => {
-    const path = await getBiomeConfigPath();
-    return exists(path);
+    return exists(oxlintConfigPath);
   },
-  create: async (opts?: BiomeOptions) => {
-    const path = await getBiomeConfigPath();
-    const extendsList = ["ultracite/biome/core"];
+  create: async (opts?: OxlintOptions) => {
+    const extendsList = ["ultracite/oxlint/core"];
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        extendsList.push(`ultracite/biome/${framework}`);
+        extendsList.push(`ultracite/oxlint/${framework}`);
       }
     }
 
@@ -42,11 +34,10 @@ export const biome = {
       extends: extendsList,
     };
 
-    return writeFile(path, JSON.stringify(config, null, 2));
+    return writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
   },
-  update: async (opts?: BiomeOptions) => {
-    const path = await getBiomeConfigPath();
-    const existingContents = await readFile(path, "utf-8");
+  update: async (opts?: OxlintOptions) => {
+    const existingContents = await readFile(oxlintConfigPath, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
@@ -62,15 +53,15 @@ export const biome = {
 
     const newExtends = [...existingExtends];
 
-    // Add ultracite/biome/core if not present
-    if (!newExtends.includes("ultracite/biome/core")) {
-      newExtends.push("ultracite/biome/core");
+    // Add ultracite/oxlint/core if not present
+    if (!newExtends.includes("ultracite/oxlint/core")) {
+      newExtends.push("ultracite/oxlint/core");
     }
 
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        const frameworkConfig = `ultracite/biome/${framework}`;
+        const frameworkConfig = `ultracite/oxlint/${framework}`;
         if (!newExtends.includes(frameworkConfig)) {
           newExtends.push(frameworkConfig);
         }
@@ -85,6 +76,6 @@ export const biome = {
     };
     const newConfig = deepmerge(configToWork, configToMerge);
 
-    await writeFile(path, JSON.stringify(newConfig, null, 2));
+    await writeFile(oxlintConfigPath, JSON.stringify(newConfig, null, 2));
   },
 };

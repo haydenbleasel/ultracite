@@ -1,20 +1,26 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+import type { options } from "../consts/options";
 import { parseFilePaths } from "../utils";
+
+type Linter = (typeof options.linters)[number];
 
 interface FixOptions {
   unsafe?: boolean;
+  linter?: Linter;
 }
 
-export const fix = async (files: string[], options: FixOptions = {}) => {
+const runBiomeFix = async (
+  files: string[],
+  unsafe?: boolean
+): Promise<{ hasErrors: boolean }> => {
   const args = ["check", "--write", "--no-errors-on-unmatched"];
 
-  if (options.unsafe) {
+  if (unsafe) {
     args.push("--unsafe");
   }
 
-  // Add files or default to current directory
   if (files.length > 0) {
     args.push(...parseFilePaths(files));
   } else {
@@ -39,4 +45,71 @@ export const fix = async (files: string[], options: FixOptions = {}) => {
   }
 
   return { hasErrors: result.status !== 0 };
+};
+
+const runEslintFix = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "eslint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runOxlintFix = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "oxlint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+export const fix = async (
+  files: string[],
+  opts: FixOptions = {}
+): Promise<{ hasErrors: boolean }> => {
+  const linter = opts.linter || "biome";
+
+  switch (linter) {
+    case "eslint":
+      return runEslintFix(files);
+    case "oxlint":
+      return runOxlintFix(files);
+    case "biome":
+    default:
+      return runBiomeFix(files, opts.unsafe);
+  }
 };
