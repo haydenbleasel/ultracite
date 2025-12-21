@@ -9,166 +9,85 @@ const Gray = ({ children }: { children: React.ReactNode }) => (
   <span className="text-muted-foreground">{children}</span>
 );
 
-const Orange = ({ children }: { children: React.ReactNode }) => (
-  <span className="text-orange-400">{children}</span>
-);
-
 const Green = ({ children }: { children: React.ReactNode }) => (
   <span className="text-green-400">{children}</span>
 );
 
-const Yellow = ({ children }: { children: React.ReactNode }) => (
-  <span className="text-yellow-400">{children}</span>
+const Cyan = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-cyan-400">{children}</span>
 );
 
 const Output = () => (
   <>
     <Line>
-      <Gray>$</Gray> ultracite fix
+      <Gray>$</Gray> bun x ultracite@latest init
     </Line>
     <br />
     <Line>
-      <Orange>Ultracite v6.3.11</Orange> fix
+      <Cyan>●</Cyan> <Gray>Detected lockfile, using <Cyan>bun</Cyan></Gray>
     </Line>
     <Line>
-      <Gray>Found</Gray> 121 errors<Gray>.</Gray>
+      <Gray>│</Gray>
     </Line>
     <Line>
-      <Green>✓</Green> <Gray>Finished in</Gray> 121ms <Gray>on</Gray> 196 files
-      <Gray>.</Gray>
-    </Line>
-    <br />
-    <Line>
-      <Yellow>Here are the issues we couldn't fix automatically:</Yellow>
-    </Line>
-    <br />
-    <Line>
-      <Orange>apps/docs/app/og/[...slug]/route.tsx:39:8</Orange>{" "}
-      <Gray>suppressions/unused</Gray>
+      <Green>◇</Green> Which formatters / linters do you want to use?
     </Line>
     <Line>
-      <Gray>
-        Suppression comment has no effect. Remove the suppression or make sure
-        you are suppressing the correct rule.
-      </Gray>
-    </Line>
-    <br />
-    <Line>
-      <Gray>{"       38 │"}</Gray>
-      {
-        '     <div style={{ fontFamily: "Geist" }} tw="flex h-full w-full bg-black">'
-      }
+      <Gray>│</Gray> <Gray>Biome</Gray>
     </Line>
     <Line>
-      <Orange>{"   >"}</Orange>
-      <Gray>{"   39 │"}</Gray>
-      {
-        '       {/** biome-ignore lint/performance/noImgElement: "Required for Satori" */}'
-      }
+      <Gray>│</Gray>
     </Line>
     <Line>
-      <Gray>{"          │"}</Gray>
-      {"        "}
-      <Orange>
-        {
-          "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        }
-      </Orange>
+      <Green>◇</Green> Which frameworks are you using?
     </Line>
     <Line>
-      <Gray>{"       40 │"}</Gray>
-      {"       <img"}
+      <Gray>│</Gray> <Gray>React, Next.js</Gray>
     </Line>
     <Line>
-      <Gray>{"       41 │"}</Gray>
-      {'         alt="Vercel OpenGraph Background"'}
-    </Line>
-    <br />
-    <Line>
-      <Gray>────────────────────────────────────────────────────────────</Gray>
-    </Line>
-    <br />
-    <Line>
-      <Orange>apps/registry/app/[component]/route.ts:226:76</Orange>{" "}
-      <Gray>lint/complexity/noExcessiveCognitiveComplexity</Gray>
+      <Gray>│</Gray>
     </Line>
     <Line>
-      <Gray>Excessive complexity of 95 detected (max: 15).</Gray>
-    </Line>
-    <br />
-    <Line>
-      <Gray>{"      225 │"}</Gray>{" "}
+      <Green>◇</Green> Which editors do you want to configure?
     </Line>
     <Line>
-      <Orange>{"   >"}</Orange>
-      <Gray>{"  226 │"}</Gray>
-      {
-        " export const GET = async (_request: NextRequest, { params }: RequestProps) => {"
-      }
+      <Gray>│</Gray> <Gray>VSCode / Cursor / Windsurf</Gray>
     </Line>
     <Line>
-      <Gray>{"          │"}</Gray>
-      {
-        "                                                                            "
-      }
-      <Orange>{"^^"}</Orange>
+      <Gray>│</Gray>
     </Line>
     <Line>
-      <Gray>{"      227 │"}</Gray>
-      {"   const { component } = await params;"}
+      <Green>◇</Green> Which agents do you want to enable?
     </Line>
     <Line>
-      <Gray>{"      228 │"}</Gray>
-      {'   const parsedComponent = component.replace(".json", "");'}
-    </Line>
-    <br />
-    <Line>
-      {"    "}
-      <Orange>i</Orange> Please refactor this function to reduce its complexity
-      score from 95 to the max allowed complexity 15.
-    </Line>
-    <br />
-    <Line>
-      <Gray>────────────────────────────────────────────────────────────</Gray>
-    </Line>
-    <br />
-    <Line>
-      <Orange>
-        packages/elements/__tests__/chain-of-thought.test.tsx:23:69
-      </Orange>{" "}
-      <Gray>lint/suspicious/noEmptyBlockStatements</Gray>
-    </Line>
-    <Line>Unexpected empty block.</Line>
-    <br />
-    <Line>
-      <Gray>{"       22 │"}</Gray>
-      {"     // Suppress console.error for this test"}
+      <Gray>│</Gray> <Gray>Cursor, Claude Code</Gray>
     </Line>
     <Line>
-      <Orange>{"   >"}</Orange>
-      <Gray>{"   23 │"}</Gray>
-      {
-        '     const spy = vi.spyOn(console, "error").mockImplementation(() => {});'
-      }
+      <Gray>│</Gray>
     </Line>
     <Line>
-      <Gray>{"          │"}</Gray>
-      {"                                                                     "}
-      <Orange>{"^^"}</Orange>
+      <Green>◇</Green> Which agent hooks do you want to enable?
     </Line>
     <Line>
-      <Gray>{"       24 │"}</Gray>{" "}
+      <Gray>│</Gray> <Gray>Cursor, Claude Code</Gray>
     </Line>
     <Line>
-      <Gray>{"       25 │"}</Gray>
-      {"     expect(() =>"}
+      <Gray>│</Gray>
     </Line>
-    <br />
     <Line>
-      {"    "}
-      <Orange>i</Orange> Empty blocks are usually the result of an incomplete
-      refactoring. Remove the empty block or add a comment inside it if it is
-      intentional.
+      <Cyan>◆</Cyan> Would you like any of the following Git hooks?
+    </Line>
+    <Line>
+      <Gray>│</Gray> <Gray>◻</Gray> Husky 
+    </Line>
+    <Line>
+      <Gray>│</Gray> <Gray>◻</Gray> Lefthook 
+    </Line>
+    <Line>
+      <Gray>│</Gray> <Gray>◻</Gray> Lint-staged 
+    </Line>
+    <Line>
+      <Gray>│</Gray> <Gray>◻</Gray> pre-commit (Python framework) 
     </Line>
   </>
 );
@@ -183,7 +102,17 @@ export const Demo = () => (
       width={1000}
     />
     <div className="size-full sm:px-16 sm:pt-16">
-      <div className="max-h-128 overflow-y-auto bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
+      <div className="max-h-128 overflow-y-auto border border-white/10 bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
+        <div className="grid grid-cols-3 mb-8 select-none pointer-events-none">
+          <div className="flex items-center gap-2">
+            <div className="size-2 rounded-full bg-muted-foreground" />
+            <div className="size-2 rounded-full bg-muted-foreground" />
+            <div className="size-2 rounded-full bg-muted-foreground" />
+          </div>
+          <div className="flex items-center justify-center">
+            <p className="text-sm text-muted-foreground font-mono">Terminal</p>
+          </div>
+        </div>
         <pre className="font-mono text-sm text-white">
           <code>
             <Output />

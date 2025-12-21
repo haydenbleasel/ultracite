@@ -17,12 +17,12 @@ type HeroProps = {
 
 const logos = [
   {
-    name: "Biome",
-    src: Biome,
-  },
-  {
     name: "ESLint",
     src: ESLint,
+  },
+  {
+    name: "Biome",
+    src: Biome,
   },
   {
     name: "Oxlint",
