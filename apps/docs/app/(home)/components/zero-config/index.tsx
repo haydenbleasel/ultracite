@@ -92,7 +92,7 @@ export const ZeroConfig = () => (
           <CodeBlock
             code={`{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [${config.presets.map((preset) => `"ultracite/${preset}"`).join(", ")}]
+  "extends": [${config.presets.map((preset) => `"ultracite/biome/${preset}"`).join(", ")}]
 }`}
             lang="json"
           />

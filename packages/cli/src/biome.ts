@@ -6,7 +6,7 @@ import { exists } from "./utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-  extends: ["ultracite/core"],
+  extends: ["ultracite/biome/core"],
 };
 
 const getBiomeConfigPath = async (): Promise<string> => {
@@ -28,7 +28,7 @@ export const biome = {
   },
   create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
-    const extendsList = ["ultracite/core"];
+    const extendsList = ["ultracite/biome/core"];
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
@@ -62,15 +62,15 @@ export const biome = {
 
     const newExtends = [...existingExtends];
 
-    // Add ultracite/core if not present
-    if (!newExtends.includes("ultracite/core")) {
-      newExtends.push("ultracite/core");
+    // Add ultracite/biome/core if not present
+    if (!newExtends.includes("ultracite/biome/core")) {
+      newExtends.push("ultracite/biome/core");
     }
 
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        const frameworkConfig = `ultracite/${framework}`;
+        const frameworkConfig = `ultracite/biome/${framework}`;
         if (!newExtends.includes(frameworkConfig)) {
           newExtends.push(frameworkConfig);
         }

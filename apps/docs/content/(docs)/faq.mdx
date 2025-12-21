@@ -65,7 +65,7 @@ Additionally, there are blog posts and community articles about Biome’s rise a
 
 ## Q: How do I disable Ultracite for a specific project or file?
 
-If you have a project where you temporarily don't want Ultracite, you can simply not include the `extends: ["ultracite/core"]` in `biome.jsonc` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome's defaults.
+If you have a project where you temporarily don't want Ultracite, you can simply not include the `extends: ["ultracite/biome/core"]` in `biome.jsonc` (or remove the config file). If the VS Code extension is installed, it may still try to format on save using Biome's defaults.
 
 To fully disable, you could turn off `formatOnSave` or uninstall the Biome extension for that workspace. For a specific file, as mentioned, use ignore comments or patterns. Essentially, Ultracite is opt-in per project via the config. If it's not configured, it won't run (Biome itself might still run formatting if triggered, but not linting rules).
 

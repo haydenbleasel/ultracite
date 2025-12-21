@@ -636,7 +636,7 @@ describe("helper functions", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
-          Promise.resolve('{"extends": ["ultracite/core"]}')
+          Promise.resolve('{"extends": ["ultracite/biome/core"]}')
         ),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),

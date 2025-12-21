@@ -18,7 +18,10 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+  dlxCommand: mock(
+    (_pm, pkg, opts) =>
+      `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+  ),
 }));
 
 describe("doctor", () => {
@@ -50,7 +53,7 @@ describe("doctor", () => {
       readFile: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/core"]}');
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("package.json")) {
           return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
@@ -62,7 +65,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
@@ -89,7 +95,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -121,7 +130,7 @@ describe("doctor", () => {
       readFile: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/core"]}');
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),
@@ -130,7 +139,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
@@ -157,7 +169,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -196,7 +211,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
@@ -231,7 +249,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
@@ -259,7 +280,7 @@ describe("doctor", () => {
       readFile: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/core"]}');
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("package.json")) {
           throw new Error("File not found");
@@ -271,7 +292,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
@@ -303,7 +327,7 @@ describe("doctor", () => {
       readFile: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/core"]}');
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("package.json")) {
           return Promise.resolve("invalid json {");
@@ -315,7 +339,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
@@ -347,7 +374,7 @@ describe("doctor", () => {
       readFile: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/core"]}');
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("package.json")) {
           // Package.json without ultracite in dependencies or devDependencies
@@ -362,7 +389,10 @@ describe("doctor", () => {
 
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock((_pm, pkg, opts) => `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
     }));
 
     await doctor();
