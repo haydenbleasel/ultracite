@@ -63,7 +63,7 @@ const configs = [
 export const ZeroConfig = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl md:text-4xl tracking-tighter">
+      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
         <span className="italic">Zero-config</span> by design
       </h2>
       <p className="text-balance text-lg text-muted-foreground tracking-tight">

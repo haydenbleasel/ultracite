@@ -9,7 +9,6 @@ import { ArrowUpIcon, ThumbsDown, ThumbsUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
 import { discuss } from "@/actions/discuss";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   InputGroup,
@@ -17,6 +16,7 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
 
 export type Feedback = {
   opinion: "good" | "bad";
@@ -138,12 +138,15 @@ export const Feedback = ({ className }: FeedbackProps) => {
           <div className="flex flex-col items-center gap-3 px-3 py-6 text-center text-sm">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
-              <Button size="sm" render={
-                <a href={previous.response?.githubUrl} target="_blank">
-                  <SiGithub className="size-4" fill="currentColor" />
-                  View on GitHub
-                </a>
-              } />
+              <Button
+                render={
+                  <a href={previous.response?.githubUrl} target="_blank">
+                    <SiGithub className="size-4" fill="currentColor" />
+                    View on GitHub
+                  </a>
+                }
+                size="sm"
+              />
 
               <Button
                 onClick={() => {

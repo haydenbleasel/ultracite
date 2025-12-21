@@ -37,7 +37,7 @@ export const Installer = ({ command }: InstallerProps) => {
   return (
     <InputGroup className="h-10 bg-card font-mono shadow-none">
       <InputGroupAddon>
-        <InputGroupText className="font-normal text-muted-foreground pl-2">
+        <InputGroupText className="pl-2 font-normal text-muted-foreground">
           $
         </InputGroupText>
       </InputGroupAddon>

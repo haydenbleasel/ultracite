@@ -45,20 +45,23 @@ export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
         <OpenInv0 />
         <OpenInCursor />
         <OpenInSeparator />
-        <OpenInItem nativeButton={false} render={
-          <a
-            className="flex items-center gap-2"
-            href={githubUrl}
-            rel="noopener"
-            target="_blank"
-          >
-            <span className="shrink-0">
-              <SiGithub />
-            </span>
-            <span className="flex-1">Open in GitHub</span>
-            <ExternalLinkIcon className="size-4 shrink-0 text-muted-foreground" />
-          </a>
-        } />
+        <OpenInItem
+          nativeButton={false}
+          render={
+            <a
+              className="flex items-center gap-2"
+              href={githubUrl}
+              rel="noopener"
+              target="_blank"
+            >
+              <span className="shrink-0">
+                <SiGithub />
+              </span>
+              <span className="flex-1">Open in GitHub</span>
+              <ExternalLinkIcon className="size-4 shrink-0 text-muted-foreground" />
+            </a>
+          }
+        />
       </OpenInContent>
     </OpenIn>
   );

@@ -1,12 +1,12 @@
-import { Navbar } from "@/components/ultracite/navbar";
 import type { ReactNode } from "react";
+import { Navbar } from "@/components/ultracite/navbar";
 
 type HomeLayoutProps = {
   children: ReactNode;
 };
 
 const HomeLayout = ({ children }: HomeLayoutProps) => (
-  <div className="relative mx-auto grid w-full container 2xl:max-w-7xl gap-24 px-4 sm:gap-32">
+  <div className="container relative mx-auto grid w-full gap-24 px-4 sm:gap-32 2xl:max-w-7xl">
     <Navbar />
     {children}
   </div>

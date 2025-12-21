@@ -20,7 +20,7 @@ const features = [
     label: "ESLint + Prettier + Stylelint",
     description: "The traditional JavaScript toolchain.",
     avatar: (
-      <div className="-space-x-1 flex items-center">
+      <div className="flex items-center -space-x-1">
         <Image
           alt="ESLint"
           className="size-6 rounded-full ring-1 ring-background"
@@ -228,7 +228,7 @@ const features = [
 export const Comparison = () => (
   <section className="grid gap-12">
     <div className="mx-auto grid max-w-2xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl md:text-4xl tracking-tighter">
+      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
         Why choose Ultracite?
       </h2>
       <p className="text-balance text-lg text-muted-foreground tracking-tight">
@@ -237,7 +237,7 @@ export const Comparison = () => (
       </p>
     </div>
 
-    <div className="-space-x-px isolate mx-auto flex w-full flex-col items-center gap-4 lg:flex-row lg:gap-0">
+    <div className="isolate mx-auto flex w-full flex-col items-center gap-4 -space-x-px lg:flex-row lg:gap-0">
       {features.map((feature, index) => (
         <Card
           className={cn(

@@ -11,8 +11,8 @@ import Profound from "./profound.svg";
 import Redpanda from "./redpanda.svg";
 import Tencent from "./tencent.svg";
 import VA from "./va.svg";
-import Workday from "./workday.svg";
 import Vercel from "./vercel.svg";
+import Workday from "./workday.svg";
 
 const logos = [
   {
@@ -76,7 +76,7 @@ const logos = [
 export const Logos = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl md:text-4xl tracking-tighter">
+      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
         Trusted by top companies
       </h2>
       <p className="text-balance text-lg text-muted-foreground tracking-tight">
@@ -92,12 +92,21 @@ export const Logos = () => (
         of open source projects.
       </p>
     </div>
-    <div className="grid grid-cols-5 border-l border-t divide-x divide-y">
-        {logos.map((logo) => (
-          <div className="w-full aspect-video p-12 flex items-center justify-center last:border-r last:border-b" key={logo.name}>
-            <Image alt={logo.name} height={48} src={logo.src} width={48} className="size-full object-contain" />
-          </div>
-        ))}
+    <div className="grid grid-cols-5 divide-x divide-y border-t border-l">
+      {logos.map((logo) => (
+        <div
+          className="flex aspect-video w-full items-center justify-center p-12 last:border-r last:border-b"
+          key={logo.name}
+        >
+          <Image
+            alt={logo.name}
+            className="size-full object-contain"
+            height={48}
+            src={logo.src}
+            width={48}
+          />
+        </div>
+      ))}
     </div>
   </div>
 );

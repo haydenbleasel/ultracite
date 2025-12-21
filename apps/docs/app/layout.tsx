@@ -3,7 +3,7 @@ import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
-import { Geist_Mono, Geist } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
 type LayoutProps = {
@@ -11,8 +11,8 @@ type LayoutProps = {
 };
 
 const sans = Geist({
-  subsets:['latin'],
-  variable:'--font-sans',
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
   weight: "variable",
 });
