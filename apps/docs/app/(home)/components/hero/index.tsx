@@ -36,17 +36,17 @@ export const Hero = ({ description, children }: HeroProps) => (
   <div className="grid gap-8 sm:gap-20">
     <div className="grid gap-4">
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-        A highly opinionated, <span className="italic">zero-configuration</span>{" "}
+        A production-grade, <span className="italic">zero-configuration</span>{" "}
         preset for{" "}
         <span className="inline-flex translate-y-1 items-center -space-x-1">
-          {logos.map((logo, index) => (
-            <Tooltip key={index}>
+          {logos.map((logo) => (
+            <Tooltip key={logo.name}>
               <TooltipTrigger>
                 <Image
                   alt={logo.name}
                   className="size-12 overflow-hidden rounded-full object-cover ring-2 ring-background"
                   height={48}
-                  key={index}
+                  key={logo.name}
                   src={logo.src}
                   width={48}
                 />

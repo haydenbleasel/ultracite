@@ -166,16 +166,14 @@ export const metadata: Metadata = {
 };
 
 const SocialPage = () => (
-  <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">
-    <div className="grid gap-20">
-      <div className="grid gap-4">
-        <h1 className="mb-0 max-w-lg text-balance font-medium text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">
-          {title}
-        </h1>
-        <p className="max-w-lg text-balance text-lg text-muted-foreground">
-          {description}
-        </p>
-      </div>
+  <div className="grid gap-8 sm:gap-20">
+    <div className="grid gap-4">
+      <h1 className="mb-0 max-w-2xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+        {title}
+      </h1>
+      <p className="max-w-xl text-balance text-lg text-muted-foreground tracking-tight">
+        {description}
+      </p>
     </div>
     <Tweets tweets={tweets} />
   </div>

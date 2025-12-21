@@ -35,13 +35,13 @@ export const Installer = ({ command }: InstallerProps) => {
   const Icon = copied ? CheckIcon : CopyIcon;
 
   return (
-    <InputGroup className="h-10 bg-card font-mono shadow-none">
+    <InputGroup className="dark h-10 bg-card font-mono shadow-none">
       <InputGroupAddon>
         <InputGroupText className="pl-2 font-normal text-muted-foreground">
           $
         </InputGroupText>
       </InputGroupAddon>
-      <InputGroupInput readOnly value={command} />
+      <InputGroupInput className="text-foreground" readOnly value={command} />
       <InputGroupAddon align="inline-end" className="pr-2">
         <InputGroupButton
           aria-label="Copy"
