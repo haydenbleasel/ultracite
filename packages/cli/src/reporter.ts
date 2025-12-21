@@ -152,6 +152,18 @@ const formatSummary = (
     );
   }
 
+  // Show message about skipped unsafe fixes
+  if (command === "fix" && summary.suggestedFixesSkipped > 0) {
+    const skippedWord =
+      summary.suggestedFixesSkipped !== 1 ? "fixes" : "fix";
+    lines.push(
+      `${pc.yellow("!")} ${pc.dim("Skipped")} ${summary.suggestedFixesSkipped} ${pc.dim("unsafe")} ${skippedWord}${pc.dim(".")}`
+    );
+    lines.push(
+      `  ${pc.dim("Run with")} ${pc.cyan("--unsafe")} ${pc.dim("to apply them.")}`
+    );
+  }
+
   return lines;
 };
 
