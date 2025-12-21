@@ -138,16 +138,12 @@ export const Feedback = ({ className }: FeedbackProps) => {
           <div className="flex flex-col items-center gap-3 px-3 py-6 text-center text-sm">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
-              <Button asChild size="sm">
-                <a
-                  href={previous.response?.githubUrl}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
+              <Button size="sm" render={
+                <a href={previous.response?.githubUrl} target="_blank">
                   <SiGithub className="size-4" fill="currentColor" />
                   View on GitHub
                 </a>
-              </Button>
+              } />
 
               <Button
                 onClick={() => {

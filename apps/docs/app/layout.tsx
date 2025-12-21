@@ -3,14 +3,14 @@ import "./global.css";
 import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Geist_Mono, Geist } from "next/font/google";
 import type { ReactNode } from "react";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
-const inter = Inter({
+const sans = Geist({
   subsets:['latin'],
   variable:'--font-sans',
   display: "swap",
@@ -29,7 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
     <html
       className={cn(
         "touch-manipulation font-sans antialiased",
-        inter.variable,
+        sans.variable,
         mono.variable
       )}
       lang="en"

@@ -1,4 +1,4 @@
-import { DynamicLink } from "fumadocs-core/dynamic-link";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Tweets } from "./tweets";
 
@@ -21,8 +21,8 @@ export const Social = () => (
         "1969727618237820980",
       ]}
     />
-    <Button asChild variant="link">
-      <DynamicLink href="/social">See all tweets</DynamicLink>
-    </Button>
+    <Button variant="link" render={
+      <Link href="/social">See all tweets</Link>
+    } />
   </div>
 );
