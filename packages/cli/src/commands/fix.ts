@@ -72,6 +72,34 @@ const runEslintFix = async (
   return { hasErrors: result.status !== 0 };
 };
 
+const runPrettierFix = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = [
+    "--write",
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "prettier", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
 const runOxlintFix = async (
   files: string[]
 ): Promise<{ hasErrors: boolean }> => {
@@ -104,8 +132,12 @@ export const fix = async (
   const linter = opts.linter || "biome";
 
   switch (linter) {
-    case "eslint":
-      return runEslintFix(files);
+    case "eslint": {
+      // ESLint is only a linter, so we run Prettier for formatting first
+      const prettierResult = await runPrettierFix(files);
+      const eslintResult = await runEslintFix(files);
+      return { hasErrors: prettierResult.hasErrors || eslintResult.hasErrors };
+    }
     case "oxlint":
       return runOxlintFix(files);
     case "biome":

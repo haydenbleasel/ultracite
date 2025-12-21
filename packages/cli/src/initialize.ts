@@ -25,6 +25,7 @@ import { preCommit } from "./integrations/pre-commit";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
 import { oxlint } from "./linters/oxlint";
+import { prettier } from "./linters/prettier";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
@@ -68,6 +69,8 @@ export const installDependencies = async (
   }
   if (linters.includes("eslint")) {
     packages.push("eslint@latest");
+    // ESLint is only a linter, so we need Prettier for formatting
+    packages.push("prettier@latest");
   }
   if (linters.includes("oxlint")) {
     packages.push("oxlint@latest");
@@ -91,6 +94,8 @@ export const installDependencies = async (
     }
     if (linters.includes("eslint")) {
       devDependencies.eslint = "latest";
+      // ESLint is only a linter, so we need Prettier for formatting
+      devDependencies.prettier = "latest";
     }
     if (linters.includes("oxlint")) {
       devDependencies.oxlint = "latest";
@@ -286,6 +291,33 @@ export const upsertOxlintConfig = async (
   await oxlint.create({ frameworks });
   if (!quiet) {
     s.stop("Oxlint configuration created.");
+  }
+};
+
+export const upsertPrettierConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Prettier configuration...");
+  }
+
+  if (await prettier.exists()) {
+    if (!quiet) {
+      s.message("Prettier configuration found, updating...");
+    }
+    await prettier.update();
+    if (!quiet) {
+      s.stop("Prettier configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Prettier configuration not found, creating...");
+  }
+  await prettier.create();
+  if (!quiet) {
+    s.stop("Prettier configuration created.");
   }
 };
 
@@ -699,14 +731,14 @@ export const initialize = async (flags?: InitializeFlags) => {
               hint: "Fast Rust-based linter and formatter",
             },
             {
-              label: "ESLint",
+              label: "ESLint + Prettier",
               value: "eslint",
-              hint: "Traditional JavaScript linter",
+              hint: "Traditional JavaScript linter and formatter",
             },
             {
               label: "Oxlint",
               value: "oxlint",
-              hint: "Fast Rust-based linter",
+              hint: "Fast Rust-based linter and formatter",
             },
           ],
           required: false,
@@ -902,7 +934,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    if (shouldRemovePrettier) {
+    // Only remove Prettier if not using ESLint (ESLint needs Prettier for formatting)
+    if (shouldRemovePrettier && !linters.includes("eslint")) {
       await removePrettier(pm, quiet);
     }
     // Only remove ESLint if not selected as a linter
@@ -920,6 +953,8 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
     if (linters.includes("eslint")) {
       await upsertEslintConfig(frameworks, quiet);
+      // ESLint is only a linter, so we need Prettier for formatting
+      await upsertPrettierConfig(quiet);
     }
     if (linters.includes("oxlint")) {
       await upsertOxlintConfig(frameworks, quiet);
