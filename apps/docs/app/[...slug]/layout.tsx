@@ -20,7 +20,6 @@ const DocLayout = ({ children }: DocLayoutProps) => {
     <DocsLayout
       {...baseOptions()}
       nav={{ ...baseOptions().nav, mode: "top" }}
-      sidebar={{ collapsible: false, className: "bg-card! border-r" }}
       tabMode="navbar"
       tree={source.pageTree}
     >

@@ -26,7 +26,7 @@ const Page = async (props: PageProps<"/[...slug]">) => {
 
   return (
     <DocsPage full={page.data.full} toc={page.data.toc}>
-      <DocsTitle className="font-normal text-3xl md:text-4xl lg:text-5xl">
+      <DocsTitle>
         {page.data.title}
       </DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
