@@ -1,18 +1,10 @@
-import { createI18nMiddleware } from "fumadocs-core/i18n/middleware";
 import { isMarkdownPreferred, rewritePath } from "fumadocs-core/negotiation";
-import {
-  type NextFetchEvent,
-  type NextRequest,
-  NextResponse,
-} from "next/server";
-import { i18n } from "@/lib/i18n";
+import { type NextRequest, NextResponse } from "next/server";
 
 const { rewrite: rewriteLLM } = rewritePath("/docs/*path", "/llms.mdx/*path");
 
-const internationalizer = createI18nMiddleware(i18n);
-
-const proxy = (request: NextRequest, context: NextFetchEvent) => {
-  // First, handle Markdown preference rewrites
+const proxy = (request: NextRequest) => {
+  // Handle Markdown preference rewrites for LLMs
   if (isMarkdownPreferred(request)) {
     const result = rewriteLLM(request.nextUrl.pathname);
     if (result) {
@@ -20,8 +12,7 @@ const proxy = (request: NextRequest, context: NextFetchEvent) => {
     }
   }
 
-  // Fallback to i18n middleware
-  return internationalizer(request, context);
+  return NextResponse.next();
 };
 
 export const config = {

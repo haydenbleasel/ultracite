@@ -1,6 +1,5 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { Logo } from "@/app/[lang]/(home)/components/logo";
-import { i18n } from "./i18n";
+import { Logo } from "@/app/(home)/components/logo";
 
 export const baseOptions = (): BaseLayoutProps => ({
   nav: {
@@ -18,7 +17,6 @@ export const baseOptions = (): BaseLayoutProps => ({
     { url: "/social", text: "Social", active: "url" },
   ],
   githubUrl: "https://github.com/haydenbleasel/ultracite",
-  i18n,
   themeSwitch: {
     mode: "light-dark-system",
   },
