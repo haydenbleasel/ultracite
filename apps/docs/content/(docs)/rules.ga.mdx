@@ -1,17 +1,23 @@
 ---
 title: Rialacha
-description: Conas Ultracite a chomhtháthú le cúntóirí códaithe AI trí rialacha eagarthóra.
+description: Conas Ultracite a chomhtháthú le cúntóirí códála AI trí rialacha eagarthóra.
 ---
 
 Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI coding assistants to write better, more consistent code that follows best practices.
 
-Oibríonn na rialacha eagarthóra i gcomhar le frithliniú agus formáidiú Biome. Cé go bhféachann Biome le formáidiú an chóid agus go nglacann sé earráidí sintéise, treoraíonn na rialacha eagarthóra na cúntóirí códaithe AI chun cód níos fearr a scríobh ó thús, agus laghdaíonn siad an gá le socruithe ina dhiaidh sin.
+Soláthraíonn Ultracite comhtháthú gan uaim le cúntóirí códála AI trí chomhaid rialacha shonracha eagarthóra a ghiniúint go huathoibríoch. Cabhraíonn na rialacha seo le cúntóirí códála AI a threorú chun cód níos fearr, níos comhsheasmhaí a scríobh a leanann na cleachtais is fearr.
 
-Coinníonn an cur chuige dúbailte seo an dá rud: cáilíocht chód uathoibrithe (trí Biome) agus giniúint chliste cód (trí rialacha códaithe AI).
+The editor rules work alongside Biome's linting and formatting. While Biome handles code formatting and catches syntax errors, the editor rules guide AI coding assistants to write better code from the start, reducing the need for fixes later.
 
-## Socrú
+Oibríonn na rialacha eagarthóra in éineacht le lintáil agus formáidiú Biome. Cé go gcaitheann Biome le formáidiú cód agus go ngreimíonn sé earráidí sintéise, treoraíonn na rialacha eagarthóra cúntóirí códála AI chun cód níos fearr a scríobh ón tús, ag laghdú an gá le socruithe ina dhiaidh sin.
 
-### Socrú Uathoibríoch
+This dual approach ensures both automated code quality (through Biome) and intelligent code generation (through AI coding rules).
+
+Cinntíonn an cur chuige dúbailte seo cáilíocht chód uathoibrithe (tríd an Biome) agus giniúint chliste cód (tríd na rialacha códála AI).
+
+## Cumrú
+
+### Cumrú Uathoibríoch
 
 When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
 
@@ -23,15 +29,19 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
+Cruthóidh an ceann seo an comhad ábhartha i do stór tionscadail. When you run the command, you'll be prompted to choose which editor rules to enable — the code block above is a sample prompt and is preserved as-is.
+
 This will create the relevant file in your project directory.
 
-### Socrú Láimhe
+### Cumrú Láimhe
 
-Má tá tú ag iarraidh socruithe a dhéanamh de láimh, cruthaigh an comhad ábhartha i eolaire do thionscadail (mar shampla `.cursor/rules` do Cursor nó `.rules` do Zed). Ansin, cóipeáil agus greamaigh [an t-ábhar seo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) sa chomhad.
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [an t-ábhar seo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+
+Má tá tú ag iarraidh socrú a dhéanamh de láimh, cruthaigh an comhad ábhartha i do stór tionscadail (m.sh. `.cursor/rules` do Cursor nó `.rules` do Zed). Ansin, cóipeáil agus greamaigh [an t-ábhar seo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) isteach sa chomhad.
 
 ## Eagarthóirí Tacaithe
 
-| Eagarthóir      | Suíomh Comhad Rialacha           |
+| Eagarthóir      | Suíomh Comhad Rialach            |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -57,18 +67,32 @@ Má tá tú ag iarraidh socruithe a dhéanamh de láimh, cruthaigh an comhad áb
 
 ## Buntáistí
 
-Tugann úsáid rialacha eagarthóra Ultracite roinnt buntáistí:
+Using Ultracite editor rules provides several advantages:
 
-- **Comhsheasmhacht**: Leanann an cód uile a ghineann AI na coincheapa céanna
-- **Cáilíocht**: Cuireann rialacha cleachtais is fearr i bhfeidhm agus coscann siad earráidí coitianta
-- **Inrochtaineacht**: Déanann treoirlínte inrochtaineachta ionsuite cinnte go bhfuil an cód cuimsitheach
+- **Comhsheasmhacht**: All AI-generated code follows the same conventions
+- **Cáilíocht**: Rules enforce best practices and prevent common mistakes
+- **Inrochtaineacht**: Built-in accessibility guidelines ensure inclusive code
+- **Feidhmíocht**: Rules promote efficient patterns and avoid anti-patterns
+- **Slándáil**: Guidelines help prevent common security vulnerabilities
+
+Agus rialacha eagarthóra Ultracite á n-úsáid, tá roinnt buntáistí:
+
+- **Comhsheasmhacht**: Leanann an cód uile a ghintear ag AI na naisc chéanna
+- **Cáilíocht**: Cuireann rialacha iallach ar chleachtais is fearr agus seachnaíonn siad botúin choitianta
+- **Inrochtaineacht**: Cinntíonn treoracha inrochtaintithe tógtha isteach cód cuimsitheach
 - **Feidhmíocht**: Cothaíonn rialacha patrúin éifeachtacha agus seachnaíonn siad frithphatrúin
-- **Slándáil**: Cabhraíonn na treoirlínte le leochaileachtaí slándála coitianta a chosc
+- **Slándáil**: Cabhraíonn treoracha le leochaileachtaí slándála coitianta a chosc
 
 ## Saincheapadh
 
-Cé go bhfuil na rialacha réamhshocraithe cuimsitheach, is féidir leat iad a shaincheapadh do do riachtanais shonracha:
+While the default rules are comprehensive, you can customize them for your specific needs:
 
-1. **Athraigh rialacha atá ann cheana**: Cuir in eagar na comhaid rialacha go díreach
-2. **Cuir rialacha sonracha tionscadail leis**: Cuir treoirlínte bhreise leis
-3. **Díghníomhachtaigh rialacha**: Bain nó cuir tráchtaireacht ar na rialacha nach mbaineann le do thionscadal
+1. **Modify existing rules**: Edit the rule files directly
+2. **Add project-specific rules**: Append additional guidelines
+3. **Disable rules**: Remove or comment out rules that don't apply to your project
+
+Cé go bhfuil na rialacha réamhshocraithe cuimsitheach, is féidir leat iad a shaincheapadh de réir do riachtanas:
+
+1. **Cuir in eagar rialacha atá ann cheana**: Cuir in eagar na gcomhad rialacha go díreach
+2. **Cuir rialacha sonracha don tionscadal leis**: Cuir treoracha breise leis
+3. **Díchumasaigh rialacha**: Bain nó cuir in trácht rialacha nach mbaineann le do thionscadal

@@ -1,19 +1,19 @@
 ---
 title: Pravila
-description: Kako integrirati Ultracite s pomočniki za pisanje kode z AI preko pravil v urejevalniku.
+description: Kako integrirati Ultracite z AI pomočniki za programiranje s pomočjo uredniških pravil.
 ---
 
-Ultracite zagotavlja nemoteno integracijo s pomočniki za pisanje kode z AI z avtomatskim generiranjem datotek pravil, specifičnih za posamezen urejevalnik. Ta pravila pomagajo usmerjati AI pomočnike pri pisanju boljše, bolj dosledne kode, ki sledi najboljšim praksam.
+Ultracite omogoča nemoteno integracijo z AI pomočniki za programiranje z avtomatskim ustvarjanjem datotek z navodili, specifičnih za posamezne urejevalnike. Ta pravila pomagajo usmerjati AI pomočnike za pisanje kode, da ustvarjajo boljšo, bolj dosledno kodo, ki sledi najboljšim praksam.
 
-Pravila za urejevalnik delujejo vzporedno z lintanjem in oblikovanjem, ki ju izvaja Biome. Medtem ko Biome skrbi za oblikovanje kode in zaznava sintaktične napake, pravila za urejevalnik usmerjajo AI pomočnike, da že od začetka pišejo boljšo kodo, s čimer zmanjšajo potrebo po kasnejših popravkih.
+Uredniška pravila delujejo vzporedno s preverjanjem in oblikovanjem kode, ki ga izvaja Biome. Medtem ko Biome skrbi za oblikovanje kode in zaznava sintaktične napake, uredniška pravila usmerjajo AI pomočnike za pisanje kode, da že na začetku ustvarjajo boljšo kodo, s čimer zmanjšajo potrebo po kasnejših popravkih.
 
-Ta dvojni pristop zagotavlja tako avtomatizirano kakovost kode (prek Biome) kot inteligentno generiranje kode (prek pravil za AI).
+Ta dvojni pristop zagotavlja tako avtomatizirano kakovost kode (prek Biome) kot tudi inteligentno generiranje kode (prek AI pravil).
 
-## Namestitev
+## Nastavitev
 
-### Samodejna namestitev
+### Samodejna nastavitev
 
-When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+Ko zaženete `npx ultracite init`, boste pozvani, da izberete, katera uredniška pravila želite omogočiti:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -23,16 +23,16 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
-To bo ustvarilo ustrezno datoteko v mapi vašega projekta.
+To bo ustvarilo ustrezno datoteko v imeniku vašega projekta.
 
-### Ročna namestitev
+### Ročna nastavitev
 
-Če želite nastaviti ročno, ustvarite ustrezno datoteko v mapi vašega projekta (na primer `.cursor/rules` za Cursor ali `.rules` za Zed). Nato kopirajte in prilepite [to vsebino](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) v datoteko.
+Če želite nastaviti stvari ročno, ustvarite ustrezno datoteko v imeniku vašega projekta (na primer `.cursor/rules` za Cursor ali `.rules` za Zed). Nato kopirajte in prilepite [to vsebino](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) v datoteko.
 
 ## Podprti urejevalniki
 
 | Urejevalnik     | Lokacija datoteke pravil         |
-| --------------- | -------------------------------- |
+| --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
 | Windsurf        | `.windsurf/rules/ultracite.md`    |
@@ -57,18 +57,18 @@ To bo ustvarilo ustrezno datoteko v mapi vašega projekta.
 
 ## Prednosti
 
-Uporaba pravil Ultracite za urejevalnik prinaša več prednosti:
+Uporaba uredniških pravil Ultracite prinaša več prednosti:
 
-- **Doslednost**: Vsa koda, ustvarjena z AI, sledi istim konvencijam
-- **Kakovost**: Pravila uveljavljajo najboljše prakse in preprečujejo pogoste napake
+- **Doslednost**: Vsa z AI ustvarjena koda sledi istim konvencijam
+- **Kakovost**: Pravila zagotavljajo najboljše prakse in preprečujejo pogoste napake
 - **Dostopnost**: Vgrajene smernice za dostopnost zagotavljajo vključujočo kodo
-- **Zmogljivost**: Pravila spodbujajo učinkovite vzorce in preprečujejo antiprakse
-- **Varnost**: Smernice pomagajo preprečiti pogoste varnostne ranljivosti
+- **Zmogljivost**: Pravila spodbujajo učinkovite vzorce in se izogibajo anti-vzorcem
+- **Varnost**: Smernice pomagajo preprečevati pogoste varnostne ranljivosti
 
-## Prilagajanje
+## Prilagoditev
 
-Čeprav so privzeta pravila obsežna, jih lahko prilagodite glede na svoje potrebe:
+Čeprav so privzeta pravila obsežna, jih lahko prilagodite glede na vaše specifične potrebe:
 
-1. **Spremenite obstoječa pravila**: Uredite datoteke s pravili neposredno
-2. **Dodajte pravila specifična za projekt**: Dodajte dodatne smernice
-3. **Onemogočite pravila**: Odstranite ali zakomentirajte pravila, ki se ne nanašajo na vaš projekt
+1. **Uredite obstoječa pravila**: Uredite datoteke pravil neposredno
+2. **Dodajte pravila specifična za projekt**: Dopolnite z dodatnimi smernicami
+3. **Onemogočite pravila**: Odstranite ali zakomentirajte pravila, ki ne veljajo za vaš projekt

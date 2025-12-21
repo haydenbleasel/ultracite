@@ -3,15 +3,15 @@ title: Regras
 description: Como integrar o Ultracite com assistentes de codificação por IA através de regras do editor.
 ---
 
-Ultracite proporciona integração perfeita com assistentes de codificação por IA ao gerar automaticamente ficheiros de regras específicos para editores. Essas regras ajudam a orientar os assistentes de codificação por IA a escrever código melhor e mais consistente, que segue as melhores práticas.
+Ultracite fornece integração perfeita com assistentes de codificação por IA gerando automaticamente ficheiros de regras específicos para cada editor. Essas regras ajudam a orientar os assistentes de codificação por IA para escrever código melhor e mais consistente que segue as melhores práticas.
 
-As regras do editor funcionam em conjunto com o linting e a formatação do Biome. Enquanto o Biome trata da formatação do código e deteta erros de sintaxe, as regras do editor orientam os assistentes de codificação por IA a escrever melhor código desde o início, reduzindo a necessidade de correções posteriores.
+As regras do editor funcionam em conjunto com o linting e a formatação do Biome. Enquanto o Biome lida com a formatação do código e detecta erros de sintaxe, as regras do editor orientam os assistentes de codificação por IA a escrever código melhor desde o início, reduzindo a necessidade de correções posteriores.
 
-Esta abordagem dupla assegura tanto a qualidade automatizada do código (através do Biome) quanto a geração inteligente de código (através das regras para IA).
+Essa abordagem dupla garante tanto qualidade de código automatizada (através do Biome) quanto geração inteligente de código (através de regras de codificação por IA).
 
 ## Configuração
 
-### Configuração Automática
+### Configuração automática
 
 When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
 
@@ -23,15 +23,15 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
-Isto criará o ficheiro relevante no diretório do seu projeto.
+This will create the relevant file in your project directory.
 
-### Configuração Manual
+### Configuração manual
 
-Se quiser configurar manualmente, crie o ficheiro relevante no diretório do seu projeto (por exemplo `.cursor/rules` para o Cursor ou `.rules` para o Zed). Depois, copie e cole [este conteúdo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) no ficheiro.
+Se você quiser configurar manualmente, crie o ficheiro relevante no diretório do seu projeto (por exemplo `.cursor/rules` para o Cursor ou `.rules` para o Zed). Depois, copie e cole [este conteúdo](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) no ficheiro.
 
-## Editores Suportados
+## Editores compatíveis
 
-| Editor          | Rule File Location                |
+| Editor          | Localização do arquivo de regras |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -55,19 +55,19 @@ Se quiser configurar manualmente, crie o ficheiro relevante no diretório do seu
 | Droid           | `AGENTS.md`                       |
 | Antigravity     | `.agent/rules/ultracite.md`       |
 
-## Benefícios
+## Vantagens
 
 Usar as regras do editor do Ultracite oferece várias vantagens:
 
 - **Consistência**: Todo o código gerado por IA segue as mesmas convenções
-- **Qualidade**: As regras aplicam as melhores práticas e previnem erros comuns
-- **Acessibilidade**: Diretrizes de acessibilidade incorporadas asseguram código inclusivo
+- **Qualidade**: As regras reforçam melhores práticas e previnem erros comuns
+- **Acessibilidade**: Diretrizes incorporadas de acessibilidade garantem código inclusivo
 - **Desempenho**: As regras promovem padrões eficientes e evitam anti-padrões
 - **Segurança**: As diretrizes ajudam a prevenir vulnerabilidades de segurança comuns
 
 ## Personalização
 
-Embora as regras predefinidas sejam abrangentes, pode personalizá-las para as necessidades específicas do seu projeto:
+Embora as regras padrão sejam abrangentes, você pode personalizá-las para as suas necessidades específicas:
 
 1. **Modificar regras existentes**: Edite os ficheiros de regras diretamente
 2. **Adicionar regras específicas do projeto**: Acrescente diretrizes adicionais

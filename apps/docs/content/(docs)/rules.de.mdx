@@ -1,19 +1,19 @@
 ---
 title: Regeln
-description: So integrieren Sie Ultracite mithilfe von Editor-Regeln in KI-Codeassistenten.
+description: Wie man Ultracite über Editor-Regeln in KI-Coding-Assistenten integriert.
 ---
 
-Ultracite bietet nahtlose Integration mit KI-Codeassistenten, indem automatisch editorspezifische Regeldateien erzeugt werden. Diese Regeln helfen, KI-Codeassistenten dazu zu leiten, besseren, konsistenteren Code zu schreiben, der Best Practices befolgt.
+Ultracite bietet eine nahtlose Integration mit KI-Coding-Assistenten, indem automatisch editor-spezifische Regeldateien erzeugt werden. Diese Regeln helfen dabei, KI-Coding-Assistenten anzuleiten, besseren und konsistenteren Code zu schreiben, der Best Practices befolgt.
 
-Die Editor-Regeln arbeiten ergänzend zu Biomes Linting und Formatierung. Während Biome die Codeformatierung übernimmt und Syntaxfehler erkennt, führen die Editor-Regeln KI-Codeassistenten dazu, von Anfang an besseren Code zu erzeugen, wodurch der Bedarf an späteren Korrekturen reduziert wird.
+Die Editor-Regeln arbeiten parallel zu Biomes Linting und Formatierung. Während Biome die Codeformatierung übernimmt und Syntaxfehler erkennt, leiten die Editor-Regeln KI-Coding-Assistenten an, von Anfang an besseren Code zu erzeugen, wodurch später weniger Korrekturen erforderlich sind.
 
-Dieser doppelte Ansatz stellt sowohl automatisierte Codequalität (durch Biome) als auch intelligente Codegenerierung (durch Regeln für KI-Codierung) sicher.
+Dieser duale Ansatz stellt sowohl automatisierte Codequalität (durch Biome) als auch intelligente Codegenerierung (durch KI-Coding-Regeln) sicher.
 
 ## Einrichtung
 
 ### Automatische Einrichtung
 
-When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+Wenn Sie `npx ultracite init` ausführen, werden Sie aufgefordert auszuwählen, welche Editor-Regeln Sie aktivieren möchten:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -23,15 +23,15 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
-Dadurch wird die entsprechende Datei in Ihrem Projektverzeichnis erstellt.
+Dies erstellt die relevante Datei in Ihrem Projektverzeichnis.
 
 ### Manuelle Einrichtung
 
-Wenn Sie die Einrichtung manuell vornehmen möchten, erstellen Sie die entsprechende Datei in Ihrem Projektverzeichnis (z. B. `.cursor/rules` für Cursor oder `.rules` für Zed). Dann kopieren Sie [diesen Inhalt](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) in die Datei.
+Wenn Sie die Einrichtung manuell vornehmen möchten, erstellen Sie die entsprechende Datei in Ihrem Projektverzeichnis (z. B. `.cursor/rules` für Cursor oder `.rules` für Zed). Kopieren Sie dann [diesen Inhalt](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) in die Datei.
 
 ## Unterstützte Editoren
 
-| Editor          | Speicherort der Regeldatei       |
+| Editor          | Speicherort der Regeldatei        |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -57,18 +57,18 @@ Wenn Sie die Einrichtung manuell vornehmen möchten, erstellen Sie die entsprech
 
 ## Vorteile
 
-Die Verwendung von Ultracite-Editor-Regeln bietet mehrere Vorteile:
+Die Verwendung der Ultracite-Editor-Regeln bietet mehrere Vorteile:
 
-- **Konsistenz**: Der gesamte von KI generierte Code folgt denselben Konventionen
+- **Konsistenz**: Alle von KI generierten Codes folgen denselben Konventionen
 - **Qualität**: Regeln erzwingen Best Practices und verhindern häufige Fehler
 - **Barrierefreiheit**: Eingebaute Richtlinien zur Barrierefreiheit sorgen für inklusiven Code
-- **Leistung**: Regeln fördern effiziente Muster und vermeiden Anti-Patterns
+- **Performance**: Regeln fördern effiziente Muster und vermeiden Anti-Pattern
 - **Sicherheit**: Richtlinien helfen, häufige Sicherheitslücken zu vermeiden
 
 ## Anpassung
 
-Während die Standardregeln umfassend sind, können Sie diese an Ihre spezifischen Bedürfnisse anpassen:
+Während die Standardregeln umfassend sind, können Sie sie an Ihre spezifischen Bedürfnisse anpassen:
 
-1. **Existierende Regeln ändern**: Bearbeiten Sie die Regeldateien direkt
-2. **Projektspezifische Regeln hinzufügen**: Hängen Sie zusätzliche Richtlinien an
-3. **Regeln deaktivieren**: Entfernen oder kommentieren Sie Regeln aus, die nicht auf Ihr Projekt zutreffen
+1. **Bestehende Regeln ändern**: Bearbeiten Sie die Regeldateien direkt
+2. **Projektspezifische Regeln hinzufügen**: Fügen Sie zusätzliche Richtlinien hinzu
+3. **Regeln deaktivieren**: Entfernen oder kommentieren Sie Regeln aus, die nicht für Ihr Projekt gelten

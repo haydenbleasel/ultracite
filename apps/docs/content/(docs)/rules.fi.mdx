@@ -1,15 +1,15 @@
 ---
 title: Säännöt
-description: Kuinka integroida Ultracite tekoälykoodiapuohjelmien kanssa editorisääntöjen avulla.
+description: Kuinka integroida Ultracite tekoälyohjelmointiapulaisten kanssa editorisääntöjen avulla.
 ---
 
-Ultracite tarjoaa saumattoman integraation tekoälykoodiapuohjelmien kanssa generoimalla automaattisesti editorikohtaisia sääntötiedostoja. Nämä säännöt auttavat ohjaamaan tekoälykoodiapuohjelmia kirjoittamaan parempaa, johdonmukaista koodia, joka noudattaa parhaita käytäntöjä.
+Ultracite tarjoaa saumattoman integraation tekoälyohjelmointiapulaisten kanssa luomalla automaattisesti editorikohtaisia sääntötiedostoja. Nämä säännöt ohjaavat tekoälyapulaisia kirjoittamaan parempaa, johdonmukaisempaa koodia, joka noudattaa parhaita käytäntöjä.
 
-Editorisäännöt toimivat rinnakkain Biomen linttauksen ja muotoilun kanssa. Kun Biome huolehtii koodin muotoilusta ja havaitsee syntaksivirheitä, editorisäännöt ohjaavat tekoälykoodiapuohjelmia kirjoittamaan parempaa koodia alusta alkaen, mikä vähentää myöhempien korjausten tarvetta.
+Editorisäännöt toimivat rinnakkain Biomen linttauksen ja muotoilun kanssa. Kun Biome huolehtii koodin muotoilusta ja havaitsee syntaksivirheitä, editorisäännöt ohjaavat tekoälyapulaisia kirjoittamaan parempaa koodia alusta lähtien, mikä vähentää myöhempien korjausten tarvetta.
 
-Tämä kaksijakoinen lähestymistapa varmistaa sekä automaattisen koodin laadun (Biome:n kautta) että älykkään koodin generoinnin (tekoälysääntöjen kautta).
+Tämä kaksijakoinen lähestymistapa varmistaa sekä automatisoidun koodin laadun (Biomen kautta) että älykkään koodin generoinnin (tekoälysääntöjen kautta).
 
-## Määritys
+## Asetus
 
 ### Automaattinen määritys
 
@@ -27,12 +27,12 @@ This will create the relevant file in your project directory.
 
 ### Manuaalinen määritys
 
-If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [tämä sisältö](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
 
 ## Tuetut editorit
 
-| Editorit        | Sääntötiedoston sijainti         |
-| --------------- | --------------------------------- |
+| Editor          | Sääntötiedoston sijainti      |
+| --------------- | ----------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
 | Windsurf        | `.windsurf/rules/ultracite.md`    |
@@ -60,15 +60,15 @@ If you want to manually set things up, create the relevant file in your project 
 Using Ultracite editor rules provides several advantages:
 
 - **Johdonmukaisuus**: Kaikki tekoälyn generoima koodi noudattaa samoja käytäntöjä
-- **Laatu**: Säännöt edistävät parhaita käytäntöjä ja estävät yleisiä virheitä
-- **Saavutettavuus**: Sisäänrakennetut saavutettavuusohjeet varmistavat inklusiivisen koodin
-- **Suorituskyky**: Säännöt suosivat tehokkaita malleja ja välttävät anti-malleja
-- **Tietoturva**: Ohjeet auttavat estämään yleisiä haavoittuvuuksia
+- **Laatu**: Säännöt pakottavat parhaiden käytäntöjen noudattamisen ja estävät yleisiä virheitä
+- **Saavutettavuus**: Sisäänrakennetut saavutettavuusohjeet varmistavat esteettömyyden huomioivan koodin
+- **Suorituskyky**: Säännöt edistävät tehokkaita malleja ja estävät huonoja käytäntöjä
+- **Turvallisuus**: Ohjeet auttavat estämään yleisiä tietoturva-aukkoja
 
 ## Mukauttaminen
 
-Vaikka oletussäännöt ovat kattavia, voit mukauttaa niitä tarpeidesi mukaan:
+While the default rules are comprehensive, you can customize them for your specific needs:
 
 1. **Muokkaa olemassa olevia sääntöjä**: Muokkaa sääntötiedostoja suoraan
-2. **Lisää projekti-/projektikohtaisia sääntöjä**: Lisää lisäohjeita
+2. **Lisää projektikohtaisia sääntöjä**: Lisää tiedostoihin lisäohjeita
 3. **Poista säännöt käytöstä**: Poista tai kommentoi pois säännöt, jotka eivät koske projektiasi

@@ -1,19 +1,19 @@
 ---
 title: Regler
-description: Hur man integrerar Ultracite med AI-kodassistenter via editorregler.
+description: Hur du integrerar Ultracite med AI-kodassistenter genom redigeringsregler.
 ---
 
-Ultracite erbjuder sömlös integration med AI-kodassistenter genom att automatiskt generera editorregelfiler. Dessa regler hjälper till att vägleda AI-kodassistenter att skriva bättre, mer konsekvent kod som följer bästa praxis.
+Ultracite erbjuder sömlös integration med AI-kodassistenter genom att automatiskt generera redigerarspecifika regelfiler. Dessa regler hjälper till att vägleda AI-kodassistenter att skriva bättre, mer konsekvent kod som följer bästa praxis.
 
-Editorreglerna fungerar tillsammans med Biomes lintning och formatering. Medan Biome hanterar kodformatering och fångar syntaxfel, leder editorreglerna AI-kodassistenter att skriva bättre kod från början, vilket minskar behovet av rättningar senare.
+Redigeringsreglerna fungerar tillsammans med Biome:s linting och formattering. Medan Biome hanterar kodformatering och fångar syntaxfel, vägleder redigeringsreglerna AI-kodassistenter att skriva bättre kod från början, vilket minskar behovet av korrigeringar i efterhand.
 
-Denna dubbla strategi säkerställer både automatisk kodkvalitet (genom Biome) och intelligent kodgenerering (genom AI-editorregler).
+Denna dubbla strategi säkerställer både automatiserad kodkvalitet (genom Biome) och intelligent kodgenerering (genom AI-redigeringsregler).
 
 ## Konfiguration
 
-### Automatisk installation
+### Automatisk konfiguration
 
-När du kör `npx ultracite init` kommer du att uppmanas att välja vilka editorregler du vill aktivera:
+När du kör `npx ultracite init` blir du tillfrågad att välja vilka redigeringsregler du vill aktivera:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -23,16 +23,16 @@ När du kör `npx ultracite init` kommer du att uppmanas att välja vilka editor
   # ... etcetera
 ```
 
-Detta kommer att skapa den relevanta filen i din projektkatalog.
+Detta skapar den relevanta filen i din projektkatalog.
 
-### Manuell installation
+### Manuell konfiguration
 
-Om du vill ställa in det manuellt, skapa den relevanta filen i din projektkatalog (till exempel `.cursor/rules` för Cursor eller `.rules` för Zed). Kopiera sedan och klistra in [detta innehåll](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) i filen.
+Om du vill ställa in saker manuellt, skapa den relevanta filen i din projektkatalog (till exempel `.cursor/rules` för Cursor eller `.rules` för Zed). Sedan kopierar och klistrar du in [detta innehåll](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) i filen.
 
 ## Stödda redigerare
 
 | Redigerare      | Plats för regelfil               |
-| --------------- | --------------------------------- |
+| --------------- | -------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
 | Windsurf        | `.windsurf/rules/ultracite.md`    |
@@ -57,17 +57,17 @@ Om du vill ställa in det manuellt, skapa den relevanta filen i din projektkatal
 
 ## Fördelar
 
-Att använda Ultracite editorregler ger flera fördelar:
+Att använda Ultracite redigeringsregler ger flera fördelar:
 
 - **Konsekvens**: All AI-genererad kod följer samma konventioner
-- **Kvalitet**: Regler upprätthåller bästa praxis och förhindrar vanliga misstag
+- **Kvalitet**: Reglerna upprätthåller bästa praxis och förhindrar vanliga misstag
 - **Tillgänglighet**: Inbyggda riktlinjer för tillgänglighet säkerställer inkluderande kod
 - **Prestanda**: Regler främjar effektiva mönster och undviker anti-mönster
-- **Säkerhet**: Riktlinjer hjälper till att förhindra vanliga säkerhetssårbarheter
+- **Säkerhet**: Riktlinjer hjälper till att förebygga vanliga säkerhetsbrister
 
 ## Anpassning
 
-Även om standardreglerna är omfattande kan du anpassa dem efter dina specifika behov:
+Även om standardreglerna är omfattande kan du anpassa dem för dina specifika behov:
 
 1. **Ändra befintliga regler**: Redigera regelfilerna direkt
 2. **Lägg till projektspecifika regler**: Lägg till ytterligare riktlinjer

@@ -3,17 +3,17 @@ title: Aturan
 description: Cara mengintegrasikan Ultracite dengan asisten pengkodean AI melalui aturan editor.
 ---
 
-Ultracite menyediakan integrasi mulus dengan asisten pengkodean AI dengan secara otomatis menghasilkan file aturan spesifik editor. Aturan-aturan ini membantu membimbing asisten pengkodean AI untuk menulis kode yang lebih baik, lebih konsisten, dan mengikuti praktik terbaik.
+Ultracite menyediakan integrasi yang mulus dengan asisten pengkodean AI dengan secara otomatis menghasilkan file aturan khusus editor. Aturan-aturan ini membantu membimbing asisten pengkodean AI untuk menulis kode yang lebih baik, lebih konsisten, dan mengikuti praktik terbaik.
 
-Aturan editor bekerja berdampingan dengan linting dan pemformatan Biome. Sementara Biome menangani pemformatan kode dan menangkap kesalahan sintaks, aturan editor membimbing asisten pengkodean AI untuk menulis kode yang lebih baik sejak awal, sehingga mengurangi kebutuhan perbaikan di kemudian hari.
+Aturan editor bekerja berdampingan dengan linting dan pemformatan Biome. Sementara Biome menangani pemformatan kode dan menangkap kesalahan sintaks, aturan editor membimbing asisten pengkodean AI untuk menulis kode yang lebih baik sejak awal, mengurangi kebutuhan perbaikan di kemudian hari.
 
-Pendekatan ganda ini memastikan baik kualitas kode otomatis (melalui Biome) maupun pembuatan kode cerdas (melalui aturan pengkodean AI).
+Pendekatan ganda ini memastikan kualitas kode otomatis (melalui Biome) dan pembuatan kode cerdas (melalui aturan pengkodean AI).
 
 ## Pengaturan
 
-### Penyiapan Otomatis
+### Pengaturan Otomatis
 
-When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+Ketika Anda menjalankan `npx ultracite init`, Anda akan diminta untuk memilih aturan editor mana yang ingin Anda aktifkan:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -23,11 +23,11 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
-This will create the relevant file in your project directory.
+Ini akan membuat file yang relevan di direktori proyek Anda.
 
-### Penyiapan Manual
+### Pengaturan Manual
 
-If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [konten ini](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+Jika Anda ingin mengatur secara manual, buat file yang relevan di direktori proyek Anda (misalnya `.cursor/rules` untuk Cursor atau `.rules` untuk Zed). Kemudian, salin dan tempel [konten ini](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) ke dalam file tersebut.
 
 ## Editor yang Didukung
 
@@ -61,14 +61,14 @@ Menggunakan aturan editor Ultracite memberikan beberapa keuntungan:
 
 - **Konsistensi**: Semua kode yang dihasilkan AI mengikuti konvensi yang sama
 - **Kualitas**: Aturan menegakkan praktik terbaik dan mencegah kesalahan umum
-- **Aksesibilitas**: Panduan aksesibilitas bawaan memastikan kode yang inklusif
-- **Performa**: Aturan mendorong pola yang efisien dan menghindari antipola
-- **Keamanan**: Panduan membantu mencegah kerentanan keamanan umum
+- **Aksesibilitas**: Pedoman aksesibilitas bawaan memastikan kode yang inklusif
+- **Performa**: Aturan mendorong pola yang efisien dan menghindari anti-pola
+- **Keamanan**: Pedoman membantu mencegah kerentanan keamanan umum
 
 ## Kustomisasi
 
-Meskipun aturan default bersifat komprehensif, Anda dapat menyesuaikannya untuk kebutuhan spesifik Anda:
+Meskipun aturan default sudah komprehensif, Anda dapat menyesuaikannya untuk kebutuhan spesifik Anda:
 
-1. **Ubah aturan yang ada**: Sunting file aturan secara langsung
-2. **Tambahkan aturan khusus proyek**: Tambahkan pedoman tambahan
-3. **Nonaktifkan aturan**: Hapus atau beri komentar pada aturan yang tidak berlaku untuk proyek Anda
+1. **Ubah aturan yang ada**: Edit file aturan secara langsung
+2. **Tambah aturan spesifik proyek**: Tambahkan pedoman tambahan
+3. **Nonaktifkan aturan**: Hapus atau komentari aturan yang tidak berlaku untuk proyek Anda

@@ -1,19 +1,19 @@
 ---
 title: Regole
-description: Come integrare Ultracite con assistenti di codifica AI tramite regole per l'editor.
+description: Come integrare Ultracite con gli assistenti di programmazione IA tramite le regole dell'editor.
 ---
 
-Ultracite offre un'integrazione senza soluzione di continuità con gli assistenti di codifica AI generando automaticamente file di regole specifici per l'editor. Queste regole aiutano a guidare gli assistenti di codifica AI a scrivere codice migliore e più coerente che segua le migliori pratiche.
+Ultracite fornisce un'integrazione senza soluzione di continuità con gli assistenti di programmazione IA generando automaticamente file di regole specifici per l'editor. Queste regole aiutano a guidare gli assistenti di programmazione IA a scrivere codice migliore, più coerente e conforme alle migliori pratiche.
 
-Le regole per l'editor lavorano insieme al linting e al formatting di Biome. Mentre Biome gestisce la formattazione del codice e rileva errori di sintassi, le regole per l'editor guidano gli assistenti di codifica AI a scrivere codice migliore fin dall'inizio, riducendo la necessità di correzioni successive.
+Le regole per l'editor funzionano in combinazione con il linting e la formattazione di Biome. Mentre Biome si occupa della formattazione del codice e individua errori di sintassi, le regole dell'editor guidano gli assistenti di programmazione IA a scrivere codice migliore fin dall'inizio, riducendo la necessità di correzioni successive.
 
-Questo approccio duplice garantisce sia la qualità del codice automatizzata (tramite Biome) sia la generazione intelligente del codice (tramite regole per la codifica AI).
+Questo approccio duplice garantisce sia la qualità automatizzata del codice (attraverso Biome) sia la generazione intelligente del codice (tramite le regole per gli assistenti IA).
 
 ## Configurazione
 
 ### Configurazione automatica
 
-Quando esegui `npx ultracite init`, ti verrà chiesto di selezionare quali regole per l'editor vuoi abilitare:
+Quando esegui `npx ultracite init`, ti verrà chiesto di selezionare quali regole dell'editor vuoi abilitare:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -27,11 +27,11 @@ Questo creerà il file pertinente nella directory del tuo progetto.
 
 ### Configurazione manuale
 
-Se vuoi configurare manualmente, crea il file pertinente nella directory del tuo progetto (per esempio `.cursor/rules` per Cursor o `.rules` per Zed). Poi, copia e incolla [questo contenuto](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) nel file.
+Se vuoi configurare manualmente le impostazioni, crea il file pertinente nella directory del tuo progetto (ad esempio `.cursor/rules` per Cursor o `.rules` per Zed). Quindi, copia e incolla [questo contenuto](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) nel file.
 
 ## Editor supportati
 
-| Editor          | Posizione del file delle regole    |
+| Editor          | Percorso del file delle regole     |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -57,18 +57,18 @@ Se vuoi configurare manualmente, crea il file pertinente nella directory del tuo
 
 ## Vantaggi
 
-L'uso delle regole per l'editor di Ultracite offre diversi vantaggi:
+L'uso delle regole dell'editor di Ultracite offre diversi vantaggi:
 
-- **Coerenza**: Tutto il codice generato dall'AI segue le stesse convenzioni
-- **Qualità**: Le regole applicano le migliori pratiche e prevengono errori comuni
-- **Accessibilità**: Linee guida integrate per l'accessibilità assicurano codice inclusivo
-- **Prestazioni**: Le regole favoriscono pattern efficienti ed evitano anti-pattern
+- **Coerenza**: Tutto il codice generato dall'IA segue le stesse convenzioni
+- **Qualità**: Le regole fanno rispettare le migliori pratiche e prevengono errori comuni
+- **Accessibilità**: Le linee guida per l'accessibilità integrate garantiscono un codice inclusivo
+- **Prestazioni**: Le regole promuovono pattern efficienti ed evitano gli anti-pattern
 - **Sicurezza**: Le linee guida aiutano a prevenire vulnerabilità di sicurezza comuni
 
 ## Personalizzazione
 
-Sebbene le regole predefinite siano complete, puoi personalizzarle in base alle tue esigenze specifiche:
+Sebbene le regole predefinite siano esaustive, puoi personalizzarle in base alle tue esigenze specifiche:
 
-1. **Modifica le regole esistenti**: Modifica direttamente i file delle regole
-2. **Aggiungi regole specifiche del progetto**: Aggiungi linee guida aggiuntive
-3. **Disabilita regole**: Rimuovi o commenta le regole che non si applicano al tuo progetto
+1. **Modificare le regole esistenti**: Modifica direttamente i file delle regole
+2. **Aggiungere regole specifiche per il progetto**: Aggiungi linee guida aggiuntive
+3. **Disabilitare regole**: Rimuovi o commenta le regole che non si applicano al tuo progetto

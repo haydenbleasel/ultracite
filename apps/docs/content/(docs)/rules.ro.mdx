@@ -1,19 +1,19 @@
 ---
 title: Reguli
-description: Cum să integrezi Ultracite cu asistenții AI de programare prin reguli pentru editor.
+description: Cum să integrezi Ultracite cu asistenți de codare AI folosind reguli pentru editor.
 ---
 
-Ultracite oferă integrare fără întreruperi cu asistenții AI de programare prin generarea automată a fișierelor de reguli specifice editorului. Aceste reguli ajută la ghidarea asistenților AI de programare pentru a scrie cod mai bun, mai coerent, care respectă bunele practici.
+Ultracite oferă integrare fără întreruperi cu asistenții de codare AI prin generarea automată a fișierelor de reguli specifice editorului. Aceste reguli ajută la ghidarea asistenților de codare AI pentru a scrie cod mai bun, mai coerent și care respectă bunele practici.
 
-Regulile pentru editor funcționează alături de linting-ul și formatarea oferite de Biome. În timp ce Biome se ocupă de formatarea codului și detectează erorile de sintaxă, regulile pentru editor ghidează asistenții AI de programare să genereze cod mai bun încă din start, reducând necesitatea corecțiilor ulterioare.
+Regulile pentru editor funcționează împreună cu linting-ul și formatarea Biome. În timp ce Biome se ocupă de formatarea codului și detectează erorile de sintaxă, regulile pentru editor ghidează asistenții de codare AI să scrie cod mai bun de la început, reducând necesitatea corecțiilor ulterioare.
 
-Această abordare duală asigură atât calitatea automată a codului (prin Biome), cât și generarea inteligentă a codului (prin regulile AI pentru programare).
+Această abordare duală asigură atât calitate automată a codului (prin Biome), cât și generare inteligentă a codului (prin regulile AI pentru editor).
 
 ## Configurare
 
 ### Configurare automată
 
-When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+Când rulezi `npx ultracite init`, ți se va cere să selectezi ce reguli pentru editor dorești să activezi:
 
 ```bash
 ? Which editor rules do you want to enable (optional)?
@@ -27,11 +27,11 @@ Acest lucru va crea fișierul relevant în directorul proiectului tău.
 
 ### Configurare manuală
 
-Dacă vrei să configurezi manual, creează fișierul relevant în directorul proiectului tău (de exemplu `.cursor/rules` pentru Cursor sau `.rules` pentru Zed). Apoi, copiază și lipește [acest conținut](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) în fișier.
+Dacă dorești să configurezi manual, creează fișierul relevant în directorul proiectului tău (de exemplu `.cursor/rules` pentru Cursor sau `.rules` pentru Zed). Apoi, copiază și inserează [acest conținut](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) în fișier.
 
 ## Editoare suportate
 
-| Editor          | Locație fișier regulă             |
+| Editor          | Locație fișier reguli             |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -57,18 +57,18 @@ Dacă vrei să configurezi manual, creează fișierul relevant în directorul pr
 
 ## Beneficii
 
-Utilizarea regulilor Ultracite pentru editor oferă mai multe avantaje:
+Folosirea regulilor Ultracite pentru editor oferă mai multe avantaje:
 
-- **Consistență**: Tot codul generat de AI urmează aceleași convenții
-- **Calitate**: Regulile aplică bune practici și previn greșelile frecvente
-- **Accesibilitate**: Ghidurile integrate de accesibilitate asigură cod incluziv
-- **Performanță**: Regulile promovează modele eficiente și evită anti-modelele
-- **Securitate**: Ghidurile ajută la prevenirea vulnerabilităților comune de securitate
+- **Consistență**: Tot codul generat de AI respectă aceleași convenții
+- **Calitate**: Regulile impun bunele practici și previn greșelile comune
+- **Accesibilitate**: Ghidurile încorporate de accesibilitate asigură un cod incluziv
+- **Performanță**: Regulile promovează modele eficiente și evită anti-pattern-urile
+- **Securitate**: Ghidurile ajută la prevenirea vulnerabilităților de securitate comune
 
 ## Personalizare
 
-Deși regulile implicite sunt cuprinzătoare, le poți personaliza pentru nevoile tale specifice:
+Deși regulile implicite sunt cuprinzătoare, le poți personaliza pentru nevoile specifice:
 
-1. **Modifică regulile existente**: Editează direct fișierele de reguli
-2. **Adaugă reguli specifice proiectului**: Apelează la linii directoare adiționale
+1. **Modifică regulile existente**: Editează fișierele de reguli direct
+2. **Adaugă reguli specifice proiectului**: Adaugă ghiduri suplimentare
 3. **Dezactivează reguli**: Elimină sau comentează regulile care nu se aplică proiectului tău

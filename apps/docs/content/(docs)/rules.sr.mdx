@@ -1,13 +1,13 @@
 ---
 title: Pravila
-description: Kako integrisati Ultracite sa AI asistentima za kodiranje putem pravila za uređivač.
+description: Kako integrisati Ultracite sa AI pomoćnicima za kodiranje putem pravila editora.
 ---
 
-Ultracite omogućava besprekornu integraciju sa AI asistentima za kodiranje automatskim generisanjem fajlova sa pravilima specifičnih za uređivač. Ova pravila pomažu u usmeravanju AI asistenata da pišu bolji, konzistentniji kod koji prati najbolje prakse.
+Ultracite omogućava besprekornu integraciju sa AI pomoćnicima za kodiranje tako što automatski generiše fajlove pravila specifične za uređivač. Ta pravila pomažu u vođenju AI pomoćnika da pišu bolji, konzistentniji kod koji prati najbolje prakse.
 
-Pravila za uređivače rade zajedno sa lintovanjem i formatiranjem koje obezbeđuje Biome. Dok Biome rukuje formatiranjem koda i otkriva sintaksne greške, pravila za uređivače usmeravaju AI asistente da od početka pišu kvalitetniji kod, smanjujući potrebu za naknadnim ispravkama.
+Pravila editora rade paralelno sa Biome-ovim lintingom i formatiranjem. Dok se Biome bavi formatiranjem koda i otkriva sintaksne greške, pravila editora usmeravaju AI pomoćnike da od početka pišu kvalitetniji kod, smanjujući potrebu za naknadnim ispravkama.
 
-Ovaj dvojni pristup osigurava i automatizovani kvalitet koda (preko Biome-a) i inteligentno generisanje koda (preko pravila za AI).
+Ovaj dvojni pristup osigurava i automatski kvalitet koda (putem Biome) i inteligentno generisanje koda (putem AI pravila).
 
 ## Podešavanje
 
@@ -23,15 +23,15 @@ When you run `npx ultracite init`, you'll be prompted to select which editor rul
   # ... etcetera
 ```
 
-Ovo će kreirati odgovarajući fajl u direktorijumu vašeg projekta.
+Ovo će kreirati relevantan fajl u direktorijumu vašeg projekta.
 
 ### Ručno podešavanje
 
-Ako želite da ručno podesite stvari, kreirajte odgovarajući fajl u direktorijumu vašeg projekta (na primer `.cursor/rules` za Cursor ili `.rules` za Zed). Zatim kopirajte i nalepite [ovaj sadržaj](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) u fajl.
+Ako želite da ručno podesite stvari, kreirajte odgovarajući fajl u direktorijumu vašeg projekta (na primer `.cursor/rules` za Cursor ili `.rules` za Zed). Zatim, kopirajte i nalepite [ovaj sadržaj](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) u fajl.
 
-## Podržani uređivači
+## Podržani editori
 
-| Uređivač        | Lokacija fajla sa pravilima       |
+| Uređivač        | Lokacija fajla pravila            |
 | --------------- | --------------------------------- |
 | GitHub Copilot  | `.github/copilot-instructions.md` |
 | Cursor          | `.cursor/rules/ultracite.mdc`     |
@@ -57,18 +57,18 @@ Ako želite da ručno podesite stvari, kreirajte odgovarajući fajl u direktorij
 
 ## Prednosti
 
-Korišćenjem Ultracite pravila za uređivače dobijate nekoliko prednosti:
+Korišćenje Ultracite pravila editora pruža nekoliko prednosti:
 
-- **Doslednost**: Sav kod koji generiše AI prati iste konvencije
-- **Kvalitet**: Pravila nameću najbolje prakse i sprečavaju uobičajene greške
+- **Doslednost**: Sav kod generisan od strane AI prati iste konvencije
+- **Kvalitet**: Pravila primenjuju najbolje prakse i sprečavaju uobičajene greške
 - **Pristupačnost**: Ugrađene smernice za pristupačnost obezbeđuju inkluzivan kod
-- **Performanse**: Pravila promovišu efikasne obrasce i izbegavaju antipattern-e
+- **Performanse**: Pravila promovišu efikasne obrasce i izbegavaju anti-pattern-e
 - **Bezbednost**: Smernice pomažu u prevenciji uobičajenih bezbednosnih ranjivosti
 
 ## Prilagođavanje
 
-Iako su podrazumevana pravila sveobuhvatna, možete ih prilagoditi svojim specifičnim potrebama:
+Iako su podrazumevana pravila obuhvatna, možete ih prilagoditi svojim specifičnim potrebama:
 
-1. **Izmenite postojeća pravila**: Direktno izmenite fajlove sa pravilima
-2. **Dodajte pravila specifična za projekat**: Dodajte dodatne smernice
-3. **Onemogućite pravila**: Uklonite ili komentarišite pravila koja se ne odnose na vaš projekat
+1. **Izmenite postojeća pravila**: Uredite fajlove pravila direktno
+2. **Dodajte pravila specifična za projekat**: Dopunite dodatnim smernicama
+3. **Onemogućite pravila**: Uklonite ili komentarišite pravila koja nisu primenljiva na vaš projekat

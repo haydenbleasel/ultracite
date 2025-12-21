@@ -1,13 +1,13 @@
 ---
 title: Szabályok
-description: Hogyan integráljuk az Ultracite-ot az AI kódolási asszisztensekkel szerkesztői szabályokon keresztül.
+description: Hogyan integráljuk az Ultracite-ot AI kódolási asszisztensekkel szerkesztői szabályok segítségével.
 ---
 
-Ultracite zökkenőmentes integrációt biztosít az AI kódolási asszisztensekkel azáltal, hogy automatikusan generál szerkesztőspecifikus szabályfájlokat. Ezek a szabályok segítik az AI kódolási asszisztenseket abban, hogy jobb, következetesebb kódot írjanak, amely megfelel a bevett gyakorlatoknak.
+Ultracite zökkenőmentes integrációt biztosít AI kódolási asszisztensekkel azáltal, hogy automatikusan generál szerkesztőspecifikus szabályfájlokat. Ezek a szabályok segítik az AI kódolási asszisztenseket abban, hogy jobb, következetesebb kódot írjanak, amely a legjobb gyakorlatokat követi.
 
-A szerkesztői szabályok a Biome lintelésével és formázásával együtt működnek. Míg a Biome a kód formázását végzi és elkapja a szintaxis hibákat, a szerkesztői szabályok arra irányítják az AI kódolási asszisztenseket, hogy már a kezdetektől jobb kódot generáljanak, így kevesebb javításra lesz szükség később.
+A szerkesztői szabályok a Biome lintelésével és formázásával együtt működnek. Míg a Biome a kód formázását végzi és észleli a szintaktikai hibákat, addig a szerkesztői szabályok arra irányítják az AI kódolási asszisztenseket, hogy már a kezdetektől jobb kódot generáljanak, csökkentve ezzel a későbbi javítások szükségességét.
 
-Ez a kettős megközelítés biztosítja az automatizált kódminőséget (a Biome-on keresztül) és az intelligens kódgenerálást (az AI kódolási szabályokon keresztül).
+Ez a kettős megközelítés biztosítja mind az automatizált kódminőséget (Biome révén), mind az intelligens kódgenerálást (AI kódolási szabályok révén).
 
 ## Beállítás
 
@@ -27,48 +27,48 @@ This will create the relevant file in your project directory.
 
 ### Kézi beállítás
 
-Ha kézzel szeretné beállítani a dolgokat, hozza létre a megfelelő fájlt a projekt könyvtárában (például `.cursor/rules` Cursor esetén vagy `.rules` Zed esetén). Ezután másolja és illessze be [ezt a tartalmat](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) a fájlba.
+Ha kézzel szeretnéd beállítani, hozd létre a megfelelő fájlt a projekt könyvtárában (például `.cursor/rules` a Cursorhoz vagy `.rules` a Zedhez). Ezután másold és illeszd be [ezt a tartalmat](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) a fájlba.
 
 ## Támogatott szerkesztők
 
-| Szerkesztő       | Szabályfájl helye                |
-| ---------------- | -------------------------------- |
-| GitHub Copilot   | `.github/copilot-instructions.md` |
-| Cursor           | `.cursor/rules/ultracite.mdc`     |
-| Windsurf         | `.windsurf/rules/ultracite.md`    |
-| Zed              | `.rules`                          |
-| Claude Code      | `.claude/CLAUDE.md`               |
-| OpenAI Codex     | `AGENTS.md`                       |
-| Kiro IDE         | `.kiro/steering/ultracite.md`     |
-| Cline            | `.clinerules`                     |
-| AMP              | `AGENT.md`                        |
-| Aider            | `ultracite.md`                    |
-| Firebase Studio  | `.idx/airules.md`                 |
-| Open Hands       | `.openhands/microagents/repo.md`  |
-| Gemini CLI       | `GEMINI.md`                       |
-| Junie            | `.junie/guidelines.md`            |
-| Augment Code     | `.augment/rules/ultracite.md`     |
-| Kilo Code        | `.kilocode/rules/ultracite.md`    |
-| Codename Goose   | `.goosehints`                     |
-| Roo Code         | `.roo/rules/ultracite.md`         |
-| Warp             | `WARP.md`                         |
-| Droid            | `AGENTS.md`                       |
-| Antigravity      | `.agent/rules/ultracite.md`       |
+| Szerkesztő      | Szabályfájl helye                |
+| --------------- | --------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md` |
+| Cursor          | `.cursor/rules/ultracite.mdc`     |
+| Windsurf        | `.windsurf/rules/ultracite.md`    |
+| Zed             | `.rules`                          |
+| Claude Code     | `.claude/CLAUDE.md`               |
+| OpenAI Codex    | `AGENTS.md`                       |
+| Kiro IDE        | `.kiro/steering/ultracite.md`     |
+| Cline           | `.clinerules`                     |
+| AMP             | `AGENT.md`                        |
+| Aider           | `ultracite.md`                    |
+| Firebase Studio | `.idx/airules.md`                 |
+| Open Hands      | `.openhands/microagents/repo.md`  |
+| Gemini CLI      | `GEMINI.md`                       |
+| Junie           | `.junie/guidelines.md`            |
+| Augment Code    | `.augment/rules/ultracite.md`     |
+| Kilo Code       | `.kilocode/rules/ultracite.md`    |
+| Codename Goose  | `.goosehints`                     |
+| Roo Code        | `.roo/rules/ultracite.md`         |
+| Warp            | `WARP.md`                         |
+| Droid           | `AGENTS.md`                       |
+| Antigravity     | `.agent/rules/ultracite.md`       |
 
 ## Előnyök
 
-Az Ultracite szerkesztői szabályok használata több előnnyel jár:
+Az Ultracite szerkesztői szabályainak használata több előnnyel jár:
 
-- **Konzisztencia**: Minden AI által generált kód ugyanazokat a konvenciókat követi
-- **Minőség**: A szabályok érvényesítik a bevett gyakorlatokat és megelőzik a gyakori hibákat
-- **Hozzáférhetőség**: A beépített akadálymentességi irányelvek inkluzív kódot biztosítanak
-- **Teljesítmény**: A szabályok elősegítik a hatékony mintákat és elkerülik az anti-patterneket
+- **Következetesség**: Minden AI által generált kód ugyanazokat a konvenciókat követi
+- **Minőség**: A szabályok érvényesítik a legjobb gyakorlatokat és megakadályozzák az általános hibákat
+- **Akadálymentesség**: A beépített akadálymentességi irányelvek inkluzív kódot biztosítanak
+- **Teljesítmény**: A szabályok hatékony mintákat ösztönöznek és elkerülik az anti-patternöket
 - **Biztonság**: Az irányelvek segítenek megelőzni a gyakori biztonsági sebezhetőségeket
 
 ## Testreszabás
 
-Bár az alapértelmezett szabályok átfogóak, testreszabhatja őket a saját igényei szerint:
+Bár az alapértelmezett szabályok átfogóak, testreszabhatod őket a konkrét igényeid szerint:
 
-1. **Módosítsa a meglévő szabályokat**: Szerkessze közvetlenül a szabályfájlokat
-2. **Projekt-specifikus szabályok hozzáadása**: Fűzzön hozzá további irányelveket
-3. **Szabályok letiltása**: Távolítson el vagy kommenteljen ki olyan szabályokat, amelyek nem vonatkoznak a projektjére
+1. **Módosítsd a meglévő szabályokat**: Szerkeszd közvetlenül a szabályfájlokat
+2. **Adj hozzá projektspecifikus szabályokat**: Fűzz hozzá további irányelveket
+3. **Tilts szabályokat**: Távolítsd el vagy kommenteld ki azokat a szabályokat, amelyek nem alkalmazhatók a projektedre

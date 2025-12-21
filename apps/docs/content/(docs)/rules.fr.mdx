@@ -1,13 +1,13 @@
 ---
 title: Règles
-description: Comment intégrer Ultracite aux assistants de codage IA via des règles d'éditeur.
+description: Comment intégrer Ultracite aux assistants de codage IA via des règles pour l'éditeur.
 ---
 
-Ultracite fournit une intégration transparente avec les assistants de codage IA en générant automatiquement des fichiers de règles spécifiques aux éditeurs. Ces règles aident à guider les assistants de codage IA pour écrire un code meilleur et plus cohérent, conforme aux bonnes pratiques.
+Ultracite offre une intégration transparente avec les assistants de codage IA en générant automatiquement des fichiers de règles spécifiques à l'éditeur. Ces règles aident à guider les assistants de codage IA pour écrire un code meilleur et plus cohérent, conforme aux bonnes pratiques.
 
-Les règles d'éditeur fonctionnent en parallèle avec le linting et le formatage de Biome. Alors que Biome gère le formatage du code et détecte les erreurs de syntaxe, les règles d'éditeur guident les assistants de codage IA pour écrire un meilleur code dès le départ, réduisant ainsi le besoin de corrections ultérieures.
+Les règles pour l'éditeur fonctionnent en complément du linting et du formatage de Biome. Alors que Biome gère le formatage du code et détecte les erreurs de syntaxe, les règles pour l'éditeur guident les assistants de codage IA pour produire un meilleur code dès le départ, réduisant ainsi le besoin de corrections ultérieures.
 
-Cette double approche garantit à la fois la qualité automatisée du code (grâce à Biome) et la génération intelligente de code (grâce aux règles pour assistants de codage IA).
+Cette approche double garantit à la fois la qualité automatisée du code (via Biome) et la génération intelligente de code (via des règles pour l'IA).
 
 ## Configuration
 
@@ -27,48 +27,48 @@ This will create the relevant file in your project directory.
 
 ### Configuration manuelle
 
-If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [ce contenu](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
 
 ## Éditeurs pris en charge
 
-| Éditeur         | Emplacement du fichier de règles     |
-| --------------- | ------------------------------------ |
-| GitHub Copilot  | `.github/copilot-instructions.md`    |
-| Cursor          | `.cursor/rules/ultracite.mdc`        |
-| Windsurf        | `.windsurf/rules/ultracite.md`       |
-| Zed             | `.rules`                             |
-| Claude Code     | `.claude/CLAUDE.md`                  |
-| OpenAI Codex    | `AGENTS.md`                          |
-| Kiro IDE        | `.kiro/steering/ultracite.md`        |
-| Cline           | `.clinerules`                        |
-| AMP             | `AGENT.md`                           |
-| Aider           | `ultracite.md`                       |
-| Firebase Studio | `.idx/airules.md`                    |
-| Open Hands      | `.openhands/microagents/repo.md`     |
-| Gemini CLI      | `GEMINI.md`                          |
-| Junie           | `.junie/guidelines.md`               |
-| Augment Code    | `.augment/rules/ultracite.md`        |
-| Kilo Code       | `.kilocode/rules/ultracite.md`       |
-| Codename Goose  | `.goosehints`                        |
-| Roo Code        | `.roo/rules/ultracite.md`            |
-| Warp            | `WARP.md`                            |
-| Droid           | `AGENTS.md`                          |
-| Antigravity     | `.agent/rules/ultracite.md`          |
+| Éditeur         | Emplacement du fichier de règles    |
+| --------------- | ----------------------------------- |
+| GitHub Copilot  | `.github/copilot-instructions.md`   |
+| Cursor          | `.cursor/rules/ultracite.mdc`       |
+| Windsurf        | `.windsurf/rules/ultracite.md`      |
+| Zed             | `.rules`                            |
+| Claude Code     | `.claude/CLAUDE.md`                 |
+| OpenAI Codex    | `AGENTS.md`                         |
+| Kiro IDE        | `.kiro/steering/ultracite.md`       |
+| Cline           | `.clinerules`                       |
+| AMP             | `AGENT.md`                          |
+| Aider           | `ultracite.md`                      |
+| Firebase Studio | `.idx/airules.md`                   |
+| Open Hands      | `.openhands/microagents/repo.md`    |
+| Gemini CLI      | `GEMINI.md`                         |
+| Junie           | `.junie/guidelines.md`              |
+| Augment Code    | `.augment/rules/ultracite.md`       |
+| Kilo Code       | `.kilocode/rules/ultracite.md`      |
+| Codename Goose  | `.goosehints`                       |
+| Roo Code        | `.roo/rules/ultracite.md`           |
+| Warp            | `WARP.md`                           |
+| Droid           | `AGENTS.md`                         |
+| Antigravity     | `.agent/rules/ultracite.md`         |
 
 ## Avantages
 
-L'utilisation des règles d'éditeur Ultracite offre plusieurs avantages :
+L'utilisation des règles d'Ultracite pour l'éditeur offre plusieurs avantages:
 
-- **Cohérence**: Tout le code généré par l'IA suit les mêmes conventions
+- **Cohérence**: All AI-generated code follows the same conventions
 - **Qualité**: Les règles imposent les bonnes pratiques et préviennent les erreurs courantes
 - **Accessibilité**: Les directives d'accessibilité intégrées garantissent un code inclusif
-- **Performance**: Les règles favorisent des modèles efficaces et évitent les anti-patterns
+- **Performance**: Les règles favorisent des schémas efficaces et évitent les anti-patterns
 - **Sécurité**: Les directives aident à prévenir les vulnérabilités de sécurité courantes
 
 ## Personnalisation
 
-Alors que les règles par défaut sont complètes, vous pouvez les personnaliser pour vos besoins spécifiques :
+Bien que les règles par défaut soient complètes, vous pouvez les personnaliser pour répondre à vos besoins spécifiques:
 
-1. **Modifier les règles existantes**: Éditez directement les fichiers de règles
-2. **Ajouter des règles spécifiques au projet**: Ajoutez des directives supplémentaires
-3. **Désactiver des règles**: Supprimez ou commentez les règles qui ne s'appliquent pas à votre projet
+1. **Modifier les règles existantes**: Éditer les fichiers de règles directement
+2. **Ajouter des règles spécifiques au projet**: Ajouter des directives supplémentaires
+3. **Désactiver des règles**: Supprimer ou commenter les règles qui ne s'appliquent pas à votre projet
