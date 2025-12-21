@@ -3,9 +3,9 @@ import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
 import { parseFilePaths } from "../utils";
 
-type FixOptions = {
+interface FixOptions {
   unsafe?: boolean;
-};
+}
 
 export const fix = async (files: string[], options: FixOptions = {}) => {
   const args = ["check", "--write", "--no-errors-on-unmatched"];

@@ -18,23 +18,23 @@ import {
 } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 
-export type Feedback = {
+export interface Feedback {
   opinion: "good" | "bad";
   url?: string;
   message: string;
-};
+}
 
-export type ActionResponse = {
+export interface ActionResponse {
   githubUrl: string;
-};
+}
 
 interface Result extends Feedback {
   response?: ActionResponse;
 }
 
-type FeedbackProps = {
+interface FeedbackProps {
   className?: string;
-};
+}
 
 export const Feedback = ({ className }: FeedbackProps) => {
   const url = usePathname();

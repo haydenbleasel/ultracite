@@ -6,9 +6,9 @@ import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
-type LayoutProps = {
+interface LayoutProps {
   children: ReactNode;
-};
+}
 
 const sans = Geist({
   subsets: ["latin"],

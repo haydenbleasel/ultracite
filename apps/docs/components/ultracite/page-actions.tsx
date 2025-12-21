@@ -17,10 +17,10 @@ import {
 } from "@/components/ai-elements/open-in-chat";
 import { Button } from "@/components/ui/button";
 
-type ViewOptionsProps = {
+interface ViewOptionsProps {
   markdownUrl: string;
   githubUrl: string;
-};
+}
 
 export const ViewOptions = ({ markdownUrl, githubUrl }: ViewOptionsProps) => {
   const fullMarkdownUrl =

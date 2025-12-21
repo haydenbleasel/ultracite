@@ -12,10 +12,10 @@ import Biome from "./biome.jpg";
 import ESLint from "./eslint.jpg";
 import Oxlint from "./oxlint.jpg";
 
-type HeroProps = {
+interface HeroProps {
   children: ReactNode;
   description: string;
-};
+}
 
 const logos = [
   {

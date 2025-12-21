@@ -5,9 +5,9 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-type CopyMarkdownProps = {
+interface CopyMarkdownProps {
   markdown: string;
-};
+}
 
 export const CopyMarkdown = ({ markdown }: CopyMarkdownProps) => {
   const [checked, onClick] = useCopyButton(() => {
