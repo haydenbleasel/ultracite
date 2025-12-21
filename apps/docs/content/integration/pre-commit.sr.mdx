@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Automatski pokrenite Ultracite na vašim pripremljenim (staged) Git fajlovima pomoću pre-commit
+---
+
+Ultracite omogućava besprekornu integraciju sa [pre-commit](https://pre-commit.com/), popularnim Python-om zasnovanim okvirom za upravljanje Git hook-ovima. Ova integracija automatski postavlja pre-commit hook-ove kako bi osigurala da je vaš kod pravilno formatiran pre svakog commita.
+
+## Šta je pre-commit?
+
+pre-commit je okvir za upravljanje i održavanje pre-commit hook-ova za više jezika. Široko se koristi u Python ekosistemu, ali podržava hook-ove za bilo koji jezik. pre-commit koristi fajl `.pre-commit-config.yaml` za definisanje koji će se hook-ovi pokretati i kada.
+
+## Kako Ultracite koristi pre-commit
+
+Kada inicijalizujete Ultracite u svom projektu, može automatski konfigurisati pre-commit da pokreće formatiranje koda pre svakog commita. Ovo obezbeđuje da:
+
+- Sav commitovani kod prati dosledne standarde formatiranja
+- Provere kvaliteta koda se automatski primenjuju
+- Članovi tima ne moraju ručno da pamte da formatiraju kod
+- Vaš repozitorijum održava čist, dosledan stil koda
+
+## Ponašanje pre-commit hook-a
+
+Integracija Ultracite-a sa pre-commit-om kreira lokalni hook koji izvršava sledeću komandu:
+
+```bash
+npx ultracite fix
+```
+
+Ova komanda:
+- Pokreće linter i formatter Biome-a na vašem kodu
+- Automatski ispravlja probleme sa formatiranjem gde je moguće
+- Osigurava da svi staged fajlovi zadovoljavaju standarde koda vašeg projekta
+- Sprečava commitove koji bi uveli nedoslednosti u formatiranju
+
+## Automatsko podešavanje
+
+Tokom procesa inicijalizacije (`ultracite init`), ako izaberete opciju pre-commit, Ultracite:
+
+1. **Kreira konfiguracioni fajl**: Podesi `.pre-commit-config.yaml` sa Ultracite hook-om
+2. **Rukuje postojećim podešavanjima**: Ako već imate pre-commit konfigurisan, dodaje Ultracite hook u vašu postojeću konfiguraciju umesto da je prepiše
+
+## Generisana konfiguracija
+
+Ultracite generiše sledeći `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Objašnjenje konfiguracije
+
+- **repo: local** - Koristi lokalno definisan hook umesto preuzimanja iz udaljenog repozitorijuma
+- **id: ultracite** - Jedinstveni identifikator za hook
+- **name: ultracite** - Ime koje se prikazuje kada se hook pokreće
+- **entry** - Komanda koja se izvršava (koristi npx za pokretanje Ultracite-a)
+- **language: system** - Koristi alate instalirane na sistemu
+- **types_or** - Tipovi fajlova koji pokreću hook
+- **pass_filenames: false** - Pokreće se jednom za sve fajlove, a ne za svaki fajl posebno
+
+## Preduslovi
+
+Pre nego što koristite integraciju sa pre-commit-om, biće vam potrebno:
+
+1. **Instaliran Python** - pre-commit je Python paket
+2. **Instaliran pre-commit** - Instalirajte globalno ili u virtualnom okruženju:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Inicijalizujte hook-ove** - Nakon što Ultracite kreira konfiguraciju, pokrenite:
+   ```bash
+   pre-commit install
+   ```
+
+## Prednosti
+
+### Dosledan stil koda
+Svaki commit automatski prati standarde formatiranja vašeg projekta, eliminišući rasprave o stilu i nedoslednosti.
+
+### Automatska kontrola kvaliteta
+Otkrivajte probleme sa formatiranjem pre nego što uđu u vaš repozitorijum, održavajući čist istorijat commit-ova.
+
+### Saradnja tima
+Svi članovi tima automatski prate iste standarde formatiranja bez ručne intervencije.
+
+### Optimizacija CI/CD
+Smanjite greške u CI/CD pipeline-u zbog problema sa formatiranjem, jer je kod preformatiran lokalno.
+
+### Podrška za više jezika
+Ako vaš projekat koristi više jezika, pre-commit može upravljati hook-ovima za sve njih u jednoj konfiguracionoj datoteci.
+
+## Integracija u radni tok
+
+Sa omogućenim pre-commit integracijom, uobičajeni Git radni tok postaje:
+
+1. **Napravite izmene** u vašim fajlovima koda
+2. **Označite izmene** sa `git add`
+3. **Commit-ujte izmene** sa `git commit`
+4. **Pre-commit hook se automatski pokreće**, formatirajući staged fajlove
+5. **Commit se nastavlja** sa pravilno formatiranim kodom
+
+Ako formatter izvrši izmene, moraćete takođe da ih označite za commit i komitujete.
+
+## Prilagođavanje
+
+Iako Ultracite postavlja razumna podrazumevana podešavanja, možete prilagoditi ponašanje:
+
+- Dodajte dodatne hook-ove iz [repozitorijuma pre-commit hook-ova](https://pre-commit.com/hooks.html)
+- Konfigurišite Biome podešavanja da prilagodite pravila formatiranja
+- Izmenite `types_or` filter da uključite/isključite tipove fajlova
+- Dodajte `exclude` obrasce da preskočite određene fajlove
+
+### Primer proširene konfiguracije
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Otklanjanje problema
+
+### Hook se ne pokreće
+Ako se pre-commit hook ne izvršava:
+- Uverite se da je pre-commit instaliran: `pre-commit --version`
+- Pokrenite `pre-commit install` da postavite Git hook-ove
+- Proverite da li fajl `.pre-commit-config.yaml` postoji u korenu vašeg projekta
+
+### Node.js nije pronađen
+Ako dobijate greške da npx nije pronađen:
+- Uverite se da je Node.js u vašem PATH-u
+- Razmislite o upotrebi `.nvmrc` ili `.node-version` fajla za upravljanje verzijama
+
+### Zaobilaženje hook-ova
+U retkim slučajevima kada trebate preskočiti pre-commit hook:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Koristite ovo štedljivo, jer zaobilazi automatizovano formatiranje koje održava konzistentnost vašeg koda.
+
+### Ručno pokretanje hook-ova
+Da biste ručno pokrenuli hook-ove na svim fajlovima:
+```bash
+pre-commit run --all-files
+```
+
+Da pokrenete samo Ultracite hook:
+```bash
+pre-commit run ultracite --all-files
+```

@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Rith Ultracite go huathoibríoch ar do chomhaid Git stádáilte le pre-commit
+---
+
+Soláthraíonn Ultracite comhtháthú gan uaim le [pre-commit](https://pre-commit.com/), creatlach coitianta bunaithe ar Python chun hooks Git a bhainistiú. Socraíonn an comhtháthú seo hooks pre-commit go huathoibríoch chun a chinntiú go bhfuil do chód formáidithe i gceart sula ndéantar gach commit.
+
+## Cad é pre-commit?
+
+Is creatlach é pre-commit chun hooks pre-commit ilteangacha a bhainistiú agus a chothabháil. Úsáidtear go forleathan é i bhfisteachán Python ach tacaíonn sé le hooks do aon teanga. Úsáideann pre-commit comhad `.pre-commit-config.yaml` chun a shonrú cé na hooks atá le rith agus cathain.
+
+## Conas a úsáideann Ultracite pre-commit
+
+Nuair a chumasaíonn tú Ultracite sa tionscadal, is féidir leis pre-commit a chumrú go huathoibríoch chun formáidiú chód a rith roimh gach commit. Cinntíonn sé seo go:
+
+- Leanann an cód go léir a chuirtear isteach caighdeáin formáideachta comhsheasmhacha
+- Tá seiceálacha cáilíochta cóid curtha i bhfeidhm go huathoibríoch
+- Níl ar bhaill foirne cuimhneamh chun cód a fhoirmáidiú de láimh
+- Coinníonn do stór stíl chód ghlan agus chomhsheasmhach
+
+## Iompar Hook pre-commit
+
+Cruthaíonn comhtháthú pre-commit Ultracite hook áitiúil a ritheann an t-ordú seo a leanas:
+
+```bash
+npx ultracite fix
+```
+
+An t-ordú seo:
+- Ritheann linter agus formáidéir Biome ar do bhonnchód
+- Déanann sé ceisteanna formáideachta a shocrú go huathoibríoch nuair is féidir
+- Cinntíonn sé go gcomhlíonann na comhaid stádáilte caighdeáin chóid do thionscadail
+- Coscann sé commits a d’fhéadfadh neamhchomhsheasmhachtaí formáideachta a thabhairt isteach
+
+## Socrú Uathoibríoch
+
+Le linn an phróisis tosaigh (`ultracite init`), má roghnaíonn tú an rogha pre-commit, déanann Ultracite:
+
+1. **Cruthaíonn Comhad Cumraíochta**: Socraíonn sé an comhad `.pre-commit-config.yaml` leis an hook Ultracite
+2. **Déileálann le Socruithe Reatha**: Má tá pre-commit cumraithe agat cheana, cuirfidh sé an hook Ultracite le do chumraíocht reatha seachas í a scríobh thar
+
+## Cumraíocht Ghinithe
+
+Gineann Ultracite an `.pre-commit-config.yaml` seo a leanas:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Míniú ar an gCumraíocht
+
+- **repo: local** - Úsáideann hook sainmhínithe go háitiúil seachas é a íoslódáil ó stóras iargúlta
+- **id: ultracite** - Aitheantóir uathúil don hook
+- **name: ultracite** - Ainm taispeána a thaispeántar nuair a ritheann an hook
+- **entry** - An t-ordú le gníomhachtú (úsáideann npx chun Ultracite a rith)
+- **language: system** - Úsáideann na huirlisí atá suiteáilte ar an gcóras
+- **types_or** - Cineálacha comhad a spreagann an hook
+- **pass_filenames: false** - Ritheann sé uair amháin do gach comhad in ionad do gach comhad ina aonar
+
+## Réamhriachtanais
+
+Sula n-úsáideann tú an comhtháthú pre-commit, beidh ort:
+
+1. **Python suiteáilte** - Is pacáiste Python é pre-commit
+2. **pre-commit suiteáilte** - Suiteáil go domhanda nó i dtimpeallacht fhíorúil:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Tosú na hooks** - Tar éis Ultracite an chumraíocht a chruthú, rith:
+   ```bash
+   pre-commit install
+   ```
+
+## Buntáistí
+
+### Stíl Chóid Chomhsheasmhach
+Leanann gach commit go huathoibríoch caighdeáin formáideachta do thionscadail, ag scriosadh díospóireachtaí stíle agus neamhchomhsheasmhachtaí.
+
+### Rialú Cáilíochta Uathoibríoch
+Faigh earráidí formáideachta sula dtéann siad isteach i do stór, ag coinneáil stair commit glan.
+
+### Comhoibriú Foirne
+Leanann gach ball foirne na caighdeáin formáideachta céanna go huathoibríoch gan idirghabháil láimhe.
+
+### Optamú CI/CD
+Laghdú ar theipeanna i bpróisis CI/CD mar gheall ar fhadhbanna formáideachta, ós rud é go bhfuil an cód formáidithe roimh ré go háitiúil.
+
+### Tacaíocht Ilteangach
+Má úsáideann do thionscadal iliomlán teangacha, is féidir le pre-commit hooks do gach ceann acu a bhainistiú i gcomhad cumraíochta amháin.
+
+## Comhtháthú leis an Sruth Oibre
+
+Le comhtháthú pre-commit cumasaithe, éiríonn do shruth oibre Git tipiciúil mar seo:
+
+1. Déan athruithe ar do chomhaid chód
+2. Stádaigh na hathruithe le `git add`
+3. Déan na hathruithe a commitáil le `git commit`
+4. Ritheann an hook pre-commit go huathoibríoch, ag formáidiú na gcomhad stádáilte
+5. Leanann an commit ar aghaidh le cód a bhfuil formáidiú ceart air
+
+Má dhéanann an formáidéir athruithe, beidh ort na hathruithe sin a stádaíocht agus a commitáil chomh maith.
+
+## Pearsanú
+
+Cé go socraíonn Ultracite réamhshocruithe réasúnta, is féidir leat an iompar a phearsanú:
+
+- Cuir hooks breise ó [stór hooks pre-commit](https://pre-commit.com/hooks.html)
+- Cumraigh socruithe Biome chun rialacha formáideachta a choigeartú
+- Athraigh an scagaire `types_or` chun cineálacha comhad a áireamh nó a eisiamh
+- Cuir patrúin `exclude` leis chun áirithe comhaid a scipeáil
+
+### Sampla de Chumraíocht Síneáilte
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Réiteach Fadhbanna
+
+### Ní bhíonn an Hook ag Rith
+Má tá an hook pre-commit nach bhfuil ag feidhmiú:
+- Déan cinnte go bhfuil pre-commit suiteáilte: `pre-commit --version`
+- Rith `pre-commit install` chun na hooks Git a shocrú
+- Seiceáil go bhfuil `.pre-commit-config.yaml` i fréamh do thionscadail
+
+### Node.js gan Aimsiú
+Má fhaigheann tú earráidí faoi npx nach bhfuil aimsithe:
+- Déan cinnte go bhfuil Node.js i do PATH
+- Smaoinigh ar úsáid a bhaint as comhad `.nvmrc` nó `.node-version` chun bainistíocht leagan a dhéanamh
+
+### Ag Seachaint na Hooks
+I gcásanna annamh nuair is gá duit an hook pre-commit a scipeáil:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Úsáid é seo go sparánach, mar mhaireann sé formáidiú uathoibrithe a choinníonn do bhonnchód comhsheasmhach.
+
+### Rith na Hooks de Láimh
+Chun na hooks a rith de láimh ar gach comhad:
+```bash
+pre-commit run --all-files
+```
+
+Chun an hook Ultracite a rith amháin:
+```bash
+pre-commit run ultracite --all-files
+```

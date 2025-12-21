@@ -26,7 +26,7 @@ export const options = {
     "droid",
     "antigravity",
   ] as const,
-  integrations: ["husky", "lefthook", "lint-staged"] as const,
+  integrations: ["husky", "lefthook", "lint-staged", "pre-commit"] as const,
   hooks: ["cursor", "claude"] as const,
   frameworks: [
     "react",

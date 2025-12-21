@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: ステージされた Git ファイルに対して pre-commit で自動的に Ultracite を実行する
+---
+
+Ultracite は、人気のある Python ベースの Git フック管理フレームワークである [pre-commit](https://pre-commit.com/) とシームレスに統合します。この統合により、コミット前にコードが適切にフォーマットされるように自動的に pre-commit フックが設定されます。
+
+## What is pre-commit?
+
+pre-commit はマルチ言語の pre-commit フックを管理・維持するためのフレームワークです。Python エコシステムで広く使われていますが、任意の言語向けのフックをサポートしています。pre-commit はどのフックをいつ実行するかを定義するために `.pre-commit-config.yaml` ファイルを使用します。
+
+## How Ultracite Uses pre-commit
+
+プロジェクトで Ultracite を初期化すると、各コミット前にコード整形を実行するように pre-commit を自動的に構成できます。これにより次が保証されます：
+
+- **すべてのコミットされたコードが一貫したフォーマット基準に従う**
+- **コード品質チェックが自動的に適用される**
+- **チームメンバーが手動でコードを整形する必要がなくなる**
+- **リポジトリがクリーンで一貫したコードスタイルを維持する**
+
+## Pre-commit Hook Behavior
+
+Ultracite の pre-commit 統合はローカルフックを作成し、次のコマンドを実行します：
+
+```bash
+npx ultracite fix
+```
+
+このコマンドは：
+- Biome のリンターとフォーマッターをコードベースで実行する
+- 可能な場合は自動的にフォーマットの問題を修正する
+- ステージされたすべてのファイルがプロジェクトのコード基準を満たすようにする
+- フォーマットの不一致を導入するようなコミットを防ぐ
+
+## Automatic Setup
+
+初期化プロセス（`ultracite init`）の間に pre-commit オプションを選択すると、Ultracite は次のことを行います：
+
+1. **Creates Config File**: `.pre-commit-config.yaml` ファイルを Ultracite フックで設定します
+2. **Handles Existing Setups**: すでに pre-commit を構成している場合は、既存の設定を上書きするのではなく Ultracite フックを追加します
+
+## Generated Configuration
+
+Ultracite は次の `.pre-commit-config.yaml` を生成します：
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Configuration Explained
+
+- **repo: local** - リモートリポジトリから取得するのではなくローカルで定義されたフックを使用する
+- **id: ultracite** - フックの一意の識別子
+- **name: ultracite** - フック実行時に表示される表示名
+- **entry** - 実行するコマンド（npx を使用して Ultracite を実行）
+- **language: system** - システムにインストールされているツールを使用する
+- **types_or** - フックをトリガーするファイルタイプ
+- **pass_filenames: false** - ファイルごとではなく、すべてのファイルに対して一度実行する
+
+## Prerequisites
+
+pre-commit 統合を使用する前に、次が必要です：
+
+1. **Python installed** - pre-commit は Python パッケージです
+2. **pre-commit installed** - グローバルに、または仮想環境にインストールします：
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Initialize hooks** - Ultracite が設定を作成した後に実行します：
+   ```bash
+   pre-commit install
+   ```
+
+## Benefits
+
+### Consistent Code Style
+すべてのコミットが自動的にプロジェクトのフォーマット基準に従うことで、スタイルに関する議論や不整合を排除します。
+
+### Automated Quality Control
+フォーマットの問題がリポジトリに入る前に検出でき、クリーンなコミット履歴を維持できます。
+
+### Team Collaboration
+チーム全員が手動の介入なしで同じフォーマット基準に従うようになります。
+
+### CI/CD Optimization
+ローカルで事前にコードを整形するため、フォーマットに起因する CI/CD の失敗を削減できます。
+
+### Multi-Language Support
+プロジェクトが複数言語を使用している場合でも、pre-commit はそれらすべてのフックを一つの設定ファイルで管理できます。
+
+## Workflow Integration
+
+pre-commit 統合が有効になっていると、一般的な Git ワークフローは次のようになります：
+
+1. **Make changes** to your code files
+2. **Stage changes** with `git add`
+3. **Commit changes** with `git commit`
+4. **Pre-commit hook runs** automatically, formatting staged files
+5. **Commit proceeds** with properly formatted code
+
+フォーマッターが変更を行った場合は、それらの変更を再度ステージしてコミットする必要があります。
+
+## Customization
+
+Ultracite は合理的なデフォルトを設定しますが、動作をカスタマイズできます：
+
+- [pre-commit hooks repository](https://pre-commit.com/hooks.html) から追加のフックを追加する
+- フォーマットルールを調整するために Biome の設定を構成する
+- `types_or` フィルターを変更してファイルタイプを含める/除外する
+- 特定のファイルをスキップするために `exclude` パターンを追加する
+
+### Example Extended Configuration
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Troubleshooting
+
+### Hook Not Running
+pre-commit フックが実行されない場合：
+- pre-commit がインストールされていることを確認する：`pre-commit --version`
+- Git フックを設定するために `pre-commit install` を実行する
+- プロジェクトルートに `.pre-commit-config.yaml` が存在するか確認する
+
+### Node.js Not Found
+npx が見つからないというエラーが発生する場合：
+- Node.js が PATH に含まれていることを確認する
+- バージョン管理のために `.nvmrc` や `.node-version` ファイルの使用を検討する
+
+### Bypassing Hooks
+pre-commit フックをスキップする必要がある稀なケースでは：
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+自動フォーマットをバイパスするため注意して使用してください。これによりコードベースの一貫性が損なわれる可能性があります。
+
+### Running Hooks Manually
+すべてのファイルでフックを手動実行するには：
+```bash
+pre-commit run --all-files
+```
+
+Ultracite フックだけを実行するには：
+```bash
+pre-commit run ultracite --all-files
+```

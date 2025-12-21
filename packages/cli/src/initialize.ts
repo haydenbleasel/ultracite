@@ -22,6 +22,7 @@ import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
+import { preCommit } from "./integrations/pre-commit";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
@@ -328,6 +329,36 @@ export const initializeLintStaged = async (
   await lintStaged.create(packageManager);
   if (!quiet) {
     s.stop("lint-staged created.");
+  }
+};
+
+export const initializePreCommit = async (
+  packageManager: PackageManagerName,
+  quiet = false
+) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Initializing pre-commit...");
+  }
+
+  if (await preCommit.exists()) {
+    if (!quiet) {
+      s.message(".pre-commit-config.yaml found, updating...");
+    }
+    await preCommit.update(packageManager);
+    if (!quiet) {
+      s.stop(".pre-commit-config.yaml updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message(".pre-commit-config.yaml not found, creating...");
+  }
+  await preCommit.create(packageManager);
+  if (!quiet) {
+    s.stop(".pre-commit-config.yaml created.");
   }
 };
 
@@ -724,6 +755,7 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Husky pre-commit hook", value: "husky" },
             { label: "Lefthook pre-commit hook", value: "lefthook" },
             { label: "Lint-staged", value: "lint-staged" },
+            { label: "pre-commit (Python framework)", value: "pre-commit" },
           ],
           required: false,
         });
@@ -772,6 +804,9 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
     if (integrations?.includes("lint-staged")) {
       await initializeLintStaged(pm, !opts.skipInstall, quiet);
+    }
+    if (integrations?.includes("pre-commit")) {
+      await initializePreCommit(pm, quiet);
     }
 
     if (!quiet) {

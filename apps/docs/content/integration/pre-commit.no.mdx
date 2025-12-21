@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Kjør Ultracite automatisk på dine indekserte Git-filer med pre-commit
+---
+
+Ultracite tilbyr sømløs integrasjon med [pre-commit](https://pre-commit.com/), et populært Python-basert rammeverk for å administrere Git-hooks. Denne integrasjonen setter automatisk opp pre-commit-hooks for å sikre at koden din er korrekt formatert før hver commit.
+
+## Hva er pre-commit?
+
+pre-commit er et rammeverk for å administrere og vedlikeholde flerspråklige pre-commit-hooks. Det er mye brukt i Python-økosystemet, men støtter hooks for alle språk. pre-commit bruker en `.pre-commit-config.yaml`-fil for å definere hvilke hooks som skal kjøres og når.
+
+## Hvordan Ultracite bruker pre-commit
+
+Når du initialiserer Ultracite i prosjektet ditt, kan det automatisk konfigurere pre-commit til å kjøre kodeformatering før hver commit. Dette sikrer at:
+
+- All commitet kode følger konsekvente formateringsstandarder
+- Kodekvalitetssjekker håndheves automatisk
+- Teammedlemmer trenger ikke å huske å formatere kode manuelt
+- Repositoryet ditt opprettholder en ren, konsistent kodestil
+
+## Pre-commit-hookens oppførsel
+
+Ultracites pre-commit-integrasjon oppretter en lokal hook som kjører følgende kommando:
+
+```bash
+npx ultracite fix
+```
+
+Denne kommandoen:
+- Kjører Biome's linter og formatter på kodebasen din
+- Fikser automatisk formateringsproblemer der det er mulig
+- Sikrer at alle indekserte filer oppfyller prosjektets kodestandarder
+- Forhindrer commits som ville introdusere formateringsinkonsistenser
+
+## Automatisk oppsett
+
+Under initialiseringsprosessen (`ultracite init`), hvis du velger pre-commit-alternativet, så:
+
+1. **Oppretter konfigurasjonsfil**: Setter opp `.pre-commit-config.yaml`-filen med Ultracite-hooken
+2. **Håndterer eksisterende oppsett**: Hvis du allerede har pre-commit konfigurert, legger den til Ultracite-hooken i din eksisterende konfigurasjon i stedet for å overskrive den
+
+## Generert konfigurasjon
+
+Ultracite genererer følgende `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Konfigurasjon forklart
+
+- **repo: local** - Bruker en lokalt definert hook i stedet for å hente fra et eksternt repository
+- **id: ultracite** - Unik identifikator for hooken
+- **name: ultracite** - Visningsnavn som vises når hooken kjører
+- **entry** - Kommandoen som skal kjøres (bruker npx for å kjøre Ultracite)
+- **language: system** - Bruker verktøyene installert på systemet
+- **types_or** - Filtyper som utløser hooken
+- **pass_filenames: false** - Kjører én gang for alle filer i stedet for per fil
+
+## Forutsetninger
+
+Før du bruker pre-commit-integrasjonen, trenger du:
+
+1. **Python installert** - pre-commit er en Python-pakke
+2. **pre-commit installert** - Installer globalt eller i et virtuelt miljø:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Initialiser hooks** - Etter at Ultracite oppretter konfigurasjonen, kjør:
+   ```bash
+   pre-commit install
+   ```
+
+## Fordeler
+
+### Konsistent kodestil
+Hver commit følger automatisk prosjektets formateringsstandarder, og eliminerer stildebatter og inkonsistenser.
+
+### Automatisert kvalitetskontroll
+Oppdag formateringsproblemer før de kommer inn i repositoryet, og oppretthold en ren commit-historikk.
+
+### Samarbeid i team
+Alle teammedlemmer følger automatisk de samme formateringsstandardene uten manuell inngripen.
+
+### CI/CD-optimalisering
+Reduser CI/CD-feil på grunn av formateringsproblemer, siden koden er forhåndsformatert lokalt.
+
+### Støtte for flere språk
+Hvis prosjektet ditt bruker flere språk, kan pre-commit håndtere hooks for alle i én konfigurasjonsfil.
+
+## Integrasjon i arbeidsflyt
+
+Med pre-commit-integrasjon aktivert blir din typiske Git-arbeidsflyt:
+
+1. **Gjør endringer** i kodefiler
+2. **Indekser endringer** med `git add`
+3. **Commit endringer** med `git commit`
+4. **Pre-commit-hooken kjører** automatisk, og formaterer indekserte filer
+5. **Commit fortsetter** med riktig formatert kode
+
+Hvis formatteren gjør endringer, må du indekser og committe disse endringene også.
+
+## Tilpasning
+
+Selv om Ultracite setter opp fornuftige standarder, kan du tilpasse oppførselen:
+
+- Legg til ekstra hooks fra [pre-commit hooks-repositoriet](https://pre-commit.com/hooks.html)
+- Konfigurer Biome-innstillinger for å justere formateringsregler
+- Endre `types_or`-filteret for å inkludere/utelukke filtyper
+- Legg til `exclude`-mønstre for å hoppe over visse filer
+
+### Eksempel på utvidet konfigurasjon
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Feilsøking
+
+### Hook kjører ikke
+Hvis pre-commit-hooken ikke kjører:
+- Sørg for at pre-commit er installert: `pre-commit --version`
+- Kjør `pre-commit install` for å sette opp Git-hookene
+- Sjekk at `.pre-commit-config.yaml` finnes i prosjektets rot
+
+### Node.js ikke funnet
+Hvis du får feil om at npx ikke blir funnet:
+- Sørg for at Node.js er i PATH-en din
+- Vurder å bruke en `.nvmrc`- eller `.node-version`-fil for versjonsstyring
+
+### Omgå hooks
+I sjeldne tilfeller hvor du trenger å hoppe over pre-commit-hooken:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Bruk dette sparsomt, da det omgår den automatiske formateringen som holder kodebasen konsistent.
+
+### Kjøre hooks manuelt
+For å kjøre hooks manuelt på alle filer:
+```bash
+pre-commit run --all-files
+```
+
+For å kjøre bare Ultracite-hooken:
+```bash
+pre-commit run ultracite --all-files
+```

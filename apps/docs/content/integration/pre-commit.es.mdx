@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Ejecuta Ultracite automáticamente en tus archivos en el área de preparación (staged) de Git con pre-commit
+---
+
+Ultracite proporciona una integración fluida con [pre-commit](https://pre-commit.com/), un popular framework basado en Python para gestionar Git hooks. Esta integración configura automáticamente los hooks de pre-commit para asegurar que tu código esté correctamente formateado antes de cada commit.
+
+## ¿Qué es pre-commit?
+
+pre-commit es un framework para gestionar y mantener hooks de pre-commit multilenguaje. Se usa ampliamente en el ecosistema de Python, pero admite hooks para cualquier lenguaje. pre-commit utiliza un archivo `.pre-commit-config.yaml` para definir qué hooks ejecutar y cuándo.
+
+## Cómo usa Ultracite pre-commit
+
+Cuando inicializas Ultracite en tu proyecto, puede configurar automáticamente pre-commit para ejecutar el formateo de código antes de cada commit. Esto garantiza que:
+
+- Todo el código comprometido siga estándares de formato consistentes
+- Las comprobaciones de calidad de código se apliquen automáticamente
+- Los miembros del equipo no tengan que recordar formatear el código manualmente
+- Tu repositorio mantenga un estilo de código limpio y consistente
+
+## Comportamiento del Hook de pre-commit
+
+La integración de pre-commit de Ultracite crea un hook local que ejecuta el siguiente comando:
+
+```bash
+npx ultracite fix
+```
+
+Este comando:
+- Ejecuta el linter y formateador de Biome en tu base de código
+- Corrige automáticamente problemas de formato cuando es posible
+- Asegura que todos los archivos en el área de preparación cumplan con los estándares de código de tu proyecto
+- Evita commits que introducirían inconsistencias de formato
+
+## Configuración automática
+
+Durante el proceso de inicialización (`ultracite init`), si seleccionas la opción pre-commit, Ultracite:
+
+1. **Crea archivo de configuración**: Configura el archivo `.pre-commit-config.yaml` con el hook de Ultracite
+2. **Gestiona configuraciones existentes**: Si ya tienes pre-commit configurado, añade el hook de Ultracite a tu configuración existente en lugar de sobrescribirla
+
+## Configuración generada
+
+Ultracite genera el siguiente `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Explicación de la configuración
+
+- **repo: local** - Usa un hook definido localmente en lugar de obtenerlo de un repositorio remoto
+- **id: ultracite** - Identificador único para el hook
+- **name: ultracite** - Nombre que se muestra cuando se ejecuta el hook
+- **entry** - El comando a ejecutar (usa npx para ejecutar Ultracite)
+- **language: system** - Usa las herramientas instaladas en el sistema
+- **types_or** - Tipos de archivo que activan el hook
+- **pass_filenames: false** - Se ejecuta una vez para todos los archivos en lugar de por archivo
+
+## Requisitos previos
+
+Antes de usar la integración con pre-commit, necesitarás:
+
+1. **Python instalado** - pre-commit es un paquete de Python
+2. **pre-commit instalado** - Instálalo globalmente o en un entorno virtual:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Inicializar hooks** - Después de que Ultracite cree la configuración, ejecuta:
+   ```bash
+   pre-commit install
+   ```
+
+## Beneficios
+
+### Estilo de código consistente
+Cada commit sigue automáticamente los estándares de formateo de tu proyecto, eliminando debates sobre estilo e inconsistencias.
+
+### Control de calidad automatizado
+Detecta problemas de formato antes de que entren en tu repositorio, manteniendo un historial de commits limpio.
+
+### Colaboración en equipo
+Todos los miembros del equipo siguen automáticamente los mismos estándares de formateo sin intervención manual.
+
+### Optimización de CI/CD
+Reduce fallos en pipelines de CI/CD debido a problemas de formato, ya que el código se preformatea localmente.
+
+### Soporte multilenguaje
+Si tu proyecto usa múltiples lenguajes, pre-commit puede gestionar hooks para todos ellos en un único archivo de configuración.
+
+## Integración en el flujo de trabajo
+
+Con la integración de pre-commit habilitada, tu flujo típico de Git se vuelve:
+
+1. **Realiza cambios** en tus archivos de código
+2. **Prepara los cambios** con `git add`
+3. **Comete los cambios** con `git commit`
+4. **El hook de pre-commit se ejecuta** automáticamente, formateando los archivos preparados
+5. **El commit procede** con código correctamente formateado
+
+Si el formateador realiza cambios, necesitarás preparar y cometer esos cambios también.
+
+## Personalización
+
+Aunque Ultracite configura valores predeterminados sensatos, puedes personalizar el comportamiento:
+
+- Agrega hooks adicionales desde el [repositorio de hooks de pre-commit](https://pre-commit.com/hooks.html)
+- Configura los ajustes de Biome para ajustar las reglas de formateo
+- Modifica el filtro `types_or` para incluir/excluir tipos de archivo
+- Añade patrones `exclude` para omitir ciertos archivos
+
+### Ejemplo de configuración extendida
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Solución de problemas
+
+### Hook no se ejecuta
+Si el hook de pre-commit no se está ejecutando:
+- Asegúrate de que pre-commit esté instalado: `pre-commit --version`
+- Ejecuta `pre-commit install` para configurar los hooks de Git
+- Comprueba que `.pre-commit-config.yaml` exista en la raíz de tu proyecto
+
+### Node.js no encontrado
+Si obtienes errores sobre npx no encontrado:
+- Asegúrate de que Node.js esté en tu PATH
+- Considera usar un archivo `.nvmrc` o `.node-version` para la gestión de versiones
+
+### Omitir hooks
+En casos raros donde necesites saltarte el hook de pre-commit:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Usa esto con moderación, ya que omite el formateo automatizado que mantiene la coherencia de tu base de código.
+
+### Ejecutar hooks manualmente
+Para ejecutar los hooks manualmente en todos los archivos:
+```bash
+pre-commit run --all-files
+```
+
+Para ejecutar solo el hook de Ultracite:
+```bash
+pre-commit run ultracite --all-files
+```

@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Suorita Ultracite automaattisesti vaiheistetuille Git-tiedostoillesi pre-commitin avulla
+---
+
+Ultracite tarjoaa saumatonta integraatiota [pre-commit](https://pre-commit.com/)-työkalun kanssa, joka on suosittu Python-pohjainen kehys Git-hookkien hallintaan. Tämä integraatio asettaa automaattisesti pre-commit-hookit varmistaakseen, että koodisi on asianmukaisesti muotoiltu ennen jokaista commitia.
+
+## Mikä on pre-commit?
+
+pre-commit on kehys monikielisten pre-commit-hookkien hallintaan ja ylläpitoon. Sitä käytetään laajasti Python-ekosysteemissä, mutta se tukee hookkeja mille tahansa kielelle. pre-commit käyttää `.pre-commit-config.yaml`-tiedostoa määrittämään, mitä hookkeja suoritetaan ja milloin.
+
+## Miten Ultracite käyttää pre-commitia
+
+Kun alustat Ultraciten projektissasi, se voi automaattisesti konfiguroida pre-commitin suorittamaan koodin muotoilun ennen jokaista commitia. Tämä varmistaa, että:
+
+- Kaikki commitoitu koodi noudattaa yhtenäisiä muotoilustandardeja
+- Koodin laadun tarkistukset otetaan automaattisesti käyttöön
+- Tiimin jäsenien ei tarvitse muistaa muotoilla koodia manuaalisesti
+- Repositoriosi säilyy siistinä ja yhdenmukaisena koodityyliltään
+
+## Pre-commit-hookin käyttäytyminen
+
+Ultraciten pre-commit-integraatio luo paikallisen hookin, joka suorittaa seuraavan komennon:
+
+```bash
+npx ultracite fix
+```
+
+Tämä komento:
+- Suorittaa Biomen linterin ja formatterin koodikannassasi
+- Korjaa automaattisesti muotoiluvirheet, kun mahdollista
+- Varmistaa, että kaikki vaiheistetut tiedostot täyttävät projektisi koodistandardit
+- Estää commitit, jotka toisivat mukanaan muotoiluinkonsistensseja
+
+## Automaattinen asennus
+
+Alustusprosessin aikana (`ultracite init`), jos valitset pre-commit-vaihtoehdon, Ultracite:
+
+1. **Luo konfiguraatiotiedoston**: Asettaa `.pre-commit-config.yaml`-tiedoston Ultracite-hookilla
+2. **Käsittelee olemassa olevat asetukset**: Jos sinulla on jo pre-commit konfiguroituna, se lisää Ultracite-hookin olemassa olevaan konfiguraatioosi sen sijaan, että korvaisi sitä
+
+## Luotu konfiguraatio
+
+Ultracite generoi seuraavan `.pre-commit-config.yaml`-tiedoston:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Konfiguraation selitys
+
+- **repo: local** - Käyttää paikallisesti määriteltyä hookia sen sijaan, että hakisi sitä etävarastosta
+- **id: ultracite** - Yksilöllinen tunniste hookille
+- **name: ultracite** - Näkyvä nimi, joka esitetään hookin suorittaessa
+- **entry** - Suoritettava komento (käyttää npx:ää Ultraciten ajamiseen)
+- **language: system** - Käyttää järjestelmään asennettuja työkaluja
+- **types_or** - Tiedostotyypit, jotka laukaisevat hookin
+- **pass_filenames: false** - Suoritetaan kerran kaikille tiedostoille sen sijaan, että suoritettaisiin tiedostokohtaisesti
+
+## Edellytykset
+
+Ennen kuin käytät pre-commit-integraatiota, tarvitset:
+
+1. **Python asennettuna** - pre-commit on Python-paketti
+2. **pre-commit asennettuna** - Asenna globaalisti tai virtuaaliympäristöön:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Hookkien alustaminen** - Kun Ultracite on luonut konfiguraation, suorita:
+   ```bash
+   pre-commit install
+   ```
+
+## Hyödyt
+
+### Johdonmukainen koodityyli
+Jokainen commit noudattaa automaattisesti projektisi muotoilustandardeja, jolloin tyylikiistat ja epäjohdonmukaisuudet vähenevät.
+
+### Automaattinen laadunvalvonta
+Tartu muotoiluvirheisiin ennen kuin ne päätyvät repositorioosi, pitäen commit-historian siistinä.
+
+### Tiimityö
+Kaikki tiimin jäsenet noudattavat automaattisesti samoja muotoilustandardeja ilman manuaalista toimintaa.
+
+### CI/CD-optimointi
+Vähennä CI/CD-putken epäonnistumisia muotoiluvirheiden takia, koska koodi on esimuotoiltu paikallisesti.
+
+### Monikielinen tuki
+Jos projektissasi käytetään useita kieliä, pre-commit voi hallita hookkeja kaikille niille yhdessä konfiguraatiotiedostossa.
+
+## Työnkulun integrointi
+
+Kun pre-commit-integraatio on käytössä, tyypillinen Git-työnkulusi on:
+
+1. **Tee muutoksia** kooditiedostoihisi
+2. **Vaiheista muutokset** komennolla `git add`
+3. **Commitoi muutokset** komennolla `git commit`
+4. **Pre-commit-hook suoritetaan** automaattisesti, muotoillen vaiheistetut tiedostot
+5. **Commit jatkuu** asianmukaisesti muotoillun koodin kanssa
+
+Jos formatter tekee muutoksia, sinun täytyy myös vaiheistaa ja commitata nuo muutokset erikseen.
+
+## Mukauttaminen
+
+Vaikka Ultracite asettaa järkevät oletusasetukset, voit mukauttaa käyttäytymistä:
+
+- Lisää lisähookkeja [pre-commit-hookkien arkistosta](https://pre-commit.com/hooks.html)
+- Konfiguroi Biomen asetuksia säätääksesi muotoilusääntöjä
+- Muokkaa `types_or`-suodatinta sisällyttääksesi/poissulkeaksesi tiedostotyyppejä
+- Lisää `exclude`-kuvioita ohittaaksesi tietyt tiedostot
+
+### Esimerkkilaajennettu konfiguraatio
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Vianetsintä
+
+### Hook ei käynnisty
+Jos pre-commit-hook ei suoritukaan:
+- Varmista, että pre-commit on asennettu: `pre-commit --version`
+- Suorita `pre-commit install` asentaaaksesi Git-hookit
+- Tarkista, että `.pre-commit-config.yaml` on projektisi juurikansiossa
+
+### Node.js ei löydy
+Jos saat virheitä, joissa npx:ää ei löydy:
+- Varmista, että Node.js on PATHissasi
+- Harkitse `.nvmrc`- tai `.node-version`-tiedoston käyttöä versiohallintaan
+
+### Hookien ohittaminen
+Poikkeustapauksissa, joissa sinun täytyy ohittaa pre-commit-hookki:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Käytä tätä säästeliäästi, koska se ohittaa automatisoidun muotoilun, joka pitää koodikannan yhdenmukaisena.
+
+### Hookien suorittaminen manuaalisesti
+Suorittaaksesi hookit manuaalisesti kaikille tiedostoille:
+```bash
+pre-commit run --all-files
+```
+
+Suorittaaksesi vain Ultracite-hookin:
+```bash
+pre-commit run ultracite --all-files
+```

@@ -1,0 +1,174 @@
+---
+title: pre-commit
+description: Samodejno zaženite Ultracite na vaših indexiranih (staged) Git datotekah z uporabo pre-commit
+---
+
+Ultracite zagotavlja nemoteno integracijo s [pre-commit](https://pre-commit.com/), priljubljenim ogrodjem v Pythonu za upravljanje Git hookov. Ta integracija samodejno nastavi pre-commit hooke, da se zagotovi pravilno oblikovanje kode pred vsakim commitom.
+
+## Kaj je pre-commit?
+
+pre-commit je ogrodje za upravljanje in vzdrževanje večjezičnih pre-commit hookov. Je široko uporabljano v Python ekosistemu, vendar podpira hooke za katerikoli jezik. pre-commit uporablja datoteko `.pre-commit-config.yaml` za določanje, katere hooke zagnati in kdaj.
+
+## Kako Ultracite uporablja pre-commit
+
+Ko inicializirate Ultracite v svojem projektu, lahko samodejno konfigurira pre-commit, da pred vsakim commitom zažene oblikovanje kode. To zagotavlja, da:
+
+- Vsa commitana koda sledi doslednim pravilom oblikovanja
+- Preverjanja kvalitete kode se izvajajo samodejno
+- Člani ekipe se ne rabijo spomniti, da bi kodo ročno formatirali
+- Vaš repozitorij ohranja čist in dosleden slog kode
+
+## Vedenje pre-commit hooka
+
+Ultraciteova pre-commit integracija ustvari lokalni hook, ki zažene naslednji ukaz:
+
+```bash
+npx ultracite fix
+```
+
+Ta ukaz:
+- Zažene Biomeov linter in formatter na vaši kodi
+- Samodejno odpravi težave z oblikovanjem, kjer je mogoče
+- Zagotovi, da vse indexirane datoteke izpolnjujejo standarde kode vašega projekta
+- Onemogoči commite, ki bi uvedli neskladnosti v oblikovanju
+
+## Samodejna nastavitev
+
+Med postopkom inicializacije (`ultracite init`), če izberete možnost pre-commit, Ultracite:
+
+1. **Creates Config File**: Nastavi datoteko `.pre-commit-config.yaml` s hookom Ultracite
+2. **Handles Existing Setups**: Če že imate konfiguriran pre-commit, doda Ultracite hook v obstoječo konfiguracijo namesto da bi jo prepisal
+
+## Generirana konfiguracija
+
+Ultracite generira naslednjo `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+### Razlaga konfiguracije
+
+- **repo: local** - Uporablja lokalno definirani hook namesto pridobivanja iz oddaljenega repozitorija
+- **id: ultracite** - Edinstven identifikator hooka
+- **name: ultracite** - Ime, ki se prikaže, ko se hook zažene
+- **entry** - Ukaz, ki se izvede (uporablja npx za zagon Ultracite)
+- **language: system** - Uporablja orodja nameščena v sistemu
+- **types_or** - Vrste datotek, ki sprožijo hook
+- **pass_filenames: false** - Zažene se enkrat za vse datoteke namesto za vsako datoteko posebej
+
+## Predpogoji
+
+Pred uporabo pre-commit integracije boste potrebovali:
+
+1. **Python nameščen** - pre-commit je Python paket
+2. **pre-commit nameščen** - Namestite globalno ali v virtualnem okolju:
+   ```bash
+   pip install pre-commit
+   # or
+   pipx install pre-commit
+   ```
+3. **Inicializirajte hooke** - Po tem, ko Ultracite ustvari konfiguracijo, zaženite:
+   ```bash
+   pre-commit install
+   ```
+
+## Koristi
+
+### Dosleden slog kode
+Vsak commit samodejno sledi pravilom oblikovanja vašega projekta, s čimer odpravljate razprave o slogu in nedoslednosti.
+
+### Samodejno preverjanje kakovosti
+Ujamite težave z oblikovanjem, preden vstopijo v repozitorij, in tako ohranite čist zgodovinski zapis commitov.
+
+### Sodelovanje v ekipi
+Vsi člani ekipe samodejno sledijo enakim pravilom oblikovanja brez ročnega posredovanja.
+
+### Optimizacija CI/CD
+Zmanjšajte napake v CI/CD cevovodu zaradi težav z oblikovanjem, saj je koda predhodno formatirana lokalno.
+
+### Podpora več jezikov
+Če vaš projekt uporablja več jezikov, lahko pre-commit upravlja hooke za vse v eni konfiguracijski datoteki.
+
+## Integracija v delovni tok
+
+S omogočeno pre-commit integracijo postane vaš običajni Git delovni tok:
+
+1. **Spremenite** datoteke kode
+2. **Stage-ajte spremembe** z `git add`
+3. **Commitajte spremembe** z `git commit`
+4. **Pre-commit hook se zažene** samodejno in oblikuje indexirane datoteke
+5. **Commit se nadaljuje** z pravilno formatirano kodo
+
+Če formatter naredi spremembe, boste morali te spremembe ponovno stage-ati in commitati.
+
+## Prilagoditve
+
+Medtem ko Ultracite nastavi smiselne privzete vrednosti, lahko obnašanje prilagodite:
+
+- Dodajte dodatne hooke iz [pre-commit hooks repository](https://pre-commit.com/hooks.html)
+- Konfigurirajte Biome nastavitve za prilagoditev pravil oblikovanja
+- Spremenite filter `types_or` za vključitev/izključitev vrst datotek
+- Dodajte vzorce `exclude` za preskakovanje določenih datotek
+
+### Primer razširjene konfiguracije
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+        exclude: ^(vendor/|dist/)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+```
+
+## Odpravljanje težav
+
+### Hook se ne zažene
+Če se pre-commit hook ne izvaja:
+- Preverite, ali je pre-commit nameščen: `pre-commit --version`
+- Za nastavitev Git hookov zaženite `pre-commit install`
+- Preverite, ali datoteka `.pre-commit-config.yaml` obstaja v korenu projekta
+
+### Node.js ni najden
+Če prejmete napake o tem, da npx ni najden:
+- Poskrbite, da je Node.js v vaši PATH spremenljivki
+- Razmislite o uporabi `.nvmrc` ali `.node-version` datoteke za upravljanje različic
+
+### Obhod hookov
+V redkih primerih, ko morate preskočiti pre-commit hook:
+```bash
+git commit --no-verify
+# or
+git commit -n
+```
+
+Uporabljajte to varčno, saj s tem obhodom izključite samodejno oblikovanje, ki ohranja doslednost kode.
+
+### Ročno zaganjanje hookov
+Za ročno zagon vseh hookov na vseh datotekah:
+```bash
+pre-commit run --all-files
+```
+
+Za zagon samo Ultracite hooka:
+```bash
+pre-commit run ultracite --all-files
+```
