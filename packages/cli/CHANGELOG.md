@@ -1,5 +1,15 @@
 ## 5.6.0
 
+## 6.5.0
+
+### Minor Changes
+
+- 628a5c3: Disable nursery rules
+
+### Patch Changes
+
+- a942392: Use `interface` as consistent type definition
+
 ## 6.4.3
 
 ### Patch Changes
