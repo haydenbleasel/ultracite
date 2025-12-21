@@ -1,10 +1,4 @@
 import Image from "next/image";
-import {
-  Marquee,
-  MarqueeContent,
-  MarqueeFade,
-  MarqueeItem,
-} from "@/components/kibo-ui/marquee";
 import Adobe from "./adobe.svg";
 import Arcade from "./arcade.svg";
 import AlanTuringInstitute from "./ati.svg";
@@ -17,6 +11,7 @@ import Profound from "./profound.svg";
 import Redpanda from "./redpanda.svg";
 import Tencent from "./tencent.svg";
 import VA from "./va.svg";
+import Workday from "./workday.svg";
 import Vercel from "./vercel.svg";
 
 const logos = [
@@ -72,38 +67,37 @@ const logos = [
     name: "Redpanda",
     src: Redpanda,
   },
+  {
+    name: "Workday",
+    src: Workday,
+  },
 ];
 
 export const Logos = () => (
-  <div className="grid gap-12 px-8">
-    <p className="text-center text-muted-foreground">
-      Used by these organizations and{" "}
-      <a
-        className="underline"
-        href="https://github.com/haydenbleasel/ultracite/network/dependents"
-        rel="noreferrer"
-        target="_blank"
-      >
-        thousands
-      </a>{" "}
-      of open source projects.
-    </p>
-    <div className="flex size-full items-center justify-center bg-background">
-      <Marquee>
-        <MarqueeFade side="left" />
-        <MarqueeFade side="right" />
-        <MarqueeContent pauseOnHover={false}>
-          {logos.map((item) => (
-            <MarqueeItem key={item.name}>
-              <Image
-                alt={item.name}
-                className="mx-8 h-8 w-auto dark:brightness-0 dark:invert"
-                src={item.src}
-              />
-            </MarqueeItem>
-          ))}
-        </MarqueeContent>
-      </Marquee>
+  <div className="grid gap-8">
+    <div className="mx-auto grid max-w-xl gap-4 text-center">
+      <h2 className="text-balance font-semibold text-3xl md:text-4xl tracking-tighter">
+        Trusted by top companies
+      </h2>
+      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+        And used by{" "}
+        <a
+          className="underline"
+          href="https://github.com/haydenbleasel/ultracite/network/dependents"
+          rel="noreferrer"
+          target="_blank"
+        >
+          thousands
+        </a>{" "}
+        of open source projects.
+      </p>
+    </div>
+    <div className="grid grid-cols-5 border-l border-t divide-x divide-y">
+        {logos.map((logo) => (
+          <div className="w-full aspect-video p-12 flex items-center justify-center last:border-r last:border-b" key={logo.name}>
+            <Image alt={logo.name} height={48} src={logo.src} width={48} className="size-full object-contain" />
+          </div>
+        ))}
     </div>
   </div>
 );

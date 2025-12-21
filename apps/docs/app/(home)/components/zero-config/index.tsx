@@ -63,10 +63,10 @@ const configs = [
 export const ZeroConfig = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-xl gap-4 text-center">
-      <h2 className="text-balance font-medium text-3xl md:text-4xl lg:text-5xl">
+      <h2 className="text-balance font-semibold text-3xl md:text-4xl tracking-tighter">
         <span className="italic">Zero-config</span> by design
       </h2>
-      <p className="text-balance text-lg text-muted-foreground">
+      <p className="text-balance text-lg text-muted-foreground tracking-tight">
         Hundreds of rules for your framework to optimize your JavaScript /
         TypeScript code, while still allowing you to customize when needed.
       </p>
