@@ -17,12 +17,12 @@ Tambahkan konfigurasi React ke `biome.jsonc` Anda:
 
 ## Ikhtisar
 
-Konfigurasi ini menambahkan aturan khusus untuk pengembangan React:
+Konfigurasi ini menambahkan aturan yang spesifik untuk pengembangan React:
 
 - **Aturan JSX**: Menegakkan sintaks dan pola JSX yang benar
 - **Aturan Hooks**: Memastikan hooks React digunakan dengan benar
 - **Aturan Komponen**: Menegakkan praktik terbaik komponen React
-- **Penanganan Children**: Mencegah penggunaan prop children yang tidak tepat
+- **Penanganan Children**: Mencegah penggunaan prop children yang tidak semestinya
 
 ## Aturan Khusus React
 
@@ -30,32 +30,26 @@ Konfigurasi ini menambahkan aturan khusus untuk pengembangan React:
 
 | Aturan | Pengaturan | Deskripsi |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Mencegah penerusan children sebagai props. children harus disisipkan di antara tag pembuka dan penutup. |
-| `noNestedComponentDefinitions` | `error` | Mencegah definisi komponen di dalam komponen lain. Ini menyebabkan re-render yang tidak perlu. |
-| `noReactPropAssignments` | `error` | Mencegah penugasan ulang props di komponen React. Props harus diperlakukan sebagai tidak dapat diubah. |
+| `noChildrenProp` | `error` | Mencegah penerusan children sebagai props. children harus ditempatkan di antara tag pembuka dan penutup. |
+| `noNestedComponentDefinitions` | `error` | Mencegah definisi komponen di dalam komponen lain. Hal ini menyebabkan re-render yang tidak perlu. |
+| `noReactPropAssignments` | `error` | Mencegah penetapan ulang props di komponen React. Props harus diperlakukan sebagai tidak dapat diubah (immutable). |
 | `noRenderReturnValue` | `error` | Mencegah penggunaan nilai kembalian dari `ReactDOM.render()`. |
 | `noVoidElementsWithChildren` | `error` | Mencegah elemen void (seperti `<img>`, `<br>`) memiliki children. |
-| `useExhaustiveDependencies` | `error` | Menegakkan agar semua dependensi ditentukan dengan benar dalam hooks React (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Menegaskan bahwa semua hooks React dipanggil dari tingkat atas fungsi komponen, bukan di dalam loop, kondisi, atau fungsi bersarang. |
+| `useExhaustiveDependencies` | `error` | Menegakkan bahwa semua dependensi ditentukan dengan benar di React hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Menegakkan bahwa semua hooks React dipanggil dari level atas fungsi komponen, bukan di dalam loop, kondisi, atau fungsi bersarang. |
 | `useJsxKeyInIterable` | `error` | Menegakkan bahwa elemen dalam iterable memiliki prop `key` untuk rekonsiliasi React. |
-
-### Eksperimental
-
-| Aturan | Pengaturan | Deskripsi |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Mencegah penggunaan `React.forwardRef` versi lama. Gunakan ref sebagai prop sebagai gantinya (React 19+). |
 
 ### Gaya
 
 | Aturan | Pengaturan | Deskripsi |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Mewajibkan penggunaan komponen fungsi dibandingkan komponen kelas di React. |
+| `useReactFunctionComponents` | `error` | Menegakkan penggunaan komponen fungsi daripada komponen kelas di React. |
 
 ### Mencurigakan
 
 | Aturan | Pengaturan | Deskripsi |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Mencegah penggunaan indeks array sebagai key. Indeks array bukan pengenal yang stabil dan dapat menyebabkan masalah dengan state komponen. |
+| `noArrayIndexKey` | `error` | Mencegah penggunaan indeks array sebagai prop `key`. Indeks array bukan pengenal yang stabil dan dapat menyebabkan masalah dengan state komponen. |
 | `noDuplicateJsxProps` | `error` | Mencegah properti duplikat di JSX. |
-| `noSuspiciousSemicolonInJsx` | `error` | Mencegah titik koma yang mengubah makna semantik elemen JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Mencegah tanda titik koma yang mengubah semantik elemen JSX. |
 | `noReactSpecificProps` | `off` | Mengizinkan properti khusus React seperti `className` dan `htmlFor`. |

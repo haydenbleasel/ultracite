@@ -17,39 +17,32 @@ Fügen Sie die Next.js-Konfiguration zu Ihrer `biome.jsonc` hinzu:
 
 ## Übersicht
 
-Diese Konfiguration fügt Regeln hinzu, die speziell auf die Next.js-Entwicklung ausgerichtet sind:
+Diese Konfiguration fügt Regeln hinzu, die speziell für die Next.js-Entwicklung gelten:
 
-- **Bildoptimierung**: Erzwingt die Verwendung der Next.js `<Image>`-Komponente
-- **Dokumentenstruktur**: Verhindert unsachgemäße Verwendung spezieller Next.js-Komponenten
-- **Client-Komponenten**: Stellt sicher, dass asynchrone Client-Komponenten korrekt behandelt werden
-- **Konfigurationsdateien**: Spezielle Behandlung für `next.config.*`-Dateien
+- **Bildoptimierung**: Durchsetzung der Verwendung der Next.js Image-Komponente
+- **Dokumentstruktur**: Verhindern der unsachgemäßen Verwendung spezieller Next.js-Komponenten
+- **Konfigurationsdateien**: Spezielle Behandlung von `next.config.*`-Dateien
 
 ## Next.js-spezifische Regeln
-
-### Experimentell
-
-| Regel | Einstellung | Beschreibung |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Verhindern Sie asynchrone Client-Komponenten in Next.js. Client-Komponenten sollten synchron sein; verwenden Sie Server-Komponenten für asynchrone Vorgänge. |
 
 ### Leistung
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noImgElement` | `error` | Verbot der Verwendung des HTML-Elements `<img>`. Verwenden Sie stattdessen die Next.js `<Image>`-Komponente zur automatischen Bildoptimierung. |
+| `noImgElement` | `error` | Die Verwendung des HTML-Elements `<img>` ist nicht erlaubt. Verwenden Sie stattdessen die Next.js-Komponente `<Image>` für automatische Bildoptimierung. |
 
 ### Stil
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Verbot der Verwendung des HTML-Elements `<head>`. Verwenden Sie stattdessen `next/head` oder die Metadata-API des App Routers. |
+| `noHeadElement` | `error` | Die Verwendung des HTML-Elements `<head>` ist nicht erlaubt. Verwenden Sie stattdessen `next/head` oder die Metadata-API des App Router. |
 
 ### Verdächtig
 
 | Regel | Einstellung | Beschreibung |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Verhindern Sie das Importieren von `next/document` in Seiten-Dateien. `_document.tsx` darf nur in `pages/_document.tsx` existieren. |
-| `noHeadImportInDocument` | `error` | Verhindern Sie das Importieren von `next/head` in `_document.tsx`. Verwenden Sie stattdessen `<Head>` aus `next/document`. |
+| `noDocumentImportInPage` | `error` | Verhindern, dass `next/document` in Seiten-Dateien importiert wird. `_document.tsx` darf nur in `pages/_document.tsx` existieren. |
+| `noHeadImportInDocument` | `error` | Verhindern, dass `next/head` in `_document.tsx` importiert wird. Verwenden Sie stattdessen `<Head>` aus `next/document`. |
 
 ## Überschreibungen für Konfigurationsdateien
 

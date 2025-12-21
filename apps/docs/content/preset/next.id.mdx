@@ -3,7 +3,7 @@ title: Next.js
 description: Aturan linting khusus Next.js untuk Ultracite.
 ---
 
-Konfigurasi Next.js ini berisi aturan linting khusus Next.js untuk optimisasi gambar, struktur dokumen, dan pola App Router.
+Konfigurasi Next.js ini memiliki aturan linting khusus Next.js untuk optimisasi gambar, struktur dokumen, dan pola App Router.
 
 ## Instalasi
 
@@ -19,41 +19,34 @@ Tambahkan konfigurasi Next.js ke `biome.jsonc` Anda:
 
 Konfigurasi ini menambahkan aturan yang spesifik untuk pengembangan Next.js:
 
-- **Optimisasi Gambar**: Menegakkan penggunaan komponen Image dari Next.js
-- **Struktur Dokumen**: Mencegah penggunaan yang tidak semestinya dari komponen khusus Next.js
-- **Komponen Klien**: Pastikan komponen klien yang asinkron ditangani dengan benar
+- **Optimisasi Gambar**: Menegakkan penggunaan komponen Image Next.js
+- **Struktur Dokumen**: Mencegah penggunaan komponen khusus Next.js yang tidak semestinya
 - **File Konfigurasi**: Penanganan khusus untuk file `next.config.*`
 
 ## Aturan Khusus Next.js
 
-### Eksperimental
-
-| Aturan | Pengaturan | Deskripsi |
-|--------|-----------|-----------|
-| `noNextAsyncClientComponent` | `error` | Mencegah komponen klien yang asinkron di Next.js. Komponen klien harus bersifat sinkron; gunakan komponen server untuk operasi asinkron. |
-
 ### Kinerja
 
 | Aturan | Pengaturan | Deskripsi |
-|--------|-----------|-----------|
-| `noImgElement` | `error` | Melarang penggunaan elemen HTML `<img>`. Gunakan komponen `<Image>` dari Next.js sebagai gantinya untuk optimisasi gambar otomatis. |
+|--------|-----------|----------|
+| `noImgElement` | `error` | Melarang penggunaan elemen HTML `<img>`. Gunakan komponen Next.js `<Image>` sebagai gantinya untuk optimisasi gambar otomatis. |
 
 ### Gaya
 
 | Aturan | Pengaturan | Deskripsi |
-|--------|-----------|-----------|
-| `noHeadElement` | `error` | Melarang penggunaan elemen HTML `<head>`. Gunakan `next/head` dari Next.js atau API metadata App Router sebagai gantinya. |
+|--------|-----------|----------|
+| `noHeadElement` | `error` | Melarang penggunaan elemen HTML `<head>`. Gunakan `next/head` atau App Router metadata API sebagai gantinya. |
 
 ### Mencurigakan
 
 | Aturan | Pengaturan | Deskripsi |
-|--------|-----------|-----------|
-| `noDocumentImportInPage` | `error` | Mencegah impor `next/document` dalam file halaman. `_document.tsx` hanya boleh ada di `pages/_document.tsx`. |
+|--------|-----------|----------|
+| `noDocumentImportInPage` | `error` | Mencegah impor `next/document` di file halaman. `_document.tsx` hanya boleh ada di `pages/_document.tsx`. |
 | `noHeadImportInDocument` | `error` | Mencegah impor `next/head` di `_document.tsx`. Gunakan `<Head>` dari `next/document` sebagai gantinya. |
 
 ## Penggantian File Konfigurasi
 
-Preset Next.js menyertakan penanganan khusus untuk file konfigurasi dan komponen App Router:
+Preset Next.js mencakup penanganan khusus untuk file konfigurasi dan komponen App Router:
 
 ### File Konfigurasi Next.js
 
@@ -95,4 +88,4 @@ Ini memungkinkan pola konfigurasi Next.js yang mungkin biasanya tidak lolos atur
 }
 ```
 
-Komponen halaman dan layout App Router diperbolehkan bersifat asinkron tanpa mewajibkan penggunaan `await`, karena Next.js menangani ini secara khusus untuk rendering sisi-server dan pengambilan data.
+Komponen halaman dan layout App Router diizinkan untuk bersifat async tanpa memerlukan `await`, karena Next.js menangani ini secara khusus untuk rendering sisi-server dan pengambilan data.

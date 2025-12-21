@@ -3,11 +3,11 @@ title: Qwik
 description: Ultracite向けのQwik固有のリンティングルール。
 ---
 
-この Qwik 構成には、シリアライズ、可視タスク、レキシカルスコープ、およびメソッド使用に関する Qwik 固有のリンティングルールが含まれます。
+このQwik設定は、シリアライズ、可視タスク、レキシカルスコープ、およびメソッド使用に関するQwik固有のリンティングルールを提供します。
 
 ## インストール
 
-この Qwik 構成を `biome.jsonc` に追加します:
+Qwik設定をあなたの `biome.jsonc` に追加します:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,32 +17,23 @@ description: Ultracite向けのQwik固有のリンティングルール。
 
 ## 概要
 
-この構成は Qwik 開発に特化したルールを追加します:
+この設定はQwik開発に特化したルールを追加します:
 
-- **シリアライズ**: Qwik の再開可能性（resumability）モデルの適切な使用を強制します
-- **可視タスク**: `useVisibleTask$` の不適切な使用を防止します
-- **レキシカルスコープ**: `$` 関数内の変数スコープが適切であることを保証します
-- **メソッドの使用**: Qwik のメソッドパターンの正しい使用を強制します
-- **React 固有の Props**: Qwik コンポーネント内で React 特有の props の使用を禁止します
+- **シリアライズ**: Qwikの再開可能性モデルの適切な使用を強制する
+- **可視タスク**: `useVisibleTask$` の不適切な使用を防止する
+- **React固有のProps**: Qwikコンポーネント内でReact固有のpropsを禁止する
 
-## Qwik 固有のルール
+## Qwik固有のルール
 
 ### 正確性
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | `useVisibleTask$` の使用を防止します。このフックはクライアント側でコードを即時に実行するため、Qwik の再開可能性（resumability）を損ないます。可能であれば `useTask$` または `useResource$` を代わりに使用してください。 |
-| `useQwikClasslist` | `error` | Qwik での動的クラスに対して、文字列連結ではなく `class` のオブジェクト構文を使用することを強制します。 |
-
-### 育成
-
-| ルール | 設定 | 説明 |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Qwik の `$` 関数における有効なレキシカルスコープを強制します。外側のスコープの変数は明示的にキャプチャされなければなりません。 |
-| `useQwikMethodUsage` | `error` | Qwik 特有のメソッドおよび API の正しい使用を強制します。 |
+| `noQwikUseVisibleTask` | `error` | `useVisibleTask$` の使用を防止します。 このフックはクライアント上でコードを積極的に実行し、Qwikの再開可能性を損ないます。可能であれば `useTask$` や `useResource$` を代わりに使用してください。 |
+| `useQwikClasslist` | `error` | Qwikで動的クラスに対して文字列連結ではなく `class` オブジェクト構文を使用することを強制する。 |
 
 ### 疑わしい
 
 | ルール | 設定 | 説明 |
 |------|---------|-------------|
-| `noReactSpecificProps` | `error` | Qwik において `className` や `htmlFor` のような React 特有の props を禁止します。代わりに `class` と `for` を使用してください。 |
+| `noReactSpecificProps` | `error` | Qwikで`className`や`htmlFor`のようなReact固有のpropsを禁止します。代わりに `class` や `for` を使用してください。 |

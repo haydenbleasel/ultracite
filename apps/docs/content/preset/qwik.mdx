@@ -21,8 +21,6 @@ This configuration adds rules specific to Qwik development:
 
 - **Serialization**: Enforce proper use of Qwik's resumability model
 - **Visible Tasks**: Prevent inappropriate use of `useVisibleTask$`
-- **Lexical Scope**: Ensure proper variable scope in `$` functions
-- **Method Usage**: Enforce correct Qwik method patterns
 - **React-Specific Props**: Disallow React-specific props in Qwik components
 
 ## Qwik-Specific Rules
@@ -33,13 +31,6 @@ This configuration adds rules specific to Qwik development:
 |------|---------|-------------|
 | `noQwikUseVisibleTask` | `error` | Prevent usage of `useVisibleTask$`. This hook runs code eagerly on the client, defeating Qwik's resumability. Use `useTask$` or `useResource$` instead when possible. |
 | `useQwikClasslist` | `error` | Enforce using `class` object syntax instead of string concatenation for dynamic classes in Qwik. |
-
-### Nursery
-
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Enforce valid lexical scope in Qwik's `$` functions. Variables from outer scopes must be explicitly captured. |
-| `useQwikMethodUsage` | `error` | Enforce correct usage of Qwik-specific methods and APIs. |
 
 ### Suspicious
 

@@ -1,9 +1,9 @@
 ---
-title: Core
-description: La configurazione base di Ultracite con regole di linting agnostiche rispetto al framework.
+title: Nucleo
+description: Configurazione di base di Ultracite con regole di linting agnostiche al framework.
 ---
 
-La configurazione core di Ultracite fornisce un insieme completo di regole di linting e impostazioni di formattazione indipendenti dal framework. Questa è la base che tutte le altre configurazioni specifiche per framework estendono.
+La configurazione core di Ultracite fornisce un set completo di regole di linting e impostazioni di formattazione agnostiche al framework. Questa è la base che tutte le altre configurazioni specifiche per framework estendono.
 
 ## Installazione
 
@@ -25,59 +25,59 @@ Oppure aggiungila manualmente al tuo `biome.jsonc`:
 
 La configurazione core include centinaia di regole di linting rigorose che coprono:
 
-- **Accessibilità (a11y)**: Far rispettare gli attributi ARIA, l'HTML semantico e la navigazione tramite tastiera
-- **Complessità**: Ridurre la complessità cognitiva e far rispettare le best practice
-- **Correttezza**: Prevenire errori comuni e far rispettare la sicurezza dei tipi
-- **Prestazioni**: Ottimizzare il codice per migliori prestazioni a runtime
+- **Accessibilità (a11y)**: Imporre attributi ARIA, HTML semantico e navigazione da tastiera
+- **Complessità**: Ridurre la complessità cognitiva e applicare le best practice
+- **Correttezza**: Prevenire errori comuni e garantire sicurezza dei tipi
+- **Prestazioni**: Ottimizzare il codice per migliori prestazioni in esecuzione
 - **Sicurezza**: Prevenire vulnerabilità di sicurezza
-- **Stile**: Far rispettare uno stile di codice coerente
+- **Stile**: Applicare uno stile di codice coerente
 - **Sospetti**: Individuare pattern sospetti che potrebbero indicare bug
 
-## Impostazioni del formatter
+## Impostazioni del formattatore
 
 - **Indentazione**: 2 spazi
-- **Lunghezza riga**: 80 caratteri
-- **Fine riga**: LF (stile Unix)
+- **Larghezza riga**: 80 caratteri
+- **Fine linea**: LF (stile Unix)
 - **Punto e virgola**: Sempre richiesti
 - **Virgolette**: Virgolette doppie per JavaScript/TypeScript e JSON
-- **Virgole finali**: Stile ES5 (array/oggetti multilinea)
+- **Trailing Commas**: Stile ES5 (array/oggetti multilinea)
 - **Parentesi per arrow**: Includere sempre le parentesi
 
 ## Caratteristiche principali
 
-### Rigore TypeScript
+### Rigidità di TypeScript
 
-La configurazione core abilita i controlli rigorosi di TypeScript:
+La configurazione core abilita i controlli strict di TypeScript:
 
-- Discourage l'uso di `any` (`noExplicitAny: error`)
+- Sconsiglia l'uso di `any` (`noExplicitAny: error`)
 - Richiede la gestione di `null/undefined`
-- Preferisce i tipi espliciti in determinate situazioni
-- Fa rispettare la sicurezza dei tipi in tutto il codebase
+- Preferisce tipi espliciti in determinate situazioni
+- Applica la sicurezza dei tipi attraverso il codebase
 
-### Equivalenti consigliati da ESLint
+### Equivalenti raccomandati di ESLint
 
-Regole comuni di best-practice incluse:
+Regole comuni e best-practice incluse:
 
-- Nessuna variabile inutilizzata (`noUnusedVariables: error`)
-- Nessun import inutilizzato (`noUnusedImports: error`)
-- Nessun eval esplicito (`noGlobalEval: error`)
-- Nessuna prototype pollution (`noPrototypeBuiltins: error`)
+- No variabili non utilizzate (`noUnusedVariables: error`)
+- No import non utilizzati (`noUnusedImports: error`)
+- No eval esplicito (`noGlobalEval: error`)
+- No prototype pollution (`noPrototypeBuiltins: error`)
 
 ### Accessibilità di default
 
-Regole equivalenti a standard di accessibilità:
+Regole equivalenti agli standard di accessibilità:
 
 - Gli attributi ARIA devono essere validi
-- Sono preferiti elementi HTML semantici
-- È richiesto il supporto alla navigazione tramite tastiera
-- Testo alternativo per le immagini richiesto
+- Preferire elementi HTML semantici
+- Richiedere il supporto alla navigazione da tastiera
+- Testo alternativo richiesto per le immagini
 
 ### Supporto Node.js
 
 Gestione specifica per l'ambiente:
 
 - Riconosce le globali di Node.js (`module`, `process`)
-- Fa rispettare il protocollo `node:` per i moduli built-in
+- Impone il protocollo `node:` per i moduli built-in
 - Supporta sia CommonJS che ESM
 
 ## Riferimento completo delle regole
@@ -86,221 +86,183 @@ Gestione specifica per l'ambiente:
 
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
-| `noAccessKey` | `error` | Far rispettare che l'attributo `accessKey` non venga utilizzato su nessun elemento HTML. |
-| `noAriaHiddenOnFocusable` | `error` | Far rispettare che `aria-hidden="true"` non sia impostato su elementi focalizzabili. |
-| `noAriaUnsupportedElements` | `error` | Far rispettare che elementi che non supportano ruoli, stati e proprietà ARIA non abbiano quegli attributi. |
-| `noAutofocus` | `off` | Far rispettare che la prop `autoFocus` non sia utilizzata sugli elementi. |
-| `noDistractingElements` | `error` | Fa rispettare che non vengano utilizzati elementi distraenti. |
+| `noAccessKey` | `error` | Imporre che l'attributo `accessKey` non sia utilizzato su nessun elemento HTML. |
+| `noAriaHiddenOnFocusable` | `error` | Imporre che `aria-hidden="true"` non sia impostato su elementi focalizzabili. |
+| `noAriaUnsupportedElements` | `error` | Imporre che elementi che non supportano ruoli, stati e proprietà ARIA non abbiano quegli attributi. |
+| `noAutofocus` | `off` | Imporre che la prop `autoFocus` non sia utilizzata sugli elementi. |
+| `noDistractingElements` | `error` | Impone di non utilizzare elementi distraenti. |
 | `noHeaderScope` | `error` | La prop scope dovrebbe essere usata solo sugli elementi `<th>`. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Far rispettare che ruoli ARIA non interattivi non siano assegnati ad elementi HTML interattivi. |
-| `noLabelWithoutControl` | `error` | Far rispettare che un elemento label o componente abbia un'etichetta testuale e un input associato. |
-| `noNoninteractiveElementInteractions` | `error` | Vietare l'uso di gestori di eventi su elementi non interattivi. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Far rispettare che ruoli ARIA interattivi non siano assegnati ad elementi HTML non interattivi. |
-| `noNoninteractiveTabindex` | `error` | Far rispettare che `tabIndex` non sia assegnato ad elementi HTML non interattivi. |
-| `noPositiveTabindex` | `error` | Prevenire l'uso di numeri interi positivi sulla proprietà `tabIndex`. |
-| `noRedundantAlt` | `error` | Far rispettare che la prop alt delle img non contenga le parole `image`, `picture`, o `photo`. |
-| `noRedundantRoles` | `error` | Far rispettare che la prop role esplicita non sia la stessa del ruolo implicito/di default su un elemento. |
-| `noStaticElementInteractions` | `error` | Far rispettare che elementi statici e visibili (come `<div>`) con gestori di click usino l'attributo role valido. |
-| `noSvgWithoutTitle` | `error` | Fa rispettare l'uso dell'elemento title per l'elemento `svg`. |
-| `useAltText` | `error` | Far rispettare che tutti gli elementi che richiedono testo alternativo abbiano informazioni significative per l'utente finale. |
-| `useAnchorContent` | `error` | Far rispettare che gli anchor abbiano contenuto e che il contenuto sia accessibile agli screen reader. |
-| `useAriaActivedescendantWithTabindex` | `error` | Far rispettare che `tabIndex` sia assegnato ad elementi HTML non interattivi con aria-activedescendant. |
-| `useAriaPropsForRole` | `error` | Far rispettare che elementi con ruoli ARIA abbiano tutti gli attributi ARIA richiesti per quel ruolo. |
-| `useAriaPropsSupportedByRole` | `error` | Far rispettare che le proprietà ARIA siano valide per i ruoli supportati dall'elemento. |
-| `useButtonType` | `error` | Fa rispettare l'uso dell'attributo `type` per l'elemento button. |
-| `useFocusableInteractive` | `error` | Elementi con un ruolo interattivo e gestori di interazione devono essere focalizzabili. |
-| `useHeadingContent` | `error` | Far rispettare che gli elementi di heading (`h1`, `h2`, ecc.) abbiano contenuto e che il contenuto sia accessibile agli screen reader. |
-| `useHtmlLang` | `error` | Far rispettare che l'elemento `html` abbia l'attributo `lang`. |
-| `useIframeTitle` | `error` | Fa rispettare l'uso dell'attributo title per l'elemento iframe. |
-| `useKeyWithClickEvents` | `error` | Far rispettare che `onClick` sia accompagnato da almeno uno dei seguenti: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Far rispettare che `onMouseOver` / `onMouseOut` siano accompagnati da `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Fa rispettare che gli elementi audio e video abbiano una traccia per i sottotitoli. |
-| `useSemanticElements` | `error` | Rileva l'uso di attributi role in elementi JSX e suggerisce di usare elementi semantici invece. |
-| `useValidAnchor` | `error` | Far rispettare che tutti gli anchor siano validi e che siano elementi navigabili. |
-| `useValidAriaProps` | `error` | Garantisce che le proprietà ARIA `aria-*` siano tutte valide. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Imporre che ruoli ARIA non interattivi non siano assegnati ad elementi HTML interattivi. |
+| `noLabelWithoutControl` | `error` | Imporre che un elemento label o un componente abbia un'etichetta testuale e un input associato. |
+| `noNoninteractiveElementInteractions` | `error` | Vietare l'uso di event handler su elementi non interattivi. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Imporre che ruoli ARIA interattivi non siano assegnati ad elementi HTML non interattivi. |
+| `noNoninteractiveTabindex` | `error` | Imporre che `tabIndex` non sia assegnato ad elementi HTML non interattivi. |
+| `noPositiveTabindex` | `error` | Impedire l'uso di interi positivi sulla proprietà `tabIndex`. |
+| `noRedundantAlt` | `error` | Imporre che la prop alt di img non contenga le parole `image`, `picture` o `photo`. |
+| `noRedundantRoles` | `error` | Imporre che la prop role esplicita non sia uguale al ruolo implicito/di default su un elemento. |
+| `noStaticElementInteractions` | `error` | Imporre che elementi statici e visibili (come `<div>`) con handler di click usino l'attributo role valido. |
+| `noSvgWithoutTitle` | `error` | Impone l'uso dell'elemento title per l'elemento `svg`. |
+| `useAltText` | `error` | Imporre che tutti gli elementi che richiedono testo alternativo forniscano informazioni significative per l'utente finale. |
+| `useAnchorContent` | `error` | Imporre che gli anchor abbiano contenuto e che il contenuto sia accessibile ai lettori di schermo. |
+| `useAriaActivedescendantWithTabindex` | `error` | Imporre che `tabIndex` sia assegnato a elementi HTML non interattivi con aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Imporre che gli elementi con ruoli ARIA abbiano tutti gli attributi ARIA richiesti per quel ruolo. |
+| `useAriaPropsSupportedByRole` | `error` | Imporre che le proprietà ARIA siano valide per i ruoli supportati dall'elemento. |
+| `useButtonType` | `error` | Impone l'uso dell'attributo `type` per l'elemento button. |
+| `useFocusableInteractive` | `error` | Elementi con un ruolo interattivo e handler devono essere focalizzabili. |
+| `useHeadingContent` | `error` | Imporre che gli elementi di heading (`h1`, `h2`, ecc.) abbiano contenuto accessibile ai lettori di schermo. |
+| `useHtmlLang` | `error` | Imporre che l'elemento `html` abbia l'attributo `lang`. |
+| `useIframeTitle` | `error` | Impone l'uso dell'attributo title per l'elemento iframe. |
+| `useKeyWithClickEvents` | `error` | Imporre che `onClick` sia accompagnato da almeno uno tra: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Imporre che `onMouseOver` / `onMouseOut` siano accompagnati da `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Impone che gli elementi audio e video abbiano una traccia per i sottotitoli. |
+| `useSemanticElements` | `error` | Rileva l'uso di attributi role in elementi JSX e suggerisce di usare elementi semantici al loro posto. |
+| `useValidAnchor` | `error` | Imporre che tutti gli anchor siano validi e navigabili. |
+| `useValidAriaProps` | `error` | Assicura che le proprietà ARIA `aria-*` siano tutte valide. |
 | `useValidAriaRole` | `error` | Elementi con ruoli ARIA devono usare un ruolo ARIA valido e non astratto. |
-| `useValidAriaValues` | `error` | Far rispettare che i valori di stato e proprietà ARIA siano validi. |
+| `useValidAriaValues` | `error` | Imporre che i valori di stato e proprietà ARIA siano validi. |
 | `useValidAutocomplete` | `error` | Usare valori validi per l'attributo autocomplete sugli input. |
-| `useValidLang` | `error` | Assicurarsi che il valore passato all'attributo `lang` sia un codice lingua e/o paese ISO corretto. |
-| `useGenericFontNames` | `error` | Vietare la mancanza della keyword di famiglia generica all'interno delle family dei font (CSS). |
+| `useValidLang` | `error` | Assicurare che il valore passato all'attributo `lang` sia un corretto codice ISO di lingua e/o paese. |
+| `useGenericFontNames` | `error` | Vietare la mancanza di una keyword di famiglia generica all'interno delle famiglie di font (CSS). |
 
 ### Complessità
 
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Vietare l'uso ambiguo di caratteri di spazio consecutivi nei literali delle espressioni regolari. |
-| `noArguments` | `error` | Vietare l'uso di arguments. |
-| `noBannedTypes` | `error` | Vietare alias di tipo primitivi e tipi fuorvianti. |
+| `noAdjacentSpacesInRegex` | `error` | Vietare l'uso poco chiaro di caratteri spazio consecutivi nei letterali di espressioni regolari. |
+| `noArguments` | `error` | Vietare l'uso di `arguments`. |
+| `noBannedTypes` | `error` | Vietare alias di tipi primitivi e tipi fuorvianti. |
 | `noCommaOperator` | `error` | Vietare l'operatore virgola. |
 | `noEmptyTypeParameters` | `error` | Vietare parametri di tipo vuoti in alias di tipo e interfacce. |
-| `noExcessiveCognitiveComplexity` | `error` | Vietare funzioni che superano un dato punteggio di Cognitive Complexity. |
+| `noExcessiveCognitiveComplexity` | `error` | Vietare funzioni che superano un dato punteggio di Complessità Cognitiva. |
 | `noExcessiveLinesPerFunction` | `off` | Limitare il numero di righe di codice in una funzione. |
 | `noExcessiveNestedTestSuites` | `error` | Questa regola impone una profondità massima per i `describe()` annidati nei file di test. |
 | `noExtraBooleanCast` | `error` | Vietare cast booleani non necessari. |
-| `noFlatMapIdentity` | `error` | Vietare l'uso di callback non necessarie in flatMap. |
-| `noForEach` | `error` | Preferire l'istruzione `for...of` invece di `Array.forEach`. |
-| `noImplicitCoercions` | `off` | Vietare conversioni di tipo shorthand. |
+| `noFlatMapIdentity` | `error` | Vietare l'uso di callback non necessari in flatMap. |
+| `noForEach` | `error` | Preferire l'istruzione `for...of` rispetto a `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Vietare conversioni di tipo in forma abbreviata. |
 | `noImportantStyles` | `off` | Vietare l'uso dello stile `!important` (CSS). |
-| `noStaticOnlyClass` | `error` | Questa regola segnala quando una classe non ha membri non-statici. |
-| `noThisInStatic` | `error` | Vietare `this` e `super` nei contesti statici. |
+| `noStaticOnlyClass` | `error` | Questa regola segnala quando una classe non ha membri non statici. |
+| `noThisInStatic` | `error` | Vietare `this` e `super` in contesti statici. |
 | `noUselessCatch` | `error` | Vietare clausole catch non necessarie. |
 | `noUselessConstructor` | `error` | Vietare costruttori non necessari. |
-| `noUselessContinue` | `error` | Evitare l'uso di continue non necessari. |
+| `noUselessContinue` | `error` | Evitare l'uso di `continue` non necessario. |
 | `noUselessEmptyExport` | `error` | Vietare export vuoti che non cambiano nulla in un file modulo. |
-| `noUselessEscapeInRegex` | `error` | Vietare sequenze di escape non necessarie nei literali di espressioni regolari. |
-| `noUselessFragments` | `error` | Vietare frammenti non necessari. |
-| `noUselessLabel` | `error` | Vietare etichette non necessarie. |
-| `noUselessLoneBlockStatements` | `error` | Vietare istruzioni a blocco annidate non necessarie. |
-| `noUselessRename` | `error` | Vietare di rinominare import, export e assegnazioni destrutturate allo stesso nome. |
-| `noUselessStringConcat` | `error` | Vietare concatenazioni non necessarie di stringhe o template literal. |
+| `noUselessEscapeInRegex` | `error` | Vietare sequenze di escape non necessarie nei letterali di espressioni regolari. |
+| `noUselessFragments` | `error` | Vietare fragment non necessari. |
+| `noUselessLabel` | `error` | Vietare label non necessarie. |
+| `noUselessLoneBlockStatements` | `error` | Vietare blocchi annidati non necessari. |
+| `noUselessRename` | `error` | Vietare il rinominare import, export e assegnazioni destrutturate con lo stesso nome. |
+| `noUselessStringConcat` | `error` | Vietare la concatenazione non necessaria di stringhe o template literal. |
 | `noUselessStringRaw` | `error` | Vietare l'uso non necessario di `String.raw` in template string senza sequenze di escape. |
 | `noUselessSwitchCase` | `error` | Vietare case inutili nelle istruzioni switch. |
 | `noUselessTernary` | `error` | Vietare operatori ternari quando esistono alternative più semplici. |
-| `noUselessThisAlias` | `error` | Vietare alias di `this` non necessari. |
+| `noUselessThisAlias` | `error` | Vietare alias inutili di `this`. |
 | `noUselessTypeConstraint` | `error` | Vietare l'uso di `any` o `unknown` come vincolo di tipo. |
-| `noUselessUndefinedInitialization` | `error` | Vietare l'inizializzazione di variabili a `undefined`. |
+| `noUselessUndefinedInitialization` | `error` | Vietare l'inizializzare variabili a `undefined`. |
 | `noVoid` | `error` | Vietare l'uso dell'operatore `void`, che non è un operatore familiare. |
 | `useArrowFunction` | `error` | Usare arrow functions al posto di function expressions. |
 | `useDateNow` | `error` | Usare `Date.now()` per ottenere il numero di millisecondi dall'Epoch Unix. |
-| `useFlatMap` | `error` | Promuove l'uso di `.flatMap()` quando `map().flat()` sono usati insieme. |
+| `useFlatMap` | `error` | Promuovere l'uso di `.flatMap()` quando `map().flat()` sono usati insieme. |
 | `useIndexOf` | `error` | Preferire `Array#{indexOf,lastIndexOf}()` rispetto a `Array#{findIndex,findLastIndex}()` quando si cerca l'indice di un elemento. |
-| `useLiteralKeys` | `error` | Far rispettare l'uso dell'accesso letterale alle proprietà rispetto all'accesso computato. |
-| `useNumericLiterals` | `error` | Vietare `parseInt()` e `Number.parseInt()` a favore dei letterali binari, ottali ed esadecimali. |
-| `useOptionalChain` | `error` | Far rispettare l'uso della concise optional chain invece di espressioni logiche concatenate. |
-| `useRegexLiterals` | `error` | Far rispettare l'uso dei literali delle espressioni regolari invece del costruttore `RegExp` quando possibile. |
+| `useLiteralKeys` | `error` | Imporre l'accesso a proprietà tramite letterali piuttosto che accesso computato. |
+| `useNumericLiterals` | `error` | Vietare `parseInt()` e `Number.parseInt()` a favore di letterali binari, ottali ed esadecimali. |
+| `useOptionalChain` | `error` | Imporre l'uso della catena opzionale concisa invece di espressioni logiche concatenate. |
+| `useRegexLiterals` | `error` | Imporre l'uso di letterali di espressione regolare invece del costruttore `RegExp` se possibile. |
 | `useSimpleNumberKeys` | `error` | Vietare nomi di membri oggetto numerici che non sono in base 10 o che usano underscore come separatore. |
-| `useSimplifiedLogicExpression` | `error` | Scartare termini ridondanti dalle espressioni logiche. |
-| `useWhile` | `error` | Far rispettare l'uso di while invece di for quando le espressioni di inizializzazione e aggiornamento non sono necessarie. |
+| `useSimplifiedLogicExpression` | `error` | Eliminare termini ridondanti dalle espressioni logiche. |
+| `useWhile` | `error` | Imporre l'uso di while anziché for quando non sono necessari inizializzatori e aggiornamenti. |
 
 ### Correttezza
 
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
-| `noConstAssign` | `error` | Previene la riassegnazione di variabili dichiarate come const. |
+| `noConstAssign` | `error` | Previene la riassegnazione di variabili dichiarate `const`. |
 | `noConstantCondition` | `error` | Vietare espressioni costanti nelle condizioni. |
-| `noConstantMathMinMaxClamp` | `error` | Vietare l'uso di `Math.min` e `Math.max` per clamp di un valore quando il risultato è costante. |
-| `noConstructorReturn` | `error` | Vietare il ritorno di un valore da un costruttore. |
-| `noEmptyCharacterClassInRegex` | `error` | Vietare classi di caratteri vuote nei literali delle espressioni regolari. |
+| `noConstantMathMinMaxClamp` | `error` | Vietare l'uso di `Math.min` e `Math.max` per clamp dove il risultato è costante. |
+| `noConstructorReturn` | `error` | Vietare il return di un valore da un costruttore. |
+| `noEmptyCharacterClassInRegex` | `error` | Vietare classi di caratteri vuote nei letterali di espressioni regolari. |
 | `noEmptyPattern` | `error` | Vietare pattern di destructuring vuoti. |
 | `noGlobalDirnameFilename` | `error` | Vietare l'uso di `__dirname` e `__filename` nello scope globale. |
-| `noGlobalObjectCalls` | `error` | Vietare chiamate alle proprietà dell'oggetto globale come funzioni. |
-| `noInnerDeclarations` | `error` | Vietare dichiarazioni di function e `var` accessibili al di fuori del loro blocco. |
+| `noGlobalObjectCalls` | `error` | Vietare la chiamata di proprietà di oggetti globali come funzioni. |
+| `noInnerDeclarations` | `error` | Vietare dichiarazioni di funzione e `var` accessibili al di fuori del loro blocco. |
 | `noInvalidBuiltinInstantiation` | `error` | Assicurare che i builtins siano istanziati correttamente. |
-| `noInvalidConstructorSuper` | `error` | Previene l'uso incorretto di `super()` all'interno delle classi. |
-| `noInvalidDirectionInLinearGradient` | `error` | Vietare valori di direzione non standard per le funzioni linear gradient (CSS). |
-| `noInvalidGridAreas` | `error` | Vietare aree di grid nominate non valide in CSS Grid Layouts (CSS). |
-| `noInvalidPositionAtImportRule` | `error` | Vietare l'uso di regole `@import` in posizioni non valide (CSS). |
+| `noInvalidConstructorSuper` | `error` | Impedire l'uso scorretto di `super()` all'interno delle classi. |
+| `noInvalidDirectionInLinearGradient` | `error` | Vietare valori di direzione non standard per funzioni linear-gradient (CSS). |
+| `noInvalidGridAreas` | `error` | Vietare aree grid nominate non valide in CSS Grid Layouts (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Vietare l'uso di at-rule `@import` in posizioni non valide (CSS). |
 | `noInvalidUseBeforeDeclaration` | `error` | Vietare l'uso di variabili e parametri di funzione prima della loro dichiarazione. |
-| `noMissingVarFunction` | `error` | Vietare la mancanza di `var` function per le variabili CSS (CSS). |
-| `noNodejsModules` | `off` | Vietare l'uso dei moduli builtin di Node.js. |
-| `noNonoctalDecimalEscape` | `error` | Vietare le sequenze di escape `\8` e `\9` nelle stringhe. |
+| `noMissingVarFunction` | `error` | Vietare var function mancante per variabili CSS (CSS). |
+| `noNodejsModules` | `off` | Vietare l'uso dei moduli built-in di Node.js. |
+| `noNonoctalDecimalEscape` | `error` | Vietare le sequenze di escape `\8` e `\9` nei literal stringa. |
 | `noPrecisionLoss` | `error` | Vietare numeri letterali che perdono precisione. |
 | `noPrivateImports` | `off` | Limitare gli import di export privati. |
 | `noProcessGlobal` | `off` | Vietare l'uso della globale `process`. |
 | `noRestrictedElements` | `error` | Vietare l'uso di elementi configurati. |
-| `noSelfAssign` | `error` | Vietare assegnazioni in cui entrambi i lati sono esattamente uguali. |
-| `noSetterReturn` | `error` | Vietare il ritorno di un valore da un setter. |
+| `noSelfAssign` | `error` | Vietare assegnazioni dove entrambi i lati sono esattamente uguali. |
+| `noSetterReturn` | `error` | Vietare il return di un valore da un setter. |
 | `noStringCaseMismatch` | `error` | Vietare il confronto di espressioni che modificano il case delle stringhe con valori non conformi. |
-| `noSwitchDeclarations` | `error` | Vietare dichiarazioni lessicali nelle clausole switch. |
-| `noUndeclaredDependencies` | `off` | Vietare l'uso di dipendenze non specificate nel `package.json`. |
-| `noUndeclaredVariables` | `error` | Previene l'uso di variabili non dichiarate all'interno del documento. |
+| `noSwitchDeclarations` | `error` | Vietare dichiarazioni lessicali in clausole switch. |
+| `noUndeclaredDependencies` | `off` | Vietare l'uso di dipendenze non specificate in `package.json`. |
+| `noUndeclaredVariables` | `error` | Impedire l'uso di variabili non dichiarate all'interno del documento. |
 | `noUnknownFunction` | `error` | Vietare funzioni di valore CSS sconosciute (CSS). |
 | `noUnknownMediaFeatureName` | `error` | Vietare nomi di media feature sconosciuti (CSS). |
 | `noUnknownProperty` | `error` | Vietare proprietà sconosciute (CSS). |
-| `noUnknownPseudoClass` | `error` | Vietare pseudo-class selectors sconosciuti (CSS). |
-| `noUnknownPseudoElement` | `error` | Vietare pseudo-element selectors sconosciuti (CSS). |
-| `noUnknownTypeSelector` | `error` | Vietare type selectors sconosciuti (CSS). |
+| `noUnknownPseudoClass` | `error` | Vietare pseudo-class selector sconosciuti (CSS). |
+| `noUnknownPseudoElement` | `error` | Vietare pseudo-element selector sconosciuti (CSS). |
+| `noUnknownTypeSelector` | `error` | Vietare type selector sconosciuti (CSS). |
 | `noUnknownUnit` | `error` | Vietare unità CSS sconosciute (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Vietare selettori An+B non abbinabili (CSS). |
-| `noUnreachable` | `error` | Vietare codice non raggiungibile. |
-| `noUnreachableSuper` | `error` | Assicura che `super()` venga chiamato esattamente una volta su ogni percorso di codice in un costruttore di classe prima di accedere a `this`. |
-| `noUnsafeFinally` | `error` | Vietare istruzioni di controllo di flusso nei blocchi finally. |
-| `noUnsafeOptionalChaining` | `error` | Vietare l'uso di optional chaining in contesti dove il valore undefined non è consentito. |
-| `noUnusedFunctionParameters` | `error` | Vietare parametri di funzione non usati. |
-| `noUnusedImports` | `error` (safe fix override) | Vietare import inutilizzati. |
-| `noUnusedLabels` | `error` | Vietare etichette non utilizzate. |
-| `noUnusedPrivateClassMembers` | `error` | Vietare membri privati di classe non usati. |
-| `noUnusedVariables` | `error` | Vietare variabili non usate. |
-| `noVoidTypeReturn` | `error` | Vietare il ritorno di un valore da una funzione con tipo di ritorno `void`. |
-| `useGraphqlNamedOperations` | `error` | Far rispettare la specifica del nome delle operazioni GraphQL. |
-| `useImageSize` | `error` | Fa rispettare che gli elementi `<img>` abbiano sia gli attributi width che height. |
-| `useImportExtensions` | `off` | Far rispettare le estensioni dei file per gli import relativi. |
+| `noUnmatchableAnbSelector` | `error` | Vietare selector An+B non corrispondenti (CSS). |
+| `noUnreachable` | `error` | Vietare codice irraggiungibile. |
+| `noUnreachableSuper` | `error` | Assicurare che `super()` venga chiamato esattamente una volta in ogni percorso di codice in un costruttore di classe prima che `this` venga utilizzato. |
+| `noUnsafeFinally` | `error` | Vietare istruzioni di controllo del flusso nei blocchi finally. |
+| `noUnsafeOptionalChaining` | `error` | Vietare l'uso della optional chaining in contesti dove il valore undefined non è consentito. |
+| `noUnusedFunctionParameters` | `error` | Vietare parametri di funzione non utilizzati. |
+| `noUnusedImports` | `error` (safe fix override) | Vietare import non utilizzati. |
+| `noUnusedLabels` | `error` | Vietare label non utilizzate. |
+| `noUnusedPrivateClassMembers` | `error` | Vietare membri privati di classe non utilizzati. |
+| `noUnusedVariables` | `error` | Vietare variabili non utilizzate. |
+| `noVoidTypeReturn` | `error` | Vietare il return di un valore da una funzione con tipo di ritorno `void`. |
+| `useGraphqlNamedOperations` | `error` | Imporre la specifica del nome per le operazioni GraphQL. |
+| `useImageSize` | `error` | Impone che gli elementi `<img>` abbiano sia gli attributi width che height. |
+| `useImportExtensions` | `off` | Applicare estensioni di file per import relativi. |
 | `useIsNan` | `error` | Richiedere chiamate a `isNaN()` quando si verifica NaN. |
-| `useJsonImportAttributes` | `off` | Fa rispettare l'uso di `{ type: "json" }` per gli import di moduli JSON. |
-| `useParseIntRadix` | `error` | Far rispettare l'uso consistente dell'argomento radix quando si usa `parseInt()`. |
-| `useSingleJsDocAsterisk` | `error` | Far rispettare che le linee dei commenti JSDoc inizino con un singolo asterisco, tranne la prima. |
-| `useUniqueElementIds` | `off` | Prevenire l'uso di stringhe letterali statiche come attributo id sugli elementi. |
-| `useValidForDirection` | `error` | Far rispettare che la clausola di aggiornamento di un `for` muova il contatore nella direzione corretta. |
+| `useJsonImportAttributes` | `off` | Impone l'uso di `{ type: "json" }` per gli import di moduli JSON. |
+| `useParseIntRadix` | `error` | Imporre l'uso coerente dell'argomento radix quando si usa `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Imporre che le linee dei commenti JSDoc inizino con un singolo asterisco, eccetto la prima. |
+| `useUniqueElementIds` | `off` | Impedire l'uso di stringhe letterali statiche come valore dell'attributo id sugli elementi. |
+| `useValidForDirection` | `error` | Imporre che la clausola di aggiornamento del loop `for` muova il contatore nella direzione corretta. |
 | `useValidTypeof` | `error` | Questa regola verifica che il risultato di un'espressione `typeof` sia confrontato con un valore valido. |
-| `useYield` | `error` | Richiedere che le generator functions contengano `yield`. |
+| `useYield` | `error` | Richiedere che le generator function contengano `yield`. |
 
 ### Nursery
 
+Le regole Nursery generalmente non sono abilitate in Ultracite in quanto sono sperimentali e possono cambiare o essere rimosse in future versioni di Biome. Tuttavia, la seguente regola è abilitata a causa della domanda popolare:
+
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | Vietare descrizioni ambigue nel testo degli anchor. |
-| `noContinue` | `off` | Vietare l'uso di continue. |
-| `noDeprecatedImports` | `off` | Limitare gli import di export deprecati. |
-| `noDuplicateDependencies` | `error` | Impedire l'elencazione di dipendenze duplicate. |
-| `noDuplicatedSpreadProps` | `error` | Vietare proprietà duplicate negli spread props. |
-| `noEmptySource` | `error` | Vietare file sorgente vuoti. |
-| `noEqualsToNull` | `error` | Vietare l'uso di `==` o `!=` per confrontare con `null`. Usare `===` o `!==` invece. |
-| `noFloatingPromises` | `off` | Richiedere che le Promises siano gestite appropriatamente. |
-| `noForIn` | `off` | Vietare l'iterazione con for-in. |
-| `noImportCycles` | `off` | Prevenire cicli di import. |
-| `noIncrementDecrement` | `error` | Vietare l'uso degli operatori `++` e `--` (eccetto nell'afterthought dei for). |
-| `noJsxLiterals` | `off` | Vietare litterali stringa all'interno di elementi JSX. |
-| `noLeakedRender` | `error` | Prevenire valori resi problematici in JSX (es. 0 o NaN). |
-| `noMisusedPromises` | `off` | Vietare l'uso di Promise in luoghi dove sono quasi sicuramente un errore. |
-| `noMultiStr` | `error` | Vietare stringhe multilinea usando la continuazione con backslash. |
-| `noParametersOnlyUsedInRecursion` | `error` | Vietare parametri usati solo nelle chiamate ricorsive. |
-| `noProto` | `error` | Vietare l'uso della proprietà `__proto__`. |
-| `noScriptUrl` | `error` | Vietare URL `javascript:` che comportano rischi di sicurezza come XSS. |
-| `noShadow` | `error` | Vietare dichiarazioni di variabili che oscurano variabili dichiarate nello scope esterno. |
-| `noSyncScripts` | `error` | Prevenire l'uso di script sincroni. |
-| `noTernary` | `off` | Vietare operatori ternari. |
-| `noUndeclaredEnvVars` | `error` | Vietare l'uso di variabili d'ambiente non dichiarate in `turbo.json`. |
-| `noUnnecessaryConditions` | `off` | Vietare condizioni basate sui tipi non necessarie che possono essere determinate staticamente come ridondanti. |
-| `noUnresolvedImports` | `off` | Segnalare quando si importano export non esistenti. |
-| `noUnusedExpressions` | `error` | Vietare espressioni che non sono né chiamate di funzione né assegnazioni. |
-| `noUselessCatchBinding` | `off` | Vietare binding `catch` non usati. |
-| `noUselessUndefined` | `error` | Vietare l'uso di `undefined` inutile. |
-| `useArraySortCompare` | `off` | Far rispettare l'uso di una funzione di confronto in `Array.prototype.sort()`. |
-| `useAwaitThenable` | `off` | Far rispettare che `await` sia usato solo su valori Promise. |
-| `useConsistentArrowReturn` | `error` | Far rispettare corpi coerenti per le arrow function. |
-| `useConsistentGraphqlDescriptions` | `error` | Richiedere che tutte le descrizioni seguano lo stesso stile (block o inline) nei file GraphQL. |
-| `useDeprecatedDate` | `error` | Richiedere che la direttiva `@deprecated` specifichi una data di rimozione. |
-| `useExhaustiveSwitchCases` | `off` | Richiedere che gli switch-case siano esaustivi. |
-| `useExplicitType` | `off` | Far rispettare i tipi in funzioni, metodi, variabili e parametri. |
-| `useFind` | `off` | Far rispettare l'uso di `Array.prototype.find()` invece di `Array.prototype.filter()` seguito da `[0]` quando si cerca un singolo risultato. |
-| `useMaxParams` | `error` | Far rispettare un numero massimo di parametri nelle definizioni di funzione. |
-| `useRegexpExec` | `off` | Far rispettare l'uso di `RegExp#exec` invece di `String#match` quando non è presente il flag global. |
-| `useRequiredScripts` | `off` | Far rispettare la presenza di voci configurabili nella sezione `scripts` dei file `package.json`. |
-| `useSortedClasses` | `error` (safe fix override) | Far rispettare l'ordinamento delle classi utility CSS. |
-| `useSpread` | `error` | Far rispettare l'uso dell'operatore spread invece di `Function.prototype.apply()`. |
-| `useUniqueGraphqlOperationName` | `error` | Assicurare che tutte le operazioni GraphQL in un documento abbiano nomi univoci. |
+| `useSortedClasses` | `error` (safe fix override) | Imporre l'ordinamento delle classi di utilità CSS. |
 
 ### Prestazioni
 
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
-| `noAccumulatingSpread` | `error` | Vietare l'uso della sintassi spread (`...`) sugli accumulatori. |
-| `noAwaitInLoops` | `off` | Vietare `await` all'interno di loop. |
+| `noAccumulatingSpread` | `error` | Vietare l'uso della sintassi spread (`...`) su accumulatori. |
+| `noAwaitInLoops` | `off` | Vietare `await` all'interno dei loop. |
 | `noBarrelFile` | `error` | Vietare l'uso di barrel file. |
 | `noDelete` | `error` | Vietare l'uso dell'operatore `delete`. |
-| `noDynamicNamespaceImportAccess` | `error` | Vietare l'accesso dinamico agli import di namespace. |
-| `noNamespaceImport` | `error` | Vietare l'uso di import di namespace. |
-| `noReExportAll` | `off` | Evitare il re-export di tutti i membri. |
+| `noDynamicNamespaceImportAccess` | `error` | Vietare l'accesso dinamico agli import namespace. |
+| `noNamespaceImport` | `error` | Vietare l'uso di import namespace. |
+| `noReExportAll` | `off` | Evitare di ri-esportare tutto. |
 | `noUnwantedPolyfillio` | `error` | Prevenire polyfill duplicati da Polyfill.io. |
-| `useGoogleFontPreconnect` | `error` | Assicurare l'uso dell'attributo `preconnect` quando si usano Google Fonts. |
-| `useTopLevelRegex` | `error` | Richiedere che i literali regex siano dichiarati a livello top. |
+| `useGoogleFontPreconnect` | `error` | Assicurare che l'attributo `preconnect` sia usato quando si usano Google Fonts. |
+| `useTopLevelRegex` | `error` | Richiedere che i literal regex siano dichiarati a livello top. |
 
 ### Sicurezza
 
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
 | `noBlankTarget` | `error` | Vietare l'attributo `target="_blank"` senza `rel="noopener"`. |
-| `noDangerouslySetInnerHtml` | `error` | Prevenire l'uso di props JSX pericolose. |
+| `noDangerouslySetInnerHtml` | `error` | Prevenire l'uso di prop JSX pericolose. |
 | `noDangerouslySetInnerHtmlWithChildren` | `error` | Segnalare quando un elemento DOM o un componente usa sia children che la prop `dangerouslySetInnerHTML`. |
 | `noGlobalEval` | `error` | Vietare l'uso di `eval()` globale. |
 
@@ -309,74 +271,74 @@ Gestione specifica per l'ambiente:
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
 | `noCommonJs` | `off` | Vietare l'uso del sistema di moduli Common JS a favore degli import in stile ESM. |
-| `noDefaultExport` | `off` | Vietare default exports. |
+| `noDefaultExport` | `off` | Vietare default export. |
 | `noDoneCallback` | `error` | Vietare l'uso di callback nei test asincroni e negli hook. |
 | `noEnum` | `error` | Vietare gli enum TypeScript. |
 | `noExportedImports` | `error` | Vietare l'export di una variabile importata. |
-| `noImplicitBoolean` | `off` | Vietare valori true impliciti sugli attributi booleani JSX. |
+| `noImplicitBoolean` | `off` | Vietare valori booleani impliciti sugli attributi booleani JSX. |
 | `noInferrableTypes` | `error` | Vietare annotazioni di tipo per variabili, parametri e proprietà di classe inizializzate con un'espressione letterale. |
-| `noMagicNumbers` | `off` | Segnalare l'uso di "magic numbers" — numeri usati direttamente invece di essere assegnati a costanti denominate. |
+| `noMagicNumbers` | `off` | Segnala l'uso di "magic numbers" — numeri usati direttamente invece di essere assegnati a costanti nominate. |
 | `noNamespace` | `error` | Vietare l'uso dei namespace di TypeScript. |
 | `noNegationElse` | `error` | Vietare la negazione nella condizione di un if se ha una clausola else. |
 | `noNestedTernary` | `error` | Vietare espressioni ternarie annidate. |
-| `noNonNullAssertion` | `error` | Vietare le asserzioni non-null usando l'operatore postfix `!`. |
+| `noNonNullAssertion` | `error` | Vietare le non-null assertion usando l'operatore postfix `!`. |
 | `noParameterAssign` | `error` | Vietare la riassegnazione dei parametri di funzione. |
-| `noParameterProperties` | `error` | Vietare l'uso delle parameter properties nei costruttori di classe. |
+| `noParameterProperties` | `error` | Vietare l'uso di parameter properties nei costruttori di classe. |
 | `noProcessEnv` | `off` | Vietare l'uso di `process.env`. |
-| `noRestrictedGlobals` | `error` | Questa regola permette di specificare nomi di variabili globali che non si desidera usare nell'applicazione. |
+| `noRestrictedGlobals` | `error` | Questa regola permette di specificare nomi di variabili globali che non si vogliono usare nell'applicazione. |
 | `noRestrictedImports` | `error` | Vietare moduli specificati quando caricati tramite import o require. |
 | `noRestrictedTypes` | `error` | Vietare tipi definiti dall'utente. |
 | `noShoutyConstants` | `error` | Vietare l'uso di costanti il cui valore è la versione in maiuscolo del suo nome. |
-| `noSubstr` | `error` | Far rispettare l'uso di `String.slice()` invece di `String.substr()` e `String.substring()`. |
-| `noUnusedTemplateLiteral` | `error` | Vietare template literal se interpolazione e gestione di caratteri speciali non sono necessarie. |
-| `noUselessElse` | `error` | Vietare il blocco else quando il blocco if termina anticipatamente. |
+| `noSubstr` | `error` | Imporre l'uso di `String.slice()` invece di `String.substr()` e `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Vietare template literal se interpolazione e gestione di caratteri speciali non sono necessari. |
+| `noUselessElse` | `error` | Vietare il blocco else quando il blocco if termina anticipatamente con break/return ecc. |
 | `noYodaExpression` | `error` | Vietare l'uso di espressioni Yoda. |
-| `useArrayLiterals` | `error` | Vietare il costruttore `Array`. |
-| `useAsConstAssertion` | `error` | Far rispettare l'uso di as const rispetto ai literal type e type annotation. |
+| `useArrayLiterals` | `error` | Vietare i costruttori `Array`. |
+| `useAsConstAssertion` | `error` | Imporre l'uso di `as const` rispetto a literal type e annotazione di tipo. |
 | `useAtIndex` | `error` | Usare `at()` invece dell'accesso per indice intero. |
-| `useBlockStatements` | `error` | Richiede il rispetto delle convenzioni sulle parentesi graffe. |
-| `useCollapsedElseIf` | `error` | Far rispettare l'uso di `else if` invece di if annidati nelle clausole `else`. |
-| `useCollapsedIf` | `error` | Far rispettare l'uso di un singolo `if` invece di clausole `if` annidate. |
-| `useComponentExportOnlyModules` | `off` | Far rispettare la dichiarazione di componenti solo all'interno di moduli che esportano esclusivamente React Components. |
+| `useBlockStatements` | `error` | Richiede di seguire convenzioni sulle parentesi graffe. |
+| `useCollapsedElseIf` | `error` | Imporre l'uso di `else if` invece di `if` annidati nelle clausole `else`. |
+| `useCollapsedIf` | `error` | Imporre l'uso di un singolo `if` invece di clausole `if` annidate. |
+| `useComponentExportOnlyModules` | `off` | Imporre la dichiarazione dei componenti solo in moduli che esportano esclusivamente React Components. |
 | `useConsistentArrayType` | `error` | Richiedere l'uso coerente di `T[]` o `Array<T>`. |
-| `useConsistentBuiltinInstantiation` | `error` | Far rispettare l'uso di new per tutti i builtins, tranne `String`, `Number` e `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Questa regola impone l'uso coerente delle parentesi graffe all'interno degli attributi e dei children JSX. |
+| `useConsistentBuiltinInstantiation` | `error` | Imporre l'uso di `new` per tutti i builtins, eccetto `String`, `Number` e `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Questa regola impone un uso coerente delle parentesi graffe dentro attributi JSX e children JSX. |
 | `useConsistentMemberAccessibility` | `error` | Richiedere modificatori di accessibilità coerenti su proprietà e metodi di classe. |
-| `useConsistentObjectDefinitions` | `error` | Richiedere la dichiarazione coerente di oggetti letterali. |
-| `useConst` | `error` | Richiedere dichiarazioni const per variabili assegnate una sola volta. |
-| `useDefaultParameterLast` | `error` | Far rispettare che i parametri di default e opzionali siano ultimi. |
+| `useConsistentObjectDefinitions` | `error` | Richiedere la dichiarazione coerente dei letterali oggetto. |
+| `useConst` | `error` | Richiedere dichiarazioni `const` per variabili assegnate una sola volta. |
+| `useDefaultParameterLast` | `error` | Imporre che i parametri di funzione con valore di default e i parametri opzionali siano ultimi. |
 | `useDefaultSwitchClause` | `error` | Richiedere la clausola `default` nelle istruzioni switch. |
-| `useDeprecatedReason` | `error` | Richiedere di specificare il motivo quando si usa la direttiva `@deprecated`. |
-| `useEnumInitializers` | `error` | Richiedere che ogni valore di un enum sia inizializzato esplicitamente. |
-| `useExplicitLengthCheck` | `off` | Far rispettare il confronto esplicito delle proprietà `length`, `size`, `byteLength` o `byteOffset` di un valore. |
+| `useDeprecatedReason` | `error` | Richiedere la specifica dell'argomento reason quando si usa la direttiva `@deprecated`. |
+| `useEnumInitializers` | `error` | Richiedere che ogni membro enum abbia un valore inizializzato esplicitamente. |
+| `useExplicitLengthCheck` | `off` | Imporre il confronto esplicito della proprietà `length`, `size`, `byteLength` o `byteOffset` di un valore. |
 | `useExponentiationOperator` | `error` | Vietare l'uso di `Math.pow` a favore dell'operatore `**`. |
-| `useExportType` | `error` | Promuove l'uso di export type per i tipi. |
-| `useExportsLast` | `off` | Richiedere che tutti gli export siano dichiarati dopo tutte le istruzioni non-export. |
-| `useFilenamingConvention` | `error` | Far rispettare convenzioni di naming per file JS e TS (kebab-case, ASCII). |
-| `useForOf` | `error` | Questa regola raccomanda for-of quando in un for si usa l'indice per estrarre un elemento dall'array iterato. |
+| `useExportType` | `error` | Promuovere l'uso di export type per i tipi. |
+| `useExportsLast` | `off` | Richiedere che tutti gli export siano dichiarati dopo tutte le dichiarazioni non-export. |
+| `useFilenamingConvention` | `error` | Imporre convenzioni di denominazione per file JavaScript e TypeScript (kebab-case, ASCII). |
+| `useForOf` | `error` | Questa regola raccomanda un loop for-of quando in un for loop l'indice è usato per estrarre un elemento dall'array iterato. |
 | `useFragmentSyntax` | `error` | Questa regola impone l'uso di `<>...</>` invece di `<Fragment>...</Fragment>`. |
-| `useGraphqlNamingConvention` | `error` | Valida che tutti i valori degli enum siano maiuscolati. |
-| `useGroupedAccessorPairs` | `error` | Far rispettare che getter e setter per la stessa proprietà siano adiacenti in classi e oggetti. |
-| `useImportType` | `error` | Promuove l'uso di `import type` per i tipi. |
-| `useLiteralEnumMembers` | `error` | Richiedere che tutti i membri dell'enum siano valori letterali. |
-| `useNamingConvention` | `off` | Regola di convenzione di naming (disabilitata). |
-| `useNodeAssertStrict` | `error` | Promuove l'uso di `node:assert/strict` rispetto a `node:assert`. |
-| `useNodejsImportProtocol` | `error` | Fa rispettare l'uso del protocollo `node:` per i moduli builtin di Node.js. |
+| `useGraphqlNamingConvention` | `error` | Valida che tutti i valori enum siano scritti in maiuscolo. |
+| `useGroupedAccessorPairs` | `error` | Imporre che getter e setter per la stessa proprietà siano adiacenti in definizioni di classi e oggetti. |
+| `useImportType` | `error` | Promuovere l'uso di `import type` per i tipi. |
+| `useLiteralEnumMembers` | `error` | Richiedere che tutti i membri enum siano valori letterali. |
+| `useNamingConvention` | `off` | Regola di convenzione dei nomi (disabilitata). |
+| `useNodeAssertStrict` | `error` | Promuovere l'uso di `node:assert/strict` rispetto a `node:assert`. |
+| `useNodejsImportProtocol` | `error` | Imporre l'uso del protocollo `node:` per i moduli built-in di Node.js. |
 | `useNumberNamespace` | `error` | Usare le proprietà di `Number` invece di quelle globali. |
-| `useNumericSeparators` | `error` | Far rispettare l'uso dei separatori numerici nei letterali numerici. |
-| `useObjectSpread` | `error` | Preferire lo spread degli oggetti rispetto a `Object.assign()` quando si costruiscono nuovi oggetti. |
-| `useReadonlyClassProperties` | `error` | Far rispettare il marking dei membri come readonly se non vengono modificati fuori dal costruttore. |
-| `useSelfClosingElements` | `error` | Prevenire tag di chiusura extra per componenti senza children. |
-| `useShorthandAssign` | `error` | Richiedere lo shorthand dell'operatore di assegnazione quando possibile. |
-| `useShorthandFunctionType` | `error` | Far rispettare l'uso di function types invece di object type con call signatures. |
+| `useNumericSeparators` | `error` | Imporre l'uso di separatori numerici nei letterali numerici. |
+| `useObjectSpread` | `error` | Preferire object spread rispetto a `Object.assign()` quando si costruiscono nuovi oggetti. |
+| `useReadonlyClassProperties` | `error` | Imporre di marcare i membri come readonly se non vengono mai modificati fuori dal costruttore. |
+| `useSelfClosingElements` | `error` | Evitare tag di chiusura extra per componenti senza children. |
+| `useShorthandAssign` | `error` | Richiedere l'uso della sintassi abbreviata dell'operatore di assegnazione dove possibile. |
+| `useShorthandFunctionType` | `error` | Imporre l'uso dei function types invece di object type con call signatures. |
 | `useSingleVarDeclarator` | `off` | Vietare dichiarazioni multiple di variabili nella stessa istruzione. |
-| `useSymbolDescription` | `error` | Richiedere un parametro di descrizione per `Symbol()`. |
-| `useTemplate` | `error` | Preferire template literal rispetto alla concatenazione di stringhe. |
+| `useSymbolDescription` | `error` | Richiedere un parametro descrizione per `Symbol()`. |
+| `useTemplate` | `error` | Preferire template literal alla concatenazione di stringhe. |
 | `useThrowNewError` | `error` | Richiedere `new` quando si lancia un errore. |
-| `useThrowOnlyError` | `error` | Vietare il lancio di valori non `Error`. |
-| `useTrimStartEnd` | `error` | Far rispettare l'uso di `String.trimStart()` e `String.trimEnd()` rispetto a `String.trimLeft()` e `String.trimRight()`. |
-| `useUnifiedTypeSignatures` | `error` | Vietare overload signatures che possono essere unificate in una singola signature. |
-| `noDescendingSpecificity` | `error` | Vietare che un selettore di specificità inferiore venga dopo uno di specificità superiore (CSS). |
+| `useThrowOnlyError` | `error` | Vietare il lancio di valori non di tipo `Error`. |
+| `useTrimStartEnd` | `error` | Imporre l'uso di `String.trimStart()` e `String.trimEnd()` rispetto a `String.trimLeft()` e `String.trimRight()`. |
+| `useUnifiedTypeSignatures` | `error` | Vietare le firme overload che possono essere unificate in una singola firma. |
+| `noDescendingSpecificity` | `error` | Vietare che un selettore con specificità inferiore venga dopo uno con specificità maggiore (CSS). |
 | `noValueAtRule` | `error` | Vietare l'uso della regola `@value` nei css modules (CSS). |
 
 ### Sospetti
@@ -384,96 +346,96 @@ Gestione specifica per l'ambiente:
 | Regola | Impostazione | Descrizione |
 |------|---------|-------------|
 | `noAlert` | `error` | Vietare l'uso di `alert`, `confirm` e `prompt`. |
-| `noApproximativeNumericConstant` | `error` | Usare costanti standard invece di letterali approssimativi. |
-| `noAssignInExpressions` | `error` | Vietare assegnazioni nelle espressioni. |
-| `noAsyncPromiseExecutor` | `error` | Vietare l'uso di una funzione async come executor di una Promise. |
-| `noBiomeFirstException` | `error` | Prevenire l'uso del pattern `!` in prima posizione di `files.includes` nel file di configurazione. |
+| `noApproximativeNumericConstant` | `error` | Usare costanti standard invece di letterali numerici approssimativi. |
+| `noAssignInExpressions` | `error` | Vietare assegnazioni dentro espressioni. |
+| `noAsyncPromiseExecutor` | `error` | Vietare l'uso di una async function come executor di Promise. |
+| `noBiomeFirstException` | `error` | Impedire l'uso del pattern `!` nella prima posizione di `files.includes` nel file di configurazione. |
 | `noBitwiseOperators` | `error` | Vietare operatori bitwise. |
 | `noCatchAssign` | `error` | Vietare la riassegnazione delle eccezioni nelle clausole catch. |
 | `noClassAssign` | `error` | Vietare la riassegnazione dei membri di classe. |
-| `noCommentText` | `error` | Prevenire che i commenti vengano inseriti come nodi di testo. |
-| `noCompareNegZero` | `error` | Vietare il confronto con `-0`. |
+| `noCommentText` | `error` | Impedire che commenti vengano inseriti come nodi di testo. |
+| `noCompareNegZero` | `error` | Vietare il confronto contro `-0`. |
 | `noConfusingLabels` | `error` | Vietare labeled statements che non sono loop. |
-| `noConfusingVoidType` | `error` | Vietare void type al di fuori di generics o tipi di ritorno. |
+| `noConfusingVoidType` | `error` | Vietare il tipo void al di fuori di generici o tipi di ritorno. |
 | `noConsole` | `off` | Vietare l'uso di `console`. |
 | `noConstEnum` | `error` | Vietare const enum di TypeScript. |
-| `noConstantBinaryExpressions` | `error` | Vietare espressioni dove l'operazione non cambia il valore. |
-| `noControlCharactersInRegex` | `error` | Prevenire caratteri di controllo e alcune sequenze di escape che corrispondono a caratteri di controllo nei literali regex. |
-| `noDebugger` | `error` | Vietare l'uso di debugger. |
+| `noConstantBinaryExpressions` | `error` | Vietare espressioni dove l'operazione non influisce sul valore. |
+| `noControlCharactersInRegex` | `error` | Impedire caratteri di controllo e alcune sequenze di escape che corrispondono a caratteri di controllo nei letterali regex. |
+| `noDebugger` | `error` | Vietare l'uso di `debugger`. |
 | `noDocumentCookie` | `error` | Vietare assegnazioni dirette a document.cookie. |
 | `noDoubleEquals` | `error` | Richiedere l'uso di `===` e `!==`. |
 | `noDuplicateAtImportRules` | `error` | Vietare regole `@import` duplicate (CSS). |
 | `noDuplicateCase` | `error` | Vietare etichette case duplicate. |
 | `noDuplicateClassMembers` | `error` | Vietare membri di classe duplicati. |
-| `noDuplicateCustomProperties` | `error` | Vietare proprietà custom duplicate all'interno dei declaration block (CSS). |
-| `noDuplicateElseIf` | `error` | Vietare condizioni duplicate nelle catene if-else-if. |
+| `noDuplicateCustomProperties` | `error` | Vietare proprietà custom duplicate all'interno di blocchi di dichiarazione (CSS). |
+| `noDuplicateElseIf` | `error` | Vietare condizioni duplicate in catene if-else-if. |
 | `noDuplicateFields` | `error` | Vietare campi duplicati nelle operazioni GraphQL. |
-| `noDuplicateFontNames` | `error` | Vietare nomi duplicati all'interno di family di font (CSS). |
+| `noDuplicateFontNames` | `error` | Vietare nomi duplicati all'interno delle famiglie di font (CSS). |
 | `noDuplicateObjectKeys` | `error` | Vietare due chiavi con lo stesso nome all'interno di oggetti. |
 | `noDuplicateParameters` | `error` | Vietare nomi di parametri di funzione duplicati. |
-| `noDuplicateProperties` | `error` | Vietare proprietà duplicate all'interno dei declaration block (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Vietare selettori duplicati all'interno dei blocchi keyframe (CSS). |
+| `noDuplicateProperties` | `error` | Vietare proprietà duplicate nei blocchi di dichiarazione (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Vietare selector duplicati all'interno di blocchi keyframe (CSS). |
 | `noDuplicateTestHooks` | `error` | Un blocco describe non dovrebbe contenere hook duplicati. |
 | `noEmptyBlock` | `error` | Vietare blocchi CSS vuoti (CSS). |
-| `noEmptyBlockStatements` | `error` | Vietare block statements vuoti e static blocks. |
+| `noEmptyBlockStatements` | `error` | Vietare blocchi vuoti e static blocks. |
 | `noEmptyInterface` | `error` | Vietare la dichiarazione di interfacce vuote. |
-| `noEvolvingTypes` | `error` | Vietare variabili che evolvono in tipo any tramite riassegnazioni. |
+| `noEvolvingTypes` | `error` | Vietare variabili che evolvono in tipo any attraverso riassegnazioni. |
 | `noExplicitAny` | `error` | Vietare l'uso del tipo any. |
-| `noExportsInTest` | `error` | Vietare l'uso di export o module.exports nei file di test. |
-| `noExtraNonNullAssertion` | `error` | Previene l'uso scorretto dell'operatore di non-null assertion `!` nei file TypeScript. |
+| `noExportsInTest` | `error` | Vietare l'uso di export o module.exports in file contenenti test. |
+| `noExtraNonNullAssertion` | `error` | Previene l'uso errato dell'operatore di non-null assertion `!` nei file TypeScript. |
 | `noFallthroughSwitchClause` | `error` | Vietare il fallthrough delle clausole switch. |
 | `noFocusedTests` | `error` | Vietare test focalizzati. |
-| `noFunctionAssign` | `error` | Vietare la riassegnazione di dichiarazioni di funzione. |
-| `noGlobalAssign` | `error` | Vietare assegnazioni ad oggetti nativi e variabili globali in sola lettura. |
+| `noFunctionAssign` | `error` | Vietare la riassegnazione delle dichiarazioni di funzione. |
+| `noGlobalAssign` | `error` | Vietare assegnazioni a oggetti nativi e variabili globali in sola lettura. |
 | `noGlobalIsFinite` | `error` | Usare `Number.isFinite` invece della globale `isFinite`. |
 | `noGlobalIsNan` | `error` | Usare `Number.isNaN` invece della globale `isNaN`. |
 | `noImplicitAnyLet` | `error` | Vietare l'uso di implicit any nelle dichiarazioni di variabili. |
-| `noImportAssign` | `error` | Vietare l'assegnazione a binding importati. |
-| `noImportantInKeyframe` | `error` | Vietare `!important` non valido all'interno delle dichiarazioni keyframe (CSS). |
-| `noIrregularWhitespace` | `error` | Vietare l'uso di caratteri di spazio irregolari. |
-| `noLabelVar` | `error` | Vietare etichette che condividono il nome con una variabile. |
-| `noMisleadingCharacterClass` | `error` | Vietare caratteri composti da multipli code point nella sintassi di character class. |
-| `noMisleadingInstantiator` | `error` | Far rispettare l'uso corretto di `new` e `constructor`. |
-| `noMisplacedAssertion` | `error` | Verifica che la funzione di assertion, per esempio expect, sia posizionata dentro una chiamata `it()`. |
+| `noImportAssign` | `error` | Vietare l'assegnazione ai binding importati. |
+| `noImportantInKeyframe` | `error` | Vietare `!important` non valido all'interno di dichiarazioni keyframe (CSS). |
+| `noIrregularWhitespace` | `error` | Vietare l'uso di caratteri di whitespace irregolari. |
+| `noLabelVar` | `error` | Vietare label che condividono nome con una variabile. |
+| `noMisleadingCharacterClass` | `error` | Vietare caratteri composti da più code point nella sintassi delle classi di caratteri. |
+| `noMisleadingInstantiator` | `error` | Imporre l'uso corretto di `new` e `constructor`. |
+| `noMisplacedAssertion` | `error` | Verifica che la funzione di assertion, ad esempio expect, sia posizionata dentro una chiamata `it()`. |
 | `noMisrefactoredShorthandAssign` | `error` | Vietare shorthand assign quando la variabile appare su entrambi i lati. |
-| `noOctalEscape` | `error` | Vietare sequenze di escape ottali nelle stringhe. |
+| `noOctalEscape` | `error` | Vietare sequenze di escape ottali nei literal stringa. |
 | `noPrototypeBuiltins` | `error` | Vietare l'uso diretto dei builtins di `Object.prototype`. |
-| `noQuickfixBiome` | `error` | Vietare l'uso di `quickfix.biome` dentro il file delle impostazioni dell'editor. |
-| `noRedeclare` | `error` | Vietare la ridefinizione di variabili, funzioni, classi e tipi nello stesso scope. |
-| `noRedundantUseStrict` | `error` | Previene l'uso ridondante di `use strict`. |
-| `noSelfCompare` | `error` | Vietare confronti dove entrambi i lati sono esattamente uguali. |
-| `noShadowRestrictedNames` | `error` | Vietare identificatori che oscurano nomi ristetti. |
-| `noShorthandPropertyOverrides` | `error` | Vietare proprietà shorthand che sovrascrivono relative longhand (CSS). |
+| `noQuickfixBiome` | `error` | Vietare l'uso di `quickfix.biome` all'interno del file di impostazioni dell'editor. |
+| `noRedeclare` | `error` | Vietare ridefinizioni di variabili, funzioni, classi e tipi nello stesso scope. |
+| `noRedundantUseStrict` | `error` | Impedire la presenza di `use strict` ridondanti. |
+| `noSelfCompare` | `error` | Vietare confronti in cui entrambi i lati sono esattamente gli stessi. |
+| `noShadowRestrictedNames` | `error` | Vietare identifier che ombreggiano nomi limitati. |
+| `noShorthandPropertyOverrides` | `error` | Vietare proprietà shorthand che sovrascrivono proprietà longhand correlate (CSS). |
 | `noSkippedTests` | `error` | Vietare test disabilitati. |
-| `noSparseArray` | `error` | Previene l'uso di array sparsi (array con buchi). |
-| `noTemplateCurlyInString` | `error` | Vietare la sintassi placeholder dei template literal nelle stringhe normali. |
+| `noSparseArray` | `error` | Impedire l'uso di array sparsi (array con buchi). |
+| `noTemplateCurlyInString` | `error` | Vietare la sintassi placeholder di template literal nelle stringhe normali. |
 | `noThenProperty` | `error` | Vietare la proprietà then. |
-| `noTsIgnore` | `error` | Previene l'uso della direttiva TypeScript `@ts-ignore`. |
-| `noUnassignedVariables` | `error` | Vietare variabili dichiarate con let o var che sono lette ma mai assegnate. |
+| `noTsIgnore` | `error` | Impedire l'uso della direttiva TypeScript `@ts-ignore`. |
+| `noUnassignedVariables` | `error` | Vietare variabili dichiarate con let o var che vengono lette ma mai assegnate. |
 | `noUnknownAtRules` | `error` | Vietare at-rule sconosciute (CSS). |
-| `noUnsafeDeclarationMerging` | `error` | Vietare merging di dichiarazioni non sicuro tra interfacce e classi. |
+| `noUnsafeDeclarationMerging` | `error` | Vietare merge di dichiarazioni non sicuro tra interfacce e classi. |
 | `noUnsafeNegation` | `error` | Vietare l'uso di negazione non sicura (`!`). |
-| `noUselessEscapeInString` | `error` | Vietare escape non necessari nelle stringhe. |
-| `noUselessRegexBackrefs` | `error` | Vietare backreference inutili nei literali regex che corrispondono sempre a stringa vuota. |
+| `noUselessEscapeInString` | `error` | Vietare escape non necessari nei literal stringa. |
+| `noUselessRegexBackrefs` | `error` | Vietare backreference inutili nelle espressioni regolari che corrispondono sempre a stringa vuota. |
 | `noVar` | `error` | Vietare l'uso di `var`. |
 | `noWith` | `error` | Vietare le istruzioni `with` in contesti non strict. |
-| `useAdjacentOverloadSignatures` | `error` | Vietare overload signatures che non sono adiacenti tra loro. |
+| `useAdjacentOverloadSignatures` | `error` | Vietare l'uso di overload signatures che non sono adiacenti. |
 | `useAwait` | `error` | Assicurare che le async function utilizzino `await`. |
-| `useBiomeIgnoreFolder` | `error` | Promuove l'uso corretto per ignorare cartelle nel file di configurazione. |
-| `useDefaultSwitchClauseLast` | `error` | Far rispettare che la clausola default in switch sia l'ultima. |
-| `useErrorMessage` | `error` | Far rispettare il passaggio di un valore di messaggio quando si crea un errore built-in. |
-| `useGetterReturn` | `error` | Far rispettare che i metodi get restituiscano sempre un valore. |
-| `useGoogleFontDisplay` | `error` | Fa rispettare l'uso di una strategia di display raccomandata con Google Fonts. |
+| `useBiomeIgnoreFolder` | `error` | Promuovere l'uso corretto per ignorare cartelle nel file di configurazione. |
+| `useDefaultSwitchClauseLast` | `error` | Imporre che le clausole default negli switch siano ultime. |
+| `useErrorMessage` | `error` | Imporre il passaggio di un messaggio quando si crea un errore built-in. |
+| `useGetterReturn` | `error` | Imporre che i metodi get restituiscano sempre un valore. |
+| `useGoogleFontDisplay` | `error` | Impone l'uso di una strategia di display raccomandata con Google Fonts. |
 | `useGuardForIn` | `error` | Richiedere che i for-in includano una istruzione `if`. |
 | `useIsArray` | `error` | Usare `Array.isArray()` invece di `instanceof Array`. |
-| `useIterableCallbackReturn` | `error` | Far rispettare valori di ritorno coerenti nelle callback iterable. |
+| `useIterableCallbackReturn` | `error` | Imporre valori di ritorno coerenti nelle callback iterable. |
 | `useNamespaceKeyword` | `error` | Richiedere l'uso della keyword namespace invece di `module` per dichiarare namespace TypeScript. |
-| `useNumberToFixedDigitsArgument` | `error` | Far rispettare l'uso dell'argomento digits con `Number#toFixed()`. |
-| `useStaticResponseMethods` | `error` | Usare metodi statici di `Response` invece del costruttore `new Response()` quando possibile. |
-| `useStrictMode` | `error` | Far rispettare l'uso della direttiva `use strict` nei file script. |
+| `useNumberToFixedDigitsArgument` | `error` | Imporre l'uso dell'argomento digits con `Number#toFixed()`. |
+| `useStaticResponseMethods` | `error` | Usare i metodi statici di `Response` invece del costruttore `new Response()` quando possibile. |
+| `useStrictMode` | `error` | Imporre l'uso della direttiva `use strict` nei file script. |
 
 ## Note
 
-Alcune regole sono disabilitate perché sono troppo lente da eseguire con lo Scanner. Come indicato nella [documentazione di Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), le regole abilitate nel progetto sono note per causare overhead di prestazioni in cambio di analisi più avanzate.
+Alcune regole sono disabilitate perché troppo lente da eseguire con lo Scanner. Come indicato nella [documentazione di Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), le regole abilitate nel progetto sono note per causare overhead di prestazioni in cambio di analisi più avanzata.
 
-Nei nostri test, abbiamo riscontrato che queste regole possono fare la differenza tra un lint di 300 ms e uno di 13 s.
+Nei nostri test, abbiamo riscontrato che queste regole possono fare la differenza tra un lint di 300ms e uno di 13s.

@@ -7,7 +7,7 @@ Configurația Next.js conține reguli de linting specifice Next.js pentru optimi
 
 ## Instalare
 
-Adăugați configurația Next.js la `biome.jsonc`:
+Adaugă configurația Next.js la `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,43 +17,36 @@ Adăugați configurația Next.js la `biome.jsonc`:
 
 ## Prezentare generală
 
-Această configurație adaugă reguli specifice pentru dezvoltarea Next.js:
+Această configurație adaugă reguli specifice dezvoltării cu Next.js:
 
-- **Optimizarea imaginilor**: Impune utilizarea componentei Next.js Image
-- **Structura documentului**: Previne utilizarea necorespunzătoare a componentelor speciale Next.js
-- **Componente client**: Asigură gestionarea corectă a componentelor client asincrone
-- **Fișiere de configurare**: Tratare specială pentru fișierele `next.config.*`
+- **Optimizare imagini**: Impune utilizarea componentului Image din Next.js
+- **Structura documentului**: Previne utilizarea incorectă a componentelor speciale din Next.js
+- **Fișiere de configurare**: Tratament special pentru fișierele `next.config.*`
 
 ## Reguli specifice Next.js
 
-### Incubator
-
-| Regula | Setare | Descriere |
-|--------|--------|-----------|
-| `noNextAsyncClientComponent` | `error` | Previne componentele client asincrone în Next.js. Componentele client ar trebui să fie sincronice; folosiți componente server pentru operații asincrone. |
-
 ### Performanță
 
-| Regula | Setare | Descriere |
+| Regulă | Setare | Descriere |
 |--------|--------|-----------|
-| `noImgElement` | `error` | Interzice utilizarea elementului HTML `<img>`. Folosiți componenta Next.js `<Image>` în schimb pentru optimizarea automată a imaginilor. |
+| `noImgElement` | `error` | Interzice utilizarea elementului HTML `<img>`. Folosește în schimb componenta `<Image>` din Next.js pentru optimizarea automată a imaginilor. |
 
 ### Stil
 
-| Regula | Setare | Descriere |
+| Regulă | Setare | Descriere |
 |--------|--------|-----------|
-| `noHeadElement` | `error` | Interzice utilizarea elementului HTML `<head>`. Folosiți `next/head` de la Next.js sau API-ul de metadata al App Router în schimb. |
+| `noHeadElement` | `error` | Interzice utilizarea elementului HTML `<head>`. Folosește în schimb `next/head` din Next.js sau App Router metadata API. |
 
 ### Suspecte
 
-| Regula | Setare | Descriere |
+| Regulă | Setare | Descriere |
 |--------|--------|-----------|
-| `noDocumentImportInPage` | `error` | Previne importarea `next/document` în fișierele de pagină. `_document.tsx` ar trebui să existe doar în `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Previne importarea `next/head` în `_document.tsx`. Folosiți `<Head>` din `next/document` în schimb. |
+| `noDocumentImportInPage` | `error` | Împiedică importarea `next/document` în fișierele de pagină. `_document.tsx` ar trebui să existe doar în `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Împiedică importarea `next/head` în `_document.tsx`. Folosește în schimb `<Head>` din `next/document`. |
 
-## Suprapuneri pentru fișierele de configurare
+## Suprascrieri pentru fișierele de configurare
 
-Presetul Next.js include tratare specială pentru fișierele de configurare și componentele App Router:
+Presetul Next.js include tratament special pentru fișierele de configurare și componentele App Router:
 
 ### Fișiere de configurare Next.js
 
@@ -74,7 +67,7 @@ Presetul Next.js include tratare specială pentru fișierele de configurare și 
 }
 ```
 
-Aceasta permite modele de configurare Next.js care, în mod normal, s-ar putea să nu treacă regulile de linting.
+Aceasta permite utilizarea unor tipare de configurare Next.js care, în mod normal, nu ar trece regulile de linting.
 
 ### Pagini și layout-uri App Router
 
@@ -95,4 +88,4 @@ Aceasta permite modele de configurare Next.js care, în mod normal, s-ar putea s
 }
 ```
 
-Componentele de pagină și layout ale App Router sunt permise să fie asincrone fără a necesita `await`, deoarece Next.js le tratează special pentru redarea pe server și preluarea datelor.
+Componentele de pagină și layout din App Router au voie să fie async fără a necesita `await`, deoarece Next.js le tratează în mod special pentru redarea pe server și preluarea datelor.

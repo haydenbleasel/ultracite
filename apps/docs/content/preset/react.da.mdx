@@ -3,7 +3,7 @@ title: React
 description: React-specifikke lint-regler for Ultracite.
 ---
 
-React-konfigurationen har React-specifikke lint-regler for JSX, hooks og komponentmønstre.
+React-konfigurationen indeholder React-specifikke lint-regler for JSX, hooks og komponentmønstre.
 
 ## Installation
 
@@ -20,9 +20,9 @@ Tilføj React-konfigurationen til din `biome.jsonc`:
 Denne konfiguration tilføjer regler, der er specifikke for React-udvikling:
 
 - **JSX-regler**: Håndhæv korrekt JSX-syntaks og mønstre
-- **Hooks-regler**: Sørg for, at React-hooks bruges korrekt
+- **Hooks-regler**: Sikr, at React-hooks bruges korrekt
 - **Komponentregler**: Håndhæv bedste praksis for React-komponenter
-- **Håndtering af children**: Forhindre forkert brug af children-proppen
+- **Håndtering af children**: Forhindre forkert brug af children-prop
 
 ## React-specifikke regler
 
@@ -30,32 +30,26 @@ Denne konfiguration tilføjer regler, der er specifikke for React-udvikling:
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Forhindre at children videregives som props. Children bør være indlejret mellem åbningstag og lukketag. |
-| `noNestedComponentDefinitions` | `error` | Forhindre komponentdefinitioner inde i andre komponenter. Dette forårsager unødvendige re-renders. |
-| `noReactPropAssignments` | `error` | Forhindre at props tildeles på ny i React-komponenter. Props bør betragtes som uforanderlige. |
+| `noChildrenProp` | `error` | Forhindre at children sendes som props. children bør være indlejret mellem åbning- og lukketags. |
+| `noNestedComponentDefinitions` | `error` | Forhindre komponentdefinitioner inde i andre komponenter. Dette forårsager unødvendige genrendringer. |
+| `noReactPropAssignments` | `error` | Forhindre genskrivning af props i React-komponenter. Props bør behandles som uforanderlige. |
 | `noRenderReturnValue` | `error` | Forhindre brug af returværdien fra `ReactDOM.render()`. |
-| `noVoidElementsWithChildren` | `error` | Forhindre at void-elementer (som `<img>`, `<br>`) har children. |
-| `useExhaustiveDependencies` | `error` | Håndhæv, at alle dependencies er korrekt angivet i React-hooks (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Håndhæv, at alle React-hooks kaldes fra topniveauet i komponentfunktioner, ikke inde i løkker, betingelser eller indlejrede funktioner. |
-| `useJsxKeyInIterable` | `error` | Håndhæv, at elementer i iterabler har en `key`-prop til Reacts reconciliation. |
-
-### Eksperimentel
-
-| Regel | Indstilling | Beskrivelse |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Forhindre brug af det ældre `React.forwardRef`. Brug ref som en prop i stedet (React 19+). |
+| `noVoidElementsWithChildren` | `error` | Forhindre void-elementer (som `<img>`, `<br>`) i at have children. |
+| `useExhaustiveDependencies` | `error` | Sørg for, at alle afhængigheder er korrekt angivet i React-hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Sikr, at alle React-hooks bliver kaldt fra topniveauet i komponentfunktioner, ikke inden i løkker, betingelser eller indlejrede funktioner. |
+| `useJsxKeyInIterable` | `error` | Sørg for, at elementer i iterables har en `key`-prop for Reacts reconciliation. |
 
 ### Stil
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Håndhæv brugen af funktionskomponenter frem for klassekomponenter i React. |
+| `useReactFunctionComponents` | `error` | Håndhæv brugen af funktionskomponenter i stedet for klassekomponenter i React. |
 
 ### Mistænkelige
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Forhindre brug af arrayindeks som keys. Arrayindeks er ikke stabile identifikatorer og kan forårsage problemer med komponenttilstand. |
-| `noDuplicateJsxProps` | `error` | Forhindre duplikerede egenskaber i JSX. |
-| `noSuspiciousSemicolonInJsx` | `error` | Forhindre semikoloner, der ændrer semantikken af JSX-elementer. |
+| `noArrayIndexKey` | `error` | Forhindre brug af arrayindekser som keys. Arrayindekser er ikke stabile identifikatorer og kan forårsage problemer med komponentens tilstand. |
+| `noDuplicateJsxProps` | `error` | Forhindre duplikerede attributter i JSX. |
+| `noSuspiciousSemicolonInJsx` | `error` | Forhindre semikoloner, der ændrer semantikken i JSX-elementer. |
 | `noReactSpecificProps` | `off` | Tillad React-specifikke props som `className` og `htmlFor`. |

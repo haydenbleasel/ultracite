@@ -3,7 +3,7 @@ title: Next.js
 description: Next.js-specifieke lintregels voor Ultracite.
 ---
 
-De Next.js-configuratie bevat Next.js-specifieke lintregels voor afbeeldingsoptimalisatie, documentstructuur en App Router-patronen.
+De Next.js-configuratie bevat Next.js-specifieke lintregels voor beeldoptimalisatie, documentstructuur en App Router-patronen.
 
 ## Installatie
 
@@ -19,30 +19,23 @@ Voeg de Next.js-configuratie toe aan je `biome.jsonc`:
 
 Deze configuratie voegt regels toe die specifiek zijn voor Next.js-ontwikkeling:
 
-- **Afbeeldingsoptimalisatie**: Forceer het gebruik van de Next.js `<Image>`-component
+- **Beeldoptimalisatie**: Dwing het gebruik af van de Next.js `<Image>`-component
 - **Documentstructuur**: Voorkom onjuist gebruik van Next.js-speciale componenten
-- **Clientcomponenten**: Zorg dat asynchrone clientcomponenten correct worden afgehandeld
 - **Configuratiebestanden**: Speciale behandeling voor `next.config.*`-bestanden
 
 ## Next.js-specifieke regels
-
-### Nursery
-
-| Regel | Instelling | Beschrijving |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Voorkom asynchrone clientcomponenten in Next.js. Clientcomponenten moeten synchroon zijn; gebruik servercomponenten voor asynchrone bewerkingen. |
 
 ### Prestaties
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `noImgElement` | `error` | Verbied het gebruik van het `<img>` HTML-element. Gebruik in plaats daarvan de Next.js `<Image>`-component voor automatische afbeeldingsoptimalisatie. |
+| `noImgElement` | `error` | Gebruik van het HTML-element `<img>` is niet toegestaan. Gebruik in plaats daarvan de Next.js `<Image>`-component voor automatische beeldoptimalisatie. |
 
 ### Stijl
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Verbied het gebruik van het `<head>` HTML-element. Gebruik in plaats daarvan Next.js `next/head` of de App Router metadata-API. |
+| `noHeadElement` | `error` | Gebruik van het HTML-element `<head>` is niet toegestaan. Gebruik in plaats daarvan Next.js `next/head` of de metadata-API van App Router. |
 
 ### Verdacht
 
@@ -74,7 +67,7 @@ De Next.js-preset bevat speciale behandeling voor configuratiebestanden en App R
 }
 ```
 
-Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet door lintregels zouden komen.
+Dit staat Next.js-configuratiepatronen toe die normaal gezien mogelijk niet door de lintregels zouden komen.
 
 ### App Router-pagina's en lay-outs
 
@@ -95,4 +88,4 @@ Dit staat Next.js-configuratiepatronen toe die normaal gesproken mogelijk niet d
 }
 ```
 
-App Router-pagina- en lay-outcomponenten mogen asynchroon zijn zonder `await` te vereisen, omdat Next.js deze speciaal afhandelt voor server-side rendering en dataopvraging.
+App Router-pagina- en lay-outcomponenten mogen async zijn zonder dat `await` vereist is, omdat Next.js deze speciaal afhandelt voor server-side rendering en gegevens ophalen.

@@ -1,9 +1,9 @@
 ---
 title: React
-description: React-spesifikke linteregler for Ultracite.
+description: React-spesifikke lintregler for Ultracite.
 ---
 
-React-konfigurasjonen har React-spesifikke linteregler for JSX, hooks og komponentmønstre.
+React-konfigurasjonen har React-spesifikke lintregler for JSX, hooks og komponentmønstre.
 
 ## Installasjon
 
@@ -19,10 +19,10 @@ Legg til React-konfigurasjonen i din `biome.jsonc`:
 
 Denne konfigurasjonen legger til regler som er spesifikke for React-utvikling:
 
-- **JSX-regler**: Håndhev riktig JSX-syntaks og mønstre
-- **Hooks-regler**: Sikre at React-hooks brukes riktig
-- **Komponentregler**: Håndhev beste praksis for React-komponenter
-- **Håndtering av children**: Forhindre feilaktig bruk av children-propen
+- **JSX-regler**: Håndhever riktig JSX-syntaks og mønstre
+- **Hooks-regler**: Sikrer at React-hooks brukes riktig
+- **Komponentregler**: Håndhever beste praksis for React-komponenter
+- **Håndtering av children**: Forhindre feil bruk av children-prop
 
 ## React-spesifikke regler
 
@@ -30,32 +30,26 @@ Denne konfigurasjonen legger til regler som er spesifikke for React-utvikling:
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Forhindre å sende children som props. Children bør være nestet mellom åpning- og lukketagger. |
+| `noChildrenProp` | `error` | Forhindre å sende children som props. children bør være nestet mellom åpning- og lukketagger. |
 | `noNestedComponentDefinitions` | `error` | Forhindre komponentdefinisjoner inne i andre komponenter. Dette forårsaker unødvendige re-renders. |
-| `noReactPropAssignments` | `error` | Forhindre at props blir overskrevet i React-komponenter. Props skal behandles som uforanderlige. |
+| `noReactPropAssignments` | `error` | Forhindre å endre props i React-komponenter. Props bør behandles som uforanderlige. |
 | `noRenderReturnValue` | `error` | Forhindre bruk av returverdien fra `ReactDOM.render()`. |
 | `noVoidElementsWithChildren` | `error` | Forhindre at void-elementer (som `<img>`, `<br>`) har children. |
-| `useExhaustiveDependencies` | `error` | Håndhev at alle avhengigheter er korrekt spesifisert i React-hooks (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Håndhev at alle React-hooks blir kalt på toppnivå i komponentfunksjoner, ikke inne i løkker, betingelser eller nestede funksjoner. |
-| `useJsxKeyInIterable` | `error` | Håndhev at elementer i iterables har en `key`-prop for Reacts rekonsiliering. |
-
-### Eksperimentell
-
-| Regel | Innstilling | Beskrivelse |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Forhindre bruk av eldre `React.forwardRef`. Bruk ref som en prop i stedet (React 19+). |
+| `useExhaustiveDependencies` | `error` | Håndhever at alle avhengigheter er korrekt spesifisert i React-hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Håndhever at alle React-hooks blir kalt fra toppenivå i komponentfunksjoner, ikke inne i løkker, betingelser eller nestede funksjoner. |
+| `useJsxKeyInIterable` | `error` | Håndhever at elementer i iterabler har en `key`-prop for Reacts reconciliation. |
 
 ### Stil
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Håndhev bruk av funksjonskomponenter fremfor klassekomponenter i React. |
+| `useReactFunctionComponents` | `error` | Håndhever bruk av funksjonskomponenter fremfor klassekomponenter i React. |
 
-### Mistenkelig
+### Mistenkelige
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
 | `noArrayIndexKey` | `error` | Forhindre bruk av arrayindekser som keys. Arrayindekser er ikke stabile identifikatorer og kan forårsake problemer med komponenttilstand. |
 | `noDuplicateJsxProps` | `error` | Forhindre dupliserte egenskaper i JSX. |
-| `noSuspiciousSemicolonInJsx` | `error` | Forhindre semikoloner som endrer semantikken til JSX-elementer. |
+| `noSuspiciousSemicolonInJsx` | `error` | Forhindre semikolon som endrer semantikken til JSX-elementer. |
 | `noReactSpecificProps` | `off` | Tillat React-spesifikke props som `className` og `htmlFor`. |

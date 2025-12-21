@@ -1,19 +1,19 @@
 ---
 title: 核心
-description: Ultracite 的基础配置，包含与框架无关的 lint 规则和格式化设置。
+description: Ultracite 的基础配置，包含与框架无关的 linting 规则。
 ---
 
-核心 Ultracite 配置提供了一套全面的与框架无关的 lint 规则和格式化设置。这是所有其他特定框架配置扩展的基础。
+Ultracite 的核心配置提供了一套全面的、与框架无关的 linting 规则和格式化设置。这是所有其他特定框架配置扩展的基础。
 
 ## 安装
 
-核心配置会在你运行时自动包含：
+当您运行以下命令时，核心配置会自动包含在内：
 
 ```bash
 npx ultracite init
 ```
 
-或者手动将其添加到你的 `biome.jsonc` 中：
+或者手动将其添加到您的 `biome.jsonc` 中：
 
 ```jsonc title="biome.jsonc"
 {
@@ -23,106 +23,106 @@ npx ultracite init
 
 ## 概览
 
-核心配置包括数百条严格的 lint 规则，涵盖：
+核心配置包含数百条严格的 lint 规则，覆盖：
 
-- **无障碍（a11y）**: 强制 ARIA 属性、语义化 HTML 和键盘导航
-- **复杂度**: 降低认知复杂性并强制最佳实践
-- **正确性**: 防止常见错误并强制类型安全
-- **性能**: 优化代码以获得更好的运行时性能
-- **安全**: 防止安全漏洞
-- **风格**: 强制一致的代码风格
-- **可疑模式**: 捕获可能表明缺陷的可疑模式
+- **可访问性 (a11y)**：强制使用 ARIA 属性、语义化 HTML 和键盘导航
+- **复杂度**：降低认知复杂度并强制执行最佳实践
+- **正确性**：防止常见错误并强制类型安全
+- **性能**：优化代码以获得更好的运行时性能
+- **安全**：防止安全漏洞
+- **风格**：强制一致的代码风格
+- **可疑**：捕获可能表明存在 bug 的可疑模式
 
-## 格式化设置
+## 格式化器设置
 
-- **缩进**: 2 个空格
-- **行宽**: 80 个字符
-- **行结束符**: LF（Unix 风格）
-- **分号**: 始终要求
-- **引号**: JavaScript/TypeScript 和 JSON 使用双引号
-- **尾随逗号**: ES5 风格（多行数组/对象）
-- **箭头函数括号**: 始终包含括号
+- **缩进**：2 个空格
+- **最大行宽**：80 个字符
+- **行结束符**：LF（Unix 风格）
+- **分号**：始终需要
+- **引号**：JavaScript/TypeScript 与 JSON 使用双引号
+- **尾随逗号**：ES5 风格（多行数组/对象）
+- **箭头函数括号**：始终包含括号
 
 ## 主要特性
 
 ### TypeScript 严格性
 
-核心配置启用了 TypeScript 的严格检查：
+核心配置启用 TypeScript 的严格检查：
 
 - 不鼓励使用 `any`（`noExplicitAny: error`）
 - 要求处理 `null/undefined`
 - 在某些情况下偏好显式类型
 - 在整个代码库中强制类型安全
 
-### ESLint 推荐等价项
+### 等价的 ESLint 推荐规则
 
 包含常见的最佳实践规则：
 
-- 不允许未使用的变量（`noUnusedVariables: error`）
-- 不允许未使用的导入（`noUnusedImports: error`）
-- 不允许显式 eval（`noGlobalEval: error`）
-- 不允许原型污染（`noPrototypeBuiltins: error`）
+- 禁止未使用的变量（`noUnusedVariables: error`）
+- 禁止未使用的导入（`noUnusedImports: error`）
+- 禁止显式 eval（`noGlobalEval: error`）
+- 禁止原型污染（`noPrototypeBuiltins: error`）
 
 ### 默认可访问性
 
-相当于可访问性标准的规则：
+等同于可访问性标准的规则：
 
-- 必须使 ARIA 属性有效
+- ARIA 属性必须有效
 - 优先使用语义化 HTML 元素
-- 要求支持键盘导航
-- 要求图像的替代文本
+- 需要支持键盘导航
+- 图片必须包含替代文本
 
 ### Node.js 支持
 
-与环境相关的处理：
+环境特定的处理：
 
-- 识别 Node.js 全局变量（`module`、`process`）
+- 识别 Node.js 全局变量（`module`, `process`）
 - 强制对内置模块使用 `node:` 协议
-- 同时支持 CommonJS 和 ESM
+- 支持 CommonJS 和 ESM 两种模块系统
 
 ## 完整规则参考
 
-### 无障碍（a11y）
+### 可访问性 (a11y)
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
 | `noAccessKey` | `error` | 强制不在任何 HTML 元素上使用 `accessKey` 属性。 |
-| `noAriaHiddenOnFocusable` | `error` | 强制不要在可聚焦元素上设置 `aria-hidden="true"`。 |
+| `noAriaHiddenOnFocusable` | `error` | 强制不在可聚焦元素上设置 `aria-hidden="true"`。 |
 | `noAriaUnsupportedElements` | `error` | 强制不在不支持 ARIA 角色、状态和属性的元素上使用这些属性。 |
-| `noAutofocus` | `off` | 强制不要在元素上使用 `autoFocus` prop。 |
-| `noDistractingElements` | `error` | 强制不使用会分心的元素。 |
-| `noHeaderScope` | `error` | `scope` prop 应仅在 `<th>` 元素上使用。 |
-| `noInteractiveElementToNoninteractiveRole` | `error` | 强制不要将非交互性的 ARIA 角色分配给交互性 HTML 元素。 |
-| `noLabelWithoutControl` | `error` | 强制 `label` 元素或组件具有文本标签并关联一个输入。 |
+| `noAutofocus` | `off` | 强制不在元素上使用 `autoFocus` 属性。 |
+| `noDistractingElements` | `error` | 强制不使用会分散注意力的元素。 |
+| `noHeaderScope` | `error` | `scope` 属性应仅用于 `<th>` 元素。 |
+| `noInteractiveElementToNoninteractiveRole` | `error` | 强制不将非交互性 ARIA 角色分配给交互性 HTML 元素。 |
+| `noLabelWithoutControl` | `error` | 强制 label 元素或组件具有文本标签并关联相应的输入。 |
 | `noNoninteractiveElementInteractions` | `error` | 禁止在非交互性元素上使用事件处理器。 |
-| `noNoninteractiveElementToInteractiveRole` | `error` | 强制不要将交互性 ARIA 角色分配给非交互性 HTML 元素。 |
-| `noNoninteractiveTabindex` | `error` | 强制不要将 `tabIndex` 分配给非交互性 HTML 元素。 |
+| `noNoninteractiveElementToInteractiveRole` | `error` | 强制不将交互性 ARIA 角色分配给非交互性 HTML 元素。 |
+| `noNoninteractiveTabindex` | `error` | 强制不在非交互性 HTML 元素上分配 `tabIndex`。 |
 | `noPositiveTabindex` | `error` | 防止在 `tabIndex` 属性上使用正整数。 |
 | `noRedundantAlt` | `error` | 强制 img 的 alt 属性不包含单词 `image`、`picture` 或 `photo`。 |
-| `noRedundantRoles` | `error` | 强制显式的 role 属性不要与元素的隐含/默认角色相同。 |
-| `noStaticElementInteractions` | `error` | 强制对具有点击处理程序的静态、可见元素（例如 `<div>`）使用有效的 role 属性。 |
-| `noSvgWithoutTitle` | `error` | 强制为 `svg` 元素使用 `title` 元素。 |
+| `noRedundantRoles` | `error` | 强制显式 role 属性不与元素的隐式/默认 role 相同。 |
+| `noStaticElementInteractions` | `error` | 强制对具有点击处理器的静态可见元素（例如 `<div>`）使用有效的 role 属性。 |
+| `noSvgWithoutTitle` | `error` | 强制为 `svg` 元素使用 title 元素。 |
 | `useAltText` | `error` | 强制所有需要替代文本的元素具有对最终用户有意义的信息。 |
-| `useAnchorContent` | `error` | 强制锚点具有内容，并且该内容对屏幕阅读器可访问。 |
-| `useAriaActivedescendantWithTabindex` | `error` | 强制对具有 `aria-activedescendant` 的非交互性 HTML 元素分配 `tabIndex`。 |
-| `useAriaPropsForRole` | `error` | 强制具有 ARIA 角色的元素必须具有该角色所需的所有 ARIA 属性。 |
-| `useAriaPropsSupportedByRole` | `error` | 强制 ARIA 属性对元素支持的角色来说是有效的。 |
-| `useButtonType` | `error` | 强制为按钮元素使用 `type` 属性。 |
-| `useFocusableInteractive` | `error` | 具有交互性角色和交互处理程序的元素必须可聚焦。 |
-| `useHeadingContent` | `error` | 强制标题元素（`h1`、`h2` 等）具有内容，并且该内容对屏幕阅读器可访问。 |
+| `useAnchorContent` | `error` | 强制锚点具有内容，且内容可被屏幕阅读器访问。 |
+| `useAriaActivedescendantWithTabindex` | `error` | 强制在带有 `aria-activedescendant` 的非交互性 HTML 元素上分配 `tabIndex`。 |
+| `useAriaPropsForRole` | `error` | 强制具有 ARIA 角色的元素必须具备该角色所需的所有 ARIA 属性。 |
+| `useAriaPropsSupportedByRole` | `error` | 强制 ARIA 属性对于元素所支持的角色是有效的。 |
+| `useButtonType` | `error` | 强制在 button 元素上使用 `type` 属性。 |
+| `useFocusableInteractive` | `error` | 具有交互性角色和交互处理器的元素必须可聚焦。 |
+| `useHeadingContent` | `error` | 强制标题元素（`h1`、`h2` 等）具有内容，且内容可被屏幕阅读器访问。 |
 | `useHtmlLang` | `error` | 强制 `html` 元素具有 `lang` 属性。 |
-| `useIframeTitle` | `error` | 强制为 `iframe` 元素使用 `title` 属性。 |
-| `useKeyWithClickEvents` | `error` | 强制 `onClick` 必须至少同时存在以下之一：`onKeyUp`、`onKeyDown`、`onKeyPress`。 |
-| `useKeyWithMouseEvents` | `error` | 强制 `onMouseOver` / `onMouseOut` 必须同时存在 `onFocus` / `onBlur`。 |
-| `useMediaCaption` | `error` | 强制音频和视频元素必须具有字幕轨道。 |
-| `useSemanticElements` | `error` | 检测在 JSX 元素中使用 role 属性并建议使用语义化元素代替。 |
-| `useValidAnchor` | `error` | 强制所有锚点都是有效且可导航的元素。 |
-| `useValidAriaProps` | `error` | 确保所有 ARIA 属性 `aria-*` 都是有效的。 |
+| `useIframeTitle` | `error` | 强制在 iframe 元素上使用 title 属性。 |
+| `useKeyWithClickEvents` | `error` | 强制 `onClick` 需要至少伴随以下之一：`onKeyUp`, `onKeyDown`, `onKeyPress`。 |
+| `useKeyWithMouseEvents` | `error` | 强制 `onMouseOver` / `onMouseOut` 需要伴随 `onFocus` / `onBlur`。 |
+| `useMediaCaption` | `error` | 强制音频和视频元素必须提供字幕轨道。 |
+| `useSemanticElements` | `error` | 检测在 JSX 元素中使用 role 属性并建议使用语义化元素替代。 |
+| `useValidAnchor` | `error` | 强制所有锚点有效且为可导航元素。 |
+| `useValidAriaProps` | `error` | 确保 ARIA 属性 `aria-*` 都是有效的。 |
 | `useValidAriaRole` | `error` | 具有 ARIA 角色的元素必须使用有效的、非抽象的 ARIA 角色。 |
-| `useValidAriaValues` | `error` | 强制 ARIA 状态和属性的值是有效的。 |
-| `useValidAutocomplete` | `error` | 在输入元素上为 `autocomplete` 属性使用有效值。 |
+| `useValidAriaValues` | `error` | 强制 ARIA 状态和属性值是有效的。 |
+| `useValidAutocomplete` | `error` | 在输入元素上使用 autocomplete 属性时使用有效值。 |
 | `useValidLang` | `error` | 确保传递给 `lang` 属性的值是正确的 ISO 语言和/或国家代码。 |
-| `useGenericFontNames` | `error` | 禁止在字体族（CSS）中缺少通用族关键字。 |
+| `useGenericFontNames` | `error` | 禁止在字体族中缺少通用族关键字（CSS）。 |
 
 ### 复杂度
 
@@ -130,81 +130,81 @@ npx ultracite init
 |------|---------|-------------|
 | `noAdjacentSpacesInRegex` | `error` | 禁止在正则表达式字面量中不明确地连续使用空格字符。 |
 | `noArguments` | `error` | 禁止使用 arguments。 |
-| `noBannedTypes` | `error` | 禁止原始类型别名和误导性的类型。 |
-| `noCommaOperator` | `error` | 禁止使用逗号操作符。 |
+| `noBannedTypes` | `error` | 禁止使用原始类型别名和具有误导性的类型。 |
+| `noCommaOperator` | `error` | 禁止使用逗号运算符。 |
 | `noEmptyTypeParameters` | `error` | 禁止在类型别名和接口中使用空的类型参数。 |
-| `noExcessiveCognitiveComplexity` | `error` | 禁止函数超过给定的认知复杂度评分。 |
+| `noExcessiveCognitiveComplexity` | `error` | 禁止认知复杂度超过给定分值的函数。 |
 | `noExcessiveLinesPerFunction` | `off` | 限制函数中的代码行数。 |
-| `noExcessiveNestedTestSuites` | `error` | 在测试文件中对嵌套的 `describe()` 强制最大深度。 |
-| `noExtraBooleanCast` | `error` | 禁止不必要的布尔类型强转。 |
-| `noFlatMapIdentity` | `error` | 禁止在 `flatMap` 上使用不必要的回调。 |
-| `noForEach` | `error` | 建议使用 `for...of` 语句而不是 `Array.forEach`。 |
-| `noImplicitCoercions` | `off` | 禁止简写的类型转换。 |
+| `noExcessiveNestedTestSuites` | `error` | 该规则在测试文件中强制限制嵌套 `describe()` 的最大深度。 |
+| `noExtraBooleanCast` | `error` | 禁止不必要的布尔强制转换。 |
+| `noFlatMapIdentity` | `error` | 禁止在 flatMap 上使用不必要的回调。 |
+| `noForEach` | `error` | 推荐使用 `for...of` 语句代替 `Array.forEach`。 |
+| `noImplicitCoercions` | `off` | 禁止简写类型转换。 |
 | `noImportantStyles` | `off` | 禁止使用 `!important` 样式（CSS）。 |
-| `noStaticOnlyClass` | `error` | 当类没有非静态成员时报告此规则。 |
-| `noThisInStatic` | `error` | 在静态上下文中禁止使用 `this` 和 `super`。 |
+| `noStaticOnlyClass` | `error` | 当类没有非静态成员时报告该规则。 |
+| `noThisInStatic` | `error` | 禁止在静态上下文中使用 `this` 和 `super`。 |
 | `noUselessCatch` | `error` | 禁止不必要的 catch 子句。 |
 | `noUselessConstructor` | `error` | 禁止不必要的构造函数。 |
 | `noUselessContinue` | `error` | 避免使用不必要的 continue。 |
-| `noUselessEmptyExport` | `error` | 禁止不会更改模块文件的空导出。 |
+| `noUselessEmptyExport` | `error` | 禁止在模块文件中不改变任何内容的空导出。 |
 | `noUselessEscapeInRegex` | `error` | 禁止在正则表达式字面量中使用不必要的转义序列。 |
-| `noUselessFragments` | `error` | 禁止不必要的片段（fragments）。 |
+| `noUselessFragments` | `error` | 禁止不必要的 fragments。 |
 | `noUselessLabel` | `error` | 禁止不必要的标签。 |
 | `noUselessLoneBlockStatements` | `error` | 禁止不必要的嵌套块语句。 |
-| `noUselessRename` | `error` | 禁止将导入、导出以及解构赋值重命名为相同的名称。 |
+| `noUselessRename` | `error` | 禁止将 import、export 和解构赋值重命名为相同的名称。 |
 | `noUselessStringConcat` | `error` | 禁止不必要的字符串或模板字面量拼接。 |
-| `noUselessStringRaw` | `error` | 禁止在模板字符串字面量中在没有任何转义序列时使用不必要的 `String.raw`。 |
-| `noUselessSwitchCase` | `error` | 禁止在 switch 语句中使用无用的 case。 |
-| `noUselessTernary` | `error` | 当存在更简单的替代方案时禁止使用三元运算符。 |
+| `noUselessStringRaw` | `error` | 禁止在模板字符串中在没有任何转义序列的情况下使用不必要的 `String.raw`。 |
+| `noUselessSwitchCase` | `error` | 禁止 switch 语句中无用的 case。 |
+| `noUselessTernary` | `error` | 当存在更简单的替代方案时，禁止使用三元运算符。 |
 | `noUselessThisAlias` | `error` | 禁止无用的 `this` 别名。 |
 | `noUselessTypeConstraint` | `error` | 禁止将 `any` 或 `unknown` 用作类型约束。 |
 | `noUselessUndefinedInitialization` | `error` | 禁止将变量初始化为 `undefined`。 |
-| `noVoid` | `error` | 禁止使用 `void` 操作符，因为它不是常见操作符。 |
-| `useArrowFunction` | `error` | 优先使用箭头函数而不是函数表达式。 |
-| `useDateNow` | `error` | 使用 `Date.now()` 来获取自 Unix 纪元以来的毫秒数。 |
+| `noVoid` | `error` | 禁止使用 `void` 操作符，该操作符不常见。 |
+| `useArrowFunction` | `error` | 在函数表达式中使用箭头函数。 |
+| `useDateNow` | `error` | 使用 `Date.now()` 获取自 Unix 纪元以来的毫秒数。 |
 | `useFlatMap` | `error` | 当 `map().flat()` 连用时，推荐使用 `.flatMap()`。 |
-| `useIndexOf` | `error` | 在查找项目索引时，优先使用 `Array#{indexOf,lastIndexOf}()` 而不是 `Array#{findIndex,findLastIndex}()`。 |
-| `useLiteralKeys` | `error` | 强制在属性访问中使用字面量访问而不是计算属性访问。 |
+| `useIndexOf` | `error` | 在查找项的索引时，优先使用 `Array#{indexOf,lastIndexOf}()` 而不是 `Array#{findIndex,findLastIndex}()`。 |
+| `useLiteralKeys` | `error` | 强制使用字面量访问属性而不是计算属性访问。 |
 | `useNumericLiterals` | `error` | 禁止使用 `parseInt()` 和 `Number.parseInt()`，优先使用二进制、八进制和十六进制字面量。 |
-| `useOptionalChain` | `error` | 强制使用简洁的可选链而不是链式逻辑表达式。 |
-| `useRegexLiterals` | `error` | 在可能的情况下，强制使用正则表达式字面量而不是 `RegExp` 构造函数。 |
-| `useSimpleNumberKeys` | `error` | 禁止使用非十进制或使用下划线作为分隔符的数值字面量作为对象成员名。 |
+| `useOptionalChain` | `error` | 强制使用简洁的可选链而不是串联的逻辑表达式。 |
+| `useRegexLiterals` | `error` | 在可能的情况下，优先使用正则表达式字面量而不是 `RegExp` 构造函数。 |
+| `useSimpleNumberKeys` | `error` | 禁止使用非十进制或使用下划线作为分隔符的数字字面量作为对象成员名。 |
 | `useSimplifiedLogicExpression` | `error` | 从逻辑表达式中去除冗余项。 |
-| `useWhile` | `error` | 当初始化和更新表达式不需要时，强制使用 while 循环替代 for 循环。 |
+| `useWhile` | `error` | 当初始化和更新表达式不需要时，强制使用 while 循环而不是 for 循环。 |
 
 ### 正确性
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
 | `noConstAssign` | `error` | 防止对 const 变量重新赋值。 |
-| `noConstantCondition` | `error` | 在条件中禁止常量表达式。 |
-| `noConstantMathMinMaxClamp` | `error` | 禁止在结果本身为常量时使用 `Math.min` 和 `Math.max` 来夹取值。 |
-| `noConstructorReturn` | `error` | 禁止在构造函数中返回一个值。 |
+| `noConstantCondition` | `error` | 禁止在条件中使用常量表达式。 |
+| `noConstantMathMinMaxClamp` | `error` | 禁止在结果本身为常量的情况下使用 `Math.min` 和 `Math.max` 来夹取值。 |
+| `noConstructorReturn` | `error` | 禁止从构造函数返回一个值。 |
 | `noEmptyCharacterClassInRegex` | `error` | 禁止在正则表达式字面量中使用空的字符类。 |
-| `noEmptyPattern` | `error` | 禁止空的解构模式。 |
-| `noGlobalDirnameFilename` | `error` | 禁止在全局作用域使用 `__dirname` 和 `__filename`。 |
+| `noEmptyPattern` | `error` | 禁止使用空的解构模式。 |
+| `noGlobalDirnameFilename` | `error` | 禁止在全局作用域中使用 `__dirname` 和 `__filename`。 |
 | `noGlobalObjectCalls` | `error` | 禁止将全局对象属性作为函数调用。 |
-| `noInnerDeclarations` | `error` | 禁止在块外可访问的函数和 `var` 声明。 |
+| `noInnerDeclarations` | `error` | 禁止在其块外部可访问的函数和 `var` 声明。 |
 | `noInvalidBuiltinInstantiation` | `error` | 确保内置对象被正确实例化。 |
-| `noInvalidConstructorSuper` | `error` | 防止在类中错误使用 `super()`。 |
+| `noInvalidConstructorSuper` | `error` | 防止在类中错误地使用 `super()`。 |
 | `noInvalidDirectionInLinearGradient` | `error` | 禁止在线性渐变函数中使用非标准方向值（CSS）。 |
 | `noInvalidGridAreas` | `error` | 禁止在 CSS Grid 布局中使用无效的命名网格区域（CSS）。 |
-| `noInvalidPositionAtImportRule` | `error` | 禁止在无效位置使用 `@import` at-rule（CSS）。 |
+| `noInvalidPositionAtImportRule` | `error` | 禁止在无效位置使用 `@import` at 规则（CSS）。 |
 | `noInvalidUseBeforeDeclaration` | `error` | 禁止在声明之前使用变量和函数参数。 |
-| `noMissingVarFunction` | `error` | 禁止缺失用于 css 变量的 `var` 函数（CSS）。 |
+| `noMissingVarFunction` | `error` | 禁止 CSS 变量缺少 `var` 函数（CSS）。 |
 | `noNodejsModules` | `off` | 禁止使用 Node.js 内置模块。 |
 | `noNonoctalDecimalEscape` | `error` | 禁止在字符串字面量中使用 `\8` 和 `\9` 转义序列。 |
-| `noPrecisionLoss` | `error` | 禁止会丢失精度的字面量数字。 |
-| `noPrivateImports` | `off` | 限制导入私有导出。 |
-| `noProcessGlobal` | `off` | 禁止使用 `process` 全局变量。 |
+| `noPrecisionLoss` | `error` | 禁止会导致精度丢失的字面数字。 |
+| `noPrivateImports` | `off` | 限制对私有导出的导入。 |
+| `noProcessGlobal` | `off` | 禁止使用全局 `process`。 |
 | `noRestrictedElements` | `error` | 禁止使用已配置的元素。 |
 | `noSelfAssign` | `error` | 禁止两边完全相同的赋值。 |
-| `noSetterReturn` | `error` | 禁止在 setter 中返回值。 |
-| `noStringCaseMismatch` | `error` | 禁止将修改了字符串大小写的表达式与不一致值进行比较。 |
-| `noSwitchDeclarations` | `error` | 禁止在 switch 分支中进行词法声明。 |
-| `noUndeclaredDependencies` | `off` | 禁止使用 `package.json` 中未声明的依赖。 |
+| `noSetterReturn` | `error` | 禁止从 setter 返回一个值。 |
+| `noStringCaseMismatch` | `error` | 禁止在修改字符串大小写后与不兼容值进行比较。 |
+| `noSwitchDeclarations` | `error` | 禁止在 switch 分支中使用词法声明。 |
+| `noUndeclaredDependencies` | `off` | 禁止使用未在 `package.json` 中声明的依赖。 |
 | `noUndeclaredVariables` | `error` | 防止在文档中使用未声明的变量。 |
-| `noUnknownFunction` | `error` | 禁止未知的 CSS 值函数（CSS）。 |
+| `noUnknownFunction` | `error` | 禁止使用未知的 CSS 值函数（CSS）。 |
 | `noUnknownMediaFeatureName` | `error` | 禁止未知的媒体特性名称（CSS）。 |
 | `noUnknownProperty` | `error` | 禁止未知属性（CSS）。 |
 | `noUnknownPseudoClass` | `error` | 禁止未知的伪类选择器（CSS）。 |
@@ -213,85 +213,47 @@ npx ultracite init
 | `noUnknownUnit` | `error` | 禁止未知的 CSS 单位（CSS）。 |
 | `noUnmatchableAnbSelector` | `error` | 禁止不可匹配的 An+B 选择器（CSS）。 |
 | `noUnreachable` | `error` | 禁止不可达代码。 |
-| `noUnreachableSuper` | `error` | 确保在类构造函数中对 `super()` 的调用在每条代码路径上且恰好调用一次，然后才能访问 `this`。 |
+| `noUnreachableSuper` | `error` | 确保在类构造函数的每条代码路径中，在访问 `this` 之前 `super()` 仅被调用一次。 |
 | `noUnsafeFinally` | `error` | 禁止在 finally 块中使用控制流语句。 |
-| `noUnsafeOptionalChaining` | `error` | 禁止在不允许 undefined 值的上下文中使用可选链。 |
+| `noUnsafeOptionalChaining` | `error` | 禁止在不允许出现 undefined 值的上下文中使用可选链。 |
 | `noUnusedFunctionParameters` | `error` | 禁止未使用的函数参数。 |
 | `noUnusedImports` | `error` (safe fix override) | 禁止未使用的导入。 |
 | `noUnusedLabels` | `error` | 禁止未使用的标签。 |
 | `noUnusedPrivateClassMembers` | `error` | 禁止未使用的私有类成员。 |
 | `noUnusedVariables` | `error` | 禁止未使用的变量。 |
-| `noVoidTypeReturn` | `error` | 禁止在返回类型为 `void` 的函数中返回值。 |
+| `noVoidTypeReturn` | `error` | 禁止从返回类型为 `void` 的函数返回一个值。 |
 | `useGraphqlNamedOperations` | `error` | 强制为 GraphQL 操作指定名称。 |
 | `useImageSize` | `error` | 强制 `<img>` 元素具有 width 和 height 属性。 |
-| `useImportExtensions` | `off` | 强制相对导入使用文件扩展名。 |
+| `useImportExtensions` | `off` | 强制为相对导入使用文件扩展名。 |
 | `useIsNan` | `error` | 在检查 NaN 时要求调用 `isNaN()`。 |
-| `useJsonImportAttributes` | `off` | 强制为 JSON 模块导入使用 `{ type: "json" }`。 |
-| `useParseIntRadix` | `error` | 强制在使用 `parseInt()` 时一致地使用基数参数。 |
-| `useSingleJsDocAsterisk` | `error` | 强制 JSDoc 注释行以单个星号开头（第一个例外）。 |
-| `useUniqueElementIds` | `off` | 防止在元素上使用静态字符串字面量 id 属性。 |
-| `useValidForDirection` | `error` | 强制 `for` 循环的更新子句以正确方向移动计数器。 |
-| `useValidTypeof` | `error` | 检查 `typeof` 表达式的结果与有效值进行比较。 |
+| `useJsonImportAttributes` | `off` | 强制在 JSON 模块导入时使用 `{ type: "json" }`。 |
+| `useParseIntRadix` | `error` | 强制在使用 `parseInt()` 时一致地使用进制参数。 |
+| `useSingleJsDocAsterisk` | `error` | 强制 JSDoc 注释行以单个星号开始，首行例外。 |
+| `useUniqueElementIds` | `off` | 防止在元素上使用静态字符串文字 id 属性。 |
+| `useValidForDirection` | `error` | 强制 `for` 循环的更新子句使计数器朝正确方向移动。 |
+| `useValidTypeof` | `error` | 检查 `typeof` 表达式的结果是否与有效值比较。 |
 | `useYield` | `error` | 要求生成器函数包含 `yield`。 |
 
 ### Nursery
 
+Nursery 规则通常在 Ultracite 中不启用，因为它们是实验性的，可能会在将来的 Biome 版本中更改或移除。但出于广泛需求，以下规则已启用：
+
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | 禁止模糊的锚文本描述。 |
-| `noContinue` | `off` | 禁止 continue 语句。 |
-| `noDeprecatedImports` | `off` | 限制导入已弃用的导出。 |
-| `noDuplicateDependencies` | `error` | 防止列出重复的依赖项。 |
-| `noDuplicatedSpreadProps` | `error` | 禁止在 spread props 中出现重复属性。 |
-| `noEmptySource` | `error` | 禁止空的源文件。 |
-| `noEqualsToNull` | `error` | 禁止使用 `==` 或 `!=` 与 `null` 比较。请改用 `===` 或 `!==`。 |
-| `noFloatingPromises` | `off` | 要求对类似 Promise 的语句进行适当处理。 |
-| `noForIn` | `off` | 禁止使用 for-in 循环进行迭代。 |
-| `noImportCycles` | `off` | 防止导入循环。 |
-| `noIncrementDecrement` | `error` | 禁止使用 `++` 和 `--` 操作符（在 for 循环的后置表达式中除外）。 |
-| `noJsxLiterals` | `off` | 禁止在 JSX 元素中使用字符串字面量。 |
-| `noLeakedRender` | `error` | 防止在 JSX 中渲染可能泄露的值（例如 0 或 NaN）。 |
-| `noMisusedPromises` | `off` | 禁止在几乎肯定是错误的位置使用 Promise。 |
-| `noMultiStr` | `error` | 禁止使用反斜杠续行的多行字符串。 |
-| `noParametersOnlyUsedInRecursion` | `error` | 禁止仅在递归调用中使用的参数。 |
-| `noProto` | `error` | 禁止使用 `__proto__` 属性。 |
-| `noScriptUrl` | `error` | 禁止 `javascript:` URL，因为它们会带来 XSS 等安全风险。 |
-| `noShadow` | `error` | 禁止变量声明遮蔽外层作用域中声明的变量。 |
-| `noSyncScripts` | `error` | 禁止使用同步脚本。 |
-| `noTernary` | `off` | 禁止三元运算符。 |
-| `noUndeclaredEnvVars` | `error` | 禁止在 `turbo.json` 中使用未声明的环境变量。 |
-| `noUnnecessaryConditions` | `off` | 禁止可以静态确定为冗余的基于类型的条件。 |
-| `noUnresolvedImports` | `off` | 在导入不存在的导出时发出警告。 |
-| `noUnusedExpressions` | `error` | 禁止既不是函数调用也不是赋值的表达式语句。 |
-| `noUselessCatchBinding` | `off` | 禁止未使用的 `catch` 绑定。 |
-| `noUselessUndefined` | `error` | 禁止使用无用的 `undefined`。 |
-| `useArraySortCompare` | `off` | 强制在 `Array.prototype.sort()` 中使用比较函数。 |
-| `useAwaitThenable` | `off` | 强制 `await` 仅用于 Promise 值。 |
-| `useConsistentArrowReturn` | `error` | 强制箭头函数体的一致性返回。 |
-| `useConsistentGraphqlDescriptions` | `error` | 要求 GraphQL 文件中的所有描述遵循相同风格（块注释或内联）。 |
-| `useDeprecatedDate` | `error` | 要求 `@deprecated` 指令指定删除日期。 |
-| `useExhaustiveSwitchCases` | `off` | 要求 switch-case 语句是穷尽的。 |
-| `useExplicitType` | `off` | 强制在函数、方法、变量和参数中使用类型。 |
-| `useFind` | `off` | 在查找单个结果时，建议使用 `Array.prototype.find()` 而不是 `Array.prototype.filter()` 后跟 `[0]`。 |
-| `useMaxParams` | `error` | 强制函数定义的参数数量上限。 |
-| `useRegexpExec` | `off` | 在未提供 global 标志时，建议使用 `RegExp#exec` 而不是 `String#match`。 |
-| `useRequiredScripts` | `off` | 强制在 `package.json` 的 `scripts` 部分存在可配置条目。 |
 | `useSortedClasses` | `error` (safe fix override) | 强制对 CSS 实用类进行排序。 |
-| `useSpread` | `error` | 强制在可行时使用扩展运算符替代 `Function.prototype.apply()`。 |
-| `useUniqueGraphqlOperationName` | `error` | 确保文档内的所有 GraphQL 操作具有唯一名称。 |
 
 ### 性能
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
-| `noAccumulatingSpread` | `error` | 禁止在累加器上使用展开 (`...`) 语法。 |
-| `noAwaitInLoops` | `off` | 禁止在循环中使用 `await`。 |
+| `noAccumulatingSpread` | `error` | 禁止在累加器上使用展开语法（`...`）。 |
+| `noAwaitInLoops` | `off` | 禁止在循环内使用 `await`。 |
 | `noBarrelFile` | `error` | 禁止使用 barrel 文件。 |
 | `noDelete` | `error` | 禁止使用 `delete` 操作符。 |
 | `noDynamicNamespaceImportAccess` | `error` | 禁止动态访问命名空间导入。 |
 | `noNamespaceImport` | `error` | 禁止使用命名空间导入。 |
-| `noReExportAll` | `off` | 避免使用全部重新导出（re-export all）。 |
-| `noUnwantedPolyfillio` | `error` | 防止来自 Polyfill.io 的重复 polyfill。 |
+| `noReExportAll` | `off` | 避免全部 re-export。 |
+| `noUnwantedPolyfillio` | `error` | 防止来自 Polyfill.io 的重复 polyfills。 |
 | `useGoogleFontPreconnect` | `error` | 在使用 Google Fonts 时确保使用 `preconnect` 属性。 |
 | `useTopLevelRegex` | `error` | 要求将正则字面量声明在顶层。 |
 
@@ -300,9 +262,9 @@ npx ultracite init
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
 | `noBlankTarget` | `error` | 禁止在没有 `rel="noopener"` 的情况下使用 `target="_blank"` 属性。 |
-| `noDangerouslySetInnerHtml` | `error` | 防止使用危险的 JSX props。 |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | 当 DOM 元素或组件同时使用 children 和 `dangerouslySetInnerHTML` prop 时报告问题。 |
-| `noGlobalEval` | `error` | 禁止使用全局 `eval()`。 |
+| `noDangerouslySetInnerHtml` | `error` | 阻止使用危险的 JSX 属性。 |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | 当 DOM 元素或组件同时使用 children 和 `dangerouslySetInnerHTML` 属性时报告。 |
+| `noGlobalEval` | `error` | 禁止使用全局的 `eval()`。 |
 
 ### 风格
 
@@ -311,169 +273,169 @@ npx ultracite init
 | `noCommonJs` | `off` | 禁止使用 Common JS 模块系统，优先使用 ESM 风格导入。 |
 | `noDefaultExport` | `off` | 禁止默认导出。 |
 | `noDoneCallback` | `error` | 禁止在异步测试和钩子中使用回调。 |
-| `noEnum` | `error` | 禁止 TypeScript enum。 |
-| `noExportedImports` | `error` | 禁止导出被导入的变量。 |
+| `noEnum` | `error` | 禁止 TypeScript 枚举。 |
+| `noExportedImports` | `error` | 禁止导出已导入的变量。 |
 | `noImplicitBoolean` | `off` | 禁止在 JSX 布尔属性上使用隐式 true 值。 |
-| `noInferrableTypes` | `error` | 禁止对以字面量表达式初始化的变量、参数和类属性使用类型注解。 |
-| `noMagicNumbers` | `off` | 报告使用“魔法数字”——直接使用数字而不是赋给具名常量。 |
+| `noInferrableTypes` | `error` | 禁止为已用字面量初始化的变量、参数和类属性添加类型注解。 |
+| `noMagicNumbers` | `off` | 报告“魔法数字”的使用——直接使用数字而不是赋予命名常量。 |
 | `noNamespace` | `error` | 禁止使用 TypeScript 的 namespace。 |
-| `noNegationElse` | `error` | 如果 if 语句有 else 子句，则禁止在条件中使用取反。 |
-| `noNestedTernary` | `error` | 禁止嵌套三元表达式。 |
-| `noNonNullAssertion` | `error` | 禁止使用后缀运算符 `!` 的非空断言。 |
+| `noNegationElse` | `error` | 如果 if 语句有 else 子句，禁止在条件中使用否定。 |
+| `noNestedTernary` | `error` | 禁止嵌套的三元表达式。 |
+| `noNonNullAssertion` | `error` | 禁止使用后缀操作符 `!` 的非空断言。 |
 | `noParameterAssign` | `error` | 禁止重新赋值函数参数。 |
 | `noParameterProperties` | `error` | 禁止在类构造函数中使用参数属性。 |
 | `noProcessEnv` | `off` | 禁止使用 `process.env`。 |
-| `noRestrictedGlobals` | `error` | 允许你指定在应用中不希望使用的全局变量名。 |
-| `noRestrictedImports` | `error` | 禁止在通过 import 或 require 加载时使用指定模块。 |
-| `noRestrictedTypes` | `error` | 禁止用户定义类型。 |
-| `noShoutyConstants` | `error` | 禁止常量的值是其名称的大写版本的情况。 |
-| `noSubstr` | `error` | 强制使用 `String.slice()` 代替 `String.substr()` 和 `String.substring()`。 |
-| `noUnusedTemplateLiteral` | `error` | 如果不需要插值和特殊字符处理，则禁止模板字面量。 |
-| `noUselessElse` | `error` | 如果 if 块提前终止，则禁止 else 块。 |
-| `noYodaExpression` | `error` | 禁止使用 Yoda 表达式。 |
+| `noRestrictedGlobals` | `error` | 该规则允许您指定在应用中不想使用的全局变量名。 |
+| `noRestrictedImports` | `error` | 禁止通过 import 或 require 加载指定模块。 |
+| `noRestrictedTypes` | `error` | 禁止用户定义的类型。 |
+| `noShoutyConstants` | `error` | 禁止使用值为其名称大写版本的常量。 |
+| `noSubstr` | `error` | 强制使用 `String.slice()` 而非 `String.substr()` 和 `String.substring()`。 |
+| `noUnusedTemplateLiteral` | `error` | 若不需要插值和特殊字符处理，禁止使用模板字面量。 |
+| `noUselessElse` | `error` | 当 if 块提前退出时禁止 else 块。 |
+| `noYodaExpression` | `error` | 禁止使用 yoda 表达式。 |
 | `useArrayLiterals` | `error` | 禁止使用 `Array` 构造函数。 |
-| `useAsConstAssertion` | `error` | 强制使用 as const 代替字面量类型和类型注解。 |
-| `useAtIndex` | `error` | 使用 `at()` 代替整数索引访问。 |
+| `useAsConstAssertion` | `error` | 强制在字面量类型和类型注释上使用 `as const`。 |
+| `useAtIndex` | `error` | 使用 `at()` 替代整数索引访问。 |
 | `useBlockStatements` | `error` | 要求遵循大括号约定。 |
-| `useCollapsedElseIf` | `error` | 强制在 `else` 子句中使用 `else if` 而不是嵌套 `if`。 |
-| `useCollapsedIf` | `error` | 强制使用单一 `if` 而不是嵌套 `if`。 |
+| `useCollapsedElseIf` | `error` | 强制在 else 子句中使用 `else if` 而不是嵌套 `if`。 |
+| `useCollapsedIf` | `error` | 强制使用单一 `if` 而不是嵌套的 `if` 子句。 |
 | `useComponentExportOnlyModules` | `off` | 强制仅在仅导出 React 组件的模块中声明组件。 |
-| `useConsistentArrayType` | `error` | 要求一致地使用 `T[]` 或 `Array<T>`。 |
+| `useConsistentArrayType` | `error` | 要求在 `T[]` 或 `Array<T>` 之间保持一致使用。 |
 | `useConsistentBuiltinInstantiation` | `error` | 强制对所有内置对象使用 new，除了 `String`、`Number` 和 `Boolean`。 |
-| `useConsistentCurlyBraces` | `off` | 强制在 JSX 属性和子元素中一致使用大括号。 |
-| `useConsistentMemberAccessibility` | `error` | 要求类属性和方法的访问修饰符一致。 |
-| `useConsistentObjectDefinitions` | `error` | 要求对象字面量的一致声明方式。 |
+| `useConsistentCurlyBraces` | `off` | 该规则在 JSX 属性和 JSX 子项中强制一致使用大括号。 |
+| `useConsistentMemberAccessibility` | `error` | 要求类属性和方法使用一致的访问修饰符。 |
+| `useConsistentObjectDefinitions` | `error` | 要求一致地声明对象字面量。 |
 | `useConst` | `error` | 要求对只赋值一次的变量使用 const 声明。 |
-| `useDefaultParameterLast` | `error` | 强制默认参数和可选参数放在最后。 |
-| `useDefaultSwitchClause` | `error` | 要求 switch 语句包含 `default` 分支。 |
-| `useDeprecatedReason` | `error` | 要求在使用 `@deprecated` 指令时指定原因参数。 |
-| `useEnumInitializers` | `error` | 要求每个枚举成员的值显式初始化。 |
+| `useDefaultParameterLast` | `error` | 强制默认函数参数和可选函数参数放在最后。 |
+| `useDefaultSwitchClause` | `error` | 在 switch 语句中要求使用 `default` 子句。 |
+| `useDeprecatedReason` | `error` | 使用 `@deprecated` 指令时要求指定原因参数。 |
+| `useEnumInitializers` | `error` | 要求每个枚举成员值显式初始化。 |
 | `useExplicitLengthCheck` | `off` | 强制显式比较值的 `length`、`size`、`byteLength` 或 `byteOffset` 属性。 |
 | `useExponentiationOperator` | `error` | 禁止使用 `Math.pow`，优先使用 `**` 运算符。 |
-| `useExportType` | `error` | 鼓励对类型使用 export type。 |
+| `useExportType` | `error` | 提倡对类型使用 export type。 |
 | `useExportsLast` | `off` | 要求所有导出在所有非导出语句之后声明。 |
 | `useFilenamingConvention` | `error` | 强制 JavaScript 和 TypeScript 文件名的命名约定（kebab-case、ASCII）。 |
-| `useForOf` | `error` | 当在 for 循环中使用索引来从迭代数组提取项时，建议使用 for-of 循环。 |
-| `useFragmentSyntax` | `error` | 强制使用 `<>...</>` 代替 `<Fragment>...</Fragment>`。 |
+| `useForOf` | `error` | 当 for 循环中使用索引从数组中提取项时，推荐使用 for-of 循环。 |
+| `useFragmentSyntax` | `error` | 强制使用 `<>...</>` 而不是 `<Fragment>...</Fragment>`。 |
 | `useGraphqlNamingConvention` | `error` | 验证所有枚举值均为大写。 |
-| `useGroupedAccessorPairs` | `error` | 强制在类和对象定义中将同一属性的 getter 和 setter 放在相邻位置。 |
-| `useImportType` | `error` | 鼓励对类型使用 `import type`。 |
+| `useGroupedAccessorPairs` | `error` | 强制在类和对象定义中将同一属性的 getter 和 setter 相邻放置。 |
+| `useImportType` | `error` | 提倡对类型使用 `import type`。 |
 | `useLiteralEnumMembers` | `error` | 要求所有枚举成员为字面量值。 |
 | `useNamingConvention` | `off` | 命名约定规则（已禁用）。 |
-| `useNodeAssertStrict` | `error` | 鼓励使用 `node:assert/strict` 而不是 `node:assert`。 |
+| `useNodeAssertStrict` | `error` | 提倡使用 `node:assert/strict` 而不是 `node:assert`。 |
 | `useNodejsImportProtocol` | `error` | 强制对 Node.js 内置模块使用 `node:` 协议。 |
-| `useNumberNamespace` | `error` | 使用 `Number` 的属性代替全局属性。 |
-| `useNumericSeparators` | `error` | 强制在数字字面量中使用数字分隔符。 |
-| `useObjectSpread` | `error` | 在构造新对象时优先使用对象扩展而不是 `Object.assign()`。 |
-| `useReadonlyClassProperties` | `error` | 如果成员在构造函数之外从未被修改，强制将其标记为 readonly。 |
-| `useSelfClosingElements` | `error` | 防止对没有子元素的组件使用额外的闭合标签。 |
-| `useShorthandAssign` | `error` | 在可能时要求使用赋值操作符的简写。 |
-| `useShorthandFunctionType` | `error` | 强制使用函数类型而不是带有调用签名的对象类型。 |
-| `useSingleVarDeclarator` | `off` | 禁止在同一变量声明语句中声明多个变量。 |
+| `useNumberNamespace` | `error` | 使用 `Number` 的属性替代全局属性。 |
+| `useNumericSeparators` | `error` | 强制在数字字面量中使用数值分隔符。 |
+| `useObjectSpread` | `error` | 在构造新对象时优先使用对象展开而不是 `Object.assign()`。 |
+| `useReadonlyClassProperties` | `error` | 如果成员在构造函数之外从未被修改，则强制将其标记为 readonly。 |
+| `useSelfClosingElements` | `error` | 防止对无子元素的组件使用额外的闭合标签。 |
+| `useShorthandAssign` | `error` | 在可能的情况下要求使用赋值运算符简写。 |
+| `useShorthandFunctionType` | `error` | 强制使用函数类型而不是带调用签名的对象类型。 |
+| `useSingleVarDeclarator` | `off` | 禁止在同一变量语句中声明多个变量。 |
 | `useSymbolDescription` | `error` | 要求为 `Symbol()` 提供描述参数。 |
 | `useTemplate` | `error` | 优先使用模板字面量而不是字符串拼接。 |
 | `useThrowNewError` | `error` | 抛出错误时要求使用 new。 |
 | `useThrowOnlyError` | `error` | 禁止抛出非 `Error` 值。 |
 | `useTrimStartEnd` | `error` | 强制使用 `String.trimStart()` 和 `String.trimEnd()` 代替 `String.trimLeft()` 和 `String.trimRight()`。 |
-| `useUnifiedTypeSignatures` | `error` | 禁止可以合并为单个签名的重载签名。 |
-| `noDescendingSpecificity` | `error` | 禁止在 CSS 中较低特异性的选择器出现在较高特异性选择器之后。 |
+| `useUnifiedTypeSignatures` | `error` | 禁止可以合并为单一签名的重载签名。 |
+| `noDescendingSpecificity` | `error` | 禁止低特异性选择器出现在高特异性选择器之后（CSS）。 |
 | `noValueAtRule` | `error` | 禁止在 css modules 中使用 `@value` 规则（CSS）。 |
 
-### 可疑模式
+### 可疑
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
 | `noAlert` | `error` | 禁止使用 `alert`、`confirm` 和 `prompt`。 |
-| `noApproximativeNumericConstant` | `error` | 使用标准常量而不是近似字面量。 |
-| `noAssignInExpressions` | `error` | 禁止在表达式中进行赋值。 |
+| `noApproximativeNumericConstant` | `error` | 使用标准常量代替近似的字面量。 |
+| `noAssignInExpressions` | `error` | 禁止在表达式中使用赋值。 |
 | `noAsyncPromiseExecutor` | `error` | 禁止将异步函数用作 Promise 执行器。 |
-| `noBiomeFirstException` | `error` | 防止在配置文件的 `files.includes` 中将 `!` 模式放在第一位。 |
-| `noBitwiseOperators` | `error` | 禁止位运算符。 |
-| `noCatchAssign` | `error` | 禁止在 catch 子句中重新赋值异常对象。 |
+| `noBiomeFirstException` | `error` | 防止在配置文件中将 `!` 模式置于 `files.includes` 的首位。 |
+| `noBitwiseOperators` | `error` | 禁止使用按位运算符。 |
+| `noCatchAssign` | `error` | 禁止在 catch 子句中重新赋值异常。 |
 | `noClassAssign` | `error` | 禁止重新赋值类成员。 |
-| `noCommentText` | `error` | 防止将注释插入为文本节点。 |
+| `noCommentText` | `error` | 防止注释被插入为文本节点。 |
 | `noCompareNegZero` | `error` | 禁止与 `-0` 进行比较。 |
 | `noConfusingLabels` | `error` | 禁止不是循环的带标签语句。 |
 | `noConfusingVoidType` | `error` | 禁止在泛型或返回类型之外使用 void 类型。 |
 | `noConsole` | `off` | 禁止使用 `console`。 |
 | `noConstEnum` | `error` | 禁止 TypeScript const enum。 |
-| `noConstantBinaryExpressions` | `error` | 禁止对值没有影响的表达式。 |
-| `noControlCharactersInRegex` | `error` | 防止在正则表达式字面量中出现控制字符及某些匹配控制字符的转义序列。 |
+| `noConstantBinaryExpressions` | `error` | 禁止操作不影响值的表达式。 |
+| `noControlCharactersInRegex` | `error` | 防止在正则表达式字面量中出现控制字符和某些匹配控制字符的转义序列。 |
 | `noDebugger` | `error` | 禁止使用 debugger。 |
 | `noDocumentCookie` | `error` | 禁止直接赋值给 document.cookie。 |
 | `noDoubleEquals` | `error` | 要求使用 `===` 和 `!==`。 |
 | `noDuplicateAtImportRules` | `error` | 禁止重复的 `@import` 规则（CSS）。 |
 | `noDuplicateCase` | `error` | 禁止重复的 case 标签。 |
 | `noDuplicateClassMembers` | `error` | 禁止重复的类成员。 |
-| `noDuplicateCustomProperties` | `error` | 禁止在声明块内出现重复的自定义属性（CSS）。 |
-| `noDuplicateElseIf` | `error` | 禁止在 if-else-if 链中出现重复条件。 |
-| `noDuplicateFields` | `error` | 禁止在 GraphQL 操作中出现重复字段。 |
-| `noDuplicateFontNames` | `error` | 禁止在字体家族中出现重复名称（CSS）。 |
-| `noDuplicateObjectKeys` | `error` | 禁止对象内部出现两个名称相同的键。 |
-| `noDuplicateParameters` | `error` | 禁止函数参数名重复。 |
-| `noDuplicateProperties` | `error` | 禁止在声明块内出现重复属性（CSS）。 |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | 禁止在关键帧块中出现重复选择器（CSS）。 |
-| `noDuplicateTestHooks` | `error` | 一个 describe 块中不应包含重复的钩子。 |
+| `noDuplicateCustomProperties` | `error` | 禁止在声明块中重复的自定义属性（CSS）。 |
+| `noDuplicateElseIf` | `error` | 禁止 if-else-if 链中重复的条件。 |
+| `noDuplicateFields` | `error` | 禁止在 GraphQL 操作中重复字段。 |
+| `noDuplicateFontNames` | `error` | 禁止字体族中重复的名字（CSS）。 |
+| `noDuplicateObjectKeys` | `error` | 禁止对象中出现两个相同名称的键。 |
+| `noDuplicateParameters` | `error` | 禁止重复的函数参数名。 |
+| `noDuplicateProperties` | `error` | 禁止在声明块中重复的属性（CSS）。 |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | 禁止在 keyframe 块中重复的选择器（CSS）。 |
+| `noDuplicateTestHooks` | `error` | 一个 describe 块不应包含重复的钩子。 |
 | `noEmptyBlock` | `error` | 禁止 CSS 空块（CSS）。 |
 | `noEmptyBlockStatements` | `error` | 禁止空的块语句和静态块。 |
 | `noEmptyInterface` | `error` | 禁止声明空接口。 |
-| `noEvolvingTypes` | `error` | 禁止通过重新赋值使变量演变为 any 类型。 |
+| `noEvolvingTypes` | `error` | 禁止变量通过重新赋值演变为 any 类型。 |
 | `noExplicitAny` | `error` | 禁止使用 any 类型。 |
 | `noExportsInTest` | `error` | 禁止在包含测试的文件中使用 export 或 module.exports。 |
-| `noExtraNonNullAssertion` | `error` | 防止在 TypeScript 文件中错误使用非空断言运算符 `!`。 |
-| `noFallthroughSwitchClause` | `error` | 禁止 switch 分支穿透（fallthrough）。 |
-| `noFocusedTests` | `error` | 禁止聚焦的测试。 |
+| `noExtraNonNullAssertion` | `error` | 防止在 TypeScript 文件中错误使用非空断言操作符 `!`。 |
+| `noFallthroughSwitchClause` | `error` | 禁止 switch 分支穿透。 |
+| `noFocusedTests` | `error` | 禁止聚焦测试。 |
 | `noFunctionAssign` | `error` | 禁止重新赋值函数声明。 |
-| `noGlobalAssign` | `error` | 禁止对原生对象和只读全局变量进行赋值。 |
-| `noGlobalIsFinite` | `error` | 使用 `Number.isFinite` 代替全局的 `isFinite`。 |
-| `noGlobalIsNan` | `error` | 使用 `Number.isNaN` 代替全局的 `isNaN`。 |
-| `noImplicitAnyLet` | `error` | 禁止在变量声明上使用隐式 any。 |
+| `noGlobalAssign` | `error` | 禁止对本地对象和只读全局变量进行赋值。 |
+| `noGlobalIsFinite` | `error` | 使用 `Number.isFinite` 替代全局 `isFinite`。 |
+| `noGlobalIsNan` | `error` | 使用 `Number.isNaN` 替代全局 `isNaN`。 |
+| `noImplicitAnyLet` | `error` | 禁止在变量声明上使用隐式 any 类型。 |
 | `noImportAssign` | `error` | 禁止对导入绑定进行赋值。 |
-| `noImportantInKeyframe` | `error` | 禁止在关键帧声明中出现无效的 `!important`（CSS）。 |
+| `noImportantInKeyframe` | `error` | 禁止在关键帧声明中使用无效的 `!important`（CSS）。 |
 | `noIrregularWhitespace` | `error` | 禁止使用不规则的空白字符。 |
-| `noLabelVar` | `error` | 禁止标签与变量同名。 |
+| `noLabelVar` | `error` | 禁止标签名与变量同名。 |
 | `noMisleadingCharacterClass` | `error` | 禁止在字符类语法中使用由多个代码点组成的字符。 |
-| `noMisleadingInstantiator` | `error` | 强制正确使用 `new` 和构造函数。 |
-| `noMisplacedAssertion` | `error` | 检查断言函数（例如 expect）是否位于 `it()` 调用内部。 |
-| `noMisrefactoredShorthandAssign` | `error` | 当变量同时出现在赋值两侧时，禁止使用简写赋值。 |
+| `noMisleadingInstantiator` | `error` | 强制正确使用 `new` 和 constructor。 |
+| `noMisplacedAssertion` | `error` | 检查断言函数（例如 expect）是否放在 `it()` 函数调用内部。 |
+| `noMisrefactoredShorthandAssign` | `error` | 当变量出现在赋值两侧时禁止使用简写赋值。 |
 | `noOctalEscape` | `error` | 禁止在字符串字面量中使用八进制转义序列。 |
-| `noPrototypeBuiltins` | `error` | 禁止直接使用 `Object.prototype` 的内建方法。 |
+| `noPrototypeBuiltins` | `error` | 禁止直接使用 `Object.prototype` 的内置方法。 |
 | `noQuickfixBiome` | `error` | 禁止在编辑器设置文件中使用 `quickfix.biome`。 |
-| `noRedeclare` | `error` | 禁止在相同作用域内重新声明变量、函数、类和类型。 |
+| `noRedeclare` | `error` | 禁止在同一作用域中重新声明变量、函数、类和类型。 |
 | `noRedundantUseStrict` | `error` | 防止出现冗余的 `use strict`。 |
 | `noSelfCompare` | `error` | 禁止两边完全相同的比较。 |
-| `noShadowRestrictedNames` | `error` | 禁止标识符遮蔽受限名称。 |
-| `noShorthandPropertyOverrides` | `error` | 禁止覆盖相关长属性的简写属性（CSS）。 |
+| `noShadowRestrictedNames` | `error` | 禁止标识符遮蔽受限制的名称。 |
+| `noShorthandPropertyOverrides` | `error` | 禁止把覆盖相关长属性的简写属性（CSS）。 |
 | `noSkippedTests` | `error` | 禁止被禁用的测试。 |
-| `noSparseArray` | `error` | 防止使用稀疏数组（带空洞的数组）。 |
+| `noSparseArray` | `error` | 防止使用稀疏数组（有空洞的数组）。 |
 | `noTemplateCurlyInString` | `error` | 禁止在普通字符串中使用模板字面量的占位语法。 |
 | `noThenProperty` | `error` | 禁止 then 属性。 |
-| `noTsIgnore` | `error` | 禁止使用 TypeScript 指令 `@ts-ignore`。 |
-| `noUnassignedVariables` | `error` | 禁止使用被读取但从未赋值的 let 或 var 变量。 |
-| `noUnknownAtRules` | `error` | 禁止未知的 at-rule（CSS）。 |
-| `noUnsafeDeclarationMerging` | `error` | 禁止接口与类之间不安全的声明合并。 |
-| `noUnsafeNegation` | `error` | 禁止使用不安全的取反（`!`）。 |
+| `noTsIgnore` | `error` | 防止使用 TypeScript 指令 `@ts-ignore`。 |
+| `noUnassignedVariables` | `error` | 禁止声明后未被赋值却被读取的 let 或 var 变量。 |
+| `noUnknownAtRules` | `error` | 禁止未知的 at 规则（CSS）。 |
+| `noUnsafeDeclarationMerging` | `error` | 禁止在接口和类之间进行不安全的声明合并。 |
+| `noUnsafeNegation` | `error` | 禁止使用不安全的否定（`!`）。 |
 | `noUselessEscapeInString` | `error` | 禁止在字符串字面量中使用不必要的转义。 |
 | `noUselessRegexBackrefs` | `error` | 禁止在正则表达式字面量中总是匹配空字符串的无用反向引用。 |
 | `noVar` | `error` | 禁止使用 `var`。 |
 | `noWith` | `error` | 在非严格上下文中禁止使用 `with` 语句。 |
-| `useAdjacentOverloadSignatures` | `error` | 禁止不相邻的重载签名存在。 |
+| `useAdjacentOverloadSignatures` | `error` | 禁止不相邻的重载签名。 |
 | `useAwait` | `error` | 确保异步函数使用 `await`。 |
-| `useBiomeIgnoreFolder` | `error` | 促进在配置文件中正确忽略文件夹的用法。 |
-| `useDefaultSwitchClauseLast` | `error` | 强制 switch 语句中的 default 子句放在最后。 |
-| `useErrorMessage` | `error` | 在创建内置错误时强制传入消息值。 |
-| `useGetterReturn` | `error` | 强制 getter 方法始终返回值。 |
-| `useGoogleFontDisplay` | `error` | 强制在使用 Google Fonts 时使用推荐的 display 策略。 |
-| `useGuardForIn` | `error` | 要求 for-in 循环包含 if 语句作为保护。 |
-| `useIsArray` | `error` | 使用 `Array.isArray()` 代替 `instanceof Array`。 |
+| `useBiomeIgnoreFolder` | `error` | 提倡在配置文件中正确使用忽略文件夹的方式。 |
+| `useDefaultSwitchClauseLast` | `error` | 强制在 switch 语句中将 default 子句放在最后。 |
+| `useErrorMessage` | `error` | 在创建内置错误时强制传递消息值。 |
+| `useGetterReturn` | `error` | 强制 getter 方法始终返回一个值。 |
+| `useGoogleFontDisplay` | `error` | 强制在 Google Fonts 中使用推荐的 display 策略。 |
+| `useGuardForIn` | `error` | 要求 for-in 循环包含一个 if 语句。 |
+| `useIsArray` | `error` | 使用 `Array.isArray()` 替代 `instanceof Array`。 |
 | `useIterableCallbackReturn` | `error` | 强制在可迭代回调中返回一致的值。 |
-| `useNamespaceKeyword` | `error` | 要求使用 namespace 关键字而不是 module 关键字来声明 TypeScript 命名空间。 |
+| `useNamespaceKeyword` | `error` | 要求使用 namespace 关键字而不是 `module` 关键字来声明 TypeScript 命名空间。 |
 | `useNumberToFixedDigitsArgument` | `error` | 强制在 `Number#toFixed()` 中使用 digits 参数。 |
-| `useStaticResponseMethods` | `error` | 在可能的情况下使用静态 `Response` 方法而不是 `new Response()` 构造函数。 |
-| `useStrictMode` | `error` | 强制在脚本文件中使用 `use strict` 指令。 |
+| `useStaticResponseMethods` | `error` | 在可能的情况下使用静态 `Response` 方法代替 `new Response()` 构造函数。 |
+| `useStrictMode` | `error` | 在脚本文件中强制使用指令 `use strict`。 |
 
-## 注意事项
+## 备注
 
-某些规则因与 Scanner 一起运行过慢而被禁用。正如 [Biome 文档](https://biomejs.dev/guides/investigate-slowness/#first-things-first) 所述，启用的项目规则在换取更高级分析的同时会带来性能开销。
+某些规则已被禁用，因为它们对于 Scanner 来说运行速度太慢。正如在 [Biome 文档](https://biomejs.dev/guides/investigate-slowness/#first-things-first) 中所述，已启用的项目规则已知会带来性能开销，以换取更高级的分析能力。
 
-在我们的测试中，我们发现这些规则可能会使 lint 的运行时间从 300ms 增加到 13s。
+在我们的测试中，我们发现这些规则可能会导致 lint 时间在 300ms 和 13s 之间产生差异。

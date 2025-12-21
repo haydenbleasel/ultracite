@@ -1,9 +1,9 @@
 ---
 title: Next.js
-description: Règles de linting spécifiques à Next.js pour Ultracite.
+description: Règles de lint spécifiques à Next.js pour Ultracite.
 ---
 
-La configuration Next.js contient des règles de linting spécifiques à Next.js pour l'optimisation des images, la structure du document et les patterns de l'App Router.
+La configuration Next.js contient des règles de lint spécifiques à Next.js pour l'optimisation des images, la structure du document et les modèles de l'App Router.
 
 ## Installation
 
@@ -21,37 +21,30 @@ Cette configuration ajoute des règles spécifiques au développement Next.js :
 
 - **Optimisation des images**: Imposer l'utilisation du composant Image de Next.js
 - **Structure du document**: Empêcher l'utilisation incorrecte des composants spéciaux de Next.js
-- **Composants client**: S'assurer que les composants client asynchrones sont correctement gérés
-- **Fichiers de configuration**: Traitement spécial pour les fichiers `next.config.*`
+- **Fichiers de configuration**: Gestion spéciale pour les fichiers `next.config.*`
 
 ## Règles spécifiques à Next.js
 
-### Expérimental
+### Performances
 
-| Règle | Réglage | Description |
+| Règle | Paramètre | Description |
 |------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Empêcher les composants client asynchrones dans Next.js. Les composants client doivent être synchrones ; utilisez des composants serveur pour les opérations asynchrones. |
-
-### Performance
-
-| Règle | Réglage | Description |
-|------|---------|-------------|
-| `noImgElement` | `error` | Interdire l'utilisation de l'élément HTML `<img>`. Utilisez plutôt le composant `<Image>` de Next.js pour l'optimisation automatique des images. |
+| `noImgElement` | `error` | Interdire l'utilisation de l'élément HTML `<img>`. Utiliser le composant `<Image>` de Next.js pour l'optimisation automatique des images. |
 
 ### Style
 
-| Règle | Réglage | Description |
+| Règle | Paramètre | Description |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Interdire l'utilisation de l'élément HTML `<head>`. Utilisez `next/head` de Next.js ou l'API de métadonnées de l'App Router à la place. |
+| `noHeadElement` | `error` | Interdire l'utilisation de l'élément HTML `<head>`. Utiliser `next/head` de Next.js ou l'API de métadonnées de l'App Router à la place. |
 
-### Comportements suspects
+### Suspicieux
 
-| Règle | Réglage | Description |
+| Règle | Paramètre | Description |
 |------|---------|-------------|
 | `noDocumentImportInPage` | `error` | Empêcher l'importation de `next/document` dans les fichiers de page. `_document.tsx` ne doit exister que dans `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Empêcher l'importation de `next/head` dans `_document.tsx`. Utilisez `<Head>` provenant de `next/document` à la place. |
+| `noHeadImportInDocument` | `error` | Empêcher l'importation de `next/head` dans `_document.tsx`. Utiliser `<Head>` depuis `next/document` à la place. |
 
-## Remplacements de fichiers de configuration
+## Remplacements pour les fichiers de configuration
 
 Le preset Next.js inclut un traitement spécial pour les fichiers de configuration et les composants de l'App Router :
 
@@ -74,7 +67,7 @@ Le preset Next.js inclut un traitement spécial pour les fichiers de configurati
 }
 ```
 
-Cela permet des modèles de configuration Next.js qui pourraient normalement ne pas passer les règles de linting.
+Cela permet d'utiliser des modèles de configuration Next.js qui ne passeraient pas typiquement les règles de lint.
 
 ### Pages et layouts de l'App Router
 
@@ -95,4 +88,4 @@ Cela permet des modèles de configuration Next.js qui pourraient normalement ne 
 }
 ```
 
-Les composants de pages et de layout de l'App Router sont autorisés à être asynchrones sans nécessiter `await`, car Next.js les gère spécialement pour le rendu côté serveur et la récupération de données.
+Les composants de page et de layout de l'App Router sont autorisés à être async sans nécessiter d'`await`, car Next.js les gère spécialement pour le rendu côté serveur et la récupération de données.

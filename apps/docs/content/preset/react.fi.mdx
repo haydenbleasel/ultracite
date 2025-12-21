@@ -1,13 +1,13 @@
 ---
 title: React
-description: React-kohtaiset linttaussäännöt Ultracitelle.
+description: React-spesifiset linttaussäännöt Ultraciteä varten.
 ---
 
-React-konfiguraatiossa on React-kohtaisia linttaussääntöjä JSX:lle, hookeille ja komponenttimalleille.
+React-konfiguraatio sisältää React-spesifisiä linttaussääntöjä JSX:lle, hookeille ja komponenttimalleille.
 
 ## Asennus
 
-Lisää React-konfiguraatio tiedostoosi `biome.jsonc`:
+Lisää React-konfiguraatio `biome.jsonc`-tiedostoosi:
 
 ```jsonc title="biome.jsonc"
 {
@@ -19,43 +19,37 @@ Lisää React-konfiguraatio tiedostoosi `biome.jsonc`:
 
 Tämä konfiguraatio lisää React-kehitykseen liittyviä sääntöjä:
 
-- **JSX-säännöt**: Varmistaa oikean JSX-syntaksin ja -käytännöt
-- **Hooks-säännöt**: Varmistaa, että React-hookeja käytetään oikein
-- **Komponenttisäännöt**: Varmistaa React-komponenttien parhaat käytännöt
-- **Children-käsittely**: Estää children-propin virheellisen käytön
+- **JSX-säännöt**: Pakottaa oikean JSX-syntaksin ja -käytännöt
+- **Hook-säännöt**: Varmistaa, että React-hookeja käytetään oikein
+- **Komponenttisäännöt**: Soveltaa React-komponenttien parhaita käytäntöjä
+- **Children-käsittely**: Estää virheellisen children-propin käytön
 
-## React-kohtaiset säännöt
+## React-spesifiset säännöt
 
 ### Oikeellisuus
 
 | Sääntö | Asetus | Kuvaus |
-|-------:|--------|--------|
-| `noChildrenProp` | `error` | Estää children-propin välittämisen. children tulee sijoittaa avaus- ja sulkutägien väliin. |
-| `noNestedComponentDefinitions` | `error` | Estää komponenttimäärittelyt muiden komponenttien sisällä. Tämä aiheuttaa tarpeettomia uudelleenrenderöintejä. |
-| `noReactPropAssignments` | `error` | Estää propien uudelleenmäärittelyn React-komponenteissa. Propeja tulisi käsitellä muuttumattomina. |
-| `noRenderReturnValue` | `error` | Estää `ReactDOM.render()`-kutsun paluuarvon käyttämisen. |
-| `noVoidElementsWithChildren` | `error` | Estää tyhjien elementtien (kuten `<img>`, `<br>`) childrenien käytön. |
-| `useExhaustiveDependencies` | `error` | Varmistaa, että kaikki riippuvuudet on määritelty oikein React-hookeissa (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Varmistaa, että kaikki React-hookit kutsutaan komponenttifunktioiden ylimmällä tasolla, ei silmukoissa, ehdoissa tai sisäkkäisissä funktioissa. |
-| `useJsxKeyInIterable` | `error` | Varmistaa, että iteratiiviset elementit sisältävät `key`-propin Reactin reconciliota varten. |
-
-### Kokeelliset
-
-| Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noReactForwardRef` | `error` | Estää legacy-muotoisen `React.forwardRef`-käytön. Käytä sen sijaan refiä propina (React 19+). |
+| `noChildrenProp` | `error` | Estä children-propin välittäminen propsina. children tulisi olla avaus- ja sulkutagien välissä. |
+| `noNestedComponentDefinitions` | `error` | Estä komponenttimäärittelyt muiden komponenttien sisällä. Tämä aiheuttaa tarpeettomia uudelleenrenderöintejä. |
+| `noReactPropAssignments` | `error` | Estä props-arvojen uudelleenmäärittely React-komponenteissa. Propsia tulisi käsitellä muuttumattomina. |
+| `noRenderReturnValue` | `error` | Estä `ReactDOM.render()`-funktion paluuarvon käyttäminen. |
+| `noVoidElementsWithChildren` | `error` | Estä, että tyhjillä elementeillä (esim. `<img>`, `<br>`) olisi children. |
+| `useExhaustiveDependencies` | `error` | Pakota, että kaikki riippuvuudet on määritelty oikein React-hookeissa (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Pakota, että kaikki React-hookit kutsutaan komponenttifunktioiden ylimmällä tasolla, ei silmukoiden, ehtojen tai sisäkkäisten funktioiden sisällä. |
+| `useJsxKeyInIterable` | `error` | Varmista, että iteroitavilla elementeillä on `key`-prop Reactin reconciliota varten. |
 
 ### Tyyli
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Varmistaa funktionaalisten komponenttien käytön luokkakomponenttien sijaan Reactissa. |
+| `useReactFunctionComponents` | `error` | Edellytä funktionaalisten komponenttien käyttöä luokkakomponenttien sijaan Reactissa. |
 
 ### Epäilyttävät
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Estää taulukkoindeksien käyttämisen key-arvoina. Indeksit eivät ole vakaita tunnisteita ja voivat aiheuttaa ongelmia komponentin tilan kanssa. |
-| `noDuplicateJsxProps` | `error` | Estää duplikaattipropit JSX:ssä. |
-| `noSuspiciousSemicolonInJsx` | `error` | Estää puolipisteet, jotka muuttaisivat JSX-elementtien semantiikkaa. |
-| `noReactSpecificProps` | `off` | Salli React-spesifit propit, kuten `className` ja `htmlFor`. |
+| `noArrayIndexKey` | `error` | Estä taulukon indeksien käyttöä key-arvoina. Indeksit eivät ole pysyviä tunnisteita ja voivat aiheuttaa ongelmia komponentin tilassa. |
+| `noDuplicateJsxProps` | `error` | Estä samojen ominaisuuksien toistuminen JSX:ssä. |
+| `noSuspiciousSemicolonInJsx` | `error` | Estä puolipisteet, jotka muuttavat JSX-elementtien semantiikkaa. |
+| `noReactSpecificProps` | `off` | Salli React-spesifiset propit kuten `className` ja `htmlFor`. |

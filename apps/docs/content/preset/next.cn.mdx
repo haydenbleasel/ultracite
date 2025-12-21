@@ -1,13 +1,13 @@
 ---
 title: Next.js
-description: Ultracite 的 Next.js 专用 lint 规则。
+description: 适用于 Next.js 的 Ultracite 特定 lint 规则。
 ---
 
-Next.js 配置包含针对图像优化、文档结构和 App Router 模式的 Next.js 专用 lint 规则。
+该 Next.js 配置包含针对图像优化、文档结构和 App Router 模式的 Next.js 特定 lint 规则。
 
 ## 安装
 
-将 Next.js 配置添加到你的 `biome.jsonc` 中：
+将 Next.js 配置添加到你的 `biome.jsonc`：
 
 ```jsonc title="biome.jsonc"
 {
@@ -21,39 +21,32 @@ Next.js 配置包含针对图像优化、文档结构和 App Router 模式的 Ne
 
 - **图像优化**: 强制使用 Next.js 的 Image 组件
 - **文档结构**: 防止不当使用 Next.js 的特殊组件
-- **客户端组件**: 确保异步客户端组件得到正确处理
-- **配置文件**: 对 `next.config.*` 文件的特殊处理
+- **配置文件**: 对 `next.config.*` 文件进行特殊处理
 
-## Next.js 专用规则
-
-### 试验规则
-
-| 规则 | 设置 | 描述 |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | 防止在 Next.js 中出现异步客户端组件。客户端组件应为同步；对于异步操作请使用服务器组件。 |
+## Next.js 特定规则
 
 ### 性能
 
-| 规则 | 设置 | 描述 |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noImgElement` | `error` | 禁止使用 `<img>` HTML 元素。请改用 Next.js 的 `<Image>` 组件以实现自动图像优化。 |
 
-### 风格
+### 样式
 
-| 规则 | 设置 | 描述 |
+| Rule | Setting | Description |
 |------|---------|-------------|
 | `noHeadElement` | `error` | 禁止使用 `<head>` HTML 元素。请改用 Next.js 的 `next/head` 或 App Router 的 metadata API。 |
 
-### 可疑规则
+### 可疑
 
-| 规则 | 设置 | 描述 |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | 防止在页面文件中导入 `next/document`。`_document.tsx` 应仅存在于 `pages/_document.tsx`。 |
-| `noHeadImportInDocument` | `error` | 防止在 `_document.tsx` 中导入 `next/head`。请改用来自 `next/document` 的 `<Head>`。 |
+| `noDocumentImportInPage` | `error` | 阻止在页面文件中导入 `next/document`。`_document.tsx` 应仅存在于 `pages/_document.tsx`。 |
+| `noHeadImportInDocument` | `error` | 阻止在 `_document.tsx` 中导入 `next/head`。请改为使用来自 `next/document` 的 `<Head>`。 |
 
 ## 配置文件覆盖
 
-Next.js 预设包含对配置文件和 App Router 组件的特殊处理：
+Next.js 预设对配置文件和 App Router 组件进行了特殊处理：
 
 ### Next.js 配置文件
 
@@ -74,9 +67,9 @@ Next.js 预设包含对配置文件和 App Router 组件的特殊处理：
 }
 ```
 
-这允许使用某些 Next.js 配置模式，这些模式在通常情况下可能无法通过 lint 规则。
+这允许某些 Next.js 配置模式（可能通常无法通过 lint 规则）存在。
 
-### App Router 页面与布局
+### App Router 页面和布局
 
 ```jsonc
 {
@@ -95,4 +88,4 @@ Next.js 预设包含对配置文件和 App Router 组件的特殊处理：
 }
 ```
 
-App Router 的页面和布局组件被允许为 async 而不需要使用 `await`，因为 Next.js 会对这些进行特殊处理以支持服务器端渲染和数据获取。
+App Router 的页面和布局组件允许为 async 而不需要使用 `await`，因为 Next.js 对这些在服务器端渲染和数据获取方面有特殊处理。

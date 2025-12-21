@@ -3,7 +3,7 @@ title: Qwik
 description: Qwik-spezifische Linting-Regeln für Ultracite.
 ---
 
-Die Qwik-Konfiguration enthält Qwik-spezifische Linting-Regeln für Serialisierung, sichtbare Tasks, lexikalischen Scope und Methodenverwendung.
+Die Qwik-Konfiguration enthält Qwik-spezifische Linting-Regeln für Serialisierung, sichtbare Tasks, lexikalischen Gültigkeitsbereich und Methodenverwendung.
 
 ## Installation
 
@@ -17,13 +17,11 @@ Fügen Sie die Qwik-Konfiguration zu Ihrer `biome.jsonc` hinzu:
 
 ## Übersicht
 
-Diese Konfiguration fügt Regeln hinzu, die speziell für die Qwik-Entwicklung gelten:
+Diese Konfiguration fügt Qwik-spezifische Regeln für die Entwicklung hinzu:
 
-- **Serialisierung**: Durchsetzung der korrekten Verwendung von Qwiks Resumability-Modell
-- **Sichtbare Tasks**: Verhindere unangemessene Verwendung von `useVisibleTask$`
-- **Lexikalischer Scope**: Sicherstellen des korrekten Variablenbereichs in `$`-Funktionen
-- **Methodenverwendung**: Durchsetzung korrekter Qwik-Methodenmuster
-- **React-spezifische Props**: Verbot von React-spezifischen Props in Qwik-Komponenten
+- **Serialisierung**: Erzwingt die richtige Verwendung von Qwiks Resumability-Modell
+- **Sichtbare Tasks**: Verhindert die ungeeignete Verwendung von `useVisibleTask$`
+- **React-spezifische Props**: Verhindert die Verwendung von React-spezifischen Props in Qwik-Komponenten
 
 ## Qwik-spezifische Regeln
 
@@ -31,15 +29,8 @@ Diese Konfiguration fügt Regeln hinzu, die speziell für die Qwik-Entwicklung g
 
 | Regel | Einstellung | Beschreibung |
 |------|-------------|-------------|
-| `noQwikUseVisibleTask` | `error` | Verhindert die Verwendung von `useVisibleTask$`. Dieser Hook führt Code auf dem Client sofort aus und untergräbt Qwiks Resumability. Verwenden Sie stattdessen wenn möglich `useTask$` oder `useResource$`. |
-| `useQwikClasslist` | `error` | Erzwingt die Verwendung der `class`-Objektsyntax statt String-Verkettung für dynamische Klassen in Qwik. |
-
-### Vorstufe
-
-| Regel | Einstellung | Beschreibung |
-|------|-------------|-------------|
-| `useQwikValidLexicalScope` | `error` | Erzwingt gültigen lexikalischen Scope in Qwiks `$`-Funktionen. Variablen aus äußeren Scopes müssen explizit erfasst werden. |
-| `useQwikMethodUsage` | `error` | Erzwingt die korrekte Verwendung Qwik-spezifischer Methoden und APIs. |
+| `noQwikUseVisibleTask` | `error` | Verhindert die Verwendung von `useVisibleTask$`. Dieser Hook führt Code sofort auf dem Client aus und untergräbt damit Qwiks Resumability. Verwenden Sie stattdessen, wenn möglich, `useTask$` oder `useResource$`. |
+| `useQwikClasslist` | `error` | Erzwingt die Verwendung der `class`-Objektsyntax statt String-Konkatenation für dynamische Klassen in Qwik. |
 
 ### Verdächtig
 

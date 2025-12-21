@@ -1,9 +1,9 @@
 ---
 title: Next.js
-description: Rialacha linnteála sonracha Next.js do Ultracite.
+description: Rialacha lintála sonracha Next.js le haghaidh Ultracite.
 ---
 
-Tá rialacha linnteála sonracha Next.js sa chumraíocht seo do bharrfheabhsú íomhánna, struchtúr doiciméid, agus patrúin an App Router.
+Tá sa chumraíocht Next.js rialacha lintála sonracha do bharrfheabhsú íomhá, struchtúr doiciméid, agus patrúin App Router.
 
 ## Suiteáil
 
@@ -17,45 +17,38 @@ Cuir an chumraíocht Next.js le do `biome.jsonc`:
 
 ## Forbhreathnú
 
-Cuirfidh an chumraíocht seo rialacha sonracha le forbairt Next.js:
+Cuirfidh an chumraíocht seo rialacha sonracha ar fáil le haghaidh forbartha Next.js:
 
-- **Barrfheabhsú Íomhá**: Éilíonn sé úsáid an Next.js Image component
-- **Struchtúr Doiciméid**: Cosain úsáid neamhchruinn na gcomhpháirteanna speisialta Next.js
-- **Comhpháirteanna Cliant**: Déan cinnte go láimhseáiltear comhpháirteanna cliant asíncrónacha i gceart
+- **Barrfheabhsú Íomhá**: Éiligh úsáid an chomhlachta Image de Next.js le haghaidh barrfheabhsú íomhá uathoibríoch
+- **Struchtúr Doiciméid**: Cosc ar úsáid míchuí de chomhlachtaí speisialta Next.js
 - **Comhaid Cumraíochta**: Láimhseáil speisialta do chomhaid `next.config.*`
 
 ## Rialacha Sonracha Next.js
 
-### Turgnamh
-
-| Rialacha | Socrú | Cur Síos |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Cosc ar chomhpháirteanna cliant asíncrónacha i Next.js. Ba chóir go mbeadh comhpháirteanna cliant síncrónach; bain úsáid as comhpháirteanna freastalaí do oibríochtaí asíncrónacha. |
-
 ### Feidhmíocht
 
-| Rialacha | Socrú | Cur Síos |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noImgElement` | `error` | Cosc ar úsáid an eilimint HTML `<img>`. Bain úsáid as an Next.js `<Image>` component ina ionad chun barrfheabhsú íomhá uathoibríoch a fháil. |
+| `noImgElement` | `error` | Ní cheadaítear úsáid an eilimint HTML `<img>`. Úsáid an chomhlacht `<Image>` de Next.js in áit sin le haghaidh barrfheabhsú íomhá uathoibríoch. |
 
 ### Stíl
 
-| Rialacha | Socrú | Cur Síos |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Cosc ar úsáid an eilimint HTML `<head>`. Bain úsáid as `next/head` de Next.js nó an metadata API an App Router ina ionad. |
+| `noHeadElement` | `error` | Ní cheadaítear úsáid an eilimint HTML `<head>`. Úsáid `next/head` de Next.js nó API metadata App Router ina áit. |
 
 ### Amhrasach
 
-| Rialacha | Socrú | Cur Síos |
+| Rule | Setting | Description |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Cosc ar `next/document` a iompórtáil i gcomhaid leathanach. Ba chóir `_document.tsx` a bheith ann ach amháin i `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Cosc ar `next/head` a iompórtáil i `_document.tsx`. Bain úsáid as `<Head>` ó `next/document` ina ionad. |
+| `noDocumentImportInPage` | `error` | Cosc ar allmhairiú `next/document` i gcomhaid leathanach. Ba chóir go mbeadh `_document.tsx` ann ach amháin i `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Cosc ar allmhairiú `next/head` i `_document.tsx`. Úsáid `<Head>` ó `next/document` ina áit. |
 
-## Athshocruithe Comhad Cumraíochta
+## Sárshocruithe Comhad Cumraíochta
 
-Cuimsíonn an réamhshocrú Next.js láimhseáil speisialta do chomhaid chumraíochta agus do chomhpháirteanna App Router:
+Cuimsíonn an réamhshocrú Next.js láimhseáil speisialta do chomhaid chumraíochta agus do chomhlachtaí App Router:
 
-### Comhaid Cumraíochta Next.js
+### Comhaid Chumraíochta Next.js
 
 ```jsonc
 {
@@ -74,9 +67,9 @@ Cuimsíonn an réamhshocrú Next.js láimhseáil speisialta do chomhaid chumraí
 }
 ```
 
-Ceadaíonn sé seo patrúin chumraíochta Next.js nach gcuirfeadh pas orthu rialacha linnteála de ghnáth.
+Ligeann sé seo patrúin chumraíochta Next.js nach bhféadfadh de ghnáth pas a fháil trí rialacha lintála.
 
-### Leathanaigh agus Leagan Amach App Router
+### Leathanaigh agus Leaganacha App Router
 
 ```jsonc
 {
@@ -95,4 +88,4 @@ Ceadaíonn sé seo patrúin chumraíochta Next.js nach gcuirfeadh pas orthu rial
 }
 ```
 
-Ceadaítear do chomhpháirteanna leathanach agus leagan amach an App Router a bheith asíncrónacha gan `await` a éileamh, mar go láimhseálann Next.js iad seo go speisialta do rindreáil ar thaobh an fhreastalaí agus do fháil sonraí.
+Ceadaítear go mbeidh comhlachtaí leathanach agus leaganacha App Router async gan gá le `await`, toisc go láimhseálann Next.js iad seo go speisialta le haghaidh rindreáil taobh-fhreastalaí agus fáil sonraí.

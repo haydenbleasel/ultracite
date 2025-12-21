@@ -1,9 +1,9 @@
 ---
 title: Qwik
-description: Qwik-specifikke lint-regler for Ultracite.
+description: Qwik-specifikke linting-regler for Ultracite.
 ---
 
-Qwik-konfigurationen indeholder Qwik-specifikke lint-regler for serialisering, synlige opgaver, leksikalsk scope og metodebrug.
+Qwik-konfigurationen indeholder Qwik-specifikke linting-regler for serialisering, synlige opgaver, leksikalsk omfang og metodebrug.
 
 ## Installation
 
@@ -17,12 +17,10 @@ Tilføj Qwik-konfigurationen til din `biome.jsonc`:
 
 ## Oversigt
 
-Denne konfiguration tilføjer regler, der er specifikke for Qwik-udvikling:
+Denne konfiguration tilføjer regler specifikke for Qwik-udvikling:
 
-- **Serialisering**: Håndhæv korrekt brug af Qwiks resumability-model
-- **Synlige opgaver**: Forhindre upassende brug af `useVisibleTask$`
-- **Leksikalsk scope**: Sikre korrekt variabelomfang i `$`-funktioner
-- **Metodebrug**: Håndhæv korrekte Qwik-metodemønstre
+- **Serialisering**: Håndhæv korrekt brug af Qwiks resumabilitetsmodel
+- **Synlige opgaver**: Forhindre uhensigtsmæssig brug af `useVisibleTask$`
 - **React-specifikke props**: Forbyd React-specifikke props i Qwik-komponenter
 
 ## Qwik-specifikke regler
@@ -31,17 +29,10 @@ Denne konfiguration tilføjer regler, der er specifikke for Qwik-udvikling:
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Forhindre brug af `useVisibleTask$`. Denne hook kører kode straks på klienten, hvilket underminerer Qwiks resumability. Brug `useTask$` eller `useResource$` i stedet, når det er muligt. |
-| `useQwikClasslist` | `error` | Håndhæv brug af `class`-objektsyntaks i stedet for strengkonkatenering for dynamiske klasser i Qwik. |
+| `noQwikUseVisibleTask` | `error` | Forhindre brug af `useVisibleTask$`. Denne hook kører kode øjeblikkeligt på klienten og undergraver Qwiks resumabilitetsmodel. Brug `useTask$` eller `useResource$` i stedet, når det er muligt. |
+| `useQwikClasslist` | `error` | Håndhæv brug af `class`-objektsyntaks i stedet for strengsammenkædning til dynamiske klasser i Qwik. |
 
-### Nursery
-
-| Regel | Indstilling | Beskrivelse |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Håndhæv gyldigt leksikalsk scope i Qwiks `$`-funktioner. Variabler fra ydre scopes skal eksplicit fanges. |
-| `useQwikMethodUsage` | `error` | Håndhæv korrekt brug af Qwik-specifikke metoder og API'er. |
-
-### Mistænkeligt
+### Mistænkelige
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|

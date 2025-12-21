@@ -1,13 +1,13 @@
 ---
 title: Next.js
-description: Nestejs-spesifikke lint-regler for Ultracite.
+description: Next.js-spesifikke lintregler for Ultracite.
 ---
 
-The Next.js configuration has Next.js-specific linting rules for image optimization, document structure, and App Router patterns.
+Next.js-konfigurasjonen inneholder Next.js-spesifikke lintregler for bildeoptimalisering, dokumentstruktur og App Router-mønstre.
 
 ## Installasjon
 
-Add the Next.js configuration to your `biome.jsonc`:
+Legg til Next.js-konfigurasjonen i din `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,43 +17,36 @@ Add the Next.js configuration to your `biome.jsonc`:
 
 ## Oversikt
 
-This configuration adds rules specific to Next.js development:
+Denne konfigurasjonen legger til regler som er spesifikke for Next.js-utvikling:
 
-- **Image-optimalisering**: Påse bruk av Next.js `<Image>`-komponenten
-- **Dokumentstruktur**: Forhindre feil bruk av Next.js-spesielle komponenter
-- **Klientkomponenter**: Sørg for at asynkrone klientkomponenter håndteres korrekt
+- **Bildeoptimalisering**: Håndhev bruk av Next.js `<Image>`-komponenten
+- **Dokumentstruktur**: Forhindre feil bruk av spesielle Next.js-komponenter
 - **Konfigurasjonsfiler**: Spesiell håndtering for `next.config.*`-filer
 
 ## Next.js-spesifikke regler
-
-### Eksperimentell
-
-| Regel | Innstilling | Beskrivelse |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Forhindre asynkrone klientkomponenter i Next.js. Klientkomponenter bør være synkrone; bruk serverkomponenter for asynkrone operasjoner. |
 
 ### Ytelse
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `noImgElement` | `error` | Ikke tillat bruk av `<img>` HTML-elementet. Bruk Next.js `<Image>`-komponenten i stedet for automatisk bildeoptimalisering. |
+| `noImgElement` | `error` | Forby bruk av `<img>` HTML-elementet. Bruk Next.js `<Image>`-komponenten i stedet for automatisk bildeoptimalisering. |
 
 ### Stil
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Ikke tillat bruk av `<head>` HTML-elementet. Bruk Next.js `next/head` eller App Router metadata-API i stedet. |
+| `noHeadElement` | `error` | Forby bruk av `<head>` HTML-elementet. Bruk Next.js `next/head` eller App Router metadata-API i stedet. |
 
 ### Mistenkelige
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Forhindre import av `next/document` i sidefiler. `_document.tsx` skal kun eksistere i `pages/_document.tsx`. |
+| `noDocumentImportInPage` | `error` | Forhindre import av `next/document` i sidefiler. `_document.tsx` bør bare eksistere i `pages/_document.tsx`. |
 | `noHeadImportInDocument` | `error` | Forhindre import av `next/head` i `_document.tsx`. Bruk `<Head>` fra `next/document` i stedet. |
 
 ## Overstyringer for konfigurasjonsfiler
 
-The Next.js preset includes special handling for configuration files and App Router components:
+Next.js-presetet inkluderer spesiell håndtering for konfigurasjonsfiler og App Router-komponenter:
 
 ### Next.js-konfigurasjonsfiler
 
@@ -74,9 +67,9 @@ The Next.js preset includes special handling for configuration files and App Rou
 }
 ```
 
-Dette tillater Next.js-konfigurasjonsmønstre som kanskje vanligvis ikke ville passere lint-regler.
+Dette tillater Next.js-konfigurasjonsmønstre som normalt kanskje ikke ville passere lintereglene.
 
-### App Router-sider og layouter
+### App Router-sider og -layouts
 
 ```jsonc
 {
@@ -95,4 +88,4 @@ Dette tillater Next.js-konfigurasjonsmønstre som kanskje vanligvis ikke ville p
 }
 ```
 
-App Router-side- og layout-komponenter kan være asynkrone uten å kreve `await`, ettersom Next.js håndterer disse spesielt for server-side rendering og datainnhenting.
+App Router-side- og layoutkomponenter kan være async uten å kreve `await`, siden Next.js håndterer disse spesielt for gjengivelse på serversiden og datahenting.

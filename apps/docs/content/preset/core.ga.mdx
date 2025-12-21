@@ -1,19 +1,19 @@
 ---
-title: Croí
-description: Cumraíocht bhunúsach Ultracite le rialacha lintála neamhchlaonta-iosctha.
+title: Lárnach
+description: Cumraíocht bhunúsach Ultracite le rialacha lintála atá neamhspleách ar chreatlacha.
 ---
 
-Soláthraíonn cumraíocht chroí Ultracite tacar cuimsitheach rialacha lintála neamhchlaonta-iosctha agus socruithe formáidithe. Is é seo an bunús a leathnaíonn gach cumrú sonraíoch freagrachta eile.
+Soláthraíonn cumraíocht lárnach Ultracite sraith chuimsitheach rialacha lintála agus socruithe formáidithe atá neamhspleách ar chreatlacha. Is é seo an bonn a leathnaíonn gach cumraíocht shonrach do chreatlach eile.
 
 ## Suiteáil
 
-Tá an chumraíocht chroí san áireamh go huathoibríoch nuair a ritheann tú:
+Cuimsítear an cumraíocht lárnach go huathoibríoch nuair a rith tú:
 
 ```bash
 npx ultracite init
 ```
 
-Nó cuir leis de láimh i do `biome.jsonc`:
+Nó cuir leis de láimh í i do `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -23,457 +23,419 @@ Nó cuir leis de láimh i do `biome.jsonc`:
 
 ## Forbhreathnú
 
-Cuimsíonn an chumraíocht chroí na céadta rialacha dian lintála a dhéanaíonn clúdach ar:
+Cuimsíonn an cumraíocht lárnach céadta rialacha dian lintála a chlúdaíonn:
 
-- **Inrochtaineacht (a11y)**: Forchuireann tréithe ARIA, HTML seimeantach, agus nascleanúint méarchláir
-- **Castacht**: Laghdú ar chasta intleachtúil agus forchuimhnigh dea-chleachtais
-- **Céartas**: Cosc ar earráidí coitianta agus forchuimhnigh sábháilteacht cineál
-- **Feidhmíocht**: Optamú cód le haghaidh feidhmíochta rith níos fearr
+- **Inrochtaineacht (a11y)**: Fhorordaíonn tréithe ARIA, HTML shaimhriúil, agus nascleanúint méarchlár
+- **Castaíocht**: Laghdóidh sé an castaacht chognaíoch agus forordaíonn sé cleachtais is fearr
+- **Éagaracht**: Cosc ar earráidí coitianta agus forordaíonn sé sábháilteacht cineálacha
+- **Feidhmíocht**: Optamóidh sé cód le haghaidh feidhmíochta reatha níos fearr
 - **Slándáil**: Cosc ar leochaileachtaí slándála
-- **Stíl**: Forchuimhnigh stíl chód chomhsheasmhach
-- **Amhrasach**: Gabhaimid patrúin amhrasacha a d’fhéadfadh a bheith ina fabhtanna
+- **Stíl**: Forordaíonn sé stíl chóid chomhsheasmhach
+- **Amhrasach**: Beartaíonn sé patrúin amhrasacha a d’fhéadfadh a bheith ina bhibí
 
 ## Socruithe Formáidithe
 
-- **Tabhairt isteach**: 2 spásanna
+- **Ionduchtú**: 2 spás
 - **Leithead Líne**: 80 carachtar
-- **Deiridh Líne**: LF (stíl Unix)
-- **Seimicolúin**: Riachtanach i gcónaí
-- **Luacháin**: Luacháin dhúbailte do JavaScript/TypeScript agus JSON
-- **Camáin Deiridh**: Stíl ES5 (eagar/obair illíne)
-- **Lúibíní Saigheada**: Cuir i gcónaí lúibíní san áireamh
+- **Deireadh Líne**: LF (stíl Unix)
+- **Leathphoncanna**: Teastaíonn i gcónaí
+- **Marcanna luachála**: Marcanna luachála dúbailte do JavaScript/TypeScript agus JSON
+- **Virgúlacha Scoir**: Stíl ES5 (sa raonta/obaircheap il-líne)
+- **Llianthearnóga sa Saighead**: Cuir i gcónaí lúibíní isteach
 
 ## Príomhghnéithe
 
-### Dianas TypeScript
+### Seiceálacha Dian TypeScript
 
-Ceadaíonn an chumraíocht chroí seiceálacha dian TypeScript:
+Cumasaíonn an cumraíocht lárnach seiceálacha dian TypeScript:
 
-- Spreagann sé neamhúsáid `any` (`noExplicitAny: error`)
+- Spreagann sé gan úsáid a bhaint as `any` (`noExplicitAny: error`)
 - Éilíonn sé láimhseáil `null/undefined`
-- Cothaíonn sé cineálacha sainmhínithe i gcásanna áirithe
-- Forchuireann sé sábháilteacht cineál ar fud an bhunachar cód
+- Taitníonn sé le cineálacha soiléire i gcásanna áirithe
+- Forordaíonn sé sábháilteacht cineálacha ar fud an bhunachóid
 
-### Cothromóidí molta ESLint
+### Comhionanna Molta ag ESLint
 
-Tá rialacha cleachtais is fearr coitianta san áireamh:
+Cuimsítear rialacha coitianta cleachtais is fearr:
 
-- Gan athróga neamhúsáidte (`noUnusedVariables: error`)
-- Gan iompórtálacha neamhúsáidte (`noUnusedImports: error`)
-- Gan eval shoiléir (`noGlobalEval: error`)
-- Gan truailliú protacalóige (`noPrototypeBuiltins: error`)
+- Gan athróg neamhúsáidte (`noUnusedVariables: error`)
+- Gan ionchur neamhúsáidte (`noUnusedImports: error`)
+- Gan `eval` sainráite (`noGlobalEval: error`)
+- Gan truailliú protaplásma (`noPrototypeBuiltins: error`)
 
-### Inrochtaineacht de réir réamhshocraithe
+### Inrochtaineacht de Réamhshocraithe
 
-Rialacha comhréireacha le caighdeáin inrochtaineachta:
+Rialacha comhionanna le caighdeáin inrochtaineachta:
 
-- Ní mór go mbeadh tréithe ARIA bailí
-- Tosaítear ar eilimintí HTML seimeantacha
-- Éilítear tacaíocht nascleanúna méarchláir
+- Caithfidh tréithe ARIA a bheith bailí
+- Moltar eilimintí HTML shaimhriúla
+- Éilítear tacaíocht do nascleanúint méarchlár
 - Éilítear téacs alt do íomhánna
 
-### Tacaíocht Node.js
+### Tacaíocht do Node.js
 
-Láimhseáil shonrach don timpeallacht:
+Láimhseáil tiomáinte ag an timpeallacht:
 
-- Aithníonn sé glóibálacha Node.js (`module`, `process`)
-- Forchuireann sé an prótacal `node:` do mhodúil ionsuite
+- Aithníonn sé domhanfhorais Node.js (`module`, `process`)
+- Forordaíonn sé an phrótacal `node:` do mhodúil ionsuite
 - Tacaíonn sé le CommonJS agus ESM araon
 
-## Tagairt Iomlán do Rialacha
+## Tagairt Iomlán na Rialacha
 
 ### Inrochtaineacht (a11y)
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noAccessKey` | `error` | Forchuireann nach bhfuil an tréith `accessKey` in úsáid ar aon eilimint HTML. |
-| `noAriaHiddenOnFocusable` | `error` | Forchuireann nach bhfuil `aria-hidden="true"` socraithe ar eilimintí is féidir fócas a chur orthu. |
-| `noAriaUnsupportedElements` | `error` | Forchuireann nach bhfuil tréithe ARIA i bhfeidhm ar eilimintí nach dtacaíonn le rólacha, stáit, agus airíonna ARIA. |
-| `noAutofocus` | `off` | Forchuireann nach bhfuil an prop `autoFocus` in úsáid ar eilimintí. |
-| `noDistractingElements` | `error` | Forchuireann nach bhfuil eilimintí mearbhallacha in úsáid. |
-| `noHeaderScope` | `error` | Ba chóir an prop scope a úsáid ach ar eilimintí `<th>`. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Forchuireann nach gcuirtear rólacha ARIA neamh-idirdhealaithe ar eilimintí HTML idirghníomhacha. |
-| `noLabelWithoutControl` | `error` | Forchuireann go bhfuil lipéad ar eilimint nó comhghearradh agus go bhfuil ionchur nasctha aige. |
-| `noNoninteractiveElementInteractions` | `error` | Diúltaíonn sé láimhseálaithe imeachtaí a úsáid ar eilimintí neamh-idirdhealaithe. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Forchuireann nach gcuirtear rólacha idirghníomhacha ARIA ar eilimintí HTML neamh-idirdhealaithe. |
-| `noNoninteractiveTabindex` | `error` | Forchuireann nach gcuirtear `tabIndex` ar eilimintí HTML neamh-idirdhealaithe. |
-| `noPositiveTabindex` | `error` | Cosc ar úsáid ainteagair dhiúltacha ar an airíonna `tabIndex`. |
-| `noRedundantAlt` | `error` | Forchuireann nach bhfuil na focail `image`, `picture`, nó `photo` sa prop alt ar `img`. |
-| `noRedundantRoles` | `error` | Forchuireann nach bhfuil an prop róil shoiléir mar an gcéanna le róil shlíúl/rianúil ar eilimint. |
-| `noStaticElementInteractions` | `error` | Forchuireann go n-úsáidtear an tréith róil bailí ar eilimintí statacha infheicthe (mar `<div>`) a bhfuil láimhseálaithe cliceála acu. |
-| `noSvgWithoutTitle` | `error` | Forchuireann úsáid an eilimint title don eilimint `svg`. |
-| `useAltText` | `error` | Forchuireann go bhfuil eolas bríúil ar gach eilimint a éilíonn téacs malartach chun aiseolas a thabhairt don úsáideoir deiridh. |
-| `useAnchorContent` | `error` | Forchuireann go bhfuil ábhar ag naisc agus go bhfuil an t-ábhar inacmhainne do léitheoirí scáileáin. |
-| `useAriaActivedescendantWithTabindex` | `error` | Forchuireann go gcuirtear `tabIndex` ar eilimintí HTML neamh-idirdhealaithe a bhfuil aria-activedescendant orthu. |
-| `useAriaPropsForRole` | `error` | Forchuireann go mbeidh gach airíonna ARIA riachtanacha ag eilimintí le róil ARIA don ról sin. |
-| `useAriaPropsSupportedByRole` | `error` | Forchuireann go bhfuil airíonna ARIA bailí don róil a thacaíonn an eilimint leo. |
-| `useButtonType` | `error` | Forchuireann úsáid an tréith `type` don eilimint cnaipe. |
-| `useFocusableInteractive` | `error` | Ba chóir go mbeadh eilimintí le ról idirghníomhach agus láimhseálaithe idirghníomhaíochta in ann fócas a fháil. |
-| `useHeadingContent` | `error` | Forchuireann go bhfuil ábhar ag eilimintí ceanntásc (`h1`, `h2`, srl.) agus go bhfuil an t-ábhar inacmhainne do léitheoirí scáileáin. |
-| `useHtmlLang` | `error` | Forchuireann go bhfuil an tréith `lang` ar an eilimint `html`. |
-| `useIframeTitle` | `error` | Forchuireann úsáid an tréith title don eilimint iframe. |
-| `useKeyWithClickEvents` | `error` | Forchuireann go gcomhtháthaítear `onClick` le ar a laghad ceann de na seo a leanas: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Forchuireann go gcomhtháthaítear `onMouseOver` / `onMouseOut` le `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Forchuireann go gcaithfidh eilimintí fuaime agus físe rian bheith acu do fotheideal. |
-| `useSemanticElements` | `error` | Aimsíonn sé úsáid airíonna ról i eilimintí JSX agus molann úsáid eilimintí seimeantacha ina ionad. |
-| `useValidAnchor` | `error` | Forchuireann go bhfuil gach nasc bailí agus gur eilimintí nascleanúna iad. |
-| `useValidAriaProps` | `error` | Cinntíonn sé go bhfuil airíonna ARIA `aria-*` go léir bailí. |
-| `useValidAriaRole` | `error` | Ní mór d’eilimintí le róil ARIA ról ARIA bailí, neamh-achoimr. |
-| `useValidAriaValues` | `error` | Forchuireann go bhfuil stáit agus luachanna airíonna ARIA bailí. |
-| `useValidAutocomplete` | `error` | Úsáid luachanna bailí don tréith autocomplete ar eilimintí ionchuir. |
-| `useValidLang` | `error` | Cinntíonn sé go bhfuil an t-aireacht a chuirtear ar an tréith `lang` ina ISO teanga agus/nó tír cheart. |
-| `useGenericFontNames` | `error` | Diúltaíonn easpa eochairfhocail teaghlaigh ginearálta laistigh de theaghlaigh cló (CSS). |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noAccessKey` | `error` | Forordaíonn nach mbaintear úsáid as an airíonna `accessKey` ar aon eilimint HTML. |
+| `noAriaHiddenOnFocusable` | `error` | Forordaíonn nach bhfuil `aria-hidden="true"` socraithe ar eilimintí inrochtana le fócas. |
+| `noAriaUnsupportedElements` | `error` | Forordaíonn nach bhfuil tréithe ARIA curtha ar eilimintí nach dtacaíonn le rólacha, stáid, agus airíonna ARIA. |
+| `noAutofocus` | `off` | Forordaíonn nach mbaintear úsáid as prop `autoFocus` ar eilimintí. |
+| `noDistractingElements` | `error` | Forordaíonn nach n-úsáidtear eilimintí a dhéanann cur isteach. |
+| `noHeaderScope` | `error` | Ba chóir an prop scope a úsáid ar eilimintí `<th>` amháin. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Forordaíonn nach gcuirtear rólacha ARIA neamh-idirghníomhaíocha ar eilimintí HTML idirghníomhacha. |
+| `noLabelWithoutControl` | `error` | Forordaíonn go bhfuil téacs lipéid ar eilimint lipéad nó comhlacht agus go bhfuil ionchur nasctha aige. |
+| `noNoninteractiveElementInteractions` | `error` | Diúltaítear handlerí imeachtaí a úsáid ar eilimintí neamh-idirghníomhacha. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Forordaíonn nach gcuirtear rólacha ARIA idirghníomhacha ar eilimintí HTML neamh-idirghníomhacha. |
+| `noNoninteractiveTabindex` | `error` | Forordaíonn nach gcuirtear `tabIndex` ar eilimintí HTML neamh-idirghníomhacha. |
+| `noPositiveTabindex` | `error` | Réamhchosnaíonn sé úsáid uimhreacha dearfacha ar an airíonna `tabIndex`. |
+| `noRedundantAlt` | `error` | Forordaíonn nach bhfuil an focal `image`, `picture`, nó `photo` sa prop alt íomhá. |
+| `noRedundantRoles` | `error` | Forordaíonn nach bhfuil an prop ról shoiléir céanna leis an ról shíneach/sochúil ar eilimint. |
+| `noStaticElementInteractions` | `error` | Forordaíonn go n-úsáidtear an airíonna ról bailí ar eilimintí statacha, inrochtana (mar `<div>`) a bhfuil láimhseálaithe cliceála orthu. |
+| `noSvgWithoutTitle` | `error` | Forordaíonn úsáid an eilimint title don eilimint `svg`. |
+| `useAltText` | `error` | Forordaíonn go mbeadh téacs malartach bríúil ag gach eilimint a éilíonn téacs malartach chun eolas a chur ar ais chuig an úsáideoir deiridh. |
+| `useAnchorContent` | `error` | Forordaíonn go bhfuil ábhar ag nascanna agus go bhfuil an t-ábhar inrochtana do scáileánléitheoirí. |
+| `useAriaActivedescendantWithTabindex` | `error` | Forordaíonn go gcuirtear `tabIndex` ar eilimintí HTML neamh-idirghníomhacha le aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Forordaíonn go gcaithfidh eilimintí le rólacha ARIA a bheith ina n-airíonna ARIA riachtanacha go léir don ról sin. |
+| `useAriaPropsSupportedByRole` | `error` | Forordaíonn go bhfuil airíonna ARIA bailí do na rólacha a thacaítear leis an eilimint. |
+| `useButtonType` | `error` | Forordaíonn úsáid an airíonna `type` don eilimint cnaipe. |
+| `useFocusableInteractive` | `error` | Caithfidh eilimintí le ról idirghníomhach agus láimhseálaithe idirghníomhaíochta a bheith inchliceáilte. |
+| `useHeadingContent` | `error` | Forordaíonn go bhfuil ábhar ag eilimintí ceanncheathrú (`h1`, `h2`, srl.) agus go bhfuil an t-ábhar inrochtana do scáileánléitheoirí. |
+| `useHtmlLang` | `error` | Forordaíonn go bhfuil airíonna `lang` ag an eilimint `html`. |
+| `useIframeTitle` | `error` | Forordaíonn úsáid an airíonna title don eilimint iframe. |
+| `useKeyWithClickEvents` | `error` | Forordaíonn go dtéann `onClick` le ceann ar a laghad de na cinn seo: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Forordaíonn go dtagann `onMouseOver` / `onMouseOut` le `onFocus` / `onBlur`. |
+| `useMediaCaption` | `error` | Forordaíonn go gcaithfidh eilimintí fuaime agus físe rian a bheith acu do fotheidil. |
+| `useSemanticElements` | `error` | Aithníonn sé úsáid airíonna ról i eilimintí JSX agus molann sé eilimintí shaimhriúla a úsáid ina ionad. |
+| `useValidAnchor` | `error` | Forordaíonn go bhfuil gach nasc bailí, agus gur eilimintí nasctha iad. |
+| `useValidAriaProps` | `error` | Cinntíonn sé go bhfuil airíonna ARIA `aria-*` uile bailí. |
+| `useValidAriaRole` | `error` | Caithfidh eilimintí le rólacha ARIA ról bailí, neamh-ganacha a úsáid. |
+| `useValidAriaValues` | `error` | Forordaíonn go bhfuil luachanna staid agus airíonna ARIA bailí. |
+| `useValidAutocomplete` | `error` | Úsáid luachanna bailí don airíonna autocomplete ar eilimintí ionchuir. |
+| `useValidLang` | `error` | Cinntíonn sé go bhfuil an t-airíonna a chuirtear ar an `lang` ina ISO teanga agus/nó tír cheart. |
+| `useGenericFontNames` | `error` | Diúltaíonn easpa eochairfhocail teaghlach ghinearálta laistigh de theaghlaigh cló (CSS). |
 
-### Castacht
+### Castaíocht
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Diúltaítear úsáid míchinnte de charachtair spáis as a chéile i litreacha rialta riachtanacha. |
-| `noArguments` | `error` | Diúltaítear úsáid na n-arguments. |
-| `noBannedTypes` | `error` | Diúltaítear aliasanna cineál bunúsacha agus cineálacha míchruinne. |
-| `noCommaOperator` | `error` | Diúltaítear an oibréir camóige. |
-| `noEmptyTypeParameters` | `error` | Diúltaítear paraiméadair chineál folmha i aliasanna cineál agus comhéadan. |
-| `noExcessiveCognitiveComplexity` | `error` | Diúltaítear feidhmeanna a théann thar scór Cognitive Complexity sonraithe. |
-| `noExcessiveLinesPerFunction` | `off` | Teorannú ar líon línte cód i bhfeidhm. |
-| `noExcessiveNestedTestSuites` | `error` | Forchuireann an riail seo doimhneacht uasta do `describe()` atá cuimsithe i gcomhaid tástála. |
-| `noExtraBooleanCast` | `error` | Diúltaítear loisintí booleacha neamh-riartha. |
-| `noFlatMapIdentity` | `error` | Diúltaítear úsáid callbhac gan ghá ar `flatMap`. |
-| `noForEach` | `error` | Moltar an ráiteas `for...of` in ionad `Array.forEach`. |
-| `noImplicitCoercions` | `off` | Diúltaítear comhshó cineál giorrúcháin. |
-| `noImportantStyles` | `off` | Diúltaítear úsáid an stíl `!important` (CSS). |
-| `noStaticOnlyClass` | `error` | Tuairiscíonn an riail seo nuair nach bhfuil baill neamh-statacha i gclase. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noAdjacentSpacesInRegex` | `error` | Diúltaíonn úsáid míchinnteach spásanna seasta as a chéile i nlitreacha imoibrithe rialta. |
+| `noArguments` | `error` | Diúltaítear úsáid `arguments`. |
+| `noBannedTypes` | `error` | Diúltaítear alaiseanna cineál primitiúil agus cineálacha míthreoracha. |
+| `noCommaOperator` | `error` | Diúltaítear oibríóir camóga. |
+| `noEmptyTypeParameters` | `error` | Diúltaítear paraiméadair chineáil fháinneacha i aliaseanna cineál agus comhéadan. |
+| `noExcessiveCognitiveComplexity` | `error` | Diúltaítear feidhmeanna a sháraíonn scór Sonas Cognaíoch áirithe. |
+| `noExcessiveLinesPerFunction` | `off` | Srian leagtha ar líon na líneacha cód i bhfeidhm. |
+| `noExcessiveNestedTestSuites` | `error` | Forordaíonn an rialachán doimhneacht uasta do `describe()` faoi na comhad tástála. |
+| `noExtraBooleanCast` | `error` | Diúltaítear caiteach boolean neamhriachtanach. |
+| `noFlatMapIdentity` | `error` | Diúltaítear úsáid callback neamhriachtanach ar `flatMap`. |
+| `noForEach` | `error` | Moltar an ráiteas `for...of` seachas `Array.forEach`. |
+| `noImplicitCoercions` | `off` | Diúltaítear tiontaithe cineál gairid. |
+| `noImportantStyles` | `off` | Diúltaítear úsáid an stíle `!important` (CSS). |
+| `noStaticOnlyClass` | `error` | Tuairiscíonn an rialachán nuair nach bhfuil baill neamh-statacha ag rang. |
 | `noThisInStatic` | `error` | Diúltaítear `this` agus `super` i gcomhthéacsanna statacha. |
-| `noUselessCatch` | `error` | Diúltaítear gnáthaiscéimeanna catch neamh-riartha. |
+| `noUselessCatch` | `error` | Diúltaítear gabhálacha catch neamhriachtanacha. |
 | `noUselessConstructor` | `error` | Diúltaítear tógálaithe neamhriachtanacha. |
-| `noUselessContinue` | `error` | Seachain úsáid continue gan ghá. |
-| `noUselessEmptyExport` | `error` | Diúltaítear easpórtálacha folmha nach ndéanann aon athrú i gcomhad modúl. |
-| `noUselessEscapeInRegex` | `error` | Diúltaítear seichimh éalaithe éagórach i litreacha rialta riachtanacha. |
-| `noUselessFragments` | `error` | Diúltaítear slisceanna neamh-riartha. |
-| `noUselessLabel` | `error` | Diúltaítear lipéid neamh-riartha. |
-| `noUselessLoneBlockStatements` | `error` | Diúltaítear ráitis bloc inmhalartaithe neamh-riartha. |
-| `noUselessRename` | `error` | Diúltaítear athainmniú iompórtála, easpórtála, agus folúntas scriosta chuig an ainm céanna. |
-| `noUselessStringConcat` | `error` | Diúltaítear cumasc teicstí nó teimpléid nach bhfuil gá leo. |
-| `noUselessStringRaw` | `error` | Diúltaítear `String.raw` gan ghá i dteimpléid téacs nach bhfuil aon seichimh éalaithe inti. |
-| `noUselessSwitchCase` | `error` | Diúltaítear cás úsáideach i ráitis switch. |
-| `noUselessTernary` | `error` | Diúltaítear oibríochtaí ternary nuair atá iomláine níos simplí ar fáil. |
-| `noUselessThisAlias` | `error` | Diúltaítear aliasáil `this` gan ghá. |
-| `noUselessTypeConstraint` | `error` | Diúltaítear `any` nó `unknown` a úsáid mar theorainn chineál. |
-| `noUselessUndefinedInitialization` | `error` | Diúltaítear hathchóirithe athróga go `undefined`. |
-| `noVoid` | `error` | Diúltaítear úsáid oibréadaí `void`, nach bhfuil coitianta. |
-| `useArrowFunction` | `error` | Úsáid feidhmeanna saigheada seachas nathanna feidhme. |
-| `useDateNow` | `error` | Úsáid `Date.now()` chun líon na millisecond ó Unix Epoch a fháil. |
+| `noUselessContinue` | `error` | Seachnaímid úsáid continue neamhriachtanach. |
+| `noUselessEmptyExport` | `error` | Diúltaítear easpórtálacha folamh nach n-athraíonn faic i gcomhad modúl. |
+| `noUselessEscapeInRegex` | `error` | Diúltaítear seichimh éalaithe neamhriachtanacha i nlitreacha imoibrithe rialta. |
+| `noUselessFragments` | `error` | Diúltaítear slisní neamhriachtanacha. |
+| `noUselessLabel` | `error` | Diúltaítear lipéid neamhriachtanacha. |
+| `noUselessLoneBlockStatements` | `error` | Diúltaítear ráitis bhlocáin atá gan úsáid go hinmheánach. |
+| `noUselessRename` | `error` | Diúltaítear athainmniú iompórtála, easpórtála, agus ailínithe dístruchtúrtha chuig an ainm céanna. |
+| `noUselessStringConcat` | `error` | Diúltaítear comhiomlánú sreinge neamhriachtanach nó shnáithlí teimpléid. |
+| `noUselessStringRaw` | `error` | Diúltaítear úsáid neamhriachtanach `String.raw` i snáitheanna teimpléid gan aon seichimh éalaithe. |
+| `noUselessSwitchCase` | `error` | Diúltaítear cásanna úsáideacha i ráitis switch. |
+| `noUselessTernary` | `error` | Diúltaítear oibríocht ternary nuair atá malairtí simplí ar fáil. |
+| `noUselessThisAlias` | `error` | Diúltaítear aliasing `this` nach bhfuil úsáideach. |
+| `noUselessTypeConstraint` | `error` | Diúltaítear úsáid `any` nó `unknown` mar choinníoll cineál. |
+| `noUselessUndefinedInitialization` | `error` | Diúltaítear athshocrú athróg go `undefined`. |
+| `noVoid` | `error` | Diúltaítear úsáid oibríora `void`, nach é an t-oibriú coitianta é. |
+| `useArrowFunction` | `error` | Úsáid feidhmeanna saighead thar léiriúcháin feidhme. |
+| `useDateNow` | `error` | Úsáid `Date.now()` chun líon na milliúin ó Eocha an Unix a fháil. |
 | `useFlatMap` | `error` | Spreagann sé úsáid `.flatMap()` nuair a úsáidtear `map().flat()` le chéile. |
-| `useIndexOf` | `error` | Roghnaigh `Array#{indexOf,lastIndexOf}()` thar `Array#{findIndex,findLastIndex}()` nuair atá á lorg innéacs mír. |
-| `useLiteralKeys` | `error` | Forchuireann úsáid rochtain fhíorúil ar airíonna seachas rochtain airíonna ríofa. |
-| `useNumericLiterals` | `error` | Diúltaítear `parseInt()` agus `Number.parseInt()` i bhfabhar litreacha dénártha, ochtghrád agus heicsdhéante. |
-| `useOptionalChain` | `error` | Forchuireann úsáid an slabhra roghnach giorra seachas nathanna logacha slabhraí. |
-| `useRegexLiterals` | `error` | Forchuireann úsáid litreacha rialta seachas an tógálaí `RegExp` más féidir. |
-| `useSimpleNumberKeys` | `error` | Diúltaítear ainmneacha rannóg rudaí ina bhfuil luachanna uimhriúla nach iad an bun-10 nó a úsáideann underscore mar scaradóir. |
-| `useSimplifiedLogicExpression` | `error` | Scaoileann téarmaí athfhillteacha ó nathanna loighiciúla. |
-| `useWhile` | `error` | Forchuireann úsáid lúbanna while seachas for nuair nach bhfuil an tús agus nuashonrú riachtanach. |
+| `useIndexOf` | `error` | Moltar `Array#{indexOf,lastIndexOf}()` thar `Array#{findIndex,findLastIndex}()` nuair atáimid ag lorg innéacs míre. |
+| `useLiteralKeys` | `error` | Forordaíonn úsáid rochtana litrigh ar mhaoin seachas rochtain mhaoin ríomhe. |
+| `useNumericLiterals` | `error` | Diúltaítear `parseInt()` agus `Number.parseInt()` i bhfabhar litreacha uimhriúla dénártha, ochtach agus heicsideacimal. |
+| `useOptionalChain` | `error` | Forordaíonn úsáid an slabhra roghnach cuimsitheacha in áit nathanna loighciúla slabhraithe. |
+| `useRegexLiterals` | `error` | Forordaíonn úsáid litreacha imoibrithe rialta seachas constructeur `RegExp` más féidir. |
+| `useSimpleNumberKeys` | `error` | Diúltaítear ainmneacha baill réad literacha uimhreacha nach bhfuil bun-10 iad nó a úsáideann únder-scritheora mar scaradóir. |
+| `useSimplifiedLogicExpression` | `error` | Baintear téarmaí athfhillteach ó nathanna loighciúla. |
+| `useWhile` | `error` | Forordaíonn úsáid lúbanna while in ionad lúbanna for nuair nach bhfuil an t-ionsaothróir agus an nuashonrú riachtanach. |
 
-### Céartas
+### Éagaracht
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noConstAssign` | `error` | Sábhálann sé go ndéantar athshocrú ar athróga const. |
-| `noConstantCondition` | `error` | Diúltaítear abairtí seasta i gcoinníollacha. |
-| `noConstantMathMinMaxClamp` | `error` | Diúltaítear úsáid `Math.min` agus `Math.max` chun luach a chlampáil áit a bhfuil an toradh seasta. |
-| `noConstructorReturn` | `error` | Diúltaítear luachan a thabhairt ó thógálaí. |
-| `noEmptyCharacterClassInRegex` | `error` | Diúltaítear ranna carachtair folmha i litreacha rialta riachtanacha. |
-| `noEmptyPattern` | `error` | Diúltaítear patrúin dí-struchtúraithe folmha. |
-| `noGlobalDirnameFilename` | `error` | Diúltaítear úsáid `__dirname` agus `__filename` sa scóip ghinearálta. |
-| `noGlobalObjectCalls` | `error` | Diúltaítear glaonna ar airíonna réad domhanda mar fheidhmeanna. |
-| `noInnerDeclarations` | `error` | Diúltaítear ráitis feidhme agus `var` atá inrochtana taobh amuigh dá mbloic. |
-| `noInvalidBuiltinInstantiation` | `error` | Cinntíonn sé go bhfuil ionsuite ag tógáil beartaithe i gceart. |
-| `noInvalidConstructorSuper` | `error` | Cosc ar úsáid mícheart `super()` laistigh de ranganna. |
-| `noInvalidDirectionInLinearGradient` | `error` | Diúltaítear luachanna treorach neamhchaighdeánacha do fheidhmeanna grádáin líneacha (CSS). |
-| `noInvalidGridAreas` | `error` | Diúltaítear réigiúin gríde ainmniúcháin neamhbhailí i leaganacha Grid CSS. |
-| `noInvalidPositionAtImportRule` | `error` | Diúltaítear úsáid `@import` i suíomhanna neamhbhailí (CSS). |
-| `noInvalidUseBeforeDeclaration` | `error` | Diúltaítear úsáid athróg agus paraiméadar feidhme sula bhfógrófar iad. |
-| `noMissingVarFunction` | `error` | Diúltaítear easpa feidhme `var` do athróga css (CSS). |
-| `noNodejsModules` | `off` | Forchoimeádas ar úsáid modúl ionsuite Node.js. |
-| `noNonoctalDecimalEscape` | `error` | Diúltaítear seichimh éalaithe `\8` agus `\9` i litreacha téacs. |
-| `noPrecisionLoss` | `error` | Diúltaítear uimhreacha liteartha a chailleann cruinneas. |
-| `noPrivateImports` | `off` | Srian ar iompórtálacha as easpórtálacha phríobháidí. |
-| `noProcessGlobal` | `off` | Diúltaítear úsáid an ghlóbaile `process`. |
-| `noRestrictedElements` | `error` | Diúltaítear úsáid eilimintí cumraithe. |
-| `noSelfAssign` | `error` | Diúltaítear socruithe ina bhfuil an dá thaobh díreach mar an gcéanna. |
-| `noSetterReturn` | `error` | Diúltaítear luachan a thabhairt ó shocraítheoir. |
-| `noStringCaseMismatch` | `error` | Diúltaítear comparáid idir nathanna a athraíonn cás téacs le luach neamhcomhlíonta. |
-| `noSwitchDeclarations` | `error` | Diúltaítear fógrúcháin léxacha i ngairdíní switch. |
-| `noUndeclaredDependencies` | `off` | Diúltaítear úsáid spleáchais nach bhfuil liostaithe i `package.json`. |
-| `noUndeclaredVariables` | `error` | Cosc ar úsáid athróg nach bhfuil fógraithe sa doiciméad. |
-| `noUnknownFunction` | `error` | Diúltaítear feidhmeanna luachanna CSS anaithnid (CSS). |
-| `noUnknownMediaFeatureName` | `error` | Diúltaítear ainmneacha gné meán anaithnid (CSS). |
-| `noUnknownProperty` | `error` | Diúltaítear airíonna anaithnid (CSS). |
-| `noUnknownPseudoClass` | `error` | Diúltaítear roghnóirí pseudo-aicme anaithnid (CSS). |
-| `noUnknownPseudoElement` | `error` | Diúltaítear roghnóirí pseudo-eilimint anaithnid (CSS). |
-| `noUnknownTypeSelector` | `error` | Diúltaítear roghnóirí cineál anaithnid (CSS). |
-| `noUnknownUnit` | `error` | Diúltaítear aonaid CSS anaithnid (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Diúltaítear roghnóirí An+B nach bhfuil in ann comharthú a dhéanamh (CSS). |
-| `noUnreachable` | `error` | Diúltaítear cód nach bhfuil inrochtain air. |
-| `noUnreachableSuper` | `error` | Cinntíonn sé go bhfuil `super()` glaoch once ar gach cosán cód i tógálaí rang sula n-úsáidtear é seo. |
-| `noUnsafeFinally` | `error` | Diúltaítear ráitis sreafa rialaithe i blocanna finally. |
-| `noUnsafeOptionalChaining` | `error` | Diúltaítear úsáid an slabhra roghnach i gcomhthéacsanna nach bhfuil `undefined` ceadaithe. |
-| `noUnusedFunctionParameters` | `error` | Diúltaítear paraiméadair feidhme neamhúsáidte. |
-| `noUnusedImports` | `error` (safe fix override) | Diúltaítear iompórtálacha neamhúsáidte. |
-| `noUnusedLabels` | `error` | Diúltaítear lipéid neamhúsáidte. |
-| `noUnusedPrivateClassMembers` | `error` | Diúltaítear baill príobháideacha rang nach n-úsáidtear. |
-| `noUnusedVariables` | `error` | Diúltaítear athróga neamhúsáidte. |
-| `noVoidTypeReturn` | `error` | Diúltaítear luachan ó fheidhm le cineál fillte `void`. |
-| `useGraphqlNamedOperations` | `error` | Forchuireann ainmniú oibríochtaí GraphQL. |
-| `useImageSize` | `error` | Forchuireann go bhfuil airíonna leithead agus airde ag eilimintí `<img>`. |
-| `useImportExtensions` | `off` | Forchuireann síneadh comhad do iompórtálacha coibhneasta. |
-| `useIsNan` | `error` | Éilíonn glaonna ar `isNaN()` nuair a sheiceálann tú NaN. |
-| `useJsonImportAttributes` | `off` | Forchuireann úsáid `{ type: "json" }` do iompórtálacha modúl JSON. |
-| `useParseIntRadix` | `error` | Forchuireann úsáid chonsistear an argóint radix nuair a úsáidtear `parseInt()`. |
-| `useSingleJsDocAsterisk` | `error` | Forchuireann go dtosaíonn línte trácht JSDoc le réaltóg amháin, seachas an chéad cheann. |
-| `useUniqueElementIds` | `off` | Cosc ar úsáid tréithe id téacs seasta ar eilimintí. |
-| `useValidForDirection` | `error` | Forchuireann nach bhogann dáileoir lúb `for` an comhaire i dtreo mícheart. |
-| `useValidTypeof` | `error` | Seiceálann an riail seo go ndéantar torthaí expression `typeof` a chur i gcomparáid le luach bailí. |
-| `useYield` | `error` | Éilíonn sé go bhfuil `yield` i bhfeidhmeanna gineadóra. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noConstAssign` | `error` | Coscann sé athchúrsáil ar athróga const. |
+| `noConstantCondition` | `error` | Diúltaíonn nathanna seasta i gcoinníollacha. |
+| `noConstantMathMinMaxClamp` | `error` | Diúltaíonn úsáid `Math.min` agus `Math.max` chun luach a chur ar fionraí nuair atá an toradh féin seasta. |
+| `noConstructorReturn` | `error` | Diúltaíonn tuairisceán luacha ó tógálaí. |
+| `noEmptyCharacterClassInRegex` | `error` | Diúltaíonn ranna carachtair folmha i nlitreacha imoibrithe rialta. |
+| `noEmptyPattern` | `error` | Diúltaíonn patrúin dhístruchtúrtha folmha. |
+| `noGlobalDirnameFilename` | `error` | Diúltaíonn úsáid `__dirname` agus `__filename` sa scóip dhomhanda. |
+| `noGlobalObjectCalls` | `error` | Diúltaíonn glaonna ar airíonna réad domhanda mar fheidhmeanna. |
+| `noInnerDeclarations` | `error` | Diúltaíonn fógraí feidhme agus `var` atá inrochtana lasmuigh dá mbhloc. |
+| `noInvalidBuiltinInstantiation` | `error` | Cinntíonn go ndéantar builtin a instealladh i gceart. |
+| `noInvalidConstructorSuper` | `error` | Coscann sé úsáid mícheart `super()` laistigh de ranganna. |
+| `noInvalidDirectionInLinearGradient` | `error` | Diúltaíonn luachanna treorach neamhchaighdeánacha do fheidhmeanna grádán líneach (CSS). |
+| `noInvalidGridAreas` | `error` | Diúltaíonn réimsí greill ainmniúcháin neamhbhailí i Léagan Gréasáin CSS (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Diúltaíonn úsáid rialacha `@import` i suíomhanna neamhbhailí (CSS). |
+| `noInvalidUseBeforeDeclaration` | `error` | Diúltaíonn úsáid athróg agus paraiméadar feidhme roimh a bhfógra. |
+| `noMissingVarFunction` | `error` | Diúltaíonn easpa feidhme `var` do athróga css (CSS). |
+| `noNodejsModules` | `off` | Cosc ar úsáid modúl ionsuite Node.js. |
+| `noNonoctalDecimalEscape` | `error` | Diúltaíonn seichimh éalaithe `\8` agus `\9` i snáithíní. |
+| `noPrecisionLoss` | `error` | Diúltaíonn uimhreacha litrigh a chaillfidh cruinneas. |
+| `noPrivateImports` | `off` | Srian ar iompórtálacha easpórtálacha príobháideacha. |
+| `noProcessGlobal` | `off` | Diúltaíonn úsáid na domhanforais `process`. |
+| `noRestrictedElements` | `error` | Diúltaíonn úsáid eilimintí cumraithe. |
+| `noSelfAssign` | `error` | Diúltaíonn socruithe ina bhfuil an dá thaobh díreach an rud céanna. |
+| `noSetterReturn` | `error` | Diúltaíonn tuairisceán luacha ó shocróir. |
+| `noStringCaseMismatch` | `error` | Diúltaíonn comparáid idir nathanna a athraíonn cás sreinge le luach neamh-chomhlíontach. |
+| `noSwitchDeclarations` | `error` | Diúltaíonn fógraí léarscála i gcúigí switch. |
+| `noUndeclaredDependencies` | `off` | Diúltaíonn úsáid spleáchais nach bhfuil luaite i `package.json`. |
+| `noUndeclaredVariables` | `error` | Coscann sé úsáid athróg nach bhfuil fógraithe laistigh den doiciméad. |
+| `noUnknownFunction` | `error` | Diúltaíonn feidhmeanna luach CSS anaithnid (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Diúltaíonn ainmneacha gné meán anaithnid (CSS). |
+| `noUnknownProperty` | `error` | Diúltaíonn airíonna anaithnid (CSS). |
+| `noUnknownPseudoClass` | `error` | Diúltaíonn roghnóirí pseudo-class anaithnid (CSS). |
+| `noUnknownPseudoElement` | `error` | Diúltaíonn roghnóirí pseudo-element anaithnid (CSS). |
+| `noUnknownTypeSelector` | `error` | Diúltaíonn roghnóirí cineál anaithnid (CSS). |
+| `noUnknownUnit` | `error` | Diúltaíonn aonaid CSS anaithnid (CSS). |
+| `noUnmatchableAnbSelector` | `error` | Diúltaíonn roghnóirí An+B nach féidir a mheaitseáil (CSS). |
+| `noUnreachable` | `error` | Diúltaíonn cód nach bhfuil inrochtaine. |
+| `noUnreachableSuper` | `error` | Cinntíonn go bhfuil `super()` glaochta go huathoibríoch agus díreach uair amháin ar gach cosán cód i tógálaí rang roimh rochtain ar seo. |
+| `noUnsafeFinally` | `error` | Diúltaíonn ráitis sreabhadh rialaithe i mblocanna finally. |
+| `noUnsafeOptionalChaining` | `error` | Diúltaíonn úsáid slabhra roghnach i gcomhthéacsanna nach bhfuil luach neamhbhailí glactha. |
+| `noUnusedFunctionParameters` | `error` | Diúltaíonn paraiméadair feidhme neamhúsáidte. |
+| `noUnusedImports` | `error` (safe fix override) | Diúltaíonn iompórtálacha neamhúsáidte. |
+| `noUnusedLabels` | `error` | Diúltaíonn lipéid neamhúsáidte. |
+| `noUnusedPrivateClassMembers` | `error` | Diúltaíonn baill phríobháideacha ranganna nach n-úsáidtear. |
+| `noUnusedVariables` | `error` | Diúltaíonn athróga neamhúsáidte. |
+| `noVoidTypeReturn` | `error` | Diúltaíonn tuairisceán luacha ó fhheidhm le cineál fillte `void`. |
+| `useGraphqlNamedOperations` | `error` | Forordaíonn ainmniú oibríochtaí GraphQL. |
+| `useImageSize` | `error` | Forordaíonn go bhfuil airíonna width agus height ag eilimintí `<img>`. |
+| `useImportExtensions` | `off` | Forordaíonn síneadh comhad d’iompórtálacha coibhneasta. |
+| `useIsNan` | `error` | Éilíonn glaonna ar `isNaN()` nuair atá ag seiceáil le haghaidh NaN. |
+| `useJsonImportAttributes` | `off` | Forordaíonn úsáid le `{ type: "json" }` d’iompórtálacha modúl JSON. |
+| `useParseIntRadix` | `error` | Forordaíonn úsáid chonsistéanta an argóint radix agus `parseInt()`. |
+| `useSingleJsDocAsterisk` | `error` | Forordaíonn línte trácht JSDoc a thosú le réalta shingil, seachas an chéad cheann. |
+| `useUniqueElementIds` | `off` | Cosc ar úsáid airíonna id litreach shlán ar eilimintí. |
+| `useValidForDirection` | `error` | Forordaíonn go gluaiseann for-loop an t-uaireadóir sa treo ceart san ordú nuashonraithe. |
+| `useValidTypeof` | `error` | Seiceálann an rialachán go bhfuil toradh nathanna `typeof` comparáide le luach bailí. |
+| `useYield` | `error` | Éilíonn feidhmeanna gineadóra cineálacha a bheith ina bhfuil `yield`. |
 
-### Naíolann
+### Díonghráin (Nursery)
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | Diúltaítear tuairiscí téacs nasc éiginnte. |
-| `noContinue` | `off` | Diúltaítear ráitis continue. |
-| `noDeprecatedImports` | `off` | Srian ar iompórtálacha as easpórtálacha atá as dáta. |
-| `noDuplicateDependencies` | `error` | Cosc ar liostáil spleáchais dúbailte. |
-| `noDuplicatedSpreadProps` | `error` | Diúltaítear airíonna dúbailte i props scaipeadh. |
-| `noEmptySource` | `error` | Diúltaítear comhaid foinse folmha. |
-| `noEqualsToNull` | `error` | Diúltaítear `==` nó `!=` a úsáid le `null`. Úsáid `===` nó `!==` ina ionad. |
-| `noFloatingPromises` | `off` | Éilíonn sé go láimhseofar ráitis cosúil le Promise i gceart. |
-| `noForIn` | `off` | Diúltaítear athrá ag úsáid lúb for-in. |
-| `noImportCycles` | `off` | Cosc ar timthriallta iompórtála. |
-| `noIncrementDecrement` | `error` | Diúltaítear úsáid na n-oibréadar `++` agus `--` (seachas sa chuid for-loop afterthoughts). |
-| `noJsxLiterals` | `off` | Diúltaítear litreacha téacs laistigh de eilimintí JSX. |
-| `noLeakedRender` | `error` | Cosc ar luachanna sceite fadhbacha i JSX (m.sh., 0 nó NaN) ó bheith líonta. |
-| `noMisusedPromises` | `off` | Diúltaítear Promises a úsáid i suíomhanna ina bhfuil siad beagnach cinnte botún. |
-| `noMultiStr` | `error` | Diúltaítear téacs illíne ag úsáid leanúna siombailí fillte. |
-| `noParametersOnlyUsedInRecursion` | `error` | Diúltaítear paraiméadair a úsáidtear ach i glaonna athfhillteacha. |
-| `noProto` | `error` | Diúltaítear úsáid an airíonna `__proto__`. |
-| `noScriptUrl` | `error` | Diúltaítear URLanna `javascript:` a chuirfidh rioscaí slándála (mar XSS). |
-| `noShadow` | `error` | Diúltaítear fógrúcháin athróige a dhíonnann athróga sa scóip seachtrach. |
-| `noSyncScripts` | `error` | Cosc ar úsáid scripteanna sioncrónacha. |
-| `noTernary` | `off` | Diúltaítear oibréadar ternary. |
-| `noUndeclaredEnvVars` | `error` | Diúltaítear úsáid athróg timpeallachta gan a bheith fógraithe i `turbo.json`. |
-| `noUnnecessaryConditions` | `off` | Diúltaítear coinníollacha bunaithe ar chineál nach bhfuil riachtanach a mheastar go staitistiúil mar ábhar athrán. |
-| `noUnresolvedImports` | `off` | Foláireamh nuair a dhéantar iompórtáil easpórtála neamhchuirfe. |
-| `noUnusedExpressions` | `error` | Diúltaítear ráitis nath nach bhfuil glao feidhme ná tasc iad. |
-| `noUselessCatchBinding` | `off` | Diúltaítear ceangail catch neamhúsáidte. |
-| `noUselessUndefined` | `error` | Diúltaítear úsáid `undefined` gan ghá. |
-| `useArraySortCompare` | `off` | Forchuireann úsáid feidhme comparáide i `Array.prototype.sort()`. |
-| `useAwaitThenable` | `off` | Forchuireann go n-úsáidtear `await` ar luachanna Promise amháin. |
-| `useConsistentArrowReturn` | `error` | Forchuireann comhsheasmhacht i gcomhlachtaí feidhme saigheada. |
-| `useConsistentGraphqlDescriptions` | `error` | Éilíonn sé go leanann gach tuairisc an stíl chéanna (bloc nó líne) laistigh de comhaid GraphQL. |
-| `useDeprecatedDate` | `error` | Éilíonn an treoir `@deprecated` dáta scriosta a shonrú. |
-| `useExhaustiveSwitchCases` | `off` | Éilíonn sé go bhfuil ráitis switch-case iomlán. |
-| `useExplicitType` | `off` | Forchuireann cineálacha i bhfeidhmeanna, modhanna, athróga, agus paraiméadair. |
-| `useFind` | `off` | Forchuireann úsáid `Array.prototype.find()` thar `Array.prototype.filter()` + `[0]` nuair atá toradh aonair á lorg. |
-| `useMaxParams` | `error` | Forchuireann uasteorainn ar líon na bparaiméadar i sraitheanna feidhme. |
-| `useRegexpExec` | `off` | Forchuireann `RegExp#exec` thar `String#match` nuair nach bhfuil calafair dhomhanda. |
-| `useRequiredScripts` | `off` | Forchuireann láithreacht iontrálacha inroghnacha i gcuid `scripts` de chomhaid `package.json`. |
-| `useSortedClasses` | `error` (safe fix override) | Forchuireann an ordú ar chláir fóntais CSS. |
-| `useSpread` | `error` | Forchuireann úsáid an oibréadaí scaipe seachas `Function.prototype.apply()`. |
-| `useUniqueGraphqlOperationName` | `error` | Cinntíonn sé go bhfuil ainmneacha uathúla ag gach oibríocht GraphQL laistigh de doiciméad. |
+Bíonn rialacha an-núrsery de ghnáth neamhghníomh i Ultracite mar go bhfuil siad turgnamhach agus d’fhéadfadh siad athrú nó a bheith bainte amach i leaganacha Biome amach anseo. Mar sin féin, tá an rialachán seo cumasaithe de bharr tóir:
+
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `useSortedClasses` | `error` (safe fix override) | Forordaíonn sé sórtáil na ranganna fóntais CSS. |
 
 ### Feidhmíocht
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noAccumulatingSpread` | `error` | Diúltaítear úsáid sintacs scaipe (`...`) ar acmhainní carnacha. |
-| `noAwaitInLoops` | `off` | Diúltaítear `await` laistigh de lúibanna. |
-| `noBarrelFile` | `error` | Diúltaítear úsáid comhad barrel. |
-| `noDelete` | `error` | Diúltaítear úsáid oibréadaí `delete`. |
-| `noDynamicNamespaceImportAccess` | `error` | Diúltaítear rochtain ar iompórtálacha ainmspás dinimiciúla. |
-| `noNamespaceImport` | `error` | Diúltaítear úsáid iompórtálacha ainmspás. |
-| `noReExportAll` | `off` | Seachain easpórtáil ar fad. |
-| `noUnwantedPolyfillio` | `error` | Cosc ar phólphills dúbailte ó Polyfill.io. |
-| `useGoogleFontPreconnect` | `error` | Cinntíonn sé go n-úsáidtear an tréith `preconnect` nuair a úsáidtear Google Fonts. |
-| `useTopLevelRegex` | `error` | Éilíonn sé go ndéantar litreacha rialta a shainmhíniú ag an leibhéal uachtarach. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noAccumulatingSpread` | `error` | Diúltaíonn úsáid sintáise spread (`...`) ar acmhainní carnacha. |
+| `noAwaitInLoops` | `off` | Diúltaíonn `await` laistigh de lúbanna. |
+| `noBarrelFile` | `error` | Diúltaíonn úsáid comhaid barrel. |
+| `noDelete` | `error` | Diúltaíonn úsáid an oibríora `delete`. |
+| `noDynamicNamespaceImportAccess` | `error` | Diúltaíonn rochtain ar iompórtálacha ainmspáis go dinimiciúil. |
+| `noNamespaceImport` | `error` | Diúltaíonn úsáid iompórtálacha ainmspáis. |
+| `noReExportAll` | `off` | Seachnaíonn easpórtáil ar fad. |
+| `noUnwantedPolyfillio` | `error` | Coscann sé ar pholaifíoltacha dúbla ó Polyfill.io. |
+| `useGoogleFontPreconnect` | `error` | Cinntíonn sé go n-úsáidtear an airíonna `preconnect` nuair a úsáidtear Google Fonts. |
+| `useTopLevelRegex` | `error` | Éilíonn sé go bhfógraítear litreacha imoibrithe rialta ag an leibhéal uachtarach. |
 
 ### Slándáil
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noBlankTarget` | `error` | Diúltaítear tréith `target="_blank"` gan `rel="noopener"`. |
-| `noDangerouslySetInnerHtml` | `error` | Cosc ar úsáid props contúirteacha JSX. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Tuairiscíonn sé nuair a úsáideann eilimint DOM nó comhghearradh leanbh agus prop `dangerouslySetInnerHTML` araon. |
-| `noGlobalEval` | `error` | Diúltaítear úsáid an `eval()` domhanda. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noBlankTarget` | `error` | Diúltaíonn airíonna `target="_blank"` gan `rel="noopener"`. |
+| `noDangerouslySetInnerHtml` | `error` | Coscann sé úsáid props JSX dainséaracha. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Tuairisceann sé nuair a úsáideann eilimint DOM nó comhlacht páistí agus prop `dangerouslySetInnerHTML` araon. |
+| `noGlobalEval` | `error` | Diúltaíonn úsáid `eval()` dhomhanda. |
 
 ### Stíl
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noCommonJs` | `off` | Diúltaítear córas modúl Common JS i bhfabhar iompórtálacha stíl ESM. |
-| `noDefaultExport` | `off` | Diúltaítear easpórtálacha réamhshocraithe. |
-| `noDoneCallback` | `error` | Diúltaítear úsáid callback i dtástálacha asíncrónacha agus sna hooks. |
-| `noEnum` | `error` | Diúltaítear enum TypeScript. |
-| `noExportedImports` | `error` | Diúltaítear easpórtáil ar athróga iompórtáilte. |
-| `noImplicitBoolean` | `off` | Diúltaítear luachanna booleacha ijsxanna neamhshonraithe. |
-| `noInferrableTypes` | `error` | Diúltaítear tráchtanna cineál do athróga, paraiméadair, agus airíonna rang a dáilteadh le hord liteartha. |
-| `noMagicNumbers` | `off` | Tuairiscíonn sé úsáid "uimhreacha draíochta" — uimhreacha a úsáidtear go díreach seachas iad a bhronnadh ar shainroghanna darbh ainm. |
-| `noNamespace` | `error` | Diúltaítear úsáid ainmspásanna TypeScript. |
-| `noNegationElse` | `error` | Diúltaítear neamhrialtacht i gcoinníoll if má tá cláusal else ann. |
-| `noNestedTernary` | `error` | Diúltaítear nathanna ternary atá séimhe. |
-| `noNonNullAssertion` | `error` | Diúltaítear dearbhú neamh-nialasach ag baint úsáide as oibríseoir postfix `!`. |
-| `noParameterAssign` | `error` | Diúltaítear athshocrú paraiméadar feidhm. |
-| `noParameterProperties` | `error` | Diúltaítear úsáid airíonna paraiméadar i dtógálaithe ranganna. |
-| `noProcessEnv` | `off` | Diúltaítear úsáid `process.env`. |
-| `noRestrictedGlobals` | `error` | Ligeann an riail seo duit ainmneacha glóibálacha a shonrú nach dteastaíonn uait i do iarratas. |
-| `noRestrictedImports` | `error` | Diúltaítear modúil sonraithe nuair a luchtaithe iad trí import nó require. |
-| `noRestrictedTypes` | `error` | Diúltaítear cineálacha sainmhínithe úsáideora. |
-| `noShoutyConstants` | `error` | Diúltaítear úsáide na gconstaanta a bhfuil a luach ina leagan ardchás dá ainm. |
-| `noSubstr` | `error` | Forchuireann úsáid `String.slice()` thar `String.substr()` agus `String.substring()`. |
-| `noUnusedTemplateLiteral` | `error` | Diúltaítear teimpléid luiche mura dteastaíonn idirchuimilt agus láimhseáil carachtair speisialta. |
-| `noUselessElse` | `error` | Diúltaítear bloc else nuair a bhriseann an bloc if go luath. |
-| `noYodaExpression` | `error` | Diúltaítear úsáid nathanna Yoda. |
-| `useArrayLiterals` | `error` | Diúltaítear tógálaithe `Array`. |
-| `useAsConstAssertion` | `error` | Forchuireann úsáid `as const` seachas cineál liteartha agus tráchtán cineál. |
-| `useAtIndex` | `error` | Úsáid `at()` in ionad rochtain innéacs iomlán. |
-| `useBlockStatements` | `error` | Éilíonn sé cloí le coinbhéirsí lúibíneacha. |
-| `useCollapsedElseIf` | `error` | Forchuireann `else if` seachas ifanna ina bhfuil ifanna i gcásanna `else`. |
-| `useCollapsedIf` | `error` | Forchuireann úsáid single `if` in ionad ifanna chunnested. |
-| `useComponentExportOnlyModules` | `off` | Forchuireann dearadh comhchomhpháirteanna i modúil a easpórtáil ach Comhpháirteanna React amháin. |
-| `useConsistentArrayType` | `error` | Éilíonn sé úsáid chomhsheasmhach `T[]` nó `Array<T>`. |
-| `useConsistentBuiltinInstantiation` | `error` | Forchuireann úsáid `new` do gach ionsuite, seachas `String`, `Number` agus `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Forchuireann an riail seo úsáid chomhsheasmhach lúibíní laistigh de airíonna JSX agus leanaí JSX. |
-| `useConsistentMemberAccessibility` | `error` | Éilíonn sé modhnóirí inrochtaineachta comhsheasmhach ar airíonna agus modhanna rang. |
-| `useConsistentObjectDefinitions` | `error` | Éilíonn sé dearadh comhsheasmhach do litreacha rudaí. |
-| `useConst` | `error` | Éilíonn sé forglacháin const do athróga a shanntar uair amháin amháin. |
-| `useDefaultParameterLast` | `error` | Forchuireann paraiméadair réamhshocraithe agus paraiméadair roghnacha feidhm a bheith ar deireadh. |
-| `useDefaultSwitchClause` | `error` | Éilíonn sé an cláusal `default` i ráitis switch. |
-| `useDeprecatedReason` | `error` | Éilíonn sé an argóint cúise a shonrú nuair a úsáidtear an treoir `@deprecated`. |
-| `useEnumInitializers` | `error` | Éilíonn sé go ndéantar gach ball enum a thosú go sainráite. |
-| `useExplicitLengthCheck` | `off` | Forchuireann comparáid shonrach ar `length`, `size`, `byteLength` nó `byteOffset`. |
-| `useExponentiationOperator` | `error` | Diúltaítear úsáid `Math.pow` i bhfabhar an oibréadaí `**`. |
-| `useExportType` | `error` | Spreagann sé úsáid easpórtála cineál do chineálacha. |
-| `useExportsLast` | `off` | Éilíonn sé go ndéantar gach easpórtáil tar éis gach ráiteas neamh-easpórtála. |
-| `useFilenamingConvention` | `error` | Forchuireann sé coinbhéirsí ainmneacha comhad do JavaScript agus TypeScript (kebab-case, ASCII). |
-| `useForOf` | `error` | Molann an riail seo lúb for-of nuair a úsáideann lúb for an innéacs chun mír a fháil ón eagar. |
-| `useFragmentSyntax` | `error` | Forchuireann an riail seo úsáid `<>...</>` seachas `<Fragment>...</Fragment>`. |
-| `useGraphqlNamingConvention` | `error` | Bailíonn sé go bhfuil gach luach enum ardaithinte. |
-| `useGroupedAccessorPairs` | `error` | Forchuireann sé go mbeidh getters agus setters don airíonna céanna in aice le chéile i ndéantús rang agus ruda. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noCommonJs` | `off` | Diúltaíonn úsáid córais modúl Common JS i bhfabhar iompórtálacha stíl ESM. |
+| `noDefaultExport` | `off` | Diúltaíonn easpórtálacha réamhshocraithe. |
+| `noDoneCallback` | `error` | Diúltaíonn úsáid callbacks i dtástálacha agus hooks asyncrónacha. |
+| `noEnum` | `error` | Diúltaíonn enum TypeScript. |
+| `noExportedImports` | `error` | Diúltaíonn easpórtáil ar athróg a iompórtáladh. |
+| `noImplicitBoolean` | `off` | Diúltaíonn luachanna boolean i JSX a bheith intuigthe go hindíreach. |
+| `noInferrableTypes` | `error` | Diúltaíonn ainmniúcháin cineál do athróga, paraiméadair, agus maoine rang a thosaítear le léiriú liteartha. |
+| `noMagicNumbers` | `off` | Tuairiscíonn úsáid "uimhreacha draoi" — uimhreacha a úsáidtear go díreach seachas a bheith ceangailte le comhsheasmhachtaí ainmniúla. |
+| `noNamespace` | `error` | Diúltaíonn úsáid ainmspásanna TypeScript. |
+| `noNegationElse` | `error` | Diúltaíonn diúltú i gcoinne coinníoll má tá claon eile ann. |
+| `noNestedTernary` | `error` | Diúltaíonn nathanna ternary fillte. |
+| `noNonNullAssertion` | `error` | Diúltaíonn dearbhuithe neamh-nialasach ag úsáid an oibríora postfix `!`. |
+| `noParameterAssign` | `error` | Diúltaíonn athshocrú paraiméadair feidhme. |
+| `noParameterProperties` | `error` | Diúltaíonn úsáid airíonna paraiméadair i dtógálaithe rang. |
+| `noProcessEnv` | `off` | Diúltaíonn úsáid `process.env`. |
+| `noRestrictedGlobals` | `error` | Ligeann an rialachán ainmneacha athróga domhanda nach dteastaíonn uait a shonrú don iarratas. |
+| `noRestrictedImports` | `error` | Diúltaíonn modúil sonraithe nuair a luchtaithe iad trí import nó require. |
+| `noRestrictedTypes` | `error` | Diúltaíonn cineálacha sainmhínithe úsáideora. |
+| `noShoutyConstants` | `error` | Diúltaíonn úsáid comhsheasmhachtaí a bhfuil a luach ina leagan ardchás dá ainm. |
+| `noSubstr` | `error` | Forordaíonn úsáid `String.slice()` i gcomparáid le `String.substr()` agus `String.substring()`. |
+| `noUnusedTemplateLiteral` | `error` | Diúltaíonn snáitheanna teimpléid má níl idirghabháil agus láimhseáil carachtair speisialta ag teastáil. |
+| `noUselessElse` | `error` | Diúltaíonn bloc else nuair a bhriseann an bloc if go luath. |
+| `noYodaExpression` | `error` | Diúltaíonn úsáid nathanna Yoda. |
+| `useArrayLiterals` | `error` | Diúltaíonn constructors `Array`. |
+| `useAsConstAssertion` | `error` | Forordaíonn úsáid `as const` thar cineál litreacha agus ainmniúchán cineál. |
+| `useAtIndex` | `error` | Úsáid `at()` in ionad rochtain innéacs uimhriúil. |
+| `useBlockStatements` | `error` | Éilíonn comhlíonadh an chonbhraictí lúbchiorclacha. |
+| `useCollapsedElseIf` | `error` | Forordaíonn úsáid `else if` in ionad `if` fillte laistigh d’else. |
+| `useCollapsedIf` | `error` | Forordaíonn úsáid `if` simplí in ionad na n-`if` fillte. |
+| `useComponentExportOnlyModules` | `off` | Forordaíonn comhlacháil chomhpháirteanna laistigh de mhodúil a easpórtálann Comhpháirteanna React amháin. |
+| `useConsistentArrayType` | `error` | Éilíonn úsáid chonsistéanta bun either `T[]` nó `Array<T>`. |
+| `useConsistentBuiltinInstantiation` | `error` | Forordaíonn úsáid `new` do na builtins go léir, seachas `String`, `Number` agus `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Forordaíonn an rialachán úsáid chonsistéanta lúibíní laistigh d’airíonna JSX agus páistí JSX. |
+| `useConsistentMemberAccessibility` | `error` | Éilíonn sé modhnóirí inrochtaineachta comhsheasmhacha ar mhaoin agus modhanna rang. |
+| `useConsistentObjectDefinitions` | `error` | Éilíonn sé fógra comhsheasmhach ar litrigh réada. |
+| `useConst` | `error` | Éilíonn fógraí const do athróga a bheagán a shanntar uair amháin. |
+| `useDefaultParameterLast` | `error` | Forordaíonn go mbeadh paraiméadair réamhshocraithe agus roghnacha ag an deireadh den liosta paraiméadar. |
+| `useDefaultSwitchClause` | `error` | Éilíonn an riail an chlib `default` i ráitis switch. |
+| `useDeprecatedReason` | `error` | Éilíonn sé an argóint chúise a shonrú nuair a úsáideann tú an treoir `@deprecated`. |
+| `useEnumInitializers` | `error` | Éilíonn sé go mbeidh luach tosaitheach shonraithe do gach ball enum. |
+| `useExplicitLengthCheck` | `off` | Forordaíonn comparáid shonrach ar `length`, `size`, `byteLength` nó `byteOffset` de luach. |
+| `useExponentiationOperator` | `error` | Diúltaíonn úsáid `Math.pow` i bhfabhar oibríora `**`. |
+| `useExportType` | `error` | Spreagann úsáid `export type` do chineálacha. |
+| `useExportsLast` | `off` | Éilíonn go ndéantar gach easpórtáil tar éis gach ráiteas neamh-easpórtála. |
+| `useFilenamingConvention` | `error` | Forordaíonn coinbhéisín ainmniú do chomhaid JavaScript agus TypeScript (kebab-case, ASCII). |
+| `useForOf` | `error` | Molann an rialachán lúb for-of nuair atá an innéacs a úsáidtear chun mír a bhaint as an eagar á úsáid sa lúb for. |
+| `useFragmentSyntax` | `error` | Forordaíonn an riail úsáid `<>...</>` thar `<Fragment>...</Fragment>`. |
+| `useGraphqlNamingConvention` | `error` | Bailíonn sé go bhfuil gach luach enum sínithe le litir mhóra. |
+| `useGroupedAccessorPairs` | `error` | Forordaíonn sé go mbeidh getters agus setters don mhaoin chéanna in aice lena chéile i shonraíochtaí rang agus réad. |
 | `useImportType` | `error` | Spreagann sé úsáid `import type` do chineálacha. |
-| `useLiteralEnumMembers` | `error` | Éilíonn sé go mbeadh gach ball enum ina luach liteartha. |
-| `useNamingConvention` | `off` | Riail coinbhéire ainmniúcháin (díghníomhachtaithe). |
-| `useNodeAssertStrict` | `error` | Spreagann sé úsáid `node:assert/strict` thar `node:assert`. |
-| `useNodejsImportProtocol` | `error` | Forchuireann úsáid an phrótacail `node:` do mhodúil ionsuite Node.js. |
-| `useNumberNamespace` | `error` | Úsáid airíonna `Number` in ionad iad a bheith domhanda. |
-| `useNumericSeparators` | `error` | Forchuireann úsáid scaradóirí uimhriúla i litreacha uimhriúla. |
-| `useObjectSpread` | `error` | Tairgteann sé scaipeadh rudaí thar `Object.assign()` nuair atá á chruthú rudaí nua. |
-| `useReadonlyClassProperties` | `error` | Forchuireann marcáil baill mar readonly má nach modhnútar iad taobh amuigh den tógálaí. |
-| `useSelfClosingElements` | `error` | Cosc ar clóscríobh leuma breise do chomhpháirteanna gan leanaí. |
-| `useShorthandAssign` | `error` | Éilíonn sé giorrúchán oibreora an t-ainm nuair is féidir. |
-| `useShorthandFunctionType` | `error` | Forchuireann úsáid cineál feidhme seachas cineál ruda le sínithe glaonna. |
-| `useSingleVarDeclarator` | `off` | Diúltaítear fógrúcháin athróga iolracha i ráiteas athróga céanna. |
-| `useSymbolDescription` | `error` | Éilíonn paraiméadar cur síos do `Symbol()`. |
-| `useTemplate` | `error` | Tairgteann sé teimpléid luachán thar cumasc téacs. |
-| `useThrowNewError` | `error` | Éilíonn `new` nuair a chaithtear earráid. |
-| `useThrowOnlyError` | `error` | Diúltaítear earráidí neamh-`Error` a chaithint. |
-| `useTrimStartEnd` | `error` | Forchuireann `String.trimStart()` agus `String.trimEnd()` thar `String.trimLeft()` agus `String.trimRight()`. |
-| `useUnifiedTypeSignatures` | `error` | Diúltaítear sínithe ró-mhúnaithe atá in ann aontú i sínithe aonair. |
-| `noDescendingSpecificity` | `error` | Diúltaítear roghnóirí le níos lú sainiúlachta a thagann i ndiaidh roghnóirí le níos mó sainiúlachta (CSS). |
-| `noValueAtRule` | `error` | Diúltaítear úsáid an riail `@value` i modúil css (CSS). |
+| `useLiteralEnumMembers` | `error` | Éilíonn sé go mbeidh gach ball enum ina luach litreacha. |
+| `useNamingConvention` | `off` | Rialachán coinbhéis ainmniúcháin (díchumasaithe). |
+| `useNodeAssertStrict` | `error` | Spreagann úsáid `node:assert/strict` thar `node:assert`. |
+| `useNodejsImportProtocol` | `error` | Forordaíonn úsáid an phrótacail `node:` do mhodúil ionsuite Node.js. |
+| `useNumberNamespace` | `error` | Úsáid airíonna `Number` seachas na cinn dhomhanda. |
+| `useNumericSeparators` | `error` | Forordaíonn úsáid scaradóirí uimhriúla i litreacha uimhriúla. |
+| `useObjectSpread` | `error` | Moltar spread réada thar `Object.assign()` nuair a cruthaítear réada nua. |
+| `useReadonlyClassProperties` | `error` | Forordaíonn marcáil maoine mar readonly más rud é nach n-athraítear iad lasmuigh den tógálaí. |
+| `useSelfClosingElements` | `error` | Coscann sé clóntaí deiridh breise do chomhpháirteanna gan páistí. |
+| `useShorthandAssign` | `error` | Éilíonn giorrúchán oibreoir assaigin nuair is féidir. |
+| `useShorthandFunctionType` | `error` | Forordaíonn úsáid cineálacha feidhme in ionad cineál réada le sínithe glaonna. |
+| `useSingleVarDeclarator` | `off` | Diúltaíonn fógraí il-athróg sa ráiteas athróg céanna. |
+| `useSymbolDescription` | `error` | Éilíonn paraiméadar tuairisc don `Symbol()`. |
+| `useTemplate` | `error` | Moltar snáithíní teimpléid thar comhiomlánú sreinge. |
+| `useThrowNewError` | `error` | Éilíonn úsáid `new` agus ag scaolladh earráid. |
+| `useThrowOnlyError` | `error` | Diúltaíonn scaolladh luachanna nach bhfuil `Error`. |
+| `useTrimStartEnd` | `error` | Forordaíonn úsáid `String.trimStart()` agus `String.trimEnd()` thar `String.trimLeft()` agus `String.trimRight()`. |
+| `useUnifiedTypeSignatures` | `error` | Diúltaíonn síntéisí tharústacha is féidir a aontú isteach i sínitheon aonair. |
+| `noDescendingSpecificity` | `error` | Diúltaíonn roghnóir a bhfuil níos lú sainaithnithe tar éis roghnóir le sainiúlacht níos airde (CSS). |
+| `noValueAtRule` | `error` | Diúltaíonn úsáid rialach `@value` i módúil css (CSS). |
 
 ### Amhrasach
 
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noAlert` | `error` | Diúltaítear úsáid `alert`, `confirm`, agus `prompt`. |
-| `noApproximativeNumericConstant` | `error` | Úsáid consain chaighdeánacha seachas liteartha práinneacha. |
-| `noAssignInExpressions` | `error` | Diúltaítear socruithe i nathanna. |
-| `noAsyncPromiseExecutor` | `error` | Diúltaítear feidhm asinchrónach a úsáid mar fheidhm executor Promise. |
-| `noBiomeFirstException` | `error` | Cosc ar an muintearas `!` in an chéad suíomh i `files.includes` sa chomhad cumraíochta. |
-| `noBitwiseOperators` | `error` | Diúltaítear oibréadar bitwise. |
-| `noCatchAssign` | `error` | Diúltaítear athshocrú eisceacht i gcláir catch. |
-| `noClassAssign` | `error` | Diúltaítear athshocrú ballaí rang. |
-| `noCommentText` | `error` | Cosc ar thráchtaireachtaí a chur mar nóid téacs. |
-| `noCompareNegZero` | `error` | Diúltaítear comparáid in aghaidh `-0`. |
-| `noConfusingLabels` | `error` | Diúltaítear ráitis lipéadaithe nach bhfuil lúbanna iad. |
-| `noConfusingVoidType` | `error` | Diúltaítear cineál void lasmuigh de ghinearálacha nó cineálacha fillte. |
-| `noConsole` | `off` | Diúltaítear úsáid `console`. |
-| `noConstEnum` | `error` | Diúltaítear enum const TypeScript. |
-| `noConstantBinaryExpressions` | `error` | Diúltaítear nathanna ina bhfuil an t-oibríocht gan tionchar ar an luach. |
-| `noControlCharactersInRegex` | `error` | Cosc ar charachtair rialaithe agus seichimh éalaithe a oireann do charachtair rialaithe i litreacha rialta riachtanacha. |
-| `noDebugger` | `error` | Diúltaítear úsáid debugger. |
-| `noDocumentCookie` | `error` | Diúltaítear socruithe dhíreach ar document.cookie. |
-| `noDoubleEquals` | `error` | Éilíonn sé úsáid `===` agus `!==`. |
-| `noDuplicateAtImportRules` | `error` | Diúltaítear riail `@import` dúbailte (CSS). |
-| `noDuplicateCase` | `error` | Diúltaítear lipéid cás dúbailte. |
-| `noDuplicateClassMembers` | `error` | Diúltaítear baill rang dúbailte. |
-| `noDuplicateCustomProperties` | `error` | Diúltaítear airíonna saincheaptha dúbailte laistigh de bhloic fhógra (CSS). |
-| `noDuplicateElseIf` | `error` | Diúltaítear coinníollacha dúbailte i slabhraí if-else-if. |
-| `noDuplicateFields` | `error` | Diúltaítear réimsí dúbailte in oibríochtaí GraphQL. |
-| `noDuplicateFontNames` | `error` | Diúltaítear ainmneacha dúbailte laistigh de theaghlach cló (CSS). |
-| `noDuplicateObjectKeys` | `error` | Diúltaítear dhá eochair leis an ainm chéanna laistigh d’oibrithe. |
-| `noDuplicateParameters` | `error` | Diúltaítear ainm paraiméadar feidhme dúbailte. |
-| `noDuplicateProperties` | `error` | Diúltaítear airíonna dúbailte laistigh de bhloic fhógra (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Diúltaítear roghnóirí dúbailte laistigh de bhlocanna keyframe (CSS). |
-| `noDuplicateTestHooks` | `error` | Níor chóir go mbeadh hooks dúbailte i gbloc describe. |
-| `noEmptyBlock` | `error` | Diúltaítear bloic folmha CSS (CSS). |
-| `noEmptyBlockStatements` | `error` | Diúltaítear ráitis bloc folmha agus blocanna statacha. |
-| `noEmptyInterface` | `error` | Diúltaítear fógrú comhéadan folamh. |
-| `noEvolvingTypes` | `error` | Diúltaítear athróg a théann i méid cineál go `any` trí athshocrú. |
-| `noExplicitAny` | `error` | Diúltaítear úsáid cineál `any`. |
-| `noExportsInTest` | `error` | Diúltaítear easpórtáil nó module.exports i gcomhaid a bhfuil tástálacha iontu. |
-| `noExtraNonNullAssertion` | `error` | Cosc ar úsáid mícheart oibríseoir dearbhaithe neamh-nialasach `!` i gcomhaid TypeScript. |
-| `noFallthroughSwitchClause` | `error` | Diúltaítear casanna switch a thagann thíos gan briseadh. |
-| `noFocusedTests` | `error` | Diúltaítear tástálacha dírithe. |
-| `noFunctionAssign` | `error` | Diúltaítear athshocrú ar fhógra feidhme. |
-| `noGlobalAssign` | `error` | Diúltaítear socruithe ar réada dúchasacha agus glóibálacha léitheoireachta-amháin. |
-| `noGlobalIsFinite` | `error` | Úsáid `Number.isFinite` in ionad `isFinite` domhanda. |
-| `noGlobalIsNan` | `error` | Úsáid `Number.isNaN` in ionad `isNaN` domhanda. |
-| `noImplicitAnyLet` | `error` | Diúltaítear úsáid cineál implicit any ar fhógraí athróga. |
-| `noImportAssign` | `error` | Diúltaítear athshocrú ar cheangail iompórtáilte. |
-| `noImportantInKeyframe` | `error` | Diúltaítear `!important` neamhbhailí laistigh de shonruithe keyframe (CSS). |
-| `noIrregularWhitespace` | `error` | Diúltaítear úsáid carachtair spáis neamhrialta. |
-| `noLabelVar` | `error` | Diúltaítear lipéid a roinntear ainm le hathróga. |
-| `noMisleadingCharacterClass` | `error` | Diúltaítear carachtair a dhéantar le iliomad pointe cód i sintacs ranga carachtair. |
-| `noMisleadingInstantiator` | `error` | Forchuireann úsáid cheart `new` agus `constructor`. |
-| `noMisplacedAssertion` | `error` | Seiceálann sé go bhfuil an fheidhm dearbhaithe (m.sh., expect) suite laistigh de ghlao `it()`. |
-| `noMisrefactoredShorthandAssign` | `error` | Diúltaítear giorrúchán áshonrú nuair a bhíonn athróg ar an dá thaobh. |
-| `noOctalEscape` | `error` | Diúltaítear seichimh éalaithe octal i litreacha téacs. |
-| `noPrototypeBuiltins` | `error` | Diúltaítear úsáid dhíreach ar bhun-eilimintí `Object.prototype`. |
-| `noQuickfixBiome` | `error` | Diúltaítear úsáid `quickfix.biome` laistigh de chomhad socruithe eagarthóra. |
-| `noRedeclare` | `error` | Diúltaítear athfhoirmithe athróga, feidhmeanna, ranganna, agus cineálacha sa scóip chéanna. |
-| `noRedundantUseStrict` | `error` | Cosc ar `use strict` atá iomarcach. |
-| `noSelfCompare` | `error` | Diúltaítear comparáidí ina bhfuil an dá thaobh díreach mar an gcéanna. |
-| `noShadowRestrictedNames` | `error` | Diúltaítear aitheantóirí a dhéanann scáthú ar ainmneacha srianta. |
-| `noShorthandPropertyOverrides` | `error` | Diúltaítear airíonna giorra a sháraíonn airíonna fada a bhaineann leo (CSS). |
-| `noSkippedTests` | `error` | Diúltaítear tástálacha a bhfuil siad faoi mhíchumas. |
-| `noSparseArray` | `error` | Cosc ar úsáid eagar scoilte (eagar le bearnaí). |
-| `noTemplateCurlyInString` | `error` | Diúltaítear sintéis ionchócar teimpléid i sreanganna rialta. |
-| `noThenProperty` | `error` | Diúltaítear airíonna then. |
-| `noTsIgnore` | `error` | Cosc ar an treoir TypeScript `@ts-ignore`. |
-| `noUnassignedVariables` | `error` | Diúltaítear athróga let nó var a léitear ach nár shonraíodh riamh iad. |
-| `noUnknownAtRules` | `error` | Diúltaítear riachtanais anaithnid @-rialacha (CSS). |
-| `noUnsafeDeclarationMerging` | `error` | Diúltaítear comhcheangail fógraithe neamhshábháilte idir comhéadan agus ranganna. |
-| `noUnsafeNegation` | `error` | Diúltaítear úsáid neamhsábháilte `!`. |
-| `noUselessEscapeInString` | `error` | Diúltaítear seichimh éalaithe neamhriachtanacha i litreacha téacs. |
-| `noUselessRegexBackrefs` | `error` | Diúltaítear tagairtí cúlfacha gan úsáid i litreacha rialta a chomhlíonann sreang folamh i gcónaí. |
-| `noVar` | `error` | Diúltaítear úsáid `var`. |
-| `noWith` | `error` | Diúltaítear ráitis `with` i gcomhthéacsanna neamh-dian. |
-| `useAdjacentOverloadSignatures` | `error` | Diúltaítear úsáid sínithe ró-mhúnaithe nach bhfuil in aice lena chéile. |
-| `useAwait` | `error` | Cinntíonn sé go n-úsáideann feidhmeanna asinchrónacha `await`. |
-| `useBiomeIgnoreFolder` | `error` | Spreagann an riail úsáid cheart chun fillteáin a chur ar neamhaird sa chomhad cumraíochta. |
-| `useDefaultSwitchClauseLast` | `error` | Forchuireann go mbeidh clauses default i ráitis switch ar an deireadh. |
-| `useErrorMessage` | `error` | Forchuireann pasáil luach teachtaireachta agus tú ag cruthú earráid ionsuite. |
-| `useGetterReturn` | `error` | Forchuireann go gcuireann modhanna getter luach ar ais i gcónaí. |
-| `useGoogleFontDisplay` | `error` | Forchuireann úsáid straitéise taispeána molta le Google Fonts. |
-| `useGuardForIn` | `error` | Éilíonn lúib for-in a bheith ina bhfuil ráiteas `if`. |
-| `useIsArray` | `error` | Úsáid `Array.isArray()` seachas `instanceof Array`. |
-| `useIterableCallbackReturn` | `error` | Forchuireann luachanna fillteacha comhsheasmhacha i dtairseacha inathraithe. |
-| `useNamespaceKeyword` | `error` | Éilíonn úsáid na heochairfhocail namespace thar `module` chun namespaces TypeScript a shonrú. |
-| `useNumberToFixedDigitsArgument` | `error` | Forchuireann úsáid an argóint digits le `Number#toFixed()`. |
-| `useStaticResponseMethods` | `error` | Úsáid modhanna static `Response` seachas tógálaí `new Response()` nuair is féidir. |
-| `useStrictMode` | `error` | Forchuireann úsáid an threoir `use strict` i gcomhaid script. |
+| Rial | Socrú | Cur síos |
+|------|--------|----------|
+| `noAlert` | `error` | Diúltaíonn úsáid `alert`, `confirm`, agus `prompt`. |
+| `noApproximativeNumericConstant` | `error` | Úsáid comhsheasmhachtaí caighdeánacha in ionad litreacha meastacháin. |
+| `noAssignInExpressions` | `error` | Diúltaíonn socruithe i n-eexprisiúin. |
+| `noAsyncPromiseExecutor` | `error` | Diúltaíonn úsáid feidhm asyncróna mar fheidhmiúchán feachtasaíochta Promise. |
+| `noBiomeFirstException` | `error` | Coscann sé an patrún `!` mar an chéad shuíomh i `files.includes` sa chomhad cumraíochta. |
+| `noBitwiseOperators` | `error` | Diúltaíonn oibreoirí giotánacha. |
+| `noCatchAssign` | `error` | Diúltaíonn athshocrú eisceachtaí i ngabhálacha catch. |
+| `noClassAssign` | `error` | Diúltaíonn athshocrú ballaí rang. |
+| `noCommentText` | `error` | Coscann sé ó thráth na tuairimí a chur isteach mar nóid téacs. |
+| `noCompareNegZero` | `error` | Diúltaíonn comparáid in aghaidh `-0`. |
+| `noConfusingLabels` | `error` | Diúltaíonn ráitis lipéadaithe nach bhfuil ina lúbanna. |
+| `noConfusingVoidType` | `error` | Diúltaíonn cineál void lasmuigh de ghinithe nó cineálacha fillte. |
+| `noConsole` | `off` | Diúltaíonn úsáid `console`. |
+| `noConstEnum` | `error` | Diúltaíonn enum const TypeScript. |
+| `noConstantBinaryExpressions` | `error` | Diúltaíonn nathanna ina n-athraíonn an oibríocht gan tionchar ar an luach. |
+| `noControlCharactersInRegex` | `error` | Coscann sé ar charachtair rialaithe agus seichimh éalaithe áirithe a oireann do charachtair rialaithe i nlitreacha imoibrithe rialta. |
+| `noDebugger` | `error` | Diúltaíonn úsáid debugger. |
+| `noDocumentCookie` | `error` | Diúltaíonn socruithe díreach ar document.cookie. |
+| `noDoubleEquals` | `error` | Éilíonn úsáid `===` agus `!==`. |
+| `noDuplicateAtImportRules` | `error` | Diúltaíonn rialacha dúbailte `@import` (CSS). |
+| `noDuplicateCase` | `error` | Diúltaíonn lipéid cás dúblacha. |
+| `noDuplicateClassMembers` | `error` | Diúltaíonn baill rang dúblacha. |
+| `noDuplicateCustomProperties` | `error` | Diúltaíonn maoine saincheaptha dúblacha laistigh de bhlocanna ráitis (CSS). |
+| `noDuplicateElseIf` | `error` | Diúltaíonn coinníollacha dúblacha i slabhraí if-else-if. |
+| `noDuplicateFields` | `error` | Diúltaíonn réimsí dúblacha in oibríochtaí GraphQL. |
+| `noDuplicateFontNames` | `error` | Diúltaíonn ainmneacha dúblacha laistigh de theaghlaigh cló (CSS). |
+| `noDuplicateObjectKeys` | `error` | Diúltaíonn dhá eochair leis an ainm céanna laistigh d’obaircheap. |
+| `noDuplicateParameters` | `error` | Diúltaíonn ainm paraiméadair feidhme dúblach. |
+| `noDuplicateProperties` | `error` | Diúltaíonn maoine dúblacha laistigh de bhlocanna ráitis (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Diúltaíonn roghnóirí dúblacha laistigh de bhlocanna keyframe (CSS). |
+| `noDuplicateTestHooks` | `error` | Níor chóir do bhloc describe bheith le hooks dúblacha. |
+| `noEmptyBlock` | `error` | Diúltaíonn bloic folmha CSS (CSS). |
+| `noEmptyBlockStatements` | `error` | Diúltaíonn ráitis bhloc folmha agus bloic statacha. |
+| `noEmptyInterface` | `error` | Diúltaíonn fógra comhéadan folmha. |
+| `noEvolvingTypes` | `error` | Diúltaíonn athrú athróg ina cineál `any` trí athshocrú. |
+| `noExplicitAny` | `error` | Diúltaíonn úsáid an chineáil any. |
+| `noExportsInTest` | `error` | Diúltaíonn úsáid export nó module.exports i gcomhaid atá ina bhfuil tástálacha. |
+| `noExtraNonNullAssertion` | `error` | Coscann sé úsáid mícheart an oibríora dearbhaithe neamh-nialasach `!` i gcomhaid TypeScript. |
+| `noFallthroughSwitchClause` | `error` | Diúltaíonn titim trasna cásanna switch. |
+| `noFocusedTests` | `error` | Diúltaíonn tástálacha fócasaithe. |
+| `noFunctionAssign` | `error` | Diúltaíonn athshocrú fógraí feidhme. |
+| `noGlobalAssign` | `error` | Diúltaíonn socruithe ar rudaí dúchais agus ar athróga domhanda atá léitheorann. |
+| `noGlobalIsFinite` | `error` | Úsáid `Number.isFinite` in ionad `isFinite` dhomhanda. |
+| `noGlobalIsNan` | `error` | Úsáid `Number.isNaN` in ionad `isNaN` dhomhanda. |
+| `noImplicitAnyLet` | `error` | Diúltaíonn úsáid chineáil any intuigthe ar fógraí athróg. |
+| `noImportAssign` | `error` | Diúltaíonn athshocrú ceangaltán iompórtáilte. |
+| `noImportantInKeyframe` | `error` | Diúltaíonn `!important` neamhbhailí laistigh de ráitis keyframe (CSS). |
+| `noIrregularWhitespace` | `error` | Diúltaíonn úsáid carachtair bán neamh-rialta. |
+| `noLabelVar` | `error` | Diúltaíonn lipéid a roinntear ainm le athróga. |
+| `noMisleadingCharacterClass` | `error` | Diúltaíonn carachtair déanta le ilphointí cód i sintéis rang carachtar. |
+| `noMisleadingInstantiator` | `error` | Forordaíonn úsáid cheart `new` agus tógálaí. |
+| `noMisplacedAssertion` | `error` | Seiceálann sé go bhfuil an fheidhm dearbhaithe, mar shampla expect, suite istigh i ghlao `it()`. |
+| `noMisrefactoredShorthandAssign` | `error` | Diúltaíonn giorrúchán assaigin nuair a bhfuil athróg ar an dá thaobh. |
+| `noOctalEscape` | `error` | Diúltaíonn seichimh éalaithe ochtacha i snáithíní. |
+| `noPrototypeBuiltins` | `error` | Diúltaíonn úsáid dhíreach ar builtinanna Object.prototype. |
+| `noQuickfixBiome` | `error` | Diúltaíonn úsáid `quickfix.biome` laistigh de chomhad socruithe eagarthóra. |
+| `noRedeclare` | `error` | Diúltaíonn athfhorghníomhú athróga, feidhmeanna, ranganna, agus cineálacha sa scóip chéanna. |
+| `noRedundantUseStrict` | `error` | Coscann sé ar `use strict` atá iomarcach. |
+| `noSelfCompare` | `error` | Diúltaíonn comparáid ina bhfuil an dá thaobh díreach an rud céanna. |
+| `noShadowRestrictedNames` | `error` | Diúltaíonn ainmneacha a scáthú ainmneacha srianta. |
+| `noShorthandPropertyOverrides` | `error` | Diúltaíonn maoine giorrúcháin a sháraíonn maoine fada gaolmhara (CSS). |
+| `noSkippedTests` | `error` | Diúltaíonn tástálacha faoi mhíchumas. |
+| `noSparseArray` | `error` | Coscann úsáid eagar scoite (eagraíonn le pollanna). |
+| `noTemplateCurlyInString` | `error` | Diúltaíonn sintéis breisiúte teimpléid i snáithíní rialta. |
+| `noThenProperty` | `error` | Diúltaíonn airíonna then. |
+| `noTsIgnore` | `error` | Coscann sé úsáid an threoirlínte TypeScript `@ts-ignore`. |
+| `noUnassignedVariables` | `error` | Diúltaíonn athróga let nó var a léitear ach nach ndearnadh a shannadh riamh. |
+| `noUnknownAtRules` | `error` | Diúltaíonn rialacha at-anaithnid (CSS). |
+| `noUnsafeDeclarationMerging` | `error` | Diúltaíonn comhleá fógraí neamhshábháilte idir comhéadan agus ranganna. |
+| `noUnsafeNegation` | `error` | Diúltaíonn úsáid diúltaithe neamhshábháilte (`!`). |
+| `noUselessEscapeInString` | `error` | Diúltaíonn seichimh éalaithe neamhriachtanacha i snáithíní. |
+| `noUselessRegexBackrefs` | `error` | Diúltaíonn tagairtí ar ais nach bhfuil úsáideach i nlitreacha imoibrithe rialta a mheaitseálann i gcónaí sreang folamh. |
+| `noVar` | `error` | Diúltaíonn úsáid `var`. |
+| `noWith` | `error` | Diúltaíonn ráitis `with` i gcomhthéacsanna neamh-dhianghlútha. |
+| `useAdjacentOverloadSignatures` | `error` | Diúltaíonn úsáid sínithe ró-lódála nach bhfuil in aice lena chéile. |
+| `useAwait` | `error` | Cinntíonn feidhmeanna asyncróna go n-úsáidtear `await`. |
+| `useBiomeIgnoreFolder` | `error` | Spreagann an úsáid cheart chun fillteáin a chur ar neamhaird sa chomhad cumraíochta. |
+| `useDefaultSwitchClauseLast` | `error` | Forordaíonn go mbeidh clibeanna default i ráitis switch i ndeireadh na n-ord. |
+| `useErrorMessage` | `error` | Forordaíonn pasáil luach teachtaireachta nuair a cruthaítear earráid ionsuite. |
+| `useGetterReturn` | `error` | Forordaíonn gur chóir modhanna get i gcónaí luach a thabhairt ar ais. |
+| `useGoogleFontDisplay` | `error` | Forordaíonn straitéis taispeána molta le Google Fonts. |
+| `useGuardForIn` | `error` | Éilíonn lúbanna for-in a bheith san áireamh le ráiteas `if`. |
+| `useIsArray` | `error` | Úsáid `Array.isArray()` in ionad `instanceof Array`. |
+| `useIterableCallbackReturn` | `error` | Forordaíonn luachanna fillte comhsheasmhacha i gcallbacha inadhainte. |
+| `useNamespaceKeyword` | `error` | Éilíonn úsáid an eochairfhocail namespace thar an eochairfhocal `module` le haghaidh ainmspásanna TypeScript. |
+| `useNumberToFixedDigitsArgument` | `error` | Forordaíonn úsáid an argóint digit le `Number#toFixed()`. |
+| `useStaticResponseMethods` | `error` | Úsáid modhanna static `Response` in ionad an chonstrúitéir `new Response()` nuair is féidir. |
+| `useStrictMode` | `error` | Forordaíonn úsáid an threoirlínte `use strict` i gcomhaid script. |
 
 ## Nótaí
 
-Tá roinnt rialacha díghníomhachtaithe mar tá siad ró-mhall le rith leis an Scanner. Mar a luaitear sna [Doiciméid Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), tá a fhios againn go gcuireann rialacha a chumasú sa tionscadal tharghá táille feidhmíochta i dtaca le dianailís níos airde.
+Tá cuid de na rialacha sin dífhorchuimhneach mar tá siad ró-mhall le rith leis an Scanner. Mar a luadh sna [doiciméid Biome](https://biomejs.dev/guides/investigate-slowness/#first-things-first), tá a fhios againn go mbíonn luchtú rialacha tionscadail faoi réir breisbhreise ar fheidhmíocht mar mhalairt ar an anailís níos forbartha.
 
-Iárdárthaí tástála, fuair muid go bhféadfadh na rialacha seo an difríocht a dhéanamh idir lint 300ms agus lint 13s.
+I dár n-idirbhearta, fuair muid amach gur féidir leis na rialacha seo an difríocht a dhéanamh idir lint 300ms agus lint 13s.

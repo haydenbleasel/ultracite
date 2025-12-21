@@ -1,9 +1,9 @@
 ---
 title: Next.js
-description: Regras de lint específicas do Next.js para o Ultracite.
+description: Regras de linting específicas do Next.js para o Ultracite.
 ---
 
-A configuração do Next.js contém regras de lint específicas para Next.js voltadas para otimização de imagens, estrutura de documentos e padrões do App Router.
+A configuração do Next.js contém regras de linting específicas do Next.js para otimização de imagens, estrutura de documentos e padrões do App Router.
 
 ## Instalação
 
@@ -17,45 +17,38 @@ Adicione a configuração do Next.js ao seu `biome.jsonc`:
 
 ## Visão geral
 
-Esta configuração adiciona regras específicas ao desenvolvimento com Next.js:
+Esta configuração adiciona regras específicas para desenvolvimento com Next.js:
 
 - **Otimização de Imagens**: Exigir o uso do componente Image do Next.js
-- **Estrutura do Documento**: Evitar o uso inadequado de componentes especiais do Next.js
-- **Componentes de Cliente**: Garantir que componentes cliente assíncronos sejam tratados corretamente
-- **Arquivos de Configuração**: Tratamento especial para arquivos `next.config.*`
+- **Estrutura de Documentos**: Evitar uso indevido dos componentes especiais do Next.js
+- **Ficheiros de Configuração**: Tratamento especial para ficheiros `next.config.*`
 
 ## Regras Específicas do Next.js
-
-### Experimental
-
-| Regra | Configuração | Descrição |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Impedir componentes cliente assíncronos no Next.js. Componentes cliente devem ser síncronos; use componentes de servidor para operações assíncronas. |
 
 ### Desempenho
 
 | Regra | Configuração | Descrição |
 |------|---------|-------------|
-| `noImgElement` | `error` | Proibir o uso do elemento HTML `<img>`. Use o componente `<Image>` do Next.js em vez disso para otimização automática de imagens. |
+| `noImgElement` | `error` | Proibir o uso do elemento HTML `<img>`. Utilize o componente `<Image>` do Next.js em vez disso para otimização automática de imagens. |
 
 ### Estilo
 
 | Regra | Configuração | Descrição |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Proibir o uso do elemento HTML `<head>`. Use `next/head` do Next.js ou a API de metadata do App Router em vez disso. |
+| `noHeadElement` | `error` | Proibir o uso do elemento HTML `<head>`. Utilize `next/head` ou a API de metadados do App Router em vez disso. |
 
-### Suspeitas
+### Suspeitos
 
 | Regra | Configuração | Descrição |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Impedir a importação de `next/document` em arquivos de página. `_document.tsx` deve existir apenas em `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Impedir a importação de `next/head` em `_document.tsx`. Use `<Head>` de `next/document` em vez disso. |
+| `noDocumentImportInPage` | `error` | Evitar importar `next/document` em ficheiros de página. `_document.tsx` só deve existir em `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Evitar importar `next/head` em `_document.tsx`. Utilize `<Head>` de `next/document` em vez disso. |
 
-## Sobrescritas de Arquivos de Configuração
+## Substituições para Ficheiros de Configuração
 
-O preset do Next.js inclui tratamento especial para arquivos de configuração e componentes do App Router:
+O preset do Next.js inclui tratamento especial para ficheiros de configuração e componentes do App Router:
 
-### Arquivos de Configuração do Next.js
+### Ficheiros de Configuração do Next.js
 
 ```jsonc
 {
@@ -74,7 +67,7 @@ O preset do Next.js inclui tratamento especial para arquivos de configuração e
 }
 ```
 
-Isso permite padrões de configuração do Next.js que normalmente poderiam não passar nas regras de lint.
+Isto permite padrões de configuração do Next.js que normalmente poderiam não passar nas regras de linting.
 
 ### Páginas e Layouts do App Router
 
@@ -95,4 +88,4 @@ Isso permite padrões de configuração do Next.js que normalmente poderiam não
 }
 ```
 
-Componentes de página e layout do App Router podem ser assíncronos sem exigir `await`, pois o Next.js os trata de forma especial para renderização no lado do servidor e obtenção de dados.
+Os componentes de página e layout do App Router podem ser async sem exigirem `await`, pois o Next.js trata estes casos de forma especial para renderização no servidor e obtenção de dados.

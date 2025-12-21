@@ -17,43 +17,36 @@ Tilføj Next.js-konfigurationen til din `biome.jsonc`:
 
 ## Oversigt
 
-Denne konfiguration tilføjer regler specifikke for Next.js-udvikling:
+Denne konfiguration tilføjer regler, der er specifikke for Next.js-udvikling:
 
-- **Billedoptimering**: Håndhæv brugen af Next.js Image-komponenten
-- **Dokumentstruktur**: Forhindre ukorrekt brug af Next.js specielle komponenter
-- **Client-komponenter**: Sikre at async client-komponenter håndteres korrekt
-- **Konfigurationsfiler**: Speciel håndtering for `next.config.*`-filer
+- **Billedoptimering**: Håndhæv brugen af Next.js `<Image>`-komponenten
+- **Dokumentstruktur**: Forhindre uhensigtsmæssig brug af Next.js' særlige komponenter
+- **Konfigurationsfiler**: Særlig håndtering af `next.config.*`-filer
 
 ## Next.js-specifikke regler
-
-### Nyudviklet
-
-| Regel | Indstilling | Beskrivelse |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Forhindre async client-komponenter i Next.js. Client-komponenter bør være synkrone; brug serverkomponenter til async-operationer. |
 
 ### Ydeevne
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noImgElement` | `error` | Forbyd brug af `<img>` HTML-element. Brug Next.js `<Image>`-komponenten i stedet for automatisk billedoptimering. |
+| `noImgElement` | `error` | Forhindre brug af `<img>` HTML-elementet. Brug i stedet Next.js `<Image>`-komponenten for automatisk billedoptimering. |
 
 ### Stil
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Forbyd brug af `<head>` HTML-element. Brug Next.js `next/head` eller App Router metadata-API i stedet. |
+| `noHeadElement` | `error` | Forhindre brug af `<head>` HTML-elementet. Brug i stedet Next.js `next/head` eller App Router metadata-API. |
 
-### Mistænkelige
+### Mistænkeligt
 
 | Regel | Indstilling | Beskrivelse |
 |------|---------|-------------|
 | `noDocumentImportInPage` | `error` | Forhindre import af `next/document` i sidefiler. `_document.tsx` bør kun eksistere i `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Forhindre import af `next/head` i `_document.tsx`. Brug `<Head>` fra `next/document` i stedet. |
+| `noHeadImportInDocument` | `error` | Forhindre import af `next/head` i `_document.tsx`. Brug i stedet `<Head>` fra `next/document`. |
 
-## Overskrivelser af konfigurationsfiler
+## Overstyringer for konfigurationsfiler
 
-Next.js-preset inkluderer speciel håndtering for konfigurationsfiler og App Router-komponenter:
+Next.js-preset inkluderer særlig håndtering for konfigurationsfiler og App Router-komponenter:
 
 ### Next.js-konfigurationsfiler
 
@@ -74,9 +67,9 @@ Next.js-preset inkluderer speciel håndtering for konfigurationsfiler og App Rou
 }
 ```
 
-Dette tillader Next.js-konfigurationsmønstre, som normalt måske ikke ville bestå lint-regler.
+Dette tillader Next.js-konfigurationsmønstre, som normalt muligvis ikke opfylder lintreglerne.
 
-### App Router-sider og layouts
+### App Router-sider og -layouts
 
 ```jsonc
 {
@@ -95,4 +88,4 @@ Dette tillader Next.js-konfigurationsmønstre, som normalt måske ikke ville bes
 }
 ```
 
-App Router-side- og layoutkomponenter må være async uden krav om `await`, da Next.js håndterer disse særligt for server-side rendering og datahentning.
+App Router-side- og layoutkomponenter må være async uden at kræve `await`, da Next.js håndterer dem særligt for server-side rendering og data fetching.

@@ -1,9 +1,9 @@
 ---
 title: React
-description: Ultracite 的 React 特定 lint 规则。
+description: 用于 Ultracite 的 React 特定 lint 规则。
 ---
 
-该 React 配置包含针对 JSX、hooks 和组件模式的 React 特定 lint 规则。
+此 React 配置包含针对 JSX、hooks 和组件模式的 React 特定 lint 规则。
 
 ## 安装
 
@@ -15,13 +15,13 @@ description: Ultracite 的 React 特定 lint 规则。
 }
 ```
 
-## 概览
+## 概述
 
 此配置添加了针对 React 开发的特定规则：
 
 - **JSX 规则**: 强制正确的 JSX 语法和模式
-- **Hooks 规则**: 确保 React hooks 的正确使用
-- **组件规则**: 强制 React 组件的最佳实践
+- **Hooks 规则**: 确保正确使用 React hooks
+- **组件规则**: 强制遵循 React 组件最佳实践
 - **子元素处理**: 防止不当的 children prop 使用
 
 ## React 特定规则
@@ -30,32 +30,26 @@ description: Ultracite 的 React 特定 lint 规则。
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | 阻止将 children 作为 props 传递。children 应嵌套在起始标签和结束标签之间。 |
-| `noNestedComponentDefinitions` | `error` | 阻止在其他组件内部定义组件。这会导致不必要的重新渲染。 |
+| `noChildrenProp` | `error` | 阻止将 children 作为 props 传递。children 应嵌套在起始和结束标签之间。 |
+| `noNestedComponentDefinitions` | `error` | 阻止在一个组件内部定义其他组件。这会导致不必要的重新渲染。 |
 | `noReactPropAssignments` | `error` | 阻止在 React 组件中重新赋值 props。props 应视为不可变。 |
-| `noRenderReturnValue` | `error` | 阻止使用 `ReactDOM.render()` 的返回值。 |
-| `noVoidElementsWithChildren` | `error` | 防止空元素（例如 `<img>`、`<br>`）包含子元素。 |
-| `useExhaustiveDependencies` | `error` | 强制在 React hooks（useEffect、useCallback、useMemo）中正确指定所有依赖项。 |
-| `useHookAtTopLevel` | `error` | 强制所有 React hooks 在组件函数的顶层被调用，而不是在循环、条件或嵌套函数中。 |
-| `useJsxKeyInIterable` | `error` | 强制可迭代项中的元素具有 `key` prop，以便 React 进行调和。 |
+| `noRenderReturnValue` | `error` | 禁止使用 `ReactDOM.render()` 的返回值。 |
+| `noVoidElementsWithChildren` | `error` | 阻止空元素（例如 `<img>`、`<br>`）拥有子元素。 |
+| `useExhaustiveDependencies` | `error` | 强制在 React hooks（如 useEffect、useCallback、useMemo）中正确指定所有依赖项。 |
+| `useHookAtTopLevel` | `error` | 强制所有 React hooks 在组件函数的顶层调用，而不是在循环、条件或嵌套函数内部调用。 |
+| `useJsxKeyInIterable` | `error` | 强制可迭代集合中的元素具有 `key` prop，以便 React 进行协调。 |
 
-### 试验性
-
-| 规则 | 设置 | 描述 |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | 阻止使用旧的 `React.forwardRef`。改为将 ref 作为 prop 使用（React 19+）。 |
-
-### 风格
+### 样式
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | 强制在 React 中使用函数组件而不是类组件。 |
+| `useReactFunctionComponents` | `error` | 强制在 React 中使用函数组件而非类组件。 |
 
 ### 可疑
 
 | 规则 | 设置 | 描述 |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | 防止将数组索引用作 key。数组索引不是稳定的标识符，可能导致组件状态问题。 |
-| `noDuplicateJsxProps` | `error` | 防止在 JSX 中出现重复属性。 |
-| `noSuspiciousSemicolonInJsx` | `error` | 防止改变 JSX 元素语义的分号使用。 |
-| `noReactSpecificProps` | `off` | 允许 React 特定的 props，例如 `className` 和 `htmlFor`。 |
+| `noArrayIndexKey` | `error` | 阻止使用数组索引作为 key。数组索引不是稳定的标识符，可能导致组件状态问题。 |
+| `noDuplicateJsxProps` | `error` | 防止 JSX 中出现重复属性。 |
+| `noSuspiciousSemicolonInJsx` | `error` | 阻止改变 JSX 元素语义的分号。 |
+| `noReactSpecificProps` | `off` | 允许像 `className` 和 `htmlFor` 这样的 React 特定 props。 |

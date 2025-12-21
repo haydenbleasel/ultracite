@@ -3,7 +3,7 @@ title: Qwik
 description: Pravila lintovanja specifična za Qwik za Ultracite.
 ---
 
-Qwik konfiguracija sadrži pravila za lintovanje specifična za Qwik za serijalizaciju, vidljive zadatke, leksički opseg i korišćenje metoda.
+Qwik konfiguracija sadrži pravila za lintovanje specifična za Qwik koja se tiču serializacije, vidljivih zadataka, leksičkog opsega i upotrebe metoda.
 
 ## Instalacija
 
@@ -19,30 +19,21 @@ Dodajte Qwik konfiguraciju u vaš `biome.jsonc`:
 
 Ova konfiguracija dodaje pravila specifična za razvoj u Qwik-u:
 
-- **Serijalizacija**: Nalaže pravilnu upotrebu Qwik-ovog modela resumabilnosti
-- **Vidljivi zadaci**: Sprečava neprimerenu upotrebu `useVisibleTask$`
-- **Leksički opseg**: Osigurava ispravan opseg promenljivih u `$` funkcijama
-- **Korišćenje metoda**: Nalaže ispravne obrasce korišćenja Qwik metoda
-- **Propovi specifični za React**: Zabranjuje React-specifične propove u Qwik komponentama
+- **Serializacija**: Sprovodi pravilnu upotrebu Qwik-ovog modela nastavljanja izvršavanja (resumability)
+- **Vidljivi zadaci**: Sprečava neprikladnu upotrebu `useVisibleTask$`
+- **React-specifični props**: Zabranjuje React-specifične props u Qwik komponentama
 
-## Pravila specifična za Qwik
+## Qwik-specifična pravila
 
 ### Ispravnost
 
 | Pravilo | Podešavanje | Opis |
-|--------|------------|------|
-| `noQwikUseVisibleTask` | `error` | Sprečava korišćenje `useVisibleTask$`. Ovaj hook pokreće kod odmah na klijentu, čime se potkopava resumabilnost Qwik-a. Kada je moguće, koristite `useTask$` ili `useResource$` umesto toga. |
-| `useQwikClasslist` | `error` | Zahteva upotrebu sintakse `class` kao objekta umesto konkatenacije stringova za dinamičke klase u Qwik-u. |
-
-### Eksperimentalno
-
-| Pravilo | Podešavanje | Opis |
-|--------|------------|------|
-| `useQwikValidLexicalScope` | `error` | Nalaže važeći leksički opseg u Qwik-ovim `$` funkcijama. Promenljive iz spoljnjih opsega moraju biti eksplicitno uhvaćene. |
-| `useQwikMethodUsage` | `error` | Nalaže ispravnu upotrebu metoda i API-ja specifičnih za Qwik. |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Sprečava upotrebu `useVisibleTask$`. Ovaj hook izvršava kod odmah na klijentu, čime se narušava Qwik-ova sposobnost nastavljanja izvršavanja (resumability). Koristite `useTask$` ili `useResource$` umesto toga kada je moguće. |
+| `useQwikClasslist` | `error` | Zahteva upotrebu objektne sintakse `class` umesto konkatenacije stringova za dinamičke klase u Qwik-u. |
 
 ### Sumnjivo
 
 | Pravilo | Podešavanje | Opis |
-|--------|------------|------|
-| `noReactSpecificProps` | `error` | Zabranjuje React-specifične propove kao što su `className` i `htmlFor` u Qwik-u. Umesto njih koristite `class` i `for`. |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Zabranjuje React-specifične props kao što su `className` i `htmlFor` u Qwik-u. Koristite `class` i `for` umesto njih. |

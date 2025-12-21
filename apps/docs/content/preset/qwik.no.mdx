@@ -3,7 +3,7 @@ title: Qwik
 description: Qwik-spesifikke linteregler for Ultracite.
 ---
 
-The Qwik configuration has Qwik-specific linting rules for serialization, visible tasks, lexical scope, and method usage.
+Qwik-konfigurasjonen inneholder Qwik-spesifikke linteregler for serialisering, synlige oppgaver, leksikalsk omfang og metodebruk.
 
 ## Installasjon
 
@@ -19,10 +19,8 @@ Legg til Qwik-konfigurasjonen i din `biome.jsonc`:
 
 Denne konfigurasjonen legger til regler spesifikke for Qwik-utvikling:
 
-- **Serialisering**: Sikre riktig bruk av Qwiks gjenopptakbarhetsmodell
+- **Serialisering**: Sørg for riktig bruk av Qwik sin resumability-modell
 - **Synlige oppgaver**: Forhindre upassende bruk av `useVisibleTask$`
-- **Leksikalsk omfang**: Sikre korrekt variabelomfang i `$`-funksjoner
-- **Metodebruk**: Håndhev riktige Qwik-metodemønstre
 - **React-spesifikke props**: Forby React-spesifikke props i Qwik-komponenter
 
 ## Qwik-spesifikke regler
@@ -31,15 +29,8 @@ Denne konfigurasjonen legger til regler spesifikke for Qwik-utvikling:
 
 | Regel | Innstilling | Beskrivelse |
 |------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Forebygge bruk av `useVisibleTask$`. Denne hooken kjører kode umiddelbart på klienten, noe som bryter med Qwiks gjenopptakbarhetsmodell. Bruk `useTask$` eller `useResource$` i stedet når det er mulig. |
+| `noQwikUseVisibleTask` | `error` | Forhindre bruk av `useVisibleTask$`. Denne hooken kjører kode umiddelbart på klienten, og undergraver Qwik sin resumability. Bruk `useTask$` eller `useResource$` i stedet når mulig. |
 | `useQwikClasslist` | `error` | Håndhev bruk av `class`-objektsyntaks i stedet for strengkonkatenering for dynamiske klasser i Qwik. |
-
-### Eksperimentell
-
-| Regel | Innstilling | Beskrivelse |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Håndhev gyldig leksikalsk omfang i Qwiks `$`-funksjoner. Variabler fra ytre omfang må fanges eksplisitt. |
-| `useQwikMethodUsage` | `error` | Håndhev korrekt bruk av Qwik-spesifikke metoder og APIer. |
 
 ### Mistenkelige
 

@@ -1,13 +1,13 @@
 ---
 title: Next.js
-description: Pravila linterja, specifična za Next.js, za Ultracite.
+description: Specifična pravila za lintanje za Next.js v Ultracite.
 ---
 
-Konfiguracija za Next.js vsebuje pravila linterja, specifična za Next.js, za optimizacijo slik, strukturo dokumenta in vzorce App Routerja.
+Konfiguracija Next.js vsebuje specifična pravila za lintanje za optimizacijo slik, strukturo dokumenta in vzorce App Routerja.
 
 ## Namestitev
 
-Dodajte konfiguracijo za Next.js v vaše `biome.jsonc`:
+Dodajte Next.js konfiguracijo v vaš `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,43 +17,36 @@ Dodajte konfiguracijo za Next.js v vaše `biome.jsonc`:
 
 ## Pregled
 
-Ta konfiguracija doda pravila, specifična za razvoj z Next.js:
+Ta konfiguracija doda pravila, specifična za razvoj Next.js:
 
-- **Optimizacija slik**: Zahtevaj uporabo Next.js `<Image>` komponente
-- **Struktura dokumenta**: Prepreči nepravilno uporabo posebnih komponent Next.js
-- **Komponente na strani odjemalca**: Poskrbi, da se asinhrone komponente na odjemalcu pravilno obravnavajo
-- **Konfiguracijske datoteke**: Posebno obravnavanje datotek `next.config.*`
+- **Image Optimization**: Zahteva uporabo Next.js Image komponente
+- **Document Structure**: Preprečuje nepravilno uporabo posebnih komponent Next.js
+- **Configuration Files**: Posebno ravnanje za datoteke `next.config.*`
 
-## Pravila specifična za Next.js
-
-### Eksperimentalno
-
-| Pravilo | Nastavitev | Opis |
-|------|---------|-------------|
-| `noNextAsyncClientComponent` | `error` | Prepreči asinhrone komponente na odjemalcu v Next.js. Komponente na odjemalcu bi morale biti sinhrone; za asinhrone operacije uporabite komponente na strežniku. |
+## Next.js-specifična pravila
 
 ### Zmogljivost
 
 | Pravilo | Nastavitev | Opis |
 |------|---------|-------------|
-| `noImgElement` | `error` | Prepove uporabo HTML elementa `<img>`. Namesto tega uporabite Next.js `<Image>` komponento za samodejno optimizacijo slik. |
+| `noImgElement` | `error` | Prepoved uporabe HTML elementa `<img>`. Namesto tega uporabite Next.js `<Image>` komponento za samodejno optimizacijo slik. |
 
 ### Slog
 
 | Pravilo | Nastavitev | Opis |
 |------|---------|-------------|
-| `noHeadElement` | `error` | Prepove uporabo HTML elementa `<head>`. Namesto tega uporabite Next.js `next/head` ali API za metapodatke App Routerja. |
+| `noHeadElement` | `error` | Prepoved uporabe HTML elementa `<head>`. Namesto tega uporabite Next.js `next/head` ali App Router metadata API. |
 
 ### Sumljivo
 
 | Pravilo | Nastavitev | Opis |
 |------|---------|-------------|
-| `noDocumentImportInPage` | `error` | Prepreči uvažanje `next/document` v datoteke strani. `_document.tsx` bi moral obstajati le v `pages/_document.tsx`. |
-| `noHeadImportInDocument` | `error` | Prepreči uvažanje `next/head` v `_document.tsx`. Namesto tega uporabite `<Head>` iz `next/document`. |
+| `noDocumentImportInPage` | `error` | Preprečite uvoz `next/document` v datotekah strani. `_document.tsx` bi moral obstajati le v `pages/_document.tsx`. |
+| `noHeadImportInDocument` | `error` | Preprečite uvoz `next/head` v `_document.tsx`. Namesto tega uporabite `<Head>` iz `next/document`. |
 
-## Nadomestitve konfiguracijskih datotek
+## Prekrite nastavitve konfiguracijskih datotek
 
-Prednastavitev za Next.js vključuje posebno obravnavo konfiguracijskih datotek in komponent App Routerja:
+Next.js prednastavitev vključuje posebno obravnavo konfiguracijskih datotek in komponent App Routerja:
 
 ### Konfiguracijske datoteke Next.js
 
@@ -74,9 +67,9 @@ Prednastavitev za Next.js vključuje posebno obravnavo konfiguracijskih datotek 
 }
 ```
 
-To omogoča vzorce konfiguracij Next.js, ki običajno morda ne bi prestali pravil linterja.
+To omogoča vzorce konfiguracije Next.js, ki morda običajno ne bi prestali pravil za lintanje.
 
-### App Router strani in postavitve
+### Strani in postavitve App Routerja
 
 ```jsonc
 {
@@ -95,4 +88,4 @@ To omogoča vzorce konfiguracij Next.js, ki običajno morda ne bi prestali pravi
 }
 ```
 
-Komponentam strani in postavitvam App Routerja je dovoljeno, da so asinhrone brez zahteve po `await`, saj Next.js zanje zagotavlja posebno obravnavo pri upodabljanju na strežniku in pridobivanju podatkov.
+Komponentam strani in postavitvam App Routerja je dovoljeno, da so async brez obveznega `await`, saj Next.js to posebej obravnava za upodabljanje na strežniku in pridobivanje podatkov.

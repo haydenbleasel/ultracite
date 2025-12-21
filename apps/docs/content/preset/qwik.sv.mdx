@@ -1,9 +1,9 @@
 ---
 title: Qwik
-description: Qwik-specifika lintningsregler för Ultracite.
+description: Qwik-specifika lintregler för Ultracite.
 ---
 
-Qwik-konfigurationen innehåller Qwik-specifika lintningsregler för serialisering, synliga uppgifter, lexiskt omfång och metodanvändning.
+Qwik-konfigurationen innehåller Qwik-specifika lintregler för serialisering, synliga uppgifter, lexikalt omfång och metodanvändning.
 
 ## Installation
 
@@ -17,13 +17,11 @@ Lägg till Qwik-konfigurationen i din `biome.jsonc`:
 
 ## Översikt
 
-Denna konfiguration lägger till regler som är specifika för Qwik-utveckling:
+Denna konfiguration lägger till regler specifika för Qwik-utveckling:
 
-- **Serialisering**: Upprätthåll korrekt användning av Qwiks resumabilitetsmodell
+- **Serialisering**: Tvinga fram korrekt användning av Qwiks resumabilitetsmodell
 - **Synliga uppgifter**: Förhindra olämplig användning av `useVisibleTask$`
-- **Lexiskt omfång**: Säkerställ korrekt variabelomfång i `$`-funktioner
-- **Metodanvändning**: Upprätthåll korrekta Qwik-metodmönster
-- **React-specifika props**: Tillåt inte React-specifika props i Qwik-komponenter
+- **React-specifika props**: Förhindra React-specifika props i Qwik-komponenter
 
 ## Qwik-specifika regler
 
@@ -31,18 +29,11 @@ Denna konfiguration lägger till regler som är specifika för Qwik-utveckling:
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Förhindra användning av `useVisibleTask$`. Denna hook kör koden omedelbart på klienten, vilket undergräver Qwiks resumabilitet. Använd `useTask$` eller `useResource$` istället när det är möjligt. |
-| `useQwikClasslist` | `error` | Upprätthåll användning av `class`-objektsyntax istället för strängkonkatenering för dynamiska klasser i Qwik. |
+| `noQwikUseVisibleTask` | `error` | Förhindra användning av `useVisibleTask$`. Denna hook kör kod omedelbart på klienten, vilket undergräver Qwiks resumabilitet. Använd `useTask$` eller `useResource$` istället när det är möjligt. |
+| `useQwikClasslist` | `error` | Tvinga användning av `class`-objektsyntax istället för strängsammanfogning för dynamiska klasser i Qwik. |
 
-### Inkubator
-
-| Regel | Inställning | Beskrivning |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Upprätthåll giltigt lexiskt omfång i Qwiks `$`-funktioner. Variabler från yttre omfång måste anges uttryckligen. |
-| `useQwikMethodUsage` | `error` | Upprätthåll korrekt användning av Qwik-specifika metoder och API:er. |
-
-### Misstänkt
+### Misstänkta
 
 | Regel | Inställning | Beskrivning |
 |------|---------|-------------|
-| `noReactSpecificProps` | `error` | Förhindra React-specifika props som `className` och `htmlFor` i Qwik. Använd `class` och `for` istället. |
+| `noReactSpecificProps` | `error` | Förbjud React-specifika props som `className` och `htmlFor` i Qwik. Använd `class` och `for` istället. |

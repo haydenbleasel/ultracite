@@ -236,31 +236,8 @@
         "noUnmatchableAnbSelector": "error"
       },
       "nursery": {
-        "noAmbiguousAnchorText": "error",
-        "noDuplicateDependencies": "error",
-        "noDuplicatedSpreadProps": "error",
-        "noEmptySource": "error",
-        "noEqualsToNull": "error",
-        "noIncrementDecrement": {
-          "level": "error",
-          "options": {
-            "allowForLoopAfterthoughts": true
-          }
-        },
-        "noLeakedRender": "error",
-        "noMultiStr": "error",
-        "noParametersOnlyUsedInRecursion": "error",
-        "noProto": "error",
-        "noScriptUrl": "error",
-        "noShadow": "error",
-        "noSyncScripts": "error",
-        "noUndeclaredEnvVars": "error",
-        "noUnusedExpressions": "error",
-        "noUselessUndefined": "error",
-        "useConsistentArrowReturn": "error",
-        "useConsistentGraphqlDescriptions": "error",
-        "useDeprecatedDate": "error",
-        "useMaxParams": "error",
+        // Typically we don't enable nursery rules anymore (https://github.com/haydenbleasel/ultracite/issues/457)
+        // but this was requested specifically by a lot of people.
         "useSortedClasses": {
           "fix": "safe",
           "level": "error",
@@ -268,30 +245,7 @@
             "attributes": ["className"],
             "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
           }
-        },
-        "useSpread": "error",
-        "useUniqueGraphqlOperationName": "error",
-
-        "noContinue": "off",
-        "noForIn": "off",
-        "noJsxLiterals": "off",
-        "noTernary": "off",
-        "noUselessCatchBinding": "off",
-        "useExplicitType": "off",
-        "useRequiredScripts": "off",
-
-        /** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/
-        "noDeprecatedImports": "off",
-        "noFloatingPromises": "off",
-        "noMisusedPromises": "off",
-        "noUnnecessaryConditions": "off",
-        "noUnresolvedImports": "off",
-        "noImportCycles": "off",
-        "useArraySortCompare": "off",
-        "useAwaitThenable": "off",
-        "useFind": "off",
-        "useExhaustiveSwitchCases": "off",
-        "useRegexpExec": "off"
+        }
       },
       "performance": {
         /** ------------------------ JavaScript Rules ------------------------ **/

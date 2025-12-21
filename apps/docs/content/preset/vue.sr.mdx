@@ -1,9 +1,9 @@
 ---
 title: Vue
-description: Pravila lintovanja specifična za Vue.js za Ultracite.
+description: Pravila za linting specifična za Vue.js za Ultracite.
 ---
 
-Konfiguracija za Vue sadrži pravila lintovanja specifična za Vue.js za strukturu komponenti, opcije podataka, computed svojstva i rezervisane ključne reči. Takođe uključuje isključenja da bi se sprečile lažno pozitivne greške lintovanja u `.vue` fajlovima.
+Vue konfiguracija sadrži pravila za linting specifična za Vue.js za strukturu komponenti, opcije podataka, izračunata svojstva i rezervisane ključne reči. Takođe uključuje override-e kako bi se sprečile lažno pozitivne greške lintovanja u `.vue` fajlovima.
 
 ## Instalacija
 
@@ -17,19 +17,15 @@ Dodajte Vue konfiguraciju u vaš `biome.jsonc`:
 
 ## Pregled
 
-Ova konfiguracija dodaje pravila specifična za razvoj u Vue.js:
+Ova konfiguracija dodaje pravila specifična za Vue.js razvoj:
 
-- **Podrška za HTML**: Omogućava eksperimentalnu potpunu podršku za HTML sa uvlačenjem skripti i stilova
-- **Imenovanje komponenti**: Sprovodi više-rečena imena komponenti
-- **Struktura podataka**: Sprečava nepravilne deklaracije opcije `data`
-- **Rezervisane ključne reči**: Zabranjuje upotrebu Vue rezervisanih propova i ključeva
-- **Duplikati ključeva**: Sprečava duplikate ključeva u opcijama komponente
-- **React-specifični props**: Zabranjuje React-specifične propse u Vue komponentama
-- **Preklapanja za Vue fajlove**: Opuštenija pravila za `.vue` fajlove kako bi se upravljalo strukturom Single File Component-a
+- **Podrška za HTML**: Omogućava eksperimentalnu potpunu podršku za HTML sa uvlačenjem sadržaja unutar `<script>` i `<style>` tagova
+- **React-specifični props**: Zabranjuje React-specifične props u Vue komponentama
+- **Override za Vue fajlove**: Opuštenija pravila za `.vue` fajlove kako bi se obradila struktura Single File Component-a
 
 ## Konfiguracija HTML formatiranja
 
-Vue preset omogućava eksperimentalnu podršku za HTML sa posebnim formatiranjem za ugrađene skripte i stilove:
+Vue preset omogućava eksperimentalnu podršku za HTML sa specijalnim formatiranjem za ugrađene skripte i stilove:
 
 ```jsonc
 {
@@ -43,50 +39,31 @@ Vue preset omogućava eksperimentalnu podršku za HTML sa posebnim formatiranjem
 ```
 
 Ova konfiguracija:
-- **Eksperimentalna potpuna podrška**: Omogućava Biome-ovo eksperimentalno parsiranje i formatiranje HTML-a za `.vue` fajlove
+- **Eksperimentalna potpuna podrška**: Omogućava Biome-ove eksperimentalne mogućnosti parsiranja i formatiranja HTML-a za `.vue` fajlove
 - **Uvlačenje skripti i stilova**: Ispravno uvlači kod unutar `<script>` i `<style>` tagova u Vue Single File Component-ima
 
 ## Vue-specifična pravila
 
-### Početni nivo
-
-| Pravilo | Podešavanje | Opis |
-|------|---------|-------------|
-| `noVueDataObjectDeclaration` | `error` | Sprečava korišćenje deklaracije objekta za opciju `data` u Vue komponentama. Opcija `data` mora biti funkcija koja vraća objekat. |
-| `noVueDuplicateKeys` | `error` | Sprečava duplikate ključeva u opcijama Vue komponente. Ključevi u `data`, `computed`, `methods`, itd. moraju biti jedinstveni. |
-| `noVueReservedKeys` | `error` | Zabranjuje Vue rezervisane ključeve kao što su `$data`, `$props`, `$el`, itd. u opcijama komponente. |
-| `noVueReservedProps` | `error` | Zabranjuje Vue rezervisane propse kao što su `key`, `ref`, i `is` kao prilagođene propse komponente. |
-| `noVueVIfWithVFor` | `error` | Zabranjuje `v-for` i `v-if` na istom elementu. |
-| `useVueHyphenatedAttributes` | `error` | Podstiče upotrebu kebab-case za imena atributa, u skladu sa preporukama Vue stila. |
-| `useVueMultiWordComponentNames` | `error` | Sprovodi više-rečena imena komponenti kako bi se izbegli konflikti sa HTML elementima. Imena jedne reči kao što su `Button` ili `Card` bi trebalo izbegavati. |
-| `useVueValidVBind` | `error` | Sprovodi validnost `v-bind` direktiva u Vue fajlovima. |
-| `useVueValidVElseIf` | `error` | Sprovodi validne `v-else-if` direktive u Vue templata. Prijavljuje nevažeće direktive sa nedostajućim uslovnim izrazima ili kada nisu prethodno praćene `v-if` ili `v-else-if` direktivom. |
-| `useVueValidVElse` | `error` | Sprovodi validne `v-else` direktive u Vue templata. Prijavljuje direktive koje nisu prethodno praćene `v-if` ili `v-else-if` direktivom. |
-| `useVueValidVHtml` | `error` | Sprovodi validnu upotrebu `v-html` direktive u Vue templata. Prijavljuje direktive sa nedostajućim izrazima, neočekivanim argumentima ili neočekivanim modifikatorima. |
-| `useVueValidVIf` | `error` | Sprovodi validne `v-if` direktive u Vue templata. Zabraňuje argumente i modifikatore, i osigurava da je vrednost obezbeđena. |
-| `useVueValidVOn` | `error` | Sprovodi validne `v-on` direktive u Vue templata. Prijavljuje nevažeće `v-on` / skraćene `@` direktive sa nedostajućim imenima događaja, nevažećim modifikatorima ili nedostajućim handler izrazima. |
-| `useVueValidVText` | `error` | Sprovodi validne `v-text` direktive u Vue templata. Pravilo prijavljuje kada `v-text` ima argument, ima modifikatore ili mu nedostaje vrednost. |
-
 ### Sumnjivo
 
 | Pravilo | Podešavanje | Opis |
-|------|---------|-------------|
-| `noReactSpecificProps` | `error` | Zabranjuje React-specifične propse kao što su `className` i `htmlFor` u Vue. Umesto njih koristite `class` i `for`. |
+|---------|------------|------|
+| `noReactSpecificProps` | `error` | Zabranjuje React-specifične props kao što su `className` i `htmlFor` u Vue-u. Umesto njih koristite `class` i `for`. |
 
-## Preklapanja za Vue fajlove
+## Override za Vue fajlove
 
-Sledeća pravila su onemogućena za `.vue` fajlove kako bi se sprečile lažno pozitivne greške zbog delimične podrške Biome-a za Vue Single File Component-e:
+Sledeća pravila su onemogućena za `.vue` fajlove kako bi se sprečile lažno pozitivne greške zbog Biome-ove delimične podrške za Vue Single File Components:
 
 ### Ispravnost
 
 | Pravilo | Podešavanje | Opis |
-|------|---------|-------------|
-| `noUnusedVariables` | `off` | Dozvoljava neiskorišćene promenljive u `.vue` fajlovima. Promenljive u script sekciji se mogu koristiti samo u template-u. |
-| `noUnusedImports` | `off` | Dozvoljava neiskorišćene import-e u `.vue` fajlovima. Importi se mogu koristiti samo u template sekciji. |
+|---------|------------|------|
+| `noUnusedVariables` | `off` | Dozvoljava neiskorišćene promenljive u `.vue` fajlovima. Promenljive u <script> sekciji mogu se koristiti samo u <template> delu. |
+| `noUnusedImports` | `off` | Dozvoljava neiskorišćene import-e u `.vue` fajlovima. Importi mogu se koristiti samo u <template> delu. |
 
 ### Stil
 
 | Pravilo | Podešavanje | Opis |
-|------|---------|-------------|
-| `useConst` | `off` | Dozvoljava deklaracije `let` i `var` u `.vue` fajlovima za reaktivne obrasce podataka. |
-| `useImportType` | `off` | Onemogućava zahteve za eksplicitnim tipom importa radi bolje kompatibilnosti sa Vue build sistemom. |
+|---------|------------|------|
+| `useConst` | `off` | Dozvoljava `let` i `var` deklaracije u `.vue` fajlovima za obrasce reaktivnih podataka. |
+| `useImportType` | `off` | Onemogućava zahteve za eksplicitnim tipovima import-a radi bolje kompatibilnosti sa Vue build sistemom. |

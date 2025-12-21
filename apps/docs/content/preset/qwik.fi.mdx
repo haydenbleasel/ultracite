@@ -1,13 +1,13 @@
 ---
 title: Qwik
-description: Qwik-spesifiset linttaussäännöt Ultracitelle.
+description: Qwik-kohtaiset linttaussäännöt Ultracitelle.
 ---
 
-Qwikin konfiguraatio sisältää Qwik-spesifisiä linttaussääntöjä serialisointiin, näkyviin tehtäviin, leksikaaliseen laajuuteen ja metodien käyttöön.
+The Qwik configuration has Qwik-specific linting rules for serialization, visible tasks, lexical scope, and method usage.
 
 ## Asennus
 
-Lisää Qwik-konfiguraatio tiedostoosi `biome.jsonc`:
+Lisää Qwik-konfiguraatio tiedostoon `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -19,30 +19,21 @@ Lisää Qwik-konfiguraatio tiedostoosi `biome.jsonc`:
 
 Tämä konfiguraatio lisää Qwik-kehitykseen liittyviä sääntöjä:
 
-- **Serialisointi**: Pakota Qwikin resumability-mallin oikea käyttö
-- **Näkyvät tehtävät**: Estä `useVisibleTask$`-hookin epäsopiva käyttö
-- **Leksikaalinen laajuus**: Varmista muuttujien oikea laajuus `$`-funktioissa
-- **Metodien käyttö**: Pakota oikeat Qwik-metodikäytännöt
-- **React-spesifiset propit**: Estä React-spesifisten propien käyttö Qwik-komponenteissa
+- **Serialisointi**: Pakottaa Qwikin resumability-mallin oikean käytön
+- **Näkyvät tehtävät**: Estää `useVisibleTask$`-hookin epäasianmukaisen käytön
+- **React-spesifiset propit**: Estää React-spesifisten propien käytön Qwik-komponenteissa
 
-## Qwik-spesifiset säännöt
+## Qwik-kohtaiset säännöt
 
 ### Oikeellisuus
 
 | Sääntö | Asetus | Kuvaus |
-|------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Estä `useVisibleTask$`-käyttö. Tämä hook suorittaa koodin välittömästi asiakaspuolella, mikä mitätöi Qwikin resumability-mallin. Käytä sen sijaan `useTask$`- tai `useResource$`-hookkeja aina kun mahdollista. |
-| `useQwikClasslist` | `error` | Pakota käyttämään `class`-objektisyntaksia merkkijonojen yhdistämisen sijaan dynaamisissa luokissa Qwikissä. |
-
-### Kokeelliset
-
-| Sääntö | Asetus | Kuvaus |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Varmista kelvollinen leksikaalinen laajuus Qwikin `$`-funktioissa. Ulkoiset muuttujat on otettava nimenomaisesti mukaan. |
-| `useQwikMethodUsage` | `error` | Pakota Qwik-spesifisten metodien ja API:en oikea käyttö. |
+|-------|--------|--------|
+| `noQwikUseVisibleTask` | `error` | Estä `useVisibleTask$`-käyttö. Tämä hook suorittaa koodin välittömästi asiakaspuolella, mikä rikkoo Qwikin resumability-mallin. Käytä tarvittaessa mieluummin `useTask$`- tai `useResource$`-hookia. |
+| `useQwikClasslist` | `error` | Pakottaa käyttämään `class`-objektisyntaksia merkkijonojen yhdistämisen sijaan dynaamisissa luokissa Qwikissä. |
 
 ### Epäilyttävät
 
 | Sääntö | Asetus | Kuvaus |
-|------|---------|-------------|
-| `noReactSpecificProps` | `error` | Kiellä React-spesifiset propit kuten `className` ja `htmlFor` Qwikissä. Käytä sen sijaan `class` ja `for`. |
+|-------|--------|--------|
+| `noReactSpecificProps` | `error` | Estää React-spesifisten propien, kuten `className` ja `htmlFor`, käytön Qwikissä. Käytä sen sijaan `class`- ja `for`-ominaisuuksia. |

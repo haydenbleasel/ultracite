@@ -1,9 +1,9 @@
 ---
 title: Qwik
-description: Règles de lint spécifiques à Qwik pour Ultracite.
+description: Règles de linting spécifiques à Qwik pour Ultracite.
 ---
 
-La configuration Qwik contient des règles de lint spécifiques à Qwik pour la sérialisation, les tâches visibles, la portée lexicale et l'utilisation des méthodes.
+La configuration Qwik contient des règles de linting spécifiques à Qwik pour la sérialisation, les tâches visibles, la portée lexicale et l'utilisation des méthodes.
 
 ## Installation
 
@@ -17,32 +17,23 @@ Ajoutez la configuration Qwik à votre `biome.jsonc` :
 
 ## Aperçu
 
-Cette configuration ajoute des règles spécifiques au développement de Qwik :
+Cette configuration ajoute des règles spécifiques au développement Qwik :
 
-- **Sérialisation**: Faire respecter la bonne utilisation du modèle de résumabilité de Qwik
-- **Tâches visibles**: Empêcher l'utilisation inappropriée de `useVisibleTask$`
-- **Portée lexicale**: Garantir la portée correcte des variables dans les fonctions `$`
-- **Utilisation des méthodes**: Faire respecter les bons modèles d'utilisation des méthodes Qwik
-- **Props spécifiques à React**: Interdire les props spécifiques à React dans les composants Qwik
+- **Sérialisation** : Faire respecter l'utilisation appropriée du modèle de résumabilité de Qwik
+- **Tâches visibles** : Empêcher l'utilisation inappropriée de `useVisibleTask$`
+- **Props spécifiques à React** : Interdire les props spécifiques à React dans les composants Qwik
 
 ## Règles spécifiques à Qwik
 
-### Exactitude
+### Correction
 
-| Règle | Niveau | Description |
+| Règle | Paramètre | Description |
 |------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Empêcher l'utilisation de `useVisibleTask$`. Ce hook exécute du code de manière anticipée côté client, ce qui compromet la résumabilité de Qwik. Utilisez `useTask$` ou `useResource$` lorsque cela est possible. |
-| `useQwikClasslist` | `error` | Appliquer l'utilisation de la syntaxe d'objet `class` au lieu de la concaténation de chaînes pour les classes dynamiques dans Qwik. |
+| `noQwikUseVisibleTask` | `error` | Empêcher l'utilisation de `useVisibleTask$`. Ce hook exécute le code immédiatement côté client, compromettant la résumabilité de Qwik. Utilisez `useTask$` ou `useResource$` lorsque c'est possible. |
+| `useQwikClasslist` | `error` | Imposer l'utilisation de la syntaxe d'objet `class` plutôt que la concaténation de chaînes pour les classes dynamiques dans Qwik. |
 
-### Nouveautés
+### Suspectes
 
-| Règle | Niveau | Description |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Appliquer une portée lexicale valide dans les fonctions `$` de Qwik. Les variables provenant de portées externes doivent être capturées explicitement. |
-| `useQwikMethodUsage` | `error` | Faire respecter l'utilisation correcte des méthodes et API spécifiques à Qwik. |
-
-### Suspicieux
-
-| Règle | Niveau | Description |
+| Règle | Paramètre | Description |
 |------|---------|-------------|
 | `noReactSpecificProps` | `error` | Interdire les props spécifiques à React comme `className` et `htmlFor` dans Qwik. Utilisez `class` et `for` à la place. |

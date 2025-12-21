@@ -1,13 +1,13 @@
 ---
 title: React
-description: React-specifikus lintelési szabályok az Ultracite számára.
+description: React-specifikus lintelési szabályok az Ultracite-hez.
 ---
 
 A React konfiguráció React-specifikus lintelési szabályokat tartalmaz JSX-hez, hookokhoz és komponensmintákhoz.
 
 ## Telepítés
 
-Add hozzá a React konfigurációt a `biome.jsonc` fájlodhoz:
+Adja hozzá a React konfigurációt a `biome.jsonc` fájlhoz:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,45 +17,39 @@ Add hozzá a React konfigurációt a `biome.jsonc` fájlodhoz:
 
 ## Áttekintés
 
-Ez a konfiguráció React-fejlesztésre vonatkozó szabályokat ad hozzá:
+Ez a konfiguráció React-fejlesztéshez specifikus szabályokat ad hozzá:
 
-- **JSX szabályok**: Érvényesíti a helyes JSX-szintaxist és -mintákat
-- **Hookok szabályai**: Biztosítja a React hookok helyes használatát
+- **JSX szabályok**: Biztosítja a megfelelő JSX-szintaxist és mintákat
+- **Hookok szabályai**: Biztosítja, hogy a React hookokat helyesen használják
 - **Komponens szabályok**: Érvényesíti a React komponensekre vonatkozó legjobb gyakorlatokat
-- **Children kezelés**: Megakadályozza a children prop nem megfelelő használatát
+- **Children kezelése**: Megakadályozza a children prop nem megfelelő használatát
 
 ## React-specifikus szabályok
 
 ### Helyesség
 
 | Szabály | Beállítás | Leírás |
-|--------|----------|--------|
-| `noChildrenProp` | `error` | Megakadályozza a children prop átadását. A children-nek a nyitó és záró tagek közé kell kerülnie. |
-| `noNestedComponentDefinitions` | `error` | Megakadályozza, hogy komponensdefiníciók más komponenseken belül legyenek. Ez szükségtelen újrarendereléseket okozhat. |
-| `noReactPropAssignments` | `error` | Megakadályozza a propok újrahözárendelését React komponensekben. A propokat változatlannak kell tekinteni. |
+|--------|-----------|--------|
+| `noChildrenProp` | `error` | Megakadályozza, hogy a children propként legyen átadva. A children-nek a nyitó és záró tagek közé kell kerülnie. |
+| `noNestedComponentDefinitions` | `error` | Megakadályozza, hogy komponensdefiníciók más komponensek belsejében legyenek. Ez felesleges újrarendereléseket okoz. |
+| `noReactPropAssignments` | `error` | Megakadályozza a props újrahozzárendelését React komponensekben. A props-okat nem módosíthatóként kell kezelni. |
 | `noRenderReturnValue` | `error` | Megakadályozza a `ReactDOM.render()` visszatérési értékének használatát. |
 | `noVoidElementsWithChildren` | `error` | Megakadályozza, hogy void elemek (például `<img>`, `<br>`) children-t tartalmazzanak. |
-| `useExhaustiveDependencies` | `error` | Követeli, hogy minden függőség helyesen legyen megadva a React hookokban (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Követeli, hogy minden React hookot a komponens függvények felső szintjén hívjanak meg, ne ciklusokban, feltételekben vagy beágyazott függvényekben. |
-| `useJsxKeyInIterable` | `error` | Követeli, hogy az iterálható elemek rendelkezzenek `key` propbal a React reconciliációhoz. |
-
-### Kísérleti
-
-| Szabály | Beállítás | Leírás |
-|--------|----------|--------|
-| `noReactForwardRef` | `error` | Megakadályozza a régi `React.forwardRef` használatát. Használj ref-et propként helyette (React 19+). |
+| `useExhaustiveDependencies` | `error` | Megköveteli, hogy minden függőség helyesen legyen megadva a React hookokban (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Megköveteli, hogy minden React hookot a komponensfüggvények felső szintjén hívjanak meg, ne ciklusok, feltételek vagy beágyazott függvények belsejében. |
+| `useJsxKeyInIterable` | `error` | Megköveteli, hogy az iterálható elemek rendelkezzenek `key` propbal a React összeegyeztetéséhez. |
 
 ### Stílus
 
 | Szabály | Beállítás | Leírás |
-|--------|----------|--------|
-| `useReactFunctionComponents` | `error` | Követeli a függvénykomponensek használatát osztálykomponensek helyett React-ben. |
+|--------|-----------|--------|
+| `useReactFunctionComponents` | `error` | Megköveteli a függvénykomponensek használatát az osztálykomponensek helyett a React-ben. |
 
 ### Gyanús
 
 | Szabály | Beállítás | Leírás |
-|--------|----------|--------|
+|--------|-----------|--------|
 | `noArrayIndexKey` | `error` | Megakadályozza, hogy tömbindexeket használjanak kulcsként. A tömbindexek nem stabil azonosítók és problémákat okozhatnak a komponens állapotával. |
 | `noDuplicateJsxProps` | `error` | Megakadályozza a duplikált tulajdonságokat JSX-ben. |
-| `noSuspiciousSemicolonInJsx` | `error` | Megakadályozza azokat a pontosvesszőket, amelyek megváltoztatják a JSX elemek szemantikáját. |
+| `noSuspiciousSemicolonInJsx` | `error` | Megakadályozza a pontosvesszőket, amelyek megváltoztatják a JSX elemek szemantikáját. |
 | `noReactSpecificProps` | `off` | Engedélyezi a React-specifikus propokat, mint a `className` és `htmlFor`. |

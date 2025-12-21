@@ -3,7 +3,7 @@ title: Qwik
 description: Reguli de lint specifice Qwik pentru Ultracite.
 ---
 
-Configurația Qwik conține reguli de lint specifice Qwik pentru serializare, sarcini vizibile, domeniu lexical și utilizarea metodelor.
+Configurația Qwik conține reguli de lint specifice Qwik pentru serializare, sarcini vizibile, scop lexical și utilizarea metodelor.
 
 ## Instalare
 
@@ -19,30 +19,21 @@ Adăugați configurația Qwik în `biome.jsonc`:
 
 Această configurație adaugă reguli specifice dezvoltării cu Qwik:
 
-- **Serializare**: Impune utilizarea corectă a modelului de reluare al Qwik
-- **Sarcini vizibile**: Previne utilizarea inadecvată a `useVisibleTask$`
-- **Domeniu lexical**: Asigură scopul corect al variabilelor în funcțiile `$`
-- **Utilizarea metodelor**: Impune tipare corecte pentru metodele Qwik
-- **Proprietăți specifice React**: Interzice proprietățile specifice React în componentele Qwik
+- **Serializare**: Aplică utilizarea corectă a modelului de reluare al Qwik
+- **Sarcini vizibile**: Previne utilizarea neadecvată a `useVisibleTask$`
+- **Props specifice React**: Interzice props specifice React în componentele Qwik
 
 ## Reguli specifice Qwik
 
 ### Corectitudine
 
-| Regulă | Setare | Descriere |
-|--------|--------|-----------|
-| `noQwikUseVisibleTask` | `error` | Previne utilizarea lui `useVisibleTask$`. Acest hook execută cod imediat pe client, anulând capacitatea de reluare (resumability) a Qwik. Folosiți `useTask$` sau `useResource$` când este posibil. |
-| `useQwikClasslist` | `error` | Impune utilizarea sintaxei obiect `class` în locul concatenării de stringuri pentru clase dinamice în Qwik. |
-
-### Experimental
-
-| Regulă | Setare | Descriere |
-|--------|--------|-----------|
-| `useQwikValidLexicalScope` | `error` | Impune un domeniu lexical valid în funcțiile `$` ale Qwik. Variabilele din domeniile exterioare trebuie capturate explicit. |
-| `useQwikMethodUsage` | `error` | Impune utilizarea corectă a metodelor și API-urilor specifice Qwik. |
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noQwikUseVisibleTask` | `error` | Preveniți utilizarea lui `useVisibleTask$`. Acest hook execută cod imediat pe client, ceea ce subminează modelul de reluare al Qwik. Folosiți `useTask$` sau `useResource$` în schimb, atunci când este posibil. |
+| `useQwikClasslist` | `error` | Aplică utilizarea sintaxei obiect `class` în locul concatenării de stringuri pentru clase dinamice în Qwik. |
 
 ### Suspecte
 
-| Regulă | Setare | Descriere |
-|--------|--------|-----------|
-| `noReactSpecificProps` | `error` | Interzice proprietăți specifice React precum `className` și `htmlFor` în Qwik. Folosiți `class` și `for` în schimb. |
+| Rule | Setting | Description |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Interzice props specifice React precum `className` și `htmlFor` în Qwik. Folosiți `class` și `for` în schimb. |

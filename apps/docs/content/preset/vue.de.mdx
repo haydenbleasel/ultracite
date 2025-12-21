@@ -3,7 +3,7 @@ title: Vue
 description: Vue.js-spezifische Linting-Regeln für Ultracite.
 ---
 
-Die Vue-Konfiguration enthält Vue.js-spezifische Linting-Regeln für Komponentenstruktur, data-Optionen, berechnete Eigenschaften und reservierte Schlüsselwörter. Sie enthält außerdem Overrides, um falsch positive Linting-Fehler in `.vue`-Dateien zu verhindern.
+Die Vue-Konfiguration enthält Vue.js-spezifische Linting-Regeln für Komponentenstruktur, Datenoptionen, berechnete Eigenschaften und reservierte Schlüsselwörter. Sie enthält außerdem Überschreibungen, um falsch-positive Linting-Fehler in `.vue`-Dateien zu verhindern.
 
 ## Installation
 
@@ -15,17 +15,13 @@ Fügen Sie die Vue-Konfiguration zu Ihrer `biome.jsonc` hinzu:
 }
 ```
 
-## Übersicht
+## Überblick
 
 Diese Konfiguration fügt Regeln hinzu, die speziell für die Vue.js-Entwicklung gelten:
 
-- **HTML-Unterstützung**: Aktiviert experimentelle vollständige HTML-Unterstützung mit Einrückung für Script- und Style-Bereiche
-- **Komponentenbenennung**: Erzwingt mehrteilige Komponentennamen
-- **Datenstruktur**: Verhindert unsachgemäße Deklarationen der `data`-Option
-- **Reservierte Schlüsselwörter**: Verbietet die Verwendung von Vue-reservierten Props und Schlüsseln
-- **Doppelte Schlüssel**: Verhindert doppelte Schlüssel in Komponentenoptionen
-- **React-spezifische Props**: Verbietet React-spezifische Props in Vue-Komponenten
-- **Overrides für .vue-Dateien**: Gelockerte Regeln für `.vue`-Dateien, um die Struktur von Single File Components zu berücksichtigen
+- **HTML-Unterstützung**: Aktiviert experimentelle vollständige HTML-Unterstützung mit Einrückung von Skript- und Style-Bereichen
+- **React-spezifische Props**: Verbot von React-spezifischen Props in Vue-Komponenten
+- **Überschreibungen für `.vue`-Dateien**: Gelockerte Regeln für `.vue`-Dateien, um mit der Struktur von Single File Components umzugehen
 
 ## Konfiguration des HTML-Formatierers
 
@@ -43,50 +39,31 @@ Das Vue-Preset aktiviert experimentelle HTML-Unterstützung mit spezieller Forma
 ```
 
 Diese Konfiguration:
-- **Experimentelle vollständige Unterstützung**: Aktiviert Biomes experimentelle HTML-Parsing- und Formatierungsfähigkeiten für `.vue`-Dateien
-- **Script und Style einrücken**: Rückt Code innerhalb von `<script>`- und `<style>`-Tags in Vue Single File Components korrekt ein
+- **Experimentelle vollständige Unterstützung**: Aktiviert Biome's experimentelle HTML-Parsing- und Formatierungsfunktionen für `.vue`-Dateien
+- **Einrückung von Skript und Style**: Bezieht die Einrückung von Code innerhalb von `<script>`- und `<style>`-Tags in Vue Single File Components korrekt mit ein
 
 ## Vue-spezifische Regeln
-
-### Entwicklungsregeln
-
-| Regel | Einstellung | Beschreibung |
-|------|-------------|-------------|
-| `noVueDataObjectDeclaration` | `error` | Verhindert die Verwendung einer Objektdeklaration für die `data`-Option in Vue-Komponenten. Die `data`-Option muss eine Funktion sein, die ein Objekt zurückgibt. |
-| `noVueDuplicateKeys` | `error` | Verhindert doppelte Schlüssel in Vue-Komponentenoptionen. Schlüssel in `data`, `computed`, `methods` usw. müssen eindeutig sein. |
-| `noVueReservedKeys` | `error` | Verbietet Vue-reservierte Schlüssel wie `$data`, `$props`, `$el` usw. in Komponentenoptionen. |
-| `noVueReservedProps` | `error` | Verbietet Vue-reservierte Props wie `key`, `ref` und `is` als benutzerdefinierte Komponentenprops. |
-| `noVueVIfWithVFor` | `error` | Verbietet `v-for` und `v-if` am selben Element. |
-| `useVueHyphenatedAttributes` | `error` | Ermutigt zur Verwendung von Kebab-Case für Attributnamen, gemäß den Empfehlungen des Vue Style Guides. |
-| `useVueMultiWordComponentNames` | `error` | Erzwingt mehrteilige Komponentennamen, um Konflikte mit HTML-Elementen zu vermeiden. Einteilige Namen wie `Button` oder `Card` sollten vermieden werden. |
-| `useVueValidVBind` | `error` | Stellt die Gültigkeit von `v-bind`-Direktiven in Vue-Dateien sicher. |
-| `useVueValidVElseIf` | `error` | Sorgt für gültige `v-else-if`-Direktiven in Vue-Templates. Meldet ungültige Direktiven mit fehlenden bedingten Ausdrücken oder wenn sie nicht von einer `v-if`- oder `v-else-if`-Direktive vorausgegangen werden. |
-| `useVueValidVElse` | `error` | Sorgt für gültige `v-else`-Direktiven in Vue-Templates. Meldet Direktiven, die nicht von einer `v-if`- oder `v-else-if`-Direktive vorausgegangen werden. |
-| `useVueValidVHtml` | `error` | Sorgt für gültige Verwendung der `v-html`-Direktive in Vue-Templates. Meldet Direktiven mit fehlenden Ausdrücken, unerwarteten Argumenten oder unerwarteten Modifikatoren. |
-| `useVueValidVIf` | `error` | Sorgt für gültige `v-if`-Direktiven in Vue-Templates. Verbietet Argumente und Modifikatoren und stellt sicher, dass ein Wert vorhanden ist. |
-| `useVueValidVOn` | `error` | Sorgt für gültige `v-on`-Direktiven in Vue-Templates. Meldet ungültige `v-on` / Kurzschreibweise `@`-Direktiven mit fehlenden Ereignisnamen, ungültigen Modifikatoren oder fehlenden Handler-Ausdrücken. |
-| `useVueValidVText` | `error` | Sorgt für gültige `v-text`-Direktiven in Vue-Templates. Die Regel meldet, wenn `v-text` ein Argument hat, Modifikatoren verwendet oder einen fehlenden Wert aufweist. |
 
 ### Verdächtig
 
 | Regel | Einstellung | Beschreibung |
-|------|-------------|-------------|
-| `noReactSpecificProps` | `error` | Verbietet React-spezifische Props wie `className` und `htmlFor` in Vue. Verwenden Sie stattdessen `class` und `for`. |
+|------|---------|-------------|
+| `noReactSpecificProps` | `error` | Verbot von React-spezifischen Props wie `className` und `htmlFor` in Vue. Verwenden Sie `class` und `for` stattdessen. |
 
-## Overrides für .vue-Dateien
+## Überschreibungen für Vue-Dateien
 
-Die folgenden Regeln sind für `.vue`-Dateien deaktiviert, um falsch positive Meldungen aufgrund von Biomes teilweiser Unterstützung für Vue Single File Components zu vermeiden:
+Die folgenden Regeln sind für `.vue`-Dateien deaktiviert, um falsch-positive Meldungen aufgrund von Biome's teilweiser Unterstützung für Vue Single File Components zu vermeiden:
 
 ### Korrektheit
 
 | Regel | Einstellung | Beschreibung |
-|------|-------------|-------------|
-| `noUnusedVariables` | `off` | Erlaubt ungenutzte Variablen in `.vue`-Dateien. Variablen im Script-Bereich können nur im Template verwendet werden. |
-| `noUnusedImports` | `off` | Erlaubt ungenutzte Imports in `.vue`-Dateien. Imports können nur im Template-Bereich verwendet werden. |
+|------|---------|-------------|
+| `noUnusedVariables` | `off` | Erlaubt ungenutzte Variablen in `.vue`-Dateien. Variablen im Script-Bereich können ausschließlich im Template verwendet werden. |
+| `noUnusedImports` | `off` | Erlaubt ungenutzte Importe in `.vue`-Dateien. Importe können ausschließlich im Template-Bereich verwendet werden. |
 
 ### Stil
 
 | Regel | Einstellung | Beschreibung |
-|------|-------------|-------------|
+|------|---------|-------------|
 | `useConst` | `off` | Erlaubt `let`- und `var`-Deklarationen in `.vue`-Dateien für reaktive Datenmuster. |
-| `useImportType` | `off` | Deaktiviert explizite Importtyp-Anforderungen für bessere Kompatibilität mit dem Build-System von Vue. |
+| `useImportType` | `off` | Deaktiviert die Anforderungen an explizite Importtypen für eine bessere Kompatibilität mit dem Build-System von Vue. |

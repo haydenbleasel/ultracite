@@ -1,13 +1,13 @@
 ---
 title: Ydin
-description: Ultraciten peruskonfiguraatio, joka sisältää kehysriippumattomia lint-sääntöjä.
+description: Ultraciten peruskonfiguraatio, joka sisältää kehyksettömät lint-säännöt ja muotoiluasetukset.
 ---
 
-Core Ultracite -konfiguraatio tarjoaa kattavan joukon kehysriippumattomia lint-sääntöjä ja muotoiluasetuksia. Tämä on perusta, jota kaikki muut kehyskohtaiset konfiguraatiot laajentavat.
+Core-konfiguraatio tarjoaa kattavan joukon kehyksettömiä lint-sääntöjä ja muotoiluasetuksia. Tämä on perusta, jota kaikki muut kehyskohtaiset konfiguraatiot laajentavat.
 
 ## Asennus
 
-Core-konfiguraatio sisältyy automaattisesti, kun suoritat:
+Core-konfiguraatio sisällytetään automaattisesti, kun suoritat:
 
 ```bash
 npx ultracite init
@@ -23,25 +23,25 @@ Tai lisää se manuaalisesti `biome.jsonc`-tiedostoosi:
 
 ## Yleiskatsaus
 
-Core-konfiguraatio sisältää satoja tiukkoja lint-sääntöjä, jotka kattaa:
+Core-konfiguraatio sisältää satoja tiukkoja lint-sääntöjä, jotka kattavat:
 
-- **Esteettömyys (a11y)**: Pakota ARIA-attribuutit, semanttinen HTML ja näppäimistönavigointi
-- **Monimutkaisuus**: Vähennä kognitiivista monimutkaisuutta ja pakota parhaat käytännöt
-- **Oikeellisuus**: Estä yleiset virheet ja pakota tyyppiturvallisuus
-- **Suorituskyky**: Optimoi koodi parempaan suoritusaikaan
-- **Turvallisuus**: Estä tietoturva-aukkoja
-- **Tyyli**: Pakota yhtenäinen koodityyli
-- **Epäilyttävät**: Tunnista epäilyttäviä kaavoja, jotka voivat viitata virheisiin
+- **Esteettömyys (a11y)**: Varmistaa ARIA-attribuuttien, semanttisen HTML:n ja näppäimistönavigoinnin noudattamisen
+- **Monimutkaisuus**: Vähentää kognitiivista monimutkaisuutta ja edistää parhaita käytäntöjä
+- **Oikeellisuus**: Estää yleisiä virheitä ja valvoo tyyppiturvallisuutta
+- **Suorituskyky**: Optimoi koodia parempaa ajonaikaista suorituskykyä varten
+- **Tietoturva**: Estää tietoturva-aukkoja
+- **Tyyli**: Varmistaa yhtenäisen koodityylin
+- **Epäilyttävät**: Tunnistaa epäilyttäviä kuvioita, jotka voivat viitata virheisiin
 
 ## Muotoilijan asetukset
 
 - **Sisennys**: 2 välilyöntiä
-- **Rivileveys**: 80 merkkiä
-- **Rivin lopetus**: LF (Unix-tyyli)
-- **Puolipisteet**: Vaaditaan aina
-- **Lainausmerkit**: Kaksoislainausmerkit JavaScript/TypeScript- ja JSON-tiedostoille
-- **Perään lisättävät pilkut**: ES5-tyyli (moniriviset taulukot/oliot)
-- **Nuolifunktioiden sulkeet**: Sulje aina mukana
+- **Rivipituus**: 80 merkkiä
+- **Rivin loppu**: LF (Unix-tyyli)
+- **Puolipisteet**: Aina vaaditaan
+- **Lainausmerkit**: Kaksoislainausmerkit JavaScript/TypeScript- ja JSON-tiedostoissa
+- **Viimeiset pilkut**: ES5-tyyli (moniriviset taulukot/oliot)
+- **Nuolifunktioiden sulkeet**: Sisällytä sulkeet aina
 
 ## Keskeiset ominaisuudet
 
@@ -49,35 +49,35 @@ Core-konfiguraatio sisältää satoja tiukkoja lint-sääntöjä, jotka kattaa:
 
 Core-konfiguraatio ottaa käyttöön TypeScriptin tiukat tarkistukset:
 
-- Vastustaa `any`-tyypin käyttöä (`noExplicitAny: error`)
-- Edellyttää `null`/`undefined`-tilojen käsittelyä
-- Suosii eksplisiittisiä tyyppejä tietyissä tilanteissa
-- Pakottaa tyyppiturvallisuuden koko koodikannassa
+- Ei kannusta käyttämään `any` (`noExplicitAny: error`)
+- Edellyttää `null`/`undefined`-arvojen käsittelyä
+- Suosisaa eksplisiittisiä tyyppejä tietyissä tilanteissa
+- Varmistaa tyyppiturvallisuuden koko koodikannassa
 
-### ESLintin suositellut vastineet
+### ESLintin suositellut vastaavat
 
-Yleiset parhaat käytännöt sisällytetään:
+Yleisiä parhaiden käytäntöjen sääntöjä sisältyy:
 
 - Ei käyttämättömiä muuttujia (`noUnusedVariables: error`)
 - Ei käyttämättömiä importteja (`noUnusedImports: error`)
-- Ei `eval`-käyttöä (`noGlobalEval: error`)
-- Ei prototype-pollutioa (`noPrototypeBuiltins: error`)
+- Ei suoraa eval-kutsua (`noGlobalEval: error`)
+- Ei prototype-pollutointia (`noPrototypeBuiltins: error`)
 
 ### Esteettömyys oletuksena
 
 Säännöt, jotka vastaavat esteettömyysstandardeja:
 
-- ARIA-attribuuttien on oltava kelvollisia
+- ARIA-attribuuttien tulee olla kelvollisia
 - Semanttisia HTML-elementtejä suositellaan
 - Näppäimistönavigoinnin tuki vaaditaan
-- Kuville vaaditaan vaihtoehtoinen teksti
+- Kuville vaaditaan alt-teksti
 
 ### Node.js-tuki
 
 Ympäristökohtainen käsittely:
 
-- Tunnistaa Node.js:n globaaliavaimet (`module`, `process`)
-- Pakottaa `node:`-protokollan sisäänrakennetuille moduuleille
+- Tunnistaa Node.js:n globaalit (`module`, `process`)
+- Pakottaa `node:`-protokollan sisäänrakennettujen moduulien tuonnissa
 - Tukee sekä CommonJS:ää että ESM:ää
 
 ## Täydellinen sääntöviite
@@ -86,298 +86,260 @@ Ympäristökohtainen käsittely:
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noAccessKey` | `error` | Pakottaa, ettei `accessKey`-attribuuttia käytetä missään HTML-elementissä. |
-| `noAriaHiddenOnFocusable` | `error` | Pakottaa, ettei `aria-hidden="true"`-attribuuttia aseteta fokusoitaviin elementteihin. |
-| `noAriaUnsupportedElements` | `error` | Pakottaa, ettei elementeillä, jotka eivät tue ARIA-rooleja, -tiloja tai -attribuutteja, ole kyseisiä attribuutteja. |
-| `noAutofocus` | `off` | Pakottaa, ettei `autoFocus`-propia käytetä elementeissä. |
-| `noDistractingElements` | `error` | Estää häirittyvien elementtien käytön. |
-| `noHeaderScope` | `error` | `scope`-propia tulisi käyttää vain `<th>`-elementeissä. |
-| `noInteractiveElementToNoninteractiveRole` | `error` | Pakottaa, ettei interaktiivisille HTML-elementeille aseteta ei-interaktiivisia ARIA-rooleja. |
-| `noLabelWithoutControl` | `error` | Pakottaa, että label-elementillä tai -komponentilla on tekstillinen label ja siihen liittyvä input. |
-| `noNoninteractiveElementInteractions` | `error` | Estää tapahtumankäsittelijöiden käytön ei-interaktiivisissa elementeissä. |
-| `noNoninteractiveElementToInteractiveRole` | `error` | Pakottaa, ettei ei-interaktiivisille HTML-elementeille aseteta interaktiivisia ARIA-rooleja. |
-| `noNoninteractiveTabindex` | `error` | Pakottaa, ettei `tabIndex`-attribuuttia aseteta ei-interaktiivisille HTML-elementeille. |
+| `noAccessKey` | `error` | Varmistaa, ettei `accessKey`-attribuuttia käytetä missään HTML-elementissä. |
+| `noAriaHiddenOnFocusable` | `error` | Varmistaa, ettei `aria-hidden="true"` aseteta fokusoitaviin elementteihin. |
+| `noAriaUnsupportedElements` | `error` | Varmistaa, että elementeillä, jotka eivät tue ARIA-rooleja, tiloja tai ominaisuuksia, ei ole kyseisiä attribuutteja. |
+| `noAutofocus` | `off` | Varmistaa, ettei `autoFocus`-proppia käytetä elementeissä. |
+| `noDistractingElements` | `error` | Estää häiritsevien elementtien käytön. |
+| `noHeaderScope` | `error` | scope-proppiä tulisi käyttää vain `<th>`-elementeissä. |
+| `noInteractiveElementToNoninteractiveRole` | `error` | Varmistaa, ettei interaktiivisille HTML-elementeille aseteta ei-interaktiivisia ARIA-rooleja. |
+| `noLabelWithoutControl` | `error` | Varmistaa, että label-elementillä tai komponentilla on tekstimuotoinen etiketti ja siihen liittyvä input. |
+| `noNoninteractiveElementInteractions` | `error` | Kieltää tapahtumakäsittelijöiden käytön ei-interaktiivisissa elementeissä. |
+| `noNoninteractiveElementToInteractiveRole` | `error` | Varmistaa, ettei ei-interaktiivisille HTML-elementeille aseteta interaktiivisia ARIA-rooleja. |
+| `noNoninteractiveTabindex` | `error` | Varmistaa, ettei `tabIndex`-arvoa aseteta ei-interaktiivisiin HTML-elementteihin. |
 | `noPositiveTabindex` | `error` | Estää positiivisten kokonaislukujen käyttöä `tabIndex`-ominaisuudessa. |
-| `noRedundantAlt` | `error` | Pakottaa, että img:n alt-prop ei sisällä sanoja `image`, `picture` tai `photo`. |
-| `noRedundantRoles` | `error` | Pakottaa, ettei eksplisiittinen role-ominaisuus ole sama kuin elementin implisiittinen/oletusrooli. |
-| `noStaticElementInteractions` | `error` | Pakottaa, että staattiset, näkyvät elementit (esim. `<div>`), joilla on click-käsittelijät, käyttävät kelvollista role-attribuuttia. |
-| `noSvgWithoutTitle` | `error` | Pakottaa `svg`-elementin `title`-elementin käytön. |
-| `useAltText` | `error` | Pakottaa, että kaikilla vaihtoehtoista tekstiä vaativilla elementeillä on merkityksellinen tieto loppukäyttäjälle. |
-| `useAnchorContent` | `error` | Pakottaa, että anchor-elementeillä on sisältö ja että sisältö on ruudunlukuohjelmille saavutettavissa. |
-| `useAriaActivedescendantWithTabindex` | `error` | Pakottaa, että `tabIndex` on asetettu ei-interaktiivisille HTML-elementeille, joilla on `aria-activedescendant`. |
-| `useAriaPropsForRole` | `error` | Pakottaa, että ARIA-rooleja käyttävillä elementeillä on kaikki kyseiselle roolille vaaditut ARIA-attribuutit. |
-| `useAriaPropsSupportedByRole` | `error` | Pakottaa, että ARIA-ominaisuudet ovat kelvollisia elementin tukemien roolien suhteen. |
-| `useButtonType` | `error` | Pakottaa `type`-attribuutin käytön button-elementeille. |
-| `useFocusableInteractive` | `error` | Elementtien, joilla on interaktiivinen rooli ja käsittelijöitä, on oltava fokusoitavia. |
-| `useHeadingContent` | `error` | Pakottaa, että otsake-elementeillä (`h1`, `h2`, jne.) on sisältö ja että sisältö on ruudunlukijoille saavutettavissa. |
-| `useHtmlLang` | `error` | Pakottaa, että `html`-elementillä on `lang`-attribuutti. |
-| `useIframeTitle` | `error` | Pakottaa `title`-attribuutin käytön `iframe`-elementeille. |
-| `useKeyWithClickEvents` | `error` | Pakottaa, että `onClick`-käsittelyyn liittyy vähintään yksi seuraavista: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
-| `useKeyWithMouseEvents` | `error` | Pakottaa, että `onMouseOver` / `onMouseOut` -tapahtumien kanssa on `onFocus` / `onBlur`. |
-| `useMediaCaption` | `error` | Pakottaa, että audio- ja videoelementeillä on tekstitysraita. |
-| `useSemanticElements` | `error` | Havaitsee rooli-attribuuttien käytön JSX-elementeissä ja suosittelee semanttisten elementtien käyttöä. |
-| `useValidAnchor` | `error` | Pakottaa, että kaikki anchorit ovat kelvollisia ja navigoitavissa olevia elementtejä. |
+| `noRedundantAlt` | `error` | Varmistaa, ettei img:n alt-prop sisällä sanoja `image`, `picture` tai `photo`. |
+| `noRedundantRoles` | `error` | Varmistaa, ettei eksplisiittinen role-ominaisuus ole sama kuin elementin implisiittinen/oletusrooli. |
+| `noStaticElementInteractions` | `error` | Varmistaa, että staattiset, näkyvät elementit (kuten `<div>`), joilla on click-käsittelijät, käyttävät kelvollista role-attribuuttia. |
+| `noSvgWithoutTitle` | `error` | Edellyttää title-elementin käyttöä `svg`-elementeille. |
+| `useAltText` | `error` | Varmistaa, että kaikilla elementeillä, jotka tarvitsevat vaihtoehtoisen tekstin, on merkityksellinen tieto loppukäyttäjälle. |
+| `useAnchorContent` | `error` | Varmistaa, että anchor-elementeillä on sisältö ja että sisältö on ruudunlukijoiden saavutettavissa. |
+| `useAriaActivedescendantWithTabindex` | `error` | Varmistaa, että `tabIndex` asetetaan ei-interaktiivisille elementeille, joilla on aria-activedescendant. |
+| `useAriaPropsForRole` | `error` | Varmistaa, että ARIA-rooleja käyttävillä elementeillä on kaikki kyseiseen rooliin vaadittavat ARIA-attribuutit. |
+| `useAriaPropsSupportedByRole` | `error` | Varmistaa, että ARIA-ominaisuudet ovat kelvollisia elementin tukemille rooleille. |
+| `useButtonType` | `error` | Edellyttää `type`-attribuutin käyttöä button-elementeillä. |
+| `useFocusableInteractive` | `error` | Elementtien, joilla on interaktiivinen rooli ja interaktiohandlerit, täytyy olla fokusoitavissa. |
+| `useHeadingContent` | `error` | Varmistaa, että otsake-elementeillä (`h1`, `h2`, jne.) on sisältö ja että sisältö on ruudunlukijoiden saavutettavissa. |
+| `useHtmlLang` | `error` | Varmistaa, että `html`-elementillä on `lang`-attribuutti. |
+| `useIframeTitle` | `error` | Edellyttää title-attribuutin käyttöä iframe-elementeille. |
+| `useKeyWithClickEvents` | `error` | Varmistaa, että `onClick`-käsittelijän mukana on vähintään yksi seuraavista: `onKeyUp`, `onKeyDown`, `onKeyPress`. |
+| `useKeyWithMouseEvents` | `error` | Varmistaa, että `onMouseOver` / `onMouseOut` yhdistetään `onFocus` / `onBlur`-käsittelijöihin. |
+| `useMediaCaption` | `error` | Edellyttää, että audio- ja videoelementeillä on tekstityskanava. |
+| `useSemanticElements` | `error` | Havaitsee rooli-attribuuttien käytön JSX-elementeissä ja ehdottaa semanttisten elementtien käyttöä sijaan. |
+| `useValidAnchor` | `error` | Varmistaa, että kaikki anchorit ovat kelvollisia ja navigoitavia elementtejä. |
 | `useValidAriaProps` | `error` | Varmistaa, että ARIA-ominaisuudet `aria-*` ovat kelvollisia. |
 | `useValidAriaRole` | `error` | ARIA-rooleja käyttävien elementtien on käytettävä kelvollista, ei-abstraktia ARIA-roolia. |
-| `useValidAriaValues` | `error` | Pakottaa, että ARIA-tilojen ja -ominaisuuksien arvot ovat kelvollisia. |
-| `useValidAutocomplete` | `error` | Käytä kelvollisia arvoja `autocomplete`-attribuutissa input-elementeillä. |
-| `useValidLang` | `error` | Varmistaa, että `lang`-attribuutille annettu arvo on oikea ISO-kieli- ja/tai maa-arvo. |
-| `useGenericFontNames` | `error` | Estää geneerisen fonttiperheen avainsanan puuttumisen fonttiperheissä (CSS). |
+| `useValidAriaValues` | `error` | Varmistaa, että ARIA-tilan ja -ominaisuuden arvot ovat kelvollisia. |
+| `useValidAutocomplete` | `error` | Käytä kelvollisia arvoja input-elementtien autocomplete-atribuutissa. |
+| `useValidLang` | `error` | Varmistaa, että `lang`-attribuutille annettu arvo on oikea ISO-kieli- ja/tai maakoodi. |
+| `useGenericFontNames` | `error` | Kieltää geneerisen fonttiperheen avainsanan puuttumisen fonttiperheistä (CSS). |
 
 ### Monimutkaisuus
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noAdjacentSpacesInRegex` | `error` | Estää epämääräisen peräkkäisten välilyöntimerkkien käytön regulaarilauseke-literaaleissa. |
-| `noArguments` | `error` | Kieltää `arguments`-objektin käytön. |
+| `noAdjacentSpacesInRegex` | `error` | Kieltää epäselvän peräkkäisten välilyöntien käytön regulaari-ilmaisuissa. |
+| `noArguments` | `error` | Kieltää arguments-olion käytön. |
 | `noBannedTypes` | `error` | Kieltää primitiivityyppien aliasien ja harhaanjohtavien tyyppien käytön. |
-| `noCommaOperator` | `error` | Kieltää pilkkuoperaattorin käytön. |
-| `noEmptyTypeParameters` | `error` | Kieltää tyhjien tyyppiparametrien käytön tyyppialiasissa ja rajapinnoissa. |
-| `noExcessiveCognitiveComplexity` | `error` | Kieltää funktiot, jotka ylittävät annetun Cognitive Complexity -pistemäärän. |
-| `noExcessiveLinesPerFunction` | `off` | Rajaa funktiossa olevien koodirivien määrää. |
-| `noExcessiveNestedTestSuites` | `error` | Tämä sääntö pakottaa maksimisyvyyden sisäkkäisille `describe()`-kutsuille testitiedostoissa. |
-| `noExtraBooleanCast` | `error` | Kieltää tarpeettomat boolean-muutokset. |
-| `noFlatMapIdentity` | `error` | Kieltää tarpeettomien callbackien käytön `flatMap`-kutsussa. |
-| `noForEach` | `error` | Suosittele `for...of`-lausetta `Array.forEach`-käytön sijaan. |
-| `noImplicitCoercions` | `off` | Kieltää lyhennetyt tyyppimuunnokset. |
-| `noImportantStyles` | `off` | Kieltää `!important`-tyylin käytön (CSS). |
+| `noCommaOperator` | `error` | Kieltää comma-operatorin käytön. |
+| `noEmptyTypeParameters` | `error` | Kieltää tyhjien tyyppiparametrien käytön type aliaseissa ja interfaceissa. |
+| `noExcessiveCognitiveComplexity` | `error` | Kieltää funktiot, jotka ylittävät asetetun Cognitive Complexity -pistemäärän. |
+| `noExcessiveLinesPerFunction` | `off` | Rajoittaa funktioiden rivimäärää. |
+| `noExcessiveNestedTestSuites` | `error` | Tämä sääntö rajoittaa describe()-kutsujen sisäkkäisyyden syvyyttä testitiedostoissa. |
+| `noExtraBooleanCast` | `error` | Kieltää tarpeettomat boolean-castaukset. |
+| `noFlatMapIdentity` | `error` | Kieltää tarpeettoman callbackin käytön flatMapissa. |
+| `noForEach` | `error` | Suositellaan `for...of`-lausetta `Array.forEach`-kutsun sijaan. |
+| `noImplicitCoercions` | `off` | Kieltää lyhyet tyyppimuunnokset. |
+| `noImportantStyles` | `off` | Kieltää `!important`-tyylien käytön (CSS). |
 | `noStaticOnlyClass` | `error` | Raportoi, kun luokalla ei ole ei-staattisia jäseniä. |
-| `noThisInStatic` | `error` | Kieltää `this`- ja `super`-käytön staattisissa konteksteissa. |
+| `noThisInStatic` | `error` | Kieltää `this` ja `super` staattisissa konteksteissa. |
 | `noUselessCatch` | `error` | Kieltää tarpeettomat catch-lohkot. |
 | `noUselessConstructor` | `error` | Kieltää tarpeettomat konstruktorit. |
-| `noUselessContinue` | `error` | Vältä tarpeettoman `continue`-käytön. |
-| `noUselessEmptyExport` | `error` | Kieltää tyhjät exportit, jotka eivät muuta mitään moduulitiedostossa. |
-| `noUselessEscapeInRegex` | `error` | Kieltää tarpeettomat escape-jaksot regulaarilauseke-literaaleissa. |
+| `noUselessContinue` | `error` | Vältä tarpeetonta continue-lausetta. |
+| `noUselessEmptyExport` | `error` | Kieltää tyhjät exportit, joilla ei ole vaikutusta moduulitiedostossa. |
+| `noUselessEscapeInRegex` | `error` | Kieltää tarpeettomat escape-sekvenssit regulaari-ilmaisuissa. |
 | `noUselessFragments` | `error` | Kieltää tarpeettomat fragmentit. |
 | `noUselessLabel` | `error` | Kieltää tarpeettomat labelit. |
-| `noUselessLoneBlockStatements` | `error` | Kieltää tarpeettomat sisäkkäiset lohkoilmaukset. |
-| `noUselessRename` | `error` | Kieltää importtien, exporttien ja destrukturoitujen määritysten uudelleennimeämisen samaan nimeen. |
+| `noUselessLoneBlockStatements` | `error` | Kieltää tarpeettomat sisäkkäiset lohkomuodostelmat. |
+| `noUselessRename` | `error` | Kieltää importtien, exporttien ja destrukturoitujen assignementien uudelleennimeämisen samaan nimeen. |
 | `noUselessStringConcat` | `error` | Kieltää tarpeettoman merkkijonojen tai template-litteraalien yhdistelyn. |
-| `noUselessStringRaw` | `error` | Kieltää tarpeettoman `String.raw`-funktion käytön template-literalissa ilman escape-jaksoja. |
+| `noUselessStringRaw` | `error` | Kieltää tarpeettoman `String.raw`-funktion käytön template-lausekkeissa ilman escape-sekvenssejä. |
 | `noUselessSwitchCase` | `error` | Kieltää hyödyttömät case-haarat switch-lauseissa. |
-| `noUselessTernary` | `error` | Kieltää ternääriset operaattorit, kun on yksinkertaisempia vaihtoehtoja. |
-| `noUselessThisAlias` | `error` | Kieltää tarpeettoman `this`-aliasoinnin. |
-| `noUselessTypeConstraint` | `error` | Kieltää `any`- tai `unknown`-käytön tyyppirajoitteena. |
-| `noUselessUndefinedInitialization` | `error` | Kieltää muuttujien alustamisen arvoon `undefined`. |
-| `noVoid` | `error` | Kieltää `void`-operaattorin käytön, joka ei ole tuttu operaattori. |
-| `useArrowFunction` | `error` | Suosi nuolifunktioita funktioilmausten sijaan. |
-| `useDateNow` | `error` | Käytä `Date.now()`-kutsua saadaksesi millisekunnit Unix-epochista. |
-| `useFlatMap` | `error` | Kannustaa `.flatMap()`-käytön hyödyntämistä, kun `map().flat()` käytetään yhdessä. |
-| `useIndexOf` | `error` | Suosi `Array#{indexOf,lastIndexOf}()`-käyttöä `Array#{findIndex,findLastIndex}()` sijaan, kun etsit alkion indeksiä. |
-| `useLiteralKeys` | `error` | Pakottaa literaalisen ominaisuuksien käytön laskettujen pääsyn sijaan. |
-| `useNumericLiterals` | `error` | Kieltää `parseInt()` ja `Number.parseInt()` käytön binääri-, oktaali- ja heksadesimaali-litteraalien hyväksi. |
-| `useOptionalChain` | `error` | Pakottaa optimaalisemman optional chainingin käytön ketjuttettujen loogisten lausekkeiden sijaan. |
-| `useRegexLiterals` | `error` | Pakottaa regulaarilausekelitteraalien käytön `RegExp`-konstruktorin sijaan, jos mahdollista. |
-| `useSimpleNumberKeys` | `error` | Kieltää numerolitteraalien objektin jäsennimien käytön, jotka eivät ole kymmenkantaisia tai käyttävät alaviivaa erotinmerkkinä. |
+| `noUselessTernary` | `error` | Kieltää ternäärisen operaattorin, kun yksinkertaisempi vaihtoehto on olemassa. |
+| `noUselessThisAlias` | `error` | Kieltää turhan `this`-aliasoinnin. |
+| `noUselessTypeConstraint` | `error` | Kieltää `any` tai `unknown` tyyppirajoitteena. |
+| `noUselessUndefinedInitialization` | `error` | Kieltää muuttujien alustamisen `undefined`-arvolla. |
+| `noVoid` | `error` | Kieltää `void`-operaattorin käytön, joka ei ole yleisesti tuttu operaattori. |
+| `useArrowFunction` | `error` | Käytä nuolifunktioita funktioexpressioiden sijaan. |
+| `useDateNow` | `error` | Käytä `Date.now()` millisekuntien hakemiseen Unix-epochista. |
+| `useFlatMap` | `error` | Kannustaa `.flatMap()`-käyttöön, kun `map().flat()` käytetään yhdessä. |
+| `useIndexOf` | `error` | Suosi `Array#{indexOf,lastIndexOf}()`-metodeja `Array#{findIndex,findLastIndex}()` sijaan, kun etsit kohteen indeksiä. |
+| `useLiteralKeys` | `error` | Varmistaa, että ominaisuuksiin viitataan literal-avaimella laskettujen avainten sijaan. |
+| `useNumericLiterals` | `error` | Kieltää `parseInt()` ja `Number.parseInt()` suosien binaari-, oktaali- ja heksadesimaali-literaaleja. |
+| `useOptionalChain` | `error` | Edellyttää lyhyempää optional chaining -syntaksia ketjutettujen loogisten lausekkeiden sijaan. |
+| `useRegexLiterals` | `error` | Suosii regulaari-ilmaisu-literaaleja `RegExp`-konstruktoria sijaan, jos mahdollista. |
+| `useSimpleNumberKeys` | `error` | Kieltää numero-litteraalien käyttäminen objektin jäseninä, jotka eivät ole kymmenjalkaisia tai käyttävät alaviivaa erotinmerkkinä. |
 | `useSimplifiedLogicExpression` | `error` | Poistaa redundantit termit loogisista lausekkeista. |
-| `useWhile` | `error` | Pakottaa while-silmukoiden käytön for-silmukoiden sijaan, kun alustaja- ja päivitysekspressioita ei tarvita. |
+| `useWhile` | `error` | Edellyttää while-silmukkaa for-silmukan sijaan, kun alustajaa ja päivityslauseketta ei tarvita. |
 
 ### Oikeellisuus
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noConstAssign` | `error` | Estää const-muuttujien uudelleenasetuksen. |
-| `noConstantCondition` | `error` | Kieltää vakioilmaisuja ehdoissa. |
-| `noConstantMathMinMaxClamp` | `error` | Kieltää `Math.min`- ja `Math.max`-käytön arvon rajoittamiseen tilanteessa, jossa tulos on itsessään vakio. |
+| `noConstAssign` | `error` | Estää const-muuttujien uudelleenmääritykset. |
+| `noConstantCondition` | `error` | Kieltää vakioilmaukset ehdoissa. |
+| `noConstantMathMinMaxClamp` | `error` | Kieltää `Math.min` ja `Math.max` käyttöä arvon rajaamiseen, kun tulos on itsessään vakio. |
 | `noConstructorReturn` | `error` | Kieltää arvon palauttamisen konstruktorista. |
-| `noEmptyCharacterClassInRegex` | `error` | Kieltää tyhjät merkistöluokat regulaarilauseke-literaaleissa. |
-| `noEmptyPattern` | `error` | Kieltää tyhjät destrukturointimallit. |
-| `noGlobalDirnameFilename` | `error` | Kieltää `__dirname`- ja `__filename`-käytön globaalissa scope:ssa. |
+| `noEmptyCharacterClassInRegex` | `error` | Kieltää tyhjät merkkiluokat regulaari-ilmaisuissa. |
+| `noEmptyPattern` | `error` | Kieltää tyhjien destrukturointimallien käytön. |
+| `noGlobalDirnameFilename` | `error` | Kieltää `__dirname` ja `__filename` käyttöä globaalissa scope:ssa. |
 | `noGlobalObjectCalls` | `error` | Kieltää globaalien objektien ominaisuuksien kutsumisen funktioina. |
-| `noInnerDeclarations` | `error` | Kieltää funktion ja `var`-määrittelyt, jotka ovat käytettävissä lohkon ulkopuolella. |
-| `noInvalidBuiltinInstantiation` | `error` | Varmistaa, että sisäänrakennetut tyypit alustetaan oikein. |
-| `noInvalidConstructorSuper` | `error` | Estää `super()`-virheiden käytön luokissa. |
-| `noInvalidDirectionInLinearGradient` | `error` | Kieltää ei-standardeja suunta-arvoja linear-gradient-funktioissa (CSS). |
-| `noInvalidGridAreas` | `error` | Kieltää virheelliset nimettyjen ruudukkoalueiden käytöt CSS Grid -asetteluissa (CSS). |
-| `noInvalidPositionAtImportRule` | `error` | Kieltää `@import`-at-sääntöjen käytön virheellisissä paikoissa (CSS). |
+| `noInnerDeclarations` | `error` | Kieltää funktio- ja `var`-deklaraatiot, jotka ovat käytettävissä oman lohkonsa ulkopuolella. |
+| `noInvalidBuiltinInstantiation` | `error` | Varmistaa, että sisäänrakennettuja objekteja luodaan oikein. |
+| `noInvalidConstructorSuper` | `error` | Estää `super()` virheellisen käytön luokissa. |
+| `noInvalidDirectionInLinearGradient` | `error` | Kieltää ei-standardit suuntavarat linear-gradient-funktioissa (CSS). |
+| `noInvalidGridAreas` | `error` | Kieltää virheelliset nimettyjen grid-alueiden määrittelyt CSS Grid -asetteluissa (CSS). |
+| `noInvalidPositionAtImportRule` | `error` | Kieltää `@import`-at-säännön käytön virheellisissä paikoissa (CSS). |
 | `noInvalidUseBeforeDeclaration` | `error` | Kieltää muuttujien ja funktioparametrien käytön ennen niiden deklarointia. |
-| `noMissingVarFunction` | `error` | Kieltää puuttuvan `var`-funktion käytön CSS-muuttujille (CSS). |
-| `noNodejsModules` | `off` | Kieltää Node.js:n sisäänrakennettujen moduulien käytön. |
-| `noNonoctalDecimalEscape` | `error` | Kieltää `\8` ja `\9` escape-jaksot merkkijonoissa. |
-| `noPrecisionLoss` | `error` | Kieltää literal-lukujen käytön, jotka menettävät tarkkuutta. |
-| `noPrivateImports` | `off` | Rajoittaa yksityisten exporttien importtaamista. |
+| `noMissingVarFunction` | `error` | Kieltää puuttuvat `var`-funktiot css-muuttujille (CSS). |
+| `noNodejsModules` | `off` | Kieltää Node.js sisäänrakennettujen moduulien käytön. |
+| `noNonoctalDecimalEscape` | `error` | Kieltää `\8` ja `\9` escape-sekvenssit merkkijonoissa. |
+| `noPrecisionLoss` | `error` | Kieltää literal-numerot, jotka menettävät tarkkuutta. |
+| `noPrivateImports` | `off` | Rajoittaa yksityisten exporttien tuontia. |
 | `noProcessGlobal` | `off` | Kieltää `process`-globaalin käytön. |
 | `noRestrictedElements` | `error` | Kieltää määriteltyjen elementtien käytön. |
-| `noSelfAssign` | `error` | Kieltää assigmentit, joissa molemmat puolet ovat täsmälleen samat. |
-| `noSetterReturn` | `error` | Kieltää arvon palauttamisen setteristä. |
-| `noStringCaseMismatch` | `error` | Kieltää merkkijonojen tapausmuutoksia vertailevien lausekkeiden vertailun ei-yhteensopivien arvojen kanssa. |
+| `noSelfAssign` | `error` | Kieltää yhdenmukaiset assigmentit, joissa molemmat puolet ovat täsmälleen samat. |
+| `noSetterReturn` | `error` | Kieltää arvon palauttamisen setter-funktiosta. |
+| `noStringCaseMismatch` | `error` | Kieltää merkkijonojen vertaamisen, joissa toinen osapuoli muuttaa merkkien kirjainkokoa ei-yhteensopivalla tavalla. |
 | `noSwitchDeclarations` | `error` | Kieltää leksikaaliset deklaroinnit switch-haaroissa. |
 | `noUndeclaredDependencies` | `off` | Kieltää riippuvuuksien käytön, joita ei ole määritelty `package.json`-tiedostossa. |
 | `noUndeclaredVariables` | `error` | Estää dokumentissa määrittelemättömien muuttujien käytön. |
 | `noUnknownFunction` | `error` | Kieltää tuntemattomat CSS-arvofunktiot (CSS). |
-| `noUnknownMediaFeatureName` | `error` | Kieltää tuntemattomat media-feature-nimet (CSS). |
-| `noUnknownProperty` | `error` | Kieltää tuntemattomat ominaisuudet (CSS). |
-| `noUnknownPseudoClass` | `error` | Kieltää tuntemattomat pseudo-class-valitsimet (CSS). |
-| `noUnknownPseudoElement` | `error` | Kieltää tuntemattomat pseudo-element-valitsimet (CSS). |
-| `noUnknownTypeSelector` | `error` | Kieltää tuntemattomat tyypin valitsimet (CSS). |
+| `noUnknownMediaFeatureName` | `error` | Kieltää tuntemattomat media feature -nimikkeet (CSS). |
+| `noUnknownProperty` | `error` | Kieltää tuntemattomat CSS-ominaisuudet (CSS). |
+| `noUnknownPseudoClass` | `error` | Kieltää tuntemattomat pseudo-class -valitsimet (CSS). |
+| `noUnknownPseudoElement` | `error` | Kieltää tuntemattomat pseudo-elementit (CSS). |
+| `noUnknownTypeSelector` | `error` | Kieltää tuntemattomat tyyppivalitsimet (CSS). |
 | `noUnknownUnit` | `error` | Kieltää tuntemattomat CSS-yksiköt (CSS). |
-| `noUnmatchableAnbSelector` | `error` | Kieltää mahdottomat An+B-valitsimet (CSS). |
-| `noUnreachable` | `error` | Kieltää saavuttamattoman koodin. |
-| `noUnreachableSuper` | `error` | Varmistaa, että `super()`-konstruktori kutsutaan täsmälleen kerran kaikilla koodipoluilla luokkakonstruktorissa ennen tämän käyttöä. |
-| `noUnsafeFinally` | `error` | Kieltää ohjausvirtalauselmat finally-lohkoissa. |
+| `noUnmatchableAnbSelector` | `error` | Kieltää mahdottomat An+B -valitsimet (CSS). |
+| `noUnreachable` | `error` | Kieltää saavutamattoman koodin. |
+| `noUnreachableSuper` | `error` | Varmistaa, että `super()`-konstruktoria kutsutaan täsmälleen kerran jokaisella koodipolulla luokan konstruktorissa ennen tämän käyttöä. |
+| `noUnsafeFinally` | `error` | Kieltää ohjausvirtalauseiden käytön finally-lohkoissa. |
 | `noUnsafeOptionalChaining` | `error` | Kieltää optional chainingin käytön konteksteissa, joissa undefined-arvo ei ole sallittu. |
 | `noUnusedFunctionParameters` | `error` | Kieltää käyttämättömät funktioparametrit. |
 | `noUnusedImports` | `error` (safe fix override) | Kieltää käyttämättömät importit. |
 | `noUnusedLabels` | `error` | Kieltää käyttämättömät labelit. |
 | `noUnusedPrivateClassMembers` | `error` | Kieltää käyttämättömät yksityiset luokan jäsenet. |
 | `noUnusedVariables` | `error` | Kieltää käyttämättömät muuttujat. |
-| `noVoidTypeReturn` | `error` | Kieltää arvon palauttamisen funktiosta, jonka paluuarvotyyppi on `void`. |
-| `useGraphqlNamedOperations` | `error` | Pakottaa GraphQL-operaatioiden nimet. |
-| `useImageSize` | `error` | Pakottaa, että `<img>`-elementeillä on sekä width- että height-atribuutit. |
-| `useImportExtensions` | `off` | Pakottaa tiedostopäätteiden käytön suhteellisissa importoinneissa. |
-| `useIsNan` | `error` | Edellyttää `isNaN()`-kutsuja, kun tarkistetaan NaN-arvoa. |
-| `useJsonImportAttributes` | `off` | Pakottaa `{ type: "json" }`-asetuksen käytön JSON-moduulien importoinneissa. |
-| `useParseIntRadix` | `error` | Pakottaa johdonmukaisen radix-argumentin käytön `parseInt()`-kutsuissa. |
-| `useSingleJsDocAsterisk` | `error` | Pakottaa JSDoc-kommenttirivien alkavan yhdellä tähdellä, paitsi ensimmäinen rivi. |
-| `useUniqueElementIds` | `off` | Estää staattisten merkkijoneliitännäisten id-attribuuttien käytön elementeissä. |
-| `useValidForDirection` | `error` | Pakottaa `for`-silmukan päivitysehtolausekkeen liikuttamaan laskuria oikeaan suuntaan. |
-| `useValidTypeof` | `error` | Tämä sääntö tarkistaa, että `typeof`-lausekkeen tulosta verrataan kelvolliseen arvoon. |
-| `useYield` | `error` | Edellyttää, että generaattorifunktiot sisältävät `yield`-kutsun. |
+| `noVoidTypeReturn` | `error` | Kieltää arvon palauttamisen funktiosta, jonka palautustyyppi on `void`. |
+| `useGraphqlNamedOperations` | `error` | Edellyttää GraphQL-operaatioiden nimeämistä. |
+| `useImageSize` | `error` | Edellyttää, että `<img>`-elementeillä on sekä width- että height-atribuutit. |
+| `useImportExtensions` | `off` | Pakottaa tiedostopäätevaatimuksen suhteellisissa importeissa. |
+| `useIsNan` | `error` | Edellyttää `isNaN()`-kutsua NaN-tarkistuksissa. |
+| `useJsonImportAttributes` | `off` | Edellyttää `{ type: "json" }`-asetusta JSON-moduulien tuonnissa. |
+| `useParseIntRadix` | `error` | Edellyttää radix-argumentin yhdenmukaista käyttöä `parseInt()`-kutsussa. |
+| `useSingleJsDocAsterisk` | `error` | Edellyttää JSDoc-kommenttirivien alkavan yhdellä tähdellä, paitsi ensimmäinen rivi. |
+| `useUniqueElementIds` | `off` | Estää staattisten merkkijono-ID-attribuuttien käytön elementeissä. |
+| `useValidForDirection` | `error` | Varmistaa, että for-silmukan päivityslauseke liikuttaa laskuria oikeaan suuntaan. |
+| `useValidTypeof` | `error` | Tarkistaa, että typeof-lausetta verrataan kelvolliseen arvoon. |
+| `useYield` | `error` | Edellyttää, että generaattorifunktiot sisältävät `yield`-lausunnon. |
 
-### Kehitys
+### Kokeilutila
+
+Nursery-säännöt eivät yleensä ole käytössä Ultracitessa, koska ne ovat kokeellisia ja voivat muuttua tai poistua tulevissa Biome-versioissa. Seuraava sääntö on kuitenkin otettu käyttöön suosion vuoksi:
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | Kieltää epämääräisten anchor-tekstien kuvaukset. |
-| `noContinue` | `off` | Kieltää `continue`-lauseet. |
-| `noDeprecatedImports` | `off` | Rajoittaa vanhentuneiden exporttien importtaamista. |
-| `noDuplicateDependencies` | `error` | Estää päällekkäisten riippuvuuksien listauksen. |
-| `noDuplicatedSpreadProps` | `error` | Kieltää duplikoidut ominaisuudet spread-propeissa. |
-| `noEmptySource` | `error` | Kieltää tyhjät lähdetiedostot. |
-| `noEqualsToNull` | `error` | Kieltää `==` tai `!=` käytön `null`-vertailussa. Käytä `===` tai `!==` sijasta. |
-| `noFloatingPromises` | `off` | Edellyttää Promise-tyyppisten lauseiden asianmukaista käsittelyä. |
-| `noForIn` | `off` | Kieltää iteroinnin for-in-silmukalla. |
-| `noImportCycles` | `off` | Estää import-syklit. |
-| `noIncrementDecrement` | `error` | Kieltää `++` ja `--`-operaattoreiden käytön (pois lukien for-silmukan afterthoughtit). |
-| `noJsxLiterals` | `off` | Kieltää merkkijonolitteraalien käytön JSX-elementeissä. |
-| `noLeakedRender` | `error` | Estää ongelmallisten vuotavien arvojen renderöinnin JSX:ssä (esim. 0 tai NaN). |
-| `noMisusedPromises` | `off` | Kieltää Promisen käyttämisen paikoissa, joissa se on lähes varmasti virhe. |
-| `noMultiStr` | `error` | Kieltää moniriviset merkkijonot backslash-jatkumalla. |
-| `noParametersOnlyUsedInRecursion` | `error` | Kieltää parametrit, joita käytetään vain rekursiivisissa kutsuissa. |
-| `noProto` | `error` | Kieltää `__proto__`-ominaisuuden käytön. |
-| `noScriptUrl` | `error` | Kieltää `javascript:`-URL:t, jotka aiheuttavat tietoturvariskejä kuten XSS:ää. |
-| `noShadow` | `error` | Kieltää muuttujien määrittelyn, joka varjostaa ulompaa scopea. |
-| `noSyncScripts` | `error` | Estää synkronisten skriptien käytön. |
-| `noTernary` | `off` | Kieltää ternääriset operaattorit. |
-| `noUndeclaredEnvVars` | `error` | Kieltää rekisteröimättömien ympäristömuuttujien käytön `turbo.json`-tiedostossa. |
-| `noUnnecessaryConditions` | `off` | Kieltää tarpeettomat tyyppipohjaiset ehdot, jotka voidaan staattisesti todeta redundantiksi. |
-| `noUnresolvedImports` | `off` | Varoittaa, kun tuodaan olemattomia exportteja. |
-| `noUnusedExpressions` | `error` | Kieltää lausekkeita, jotka eivät ole funktiokutsu tai assigmentti. |
-| `noUselessCatchBinding` | `off` | Kieltää käyttämättömät `catch`-sidokset. |
-| `noUselessUndefined` | `error` | Kieltää turhan `undefined`-käytön. |
-| `useArraySortCompare` | `off` | Pakottaa vertailufunktion käytön `Array.prototype.sort()`-kutsussa. |
-| `useAwaitThenable` | `off` | Pakottaa `await`-käytön vain Promise-arvoihin. |
-| `useConsistentArrowReturn` | `error` | Pakottaa yhtenäiset nuolifunktioiden runkorakenteet. |
-| `useConsistentGraphqlDescriptions` | `error` | Edellyttää, että kaikki kuvaukset noudattavat samaa tyyliä (lohko tai inline) GraphQL-tiedostoissa. |
-| `useDeprecatedDate` | `error` | Edellyttää `@deprecated`-direktiivin yhteyteen poiston päivämäärän määrittelyä. |
-| `useExhaustiveSwitchCases` | `off` | Edellyttää switch-case-lauseiden olevan kattavia. |
-| `useExplicitType` | `off` | Pakottaa tyyppien käytön funktioissa, metodeissa, muuttujissa ja parametreissa. |
-| `useFind` | `off` | Suosittele `Array.prototype.find()`-käyttöä `Array.prototype.filter()` + `[0]` sijasta, kun etsitään yksittäistä tulosta. |
-| `useMaxParams` | `error` | Pakottaa maksimi parametrien määrän funktiomäärittelyissä. |
-| `useRegexpExec` | `off` | Pakottaa `RegExp#exec`-käytön `String#match`-käytön sijaan, kun ei ole globaalia tunnistetta. |
-| `useRequiredScripts` | `off` | Pakottaa tiettyjen konfiguroitavien avainten olemassaolon `package.json`-tiedostojen `scripts`-osiossa. |
-| `useSortedClasses` | `error` (safe fix override) | Pakottaa CSS-util-luokkien lajittelun. |
-| `useSpread` | `error` | Pakottaa spread-operaattorin käytön `Function.prototype.apply()`-sijaan. |
-| `useUniqueGraphqlOperationName` | `error` | Varmistaa, että kaikilla GraphQL-operaatioilla dokumentissa on uniikit nimet. |
+| `useSortedClasses` | `error` (safe fix override) | Pakottaa CSS-apuluokkien lajittelun. |
 
 ### Suorituskyky
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
 | `noAccumulatingSpread` | `error` | Kieltää spread (`...`) -syntaksin käytön akkumulaattoreissa. |
-| `noAwaitInLoops` | `off` | Kieltää `await`-kutsut silmukoissa. |
+| `noAwaitInLoops` | `off` | Kieltää `await`-käytön silmukoissa. |
 | `noBarrelFile` | `error` | Kieltää barrel-tiedostojen käytön. |
 | `noDelete` | `error` | Kieltää `delete`-operaattorin käytön. |
-| `noDynamicNamespaceImportAccess` | `error` | Kieltää namespace-importtien dynaamisen käyttämisen. |
+| `noDynamicNamespaceImportAccess` | `error` | Kieltää dynaamisen pääsyn namespace-importteihin. |
 | `noNamespaceImport` | `error` | Kieltää namespace-importtien käytön. |
-| `noReExportAll` | `off` | Vältä kaikkien uudelleenviennin käyttäminen. |
-| `noUnwantedPolyfillio` | `error` | Estää duplikaattipolyfillien latautumisen Polyfill.io:sta. |
-| `useGoogleFontPreconnect` | `error` | Varmistaa `preconnect`-attribuutin käytön Google Fonts -käytössä. |
-| `useTopLevelRegex` | `error` | Edellyttää regulaarilausekelitteraalien määrittelyä ylätasolla. |
+| `noReExportAll` | `off` | Vältä kaikkien uudelleenviennissä (`export *`). |
+| `noUnwantedPolyfillio` | `error` | Estää Polyfill.io:n duplikaattipolyfillit. |
+| `useGoogleFontPreconnect` | `error` | Varmistaa, että `preconnect`-attribuuttia käytetään Google Fontsien kanssa. |
+| `useTopLevelRegex` | `error` | Edellyttää regulaari-ilmaisu-literalien määrittämistä top-tasolla. |
 
-### Turvallisuus
+### Tietoturva
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noBlankTarget` | `error` | Kieltää `target="_blank"`-attribuutin ilman `rel="noopener"`-määrettä. |
-| `noDangerouslySetInnerHtml` | `error` | Estää vaarallisten JSX-propien käytön. |
-| `noDangerouslySetInnerHtmlWithChildren` | `error` | Raportoi, kun DOM-elementillä tai komponentilla käytetään sekä children että `dangerouslySetInnerHTML`-propia. |
+| `noBlankTarget` | `error` | Kieltää `target="_blank"`-attribuutin ilman `rel="noopener"`. |
+| `noDangerouslySetInnerHtml` | `error` | Estää vaarallisten JSX-proppien käytön. |
+| `noDangerouslySetInnerHtmlWithChildren` | `error` | Raportoi, kun DOM-elementti tai komponentti käyttää sekä children- että `dangerouslySetInnerHTML`-proppia. |
 | `noGlobalEval` | `error` | Kieltää globaalin `eval()`-funktion käytön. |
 
 ### Tyyli
 
 | Sääntö | Asetus | Kuvaus |
 |------|---------|-------------|
-| `noCommonJs` | `off` | Kieltää Common JS -moduulijärjestelmän käytön ESM-tyylisten importtien hyväksi. |
+| `noCommonJs` | `off` | Kieltää Common JS -moduulijärjestelmän käytön ESM-tuontien eduksi. |
 | `noDefaultExport` | `off` | Kieltää default-exportit. |
 | `noDoneCallback` | `error` | Kieltää callbackin käytön asynkronisissa testeissä ja hookeissa. |
 | `noEnum` | `error` | Kieltää TypeScript-enumit. |
-| `noExportedImports` | `error` | Kieltää importatun muuttujan uudelleenexportin. |
+| `noExportedImports` | `error` | Kieltää tuodun muuttujan exporttaamisen. |
 | `noImplicitBoolean` | `off` | Kieltää implisiittiset true-arvot JSX-boolean-attribuuteissa. |
-| `noInferrableTypes` | `error` | Kieltää tyyppimerkintöjen käytön muuttujille, parametreille ja luokan ominaisuuksille, jotka on alustettu litteraalilla. |
-| `noMagicNumbers` | `off` | Raportoi "magic number" -käytöt — lukuja, jotka on käytetty suoraan sen sijaan, että ne olisi annettu nimetylle vakioille. |
+| `noInferrableTypes` | `error` | Kieltää tyyppimerkinnät muuttujille, parametreille ja luokan ominaisuuksille, jotka on alustettu literalilla. |
+| `noMagicNumbers` | `off` | Raportoi "magic number" -käytöt — suoraan käytetyt numerot sen sijaan, että ne olisi annettu nimetyille vakioille. |
 | `noNamespace` | `error` | Kieltää TypeScriptin namespacejen käytön. |
-| `noNegationElse` | `error` | Kieltää negation käytön if-lauseen ehtona, jos sillä on else-haara. |
+| `noNegationElse` | `error` | Kieltää kieltomuodon käytön if-lauseen ehtona, jos siinä on else-haara. |
 | `noNestedTernary` | `error` | Kieltää sisäkkäiset ternäärilausekkeet. |
-| `noNonNullAssertion` | `error` | Kieltää non-null-assertionin (`!`) käytön. |
-| `noParameterAssign` | `error` | Kieltää funktioparametrien uudelleenasetuksen. |
+| `noNonNullAssertion` | `error` | Kieltää non-null-assertionin `!` käytön. |
+| `noParameterAssign` | `error` | Kieltää funktioparametrien uudelleenmäärittelyn. |
 | `noParameterProperties` | `error` | Kieltää parametrien ominaisuuksien käytön luokkakonstruktoreissa. |
 | `noProcessEnv` | `off` | Kieltää `process.env`-käytön. |
-| `noRestrictedGlobals` | `error` | Tämän säännön avulla voit määritellä globaalit muuttujanimet, joita et halua käyttää sovelluksessasi. |
-| `noRestrictedImports` | `error` | Kieltää määriteltyjen moduulien käytön importin tai require:n kautta. |
+| `noRestrictedGlobals` | `error` | Tämä sääntö sallii määritellä globaalit muuttujanimet, joita ei haluta käyttää sovelluksessa. |
+| `noRestrictedImports` | `error` | Kieltää määriteltyjen moduulien tuonnin importin tai require:n kautta. |
 | `noRestrictedTypes` | `error` | Kieltää käyttäjän määrittelemät tyypit. |
-| `noShoutyConstants` | `error` | Kieltää vakioiden käytön, joiden arvo on nimen isolla kirjoitettu versio. |
-| `noSubstr` | `error` | Pakottaa `String.slice()`-käytön `String.substr()` ja `String.substring()` sijaan. |
-| `noUnusedTemplateLiteral` | `error` | Kieltää template-litteraalien käytön, jos interpolaatio ja erikoismerkkien käsittely eivät ole tarpeen. |
-| `noUselessElse` | `error` | Kieltää else-haaran, kun if-lohko poistuu aikaisin. |
-| `noYodaExpression` | `error` | Kieltää Yoda-ilmaisuja. |
-| `useArrayLiterals` | `error` | Kieltää `Array`-konstruktorin käytön. |
-| `useAsConstAssertion` | `error` | Pakottaa `as const`-käytön litteraalityyppien ja tyyppimerkintöjen sijaan. |
-| `useAtIndex` | `error` | Käytä `at()`-metodia kokonaislukkiin perustuvan indeksin sijaan. |
-| `useBlockStatements` | `error` | Edellyttää aaltosulkujen käyttöä sovituissa tilanteissa. |
-| `useCollapsedElseIf` | `error` | Pakottaa `else if`-rakenteen käytön sisäkkäisten `if`-rakenteiden sijaan. |
-| `useCollapsedIf` | `error` | Pakottaa yksinkertaisen `if`-rakenteen käytön sisäkkäisten `if`-rakenteiden sijaan. |
-| `useComponentExportOnlyModules` | `off` | Pakottaa komponenttien määrittelyn vain moduuleissa, jotka vievät yksinomaan React-komponentteja. |
-| `useConsistentArrayType` | `error` | Edellyttää joko `T[]` tai `Array<T>` -muodon johdonmukaista käyttöä. |
-| `useConsistentBuiltinInstantiation` | `error` | Pakottaa new-operaattorin käytön kaikille builtin-tyypeille, lukuun ottamatta `String`, `Number` ja `Boolean`. |
-| `useConsistentCurlyBraces` | `off` | Tämä sääntö pakottaa aaltosulkujen johdonmukaisen käytön JSX-attribuuteissa ja JSX-lapsissa. |
-| `useConsistentMemberAccessibility` | `error` | Edellyttää johdonmukaisia accessibility-modifikaattoreita luokan ominaisuuksissa ja metodeissa. |
-| `useConsistentObjectDefinitions` | `error` | Edellyttää objektilitteraalien yhtenäistä määrittelyä. |
-| `useConst` | `error` | Edellyttää `const`-määrittelyjä muuttujille, joille asetetaan arvo vain kerran. |
-| `useDefaultParameterLast` | `error` | Pakottaa oletus- ja valinnaiset parametrit sijoittumaan viimeiseksi. |
+| `noShoutyConstants` | `error` | Kieltää vakioiden käytön, joiden arvo on nimen suurilla kirjaimilla oleva versio. |
+| `noSubstr` | `error` | Suosii `String.slice()`-käyttöä `String.substr()` ja `String.substring()` sijaan. |
+| `noUnusedTemplateLiteral` | `error` | Kieltää template-litteraalit, jos interpolaatio ja erikoismerkkien käsittely eivät ole tarpeen. |
+| `noUselessElse` | `error` | Kieltää else-lohkon, kun if-lohko katkaisee suorituksen aikaisin. |
+| `noYodaExpression` | `error` | Kieltää Yoda-lausekkeet. |
+| `useArrayLiterals` | `error` | Kieltää `Array`-konstruktoreiden käytön. |
+| `useAsConstAssertion` | `error` | Edellyttää `as const`-käyttöä literal-tyyppien ja tyyppimerkintöjen sijaan. |
+| `useAtIndex` | `error` | Käytä `at()`-metodia kokonaislukkuindeksin sijaan. |
+| `useBlockStatements` | `error` | Vaatii aaltosulkeiden käytön noudattamista. |
+| `useCollapsedElseIf` | `error` | Suosii `else if`-käyttöä sisäkkäisten if-haarojen sijaan. |
+| `useCollapsedIf` | `error` | Suosii yksittäisen `if`-rakenteen käyttöä sisäkkäisten if-haarojen sijaan. |
+| `useComponentExportOnlyModules` | `off` | Edellyttää React-komponenttien määrittelyä vain moduuleissa, jotka vievät ainoastaan komponentteja. |
+| `useConsistentArrayType` | `error` | Edellyttää johdonmukaista käyttöä joko `T[]` tai `Array<T>` välillä. |
+| `useConsistentBuiltinInstantiation` | `error` | Pakottaa new-operaattorin käytön kaikille sisäänrakennetuille paitsi `String`, `Number` ja `Boolean`. |
+| `useConsistentCurlyBraces` | `off` | Tämä sääntö vaatii yhtenäistä kaarisulkeiden käyttöä JSX-attribuuteissa ja JSX-lapsissa. |
+| `useConsistentMemberAccessibility` | `error` | Vaatii yhtenäisten näkyvyysmuokkainten käytön luokan ominaisuuksissa ja metodeissa. |
+| `useConsistentObjectDefinitions` | `error` | Vaatii objektilitteraalien yhdenmukaisen määrittelyn. |
+| `useConst` | `error` | Pakottaa const-deklaroinnit muuttujille, joita ei muuteta uudelleen. |
+| `useDefaultParameterLast` | `error` | Pakottaa oletusparametrit ja valinnaiset parametrit viimeisiksi funktiomäärittelyissä. |
 | `useDefaultSwitchClause` | `error` | Edellyttää `default`-haaran olemassaolon switch-lauseissa. |
-| `useDeprecatedReason` | `error` | Edellyttää syyn määrittelyä `@deprecated`-direktiivin yhteydessä. |
-| `useEnumInitializers` | `error` | Edellyttää, että jokaisella enum-jäsenellä on eksplisiittinen alustusarvo. |
+| `useDeprecatedReason` | `error` | Edellyttää syy-argumentin määrittämistä `@deprecated`-direktiivin käytössä. |
+| `useEnumInitializers` | `error` | Edellyttää, että jokainen enum-jäsen alustetaan eksplisiittisesti. |
 | `useExplicitLengthCheck` | `off` | Pakottaa `length`, `size`, `byteLength` tai `byteOffset` -ominaisuuksien eksplisiittisen vertailun. |
-| `useExponentiationOperator` | `error` | Kieltää `Math.pow` käytön ja suosii `**`-operaattoria. |
-| `useExportType` | `error` | Kannustaa `export type`-käytön tyyppien vientiin. |
-| `useExportsLast` | `off` | Pakottaa kaikkien export-lauseiden sijoittamisen ei-export-lausuntojen jälkeen. |
-| `useFilenamingConvention` | `error` | Pakottaa tiedostonimien nimeämiskäytännöt JavaScript- ja TypeScript-tiedostoille (kebab-case, ASCII). |
-| `useForOf` | `error` | Suosittele for-of-silmukkaa, kun for-silmukassa käytetään indeksiä alkion hakemiseen iteroidusta taulukosta. |
+| `useExponentiationOperator` | `error` | Kieltää `Math.pow`-käytön `**`-operaattorin eduksi. |
+| `useExportType` | `error` | Kannustaa käyttämään export typea tyypeille. |
+| `useExportsLast` | `off` | Edellyttää, että kaikki exportit määritellään kaikkien ei-export-lauseiden jälkeen. |
+| `useFilenamingConvention` | `error` | Pakottaa JavaScript- ja TypeScript-tiedostojen nimenantokäytännöt (kebab-case, ASCII). |
+| `useForOf` | `error` | Suosittelee for-of-silmukkaa, kun for-silmukassa indeksiä käytetään kohteen hakemiseen iteroitavasta taulukosta. |
 | `useFragmentSyntax` | `error` | Pakottaa `<>...</>`-syntaksin käytön `<Fragment>...</Fragment>` sijaan. |
-| `useGraphqlNamingConvention` | `error` | Varmistaa, että kaikki enum-arvot ovat isoilla kirjaimilla. |
-| `useGroupedAccessorPairs` | `error` | Pakottaa getter- ja setter-menetelmien läheisyyden luokka- ja objekti-määrittelyissä. |
-| `useImportType` | `error` | Kannustaa `import type`-käytön tyypeille. |
+| `useGraphqlNamingConvention` | `error` | Varmistaa, että kaikki enum-arvot ovat isolla alkukirjaimella. |
+| `useGroupedAccessorPairs` | `error` | Varmistaa, että getterit ja setterit samalle ominaisuudelle ovat vierekkäin luokka- ja objektimäärittelyissä. |
+| `useImportType` | `error` | Kannustaa `import type`-käyttöön tyypeille. |
 | `useLiteralEnumMembers` | `error` | Edellyttää, että kaikki enum-jäsenet ovat literaaliarvoja. |
-| `useNamingConvention` | `off` | Nimeämiskäytäntösääntö (pois käytöstä). |
-| `useNodeAssertStrict` | `error` | Kannustaa `node:assert/strict`-käytön `node:assert`-sijaan. |
-| `useNodejsImportProtocol` | `error` | Pakottaa `node:`-protokollan käyttämisen Node.js:n sisäänrakennetuille moduuleille. |
+| `useNamingConvention` | `off` | Nimeämiskäytäntörule (poistettu käytöstä). |
+| `useNodeAssertStrict` | `error` | Kannustaa `node:assert/strict`-käyttöön `node:assert` sijaan. |
+| `useNodejsImportProtocol` | `error` | Pakottaa `node:`-protokollan käytön Node.js sisäänrakennettujen moduulien tuonnissa. |
 | `useNumberNamespace` | `error` | Käytä `Number`-ominaisuuksia globaaleiden sijaan. |
-| `useNumericSeparators` | `error` | Pakottaa numeeristen erottimien käytön numeerisissa litteraaleissa. |
-| `useObjectSpread` | `error` | Suosi objektin spreadia `Object.assign()` sijaan uusien olioiden rakentamisessa. |
-| `useReadonlyClassProperties` | `error` | Pakottaa jäsenet merkitsemään `readonly`, jos niitä ei muokata konstruktorin ulkopuolella. |
-| `useSelfClosingElements` | `error` | Estä ylimääräiset sulkevat tagit komponenteille, joilla ei ole lapsia. |
-| `useShorthandAssign` | `error` | Pakottaa assigment-operaattorin lyhennemuodon käytön, kun mahdollista. |
-| `useShorthandFunctionType` | `error` | Pakottaa funktiotyyppien käytön objektityyppien sijaan, joissa on call-signature. |
+| `useNumericSeparators` | `error` | Pakottaa numeeristen erottimien käytön numeerisissa literaaleissa. |
+| `useObjectSpread` | `error` | Suosi object spread -syntaksia `Object.assign()` sijaan uusien objektien luomisessa. |
+| `useReadonlyClassProperties` | `error` | Pakottaa merkitsemään jäsenet readonlyiksi, jos niitä ei muuteta konstruktorin ulkopuolella. |
+| `useSelfClosingElements` | `error` | Estää ylimääräiset sulkevat tagit komponenteille, joilla ei ole lapsia. |
+| `useShorthandAssign` | `error` | Edellyttää lyhyttä assign-operaattoria, kun mahdollista. |
+| `useShorthandFunctionType` | `error` | Edellyttää funktiotyyppien käyttöä objektityyppien sijaan, joilla on call-signature. |
 | `useSingleVarDeclarator` | `off` | Kieltää useiden muuttujien deklaroinnin samassa lausumassa. |
-| `useSymbolDescription` | `error` | Edellyttää kuvaustekstin antamista `Symbol()`-kutsulle. |
-| `useTemplate` | `error` | Suosi template-litteraaleja merkkijonojen yhdistelyn sijaan. |
-| `useThrowNewError` | `error` | Edellyttää `new`-avainsanan käyttöä virheen heitossa. |
+| `useSymbolDescription` | `error` | Edellyttää description-argumenttia `Symbol()`-kutsussa. |
+| `useTemplate` | `error` | Suosii template-litteraaleja merkkijonon yhdistämisen sijaan. |
+| `useThrowNewError` | `error` | Edellyttää new-operaattorin käyttöä virhettä heitettäessä. |
 | `useThrowOnlyError` | `error` | Kieltää ei-`Error`-arvojen heittämisen. |
 | `useTrimStartEnd` | `error` | Pakottaa `String.trimStart()` ja `String.trimEnd()` käytön `String.trimLeft()` ja `String.trimRight()` sijaan. |
-| `useUnifiedTypeSignatures` | `error` | Kieltää ylikuormitetut signatuurit, jotka voidaan yhdistää yhdeksi signatuuriksi. |
-| `noDescendingSpecificity` | `error` | Kieltää alemman spesifisyyden valitsimen tulemisen korkeamman spesifisyyden valitsimen jälkeen (CSS). |
-| `noValueAtRule` | `error` | Kieltää `@value`-säännön käytön CSS-moduuleissa (CSS). |
+| `useUnifiedTypeSignatures` | `error` | Kieltää overload-signaturet, jotka voidaan yhdistää yhdeksi signatuuriksi. |
+| `noDescendingSpecificity` | `error` | Kieltää matalamman spesifisyyden valitsimen esiintymisen korkeamman spesifisyyden valitsimen jälkeen (CSS). |
+| `noValueAtRule` | `error` | Kieltää `@value`-säännön käytön css-moduuleissa (CSS). |
 
 ### Epäilyttävät
 
@@ -385,95 +347,95 @@ Ympäristökohtainen käsittely:
 |------|---------|-------------|
 | `noAlert` | `error` | Kieltää `alert`, `confirm` ja `prompt`-käytön. |
 | `noApproximativeNumericConstant` | `error` | Käytä standardivakioita approksimoitujen literalien sijaan. |
-| `noAssignInExpressions` | `error` | Kieltää assigmenttien tekemisen lausekkeissa. |
-| `noAsyncPromiseExecutor` | `error` | Kieltää asynkronisen funktion käyttämisen Promise-executorina. |
-| `noBiomeFirstException` | `error` | Estää `!`-kuvion käytön `files.includes`-listan ensimmäisessä sijainnissa konfiguraatiotiedostossa. |
-| `noBitwiseOperators` | `error` | Kieltää bittitason operaattoreiden käytön. |
-| `noCatchAssign` | `error` | Kieltää poikkeusten uudelleenasetuksen catch-lohkoissa. |
-| `noClassAssign` | `error` | Kieltää luokkajäsenten uudelleenmäärittelyn. |
-| `noCommentText` | `error` | Estää kommenttien liittämisen tekstisolmuiksi. |
-| `noCompareNegZero` | `error` | Kieltää vertailun `-0` kanssa. |
+| `noAssignInExpressions` | `error` | Kieltää assigneja lausekkeissa. |
+| `noAsyncPromiseExecutor` | `error` | Kieltää asynkronisten funktioiden käytön Promise-exekutoreina. |
+| `noBiomeFirstException` | `error` | Estää `!`-kuvion käytön `files.includes`-ensimmäisessä sijainnissa konfiguraatiotiedostossa. |
+| `noBitwiseOperators` | `error` | Kieltää bitwise-operaattoreiden käytön. |
+| `noCatchAssign` | `error` | Kieltää poikkeusten uudelleenmäärittelyn catch-haaroissa. |
+| `noClassAssign` | `error` | Kieltää luokan jäsenten uudelleenmäärittelyn. |
+| `noCommentText` | `error` | Estää kommenttien sijoittamisen tekstisolmuiksi. |
+| `noCompareNegZero` | `error` | Kieltää vertailun `-0`-arvoon. |
 | `noConfusingLabels` | `error` | Kieltää label-lauseet, jotka eivät ole silmukoita. |
-| `noConfusingVoidType` | `error` | Kieltää void-tyypin käytön geneeristen tai paluuarvotyyppien ulkopuolella. |
-| `noConsole` | `off` | Kieltää `console`-käytön. |
-| `noConstEnum` | `error` | Kieltää TypeScriptin const-enumit. |
-| `noConstantBinaryExpressions` | `error` | Kieltää lausekkeet, joissa operaatiolla ei ole vaikutusta arvoon. |
-| `noControlCharactersInRegex` | `error` | Estää kontrollimerkkien ja joidenkin escape-jaksojen käytön regulaarilausekkeissa. |
+| `noConfusingVoidType` | `error` | Kieltää void-tyypin käytön genericsin tai palautustyyppien ulkopuolella. |
+| `noConsole` | `off` | Kieltää console:n käytön. |
+| `noConstEnum` | `error` | Kieltää TypeScript `const enum`-käytön. |
+| `noConstantBinaryExpressions` | `error` | Kieltää lausekkeet, joissa operaatio ei vaikuta arvoon. |
+| `noControlCharactersInRegex` | `error` | Estää kontrollimerkkien ja joidenkin escape-sekvenssien käytön regulaari-ilmaisuissa. |
 | `noDebugger` | `error` | Kieltää debuggerin käytön. |
-| `noDocumentCookie` | `error` | Kieltää suorat assigmentit `document.cookie`-muuttujaan. |
-| `noDoubleEquals` | `error` | Edellyttää `===` ja `!==` käyttöä. |
+| `noDocumentCookie` | `error` | Kieltää suorat assigneet document.cookie:iin. |
+| `noDoubleEquals` | `error` | Vaatii `===` ja `!==` käyttöä. |
 | `noDuplicateAtImportRules` | `error` | Kieltää duplikaattiset `@import`-säännöt (CSS). |
-| `noDuplicateCase` | `error` | Kieltää duplikaattiset case-labelit. |
+| `noDuplicateCase` | `error` | Kieltää duplikaattiset case-etiketit. |
 | `noDuplicateClassMembers` | `error` | Kieltää duplikaattiset luokan jäsenet. |
-| `noDuplicateCustomProperties` | `error` | Kieltää duplikaattiset custom-ominaisuudet deklarointiblokissa (CSS). |
+| `noDuplicateCustomProperties` | `error` | Kieltää duplikaattiset custom propertyt declaration blockeissa (CSS). |
 | `noDuplicateElseIf` | `error` | Kieltää duplikaattiset ehdot if-else-if -ketjuissa. |
 | `noDuplicateFields` | `error` | Kieltää duplikaattikentät GraphQL-operaatioissa. |
-| `noDuplicateFontNames` | `error` | Kieltää duplikaattinimet fonttiperheissä (CSS). |
-| `noDuplicateObjectKeys` | `error` | Kieltää kahden saman nimisen avaimen käytön objekteissa. |
-| `noDuplicateParameters` | `error` | Kieltää duplikaattiset funktion parametrien nimet. |
-| `noDuplicateProperties` | `error` | Kieltää duplikaattiset ominaisuudet deklarointiblokeissa (CSS). |
-| `noDuplicateSelectorsKeyframeBlock` | `error` | Kieltää duplikaattivalitsimet keyframe-blokeissa (CSS). |
-| `noDuplicateTestHooks` | `error` | Describe-lohkon ei tulisi sisältää duplikaattisia hookkeja. |
+| `noDuplicateFontNames` | `error` | Kieltää fonttiperheiden duplikaattinimet (CSS). |
+| `noDuplicateObjectKeys` | `error` | Kieltää kahden saman nimisen avaimen olemassaolon objekteissa. |
+| `noDuplicateParameters` | `error` | Kieltää duplikaattiset funktioparametrin nimet. |
+| `noDuplicateProperties` | `error` | Kieltää duplikaattiset ominaisuudet declaration blockeissa (CSS). |
+| `noDuplicateSelectorsKeyframeBlock` | `error` | Kieltää duplikaattiset selektorit keyframe-lohkoissa (CSS). |
+| `noDuplicateTestHooks` | `error` | describe-lohkon ei tulisi sisältää duplikaattisia hookkeja. |
 | `noEmptyBlock` | `error` | Kieltää tyhjät CSS-lohkot (CSS). |
-| `noEmptyBlockStatements` | `error` | Kieltää tyhjät lohkoilmaukset ja staattiset lohkot. |
-| `noEmptyInterface` | `error` | Kieltää tyhjien rajapintojen deklaroinnin. |
-| `noEvolvingTypes` | `error` | Kieltää muuttujien muuttumisen `any`-tyypiksi uudelleenasetusten kautta. |
+| `noEmptyBlockStatements` | `error` | Kieltää tyhjät lohkomuodostelmat ja staattiset lohkot. |
+| `noEmptyInterface` | `error` | Kieltää tyhjien interfacejen deklaroinnin. |
+| `noEvolvingTypes` | `error` | Kieltää muuttujien kehittymisen `any`-tyypiksi uudelleenmäärittelyjen kautta. |
 | `noExplicitAny` | `error` | Kieltää `any`-tyypin käytön. |
-| `noExportsInTest` | `error` | Kieltää `export`- tai `module.exports`-käytön testitiedostoissa. |
-| `noExtraNonNullAssertion` | `error` | Estää `!` non-null-assertionin väärän käytön TypeScript-tiedostoissa. |
-| `noFallthroughSwitchClause` | `error` | Kieltää switch-haaroissa tapahtuvan putoamisen läpi. |
+| `noExportsInTest` | `error` | Kieltää exportin tai module.exportsin käytön tiedostoissa, jotka sisältävät testejä. |
+| `noExtraNonNullAssertion` | `error` | Estää non-null-assertionin `!` väärinkäytön TypeScript-tiedostoissa. |
+| `noFallthroughSwitchClause` | `error` | Kieltää switch-haaroista putoamisen seuraavaan haaraan. |
 | `noFocusedTests` | `error` | Kieltää fokusoidut testit. |
-| `noFunctionAssign` | `error` | Kieltää funktiomäärittelyjen uudelleenasetuksen. |
-| `noGlobalAssign` | `error` | Kieltää natiiviobjektien ja kirjoitussuojattujen globaalien muuttujien uudelleenasetuksen. |
+| `noFunctionAssign` | `error` | Kieltää funktiodeklarointien uudelleenmäärittelyn. |
+| `noGlobalAssign` | `error` | Kieltää assigneja native-objekteihin ja vain-lukuisiin globaaleihin. |
 | `noGlobalIsFinite` | `error` | Käytä `Number.isFinite`-funktiota globaalin `isFinite` sijaan. |
 | `noGlobalIsNan` | `error` | Käytä `Number.isNaN`-funktiota globaalin `isNaN` sijaan. |
-| `noImplicitAnyLet` | `error` | Kieltää implisiittisen `any`-tyypin käytön `let`-määrittelyissä. |
-| `noImportAssign` | `error` | Kieltää importattuihin sitoumuksiin assigmentin tekemisen. |
-| `noImportantInKeyframe` | `error` | Kieltää virheellisen `!important`-käytön keyframe-ilmoituksissa (CSS). |
-| `noIrregularWhitespace` | `error` | Kieltää epäsäännöllisten välilyöntimerkkien käytön. |
-| `noLabelVar` | `error` | Kieltää labelit, jotka jakavat nimen muuttujan kanssa. |
-| `noMisleadingCharacterClass` | `error` | Kieltää merkkejä, jotka on muodostettu useammasta koodipisteestä merkistöluokan syntaksissa. |
-| `noMisleadingInstantiator` | `error` | Pakottaa `new`- ja konstruktorin oikean käytön. |
-| `noMisplacedAssertion` | `error` | Tarkistaa, että assertion-funktio, esim. expect, on sijoitettu `it()`-kutsun sisälle. |
-| `noMisrefactoredShorthandAssign` | `error` | Kieltää shorthand-assigmentin, kun muuttuja esiintyy molemmilla puolilla. |
-| `noOctalEscape` | `error` | Kieltää oktaaliescape-jaksot merkkijonoissa. |
-| `noPrototypeBuiltins` | `error` | Kieltää suoran `Object.prototype`-builtinien käytön. |
-| `noQuickfixBiome` | `error` | Kieltää `quickfix.biome`-asetuksen käytön editorin asetustiedostossa. |
-| `noRedeclare` | `error` | Kieltää muuttujien, funktioiden, luokkien ja tyypin uudelleendeklaroinnin samassa scope:ssa. |
-| `noRedundantUseStrict` | `error` | Estää redundantin `use strict`-määrityksen. |
+| `noImplicitAnyLet` | `error` | Kieltää implisiittisen any-tyypin käytön muuttujadeklaroinneissa. |
+| `noImportAssign` | `error` | Kieltää importattujen bindingien uudelleenmäärittelyn. |
+| `noImportantInKeyframe` | `error` | Kieltää virheellisen `!important`-käytön keyframe-deklaratioissa (CSS). |
+| `noIrregularWhitespace` | `error` | Kieltää epäsäännöllisten whitespace-merkkien käytön. |
+| `noLabelVar` | `error` | Kieltää labelit, joilla on sama nimi kuin muuttujalla. |
+| `noMisleadingCharacterClass` | `error` | Kieltää monesta koodipointista muodostuvat merkit character class -syntaksissa. |
+| `noMisleadingInstantiator` | `error` | Varmistaa `new` ja konstruktorin oikean käytön. |
+| `noMisplacedAssertion` | `error` | Tarkistaa, että assertion-funktio, esimerkiksi expect, on sijoitettu `it()`-kutsun sisään. |
+| `noMisrefactoredShorthandAssign` | `error` | Kieltää shorthand assignin, kun muuttuja esiintyy molemmilla puolilla. |
+| `noOctalEscape` | `error` | Kieltää oktaalikoodin escape-sekvenssit merkkijonoissa. |
+| `noPrototypeBuiltins` | `error` | Kieltää suoran käytön `Object.prototype`-builtineille. |
+| `noQuickfixBiome` | `error` | Kieltää `quickfix.biome`-käytön editorin asetustiedostossa. |
+| `noRedeclare` | `error` | Kieltää muuttujien, funktioiden, luokkien ja tyyppien uudelleenjulistuksen samassa scope:ssa. |
+| `noRedundantUseStrict` | `error` | Estää redundantin `use strict`-käytön. |
 | `noSelfCompare` | `error` | Kieltää vertailut, joissa molemmat puolet ovat täsmälleen samat. |
-| `noShadowRestrictedNames` | `error` | Kieltää identifikaattoreiden varjostamisen rajoitettujen nimien kanssa. |
-| `noShorthandPropertyOverrides` | `error` | Kieltää shorthand-ominaisuudet, jotka korvaavat samankaltaisia longhand-ominaisuuksia (CSS). |
+| `noShadowRestrictedNames` | `error` | Kieltää tunnisteiden varjostamisen rajoitettujen nimien yli. |
+| `noShorthandPropertyOverrides` | `error` | Kieltää shorthand-ominaisuudet, jotka korvaavat liittyviä longhand-ominaisuuksia (CSS). |
 | `noSkippedTests` | `error` | Kieltää poistetut testit. |
-| `noSparseArray` | `error` | Estää epätäydellisten (hole) taulukoiden käytön. |
-| `noTemplateCurlyInString` | `error` | Kieltää template-literal-paikantajan syntaksin tavallisissa merkkijonoissa. |
+| `noSparseArray` | `error` | Estää harvinaisten taulukoiden (aukkoja sisältävien) käytön. |
+| `noTemplateCurlyInString` | `error` | Kieltää template-litteraalin paikkamerkkisyntaksin tavallisissa merkkijonoissa. |
 | `noThenProperty` | `error` | Kieltää then-ominaisuuden käytön. |
-| `noTsIgnore` | `error` | Estää TypeScript-direktiivin `@ts-ignore` käytön. |
-| `noUnassignedVariables` | `error` | Kieltää `let` tai `var` -muuttujat, jotka luetaan mutta joita ei koskaan alusteta. |
+| `noTsIgnore` | `error` | Estää TypeScriptin `@ts-ignore`-direktiivin käytön. |
+| `noUnassignedVariables` | `error` | Kieltää let- tai var-muuttujat, joita luetaan mutta joita ei koskaan alusteta. |
 | `noUnknownAtRules` | `error` | Kieltää tuntemattomat at-säännöt (CSS). |
-| `noUnsafeDeclarationMerging` | `error` | Kieltää turvattoman deklaraatioiden yhdistämisen rajapintojen ja luokkien välillä. |
-| `noUnsafeNegation` | `error` | Kieltää turvattoman negation (`!`) käytön. |
-| `noUselessEscapeInString` | `error` | Kieltää tarpeettomat escape-jaksot merkkijonoissa. |
-| `noUselessRegexBackrefs` | `error` | Kieltää tarpeettomat backreferencet regulaarilauseke-literaaleissa, jotka aina vastaavat tyhjää merkkijonoa. |
+| `noUnsafeDeclarationMerging` | `error` | Kieltää vaarallisen deklaraatioiden yhdistämisen interfacejen ja luokkien välillä. |
+| `noUnsafeNegation` | `error` | Kieltää vaarallisen negation (`!`). |
+| `noUselessEscapeInString` | `error` | Kieltää tarpeettomat escape-sekvenssit merkkijonoissa. |
+| `noUselessRegexBackrefs` | `error` | Kieltää hyödyttömät takaisinviittaukset regulaari-ilmaisuissa, jotka aina vastaavat tyhjää merkkijonoa. |
 | `noVar` | `error` | Kieltää `var`-käytön. |
 | `noWith` | `error` | Kieltää `with`-lauseet ei-striktissä kontekstissa. |
-| `useAdjacentOverloadSignatures` | `error` | Kieltää ylikuormitettujen signatuurien käytön, jotka eivät ole vierekkäin. |
-| `useAwait` | `error` | Varmistaa, että asynkroniset funktiot käyttävät `await`-kutsuja. |
-| `useBiomeIgnoreFolder` | `error` | Kannustaa kansioiden oikeaan ohittamiseen konfiguraatiotiedostossa. |
-| `useDefaultSwitchClauseLast` | `error` | Pakottaa default-haaran olemisen viimeisenä switch-lauseessa. |
-| `useErrorMessage` | `error` | Pakottaa viestiarvon välittämisen, kun luodaan sisäänrakennettua virhettä. |
-| `useGetterReturn` | `error` | Pakottaa get-menetelmät aina palauttamaan arvon. |
-| `useGoogleFontDisplay` | `error` | Pakottaa suositellun display-strategian käytön Google Fonts -käytössä. |
-| `useGuardForIn` | `error` | Edellyttää for-in-silmukoilta `if`-lauseen käytön. |
-| `useIsArray` | `error` | Käytä `Array.isArray()`-funktiota `instanceof Array` sijaan. |
-| `useIterableCallbackReturn` | `error` | Pakottaa johdonmukaiset palautusarvot iteroivissa callback-funktioissa. |
-| `useNamespaceKeyword` | `error` | Edellyttää `namespace`-avainsanan käyttöä `module`-avaimen sijaan TypeScript-namespacejen määrittelyssä. |
+| `useAdjacentOverloadSignatures` | `error` | Kieltää overload-signaturet, jotka eivät ole vierekkäin. |
+| `useAwait` | `error` | Varmistaa, että asynkroniset funktiot käyttävät `await`. |
+| `useBiomeIgnoreFolder` | `error` | Edistää oikeaa kansioiden ohitusmekanismin käyttöä konfiguraatiotiedostossa. |
+| `useDefaultSwitchClauseLast` | `error` | Pakottaa default-haaran switch-lauseissa viimeiseksi. |
+| `useErrorMessage` | `error` | Edellyttää viestiarvon välittämistä built-in-virheen luomisessa. |
+| `useGetterReturn` | `error` | Varmistaa, että get-metodit palauttavat aina arvon. |
+| `useGoogleFontDisplay` | `error` | Edellyttää suositellun display-strategian käyttöä Google Fontsien kanssa. |
+| `useGuardForIn` | `error` | Edellyttää for-in -silmukoissa `if`-lausekkeen käyttöä. |
+| `useIsArray` | `error` | Käytä `Array.isArray()`-metodia `instanceof Array` sijaan. |
+| `useIterableCallbackReturn` | `error` | Varmistaa yhtenäiset palautusarvot iteroivissa callbackeissa. |
+| `useNamespaceKeyword` | `error` | Vaatii namespace-avainsanan käytön `module`-avainsanan sijaan TypeScript-namespaceja deklaroitaessa. |
 | `useNumberToFixedDigitsArgument` | `error` | Pakottaa digits-argumentin käytön `Number#toFixed()`-kutsussa. |
 | `useStaticResponseMethods` | `error` | Käytä staattisia `Response`-metodeja `new Response()`-konstruktorin sijaan, kun mahdollista. |
-| `useStrictMode` | `error` | Pakottaa `use strict` -direktiivin käytön skriptitiedostoissa. |
+| `useStrictMode` | `error` | Edellyttää `use strict` -direktiivin käyttöä skriptitiedostoissa. |
 
 ## Huomautukset
 
-Tietyt säännöt on poistettu käytöstä, koska ne ovat liian hitaita Scannerin kanssa suoritettaviksi. Kuten [Biome-dokumentaatiossa](https://biomejs.dev/guides/investigate-slowness/#first-things-first) mainitaan, projektissa käytössä olevat säännöt tiedetään aiheuttavan suorituskykykustannuksia vastineeksi edistyneemmästä analyysista.
+Tietyt säännöt on poistettu käytöstä, koska ne ovat liian hitaita Scannerin kanssa suoritettavaksi. Kuten [Biome-dokumentaatiossa](https://biomejs.dev/guides/investigate-slowness/#first-things-first) todetaan, käytössä olevat projektisäännöt voivat aiheuttaa suorituskykykustannuksia vastineena edistyneemmästä analyysistä.
 
-Testauksessamme olemme havainneet, että nämä säännöt voivat tehdä eron 300 ms ja 13 s lint-suorituksen välillä.
+Testauksessamme olemme havainneet, että nämä säännöt voivat tehdä eron 300 ms:n ja 13 s:n lint-kierroksen välillä.

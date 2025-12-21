@@ -1,13 +1,13 @@
 ---
 title: React
-description: Rialacha lintithe sainiúla do React le haghaidh Ultracite.
+description: Rialacha iniúchta sonracha do React d'Ultracite.
 ---
 
-Tá sa chumraíocht React rialacha lintithe atá sainiúil do React maidir le JSX, hooks, agus patrúin comhpháirte.
+Tá sa chumraíocht React rialacha iniúchta sonracha do JSX, hooks, agus patrúin chomhpháirte.
 
 ## Suiteáil
 
-Cuir an chumraíocht React leis do `biome.jsonc`:
+Cuir an chumraíocht React le do `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,45 +17,39 @@ Cuir an chumraíocht React leis do `biome.jsonc`:
 
 ## Forbhreathnú
 
-Cuirfidh an chumraíocht seo rialacha sonracha le húsáid i bhforbairt React:
+Cuir an chumraíocht seo rialacha sonracha leis don fhorbairt React:
 
-- **Rialacha JSX**: Déan cinnte faoi shintéis agus patrúin JSX cheart
+- **Rialacha JSX**: Cur chun feidhme ar shintéis agus ar phatrúin JSX chuí
 - **Rialacha Hooks**: Déan cinnte go n-úsáidtear hooks React i gceart
-- **Rialacha Comhpháirte**: Íoc ar chleachtais is fearr do chomhpháirteanna React
-- **Bainistíocht Children**: Cosc ar úsáid míchuí ar an prop children
+- **Rialacha Comhpháirte**: Cur chun feidhme ar na cleachtais is fearr do chomhpháirteanna React
+- **Láimhseáil children**: Cosc ar úsáid mhíchuí an prop children
 
-## Rialacha Sainiúla do React
+## Rialacha Sonracha React
 
-### Céartas
+### Ceartúlacht
 
-| Rialacha | Socrú | Tuairisc |
-|------|---------|-------------|
-| `noChildrenProp` | `error` | Cosc ar children a thabhairt mar props. Ba chóir children a bheith fite idir na lipéid oscailte agus dúnta. |
-| `noNestedComponentDefinitions` | `error` | Cosc ar shainmhínithe comhpháirte laistigh de chomhpháirteanna eile. Cruthaíonn sé seo ath-ríomhanna neamhriachtanacha. |
-| `noReactPropAssignments` | `error` | Cosc ar athshocrú props i gcomhpháirteanna React. Ba chóir props a chóiriú mar neamh-inathraithe. |
-| `noRenderReturnValue` | `error` | Cosc ar úsáid an luach tuairisce ó `ReactDOM.render()`. |
-| `noVoidElementsWithChildren` | `error` | Cosc ar eilimintí folamh (mar `<img>`, `<br>`) le children. |
-| `useExhaustiveDependencies` | `error` | Ná cuir ar leataobh: déan cinnte go bhfuil gach spleáchas sonraithe i gceart i hooks React (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Déan cinnte go glaotar gach hook React ó leibhéal uachtarach fheidhmeanna comhpháirte, ní laistigh de lúbanna, coinníollacha, nó feidhmeanna fite. |
-| `useJsxKeyInIterable` | `error` | Déan cinnte go bhfuil prop `key` ag eilimintí in iterables chun meaitseáil React a éascú. |
-
-### Naíonra
-
-| Rialacha | Socrú | Tuairisc |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Cosc ar úsáid an seanleagan `React.forwardRef`. Úsáid ref mar prop ina áit (React 19+). |
+| Rialach | Socrú | Cur síos |
+|--------|--------|----------|
+| `noChildrenProp` | `error` | Cosc ar tharchur children mar prop. Ba chóir go mbeadh children suiteáilte idir an lipéad oscailte agus an lipéad dúnach. |
+| `noNestedComponentDefinitions` | `error` | Cosc ar shainmhínithe comhpháirt laistigh de chomhpháirteanna eile. Cruthaíonn sé seo ath-rindreálacha neamh-riachtanacha. |
+| `noReactPropAssignments` | `error` | Cosc ar athcheapadh props i gcomhpháirteanna React. Ba chóir props a chóireáil mar neamh-athraitheach. |
+| `noRenderReturnValue` | `error` | Cosc ar úsáid luach fillte ó `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Cosc ar eilimintí folamh (mar `<img>`, `<br>`) a bheith le children. |
+| `useExhaustiveDependencies` | `error` | Cur chun feidhme go bhfuil na spleáchais go léir sonraithe i gceart i hooks React (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Cur chun feidhme gur gá glaoch ar gach hook React ón leibhéal barr de fheidhmeanna comhpháirte, ní laistigh de lúbanna, coinníollacha, nó feidhmeanna faoistruchtúrtha. |
+| `useJsxKeyInIterable` | `error` | Cur chun feidhme go bhfuil prop `key` ag eilimintí i iterable chun comhfhreagras React a chumasú. |
 
 ### Stíl
 
-| Rialacha | Socrú | Tuairisc |
-|------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Spreag úsáid comhpháirteanna feidhme in ionad comhpháirteanna rang i React. |
+| Rialach | Socrú | Cur síos |
+|--------|--------|----------|
+| `useReactFunctionComponents` | `error` | Cur chun feidhme úsáid a bhaint as comhpháirteanna feidhme in ionad comhpháirteanna rang i React. |
 
 ### Amhrasach
 
-| Rialacha | Socrú | Tuairisc |
-|------|---------|-------------|
-| `noArrayIndexKey` | `error` | Cosc ar úsáid innéacsanna eagar mar keys. Níl innéacsanna eagar ina n-aitheantóirí seasta agus féadfaidh siad fadhbanna a chruthú le stát comhpháirte. |
+| Rialach | Socrú | Cur síos |
+|--------|--------|----------|
+| `noArrayIndexKey` | `error` | Cosc ar úsáid innéacsí eagar mar keys. Níl innéacsí eagar mar aitheantóirí seasta agus féadfaidh siad fadhbanna a chruthú le staid comhpháirte. |
 | `noDuplicateJsxProps` | `error` | Cosc ar airíonna dúblacha i JSX. |
-| `noSuspiciousSemicolonInJsx` | `error` | Cosc ar sheimicolóin a athraíonn an bhrí seimeantúil d'eilimintí JSX. |
-| `noReactSpecificProps` | `off` | Ceadaigh props sainiúla React cosúil le `className` agus `htmlFor`. |
+| `noSuspiciousSemicolonInJsx` | `error` | Cosc ar sheimicólóin a athraíonn brí eilimintí JSX. |
+| `noReactSpecificProps` | `off` | Ceadaigh props sonracha React cosúil le `className` agus `htmlFor`. |

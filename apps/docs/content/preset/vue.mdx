@@ -20,10 +20,6 @@ Add the Vue configuration to your `biome.jsonc`:
 This configuration adds rules specific to Vue.js development:
 
 - **HTML Support**: Enables experimental full HTML support with script and style indentation
-- **Component Naming**: Enforce multi-word component names
-- **Data Structure**: Prevent improper data option declarations
-- **Reserved Keywords**: Disallow use of Vue reserved props and keys
-- **Duplicate Keys**: Prevent duplicate keys in component options
 - **React-Specific Props**: Disallow React-specific props in Vue components
 - **Vue File Overrides**: Relaxed rules for `.vue` files to handle Single File Component structure
 
@@ -47,26 +43,6 @@ This configuration:
 - **Indent Script and Style**: Properly indents code inside `<script>` and `<style>` tags in Vue Single File Components
 
 ## Vue-Specific Rules
-
-### Nursery
-
-| Rule | Setting | Description |
-|------|---------|-------------|
-| `noVueDataObjectDeclaration` | `error` | Prevent using object declaration for the `data` option in Vue components. The `data` option must be a function that returns an object. |
-| `noVueDuplicateKeys` | `error` | Prevent duplicate keys in Vue component options. Keys in `data`, `computed`, `methods`, etc. must be unique. |
-| `noVueReservedKeys` | `error` | Disallow Vue reserved keys like `$data`, `$props`, `$el`, etc. in component options. |
-| `noVueReservedProps` | `error` | Disallow Vue reserved props like `key`, `ref`, and `is` as custom component props. |
-| `noVueSetupPropsReactivityLoss` | `error` | Prevent usages that cause reactivity loss in Vue `setup` function props. |
-| `noVueVIfWithVFor` | `error` | Disallow `v-for` and `v-if` on the same element. |
-| `useVueHyphenatedAttributes` | `error` | Encourage using kebab-case for attribute names, per the Vue style guide's recommendations. |
-| `useVueMultiWordComponentNames` | `error` | Enforce multi-word component names to avoid conflicts with HTML elements. Single-word names like `Button` or `Card` should be avoided. |
-| `useVueValidVBind` | `error` | Enforce the validity of `v-bind` directives in Vue files. |
-| `useVueValidVElseIf` | `error` | Enforce valid `v-else-if` directives in Vue templates. Reports invalid directives with missing conditional expressions or when not preceded by a `v-if` or `v-else-if` directive. |
-| `useVueValidVElse` | `error` | Enforce valid `v-else` directives in Vue templates. Reports directives that are not preceded by a `v-if` or `v-else-if` directive. |
-| `useVueValidVHtml` | `error` | Enforce valid usage of the `v-html` directive in Vue templates. Reports directives with missing expressions, unexpected arguments, or unexpected modifiers. |
-| `useVueValidVIf` | `error` | Enforce valid `v-if` directives in Vue templates. Disallows arguments and modifiers, and ensures a value is provided. |
-| `useVueValidVOn` | `error` | Enforce valid `v-on` directives in Vue templates. Reports invalid `v-on` / shorthand `@` directives with missing event names, invalid modifiers, or missing handler expressions. |
-| `useVueValidVText` | `error` | Enforce valid `v-text` directives in Vue templates. The rule reports when v-text has an argument, has modifiers, or is missing a value. |
 
 ### Suspicious
 

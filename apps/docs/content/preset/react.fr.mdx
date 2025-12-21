@@ -1,9 +1,9 @@
 ---
 title: React
-description: Règles de lint spécifiques à React pour Ultracite.
+description: Règles de linting spécifiques à React pour Ultracite.
 ---
 
-La configuration React contient des règles de lint spécifiques à React pour JSX, les hooks et les modèles de composants.
+La configuration React contient des règles de linting spécifiques à React pour JSX, les hooks et les modèles de composants.
 
 ## Installation
 
@@ -19,43 +19,37 @@ Ajoutez la configuration React à votre `biome.jsonc` :
 
 Cette configuration ajoute des règles spécifiques au développement React :
 
-- **Règles JSX**: Imposer une syntaxe et des modèles JSX appropriés
-- **Règles des hooks**: Garantir l'utilisation correcte des hooks React
-- **Règles des composants**: Imposer les bonnes pratiques des composants React
-- **Gestion de la prop children**: Empêcher l'utilisation incorrecte de la prop children
+- **Règles JSX**: Appliquer une syntaxe et des modèles JSX appropriés
+- **Règles des hooks**: Garantir que les hooks React sont utilisés correctement
+- **Règles des composants**: Appliquer les meilleures pratiques pour les composants React
+- **Gestion des children**: Empêcher l'utilisation incorrecte de la prop children
 
 ## Règles spécifiques à React
 
 ### Exactitude
 
-| Règle | Paramètre | Description |
+| Règle | Niveau | Description |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Empêcher de passer children en tant que props. Les children doivent être imbriqués entre les balises d'ouverture et de fermeture. |
+| `noChildrenProp` | `error` | Empêcher le passage de children en tant que props. Les children doivent être imbriqués entre les balises ouvrante et fermante. |
 | `noNestedComponentDefinitions` | `error` | Empêcher les définitions de composants à l'intérieur d'autres composants. Cela provoque des re-rendus inutiles. |
 | `noReactPropAssignments` | `error` | Empêcher la réaffectation des props dans les composants React. Les props doivent être traitées comme immuables. |
 | `noRenderReturnValue` | `error` | Empêcher l'utilisation de la valeur de retour de `ReactDOM.render()`. |
-| `noVoidElementsWithChildren` | `error` | Empêcher que des éléments vides (comme `<img>`, `<br>`) aient des children. |
-| `useExhaustiveDependencies` | `error` | Imposer que toutes les dépendances soient correctement spécifiées dans les hooks React (`useEffect`, `useCallback`, `useMemo`). |
-| `useHookAtTopLevel` | `error` | Imposer que tous les hooks React soient appelés depuis le niveau supérieur des fonctions de composants, et non à l'intérieur de boucles, de conditions ou de fonctions imbriquées. |
-| `useJsxKeyInIterable` | `error` | Imposer que les éléments dans des itérables aient une prop `key` pour la réconciliation de React. |
-
-### Expérimental
-
-| Règle | Paramètre | Description |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Empêcher l'utilisation de l'ancien `React.forwardRef`. Utilisez la prop ref à la place (React 19+). |
+| `noVoidElementsWithChildren` | `error` | Empêcher que les éléments vides (comme `<img>`, `<br>`) aient des children. |
+| `useExhaustiveDependencies` | `error` | Exiger que toutes les dépendances soient correctement spécifiées dans les hooks React (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Faire en sorte que tous les hooks React soient appelés depuis le niveau supérieur des fonctions de composants, et non à l'intérieur de boucles, de conditions ou de fonctions imbriquées. |
+| `useJsxKeyInIterable` | `error` | Exiger que les éléments dans des itérables aient une prop `key` pour la réconciliation de React. |
 
 ### Style
 
-| Règle | Paramètre | Description |
+| Règle | Niveau | Description |
 |------|---------|-------------|
 | `useReactFunctionComponents` | `error` | Imposer l'utilisation des composants fonctionnels plutôt que des composants de classe dans React. |
 
-### Comportements suspects
+### Éléments suspects
 
-| Règle | Paramètre | Description |
+| Règle | Niveau | Description |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Empêcher l'utilisation des indices de tableau comme clés. Les indices de tableau ne sont pas des identifiants stables et peuvent causer des problèmes avec l'état des composants. |
-| `noDuplicateJsxProps` | `error` | Empêcher les propriétés dupliquées dans JSX. |
+| `noArrayIndexKey` | `error` | Empêcher l'utilisation des indices de tableau comme clés. Les indices de tableau ne sont pas des identifiants stables et peuvent provoquer des problèmes avec l'état du composant. |
+| `noDuplicateJsxProps` | `error` | Empêcher les propriétés dupliquées dans le JSX. |
 | `noSuspiciousSemicolonInJsx` | `error` | Empêcher les points-virgules qui modifient la sémantique des éléments JSX. |
 | `noReactSpecificProps` | `off` | Autoriser les props spécifiques à React comme `className` et `htmlFor`. |

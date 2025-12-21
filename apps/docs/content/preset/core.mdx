@@ -236,49 +236,11 @@ Environment-specific handling:
 
 ### Nursery
 
+Nursery rules are generally not enabled in Ultracite as they are experimental and may change or be removed in future Biome versions. However, the following rule is enabled due to popular demand:
+
 | Rule | Setting | Description |
 |------|---------|-------------|
-| `noAmbiguousAnchorText` | `error` | Disallow ambiguous anchor text descriptions. |
-| `noContinue` | `off` | Disallow continue statements. |
-| `noDeprecatedImports` | `off` | Restrict imports of deprecated exports. |
-| `noDuplicateDependencies` | `error` | Prevent the listing of duplicate dependencies. |
-| `noDuplicatedSpreadProps` | `error` | Disallow duplicate properties in spread props. |
-| `noEmptySource` | `error` | Disallow empty source files. |
-| `noEqualsToNull` | `error` | Disallow using `==` or `!=` to compare with `null`. Use `===` or `!==` instead. |
-| `noFloatingPromises` | `off` | Require Promise-like statements to be handled appropriately. |
-| `noForIn` | `off` | Disallow iterating using a for-in loop. |
-| `noImportCycles` | `off` | Prevent import cycles. |
-| `noIncrementDecrement` | `error` | Disallow the use of `++` and `--` operators (except in for loop afterthoughts). |
-| `noJsxLiterals` | `off` | Disallow string literals inside JSX elements. |
-| `noLeakedRender` | `error` | Prevent problematic leaked values in JSX (e.g., 0 or NaN) from being rendered. |
-| `noMisusedPromises` | `off` | Disallow Promises to be used in places where they are almost certainly a mistake. |
-| `noMultiStr` | `error` | Disallow multi-line strings using backslash continuation. |
-| `noParametersOnlyUsedInRecursion` | `error` | Disallow parameters that are only used in recursive calls. |
-| `noProto` | `error` | Disallow the use of the `__proto__` property. |
-| `noScriptUrl` | `error` | Disallow `javascript:` URLs which pose security risks like XSS vulnerabilities. |
-| `noShadow` | `error` | Disallow variable declarations from shadowing variables declared in the outer scope. |
-| `noSyncScripts` | `error` | Prevent the usage of synchronous scripts. |
-| `noTernary` | `off` | Disallow ternary operators. |
-| `noUndeclaredEnvVars` | `error` | Disallow the use of undeclared environment variables in `turbo.json`. |
-| `noUnnecessaryConditions` | `off` | Disallow unnecessary type-based conditions that can be statically determined as redundant. |
-| `noUnresolvedImports` | `off` | Warn when importing non-existing exports. |
-| `noUnusedExpressions` | `error` | Disallow expression statements that are neither a function call nor an assignment. |
-| `noUselessCatchBinding` | `off` | Disallow unused `catch` bindings. |
-| `noUselessUndefined` | `error` | Disallow the use of useless `undefined`. |
-| `useArraySortCompare` | `off` | Enforce the use of a compare function in `Array.prototype.sort()`. |
-| `useAwaitThenable` | `off` | Enforce that `await` is only used on Promise values. |
-| `useConsistentArrowReturn` | `error` | Enforce consistent arrow function bodies. |
-| `useConsistentGraphqlDescriptions` | `error` | Require all descriptions to follow the same style (either block or inline) inside GraphQL files. |
-| `useDeprecatedDate` | `error` | Require the `@deprecated` directive to specify a deletion date. |
-| `useExhaustiveSwitchCases` | `off` | Require switch-case statements to be exhaustive. |
-| `useExplicitType` | `off` | Enforce types in functions, methods, variables, and parameters. |
-| `useFind` | `off` | Enforce the use of `Array.prototype.find()` over `Array.prototype.filter()` followed by `[0]` when looking for a single result. |
-| `useMaxParams` | `error` | Enforce a maximum number of parameters in function definitions. |
-| `useRegexpExec` | `off` | Enforce `RegExp#exec` over `String#match` when no global flag is provided. |
-| `useRequiredScripts` | `off` | Enforce presence of configurable entries in the `scripts` section of `package.json` files. |
 | `useSortedClasses` | `error` (safe fix override) | Enforce the sorting of CSS utility classes. |
-| `useSpread` | `error` | Enforce the use of the spread operator over `Function.prototype.apply()`. |
-| `useUniqueGraphqlOperationName` | `error` | Ensure that all GraphQL operations within a document have unique names. |
 
 ### Performance
 

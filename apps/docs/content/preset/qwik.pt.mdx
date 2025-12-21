@@ -1,9 +1,9 @@
 ---
 title: Qwik
-description: Regras de lint específicas do Qwik para o Ultracite.
+description: Regras de linting específicas do Qwik para Ultracite.
 ---
 
-A configuração do Qwik contém regras de lint específicas para Qwik relacionadas à serialização, tarefas visíveis, escopo léxico e uso de métodos.
+A configuração do Qwik possui regras de linting específicas para serialização, tarefas visíveis, escopo léxico e uso de métodos.
 
 ## Instalação
 
@@ -17,32 +17,23 @@ Adicione a configuração do Qwik ao seu `biome.jsonc`:
 
 ## Visão geral
 
-Esta configuração adiciona regras específicas para o desenvolvimento com Qwik:
+Esta configuração adiciona regras específicas para desenvolvimento com Qwik:
 
-- **Serialização**: Aplicar o uso correto do modelo de resumibilidade do Qwik
+- **Serialização**: Aplicar o uso adequado do modelo de retomabilidade do Qwik
 - **Tarefas Visíveis**: Evitar o uso inadequado de `useVisibleTask$`
-- **Escopo Léxico**: Garantir escopo de variável adequado em funções `$`
-- **Uso de Métodos**: Aplicar padrões corretos de métodos do Qwik
-- **Props específicos do React**: Proibir props específicos do React em componentes Qwik
+- **Props Específicas do React**: Proibir o uso de props específicas do React em componentes Qwik
 
 ## Regras específicas do Qwik
 
 ### Correção
 
 | Regra | Configuração | Descrição |
-|------|---------|-------------|
-| `noQwikUseVisibleTask` | `error` | Impedir o uso de `useVisibleTask$`. Este hook executa código de forma ansiosa no cliente, comprometendo a resumibilidade do Qwik. Use `useTask$` ou `useResource$` quando possível. |
+|------|--------------|----------|
+| `noQwikUseVisibleTask` | `error` | Evitar o uso de `useVisibleTask$`. Este hook executa código de forma imediata no cliente, comprometendo a retomabilidade do Qwik. Use `useTask$` ou `useResource$` quando possível. |
 | `useQwikClasslist` | `error` | Exigir o uso da sintaxe de objeto `class` em vez de concatenação de strings para classes dinâmicas no Qwik. |
-
-### Em desenvolvimento
-
-| Regra | Configuração | Descrição |
-|------|---------|-------------|
-| `useQwikValidLexicalScope` | `error` | Exigir escopo léxico válido nas funções `$` do Qwik. Variáveis de escopos externos devem ser capturadas explicitamente. |
-| `useQwikMethodUsage` | `error` | Exigir o uso correto de métodos e APIs específicos do Qwik. |
 
 ### Suspeitas
 
 | Regra | Configuração | Descrição |
-|------|---------|-------------|
-| `noReactSpecificProps` | `error` | Proibir props específicos do React como `className` e `htmlFor` no Qwik. Use `class` e `for` em vez disso. |
+|------|--------------|----------|
+| `noReactSpecificProps` | `error` | Proibir props específicas do React como `className` e `htmlFor` no Qwik. Use `class` e `for` em vez disso. |

@@ -1,13 +1,13 @@
 ---
 title: React
-description: React-specifična pravila lintanja za Ultracite.
+description: Pravila linterja, specifična za React, za Ultracite.
 ---
 
-Konfiguracija za React vsebuje React-specifična pravila linterja za JSX, hooks in vzorce komponent.
+Konfiguracija za React vsebuje pravila linterja, specifična za JSX, hooks in vzorce komponent.
 
 ## Namestitev
 
-Dodajte React konfiguracijo v vašo `biome.jsonc`:
+Dodajte konfiguracijo za React v vašo datoteko `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -17,33 +17,27 @@ Dodajte React konfiguracijo v vašo `biome.jsonc`:
 
 ## Pregled
 
-Ta konfiguracija doda pravila, specifična za razvoj z Reactom:
+Ta konfiguracija doda pravila, specifična za razvoj z React:
 
-- **Pravila JSX**: Uveljavljajo pravilno sintakso in vzorce JSX
-- **Pravila Hooks**: Zagotavljajo pravilno uporabo React hooks
-- **Pravila komponent**: Uveljavljajo najboljše prakse za React komponente
-- **Ravnanje z children**: Preprečuje nepravilno uporabo propsa `children`
+- **Pravila JSX**: Uveljavlja pravilno sintakso in vzorce za JSX
+- **Pravila za hooks**: Zagotavlja pravilno uporabo React hooks
+- **Pravila komponent**: Uveljavlja najboljše prakse za React komponente
+- **Ravnanje z children**: Preprečuje nepravilno uporabo props children
 
-## React-specifična pravila
+## Pravila, specifična za React
 
 ### Pravilnost
 
 | Pravilo | Nastavitev | Opis |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Preprečuje posredovanje prop-a `children`. Vsebina `children` naj bo vnešena med odpirajoči in zapirajoči element. |
+| `noChildrenProp` | `error` | Preprečuje posredovanje children kot props. children naj bodo gnezdene med odpirajočim in zapirajočim tagom. |
 | `noNestedComponentDefinitions` | `error` | Preprečuje definicije komponent znotraj drugih komponent. To povzroča nepotrebne ponovne upodobitve. |
 | `noReactPropAssignments` | `error` | Preprečuje ponovno dodeljevanje props v React komponentah. Props je treba obravnavati kot nespremenljive. |
-| `noRenderReturnValue` | `error` | Preprečuje uporabo vrnjene vrednosti iz `ReactDOM.render()`. |
-| `noVoidElementsWithChildren` | `error` | Preprečuje, da bi void elementi (npr. `<img>`, `<br>`) imeli `children`. |
+| `noRenderReturnValue` | `error` | Preprečuje uporabo vrednosti, ki jo vrne `ReactDOM.render()`. |
+| `noVoidElementsWithChildren` | `error` | Preprečuje, da bi void elementi (npr. `<img>`, `<br>`) imeli children. |
 | `useExhaustiveDependencies` | `error` | Zahteva, da so vse odvisnosti pravilno navedene v React hooks (useEffect, useCallback, useMemo). |
-| `useHookAtTopLevel` | `error` | Zahteva, da so vsi React hooks klicani na vrhnji ravni funkcij komponent, ne znotraj zank, pogojnih stavkov ali gnezdenih funkcij. |
-| `useJsxKeyInIterable` | `error` | Zahteva, da imajo elementi v iterabilnih strukturah prop `key` za Reactovo uskladitev. |
-
-### Eksperimentalno
-
-| Pravilo | Nastavitev | Opis |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Preprečuje uporabo zastarelega `React.forwardRef`. Namesto tega uporabite ref kot prop (React 19+). |
+| `useHookAtTopLevel` | `error` | Zahteva, da se vsi React hooks kličejo na vrhnji ravni funkcij komponent, ne znotraj zank, pogojev ali gnezdenih funkcij. |
+| `useJsxKeyInIterable` | `error` | Zahteva, da imajo elementi v iterabilnih strukturah `key` prop za Reactovo usklajevanje. |
 
 ### Slog
 
@@ -55,7 +49,7 @@ Ta konfiguracija doda pravila, specifična za razvoj z Reactom:
 
 | Pravilo | Nastavitev | Opis |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Preprečuje uporabo indeksov polja kot prop-a `key`. Indeksi niso stabilni identifikatorji in lahko povzročijo težave s stanjem komponent. |
+| `noArrayIndexKey` | `error` | Preprečuje uporabo indeksov polja kot key. Indeksi polja niso stabilni identifikatorji in lahko povzročijo težave s stanjem komponent. |
 | `noDuplicateJsxProps` | `error` | Preprečuje podvojene lastnosti v JSX. |
 | `noSuspiciousSemicolonInJsx` | `error` | Preprečuje podpičja, ki spremenijo semantiko JSX elementov. |
-| `noReactSpecificProps` | `off` | Dovoli React-specifične propse, kot sta `className` in `htmlFor`. |
+| `noReactSpecificProps` | `off` | Dovoli React-specifične props, kot sta `className` in `htmlFor`. |

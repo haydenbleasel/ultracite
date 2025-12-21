@@ -7,7 +7,7 @@ De React-configuratie bevat React-specifieke lintregels voor JSX, hooks en compo
 
 ## Installatie
 
-Voeg de React-configuratie toe aan je `biome.jsonc`:
+Voeg de React-configuratie toe aan uw `biome.jsonc`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -20,9 +20,9 @@ Voeg de React-configuratie toe aan je `biome.jsonc`:
 Deze configuratie voegt regels toe die specifiek zijn voor React-ontwikkeling:
 
 - **JSX-regels**: Handhaaf correcte JSX-syntaxis en -patronen
-- **Hooks-regels**: Zorg ervoor dat React-hooks correct worden gebruikt
-- **Component-regels**: Handhaaf best practices voor React-componenten
-- **Omgaan met `children`**: Voorkom onjuist gebruik van de `children`-prop
+- **Hooks-regels**: Zorg dat React-hooks correct worden gebruikt
+- **Componentregels**: Handhaaf beste praktijken voor React-componenten
+- **Omgang met children**: Voorkom onjuist gebruik van de children-prop
 
 ## React-specifieke regels
 
@@ -30,32 +30,26 @@ Deze configuratie voegt regels toe die specifiek zijn voor React-ontwikkeling:
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `noChildrenProp` | `error` | Voorkom het doorgeven van children als props. Children moeten genest zijn tussen de openingstags en sluitingstags. |
-| `noNestedComponentDefinitions` | `error` | Voorkom componentdefinities binnen andere componenten. Dit veroorzaakt onnodige re-renders. |
+| `noChildrenProp` | `error` | Voorkom dat children als props worden doorgegeven. Children moeten genest zijn tussen de openingstag en de sluitingstag. |
+| `noNestedComponentDefinitions` | `error` | Voorkom componentdefinities binnen andere componenten. Dit veroorzaakt onnodige her-rendering. |
 | `noReactPropAssignments` | `error` | Voorkom het opnieuw toewijzen van props in React-componenten. Props moeten als onveranderlijk worden behandeld. |
 | `noRenderReturnValue` | `error` | Voorkom het gebruik van de returnwaarde van `ReactDOM.render()`. |
 | `noVoidElementsWithChildren` | `error` | Voorkom dat void-elementen (zoals `<img>`, `<br>`) children hebben. |
-| `useExhaustiveDependencies` | `error` | Dwing af dat alle afhankelijkheden correct worden opgegeven in React-hooks (`useEffect`, `useCallback`, `useMemo`). |
-| `useHookAtTopLevel` | `error` | Dwing af dat alle React-hooks worden aangeroepen vanaf het bovenste niveau van componentfuncties, niet binnen lussen, voorwaarden of geneste functies. |
-| `useJsxKeyInIterable` | `error` | Dwing af dat elementen in iterables een `key`-prop hebben voor React's reconciliatie. |
-
-### Experimenteel
-
-| Regel | Instelling | Beschrijving |
-|------|---------|-------------|
-| `noReactForwardRef` | `error` | Voorkom gebruik van de verouderde `React.forwardRef`. Gebruik in plaats daarvan ref als prop (React 19+). |
+| `useExhaustiveDependencies` | `error` | Handhaaf dat alle afhankelijkheden correct zijn gespecificeerd in React-hooks (useEffect, useCallback, useMemo). |
+| `useHookAtTopLevel` | `error` | Eis dat alle React-hooks op het topniveau van componentfuncties worden aangeroepen, niet binnen lussen, voorwaarden of geneste functies. |
+| `useJsxKeyInIterable` | `error` | Eis dat elementen in iterables een `key`-prop hebben voor React's reconciliatie. |
 
 ### Stijl
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `useReactFunctionComponents` | `error` | Dwing het gebruik van functionele componenten af boven klassecomponenten in React. |
+| `useReactFunctionComponents` | `error` | Dwing het gebruik van functionele componenten af in plaats van klassecomponenten in React. |
 
 ### Verdacht
 
 | Regel | Instelling | Beschrijving |
 |------|---------|-------------|
-| `noArrayIndexKey` | `error` | Voorkom het gebruik van array-indexen als keys. Array-indexen zijn geen stabiele identificatoren en kunnen problemen veroorzaken met de componentstatus. |
+| `noArrayIndexKey` | `error` | Voorkom het gebruik van arrayindices als keys. Arrayindices zijn geen stabiele identificatoren en kunnen problemen veroorzaken met de componentstate. |
 | `noDuplicateJsxProps` | `error` | Voorkom dubbele eigenschappen in JSX. |
 | `noSuspiciousSemicolonInJsx` | `error` | Voorkom puntkomma's die de semantiek van JSX-elementen veranderen. |
 | `noReactSpecificProps` | `off` | Sta React-specifieke props toe zoals `className` en `htmlFor`. |
