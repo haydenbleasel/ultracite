@@ -3,6 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  agents,
+  categoryLabels,
+  getAgentsByCategory,
+} from "@/app/(home)/agents/data";
 import BiomeLogo from "@/app/(home)/components/hero/biome.jpg";
 import ESLintLogo from "@/app/(home)/components/hero/eslint.jpg";
 import OxlintLogo from "@/app/(home)/components/hero/oxlint.jpg";
@@ -49,9 +54,17 @@ const providers = [
   },
 ];
 
+const agentCategories = [
+  { key: "ide" as const, label: categoryLabels.ide },
+  { key: "cli" as const, label: categoryLabels.cli },
+  { key: "extension" as const, label: categoryLabels.extension },
+  { key: "cloud" as const, label: categoryLabels.cloud },
+];
+
 export const Navbar = () => {
   const pathname = usePathname();
   const isProviderPage = pathname.startsWith("/providers");
+  const isAgentPage = pathname.startsWith("/agents");
 
   return (
     <div className="sticky top-0 z-50 flex items-center justify-between bg-background py-4">
@@ -99,6 +112,48 @@ export const Navbar = () => {
                     </li>
                   ))}
                 </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger
+                className={isAgentPage ? "bg-muted/50" : ""}
+              >
+                Agents
+                <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+                  {agents.length}
+                </span>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="grid w-[500px] grid-cols-2 gap-4 p-2">
+                  {agentCategories.map((category) => (
+                    <div key={category.key}>
+                      <p className="mb-2 px-3 font-medium text-muted-foreground text-xs">
+                        {category.label}
+                      </p>
+                      <ul className="grid gap-0.5">
+                        {getAgentsByCategory(category.key).map((agent) => (
+                          <li key={agent.id}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors hover:bg-muted"
+                                href={`/agents/${agent.id}`}
+                              >
+                                <Image
+                                  alt={agent.name}
+                                  className="size-5 rounded-full"
+                                  height={20}
+                                  src={agent.logo}
+                                  width={20}
+                                />
+                                {agent.name}
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
