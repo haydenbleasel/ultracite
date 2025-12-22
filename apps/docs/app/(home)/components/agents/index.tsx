@@ -76,8 +76,8 @@ export const Agents = () => (
       <Tooltip>
         <TooltipTrigger delay={0}>
           <DynamicLink href="/rules">
-            <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted-foreground ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
-              <span className="text-background text-sm">+ 16</span>
+            <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border bg-secondary ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
+              <span className="text-muted-foreground text-sm">+ 16</span>
             </div>
           </DynamicLink>
         </TooltipTrigger>
