@@ -1,17 +1,31 @@
 {
-  "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "rules": {},
-  "ignorePatterns": [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/.next/**",
-    "**/.nuxt/**",
-    "**/.output/**",
-    "**/.svelte-kit/**",
-    "**/coverage/**",
-    "**/.turbo/**",
-    "**/.vercel/**",
-    "**/storybook-static/**"
-  ]
+  "$schema": "../../../../../node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "react",
+    "react-perf",
+    "nextjs",
+    "oxc",
+    "import",
+    "jsdoc",
+    "jsx-a11y",
+    "node",
+    "promise",
+    "jest",
+    "vitest",
+    "vue"
+  ],
+  "env": {
+    "browser": true
+  },
+  "categories": {
+    "correctness": "error",
+    "perf": "error",
+    "restriction": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "style": "error"
+  }
 }
