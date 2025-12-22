@@ -13,6 +13,7 @@ import {
   type PackageManagerName,
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
+import { agents as agentsData, getAgentById } from "@ultracite/data";
 import { createAgents } from "./agents";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";
@@ -911,29 +912,10 @@ export const initialize = async (flags?: InitializeFlags) => {
     let agents = opts.agents;
     let hooks = opts.hooks;
 
-    const agentsOptions: Record<(typeof options.agents)[number], string> = {
-      "vscode-copilot": "GitHub Copilot (VSCode)",
-      cursor: "Cursor",
-      windsurf: "Windsurf",
-      zed: "Zed",
-      claude: "Claude Code",
-      codex: "OpenAI Codex / Jules / OpenCode",
-      kiro: "Kiro IDE",
-      cline: "Cline",
-      amp: "AMP",
-      aider: "Aider",
-      "firebase-studio": "Firebase Studio",
-      "open-hands": "Open Hands",
-      "gemini-cli": "Gemini CLI",
-      junie: "Junie",
-      augmentcode: "Augment Code",
-      "kilo-code": "Kilo Code",
-      goose: "Codename Goose",
-      "roo-code": "Roo Code",
-      warp: "Warp",
-      droid: "Droid",
-      antigravity: "Antigravity",
-    } as const;
+    // Build agent options from shared data
+    const agentsOptions = Object.fromEntries(
+      agentsData.map((agent) => [agent.id, agent.name])
+    ) as Record<(typeof options.agents)[number], string>;
 
     if (!agents) {
       if (quiet) {
@@ -958,10 +940,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    const hooksOptions: Record<(typeof options.hooks)[number], string> = {
-      cursor: "Cursor",
-      claude: "Claude Code",
-    } as const;
+    // Build hooks options from shared data
+    const hooksOptions = Object.fromEntries(
+      (["cursor", "claude"] as const).map((id) => [
+        id,
+        getAgentById(id)?.name ?? id,
+      ])
+    ) as Record<(typeof options.hooks)[number], string>;
 
     if (!hooks) {
       if (quiet) {
