@@ -5,95 +5,12 @@ import {
   SiJson,
   SiTypescript,
 } from "@icons-pack/react-simple-icons";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
-import Biome from "../hero/biome.jpg";
-import ESLint from "../hero/eslint.jpg";
-import Oxlint from "../hero/oxlint.jpg";
-import {
-  Angular,
-  Astro,
-  Nextjs,
-  Qwik,
-  React,
-  Remix,
-  Solid,
-  Svelte,
-  Vue,
-} from "./icons";
-
-const providers = [
-  {
-    label: "ESLint",
-    logo: ESLint,
-  },
-  {
-    label: "Biome",
-    logo: Biome,
-  },
-  {
-    label: "Oxlint",
-    logo: Oxlint,
-  },
-];
-
-const configs = [
-  {
-    label: "Next.js",
-    logo: Nextjs,
-    presets: ["core", "react", "next"],
-  },
-  {
-    label: "React",
-    logo: React,
-    presets: ["core", "react"],
-  },
-  {
-    label: "Solid",
-    logo: Solid,
-    presets: ["core", "solid"],
-  },
-  {
-    label: "Vue",
-    logo: Vue,
-    presets: ["core", "vue"],
-  },
-  {
-    label: "Svelte",
-    logo: Svelte,
-    presets: ["core", "svelte"],
-  },
-  {
-    label: "Qwik",
-    logo: Qwik,
-    presets: ["core", "qwik"],
-  },
-  {
-    label: "Angular",
-    logo: Angular,
-    presets: ["core", "angular"],
-  },
-  {
-    label: "Remix",
-    logo: Remix,
-    presets: ["core", "remix"],
-  },
-  {
-    label: "Astro",
-    logo: Astro,
-    presets: ["core", "astro"],
-  },
-];
+import { FrameworkSelector, frameworks } from "./framework-selector";
+import { ProviderSelector, providers } from "./provider-selector";
 
 const biomeConfig = [
   {
@@ -143,12 +60,14 @@ const oxlintConfig = [
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(providers[0].label);
-  const [config, setConfig] = useState<string | null>(configs[0].label);
+  const [framework, setFramework] = useState<string | null>(
+    frameworks[0].label
+  );
 
   const selectedProvider = providers.find((p) => p.label === provider);
-  const selectedConfig = configs.find((c) => c.label === config);
+  const selectedFramework = frameworks.find((f) => f.label === framework);
 
-  const file = useMemo(() => {
+  const config = useMemo(() => {
     if (selectedProvider?.label === "Biome") {
       return biomeConfig;
     }
@@ -172,65 +91,20 @@ export const ZeroConfig = () => {
 
       <div className="flex items-center justify-center gap-2">
         <span className="text-muted-foreground text-sm">I'm using</span>
-        <Select onValueChange={setProvider} value={provider}>
-          <SelectTrigger>
-            <SelectValue>
-              {selectedProvider && (
-                <>
-                  <Image
-                    alt={selectedProvider.label}
-                    className="size-4 rounded-full"
-                    src={selectedProvider.logo}
-                  />
-                  {selectedProvider.label}
-                </>
-              )}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {providers.map((provider) => (
-              <SelectItem key={provider.label} value={provider.label}>
-                <div className="flex items-center gap-2">
-                  <Image
-                    alt={provider.label}
-                    className="size-4 rounded-full"
-                    src={provider.logo}
-                  />
-                  <span className="hidden lg:block">{provider.label}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ProviderSelector value={provider} onValueChange={setProvider} />
         <span className="text-muted-foreground text-sm">on my</span>
-        <Select onValueChange={setConfig} value={config}>
-          <SelectTrigger>
-            <SelectValue>
-              {selectedConfig && (
-                <>
-                  <selectedConfig.logo className="size-4" />
-                  {selectedConfig.label}
-                </>
-              )}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {configs.map((config) => (
-              <SelectItem key={config.label} value={config.label}>
-                <config.logo className="size-4" />
-                <span className="hidden lg:block">{config.label}</span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <FrameworkSelector value={framework} onValueChange={setFramework} />
         <span className="text-muted-foreground text-sm">project</span>
       </div>
 
-      {file && (
+      {config && (
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
-          <Tabs className="w-full gap-0" defaultValue={file[0]?.filename ?? ""}>
+          <Tabs
+            className="w-full gap-0"
+            defaultValue={config[0]?.filename ?? ""}
+          >
             <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
-              {file.map((f) => (
+              {config.map((f) => (
                 <TabsTrigger
                   className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
                   key={f.filename}
@@ -241,10 +115,10 @@ export const ZeroConfig = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
-            {file.map((f) => (
+            {config.map((f) => (
               <TabsContent key={f.filename} value={f.filename}>
                 <CodeBlock
-                  code={f.code(selectedConfig?.presets ?? [])}
+                  code={f.code(selectedFramework?.presets ?? [])}
                   lang={f.lang as BundledLanguage}
                 />
               </TabsContent>
