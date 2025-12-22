@@ -27,6 +27,7 @@ import { eslint } from "./linters/eslint";
 import { oxfmt } from "./linters/oxfmt";
 import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
+import { stylelint } from "./linters/stylelint";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
@@ -70,8 +71,9 @@ export const installDependencies = async (
   }
   if (linters.includes("eslint")) {
     packages.push("eslint@latest");
-    // ESLint is only a linter, so we need Prettier for formatting
+    // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     packages.push("prettier@latest");
+    packages.push("stylelint@latest");
   }
   if (linters.includes("oxlint")) {
     packages.push("oxlint@latest");
@@ -97,8 +99,9 @@ export const installDependencies = async (
     }
     if (linters.includes("eslint")) {
       devDependencies.eslint = "latest";
-      // ESLint is only a linter, so we need Prettier for formatting
+      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       devDependencies.prettier = "latest";
+      devDependencies.stylelint = "latest";
     }
     if (linters.includes("oxlint")) {
       devDependencies.oxlint = "latest";
@@ -170,7 +173,9 @@ export const upsertVsCodeSettings = async (
   await vscode.create(linters);
 
   // Install extensions for selected linters
-  const extensionsToInstall = linters.map((linter) => LINTER_EXTENSIONS[linter]);
+  const extensionsToInstall = linters.map(
+    (linter) => LINTER_EXTENSIONS[linter]
+  );
   const installedExtensions: string[] = [];
   const failedExtensions: string[] = [];
 
@@ -349,6 +354,33 @@ export const upsertPrettierConfig = async (quiet = false) => {
   await prettier.create();
   if (!quiet) {
     s.stop("Prettier configuration created.");
+  }
+};
+
+export const upsertStylelintConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Stylelint configuration...");
+  }
+
+  if (await stylelint.exists()) {
+    if (!quiet) {
+      s.message("Stylelint configuration found, updating...");
+    }
+    await stylelint.update();
+    if (!quiet) {
+      s.stop("Stylelint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Stylelint configuration not found, creating...");
+  }
+  await stylelint.create();
+  if (!quiet) {
+    s.stop("Stylelint configuration created.");
   }
 };
 
@@ -784,19 +816,16 @@ export const initialize = async (flags?: InitializeFlags) => {
           message: "Which linters do you want to use?",
           options: [
             {
-              label: "Biome (recommended)",
+              label: "Biome",
               value: "biome",
-              hint: "Fast Rust-based linter and formatter",
             },
             {
-              label: "ESLint + Prettier",
+              label: "ESLint + Prettier + Stylelint",
               value: "eslint",
-              hint: "Traditional JavaScript linter and formatter",
             },
             {
-              label: "Oxlint",
+              label: "Oxlint + Oxfmt",
               value: "oxlint",
-              hint: "Fast Rust-based linter and formatter",
             },
           ],
           required: false,
@@ -1011,8 +1040,9 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
     if (linters.includes("eslint")) {
       await upsertEslintConfig(frameworks, quiet);
-      // ESLint is only a linter, so we need Prettier for formatting
+      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(quiet);
+      await upsertStylelintConfig(quiet);
     }
     if (linters.includes("oxlint")) {
       await upsertOxlintConfig(frameworks, quiet);

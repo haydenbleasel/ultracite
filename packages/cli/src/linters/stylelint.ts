@@ -1,21 +1,21 @@
 import { writeFile } from "node:fs/promises";
 import { exists } from "../utils";
 
-const configPath = "./prettier.config.mjs";
+const configPath = "./stylelint.config.mjs";
 
-const generatePrettierConfig = (): string => {
-  return `export { default } from "ultracite/prettier";
+const generateStylelintConfig = (): string => {
+  return `export { default } from "ultracite/stylelint";
 `;
 };
 
-export const prettier = {
+export const stylelint = {
   exists: () => exists(configPath),
   create: async () => {
-    const config = generatePrettierConfig();
+    const config = generateStylelintConfig();
     return writeFile(configPath, config);
   },
   update: async () => {
-    const config = generatePrettierConfig();
+    const config = generateStylelintConfig();
     return writeFile(configPath, config);
   },
 };

@@ -39,7 +39,7 @@ export default defineConfig([
 ]);`,
   },
   {
-    filename: ".prettierrc.mjs",
+    filename: "prettier.config.mjs",
     icon: SiJavascript,
     lang: "ts",
     code: () => `export { default } from "ultracite/prettier";`,
