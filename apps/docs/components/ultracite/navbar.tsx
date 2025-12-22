@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { agents } from "@/app/(home)/agents/data";
+import { editors } from "@/app/(home)/editors/data";
 import BiomeLogo from "@/app/(home)/components/hero/biome.jpg";
 import ESLintLogo from "@/app/(home)/components/hero/eslint.jpg";
 import OxlintLogo from "@/app/(home)/components/hero/oxlint.jpg";
@@ -53,6 +54,7 @@ const providers = [
 export const Navbar = () => {
   const pathname = usePathname();
   const isProviderPage = pathname.startsWith("/providers");
+  const isEditorPage = pathname.startsWith("/editors");
   const isAgentPage = pathname.startsWith("/agents");
 
   return (
@@ -95,6 +97,45 @@ export const Navbar = () => {
                               </span>
                               <span className="text-muted-foreground text-xs">
                                 {provider.description}
+                              </span>
+                            </div>
+                          </Link>
+                        }
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger
+                className={isEditorPage ? "bg-muted/50" : ""}
+              >
+                Editors
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-72 gap-1">
+                  {editors.map((editor) => (
+                    <li key={editor.id}>
+                      <NavigationMenuLink
+                        render={
+                          <Link
+                            className="flex items-center gap-3"
+                            href={`/editors/${editor.id}`}
+                          >
+                            <Image
+                              alt={editor.name}
+                              className="size-8 rounded-full"
+                              height={32}
+                              src={editor.logo}
+                              width={32}
+                            />
+                            <div className="grid gap-0.5">
+                              <span className="font-medium text-sm">
+                                {editor.name}
+                              </span>
+                              <span className="text-muted-foreground text-xs">
+                                {editor.subtitle}
                               </span>
                             </div>
                           </Link>
