@@ -66,16 +66,16 @@ export const frameworks = [
   },
 ];
 
-export type Framework = {
+export interface Framework {
   label: string;
   logo: ComponentType<{ className?: string }>;
   presets: string[];
-};
+}
 
-type FrameworkSelectorProps = {
+interface FrameworkSelectorProps {
   value: string | null;
-  onValueChange: (value: string) => void;
-};
+  onValueChange: (value: string | null) => void;
+}
 
 export const FrameworkSelector = ({
   value,
@@ -88,18 +88,20 @@ export const FrameworkSelector = ({
       <SelectTrigger>
         <SelectValue>
           {selectedFramework && (
-            <>
+            <div className="flex items-center gap-1.5">
               <selectedFramework.logo className="size-4" />
               {selectedFramework.label}
-            </>
+            </div>
           )}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {frameworks.map((framework) => (
           <SelectItem key={framework.label} value={framework.label}>
-            <framework.logo className="size-4" />
-            <span className="hidden lg:block">{framework.label}</span>
+            <div className="flex items-center gap-1.5">
+              <framework.logo className="size-4" />
+              <span>{framework.label}</span>
+            </div>
           </SelectItem>
         ))}
       </SelectContent>
