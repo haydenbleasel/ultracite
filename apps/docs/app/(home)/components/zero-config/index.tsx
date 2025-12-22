@@ -100,9 +100,11 @@ const biomeConfig = [
     filename: "biome.jsonc",
     icon: SiJson,
     lang: "json",
-    code: `{
+    code: (presets: string[]) => `{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/biome/core", "ultracite/biome/react", "ultracite/biome/next"]
+  "extends": [
+    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
+  ]
 }`,
   },
 ];
@@ -112,13 +114,13 @@ const eslintConfig = [
     filename: "eslint.config.mjs",
     icon: SiJavascript,
     lang: "js",
-    code: `export { default } from 'ultracite';`,
+    code: (presets: string[]) => `export { default } from 'ultracite';`,
   },
   {
     filename: "prettier.config.ts",
     icon: SiTypescript,
     lang: "ts",
-    code: "// TBD",
+    code: (presets: string[]) => "// TBD",
   },
 ];
 
@@ -127,15 +129,15 @@ const oxlintConfig = [
     filename: ".oxlintrc.json",
     icon: SiJson,
     lang: "json",
-    code: `{
-  "extends": ["ultracite/oxlint/core", "ultracite/oxlint/react", "ultracite/oxlint/next"]
+    code: (presets: string[]) => `{
+  "extends": [${presets.map((p) => `"ultracite/oxlint/${p}"`).join(", ")}]
 }`,
   },
   {
     filename: ".oxfmtrc.jsonc",
     icon: SiJson,
     lang: "json",
-    code: "// TBD",
+    code: (presets: string[]) => "// TBD",
   },
 ];
 
@@ -226,11 +228,11 @@ export const ZeroConfig = () => {
 
       {file && (
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
-          <Tabs className="w-full" defaultValue={file[0]?.filename ?? ""}>
-            <TabsList className="flex overflow-x-auto border-b bg-sidebar px-2">
+          <Tabs className="w-full gap-0" defaultValue={file[0]?.filename ?? ""}>
+            <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
               {file.map((f) => (
                 <TabsTrigger
-                  className="flex items-center gap-2 px-4 py-2 font-mono text-xs"
+                  className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
                   key={f.filename}
                   value={f.filename}
                 >
@@ -241,7 +243,10 @@ export const ZeroConfig = () => {
             </TabsList>
             {file.map((f) => (
               <TabsContent key={f.filename} value={f.filename}>
-                <CodeBlock code={f.code} lang={f.lang as BundledLanguage} />
+                <CodeBlock
+                  code={f.code(selectedConfig?.presets ?? [])}
+                  lang={f.lang as BundledLanguage}
+                />
               </TabsContent>
             ))}
           </Tabs>
