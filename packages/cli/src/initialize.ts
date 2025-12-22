@@ -24,6 +24,7 @@ import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
+import { oxfmt } from "./linters/oxfmt";
 import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { eslintCleanup } from "./migrations/eslint";
@@ -74,6 +75,8 @@ export const installDependencies = async (
   }
   if (linters.includes("oxlint")) {
     packages.push("oxlint@latest");
+    // Oxlint is only a linter, so we need oxfmt for formatting
+    packages.push("oxfmt@latest");
   }
 
   if (install) {
@@ -99,6 +102,8 @@ export const installDependencies = async (
     }
     if (linters.includes("oxlint")) {
       devDependencies.oxlint = "latest";
+      // Oxlint is only a linter, so we need oxfmt for formatting
+      devDependencies.oxfmt = "latest";
     }
 
     await updatePackageJson({ devDependencies });
@@ -344,6 +349,33 @@ export const upsertPrettierConfig = async (quiet = false) => {
   await prettier.create();
   if (!quiet) {
     s.stop("Prettier configuration created.");
+  }
+};
+
+export const upsertOxfmtConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for oxfmt configuration...");
+  }
+
+  if (await oxfmt.exists()) {
+    if (!quiet) {
+      s.message("oxfmt configuration found, updating...");
+    }
+    await oxfmt.update();
+    if (!quiet) {
+      s.stop("oxfmt configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("oxfmt configuration not found, creating...");
+  }
+  await oxfmt.create();
+  if (!quiet) {
+    s.stop("oxfmt configuration created.");
   }
 };
 
@@ -984,6 +1016,8 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
     if (linters.includes("oxlint")) {
       await upsertOxlintConfig(frameworks, quiet);
+      // Oxlint is only a linter, so we need oxfmt for formatting
+      await upsertOxfmtConfig(quiet);
     }
 
     if (editorConfig?.includes("vscode")) {
