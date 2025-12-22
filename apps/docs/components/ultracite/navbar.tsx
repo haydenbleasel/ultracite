@@ -1,9 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import BiomeLogo from "@/app/(home)/components/hero/biome.jpg";
+import ESLintLogo from "@/app/(home)/components/hero/eslint.jpg";
+import OxlintLogo from "@/app/(home)/components/hero/oxlint.jpg";
 import { Logo } from "@/app/(home)/components/logo";
 import { Button } from "../ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "../ui/navigation-menu";
 
 const links = [
   {
@@ -16,15 +28,82 @@ const links = [
   },
 ];
 
+const providers = [
+  {
+    href: "/providers/eslint",
+    label: "ESLint + Prettier + Stylelint",
+    description: "The most mature linting ecosystem",
+    logo: ESLintLogo,
+  },
+  {
+    href: "/providers/biome",
+    label: "Biome",
+    description: "The modern all-in-one toolchain",
+    logo: BiomeLogo,
+  },
+  {
+    href: "/providers/oxlint",
+    label: "Oxlint + Oxfmt",
+    description: "The fastest linter available",
+    logo: OxlintLogo,
+  },
+];
+
 export const Navbar = () => {
   const pathname = usePathname();
+  const isProviderPage = pathname.startsWith("/providers");
 
   return (
     <div className="sticky top-0 z-50 flex items-center justify-between bg-background py-4">
-      <Link className="flex items-center gap-2" href="/">
-        <Logo className="size-4" />
-        <span className="font-semibold text-lg tracking-tight">Ultracite</span>
-      </Link>
+      <div className="flex items-center gap-4">
+        <Link className="flex items-center gap-2" href="/">
+          <Logo className="size-4" />
+          <span className="font-semibold text-lg tracking-tight">
+            Ultracite
+          </span>
+        </Link>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger
+                className={isProviderPage ? "bg-muted/50" : ""}
+              >
+                Providers
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-72 gap-1">
+                  {providers.map((provider) => (
+                    <li key={provider.href}>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="flex items-center gap-3"
+                          href={provider.href}
+                        >
+                          <Image
+                            alt={provider.label}
+                            className="size-8 rounded-full"
+                            height={32}
+                            src={provider.logo}
+                            width={32}
+                          />
+                          <div className="grid gap-0.5">
+                            <span className="font-medium text-sm">
+                              {provider.label}
+                            </span>
+                            <span className="text-muted-foreground text-xs">
+                              {provider.description}
+                            </span>
+                          </div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-px">
           {links.map((link) => (
