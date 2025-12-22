@@ -77,11 +77,11 @@ export const Agents = () => (
         <TooltipTrigger delay={0}>
           <DynamicLink href="/rules">
             <div className="flex size-14 items-center justify-center overflow-hidden rounded-full bg-muted-foreground ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
-              <span className="text-background text-sm">+ 12</span>
+              <span className="text-background text-sm">+ 16</span>
             </div>
           </DynamicLink>
         </TooltipTrigger>
-        <TooltipContent>+ 12 more agents</TooltipContent>
+        <TooltipContent>+ 16 more agents</TooltipContent>
       </Tooltip>
     </div>
   </div>
