@@ -48,6 +48,8 @@
     "arrow-body-style": ["error", "as-needed"],
     "max-depth": "off",
     "max-params": "off",
+    "capitalized-comments": "off",
+    "new-cap": "off",
 
     "import/no-default-export": "off",
     "import/exports-last": "off",
@@ -61,6 +63,9 @@
     "import/group-exports": "off",
     "import/no-commonjs": "off",
     "import/unambiguous": "off",
+    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/no-dynamic-require": "off",
+    "import/no-unassigned-import": "off",
 
     "jsdoc/require-param": "off",
     "jsdoc/require-returns": "off",
@@ -76,10 +81,12 @@
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-process-exit": "off",
     "unicorn/prefer-global-this": "off",
+    "unicorn/no-null": "off",
 
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
     "typescript/explicit-function-return-type": "off",
+    "typescript/no-var-requires": "off",
 
     "node/no-process-env": "off",
 
@@ -90,5 +97,19 @@
     "oxc/no-async-await": "off",
     "oxc/no-rest-spread-properties": "off",
     "oxc/no-optional-chaining": "off",
-  }
+
+    "promise/catch-or-return": "off",
+    "promise/always-return": "off",
+
+    "jsx-a11y/no-autofocus": "off"
+  },
+
+  "overrides": [
+    {
+      "files": ["**/next-env.d.ts"],
+      "rules": {
+        "import/no-unassigned-import": "off",
+      }
+    }
+  ]
 }
