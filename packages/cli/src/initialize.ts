@@ -152,7 +152,7 @@ export const upsertVsCodeSettings = async (
     if (!quiet) {
       s.message("settings.json found, updating...");
     }
-    await vscode.update();
+    await vscode.update(linters);
     if (!quiet) {
       s.stop("settings.json updated.");
     }
@@ -162,7 +162,7 @@ export const upsertVsCodeSettings = async (
   if (!quiet) {
     s.message("settings.json not found, creating...");
   }
-  await vscode.create();
+  await vscode.create(linters);
 
   // Install extensions for selected linters
   const extensionsToInstall = linters.map((linter) => LINTER_EXTENSIONS[linter]);
