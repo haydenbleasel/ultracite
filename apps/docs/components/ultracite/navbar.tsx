@@ -3,11 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  agents,
-  categoryLabels,
-  getAgentsByCategory,
-} from "@/app/(home)/agents/data";
+import { agents } from "@/app/(home)/agents/data";
 import BiomeLogo from "@/app/(home)/components/hero/biome.jpg";
 import ESLintLogo from "@/app/(home)/components/hero/eslint.jpg";
 import OxlintLogo from "@/app/(home)/components/hero/oxlint.jpg";
@@ -54,13 +50,6 @@ const providers = [
   },
 ];
 
-const agentCategories = [
-  { key: "ide" as const, label: categoryLabels.ide },
-  { key: "cli" as const, label: categoryLabels.cli },
-  { key: "extension" as const, label: categoryLabels.extension },
-  { key: "cloud" as const, label: categoryLabels.cloud },
-];
-
 export const Navbar = () => {
   const pathname = usePathname();
   const isProviderPage = pathname.startsWith("/providers");
@@ -87,28 +76,30 @@ export const Navbar = () => {
                 <ul className="grid w-72 gap-1">
                   {providers.map((provider) => (
                     <li key={provider.href}>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          className="flex items-center gap-3"
-                          href={provider.href}
-                        >
-                          <Image
-                            alt={provider.label}
-                            className="size-8 rounded-full"
-                            height={32}
-                            src={provider.logo}
-                            width={32}
-                          />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-sm">
-                              {provider.label}
-                            </span>
-                            <span className="text-muted-foreground text-xs">
-                              {provider.description}
-                            </span>
-                          </div>
-                        </Link>
-                      </NavigationMenuLink>
+                      <NavigationMenuLink
+                        render={
+                          <Link
+                            className="flex items-center gap-3"
+                            href={provider.href}
+                          >
+                            <Image
+                              alt={provider.label}
+                              className="size-8 rounded-full"
+                              height={32}
+                              src={provider.logo}
+                              width={32}
+                            />
+                            <div className="grid gap-0.5">
+                              <span className="font-medium text-sm">
+                                {provider.label}
+                              </span>
+                              <span className="text-muted-foreground text-xs">
+                                {provider.description}
+                              </span>
+                            </div>
+                          </Link>
+                        }
+                      />
                     </li>
                   ))}
                 </ul>
@@ -124,36 +115,29 @@ export const Navbar = () => {
                 </span>
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div className="grid w-[500px] grid-cols-2 gap-4 p-2">
-                  {agentCategories.map((category) => (
-                    <div key={category.key}>
-                      <p className="mb-2 px-3 font-medium text-muted-foreground text-xs">
-                        {category.label}
-                      </p>
-                      <ul className="grid gap-0.5">
-                        {getAgentsByCategory(category.key).map((agent) => (
-                          <li key={agent.id}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors hover:bg-muted"
-                                href={`/agents/${agent.id}`}
-                              >
-                                <Image
-                                  alt={agent.name}
-                                  className="size-5 rounded-full"
-                                  height={20}
-                                  src={agent.logo}
-                                  width={20}
-                                />
-                                {agent.name}
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <ul className="grid grid-cols-4 gap-1 p-2">
+                  {agents.map((agent) => (
+                    <li key={agent.id}>
+                      <NavigationMenuLink
+                        render={
+                          <Link
+                            className="flex items-center gap-3"
+                            href={`/agents/${agent.id}`}
+                          >
+                            <Image
+                              alt={agent.name}
+                              className="size-5 rounded-full"
+                              height={20}
+                              src={agent.logo}
+                              width={20}
+                            />
+                            {agent.name}
+                          </Link>
+                        }
+                      />
+                    </li>
                   ))}
-                </div>
+                </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
