@@ -1,6 +1,10 @@
 "use client";
 
-import { IconBrandJavascript, IconJson } from "@tabler/icons-react";
+import {
+  SiJavascript,
+  SiJson,
+  SiTypescript,
+} from "@icons-pack/react-simple-icons";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
@@ -11,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
 import Biome from "../hero/biome.jpg";
 import ESLint from "../hero/eslint.jpg";
@@ -90,31 +95,49 @@ const configs = [
   },
 ];
 
-const biomeConfig = {
-  filename: "biome.jsonc",
-  icon: IconJson,
-  lang: "json",
-  code: `{
+const biomeConfig = [
+  {
+    filename: "biome.jsonc",
+    icon: SiJson,
+    lang: "json",
+    code: `{
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite/biome/core", "ultracite/biome/react", "ultracite/biome/next"]
 }`,
-};
+  },
+];
 
-const eslintConfig = {
-  filename: "eslint.config.mjs",
-  icon: IconBrandJavascript,
-  lang: "js",
-  code: `export { default } from 'ultracite';`,
-};
+const eslintConfig = [
+  {
+    filename: "eslint.config.mjs",
+    icon: SiJavascript,
+    lang: "js",
+    code: `export { default } from 'ultracite';`,
+  },
+  {
+    filename: "prettier.config.ts",
+    icon: SiTypescript,
+    lang: "ts",
+    code: "// TBD",
+  },
+];
 
-const oxlintConfig = {
-  filename: ".oxlintrc.json",
-  icon: IconJson,
-  lang: "json",
-  code: `{
+const oxlintConfig = [
+  {
+    filename: ".oxlintrc.json",
+    icon: SiJson,
+    lang: "json",
+    code: `{
   "extends": ["ultracite/oxlint/core", "ultracite/oxlint/react", "ultracite/oxlint/next"]
 }`,
-};
+  },
+  {
+    filename: ".oxfmtrc.jsonc",
+    icon: SiJson,
+    lang: "json",
+    code: "// TBD",
+  },
+];
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(providers[0].label);
@@ -202,12 +225,26 @@ export const ZeroConfig = () => {
       </div>
 
       {file && (
-        <div className="mx-auto w-full max-w-3xl divide-y overflow-hidden rounded-lg border">
-          <div className="flex items-center gap-2 bg-sidebar p-4">
-            <file.icon className="size-4" />
-            <span className="font-mono text-sm">{file.filename}</span>
-          </div>
-          <CodeBlock code={file.code} lang={file.lang as BundledLanguage} />
+        <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
+          <Tabs className="w-full" defaultValue={file[0]?.filename ?? ""}>
+            <TabsList className="flex overflow-x-auto border-b bg-sidebar px-2">
+              {file.map((f) => (
+                <TabsTrigger
+                  className="flex items-center gap-2 px-4 py-2 font-mono text-xs"
+                  key={f.filename}
+                  value={f.filename}
+                >
+                  <f.icon className="size-3.5 text-muted-foreground" />
+                  <span>{f.filename}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {file.map((f) => (
+              <TabsContent key={f.filename} value={f.filename}>
+                <CodeBlock code={f.code} lang={f.lang as BundledLanguage} />
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
       )}
     </div>
