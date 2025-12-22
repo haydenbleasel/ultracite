@@ -36,7 +36,6 @@ const oxlintConfig = {
   "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
-    "source.organizeImports.oxc": "explicit",
   },
 };
 
