@@ -11,6 +11,8 @@ import { Installer } from "../installer";
 import Biome from "./biome.jpg";
 import ESLint from "./eslint.jpg";
 import Oxlint from "./oxlint.jpg";
+import Prettier from "./prettier.jpg";
+import Stylelint from "./stylelint.jpg";
 
 interface HeroProps {
   children: ReactNode;
@@ -29,6 +31,14 @@ const logos = [
   {
     name: "Oxlint",
     src: Oxlint,
+  },
+  {
+    name: "Prettier",
+    src: Prettier,
+  },
+  {
+    name: "Stylelint",
+    src: Stylelint,
   },
 ];
 

@@ -73,19 +73,18 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
     };
   }, [code, lang]);
 
-  if (!result) {
-    return (
-      <pre
-        className={cn(
-          className,
-          "bg-(--shiki-light-bg)! p-4 text-sm dark:bg-(--shiki-dark-bg)!"
-        )}
-        data-language={lang}
-      >
-        <code>{code}</code>
-      </pre>
-    );
-  }
+  const output: ThemedToken[][] = result
+    ? result.tokens
+    : code.split("\n").map((line) => [
+        {
+          content: line,
+          color: "var(--shiki-light-fg)",
+          bgColor: "var(--shiki-light-bg)",
+          htmlStyle: {},
+          htmlAttrs: {},
+          offset: 0,
+        },
+      ]);
 
   return (
     <pre
@@ -95,12 +94,12 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
       )}
       data-language={lang}
       style={{
-        backgroundColor: result.bg,
-        color: result.fg,
+        backgroundColor: result?.bg,
+        color: result?.fg,
       }}
     >
       <code className="[counter-increment:line_0] [counter-reset:line]">
-        {result.tokens.map((row, index) => (
+        {output.map((row, index) => (
           <span
             className={cn(
               "block",

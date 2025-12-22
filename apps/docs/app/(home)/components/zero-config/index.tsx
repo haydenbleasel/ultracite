@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  SiJavascript,
-  SiJson,
-  SiTypescript,
-} from "@icons-pack/react-simple-icons";
+import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,13 +27,28 @@ const eslintConfig = [
     filename: "eslint.config.mjs",
     icon: SiJavascript,
     lang: "js",
-    code: (presets: string[]) => `export { default } from 'ultracite';`,
+    code: (presets: string[]) => `import { defineConfig } from "eslint/config";
+${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
+
+export default defineConfig([
+  {
+    extends: [
+      ${presets.join(",\n      ")}
+    ],
+  },
+]);`,
   },
   {
-    filename: "prettier.config.ts",
-    icon: SiTypescript,
+    filename: ".prettierrc.mjs",
+    icon: SiJavascript,
     lang: "ts",
-    code: (presets: string[]) => "// TBD",
+    code: () => `export { default } from "ultracite/prettier";`,
+  },
+  {
+    filename: "stylelint.config.mjs",
+    icon: SiJavascript,
+    lang: "ts",
+    code: () => `export { default } from 'ultracite/stylelint';`,
   },
 ];
 
@@ -47,35 +58,55 @@ const oxlintConfig = [
     icon: SiJson,
     lang: "json",
     code: (presets: string[]) => `{
-  "extends": [${presets.map((p) => `"ultracite/oxlint/${p}"`).join(", ")}]
+  "extends": [
+    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
+  ]
 }`,
   },
   {
     filename: ".oxfmtrc.jsonc",
     icon: SiJson,
     lang: "json",
-    code: (presets: string[]) => "// TBD",
+    code: () => `{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json"
+}`,
   },
 ];
 
 export const ZeroConfig = () => {
-  const [provider, setProvider] = useState<string | null>(providers[0].label);
+  const [provider, setProvider] = useState<string | null>(providers[1].id);
   const [framework, setFramework] = useState<string | null>(
     frameworks[0].label
   );
 
-  const selectedProvider = providers.find((p) => p.label === provider);
+  const selectedProvider = providers.find((p) => p.id === provider);
   const selectedFramework = frameworks.find((f) => f.label === framework);
 
   const config = useMemo(() => {
-    if (selectedProvider?.label === "Biome") {
+    if (selectedProvider?.id === "biome") {
       return biomeConfig;
     }
-    if (selectedProvider?.label === "ESLint") {
+    if (selectedProvider?.id === "eslint") {
       return eslintConfig;
     }
     return oxlintConfig;
   }, [selectedProvider]);
+
+  // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
+  // The value should always be valid for the current config; fallback to first available tab if needed.
+  const [tabValue, setTabValue] = useState<string>(config[0]?.filename ?? "");
+
+  // Whenever config changes, reset tab to first in config
+  // (guard against stale filename if provider/framework is switched)
+  // This avoids uncontrolled->controlled warning.
+  // We only setTabValue if the filename list changed and tabValue is not present.
+  useMemo(() => {
+    if (!config.some((c) => c.filename === tabValue)) {
+      setTabValue(config[0]?.filename ?? "");
+    }
+    // Only run when config changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config, tabValue]);
 
   return (
     <div className="grid gap-8">
@@ -91,9 +122,9 @@ export const ZeroConfig = () => {
 
       <div className="flex items-center justify-center gap-2">
         <span className="text-muted-foreground text-sm">I'm using</span>
-        <ProviderSelector value={provider} onValueChange={setProvider} />
+        <ProviderSelector onValueChange={setProvider} value={provider} />
         <span className="text-muted-foreground text-sm">on my</span>
-        <FrameworkSelector value={framework} onValueChange={setFramework} />
+        <FrameworkSelector onValueChange={setFramework} value={framework} />
         <span className="text-muted-foreground text-sm">project</span>
       </div>
 
@@ -101,7 +132,8 @@ export const ZeroConfig = () => {
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
           <Tabs
             className="w-full gap-0"
-            defaultValue={config[0]?.filename ?? ""}
+            onValueChange={setTabValue}
+            value={tabValue}
           >
             <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
               {config.map((f) => (

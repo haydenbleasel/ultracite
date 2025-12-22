@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { StaticImageData } from "next/image";
+import type { ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -10,65 +10,78 @@ import {
 import Biome from "../hero/biome.jpg";
 import ESLint from "../hero/eslint.jpg";
 import Oxlint from "../hero/oxlint.jpg";
+import Prettier from "../hero/prettier.jpg";
+import Stylelint from "../hero/stylelint.jpg";
 
 export const providers = [
   {
-    label: "ESLint",
-    logo: ESLint,
+    id: "eslint",
+    title: () => (
+      <span className="flex items-center gap-1">
+        <Image alt="ESLint" className="size-4 rounded-full" src={ESLint} />
+        <span>ESLint, </span>
+        <Image alt="Prettier" className="size-4 rounded-full" src={Prettier} />
+        <span>Prettier and </span>
+        <Image
+          alt="Stylelint"
+          className="size-4 rounded-full"
+          src={Stylelint}
+        />
+        <span>Stylelint</span>
+      </span>
+    ),
   },
   {
-    label: "Biome",
-    logo: Biome,
+    id: "biome",
+    title: () => (
+      <span className="flex items-center gap-1">
+        <Image alt="Biome" className="size-4 rounded-full" src={Biome} />
+        <span>Biome</span>
+      </span>
+    ),
   },
   {
-    label: "Oxlint",
-    logo: Oxlint,
+    id: "oxlint",
+    title: () => (
+      <span className="flex items-center gap-1">
+        <Image alt="Oxlint" className="size-4 rounded-full" src={Oxlint} />
+        <span>Oxlint and Oxfmt</span>
+      </span>
+    ),
   },
 ];
 
-export type Provider = {
-  label: string;
-  logo: StaticImageData;
-};
+export interface Provider {
+  id: string;
+  title: ReactNode;
+}
 
-type ProviderSelectorProps = {
+interface ProviderSelectorProps {
   value: string | null;
-  onValueChange: (value: string) => void;
-};
+  onValueChange: (value: string | null) => void;
+}
 
 export const ProviderSelector = ({
   value,
   onValueChange,
 }: ProviderSelectorProps) => {
-  const selectedProvider = providers.find((p) => p.label === value);
+  const selectedProvider = providers.find((p) => p.id === value);
 
   return (
     <Select onValueChange={onValueChange} value={value ?? undefined}>
       <SelectTrigger>
-        <SelectValue>
-          {selectedProvider && (
-            <>
-              <Image
-                alt={selectedProvider.label}
-                className="size-4 rounded-full"
-                src={selectedProvider.logo}
-              />
-              {selectedProvider.label}
-            </>
-          )}
-        </SelectValue>
+        {selectedProvider ? (
+          <SelectValue>
+            <selectedProvider.title />
+          </SelectValue>
+        ) : (
+          <SelectValue />
+        )}
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="w-2xs">
         {providers.map((provider) => (
-          <SelectItem key={provider.label} value={provider.label}>
-            <div className="flex items-center gap-2">
-              <Image
-                alt={provider.label}
-                className="size-4 rounded-full"
-                src={provider.logo}
-              />
-              <span className="hidden lg:block">{provider.label}</span>
-            </div>
+          <SelectItem key={provider.id} value={provider.id}>
+            <provider.title />
           </SelectItem>
         ))}
       </SelectContent>
