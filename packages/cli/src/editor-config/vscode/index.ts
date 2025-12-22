@@ -25,8 +25,8 @@ export const vscode = {
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
   },
-  extension: () =>
-    spawnSync("code --install-extension biomejs.biome", {
+  extension: (extensionId = "biomejs.biome") =>
+    spawnSync(`code --install-extension ${extensionId}`, {
       stdio: "pipe",
       shell: true,
     }),

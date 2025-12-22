@@ -132,7 +132,16 @@ export const upsertTsConfig = async (quiet = false) => {
   }
 };
 
-export const upsertVsCodeSettings = async (quiet = false) => {
+const LINTER_EXTENSIONS: Record<Linter, { id: string; name: string }> = {
+  biome: { id: "biomejs.biome", name: "Biome" },
+  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
+  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
+};
+
+export const upsertVsCodeSettings = async (
+  linters: Linter[] = ["biome"],
+  quiet = false
+) => {
   const s = spinner();
 
   if (!quiet) {
@@ -154,23 +163,40 @@ export const upsertVsCodeSettings = async (quiet = false) => {
     s.message("settings.json not found, creating...");
   }
   await vscode.create();
-  if (!quiet) {
-    s.message("settings.json created.");
-    s.message("Installing Biome extension...");
+
+  // Install extensions for selected linters
+  const extensionsToInstall = linters.map((linter) => LINTER_EXTENSIONS[linter]);
+  const installedExtensions: string[] = [];
+  const failedExtensions: string[] = [];
+
+  for (const ext of extensionsToInstall) {
+    if (!quiet) {
+      s.message(`Installing ${ext.name} extension...`);
+    }
+
+    try {
+      const result = vscode.extension(ext.id);
+      if (result.status === 0) {
+        installedExtensions.push(ext.name);
+      } else {
+        failedExtensions.push(ext.name);
+      }
+    } catch {
+      failedExtensions.push(ext.name);
+    }
   }
 
-  try {
-    const result = vscode.extension();
-    if (!quiet) {
-      if (result.status === 0) {
-        s.stop("settings.json created and Biome extension installed.");
-      } else {
-        s.stop("settings.json created. Install Biome extension manually.");
-      }
-    }
-  } catch (_error) {
-    if (!quiet) {
-      s.stop("settings.json created. Install Biome extension manually.");
+  if (!quiet) {
+    if (failedExtensions.length === 0 && installedExtensions.length > 0) {
+      s.stop(
+        `settings.json created and ${installedExtensions.join(", ")} extension(s) installed.`
+      );
+    } else if (failedExtensions.length > 0) {
+      s.stop(
+        `settings.json created. Install ${failedExtensions.join(", ")} extension(s) manually.`
+      );
+    } else {
+      s.stop("settings.json created.");
     }
   }
 };
@@ -961,7 +987,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (editorConfig?.includes("vscode")) {
-      await upsertVsCodeSettings(quiet);
+      await upsertVsCodeSettings(linters, quiet);
     }
     if (editorConfig?.includes("zed")) {
       await upsertZedSettings(quiet);
