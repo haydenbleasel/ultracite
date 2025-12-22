@@ -6,7 +6,7 @@ interface HomeLayoutProps {
 }
 
 const HomeLayout = ({ children }: HomeLayoutProps) => (
-  <div className="container relative mx-auto grid w-full gap-24 px-4 sm:gap-32 2xl:max-w-7xl">
+  <div className="container relative mx-auto grid w-full gap-16 px-4 sm:gap-24 2xl:max-w-7xl">
     <Navbar />
     {children}
   </div>
