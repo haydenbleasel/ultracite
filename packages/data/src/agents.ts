@@ -315,7 +315,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     id: "goose",
-    name: "Codename Goose",
+    name: "Goose",
     subtitle: "Block's open-source agent",
     description:
       "Block's open-source AI developer agent for autonomous software development.",
