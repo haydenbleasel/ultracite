@@ -267,7 +267,7 @@ describe("initialize", () => {
       pm: "npm",
       skipInstall: true,
       editors: [],
-      agents: ["cursor", "windsurf"],
+      agents: ["kiro", "trae"],
       integrations: [],
       frameworks: [],
       migrate: [],
@@ -887,7 +887,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("cursor", "Cursor");
+      await upsertAgents("kiro", "Kiro");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -896,22 +896,12 @@ describe("helper functions", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.cursor/rules/ultracite.mdc") {
-            return Promise.resolve();
-          }
-          if (path === "./.cursor/hooks.json") {
+          if (path === "./.kiro/steering/ultracite.md") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock((path: string) => {
-          if (path === "./.cursor/hooks.json") {
-            return Promise.resolve(
-              '{"version": 1, "hooks": {"afterFileEdit": []}}'
-            );
-          }
-          return Promise.resolve("# existing rules");
-        }),
+        readFile: mock(() => Promise.resolve("# existing rules")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -924,7 +914,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("cursor", "Cursor");
+      await upsertAgents("kiro", "Kiro");
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });

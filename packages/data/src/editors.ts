@@ -7,6 +7,15 @@ import zedLogo from "../logos/zed.svg";
 
 export type EditorCliValue = "vscode" | "zed";
 
+export interface EditorRulesConfig {
+  /** Path to the rules file */
+  path: string;
+  /** Header content to prepend to the rules file (e.g., frontmatter) */
+  header?: string;
+  /** Whether to append to existing file instead of replacing */
+  appendMode?: boolean;
+}
+
 export interface Editor {
   /** Unique identifier for the editor */
   id: string;
@@ -16,7 +25,7 @@ export interface Editor {
   subtitle: string;
   /** Full description */
   description: string;
-  /** Path to the config file the CLI creates */
+  /** Path to the settings config file */
   configPath: string;
   /** Editor's website URL */
   website: string;
@@ -26,6 +35,8 @@ export interface Editor {
   features: string[];
   /** Logo for UI display */
   logo: StaticImageData;
+  /** Rules file configuration (for AI agent rules) */
+  rules?: EditorRulesConfig;
 }
 
 export const editors: Editor[] = [
@@ -62,6 +73,14 @@ export const editors: Editor[] = [
       "Codebase understanding",
     ],
     logo: cursorLogo,
+    rules: {
+      path: ".cursor/rules/ultracite.mdc",
+      header: `---
+description: Ultracite Rules - AI-Ready Formatter and Linter
+globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
+alwaysApply: false
+---`,
+    },
   },
   {
     id: "windsurf",
@@ -79,6 +98,9 @@ export const editors: Editor[] = [
       "Multi-file editing",
     ],
     logo: windsurfLogo,
+    rules: {
+      path: ".windsurf/rules/ultracite.md",
+    },
   },
   {
     id: "antigravity",
@@ -113,6 +135,10 @@ export const editors: Editor[] = [
       "GPU-accelerated",
     ],
     logo: zedLogo,
+    rules: {
+      path: ".rules",
+      appendMode: true,
+    },
   },
 ];
 

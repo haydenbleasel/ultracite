@@ -26,11 +26,11 @@ describe("createAgents", () => {
     mock.restore();
   });
 
-  describe("cursor agent", () => {
+  describe("kiro agent", () => {
     test("exists returns true when rules file exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.cursor/rules/ultracite.mdc") {
+          if (path === "./.kiro/steering/ultracite.md") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -40,7 +40,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "npm");
+      const agents = createAgents("kiro", "npm");
       const result = await agents.exists();
       expect(result).toBe(true);
     });
@@ -56,30 +56,11 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("cursor", "npm");
+      const agents = createAgents("kiro", "npm");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalledTimes(1); // rules file only
-    });
-
-    test("create writes rules with header", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
-      }));
-
-      const agents = createAgents("cursor", "npm");
-      await agents.create();
-
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.cursor/rules/ultracite.mdc");
-      expect(writeCall[1]).toContain("---");
-      expect(writeCall[1]).toContain("description: Ultracite Rules");
     });
 
     test("uses correct package runner for npm", async () => {
@@ -92,7 +73,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "npm");
+      const agents = createAgents("kiro", "npm");
       await agents.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -110,7 +91,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "bun");
+      const agents = createAgents("kiro", "bun");
       await agents.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -128,7 +109,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "yarn");
+      const agents = createAgents("kiro", "yarn");
       await agents.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -146,7 +127,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "pnpm");
+      const agents = createAgents("kiro", "pnpm");
       await agents.create();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -164,18 +145,18 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cursor", "npm");
+      const agents = createAgents("kiro", "npm");
       await agents.update();
 
-      // Cursor is not in append mode, so it always overwrites
+      // Kiro is not in append mode, so it always overwrites
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.cursor/rules/ultracite.mdc");
+      expect(writeCall[0]).toBe("./.kiro/steering/ultracite.md");
     });
   });
 
-  describe("windsurf agent", () => {
-    test("create creates windsurf rules file", async () => {
+  describe("trae agent", () => {
+    test("create creates trae rules file", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -185,12 +166,12 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("windsurf", "npm");
+      const agents = createAgents("trae", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.windsurf/rules/ultracite.md");
+      expect(writeCall[0]).toBe("./.trae/rules/project_rules.md");
     });
   });
 
@@ -233,8 +214,8 @@ describe("createAgents", () => {
     });
   });
 
-  describe("zed agent", () => {
-    test("create creates .rules file", async () => {
+  describe("cline agent", () => {
+    test("create creates .clinerules file", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -244,16 +225,16 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed", "npm");
+      const agents = createAgents("cline", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.rules");
+      expect(writeCall[0]).toBe("./.clinerules");
     });
 
-    test("update appends to .rules file", async () => {
-      const existingContent = "Existing zed rules";
+    test("update appends to .clinerules file", async () => {
+      const existingContent = "Existing cline rules";
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -263,11 +244,11 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed", "npm");
+      const agents = createAgents("cline", "npm");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[1]).toContain("Existing zed rules");
+      expect(writeCall[1]).toContain("Existing cline rules");
     });
 
     test("update creates file when it does not exist in append mode", async () => {
@@ -283,13 +264,13 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("zed", "npm");
+      const agents = createAgents("cline", "npm");
       await agents.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
       // Should write the content since file doesn't exist
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.rules");
+      expect(writeCall[0]).toBe("./.clinerules");
     });
   });
 
@@ -324,12 +305,12 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("windsurf", "npm");
+      const agents = createAgents("kiro", "npm");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
       const mkdirCall = mockMkdir.mock.calls[0];
-      expect(mkdirCall[0]).toBe(".windsurf/rules");
+      expect(mkdirCall[0]).toBe(".kiro/steering");
     });
 
     test("does not create directory for root-level files", async () => {

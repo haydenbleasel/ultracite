@@ -8,7 +8,6 @@ import clineLogo from "../logos/cline.svg";
 import codexLogo from "../logos/codex.svg";
 import vscodeCopilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
-import cursorLogo from "../logos/cursor.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
 import firebenderLogo from "../logos/firebender.svg";
@@ -24,8 +23,6 @@ import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
 import traeLogo from "../logos/trae.svg";
 import warpLogo from "../logos/warp.svg";
-import windsurfLogo from "../logos/windsurf.svg";
-import zedLogo from "../logos/zed.svg";
 
 export type AgentCategory = "ide" | "cli" | "cloud" | "extension";
 
@@ -121,48 +118,6 @@ export const agents: Agent[] = [
     logo: julesLogo,
   },
   {
-    id: "cursor",
-    name: "Cursor",
-    subtitle: "The AI-first code editor",
-    description:
-      "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
-    configPath: ".cursor/rules/ultracite.mdc",
-    website: "https://cursor.com",
-    category: "ide",
-    features: [
-      "AI-native editor",
-      "Inline completions",
-      "Chat interface",
-      "Codebase understanding",
-    ],
-    config: {
-      header: `---
-description: Ultracite Rules - AI-Ready Formatter and Linter
-globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
-alwaysApply: false
----`,
-    },
-    logo: cursorLogo,
-  },
-  {
-    id: "windsurf",
-    name: "Windsurf",
-    subtitle: "The agentic IDE by Codeium",
-    description:
-      "Codeium's agentic IDE that combines AI assistance with a powerful development environment.",
-    configPath: ".windsurf/rules/ultracite.md",
-    website: "https://codeium.com/windsurf",
-    category: "ide",
-    features: [
-      "Agentic workflows",
-      "Cascade AI system",
-      "Real-time collaboration",
-      "Multi-file editing",
-    ],
-    config: {},
-    logo: windsurfLogo,
-  },
-  {
     id: "copilot",
     name: "GitHub Copilot",
     subtitle: "GitHub's AI pair programmer",
@@ -184,26 +139,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     logo: vscodeCopilotLogo,
-  },
-  {
-    id: "zed",
-    name: "Zed",
-    subtitle: "High-performance editor",
-    description:
-      "A high-performance, multiplayer code editor with built-in AI assistance.",
-    configPath: ".rules",
-    website: "https://zed.dev",
-    category: "ide",
-    features: [
-      "Lightning fast",
-      "Collaborative editing",
-      "Built-in AI assistant",
-      "GPU-accelerated",
-    ],
-    config: {
-      appendMode: true,
-    },
-    logo: zedLogo,
   },
   {
     id: "kiro",
