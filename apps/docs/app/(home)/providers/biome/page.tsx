@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import { Installer } from "../../components/installer";
 import BiomeLogo from "../../components/hero/biome.jpg";
+import { Installer } from "../../components/installer";
 
 const title = "Biome | Ultracite";
 const description =
@@ -215,7 +215,8 @@ const BiomePage = () => (
           <div className="max-w-md rounded-lg border p-4">
             <code className="text-sm">biome.jsonc</code>
             <p className="mt-1 text-muted-foreground text-xs">
-              Extends Ultracite presets with support for framework-specific rules
+              Extends Ultracite presets with support for framework-specific
+              rules
             </p>
           </div>
         </section>

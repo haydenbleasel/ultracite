@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-storybook';
+import plugin from "eslint-plugin-storybook";
 
 const { rules } = plugin;
 
@@ -7,7 +7,7 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`storybook/${key}`, 'error'])
+  availableKeys.map((key) => [`storybook/${key}`, "error"])
 );
 
 const overrideRules = {};

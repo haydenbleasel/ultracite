@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-github';
+import plugin from "eslint-plugin-github";
 
 const { rules } = plugin;
 
@@ -7,11 +7,11 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`github/${key}`, 'error'])
+  availableKeys.map((key) => [`github/${key}`, "error"])
 );
 
 const overrideRules = {
-  'github/unescaped-html-literal': 'off',
+  "github/unescaped-html-literal": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

@@ -7,13 +7,13 @@ import {
   multiselect,
   spinner,
 } from "@clack/prompts";
+import { agents as agentsData, getAgentById } from "@ultracite/data";
 import {
   addDevDependency,
   detectPackageManager,
   type PackageManagerName,
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
-import { agents as agentsData, getAgentById } from "@ultracite/data";
 import { createAgents } from "./agents";
 import type { options } from "./consts/options";
 import { vscode } from "./editor-config/vscode";

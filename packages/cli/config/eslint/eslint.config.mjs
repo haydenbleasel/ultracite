@@ -1,98 +1,97 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import typescript from '@typescript-eslint/eslint-plugin';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import * as importPlugin from 'eslint-plugin-import';
-import jest from 'eslint-plugin-jest';
-import promise from 'eslint-plugin-promise';
-import n from 'eslint-plugin-n';
-import next from '@next/eslint-plugin-next';
-import globals from 'globals';
-import prettier from 'eslint-plugin-prettier';
-import cypress from 'eslint-plugin-cypress';
-import storybook from 'eslint-plugin-storybook';
-import unusedImports from 'eslint-plugin-unused-imports';
+import next from "@next/eslint-plugin-next";
+import * as query from "@tanstack/eslint-plugin-query";
+import typescript from "@typescript-eslint/eslint-plugin";
+import * as typescriptParser from "@typescript-eslint/parser";
+import eslintPrettier from "eslint-config-prettier";
 // import tailwindcss from 'eslint-plugin-tailwindcss';
-import * as importTypescriptResolver from 'eslint-import-resolver-typescript';
-import html from 'eslint-plugin-html';
-import compat from 'eslint-plugin-compat';
-import eslintPrettier from 'eslint-config-prettier';
-import * as typescriptParser from '@typescript-eslint/parser';
-import sonarjs from 'eslint-plugin-sonarjs';
-import unicorn from 'eslint-plugin-unicorn';
-import github from 'eslint-plugin-github';
-import * as query from '@tanstack/eslint-plugin-query';
-
-import eslintRules from './rules/eslint.mjs';
-import reactRules from './rules/react.mjs';
-import reactHooksRules from './rules/reactHooks.mjs';
-import typescriptRules from './rules/typescript.mjs';
-import jsxA11yRules from './rules/jsx-a11y.mjs';
-import importRules from './rules/import.mjs';
-import jestRules from './rules/jest.mjs';
-import promiseRules from './rules/promise.mjs';
-import nRules from './rules/n.mjs';
-import nextRules from './rules/next.mjs';
-import prettierRules from './rules/prettier.mjs';
-import eslintTypescriptRules from './rules/eslint-typescript.mjs';
-import cypressRules from './rules/cypress.mjs';
-import storybookRules from './rules/storybook.mjs';
+import * as importTypescriptResolver from "eslint-import-resolver-typescript";
+import compat from "eslint-plugin-compat";
+import cypress from "eslint-plugin-cypress";
+import github from "eslint-plugin-github";
+import html from "eslint-plugin-html";
+import * as importPlugin from "eslint-plugin-import";
+import jest from "eslint-plugin-jest";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import n from "eslint-plugin-n";
+import prettier from "eslint-plugin-prettier";
+import promise from "eslint-plugin-promise";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import sonarjs from "eslint-plugin-sonarjs";
+import storybook from "eslint-plugin-storybook";
+import unicorn from "eslint-plugin-unicorn";
+import unusedImports from "eslint-plugin-unused-imports";
+import globals from "globals";
+import compatRules from "./rules/compat.mjs";
+import cypressRules from "./rules/cypress.mjs";
+import eslintRules from "./rules/eslint.mjs";
+import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
+import githubRules from "./rules/github.mjs";
+import importRules from "./rules/import.mjs";
+import jestRules from "./rules/jest.mjs";
+import jsxA11yRules from "./rules/jsx-a11y.mjs";
+import nRules from "./rules/n.mjs";
+import nextRules from "./rules/next.mjs";
+import prettierRules from "./rules/prettier.mjs";
+import promiseRules from "./rules/promise.mjs";
+import queryRules from "./rules/query.mjs";
+import reactRules from "./rules/react.mjs";
+import reactHooksRules from "./rules/reactHooks.mjs";
+import sonarjsRules from "./rules/sonarjs.mjs";
+import storybookRules from "./rules/storybook.mjs";
+import typescriptRules from "./rules/typescript.mjs";
+import unicornRules from "./rules/unicorn.mjs";
 // import tailwindcssRules from './rules/tailwindcss.mjs';
-import unusedImportsRules from './rules/unused-imports.mjs';
-import sonarjsRules from './rules/sonarjs.mjs';
-import compatRules from './rules/compat.mjs';
-import unicornRules from './rules/unicorn.mjs';
-import githubRules from './rules/github.mjs';
-import queryRules from './rules/query.mjs';
+import unusedImportsRules from "./rules/unused-imports.mjs";
 
 const config = [
   importPlugin.configs.typescript,
   {
-    ignores: ['**/dist/', '**/build/', '**/.next/', '**/.turbo/'],
+    ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
   },
   {
     languageOptions: {
-      sourceType: 'module',
+      sourceType: "module",
       globals: {
         ...globals.browser,
         ...globals.node,
       },
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        ecmaVersion: "latest",
+        sourceType: "module",
         ecmaFeatures: {
           jsx: true,
         },
       },
     },
     files: [
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.json',
-      '**/*.mjs',
-      '**/*.cjs',
-      '**/*.html',
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.mjs",
+      "**/*.cjs",
+      "**/*.html",
     ],
     plugins: {
       prettier,
       react,
-      'react-hooks': reactHooks,
-      'jsx-a11y': jsxA11y,
+      "react-hooks": reactHooks,
+      "jsx-a11y": jsxA11y,
       import: importPlugin,
       promise,
       n,
-      '@next/next': next,
-      'unused-imports': unusedImports,
+      "@next/next": next,
+      "unused-imports": unusedImports,
       // tailwindcss,
       sonarjs,
       compat,
       unicorn,
       github,
-      '@tanstack/eslint-plugin-query': query,
+      "@tanstack/eslint-plugin-query": query,
     },
     rules: {
       ...eslintRules,
@@ -116,30 +115,30 @@ const config = [
 
     settings: {
       react: {
-        version: 'detect',
+        version: "detect",
       },
 
       // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
-      'import/parsers': {
-        espree: ['.js', '.cjs', '.mjs', '.jsx', '.ts', '.tsx'],
+      "import/parsers": {
+        espree: [".js", ".cjs", ".mjs", ".jsx", ".ts", ".tsx"],
       },
-      'import/resolver': {
+      "import/resolver": {
         typescript: true,
         node: true,
       },
     },
   },
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
       },
     },
     plugins: {
-      '@typescript-eslint': typescript,
-      'import/typescript': importTypescriptResolver,
+      "@typescript-eslint": typescript,
+      "import/typescript": importTypescriptResolver,
     },
     rules: {
       ...eslintTypescriptRules,
@@ -147,7 +146,7 @@ const config = [
     },
   },
   {
-    files: ['**/*.test.js', '**/*.test.jsx', 'tests/**/*.js', 'tests/**/*.jsx'],
+    files: ["**/*.test.js", "**/*.test.jsx", "tests/**/*.js", "tests/**/*.jsx"],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -161,7 +160,7 @@ const config = [
     },
   },
   {
-    files: ['**/*.cy.js', '**/*.cy.jsx'],
+    files: ["**/*.cy.js", "**/*.cy.jsx"],
     languageOptions: {
       globals: {
         ...globals.cypress,
@@ -176,10 +175,10 @@ const config = [
   },
   {
     files: [
-      '**/*.stories.js',
-      '**/*.stories.jsx',
-      '**/*.stories.ts',
-      '**/*.stories.tsx',
+      "**/*.stories.js",
+      "**/*.stories.jsx",
+      "**/*.stories.ts",
+      "**/*.stories.tsx",
     ],
     plugins: {
       storybook,
@@ -189,12 +188,12 @@ const config = [
     },
   },
   {
-    files: ['**/*.html'],
+    files: ["**/*.html"],
     plugins: {
       html,
     },
     settings: {
-      'html/javascript-tag-names': ['script', 'Script'],
+      "html/javascript-tag-names": ["script", "Script"],
     },
   },
 ];

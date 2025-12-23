@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-cypress';
+import plugin from "eslint-plugin-cypress";
 
 const { rules } = plugin;
 
@@ -7,7 +7,7 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`cypress/${key}`, 'error'])
+  availableKeys.map((key) => [`cypress/${key}`, "error"])
 );
 
 const overrideRules = {};

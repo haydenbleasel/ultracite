@@ -1,4 +1,4 @@
-import plugin from '@next/eslint-plugin-next';
+import plugin from "@next/eslint-plugin-next";
 
 const { rules } = plugin;
 
@@ -7,7 +7,7 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`@next/next/${key}`, 'error'])
+  availableKeys.map((key) => [`@next/next/${key}`, "error"])
 );
 
 const overrideRules = {};

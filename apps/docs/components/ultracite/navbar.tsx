@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { agents } from "@/app/(home)/agents/data";
+import { Logo } from "@/app/(home)/components/logo";
 import { editors } from "@/app/(home)/editors/data";
 import { providers } from "@/app/(home)/providers/data";
-import { Logo } from "@/app/(home)/components/logo";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,

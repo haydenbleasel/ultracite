@@ -1,11 +1,10 @@
-import type { StaticImageData } from "next/image";
 import {
+  type AgentCategory,
   agents as agentsData,
+  type Agent as BaseAgent,
   categoryLabels,
   getAgentById as getAgentByIdBase,
   getAgentsByCategory as getAgentsByCategoryBase,
-  type Agent as BaseAgent,
-  type AgentCategory,
 } from "@ultracite/data";
 import aiderLogo from "@ultracite/data/logos/aider.svg";
 import ampLogo from "@ultracite/data/logos/amp.svg";
@@ -28,6 +27,7 @@ import vscodeCopilotLogo from "@ultracite/data/logos/vscode-copilot.svg";
 import warpLogo from "@ultracite/data/logos/warp.svg";
 import windsurfLogo from "@ultracite/data/logos/windsurf.svg";
 import zedLogo from "@ultracite/data/logos/zed.svg";
+import type { StaticImageData } from "next/image";
 
 // Logo mapping
 const logoMap: Record<string, StaticImageData> = {

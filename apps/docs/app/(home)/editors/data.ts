@@ -1,14 +1,14 @@
-import type { StaticImageData } from "next/image";
 import {
-  editors as editorsData,
-  getEditorById as getEditorByIdBase,
   type Editor as BaseEditor,
   type EditorCliValue,
+  editors as editorsData,
+  getEditorById as getEditorByIdBase,
 } from "@ultracite/data";
 import cursorLogo from "@ultracite/data/logos/cursor.svg";
 import vscodeLogo from "@ultracite/data/logos/vscode.svg";
 import windsurfLogo from "@ultracite/data/logos/windsurf.svg";
 import zedLogo from "@ultracite/data/logos/zed.svg";
+import type { StaticImageData } from "next/image";
 
 // Logo mapping
 const logoMap: Record<string, StaticImageData> = {

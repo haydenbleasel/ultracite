@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-promise';
+import plugin from "eslint-plugin-promise";
 
 const { rules } = plugin;
 
@@ -7,12 +7,12 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`promise/${key}`, 'error'])
+  availableKeys.map((key) => [`promise/${key}`, "error"])
 );
 
 const overrideRules = {
-  'promise/catch-or-return': ['error', { allowFinally: true }],
-  'promise/no-native': 'off',
+  "promise/catch-or-return": ["error", { allowFinally: true }],
+  "promise/no-native": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

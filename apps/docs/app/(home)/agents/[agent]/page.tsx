@@ -58,12 +58,18 @@ const AgentPage = async ({ params }: AgentPageProps) => {
             {agent.description}
           </p>
           <div className="flex w-full max-w-lg flex-col items-center gap-2 sm:flex-row">
-            <Installer command={`npx ultracite@latest init --agents ${agent.id}`} />
+            <Installer
+              command={`npx ultracite@latest init --agents ${agent.id}`}
+            />
             <Button
               className="px-4"
               nativeButton={false}
               render={
-                <a href={agent.website} rel="noopener noreferrer" target="_blank">
+                <a
+                  href={agent.website}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   Visit {agent.name}
                 </a>
               }
@@ -198,8 +204,8 @@ const AgentPage = async ({ params }: AgentPageProps) => {
               <div className="rounded-lg border p-6">
                 <h3 className="mb-2 font-medium">Team alignment</h3>
                 <p className="text-muted-foreground text-sm">
-                  Everyone's AI assistant generates code that matches your team's
-                  style guide.
+                  Everyone's AI assistant generates code that matches your
+                  team's style guide.
                 </p>
               </div>
             </div>
@@ -211,8 +217,8 @@ const AgentPage = async ({ params }: AgentPageProps) => {
                 Other agents
               </h2>
               <p className="max-w-2xl text-muted-foreground">
-                Ultracite supports {agents.length} AI coding assistants. Here are
-                some others you might be interested in.
+                Ultracite supports {agents.length} AI coding assistants. Here
+                are some others you might be interested in.
               </p>
             </div>
 

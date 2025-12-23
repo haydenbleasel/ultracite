@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import { Installer } from "../../components/installer";
 import ESLintLogo from "../../components/hero/eslint.jpg";
 import PrettierLogo from "../../components/hero/prettier.jpg";
 import StylelintLogo from "../../components/hero/stylelint.jpg";
+import { Installer } from "../../components/installer";
 
 const title = "ESLint, Prettier & Stylelint | Ultracite";
 const description =
@@ -97,10 +97,11 @@ const ESLintPage = () => (
               Why ESLint + Prettier + Stylelint?
             </h2>
             <p className="max-w-2xl text-muted-foreground">
-              This combination is the industry standard for JavaScript/TypeScript
-              projects. ESLint handles code quality and potential bugs, Prettier
-              ensures consistent formatting, and Stylelint keeps your CSS clean.
-              Together, they provide the most comprehensive coverage available.
+              This combination is the industry standard for
+              JavaScript/TypeScript projects. ESLint handles code quality and
+              potential bugs, Prettier ensures consistent formatting, and
+              Stylelint keeps your CSS clean. Together, they provide the most
+              comprehensive coverage available.
             </p>
           </div>
 

@@ -1,13 +1,13 @@
-import type { StaticImageData } from "next/image";
 import {
-  providers as providersData,
-  getProviderById as getProviderByIdBase,
   type Provider as BaseProvider,
+  getProviderById as getProviderByIdBase,
   type ProviderId,
+  providers as providersData,
 } from "@ultracite/data";
 import biomeLogo from "@ultracite/data/logos/biome.svg";
 import eslintLogo from "@ultracite/data/logos/eslint.svg";
 import oxlintLogo from "@ultracite/data/logos/oxlint.svg";
+import type { StaticImageData } from "next/image";
 
 // Logo mapping
 const logoMap: Record<ProviderId, StaticImageData> = {

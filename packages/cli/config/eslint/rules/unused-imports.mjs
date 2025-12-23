@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-unused-imports';
+import plugin from "eslint-plugin-unused-imports";
 
 const { rules } = plugin;
 
@@ -7,7 +7,7 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`unused-imports/${key}`, 'error'])
+  availableKeys.map((key) => [`unused-imports/${key}`, "error"])
 );
 
 const overrideRules = {};

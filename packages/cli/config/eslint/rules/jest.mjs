@@ -1,4 +1,4 @@
-import plugin from 'eslint-plugin-jest';
+import plugin from "eslint-plugin-jest";
 
 const { rules } = plugin;
 
@@ -7,7 +7,7 @@ const availableKeys = Object.keys(rules).filter(
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`jest/${key}`, 'error'])
+  availableKeys.map((key) => [`jest/${key}`, "error"])
 );
 
 const overrideRules = {};

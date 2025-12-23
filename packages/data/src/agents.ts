@@ -281,7 +281,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     id: "junie",
     name: "Junie",
     subtitle: "JetBrains' AI agent",
-    description: "JetBrains' AI coding agent integrated into their IDE ecosystem.",
+    description:
+      "JetBrains' AI coding agent integrated into their IDE ecosystem.",
     configPath: ".junie/guidelines.md",
     website: "https://jetbrains.com/junie",
     category: "ide",
@@ -425,7 +426,10 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 ];
 
 /** Get all agent IDs */
-export const agentIds = agents.map((agent) => agent.id) as [string, ...string[]];
+export const agentIds = agents.map((agent) => agent.id) as [
+  string,
+  ...string[],
+];
 
 /** Get an agent by ID */
 export const getAgentById = (id: string): Agent | undefined =>

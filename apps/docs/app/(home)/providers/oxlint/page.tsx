@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import { Installer } from "../../components/installer";
 import OxlintLogo from "../../components/hero/oxlint.jpg";
+import { Installer } from "../../components/installer";
 
 const title = "Oxlint & Oxfmt | Ultracite";
 const description =

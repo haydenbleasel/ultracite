@@ -1,5 +1,5 @@
 const config = {
-  'compat/compat': 'warn',
+  "compat/compat": "warn",
 };
 
 export default config;
