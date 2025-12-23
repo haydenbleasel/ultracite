@@ -1,44 +1,42 @@
 import type { Sandbox } from "@vercel/sandbox";
 
 export interface LintIssueDetails {
+  linterOutput: string;
   file: string;
-  line: number;
-  column: number;
-  rule: string;
-  message: string;
   fileContent: string;
 }
 
-const BIOME_OUTPUT_PATTERN = /^(.+?):(\d+):(\d+)\s+([\w/]+)\s+(.+)$/m;
+// Generic pattern to find file paths in linter output (works for most linters)
+const FILE_PATH_PATTERN = /([\w./-]+\.[tj]sx?):(\d+)/;
 
 export async function parseLintIssue(
-  sandbox: Sandbox,
-  fixOutput: string
+  sandbox: Sandbox
 ): Promise<LintIssueDetails | null> {
   "use step";
 
-  const match = fixOutput.match(BIOME_OUTPUT_PATTERN);
+  // Run ultracite check to get current issues
+  const checkResult = await sandbox.runCommand("npx", ["ultracite", "check"]);
+  const output = await checkResult.output("both");
 
-  if (!match) {
+  // Get first 50 lines of output
+  const linterOutput = output.split("\n").slice(0, 50).join("\n");
+
+  // Find the first file path mentioned in the output
+  const fileMatch = output.match(FILE_PATH_PATTERN);
+
+  if (!fileMatch) {
     return null;
   }
 
-  const file = match[1];
-  const line = Number.parseInt(match[2], 10);
-  const column = Number.parseInt(match[3], 10);
-  const rule = match[4];
-  const message = match[5];
+  const file = fileMatch[1];
 
   // Read the file content from the sandbox
   const catResult = await sandbox.runCommand("cat", [file]);
   const fileContent = await catResult.stdout();
 
   return {
+    linterOutput,
     file,
-    line,
-    column,
-    rule,
-    message,
     fileContent,
   };
 }

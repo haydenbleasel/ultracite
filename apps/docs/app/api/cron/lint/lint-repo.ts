@@ -65,7 +65,6 @@ export async function lintRepoWorkflow(
         defaultBranch,
         branchName,
         title: "Auto-fix lint issues",
-        rule: "multiple",
         file: "multiple files",
         isLLMFix: false,
       });
@@ -92,7 +91,7 @@ export async function lintRepoWorkflow(
         // Step 9b: Create branch and push (LLM fix)
         const branchName = await createBranchAndPush(
           sandbox,
-          issue.rule,
+          issue.file.replace(/[/.]/g, "-"),
           llmFix.title
         );
 
@@ -103,14 +102,13 @@ export async function lintRepoWorkflow(
           defaultBranch,
           branchName,
           title: llmFix.title,
-          rule: issue.rule,
           file: issue.file,
           isLLMFix: true,
         });
 
         result = {
           issuesFound: 1,
-          issueFixed: issue.rule,
+          issueFixed: llmFix.title,
           prCreated: true,
           prNumber: prResult.prNumber,
           prUrl: prResult.prUrl,

@@ -10,7 +10,7 @@ export interface LLMFixResult {
 const fixSchema = z.object({
   title: z
     .string()
-    .describe("A short, descriptive title for the PR (e.g., 'Fix unused variable in utils.ts')"),
+    .describe("A short, descriptive title for the fix (e.g., 'Fix unused variable in utils.ts')"),
   fixedContent: z
     .string()
     .describe("The complete fixed file content with the issue resolved"),
@@ -24,20 +24,21 @@ export async function generateLLMFix(
   const { object } = await generateObject({
     model: "openai/codex-mini",
     schema: fixSchema,
-    prompt: `You are a code assistant that fixes linting issues. Fix the following issue and return the complete fixed file content.
+    prompt: `You are a code assistant that fixes linting issues. Below is the output from a linter (could be ESLint, Biome, or OxLint) and the content of the first file mentioned.
+
+**Linter output (first 50 lines)**:
+\`\`\`
+${issue.linterOutput}
+\`\`\`
 
 **File**: ${issue.file}
-**Line**: ${issue.line}
-**Column**: ${issue.column}
-**Rule**: ${issue.rule}
-**Message**: ${issue.message}
 
 **Current file content**:
 \`\`\`
 ${issue.fileContent}
 \`\`\`
 
-Please fix this specific issue. Return the complete file content with the fix applied, preserving all other code exactly as is. Also provide a short, descriptive title for this fix.`,
+Fix the FIRST issue mentioned in the linter output. Return the complete file content with the fix applied, preserving all other code exactly as is. Also provide a short, descriptive title for this fix.`,
   });
 
   return {

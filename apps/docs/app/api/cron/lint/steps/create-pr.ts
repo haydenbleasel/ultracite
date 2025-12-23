@@ -7,7 +7,6 @@ export interface CreatePRParams {
   defaultBranch: string;
   branchName: string;
   title: string;
-  rule: string;
   file: string;
   isLLMFix: boolean;
 }
@@ -23,7 +22,6 @@ export async function createPullRequest(
     defaultBranch,
     branchName,
     title,
-    rule,
     file,
     isLLMFix,
   } = params;
@@ -45,12 +43,11 @@ export async function createPullRequest(
 
 This PR fixes a linting issue detected by Ultracite.
 
-**Rule**: \`${rule}\`
 **File**: \`${file}\`
 
 ## Changes
 
-${fixMethod} for the \`${rule}\` rule.
+${fixMethod}.
 
 ---
 
