@@ -79,7 +79,7 @@ export async function lintRepoWorkflow(
     } else {
       // No auto-fix changes, try LLM fix for remaining issues
       // Step 6b: Parse the first lint issue
-      const issue = await parseLintIssue(sandbox);
+      const issue = await parseLintIssue(sandbox, fixResult.output);
 
       if (issue) {
         // Step 7b: Generate LLM fix

@@ -10,19 +10,16 @@ export interface LintIssueDetails {
 const FILE_PATH_PATTERN = /([\w./-]+\.[tj]sx?):(\d+)/;
 
 export async function parseLintIssue(
-  sandbox: Sandbox
+  sandbox: Sandbox,
+  fixOutput: string
 ): Promise<LintIssueDetails | null> {
   "use step";
 
-  // Run ultracite check to get current issues
-  const checkResult = await sandbox.runCommand("npx", ["ultracite", "check"]);
-  const output = await checkResult.output("both");
-
   // Get first 50 lines of output
-  const linterOutput = output.split("\n").slice(0, 50).join("\n");
+  const linterOutput = fixOutput.split("\n").slice(0, 50).join("\n");
 
   // Find the first file path mentioned in the output
-  const fileMatch = output.match(FILE_PATH_PATTERN);
+  const fileMatch = fixOutput.match(FILE_PATH_PATTERN);
 
   if (!fileMatch) {
     return null;
