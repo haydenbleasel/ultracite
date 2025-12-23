@@ -15,6 +15,7 @@ export const ConnectGitHubButton = ({
 
   return (
     <Button
+      nativeButton={false}
       render={
         <Link href={installUrl}>
           <SiGithub className="size-4" />

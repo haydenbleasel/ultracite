@@ -2,10 +2,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { database } from "@/lib/database";
 import { env } from "@/lib/env";
-import { lintRepoWorkflow } from "@/workflows/lint-repo";
+import { lintRepoWorkflow } from "./lint-repo";
 
 export const GET = async (request: NextRequest) => {
   const authHeader = request.headers.get("authorization");
+
   if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
