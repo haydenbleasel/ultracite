@@ -1,34 +1,56 @@
 import { getInstallationOctokit } from "@/lib/github/app";
-import type { LintIssue, PullRequestResult } from "./types";
+import type { PullRequestResult } from "./types";
+
+export interface CreatePRParams {
+  installationId: number;
+  repoFullName: string;
+  defaultBranch: string;
+  branchName: string;
+  title: string;
+  rule: string;
+  file: string;
+  isLLMFix: boolean;
+}
 
 export async function createPullRequest(
-  installationId: number,
-  repoFullName: string,
-  defaultBranch: string,
-  branchName: string,
-  issue: LintIssue
+  params: CreatePRParams
 ): Promise<PullRequestResult> {
   "use step";
 
+  const {
+    installationId,
+    repoFullName,
+    defaultBranch,
+    branchName,
+    title,
+    rule,
+    file,
+    isLLMFix,
+  } = params;
+
   const octokit = await getInstallationOctokit(installationId);
   const [owner, repo] = repoFullName.split("/");
+
+  const fixMethod = isLLMFix
+    ? "AI-generated fix using GPT-4"
+    : "Automatically applied the recommended fix";
 
   const { data: pr } = await octokit.request(
     "POST /repos/{owner}/{repo}/pulls",
     {
       owner,
       repo,
-      title: `fix: Ultracite lint fix for ${issue.rule}`,
+      title: `fix: ${title}`,
       body: `## Summary
 
 This PR fixes a linting issue detected by Ultracite.
 
-**Rule**: \`${issue.rule}\`
-**File**: \`${issue.file}\`
+**Rule**: \`${rule}\`
+**File**: \`${file}\`
 
 ## Changes
 
-Automatically applied the recommended fix for the \`${issue.rule}\` rule.
+${fixMethod} for the \`${rule}\` rule.
 
 ---
 

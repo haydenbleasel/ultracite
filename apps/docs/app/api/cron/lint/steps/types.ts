@@ -22,11 +22,6 @@ export interface LintStepResult {
   error?: string;
 }
 
-export interface LintIssue {
-  rule: string;
-  file: string;
-}
-
 export interface PullRequestResult {
   prNumber: number;
   prUrl: string;

@@ -1,12 +1,13 @@
-import { checkChanges } from "./steps/check-changes";
-import { checkLint } from "./steps/check-lint";
+import { applyLLMFix } from "./steps/apply-llm-fix";
 import { createBranchAndPush } from "./steps/create-branch-and-push";
 import { createLintRun } from "./steps/create-lint-run";
 import { createPullRequest } from "./steps/create-pr";
 import { createSandbox } from "./steps/create-sandbox";
 import { fixLint } from "./steps/fix-lint";
+import { generateLLMFix } from "./steps/generate-llm-fix";
 import { getGitHubToken } from "./steps/get-github-token";
 import { installDependencies } from "./steps/install-dependencies";
+import { parseLintIssue } from "./steps/parse-lint-issue";
 import { stopSandbox } from "./steps/stop-sandbox";
 import type {
   LintRepoParams,
@@ -45,48 +46,79 @@ export async function lintRepoWorkflow(
     // Step 4: Install dependencies
     await installDependencies(sandbox);
 
-    // Step 5: Run lint check
-    const issue = await checkLint(sandbox);
+    // Step 5: Run ultracite fix
+    const fixResult = await fixLint(sandbox);
 
-    if (!issue) {
-      return {
-        repo: repoFullName,
-        status: "success",
-      };
-    }
+    // If auto-fix made changes, create a PR with those changes
+    if (fixResult.hasChanges) {
+      // Step 6a: Create branch and push (auto-fix)
+      const branchName = await createBranchAndPush(
+        sandbox,
+        "auto-fix",
+        "Auto-fix lint issues"
+      );
 
-    // Step 6: Fix lint issues
-    await fixLint(sandbox);
-
-    // Step 7: Check if there are changes
-    const hasChanges = await checkChanges(sandbox);
-
-    if (hasChanges) {
-      // Step 8: Create branch and push
-      const branchName = await createBranchAndPush(sandbox, issue.rule);
-
-      // Step 9: Create pull request
-      const prResult = await createPullRequest(
+      // Step 7a: Create pull request (auto-fix)
+      const prResult = await createPullRequest({
         installationId,
         repoFullName,
         defaultBranch,
         branchName,
-        issue
-      );
+        title: "Auto-fix lint issues",
+        rule: "multiple",
+        file: "multiple files",
+        isLLMFix: false,
+      });
 
       result = {
         issuesFound: 1,
-        issueFixed: issue.rule,
+        issueFixed: "auto-fix",
         prCreated: true,
         prNumber: prResult.prNumber,
         prUrl: prResult.prUrl,
       };
     } else {
-      result = {
-        issuesFound: 1,
-        prCreated: false,
-        issueFixed: issue.rule,
-      };
+      // No auto-fix changes, try LLM fix for remaining issues
+      // Step 6b: Parse the first lint issue
+      const issue = await parseLintIssue(sandbox, fixResult.output);
+
+      if (!issue) {
+        // No issues found, we're done
+        result = { issuesFound: 0, prCreated: false };
+      } else {
+        // Step 7b: Generate LLM fix
+        const llmFix = await generateLLMFix(issue);
+
+        // Step 8b: Apply the LLM fix to the codebase
+        await applyLLMFix(sandbox, issue.file, llmFix.fixedContent);
+
+        // Step 9b: Create branch and push (LLM fix)
+        const branchName = await createBranchAndPush(
+          sandbox,
+          issue.rule,
+          llmFix.title
+        );
+
+        // Step 10b: Create pull request (LLM fix)
+        const prResult = await createPullRequest({
+          installationId,
+          repoFullName,
+          defaultBranch,
+          branchName,
+          title: llmFix.title,
+          rule: issue.rule,
+          file: issue.file,
+          isLLMFix: true,
+        });
+
+        result = {
+          issuesFound: 1,
+          issueFixed: issue.rule,
+          prCreated: true,
+          prNumber: prResult.prNumber,
+          prUrl: prResult.prUrl,
+        };
+      }
     }
   } catch (error) {
     const errorMessage =
@@ -97,11 +129,11 @@ export async function lintRepoWorkflow(
       error: errorMessage,
     };
   } finally {
-    // Step 10: Stop sandbox
+    // Final step: Stop sandbox
     await stopSandbox(sandbox);
   }
 
-  // Step 11: Update lint run with results
+  // Final step: Update lint run with results
   await updateLintRun(lintRunId, result);
 
   return {

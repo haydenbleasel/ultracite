@@ -2,11 +2,12 @@ import type { Sandbox } from "@vercel/sandbox";
 
 export async function createBranchAndPush(
   sandbox: Sandbox,
-  rule: string
+  branchSuffix: string,
+  commitMessage: string
 ): Promise<string> {
   "use step";
 
-  const branchName = `ultracite/fix-${rule.replace(/\//g, "-")}-${Date.now()}`;
+  const branchName = `ultracite/fix-${branchSuffix.replace(/\//g, "-")}-${Date.now()}`;
 
   await sandbox.runCommand("git", ["checkout", "-b", branchName]);
   await sandbox.runCommand("git", [
@@ -19,7 +20,7 @@ export async function createBranchAndPush(
   await sandbox.runCommand("git", [
     "commit",
     "-m",
-    `fix: ${rule} lint issue\n\nAutomatically fixed by Ultracite`,
+    `fix: ${commitMessage}\n\nAutomatically fixed by Ultracite`,
   ]);
   await sandbox.runCommand("git", ["push", "origin", branchName]);
 
