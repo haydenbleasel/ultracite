@@ -6,6 +6,7 @@ import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
 import codexLogo from "../logos/codex.svg";
+import vscodeCopilotLogo from "../logos/copilot.svg";
 import cursorLogo from "../logos/cursor.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
@@ -16,7 +17,6 @@ import kiloCodeLogo from "../logos/kilo-code.svg";
 import kiroLogo from "../logos/kiro.svg";
 import openHandsLogo from "../logos/open-hands.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
-import vscodeCopilotLogo from "../logos/vscode-copilot.svg";
 import warpLogo from "../logos/warp.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
@@ -137,7 +137,7 @@ alwaysApply: false
     logo: windsurfLogo,
   },
   {
-    id: "vscode-copilot",
+    id: "copilot",
     name: "GitHub Copilot",
     subtitle: "GitHub's AI pair programmer",
     description:

@@ -194,7 +194,7 @@ describe("createAgents", () => {
     });
   });
 
-  describe("vscode-copilot agent", () => {
+  describe("copilot agent", () => {
     test("create creates copilot instructions with header", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
@@ -205,7 +205,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("vscode-copilot", "npm");
+      const agents = createAgents("copilot", "npm");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -225,7 +225,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("vscode-copilot", "npm");
+      const agents = createAgents("copilot", "npm");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
