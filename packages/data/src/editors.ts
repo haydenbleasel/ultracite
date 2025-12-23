@@ -1,4 +1,5 @@
 import type { StaticImageData } from "next/image";
+import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
 import vscodeLogo from "../logos/vscode.svg";
 import windsurfLogo from "../logos/windsurf.svg";
@@ -78,6 +79,23 @@ export const editors: Editor[] = [
       "Multi-file editing",
     ],
     logo: windsurfLogo,
+  },
+  {
+    id: "antigravity",
+    name: "Antigravity",
+    subtitle: "Google's next-generation IDE",
+    description:
+      "An AI-powered development platform built on VS Code for building and deploying applications faster.",
+    configPath: ".vscode/settings.json",
+    website: "https://antigravity.dev",
+    cliValue: "vscode",
+    features: [
+      "Rapid development",
+      "Cloud deployment",
+      "AI assistance",
+      "Full-stack support",
+    ],
+    logo: antigravityLogo,
   },
   {
     id: "zed",

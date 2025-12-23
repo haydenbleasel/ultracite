@@ -313,44 +313,6 @@ describe("createAgents", () => {
     });
   });
 
-  describe("antigravity agent", () => {
-    test("create creates antigravity rules file", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
-      }));
-
-      const agents = createAgents("antigravity", "npm");
-      await agents.create();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.agent/rules/ultracite.md");
-    });
-
-    test("update overwrites rules file (not in append mode)", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("# Existing rules")),
-        writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
-      }));
-
-      const agents = createAgents("antigravity", "npm");
-      await agents.update();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.agent/rules/ultracite.md");
-    });
-  });
-
   describe("directory creation", () => {
     test("creates parent directory when needed", async () => {
       const mockMkdir = mock(() => Promise.resolve());

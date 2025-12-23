@@ -2,7 +2,6 @@ import type { StaticImageData } from "next/image";
 import aiderLogo from "../logos/aider.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
-import antigravityLogo from "../logos/antigravity.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
@@ -11,16 +10,16 @@ import vscodeCopilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
 import cursorLogo from "../logos/cursor.svg";
 import droidLogo from "../logos/droid.svg";
-import firebenderLogo from "../logos/firebender.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
+import firebenderLogo from "../logos/firebender.svg";
 import geminiLogo from "../logos/gemini.svg";
 import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
 import kiroLogo from "../logos/kiro.svg";
-import opencodeLogo from "../logos/opencode.svg";
 import openHandsLogo from "../logos/open-hands.svg";
+import opencodeLogo from "../logos/opencode.svg";
 import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
 import traeLogo from "../logos/trae.svg";
@@ -324,7 +323,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     id: "gemini-cli",
-    name: "Gemini CLI",
+    name: "Gemini",
     subtitle: "Google's terminal AI",
     description:
       "Google's command-line interface for Gemini, bringing AI assistance to your terminal.",
@@ -477,24 +476,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     logo: droidLogo,
-  },
-  {
-    id: "antigravity",
-    name: "Antigravity",
-    subtitle: "Rapid AI development",
-    description:
-      "An AI-powered development platform for building and deploying applications faster.",
-    configPath: ".agent/rules/ultracite.md",
-    website: "https://antigravity.dev",
-    category: "cloud",
-    features: [
-      "Rapid development",
-      "Cloud deployment",
-      "AI assistance",
-      "Full-stack support",
-    ],
-    config: {},
-    logo: antigravityLogo,
   },
   {
     id: "opencode",
