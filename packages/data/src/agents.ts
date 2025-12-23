@@ -1,5 +1,6 @@
 import type { StaticImageData } from "next/image";
 import aiderLogo from "../logos/aider.svg";
+import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
 import antigravityLogo from "../logos/antigravity.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
@@ -7,8 +8,10 @@ import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
 import codexLogo from "../logos/codex.svg";
 import vscodeCopilotLogo from "../logos/copilot.svg";
+import crushLogo from "../logos/crush.svg";
 import cursorLogo from "../logos/cursor.svg";
 import droidLogo from "../logos/droid.svg";
+import firebenderLogo from "../logos/firebender.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
 import geminiLogo from "../logos/gemini.svg";
 import gooseLogo from "../logos/goose.svg";
@@ -16,8 +19,11 @@ import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
 import kiroLogo from "../logos/kiro.svg";
+import opencodeLogo from "../logos/opencode.svg";
 import openHandsLogo from "../logos/open-hands.svg";
+import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
+import traeLogo from "../logos/trae.svg";
 import warpLogo from "../logos/warp.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
@@ -489,6 +495,122 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     ],
     config: {},
     logo: antigravityLogo,
+  },
+  {
+    id: "opencode",
+    name: "OpenCode",
+    subtitle: "Open-source coding agent",
+    description:
+      "An open-source AI coding agent that runs in your terminal, desktop, or IDE with support for 75+ LLM providers.",
+    configPath: "AGENTS.md",
+    website: "https://opencode.ai",
+    category: "cli",
+    features: [
+      "Open source",
+      "Multi-provider support",
+      "Terminal and desktop",
+      "Privacy focused",
+    ],
+    config: {
+      appendMode: true,
+    },
+    logo: opencodeLogo,
+  },
+  {
+    id: "crush",
+    name: "Crush",
+    subtitle: "Glamorous terminal agent",
+    description:
+      "Charmbracelet's glamorous AI coding agent for your terminal with multi-model support.",
+    configPath: "CRUSH.md",
+    website: "https://github.com/charmbracelet/crush",
+    category: "cli",
+    features: [
+      "Terminal TUI",
+      "Multi-model support",
+      "Cross-platform",
+      "Open source",
+    ],
+    config: {
+      appendMode: true,
+    },
+    logo: crushLogo,
+  },
+  {
+    id: "qwen",
+    name: "Qwen Code",
+    subtitle: "Alibaba's coding CLI",
+    description:
+      "Alibaba's command-line interface for Qwen3-Coder, enabling agentic coding with natural language.",
+    configPath: "AGENTS.md",
+    website: "https://github.com/QwenLM/Qwen3-Coder",
+    category: "cli",
+    features: [
+      "Agentic coding",
+      "256K context window",
+      "Multi-language support",
+      "Open source model",
+    ],
+    config: {
+      appendMode: true,
+    },
+    logo: qwenLogo,
+  },
+  {
+    id: "trae",
+    name: "Trae AI",
+    subtitle: "ByteDance's AI IDE",
+    description:
+      "ByteDance's AI-powered IDE built on VS Code with free access to GPT-4o and Claude 3.5 Sonnet.",
+    configPath: ".trae/rules/project_rules.md",
+    website: "https://www.trae.ai",
+    category: "ide",
+    features: [
+      "Free AI models",
+      "VS Code based",
+      "Bilingual support",
+      "Project-level code generation",
+    ],
+    config: {},
+    logo: traeLogo,
+  },
+  {
+    id: "amazon-q-cli",
+    name: "Amazon Q CLI",
+    subtitle: "AWS's terminal AI",
+    description:
+      "Amazon's AI-powered CLI with command autocompletion, natural language chat, and AWS integration.",
+    configPath: ".amazonq/rules/ultracite.md",
+    website: "https://aws.amazon.com/q/developer",
+    category: "cli",
+    features: [
+      "AWS integration",
+      "Command autocompletion",
+      "Multi-language support",
+      "Agentic workflows",
+    ],
+    config: {
+      appendMode: true,
+    },
+    logo: amazonQLogo,
+  },
+  {
+    id: "firebender",
+    name: "Firebender",
+    subtitle: "Android Studio AI",
+    description:
+      "The most powerful AI coding assistant for Android Studio with codebase context and up-to-date Android knowledge.",
+    configPath: "firebender.json",
+    website: "https://firebender.com",
+    category: "extension",
+    features: [
+      "Android Studio plugin",
+      "Codebase context",
+      "Latest Android docs",
+      "Privacy focused",
+    ],
+    config: {},
+    logo: firebenderLogo,
   },
 ];
 
