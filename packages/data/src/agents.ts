@@ -12,6 +12,7 @@ import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
 import geminiLogo from "../logos/gemini.svg";
 import gooseLogo from "../logos/goose.svg";
+import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
 import kiroLogo from "../logos/kiro.svg";
@@ -76,12 +77,12 @@ export const agents: Agent[] = [
   },
   {
     id: "codex",
-    name: "OpenAI Codex / Jules",
-    subtitle: "OpenAI's cloud agents",
+    name: "OpenAI Codex",
+    subtitle: "OpenAI's coding agent",
     description:
-      "OpenAI's cloud-based coding agents including Codex CLI and Jules for autonomous development.",
+      "OpenAI's cloud-based coding agent for autonomous software development tasks.",
     configPath: "AGENTS.md",
-    website: "https://openai.com",
+    website: "https://openai.com/codex",
     category: "cloud",
     features: [
       "Cloud-based execution",
@@ -93,6 +94,26 @@ export const agents: Agent[] = [
       appendMode: true,
     },
     logo: codexLogo,
+  },
+  {
+    id: "jules",
+    name: "Google Jules",
+    subtitle: "Google's async agent",
+    description:
+      "Google's asynchronous AI coding agent that works in the background to complete development tasks.",
+    configPath: "AGENTS.md",
+    website: "https://jules.google.com",
+    category: "cloud",
+    features: [
+      "Async task execution",
+      "Background processing",
+      "GitHub integration",
+      "Multi-file changes",
+    ],
+    config: {
+      appendMode: true,
+    },
+    logo: julesLogo,
   },
   {
     id: "cursor",
