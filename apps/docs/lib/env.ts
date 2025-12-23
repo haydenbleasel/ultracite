@@ -17,6 +17,10 @@ export const env = createEnv({
     GITHUB_APP_ID: z.string(),
     GITHUB_APP_PRIVATE_KEY: z.string(),
     GITHUB_APP_WEBHOOK_SECRET: z.string(),
+
+    // Vercel Sandbox (optional - uses OIDC on Vercel)
+    VERCEL_TEAM_ID: z.string().optional(),
+    VERCEL_PROJECT_ID: z.string().optional(),
   },
   client: {
     // Clerk
@@ -45,5 +49,7 @@ export const env = createEnv({
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
     NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
+    VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
+    VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
   },
 });
