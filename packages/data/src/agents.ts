@@ -77,7 +77,7 @@ export const agents: Agent[] = [
   },
   {
     id: "codex",
-    name: "OpenAI Codex",
+    name: "Codex",
     subtitle: "OpenAI's coding agent",
     description:
       "OpenAI's cloud-based coding agent for autonomous software development tasks.",
@@ -97,7 +97,7 @@ export const agents: Agent[] = [
   },
   {
     id: "jules",
-    name: "Google Jules",
+    name: "Jules",
     subtitle: "Google's async agent",
     description:
       "Google's asynchronous AI coding agent that works in the background to complete development tasks.",
