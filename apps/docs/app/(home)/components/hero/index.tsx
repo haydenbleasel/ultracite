@@ -1,3 +1,5 @@
+"use client";
+
 import { providers } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
