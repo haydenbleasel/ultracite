@@ -11,9 +11,9 @@ export async function generateLLMFix(
 ): Promise<LLMFixResult> {
   "use step";
 
-  const { experimental_output } = await ultraciteAgent.generate({
+  const { output } = await ultraciteAgent.generate({
     prompt: `Here are the first 50 lines of the linter output:
-    
+
 \`\`\`
 ${issue.linterOutput}
 \`\`\`
@@ -33,7 +33,7 @@ Also provide a short, descriptive title for this fix.`,
   });
 
   return {
-    title: experimental_output.title,
-    fixedContent: experimental_output.fixedContent,
+    title: output.title,
+    fixedContent: output.fixedContent,
   };
 }

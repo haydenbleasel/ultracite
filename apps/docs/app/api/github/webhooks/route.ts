@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
 import { database } from "@/lib/database";
 import { env } from "@/lib/env";
+import { reviewPRWorkflow } from "./review-pr";
 
 const verifySignature = (payload: string, signature: string): boolean => {
   const expected = `sha256=${crypto
@@ -30,6 +31,9 @@ export const POST = async (request: NextRequest) => {
     case "installation_repositories":
       await handleInstallationRepositoriesEvent(data);
       break;
+    case "pull_request":
+      await handlePullRequestEvent(data);
+      break;
     default:
       break;
   }
@@ -51,6 +55,19 @@ interface WebhookPayload {
   repositories_removed?: {
     id: number;
   }[];
+  pull_request?: {
+    number: number;
+    head: {
+      ref: string;
+    };
+    base: {
+      ref: string;
+    };
+  };
+  repository?: {
+    id: number;
+    full_name: string;
+  };
 }
 
 const handleInstallationEvent = async (data: WebhookPayload) => {
@@ -117,4 +134,35 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
         });
     }
   }
+};
+
+const handlePullRequestEvent = async (data: WebhookPayload) => {
+  const { action, installation, pull_request, repository } = data;
+
+  // Only run on opened or synchronized (new commits pushed) PRs
+  if (action !== "opened" && action !== "synchronize") {
+    return;
+  }
+
+  if (!pull_request || !repository) {
+    return;
+  }
+
+  // Check if this repo is tracked by Ultracite
+  const repo = await database.repo.findFirst({
+    where: { githubRepoId: repository.id },
+  });
+
+  if (!repo) {
+    return;
+  }
+
+  // Run the review workflow
+  await reviewPRWorkflow({
+    installationId: installation.id,
+    repoFullName: repository.full_name,
+    prNumber: pull_request.number,
+    prBranch: pull_request.head.ref,
+    baseBranch: pull_request.base.ref,
+  });
 };

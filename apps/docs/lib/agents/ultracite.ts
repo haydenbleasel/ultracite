@@ -1,14 +1,14 @@
-import { Experimental_Agent as Agent, Output } from "ai";
+import { ToolLoopAgent, Output } from "ai";
 import { z } from "zod";
 
-export const ultraciteAgent = new Agent({
+export const ultraciteAgent = new ToolLoopAgent({
   model: "openai/gpt-5.1-codex-mini",
-  system: [
+  instructions: [
     "You are a code assistant that fixes linting issues.",
     "The user will provide output from a linter (could be ESLint, Biome, or OxLint)",
     "You will need to fix the issues in the code.",
   ].join("\n"),
-  experimental_output: Output.object({
+  output: Output.object({
     schema: z.object({
       title: z
         .string()
