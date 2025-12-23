@@ -1,5 +1,6 @@
 import { agents, categoryLabels, getAgentById } from "@ultracite/data";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,13 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
     <>
       <div className="grid gap-8 sm:gap-20">
         <div className="grid gap-4">
+          <Image
+            alt={agent.name}
+            className="size-10 rounded-full"
+            height={40}
+            src={agent.logo}
+            width={40}
+          />
           <div className="flex items-center gap-2">
             <span className="rounded-full border bg-muted/50 px-3 py-1 text-xs">
               {categoryLabels[agent.category]}
