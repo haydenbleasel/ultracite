@@ -82,10 +82,7 @@ export async function lintRepoWorkflow(
       // Step 6b: Parse the first lint issue
       const issue = await parseLintIssue(sandbox, fixResult.output);
 
-      if (!issue) {
-        // No issues found, we're done
-        result = { issuesFound: 0, prCreated: false };
-      } else {
+      if (issue) {
         // Step 7b: Generate LLM fix
         const llmFix = await generateLLMFix(issue);
 
@@ -118,6 +115,9 @@ export async function lintRepoWorkflow(
           prNumber: prResult.prNumber,
           prUrl: prResult.prUrl,
         };
+      } else {
+        // No issues found, we're done
+        result = { issuesFound: 0, prCreated: false };
       }
     }
   } catch (error) {
