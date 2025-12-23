@@ -8,11 +8,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Installer } from "../installer";
-import Biome from "./biome.jpg";
-import ESLint from "./eslint.jpg";
-import Oxlint from "./oxlint.jpg";
-import Prettier from "./prettier.jpg";
-import Stylelint from "./stylelint.jpg";
+import Biome from "./logos/biome.svg";
+import ESLint from "./logos/eslint.svg";
+import Oxlint from "./logos/oxlint.svg";
+import Prettier from "./logos/prettier.svg";
+import Stylelint from "./logos/stylelint.svg";
 
 interface HeroProps {
   children: ReactNode;
