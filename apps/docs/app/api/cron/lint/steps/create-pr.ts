@@ -32,7 +32,7 @@ export async function createPullRequest(
   const [owner, repo] = repoFullName.split("/");
 
   const fixMethod = isLLMFix
-    ? "AI-generated fix using GPT-4"
+    ? "AI-generated fix using openai/codex-mini"
     : "Automatically applied the recommended fix";
 
   const { data: pr } = await octokit.request(

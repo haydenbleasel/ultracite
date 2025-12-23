@@ -15,7 +15,7 @@ export async function createBranchAndPush(
     "user.email",
     "ultracite@users.noreply.github.com",
   ]);
-  await sandbox.runCommand("git", ["config", "user.name", "Ultracite Bot"]);
+  await sandbox.runCommand("git", ["config", "user.name", "Ultracite"]);
   await sandbox.runCommand("git", ["add", "-A"]);
   await sandbox.runCommand("git", [
     "commit",

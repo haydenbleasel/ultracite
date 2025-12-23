@@ -17,11 +17,8 @@ export async function parseLintIssue(
 ): Promise<LintIssueDetails | null> {
   "use step";
 
-  // Run ultracite check to get current issues (since fix output may not have details)
-  const checkResult = await sandbox.runCommand("npx", ["ultracite", "check"]);
-  const checkOutput = await checkResult.output("both");
+  const match = fixOutput.match(BIOME_OUTPUT_PATTERN);
 
-  const match = checkOutput.match(BIOME_OUTPUT_PATTERN);
   if (!match) {
     return null;
   }
