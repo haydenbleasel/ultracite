@@ -1,11 +1,11 @@
-import { createReviewPRAgent } from "@/lib/agents/review-pr";
+import type { Sandbox } from "@vercel/sandbox";
+import { reviewAgent } from "@/lib/agents/review";
+import { getInstallationOctokit } from "@/lib/github/app";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { installDependencies } from "@/lib/steps/install-dependencies";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
-import { getInstallationOctokit } from "@/lib/github/app";
-import type { Sandbox } from "@vercel/sandbox";
 
 export interface ReviewPRParams {
   installationId: number;
@@ -112,7 +112,7 @@ export async function reviewPRWorkflow(
     }
 
     // Step 6: Use the agent to iteratively fix remaining issues
-    const { agent, getFixCount } = createReviewPRAgent(sandbox);
+    const { agent, getFixCount } = reviewAgent(sandbox);
 
     await agent.generate({
       prompt: `Check for remaining lint issues in the codebase and fix them iteratively.

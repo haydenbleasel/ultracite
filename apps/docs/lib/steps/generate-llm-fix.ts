@@ -1,4 +1,4 @@
-import { ultraciteAgent } from "@/lib/agents/ultracite";
+import { improveAgent } from "@/lib/agents/improve";
 import type { LintIssueDetails } from "./parse-lint-issue";
 
 export interface LLMFixResult {
@@ -11,7 +11,7 @@ export async function generateLLMFix(
 ): Promise<LLMFixResult> {
   "use step";
 
-  const { output } = await ultraciteAgent.generate({
+  const { output } = await improveAgent.generate({
     prompt: `Here are the first 50 lines of the linter output:
 
 \`\`\`

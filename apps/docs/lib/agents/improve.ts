@@ -1,8 +1,8 @@
-import { ToolLoopAgent, Output } from "ai";
+import { Output, ToolLoopAgent } from "ai";
 import { z } from "zod";
 
-export const ultraciteAgent = new ToolLoopAgent({
-  model: "openai/gpt-5.1-codex-mini",
+export const improveAgent = new ToolLoopAgent({
+  model: "openai/gpt-oss-120b",
   instructions: [
     "You are a code assistant that fixes linting issues.",
     "The user will provide output from a linter (could be ESLint, Biome, or OxLint)",

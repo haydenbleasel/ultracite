@@ -1,14 +1,14 @@
-import { ToolLoopAgent, stepCountIs, tool } from "ai";
 import type { Sandbox } from "@vercel/sandbox";
+import { stepCountIs, ToolLoopAgent, tool } from "ai";
 import { z } from "zod";
 
 const MAX_FIX_ITERATIONS = 20;
 
-export const createReviewPRAgent = (sandbox: Sandbox) => {
+export const reviewAgent = (sandbox: Sandbox) => {
   let fixCount = 0;
 
   const agent = new ToolLoopAgent({
-    model: "openai/gpt-5.1-codex-mini",
+    model: "openai/gpt-oss-120b",
     instructions: `You are a code assistant that iteratively fixes linting issues in a codebase.
 
 Your job is to:
