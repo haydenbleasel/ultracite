@@ -1,22 +1,25 @@
-import { applyLLMFix } from "./steps/apply-llm-fix";
-import { createBranchAndPush } from "./steps/create-branch-and-push";
-import { createLintRun } from "./steps/create-lint-run";
-import { createPullRequest } from "./steps/create-pr";
-import { createSandbox } from "./steps/create-sandbox";
-import { fixLint } from "./steps/fix-lint";
-import { generateLLMFix } from "./steps/generate-llm-fix";
-import { getGitHubToken } from "./steps/get-github-token";
-import { installDependencies } from "./steps/install-dependencies";
-import { parseLintIssue } from "./steps/parse-lint-issue";
-import { stopSandbox } from "./steps/stop-sandbox";
+import { applyLLMFix } from "@/lib/steps/apply-llm-fix";
+import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
+import { createLintRun } from "@/lib/steps/create-lint-run";
+import { createPullRequest } from "@/lib/steps/create-pr";
+import { createSandbox } from "@/lib/steps/create-sandbox";
+import { fixLint } from "@/lib/steps/fix-lint";
+import { generateLLMFix } from "@/lib/steps/generate-llm-fix";
+import { getGitHubToken } from "@/lib/steps/get-github-token";
+import { installDependencies } from "@/lib/steps/install-dependencies";
+import { parseLintIssue } from "@/lib/steps/parse-lint-issue";
+import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import type {
   LintRepoParams,
   LintRepoResult,
   LintStepResult,
-} from "./steps/types";
-import { updateLintRun } from "./steps/update-lint-run";
+} from "@/lib/steps/types";
+import { updateLintRun } from "@/lib/steps/update-lint-run";
 
-export type { LintRepoParams, LintRepoResult } from "./steps/types";
+export type {
+  LintRepoParams,
+  LintRepoResult,
+} from "@/lib/steps/types";
 
 export async function lintRepoWorkflow(
   params: LintRepoParams
