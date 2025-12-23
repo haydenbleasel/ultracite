@@ -1,3 +1,4 @@
+import { agents, categoryLabels, getAgentById } from "@ultracite/data";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,20 +6,13 @@ import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Installer } from "../../components/installer";
-import { agents, categoryLabels, getAgentById } from "../data";
-
-interface AgentPageProps {
-  params: Promise<{
-    agent: string;
-  }>;
-}
 
 export const generateStaticParams = () =>
   agents.map((agent) => ({ agent: agent.id }));
 
 export const generateMetadata = async ({
   params,
-}: AgentPageProps): Promise<Metadata> => {
+}: PageProps<"/agents/[agent]">): Promise<Metadata> => {
   const { agent: agentId } = await params;
   const agent = getAgentById(agentId);
 
@@ -34,7 +28,7 @@ export const generateMetadata = async ({
   };
 };
 
-const AgentPage = async ({ params }: AgentPageProps) => {
+const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
   const { agent: agentId } = await params;
   const agent = getAgentById(agentId);
 

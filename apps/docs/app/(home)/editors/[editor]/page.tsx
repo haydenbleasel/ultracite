@@ -1,3 +1,4 @@
+import { editors, getEditorById } from "@ultracite/data";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,20 +6,13 @@ import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Installer } from "../../components/installer";
-import { editors, getEditorById } from "../data";
-
-interface EditorPageProps {
-  params: Promise<{
-    editor: string;
-  }>;
-}
 
 export const generateStaticParams = () =>
   editors.map((editor) => ({ editor: editor.id }));
 
 export const generateMetadata = async ({
   params,
-}: EditorPageProps): Promise<Metadata> => {
+}: PageProps<"/editors/[editor]">): Promise<Metadata> => {
   const { editor: editorId } = await params;
   const editor = getEditorById(editorId);
 
@@ -34,7 +28,7 @@ export const generateMetadata = async ({
   };
 };
 
-const EditorPage = async ({ params }: EditorPageProps) => {
+const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
   const { editor: editorId } = await params;
   const editor = getEditorById(editorId);
 
