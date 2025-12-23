@@ -22,6 +22,7 @@ export const ConnectGitHubButton = ({
           {hasInstallation ? "Manage GitHub" : "Connect GitHub"}
         </Link>
       }
+      variant={hasInstallation ? "secondary" : "default"}
     />
   );
 };
