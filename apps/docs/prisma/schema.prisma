@@ -9,21 +9,70 @@ datasource db {
 }
 
 model Organization {
-  id String @id
+  id String @id // Clerk org ID
 
-  repos Repo[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  // GitHub App installation
+  githubInstallationId Int?      @unique
+  githubAccountLogin   String?
+  installedAt          DateTime?
+
+  repos    Repo[]
+  lintRuns LintRun[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Repo {
-  id String @id
+  id String @id @default(cuid())
 
-  organization Organization @relation(fields: [organizationId], references: [id])
+  githubRepoId  Int     @unique
+  name          String
+  fullName      String // owner/repo
+  defaultBranch String  @default("main")
+  enabled       Boolean @default(true)
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+
+  lintRuns LintRun[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([organizationId])
+}
+
+model LintRun {
+  id String @id @default(cuid())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  repo   Repo   @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  repoId String
+
+  status      LintRunStatus @default(PENDING)
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  issuesFound  Int?
+  issueFixed   String?
+  prNumber     Int?
+  prUrl        String?
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([repoId])
+}
+
+enum LintRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS_NO_ISSUES
+  SUCCESS_PR_CREATED
+  FAILED
 }
