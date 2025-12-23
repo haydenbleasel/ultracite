@@ -1,7 +1,7 @@
 "use server";
 
 import { App, type Octokit } from "octokit";
-import type { ActionResponse, Feedback } from "@/components/feedback";
+import type { ActionResponse, Feedback } from "@/components/ultracite/feedback";
 import { env } from "@/env";
 
 const repo = "ultracite";
