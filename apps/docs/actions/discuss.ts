@@ -2,7 +2,7 @@
 
 import { App, type Octokit } from "octokit";
 import type { ActionResponse, Feedback } from "@/components/ultracite/feedback";
-import { env } from "@/env";
+import { env } from "@/lib/env";
 
 const repo = "ultracite";
 const owner = "haydenbleasel";

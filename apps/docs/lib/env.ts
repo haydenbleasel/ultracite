@@ -12,6 +12,11 @@ export const env = createEnv({
 
     // Database
     DATABASE_URL: z.string(),
+
+    // GitHub App
+    GITHUB_APP_ID: z.string(),
+    GITHUB_APP_PRIVATE_KEY: z.string(),
+    GITHUB_APP_WEBHOOK_SECRET: z.string(),
   },
   client: {
     // Clerk
@@ -20,6 +25,9 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
     NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL: z.string(),
     NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL: z.string(),
+
+    // GitHub App
+    NEXT_PUBLIC_GITHUB_APP_SLUG: z.string(),
   },
   runtimeEnv: {
     CRON_SECRET: process.env.CRON_SECRET,
@@ -33,5 +41,9 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL:
       process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL,
     DATABASE_URL: process.env.DATABASE_URL,
+    GITHUB_APP_ID: process.env.GITHUB_APP_ID,
+    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
+    GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
+    NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
   },
 });

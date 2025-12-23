@@ -27,7 +27,11 @@ export const providers = [
             src={eslintProvider.logo}
           />
           <span>ESLint, </span>
-          <Image alt="Prettier" className="size-4 rounded-full" src={Prettier} />
+          <Image
+            alt="Prettier"
+            className="size-4 rounded-full"
+            src={Prettier}
+          />
           <span>Prettier and </span>
           <Image
             alt="Stylelint"
