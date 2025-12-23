@@ -20,7 +20,6 @@ import openHandsLogo from "../logos/open-hands.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
-import traeLogo from "../logos/trae.svg";
 import warpLogo from "../logos/warp.svg";
 
 export type AgentCategory = "ide" | "cli" | "cloud" | "extension";
@@ -452,24 +451,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     logo: qwenLogo,
-  },
-  {
-    id: "trae",
-    name: "Trae AI",
-    subtitle: "ByteDance's AI IDE",
-    description:
-      "ByteDance's AI-powered IDE built on VS Code with free access to GPT-4o and Claude 3.5 Sonnet.",
-    configPath: ".trae/rules/project_rules.md",
-    website: "https://www.trae.ai",
-    category: "ide",
-    features: [
-      "Free AI models",
-      "VS Code based",
-      "Bilingual support",
-      "Project-level code generation",
-    ],
-    config: {},
-    logo: traeLogo,
   },
   {
     id: "amazon-q-cli",

@@ -2,6 +2,8 @@ import type { StaticImageData } from "next/image";
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
+import traeLogo from "../logos/trae.svg";
+import voidLogo from "../logos/void.svg";
 import vscodeLogo from "../logos/vscode.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
@@ -139,6 +141,43 @@ alwaysApply: false
     rules: {
       path: ".kiro/steering/ultracite.md",
     },
+  },
+  {
+    id: "trae",
+    name: "Trae AI",
+    subtitle: "ByteDance's AI IDE",
+    description:
+      "ByteDance's AI-powered IDE built on VS Code with free access to GPT-4o and Claude 3.5 Sonnet.",
+    configPath: ".vscode/settings.json",
+    website: "https://www.trae.ai",
+    cliValue: "vscode",
+    features: [
+      "Free AI models",
+      "VS Code based",
+      "Bilingual support",
+      "Project-level code generation",
+    ],
+    logo: traeLogo,
+    rules: {
+      path: ".trae/rules/project_rules.md",
+    },
+  },
+  {
+    id: "void",
+    name: "Void",
+    subtitle: "Open-source AI editor",
+    description:
+      "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
+    configPath: ".vscode/settings.json",
+    website: "https://voideditor.com",
+    cliValue: "vscode",
+    features: [
+      "Open source",
+      "AI-native editor",
+      "VS Code compatible",
+      "Privacy focused",
+    ],
+    logo: voidLogo,
   },
   {
     id: "zed",
