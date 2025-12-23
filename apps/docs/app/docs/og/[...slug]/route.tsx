@@ -6,7 +6,7 @@ import { source } from "@/lib/source";
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<"/og/[...slug]">
+  { params }: RouteContext<"/docs/og/[...slug]">
 ) => {
   const { slug } = await params;
   const page = source.getPage(slug.slice(0, -1));
@@ -16,10 +16,10 @@ export const GET = async (
   }
 
   const geistBold = await readFile(
-    join(process.cwd(), "app/og/[...slug]/Geist-Bold.ttf")
+    join(process.cwd(), "app/docs/og/[...slug]/Geist-Bold.ttf")
   );
   const geistRegular = await readFile(
-    join(process.cwd(), "app/og/[...slug]/Geist-Regular.ttf")
+    join(process.cwd(), "app/docs/og/[...slug]/Geist-Regular.ttf")
   );
 
   return new ImageResponse(
