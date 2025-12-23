@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import "./global.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
@@ -26,28 +27,30 @@ const mono = Geist_Mono({
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <html
-      className={cn(
-        "touch-manipulation font-sans antialiased",
-        sans.variable,
-        mono.variable
-      )}
-      lang="en"
-      suppressHydrationWarning
-    >
-      <body>
-        <RootProvider
-          theme={{
-            defaultTheme: undefined,
-            enableSystem: true,
-          }}
-        >
-          {children}
-        </RootProvider>
-        <Toaster />
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        className={cn(
+          "touch-manipulation font-sans antialiased",
+          sans.variable,
+          mono.variable
+        )}
+        lang="en"
+        suppressHydrationWarning
+      >
+        <body>
+          <RootProvider
+            theme={{
+              defaultTheme: undefined,
+              enableSystem: true,
+            }}
+          >
+            {children}
+          </RootProvider>
+          <Toaster />
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 };
 

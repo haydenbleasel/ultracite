@@ -1,9 +1,10 @@
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import { isMarkdownPreferred, rewritePath } from "fumadocs-core/negotiation";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const { rewrite: rewriteLLM } = rewritePath("/docs/*path", "/llms.mdx/*path");
 
-const proxy = (request: NextRequest) => {
+export default clerkMiddleware((_, request) => {
   // Handle Markdown preference rewrites for LLMs
   if (isMarkdownPreferred(request)) {
     const result = rewriteLLM(request.nextUrl.pathname);
@@ -13,13 +14,13 @@ const proxy = (request: NextRequest) => {
   }
 
   return NextResponse.next();
-};
+});
 
 export const config = {
-  // Matcher ignoring `/_next/`, `/api/`, static assets, favicon, file-based metadata, etc.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|icon\\.png|apple-icon\\.png|opengraph-image\\.png|twitter-image\\.png|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest).*)",
+    // Skip Next.js internals and all static files, unless found in search params
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
   ],
 };
-
-export default proxy;
