@@ -1,10 +1,10 @@
+import BiomeLogo from "@ultracite/data/logos/biome.svg";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import BiomeLogo from "../../components/hero/biome.jpg";
 import { Installer } from "../../components/installer";
 
 const title = "Biome | Ultracite";

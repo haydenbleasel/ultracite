@@ -1,3 +1,8 @@
+import Biome from "@ultracite/data/logos/biome.svg";
+import ESLint from "@ultracite/data/logos/eslint.svg";
+import Oxlint from "@ultracite/data/logos/oxlint.svg";
+import Prettier from "@ultracite/data/logos/prettier.svg";
+import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -8,11 +13,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Installer } from "../installer";
-import Biome from "./logos/biome.svg";
-import ESLint from "./logos/eslint.svg";
-import Oxlint from "./logos/oxlint.svg";
-import Prettier from "./logos/prettier.svg";
-import Stylelint from "./logos/stylelint.svg";
 
 interface HeroProps {
   children: ReactNode;

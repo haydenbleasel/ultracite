@@ -1,3 +1,10 @@
+import claude from "@ultracite/data/logos/claude.svg";
+import codex from "@ultracite/data/logos/codex.svg";
+import cursor from "@ultracite/data/logos/cursor.svg";
+import gemini from "@ultracite/data/logos/gemini.svg";
+import warp from "@ultracite/data/logos/warp.svg";
+import windsurf from "@ultracite/data/logos/windsurf.svg";
+import zed from "@ultracite/data/logos/zed.svg";
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import Image from "next/image";
 import {
@@ -6,13 +13,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import claude from "./logos/claude.svg";
-import codex from "./logos/codex.svg";
-import cursor from "./logos/cursor.svg";
-import gemini from "./logos/gemini.svg";
-import warp from "./logos/warp.svg";
-import windsurf from "./logos/windsurf.svg";
-import zed from "./logos/zed.svg";
 
 const logos = [
   {

@@ -1,3 +1,8 @@
+import Biome from "@ultracite/data/logos/biome.svg";
+import ESLint from "@ultracite/data/logos/eslint.svg";
+import Oxlint from "@ultracite/data/logos/oxlint.svg";
+import Prettier from "@ultracite/data/logos/prettier.svg";
+import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import {
@@ -7,11 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Biome from "../hero/biome.jpg";
-import ESLint from "../hero/eslint.jpg";
-import Oxlint from "../hero/oxlint.jpg";
-import Prettier from "../hero/prettier.jpg";
-import Stylelint from "../hero/stylelint.jpg";
 
 export const providers = [
   {
