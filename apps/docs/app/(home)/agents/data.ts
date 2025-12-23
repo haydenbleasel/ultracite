@@ -7,27 +7,27 @@ import {
   type Agent as BaseAgent,
   type AgentCategory,
 } from "@ultracite/data";
-import aiderLogo from "../components/agents/logos/aider.svg";
-import ampLogo from "../components/agents/logos/amp.svg";
-import antigravityLogo from "../components/agents/logos/antigravity.svg";
-import augmentcodeLogo from "../components/agents/logos/augmentcode.svg";
-import claudeLogo from "../components/agents/logos/claude.svg";
-import clineLogo from "../components/agents/logos/cline.svg";
-import codexLogo from "../components/agents/logos/codex.svg";
-import cursorLogo from "../components/agents/logos/cursor.svg";
-import droidLogo from "../components/agents/logos/droid.svg";
-import firebaseStudioLogo from "../components/agents/logos/firebase-studio.svg";
-import geminiLogo from "../components/agents/logos/gemini.svg";
-import gooseLogo from "../components/agents/logos/goose.svg";
-import junieLogo from "../components/agents/logos/junie.svg";
-import kiloCodeLogo from "../components/agents/logos/kilo-code.svg";
-import kiroLogo from "../components/agents/logos/kiro.svg";
-import openHandsLogo from "../components/agents/logos/open-hands.svg";
-import rooCodeLogo from "../components/agents/logos/roo-code.svg";
-import vscodeCopilotLogo from "../components/agents/logos/vscode-copilot.svg";
-import warpLogo from "../components/agents/logos/warp.svg";
-import windsurfLogo from "../components/agents/logos/windsurf.svg";
-import zedLogo from "../components/agents/logos/zed.svg";
+import aiderLogo from "@ultracite/data/logos/aider.svg";
+import ampLogo from "@ultracite/data/logos/amp.svg";
+import antigravityLogo from "@ultracite/data/logos/antigravity.svg";
+import augmentcodeLogo from "@ultracite/data/logos/augmentcode.svg";
+import claudeLogo from "@ultracite/data/logos/claude.svg";
+import clineLogo from "@ultracite/data/logos/cline.svg";
+import codexLogo from "@ultracite/data/logos/codex.svg";
+import cursorLogo from "@ultracite/data/logos/cursor.svg";
+import droidLogo from "@ultracite/data/logos/droid.svg";
+import firebaseStudioLogo from "@ultracite/data/logos/firebase-studio.svg";
+import geminiLogo from "@ultracite/data/logos/gemini.svg";
+import gooseLogo from "@ultracite/data/logos/goose.svg";
+import junieLogo from "@ultracite/data/logos/junie.svg";
+import kiloCodeLogo from "@ultracite/data/logos/kilo-code.svg";
+import kiroLogo from "@ultracite/data/logos/kiro.svg";
+import openHandsLogo from "@ultracite/data/logos/open-hands.svg";
+import rooCodeLogo from "@ultracite/data/logos/roo-code.svg";
+import vscodeCopilotLogo from "@ultracite/data/logos/vscode-copilot.svg";
+import warpLogo from "@ultracite/data/logos/warp.svg";
+import windsurfLogo from "@ultracite/data/logos/windsurf.svg";
+import zedLogo from "@ultracite/data/logos/zed.svg";
 
 // Logo mapping
 const logoMap: Record<string, StaticImageData> = {

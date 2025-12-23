@@ -5,9 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { agents } from "@/app/(home)/agents/data";
 import { editors } from "@/app/(home)/editors/data";
-import BiomeLogo from "@/app/(home)/components/hero/biome.jpg";
-import ESLintLogo from "@/app/(home)/components/hero/eslint.jpg";
-import OxlintLogo from "@/app/(home)/components/hero/oxlint.jpg";
+import { providers } from "@/app/(home)/providers/data";
 import { Logo } from "@/app/(home)/components/logo";
 import { Button } from "../ui/button";
 import {
@@ -27,27 +25,6 @@ const links = [
   {
     href: "/social",
     label: "Social",
-  },
-];
-
-const providers = [
-  {
-    href: "/providers/eslint",
-    label: "ESLint + Prettier + Stylelint",
-    description: "The most mature linting ecosystem",
-    logo: ESLintLogo,
-  },
-  {
-    href: "/providers/biome",
-    label: "Biome",
-    description: "The modern all-in-one toolchain",
-    logo: BiomeLogo,
-  },
-  {
-    href: "/providers/oxlint",
-    label: "Oxlint + Oxfmt",
-    description: "The fastest linter available",
-    logo: OxlintLogo,
   },
 ];
 
@@ -77,15 +54,15 @@ export const Navbar = () => {
               <NavigationMenuContent>
                 <ul className="grid w-72 gap-1">
                   {providers.map((provider) => (
-                    <li key={provider.href}>
+                    <li key={provider.id}>
                       <NavigationMenuLink
                         render={
                           <Link
                             className="flex items-center gap-3"
-                            href={provider.href}
+                            href={`/providers/${provider.id}`}
                           >
                             <Image
-                              alt={provider.label}
+                              alt={provider.name}
                               className="size-8 rounded-full"
                               height={32}
                               src={provider.logo}
@@ -93,10 +70,10 @@ export const Navbar = () => {
                             />
                             <div className="grid gap-0.5">
                               <span className="font-medium text-sm">
-                                {provider.label}
+                                {provider.name}
                               </span>
                               <span className="text-muted-foreground text-xs">
-                                {provider.description}
+                                {provider.subtitle}
                               </span>
                             </div>
                           </Link>

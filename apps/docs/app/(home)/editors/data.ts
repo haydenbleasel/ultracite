@@ -5,10 +5,10 @@ import {
   type Editor as BaseEditor,
   type EditorCliValue,
 } from "@ultracite/data";
-import cursorLogo from "../components/agents/logos/cursor.svg";
-import vscodeLogo from "../components/agents/logos/vscode.svg";
-import windsurfLogo from "../components/agents/logos/windsurf.svg";
-import zedLogo from "../components/agents/logos/zed.svg";
+import cursorLogo from "@ultracite/data/logos/cursor.svg";
+import vscodeLogo from "@ultracite/data/logos/vscode.svg";
+import windsurfLogo from "@ultracite/data/logos/windsurf.svg";
+import zedLogo from "@ultracite/data/logos/zed.svg";
 
 // Logo mapping
 const logoMap: Record<string, StaticImageData> = {
