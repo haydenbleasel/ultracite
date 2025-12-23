@@ -6,6 +6,7 @@ import { ConnectGitHubButton } from "@/components/dashboard/connect-github-butto
 import { RepoList } from "@/components/dashboard/repo-list";
 import {
   Empty,
+  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -45,46 +46,55 @@ const DashboardPage = async () => {
 
   const hasInstallation = Boolean(organization.githubInstallationId);
 
+  if (!hasInstallation) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <SiGithub className="size-6" />
+          </EmptyMedia>
+          <EmptyTitle>Connect GitHub</EmptyTitle>
+          <EmptyDescription>
+            Install the Ultracite GitHub App to start linting your repositories
+            automatically.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <ConnectGitHubButton hasInstallation={false} />
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
+  if (organization.repos.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No repositories</EmptyTitle>
+          <EmptyDescription>
+            No repositories found. Make sure you have granted access to at least
+            one repository.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <ConnectGitHubButton hasInstallation={hasInstallation} />
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-bold text-3xl tracking-tight">Dashboard</h1>
+          <h1 className="font-semibold text-3xl tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">
             Manage your connected repositories and lint runs.
           </p>
         </div>
         <ConnectGitHubButton hasInstallation={hasInstallation} />
       </div>
-
-      {hasInstallation ? (
-        organization.repos.length === 0 ? (
-          <Empty>
-            <EmptyHeader>
-              <EmptyTitle>No repositories</EmptyTitle>
-              <EmptyDescription>
-                No repositories found. Make sure you have granted access to at
-                least one repository.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : (
-          <RepoList repos={organization.repos} />
-        )
-      ) : (
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <SiGithub className="size-6" />
-            </EmptyMedia>
-            <EmptyTitle>Connect GitHub</EmptyTitle>
-            <EmptyDescription>
-              Install the Ultracite GitHub App to start linting your
-              repositories automatically.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      )}
+      <RepoList repos={organization.repos} />
     </div>
   );
 };
