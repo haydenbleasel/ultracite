@@ -1,6 +1,4 @@
-import Biome from "@ultracite/data/logos/biome.svg";
-import ESLint from "@ultracite/data/logos/eslint.svg";
-import Oxlint from "@ultracite/data/logos/oxlint.svg";
+import { providers as providersData } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import Image from "next/image";
@@ -13,41 +11,60 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const eslintProvider = providersData.find((p) => p.id === "eslint");
+const biomeProvider = providersData.find((p) => p.id === "biome");
+const oxlintProvider = providersData.find((p) => p.id === "oxlint");
+
 export const providers = [
   {
     id: "eslint",
-    title: () => (
-      <span className="flex items-center gap-1">
-        <Image alt="ESLint" className="size-4 rounded-full" src={ESLint} />
-        <span>ESLint, </span>
-        <Image alt="Prettier" className="size-4 rounded-full" src={Prettier} />
-        <span>Prettier and </span>
-        <Image
-          alt="Stylelint"
-          className="size-4 rounded-full"
-          src={Stylelint}
-        />
-        <span>Stylelint</span>
-      </span>
-    ),
+    title: () =>
+      eslintProvider ? (
+        <span className="flex items-center gap-1">
+          <Image
+            alt="ESLint"
+            className="size-4 rounded-full"
+            src={eslintProvider.logo}
+          />
+          <span>ESLint, </span>
+          <Image alt="Prettier" className="size-4 rounded-full" src={Prettier} />
+          <span>Prettier and </span>
+          <Image
+            alt="Stylelint"
+            className="size-4 rounded-full"
+            src={Stylelint}
+          />
+          <span>Stylelint</span>
+        </span>
+      ) : null,
   },
   {
     id: "biome",
-    title: () => (
-      <span className="flex items-center gap-1">
-        <Image alt="Biome" className="size-4 rounded-full" src={Biome} />
-        <span>Biome</span>
-      </span>
-    ),
+    title: () =>
+      biomeProvider ? (
+        <span className="flex items-center gap-1">
+          <Image
+            alt="Biome"
+            className="size-4 rounded-full"
+            src={biomeProvider.logo}
+          />
+          <span>Biome</span>
+        </span>
+      ) : null,
   },
   {
     id: "oxlint",
-    title: () => (
-      <span className="flex items-center gap-1">
-        <Image alt="Oxlint" className="size-4 rounded-full" src={Oxlint} />
-        <span>Oxlint and Oxfmt</span>
-      </span>
-    ),
+    title: () =>
+      oxlintProvider ? (
+        <span className="flex items-center gap-1">
+          <Image
+            alt="Oxlint"
+            className="size-4 rounded-full"
+            src={oxlintProvider.logo}
+          />
+          <span>Oxlint and Oxfmt</span>
+        </span>
+      ) : null,
   },
 ];
 

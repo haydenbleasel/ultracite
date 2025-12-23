@@ -1,11 +1,13 @@
+import { getProviderById } from "@ultracite/data";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import OxlintLogo from "../../components/hero/oxlint.jpg";
 import { Installer } from "../../components/installer";
+
+const provider = getProviderById("oxlint");
 
 const title = "Oxlint & Oxfmt | Ultracite";
 const description =
@@ -77,13 +79,15 @@ const OxlintPage = () => (
   <>
     <div className="grid gap-8 sm:gap-20">
       <div className="grid gap-4">
-        <Image
-          alt="Oxlint"
-          className="size-10 rounded-full"
-          height={40}
-          src={OxlintLogo}
-          width={40}
-        />
+        {provider && (
+          <Image
+            alt={provider.name}
+            className="size-10 rounded-full"
+            height={40}
+            src={provider.logo}
+            width={40}
+          />
+        )}
         <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
           The fastest linter available
         </h1>

@@ -5,6 +5,7 @@ const withMdx = createMDX();
 
 const config: NextConfig = {
   reactStrictMode: true,
+  transpilePackages: ["@ultracite/data"],
 
   images: {
     formats: ["image/avif", "image/webp"],

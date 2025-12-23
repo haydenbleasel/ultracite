@@ -1,13 +1,15 @@
+import { getProviderById } from "@ultracite/data";
+import Prettier from "@ultracite/data/logos/prettier.svg";
+import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
-import ESLintLogo from "../../components/hero/eslint.jpg";
-import PrettierLogo from "../../components/hero/prettier.jpg";
-import StylelintLogo from "../../components/hero/stylelint.jpg";
 import { Installer } from "../../components/installer";
+
+const provider = getProviderById("eslint");
 
 const title = "ESLint, Prettier & Stylelint | Ultracite";
 const description =
@@ -50,25 +52,27 @@ const ESLintPage = () => (
     <div className="grid gap-8 sm:gap-20">
       <div className="grid gap-4">
         <div className="flex items-center gap-2">
-          <Image
-            alt="ESLint"
-            className="size-10 rounded-full"
-            height={40}
-            src={ESLintLogo}
-            width={40}
-          />
+          {provider && (
+            <Image
+              alt="ESLint"
+              className="size-10 rounded-full"
+              height={40}
+              src={provider.logo}
+              width={40}
+            />
+          )}
           <Image
             alt="Prettier"
             className="-ml-3 size-10 rounded-full ring-2 ring-background"
             height={40}
-            src={PrettierLogo}
+            src={Prettier}
             width={40}
           />
           <Image
             alt="Stylelint"
             className="-ml-3 size-10 rounded-full ring-2 ring-background"
             height={40}
-            src={StylelintLogo}
+            src={Stylelint}
             width={40}
           />
         </div>

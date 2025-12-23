@@ -1,6 +1,4 @@
-import Biome from "@ultracite/data/logos/biome.svg";
-import ESLint from "@ultracite/data/logos/eslint.svg";
-import Oxlint from "@ultracite/data/logos/oxlint.svg";
+import { providers } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import Image from "next/image";
@@ -20,18 +18,10 @@ interface HeroProps {
 }
 
 const logos = [
-  {
-    name: "ESLint",
-    src: ESLint,
-  },
-  {
-    name: "Biome",
-    src: Biome,
-  },
-  {
-    name: "Oxlint",
-    src: Oxlint,
-  },
+  ...providers.map((provider) => ({
+    name: provider.name.split(" ")[0],
+    src: provider.logo,
+  })),
   {
     name: "Prettier",
     src: Prettier,

@@ -1,10 +1,4 @@
-import claude from "@ultracite/data/logos/claude.svg";
-import codex from "@ultracite/data/logos/codex.svg";
-import cursor from "@ultracite/data/logos/cursor.svg";
-import gemini from "@ultracite/data/logos/gemini.svg";
-import warp from "@ultracite/data/logos/warp.svg";
-import windsurf from "@ultracite/data/logos/windsurf.svg";
-import zed from "@ultracite/data/logos/zed.svg";
+import { agents, getAgentById } from "@ultracite/data";
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import Image from "next/image";
 import {
@@ -14,36 +8,21 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-const logos = [
-  {
-    name: "Cursor",
-    src: cursor,
-  },
-  {
-    name: "Windsurf",
-    src: windsurf,
-  },
-  {
-    name: "Zed",
-    src: zed,
-  },
-  {
-    name: "Claude Code",
-    src: claude,
-  },
-  {
-    name: "OpenAI Codex",
-    src: codex,
-  },
-  {
-    name: "Gemini CLI",
-    src: gemini,
-  },
-  {
-    name: "Warp",
-    src: warp,
-  },
+const featuredAgentIds = [
+  "cursor",
+  "windsurf",
+  "zed",
+  "claude",
+  "codex",
+  "gemini-cli",
+  "warp",
 ];
+
+const featuredAgents = featuredAgentIds
+  .map((id) => getAgentById(id))
+  .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));
+
+const remainingCount = agents.length - featuredAgents.length;
 
 export const Agents = () => (
   <div className="grid gap-8">
@@ -57,31 +36,32 @@ export const Agents = () => (
       </p>
     </div>
     <div className="mx-auto flex items-center justify-center -space-x-1">
-      {logos.map((logo, index) => (
-        <Tooltip key={logo.name}>
+      {featuredAgents.map((agent, index) => (
+        <Tooltip key={agent.id}>
           <TooltipTrigger delay={0}>
             <Image
-              alt={logo.name}
+              alt={agent.name}
               className={cn(
                 "size-14 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2",
                 index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
               )}
-              key={logo.name}
-              src={logo.src}
+              src={agent.logo}
             />
           </TooltipTrigger>
-          <TooltipContent>{logo.name}</TooltipContent>
+          <TooltipContent>{agent.name}</TooltipContent>
         </Tooltip>
       ))}
       <Tooltip>
         <TooltipTrigger delay={0}>
           <DynamicLink href="/rules">
             <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border bg-secondary ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
-              <span className="text-muted-foreground text-sm">+ 16</span>
+              <span className="text-muted-foreground text-sm">
+                + {remainingCount}
+              </span>
             </div>
           </DynamicLink>
         </TooltipTrigger>
-        <TooltipContent>+ 16 more agents</TooltipContent>
+        <TooltipContent>+ {remainingCount} more agents</TooltipContent>
       </Tooltip>
     </div>
   </div>

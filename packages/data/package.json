@@ -3,44 +3,32 @@
   "description": "Shared data for Ultracite CLI and website",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "files": [
-    "dist",
+    "src",
     "logos"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./agents": {
-      "import": "./dist/agents.js",
-      "types": "./dist/agents.d.ts"
-    },
-    "./editors": {
-      "import": "./dist/editors.js",
-      "types": "./dist/editors.d.ts"
-    },
-    "./providers": {
-      "import": "./dist/providers.js",
-      "types": "./dist/providers.d.ts"
-    },
-    "./options": {
-      "import": "./dist/options.js",
-      "types": "./dist/options.d.ts"
-    },
+    ".": "./src/index.ts",
+    "./agents": "./src/agents.ts",
+    "./editors": "./src/editors.ts",
+    "./providers": "./src/providers.ts",
+    "./options": "./src/options.ts",
     "./logos/*": "./logos/*"
   },
   "author": "Hayden Bleasel <hello@haydenbleasel.com>",
   "license": "MIT",
   "devDependencies": {
-    "tsup": "^8.5.1",
-    "typescript": "^5.8.3"
+    "next": "^16.0.0"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "packageManager": "bun@1.3.4"
 }

@@ -1,3 +1,8 @@
+import type { StaticImageData } from "next/image";
+import biomeLogo from "../logos/biome.svg";
+import eslintLogo from "../logos/eslint.svg";
+import oxlintLogo from "../logos/oxlint.svg";
+
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface Provider {
@@ -15,6 +20,8 @@ export interface Provider {
   features: string[];
   /** Additional tools included with this provider */
   includes?: string[];
+  /** Logo for UI display */
+  logo: StaticImageData;
 }
 
 export const providers: Provider[] = [
@@ -32,6 +39,7 @@ export const providers: Provider[] = [
       "Wide IDE support",
     ],
     includes: ["ESLint", "Prettier", "Stylelint"],
+    logo: eslintLogo,
   },
   {
     id: "biome",
@@ -46,6 +54,7 @@ export const providers: Provider[] = [
       "Zero configuration",
       "Drop-in replacement",
     ],
+    logo: biomeLogo,
   },
   {
     id: "oxlint",
@@ -61,6 +70,7 @@ export const providers: Provider[] = [
       "Oxc ecosystem",
     ],
     includes: ["Oxlint", "Oxfmt"],
+    logo: oxlintLogo,
   },
 ];
 

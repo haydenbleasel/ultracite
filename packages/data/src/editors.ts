@@ -1,3 +1,9 @@
+import type { StaticImageData } from "next/image";
+import cursorLogo from "../logos/cursor.svg";
+import vscodeLogo from "../logos/vscode.svg";
+import windsurfLogo from "../logos/windsurf.svg";
+import zedLogo from "../logos/zed.svg";
+
 export type EditorCliValue = "vscode" | "zed";
 
 export interface Editor {
@@ -17,6 +23,8 @@ export interface Editor {
   cliValue: EditorCliValue;
   /** Key features of the editor */
   features: string[];
+  /** Logo for UI display */
+  logo: StaticImageData;
 }
 
 export const editors: Editor[] = [
@@ -35,6 +43,7 @@ export const editors: Editor[] = [
       "Git integration",
       "IntelliSense",
     ],
+    logo: vscodeLogo,
   },
   {
     id: "cursor",
@@ -51,6 +60,7 @@ export const editors: Editor[] = [
       "Chat interface",
       "Codebase understanding",
     ],
+    logo: cursorLogo,
   },
   {
     id: "windsurf",
@@ -67,6 +77,7 @@ export const editors: Editor[] = [
       "VS Code compatibility",
       "Multi-file editing",
     ],
+    logo: windsurfLogo,
   },
   {
     id: "zed",
@@ -83,6 +94,7 @@ export const editors: Editor[] = [
       "Built-in AI assistant",
       "GPU-accelerated",
     ],
+    logo: zedLogo,
   },
 ];
 

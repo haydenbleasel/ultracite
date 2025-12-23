@@ -1,3 +1,26 @@
+import type { StaticImageData } from "next/image";
+import aiderLogo from "../logos/aider.svg";
+import ampLogo from "../logos/amp.svg";
+import antigravityLogo from "../logos/antigravity.svg";
+import augmentcodeLogo from "../logos/augmentcode.svg";
+import claudeLogo from "../logos/claude.svg";
+import clineLogo from "../logos/cline.svg";
+import codexLogo from "../logos/codex.svg";
+import cursorLogo from "../logos/cursor.svg";
+import droidLogo from "../logos/droid.svg";
+import firebaseStudioLogo from "../logos/firebase-studio.svg";
+import geminiLogo from "../logos/gemini.svg";
+import gooseLogo from "../logos/goose.svg";
+import junieLogo from "../logos/junie.svg";
+import kiloCodeLogo from "../logos/kilo-code.svg";
+import kiroLogo from "../logos/kiro.svg";
+import openHandsLogo from "../logos/open-hands.svg";
+import rooCodeLogo from "../logos/roo-code.svg";
+import vscodeCopilotLogo from "../logos/vscode-copilot.svg";
+import warpLogo from "../logos/warp.svg";
+import windsurfLogo from "../logos/windsurf.svg";
+import zedLogo from "../logos/zed.svg";
+
 export type AgentCategory = "ide" | "cli" | "cloud" | "extension";
 
 export interface AgentConfig {
@@ -26,6 +49,8 @@ export interface Agent {
   features: string[];
   /** CLI configuration */
   config: AgentConfig;
+  /** Logo for UI display */
+  logo: StaticImageData;
 }
 
 export const agents: Agent[] = [
@@ -47,6 +72,7 @@ export const agents: Agent[] = [
     config: {
       appendMode: true,
     },
+    logo: claudeLogo,
   },
   {
     id: "codex",
@@ -66,6 +92,7 @@ export const agents: Agent[] = [
     config: {
       appendMode: true,
     },
+    logo: codexLogo,
   },
   {
     id: "cursor",
@@ -89,6 +116,7 @@ globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphq
 alwaysApply: false
 ---`,
     },
+    logo: cursorLogo,
   },
   {
     id: "windsurf",
@@ -106,6 +134,7 @@ alwaysApply: false
       "Multi-file editing",
     ],
     config: {},
+    logo: windsurfLogo,
   },
   {
     id: "vscode-copilot",
@@ -128,6 +157,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
       appendMode: true,
     },
+    logo: vscodeCopilotLogo,
   },
   {
     id: "zed",
@@ -147,6 +177,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: zedLogo,
   },
   {
     id: "kiro",
@@ -164,6 +195,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       "Production-ready output",
     ],
     config: {},
+    logo: kiroLogo,
   },
   {
     id: "cline",
@@ -183,6 +215,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: clineLogo,
   },
   {
     id: "amp",
@@ -202,6 +235,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: ampLogo,
   },
   {
     id: "aider",
@@ -219,6 +253,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       "Pair programming",
     ],
     config: {},
+    logo: aiderLogo,
   },
   {
     id: "firebase-studio",
@@ -238,6 +273,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: firebaseStudioLogo,
   },
   {
     id: "open-hands",
@@ -257,6 +293,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: openHandsLogo,
   },
   {
     id: "gemini-cli",
@@ -276,6 +313,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: geminiLogo,
   },
   {
     id: "junie",
@@ -295,6 +333,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: junieLogo,
   },
   {
     id: "augmentcode",
@@ -312,6 +351,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       "Security-first",
     ],
     config: {},
+    logo: augmentcodeLogo,
   },
   {
     id: "kilo-code",
@@ -329,6 +369,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       "Privacy focused",
     ],
     config: {},
+    logo: kiloCodeLogo,
   },
   {
     id: "goose",
@@ -348,6 +389,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: gooseLogo,
   },
   {
     id: "roo-code",
@@ -367,6 +409,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: rooCodeLogo,
   },
   {
     id: "warp",
@@ -386,6 +429,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: warpLogo,
   },
   {
     id: "droid",
@@ -405,6 +449,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     config: {
       appendMode: true,
     },
+    logo: droidLogo,
   },
   {
     id: "antigravity",
@@ -422,6 +467,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       "Full-stack support",
     ],
     config: {},
+    logo: antigravityLogo,
   },
 ];
 
