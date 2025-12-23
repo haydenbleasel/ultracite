@@ -8,7 +8,11 @@ import { fixLint } from "./steps/fix-lint";
 import { getGitHubToken } from "./steps/get-github-token";
 import { installDependencies } from "./steps/install-dependencies";
 import { stopSandbox } from "./steps/stop-sandbox";
-import type { LintRepoParams, LintRepoResult, LintStepResult } from "./steps/types";
+import type {
+  LintRepoParams,
+  LintRepoResult,
+  LintStepResult,
+} from "./steps/types";
 import { updateLintRun } from "./steps/update-lint-run";
 
 export type { LintRepoParams, LintRepoResult } from "./steps/types";
@@ -42,47 +46,47 @@ export async function lintRepoWorkflow(
     await installDependencies(sandbox);
 
     // Step 5: Run lint check
-    const checkResult = await checkLint(sandbox);
+    const issue = await checkLint(sandbox);
 
-    if (!checkResult.hasIssues || !checkResult.issue) {
-      result = { issuesFound: 0, prCreated: false };
+    if (!issue) {
+      return {
+        repo: repoFullName,
+        status: "success",
+      };
+    }
+
+    // Step 6: Fix lint issues
+    await fixLint(sandbox);
+
+    // Step 7: Check if there are changes
+    const hasChanges = await checkChanges(sandbox);
+
+    if (hasChanges) {
+      // Step 8: Create branch and push
+      const branchName = await createBranchAndPush(sandbox, issue.rule);
+
+      // Step 9: Create pull request
+      const prResult = await createPullRequest(
+        installationId,
+        repoFullName,
+        defaultBranch,
+        branchName,
+        issue
+      );
+
+      result = {
+        issuesFound: 1,
+        issueFixed: issue.rule,
+        prCreated: true,
+        prNumber: prResult.prNumber,
+        prUrl: prResult.prUrl,
+      };
     } else {
-      // Step 6: Fix lint issues
-      await fixLint(sandbox);
-
-      // Step 7: Check if there are changes
-      const hasChanges = await checkChanges(sandbox);
-
-      if (!hasChanges) {
-        result = {
-          issuesFound: 1,
-          prCreated: false,
-          issueFixed: checkResult.issue.rule,
-        };
-      } else {
-        // Step 8: Create branch and push
-        const branchName = await createBranchAndPush(
-          sandbox,
-          checkResult.issue.rule
-        );
-
-        // Step 9: Create pull request
-        const prResult = await createPullRequest(
-          installationId,
-          repoFullName,
-          defaultBranch,
-          branchName,
-          checkResult.issue
-        );
-
-        result = {
-          issuesFound: 1,
-          issueFixed: checkResult.issue.rule,
-          prCreated: true,
-          prNumber: prResult.prNumber,
-          prUrl: prResult.prUrl,
-        };
-      }
+      result = {
+        issuesFound: 1,
+        prCreated: false,
+        issueFixed: issue.rule,
+      };
     }
   } catch (error) {
     const errorMessage =

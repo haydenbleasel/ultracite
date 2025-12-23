@@ -3,11 +3,6 @@ import type { LintIssue } from "./types";
 
 const BIOME_OUTPUT_PATTERN = /^(.+?):(\d+):(\d+)\s+([\w/]+)/m;
 
-export interface CheckLintResult {
-  hasIssues: boolean;
-  issue: LintIssue | null;
-}
-
 function parseFirstIssue(output: string): LintIssue | null {
   const match = output.match(BIOME_OUTPUT_PATTERN);
   if (match) {
@@ -19,22 +14,18 @@ function parseFirstIssue(output: string): LintIssue | null {
   return null;
 }
 
-export async function checkLint(sandbox: Sandbox): Promise<CheckLintResult> {
+export async function checkLint(sandbox: Sandbox): Promise<LintIssue | null> {
   "use step";
 
-  const checkResult = await sandbox.runCommand("npx", [
-    "ultracite",
-    "check",
-    "--diagnostic-level=error",
-  ]);
-
+  const checkResult = await sandbox.runCommand("npx", ["ultracite", "check"]);
   const checkOutput = await checkResult.output("both");
   const hasIssues = checkResult.exitCode !== 0;
 
   if (!hasIssues) {
-    return { hasIssues: false, issue: null };
+    return null;
   }
 
   const issue = parseFirstIssue(checkOutput);
-  return { hasIssues: Boolean(issue), issue };
+
+  return issue;
 }
