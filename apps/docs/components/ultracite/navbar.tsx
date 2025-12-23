@@ -89,7 +89,7 @@ export const Navbar = () => {
                 Editors
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-72 gap-1">
+                <ul className="grid grid-cols-2 gap-1 p-2">
                   {editors.map((editor) => (
                     <li key={editor.id}>
                       <NavigationMenuLink

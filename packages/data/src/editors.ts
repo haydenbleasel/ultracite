@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
+import kiroLogo from "../logos/kiro.svg";
 import vscodeLogo from "../logos/vscode.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
@@ -118,6 +119,26 @@ alwaysApply: false
       "Full-stack support",
     ],
     logo: antigravityLogo,
+  },
+  {
+    id: "kiro",
+    name: "Kiro",
+    subtitle: "AWS's spec-driven IDE",
+    description:
+      "AWS's spec-driven AI development environment for building production-ready applications.",
+    configPath: ".vscode/settings.json",
+    website: "https://kiro.dev",
+    cliValue: "vscode",
+    features: [
+      "Spec-driven development",
+      "AWS integration",
+      "Automated testing",
+      "Production-ready output",
+    ],
+    logo: kiroLogo,
+    rules: {
+      path: ".kiro/steering/ultracite.md",
+    },
   },
   {
     id: "zed",

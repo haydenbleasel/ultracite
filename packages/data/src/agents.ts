@@ -16,7 +16,6 @@ import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
-import kiroLogo from "../logos/kiro.svg";
 import openHandsLogo from "../logos/open-hands.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import qwenLogo from "../logos/qwen.svg";
@@ -139,24 +138,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     logo: vscodeCopilotLogo,
-  },
-  {
-    id: "kiro",
-    name: "Kiro",
-    subtitle: "AWS's spec-driven IDE",
-    description:
-      "AWS's spec-driven AI development environment for building production-ready applications.",
-    configPath: ".kiro/steering/ultracite.md",
-    website: "https://kiro.dev",
-    category: "ide",
-    features: [
-      "Spec-driven development",
-      "AWS integration",
-      "Automated testing",
-      "Production-ready output",
-    ],
-    config: {},
-    logo: kiroLogo,
   },
   {
     id: "cline",
