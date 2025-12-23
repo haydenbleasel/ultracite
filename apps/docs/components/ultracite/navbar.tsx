@@ -1,6 +1,6 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+// import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { agents, editors, providers } from "@ultracite/data";
 import Image from "next/image";
 import Link from "next/link";
@@ -175,7 +175,7 @@ export const Navbar = () => {
             />
           ))}
         </div>
-        <SignedOut>
+        {/* <SignedOut>
           <SignInButton>
             <Button
               nativeButton={false}
@@ -189,7 +189,7 @@ export const Navbar = () => {
             render={<Link href="/dashboard">Dashboard</Link>}
           />
           <UserButton />
-        </SignedIn>
+        </SignedIn> */}
       </div>
     </div>
   );
