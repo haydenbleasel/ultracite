@@ -1,75 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { start } from "workflow/api";
 import { database } from "@/lib/database";
-import type { Organization, Repo } from "@/lib/database/generated/client";
 import { env } from "@/lib/env";
-import { runLintAndCreatePR } from "@/lib/lint/runner";
-
-export const maxDuration = 300;
-
-interface LintResult {
-  repo: string;
-  status: "success" | "error";
-  prUrl?: string;
-  error?: string;
-}
-
-const processRepo = async (
-  org: Organization & { githubInstallationId: number },
-  repo: Repo
-): Promise<LintResult> => {
-  const lintRun = await database.lintRun.create({
-    data: {
-      organizationId: org.id,
-      repoId: repo.id,
-      status: "RUNNING",
-      startedAt: new Date(),
-    },
-  });
-
-  try {
-    const result = await runLintAndCreatePR({
-      installationId: org.githubInstallationId,
-      repoFullName: repo.fullName,
-      defaultBranch: repo.defaultBranch,
-    });
-
-    await database.lintRun.update({
-      where: { id: lintRun.id },
-      data: {
-        status: result.prCreated ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
-        completedAt: new Date(),
-        issuesFound: result.issuesFound,
-        issueFixed: result.issueFixed,
-        prNumber: result.prNumber,
-        prUrl: result.prUrl,
-      },
-    });
-
-    return {
-      repo: repo.fullName,
-      status: "success",
-      prUrl: result.prUrl,
-    };
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-
-    await database.lintRun.update({
-      where: { id: lintRun.id },
-      data: {
-        status: "FAILED",
-        completedAt: new Date(),
-        errorMessage,
-      },
-    });
-
-    return {
-      repo: repo.fullName,
-      status: "error",
-      error: errorMessage,
-    };
-  }
-};
+import { lintRepoWorkflow } from "@/workflows/lint-repo";
 
 export const GET = async (request: NextRequest) => {
   const authHeader = request.headers.get("authorization");
@@ -88,7 +21,7 @@ export const GET = async (request: NextRequest) => {
     },
   });
 
-  const results: LintResult[] = [];
+  const workflowsStarted: string[] = [];
 
   for (const org of organizations) {
     if (!org.githubInstallationId) {
@@ -96,13 +29,23 @@ export const GET = async (request: NextRequest) => {
     }
 
     for (const repo of org.repos) {
-      const result = await processRepo(
-        { ...org, githubInstallationId: org.githubInstallationId },
-        repo
-      );
-      results.push(result);
+      // Start a durable workflow for each repo
+      await start(lintRepoWorkflow, [
+        {
+          organizationId: org.id,
+          repoId: repo.id,
+          repoFullName: repo.fullName,
+          defaultBranch: repo.defaultBranch,
+          installationId: org.githubInstallationId,
+        },
+      ]);
+
+      workflowsStarted.push(repo.fullName);
     }
   }
 
-  return NextResponse.json({ results });
+  return NextResponse.json({
+    message: `Started ${workflowsStarted.length} lint workflows`,
+    repos: workflowsStarted,
+  });
 };
