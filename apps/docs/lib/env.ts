@@ -21,6 +21,9 @@ export const env = createEnv({
     // Vercel Sandbox (optional - uses OIDC on Vercel)
     VERCEL_TEAM_ID: z.string().optional(),
     VERCEL_PROJECT_ID: z.string().optional(),
+
+    // Anthropic
+    ANTHROPIC_API_KEY: z.string(),
   },
   client: {
     // Clerk
@@ -51,5 +54,6 @@ export const env = createEnv({
     NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   },
 });

@@ -70,19 +70,7 @@ export async function reviewPRWorkflow(
       await installClaudeCode(sandbox);
 
       // Step 8: Use Claude Code to fix remaining issues iteratively
-      await runClaudeCode(
-        sandbox,
-        `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
-
-After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
-
-Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
-
-Important:
-- Only fix real lint errors shown in the output
-- Don't modify files unnecessarily
-- Preserve the existing code style`
-      );
+      await runClaudeCode(sandbox);
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandbox)) {

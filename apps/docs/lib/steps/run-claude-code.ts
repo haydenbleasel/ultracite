@@ -5,9 +5,19 @@ export interface ClaudeCodeResult {
   success: boolean;
 }
 
+const prompt = `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
+
+After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
+
+Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
+
+Important:
+- Only fix real lint errors shown in the output
+- Don't modify files unnecessarily
+- Preserve the existing code style`;
+
 export async function runClaudeCode(
-  sandbox: Sandbox,
-  prompt: string
+  sandbox: Sandbox
 ): Promise<ClaudeCodeResult> {
   "use step";
 
@@ -24,6 +34,11 @@ export async function runClaudeCode(
   const result = await sandbox.runCommand("sh", [
     "-c",
     `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --model claude-haiku-4-5`,
+    "--dangerously-skip-permissions",
+    "--fallback-model",
+    "claude-sonnet-4-5",
+    "--max-turns",
+    "30",
   ]);
 
   const output = await result.output("both");
