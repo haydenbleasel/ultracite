@@ -82,7 +82,6 @@ export async function lintRepoWorkflow(
 
       const branchName = await createBranchAndPush(
         sandboxId,
-        "auto-fix",
         "Auto-fix lint issues",
         repoFullName,
         token
@@ -118,7 +117,6 @@ export async function lintRepoWorkflow(
 
         const branchName = await createBranchAndPush(
           sandboxId,
-          "claude-fix",
           "Fix lint issue with Claude Code",
           repoFullName,
           token

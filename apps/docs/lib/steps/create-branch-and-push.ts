@@ -1,8 +1,8 @@
 import { Sandbox } from "@vercel/sandbox";
+import { nanoid } from "nanoid";
 
 export async function createBranchAndPush(
   sandboxId: string,
-  branchSuffix: string,
   commitMessage: string,
   repoFullName: string,
   token: string
@@ -15,7 +15,7 @@ export async function createBranchAndPush(
   const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
   await sandbox.runCommand("git", ["remote", "set-url", "origin", authenticatedUrl]);
 
-  const branchName = `ultracite/fix-${branchSuffix.replace(/\//g, "-")}-${Date.now()}`;
+  const branchName = `ultracite/fix-${nanoid()}`;
 
   const checkoutResult = await sandbox.runCommand("git", [
     "checkout",
