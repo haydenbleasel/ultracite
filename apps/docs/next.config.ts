@@ -5,7 +5,6 @@ import { withWorkflow } from "workflow/next";
 const withMdx = createMDX();
 
 const config: NextConfig = {
-  reactStrictMode: true,
   transpilePackages: ["@ultracite/data"],
 
   images: {
