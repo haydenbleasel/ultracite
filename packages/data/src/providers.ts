@@ -22,6 +22,8 @@ export interface Provider {
   includes?: string[];
   /** Logo for UI display */
   logo: StaticImageData;
+  /** Videos for the provider */
+  videos?: string[];
 }
 
 export const providers: Provider[] = [
@@ -55,6 +57,10 @@ export const providers: Provider[] = [
       "Drop-in replacement",
     ],
     logo: biomeLogo,
+    videos: [
+      "https://www.youtube.com/watch?v=lEkXbneUnWg",
+      "https://www.youtube.com/watch?v=b_F4LaycQcE",
+    ],
   },
   {
     id: "oxlint",

@@ -1,6 +1,10 @@
-import { Video } from "./video";
+import { Video } from "../../components/video";
 
-export const Videos = () => (
+interface VideosProps {
+  data: string[];
+}
+
+export const Videos = ({ data }: VideosProps) => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
@@ -12,8 +16,9 @@ export const Videos = () => (
       </p>
     </div>
     <div className="grid gap-8 sm:grid-cols-2">
-      <Video video="https://www.youtube.com/watch?v=lEkXbneUnWg" />
-      <Video video="https://www.youtube.com/watch?v=b_F4LaycQcE" />
+      {data.map((video) => (
+        <Video key={video} video={video} />
+      ))}
     </div>
   </div>
 );

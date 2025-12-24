@@ -54,30 +54,28 @@ export const Navbar = () => {
                 <ul className="grid w-72 gap-1">
                   {providers.map((provider) => (
                     <li key={provider.id}>
-                      <NavigationMenuLink
-                        render={
-                          <Link
-                            className="flex items-center gap-3"
-                            href={`/providers/${provider.id}`}
-                          >
-                            <Image
-                              alt={provider.name}
-                              className="size-8 rounded-full"
-                              height={32}
-                              src={provider.logo}
-                              width={32}
-                            />
-                            <div className="grid gap-0.5">
-                              <span className="font-medium text-sm">
-                                {provider.name}
-                              </span>
-                              <span className="text-muted-foreground text-xs">
-                                {provider.subtitle}
-                              </span>
-                            </div>
-                          </Link>
-                        }
-                      />
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="flex items-center gap-3"
+                          href={`/providers/${provider.id}`}
+                        >
+                          <Image
+                            alt={provider.name}
+                            className="size-8 rounded-full"
+                            height={32}
+                            src={provider.logo}
+                            width={32}
+                          />
+                          <div className="grid gap-0.5">
+                            <span className="font-medium text-sm">
+                              {provider.name}
+                            </span>
+                            <span className="text-muted-foreground text-xs">
+                              {provider.subtitle}
+                            </span>
+                          </div>
+                        </Link>
+                      </NavigationMenuLink>
                     </li>
                   ))}
                 </ul>
@@ -90,33 +88,31 @@ export const Navbar = () => {
                 Editors
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid grid-cols-2 gap-1 p-2">
+                <ul className="grid w-lg grid-cols-2 gap-1 p-2">
                   {editors.map((editor) => (
                     <li key={editor.id}>
-                      <NavigationMenuLink
-                        render={
-                          <Link
-                            className="flex items-center gap-3"
-                            href={`/editors/${editor.id}`}
-                          >
-                            <Image
-                              alt={editor.name}
-                              className="size-8 rounded-full"
-                              height={32}
-                              src={editor.logo}
-                              width={32}
-                            />
-                            <div className="grid gap-0.5">
-                              <span className="font-medium text-sm">
-                                {editor.name}
-                              </span>
-                              <span className="text-muted-foreground text-xs">
-                                {editor.subtitle}
-                              </span>
-                            </div>
-                          </Link>
-                        }
-                      />
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="flex items-center gap-3"
+                          href={`/editors/${editor.id}`}
+                        >
+                          <Image
+                            alt={editor.name}
+                            className="size-8 rounded-full"
+                            height={32}
+                            src={editor.logo}
+                            width={32}
+                          />
+                          <div className="grid gap-0.5">
+                            <span className="font-medium text-sm">
+                              {editor.name}
+                            </span>
+                            <span className="text-muted-foreground text-xs">
+                              {editor.subtitle}
+                            </span>
+                          </div>
+                        </Link>
+                      </NavigationMenuLink>
                     </li>
                   ))}
                 </ul>
@@ -132,26 +128,24 @@ export const Navbar = () => {
                 </span>
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid grid-cols-4 gap-1 p-2">
+                <ul className="grid w-2xl grid-cols-4 gap-1 p-2">
                   {agents.map((agent) => (
                     <li key={agent.id}>
-                      <NavigationMenuLink
-                        render={
-                          <Link
-                            className="flex items-center gap-3"
-                            href={`/agents/${agent.id}`}
-                          >
-                            <Image
-                              alt={agent.name}
-                              className="size-5 rounded-full"
-                              height={20}
-                              src={agent.logo}
-                              width={20}
-                            />
-                            {agent.name}
-                          </Link>
-                        }
-                      />
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="flex items-center gap-3"
+                          href={`/agents/${agent.id}`}
+                        >
+                          <Image
+                            alt={agent.name}
+                            className="size-5 rounded-full"
+                            height={20}
+                            src={agent.logo}
+                            width={20}
+                          />
+                          {agent.name}
+                        </Link>
+                      </NavigationMenuLink>
                     </li>
                   ))}
                 </ul>
@@ -164,31 +158,27 @@ export const Navbar = () => {
         <div className="flex items-center gap-px">
           {links.map((link) => (
             <Button
-              key={link.href}
               asChild
+              key={link.href}
               variant={pathname === link.href ? "secondary" : "ghost"}
             >
               <Link href={link.href} key={link.href}>
-                  {link.label}
-                </Link>
-              </Button>
+                {link.label}
+              </Link>
+            </Button>
           ))}
         </div>
         <SignedOut>
           <SignInButton>
-            <Button
-              asChild
-            >
+            <Button asChild>
               <Link href="/sign-in">Sign in</Link>
-              </Button>
+            </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <Button
-            asChild
-          >
+          <Button asChild>
             <Link href="/dashboard">Dashboard</Link>
-            </Button>
+          </Button>
           <UserButton />
         </SignedIn>
       </div>

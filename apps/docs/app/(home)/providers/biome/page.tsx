@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Installer } from "../../components/installer";
+import { Videos } from "../components/videos";
 
 const provider = getProviderById("biome");
 
@@ -96,12 +97,7 @@ const BiomePage = () => (
         </p>
         <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
           <Installer command="npx ultracite@latest init --linters biome" />
-          <Button
-            className="px-4"
-            asChild
-            size="lg"
-            variant="link"
-          >
+          <Button asChild className="px-4" size="lg" variant="link">
             <Link href="/docs">Read the docs</Link>
           </Button>
         </div>
@@ -225,6 +221,8 @@ const BiomePage = () => (
             </p>
           </div>
         </section>
+
+        {provider?.videos && <Videos data={provider.videos} />}
 
         <section className="grid gap-8">
           <div className="grid gap-4">

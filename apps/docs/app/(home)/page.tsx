@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Agents } from "./components/agents";
+import { Cloud } from "./components/cloud";
 import { CallToAction } from "./components/cta";
 import { Demo } from "./components/demo";
 import { Footer } from "./components/footer";
@@ -7,7 +8,6 @@ import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
 import { Logos } from "./components/logos";
 import { Social } from "./components/social";
-import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
 const title =
@@ -29,7 +29,7 @@ const Home = () => (
     <ZeroConfig />
     <IDE />
     <Agents />
-    <Videos />
+    <Cloud />
     <Social />
     <CallToAction />
     <Footer />
