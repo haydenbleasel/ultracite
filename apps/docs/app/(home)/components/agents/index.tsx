@@ -37,8 +37,8 @@ export const Agents = () => (
     </div>
     <div className="mx-auto flex items-center justify-center -space-x-1">
       {featuredAgents.map((agent, index) => (
-        <Tooltip key={agent.id}>
-          <TooltipTrigger delay={0}>
+        <Tooltip delayDuration={0} key={agent.id}>
+          <TooltipTrigger>
             <Image
               alt={agent.name}
               className={cn(
@@ -51,8 +51,8 @@ export const Agents = () => (
           <TooltipContent>{agent.name}</TooltipContent>
         </Tooltip>
       ))}
-      <Tooltip>
-        <TooltipTrigger delay={0}>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger>
           <DynamicLink href="/rules">
             <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border bg-secondary ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
               <span className="text-muted-foreground text-sm">
