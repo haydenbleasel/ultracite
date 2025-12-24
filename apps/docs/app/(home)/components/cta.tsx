@@ -1,5 +1,3 @@
-"use client";
-
 import { Installer } from "./installer";
 
 export const CallToAction = () => (

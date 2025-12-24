@@ -98,11 +98,12 @@ const OxlintPage = () => (
           <Installer command="npx ultracite@latest init --linters oxlint" />
           <Button
             className="px-4"
-            nativeButton={false}
-            render={<Link href="/docs">Read the docs</Link>}
+            asChild
             size="lg"
             variant="link"
-          />
+          >
+            <Link href="/docs">Read the docs</Link>
+          </Button>
         </div>
       </div>
 

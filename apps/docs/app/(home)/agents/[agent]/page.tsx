@@ -65,19 +65,18 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
             />
             <Button
               className="px-4"
-              nativeButton={false}
-              render={
-                <a
-                  href={agent.website}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Visit {agent.name}
-                </a>
-              }
+              asChild
               size="lg"
               variant="link"
-            />
+            >
+              <a
+                href={agent.website}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Visit {agent.name}
+              </a>
+            </Button>
           </div>
         </div>
 
@@ -244,10 +243,11 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
 
             <Button
               className="w-fit"
-              nativeButton={false}
-              render={<Link href="/docs">View all agents</Link>}
+              asChild
               variant="outline"
-            />
+            >
+              <Link href="/docs">View all agents</Link>
+            </Button>
           </section>
         </div>
       </div>

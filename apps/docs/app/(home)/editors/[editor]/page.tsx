@@ -65,19 +65,18 @@ const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
             />
             <Button
               className="px-4"
-              nativeButton={false}
-              render={
-                <a
+              asChild
+              size="lg"
+              variant="link"
+            >
+              <a
                   href={editor.website}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   Visit {editor.name}
                 </a>
-              }
-              size="lg"
-              variant="link"
-            />
+                </Button>
           </div>
         </div>
 

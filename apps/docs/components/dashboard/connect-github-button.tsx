@@ -1,5 +1,3 @@
-"use client";
-
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,14 +13,13 @@ export const ConnectGitHubButton = ({
 
   return (
     <Button
-      nativeButton={false}
-      render={
-        <Link href={installUrl}>
+      asChild
+      variant={hasInstallation ? "secondary" : "default"}
+    >
+      <Link href={installUrl}>
           <SiGithub className="size-4" />
           {hasInstallation ? "Manage GitHub" : "Connect GitHub"}
         </Link>
-      }
-      variant={hasInstallation ? "secondary" : "default"}
-    />
+        </Button>
   );
 };

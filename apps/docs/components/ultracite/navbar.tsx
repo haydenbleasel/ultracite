@@ -165,29 +165,30 @@ export const Navbar = () => {
           {links.map((link) => (
             <Button
               key={link.href}
-              nativeButton={false}
-              render={
-                <Link href={link.href} key={link.href}>
+              asChild
+              variant={pathname === link.href ? "secondary" : "ghost"}
+            >
+              <Link href={link.href} key={link.href}>
                   {link.label}
                 </Link>
-              }
-              variant={pathname === link.href ? "secondary" : "ghost"}
-            />
+              </Button>
           ))}
         </div>
         <SignedOut>
           <SignInButton>
             <Button
-              nativeButton={false}
-              render={<Link href="/sign-in">Sign in</Link>}
-            />
+              asChild
+            >
+              <Link href="/sign-in">Sign in</Link>
+              </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
           <Button
-            nativeButton={false}
-            render={<Link href="/dashboard">Dashboard</Link>}
-          />
+            asChild
+          >
+            <Link href="/dashboard">Dashboard</Link>
+            </Button>
           <UserButton />
         </SignedIn>
       </div>

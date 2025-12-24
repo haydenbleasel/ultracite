@@ -22,9 +22,10 @@ export const Social = () => (
       ]}
     />
     <Button
-      nativeButton={false}
-      render={<Link href="/social">See all tweets</Link>}
+      asChild
       variant="link"
-    />
+    >
+      <Link href="/social">See all tweets</Link>
+    </Button>
   </div>
 );

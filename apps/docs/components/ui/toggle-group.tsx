@@ -1,9 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
 import { type VariantProps } from "class-variance-authority"
+import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 import { toggleVariants } from "@/components/ui/toggle"
@@ -28,13 +27,13 @@ function ToggleGroup({
   orientation = "horizontal",
   children,
   ...props
-}: ToggleGroupPrimitive.Props &
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
   VariantProps<typeof toggleVariants> & {
     spacing?: number
     orientation?: "horizontal" | "vertical"
   }) {
   return (
-    <ToggleGroupPrimitive
+    <ToggleGroupPrimitive.Root
       data-slot="toggle-group"
       data-variant={variant}
       data-size={size}
@@ -52,7 +51,7 @@ function ToggleGroup({
       >
         {children}
       </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive>
+    </ToggleGroupPrimitive.Root>
   )
 }
 
@@ -62,11 +61,12 @@ function ToggleGroupItem({
   variant = "default",
   size = "default",
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
+}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
+  VariantProps<typeof toggleVariants>) {
   const context = React.useContext(ToggleGroupContext)
 
   return (
-    <TogglePrimitive
+    <ToggleGroupPrimitive.Item
       data-slot="toggle-group-item"
       data-variant={context.variant || variant}
       data-size={context.size || size}
@@ -82,7 +82,7 @@ function ToggleGroupItem({
       {...props}
     >
       {children}
-    </TogglePrimitive>
+    </ToggleGroupPrimitive.Item>
   )
 }
 

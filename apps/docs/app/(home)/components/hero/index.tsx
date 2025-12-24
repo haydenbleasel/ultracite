@@ -1,5 +1,3 @@
-"use client";
-
 import { providers } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
@@ -64,11 +62,12 @@ export const Hero = ({ description, children }: HeroProps) => (
         <Installer command="npx ultracite@latest init" />
         <Button
           className="px-4"
-          nativeButton={false}
-          render={<Link href="/docs">Read the docs</Link>}
+          asChild
           size="lg"
           variant="link"
-        />
+        >
+          <Link href="/docs">Read the docs</Link>
+        </Button>
       </div>
     </div>
     {children}
