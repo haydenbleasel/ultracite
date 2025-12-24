@@ -9,13 +9,13 @@ import {
 import { cn } from "@/lib/utils";
 
 const featuredAgentIds = [
-  "cursor",
-  "windsurf",
-  "zed",
   "claude",
   "codex",
-  "gemini-cli",
+  "gemini",
   "warp",
+  "opencode",
+  "qwen",
+  "copilot",
 ];
 
 const featuredAgents = featuredAgentIds

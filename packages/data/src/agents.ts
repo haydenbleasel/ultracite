@@ -6,7 +6,7 @@ import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
 import codexLogo from "../logos/codex.svg";
-import vscodeCopilotLogo from "../logos/copilot.svg";
+import copilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
@@ -136,7 +136,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
       appendMode: true,
     },
-    logo: vscodeCopilotLogo,
+    logo: copilotLogo,
   },
   {
     id: "cline",
@@ -237,7 +237,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     logo: openHandsLogo,
   },
   {
-    id: "gemini-cli",
+    id: "gemini",
     name: "Gemini",
     subtitle: "Google's terminal AI",
     description:
