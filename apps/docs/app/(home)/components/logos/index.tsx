@@ -81,10 +81,10 @@ const logos = [
 export const Logos = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Trusted by top companies
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         And used by{" "}
         <a
           className="underline"
@@ -100,7 +100,7 @@ export const Logos = () => (
     <div className="grid grid-cols-3 divide-x divide-y border-t border-l lg:grid-cols-5">
       {logos.map((logo) => (
         <div
-          className="flex aspect-video w-full items-center justify-center p-12 last:border-r last:border-b"
+          className="flex aspect-video w-full items-center justify-center p-4 last:border-r last:border-b sm:p-8 md:p-12 lg:p-8 xl:p-12"
           key={logo.name}
         >
           <Image

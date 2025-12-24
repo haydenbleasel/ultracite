@@ -111,16 +111,16 @@ export const ZeroConfig = () => {
   return (
     <div className="grid gap-8">
       <div className="mx-auto grid max-w-xl gap-4 text-center">
-        <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+        <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
           Zero-config by design
         </h2>
-        <p className="text-balance text-lg text-muted-foreground tracking-tight">
+        <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
           Hundreds of rules for your framework to optimize your JavaScript /
           TypeScript code, while still allowing you to customize when needed.
         </p>
       </div>
 
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
         <span className="text-muted-foreground text-sm">I'm using</span>
         <ProviderSelector onValueChange={setProvider} value={provider} />
         <span className="text-muted-foreground text-sm">on my</span>

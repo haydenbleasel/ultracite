@@ -5,10 +5,10 @@ import { Tweets } from "./tweets";
 export const Social = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         What the community is saying
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Here's what some of the most in the most forward-thinking developers in
         the React ecosystem have to say about Ultracite.
       </p>

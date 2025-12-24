@@ -27,10 +27,10 @@ const remainingCount = agents.length - featuredAgents.length;
 export const Agents = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Works with all your favourite agents
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Ultracite can generate rules files for all these popular IDEs and
         agents, so you can get the most of out of your AI integrations.
       </p>

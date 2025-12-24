@@ -7,10 +7,10 @@ import { Sidebar } from "./sidebar";
 export const IDE = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Designed for humans and AI
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Ensure consistent code style and quality across all team members and AI
         models, eliminating debates over formatting and reducing code review
         friction.

@@ -3,10 +3,10 @@ import { Installer } from "./installer";
 export const CallToAction = () => (
   <div className="grid items-center gap-8 sm:p-16 md:p-24">
     <div className="flex flex-col items-center justify-center gap-2 text-center">
-      <h2 className="text-balance font-medium text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-medium text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Install in seconds. Run in milliseconds.
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Install Ultracite and start shipping code faster in seconds.
       </p>
     </div>

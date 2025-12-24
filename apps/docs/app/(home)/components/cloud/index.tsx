@@ -85,10 +85,10 @@ export const Cloud = () => (
       >
         Ultracite Cloud
       </Badge>
-      <h2 className="text-balance font-semibold text-3xl tracking-tighter md:text-4xl">
+      <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Automated lint fixes, powered by AI
       </h2>
-      <p className="text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Ultracite Cloud monitors your repositories and pull requests,
         automatically fixing lint issues and creating PRs. When auto-fix isn't
         enough, AI steps in to resolve the trickier problems.
