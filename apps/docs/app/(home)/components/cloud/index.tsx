@@ -23,7 +23,7 @@ const GitHubComment = () => (
         <div className="flex items-center gap-2 rounded-t-md border border-b-0 bg-foreground/5 px-4 py-2 backdrop-blur-sm">
           <span className="font-semibold">ultracite</span>
           <span className="rounded-full border px-1.5 py-px text-xs">bot</span>
-          <span className="text-muted-foreground">commented just now</span>
+          <span className="text-foreground/50">commented just now</span>
           <Badge className="ml-auto" variant="outline">
             Contributor
           </Badge>
@@ -88,7 +88,7 @@ export const Cloud = () => (
       <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Automated lint fixes, powered by AI
       </h2>
-      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
+      <p className="text-balance text-foreground/50 tracking-tight sm:text-lg">
         Ultracite Cloud monitors your repositories and pull requests,
         automatically fixing lint issues and creating PRs. When auto-fix isn't
         enough, AI steps in to resolve the trickier problems.
