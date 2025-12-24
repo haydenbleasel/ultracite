@@ -1,4 +1,4 @@
-import { agents } from "@ultracite/data";
+import { agents } from "@ultracite/data/agents";
 import type { options } from "./options";
 
 export interface EditorRuleConfig {

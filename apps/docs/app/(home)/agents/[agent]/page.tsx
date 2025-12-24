@@ -1,4 +1,4 @@
-import { agents, categoryLabels, getAgentById } from "@ultracite/data";
+import { agents, categoryLabels, getAgentById } from "@ultracite/data/agents";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

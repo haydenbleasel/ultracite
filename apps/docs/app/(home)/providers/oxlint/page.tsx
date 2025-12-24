@@ -1,4 +1,4 @@
-import { getProviderById } from "@ultracite/data";
+import { getProviderById } from "@ultracite/data/providers";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

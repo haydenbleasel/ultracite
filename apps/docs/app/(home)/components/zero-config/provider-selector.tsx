@@ -1,6 +1,6 @@
-import { providers as providersData } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
+import { providers as providersData } from "@ultracite/data/providers";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import {

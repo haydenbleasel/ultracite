@@ -1,6 +1,6 @@
-import { getProviderById } from "@ultracite/data";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
+import { getProviderById } from "@ultracite/data/providers";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

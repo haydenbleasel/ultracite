@@ -1,4 +1,4 @@
-import { editors, getEditorById } from "@ultracite/data";
+import { editors, getEditorById } from "@ultracite/data/editors";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";

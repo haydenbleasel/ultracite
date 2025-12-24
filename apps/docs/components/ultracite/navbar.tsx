@@ -1,8 +1,10 @@
 "use client";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { agents, editors, providers } from "@ultracite/data";
 import { IconMenu2 } from "@tabler/icons-react";
+import { agents } from "@ultracite/data/agents";
+import { editors } from "@ultracite/data/editors";
+import { providers } from "@ultracite/data/providers";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -192,14 +194,17 @@ export const Navbar = () => {
           <UserButton />
         </SignedIn>
 
-        <Sheet open={open} onOpenChange={setOpen}>
+        <Sheet onOpenChange={setOpen} open={open}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon">
+            <Button size="icon" variant="ghost">
               <IconMenu2 className="size-5" />
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
+          <SheetContent
+            className="w-full overflow-y-auto sm:max-w-md"
+            side="right"
+          >
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
@@ -207,14 +212,12 @@ export const Navbar = () => {
               <div className="flex flex-col gap-2">
                 {links.map((link) => (
                   <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`rounded-md px-3 py-2 text-sm font-medium ${
-                      pathname === link.href
-                        ? "bg-muted"
-                        : "hover:bg-muted/50"
+                    className={`rounded-md px-3 py-2 font-medium text-sm ${
+                      pathname === link.href ? "bg-muted" : "hover:bg-muted/50"
                     }`}
+                    href={link.href}
+                    key={link.href}
+                    onClick={() => setOpen(false)}
                   >
                     {link.label}
                   </Link>
@@ -222,15 +225,15 @@ export const Navbar = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                   Providers
                 </span>
                 {providers.map((provider) => (
                   <Link
-                    key={provider.id}
-                    href={`/providers/${provider.id}`}
-                    onClick={() => setOpen(false)}
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                    href={`/providers/${provider.id}`}
+                    key={provider.id}
+                    onClick={() => setOpen(false)}
                   >
                     <Image
                       alt={provider.name}
@@ -245,15 +248,15 @@ export const Navbar = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                   Editors
                 </span>
                 {editors.map((editor) => (
                   <Link
-                    key={editor.id}
-                    href={`/editors/${editor.id}`}
-                    onClick={() => setOpen(false)}
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                    href={`/editors/${editor.id}`}
+                    key={editor.id}
+                    onClick={() => setOpen(false)}
                   >
                     <Image
                       alt={editor.name}
@@ -268,15 +271,15 @@ export const Navbar = () => {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                   Agents ({agents.length})
                 </span>
                 {agents.map((agent) => (
                   <Link
-                    key={agent.id}
-                    href={`/agents/${agent.id}`}
-                    onClick={() => setOpen(false)}
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                    href={`/agents/${agent.id}`}
+                    key={agent.id}
+                    onClick={() => setOpen(false)}
                   >
                     <Image
                       alt={agent.name}

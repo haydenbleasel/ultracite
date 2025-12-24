@@ -7,7 +7,7 @@ import {
   multiselect,
   spinner,
 } from "@clack/prompts";
-import { agents as agentsData, getAgentById } from "@ultracite/data";
+import { agents as agentsData, getAgentById } from "@ultracite/data/agents";
 import {
   addDevDependency,
   detectPackageManager,

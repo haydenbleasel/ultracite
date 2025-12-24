@@ -1,12 +1,12 @@
+import { agentIds } from "@ultracite/data/agents";
+import { editorCliValues } from "@ultracite/data/editors";
 import {
-  agentIds,
-  editorCliValues,
   frameworks,
   hooks,
   integrations,
   migrations,
-  providerIds,
-} from "@ultracite/data";
+} from "@ultracite/data/options";
+import { providerIds } from "@ultracite/data/providers";
 import { type PackageManagerName, packageManagers } from "nypm";
 
 export const options = {

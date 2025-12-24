@@ -1,4 +1,4 @@
-import { agents, getAgentById } from "@ultracite/data";
+import { agents, getAgentById } from "@ultracite/data/agents";
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import Image from "next/image";
 import {
