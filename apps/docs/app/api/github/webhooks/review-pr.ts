@@ -1,9 +1,11 @@
-import type { Sandbox } from "@vercel/sandbox";
 import { reviewAgent } from "@/lib/agents/review";
-import { getInstallationOctokit } from "@/lib/github/app";
+import { addPRComment } from "@/lib/steps/add-pr-comment";
+import { checkoutBranch } from "@/lib/steps/checkout-branch";
+import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
+import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installDependencies } from "@/lib/steps/install-dependencies";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 
@@ -23,60 +25,6 @@ export interface ReviewPRResult {
   error?: string;
 }
 
-async function checkoutPRBranch(sandbox: Sandbox, branch: string) {
-  "use step";
-
-  await sandbox.runCommand("git", ["fetch", "origin", branch]);
-  await sandbox.runCommand("git", ["checkout", branch]);
-}
-
-async function commitAndPush(sandbox: Sandbox, message: string) {
-  "use step";
-
-  await sandbox.runCommand("git", [
-    "config",
-    "user.email",
-    "ultracite@users.noreply.github.com",
-  ]);
-  await sandbox.runCommand("git", ["config", "user.name", "Ultracite"]);
-  await sandbox.runCommand("git", ["add", "-A"]);
-  await sandbox.runCommand("git", ["commit", "-m", message]);
-  await sandbox.runCommand("git", ["push"]);
-}
-
-async function hasUncommittedChanges(sandbox: Sandbox): Promise<boolean> {
-  "use step";
-
-  const diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
-  const diffOutput = await diffResult.stdout();
-  return Boolean(diffOutput.trim());
-}
-
-async function addReviewComment(
-  installationId: number,
-  repoFullName: string,
-  prNumber: number,
-  body: string
-) {
-  "use step";
-
-  const octokit = await getInstallationOctokit(installationId);
-  const [owner, repo] = repoFullName.split("/");
-
-  await octokit.request(
-    "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
-    {
-      owner,
-      repo,
-      issue_number: prNumber,
-      body,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    }
-  );
-}
-
 export async function reviewPRWorkflow(
   params: ReviewPRParams
 ): Promise<ReviewPRResult> {
@@ -94,7 +42,7 @@ export async function reviewPRWorkflow(
 
   try {
     // Step 3: Checkout the PR branch
-    await checkoutPRBranch(sandbox, prBranch);
+    await checkoutBranch(sandbox, prBranch);
 
     // Step 4: Install dependencies
     await installDependencies(sandbox);
@@ -137,7 +85,7 @@ Important: Only fix real lint errors shown in the output. Don't modify files unn
 
     // Add a comment to the PR summarizing what was done
     if (fixesApplied > 0) {
-      await addReviewComment(
+      await addPRComment(
         installationId,
         repoFullName,
         prNumber,
@@ -151,7 +99,7 @@ Changes have been pushed to this branch. Please review the commits.
 *Powered by [Ultracite](https://ultracite.ai)*`
       );
     } else {
-      await addReviewComment(
+      await addPRComment(
         installationId,
         repoFullName,
         prNumber,
@@ -176,7 +124,7 @@ No lint issues found in this PR.
 
     // Try to leave a comment about the failure
     try {
-      await addReviewComment(
+      await addPRComment(
         installationId,
         repoFullName,
         prNumber,
