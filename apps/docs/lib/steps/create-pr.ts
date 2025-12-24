@@ -30,8 +30,8 @@ export async function createPullRequest(
   const [owner, repo] = repoFullName.split("/");
 
   const fixMethod = isLLMFix
-    ? "AI-generated fix using openai/codex-mini"
-    : "Automatically applied the recommended fix";
+    ? "AI-generated fix using Ultracite Cloud"
+    : "Auto-generated fix using Ultracite Cloud";
 
   const response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
     owner,
