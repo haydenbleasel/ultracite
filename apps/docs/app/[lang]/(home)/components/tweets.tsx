@@ -19,9 +19,9 @@ const Tweet = async ({ id }: { id: string }) => {
   }
 };
 
-type TweetsProps = {
+interface TweetsProps {
   tweets: string[];
-};
+}
 
 export const Tweets = ({ tweets }: TweetsProps) => (
   <div className="lg:columns-2 xl:columns-3">

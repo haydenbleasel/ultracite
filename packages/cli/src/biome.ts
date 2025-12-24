@@ -17,9 +17,9 @@ const getBiomeConfigPath = async (): Promise<string> => {
   return "./biome.jsonc";
 };
 
-type BiomeOptions = {
+interface BiomeOptions {
   frameworks?: (typeof options.frameworks)[number][];
-};
+}
 
 export const biome = {
   exists: async () => {

@@ -8,9 +8,9 @@ const Player = dynamic(
   { ssr: false }
 );
 
-type VideoProps = {
+interface VideoProps {
   video: string;
-};
+}
 
 export const Video = ({ video }: VideoProps) => (
   <div className="relative isolate aspect-video overflow-hidden rounded-lg">

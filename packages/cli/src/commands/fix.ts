@@ -4,9 +4,9 @@ import { detectPackageManager, dlxCommand } from "nypm";
 import { formatBiomeOutput } from "../reporter";
 import { parseFilePaths } from "../utils";
 
-type FixOptions = {
+interface FixOptions {
   unsafe?: boolean;
-};
+}
 
 export const fix = async (files: string[], options: FixOptions = {}) => {
   const args = [

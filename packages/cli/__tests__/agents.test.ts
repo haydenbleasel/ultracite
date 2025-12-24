@@ -11,8 +11,16 @@ mock.module("node:fs/promises", () => ({
 mock.module("nypm", () => ({
   detectPackageManager: mock(async () => ({ name: "npm" })),
   dlxCommand: mock((pm, pkg) => {
-    const prefix =
-      pm === "bun" ? "bunx" : pm === "yarn" ? "yarn dlx" : pm === "pnpm" ? "pnpm dlx" : "npx";
+    let prefix: string;
+    if (pm === "bun") {
+      prefix = "bunx";
+    } else if (pm === "yarn") {
+      prefix = "yarn dlx";
+    } else if (pm === "pnpm") {
+      prefix = "pnpm dlx";
+    } else {
+      prefix = "npx";
+    }
     return pkg ? `${prefix} ${pkg}` : prefix;
   }),
 }));
