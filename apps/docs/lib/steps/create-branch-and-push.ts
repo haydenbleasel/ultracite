@@ -11,7 +11,17 @@ export async function createBranchAndPush(
 
   const branchName = `ultracite/fix-${branchSuffix.replace(/\//g, "-")}-${Date.now()}`;
 
-  await sandbox.runCommand("git", ["checkout", "-b", branchName]);
+  const checkoutResult = await sandbox.runCommand("git", [
+    "checkout",
+    "-b",
+    branchName,
+  ]);
+  
+  if (checkoutResult.exitCode !== 0) {
+    const output = await checkoutResult.output("both");
+    throw new Error(`Failed to create branch: ${output}`);
+  }
+
   await sandbox.runCommand("git", [
     "config",
     "user.email",
@@ -19,12 +29,44 @@ export async function createBranchAndPush(
   ]);
   await sandbox.runCommand("git", ["config", "user.name", "Ultracite"]);
   await sandbox.runCommand("git", ["add", "-A"]);
-  await sandbox.runCommand("git", [
+
+  const commitResult = await sandbox.runCommand("git", [
     "commit",
     "-m",
     `fix: ${commitMessage}\n\nAutomatically fixed by Ultracite`,
   ]);
-  await sandbox.runCommand("git", ["push", "origin", branchName]);
+  
+  if (commitResult.exitCode !== 0) {
+    const output = await commitResult.output("both");
+    throw new Error(`Failed to commit: ${output}`);
+  }
+
+  const pushResult = await sandbox.runCommand("git", [
+    "push",
+    "origin",
+    branchName,
+  ]);
+  
+  if (pushResult.exitCode !== 0) {
+    const output = await pushResult.output("both");
+    throw new Error(`Failed to push branch: ${output}`);
+  }
+
+  // Verify the branch exists on remote
+  const verifyResult = await sandbox.runCommand("git", [
+    "ls-remote",
+    "--heads",
+    "origin",
+    branchName,
+  ]);
+  
+  const verifyOutput = await verifyResult.stdout();
+  
+  if (!verifyOutput.includes(branchName)) {
+    throw new Error(
+      `Branch ${branchName} was not found on remote after push`
+    );
+  }
 
   return branchName;
 }
