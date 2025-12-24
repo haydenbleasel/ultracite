@@ -1,11 +1,12 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
 export async function commitAndPush(
-  sandbox: Sandbox,
+  sandboxId: string,
   message: string
 ): Promise<void> {
   "use step";
 
+  const sandbox = await Sandbox.get({ sandboxId });
   await sandbox.runCommand("git", [
     "config",
     "user.email",

@@ -1,4 +1,4 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
 export interface FixLintResult {
   output: string;
@@ -6,8 +6,10 @@ export interface FixLintResult {
   hasRemainingIssues: boolean;
 }
 
-export async function fixLint(sandbox: Sandbox): Promise<FixLintResult> {
+export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   "use step";
+
+  const sandbox = await Sandbox.get({ sandboxId });
 
   const result = await sandbox.runCommand("npx", ["ultracite", "fix"]);
   const output = await result.output("both");

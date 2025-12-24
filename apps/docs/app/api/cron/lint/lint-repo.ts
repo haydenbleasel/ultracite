@@ -62,23 +62,23 @@ export async function lintRepoWorkflow(
   // Step 3: Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Step 4: Create sandbox with the repo
-  const sandbox = await createSandbox(repoFullName, token);
+  // Step 4: Create sandbox with the repo (returns sandbox ID for serialization)
+  const sandboxId = await createSandbox(repoFullName, token);
 
   let result: LintStepResult;
 
   try {
     // Step 5: Install dependencies
-    await installDependencies(sandbox);
+    await installDependencies(sandboxId);
 
     // Step 6: Run ultracite fix (auto-fix what we can)
-    const fixResult = await fixLint(sandbox);
+    const fixResult = await fixLint(sandboxId);
 
     // Only do ONE thing per run: either auto-fix OR AI fix (not both)
     if (fixResult.hasChanges) {
       // Auto-fix made changes - create a PR with those
       const branchName = await createBranchAndPush(
-        sandbox,
+        sandboxId,
         "auto-fix",
         "Auto-fix lint issues"
       );
@@ -102,11 +102,11 @@ export async function lintRepoWorkflow(
       };
     } else if (fixResult.hasRemainingIssues) {
       // No auto-fixes possible, use Claude Code to fix ONE issue
-      await installClaudeCode(sandbox);
+      await installClaudeCode(sandboxId);
 
       // Single fix mode: only fix one issue per cron run
       await runClaudeCode(
-        sandbox,
+        sandboxId,
         `You are fixing a single lint issue in a codebase. Run "npx ultracite check" to see the current lint errors.
 
 Pick the FIRST error shown and fix only that one issue. After fixing it, run "npx ultracite check" once more to verify the fix worked, then stop.
@@ -119,9 +119,9 @@ Important:
 - Stop after fixing one issue`
       );
 
-      if (await hasUncommittedChanges(sandbox)) {
+      if (await hasUncommittedChanges(sandboxId)) {
         const branchName = await createBranchAndPush(
-          sandbox,
+          sandboxId,
           "claude-fix",
           "Fix lint issue with Claude Code"
         );
@@ -165,7 +165,7 @@ Important:
     };
   } finally {
     // Final step: Stop sandbox
-    await stopSandbox(sandbox);
+    await stopSandbox(sandboxId);
   }
 
   // Final step: Update lint run with results

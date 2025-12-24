@@ -5,7 +5,7 @@ const TEN_MINUTES_MS = 10 * 60 * 1000;
 export async function createSandbox(
   repoFullName: string,
   token: string
-): Promise<Sandbox> {
+): Promise<string> {
   "use step";
 
   const sandbox = await Sandbox.create({
@@ -19,5 +19,6 @@ export async function createSandbox(
     timeout: TEN_MINUTES_MS,
   });
 
-  return sandbox;
+  // Return only the ID (serializable) instead of the Sandbox instance
+  return sandbox.sandboxId;
 }

@@ -1,4 +1,4 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
 export interface ClaudeCodeResult {
   output: string;
@@ -6,10 +6,12 @@ export interface ClaudeCodeResult {
 }
 
 export async function runClaudeCode(
-  sandbox: Sandbox,
+  sandboxId: string,
   prompt: string
 ): Promise<ClaudeCodeResult> {
   "use step";
+
+  const sandbox = await Sandbox.get({ sandboxId });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
 

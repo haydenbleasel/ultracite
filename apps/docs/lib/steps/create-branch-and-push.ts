@@ -1,11 +1,13 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
 export async function createBranchAndPush(
-  sandbox: Sandbox,
+  sandboxId: string,
   branchSuffix: string,
   commitMessage: string
 ): Promise<string> {
   "use step";
+
+  const sandbox = await Sandbox.get({ sandboxId });
 
   const branchName = `ultracite/fix-${branchSuffix.replace(/\//g, "-")}-${Date.now()}`;
 

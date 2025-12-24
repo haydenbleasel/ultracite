@@ -1,11 +1,12 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
 export async function checkoutBranch(
-  sandbox: Sandbox,
+  sandboxId: string,
   branch: string
 ): Promise<void> {
   "use step";
 
+  const sandbox = await Sandbox.get({ sandboxId });
   await sandbox.runCommand("git", ["fetch", "origin", branch]);
   await sandbox.runCommand("git", ["checkout", branch]);
 }

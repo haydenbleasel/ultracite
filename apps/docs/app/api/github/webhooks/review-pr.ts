@@ -79,23 +79,23 @@ Please ensure the Ultracite app has write access to this repository and branch.
   // Step 2: Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Step 3: Create sandbox with the repo
-  const sandbox = await createSandbox(repoFullName, token);
+  // Step 3: Create sandbox with the repo (returns sandbox ID for serialization)
+  const sandboxId = await createSandbox(repoFullName, token);
 
   try {
     // Step 4: Checkout the PR branch
-    await checkoutBranch(sandbox, prBranch);
+    await checkoutBranch(sandboxId, prBranch);
 
     // Step 5: Install dependencies
-    await installDependencies(sandbox);
+    await installDependencies(sandboxId);
 
     // Step 6: Run ultracite fix (auto-fix what we can)
-    const fixResult = await fixLint(sandbox);
+    const fixResult = await fixLint(sandboxId);
 
     if (fixResult.hasChanges) {
       // Commit auto-fix changes
       await commitAndPush(
-        sandbox,
+        sandboxId,
         "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite"
       );
       madeChanges = true;
@@ -104,11 +104,11 @@ Please ensure the Ultracite app has write access to this repository and branch.
     // Step 7: Check if there are remaining issues (based on exit code from check)
     if (fixResult.hasRemainingIssues) {
       // Step 8: Install Claude Code CLI
-      await installClaudeCode(sandbox);
+      await installClaudeCode(sandboxId);
 
       // Step 9: Use Claude Code to fix remaining issues iteratively
       await runClaudeCode(
-        sandbox,
+        sandboxId,
         `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
 
 After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
@@ -122,9 +122,9 @@ Important:
       );
 
       // Commit any changes from Claude Code fixes
-      if (await hasUncommittedChanges(sandbox)) {
+      if (await hasUncommittedChanges(sandboxId)) {
         await commitAndPush(
-          sandbox,
+          sandboxId,
           "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
         );
         madeChanges = true;
@@ -203,6 +203,6 @@ ${errorMessage}
     };
   } finally {
     // Final step: Stop sandbox
-    await stopSandbox(sandbox);
+    await stopSandbox(sandboxId);
   }
 }

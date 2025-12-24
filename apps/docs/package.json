@@ -8,7 +8,8 @@
     "prebuild": "prisma generate --no-hints",
     "build": "bun --bun next build",
     "postinstall": "fumadocs-mdx",
-    "migrate": "bun x prisma format && bun x prisma generate && bun x prisma db push"
+    "migrate": "bun x prisma format && bun x prisma generate && bun x prisma db push",
+    "workflow": "bun x workflow inspect runs --web --webPort=3001"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",

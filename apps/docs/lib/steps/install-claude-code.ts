@@ -1,8 +1,9 @@
-import type { Sandbox } from "@vercel/sandbox";
+import { Sandbox } from "@vercel/sandbox";
 
-export async function installClaudeCode(sandbox: Sandbox): Promise<void> {
+export async function installClaudeCode(sandboxId: string): Promise<void> {
   "use step";
 
+  const sandbox = await Sandbox.get({ sandboxId });
   await sandbox.runCommand("npm", [
     "install",
     "-g",

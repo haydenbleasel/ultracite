@@ -24,6 +24,9 @@ export const env = createEnv({
 
     // Anthropic
     ANTHROPIC_API_KEY: z.string(),
+
+    // Vercel
+    VERCEL_OIDC_TOKEN: z.string(),
   },
   client: {
     // Clerk
@@ -55,5 +58,6 @@ export const env = createEnv({
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
   },
 });
