@@ -33,10 +33,15 @@ export async function reviewPRWorkflow(
 ): Promise<ReviewPRResult> {
   "use workflow";
 
-  const { installationId, repoFullName, prNumber, prBranch, lintRunId } = params;
+  const { installationId, repoFullName, prNumber, prBranch, lintRunId } =
+    params;
 
   // Step 1: Check if we have push access before doing any work
-  const pushAccess = await checkPushAccess(installationId, repoFullName, prBranch);
+  const pushAccess = await checkPushAccess(
+    installationId,
+    repoFullName,
+    prBranch
+  );
 
   if (!pushAccess.canPush) {
     await addPRComment(
@@ -102,7 +107,19 @@ Please ensure the Ultracite app has write access to this repository and branch.
       await installClaudeCode(sandbox);
 
       // Step 9: Use Claude Code to fix remaining issues iteratively
-      await runClaudeCode(sandbox);
+      await runClaudeCode(
+        sandbox,
+        `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
+
+After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
+
+Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
+
+Important:
+- Only fix real lint errors shown in the output
+- Don't modify files unnecessarily
+- Preserve the existing code style`
+      );
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandbox)) {

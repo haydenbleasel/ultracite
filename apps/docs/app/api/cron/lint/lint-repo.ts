@@ -1,3 +1,4 @@
+import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
@@ -37,31 +38,51 @@ export async function lintRepoWorkflow(
   // Step 1: Create lint run record
   const lintRunId = await createLintRun(organizationId, repoId);
 
-  // Step 2: Get GitHub access token
+  // Step 2: Check if we have push access before doing any work
+  const pushAccess = await checkPushAccess(
+    installationId,
+    repoFullName,
+    defaultBranch
+  );
+
+  if (!pushAccess.canPush) {
+    await updateLintRun(lintRunId, {
+      prCreated: false,
+      issuesFound: 0,
+      error: pushAccess.reason,
+    });
+
+    return {
+      repo: repoFullName,
+      status: "error",
+      error: pushAccess.reason,
+    };
+  }
+
+  // Step 3: Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Step 3: Create sandbox with the repo
+  // Step 4: Create sandbox with the repo
   const sandbox = await createSandbox(repoFullName, token);
 
   let result: LintStepResult;
 
   try {
-    // Step 4: Install dependencies
+    // Step 5: Install dependencies
     await installDependencies(sandbox);
 
-    // Step 5: Run ultracite fix (auto-fix what we can)
+    // Step 6: Run ultracite fix (auto-fix what we can)
     const fixResult = await fixLint(sandbox);
 
-    // If auto-fix made changes, create a PR with those changes
+    // Only do ONE thing per run: either auto-fix OR AI fix (not both)
     if (fixResult.hasChanges) {
-      // Step 6a: Create branch and push (auto-fix)
+      // Auto-fix made changes - create a PR with those
       const branchName = await createBranchAndPush(
         sandbox,
         "auto-fix",
         "Auto-fix lint issues"
       );
 
-      // Step 7a: Create pull request (auto-fix)
       const prResult = await createPullRequest({
         installationId,
         repoFullName,
@@ -80,29 +101,37 @@ export async function lintRepoWorkflow(
         prUrl: prResult.prUrl,
       };
     } else if (fixResult.hasRemainingIssues) {
-      // There are remaining issues that couldn't be auto-fixed
-      // Step 6b: Install Claude Code CLI
+      // No auto-fixes possible, use Claude Code to fix ONE issue
       await installClaudeCode(sandbox);
 
-      // Step 7b: Use Claude Code to fix remaining issues
-      await runClaudeCode(sandbox);
+      // Single fix mode: only fix one issue per cron run
+      await runClaudeCode(
+        sandbox,
+        `You are fixing a single lint issue in a codebase. Run "npx ultracite check" to see the current lint errors.
 
-      // Check if Claude Code made any changes
+Pick the FIRST error shown and fix only that one issue. After fixing it, run "npx ultracite check" once more to verify the fix worked, then stop.
+
+Important:
+- Only fix ONE issue, even if there are multiple
+- Only fix real lint errors shown in the output
+- Don't modify files unnecessarily
+- Preserve the existing code style
+- Stop after fixing one issue`
+      );
+
       if (await hasUncommittedChanges(sandbox)) {
-        // Step 8b: Create branch and push (Claude Code fix)
         const branchName = await createBranchAndPush(
           sandbox,
           "claude-fix",
-          "Fix lint issues with Claude Code"
+          "Fix lint issue with Claude Code"
         );
 
-        // Step 9b: Create pull request (Claude Code fix)
         const prResult = await createPullRequest({
           installationId,
           repoFullName,
           defaultBranch,
           branchName,
-          title: "Fix lint issues",
+          title: "Fix lint issue",
           file: "multiple files",
           isLLMFix: true,
         });
@@ -115,15 +144,15 @@ export async function lintRepoWorkflow(
           prUrl: prResult.prUrl,
         };
       } else {
-        // Claude Code couldn't fix the issues
+        // Claude Code couldn't fix the issue
         result = {
           issuesFound: 1,
           prCreated: false,
-          error: "Claude Code could not resolve the lint issues",
+          error: "Claude Code could not resolve the lint issue",
         };
       }
     } else {
-      // No issues found, we're done
+      // No issues found
       result = { issuesFound: 0, prCreated: false };
     }
   } catch (error) {

@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { database } from "@/lib/database";
 import { env } from "@/lib/env";
-import { reviewPRWorkflow, type ReviewPRParams } from "./review-pr";
+import { type ReviewPRParams, reviewPRWorkflow } from "./review-pr";
 
 const verifySignature = (payload: string, signature: string): boolean => {
   const expected = `sha256=${crypto
