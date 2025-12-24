@@ -7,5 +7,6 @@ export async function hasUncommittedChanges(
 
   const diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
   const diffOutput = await diffResult.stdout();
+
   return Boolean(diffOutput.trim());
 }

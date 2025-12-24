@@ -33,13 +33,11 @@ export async function createPullRequest(
     ? "AI-generated fix using openai/codex-mini"
     : "Automatically applied the recommended fix";
 
-  const { data: pr } = await octokit.request(
-    "POST /repos/{owner}/{repo}/pulls",
-    {
-      owner,
-      repo,
-      title: `fix: ${title}`,
-      body: `## Summary
+  const response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
+    owner,
+    repo,
+    title: `fix: ${title}`,
+    body: `## Summary
 
 This PR fixes a linting issue detected by Ultracite.
 
@@ -52,16 +50,19 @@ ${fixMethod}.
 ---
 
 *This PR was automatically created by [Ultracite](https://ultracite.ai) using [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox).*`,
-      head: branchName,
-      base: defaultBranch,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    }
-  );
+    head: branchName,
+    base: defaultBranch,
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+
+  if (response.status !== 201) {
+    throw new Error(`Failed to create PR: ${response.status}`);
+  }
 
   return {
-    prNumber: pr.number,
-    prUrl: pr.html_url,
+    prNumber: response.data.number,
+    prUrl: response.data.html_url,
   };
 }

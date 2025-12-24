@@ -11,7 +11,7 @@ export async function addPRComment(
   const octokit = await getInstallationOctokit(installationId);
   const [owner, repo] = repoFullName.split("/");
 
-  await octokit.request(
+  const response = await octokit.request(
     "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
     {
       owner,
@@ -23,4 +23,8 @@ export async function addPRComment(
       },
     }
   );
+
+  if (response.status !== 201) {
+    throw new Error(`Failed to add PR comment: ${response.status}`);
+  }
 }
