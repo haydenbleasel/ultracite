@@ -107,19 +107,7 @@ export async function lintRepoWorkflow(
       await installClaudeCode(sandboxId);
 
       // Single fix mode: only fix one issue per cron run
-      await runClaudeCode(
-        sandboxId,
-        `You are fixing a single lint issue in a codebase. Run "npx ultracite check" to see the current lint errors.
-
-Pick the FIRST error shown and fix only that one issue. After fixing it, run "npx ultracite check" once more to verify the fix worked, then stop.
-
-Important:
-- Only fix ONE issue, even if there are multiple
-- Only fix real lint errors shown in the output
-- Don't modify files unnecessarily
-- Preserve the existing code style
-- Stop after fixing one issue`
-      );
+      await runClaudeCode(sandboxId);
 
       if (await hasUncommittedChanges(sandboxId)) {
         const branchName = await createBranchAndPush(

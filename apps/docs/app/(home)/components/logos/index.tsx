@@ -97,7 +97,7 @@ export const Logos = () => (
         of open source projects.
       </p>
     </div>
-    <div className="grid grid-cols-5 divide-x divide-y border-t border-l">
+    <div className="grid grid-cols-3 lg:grid-cols-5 divide-x divide-y border-t border-l">
       {logos.map((logo) => (
         <div
           className="flex aspect-video w-full items-center justify-center p-12 last:border-r last:border-b"
