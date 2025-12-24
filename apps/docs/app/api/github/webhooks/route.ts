@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
+import { start } from "workflow/api";
 import { database } from "@/lib/database";
 import { env } from "@/lib/env";
 import { reviewPRWorkflow } from "./review-pr";
@@ -144,8 +145,10 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  if (!pull_request || !repository) {
-    return;
+  if (!(pull_request && repository)) {
+    throw new Error(
+      `Invalid pull request or repository: ${JSON.stringify({ pull_request, repository })}`
+    );
   }
 
   // Check if this repo is tracked by Ultracite
@@ -158,11 +161,13 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
   }
 
   // Run the review workflow
-  await reviewPRWorkflow({
-    installationId: installation.id,
-    repoFullName: repository.full_name,
-    prNumber: pull_request.number,
-    prBranch: pull_request.head.ref,
-    baseBranch: pull_request.base.ref,
-  });
+  await start(reviewPRWorkflow, [
+    {
+      installationId: installation.id,
+      repoFullName: repository.full_name,
+      prNumber: pull_request.number,
+      prBranch: pull_request.head.ref,
+      baseBranch: pull_request.base.ref,
+    },
+  ]);
 };
