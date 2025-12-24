@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 
 interface LayoutProps {
@@ -38,15 +39,17 @@ const Layout = ({ children }: LayoutProps) => {
         suppressHydrationWarning
       >
         <body>
-          <RootProvider
-            theme={{
-              defaultTheme: undefined,
-              enableSystem: true,
-            }}
-          >
-            {children}
-          </RootProvider>
-          <Toaster />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <RootProvider
+              theme={{
+                defaultTheme: undefined,
+                enableSystem: true,
+              }}
+            >
+              {children}
+            </RootProvider>
+            <Toaster />
+          </ThemeProvider>
           <Analytics />
         </body>
       </html>

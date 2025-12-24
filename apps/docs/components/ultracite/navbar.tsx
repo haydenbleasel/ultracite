@@ -2,9 +2,11 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { agents, editors, providers } from "@ultracite/data";
+import { IconMenu2 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Logo } from "@/app/(home)/components/logo";
 import { Button } from "../ui/button";
 import {
@@ -15,6 +17,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 
 const links = [
   {
@@ -29,6 +38,7 @@ const links = [
 
 export const Navbar = () => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   const isProviderPage = pathname.startsWith("/providers");
   const isEditorPage = pathname.startsWith("/editors");
   const isAgentPage = pathname.startsWith("/agents");
@@ -42,7 +52,7 @@ export const Navbar = () => {
             Ultracite
           </span>
         </Link>
-        <NavigationMenu>
+        <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger
@@ -155,7 +165,7 @@ export const Navbar = () => {
         </NavigationMenu>
       </div>
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-px">
+        <div className="hidden items-center gap-px md:flex">
           {links.map((link) => (
             <Button
               asChild
@@ -170,17 +180,135 @@ export const Navbar = () => {
         </div>
         <SignedOut>
           <SignInButton>
-            <Button asChild>
+            <Button asChild className="hidden md:inline-flex">
               <Link href="/sign-in">Sign in</Link>
             </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <Button asChild>
+          <Button asChild className="hidden md:inline-flex">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
           <UserButton />
         </SignedIn>
+
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <IconMenu2 className="size-5" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col gap-6 p-6">
+              <div className="flex flex-col gap-2">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className={`rounded-md px-3 py-2 text-sm font-medium ${
+                      pathname === link.href
+                        ? "bg-muted"
+                        : "hover:bg-muted/50"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                  Providers
+                </span>
+                {providers.map((provider) => (
+                  <Link
+                    key={provider.id}
+                    href={`/providers/${provider.id}`}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                  >
+                    <Image
+                      alt={provider.name}
+                      className="size-6 rounded-full"
+                      height={24}
+                      src={provider.logo}
+                      width={24}
+                    />
+                    <span className="text-sm">{provider.name}</span>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                  Editors
+                </span>
+                {editors.map((editor) => (
+                  <Link
+                    key={editor.id}
+                    href={`/editors/${editor.id}`}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                  >
+                    <Image
+                      alt={editor.name}
+                      className="size-6 rounded-full"
+                      height={24}
+                      src={editor.logo}
+                      width={24}
+                    />
+                    <span className="text-sm">{editor.name}</span>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <span className="px-3 text-xs font-semibold uppercase text-muted-foreground">
+                  Agents ({agents.length})
+                </span>
+                {agents.map((agent) => (
+                  <Link
+                    key={agent.id}
+                    href={`/agents/${agent.id}`}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                  >
+                    <Image
+                      alt={agent.name}
+                      className="size-5 rounded-full"
+                      height={20}
+                      src={agent.logo}
+                      width={20}
+                    />
+                    <span className="text-sm">{agent.name}</span>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-auto flex flex-col gap-2 border-t pt-4">
+                <SignedOut>
+                  <Button asChild className="w-full">
+                    <Link href="/sign-in" onClick={() => setOpen(false)}>
+                      Sign in
+                    </Link>
+                  </Button>
+                </SignedOut>
+                <SignedIn>
+                  <Button asChild className="w-full">
+                    <Link href="/dashboard" onClick={() => setOpen(false)}>
+                      Dashboard
+                    </Link>
+                  </Button>
+                </SignedIn>
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

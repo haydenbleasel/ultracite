@@ -105,7 +105,7 @@ export const Logos = () => (
         >
           <Image
             alt={logo.name}
-            className="size-full object-contain"
+            className="size-full object-contain dark:brightness-0 dark:invert"
             height={48}
             src={logo.src}
             width={48}

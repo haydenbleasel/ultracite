@@ -101,6 +101,7 @@ export const Demo = () => (
       alt=""
       className="absolute top-0 left-0 size-full object-cover"
       height={1000}
+      priority
       src={Background}
       width={1000}
     />

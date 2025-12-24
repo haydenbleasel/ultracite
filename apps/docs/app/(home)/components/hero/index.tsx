@@ -46,6 +46,7 @@ export const Hero = ({ description, children }: HeroProps) => (
                   className="size-6 overflow-hidden rounded-full object-cover ring-2 ring-background sm:size-8 md:size-10 lg:size-12"
                   height={48}
                   key={logo.name}
+                  priority
                   src={logo.src}
                   width={48}
                 />
