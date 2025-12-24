@@ -20,7 +20,7 @@ const features = [
     label: "ESLint + Prettier + Stylelint",
     description: "The traditional JavaScript toolchain.",
     avatar: (
-      <div className="-space-x-1 flex items-center">
+      <div className="flex items-center -space-x-1">
         <Image
           alt="ESLint"
           className="size-6 rounded-full ring-1 ring-background"
@@ -237,7 +237,7 @@ export const Comparison = () => (
       </p>
     </div>
 
-    <div className="-space-x-px isolate mx-auto flex w-full flex-col items-center gap-4 lg:flex-row lg:gap-0">
+    <div className="isolate mx-auto flex w-full flex-col items-center gap-4 -space-x-px lg:flex-row lg:gap-0">
       {features.map((feature, index) => (
         <Card
           className={cn(

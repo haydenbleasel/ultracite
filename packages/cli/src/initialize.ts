@@ -31,7 +31,7 @@ import { isMonorepo, title, updatePackageJson } from "./utils";
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
-type InitializeFlags = {
+interface InitializeFlags {
   pm?: PackageManagerName;
   editors?: (typeof options.editorConfigs)[number][];
   agents?: (typeof options.agents)[number][];
@@ -41,7 +41,7 @@ type InitializeFlags = {
   migrate?: (typeof options.migrations)[number][];
   skipInstall?: boolean;
   quiet?: boolean;
-};
+}
 
 export const installDependencies = async (
   packageManager: PackageManagerName,
@@ -140,7 +140,7 @@ export const upsertVsCodeSettings = async (quiet = false) => {
         s.stop("settings.json created. Install Biome extension manually.");
       }
     }
-  } catch (error) {
+  } catch (_error) {
     if (!quiet) {
       s.stop("settings.json created. Install Biome extension manually.");
     }

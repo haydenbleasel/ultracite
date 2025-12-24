@@ -10,11 +10,11 @@ import { eslintConfigFiles } from "../migrations/eslint";
 import { prettierConfigFiles } from "../migrations/prettier";
 import { title } from "../utils";
 
-type DiagnosticCheck = {
+interface DiagnosticCheck {
   name: string;
   status: "pass" | "fail" | "warn";
   message: string;
-};
+}
 
 // Check if Biome is installed
 const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {

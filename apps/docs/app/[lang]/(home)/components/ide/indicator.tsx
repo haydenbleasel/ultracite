@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 
-type IndicatorProps = {
+interface IndicatorProps {
   title: string;
   description: string;
   className?: string;
   reverse?: boolean;
-};
+}
 
 export const Indicator = ({
   title,

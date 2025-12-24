@@ -12,10 +12,10 @@ import {
 import type { ReactNode } from "react";
 import { i18n } from "@/lib/i18n";
 
-type LayoutProps = {
+interface LayoutProps {
   children: ReactNode;
   params: Promise<{ lang: string }>;
-};
+}
 
 const sans = Instrument_Sans({
   subsets: ["latin"],

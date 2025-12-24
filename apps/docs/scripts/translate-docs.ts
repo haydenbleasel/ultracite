@@ -34,7 +34,7 @@ function computeHash(content: string): string {
   return createHash("sha256").update(content).digest("hex");
 }
 
-type TranslationCache = {
+interface TranslationCache {
   [filePath: string]: {
     hash: string;
     translations: {
@@ -44,16 +44,16 @@ type TranslationCache = {
       };
     };
   };
-};
+}
 
-type OldTranslationCache = {
+interface OldTranslationCache {
   [filePath: string]: {
     [locale: string]: {
       hash: string;
       translatedAt: string;
     };
   };
-};
+}
 
 function migrateCache(oldCache: OldTranslationCache): TranslationCache {
   const newCache: TranslationCache = {};
@@ -303,11 +303,11 @@ async function translateFile(
   console.log(`✓ Translated: ${filePath} → ${newFilePath}`);
 }
 
-type TranslationItem = {
+interface TranslationItem {
   filePath: string;
   locale: string;
   hash: string;
-};
+}
 
 function parseArgs(): {
   targetLocales: string[] | null;

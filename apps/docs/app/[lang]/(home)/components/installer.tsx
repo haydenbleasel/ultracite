@@ -14,9 +14,9 @@ import {
 
 const COPY_TIMEOUT = 2000;
 
-type InstallerProps = {
+interface InstallerProps {
   command: string;
-};
+}
 
 export const Installer = ({ command }: InstallerProps) => {
   const [copied, setCopied] = useState(false);
