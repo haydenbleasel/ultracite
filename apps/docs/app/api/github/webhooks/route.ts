@@ -151,6 +151,11 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     );
   }
 
+  // Skip PRs created by Ultracite (from lint-repo workflow)
+  if (pull_request.head.ref.startsWith("ultracite/")) {
+    return;
+  }
+
   // Check if this repo is tracked by Ultracite
   const repo = await database.repo.findFirst({
     where: { githubRepoId: repository.id },
