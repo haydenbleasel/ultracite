@@ -1,13 +1,12 @@
-import { applyLLMFix } from "@/lib/steps/apply-llm-fix";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
-import { generateLLMFix } from "@/lib/steps/generate-llm-fix";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
+import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installDependencies } from "@/lib/steps/install-dependencies";
-import { parseLintIssue } from "@/lib/steps/parse-lint-issue";
+import { installClaudeCode, runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import type {
   LintRepoParams,
@@ -49,7 +48,7 @@ export async function lintRepoWorkflow(
     // Step 4: Install dependencies
     await installDependencies(sandbox);
 
-    // Step 5: Run ultracite fix
+    // Step 5: Run ultracite fix (auto-fix what we can)
     const fixResult = await fixLint(sandbox);
 
     // If auto-fix made changes, create a PR with those changes
@@ -79,47 +78,67 @@ export async function lintRepoWorkflow(
         prNumber: prResult.prNumber,
         prUrl: prResult.prUrl,
       };
-    } else {
-      // No auto-fix changes, try LLM fix for remaining issues
-      // Step 6b: Parse the first lint issue
-      const issue = await parseLintIssue(sandbox, fixResult.output);
+    } else if (
+      fixResult.output.includes("error") ||
+      fixResult.output.includes("warning")
+    ) {
+      // There are remaining issues that couldn't be auto-fixed
+      // Step 6b: Install Claude Code CLI
+      await installClaudeCode(sandbox);
 
-      if (issue) {
-        // Step 7b: Generate LLM fix
-        const llmFix = await generateLLMFix(issue);
+      // Step 7b: Use Claude Code to fix remaining issues
+      await runClaudeCode(
+        sandbox,
+        `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
 
-        // Step 8b: Apply the LLM fix to the codebase
-        await applyLLMFix(sandbox, issue.file, llmFix.fixedContent);
+After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
 
-        // Step 9b: Create branch and push (LLM fix)
+Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
+
+Important:
+- Only fix real lint errors shown in the output
+- Don't modify files unnecessarily
+- Preserve the existing code style`
+      );
+
+      // Check if Claude Code made any changes
+      if (await hasUncommittedChanges(sandbox)) {
+        // Step 8b: Create branch and push (Claude Code fix)
         const branchName = await createBranchAndPush(
           sandbox,
-          issue.file.replace(/[/.]/g, "-"),
-          llmFix.title
+          "claude-fix",
+          "Fix lint issues with Claude Code"
         );
 
-        // Step 10b: Create pull request (LLM fix)
+        // Step 9b: Create pull request (Claude Code fix)
         const prResult = await createPullRequest({
           installationId,
           repoFullName,
           defaultBranch,
           branchName,
-          title: llmFix.title,
-          file: issue.file,
+          title: "Fix lint issues",
+          file: "multiple files",
           isLLMFix: true,
         });
 
         result = {
           issuesFound: 1,
-          issueFixed: llmFix.title,
+          issueFixed: "claude-code-fix",
           prCreated: true,
           prNumber: prResult.prNumber,
           prUrl: prResult.prUrl,
         };
       } else {
-        // No issues found, we're done
-        result = { issuesFound: 0, prCreated: false };
+        // Claude Code couldn't fix the issues
+        result = {
+          issuesFound: 1,
+          prCreated: false,
+          error: "Claude Code could not resolve the lint issues",
+        };
       }
+    } else {
+      // No issues found, we're done
+      result = { issuesFound: 0, prCreated: false };
     }
   } catch (error) {
     const errorMessage =

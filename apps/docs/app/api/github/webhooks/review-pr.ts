@@ -1,4 +1,3 @@
-import { reviewAgent } from "@/lib/agents/review";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
@@ -6,7 +5,9 @@ import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
+import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
+import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 
 export interface ReviewPRParams {
@@ -59,37 +60,44 @@ export async function reviewPRWorkflow(
       fixesApplied++;
     }
 
-    // Step 6: Use the agent to iteratively fix remaining issues
-    const { agent, getFixCount } = reviewAgent(sandbox);
+    // Step 6: Check if there are remaining issues
+    const hasRemainingIssues =
+      fixResult.output.includes("error") ||
+      fixResult.output.includes("warning");
 
-    await agent.generate({
-      prompt: `Check for remaining lint issues in the codebase and fix them iteratively.
+    if (hasRemainingIssues) {
+      // Step 7: Install Claude Code CLI
+      await installClaudeCode(sandbox);
 
-Start by running checkLint to see if there are any issues.
-If there are issues, read the file mentioned in the error, fix the issue, and write the corrected file.
-Then check again to verify the fix worked and look for more issues.
-Continue until all issues are fixed or you've made multiple attempts at the same issue.
-
-Important: Only fix real lint errors shown in the output. Don't modify files unnecessarily.`,
-    });
-
-    fixesApplied += getFixCount();
-
-    // Commit any remaining changes from agent fixes
-    if (await hasUncommittedChanges(sandbox)) {
-      await commitAndPush(
+      // Step 8: Use Claude Code to fix remaining issues iteratively
+      await runClaudeCode(
         sandbox,
-        "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
+        `You are fixing lint issues in a codebase. Run "npx ultracite check" to see the current lint errors, then fix them one by one.
+
+After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
+
+Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
+
+Important:
+- Only fix real lint errors shown in the output
+- Don't modify files unnecessarily
+- Preserve the existing code style`
       );
+
+      // Commit any changes from Claude Code fixes
+      if (await hasUncommittedChanges(sandbox)) {
+        await commitAndPush(
+          sandbox,
+          "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
+        );
+        fixesApplied++;
+      }
     }
 
     // Add a comment to the PR summarizing what was done
-    if (fixesApplied > 0) {
-      await addPRComment(
-        installationId,
-        repoFullName,
-        prNumber,
-        `## Ultracite Review Complete
+    const commentBody =
+      fixesApplied > 0
+        ? `## Ultracite Review Complete
 
 I've automatically fixed **${fixesApplied}** lint issue${fixesApplied === 1 ? "" : "s"} in this PR.
 
@@ -97,20 +105,14 @@ Changes have been pushed to this branch. Please review the commits.
 
 ---
 *Powered by [Ultracite](https://ultracite.ai)*`
-      );
-    } else {
-      await addPRComment(
-        installationId,
-        repoFullName,
-        prNumber,
-        `## Ultracite Review Complete
+        : `## Ultracite Review Complete
 
 No lint issues found in this PR.
 
 ---
-*Powered by [Ultracite](https://ultracite.ai)*`
-      );
-    }
+*Powered by [Ultracite](https://ultracite.ai)*`;
+
+    await addPRComment(installationId, repoFullName, prNumber, commentBody);
 
     return {
       repo: repoFullName,
