@@ -6,9 +6,9 @@ export interface CreatePRParams {
   repoFullName: string;
   defaultBranch: string;
   branchName: string;
-  title: string;
   file: string;
   isLLMFix: boolean;
+  changelog?: string;
 }
 
 export async function createPullRequest(
@@ -21,35 +21,33 @@ export async function createPullRequest(
     repoFullName,
     defaultBranch,
     branchName,
-    title,
     file,
     isLLMFix,
+    changelog,
   } = params;
 
   const octokit = await getInstallationOctokit(installationId);
   const [owner, repo] = repoFullName.split("/");
 
-  const fixMethod = isLLMFix
+  const title = isLLMFix
     ? "AI-generated fix using Ultracite Cloud"
     : "Auto-generated fix using Ultracite Cloud";
 
   const response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
     owner,
     repo,
-    title: `fix: ${title}`,
+    title: title,
     body: `## Summary
 
-This PR fixes a linting issue detected by Ultracite.
-
-**File**: \`${file}\`
+This PR fixes linting issues detected by Ultracite.
 
 ## Changes
 
-${fixMethod}.
+${changelog ?? "Check the files for changes."}
 
 ---
 
-*This PR was automatically created by [Ultracite](https://ultracite.ai) using [Vercel Sandbox](https://vercel.com/docs/vercel-sandbox).*`,
+*This PR was automatically created by [Ultracite Cloud](https://www.ultracite.ai)*`,
     head: branchName,
     base: defaultBranch,
     headers: {

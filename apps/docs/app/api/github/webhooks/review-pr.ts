@@ -4,6 +4,7 @@ import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
+import { generateChangelog } from "@/lib/steps/generate-changelog";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installClaudeCode } from "@/lib/steps/install-claude-code";
@@ -75,6 +76,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
   }
 
   let madeChanges = false;
+  const changelogs: string[] = [];
 
   // Step 2: Get GitHub access token
   const token = await getGitHubToken(installationId);
@@ -93,6 +95,12 @@ Please ensure the Ultracite app has write access to this repository and branch.
     const fixResult = await fixLint(sandboxId);
 
     if (fixResult.hasChanges) {
+      // Generate changelog before committing
+      const changelogResult = await generateChangelog(sandboxId);
+      if (changelogResult.success) {
+        changelogs.push(changelogResult.changelog);
+      }
+
       // Commit auto-fix changes
       await commitAndPush(
         sandboxId,
@@ -113,6 +121,12 @@ Please ensure the Ultracite app has write access to this repository and branch.
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {
+        // Generate changelog before committing
+        const changelogResult = await generateChangelog(sandboxId);
+        if (changelogResult.success) {
+          changelogs.push(changelogResult.changelog);
+        }
+
         await commitAndPush(
           sandboxId,
           "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI",
@@ -124,12 +138,14 @@ Please ensure the Ultracite app has write access to this repository and branch.
     }
 
     // Add a comment to the PR summarizing what was done
+    const changelogSection = changelogs.length > 0
+      ? `\n\n## Changes\n\n${changelogs.join("\n\n")}`
+      : "";
+
     const commentBody = madeChanges
       ? `## Ultracite Review Complete
 
-I've automatically fixed lint issues in this PR.
-
-Changes have been pushed to this branch. Please review the commits.
+I've automatically fixed lint issues in this PR.${changelogSection}
 
 ---
 *Powered by [Ultracite](https://ultracite.ai)*`

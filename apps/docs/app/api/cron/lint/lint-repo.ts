@@ -4,6 +4,7 @@ import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
+import { generateChangelog } from "@/lib/steps/generate-changelog";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installClaudeCode } from "@/lib/steps/install-claude-code";
@@ -76,7 +77,9 @@ export async function lintRepoWorkflow(
 
     // Only do ONE thing per run: either auto-fix OR AI fix (not both)
     if (fixResult.hasChanges) {
-      // Auto-fix made changes - create a PR with those
+      // Auto-fix made changes - generate changelog and create a PR
+      const changelogResult = await generateChangelog(sandboxId);
+
       const branchName = await createBranchAndPush(
         sandboxId,
         "auto-fix",
@@ -90,9 +93,9 @@ export async function lintRepoWorkflow(
         repoFullName,
         defaultBranch,
         branchName,
-        title: "Auto-fix lint issues",
         file: "multiple files",
         isLLMFix: false,
+        changelog: changelogResult.success ? changelogResult.changelog : undefined,
       });
 
       result = {
@@ -110,6 +113,9 @@ export async function lintRepoWorkflow(
       await runClaudeCode(sandboxId);
 
       if (await hasUncommittedChanges(sandboxId)) {
+        // Generate changelog before committing
+        const changelogResult = await generateChangelog(sandboxId);
+
         const branchName = await createBranchAndPush(
           sandboxId,
           "claude-fix",
@@ -123,9 +129,9 @@ export async function lintRepoWorkflow(
           repoFullName,
           defaultBranch,
           branchName,
-          title: "Fix lint issue",
           file: "multiple files",
           isLLMFix: true,
+          changelog: changelogResult.success ? changelogResult.changelog : undefined,
         });
 
         result = {
