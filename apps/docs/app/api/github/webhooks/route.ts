@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { database } from "@/lib/database";
 import { env } from "@/lib/env";
-import { reviewPRWorkflow } from "./review-pr";
+import { reviewPRWorkflow, type ReviewPRParams } from "./review-pr";
 
 const verifySignature = (payload: string, signature: string): boolean => {
   const expected = `sha256=${crypto
@@ -154,20 +154,63 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
   // Check if this repo is tracked by Ultracite
   const repo = await database.repo.findFirst({
     where: { githubRepoId: repository.id },
+    include: { organization: true },
   });
 
   if (!repo) {
     return;
   }
 
-  // Run the review workflow
-  await start(reviewPRWorkflow, [
-    {
-      installationId: installation.id,
-      repoFullName: repository.full_name,
+  // Deduplication: Check if there's already a running review for this PR
+  const existingRun = await database.lintRun.findFirst({
+    where: {
+      repoId: repo.id,
       prNumber: pull_request.number,
-      prBranch: pull_request.head.ref,
-      baseBranch: pull_request.base.ref,
+      status: {
+        in: ["PENDING", "RUNNING"],
+      },
     },
-  ]);
+  });
+
+  if (existingRun) {
+    // Skip - there's already a review in progress for this PR
+    return;
+  }
+
+  // Create a lint run record to track this review and prevent duplicates
+  const lintRun = await database.lintRun.create({
+    data: {
+      organizationId: repo.organizationId,
+      repoId: repo.id,
+      prNumber: pull_request.number,
+      status: "RUNNING",
+      startedAt: new Date(),
+    },
+  });
+
+  // Run the review workflow
+  const params: ReviewPRParams = {
+    installationId: installation.id,
+    repoFullName: repository.full_name,
+    prNumber: pull_request.number,
+    prBranch: pull_request.head.ref,
+    baseBranch: pull_request.base.ref,
+    lintRunId: lintRun.id,
+  };
+
+  try {
+    await start(reviewPRWorkflow, [params]);
+  } catch (error) {
+    // Mark the lint run as failed if workflow startup fails
+    await database.lintRun.update({
+      where: { id: lintRun.id },
+      data: {
+        status: "FAILED",
+        completedAt: new Date(),
+        errorMessage:
+          error instanceof Error ? error.message : "Failed to start workflow",
+      },
+    });
+    throw error;
+  }
 };

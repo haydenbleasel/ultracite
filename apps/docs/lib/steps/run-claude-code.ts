@@ -33,12 +33,7 @@ export async function runClaudeCode(
   // Run claude with the API key set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --model claude-haiku-4-5`,
-    "--dangerously-skip-permissions",
-    "--fallback-model",
-    "claude-sonnet-4-5",
-    "--max-turns",
-    "30",
+    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30`,
   ]);
 
   const output = await result.output("both");

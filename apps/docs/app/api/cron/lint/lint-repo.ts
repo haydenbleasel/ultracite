@@ -5,8 +5,9 @@ import { createSandbox } from "@/lib/steps/create-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
+import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
-import { installClaudeCode, runClaudeCode } from "@/lib/steps/run-claude-code";
+import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import type {
   LintRepoParams,
@@ -78,10 +79,7 @@ export async function lintRepoWorkflow(
         prNumber: prResult.prNumber,
         prUrl: prResult.prUrl,
       };
-    } else if (
-      fixResult.output.includes("error") ||
-      fixResult.output.includes("warning")
-    ) {
+    } else if (fixResult.hasRemainingIssues) {
       // There are remaining issues that couldn't be auto-fixed
       // Step 6b: Install Claude Code CLI
       await installClaudeCode(sandbox);

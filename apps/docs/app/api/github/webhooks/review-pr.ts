@@ -1,4 +1,5 @@
 import { addPRComment } from "@/lib/steps/add-pr-comment";
+import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { createSandbox } from "@/lib/steps/create-sandbox";
@@ -9,6 +10,7 @@ import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
+import { updateLintRun } from "@/lib/steps/update-lint-run";
 
 export interface ReviewPRParams {
   installationId: number;
@@ -16,13 +18,13 @@ export interface ReviewPRParams {
   prNumber: number;
   prBranch: string;
   baseBranch: string;
+  lintRunId: string;
 }
 
 export interface ReviewPRResult {
   repo: string;
   prNumber: number;
   status: "success" | "no_issues" | "error";
-  fixesApplied: number;
   error?: string;
 }
 
@@ -31,24 +33,58 @@ export async function reviewPRWorkflow(
 ): Promise<ReviewPRResult> {
   "use workflow";
 
-  const { installationId, repoFullName, prNumber, prBranch } = params;
+  const { installationId, repoFullName, prNumber, prBranch, lintRunId } = params;
 
-  let fixesApplied = 0;
+  // Step 1: Check if we have push access before doing any work
+  const pushAccess = await checkPushAccess(installationId, repoFullName, prBranch);
 
-  // Step 1: Get GitHub access token
+  if (!pushAccess.canPush) {
+    await addPRComment(
+      installationId,
+      repoFullName,
+      prNumber,
+      `## Ultracite Review Skipped
+
+Unable to push fixes to this branch: ${pushAccess.reason}
+
+Please ensure the Ultracite app has write access to this repository and branch.
+
+---
+*Powered by [Ultracite](https://ultracite.ai)*`
+    );
+
+    // Update lint run status as failed
+    await updateLintRun(lintRunId, {
+      prCreated: false,
+      issuesFound: 0,
+      prNumber,
+      error: pushAccess.reason,
+    });
+
+    return {
+      repo: repoFullName,
+      prNumber,
+      status: "error",
+      error: pushAccess.reason,
+    };
+  }
+
+  let madeChanges = false;
+
+  // Step 2: Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Step 2: Create sandbox with the repo
+  // Step 3: Create sandbox with the repo
   const sandbox = await createSandbox(repoFullName, token);
 
   try {
-    // Step 3: Checkout the PR branch
+    // Step 4: Checkout the PR branch
     await checkoutBranch(sandbox, prBranch);
 
-    // Step 4: Install dependencies
+    // Step 5: Install dependencies
     await installDependencies(sandbox);
 
-    // Step 5: Run ultracite fix (auto-fix what we can)
+    // Step 6: Run ultracite fix (auto-fix what we can)
     const fixResult = await fixLint(sandbox);
 
     if (fixResult.hasChanges) {
@@ -57,19 +93,15 @@ export async function reviewPRWorkflow(
         sandbox,
         "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite"
       );
-      fixesApplied++;
+      madeChanges = true;
     }
 
-    // Step 6: Check if there are remaining issues
-    const hasRemainingIssues =
-      fixResult.output.includes("error") ||
-      fixResult.output.includes("warning");
-
-    if (hasRemainingIssues) {
-      // Step 7: Install Claude Code CLI
+    // Step 7: Check if there are remaining issues (based on exit code from check)
+    if (fixResult.hasRemainingIssues) {
+      // Step 8: Install Claude Code CLI
       await installClaudeCode(sandbox);
 
-      // Step 8: Use Claude Code to fix remaining issues iteratively
+      // Step 9: Use Claude Code to fix remaining issues iteratively
       await runClaudeCode(sandbox);
 
       // Commit any changes from Claude Code fixes
@@ -78,22 +110,21 @@ export async function reviewPRWorkflow(
           sandbox,
           "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
         );
-        fixesApplied++;
+        madeChanges = true;
       }
     }
 
     // Add a comment to the PR summarizing what was done
-    const commentBody =
-      fixesApplied > 0
-        ? `## Ultracite Review Complete
+    const commentBody = madeChanges
+      ? `## Ultracite Review Complete
 
-I've automatically fixed **${fixesApplied}** lint issue${fixesApplied === 1 ? "" : "s"} in this PR.
+I've automatically fixed lint issues in this PR.
 
 Changes have been pushed to this branch. Please review the commits.
 
 ---
 *Powered by [Ultracite](https://ultracite.ai)*`
-        : `## Ultracite Review Complete
+      : `## Ultracite Review Complete
 
 No lint issues found in this PR.
 
@@ -102,11 +133,17 @@ No lint issues found in this PR.
 
     await addPRComment(installationId, repoFullName, prNumber, commentBody);
 
+    // Update lint run status
+    await updateLintRun(lintRunId, {
+      prCreated: madeChanges,
+      issuesFound: 0,
+      prNumber,
+    });
+
     return {
       repo: repoFullName,
       prNumber,
-      status: fixesApplied > 0 ? "success" : "no_issues",
-      fixesApplied,
+      status: madeChanges ? "success" : "no_issues",
     };
   } catch (error) {
     const errorMessage =
@@ -133,11 +170,18 @@ ${errorMessage}
       // Ignore comment failure
     }
 
+    // Update lint run status as failed
+    await updateLintRun(lintRunId, {
+      prCreated: false,
+      issuesFound: 0,
+      prNumber,
+      error: errorMessage,
+    });
+
     return {
       repo: repoFullName,
       prNumber,
       status: "error",
-      fixesApplied,
       error: errorMessage,
     };
   } finally {
