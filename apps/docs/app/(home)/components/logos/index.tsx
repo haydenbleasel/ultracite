@@ -5,6 +5,7 @@ import AlanTuringInstitute from "./ati.svg";
 import Axiom from "./axiom.svg";
 import Clerk from "./clerk.svg";
 import Consent from "./consent.svg";
+import ElevenLabs from "./elevenlabs.svg";
 import FrenchGovernment from "./french-government.svg";
 import MagicUI from "./magic-ui.svg";
 import Profound from "./profound.svg";
@@ -70,6 +71,10 @@ const logos = [
   {
     name: "Workday",
     src: Workday,
+  },
+  {
+    name: "ElevenLabs",
+    src: ElevenLabs,
   },
 ];
 
