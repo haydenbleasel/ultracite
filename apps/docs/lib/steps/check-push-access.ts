@@ -31,12 +31,11 @@ export async function checkPushAccess(
 
   // Check branch protection rules
   try {
-    const { data: protection } =
-      await octokit.rest.repos.getBranchProtection({
-        owner,
-        repo,
-        branch,
-      });
+    const { data: protection } = await octokit.rest.repos.getBranchProtection({
+      owner,
+      repo,
+      branch,
+    });
 
     // Check if there are restrictions on who can push
     if (protection.restrictions) {

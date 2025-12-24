@@ -96,12 +96,7 @@ const OxlintPage = () => (
         </p>
         <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
           <Installer command="npx ultracite@latest init --linters oxlint" />
-          <Button
-            className="px-4"
-            asChild
-            size="lg"
-            variant="link"
-          >
+          <Button asChild className="px-4" size="lg" variant="link">
             <Link href="/docs">Read the docs</Link>
           </Button>
         </div>

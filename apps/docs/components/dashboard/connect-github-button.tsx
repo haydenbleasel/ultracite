@@ -12,14 +12,11 @@ export const ConnectGitHubButton = ({
   const installUrl = `https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_SLUG}/installations/new`;
 
   return (
-    <Button
-      asChild
-      variant={hasInstallation ? "secondary" : "default"}
-    >
+    <Button asChild variant={hasInstallation ? "secondary" : "default"}>
       <Link href={installUrl}>
-          <SiGithub className="size-4" />
-          {hasInstallation ? "Manage GitHub" : "Connect GitHub"}
-        </Link>
-        </Button>
+        <SiGithub className="size-4" />
+        {hasInstallation ? "Manage GitHub" : "Connect GitHub"}
+      </Link>
+    </Button>
   );
 };

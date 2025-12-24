@@ -36,7 +36,7 @@ export async function createPullRequest(
   const response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
     owner,
     repo,
-    title: title,
+    title,
     body: `## Summary
 
 This PR fixes linting issues detected by Ultracite.

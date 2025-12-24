@@ -138,9 +138,10 @@ Please ensure the Ultracite app has write access to this repository and branch.
     }
 
     // Add a comment to the PR summarizing what was done
-    const changelogSection = changelogs.length > 0
-      ? `\n\n## Changes\n\n${changelogs.join("\n\n")}`
-      : "";
+    const changelogSection =
+      changelogs.length > 0
+        ? `\n\n## Changes\n\n${changelogs.join("\n\n")}`
+        : "";
 
     const commentBody = madeChanges
       ? `## Ultracite Review Complete

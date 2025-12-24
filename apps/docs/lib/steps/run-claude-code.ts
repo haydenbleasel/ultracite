@@ -18,7 +18,7 @@ Important:
 - Don't modify files unnecessarily`;
 
 export async function runClaudeCode(
-  sandboxId: string,
+  sandboxId: string
 ): Promise<ClaudeCodeResult> {
   "use step";
 

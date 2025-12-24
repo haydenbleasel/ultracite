@@ -94,7 +94,9 @@ export async function lintRepoWorkflow(
         branchName,
         file: "multiple files",
         isLLMFix: false,
-        changelog: changelogResult.success ? changelogResult.changelog : undefined,
+        changelog: changelogResult.success
+          ? changelogResult.changelog
+          : undefined,
       });
 
       result = {
@@ -129,7 +131,9 @@ export async function lintRepoWorkflow(
           branchName,
           file: "multiple files",
           isLLMFix: true,
-          changelog: changelogResult.success ? changelogResult.changelog : undefined,
+          changelog: changelogResult.success
+            ? changelogResult.changelog
+            : undefined,
         });
 
         result = {

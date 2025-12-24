@@ -63,17 +63,8 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
             <Installer
               command={`npx ultracite@latest init --agents ${agent.id}`}
             />
-            <Button
-              className="px-4"
-              asChild
-              size="lg"
-              variant="link"
-            >
-              <a
-                href={agent.website}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
+            <Button asChild className="px-4" size="lg" variant="link">
+              <a href={agent.website} rel="noopener noreferrer" target="_blank">
                 Visit {agent.name}
               </a>
             </Button>
@@ -241,11 +232,7 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
                 ))}
             </div>
 
-            <Button
-              className="w-fit"
-              asChild
-              variant="outline"
-            >
+            <Button asChild className="w-fit" variant="outline">
               <Link href="/docs">View all agents</Link>
             </Button>
           </section>

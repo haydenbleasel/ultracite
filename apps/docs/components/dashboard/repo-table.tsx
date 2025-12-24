@@ -1,4 +1,4 @@
-import { ExternalLinkIcon, GitBranchIcon } from "lucide-react";
+import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Table,
@@ -18,13 +18,11 @@ interface RepoTableProps {
 
 export const RepoTable = ({ runs, repo }: RepoTableProps) => {
   if (runs.length === 0) {
-    return (
-      <p className="text-muted-foreground text-sm">No lint runs found.</p>
-    );
+    return <p className="text-muted-foreground text-sm">No lint runs found.</p>;
   }
 
   return (
-    <div className="bg-background rounded-lg border shadow-xs overflow-hidden">
+    <div className="overflow-hidden rounded-lg border bg-background shadow-xs">
       <Table>
         <TableHeader>
           <TableRow>

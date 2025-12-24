@@ -63,20 +63,15 @@ const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
             <Installer
               command={`npx ultracite@latest init --editors ${editor.cliValue}`}
             />
-            <Button
-              className="px-4"
-              asChild
-              size="lg"
-              variant="link"
-            >
+            <Button asChild className="px-4" size="lg" variant="link">
               <a
-                  href={editor.website}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Visit {editor.name}
-                </a>
-                </Button>
+                href={editor.website}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Visit {editor.name}
+              </a>
+            </Button>
           </div>
         </div>
 

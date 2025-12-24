@@ -13,7 +13,12 @@ export async function createBranchAndPush(
 
   // Configure remote URL with authentication token
   const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
-  await sandbox.runCommand("git", ["remote", "set-url", "origin", authenticatedUrl]);
+  await sandbox.runCommand("git", [
+    "remote",
+    "set-url",
+    "origin",
+    authenticatedUrl,
+  ]);
 
   const branchName = `ultracite/fix-${nanoid()}`;
 
@@ -22,7 +27,7 @@ export async function createBranchAndPush(
     "-b",
     branchName,
   ]);
-  
+
   if (checkoutResult.exitCode !== 0) {
     const output = await checkoutResult.output("both");
     throw new Error(`Failed to create branch: ${output}`);
@@ -41,7 +46,7 @@ export async function createBranchAndPush(
     "-m",
     `fix: ${commitMessage}\n\nAutomatically fixed by Ultracite`,
   ]);
-  
+
   if (commitResult.exitCode !== 0) {
     const output = await commitResult.output("both");
     throw new Error(`Failed to commit: ${output}`);
@@ -52,7 +57,7 @@ export async function createBranchAndPush(
     "origin",
     branchName,
   ]);
-  
+
   if (pushResult.exitCode !== 0) {
     const output = await pushResult.output("both");
     throw new Error(`Failed to push branch: ${output}`);
@@ -65,13 +70,11 @@ export async function createBranchAndPush(
     "origin",
     branchName,
   ]);
-  
+
   const verifyOutput = await verifyResult.stdout();
-  
+
   if (!verifyOutput.includes(branchName)) {
-    throw new Error(
-      `Branch ${branchName} was not found on remote after push`
-    );
+    throw new Error(`Branch ${branchName} was not found on remote after push`);
   }
 
   return branchName;

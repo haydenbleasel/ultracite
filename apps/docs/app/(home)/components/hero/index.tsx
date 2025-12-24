@@ -43,7 +43,7 @@ export const Hero = ({ description, children }: HeroProps) => (
               <TooltipTrigger>
                 <Image
                   alt={logo.name}
-                  className="size-12 overflow-hidden rounded-full object-cover ring-2 ring-background"
+                  className="size-6 overflow-hidden rounded-full object-cover ring-2 ring-background sm:size-8 md:size-10 lg:size-12"
                   height={48}
                   key={logo.name}
                   src={logo.src}
@@ -55,17 +55,12 @@ export const Hero = ({ description, children }: HeroProps) => (
           ))}
         </span>
       </h1>
-      <p className="max-w-xl text-balance text-lg text-muted-foreground tracking-tight">
+      <p className="max-w-xl text-balance text-muted-foreground tracking-tight sm:text-lg">
         {description}
       </p>
       <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
         <Installer command="npx ultracite@latest init" />
-        <Button
-          className="px-4"
-          asChild
-          size="lg"
-          variant="link"
-        >
+        <Button asChild className="px-4" size="lg" variant="link">
           <Link href="/docs">Read the docs</Link>
         </Button>
       </div>

@@ -8,15 +8,15 @@ interface RepoListProps {
 }
 
 export const RepoList = ({ repos }: RepoListProps) => (
-    <div className="space-y-4">
-      {repos.map((repo) => (
-        <div className="bg-secondary rounded-xl p-2 space-y-2">
-          <div className="flex items-center justify-between gap-2 py-1 px-2">
-            <h3 className="font-semibold text-sm">{repo.fullName}</h3>
-            <p className="text-muted-foreground text-xs">{repo.defaultBranch}</p>
-          </div>
-          <RepoTable runs={repo.lintRuns} repo={repo} />
+  <div className="space-y-4">
+    {repos.map((repo) => (
+      <div className="space-y-2 rounded-xl bg-secondary p-2">
+        <div className="flex items-center justify-between gap-2 px-2 py-1">
+          <h3 className="font-semibold text-sm">{repo.fullName}</h3>
+          <p className="text-muted-foreground text-xs">{repo.defaultBranch}</p>
         </div>
-      ))}
-    </div>
-  );
+        <RepoTable repo={repo} runs={repo.lintRuns} />
+      </div>
+    ))}
+  </div>
+);
