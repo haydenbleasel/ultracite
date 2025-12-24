@@ -3,11 +3,17 @@ import { Sandbox } from "@vercel/sandbox";
 export async function createBranchAndPush(
   sandboxId: string,
   branchSuffix: string,
-  commitMessage: string
+  commitMessage: string,
+  repoFullName: string,
+  token: string
 ): Promise<string> {
   "use step";
 
   const sandbox = await Sandbox.get({ sandboxId });
+
+  // Configure remote URL with authentication token
+  const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
+  await sandbox.runCommand("git", ["remote", "set-url", "origin", authenticatedUrl]);
 
   const branchName = `ultracite/fix-${branchSuffix.replace(/\//g, "-")}-${Date.now()}`;
 

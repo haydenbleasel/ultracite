@@ -96,7 +96,9 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Commit auto-fix changes
       await commitAndPush(
         sandboxId,
-        "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite"
+        "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite",
+        repoFullName,
+        token
       );
       madeChanges = true;
     }
@@ -125,7 +127,9 @@ Important:
       if (await hasUncommittedChanges(sandboxId)) {
         await commitAndPush(
           sandboxId,
-          "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
+          "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI",
+          repoFullName,
+          token
         );
         madeChanges = true;
       }

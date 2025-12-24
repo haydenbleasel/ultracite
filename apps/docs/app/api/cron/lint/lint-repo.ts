@@ -80,7 +80,9 @@ export async function lintRepoWorkflow(
       const branchName = await createBranchAndPush(
         sandboxId,
         "auto-fix",
-        "Auto-fix lint issues"
+        "Auto-fix lint issues",
+        repoFullName,
+        token
       );
 
       const prResult = await createPullRequest({
@@ -123,7 +125,9 @@ Important:
         const branchName = await createBranchAndPush(
           sandboxId,
           "claude-fix",
-          "Fix lint issue with Claude Code"
+          "Fix lint issue with Claude Code",
+          repoFullName,
+          token
         );
 
         const prResult = await createPullRequest({
