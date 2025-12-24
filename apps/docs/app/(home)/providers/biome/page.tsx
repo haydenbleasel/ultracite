@@ -83,10 +83,10 @@ const BiomePage = () => (
         {provider && (
           <Image
             alt={provider.name}
-            className="size-10 rounded-full"
-            height={40}
+            className="size-12 rounded-full"
+            height={48}
             src={provider.logo}
-            width={40}
+            width={48}
           />
         )}
         <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">

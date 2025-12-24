@@ -55,25 +55,25 @@ const ESLintPage = () => (
           {provider && (
             <Image
               alt="ESLint"
-              className="size-10 rounded-full"
-              height={40}
+              className="size-12 rounded-full"
+              height={48}
               src={provider.logo}
-              width={40}
+              width={48}
             />
           )}
           <Image
             alt="Prettier"
-            className="-ml-3 size-10 rounded-full ring-2 ring-background"
-            height={40}
+            className="-ml-3 size-12 rounded-full ring-2 ring-background"
+            height={48}
             src={Prettier}
-            width={40}
+            width={48}
           />
           <Image
             alt="Stylelint"
-            className="-ml-3 size-10 rounded-full ring-2 ring-background"
-            height={40}
+            className="-ml-3 size-12 rounded-full ring-2 ring-background"
+            height={48}
             src={Stylelint}
-            width={40}
+            width={48}
           />
         </div>
         <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 const Home = () => (
-  <div className="mt-16 grid gap-16 sm:mt-24 sm:gap-24 md:gap-32">
+  <div className="grid gap-16 sm:gap-24 md:gap-32">
     <Hero description={description}>
       <Demo />
     </Hero>
