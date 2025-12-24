@@ -36,7 +36,6 @@ const DashboardPage = async () => {
         orderBy: { createdAt: "desc" },
         include: {
           lintRuns: {
-            take: 1,
             orderBy: { createdAt: "desc" },
           },
         },

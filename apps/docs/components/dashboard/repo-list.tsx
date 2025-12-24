@@ -1,5 +1,5 @@
 import type { LintRun, Repo } from "@/lib/database/generated/client";
-import { RepoCard } from "./repo-card";
+import { RepoTable } from "./repo-table";
 
 interface RepoListProps {
   repos: (Repo & {
@@ -7,12 +7,16 @@ interface RepoListProps {
   })[];
 }
 
-export const RepoList = ({ repos }: RepoListProps) => {
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+export const RepoList = ({ repos }: RepoListProps) => (
+    <div className="space-y-4">
       {repos.map((repo) => (
-        <RepoCard key={repo.id} repo={repo} />
+        <div className="bg-secondary rounded-xl p-2 space-y-2">
+          <div className="flex items-center justify-between gap-2 py-1 px-2">
+            <h3 className="font-semibold text-sm">{repo.fullName}</h3>
+            <p className="text-muted-foreground text-xs">{repo.defaultBranch}</p>
+          </div>
+          <RepoTable runs={repo.lintRuns} repo={repo} />
+        </div>
       ))}
     </div>
   );
-};
