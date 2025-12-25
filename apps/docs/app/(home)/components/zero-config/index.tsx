@@ -1,6 +1,11 @@
 "use client";
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
+import {
+  type ConfigFile,
+  type ProviderId,
+  getConfigFiles,
+} from "@ultracite/data/providers";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,70 +13,11 @@ import { CodeBlock } from "@/components/ultracite/code-block/client";
 import { FrameworkSelector, frameworks } from "./framework-selector";
 import { ProviderSelector, providers } from "./provider-selector";
 
-const biomeConfig = [
-  {
-    filename: "biome.jsonc",
-    icon: SiJson,
-    lang: "json",
-    code: (presets: string[]) => `{
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [
-    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
-  ]
-}`,
-  },
-];
+const getIcon = (lang: ConfigFile["lang"]) =>
+  lang === "json" ? SiJson : SiJavascript;
 
-const eslintConfig = [
-  {
-    filename: "eslint.config.mjs",
-    icon: SiJavascript,
-    lang: "js",
-    code: (presets: string[]) => `import { defineConfig } from "eslint/config";
-${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
-
-export default defineConfig([
-  {
-    extends: [
-      ${presets.join(",\n      ")}
-    ],
-  },
-]);`,
-  },
-  {
-    filename: "prettier.config.mjs",
-    icon: SiJavascript,
-    lang: "ts",
-    code: () => `export { default } from "ultracite/prettier";`,
-  },
-  {
-    filename: "stylelint.config.mjs",
-    icon: SiJavascript,
-    lang: "ts",
-    code: () => `export { default } from 'ultracite/stylelint';`,
-  },
-];
-
-const oxlintConfig = [
-  {
-    filename: ".oxlintrc.json",
-    icon: SiJson,
-    lang: "json",
-    code: (presets: string[]) => `{
-  "extends": [
-    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
-  ]
-}`,
-  },
-  {
-    filename: ".oxfmtrc.jsonc",
-    icon: SiJson,
-    lang: "json",
-    code: () => `{
-  "$schema": "./node_modules/oxfmt/configuration_schema.json"
-}`,
-  },
-];
+const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
+  lang === "json" ? "json" : "js";
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(providers[1].id);
@@ -83,13 +29,10 @@ export const ZeroConfig = () => {
   const selectedFramework = frameworks.find((f) => f.label === framework);
 
   const config = useMemo(() => {
-    if (selectedProvider?.id === "biome") {
-      return biomeConfig;
+    if (!selectedProvider?.id) {
+      return [];
     }
-    if (selectedProvider?.id === "eslint") {
-      return eslintConfig;
-    }
-    return oxlintConfig;
+    return getConfigFiles(selectedProvider.id as ProviderId);
   }, [selectedProvider]);
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
@@ -136,22 +79,25 @@ export const ZeroConfig = () => {
             value={tabValue}
           >
             <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
-              {config.map((f) => (
-                <TabsTrigger
-                  className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
-                  key={f.filename}
-                  value={f.filename}
-                >
-                  <f.icon className="size-3.5 text-muted-foreground" />
-                  <span>{f.filename}</span>
-                </TabsTrigger>
-              ))}
+              {config.map((f) => {
+                const Icon = getIcon(f.lang);
+                return (
+                  <TabsTrigger
+                    className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
+                    key={f.filename}
+                    value={f.filename}
+                  >
+                    <Icon className="size-3.5 text-muted-foreground" />
+                    <span>{f.filename}</span>
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
             {config.map((f) => (
               <TabsContent key={f.filename} value={f.filename}>
                 <CodeBlock
                   code={f.code(selectedFramework?.presets ?? [])}
-                  lang={f.lang as BundledLanguage}
+                  lang={getLang(f.lang)}
                 />
               </TabsContent>
             ))}

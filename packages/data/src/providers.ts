@@ -10,6 +10,97 @@ export { prettierLogo, stylelintLogo };
 
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
+export interface ConfigFile {
+  filename: string;
+  lang: "json" | "javascript";
+  code: (presets: string[]) => string;
+}
+
+const biomeConfigFiles: ConfigFile[] = [
+  {
+    filename: "biome.jsonc",
+    lang: "json",
+    code: (presets: string[]) => `{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
+  ]
+}`,
+  },
+];
+
+const eslintConfigFiles: ConfigFile[] = [
+  {
+    filename: "eslint.config.mjs",
+    lang: "javascript",
+    code: (presets: string[]) => `import { defineConfig } from "eslint/config";
+${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
+
+export default defineConfig([
+  {
+    extends: [
+      ${presets.join(",\n      ")}
+    ],
+  },
+]);`,
+  },
+  {
+    filename: "prettier.config.mjs",
+    lang: "javascript",
+    code: () => `export { default } from "ultracite/prettier";`,
+  },
+  {
+    filename: "stylelint.config.mjs",
+    lang: "javascript",
+    code: () => `export { default } from "ultracite/stylelint";`,
+  },
+];
+
+const oxlintConfigFiles: ConfigFile[] = [
+  {
+    filename: ".oxlintrc.json",
+    lang: "json",
+    code: (presets: string[]) => `{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": [
+    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
+  ]
+}`,
+  },
+  {
+    filename: ".oxfmtrc.jsonc",
+    lang: "json",
+    code: () => `{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json"
+}`,
+  },
+];
+
+/** Get config files for a provider */
+export const getConfigFiles = (providerId: ProviderId): ConfigFile[] => {
+  if (providerId === "biome") {
+    return biomeConfigFiles;
+  }
+  if (providerId === "eslint") {
+    return eslintConfigFiles;
+  }
+  if (providerId === "oxlint") {
+    return oxlintConfigFiles;
+  }
+  return [];
+};
+
+/** Get description text for config section */
+export const getConfigDescription = (providerId: ProviderId): string => {
+  if (providerId === "biome") {
+    return "Biome handles both formatting and linting with one unified config.";
+  }
+  if (providerId === "eslint") {
+    return "Ultracite handles the complexity of combining multiple tools into a cohesive setup.";
+  }
+  return "Giving you control over each aspect of linting and formatting.";
+};
+
 export interface ProviderFeature {
   title: string;
   description: string;
