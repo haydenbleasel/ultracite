@@ -1,4 +1,6 @@
 /* biome-ignore-all lint/style/useNamingConvention: "Editor configs use various naming conventions" */
+
+import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
@@ -166,29 +168,34 @@ export const vscodeEslintConfig = {
 export const getVscodeConfig = (linter: Linter = "biome") => {
   switch (linter) {
     case "biome":
-      return {
-        ...vscodeBaseConfig,
-        ...vscodeBiomeConfig,
-      };
-    case "oxlint":
-      return {
-        ...vscodeBaseConfig,
-        ...vscodeOxlintConfig,
-      };
+      return deepmerge(vscodeBaseConfig, vscodeBiomeConfig);
     case "eslint":
-      return {
-        ...vscodeBaseConfig,
-        ...vscodeEslintConfig,
-      };
+      return deepmerge(vscodeBaseConfig, vscodeEslintConfig);
+    case "oxlint":
+      return deepmerge(vscodeBaseConfig, vscodeOxlintConfig);
     default:
       return vscodeBaseConfig;
   }
 };
 
 // Zed Biome configuration
-export const zedBiomeConfig = {
+export const zedBaseConfig = {
   formatter: "language_server",
   format_on_save: "on",
+  lsp: {
+    "typescript-language-server": {
+      settings: {
+        typescript: {
+          preferences: {
+            includePackageJsonAutoImports: "on",
+          },
+        },
+      },
+    },
+  },
+};
+
+const zedBiomeConfig = {
   languages: {
     JavaScript: {
       formatter: {
@@ -224,13 +231,104 @@ export const zedBiomeConfig = {
       },
     },
   },
+};
+
+const zedEslintConfig = {
+  languages: {
+    JavaScript: {
+      formatter: {
+        language_server: {
+          name: "eslint",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
+    },
+    TypeScript: {
+      formatter: {
+        language_server: {
+          name: "eslint",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
+    },
+    TSX: {
+      formatter: {
+        language_server: {
+          name: "eslint",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
+    },
+  },
+};
+
+const zedOxcConfig = {
+  languages: {
+    JavaScript: {
+      formatter: {
+        language_server: {
+          name: "oxfmt",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
+    },
+    TypeScript: {
+      formatter: {
+        language_server: {
+          name: "oxfmt",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
+    },
+    TSX: {
+      formatter: {
+        language_server: {
+          name: "oxfmt",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
+    },
+  },
   lsp: {
-    "typescript-language-server": {
-      settings: {
-        typescript: {
-          preferences: {
-            includePackageJsonAutoImports: "on",
-          },
+    oxlint: {
+      initialization_options: {
+        settings: {
+          disableNestedConfig: false,
+          fixKind: "safe_fix",
+          run: "onType",
+          typeAware: true,
+          unusedDisableDirectives: "deny",
+        },
+      },
+    },
+    oxfmt: {
+      initialization_options: {
+        settings: {
+          configPath: null,
+          flags: {},
+          "fmt.configPath": null,
+          "fmt.experimental": true,
+          run: "onSave",
+          typeAware: false,
+          unusedDisableDirectives: false,
         },
       },
     },
@@ -238,13 +336,16 @@ export const zedBiomeConfig = {
 };
 
 export const getZedConfig = (linter: Linter = "biome") => {
-  // Zed currently only has good support for Biome
-  // ESLint and Oxlint support is limited
-  if (linter === "biome") {
-    return zedBiomeConfig;
+  switch (linter) {
+    case "biome":
+      return deepmerge(zedBaseConfig, zedBiomeConfig);
+    case "eslint":
+      return deepmerge(zedBaseConfig, zedEslintConfig);
+    case "oxlint":
+      return deepmerge(zedBaseConfig, zedOxcConfig);
+    default:
+      return zedBaseConfig;
   }
-  // Default to Biome config for other linters
-  return zedBiomeConfig;
 };
 
 export const editors: Editor[] = [
