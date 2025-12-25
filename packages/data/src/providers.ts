@@ -90,17 +90,6 @@ export const getConfigFiles = (providerId: ProviderId): ConfigFile[] => {
   return [];
 };
 
-/** Get description text for config section */
-export const getConfigDescription = (providerId: ProviderId): string => {
-  if (providerId === "biome") {
-    return "Biome handles both formatting and linting with one unified config.";
-  }
-  if (providerId === "eslint") {
-    return "Ultracite handles the complexity of combining multiple tools into a cohesive setup.";
-  }
-  return "Giving you control over each aspect of linting and formatting.";
-};
-
 export interface ProviderFeature {
   title: string;
   description: string;

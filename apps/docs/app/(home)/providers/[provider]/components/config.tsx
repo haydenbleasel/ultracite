@@ -1,61 +1,64 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import {
-  getConfigDescription,
+  type ConfigFile,
   getConfigFiles,
   type Provider,
 } from "@ultracite/data/providers";
+import type { BundledLanguage } from "shiki";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/server";
 
 interface ConfigProps {
   provider: Provider;
 }
 
-const ConfigIcon = ({ lang }: { lang: "json" | "javascript" }) => {
-  if (lang === "json") {
-    return <SiJson className="size-4 text-muted-foreground" />;
-  }
-  return <SiJavascript className="size-4 text-muted-foreground" />;
-};
+const getIcon = (lang: ConfigFile["lang"]) =>
+  lang === "json" ? SiJson : SiJavascript;
+
+const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
+  lang === "json" ? "json" : "js";
 
 export const Config = ({ provider }: ConfigProps) => {
   const configFiles = getConfigFiles(provider.id);
-  const isSingleFile = configFiles.length === 1;
 
   return (
-    <div
-      className={`grid items-start gap-8 ${isSingleFile ? "lg:grid-cols-3" : ""}`}
-    >
-      <div className="grid gap-4">
+    <div className="grid gap-8">
+      <div className="mx-auto grid max-w-xl gap-4 text-center">
         <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
           Configuration
         </h2>
         <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
-          {configFiles.length === 1
-            ? "A single configuration file is all you need."
-            : `${configFiles.length === 2 ? "Two" : "Three"} simple config files are all you need.`}{" "}
-          {getConfigDescription(provider.id)}
+          Simple configuration files which extend the Ultracite configuration,
+          giving you control over each aspect of linting and formatting.
         </p>
       </div>
 
-      <div
-        className={`grid gap-4 ${isSingleFile ? "col-span-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}
-      >
-        {configFiles.map((file) => (
-          <div
-            className="mx-auto w-full max-w-3xl divide-y overflow-hidden rounded-lg border"
-            key={file.filename}
-          >
-            <div className="flex items-center gap-2 bg-secondary p-4">
-              <ConfigIcon lang={file.lang} />
-              <p className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm font-mono text-xs">
-                {file.filename}
-              </p>
-            </div>
-            <div className="mx-auto h-48 w-full max-w-3xl overflow-hidden overflow-y-auto">
-              <CodeBlock code={file.code(["core"])} lang={file.lang} />
-            </div>
-          </div>
-        ))}
+      <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
+        <Tabs className="w-full gap-0" defaultValue={configFiles[0]?.filename}>
+          <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
+            {configFiles.map((file) => {
+              const Icon = getIcon(file.lang);
+              return (
+                <TabsTrigger
+                  className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
+                  key={file.filename}
+                  value={file.filename}
+                >
+                  <Icon className="size-3.5 text-muted-foreground" />
+                  <span>{file.filename}</span>
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+          {configFiles.map((file) => (
+            <TabsContent key={file.filename} value={file.filename}>
+              <CodeBlock
+                code={file.code(["core", "react", "next"])}
+                lang={getLang(file.lang)}
+              />
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
     </div>
   );
