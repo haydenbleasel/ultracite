@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { getRules } from "@ultracite/data/rules";
 import { dlxCommand, type PackageManagerName } from "nypm";
-import type { options } from "../consts/options";
+import type { options } from "@ultracite/data/options";
 import { AGENTS } from "../consts/rules";
 import { exists } from "../utils";
 

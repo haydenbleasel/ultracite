@@ -17,7 +17,7 @@ import {
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
-import type { options } from "./consts/options";
+import type { options } from "@ultracite/data/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
 import { createHooks } from "./hooks";

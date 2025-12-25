@@ -1,11 +1,12 @@
+import { options } from "@ultracite/data/options";
 import { initTRPC } from "@trpc/server";
 import { createCli, type TrpcCliMeta } from "trpc-cli";
+import { type PackageManagerName, packageManagers } from "nypm";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
-import { options } from "./consts/options";
 import { initialize } from "./initialize";
 
 const t = initTRPC.meta<TrpcCliMeta>().create();
@@ -18,7 +19,12 @@ export const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(options.packageManagers)
+          .enum(
+            packageManagers.map((pm) => pm.name) as [
+              PackageManagerName,
+              ...PackageManagerName[],
+            ]
+          )
           .optional()
           .describe("Package manager to use"),
         linter: z

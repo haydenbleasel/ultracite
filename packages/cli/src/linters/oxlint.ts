@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import type { options } from "../consts/options";
+import type { options } from "@ultracite/data/options";
 import { exists } from "../utils";
 
 const oxlintConfigPath = "./.oxlintrc.json";
