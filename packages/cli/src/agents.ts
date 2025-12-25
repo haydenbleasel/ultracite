@@ -1,35 +1,29 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { agents } from "@ultracite/data/agents";
-import type { EditorRulesConfig } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
 import { getRules } from "@ultracite/data/rules";
 import { dlxCommand, type PackageManagerName } from "nypm";
 import { exists } from "./utils";
 
-const AGENTS: Record<(typeof options.agents)[number], EditorRulesConfig> =
-  Object.fromEntries(
-    agents.map((agent) => [
-      agent.id,
-      {
-        path: `./${agent.config.path}`,
-        header: agent.config.header,
-        appendMode: agent.config.appendMode,
-      } satisfies EditorRulesConfig,
-    ])
-  ) as Record<(typeof options.agents)[number], EditorRulesConfig>;
-
 export const createAgents = (
   name: (typeof options.agents)[number],
   packageManager: PackageManagerName
 ) => {
-  const config = AGENTS[name];
+  const agent = agents.find((agent) => agent.id === name);
+
+  if (!agent) {
+    throw new Error(`Agent "${name}" not found`);
+  }
+
   const dlx = dlxCommand(packageManager, "");
   const rules = getRules(dlx);
-  const content = config.header ? `${config.header}\n\n${rules}` : rules;
+  const content = agent.config.header
+    ? `${agent.config.header}\n\n${rules}`
+    : rules;
 
   const ensureDirectory = async () => {
-    const dir = dirname(config.path);
+    const dir = dirname(agent.config.path);
     // Only create directory if it's not the current directory
     if (dir !== ".") {
       // Remove leading './' if present for consistency with test expectations
@@ -39,32 +33,32 @@ export const createAgents = (
   };
 
   return {
-    exists: () => exists(config.path),
+    exists: () => exists(agent.config.path),
 
     create: async () => {
       await ensureDirectory();
-      await writeFile(config.path, content);
+      await writeFile(agent.config.path, content);
     },
 
     update: async () => {
       await ensureDirectory();
 
-      if (config.appendMode) {
-        if (!(await exists(config.path))) {
-          await writeFile(config.path, content);
+      if (agent.config.appendMode) {
+        if (!(await exists(agent.config.path))) {
+          await writeFile(agent.config.path, content);
           return;
         }
 
-        const existingContents = await readFile(config.path, "utf-8");
+        const existingContents = await readFile(agent.config.path, "utf-8");
 
         // Check if rules are already present to avoid duplicates
         if (existingContents.includes(rules.trim())) {
           return;
         }
 
-        await writeFile(config.path, `${existingContents}\n\n${rules}`);
+        await writeFile(agent.config.path, `${existingContents}\n\n${rules}`);
       } else {
-        await writeFile(config.path, content);
+        await writeFile(agent.config.path, content);
       }
     },
   };
