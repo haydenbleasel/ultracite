@@ -11,7 +11,7 @@ import {
 import { agents as agentsData } from "@ultracite/data/agents";
 import { editors } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
-import { linterExtensions } from "@ultracite/data/providers";
+import { providers } from "@ultracite/data/providers";
 import {
   addDevDependency,
   detectPackageManager,
@@ -179,18 +179,24 @@ export const upsertEditorConfig = async (
 
   // Install extension for VS Code-based editors
   if (editorConfig.extension) {
-    const ext = linterExtensions[linter];
+    const linterExtension = providers.find(
+      (provider) => provider.id === linter
+    )?.vscodeExtensionId;
+
+    if (!linterExtension) {
+      throw new Error(`Linter extension not found for ${linter}`);
+    }
 
     if (!quiet) {
-      s.message(`Installing ${ext.name} extension...`);
+      s.message(`Installing ${linterExtension} extension...`);
     }
 
     try {
-      const result = editorConfig.extension(ext.id);
+      const result = editorConfig.extension(linterExtension);
       if (result.status === 0) {
         if (!quiet) {
           s.stop(
-            `${editor.config.path} created and ${ext.name} extension installed.`
+            `${editor.config.path} created and ${linterExtension} extension installed.`
           );
         }
         return;
@@ -201,7 +207,7 @@ export const upsertEditorConfig = async (
 
     if (!quiet) {
       s.stop(
-        `${editor.config.path} created. Install ${ext.name} extension manually.`
+        `${editor.config.path} created. Install ${linterExtension} extension manually.`
       );
     }
     return;

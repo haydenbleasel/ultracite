@@ -15,12 +15,6 @@ export interface LinterExtension {
   name: string;
 }
 
-export const linterExtensions: Record<Linter, LinterExtension> = {
-  biome: { id: "biomejs.biome", name: "Biome" },
-  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
-  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
-};
-
 export interface ConfigFile {
   name: string;
   lang: "json" | "javascript";
@@ -45,6 +39,7 @@ export interface Provider {
   videos?: string[];
   frameworks: string[];
   configFiles: ConfigFile[];
+  vscodeExtensionId: string;
 }
 
 export const providers: Provider[] = [
@@ -120,6 +115,7 @@ export const providers: Provider[] = [
 }`,
       },
     ],
+    vscodeExtensionId: "biomejs.biome",
   },
   {
     id: "eslint",
@@ -183,7 +179,9 @@ export const providers: Provider[] = [
       {
         name: "eslint.config.mjs",
         lang: "javascript",
-        code: (presets: string[]) => `import { defineConfig } from "eslint/config";
+        code: (
+          presets: string[]
+        ) => `import { defineConfig } from "eslint/config";
 ${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
 
 export default defineConfig([
@@ -205,6 +203,7 @@ export default defineConfig([
         code: () => `export { default } from "ultracite/stylelint";`,
       },
     ],
+    vscodeExtensionId: "dbaeumer.vscode-eslint",
   },
   {
     id: "oxlint",
@@ -282,5 +281,6 @@ export default defineConfig([
 }`,
       },
     ],
+    vscodeExtensionId: "oxc.oxc-vscode",
   },
 ];
