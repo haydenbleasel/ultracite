@@ -7,17 +7,6 @@ interface ConfigProps {
   editor: Editor;
 }
 
-const settingsExample = `{
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
-    "source.organizeImports.biome": "explicit"
-  },
-  "editor.defaultFormatter": "biomejs.biome",
-  "typescript.tsdk": "node_modules/typescript/lib"
-}`;
-
 export const Config = ({ editor }: ConfigProps) => (
   <div className="grid items-start gap-8 lg:grid-cols-3">
     <div className="grid gap-4">
@@ -37,11 +26,14 @@ export const Config = ({ editor }: ConfigProps) => (
     <div className="col-span-2 mx-auto w-full max-w-3xl divide-y overflow-hidden rounded-lg border">
       <div className="bg-secondary px-4 py-3">
         <p className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 font-mono text-xs">
-          {editor.configPath}
+          {editor.config.path}
         </p>
       </div>
       <div className="mx-auto h-96 w-full max-w-3xl overflow-hidden overflow-y-auto">
-        <CodeBlock code={settingsExample} lang="json" />
+        <CodeBlock
+          code={JSON.stringify(editor.config.content, null, 2)}
+          lang="json"
+        />
       </div>
     </div>
   </div>
