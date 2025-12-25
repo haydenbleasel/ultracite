@@ -53,7 +53,7 @@ export const Sidebar = () => (
     <div className="flex flex-col gap-px">
       <FileItem icon={FolderIcon} name=".cursor" />
       <FileItem className="ml-2" icon={SiJson} name="hooks.json" />
-      <FileItem className="ml-2" icon={FolderIcon} name=".rules" />
+      <FileItem className="ml-2" icon={FolderIcon} name="rules" />
       <FileItem className="ml-4" icon={SiMarkdown} name="ultracite.mdc" />
       <FileItem icon={FolderIcon} name=".vscode" />
       <FileItem className="ml-2" icon={SiJson} name="settings.json" />
