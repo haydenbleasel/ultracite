@@ -9,7 +9,7 @@ import {
   spinner,
 } from "@clack/prompts";
 import { agents as agentsData } from "@ultracite/data/agents";
-import { editorsWithHooks } from "@ultracite/data/editors";
+import { editorsWithHooks, getEditorById } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
 import { linterExtensions } from "@ultracite/data/providers";
 import {
@@ -19,8 +19,7 @@ import {
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
-import { vscode } from "./editor-config/vscode";
-import { zed } from "./editor-config/zed";
+import { createEditorConfig } from "./editor-config";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
@@ -144,84 +143,74 @@ export const upsertTsConfig = async (quiet = false) => {
   }
 };
 
-export const upsertVsCodeSettings = async (
+export const upsertEditorConfig = async (
+  editorId: string,
   linter: Linter = "biome",
   quiet = false
 ) => {
+  const editor = getEditorById(editorId);
+  if (!editor) {
+    throw new Error(`Editor "${editorId}" not found`);
+  }
+
+  const editorConfig = createEditorConfig(editorId, linter);
   const s = spinner();
 
   if (!quiet) {
-    s.start("Checking for .vscode/settings.json...");
+    s.start(`Checking for ${editor.config.path}...`);
   }
 
-  if (await vscode.exists()) {
+  if (await editorConfig.exists()) {
     if (!quiet) {
-      s.message("settings.json found, updating...");
+      s.message(`${editor.config.path} found, updating...`);
     }
-    await vscode.update(linter);
+    await editorConfig.update();
     if (!quiet) {
-      s.stop("settings.json updated.");
+      s.stop(`${editor.config.path} updated.`);
     }
     return;
   }
 
   if (!quiet) {
-    s.message("settings.json not found, creating...");
+    s.message(`${editor.config.path} not found, creating...`);
   }
-  await vscode.create(linter);
+  await editorConfig.create();
 
-  // Install extension for selected linter
-  const ext = linterExtensions[linter];
+  // Install extension for VS Code-based editors
+  if (editorConfig.extension) {
+    const ext = linterExtensions[linter];
 
-  if (!quiet) {
-    s.message(`Installing ${ext.name} extension...`);
-  }
+    if (!quiet) {
+      s.message(`Installing ${ext.name} extension...`);
+    }
 
-  try {
-    const result = vscode.extension(ext.id);
-    if (result.status === 0) {
-      if (!quiet) {
-        s.stop(`settings.json created and ${ext.name} extension installed.`);
+    try {
+      const result = editorConfig.extension(ext.id);
+      if (result.status === 0) {
+        if (!quiet) {
+          s.stop(`${editor.config.path} created and ${ext.name} extension installed.`);
+        }
+        return;
       }
-    } else if (!quiet) {
-      s.stop(`settings.json created. Install ${ext.name} extension manually.`);
+    } catch {
+      // Fall through to manual install message
     }
-  } catch {
-    if (!quiet) {
-      s.stop(`settings.json created. Install ${ext.name} extension manually.`);
-    }
-  }
-};
 
-export const upsertZedSettings = async (
-  linter: Linter = "biome",
-  quiet = false
-) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Checking for .zed/settings.json...");
-  }
-
-  if (await zed.exists()) {
     if (!quiet) {
-      s.message("settings.json found, updating...");
-    }
-    await zed.update(linter);
-    if (!quiet) {
-      s.stop("settings.json updated.");
+      s.stop(`${editor.config.path} created. Install ${ext.name} extension manually.`);
     }
     return;
   }
 
+  // Non-VS Code editors (like Zed)
   if (!quiet) {
-    s.message("settings.json not found, creating...");
-  }
-  await zed.create(linter);
-  if (!quiet) {
-    s.message(
-      "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
-    );
+    if (editorId === "zed") {
+      s.stop(
+        `${editor.config.path} created. Install the Biome extension: https://biomejs.dev/reference/zed/`
+      );
+    } else {
+      s.stop(`${editor.config.path} created.`);
+    }
   }
 };
 
@@ -1012,11 +1001,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertOxfmtConfig(quiet);
     }
 
-    if (editorConfig?.includes("vscode")) {
-      await upsertVsCodeSettings(linter, quiet);
-    }
-    if (editorConfig?.includes("zed")) {
-      await upsertZedSettings(linter, quiet);
+    for (const editorId of editorConfig ?? []) {
+      await upsertEditorConfig(editorId, linter, quiet);
     }
 
     for (const ruleName of agents ?? []) {

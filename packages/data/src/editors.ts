@@ -25,6 +25,8 @@ export interface EditorHooksConfig {
 export interface EditorConfig {
   path: string;
   getContent: (linter?: Linter) => Record<string, unknown>;
+  /** CLI command to install extensions (e.g., "code --install-extension" for VS Code-based editors) */
+  extensionCommand?: string;
 }
 
 export interface Editor {
@@ -177,6 +179,7 @@ export const editors: Editor[] = [
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -207,6 +210,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -231,6 +235,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -244,6 +249,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -260,6 +266,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -276,6 +283,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {
@@ -289,6 +297,7 @@ alwaysApply: false
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
     },
   },
   {

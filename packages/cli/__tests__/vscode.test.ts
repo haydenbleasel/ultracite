@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import { vscode } from "../src/editor-config/vscode";
+import { createEditorConfig } from "../src/editor-config";
 
 mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0 })),
@@ -13,7 +13,7 @@ mock.module("node:fs/promises", () => ({
   mkdir: mock(() => Promise.resolve()),
 }));
 
-describe("vscode", () => {
+describe("vscode editor config", () => {
   beforeEach(() => {
     mock.restore();
   });
@@ -22,7 +22,7 @@ describe("vscode", () => {
     test("returns true when settings.json exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.vscode/settings.json") {
+          if (path === ".vscode/settings.json") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -32,6 +32,7 @@ describe("vscode", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const vscode = createEditorConfig("vscode");
       const result = await vscode.exists();
       expect(result).toBe(true);
     });
@@ -44,6 +45,7 @@ describe("vscode", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const vscode = createEditorConfig("vscode");
       const result = await vscode.exists();
       expect(result).toBe(false);
     });
@@ -59,6 +61,7 @@ describe("vscode", () => {
         mkdir: mockMkdir,
       }));
 
+      const vscode = createEditorConfig("vscode");
       await vscode.create();
 
       expect(mockMkdir).toHaveBeenCalledWith(".vscode", { recursive: true });
@@ -73,11 +76,12 @@ describe("vscode", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const vscode = createEditorConfig("vscode");
       await vscode.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.vscode/settings.json");
+      expect(writeCall[0]).toBe(".vscode/settings.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       // The default config includes various VS Code settings
       // Just verify it's a valid object with some expected keys
@@ -97,6 +101,7 @@ describe("vscode", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const vscode = createEditorConfig("vscode");
       await vscode.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -117,6 +122,7 @@ describe("vscode", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const vscode = createEditorConfig("vscode");
       await vscode.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -136,7 +142,9 @@ describe("vscode", () => {
         execSync: mock(() => ""),
       }));
 
-      vscode.extension();
+      const vscode = createEditorConfig("vscode");
+      expect(vscode.extension).toBeDefined();
+      vscode.extension?.("biomejs.biome");
 
       expect(mockSpawn).toHaveBeenCalled();
       const spawnCall = mockSpawn.mock.calls[0];
