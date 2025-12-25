@@ -22,8 +22,8 @@ export const Config = ({ provider }: ConfigProps) => {
   const configFiles = getConfigFiles(provider.id);
 
   return (
-    <div className="grid gap-8">
-      <div className="mx-auto grid max-w-xl gap-4 text-center">
+    <div className="grid items-start gap-8 lg:grid-cols-3">
+      <div className="grid gap-4">
         <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
           Configuration
         </h2>
@@ -31,11 +31,15 @@ export const Config = ({ provider }: ConfigProps) => {
           Simple configuration files which extend the Ultracite configuration,
           giving you control over each aspect of linting and formatting.
         </p>
+        <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
+          Each config file is designed to be minimal while providing maximum
+          coverage through Ultracite presets.
+        </p>
       </div>
 
-      <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
+      <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
         <Tabs className="w-full gap-0" defaultValue={configFiles[0]?.filename}>
-          <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
+          <TabsList className="w-full justify-start rounded-none border-b bg-secondary px-4 py-3 group-data-horizontal/tabs:h-auto">
             {configFiles.map((file) => {
               const Icon = getIcon(file.lang);
               return (
