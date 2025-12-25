@@ -26,7 +26,7 @@ export const Files = ({ agent }: FilesProps) => (
     <div className="col-span-2 mx-auto w-full max-w-3xl divide-y overflow-hidden rounded-lg border">
       <div className="bg-secondary px-4 py-3">
         <p className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 font-mono text-xs">
-          {agent.configPath}
+          {agent.config.path}
         </p>
       </div>
       <div className="mx-auto h-96 w-full max-w-3xl overflow-auto">

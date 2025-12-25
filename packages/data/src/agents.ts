@@ -22,29 +22,18 @@ import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
 import warpLogo from "../logos/warp.svg";
 
-export type AgentCategory = "ide" | "cli" | "cloud" | "extension";
-
 export interface AgentConfig {
-  /** Header content to prepend to the rules file (e.g., frontmatter) */
-  header?: string;
-  /** Whether to append to existing file instead of replacing */
+  path: string;
   appendMode?: boolean;
+  header?: string;
 }
 
 export interface Agent {
-  /** Unique identifier for the agent */
   id: string;
-  /** Display name */
   name: string;
-  /** Short tagline for navbar */
   subtitle: string;
-  /** Full description */
   description: string;
-  /** Path to the config file the CLI creates */
-  configPath: string;
-  /** CLI configuration */
   config: AgentConfig;
-  /** Logo for UI display */
   logo: StaticImageData;
 }
 
@@ -55,8 +44,8 @@ export const agents: Agent[] = [
     subtitle: "Anthropic's agentic CLI",
     description:
       "Anthropic's official CLI for Claude, an agentic coding tool that lives in your terminal.",
-    configPath: ".claude/CLAUDE.md",
     config: {
+      path: ".claude/CLAUDE.md",
       appendMode: true,
     },
     logo: claudeLogo,
@@ -67,8 +56,8 @@ export const agents: Agent[] = [
     subtitle: "OpenAI's coding agent",
     description:
       "OpenAI's cloud-based coding agent for autonomous software development tasks.",
-    configPath: "AGENTS.md",
     config: {
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: codexLogo,
@@ -79,8 +68,8 @@ export const agents: Agent[] = [
     subtitle: "Google's async agent",
     description:
       "Google's asynchronous AI coding agent that works in the background to complete development tasks.",
-    configPath: "AGENTS.md",
     config: {
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: julesLogo,
@@ -91,12 +80,12 @@ export const agents: Agent[] = [
     subtitle: "GitHub's AI pair programmer",
     description:
       "GitHub's AI pair programmer that suggests code completions and helps write code faster.",
-    configPath: ".github/copilot-instructions.md",
     config: {
+      path: ".github/copilot-instructions.md",
+      appendMode: true,
       header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
-      appendMode: true,
     },
     logo: copilotLogo,
   },
@@ -106,8 +95,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Autonomous VS Code agent",
     description:
       "An autonomous coding agent for VS Code that can create and edit files, run commands, and more.",
-    configPath: ".clinerules",
     config: {
+      path: ".clinerules",
       appendMode: true,
     },
     logo: clineLogo,
@@ -118,8 +107,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Sourcegraph's coding agent",
     description:
       "Sourcegraph's AI coding agent that understands your entire codebase for intelligent assistance.",
-    configPath: "AGENT.md",
     config: {
+      path: "AGENT.md",
       appendMode: true,
     },
     logo: ampLogo,
@@ -130,8 +119,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Terminal pair programming",
     description:
       "AI pair programming in your terminal with support for multiple LLM providers.",
-    configPath: "ultracite.md",
-    config: {},
+    config: {
+      path: "ultracite.md",
+    },
     logo: aiderLogo,
   },
   {
@@ -140,8 +130,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Google's cloud IDE",
     description:
       "Google's AI-powered development environment integrated with Firebase services.",
-    configPath: ".idx/airules.md",
     config: {
+      path: ".idx/airules.md",
       appendMode: true,
     },
     logo: firebaseStudioLogo,
@@ -152,8 +142,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Open-source AI agents",
     description:
       "An open-source platform for AI software development agents with autonomous capabilities.",
-    configPath: ".openhands/microagents/repo.md",
     config: {
+      path: ".openhands/microagents/repo.md",
       appendMode: true,
     },
     logo: openHandsLogo,
@@ -164,8 +154,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Google's terminal AI",
     description:
       "Google's command-line interface for Gemini, bringing AI assistance to your terminal.",
-    configPath: "GEMINI.md",
     config: {
+      path: "GEMINI.md",
       appendMode: true,
     },
     logo: geminiLogo,
@@ -176,8 +166,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "JetBrains' AI agent",
     description:
       "JetBrains' AI coding agent integrated into their IDE ecosystem.",
-    configPath: ".junie/guidelines.md",
     config: {
+      path: ".junie/guidelines.md",
       appendMode: true,
     },
     logo: junieLogo,
@@ -188,8 +178,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Enterprise AI assistant",
     description:
       "An AI coding assistant focused on enterprise development workflows and team collaboration.",
-    configPath: ".augment/rules/ultracite.md",
-    config: {},
+    config: {
+      path: ".augment/rules/ultracite.md",
+    },
     logo: augmentcodeLogo,
   },
   {
@@ -198,8 +189,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Customizable VS Code AI",
     description:
       "A VS Code extension providing AI-powered coding assistance with customizable rules.",
-    configPath: ".kilocode/rules/ultracite.md",
-    config: {},
+    config: {
+      path: ".kilocode/rules/ultracite.md",
+    },
     logo: kiloCodeLogo,
   },
   {
@@ -208,8 +200,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Block's open-source agent",
     description:
       "Block's open-source AI developer agent for autonomous software development.",
-    configPath: ".goosehints",
     config: {
+      path: ".goosehints",
       appendMode: true,
     },
     logo: gooseLogo,
@@ -220,8 +212,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Codebase navigation AI",
     description:
       "An AI coding assistant focused on understanding and navigating complex codebases.",
-    configPath: ".roo/rules/ultracite.md",
     config: {
+      path: ".roo/rules/ultracite.md",
       appendMode: true,
     },
     logo: rooCodeLogo,
@@ -232,8 +224,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Modern AI terminal",
     description:
       "A modern terminal with AI-powered command suggestions and workflow automation.",
-    configPath: "WARP.md",
     config: {
+      path: "WARP.md",
       appendMode: true,
     },
     logo: warpLogo,
@@ -244,8 +236,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Automated code generation",
     description:
       "An AI development agent focused on automated code generation and task completion.",
-    configPath: "AGENTS.md",
     config: {
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: droidLogo,
@@ -256,8 +248,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Open-source coding agent",
     description:
       "An open-source AI coding agent that runs in your terminal, desktop, or IDE with support for 75+ LLM providers.",
-    configPath: "AGENTS.md",
     config: {
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: opencodeLogo,
@@ -268,8 +260,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Glamorous terminal agent",
     description:
       "Charmbracelet's glamorous AI coding agent for your terminal with multi-model support.",
-    configPath: "CRUSH.md",
     config: {
+      path: "CRUSH.md",
       appendMode: true,
     },
     logo: crushLogo,
@@ -280,8 +272,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Alibaba's coding CLI",
     description:
       "Alibaba's command-line interface for Qwen3-Coder, enabling agentic coding with natural language.",
-    configPath: "AGENTS.md",
     config: {
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: qwenLogo,
@@ -292,8 +284,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "AWS's terminal AI",
     description:
       "Amazon's AI-powered CLI with command autocompletion, natural language chat, and AWS integration.",
-    configPath: ".amazonq/rules/ultracite.md",
     config: {
+      path: ".amazonq/rules/ultracite.md",
       appendMode: true,
     },
     logo: amazonQLogo,
@@ -304,26 +296,17 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     subtitle: "Android Studio AI",
     description:
       "The most powerful AI coding assistant for Android Studio with codebase context and up-to-date Android knowledge.",
-    configPath: "firebender.json",
-    config: {},
+    config: {
+      path: "firebender.json",
+    },
     logo: firebenderLogo,
   },
 ];
 
-/** Get all agent IDs */
 export const agentIds = agents.map((agent) => agent.id) as [
   string,
   ...string[],
 ];
 
-/** Get an agent by ID */
 export const getAgentById = (id: string): Agent | undefined =>
   agents.find((agent) => agent.id === id);
-
-/** Category display labels */
-export const categoryLabels: Record<AgentCategory, string> = {
-  ide: "IDE / Editor",
-  cli: "Command Line",
-  cloud: "Cloud Platform",
-  extension: "VS Code Extension",
-};

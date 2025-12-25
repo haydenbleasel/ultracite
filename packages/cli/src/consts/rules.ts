@@ -17,7 +17,7 @@ export const AGENTS: Record<(typeof options.agents)[number], EditorRuleConfig> =
     agents.map((agent) => [
       agent.id,
       {
-        path: `./${agent.configPath}`,
+        path: `./${agent.config.path}`,
         header: agent.config.header,
         appendMode: agent.config.appendMode,
       } satisfies EditorRuleConfig,
