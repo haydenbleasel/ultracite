@@ -8,6 +8,7 @@ import {
   spinner,
 } from "@clack/prompts";
 import { agents as agentsData, getAgentById } from "@ultracite/data/agents";
+import { linterExtensions } from "@ultracite/data/editors";
 import {
   addDevDependency,
   detectPackageManager,
@@ -141,12 +142,6 @@ export const upsertTsConfig = async (quiet = false) => {
   }
 };
 
-const LINTER_EXTENSIONS: Record<Linter, { id: string; name: string }> = {
-  biome: { id: "biomejs.biome", name: "Biome" },
-  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
-  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
-};
-
 export const upsertVsCodeSettings = async (
   linters: Linter[] = ["biome"],
   quiet = false
@@ -175,7 +170,7 @@ export const upsertVsCodeSettings = async (
 
   // Install extensions for selected linters
   const extensionsToInstall = linters.map(
-    (linter) => LINTER_EXTENSIONS[linter]
+    (linter) => linterExtensions[linter]
   );
   const installedExtensions: string[] = [];
   const failedExtensions: string[] = [];
@@ -212,7 +207,10 @@ export const upsertVsCodeSettings = async (
   }
 };
 
-export const upsertZedSettings = async (quiet = false) => {
+export const upsertZedSettings = async (
+  linters: Linter[] = ["biome"],
+  quiet = false
+) => {
   const s = spinner();
 
   if (!quiet) {
@@ -223,7 +221,7 @@ export const upsertZedSettings = async (quiet = false) => {
     if (!quiet) {
       s.message("settings.json found, updating...");
     }
-    await zed.update();
+    await zed.update(linters);
     if (!quiet) {
       s.stop("settings.json updated.");
     }
@@ -233,7 +231,7 @@ export const upsertZedSettings = async (quiet = false) => {
   if (!quiet) {
     s.message("settings.json not found, creating...");
   }
-  await zed.create();
+  await zed.create(linters);
   if (!quiet) {
     s.message(
       "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
@@ -1039,7 +1037,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertVsCodeSettings(linters, quiet);
     }
     if (editorConfig?.includes("zed")) {
-      await upsertZedSettings(quiet);
+      await upsertZedSettings(linters, quiet);
     }
 
     for (const ruleName of agents ?? []) {

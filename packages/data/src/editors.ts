@@ -12,6 +12,20 @@ import zedLogo from "../logos/zed.svg";
 export type EditorCliValue = "vscode" | "zed";
 export type Linter = "biome" | "eslint" | "oxlint";
 
+export interface LinterExtension {
+  /** VS Code extension ID */
+  id: string;
+  /** Display name */
+  name: string;
+}
+
+/** Linter VS Code extension mappings */
+export const linterExtensions: Record<Linter, LinterExtension> = {
+  biome: { id: "biomejs.biome", name: "Biome" },
+  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
+  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
+};
+
 export interface EditorRulesConfig {
   /** Path to the rules file */
   path: string;
@@ -24,8 +38,8 @@ export interface EditorRulesConfig {
 export interface EditorConfig {
   /** Path to the settings config file */
   path: string;
-  /** Default editor settings configuration */
-  content: Record<string, unknown>;
+  /** Get editor settings configuration for a linter */
+  getContent: (linters?: Linter[]) => Record<string, unknown>;
 }
 
 export interface Editor {
@@ -116,8 +130,8 @@ export const getVscodeConfig = (linters: Linter[] = ["biome"]) => {
   return vscodeBiomeConfig;
 };
 
-// Zed configuration
-export const zedConfig = {
+// Zed Biome configuration
+export const zedBiomeConfig = {
   formatter: "language_server",
   format_on_save: "on",
   languages: {
@@ -168,13 +182,27 @@ export const zedConfig = {
   },
 };
 
+/** @deprecated Use zedBiomeConfig instead */
+export const zedConfig = zedBiomeConfig;
+
+/** Get Zed config based on linter selection */
+export const getZedConfig = (linters: Linter[] = ["biome"]) => {
+  // Zed currently only has good support for Biome
+  // ESLint and Oxlint support is limited
+  if (linters.includes("biome")) {
+    return zedBiomeConfig;
+  }
+  // Default to Biome config for other linters
+  return zedBiomeConfig;
+};
+
 /** Get editor config by CLI value */
 export const getEditorConfig = (
   cliValue: EditorCliValue,
   linters: Linter[] = ["biome"]
 ) => {
   if (cliValue === "zed") {
-    return zedConfig;
+    return getZedConfig(linters);
   }
   return getVscodeConfig(linters);
 };
@@ -197,7 +225,7 @@ export const editors: Editor[] = [
     logo: vscodeLogo,
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -225,7 +253,7 @@ alwaysApply: false
     },
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -248,7 +276,7 @@ alwaysApply: false
     },
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -268,7 +296,7 @@ alwaysApply: false
     logo: antigravityLogo,
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -291,7 +319,7 @@ alwaysApply: false
     },
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -314,7 +342,7 @@ alwaysApply: false
     },
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -334,7 +362,7 @@ alwaysApply: false
     logo: voidLogo,
     config: {
       path: ".vscode/settings.json",
-      content: vscodeBiomeConfig,
+      getContent: getVscodeConfig,
     },
   },
   {
@@ -358,7 +386,7 @@ alwaysApply: false
     },
     config: {
       path: ".zed/settings.json",
-      content: zedConfig,
+      getContent: getZedConfig,
     },
   },
 ];

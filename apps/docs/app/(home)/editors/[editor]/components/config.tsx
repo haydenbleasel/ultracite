@@ -31,7 +31,7 @@ export const Config = ({ editor }: ConfigProps) => (
       </div>
       <div className="mx-auto h-96 w-full max-w-3xl overflow-hidden overflow-y-auto">
         <CodeBlock
-          code={JSON.stringify(editor.config.content, null, 2)}
+          code={JSON.stringify(editor.config.getContent(), null, 2)}
           lang="json"
         />
       </div>
