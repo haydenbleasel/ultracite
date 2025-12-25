@@ -87,18 +87,17 @@ const oxlintConfigFiles: ConfigFile[] = [
   },
 ];
 
-/** Get config files for a provider */
 export const getConfigFiles = (providerId: ProviderId): ConfigFile[] => {
-  if (providerId === "biome") {
-    return biomeConfigFiles;
+  switch (providerId) {
+    case "biome":
+      return biomeConfigFiles;
+    case "eslint":
+      return eslintConfigFiles;
+    case "oxlint":
+      return oxlintConfigFiles;
+    default:
+      return [];
   }
-  if (providerId === "eslint") {
-    return eslintConfigFiles;
-  }
-  if (providerId === "oxlint") {
-    return oxlintConfigFiles;
-  }
-  return [];
 };
 
 export interface ProviderBenefit {
@@ -108,31 +107,16 @@ export interface ProviderBenefit {
 }
 
 export interface Provider {
-  /** Unique identifier (matches CLI --linters value) */
   id: ProviderId;
-  /** Display name */
   name: string;
-  /** Page title */
-  title: string;
-  /** Short tagline for navbar */
   subtitle: string;
-  /** Full description */
   description: string;
-  /** Provider's website URL */
-  website: string;
-  /** Key benefits shown as cards */
   benefits: ProviderBenefit[];
-  /** Additional tools included with this provider */
   includes?: string[];
-  /** Logo for UI display */
   logo: StaticImageData;
-  /** Additional logos to show (e.g., Prettier, Stylelint) */
   additionalLogos?: StaticImageData[];
-  /** Videos for the provider */
   videos?: string[];
-  /** Supported frameworks */
   frameworks: string[];
-  /** Configuration files */
   configFiles: { name: string; description: string }[];
 }
 
@@ -140,11 +124,9 @@ export const providers: Provider[] = [
   {
     id: "biome",
     name: "Biome",
-    title: "Biome | Ultracite",
     subtitle: "The modern all-in-one toolchain",
     description:
       "The modern, all-in-one toolchain. Biome is a fast formatter and linter written in Rust that handles JavaScript, TypeScript, JSON, CSS, and more with a single tool.",
-    website: "https://biomejs.dev",
     benefits: [
       {
         title: "Lightning fast",
@@ -210,11 +192,9 @@ export const providers: Provider[] = [
   {
     id: "eslint",
     name: "ESLint + Prettier + Stylelint",
-    title: "ESLint, Prettier & Stylelint | Ultracite",
     subtitle: "The most mature linting ecosystem",
     description:
       "The most mature and comprehensive linting solution. Combines ESLint for JavaScript/TypeScript, Prettier for formatting, and Stylelint for CSS with 20+ plugins and hundreds of preconfigured rules.",
-    website: "https://eslint.org",
     benefits: [
       {
         title: "Battle-tested",
@@ -285,11 +265,9 @@ export const providers: Provider[] = [
   {
     id: "oxlint",
     name: "Oxlint + Oxfmt",
-    title: "Oxlint & Oxfmt | Ultracite",
     subtitle: "The fastest linter available",
     description:
       "The fastest linter available. Oxlint is part of the Oxc project, running 50-100x faster than ESLint with a focus on catching bugs and reducing false positives.",
-    website: "https://oxc.rs",
     benefits: [
       {
         title: "50-100x faster",
