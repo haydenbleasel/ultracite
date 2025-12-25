@@ -18,8 +18,8 @@ export interface EditorRulesConfig {
 
 export interface EditorHooksConfig {
   path: string;
-  /** Template string with {{command}} placeholder */
-  content: string;
+  /** Returns hook configuration object for the given command */
+  getContent: (command: string) => Record<string, unknown>;
 }
 
 export interface EditorConfig {
@@ -197,12 +197,12 @@ alwaysApply: false
     },
     hooks: {
       path: ".cursor/hooks.json",
-      content: `{
-  "version": 1,
-  "hooks": {
-    "afterFileEdit": [{ "command": "{{command}}" }]
-  }
-}`,
+      getContent: (command) => ({
+        version: 1,
+        hooks: {
+          afterFileEdit: [{ command }],
+        },
+      }),
     },
     config: {
       path: ".vscode/settings.json",
@@ -219,6 +219,14 @@ alwaysApply: false
     logo: windsurfLogo,
     rules: {
       path: ".windsurf/rules/ultracite.md",
+    },
+    hooks: {
+      path: ".windsurf/hooks.json",
+      getContent: (command) => ({
+        hooks: {
+          post_write_code: [{ command, show_output: true }],
+        },
+      }),
     },
     config: {
       path: ".vscode/settings.json",
