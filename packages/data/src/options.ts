@@ -1,5 +1,5 @@
 import { agentIds } from "./agents";
-import { editorIds } from "./editors";
+import { editorHookIds, editorIds } from "./editors";
 import { providerIds } from "./providers";
 
 /** Supported frameworks for framework-specific linting rules */
@@ -27,11 +27,6 @@ export const integrations = [
 
 export type Integration = (typeof integrations)[number];
 
-/** Supported agent hooks */
-export const hooks = ["cursor", "claude"] as const;
-
-export type Hook = (typeof hooks)[number];
-
 /** Supported migrations */
 export const migrations = ["eslint", "prettier"] as const;
 
@@ -43,7 +38,7 @@ export const options = {
   editorConfigs: editorIds,
   agents: agentIds,
   integrations,
-  hooks,
+  hooks: editorHookIds,
   frameworks,
   migrations,
 } as const;

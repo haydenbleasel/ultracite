@@ -8,7 +8,8 @@ import {
   select,
   spinner,
 } from "@clack/prompts";
-import { agents as agentsData, getAgentById } from "@ultracite/data/agents";
+import { agents as agentsData } from "@ultracite/data/agents";
+import { editorsWithHooks } from "@ultracite/data/editors";
 import { linterExtensions } from "@ultracite/data/providers";
 import {
   addDevDependency,
@@ -919,12 +920,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    // Build hooks options from shared data
+    // Build hooks options from editors that support hooks
     const hooksOptions = Object.fromEntries(
-      (["cursor", "claude"] as const).map((id) => [
-        id,
-        getAgentById(id)?.name ?? id,
-      ])
+      editorsWithHooks.map((editor) => [editor.id, editor.name])
     ) as Record<(typeof options.hooks)[number], string>;
 
     if (!hooks) {

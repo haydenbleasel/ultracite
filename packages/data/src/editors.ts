@@ -16,6 +16,12 @@ export interface EditorRulesConfig {
   appendMode?: boolean;
 }
 
+export interface EditorHooksConfig {
+  path: string;
+  /** Template string with {{command}} placeholder */
+  content: string;
+}
+
 export interface EditorConfig {
   path: string;
   getContent: (linter?: Linter) => Record<string, unknown>;
@@ -29,6 +35,7 @@ export interface Editor {
   website: string;
   logo: StaticImageData;
   rules?: EditorRulesConfig;
+  hooks?: EditorHooksConfig;
   config: EditorConfig;
 }
 
@@ -188,6 +195,15 @@ globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphq
 alwaysApply: false
 ---`,
     },
+    hooks: {
+      path: ".cursor/hooks.json",
+      content: `{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [{ "command": "{{command}}" }]
+  }
+}`,
+    },
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
@@ -293,3 +309,15 @@ export const editorIds = editors.map((editor) => editor.id) as [
 
 export const getEditorById = (id: string): Editor | undefined =>
   editors.find((editor) => editor.id === id);
+
+/** Get all editors that have hooks configured */
+export const editorsWithHooks = editors.filter(
+  (editor): editor is Editor & { hooks: EditorHooksConfig } =>
+    editor.hooks !== undefined
+);
+
+/** IDs of editors that support hooks */
+export const editorHookIds = editorsWithHooks.map((editor) => editor.id) as [
+  string,
+  ...string[],
+];
