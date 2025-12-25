@@ -6,8 +6,6 @@ import oxlintLogo from "../logos/oxlint.svg";
 import prettierLogo from "../logos/prettier.svg";
 import stylelintLogo from "../logos/stylelint.svg";
 
-export { prettierLogo, stylelintLogo };
-
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface ConfigFile {

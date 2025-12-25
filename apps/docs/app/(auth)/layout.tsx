@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-type AuthLayoutProps = {
+interface AuthLayoutProps {
   readonly children: ReactNode;
-};
+}
 
 const AuthLayout = ({ children }: AuthLayoutProps) => (
   <div className="flex h-screen w-screen items-center justify-center bg-sidebar p-8">

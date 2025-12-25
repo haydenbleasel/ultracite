@@ -10,7 +10,7 @@ interface RepoListProps {
 export const RepoList = ({ repos }: RepoListProps) => (
   <div className="space-y-4">
     {repos.map((repo) => (
-      <div className="space-y-2 rounded-xl bg-secondary p-2">
+      <div className="space-y-2 rounded-xl bg-secondary p-2" key={repo.id}>
         <div className="flex items-center justify-between gap-2 px-2 py-1">
           <h3 className="font-semibold text-sm">{repo.fullName}</h3>
           <p className="text-muted-foreground text-xs">{repo.defaultBranch}</p>

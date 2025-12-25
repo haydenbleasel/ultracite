@@ -105,11 +105,10 @@ export const check = async (
 
   switch (linter) {
     case "eslint":
-      return runEslintCheck(files);
+      return await runEslintCheck(files);
     case "oxlint":
-      return runOxlintCheck(files);
-    case "biome":
+      return await runOxlintCheck(files);
     default:
-      return runBiomeCheck(files, diagnosticLevel);
+      return await runBiomeCheck(files, diagnosticLevel);
   }
 };

@@ -21,7 +21,6 @@ export async function createPullRequest(
     repoFullName,
     defaultBranch,
     branchName,
-    file,
     isLLMFix,
     changelog,
   } = params;

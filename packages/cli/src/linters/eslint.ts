@@ -54,10 +54,10 @@ export const eslint = {
   },
   create: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
   update: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
 };

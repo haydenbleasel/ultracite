@@ -1,16 +1,20 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
 import next from "@next/eslint-plugin-next";
+// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
 import * as query from "@tanstack/eslint-plugin-query";
 import typescript from "@typescript-eslint/eslint-plugin";
+// biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser";
 import eslintPrettier from "eslint-config-prettier";
 // import tailwindcss from 'eslint-plugin-tailwindcss';
+// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
 import * as importTypescriptResolver from "eslint-import-resolver-typescript";
 import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
+// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
 import * as importPlugin from "eslint-plugin-import";
 import jest from "eslint-plugin-jest";
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -38,7 +42,7 @@ import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
 import queryRules from "./rules/query.mjs";
 import reactRules from "./rules/react.mjs";
-import reactHooksRules from "./rules/reactHooks.mjs";
+import reactHooksRules from "./rules/react-hooks.mjs";
 import sonarjsRules from "./rules/sonarjs.mjs";
 import storybookRules from "./rules/storybook.mjs";
 import typescriptRules from "./rules/typescript.mjs";

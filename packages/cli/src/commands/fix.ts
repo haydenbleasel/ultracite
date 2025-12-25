@@ -140,7 +140,6 @@ export const fix = async (
     }
     case "oxlint":
       return runOxlintFix(files);
-    case "biome":
     default:
       return runBiomeFix(files, opts.unsafe);
   }

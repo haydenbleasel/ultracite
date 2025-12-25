@@ -68,10 +68,10 @@ export const prettier = {
   },
   create: async () => {
     const config = generatePrettierConfig();
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
   update: async () => {
     const config = generatePrettierConfig();
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
 };

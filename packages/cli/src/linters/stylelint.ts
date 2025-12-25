@@ -59,10 +59,10 @@ export const stylelint = {
   },
   create: async () => {
     const config = generateStylelintConfig();
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
   update: async () => {
     const config = generateStylelintConfig();
-    return writeFile(defaultConfigPath, config);
+    await writeFile(defaultConfigPath, config);
   },
 };

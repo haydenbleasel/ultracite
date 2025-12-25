@@ -23,6 +23,7 @@ export type {
   LintRepoResult,
 } from "@/lib/steps/types";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Workflow orchestration requires multiple conditional paths
 export async function lintRepoWorkflow(
   params: LintRepoParams
 ): Promise<LintRepoResult> {
