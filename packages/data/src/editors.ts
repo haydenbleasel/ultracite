@@ -54,7 +54,6 @@ const vscodeBaseConfig = {
 // Maps https://biomejs.dev/internals/language-support/
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeBiomeConfig = {
-  ...vscodeBaseConfig,
   // JavaScript
   "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
   // TypeScript
@@ -112,8 +111,6 @@ export const vscodeBiomeConfig = {
 // Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {
-  ...vscodeBaseConfig,
-
   // JS, JSX
   "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
@@ -160,7 +157,6 @@ export const vscodeOxlintConfig = {
 
 // VS Code ESLint/Prettier configuration
 export const vscodeEslintConfig = {
-  ...vscodeBaseConfig,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
@@ -170,11 +166,20 @@ export const vscodeEslintConfig = {
 export const getVscodeConfig = (linter: Linter = "biome") => {
   switch (linter) {
     case "biome":
-      return vscodeBiomeConfig;
+      return {
+        ...vscodeBaseConfig,
+        ...vscodeBiomeConfig,
+      };
     case "oxlint":
-      return vscodeOxlintConfig;
+      return {
+        ...vscodeBaseConfig,
+        ...vscodeOxlintConfig,
+      };
     case "eslint":
-      return vscodeEslintConfig;
+      return {
+        ...vscodeBaseConfig,
+        ...vscodeEslintConfig,
+      };
     default:
       return vscodeBaseConfig;
   }
