@@ -96,16 +96,16 @@ export const vscodeEslintConfig = {
 };
 
 export const getVscodeConfig = (linter: Linter = "biome") => {
-  if (linter === "biome") {
-    return vscodeBiomeConfig;
+  switch (linter) {
+    case "biome":
+      return vscodeBiomeConfig;
+    case "oxlint":
+      return vscodeOxlintConfig;
+    case "eslint":
+      return vscodeEslintConfig;
+    default:
+      return vscodeBaseConfig;
   }
-  if (linter === "oxlint") {
-    return vscodeOxlintConfig;
-  }
-  if (linter === "eslint") {
-    return vscodeEslintConfig;
-  }
-  return vscodeBiomeConfig;
 };
 
 // Zed Biome configuration
