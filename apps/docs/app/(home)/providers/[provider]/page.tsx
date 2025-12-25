@@ -9,10 +9,10 @@ import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
+import { Videos } from "../components/videos";
+import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
-import { Features } from "./components/features";
 import { ProviderHero } from "./components/hero";
-import { Sections } from "./components/sections";
 
 interface ProviderPageProps {
   params: Promise<{ provider: string }>;
@@ -48,9 +48,9 @@ const ProviderPage = async ({ params }: ProviderPageProps) => {
   return (
     <div className="grid gap-16 sm:gap-24 md:gap-32">
       <ProviderHero provider={provider} />
-      <Features provider={provider} />
       <Config provider={provider} />
-      <Sections provider={provider} />
+      <Benefits provider={provider} />
+      {provider.videos && <Videos data={provider.videos} />}
       <Logos />
       <Social />
       <CallToAction />
