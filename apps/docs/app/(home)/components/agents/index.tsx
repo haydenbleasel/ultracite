@@ -1,4 +1,4 @@
-import { agents, getAgentById } from "@ultracite/data/agents";
+import { type Agent, agents } from "@ultracite/data/agents";
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import Image from "next/image";
 import {
@@ -19,8 +19,8 @@ const featuredAgentIds = [
 ];
 
 const featuredAgents = featuredAgentIds
-  .map((id) => getAgentById(id))
-  .filter((agent): agent is NonNullable<typeof agent> => Boolean(agent));
+  .map((id) => agents.find((agent) => agent.id === id))
+  .filter(Boolean) as Agent[];
 
 const remainingCount = agents.length - featuredAgents.length;
 

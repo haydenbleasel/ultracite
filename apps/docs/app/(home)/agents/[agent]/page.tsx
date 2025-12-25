@@ -1,4 +1,4 @@
-import { agents, getAgentById } from "@ultracite/data/agents";
+import { agents } from "@ultracite/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CallToAction } from "../../components/cta";
@@ -16,12 +16,10 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/agents/[agent]">): Promise<Metadata> => {
   const { agent: agentId } = await params;
-  const agent = getAgentById(agentId);
+  const agent = agents.find((agent) => agent.id === agentId);
 
   if (!agent) {
-    return {
-      title: "Agent Not Found | Ultracite",
-    };
+    return {};
   }
 
   return {
@@ -32,7 +30,7 @@ export const generateMetadata = async ({
 
 const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
   const { agent: agentId } = await params;
-  const agent = getAgentById(agentId);
+  const agent = agents.find((agent) => agent.id === agentId);
 
   if (!agent) {
     notFound();

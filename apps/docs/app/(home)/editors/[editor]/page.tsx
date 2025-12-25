@@ -1,4 +1,4 @@
-import { editors, getEditorById } from "@ultracite/data/editors";
+import { editors } from "@ultracite/data/editors";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CallToAction } from "../../components/cta";
@@ -16,12 +16,10 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/editors/[editor]">): Promise<Metadata> => {
   const { editor: editorId } = await params;
-  const editor = getEditorById(editorId);
+  const editor = editors.find((editor) => editor.id === editorId);
 
   if (!editor) {
-    return {
-      title: "Editor Not Found | Ultracite",
-    };
+    return {};
   }
 
   return {
@@ -32,7 +30,7 @@ export const generateMetadata = async ({
 
 const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
   const { editor: editorId } = await params;
-  const editor = getEditorById(editorId);
+  const editor = editors.find((editor) => editor.id === editorId);
 
   if (!editor) {
     notFound();

@@ -5,10 +5,10 @@ import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
-import { Videos } from "../components/videos";
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
 import { ProviderHero } from "./components/hero";
+import { Videos } from "./components/videos";
 
 interface ProviderPageProps {
   params: Promise<{ provider: string }>;

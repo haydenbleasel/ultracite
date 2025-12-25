@@ -1,4 +1,4 @@
-import { Video } from "../../components/video";
+import { Video } from "./video";
 
 interface VideosProps {
   data: string[];
