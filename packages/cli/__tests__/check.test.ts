@@ -147,4 +147,170 @@ describe("check", () => {
       "Failed to run Ultracite: spawn failed"
     );
   });
+
+  test("runs eslint check when linter is eslint", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await check([[], { linter: "eslint" }]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain("npx eslint");
+  });
+
+  test("runs eslint check with specific files", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await check([["src/index.ts"], { linter: "eslint" }]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain("src/index.ts");
+  });
+
+  test("eslint check throws on spawn error", async () => {
+    const mockSpawn = mock(() => ({
+      error: new Error("eslint spawn failed"),
+      status: null,
+    }));
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+      "Failed to run Ultracite: eslint spawn failed"
+    );
+  });
+
+  test("runs oxlint check when linter is oxlint", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await check([[], { linter: "oxlint" }]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain("npx oxlint");
+  });
+
+  test("runs oxlint check with specific files", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await check([["src/index.ts"], { linter: "oxlint" }]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[0]).toContain("src/index.ts");
+  });
+
+  test("oxlint check throws on spawn error", async () => {
+    const mockSpawn = mock(() => ({
+      error: new Error("oxlint spawn failed"),
+      status: null,
+    }));
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await expect(check([[], { linter: "oxlint" }])).rejects.toThrow(
+      "Failed to run Ultracite: oxlint spawn failed"
+    );
+  });
+
+  test("eslint check returns hasErrors true on failure", async () => {
+    const mockSpawn = mock(() => ({ status: 1 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    const result = await check([[], { linter: "eslint" }]);
+    expect(result.hasErrors).toBe(true);
+  });
+
+  test("oxlint check returns hasErrors true on failure", async () => {
+    const mockSpawn = mock(() => ({ status: 1 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    const result = await check([[], { linter: "oxlint" }]);
+    expect(result.hasErrors).toBe(true);
+  });
 });
