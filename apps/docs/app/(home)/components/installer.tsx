@@ -11,14 +11,16 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
 
 const COPY_TIMEOUT = 2000;
 
 interface InstallerProps {
   command: string;
+  className?: string;
 }
 
-export const Installer = ({ command }: InstallerProps) => {
+export const Installer = ({ command, className }: InstallerProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -35,7 +37,9 @@ export const Installer = ({ command }: InstallerProps) => {
   const Icon = copied ? CheckIcon : CopyIcon;
 
   return (
-    <InputGroup className="dark h-10 bg-card font-mono shadow-none">
+    <InputGroup
+      className={cn("dark h-10 bg-card font-mono shadow-none", className)}
+    >
       <InputGroupAddon>
         <InputGroupText className="pl-2 font-normal text-muted-foreground">
           $

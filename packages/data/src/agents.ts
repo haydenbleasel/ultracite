@@ -42,12 +42,6 @@ export interface Agent {
   description: string;
   /** Path to the config file the CLI creates */
   configPath: string;
-  /** Agent's website URL */
-  website: string;
-  /** Category of the agent */
-  category: AgentCategory;
-  /** Key features of the agent */
-  features: string[];
   /** CLI configuration */
   config: AgentConfig;
   /** Logo for UI display */
@@ -62,14 +56,6 @@ export const agents: Agent[] = [
     description:
       "Anthropic's official CLI for Claude, an agentic coding tool that lives in your terminal.",
     configPath: ".claude/CLAUDE.md",
-    website: "https://claude.ai/code",
-    category: "cli",
-    features: [
-      "Agentic coding assistant",
-      "Terminal-based workflow",
-      "Context-aware suggestions",
-      "Multi-file editing",
-    ],
     config: {
       appendMode: true,
     },
@@ -82,14 +68,6 @@ export const agents: Agent[] = [
     description:
       "OpenAI's cloud-based coding agent for autonomous software development tasks.",
     configPath: "AGENTS.md",
-    website: "https://openai.com/codex",
-    category: "cloud",
-    features: [
-      "Cloud-based execution",
-      "Autonomous coding",
-      "GitHub integration",
-      "Async task handling",
-    ],
     config: {
       appendMode: true,
     },
@@ -102,14 +80,6 @@ export const agents: Agent[] = [
     description:
       "Google's asynchronous AI coding agent that works in the background to complete development tasks.",
     configPath: "AGENTS.md",
-    website: "https://jules.google.com",
-    category: "cloud",
-    features: [
-      "Async task execution",
-      "Background processing",
-      "GitHub integration",
-      "Multi-file changes",
-    ],
     config: {
       appendMode: true,
     },
@@ -122,14 +92,6 @@ export const agents: Agent[] = [
     description:
       "GitHub's AI pair programmer that suggests code completions and helps write code faster.",
     configPath: ".github/copilot-instructions.md",
-    website: "https://github.com/features/copilot",
-    category: "extension",
-    features: [
-      "Code completions",
-      "Chat interface",
-      "PR summaries",
-      "Documentation generation",
-    ],
     config: {
       header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
@@ -145,14 +107,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An autonomous coding agent for VS Code that can create and edit files, run commands, and more.",
     configPath: ".clinerules",
-    website: "https://cline.bot",
-    category: "extension",
-    features: [
-      "Autonomous execution",
-      "File management",
-      "Command execution",
-      "Human-in-the-loop",
-    ],
     config: {
       appendMode: true,
     },
@@ -165,14 +119,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Sourcegraph's AI coding agent that understands your entire codebase for intelligent assistance.",
     configPath: "AGENT.md",
-    website: "https://sourcegraph.com/amp",
-    category: "cli",
-    features: [
-      "Codebase-wide context",
-      "Code search integration",
-      "Multi-repo support",
-      "Enterprise ready",
-    ],
     config: {
       appendMode: true,
     },
@@ -185,14 +131,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "AI pair programming in your terminal with support for multiple LLM providers.",
     configPath: "ultracite.md",
-    website: "https://aider.chat",
-    category: "cli",
-    features: [
-      "Multi-LLM support",
-      "Git integration",
-      "Voice coding",
-      "Pair programming",
-    ],
     config: {},
     logo: aiderLogo,
   },
@@ -203,14 +141,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Google's AI-powered development environment integrated with Firebase services.",
     configPath: ".idx/airules.md",
-    website: "https://firebase.google.com",
-    category: "cloud",
-    features: [
-      "Firebase integration",
-      "Cloud-based IDE",
-      "AI assistance",
-      "Instant deployment",
-    ],
     config: {
       appendMode: true,
     },
@@ -223,14 +153,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An open-source platform for AI software development agents with autonomous capabilities.",
     configPath: ".openhands/microagents/repo.md",
-    website: "https://all-hands.dev",
-    category: "cloud",
-    features: [
-      "Open source",
-      "Autonomous agents",
-      "Self-hosted option",
-      "Extensible platform",
-    ],
     config: {
       appendMode: true,
     },
@@ -243,14 +165,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Google's command-line interface for Gemini, bringing AI assistance to your terminal.",
     configPath: "GEMINI.md",
-    website: "https://github.com/google-gemini/gemini-cli",
-    category: "cli",
-    features: [
-      "Terminal-based",
-      "Gemini models",
-      "Shell integration",
-      "Context awareness",
-    ],
     config: {
       appendMode: true,
     },
@@ -263,14 +177,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "JetBrains' AI coding agent integrated into their IDE ecosystem.",
     configPath: ".junie/guidelines.md",
-    website: "https://jetbrains.com/junie",
-    category: "ide",
-    features: [
-      "JetBrains integration",
-      "Autonomous coding",
-      "IDE-native experience",
-      "Multi-language support",
-    ],
     config: {
       appendMode: true,
     },
@@ -283,14 +189,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An AI coding assistant focused on enterprise development workflows and team collaboration.",
     configPath: ".augment/rules/ultracite.md",
-    website: "https://augmentcode.com",
-    category: "extension",
-    features: [
-      "Enterprise focus",
-      "Team collaboration",
-      "Context retention",
-      "Security-first",
-    ],
     config: {},
     logo: augmentcodeLogo,
   },
@@ -301,14 +199,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "A VS Code extension providing AI-powered coding assistance with customizable rules.",
     configPath: ".kilocode/rules/ultracite.md",
-    website: "https://kilocode.ai",
-    category: "extension",
-    features: [
-      "VS Code extension",
-      "Customizable rules",
-      "Local-first",
-      "Privacy focused",
-    ],
     config: {},
     logo: kiloCodeLogo,
   },
@@ -319,14 +209,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Block's open-source AI developer agent for autonomous software development.",
     configPath: ".goosehints",
-    website: "https://block.github.io/goose",
-    category: "cli",
-    features: [
-      "Open source",
-      "Autonomous execution",
-      "Tool extensibility",
-      "Multi-provider support",
-    ],
     config: {
       appendMode: true,
     },
@@ -339,14 +221,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An AI coding assistant focused on understanding and navigating complex codebases.",
     configPath: ".roo/rules/ultracite.md",
-    website: "https://roo.dev",
-    category: "extension",
-    features: [
-      "Codebase navigation",
-      "Context understanding",
-      "VS Code integration",
-      "Smart completions",
-    ],
     config: {
       appendMode: true,
     },
@@ -359,14 +233,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "A modern terminal with AI-powered command suggestions and workflow automation.",
     configPath: "WARP.md",
-    website: "https://warp.dev",
-    category: "cli",
-    features: [
-      "Modern terminal",
-      "AI commands",
-      "Workflow automation",
-      "Team collaboration",
-    ],
     config: {
       appendMode: true,
     },
@@ -379,14 +245,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An AI development agent focused on automated code generation and task completion.",
     configPath: "AGENTS.md",
-    website: "https://droid.dev",
-    category: "cloud",
-    features: [
-      "Task automation",
-      "Code generation",
-      "Cloud execution",
-      "CI/CD integration",
-    ],
     config: {
       appendMode: true,
     },
@@ -399,14 +257,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "An open-source AI coding agent that runs in your terminal, desktop, or IDE with support for 75+ LLM providers.",
     configPath: "AGENTS.md",
-    website: "https://opencode.ai",
-    category: "cli",
-    features: [
-      "Open source",
-      "Multi-provider support",
-      "Terminal and desktop",
-      "Privacy focused",
-    ],
     config: {
       appendMode: true,
     },
@@ -419,14 +269,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Charmbracelet's glamorous AI coding agent for your terminal with multi-model support.",
     configPath: "CRUSH.md",
-    website: "https://github.com/charmbracelet/crush",
-    category: "cli",
-    features: [
-      "Terminal TUI",
-      "Multi-model support",
-      "Cross-platform",
-      "Open source",
-    ],
     config: {
       appendMode: true,
     },
@@ -439,14 +281,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Alibaba's command-line interface for Qwen3-Coder, enabling agentic coding with natural language.",
     configPath: "AGENTS.md",
-    website: "https://github.com/QwenLM/Qwen3-Coder",
-    category: "cli",
-    features: [
-      "Agentic coding",
-      "256K context window",
-      "Multi-language support",
-      "Open source model",
-    ],
     config: {
       appendMode: true,
     },
@@ -459,14 +293,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Amazon's AI-powered CLI with command autocompletion, natural language chat, and AWS integration.",
     configPath: ".amazonq/rules/ultracite.md",
-    website: "https://aws.amazon.com/q/developer",
-    category: "cli",
-    features: [
-      "AWS integration",
-      "Command autocompletion",
-      "Multi-language support",
-      "Agentic workflows",
-    ],
     config: {
       appendMode: true,
     },
@@ -479,14 +305,6 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "The most powerful AI coding assistant for Android Studio with codebase context and up-to-date Android knowledge.",
     configPath: "firebender.json",
-    website: "https://firebender.com",
-    category: "extension",
-    features: [
-      "Android Studio plugin",
-      "Codebase context",
-      "Latest Android docs",
-      "Privacy focused",
-    ],
     config: {},
     logo: firebenderLogo,
   },
@@ -501,10 +319,6 @@ export const agentIds = agents.map((agent) => agent.id) as [
 /** Get an agent by ID */
 export const getAgentById = (id: string): Agent | undefined =>
   agents.find((agent) => agent.id === id);
-
-/** Get agents by category */
-export const getAgentsByCategory = (category: AgentCategory): Agent[] =>
-  agents.filter((agent) => agent.category === category);
 
 /** Category display labels */
 export const categoryLabels: Record<AgentCategory, string> = {

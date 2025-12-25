@@ -7,8 +7,8 @@ export const Footer = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <footer className="flex items-center justify-between p-8">
-      <p className="font-medium text-muted-foreground text-sm">
+    <footer className="flex flex-col items-center justify-between gap-4 p-8 text-center sm:flex-row sm:text-left">
+      <p className="text-balance font-medium text-muted-foreground text-sm">
         Made with ❤️ and ☕ by{" "}
         <a
           className="text-primary underline"
