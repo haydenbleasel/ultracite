@@ -195,13 +195,29 @@ export const providers: Provider[] = [
       "https://www.youtube.com/watch?v=b_F4LaycQcE",
     ],
     ruleCategories: [
-      { name: "Accessibility", count: 35, description: "WCAG and ARIA compliance" },
-      { name: "Complexity", count: 41, description: "Code complexity management" },
-      { name: "Correctness", count: 45, description: "Bug prevention and safety" },
+      {
+        name: "Accessibility",
+        count: 35,
+        description: "WCAG and ARIA compliance",
+      },
+      {
+        name: "Complexity",
+        count: 41,
+        description: "Code complexity management",
+      },
+      {
+        name: "Correctness",
+        count: 45,
+        description: "Bug prevention and safety",
+      },
       { name: "Performance", count: 10, description: "Runtime optimizations" },
       { name: "Security", count: 5, description: "Security best practices" },
       { name: "Style", count: 70, description: "Code style consistency" },
-      { name: "Suspicious", count: 80, description: "Potentially buggy patterns" },
+      {
+        name: "Suspicious",
+        count: 80,
+        description: "Potentially buggy patterns",
+      },
     ],
     languages: [
       "JavaScript",
@@ -228,13 +244,15 @@ export const providers: Provider[] = [
     configFiles: [
       {
         name: "biome.jsonc",
-        description: "Extends Ultracite presets with support for framework-specific rules",
+        description:
+          "Extends Ultracite presets with support for framework-specific rules",
       },
     ],
     smartFeatures: [
       {
         name: "Import sorting",
-        description: "Automatically organizes imports by type and alphabetically",
+        description:
+          "Automatically organizes imports by type and alphabetically",
       },
       {
         name: "Attribute sorting",
@@ -242,7 +260,8 @@ export const providers: Provider[] = [
       },
       {
         name: "Tailwind CSS",
-        description: "Sorts Tailwind classes automatically with useSortedClasses",
+        description:
+          "Sorts Tailwind classes automatically with useSortedClasses",
       },
     ],
   },
@@ -363,12 +382,30 @@ export const providers: Provider[] = [
       { name: "Vue", description: "Vue.js rules" },
     ],
     ruleCategories: [
-      { name: "Correctness", description: "Rules that prevent bugs and incorrect code" },
-      { name: "Suspicious", description: "Rules that detect potentially problematic patterns" },
-      { name: "Pedantic", description: "Strict rules for code quality purists" },
-      { name: "Performance", description: "Rules that catch performance issues" },
-      { name: "Restriction", description: "Rules that restrict certain patterns" },
-      { name: "Style", description: "Rules that enforce consistent code style" },
+      {
+        name: "Correctness",
+        description: "Rules that prevent bugs and incorrect code",
+      },
+      {
+        name: "Suspicious",
+        description: "Rules that detect potentially problematic patterns",
+      },
+      {
+        name: "Pedantic",
+        description: "Strict rules for code quality purists",
+      },
+      {
+        name: "Performance",
+        description: "Rules that catch performance issues",
+      },
+      {
+        name: "Restriction",
+        description: "Rules that restrict certain patterns",
+      },
+      {
+        name: "Style",
+        description: "Rules that enforce consistent code style",
+      },
     ],
     frameworks: [
       "Next.js",
@@ -384,11 +421,13 @@ export const providers: Provider[] = [
     configFiles: [
       {
         name: ".oxlintrc.json",
-        description: "Linting configuration with Ultracite presets and category-based rules",
+        description:
+          "Linting configuration with Ultracite presets and category-based rules",
       },
       {
         name: ".oxfmtrc.jsonc",
-        description: "Formatting configuration powered by Oxfmt for consistent code style",
+        description:
+          "Formatting configuration powered by Oxfmt for consistent code style",
       },
     ],
   },

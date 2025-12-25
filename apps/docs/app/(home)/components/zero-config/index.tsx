@@ -3,8 +3,8 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import {
   type ConfigFile,
-  type ProviderId,
   getConfigFiles,
+  type ProviderId,
 } from "@ultracite/data/providers";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";

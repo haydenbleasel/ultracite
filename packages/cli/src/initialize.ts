@@ -182,10 +182,8 @@ export const upsertVsCodeSettings = async (
       if (!quiet) {
         s.stop(`settings.json created and ${ext.name} extension installed.`);
       }
-    } else {
-      if (!quiet) {
-        s.stop(`settings.json created. Install ${ext.name} extension manually.`);
-      }
+    } else if (!quiet) {
+      s.stop(`settings.json created. Install ${ext.name} extension manually.`);
     }
   } catch {
     if (!quiet) {

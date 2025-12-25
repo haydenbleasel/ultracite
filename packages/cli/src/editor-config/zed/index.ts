@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { type Linter, getZedConfig } from "@ultracite/data/editors";
+import { getZedConfig, type Linter } from "@ultracite/data/editors";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { exists } from "../../utils";
