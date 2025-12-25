@@ -327,7 +327,7 @@ alwaysApply: false
     name: "Trae AI",
     subtitle: "ByteDance's AI IDE",
     description:
-      "ByteDance's AI-powered IDE built on VS Code with free access to GPT-4o and Claude 3.5 Sonnet.",
+      "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
     website: "https://www.trae.ai",
     cliValue: "vscode",
     features: [
