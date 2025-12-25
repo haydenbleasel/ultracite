@@ -147,6 +147,7 @@ export const upsertEditorConfig = async (
   editorId: string,
   linter: Linter = "biome",
   quiet = false
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Editor configuration requires multiple conditional paths
 ) => {
   const editor = editors.find((editor) => editor.id === editorId);
 

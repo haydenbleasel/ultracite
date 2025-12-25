@@ -1,7 +1,7 @@
 "use client";
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
-import { type ConfigFile } from "@ultracite/data/providers";
+import type { ConfigFile } from "@ultracite/data/providers";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

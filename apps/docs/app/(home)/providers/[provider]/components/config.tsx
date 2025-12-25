@@ -1,5 +1,5 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
-import { type ConfigFile, type Provider } from "@ultracite/data/providers";
+import type { ConfigFile, Provider } from "@ultracite/data/providers";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/server";
