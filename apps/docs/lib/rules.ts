@@ -1,1 +1,0 @@
-../../../packages/cli/src/agents/rules.ts
