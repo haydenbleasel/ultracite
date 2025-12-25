@@ -21,8 +21,8 @@ export const router = t.router({
           .enum(options.packageManagers)
           .optional()
           .describe("Package manager to use"),
-        linters: z
-          .array(z.enum(options.linters))
+        linter: z
+          .enum(options.linters)
           .optional()
           .describe("Linter / formatter to use"),
         editors: z

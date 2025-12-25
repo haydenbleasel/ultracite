@@ -39,7 +39,7 @@ export interface EditorConfig {
   /** Path to the settings config file */
   path: string;
   /** Get editor settings configuration for a linter */
-  getContent: (linters?: Linter[]) => Record<string, unknown>;
+  getContent: (linter?: Linter) => Record<string, unknown>;
 }
 
 export interface Editor {
@@ -117,14 +117,14 @@ export const vscodeEslintConfig = {
 };
 
 /** Get VS Code config based on linter selection */
-export const getVscodeConfig = (linters: Linter[] = ["biome"]) => {
-  if (linters.includes("biome")) {
+export const getVscodeConfig = (linter: Linter = "biome") => {
+  if (linter === "biome") {
     return vscodeBiomeConfig;
   }
-  if (linters.includes("oxlint")) {
+  if (linter === "oxlint") {
     return vscodeOxlintConfig;
   }
-  if (linters.includes("eslint")) {
+  if (linter === "eslint") {
     return vscodeEslintConfig;
   }
   return vscodeBiomeConfig;
@@ -186,10 +186,10 @@ export const zedBiomeConfig = {
 export const zedConfig = zedBiomeConfig;
 
 /** Get Zed config based on linter selection */
-export const getZedConfig = (linters: Linter[] = ["biome"]) => {
+export const getZedConfig = (linter: Linter = "biome") => {
   // Zed currently only has good support for Biome
   // ESLint and Oxlint support is limited
-  if (linters.includes("biome")) {
+  if (linter === "biome") {
     return zedBiomeConfig;
   }
   // Default to Biome config for other linters
@@ -199,12 +199,12 @@ export const getZedConfig = (linters: Linter[] = ["biome"]) => {
 /** Get editor config by CLI value */
 export const getEditorConfig = (
   cliValue: EditorCliValue,
-  linters: Linter[] = ["biome"]
+  linter: Linter = "biome"
 ) => {
   if (cliValue === "zed") {
-    return getZedConfig(linters);
+    return getZedConfig(linter);
   }
-  return getVscodeConfig(linters);
+  return getVscodeConfig(linter);
 };
 
 export const editors: Editor[] = [

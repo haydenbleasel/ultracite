@@ -5,6 +5,7 @@ import {
   isCancel,
   log,
   multiselect,
+  select,
   spinner,
 } from "@clack/prompts";
 import { agents as agentsData, getAgentById } from "@ultracite/data/agents";
@@ -42,7 +43,7 @@ type Linter = (typeof options.linters)[number];
 
 interface InitializeFlags {
   pm?: PackageManagerName;
-  linters?: Linter[];
+  linter?: Linter;
   editors?: (typeof options.editorConfigs)[number][];
   agents?: (typeof options.agents)[number][];
   hooks?: (typeof options.hooks)[number][];
@@ -55,7 +56,7 @@ interface InitializeFlags {
 
 export const installDependencies = async (
   packageManager: PackageManagerName,
-  linters: Linter[] = ["biome"],
+  linter: Linter = "biome",
   install = true,
   quiet = false
 ) => {
@@ -68,16 +69,16 @@ export const installDependencies = async (
   const packages: string[] = [`ultracite@${ultraciteVersion}`];
 
   // Add linter-specific dependencies
-  if (linters.includes("biome")) {
+  if (linter === "biome") {
     packages.push(`@biomejs/biome@${schemaVersion}`);
   }
-  if (linters.includes("eslint")) {
+  if (linter === "eslint") {
     packages.push("eslint@latest");
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     packages.push("prettier@latest");
     packages.push("stylelint@latest");
   }
-  if (linters.includes("oxlint")) {
+  if (linter === "oxlint") {
     packages.push("oxlint@latest");
     // Oxlint is only a linter, so we need oxfmt for formatting
     packages.push("oxfmt@latest");
@@ -96,16 +97,16 @@ export const installDependencies = async (
       ultracite: ultraciteVersion,
     };
 
-    if (linters.includes("biome")) {
+    if (linter === "biome") {
       devDependencies["@biomejs/biome"] = schemaVersion;
     }
-    if (linters.includes("eslint")) {
+    if (linter === "eslint") {
       devDependencies.eslint = "latest";
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       devDependencies.prettier = "latest";
       devDependencies.stylelint = "latest";
     }
-    if (linters.includes("oxlint")) {
+    if (linter === "oxlint") {
       devDependencies.oxlint = "latest";
       // Oxlint is only a linter, so we need oxfmt for formatting
       devDependencies.oxfmt = "latest";
@@ -143,7 +144,7 @@ export const upsertTsConfig = async (quiet = false) => {
 };
 
 export const upsertVsCodeSettings = async (
-  linters: Linter[] = ["biome"],
+  linter: Linter = "biome",
   quiet = false
 ) => {
   const s = spinner();
@@ -156,7 +157,7 @@ export const upsertVsCodeSettings = async (
     if (!quiet) {
       s.message("settings.json found, updating...");
     }
-    await vscode.update(linters);
+    await vscode.update(linter);
     if (!quiet) {
       s.stop("settings.json updated.");
     }
@@ -166,49 +167,35 @@ export const upsertVsCodeSettings = async (
   if (!quiet) {
     s.message("settings.json not found, creating...");
   }
-  await vscode.create(linters);
+  await vscode.create(linter);
 
-  // Install extensions for selected linters
-  const extensionsToInstall = linters.map(
-    (linter) => linterExtensions[linter]
-  );
-  const installedExtensions: string[] = [];
-  const failedExtensions: string[] = [];
-
-  for (const ext of extensionsToInstall) {
-    if (!quiet) {
-      s.message(`Installing ${ext.name} extension...`);
-    }
-
-    try {
-      const result = vscode.extension(ext.id);
-      if (result.status === 0) {
-        installedExtensions.push(ext.name);
-      } else {
-        failedExtensions.push(ext.name);
-      }
-    } catch {
-      failedExtensions.push(ext.name);
-    }
-  }
+  // Install extension for selected linter
+  const ext = linterExtensions[linter];
 
   if (!quiet) {
-    if (failedExtensions.length === 0 && installedExtensions.length > 0) {
-      s.stop(
-        `settings.json created and ${installedExtensions.join(", ")} extension(s) installed.`
-      );
-    } else if (failedExtensions.length > 0) {
-      s.stop(
-        `settings.json created. Install ${failedExtensions.join(", ")} extension(s) manually.`
-      );
+    s.message(`Installing ${ext.name} extension...`);
+  }
+
+  try {
+    const result = vscode.extension(ext.id);
+    if (result.status === 0) {
+      if (!quiet) {
+        s.stop(`settings.json created and ${ext.name} extension installed.`);
+      }
     } else {
-      s.stop("settings.json created.");
+      if (!quiet) {
+        s.stop(`settings.json created. Install ${ext.name} extension manually.`);
+      }
+    }
+  } catch {
+    if (!quiet) {
+      s.stop(`settings.json created. Install ${ext.name} extension manually.`);
     }
   }
 };
 
 export const upsertZedSettings = async (
-  linters: Linter[] = ["biome"],
+  linter: Linter = "biome",
   quiet = false
 ) => {
   const s = spinner();
@@ -221,7 +208,7 @@ export const upsertZedSettings = async (
     if (!quiet) {
       s.message("settings.json found, updating...");
     }
-    await zed.update(linters);
+    await zed.update(linter);
     if (!quiet) {
       s.stop("settings.json updated.");
     }
@@ -231,7 +218,7 @@ export const upsertZedSettings = async (
   if (!quiet) {
     s.message("settings.json not found, creating...");
   }
-  await zed.create(linters);
+  await zed.create(linter);
   if (!quiet) {
     s.message(
       "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
@@ -795,8 +782,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let linters = opts.linters;
-    if (linters === undefined) {
+    let linter = opts.linter;
+    if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to biome only
       const hasOtherCliOptions =
         quiet ||
@@ -809,13 +796,13 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
-        linters = ["biome"];
+        linter = "biome";
       } else {
-        const lintersResult = await multiselect({
-          message: "Which linters do you want to use?",
+        const linterResult = await select({
+          message: "Which linter do you want to use?",
           options: [
             {
-              label: "Biome",
+              label: "Biome (Recommended)",
               value: "biome",
             },
             {
@@ -827,18 +814,14 @@ export const initialize = async (flags?: InitializeFlags) => {
               value: "oxlint",
             },
           ],
-          required: false,
         });
 
-        if (isCancel(lintersResult)) {
+        if (isCancel(linterResult)) {
           cancel("Operation cancelled.");
           return;
         }
 
-        linters =
-          lintersResult.length > 0
-            ? (lintersResult as Linter[])
-            : (["biome"] as Linter[]);
+        linter = linterResult as Linter;
       }
     }
 
@@ -1005,39 +988,39 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     // Only remove Prettier if not using ESLint (ESLint needs Prettier for formatting)
-    if (shouldRemovePrettier && !linters.includes("eslint")) {
+    if (shouldRemovePrettier && linter !== "eslint") {
       await removePrettier(pm, quiet);
     }
     // Only remove ESLint if not selected as a linter
-    if (shouldRemoveEslint && !linters.includes("eslint")) {
+    if (shouldRemoveEslint && linter !== "eslint") {
       await removeEsLint(pm, quiet);
     }
 
-    await installDependencies(pm, linters, !opts.skipInstall, quiet);
+    await installDependencies(pm, linter, !opts.skipInstall, quiet);
 
     await upsertTsConfig(quiet);
 
-    // Create configs for selected linters
-    if (linters.includes("biome")) {
+    // Create config for selected linter
+    if (linter === "biome") {
       await upsertBiomeConfig(frameworks, quiet);
     }
-    if (linters.includes("eslint")) {
+    if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(quiet);
       await upsertStylelintConfig(quiet);
     }
-    if (linters.includes("oxlint")) {
+    if (linter === "oxlint") {
       await upsertOxlintConfig(frameworks, quiet);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
     }
 
     if (editorConfig?.includes("vscode")) {
-      await upsertVsCodeSettings(linters, quiet);
+      await upsertVsCodeSettings(linter, quiet);
     }
     if (editorConfig?.includes("zed")) {
-      await upsertZedSettings(linters, quiet);
+      await upsertZedSettings(linter, quiet);
     }
 
     for (const ruleName of agents ?? []) {

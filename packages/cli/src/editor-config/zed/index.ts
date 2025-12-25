@@ -8,12 +8,12 @@ const path = "./.zed/settings.json";
 
 export const zed = {
   exists: () => exists(path),
-  create: async (linters: Linter[] = ["biome"]) => {
+  create: async (linter: Linter = "biome") => {
     await mkdir(".zed", { recursive: true });
-    const config = getZedConfig(linters);
+    const config = getZedConfig(linter);
     await writeFile(path, JSON.stringify(config, null, 2));
   },
-  update: async (linters: Linter[] = ["biome"]) => {
+  update: async (linter: Linter = "biome") => {
     const existingContents = await readFile(path, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
@@ -21,7 +21,7 @@ export const zed = {
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToMerge = existingConfig || {};
-    const defaultConfig = getZedConfig(linters);
+    const defaultConfig = getZedConfig(linter);
     const newConfig = deepmerge(configToMerge, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));
