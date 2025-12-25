@@ -1,10 +1,23 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
+import { agents } from "@ultracite/data/agents";
+import type { EditorRulesConfig } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
 import { getRules } from "@ultracite/data/rules";
 import { dlxCommand, type PackageManagerName } from "nypm";
-import { AGENTS } from "./consts/rules";
 import { exists } from "./utils";
+
+const AGENTS: Record<(typeof options.agents)[number], EditorRulesConfig> =
+  Object.fromEntries(
+    agents.map((agent) => [
+      agent.id,
+      {
+        path: `./${agent.config.path}`,
+        header: agent.config.header,
+        appendMode: agent.config.appendMode,
+      } satisfies EditorRulesConfig,
+    ])
+  ) as Record<(typeof options.agents)[number], EditorRulesConfig>;
 
 export const createAgents = (
   name: (typeof options.agents)[number],
