@@ -51,16 +51,57 @@ const vscodeBaseConfig = {
 };
 
 // VS Code Biome configuration
+// Maps https://biomejs.dev/internals/language-support/
+// to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeBiomeConfig = {
   ...vscodeBaseConfig,
+  // JavaScript
   "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
+  // TypeScript
   "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // JSX
   "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // TSX
   "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // JSON
   "[json]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // JSONC
   "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // HTML
+  "[html]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // Vue
+  "[vue]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // Svelte
+  "[svelte]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // Astro
+  // Astro not supported by VSCode
+
+  // CSS
   "[css]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // YAML
+  "[yaml]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // GraphQL
   "[graphql]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // Markdown
+  "[markdown]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // MDX
+  "[mdx]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  // GritQL
+  // GritQL not supported by VSCode
+
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
@@ -68,16 +109,50 @@ export const vscodeBiomeConfig = {
 };
 
 // VS Code OxLint configuration
+// Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
+// to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {
   ...vscodeBaseConfig,
+
+  // JS, JSX
   "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // TS, TSX
+  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // JSON, JSONC, JSON5
   "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  // JSON5 not supported by VSCode
+
+  // YAML
+  "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // HTML, Angular, Vue, MJML
+  "[html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  // Angular not supported by VSCode
+  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[vue-html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  // MJML not supported by VSCode
+
+  // Ember, Handlebars
+  // Ember not supported by VSCode
+  "[handlebars]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // CSS, SCSS, Less
   "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[scss]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[less]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // GraphQL
   "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+
+  // Markdown, MDX
+  "[markdown]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  // MDX not supported by VSCode
+
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
   },
