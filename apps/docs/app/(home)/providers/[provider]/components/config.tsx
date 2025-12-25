@@ -1,9 +1,5 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
-import {
-  type ConfigFile,
-  getConfigFiles,
-  type Provider,
-} from "@ultracite/data/providers";
+import { type ConfigFile, type Provider } from "@ultracite/data/providers";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/server";
@@ -19,7 +15,7 @@ const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
   lang === "json" ? "json" : "js";
 
 export const Config = ({ provider }: ConfigProps) => {
-  const configFiles = getConfigFiles(provider.id);
+  const { configFiles } = provider;
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-3">
@@ -38,24 +34,24 @@ export const Config = ({ provider }: ConfigProps) => {
       </div>
 
       <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
-        <Tabs className="w-full gap-0" defaultValue={configFiles[0]?.filename}>
+        <Tabs className="w-full gap-0" defaultValue={configFiles[0]?.name}>
           <TabsList className="w-full justify-start rounded-none border-b bg-secondary px-4 py-3 group-data-horizontal/tabs:h-auto">
             {configFiles.map((file) => {
               const Icon = getIcon(file.lang);
               return (
                 <TabsTrigger
                   className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
-                  key={file.filename}
-                  value={file.filename}
+                  key={file.name}
+                  value={file.name}
                 >
                   <Icon className="size-3.5 text-muted-foreground" />
-                  <span>{file.filename}</span>
+                  <span>{file.name}</span>
                 </TabsTrigger>
               );
             })}
           </TabsList>
           {configFiles.map((file) => (
-            <TabsContent key={file.filename} value={file.filename}>
+            <TabsContent key={file.name} value={file.name}>
               <CodeBlock
                 code={file.code(["core", "react", "next"])}
                 lang={getLang(file.lang)}

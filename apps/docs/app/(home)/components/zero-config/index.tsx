@@ -1,11 +1,7 @@
 "use client";
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
-import {
-  type ConfigFile,
-  getConfigFiles,
-  type ProviderId,
-} from "@ultracite/data/providers";
+import { type ConfigFile } from "@ultracite/data/providers";
 import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,23 +25,20 @@ export const ZeroConfig = () => {
   const selectedFramework = frameworks.find((f) => f.label === framework);
 
   const config = useMemo(() => {
-    if (!selectedProvider?.id) {
-      return [];
-    }
-    return getConfigFiles(selectedProvider.id as ProviderId);
+    return selectedProvider?.configFiles ?? [];
   }, [selectedProvider]);
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
   // The value should always be valid for the current config; fallback to first available tab if needed.
-  const [tabValue, setTabValue] = useState<string>(config[0]?.filename ?? "");
+  const [tabValue, setTabValue] = useState<string>(config[0]?.name ?? "");
 
   // Whenever config changes, reset tab to first in config
-  // (guard against stale filename if provider/framework is switched)
+  // (guard against stale name if provider/framework is switched)
   // This avoids uncontrolled->controlled warning.
-  // We only setTabValue if the filename list changed and tabValue is not present.
+  // We only setTabValue if the name list changed and tabValue is not present.
   useMemo(() => {
-    if (!config.some((c) => c.filename === tabValue)) {
-      setTabValue(config[0]?.filename ?? "");
+    if (!config.some((c) => c.name === tabValue)) {
+      setTabValue(config[0]?.name ?? "");
     }
     // Only run when config changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,17 +77,17 @@ export const ZeroConfig = () => {
                 return (
                   <TabsTrigger
                     className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
-                    key={f.filename}
-                    value={f.filename}
+                    key={f.name}
+                    value={f.name}
                   >
                     <Icon className="size-3.5 text-muted-foreground" />
-                    <span>{f.filename}</span>
+                    <span>{f.name}</span>
                   </TabsTrigger>
                 );
               })}
             </TabsList>
             {config.map((f) => (
-              <TabsContent key={f.filename} value={f.filename}>
+              <TabsContent key={f.name} value={f.name}>
                 <CodeBlock
                   code={f.code(selectedFramework?.presets ?? [])}
                   lang={getLang(f.lang)}

@@ -22,83 +22,10 @@ export const linterExtensions: Record<Linter, LinterExtension> = {
 };
 
 export interface ConfigFile {
-  filename: string;
+  name: string;
   lang: "json" | "javascript";
   code: (presets: string[]) => string;
 }
-
-const biomeConfigFiles: ConfigFile[] = [
-  {
-    filename: "biome.jsonc",
-    lang: "json",
-    code: (presets: string[]) => `{
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [
-    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
-  ]
-}`,
-  },
-];
-
-const eslintConfigFiles: ConfigFile[] = [
-  {
-    filename: "eslint.config.mjs",
-    lang: "javascript",
-    code: (presets: string[]) => `import { defineConfig } from "eslint/config";
-${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
-
-export default defineConfig([
-  {
-    extends: [
-      ${presets.join(",\n      ")}
-    ],
-  },
-]);`,
-  },
-  {
-    filename: "prettier.config.mjs",
-    lang: "javascript",
-    code: () => `export { default } from "ultracite/prettier";`,
-  },
-  {
-    filename: "stylelint.config.mjs",
-    lang: "javascript",
-    code: () => `export { default } from "ultracite/stylelint";`,
-  },
-];
-
-const oxlintConfigFiles: ConfigFile[] = [
-  {
-    filename: ".oxlintrc.json",
-    lang: "json",
-    code: (presets: string[]) => `{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": [
-    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
-  ]
-}`,
-  },
-  {
-    filename: ".oxfmtrc.jsonc",
-    lang: "json",
-    code: () => `{
-  "$schema": "./node_modules/oxfmt/configuration_schema.json"
-}`,
-  },
-];
-
-export const getConfigFiles = (providerId: ProviderId): ConfigFile[] => {
-  switch (providerId) {
-    case "biome":
-      return biomeConfigFiles;
-    case "eslint":
-      return eslintConfigFiles;
-    case "oxlint":
-      return oxlintConfigFiles;
-    default:
-      return [];
-  }
-};
 
 export interface ProviderBenefit {
   title: string;
@@ -117,7 +44,7 @@ export interface Provider {
   additionalLogos?: StaticImageData[];
   videos?: string[];
   frameworks: string[];
-  configFiles: { name: string; description: string }[];
+  configFiles: ConfigFile[];
 }
 
 export const providers: Provider[] = [
@@ -184,8 +111,13 @@ export const providers: Provider[] = [
     configFiles: [
       {
         name: "biome.jsonc",
-        description:
-          "Extends Ultracite presets with support for framework-specific rules",
+        lang: "json",
+        code: (presets: string[]) => `{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
+  ]
+}`,
       },
     ],
   },
@@ -250,15 +182,27 @@ export const providers: Provider[] = [
     configFiles: [
       {
         name: "eslint.config.mjs",
-        description: "ESLint flat config format with Ultracite presets",
+        lang: "javascript",
+        code: (presets: string[]) => `import { defineConfig } from "eslint/config";
+${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
+
+export default defineConfig([
+  {
+    extends: [
+      ${presets.join(",\n      ")}
+    ],
+  },
+]);`,
       },
       {
         name: "prettier.config.mjs",
-        description: "Consistent formatting with sensible defaults",
+        lang: "javascript",
+        code: () => `export { default } from "ultracite/prettier";`,
       },
       {
         name: "stylelint.config.mjs",
-        description: "CSS linting with modern best practices",
+        lang: "javascript",
+        code: () => `export { default } from "ultracite/stylelint";`,
       },
     ],
   },
@@ -322,13 +266,20 @@ export const providers: Provider[] = [
     configFiles: [
       {
         name: ".oxlintrc.json",
-        description:
-          "Linting configuration with Ultracite presets and category-based rules",
+        lang: "json",
+        code: (presets: string[]) => `{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": [
+    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
+  ]
+}`,
       },
       {
         name: ".oxfmtrc.jsonc",
-        description:
-          "Formatting configuration powered by Oxfmt for consistent code style",
+        lang: "json",
+        code: () => `{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json"
+}`,
       },
     ],
   },
