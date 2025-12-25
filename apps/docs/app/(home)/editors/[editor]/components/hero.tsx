@@ -32,7 +32,7 @@ export const EditorHero = ({ editor }: EditorHeroProps) => (
       </p>
       <Installer
         className="max-w-md"
-        command={`npx ultracite@latest init --editors ${editor.cliValue}`}
+        command={`npx ultracite@latest init --editors ${editor.id}`}
       />
     </div>
   </div>
