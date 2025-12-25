@@ -34,7 +34,7 @@ import { stylelint } from "./linters/stylelint";
 import { eslintCleanup } from "./migrations/eslint";
 import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
-import { isMonorepo, title, updatePackageJson } from "./utils";
+import { isMonorepo, updatePackageJson } from "./utils";
 
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
@@ -188,7 +188,9 @@ export const upsertEditorConfig = async (
       const result = editorConfig.extension(ext.id);
       if (result.status === 0) {
         if (!quiet) {
-          s.stop(`${editor.config.path} created and ${ext.name} extension installed.`);
+          s.stop(
+            `${editor.config.path} created and ${ext.name} extension installed.`
+          );
         }
         return;
       }
@@ -197,7 +199,9 @@ export const upsertEditorConfig = async (
     }
 
     if (!quiet) {
-      s.stop(`${editor.config.path} created. Install ${ext.name} extension manually.`);
+      s.stop(
+        `${editor.config.path} created. Install ${ext.name} extension manually.`
+      );
     }
     return;
   }
@@ -683,7 +687,7 @@ export const initialize = async (flags?: InitializeFlags) => {
   const quiet = opts.quiet ?? false;
 
   if (!quiet) {
-    intro(title);
+    intro(`Ultracite v${ultraciteVersion}`);
   }
 
   try {
