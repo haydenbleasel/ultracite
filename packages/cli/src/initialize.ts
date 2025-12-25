@@ -10,6 +10,7 @@ import {
 } from "@clack/prompts";
 import { agents as agentsData } from "@ultracite/data/agents";
 import { editorsWithHooks } from "@ultracite/data/editors";
+import type { options } from "@ultracite/data/options";
 import { linterExtensions } from "@ultracite/data/providers";
 import {
   addDevDependency,
@@ -18,7 +19,6 @@ import {
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
-import type { options } from "@ultracite/data/options";
 import { vscode } from "./editor-config/vscode";
 import { zed } from "./editor-config/zed";
 import { createHooks } from "./hooks";

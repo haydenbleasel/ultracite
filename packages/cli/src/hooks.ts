@@ -4,7 +4,7 @@ import { getEditorById } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
 import deepmerge from "deepmerge";
 import { dlxCommand, type PackageManagerName } from "nypm";
-import { exists } from "../utils";
+import { exists } from "./utils";
 
 export const createHooks = (
   name: (typeof options.hooks)[number],
