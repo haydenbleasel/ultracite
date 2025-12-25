@@ -167,57 +167,6 @@ const Frameworks = ({ provider }: SectionsProps) => (
   </section>
 );
 
-const getConfigDescription = (providerId: string): string => {
-  if (providerId === "biome") {
-    return "Biome handles both formatting and linting with one unified config.";
-  }
-  if (providerId === "eslint") {
-    return "Ultracite handles the complexity of combining multiple tools into a cohesive setup.";
-  }
-  return "Giving you control over each aspect of linting and formatting.";
-};
-
-const getConfigGridClass = (count: number): string => {
-  if (count === 1) {
-    return "max-w-md";
-  }
-  if (count === 2) {
-    return "sm:grid-cols-2";
-  }
-  return "sm:grid-cols-3";
-};
-
-const Configuration = ({ provider }: SectionsProps) => {
-  const fileCountLabel =
-    provider.configFiles.length === 1
-      ? "A single configuration file is all you need."
-      : `${provider.configFiles.length === 2 ? "Two" : "Three"} simple config files are all you need.`;
-
-  return (
-    <section className="grid gap-8">
-      <div className="grid gap-4">
-        <h2 className="font-semibold text-2xl tracking-tight">Configuration</h2>
-        <p className="max-w-2xl text-muted-foreground">
-          {fileCountLabel} {getConfigDescription(provider.id)}
-        </p>
-      </div>
-
-      <div
-        className={`grid gap-4 ${getConfigGridClass(provider.configFiles.length)}`}
-      >
-        {provider.configFiles.map((file) => (
-          <div className="rounded-lg border p-4" key={file.name}>
-            <code className="text-sm">{file.name}</code>
-            <p className="mt-1 text-muted-foreground text-xs">
-              {file.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
 const SmartFeatures = ({ provider }: SectionsProps) => {
   if (!provider.smartFeatures) {
     return null;
@@ -293,7 +242,6 @@ export const Sections = ({ provider }: SectionsProps) => (
     <Plugins provider={provider} />
     <Languages provider={provider} />
     <Frameworks provider={provider} />
-    <Configuration provider={provider} />
     {provider.videos && <Videos data={provider.videos} />}
     <SmartFeatures provider={provider} />
     <OxcEcosystem provider={provider} />

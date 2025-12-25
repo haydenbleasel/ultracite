@@ -9,6 +9,7 @@ import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
+import { Config } from "./components/config";
 import { Features } from "./components/features";
 import { ProviderHero } from "./components/hero";
 import { Sections } from "./components/sections";
@@ -48,6 +49,7 @@ const ProviderPage = async ({ params }: ProviderPageProps) => {
     <div className="grid gap-16 sm:gap-24 md:gap-32">
       <ProviderHero provider={provider} />
       <Features provider={provider} />
+      <Config provider={provider} />
       <Sections provider={provider} />
       <Logos />
       <Social />

@@ -1,10 +1,8 @@
 import type { Provider } from "@ultracite/data/providers";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { Installer } from "@/app/(home)/components/installer";
 import { Logo } from "@/app/(home)/components/logo";
-import { Button } from "@/components/ui/button";
 
 interface ProviderHeroProps {
   provider: Provider;
@@ -41,14 +39,10 @@ export const ProviderHero = ({ provider }: ProviderHeroProps) => (
       <p className="max-w-xl text-balance text-lg text-muted-foreground tracking-tight">
         {provider.description}
       </p>
-      <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
-        <Installer
-          command={`npx ultracite@latest init --linter ${provider.id}`}
-        />
-        <Button asChild className="px-4" size="lg" variant="link">
-          <Link href="/docs">Read the docs</Link>
-        </Button>
-      </div>
+      <Installer
+        className="max-w-md"
+        command={`npx ultracite@latest init --linter ${provider.id}`}
+      />
     </div>
   </div>
 );
