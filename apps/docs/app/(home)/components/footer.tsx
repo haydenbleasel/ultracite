@@ -8,7 +8,7 @@ export const Footer = () => {
 
   return (
     <footer className="flex items-center justify-between p-8">
-      <p className="text-muted-foreground text-sm">
+      <p className="font-medium text-muted-foreground text-sm">
         Made with ❤️ and ☕ by{" "}
         <a
           className="text-primary underline"
@@ -18,6 +18,16 @@ export const Footer = () => {
         >
           @haydenbleasel
         </a>
+        . Free and{" "}
+        <a
+          className="text-primary underline"
+          href="https://github.com/haydenbleasel/ultracite"
+          rel="noreferrer"
+          target="_blank"
+        >
+          open source
+        </a>
+        , forever.
       </p>
       <ThemeSwitcher
         onChange={setTheme}
