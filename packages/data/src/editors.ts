@@ -8,19 +8,7 @@ import voidLogo from "../logos/void.svg";
 import vscodeLogo from "../logos/vscode.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
-
-export type Linter = "biome" | "eslint" | "oxlint";
-
-export interface LinterExtension {
-  id: string;
-  name: string;
-}
-
-export const linterExtensions: Record<Linter, LinterExtension> = {
-  biome: { id: "biomejs.biome", name: "Biome" },
-  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
-  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
-};
+import type { Linter } from "./providers";
 
 export interface EditorRulesConfig {
   path: string;

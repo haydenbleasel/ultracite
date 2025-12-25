@@ -8,6 +8,19 @@ import stylelintLogo from "../logos/stylelint.svg";
 
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
+export type Linter = "biome" | "eslint" | "oxlint";
+
+export interface LinterExtension {
+  id: string;
+  name: string;
+}
+
+export const linterExtensions: Record<Linter, LinterExtension> = {
+  biome: { id: "biomejs.biome", name: "Biome" },
+  eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
+  oxlint: { id: "oxc.oxc-vscode", name: "Oxlint" },
+};
+
 export interface ConfigFile {
   filename: string;
   lang: "json" | "javascript";

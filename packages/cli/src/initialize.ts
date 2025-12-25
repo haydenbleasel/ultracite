@@ -9,7 +9,7 @@ import {
   spinner,
 } from "@clack/prompts";
 import { agents as agentsData, getAgentById } from "@ultracite/data/agents";
-import { linterExtensions } from "@ultracite/data/editors";
+import { linterExtensions } from "@ultracite/data/providers";
 import {
   addDevDependency,
   detectPackageManager,

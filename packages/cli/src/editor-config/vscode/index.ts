@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { getVscodeConfig, type Linter } from "@ultracite/data/editors";
+import { getVscodeConfig } from "@ultracite/data/editors";
+import type { Linter } from "@ultracite/data/providers";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { exists } from "../../utils";
