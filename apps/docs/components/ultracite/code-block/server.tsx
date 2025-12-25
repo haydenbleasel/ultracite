@@ -46,10 +46,7 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
 
   return (
     <pre
-      className={cn(
-        className,
-        "bg-(--shiki-light-bg)! p-4 text-sm dark:bg-(--shiki-dark-bg)!"
-      )}
+      className={cn(className, "p-4 text-sm")}
       data-language={lang}
       style={{
         backgroundColor: result.bg,
