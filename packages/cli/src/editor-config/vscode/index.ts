@@ -1,11 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { type Linter, getVscodeConfig } from "@ultracite/data/editors";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { exists } from "../../utils";
-import { getDefaultConfig } from "./default-config";
-
-type Linter = "biome" | "eslint" | "oxlint";
 
 const path = "./.vscode/settings.json";
 
@@ -13,7 +11,7 @@ export const vscode = {
   exists: () => exists(path),
   create: async (linters: Linter[] = ["biome"]) => {
     await mkdir(".vscode", { recursive: true });
-    const config = getDefaultConfig(linters);
+    const config = getVscodeConfig(linters);
     await writeFile(path, JSON.stringify(config, null, 2));
   },
   update: async (linters: Linter[] = ["biome"]) => {
@@ -24,7 +22,7 @@ export const vscode = {
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToMerge = existingConfig || {};
-    const defaultConfig = getDefaultConfig(linters);
+    const defaultConfig = getVscodeConfig(linters);
     const newConfig = deepmerge(configToMerge, defaultConfig);
 
     await writeFile(path, JSON.stringify(newConfig, null, 2));

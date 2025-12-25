@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/style/useNamingConvention: "Editor configs use various naming conventions" */
 import type { StaticImageData } from "next/image";
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
@@ -9,6 +10,7 @@ import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
 
 export type EditorCliValue = "vscode" | "zed";
+export type Linter = "biome" | "eslint" | "oxlint";
 
 export interface EditorRulesConfig {
   /** Path to the rules file */
@@ -17,6 +19,13 @@ export interface EditorRulesConfig {
   header?: string;
   /** Whether to append to existing file instead of replacing */
   appendMode?: boolean;
+}
+
+export interface EditorConfig {
+  /** Path to the settings config file */
+  path: string;
+  /** Default editor settings configuration */
+  content: Record<string, unknown>;
 }
 
 export interface Editor {
@@ -28,8 +37,6 @@ export interface Editor {
   subtitle: string;
   /** Full description */
   description: string;
-  /** Path to the settings config file */
-  configPath: string;
   /** Editor's website URL */
   website: string;
   /** CLI value for --editors flag */
@@ -40,7 +47,137 @@ export interface Editor {
   logo: StaticImageData;
   /** Rules file configuration (for AI agent rules) */
   rules?: EditorRulesConfig;
+  /** Editor settings configuration */
+  config: EditorConfig;
 }
+
+// VS Code base configuration
+const vscodeBaseConfig = {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "emmet.showExpandedAbbreviation": "never",
+};
+
+// VS Code Biome configuration
+export const vscodeBiomeConfig = {
+  ...vscodeBaseConfig,
+  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[css]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[graphql]": { "editor.defaultFormatter": "biomejs.biome" },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit",
+  },
+};
+
+// VS Code OxLint configuration
+export const vscodeOxlintConfig = {
+  ...vscodeBaseConfig,
+  "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
+  },
+};
+
+// VS Code ESLint/Prettier configuration
+export const vscodeEslintConfig = {
+  ...vscodeBaseConfig,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit",
+  },
+};
+
+/** Get VS Code config based on linter selection */
+export const getVscodeConfig = (linters: Linter[] = ["biome"]) => {
+  if (linters.includes("biome")) {
+    return vscodeBiomeConfig;
+  }
+  if (linters.includes("oxlint")) {
+    return vscodeOxlintConfig;
+  }
+  if (linters.includes("eslint")) {
+    return vscodeEslintConfig;
+  }
+  return vscodeBiomeConfig;
+};
+
+// Zed configuration
+export const zedConfig = {
+  formatter: "language_server",
+  format_on_save: "on",
+  languages: {
+    JavaScript: {
+      formatter: {
+        language_server: {
+          name: "biome",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
+    },
+    TypeScript: {
+      formatter: {
+        language_server: {
+          name: "biome",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
+    },
+    TSX: {
+      formatter: {
+        language_server: {
+          name: "biome",
+        },
+      },
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
+    },
+  },
+  lsp: {
+    "typescript-language-server": {
+      settings: {
+        typescript: {
+          preferences: {
+            includePackageJsonAutoImports: "on",
+          },
+        },
+      },
+    },
+  },
+};
+
+/** Get editor config by CLI value */
+export const getEditorConfig = (
+  cliValue: EditorCliValue,
+  linters: Linter[] = ["biome"]
+) => {
+  if (cliValue === "zed") {
+    return zedConfig;
+  }
+  return getVscodeConfig(linters);
+};
 
 export const editors: Editor[] = [
   {
@@ -49,7 +186,6 @@ export const editors: Editor[] = [
     subtitle: "The most popular code editor",
     description:
       "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
-    configPath: ".vscode/settings.json",
     website: "https://code.visualstudio.com",
     cliValue: "vscode",
     features: [
@@ -59,6 +195,10 @@ export const editors: Editor[] = [
       "IntelliSense",
     ],
     logo: vscodeLogo,
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "cursor",
@@ -66,7 +206,6 @@ export const editors: Editor[] = [
     subtitle: "The AI-first code editor",
     description:
       "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
-    configPath: ".vscode/settings.json",
     website: "https://cursor.com",
     cliValue: "vscode",
     features: [
@@ -84,6 +223,10 @@ globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphq
 alwaysApply: false
 ---`,
     },
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "windsurf",
@@ -91,7 +234,6 @@ alwaysApply: false
     subtitle: "The agentic IDE by Codeium",
     description:
       "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
-    configPath: ".vscode/settings.json",
     website: "https://codeium.com/windsurf",
     cliValue: "vscode",
     features: [
@@ -104,6 +246,10 @@ alwaysApply: false
     rules: {
       path: ".windsurf/rules/ultracite.md",
     },
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "antigravity",
@@ -111,7 +257,6 @@ alwaysApply: false
     subtitle: "Google's next-generation IDE",
     description:
       "An AI-powered development platform built on VS Code for building and deploying applications faster.",
-    configPath: ".vscode/settings.json",
     website: "https://antigravity.dev",
     cliValue: "vscode",
     features: [
@@ -121,6 +266,10 @@ alwaysApply: false
       "Full-stack support",
     ],
     logo: antigravityLogo,
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "kiro",
@@ -128,7 +277,6 @@ alwaysApply: false
     subtitle: "AWS's spec-driven IDE",
     description:
       "AWS's spec-driven AI development environment for building production-ready applications.",
-    configPath: ".vscode/settings.json",
     website: "https://kiro.dev",
     cliValue: "vscode",
     features: [
@@ -141,6 +289,10 @@ alwaysApply: false
     rules: {
       path: ".kiro/steering/ultracite.md",
     },
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "trae",
@@ -148,7 +300,6 @@ alwaysApply: false
     subtitle: "ByteDance's AI IDE",
     description:
       "ByteDance's AI-powered IDE built on VS Code with free access to GPT-4o and Claude 3.5 Sonnet.",
-    configPath: ".vscode/settings.json",
     website: "https://www.trae.ai",
     cliValue: "vscode",
     features: [
@@ -161,6 +312,10 @@ alwaysApply: false
     rules: {
       path: ".trae/rules/project_rules.md",
     },
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "void",
@@ -168,7 +323,6 @@ alwaysApply: false
     subtitle: "Open-source AI editor",
     description:
       "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
-    configPath: ".vscode/settings.json",
     website: "https://voideditor.com",
     cliValue: "vscode",
     features: [
@@ -178,6 +332,10 @@ alwaysApply: false
       "Privacy focused",
     ],
     logo: voidLogo,
+    config: {
+      path: ".vscode/settings.json",
+      content: vscodeBiomeConfig,
+    },
   },
   {
     id: "zed",
@@ -185,7 +343,6 @@ alwaysApply: false
     subtitle: "The high-performance editor",
     description:
       "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
-    configPath: ".zed/settings.json",
     website: "https://zed.dev",
     cliValue: "zed",
     features: [
@@ -198,6 +355,10 @@ alwaysApply: false
     rules: {
       path: ".rules",
       appendMode: true,
+    },
+    config: {
+      path: ".zed/settings.json",
+      content: zedConfig,
     },
   },
 ];
