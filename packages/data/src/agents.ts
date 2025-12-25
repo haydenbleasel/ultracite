@@ -302,11 +302,3 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     logo: firebenderLogo,
   },
 ];
-
-export const agentIds = agents.map((agent) => agent.id) as [
-  string,
-  ...string[],
-];
-
-export const getAgentById = (id: string): Agent | undefined =>
-  agents.find((agent) => agent.id === id);

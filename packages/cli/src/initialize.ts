@@ -9,7 +9,7 @@ import {
   spinner,
 } from "@clack/prompts";
 import { agents as agentsData } from "@ultracite/data/agents";
-import { editorsWithHooks, getEditorById } from "@ultracite/data/editors";
+import { editors } from "@ultracite/data/editors";
 import type { options } from "@ultracite/data/options";
 import { linterExtensions } from "@ultracite/data/providers";
 import {
@@ -148,7 +148,8 @@ export const upsertEditorConfig = async (
   linter: Linter = "biome",
   quiet = false
 ) => {
-  const editor = getEditorById(editorId);
+  const editor = editors.find((editor) => editor.id === editorId);
+
   if (!editor) {
     throw new Error(`Editor "${editorId}" not found`);
   }
@@ -687,7 +688,7 @@ export const initialize = async (flags?: InitializeFlags) => {
   const quiet = opts.quiet ?? false;
 
   if (!quiet) {
-    intro(`Ultracite v${ultraciteVersion}`);
+    intro(`Ultracite v${ultraciteVersion} Initialization`);
   }
 
   try {
@@ -915,7 +916,9 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     // Build hooks options from editors that support hooks
     const hooksOptions = Object.fromEntries(
-      editorsWithHooks.map((editor) => [editor.id, editor.name])
+      editors
+        .filter((editor) => editor.hooks)
+        .map((editor) => [editor.id, editor.name])
     ) as Record<(typeof options.hooks)[number], string>;
 
     if (!hooks) {

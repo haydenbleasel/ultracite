@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import { detectPackageManager, dlxCommand } from "nypm";
 import type { options } from "@ultracite/data/options";
+import { detectPackageManager, dlxCommand } from "nypm";
 import { parseFilePaths } from "../utils";
 
 type Linter = (typeof options.linters)[number];

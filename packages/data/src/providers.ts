@@ -355,10 +355,3 @@ export const providers: Provider[] = [
     ],
   },
 ];
-
-/** Get all provider IDs */
-export const providerIds: ProviderId[] = ["biome", "eslint", "oxlint"];
-
-/** Get a provider by ID */
-export const getProviderById = (id: ProviderId): Provider | undefined =>
-  providers.find((provider) => provider.id === id);

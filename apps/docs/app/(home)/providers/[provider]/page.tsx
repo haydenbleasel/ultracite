@@ -1,8 +1,4 @@
-import {
-  getProviderById,
-  type ProviderId,
-  providerIds,
-} from "@ultracite/data/providers";
+import { providers } from "@ultracite/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CallToAction } from "../../components/cta";
@@ -19,13 +15,13 @@ interface ProviderPageProps {
 }
 
 export const generateStaticParams = () =>
-  providerIds.map((provider) => ({ provider }));
+  providers.map((provider) => ({ provider: provider.id }));
 
 export const generateMetadata = async ({
   params,
 }: ProviderPageProps): Promise<Metadata> => {
   const { provider: providerId } = await params;
-  const provider = getProviderById(providerId as ProviderId);
+  const provider = providers.find((provider) => provider.id === providerId);
 
   if (!provider) {
     return {};
@@ -39,7 +35,7 @@ export const generateMetadata = async ({
 
 const ProviderPage = async ({ params }: ProviderPageProps) => {
   const { provider: providerId } = await params;
-  const provider = getProviderById(providerId as ProviderId);
+  const provider = providers.find((provider) => provider.id === providerId);
 
   if (!provider) {
     notFound();

@@ -1,4 +1,5 @@
-import { access, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import { parse } from "jsonc-parser";
 
 export const exists = async (path: string) => {
@@ -90,4 +91,12 @@ export const parseFilePaths = (files: string[]): string[] => {
     }
     return file;
   });
+};
+
+export const ensureDirectory = async (path: string) => {
+  const dir = dirname(path);
+  if (dir !== ".") {
+    const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
+    await mkdir(cleanDir, { recursive: true });
+  }
 };

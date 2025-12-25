@@ -318,23 +318,3 @@ alwaysApply: false
     },
   },
 ];
-
-export const editorIds = editors.map((editor) => editor.id) as [
-  string,
-  ...string[],
-];
-
-export const getEditorById = (id: string): Editor | undefined =>
-  editors.find((editor) => editor.id === id);
-
-/** Get all editors that have hooks configured */
-export const editorsWithHooks = editors.filter(
-  (editor): editor is Editor & { hooks: EditorHooksConfig } =>
-    editor.hooks !== undefined
-);
-
-/** IDs of editors that support hooks */
-export const editorHookIds = editorsWithHooks.map((editor) => editor.id) as [
-  string,
-  ...string[],
-];

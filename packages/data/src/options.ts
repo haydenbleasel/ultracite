@@ -1,6 +1,6 @@
-import { agentIds } from "./agents";
-import { editorHookIds, editorIds } from "./editors";
-import { providerIds } from "./providers";
+import { agents } from "./agents";
+import { editors } from "./editors";
+import { providers } from "./providers";
 
 /** Supported frameworks for framework-specific linting rules */
 export const frameworks = [
@@ -34,11 +34,11 @@ export type Migration = (typeof migrations)[number];
 
 /** All CLI options consolidated */
 export const options = {
-  linters: providerIds,
-  editorConfigs: editorIds,
-  agents: agentIds,
+  linters: providers.map((provider) => provider.id),
+  editorConfigs: editors.map((editor) => editor.id),
+  agents: agents.map((agent) => agent.id),
   integrations,
-  hooks: editorHookIds,
+  hooks: editors.filter((editor) => editor.hooks).map((editor) => editor.id),
   frameworks,
   migrations,
 } as const;

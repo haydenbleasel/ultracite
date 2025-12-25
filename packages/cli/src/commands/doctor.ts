@@ -6,9 +6,9 @@ import process from "node:process";
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import { detectPackageManager, dlxCommand } from "nypm";
+import packageJson from "../../package.json" with { type: "json" };
 import { eslintConfigFiles } from "../migrations/eslint";
 import { prettierConfigFiles } from "../migrations/prettier";
-import { title } from "../utils";
 
 interface DiagnosticCheck {
   name: string;
@@ -350,7 +350,7 @@ const runCheck = async (
 
 // Main doctor function
 export const doctor = async (): Promise<void> => {
-  intro(title);
+  intro(`Ultracite v${packageJson.version} Doctor`);
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";

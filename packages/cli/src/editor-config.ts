@@ -1,46 +1,41 @@
 import { spawnSync } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
-import { getEditorById } from "@ultracite/data/editors";
+import { readFile, writeFile } from "node:fs/promises";
+import { editors } from "@ultracite/data/editors";
 import type { Linter } from "@ultracite/data/providers";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { exists } from "./utils";
+import { ensureDirectory, exists } from "./utils";
 
-export const createEditorConfig = (editorId: string, linter: Linter = "biome") => {
-  const editor = getEditorById(editorId);
+export const createEditorConfig = (
+  editorId: string,
+  linter: Linter = "biome"
+) => {
+  const editor = editors.find((editor) => editor.id === editorId);
+
   if (!editor) {
     throw new Error(`Editor "${editorId}" not found`);
   }
 
-  const { path: configPath, getContent, extensionCommand } = editor.config;
-  const content = getContent(linter);
-
-  const ensureDirectory = async () => {
-    const dir = dirname(configPath);
-    if (dir !== ".") {
-      const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
-      await mkdir(cleanDir, { recursive: true });
-    }
-  };
+  const content = editor.config.getContent(linter);
 
   return {
-    exists: () => exists(configPath),
+    exists: () => exists(editor.config.path),
 
     create: async () => {
-      await ensureDirectory();
-      await writeFile(configPath, JSON.stringify(content, null, 2));
+      await ensureDirectory(editor.config.path);
+      await writeFile(editor.config.path, JSON.stringify(content, null, 2));
     },
 
     update: async () => {
-      await ensureDirectory();
+      await ensureDirectory(editor.config.path);
+      const doesExist = await exists(editor.config.path);
 
-      if (!(await exists(configPath))) {
-        await writeFile(configPath, JSON.stringify(content, null, 2));
+      if (!doesExist) {
+        await writeFile(editor.config.path, JSON.stringify(content, null, 2));
         return;
       }
 
-      const existingContents = await readFile(configPath, "utf-8");
+      const existingContents = await readFile(editor.config.path, "utf-8");
       const existingConfig = parse(existingContents) as
         | Record<string, unknown>
         | undefined;
@@ -49,12 +44,12 @@ export const createEditorConfig = (editorId: string, linter: Linter = "biome") =
       const configToMerge = existingConfig || {};
       const newConfig = deepmerge(configToMerge, content);
 
-      await writeFile(configPath, JSON.stringify(newConfig, null, 2));
+      await writeFile(editor.config.path, JSON.stringify(newConfig, null, 2));
     },
 
-    extension: extensionCommand
+    extension: editor.config.extensionCommand
       ? (extensionId: string) =>
-          spawnSync(`${extensionCommand} ${extensionId}`, {
+          spawnSync(`${editor.config.extensionCommand} ${extensionId}`, {
             stdio: "pipe",
             shell: true,
           })

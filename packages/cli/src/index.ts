@@ -1,7 +1,7 @@
-import { options } from "@ultracite/data/options";
 import { initTRPC } from "@trpc/server";
-import { createCli, type TrpcCliMeta } from "trpc-cli";
+import { options } from "@ultracite/data/options";
 import { type PackageManagerName, packageManagers } from "nypm";
+import { createCli, type TrpcCliMeta } from "trpc-cli";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
