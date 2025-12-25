@@ -49,7 +49,7 @@ export const Navbar = () => {
     <div className="sticky top-0 z-50 flex items-center justify-between bg-background py-4">
       <div className="flex items-center gap-4">
         <Link className="flex items-center gap-2" href="/">
-          <Logo className="size-4" />
+          <Logo className="size-5" />
           <span className="font-semibold text-lg tracking-tight">
             Ultracite
           </span>
