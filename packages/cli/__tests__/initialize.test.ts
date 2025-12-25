@@ -9,9 +9,8 @@ import {
   removePrettier,
   upsertAgents,
   upsertBiomeConfig,
+  upsertEditorConfig,
   upsertTsConfig,
-  upsertVsCodeSettings,
-  upsertZedSettings,
 } from "../src/initialize";
 
 mock.module("node:fs/promises", () => ({
@@ -59,14 +58,14 @@ mock.module("@clack/prompts", () => ({
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
+  select: mock(() => Promise.resolve("biome")),
   isCancel: mock(() => false),
   cancel: mock(noop),
 }));
 
 describe("initialize", () => {
-  beforeEach(() => {
-    mock.restore();
-  });
+  // Note: We don't call mock.restore() here because it causes issues
+  // with module re-loading when the tests transition between each other
 
   test("completes successfully with minimal options", async () => {
     const mockLog = {
@@ -267,7 +266,7 @@ describe("initialize", () => {
       pm: "npm",
       skipInstall: true,
       editors: [],
-      agents: ["kiro", "trae"],
+      agents: ["claude", "cline"],
       integrations: [],
       frameworks: [],
       migrate: [],
@@ -366,9 +365,8 @@ describe("initialize", () => {
 });
 
 describe("helper functions", () => {
-  beforeEach(() => {
-    mock.restore();
-  });
+  // Note: We don't call mock.restore() here because it causes issues
+  // with module re-loading when the tests transition between each other
 
   describe("installDependencies", () => {
     test("installs dependencies when install is true", async () => {
@@ -471,7 +469,7 @@ describe("helper functions", () => {
     });
   });
 
-  describe("upsertVsCodeSettings", () => {
+  describe("upsertEditorConfig", () => {
     test("creates vscode settings when not exists", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
@@ -494,7 +492,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertVsCodeSettings();
+      await upsertEditorConfig("vscode");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -502,7 +500,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.vscode/settings.json") {
+          if (path === ".vscode/settings.json") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -520,7 +518,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertVsCodeSettings();
+      await upsertEditorConfig("vscode");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -550,12 +548,10 @@ describe("helper functions", () => {
       }));
 
       // Should not throw, just continue
-      await upsertVsCodeSettings();
+      await upsertEditorConfig("vscode");
       expect(mockWriteFile).toHaveBeenCalled();
     });
-  });
 
-  describe("upsertZedSettings", () => {
     test("creates zed settings when not exists", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
@@ -573,7 +569,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertZedSettings();
+      await upsertEditorConfig("zed");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -581,7 +577,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.zed/settings.json") {
+          if (path === ".zed/settings.json") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -599,7 +595,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertZedSettings();
+      await upsertEditorConfig("zed");
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });
@@ -887,7 +883,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("kiro", "Kiro");
+      await upsertAgents("claude", "Claude Code");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -896,7 +892,7 @@ describe("helper functions", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.kiro/steering/ultracite.md") {
+          if (path === "./.claude/CLAUDE.md") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -914,7 +910,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("kiro", "Kiro");
+      await upsertAgents("claude", "Claude Code");
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });

@@ -239,7 +239,16 @@ export default defineConfig([
         name: ".oxfmtrc.jsonc",
         lang: "json",
         code: () => `{
-  "$schema": "./node_modules/oxfmt/configuration_schema.json"
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "proseWrap": "never",
+  "printWidth": 80,
 }`,
       },
     ],
