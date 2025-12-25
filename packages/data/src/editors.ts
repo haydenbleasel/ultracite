@@ -10,22 +10,23 @@ import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
 import type { Linter } from "./providers";
 
+/* e.g. .cursor/rules/ultracite.mdc */
 export interface EditorRulesConfig {
   path: string;
   header?: string;
   appendMode?: boolean;
 }
 
+/* e.g. .cursor/hooks.json */
 export interface EditorHooksConfig {
   path: string;
-  /** Returns hook configuration object for the given command */
   getContent: (command: string) => Record<string, unknown>;
 }
 
-export interface EditorConfig {
+/* e.g. .vscode/settings.json */
+export interface EditorSettingsConfig {
   path: string;
   getContent: (linter?: Linter) => Record<string, unknown>;
-  /** CLI command to install extensions (e.g., "code --install-extension" for VS Code-based editors) */
   extensionCommand?: string;
 }
 
@@ -34,11 +35,10 @@ export interface Editor {
   name: string;
   subtitle: string;
   description: string;
-  website: string;
   logo: StaticImageData;
   rules?: EditorRulesConfig;
   hooks?: EditorHooksConfig;
-  config: EditorConfig;
+  config: EditorSettingsConfig;
 }
 
 // VS Code base configuration
@@ -174,7 +174,6 @@ export const editors: Editor[] = [
     subtitle: "The most popular code editor",
     description:
       "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
-    website: "https://code.visualstudio.com",
     logo: vscodeLogo,
     config: {
       path: ".vscode/settings.json",
@@ -188,7 +187,6 @@ export const editors: Editor[] = [
     subtitle: "The AI-first code editor",
     description:
       "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
-    website: "https://cursor.com",
     logo: cursorLogo,
     rules: {
       path: ".cursor/rules/ultracite.mdc",
@@ -219,7 +217,6 @@ alwaysApply: false
     subtitle: "The agentic IDE by Codeium",
     description:
       "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
-    website: "https://codeium.com/windsurf",
     logo: windsurfLogo,
     rules: {
       path: ".windsurf/rules/ultracite.md",
@@ -244,7 +241,6 @@ alwaysApply: false
     subtitle: "Google's next-generation IDE",
     description:
       "An AI-powered development platform built on VS Code for building and deploying applications faster.",
-    website: "https://antigravity.dev",
     logo: antigravityLogo,
     config: {
       path: ".vscode/settings.json",
@@ -258,7 +254,6 @@ alwaysApply: false
     subtitle: "AWS's spec-driven IDE",
     description:
       "AWS's spec-driven AI development environment for building production-ready applications.",
-    website: "https://kiro.dev",
     logo: kiroLogo,
     rules: {
       path: ".kiro/steering/ultracite.md",
@@ -275,7 +270,6 @@ alwaysApply: false
     subtitle: "ByteDance's AI IDE",
     description:
       "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
-    website: "https://www.trae.ai",
     logo: traeLogo,
     rules: {
       path: ".trae/rules/project_rules.md",
@@ -292,7 +286,6 @@ alwaysApply: false
     subtitle: "Open-source AI editor",
     description:
       "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
-    website: "https://voideditor.com",
     logo: voidLogo,
     config: {
       path: ".vscode/settings.json",
@@ -306,7 +299,6 @@ alwaysApply: false
     subtitle: "The high-performance editor",
     description:
       "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
-    website: "https://zed.dev",
     logo: zedLogo,
     rules: {
       path: ".rules",
