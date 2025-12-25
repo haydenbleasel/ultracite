@@ -1,5 +1,5 @@
 import { agentIds } from "@ultracite/data/agents";
-import { editorCliValues } from "@ultracite/data/editors";
+import { editorIds } from "@ultracite/data/editors";
 import {
   frameworks,
   hooks,
@@ -12,7 +12,7 @@ import { type PackageManagerName, packageManagers } from "nypm";
 export const options = {
   packageManagers: packageManagers.map((pm) => pm.name) as PackageManagerName[],
   linters: providerIds,
-  editorConfigs: editorCliValues,
+  editorConfigs: editorIds,
   agents: agentIds,
   integrations,
   hooks,

@@ -1,5 +1,5 @@
 import { agentIds } from "./agents";
-import { editorCliValues } from "./editors";
+import { editorIds } from "./editors";
 import { providerIds } from "./providers";
 
 /** Supported frameworks for framework-specific linting rules */
@@ -40,7 +40,7 @@ export type Migration = (typeof migrations)[number];
 /** All CLI options consolidated */
 export const options = {
   linters: providerIds,
-  editorConfigs: editorCliValues,
+  editorConfigs: editorIds,
   agents: agentIds,
   integrations,
   hooks,
