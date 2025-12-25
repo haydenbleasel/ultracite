@@ -1,5 +1,4 @@
-"use client";
-
+import { SiJson } from "@icons-pack/react-simple-icons";
 import type { Editor } from "@ultracite/data/editors";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
 
@@ -24,8 +23,9 @@ export const Config = ({ editor }: ConfigProps) => (
     </div>
 
     <div className="col-span-2 mx-auto w-full max-w-3xl divide-y overflow-hidden rounded-lg border">
-      <div className="bg-secondary px-4 py-3">
-        <p className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 font-mono text-xs">
+      <div className="flex items-center gap-2 bg-secondary p-4">
+        <SiJson className="size-4 text-muted-foreground" />
+        <p className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm font-mono text-xs">
           {editor.config.path}
         </p>
       </div>

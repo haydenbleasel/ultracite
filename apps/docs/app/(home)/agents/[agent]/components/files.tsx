@@ -1,5 +1,3 @@
-"use client";
-
 import type { Agent } from "@ultracite/data/agents";
 import { getRules } from "@ultracite/data/rules";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
