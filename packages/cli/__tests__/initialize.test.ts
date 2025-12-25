@@ -5,8 +5,6 @@ import {
   initializeLintStaged,
   initializePrecommitHook,
   installDependencies,
-  removeEsLint,
-  removePrettier,
   upsertAgents,
   upsertBiomeConfig,
   upsertEditorConfig,
@@ -96,7 +94,6 @@ describe("initialize", () => {
       agents: [],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockLog.success).toHaveBeenCalled();
@@ -140,7 +137,6 @@ describe("initialize", () => {
       agents: [],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockDetect).toHaveBeenCalled();
@@ -185,7 +181,6 @@ describe("initialize", () => {
       agents: [],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockAddDep).toHaveBeenCalled();
@@ -912,92 +907,6 @@ describe("helper functions", () => {
 
       await upsertAgents("claude", "Claude Code");
       expect(mockWriteFile).toHaveBeenCalled();
-    });
-  });
-
-  describe("removePrettier", () => {
-    test("removes prettier packages and files", async () => {
-      const mockUnlink = mock(() => Promise.resolve());
-      const mockRemoveDep = mock(() => Promise.resolve());
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        removeDependency: mockRemoveDep,
-      }));
-
-      mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
-          if (path === ".prettierrc") {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error("ENOENT"));
-        }),
-        readFile: mock(() =>
-          Promise.resolve('{"devDependencies": {"prettier": "2.0.0"}}')
-        ),
-        writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
-        unlink: mockUnlink,
-      }));
-
-      mock.module("@clack/prompts", () => ({
-        spinner: mock(() => ({
-          start: mock(noop),
-          stop: mock(noop),
-          message: mock(noop),
-        })),
-      }));
-
-      await removePrettier("npm");
-      expect(mockRemoveDep).toHaveBeenCalled();
-      expect(mockUnlink).toHaveBeenCalled();
-    });
-  });
-
-  describe("removeEsLint", () => {
-    test("removes eslint packages and files", async () => {
-      const mockUnlink = mock(() => Promise.resolve());
-      const mockRemoveDep = mock(() => Promise.resolve());
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        removeDependency: mockRemoveDep,
-      }));
-
-      mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
-          if (path === ".eslintrc") {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error("ENOENT"));
-        }),
-        readFile: mock(() =>
-          Promise.resolve('{"devDependencies": {"eslint": "8.0.0"}}')
-        ),
-        writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
-        unlink: mockUnlink,
-      }));
-
-      mock.module("@clack/prompts", () => ({
-        spinner: mock(() => ({
-          start: mock(noop),
-          stop: mock(noop),
-          message: mock(noop),
-        })),
-      }));
-
-      await removeEsLint("npm");
-      expect(mockRemoveDep).toHaveBeenCalled();
-      expect(mockUnlink).toHaveBeenCalled();
     });
   });
 });

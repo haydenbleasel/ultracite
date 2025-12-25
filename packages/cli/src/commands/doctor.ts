@@ -7,8 +7,35 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import { detectPackageManager, dlxCommand } from "nypm";
 import packageJson from "../../package.json" with { type: "json" };
-import { eslintConfigFiles } from "../migrations/eslint";
-import { prettierConfigFiles } from "../migrations/prettier";
+// Config files to check for conflicting tools
+const prettierConfigFiles = [
+  ".prettierrc",
+  ".prettierrc.js",
+  ".prettierrc.cjs",
+  ".prettierrc.mjs",
+  ".prettierrc.json",
+  ".prettierrc.yaml",
+  ".prettierrc.yml",
+  "prettier.config.js",
+  "prettier.config.mjs",
+  "prettier.config.cjs",
+];
+
+const eslintConfigFiles = [
+  ".eslintrc",
+  ".eslintrc.js",
+  ".eslintrc.cjs",
+  ".eslintrc.mjs",
+  ".eslintrc.json",
+  ".eslintrc.yaml",
+  ".eslintrc.yml",
+  "eslint.config.js",
+  "eslint.config.mjs",
+  "eslint.config.cjs",
+  "eslint.config.ts",
+  "eslint.config.mts",
+  "eslint.config.cts",
+];
 
 interface DiagnosticCheck {
   name: string;

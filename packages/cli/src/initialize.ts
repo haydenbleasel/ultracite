@@ -31,8 +31,6 @@ import { oxfmt } from "./linters/oxfmt";
 import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
-import { eslintCleanup } from "./migrations/eslint";
-import { prettierCleanup } from "./migrations/prettier";
 import { tsconfig } from "./tsconfig";
 import { isMonorepo, updatePackageJson } from "./utils";
 
@@ -49,7 +47,6 @@ interface InitializeFlags {
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
-  migrate?: (typeof options.migrations)[number][];
   skipInstall?: boolean;
   quiet?: boolean;
 }
@@ -621,74 +618,6 @@ export const upsertHooks = async (
   }
 };
 
-export const removePrettier = async (pm: PackageManagerName, quiet = false) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Removing Prettier dependencies and configuration...");
-  }
-
-  try {
-    const result = await prettierCleanup.remove(pm);
-
-    if (!quiet) {
-      if (result.packagesRemoved.length > 0) {
-        s.message(
-          `Removed Prettier packages: ${result.packagesRemoved.join(", ")}`
-        );
-      }
-
-      if (result.filesRemoved.length > 0) {
-        s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
-      }
-
-      if (result.vsCodeCleaned) {
-        s.message("Cleaned VS Code settings");
-      }
-
-      s.stop("Prettier removed successfully.");
-    }
-  } catch (_error) {
-    if (!quiet) {
-      s.stop("Failed to remove Prettier completely, but continuing...");
-    }
-  }
-};
-
-export const removeEsLint = async (pm: PackageManagerName, quiet = false) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Removing ESLint dependencies and configuration...");
-  }
-
-  try {
-    const result = await eslintCleanup.remove(pm);
-
-    if (!quiet) {
-      if (result.packagesRemoved.length > 0) {
-        s.message(
-          `Removed ESLint packages: ${result.packagesRemoved.join(", ")}`
-        );
-      }
-
-      if (result.filesRemoved.length > 0) {
-        s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
-      }
-
-      if (result.vsCodeCleaned) {
-        s.message("Cleaned VS Code settings");
-      }
-
-      s.stop("ESLint removed successfully.");
-    }
-  } catch (_error) {
-    if (!quiet) {
-      s.stop("Failed to remove ESLint completely, but continuing...");
-    }
-  }
-};
-
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
 export const initialize = async (flags?: InitializeFlags) => {
   const opts = flags ?? {};
@@ -720,68 +649,6 @@ export const initialize = async (flags?: InitializeFlags) => {
       pm = detected.name;
     }
 
-    let shouldRemovePrettier = opts.migrate?.includes("prettier");
-    let shouldRemoveEslint = opts.migrate?.includes("eslint");
-
-    if (
-      !quiet &&
-      (shouldRemovePrettier === undefined || shouldRemoveEslint === undefined)
-    ) {
-      const migrationOptions: Array<{ label: string; value: string }> = [];
-
-      if (
-        shouldRemovePrettier === undefined &&
-        (await prettierCleanup.hasPrettier())
-      ) {
-        migrationOptions.push({
-          label:
-            "Remove Prettier (dependencies, config files, VS Code settings)",
-          value: "prettier",
-        });
-      }
-
-      if (
-        shouldRemoveEslint === undefined &&
-        (await eslintCleanup.hasEsLint())
-      ) {
-        migrationOptions.push({
-          label: "Remove ESLint (dependencies, config files, VS Code settings)",
-          value: "eslint",
-        });
-      }
-
-      if (migrationOptions.length > 0) {
-        const migrationChoices = await multiselect({
-          message:
-            "Remove existing formatters/linters (recommended for clean migration)?",
-          options: migrationOptions,
-          required: false,
-        });
-
-        if (isCancel(migrationChoices)) {
-          cancel("Operation cancelled.");
-          return;
-        }
-
-        if (shouldRemovePrettier === undefined) {
-          shouldRemovePrettier = migrationChoices.includes("prettier");
-        }
-        if (shouldRemoveEslint === undefined) {
-          shouldRemoveEslint = migrationChoices.includes("eslint");
-        }
-      }
-    }
-
-    // Set defaults for quiet mode if not explicitly provided
-    if (quiet) {
-      if (shouldRemovePrettier === undefined) {
-        shouldRemovePrettier = false;
-      }
-      if (shouldRemoveEslint === undefined) {
-        shouldRemoveEslint = false;
-      }
-    }
-
     let linter = opts.linter;
     if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to biome only
@@ -792,7 +659,6 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
-        opts.migrate !== undefined ||
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
@@ -835,8 +701,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.hooks ||
-        opts.integrations !== undefined ||
-        opts.migrate !== undefined;
+        opts.integrations !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -960,8 +825,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.pm ||
         opts.editors ||
         opts.agents ||
-        opts.hooks ||
-        opts.migrate !== undefined;
+        opts.hooks;
 
       if (hasOtherCliOptions) {
         integrations = [];
@@ -984,15 +848,6 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         integrations = integrationsResult;
       }
-    }
-
-    // Only remove Prettier if not using ESLint (ESLint needs Prettier for formatting)
-    if (shouldRemovePrettier && linter !== "eslint") {
-      await removePrettier(pm, quiet);
-    }
-    // Only remove ESLint if not selected as a linter
-    if (shouldRemoveEslint && linter !== "eslint") {
-      await removeEsLint(pm, quiet);
     }
 
     await installDependencies(pm, linter, !opts.skipInstall, quiet);
