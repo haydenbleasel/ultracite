@@ -12,13 +12,10 @@ import zedLogo from "../logos/zed.svg";
 export type Linter = "biome" | "eslint" | "oxlint";
 
 export interface LinterExtension {
-  /** VS Code extension ID */
   id: string;
-  /** Display name */
   name: string;
 }
 
-/** Linter VS Code extension mappings */
 export const linterExtensions: Record<Linter, LinterExtension> = {
   biome: { id: "biomejs.biome", name: "Biome" },
   eslint: { id: "dbaeumer.vscode-eslint", name: "ESLint" },
@@ -26,37 +23,24 @@ export const linterExtensions: Record<Linter, LinterExtension> = {
 };
 
 export interface EditorRulesConfig {
-  /** Path to the rules file */
   path: string;
-  /** Header content to prepend to the rules file (e.g., frontmatter) */
   header?: string;
-  /** Whether to append to existing file instead of replacing */
   appendMode?: boolean;
 }
 
 export interface EditorConfig {
-  /** Path to the settings config file */
   path: string;
-  /** Get editor settings configuration for a linter */
   getContent: (linter?: Linter) => Record<string, unknown>;
 }
 
 export interface Editor {
-  /** Unique identifier for the editor */
   id: string;
-  /** Display name */
   name: string;
-  /** Short tagline for navbar */
   subtitle: string;
-  /** Full description */
   description: string;
-  /** Editor's website URL */
   website: string;
-  /** Logo for UI display */
   logo: StaticImageData;
-  /** Rules file configuration (for AI agent rules) */
   rules?: EditorRulesConfig;
-  /** Editor settings configuration */
   config: EditorConfig;
 }
 
@@ -111,7 +95,6 @@ export const vscodeEslintConfig = {
   },
 };
 
-/** Get VS Code config based on linter selection */
 export const getVscodeConfig = (linter: Linter = "biome") => {
   if (linter === "biome") {
     return vscodeBiomeConfig;
@@ -177,7 +160,6 @@ export const zedBiomeConfig = {
   },
 };
 
-/** Get Zed config based on linter selection */
 export const getZedConfig = (linter: Linter = "biome") => {
   // Zed currently only has good support for Biome
   // ESLint and Oxlint support is limited
@@ -316,12 +298,10 @@ alwaysApply: false
   },
 ];
 
-/** Get all editor IDs */
 export const editorIds = editors.map((editor) => editor.id) as [
   string,
   ...string[],
 ];
 
-/** Get an editor by ID */
 export const getEditorById = (id: string): Editor | undefined =>
   editors.find((editor) => editor.id === id);
