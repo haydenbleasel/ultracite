@@ -10,7 +10,7 @@ import voidLogo from "../logos/void.svg";
 import vscodeLogo from "../logos/vscode.svg";
 import windsurfLogo from "../logos/windsurf.svg";
 import zedLogo from "../logos/zed.svg";
-import type { Linter } from "./providers";
+import type { ProviderId } from "./providers";
 
 /* e.g. .cursor/rules/ultracite.mdc */
 export interface EditorRulesConfig {
@@ -28,7 +28,7 @@ export interface EditorHooksConfig {
 /* e.g. .vscode/settings.json */
 export interface EditorSettingsConfig {
   path: string;
-  getContent: (linter?: Linter) => Record<string, unknown>;
+  getContent: (linter?: ProviderId) => Record<string, unknown>;
   extensionCommand?: string;
 }
 
@@ -165,7 +165,7 @@ export const vscodeEslintConfig = {
   },
 };
 
-export const getVscodeConfig = (linter: Linter = "biome") => {
+export const getVscodeConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
     case "biome":
       return deepmerge(vscodeBaseConfig, vscodeBiomeConfig);
@@ -335,7 +335,7 @@ const zedOxcConfig = {
   },
 };
 
-export const getZedConfig = (linter: Linter = "biome") => {
+export const getZedConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
     case "biome":
       return deepmerge(zedBaseConfig, zedBiomeConfig);

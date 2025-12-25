@@ -8,13 +8,6 @@ import stylelintLogo from "../logos/stylelint.svg";
 
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
-export type Linter = "biome" | "eslint" | "oxlint";
-
-export interface LinterExtension {
-  id: string;
-  name: string;
-}
-
 export interface ConfigFile {
   name: string;
   lang: "json" | "javascript";
@@ -37,7 +30,6 @@ export interface Provider {
   logo: StaticImageData;
   additionalLogos?: StaticImageData[];
   videos?: string[];
-  frameworks: string[];
   configFiles: ConfigFile[];
   vscodeExtensionId: string;
 }
@@ -92,17 +84,7 @@ export const providers: Provider[] = [
       "https://www.youtube.com/watch?v=lEkXbneUnWg",
       "https://www.youtube.com/watch?v=b_F4LaycQcE",
     ],
-    frameworks: [
-      "Next.js",
-      "React",
-      "Vue",
-      "Svelte",
-      "Solid",
-      "Qwik",
-      "Angular",
-      "Remix",
-      "Astro",
-    ],
+
     configFiles: [
       {
         name: "biome.jsonc",
@@ -164,17 +146,7 @@ export const providers: Provider[] = [
     includes: ["ESLint", "Prettier", "Stylelint"],
     logo: eslintLogo,
     additionalLogos: [prettierLogo, stylelintLogo],
-    frameworks: [
-      "Next.js",
-      "React",
-      "Vue",
-      "Svelte",
-      "Solid",
-      "Qwik",
-      "Angular",
-      "Remix",
-      "Astro",
-    ],
+
     configFiles: [
       {
         name: "eslint.config.mjs",
@@ -251,17 +223,7 @@ export default defineConfig([
     ],
     includes: ["Oxlint", "Oxfmt"],
     logo: oxlintLogo,
-    frameworks: [
-      "Next.js",
-      "React",
-      "Vue",
-      "Svelte",
-      "Solid",
-      "Qwik",
-      "Angular",
-      "Remix",
-      "Astro",
-    ],
+
     configFiles: [
       {
         name: ".oxlintrc.json",
