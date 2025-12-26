@@ -46,7 +46,7 @@ export const Navbar = () => {
   const isAgentPage = pathname.startsWith("/agents");
 
   return (
-    <div className="sticky top-0 z-50 flex items-center justify-between bg-background py-4">
+    <div className="sticky top-0 z-50 flex items-center justify-between border-b bg-background px-4 py-3">
       <div className="flex items-center gap-4">
         <Link className="flex items-center gap-2" href="/">
           <Logo className="size-5" />

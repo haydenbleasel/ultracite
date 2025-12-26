@@ -7,6 +7,7 @@ import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
+import { Navbar } from "@/components/ultracite/navbar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -46,6 +47,7 @@ const Layout = ({ children }: LayoutProps) => {
                 enableSystem: true,
               }}
             >
+              <Navbar />
               {children}
             </RootProvider>
             <Toaster />
