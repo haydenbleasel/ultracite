@@ -2,7 +2,6 @@ import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import { providers as providersData } from "@ultracite/data/providers";
 import Image from "next/image";
-import type { ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -17,7 +16,7 @@ const oxlintProvider = providersData.find((p) => p.id === "oxlint");
 
 export const providers = [
   {
-    id: "eslint",
+    ...eslintProvider,
     title: () =>
       eslintProvider ? (
         <span className="flex items-center gap-1">
@@ -43,7 +42,7 @@ export const providers = [
       ) : null,
   },
   {
-    id: "biome",
+    ...biomeProvider,
     title: () =>
       biomeProvider ? (
         <span className="flex items-center gap-1">
@@ -57,7 +56,7 @@ export const providers = [
       ) : null,
   },
   {
-    id: "oxlint",
+    ...oxlintProvider,
     title: () =>
       oxlintProvider ? (
         <span className="flex items-center gap-1">
@@ -71,11 +70,6 @@ export const providers = [
       ) : null,
   },
 ];
-
-export interface Provider {
-  id: string;
-  title: ReactNode;
-}
 
 interface ProviderSelectorProps {
   value: string | null;
@@ -101,7 +95,7 @@ export const ProviderSelector = ({
       </SelectTrigger>
       <SelectContent className="w-2xs">
         {providers.map((provider) => (
-          <SelectItem key={provider.id} value={provider.id}>
+          <SelectItem key={provider.id} value={provider.id ?? ""}>
             <provider.title />
           </SelectItem>
         ))}
