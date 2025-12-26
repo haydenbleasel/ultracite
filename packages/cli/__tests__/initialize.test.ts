@@ -18,29 +18,7 @@ import {
   upsertTsConfig,
 } from "../src/initialize";
 
-// Mock the data package modules that contain SVG imports requiring react
-mock.module("@ultracite/data/providers", () => ({
-  providers: [
-    {
-      id: "biome",
-      name: "Biome",
-      configFiles: [{ name: "biome.jsonc", code: () => "{}" }],
-      vscodeExtensionId: "biomejs.biome",
-    },
-    {
-      id: "eslint",
-      name: "ESLint",
-      configFiles: [{ name: "eslint.config.mjs", code: () => "" }],
-      vscodeExtensionId: "dbaeumer.vscode-eslint",
-    },
-    {
-      id: "oxlint",
-      name: "Oxlint",
-      configFiles: [{ name: ".oxlintrc.json", code: () => "{}" }],
-      vscodeExtensionId: "oxc.oxc-vscode",
-    },
-  ],
-}));
+// Data package mocks are in preload.ts (must run before imports)
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
