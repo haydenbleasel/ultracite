@@ -1,8 +1,5 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
-import next from "@next/eslint-plugin-next";
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as query from "@tanstack/eslint-plugin-query";
 import typescript from "@typescript-eslint/eslint-plugin";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser";
@@ -17,12 +14,9 @@ import html from "eslint-plugin-html";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
 import * as importPlugin from "eslint-plugin-import";
 import jest from "eslint-plugin-jest";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
 import sonarjs from "eslint-plugin-sonarjs";
 import storybook from "eslint-plugin-storybook";
 import unicorn from "eslint-plugin-unicorn";
@@ -35,14 +29,9 @@ import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
 import jestRules from "./rules/jest.mjs";
-import jsxA11yRules from "./rules/jsx-a11y.mjs";
 import nRules from "./rules/n.mjs";
-import nextRules from "./rules/next.mjs";
 import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
-import queryRules from "./rules/query.mjs";
-import reactRules from "./rules/react.mjs";
-import reactHooksRules from "./rules/react-hooks.mjs";
 import sonarjsRules from "./rules/sonarjs.mjs";
 import storybookRules from "./rules/storybook.mjs";
 import typescriptRules from "./rules/typescript.mjs";
@@ -65,16 +54,11 @@ const config = [
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        ecmaFeatures: {
-          jsx: true,
-        },
       },
     },
     files: [
       "**/*.js",
-      "**/*.jsx",
       "**/*.ts",
-      "**/*.tsx",
       "**/*.json",
       "**/*.mjs",
       "**/*.cjs",
@@ -82,30 +66,21 @@ const config = [
     ],
     plugins: {
       prettier,
-      react,
-      "react-hooks": reactHooks,
-      "jsx-a11y": jsxA11y,
       import: importPlugin,
       promise,
       n,
-      "@next/next": next,
       "unused-imports": unusedImports,
       // tailwindcss,
       sonarjs,
       compat,
       unicorn,
       github,
-      "@tanstack/eslint-plugin-query": query,
     },
     rules: {
       ...eslintRules,
-      ...reactRules,
-      ...reactHooksRules,
-      ...jsxA11yRules,
       ...importRules,
       ...promiseRules,
       ...nRules,
-      ...nextRules,
       ...prettierRules,
       ...eslintPrettier.rules,
       ...unusedImportsRules,
@@ -114,17 +89,12 @@ const config = [
       ...compatRules,
       ...unicornRules,
       ...githubRules,
-      ...queryRules,
     },
 
     settings: {
-      react: {
-        version: "detect",
-      },
-
       // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
       "import/parsers": {
-        espree: [".js", ".cjs", ".mjs", ".jsx", ".ts", ".tsx"],
+        espree: [".js", ".cjs", ".mjs", ".ts"],
       },
       "import/resolver": {
         typescript: true,
@@ -133,7 +103,7 @@ const config = [
     },
   },
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.ts"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -150,7 +120,7 @@ const config = [
     },
   },
   {
-    files: ["**/*.test.js", "**/*.test.jsx", "tests/**/*.js", "tests/**/*.jsx"],
+    files: ["**/*.test.js", "tests/**/*.js"],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -164,7 +134,7 @@ const config = [
     },
   },
   {
-    files: ["**/*.cy.js", "**/*.cy.jsx"],
+    files: ["**/*.cy.js"],
     languageOptions: {
       globals: {
         ...globals.cypress,
@@ -178,12 +148,7 @@ const config = [
     },
   },
   {
-    files: [
-      "**/*.stories.js",
-      "**/*.stories.jsx",
-      "**/*.stories.ts",
-      "**/*.stories.tsx",
-    ],
+    files: ["**/*.stories.js", "**/*.stories.ts"],
     plugins: {
       storybook,
     },
