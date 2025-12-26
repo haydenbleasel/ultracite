@@ -1,0 +1,121 @@
+---
+title: ESLint
+description: The most mature and comprehensive linting ecosystem.
+---
+
+[ESLint](https://eslint.org/) combined with [Prettier](https://prettier.io/) and [Stylelint](https://stylelint.io/) provides the most mature and battle-tested linting solution available. Used by millions of developers, this toolchain offers the largest ecosystem of plugins and configurations.
+
+## Benefits
+
+- **Battle-tested** — Used by millions of developers worldwide with the largest plugin ecosystem
+- **20+ plugins included** — React, TypeScript, JSX A11y, Import, Next.js, Unicorn, SonarJS, and more
+- **Three tools in one** — ESLint for code quality, Prettier for formatting, Stylelint for CSS
+- **Framework-aware** — First-class support for React, Next.js, Vue, Svelte, and more
+- **Type-aware linting** — Deep TypeScript integration with type-aware rules
+- **Maximum coverage** — Hundreds of rules covering accessibility, security, performance, and best practices
+
+## Usage
+
+Ultracite generates three config files for ESLint:
+
+```javascript title="eslint.config.mjs"
+import { defineConfig } from "eslint/config";
+import core from "ultracite/eslint/core";
+
+export default defineConfig([
+  {
+    extends: [core],
+  },
+]);
+```
+
+```javascript title="prettier.config.mjs"
+export { default } from "ultracite/prettier";
+```
+
+```javascript title="stylelint.config.mjs"
+export { default } from "ultracite/stylelint";
+```
+
+Add framework presets as needed:
+
+```javascript title="eslint.config.mjs"
+import { defineConfig } from "eslint/config";
+import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+import next from "ultracite/eslint/next";
+
+export default defineConfig([
+  {
+    extends: [core, react, next],
+  },
+]);
+```
+
+## Configuration Approach
+
+Ultracite's ESLint configuration uses an **opt-out** approach. This means we enable all recommended rules from each plugin, then selectively disable or adjust rules that don't fit our opinionated defaults. This ensures maximum coverage while avoiding overly strict or conflicting rules.
+
+## Included Plugins
+
+Ultracite's ESLint configuration includes the following plugins:
+
+### Core Plugins
+
+- **eslint** — ESLint's built-in rules for JavaScript best practices
+- **@typescript-eslint** — TypeScript-specific linting rules with type-aware checks
+- **prettier** — Integrates Prettier formatting as ESLint rules
+- **unused-imports** — Automatically removes unused imports
+
+### Code Quality
+
+- **unicorn** — Opinionated rules for cleaner, more readable code
+- **sonarjs** — Bug detection and code smell identification
+- **promise** — Best practices for Promises and async/await
+- **import** — Import/export syntax validation and organization
+
+### Framework Support
+
+- **react** / **react-hooks** — React-specific rules and hooks validation
+- **jsx-a11y** — Accessibility rules for JSX elements
+- **@next/next** — Next.js-specific rules
+- **vue** / **svelte** / **solid** / **astro** / **angular** / **qwik** — Framework-specific rules
+
+### Testing
+
+- **jest** — Jest testing best practices
+- **cypress** — Cypress testing best practices
+- **storybook** — Storybook component documentation rules
+
+### Other
+
+- **n** — Node.js-specific rules
+- **compat** — Browser compatibility checks
+- **tailwindcss** — Tailwind CSS class validation
+- **github** — GitHub-specific best practices
+- **html** — Linting for inline scripts in HTML files
+
+## Formatter Settings (Prettier)
+
+Ultracite configures Prettier with these defaults:
+
+- **Indentation**: 2 spaces
+- **Line Width**: 80 characters
+- **Semicolons**: Always required
+- **Single Quotes**: Yes
+- **Trailing Commas**: ES5 style
+- **Arrow Parentheses**: Always include
+
+## Rule Reference
+
+For the complete list of rules and their settings, see the [ESLint configuration on GitHub](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/eslint).
+
+## VS Code Extensions
+
+Install the required extensions for VS Code:
+
+```bash title="Terminal"
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension stylelint.vscode-stylelint
+```

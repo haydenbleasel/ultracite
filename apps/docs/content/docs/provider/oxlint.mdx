@@ -1,0 +1,119 @@
+---
+title: Oxlint
+description: The fastest linter available, 50-100x faster than ESLint.
+---
+
+[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) is part of the [Oxc project](https://oxc.rs/), a collection of high-performance JavaScript tools written in Rust. Paired with [Oxfmt](https://oxc.rs/) for formatting, this toolchain is ideal for large codebases where speed is critical.
+
+## Benefits
+
+- **50-100x faster** — Lint your entire codebase in milliseconds
+- **15 plugin equivalents** — Built-in support for React, TypeScript, Next.js, Vue, Jest, Vitest, and more
+- **Bug-focused rules** — Prioritizes catching real bugs over stylistic issues
+- **High signal-to-noise ratio** — Fewer false positives, more actionable feedback
+- **Oxc ecosystem** — Part of a larger project with parser, resolver, transformer, and minifier
+- **Drop-in ready** — Works alongside existing setups or as a complete replacement
+
+## Usage
+
+Ultracite generates two config files for Oxlint:
+
+```jsonc title=".oxlintrc.json"
+{
+  "extends": ["ultracite/oxlint/core"]
+}
+```
+
+```jsonc title=".oxfmtrc.jsonc"
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "printWidth": 80
+}
+```
+
+Add framework presets as needed:
+
+```jsonc title=".oxlintrc.json"
+{
+  "extends": [
+    "ultracite/oxlint/core",
+    "ultracite/oxlint/react",
+    "ultracite/oxlint/next"
+  ]
+}
+```
+
+## Configuration Approach
+
+Ultracite's Oxlint configuration uses an **opt-out** approach. This means we enable all rule categories at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
+
+## Rule Categories
+
+Oxlint organizes rules into the following categories:
+
+### Correctness
+
+Rules that catch definite bugs and errors. These are high-confidence rules that identify code that is almost certainly wrong.
+
+### Suspicious
+
+Rules that catch code patterns that are likely bugs or mistakes. These have a slightly higher false-positive rate but catch important issues.
+
+### Pedantic
+
+Rules that enforce stricter coding standards. These are more opinionated and may require more effort to satisfy.
+
+### Performance
+
+Rules that identify performance issues and suggest optimizations for better runtime efficiency.
+
+### Restriction
+
+Rules that restrict certain language features or patterns. These are typically project-specific preferences.
+
+### Style
+
+Rules that enforce consistent code style across the codebase.
+
+## Included Plugins
+
+Oxlint includes built-in support equivalent to these ESLint plugins:
+
+- **eslint** — Core JavaScript rules
+- **typescript** — TypeScript-specific rules
+- **unicorn** — Opinionated code quality rules
+- **oxc** — Oxc-specific optimizations
+- **import** — Import/export validation
+- **jsdoc** — JSDoc comment validation
+- **node** — Node.js-specific rules
+- **promise** — Promise and async/await best practices
+- **jest** / **vitest** — Testing framework rules
+
+## Formatter Settings (Oxfmt)
+
+Ultracite configures Oxfmt with these defaults:
+
+- **Indentation**: 2 spaces
+- **Line Width**: 80 characters
+- **Semicolons**: Always required
+- **Single Quotes**: Yes
+- **Trailing Commas**: ES5 style
+- **Arrow Parentheses**: Always include
+
+## Rule Reference
+
+For the complete list of rules and their settings, see the [Oxlint configuration on GitHub](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/oxlint).
+
+## VS Code Extension
+
+Install the [Oxc extension](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) for VS Code:
+
+```bash title="Terminal"
+code --install-extension oxc.oxc-vscode
+```
