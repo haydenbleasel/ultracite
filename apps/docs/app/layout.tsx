@@ -3,11 +3,11 @@ import "./global.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import { RootProvider } from "fumadocs-ui/provider/next";
-import { cn } from "fumadocs-ui/utils/cn";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Navbar } from "@/components/ultracite/navbar";
+import { cn } from "@/lib/utils";
 
 interface LayoutProps {
   children: ReactNode;

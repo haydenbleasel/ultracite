@@ -11,6 +11,8 @@ const config: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
 
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
+
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

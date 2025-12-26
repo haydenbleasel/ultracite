@@ -11,13 +11,16 @@ export const metadata: Metadata = {
 
 const DocLayout = ({ children }: LayoutProps<"/docs/[[...slug]]">) => (
   <DocsLayout
+    containerProps={{
+      className: "transition-none!",
+    }}
     githubUrl="https://github.com/haydenbleasel/ultracite"
     nav={{
       enabled: false,
     }}
     sidebar={{
       collapsible: false,
-      className: "bg-background!",
+      className: "bg-background! xl:border-none!",
     }}
     themeSwitch={{
       enabled: false,
