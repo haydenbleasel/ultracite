@@ -3,11 +3,11 @@ title: Setup
 description: How to install Ultracite in your project.
 ---
 
-Ultracite can be installed with all major package managers. You'll need Node.js v14.18+ (Node 18+ recommended) and a project with a `package.json` file.
+Ultracite can be installed with all major package managers. You'll need Node.js 20+ and a project with a `package.json` file.
 
 ## Installation
 
-The easiest way to get started is to run Ultracite's `init` script, which will install the necessary packages and set up the config file for you. In your project directory, run:
+The easiest way to get started is to run Ultracite's `init` script, which will install the necessary packages and set up the config files for you. In your project directory, run:
 
 ```package-install
 npx ultracite init
@@ -17,6 +17,7 @@ You can optionally pass the following flags to the `init` command:
 
 | Flag                | Description                                      | Options                                                                 |
 |---------------------|--------------------------------------------------|-------------------------------------------------------------------------|
+| `--linter`          | The linting toolchain to use.                    | `biome`, `eslint`, `oxlint`                                             |
 | `--pm`              | The package manager to use.                      | `pnpm`, `bun`, `yarn`, `npm`                                            |
 | `--frameworks`      | The frameworks to configure.                     | Comma-separated: `react`, `next`, `solid`, `vue`, `qwik`, `angular`, `remix`, `svelte` |
 | `--editors`         | The editors to configure.                        | Comma-separated: `vscode`, `zed`                                        |
@@ -43,20 +44,20 @@ CI=true npx ultracite init --pm npm
 
 In quiet mode, Ultracite will:
 - Skip all interactive prompts
-- Use sensible defaults for all options
+- Use sensible defaults for all options (Biome by default)
 - Suppress ASCII art, spinners, and log messages
-- Only create the core Biome configuration
+- Only create the core linter configuration
 - Exit cleanly with code 0 on success or 1 on failure
 
-## Extensions
-
-If you’re using Visual Studio Code, install the official [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extension, which allows on-save formatting/fixing:
+You can combine `--quiet` with `--linter` to specify a toolchain:
 
 ```bash title="Terminal"
-code --install-extension biomejs.biome
+npx ultracite init --quiet --linter eslint --pm npm
 ```
 
-Additionally, if you use Tailwind CSS, it’s recommended to install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for class sorting and hints:
+### Usage with Tailwind CSS
+
+If you use Tailwind CSS, it's recommended to install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for class sorting and hints:
 
 ```bash title="Terminal"
 code --install-extension bradlc.vscode-tailwindcss
