@@ -5,59 +5,51 @@ description: This section covers how to use Ultracite on a day-to-day basis — 
 
 ## IDE Integration
 
-Ultracite works best when integrated into your editor, so you get immediate feedback as you write code. It is designed to run automatically on save. To test it out, open a project in your IDE. As you edit files, you should see formatting take effect on save. Try introducing a small code style mistake (like an extra semicolon or a wrongly indented line) and hit Save – Ultracite (Biome) will instantly reformat the file.
+Ultracite works best when integrated into your editor, so you get immediate feedback as you write code. It is designed to run automatically on save.
 
-If you introduce a common lint issue (like an unused variable), you might see a squiggly underline or a warning in the Problems panel; on save, Ultracite will attempt to fix it if it’s auto-fixable (for example, remove an unused import) or otherwise leave a warning for you to address.
+To test it out, open a project in your IDE. As you edit files, you should see formatting take effect on save. Try introducing a small code style mistake (like an extra semicolon or a wrongly indented line) and hit Save — Ultracite will instantly reformat the file.
+
+If you introduce a lint issue (like an unused variable), you'll see a squiggly underline or a warning in the Problems panel. On save, Ultracite will attempt to fix it if it's auto-fixable (for example, removing an unused import) or otherwise leave a warning for you to address.
 
 ### Instant formatting
 
-Every time you save a file, Biome (with Ultracite’s config) formats the file. You don’t need to run a separate Prettier or worry about formatting – it’s taken care of.
+Every time you save a file, your chosen linter formats the code. You don't need to run a separate formatter or worry about style — it's taken care of.
 
-Thanks to the `codeActionsOnSave` settings, VS Code will also apply Biome’s “fix all” action on save. This means any lint rule that has an auto-fix (like converting `!=` to `!==`, adding missing parentheses, fixing import order, etc.) will be applied. It’s as if you ran `--fix` with ESLint automatically.
+Thanks to the `codeActionsOnSave` settings, VS Code will also apply "fix all" actions on save. This means any lint rule with an auto-fix (like converting `!=` to `!==`, adding missing parentheses, fixing import order, etc.) will be applied automatically.
 
-We even enabled `formatOnPaste` – so if you paste code from elsewhere, it will immediately be formatted to match your style.
+We also enable `formatOnPaste` — so if you paste code from elsewhere, it will immediately be formatted to match your style.
 
-The key advantage here is instant feedback. You write code in VS Code, and Ultracite continuously keeps it clean. Over time, you’ll notice you spend little to no time fixing lint errors – Ultracite either fixes them for you or points them out early. This leads to a smooth development workflow where code style and minor issues never pile up.
+The key advantage is instant feedback. You write code, and Ultracite continuously keeps it clean. Over time, you'll spend little to no time fixing lint errors — Ultracite either fixes them for you or points them out early.
 
 ### Problems panel integration
 
-Any issues that remain (which require your attention) will show up in the Problems panel. For example, if Ultracite has a rule that prohibits something or finds an error it can’t fix (say, you used a deprecated API or forgot to handle a Promise rejection), it will list it as an error or warning. You can click it to jump to the location in code.
+Any issues that require your attention will show up in the Problems panel. For example, if Ultracite finds an error it can't fix (like a deprecated API or an unhandled Promise rejection), it will list it as an error or warning. Click it to jump to the location in code.
 
-### Code lenses / Quick fixes
+### Quick fixes
 
-In many cases, the VS Code extension for Biome provides quick fix suggestions. If you see a yellow lightbulb or a suggestion popup, you can apply fixes manually as well. For instance, if a import is unused, you might get a quick fix to remove it (if it wasn’t already removed on save).
+In many cases, the VS Code extension for your linter provides quick fix suggestions. If you see a yellow lightbulb or a suggestion popup, you can apply fixes manually as well.
 
-## CLI usage
+## CLI Usage
 
-Ultracite comes with a convenient CLI (invoked as `ultracite` when installed). Here are common ways to use it.
+Ultracite comes with a CLI that wraps your chosen linter. The commands work the same regardless of which toolchain you're using.
 
 ### Checking Code
 
-The `check` command wraps the Biome `check` command, which runs the linter without fixing files.
+The `check` command runs the linter without modifying files:
 
 ```bash title="Terminal"
 npx ultracite check
 ```
 
-You can pass `--diagnostic-level` filter to show only errors or warnings:
-
-```bash title="Terminal"
-# Show only errors
-npx ultracite check --diagnostic-level error
-
-# Show warnings and above (errors)
-npx ultracite check --diagnostic-level warn
-```
-
 ### Fixing Code
 
-The `fix` command wraps the Biome `check --write` command, which runs the linter and fixes files.
+The `fix` command runs the linter and auto-fixes issues:
 
 ```bash title="Terminal"
 npx ultracite fix
 ```
 
-You can also apply unsafe fixes by running:
+You can also apply unsafe fixes (fixes that may change code behavior):
 
 ```bash title="Terminal"
 npx ultracite fix --unsafe
@@ -65,7 +57,7 @@ npx ultracite fix --unsafe
 
 ### Validating Setup
 
-The `doctor` command checks your setup for issues and provides recommendations. This is useful to run after installing Ultracite to ensure everything is configured correctly.
+The `doctor` command checks your setup for issues and provides recommendations. This is useful to run after installing Ultracite to ensure everything is configured correctly:
 
 ```bash title="Terminal"
 npx ultracite doctor
