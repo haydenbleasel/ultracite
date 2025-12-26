@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { Navbar } from "@/components/ultracite/navbar";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -15,8 +14,7 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="container relative mx-auto grid w-full gap-8 px-4 2xl:max-w-7xl">
-      <Navbar />
+    <div className="container relative mx-auto mt-8 grid w-full gap-8 px-4 sm:mt-16 2xl:max-w-7xl">
       {children}
     </div>
   );
