@@ -109,7 +109,7 @@ export const vscodeBiomeConfig = {
   },
 };
 
-// VS Code OxLint configuration
+// VS Code Oxlint configuration
 // Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {

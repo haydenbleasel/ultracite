@@ -27,7 +27,11 @@ Make sure you have:
 
 The fastest way is to run the [automatic setup script](/setup#automatic-installation).
 
-This will:
+```package-install
+npx ultracite init
+```
+
+When prompted, select **Biome** as your linting provider. This will:
 
 - Install Ultracite as a dependency
 - Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
@@ -36,15 +40,16 @@ This will:
 - Preserve your custom rules and settings
 - Set up editor integrations
 
-Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides that are now handled by Ultracite's preset.
 
 ### Option 2: Manual Migration
 
-If you prefer more control over the process, follow the [Manual Migration](/setup#manual-installation) steps by:
+If you prefer more control over the process, update your `biome.jsonc` to extend Ultracite:
 
-- Installing Ultracite and Biome manually
-- Updating your `biome.json` file to extend Ultracite
-- Creating or updating a `.vscode/settings.json` file to enable the Biome extension
-- Enabling `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core"]
+}
+```
 
 After the migration, restart your editor to ensure the new configuration is applied.
