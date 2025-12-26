@@ -31,7 +31,7 @@ export const RepoSidebar = ({ repos, hasInstallation }: RepoSidebarProps) => {
   const pathname = usePathname();
 
   return (
-    <Sidebar className="top-(--fd-banner-height)">
+    <Sidebar className="top-(--fd-banner-height) h-[calc(100svh-var(--fd-banner-height))]">
       <SidebarHeader>
         <OrganizationSwitcher
           afterSelectOrganizationUrl="/dashboard"
