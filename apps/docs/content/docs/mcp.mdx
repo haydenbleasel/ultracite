@@ -3,44 +3,47 @@ title: MCP
 description: How to use Ultracite with MCP
 ---
 
-The **Model Context Protocol (MCP)** is an open standard that allows AI assistants like Claude, Cursor, and other AI-powered tools to securely connect with external data sources and systems. Think of it as a "universal remote" that lets your AI tools access real-world data and functionality.
+The **Model Context Protocol (MCP)** is an open standard that allows AI assistants like Claude, Cursor, and other AI-powered tools to securely connect with external data sources and systems.
 
-Ultracite supports MCP to supercharge your AI development workflow.
+Ultracite provides an MCP server that gives AI assistants access to high-level coding standards and best practices — the same rules that guide AI code generation through Ultracite's editor integrations.
 
-## Installation Guide
+## What It Provides
+
+The Ultracite MCP server exposes a single tool:
+
+- **`getRules`** — Returns Ultracite's core coding standards covering type safety, modern JavaScript/TypeScript patterns, React/JSX best practices, error handling, security, performance, and testing guidelines.
+
+These are high-level coding principles, not the specific linting rules from each provider (Biome, ESLint, Oxlint). For provider-specific rule details, see the [Providers](/provider/biome) documentation.
+
+## Installation
 
 ### Step 1: Choose Your AI Tool
 
-First, make sure you're using an AI development tool that supports MCP:
+Make sure you're using an AI development tool that supports MCP:
 
-- [Claude Desktop](https://claude.ai/download) (Free - recommended for beginners)
-- [Cursor](https://www.cursor.com/) (AI-powered code editor)
-- [Windsurf by Codeium](https://windsurf.com/) (AI development platform)
+- [Claude Desktop](https://claude.ai/download)
+- [Cursor](https://www.cursor.com/)
+- [Windsurf by Codeium](https://windsurf.com/)
 - Other MCP-compatible tools
 
 ### Step 2: Locate Your Configuration File
 
-Depending on your AI tool, you'll need to edit one of these files:
+Depending on your AI tool, edit one of these files:
 
-- **Claude Desktop**: `~/Library/Application\ Support/Claude/claude_desktop_config.json` for macOS and `%APPDATA%\Claude\claude_desktop_config.json` for Windows
+- **Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
 - **Cursor**: `.cursor/mcp.json`
 - **Windsurf**: `.codeium/windsurf/mcp_config.json`
-- **Other tools**: Check your tool's MCP documentation
 
 ### Step 3: Add Ultracite Configuration
 
-Copy and paste this configuration into your MCP config file:
+Add this to your MCP config file:
 
 ```json
 {
   "mcpServers": {
     "ultracite": {
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://www.ultracite.ai/api/mcp/mcp"
-      ]
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
     }
   }
 }
@@ -50,13 +53,23 @@ Copy and paste this configuration into your MCP config file:
 
 Close and reopen your AI application for the changes to take effect.
 
-### Step 5: Verify the Connection
+## Usage
 
-Test the integration by asking your AI assistant:
+Once configured, you can ask your AI assistant about Ultracite's coding standards:
 
-> What Ultracite rules are available?
+> What are Ultracite's coding standards?
 
-If successful, your AI should be able to list and explain Ultracite rules!
+The AI will retrieve the high-level principles covering:
+
+- Type safety and explicitness
+- Modern JavaScript/TypeScript patterns
+- React and JSX best practices
+- Async and Promise handling
+- Error handling and debugging
+- Code organization
+- Security considerations
+- Performance optimizations
+- Testing guidelines
 
 ## Multiple MCP Servers
 
@@ -72,47 +85,13 @@ You can use Ultracite alongside other MCP servers:
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"]
-    },
-    "filesystem": {
-      "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/project"]
     }
   }
 }
 ```
 
-## Usage Examples
-
-### Exploring Available Rules
-
-Ask your AI assistant:
-
-> What rules does Ultracite have for React hooks?
-
-Expected response will include relevant React hook linting rules and their descriptions.
-
-### Understanding Rule Categories
-
-> Show me all accessibility rules in Ultracite
-
-Your AI can list and explain the a11y rules configured in Ultracite.
-
-### Comparing Presets
-
-> What's the difference between `ultracite/biome/core` and `ultracite/biome/react`?
-
-Get detailed information about different preset configurations and when to use them.
-
 ## Security and Privacy
 
-### Data Handling
-
-- The Ultracite MCP server only provides public linting rule documentation and configuration information
+- The Ultracite MCP server only provides public coding standards documentation
 - No personal data or code is transmitted to our servers
-- All communication happens through your chosen AI tool's security layer
-
-### Authentication
-
-- No authentication required for public documentation access
-- Future premium features may require API keys
-- Always use official Ultracite MCP endpoints
+- No authentication required
