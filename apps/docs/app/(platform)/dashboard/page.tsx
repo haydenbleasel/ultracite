@@ -47,7 +47,7 @@ const DashboardPage = async () => {
 
   if (!hasInstallation) {
     return (
-      <Empty>
+      <Empty className="py-8 sm:py-12 md:py-16">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <SiGithub className="size-6" />
@@ -67,7 +67,7 @@ const DashboardPage = async () => {
 
   if (organization.repos.length === 0) {
     return (
-      <Empty>
+      <Empty className="py-8 sm:py-12 md:py-16">
         <EmptyHeader>
           <EmptyTitle>No repositories</EmptyTitle>
           <EmptyDescription>
