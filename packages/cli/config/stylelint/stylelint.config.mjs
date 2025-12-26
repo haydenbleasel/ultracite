@@ -13,6 +13,8 @@ const config = {
           "variants",
           "responsive",
           "screen",
+          "source",
+          "reference",
         ],
       },
     ],
