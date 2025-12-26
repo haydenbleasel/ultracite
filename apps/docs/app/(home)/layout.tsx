@@ -5,7 +5,7 @@ interface HomeLayoutProps {
 }
 
 const HomeLayout = ({ children }: HomeLayoutProps) => (
-  <div className="container relative mx-auto grid px-4 2xl:max-w-7xl">
+  <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
     {children}
   </div>
 );
