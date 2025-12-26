@@ -2,22 +2,18 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-interface DashboardLayoutProps {
+interface PlatformLayoutProps {
   children: ReactNode;
 }
 
-const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
+const PlatformLayout = async ({ children }: PlatformLayoutProps) => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  return (
-    <div className="container relative mx-auto grid w-full gap-8 px-4 2xl:max-w-7xl">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 };
 
-export default DashboardLayout;
+export default PlatformLayout;

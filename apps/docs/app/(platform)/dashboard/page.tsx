@@ -1,17 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
-import { SiGithub } from "@icons-pack/react-simple-icons";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ConnectGitHubButton } from "@/components/dashboard/connect-github-button";
-import { RepoList } from "@/components/dashboard/repo-list";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { database } from "@/lib/database";
 
 export const metadata: Metadata = {
@@ -26,76 +15,21 @@ const DashboardPage = async () => {
     redirect("/sign-in");
   }
 
-  const organization = await database.organization.upsert({
-    where: { id: orgId },
-    create: { id: orgId },
-    update: {},
-    include: {
-      repos: {
-        where: { enabled: true },
-        orderBy: { createdAt: "desc" },
-        include: {
-          lintRuns: {
-            orderBy: { createdAt: "desc" },
-          },
-        },
-      },
+  const firstRepo = await database.repo.findFirst({
+    where: {
+      organizationId: orgId,
+      enabled: true,
     },
+    orderBy: { createdAt: "desc" },
+    select: { id: true },
   });
 
-  const hasInstallation = Boolean(organization.githubInstallationId);
-
-  if (!hasInstallation) {
-    return (
-      <Empty className="py-8 sm:py-12 md:py-16">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <SiGithub className="size-6" />
-          </EmptyMedia>
-          <EmptyTitle>Connect GitHub</EmptyTitle>
-          <EmptyDescription>
-            Install the Ultracite GitHub App to start linting your repositories
-            automatically.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <ConnectGitHubButton hasInstallation={false} />
-        </EmptyContent>
-      </Empty>
-    );
+  if (firstRepo) {
+    redirect(`/dashboard/${firstRepo.id}`);
   }
 
-  if (organization.repos.length === 0) {
-    return (
-      <Empty className="py-8 sm:py-12 md:py-16">
-        <EmptyHeader>
-          <EmptyTitle>No repositories</EmptyTitle>
-          <EmptyDescription>
-            No repositories found. Make sure you have granted access to at least
-            one repository.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <ConnectGitHubButton hasInstallation={hasInstallation} />
-        </EmptyContent>
-      </Empty>
-    );
-  }
-
-  return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-semibold text-3xl tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage your connected repositories and lint runs.
-          </p>
-        </div>
-        <ConnectGitHubButton hasInstallation={hasInstallation} />
-      </div>
-      <RepoList repos={organization.repos} />
-    </div>
-  );
+  // Layout handles empty states, this is a fallback
+  return null;
 };
 
 export default DashboardPage;

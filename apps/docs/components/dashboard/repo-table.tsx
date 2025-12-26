@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Table,
@@ -8,17 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { LintRun, Repo } from "@/lib/database/generated/client";
+import type { LintRun } from "@/lib/database/generated/client";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoTableProps {
   runs: LintRun[];
-  repo: Repo;
 }
 
-export const RepoTable = ({ runs, repo }: RepoTableProps) => {
+export const RepoTable = ({ runs }: RepoTableProps) => {
   if (runs.length === 0) {
-    return <p className="text-muted-foreground text-sm">No lint runs found.</p>;
+    return (
+      <div className="flex h-full flex-1 items-center justify-center">
+        <p className="text-muted-foreground text-sm">No lint runs yet.</p>
+      </div>
+    );
   }
 
   return (
@@ -26,8 +28,8 @@ export const RepoTable = ({ runs, repo }: RepoTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Repository</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Issues</TableHead>
             <TableHead>PR</TableHead>
             <TableHead>Date</TableHead>
           </TableRow>
@@ -36,18 +38,10 @@ export const RepoTable = ({ runs, repo }: RepoTableProps) => {
           {runs.map((run) => (
             <TableRow key={run.id}>
               <TableCell>
-                <Link
-                  className="flex items-center gap-2 hover:underline"
-                  href={`https://github.com/${repo.fullName}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {repo.fullName}
-                  <ExternalLinkIcon className="size-3 text-muted-foreground" />
-                </Link>
-              </TableCell>
-              <TableCell>
                 <LintStatusBadge status={run.status} />
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {run.issuesFound ?? "-"}
               </TableCell>
               <TableCell>
                 {run.prUrl ? (
