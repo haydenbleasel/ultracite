@@ -1,21 +1,16 @@
 {
-  "$schema": "../../../../node_modules/oxlint/configuration_schema.json",
+  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
   "plugins": [
     "eslint",
     "typescript",
     "unicorn",
-    "react",
-    "react-perf",
-    "nextjs",
     "oxc",
     "import",
     "jsdoc",
-    "jsx-a11y",
     "node",
     "promise",
     "jest",
-    "vitest",
-    "vue"
+    "vitest"
   ],
   "env": {
     "browser": true
@@ -72,13 +67,6 @@
     "jsdoc/require-param": "off",
     "jsdoc/require-returns": "off",
 
-    "react/only-export-components": "off",
-    "react/jsx-boolean-value": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": "off",
-    "react/no-unknown-property": "off",
-    "react/jsx-props-no-spreading": "off",
-
     "unicorn/explicit-length-check": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-process-exit": "off",
@@ -93,27 +81,12 @@
 
     "node/no-process-env": "off",
 
-    "react_perf/jsx-no-jsx-as-prop": "off",
-    "react_perf/jsx-no-new-object-as-prop": "off",
-    "react_perf/jsx-no-new-array-as-prop": "off",
-
     "oxc/no-map-spread": "off",
     "oxc/no-async-await": "off",
     "oxc/no-rest-spread-properties": "off",
     "oxc/no-optional-chaining": "off",
 
     "promise/catch-or-return": "off",
-    "promise/always-return": "off",
-
-    "jsx-a11y/no-autofocus": "off"
-  },
-
-  "overrides": [
-    {
-      "files": ["**/next-env.d.ts"],
-      "rules": {
-        "import/no-unassigned-import": "off"
-      }
-    }
-  ]
+    "promise/always-return": "off"
+  }
 }

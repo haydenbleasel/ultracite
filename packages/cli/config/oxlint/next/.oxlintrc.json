@@ -1,4 +1,13 @@
 {
   "$schema": "../../../node_modules/oxlint/configuration_schema.json",
-  "rules": {}
+  "plugins": ["nextjs"],
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["**/next-env.d.ts"],
+      "rules": {
+        "import/no-unassigned-import": "off"
+      }
+    }
+  ]
 }
