@@ -112,7 +112,15 @@ export async function lintRepoWorkflow(
       await installClaudeCode(sandboxId);
 
       // Single fix mode: only fix one issue per cron run
-      await runClaudeCode(sandboxId);
+      const claudeCodeResult = await runClaudeCode(sandboxId);
+
+      // TODO: Record Claude Code costs to billing system
+      // await recordBillingUsage({
+      //   organizationId,
+      //   costUsd: claudeCodeResult.costUsd,
+      //   type: 'claude-code',
+      //   context: { repoFullName },
+      // });
 
       if (await hasUncommittedChanges(sandboxId)) {
         // Generate changelog before committing

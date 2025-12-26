@@ -118,7 +118,15 @@ Please ensure the Ultracite app has write access to this repository and branch.
       await installClaudeCode(sandboxId);
 
       // Step 9: Use Claude Code to fix remaining issues iteratively
-      await runClaudeCode(sandboxId);
+      const claudeCodeResult = await runClaudeCode(sandboxId);
+
+      // TODO: Record Claude Code costs to billing system
+      // await recordBillingUsage({
+      //   installationId,
+      //   costUsd: claudeCodeResult.costUsd,
+      //   type: 'claude-code',
+      //   context: { repoFullName, prNumber },
+      // });
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {

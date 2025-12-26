@@ -1,7 +1,7 @@
 import { Sandbox } from "@vercel/sandbox";
 
 export interface ClaudeCodeResult {
-  output: string;
+  costUsd: number;
   success: boolean;
 }
 
@@ -36,11 +36,25 @@ export async function runClaudeCode(
   // Run claude with the API key set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30`,
+    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
   ]);
 
   const output = await result.output("both");
   const success = result.exitCode === 0;
 
-  return { output, success };
+  try {
+    const parsed = JSON.parse(output) as {
+      total_cost_usd: number;
+    };
+
+    return {
+      costUsd: parsed.total_cost_usd,
+      success,
+    };
+  } catch {
+    return {
+      costUsd: 0,
+      success: false,
+    };
+  }
 }
