@@ -1,5 +1,3 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
-
 import typescript from "@typescript-eslint/eslint-plugin";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser";
