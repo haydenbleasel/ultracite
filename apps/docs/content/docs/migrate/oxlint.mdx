@@ -1,0 +1,61 @@
+---
+title: Migrate from OxLint
+description: How to migrate your project from OxLint to Ultracite.
+---
+
+If you're already using OxLint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while preserving your code quality standards.
+
+## Why Migrate to Ultracite?
+
+- **Combined Tool**: Ultracite provides both linting and formatting in a single tool
+- **Zero Configuration**: Ultracite provides a highly configured preset of rules
+- **Editor Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistent Workflow**: Standardized setup across projects and teams
+- **Maintained Rules**: Regular updates with new best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using OxLint
+- Node.js v14.18+ (Node 18+ recommended)
+- An OxLint configuration file (e.g., `oxlintrc.json`, `.oxlintrc.json`)
+
+## Migration Options
+
+### Option 1: Quick Migration (Recommended)
+
+The fastest way is to run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+This will:
+
+- Install Ultracite as a dependency
+- Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Preserve your custom rules and settings
+- Set up editor integrations
+
+When prompted, choose to remove the existing OxLint configuration. This will:
+
+- Remove OxLint and any related dependencies
+- Remove any OxLint configuration files
+- Remove any OxLint related commands from your `.vscode/settings.json` file
+
+Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+
+### Option 2: Manual Migration
+
+If you prefer more control over the process, follow the [Manual Migration](/setup#manual-installation) steps by:
+
+- Installing Ultracite and Biome manually
+- Updating your `biome.json` file to extend Ultracite
+- Creating or updating a `.vscode/settings.json` file to enable the Biome extension
+- Enabling `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Manually removing OxLint and its configuration files
+
+After the migration, restart your editor to ensure the new configuration is applied.
