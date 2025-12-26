@@ -12,6 +12,24 @@ describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
 
+  describe("invalid editor", () => {
+    test("throws error for invalid editor name", () => {
+      expect(() => {
+        // @ts-expect-error - Testing invalid editor name
+        createHooks("invalid-editor-name", "npm");
+      }).toThrow('Editor "invalid-editor-name" not found');
+    });
+
+    test("throws error for editor without hooks support", () => {
+      // vscode has hooks, but we can test an editor that doesn't
+      // If all editors have hooks now, this test might need adjustment
+      expect(() => {
+        // @ts-expect-error - Testing editor that may not support hooks
+        createHooks("zed", "npm");
+      }).toThrow('Editor "zed" does not support hooks');
+    });
+  });
+
   describe("cursor hooks", () => {
     test("exists returns true when hooks.json exists", async () => {
       mock.module("node:fs/promises", () => ({

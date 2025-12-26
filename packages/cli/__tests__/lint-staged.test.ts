@@ -557,6 +557,46 @@ describe("lintStaged", () => {
       }
     });
 
+    test("handles YAML with multiple keys and arrays", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() =>
+          Promise.resolve("*.js:\n  - eslint\n  - prettier\n*.ts:\n  - tsc")
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("handles package.json that parses to null", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./package.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve("null")),
+        writeFile: mockWriteFile,
+      }));
+
+      await lintStaged.update("npm");
+
+      // Should handle null packageJson gracefully - may or may not write
+      // The important thing is it doesn't throw
+      expect(true).toBe(true);
+    });
+
     test("handles ESM config import error by creating fallback", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 

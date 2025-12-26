@@ -25,6 +25,15 @@ describe("createAgents", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
 
+  describe("invalid agent", () => {
+    test("throws error for invalid agent name", () => {
+      expect(() => {
+        // @ts-expect-error - Testing invalid agent name
+        createAgents("invalid-agent-name", "npm");
+      }).toThrow('Agent "invalid-agent-name" not found');
+    });
+  });
+
   describe("copilot agent", () => {
     test("create creates copilot instructions with header", async () => {
       const mockWriteFile = mock(() => Promise.resolve());

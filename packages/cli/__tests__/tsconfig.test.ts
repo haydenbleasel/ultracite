@@ -34,6 +34,15 @@ describe("tsconfig", () => {
       const result = await tsconfig.exists();
       expect(result).toBe(false);
     });
+
+    test("returns false when glob throws an error", async () => {
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.reject(new Error("Glob error"))),
+      }));
+
+      const result = await tsconfig.exists();
+      expect(result).toBe(false);
+    });
   });
 
   describe("update", () => {
