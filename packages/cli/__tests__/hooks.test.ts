@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 import { createHooks } from "../src/hooks";
 
 mock.module("node:fs/promises", () => ({
@@ -150,5 +150,4 @@ describe("createHooks", () => {
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
   });
-
 });

@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 import {
   initialize,
   initializeLefthook,
   initializeLintStaged,
-  initializePrecommitHook,
   initializePreCommit,
+  initializePrecommitHook,
   installDependencies,
   upsertAgents,
   upsertBiomeConfig,
@@ -1407,7 +1407,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock(() => Promise.resolve('export default [];')),
+        readFile: mock(() => Promise.resolve("export default [];")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -1505,7 +1505,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock(() => Promise.resolve('export default {};')),
+        readFile: mock(() => Promise.resolve("export default {};")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));
@@ -1554,7 +1554,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock(() => Promise.resolve('export default {};')),
+        readFile: mock(() => Promise.resolve("export default {};")),
         writeFile: mockWriteFile,
         mkdir: mock(() => Promise.resolve()),
       }));

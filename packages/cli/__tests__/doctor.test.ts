@@ -433,7 +433,7 @@ describe("doctor", () => {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("eslint.config")) {
-          return Promise.resolve('import ultracite/eslint');
+          return Promise.resolve("import ultracite/eslint");
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),
@@ -482,7 +482,7 @@ describe("doctor", () => {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes("eslint.config")) {
-          return Promise.resolve('export default [];');
+          return Promise.resolve("export default [];");
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),
@@ -531,9 +531,7 @@ describe("doctor", () => {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes(".oxlintrc.json")) {
-          return Promise.resolve(
-            '{"extends": ["ultracite/oxlint/core"]}'
-          );
+          return Promise.resolve('{"extends": ["ultracite/oxlint/core"]}');
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),
@@ -654,8 +652,7 @@ describe("doctor", () => {
       existsSync: mock((path: string) => {
         const pathStr = String(path);
         return (
-          pathStr.includes("biome.json") ||
-          pathStr.includes(".oxlintrc.json")
+          pathStr.includes("biome.json") || pathStr.includes(".oxlintrc.json")
         );
       }),
     }));

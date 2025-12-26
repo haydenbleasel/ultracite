@@ -7,6 +7,7 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import { detectPackageManager, dlxCommand } from "nypm";
 import packageJson from "../../package.json" with { type: "json" };
+
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
   ".prettierrc",

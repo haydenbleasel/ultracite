@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 import { createAgents } from "../src/agents";
 
 mock.module("node:fs/promises", () => ({

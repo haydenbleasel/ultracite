@@ -821,11 +821,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
-        quiet ||
-        opts.pm ||
-        opts.editors ||
-        opts.agents ||
-        opts.hooks;
+        quiet || opts.pm || opts.editors || opts.agents || opts.hooks;
 
       if (hasOtherCliOptions) {
         integrations = [];
