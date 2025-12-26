@@ -2,7 +2,7 @@
 
 import { OrganizationSwitcher } from "@clerk/nextjs";
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { IconGitFork, IconSettings } from "@tabler/icons-react";
+import { IconGitFork } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -79,14 +79,6 @@ export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
               >
                 <SiGithub className="size-4" />
                 <span>GitHub Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href="/dashboard/settings">
-                <IconSettings className="size-4" />
-                <span>Settings</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

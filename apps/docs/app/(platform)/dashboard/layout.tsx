@@ -92,11 +92,8 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <SidebarProvider>
-      <RepoSidebar
-        hasInstallation={hasInstallation}
-        repos={organization.repos}
-      />
+    <SidebarProvider className="min-h-auto">
+      <RepoSidebar repos={organization.repos} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
