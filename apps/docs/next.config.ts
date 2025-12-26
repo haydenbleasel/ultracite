@@ -31,26 +31,6 @@ const config: NextConfig = {
       },
     ];
   },
-
-  redirects() {
-    return [
-      {
-        source: "/husky",
-        destination: "/integration/husky",
-        permanent: true,
-      },
-      {
-        source: "/lint-staged",
-        destination: "/integration/lint-staged",
-        permanent: true,
-      },
-      {
-        source: "/lefthook",
-        destination: "/integration/lefthook",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default withWorkflow(withMdx(config));
