@@ -4,10 +4,17 @@ import {
   initializeLefthook,
   initializeLintStaged,
   initializePrecommitHook,
+  initializePreCommit,
   installDependencies,
   upsertAgents,
   upsertBiomeConfig,
   upsertEditorConfig,
+  upsertEslintConfig,
+  upsertHooks,
+  upsertOxfmtConfig,
+  upsertOxlintConfig,
+  upsertPrettierConfig,
+  upsertStylelintConfig,
   upsertTsConfig,
 } from "../src/initialize";
 
@@ -383,7 +390,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies("npm", ["biome"], true);
+      await installDependencies("npm", "biome", true);
       expect(mockAddDep).toHaveBeenCalled();
     });
 
@@ -404,7 +411,97 @@ describe("helper functions", () => {
         })),
       }));
 
-      await installDependencies("npm", ["biome"], false);
+      await installDependencies("npm", "biome", false);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("installs eslint dependencies when linter is eslint", async () => {
+      const mockAddDep = mock(() => Promise.resolve());
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        dlxCommand: mock(() => "npx ultracite fix"),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "eslint", true);
+      expect(mockAddDep).toHaveBeenCalled();
+    });
+
+    test("installs oxlint dependencies when linter is oxlint", async () => {
+      const mockAddDep = mock(() => Promise.resolve());
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        dlxCommand: mock(() => "npx ultracite fix"),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "oxlint", true);
+      expect(mockAddDep).toHaveBeenCalled();
+    });
+
+    test("updates package.json with eslint deps when install is false", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "eslint", false);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates package.json with oxlint deps when install is false", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "oxlint", false);
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });
@@ -642,6 +739,349 @@ describe("helper functions", () => {
       }));
 
       await upsertBiomeConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertEslintConfig", () => {
+    test("creates eslint config with frameworks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertEslintConfig(["react"]);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing eslint config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./eslint.config.mjs") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve('export default [];')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertEslintConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertOxlintConfig", () => {
+    test("creates oxlint config with frameworks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertOxlintConfig(["react"]);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing oxlint config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./.oxlintrc.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve('{"extends": []}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertOxlintConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertPrettierConfig", () => {
+    test("creates prettier config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertPrettierConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing prettier config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./prettier.config.mjs") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve('export default {};')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertPrettierConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertStylelintConfig", () => {
+    test("creates stylelint config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertStylelintConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing stylelint config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./stylelint.config.mjs") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve('export default {};')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertStylelintConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertOxfmtConfig", () => {
+    test("creates oxfmt config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertOxfmtConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing oxfmt config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./.oxfmtrc.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertOxfmtConfig();
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertHooks", () => {
+    test("creates hooks for cursor", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertHooks("cursor", "npm");
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing hooks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === ".cursor/hooks.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await upsertHooks("cursor", "npm");
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("initializePreCommit", () => {
+    test("creates pre-commit config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await initializePreCommit("npm", true);
+      expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("updates existing pre-commit config", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./.pre-commit-config.yaml") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve("repos: []")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await initializePreCommit("npm", false);
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });

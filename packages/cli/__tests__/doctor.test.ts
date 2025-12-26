@@ -104,6 +104,53 @@ describe("doctor", () => {
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
+  test("warns when conflicting tools are present (prettier and eslint)", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes(".prettierrc") ||
+          pathStr.includes(".eslintrc") ||
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await doctor();
+
+    consoleLogSpy.mockRestore();
+  });
+
   test("warns when conflicting tools are present", async () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
       // noop
@@ -355,6 +402,288 @@ describe("doctor", () => {
     await doctor();
 
     consoleLogSpy.mockRestore();
+  });
+
+  test("checks ESLint config when it exists and imports ultracite", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json") ||
+          pathStr.includes("eslint.config.mjs")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes("eslint.config")) {
+          return Promise.resolve('import ultracite/eslint');
+        }
+        return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await doctor();
+
+    consoleLogSpy.mockRestore();
+  });
+
+  test("checks ESLint config when it exists but doesn't import ultracite", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json") ||
+          pathStr.includes("eslint.config.mjs")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes("eslint.config")) {
+          return Promise.resolve('export default [];');
+        }
+        return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await doctor();
+
+    consoleLogSpy.mockRestore();
+  });
+
+  test("checks Oxlint config when it exists and extends ultracite", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json") ||
+          pathStr.includes(".oxlintrc.json")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes(".oxlintrc.json")) {
+          return Promise.resolve(
+            '{"extends": ["ultracite/oxlint/core"]}'
+          );
+        }
+        return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await doctor();
+
+    consoleLogSpy.mockRestore();
+  });
+
+  test("checks Oxlint config when it exists but doesn't extend ultracite", async () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes("package.json") ||
+          pathStr.includes(".oxlintrc.json")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes(".oxlintrc.json")) {
+          return Promise.resolve('{"extends": []}');
+        }
+        return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await doctor();
+
+    consoleLogSpy.mockRestore();
+  });
+
+  test("handles ESLint config read error", async () => {
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes("eslint.config.mjs")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes("eslint.config")) {
+          throw new Error("Read error");
+        }
+        return Promise.resolve("{}");
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+  });
+
+  test("handles Oxlint config parse error", async () => {
+    mock.module("node:child_process", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+      execSync: mock(() => ""),
+    }));
+
+    mock.module("node:fs", () => ({
+      existsSync: mock((path: string) => {
+        const pathStr = String(path);
+        return (
+          pathStr.includes("biome.json") ||
+          pathStr.includes(".oxlintrc.json")
+        );
+      }),
+    }));
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock((path: string) => {
+        const pathStr = String(path);
+        if (pathStr.includes("biome.json")) {
+          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+        }
+        if (pathStr.includes(".oxlintrc.json")) {
+          throw new Error("Read error");
+        }
+        return Promise.resolve("{}");
+      }),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+
+    await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
   test("warns when ultracite is not in package.json dependencies", async () => {
