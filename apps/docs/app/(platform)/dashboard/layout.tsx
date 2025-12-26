@@ -2,8 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { ConnectGitHubButton } from "@/components/dashboard/connect-github-button";
-import { RepoSidebar } from "@/components/dashboard/repo-sidebar";
 import {
   Empty,
   EmptyContent,
@@ -14,6 +12,8 @@ import {
 } from "@/components/ui/empty";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { database } from "@/lib/database";
+import { ConnectGitHubButton } from "./components/connect-github-button";
+import { RepoSidebar } from "./components/repo-sidebar";
 
 interface DashboardLayoutProps {
   children: ReactNode;

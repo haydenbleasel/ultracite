@@ -3,7 +3,7 @@ import { IconExternalLink } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { RepoTable } from "@/components/dashboard/repo-table";
+import { RepoTable } from "@/app/(platform)/dashboard/components/repo-table";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { database } from "@/lib/database";
 

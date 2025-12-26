@@ -1,6 +1,7 @@
 "use client";
 
 import { OrganizationSwitcher } from "@clerk/nextjs";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 import { IconGitFork, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,17 +18,15 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type { LintRun, Repo } from "@/lib/database/generated/client";
-import { ConnectGitHubButton } from "./connect-github-button";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoSidebarProps {
   repos: (Repo & {
     lintRuns: LintRun[];
   })[];
-  hasInstallation: boolean;
 }
 
-export const RepoSidebar = ({ repos, hasInstallation }: RepoSidebarProps) => {
+export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -74,7 +73,14 @@ export const RepoSidebar = ({ repos, hasInstallation }: RepoSidebarProps) => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <ConnectGitHubButton hasInstallation={hasInstallation} />
+            <SidebarMenuButton asChild>
+              <Link
+                href={`https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_SLUG}/installations/new`}
+              >
+                <SiGithub className="size-4" />
+                <span>GitHub Settings</span>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
