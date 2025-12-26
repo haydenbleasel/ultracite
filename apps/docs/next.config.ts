@@ -7,6 +7,10 @@ const withMdx = createMDX();
 const config: NextConfig = {
   transpilePackages: ["@ultracite/data"],
 
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
+
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

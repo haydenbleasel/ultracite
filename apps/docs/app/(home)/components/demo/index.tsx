@@ -117,7 +117,7 @@ export const Demo = () => (
             <p className="font-mono text-muted-foreground text-xs">Terminal</p>
           </div>
         </div>
-        <pre className="font-mono text-sm text-white">
+        <pre className="font-mono text-white text-xs sm:text-sm">
           <code>
             <Output />
           </code>

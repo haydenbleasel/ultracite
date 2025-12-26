@@ -42,7 +42,7 @@ export const Agents = () => (
             <Image
               alt={agent.name}
               className={cn(
-                "size-14 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2",
+                "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
                 index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
               )}
               src={agent.logo}
@@ -54,8 +54,8 @@ export const Agents = () => (
       <Tooltip delayDuration={0}>
         <TooltipTrigger>
           <DynamicLink href="/rules">
-            <div className="flex size-14 items-center justify-center overflow-hidden rounded-full border bg-secondary ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3">
-              <span className="text-muted-foreground text-sm">
+            <div className="flex size-10 items-center justify-center overflow-hidden rounded-full border bg-secondary ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3 sm:size-14">
+              <span className="text-muted-foreground text-xs sm:text-sm">
                 + {remainingCount}
               </span>
             </div>

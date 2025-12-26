@@ -63,7 +63,7 @@ export const Benefits = ({ editor }: BenefitsProps) => (
         linter.
       </p>
     </div>
-    <div className="grid divide-x divide-y rounded-lg border-t border-l sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">
       {benefits.map((benefit) => (
         <div className="p-6 last:border-r last:border-b" key={benefit.title}>
           <benefit.icon className="mb-3 size-5 text-muted-foreground" />

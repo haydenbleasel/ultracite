@@ -16,7 +16,9 @@ const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
   lang === "json" ? "json" : "js";
 
 export const ZeroConfig = () => {
-  const [provider, setProvider] = useState<string | null>(providers[1].id);
+  const [provider, setProvider] = useState<string | null>(
+    providers[1].id ?? null
+  );
   const [framework, setFramework] = useState<string | null>(
     frameworks[0].label
   );
@@ -71,12 +73,12 @@ export const ZeroConfig = () => {
             onValueChange={setTabValue}
             value={tabValue}
           >
-            <TabsList className="w-full justify-start rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
+            <TabsList className="w-full justify-start overflow-auto rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
               {config.map((f) => {
                 const Icon = getIcon(f.lang);
                 return (
                   <TabsTrigger
-                    className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
+                    className="inline-flex flex-auto shrink-0 grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
                     key={f.name}
                     value={f.name}
                   >

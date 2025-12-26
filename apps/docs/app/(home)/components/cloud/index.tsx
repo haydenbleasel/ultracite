@@ -7,11 +7,11 @@ import Background from "./background.jpg";
 const GitHubComment = () => (
   <div className="dark font-sans text-foreground text-sm">
     {/* Line */}
-    <div className="ml-18 h-32 w-0.5 bg-foreground/10" />
+    <div className="ml-4 h-32 w-0.5 bg-foreground/10 sm:ml-18" />
 
     <div className="flex w-full gap-4">
       {/* Avatar */}
-      <div className="relative shrink-0">
+      <div className="relative hidden shrink-0 sm:block">
         <div className="flex size-10 items-center justify-center overflow-hidden rounded-md border bg-foreground/5 backdrop-blur-sm">
           <Logo className="size-4" />
         </div>
@@ -23,8 +23,10 @@ const GitHubComment = () => (
         <div className="flex items-center gap-2 rounded-t-md border border-b-0 bg-foreground/5 px-4 py-2 backdrop-blur-sm">
           <span className="font-semibold">ultracite</span>
           <span className="rounded-full border px-1.5 py-px text-xs">bot</span>
-          <span className="text-foreground/50">commented just now</span>
-          <Badge className="ml-auto" variant="outline">
+          <span className="hidden text-foreground/50 sm:block">
+            commented just now
+          </span>
+          <Badge className="ml-auto hidden sm:block" variant="outline">
             Contributor
           </Badge>
         </div>
@@ -40,17 +42,17 @@ const GitHubComment = () => (
           <details className="mb-4">
             <summary className="cursor-pointer">3 Issues Fixed</summary>
             <div className="mt-2 space-y-1 pl-4">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Check className="size-3 text-green-600" />
                 <code className="rounded px-1">src/components/Button.tsx</code>
                 <span>— Missing semicolon</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Check className="size-3 text-green-600" />
                 <code className="rounded px-1">src/utils/format.ts</code>
                 <span>— Prefer const over let</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Check className="size-3 text-green-600" />
                 <code className="rounded px-1">src/hooks/useAuth.ts</code>
                 <span>— Unused import removed</span>
@@ -72,7 +74,7 @@ const GitHubComment = () => (
     </div>
 
     {/* Line */}
-    <div className="ml-18 h-32 w-0.5 bg-foreground/10" />
+    <div className="ml-4 h-32 w-0.5 bg-foreground/10 sm:ml-18" />
   </div>
 );
 

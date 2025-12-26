@@ -24,7 +24,7 @@ interface TweetsProps {
 }
 
 export const Tweets = ({ tweets }: TweetsProps) => (
-  <div className="lg:columns-2 xl:columns-3">
+  <div className="md:columns-2 xl:columns-3">
     {tweets.map((tweet) => (
       <Suspense fallback={<TweetSkeleton />} key={tweet}>
         <div className="[&_.react-tweet-theme]:mt-0! [&_.react-tweet-theme]:mb-4! [&_.react-tweet-theme]:border-border! [&_.react-tweet-theme]:bg-card!">

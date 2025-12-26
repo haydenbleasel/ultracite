@@ -48,7 +48,7 @@ export const Benefits = ({ provider }: BenefitsProps) => (
         {provider.description}
       </p>
     </div>
-    <div className="grid divide-x divide-y rounded-lg border-t border-l sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">
       {provider.benefits.map((benefit) => {
         const Icon = iconMap[benefit.icon];
         return (
