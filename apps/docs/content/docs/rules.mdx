@@ -3,57 +3,35 @@ title: Rules
 description: How to integrate Ultracite with AI coding assistants through editor rules.
 ---
 
-Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI coding assistants to write better, more consistent code that follows best practices.
+Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
 
-The editor rules work alongside Biome's linting and formatting. While Biome handles code formatting and catches syntax errors, the editor rules guide AI coding assistants to write better code from the start, reducing the need for fixes later.
+The editor rules work alongside your linter's formatting and linting. While your linter handles code formatting and catches errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
 
-This dual approach ensures both automated code quality (through Biome) and intelligent code generation (through AI coding rules).
+This dual approach ensures both automated code quality (through linting) and intelligent code generation (through AI coding rules).
 
 ## Setup
 
 ### Automatic Setup
 
-When you run `npx ultracite init`, you'll be prompted to select which editor rules you want to enable:
+When you run `npx ultracite init`, you'll be prompted to select which AI agents you want to enable:
 
 ```bash
-? Which editor rules do you want to enable (optional)?
-  ◯ GitHub Copilot (VSCode)
+? Which AI agents do you want to enable (optional)?
+  ◯ GitHub Copilot
   ◯ Cursor
   ◯ Windsurf
-  # ... etcetera
+  # ... and more
 ```
 
-This will create the relevant file in your project directory.
+This will create the relevant rule file(s) in your project directory.
 
 ### Manual Setup
 
-If you want to manually set things up, create the relevant file in your project directory (for example `.cursor/rules` for Cursor or `.rules` for Zed). Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/tree/main/.cursor/rules/ultracite.mdc) into the file.
+If you want to manually set things up, create the relevant file in your project directory. You can find the rule file location for each agent on their respective pages. Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/blob/main/packages/data/src/rules.ts) into the file.
 
-## Supported Editors
+## Supported Agents
 
-| Editor          | Rule File Location                |
-| --------------- | --------------------------------- |
-| GitHub Copilot  | `.github/copilot-instructions.md` |
-| Cursor          | `.cursor/rules/ultracite.mdc`     |
-| Windsurf        | `.windsurf/rules/ultracite.md`    |
-| Zed             | `.rules`                          |
-| Claude Code     | `.claude/CLAUDE.md`               |
-| Codex           | `AGENTS.md`                       |
-| Kiro IDE        | `.kiro/steering/ultracite.md`     |
-| Cline           | `.clinerules`                     |
-| AMP             | `AGENT.md`                        |
-| Aider           | `ultracite.md`                    |
-| Firebase Studio | `.idx/airules.md`                 |
-| Open Hands      | `.openhands/microagents/repo.md`  |
-| Gemini          | `GEMINI.md`                       |
-| Junie           | `.junie/guidelines.md`            |
-| Augment Code    | `.augment/rules/ultracite.md`     |
-| Kilo Code       | `.kilocode/rules/ultracite.md`    |
-| Goose           | `.goosehints`                     |
-| Roo Code        | `.roo/rules/ultracite.md`         |
-| Warp            | `WARP.md`                         |
-| Droid           | `AGENTS.md`                       |
-| Antigravity     | `.agent/rules/ultracite.md`       |
+Ultracite supports a wide range of AI coding assistants. Check the **Agents** section in the navigation bar for the full list of supported agents, including setup instructions and configuration details for each one.
 
 ## Benefits
 
