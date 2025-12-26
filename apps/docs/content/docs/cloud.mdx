@@ -88,4 +88,39 @@ Ultracite only accesses repositories you explicitly enable.
 
 ## Pricing
 
-Ultracite Cloud is currently in beta. Visit [ultracite.ai](https://ultracite.ai) for current pricing information.
+Ultracite Cloud has simple, transparent pricing. We aim to keep costs as low as possible while covering the infrastructure needed to run the service.
+
+### Monthly Fee
+
+**$5/month** — A flat fee to support ongoing platform development and maintenance.
+
+### Usage-Based Fees
+
+All usage-based fees are passed through at cost:
+
+| Resource | Price | Notes |
+| --- | --- | --- |
+| Input tokens | $1 / MTok | Claude 4.5 Haiku, [at-cost pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| Output tokens | $5 / MTok | Claude 4.5 Haiku, [at-cost pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| Workflow runs | $0.025 / run | Vercel Sandbox, [estimated at-cost pricing](https://vercel.com/docs/vercel-sandbox/pricing) (see below) |
+
+### Example
+
+A typical PR review might use:
+- ~10,000 input tokens ($0.01)
+- ~5,000 output tokens ($0.025)
+- 1 workflow run ($0.025)
+
+**Total: ~$0.06 per PR review**
+
+### Estimated Sandbox pricing
+
+Our napkin math for the at-cost pricing of a typical 5-minute lint workflow:
+
+| Component             | Calculation              | Cost        |
+|-----------------------|--------------------------|-------------|
+| CPU (5 min)           | 0.083 hr × $0.128        | ~$0.011     |
+| Memory (0.5GB, 5 min) | 0.083 hr × 0.5 × $0.0106 | ~$0.0004    |
+| Network (~100MB)      | 0.1 GB × $0.15           | ~$0.015     |
+| Creation              | 1 × $0.0000006           | ~$0.000     |
+| **Total**             |                          | **~$0.026/run** |

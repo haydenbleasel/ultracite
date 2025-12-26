@@ -1,6 +1,6 @@
 import { Sandbox } from "@vercel/sandbox";
 
-const TEN_MINUTES_MS = 10 * 60 * 1000;
+const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 export async function createSandbox(
   repoFullName: string,
@@ -16,7 +16,7 @@ export async function createSandbox(
       password: token,
       depth: 1,
     },
-    timeout: TEN_MINUTES_MS,
+    timeout: FIVE_MINUTES_MS,
   });
 
   // Return only the ID (serializable) instead of the Sandbox instance
