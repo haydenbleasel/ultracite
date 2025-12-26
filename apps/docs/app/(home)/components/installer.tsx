@@ -25,7 +25,9 @@ export const Installer = ({ command, className }: InstallerProps) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(command);
-    toast.success("Copied to clipboard");
+    toast.success("Copied to clipboard", {
+      description: "Paste it into your terminal to install Ultracite.",
+    });
     setCopied(true);
 
     track("Copied installer command");
