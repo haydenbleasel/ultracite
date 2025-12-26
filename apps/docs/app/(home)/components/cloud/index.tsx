@@ -78,17 +78,17 @@ const GitHubComment = () => (
 
 export const Cloud = () => (
   <div className="grid gap-8">
+    <Badge
+      className="mx-auto h-auto border-primary bg-transparent px-3 py-0.5 text-primary text-sm"
+      variant="outline"
+    >
+      Ultracite Cloud
+    </Badge>
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
-      <Badge
-        className="mx-auto h-auto border-primary bg-transparent px-3 py-0.5 text-primary text-sm"
-        variant="outline"
-      >
-        Ultracite Cloud
-      </Badge>
       <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
         Automated lint fixes, powered by AI
       </h2>
-      <p className="text-balance text-foreground/50 tracking-tight sm:text-lg">
+      <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         Ultracite Cloud monitors your repositories and pull requests,
         automatically fixing lint issues and creating PRs. When auto-fix isn't
         enough, AI steps in to resolve the trickier problems.
@@ -98,7 +98,7 @@ export const Cloud = () => (
     <div className="dark relative isolate overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl">
       <Image
         alt=""
-        className="absolute top-0 left-0 size-full object-cover"
+        className="absolute top-0 left-0 size-full object-cover object-top"
         height={1000}
         src={Background}
         width={1000}

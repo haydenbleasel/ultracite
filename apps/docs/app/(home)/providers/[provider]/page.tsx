@@ -1,7 +1,6 @@
 import { providers } from "@ultracite/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
@@ -49,7 +48,6 @@ const ProviderPage = async ({ params }: ProviderPageProps) => {
       {provider.videos && <Videos data={provider.videos} />}
       <Logos />
       <Social />
-      <CallToAction />
       <Footer />
     </div>
   );

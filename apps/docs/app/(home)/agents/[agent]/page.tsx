@@ -1,7 +1,6 @@
 import { agents } from "@ultracite/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
@@ -43,7 +42,6 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
       <Benefits agent={agent} />
       <Logos />
       <Social />
-      <CallToAction />
       <Footer />
     </div>
   );

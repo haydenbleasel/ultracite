@@ -1,7 +1,6 @@
 import { editors } from "@ultracite/data/editors";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CallToAction } from "../../components/cta";
 import { Footer } from "../../components/footer";
 import { Logos } from "../../components/logos";
 import { Social } from "../../components/social";
@@ -43,7 +42,6 @@ const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
       <Benefits editor={editor} />
       <Logos />
       <Social />
-      <CallToAction />
       <Footer />
     </div>
   );

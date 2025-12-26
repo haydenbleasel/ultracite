@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Agents } from "./components/agents";
 import { Cloud } from "./components/cloud";
-import { CallToAction } from "./components/cta";
 import { Demo } from "./components/demo";
 import { Footer } from "./components/footer";
 import { Hero } from "./components/hero";
@@ -31,7 +30,6 @@ const Home = () => (
     <Agents />
     <Cloud />
     <Social />
-    <CallToAction />
     <Footer />
   </div>
 );
