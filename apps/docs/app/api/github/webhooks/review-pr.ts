@@ -9,6 +9,7 @@ import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
+import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
@@ -120,13 +121,13 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Step 9: Use Claude Code to fix remaining issues iteratively
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      // TODO: Record Claude Code costs to billing system
-      // await recordBillingUsage({
-      //   installationId,
-      //   costUsd: claudeCodeResult.costUsd,
-      //   type: 'claude-code',
-      //   context: { repoFullName, prNumber },
-      // });
+      // Step 10: Record Claude Code costs to billing system
+      await recordBillingUsage({
+        installationId,
+        costUsd: claudeCodeResult.costUsd,
+        type: "claude-code",
+        context: { repoFullName, prNumber },
+      });
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {

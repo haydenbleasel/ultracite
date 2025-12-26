@@ -9,6 +9,7 @@ import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
 import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
+import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import type {
@@ -114,13 +115,13 @@ export async function lintRepoWorkflow(
       // Single fix mode: only fix one issue per cron run
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      // TODO: Record Claude Code costs to billing system
-      // await recordBillingUsage({
-      //   organizationId,
-      //   costUsd: claudeCodeResult.costUsd,
-      //   type: 'claude-code',
-      //   context: { repoFullName },
-      // });
+      // Record Claude Code costs to billing system
+      await recordBillingUsage({
+        installationId,
+        costUsd: claudeCodeResult.costUsd,
+        type: "claude-code",
+        context: { repoFullName },
+      });
 
       if (await hasUncommittedChanges(sandboxId)) {
         // Generate changelog before committing
