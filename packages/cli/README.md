@@ -35,7 +35,7 @@ Enforces strict type checking and best practices by default, catching type error
 Unified toolchain configuration across all packages and apps, eliminating thousands of lines of duplicate config files while maintaining consistency.
 
 ### 🤖 **AI-Friendly**
-Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction. Supports GitHub Copilot, Cursor, Windsurf, Zed, Claude Code, and OpenAI Codex.
+Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction. Supports Copilot, Cursor, Windsurf, Zed, Claude Code, and Codex.
 
 ### 🔧 **Intuitive and Robust**
 Automatically reformats code and fixes lint issues on save, with clear error reporting for issues that need manual attention.

@@ -1,0 +1,55 @@
+---
+title: Migrate from Stylelint
+description: How to migrate your project from Stylelint to Ultracite.
+---
+
+If you're already using Stylelint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while preserving your styling standards.
+
+## Why Migrate to Ultracite?
+
+- **Multiple Providers**: Choose between Biome, ESLint + Prettier + Stylelint, or Oxlint
+- **Zero Configuration**: Ultracite provides highly configured presets for each provider
+- **Editor Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistent Workflow**: Standardized setup across projects and teams
+- **Maintained Rules**: Regular updates with new best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using Stylelint
+- Node.js v14.18+ (Node 18+ recommended)
+- A Stylelint configuration file (e.g., `.stylelintrc`, `stylelint.config.js`)
+
+## Migration Options
+
+### Option 1: Quick Migration (Recommended)
+
+The fastest way is to run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+This will:
+
+- Prompt you to choose a linting provider (Biome, ESLint, or Oxlint)
+- Install Ultracite and the necessary dependencies
+- Create or merge your linter configuration with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Set up editor integrations
+
+When prompted, choose to remove the existing Stylelint configuration if you're switching to Biome or Oxlint (which have built-in CSS support). This will:
+
+- Remove Stylelint and any related dependencies
+- Remove any Stylelint configuration files
+- Remove any Stylelint related commands from your `.vscode/settings.json` file
+
+If you choose ESLint as your provider, Ultracite will configure Stylelint alongside ESLint using Ultracite's preset.
+
+### Option 2: Manual Migration
+
+If you prefer more control over the process, follow the [Manual Setup](/setup#manual-setup) steps and manually remove Stylelint and its configuration files.
+
+After the migration, restart your editor to ensure the new configuration is applied.

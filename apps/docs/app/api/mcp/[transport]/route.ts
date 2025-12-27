@@ -1,8 +1,6 @@
+import { getRules } from "@ultracite/data/rules";
 import { track } from "@vercel/analytics/server";
 import { createMcpHandler } from "mcp-handler";
-
-// biome-ignore lint/performance/noNamespaceImport: We need to import the rules as an object to avoid type errors
-import * as rules from "@/lib/rules";
 
 const handler = createMcpHandler(
   (server) => {
@@ -17,9 +15,7 @@ const handler = createMcpHandler(
           content: [
             {
               type: "text",
-              text: Object.values(rules)
-                .map((rule) => `- ${rule}`)
-                .join("\n"),
+              text: getRules("npx"),
             },
           ],
         };

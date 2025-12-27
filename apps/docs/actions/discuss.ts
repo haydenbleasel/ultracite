@@ -1,8 +1,8 @@
 "use server";
 
 import { App, type Octokit } from "octokit";
-import type { ActionResponse, Feedback } from "@/components/feedback";
-import { env } from "@/env";
+import type { ActionResponse, Feedback } from "@/components/ultracite/feedback";
+import { env } from "@/lib/env";
 
 const repo = "ultracite";
 const owner = "haydenbleasel";
@@ -27,7 +27,7 @@ const getOctokit = async (): Promise<Octokit> => {
   return await app.getInstallationOctokit(data.id);
 };
 
-type RepositoryInfo = {
+interface RepositoryInfo {
   id: string;
   discussionCategories: {
     nodes: {
@@ -35,7 +35,7 @@ type RepositoryInfo = {
       name: string;
     }[];
   };
-};
+}
 
 const getFeedbackDestination = async () => {
   const octokit = await getOctokit();

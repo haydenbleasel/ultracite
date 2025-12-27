@@ -1,0 +1,48 @@
+---
+title: Introduction
+description: A brief overview of Ultracite and how it works.
+---
+
+Ultracite is a highly opinionated, zero-configuration preset for JavaScript and TypeScript linting and formatting. It supports three major toolchains:
+
+- **[Biome](https://biomejs.dev/)** — The modern, all-in-one toolchain written in Rust
+- **[ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [Stylelint](https://stylelint.io/)** — The most mature and comprehensive linting ecosystem
+- **[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) + [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)** — The fastest linter available, 50-100x faster than ESLint
+
+Install Ultracite quickly by running:
+
+```package-install
+npx ultracite init
+```
+
+Then follow the [Usage](/usage) guide to get started, or check out [Setup](/setup) for more granular control.
+
+## How does Ultracite work?
+
+Once set up, Ultracite runs mostly in the background — automatically formatting your code and applying fixes every time you save your files. Because the underlying tools are highly optimized (especially the Rust-based Biome and Oxlint), running Ultracite's checks is extremely fast and can comfortably run on every save without lag. This means you can focus on building and shipping instead of manually correcting style issues or debugging runtime errors.
+
+## Goals
+
+Ultracite's goals from a development perspective are:
+
+### Lightning-fast performance
+
+Ultracite benefits from the performance of Rust-based tools like [Biome](https://biomejs.dev/) and [Oxlint](https://oxc.rs/), enabling instant feedback even on large codebases.
+
+### Zero-config by design
+
+Ultracite is designed to be zero-config by default. This allows new users to get started quickly without needing to configure their linter or formatter, saving teams time when onboarding new developers.
+
+The goal is to provide a default configuration that works for most projects, while still allowing customization for those who need it.
+
+### Intuitive and simple
+
+Ultracite should be as invisible as possible. Preferably, it should not require any configuration or action from the user. When feedback is needed, it should be easy to understand and act on.
+
+### Maximum type safety
+
+Ultracite is designed to be as type-safe as possible. It uses TypeScript's strict mode and additional lint rules to catch errors and provide suggestions for improvements.
+
+### Plays nice with others
+
+Ultracite works alongside other tools and libraries without conflict. You can choose the toolchain that best fits your project's needs.

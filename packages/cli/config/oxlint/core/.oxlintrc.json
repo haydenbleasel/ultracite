@@ -1,0 +1,92 @@
+{
+  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "jsdoc",
+    "node",
+    "promise",
+    "jest",
+    "vitest"
+  ],
+  "env": {
+    "browser": true
+  },
+  "categories": {
+    "correctness": "error",
+    "perf": "error",
+    "restriction": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "style": "error"
+  },
+  "rules": {
+    "no-await-in-loop": "off",
+    "max-lines-per-function": "off",
+    "no-implicit-coercion": "off",
+    "no-magic-numbers": "off",
+    "no-console": "off",
+    "no-ternary": "off",
+    "no-undefined": "off",
+    "max-lines": "off",
+    "id-length": "off",
+    "func-style": [
+      "error",
+      {
+        "allowArrowFunctions": true,
+        "style": "expression"
+      }
+    ],
+    "arrow-body-style": ["error", "as-needed"],
+    "max-depth": "off",
+    "max-params": "off",
+    "capitalized-comments": "off",
+    "new-cap": "off",
+    "no-continue": "off",
+    "init-declarations": "off",
+
+    "import/no-default-export": "off",
+    "import/exports-last": "off",
+    "import/no-named-export": "off",
+    "import/max-dependencies": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "import/no-namespace": "off",
+    "import/no-anonymous-default-export": "off",
+    "import/prefer-default-export": "off",
+    "import/group-exports": "off",
+    "import/no-commonjs": "off",
+    "import/unambiguous": "off",
+    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/no-dynamic-require": "off",
+    "import/no-unassigned-import": "off",
+
+    "jsdoc/require-param": "off",
+    "jsdoc/require-returns": "off",
+
+    "unicorn/explicit-length-check": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-process-exit": "off",
+    "unicorn/prefer-global-this": "off",
+    "unicorn/no-null": "off",
+    "unicorn/prefer-top-level-await": "off",
+
+    "typescript/explicit-module-boundary-types": "off",
+    "typescript/no-require-imports": "off",
+    "typescript/explicit-function-return-type": "off",
+    "typescript/no-var-requires": "off",
+
+    "node/no-process-env": "off",
+
+    "oxc/no-map-spread": "off",
+    "oxc/no-async-await": "off",
+    "oxc/no-rest-spread-properties": "off",
+    "oxc/no-optional-chaining": "off",
+
+    "promise/catch-or-return": "off",
+    "promise/always-return": "off"
+  }
+}

@@ -36,7 +36,7 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
      - `create()`: Create initial configuration
      - `update()`: Update existing configuration
    - Current integrations: Cursor, GitHub Copilot, Windsurf, Zed
-   - New integrations: Claude Code, OpenAI Codex (being added)
+   - New integrations: Claude Code, Codex (being added)
 
 ## Development Workflow
 

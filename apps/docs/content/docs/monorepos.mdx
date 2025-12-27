@@ -1,0 +1,48 @@
+---
+title: Monorepos
+description: How to use Ultracite within a monorepo.
+---
+
+Ultracite is designed to work out of the box with monorepos. Here's how to use it with Turborepo.
+
+## Configuration
+
+When initializing Ultracite, it will create the appropriate config file(s) in the root of your repository based on your chosen linter. This configuration applies to your entire monorepo.
+
+```
+my-turborepo/
+├── apps/
+├── packages/
+├── turbo.json
+└── biome.jsonc (or eslint.config.mjs, .oxlintrc.json, etc.)
+```
+
+## Adding scripts
+
+Because Ultracite's underlying tools are fast (especially the Rust-based Biome and Oxlint), you can run a single root script rather than creating separate scripts in each package.
+
+Add the `check` and `fix` scripts to your root `package.json`:
+
+```json title="package.json"
+{
+  "scripts": {
+    "check": "ultracite check",
+    "fix": "ultracite fix"
+  }
+}
+```
+
+Optionally, add these as root tasks in your `turbo.json`:
+
+```json title="turbo.json"
+{
+  "tasks": {
+    "//#check": {},
+    "//#fix": {
+      "cache": false
+    }
+  }
+}
+```
+
+You can now run `turbo run check` and `turbo run fix` from anywhere in your monorepo.

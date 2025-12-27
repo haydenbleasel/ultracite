@@ -1,0 +1,112 @@
+---
+title: Upgrade to v7
+description: Guide for upgrading from Ultracite v6 to v7 with multi-linter support.
+---
+
+Ultracite v7 introduces support for multiple linting providers: Biome, ESLint + Prettier + Stylelint, and Oxlint + Oxfmt.
+
+## What Changed
+
+### Multi-Provider Support
+
+Ultracite now supports three linting toolchains:
+
+- **[Biome](/provider/biome)** — The modern, all-in-one toolchain (default)
+- **[ESLint + Prettier + Stylelint](/provider/eslint)** — The most mature ecosystem
+- **[Oxlint + Oxfmt](/provider/oxlint)** — The fastest option
+
+### Updated Preset Paths
+
+Preset paths now include the provider name to distinguish between linters:
+
+| v6 Path | v7 Path |
+|---------|---------|
+| `ultracite/core` | `ultracite/biome/core` |
+| `ultracite/react` | `ultracite/biome/react` |
+| `ultracite/next` | `ultracite/biome/next` |
+| `ultracite/solid` | `ultracite/biome/solid` |
+| `ultracite/vue` | `ultracite/biome/vue` |
+| `ultracite/svelte` | `ultracite/biome/svelte` |
+| `ultracite/qwik` | `ultracite/biome/qwik` |
+| `ultracite/angular` | `ultracite/biome/angular` |
+| `ultracite/remix` | `ultracite/biome/remix` |
+| `ultracite/astro` | `ultracite/biome/astro` |
+
+### New CLI Flag
+
+The `--linter` flag allows you to specify which provider to use:
+
+```bash
+npx ultracite init --linter biome
+npx ultracite init --linter eslint
+npx ultracite init --linter oxlint
+```
+
+## Migration
+
+### For Biome Users (Default)
+
+Update your `biome.jsonc` to use the new preset paths:
+
+```jsonc title="biome.jsonc"
+{
+  // Before (v6)
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+
+  // After (v7)
+  "extends": ["ultracite/biome/core", "ultracite/biome/react", "ultracite/biome/next"]
+}
+```
+
+### Switching to ESLint
+
+If you'd like to switch to ESLint + Prettier + Stylelint:
+
+```bash
+npx ultracite init --linter eslint
+```
+
+This will create `eslint.config.mjs`, `prettier.config.mjs`, and `stylelint.config.mjs` files:
+
+```javascript title="eslint.config.mjs"
+import { defineConfig } from "eslint/config";
+import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+import next from "ultracite/eslint/next";
+
+export default defineConfig([
+  {
+    extends: [core, react, next],
+  },
+]);
+```
+
+### Switching to Oxlint
+
+If you'd like to switch to the fastest option:
+
+```bash
+npx ultracite init --linter oxlint
+```
+
+This will create `.oxlintrc.json` and `.oxfmtrc.jsonc` files:
+
+```jsonc title=".oxlintrc.json"
+{
+  "extends": [
+    "ultracite/oxlint/core",
+    "ultracite/oxlint/react",
+    "ultracite/oxlint/next"
+  ]
+}
+```
+
+## Quick Upgrade
+
+For the fastest upgrade path, run:
+
+```bash
+npx ultracite init
+```
+
+When prompted, select your preferred linting provider. Ultracite will update your configuration files automatically.

@@ -13,17 +13,11 @@ jobs:
 
     strategy:
       matrix:
-        runtime: [node-18, node-20, node-22, bun]
+        runtime: [node-20, node-22, node-24, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Use Node.js 18.x
-        if: matrix.runtime == 'node-18'
-        uses: actions/setup-node@v6
-        with:
-          node-version: 18.x
 
       - name: Use Node.js 20.x
         if: matrix.runtime == 'node-20'
@@ -36,6 +30,12 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22.x
+
+      - name: Use Node.js 24.x
+        if: matrix.runtime == 'node-24'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
 
       - uses: oven-sh/setup-bun@v2
         name: Install Bun
@@ -52,17 +52,11 @@ jobs:
 
     strategy:
       matrix:
-        runtime: [node-18, node-20, node-22, bun]
+        runtime: [node-20, node-22, node-24, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Use Node.js 18.x
-        if: matrix.runtime == 'node-18'
-        uses: actions/setup-node@v6
-        with:
-          node-version: 18.x
 
       - name: Use Node.js 20.x
         if: matrix.runtime == 'node-20'
@@ -75,6 +69,12 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22.x
+
+      - name: Use Node.js 24.x
+        if: matrix.runtime == 'node-24'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
 
       - uses: oven-sh/setup-bun@v2
         name: Install Bun

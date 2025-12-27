@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import { zed } from "../src/editor-config/zed";
+import { createEditorConfig } from "../src/editor-config";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -8,7 +8,7 @@ mock.module("node:fs/promises", () => ({
   mkdir: mock(() => Promise.resolve()),
 }));
 
-describe("zed", () => {
+describe("zed editor config", () => {
   beforeEach(() => {
     mock.restore();
   });
@@ -17,7 +17,7 @@ describe("zed", () => {
     test("returns true when settings.json exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.zed/settings.json") {
+          if (path === ".zed/settings.json") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -27,6 +27,7 @@ describe("zed", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const zed = createEditorConfig("zed");
       const result = await zed.exists();
       expect(result).toBe(true);
     });
@@ -39,6 +40,7 @@ describe("zed", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const zed = createEditorConfig("zed");
       const result = await zed.exists();
       expect(result).toBe(false);
     });
@@ -54,6 +56,7 @@ describe("zed", () => {
         mkdir: mockMkdir,
       }));
 
+      const zed = createEditorConfig("zed");
       await zed.create();
 
       expect(mockMkdir).toHaveBeenCalledWith(".zed", { recursive: true });
@@ -68,11 +71,12 @@ describe("zed", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const zed = createEditorConfig("zed");
       await zed.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe("./.zed/settings.json");
+      expect(writeCall[0]).toBe(".zed/settings.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent).toBeTruthy();
     });
@@ -89,6 +93,7 @@ describe("zed", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const zed = createEditorConfig("zed");
       await zed.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -106,12 +111,20 @@ describe("zed", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
+      const zed = createEditorConfig("zed");
       await zed.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent).toBeTruthy();
+    });
+  });
+
+  describe("extension", () => {
+    test("does not have extension method (Zed is not VS Code-based)", () => {
+      const zed = createEditorConfig("zed");
+      expect(zed.extension).toBeUndefined();
     });
   });
 });

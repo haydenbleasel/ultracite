@@ -1,18 +1,14 @@
-import { createI18nMiddleware } from "fumadocs-core/i18n/middleware";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import { isMarkdownPreferred, rewritePath } from "fumadocs-core/negotiation";
-import {
-  type NextFetchEvent,
-  type NextRequest,
-  NextResponse,
-} from "next/server";
-import { i18n } from "@/lib/i18n";
+import { NextResponse } from "next/server";
 
-const { rewrite: rewriteLLM } = rewritePath("/docs/*path", "/llms.mdx/*path");
+const { rewrite: rewriteLLM } = rewritePath(
+  "/docs/*path",
+  "/docs/llms.mdx/*path"
+);
 
-const internationalizer = createI18nMiddleware(i18n);
-
-const proxy = (request: NextRequest, context: NextFetchEvent) => {
-  // First, handle Markdown preference rewrites
+export default clerkMiddleware((_, request) => {
+  // Handle Markdown preference rewrites for LLMs
   if (isMarkdownPreferred(request)) {
     const result = rewriteLLM(request.nextUrl.pathname);
     if (result) {
@@ -20,15 +16,14 @@ const proxy = (request: NextRequest, context: NextFetchEvent) => {
     }
   }
 
-  // Fallback to i18n middleware
-  return internationalizer(request, context);
-};
+  return NextResponse.next();
+});
 
 export const config = {
-  // Matcher ignoring `/_next/`, `/api/`, static assets, favicon, file-based metadata, etc.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|icon\\.png|apple-icon\\.png|opengraph-image\\.png|twitter-image\\.png|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest).*)",
+    // Skip Next.js internals, all static files, and .well-known/workflow/*, unless found in search params
+    "/((?!_next|\\.well-known/workflow/|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
   ],
 };
-
-export default proxy;

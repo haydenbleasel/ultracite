@@ -1,10 +1,17 @@
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
+import { withWorkflow } from "workflow/next";
 
 const withMdx = createMDX();
 
 const config: NextConfig = {
-  reactStrictMode: true,
+  transpilePackages: ["@ultracite/data"],
+
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
+
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -24,26 +31,6 @@ const config: NextConfig = {
       },
     ];
   },
-
-  redirects() {
-    return [
-      {
-        source: "/husky",
-        destination: "/integration/husky",
-        permanent: true,
-      },
-      {
-        source: "/lint-staged",
-        destination: "/integration/lint-staged",
-        permanent: true,
-      },
-      {
-        source: "/lefthook",
-        destination: "/integration/lefthook",
-        permanent: true,
-      },
-    ];
-  },
 };
 
-export default withMdx(config);
+export default withWorkflow(withMdx(config));
