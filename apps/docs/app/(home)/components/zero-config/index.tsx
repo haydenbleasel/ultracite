@@ -2,7 +2,7 @@
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@ultracite/data/providers";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
@@ -38,12 +38,10 @@ export const ZeroConfig = () => {
   // (guard against stale name if provider/framework is switched)
   // This avoids uncontrolled->controlled warning.
   // We only setTabValue if the name list changed and tabValue is not present.
-  useMemo(() => {
+  useEffect(() => {
     if (!config.some((c) => c.name === tabValue)) {
       setTabValue(config[0]?.name ?? "");
     }
-    // Only run when config changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config, tabValue]);
 
   return (
