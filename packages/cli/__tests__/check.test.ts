@@ -1,31 +1,9 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 import { check } from "../src/commands/check";
-
-mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
-  execSync: mock(() => ""),
-}));
-
-mock.module("nypm", () => ({
-  detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock(
-    (_pm, pkg, opts) =>
-      `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-  ),
-}));
-
-mock.module("../src/utils", () => ({
-  detectLinter: mock(async () => "biome"),
-  parseFilePaths: (files: string[]) =>
-    files.map((file) =>
-      /[ $(){}[\]&|;<>!"'`*?#~]/.test(file)
-        ? `'${file.replace(/'/g, "'\\''")}'`
-        : file
-    ),
-}));
+import { parseFilePaths } from "../src/utils";
 
 describe("check", () => {
-  beforeEach(() => {
+  afterEach(() => {
     mock.restore();
   });
 
@@ -44,7 +22,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check(undefined);
@@ -71,7 +49,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([["src/index.ts", "src/test.ts"], {}]);
@@ -97,7 +75,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([[], { "diagnostic-level": "error" }]);
@@ -122,19 +100,15 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) =>
-        files.map((file) =>
-          /[ $(){}[\]&|;<>!"'`*?#~]/.test(file)
-            ? `'${file.replace(/'/g, "'\\''")}'`
-            : file
-        ),
+      parseFilePaths,
     }));
 
     await check([["src/my file.ts"], {}]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("'src/my file.ts'");
+    // The real parseFilePaths adds a trailing space
+    expect(callArgs[0]).toContain("'src/my file.ts' ");
   });
 
   test("returns hasErrors true when biome check finds errors", async () => {
@@ -153,7 +127,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     const result = await check(undefined);
@@ -179,7 +153,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await expect(check(undefined)).rejects.toThrow(
@@ -202,7 +176,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => null),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await expect(check(undefined)).rejects.toThrow(
@@ -225,7 +199,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([[], { linter: "eslint" }]);
@@ -255,7 +229,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([["src/index.ts"], { linter: "eslint" }]);
@@ -284,7 +258,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
@@ -307,7 +281,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([[], { linter: "oxlint" }]);
@@ -335,7 +309,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check([["src/index.ts"], { linter: "oxlint" }]);
@@ -364,7 +338,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await expect(check([[], { linter: "oxlint" }])).rejects.toThrow(
@@ -387,7 +361,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     const result = await check([[], { linter: "eslint" }]);
@@ -409,7 +383,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     const result = await check([[], { linter: "oxlint" }]);
@@ -431,7 +405,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check(undefined);
@@ -457,7 +431,7 @@ describe("check", () => {
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
-      parseFilePaths: (files: string[]) => files,
+      parseFilePaths,
     }));
 
     await check(undefined);
