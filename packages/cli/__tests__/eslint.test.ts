@@ -68,8 +68,12 @@ describe("eslint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[1]).toContain('import react from "ultracite/eslint/react"');
-      expect(writeCall[1]).toContain('import next from "ultracite/eslint/next"');
+      expect(writeCall[1]).toContain(
+        'import react from "ultracite/eslint/react"'
+      );
+      expect(writeCall[1]).toContain(
+        'import next from "ultracite/eslint/next"'
+      );
       expect(writeCall[1]).toContain("...react");
       expect(writeCall[1]).toContain("...next");
     });

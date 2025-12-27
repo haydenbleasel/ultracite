@@ -205,9 +205,7 @@ describe("fix", () => {
       parseFilePaths,
     }));
 
-    await expect(fix([], {})).rejects.toThrow(
-      "No linter configuration found"
-    );
+    await expect(fix([], {})).rejects.toThrow("No linter configuration found");
   });
 
   test("runs eslint fix when linter is eslint (runs prettier, eslint, stylelint)", async () => {
