@@ -29,13 +29,14 @@ interface EslintOptions {
 }
 
 const generateEslintConfig = (opts?: EslintOptions): string => {
-  const imports: string[] = ['import ultracite from "ultracite/eslint";'];
-  const configs: string[] = ["...ultracite.core"];
+  const imports: string[] = ['import core from "ultracite/eslint/core";'];
+  const configs: string[] = ["...core"];
 
   // Add framework-specific configs
   if (opts?.frameworks && opts.frameworks.length > 0) {
     for (const framework of opts.frameworks) {
-      configs.push(`...ultracite.${framework}`);
+      imports.push(`import ${framework} from "ultracite/eslint/${framework}";`);
+      configs.push(`...${framework}`);
     }
   }
 

@@ -14,6 +14,16 @@ mock.module("nypm", () => ({
   ),
 }));
 
+mock.module("../src/utils", () => ({
+  detectLinter: mock(async () => "biome"),
+  parseFilePaths: (files: string[]) =>
+    files.map((file) =>
+      /[ $(){}[\]&|;<>!"'`*?#~]/.test(file)
+        ? `'${file.replace(/'/g, "'\\''")}'`
+        : file
+    ),
+}));
+
 describe("check", () => {
   beforeEach(() => {
     mock.restore();
@@ -31,6 +41,10 @@ describe("check", () => {
         (_pm, pkg, opts) =>
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) => files,
     }));
 
     await check(undefined);
@@ -55,6 +69,10 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([["src/index.ts", "src/test.ts"], {}]);
 
@@ -77,6 +95,10 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([[], { "diagnostic-level": "error" }]);
 
@@ -97,6 +119,15 @@ describe("check", () => {
         (_pm, pkg, opts) =>
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) =>
+        files.map((file) =>
+          /[ $(){}[\]&|;<>!"'`*?#~]/.test(file)
+            ? `'${file.replace(/'/g, "'\\''")}'`
+            : file
+        ),
     }));
 
     await check([["src/my file.ts"], {}]);
@@ -120,6 +151,10 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     const result = await check(undefined);
     expect(result.hasErrors).toBe(true);
@@ -142,13 +177,17 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await expect(check(undefined)).rejects.toThrow(
-      "Failed to run Ultracite: spawn failed"
+      "Failed to run Biome: spawn failed"
     );
   });
 
-  test("runs eslint check when linter is eslint", async () => {
+  test("throws when no linter configuration found", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -161,12 +200,44 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => null),
+      parseFilePaths: (files: string[]) => files,
+    }));
+
+    await expect(check(undefined)).rejects.toThrow(
+      "No linter configuration found"
+    );
+  });
+
+  test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([[], { linter: "eslint" }]);
 
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("npx eslint");
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    const prettierCall = mockSpawn.mock.calls[0];
+    const eslintCall = mockSpawn.mock.calls[1];
+    const stylelintCall = mockSpawn.mock.calls[2];
+    expect(prettierCall[0]).toContain("npx prettier");
+    expect(prettierCall[0]).toContain("--check");
+    expect(eslintCall[0]).toContain("npx eslint");
+    expect(stylelintCall[0]).toContain("npx stylelint");
   });
 
   test("runs eslint check with specific files", async () => {
@@ -182,17 +253,21 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([["src/index.ts"], { linter: "eslint" }]);
 
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("src/index.ts");
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    const eslintCall = mockSpawn.mock.calls[1];
+    expect(eslintCall[0]).toContain("src/index.ts");
   });
 
   test("eslint check throws on spawn error", async () => {
     const mockSpawn = mock(() => ({
-      error: new Error("eslint spawn failed"),
+      error: new Error("prettier spawn failed"),
       status: null,
     }));
 
@@ -207,13 +282,17 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
-      "Failed to run Ultracite: eslint spawn failed"
+      "Failed to run Prettier: prettier spawn failed"
     );
   });
 
-  test("runs oxlint check when linter is oxlint", async () => {
+  test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -226,12 +305,19 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([[], { linter: "oxlint" }]);
 
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("npx oxlint");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxfmtCall = mockSpawn.mock.calls[0];
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxfmtCall[0]).toContain("npx oxfmt");
+    expect(oxfmtCall[0]).toContain("--check");
+    expect(oxlintCall[0]).toContain("npx oxlint");
   });
 
   test("runs oxlint check with specific files", async () => {
@@ -247,17 +333,21 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await check([["src/index.ts"], { linter: "oxlint" }]);
 
-    expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("src/index.ts");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxlintCall[0]).toContain("src/index.ts");
   });
 
   test("oxlint check throws on spawn error", async () => {
     const mockSpawn = mock(() => ({
-      error: new Error("oxlint spawn failed"),
+      error: new Error("oxfmt spawn failed"),
       status: null,
     }));
 
@@ -272,9 +362,13 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     await expect(check([[], { linter: "oxlint" }])).rejects.toThrow(
-      "Failed to run Ultracite: oxlint spawn failed"
+      "Failed to run oxfmt: oxfmt spawn failed"
     );
   });
 
@@ -290,6 +384,10 @@ describe("check", () => {
         (_pm, pkg, opts) =>
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths: (files: string[]) => files,
     }));
 
     const result = await check([[], { linter: "eslint" }]);
@@ -309,8 +407,63 @@ describe("check", () => {
           `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
       ),
     }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
 
     const result = await check([[], { linter: "oxlint" }]);
     expect(result.hasErrors).toBe(true);
+  });
+
+  test("auto-detects eslint when eslint config exists", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
+
+    await check(undefined);
+
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    expect(mockSpawn.mock.calls[0][0]).toContain("prettier");
+    expect(mockSpawn.mock.calls[1][0]).toContain("eslint");
+    expect(mockSpawn.mock.calls[2][0]).toContain("stylelint");
+  });
+
+  test("auto-detects oxlint when oxlint config exists", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths: (files: string[]) => files,
+    }));
+
+    await check(undefined);
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    expect(mockSpawn.mock.calls[0][0]).toContain("oxfmt");
+    expect(mockSpawn.mock.calls[1][0]).toContain("oxlint");
   });
 });

@@ -100,3 +100,42 @@ export const ensureDirectory = async (path: string) => {
     await mkdir(cleanDir, { recursive: true });
   }
 };
+
+export type Linter = "biome" | "eslint" | "oxlint";
+
+// Config file patterns for each linter
+const biomeConfigPaths = ["./biome.json", "./biome.jsonc"] as const;
+
+const eslintConfigPaths = [
+  "./eslint.config.mjs",
+  "./eslint.config.js",
+  "./eslint.config.cjs",
+  "./eslint.config.ts",
+  "./eslint.config.mts",
+  "./eslint.config.cts",
+] as const;
+
+const oxlintConfigPath = "./.oxlintrc.json";
+
+export const detectLinter = async (): Promise<Linter | null> => {
+  // Check for biome config
+  for (const path of biomeConfigPaths) {
+    if (await exists(path)) {
+      return "biome";
+    }
+  }
+
+  // Check for eslint config
+  for (const path of eslintConfigPaths) {
+    if (await exists(path)) {
+      return "eslint";
+    }
+  }
+
+  // Check for oxlint config
+  if (await exists(oxlintConfigPath)) {
+    return "oxlint";
+  }
+
+  return null;
+};

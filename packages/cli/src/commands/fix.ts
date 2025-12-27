@@ -1,10 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import type { options } from "@ultracite/data/options";
 import { detectPackageManager, dlxCommand } from "nypm";
-import { parseFilePaths } from "../utils";
-
-type Linter = (typeof options.linters)[number];
+import { detectLinter, type Linter, parseFilePaths } from "../utils";
 
 interface FixOptions {
   unsafe?: boolean;
@@ -41,7 +38,7 @@ const runBiomeFix = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run Biome: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -66,7 +63,7 @@ const runEslintFix = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run ESLint: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -94,7 +91,32 @@ const runPrettierFix = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run Prettier: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runStylelintFix = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "stylelint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Stylelint: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -119,7 +141,35 @@ const runOxlintFix = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run Oxlint: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runOxfmtFix = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = [
+    "--write",
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "oxfmt", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run oxfmt: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -129,17 +179,31 @@ export const fix = async (
   files: string[],
   opts: FixOptions = {}
 ): Promise<{ hasErrors: boolean }> => {
-  const linter = opts.linter || "biome";
+  const linter = opts.linter || (await detectLinter());
+
+  if (!linter) {
+    throw new Error(
+      "No linter configuration found. Run `ultracite init` to set up a linter."
+    );
+  }
 
   switch (linter) {
     case "eslint": {
-      // ESLint is only a linter, so we run Prettier for formatting first
       const prettierResult = await runPrettierFix(files);
       const eslintResult = await runEslintFix(files);
-      return { hasErrors: prettierResult.hasErrors || eslintResult.hasErrors };
+      const stylelintResult = await runStylelintFix(files);
+      return {
+        hasErrors:
+          prettierResult.hasErrors ||
+          eslintResult.hasErrors ||
+          stylelintResult.hasErrors,
+      };
     }
-    case "oxlint":
-      return runOxlintFix(files);
+    case "oxlint": {
+      const oxfmtResult = await runOxfmtFix(files);
+      const oxlintResult = await runOxlintFix(files);
+      return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
+    }
     default:
       return runBiomeFix(files, opts.unsafe);
   }

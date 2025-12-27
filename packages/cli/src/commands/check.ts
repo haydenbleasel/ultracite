@@ -1,10 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import type { options } from "@ultracite/data/options";
 import { detectPackageManager, dlxCommand } from "nypm";
-import { parseFilePaths } from "../utils";
-
-type Linter = (typeof options.linters)[number];
+import { detectLinter, type Linter, parseFilePaths } from "../utils";
 
 interface CheckOptions {
   "diagnostic-level"?: "info" | "warn" | "error";
@@ -40,7 +37,7 @@ const runBiomeCheck = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run Biome: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -65,7 +62,60 @@ const runEslintCheck = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run ESLint: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runPrettierCheck = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = [
+    "--check",
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "prettier", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Prettier: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runStylelintCheck = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "stylelint", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run Stylelint: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -90,7 +140,35 @@ const runOxlintCheck = async (
   });
 
   if (result.error) {
-    throw new Error(`Failed to run Ultracite: ${result.error.message}`);
+    throw new Error(`Failed to run Oxlint: ${result.error.message}`);
+  }
+
+  return { hasErrors: result.status !== 0 };
+};
+
+const runOxfmtCheck = async (
+  files: string[]
+): Promise<{ hasErrors: boolean }> => {
+  const args = [
+    "--check",
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
+
+  const detected = await detectPackageManager(process.cwd());
+  const pm = detected?.name || "npm";
+
+  const fullCommand = dlxCommand(pm, "oxfmt", {
+    args,
+    short: pm === "npm",
+  });
+
+  const result = spawnSync(fullCommand, {
+    stdio: "inherit",
+    shell: true,
+  });
+
+  if (result.error) {
+    throw new Error(`Failed to run oxfmt: ${result.error.message}`);
   }
 
   return { hasErrors: result.status !== 0 };
@@ -101,14 +179,34 @@ export const check = async (
 ): Promise<{ hasErrors: boolean }> => {
   const files = opts?.[0] || [];
   const diagnosticLevel = opts?.[1]["diagnostic-level"];
-  const linter = opts?.[1].linter || "biome";
+  const explicitLinter = opts?.[1].linter;
+
+  const linter = explicitLinter || (await detectLinter());
+
+  if (!linter) {
+    throw new Error(
+      "No linter configuration found. Run `ultracite init` to set up a linter."
+    );
+  }
 
   switch (linter) {
-    case "eslint":
-      return await runEslintCheck(files);
-    case "oxlint":
-      return await runOxlintCheck(files);
+    case "eslint": {
+      const prettierResult = await runPrettierCheck(files);
+      const eslintResult = await runEslintCheck(files);
+      const stylelintResult = await runStylelintCheck(files);
+      return {
+        hasErrors:
+          prettierResult.hasErrors ||
+          eslintResult.hasErrors ||
+          stylelintResult.hasErrors,
+      };
+    }
+    case "oxlint": {
+      const oxfmtResult = await runOxfmtCheck(files);
+      const oxlintResult = await runOxlintCheck(files);
+      return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
+    }
     default:
-      return await runBiomeCheck(files, diagnosticLevel);
+      return runBiomeCheck(files, diagnosticLevel);
   }
 };
