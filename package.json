@@ -13,7 +13,7 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "bun build && changeset publish",
-    "bump-deps": "npx npm-check-updates --deep -u -x recharts && bun install",
+    "bump-deps": "npx npm-check-updates --deep -u -x \"recharts,react-resizable-panels\" && bun install",
     "bump-ui": "cd apps/docs && npx shadcn@latest add --all --overwrite && npx shadcn@latest migrate radix",
     "translate": "cd apps/docs && bun run translate"
   },
