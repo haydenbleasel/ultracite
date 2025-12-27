@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/app/(home)/components/logo";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -28,6 +29,11 @@ import {
 } from "../ui/sheet";
 
 const links = [
+  {
+    href: "/cloud",
+    label: "Cloud",
+    className: "text-primary",
+  },
   {
     href: "/docs",
     label: "Docs",
@@ -54,7 +60,7 @@ export const Navbar = () => {
             Ultracite
           </span>
         </Link>
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu className="hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger
@@ -167,35 +173,34 @@ export const Navbar = () => {
         </NavigationMenu>
       </div>
       <div className="flex items-center gap-2">
-        <div className="hidden items-center gap-px md:flex">
+        <div className="hidden items-center gap-px lg:flex">
           {links.map((link) => (
             <Button
               asChild
+              className={link.className}
               key={link.href}
               variant={pathname === link.href ? "secondary" : "ghost"}
             >
-              <Link href={link.href} key={link.href}>
-                {link.label}
-              </Link>
+              <Link href={link.href}>{link.label}</Link>
             </Button>
           ))}
         </div>
         <SignedOut>
           <SignInButton>
-            <Button asChild className="hidden md:inline-flex">
+            <Button asChild className="hidden lg:inline-flex">
               <Link href="/sign-in">Sign in</Link>
             </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <Button asChild className="hidden md:inline-flex">
+          <Button asChild className="hidden lg:inline-flex">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
           <UserButton />
         </SignedIn>
 
         <Sheet onOpenChange={setOpen} open={open}>
-          <SheetTrigger asChild className="md:hidden">
+          <SheetTrigger asChild className="lg:hidden">
             <Button size="icon" variant="ghost">
               <IconMenu2 className="size-5" />
               <span className="sr-only">Open menu</span>
@@ -212,9 +217,11 @@ export const Navbar = () => {
               <div className="flex flex-col gap-2">
                 {links.map((link) => (
                   <Link
-                    className={`rounded-md px-3 py-2 font-medium text-sm ${
+                    className={cn(
+                      "rounded-md px-3 py-2 font-medium text-sm",
+                      link.className,
                       pathname === link.href ? "bg-muted" : "hover:bg-muted/50"
-                    }`}
+                    )}
                     href={link.href}
                     key={link.href}
                     onClick={() => setOpen(false)}
