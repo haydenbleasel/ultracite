@@ -21,4 +21,4 @@ const adapter = new PrismaPg({
 
 export const database = new PrismaClient({ adapter });
 
-export * from "./generated/client";
+export type * from "./generated/client";
