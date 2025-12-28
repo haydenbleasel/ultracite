@@ -14,8 +14,10 @@ export const config = {
      * - favicon.ico (favicon file)
      * - .well-known/workflow/ (workflow files)
      * - /api/cron (cron jobs)
+     * - /api/stripe/webhooks
+     * - /api/github/webhooks
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|\\.well-known/workflow/|api/cron|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|\\.well-known/workflow/|api/cron|api/stripe/webhooks|api/github/webhooks|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

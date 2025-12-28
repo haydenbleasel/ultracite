@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "bun --bun next dev --port 3002",
+    "dev": "concurrently \"bun --bun next dev --port 3002\" \"bun run stripe\"",
     "build": "bun --bun next build",
     "workflow": "bun x workflow inspect runs --web",
-    "tunnel": "lt --port 3002"
+    "stripe": "stripe listen --forward-to http://localhost:3002/api/stripe/webhooks"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^13.8.0",
-    "stripe": "^17.5.0",
+    "stripe": "^20.1.0",
     "@repo/backend": "workspace:*",
     "@repo/design-system": "workspace:*",
     "@supabase/postgrest-js": "*",
@@ -26,7 +26,7 @@
     "octokit": "^5.0.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "workflow": "^4.0.1-beta.36",
+    "workflow": "^4.0.1-beta.37",
     "zod": "^4.2.1"
   },
   "devDependencies": {

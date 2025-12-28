@@ -22,6 +22,7 @@ export const POST = async (request: NextRequest) => {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Stripe webhook verification failed:", message);
     return NextResponse.json(
       { error: `Webhook error: ${message}` },
       { status: 400 }
@@ -29,7 +30,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   switch (event.type) {
-    case "checkout.session.completed": {
+    case "customer.subscription.created": {
       const session = event.data.object;
       const organizationId = session.metadata?.organizationId;
       const customerId = session.customer as string;
