@@ -1,0 +1,40 @@
+{
+  "name": "@repo/data",
+  "description": "Shared data for Ultracite CLI and website",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "logos"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./agents": "./src/agents.ts",
+    "./editors": "./src/editors.ts",
+    "./providers": "./src/providers.ts",
+    "./options": "./src/options.ts",
+    "./rules": "./src/rules.ts",
+    "./consts": "./src/consts.ts",
+    "./logos/*": "./logos/*"
+  },
+  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "next": "^16.1.1"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
+  "packageManager": "bun@1.3.5",
+  "dependencies": {
+    "deepmerge": "^4.3.1"
+  }
+}

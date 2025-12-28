@@ -1,4 +1,5 @@
-import { access, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import { parse } from "jsonc-parser";
 
 export const exists = async (path: string) => {
@@ -29,17 +30,6 @@ export const isMonorepo = async () => {
     return false;
   }
 };
-
-export const title = `
-888     888 888    88888888888 8888888b.         d8888  .d8888b. 8888888 88888888888 8888888888 
-888     888 888        888     888   Y88b       d88888 d88P  Y88b  888       888     888        
-888     888 888        888     888    888      d88P888 888    888  888       888     888        
-888     888 888        888     888   d88P     d88P 888 888         888       888     8888888    
-888     888 888        888     8888888P"     d88P  888 888         888       888     888        
-888     888 888        888     888 T88b     d88P   888 888    888  888       888     888        
-Y88b. .d88P 888        888     888  T88b   d8888888888 Y88b  d88P  888       888     888        
- "Y88888P"  88888888   888     888   T88b d88P     888  "Y8888P" 8888888     888     8888888888
-`;
 
 export const updatePackageJson = async ({
   dependencies,
@@ -101,4 +91,51 @@ export const parseFilePaths = (files: string[]): string[] => {
     }
     return file;
   });
+};
+
+export const ensureDirectory = async (path: string) => {
+  const dir = dirname(path);
+  if (dir !== ".") {
+    const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
+    await mkdir(cleanDir, { recursive: true });
+  }
+};
+
+export type Linter = "biome" | "eslint" | "oxlint";
+
+// Config file patterns for each linter
+const biomeConfigPaths = ["./biome.json", "./biome.jsonc"] as const;
+
+const eslintConfigPaths = [
+  "./eslint.config.mjs",
+  "./eslint.config.js",
+  "./eslint.config.cjs",
+  "./eslint.config.ts",
+  "./eslint.config.mts",
+  "./eslint.config.cts",
+] as const;
+
+const oxlintConfigPath = "./.oxlintrc.json";
+
+export const detectLinter = async (): Promise<Linter | null> => {
+  // Check for biome config
+  for (const path of biomeConfigPaths) {
+    if (await exists(path)) {
+      return "biome";
+    }
+  }
+
+  // Check for eslint config
+  for (const path of eslintConfigPaths) {
+    if (await exists(path)) {
+      return "eslint";
+    }
+  }
+
+  // Check for oxlint config
+  if (await exists(oxlintConfigPath)) {
+    return "oxlint";
+  }
+
+  return null;
 };

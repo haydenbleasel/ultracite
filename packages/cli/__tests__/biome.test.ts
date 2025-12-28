@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import { biome } from "../src/biome";
+import { biome } from "../src/linters/biome";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
@@ -71,7 +71,7 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent.extends).toEqual(["ultracite/core"]);
+      expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
       expect(writtenContent.$schema).toBe(
         "./node_modules/@biomejs/biome/configuration_schema.json"
       );
@@ -91,15 +91,15 @@ describe("biome", () => {
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual([
-        "ultracite/core",
-        "ultracite/react",
-        "ultracite/next",
+        "ultracite/biome/core",
+        "ultracite/biome/react",
+        "ultracite/biome/next",
       ]);
     });
   });
 
   describe("update", () => {
-    test("adds ultracite/core to existing config", async () => {
+    test("adds ultracite/biome/core to existing config", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
@@ -119,11 +119,11 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent.extends).toContain("ultracite/core");
+      expect(writtenContent.extends).toContain("ultracite/biome/core");
       expect(writtenContent.formatter.indentStyle).toBe("tab");
     });
 
-    test("does not duplicate ultracite/core in extends", async () => {
+    test("does not duplicate ultracite/biome/core in extends", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
@@ -133,7 +133,7 @@ describe("biome", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
-          Promise.resolve('{"extends": ["ultracite/core"]}')
+          Promise.resolve('{"extends": ["ultracite/biome/core"]}')
         ),
         writeFile: mockWriteFile,
       }));
@@ -143,7 +143,7 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent.extends).toEqual(["ultracite/core"]);
+      expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
     });
 
     test("adds framework extends without duplicates", async () => {
@@ -156,7 +156,9 @@ describe("biome", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
-          Promise.resolve('{"extends": ["ultracite/core", "ultracite/react"]}')
+          Promise.resolve(
+            '{"extends": ["ultracite/biome/core", "ultracite/biome/react"]}'
+          )
         ),
         writeFile: mockWriteFile,
       }));
@@ -167,9 +169,9 @@ describe("biome", () => {
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual([
-        "ultracite/core",
-        "ultracite/react",
-        "ultracite/next",
+        "ultracite/biome/core",
+        "ultracite/biome/react",
+        "ultracite/biome/next",
       ]);
     });
 
@@ -191,7 +193,7 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent.extends).toContain("ultracite/core");
+      expect(writtenContent.extends).toContain("ultracite/biome/core");
     });
   });
 });

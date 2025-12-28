@@ -1,22 +1,41 @@
-import DynamicLink from "fumadocs-core/dynamic-link";
+import { TypeTable } from "fumadocs-ui/components/type-table";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
-import type { ComponentProps } from "react";
+import {
+  Callout,
+  CalloutContainer,
+  CalloutDescription,
+  CalloutTitle,
+} from "@/components/fumadocs/callout";
+import { CodeBlock } from "@/components/fumadocs/code-block";
+import {
+  CodeBlockTab,
+  CodeBlockTabs,
+  CodeBlockTabsList,
+  CodeBlockTabsTrigger,
+} from "@/components/fumadocs/code-block-tabs";
+import { Mermaid } from "@/components/fumadocs/mermaid";
 
 // use this function to get MDX components, you will need it for rendering MDX
-export function getMDXComponents(
-  lang: string,
-  components?: MDXComponents
-): MDXComponents {
+export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
     ...components,
 
-    a: ({ href, ...props }: ComponentProps<typeof DynamicLink>) =>
-      href?.startsWith("/") ? (
-        <DynamicLink {...props} href={`/${lang}${href as string}`} />
-      ) : (
-        <a {...props} href={href} />
-      ),
+    pre: CodeBlock,
+
+    CodeBlockTabs,
+    CodeBlockTabsList,
+    CodeBlockTabsTrigger,
+    CodeBlockTab,
+
+    TypeTable,
+
+    Callout,
+    CalloutContainer,
+    CalloutTitle,
+    CalloutDescription,
+
+    Mermaid,
   };
 }

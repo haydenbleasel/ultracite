@@ -93,6 +93,17 @@ describe("isMonorepo", () => {
     const result = await isMonorepo();
     expect(result).toBe(false);
   });
+
+  test("returns false when package.json parses to null", async () => {
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      readFile: mock(() => Promise.resolve("null")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    const result = await isMonorepo();
+    expect(result).toBe(false);
+  });
 });
 
 describe("updatePackageJson", () => {

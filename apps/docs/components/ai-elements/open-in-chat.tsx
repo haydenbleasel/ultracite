@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,14 +8,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from "@repo/design-system/components/ui/dropdown-menu";
 import {
   ChevronDownIcon,
   ExternalLinkIcon,
   MessageCircleIcon,
 } from "lucide-react";
 import { type ComponentProps, createContext, useContext } from "react";
+import { cn } from "@repo/design-system/lib/utils";
 
 const providers = {
   github: {
@@ -236,7 +238,7 @@ export const OpenInTrigger = ({ children, ...props }: OpenInTriggerProps) => (
     {children ?? (
       <Button type="button" variant="outline">
         Open in chat
-        <ChevronDownIcon className="ml-2 size-4" />
+        <ChevronDownIcon className="size-4" />
       </Button>
     )}
   </DropdownMenuTrigger>

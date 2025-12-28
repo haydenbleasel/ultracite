@@ -1,0 +1,55 @@
+---
+title: Migrate from Biome
+description: How to migrate your project from standalone Biome to Ultracite.
+---
+
+If you're already using Biome and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while preserving your existing configuration.
+
+## Why Migrate to Ultracite?
+
+- **Zero Configuration**: Ultracite provides a highly configured preset of rules
+- **Editor Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistent Workflow**: Standardized setup across projects and teams
+- **Additional Tooling**: Optional Git hooks, lint-staged integration
+- **Maintained Rules**: Regular updates with new best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using Biome
+- Node.js v14.18+ (Node 18+ recommended)
+- A `biome.json` or `biome.jsonc` file
+
+## Migration Options
+
+### Option 1: Quick Migration (Recommended)
+
+The fastest way is to run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+When prompted, select **Biome** as your linting provider. This will:
+
+- Install Ultracite as a dependency
+- Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Preserve your custom rules and settings
+- Set up editor integrations
+
+Following the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides that are now handled by Ultracite's preset.
+
+### Option 2: Manual Migration
+
+If you prefer more control over the process, update your `biome.jsonc` to extend Ultracite:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core"]
+}
+```
+
+After the migration, restart your editor to ensure the new configuration is applied.

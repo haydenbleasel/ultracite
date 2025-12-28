@@ -1,0 +1,93 @@
+---
+title: Biome
+description: The modern, all-in-one toolchain for JavaScript and TypeScript.
+---
+
+[Biome](https://biomejs.dev/) is a fast, all-in-one toolchain for JavaScript and TypeScript projects. Written in Rust, it combines formatting and linting into a single binary with zero dependencies.
+
+## Benefits
+
+- **Lightning fast** — 25x faster than Prettier, formats large codebases in milliseconds
+- **All-in-one toolchain** — No more juggling ESLint, Prettier, and other tools
+- **Zero dependencies** — One binary does everything with consistent behavior
+- **Multi-language support** — Handles JavaScript, TypeScript, JSX, TSX, JSON, CSS, GraphQL, and HTML
+- **Smart sorting** — Automatically organizes imports, JSX attributes, and Tailwind CSS classes
+
+## Usage
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core"]
+}
+```
+
+Add framework presets as needed:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ]
+}
+```
+
+## Configuration Approach
+
+Ultracite's Biome configuration uses an **opt-in** approach. This means every rule is explicitly specified in the configuration — nothing is implicitly inherited. This gives you full visibility into exactly which rules are enabled and at what level.
+
+## Rule Categories
+
+Biome organizes rules into the following categories:
+
+### Accessibility (a11y)
+
+Rules that enforce ARIA attributes, semantic HTML, keyboard navigation, and other accessibility best practices. Examples include requiring alt text for images, valid ARIA roles, and proper heading structure.
+
+### Complexity
+
+Rules that reduce cognitive complexity and enforce best practices. Examples include preferring `for...of` over `forEach`, using optional chaining, and avoiding excessive nesting.
+
+### Correctness
+
+Rules that prevent common errors and enforce type safety. Examples include catching unused variables, invalid regex patterns, unreachable code, and incorrect use of hooks.
+
+### Performance
+
+Rules that optimize code for better runtime performance. Examples include avoiding accumulating spread in loops, discouraging barrel files, and enforcing efficient patterns.
+
+### Security
+
+Rules that prevent security vulnerabilities. Examples include blocking `eval()`, requiring `rel="noopener"` on external links, and flagging dangerous `innerHTML` usage.
+
+### Style
+
+Rules that enforce consistent code style. Examples include preferring `const` over `let`, using template literals, enforcing consistent type definitions, and file naming conventions.
+
+### Suspicious
+
+Rules that catch suspicious patterns that might indicate bugs. Examples include flagging `debugger` statements, duplicate object keys, and implicit type coercion.
+
+## Formatter Settings
+
+Ultracite configures Biome's formatter with these defaults:
+
+- **Indentation**: 2 spaces
+- **Line Width**: 80 characters
+- **Line Ending**: LF (Unix-style)
+- **Semicolons**: Always required
+- **Trailing Commas**: ES5 style
+- **Arrow Parentheses**: Always include
+
+## Rule Reference
+
+For the complete list of rules and their settings, see the [Biome configuration on GitHub](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/biome).
+
+## VS Code Extension
+
+Install the [Biome extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) for VS Code:
+
+```bash title="Terminal"
+code --install-extension biomejs.biome
+```

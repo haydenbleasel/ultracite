@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 
 // Set environment BEFORE any imports
 process.env.VITEST = "true";
@@ -24,6 +24,7 @@ mock.module("@clack/prompts", () => ({
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
+  select: mock(() => Promise.resolve("biome")),
   isCancel: mock(() => false),
   cancel: mock(noop),
 }));
@@ -61,9 +62,8 @@ mock.module("glob", () => ({
 // The actual router is tested implicitly through the other test files
 
 describe("CLI Router", () => {
-  beforeEach(() => {
-    mock.restore();
-  });
+  // Note: We don't call mock.restore() here because it causes issues
+  // with module re-loading when the tests transition between each other
 
   test("CLI commands are tested through individual test files", () => {
     // The CLI router is tested implicitly through:
