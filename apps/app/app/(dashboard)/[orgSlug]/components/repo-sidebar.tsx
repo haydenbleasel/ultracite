@@ -4,17 +4,13 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
-import { IconBuilding } from "@tabler/icons-react";
 import Link from "next/link";
 import { getUserOrganizations } from "@/lib/auth";
-import { RepoSidebarItem } from "./repo-sidebar-item";
+import { OrganizationSidebarGroup } from "./organization-sidebar-group";
 
 export const RepoSidebar = async () => {
   const userOrgs = await getUserOrganizations();
@@ -41,30 +37,7 @@ export const RepoSidebar = async () => {
     <Sidebar className="top-(--navbar-height) h-[calc(100svh-var(--navbar-height))]">
       <SidebarContent>
         {organizations.map((org) => (
-          <SidebarGroup key={org.id}>
-            <SidebarGroupLabel className="gap-2">
-              <IconBuilding className="size-4" />
-              <span className="truncate">{org.slug}</span>
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {org.repos.map((repo) => (
-                  <RepoSidebarItem
-                    key={repo.id}
-                    orgSlug={org.slug}
-                    repoSlug={repo.name}
-                  />
-                ))}
-                {org.repos.length === 0 && (
-                  <SidebarMenuItem>
-                    <span className="px-2 py-1.5 text-muted-foreground text-xs">
-                      No repositories
-                    </span>
-                  </SidebarMenuItem>
-                )}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <OrganizationSidebarGroup key={org.id} organization={org} />
         ))}
       </SidebarContent>
       <SidebarFooter>
