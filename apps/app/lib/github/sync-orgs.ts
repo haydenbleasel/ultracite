@@ -1,7 +1,7 @@
 import "server-only";
 
+import { database } from "@repo/backend/database";
 import { Octokit } from "octokit";
-import { database } from "@repo/backend";
 import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
@@ -80,11 +80,7 @@ async function checkGitHubAppInstallation(
   }
 }
 
-/**
- * Sync GitHub organizations (and personal account) for a user.
- * Creates Organization records if they don't exist and adds user as member.
- * Also auto-links existing GitHub App installations and syncs repos.
- */
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Requires multiple conditional paths
 export async function syncGitHubOrganizations(
   providerToken: string,
   userId: string
@@ -95,9 +91,12 @@ export async function syncGitHubOrganizations(
   const { data: user } = await octokit.rest.users.getAuthenticated();
 
   // Fetch all organizations the user belongs to (with pagination)
-  const orgs = await octokit.paginate(octokit.rest.orgs.listForAuthenticatedUser, {
-    per_page: 100,
-  });
+  const orgs = await octokit.paginate(
+    octokit.rest.orgs.listForAuthenticatedUser,
+    {
+      per_page: 100,
+    }
+  );
 
   // Combine personal account and organizations
   const allOrgs: GitHubOrg[] = [
@@ -130,7 +129,11 @@ export async function syncGitHubOrganizations(
 
     // Use upsert to atomically find-or-create the organization by GitHub ID
     // This prevents race conditions when multiple users from the same org log in simultaneously
-    let organization: { id: string; slug: string; githubInstallationId: number | null } | null = null;
+    let organization: {
+      id: string;
+      slug: string;
+      githubInstallationId: number | null;
+    } | null = null;
 
     try {
       organization = await database.organization.upsert({
@@ -193,7 +196,13 @@ export async function syncGitHubOrganizations(
 
     // Check if GitHub App is already installed on this account
     // and auto-link if not already linked
-    if (!organization.githubInstallationId) {
+    if (organization.githubInstallationId) {
+      // Already has installation, just sync repos to ensure they're up to date
+      await syncRepositories(
+        organization.id,
+        organization.githubInstallationId
+      );
+    } else {
       const installation = await checkGitHubAppInstallation(
         org.login,
         org.type
@@ -213,9 +222,6 @@ export async function syncGitHubOrganizations(
         // Sync repositories from the installation
         await syncRepositories(organization.id, installation.id);
       }
-    } else {
-      // Already has installation, just sync repos to ensure they're up to date
-      await syncRepositories(organization.id, organization.githubInstallationId);
     }
 
     syncedOrganizations.push({

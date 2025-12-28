@@ -1,9 +1,10 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { env } from "@/lib/env";
 import { lintRepoWorkflow } from "./lint-repo";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Requires multiple conditional paths
 export const GET = async (request: NextRequest) => {
   const authHeader = request.headers.get("authorization");
 

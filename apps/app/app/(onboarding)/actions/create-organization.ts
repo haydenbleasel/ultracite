@@ -1,6 +1,6 @@
 "use server";
 
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { getCurrentUser, getOrCreateDbUser } from "@/lib/auth";
 
 interface CreateOrganizationInput {
@@ -12,6 +12,8 @@ interface CreateOrganizationResult {
   error?: string;
   slug?: string;
 }
+
+const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export async function createOrganization({
   name,
@@ -29,7 +31,6 @@ export async function createOrganization({
   }
 
   // Validate slug format
-  const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
   if (!slugRegex.test(slug)) {
     return {
       error: "Slug must contain only lowercase letters, numbers, and hyphens.",

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { database } from "@repo/backend";
+import { database, type LintRun } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { env } from "@/lib/env";
@@ -186,10 +186,8 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  // Atomic deduplication using SERIALIZABLE isolation to prevent race conditions
-  // between concurrent webhook calls for the same PR. SERIALIZABLE ensures that
-  // if two transactions try to read-then-write, one will be rolled back.
-  let lintRun;
+  let lintRun: LintRun | null = null;
+
   try {
     lintRun = await database.$transaction(
       async (tx) => {

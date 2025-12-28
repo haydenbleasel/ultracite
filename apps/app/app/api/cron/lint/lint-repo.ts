@@ -172,7 +172,8 @@ export async function lintRepoWorkflow(
     // - SUCCESS_PR_CREATED: PR was created with fixes
     // - SUCCESS_NO_ISSUES: No lint issues were found
     // - FAILED: Claude Code found issues but couldn't fix them
-    let status: "SUCCESS_PR_CREATED" | "SUCCESS_NO_ISSUES" | "FAILED" = "SUCCESS_NO_ISSUES";
+    let status: "SUCCESS_PR_CREATED" | "SUCCESS_NO_ISSUES" | "FAILED" =
+      "SUCCESS_NO_ISSUES";
     if (result.prCreated) {
       status = "SUCCESS_PR_CREATED";
     } else if (result.error) {
@@ -197,7 +198,7 @@ export async function lintRepoWorkflow(
     await updateLintRun(lintRun.id, {
       status: "FAILED",
       completedAt: new Date(),
-      errorMessage: errorMessage,
+      errorMessage,
     });
   } finally {
     // Final step: Stop sandbox

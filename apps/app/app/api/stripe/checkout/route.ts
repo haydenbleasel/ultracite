@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { env } from "@/lib/env";

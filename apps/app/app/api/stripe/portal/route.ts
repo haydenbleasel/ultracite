@@ -1,6 +1,6 @@
-import { database } from "@repo/backend";
-import { type NextRequest, NextResponse } from "next/server";
+import { database } from "@repo/backend/database";
 import { redirect } from "next/navigation";
+import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 

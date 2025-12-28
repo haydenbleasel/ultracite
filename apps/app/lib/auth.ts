@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { createClient } from "@/lib/supabase/server";
 
 export async function getCurrentUser() {

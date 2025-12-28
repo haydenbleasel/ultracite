@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import {
   SidebarInset,
   SidebarProvider,

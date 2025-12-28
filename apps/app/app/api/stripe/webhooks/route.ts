@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { env } from "@/lib/env";

@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { ExternalLinkIcon } from "lucide-react";

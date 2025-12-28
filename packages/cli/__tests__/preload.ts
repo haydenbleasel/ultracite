@@ -40,9 +40,7 @@ mock.module("@repo/data/providers", () => ({
       name: "Biome",
       subtitle: "The modern all-in-one toolchain",
       description: "Fast formatter and linter written in Rust",
-      configFiles: [
-        { name: "biome.jsonc", lang: "json", code: () => "{}" },
-      ],
+      configFiles: [{ name: "biome.jsonc", lang: "json", code: () => "{}" }],
       vscodeExtensionId: "biomejs.biome",
       logo: mockSvg,
     },

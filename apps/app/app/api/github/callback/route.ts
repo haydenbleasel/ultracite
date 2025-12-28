@@ -1,4 +1,4 @@
-import { database } from "@repo/backend";
+import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
