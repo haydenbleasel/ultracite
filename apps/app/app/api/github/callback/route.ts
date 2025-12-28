@@ -45,7 +45,7 @@ export const GET = async (request: NextRequest) => {
     // Find the organization that matches the GitHub account login
     const organization = await database.organization.findFirst({
       where: {
-        githubAccountLogin: accountLogin,
+        githubOrgLogin: accountLogin,
         members: {
           some: {
             userId: user.id,
