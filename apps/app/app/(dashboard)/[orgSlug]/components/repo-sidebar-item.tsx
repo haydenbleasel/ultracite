@@ -4,7 +4,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
-import { IconGitFork } from "@tabler/icons-react";
+import { GitForkIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -26,7 +26,7 @@ export const RepoSidebarItem = ({
         isActive={pathname === `/${orgSlug}/${repoSlug}`}
       >
         <Link href={`/${orgSlug}/${repoSlug}`}>
-          <IconGitFork className="size-4" />
+          <GitForkIcon className="size-4" />
           <span className="flex-1 truncate">{repoSlug}</span>
         </Link>
       </SidebarMenuButton>
