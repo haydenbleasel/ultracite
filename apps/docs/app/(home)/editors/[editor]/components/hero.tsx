@@ -1,4 +1,4 @@
-import type { Editor } from "@ultracite/data/editors";
+import type { Editor } from "@repo/data/editors";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 import { Installer } from "@/app/(home)/components/installer";

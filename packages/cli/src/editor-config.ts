@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
-import { editors } from "@ultracite/data/editors";
-import type { Linter } from "@ultracite/data/providers";
+import { editors } from "@repo/data/editors";
+import type { Linter } from "@repo/data/providers";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { ensureDirectory, exists } from "./utils";

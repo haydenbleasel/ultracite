@@ -1,12 +1,12 @@
+import Prettier from "@repo/data/logos/prettier.svg";
+import Stylelint from "@repo/data/logos/stylelint.svg";
+import { providers } from "@repo/data/providers";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
-import Prettier from "@ultracite/data/logos/prettier.svg";
-import Stylelint from "@ultracite/data/logos/stylelint.svg";
-import { providers } from "@ultracite/data/providers";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";

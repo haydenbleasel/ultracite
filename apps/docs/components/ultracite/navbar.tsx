@@ -1,9 +1,9 @@
 "use client";
 
+import { agents } from "@repo/data/agents";
+import { editors } from "@repo/data/editors";
+import { providers } from "@repo/data/providers";
 import { IconMenu2 } from "@tabler/icons-react";
-import { agents } from "@ultracite/data/agents";
-import { editors } from "@ultracite/data/editors";
-import { providers } from "@ultracite/data/providers";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

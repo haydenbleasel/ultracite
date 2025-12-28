@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { agents } from "@ultracite/data/agents";
-import type { options } from "@ultracite/data/options";
-import { getRules } from "@ultracite/data/rules";
+import { agents } from "@repo/data/agents";
+import type { options } from "@repo/data/options";
+import { getRules } from "@repo/data/rules";
 import { dlxCommand, type PackageManagerName } from "nypm";
 import { ensureDirectory, exists } from "./utils";
 

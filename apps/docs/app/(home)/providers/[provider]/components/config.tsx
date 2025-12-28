@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/design-system/components/ui/tabs";
-import type { ConfigFile, Provider } from "@ultracite/data/providers";
+import type { ConfigFile, Provider } from "@repo/data/providers";
 import type { BundledLanguage } from "shiki";
 import { CodeBlock } from "@/components/ultracite/code-block/server";
 

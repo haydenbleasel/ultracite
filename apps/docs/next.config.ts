@@ -5,7 +5,7 @@ import { withWorkflow } from "workflow/next";
 const withMdx = createMDX();
 
 const config: NextConfig = {
-  transpilePackages: ["@ultracite/data"],
+  transpilePackages: ["@repo/data"],
 
   experimental: {
     turbopackFileSystemCacheForDev: true,

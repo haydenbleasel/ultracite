@@ -23,6 +23,7 @@
         "@polar-sh/nextjs": "^0.9.3",
         "@polar-sh/sdk": "^0.42.1",
         "@radix-ui/react-use-controllable-state": "^1.2.2",
+        "@repo/data": "workspace:*",
         "@repo/design-system": "workspace:*",
         "@shikijs/core": "^3.20.0",
         "@shikijs/langs": "^3.20.0",
@@ -34,7 +35,6 @@
         "@t3-oss/env-nextjs": "^0.13.10",
         "@tabler/icons-react": "^3.36.0",
         "@ultracite/backend": "workspace:*",
-        "@ultracite/data": "workspace:*",
         "@vercel/analytics": "^1.6.1",
         "@vercel/sandbox": "^1.1.1",
         "@workflow/swc-plugin": "^4.0.1-beta.12",
@@ -129,8 +129,8 @@
       },
       "dependencies": {
         "@clack/prompts": "^0.11.0",
+        "@repo/data": "workspace:*",
         "@trpc/server": "^11.8.1",
-        "@ultracite/data": "workspace:*",
         "deepmerge": "^4.3.1",
         "glob": "^13.0.0",
         "jsonc-parser": "^3.3.1",
@@ -182,7 +182,7 @@
       },
     },
     "packages/data": {
-      "name": "@ultracite/data",
+      "name": "@repo/data",
       "version": "1.0.0",
       "dependencies": {
         "deepmerge": "^4.3.1",
@@ -969,6 +969,8 @@
 
     "@redis/time-series": ["@redis/time-series@1.1.0", "", { "peerDependencies": { "@redis/client": "^1.0.0" } }, "sha512-c1Q99M5ljsIuc4YdaCwfUEXsofakb9c8+Zse2qxTadu8TalLXuAESzLvFAvNVbkmSlvlzIQOLpBCmWI9wTOt+g=="],
 
+    "@repo/data": ["@repo/data@workspace:packages/data"],
+
     "@repo/design-system": ["@repo/design-system@workspace:packages/design-system"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
@@ -1376,8 +1378,6 @@
     "@typescript-eslint/visitor-keys": ["@typescript-eslint/visitor-keys@8.50.1", "", { "dependencies": { "@typescript-eslint/types": "8.50.1", "eslint-visitor-keys": "^4.2.1" } }, "sha512-IrDKrw7pCRUR94zeuCSUWQ+w8JEf5ZX5jl/e6AHGSLi1/zIr0lgutfn/7JpfCey+urpgQEdrZVYzCaVVKiTwhQ=="],
 
     "@ultracite/backend": ["@ultracite/backend@workspace:packages/backend"],
-
-    "@ultracite/data": ["@ultracite/data@workspace:packages/data"],
 
     "@ungap/structured-clone": ["@ungap/structured-clone@1.3.0", "", {}, "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g=="],
 

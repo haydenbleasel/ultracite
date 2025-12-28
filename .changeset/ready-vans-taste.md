@@ -1,5 +1,5 @@
 ---
-"@ultracite/data": major
+"@repo/data": major
 "ultracite": major
 ---
 

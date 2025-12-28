@@ -8,10 +8,10 @@ import {
   select,
   spinner,
 } from "@clack/prompts";
-import { agents as agentsData } from "@ultracite/data/agents";
-import { editors } from "@ultracite/data/editors";
-import type { options } from "@ultracite/data/options";
-import { providers } from "@ultracite/data/providers";
+import { agents as agentsData } from "@repo/data/agents";
+import { editors } from "@repo/data/editors";
+import type { options } from "@repo/data/options";
+import { providers } from "@repo/data/providers";
 import {
   addDevDependency,
   detectPackageManager,

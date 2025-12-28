@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { options } from "@ultracite/data/options";
+import { options } from "@repo/data/options";
 import { type PackageManagerName, packageManagers } from "nypm";
 import { createCli, type TrpcCliMeta } from "trpc-cli";
 import z from "zod";

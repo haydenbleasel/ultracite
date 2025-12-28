@@ -1,5 +1,5 @@
 import { SiJson } from "@icons-pack/react-simple-icons";
-import type { Editor } from "@ultracite/data/editors";
+import type { Editor } from "@repo/data/editors";
 import { CodeBlock } from "@/components/ultracite/code-block/server";
 
 interface ConfigProps {

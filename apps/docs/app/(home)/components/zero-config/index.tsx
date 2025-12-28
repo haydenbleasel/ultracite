@@ -7,7 +7,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/design-system/components/ui/tabs";
-import type { ConfigFile } from "@ultracite/data/providers";
+import type { ConfigFile } from "@repo/data/providers";
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { CodeBlock } from "@/components/ultracite/code-block/client";

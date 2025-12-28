@@ -1,4 +1,4 @@
-import { editors } from "@ultracite/data/editors";
+import { editors } from "@repo/data/editors";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Footer } from "../../components/footer";

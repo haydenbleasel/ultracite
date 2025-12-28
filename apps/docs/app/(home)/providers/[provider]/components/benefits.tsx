@@ -1,4 +1,4 @@
-import type { Provider } from "@ultracite/data/providers";
+import type { Provider } from "@repo/data/providers";
 import {
   ArrowUpDown,
   Box,

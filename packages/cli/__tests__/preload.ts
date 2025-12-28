@@ -2,7 +2,7 @@ import { mock } from "bun:test";
 
 // Mock the data package modules that contain SVG imports requiring react
 // These mocks must be set up before any imports that use these modules
-mock.module("@ultracite/data/providers", () => ({
+mock.module("@repo/data/providers", () => ({
   providers: [
     {
       id: "biome",
@@ -25,7 +25,7 @@ mock.module("@ultracite/data/providers", () => ({
   ],
 }));
 
-mock.module("@ultracite/data/agents", () => ({
+mock.module("@repo/data/agents", () => ({
   agents: [
     {
       id: "claude",
@@ -40,7 +40,7 @@ mock.module("@ultracite/data/agents", () => ({
   ],
 }));
 
-mock.module("@ultracite/data/editors", () => ({
+mock.module("@repo/data/editors", () => ({
   editors: [
     {
       id: "vscode",

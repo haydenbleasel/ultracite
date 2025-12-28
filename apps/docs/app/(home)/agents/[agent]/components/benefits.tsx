@@ -1,4 +1,4 @@
-import type { Agent } from "@ultracite/data/agents";
+import type { Agent } from "@repo/data/agents";
 import type { LucideIcon } from "lucide-react";
 import {
   CheckCircleIcon,

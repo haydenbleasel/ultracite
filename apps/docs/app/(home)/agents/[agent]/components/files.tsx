@@ -1,5 +1,5 @@
-import type { Agent } from "@ultracite/data/agents";
-import { getRules } from "@ultracite/data/rules";
+import type { Agent } from "@repo/data/agents";
+import { getRules } from "@repo/data/rules";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
 
 interface FilesProps {

@@ -1,4 +1,4 @@
-import { agents } from "@ultracite/data/agents";
+import { agents } from "@repo/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Footer } from "../../components/footer";

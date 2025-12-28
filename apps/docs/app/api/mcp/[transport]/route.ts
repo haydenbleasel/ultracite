@@ -1,4 +1,4 @@
-import { getRules } from "@ultracite/data/rules";
+import { getRules } from "@repo/data/rules";
 import { track } from "@vercel/analytics/server";
 import { createMcpHandler } from "mcp-handler";
 

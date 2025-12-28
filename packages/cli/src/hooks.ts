@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { editors } from "@ultracite/data/editors";
-import type { options } from "@ultracite/data/options";
+import { editors } from "@repo/data/editors";
+import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { dlxCommand, type PackageManagerName } from "nypm";
 import { ensureDirectory, exists } from "./utils";

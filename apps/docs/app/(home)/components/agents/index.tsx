@@ -1,9 +1,9 @@
+import { type Agent, agents } from "@repo/data/agents";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
-import { type Agent, agents } from "@ultracite/data/agents";
 import { DynamicLink } from "fumadocs-core/dynamic-link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";

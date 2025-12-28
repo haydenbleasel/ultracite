@@ -1,4 +1,4 @@
-import type { Provider } from "@ultracite/data/providers";
+import type { Provider } from "@repo/data/providers";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
 import { Installer } from "@/app/(home)/components/installer";

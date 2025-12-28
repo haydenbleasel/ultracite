@@ -1,4 +1,4 @@
-import { providers } from "@ultracite/data/providers";
+import { providers } from "@repo/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Footer } from "../../components/footer";

@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { options } from "@ultracite/data/options";
+import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { exists } from "../utils";

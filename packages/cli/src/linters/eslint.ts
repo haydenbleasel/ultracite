@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import type { options } from "@ultracite/data/options";
+import type { options } from "@repo/data/options";
 import { exists } from "../utils";
 
 // All possible ESLint flat config file locations

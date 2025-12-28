@@ -1,3 +1,6 @@
+import Prettier from "@repo/data/logos/prettier.svg";
+import Stylelint from "@repo/data/logos/stylelint.svg";
+import { providers as providersData } from "@repo/data/providers";
 import {
   Select,
   SelectContent,
@@ -5,9 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/design-system/components/ui/select";
-import Prettier from "@ultracite/data/logos/prettier.svg";
-import Stylelint from "@ultracite/data/logos/stylelint.svg";
-import { providers as providersData } from "@ultracite/data/providers";
 import Image from "next/image";
 
 const eslintProvider = providersData.find((p) => p.id === "eslint");

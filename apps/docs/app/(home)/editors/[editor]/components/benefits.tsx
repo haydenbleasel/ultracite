@@ -1,4 +1,4 @@
-import type { Editor } from "@ultracite/data/editors";
+import type { Editor } from "@repo/data/editors";
 import type { LucideIcon } from "lucide-react";
 import {
   ClipboardPasteIcon,
