@@ -2,6 +2,7 @@
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
+import { providers } from "@repo/data/providers";
 import {
   Tabs,
   TabsContent,
@@ -12,7 +13,7 @@ import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/c
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 import { FrameworkSelector, frameworks } from "./framework-selector";
-import { ProviderSelector, providers } from "./provider-selector";
+import { ProviderSelector } from "./provider-selector";
 
 const getIcon = (lang: ConfigFile["lang"]) =>
   lang === "json" ? SiJson : SiJavascript;

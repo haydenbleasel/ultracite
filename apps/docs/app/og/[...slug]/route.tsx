@@ -6,7 +6,7 @@ import { source } from "@/lib/source";
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<"/docs/og/[...slug]">
+  { params }: RouteContext<"/og/[...slug]">
 ) => {
   const { slug } = await params;
   const page = source.getPage(slug.slice(0, -1));
@@ -16,10 +16,10 @@ export const GET = async (
   }
 
   const geistBold = await readFile(
-    join(process.cwd(), "app/docs/og/[...slug]/Geist-Bold.ttf")
+    join(process.cwd(), "app/og/[...slug]/Geist-Bold.ttf")
   );
   const geistRegular = await readFile(
-    join(process.cwd(), "app/docs/og/[...slug]/Geist-Regular.ttf")
+    join(process.cwd(), "app/og/[...slug]/Geist-Regular.ttf")
   );
 
   return new ImageResponse(
@@ -27,9 +27,9 @@ export const GET = async (
       style={{
         backgroundSize: "80px 80px",
         backgroundImage:
-          "linear-gradient(to right, #FF781A 1px, transparent 1px), linear-gradient(to bottom, #FF781A 1px, transparent 1px)",
+          "linear-gradient(to right, #5B52F3 1px, transparent 1px), linear-gradient(to bottom, #5B52F3 1px, transparent 1px)",
       }}
-      tw="flex flex-col justify-between items-start w-full h-full bg-[#ff6900] p-12 text-white"
+      tw="flex flex-col justify-between items-start w-full h-full bg-[#4F46E5] p-12 text-white"
     >
       <svg
         fill="none"
