@@ -1,4 +1,4 @@
-import { database, type LintRun } from "@repo/backend";
+import { database, type LintRun } from "@repo/backend/database";
 
 export async function createLintRun(
   organizationId: string,

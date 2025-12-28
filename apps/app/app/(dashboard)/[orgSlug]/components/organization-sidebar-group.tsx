@@ -1,4 +1,4 @@
-import type { Organization, Repo } from "@repo/backend/src";
+import type { Organization, Repo } from "@repo/backend/database";
 import {
   SidebarGroup,
   SidebarGroupContent,
