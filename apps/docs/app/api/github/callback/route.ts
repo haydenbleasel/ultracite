@@ -1,10 +1,17 @@
-import { auth } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
 import { database } from "@/lib/database";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
+import { createClient } from "@/lib/supabase/server";
 
 export const GET = async (request: NextRequest) => {
-  const { orgId } = await auth();
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getClaims();
+  if (error || !data?.claims) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  const orgId = "";
 
   if (!orgId) {
     return NextResponse.redirect(new URL("/login", request.url));

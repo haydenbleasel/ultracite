@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { IconExternalLink } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -6,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { RepoTable } from "@/app/(platform)/dashboard/components/repo-table";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { database } from "@/lib/database";
+import { createClient } from "@/lib/supabase/server";
 
 interface RepoPageProps {
   params: Promise<{
@@ -29,7 +29,12 @@ export const generateMetadata = async ({
 };
 
 const RepoPage = async ({ params }: RepoPageProps) => {
-  const { orgId } = await auth();
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getClaims();
+  if (error || !data?.claims) {
+    redirect("/login");
+  }
+  const orgId = "";
   const { id } = await params;
 
   if (!orgId) {

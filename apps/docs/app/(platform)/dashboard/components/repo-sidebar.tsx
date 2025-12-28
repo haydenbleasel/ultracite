@@ -1,6 +1,5 @@
 "use client";
 
-import { OrganizationSwitcher } from "@clerk/nextjs";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { IconGitFork } from "@tabler/icons-react";
 import Link from "next/link";
@@ -32,7 +31,7 @@ export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
   return (
     <Sidebar className="top-(--fd-banner-height) h-[calc(100svh-var(--fd-banner-height))]">
       <SidebarHeader>
-        <OrganizationSwitcher
+        {/* <OrganizationSwitcher
           afterSelectOrganizationUrl="/dashboard"
           afterSelectPersonalUrl="/dashboard"
           appearance={{
@@ -41,7 +40,7 @@ export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
               organizationSwitcherTrigger: "w-full justify-between px-2 py-1.5",
             },
           }}
-        />
+        /> */}
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

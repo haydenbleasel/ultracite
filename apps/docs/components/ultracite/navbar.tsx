@@ -1,6 +1,6 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+// import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { IconMenu2 } from "@tabler/icons-react";
 import { agents } from "@ultracite/data/agents";
 import { editors } from "@ultracite/data/editors";
@@ -11,7 +11,6 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/app/(home)/components/logo";
 import { cn } from "@/lib/utils";
-import { CurrentUserAvatar } from "../supabase-ui/current-user-avatar";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -186,7 +185,7 @@ export const Navbar = () => {
             </Button>
           ))}
         </div>
-        <SignedOut>
+        {/* <SignedOut>
           <SignInButton>
             <Button asChild className="hidden lg:inline-flex">
               <Link href="/login">Sign in</Link>
@@ -198,7 +197,7 @@ export const Navbar = () => {
             <Link href="/dashboard">Dashboard</Link>
           </Button>
           <CurrentUserAvatar />
-        </SignedIn>
+        </SignedIn> */}
 
         <Sheet onOpenChange={setOpen} open={open}>
           <SheetTrigger asChild className="lg:hidden">

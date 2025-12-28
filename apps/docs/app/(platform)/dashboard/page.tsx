@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { database } from "@/lib/database";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -9,7 +9,13 @@ export const metadata: Metadata = {
 };
 
 const DashboardPage = async () => {
-  const { orgId } = await auth();
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getClaims();
+  if (error || !data?.claims) {
+    redirect("/login");
+  }
+  const orgId = "";
 
   if (!orgId) {
     redirect("/login");
