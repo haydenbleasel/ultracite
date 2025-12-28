@@ -21,7 +21,7 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
   }
 
   return (
-    <div className="flex-1 overflow-hidden p-4">
+    <div className="flex-1 overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
