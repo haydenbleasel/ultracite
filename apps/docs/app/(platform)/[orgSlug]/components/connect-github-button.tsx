@@ -1,6 +1,6 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Button } from "@repo/design-system/components/ui/button";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 interface ConnectGitHubButtonProps {
   hasInstallation: boolean;

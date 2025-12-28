@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { createOrganization } from '../actions/create-organization';
+import { Button } from "@repo/design-system/components/ui/button";
+import { Input } from "@repo/design-system/components/ui/input";
+import { Label } from "@repo/design-system/components/ui/label";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createOrganization } from "../actions/create-organization";
 
 export const CreateOrganizationForm = () => {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const generateSlug = (value: string) => {
     return value
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,34 +45,34 @@ export const CreateOrganizationForm = () => {
 
       router.push(`/${result.slug}`);
     } catch {
-      setError('An unexpected error occurred. Please try again.');
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <Label htmlFor="name">Organization name</Label>
         <Input
-          id="name"
-          placeholder="Acme Inc."
-          value={name}
-          onChange={handleNameChange}
-          required
           disabled={isLoading}
+          id="name"
+          onChange={handleNameChange}
+          placeholder="Acme Inc."
+          required
+          value={name}
         />
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="slug">URL slug</Label>
         <Input
-          id="slug"
-          placeholder="acme-inc"
-          value={slug}
-          onChange={(e) => setSlug(generateSlug(e.target.value))}
-          required
           disabled={isLoading}
+          id="slug"
+          onChange={(e) => setSlug(generateSlug(e.target.value))}
+          placeholder="acme-inc"
+          required
+          value={slug}
         />
         <p className="text-muted-foreground text-xs">
           This will be used in URLs. Only lowercase letters, numbers, and
@@ -80,8 +80,8 @@ export const CreateOrganizationForm = () => {
         </p>
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}
-      <Button type="submit" disabled={isLoading || !name || !slug}>
-        {isLoading ? 'Creating...' : 'Create organization'}
+      <Button disabled={isLoading || !name || !slug} type="submit">
+        {isLoading ? "Creating..." : "Create organization"}
       </Button>
     </form>
   );

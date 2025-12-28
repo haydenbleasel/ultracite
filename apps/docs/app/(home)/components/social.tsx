@@ -1,5 +1,5 @@
+import { Button } from "@repo/design-system/components/ui/button";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Tweets } from "./tweets";
 
 export const Social = () => (

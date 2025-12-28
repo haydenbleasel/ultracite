@@ -1,6 +1,4 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { notFound, redirect } from "next/navigation";
-import type { ReactNode } from "react";
 import {
   Empty,
   EmptyContent,
@@ -8,8 +6,13 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+} from "@repo/design-system/components/ui/empty";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@repo/design-system/components/ui/sidebar";
+import { notFound, redirect } from "next/navigation";
+import type { ReactNode } from "react";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { database } from "@/lib/database";
 import { ConnectGitHubButton } from "./components/connect-github-button";

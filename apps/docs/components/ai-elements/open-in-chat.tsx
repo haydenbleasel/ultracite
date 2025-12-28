@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,14 +8,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from "@repo/design-system/components/ui/dropdown-menu";
 import {
   ChevronDownIcon,
   ExternalLinkIcon,
   MessageCircleIcon,
 } from "lucide-react";
 import { type ComponentProps, createContext, useContext } from "react";
+import { cn } from "@/lib/utils";
 
 const providers = {
   github: {

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -6,8 +5,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@repo/design-system/components/ui/table";
 import type { LintRun } from "@ultracite/backend/database";
+import Link from "next/link";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoTableProps {

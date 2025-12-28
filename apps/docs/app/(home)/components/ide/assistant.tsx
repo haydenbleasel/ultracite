@@ -1,5 +1,5 @@
+import { Textarea } from "@repo/design-system/components/ui/textarea";
 import { WrenchIcon } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
 
 export const Assistant = () => (
   <div className="relative isolate flex h-full flex-col items-start gap-4 overflow-hidden p-4 text-muted-foreground text-xs">

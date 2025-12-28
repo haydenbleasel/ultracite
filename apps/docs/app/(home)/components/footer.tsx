@@ -1,7 +1,7 @@
 "use client";
 
+import { ThemeSwitcher } from "@repo/design-system/components/kibo-ui/theme-switcher";
 import { useTheme } from "next-themes";
-import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import { Installer } from "./installer";
 
 export const Footer = () => {

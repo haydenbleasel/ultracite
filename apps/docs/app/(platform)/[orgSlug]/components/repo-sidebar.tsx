@@ -1,9 +1,6 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { IconGitFork } from "@tabler/icons-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +12,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@repo/design-system/components/ui/sidebar";
+import { IconGitFork } from "@tabler/icons-react";
 import type { LintRun, Repo } from "@ultracite/backend/database";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoSidebarProps {

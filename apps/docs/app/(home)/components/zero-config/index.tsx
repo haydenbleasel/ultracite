@@ -1,10 +1,15 @@
 "use client";
 
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/design-system/components/ui/tabs";
 import type { ConfigFile } from "@ultracite/data/providers";
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
 import { FrameworkSelector, frameworks } from "./framework-selector";
 import { ProviderSelector, providers } from "./provider-selector";

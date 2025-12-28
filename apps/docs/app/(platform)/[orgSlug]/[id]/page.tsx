@@ -1,9 +1,9 @@
+import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { IconExternalLink } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { RepoTable } from "@/app/(platform)/[orgSlug]/components/repo-table";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { database } from "@/lib/database";
 

@@ -1,6 +1,6 @@
+import { Badge } from "@repo/design-system/components/ui/badge";
 import { Check, Smile } from "lucide-react";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { Logo } from "../logo";
 import Background from "./background.jpg";
 

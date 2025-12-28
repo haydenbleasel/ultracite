@@ -1,7 +1,7 @@
 "use client";
 
+import { Skeleton } from "@repo/design-system/components/ui/skeleton";
 import dynamic from "next/dynamic";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Player = dynamic(
   () => import("react-player").then((mod) => mod.default),

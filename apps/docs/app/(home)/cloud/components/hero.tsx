@@ -1,8 +1,8 @@
+import { Badge } from "@repo/design-system/components/ui/badge";
+import { Button } from "@repo/design-system/components/ui/button";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Background from "../../components/cloud/background.jpg";
 import { Logo } from "../../components/logo";
 

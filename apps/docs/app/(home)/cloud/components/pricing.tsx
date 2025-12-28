@@ -1,12 +1,12 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/design-system/components/ui/card";
+import Link from "next/link";
 
 const pricingItems = [
   {

@@ -1,6 +1,7 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Button } from "@repo/design-system/components/ui/button";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
 import {
   OpenIn,
@@ -15,7 +16,6 @@ import {
   OpenInTrigger,
   OpenInv0,
 } from "@/components/ai-elements/open-in-chat";
-import { Button } from "@/components/ui/button";
 
 interface ViewOptionsProps {
   markdownUrl: string;

@@ -1,15 +1,15 @@
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
 import Prettier from "@ultracite/data/logos/prettier.svg";
 import Stylelint from "@ultracite/data/logos/stylelint.svg";
 import { providers } from "@ultracite/data/providers";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Installer } from "../installer";
 
 interface HeroProps {

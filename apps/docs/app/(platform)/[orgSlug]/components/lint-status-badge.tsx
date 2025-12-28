@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@repo/design-system/components/ui/badge";
 import type { LintRunStatus } from "@ultracite/backend/database";
 
 interface LintStatusBadgeProps {

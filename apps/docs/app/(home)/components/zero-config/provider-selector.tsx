@@ -1,14 +1,14 @@
-import Prettier from "@ultracite/data/logos/prettier.svg";
-import Stylelint from "@ultracite/data/logos/stylelint.svg";
-import { providers as providersData } from "@ultracite/data/providers";
-import Image from "next/image";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@repo/design-system/components/ui/select";
+import Prettier from "@ultracite/data/logos/prettier.svg";
+import Stylelint from "@ultracite/data/logos/stylelint.svg";
+import { providers as providersData } from "@ultracite/data/providers";
+import Image from "next/image";
 
 const eslintProvider = providersData.find((p) => p.id === "eslint");
 const biomeProvider = providersData.find((p) => p.id === "biome");
