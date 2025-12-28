@@ -14,7 +14,8 @@
     "dev": "npx supabase start",
     "stop": "npx supabase stop",
     "generate": "prisma generate --no-hints",
-    "migrate": "prisma format && prisma generate && prisma db push"
+    "migrate": "prisma format && prisma generate && prisma db push",
+    "gen-types": "supabase gen types typescript --local > database.types.ts"
   },
   "dependencies": {
     "@prisma/adapter-neon": "^7.2.0",
