@@ -1,9 +1,9 @@
-import "server-only";
+import 'server-only';
 
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { env } from "@/lib/env";
-import { PrismaClient } from "./generated/client";
+import { createDatabase } from '@ultracite/backend/database';
+import { env } from '@/lib/env';
 
-const adapter = new PrismaNeon({ connectionString: env.DATABASE_URL });
+export const database = createDatabase(env.DATABASE_URL);
 
-export const database = new PrismaClient({ adapter });
+// Re-export types from backend
+export type * from '@ultracite/backend/database';

@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import type { LintRunStatus } from "@/lib/database/generated/client";
+import type { LintRunStatus } from "@ultracite/backend/database";
 
 interface LintStatusBadgeProps {
   status: LintRunStatus | null;

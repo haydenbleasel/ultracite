@@ -16,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import type { LintRun, Repo } from "@/lib/database/generated/client";
+import type { LintRun, Repo } from "@ultracite/backend/database";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoSidebarProps {

@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { LintRun } from "@/lib/database/generated/client";
+import type { LintRun } from "@ultracite/backend/database";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoTableProps {
