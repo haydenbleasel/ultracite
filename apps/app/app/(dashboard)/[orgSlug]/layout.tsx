@@ -65,17 +65,15 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   const isSubscribed = Boolean(organization.stripeCustomerId);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <SidebarProvider className="min-h-auto flex-1">
-        <RepoSidebar />
-        <SidebarInset>
-          {!isSubscribed && (
-            <SubscriptionBanner organizationId={organization.id} />
-          )}
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
-    </div>
+    <SidebarProvider className="min-h-auto flex-1">
+      <RepoSidebar />
+      <SidebarInset>
+        {!isSubscribed && (
+          <SubscriptionBanner organizationId={organization.id} />
+        )}
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 
