@@ -1,4 +1,4 @@
-import { Decimal } from "@repo/backend/src/database/generated/client/runtime/client";
+import { Prisma } from "@repo/backend/database";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
@@ -49,7 +49,7 @@ export async function reviewPRWorkflow(
     stripeCustomerId,
   } = params;
 
-  let cost = new Decimal(sandboxCostUsd);
+  let cost = new Prisma.Decimal(sandboxCostUsd);
 
   // Check if we have push access before doing any work
   const pushAccess = await checkPushAccess(
@@ -134,7 +134,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Use Claude Code to fix remaining issues iteratively
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      const aiCost = new Decimal(claudeCodeResult.costUsd);
+      const aiCost = new Prisma.Decimal(claudeCodeResult.costUsd);
       cost = cost.plus(aiCost);
 
       // Update lint run with AI cost

@@ -1,4 +1,4 @@
-import { Decimal } from "@repo/backend/src/database/generated/client/runtime/client";
+import { Prisma } from "@repo/backend/database";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
@@ -71,7 +71,7 @@ export async function lintRepoWorkflow(
   const sandboxId = await createSandbox(repoFullName, token);
 
   let result: LintStepResult;
-  let cost = new Decimal(lintRun.sandboxCostUsd);
+  let cost = new Prisma.Decimal(lintRun.sandboxCostUsd);
 
   try {
     // Install dependencies
@@ -116,7 +116,7 @@ export async function lintRepoWorkflow(
       // Single fix mode: only fix one issue per cron run
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      const aiCost = new Decimal(claudeCodeResult.costUsd);
+      const aiCost = new Prisma.Decimal(claudeCodeResult.costUsd);
       cost = cost.plus(aiCost);
 
       // Update lint run with AI cost

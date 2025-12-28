@@ -8,7 +8,13 @@ const config: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
 
-  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
+  serverExternalPackages: [
+    "shiki",
+    "@shikijs/engine-oniguruma",
+    "@prisma/client",
+    "@prisma/adapter-pg",
+    "@repo/backend",
+  ],
 
   images: {
     formats: ["image/avif", "image/webp"],
