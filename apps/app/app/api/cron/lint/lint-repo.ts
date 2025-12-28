@@ -1,4 +1,4 @@
-import { Prisma } from "@repo/backend/database";
+import { Prisma } from "@/lib/prisma";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";

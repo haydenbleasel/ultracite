@@ -1,4 +1,4 @@
-import { Prisma } from "@repo/backend/database";
+import { Prisma } from "@/lib/prisma";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
