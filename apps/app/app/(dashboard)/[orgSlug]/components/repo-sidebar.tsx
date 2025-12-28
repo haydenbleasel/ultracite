@@ -34,7 +34,7 @@ export const RepoSidebar = async () => {
   });
 
   return (
-    <Sidebar className="top-(--navbar-height) h-[calc(100svh-var(--navbar-height))]">
+    <Sidebar className="sticky top-(--navbar-height) h-[calc(100svh-var(--navbar-height))]">
       <SidebarContent>
         {organizations.map((org) => (
           <OrganizationSidebarGroup key={org.id} organization={org} />
