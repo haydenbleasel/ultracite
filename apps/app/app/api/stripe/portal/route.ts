@@ -43,10 +43,18 @@ export const GET = async (request: NextRequest) => {
 
   const origin = request.headers.get("origin") ?? request.nextUrl.origin;
 
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: organization.stripeCustomerId,
-    return_url: `${origin}/${organization.slug}`,
-  });
+  try {
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: organization.stripeCustomerId,
+      return_url: `${origin}/${organization.slug}`,
+    });
 
-  redirect(portalSession.url);
+    redirect(portalSession.url);
+  } catch (error) {
+    console.error("Stripe portal error:", error);
+    return NextResponse.json(
+      { error: "Failed to create billing portal session" },
+      { status: 500 }
+    );
+  }
 };

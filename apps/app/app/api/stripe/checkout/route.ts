@@ -41,51 +41,59 @@ export const POST = async (request: NextRequest) => {
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   const origin = `${protocol}://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
 
-  // If already subscribed, redirect to billing portal
-  if (organization.stripeCustomerId) {
-    const portalSession = await stripe.billingPortal.sessions.create({
-      customer: organization.stripeCustomerId,
-      return_url: origin,
-    });
+  try {
+    // If already subscribed, redirect to billing portal
+    if (organization.stripeCustomerId) {
+      const portalSession = await stripe.billingPortal.sessions.create({
+        customer: organization.stripeCustomerId,
+        return_url: origin,
+      });
 
-    return NextResponse.json({ url: portalSession.url });
-  }
+      return NextResponse.json({ url: portalSession.url });
+    }
 
-  // Create a new Stripe customer
-  const customer = await stripe.customers.create({
-    email: user.email ?? undefined,
-    name: organization.name,
-    metadata: {
-      organizationId: organization.id,
-    },
-  });
-
-  // Create checkout session
-  const session = await stripe.checkout.sessions.create({
-    customer: customer.id,
-    mode: "subscription",
-    line_items: [
-      {
-        price: env.STRIPE_PRICE_ID,
-      },
-    ],
-    success_url: new URL(
-      `${organization.slug}?checkout=success`,
-      origin
-    ).toString(),
-    cancel_url: new URL(
-      `${organization.slug}?checkout=cancel`,
-      origin
-    ).toString(),
-    metadata: {
-      organizationId: organization.id,
-    },
-    subscription_data: {
+    // Create a new Stripe customer
+    const customer = await stripe.customers.create({
+      email: user.email ?? undefined,
+      name: organization.name,
       metadata: {
         organizationId: organization.id,
       },
-    },
-  });
+    });
 
-  return NextResponse.json({ url: session.url });
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create({
+      customer: customer.id,
+      mode: "subscription",
+      line_items: [
+        {
+          price: env.STRIPE_PRICE_ID,
+        },
+      ],
+      success_url: new URL(
+        `${organization.slug}?checkout=success`,
+        origin
+      ).toString(),
+      cancel_url: new URL(
+        `${organization.slug}?checkout=cancel`,
+        origin
+      ).toString(),
+      metadata: {
+        organizationId: organization.id,
+      },
+      subscription_data: {
+        metadata: {
+          organizationId: organization.id,
+        },
+      },
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    console.error("Stripe checkout error:", error);
+    return NextResponse.json(
+      { error: "Failed to create checkout session" },
+      { status: 500 }
+    );
+  }
 };

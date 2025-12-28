@@ -24,6 +24,7 @@ export const GET = async (request: NextRequest) => {
   });
 
   const workflowsStarted: string[] = [];
+  const workflowsFailed: { repo: string; error: string }[] = [];
 
   for (const org of organizations) {
     if (!(org.githubInstallationId && org.stripeCustomerId)) {
@@ -31,20 +32,50 @@ export const GET = async (request: NextRequest) => {
     }
 
     for (const repo of org.repos) {
-      // Start a durable workflow for each repo
-      await start(lintRepoWorkflow, [
-        {
-          organizationId: org.id,
-          repoId: repo.id,
-          repoFullName: repo.fullName,
-          defaultBranch: repo.defaultBranch,
-          installationId: org.githubInstallationId,
-          stripeCustomerId: org.stripeCustomerId,
-        },
-      ]);
+      try {
+        // Start a durable workflow for each repo
+        await start(lintRepoWorkflow, [
+          {
+            organizationId: org.id,
+            repoId: repo.id,
+            repoFullName: repo.fullName,
+            defaultBranch: repo.defaultBranch,
+            installationId: org.githubInstallationId,
+            stripeCustomerId: org.stripeCustomerId,
+          },
+        ]);
 
-      workflowsStarted.push(repo.fullName);
+        workflowsStarted.push(repo.fullName);
+      } catch (error) {
+        console.error(`Failed to start workflow for ${repo.fullName}:`, error);
+        workflowsFailed.push({
+          repo: repo.fullName,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
     }
+  }
+
+  // Return appropriate status based on results
+  if (workflowsFailed.length > 0 && workflowsStarted.length === 0) {
+    return NextResponse.json(
+      {
+        message: "All workflows failed to start",
+        failed: workflowsFailed,
+      },
+      { status: 500 }
+    );
+  }
+
+  if (workflowsFailed.length > 0) {
+    return NextResponse.json(
+      {
+        message: `Started ${workflowsStarted.length} workflows, ${workflowsFailed.length} failed`,
+        repos: workflowsStarted,
+        failed: workflowsFailed,
+      },
+      { status: 207 } // Multi-Status for partial success
+    );
   }
 
   return NextResponse.json({

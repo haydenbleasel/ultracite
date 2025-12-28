@@ -186,32 +186,41 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  // Deduplication: Check if there's already a running review for this PR
-  const existingRun = await database.lintRun.findFirst({
-    where: {
-      repoId: repo.id,
-      prNumber: pull_request.number,
-      status: {
-        in: ["PENDING", "RUNNING"],
+  // Atomic deduplication using a transaction to prevent race conditions
+  // between concurrent webhook calls for the same PR
+  const lintRun = await database.$transaction(async (tx) => {
+    // Check if there's already a running review for this PR
+    const existingRun = await tx.lintRun.findFirst({
+      where: {
+        repoId: repo.id,
+        prNumber: pull_request.number,
+        status: {
+          in: ["PENDING", "RUNNING"],
+        },
       },
-    },
+    });
+
+    if (existingRun) {
+      // Skip - there's already a review in progress for this PR
+      return null;
+    }
+
+    // Create a lint run record within the same transaction
+    return tx.lintRun.create({
+      data: {
+        organizationId: repo.organizationId,
+        repoId: repo.id,
+        prNumber: pull_request.number,
+        status: "RUNNING",
+        startedAt: new Date(),
+      },
+    });
   });
 
-  if (existingRun) {
-    // Skip - there's already a review in progress for this PR
+  if (!lintRun) {
+    // A review is already in progress for this PR
     return;
   }
-
-  // Create a lint run record to track this review and prevent duplicates
-  const lintRun = await database.lintRun.create({
-    data: {
-      organizationId: repo.organizationId,
-      repoId: repo.id,
-      prNumber: pull_request.number,
-      status: "RUNNING",
-      startedAt: new Date(),
-    },
-  });
 
   // Run the review workflow
   const params: ReviewPRParams = {
