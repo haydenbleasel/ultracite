@@ -83,7 +83,8 @@ async function checkGitHubAppInstallation(
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Requires multiple conditional paths
 export async function syncGitHubOrganizations(
   providerToken: string,
-  userId: string
+  userId: string,
+  userEmail: string
 ): Promise<{ synced: number; organizations: { id: string; slug: string }[] }> {
   const octokit = new Octokit({ auth: providerToken });
 
@@ -119,8 +120,8 @@ export async function syncGitHubOrganizations(
   // Ensure user exists in database
   await database.user.upsert({
     where: { id: userId },
-    create: { id: userId, email: "" },
-    update: {},
+    create: { id: userId, email: userEmail },
+    update: { email: userEmail },
   });
 
   for (const org of allOrgs) {

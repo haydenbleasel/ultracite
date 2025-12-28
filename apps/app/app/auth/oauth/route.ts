@@ -30,12 +30,14 @@ export async function GET(request: Request) {
   // Sync GitHub organizations using the provider token
   const providerToken = data.session?.provider_token;
   const userId = data.session?.user?.id;
+  const userEmail = data.session?.user?.email ?? "";
 
   if (providerToken && userId) {
     try {
       const { organizations } = await syncGitHubOrganizations(
         providerToken,
-        userId
+        userId,
+        userEmail
       );
 
       // Redirect to first organization if available
