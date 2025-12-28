@@ -13,7 +13,6 @@ import {
   SidebarProvider,
 } from "@repo/design-system/components/ui/sidebar";
 import { notFound, redirect } from "next/navigation";
-import type { ReactNode } from "react";
 import {
   getCurrentUser,
   getOrganizationBySlug,
@@ -22,14 +21,7 @@ import {
 import { ConnectGitHubButton } from "./components/connect-github-button";
 import { RepoSidebar } from "./components/repo-sidebar";
 
-interface OrgLayoutProps {
-  children: ReactNode;
-  params: Promise<{
-    orgSlug: string;
-  }>;
-}
-
-const OrgLayout = async ({ children, params }: OrgLayoutProps) => {
+const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   const user = await getCurrentUser();
 
   if (!user) {

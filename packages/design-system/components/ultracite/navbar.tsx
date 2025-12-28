@@ -1,7 +1,7 @@
 "use client";
 
 import { agents } from "@repo/data/agents";
-import { appUrl, docsUrl } from "@repo/data/consts";
+import { appUrl, docsUrl, webUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import { Button } from "@repo/design-system/components/ui/button";
@@ -30,7 +30,7 @@ import { Logo } from "./logo";
 
 const links = [
   {
-    href: "/cloud",
+    href: `${webUrl}/cloud`,
     label: "Cloud",
     className: "text-primary",
     isActive: (path: string) => path.startsWith("/cloud"),
@@ -47,7 +47,7 @@ const links = [
     },
   },
   {
-    href: "/social",
+    href: `${webUrl}/social`,
     label: "Social",
     isActive: (path: string) => path.startsWith("/social"),
   },
@@ -84,7 +84,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`/providers/${provider.id}`}
+                          href={`${webUrl}/providers/${provider.id}`}
                         >
                           <Image
                             alt={provider.name}
@@ -121,7 +121,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`/editors/${editor.id}`}
+                          href={`${webUrl}/editors/${editor.id}`}
                         >
                           <Image
                             alt={editor.name}
@@ -161,7 +161,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`/agents/${agent.id}`}
+                          href={`${webUrl}/agents/${agent.id}`}
                         >
                           <Image
                             alt={agent.name}
@@ -212,7 +212,7 @@ export const Navbar = () => {
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-6 p-6">
+            <nav className="flex flex-col gap-6 p-4">
               <div className="flex flex-col gap-2">
                 {links.map((link) => (
                   <Link
@@ -237,7 +237,7 @@ export const Navbar = () => {
                 {providers.map((provider) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`/providers/${provider.id}`}
+                    href={`${webUrl}/providers/${provider.id}`}
                     key={provider.id}
                     onClick={() => setOpen(false)}
                   >
@@ -260,7 +260,7 @@ export const Navbar = () => {
                 {editors.map((editor) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`/editors/${editor.id}`}
+                    href={`${webUrl}/editors/${editor.id}`}
                     key={editor.id}
                     onClick={() => setOpen(false)}
                   >
@@ -283,7 +283,7 @@ export const Navbar = () => {
                 {agents.map((agent) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`/agents/${agent.id}`}
+                    href={`${webUrl}/agents/${agent.id}`}
                     key={agent.id}
                     onClick={() => setOpen(false)}
                   >
