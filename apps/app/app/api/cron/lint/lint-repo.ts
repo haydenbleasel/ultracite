@@ -167,6 +167,14 @@ export async function lintRepoWorkflow(
       cost: cost.toNumber(),
       stripeCustomerId,
     });
+
+    await updateLintRun(lintRun.id, {
+      status: result.prCreated ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
+      completedAt: new Date(),
+      prNumber: result.prNumber,
+      prUrl: result.prUrl,
+      errorMessage: result.error,
+    });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
@@ -174,13 +182,16 @@ export async function lintRepoWorkflow(
       prCreated: false,
       error: errorMessage,
     };
+
+    await updateLintRun(lintRun.id, {
+      status: "FAILED",
+      completedAt: new Date(),
+      errorMessage: errorMessage,
+    });
   } finally {
     // Final step: Stop sandbox
     await stopSandbox(sandboxId);
   }
-
-  // Final step: Update lint run with results
-  await updateLintRun(lintRun.id, result);
 
   return {
     repo: repoFullName,
