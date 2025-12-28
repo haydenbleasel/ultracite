@@ -16,7 +16,6 @@ import {
 import { IconBuilding, IconGitFork } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LintStatusBadge } from "./lint-status-badge";
 
 type RepoWithLintRuns = Repo & {
   lintRuns: LintRun[];
@@ -28,13 +27,9 @@ type OrganizationWithRepos = Organization & {
 
 interface RepoSidebarProps {
   organizations: OrganizationWithRepos[];
-  currentOrgSlug: string;
 }
 
-export const RepoSidebar = ({
-  organizations,
-  currentOrgSlug,
-}: RepoSidebarProps) => {
+export const RepoSidebar = ({ organizations }: RepoSidebarProps) => {
   const pathname = usePathname();
 
   return (
@@ -44,14 +39,11 @@ export const RepoSidebar = ({
           <SidebarGroup key={org.id}>
             <SidebarGroupLabel className="gap-2">
               <IconBuilding className="size-4" />
-              <Link href={`/${org.slug}`} className="truncate hover:underline">
-                {org.name}
-              </Link>
+              <span className="truncate">{org.slug}</span>
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {org.repos.map((repo) => {
-                  const latestRun = repo.lintRuns[0];
                   const isActive = pathname === `/${org.slug}/${repo.name}`;
 
                   return (
@@ -60,9 +52,6 @@ export const RepoSidebar = ({
                         <Link href={`/${org.slug}/${repo.name}`}>
                           <IconGitFork className="size-4" />
                           <span className="flex-1 truncate">{repo.name}</span>
-                          {latestRun && (
-                            <LintStatusBadge status={latestRun.status} />
-                          )}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

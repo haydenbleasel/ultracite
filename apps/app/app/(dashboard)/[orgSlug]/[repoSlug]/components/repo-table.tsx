@@ -7,31 +7,29 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/design-system/components/ui/table";
+import { CheckIcon } from "lucide-react";
 import Link from "next/link";
 import { LintStatusBadge } from "./lint-status-badge";
+import { RepoEmptyState } from "./repo-empty-state";
 
 interface RepoTableProps {
   runs: LintRun[];
 }
 
 export const RepoTable = ({ runs }: RepoTableProps) => {
-  if (runs.length === 0) {
-    return (
-      <div className="flex h-full flex-1 items-center justify-center">
-        <p className="text-muted-foreground text-sm">No lint runs yet.</p>
-      </div>
-    );
+  if (!runs.length) {
+    return <RepoEmptyState />;
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-background shadow-xs">
+    <div className="flex-1 overflow-hidden p-4">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Status</TableHead>
-            <TableHead>Issues</TableHead>
+            <TableHead>Issues Found</TableHead>
             <TableHead>PR</TableHead>
-            <TableHead>Date</TableHead>
+            <TableHead>Timestamp</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,7 +39,7 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
                 <LintStatusBadge status={run.status} />
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {run.issuesFound ?? "-"}
+                {run.issuesFound ? <CheckIcon className="size-4" /> : "-"}
               </TableCell>
               <TableCell>
                 {run.prUrl ? (
@@ -58,7 +56,7 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
                 )}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {run.createdAt.toLocaleDateString()}
+                {run.createdAt.toLocaleString()}
               </TableCell>
             </TableRow>
           ))}

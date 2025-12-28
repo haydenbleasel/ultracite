@@ -5,7 +5,7 @@ import { ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
-import { RepoTable } from "../components/repo-table";
+import { RepoTable } from "./components/repo-table";
 
 export const generateMetadata = async ({
   params,
@@ -58,7 +58,7 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
         <SidebarTrigger />
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="font-semibold tracking-tight">{repo.fullName}</h1>
+            <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
           </div>
           <Button asChild size="icon" variant="ghost">
             <a
@@ -71,7 +71,7 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
           </Button>
         </div>
       </header>
-      <main className="flex-1 p-4">
+      <main>
         <RepoTable runs={repo.lintRuns} />
       </main>
     </div>

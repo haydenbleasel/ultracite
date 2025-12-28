@@ -1,13 +1,4 @@
-import { SiGithub } from "@icons-pack/react-simple-icons";
 import { database } from "@repo/backend";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@repo/design-system/components/ui/empty";
 import {
   SidebarInset,
   SidebarProvider,
@@ -18,7 +9,8 @@ import {
   getOrganizationBySlug,
   getUserOrganizations,
 } from "@/lib/auth";
-import { ConnectGitHubButton } from "./components/connect-github-button";
+import { InstallationEmptyState } from "./components/installation-empty-state";
+import { OrganizationEmptyState } from "./components/organization-empty-state";
 import { RepoSidebar } from "./components/repo-sidebar";
 
 const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
@@ -81,21 +73,7 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   if (!hasInstallation) {
     return (
       <div className="container relative mx-auto grid w-full gap-8 px-4 2xl:max-w-7xl">
-        <Empty className="py-8 sm:py-12 md:py-16">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <SiGithub className="size-6" />
-            </EmptyMedia>
-            <EmptyTitle>Connect GitHub</EmptyTitle>
-            <EmptyDescription>
-              Install the Ultracite GitHub App to start linting your
-              repositories automatically.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <ConnectGitHubButton hasInstallation={false} />
-          </EmptyContent>
-        </Empty>
+        <InstallationEmptyState />
       </div>
     );
   }
@@ -103,25 +81,14 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   if (organization.repos.length === 0) {
     return (
       <div className="container relative mx-auto grid w-full gap-8 px-4 2xl:max-w-7xl">
-        <Empty className="py-8 sm:py-12 md:py-16">
-          <EmptyHeader>
-            <EmptyTitle>No repositories</EmptyTitle>
-            <EmptyDescription>
-              No repositories found. Make sure you have granted access to at
-              least one repository.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <ConnectGitHubButton hasInstallation={hasInstallation} />
-          </EmptyContent>
-        </Empty>
+        <OrganizationEmptyState hasInstallation={hasInstallation} />
       </div>
     );
   }
 
   return (
     <SidebarProvider className="min-h-auto">
-      <RepoSidebar currentOrgSlug={orgSlug} organizations={allOrganizations} />
+      <RepoSidebar organizations={allOrganizations} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
