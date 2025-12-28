@@ -2,6 +2,7 @@ import "server-only";
 
 import { Octokit } from "octokit";
 import { database } from "@repo/backend";
+import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
   id: number;
@@ -12,8 +13,76 @@ interface GitHubOrg {
 }
 
 /**
+ * Sync repositories for an organization using its GitHub App installation.
+ */
+async function syncRepositories(orgId: string, installationId: number) {
+  const octokit = await getInstallationOctokit(installationId);
+
+  const { data } = await octokit.request("GET /installation/repositories", {
+    per_page: 100,
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+
+  for (const repo of data.repositories) {
+    await database.repo.upsert({
+      where: { githubRepoId: repo.id },
+      create: {
+        organizationId: orgId,
+        githubRepoId: repo.id,
+        name: repo.name,
+        fullName: repo.full_name,
+        defaultBranch: repo.default_branch ?? "main",
+      },
+      update: {
+        name: repo.name,
+        fullName: repo.full_name,
+        defaultBranch: repo.default_branch ?? "main",
+      },
+    });
+  }
+}
+
+/**
+ * Check if the GitHub App is installed on a user or organization account.
+ * Returns the installation details if found, null otherwise.
+ */
+async function checkGitHubAppInstallation(
+  login: string,
+  type: "Organization" | "User"
+): Promise<{ id: number; createdAt: string } | null> {
+  try {
+    const app = getGitHubApp();
+    const endpoint =
+      type === "Organization"
+        ? "GET /orgs/{org}/installation"
+        : "GET /users/{username}/installation";
+
+    const params =
+      type === "Organization" ? { org: login } : { username: login };
+
+    const { data: installation } = await app.octokit.request(endpoint, {
+      ...params,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
+
+    return {
+      id: installation.id,
+      createdAt: installation.created_at,
+    };
+  } catch {
+    // Installation not found (404) or other error
+    return null;
+  }
+}
+
+/**
  * Sync GitHub organizations (and personal account) for a user.
  * Creates Organization records if they don't exist and adds user as member.
+ * Also auto-links existing GitHub App installations and syncs repos.
  */
 export async function syncGitHubOrganizations(
   providerToken: string,
@@ -116,6 +185,33 @@ export async function syncGitHubOrganizations(
           role,
         },
       });
+    }
+
+    // Check if GitHub App is already installed on this account
+    // and auto-link if not already linked
+    if (!organization.githubInstallationId) {
+      const installation = await checkGitHubAppInstallation(
+        org.login,
+        org.type
+      );
+
+      if (installation) {
+        // Link the installation to this organization
+        await database.organization.update({
+          where: { id: organization.id },
+          data: {
+            githubInstallationId: installation.id,
+            githubAccountLogin: org.login,
+            installedAt: new Date(installation.createdAt),
+          },
+        });
+
+        // Sync repositories from the installation
+        await syncRepositories(organization.id, installation.id);
+      }
+    } else {
+      // Already has installation, just sync repos to ensure they're up to date
+      await syncRepositories(organization.id, organization.githubInstallationId);
     }
 
     syncedOrganizations.push({
