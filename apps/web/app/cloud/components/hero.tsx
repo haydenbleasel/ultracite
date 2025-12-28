@@ -4,7 +4,7 @@ import { Logo } from "@repo/design-system/components/ultracite/logo";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import Background from "@/components/cloud/background.jpg";
+import Background from "@/app/(home)/components/cloud/background.jpg";
 
 const GitHubComment = () => (
   <div className="dark font-sans text-foreground text-sm">
