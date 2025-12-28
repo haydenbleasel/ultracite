@@ -12,7 +12,7 @@ const DashboardPage = async () => {
   const { orgId } = await auth();
 
   if (!orgId) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   const firstRepo = await database.repo.findFirst({

@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/empty";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { database } from "@/lib/database";
+import { createClient } from "@/lib/supabase/server";
 import { ConnectGitHubButton } from "./components/connect-github-button";
 import { RepoSidebar } from "./components/repo-sidebar";
 
@@ -20,15 +20,14 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
-  const { userId, orgId } = await auth();
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getClaims();
 
-  if (!userId) {
-    redirect("/sign-in");
+  if (error || !data?.claims) {
+    redirect("/login");
   }
 
-  if (!orgId) {
-    redirect("/sign-in");
-  }
+  const orgId = "";
 
   const organization = await database.organization.upsert({
     where: { id: orgId },

@@ -1,6 +1,6 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { IconMenu2 } from "@tabler/icons-react";
 import { agents } from "@ultracite/data/agents";
 import { editors } from "@ultracite/data/editors";
@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/app/(home)/components/logo";
 import { cn } from "@/lib/utils";
+import { CurrentUserAvatar } from "../supabase-ui/current-user-avatar";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -188,7 +189,7 @@ export const Navbar = () => {
         <SignedOut>
           <SignInButton>
             <Button asChild className="hidden lg:inline-flex">
-              <Link href="/sign-in">Sign in</Link>
+              <Link href="/login">Sign in</Link>
             </Button>
           </SignInButton>
         </SignedOut>
@@ -196,7 +197,7 @@ export const Navbar = () => {
           <Button asChild className="hidden lg:inline-flex">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
-          <UserButton />
+          <CurrentUserAvatar />
         </SignedIn>
 
         <Sheet onOpenChange={setOpen} open={open}>
@@ -303,7 +304,7 @@ export const Navbar = () => {
               <div className="mt-auto flex flex-col gap-2 border-t pt-4">
                 <SignedOut>
                   <Button asChild className="w-full">
-                    <Link href="/sign-in" onClick={() => setOpen(false)}>
+                    <Link href="/login" onClick={() => setOpen(false)}>
                       Sign in
                     </Link>
                   </Button>

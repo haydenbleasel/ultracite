@@ -11,7 +11,7 @@ const PlatformLayout = async ({ children }: PlatformLayoutProps) => {
 
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   return children;

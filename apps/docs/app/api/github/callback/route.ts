@@ -7,7 +7,7 @@ export const GET = async (request: NextRequest) => {
   const { orgId } = await auth();
 
   if (!orgId) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   const searchParams = request.nextUrl.searchParams;

@@ -33,7 +33,7 @@ const RepoPage = async ({ params }: RepoPageProps) => {
   const { id } = await params;
 
   if (!orgId) {
-    redirect("/sign-in");
+    redirect("/login");
   }
 
   const repo = await database.repo.findUnique({
