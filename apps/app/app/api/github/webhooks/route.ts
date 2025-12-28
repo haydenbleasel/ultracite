@@ -186,36 +186,54 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  // Atomic deduplication using a transaction to prevent race conditions
-  // between concurrent webhook calls for the same PR
-  const lintRun = await database.$transaction(async (tx) => {
-    // Check if there's already a running review for this PR
-    const existingRun = await tx.lintRun.findFirst({
-      where: {
-        repoId: repo.id,
-        prNumber: pull_request.number,
-        status: {
-          in: ["PENDING", "RUNNING"],
-        },
-      },
-    });
+  // Atomic deduplication using SERIALIZABLE isolation to prevent race conditions
+  // between concurrent webhook calls for the same PR. SERIALIZABLE ensures that
+  // if two transactions try to read-then-write, one will be rolled back.
+  let lintRun;
+  try {
+    lintRun = await database.$transaction(
+      async (tx) => {
+        // Check if there's already a running review for this PR
+        const existingRun = await tx.lintRun.findFirst({
+          where: {
+            repoId: repo.id,
+            prNumber: pull_request.number,
+            status: {
+              in: ["PENDING", "RUNNING"],
+            },
+          },
+        });
 
-    if (existingRun) {
-      // Skip - there's already a review in progress for this PR
-      return null;
+        if (existingRun) {
+          // Skip - there's already a review in progress for this PR
+          return null;
+        }
+
+        // Create a lint run record within the same transaction
+        return tx.lintRun.create({
+          data: {
+            organizationId: repo.organizationId,
+            repoId: repo.id,
+            prNumber: pull_request.number,
+            status: "RUNNING",
+            startedAt: new Date(),
+          },
+        });
+      },
+      {
+        isolationLevel: "Serializable",
+      }
+    );
+  } catch (error) {
+    // Serialization failure means another transaction won the race - that's fine
+    if (
+      error instanceof Error &&
+      error.message.includes("could not serialize access")
+    ) {
+      return;
     }
-
-    // Create a lint run record within the same transaction
-    return tx.lintRun.create({
-      data: {
-        organizationId: repo.organizationId,
-        repoId: repo.id,
-        prNumber: pull_request.number,
-        status: "RUNNING",
-        startedAt: new Date(),
-      },
-    });
-  });
+    throw error;
+  }
 
   if (!lintRun) {
     // A review is already in progress for this PR

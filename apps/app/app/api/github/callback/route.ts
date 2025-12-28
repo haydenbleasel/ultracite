@@ -95,17 +95,21 @@ export const GET = async (request: NextRequest) => {
   return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
 };
 
+/**
+ * Sync repositories for an organization using its GitHub App installation.
+ * Handles pagination to support organizations with more than 100 repositories.
+ */
 const syncRepositories = async (orgId: string, installationId: number) => {
   const octokit = await getInstallationOctokit(installationId);
 
-  const { data } = await octokit.request("GET /installation/repositories", {
-    per_page: 100,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+  // Use pagination to fetch all repositories
+  const repositories = await octokit.paginate(
+    octokit.rest.apps.listReposAccessibleToInstallation,
+    { per_page: 100 },
+    (response) => response.data
+  );
 
-  for (const repo of data.repositories) {
+  for (const repo of repositories) {
     await database.repo.upsert({
       where: { githubRepoId: repo.id },
       create: {

@@ -14,18 +14,19 @@ interface GitHubOrg {
 
 /**
  * Sync repositories for an organization using its GitHub App installation.
+ * Handles pagination to support organizations with more than 100 repositories.
  */
 async function syncRepositories(orgId: string, installationId: number) {
   const octokit = await getInstallationOctokit(installationId);
 
-  const { data } = await octokit.request("GET /installation/repositories", {
-    per_page: 100,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+  // Use pagination to fetch all repositories
+  const repositories = await octokit.paginate(
+    octokit.rest.apps.listReposAccessibleToInstallation,
+    { per_page: 100 },
+    (response) => response.data
+  );
 
-  for (const repo of data.repositories) {
+  for (const repo of repositories) {
     await database.repo.upsert({
       where: { githubRepoId: repo.id },
       create: {
@@ -93,8 +94,10 @@ export async function syncGitHubOrganizations(
   // Fetch the authenticated user's info (for personal account)
   const { data: user } = await octokit.rest.users.getAuthenticated();
 
-  // Fetch organizations the user belongs to
-  const { data: orgs } = await octokit.rest.orgs.listForAuthenticatedUser();
+  // Fetch all organizations the user belongs to (with pagination)
+  const orgs = await octokit.paginate(octokit.rest.orgs.listForAuthenticatedUser, {
+    per_page: 100,
+  });
 
   // Combine personal account and organizations
   const allOrgs: GitHubOrg[] = [
