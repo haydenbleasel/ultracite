@@ -30,9 +30,6 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string(),
     STRIPE_PRICE_ID: z.string(),
     STRIPE_METER_EVENT_NAME: z.string(),
-
-    // Vercel
-    VERCEL_OIDC_TOKEN: z.string(),
   },
   client: {
     // Supabase
@@ -58,7 +55,6 @@ export const env = createEnv({
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
