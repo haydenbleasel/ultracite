@@ -9,6 +9,7 @@ if (!process.env.POSTGRES_PRISMA_URL) {
 
 const url = new URL(process.env.POSTGRES_PRISMA_URL);
 
+// Patch issue: https://github.com/prisma/prisma/issues/19209#issuecomment-1575711892
 url.searchParams.set("sslmode", "no-verify");
 
 const adapter = new PrismaPg({
