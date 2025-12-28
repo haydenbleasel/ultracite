@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Installer } from "./installer";
 
-type HeroProps = {
+interface HeroProps {
   children: ReactNode;
-};
+}
 
 export const Hero = ({ children }: HeroProps) => (
   <div className="grid gap-8 pt-8 sm:gap-20 sm:pt-20">

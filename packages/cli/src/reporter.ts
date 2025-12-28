@@ -1,7 +1,7 @@
 import pc from "picocolors";
 import packageJson from "../package.json" with { type: "json" };
 
-type BiomeDiagnostic = {
+interface BiomeDiagnostic {
   category: string;
   severity: "error" | "warning" | "info";
   description: string;
@@ -18,9 +18,9 @@ type BiomeDiagnostic = {
     sourceCode: string;
   };
   tags: string[];
-};
+}
 
-type BiomeSummary = {
+interface BiomeSummary {
   changed: number;
   unchanged: number;
   matches: number;
@@ -32,13 +32,13 @@ type BiomeSummary = {
   skipped: number;
   suggestedFixesSkipped: number;
   diagnosticsNotPrinted: number;
-};
+}
 
-type BiomeOutput = {
+interface BiomeOutput {
   summary: BiomeSummary;
   diagnostics: BiomeDiagnostic[];
   command: string;
-};
+}
 
 // Custom orange using 256-color ANSI code (color 208)
 const orange = (text: string) => `\x1b[38;5;208m${text}\x1b[39m`;
@@ -154,8 +154,7 @@ const formatSummary = (
 
   // Show message about skipped unsafe fixes
   if (command === "fix" && summary.suggestedFixesSkipped > 0) {
-    const skippedWord =
-      summary.suggestedFixesSkipped !== 1 ? "fixes" : "fix";
+    const skippedWord = summary.suggestedFixesSkipped !== 1 ? "fixes" : "fix";
     lines.push(
       `${pc.yellow("!")} ${pc.dim("Skipped")} ${summary.suggestedFixesSkipped} ${pc.dim("unsafe")} ${skippedWord}${pc.dim(".")}`
     );

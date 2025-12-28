@@ -1,14 +1,14 @@
 import type { options } from "./options";
 
-export type EditorRuleConfig = {
+export interface EditorRuleConfig {
   path: string;
   header?: string;
   appendMode?: boolean;
-};
+}
 
-export type HookConfig = {
+export interface HookConfig {
   path: string;
-};
+}
 
 export const AGENTS: Record<(typeof options.agents)[number], EditorRuleConfig> =
   {

@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { formatBiomeOutput } from "../src/reporter";
 
+const UNSAFE_FIX_REGEX = /unsafe.*fix[^e]/;
+
 // Helper to create mock Biome JSON output
 const createMockBiomeOutput = (options: {
   errors?: number;
@@ -13,7 +15,11 @@ const createMockBiomeOutput = (options: {
     severity: "error" | "warning" | "info";
     description: string;
     message: Array<{ content: string; elements: string[] }>;
-    advices: { advices: Array<{ log?: [string, Array<{ content: string; elements: string[] }>] }> };
+    advices: {
+      advices: Array<{
+        log?: [string, Array<{ content: string; elements: string[] }>];
+      }>;
+    };
     location: {
       path: { file: string };
       span: [number, number] | null;
@@ -66,7 +72,7 @@ describe("formatBiomeOutput", () => {
 
     expect(result.output).toContain("Skipped");
     expect(result.output).toContain("1");
-    expect(result.output).toMatch(/unsafe.*fix[^e]/);
+    expect(result.output).toMatch(UNSAFE_FIX_REGEX);
   });
 
   test("does not show skipped message when suggestedFixesSkipped is 0", () => {
