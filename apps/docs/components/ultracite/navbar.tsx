@@ -1,6 +1,5 @@
 "use client";
 
-// import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { IconMenu2 } from "@tabler/icons-react";
 import { agents } from "@ultracite/data/agents";
 import { editors } from "@ultracite/data/editors";
@@ -11,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/app/(home)/components/logo";
 import { cn } from "@/lib/utils";
+import { CurrentUserAvatar } from "../supabase-ui/current-user-avatar";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -44,7 +44,10 @@ const links = [
   },
 ];
 
-export const Navbar = () => {
+interface NavbarProps {
+  authenticated: boolean;
+}
+export const Navbar = ({ authenticated }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isProviderPage = pathname.startsWith("/providers");
@@ -185,19 +188,18 @@ export const Navbar = () => {
             </Button>
           ))}
         </div>
-        {/* <SignedOut>
-          <SignInButton>
-            <Button asChild className="hidden lg:inline-flex">
-              <Link href="/login">Sign in</Link>
+        {authenticated ? (
+          <>
+            <Button asChild className="hidden lg:inline-flex" variant="ghost">
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
+            <CurrentUserAvatar />
+          </>
+        ) : (
           <Button asChild className="hidden lg:inline-flex">
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/auth/login">Sign in</Link>
           </Button>
-          <CurrentUserAvatar />
-        </SignedIn> */}
+        )}
 
         <Sheet onOpenChange={setOpen} open={open}>
           <SheetTrigger asChild className="lg:hidden">
@@ -301,20 +303,19 @@ export const Navbar = () => {
               </div>
 
               <div className="mt-auto flex flex-col gap-2 border-t pt-4">
-                <SignedOut>
-                  <Button asChild className="w-full">
-                    <Link href="/login" onClick={() => setOpen(false)}>
-                      Sign in
-                    </Link>
-                  </Button>
-                </SignedOut>
-                <SignedIn>
+                {authenticated ? (
                   <Button asChild className="w-full">
                     <Link href="/dashboard" onClick={() => setOpen(false)}>
                       Dashboard
                     </Link>
                   </Button>
-                </SignedIn>
+                ) : (
+                  <Button asChild className="w-full">
+                    <Link href="/auth/login" onClick={() => setOpen(false)}>
+                      Sign in
+                    </Link>
+                  </Button>
+                )}
               </div>
             </nav>
           </SheetContent>

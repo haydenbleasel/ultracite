@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
 import { database } from "@/lib/database";
-import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -9,21 +9,21 @@ export const metadata: Metadata = {
 };
 
 const DashboardPage = async () => {
-  const supabase = await createClient();
+  const user = await getCurrentUser();
 
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    redirect("/login");
+  if (!user) {
+    redirect("/auth/login");
   }
-  const orgId = "";
 
-  if (!orgId) {
-    redirect("/login");
+  const organization = await getActiveOrganization();
+
+  if (!organization) {
+    redirect("/onboarding");
   }
 
   const firstRepo = await database.repo.findFirst({
     where: {
-      organizationId: orgId,
+      organizationId: organization.id,
       enabled: true,
     },
     orderBy: { createdAt: "desc" },

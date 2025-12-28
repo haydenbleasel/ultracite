@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { Navbar } from "@/components/ultracite/navbar";
+import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
 interface LayoutProps {
@@ -26,7 +27,11 @@ const mono = Geist_Mono({
   weight: "variable",
 });
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = async ({ children }: LayoutProps) => {
+  const supabase = await createClient();
+
+  const { data } = await supabase.auth.getClaims();
+
   return (
     <html
       className={cn(
@@ -45,7 +50,7 @@ const Layout = ({ children }: LayoutProps) => {
               enableSystem: true,
             }}
           >
-            <Navbar />
+            <Navbar authenticated={Boolean(data?.claims)} />
             {children}
           </RootProvider>
           <Toaster />

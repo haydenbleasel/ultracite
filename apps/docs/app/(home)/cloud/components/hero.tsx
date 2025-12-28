@@ -76,7 +76,7 @@ export const Hero = () => (
       </p>
       <div className="flex flex-wrap gap-3">
         <Button asChild size="lg">
-          <Link href="/login">Get Started</Link>
+          <Link href="/auth/login">Get Started</Link>
         </Button>
         <Button asChild size="lg" variant="outline">
           <Link href="/docs/cloud">Read the Docs</Link>

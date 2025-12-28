@@ -8,19 +8,57 @@ datasource db {
   relationMode = "prisma"
 }
 
+model User {
+  id    String @id // Supabase auth user ID
+  email String @unique
+
+  memberships OrganizationMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Organization {
-  id String @id // Clerk org ID
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
 
   // GitHub App installation
   githubInstallationId Int?      @unique
   githubAccountLogin   String?
   installedAt          DateTime?
 
+  members  OrganizationMember[]
   repos    Repo[]
   lintRuns LintRun[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model OrganizationMember {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  role OrganizationRole @default(MEMBER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, organizationId])
+  @@index([userId])
+  @@index([organizationId])
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
 }
 
 model Repo {

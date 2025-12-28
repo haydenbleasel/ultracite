@@ -1,17 +1,16 @@
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/auth";
 
 interface PlatformLayoutProps {
   children: ReactNode;
 }
 
 const PlatformLayout = async ({ children }: PlatformLayoutProps) => {
-  const supabase = await createClient();
+  const user = await getCurrentUser();
 
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    redirect("/login");
+  if (!user) {
+    redirect("/auth/login");
   }
 
   return children;

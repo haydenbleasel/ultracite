@@ -10,8 +10,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
 import { database } from "@/lib/database";
-import { createClient } from "@/lib/supabase/server";
 import { ConnectGitHubButton } from "./components/connect-github-button";
 import { RepoSidebar } from "./components/repo-sidebar";
 
@@ -20,19 +20,20 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
+  const user = await getCurrentUser();
 
-  if (error || !data?.claims) {
-    redirect("/login");
+  if (!user) {
+    redirect("/auth/login");
   }
 
-  const orgId = "";
+  const activeOrg = await getActiveOrganization();
 
-  const organization = await database.organization.upsert({
-    where: { id: orgId },
-    create: { id: orgId },
-    update: {},
+  if (!activeOrg) {
+    redirect("/onboarding");
+  }
+
+  const organization = await database.organization.findUnique({
+    where: { id: activeOrg.id },
     include: {
       repos: {
         where: { enabled: true },
@@ -46,6 +47,10 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
       },
     },
   });
+
+  if (!organization) {
+    redirect("/onboarding");
+  }
 
   const hasInstallation = Boolean(organization.githubInstallationId);
 

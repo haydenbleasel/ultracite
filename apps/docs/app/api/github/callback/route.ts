@@ -1,21 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
 import { database } from "@/lib/database";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
-import { createClient } from "@/lib/supabase/server";
 
 export const GET = async (request: NextRequest) => {
-  const supabase = await createClient();
+  const user = await getCurrentUser();
 
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!user) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const orgId = "";
+  const organization = await getActiveOrganization();
 
-  if (!orgId) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!organization) {
+    return NextResponse.redirect(new URL("/onboarding", request.url));
   }
+
+  const orgId = organization.id;
 
   const searchParams = request.nextUrl.searchParams;
   const installationId = searchParams.get("installation_id");
@@ -43,15 +44,9 @@ export const GET = async (request: NextRequest) => {
         ? installation.account.login
         : (installation.account?.slug ?? null);
 
-    await database.organization.upsert({
+    await database.organization.update({
       where: { id: orgId },
-      create: {
-        id: orgId,
-        githubInstallationId: installationIdNum,
-        githubAccountLogin: accountLogin,
-        installedAt: new Date(installation.created_at),
-      },
-      update: {
+      data: {
         githubInstallationId: installationIdNum,
         githubAccountLogin: accountLogin,
         installedAt: new Date(installation.created_at),
