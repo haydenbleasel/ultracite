@@ -162,7 +162,7 @@ export async function lintRepoWorkflow(
       result = { prCreated: false };
     }
 
-    // Record workflow costs to billing system
+    // Record workflow costs to billing system (only on success)
     await recordBillingUsage({
       cost: cost.toNumber(),
       stripeCustomerId,

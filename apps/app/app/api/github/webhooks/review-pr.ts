@@ -134,7 +134,11 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Use Claude Code to fix remaining issues iteratively
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      cost = cost.plus(new Decimal(claudeCodeResult.costUsd));
+      const aiCost = new Decimal(claudeCodeResult.costUsd);
+      cost = cost.plus(aiCost);
+
+      // Update lint run with AI cost
+      await updateLintRun(lintRunId, { aiCostUsd: aiCost });
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {
@@ -154,7 +158,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
       }
     }
 
-    // Record Claude Code costs to billing system
+    // Record workflow costs to billing system (only on success)
     await recordBillingUsage({
       stripeCustomerId,
       cost: cost.toNumber(),
