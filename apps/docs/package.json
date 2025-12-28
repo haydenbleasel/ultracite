@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "predev": "prisma generate --no-hints",
-    "dev": "concurrently \"bun --bun supabase start\" \"bun --bun next dev\"",
+    "dev": "concurrently \"npx supabase start\" \"bun --bun next dev\"",
     "prebuild": "prisma generate --no-hints",
     "build": "bun --bun next build",
     "postinstall": "fumadocs-mdx",
