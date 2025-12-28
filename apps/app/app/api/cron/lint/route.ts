@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest) => {
   const workflowsStarted: string[] = [];
 
   for (const org of organizations) {
-    if (!org.githubInstallationId) {
+    if (!(org.githubInstallationId && org.stripeCustomerId)) {
       continue;
     }
 
