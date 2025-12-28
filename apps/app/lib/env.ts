@@ -8,7 +8,7 @@ export const env = createEnv({
     CRON_SECRET: z.string(),
 
     // Database
-    DATABASE_URL: z.string(),
+    POSTGRES_PRISMA_URL: z.string(),
 
     // GitHub App
     GITHUB_APP_ID: z.string(),
@@ -37,14 +37,14 @@ export const env = createEnv({
   client: {
     // Supabase
     NEXT_PUBLIC_SUPABASE_URL: z.string(),
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY: z.string(),
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string(),
 
     // GitHub App
     NEXT_PUBLIC_GITHUB_APP_SLUG: z.string(),
   },
   runtimeEnv: {
     CRON_SECRET: process.env.CRON_SECRET,
-    DATABASE_URL: process.env.DATABASE_URL,
+    POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
     GITHUB_APP_ID: process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
@@ -53,8 +53,8 @@ export const env = createEnv({
     GITHUB_REDIRECT_URI: process.env.GITHUB_REDIRECT_URI,
     NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
