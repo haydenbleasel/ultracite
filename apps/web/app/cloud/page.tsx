@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Climate from "./components/climate";
 import { Features } from "./components/features";
 import { Hero } from "./components/hero";
 import { Pricing } from "./components/pricing";
@@ -17,6 +18,7 @@ const CloudPage = () => (
     <Hero />
     <Features />
     <Pricing />
+    <Climate />
   </div>
 );
 
