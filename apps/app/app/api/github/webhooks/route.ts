@@ -166,6 +166,10 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
+  if (!repo.organization.stripeCustomerId) {
+    return;
+  }
+
   // Deduplication: Check if there's already a running review for this PR
   const existingRun = await database.lintRun.findFirst({
     where: {
@@ -201,6 +205,8 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     prBranch: pull_request.head.ref,
     baseBranch: pull_request.base.ref,
     lintRunId: lintRun.id,
+    sandboxCostUsd: lintRun.sandboxCostUsd.toNumber(),
+    stripeCustomerId: repo.organization.stripeCustomerId,
   };
 
   try {

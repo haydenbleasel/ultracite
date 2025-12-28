@@ -14,6 +14,7 @@ export const GET = async (request: NextRequest) => {
   const organizations = await database.organization.findMany({
     where: {
       githubInstallationId: { not: null },
+      stripeCustomerId: { not: null },
     },
     include: {
       repos: {
@@ -38,6 +39,7 @@ export const GET = async (request: NextRequest) => {
           repoFullName: repo.fullName,
           defaultBranch: repo.defaultBranch,
           installationId: org.githubInstallationId,
+          stripeCustomerId: org.stripeCustomerId,
         },
       ]);
 

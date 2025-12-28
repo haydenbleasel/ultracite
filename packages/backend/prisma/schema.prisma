@@ -32,6 +32,9 @@ model Organization {
   githubAccountLogin   String?
   installedAt          DateTime?
 
+  // Billing
+  stripeCustomerId String? @unique
+
   members  OrganizationMember[]
   repos    Repo[]
   lintRuns LintRun[]
@@ -98,11 +101,14 @@ model LintRun {
   startedAt   DateTime?
   completedAt DateTime?
 
-  issuesFound  Int?
   issueFixed   String?
   prNumber     Int?
   prUrl        String?
   errorMessage String?
+
+  // Billing
+  sandboxCostUsd Decimal  @default(0.025)
+  aiCostUsd      Decimal?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

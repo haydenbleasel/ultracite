@@ -4,6 +4,7 @@ export interface LintRepoParams {
   repoFullName: string;
   defaultBranch: string;
   installationId: number;
+  stripeCustomerId: string;
 }
 
 export interface LintRepoResult {
@@ -15,8 +16,6 @@ export interface LintRepoResult {
 
 export interface LintStepResult {
   prCreated: boolean;
-  issuesFound: number;
-  issueFixed?: string;
   prNumber?: number;
   prUrl?: string;
   error?: string;

@@ -1,10 +1,9 @@
-// import { polar } from "../polar";
+import { env } from "../env";
+import { stripe } from "../stripe";
 
 export interface RecordBillingUsageContext {
-  installationId: number;
-  costUsd: number;
-  type: string;
-  context: Record<string, unknown>;
+  cost: number;
+  stripeCustomerId: string;
 }
 
 export async function recordBillingUsage(
@@ -12,8 +11,22 @@ export async function recordBillingUsage(
 ): Promise<void> {
   "use step";
 
-  // TODO: Track usage
-  console.log("Tracking usage:", context);
+  const { cost, stripeCustomerId } = context;
 
-  return await Promise.resolve();
+  // Skip billing if there's no cost
+  if (cost <= 0) {
+    return;
+  }
+
+  // Report usage to Stripe meters
+  // Convert USD to cents for Stripe (meters typically use smallest currency unit)
+  const costCents = Math.round(cost * 100);
+
+  await stripe.billing.meterEvents.create({
+    event_name: env.STRIPE_METER_EVENT_NAME,
+    payload: {
+      stripe_customer_id: stripeCustomerId,
+      value: String(costCents),
+    },
+  });
 }

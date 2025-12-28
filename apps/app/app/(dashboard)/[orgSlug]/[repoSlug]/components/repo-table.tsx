@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/design-system/components/ui/table";
-import { CheckIcon } from "lucide-react";
 import Link from "next/link";
 import { LintStatusBadge } from "./lint-status-badge";
 import { RepoEmptyState } from "./repo-empty-state";
@@ -27,7 +26,6 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
         <TableHeader>
           <TableRow>
             <TableHead>Status</TableHead>
-            <TableHead>Issues Found</TableHead>
             <TableHead>PR</TableHead>
             <TableHead>Timestamp</TableHead>
           </TableRow>
@@ -37,9 +35,6 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
             <TableRow key={run.id}>
               <TableCell>
                 <LintStatusBadge status={run.status} />
-              </TableCell>
-              <TableCell className="text-muted-foreground">
-                {run.issuesFound ? <CheckIcon className="size-4" /> : "-"}
               </TableCell>
               <TableCell>
                 {run.prUrl ? (

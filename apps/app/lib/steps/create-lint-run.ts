@@ -1,9 +1,9 @@
-import { database } from "@repo/backend";
+import { database, type LintRun } from "@repo/backend";
 
 export async function createLintRun(
   organizationId: string,
   repoId: string
-): Promise<string> {
+): Promise<Pick<LintRun, "id" | "sandboxCostUsd">> {
   "use step";
 
   const lintRun = await database.lintRun.create({
@@ -13,7 +13,11 @@ export async function createLintRun(
       status: "RUNNING",
       startedAt: new Date(),
     },
+    select: {
+      id: true,
+      sandboxCostUsd: true,
+    },
   });
 
-  return lintRun.id;
+  return lintRun;
 }

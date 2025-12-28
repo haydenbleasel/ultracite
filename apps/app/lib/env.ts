@@ -25,8 +25,9 @@ export const env = createEnv({
     // Anthropic
     ANTHROPIC_API_KEY: z.string(),
 
-    // Polar
-    POLAR_ACCESS_TOKEN: z.string().optional(),
+    // Stripe
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_METER_EVENT_NAME: z.string(),
 
     // Vercel
     VERCEL_OIDC_TOKEN: z.string(),
@@ -56,6 +57,7 @@ export const env = createEnv({
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
-    POLAR_ACCESS_TOKEN: process.env.POLAR_ACCESS_TOKEN,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_METER_EVENT_NAME: process.env.STRIPE_METER_EVENT_NAME,
   },
 });

@@ -1,3 +1,4 @@
+import { Decimal } from "@repo/backend/src/database/generated/client/runtime/client";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
@@ -21,6 +22,8 @@ export interface ReviewPRParams {
   prBranch: string;
   baseBranch: string;
   lintRunId: string;
+  sandboxCostUsd: number;
+  stripeCustomerId: string;
 }
 
 export interface ReviewPRResult {
@@ -36,10 +39,19 @@ export async function reviewPRWorkflow(
 ): Promise<ReviewPRResult> {
   "use workflow";
 
-  const { installationId, repoFullName, prNumber, prBranch, lintRunId } =
-    params;
+  const {
+    installationId,
+    repoFullName,
+    prNumber,
+    prBranch,
+    lintRunId,
+    sandboxCostUsd,
+    stripeCustomerId,
+  } = params;
 
-  // Step 1: Check if we have push access before doing any work
+  let cost = new Decimal(sandboxCostUsd);
+
+  // Check if we have push access before doing any work
   const pushAccess = await checkPushAccess(
     installationId,
     repoFullName,
@@ -63,10 +75,10 @@ Please ensure the Ultracite app has write access to this repository and branch.
 
     // Update lint run status as failed
     await updateLintRun(lintRunId, {
-      prCreated: false,
-      issuesFound: 0,
+      status: "FAILED",
+      errorMessage: pushAccess.reason,
+      completedAt: new Date(),
       prNumber,
-      error: pushAccess.reason,
     });
 
     return {
@@ -80,25 +92,26 @@ Please ensure the Ultracite app has write access to this repository and branch.
   let madeChanges = false;
   const changelogs: string[] = [];
 
-  // Step 2: Get GitHub access token
+  // Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Step 3: Create sandbox with the repo (returns sandbox ID for serialization)
+  // Create sandbox with the repo (returns sandbox ID for serialization)
   const sandboxId = await createSandbox(repoFullName, token);
 
   try {
-    // Step 4: Checkout the PR branch
+    // Checkout the PR branch
     await checkoutBranch(sandboxId, prBranch);
 
-    // Step 5: Install dependencies
+    // Install dependencies
     await installDependencies(sandboxId);
 
-    // Step 6: Run ultracite fix (auto-fix what we can)
+    // Run ultracite fix (auto-fix what we can)
     const fixResult = await fixLint(sandboxId);
 
     if (fixResult.hasChanges) {
       // Generate changelog before committing
       const changelogResult = await generateChangelog(sandboxId);
+
       if (changelogResult.success) {
         changelogs.push(changelogResult.changelog);
       }
@@ -113,21 +126,15 @@ Please ensure the Ultracite app has write access to this repository and branch.
       madeChanges = true;
     }
 
-    // Step 7: Check if there are remaining issues (based on exit code from check)
+    // Check if there are remaining issues (based on exit code from check)
     if (fixResult.hasRemainingIssues) {
-      // Step 8: Install Claude Code CLI
+      // Install Claude Code CLI
       await installClaudeCode(sandboxId);
 
-      // Step 9: Use Claude Code to fix remaining issues iteratively
+      // Use Claude Code to fix remaining issues iteratively
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      // Step 10: Record Claude Code costs to billing system
-      await recordBillingUsage({
-        installationId,
-        costUsd: claudeCodeResult.costUsd,
-        type: "claude-code",
-        context: { repoFullName, prNumber },
-      });
+      cost = cost.plus(new Decimal(claudeCodeResult.costUsd));
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {
@@ -146,6 +153,12 @@ Please ensure the Ultracite app has write access to this repository and branch.
         madeChanges = true;
       }
     }
+
+    // Record Claude Code costs to billing system
+    await recordBillingUsage({
+      stripeCustomerId,
+      cost: cost.toNumber(),
+    });
 
     // Add a comment to the PR summarizing what was done
     const changelogSection =
@@ -171,8 +184,8 @@ No lint issues found in this PR.
 
     // Update lint run status
     await updateLintRun(lintRunId, {
-      prCreated: madeChanges,
-      issuesFound: 0,
+      status: madeChanges ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
+      completedAt: new Date(),
       prNumber,
     });
 
@@ -208,10 +221,10 @@ ${errorMessage}
 
     // Update lint run status as failed
     await updateLintRun(lintRunId, {
-      prCreated: false,
-      issuesFound: 0,
+      status: "FAILED",
+      completedAt: new Date(),
       prNumber,
-      error: errorMessage,
+      errorMessage,
     });
 
     return {
