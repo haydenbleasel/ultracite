@@ -42,23 +42,69 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    // Find the organization that matches the GitHub account login
-    const organization = await database.organization.findFirst({
+    // Ensure user exists in database
+    await database.user.upsert({
+      where: { id: user.id },
+      create: { id: user.id, email: user.email ?? "" },
+      update: {},
+    });
+
+    // Find or create the organization that matches the GitHub account login
+    let organization = await database.organization.findFirst({
       where: {
         githubOrgLogin: accountLogin,
-        members: {
-          some: {
-            userId: user.id,
-          },
-        },
       },
     });
 
     if (!organization) {
-      return NextResponse.redirect(
-        new URL("/onboarding?error=org-not-found", request.url)
-      );
+      // Organization doesn't exist yet - create it from the installation data
+      const accountId =
+        installation.account && "id" in installation.account
+          ? installation.account.id
+          : null;
+      const accountType =
+        installation.account && "type" in installation.account
+          ? (installation.account.type as "User" | "Organization")
+          : "Organization";
+
+      if (!accountId) {
+        return NextResponse.redirect(
+          new URL("/onboarding?error=no-account", request.url)
+        );
+      }
+
+      // Use upsert to handle race conditions with OAuth sync
+      organization = await database.organization.upsert({
+        where: { githubOrgId: accountId },
+        create: {
+          name: accountLogin,
+          slug: accountLogin.toLowerCase(),
+          githubOrgId: accountId,
+          githubOrgLogin: accountLogin,
+          githubOrgType: accountType,
+        },
+        update: {
+          githubOrgLogin: accountLogin,
+          githubOrgType: accountType,
+        },
+      });
     }
+
+    // Ensure user is a member of the organization
+    await database.organizationMember.upsert({
+      where: {
+        userId_organizationId: {
+          userId: user.id,
+          organizationId: organization.id,
+        },
+      },
+      create: {
+        userId: user.id,
+        organizationId: organization.id,
+        role: "MEMBER",
+      },
+      update: {},
+    });
 
     await database.organization.update({
       where: { id: organization.id },
