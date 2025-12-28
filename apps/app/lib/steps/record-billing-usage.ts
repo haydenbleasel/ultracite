@@ -19,8 +19,8 @@ export async function recordBillingUsage(
   }
 
   // Report usage to Stripe meters
-  // Convert USD to cents for Stripe (meters typically use smallest currency unit)
-  const costCents = Math.round(cost * 100);
+  // Convert USD to cents, rounding up to ensure we never undercharge
+  const costCents = Math.ceil(cost * 100);
 
   await stripe.billing.meterEvents.create({
     event_name: env.STRIPE_METER_EVENT_NAME,
