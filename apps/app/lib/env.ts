@@ -14,6 +14,9 @@ export const env = createEnv({
     GITHUB_APP_ID: z.string(),
     GITHUB_APP_PRIVATE_KEY: z.string(),
     GITHUB_APP_WEBHOOK_SECRET: z.string(),
+    GITHUB_CLIENT_ID: z.string(),
+    GITHUB_CLIENT_SECRET: z.string(),
+    GITHUB_REDIRECT_URI: z.string(),
 
     // Vercel Sandbox (optional - uses OIDC on Vercel)
     VERCEL_TEAM_ID: z.string().optional(),
@@ -42,6 +45,9 @@ export const env = createEnv({
     GITHUB_APP_ID: process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GITHUB_REDIRECT_URI: process.env.GITHUB_REDIRECT_URI,
     NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY:

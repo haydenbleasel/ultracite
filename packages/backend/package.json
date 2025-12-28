@@ -11,8 +11,8 @@
     "./supabase/client": "./src/supabase/client.ts"
   },
   "scripts": {
-    "dev": "npx supabase start",
-    "stop": "npx supabase stop",
+    "dev": "supabase start",
+    "stop": "supabase stop",
     "generate": "prisma generate --no-hints",
     "migrate": "prisma format && prisma generate && prisma db push",
     "gen-types": "supabase gen types typescript --local > database.types.ts"
