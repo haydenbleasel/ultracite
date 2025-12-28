@@ -3,15 +3,7 @@
 import { agents } from "@repo/data/agents";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
-import { IconMenu2 } from "@tabler/icons-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Logo } from "@/app/(home)/components/logo";
-import { cn } from "@/lib/utils";
-import { CurrentUserAvatar } from "../supabase-ui/current-user-avatar";
-import { Button } from "../ui/button";
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -19,14 +11,22 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "../ui/navigation-menu";
+} from "@repo/design-system/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../ui/sheet";
+} from "@repo/design-system/components/ui/sheet";
+import { IconMenu2 } from "@tabler/icons-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Logo } from "@/app/(home)/components/logo";
+import { CurrentUserAvatar } from "@/components/supabase-ui/current-user-avatar";
+import { cn } from "@/lib/utils";
 
 const links = [
   {

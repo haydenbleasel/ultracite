@@ -9,7 +9,6 @@ export const env = createEnv({
 
     // Database
     DATABASE_URL: z.string(),
-    DIRECT_URL: z.string(),
 
     // GitHub App
     GITHUB_APP_ID: z.string(),
@@ -24,7 +23,7 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: z.string(),
 
     // Polar
-    POLAR_ACCESS_TOKEN: z.string(),
+    POLAR_ACCESS_TOKEN: z.string().optional(),
 
     // Vercel
     VERCEL_OIDC_TOKEN: z.string(),
@@ -40,7 +39,6 @@ export const env = createEnv({
   runtimeEnv: {
     CRON_SECRET: process.env.CRON_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_URL: process.env.DIRECT_URL,
     GITHUB_APP_ID: process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
