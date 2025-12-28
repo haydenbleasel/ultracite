@@ -128,67 +128,68 @@ export async function syncGitHubOrganizations(
     // Generate a slug from the login (already lowercase with valid chars)
     const slug = org.login.toLowerCase();
 
-    // Check if organization already exists by GitHub ID
-    let organization = await database.organization.findUnique({
-      where: { githubOrgId: org.id },
-    });
+    // Use upsert to atomically find-or-create the organization by GitHub ID
+    // This prevents race conditions when multiple users from the same org log in simultaneously
+    let organization: { id: string; slug: string; githubInstallationId: number | null } | null = null;
 
-    if (organization) {
-      // Update existing organization
-      organization = await database.organization.update({
-        where: { id: organization.id },
-        data: {
-          name: org.name ?? org.login,
-          githubOrgLogin: org.login,
-          githubOrgType: org.type,
-        },
-      });
-    } else {
-      // Check if slug is taken by another org
-      const existingBySlug = await database.organization.findUnique({
-        where: { slug },
-      });
-
-      if (existingBySlug) {
-        // Slug is taken by a different org - skip this one
-        // In the future, could append a suffix
-        continue;
-      }
-
-      // Create new organization
-      organization = await database.organization.create({
-        data: {
+    try {
+      organization = await database.organization.upsert({
+        where: { githubOrgId: org.id },
+        create: {
           name: org.name ?? org.login,
           slug,
           githubOrgId: org.id,
           githubOrgLogin: org.login,
           githubOrgType: org.type,
         },
+        update: {
+          name: org.name ?? org.login,
+          githubOrgLogin: org.login,
+          githubOrgType: org.type,
+        },
       });
+    } catch (error) {
+      // Handle slug unique constraint violation - another org already has this slug
+      // This can happen if a different GitHub org claimed the slug first
+      if (
+        error instanceof Error &&
+        error.message.includes("Unique constraint")
+      ) {
+        // Try to find the org by githubOrgId in case it was created by a concurrent request
+        organization = await database.organization.findUnique({
+          where: { githubOrgId: org.id },
+        });
+
+        if (!organization) {
+          // Slug is taken by a different org - skip this one
+          console.warn(
+            `Skipping org ${org.login}: slug "${slug}" is taken by another organization`
+          );
+          continue;
+        }
+      } else {
+        throw error;
+      }
     }
 
-    // Add user as member if not already
-    const existingMembership = await database.organizationMember.findUnique({
+    // Add user as member if not already (using upsert to prevent race conditions)
+    // For personal account, user is owner. For orgs, start as member
+    const role = org.type === "User" ? "OWNER" : "MEMBER";
+
+    await database.organizationMember.upsert({
       where: {
         userId_organizationId: {
           userId,
           organizationId: organization.id,
         },
       },
+      create: {
+        userId,
+        organizationId: organization.id,
+        role,
+      },
+      update: {}, // Don't update role if membership already exists
     });
-
-    if (!existingMembership) {
-      // For personal account, user is owner. For orgs, start as member
-      const role = org.type === "User" ? "OWNER" : "MEMBER";
-
-      await database.organizationMember.create({
-        data: {
-          userId,
-          organizationId: organization.id,
-          role,
-        },
-      });
-    }
 
     // Check if GitHub App is already installed on this account
     // and auto-link if not already linked
