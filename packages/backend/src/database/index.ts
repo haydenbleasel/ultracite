@@ -3,8 +3,16 @@ import "server-only";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "./generated/client";
 
+if (!process.env.POSTGRES_PRISMA_URL) {
+  throw new Error("POSTGRES_PRISMA_URL is not set");
+}
+
+const url = new URL(process.env.POSTGRES_PRISMA_URL);
+
+url.searchParams.set("sslmode", "no-verify");
+
 const adapter = new PrismaPg({
-  connectionString: process.env.POSTGRES_PRISMA_URL,
+  connectionString: url.toString(),
   ssl: {
     rejectUnauthorized: false,
   },
