@@ -10,9 +10,21 @@ import { RepoTable } from "./components/repo-table";
 export const generateMetadata = async ({
   params,
 }: PageProps<"/[orgSlug]/[repoSlug]">): Promise<Metadata> => {
-  const { repoSlug } = await params;
+  const { orgSlug, repoSlug } = await params;
+  const organization = await getOrganizationBySlug(orgSlug);
+
+  if (!organization) {
+    return {
+      title: "Repository",
+      description: "Lint runs for this repository.",
+    };
+  }
+
   const repo = await database.repo.findFirst({
-    where: { name: repoSlug },
+    where: {
+      name: repoSlug,
+      organizationId: organization.id,
+    },
     select: { fullName: true },
   });
 
