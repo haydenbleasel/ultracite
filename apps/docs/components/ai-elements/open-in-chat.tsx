@@ -15,7 +15,7 @@ import {
   MessageCircleIcon,
 } from "lucide-react";
 import { type ComponentProps, createContext, useContext } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/design-system/lib/utils";
 
 const providers = {
   github: {

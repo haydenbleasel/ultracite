@@ -1,5 +1,5 @@
 {
-  "name": "@ultracite/backend",
+  "name": "@repo/backend",
   "description": "Supabase and database backend for Ultracite",
   "version": "1.0.0",
   "type": "module",
@@ -18,7 +18,9 @@
     "gen-types": "supabase gen types typescript --local > database.types.ts"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
+    "@prisma/client-runtime-utils": "^7.2.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0"
   },

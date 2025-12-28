@@ -1,0 +1,55 @@
+import { vercel } from "@t3-oss/env-core/presets-zod";
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
+
+export const env = createEnv({
+  extends: [vercel()],
+  server: {
+    CRON_SECRET: z.string(),
+
+    // Database
+    DATABASE_URL: z.string(),
+
+    // GitHub App
+    GITHUB_APP_ID: z.string(),
+    GITHUB_APP_PRIVATE_KEY: z.string(),
+    GITHUB_APP_WEBHOOK_SECRET: z.string(),
+
+    // Vercel Sandbox (optional - uses OIDC on Vercel)
+    VERCEL_TEAM_ID: z.string().optional(),
+    VERCEL_PROJECT_ID: z.string().optional(),
+
+    // Anthropic
+    ANTHROPIC_API_KEY: z.string(),
+
+    // Polar
+    POLAR_ACCESS_TOKEN: z.string().optional(),
+
+    // Vercel
+    VERCEL_OIDC_TOKEN: z.string(),
+  },
+  client: {
+    // Supabase
+    NEXT_PUBLIC_SUPABASE_URL: z.string(),
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY: z.string(),
+
+    // GitHub App
+    NEXT_PUBLIC_GITHUB_APP_SLUG: z.string(),
+  },
+  runtimeEnv: {
+    CRON_SECRET: process.env.CRON_SECRET,
+    DATABASE_URL: process.env.DATABASE_URL,
+    GITHUB_APP_ID: process.env.GITHUB_APP_ID,
+    GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
+    GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
+    NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY,
+    VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
+    VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
+    POLAR_ACCESS_TOKEN: process.env.POLAR_ACCESS_TOKEN,
+  },
+});

@@ -1,3 +1,4 @@
+import { cn } from "@repo/design-system/lib/utils";
 import {
   CalloutContainer as CalloutContainerPrimitive,
   CalloutDescription as CalloutDescriptionPrimitive,
@@ -5,7 +6,6 @@ import {
   CalloutTitle as CalloutTitlePrimitive,
 } from "fumadocs-ui/components/callout";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/utils";
 
 type CalloutProps = ComponentProps<typeof CalloutPrimitive>;
 

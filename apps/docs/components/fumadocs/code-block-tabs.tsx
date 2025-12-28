@@ -1,3 +1,4 @@
+import { cn } from "@repo/design-system/lib/utils";
 import {
   Tabs,
   TabsContent,
@@ -5,7 +6,6 @@ import {
   TabsTrigger,
 } from "fumadocs-ui/components/tabs.unstyled";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/utils";
 
 export const CodeBlockTabsList = (props: ComponentProps<typeof TabsList>) => (
   <TabsList

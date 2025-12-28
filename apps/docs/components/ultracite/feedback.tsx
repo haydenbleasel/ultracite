@@ -8,6 +8,7 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@repo/design-system/components/ui/input-group";
+import { cn } from "@repo/design-system/lib/utils";
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,7 +17,6 @@ import { ArrowUpIcon, ThumbsDown, ThumbsUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
 import { discuss } from "@/actions/discuss";
-import { cn } from "@/lib/utils";
 
 export interface Feedback {
   opinion: "good" | "bad";

@@ -15,7 +15,6 @@ import {
   CodeBlockTabsTrigger,
 } from "@/components/fumadocs/code-block-tabs";
 import { Mermaid } from "@/components/fumadocs/mermaid";
-import { Video } from "@/components/fumadocs/video";
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -38,7 +37,5 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     CalloutDescription,
 
     Mermaid,
-
-    Video,
   };
 }

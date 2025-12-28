@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/design-system/components/ui/card";
+import { cn } from "@repo/design-system/lib/utils";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import {
   type CSSProperties,
@@ -16,7 +17,6 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
   children: ReactNode;

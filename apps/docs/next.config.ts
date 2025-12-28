@@ -1,6 +1,5 @@
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
-import { withWorkflow } from "workflow/next";
 
 const withMdx = createMDX();
 
@@ -33,4 +32,4 @@ const config: NextConfig = {
   },
 };
 
-export default withWorkflow(withMdx(config));
+export default withMdx(config);
