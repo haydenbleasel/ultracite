@@ -168,8 +168,19 @@ export async function lintRepoWorkflow(
       stripeCustomerId,
     });
 
+    // Determine the correct status based on the result
+    // - SUCCESS_PR_CREATED: PR was created with fixes
+    // - SUCCESS_NO_ISSUES: No lint issues were found
+    // - FAILED: Claude Code found issues but couldn't fix them
+    let status: "SUCCESS_PR_CREATED" | "SUCCESS_NO_ISSUES" | "FAILED" = "SUCCESS_NO_ISSUES";
+    if (result.prCreated) {
+      status = "SUCCESS_PR_CREATED";
+    } else if (result.error) {
+      status = "FAILED";
+    }
+
     await updateLintRun(lintRun.id, {
-      status: result.prCreated ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
+      status,
       completedAt: new Date(),
       prNumber: result.prNumber,
       prUrl: result.prUrl,
