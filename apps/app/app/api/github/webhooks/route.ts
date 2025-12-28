@@ -3,6 +3,7 @@ import { database } from "@repo/backend";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { env } from "@/lib/env";
+import { getInstallationOctokit } from "@/lib/github/app";
 import { type ReviewPRParams, reviewPRWorkflow } from "./review-pr";
 
 const verifySignature = (payload: string, signature: string): boolean => {
@@ -106,7 +107,21 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
   }
 
   if (action === "added" && repositories_added) {
+    // Fetch repository details from GitHub API to get the default branch
+    const octokit = await getInstallationOctokit(installation.id);
+
     for (const repo of repositories_added) {
+      // Fetch the full repository data to get the default branch
+      const { data: repoData } = await octokit.request(
+        "GET /repositories/{id}",
+        {
+          id: repo.id,
+          headers: {
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        }
+      );
+
       await database.repo.upsert({
         where: { githubRepoId: repo.id },
         create: {
@@ -114,11 +129,12 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
           githubRepoId: repo.id,
           name: repo.name,
           fullName: repo.full_name,
-          defaultBranch: "main",
+          defaultBranch: repoData.default_branch ?? "main",
         },
         update: {
           name: repo.name,
           fullName: repo.full_name,
+          defaultBranch: repoData.default_branch ?? "main",
         },
       });
     }
