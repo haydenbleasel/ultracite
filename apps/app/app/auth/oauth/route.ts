@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { syncGitHubOrganizations } from "@/lib/github/sync-orgs";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -19,11 +20,32 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
     // return the user to an error page with instructions
     return NextResponse.redirect(`${origin}/auth/error`);
+  }
+
+  // Sync GitHub organizations using the provider token
+  const providerToken = data.session?.provider_token;
+  const userId = data.session?.user?.id;
+
+  if (providerToken && userId) {
+    try {
+      const { organizations } = await syncGitHubOrganizations(
+        providerToken,
+        userId
+      );
+
+      // Redirect to first organization if available
+      if (organizations.length > 0 && next === "/") {
+        next = `/${organizations[0].slug}`;
+      }
+    } catch (syncError) {
+      // Log error but don't fail the auth flow
+      console.error("Failed to sync GitHub organizations:", syncError);
+    }
   }
 
   const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer

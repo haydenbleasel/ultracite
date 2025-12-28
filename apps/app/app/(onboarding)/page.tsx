@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
-import { CreateOrganizationForm } from "./components/create-organization-form";
+import { getCurrentUser, getUserOrganizations } from "@/lib/auth";
+import { OrganizationList } from "./components/organization-list";
 
 export const metadata: Metadata = {
-  title: "Create Organization",
-  description: "Create your organization to get started with Ultracite.",
+  title: "Select Organization",
+  description: "Select an organization to get started with Ultracite.",
 };
 
 const OnboardingPage = async () => {
@@ -15,26 +15,53 @@ const OnboardingPage = async () => {
     redirect("/auth/login");
   }
 
-  // If user already has an organization, redirect to it
-  const organization = await getFirstOrganization();
+  // Get user's organizations
+  const organizations = await getUserOrganizations();
 
-  if (organization) {
-    redirect(`/${organization.slug}`);
+  // If user has exactly one organization, redirect to it
+  if (organizations.length === 1) {
+    redirect(`/${organizations[0].slug}`);
   }
 
+  // If user has multiple organizations, let them choose
+  if (organizations.length > 1) {
+    return (
+      <div className="container relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-lg flex-col items-center justify-center px-4">
+        <div className="flex w-full flex-col gap-6">
+          <div className="flex flex-col gap-2 text-center">
+            <h1 className="font-semibold text-3xl tracking-tight">
+              Select an organization
+            </h1>
+            <p className="text-balance text-muted-foreground">
+              Choose which organization you want to work with.
+            </p>
+          </div>
+          <OrganizationList organizations={organizations} />
+        </div>
+      </div>
+    );
+  }
+
+  // No organizations - this shouldn't happen since we sync on login
+  // but handle it gracefully
   return (
     <div className="container relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-lg flex-col items-center justify-center px-4">
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="font-semibold text-3xl tracking-tight">
-            Create your organization
+            No organizations found
           </h1>
           <p className="text-balance text-muted-foreground">
-            Organizations help you manage repositories and collaborate with your
-            team.
+            We couldn&apos;t find any GitHub organizations for your account.
+            Please try logging in again to sync your organizations.
           </p>
         </div>
-        <CreateOrganizationForm />
+        <a
+          href="/auth/login"
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm hover:bg-primary/90"
+        >
+          Log in again
+        </a>
       </div>
     </div>
   );

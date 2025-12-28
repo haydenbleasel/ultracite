@@ -22,6 +22,11 @@ model Organization {
   name String
   slug String @unique
 
+  // GitHub Organization/User sync
+  githubOrgId    Int?    @unique // GitHub org/user ID for synced organizations
+  githubOrgLogin String? // GitHub org/user login name
+  githubOrgType  String? // "Organization" or "User"
+
   // GitHub App installation
   githubInstallationId Int?      @unique
   githubAccountLogin   String?
