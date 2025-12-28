@@ -10,15 +10,6 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const organization = await getFirstOrganization();
-
-  if (!organization) {
-    return NextResponse.redirect(new URL("/onboarding", request.url));
-  }
-
-  const orgId = organization.id;
-  const orgSlug = organization.slug;
-
   const searchParams = request.nextUrl.searchParams;
   const installationId = searchParams.get("installation_id");
   const setupAction = searchParams.get("setup_action");
@@ -45,8 +36,32 @@ export const GET = async (request: NextRequest) => {
         ? installation.account.login
         : (installation.account?.slug ?? null);
 
+    if (!accountLogin) {
+      return NextResponse.redirect(
+        new URL("/onboarding?error=no-account", request.url)
+      );
+    }
+
+    // Find the organization that matches the GitHub account login
+    const organization = await database.organization.findFirst({
+      where: {
+        githubAccountLogin: accountLogin,
+        members: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+
+    if (!organization) {
+      return NextResponse.redirect(
+        new URL("/onboarding?error=org-not-found", request.url)
+      );
+    }
+
     await database.organization.update({
-      where: { id: orgId },
+      where: { id: organization.id },
       data: {
         githubInstallationId: installationIdNum,
         githubAccountLogin: accountLogin,
@@ -54,14 +69,21 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
-    await syncRepositories(orgId, installationIdNum);
+    await syncRepositories(organization.id, installationIdNum);
 
-    return NextResponse.redirect(new URL(`/${orgSlug}`, request.url));
+    return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
+  }
+
+  // For non-install/update actions, fall back to first organization
+  const organization = await getFirstOrganization();
+
+  if (!organization) {
+    return NextResponse.redirect(new URL("/onboarding", request.url));
   }
 
   if (setupAction === "request") {
     await database.organization.update({
-      where: { id: orgId },
+      where: { id: organization.id },
       data: {
         githubInstallationId: null,
         githubAccountLogin: null,
@@ -70,7 +92,7 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  return NextResponse.redirect(new URL(`/${orgSlug}`, request.url));
+  return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
 };
 
 const syncRepositories = async (orgId: string, installationId: number) => {
