@@ -38,7 +38,8 @@ export const POST = async (request: NextRequest) => {
   }
 
   const organization = membership.organization;
-  const origin = request.headers.get("origin") ?? undefined;
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const origin = `${protocol}://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
 
   // If already subscribed, redirect to billing portal
   if (organization.stripeCustomerId) {
