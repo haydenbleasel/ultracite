@@ -1,19 +1,20 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import { createClient } from "@/lib/supabase/server";
 
 interface PlatformLayoutProps {
   children: ReactNode;
 }
 
 const PlatformLayout = async ({ children }: PlatformLayoutProps) => {
-  const { userId } = await auth();
+  const supabase = await createClient();
 
-  if (!userId) {
+  const { data, error } = await supabase.auth.getClaims();
+  if (error || !data?.claims) {
     redirect("/sign-in");
   }
 
-  return <>{children}</>;
+  return children;
 };
 
 export default PlatformLayout;
