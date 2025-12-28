@@ -52,12 +52,12 @@ export const RepoSidebar = ({
               <SidebarMenu>
                 {org.repos.map((repo) => {
                   const latestRun = repo.lintRuns[0];
-                  const isActive = pathname === `/${org.slug}/${repo.id}`;
+                  const isActive = pathname === `/${org.slug}/${repo.name}`;
 
                   return (
                     <SidebarMenuItem key={repo.id}>
                       <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={`/${org.slug}/${repo.id}`}>
+                        <Link href={`/${org.slug}/${repo.name}`}>
                           <IconGitFork className="size-4" />
                           <span className="flex-1 truncate">{repo.name}</span>
                           {latestRun && (

@@ -129,7 +129,7 @@ const OrgLayout = async ({ children, params }: OrgLayoutProps) => {
 
   return (
     <SidebarProvider className="min-h-auto">
-      <RepoSidebar organizations={allOrganizations} currentOrgSlug={orgSlug} />
+      <RepoSidebar currentOrgSlug={orgSlug} organizations={allOrganizations} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

@@ -1,25 +1,18 @@
 import { database } from "@repo/backend";
+import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
-import { IconExternalLink } from "@tabler/icons-react";
+import { ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
-import { RepoTable } from "../../components/repo-table";
-
-interface RepoPageProps {
-  params: Promise<{
-    orgSlug: string;
-    id: string;
-  }>;
-}
+import { RepoTable } from "../components/repo-table";
 
 export const generateMetadata = async ({
   params,
-}: RepoPageProps): Promise<Metadata> => {
-  const { id } = await params;
-  const repo = await database.repo.findUnique({
-    where: { id },
+}: PageProps<"/[orgSlug]/[repoSlug]">): Promise<Metadata> => {
+  const { repoSlug } = await params;
+  const repo = await database.repo.findFirst({
+    where: { name: repoSlug },
     select: { fullName: true },
   });
 
@@ -29,23 +22,23 @@ export const generateMetadata = async ({
   };
 };
 
-const RepoPage = async ({ params }: RepoPageProps) => {
+const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
   const user = await getCurrentUser();
 
   if (!user) {
     redirect("/auth/login");
   }
 
-  const { orgSlug, id } = await params;
+  const { orgSlug, repoSlug } = await params;
   const organization = await getOrganizationBySlug(orgSlug);
 
   if (!organization) {
     notFound();
   }
 
-  const repo = await database.repo.findUnique({
+  const repo = await database.repo.findFirst({
     where: {
-      id,
+      name: repoSlug,
       organizationId: organization.id,
     },
     include: {
@@ -65,19 +58,17 @@ const RepoPage = async ({ params }: RepoPageProps) => {
         <SidebarTrigger />
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="font-semibold text-lg">{repo.fullName}</h1>
-            <Link
-              className="text-muted-foreground hover:text-foreground"
+            <h1 className="font-semibold tracking-tight">{repo.fullName}</h1>
+          </div>
+          <Button asChild size="icon" variant="ghost">
+            <a
               href={`https://github.com/${repo.fullName}`}
               rel="noopener noreferrer"
               target="_blank"
             >
-              <IconExternalLink className="size-4" />
-            </Link>
-          </div>
-          <p className="font-mono text-muted-foreground text-sm">
-            {repo.defaultBranch}
-          </p>
+              <ExternalLinkIcon className="size-4" />
+            </a>
+          </Button>
         </div>
       </header>
       <main className="flex-1 p-4">

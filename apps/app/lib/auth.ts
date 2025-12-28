@@ -48,7 +48,9 @@ export async function getOrganizationBySlug(slug: string) {
   const membership = await database.organizationMember.findFirst({
     where: {
       userId: user.id,
-      organization: { slug },
+      organization: {
+        OR: [{ slug }, { githubOrgLogin: slug }],
+      },
     },
     include: {
       organization: true,

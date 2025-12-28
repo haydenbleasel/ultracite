@@ -8,13 +8,7 @@ export const metadata: Metadata = {
   description: "Manage your connected repositories and lint runs.",
 };
 
-interface OrgPageProps {
-  params: Promise<{
-    orgSlug: string;
-  }>;
-}
-
-const OrgPage = async ({ params }: OrgPageProps) => {
+const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -34,11 +28,11 @@ const OrgPage = async ({ params }: OrgPageProps) => {
       enabled: true,
     },
     orderBy: { createdAt: "desc" },
-    select: { id: true },
+    select: { name: true },
   });
 
   if (firstRepo) {
-    redirect(`/${orgSlug}/${firstRepo.id}`);
+    redirect(`/${orgSlug}/${firstRepo.name}`);
   }
 
   // Layout handles empty states, this is a fallback
