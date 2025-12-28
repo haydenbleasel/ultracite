@@ -4,8 +4,8 @@ import { IconExternalLink } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { RepoTable } from "@/app/[orgSlug]/components/repo-table";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { RepoTable } from "../../components/repo-table";
 
 interface RepoPageProps {
   params: Promise<{

@@ -27,7 +27,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         provider: 'github',
         options: {
           redirectTo: `${window.location.origin}/auth/oauth?next=/`,
-          scopes: 'read:org',
         },
       })
 

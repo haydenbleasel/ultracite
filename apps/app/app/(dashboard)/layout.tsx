@@ -14,7 +14,11 @@ import {
 } from "@repo/design-system/components/ui/sidebar";
 import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import {
+  getCurrentUser,
+  getOrganizationBySlug,
+  getUserOrganizations,
+} from "@/lib/auth";
 import { ConnectGitHubButton } from "./components/connect-github-button";
 import { RepoSidebar } from "./components/repo-sidebar";
 
@@ -58,6 +62,27 @@ const OrgLayout = async ({ children, params }: OrgLayoutProps) => {
   if (!organization) {
     notFound();
   }
+
+  // Fetch all organizations the user has access to with their repos
+  const userOrgs = await getUserOrganizations();
+  const allOrganizations = await database.organization.findMany({
+    where: {
+      id: { in: userOrgs.map((o) => o.id) },
+    },
+    include: {
+      repos: {
+        where: { enabled: true },
+        orderBy: { createdAt: "desc" },
+        include: {
+          lintRuns: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+          },
+        },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
 
   const hasInstallation = Boolean(organization.githubInstallationId);
 
@@ -104,7 +129,7 @@ const OrgLayout = async ({ children, params }: OrgLayoutProps) => {
 
   return (
     <SidebarProvider className="min-h-auto">
-      <RepoSidebar orgSlug={orgSlug} repos={organization.repos} />
+      <RepoSidebar organizations={allOrganizations} currentOrgSlug={orgSlug} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

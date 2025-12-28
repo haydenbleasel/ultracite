@@ -1,3 +1,4 @@
+import { Button } from "@repo/design-system/components/ui/button";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getCurrentUser, getUserOrganizations } from "@/lib/auth";
@@ -56,12 +57,9 @@ const OnboardingPage = async () => {
             Please try logging in again to sync your organizations.
           </p>
         </div>
-        <a
-          href="/auth/login"
-          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm hover:bg-primary/90"
-        >
-          Log in again
-        </a>
+        <Button asChild className="mx-auto w-fit">
+          <a href="/auth/login">Log in again</a>
+        </Button>
       </div>
     </div>
   );
