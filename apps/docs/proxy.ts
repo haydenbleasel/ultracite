@@ -1,14 +1,13 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
 import { isMarkdownPreferred, rewritePath } from "fumadocs-core/negotiation";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { updateSession } from "@/lib/supabase/middleware";
 
 const { rewrite: rewriteLLM } = rewritePath(
   "/docs/*path",
   "/docs/llms.mdx/*path"
 );
 
-export default clerkMiddleware((_, request) => {
-  // Handle Markdown preference rewrites for LLMs
+export async function proxy(request: NextRequest) {
   if (isMarkdownPreferred(request)) {
     const result = rewriteLLM(request.nextUrl.pathname);
     if (result) {
@@ -16,14 +15,19 @@ export default clerkMiddleware((_, request) => {
     }
   }
 
-  return NextResponse.next();
-});
+  return await updateSession(request);
+}
 
 export const config = {
   matcher: [
-    // Skip Next.js internals, all static files, and .well-known/workflow/*, unless found in search params
-    "/((?!_next|\\.well-known/workflow/|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - .well-known/workflow/ (workflow files)
+     * Feel free to modify this pattern to include more paths.
+     */
+    "/((?!_next/static|_next/image|favicon.ico|\\.well-known/workflow/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
