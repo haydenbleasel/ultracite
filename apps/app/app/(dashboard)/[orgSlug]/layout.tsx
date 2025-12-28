@@ -8,6 +8,7 @@ import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { InstallationEmptyState } from "./components/installation-empty-state";
 import { OrganizationEmptyState } from "./components/organization-empty-state";
 import { RepoSidebar } from "./components/repo-sidebar";
+import { SubscriptionBanner } from "./components/subscription-banner";
 
 const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   const user = await getCurrentUser();
@@ -61,11 +62,20 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
     );
   }
 
+  const isSubscribed = Boolean(organization.stripeCustomerId);
+
   return (
-    <SidebarProvider className="min-h-auto">
-      <RepoSidebar />
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
+    <div className="flex min-h-screen flex-col">
+      <SidebarProvider className="min-h-auto flex-1">
+        <RepoSidebar />
+        <SidebarInset>
+          {!isSubscribed && (
+            <SubscriptionBanner organizationId={organization.id} />
+          )}
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
   );
 };
 

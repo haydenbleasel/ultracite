@@ -27,6 +27,8 @@ export const env = createEnv({
 
     // Stripe
     STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
+    STRIPE_PRICE_ID: z.string(),
     STRIPE_METER_EVENT_NAME: z.string(),
 
     // Vercel
@@ -58,6 +60,8 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
     STRIPE_METER_EVENT_NAME: process.env.STRIPE_METER_EVENT_NAME,
   },
 });
