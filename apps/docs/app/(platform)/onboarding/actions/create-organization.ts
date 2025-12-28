@@ -1,11 +1,7 @@
 'use server';
 
 import { database } from '@/lib/database';
-import {
-  getCurrentUser,
-  getOrCreateDbUser,
-  setActiveOrganization,
-} from '@/lib/auth';
+import { getCurrentUser, getOrCreateDbUser } from '@/lib/auth';
 
 interface CreateOrganizationInput {
   name: string;
@@ -14,7 +10,7 @@ interface CreateOrganizationInput {
 
 interface CreateOrganizationResult {
   error?: string;
-  organizationId?: string;
+  slug?: string;
 }
 
 export async function createOrganization({
@@ -64,8 +60,5 @@ export async function createOrganization({
     },
   });
 
-  // Set as active organization
-  await setActiveOrganization(organization.id);
-
-  return { organizationId: organization.id };
+  return { slug: organization.slug };
 }

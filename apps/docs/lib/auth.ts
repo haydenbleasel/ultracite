@@ -1,8 +1,5 @@
-import { cookies } from 'next/headers';
 import { database } from '@/lib/database';
 import { createClient } from '@/lib/supabase/server';
-
-const ACTIVE_ORG_COOKIE = 'ultracite_active_org';
 
 export async function getCurrentUser() {
   const supabase = await createClient();
@@ -38,33 +35,39 @@ export async function getOrCreateDbUser() {
   return dbUser;
 }
 
-export async function getActiveOrganization() {
+/**
+ * Get an organization by slug and verify the current user has access to it.
+ * Returns null if the org doesn't exist or user is not a member.
+ */
+export async function getOrganizationBySlug(slug: string) {
   const user = await getCurrentUser();
   if (!user) {
     return null;
   }
 
-  const cookieStore = await cookies();
-  const activeOrgId = cookieStore.get(ACTIVE_ORG_COOKIE)?.value;
+  const membership = await database.organizationMember.findFirst({
+    where: {
+      userId: user.id,
+      organization: { slug },
+    },
+    include: {
+      organization: true,
+    },
+  });
 
-  // If we have an active org cookie, verify the user is a member
-  if (activeOrgId) {
-    const membership = await database.organizationMember.findFirst({
-      where: {
-        userId: user.id,
-        organizationId: activeOrgId,
-      },
-      include: {
-        organization: true,
-      },
-    });
+  return membership?.organization ?? null;
+}
 
-    if (membership) {
-      return membership.organization;
-    }
+/**
+ * Get the first organization the user is a member of.
+ * Used for redirecting after login/onboarding.
+ */
+export async function getFirstOrganization() {
+  const user = await getCurrentUser();
+  if (!user) {
+    return null;
   }
 
-  // Otherwise, get the first organization the user is a member of
   const firstMembership = await database.organizationMember.findFirst({
     where: { userId: user.id },
     include: { organization: true },
@@ -87,14 +90,4 @@ export async function getUserOrganizations() {
   });
 
   return memberships.map((m) => m.organization);
-}
-
-export async function setActiveOrganization(orgId: string) {
-  const cookieStore = await cookies();
-  cookieStore.set(ACTIVE_ORG_COOKIE, orgId, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-  });
 }

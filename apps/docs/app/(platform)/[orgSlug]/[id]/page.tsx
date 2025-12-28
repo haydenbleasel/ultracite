@@ -2,13 +2,14 @@ import { IconExternalLink } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { RepoTable } from "@/app/(platform)/dashboard/components/repo-table";
+import { RepoTable } from "@/app/(platform)/[orgSlug]/components/repo-table";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { database } from "@/lib/database";
 
 interface RepoPageProps {
   params: Promise<{
+    orgSlug: string;
     id: string;
   }>;
 }
@@ -35,13 +36,12 @@ const RepoPage = async ({ params }: RepoPageProps) => {
     redirect("/auth/login");
   }
 
-  const organization = await getActiveOrganization();
+  const { orgSlug, id } = await params;
+  const organization = await getOrganizationBySlug(orgSlug);
 
   if (!organization) {
-    redirect("/onboarding");
+    notFound();
   }
-
-  const { id } = await params;
 
   const repo = await database.repo.findUnique({
     where: {

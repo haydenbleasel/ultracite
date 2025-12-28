@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { getActiveOrganization, getCurrentUser } from '@/lib/auth';
+import { getCurrentUser, getFirstOrganization } from '@/lib/auth';
 import { CreateOrganizationForm } from './components/create-organization-form';
 
 export const metadata: Metadata = {
@@ -15,10 +15,10 @@ const OnboardingPage = async () => {
     redirect('/auth/login');
   }
 
-  // If user already has an organization, redirect to dashboard
-  const organization = await getActiveOrganization();
+  // If user already has an organization, redirect to it
+  const organization = await getFirstOrganization();
   if (organization) {
-    redirect('/dashboard');
+    redirect(`/${organization.slug}`);
   }
 
   return (

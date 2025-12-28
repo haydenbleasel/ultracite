@@ -43,7 +43,7 @@ export const CreateOrganizationForm = () => {
         return;
       }
 
-      router.push('/dashboard');
+      router.push(`/${result.slug}`);
     } catch {
       setError('An unexpected error occurred. Please try again.');
     } finally {

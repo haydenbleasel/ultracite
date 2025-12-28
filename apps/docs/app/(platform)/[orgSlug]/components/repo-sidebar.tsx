@@ -20,28 +20,18 @@ import type { LintRun, Repo } from "@/lib/database/generated/client";
 import { LintStatusBadge } from "./lint-status-badge";
 
 interface RepoSidebarProps {
+  orgSlug: string;
   repos: (Repo & {
     lintRuns: LintRun[];
   })[];
 }
 
-export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
+export const RepoSidebar = ({ orgSlug, repos }: RepoSidebarProps) => {
   const pathname = usePathname();
 
   return (
     <Sidebar className="top-(--fd-banner-height) h-[calc(100svh-var(--fd-banner-height))]">
-      <SidebarHeader>
-        {/* <OrganizationSwitcher
-          afterSelectOrganizationUrl="/dashboard"
-          afterSelectPersonalUrl="/dashboard"
-          appearance={{
-            elements: {
-              rootBox: "w-full",
-              organizationSwitcherTrigger: "w-full justify-between px-2 py-1.5",
-            },
-          }}
-        /> */}
-      </SidebarHeader>
+      <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Repositories</SidebarGroupLabel>
@@ -49,12 +39,12 @@ export const RepoSidebar = ({ repos }: RepoSidebarProps) => {
             <SidebarMenu>
               {repos.map((repo) => {
                 const latestRun = repo.lintRuns[0];
-                const isActive = pathname === `/dashboard/${repo.id}`;
+                const isActive = pathname === `/${orgSlug}/${repo.id}`;
 
                 return (
                   <SidebarMenuItem key={repo.id}>
                     <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={`/dashboard/${repo.id}`}>
+                      <Link href={`/${orgSlug}/${repo.id}`}>
                         <IconGitFork className="size-4" />
                         <span className="flex-1 truncate">{repo.name}</span>
                         {latestRun && (

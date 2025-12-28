@@ -46,8 +46,10 @@ const links = [
 
 interface NavbarProps {
   authenticated: boolean;
+  orgSlug?: string;
 }
-export const Navbar = ({ authenticated }: NavbarProps) => {
+
+export const Navbar = ({ authenticated, orgSlug }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isProviderPage = pathname.startsWith("/providers");
@@ -188,10 +190,17 @@ export const Navbar = ({ authenticated }: NavbarProps) => {
             </Button>
           ))}
         </div>
-        {authenticated ? (
+        {authenticated && orgSlug ? (
           <>
             <Button asChild className="hidden lg:inline-flex" variant="ghost">
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href={`/${orgSlug}`}>Dashboard</Link>
+            </Button>
+            <CurrentUserAvatar />
+          </>
+        ) : authenticated ? (
+          <>
+            <Button asChild className="hidden lg:inline-flex" variant="ghost">
+              <Link href="/onboarding">Dashboard</Link>
             </Button>
             <CurrentUserAvatar />
           </>
@@ -303,9 +312,15 @@ export const Navbar = ({ authenticated }: NavbarProps) => {
               </div>
 
               <div className="mt-auto flex flex-col gap-2 border-t pt-4">
-                {authenticated ? (
+                {authenticated && orgSlug ? (
                   <Button asChild className="w-full">
-                    <Link href="/dashboard" onClick={() => setOpen(false)}>
+                    <Link href={`/${orgSlug}`} onClick={() => setOpen(false)}>
+                      Dashboard
+                    </Link>
+                  </Button>
+                ) : authenticated ? (
+                  <Button asChild className="w-full">
+                    <Link href="/onboarding" onClick={() => setOpen(false)}>
                       Dashboard
                     </Link>
                   </Button>

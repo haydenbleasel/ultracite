@@ -1,5 +1,5 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import {
   Empty,
@@ -10,30 +10,34 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { database } from "@/lib/database";
 import { ConnectGitHubButton } from "./components/connect-github-button";
 import { RepoSidebar } from "./components/repo-sidebar";
 
-interface DashboardLayoutProps {
+interface OrgLayoutProps {
   children: ReactNode;
+  params: Promise<{
+    orgSlug: string;
+  }>;
 }
 
-const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
+const OrgLayout = async ({ children, params }: OrgLayoutProps) => {
   const user = await getCurrentUser();
 
   if (!user) {
     redirect("/auth/login");
   }
 
-  const activeOrg = await getActiveOrganization();
+  const { orgSlug } = await params;
+  const org = await getOrganizationBySlug(orgSlug);
 
-  if (!activeOrg) {
-    redirect("/onboarding");
+  if (!org) {
+    notFound();
   }
 
   const organization = await database.organization.findUnique({
-    where: { id: activeOrg.id },
+    where: { id: org.id },
     include: {
       repos: {
         where: { enabled: true },
@@ -49,7 +53,7 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   });
 
   if (!organization) {
-    redirect("/onboarding");
+    notFound();
   }
 
   const hasInstallation = Boolean(organization.githubInstallationId);
@@ -97,10 +101,10 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 
   return (
     <SidebarProvider className="min-h-auto">
-      <RepoSidebar repos={organization.repos} />
+      <RepoSidebar orgSlug={orgSlug} repos={organization.repos} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
 };
 
-export default DashboardLayout;
+export default OrgLayout;

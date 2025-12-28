@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { database } from "@/lib/database";
 
 export const metadata: Metadata = {
@@ -8,17 +8,24 @@ export const metadata: Metadata = {
   description: "Manage your connected repositories and lint runs.",
 };
 
-const DashboardPage = async () => {
+interface OrgPageProps {
+  params: Promise<{
+    orgSlug: string;
+  }>;
+}
+
+const OrgPage = async ({ params }: OrgPageProps) => {
   const user = await getCurrentUser();
 
   if (!user) {
     redirect("/auth/login");
   }
 
-  const organization = await getActiveOrganization();
+  const { orgSlug } = await params;
+  const organization = await getOrganizationBySlug(orgSlug);
 
   if (!organization) {
-    redirect("/onboarding");
+    notFound();
   }
 
   const firstRepo = await database.repo.findFirst({
@@ -31,11 +38,11 @@ const DashboardPage = async () => {
   });
 
   if (firstRepo) {
-    redirect(`/dashboard/${firstRepo.id}`);
+    redirect(`/${orgSlug}/${firstRepo.id}`);
   }
 
   // Layout handles empty states, this is a fallback
   return null;
 };
 
-export default DashboardPage;
+export default OrgPage;

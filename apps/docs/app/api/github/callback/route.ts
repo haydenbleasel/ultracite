@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getActiveOrganization, getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
 import { database } from "@/lib/database";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
 
@@ -10,13 +10,14 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const organization = await getActiveOrganization();
+  const organization = await getFirstOrganization();
 
   if (!organization) {
     return NextResponse.redirect(new URL("/onboarding", request.url));
   }
 
   const orgId = organization.id;
+  const orgSlug = organization.slug;
 
   const searchParams = request.nextUrl.searchParams;
   const installationId = searchParams.get("installation_id");
@@ -55,7 +56,7 @@ export const GET = async (request: NextRequest) => {
 
     await syncRepositories(orgId, installationIdNum);
 
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL(`/${orgSlug}`, request.url));
   }
 
   if (setupAction === "request") {
@@ -69,7 +70,7 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  return NextResponse.redirect(new URL("/dashboard", request.url));
+  return NextResponse.redirect(new URL(`/${orgSlug}`, request.url));
 };
 
 const syncRepositories = async (orgId: string, installationId: number) => {
