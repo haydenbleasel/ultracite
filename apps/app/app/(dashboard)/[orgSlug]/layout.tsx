@@ -4,11 +4,7 @@ import {
   SidebarProvider,
 } from "@repo/design-system/components/ui/sidebar";
 import { notFound, redirect } from "next/navigation";
-import {
-  getCurrentUser,
-  getOrganizationBySlug,
-  getUserOrganizations,
-} from "@/lib/auth";
+import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 import { InstallationEmptyState } from "./components/installation-empty-state";
 import { OrganizationEmptyState } from "./components/organization-empty-state";
 import { RepoSidebar } from "./components/repo-sidebar";
@@ -47,27 +43,6 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
     notFound();
   }
 
-  // Fetch all organizations the user has access to with their repos
-  const userOrgs = await getUserOrganizations();
-  const allOrganizations = await database.organization.findMany({
-    where: {
-      id: { in: userOrgs.map((o) => o.id) },
-    },
-    include: {
-      repos: {
-        where: { enabled: true },
-        orderBy: { createdAt: "desc" },
-        include: {
-          lintRuns: {
-            orderBy: { createdAt: "desc" },
-            take: 1,
-          },
-        },
-      },
-    },
-    orderBy: { name: "asc" },
-  });
-
   const hasInstallation = Boolean(organization.githubInstallationId);
 
   if (!hasInstallation) {
@@ -88,7 +63,7 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
 
   return (
     <SidebarProvider className="min-h-auto">
-      <RepoSidebar organizations={allOrganizations} />
+      <RepoSidebar />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

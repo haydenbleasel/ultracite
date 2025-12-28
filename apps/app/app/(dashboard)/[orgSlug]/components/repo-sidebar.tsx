@@ -1,7 +1,5 @@
-"use client";
-
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import type { LintRun, Organization, Repo } from "@repo/backend/database";
+import { database } from "@repo/backend/database";
 import {
   Sidebar,
   SidebarContent,
@@ -13,24 +11,31 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
-import { IconBuilding, IconGitFork } from "@tabler/icons-react";
+import { IconBuilding } from "@tabler/icons-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { getUserOrganizations } from "@/lib/auth";
+import { RepoSidebarItem } from "./repo-sidebar-item";
 
-type RepoWithLintRuns = Repo & {
-  lintRuns: LintRun[];
-};
-
-type OrganizationWithRepos = Organization & {
-  repos: RepoWithLintRuns[];
-};
-
-interface RepoSidebarProps {
-  organizations: OrganizationWithRepos[];
-}
-
-export const RepoSidebar = ({ organizations }: RepoSidebarProps) => {
-  const pathname = usePathname();
+export const RepoSidebar = async () => {
+  const userOrgs = await getUserOrganizations();
+  const organizations = await database.organization.findMany({
+    where: {
+      id: { in: userOrgs.map((o) => o.id) },
+    },
+    include: {
+      repos: {
+        where: { enabled: true },
+        orderBy: { createdAt: "desc" },
+        include: {
+          lintRuns: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+          },
+        },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
 
   return (
     <Sidebar className="top-(--navbar-height) h-[calc(100svh-var(--navbar-height))]">
@@ -43,20 +48,13 @@ export const RepoSidebar = ({ organizations }: RepoSidebarProps) => {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {org.repos.map((repo) => {
-                  const isActive = pathname === `/${org.slug}/${repo.name}`;
-
-                  return (
-                    <SidebarMenuItem key={repo.id}>
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={`/${org.slug}/${repo.name}`}>
-                          <IconGitFork className="size-4" />
-                          <span className="flex-1 truncate">{repo.name}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                {org.repos.map((repo) => (
+                  <RepoSidebarItem
+                    key={repo.id}
+                    orgSlug={org.slug}
+                    repoSlug={repo.name}
+                  />
+                ))}
                 {org.repos.length === 0 && (
                   <SidebarMenuItem>
                     <span className="px-2 py-1.5 text-muted-foreground text-xs">
