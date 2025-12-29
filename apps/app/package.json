@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"bun --bun next dev --port 3002\" \"bun run stripe\"",
-    "build": "bun --bun next build",
+    "build": "next build",
     "workflow": "bun x workflow inspect runs --web",
     "stripe": "stripe listen --forward-to http://localhost:3002/api/stripe/webhooks"
   },
@@ -18,7 +18,6 @@
     "@t3-oss/env-core": "^0.13.10",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@vercel/sandbox": "^1.1.1",
-    "@workflow/swc-plugin": "^4.0.1-beta.12",
     "decimal.js": "^10.6.0",
     "lucide-react": "^0.562.0",
     "nanoid": "^5.1.6",
@@ -26,8 +25,9 @@
     "octokit": "^5.0.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "server-only": "^0.0.1",
     "stripe": "^20.1.0",
-    "workflow": "4.0.1-beta.34",
+    "workflow": "https://workflow-docs-224kdz2qp.vercel.sh/workflow.tgz",
     "zod": "^4.2.1"
   },
   "devDependencies": {
