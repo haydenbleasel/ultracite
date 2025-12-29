@@ -13,7 +13,6 @@ const config: NextConfig = {
     "@shikijs/engine-oniguruma",
     "@prisma/client",
     "@prisma/adapter-pg",
-    "@repo/backend",
   ],
 
   images: {
