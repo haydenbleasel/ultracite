@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 
 const config: NextConfig = {
-  transpilePackages: ["@repo/data"],
+  transpilePackages: ["@repo/data", "@repo/backend"],
 
   experimental: {
     turbopackFileSystemCacheForDev: true,
