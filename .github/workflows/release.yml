@@ -65,9 +65,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: "" # Workaround for https://github.com/changesets/action/pull/545
 
-      - name: Deploy to Vercel
+      - name: Deploy apps to Vercel
         if: steps.changesets.outputs.published == 'true'
-        run: bunx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          (cd apps/app && VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID_APP }} bunx vercel --prod --token=$VERCEL_TOKEN) &
+          (cd apps/docs && VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID_DOCS }} bunx vercel --prod --token=$VERCEL_TOKEN) &
+          (cd apps/jfuu && VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID_JFUU }} bunx vercel --prod --token=$VERCEL_TOKEN) &
+          (cd apps/web && VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID_WEB }} bunx vercel --prod --token=$VERCEL_TOKEN) &
+          wait
