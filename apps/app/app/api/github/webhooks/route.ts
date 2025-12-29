@@ -182,7 +182,8 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  if (!repo.organization.stripeCustomerId) {
+  // Skip if repo is not enabled or organization is not subscribed
+  if (!(repo.enabled && repo.organization.stripeCustomerId)) {
     return;
   }
 
