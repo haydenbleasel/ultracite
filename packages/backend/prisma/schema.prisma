@@ -71,10 +71,10 @@ enum OrganizationRole {
 model Repo {
   id String @id @default(cuid())
 
-  githubRepoId  Int     @unique
+  githubRepoId  Int    @unique
   name          String
   fullName      String // owner/repo
-  defaultBranch String  @default("main")
+  defaultBranch String @default("main")
 
   dailyRunsEnabled Boolean @default(true)
   prReviewEnabled  Boolean @default(true)
