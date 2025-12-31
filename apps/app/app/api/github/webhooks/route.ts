@@ -180,8 +180,10 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
     return;
   }
 
-  // Skip if repo is not enabled or organization is not subscribed
-  if (!(repo.enabled && repo.organization.stripeCustomerId)) {
+  // Skip if repo is not enabled, PR reviews are disabled, or organization is not subscribed
+  if (
+    !(repo.enabled && repo.prReviewEnabled && repo.organization.stripeCustomerId)
+  ) {
     return;
   }
 

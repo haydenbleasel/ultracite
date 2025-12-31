@@ -77,6 +77,9 @@ model Repo {
   defaultBranch String  @default("main")
   enabled       Boolean @default(true)
 
+  dailyRunsEnabled Boolean @default(true)
+  prReviewEnabled  Boolean @default(true)
+
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
 

@@ -78,7 +78,9 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
           <div className="flex items-center gap-px">
             <RepoSettings
               defaultBranch={repo.defaultBranch}
+              defaultDailyRunsEnabled={repo.dailyRunsEnabled}
               defaultEnabled={repo.enabled}
+              defaultPrReviewEnabled={repo.prReviewEnabled}
               repoId={repo.id}
             />
             <Button asChild size="icon" variant="ghost">

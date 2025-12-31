@@ -22,12 +22,16 @@ import { updateRepo } from "@/actions/repo/update";
 interface RepoSettingsProps {
   defaultBranch: string;
   defaultEnabled: boolean;
+  defaultDailyRunsEnabled: boolean;
+  defaultPrReviewEnabled: boolean;
   repoId: string;
 }
 
 export const RepoSettings = ({
   defaultBranch,
   defaultEnabled,
+  defaultDailyRunsEnabled,
+  defaultPrReviewEnabled,
   repoId,
 }: RepoSettingsProps) => {
   const [state, formAction, isPending] = useActionState(
@@ -37,9 +41,13 @@ export const RepoSettings = ({
     ) => {
       const newDefaultBranch = formData.get("default-branch") as string;
       const newEnabled = formData.get("enabled") === "on";
+      const newDailyRunsEnabled = formData.get("daily-runs-enabled") === "on";
+      const newPrReviewEnabled = formData.get("pr-review-enabled") === "on";
       const result = await updateRepo(repoId, {
         defaultBranch: newDefaultBranch,
         enabled: newEnabled,
+        dailyRunsEnabled: newDailyRunsEnabled,
+        prReviewEnabled: newPrReviewEnabled,
       });
 
       return result;
@@ -87,6 +95,22 @@ export const RepoSettings = ({
                 defaultChecked={defaultEnabled}
                 id="enabled"
                 name="enabled"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="daily-runs-enabled">Daily runs</Label>
+              <Switch
+                defaultChecked={defaultDailyRunsEnabled}
+                id="daily-runs-enabled"
+                name="daily-runs-enabled"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="pr-review-enabled">PR reviews</Label>
+              <Switch
+                defaultChecked={defaultPrReviewEnabled}
+                id="pr-review-enabled"
+                name="pr-review-enabled"
               />
             </div>
           </div>
