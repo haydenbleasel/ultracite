@@ -212,7 +212,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
         }
 
         // Create a lint run record within the same transaction
-        return tx.lintRun.create({
+        const lintRun = await tx.lintRun.create({
           data: {
             organizationId: repo.organizationId,
             repoId: repo.id,
@@ -224,6 +224,8 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
             id: true,
           },
         });
+
+        return lintRun.id;
       },
       {
         isolationLevel: "Serializable",
