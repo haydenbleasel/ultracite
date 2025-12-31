@@ -1,7 +1,6 @@
 import { database } from "@repo/backend/database";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Button } from "@repo/design-system/components/ui/button";
-import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -69,7 +68,6 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
   return (
     <div className="flex flex-1 flex-col">
       <header className="flex h-14 items-center gap-4 border-b px-4">
-        <SidebarTrigger />
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-2">
             <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
