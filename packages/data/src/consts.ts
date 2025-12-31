@@ -11,3 +11,5 @@ export const docsUrl = isProduction
 export const appUrl = isProduction
   ? "https://app.ultracite.ai"
   : "http://localhost:3002";
+
+export const statusUrl = "https://status.ultracite.ai";
