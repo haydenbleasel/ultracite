@@ -33,8 +33,8 @@ export const POST = async (request: NextRequest) => {
     case "installation_repositories":
       await handleInstallationRepositoriesEvent(data);
       break;
-    case "pull_request":
-      await handlePullRequestEvent(data);
+    case "issue_comment":
+      await handleIssueCommentEvent(data);
       break;
     default:
       break;
@@ -57,18 +57,14 @@ interface WebhookPayload {
   repositories_removed?: {
     id: number;
   }[];
-  pull_request?: {
+  issue?: {
     number: number;
-    head: {
-      ref: string;
-    };
-    base: {
-      ref: string;
+    pull_request?: {
+      url: string;
     };
   };
-  requested_reviewer?: {
-    login: string;
-    type: string;
+  comment?: {
+    body: string;
   };
   repository?: {
     id: number;
@@ -157,25 +153,38 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
   }
 };
 
-const handlePullRequestEvent = async (data: WebhookPayload) => {
-  const { action, installation, pull_request, repository, requested_reviewer } =
-    data;
+// Check if comment matches trigger patterns
+const isReviewTrigger = (comment: string): boolean => {
+  const normalized = comment.trim().toLowerCase();
+  const appSlug = env.NEXT_PUBLIC_GITHUB_APP_SLUG.toLowerCase();
 
-  // Only run when Ultracite app is assigned as a reviewer
-  if (action !== "review_requested") {
+  return (
+    normalized === `@${appSlug} review` ||
+    normalized === `${appSlug} review` ||
+    normalized === `/${appSlug} review`
+  );
+};
+
+const handleIssueCommentEvent = async (data: WebhookPayload) => {
+  const { action, installation, issue, comment, repository } = data;
+
+  // Only handle new comments
+  if (action !== "created") {
     return;
   }
 
-  // Check if the requested reviewer is the Ultracite app
-  const expectedBotLogin = `${env.NEXT_PUBLIC_GITHUB_APP_SLUG}[bot]`;
-  if (requested_reviewer?.login !== expectedBotLogin) {
+  // Check if this is a PR comment (not a regular issue)
+  if (!issue?.pull_request) {
     return;
   }
 
-  if (!(pull_request && repository)) {
-    throw new Error(
-      `Invalid pull request or repository: ${JSON.stringify({ pull_request, repository })}`
-    );
+  // Check if the comment is a review trigger
+  if (!(comment && isReviewTrigger(comment.body))) {
+    return;
+  }
+
+  if (!repository) {
+    throw new Error(`Invalid repository: ${JSON.stringify({ repository })}`);
   }
 
   // Check if this repo is tracked by Ultracite
@@ -193,6 +202,21 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
+  // Fetch PR details to get branch info
+  const octokit = await getInstallationOctokit(installation.id);
+  const [owner, repoName] = repository.full_name.split("/");
+  const { data: pullRequest } = await octokit.request(
+    "GET /repos/{owner}/{repo}/pulls/{pull_number}",
+    {
+      owner,
+      repo: repoName,
+      pull_number: issue.number,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
+
   let lintRunId: string | undefined;
 
   try {
@@ -202,7 +226,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
         const existingRun = await tx.lintRun.findFirst({
           where: {
             repoId: repo.id,
-            prNumber: pull_request.number,
+            prNumber: issue.number,
             status: {
               in: ["PENDING", "RUNNING"],
             },
@@ -222,7 +246,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
           data: {
             organizationId: repo.organizationId,
             repoId: repo.id,
-            prNumber: pull_request.number,
+            prNumber: issue.number,
             status: "RUNNING",
             startedAt: new Date(),
           },
@@ -257,9 +281,9 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
   const params: ReviewPRParams = {
     installationId: installation.id,
     repoFullName: repository.full_name,
-    prNumber: pull_request.number,
-    prBranch: pull_request.head.ref,
-    baseBranch: pull_request.base.ref,
+    prNumber: issue.number,
+    prBranch: pullRequest.head.ref,
+    baseBranch: pullRequest.base.ref,
     lintRunId,
     stripeCustomerId: repo.organization.stripeCustomerId,
   };
