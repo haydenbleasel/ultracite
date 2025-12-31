@@ -28,6 +28,7 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
             <TableHead>Status</TableHead>
             <TableHead>PR</TableHead>
             <TableHead>Timestamp</TableHead>
+            <TableHead>Note</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -52,6 +53,9 @@ export const RepoTable = ({ runs }: RepoTableProps) => {
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {run.createdAt.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {run.errorMessage ?? ""}
               </TableCell>
             </TableRow>
           ))}
