@@ -59,6 +59,11 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
       lintRuns: {
         orderBy: { createdAt: "desc" },
       },
+      organization: {
+        select: {
+          stripeCustomerId: true,
+        },
+      },
     },
   });
 
@@ -106,7 +111,11 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
         </div>
       </header>
       <main>
-        <RepoTable runs={repo.lintRuns} />
+        <RepoTable
+          isSubscribed={Boolean(repo.organization.stripeCustomerId)}
+          repoId={repo.id}
+          runs={repo.lintRuns}
+        />
       </main>
     </div>
   );

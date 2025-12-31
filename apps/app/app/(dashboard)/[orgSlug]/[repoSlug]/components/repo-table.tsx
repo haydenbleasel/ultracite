@@ -12,12 +12,14 @@ import { LintStatusBadge } from "./lint-status-badge";
 import { RepoEmptyState } from "./repo-empty-state";
 
 interface RepoTableProps {
+  repoId: string;
   runs: LintRun[];
+  isSubscribed: boolean;
 }
 
-export const RepoTable = ({ runs }: RepoTableProps) => {
+export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
   if (!runs.length) {
-    return <RepoEmptyState />;
+    return <RepoEmptyState isSubscribed={isSubscribed} repoId={repoId} />;
   }
 
   return (
