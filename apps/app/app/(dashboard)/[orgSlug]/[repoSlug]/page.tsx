@@ -67,38 +67,36 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="flex h-14 items-center gap-4 border-b px-4">
-        <div className="flex flex-1 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
-            {repo.dailyRunsEnabled && (
-              <Badge variant="secondary">
-                <CheckCircleIcon className="size-4" /> Daily runs
-              </Badge>
-            )}
-            {repo.prReviewEnabled && (
-              <Badge variant="secondary">
-                <CheckCircleIcon className="size-4" /> PR reviews
-              </Badge>
-            )}
-          </div>
-          <div className="flex items-center gap-px">
-            <RepoSettings
-              defaultBranch={repo.defaultBranch}
-              defaultDailyRunsEnabled={repo.dailyRunsEnabled}
-              defaultPrReviewEnabled={repo.prReviewEnabled}
-              repoId={repo.id}
-            />
-            <Button asChild size="icon" variant="ghost">
-              <a
-                href={`https://github.com/${repo.fullName}`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <ExternalLinkIcon className="size-4" />
-              </a>
-            </Button>
-          </div>
+      <header className="flex h-14 items-center justify-between gap-4 border-b px-4">
+        <div className="flex items-center gap-2">
+          <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
+          {repo.dailyRunsEnabled && (
+            <Badge variant="secondary">
+              <CheckCircleIcon className="size-4" /> Daily runs
+            </Badge>
+          )}
+          {repo.prReviewEnabled && (
+            <Badge variant="secondary">
+              <CheckCircleIcon className="size-4" /> PR reviews
+            </Badge>
+          )}
+        </div>
+        <div className="flex items-center gap-px">
+          <RepoSettings
+            defaultBranch={repo.defaultBranch}
+            defaultDailyRunsEnabled={repo.dailyRunsEnabled}
+            defaultPrReviewEnabled={repo.prReviewEnabled}
+            repoId={repo.id}
+          />
+          <Button asChild size="icon" variant="ghost">
+            <a
+              href={`https://github.com/${repo.fullName}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <ExternalLinkIcon className="size-4" />
+            </a>
+          </Button>
         </div>
       </header>
       <main>
