@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"bun --bun next dev --port 3002\" \"bun run stripe\"",
-    "build": "next build",
+    "build": "bun --bun next build",
     "workflow": "bun x workflow inspect runs --web",
     "stripe": "stripe listen --forward-to http://localhost:3002/api/stripe/webhooks"
   },
@@ -27,7 +27,7 @@
     "react-dom": "19.2.3",
     "server-only": "^0.0.1",
     "stripe": "^20.1.0",
-    "workflow": "https://workflow-docs-224kdz2qp.vercel.sh/workflow.tgz",
+    "workflow": "^4.0.1-beta.40",
     "zod": "^4.2.1"
   },
   "devDependencies": {
