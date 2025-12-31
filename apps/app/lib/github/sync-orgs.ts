@@ -34,12 +34,12 @@ async function syncRepositories(orgId: string, installationId: number) {
         githubRepoId: repo.id,
         name: repo.name,
         fullName: repo.full_name,
-        defaultBranch: repo.default_branch ?? "main",
+        defaultBranch: repo.default_branch,
       },
       update: {
         name: repo.name,
         fullName: repo.full_name,
-        defaultBranch: repo.default_branch ?? "main",
+        defaultBranch: repo.default_branch,
       },
     });
   }

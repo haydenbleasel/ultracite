@@ -5,6 +5,7 @@ import { ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { RepoSettings } from "./components/repo-settings";
 import { RepoTable } from "./components/repo-table";
 
 export const generateMetadata = async ({
@@ -72,15 +73,18 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
           <div className="flex items-center gap-2">
             <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
           </div>
-          <Button asChild size="icon" variant="ghost">
-            <a
-              href={`https://github.com/${repo.fullName}`}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <ExternalLinkIcon className="size-4" />
-            </a>
-          </Button>
+          <div className="flex items-center gap-px">
+            <RepoSettings defaultBranch={repo.defaultBranch} repoId={repo.id} />
+            <Button asChild size="icon" variant="ghost">
+              <a
+                href={`https://github.com/${repo.fullName}`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ExternalLinkIcon className="size-4" />
+              </a>
+            </Button>
+          </div>
         </div>
       </header>
       <main>

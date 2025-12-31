@@ -129,12 +129,12 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
           githubRepoId: repo.id,
           name: repo.name,
           fullName: repo.full_name,
-          defaultBranch: repoData.default_branch ?? "main",
+          defaultBranch: repoData.default_branch,
         },
         update: {
           name: repo.name,
           fullName: repo.full_name,
-          defaultBranch: repoData.default_branch ?? "main",
+          defaultBranch: repoData.default_branch,
         },
       });
     }
