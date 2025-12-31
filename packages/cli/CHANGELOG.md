@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 6.5.1
+
+### Patch Changes
+
+- 3998825: Fix undefined input to fix command
+
 ## 6.5.0
 
 ### Minor Changes
