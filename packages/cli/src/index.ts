@@ -95,19 +95,21 @@ export const router = t.router({
       description: "Run Biome linter and fixes files",
     })
     .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-        }),
-      ])
+      z
+        .tuple([
+          z
+            .array(z.string())
+            .optional()
+            .default([])
+            .describe("specific files to format"),
+          z.object({
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+          }),
+        ])
+        .optional()
     )
     .mutation(async ({ input }) => {
-      const [files, opts] = input;
+      const [files, opts] = input ?? [[], {}];
       await fix(files, { unsafe: opts.unsafe });
     }),
 
@@ -145,19 +147,21 @@ export const router = t.router({
         "⚠️ DEPRECATED: Use 'fix' instead - Run Biome linter and fixes files",
     })
     .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-        }),
-      ])
+      z
+        .tuple([
+          z
+            .array(z.string())
+            .optional()
+            .default([])
+            .describe("specific files to format"),
+          z.object({
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+          }),
+        ])
+        .optional()
     )
     .mutation(async ({ input }) => {
-      const [files, opts] = input;
+      const [files, opts] = input ?? [[], {}];
       console.warn(
         "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
       );
