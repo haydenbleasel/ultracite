@@ -1,5 +1,5 @@
 import { database } from "@repo/backend/database";
-import { Decimal } from "@repo/backend/src/database/generated/client/runtime/client";
+import { Decimal } from "decimal.js";
 
 export async function trackCost(
   lintRunId: string,
