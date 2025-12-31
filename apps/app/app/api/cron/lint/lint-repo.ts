@@ -1,4 +1,3 @@
-import { Decimal } from "@/lib/decimal";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
@@ -13,6 +12,7 @@ import { installDependencies } from "@/lib/steps/install-dependencies";
 import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
+import { trackCost } from "@/lib/steps/track-cost";
 import type {
   LintRepoParams,
   LintRepoResult,
@@ -41,7 +41,7 @@ export async function lintRepoWorkflow(
   } = params;
 
   // Create lint run record
-  const lintRun = await createLintRun(organizationId, repoId);
+  const lintRunId = await createLintRun(organizationId, repoId);
 
   // Check if we have push access before doing any work
   const pushAccess = await checkPushAccess(
@@ -51,7 +51,7 @@ export async function lintRepoWorkflow(
   );
 
   if (!pushAccess.canPush) {
-    await updateLintRun(lintRun.id, {
+    await updateLintRun(lintRunId, {
       status: "FAILED",
       errorMessage: pushAccess.reason,
       completedAt: new Date(),
@@ -71,7 +71,6 @@ export async function lintRepoWorkflow(
   const sandboxId = await createSandbox(repoFullName, token);
 
   let result: LintStepResult;
-  let cost = new Decimal(lintRun.sandboxCostUsd);
 
   try {
     // Install dependencies
@@ -116,11 +115,8 @@ export async function lintRepoWorkflow(
       // Single fix mode: only fix one issue per cron run
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      const aiCost = new Decimal(claudeCodeResult.costUsd);
-      cost = cost.plus(aiCost);
-
       // Update lint run with AI cost
-      await updateLintRun(lintRun.id, { aiCostUsd: aiCost });
+      await trackCost(lintRunId, claudeCodeResult.costUsd);
 
       if (await hasUncommittedChanges(sandboxId)) {
         // Generate changelog before committing
@@ -163,10 +159,7 @@ export async function lintRepoWorkflow(
     }
 
     // Record workflow costs to billing system (only on success)
-    await recordBillingUsage({
-      cost: cost.toNumber(),
-      stripeCustomerId,
-    });
+    await recordBillingUsage(lintRunId, stripeCustomerId);
 
     // Determine the correct status based on the result
     // - SUCCESS_PR_CREATED: PR was created with fixes
@@ -180,7 +173,7 @@ export async function lintRepoWorkflow(
       status = "FAILED";
     }
 
-    await updateLintRun(lintRun.id, {
+    await updateLintRun(lintRunId, {
       status,
       completedAt: new Date(),
       prNumber: result.prNumber,
@@ -195,7 +188,7 @@ export async function lintRepoWorkflow(
       error: errorMessage,
     };
 
-    await updateLintRun(lintRun.id, {
+    await updateLintRun(lintRunId, {
       status: "FAILED",
       completedAt: new Date(),
       errorMessage,

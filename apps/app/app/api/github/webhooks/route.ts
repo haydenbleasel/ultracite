@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { database, type LintRun } from "@repo/backend/database";
+import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { env } from "@/lib/env";
@@ -187,10 +187,10 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  let lintRun: LintRun | null = null;
+  let lintRunId: string | undefined;
 
   try {
-    lintRun = await database.$transaction(
+    lintRunId = await database.$transaction(
       async (tx) => {
         // Check if there's already a running review for this PR
         const existingRun = await tx.lintRun.findFirst({
@@ -201,11 +201,14 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
               in: ["PENDING", "RUNNING"],
             },
           },
+          select: {
+            id: true,
+          },
         });
 
         if (existingRun) {
           // Skip - there's already a review in progress for this PR
-          return null;
+          return undefined;
         }
 
         // Create a lint run record within the same transaction
@@ -216,6 +219,9 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
             prNumber: pull_request.number,
             status: "RUNNING",
             startedAt: new Date(),
+          },
+          select: {
+            id: true,
           },
         });
       },
@@ -234,7 +240,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     throw error;
   }
 
-  if (!lintRun) {
+  if (!lintRunId) {
     // A review is already in progress for this PR
     return;
   }
@@ -246,8 +252,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     prNumber: pull_request.number,
     prBranch: pull_request.head.ref,
     baseBranch: pull_request.base.ref,
-    lintRunId: lintRun.id,
-    sandboxCostUsd: lintRun.sandboxCostUsd.toNumber(),
+    lintRunId,
     stripeCustomerId: repo.organization.stripeCustomerId,
   };
 
@@ -256,7 +261,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
   } catch (error) {
     // Mark the lint run as failed if workflow startup fails
     await database.lintRun.update({
-      where: { id: lintRun.id },
+      where: { id: lintRunId },
       data: {
         status: "FAILED",
         completedAt: new Date(),

@@ -1,4 +1,3 @@
-import { Decimal } from "@/lib/decimal";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
@@ -13,6 +12,7 @@ import { installDependencies } from "@/lib/steps/install-dependencies";
 import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
+import { trackCost } from "@/lib/steps/track-cost";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
 
 export interface ReviewPRParams {
@@ -22,7 +22,6 @@ export interface ReviewPRParams {
   prBranch: string;
   baseBranch: string;
   lintRunId: string;
-  sandboxCostUsd: number;
   stripeCustomerId: string;
 }
 
@@ -45,11 +44,8 @@ export async function reviewPRWorkflow(
     prNumber,
     prBranch,
     lintRunId,
-    sandboxCostUsd,
     stripeCustomerId,
   } = params;
-
-  let cost = new Decimal(sandboxCostUsd);
 
   // Check if we have push access before doing any work
   const pushAccess = await checkPushAccess(
@@ -134,11 +130,8 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Use Claude Code to fix remaining issues iteratively
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
-      const aiCost = new Decimal(claudeCodeResult.costUsd);
-      cost = cost.plus(aiCost);
-
       // Update lint run with AI cost
-      await updateLintRun(lintRunId, { aiCostUsd: aiCost });
+      await trackCost(lintRunId, claudeCodeResult.costUsd);
 
       // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {
@@ -159,10 +152,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
     }
 
     // Record workflow costs to billing system (only on success)
-    await recordBillingUsage({
-      stripeCustomerId,
-      cost: cost.toNumber(),
-    });
+    await recordBillingUsage(lintRunId, stripeCustomerId);
 
     // Add a comment to the PR summarizing what was done
     const changelogSection =

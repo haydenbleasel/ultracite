@@ -1,17 +1,22 @@
+import { database } from "@repo/backend/database";
 import { env } from "../env";
 import { stripe } from "../stripe";
 
-export interface RecordBillingUsageContext {
-  cost: number;
-  stripeCustomerId: string;
-}
-
 export async function recordBillingUsage(
-  context: RecordBillingUsageContext
+  lintRunId: string,
+  stripeCustomerId: string
 ): Promise<void> {
   "use step";
 
-  const { cost, stripeCustomerId } = context;
+  const lintRun = await database.lintRun.findUnique({
+    where: { id: lintRunId },
+  });
+
+  if (!lintRun) {
+    throw new Error("Lint run not found");
+  }
+
+  const cost = lintRun.sandboxCostUsd.plus(lintRun.aiCostUsd ?? 0).toNumber();
 
   // Skip billing if there's no cost
   if (cost <= 0) {
