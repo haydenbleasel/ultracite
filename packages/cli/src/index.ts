@@ -118,6 +118,10 @@ export const router = t.router({
             .describe("specific files to format"),
           z.object({
             unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+            linter: z
+              .enum(options.linters)
+              .optional()
+              .describe("linter to use (biome, eslint, or oxlint)"),
           }),
         ])
         .optional()
