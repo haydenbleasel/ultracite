@@ -13,4 +13,11 @@ export async function installDependencies(sandboxId: string): Promise<void> {
   // We use `ni` to install dependencies by automatically detecting the package manager.
   await sandbox.runCommand("npm", ["install", "-g", "@antfu/ni"]);
   await sandbox.runCommand("ni", []);
+
+  // We need Claude Code to fix lint issues and generate changelogs.
+  await sandbox.runCommand("npm", [
+    "install",
+    "-g",
+    "@anthropic-ai/claude-code",
+  ]);
 }

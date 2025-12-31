@@ -7,7 +7,6 @@ import { fixLint } from "@/lib/steps/fix-lint";
 import { generateChangelog } from "@/lib/steps/generate-changelog";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
 import { hasUncommittedChanges } from "@/lib/steps/has-uncommitted-changes";
-import { installClaudeCode } from "@/lib/steps/install-claude-code";
 import { installDependencies } from "@/lib/steps/install-dependencies";
 import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
@@ -109,9 +108,6 @@ export async function lintRepoWorkflow(
         prUrl: prResult.prUrl,
       };
     } else if (fixResult.hasRemainingIssues) {
-      // No auto-fixes possible, use Claude Code to fix ONE issue
-      await installClaudeCode(sandboxId);
-
       // Single fix mode: only fix one issue per cron run
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
