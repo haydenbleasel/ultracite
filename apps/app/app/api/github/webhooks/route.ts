@@ -153,6 +153,101 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
   }
 };
 
+const createOrStartLintRun = async (
+  repo: { id: string; organizationId: string },
+  pullRequest: { number: number }
+): Promise<string | undefined> => {
+  try {
+    const lintRunId = await database.$transaction(
+      async (tx) => {
+        // Check if there's already a running review for this PR
+        const existingRun = await tx.lintRun.findFirst({
+          where: {
+            repoId: repo.id,
+            prNumber: pullRequest.number,
+            status: {
+              in: ["PENDING", "RUNNING"],
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        if (existingRun) {
+          // Skip - there's already a review in progress for this PR
+          return undefined;
+        }
+
+        // Create a lint run record within the same transaction
+        const lintRun = await database.lintRun.create({
+          data: {
+            organizationId: repo.organizationId,
+            repoId: repo.id,
+            prNumber: pullRequest.number,
+            status: "RUNNING",
+            startedAt: new Date(),
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        return lintRun.id;
+      },
+      {
+        isolationLevel: "Serializable",
+      }
+    );
+    return lintRunId;
+  } catch (error) {
+    // Serialization failure means another transaction won the race - that's fine
+    if (
+      error instanceof Error &&
+      error.message.includes("could not serialize access")
+    ) {
+      return undefined;
+    }
+    throw error;
+  }
+};
+
+const startReviewWorkflow = async (
+  lintRunId: string,
+  installationId: number,
+  repoFullName: string,
+  prNumber: number,
+  prBranch: string,
+  baseBranch: string,
+  stripeCustomerId: string
+): Promise<void> => {
+  const params: ReviewPRParams = {
+    installationId,
+    repoFullName,
+    prNumber,
+    prBranch,
+    baseBranch,
+    lintRunId,
+    stripeCustomerId,
+  };
+
+  try {
+    await start(reviewPRWorkflow, [params]);
+  } catch (error) {
+    // Mark the lint run as failed if workflow startup fails
+    await database.lintRun.update({
+      where: { id: lintRunId },
+      data: {
+        status: "FAILED",
+        completedAt: new Date(),
+        errorMessage:
+          error instanceof Error ? error.message : "Failed to start workflow",
+      },
+    });
+    throw error;
+  }
+};
+
 const handlePullRequestEvent = async (data: WebhookPayload) => {
   const { action, installation, pull_request, repository } = data;
 
@@ -192,60 +287,7 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  let lintRunId: string | undefined;
-
-  try {
-    lintRunId = await database.$transaction(
-      async (tx) => {
-        // Check if there's already a running review for this PR
-        const existingRun = await tx.lintRun.findFirst({
-          where: {
-            repoId: repo.id,
-            prNumber: pull_request.number,
-            status: {
-              in: ["PENDING", "RUNNING"],
-            },
-          },
-          select: {
-            id: true,
-          },
-        });
-
-        if (existingRun) {
-          // Skip - there's already a review in progress for this PR
-          return undefined;
-        }
-
-        // Create a lint run record within the same transaction
-        const lintRun = await tx.lintRun.create({
-          data: {
-            organizationId: repo.organizationId,
-            repoId: repo.id,
-            prNumber: pull_request.number,
-            status: "RUNNING",
-            startedAt: new Date(),
-          },
-          select: {
-            id: true,
-          },
-        });
-
-        return lintRun.id;
-      },
-      {
-        isolationLevel: "Serializable",
-      }
-    );
-  } catch (error) {
-    // Serialization failure means another transaction won the race - that's fine
-    if (
-      error instanceof Error &&
-      error.message.includes("could not serialize access")
-    ) {
-      return;
-    }
-    throw error;
-  }
+  const lintRunId = await createOrStartLintRun(repo, pull_request);
 
   if (!lintRunId) {
     // A review is already in progress for this PR
@@ -253,29 +295,13 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
   }
 
   // Run the review workflow
-  const params: ReviewPRParams = {
-    installationId: installation.id,
-    repoFullName: repository.full_name,
-    prNumber: pull_request.number,
-    prBranch: pull_request.head.ref,
-    baseBranch: pull_request.base.ref,
+  await startReviewWorkflow(
     lintRunId,
-    stripeCustomerId: repo.organization.stripeCustomerId,
-  };
-
-  try {
-    await start(reviewPRWorkflow, [params]);
-  } catch (error) {
-    // Mark the lint run as failed if workflow startup fails
-    await database.lintRun.update({
-      where: { id: lintRunId },
-      data: {
-        status: "FAILED",
-        completedAt: new Date(),
-        errorMessage:
-          error instanceof Error ? error.message : "Failed to start workflow",
-      },
-    });
-    throw error;
-  }
+    installation.id,
+    repository.full_name,
+    pull_request.number,
+    pull_request.head.ref,
+    pull_request.base.ref,
+    repo.organization.stripeCustomerId
+  );
 };

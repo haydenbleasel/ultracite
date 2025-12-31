@@ -3,6 +3,132 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
 
+const handleInstallOrUpdate = async (
+  request: NextRequest,
+  user: { id: string; email: string | null },
+  installationId: string
+) => {
+  const installationIdNum = Number.parseInt(installationId, 10);
+
+  const app = getGitHubApp();
+  const { data: installation } = await app.octokit.request(
+    "GET /app/installations/{installation_id}",
+    {
+      installation_id: installationIdNum,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
+
+  const accountLogin =
+    installation.account && "login" in installation.account
+      ? installation.account.login
+      : (installation.account?.slug ?? null);
+
+  if (!accountLogin) {
+    return NextResponse.redirect(
+      new URL("/onboarding?error=no-account", request.url)
+    );
+  }
+
+  // Ensure user exists in database
+  await database.user.upsert({
+    where: { id: user.id },
+    create: { id: user.id, email: user.email ?? "" },
+    update: {},
+  });
+
+  // Find or create the organization that matches the GitHub account login
+  let organization = await database.organization.findFirst({
+    where: {
+      githubOrgLogin: accountLogin,
+    },
+  });
+
+  if (!organization) {
+    organization = await createOrganizationFromInstallation(
+      installation,
+      accountLogin
+    );
+    if (!organization) {
+      return NextResponse.redirect(
+        new URL("/onboarding?error=no-account", request.url)
+      );
+    }
+  }
+
+  // Ensure user is a member of the organization
+  await database.organizationMember.upsert({
+    where: {
+      userId_organizationId: {
+        userId: user.id,
+        organizationId: organization.id,
+      },
+    },
+    create: {
+      userId: user.id,
+      organizationId: organization.id,
+      role: "MEMBER",
+    },
+    update: {},
+  });
+
+  await database.organization.update({
+    where: { id: organization.id },
+    data: {
+      githubInstallationId: installationIdNum,
+      githubAccountLogin: accountLogin,
+      installedAt: new Date(installation.created_at),
+    },
+  });
+
+  await syncRepositories(organization.id, installationIdNum);
+
+  return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
+};
+
+const createOrganizationFromInstallation = (
+  installation: {
+    account?: {
+      id?: number;
+      type?: string;
+      login?: string;
+      slug?: string;
+    };
+  },
+  accountLogin: string
+) => {
+  const accountId =
+    installation.account && "id" in installation.account
+      ? installation.account.id
+      : null;
+  const accountType =
+    installation.account && "type" in installation.account
+      ? (installation.account.type as "User" | "Organization")
+      : "Organization";
+
+  if (!accountId) {
+    return null;
+  }
+
+  // Use upsert to handle race conditions with OAuth sync
+  return database.organization.upsert({
+    where: { githubOrgId: accountId },
+    create: {
+      name: accountLogin,
+      slug: accountLogin.toLowerCase(),
+      githubOrgId: accountId,
+      githubOrgLogin: accountLogin,
+      githubOrgType: accountType,
+    },
+    update: {
+      githubOrgLogin: accountLogin,
+      githubOrgType: accountType,
+    },
+  });
+};
+
 export const GET = async (request: NextRequest) => {
   const user = await getCurrentUser();
 
@@ -18,106 +144,7 @@ export const GET = async (request: NextRequest) => {
     installationId &&
     (setupAction === "install" || setupAction === "update")
   ) {
-    const installationIdNum = Number.parseInt(installationId, 10);
-
-    const app = getGitHubApp();
-    const { data: installation } = await app.octokit.request(
-      "GET /app/installations/{installation_id}",
-      {
-        installation_id: installationIdNum,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
-      }
-    );
-
-    const accountLogin =
-      installation.account && "login" in installation.account
-        ? installation.account.login
-        : (installation.account?.slug ?? null);
-
-    if (!accountLogin) {
-      return NextResponse.redirect(
-        new URL("/onboarding?error=no-account", request.url)
-      );
-    }
-
-    // Ensure user exists in database
-    await database.user.upsert({
-      where: { id: user.id },
-      create: { id: user.id, email: user.email ?? "" },
-      update: {},
-    });
-
-    // Find or create the organization that matches the GitHub account login
-    let organization = await database.organization.findFirst({
-      where: {
-        githubOrgLogin: accountLogin,
-      },
-    });
-
-    if (!organization) {
-      // Organization doesn't exist yet - create it from the installation data
-      const accountId =
-        installation.account && "id" in installation.account
-          ? installation.account.id
-          : null;
-      const accountType =
-        installation.account && "type" in installation.account
-          ? (installation.account.type as "User" | "Organization")
-          : "Organization";
-
-      if (!accountId) {
-        return NextResponse.redirect(
-          new URL("/onboarding?error=no-account", request.url)
-        );
-      }
-
-      // Use upsert to handle race conditions with OAuth sync
-      organization = await database.organization.upsert({
-        where: { githubOrgId: accountId },
-        create: {
-          name: accountLogin,
-          slug: accountLogin.toLowerCase(),
-          githubOrgId: accountId,
-          githubOrgLogin: accountLogin,
-          githubOrgType: accountType,
-        },
-        update: {
-          githubOrgLogin: accountLogin,
-          githubOrgType: accountType,
-        },
-      });
-    }
-
-    // Ensure user is a member of the organization
-    await database.organizationMember.upsert({
-      where: {
-        userId_organizationId: {
-          userId: user.id,
-          organizationId: organization.id,
-        },
-      },
-      create: {
-        userId: user.id,
-        organizationId: organization.id,
-        role: "MEMBER",
-      },
-      update: {},
-    });
-
-    await database.organization.update({
-      where: { id: organization.id },
-      data: {
-        githubInstallationId: installationIdNum,
-        githubAccountLogin: accountLogin,
-        installedAt: new Date(installation.created_at),
-      },
-    });
-
-    await syncRepositories(organization.id, installationIdNum);
-
-    return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
+    return handleInstallOrUpdate(request, user, installationId);
   }
 
   // For non-install/update actions, fall back to first organization
