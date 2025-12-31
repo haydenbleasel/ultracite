@@ -1,4 +1,9 @@
 import crypto from "node:crypto";
+import type {
+  InstallationEvent,
+  InstallationRepositoriesEvent,
+  IssueCommentEvent,
+} from "@octokit/webhooks-types";
 import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
@@ -24,17 +29,22 @@ export const POST = async (request: NextRequest) => {
   }
 
   const event = request.headers.get("x-github-event");
-  const data = JSON.parse(payload) as WebhookPayload;
 
   switch (event) {
     case "installation":
-      await handleInstallationEvent(data);
+      await handleInstallationEvent(
+        JSON.parse(payload) as InstallationEvent
+      );
       break;
     case "installation_repositories":
-      await handleInstallationRepositoriesEvent(data);
+      await handleInstallationRepositoriesEvent(
+        JSON.parse(payload) as InstallationRepositoriesEvent
+      );
       break;
     case "issue_comment":
-      await handleIssueCommentEvent(data);
+      await handleIssueCommentEvent(
+        JSON.parse(payload) as IssueCommentEvent
+      );
       break;
     default:
       break;
@@ -43,36 +53,7 @@ export const POST = async (request: NextRequest) => {
   return NextResponse.json({ received: true });
 };
 
-interface WebhookPayload {
-  action: string;
-  installation: {
-    id: number;
-  };
-  repositories_added?: {
-    id: number;
-    name: string;
-    full_name: string;
-    private: boolean;
-  }[];
-  repositories_removed?: {
-    id: number;
-  }[];
-  issue?: {
-    number: number;
-    pull_request?: {
-      url: string;
-    };
-  };
-  comment?: {
-    body: string;
-  };
-  repository?: {
-    id: number;
-    full_name: string;
-  };
-}
-
-const handleInstallationEvent = async (data: WebhookPayload) => {
+const handleInstallationEvent = async (data: InstallationEvent) => {
   const { action, installation } = data;
 
   if (action === "deleted") {
@@ -94,7 +75,9 @@ const handleInstallationEvent = async (data: WebhookPayload) => {
   }
 };
 
-const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
+const handleInstallationRepositoriesEvent = async (
+  data: InstallationRepositoriesEvent
+) => {
   const { action, installation, repositories_added, repositories_removed } =
     data;
 
@@ -165,7 +148,7 @@ const isReviewTrigger = (comment: string): boolean => {
   );
 };
 
-const handleIssueCommentEvent = async (data: WebhookPayload) => {
+const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
   const { action, installation, issue, comment, repository } = data;
 
   // Only handle new comments
@@ -183,8 +166,8 @@ const handleIssueCommentEvent = async (data: WebhookPayload) => {
     return;
   }
 
-  if (!repository) {
-    throw new Error(`Invalid repository: ${JSON.stringify({ repository })}`);
+  if (!(repository && installation)) {
+    return;
   }
 
   // Check if this repo is tracked by Ultracite
