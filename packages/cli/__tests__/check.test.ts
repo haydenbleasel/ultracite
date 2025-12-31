@@ -266,6 +266,74 @@ describe("check", () => {
     );
   });
 
+  test("eslint check throws on eslint spawn error", async () => {
+    let callCount = 0;
+    const mockSpawn = mock(() => {
+      callCount++;
+      if (callCount === 1) {
+        return { status: 0 }; // prettier succeeds
+      }
+      return {
+        error: new Error("eslint spawn failed"),
+        status: null,
+      };
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths,
+    }));
+
+    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+      "Failed to run ESLint: eslint spawn failed"
+    );
+  });
+
+  test("eslint check throws on stylelint spawn error", async () => {
+    let callCount = 0;
+    const mockSpawn = mock(() => {
+      callCount++;
+      if (callCount <= 2) {
+        return { status: 0 }; // prettier and eslint succeed
+      }
+      return {
+        error: new Error("stylelint spawn failed"),
+        status: null,
+      };
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths,
+    }));
+
+    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+      "Failed to run Stylelint: stylelint spawn failed"
+    );
+  });
+
   test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({

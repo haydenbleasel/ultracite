@@ -222,3 +222,16 @@ describe("parseFilePaths", () => {
     ]);
   });
 });
+
+describe("isMonorepo error handling", () => {
+  test("returns false when readFile throws an error", async () => {
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      readFile: mock(() => Promise.reject(new Error("ENOENT"))),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    const result = await isMonorepo();
+    expect(result).toBe(false);
+  });
+});

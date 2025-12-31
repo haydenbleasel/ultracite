@@ -348,6 +348,40 @@ describe("fix", () => {
     );
   });
 
+  test("eslint fix throws on stylelint spawn error", async () => {
+    let callCount = 0;
+    const mockSpawn = mock(() => {
+      callCount++;
+      if (callCount <= 2) {
+        return { status: 0 }; // prettier and eslint succeed
+      }
+      return {
+        error: new Error("stylelint spawn failed"),
+        status: null,
+      };
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "eslint"),
+      parseFilePaths,
+    }));
+
+    await expect(fix([], { linter: "eslint" })).rejects.toThrow(
+      "Failed to run Stylelint: stylelint spawn failed"
+    );
+  });
+
   test("runs oxlint fix when linter is oxlint (runs oxfmt, oxlint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({

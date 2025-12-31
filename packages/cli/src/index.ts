@@ -109,23 +109,25 @@ export const router = t.router({
       description: "Run linter and fix files",
     })
     .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-          linter: z
-            .enum(options.linters)
+      z
+        .tuple([
+          z
+            .array(z.string())
             .optional()
-            .describe("linter to use (biome, eslint, or oxlint)"),
-        }),
-      ])
+            .default([])
+            .describe("specific files to format"),
+          z.object({
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+            linter: z
+              .enum(options.linters)
+              .optional()
+              .describe("linter to use (biome, eslint, or oxlint)"),
+          }),
+        ])
+        .optional()
     )
     .mutation(async ({ input }) => {
-      const [files, opts] = input;
+      const [files, opts] = input ?? [[], {}];
       await fix(files, { unsafe: opts.unsafe, linter: opts.linter });
     }),
 
@@ -135,51 +137,6 @@ export const router = t.router({
     })
     .query(async () => {
       await doctor();
-    }),
-
-  // Deprecated commands for backwards compatibility
-  lint: t.procedure
-    .meta({
-      description:
-        "⚠️ DEPRECATED: Use 'check' instead - Run Biome linter without fixing files",
-    })
-    .input(
-      z
-        .array(z.string())
-        .optional()
-        .default([])
-        .describe("specific files to lint")
-    )
-    .query(async ({ input }) => {
-      console.warn(
-        "⚠️  Warning: 'lint' command is deprecated. Please use 'check' instead."
-      );
-      await check([input, {}]);
-    }),
-
-  format: t.procedure
-    .meta({
-      description:
-        "⚠️ DEPRECATED: Use 'fix' instead - Run Biome linter and fixes files",
-    })
-    .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-        }),
-      ])
-    )
-    .mutation(async ({ input }) => {
-      const [files, opts] = input;
-      console.warn(
-        "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
-      );
-      await fix(files, { unsafe: opts.unsafe });
     }),
 });
 

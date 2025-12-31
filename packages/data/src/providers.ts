@@ -45,7 +45,7 @@ export const providers: Provider[] = [
       {
         title: "Lightning fast",
         description:
-          "Written in Rust, Biome is 25x faster than Prettier and can format a large codebase in milliseconds.",
+          "Written in Rust, Biome can format a large codebase in milliseconds.",
         icon: "Zap",
       },
       {

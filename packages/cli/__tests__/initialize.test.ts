@@ -1173,6 +1173,13 @@ describe("helper functions", () => {
   });
 
   describe("upsertEditorConfig", () => {
+    test("throws error for invalid editor id", async () => {
+      await expect(async () => {
+        // @ts-expect-error - Testing invalid editor
+        await upsertEditorConfig("invalid-editor");
+      }).toThrow('Editor "invalid-editor" not found');
+    });
+
     test("creates vscode settings when not exists", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
@@ -1924,7 +1931,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("claude", "Claude Code");
+      await upsertAgents("claude", "Claude Code", "npm");
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -1933,7 +1940,7 @@ describe("helper functions", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.claude/CLAUDE.md") {
+          if (path === ".claude/CLAUDE.md") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));
@@ -1951,7 +1958,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("claude", "Claude Code");
+      await upsertAgents("claude", "Claude Code", "npm");
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });
