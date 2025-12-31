@@ -6,7 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
-import { BuildingIcon, CreditCardIcon } from "lucide-react";
+import { CreditCardIcon } from "lucide-react";
 import { RepoSidebarItem } from "./repo-sidebar-item";
 
 interface OrganizationSidebarGroupProps {
@@ -20,7 +20,6 @@ export const OrganizationSidebarGroup = ({
 }: OrganizationSidebarGroupProps) => (
   <SidebarGroup key={organization.id}>
     <SidebarGroupLabel className="gap-2">
-      <BuildingIcon className="size-4 shrink-0" />
       <span className="flex-1 truncate">{organization.slug}</span>
       <a
         href={`/api/stripe/portal?organizationId=${organization.id}`}
