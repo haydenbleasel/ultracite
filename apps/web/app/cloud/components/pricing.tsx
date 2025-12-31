@@ -1,3 +1,4 @@
+import { docsUrl } from "@repo/data/src/consts";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Card,
@@ -6,6 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/design-system/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
+import { InfoIcon } from "lucide-react";
 import Link from "next/link";
 
 const pricingItems = [
@@ -32,6 +39,8 @@ const pricingItems = [
   },
 ];
 
+const pricingUrl = new URL("/cloud#pricing", docsUrl);
+
 export const Pricing = () => (
   <div className="grid items-center gap-8 md:grid-cols-2">
     <div className="grid gap-4">
@@ -43,7 +52,7 @@ export const Pricing = () => (
         infrastructure needed to run the service.
       </p>
       <Button asChild className="w-fit" variant="secondary">
-        <Link href="/docs/cloud#pricing">Learn more</Link>
+        <Link href={pricingUrl.toString()}>Learn more</Link>
       </Button>
     </div>
 
@@ -56,11 +65,17 @@ export const Pricing = () => (
         <div className="space-y-2">
           {pricingItems.map((item) => (
             <div
-              className="flex items-center justify-between gap-4 text-sm"
+              className="flex items-center gap-2 text-sm"
               key={item.resource}
             >
               <span className="text-muted-foreground">{item.resource}</span>
-              <span className="font-medium">{item.price}</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon className="size-3 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>{item.notes}</TooltipContent>
+              </Tooltip>
+              <span className="ml-auto font-medium">{item.price}</span>
             </div>
           ))}
         </div>

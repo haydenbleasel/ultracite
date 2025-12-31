@@ -1,3 +1,4 @@
+import { appUrl, docsUrl } from "@repo/data/src/consts";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Button } from "@repo/design-system/components/ui/button";
 import { Logo } from "@repo/design-system/components/ultracite/logo";
@@ -64,6 +65,8 @@ const GitHubComment = () => (
   </div>
 );
 
+const cloudUrl = new URL("/cloud", docsUrl);
+
 export const Hero = () => (
   <div className="grid gap-8 sm:gap-12">
     <div className="grid gap-4">
@@ -76,10 +79,10 @@ export const Hero = () => (
       </p>
       <div className="flex flex-wrap gap-3">
         <Button asChild size="lg">
-          <Link href="/auth/login">Get Started</Link>
+          <Link href={appUrl}>Get Started</Link>
         </Button>
         <Button asChild size="lg" variant="outline">
-          <Link href="/docs/cloud">Read the Docs</Link>
+          <Link href={cloudUrl}>Read the Docs</Link>
         </Button>
       </div>
     </div>

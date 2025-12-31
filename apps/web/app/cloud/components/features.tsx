@@ -12,7 +12,7 @@ const features = [
     icon: GitPullRequest,
     title: "Automated PR Reviews",
     description:
-      "When you open or update a pull request, Ultracite automatically checks out your branch, runs fixes, and commits changes directly to your PR.",
+      'When you comment "@ultracite review" on a pull request, Ultracite automatically checks out your branch, runs fixes, and commits changes directly to your PR.',
   },
   {
     icon: Calendar,
