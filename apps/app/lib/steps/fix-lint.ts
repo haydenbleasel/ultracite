@@ -11,7 +11,7 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
 
   const sandbox = await Sandbox.get({ sandboxId });
 
-  const result = await sandbox.runCommand("npx", ["ultracite", "fix"]);
+  const result = await sandbox.runCommand("nlx", ["ultracite", "fix"]);
   const output = await result.output("both");
 
   // Check if there are uncommitted changes
@@ -20,7 +20,7 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   const hasChanges = Boolean(diffOutput.trim());
 
   // Run check to see if there are remaining issues (non-zero exit = issues remain)
-  const checkResult = await sandbox.runCommand("npx", ["ultracite", "check"]);
+  const checkResult = await sandbox.runCommand("nlx", ["ultracite", "check"]);
   const hasRemainingIssues = checkResult.exitCode !== 0;
 
   return { output, hasChanges, hasRemainingIssues };
