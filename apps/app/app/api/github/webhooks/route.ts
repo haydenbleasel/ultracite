@@ -172,6 +172,11 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     return;
   }
 
+  // Skip PRs created by Changeset (from release workflow)
+  if (pull_request.head.ref.startsWith("changeset-release/")) {
+    return;
+  }
+
   // Check if this repo is tracked by Ultracite
   const repo = await database.repo.findFirst({
     where: { githubRepoId: repository.id },
