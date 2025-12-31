@@ -109,23 +109,25 @@ export const router = t.router({
       description: "Run linter and fix files",
     })
     .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-          linter: z
-            .enum(options.linters)
+      z
+        .tuple([
+          z
+            .array(z.string())
             .optional()
-            .describe("linter to use (biome, eslint, or oxlint)"),
-        }),
-      ])
+            .default([])
+            .describe("specific files to format"),
+          z.object({
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+            linter: z
+              .enum(options.linters)
+              .optional()
+              .describe("linter to use (biome, eslint, or oxlint)"),
+          }),
+        ])
+        .optional()
     )
     .mutation(async ({ input }) => {
-      const [files, opts] = input;
+      const [files, opts] = input ?? [[], {}];
       await fix(files, { unsafe: opts.unsafe, linter: opts.linter });
     }),
 
@@ -163,19 +165,21 @@ export const router = t.router({
         "⚠️ DEPRECATED: Use 'fix' instead - Run Biome linter and fixes files",
     })
     .input(
-      z.tuple([
-        z
-          .array(z.string())
-          .optional()
-          .default([])
-          .describe("specific files to format"),
-        z.object({
-          unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-        }),
-      ])
+      z
+        .tuple([
+          z
+            .array(z.string())
+            .optional()
+            .default([])
+            .describe("specific files to format"),
+          z.object({
+            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
+          }),
+        ])
+        .optional()
     )
     .mutation(async ({ input }) => {
-      const [files, opts] = input;
+      const [files, opts] = input ?? [[], {}];
       console.warn(
         "⚠️  Warning: 'format' command is deprecated. Please use 'fix' instead."
       );
