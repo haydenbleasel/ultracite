@@ -21,7 +21,6 @@ import { updateRepo } from "@/actions/repo/update";
 
 interface RepoSettingsProps {
   defaultBranch: string;
-  defaultEnabled: boolean;
   defaultDailyRunsEnabled: boolean;
   defaultPrReviewEnabled: boolean;
   repoId: string;
@@ -29,7 +28,6 @@ interface RepoSettingsProps {
 
 export const RepoSettings = ({
   defaultBranch,
-  defaultEnabled,
   defaultDailyRunsEnabled,
   defaultPrReviewEnabled,
   repoId,
@@ -40,12 +38,10 @@ export const RepoSettings = ({
       formData: FormData
     ) => {
       const newDefaultBranch = formData.get("default-branch") as string;
-      const newEnabled = formData.get("enabled") === "on";
       const newDailyRunsEnabled = formData.get("daily-runs-enabled") === "on";
       const newPrReviewEnabled = formData.get("pr-review-enabled") === "on";
       const result = await updateRepo(repoId, {
         defaultBranch: newDefaultBranch,
-        enabled: newEnabled,
         dailyRunsEnabled: newDailyRunsEnabled,
         prReviewEnabled: newPrReviewEnabled,
       });
@@ -72,7 +68,7 @@ export const RepoSettings = ({
           <SettingsIcon className="size-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-xl">
         <form action={formAction}>
           <DialogHeader>
             <DialogTitle>Repository settings</DialogTitle>
@@ -90,15 +86,12 @@ export const RepoSettings = ({
               />
             </div>
             <div className="flex items-center justify-between gap-3">
-              <Label htmlFor="enabled">Enabled</Label>
-              <Switch
-                defaultChecked={defaultEnabled}
-                id="enabled"
-                name="enabled"
-              />
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <Label htmlFor="daily-runs-enabled">Daily runs</Label>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="daily-runs-enabled">Daily runs</Label>
+                <p className="text-muted-foreground text-sm">
+                  Opens a PR that fixes all issues once a day.
+                </p>
+              </div>
               <Switch
                 defaultChecked={defaultDailyRunsEnabled}
                 id="daily-runs-enabled"
@@ -106,7 +99,16 @@ export const RepoSettings = ({
               />
             </div>
             <div className="flex items-center justify-between gap-3">
-              <Label htmlFor="pr-review-enabled">PR reviews</Label>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="pr-review-enabled">PR reviews</Label>
+                <p className="text-muted-foreground text-sm">
+                  Fixes your PR when you comment{" "}
+                  <code className="-translate-y-0.5 text-xs">
+                    @ultracite review
+                  </code>
+                  .
+                </p>
+              </div>
               <Switch
                 defaultChecked={defaultPrReviewEnabled}
                 id="pr-review-enabled"

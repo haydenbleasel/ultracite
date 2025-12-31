@@ -25,7 +25,6 @@ const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
   const firstRepo = await database.repo.findFirst({
     where: {
       organizationId: organization.id,
-      enabled: true,
     },
     orderBy: { createdAt: "desc" },
     select: { name: true },

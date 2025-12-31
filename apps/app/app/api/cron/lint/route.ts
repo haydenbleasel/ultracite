@@ -19,7 +19,7 @@ export const GET = async (request: NextRequest) => {
     },
     include: {
       repos: {
-        where: { enabled: true, dailyRunsEnabled: true },
+        where: { dailyRunsEnabled: true },
       },
     },
   });

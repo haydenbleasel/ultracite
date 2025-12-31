@@ -2,7 +2,7 @@ import { database } from "@repo/backend/database";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
-import { ExternalLinkIcon } from "lucide-react";
+import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
@@ -73,13 +73,21 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-2">
             <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
-            {repo.enabled ? null : <Badge variant="outline">Disabled</Badge>}
+            {repo.dailyRunsEnabled && (
+              <Badge variant="secondary">
+                <CheckCircleIcon className="size-4" /> Daily runs
+              </Badge>
+            )}
+            {repo.prReviewEnabled && (
+              <Badge variant="secondary">
+                <CheckCircleIcon className="size-4" /> PR reviews
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-px">
             <RepoSettings
               defaultBranch={repo.defaultBranch}
               defaultDailyRunsEnabled={repo.dailyRunsEnabled}
-              defaultEnabled={repo.enabled}
               defaultPrReviewEnabled={repo.prReviewEnabled}
               repoId={repo.id}
             />

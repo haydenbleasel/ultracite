@@ -75,7 +75,6 @@ model Repo {
   name          String
   fullName      String // owner/repo
   defaultBranch String  @default("main")
-  enabled       Boolean @default(true)
 
   dailyRunsEnabled Boolean @default(true)
   prReviewEnabled  Boolean @default(true)
