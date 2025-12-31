@@ -81,12 +81,12 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
           <div className="flex items-center gap-2">
             <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
             {repo.dailyRunsEnabled && (
-              <Badge variant="secondary">
+              <Badge className="hidden lg:flex" variant="secondary">
                 <CheckCircleIcon className="size-4" /> Daily runs
               </Badge>
             )}
             {repo.prReviewEnabled && (
-              <Badge variant="secondary">
+              <Badge className="hidden lg:flex" variant="secondary">
                 <CheckCircleIcon className="size-4" /> PR reviews
               </Badge>
             )}
