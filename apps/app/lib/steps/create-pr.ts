@@ -36,13 +36,7 @@ export async function createPullRequest(
     owner,
     repo,
     title,
-    body: `## Summary
-
-This PR fixes linting issues detected by Ultracite.
-
-## Changes
-
-${changelog ?? "Check the files for changes."}
+    body: `${changelog ?? "Check the files for changes."}
 
 ---
 
