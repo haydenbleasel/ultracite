@@ -2,9 +2,9 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "root": true,
   "extends": [
-    "./packages/cli/config/core/biome.jsonc",
-    "./packages/cli/config/react/biome.jsonc",
-    "./packages/cli/config/next/biome.jsonc"
+    "./packages/cli/config/biome/core/biome.jsonc",
+    "./packages/cli/config/biome/react/biome.jsonc",
+    "./packages/cli/config/biome/next/biome.jsonc"
   ],
   "linter": {
     "rules": {
@@ -17,10 +17,14 @@
   "files": {
     "includes": [
       "**/*",
+
+      "!packages/design-system/components/ui",
+      "!packages/design-system/components/kibo-ui",
+      "!packages/design-system/lib/utils.ts",
+      "!packages/design-system/hooks/use-mobile.ts",
       "!apps/docs/components/ai-elements",
-      "!apps/docs/components/ui",
-      "!apps/docs/lib/utils.ts",
-      "!apps/docs/hooks/use-mobile.ts",
+      "!apps/app/components/supabase-ui",
+      "!apps/app/lib/supabase",
       "!test"
     ]
   }

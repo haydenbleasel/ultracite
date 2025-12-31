@@ -4,7 +4,13 @@ import type { NextConfig } from "next";
 const withMdx = createMDX();
 
 const config: NextConfig = {
-  reactStrictMode: true,
+  transpilePackages: ["@repo/data"],
+
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
+
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 
   images: {
     formats: ["image/avif", "image/webp"],
@@ -21,26 +27,6 @@ const config: NextConfig = {
       {
         source: "/:path*.mdx",
         destination: "/llms.mdx/:path*",
-      },
-    ];
-  },
-
-  redirects() {
-    return [
-      {
-        source: "/husky",
-        destination: "/integration/husky",
-        permanent: true,
-      },
-      {
-        source: "/lint-staged",
-        destination: "/integration/lint-staged",
-        permanent: true,
-      },
-      {
-        source: "/lefthook",
-        destination: "/integration/lefthook",
-        permanent: true,
       },
     ];
   },

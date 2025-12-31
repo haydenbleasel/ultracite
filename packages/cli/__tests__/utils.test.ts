@@ -93,6 +93,17 @@ describe("isMonorepo", () => {
     const result = await isMonorepo();
     expect(result).toBe(false);
   });
+
+  test("returns false when package.json parses to null", async () => {
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      readFile: mock(() => Promise.resolve("null")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    const result = await isMonorepo();
+    expect(result).toBe(false);
+  });
 });
 
 describe("updatePackageJson", () => {
@@ -209,5 +220,18 @@ describe("parseFilePaths", () => {
       "'with space.js' ",
       "'user'\\''s.ts' ",
     ]);
+  });
+});
+
+describe("isMonorepo error handling", () => {
+  test("returns false when readFile throws an error", async () => {
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      readFile: mock(() => Promise.reject(new Error("ENOENT"))),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    const result = await isMonorepo();
+    expect(result).toBe(false);
   });
 });

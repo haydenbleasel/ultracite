@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 import { tsconfig } from "../src/tsconfig";
 
 mock.module("glob", () => ({
@@ -12,9 +12,8 @@ mock.module("node:fs/promises", () => ({
 }));
 
 describe("tsconfig", () => {
-  beforeEach(() => {
-    mock.restore();
-  });
+  // Note: We don't call mock.restore() here because it causes issues
+  // with module re-loading when the tests transition between each other
 
   describe("exists", () => {
     test("returns true when tsconfig files are found", async () => {
@@ -29,6 +28,15 @@ describe("tsconfig", () => {
     test("returns false when no tsconfig files are found", async () => {
       mock.module("glob", () => ({
         glob: mock(() => Promise.resolve([])),
+      }));
+
+      const result = await tsconfig.exists();
+      expect(result).toBe(false);
+    });
+
+    test("returns false when glob throws an error", async () => {
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.reject(new Error("Glob error"))),
       }));
 
       const result = await tsconfig.exists();

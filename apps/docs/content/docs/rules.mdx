@@ -1,0 +1,52 @@
+---
+title: Rules
+description: How to integrate Ultracite with AI coding assistants through editor rules.
+---
+
+Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
+
+The editor rules work alongside your linter's formatting and linting. While your linter handles code formatting and catches errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
+
+This dual approach ensures both automated code quality (through linting) and intelligent code generation (through AI coding rules).
+
+## Setup
+
+### Automatic Setup
+
+When you run `npx ultracite init`, you'll be prompted to select which AI agents you want to enable:
+
+```bash
+? Which AI agents do you want to enable (optional)?
+  ◯ GitHub Copilot
+  ◯ Cursor
+  ◯ Windsurf
+  # ... and more
+```
+
+This will create the relevant rule file(s) in your project directory.
+
+### Manual Setup
+
+If you want to manually set things up, create the relevant file in your project directory. You can find the rule file location for each agent on their respective pages. Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/blob/main/packages/data/src/rules.ts) into the file.
+
+## Supported Agents
+
+Ultracite supports a wide range of AI coding assistants. Check the **Agents** section in the navigation bar for the full list of supported agents, including setup instructions and configuration details for each one.
+
+## Benefits
+
+Using Ultracite editor rules provides several advantages:
+
+- **Consistency**: All AI-generated code follows the same conventions
+- **Quality**: Rules enforce best practices and prevent common mistakes
+- **Accessibility**: Built-in accessibility guidelines ensure inclusive code
+- **Performance**: Rules promote efficient patterns and avoid anti-patterns
+- **Security**: Guidelines help prevent common security vulnerabilities
+
+## Customization
+
+While the default rules are comprehensive, you can customize them for your specific needs:
+
+1. **Modify existing rules**: Edit the rule files directly
+2. **Add project-specific rules**: Append additional guidelines
+3. **Disable rules**: Remove or comment out rules that don't apply to your project

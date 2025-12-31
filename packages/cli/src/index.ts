@@ -1,11 +1,12 @@
+import { options } from "@repo/data/options";
 import { initTRPC } from "@trpc/server";
+import { type PackageManagerName, packageManagers } from "nypm";
 import { createCli, type TrpcCliMeta } from "trpc-cli";
 import z from "zod";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
-import { options } from "./consts/options";
 import { initialize } from "./initialize";
 
 const t = initTRPC.meta<TrpcCliMeta>().create();
@@ -18,9 +19,18 @@ export const router = t.router({
     .input(
       z.object({
         pm: z
-          .enum(options.packageManagers)
+          .enum(
+            packageManagers.map((pm) => pm.name) as [
+              PackageManagerName,
+              ...PackageManagerName[],
+            ]
+          )
           .optional()
           .describe("Package manager to use"),
+        linter: z
+          .enum(options.linters)
+          .optional()
+          .describe("Linter / formatter to use"),
         editors: z
           .array(z.enum(options.editorConfigs))
           .optional()
@@ -65,7 +75,7 @@ export const router = t.router({
 
   check: t.procedure
     .meta({
-      description: "Run Biome linter without fixing files",
+      description: "Run linter without fixing files",
     })
     .input(
       z
@@ -82,6 +92,10 @@ export const router = t.router({
               .describe(
                 "level of diagnostics to show. In order, from the lowest to the most important: info, warn, error."
               ),
+            linter: z
+              .enum(options.linters)
+              .optional()
+              .describe("linter to use (biome, eslint, or oxlint)"),
           }),
         ])
         .optional()
@@ -92,7 +106,7 @@ export const router = t.router({
 
   fix: t.procedure
     .meta({
-      description: "Run Biome linter and fixes files",
+      description: "Run linter and fix files",
     })
     .input(
       z
@@ -110,7 +124,7 @@ export const router = t.router({
     )
     .mutation(async ({ input }) => {
       const [files, opts] = input ?? [[], {}];
-      await fix(files, { unsafe: opts.unsafe });
+      await fix(files, { unsafe: opts.unsafe, linter: opts.linter });
     }),
 
   doctor: t.procedure

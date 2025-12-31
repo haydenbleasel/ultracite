@@ -5,8 +5,13 @@ import {
   isCancel,
   log,
   multiselect,
+  select,
   spinner,
 } from "@clack/prompts";
+import { agents as agentsData } from "@repo/data/agents";
+import { editors } from "@repo/data/editors";
+import type { options } from "@repo/data/options";
+import { providers } from "@repo/data/providers";
 import {
   addDevDependency,
   detectPackageManager,
@@ -14,37 +19,41 @@ import {
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
-import { biome } from "./biome";
-import type { options } from "./consts/options";
-import { vscode } from "./editor-config/vscode";
-import { zed } from "./editor-config/zed";
+import { createEditorConfig } from "./editor-config";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
-import { eslintCleanup } from "./migrations/eslint";
-import { prettierCleanup } from "./migrations/prettier";
+import { biome } from "./linters/biome";
+import { eslint } from "./linters/eslint";
+import { oxfmt } from "./linters/oxfmt";
+import { oxlint } from "./linters/oxlint";
+import { prettier } from "./linters/prettier";
+import { stylelint } from "./linters/stylelint";
 import { tsconfig } from "./tsconfig";
-import { isMonorepo, title, updatePackageJson } from "./utils";
+import { isMonorepo, updatePackageJson } from "./utils";
 
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
-type InitializeFlags = {
+type Linter = (typeof options.linters)[number];
+
+interface InitializeFlags {
   pm?: PackageManagerName;
+  linter?: Linter;
   editors?: (typeof options.editorConfigs)[number][];
   agents?: (typeof options.agents)[number][];
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
   frameworks?: (typeof options.frameworks)[number][];
-  migrate?: (typeof options.migrations)[number][];
   skipInstall?: boolean;
   quiet?: boolean;
-};
+}
 
 export const installDependencies = async (
   packageManager: PackageManagerName,
+  linter: Linter = "biome",
   install = true,
   quiet = false
 ) => {
@@ -54,10 +63,23 @@ export const installDependencies = async (
     s.start("Installing dependencies...");
   }
 
-  const packages = [
-    `ultracite@${ultraciteVersion}`,
-    `@biomejs/biome@${schemaVersion}`,
-  ];
+  const packages: string[] = [`ultracite@${ultraciteVersion}`];
+
+  // Add linter-specific dependencies
+  if (linter === "biome") {
+    packages.push(`@biomejs/biome@${schemaVersion}`);
+  }
+  if (linter === "eslint") {
+    packages.push("eslint@latest");
+    // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
+    packages.push("prettier@latest");
+    packages.push("stylelint@latest");
+  }
+  if (linter === "oxlint") {
+    packages.push("oxlint@latest");
+    // Oxlint is only a linter, so we need oxfmt for formatting
+    packages.push("oxfmt@latest");
+  }
 
   if (install) {
     for (const pkg of packages) {
@@ -68,12 +90,26 @@ export const installDependencies = async (
       });
     }
   } else {
-    await updatePackageJson({
-      devDependencies: {
-        "@biomejs/biome": schemaVersion,
-        ultracite: ultraciteVersion,
-      },
-    });
+    const devDependencies: Record<string, string> = {
+      ultracite: ultraciteVersion,
+    };
+
+    if (linter === "biome") {
+      devDependencies["@biomejs/biome"] = schemaVersion;
+    }
+    if (linter === "eslint") {
+      devDependencies.eslint = "latest";
+      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
+      devDependencies.prettier = "latest";
+      devDependencies.stylelint = "latest";
+    }
+    if (linter === "oxlint") {
+      devDependencies.oxlint = "latest";
+      // Oxlint is only a linter, so we need oxfmt for formatting
+      devDependencies.oxfmt = "latest";
+    }
+
+    await updatePackageJson({ devDependencies });
   }
 
   if (!quiet) {
@@ -104,75 +140,86 @@ export const upsertTsConfig = async (quiet = false) => {
   }
 };
 
-export const upsertVsCodeSettings = async (quiet = false) => {
+export const upsertEditorConfig = async (
+  editorId: string,
+  linter: Linter = "biome",
+  quiet = false
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Editor configuration requires multiple conditional paths
+) => {
+  const editor = editors.find((editor) => editor.id === editorId);
+
+  if (!editor) {
+    throw new Error(`Editor "${editorId}" not found`);
+  }
+
+  const editorConfig = createEditorConfig(editorId, linter);
   const s = spinner();
 
   if (!quiet) {
-    s.start("Checking for .vscode/settings.json...");
+    s.start(`Checking for ${editor.config.path}...`);
   }
 
-  if (await vscode.exists()) {
+  if (await editorConfig.exists()) {
     if (!quiet) {
-      s.message("settings.json found, updating...");
+      s.message(`${editor.config.path} found, updating...`);
     }
-    await vscode.update();
+    await editorConfig.update();
     if (!quiet) {
-      s.stop("settings.json updated.");
+      s.stop(`${editor.config.path} updated.`);
     }
     return;
   }
 
   if (!quiet) {
-    s.message("settings.json not found, creating...");
+    s.message(`${editor.config.path} not found, creating...`);
   }
-  await vscode.create();
-  if (!quiet) {
-    s.message("settings.json created.");
-    s.message("Installing Biome extension...");
-  }
+  await editorConfig.create();
 
-  try {
-    const result = vscode.extension();
+  // Install extension for VS Code-based editors
+  if (editorConfig.extension) {
+    const linterExtension = providers.find(
+      (provider) => provider.id === linter
+    )?.vscodeExtensionId;
+
+    if (!linterExtension) {
+      throw new Error(`Linter extension not found for ${linter}`);
+    }
+
     if (!quiet) {
+      s.message(`Installing ${linterExtension} extension...`);
+    }
+
+    try {
+      const result = editorConfig.extension(linterExtension);
       if (result.status === 0) {
-        s.stop("settings.json created and Biome extension installed.");
-      } else {
-        s.stop("settings.json created. Install Biome extension manually.");
+        if (!quiet) {
+          s.stop(
+            `${editor.config.path} created and ${linterExtension} extension installed.`
+          );
+        }
+        return;
       }
+    } catch {
+      // Fall through to manual install message
     }
-  } catch (error) {
-    if (!quiet) {
-      s.stop("settings.json created. Install Biome extension manually.");
-    }
-  }
-};
 
-export const upsertZedSettings = async (quiet = false) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Checking for .zed/settings.json...");
-  }
-
-  if (await zed.exists()) {
     if (!quiet) {
-      s.message("settings.json found, updating...");
-    }
-    await zed.update();
-    if (!quiet) {
-      s.stop("settings.json updated.");
+      s.stop(
+        `${editor.config.path} created. Install ${linterExtension} extension manually.`
+      );
     }
     return;
   }
 
+  // Non-VS Code editors (like Zed)
   if (!quiet) {
-    s.message("settings.json not found, creating...");
-  }
-  await zed.create();
-  if (!quiet) {
-    s.message(
-      "settings.json created. Install the Biome extension: https://biomejs.dev/reference/zed/"
-    );
+    if (editorId === "zed") {
+      s.stop(
+        `${editor.config.path} created. Install the Biome extension: https://biomejs.dev/reference/zed/`
+      );
+    } else {
+      s.stop(`${editor.config.path} created.`);
+    }
   }
 };
 
@@ -203,6 +250,147 @@ export const upsertBiomeConfig = async (
   await biome.create({ frameworks });
   if (!quiet) {
     s.stop("Biome configuration created.");
+  }
+};
+
+export const upsertEslintConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for ESLint configuration...");
+  }
+
+  if (await eslint.exists()) {
+    if (!quiet) {
+      s.message("ESLint configuration found, updating...");
+    }
+    await eslint.update({ frameworks });
+    if (!quiet) {
+      s.stop("ESLint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("ESLint configuration not found, creating...");
+  }
+  await eslint.create({ frameworks });
+  if (!quiet) {
+    s.stop("ESLint configuration created.");
+  }
+};
+
+export const upsertOxlintConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Oxlint configuration...");
+  }
+
+  if (await oxlint.exists()) {
+    if (!quiet) {
+      s.message("Oxlint configuration found, updating...");
+    }
+    await oxlint.update({ frameworks });
+    if (!quiet) {
+      s.stop("Oxlint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Oxlint configuration not found, creating...");
+  }
+  await oxlint.create({ frameworks });
+  if (!quiet) {
+    s.stop("Oxlint configuration created.");
+  }
+};
+
+export const upsertPrettierConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Prettier configuration...");
+  }
+
+  if (await prettier.exists()) {
+    if (!quiet) {
+      s.message("Prettier configuration found, updating...");
+    }
+    await prettier.update();
+    if (!quiet) {
+      s.stop("Prettier configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Prettier configuration not found, creating...");
+  }
+  await prettier.create();
+  if (!quiet) {
+    s.stop("Prettier configuration created.");
+  }
+};
+
+export const upsertStylelintConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for Stylelint configuration...");
+  }
+
+  if (await stylelint.exists()) {
+    if (!quiet) {
+      s.message("Stylelint configuration found, updating...");
+    }
+    await stylelint.update();
+    if (!quiet) {
+      s.stop("Stylelint configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("Stylelint configuration not found, creating...");
+  }
+  await stylelint.create();
+  if (!quiet) {
+    s.stop("Stylelint configuration created.");
+  }
+};
+
+export const upsertOxfmtConfig = async (quiet = false) => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for oxfmt configuration...");
+  }
+
+  if (await oxfmt.exists()) {
+    if (!quiet) {
+      s.message("oxfmt configuration found, updating...");
+    }
+    await oxfmt.update();
+    if (!quiet) {
+      s.stop("oxfmt configuration updated.");
+    }
+    return;
+  }
+
+  if (!quiet) {
+    s.message("oxfmt configuration not found, creating...");
+  }
+  await oxfmt.create();
+  if (!quiet) {
+    s.stop("oxfmt configuration created.");
   }
 };
 
@@ -430,81 +618,13 @@ export const upsertHooks = async (
   }
 };
 
-export const removePrettier = async (pm: PackageManagerName, quiet = false) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Removing Prettier dependencies and configuration...");
-  }
-
-  try {
-    const result = await prettierCleanup.remove(pm);
-
-    if (!quiet) {
-      if (result.packagesRemoved.length > 0) {
-        s.message(
-          `Removed Prettier packages: ${result.packagesRemoved.join(", ")}`
-        );
-      }
-
-      if (result.filesRemoved.length > 0) {
-        s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
-      }
-
-      if (result.vsCodeCleaned) {
-        s.message("Cleaned VS Code settings");
-      }
-
-      s.stop("Prettier removed successfully.");
-    }
-  } catch (_error) {
-    if (!quiet) {
-      s.stop("Failed to remove Prettier completely, but continuing...");
-    }
-  }
-};
-
-export const removeEsLint = async (pm: PackageManagerName, quiet = false) => {
-  const s = spinner();
-
-  if (!quiet) {
-    s.start("Removing ESLint dependencies and configuration...");
-  }
-
-  try {
-    const result = await eslintCleanup.remove(pm);
-
-    if (!quiet) {
-      if (result.packagesRemoved.length > 0) {
-        s.message(
-          `Removed ESLint packages: ${result.packagesRemoved.join(", ")}`
-        );
-      }
-
-      if (result.filesRemoved.length > 0) {
-        s.message(`Removed config files: ${result.filesRemoved.join(", ")}`);
-      }
-
-      if (result.vsCodeCleaned) {
-        s.message("Cleaned VS Code settings");
-      }
-
-      s.stop("ESLint removed successfully.");
-    }
-  } catch (_error) {
-    if (!quiet) {
-      s.stop("Failed to remove ESLint completely, but continuing...");
-    }
-  }
-};
-
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
 export const initialize = async (flags?: InitializeFlags) => {
   const opts = flags ?? {};
   const quiet = opts.quiet ?? false;
 
   if (!quiet) {
-    intro(title);
+    intro(`Ultracite v${ultraciteVersion} Initialization`);
   }
 
   try {
@@ -529,65 +649,45 @@ export const initialize = async (flags?: InitializeFlags) => {
       pm = detected.name;
     }
 
-    let shouldRemovePrettier = opts.migrate?.includes("prettier");
-    let shouldRemoveEslint = opts.migrate?.includes("eslint");
+    let linter = opts.linter;
+    if (linter === undefined) {
+      // If quiet mode or other CLI options are provided, default to biome only
+      const hasOtherCliOptions =
+        quiet ||
+        opts.pm ||
+        opts.editors ||
+        opts.agents ||
+        opts.hooks ||
+        opts.integrations !== undefined ||
+        opts.frameworks !== undefined;
 
-    if (
-      !quiet &&
-      (shouldRemovePrettier === undefined || shouldRemoveEslint === undefined)
-    ) {
-      const migrationOptions: Array<{ label: string; value: string }> = [];
-
-      if (
-        shouldRemovePrettier === undefined &&
-        (await prettierCleanup.hasPrettier())
-      ) {
-        migrationOptions.push({
-          label:
-            "Remove Prettier (dependencies, config files, VS Code settings)",
-          value: "prettier",
-        });
-      }
-
-      if (
-        shouldRemoveEslint === undefined &&
-        (await eslintCleanup.hasEsLint())
-      ) {
-        migrationOptions.push({
-          label: "Remove ESLint (dependencies, config files, VS Code settings)",
-          value: "eslint",
-        });
-      }
-
-      if (migrationOptions.length > 0) {
-        const migrationChoices = await multiselect({
-          message:
-            "Remove existing formatters/linters (recommended for clean migration)?",
-          options: migrationOptions,
-          required: false,
+      if (hasOtherCliOptions) {
+        linter = "biome";
+      } else {
+        const linterResult = await select({
+          message: "Which linter do you want to use?",
+          options: [
+            {
+              label: "Biome (Recommended)",
+              value: "biome",
+            },
+            {
+              label: "ESLint + Prettier + Stylelint",
+              value: "eslint",
+            },
+            {
+              label: "Oxlint + Oxfmt",
+              value: "oxlint",
+            },
+          ],
         });
 
-        if (isCancel(migrationChoices)) {
+        if (isCancel(linterResult)) {
           cancel("Operation cancelled.");
           return;
         }
 
-        if (shouldRemovePrettier === undefined) {
-          shouldRemovePrettier = migrationChoices.includes("prettier");
-        }
-        if (shouldRemoveEslint === undefined) {
-          shouldRemoveEslint = migrationChoices.includes("eslint");
-        }
-      }
-    }
-
-    // Set defaults for quiet mode if not explicitly provided
-    if (quiet) {
-      if (shouldRemovePrettier === undefined) {
-        shouldRemovePrettier = false;
-      }
-      if (shouldRemoveEslint === undefined) {
-        shouldRemoveEslint = false;
+        linter = linterResult as Linter;
       }
     }
 
@@ -601,8 +701,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.hooks ||
-        opts.integrations !== undefined ||
-        opts.migrate !== undefined;
+        opts.integrations !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -659,29 +758,10 @@ export const initialize = async (flags?: InitializeFlags) => {
     let agents = opts.agents;
     let hooks = opts.hooks;
 
-    const agentsOptions: Record<(typeof options.agents)[number], string> = {
-      "vscode-copilot": "GitHub Copilot (VSCode)",
-      cursor: "Cursor",
-      windsurf: "Windsurf",
-      zed: "Zed",
-      claude: "Claude Code",
-      codex: "OpenAI Codex / Jules / OpenCode",
-      kiro: "Kiro IDE",
-      cline: "Cline",
-      amp: "AMP",
-      aider: "Aider",
-      "firebase-studio": "Firebase Studio",
-      "open-hands": "Open Hands",
-      "gemini-cli": "Gemini CLI",
-      junie: "Junie",
-      augmentcode: "Augment Code",
-      "kilo-code": "Kilo Code",
-      goose: "Codename Goose",
-      "roo-code": "Roo Code",
-      warp: "Warp",
-      droid: "Droid",
-      antigravity: "Antigravity",
-    } as const;
+    // Build agent options from shared data
+    const agentsOptions = Object.fromEntries(
+      agentsData.map((agent) => [agent.id, agent.name])
+    ) as Record<(typeof options.agents)[number], string>;
 
     if (!agents) {
       if (quiet) {
@@ -706,10 +786,12 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    const hooksOptions: Record<(typeof options.hooks)[number], string> = {
-      cursor: "Cursor",
-      claude: "Claude Code",
-    } as const;
+    // Build hooks options from editors that support hooks
+    const hooksOptions = Object.fromEntries(
+      editors
+        .filter((editor) => editor.hooks)
+        .map((editor) => [editor.id, editor.name])
+    ) as Record<(typeof options.hooks)[number], string>;
 
     if (!hooks) {
       if (quiet) {
@@ -739,12 +821,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
       const hasOtherCliOptions =
-        quiet ||
-        opts.pm ||
-        opts.editors ||
-        opts.agents ||
-        opts.hooks ||
-        opts.migrate !== undefined;
+        quiet || opts.pm || opts.editors || opts.agents || opts.hooks;
 
       if (hasOtherCliOptions) {
         integrations = [];
@@ -769,23 +846,28 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    if (shouldRemovePrettier) {
-      await removePrettier(pm, quiet);
-    }
-    if (shouldRemoveEslint) {
-      await removeEsLint(pm, quiet);
-    }
-
-    await installDependencies(pm, !opts.skipInstall, quiet);
+    await installDependencies(pm, linter, !opts.skipInstall, quiet);
 
     await upsertTsConfig(quiet);
-    await upsertBiomeConfig(frameworks, quiet);
 
-    if (editorConfig?.includes("vscode")) {
-      await upsertVsCodeSettings(quiet);
+    // Create config for selected linter
+    if (linter === "biome") {
+      await upsertBiomeConfig(frameworks, quiet);
     }
-    if (editorConfig?.includes("zed")) {
-      await upsertZedSettings(quiet);
+    if (linter === "eslint") {
+      await upsertEslintConfig(frameworks, quiet);
+      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
+      await upsertPrettierConfig(quiet);
+      await upsertStylelintConfig(quiet);
+    }
+    if (linter === "oxlint") {
+      await upsertOxlintConfig(frameworks, quiet);
+      // Oxlint is only a linter, so we need oxfmt for formatting
+      await upsertOxfmtConfig(quiet);
+    }
+
+    for (const editorId of editorConfig ?? []) {
+      await upsertEditorConfig(editorId, linter, quiet);
     }
 
     for (const ruleName of agents ?? []) {

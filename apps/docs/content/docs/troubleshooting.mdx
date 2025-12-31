@@ -1,0 +1,80 @@
+---
+title: Troubleshooting
+description: This section covers how to troubleshoot Ultracite.
+---
+
+Even though Ultracite aims to simplify linting and formatting, you might encounter some issues during setup and usage. Here are some common issues and their solutions:
+
+## "Ultracite isn't formatting on save in VS Code."
+
+Double-check that you have the appropriate VS Code extension installed and enabled for your chosen linter (Biome, ESLint, or Oxlint). Verify your `.vscode/settings.json` contains the correct `editor.defaultFormatter` and `editor.codeActionsOnSave` entries as shown in [Setup](/setup).
+
+Also ensure there's no conflicting formatter or linter extension enabled. If you have multiple formatting extensions active, they might interfere or take precedence over each other.
+
+You may need to disable VS Code's built-in Format On Save if another formatter is grabbing the file. Try running the "Format Document" command manually and see if the correct formatter is used or if any error appears.
+
+## "I installed Ultracite, but VS Code still uses my old linter."
+
+Ensure you removed or turned off your old configs. For example, if you have leftover `.eslintrc`, `.prettierrc`, or `biome.jsonc` files from a previous setup, VS Code extensions might still pick them up and cause duplicate diagnostics.
+
+It's recommended to remove those configs (or at least disable the corresponding extensions) when switching linters to avoid confusion. Let your chosen Ultracite toolchain take over as the sole linter/formatter.
+
+## "Ultracite is throwing parse errors for files I don't want it to check."
+
+A common example is installing components from a UI library like [`shadcn/ui`](https://ui.shadcn.com/). While they're designed to be modified, you may want to preserve the original source code for updates. In this case, you'll want to exclude those files from linting.
+
+For Biome, add patterns to your `biome.jsonc`:
+
+```json title="biome.jsonc"
+{
+  "files": {
+    "includes": ["!components/ui/**", "!lib/**", "!hooks/**"]
+  }
+}
+```
+
+By default, all linters should ignore `node_modules`, but if you opened a file manually from there, the extension might still try to lint it. Generally, ignore generated files or third-party code.
+
+Another cause could be experimental syntax that your linter can't parse yet. Check your linter's issue tracker for support of that syntax.
+
+## "I see double errors for the same issue."
+
+This can happen if you have multiple linters running at once. It can also occur if VS Code's TypeScript checker and your linter both report the same error.
+
+To resolve, standardize on one tool per type of check. If using Ultracite, disable other linters. For TypeScript type errors, VS Code's built-in TS server will show them (red squiggles for type issues) — your linter may also show type-driven lint issues. Usually this is fine as they highlight the same problem.
+
+If it bothers you, you can turn off VS Code's TS validator (`"typescript.validate.enable": false` in settings), or vice versa. Just ensure you don't have two linters with overlapping functionality enabled.
+
+## "Pre-commit hook/CI is failing due to Ultracite."
+
+If your pre-commit hook runs `ultracite check` and fails, it means there are issues that weren't auto-fixed (or someone bypassed running it). Run `ultracite fix` locally to auto-fix what can be fixed, then inspect the remaining output.
+
+Address any remaining issues manually, then commit. If CI is failing on `ultracite check`, do the same: run it locally to see what issues were found. Treat Ultracite failures like failing tests — something to correct in code.
+
+## "I get an error about `strictNullChecks` or type issues after enabling Ultracite."
+
+Ultracite expects TypeScript strictness. If you haven't enabled `strictNullChecks` (or full `strict` mode), you might get TypeScript-related lint warnings about potential undefined usage that TS isn't catching due to loose settings.
+
+The solution is to enable strict flags in your `tsconfig.json` as recommended. If you cannot do this for legacy reasons, you may need to disable certain rules that assume strictness. However, it's highly recommended to use TS strict mode — it improves code quality and aligns with Ultracite's philosophy.
+
+## "Ultracite is too strict for our team — can I tone it down?"
+
+Yes. While Ultracite's value is in being strict, you're free to override rules. If developers are overwhelmed by warnings, identify which rules are causing friction and turn them to `warn` or `off` in your config.
+
+For instance, if you find the accessibility rules too noisy for an internal tool, you might disable some of them. Or if you disagree with a code style enforced, you can adjust it.
+
+The key is communication with the team — perhaps educate why a rule exists before disabling it. If still unwanted, customize the config. Check out the [Configuration](/configuration) section for more information on how to override rules.
+
+## "Are there known limitations I should be aware of?"
+
+Each linter has different coverage:
+
+- **Biome** handles JS/TS/JSX/TSX/JSON/CSS/GraphQL but doesn't have every rule from ESLint's plugin ecosystem.
+- **ESLint + Prettier + Stylelint** has the most comprehensive rule coverage with 20+ plugins, but is slower.
+- **Oxlint** is the fastest but focuses on bug-catching rules over stylistic ones.
+
+If your project relies on specific rules from a particular ecosystem (like certain Stylelint CSS checks or ESLint plugins), make sure your chosen linter supports them or consider using that toolchain instead.
+
+---
+
+If you run into an issue not covered here, check [Ultracite's GitHub issues](https://github.com/haydenbleasel/ultracite/issues) or the documentation for your chosen linter.

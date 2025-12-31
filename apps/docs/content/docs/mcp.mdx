@@ -1,0 +1,97 @@
+---
+title: MCP
+description: How to use Ultracite with MCP
+---
+
+The **Model Context Protocol (MCP)** is an open standard that allows AI assistants like Claude, Cursor, and other AI-powered tools to securely connect with external data sources and systems.
+
+Ultracite provides an MCP server that gives AI assistants access to high-level coding standards and best practices — the same rules that guide AI code generation through Ultracite's editor integrations.
+
+## What It Provides
+
+The Ultracite MCP server exposes a single tool:
+
+- **`getRules`** — Returns Ultracite's core coding standards covering type safety, modern JavaScript/TypeScript patterns, React/JSX best practices, error handling, security, performance, and testing guidelines.
+
+These are high-level coding principles, not the specific linting rules from each provider (Biome, ESLint, Oxlint). For provider-specific rule details, see the [Providers](/provider/biome) documentation.
+
+## Installation
+
+### Step 1: Choose Your AI Tool
+
+Make sure you're using an AI development tool that supports MCP:
+
+- [Claude Desktop](https://claude.ai/download)
+- [Cursor](https://www.cursor.com/)
+- [Windsurf by Codeium](https://windsurf.com/)
+- Other MCP-compatible tools
+
+### Step 2: Locate Your Configuration File
+
+Depending on your AI tool, edit one of these files:
+
+- **Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
+- **Cursor**: `.cursor/mcp.json`
+- **Windsurf**: `.codeium/windsurf/mcp_config.json`
+
+### Step 3: Add Ultracite Configuration
+
+Add this to your MCP config file:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    }
+  }
+}
+```
+
+### Step 4: Restart Your AI Tool
+
+Close and reopen your AI application for the changes to take effect.
+
+## Usage
+
+Once configured, you can ask your AI assistant about Ultracite's coding standards:
+
+> What are Ultracite's coding standards?
+
+The AI will retrieve the high-level principles covering:
+
+- Type safety and explicitness
+- Modern JavaScript/TypeScript patterns
+- React and JSX best practices
+- Async and Promise handling
+- Error handling and debugging
+- Code organization
+- Security considerations
+- Performance optimizations
+- Testing guidelines
+
+## Multiple MCP Servers
+
+You can use Ultracite alongside other MCP servers:
+
+```json
+{
+  "mcpServers": {
+    "ultracite": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://www.ultracite.ai/api/mcp/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    }
+  }
+}
+```
+
+## Security and Privacy
+
+- The Ultracite MCP server only provides public coding standards documentation
+- No personal data or code is transmitted to our servers
+- No authentication required

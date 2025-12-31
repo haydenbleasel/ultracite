@@ -1,11 +1,17 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "envMode": "loose",
+  "globalDependencies": ["**/.env.*local"],
   "ui": "tui",
+  "envMode": "loose",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": ["^build", "test"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "src/database/generated/**"
+      ]
     },
     "test": {
       "dependsOn": ["^test"]
@@ -14,8 +20,8 @@
       "dependsOn": ["^test:coverage"]
     },
     "dev": {
-      "persistent": true,
-      "cache": false
+      "cache": false,
+      "persistent": true
     }
   }
 }

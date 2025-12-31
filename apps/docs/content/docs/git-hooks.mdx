@@ -1,0 +1,94 @@
+---
+title: Git Hooks
+description: Automatically run Ultracite on your staged Git files before committing.
+---
+
+Ultracite integrates with popular Git hook tools to automatically format and lint your code before every commit. This ensures all committed code follows your project's standards without manual intervention.
+
+## Setup
+
+During initialization, you can select which Git hook tool to use:
+
+```bash
+npx ultracite init --integrations husky,lint-staged
+```
+
+Or select them interactively when prompted.
+
+## Supported Tools
+
+### Husky
+
+[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite creates a `.husky/pre-commit` file that runs `npx ultracite fix` before each commit.
+
+```bash title=".husky/pre-commit"
+npx ultracite fix
+```
+
+### lefthook
+
+[lefthook](https://lefthook.dev/) is a fast Git hooks manager written in Go. Ultracite creates a `lefthook.yml` configuration:
+
+```yaml title="lefthook.yml"
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      stage_fixed: true
+```
+
+### lint-staged
+
+[lint-staged](https://github.com/okonet/lint-staged) runs linters only on staged files. Ultracite adds configuration to your `package.json` or creates a `.lintstagedrc` file:
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css}": ["npx ultracite fix"]
+  }
+}
+```
+
+Note: lint-staged is typically used alongside Husky or lefthook to trigger the pre-commit hook.
+
+### pre-commit
+
+[pre-commit](https://pre-commit.com/) is a Python-based framework for managing Git hooks. Ultracite creates a `.pre-commit-config.yaml`:
+
+```yaml title=".pre-commit-config.yaml"
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+After setup, run `pre-commit install` to activate the hooks.
+
+## How It Works
+
+1. You make changes and stage files with `git add`
+2. You run `git commit`
+3. The pre-commit hook runs `npx ultracite fix`
+4. Code is formatted and auto-fixable issues are resolved
+5. The commit proceeds with properly formatted code
+
+## Benefits
+
+- **Consistency**: All committed code follows the same standards
+- **Automation**: No need to remember to format code manually
+- **Clean History**: Formatting issues never enter your repository
+- **Team Collaboration**: Everyone follows the same rules automatically
+
+## Bypassing Hooks
+
+In rare cases where you need to skip the pre-commit hook:
+
+```bash
+git commit --no-verify
+```
+
+Use this sparingly, as it bypasses the automated formatting.
