@@ -66,6 +66,10 @@ interface WebhookPayload {
       ref: string;
     };
   };
+  requested_reviewer?: {
+    login: string;
+    type: string;
+  };
   repository?: {
     id: number;
     full_name: string;
@@ -154,10 +158,17 @@ const handleInstallationRepositoriesEvent = async (data: WebhookPayload) => {
 };
 
 const handlePullRequestEvent = async (data: WebhookPayload) => {
-  const { action, installation, pull_request, repository } = data;
+  const { action, installation, pull_request, repository, requested_reviewer } =
+    data;
 
-  // Only run on opened or synchronized (new commits pushed) PRs
-  if (action !== "opened" && action !== "synchronize") {
+  // Only run when Ultracite app is assigned as a reviewer
+  if (action !== "review_requested") {
+    return;
+  }
+
+  // Check if the requested reviewer is the Ultracite app
+  const expectedBotLogin = `${env.NEXT_PUBLIC_GITHUB_APP_SLUG}[bot]`;
+  if (requested_reviewer?.login !== expectedBotLogin) {
     return;
   }
 
@@ -165,16 +176,6 @@ const handlePullRequestEvent = async (data: WebhookPayload) => {
     throw new Error(
       `Invalid pull request or repository: ${JSON.stringify({ pull_request, repository })}`
     );
-  }
-
-  // Skip PRs created by Ultracite (from lint-repo workflow)
-  if (pull_request.head.ref.startsWith("ultracite/")) {
-    return;
-  }
-
-  // Skip PRs created by Changeset (from release workflow)
-  if (pull_request.head.ref.startsWith("changeset-release/")) {
-    return;
   }
 
   // Check if this repo is tracked by Ultracite
