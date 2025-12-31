@@ -65,7 +65,7 @@ const GitHubComment = () => (
   </div>
 );
 
-const cloudUrl = new URL("/cloud", docsUrl);
+const cloudUrl = new URL("/cloud", docsUrl).toString();
 
 export const Hero = () => (
   <div className="grid gap-8 sm:gap-12">

@@ -30,7 +30,7 @@ import { Logo } from "./logo";
 
 const links = [
   {
-    href: `${webUrl}/cloud`,
+    href: new URL("/cloud", webUrl).toString(),
     label: "Cloud",
     className: "text-primary",
     isActive: (path: string) => path.startsWith("/cloud"),
@@ -47,7 +47,7 @@ const links = [
     },
   },
   {
-    href: `${webUrl}/social`,
+    href: new URL("/social", webUrl).toString(),
     label: "Social",
     isActive: (path: string) => path.startsWith("/social"),
   },
@@ -84,7 +84,10 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`${webUrl}/providers/${provider.id}`}
+                          href={new URL(
+                            `/providers/${provider.id}`,
+                            webUrl
+                          ).toString()}
                         >
                           <Image
                             alt={provider.name}
@@ -121,7 +124,10 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`${webUrl}/editors/${editor.id}`}
+                          href={new URL(
+                            `/editors/${editor.id}`,
+                            webUrl
+                          ).toString()}
                         >
                           <Image
                             alt={editor.name}
@@ -161,7 +167,10 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={`${webUrl}/agents/${agent.id}`}
+                          href={new URL(
+                            `/agents/${agent.id}`,
+                            webUrl
+                          ).toString()}
                         >
                           <Image
                             alt={agent.name}
@@ -237,7 +246,10 @@ export const Navbar = () => {
                 {providers.map((provider) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`${webUrl}/providers/${provider.id}`}
+                    href={new URL(
+                      `/providers/${provider.id}`,
+                      webUrl
+                    ).toString()}
                     key={provider.id}
                     onClick={() => setOpen(false)}
                   >
@@ -260,7 +272,7 @@ export const Navbar = () => {
                 {editors.map((editor) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`${webUrl}/editors/${editor.id}`}
+                    href={new URL(`/editors/${editor.id}`, webUrl).toString()}
                     key={editor.id}
                     onClick={() => setOpen(false)}
                   >
@@ -283,7 +295,7 @@ export const Navbar = () => {
                 {agents.map((agent) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={`${webUrl}/agents/${agent.id}`}
+                    href={new URL(`/agents/${agent.id}`, webUrl).toString()}
                     key={agent.id}
                     onClick={() => setOpen(false)}
                   >
