@@ -59,10 +59,12 @@ export async function checkPushAccess(
     }
   } catch (error) {
     // 404 means no branch protection - that's fine, we can push
+    // 403 can mean branch protection isn't available (requires GitHub Pro for private repos)
     if (
       error instanceof Error &&
       "status" in error &&
-      (error as { status: number }).status === 404
+      ((error as { status: number }).status === 404 ||
+        (error as { status: number }).status === 403)
     ) {
       return { canPush: true };
     }
