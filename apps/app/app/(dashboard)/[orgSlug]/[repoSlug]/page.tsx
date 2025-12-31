@@ -1,4 +1,5 @@
 import { database } from "@repo/backend/database";
+import { Badge } from "@repo/design-system/components/ui/badge";
 import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { ExternalLinkIcon } from "lucide-react";
@@ -72,9 +73,14 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-2">
             <h1 className="font-medium tracking-tight">{repo.fullName}</h1>
+            {repo.enabled ? null : <Badge variant="outline">Disabled</Badge>}
           </div>
           <div className="flex items-center gap-px">
-            <RepoSettings defaultBranch={repo.defaultBranch} repoId={repo.id} />
+            <RepoSettings
+              defaultBranch={repo.defaultBranch}
+              defaultEnabled={repo.enabled}
+              repoId={repo.id}
+            />
             <Button asChild size="icon" variant="ghost">
               <a
                 href={`https://github.com/${repo.fullName}`}

@@ -13,6 +13,7 @@ import {
 } from "@repo/design-system/components/ui/dialog";
 import { Input } from "@repo/design-system/components/ui/input";
 import { Label } from "@repo/design-system/components/ui/label";
+import { Switch } from "@repo/design-system/components/ui/switch";
 import { SettingsIcon } from "lucide-react";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
@@ -20,18 +21,25 @@ import { updateRepo } from "@/actions/repo/update";
 
 interface RepoSettingsProps {
   defaultBranch: string;
+  defaultEnabled: boolean;
   repoId: string;
 }
 
-export const RepoSettings = ({ defaultBranch, repoId }: RepoSettingsProps) => {
+export const RepoSettings = ({
+  defaultBranch,
+  defaultEnabled,
+  repoId,
+}: RepoSettingsProps) => {
   const [state, formAction, isPending] = useActionState(
     async (
       _prevState: { success: boolean; error: string | undefined },
       formData: FormData
     ) => {
       const newDefaultBranch = formData.get("default-branch") as string;
+      const newEnabled = formData.get("enabled") === "on";
       const result = await updateRepo(repoId, {
         defaultBranch: newDefaultBranch,
+        enabled: newEnabled,
       });
 
       return result;
@@ -71,6 +79,14 @@ export const RepoSettings = ({ defaultBranch, repoId }: RepoSettingsProps) => {
                 defaultValue={defaultBranch}
                 id="default-branch"
                 name="default-branch"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="enabled">Enabled</Label>
+              <Switch
+                defaultChecked={defaultEnabled}
+                id="enabled"
+                name="enabled"
               />
             </div>
           </div>

@@ -28,7 +28,6 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
     where: { id: org.id },
     include: {
       repos: {
-        where: { enabled: true },
         orderBy: { createdAt: "desc" },
         include: {
           lintRuns: {

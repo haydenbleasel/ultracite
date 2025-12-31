@@ -20,7 +20,6 @@ export const RepoSidebar = async () => {
     },
     include: {
       repos: {
-        where: { enabled: true },
         orderBy: { createdAt: "desc" },
         include: {
           lintRuns: {
