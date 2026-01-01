@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.0.4
+
+### Patch Changes
+
+- 7e9b76c: Fix legacy imports
+
 ## 7.0.3
 
 ### Patch Changes
