@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 7.0.2
+
+### Patch Changes
+
+- 246c1fc: Update docs and README
+  Remove catalog dependencies
+
 ## 7.0.1
 
 ### Patch Changes
