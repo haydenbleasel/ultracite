@@ -40,7 +40,7 @@ export async function createPullRequest(
 
 ---
 
-*This PR was automatically created by [Ultracite Cloud](https://www.ultracite.ai)*`,
+*This PR was automatically created by [Ultracite Cloud](https://www.ultracite.ai/cloud)*`,
     head: branchName,
     base: defaultBranch,
     headers: {
