@@ -8,6 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
+import { LifeBuoyIcon } from "lucide-react";
 import Link from "next/link";
 import { getUserOrganizations } from "@/lib/auth";
 import { OrganizationSidebarGroup } from "./organization-sidebar-group";
@@ -42,6 +43,12 @@ export const RepoSidebar = async () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href={"mailto:hayden@ultracite.ai"}>
+                <LifeBuoyIcon className="size-4" />
+                <span>Support</span>
+              </Link>
+            </SidebarMenuButton>
             <SidebarMenuButton asChild>
               <Link
                 href={`https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_SLUG}/installations/new`}
