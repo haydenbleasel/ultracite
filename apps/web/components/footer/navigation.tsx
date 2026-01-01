@@ -1,6 +1,6 @@
 import { SiX } from "@icons-pack/react-simple-icons";
 import { agents } from "@repo/data/src/agents";
-import { statusUrl } from "@repo/data/src/consts";
+import { docsUrl, statusUrl } from "@repo/data/src/consts";
 import { editors } from "@repo/data/src/editors";
 import { providers } from "@repo/data/src/providers";
 import { Logo } from "@repo/design-system/components/ultracite/logo";
@@ -31,7 +31,7 @@ const generalLinks = [
     label: "Cloud",
   },
   {
-    href: "/docs",
+    href: docsUrl,
     label: "Docs",
   },
   {
