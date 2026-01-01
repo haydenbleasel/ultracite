@@ -1,8 +1,8 @@
 # Ultracite
 
-**A highly opinionated, zero-configuration linter and formatter.**
+**A production-grade, zero-configuration preset for ESLint, Biome, and Oxlint.**
 
-Ultracite is a highly opinionated preset for [Biome](https://biomejs.dev), designed to help you and your AI models write consistent and type-safe code without the hassle of configuration.
+Ultracite is designed to help you and your AI models write consistent and type-safe code without the hassle of configuration. Choose your preferred toolchain and get started in seconds.
 
 <div>
   <img src="https://img.shields.io/npm/dy/ultracite" alt="" />
@@ -12,80 +12,38 @@ Ultracite is a highly opinionated preset for [Biome](https://biomejs.dev), desig
 
 ## Quick Start
 
-Install and initialize Ultracite in your project:
-
 ```sh
 npx ultracite init
 ```
 
-That's it! Ultracite will automatically format your code and fix lint issues every time you save. No configuration required.
+The interactive setup will guide you through selecting your formatter/linter, framework, editor, and AI agents.
+
+## Supported Tools
+
+- **Biome** — All-in-one formatting and linting
+- **ESLint + Prettier + Stylelint** — Most mature ecosystem with the largest plugin support
+- **Oxlint + Oxfmt** — 50-100x faster than ESLint, part of the Oxc ecosystem
 
 ## Key Features
 
-### ⚡ **Subsecond Performance**
-Built in Rust for instant code analysis and processing. On-save checks feel seamless without interrupting your workflow.
+### ⚡ Subsecond Performance
+Built on Rust-based tools for instant code analysis. On-save checks feel seamless without interrupting your workflow.
 
-### 🎯 **Zero-Config by Design**
-Preconfigured rules optimized for Next.js, React, and TypeScript projects with sensible defaults. Customize when needed, but it works perfectly out of the box.
+### 🎯 Zero-Config by Design
+Hundreds of preconfigured rules optimized for JavaScript and TypeScript projects. Customize when needed, but it works perfectly out of the box.
 
-### 🛡️ **Maximum Type Safety**
-Enforces strict type checking and best practices by default, catching type errors and preventing unsafe code patterns before they become problems.
+### 🤖 AI-Ready
+Generate rules for 20+ AI agents including Claude Code, GitHub Copilot, Cursor, Gemini, and more. Ensures consistent code style across all team members and AI models.
 
-### 🏗️ **Monorepo Ready**
-Unified toolchain configuration across all packages and apps, eliminating thousands of lines of duplicate config files while maintaining consistency.
+### 🏗️ Monorepo Ready
+Unified toolchain configuration across all packages and apps, eliminating duplicate config files while maintaining consistency.
 
-### 🤖 **AI-Friendly**
-Ensures consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction. Supports Copilot, Cursor, Windsurf, Zed, Claude Code, and Codex.
+## Ultracite Cloud
 
-### 🔧 **Intuitive and Robust**
-Automatically reformats code and fixes lint issues on save, with clear error reporting for issues that need manual attention.
+Automated linting and AI-powered fixes for your repositories. Connect your repos and let Ultracite automatically review pull requests, run scheduled lint checks, and fix issues with Claude.
 
-## How It Works
-
-Once set up, Ultracite runs mostly in the background:
-
-- **Automatic formatting** on every save
-- **Lint fixes** applied automatically when possible
-- **Type safety** enforced with strict rules
-- **Import organization** and cleanup
-- **Accessibility improvements** built-in
-
-Because Biome is extremely fast, even on large projects, running Ultracite's checks is instantaneous and can comfortably run on every save without lag.
-
-## Command Line Usage
-
-```sh
-# Format your code
-npx ultracite fix
-
-# Check for lint issues
-npx ultracite check
-```
-
-## Tests
-
-You can run tests with:
-
-```bash
-bun test
-```
-
-Check the coverage of the CLI with:
-
-```bash
-bun test:coverage
-```
+Learn more at [ultracite.ai/cloud](https://www.ultracite.ai/cloud)
 
 ---
 
-Read the [docs](https://www.ultracite.ai/) for detailed setup instructions, configuration options, and examples.
-
-## Sponsors
-
-Thank you to all our sponsors!
-
-### CodeRabbit
-
-![CodeRabbit](./apps/docs/public/coderabbit.png)
-
-[CodeRabbit](https://www.coderabbit.ai/) helps you cut code review time & bugs in half. Supercharge your entire team with AI-driven contextual feedback. Supports all languages!
+Read the [docs](https://docs.ultracite.ai/) for detailed setup instructions, configuration options, and examples.
