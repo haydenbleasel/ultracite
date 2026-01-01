@@ -9,7 +9,7 @@ export interface LintRepoParams {
 
 export interface LintRepoResult {
   repo: string;
-  status: "success" | "error";
+  status: "success" | "error" | "skipped";
   prUrl?: string;
   error?: string;
 }

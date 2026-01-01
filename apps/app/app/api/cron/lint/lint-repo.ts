@@ -1,3 +1,4 @@
+import { checkExistingPR } from "@/lib/steps/check-existing-pr";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
@@ -59,6 +60,24 @@ export async function lintRepoWorkflow(
       repo: repoFullName,
       status: "error",
       error: pushAccess.reason,
+    };
+  }
+
+  // Check if there's already an open PR from Ultracite
+  const existingPR = await checkExistingPR(installationId, repoFullName);
+
+  if (existingPR.hasExistingPR) {
+    await updateLintRun(lintRunId, {
+      status: "SUCCESS_NO_ISSUES",
+      completedAt: new Date(),
+      prNumber: existingPR.prNumber,
+      prUrl: existingPR.prUrl,
+    });
+
+    return {
+      repo: repoFullName,
+      status: "skipped",
+      prUrl: existingPR.prUrl,
     };
   }
 
