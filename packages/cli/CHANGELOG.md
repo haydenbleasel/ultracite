@@ -1,5 +1,24 @@
 ## 5.6.0
 
+## 7.0.0
+
+### Major Changes
+
+- c4a205f: Remove i18n docs
+- c4a205f: Remove custom reporter
+- c4a205f: Scaffold support for ESLint and Oxlint
+- c4a205f: Add support for Amazon Q, Crush, Firebender, OpenCode, Qwen and Trae
+- c4a205f: Move biome config under `biome`
+
+### Patch Changes
+
+- 5538022: Increase max allowed complexity
+- 5508d47: Remove GraphQL override that disables formatter/linter
+- e1b6be6: Fix undefined input to fix command
+- 618ae17: Fix changesets
+- Updated dependencies [c4a205f]
+  - @repo/data@2.0.0
+
 ## 6.5.1
 
 ### Patch Changes
