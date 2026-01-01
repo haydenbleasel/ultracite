@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.0.3
+
+### Patch Changes
+
+- 92eaa89: Cleanup dist files
+
 ## 7.0.2
 
 ### Patch Changes
