@@ -32,9 +32,7 @@ export const POST = async (request: NextRequest) => {
 
   switch (event) {
     case "installation":
-      await handleInstallationEvent(
-        JSON.parse(payload) as InstallationEvent
-      );
+      await handleInstallationEvent(JSON.parse(payload) as InstallationEvent);
       break;
     case "installation_repositories":
       await handleInstallationRepositoriesEvent(
@@ -42,9 +40,7 @@ export const POST = async (request: NextRequest) => {
       );
       break;
     case "issue_comment":
-      await handleIssueCommentEvent(
-        JSON.parse(payload) as IssueCommentEvent
-      );
+      await handleIssueCommentEvent(JSON.parse(payload) as IssueCommentEvent);
       break;
     default:
       break;
