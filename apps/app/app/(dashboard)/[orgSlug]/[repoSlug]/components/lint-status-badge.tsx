@@ -17,6 +17,7 @@ const statusConfig: Record<
   SUCCESS_NO_ISSUES: { label: "Passing", variant: "default" },
   SUCCESS_PR_CREATED: { label: "PR Created", variant: "default" },
   FAILED: { label: "Failed", variant: "destructive" },
+  SKIPPED: { label: "Skipped", variant: "secondary" },
 };
 
 export const LintStatusBadge = ({ status }: LintStatusBadgeProps) => {

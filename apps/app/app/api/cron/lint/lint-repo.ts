@@ -68,7 +68,7 @@ export async function lintRepoWorkflow(
 
   if (existingPR.hasExistingPR) {
     await updateLintRun(lintRunId, {
-      status: "SUCCESS_NO_ISSUES",
+      status: "SKIPPED",
       completedAt: new Date(),
       prNumber: existingPR.prNumber,
       prUrl: existingPR.prUrl,
