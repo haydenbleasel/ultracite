@@ -49,13 +49,15 @@ interface InitializeFlags {
   frameworks?: (typeof options.frameworks)[number][];
   skipInstall?: boolean;
   quiet?: boolean;
+  "type-aware"?: boolean;
 }
 
 export const installDependencies = async (
   packageManager: PackageManagerName,
   linter: Linter = "biome",
   install = true,
-  quiet = false
+  quiet = false,
+  typeAware = false
 ) => {
   const s = spinner();
 
@@ -79,6 +81,10 @@ export const installDependencies = async (
     packages.push("oxlint@latest");
     // Oxlint is only a linter, so we need oxfmt for formatting
     packages.push("oxfmt@latest");
+    // Type-aware linting requires oxlint-tsgolint
+    if (typeAware) {
+      packages.push("oxlint-tsgolint@latest");
+    }
   }
 
   if (install) {
@@ -107,6 +113,10 @@ export const installDependencies = async (
       devDependencies.oxlint = "latest";
       // Oxlint is only a linter, so we need oxfmt for formatting
       devDependencies.oxfmt = "latest";
+      // Type-aware linting requires oxlint-tsgolint
+      if (typeAware) {
+        devDependencies["oxlint-tsgolint"] = "latest";
+      }
     }
 
     await updatePackageJson({ devDependencies });
@@ -846,7 +856,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    await installDependencies(pm, linter, !opts.skipInstall, quiet);
+    await installDependencies(
+      pm,
+      linter,
+      !opts.skipInstall,
+      quiet,
+      linter === "oxlint" && opts["type-aware"]
+    );
 
     await upsertTsConfig(quiet);
 

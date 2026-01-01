@@ -57,6 +57,12 @@ export const router = t.router({
           .describe(
             "Migration tools to remove (e.g., eslint, prettier). Removes dependencies, config files, and editor settings."
           ),
+        "type-aware": z
+          .boolean()
+          .optional()
+          .describe(
+            "enable type-aware linting (oxlint only, installs oxlint-tsgolint)"
+          ),
         skipInstall: z
           .boolean()
           .default(false)

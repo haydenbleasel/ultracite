@@ -57,7 +57,17 @@ npx ultracite fix --unsafe
 
 ### Type-Aware Linting (Oxlint)
 
-When using Oxlint, you can enable type-aware linting rules that leverage TypeScript's type system:
+When using Oxlint, you can enable type-aware linting rules that leverage TypeScript's type system.
+
+To set up type-aware linting during initialization:
+
+```bash title="Terminal"
+npx ultracite init --linter oxlint --type-aware
+```
+
+This installs the required `oxlint-tsgolint` dependency automatically.
+
+Then use the flags when checking or fixing:
 
 ```bash title="Terminal"
 npx ultracite check --type-aware

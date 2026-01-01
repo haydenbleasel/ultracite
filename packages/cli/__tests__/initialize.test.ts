@@ -419,6 +419,64 @@ describe("initialize", () => {
     expect(mockWriteFile).toHaveBeenCalled();
   });
 
+  test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {
+    const installedPackages: string[] = [];
+    const mockAddDep = mock((pkg: string) => {
+      installedPackages.push(pkg);
+      return Promise.resolve();
+    });
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      writeFile: mock(() => Promise.resolve()),
+      mkdir: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      intro: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        start: mock(noop),
+        stop: mock(noop),
+        message: mock(noop),
+      })),
+      log: {
+        info: mock(noop),
+        success: mock(noop),
+        error: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      select: mock(() => Promise.resolve("oxlint")),
+      isCancel: mock(() => false),
+      cancel: mock(noop),
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      dlxCommand: mock(() => "npx ultracite fix"),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await initialize({
+      pm: "npm",
+      skipInstall: false,
+      linter: "oxlint",
+      "type-aware": true,
+      editors: [],
+      agents: [],
+      hooks: [],
+      integrations: [],
+      frameworks: [],
+    });
+
+    expect(installedPackages).toContain("oxlint-tsgolint@latest");
+  });
+
   test("completes successfully with minimal options", async () => {
     const mockLog = {
       info: mock(noop),
@@ -1114,6 +1172,89 @@ describe("helper functions", () => {
 
       await installDependencies("npm", "oxlint", false);
       expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("installs oxlint-tsgolint when type-aware is true", async () => {
+      const installedPackages: string[] = [];
+      const mockAddDep = mock((pkg: string) => {
+        installedPackages.push(pkg);
+        return Promise.resolve();
+      });
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        dlxCommand: mock(() => "npx ultracite fix"),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "oxlint", true, true, true);
+      expect(installedPackages).toContain("oxlint-tsgolint@latest");
+    });
+
+    test("does not install oxlint-tsgolint when type-aware is false", async () => {
+      const installedPackages: string[] = [];
+      const mockAddDep = mock((pkg: string) => {
+        installedPackages.push(pkg);
+        return Promise.resolve();
+      });
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        dlxCommand: mock(() => "npx ultracite fix"),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "oxlint", true, true, false);
+      expect(installedPackages).not.toContain("oxlint-tsgolint@latest");
+    });
+
+    test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
+      let writtenContent = "";
+      const mockWriteFile = mock((_path: string, content: string) => {
+        writtenContent = content;
+        return Promise.resolve();
+      });
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          start: mock(noop),
+          stop: mock(noop),
+          message: mock(noop),
+        })),
+      }));
+
+      await installDependencies("npm", "oxlint", false, true, true);
+      expect(mockWriteFile).toHaveBeenCalled();
+      expect(writtenContent).toContain("oxlint-tsgolint");
     });
   });
 
