@@ -6,6 +6,8 @@ import { detectLinter, type Linter, parseFilePaths } from "../utils";
 interface FixOptions {
   unsafe?: boolean;
   linter?: Linter;
+  "type-aware"?: boolean;
+  "type-check"?: boolean;
 }
 
 const runBiomeFix = async (
@@ -123,9 +125,21 @@ const runStylelintFix = async (
 };
 
 const runOxlintFix = async (
-  files: string[]
+  files: string[],
+  typeAware?: boolean,
+  typeCheck?: boolean
 ): Promise<{ hasErrors: boolean }> => {
-  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+  const args = ["--fix"];
+
+  if (typeAware) {
+    args.push("--type-aware");
+  }
+
+  if (typeCheck) {
+    args.push("--type-check");
+  }
+
+  args.push(...(files.length > 0 ? parseFilePaths(files) : ["."]));
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -201,7 +215,11 @@ export const fix = async (
     }
     case "oxlint": {
       const oxfmtResult = await runOxfmtFix(files);
-      const oxlintResult = await runOxlintFix(files);
+      const oxlintResult = await runOxlintFix(
+        files,
+        opts["type-aware"],
+        opts["type-check"]
+      );
       return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
     }
     default:

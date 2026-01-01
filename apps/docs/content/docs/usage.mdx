@@ -55,6 +55,34 @@ You can also apply unsafe fixes (fixes that may change code behavior):
 npx ultracite fix --unsafe
 ```
 
+### Type-Aware Linting (Oxlint)
+
+When using Oxlint, you can enable type-aware linting rules that leverage TypeScript's type system:
+
+```bash title="Terminal"
+npx ultracite check --type-aware
+npx ultracite fix --type-aware
+```
+
+This enables rules like `no-floating-promises`, `no-misused-promises`, and `await-thenable` that catch bugs by analyzing types.
+
+You can also enable TypeScript compiler diagnostics (experimental):
+
+```bash title="Terminal"
+npx ultracite check --type-check
+npx ultracite fix --type-check
+```
+
+Both flags can be combined:
+
+```bash title="Terminal"
+npx ultracite fix --type-aware --type-check
+```
+
+<Callout>
+These flags only apply when using Oxlint. They have no effect with Biome or ESLint.
+</Callout>
+
 ### Validating Setup
 
 The `doctor` command checks your setup for issues and provides recommendations. This is useful to run after installing Ultracite to ensure everything is configured correctly:

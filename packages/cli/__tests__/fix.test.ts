@@ -535,4 +535,110 @@ describe("fix", () => {
     expect(mockSpawn.mock.calls[0][0]).toContain("oxfmt");
     expect(mockSpawn.mock.calls[1][0]).toContain("oxlint");
   });
+
+  test("runs oxlint fix with --type-aware flag", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths,
+    }));
+
+    await fix([], { linter: "oxlint", "type-aware": true });
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxlintCall[0]).toContain("--type-aware");
+  });
+
+  test("runs oxlint fix with --type-check flag", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths,
+    }));
+
+    await fix([], { linter: "oxlint", "type-check": true });
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxlintCall[0]).toContain("--type-check");
+  });
+
+  test("runs oxlint fix with both --type-aware and --type-check flags", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths,
+    }));
+
+    await fix([], { linter: "oxlint", "type-aware": true, "type-check": true });
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxlintCall[0]).toContain("--type-aware");
+    expect(oxlintCall[0]).toContain("--type-check");
+  });
+
+  test("does not include type flags when options are false", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+      execSync: mock(() => ""),
+    }));
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(async () => ({ name: "npm" })),
+      dlxCommand: mock(
+        (_pm, pkg, opts) =>
+          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
+      ),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "oxlint"),
+      parseFilePaths,
+    }));
+
+    await fix([], {
+      linter: "oxlint",
+      "type-aware": false,
+      "type-check": false,
+    });
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const oxlintCall = mockSpawn.mock.calls[1];
+    expect(oxlintCall[0]).not.toContain("--type-aware");
+    expect(oxlintCall[0]).not.toContain("--type-check");
+  });
 });
