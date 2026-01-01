@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.0.1
+
+### Patch Changes
+
+- a8408b6: Fix bundling issues
+
 ## 7.0.0
 
 ### Major Changes
