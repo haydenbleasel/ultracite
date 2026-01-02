@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.0.5
+
+### Patch Changes
+
+- ab47642: add --type-aware and --type-check flags for oxlint
+
 ## 7.0.4
 
 ### Patch Changes
