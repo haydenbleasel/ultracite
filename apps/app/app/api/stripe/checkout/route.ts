@@ -70,14 +70,8 @@ export const POST = async (request: NextRequest) => {
           price: env.STRIPE_PRICE_ID,
         },
       ],
-      success_url: new URL(
-        `${organization.slug}?checkout=success`,
-        origin
-      ).toString(),
-      cancel_url: new URL(
-        `${organization.slug}?checkout=cancel`,
-        origin
-      ).toString(),
+      success_url: new URL(organization.slug, origin).toString(),
+      cancel_url: new URL(organization.slug, origin).toString(),
       metadata: {
         organizationId: organization.id,
       },
