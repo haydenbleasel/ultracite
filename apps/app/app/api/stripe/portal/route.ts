@@ -2,6 +2,7 @@ import { database } from "@repo/backend/database";
 import { redirect } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
+import { env } from "@/lib/env";
 import { stripe } from "@/lib/stripe";
 
 export const GET = async (request: NextRequest) => {
@@ -36,12 +37,54 @@ export const GET = async (request: NextRequest) => {
   }
 
   const organization = membership.organization;
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const origin = `${protocol}://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
 
+  // If not subscribed, redirect to checkout
   if (!organization.stripeCustomerId) {
-    return NextResponse.json({ error: "No subscription" }, { status: 400 });
-  }
+    const customer = await stripe.customers.create({
+      email: user.email ?? undefined,
+      name: organization.name,
+      metadata: {
+        organizationId: organization.id,
+      },
+    });
 
-  const origin = request.headers.get("origin") ?? request.nextUrl.origin;
+    const session = await stripe.checkout.sessions.create({
+      customer: customer.id,
+      mode: "subscription",
+      line_items: [
+        {
+          price: env.STRIPE_PRICE_ID,
+        },
+      ],
+      success_url: new URL(
+        `${organization.slug}?checkout=success`,
+        origin
+      ).toString(),
+      cancel_url: new URL(
+        `${organization.slug}?checkout=cancel`,
+        origin
+      ).toString(),
+      metadata: {
+        organizationId: organization.id,
+      },
+      subscription_data: {
+        metadata: {
+          organizationId: organization.id,
+        },
+      },
+    });
+
+    if (session.url) {
+      redirect(session.url);
+    }
+
+    return NextResponse.json(
+      { error: "Failed to create checkout session" },
+      { status: 500 }
+    );
+  }
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: organization.stripeCustomerId,
