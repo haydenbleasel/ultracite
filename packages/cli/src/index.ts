@@ -57,6 +57,12 @@ export const router = t.router({
           .describe(
             "Migration tools to remove (e.g., eslint, prettier). Removes dependencies, config files, and editor settings."
           ),
+        "type-aware": z
+          .boolean()
+          .optional()
+          .describe(
+            "enable type-aware linting (oxlint only, installs oxlint-tsgolint)"
+          ),
         skipInstall: z
           .boolean()
           .default(false)
@@ -96,6 +102,14 @@ export const router = t.router({
               .enum(options.linters)
               .optional()
               .describe("linter to use (biome, eslint, or oxlint)"),
+            "type-aware": z
+              .boolean()
+              .optional()
+              .describe("enable type-aware linting rules (oxlint only)"),
+            "type-check": z
+              .boolean()
+              .optional()
+              .describe("enable TypeScript compiler diagnostics (oxlint only)"),
           }),
         ])
         .optional()
@@ -122,13 +136,26 @@ export const router = t.router({
               .enum(options.linters)
               .optional()
               .describe("linter to use (biome, eslint, or oxlint)"),
+            "type-aware": z
+              .boolean()
+              .optional()
+              .describe("enable type-aware linting rules (oxlint only)"),
+            "type-check": z
+              .boolean()
+              .optional()
+              .describe("enable TypeScript compiler diagnostics (oxlint only)"),
           }),
         ])
         .optional()
     )
     .mutation(async ({ input }) => {
       const [files, opts] = input ?? [[], {}];
-      await fix(files, { unsafe: opts.unsafe, linter: opts.linter });
+      await fix(files, {
+        unsafe: opts.unsafe,
+        linter: opts.linter,
+        "type-aware": opts["type-aware"],
+        "type-check": opts["type-check"],
+      });
     }),
 
   doctor: t.procedure

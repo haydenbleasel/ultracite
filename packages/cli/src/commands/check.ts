@@ -6,6 +6,8 @@ import { detectLinter, type Linter, parseFilePaths } from "../utils";
 interface CheckOptions {
   "diagnostic-level"?: "info" | "warn" | "error";
   linter?: Linter;
+  "type-aware"?: boolean;
+  "type-check"?: boolean;
 }
 
 const runBiomeCheck = async (
@@ -122,9 +124,21 @@ const runStylelintCheck = async (
 };
 
 const runOxlintCheck = async (
-  files: string[]
+  files: string[],
+  typeAware?: boolean,
+  typeCheck?: boolean
 ): Promise<{ hasErrors: boolean }> => {
-  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+  const args: string[] = [];
+
+  if (typeAware) {
+    args.push("--type-aware");
+  }
+
+  if (typeCheck) {
+    args.push("--type-check");
+  }
+
+  args.push(...(files.length > 0 ? parseFilePaths(files) : ["."]));
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -203,7 +217,11 @@ export const check = async (
     }
     case "oxlint": {
       const oxfmtResult = await runOxfmtCheck(files);
-      const oxlintResult = await runOxlintCheck(files);
+      const oxlintResult = await runOxlintCheck(
+        files,
+        opts?.[1]["type-aware"],
+        opts?.[1]["type-check"]
+      );
       return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
     }
     default:
