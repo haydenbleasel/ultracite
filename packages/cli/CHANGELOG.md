@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.0.6
+
+### Patch Changes
+
+- 702f6b5: Upgrade Biome to 2.3.11
+
 ## 7.0.5
 
 ### Patch Changes
