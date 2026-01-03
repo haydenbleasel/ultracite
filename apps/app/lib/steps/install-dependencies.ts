@@ -5,19 +5,17 @@ export async function installDependencies(sandboxId: string): Promise<void> {
 
   const sandbox = await Sandbox.get({ sandboxId });
 
-  // We need to install all the relevant package managers
-  await sandbox.runCommand("npm", ["install", "-g", "pnpm"]);
-  await sandbox.runCommand("npm", ["install", "-g", "yarn"]);
-  await sandbox.runCommand("npm", ["install", "-g", "bun"]);
-
-  // We use `ni` to install dependencies by automatically detecting the package manager.
-  await sandbox.runCommand("npm", ["install", "-g", "@antfu/ni"]);
-  await sandbox.runCommand("ni", []);
-
-  // We need Claude Code to fix lint issues and generate changelogs.
+  // Install all global packages in a single command for faster execution
   await sandbox.runCommand("npm", [
     "install",
     "-g",
+    "pnpm",
+    "yarn",
+    "bun",
+    "@antfu/ni",
     "@anthropic-ai/claude-code",
   ]);
+
+  // Use `ni` to install project dependencies by automatically detecting the package manager
+  await sandbox.runCommand("ni", []);
 }
