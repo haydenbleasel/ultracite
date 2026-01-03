@@ -1,7 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { editors } from "@repo/data/editors";
+import { hooks } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
+import { parse } from "jsonc-parser";
 import { dlxCommand, type PackageManagerName } from "nypm";
 import { ensureDirectory, exists } from "./utils";
 
@@ -9,63 +10,59 @@ export const createHooks = (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName
 ) => {
-  const editor = editors.find((editor) => editor.id === name);
+  const hookIntegration = hooks.find((hook) => hook.id === name);
 
-  if (!editor) {
-    throw new Error(`Editor "${name}" not found`);
-  }
-
-  if (!editor.hooks) {
-    throw new Error(`Editor "${name}" does not support hooks`);
+  if (!hookIntegration) {
+    throw new Error(`Hook integration "${name}" not found`);
   }
 
   const command = dlxCommand(packageManager, "ultracite", {
     args: ["fix"],
     short: packageManager === "npm",
   });
-  const content = editor.hooks.getContent(command);
+  const content = hookIntegration.hooks.getContent(command);
 
-  const hasUltraciteHook = (obj: Record<string, unknown>): boolean => {
-    return JSON.stringify(obj).includes("ultracite");
-  };
+  const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null && !Array.isArray(value);
+
+  const hasUltraciteHook = (obj: unknown): boolean =>
+    JSON.stringify(obj).includes("ultracite");
 
   const updateConfig = async (): Promise<void> => {
-    if (!editor.hooks?.path) {
-      throw new Error(`Editor "${name}" does not support hooks`);
-    }
-
-    const doesExist = await exists(editor.hooks.path);
+    const doesExist = await exists(hookIntegration.hooks.path);
 
     if (!doesExist) {
-      await writeFile(editor.hooks.path, JSON.stringify(content, null, 2));
+      await writeFile(
+        hookIntegration.hooks.path,
+        JSON.stringify(content, null, 2)
+      );
       return;
     }
 
-    const existingContent = await readFile(editor.hooks.path, "utf-8");
-    const existingJson = JSON.parse(existingContent);
+    const existingContent = await readFile(hookIntegration.hooks.path, "utf-8");
+    const parsed = parse(existingContent) as unknown;
+    const existingJson = isRecord(parsed) ? parsed : {};
 
     if (!hasUltraciteHook(existingJson)) {
       const merged = deepmerge(existingJson, content);
-      await writeFile(editor.hooks.path, JSON.stringify(merged, null, 2));
+      await writeFile(
+        hookIntegration.hooks.path,
+        JSON.stringify(merged, null, 2)
+      );
     }
   };
 
   return {
-    exists: () => (editor.hooks?.path ? exists(editor.hooks.path) : false),
+    exists: () => exists(hookIntegration.hooks.path),
     create: async () => {
-      if (!editor.hooks?.path) {
-        throw new Error(`Editor "${name}" does not support hooks`);
-      }
-
-      await ensureDirectory(editor.hooks.path);
-      await writeFile(editor.hooks.path, JSON.stringify(content, null, 2));
+      await ensureDirectory(hookIntegration.hooks.path);
+      await writeFile(
+        hookIntegration.hooks.path,
+        JSON.stringify(content, null, 2)
+      );
     },
     update: async () => {
-      if (!editor.hooks?.path) {
-        throw new Error(`Editor "${name}" does not support hooks`);
-      }
-
-      await ensureDirectory(editor.hooks.path);
+      await ensureDirectory(hookIntegration.hooks.path);
       await updateConfig();
     },
   };

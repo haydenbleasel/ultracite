@@ -10,6 +10,7 @@ import {
 } from "@clack/prompts";
 import { agents as agentsData } from "@repo/data/agents";
 import { editors } from "@repo/data/editors";
+import { hooks as hookIntegrations } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
 import {
@@ -596,11 +597,13 @@ export const upsertAgents = async (
 
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
-  displayName: string,
   packageManager: PackageManagerName,
   quiet = false
 ) => {
   const s = spinner();
+
+  const displayName =
+    hookIntegrations.find((hook) => hook.id === name)?.name ?? name;
 
   if (!quiet) {
     s.start(`Checking for ${displayName} hooks...`);
@@ -796,11 +799,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    // Build hooks options from editors that support hooks
+    // Build hooks options from supported hook integrations
     const hooksOptions = Object.fromEntries(
-      editors
-        .filter((editor) => editor.hooks)
-        .map((editor) => [editor.id, editor.name])
+      hookIntegrations.map((hook) => [hook.id, hook.name])
     ) as Record<(typeof options.hooks)[number], string>;
 
     if (!hooks) {
@@ -891,7 +892,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const hookName of hooks ?? []) {
-      await upsertHooks(hookName, hooksOptions[hookName], pm, quiet);
+      await upsertHooks(hookName, pm, quiet);
     }
 
     if (integrations?.includes("husky")) {
