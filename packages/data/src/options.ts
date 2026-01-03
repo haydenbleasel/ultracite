@@ -1,5 +1,6 @@
 import { agents } from "./agents";
 import { editors } from "./editors";
+import { hooks } from "./hooks";
 import { providers } from "./providers";
 
 /** Supported frameworks for framework-specific linting rules */
@@ -38,7 +39,7 @@ export const options = {
   editorConfigs: editors.map((editor) => editor.id),
   agents: agents.map((agent) => agent.id),
   integrations,
-  hooks: editors.filter((editor) => editor.hooks).map((editor) => editor.id),
+  hooks: hooks.map((hook) => hook.id),
   frameworks,
   migrations,
 } as const;

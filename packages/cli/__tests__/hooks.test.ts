@@ -12,21 +12,19 @@ describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
 
-  describe("invalid editor", () => {
-    test("throws error for invalid editor name", () => {
+  describe("invalid editor or hook integration", () => {
+    test("throws error for invalid editor or hook integration name", () => {
       expect(() => {
-        // @ts-expect-error - Testing invalid editor name
+        // @ts-expect-error - Testing invalid hook integration name
         createHooks("invalid-editor-name", "npm");
-      }).toThrow('Editor "invalid-editor-name" not found');
+      }).toThrow('Hook integration "invalid-editor-name" not found');
     });
 
     test("throws error for editor without hooks support", () => {
-      // vscode has hooks, but we can test an editor that doesn't
-      // If all editors have hooks now, this test might need adjustment
       expect(() => {
         // @ts-expect-error - Testing editor that may not support hooks
         createHooks("zed", "npm");
-      }).toThrow('Editor "zed" does not support hooks');
+      }).toThrow('Hook integration "zed" not found');
     });
   });
 
@@ -147,6 +145,74 @@ describe("createHooks", () => {
       await hooks.update();
 
       // Should not write anything since hook already exists
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("claude hooks", () => {
+    test("create writes .claude/settings.json with correct structure", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("claude", "npm");
+      await hooks.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[0]).toBe(".claude/settings.json");
+
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.hooks.PostToolUse).toHaveLength(1);
+      expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
+      expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
+      expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
+        "npx ultracite fix"
+      );
+    });
+
+    test("update merges hooks into existing settings when ultracite not present", async () => {
+      const existingSettings = '{"model": "claude-3-5-sonnet"}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("claude", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const hooksWrite = mockWriteFile.mock.calls[0];
+      expect(hooksWrite[0]).toBe(".claude/settings.json");
+
+      const merged = JSON.parse(hooksWrite[1] as string);
+      expect(merged.model).toBe("claude-3-5-sonnet");
+      expect(merged.hooks.PostToolUse).toHaveLength(1);
+    });
+
+    test("update skips when ultracite hook already exists in settings", async () => {
+      const existingSettings =
+        '{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"npx ultracite fix"}]}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("claude", "npm");
+      await hooks.update();
+
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
   });
