@@ -32,7 +32,6 @@ export interface ReviewPRResult {
   error?: string;
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Workflow orchestration requires multiple conditional paths
 export async function reviewPRWorkflow(
   params: ReviewPRParams
 ): Promise<ReviewPRResult> {

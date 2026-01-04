@@ -5,17 +5,29 @@ export async function installDependencies(sandboxId: string): Promise<void> {
 
   const sandbox = await Sandbox.get({ sandboxId });
 
-  // Install all global packages in a single command for faster execution
+  // Install ni and Claude Code first
   await sandbox.runCommand("npm", [
     "install",
     "-g",
-    "pnpm",
-    "yarn",
-    "bun",
     "@antfu/ni",
     "@anthropic-ai/claude-code",
   ]);
 
-  // Use `ni` to install project dependencies by automatically detecting the package manager
+  // Detect the package manager using `ni -v`
+  const result = await sandbox.runCommand("ni", ["-v"]);
+  const output = await result.stdout();
+
+  // Parse output to find which package manager is used (pnpm, yarn, or bun)
+  const packageManagers = ["pnpm", "yarn", "bun"];
+  const detectedManager = packageManagers.find((pm) =>
+    output.split("\n").some((line) => line.startsWith(pm))
+  );
+
+  // Install the detected package manager if needed (npm is already available)
+  if (detectedManager) {
+    await sandbox.runCommand("npm", ["install", "-g", detectedManager]);
+  }
+
+  // Use `ni` to install project dependencies
   await sandbox.runCommand("ni", []);
 }

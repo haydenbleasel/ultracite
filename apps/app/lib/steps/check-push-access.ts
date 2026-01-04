@@ -32,6 +32,7 @@ export async function checkPushAccess(
 
   // Check if the installation has write access to contents
   const permissions = installation.permissions;
+
   if (!permissions?.contents || permissions.contents === "read") {
     return {
       canPush: false,
