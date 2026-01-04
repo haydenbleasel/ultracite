@@ -110,6 +110,16 @@ export const router = t.router({
               .boolean()
               .optional()
               .describe("enable TypeScript compiler diagnostics (oxlint only)"),
+            "no-error-on-unmatched-pattern": z
+              .boolean()
+              .optional()
+              .describe(
+                "suppress errors when files don't match patterns (useful for hooks/CI)"
+              ),
+            "error-on-warnings": z
+              .boolean()
+              .optional()
+              .describe("treat warnings as errors (biome only)"),
           }),
         ])
         .optional()
@@ -144,6 +154,10 @@ export const router = t.router({
               .boolean()
               .optional()
               .describe("enable TypeScript compiler diagnostics (oxlint only)"),
+            "error-on-warnings": z
+              .boolean()
+              .optional()
+              .describe("treat warnings as errors (biome only)"),
           }),
         ])
         .optional()
@@ -155,6 +169,7 @@ export const router = t.router({
         linter: opts.linter,
         "type-aware": opts["type-aware"],
         "type-check": opts["type-check"],
+        "error-on-warnings": opts["error-on-warnings"],
       });
     }),
 

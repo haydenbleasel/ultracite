@@ -8,16 +8,22 @@ interface FixOptions {
   linter?: Linter;
   "type-aware"?: boolean;
   "type-check"?: boolean;
+  "error-on-warnings"?: boolean;
 }
 
 const runBiomeFix = async (
   files: string[],
-  unsafe?: boolean
+  unsafe?: boolean,
+  errorOnWarnings?: boolean
 ): Promise<{ hasErrors: boolean }> => {
   const args = ["check", "--write", "--no-errors-on-unmatched"];
 
   if (unsafe) {
     args.push("--unsafe");
+  }
+
+  if (errorOnWarnings) {
+    args.push("--error-on-warnings");
   }
 
   if (files.length > 0) {
@@ -127,9 +133,10 @@ const runStylelintFix = async (
 const runOxlintFix = async (
   files: string[],
   typeAware?: boolean,
-  typeCheck?: boolean
+  typeCheck?: boolean,
+  unsafe?: boolean
 ): Promise<{ hasErrors: boolean }> => {
-  const args = ["--fix"];
+  const args = [unsafe ? "--fix-dangerously" : "--fix"];
 
   if (typeAware) {
     args.push("--type-aware");
@@ -218,11 +225,12 @@ export const fix = async (
       const oxlintResult = await runOxlintFix(
         files,
         opts["type-aware"],
-        opts["type-check"]
+        opts["type-check"],
+        opts.unsafe
       );
       return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
     }
     default:
-      return runBiomeFix(files, opts.unsafe);
+      return runBiomeFix(files, opts.unsafe, opts["error-on-warnings"]);
   }
 };
