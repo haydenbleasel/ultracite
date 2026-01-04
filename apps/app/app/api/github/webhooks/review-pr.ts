@@ -33,6 +33,7 @@ export interface ReviewPRResult {
   error?: string;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Workflow orchestration requires multiple conditional paths
 export async function reviewPRWorkflow(
   params: ReviewPRParams
 ): Promise<ReviewPRResult> {
@@ -134,6 +135,13 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Update lint run with AI cost
       await trackCost(lintRunId, claudeCodeResult.costUsd);
 
+      if (!claudeCodeResult.success) {
+        // Claude Code failed - throw to trigger error handling
+        throw new Error(
+          claudeCodeResult.errorMessage ?? "Claude Code failed to run"
+        );
+      }
+
       if (await hasUncommittedChanges(sandboxId)) {
         // Commit any changes from Claude Code fixes
         // Generate changelog before committing
@@ -188,8 +196,16 @@ No lint issues found in this PR.
       status: madeChanges ? "success" : "no_issues",
     };
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+    let errorMessage: string;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === "string") {
+      errorMessage = error;
+    } else if (error && typeof error === "object" && "message" in error) {
+      errorMessage = String(error.message);
+    } else {
+      errorMessage = `Unexpected error: ${JSON.stringify(error)}`;
+    }
 
     // Try to leave a comment about the failure
     try {

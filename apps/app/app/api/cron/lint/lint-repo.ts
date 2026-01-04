@@ -141,7 +141,13 @@ export async function lintRepoWorkflow(
       // Update lint run with AI cost
       await trackCost(lintRunId, claudeCodeResult.costUsd);
 
-      if (await hasUncommittedChanges(sandboxId)) {
+      // Check if Claude Code failed
+      if (!claudeCodeResult.success) {
+        result = {
+          prCreated: false,
+          error: claudeCodeResult.errorMessage ?? "Claude Code failed",
+        };
+      } else if (await hasUncommittedChanges(sandboxId)) {
         // Generate changelog before committing
         const changelogResult = await generateChangelog(sandboxId);
 
@@ -170,10 +176,11 @@ export async function lintRepoWorkflow(
           prUrl: prResult.prUrl,
         };
       } else {
-        // Claude Code couldn't fix the issue
+        // Claude Code ran successfully but made no changes
         result = {
           prCreated: false,
-          error: "Claude Code could not resolve the lint issue",
+          error:
+            "Claude Code completed but could not fix the lint issues (no changes made)",
         };
       }
     } else {
@@ -204,8 +211,17 @@ export async function lintRepoWorkflow(
       errorMessage: result.error,
     });
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+    let errorMessage: string;
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === "string") {
+      errorMessage = error;
+    } else if (error && typeof error === "object" && "message" in error) {
+      errorMessage = String(error.message);
+    } else {
+      errorMessage = `Unexpected error: ${JSON.stringify(error)}`;
+    }
+
     result = {
       prCreated: false,
       error: errorMessage,

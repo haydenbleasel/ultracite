@@ -3,6 +3,8 @@ import { Sandbox } from "@vercel/sandbox";
 export interface ClaudeCodeResult {
   costUsd: number;
   success: boolean;
+  output: string;
+  errorMessage?: string;
 }
 
 const prompt = `You are fixing lint issues in a codebase.
@@ -27,7 +29,12 @@ export async function runClaudeCode(
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
-    throw new Error("ANTHROPIC_API_KEY is not set");
+    return {
+      costUsd: 0,
+      success: false,
+      output: "",
+      errorMessage: "ANTHROPIC_API_KEY is not set",
+    };
   }
 
   // Escape the prompt for shell usage
@@ -40,7 +47,15 @@ export async function runClaudeCode(
   ]);
 
   const output = await result.output("both");
-  const success = result.exitCode === 0;
+
+  if (result.exitCode !== 0) {
+    return {
+      costUsd: 0,
+      success: false,
+      output,
+      errorMessage: `Claude Code exited with code ${result.exitCode}`,
+    };
+  }
 
   try {
     const parsed = JSON.parse(output) as {
@@ -49,12 +64,15 @@ export async function runClaudeCode(
 
     return {
       costUsd: parsed.total_cost_usd,
-      success,
+      success: true,
+      output,
     };
   } catch {
     return {
       costUsd: 0,
       success: false,
+      output,
+      errorMessage: "Failed to parse Claude Code output as JSON",
     };
   }
 }
