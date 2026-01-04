@@ -13,11 +13,14 @@ Run "npx ultracite check" to see the current lint errors, then fix them one by o
 
 After each fix, run "npx ultracite check" again to verify the fix worked and check for remaining issues.
 
-Continue until all lint issues are resolved or you've made multiple attempts at the same issue.
+Stop when you have fixed 15 issues OR all issues are resolved, whichever comes first.
 
 Important:
-- Only fix real lint errors shown in the output
-- Don't modify files unnecessarily`;
+- Only fix SIMPLE issues (unused variables, missing semicolons, import ordering, formatting, simple type fixes, etc.)
+- SKIP complex issues that require architectural changes, major refactoring, or deep domain knowledge
+- If an issue would require changing more than ~10 lines or multiple files, skip it
+- Don't modify files unnecessarily
+- Don't attempt the same issue more than twice - move on if you can't fix it easily`;
 
 export async function runClaudeCode(
   sandboxId: string
