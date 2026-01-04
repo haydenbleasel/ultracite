@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex callback
 export const GET = async (request: NextRequest) => {
   const user = await getCurrentUser();
 

@@ -80,7 +80,6 @@ async function checkGitHubAppInstallation(
   }
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Requires multiple conditional paths
 export async function syncGitHubOrganizations(
   providerToken: string,
   userId: string,

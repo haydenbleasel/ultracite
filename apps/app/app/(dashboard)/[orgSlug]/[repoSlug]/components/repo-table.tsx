@@ -60,8 +60,11 @@ export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
               <TableCell className="text-muted-foreground">
                 {run.errorMessage ?? ""}
               </TableCell>
-              <TableCell className="text-muted-foreground font-mono tabular-nums">
-                ${(Number(run.sandboxCostUsd) + Number(run.aiCostUsd ?? 0)).toFixed(4)}
+              <TableCell className="font-mono text-muted-foreground tabular-nums">
+                $
+                {(
+                  Number(run.sandboxCostUsd) + Number(run.aiCostUsd ?? 0)
+                ).toFixed(4)}
               </TableCell>
             </TableRow>
           ))}

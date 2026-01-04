@@ -28,6 +28,7 @@ export type {
   LintRepoResult,
 } from "@/lib/steps/types";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex workflow
 export async function lintRepoWorkflow(
   params: LintRepoParams
 ): Promise<LintRepoResult> {

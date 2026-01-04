@@ -133,9 +133,8 @@ describe("oxlint linter", () => {
       const content = JSON.parse(writeCall[1] as string);
       // Should only appear once
       expect(
-        content.extends.filter(
-          (e: string) => e === getOxlintConfigPath("core")
-        ).length
+        content.extends.filter((e: string) => e === getOxlintConfigPath("core"))
+          .length
       ).toBe(1);
     });
 
