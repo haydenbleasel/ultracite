@@ -13,6 +13,7 @@ export async function commitAndPush(
 
   const commitResult = await sandbox.runCommand("git", [
     "commit",
+    "--no-verify",
     "-m",
     message,
   ]);
