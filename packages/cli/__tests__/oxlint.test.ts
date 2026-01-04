@@ -1,6 +1,10 @@
 import { describe, expect, mock, test } from "bun:test";
 import { oxlint } from "../src/linters/oxlint";
 
+// Helper to generate the expected oxlint config path
+const getOxlintConfigPath = (name: string) =>
+  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   readFile: mock(() => Promise.resolve("{}")),
@@ -48,7 +52,7 @@ describe("oxlint linter", () => {
       const writeCall = mockWriteFile.mock.calls[0];
       expect(writeCall[0]).toBe("./.oxlintrc.json");
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/core");
+      expect(content.extends).toContain(getOxlintConfigPath("core"));
     });
 
     test("creates oxlint config with frameworks", async () => {
@@ -65,8 +69,8 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/react");
-      expect(content.extends).toContain("ultracite/oxlint/next");
+      expect(content.extends).toContain(getOxlintConfigPath("react"));
+      expect(content.extends).toContain(getOxlintConfigPath("next"));
     });
   });
 
@@ -89,7 +93,7 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/core");
+      expect(content.extends).toContain(getOxlintConfigPath("core"));
       expect(content.extends).toContain("some-other-config");
     });
 
@@ -107,13 +111,13 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/core");
+      expect(content.extends).toContain(getOxlintConfigPath("core"));
     });
 
-    test("skips adding ultracite config if already present", async () => {
+    test("skips adding ultracite config if already present (new format)", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       const existingConfig = JSON.stringify({
-        extends: ["ultracite/oxlint/core"],
+        extends: [getOxlintConfigPath("core")],
       });
 
       mock.module("node:fs/promises", () => ({
@@ -129,15 +133,16 @@ describe("oxlint linter", () => {
       const content = JSON.parse(writeCall[1] as string);
       // Should only appear once
       expect(
-        content.extends.filter((e: string) => e === "ultracite/oxlint/core")
-          .length
+        content.extends.filter(
+          (e: string) => e === getOxlintConfigPath("core")
+        ).length
       ).toBe(1);
     });
 
     test("adds framework configs during update", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       const existingConfig = JSON.stringify({
-        extends: ["ultracite/oxlint/core"],
+        extends: [getOxlintConfigPath("core")],
       });
 
       mock.module("node:fs/promises", () => ({
@@ -151,7 +156,7 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/react");
+      expect(content.extends).toContain(getOxlintConfigPath("react"));
     });
 
     test("handles config without extends array", async () => {
@@ -171,7 +176,7 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const writeCall = mockWriteFile.mock.calls[0];
       const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain("ultracite/oxlint/core");
+      expect(content.extends).toContain(getOxlintConfigPath("core"));
     });
   });
 });

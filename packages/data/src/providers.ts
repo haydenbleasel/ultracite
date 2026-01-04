@@ -231,7 +231,7 @@ export default defineConfig([
         code: (presets: string[]) => `{
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "extends": [
-    ${presets.map((p) => `"ultracite/oxlint/${p}"`).join(",\n    ")}
+    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}/.oxlintrc.json"`).join(",\n    ")}
   ]
 }`,
       },

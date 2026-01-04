@@ -10,9 +10,14 @@ interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
 }
 
+// Helper to generate the full node_modules path for oxlint configs
+// Oxlint doesn't support Node.js package exports, so we need explicit paths
+const getOxlintConfigPath = (name: string) =>
+  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+
 const defaultConfig = {
   $schema: "./node_modules/oxlint/configuration_schema.json",
-  extends: ["ultracite/oxlint/core"],
+  extends: [getOxlintConfigPath("core")],
 };
 
 export const oxlint = {
@@ -20,12 +25,12 @@ export const oxlint = {
     return await exists(oxlintConfigPath);
   },
   create: async (opts?: OxlintOptions) => {
-    const extendsList = ["ultracite/oxlint/core"];
+    const extendsList = [getOxlintConfigPath("core")];
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        extendsList.push(`ultracite/oxlint/${framework}`);
+        extendsList.push(getOxlintConfigPath(framework));
       }
     }
 
@@ -51,19 +56,22 @@ export const oxlint = {
         ? configToWork.extends
         : [];
 
+    // Helper to check if a config is already present
+    const hasConfig = (name: string) =>
+      existingExtends.some((ext: string) => ext === getOxlintConfigPath(name));
+
     const newExtends = [...existingExtends];
 
-    // Add ultracite/oxlint/core if not present
-    if (!newExtends.includes("ultracite/oxlint/core")) {
-      newExtends.push("ultracite/oxlint/core");
+    // Add core config if not present
+    if (!hasConfig("core")) {
+      newExtends.push(getOxlintConfigPath("core"));
     }
 
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        const frameworkConfig = `ultracite/oxlint/${framework}`;
-        if (!newExtends.includes(frameworkConfig)) {
-          newExtends.push(frameworkConfig);
+        if (!hasConfig(framework)) {
+          newExtends.push(getOxlintConfigPath(framework));
         }
       }
     }

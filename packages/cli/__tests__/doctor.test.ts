@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 import { doctor } from "../src/commands/doctor";
 
+// Helper to generate the expected oxlint config path
+const getOxlintConfigPath = (name: string) =>
+  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+
 mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
   execSync: mock(() => ""),
@@ -531,7 +535,9 @@ describe("doctor", () => {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
         if (pathStr.includes(".oxlintrc.json")) {
-          return Promise.resolve('{"extends": ["ultracite/oxlint/core"]}');
+          return Promise.resolve(
+            `{"extends": ["${getOxlintConfigPath("core")}"]}`
+          );
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),

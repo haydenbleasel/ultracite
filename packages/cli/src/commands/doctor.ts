@@ -236,6 +236,10 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
   }
 };
 
+// Helper to generate the full node_modules path for oxlint configs
+const getOxlintConfigPath = (name: string) =>
+  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+
 // Check if .oxlintrc.json exists and extends ultracite
 const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
   const oxlintConfigPath = join(process.cwd(), ".oxlintrc.json");
@@ -254,19 +258,19 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
 
     if (
       Array.isArray(config?.extends) &&
-      config.extends.includes("ultracite/oxlint/core")
+      config.extends.includes(getOxlintConfigPath("core"))
     ) {
       return {
         name: "Oxlint configuration",
         status: "pass",
-        message: ".oxlintrc.json extends ultracite/oxlint/core",
+        message: ".oxlintrc.json extends ultracite oxlint config",
       };
     }
 
     return {
       name: "Oxlint configuration",
       status: "warn",
-      message: ".oxlintrc.json exists but doesn't extend ultracite/oxlint/core",
+      message: ".oxlintrc.json exists but doesn't extend ultracite config",
     };
   } catch {
     return {
