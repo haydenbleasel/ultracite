@@ -15,6 +15,16 @@ export async function checkPushAccess(
   const [owner, repo] = repoFullName.split("/");
   const octokit = await getInstallationOctokit(installationId);
 
+  // Check if the repository is archived
+  const { data: repoData } = await octokit.rest.repos.get({ owner, repo });
+
+  if (repoData.archived) {
+    return {
+      canPush: false,
+      reason: "Repository is archived and cannot be modified",
+    };
+  }
+
   // Check installation permissions for this repo
   const { data: installation } = await octokit.rest.apps.getInstallation({
     installation_id: installationId,

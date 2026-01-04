@@ -126,7 +126,6 @@ export async function lintRepoWorkflow(
         prUrl: prResult.prUrl,
       };
     } else if (fixResult.hasRemainingIssues) {
-      // Single fix mode: only fix one issue per cron run
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
       // Update lint run with AI cost
