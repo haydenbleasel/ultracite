@@ -31,6 +31,7 @@ export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
             <TableHead>PR</TableHead>
             <TableHead>Timestamp</TableHead>
             <TableHead>Note</TableHead>
+            <TableHead>Cost</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -58,6 +59,9 @@ export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {run.errorMessage ?? ""}
+              </TableCell>
+              <TableCell className="text-muted-foreground font-mono tabular-nums">
+                ${(Number(run.sandboxCostUsd) + Number(run.aiCostUsd ?? 0)).toFixed(4)}
               </TableCell>
             </TableRow>
           ))}
