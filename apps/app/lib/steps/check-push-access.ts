@@ -1,4 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
+import { database } from "@repo/backend/database";
 
 export interface PushAccessResult {
   canPush: boolean;
@@ -19,6 +20,15 @@ export async function checkPushAccess(
   const { data: repoData } = await octokit.rest.repos.get({ owner, repo });
 
   if (repoData.archived) {
+    // Disable the repo so we don't try to lint it again
+    await database.repo.updateMany({
+      where: { fullName: repoFullName },
+      data: {
+        dailyRunsEnabled: false,
+        prReviewEnabled: false,
+      },
+    });
+
     return {
       canPush: false,
       reason: "Repository is archived and cannot be modified",
