@@ -30,7 +30,7 @@ export const Files = ({ agent }: FilesProps) => (
         </p>
       </div>
       <div className="mx-auto h-96 w-full max-w-3xl overflow-auto">
-        <CodeBlock code={getRules("npm")} lang="markdown" />
+        <CodeBlock code={getRules("npm", "biome")} lang="markdown" />
       </div>
     </div>
   </div>
