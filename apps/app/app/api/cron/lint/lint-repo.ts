@@ -4,6 +4,7 @@ import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
 import { createSandbox } from "@/lib/steps/create-sandbox";
+import { extendSandbox } from "@/lib/steps/extend-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { generateChangelog } from "@/lib/steps/generate-changelog";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
@@ -126,6 +127,10 @@ export async function lintRepoWorkflow(
         prUrl: prResult.prUrl,
       };
     } else if (fixResult.hasRemainingIssues) {
+      // Extend sandbox timeout by another 3 minutes
+      await extendSandbox(sandboxId);
+
+      // Run Claude Code to fix the remaining issues
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
       // Update lint run with AI cost

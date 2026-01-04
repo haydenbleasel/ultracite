@@ -3,6 +3,7 @@ import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { createSandbox } from "@/lib/steps/create-sandbox";
+import { extendSandbox } from "@/lib/steps/extend-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
 import { generateChangelog } from "@/lib/steps/generate-changelog";
 import { getGitHubToken } from "@/lib/steps/get-github-token";
@@ -123,14 +124,17 @@ Please ensure the Ultracite app has write access to this repository and branch.
 
     // Check if there are remaining issues (based on exit code from check)
     if (fixResult.hasRemainingIssues) {
-      // Use Claude Code to fix remaining issues iteratively
+      // Extend sandbox timeout by another 3 minutes
+      await extendSandbox(sandboxId);
+
+      // Run Claude Code to fix the remaining issues
       const claudeCodeResult = await runClaudeCode(sandboxId);
 
       // Update lint run with AI cost
       await trackCost(lintRunId, claudeCodeResult.costUsd);
 
-      // Commit any changes from Claude Code fixes
       if (await hasUncommittedChanges(sandboxId)) {
+        // Commit any changes from Claude Code fixes
         // Generate changelog before committing
         const changelogResult = await generateChangelog(sandboxId);
         if (changelogResult.success) {
