@@ -63,19 +63,5 @@ export async function createBranchAndPush(
     throw new Error(`Failed to push branch: ${output}`);
   }
 
-  // Verify the branch exists on remote
-  const verifyResult = await sandbox.runCommand("git", [
-    "ls-remote",
-    "--heads",
-    "origin",
-    branchName,
-  ]);
-
-  const verifyOutput = await verifyResult.stdout();
-
-  if (!verifyOutput.includes(branchName)) {
-    throw new Error(`Branch ${branchName} was not found on remote after push`);
-  }
-
   return branchName;
 }
