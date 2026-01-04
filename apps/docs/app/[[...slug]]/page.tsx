@@ -31,7 +31,7 @@ const Page = async (props: PageProps<"/[[...slug]]">) => {
       <div className="-mt-6 mb-6 flex flex-row items-center gap-2">
         <CopyMarkdown markdown={markdown} />
         <ViewOptions
-          githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/apps/docs/content/${page.path}`}
+          githubUrl={`https://github.com/haydenbleasel/ultracite/blob/main/apps/docs/content/docs/${page.path}`}
           markdownUrl={`${page.url}.mdx`}
         />
       </div>
