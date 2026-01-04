@@ -45,7 +45,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("copilot", "npm");
+      const agents = createAgents("copilot", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("copilot", "npm");
+      const agents = createAgents("copilot", "npm", "biome");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -84,7 +84,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cline", "npm");
+      const agents = createAgents("cline", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cline", "npm");
+      const agents = createAgents("cline", "npm", "biome");
       await agents.update();
 
       const writeCall = mockWriteFile.mock.calls[0];
@@ -123,7 +123,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("cline", "npm");
+      const agents = createAgents("cline", "npm", "biome");
       await agents.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -144,7 +144,7 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("claude", "npm");
+      const agents = createAgents("claude", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -164,7 +164,7 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("junie", "npm");
+      const agents = createAgents("junie", "npm", "biome");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
@@ -182,7 +182,7 @@ describe("createAgents", () => {
         mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("codex", "npm");
+      const agents = createAgents("codex", "npm", "biome");
       await agents.create();
 
       // Should not be called for root-level AGENTS.md

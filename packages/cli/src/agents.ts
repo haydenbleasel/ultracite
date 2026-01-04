@@ -1,13 +1,15 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { agents } from "@repo/data/agents";
 import type { options } from "@repo/data/options";
+import { providers } from "@repo/data/providers";
 import { getRules } from "@repo/data/rules";
 import { dlxCommand, type PackageManagerName } from "nypm";
 import { ensureDirectory, exists } from "./utils";
 
 export const createAgents = (
   name: (typeof options.agents)[number],
-  packageManager: PackageManagerName
+  packageManager: PackageManagerName,
+  linter: (typeof options.linters)[number]
 ) => {
   const agent = agents.find((agent) => agent.id === name);
 
@@ -15,8 +17,14 @@ export const createAgents = (
     throw new Error(`Agent "${name}" not found`);
   }
 
+  const provider = providers.find((provider) => provider.id === linter);
+
+  if (!provider) {
+    throw new Error(`Provider "${linter}" not found`);
+  }
+
   const dlx = dlxCommand(packageManager, "");
-  const rules = getRules(dlx);
+  const rules = getRules(dlx, provider.name);
   const content = agent.config.header
     ? `${agent.config.header}\n\n${rules}`
     : rules;
