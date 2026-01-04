@@ -564,6 +564,7 @@ export const upsertAgents = async (
   name: (typeof options.agents)[number],
   displayName: string,
   packageManager: PackageManagerName,
+  linter: (typeof options.linters)[number],
   quiet = false
 ) => {
   const s = spinner();
@@ -572,7 +573,7 @@ export const upsertAgents = async (
     s.start(`Checking for ${displayName}...`);
   }
 
-  const agents = createAgents(name, packageManager);
+  const agents = createAgents(name, packageManager, linter);
 
   if (await agents.exists()) {
     if (!quiet) {
@@ -887,7 +888,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const ruleName of agents ?? []) {
-      await upsertAgents(ruleName, agentsOptions[ruleName], pm, quiet);
+      await upsertAgents(ruleName, agentsOptions[ruleName], pm, linter, quiet);
     }
 
     for (const hookName of hooks ?? []) {

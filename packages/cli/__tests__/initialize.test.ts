@@ -2072,7 +2072,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("claude", "Claude Code", "npm");
+      await upsertAgents("claude", "Claude Code", "npm", 'biome');
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
@@ -2099,7 +2099,7 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("claude", "Claude Code", "npm");
+      await upsertAgents("claude", "Claude Code", "npm", 'biome');
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });

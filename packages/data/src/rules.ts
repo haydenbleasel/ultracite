@@ -1,6 +1,9 @@
-export const getRules = (runner: string) => `# Ultracite Code Standards
+export const getRules = (
+  runner: string,
+  providerName: string
+) => `# Ultracite Code Standards
 
-This project uses **Ultracite**, a zero-config Biome preset that enforces strict code quality standards through automated formatting and linting.
+This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
 
 ## Quick Reference
 
@@ -8,7 +11,7 @@ This project uses **Ultracite**, a zero-config Biome preset that enforces strict
 - **Check for issues**: \`${runner} ultracite check\`
 - **Diagnose setup**: \`${runner} ultracite doctor\`
 
-Biome (the underlying engine) provides extremely fast Rust-based linting and formatting. Most issues are automatically fixable.
+${providerName} (the underlying engine) provides extremely fast Rust-based linting and formatting. Most issues are automatically fixable.
 
 ---
 
