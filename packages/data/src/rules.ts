@@ -11,7 +11,7 @@ This project uses **Ultracite**, a zero-config preset that enforces strict code 
 - **Check for issues**: \`${runner} ultracite check\`
 - **Diagnose setup**: \`${runner} ultracite doctor\`
 
-${providerName} (the underlying engine) provides extremely fast Rust-based linting and formatting. Most issues are automatically fixable.
+${providerName} (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
 
 ---
 
@@ -110,11 +110,11 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Don't use \`.only\` or \`.skip\` in committed code
 - Keep test suites reasonably flat - avoid excessive \`describe\` nesting
 
-## When Biome Can't Help
+## When ${providerName} Can't Help
 
-Biome's linter will catch most issues automatically. Focus your attention on:
+${providerName}'s linter will catch most issues automatically. Focus your attention on:
 
-1. **Business logic correctness** - Biome can't validate your algorithms
+1. **Business logic correctness** - ${providerName} can't validate your algorithms
 2. **Meaningful naming** - Use descriptive names for functions, variables, and types
 3. **Architecture decisions** - Component structure, data flow, and API design
 4. **Edge cases** - Handle boundary conditions and error states
@@ -123,5 +123,5 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
-Most formatting and common issues are automatically fixed by Biome. Run \`${runner} ultracite fix\` before committing to ensure compliance.
+Most formatting and common issues are automatically fixed by ${providerName}. Run \`${runner} ultracite fix\` before committing to ensure compliance.
 `;
