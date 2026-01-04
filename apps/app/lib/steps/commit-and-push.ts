@@ -2,7 +2,8 @@ import { Sandbox } from "@vercel/sandbox";
 
 export async function commitAndPush(
   sandboxId: string,
-  message: string
+  message: string,
+  branchName?: string
 ): Promise<void> {
   "use step";
 
@@ -21,7 +22,8 @@ export async function commitAndPush(
     throw new Error(`Failed to commit: ${output}`);
   }
 
-  const pushResult = await sandbox.runCommand("git", ["push"]);
+  const pushArgs = branchName ? ["push", "origin", branchName] : ["push"];
+  const pushResult = await sandbox.runCommand("git", pushArgs);
 
   if (pushResult.exitCode !== 0) {
     const output = await pushResult.output("both");

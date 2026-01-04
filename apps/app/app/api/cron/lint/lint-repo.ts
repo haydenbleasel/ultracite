@@ -1,7 +1,8 @@
 import { checkExistingPR } from "@/lib/steps/check-existing-pr";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
+import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { configureGit } from "@/lib/steps/configure-git";
-import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
+import { createBranch } from "@/lib/steps/create-branch";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
 import { createSandbox } from "@/lib/steps/create-sandbox";
@@ -106,9 +107,11 @@ export async function lintRepoWorkflow(
       // Auto-fix made changes - generate changelog and create a PR
       const changelogResult = await generateChangelog(sandboxId);
 
-      const branchName = await createBranchAndPush(
+      const branchName = await createBranch(sandboxId);
+      await commitAndPush(
         sandboxId,
-        "Auto-fix lint issues"
+        "fix: Auto-fix lint issues\n\nAutomatically fixed by Ultracite",
+        branchName
       );
 
       const prResult = await createPullRequest({
@@ -142,9 +145,11 @@ export async function lintRepoWorkflow(
         // Generate changelog before committing
         const changelogResult = await generateChangelog(sandboxId);
 
-        const branchName = await createBranchAndPush(
+        const branchName = await createBranch(sandboxId);
+        await commitAndPush(
           sandboxId,
-          "Fix lint issue with Claude Code"
+          "fix: Fix lint issue with Claude Code\n\nAutomatically fixed by Ultracite",
+          branchName
         );
 
         const prResult = await createPullRequest({
