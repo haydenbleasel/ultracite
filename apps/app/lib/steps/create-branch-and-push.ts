@@ -3,22 +3,11 @@ import { nanoid } from "nanoid";
 
 export async function createBranchAndPush(
   sandboxId: string,
-  commitMessage: string,
-  repoFullName: string,
-  token: string
+  commitMessage: string
 ): Promise<string> {
   "use step";
 
   const sandbox = await Sandbox.get({ sandboxId });
-
-  // Configure remote URL with authentication token
-  const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
-  await sandbox.runCommand("git", [
-    "remote",
-    "set-url",
-    "origin",
-    authenticatedUrl,
-  ]);
 
   const branchName = `ultracite/fix-${nanoid()}`;
 
@@ -33,12 +22,6 @@ export async function createBranchAndPush(
     throw new Error(`Failed to create branch: ${output}`);
   }
 
-  await sandbox.runCommand("git", [
-    "config",
-    "user.email",
-    "ultracite@users.noreply.github.com",
-  ]);
-  await sandbox.runCommand("git", ["config", "user.name", "Ultracite"]);
   await sandbox.runCommand("git", ["add", "-A"]);
 
   const commitResult = await sandbox.runCommand("git", [

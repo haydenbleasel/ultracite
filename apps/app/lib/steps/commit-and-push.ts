@@ -2,29 +2,12 @@ import { Sandbox } from "@vercel/sandbox";
 
 export async function commitAndPush(
   sandboxId: string,
-  message: string,
-  repoFullName: string,
-  token: string
+  message: string
 ): Promise<void> {
   "use step";
 
   const sandbox = await Sandbox.get({ sandboxId });
 
-  // Configure remote URL with authentication token
-  const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
-  await sandbox.runCommand("git", [
-    "remote",
-    "set-url",
-    "origin",
-    authenticatedUrl,
-  ]);
-
-  await sandbox.runCommand("git", [
-    "config",
-    "user.email",
-    "ultracite@users.noreply.github.com",
-  ]);
-  await sandbox.runCommand("git", ["config", "user.name", "Ultracite"]);
   await sandbox.runCommand("git", ["add", "-A"]);
 
   const commitResult = await sandbox.runCommand("git", [

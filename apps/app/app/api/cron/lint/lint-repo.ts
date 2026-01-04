@@ -1,5 +1,6 @@
 import { checkExistingPR } from "@/lib/steps/check-existing-pr";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
+import { configureGit } from "@/lib/steps/configure-git";
 import { createBranchAndPush } from "@/lib/steps/create-branch-and-push";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
@@ -94,6 +95,9 @@ export async function lintRepoWorkflow(
     // Install dependencies
     await installDependencies(sandboxId);
 
+    // Configure git for pushing
+    await configureGit(sandboxId, repoFullName, token);
+
     // Run CLI fixes (auto-fix what we can)
     const fixResult = await fixLint(sandboxId);
 
@@ -104,9 +108,7 @@ export async function lintRepoWorkflow(
 
       const branchName = await createBranchAndPush(
         sandboxId,
-        "Auto-fix lint issues",
-        repoFullName,
-        token
+        "Auto-fix lint issues"
       );
 
       const prResult = await createPullRequest({
@@ -142,9 +144,7 @@ export async function lintRepoWorkflow(
 
         const branchName = await createBranchAndPush(
           sandboxId,
-          "Fix lint issue with Claude Code",
-          repoFullName,
-          token
+          "Fix lint issue with Claude Code"
         );
 
         const prResult = await createPullRequest({

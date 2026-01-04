@@ -2,6 +2,7 @@ import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
+import { configureGit } from "@/lib/steps/configure-git";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { extendSandbox } from "@/lib/steps/extend-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
@@ -100,6 +101,9 @@ Please ensure the Ultracite app has write access to this repository and branch.
     // Install dependencies
     await installDependencies(sandboxId);
 
+    // Configure git for pushing
+    await configureGit(sandboxId, repoFullName, token);
+
     // Run ultracite fix (auto-fix what we can)
     const fixResult = await fixLint(sandboxId);
 
@@ -114,9 +118,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
       // Commit auto-fix changes
       await commitAndPush(
         sandboxId,
-        "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite",
-        repoFullName,
-        token
+        "fix: auto-fix lint issues\n\nAutomatically fixed by Ultracite"
       );
       madeChanges = true;
     }
@@ -142,9 +144,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
 
         await commitAndPush(
           sandboxId,
-          "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI",
-          repoFullName,
-          token
+          "fix: resolve lint issues\n\nAutomatically fixed by Ultracite AI"
         );
         madeChanges = true;
       }
