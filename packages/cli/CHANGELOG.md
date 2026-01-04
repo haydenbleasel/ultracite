@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 7.0.7
+
+### Patch Changes
+
+- ea7a6dc: Fix oxlint import path
+- a6e43a0: Add more CLI options for oxlint, oxfmt and biome
+- ad52a16: Fix linter provider mention in agent rules
+
 ## 7.0.6
 
 ### Patch Changes
