@@ -17,6 +17,7 @@ import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
+import mistralLogo from "../logos/mistral.svg";
 import openHandsLogo from "../logos/open-hands.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import qwenLogo from "../logos/qwen.svg";
@@ -313,5 +314,16 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       appendMode: true,
     },
     logo: cursorCliLogo,
+  },
+  {
+    id: "mistral-vibe",
+    name: "Mistral Vibe",
+    subtitle: "Minimal CLI coding agent",
+    description:
+      "Mistral's minimal CLI coding agent for streamlined development tasks.",
+    config: {
+      path: "VIBE.md",
+    },
+    logo: mistralLogo,
   },
 ];
