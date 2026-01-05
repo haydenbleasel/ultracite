@@ -8,6 +8,7 @@ import clineLogo from "../logos/cline.svg";
 import codexLogo from "../logos/codex.svg";
 import copilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
+import cursorCliLogo from "../logos/cursor.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
 import firebenderLogo from "../logos/firebender.svg";
@@ -300,5 +301,17 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       path: "firebender.json",
     },
     logo: firebenderLogo,
+  },
+  {
+    id: "cursor-cli",
+    name: "Cursor CLI",
+    subtitle: "Cursor's terminal agent",
+    description:
+      "Cursor's CLI, built to help you ship right from your terminal.",
+    config: {
+      path: ".cursor/rules/ultracite.mdc",
+      appendMode: true,
+    },
+    logo: cursorCliLogo,
   },
 ];
