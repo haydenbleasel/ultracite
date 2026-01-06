@@ -6,6 +6,7 @@ import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { CostTracker } from "./components/cost-tracker";
 import { RepoSettings } from "./components/repo-settings";
 import { RepoTable } from "./components/repo-table";
 
@@ -90,6 +91,7 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
                 <CheckCircleIcon className="size-4" /> PR reviews
               </Badge>
             )}
+            <CostTracker runs={repo.lintRuns} />
           </div>
           <div className="flex items-center gap-px">
             <RepoSettings
