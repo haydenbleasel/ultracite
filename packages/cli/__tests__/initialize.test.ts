@@ -811,7 +811,7 @@ describe("initialize", () => {
       skipInstall: true,
       editors: [],
       agents: [],
-      hooks: ["cursor", "windsurf"],
+      hooks: ["cursor", "windsurf", "claude"],
       integrations: [],
       frameworks: [],
     });
