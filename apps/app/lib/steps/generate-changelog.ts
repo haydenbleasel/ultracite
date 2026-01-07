@@ -23,17 +23,11 @@ export async function generateChangelog(
 
   const sandbox = await Sandbox.get({ sandboxId });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("ANTHROPIC_API_KEY is not set");
-  }
-
   const escapedPrompt = prompt.replace(/'/g, "'\\''");
 
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 5`,
+    `claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 5`,
   ]);
 
   const output = await result.output("both");
