@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+import { env } from "../env";
 
 export interface ClaudeCodeResult {
   costUsd: number;
@@ -33,10 +34,10 @@ export async function runClaudeCode(
   // Escape the prompt for shell usage
   const escapedPrompt = prompt.replace(/'/g, "'\\''");
 
-  // Run claude with the API key set inline
+  // Run claude with Vercel AI Gateway env vars set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
+    `ANTHROPIC_BASE_URL="https://ai-gateway.vercel.sh" ANTHROPIC_AUTH_TOKEN="${env.VERCEL_AI_GATEWAY_API_KEY}" ANTHROPIC_API_KEY="" claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
   ]);
 
   // Get the output

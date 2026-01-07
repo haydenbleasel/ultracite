@@ -30,14 +30,4 @@ export async function installDependencies(sandboxId: string): Promise<void> {
 
   // Use `ni` to install project dependencies
   await sandbox.runCommand("ni", []);
-
-  // Set environment variables for Claude Code to use Vercel AI Gateway
-  await sandbox.runCommand("sh", [
-    "-c",
-    [
-      'export ANTHROPIC_BASE_URL="https://ai-gateway.vercel.sh"',
-      `export ANTHROPIC_AUTH_TOKEN="${process.env.VERCEL_AI_GATEWAY_API_KEY}"`,
-      'export ANTHROPIC_API_KEY=""',
-    ].join(" && "),
-  ]);
 }
