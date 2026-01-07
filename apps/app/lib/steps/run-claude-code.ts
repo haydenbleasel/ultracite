@@ -31,13 +31,14 @@ export async function runClaudeCode(
   // Get the sandbox
   const sandbox = await Sandbox.get({ sandboxId });
 
-  // Escape the prompt for shell usage
+  // Escape values for shell usage (single quotes prevent shell interpretation)
   const escapedPrompt = prompt.replace(/'/g, "'\\''");
+  const escapedApiKey = env.VERCEL_AI_GATEWAY_API_KEY.replace(/'/g, "'\\''");
 
   // Run claude with Vercel AI Gateway env vars set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_BASE_URL="https://ai-gateway.vercel.sh" ANTHROPIC_AUTH_TOKEN="${env.VERCEL_AI_GATEWAY_API_KEY}" ANTHROPIC_API_KEY="" claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
+    `ANTHROPIC_BASE_URL='https://ai-gateway.vercel.sh' ANTHROPIC_AUTH_TOKEN='${escapedApiKey}' ANTHROPIC_API_KEY='' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
   ]);
 
   // Get the output
