@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+import { env } from "../env";
 
 export interface ClaudeCodeResult {
   costUsd: number;
@@ -27,30 +28,23 @@ export async function runClaudeCode(
 ): Promise<ClaudeCodeResult> {
   "use step";
 
+  // Get the sandbox
   const sandbox = await Sandbox.get({ sandboxId });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  if (!apiKey) {
-    return {
-      costUsd: 0,
-      success: false,
-      output: "",
-      errorMessage: "ANTHROPIC_API_KEY is not set",
-    };
-  }
-
-  // Escape the prompt for shell usage
+  // Escape values for shell usage (single quotes prevent shell interpretation)
   const escapedPrompt = prompt.replace(/'/g, "'\\''");
+  const escapedApiKey = env.VERCEL_AI_GATEWAY_API_KEY.replace(/'/g, "'\\''");
 
-  // Run claude with the API key set inline
+  // Run claude with Vercel AI Gateway env vars set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
+    `ANTHROPIC_BASE_URL='https://ai-gateway.vercel.sh' ANTHROPIC_AUTH_TOKEN='${escapedApiKey}' ANTHROPIC_API_KEY='' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
   ]);
 
+  // Get the output
   const output = await result.output("both");
 
+  // If the command failed, return an error
   if (result.exitCode !== 0) {
     return {
       costUsd: 0,
@@ -60,11 +54,13 @@ export async function runClaudeCode(
     };
   }
 
+  // Parse the output as JSON
   try {
     const parsed = JSON.parse(output) as {
       total_cost_usd: number;
     };
 
+    // Return the cost and success
     return {
       costUsd: parsed.total_cost_usd,
       success: true,
