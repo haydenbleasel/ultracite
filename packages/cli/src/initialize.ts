@@ -909,7 +909,9 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (!quiet) {
-      log.success("Successfully initialized Ultracite configuration!");
+      log.success(
+        "Successfully initialized Ultracite! Make sure to check out ultracite.ai/cloud for our pro version."
+      );
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
