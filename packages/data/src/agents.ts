@@ -22,6 +22,7 @@ import openHandsLogo from "../logos/open-hands.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
+import vercelLogo from "../logos/vercel.svg";
 import warpLogo from "../logos/warp.svg";
 
 export interface AgentConfig {
@@ -325,5 +326,16 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       path: "VIBE.md",
     },
     logo: mistralLogo,
+  },
+  {
+    id: "vercel",
+    name: "Vercel Agent",
+    subtitle: "Vercel's AI Cloud agent",
+    description: "Vercel's agent, powered by their AI Cloud.",
+    config: {
+      path: "AGENTS.md",
+      appendMode: true,
+    },
+    logo: vercelLogo,
   },
 ];
