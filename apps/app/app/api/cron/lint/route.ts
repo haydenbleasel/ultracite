@@ -11,22 +11,14 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { searchParams } = new URL(request.url);
-  const orgSlug = searchParams.get("orgSlug");
-  const repoSlug = searchParams.get("repoSlug");
-
   const organizations = await database.organization.findMany({
     where: {
       githubInstallationId: { not: null },
       stripeCustomerId: { not: null },
-      ...(orgSlug && { slug: orgSlug }),
     },
     include: {
       repos: {
-        where: {
-          dailyRunsEnabled: true,
-          ...(repoSlug && { slug: repoSlug }),
-        },
+        where: { dailyRunsEnabled: true },
       },
     },
   });
