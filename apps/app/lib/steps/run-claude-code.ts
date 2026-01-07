@@ -27,18 +27,8 @@ export async function runClaudeCode(
 ): Promise<ClaudeCodeResult> {
   "use step";
 
+  // Get the sandbox
   const sandbox = await Sandbox.get({ sandboxId });
-
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  if (!apiKey) {
-    return {
-      costUsd: 0,
-      success: false,
-      output: "",
-      errorMessage: "ANTHROPIC_API_KEY is not set",
-    };
-  }
 
   // Escape the prompt for shell usage
   const escapedPrompt = prompt.replace(/'/g, "'\\''");
@@ -46,11 +36,13 @@ export async function runClaudeCode(
   // Run claude with the API key set inline
   const result = await sandbox.runCommand("sh", [
     "-c",
-    `ANTHROPIC_API_KEY='${apiKey}' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
+    `claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
   ]);
 
+  // Get the output
   const output = await result.output("both");
 
+  // If the command failed, return an error
   if (result.exitCode !== 0) {
     return {
       costUsd: 0,
@@ -60,11 +52,13 @@ export async function runClaudeCode(
     };
   }
 
+  // Parse the output as JSON
   try {
     const parsed = JSON.parse(output) as {
       total_cost_usd: number;
     };
 
+    // Return the cost and success
     return {
       costUsd: parsed.total_cost_usd,
       success: true,

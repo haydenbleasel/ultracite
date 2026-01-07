@@ -22,8 +22,8 @@ export const env = createEnv({
     VERCEL_TEAM_ID: z.string().optional(),
     VERCEL_PROJECT_ID: z.string().optional(),
 
-    // Anthropic
-    ANTHROPIC_API_KEY: z.string(),
+    // Vercel AI Gateway
+    VERCEL_AI_GATEWAY_API_KEY: z.string(),
 
     // Stripe
     STRIPE_SECRET_KEY: z.string(),
