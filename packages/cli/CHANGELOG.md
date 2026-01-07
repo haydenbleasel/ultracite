@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 7.0.9
+
+### Patch Changes
+
+- 95dd898: Disable sort-imports in favor of oxfmt
+- c72d2b3: Disable react/jsx-max-depth
+- 2ae8976: Disable typescript/require-await
+
 ## 7.0.8
 
 ### Patch Changes
