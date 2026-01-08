@@ -39,7 +39,7 @@ export const sendSlackMessage = async (
   const payload: SlackMessagePayload = {
     text: message,
     channel: `#${env.SLACK_CHANNEL}`,
-    username: "Ultracite",
+    username: "ultracite-bot",
   };
 
   try {
