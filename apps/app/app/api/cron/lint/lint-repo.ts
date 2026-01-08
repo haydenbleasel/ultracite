@@ -18,6 +18,7 @@ import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import type { LintRepoParams, LintStepResult } from "@/lib/steps/types";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
+import { sendSlackMessage } from "@/lib/slack";
 import { FatalError } from "workflow";
 
 export type { LintRepoParams } from "@/lib/steps/types";
@@ -203,6 +204,11 @@ export async function lintRepoWorkflow(
       completedAt: new Date(),
       errorMessage,
     });
+
+    // Notify Slack about the failure
+    await sendSlackMessage(
+      `🚨 Lint workflow failed for *${repoFullName}*\n\`\`\`${errorMessage}\`\`\``
+    );
 
     throw error;
   } finally {

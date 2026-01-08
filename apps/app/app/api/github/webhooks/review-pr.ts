@@ -15,6 +15,7 @@ import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
+import { sendSlackMessage } from "@/lib/slack";
 import { FatalError } from "workflow";
 
 export interface ReviewPRParams {
@@ -219,6 +220,11 @@ ${errorMessage}
       prNumber,
       errorMessage,
     });
+
+    // Notify Slack about the failure
+    await sendSlackMessage(
+      `🚨 PR review workflow failed for *${repoFullName}* PR #${prNumber}\n\`\`\`${errorMessage}\`\`\``
+    );
 
     throw error;
   } finally {

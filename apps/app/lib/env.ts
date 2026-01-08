@@ -30,6 +30,10 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string(),
     STRIPE_PRICE_ID: z.string(),
     STRIPE_METER_EVENT_NAME: z.string(),
+
+    // Slack
+    SLACK_WEBHOOK_URL: z.string(),
+    SLACK_CHANNEL: z.string(),
   },
   client: {
     // Supabase
@@ -59,5 +63,7 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
     STRIPE_METER_EVENT_NAME: process.env.STRIPE_METER_EVENT_NAME,
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+    SLACK_CHANNEL: process.env.SLACK_CHANNEL,
   },
 });
