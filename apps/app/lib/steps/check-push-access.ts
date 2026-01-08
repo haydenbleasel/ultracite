@@ -1,4 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
+import { parseError } from "@/lib/error";
 import { database } from "@repo/backend/database";
 
 export interface PushAccessResult {
@@ -14,10 +15,24 @@ export async function checkPushAccess(
   "use step";
 
   const [owner, repo] = repoFullName.split("/");
-  const octokit = await getInstallationOctokit(installationId);
+
+  let octokit;
+
+  try {
+    octokit = await getInstallationOctokit(installationId);
+  } catch (error) {
+    throw new Error(`[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`);
+  }
 
   // Check if the repository is archived
-  const { data: repoData } = await octokit.rest.repos.get({ owner, repo });
+  let repoData;
+
+  try {
+    const response = await octokit.rest.repos.get({ owner, repo });
+    repoData = response.data;
+  } catch (error) {
+    throw new Error(`Failed to get repository info: ${parseError(error)}`);
+  }
 
   if (repoData.archived) {
     // Disable the repo so we don't try to lint it again
@@ -36,9 +51,16 @@ export async function checkPushAccess(
   }
 
   // Check installation permissions for this repo
-  const { data: installation } = await octokit.rest.apps.getInstallation({
-    installation_id: installationId,
-  });
+  let installation;
+
+  try {
+    const response = await octokit.rest.apps.getInstallation({
+      installation_id: installationId,
+    });
+    installation = response.data;
+  } catch (error) {
+    throw new Error(`Failed to get installation info: ${parseError(error)}`);
+  }
 
   // Check if the installation has write access to contents
   const permissions = installation.permissions;

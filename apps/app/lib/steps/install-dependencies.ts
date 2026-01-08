@@ -1,20 +1,38 @@
 import { Sandbox } from "@vercel/sandbox";
+import { parseError } from "@/lib/error";
 
 export async function installDependencies(sandboxId: string): Promise<void> {
   "use step";
 
-  const sandbox = await Sandbox.get({ sandboxId });
+  let sandbox: Sandbox | null = null;
+
+  try {
+    sandbox = await Sandbox.get({ sandboxId });
+  } catch (error) {
+    throw new Error(`[installDependencies] Failed to get sandbox: ${parseError(error)}`);
+  }
 
   // Install ni and Claude Code first
-  await sandbox.runCommand("npm", [
-    "install",
-    "-g",
-    "@antfu/ni",
-    "@anthropic-ai/claude-code",
-  ]);
+  try {
+    await sandbox.runCommand("npm", [
+      "install",
+      "-g",
+      "@antfu/ni",
+      "@anthropic-ai/claude-code",
+    ]);
+  } catch (error) {
+    throw new Error(`Failed to install global dependencies: ${parseError(error)}`);
+  }
 
   // Detect the package manager using `ni -v`
-  const result = await sandbox.runCommand("ni", ["-v"]);
+  let result;
+
+  try {
+    result = await sandbox.runCommand("ni", ["-v"]);
+  } catch (error) {
+    throw new Error(`Failed to detect package manager: ${parseError(error)}`);
+  }
+
   const output = await result.stdout();
 
   // Parse output to find which package manager is used (pnpm, yarn, or bun)
@@ -25,9 +43,17 @@ export async function installDependencies(sandboxId: string): Promise<void> {
 
   // Install the detected package manager if needed (npm is already available)
   if (detectedManager) {
-    await sandbox.runCommand("npm", ["install", "-g", detectedManager]);
+    try {
+      await sandbox.runCommand("npm", ["install", "-g", detectedManager]);
+    } catch (error) {
+      throw new Error(`Failed to install ${detectedManager}: ${parseError(error)}`);
+    }
   }
 
   // Use `ni` to install project dependencies
-  await sandbox.runCommand("ni", []);
+  try {
+    await sandbox.runCommand("ni", []);
+  } catch (error) {
+    throw new Error(`Failed to install project dependencies: ${parseError(error)}`);
+  }
 }

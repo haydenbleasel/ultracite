@@ -1,4 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
+import { parseError } from "@/lib/error";
 
 export interface ExistingPRResult {
   hasExistingPR: boolean;
@@ -13,15 +14,29 @@ export async function checkExistingPR(
   "use step";
 
   const [owner, repo] = repoFullName.split("/");
-  const octokit = await getInstallationOctokit(installationId);
+
+  let octokit;
+
+  try {
+    octokit = await getInstallationOctokit(installationId);
+  } catch (error) {
+    throw new Error(`[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`);
+  }
 
   // List open PRs and check if any have a head branch starting with ultracite/fix-
-  const { data: pulls } = await octokit.rest.pulls.list({
-    owner,
-    repo,
-    state: "open",
-    per_page: 100,
-  });
+  let pulls;
+
+  try {
+    const response = await octokit.rest.pulls.list({
+      owner,
+      repo,
+      state: "open",
+      per_page: 100,
+    });
+    pulls = response.data;
+  } catch (error) {
+    throw new Error(`Failed to list pull requests: ${parseError(error)}`);
+  }
 
   const existingPR = pulls.find((pr) =>
     pr.head.ref.startsWith("ultracite/fix-")

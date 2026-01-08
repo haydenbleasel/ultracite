@@ -1,3 +1,4 @@
+import { parseError } from "@/lib/error";
 import { database } from "@repo/backend/database";
 import { Decimal } from "decimal.js";
 
@@ -7,8 +8,12 @@ export async function trackCost(
 ): Promise<void> {
   "use step";
 
-  await database.lintRun.update({
-    where: { id: lintRunId },
-    data: { aiCostUsd: new Decimal(aiCostUsd) },
-  });
+  try {
+    await database.lintRun.update({
+      where: { id: lintRunId },
+      data: { aiCostUsd: new Decimal(aiCostUsd) },
+    });
+  } catch (error) {
+    throw new Error(`Failed to track cost: ${parseError(error)}`);
+  }
 }
