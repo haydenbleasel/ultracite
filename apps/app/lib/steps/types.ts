@@ -7,18 +7,10 @@ export interface LintRepoParams {
   stripeCustomerId: string;
 }
 
-export interface LintRepoResult {
-  repo: string;
-  status: "success" | "error" | "skipped";
-  prUrl?: string;
-  error?: string;
-}
-
 export interface LintStepResult {
   prCreated: boolean;
   prNumber?: number;
   prUrl?: string;
-  error?: string;
 }
 
 export interface PullRequestResult {

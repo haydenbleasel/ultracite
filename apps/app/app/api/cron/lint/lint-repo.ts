@@ -16,22 +16,15 @@ import { recordBillingUsage } from "@/lib/steps/record-billing-usage";
 import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
-import type {
-  LintRepoParams,
-  LintRepoResult,
-  LintStepResult,
-} from "@/lib/steps/types";
+import type { LintRepoParams, LintStepResult } from "@/lib/steps/types";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
 
-export type {
-  LintRepoParams,
-  LintRepoResult,
-} from "@/lib/steps/types";
+export type { LintRepoParams } from "@/lib/steps/types";
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex workflow
 export async function lintRepoWorkflow(
   params: LintRepoParams
-): Promise<LintRepoResult> {
+): Promise<void> {
   "use workflow";
 
   const {
@@ -60,11 +53,7 @@ export async function lintRepoWorkflow(
       completedAt: new Date(),
     });
 
-    return {
-      repo: repoFullName,
-      status: "error",
-      error: pushAccess.reason,
-    };
+    throw new Error(pushAccess.reason);
   }
 
   // Check if there's already an open PR from Ultracite
@@ -78,11 +67,7 @@ export async function lintRepoWorkflow(
       prUrl: existingPR.prUrl,
     });
 
-    return {
-      repo: repoFullName,
-      status: "skipped",
-      prUrl: existingPR.prUrl,
-    };
+    return;
   }
 
   // Get GitHub access token
@@ -144,11 +129,10 @@ export async function lintRepoWorkflow(
 
       // Check if Claude Code failed
       if (!claudeCodeResult.success) {
-        result = {
-          prCreated: false,
-          error: claudeCodeResult.errorMessage ?? "Claude Code failed",
-        };
-      } else if (await hasUncommittedChanges(sandboxId)) {
+        throw new Error(claudeCodeResult.errorMessage ?? "Claude Code failed");
+      }
+
+      if (await hasUncommittedChanges(sandboxId)) {
         // Generate changelog before committing
         const changelogResult = await generateChangelog(sandboxId);
 
@@ -178,11 +162,9 @@ export async function lintRepoWorkflow(
         };
       } else {
         // Claude Code ran successfully but made no changes
-        result = {
-          prCreated: false,
-          error:
-            "Claude Code completed but could not fix the lint issues (no changes made)",
-        };
+        throw new Error(
+          "Claude Code completed but could not fix the lint issues (no changes made)"
+        );
       }
     } else {
       // No issues found
@@ -193,23 +175,13 @@ export async function lintRepoWorkflow(
     await recordBillingUsage(lintRunId, stripeCustomerId);
 
     // Determine the correct status based on the result
-    // - SUCCESS_PR_CREATED: PR was created with fixes
-    // - SUCCESS_NO_ISSUES: No lint issues were found
-    // - FAILED: Claude Code found issues but couldn't fix them
-    let status: "SUCCESS_PR_CREATED" | "SUCCESS_NO_ISSUES" | "FAILED" =
-      "SUCCESS_NO_ISSUES";
-    if (result.prCreated) {
-      status = "SUCCESS_PR_CREATED";
-    } else if (result.error) {
-      status = "FAILED";
-    }
+    const status = result.prCreated ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES";
 
     await updateLintRun(lintRunId, {
       status,
       completedAt: new Date(),
       prNumber: result.prNumber,
       prUrl: result.prUrl,
-      errorMessage: result.error,
     });
   } catch (error) {
     let errorMessage: string;
@@ -223,25 +195,15 @@ export async function lintRepoWorkflow(
       errorMessage = `Unexpected error: ${JSON.stringify(error)}`;
     }
 
-    result = {
-      prCreated: false,
-      error: errorMessage,
-    };
-
     await updateLintRun(lintRunId, {
       status: "FAILED",
       completedAt: new Date(),
       errorMessage,
     });
+
+    throw error;
   } finally {
     // Final step: Stop sandbox
     await stopSandbox(sandboxId);
   }
-
-  return {
-    repo: repoFullName,
-    status: result.error ? "error" : "success",
-    prUrl: result.prUrl,
-    error: result.error,
-  };
 }

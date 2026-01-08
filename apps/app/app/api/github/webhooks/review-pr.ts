@@ -26,17 +26,10 @@ export interface ReviewPRParams {
   stripeCustomerId: string;
 }
 
-export interface ReviewPRResult {
-  repo: string;
-  prNumber: number;
-  status: "success" | "no_issues" | "error";
-  error?: string;
-}
-
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Workflow orchestration requires multiple conditional paths
 export async function reviewPRWorkflow(
   params: ReviewPRParams
-): Promise<ReviewPRResult> {
+): Promise<void> {
   "use workflow";
 
   const {
@@ -78,12 +71,7 @@ Please ensure the Ultracite app has write access to this repository and branch.
       prNumber,
     });
 
-    return {
-      repo: repoFullName,
-      prNumber,
-      status: "error",
-      error: pushAccess.reason,
-    };
+    throw new Error(pushAccess.reason);
   }
 
   let madeChanges = false;
@@ -189,12 +177,6 @@ No lint issues found in this PR.
       completedAt: new Date(),
       prNumber,
     });
-
-    return {
-      repo: repoFullName,
-      prNumber,
-      status: madeChanges ? "success" : "no_issues",
-    };
   } catch (error) {
     let errorMessage: string;
     if (error instanceof Error) {
@@ -236,12 +218,7 @@ ${errorMessage}
       errorMessage,
     });
 
-    return {
-      repo: repoFullName,
-      prNumber,
-      status: "error",
-      error: errorMessage,
-    };
+    throw error;
   } finally {
     // Final step: Stop sandbox
     await stopSandbox(sandboxId);
