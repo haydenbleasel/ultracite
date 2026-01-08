@@ -333,7 +333,7 @@ const Home = () => (
           <div className="h-2 w-2 rounded-full bg-green-400" />
           <span className="text-zinc-300">Windsurf</span>
           <span className="ml-auto text-muted-foreground text-sm">
-            .windsurfrules
+            .windsurf/rules/ultracite.md
           </span>
         </div>
       </div>
