@@ -1,4 +1,5 @@
 import type { StaticImageData } from "next/image";
+import type { HooksConfig } from "./types";
 import aiderLogo from "../logos/aider.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
@@ -38,6 +39,7 @@ export interface Agent {
   description: string;
   config: AgentConfig;
   logo: StaticImageData;
+  hooks?: HooksConfig;
 }
 
 export const agents: Agent[] = [
@@ -52,6 +54,24 @@ export const agents: Agent[] = [
       appendMode: true,
     },
     logo: claudeLogo,
+    hooks: {
+      path: ".claude/settings.json",
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              matcher: "Write|Edit",
+              hooks: [
+                {
+                  type: "command",
+                  command,
+                },
+              ],
+            },
+          ],
+        },
+      }),
+    },
   },
   {
     id: "codex",

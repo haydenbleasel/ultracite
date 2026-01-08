@@ -81,6 +81,24 @@ mock.module("@repo/data/agents", () => ({
       description: "Anthropic's official CLI for Claude",
       config: { path: ".claude/CLAUDE.md", appendMode: true },
       logo: mockSvg,
+      hooks: {
+        path: ".claude/settings.json",
+        getContent: (command: string) => ({
+          hooks: {
+            PostToolUse: [
+              {
+                matcher: "Write|Edit",
+                hooks: [
+                  {
+                    type: "command",
+                    command,
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      },
     },
     {
       id: "codex",

@@ -2,6 +2,7 @@
 
 import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
+import type { HooksConfig } from "./types";
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
@@ -19,12 +20,6 @@ export interface EditorRulesConfig {
   appendMode?: boolean;
 }
 
-/* e.g. .cursor/hooks.json */
-export interface EditorHooksConfig {
-  path: string;
-  getContent: (command: string) => Record<string, unknown>;
-}
-
 /* e.g. .vscode/settings.json */
 export interface EditorSettingsConfig {
   path: string;
@@ -39,7 +34,7 @@ export interface Editor {
   description: string;
   logo: StaticImageData;
   rules?: EditorRulesConfig;
-  hooks?: EditorHooksConfig;
+  hooks?: HooksConfig;
   config: EditorSettingsConfig;
 }
 

@@ -1,47 +1,38 @@
-import { editors, type Editor, type EditorHooksConfig } from "./editors";
+import { agents, type Agent } from "./agents";
+import { editors, type Editor } from "./editors";
+import type { HooksConfig } from "./types";
+
+export type { HooksConfig } from "./types";
 
 export interface HookIntegration {
   id: string;
   name: string;
-  hooks: EditorHooksConfig;
+  hooks: HooksConfig;
 }
 
 const isEditorWithHooks = (
   editor: Editor
-): editor is Editor & { hooks: EditorHooksConfig } => Boolean(editor.hooks);
+): editor is Editor & { hooks: HooksConfig } => Boolean(editor.hooks);
 
-const editorHookIntegrations: HookIntegration[] = editors
-  .filter(isEditorWithHooks)
-  .map((editor) => ({
+const isAgentWithHooks = (
+  agent: Agent
+): agent is Agent & { hooks: HooksConfig } => Boolean(agent.hooks);
+
+const getEditorHookIntegrations = (): HookIntegration[] =>
+  editors.filter(isEditorWithHooks).map((editor) => ({
     id: editor.id,
     name: editor.name,
     hooks: editor.hooks,
   }));
 
-const claudeCodeHooksIntegration: HookIntegration = {
-  id: "claude",
-  name: "Claude Code",
-  hooks: {
-    path: ".claude/settings.json",
-    getContent: (command) => ({
-      hooks: {
-        PostToolUse: [
-          {
-            matcher: "Write|Edit",
-            hooks: [
-              {
-                type: "command",
-                command,
-              },
-            ],
-          },
-        ],
-      },
-    }),
-  },
-};
+const getAgentHookIntegrations = (): HookIntegration[] =>
+  agents.filter(isAgentWithHooks).map((agent) => ({
+    id: agent.id,
+    name: agent.name,
+    hooks: agent.hooks,
+  }));
 
 export const hooks: HookIntegration[] = [
-  ...editorHookIntegrations,
-  claudeCodeHooksIntegration,
+  ...getEditorHookIntegrations(),
+  ...getAgentHookIntegrations(),
 ];
