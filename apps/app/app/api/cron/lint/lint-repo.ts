@@ -18,6 +18,7 @@ import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import type { LintRepoParams, LintStepResult } from "@/lib/steps/types";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
+import { FatalError } from "workflow";
 
 export type { LintRepoParams } from "@/lib/steps/types";
 
@@ -53,7 +54,8 @@ export async function lintRepoWorkflow(
       completedAt: new Date(),
     });
 
-    throw new Error(pushAccess.reason);
+    // No point retrying - push access won't change
+    throw new FatalError(pushAccess.reason ?? "Push access denied");
   }
 
   // Check if there's already an open PR from Ultracite
@@ -129,7 +131,8 @@ export async function lintRepoWorkflow(
 
       // Check if Claude Code failed
       if (!claudeCodeResult.success) {
-        throw new Error(claudeCodeResult.errorMessage ?? "Claude Code failed");
+        // AI failures are non-retryable - the model couldn't fix the issue
+        throw new FatalError(claudeCodeResult.errorMessage ?? "Claude Code failed");
       }
 
       if (await hasUncommittedChanges(sandboxId)) {
@@ -161,8 +164,8 @@ export async function lintRepoWorkflow(
           prUrl: prResult.prUrl,
         };
       } else {
-        // Claude Code ran successfully but made no changes
-        throw new Error(
+        // Claude Code ran successfully but made no changes - non-retryable
+        throw new FatalError(
           "Claude Code completed but could not fix the lint issues (no changes made)"
         );
       }

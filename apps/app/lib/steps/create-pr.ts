@@ -1,5 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
-import { parseError } from "@/lib/error";
+import { handleGitHubError, parseError } from "@/lib/error";
 import type { PullRequestResult } from "./types";
 
 export interface CreatePRParams {
@@ -36,11 +36,35 @@ export async function createPullRequest(
 
   const [owner, repo] = repoFullName.split("/");
 
+  // Check if a PR already exists from this branch (idempotency check for retries)
+  try {
+    const { data: existingPRs } = await octokit.rest.pulls.list({
+      owner,
+      repo,
+      head: `${owner}:${branchName}`,
+      state: "open",
+    });
+
+    if (existingPRs.length > 0) {
+      // PR already exists, return it instead of creating a duplicate
+      const existingPR = existingPRs[0];
+      return {
+        prNumber: existingPR.number,
+        prUrl: existingPR.html_url,
+      };
+    }
+  } catch (error) {
+    // Non-fatal: continue to create PR if check fails
+    console.error(`Failed to check for existing PR: ${parseError(error)}`);
+  }
+
   const title = isLLMFix
     ? "AI-generated fix using Ultracite Cloud"
     : "Auto-generated fix using Ultracite Cloud";
 
-  let response;
+  let response: Awaited<
+    ReturnType<typeof octokit.request<"POST /repos/{owner}/{repo}/pulls">>
+  >;
 
   try {
     response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
@@ -59,7 +83,7 @@ export async function createPullRequest(
       },
     });
   } catch (error) {
-    throw new Error(`Failed to create pull request: ${parseError(error)}`);
+    return handleGitHubError(error, "Failed to create pull request");
   }
 
   if (response.status !== 201) {

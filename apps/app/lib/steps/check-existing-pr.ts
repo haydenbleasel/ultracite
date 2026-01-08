@@ -1,5 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
-import { parseError } from "@/lib/error";
+import { handleGitHubError, parseError } from "@/lib/error";
 
 export interface ExistingPRResult {
   hasExistingPR: boolean;
@@ -24,7 +24,7 @@ export async function checkExistingPR(
   }
 
   // List open PRs and check if any have a head branch starting with ultracite/fix-
-  let pulls;
+  let pulls: Awaited<ReturnType<typeof octokit.rest.pulls.list>>["data"];
 
   try {
     const response = await octokit.rest.pulls.list({
@@ -35,7 +35,7 @@ export async function checkExistingPR(
     });
     pulls = response.data;
   } catch (error) {
-    throw new Error(`Failed to list pull requests: ${parseError(error)}`);
+    return handleGitHubError(error, "Failed to list pull requests");
   }
 
   const existingPR = pulls.find((pr) =>

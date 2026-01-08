@@ -1,5 +1,5 @@
 import { getInstallationOctokit } from "@/lib/github/app";
-import { parseError } from "@/lib/error";
+import { handleGitHubError, parseError } from "@/lib/error";
 import { database } from "@repo/backend/database";
 
 export interface PushAccessResult {
@@ -25,13 +25,13 @@ export async function checkPushAccess(
   }
 
   // Check if the repository is archived
-  let repoData;
+  let repoData: Awaited<ReturnType<typeof octokit.rest.repos.get>>["data"];
 
   try {
     const response = await octokit.rest.repos.get({ owner, repo });
     repoData = response.data;
   } catch (error) {
-    throw new Error(`Failed to get repository info: ${parseError(error)}`);
+    return handleGitHubError(error, "Failed to get repository info");
   }
 
   if (repoData.archived) {
@@ -51,7 +51,9 @@ export async function checkPushAccess(
   }
 
   // Check installation permissions for this repo
-  let installation;
+  let installation: Awaited<
+    ReturnType<typeof octokit.rest.apps.getInstallation>
+  >["data"];
 
   try {
     const response = await octokit.rest.apps.getInstallation({
@@ -59,7 +61,7 @@ export async function checkPushAccess(
     });
     installation = response.data;
   } catch (error) {
-    throw new Error(`Failed to get installation info: ${parseError(error)}`);
+    return handleGitHubError(error, "Failed to get installation info");
   }
 
   // Check if the installation has write access to contents

@@ -15,6 +15,7 @@ import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
+import { FatalError } from "workflow";
 
 export interface ReviewPRParams {
   installationId: number;
@@ -71,7 +72,8 @@ Please ensure the Ultracite app has write access to this repository and branch.
       prNumber,
     });
 
-    throw new Error(pushAccess.reason);
+    // No point retrying - push access won't change
+    throw new FatalError(pushAccess.reason ?? "Push access denied");
   }
 
   let madeChanges = false;
@@ -124,8 +126,8 @@ Please ensure the Ultracite app has write access to this repository and branch.
       await trackCost(lintRunId, claudeCodeResult.costUsd);
 
       if (!claudeCodeResult.success) {
-        // Claude Code failed - throw to trigger error handling
-        throw new Error(
+        // AI failures are non-retryable - the model couldn't fix the issue
+        throw new FatalError(
           claudeCodeResult.errorMessage ?? "Claude Code failed to run"
         );
       }
