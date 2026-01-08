@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 7.0.10
+
+### Patch Changes
+
+- a7b34ed: Add Vercel Agent support
+- b6658ce: Add Claude Code hook integration to run `ultracite fix` after `Write`/`Edit` tool usage.
+
 ## 7.0.9
 
 ### Patch Changes
