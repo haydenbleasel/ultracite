@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CopyMarkdown } from "@/components/ultracite/copy-markdown";
 import { Feedback } from "@/components/ultracite/feedback";
+import { MobileSidebarTrigger } from "@/components/ultracite/mobile-sidebar-trigger";
 import { ViewOptions } from "@/components/ultracite/page-actions";
 import { getLLMText, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
@@ -44,6 +45,7 @@ const Page = async (props: PageProps<"/[[...slug]]">) => {
         />
       </DocsBody>
       <Feedback className="mt-12" />
+      <MobileSidebarTrigger />
     </DocsPage>
   );
 };

@@ -4,6 +4,7 @@ import { Social } from "@/components/social";
 import { Agents } from "./components/agents";
 import { Cloud } from "./components/cloud";
 import { Demo } from "./components/demo";
+import { Editors } from "./components/editors";
 import { Hero } from "./components/hero";
 import { IDE } from "./components/ide";
 import { ZeroConfig } from "./components/zero-config";
@@ -27,6 +28,7 @@ const Home = () => (
     <ZeroConfig />
     <IDE />
     <Agents />
+    <Editors />
     <Cloud />
     <Social />
   </div>
