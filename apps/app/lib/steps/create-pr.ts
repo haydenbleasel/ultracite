@@ -1,5 +1,5 @@
-import { getInstallationOctokit } from "@/lib/github/app";
 import { handleGitHubError, parseError } from "@/lib/error";
+import { getInstallationOctokit } from "@/lib/github/app";
 import type { PullRequestResult } from "./types";
 
 export interface CreatePRParams {
@@ -31,7 +31,9 @@ export async function createPullRequest(
   try {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
-    throw new Error(`[createPullRequest] Failed to get GitHub client: ${parseError(error)}`);
+    throw new Error(
+      `[createPullRequest] Failed to get GitHub client: ${parseError(error)}`
+    );
   }
 
   const [owner, repo] = repoFullName.split("/");
@@ -87,9 +89,7 @@ export async function createPullRequest(
   }
 
   if (response.status !== 201) {
-    throw new Error(
-      `Failed to create PR with status ${response.status}`
-    );
+    throw new Error(`Failed to create PR with status ${response.status}`);
   }
 
   return {

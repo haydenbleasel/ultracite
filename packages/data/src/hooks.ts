@@ -1,5 +1,5 @@
-import { agents, type Agent } from "./agents";
-import { editors, type Editor } from "./editors";
+import { type Agent, agents } from "./agents";
+import { type Editor, editors } from "./editors";
 import type { HooksConfig } from "./types";
 
 export type { HooksConfig } from "./types";

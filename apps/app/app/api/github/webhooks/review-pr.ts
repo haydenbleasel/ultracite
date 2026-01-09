@@ -1,3 +1,5 @@
+import { FatalError } from "workflow";
+import { sendSlackMessage } from "@/lib/slack";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
@@ -15,8 +17,6 @@ import { runClaudeCode } from "@/lib/steps/run-claude-code";
 import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
-import { sendSlackMessage } from "@/lib/slack";
-import { FatalError } from "workflow";
 
 export interface ReviewPRParams {
   installationId: number;
@@ -29,9 +29,7 @@ export interface ReviewPRParams {
 }
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Workflow orchestration requires multiple conditional paths
-export async function reviewPRWorkflow(
-  params: ReviewPRParams
-): Promise<void> {
+export async function reviewPRWorkflow(params: ReviewPRParams): Promise<void> {
   "use workflow";
 
   const {

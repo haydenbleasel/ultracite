@@ -12,7 +12,9 @@ export async function checkoutBranch(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[checkoutBranch] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[checkoutBranch] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   try {
@@ -24,6 +26,8 @@ export async function checkoutBranch(
   try {
     await sandbox.runCommand("git", ["checkout", branch]);
   } catch (error) {
-    throw new Error(`Failed to checkout branch "${branch}": ${parseError(error)}`);
+    throw new Error(
+      `Failed to checkout branch "${branch}": ${parseError(error)}`
+    );
   }
 }

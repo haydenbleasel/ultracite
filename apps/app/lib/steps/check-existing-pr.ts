@@ -1,5 +1,5 @@
-import { getInstallationOctokit } from "@/lib/github/app";
 import { handleGitHubError, parseError } from "@/lib/error";
+import { getInstallationOctokit } from "@/lib/github/app";
 
 export interface ExistingPRResult {
   hasExistingPR: boolean;
@@ -20,7 +20,9 @@ export async function checkExistingPR(
   try {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
-    throw new Error(`[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`);
+    throw new Error(
+      `[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`
+    );
   }
 
   // List open PRs and check if any have a head branch starting with ultracite/fix-

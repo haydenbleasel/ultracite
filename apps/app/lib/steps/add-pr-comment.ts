@@ -1,5 +1,5 @@
-import { getInstallationOctokit } from "@/lib/github/app";
 import { parseError } from "@/lib/error";
+import { getInstallationOctokit } from "@/lib/github/app";
 
 export async function addPRComment(
   installationId: number,
@@ -14,7 +14,9 @@ export async function addPRComment(
   try {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
-    throw new Error(`[addPRComment] Failed to get GitHub client: ${parseError(error)}`);
+    throw new Error(
+      `[addPRComment] Failed to get GitHub client: ${parseError(error)}`
+    );
   }
 
   const [owner, repo] = repoFullName.split("/");
@@ -39,8 +41,6 @@ export async function addPRComment(
   }
 
   if (response.status !== 201) {
-    throw new Error(
-      `Failed to add PR comment with status ${response.status}`
-    );
+    throw new Error(`Failed to add PR comment with status ${response.status}`);
   }
 }

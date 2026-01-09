@@ -1,3 +1,5 @@
+import { FatalError } from "workflow";
+import { sendSlackMessage } from "@/lib/slack";
 import { checkExistingPR } from "@/lib/steps/check-existing-pr";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
@@ -18,15 +20,11 @@ import { stopSandbox } from "@/lib/steps/stop-sandbox";
 import { trackCost } from "@/lib/steps/track-cost";
 import type { LintRepoParams, LintStepResult } from "@/lib/steps/types";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
-import { sendSlackMessage } from "@/lib/slack";
-import { FatalError } from "workflow";
 
 export type { LintRepoParams } from "@/lib/steps/types";
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex workflow
-export async function lintRepoWorkflow(
-  params: LintRepoParams
-): Promise<void> {
+export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
   "use workflow";
 
   const {
@@ -133,7 +131,9 @@ export async function lintRepoWorkflow(
       // Check if Claude Code failed
       if (!claudeCodeResult.success) {
         // AI failures are non-retryable - the model couldn't fix the issue
-        throw new FatalError(claudeCodeResult.errorMessage ?? "Claude Code failed");
+        throw new FatalError(
+          claudeCodeResult.errorMessage ?? "Claude Code failed"
+        );
       }
 
       if (await hasUncommittedChanges(sandboxId)) {
@@ -179,7 +179,9 @@ export async function lintRepoWorkflow(
     await recordBillingUsage(lintRunId, stripeCustomerId);
 
     // Determine the correct status based on the result
-    const status = result.prCreated ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES";
+    const status = result.prCreated
+      ? "SUCCESS_PR_CREATED"
+      : "SUCCESS_NO_ISSUES";
 
     await updateLintRun(lintRunId, {
       status,

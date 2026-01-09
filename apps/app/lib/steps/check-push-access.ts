@@ -1,6 +1,6 @@
-import { getInstallationOctokit } from "@/lib/github/app";
-import { handleGitHubError, parseError } from "@/lib/error";
 import { database } from "@repo/backend/database";
+import { handleGitHubError, parseError } from "@/lib/error";
+import { getInstallationOctokit } from "@/lib/github/app";
 
 export interface PushAccessResult {
   canPush: boolean;
@@ -21,7 +21,9 @@ export async function checkPushAccess(
   try {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
-    throw new Error(`[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`);
+    throw new Error(
+      `[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`
+    );
   }
 
   // Check if the repository is archived

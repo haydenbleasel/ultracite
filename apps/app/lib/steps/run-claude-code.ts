@@ -35,7 +35,9 @@ export async function runClaudeCode(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[runClaudeCode] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[runClaudeCode] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   // Escape values for shell usage (single quotes prevent shell interpretation)

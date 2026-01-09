@@ -13,7 +13,9 @@ export async function configureGit(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[configureGit] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[configureGit] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   const name = "Ultracite";

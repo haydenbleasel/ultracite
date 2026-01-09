@@ -1,6 +1,6 @@
 import { Sandbox } from "@vercel/sandbox";
-import { parseError } from "@/lib/error";
 import { nanoid } from "nanoid";
+import { parseError } from "@/lib/error";
 
 export async function createBranch(sandboxId: string): Promise<string> {
   "use step";
@@ -10,7 +10,9 @@ export async function createBranch(sandboxId: string): Promise<string> {
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[createBranch] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[createBranch] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   const branchName = `ultracite/fix-${nanoid()}`;

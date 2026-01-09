@@ -11,7 +11,9 @@ export async function hasUncommittedChanges(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[hasUncommittedChanges] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[hasUncommittedChanges] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   let diffResult;
@@ -19,7 +21,9 @@ export async function hasUncommittedChanges(
   try {
     diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
   } catch (error) {
-    throw new Error(`[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`);
+    throw new Error(
+      `[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`
+    );
   }
 
   const diffOutput = await diffResult.stdout();

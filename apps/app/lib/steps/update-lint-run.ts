@@ -1,5 +1,5 @@
-import { parseError } from "@/lib/error";
 import { database, type LintRun } from "@repo/backend/database";
+import { parseError } from "@/lib/error";
 
 export async function updateLintRun(
   lintRunId: string,

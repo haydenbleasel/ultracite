@@ -28,7 +28,9 @@ export async function generateChangelog(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[generateChangelog] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[generateChangelog] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   // Escape values for shell usage (single quotes prevent shell interpretation)

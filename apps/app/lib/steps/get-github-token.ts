@@ -1,5 +1,5 @@
-import { getInstallationOctokit } from "@/lib/github/app";
 import { parseError } from "@/lib/error";
+import { getInstallationOctokit } from "@/lib/github/app";
 
 export async function getGitHubToken(installationId: number): Promise<string> {
   "use step";
@@ -9,7 +9,9 @@ export async function getGitHubToken(installationId: number): Promise<string> {
   try {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
-    throw new Error(`[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`);
+    throw new Error(
+      `[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`
+    );
   }
 
   let token;

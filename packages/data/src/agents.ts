@@ -1,5 +1,4 @@
 import type { StaticImageData } from "next/image";
-import type { HooksConfig } from "./types";
 import aiderLogo from "../logos/aider.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
@@ -25,6 +24,7 @@ import qwenLogo from "../logos/qwen.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
 import vercelLogo from "../logos/vercel.svg";
 import warpLogo from "../logos/warp.svg";
+import type { HooksConfig } from "./types";
 
 export interface AgentConfig {
   path: string;

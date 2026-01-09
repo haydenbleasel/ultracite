@@ -13,7 +13,9 @@ export async function commitAndPush(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[commitAndPush] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[commitAndPush] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   try {

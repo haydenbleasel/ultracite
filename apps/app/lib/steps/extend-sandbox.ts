@@ -11,7 +11,9 @@ export async function extendSandbox(sandboxId: string): Promise<void> {
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[extendSandbox] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[extendSandbox] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   try {

@@ -9,7 +9,9 @@ export async function stopSandbox(sandboxId: string): Promise<void> {
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[stopSandbox] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[stopSandbox] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   try {

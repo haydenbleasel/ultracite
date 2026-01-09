@@ -9,7 +9,9 @@ export async function installDependencies(sandboxId: string): Promise<void> {
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[installDependencies] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(
+      `[installDependencies] Failed to get sandbox: ${parseError(error)}`
+    );
   }
 
   // Install ni and Claude Code first
@@ -21,7 +23,9 @@ export async function installDependencies(sandboxId: string): Promise<void> {
       "@anthropic-ai/claude-code",
     ]);
   } catch (error) {
-    throw new Error(`Failed to install global dependencies: ${parseError(error)}`);
+    throw new Error(
+      `Failed to install global dependencies: ${parseError(error)}`
+    );
   }
 
   // Detect the package manager using `ni -v`
@@ -46,7 +50,9 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     try {
       await sandbox.runCommand("npm", ["install", "-g", detectedManager]);
     } catch (error) {
-      throw new Error(`Failed to install ${detectedManager}: ${parseError(error)}`);
+      throw new Error(
+        `Failed to install ${detectedManager}: ${parseError(error)}`
+      );
     }
   }
 
@@ -54,6 +60,8 @@ export async function installDependencies(sandboxId: string): Promise<void> {
   try {
     await sandbox.runCommand("ni", []);
   } catch (error) {
-    throw new Error(`Failed to install project dependencies: ${parseError(error)}`);
+    throw new Error(
+      `Failed to install project dependencies: ${parseError(error)}`
+    );
   }
 }

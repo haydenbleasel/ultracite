@@ -1,6 +1,6 @@
-import { parseError } from "@/lib/error";
 import { database } from "@repo/backend/database";
 import { Decimal } from "decimal.js";
+import { parseError } from "@/lib/error";
 
 export async function trackCost(
   lintRunId: string,
