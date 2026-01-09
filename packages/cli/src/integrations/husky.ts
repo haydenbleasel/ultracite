@@ -1,6 +1,7 @@
 import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const createHookScript = (command: string) => `#!/bin/sh
@@ -76,34 +77,6 @@ exit $FORMAT_EXIT_CODE
 const path = "./.husky/pre-commit";
 
 export const husky = {
-  exists: () => exists(path),
-  install: async (packageManager: PackageManagerName) => {
-    await addDevDependency("husky", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
-    });
-
-    // Add prepare script to package.json to ensure husky is initialized
-    await updatePackageJson({
-      scripts: {
-        prepare: "husky",
-      },
-    });
-  },
-  init: (packageManager: PackageManagerName) => {
-    // Initialize husky - this sets up git hooks infrastructure
-    const initCommand = dlxCommand(packageManager, "husky", {
-      args: ["init"],
-    });
-
-    try {
-      execSync(initCommand, { stdio: "pipe" });
-    } catch (_error) {
-      // If init fails, it might be because it's already initialized
-      // Continue anyway as we'll create the hook file next
-    }
-  },
   create: async (packageManager: PackageManagerName) => {
     await mkdir(".husky", { recursive: true });
 
@@ -117,8 +90,36 @@ export const husky = {
 
     await writeFile(path, hookScript);
   },
+  exists: () => exists(path),
+  init: (packageManager: PackageManagerName) => {
+    // Initialize husky - this sets up git hooks infrastructure
+    const initCommand = dlxCommand(packageManager, "husky", {
+      args: ["init"],
+    });
+
+    try {
+      execSync(initCommand, { stdio: "pipe" });
+    } catch {
+      // If init fails, it might be because it's already initialized
+      // Continue anyway as we'll create the hook file next
+    }
+  },
+  install: async (packageManager: PackageManagerName) => {
+    await addDevDependency("husky", {
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
+    });
+
+    // Add prepare script to package.json to ensure husky is initialized
+    await updatePackageJson({
+      scripts: {
+        prepare: "husky",
+      },
+    });
+  },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
 
     const command = dlxCommand(packageManager, "ultracite", {
       args: ["fix"],

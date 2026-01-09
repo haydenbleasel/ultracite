@@ -17,25 +17,25 @@ import Link from "next/link";
 
 const pricingItems = [
   {
-    resource: "Monthly Fee",
-    price: "$5/month",
     notes:
       "A flat fee to support ongoing platform development and maintenance.",
+    price: "$5/month",
+    resource: "Monthly Fee",
   },
   {
-    resource: "Input tokens",
+    notes: "Claude 4.5 Haiku, at-cost pricing",
     price: "$1 / MTok",
-    notes: "Claude 4.5 Haiku, at-cost pricing",
+    resource: "Input tokens",
   },
   {
-    resource: "Output tokens",
+    notes: "Claude 4.5 Haiku, at-cost pricing",
     price: "$5 / MTok",
-    notes: "Claude 4.5 Haiku, at-cost pricing",
+    resource: "Output tokens",
   },
   {
-    resource: "Workflow runs",
-    price: "$0.025 / run",
     notes: "Vercel Sandbox, estimated at-cost",
+    price: "$0.025 / run",
+    resource: "Workflow runs",
   },
 ];
 

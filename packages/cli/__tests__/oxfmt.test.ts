@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { oxfmt } from "../src/linters/oxfmt";
 
 mock.module("node:fs/promises", () => ({

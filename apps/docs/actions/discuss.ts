@@ -1,7 +1,11 @@
 "use server";
 
 import { App, type Octokit } from "octokit";
-import type { ActionResponse, Feedback } from "@/components/ultracite/feedback";
+
+import type {
+  ActionResponse,
+  Feedback,
+} from "@/components/ultracite/feedback";
 import { env } from "@/lib/env";
 
 const repo = "ultracite";
@@ -10,17 +14,17 @@ const DocsCategory = "Documentation";
 
 const getOctokit = async (): Promise<Octokit> => {
   const appId = env.GITHUB_APP_ID;
-  const privateKey = env.GITHUB_APP_PRIVATE_KEY.replace(/\\n/g, "\n");
+  const privateKey = env.GITHUB_APP_PRIVATE_KEY.replaceAll('\\n', "\n");
   const app = new App({ appId, privateKey });
 
   const { data } = await app.octokit.request(
     "GET /repos/{owner}/{repo}/installation",
     {
-      owner,
-      repo,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      owner,
+      repo,
     }
   );
 
@@ -112,7 +116,7 @@ export const discuss = async (
               }
             }`);
 
-    discussion = result.discussion;
+    ({ discussion } = result);
   }
 
   return {

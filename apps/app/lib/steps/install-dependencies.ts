@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export async function installDependencies(sandboxId: string): Promise<void> {
@@ -10,7 +11,8 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[installDependencies] Failed to get sandbox: ${parseError(error)}`
+      `[installDependencies] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -24,7 +26,8 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     ]);
   } catch (error) {
     throw new Error(
-      `Failed to install global dependencies: ${parseError(error)}`
+      `Failed to install global dependencies: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -34,7 +37,9 @@ export async function installDependencies(sandboxId: string): Promise<void> {
   try {
     result = await sandbox.runCommand("ni", ["-v"]);
   } catch (error) {
-    throw new Error(`Failed to detect package manager: ${parseError(error)}`);
+    throw new Error(`Failed to detect package manager: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   const output = await result.stdout();
@@ -51,7 +56,8 @@ export async function installDependencies(sandboxId: string): Promise<void> {
       await sandbox.runCommand("npm", ["install", "-g", detectedManager]);
     } catch (error) {
       throw new Error(
-        `Failed to install ${detectedManager}: ${parseError(error)}`
+        `Failed to install ${detectedManager}: ${parseError(error)}`,
+        { cause: error }
       );
     }
   }
@@ -61,7 +67,8 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     await sandbox.runCommand("ni", []);
   } catch (error) {
     throw new Error(
-      `Failed to install project dependencies: ${parseError(error)}`
+      `Failed to install project dependencies: ${parseError(error)}`,
+      { cause: error }
     );
   }
 }

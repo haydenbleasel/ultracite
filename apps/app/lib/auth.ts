@@ -1,4 +1,5 @@
 import { database } from "@repo/backend/database";
+
 import { createClient } from "@/lib/supabase/server";
 
 export async function getCurrentUser() {
@@ -22,14 +23,14 @@ export async function getOrCreateDbUser() {
   }
 
   const dbUser = await database.user.upsert({
-    where: { id: user.id },
     create: {
-      id: user.id,
       email: user.email ?? "",
+      id: user.id,
     },
     update: {
       email: user.email ?? "",
     },
+    where: { id: user.id },
   });
 
   return dbUser;
@@ -46,14 +47,14 @@ export async function getOrganizationBySlug(slug: string) {
   }
 
   const membership = await database.organizationMember.findFirst({
+    include: {
+      organization: true,
+    },
     where: {
-      userId: user.id,
       organization: {
         OR: [{ slug }, { githubOrgLogin: slug }],
       },
-    },
-    include: {
-      organization: true,
+      userId: user.id,
     },
   });
 
@@ -71,9 +72,9 @@ export async function getFirstOrganization() {
   }
 
   const firstMembership = await database.organizationMember.findFirst({
-    where: { userId: user.id },
     include: { organization: true },
     orderBy: { createdAt: "asc" },
+    where: { userId: user.id },
   });
 
   return firstMembership?.organization ?? null;
@@ -86,9 +87,9 @@ export async function getUserOrganizations() {
   }
 
   const memberships = await database.organizationMember.findMany({
-    where: { userId: user.id },
     include: { organization: true },
     orderBy: { createdAt: "asc" },
+    where: { userId: user.id },
   });
 
   return memberships.map((m) => m.organization);

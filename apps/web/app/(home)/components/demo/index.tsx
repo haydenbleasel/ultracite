@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import Background from "./background.jpg";
 
 const Line = ({ children }: { children?: React.ReactNode }) => (

@@ -1,9 +1,10 @@
-import { readFile, writeFile } from "node:fs/promises";
 import { hooks } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import { readFile, writeFile } from "node:fs/promises";
 import { dlxCommand, type PackageManagerName } from "nypm";
+
 import { ensureDirectory, exists } from "./utils";
 
 export const createHooks = (
@@ -39,7 +40,7 @@ export const createHooks = (
       return;
     }
 
-    const existingContent = await readFile(hookIntegration.hooks.path, "utf-8");
+    const existingContent = await readFile(hookIntegration.hooks.path, "utf8");
     const parsed = parse(existingContent) as unknown;
     const existingJson = isRecord(parsed) ? parsed : {};
 
@@ -53,7 +54,6 @@ export const createHooks = (
   };
 
   return {
-    exists: () => exists(hookIntegration.hooks.path),
     create: async () => {
       await ensureDirectory(hookIntegration.hooks.path);
       await writeFile(
@@ -61,6 +61,7 @@ export const createHooks = (
         JSON.stringify(content, null, 2)
       );
     },
+    exists: () => exists(hookIntegration.hooks.path),
     update: async () => {
       await ensureDirectory(hookIntegration.hooks.path);
       await updateConfig();

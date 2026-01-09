@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Just Fucking Use Ultracite",
   description:
     "Stop wasting hours configuring your linting tools. Whether you use ESLint, Biome, or Oxlint—Ultracite gives you battle-tested presets so you can get back to actually building things.",
+  title: "Just Fucking Use Ultracite",
 };
 
 const Home = () => (

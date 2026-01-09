@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+
 import { detectLinter, type Linter, parseFilePaths } from "../utils";
 
 interface CheckOptions {
@@ -41,8 +42,8 @@ const runBiomeCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -66,8 +67,8 @@ const runEslintCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -94,8 +95,8 @@ const runPrettierCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -119,8 +120,8 @@ const runStylelintCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -156,8 +157,8 @@ const runOxlintCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -188,8 +189,8 @@ const runOxfmtCheck = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -238,11 +239,12 @@ export const check = async (
       );
       return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
     }
-    default:
+    default: {
       return runBiomeCheck(
         files,
         diagnosticLevel,
         opts?.[1]["error-on-warnings"]
       );
+    }
   }
 };

@@ -9,13 +9,18 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "import/no-unresolved": "off",
-  "import/no-internal-modules": "off",
-  "import/no-relative-parent-imports": "off",
-  "import/no-named-as-default": "off",
   "import/exports-last": "off",
-  "import/no-namespace": "off",
   "import/extensions": "off",
+  "import/group-exports": "off",
+  "import/max-dependencies": "off",
+  "import/no-default-export": "off",
+  "import/no-internal-modules": "off",
+  "import/no-named-as-default": "off",
+  "import/no-named-export": "off",
+  "import/no-namespace": "off",
+  "import/no-relative-parent-imports": "off",
+  "import/no-unassigned-import": "off",
+  "import/no-unresolved": "off",
   "import/order": [
     "error",
     {
@@ -32,11 +37,6 @@ const overrideRules = {
     },
   ],
   "import/prefer-default-export": "off",
-  "import/max-dependencies": "off",
-  "import/no-unassigned-import": "off",
-  "import/no-default-export": "off",
-  "import/no-named-export": "off",
-  "import/group-exports": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

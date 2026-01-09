@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
@@ -18,6 +19,6 @@ export const config = {
      * - /api/github/webhooks
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|\\.well-known/workflow/|api/cron|api/stripe/webhooks|api/github/webhooks|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    String.raw`/((?!_next/static|_next/image|favicon.ico|\.well-known/workflow/|api/cron|api/stripe/webhooks|api/github/webhooks|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)`,
   ],
 };

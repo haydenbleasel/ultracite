@@ -12,12 +12,12 @@ const statusConfig: Record<
     variant: "default" | "secondary" | "destructive" | "outline";
   }
 > = {
+  FAILED: { label: "Failed", variant: "destructive" },
   PENDING: { label: "Pending", variant: "outline" },
   RUNNING: { label: "Running", variant: "secondary" },
+  SKIPPED: { label: "Skipped", variant: "secondary" },
   SUCCESS_NO_ISSUES: { label: "Passing", variant: "default" },
   SUCCESS_PR_CREATED: { label: "PR Created", variant: "default" },
-  FAILED: { label: "Failed", variant: "destructive" },
-  SKIPPED: { label: "Skipped", variant: "secondary" },
 };
 
 export const LintStatusBadge = ({ status }: LintStatusBadgeProps) => {

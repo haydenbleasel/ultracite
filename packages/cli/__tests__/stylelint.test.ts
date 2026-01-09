@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { stylelint } from "../src/linters/stylelint";
 
 mock.module("node:fs/promises", () => ({

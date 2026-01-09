@@ -15,40 +15,40 @@ interface BenefitsProps {
 
 const benefits: { title: string; description: string; icon: LucideIcon }[] = [
   {
-    title: "Format on save",
     description:
       "Automatically formats your code when you save, keeping it clean and consistent.",
     icon: SaveIcon,
+    title: "Format on save",
   },
   {
-    title: "Default formatter",
     description:
       "Sets up the correct formatter extension for each file type based on your linter choice.",
     icon: CodeIcon,
+    title: "Default formatter",
   },
   {
-    title: "Auto-fix on save",
     description:
       "Enables code actions on save to automatically fix linting issues and organize imports.",
     icon: WrenchIcon,
+    title: "Auto-fix on save",
   },
   {
-    title: "TypeScript SDK",
     description:
       "Configures the workspace TypeScript version for consistent type checking.",
     icon: SettingsIcon,
+    title: "TypeScript SDK",
   },
   {
-    title: "Extension installation",
     description:
       "Automatically installs the required linter extension when creating a new configuration.",
     icon: SparklesIcon,
+    title: "Extension installation",
   },
   {
-    title: "Format on paste",
     description:
       "Formats pasted code to match your project's style automatically.",
     icon: ClipboardPasteIcon,
+    title: "Format on paste",
   },
 ];
 

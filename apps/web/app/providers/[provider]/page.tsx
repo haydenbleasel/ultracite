@@ -1,8 +1,10 @@
 import { providers } from "@repo/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { Logos } from "@/components/logos";
 import { Social } from "@/components/social";
+
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
 import { ProviderHero } from "./components/hero";
@@ -26,8 +28,8 @@ export const generateMetadata = async ({
   }
 
   return {
-    title: `${provider.name} | Ultracite`,
     description: provider.description,
+    title: `${provider.name} | Ultracite`,
   };
 };
 

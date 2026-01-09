@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
+
 import { getLLMText, source } from "@/lib/source";
 
 export const revalidate = false;

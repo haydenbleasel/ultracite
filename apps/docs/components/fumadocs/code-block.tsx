@@ -44,7 +44,7 @@ export const CodeBlock = ({
       return;
     }
 
-    const code = ref.current?.innerText;
+    const code = ref.current?.textContent;
 
     if (!code) {
       toast.error("No code to copy");

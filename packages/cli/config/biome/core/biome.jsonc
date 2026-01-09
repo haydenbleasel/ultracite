@@ -44,8 +44,8 @@
       "!!**/.expo-shared",
       "!!**/android/build",
       "!!**/ios/build",
-      "!!**/DerivedData/**/*"
-    ]
+      "!!**/DerivedData/**/*",
+    ],
   },
   "formatter": {
     "enabled": true,
@@ -55,7 +55,7 @@
     "lineEnding": "lf",
     "lineWidth": 80,
     "attributePosition": "auto",
-    "bracketSpacing": true
+    "bracketSpacing": true,
   },
   "assist": {
     "actions": {
@@ -65,9 +65,9 @@
         // Enforce attribute sorting in JSX elements.
         "useSortedAttributes": "on",
         // Enforce ordering of a JS object properties.
-        "useSortedKeys": "off"
-      }
-    }
+        "useSortedKeys": "off",
+      },
+    },
   },
   "linter": {
     "enabled": true,
@@ -114,7 +114,7 @@
         "noAutofocus": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
-        "useGenericFontNames": "error"
+        "useGenericFontNames": "error",
       },
       "complexity": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -127,8 +127,8 @@
         "noExcessiveCognitiveComplexity": {
           "level": "error",
           "options": {
-            "maxAllowedComplexity": 20
-          }
+            "maxAllowedComplexity": 20,
+          },
         },
         "noExcessiveNestedTestSuites": "error",
         "noExtraBooleanCast": "error",
@@ -169,7 +169,7 @@
         "noImplicitCoercions": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
-        "noImportantStyles": "off"
+        "noImportantStyles": "off",
       },
       "correctness": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -201,7 +201,7 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": {
           "fix": "safe",
-          "level": "error"
+          "level": "error",
         },
         "noUnusedLabels": "error",
         "noUnusedPrivateClassMembers": "error",
@@ -238,7 +238,7 @@
         "noUnknownPseudoElement": "error",
         "noUnknownTypeSelector": "error",
         "noUnknownUnit": "error",
-        "noUnmatchableAnbSelector": "error"
+        "noUnmatchableAnbSelector": "error",
       },
       "nursery": {
         // Typically we don't enable nursery rules anymore (https://github.com/haydenbleasel/ultracite/issues/457)
@@ -248,9 +248,9 @@
           "level": "error",
           "options": {
             "attributes": ["className"],
-            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
-          }
-        }
+            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+          },
+        },
       },
       "performance": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -265,7 +265,7 @@
         "useTopLevelRegex": "error",
 
         "noAwaitInLoops": "off",
-        "noReExportAll": "off"
+        "noReExportAll": "off",
       },
       "security": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -275,7 +275,7 @@
         "noDangerouslySetInnerHtmlWithChildren": "error",
         "noGlobalEval": "error",
 
-        "noSecrets": "off"
+        "noSecrets": "off",
       },
       "style": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -311,8 +311,8 @@
         "useConsistentTypeDefinitions": {
           "level": "error",
           "options": {
-            "style": "interface"
-          }
+            "style": "interface",
+          },
         },
         "useConst": "error",
         "useDefaultParameterLast": "error",
@@ -325,8 +325,8 @@
           "level": "error",
           "options": {
             "requireAscii": true,
-            "filenameCases": ["kebab-case"]
-          }
+            "filenameCases": ["kebab-case"],
+          },
         },
         "useForOf": "error",
         "useFragmentSyntax": "error",
@@ -364,7 +364,7 @@
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDescendingSpecificity": "error",
-        "noValueAtRule": "error"
+        "noValueAtRule": "error",
       },
       "suspicious": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -460,9 +460,9 @@
         "noEmptyBlock": "error",
         "noImportantInKeyframe": "error",
         "noShorthandPropertyOverrides": "error",
-        "noUnknownAtRules": "error"
-      }
-    }
+        "noUnknownAtRules": "error",
+      },
+    },
   },
   "javascript": {
     "formatter": {
@@ -471,25 +471,25 @@
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
       "semicolons": "always",
-      "trailingCommas": "es5"
-    }
+      "trailingCommas": "es5",
+    },
   },
   "css": {
     "formatter": {
       "enabled": true,
       "lineEnding": "lf",
       "lineWidth": 80,
-      "quoteStyle": "double"
+      "quoteStyle": "double",
     },
     "parser": {
       "allowWrongLineComments": false,
       "cssModules": false,
-      "tailwindDirectives": true
-    }
+      "tailwindDirectives": true,
+    },
   },
   "json": {
     "assist": {
-      "enabled": false
+      "enabled": false,
     },
     "formatter": {
       "enabled": true,
@@ -497,23 +497,23 @@
       "indentWidth": 2,
       "lineEnding": "lf",
       "lineWidth": 80,
-      "trailingCommas": "none"
+      "trailingCommas": "none",
     },
     "parser": {
       "allowComments": false,
-      "allowTrailingCommas": false
-    }
+      "allowTrailingCommas": false,
+    },
   },
   "html": {
     "formatter": {
-      "enabled": true
-    }
+      "enabled": true,
+    },
   },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true,
-    "defaultBranch": "main"
+    "defaultBranch": "main",
   },
   "overrides": [
     {
@@ -540,8 +540,8 @@
         "nuxt.config.*",
         "astro.config.*",
         "svelte.config.*",
-        "tsup.config.*"
-      ]
+        "tsup.config.*",
+      ],
     },
     {
       // Test files
@@ -549,14 +549,14 @@
       "linter": {
         "rules": {
           "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
+            "noExcessiveCognitiveComplexity": "off",
           },
           "suspicious": {
             "noConsole": "off",
-            "noExplicitAny": "off"
-          }
-        }
-      }
+            "noExplicitAny": "off",
+          },
+        },
+      },
     },
     {
       // Scripts and CLI tools
@@ -564,13 +564,13 @@
       "linter": {
         "rules": {
           "suspicious": {
-            "noConsole": "off"
+            "noConsole": "off",
           },
           "style": {
-            "noProcessEnv": "off"
-          }
-        }
-      }
+            "noProcessEnv": "off",
+          },
+        },
+      },
     },
     {
       // Storybook files
@@ -579,10 +579,10 @@
         "rules": {
           "correctness": {
             "noUnusedVariables": "off",
-            "noUnusedImports": "off"
-          }
-        }
-      }
+            "noUnusedImports": "off",
+          },
+        },
+      },
     },
     {
       // Environment and type definition files
@@ -591,10 +591,10 @@
         "rules": {
           "correctness": {
             "noUnusedVariables": "off",
-            "noUndeclaredVariables": "off"
-          }
-        }
-      }
+            "noUndeclaredVariables": "off",
+          },
+        },
+      },
     },
     {
       // Files that should not be processed (build output, generated files, non-JS files)
@@ -609,14 +609,14 @@
         "**/*.min.css",
         "**/worker-configuration.d.ts",
         ".env",
-        ".env.*"
+        ".env.*",
       ],
       "formatter": {
-        "enabled": false
+        "enabled": false,
       },
       "linter": {
-        "enabled": false
-      }
+        "enabled": false,
+      },
     },
     {
       // Package.json and similar JSON config files
@@ -625,14 +625,14 @@
         "**/{tsconfig,jsconfig}.json",
         "**/tsconfig.*.json",
         ".vscode/*.json",
-        ".github/**/*.json"
+        ".github/**/*.json",
       ],
       "json": {
         "parser": {
           "allowComments": true,
-          "allowTrailingCommas": true
-        }
-      }
+          "allowTrailingCommas": true,
+        },
+      },
     },
     {
       // JSONC files (JSON with Comments)
@@ -640,9 +640,9 @@
       "json": {
         "parser": {
           "allowComments": true,
-          "allowTrailingCommas": true
-        }
-      }
-    }
-  ]
+          "allowTrailingCommas": true,
+        },
+      },
+    },
+  ],
 }

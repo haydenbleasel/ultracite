@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
+
 import { detectLinter, type Linter, parseFilePaths } from "../utils";
 
 interface FixOptions {
@@ -41,8 +42,8 @@ const runBiomeFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -66,8 +67,8 @@ const runEslintFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -94,8 +95,8 @@ const runPrettierFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -119,8 +120,8 @@ const runStylelintFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -157,8 +158,8 @@ const runOxlintFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -185,8 +186,8 @@ const runOxfmtFix = async (
   });
 
   const result = spawnSync(fullCommand, {
-    stdio: "inherit",
     shell: true,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -230,7 +231,8 @@ export const fix = async (
       );
       return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
     }
-    default:
+    default: {
       return runBiomeFix(files, opts.unsafe, opts["error-on-warnings"]);
+    }
   }
 };

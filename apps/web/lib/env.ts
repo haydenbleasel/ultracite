@@ -3,12 +3,12 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
 export const env = createEnv({
-  extends: [vercel()],
-  server: {
-    BETTERSTACK_API_KEY: z.string(),
-  },
   client: {},
+  extends: [vercel()],
   runtimeEnv: {
     BETTERSTACK_API_KEY: process.env.BETTERSTACK_API_KEY,
+  },
+  server: {
+    BETTERSTACK_API_KEY: z.string(),
   },
 });

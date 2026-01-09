@@ -2,6 +2,7 @@ import { Badge } from "@repo/design-system/components/ui/badge";
 import { Logo } from "@repo/design-system/components/ultracite/logo";
 import { Check, Smile } from "lucide-react";
 import Image from "next/image";
+
 import Background from "./background.jpg";
 
 const GitHubComment = () => (

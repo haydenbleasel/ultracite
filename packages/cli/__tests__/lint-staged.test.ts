@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { lintStaged } from "../src/integrations/lint-staged";
 
 mock.module("node:fs/promises", () => ({
@@ -9,8 +10,8 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
-  dlxCommand: mock(() => "npx ultracite fix"),
   detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+  dlxCommand: mock(() => "npx ultracite fix"),
   removeDependency: mock(() => Promise.resolve()),
 }));
 
@@ -69,8 +70,8 @@ describe("lintStaged", () => {
       const mockAddDep = mock(() => Promise.resolve());
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 

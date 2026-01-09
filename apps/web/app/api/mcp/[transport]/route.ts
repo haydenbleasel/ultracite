@@ -8,12 +8,12 @@ const handler = createMcpHandler(
     server.registerTool(
       "get_rules",
       {
-        title: "Get Rules",
         description: "Provides a list of all Ultracite rules.",
         inputSchema: {
-          runner: z.enum(["npx", "bun", "yarn", "npm"]).default("npx"),
           provider: z.enum(["biome", "eslint", "oxlint"]).default("biome"),
+          runner: z.enum(["npx", "bun", "yarn", "npm"]).default("npx"),
         },
+        title: "Get Rules",
       },
       async ({ runner, provider }) => {
         await track("MCP: Get rules");
@@ -21,8 +21,8 @@ const handler = createMcpHandler(
         return {
           content: [
             {
-              type: "text",
               text: getRules(runner, provider),
+              type: "text",
             },
           ],
         };
@@ -31,8 +31,8 @@ const handler = createMcpHandler(
   },
   {},
   {
-    disableSse: true,
     basePath: "/api/mcp",
+    disableSse: true,
     maxDuration: 60,
     verboseLogs: true,
   }

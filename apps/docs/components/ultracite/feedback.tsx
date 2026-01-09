@@ -16,6 +16,7 @@ import {
 import { ArrowUpIcon, ThumbsDown, ThumbsUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
+
 import { discuss } from "@/actions/discuss";
 
 export interface Feedback {
@@ -70,8 +71,8 @@ export const Feedback = ({ className }: FeedbackProps) => {
 
     startTransition(() => {
       const feedback: Feedback = {
-        opinion,
         message,
+        opinion,
       };
 
       discuss(url, feedback).then((response) => {

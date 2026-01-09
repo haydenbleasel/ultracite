@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export async function configureGit(
@@ -14,7 +15,8 @@ export async function configureGit(
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[configureGit] Failed to get sandbox: ${parseError(error)}`
+      `[configureGit] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -32,18 +34,24 @@ export async function configureGit(
       authenticatedUrl,
     ]);
   } catch (error) {
-    throw new Error(`Failed to set remote URL: ${parseError(error)}`);
+    throw new Error(`Failed to set remote URL: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   try {
     await sandbox.runCommand("git", ["config", "user.email", email]);
   } catch (error) {
-    throw new Error(`Failed to configure git email: ${parseError(error)}`);
+    throw new Error(`Failed to configure git email: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   try {
     await sandbox.runCommand("git", ["config", "user.name", name]);
   } catch (error) {
-    throw new Error(`Failed to configure git name: ${parseError(error)}`);
+    throw new Error(`Failed to configure git name: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 }

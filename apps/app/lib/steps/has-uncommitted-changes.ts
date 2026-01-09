@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export async function hasUncommittedChanges(
@@ -12,7 +13,8 @@ export async function hasUncommittedChanges(
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[hasUncommittedChanges] Failed to get sandbox: ${parseError(error)}`
+      `[hasUncommittedChanges] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -22,7 +24,8 @@ export async function hasUncommittedChanges(
     diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
   } catch (error) {
     throw new Error(
-      `[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`
+      `[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`,
+      { cause: error }
     );
   }
 

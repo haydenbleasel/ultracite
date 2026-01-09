@@ -1,11 +1,12 @@
 import { database } from "@repo/backend/database";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
   description: "Manage your connected repositories and lint runs.",
+  title: "Dashboard",
 };
 
 const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
@@ -23,11 +24,11 @@ const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
   }
 
   const firstRepo = await database.repo.findFirst({
+    orderBy: { createdAt: "desc" },
+    select: { name: true },
     where: {
       organizationId: organization.id,
     },
-    orderBy: { createdAt: "desc" },
-    select: { name: true },
   });
 
   if (firstRepo) {

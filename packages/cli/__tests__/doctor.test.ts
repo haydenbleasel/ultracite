@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+
 import { doctor } from "../src/commands/doctor";
 
 // Helper to generate the expected oxlint config path
@@ -6,8 +7,8 @@ const getOxlintConfigPath = (name: string) =>
   `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
 }));
 
 mock.module("node:fs", () => ({
@@ -39,8 +40,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -83,8 +84,8 @@ describe("doctor", () => {
 
   test("fails when Biome is not installed", async () => {
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 1, stdout: "" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 1, stdout: "" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -114,8 +115,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -161,8 +162,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -208,8 +209,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -242,8 +243,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -282,8 +283,8 @@ describe("doctor", () => {
 
   test("fails when biome config cannot be parsed", async () => {
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -322,8 +323,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -367,8 +368,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -414,8 +415,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -463,8 +464,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -512,8 +513,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -563,8 +564,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -608,8 +609,8 @@ describe("doctor", () => {
 
   test("handles ESLint config read error", async () => {
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -650,8 +651,8 @@ describe("doctor", () => {
 
   test("handles Oxlint config parse error", async () => {
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -695,8 +696,8 @@ describe("doctor", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
       execSync: mock(() => ""),
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({

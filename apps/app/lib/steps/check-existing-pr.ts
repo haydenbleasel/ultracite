@@ -21,7 +21,8 @@ export async function checkExistingPR(
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
     throw new Error(
-      `[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`
+      `[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -31,9 +32,9 @@ export async function checkExistingPR(
   try {
     const response = await octokit.rest.pulls.list({
       owner,
+      per_page: 100,
       repo,
       state: "open",
-      per_page: 100,
     });
     pulls = response.data;
   } catch (error) {
@@ -47,8 +48,8 @@ export async function checkExistingPR(
   if (existingPR) {
     return {
       hasExistingPR: true,
-      prUrl: existingPR.html_url,
       prNumber: existingPR.number,
+      prUrl: existingPR.html_url,
     };
   }
 

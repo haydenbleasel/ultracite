@@ -7,6 +7,7 @@ import {
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { CopyMarkdown } from "@/components/ultracite/copy-markdown";
 import { Feedback } from "@/components/ultracite/feedback";
 import { MobileSidebarTrigger } from "@/components/ultracite/mobile-sidebar-trigger";
@@ -65,19 +66,19 @@ export const generateMetadata = async (
   const image = ["/og", ...(slug ?? []), "image.png"].join("/");
 
   return {
-    title: page.data.title,
     description: page.data.description,
     openGraph: {
-      title: page.data.title,
       description: page.data.description,
       images: image,
+      title: page.data.title,
     },
+    title: page.data.title,
     twitter: {
-      title: page.data.title,
-      description: page.data.description,
-      creator: "@haydenbleasel",
       card: "summary_large_image",
+      creator: "@haydenbleasel",
+      description: page.data.description,
       images: image,
+      title: page.data.title,
     },
   };
 };

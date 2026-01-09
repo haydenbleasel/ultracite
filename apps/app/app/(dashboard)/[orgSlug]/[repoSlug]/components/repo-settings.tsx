@@ -17,6 +17,7 @@ import { Switch } from "@repo/design-system/components/ui/switch";
 import { SettingsIcon } from "lucide-react";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+
 import { updateRepo } from "@/actions/repo/update";
 
 interface RepoSettingsProps {
@@ -41,14 +42,14 @@ export const RepoSettings = ({
       const newDailyRunsEnabled = formData.get("daily-runs-enabled") === "on";
       const newPrReviewEnabled = formData.get("pr-review-enabled") === "on";
       const result = await updateRepo(repoId, {
-        defaultBranch: newDefaultBranch,
         dailyRunsEnabled: newDailyRunsEnabled,
+        defaultBranch: newDefaultBranch,
         prReviewEnabled: newPrReviewEnabled,
       });
 
       return result;
     },
-    { success: false, error: undefined }
+    { error: undefined, success: false }
   );
 
   useEffect(() => {

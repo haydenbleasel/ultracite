@@ -1,6 +1,7 @@
 "use server";
 
 import { database, type Repo } from "@repo/backend/src/database";
+
 import { getInstallationOctokit } from "@/lib/github/app";
 
 const validateBranch = async (
@@ -8,20 +9,20 @@ const validateBranch = async (
   branchName: string
 ): Promise<{ valid: boolean; error?: string }> => {
   const repo = await database.repo.findUnique({
-    where: { id: repoId },
     include: { organization: true },
+    where: { id: repoId },
   });
 
   if (!repo) {
-    return { valid: false, error: "Repository not found" };
+    return { error: "Repository not found", valid: false };
   }
 
   const installationId = repo.organization.githubInstallationId;
 
   if (!installationId) {
     return {
-      valid: false,
       error: "GitHub App not installed for this organization",
+      valid: false,
     };
   }
 
@@ -31,21 +32,21 @@ const validateBranch = async (
     const octokit = await getInstallationOctokit(installationId);
 
     await octokit.request("GET /repos/{owner}/{repo}/branches/{branch}", {
-      owner,
-      repo: repoName,
       branch: branchName,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      owner,
+      repo: repoName,
     });
 
     return { valid: true };
   } catch (error) {
     if (error instanceof Error && "status" in error && error.status === 404) {
-      return { valid: false, error: `Branch "${branchName}" does not exist` };
+      return { error: `Branch "${branchName}" does not exist`, valid: false };
     }
 
-    return { valid: false, error: "Failed to validate branch" };
+    return { error: "Failed to validate branch", valid: false };
   }
 };
 
@@ -55,19 +56,19 @@ export const updateRepo = async (repoId: string, data: Partial<Repo>) => {
       const validation = await validateBranch(repoId, data.defaultBranch);
 
       if (!validation.valid) {
-        return { success: false, error: validation.error };
+        return { error: validation.error, success: false };
       }
     }
 
     await database.repo.update({
-      where: { id: repoId },
       data,
+      where: { id: repoId },
     });
 
-    return { success: true, error: undefined };
+    return { error: undefined, success: true };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
 
-    return { success: false, error: message };
+    return { error: message, success: false };
   }
 };

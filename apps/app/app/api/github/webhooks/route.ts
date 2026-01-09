@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import type {
   InstallationEvent,
   InstallationRepositoriesEvent,
@@ -6,9 +5,12 @@ import type {
 } from "@octokit/webhooks-types";
 import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { start } from "workflow/api";
+
 import { env } from "@/lib/env";
 import { getInstallationOctokit } from "@/lib/github/app";
+
 import { type ReviewPRParams, reviewPRWorkflow } from "./review-pr";
 
 const verifySignature = (payload: string, signature: string): boolean => {
@@ -31,19 +33,23 @@ export const POST = async (request: NextRequest) => {
   const event = request.headers.get("x-github-event");
 
   switch (event) {
-    case "installation":
+    case "installation": {
       await handleInstallationEvent(JSON.parse(payload) as InstallationEvent);
       break;
-    case "installation_repositories":
+    }
+    case "installation_repositories": {
       await handleInstallationRepositoriesEvent(
         JSON.parse(payload) as InstallationRepositoriesEvent
       );
       break;
-    case "issue_comment":
+    }
+    case "issue_comment": {
       await handleIssueCommentEvent(JSON.parse(payload) as IssueCommentEvent);
       break;
-    default:
+    }
+    default: {
       break;
+    }
   }
 
   return NextResponse.json({ received: true });
@@ -60,12 +66,12 @@ const handleInstallationEvent = async (data: InstallationEvent) => {
     if (org) {
       await database.repo.deleteMany({ where: { organizationId: org.id } });
       await database.organization.update({
-        where: { id: org.id },
         data: {
-          githubInstallationId: null,
           githubAccountLogin: null,
+          githubInstallationId: null,
           installedAt: null,
         },
+        where: { id: org.id },
       });
     }
   }
@@ -94,27 +100,27 @@ const handleInstallationRepositoriesEvent = async (
       const { data: repoData } = await octokit.request(
         "GET /repositories/{id}",
         {
-          id: repo.id,
           headers: {
             "X-GitHub-Api-Version": "2022-11-28",
           },
+          id: repo.id,
         }
       );
 
       await database.repo.upsert({
-        where: { githubRepoId: repo.id },
         create: {
-          organizationId: org.id,
+          defaultBranch: repoData.default_branch,
+          fullName: repo.full_name,
           githubRepoId: repo.id,
           name: repo.name,
-          fullName: repo.full_name,
-          defaultBranch: repoData.default_branch,
+          organizationId: org.id,
         },
         update: {
-          name: repo.name,
-          fullName: repo.full_name,
           defaultBranch: repoData.default_branch,
+          fullName: repo.full_name,
+          name: repo.name,
         },
+        where: { githubRepoId: repo.id },
       });
     }
   }
@@ -168,8 +174,8 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
 
   // Check if this repo is tracked by Ultracite
   const repo = await database.repo.findFirst({
-    where: { githubRepoId: repository.id },
     include: { organization: true },
+    where: { githubRepoId: repository.id },
   });
 
   if (!repo) {
@@ -187,12 +193,12 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
   const { data: pullRequest } = await octokit.request(
     "GET /repos/{owner}/{repo}/pulls/{pull_number}",
     {
-      owner,
-      repo: repoName,
-      pull_number: issue.number,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      owner,
+      pull_number: issue.number,
+      repo: repoName,
     }
   );
 
@@ -203,31 +209,31 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
       async (tx) => {
         // Check if there's already a running review for this PR
         const existingRun = await tx.lintRun.findFirst({
+          select: {
+            id: true,
+          },
           where: {
-            repoId: repo.id,
             prNumber: issue.number,
+            repoId: repo.id,
             status: {
               in: ["PENDING", "RUNNING"],
             },
-          },
-          select: {
-            id: true,
           },
         });
 
         if (existingRun) {
           // Skip - there's already a review in progress for this PR
-          return undefined;
+          return;
         }
 
         // Create a lint run record within the same transaction
         const lintRun = await tx.lintRun.create({
           data: {
             organizationId: repo.organizationId,
-            repoId: repo.id,
             prNumber: issue.number,
-            status: "RUNNING",
+            repoId: repo.id,
             startedAt: new Date(),
+            status: "RUNNING",
           },
           select: {
             id: true,
@@ -258,12 +264,12 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
 
   // Run the review workflow
   const params: ReviewPRParams = {
-    installationId: installation.id,
-    repoFullName: repository.full_name,
-    prNumber: issue.number,
-    prBranch: pullRequest.head.ref,
     baseBranch: pullRequest.base.ref,
+    installationId: installation.id,
     lintRunId,
+    prBranch: pullRequest.head.ref,
+    prNumber: issue.number,
+    repoFullName: repository.full_name,
     stripeCustomerId: repo.organization.stripeCustomerId,
   };
 
@@ -272,13 +278,13 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
   } catch (error) {
     // Mark the lint run as failed if workflow startup fails
     await database.lintRun.update({
-      where: { id: lintRunId },
       data: {
-        status: "FAILED",
         completedAt: new Date(),
         errorMessage:
           error instanceof Error ? error.message : "Failed to start workflow",
+        status: "FAILED",
       },
+      where: { id: lintRunId },
     });
     throw error;
   }

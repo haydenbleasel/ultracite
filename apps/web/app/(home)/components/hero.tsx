@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+
 import { Installer } from "@/components/installer";
 
 interface HeroProps {

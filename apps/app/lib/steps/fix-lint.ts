@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export interface FixLintResult {
@@ -15,7 +16,9 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(`[fixLint] Failed to get sandbox: ${parseError(error)}`);
+    throw new Error(`[fixLint] Failed to get sandbox: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   let result;
@@ -23,7 +26,9 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   try {
     result = await sandbox.runCommand("nlx", ["ultracite", "fix"]);
   } catch (error) {
-    throw new Error(`Failed to run ultracite fix: ${parseError(error)}`);
+    throw new Error(`Failed to run ultracite fix: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   const output = await result.output("both");
@@ -34,7 +39,10 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   try {
     diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
   } catch (error) {
-    throw new Error(`[fixLint] Failed to check git diff: ${parseError(error)}`);
+    throw new Error(
+      `[fixLint] Failed to check git diff: ${parseError(error)}`,
+      { cause: error }
+    );
   }
 
   const diffOutput = await diffResult.stdout();
@@ -46,10 +54,12 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   try {
     checkResult = await sandbox.runCommand("nlx", ["ultracite", "check"]);
   } catch (error) {
-    throw new Error(`Failed to run ultracite check: ${parseError(error)}`);
+    throw new Error(`Failed to run ultracite check: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   const hasRemainingIssues = checkResult.exitCode !== 0;
 
-  return { output, hasChanges, hasRemainingIssues };
+  return { hasChanges, hasRemainingIssues, output };
 }

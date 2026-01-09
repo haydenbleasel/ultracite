@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import {
   exists,
   isMonorepo,
@@ -127,8 +128,8 @@ describe("updatePackageJson", () => {
     const writeCall = mockWriteFile.mock.calls[0];
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.devDependencies).toEqual({
-      old: "1.0.0",
       "new-package": "2.0.0",
+      old: "1.0.0",
     });
   });
 
@@ -152,8 +153,8 @@ describe("updatePackageJson", () => {
     const writeCall = mockWriteFile.mock.calls[0];
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.dependencies).toEqual({
-      old: "1.0.0",
       "new-package": "2.0.0",
+      old: "1.0.0",
     });
   });
 
@@ -177,8 +178,8 @@ describe("updatePackageJson", () => {
     const writeCall = mockWriteFile.mock.calls[0];
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.scripts).toEqual({
-      test: "echo test",
       build: "tsc",
+      test: "echo test",
     });
   });
 });
@@ -199,7 +200,7 @@ describe("parseFilePaths", () => {
   test("escapes single quotes in file paths", () => {
     const files = ["src/user's file.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/user'\\''s file.ts' "]);
+    expect(result).toEqual([String.raw`'src/user'\''s file.ts' `]);
   });
 
   test("wraps files with special characters in quotes", () => {
@@ -218,7 +219,7 @@ describe("parseFilePaths", () => {
     expect(result).toEqual([
       "normal.ts",
       "'with space.js' ",
-      "'user'\\''s.ts' ",
+      String.raw`'user'\''s.ts' `,
     ]);
   });
 });

@@ -1,8 +1,10 @@
 import { editors } from "@repo/data/editors";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { Logos } from "@/components/logos";
 import { Social } from "@/components/social";
+
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
 import { EditorHero } from "./components/hero";
@@ -21,8 +23,8 @@ export const generateMetadata = async ({
   }
 
   return {
-    title: `${editor.name} | Ultracite`,
     description: editor.description,
+    title: `${editor.name} | Ultracite`,
   };
 };
 

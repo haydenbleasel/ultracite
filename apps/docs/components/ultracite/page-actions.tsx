@@ -3,6 +3,7 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Button } from "@repo/design-system/components/ui/button";
 import { ChevronDownIcon, ExternalLinkIcon } from "lucide-react";
+
 import {
   OpenIn,
   OpenInChatGPT,

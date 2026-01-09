@@ -1,5 +1,6 @@
 import { handleGitHubError, parseError } from "@/lib/error";
 import { getInstallationOctokit } from "@/lib/github/app";
+
 import type { PullRequestResult } from "./types";
 
 export interface CreatePRParams {
@@ -32,7 +33,8 @@ export async function createPullRequest(
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
     throw new Error(
-      `[createPullRequest] Failed to get GitHub client: ${parseError(error)}`
+      `[createPullRequest] Failed to get GitHub client: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -41,9 +43,9 @@ export async function createPullRequest(
   // Check if a PR already exists from this branch (idempotency check for retries)
   try {
     const { data: existingPRs } = await octokit.rest.pulls.list({
+      head: `${owner}:${branchName}`,
       owner,
       repo,
-      head: `${owner}:${branchName}`,
       state: "open",
     });
 
@@ -70,19 +72,19 @@ export async function createPullRequest(
 
   try {
     response = await octokit.request("POST /repos/{owner}/{repo}/pulls", {
-      owner,
-      repo,
-      title,
+      base: defaultBranch,
       body: `${changelog ?? "Check the files for changes."}
 
 ---
 
 *This PR was automatically created by [Ultracite Cloud](https://www.ultracite.ai/cloud)*`,
       head: branchName,
-      base: defaultBranch,
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      owner,
+      repo,
+      title,
     });
   } catch (error) {
     return handleGitHubError(error, "Failed to create pull request");

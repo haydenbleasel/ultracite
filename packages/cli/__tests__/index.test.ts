@@ -10,35 +10,35 @@ const noop = () => {
 
 // Mock all modules before importing
 mock.module("@clack/prompts", () => ({
+  cancel: mock(noop),
   intro: mock(noop),
-  outro: mock(noop),
-  spinner: mock(() => ({
-    start: mock(noop),
-    stop: mock(noop),
-    message: mock(noop),
-  })),
+  isCancel: mock(() => false),
   log: {
+    error: mock(noop),
     info: mock(noop),
     success: mock(noop),
-    error: mock(noop),
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
+  outro: mock(noop),
   select: mock(() => Promise.resolve("biome")),
-  isCancel: mock(() => false),
-  cancel: mock(noop),
+  spinner: mock(() => ({
+    message: mock(noop),
+    start: mock(noop),
+    stop: mock(noop),
+  })),
 }));
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve('{"name": "test"}')),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
 }));
 
 mock.module("node:fs", () => ({
@@ -47,10 +47,10 @@ mock.module("node:fs", () => ({
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
-  dlxCommand: mock(() => "npx ultracite fix"),
   detectPackageManager: mock(() =>
     Promise.resolve({ name: "npm", warnings: [] })
   ),
+  dlxCommand: mock(() => "npx ultracite fix"),
   removeDependency: mock(() => Promise.resolve()),
 }));
 

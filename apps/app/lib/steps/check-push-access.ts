@@ -1,4 +1,5 @@
 import { database } from "@repo/backend/database";
+
 import { handleGitHubError, parseError } from "@/lib/error";
 import { getInstallationOctokit } from "@/lib/github/app";
 
@@ -22,7 +23,8 @@ export async function checkPushAccess(
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
     throw new Error(
-      `[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`
+      `[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -39,11 +41,11 @@ export async function checkPushAccess(
   if (repoData.archived) {
     // Disable the repo so we don't try to lint it again
     await database.repo.updateMany({
-      where: { fullName: repoFullName },
       data: {
         dailyRunsEnabled: false,
         prReviewEnabled: false,
       },
+      where: { fullName: repoFullName },
     });
 
     return {
@@ -67,7 +69,7 @@ export async function checkPushAccess(
   }
 
   // Check if the installation has write access to contents
-  const permissions = installation.permissions;
+  const { permissions } = installation;
 
   if (!permissions?.contents || permissions.contents === "read") {
     return {
@@ -79,9 +81,9 @@ export async function checkPushAccess(
   // Check branch protection rules
   try {
     const { data: protection } = await octokit.rest.repos.getBranchProtection({
+      branch,
       owner,
       repo,
-      branch,
     });
 
     // Check if there are restrictions on who can push

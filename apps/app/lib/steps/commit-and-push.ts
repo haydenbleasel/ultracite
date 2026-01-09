@@ -1,4 +1,5 @@
 import { type CommandFinished, Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export async function commitAndPush(
@@ -14,14 +15,17 @@ export async function commitAndPush(
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[commitAndPush] Failed to get sandbox: ${parseError(error)}`
+      `[commitAndPush] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
   try {
     await sandbox.runCommand("git", ["add", "-A"]);
   } catch (error) {
-    throw new Error(`Failed to add changes: ${parseError(error)}`);
+    throw new Error(`Failed to add changes: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   let commitResult: CommandFinished | null = null;
@@ -34,7 +38,7 @@ export async function commitAndPush(
       message,
     ]);
   } catch (error) {
-    throw new Error(`Failed to commit: ${parseError(error)}`);
+    throw new Error(`Failed to commit: ${parseError(error)}`, { cause: error });
   }
 
   if (commitResult.exitCode !== 0) {
@@ -51,7 +55,9 @@ export async function commitAndPush(
   try {
     pushResult = await sandbox.runCommand("git", pushArgs);
   } catch (error) {
-    throw new Error(`Failed to run git push: ${parseError(error)}`);
+    throw new Error(`Failed to run git push: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   if (pushResult.exitCode !== 0) {

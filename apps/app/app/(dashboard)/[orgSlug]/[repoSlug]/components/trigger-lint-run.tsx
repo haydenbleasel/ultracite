@@ -3,6 +3,7 @@
 import { Button } from "@repo/design-system/components/ui/button";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+
 import { triggerLintRun } from "@/actions/repo/lint";
 
 interface TriggerLintRunButtonProps {
@@ -16,7 +17,7 @@ export const TriggerLintRunButton = ({ repoId }: TriggerLintRunButtonProps) => {
 
       return result;
     },
-    { success: false, error: undefined }
+    { error: undefined, success: false }
   );
 
   useEffect(() => {

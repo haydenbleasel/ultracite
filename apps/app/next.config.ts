@@ -2,10 +2,18 @@ import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 
 const config: NextConfig = {
-  transpilePackages: ["@repo/data", "@repo/backend"],
-
   experimental: {
     turbopackFileSystemCacheForDev: true,
+  },
+
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        hostname: "github.com",
+        protocol: "https",
+      },
+    ],
   },
 
   serverExternalPackages: [
@@ -15,15 +23,7 @@ const config: NextConfig = {
     "@prisma/adapter-pg",
   ],
 
-  images: {
-    formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-    ],
-  },
+  transpilePackages: ["@repo/data", "@repo/backend"],
 };
 
 export default withWorkflow(config);

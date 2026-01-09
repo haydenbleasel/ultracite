@@ -1,7 +1,8 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+
 import { source } from "@/lib/source";
 
 export const GET = async (
@@ -25,9 +26,9 @@ export const GET = async (
   return new ImageResponse(
     <div
       style={{
-        backgroundSize: "80px 80px",
         backgroundImage:
           "linear-gradient(to right, #5B52F3 1px, transparent 1px), linear-gradient(to bottom, #5B52F3 1px, transparent 1px)",
+        backgroundSize: "80px 80px",
       }}
       tw="flex flex-col justify-between items-start w-full h-full bg-[#4F46E5] p-12 text-white"
     >
@@ -58,22 +59,22 @@ export const GET = async (
       </div>
     </div>,
     {
-      width: 1200,
-      height: 630,
       fonts: [
         {
-          name: "Geist",
           data: geistBold,
+          name: "Geist",
           style: "normal",
           weight: 700,
         },
         {
-          name: "Geist",
           data: geistRegular,
+          name: "Geist",
           style: "normal",
           weight: 400,
         },
       ],
+      height: 630,
+      width: 1200,
     }
   );
 };

@@ -1,5 +1,7 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
+
 import { env } from "../env";
 
 export interface ClaudeCodeResult {
@@ -36,13 +38,17 @@ export async function runClaudeCode(
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[runClaudeCode] Failed to get sandbox: ${parseError(error)}`
+      `[runClaudeCode] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
   // Escape values for shell usage (single quotes prevent shell interpretation)
-  const escapedPrompt = prompt.replace(/'/g, "'\\''");
-  const escapedApiKey = env.VERCEL_AI_GATEWAY_API_KEY.replace(/'/g, "'\\''");
+  const escapedPrompt = prompt.replaceAll('\'', String.raw`'\''`);
+  const escapedApiKey = env.VERCEL_AI_GATEWAY_API_KEY.replaceAll(
+    '\'',
+    String.raw`'\''`
+  );
 
   // Run claude with Vercel AI Gateway env vars set inline
   let result;
@@ -53,7 +59,9 @@ export async function runClaudeCode(
       `ANTHROPIC_BASE_URL='https://ai-gateway.vercel.sh' ANTHROPIC_AUTH_TOKEN='${escapedApiKey}' ANTHROPIC_API_KEY='' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
     ]);
   } catch (error) {
-    throw new Error(`Failed to run Claude Code: ${parseError(error)}`);
+    throw new Error(`Failed to run Claude Code: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   // Get the output
@@ -63,9 +71,9 @@ export async function runClaudeCode(
   if (result.exitCode !== 0) {
     return {
       costUsd: 0,
-      success: false,
-      output,
       errorMessage: `Claude Code exited with code ${result.exitCode}`,
+      output,
+      success: false,
     };
   }
 
@@ -78,15 +86,15 @@ export async function runClaudeCode(
     // Return the cost and success
     return {
       costUsd: parsed.total_cost_usd,
-      success: true,
       output,
+      success: true,
     };
   } catch {
     return {
       costUsd: 0,
-      success: false,
-      output,
       errorMessage: "Failed to parse Claude Code output as JSON",
+      output,
+      success: false,
     };
   }
 }

@@ -18,13 +18,6 @@ const overrideRules = {
       namedComponents: "arrow-function",
     },
   ],
-  "react/no-array-index-key": "off",
-  "react/no-arrow-function-lifecycle": "off",
-  "react/no-invalid-html-attribute": "off",
-  "react/no-multi-comp": "off",
-  "react/no-unused-class-component-methods": "off",
-  "react/react-in-jsx-scope": "off",
-  "react/require-default-props": "off",
   "react/jsx-filename-extension": [
     "error",
     {
@@ -39,6 +32,13 @@ const overrideRules = {
   "react/jsx-one-expression-per-line": "off",
   "react/jsx-props-no-spreading": "off",
   "react/jsx-sort-props": "off",
+  "react/no-array-index-key": "off",
+  "react/no-arrow-function-lifecycle": "off",
+  "react/no-invalid-html-attribute": "off",
+  "react/no-multi-comp": "off",
+  "react/no-unused-class-component-methods": "off",
+  "react/react-in-jsx-scope": "off",
+  "react/require-default-props": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

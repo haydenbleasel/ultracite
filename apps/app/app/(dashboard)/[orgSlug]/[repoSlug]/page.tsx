@@ -5,7 +5,9 @@ import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+
 import { CostTracker } from "./components/cost-tracker";
 import { RepoSettings } from "./components/repo-settings";
 import { RepoTable } from "./components/repo-table";
@@ -18,22 +20,22 @@ export const generateMetadata = async ({
 
   if (!organization) {
     return {
-      title: "Repository",
       description: "Lint runs for this repository.",
+      title: "Repository",
     };
   }
 
   const repo = await database.repo.findFirst({
+    select: { fullName: true },
     where: {
       name: repoSlug,
       organizationId: organization.id,
     },
-    select: { fullName: true },
   });
 
   return {
-    title: repo?.fullName ?? "Repository",
     description: `Lint runs for ${repo?.fullName ?? "this repository"}.`,
+    title: repo?.fullName ?? "Repository",
   };
 };
 
@@ -52,10 +54,6 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
   }
 
   const repo = await database.repo.findFirst({
-    where: {
-      name: repoSlug,
-      organizationId: organization.id,
-    },
     include: {
       lintRuns: {
         orderBy: { createdAt: "desc" },
@@ -65,6 +63,10 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
           stripeCustomerId: true,
         },
       },
+    },
+    where: {
+      name: repoSlug,
+      organizationId: organization.id,
     },
   });
 

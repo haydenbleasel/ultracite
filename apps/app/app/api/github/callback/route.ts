@@ -1,5 +1,6 @@
 import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
+
 import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
 
@@ -11,7 +12,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const searchParams = request.nextUrl.searchParams;
+  const { searchParams } = request.nextUrl;
   const installationId = searchParams.get("installation_id");
   const setupAction = searchParams.get("setup_action");
 
@@ -25,10 +26,10 @@ export const GET = async (request: NextRequest) => {
     const { data: installation } = await app.octokit.request(
       "GET /app/installations/{installation_id}",
       {
-        installation_id: installationIdNum,
         headers: {
           "X-GitHub-Api-Version": "2022-11-28",
         },
+        installation_id: installationIdNum,
       }
     );
 
@@ -45,9 +46,9 @@ export const GET = async (request: NextRequest) => {
 
     // Ensure user exists in database
     await database.user.upsert({
-      where: { id: user.id },
-      create: { id: user.id, email: user.email ?? "" },
+      create: { email: user.email ?? "", id: user.id },
       update: {},
+      where: { id: user.id },
     });
 
     // Find or create the organization that matches the GitHub account login
@@ -76,44 +77,44 @@ export const GET = async (request: NextRequest) => {
 
       // Use upsert to handle race conditions with OAuth sync
       organization = await database.organization.upsert({
-        where: { githubOrgId: accountId },
         create: {
-          name: accountLogin,
-          slug: accountLogin.toLowerCase(),
           githubOrgId: accountId,
           githubOrgLogin: accountLogin,
           githubOrgType: accountType,
+          name: accountLogin,
+          slug: accountLogin.toLowerCase(),
         },
         update: {
           githubOrgLogin: accountLogin,
           githubOrgType: accountType,
         },
+        where: { githubOrgId: accountId },
       });
     }
 
     // Ensure user is a member of the organization
     await database.organizationMember.upsert({
-      where: {
-        userId_organizationId: {
-          userId: user.id,
-          organizationId: organization.id,
-        },
-      },
       create: {
-        userId: user.id,
         organizationId: organization.id,
         role: "MEMBER",
+        userId: user.id,
       },
       update: {},
+      where: {
+        userId_organizationId: {
+          organizationId: organization.id,
+          userId: user.id,
+        },
+      },
     });
 
     await database.organization.update({
-      where: { id: organization.id },
       data: {
-        githubInstallationId: installationIdNum,
         githubAccountLogin: accountLogin,
+        githubInstallationId: installationIdNum,
         installedAt: new Date(installation.created_at),
       },
+      where: { id: organization.id },
     });
 
     await syncRepositories(organization.id, installationIdNum);
@@ -130,12 +131,12 @@ export const GET = async (request: NextRequest) => {
 
   if (setupAction === "request") {
     await database.organization.update({
-      where: { id: organization.id },
       data: {
-        githubInstallationId: null,
         githubAccountLogin: null,
+        githubInstallationId: null,
         installedAt: null,
       },
+      where: { id: organization.id },
     });
   }
 
@@ -158,19 +159,19 @@ const syncRepositories = async (orgId: string, installationId: number) => {
 
   for (const repo of repositories) {
     await database.repo.upsert({
-      where: { githubRepoId: repo.id },
       create: {
-        organizationId: orgId,
+        defaultBranch: repo.default_branch,
+        fullName: repo.full_name,
         githubRepoId: repo.id,
         name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
+        organizationId: orgId,
       },
       update: {
-        name: repo.name,
-        fullName: repo.full_name,
         defaultBranch: repo.default_branch,
+        fullName: repo.full_name,
+        name: repo.name,
       },
+      where: { githubRepoId: repo.id },
     });
   }
 };

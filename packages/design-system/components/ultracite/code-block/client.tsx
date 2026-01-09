@@ -59,8 +59,8 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
       const tokens = highlighter.codeToTokens(code, {
         lang,
         themes: {
-          light: lightTheme,
           dark: darkTheme,
+          light: lightTheme,
         },
       });
 
@@ -78,11 +78,11 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
     ? result.tokens
     : code.split("\n").map((line) => [
         {
-          content: line,
-          color: "var(--shiki-light-fg)",
           bgColor: "var(--shiki-light-bg)",
-          htmlStyle: {},
+          color: "var(--shiki-light-fg)",
+          content: line,
           htmlAttrs: {},
+          htmlStyle: {},
           offset: 0,
         },
       ]);

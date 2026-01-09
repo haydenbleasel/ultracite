@@ -1,8 +1,10 @@
 import { agents } from "@repo/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
 import { Logos } from "@/components/logos";
 import { Social } from "@/components/social";
+
 import { Benefits } from "./components/benefits";
 import { Files } from "./components/files";
 import { AgentHero } from "./components/hero";
@@ -21,8 +23,8 @@ export const generateMetadata = async ({
   }
 
   return {
-    title: `${agent.name} | Ultracite`,
     description: agent.description,
+    title: `${agent.name} | Ultracite`,
   };
 };
 

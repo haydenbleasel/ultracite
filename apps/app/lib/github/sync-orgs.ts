@@ -1,7 +1,7 @@
 import "server-only";
-
 import { database } from "@repo/backend/database";
 import { Octokit } from "octokit";
+
 import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
@@ -28,19 +28,19 @@ async function syncRepositories(orgId: string, installationId: number) {
 
   for (const repo of repositories) {
     await database.repo.upsert({
-      where: { githubRepoId: repo.id },
       create: {
-        organizationId: orgId,
+        defaultBranch: repo.default_branch,
+        fullName: repo.full_name,
         githubRepoId: repo.id,
         name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
+        organizationId: orgId,
       },
       update: {
-        name: repo.name,
-        fullName: repo.full_name,
         defaultBranch: repo.default_branch,
+        fullName: repo.full_name,
+        name: repo.name,
       },
+      where: { githubRepoId: repo.id },
     });
   }
 }
@@ -71,8 +71,8 @@ async function checkGitHubAppInstallation(
     });
 
     return {
-      id: installation.id,
       createdAt: installation.created_at,
+      id: installation.id,
     };
   } catch {
     // Installation not found (404) or other error
@@ -103,14 +103,14 @@ export async function syncGitHubOrganizations(
     {
       id: user.id,
       login: user.login,
-      type: "User",
       name: user.name,
+      type: "User",
     },
     ...orgs.map((org) => ({
       id: org.id,
       login: org.login,
-      type: "Organization" as const,
-      name: org.login, // GitHub orgs don't always have a display name in this endpoint
+      name: org.login,
+      type: "Organization" as const, // GitHub orgs don't always have a display name in this endpoint
     })),
   ];
 
@@ -118,9 +118,9 @@ export async function syncGitHubOrganizations(
 
   // Ensure user exists in database
   await database.user.upsert({
-    where: { id: userId },
-    create: { id: userId, email: userEmail },
+    create: { email: userEmail, id: userId },
     update: { email: userEmail },
+    where: { id: userId },
   });
 
   for (const org of allOrgs) {
@@ -137,19 +137,19 @@ export async function syncGitHubOrganizations(
 
     try {
       organization = await database.organization.upsert({
-        where: { githubOrgId: org.id },
         create: {
-          name: org.name ?? org.login,
-          slug,
           githubOrgId: org.id,
           githubOrgLogin: org.login,
           githubOrgType: org.type,
+          name: org.name ?? org.login,
+          slug,
         },
         update: {
-          name: org.name ?? org.login,
           githubOrgLogin: org.login,
           githubOrgType: org.type,
+          name: org.name ?? org.login,
         },
+        where: { githubOrgId: org.id },
       });
     } catch (error) {
       // Handle slug unique constraint violation - another org already has this slug
@@ -180,18 +180,18 @@ export async function syncGitHubOrganizations(
     const role = org.type === "User" ? "OWNER" : "MEMBER";
 
     await database.organizationMember.upsert({
-      where: {
-        userId_organizationId: {
-          userId,
-          organizationId: organization.id,
-        },
-      },
       create: {
-        userId,
         organizationId: organization.id,
         role,
+        userId,
       },
-      update: {}, // Don't update role if membership already exists
+      update: {},
+      where: {
+        userId_organizationId: {
+          organizationId: organization.id,
+          userId,
+        },
+      }, // Don't update role if membership already exists
     });
 
     // Check if GitHub App is already installed on this account
@@ -211,12 +211,12 @@ export async function syncGitHubOrganizations(
       if (installation) {
         // Link the installation to this organization
         await database.organization.update({
-          where: { id: organization.id },
           data: {
-            githubInstallationId: installation.id,
             githubAccountLogin: org.login,
+            githubInstallationId: installation.id,
             installedAt: new Date(installation.createdAt),
           },
+          where: { id: organization.id },
         });
 
         // Sync repositories from the installation
@@ -231,7 +231,7 @@ export async function syncGitHubOrganizations(
   }
 
   return {
-    synced: syncedOrganizations.length,
     organizations: syncedOrganizations,
+    synced: syncedOrganizations.length,
   };
 }

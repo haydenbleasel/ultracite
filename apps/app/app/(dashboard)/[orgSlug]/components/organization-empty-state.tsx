@@ -7,6 +7,7 @@ import {
   EmptyTitle,
 } from "@repo/design-system/components/ui/empty";
 import { BuildingIcon } from "lucide-react";
+
 import { ConnectGitHubButton } from "./connect-github-button";
 
 interface OrganizationEmptyStateProps {

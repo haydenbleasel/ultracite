@@ -1,6 +1,8 @@
 import { database } from "@repo/backend/database";
 import { FatalError, getStepMetadata } from "workflow";
+
 import { parseError } from "@/lib/error";
+
 import { env } from "../env";
 import { stripe } from "../stripe";
 
@@ -20,7 +22,9 @@ export async function recordBillingUsage(
       where: { id: lintRunId },
     });
   } catch (error) {
-    throw new Error(`Failed to fetch lint run: ${parseError(error)}`);
+    throw new Error(`Failed to fetch lint run: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   if (!lintRun) {
@@ -53,6 +57,8 @@ export async function recordBillingUsage(
       }
     );
   } catch (error) {
-    throw new Error(`Failed to record billing usage: ${parseError(error)}`);
+    throw new Error(`Failed to record billing usage: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 }

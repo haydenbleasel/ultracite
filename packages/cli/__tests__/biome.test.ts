@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { biome } from "../src/linters/biome";
 
 mock.module("node:fs/promises", () => ({

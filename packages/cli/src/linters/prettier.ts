@@ -1,4 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
+
 import { exists } from "../utils";
 
 // All possible Prettier config file locations
@@ -33,7 +34,7 @@ const defaultConfigPath = "./prettier.config.mjs";
 
 const hasPrettierKeyInPackageJson = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
+    const packageJson = JSON.parse(await readFile("./package.json", "utf8"));
     return "prettier" in packageJson;
   } catch {
     return false;
@@ -56,19 +57,18 @@ const getPrettierConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generatePrettierConfig = (): string => {
-  return `export { default } from "ultracite/prettier";
+const generatePrettierConfig =
+  (): string => `export { default } from "ultracite/prettier";
 `;
-};
 
 export const prettier = {
-  exists: async () => {
-    const path = await getPrettierConfigPath();
-    return path !== null;
-  },
   create: async () => {
     const config = generatePrettierConfig();
     await writeFile(defaultConfigPath, config);
+  },
+  exists: async () => {
+    const path = await getPrettierConfigPath();
+    return path !== null;
   },
   update: async () => {
     const config = generatePrettierConfig();

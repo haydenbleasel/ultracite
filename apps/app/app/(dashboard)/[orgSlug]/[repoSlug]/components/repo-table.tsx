@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@repo/design-system/components/ui/table";
 import Link from "next/link";
+
 import { LintStatusBadge } from "./lint-status-badge";
 import { RepoEmptyState } from "./repo-empty-state";
 

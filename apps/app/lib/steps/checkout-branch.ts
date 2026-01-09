@@ -1,4 +1,5 @@
 import { Sandbox } from "@vercel/sandbox";
+
 import { parseError } from "@/lib/error";
 
 export async function checkoutBranch(
@@ -13,21 +14,26 @@ export async function checkoutBranch(
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[checkoutBranch] Failed to get sandbox: ${parseError(error)}`
+      `[checkoutBranch] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
   try {
     await sandbox.runCommand("git", ["fetch", "origin", branch]);
   } catch (error) {
-    throw new Error(`Failed to fetch branch "${branch}": ${parseError(error)}`);
+    throw new Error(
+      `Failed to fetch branch "${branch}": ${parseError(error)}`,
+      { cause: error }
+    );
   }
 
   try {
     await sandbox.runCommand("git", ["checkout", branch]);
   } catch (error) {
     throw new Error(
-      `Failed to checkout branch "${branch}": ${parseError(error)}`
+      `Failed to checkout branch "${branch}": ${parseError(error)}`,
+      { cause: error }
     );
   }
 }

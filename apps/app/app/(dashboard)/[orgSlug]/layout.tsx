@@ -4,7 +4,9 @@ import {
   SidebarProvider,
 } from "@repo/design-system/components/ui/sidebar";
 import { notFound, redirect } from "next/navigation";
+
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+
 import { InstallationEmptyState } from "./components/installation-empty-state";
 import { OrganizationEmptyState } from "./components/organization-empty-state";
 import { RepoSidebar } from "./components/repo-sidebar";
@@ -25,18 +27,18 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
   }
 
   const organization = await database.organization.findUnique({
-    where: { id: org.id },
     include: {
       repos: {
-        orderBy: { createdAt: "desc" },
         include: {
           lintRuns: {
             orderBy: { createdAt: "desc" },
             take: 1,
           },
         },
+        orderBy: { createdAt: "desc" },
       },
     },
+    where: { id: org.id },
   });
 
   if (!organization) {

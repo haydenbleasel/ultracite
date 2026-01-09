@@ -8,10 +8,10 @@ import {
 export const docs = defineDocs({
   dir: "content/docs",
   docs: {
-    schema: frontmatterSchema,
     postprocess: {
       includeProcessedMarkdown: true,
     },
+    schema: frontmatterSchema,
   },
   meta: {
     schema: metaSchema,
@@ -22,8 +22,8 @@ export default defineConfig({
   mdxOptions: {
     rehypeCodeOptions: {
       themes: {
-        light: "github-light",
         dark: "github-dark",
+        light: "github-light",
       },
     },
   },

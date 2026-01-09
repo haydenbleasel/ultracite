@@ -1,9 +1,10 @@
-import { readFile, writeFile } from "node:fs/promises";
 import { agents } from "@repo/data/agents";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
 import { getRules } from "@repo/data/rules";
+import { readFile, writeFile } from "node:fs/promises";
 import { dlxCommand, type PackageManagerName } from "nypm";
+
 import { ensureDirectory, exists } from "./utils";
 
 export const createAgents = (
@@ -30,12 +31,12 @@ export const createAgents = (
     : rules;
 
   return {
-    exists: () => exists(agent.config.path),
-
     create: async () => {
       await ensureDirectory(agent.config.path);
       await writeFile(agent.config.path, content);
     },
+
+    exists: () => exists(agent.config.path),
 
     update: async () => {
       await ensureDirectory(agent.config.path);
@@ -46,7 +47,7 @@ export const createAgents = (
         return;
       }
 
-      const existingContents = await readFile(agent.config.path, "utf-8");
+      const existingContents = await readFile(agent.config.path, "utf8");
 
       // Check if rules are already present to avoid duplicates
       if (existingContents.includes(rules.trim())) {

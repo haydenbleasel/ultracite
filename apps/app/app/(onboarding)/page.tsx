@@ -1,12 +1,14 @@
 import { Button } from "@repo/design-system/components/ui/button";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { getCurrentUser, getUserOrganizations } from "@/lib/auth";
+
 import { OrganizationList } from "./components/organization-list";
 
 export const metadata: Metadata = {
-  title: "Select Organization",
   description: "Select an organization to get started with Ultracite.",
+  title: "Select Organization",
 };
 
 const OnboardingPage = async () => {

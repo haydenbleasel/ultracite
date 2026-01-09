@@ -1,6 +1,7 @@
-import { readFile, writeFile } from "node:fs/promises";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import { readFile, writeFile } from "node:fs/promises";
+
 import { exists } from "../utils";
 
 const oxfmtConfigPath = "./.oxfmtrc.jsonc";
@@ -9,30 +10,27 @@ const oxfmtConfigPath = "./.oxfmtrc.jsonc";
 // https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
 const defaultConfig = {
   $schema: "./node_modules/oxfmt/configuration_schema.json",
-  printWidth: 80,
-  tabWidth: 2,
-  useTabs: false,
-  semi: true,
-  singleQuote: false,
-  quoteProps: "as-needed",
-  jsxSingleQuote: false,
-  trailingComma: "es5",
-  bracketSpacing: true,
-  bracketSameLine: false,
   arrowParens: "always",
+  bracketSameLine: false,
+  bracketSpacing: true,
   endOfLine: "lf",
-  experimentalSortPackageJson: true,
   experimentalSortImports: {
     ignoreCase: true,
     newlinesBetween: true,
     order: "asc",
   },
+  experimentalSortPackageJson: true,
+  jsxSingleQuote: false,
+  printWidth: 80,
+  quoteProps: "as-needed",
+  semi: true,
+  singleQuote: false,
+  tabWidth: 2,
+  trailingComma: "es5",
+  useTabs: false,
 };
 
 export const oxfmt = {
-  exists: async () => {
-    return await exists(oxfmtConfigPath);
-  },
   create: async () => {
     const configContent = `// Ultracite oxfmt Configuration
 // https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
@@ -40,8 +38,9 @@ ${JSON.stringify(defaultConfig, null, 2)}
 `;
     return await writeFile(oxfmtConfigPath, configContent);
   },
+  exists: async () => await exists(oxfmtConfigPath),
   update: async () => {
-    const existingContents = await readFile(oxfmtConfigPath, "utf-8");
+    const existingContents = await readFile(oxfmtConfigPath, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

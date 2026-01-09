@@ -7,6 +7,7 @@ import {
   EmptyTitle,
 } from "@repo/design-system/components/ui/empty";
 import { WorkflowIcon } from "lucide-react";
+
 import { TriggerLintRunButton } from "./trigger-lint-run";
 
 interface RepoEmptyStateProps {

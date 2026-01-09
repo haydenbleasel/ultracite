@@ -1,7 +1,8 @@
-import { readFile, writeFile } from "node:fs/promises";
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import { readFile, writeFile } from "node:fs/promises";
+
 import { exists } from "../utils";
 
 const oxlintConfigPath = "./.oxlintrc.json";
@@ -21,9 +22,6 @@ const defaultConfig = {
 };
 
 export const oxlint = {
-  exists: async () => {
-    return await exists(oxlintConfigPath);
-  },
   create: async (opts?: OxlintOptions) => {
     const extendsList = [getOxlintConfigPath("core")];
 
@@ -41,8 +39,9 @@ export const oxlint = {
 
     return await writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
   },
+  exists: async () => await exists(oxlintConfigPath),
   update: async (opts?: OxlintOptions) => {
-    const existingContents = await readFile(oxlintConfigPath, "utf-8");
+    const existingContents = await readFile(oxlintConfigPath, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

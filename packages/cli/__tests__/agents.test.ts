@@ -1,11 +1,12 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { createAgents } from "../src/agents";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("nypm", () => ({
@@ -13,8 +14,8 @@ mock.module("nypm", () => ({
   dlxCommand: mock((pm, pkg) => {
     const prefixMap: Record<string, string> = {
       bun: "bunx",
-      yarn: "yarn dlx",
       pnpm: "pnpm dlx",
+      yarn: "yarn dlx",
     };
     const prefix = prefixMap[pm] || "npx";
     return pkg ? `${prefix} ${pkg}` : prefix;
@@ -40,9 +41,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("copilot", "npm", "biome");
@@ -60,9 +61,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("copilot", "npm", "biome");
@@ -79,9 +80,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
@@ -98,9 +99,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
@@ -114,13 +115,10 @@ describe("createAgents", () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
-        access: mock((_path: string) => {
-          // File doesn't exist
-          return Promise.reject(new Error("ENOENT"));
-        }),
+        access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
@@ -139,9 +137,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("claude", "npm", "biome");
@@ -159,9 +157,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
       const agents = createAgents("junie", "npm", "biome");
@@ -177,9 +175,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
       const agents = createAgents("codex", "npm", "biome");

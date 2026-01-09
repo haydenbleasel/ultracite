@@ -1,6 +1,8 @@
+import type Stripe from "stripe";
+
 import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
-import type Stripe from "stripe";
+
 import { env } from "@/lib/env";
 import { stripe } from "@/lib/stripe";
 
@@ -37,8 +39,8 @@ export const POST = async (request: NextRequest) => {
 
       if (organizationId && customerId) {
         await database.organization.update({
-          where: { id: organizationId },
           data: { stripeCustomerId: customerId },
+          where: { id: organizationId },
         });
       }
 
@@ -51,8 +53,8 @@ export const POST = async (request: NextRequest) => {
 
       // Remove stripeCustomerId to disable linting
       await database.organization.updateMany({
-        where: { stripeCustomerId: customerId },
         data: { stripeCustomerId: null },
+        where: { stripeCustomerId: customerId },
       });
 
       return new Response("OK", { status: 200 });

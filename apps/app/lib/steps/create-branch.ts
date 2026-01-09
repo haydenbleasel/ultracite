@@ -1,5 +1,6 @@
 import { Sandbox } from "@vercel/sandbox";
 import { nanoid } from "nanoid";
+
 import { parseError } from "@/lib/error";
 
 export async function createBranch(sandboxId: string): Promise<string> {
@@ -11,7 +12,8 @@ export async function createBranch(sandboxId: string): Promise<string> {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
     throw new Error(
-      `[createBranch] Failed to get sandbox: ${parseError(error)}`
+      `[createBranch] Failed to get sandbox: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -26,7 +28,9 @@ export async function createBranch(sandboxId: string): Promise<string> {
       branchName,
     ]);
   } catch (error) {
-    throw new Error(`Failed to create branch: ${parseError(error)}`);
+    throw new Error(`Failed to create branch: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   if (checkoutResult.exitCode !== 0) {

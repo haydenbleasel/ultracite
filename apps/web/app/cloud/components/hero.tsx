@@ -5,6 +5,7 @@ import { Logo } from "@repo/design-system/components/ultracite/logo";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
 import Background from "@/app/(home)/components/cloud/background.jpg";
 
 const GitHubComment = () => (

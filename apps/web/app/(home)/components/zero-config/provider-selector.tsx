@@ -16,6 +16,16 @@ const biomeProvider = providers.find((p) => p.id === "biome");
 const oxlintProvider = providers.find((p) => p.id === "oxlint");
 
 const providerTitles: Record<ProviderId, ReactNode> = {
+  biome: biomeProvider ? (
+    <span className="flex items-center gap-1">
+      <Image
+        alt="Biome"
+        className="size-4 rounded-full"
+        src={biomeProvider.logo}
+      />
+      <span>Biome</span>
+    </span>
+  ) : null,
   eslint: eslintProvider ? (
     <span className="flex items-center gap-1">
       <Image
@@ -28,16 +38,6 @@ const providerTitles: Record<ProviderId, ReactNode> = {
       <span>Prettier and </span>
       <Image alt="Stylelint" className="size-4 rounded-full" src={Stylelint} />
       <span>Stylelint</span>
-    </span>
-  ) : null,
-  biome: biomeProvider ? (
-    <span className="flex items-center gap-1">
-      <Image
-        alt="Biome"
-        className="size-4 rounded-full"
-        src={biomeProvider.logo}
-      />
-      <span>Biome</span>
     </span>
   ) : null,
   oxlint: oxlintProvider ? (

@@ -4,20 +4,16 @@ import type { NextConfig } from "next";
 const withMdx = createMDX();
 
 const config: NextConfig = {
-  transpilePackages: ["@repo/data"],
-
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-
-  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
-        protocol: "https",
         hostname: "github.com",
+        protocol: "https",
       },
     ],
   },
@@ -25,11 +21,15 @@ const config: NextConfig = {
   rewrites() {
     return [
       {
-        source: "/:path*.mdx",
         destination: "/llms.mdx/:path*",
+        source: "/:path*.mdx",
       },
     ];
   },
+
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
+
+  transpilePackages: ["@repo/data"],
 };
 
 export default withMdx(config);

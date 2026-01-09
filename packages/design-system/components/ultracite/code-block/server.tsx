@@ -39,8 +39,8 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
   const result = highlighter.codeToTokens(code, {
     lang,
     themes: {
-      light: lightTheme,
       dark: darkTheme,
+      light: lightTheme,
     },
   });
 

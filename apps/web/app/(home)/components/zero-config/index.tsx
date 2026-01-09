@@ -12,6 +12,7 @@ import {
 import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/client";
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
+
 import { FrameworkSelector, frameworks } from "./framework-selector";
 import { ProviderSelector } from "./provider-selector";
 
@@ -32,9 +33,10 @@ export const ZeroConfig = () => {
   const selectedProvider = providers.find((p) => p.id === provider);
   const selectedFramework = frameworks.find((f) => f.label === framework);
 
-  const config = useMemo(() => {
-    return selectedProvider?.configFiles ?? [];
-  }, [selectedProvider]);
+  const config = useMemo(
+    () => selectedProvider?.configFiles ?? [],
+    [selectedProvider]
+  );
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
   // The value should always be valid for the current config; fallback to first available tab if needed.

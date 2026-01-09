@@ -16,13 +16,13 @@ const overrideRules = {
   "@typescript-eslint/naming-convention": [
     "error",
     {
-      selector: "default",
       format: ["camelCase", "PascalCase", "snake_case"],
+      selector: "default",
     },
     {
-      selector: "objectLiteralProperty",
       format: null,
       modifiers: ["requiresQuotes"],
+      selector: "objectLiteralProperty",
     },
   ],
   "@typescript-eslint/no-confusing-void-expression": "off",

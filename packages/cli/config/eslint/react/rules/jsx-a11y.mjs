@@ -11,15 +11,15 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "jsx-a11y/no-autofocus": "off",
   "jsx-a11y/label-has-associated-control": [
     "error",
     {
-      labelComponents: ["Label"],
       controlComponents: ["Input", "Select", "Textarea", "Checkbox", "Radio"],
       depth: 3,
+      labelComponents: ["Label"],
     },
   ],
+  "jsx-a11y/no-autofocus": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

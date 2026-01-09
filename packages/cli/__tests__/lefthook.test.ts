@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { lefthook } from "../src/integrations/lefthook";
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0 })),
 }));
 
 mock.module("node:fs/promises", () => ({
@@ -14,13 +15,13 @@ mock.module("node:fs/promises", () => ({
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
+  detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
   dlxCommand: mock((_pm: string, name: string) => {
     if (name === "ultracite") {
       return "npx ultracite fix";
     }
     return `npx ${name} install`;
   }),
-  detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
   removeDependency: mock(() => Promise.resolve()),
 }));
 
@@ -59,8 +60,8 @@ describe("lefthook", () => {
       const mockExecSync = mock(() => "");
 
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mockExecSync,
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("node:fs/promises", () => ({
@@ -71,13 +72,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
           return "npx ultracite fix";
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -89,8 +90,8 @@ describe("lefthook", () => {
     test("runs lefthook install command", async () => {
       const mockExecSync = mock(() => "");
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mockExecSync,
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("node:fs/promises", () => ({
@@ -101,13 +102,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
           return "npx ultracite fix";
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -128,19 +129,19 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
           return "npx ultracite fix";
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mock(() => ""),
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       await lefthook.install("npm");
@@ -163,13 +164,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
           return `npx ${name} install`;
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -198,13 +199,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
           return `npx ${name} install`;
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -225,13 +226,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
           return `npx ${name} install`;
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -255,13 +256,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
           return `npx ${name} install`;
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -285,13 +286,13 @@ describe("lefthook", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         dlxCommand: mock((_pm: string, name: string) => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
           return `npx ${name} install`;
         }),
-        detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
         removeDependency: mock(() => Promise.resolve()),
       }));
 

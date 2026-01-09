@@ -1,6 +1,7 @@
 import { database } from "@repo/backend/database";
 import { redirect } from "next/navigation";
 import { type NextRequest, NextResponse } from "next/server";
+
 import { getCurrentUser } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { stripe } from "@/lib/stripe";
@@ -23,12 +24,12 @@ export const GET = async (request: NextRequest) => {
 
   // Verify user is a member of this organization
   const membership = await database.organizationMember.findFirst({
-    where: {
-      userId: user.id,
-      organizationId,
-    },
     include: {
       organization: true,
+    },
+    where: {
+      organizationId,
+      userId: user.id,
     },
   });
 
@@ -36,7 +37,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "Not a member" }, { status: 403 });
   }
 
-  const organization = membership.organization;
+  const { organization } = membership;
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   const origin = `${protocol}://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
 
@@ -44,36 +45,36 @@ export const GET = async (request: NextRequest) => {
   if (!organization.stripeCustomerId) {
     const customer = await stripe.customers.create({
       email: user.email ?? undefined,
-      name: organization.name,
       metadata: {
         organizationId: organization.id,
       },
+      name: organization.name,
     });
 
     const session = await stripe.checkout.sessions.create({
+      cancel_url: new URL(
+        `${organization.slug}?checkout=cancel`,
+        origin
+      ).toString(),
       customer: customer.id,
-      mode: "subscription",
       line_items: [
         {
           price: env.STRIPE_PRICE_ID,
         },
       ],
-      success_url: new URL(
-        `${organization.slug}?checkout=success`,
-        origin
-      ).toString(),
-      cancel_url: new URL(
-        `${organization.slug}?checkout=cancel`,
-        origin
-      ).toString(),
       metadata: {
         organizationId: organization.id,
       },
+      mode: "subscription",
       subscription_data: {
         metadata: {
           organizationId: organization.id,
         },
       },
+      success_url: new URL(
+        `${organization.slug}?checkout=success`,
+        origin
+      ).toString(),
     });
 
     if (session.url) {

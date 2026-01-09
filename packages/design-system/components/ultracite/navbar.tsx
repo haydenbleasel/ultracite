@@ -26,18 +26,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+
 import { Logo } from "./logo";
 
 const links = [
   {
-    href: new URL("/cloud", webUrl).toString(),
-    label: "Cloud",
     className: "text-primary",
+    href: new URL("/cloud", webUrl).toString(),
     isActive: (path: string) => path.startsWith("/cloud"),
+    label: "Cloud",
   },
   {
     href: docsUrl,
-    label: "Docs",
     isActive: () => {
       if (typeof window === "undefined") {
         return false;
@@ -45,11 +45,12 @@ const links = [
 
       return window.location.origin.startsWith(docsUrl);
     },
+    label: "Docs",
   },
   {
     href: new URL("/social", webUrl).toString(),
-    label: "Social",
     isActive: (path: string) => path.startsWith("/social"),
+    label: "Social",
   },
 ];
 
@@ -293,7 +294,7 @@ export const Navbar = () => {
                   Agents ({agents.length})
                 </span>
                 {agents
-                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .toSorted((a, b) => a.name.localeCompare(b.name))
                   .map((agent) => (
                     <Link
                       className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"

@@ -9,6 +9,7 @@ import {
 import { ThemeSwitcher } from "@repo/design-system/components/kibo-ui/theme-switcher";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
+
 import { getStatus } from "@/actions/status/get";
 
 export const SubFooter = () => {

@@ -10,27 +10,29 @@ import {
 } from "@repo/design-system/components/ui/sidebar";
 import { LifeBuoyIcon } from "lucide-react";
 import Link from "next/link";
+
 import { getUserOrganizations } from "@/lib/auth";
+
 import { OrganizationSidebarGroup } from "./organization-sidebar-group";
 
 export const RepoSidebar = async () => {
   const userOrgs = await getUserOrganizations();
   const organizations = await database.organization.findMany({
-    where: {
-      id: { in: userOrgs.map((o) => o.id) },
-    },
     include: {
       repos: {
-        orderBy: { createdAt: "desc" },
         include: {
           lintRuns: {
             orderBy: { createdAt: "desc" },
             take: 1,
           },
         },
+        orderBy: { createdAt: "desc" },
       },
     },
     orderBy: { name: "asc" },
+    where: {
+      id: { in: userOrgs.map((o) => o.id) },
+    },
   });
 
   return (
@@ -44,7 +46,7 @@ export const RepoSidebar = async () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link href={"mailto:hayden@ultracite.ai"}>
+              <Link href="mailto:hayden@ultracite.ai">
                 <LifeBuoyIcon className="size-4" />
                 <span>Support</span>
               </Link>

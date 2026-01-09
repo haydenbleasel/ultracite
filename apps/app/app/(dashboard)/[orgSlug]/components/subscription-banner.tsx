@@ -18,9 +18,9 @@ export const SubscriptionBanner = ({
 
     try {
       const response = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ organizationId }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
       });
 
       const { url } = (await response.json()) as { url: string };

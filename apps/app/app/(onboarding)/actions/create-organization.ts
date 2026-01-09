@@ -1,6 +1,7 @@
 "use server";
 
 import { database } from "@repo/backend/database";
+
 import { getCurrentUser, getOrCreateDbUser } from "@/lib/auth";
 
 interface CreateOrganizationInput {
@@ -49,14 +50,14 @@ export async function createOrganization({
   // Create organization and add user as owner
   const organization = await database.organization.create({
     data: {
-      name,
-      slug,
       members: {
         create: {
-          userId: user.id,
           role: "OWNER",
+          userId: user.id,
         },
       },
+      name,
+      slug,
     },
   });
 

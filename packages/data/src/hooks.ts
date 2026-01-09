@@ -20,16 +20,16 @@ const isAgentWithHooks = (
 
 const getEditorHookIntegrations = (): HookIntegration[] =>
   editors.filter(isEditorWithHooks).map((editor) => ({
+    hooks: editor.hooks,
     id: editor.id,
     name: editor.name,
-    hooks: editor.hooks,
   }));
 
 const getAgentHookIntegrations = (): HookIntegration[] =>
   agents.filter(isAgentWithHooks).map((agent) => ({
+    hooks: agent.hooks,
     id: agent.id,
     name: agent.name,
-    hooks: agent.hooks,
   }));
 
 export const hooks: HookIntegration[] = [

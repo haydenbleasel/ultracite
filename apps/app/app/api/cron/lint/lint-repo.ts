@@ -1,4 +1,5 @@
 import { FatalError } from "workflow";
+
 import { sendSlackMessage } from "@/lib/slack";
 import { checkExistingPR } from "@/lib/steps/check-existing-pr";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
@@ -48,9 +49,9 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
 
   if (!pushAccess.canPush) {
     await updateLintRun(lintRunId, {
-      status: "FAILED",
-      errorMessage: pushAccess.reason,
       completedAt: new Date(),
+      errorMessage: pushAccess.reason,
+      status: "FAILED",
     });
 
     // No point retrying - push access won't change
@@ -62,10 +63,10 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
 
   if (existingPR.hasExistingPR) {
     await updateLintRun(lintRunId, {
-      status: "SKIPPED",
       completedAt: new Date(),
       prNumber: existingPR.prNumber,
       prUrl: existingPR.prUrl,
+      status: "SKIPPED",
     });
 
     return;
@@ -102,15 +103,15 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
       );
 
       const prResult = await createPullRequest({
-        installationId,
-        repoFullName,
-        defaultBranch,
         branchName,
-        file: "multiple files",
-        isLLMFix: false,
         changelog: changelogResult.success
           ? changelogResult.changelog
           : undefined,
+        defaultBranch,
+        file: "multiple files",
+        installationId,
+        isLLMFix: false,
+        repoFullName,
       });
 
       result = {
@@ -148,15 +149,15 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
         );
 
         const prResult = await createPullRequest({
-          installationId,
-          repoFullName,
-          defaultBranch,
           branchName,
-          file: "multiple files",
-          isLLMFix: true,
           changelog: changelogResult.success
             ? changelogResult.changelog
             : undefined,
+          defaultBranch,
+          file: "multiple files",
+          installationId,
+          isLLMFix: true,
+          repoFullName,
         });
 
         result = {
@@ -184,10 +185,10 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
       : "SUCCESS_NO_ISSUES";
 
     await updateLintRun(lintRunId, {
-      status,
       completedAt: new Date(),
       prNumber: result.prNumber,
       prUrl: result.prUrl,
+      status,
     });
   } catch (error) {
     let errorMessage: string;
@@ -202,9 +203,9 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
     }
 
     await updateLintRun(lintRunId, {
-      status: "FAILED",
       completedAt: new Date(),
       errorMessage,
+      status: "FAILED",
     });
 
     // Notify Slack about the failure

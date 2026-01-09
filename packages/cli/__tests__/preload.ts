@@ -7,24 +7,24 @@ mock.module("glob", () => ({
 }));
 
 // Mock SVG for StaticImageData type
-const mockSvg = { src: "/mock.svg", height: 24, width: 24, blurDataURL: "" };
+const mockSvg = { blurDataURL: "", height: 24, src: "/mock.svg", width: 24 };
 
 // VS Code base configuration (matches the real implementation)
 const vscodeBaseConfig = {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
   "emmet.showExpandedAbbreviation": "never",
+  "typescript.tsdk": "node_modules/typescript/lib",
 };
 
 const vscodeBiomeConfig = {
   "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
   "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
   "[json]": { "editor.defaultFormatter": "biomejs.biome" },
   "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
@@ -36,38 +36,38 @@ const vscodeBiomeConfig = {
 mock.module("@repo/data/providers", () => ({
   providers: [
     {
+      configFiles: [{ code: () => "{}", lang: "json", name: "biome.jsonc" }],
+      description: "Fast formatter and linter written in Rust",
       id: "biome",
+      logo: mockSvg,
       name: "Biome",
       subtitle: "The modern all-in-one toolchain",
-      description: "Fast formatter and linter written in Rust",
-      configFiles: [{ name: "biome.jsonc", lang: "json", code: () => "{}" }],
       vscodeExtensionId: "biomejs.biome",
-      logo: mockSvg,
     },
     {
+      configFiles: [
+        { code: () => "", lang: "javascript", name: "eslint.config.mjs" },
+        { code: () => "", lang: "javascript", name: "prettier.config.mjs" },
+        { code: () => "", lang: "javascript", name: "stylelint.config.mjs" },
+      ],
+      description: "Battle-tested linting solution",
       id: "eslint",
+      logo: mockSvg,
       name: "ESLint + Prettier + Stylelint",
       subtitle: "The most mature linting ecosystem",
-      description: "Battle-tested linting solution",
-      configFiles: [
-        { name: "eslint.config.mjs", lang: "javascript", code: () => "" },
-        { name: "prettier.config.mjs", lang: "javascript", code: () => "" },
-        { name: "stylelint.config.mjs", lang: "javascript", code: () => "" },
-      ],
       vscodeExtensionId: "dbaeumer.vscode-eslint",
-      logo: mockSvg,
     },
     {
+      configFiles: [
+        { code: () => "{}", lang: "json", name: ".oxlintrc.json" },
+        { code: () => "{}", lang: "json", name: ".oxfmtrc.jsonc" },
+      ],
+      description: "50-100x faster than ESLint",
       id: "oxlint",
+      logo: mockSvg,
       name: "Oxlint + Oxfmt",
       subtitle: "The fastest linter available",
-      description: "50-100x faster than ESLint",
-      configFiles: [
-        { name: ".oxlintrc.json", lang: "json", code: () => "{}" },
-        { name: ".oxfmtrc.jsonc", lang: "json", code: () => "{}" },
-      ],
       vscodeExtensionId: "oxc.oxc-vscode",
-      logo: mockSvg,
     },
   ],
 }));
@@ -75,14 +75,9 @@ mock.module("@repo/data/providers", () => ({
 mock.module("@repo/data/agents", () => ({
   agents: [
     {
-      id: "claude",
-      name: "Claude Code",
-      subtitle: "Anthropic's agentic CLI",
+      config: { appendMode: true, path: ".claude/CLAUDE.md" },
       description: "Anthropic's official CLI for Claude",
-      config: { path: ".claude/CLAUDE.md", appendMode: true },
-      logo: mockSvg,
       hooks: {
-        path: ".claude/settings.json",
         getContent: (command: string) => ({
           hooks: {
             PostToolUse: [
@@ -98,77 +93,82 @@ mock.module("@repo/data/agents", () => ({
             ],
           },
         }),
+        path: ".claude/settings.json",
       },
+      id: "claude",
+      logo: mockSvg,
+      name: "Claude Code",
+      subtitle: "Anthropic's agentic CLI",
     },
     {
+      config: { appendMode: true, path: "AGENTS.md" },
+      description: "OpenAI's cloud-based coding agent",
       id: "codex",
+      logo: mockSvg,
       name: "Codex",
       subtitle: "OpenAI's coding agent",
-      description: "OpenAI's cloud-based coding agent",
-      config: { path: "AGENTS.md", appendMode: true },
-      logo: mockSvg,
     },
     {
+      config: { appendMode: true, path: "AGENTS.md" },
+      description: "Google's asynchronous AI coding agent",
       id: "jules",
+      logo: mockSvg,
       name: "Jules",
       subtitle: "Google's async agent",
-      description: "Google's asynchronous AI coding agent",
-      config: { path: "AGENTS.md", appendMode: true },
-      logo: mockSvg,
     },
     {
-      id: "copilot",
-      name: "GitHub Copilot",
-      subtitle: "GitHub's AI pair programmer",
-      description: "GitHub's AI pair programmer",
       config: {
-        path: ".github/copilot-instructions.md",
         appendMode: true,
         header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
+        path: ".github/copilot-instructions.md",
       },
+      description: "GitHub's AI pair programmer",
+      id: "copilot",
       logo: mockSvg,
+      name: "GitHub Copilot",
+      subtitle: "GitHub's AI pair programmer",
     },
     {
+      config: { appendMode: true, path: ".clinerules" },
+      description: "An autonomous coding agent for VS Code",
       id: "cline",
+      logo: mockSvg,
       name: "Cline",
       subtitle: "Autonomous VS Code agent",
-      description: "An autonomous coding agent for VS Code",
-      config: { path: ".clinerules", appendMode: true },
-      logo: mockSvg,
     },
     {
+      config: { appendMode: true, path: ".roo/rules.md" },
+      description: "AI code assistant",
       id: "roo-code",
+      logo: mockSvg,
       name: "Roo Code",
       subtitle: "AI-powered code assistant",
-      description: "AI code assistant",
-      config: { path: ".roo/rules.md", appendMode: true },
-      logo: mockSvg,
     },
     {
+      config: { appendMode: true, path: ".aider/conventions.md" },
+      description: "AI pair programming tool",
       id: "aider",
+      logo: mockSvg,
       name: "Aider",
       subtitle: "AI pair programming in terminal",
-      description: "AI pair programming tool",
-      config: { path: ".aider/conventions.md", appendMode: true },
-      logo: mockSvg,
     },
     {
+      config: { appendMode: true, path: ".gemini/style-guide.md" },
+      description: "Google's AI coding assistant",
       id: "gemini",
+      logo: mockSvg,
       name: "Gemini Code Assist",
       subtitle: "Google's AI assistant",
-      description: "Google's AI coding assistant",
-      config: { path: ".gemini/style-guide.md", appendMode: true },
-      logo: mockSvg,
     },
     {
+      config: { appendMode: true, path: ".junie/guidelines.md" },
+      description: "JetBrains AI coding assistant",
       id: "junie",
+      logo: mockSvg,
       name: "Junie",
       subtitle: "JetBrains AI assistant",
-      description: "JetBrains AI coding assistant",
-      config: { path: ".junie/guidelines.md", appendMode: true },
-      logo: mockSvg,
     },
   ],
 }));
@@ -176,24 +176,19 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 mock.module("@repo/data/editors", () => ({
   editors: [
     {
+      config: {
+        extensionCommand: "code --install-extension",
+        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
+      },
+      description: "Popular code editor",
       id: "vscode",
+      logo: mockSvg,
       name: "VS Code",
       subtitle: "Microsoft's code editor",
-      description: "Popular code editor",
-      config: {
-        path: ".vscode/settings.json",
-        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
-        extensionCommand: "code --install-extension",
-      },
-      logo: mockSvg,
     },
     {
-      id: "zed",
-      name: "Zed",
-      subtitle: "High-performance code editor",
-      description: "Fast code editor",
       config: {
-        path: ".zed/settings.json",
         getContent: () => ({
           formatter: "language_server",
           format_on_save: "on",
@@ -203,16 +198,21 @@ mock.module("@repo/data/editors", () => ({
             },
           },
         }),
+        path: ".zed/settings.json",
       },
+      description: "Fast code editor",
+      id: "zed",
       logo: mockSvg,
+      name: "Zed",
+      subtitle: "High-performance code editor",
     },
     {
-      id: "cursor",
-      name: "Cursor",
-      subtitle: "AI-first code editor",
+      config: {
+        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
+      },
       description: "AI-powered code editor",
       hooks: {
-        path: ".cursor/hooks.json",
         getContent: (command: string) => ({
           version: 1,
           hooks: {
@@ -225,20 +225,20 @@ mock.module("@repo/data/editors", () => ({
             ],
           },
         }),
+        path: ".cursor/hooks.json",
       },
-      config: {
-        path: ".vscode/settings.json",
-        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
-      },
+      id: "cursor",
       logo: mockSvg,
+      name: "Cursor",
+      subtitle: "AI-first code editor",
     },
     {
-      id: "windsurf",
-      name: "Windsurf",
-      subtitle: "Codeium's AI editor",
+      config: {
+        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
+      },
       description: "AI-powered editor by Codeium",
       hooks: {
-        path: ".windsurf/hooks.json",
         getContent: (command: string) => ({
           version: 1,
           hooks: {
@@ -251,12 +251,12 @@ mock.module("@repo/data/editors", () => ({
             ],
           },
         }),
+        path: ".windsurf/hooks.json",
       },
-      config: {
-        path: ".vscode/settings.json",
-        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
-      },
+      id: "windsurf",
       logo: mockSvg,
+      name: "Windsurf",
+      subtitle: "Codeium's AI editor",
     },
   ],
 }));

@@ -1,7 +1,9 @@
 import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
+
 import { env } from "@/lib/env";
+
 import { lintRepoWorkflow } from "./lint-repo";
 
 export const GET = async (request: NextRequest) => {
@@ -12,14 +14,14 @@ export const GET = async (request: NextRequest) => {
   }
 
   const organizations = await database.organization.findMany({
-    where: {
-      githubInstallationId: { not: null },
-      stripeCustomerId: { not: null },
-    },
     include: {
       repos: {
         where: { dailyRunsEnabled: true },
       },
+    },
+    where: {
+      githubInstallationId: { not: null },
+      stripeCustomerId: { not: null },
     },
   });
 
@@ -36,11 +38,11 @@ export const GET = async (request: NextRequest) => {
         // Start a durable workflow for each repo
         await start(lintRepoWorkflow, [
           {
-            organizationId: org.id,
-            repoId: repo.id,
-            repoFullName: repo.fullName,
             defaultBranch: repo.defaultBranch,
             installationId: org.githubInstallationId,
+            organizationId: org.id,
+            repoFullName: repo.fullName,
+            repoId: repo.id,
             stripeCustomerId: org.stripeCustomerId,
           },
         ]);
@@ -49,8 +51,8 @@ export const GET = async (request: NextRequest) => {
       } catch (error) {
         console.error(`Failed to start workflow for ${repo.fullName}:`, error);
         workflowsFailed.push({
-          repo: repo.fullName,
           error: error instanceof Error ? error.message : "Unknown error",
+          repo: repo.fullName,
         });
       }
     }
@@ -60,8 +62,8 @@ export const GET = async (request: NextRequest) => {
   if (workflowsFailed.length > 0 && workflowsStarted.length === 0) {
     return NextResponse.json(
       {
-        message: "All workflows failed to start",
         failed: workflowsFailed,
+        message: "All workflows failed to start",
       },
       { status: 500 }
     );
@@ -70,9 +72,9 @@ export const GET = async (request: NextRequest) => {
   if (workflowsFailed.length > 0) {
     return NextResponse.json(
       {
+        failed: workflowsFailed,
         message: `Started ${workflowsStarted.length} workflows, ${workflowsFailed.length} failed`,
         repos: workflowsStarted,
-        failed: workflowsFailed,
       },
       { status: 207 } // Multi-Status for partial success
     );

@@ -2,6 +2,7 @@ import type { Provider } from "@repo/data/providers";
 import { Logo } from "@repo/design-system/components/ultracite/logo";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
+
 import { Installer } from "@/components/installer";
 
 interface ProviderHeroProps {

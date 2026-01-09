@@ -1,6 +1,6 @@
 import "server-only";
-
 import { PrismaPg } from "@prisma/adapter-pg";
+
 import { PrismaClient } from "./generated/client";
 
 if (!process.env.POSTGRES_PRISMA_URL) {

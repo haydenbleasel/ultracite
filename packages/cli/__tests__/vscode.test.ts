@@ -1,16 +1,17 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { createEditorConfig } from "../src/editor-config";
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0 })),
 }));
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 describe("vscode editor config", () => {
@@ -27,9 +28,9 @@ describe("vscode editor config", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -40,9 +41,9 @@ describe("vscode editor config", () => {
     test("returns false when settings.json does not exist", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -56,9 +57,9 @@ describe("vscode editor config", () => {
       const mockMkdir = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -71,9 +72,9 @@ describe("vscode editor config", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -96,9 +97,9 @@ describe("vscode editor config", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -117,9 +118,9 @@ describe("vscode editor config", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -138,8 +139,8 @@ describe("vscode editor config", () => {
     test("attempts to install Biome extension", () => {
       const mockSpawn = mock(() => ({ status: 0 }));
       mock.module("node:child_process", () => ({
-        spawnSync: mockSpawn,
         execSync: mock(() => ""),
+        spawnSync: mockSpawn,
       }));
 
       const vscode = createEditorConfig("vscode");

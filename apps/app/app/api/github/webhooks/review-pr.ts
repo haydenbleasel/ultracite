@@ -1,4 +1,5 @@
 import { FatalError } from "workflow";
+
 import { sendSlackMessage } from "@/lib/slack";
 import { addPRComment } from "@/lib/steps/add-pr-comment";
 import { checkPushAccess } from "@/lib/steps/check-push-access";
@@ -65,10 +66,10 @@ Please ensure the Ultracite app has write access to this repository and branch.
 
     // Update lint run status as failed
     await updateLintRun(lintRunId, {
-      status: "FAILED",
-      errorMessage: pushAccess.reason,
       completedAt: new Date(),
+      errorMessage: pushAccess.reason,
       prNumber,
+      status: "FAILED",
     });
 
     // No point retrying - push access won't change
@@ -174,9 +175,9 @@ No lint issues found in this PR.
 
     // Update lint run status
     await updateLintRun(lintRunId, {
-      status: madeChanges ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
       completedAt: new Date(),
       prNumber,
+      status: madeChanges ? "SUCCESS_PR_CREATED" : "SUCCESS_NO_ISSUES",
     });
   } catch (error) {
     let errorMessage: string;
@@ -213,10 +214,10 @@ ${errorMessage}
 
     // Update lint run status as failed
     await updateLintRun(lintRunId, {
-      status: "FAILED",
       completedAt: new Date(),
-      prNumber,
       errorMessage,
+      prNumber,
+      status: "FAILED",
     });
 
     // Notify Slack about the failure

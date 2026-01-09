@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { prettier } from "../src/linters/prettier";
 
 mock.module("node:fs/promises", () => ({

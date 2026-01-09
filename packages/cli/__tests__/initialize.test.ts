@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import {
   initialize,
   initializeLefthook,
@@ -22,22 +23,22 @@ import {
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve('{"name": "test"}')),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0 })),
 }));
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
-  dlxCommand: mock(() => "npx ultracite fix"),
   detectPackageManager: mock(() =>
     Promise.resolve({ name: "npm", warnings: [] })
   ),
+  dlxCommand: mock(() => "npx ultracite fix"),
   removeDependency: mock(() => Promise.resolve()),
 }));
 
@@ -51,23 +52,23 @@ const noop = () => {
 };
 
 mock.module("@clack/prompts", () => ({
+  cancel: mock(noop),
   intro: mock(noop),
-  outro: mock(noop),
-  spinner: mock(() => ({
-    start: mock(noop),
-    stop: mock(noop),
-    message: mock(noop),
-  })),
+  isCancel: mock(() => false),
   log: {
+    error: mock(noop),
     info: mock(noop),
     success: mock(noop),
-    error: mock(noop),
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
+  outro: mock(noop),
   select: mock(() => Promise.resolve("biome")),
-  isCancel: mock(() => false),
-  cancel: mock(noop),
+  spinner: mock(() => ({
+    message: mock(noop),
+    start: mock(noop),
+    stop: mock(noop),
+  })),
 }));
 
 describe("initialize", () => {
@@ -78,43 +79,43 @@ describe("initialize", () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
+      outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     // Pass all options except editors to trigger just the editor prompt
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "biome",
-      frameworks: [],
       agents: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockMultiselect).toHaveBeenCalled();
@@ -124,43 +125,43 @@ describe("initialize", () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
+      outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     // Pass all options except agents to trigger just the agents prompt
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "biome",
-      frameworks: [],
       editors: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockMultiselect).toHaveBeenCalled();
@@ -170,43 +171,43 @@ describe("initialize", () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
+      outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     // Pass all options except hooks to trigger just the hooks prompt
     await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      integrations: [],
+      linter: "biome",
       pm: "npm",
       skipInstall: true,
-      linter: "biome",
-      frameworks: [],
-      editors: [],
-      agents: [],
-      integrations: [],
     });
 
     expect(mockMultiselect).toHaveBeenCalled();
@@ -217,43 +218,43 @@ describe("initialize", () => {
     const mockMultiselect = mock(() => Symbol.for("cancel"));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mockCancel,
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
+      outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
-      isCancel: mock((val) => val === Symbol.for("cancel")),
-      cancel: mockCancel,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     // Pass all options except editors to trigger just the editor prompt (and cancel it)
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "biome",
-      frameworks: [],
       agents: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockCancel).toHaveBeenCalled();
@@ -272,42 +273,42 @@ describe("initialize", () => {
     });
 
     mock.module("@clack/prompts", () => ({
+      cancel: mockCancel,
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
+      outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
-      isCancel: mock((val) => val === Symbol.for("cancel")),
-      cancel: mockCancel,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     // Pass all options except editors and agents to trigger those prompts
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "biome",
       frameworks: [],
       hooks: [],
       integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockCancel).toHaveBeenCalled();
@@ -318,49 +319,49 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
       select: mock(() => Promise.resolve("eslint")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "eslint",
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
-      frameworks: [],
+      linter: "eslint",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -371,49 +372,49 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
       select: mock(() => Promise.resolve("oxlint")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      linter: "oxlint",
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
-      frameworks: [],
+      linter: "oxlint",
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -428,50 +429,50 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mock(() => Promise.resolve()),
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
       select: mock(() => Promise.resolve("oxlint")),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mockAddDep,
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: false,
-      linter: "oxlint",
-      "type-aware": true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
-      frameworks: [],
+      linter: "oxlint",
+      pm: "npm",
+      skipInstall: false,
+      "type-aware": true,
     });
 
     expect(installedPackages).toContain("oxlint-tsgolint@latest");
@@ -479,33 +480,33 @@ describe("initialize", () => {
 
   test("completes successfully with minimal options", async () => {
     const mockLog = {
+      error: mock(noop),
       info: mock(noop),
       success: mock(noop),
-      error: mock(noop),
       warn: mock(noop),
     };
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      integrations: [],
       pm: "npm",
       skipInstall: true,
-      editors: [],
-      agents: [],
-      integrations: [],
-      frameworks: [],
     });
 
     expect(mockLog.success).toHaveBeenCalled();
@@ -516,39 +517,39 @@ describe("initialize", () => {
       Promise.resolve({ name: "pnpm", warnings: [] })
     );
     const mockLog = {
+      error: mock(noop),
       info: mock(noop),
       success: mock(noop),
-      error: mock(noop),
       warn: mock(noop),
     };
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mockDetect,
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      skipInstall: true,
-      editors: [],
       agents: [],
-      integrations: [],
+      editors: [],
       frameworks: [],
+      integrations: [],
+      skipInstall: true,
     });
 
     expect(mockDetect).toHaveBeenCalled();
@@ -560,39 +561,39 @@ describe("initialize", () => {
 
     mock.module("nypm", () => ({
       addDevDependency: mockAddDep,
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      integrations: [],
       pm: "npm",
       skipInstall: false,
-      editors: [],
-      agents: [],
-      integrations: [],
-      frameworks: [],
     });
 
     expect(mockAddDep).toHaveBeenCalled();
@@ -603,38 +604,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
+      agents: [],
+      editors: ["vscode", "zed"],
+      frameworks: [],
+      integrations: [],
+      migrate: [],
       pm: "npm",
       skipInstall: true,
-      editors: ["vscode", "zed"],
-      agents: [],
-      integrations: [],
-      frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -645,38 +646,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
+      agents: ["claude", "cline"],
+      editors: [],
+      frameworks: [],
+      integrations: [],
+      migrate: [],
       pm: "npm",
       skipInstall: true,
-      editors: [],
-      agents: ["claude", "cline"],
-      integrations: [],
-      frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -687,38 +688,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      integrations: ["husky", "lint-staged"],
+      migrate: [],
       pm: "npm",
       skipInstall: true,
-      editors: [],
-      agents: [],
-      integrations: ["husky", "lint-staged"],
-      frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -735,6 +736,7 @@ describe("initialize", () => {
         }
         return Promise.reject(new Error("ENOENT"));
       }),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock((path: string) => {
         if (path === "./.husky/pre-commit") {
           return Promise.resolve('#!/bin/sh\necho "existing"');
@@ -742,36 +744,35 @@ describe("initialize", () => {
         return Promise.resolve('{"name": "test"}');
       }),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: ["husky"],
-      frameworks: [],
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -782,38 +783,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: ["cursor", "windsurf", "claude"],
       integrations: [],
-      frameworks: [],
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -824,38 +825,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: ["lefthook"],
-      frameworks: [],
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -866,38 +867,38 @@ describe("initialize", () => {
 
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mockWriteFile,
-      mkdir: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      pm: "npm",
-      skipInstall: true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: ["pre-commit"],
-      frameworks: [],
+      pm: "npm",
+      skipInstall: true,
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -905,45 +906,45 @@ describe("initialize", () => {
 
   test("shows warnings when package manager detected with warnings", async () => {
     const mockLog = {
+      error: mock(noop),
       info: mock(noop),
       success: mock(noop),
-      error: mock(noop),
       warn: mock(noop),
     };
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({
           name: "npm",
           warnings: ["Some warning about lockfile"],
         })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await initialize({
-      skipInstall: true,
-      editors: [],
       agents: [],
+      editors: [],
+      frameworks: [],
       hooks: [],
       integrations: [],
-      frameworks: [],
+      skipInstall: true,
     });
 
     expect(mockLog.warn).toHaveBeenCalled();
@@ -952,82 +953,82 @@ describe("initialize", () => {
   test("throws error when no package manager detected", async () => {
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() => Promise.resolve(null)),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     await expect(async () => {
       await initialize({
-        skipInstall: true,
-        editors: [],
         agents: [],
+        editors: [],
+        frameworks: [],
         hooks: [],
         integrations: [],
-        frameworks: [],
+        skipInstall: true,
       });
     }).toThrow("No package manager specified or detected");
   });
 
   test("exits with error on failure", async () => {
     const mockLog = {
+      error: mock(noop),
       info: mock(noop),
       success: mock(noop),
-      error: mock(noop),
       warn: mock(noop),
     };
 
     mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
       intro: mock(noop),
-      outro: mock(noop),
-      spinner: mock(() => ({
-        start: mock(noop),
-        stop: mock(noop),
-        message: mock(noop),
-      })),
+      isCancel: mock(() => false),
       log: mockLog,
       multiselect: mock(() => Promise.resolve([])),
-      isCancel: mock(() => false),
-      cancel: mock(noop),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
     }));
 
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.reject(new Error("Install failed"))),
-      dlxCommand: mock(() => "npx ultracite fix"),
       detectPackageManager: mock(() =>
         Promise.resolve({ name: "npm", warnings: [] })
       ),
+      dlxCommand: mock(() => "npx ultracite fix"),
       removeDependency: mock(() => Promise.resolve()),
     }));
 
     await expect(async () => {
       await initialize({
+        agents: [],
+        editors: [],
+        frameworks: [],
+        integrations: [],
+        migrate: [],
         pm: "npm",
         skipInstall: false,
-        editors: [],
-        agents: [],
-        integrations: [],
-        frameworks: [],
-        migrate: [],
       });
     }).toThrow("Install failed");
 
@@ -1044,18 +1045,18 @@ describe("helper functions", () => {
       const mockAddDep = mock(() => Promise.resolve());
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1067,16 +1068,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"name": "test"}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1089,18 +1090,18 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1113,18 +1114,18 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1136,16 +1137,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"name": "test"}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1157,16 +1158,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"name": "test"}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1183,18 +1184,18 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1211,18 +1212,18 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1239,16 +1240,16 @@ describe("helper functions", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"name": "test"}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1268,9 +1269,9 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"compilerOptions": {}}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("glob", () => ({
@@ -1279,9 +1280,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1292,9 +1293,9 @@ describe("helper functions", () => {
     test("skips when no tsconfig found", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("glob", () => ({
@@ -1303,9 +1304,9 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1325,21 +1326,21 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mock(() => ""),
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1356,16 +1357,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"editor.tabSize": 2}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1377,24 +1378,24 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       // Mock extension install to throw error
       mock.module("node:child_process", () => ({
+        execSync: mock(() => ""),
         spawnSync: mock(() => {
           throw new Error("Extension install failed");
         }),
-        execSync: mock(() => ""),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1407,16 +1408,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1433,16 +1434,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"theme": "dark"}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1456,16 +1457,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1482,18 +1483,18 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() =>
           Promise.resolve('{"extends": ["ultracite/biome/core"]}')
         ),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1507,16 +1508,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1533,16 +1534,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("export default [];")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1556,16 +1557,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1582,16 +1583,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"extends": []}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1605,16 +1606,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1631,16 +1632,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("export default {};")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1654,16 +1655,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1680,16 +1681,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("export default {};")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1703,16 +1704,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1724,16 +1725,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1747,16 +1748,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1773,16 +1774,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1796,16 +1797,16 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1822,16 +1823,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("repos: []")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1847,30 +1848,30 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mock(() => ""),
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1889,6 +1890,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock((path: string) => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test", "devDependencies": {}}');
@@ -1896,19 +1898,18 @@ describe("helper functions", () => {
           return Promise.resolve("#!/bin/sh\necho test");
         }),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:child_process", () => ({
-        spawnSync: mock(() => ({ status: 0 })),
         execSync: mock(() => ""),
+        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1924,25 +1925,25 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1961,6 +1962,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock((path: string) => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test"}');
@@ -1970,14 +1972,13 @@ describe("helper functions", () => {
           );
         }),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -1993,25 +1994,25 @@ describe("helper functions", () => {
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() =>
           Promise.resolve({ name: "npm", warnings: [] })
         ),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -2030,6 +2031,7 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock((path: string) => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test"}');
@@ -2037,14 +2039,13 @@ describe("helper functions", () => {
           return Promise.resolve('{"*.js": ["eslint"]}');
         }),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -2059,16 +2060,16 @@ describe("helper functions", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 
@@ -2086,16 +2087,16 @@ describe("helper functions", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("# existing rules")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
+          message: mock(noop),
           start: mock(noop),
           stop: mock(noop),
-          message: mock(noop),
         })),
       }));
 

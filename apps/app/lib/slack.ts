@@ -7,16 +7,16 @@ interface SlackMessagePayload {
   username?: string;
   icon_emoji?: string;
   icon_url?: string;
-  attachments?: Array<{
+  attachments?: {
     color?: string;
     title?: string;
     text?: string;
-    fields?: Array<{
+    fields?: {
       title: string;
       value: string;
       short?: boolean;
-    }>;
-  }>;
+    }[];
+  }[];
 }
 
 export interface SlackMessageOptions {
@@ -37,25 +37,25 @@ export const sendSlackMessage = async (
   message: string
 ): Promise<{ success: boolean; error?: string }> => {
   const payload: SlackMessagePayload = {
-    text: message,
     channel: `#${env.SLACK_CHANNEL}`,
+    text: message,
     username: "ultracite-bot",
   };
 
   try {
     const response = await fetch(env.SLACK_WEBHOOK_URL, {
-      method: "POST",
+      body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      method: "POST",
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       return {
-        success: false,
         error: `HTTP ${response.status}: ${errorText}`,
+        success: false,
       };
     }
 
@@ -63,6 +63,6 @@ export const sendSlackMessage = async (
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error";
-    return { success: false, error: errorMessage };
+    return { error: errorMessage, success: false };
   }
 };

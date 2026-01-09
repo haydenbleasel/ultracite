@@ -9,40 +9,40 @@ import {
 
 const features = [
   {
-    icon: GitPullRequest,
-    title: "Automated PR Reviews",
     description:
       'When you comment "@ultracite review" on a pull request, Ultracite automatically checks out your branch, runs fixes, and commits changes directly to your PR.',
+    icon: GitPullRequest,
+    title: "Automated PR Reviews",
   },
   {
-    icon: Calendar,
-    title: "Scheduled Lint Runs",
     description:
       "Daily automated runs on your default branch catch issues that slip through, creating pull requests with fixes and generated changelogs.",
+    icon: Calendar,
+    title: "Scheduled Lint Runs",
   },
   {
-    icon: LayoutDashboard,
-    title: "Dashboard",
     description:
       "Get visibility into all connected repositories, lint run history, issues found and fixed, and pull requests created.",
+    icon: LayoutDashboard,
+    title: "Dashboard",
   },
   {
-    icon: Bot,
-    title: "AI-Powered Fixes",
     description:
       "When auto-fix isn't enough, Claude Code steps in to handle complex issues like refactoring, accessibility fixes, and type errors.",
+    icon: Bot,
+    title: "AI-Powered Fixes",
   },
   {
-    icon: Lock,
-    title: "Secure Sandboxes",
     description:
       "All linting runs in isolated sandbox environments. Your code is cloned, processed, and the sandbox is destroyed — we never store your source code.",
+    icon: Lock,
+    title: "Secure Sandboxes",
   },
   {
-    icon: Zap,
-    title: "Zero Configuration",
     description:
       "Connect your repos once, enable them in the dashboard, and Ultracite handles everything else automatically.",
+    icon: Zap,
+    title: "Zero Configuration",
   },
 ];
 

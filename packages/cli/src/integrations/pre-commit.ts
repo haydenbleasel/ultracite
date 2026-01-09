@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dlxCommand, type PackageManagerName } from "nypm";
+
 import { exists } from "../utils";
 
 const path = "./.pre-commit-config.yaml";
@@ -23,13 +24,13 @@ const createPreCommitConfig = (packageManager: PackageManagerName) => `repos:
 `;
 
 export const preCommit = {
-  exists: () => exists(path),
   create: async (packageManager: PackageManagerName) => {
     const config = createPreCommitConfig(packageManager);
     await writeFile(path, config);
   },
+  exists: () => exists(path),
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
 
     // Check if ultracite hook is already present

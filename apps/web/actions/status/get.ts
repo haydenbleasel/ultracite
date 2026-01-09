@@ -1,6 +1,7 @@
 "use server";
 
 import { env } from "@/lib/env";
+
 import type { BetterStackResponse } from "./types";
 
 export const getStatus = async () => {

@@ -7,6 +7,7 @@ import {
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
 import { CreditCardIcon } from "lucide-react";
+
 import { RepoSidebarItem } from "./repo-sidebar-item";
 
 interface OrganizationSidebarGroupProps {

@@ -1,4 +1,3 @@
-import process from "node:process";
 import {
   cancel,
   intro,
@@ -13,11 +12,13 @@ import { editors } from "@repo/data/editors";
 import { hooks as hookIntegrations } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
+import process from "node:process";
 import {
   addDevDependency,
   detectPackageManager,
   type PackageManagerName,
 } from "nypm";
+
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
 import { createEditorConfig } from "./editor-config";
@@ -92,8 +93,8 @@ export const installDependencies = async (
     for (const pkg of packages) {
       await addDevDependency(pkg, {
         packageManager,
-        workspace: await isMonorepo(),
         silent: true,
+        workspace: await isMonorepo(),
       });
     }
   } else {
@@ -663,7 +664,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       pm = detected.name;
     }
 
-    let linter = opts.linter;
+    let { linter } = opts;
     if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to biome only
       const hasOtherCliOptions =
@@ -705,7 +706,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let frameworks = opts.frameworks;
+    let { frameworks } = opts;
     if (frameworks === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -769,8 +770,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let agents = opts.agents;
-    let hooks = opts.hooks;
+    let { agents } = opts;
+    let { hooks } = opts;
 
     // Build agent options from shared data
     const agentsOptions = Object.fromEntries(
@@ -785,8 +786,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         const agentsResult = await multiselect({
           message: "Which agents do you want to enable (optional)?",
           options: Object.entries(agentsOptions).map(([value, label]) => ({
-            value,
             label,
+            value,
           })),
           required: false,
         });
@@ -813,8 +814,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         const hooksResult = await multiselect({
           message: "Which agent hooks do you want to enable (optional)?",
           options: Object.entries(hooksOptions).map(([value, label]) => ({
-            value,
             label,
+            value,
           })),
           required: false,
         });
@@ -828,7 +829,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let integrations = opts.integrations;
+    let { integrations } = opts;
     if (integrations === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts

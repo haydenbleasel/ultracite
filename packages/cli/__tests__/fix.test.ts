@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+
 import { fix } from "../src/commands/fix";
 import { parseFilePaths } from "../src/utils";
 
@@ -10,8 +11,8 @@ describe("fix", () => {
   test("runs biome check with --write flag", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -38,8 +39,8 @@ describe("fix", () => {
   test("runs biome fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -64,8 +65,8 @@ describe("fix", () => {
   test("runs biome fix with unsafe option", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -89,8 +90,8 @@ describe("fix", () => {
   test("does not include --unsafe when option is false", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -114,8 +115,8 @@ describe("fix", () => {
   test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -141,8 +142,8 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 1 }));
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -167,8 +168,8 @@ describe("fix", () => {
     }));
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -190,8 +191,8 @@ describe("fix", () => {
   test("throws when no linter configuration found", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -211,8 +212,8 @@ describe("fix", () => {
   test("runs eslint fix when linter is eslint (runs prettier, eslint, stylelint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -243,8 +244,8 @@ describe("fix", () => {
   test("runs eslint fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -268,8 +269,8 @@ describe("fix", () => {
   test("eslint fix returns hasErrors true when prettier fails", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -294,8 +295,8 @@ describe("fix", () => {
     }));
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -328,8 +329,8 @@ describe("fix", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -362,8 +363,8 @@ describe("fix", () => {
     });
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -385,8 +386,8 @@ describe("fix", () => {
   test("runs oxlint fix when linter is oxlint (runs oxfmt, oxlint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -414,8 +415,8 @@ describe("fix", () => {
   test("runs oxlint fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -443,8 +444,8 @@ describe("fix", () => {
     }));
 
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -466,8 +467,8 @@ describe("fix", () => {
   test("oxlint fix returns hasErrors true on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -488,8 +489,8 @@ describe("fix", () => {
   test("auto-detects eslint when eslint config exists", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -514,8 +515,8 @@ describe("fix", () => {
   test("auto-detects oxlint when oxlint config exists", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -539,8 +540,8 @@ describe("fix", () => {
   test("runs oxlint fix with --type-aware flag", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -564,8 +565,8 @@ describe("fix", () => {
   test("runs oxlint fix with --type-check flag", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -589,8 +590,8 @@ describe("fix", () => {
   test("runs oxlint fix with both --type-aware and --type-check flags", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),
@@ -615,8 +616,8 @@ describe("fix", () => {
   test("does not include type flags when options are false", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
       execSync: mock(() => ""),
+      spawnSync: mockSpawn,
     }));
     mock.module("nypm", () => ({
       detectPackageManager: mock(async () => ({ name: "npm" })),

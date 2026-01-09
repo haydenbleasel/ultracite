@@ -7,6 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@repo/design-system/components/ui/empty";
+
 import { ConnectGitHubButton } from "./connect-github-button";
 
 export const InstallationEmptyState = () => (

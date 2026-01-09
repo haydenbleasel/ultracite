@@ -65,6 +65,7 @@ We use [Changesets](https://github.com/changesets/changesets) to manage versions
 5. Commit the generated changeset file in `.changeset/` with your changes
 
 **When to create a changeset:**
+
 - Bug fixes
 - New features
 - Breaking changes
@@ -72,6 +73,7 @@ We use [Changesets](https://github.com/changesets/changesets) to manage versions
 - Documentation updates that affect usage
 
 **When NOT to create a changeset:**
+
 - Internal refactoring with no user-facing changes
 - Test updates
 - Build configuration changes
@@ -88,6 +90,7 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 5. Update AI/IDE rules in `packages/cli/src/agents/rules.ts` if needed
 
 **Biome vs Ultracite Contributions:**
+
 - To add or change how a rule works internally → Contribute to [Biome's repository](https://github.com/biomejs/biome)
 - To adjust which rules are enabled or their severity → Contribute to Ultracite
 - Once Biome releases a new rule version, Ultracite can bump the dependency and enable it
@@ -112,12 +115,14 @@ If you modify Biome rules in `packages/cli/biome.jsonc`:
 ### Running Commands
 
 From the root directory:
+
 - `bun test` - Run all tests across all packages
 - `bun run build` - Build all packages
 - `bun check` - Run Ultracite linter on the codebase
 - `bun fix` - Auto-fix linting issues
 
 From a specific package (e.g., `packages/cli`):
+
 - `bun test` - Run tests for that package only
 - `bun run build` - Build that package only
 

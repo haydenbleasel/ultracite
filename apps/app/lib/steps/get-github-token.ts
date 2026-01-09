@@ -10,7 +10,8 @@ export async function getGitHubToken(installationId: number): Promise<string> {
     octokit = await getInstallationOctokit(installationId);
   } catch (error) {
     throw new Error(
-      `[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`
+      `[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`,
+      { cause: error }
     );
   }
 
@@ -20,9 +21,11 @@ export async function getGitHubToken(installationId: number): Promise<string> {
     const auth = (await octokit.auth({
       type: "installation",
     })) as { token: string };
-    token = auth.token;
+    ({ token } = auth);
   } catch (error) {
-    throw new Error(`Failed to get GitHub token: ${parseError(error)}`);
+    throw new Error(`Failed to get GitHub token: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 
   return token;

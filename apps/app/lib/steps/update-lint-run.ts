@@ -1,4 +1,5 @@
 import { database, type LintRun } from "@repo/backend/database";
+
 import { parseError } from "@/lib/error";
 
 export async function updateLintRun(
@@ -9,10 +10,12 @@ export async function updateLintRun(
 
   try {
     await database.lintRun.update({
-      where: { id: lintRunId },
       data,
+      where: { id: lintRunId },
     });
   } catch (error) {
-    throw new Error(`Failed to update lint run: ${parseError(error)}`);
+    throw new Error(`Failed to update lint run: ${parseError(error)}`, {
+      cause: error,
+    });
   }
 }

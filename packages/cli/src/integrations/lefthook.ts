@@ -1,6 +1,7 @@
 import { execSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
@@ -31,12 +32,16 @@ const createLefthookConfig = (
 `;
 
 export const lefthook = {
+  create: async (packageManager: PackageManagerName) => {
+    const config = createLefthookConfig(packageManager);
+    await writeFile(path, config);
+  },
   exists: () => exists(path),
   install: async (packageManager: PackageManagerName) => {
     await addDevDependency("lefthook", {
       packageManager,
-      workspace: await isMonorepo(),
       silent: true,
+      workspace: await isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized
@@ -53,12 +58,8 @@ export const lefthook = {
 
     execSync(installCommand, { stdio: "pipe" });
   },
-  create: async (packageManager: PackageManagerName) => {
-    const config = createLefthookConfig(packageManager);
-    await writeFile(path, config);
-  },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { syncGitHubOrganizations } from "@/lib/github/sync-orgs";
 import { createClient } from "@/lib/supabase/server";
 
@@ -44,9 +45,9 @@ export async function GET(request: Request) {
       if (organizations.length > 0 && next === "/") {
         next = `/${organizations[0].slug}`;
       }
-    } catch (syncError) {
+    } catch (error) {
       // Log error but don't fail the auth flow
-      console.error("Failed to sync GitHub organizations:", syncError);
+      console.error("Failed to sync GitHub organizations:", error);
     }
   }
 

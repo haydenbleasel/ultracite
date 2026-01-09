@@ -5,6 +5,7 @@
 Ultracite is a zero-config Biome preset that provides AI-ready formatting and linting for JavaScript/TypeScript projects. It wraps Biome with sensible defaults and extends it with AI/IDE integration capabilities.
 
 **Key Features:**
+
 - Lightning-fast formatting and linting (built on Rust-based Biome)
 - Zero-config setup with `npx ultracite init`
 - Hundreds of strict linting rules for type safety and code quality
@@ -41,17 +42,20 @@ Ultracite is a zero-config Biome preset that provides AI-ready formatting and li
 ## Development Workflow
 
 ### Setup
+
 ```bash
 bun install
 ```
 
 ### Testing
+
 ```bash
 bun test              # Run all tests
 bun test:coverage     # Run tests with coverage
 ```
 
 ### Building
+
 ```bash
 bun build             # Build the CLI with tsup
 ```
@@ -59,21 +63,22 @@ bun build             # Build the CLI with tsup
 ### Adding New IDE Integrations
 
 1. Create a new script in `scripts/` following the pattern:
-```typescript
-import { mkdir, writeFile } from 'node:fs/promises';
-import { rulesFile } from '../docs/lib/rules';
-import { exists } from './utils';
 
-const path = './path/to/config';
+```typescript
+import { mkdir, writeFile } from "node:fs/promises";
+import { rulesFile } from "../docs/lib/rules";
+import { exists } from "./utils";
+
+const path = "./path/to/config";
 
 export const integration = {
   exists: () => exists(path),
   create: async () => {
-    await mkdir('./path/to', { recursive: true });
+    await mkdir("./path/to", { recursive: true });
     await writeFile(path, rulesFile);
   },
   update: async () => {
-    await mkdir('./path/to', { recursive: true });
+    await mkdir("./path/to", { recursive: true });
     await writeFile(path, rulesFile);
   },
 };
@@ -89,6 +94,7 @@ export const integration = {
 ## Key Conventions
 
 ### Code Style
+
 - Use single quotes for strings (enforced by Biome)
 - 2-space indentation
 - Semicolons required
@@ -96,23 +102,27 @@ export const integration = {
 - Explicit type annotations avoided when TypeScript can infer
 
 ### Testing
+
 - Tests use `bun:test`
 - Mock file system operations with `vi.mock`
 - Test both success and failure cases
 - Follow existing test patterns
 
 ### Error Handling
+
 - Use try-catch blocks for external operations
 - Exit with code 1 on failures
 - Provide clear error messages
 
 ### File Naming
+
 - Use kebab-case for file names
 - Match test files to source files (e.g., `foo.ts` → `foo.test.ts`)
 
 ## Important Commands
 
 ### Development
+
 ```bash
 # Run Biome formatter on this project
 npx @biomejs/biome check --write ./
@@ -125,6 +135,7 @@ node ./dist/index.js init
 ```
 
 ### Git Workflow
+
 - Main branch: `main`
 - Version bumps are automated with `[skip ci]` commits
 - Follow conventional commits when possible
@@ -132,6 +143,7 @@ node ./dist/index.js init
 ## Working with the Documentation Site
 
 The `docs/` directory contains a Next.js website:
+
 - Documentation content in `docs/content/`
 - Rules definition in `docs/lib/rules.ts`
 - To run locally: `cd docs && bun dev`
@@ -147,16 +159,19 @@ The `docs/` directory contains a Next.js website:
 ## Common Tasks
 
 ### Adding a New Linting Rule
+
 1. Add to `biome.jsonc` in the appropriate category
 2. Test the rule works as expected
 3. Consider if it should be added to AI/IDE rules in `docs/lib/rules.ts`
 
 ### Updating AI/IDE Rules
+
 1. Modify `docs/lib/rules.ts`
 2. Run `bun test` to ensure all integrations still work
 3. Users will get updated rules on next `ultracite init`
 
 ### Debugging Issues
+
 1. Check if it's a Biome issue first: `npx @biomejs/biome check`
 2. Enable verbose output in the scripts
 3. Check test files for expected behavior

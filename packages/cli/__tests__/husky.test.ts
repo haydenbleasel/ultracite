@@ -1,22 +1,23 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { husky } from "../src/integrations/husky";
 
 mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
   execSync: mock(() => ""),
+  spawnSync: mock(() => ({ status: 0 })),
 }));
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
-  dlxCommand: mock(() => "npx ultracite fix"),
   detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+  dlxCommand: mock(() => "npx ultracite fix"),
   removeDependency: mock(() => Promise.resolve()),
 }));
 
@@ -29,9 +30,9 @@ describe("husky", () => {
     test("returns true when pre-commit hook exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const result = await husky.exists();
@@ -41,9 +42,9 @@ describe("husky", () => {
     test("returns false when pre-commit hook does not exist", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const result = await husky.exists();
@@ -56,8 +57,8 @@ describe("husky", () => {
       const mockAddDep = mock(() => Promise.resolve());
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -72,15 +73,15 @@ describe("husky", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mockReadFile,
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
-        dlxCommand: mock(() => "npx ultracite fix"),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+        dlxCommand: mock(() => "npx ultracite fix"),
         removeDependency: mock(() => Promise.resolve()),
       }));
 
@@ -98,9 +99,9 @@ describe("husky", () => {
       const mockMkdir = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
       await husky.create("npm");
@@ -112,9 +113,9 @@ describe("husky", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       await husky.create("npm");
@@ -133,9 +134,9 @@ describe("husky", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       await husky.update("npm");
