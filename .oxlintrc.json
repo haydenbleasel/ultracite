@@ -1,11 +1,18 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": ["./packages/cli/config/oxlint/core/.oxlintrc.json"],
+  "extends": [
+    "./packages/cli/config/oxlint/core/.oxlintrc.json",
+    "./packages/cli/config/oxlint/react/.oxlintrc.json",
+    "./packages/cli/config/oxlint/next/.oxlintrc.json"
+  ],
   "ignorePatterns": [
+    "packages/design-system/components/ui",
+    "packages/design-system/components/kibo-ui",
+    "packages/design-system/lib/utils.ts",
+    "packages/design-system/hooks/use-mobile.ts",
     "apps/docs/components/ai-elements",
-    "apps/docs/components/ui",
-    "apps/docs/lib/utils.ts",
-    "apps/docs/hooks/use-mobile.ts",
+    "apps/app/components/supabase-ui",
+    "apps/app/lib/supabase",
     "test"
   ]
 }
