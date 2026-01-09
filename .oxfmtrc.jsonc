@@ -2,6 +2,16 @@
 // https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "packages/design-system/components/ui/**",
+    "packages/design-system/components/kibo-ui/**",
+    "packages/design-system/lib/utils.ts",
+    "packages/design-system/hooks/use-mobile.ts",
+    "apps/docs/components/ai-elements/**",
+    "apps/app/components/supabase-ui/**",
+    "apps/app/lib/supabase/**",
+    "test/**"
+  ],
   "printWidth": 80,
   "tabWidth": 2,
   "useTabs": false,
