@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 7.0.11
+
+### Patch Changes
+
+- 79d2756: fix: exit with code 1 when check/fix finds errors
+- c032612: Fix: Parser Errors on .jsonc Files Due to Comments
+- a556651: Move oxlint to optionalDependencies or peerDependencies
+
 ## 7.0.10
 
 ### Patch Changes
