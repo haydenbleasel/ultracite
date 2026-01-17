@@ -920,7 +920,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.skipInstall,
       quiet,
       linter === "oxlint" && opts["type-aware"],
-      opts.frameworks
+      frameworks
     );
 
     await upsertTsConfig(quiet);
