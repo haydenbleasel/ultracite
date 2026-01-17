@@ -39,6 +39,7 @@ const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
 type Linter = (typeof options.linters)[number];
+type Frameworks = (typeof options.frameworks)[number];
 
 interface InitializeFlags {
   pm?: PackageManagerName;
@@ -53,12 +54,41 @@ interface InitializeFlags {
   "type-aware"?: boolean;
 }
 
+const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
+  angular: ["@angular-eslint/eslint-plugin@latest"],
+  astro: ["eslint-plugin-astro@latest"],
+  next: ["@next/eslint-plugin-next@latest"],
+  qwik: ["eslint-plugin-qwik@latest"],
+  react: [
+    "eslint-plugin-react@latest",
+    "eslint-plugin-react-hooks@latest",
+    "eslint-plugin-jsx-a11y@latest",
+    "@tanstack/eslint-plugin-query@latest",
+  ],
+  remix: ["eslint-plugin-remix@latest"],
+  solid: ["eslint-plugin-solid@latest"],
+  svelte: ["eslint-plugin-svelte@latest"],
+  vue: ["eslint-plugin-vue@latest"],
+};
+const addEslintFrameworkPackages = (
+  packages: string[],
+  frameworks: Frameworks[]
+) => {
+  for (const framework of frameworks) {
+    const deps = eslintFrameworkPackages[framework];
+    if (deps) {
+      packages.push(...deps);
+    }
+  }
+};
+
 export const installDependencies = async (
   packageManager: PackageManagerName,
   linter: Linter = "biome",
   install = true,
   quiet = false,
-  typeAware = false
+  typeAware = false,
+  frameworks: Frameworks[] = ["react"]
 ) => {
   const s = spinner();
 
@@ -74,6 +104,32 @@ export const installDependencies = async (
   }
   if (linter === "eslint") {
     packages.push("eslint@latest");
+
+    // Add Plugin eslint for core dependencies
+    packages.push(
+      ...[
+        "@typescript-eslint/eslint-plugin@latest",
+        "@typescript-eslint/parser@latest",
+        "eslint-config-prettier@latest",
+        "eslint-import-resolver-typescript@latest",
+        "eslint-plugin-compat@latest",
+        "eslint-plugin-cypress@latest",
+        "eslint-plugin-github@latest",
+        "eslint-plugin-html@latest",
+        "eslint-plugin-import@latest",
+        "eslint-plugin-jest@latest",
+        "eslint-plugin-n@latest",
+        "eslint-plugin-prettier@latest",
+        "eslint-plugin-promise@latest",
+        "eslint-plugin-sonarjs@latest",
+        "eslint-plugin-storybook@latest",
+        "eslint-plugin-tailwindcss@latest",
+        "eslint-plugin-unicorn@latest",
+        "eslint-plugin-unused-imports@latest",
+        "globals@latest",
+      ]
+    );
+    addEslintFrameworkPackages(packages, frameworks);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     packages.push("prettier@latest");
     packages.push("stylelint@latest");
@@ -863,7 +919,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       linter,
       !opts.skipInstall,
       quiet,
-      linter === "oxlint" && opts["type-aware"]
+      linter === "oxlint" && opts["type-aware"],
+      opts.frameworks
     );
 
     await upsertTsConfig(quiet);
