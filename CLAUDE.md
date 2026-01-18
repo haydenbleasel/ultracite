@@ -89,7 +89,7 @@ export const integration = {
 ## Key Conventions
 
 ### Code Style
-- Use single quotes for strings (enforced by Biome)
+- Use double quotes for strings (enforced by Biome)
 - 2-space indentation
 - Semicolons required
 - Arrow functions preferred
