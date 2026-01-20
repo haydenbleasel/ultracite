@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { ReferralDashboard } from "./components/referral-dashboard";
+
+export const metadata: Metadata = {
+  title: "Referrals",
+  description: "Manage your referral program and earn credits.",
+};
+
+const ReferralsPage = async ({
+  params,
+}: PageProps<"/[orgSlug]/settings/referrals">) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const { orgSlug } = await params;
+  const organization = await getOrganizationBySlug(orgSlug);
+
+  if (!organization) {
+    notFound();
+  }
+
+  return (
+    <div className="container relative mx-auto grid w-full gap-8 px-4 py-8 2xl:max-w-4xl">
+      <div>
+        <h1 className="font-semibold text-2xl tracking-tight">Referrals</h1>
+        <p className="text-muted-foreground">
+          Earn $5 credit for each organization you refer. Your referral gets $5
+          too.
+        </p>
+      </div>
+      <ReferralDashboard organizationId={organization.id} />
+    </div>
+  );
+};
+
+export default ReferralsPage;

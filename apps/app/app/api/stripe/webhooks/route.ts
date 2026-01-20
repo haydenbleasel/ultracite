@@ -2,6 +2,7 @@ import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { env } from "@/lib/env";
+import { applyReferralCredits } from "@/lib/referral/apply-credits";
 import { stripe } from "@/lib/stripe";
 
 export const POST = async (request: NextRequest) => {
@@ -54,6 +55,17 @@ export const POST = async (request: NextRequest) => {
         where: { stripeCustomerId: customerId },
         data: { stripeCustomerId: null },
       });
+
+      return new Response("OK", { status: 200 });
+    }
+
+    case "invoice.paid": {
+      const invoice = event.data.object as Stripe.Invoice;
+
+      // Only apply referral credits on first invoice (subscription creation)
+      if (invoice.billing_reason === "subscription_create") {
+        await applyReferralCredits(invoice);
+      }
 
       return new Response("OK", { status: 200 });
     }

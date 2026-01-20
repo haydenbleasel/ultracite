@@ -39,6 +39,11 @@ model Organization {
   repos    Repo[]
   lintRuns LintRun[]
 
+  // Referrals
+  referralCode     ReferralCode?
+  referralsGiven   Referral[]    @relation("ReferrerOrganization")
+  referralReceived Referral?     @relation("ReferredOrganization")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -126,4 +131,38 @@ enum LintRunStatus {
   SUCCESS_PR_CREATED
   FAILED
   SKIPPED
+}
+
+model ReferralCode {
+  id             String       @id @default(cuid())
+  code           String       @unique // 8-char alphanumeric
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String       @unique // One code per org
+  timesUsed      Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([code])
+}
+
+model Referral {
+  id                     String         @id @default(cuid())
+  referrerOrganization   Organization   @relation("ReferrerOrganization", fields: [referrerOrganizationId], references: [id])
+  referrerOrganizationId String
+  referredOrganization   Organization   @relation("ReferredOrganization", fields: [referredOrganizationId], references: [id])
+  referredOrganizationId String         @unique // Each org referred once
+  status                 ReferralStatus @default(PENDING)
+  referrerCreditedAt     DateTime?
+  referredCreditedAt     DateTime?
+  paidInvoiceId          String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  @@index([referrerOrganizationId])
+}
+
+enum ReferralStatus {
+  PENDING   // Waiting for first paid invoice
+  COMPLETED // Both parties credited
+  INVALID   // Fraud/abuse
 }
