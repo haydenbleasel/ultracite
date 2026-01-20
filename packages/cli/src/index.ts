@@ -125,10 +125,7 @@ export const router = t.router({
         .optional()
     )
     .query(async ({ input }) => {
-      const result = await check(input);
-      if (result.hasErrors) {
-        throw new Error("Lint errors found");
-      }
+      await check(input);
     }),
 
   fix: t.procedure
@@ -167,16 +164,13 @@ export const router = t.router({
     )
     .mutation(async ({ input }) => {
       const [files, opts] = input ?? [[], {}];
-      const result = await fix(files, {
+      await fix(files, {
         unsafe: opts.unsafe,
         linter: opts.linter,
         "type-aware": opts["type-aware"],
         "type-check": opts["type-check"],
         "error-on-warnings": opts["error-on-warnings"],
       });
-      if (result.hasErrors) {
-        throw new Error("Lint errors found");
-      }
     }),
 
   doctor: t.procedure

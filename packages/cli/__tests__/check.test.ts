@@ -111,8 +111,9 @@ describe("check", () => {
     expect(callArgs[0]).toContain("'src/my file.ts' ");
   });
 
-  test("returns hasErrors true when biome check finds errors", async () => {
+  test("exits with status code when biome check finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
+    const mockExit = mock(() => {});
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -129,9 +130,10 @@ describe("check", () => {
       detectLinter: mock(async () => "biome"),
       parseFilePaths,
     }));
+    process.exit = mockExit as never;
 
-    const result = await check(undefined);
-    expect(result.hasErrors).toBe(true);
+    await check(undefined);
+    expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   test("exits when spawn returns error", async () => {
@@ -414,8 +416,10 @@ describe("check", () => {
     );
   });
 
-  test("eslint check returns hasErrors true on failure", async () => {
+  test("eslint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
+    const mockExit = mock(() => {});
+
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -431,13 +435,16 @@ describe("check", () => {
       detectLinter: mock(async () => "eslint"),
       parseFilePaths,
     }));
+    process.exit = mockExit as never;
 
-    const result = await check([[], { linter: "eslint" }]);
-    expect(result.hasErrors).toBe(true);
+    await check([[], { linter: "eslint" }]);
+    expect(mockExit).toHaveBeenCalledWith(1);
   });
 
-  test("oxlint check returns hasErrors true on failure", async () => {
+  test("oxlint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
+    const mockExit = mock(() => {});
+
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
       execSync: mock(() => ""),
@@ -453,9 +460,10 @@ describe("check", () => {
       detectLinter: mock(async () => "oxlint"),
       parseFilePaths,
     }));
+    process.exit = mockExit as never;
 
-    const result = await check([[], { linter: "oxlint" }]);
-    expect(result.hasErrors).toBe(true);
+    await check([[], { linter: "oxlint" }]);
+    expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   test("auto-detects eslint when eslint config exists", async () => {

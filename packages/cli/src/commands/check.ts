@@ -16,7 +16,7 @@ const runBiomeCheck = async (
   files: string[],
   diagnosticLevel?: string,
   errorOnWarnings?: boolean
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const args = ["check", "--no-errors-on-unmatched"];
   if (diagnosticLevel) {
     args.push(`--diagnostic-level=${diagnosticLevel}`);
@@ -49,12 +49,12 @@ const runBiomeCheck = async (
     throw new Error(`Failed to run Biome: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runEslintCheck = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runEslintCheck = async (files: string[]): Promise<void> => {
   const args = files.length > 0 ? parseFilePaths(files) : ["."];
 
   const detected = await detectPackageManager(process.cwd());
@@ -74,12 +74,12 @@ const runEslintCheck = async (
     throw new Error(`Failed to run ESLint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runPrettierCheck = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runPrettierCheck = async (files: string[]): Promise<void> => {
   const args = [
     "--check",
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -102,12 +102,12 @@ const runPrettierCheck = async (
     throw new Error(`Failed to run Prettier: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runStylelintCheck = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runStylelintCheck = async (files: string[]): Promise<void> => {
   const args = files.length > 0 ? parseFilePaths(files) : ["."];
 
   const detected = await detectPackageManager(process.cwd());
@@ -127,14 +127,16 @@ const runStylelintCheck = async (
     throw new Error(`Failed to run Stylelint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
 const runOxlintCheck = async (
   files: string[],
   typeAware?: boolean,
   typeCheck?: boolean
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const args: string[] = [];
 
   if (typeAware) {
@@ -164,13 +166,15 @@ const runOxlintCheck = async (
     throw new Error(`Failed to run Oxlint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
 const runOxfmtCheck = async (
   files: string[],
   noErrorOnUnmatchedPattern?: boolean
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const args = ["--check"];
 
   if (noErrorOnUnmatchedPattern) {
@@ -196,12 +200,14 @@ const runOxfmtCheck = async (
     throw new Error(`Failed to run oxfmt: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
 export const check = async (
   opts: [string[], CheckOptions] | undefined
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const files = opts?.[0] || [];
   const diagnosticLevel = opts?.[1]["diagnostic-level"];
   const explicitLinter = opts?.[1].linter;
@@ -216,30 +222,22 @@ export const check = async (
 
   switch (linter) {
     case "eslint": {
-      const prettierResult = await runPrettierCheck(files);
-      const eslintResult = await runEslintCheck(files);
-      const stylelintResult = await runStylelintCheck(files);
-      return {
-        hasErrors:
-          prettierResult.hasErrors ||
-          eslintResult.hasErrors ||
-          stylelintResult.hasErrors,
-      };
+      await runPrettierCheck(files);
+      await runEslintCheck(files);
+      await runStylelintCheck(files);
+      break;
     }
     case "oxlint": {
-      const oxfmtResult = await runOxfmtCheck(
-        files,
-        opts?.[1]["no-error-on-unmatched-pattern"]
-      );
-      const oxlintResult = await runOxlintCheck(
+      await runOxfmtCheck(files, opts?.[1]["no-error-on-unmatched-pattern"]);
+      await runOxlintCheck(
         files,
         opts?.[1]["type-aware"],
         opts?.[1]["type-check"]
       );
-      return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
+      break;
     }
     default:
-      return runBiomeCheck(
+      await runBiomeCheck(
         files,
         diagnosticLevel,
         opts?.[1]["error-on-warnings"]

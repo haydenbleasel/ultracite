@@ -15,7 +15,7 @@ const runBiomeFix = async (
   files: string[],
   unsafe?: boolean,
   errorOnWarnings?: boolean
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const args = ["check", "--write", "--no-errors-on-unmatched"];
 
   if (unsafe) {
@@ -49,12 +49,12 @@ const runBiomeFix = async (
     throw new Error(`Failed to run Biome: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runEslintFix = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runEslintFix = async (files: string[]): Promise<void> => {
   const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
 
   const detected = await detectPackageManager(process.cwd());
@@ -74,12 +74,12 @@ const runEslintFix = async (
     throw new Error(`Failed to run ESLint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runPrettierFix = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runPrettierFix = async (files: string[]): Promise<void> => {
   const args = [
     "--write",
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -102,12 +102,12 @@ const runPrettierFix = async (
     throw new Error(`Failed to run Prettier: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runStylelintFix = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runStylelintFix = async (files: string[]): Promise<void> => {
   const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
 
   const detected = await detectPackageManager(process.cwd());
@@ -127,7 +127,9 @@ const runStylelintFix = async (
     throw new Error(`Failed to run Stylelint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
 const runOxlintFix = async (
@@ -135,7 +137,7 @@ const runOxlintFix = async (
   typeAware?: boolean,
   typeCheck?: boolean,
   unsafe?: boolean
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const args = [unsafe ? "--fix-dangerously" : "--fix"];
 
   if (typeAware) {
@@ -165,12 +167,12 @@ const runOxlintFix = async (
     throw new Error(`Failed to run Oxlint: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
-const runOxfmtFix = async (
-  files: string[]
-): Promise<{ hasErrors: boolean }> => {
+const runOxfmtFix = async (files: string[]): Promise<void> => {
   const args = [
     "--write",
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -193,13 +195,15 @@ const runOxfmtFix = async (
     throw new Error(`Failed to run oxfmt: ${result.error.message}`);
   }
 
-  return { hasErrors: result.status !== 0 };
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1);
+  }
 };
 
 export const fix = async (
   files: string[],
   opts: FixOptions = {}
-): Promise<{ hasErrors: boolean }> => {
+): Promise<void> => {
   const linter = opts.linter || (await detectLinter());
 
   if (!linter) {
@@ -210,27 +214,22 @@ export const fix = async (
 
   switch (linter) {
     case "eslint": {
-      const prettierResult = await runPrettierFix(files);
-      const eslintResult = await runEslintFix(files);
-      const stylelintResult = await runStylelintFix(files);
-      return {
-        hasErrors:
-          prettierResult.hasErrors ||
-          eslintResult.hasErrors ||
-          stylelintResult.hasErrors,
-      };
+      await runPrettierFix(files);
+      await runEslintFix(files);
+      await runStylelintFix(files);
+      break;
     }
     case "oxlint": {
-      const oxfmtResult = await runOxfmtFix(files);
-      const oxlintResult = await runOxlintFix(
+      await runOxfmtFix(files);
+      await runOxlintFix(
         files,
         opts["type-aware"],
         opts["type-check"],
         opts.unsafe
       );
-      return { hasErrors: oxfmtResult.hasErrors || oxlintResult.hasErrors };
+      break;
     }
     default:
-      return runBiomeFix(files, opts.unsafe, opts["error-on-warnings"]);
+      await runBiomeFix(files, opts.unsafe, opts["error-on-warnings"]);
   }
 };
