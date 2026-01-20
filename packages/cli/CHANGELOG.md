@@ -1,5 +1,14 @@
 ## 5.6.0
 
+## 7.0.12
+
+### Patch Changes
+
+- f328fc6: Update nypm to remove dependency on corepack
+- 6f638fa: Fix error message when exiting with code 1
+- f328fc6: Fix eslint dependencies during initialization
+- f328fc6: Allow comments in json files
+
 ## 7.0.11
 
 ### Patch Changes
