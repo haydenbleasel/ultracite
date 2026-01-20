@@ -299,6 +299,7 @@ export const lintStaged = {
       packageManager,
       workspace: await isMonorepo(),
       silent: true,
+      corepack: false,
     });
   },
   create: async (packageManager: PackageManagerName) => {

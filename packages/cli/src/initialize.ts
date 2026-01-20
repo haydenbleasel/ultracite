@@ -94,6 +94,7 @@ export const installDependencies = async (
         packageManager,
         workspace: await isMonorepo(),
         silent: true,
+        corepack: false,
       });
     }
   } else {
