@@ -1,11 +1,10 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalDependencies": ["**/.env.*local"],
   "ui": "tui",
-  "envMode": "loose",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "test"],
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env.*.local"],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
@@ -13,11 +12,20 @@
         "src/database/generated/**"
       ]
     },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
     "test": {
-      "dependsOn": ["^test"]
+      "dependsOn": ["transit"]
     },
     "test:coverage": {
-      "dependsOn": ["^test:coverage"]
+      "dependsOn": ["transit"]
+    },
+    "lint": {
+      "dependsOn": ["transit"]
+    },
+    "check-types": {
+      "dependsOn": ["transit"]
     },
     "dev": {
       "cache": false,

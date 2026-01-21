@@ -38,7 +38,7 @@
     "fix": "bun ./packages/cli/src/index.ts fix",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:publish": "bun build && changeset publish",
+    "changeset:publish": "turbo run build && changeset publish",
     "bump-deps": "npx npm-check-updates --deep -u -x \"recharts,react-resizable-panels\" && bun install",
     "bump-ui": "cd apps/docs && npx shadcn@latest add --all --overwrite && npx shadcn@latest migrate radix"
   },
