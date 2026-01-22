@@ -1,7 +1,6 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as query from "@tanstack/eslint-plugin-query";
+import query from "@tanstack/eslint-plugin-query";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -24,7 +23,7 @@ const config = [
       react,
       "react-hooks": reactHooks,
       "jsx-a11y": jsxA11y,
-      "@tanstack/eslint-plugin-query": query,
+      "@tanstack/query": query,
     },
     rules: {
       ...reactRules,
