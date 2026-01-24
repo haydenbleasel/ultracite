@@ -15,6 +15,7 @@ const overrideRules = {
   "import/no-named-as-default": "off",
   "import/exports-last": "off",
   "import/no-namespace": "off",
+  "import/enforce-node-protocol-usage": ["error", "always"],
   "import/extensions": "off",
   "import/order": [
     "error",
