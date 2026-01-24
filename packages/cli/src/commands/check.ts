@@ -1,30 +1,13 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
-import { detectLinter, type Linter, parseFilePaths } from "../utils";
-
-interface CheckOptions {
-  "diagnostic-level"?: "info" | "warn" | "error";
-  linter?: Linter;
-  "type-aware"?: boolean;
-  "type-check"?: boolean;
-  "no-error-on-unmatched-pattern"?: boolean;
-  "error-on-warnings"?: boolean;
-}
+import { detectLinter, parseFilePaths } from "../utils";
 
 const runBiomeCheck = async (
   files: string[],
-  diagnosticLevel?: string,
-  errorOnWarnings?: boolean
+  passthrough: string[]
 ): Promise<void> => {
-  const args = ["check", "--no-errors-on-unmatched"];
-  if (diagnosticLevel) {
-    args.push(`--diagnostic-level=${diagnosticLevel}`);
-  }
-
-  if (errorOnWarnings) {
-    args.push("--error-on-warnings");
-  }
+  const args = ["check", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
     args.push(...parseFilePaths(files));
@@ -54,8 +37,14 @@ const runBiomeCheck = async (
   }
 };
 
-const runEslintCheck = async (files: string[]): Promise<void> => {
-  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+const runEslintCheck = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
+  const args = [
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -79,9 +68,13 @@ const runEslintCheck = async (files: string[]): Promise<void> => {
   }
 };
 
-const runPrettierCheck = async (files: string[]): Promise<void> => {
+const runPrettierCheck = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
   const args = [
     "--check",
+    ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
@@ -107,8 +100,14 @@ const runPrettierCheck = async (files: string[]): Promise<void> => {
   }
 };
 
-const runStylelintCheck = async (files: string[]): Promise<void> => {
-  const args = files.length > 0 ? parseFilePaths(files) : ["."];
+const runStylelintCheck = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
+  const args = [
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -134,20 +133,12 @@ const runStylelintCheck = async (files: string[]): Promise<void> => {
 
 const runOxlintCheck = async (
   files: string[],
-  typeAware?: boolean,
-  typeCheck?: boolean
+  passthrough: string[]
 ): Promise<void> => {
-  const args: string[] = [];
-
-  if (typeAware) {
-    args.push("--type-aware");
-  }
-
-  if (typeCheck) {
-    args.push("--type-check");
-  }
-
-  args.push(...(files.length > 0 ? parseFilePaths(files) : ["."]));
+  const args = [
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -173,15 +164,13 @@ const runOxlintCheck = async (
 
 const runOxfmtCheck = async (
   files: string[],
-  noErrorOnUnmatchedPattern?: boolean
+  passthrough: string[]
 ): Promise<void> => {
-  const args = ["--check"];
-
-  if (noErrorOnUnmatchedPattern) {
-    args.push("--no-error-on-unmatched-pattern");
-  }
-
-  args.push(...(files.length > 0 ? parseFilePaths(files) : ["."]));
+  const args = [
+    "--check",
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -207,12 +196,9 @@ const runOxfmtCheck = async (
 
 export const check = async (
   files: string[] = [],
-  opts: CheckOptions = {}
+  passthrough: string[] = []
 ): Promise<void> => {
-  const diagnosticLevel = opts["diagnostic-level"];
-  const explicitLinter = opts.linter;
-
-  const linter = explicitLinter || (await detectLinter());
+  const linter = await detectLinter();
 
   if (!linter) {
     throw new Error(
@@ -222,17 +208,17 @@ export const check = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierCheck(files);
-      await runEslintCheck(files);
-      await runStylelintCheck(files);
+      await runPrettierCheck(files, passthrough);
+      await runEslintCheck(files, passthrough);
+      await runStylelintCheck(files, passthrough);
       break;
     }
     case "oxlint": {
-      await runOxfmtCheck(files, opts["no-error-on-unmatched-pattern"]);
-      await runOxlintCheck(files, opts["type-aware"], opts["type-check"]);
+      await runOxfmtCheck(files, passthrough);
+      await runOxlintCheck(files, passthrough);
       break;
     }
     default:
-      await runBiomeCheck(files, diagnosticLevel, opts["error-on-warnings"]);
+      await runBiomeCheck(files, passthrough);
   }
 };

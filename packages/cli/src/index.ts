@@ -45,47 +45,29 @@ program
 program
   .command("check")
   .argument("[files...]", "Files to check")
-  .description("Run linter without fixing files")
-  .option(
-    "--diagnostic-level <level>",
-    "Level of diagnostics (info, warn, error)"
+  .description(
+    "Run linter without fixing files. Unknown options are passed to the underlying linter."
   )
-  .option("--linter <linter>", "Linter to use")
-  .option("--type-aware", "Enable type-aware linting (oxlint only)")
-  .option("--type-check", "Enable TypeScript diagnostics (oxlint only)")
-  .option(
-    "--no-error-on-unmatched-pattern",
-    "Suppress unmatched pattern errors"
-  )
-  .option("--error-on-warnings", "Treat warnings as errors (biome only)")
-  .action(async (files, opts) => {
-    await check(files, {
-      "diagnostic-level": opts.diagnosticLevel,
-      linter: opts.linter,
-      "type-aware": opts.typeAware,
-      "type-check": opts.typeCheck,
-      "no-error-on-unmatched-pattern": opts.errorOnUnmatchedPattern === false,
-      "error-on-warnings": opts.errorOnWarnings,
-    });
+  .allowUnknownOption()
+  .action(async (files) => {
+    const cmdIndex = process.argv.indexOf("check");
+    const allArgs = process.argv.slice(cmdIndex + 1);
+    const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
+    await check(files, passthrough);
   });
 
 program
   .command("fix")
   .argument("[files...]", "Files to fix")
-  .description("Run linter and fix files")
-  .option("--unsafe", "Apply unsafe fixes")
-  .option("--linter <linter>", "Linter to use")
-  .option("--type-aware", "Enable type-aware linting (oxlint only)")
-  .option("--type-check", "Enable TypeScript diagnostics (oxlint only)")
-  .option("--error-on-warnings", "Treat warnings as errors (biome only)")
-  .action(async (files, opts) => {
-    await fix(files, {
-      unsafe: opts.unsafe,
-      linter: opts.linter,
-      "type-aware": opts.typeAware,
-      "type-check": opts.typeCheck,
-      "error-on-warnings": opts.errorOnWarnings,
-    });
+  .description(
+    "Run linter and fix files. Unknown options are passed to the underlying linter."
+  )
+  .allowUnknownOption()
+  .action(async (files) => {
+    const cmdIndex = process.argv.indexOf("fix");
+    const allArgs = process.argv.slice(cmdIndex + 1);
+    const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
+    await fix(files, passthrough);
   });
 
 program
