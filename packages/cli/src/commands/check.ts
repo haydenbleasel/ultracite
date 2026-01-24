@@ -206,11 +206,11 @@ const runOxfmtCheck = async (
 };
 
 export const check = async (
-  opts: [string[], CheckOptions] | undefined
+  files: string[] = [],
+  opts: CheckOptions = {}
 ): Promise<void> => {
-  const files = opts?.[0] || [];
-  const diagnosticLevel = opts?.[1]["diagnostic-level"];
-  const explicitLinter = opts?.[1].linter;
+  const diagnosticLevel = opts["diagnostic-level"];
+  const explicitLinter = opts.linter;
 
   const linter = explicitLinter || (await detectLinter());
 
@@ -228,19 +228,11 @@ export const check = async (
       break;
     }
     case "oxlint": {
-      await runOxfmtCheck(files, opts?.[1]["no-error-on-unmatched-pattern"]);
-      await runOxlintCheck(
-        files,
-        opts?.[1]["type-aware"],
-        opts?.[1]["type-check"]
-      );
+      await runOxfmtCheck(files, opts["no-error-on-unmatched-pattern"]);
+      await runOxlintCheck(files, opts["type-aware"], opts["type-check"]);
       break;
     }
     default:
-      await runBiomeCheck(
-        files,
-        diagnosticLevel,
-        opts?.[1]["error-on-warnings"]
-      );
+      await runBiomeCheck(files, diagnosticLevel, opts["error-on-warnings"]);
   }
 };

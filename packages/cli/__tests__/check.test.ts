@@ -25,7 +25,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check(undefined);
+    await check();
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -52,7 +52,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([["src/index.ts", "src/test.ts"], {}]);
+    await check(["src/index.ts", "src/test.ts"], {});
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -78,7 +78,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([[], { "diagnostic-level": "error" }]);
+    await check([], { "diagnostic-level": "error" });
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -103,7 +103,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([["src/my file.ts"], {}]);
+    await check(["src/my file.ts"], {});
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
@@ -132,7 +132,7 @@ describe("check", () => {
     }));
     process.exit = mockExit as never;
 
-    await check(undefined);
+    await check();
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
@@ -204,7 +204,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([[], { linter: "eslint" }]);
+    await check([], { linter: "eslint" });
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     const prettierCall = mockSpawn.mock.calls[0];
@@ -234,7 +234,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([["src/index.ts"], { linter: "eslint" }]);
+    await check(["src/index.ts"], { linter: "eslint" });
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     const eslintCall = mockSpawn.mock.calls[1];
@@ -263,7 +263,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+    await expect(check([], { linter: "eslint" })).rejects.toThrow(
       "Failed to run Prettier: prettier spawn failed"
     );
   });
@@ -297,7 +297,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+    await expect(check([], { linter: "eslint" })).rejects.toThrow(
       "Failed to run ESLint: eslint spawn failed"
     );
   });
@@ -331,7 +331,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await expect(check([[], { linter: "eslint" }])).rejects.toThrow(
+    await expect(check([], { linter: "eslint" })).rejects.toThrow(
       "Failed to run Stylelint: stylelint spawn failed"
     );
   });
@@ -354,7 +354,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([[], { linter: "oxlint" }]);
+    await check([], { linter: "oxlint" });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxfmtCall = mockSpawn.mock.calls[0];
@@ -382,7 +382,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([["src/index.ts"], { linter: "oxlint" }]);
+    await check(["src/index.ts"], { linter: "oxlint" });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
@@ -411,7 +411,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await expect(check([[], { linter: "oxlint" }])).rejects.toThrow(
+    await expect(check([], { linter: "oxlint" })).rejects.toThrow(
       "Failed to run oxfmt: oxfmt spawn failed"
     );
   });
@@ -437,7 +437,7 @@ describe("check", () => {
     }));
     process.exit = mockExit as never;
 
-    await check([[], { linter: "eslint" }]);
+    await check([], { linter: "eslint" });
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
@@ -462,7 +462,7 @@ describe("check", () => {
     }));
     process.exit = mockExit as never;
 
-    await check([[], { linter: "oxlint" }]);
+    await check([], { linter: "oxlint" });
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
@@ -484,7 +484,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check(undefined);
+    await check();
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     expect(mockSpawn.mock.calls[0][0]).toContain("prettier");
@@ -510,7 +510,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check(undefined);
+    await check();
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     expect(mockSpawn.mock.calls[0][0]).toContain("oxfmt");
@@ -535,7 +535,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([[], { linter: "oxlint", "type-aware": true }]);
+    await check([], { linter: "oxlint", "type-aware": true });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
@@ -560,7 +560,7 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([[], { linter: "oxlint", "type-check": true }]);
+    await check([], { linter: "oxlint", "type-check": true });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
@@ -585,10 +585,11 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([
-      [],
-      { linter: "oxlint", "type-aware": true, "type-check": true },
-    ]);
+    await check([], {
+      linter: "oxlint",
+      "type-aware": true,
+      "type-check": true,
+    });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
@@ -614,10 +615,11 @@ describe("check", () => {
       parseFilePaths,
     }));
 
-    await check([
-      [],
-      { linter: "oxlint", "type-aware": false, "type-check": false },
-    ]);
+    await check([], {
+      linter: "oxlint",
+      "type-aware": false,
+      "type-check": false,
+    });
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];

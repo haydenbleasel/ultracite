@@ -1,194 +1,102 @@
-import { options } from "@repo/data/options";
-import { initTRPC } from "@trpc/server";
-import { type PackageManagerName, packageManagers } from "nypm";
-import { createCli, type TrpcCliMeta } from "trpc-cli";
-import z from "zod";
+import { Command } from "commander";
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { initialize } from "./initialize";
 
-const t = initTRPC.meta<TrpcCliMeta>().create();
+const program = new Command();
 
-export const router = t.router({
-  init: t.procedure
-    .meta({
-      description: "Initialize Ultracite in the current directory",
-    })
-    .input(
-      z.object({
-        pm: z
-          .enum(
-            packageManagers.map((pm) => pm.name) as [
-              PackageManagerName,
-              ...PackageManagerName[],
-            ]
-          )
-          .optional()
-          .describe("Package manager to use"),
-        linter: z
-          .enum(options.linters)
-          .optional()
-          .describe("Linter / formatter to use"),
-        editors: z
-          .array(z.enum(options.editorConfigs))
-          .optional()
-          .describe("Editors to configure"),
-        agents: z
-          .array(z.enum(options.agents))
-          .optional()
-          .describe("Agents to enable"),
-        hooks: z
-          .array(z.enum(options.hooks))
-          .optional()
-          .describe("Hooks to enable"),
-        frameworks: z
-          .array(z.enum(options.frameworks))
-          .optional()
-          .describe("Frameworks being used"),
-        integrations: z
-          .array(z.enum(options.integrations))
-          .optional()
-          .describe("Additional integrations to enable"),
-        migrate: z
-          .array(z.enum(options.migrations))
-          .optional()
-          .describe(
-            "Migration tools to remove (e.g., eslint, prettier). Removes dependencies, config files, and editor settings."
-          ),
-        "type-aware": z
-          .boolean()
-          .optional()
-          .describe(
-            "enable type-aware linting (oxlint only, installs oxlint-tsgolint)"
-          ),
-        skipInstall: z
-          .boolean()
-          .default(false)
-          .describe("Skip installing dependencies"),
-        quiet: z
-          .boolean()
-          .default(process.env.CI === "true" || process.env.CI === "1")
-          .describe(
-            "Suppress all interactive prompts and visual output. Automatically enabled in CI environments."
-          ),
-      })
-    )
-    .mutation(async ({ input }) => {
-      await initialize(input);
-    }),
+program
+  .name("ultracite")
+  .version(packageJson.version)
+  .description(packageJson.description);
 
-  check: t.procedure
-    .meta({
-      description: "Run linter without fixing files",
-    })
-    .input(
-      z
-        .tuple([
-          z
-            .array(z.string())
-            .optional()
-            .default([])
-            .describe("specific files to lint"),
-          z.object({
-            "diagnostic-level": z
-              .enum(["info", "warn", "error"])
-              .optional()
-              .describe(
-                "level of diagnostics to show. In order, from the lowest to the most important: info, warn, error."
-              ),
-            linter: z
-              .enum(options.linters)
-              .optional()
-              .describe("linter to use (biome, eslint, or oxlint)"),
-            "type-aware": z
-              .boolean()
-              .optional()
-              .describe("enable type-aware linting rules (oxlint only)"),
-            "type-check": z
-              .boolean()
-              .optional()
-              .describe("enable TypeScript compiler diagnostics (oxlint only)"),
-            "no-error-on-unmatched-pattern": z
-              .boolean()
-              .optional()
-              .describe(
-                "suppress errors when files don't match patterns (useful for hooks/CI)"
-              ),
-            "error-on-warnings": z
-              .boolean()
-              .optional()
-              .describe("treat warnings as errors (biome only)"),
-          }),
-        ])
-        .optional()
-    )
-    .query(async ({ input }) => {
-      await check(input);
-    }),
+program
+  .command("init")
+  .description("Initialize Ultracite in the current directory")
+  .option("--pm <pm>", "Package manager to use")
+  .option("--linter <linter>", "Linter to use")
+  .option("--editors <editors...>", "Editors to configure")
+  .option("--agents <agents...>", "Agents to enable")
+  .option("--hooks <hooks...>", "Hooks to enable")
+  .option("--frameworks <frameworks...>", "Frameworks being used")
+  .option("--integrations <integrations...>", "Integrations to enable")
+  .option("--migrate <tools...>", "Migration tools to remove")
+  .option("--type-aware", "Enable type-aware linting (oxlint only)")
+  .option("--skip-install", "Skip installing dependencies")
+  .option("--quiet", "Suppress interactive prompts")
+  .action(async (opts) => {
+    await initialize({
+      pm: opts.pm,
+      linter: opts.linter,
+      editors: opts.editors,
+      agents: opts.agents,
+      hooks: opts.hooks,
+      frameworks: opts.frameworks,
+      integrations: opts.integrations,
+      migrate: opts.migrate,
+      "type-aware": opts.typeAware,
+      skipInstall: opts.skipInstall,
+      quiet: opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
+    });
+  });
 
-  fix: t.procedure
-    .meta({
-      description: "Run linter and fix files",
-    })
-    .input(
-      z
-        .tuple([
-          z
-            .array(z.string())
-            .optional()
-            .default([])
-            .describe("specific files to format"),
-          z.object({
-            unsafe: z.boolean().optional().describe("apply unsafe fixes"),
-            linter: z
-              .enum(options.linters)
-              .optional()
-              .describe("linter to use (biome, eslint, or oxlint)"),
-            "type-aware": z
-              .boolean()
-              .optional()
-              .describe("enable type-aware linting rules (oxlint only)"),
-            "type-check": z
-              .boolean()
-              .optional()
-              .describe("enable TypeScript compiler diagnostics (oxlint only)"),
-            "error-on-warnings": z
-              .boolean()
-              .optional()
-              .describe("treat warnings as errors (biome only)"),
-          }),
-        ])
-        .optional()
-    )
-    .mutation(async ({ input }) => {
-      const [files, opts] = input ?? [[], {}];
-      await fix(files, {
-        unsafe: opts.unsafe,
-        linter: opts.linter,
-        "type-aware": opts["type-aware"],
-        "type-check": opts["type-check"],
-        "error-on-warnings": opts["error-on-warnings"],
-      });
-    }),
+program
+  .command("check")
+  .argument("[files...]", "Files to check")
+  .description("Run linter without fixing files")
+  .option(
+    "--diagnostic-level <level>",
+    "Level of diagnostics (info, warn, error)"
+  )
+  .option("--linter <linter>", "Linter to use")
+  .option("--type-aware", "Enable type-aware linting (oxlint only)")
+  .option("--type-check", "Enable TypeScript diagnostics (oxlint only)")
+  .option(
+    "--no-error-on-unmatched-pattern",
+    "Suppress unmatched pattern errors"
+  )
+  .option("--error-on-warnings", "Treat warnings as errors (biome only)")
+  .action(async (files, opts) => {
+    await check(files, {
+      "diagnostic-level": opts.diagnosticLevel,
+      linter: opts.linter,
+      "type-aware": opts.typeAware,
+      "type-check": opts.typeCheck,
+      "no-error-on-unmatched-pattern": opts.errorOnUnmatchedPattern === false,
+      "error-on-warnings": opts.errorOnWarnings,
+    });
+  });
 
-  doctor: t.procedure
-    .meta({
-      description: "Verify your Ultracite setup and check for issues",
-    })
-    .query(async () => {
-      await doctor();
-    }),
-});
+program
+  .command("fix")
+  .argument("[files...]", "Files to fix")
+  .description("Run linter and fix files")
+  .option("--unsafe", "Apply unsafe fixes")
+  .option("--linter <linter>", "Linter to use")
+  .option("--type-aware", "Enable type-aware linting (oxlint only)")
+  .option("--type-check", "Enable TypeScript diagnostics (oxlint only)")
+  .option("--error-on-warnings", "Treat warnings as errors (biome only)")
+  .action(async (files, opts) => {
+    await fix(files, {
+      unsafe: opts.unsafe,
+      linter: opts.linter,
+      "type-aware": opts.typeAware,
+      "type-check": opts.typeCheck,
+      "error-on-warnings": opts.errorOnWarnings,
+    });
+  });
 
-const cli = createCli({
-  router,
-  name: packageJson.name,
-  version: packageJson.version,
-  description: packageJson.description,
-});
+program
+  .command("doctor")
+  .description("Verify your Ultracite setup")
+  .action(async () => {
+    await doctor();
+  });
 
 if (!process.env.TEST) {
-  cli.run();
+  program.parse();
 }
+
+export { program };
