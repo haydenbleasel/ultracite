@@ -123,7 +123,6 @@ export const installDependencies = async (
         "eslint-plugin-promise@latest",
         "eslint-plugin-sonarjs@latest",
         "eslint-plugin-storybook@latest",
-        "eslint-plugin-tailwindcss@latest",
         "eslint-plugin-unicorn@latest",
         "eslint-plugin-unused-imports@latest",
         "globals@latest",

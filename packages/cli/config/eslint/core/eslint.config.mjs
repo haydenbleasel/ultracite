@@ -16,7 +16,6 @@ import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
 import sonarjs from "eslint-plugin-sonarjs";
 import storybook from "eslint-plugin-storybook";
-import tailwindcss from "eslint-plugin-tailwindcss";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
@@ -32,7 +31,6 @@ import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
 import sonarjsRules from "./rules/sonarjs.mjs";
 import storybookRules from "./rules/storybook.mjs";
-import tailwindcssRules from "./rules/tailwindcss.mjs";
 import typescriptRules from "./rules/typescript.mjs";
 import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
@@ -68,7 +66,6 @@ const config = [
       promise,
       n,
       "unused-imports": unusedImports,
-      tailwindcss,
       sonarjs,
       compat,
       unicorn,
@@ -82,7 +79,6 @@ const config = [
       ...prettierRules,
       ...eslintPrettier.rules,
       ...unusedImportsRules,
-      ...tailwindcssRules,
       ...sonarjsRules,
       ...compatRules,
       ...unicornRules,
