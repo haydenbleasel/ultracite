@@ -13,7 +13,11 @@ import Link from "next/link";
 import { getUserOrganizations } from "@/lib/auth";
 import { OrganizationSidebarGroup } from "./organization-sidebar-group";
 
-export const RepoSidebar = async ({ orgSlug }: { orgSlug: string }) => {
+interface RepoSidebarProps {
+  orgSlug: string;
+}
+
+export const RepoSidebar = async ({ orgSlug }: RepoSidebarProps) => {
   const userOrgs = await getUserOrganizations();
   const organizations = await database.organization.findMany({
     where: {
