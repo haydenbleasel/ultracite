@@ -1231,11 +1231,7 @@ describe("helper functions", () => {
     });
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
-      let writtenContent = "";
-      const mockWriteFile = mock((_path: string, content: string) => {
-        writtenContent = content;
-        return Promise.resolve();
-      });
+      const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -1254,7 +1250,13 @@ describe("helper functions", () => {
 
       await installDependencies("npm", "oxlint", false, true, true);
       expect(mockWriteFile).toHaveBeenCalled();
-      expect(writtenContent).toContain("oxlint-tsgolint");
+
+      // Check that at least one call contains oxlint-tsgolint
+      const hasOxlintTsgolint = mockWriteFile.mock.calls.some(
+        (call) =>
+          typeof call[1] === "string" && call[1].includes("oxlint-tsgolint")
+      );
+      expect(hasOxlintTsgolint).toBe(true);
     });
   });
 
