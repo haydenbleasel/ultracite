@@ -23,7 +23,8 @@ export const env = createEnv({
     VERCEL_PROJECT_ID: z.string().optional(),
 
     // Vercel AI Gateway
-    VERCEL_AI_GATEWAY_API_KEY: z.string(),
+    VERCEL_OIDC_TOKEN: z.string(),
+    AI_GATEWAY_API_KEY: z.string(),
 
     // Stripe
     STRIPE_SECRET_KEY: z.string(),
@@ -58,7 +59,8 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
-    VERCEL_AI_GATEWAY_API_KEY: process.env.VERCEL_AI_GATEWAY_API_KEY,
+    VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN,
+    AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
