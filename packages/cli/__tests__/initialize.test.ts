@@ -634,7 +634,6 @@ describe("initialize", () => {
       agents: [],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -676,7 +675,6 @@ describe("initialize", () => {
       agents: ["claude", "cline"],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -718,7 +716,6 @@ describe("initialize", () => {
       agents: [],
       integrations: ["husky", "lint-staged"],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -1027,8 +1024,7 @@ describe("initialize", () => {
         agents: [],
         integrations: [],
         frameworks: [],
-        migrate: [],
-      });
+        });
     }).toThrow("Install failed");
 
     expect(mockLog.error).toHaveBeenCalled();

@@ -22,7 +22,6 @@ program
   .option("--hooks <hooks...>", "Hooks to enable")
   .option("--frameworks <frameworks...>", "Frameworks being used")
   .option("--integrations <integrations...>", "Integrations to enable")
-  .option("--migrate <tools...>", "Migration tools to remove")
   .option("--type-aware", "Enable type-aware linting (oxlint only)")
   .option("--skip-install", "Skip installing dependencies")
   .option("--quiet", "Suppress interactive prompts")
@@ -35,7 +34,6 @@ program
       hooks: opts.hooks,
       frameworks: opts.frameworks,
       integrations: opts.integrations,
-      migrate: opts.migrate,
       "type-aware": opts.typeAware,
       skipInstall: opts.skipInstall,
       quiet:
