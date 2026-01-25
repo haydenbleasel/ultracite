@@ -179,6 +179,14 @@ export const installDependencies = async (
     await updatePackageJson({ devDependencies });
   }
 
+  // Add ultracite scripts to package.json
+  await updatePackageJson({
+    scripts: {
+      check: "ultracite check",
+      fix: "ultracite fix",
+    },
+  });
+
   if (!quiet) {
     s.stop("Dependencies installed.");
   }
