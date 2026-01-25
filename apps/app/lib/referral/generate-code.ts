@@ -16,29 +16,25 @@ export async function getOrCreateReferralCode(organizationId: string) {
   }
 
   // Generate unique code with collision check
-  let code = generateCode();
-  let attempts = 0;
   const maxAttempts = 5;
 
-  while (attempts < maxAttempts) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const code = generateCode();
     const collision = await database.referralCode.findUnique({
       where: { code },
     });
 
     if (!collision) {
-      break;
+      return database.referralCode.create({
+        data: {
+          code,
+          organizationId,
+        },
+      });
     }
-
-    code = generateCode();
-    attempts++;
   }
 
-  return database.referralCode.create({
-    data: {
-      code,
-      organizationId,
-    },
-  });
+  throw new Error("Failed to generate unique referral code after max attempts");
 }
 
 export function getReferralUrl(code: string) {

@@ -48,31 +48,27 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   const now = new Date();
 
   // Apply credit to referred org (this org)
-  let referredCredited = false;
-  if (org.stripeCustomerId) {
-    referredCredited = await applyCredit(
-      org.stripeCustomerId,
-      "Referral signup bonus"
-    );
-  }
+  // Consider credited if no Stripe customer (can't apply) or credit succeeded
+  const referredCredited = org.stripeCustomerId
+    ? await applyCredit(org.stripeCustomerId, "Referral signup bonus")
+    : true;
 
   // Apply credit to referrer org
-  let referrerCredited = false;
-  if (referrerOrg.stripeCustomerId) {
-    referrerCredited = await applyCredit(
-      referrerOrg.stripeCustomerId,
-      `Referral bonus - ${org.name}`
-    );
-  }
+  const referrerCredited = referrerOrg.stripeCustomerId
+    ? await applyCredit(referrerOrg.stripeCustomerId, `Referral bonus - ${org.name}`)
+    : true;
+
+  // Only mark completed if both credits were applied (or not applicable)
+  const allCreditsApplied = referredCredited && referrerCredited;
 
   // Update referral status
   await database.referral.update({
     where: { id: referral.id },
     data: {
-      status: "COMPLETED",
+      status: allCreditsApplied ? "COMPLETED" : "PENDING",
       paidInvoiceId: invoice.id,
-      referredCreditedAt: referredCredited ? now : null,
-      referrerCreditedAt: referrerCredited ? now : null,
+      referredCreditedAt: referredCredited && org.stripeCustomerId ? now : null,
+      referrerCreditedAt: referrerCredited && referrerOrg.stripeCustomerId ? now : null,
     },
   });
 }

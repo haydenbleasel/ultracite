@@ -26,29 +26,43 @@ export async function processReferral(
     return { success: false, error: "Cannot refer yourself" };
   }
 
-  // Check if org was already referred
-  const existingReferral = await database.referral.findUnique({
-    where: { referredOrganizationId },
-  });
+  // Create the referral record atomically, handling race conditions
+  try {
+    await database.$transaction(async (tx) => {
+      // Check and create in same transaction to prevent TOCTOU
+      const existingReferral = await tx.referral.findUnique({
+        where: { referredOrganizationId },
+      });
 
-  if (existingReferral) {
-    return { success: false, error: "Organization already referred" };
+      if (existingReferral) {
+        throw new Error("Organization already referred");
+      }
+
+      await tx.referral.create({
+        data: {
+          referrerOrganizationId: code.organizationId,
+          referredOrganizationId,
+          status: "PENDING",
+        },
+      });
+
+      await tx.referralCode.update({
+        where: { id: code.id },
+        data: { timesUsed: { increment: 1 } },
+      });
+    });
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Error) {
+      // Handle both explicit check and unique constraint race condition
+      if (
+        error.message === "Organization already referred" ||
+        error.message.includes("Unique constraint")
+      ) {
+        return { success: false, error: "Organization already referred" };
+      }
+    }
+    throw error;
   }
-
-  // Create the referral record
-  await database.$transaction([
-    database.referral.create({
-      data: {
-        referrerOrganizationId: code.organizationId,
-        referredOrganizationId,
-        status: "PENDING",
-      },
-    }),
-    database.referralCode.update({
-      where: { id: code.id },
-      data: { timesUsed: { increment: 1 } },
-    }),
-  ]);
-
-  return { success: true };
 }

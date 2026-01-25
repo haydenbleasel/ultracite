@@ -129,12 +129,6 @@ export async function syncGitHubOrganizations(
     // Generate a slug from the login (already lowercase with valid chars)
     const slug = org.login.toLowerCase();
 
-    // Check if org already exists (for referral tracking)
-    const existingOrg = await database.organization.findUnique({
-      where: { githubOrgId: org.id },
-    });
-    const isNewOrg = !existingOrg;
-
     // Use upsert to atomically find-or-create the organization by GitHub ID
     // This prevents race conditions when multiple users from the same org log in simultaneously
     let organization: {
@@ -202,8 +196,8 @@ export async function syncGitHubOrganizations(
       update: {}, // Don't update role if membership already exists
     });
 
-    // Process referral for newly created orgs
-    if (isNewOrg && referralCode) {
+    // Process referral if code provided (processReferral handles duplicates gracefully)
+    if (referralCode) {
       await processReferral(referralCode, organization.id);
     }
 
