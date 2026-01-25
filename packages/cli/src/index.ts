@@ -38,7 +38,8 @@ program
       migrate: opts.migrate,
       "type-aware": opts.typeAware,
       skipInstall: opts.skipInstall,
-      quiet: opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
+      quiet:
+        opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
     });
   });
 

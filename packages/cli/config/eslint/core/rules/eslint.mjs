@@ -1,7 +1,7 @@
 import plugin from "@eslint/js";
 
 // Create a new object to avoid mutating the readonly rules object
-const baseRules = Object.assign({}, plugin.configs.all.rules);
+const baseRules = { ...plugin.configs.all.rules };
 
 const overrideRules = {
   "no-unused-private-class-members": "off",
