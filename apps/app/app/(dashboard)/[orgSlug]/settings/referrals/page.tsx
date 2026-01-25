@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { getReferralCode } from "@/lib/referral/get-referral-code";
+import { getReferralStats } from "@/lib/referral/get-referral-stats";
 import { ReferralDashboard } from "./components/referral-dashboard";
 
 export const metadata: Metadata = {
@@ -24,6 +26,11 @@ const ReferralsPage = async ({
     notFound();
   }
 
+  const [referralCode, stats] = await Promise.all([
+    getReferralCode(organization.id),
+    getReferralStats(organization.id, organization.stripeCustomerId),
+  ]);
+
   return (
     <div className="container relative mx-auto grid w-full gap-8 px-4 py-8 2xl:max-w-4xl">
       <div>
@@ -33,7 +40,7 @@ const ReferralsPage = async ({
           too.
         </p>
       </div>
-      <ReferralDashboard organizationId={organization.id} />
+      <ReferralDashboard referralCode={referralCode} stats={stats} />
     </div>
   );
 };
