@@ -25,12 +25,30 @@ export async function getOrCreateReferralCode(organizationId: string) {
     });
 
     if (!collision) {
-      return database.referralCode.create({
-        data: {
-          code,
-          organizationId,
-        },
-      });
+      try {
+        return await database.referralCode.create({
+          data: {
+            code,
+            organizationId,
+          },
+        });
+      } catch (error) {
+        // Handle race condition: another request created a code for this org
+        if (
+          error instanceof Error &&
+          error.message.includes("Unique constraint")
+        ) {
+          const created = await database.referralCode.findUnique({
+            where: { organizationId },
+          });
+          if (created) {
+            return created;
+          }
+          // If not found by organizationId, it was a code collision - retry
+          continue;
+        }
+        throw error;
+      }
     }
   }
 

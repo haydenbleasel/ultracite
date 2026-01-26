@@ -38,6 +38,16 @@ export async function processReferral(
         throw new Error("Organization already referred");
       }
 
+      // Check if org already has an active subscription (stripeCustomerId indicates they've subscribed)
+      const referredOrg = await tx.organization.findUnique({
+        where: { id: referredOrganizationId },
+        select: { stripeCustomerId: true },
+      });
+
+      if (referredOrg?.stripeCustomerId) {
+        throw new Error("Organization already subscribed");
+      }
+
       await tx.referral.create({
         data: {
           referrerOrganizationId: code.organizationId,
@@ -55,11 +65,14 @@ export async function processReferral(
     return { success: true };
   } catch (error) {
     if (error instanceof Error) {
-      // Handle both explicit check and unique constraint race condition
-      if (
-        error.message === "Organization already referred" ||
-        error.message.includes("Unique constraint")
-      ) {
+      // Handle explicit checks and unique constraint race condition
+      if (error.message === "Organization already referred") {
+        return { success: false, error: "Organization already referred" };
+      }
+      if (error.message === "Organization already subscribed") {
+        return { success: false, error: "Organization already has a subscription" };
+      }
+      if (error.message.includes("Unique constraint")) {
         return { success: false, error: "Organization already referred" };
       }
     }
