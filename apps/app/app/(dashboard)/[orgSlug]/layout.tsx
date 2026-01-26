@@ -65,7 +65,7 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
 
   return (
     <SidebarProvider className="min-h-auto flex-1">
-      <RepoSidebar />
+      <RepoSidebar orgSlug={orgSlug} />
       <SidebarInset>
         {!isSubscribed && (
           <SubscriptionBanner organizationId={organization.id} />

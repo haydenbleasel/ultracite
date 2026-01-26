@@ -2,6 +2,7 @@ import "server-only";
 
 import { database } from "@repo/backend/database";
 import { Octokit } from "octokit";
+import { processReferral } from "@/lib/referral/process-referral";
 import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
@@ -83,7 +84,8 @@ async function checkGitHubAppInstallation(
 export async function syncGitHubOrganizations(
   providerToken: string,
   userId: string,
-  userEmail: string
+  userEmail: string,
+  referralCode?: string
 ): Promise<{ synced: number; organizations: { id: string; slug: string }[] }> {
   const octokit = new Octokit({ auth: providerToken });
 
@@ -193,6 +195,11 @@ export async function syncGitHubOrganizations(
       },
       update: {}, // Don't update role if membership already exists
     });
+
+    // Process referral if code provided (processReferral handles duplicates gracefully)
+    if (referralCode) {
+      await processReferral(referralCode, organization.id);
+    }
 
     // Check if GitHub App is already installed on this account
     // and auto-link if not already linked

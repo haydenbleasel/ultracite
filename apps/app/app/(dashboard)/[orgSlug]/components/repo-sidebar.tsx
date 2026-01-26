@@ -8,12 +8,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
-import { LifeBuoyIcon } from "lucide-react";
+import { GiftIcon, LifeBuoyIcon } from "lucide-react";
 import Link from "next/link";
 import { getUserOrganizations } from "@/lib/auth";
 import { OrganizationSidebarGroup } from "./organization-sidebar-group";
 
-export const RepoSidebar = async () => {
+interface RepoSidebarProps {
+  orgSlug: string;
+}
+
+export const RepoSidebar = async ({ orgSlug }: RepoSidebarProps) => {
   const userOrgs = await getUserOrganizations();
   const organizations = await database.organization.findMany({
     where: {
@@ -43,6 +47,12 @@ export const RepoSidebar = async () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href={`/${orgSlug}/settings/referrals`}>
+                <GiftIcon className="size-4" />
+                <span>Referrals</span>
+              </Link>
+            </SidebarMenuButton>
             <SidebarMenuButton asChild>
               <Link href={"mailto:hayden@ultracite.ai"}>
                 <LifeBuoyIcon className="size-4" />
