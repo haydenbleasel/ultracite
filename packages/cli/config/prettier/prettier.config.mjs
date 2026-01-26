@@ -9,7 +9,7 @@ const config = {
   arrowParens: "always",
   proseWrap: "never",
   printWidth: 80,
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 };
 
 export default config;
