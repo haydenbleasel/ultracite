@@ -1,5 +1,12 @@
 ## 5.6.0
 
+## 7.1.1
+
+### Patch Changes
+
+- 0e9af01: Automatically add scripts to root package.json
+- 656f6d7: fix(oxlint-remix): ignore unicorn rules for generated routeTree.gen.ts
+
 ## 7.1.0
 
 ### Minor Changes
