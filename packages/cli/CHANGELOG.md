@@ -1,5 +1,18 @@
 ## 5.6.0
 
+## 7.1.0
+
+### Minor Changes
+
+- c201da4: Switch to commander.js, fix multiple agents args
+- e022697: Add support for all provider flags
+
+### Patch Changes
+
+- 64e79c7: fix(eslint): fix eslint rules config
+- a5ae91c: fix(eslint): Remove eslint-plugin-tailwindcss due to v4 incompatibility
+- 5c349a9: Enable tsconfig.json to have comments
+
 ## 7.0.12
 
 ### Patch Changes
