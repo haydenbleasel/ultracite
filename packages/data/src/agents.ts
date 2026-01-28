@@ -248,7 +248,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "A modern terminal with AI-powered command suggestions and workflow automation.",
     config: {
-      path: "WARP.md",
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: warpLogo,
