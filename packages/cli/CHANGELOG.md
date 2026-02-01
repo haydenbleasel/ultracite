@@ -1,5 +1,13 @@
 ## 5.6.0
 
+## 7.1.2
+
+### Patch Changes
+
+- 9d443b6: Fix func-style config in oxlint
+- 3d9b488: Fix: argument --unsafe cannot be used multiple times in this context
+- f06808f: Don't pass options to formatters, only linters
+
 ## 7.1.1
 
 ### Patch Changes

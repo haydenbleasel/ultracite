@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.0
+
+### Minor Changes
+
+- 46e52e3: Switch Warp config file to AGENTS.md
+
 ## 2.0.1
 
 ### Patch Changes
