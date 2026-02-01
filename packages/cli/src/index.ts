@@ -52,7 +52,9 @@ program
     const cmdIndex = process.argv.indexOf("check");
     const allArgs = process.argv.slice(cmdIndex + 1);
     const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    await check(files, passthrough);
+    // Filter out any flags that Commander may have included in files
+    const filteredFiles = files.filter((file: string) => !file.startsWith("--"));
+    await check(filteredFiles, passthrough);
   });
 
 program
@@ -66,7 +68,9 @@ program
     const cmdIndex = process.argv.indexOf("fix");
     const allArgs = process.argv.slice(cmdIndex + 1);
     const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    await fix(files, passthrough);
+    // Filter out any flags that Commander may have included in files
+    const filteredFiles = files.filter((file: string) => !file.startsWith("--"));
+    await fix(filteredFiles, passthrough);
   });
 
 program
