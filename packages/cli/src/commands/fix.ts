@@ -215,13 +215,13 @@ export const fix = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierFix(files, passthrough);
+      await runPrettierFix(files, []);
       await runEslintFix(files, passthrough);
-      await runStylelintFix(files, passthrough);
+      await runStylelintFix(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtFix(files, passthrough);
+      await runOxfmtFix(files, []);
       await runOxlintFix(files, passthrough);
       break;
     }

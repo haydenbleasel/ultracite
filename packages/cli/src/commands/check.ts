@@ -208,13 +208,13 @@ export const check = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierCheck(files, passthrough);
+      await runPrettierCheck(files, []);
       await runEslintCheck(files, passthrough);
-      await runStylelintCheck(files, passthrough);
+      await runStylelintCheck(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtCheck(files, passthrough);
+      await runOxfmtCheck(files, []);
       await runOxlintCheck(files, passthrough);
       break;
     }
