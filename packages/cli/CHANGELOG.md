@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.1.3
+
+### Patch Changes
+
+- c60533d: Fix oxlint import/consistent-type-specifier-style
+
 ## 7.1.2
 
 ### Patch Changes
