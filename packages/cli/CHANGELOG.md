@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.1.4
+
+### Patch Changes
+
+- 34c79bb: Fix conflicting oxlint rules
+
 ## 7.1.3
 
 ### Patch Changes
