@@ -35,9 +35,9 @@
     "id-length": "off",
     "func-style": [
       "error",
+      "expression",
       {
-        "allowArrowFunctions": true,
-        "style": "expression"
+        "allowArrowFunctions": true
       }
     ],
     "arrow-body-style": ["error", "as-needed"],
@@ -49,6 +49,7 @@
     "init-declarations": "off",
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
+    "no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
 
     "import/no-default-export": "off",
     "import/exports-last": "off",
@@ -62,7 +63,7 @@
     "import/group-exports": "off",
     "import/no-commonjs": "off",
     "import/unambiguous": "off",
-    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
     "import/no-dynamic-require": "off",
     "import/no-unassigned-import": "off",
 
@@ -75,6 +76,7 @@
     "unicorn/prefer-global-this": "off",
     "unicorn/no-null": "off",
     "unicorn/prefer-top-level-await": "off",
+    "unicorn/prefer-string-raw": "off",
 
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
@@ -90,6 +92,8 @@
     "oxc/no-optional-chaining": "off",
 
     "promise/catch-or-return": "off",
-    "promise/always-return": "off"
+    "promise/always-return": "off",
+
+    "vitest/prefer-called-times": "off"
   }
 }

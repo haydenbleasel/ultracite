@@ -634,7 +634,6 @@ describe("initialize", () => {
       agents: [],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -676,7 +675,6 @@ describe("initialize", () => {
       agents: ["claude", "cline"],
       integrations: [],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -718,7 +716,6 @@ describe("initialize", () => {
       agents: [],
       integrations: ["husky", "lint-staged"],
       frameworks: [],
-      migrate: [],
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -1027,7 +1024,6 @@ describe("initialize", () => {
         agents: [],
         integrations: [],
         frameworks: [],
-        migrate: [],
       });
     }).toThrow("Install failed");
 
@@ -1231,7 +1227,11 @@ describe("helper functions", () => {
     });
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const writtenContents: string[] = [];
+      const mockWriteFile = mock((_path: string, content: string) => {
+        writtenContents.push(content);
+        return Promise.resolve();
+      });
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -1250,13 +1250,9 @@ describe("helper functions", () => {
 
       await installDependencies("npm", "oxlint", false, true, true);
       expect(mockWriteFile).toHaveBeenCalled();
-
-      // Check that at least one call contains oxlint-tsgolint
-      const hasOxlintTsgolint = mockWriteFile.mock.calls.some(
-        (call) =>
-          typeof call[1] === "string" && call[1].includes("oxlint-tsgolint")
+      expect(writtenContents.some((c) => c.includes("oxlint-tsgolint"))).toBe(
+        true
       );
-      expect(hasOxlintTsgolint).toBe(true);
     });
   });
 

@@ -36,9 +36,10 @@
     "test:coverage": "turbo test:coverage",
     "check": "bun ./packages/cli/src/index.ts check",
     "fix": "bun ./packages/cli/src/index.ts fix",
+    "validate:configs": "bun ./scripts/validate-configs.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",
-    "changeset:publish": "bun build && changeset publish",
+    "changeset:publish": "turbo run build && changeset publish",
     "bump-deps": "npx npm-check-updates --deep -u -x \"recharts,react-resizable-panels\" && bun install",
     "bump-ui": "cd apps/docs && npx shadcn@latest add --all --overwrite && npx shadcn@latest migrate radix"
   },
@@ -47,7 +48,7 @@
     "@changesets/cli": "^2.29.8",
     "@types/node": "catalog:",
     "concurrently": "^9.2.1",
-    "turbo": "^2.7.3",
+    "turbo": "^2.7.5",
     "typescript": "catalog:"
   },
   "packageManager": "bun@1.3.5",

@@ -1,5 +1,8 @@
 import plugin from "@eslint/js";
 
+// Create a new object to avoid mutating the readonly rules object
+const baseRules = { ...plugin.configs.all.rules };
+
 const overrideRules = {
   "no-unused-private-class-members": "off",
   "capitalized-comments": "off",
@@ -25,6 +28,6 @@ const overrideRules = {
   "sort-vars": "off",
 };
 
-const config = Object.assign(plugin.configs.all.rules, overrideRules);
+const config = Object.assign(baseRules, overrideRules);
 
 export default config;

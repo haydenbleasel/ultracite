@@ -1,5 +1,45 @@
 ## 5.6.0
 
+## 7.1.4
+
+### Patch Changes
+
+- 34c79bb: Fix conflicting oxlint rules
+
+## 7.1.3
+
+### Patch Changes
+
+- c60533d: Fix oxlint import/consistent-type-specifier-style
+
+## 7.1.2
+
+### Patch Changes
+
+- 9d443b6: Fix func-style config in oxlint
+- 3d9b488: Fix: argument --unsafe cannot be used multiple times in this context
+- f06808f: Don't pass options to formatters, only linters
+
+## 7.1.1
+
+### Patch Changes
+
+- 0e9af01: Automatically add scripts to root package.json
+- 656f6d7: fix(oxlint-remix): ignore unicorn rules for generated routeTree.gen.ts
+
+## 7.1.0
+
+### Minor Changes
+
+- c201da4: Switch to commander.js, fix multiple agents args
+- e022697: Add support for all provider flags
+
+### Patch Changes
+
+- 64e79c7: fix(eslint): fix eslint rules config
+- a5ae91c: fix(eslint): Remove eslint-plugin-tailwindcss due to v4 incompatibility
+- 5c349a9: Enable tsconfig.json to have comments
+
 ## 7.0.12
 
 ### Patch Changes

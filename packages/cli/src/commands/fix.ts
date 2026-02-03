@@ -1,30 +1,13 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectPackageManager, dlxCommand } from "nypm";
-import { detectLinter, type Linter, parseFilePaths } from "../utils";
-
-interface FixOptions {
-  unsafe?: boolean;
-  linter?: Linter;
-  "type-aware"?: boolean;
-  "type-check"?: boolean;
-  "error-on-warnings"?: boolean;
-}
+import { detectLinter, parseFilePaths } from "../utils";
 
 const runBiomeFix = async (
   files: string[],
-  unsafe?: boolean,
-  errorOnWarnings?: boolean
+  passthrough: string[]
 ): Promise<void> => {
-  const args = ["check", "--write", "--no-errors-on-unmatched"];
-
-  if (unsafe) {
-    args.push("--unsafe");
-  }
-
-  if (errorOnWarnings) {
-    args.push("--error-on-warnings");
-  }
+  const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
     args.push(...parseFilePaths(files));
@@ -54,8 +37,15 @@ const runBiomeFix = async (
   }
 };
 
-const runEslintFix = async (files: string[]): Promise<void> => {
-  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+const runEslintFix = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
+  const args = [
+    "--fix",
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -79,9 +69,13 @@ const runEslintFix = async (files: string[]): Promise<void> => {
   }
 };
 
-const runPrettierFix = async (files: string[]): Promise<void> => {
+const runPrettierFix = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
   const args = [
     "--write",
+    ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
@@ -107,8 +101,15 @@ const runPrettierFix = async (files: string[]): Promise<void> => {
   }
 };
 
-const runStylelintFix = async (files: string[]): Promise<void> => {
-  const args = ["--fix", ...(files.length > 0 ? parseFilePaths(files) : ["."])];
+const runStylelintFix = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
+  const args = [
+    "--fix",
+    ...passthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -134,21 +135,17 @@ const runStylelintFix = async (files: string[]): Promise<void> => {
 
 const runOxlintFix = async (
   files: string[],
-  typeAware?: boolean,
-  typeCheck?: boolean,
-  unsafe?: boolean
+  passthrough: string[]
 ): Promise<void> => {
-  const args = [unsafe ? "--fix-dangerously" : "--fix"];
+  // Check if --unsafe is in passthrough, use --fix-dangerously instead
+  const hasUnsafe = passthrough.includes("--unsafe");
+  const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
 
-  if (typeAware) {
-    args.push("--type-aware");
-  }
-
-  if (typeCheck) {
-    args.push("--type-check");
-  }
-
-  args.push(...(files.length > 0 ? parseFilePaths(files) : ["."]));
+  const args = [
+    hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filteredPassthrough,
+    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+  ];
 
   const detected = await detectPackageManager(process.cwd());
   const pm = detected?.name || "npm";
@@ -172,9 +169,13 @@ const runOxlintFix = async (
   }
 };
 
-const runOxfmtFix = async (files: string[]): Promise<void> => {
+const runOxfmtFix = async (
+  files: string[],
+  passthrough: string[]
+): Promise<void> => {
   const args = [
     "--write",
+    ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
@@ -202,9 +203,9 @@ const runOxfmtFix = async (files: string[]): Promise<void> => {
 
 export const fix = async (
   files: string[],
-  opts: FixOptions = {}
+  passthrough: string[] = []
 ): Promise<void> => {
-  const linter = opts.linter || (await detectLinter());
+  const linter = await detectLinter();
 
   if (!linter) {
     throw new Error(
@@ -214,22 +215,17 @@ export const fix = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierFix(files);
-      await runEslintFix(files);
-      await runStylelintFix(files);
+      await runPrettierFix(files, []);
+      await runEslintFix(files, passthrough);
+      await runStylelintFix(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtFix(files);
-      await runOxlintFix(
-        files,
-        opts["type-aware"],
-        opts["type-check"],
-        opts.unsafe
-      );
+      await runOxfmtFix(files, []);
+      await runOxlintFix(files, passthrough);
       break;
     }
     default:
-      await runBiomeFix(files, opts.unsafe, opts["error-on-warnings"]);
+      await runBiomeFix(files, passthrough);
   }
 };

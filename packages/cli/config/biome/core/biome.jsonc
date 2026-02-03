@@ -619,13 +619,7 @@
     },
     {
       // Package.json and similar JSON config files
-      "includes": [
-        "**/package.json",
-        "**/{tsconfig,jsconfig}.json",
-        "**/tsconfig.*.json",
-        ".vscode/*.json",
-        ".github/**/*.json"
-      ],
+      "includes": ["**/package.json", ".github/**/*.json"],
       "json": {
         "parser": {
           "allowTrailingCommas": true
@@ -633,10 +627,16 @@
       }
     },
     {
-      // JSONC files (JSON with Comments)
-      "includes": ["**/*.jsonc"],
+      // JSONC files (JSON with Comments) - tsconfig.json is technically JSONC
+      "includes": [
+        "**/*.jsonc",
+        "**/{tsconfig,jsconfig}.json",
+        "**/tsconfig.*.json",
+        ".vscode/*.json"
+      ],
       "json": {
         "parser": {
+          "allowComments": true,
           "allowTrailingCommas": true
         }
       }

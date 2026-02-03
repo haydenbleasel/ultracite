@@ -123,7 +123,6 @@ export const installDependencies = async (
         "eslint-plugin-promise@latest",
         "eslint-plugin-sonarjs@latest",
         "eslint-plugin-storybook@latest",
-        "eslint-plugin-tailwindcss@latest",
         "eslint-plugin-unicorn@latest",
         "eslint-plugin-unused-imports@latest",
         "globals@latest",
@@ -179,6 +178,14 @@ export const installDependencies = async (
 
     await updatePackageJson({ devDependencies });
   }
+
+  // Add ultracite scripts to package.json
+  await updatePackageJson({
+    scripts: {
+      check: "ultracite check",
+      fix: "ultracite fix",
+    },
+  });
 
   if (!quiet) {
     s.stop("Dependencies installed.");

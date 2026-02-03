@@ -28,11 +28,6 @@ export const integrations = [
 
 export type Integration = (typeof integrations)[number];
 
-/** Supported migrations */
-export const migrations = ["eslint", "prettier"] as const;
-
-export type Migration = (typeof migrations)[number];
-
 /** All CLI options consolidated */
 export const options = {
   linters: providers.map((provider) => provider.id),
@@ -41,5 +36,4 @@ export const options = {
   integrations,
   hooks: hooks.map((hook) => hook.id),
   frameworks,
-  migrations,
 } as const;
