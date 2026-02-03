@@ -31,7 +31,10 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
     where: { stripeCustomerId: customerId },
     include: {
       referralReceived: {
-        where: { status: "PENDING" },
+        where: {
+          status: "PENDING",
+          referredCreditedAt: null, // Idempotency: skip if already credited
+        },
         include: {
           referrerOrganization: true,
         },
@@ -40,40 +43,65 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   });
 
   if (!org?.referralReceived) {
-    return; // No pending referral
+    return; // No pending referral or already credited
   }
 
   const referral = org.referralReceived;
   const referrerOrg = referral.referrerOrganization;
   const now = new Date();
 
-  // Apply credit to referred org (this org) - using customerId since that's how we found them
-  const referredCredited = await applyCredit(customerId, "Referral signup bonus");
+  // Mark as credited FIRST for idempotency (before Stripe call)
+  // This prevents duplicate credits on webhook retry
+  await database.referral.update({
+    where: { id: referral.id },
+    data: {
+      paidInvoiceId: invoice.id,
+      referredCreditedAt: now,
+    },
+  });
+
+  // Apply credit to referred org
+  const referredCredited = await applyCredit(
+    customerId,
+    "Referral signup bonus"
+  );
+
+  if (!referredCredited) {
+    // Roll back the timestamp if credit failed so it can be retried
+    await database.referral.update({
+      where: { id: referral.id },
+      data: { referredCreditedAt: null },
+    });
+    return;
+  }
 
   // Apply credit to referrer org only if they have a Stripe customer
-  // If not, we'll apply it when they subscribe (via separate check)
+  // If not, we'll apply it when they subscribe (via applyPendingReferrerCredits)
   let referrerCredited = false;
   if (referrerOrg.stripeCustomerId) {
     referrerCredited = await applyCredit(
       referrerOrg.stripeCustomerId,
       `Referral bonus - ${org.name}`
     );
+
+    if (referrerCredited) {
+      await database.referral.update({
+        where: { id: referral.id },
+        data: { referrerCreditedAt: now },
+      });
+    }
   }
 
   // Only mark completed if BOTH credits were actually applied
-  // Keep as PENDING if referrer hasn't subscribed yet (no stripeCustomerId)
+  // Keep as PENDING if referrer hasn't subscribed yet or credit failed
   const canComplete = referredCredited && referrerCredited;
 
-  // Update referral status
-  await database.referral.update({
-    where: { id: referral.id },
-    data: {
-      status: canComplete ? "COMPLETED" : "PENDING",
-      paidInvoiceId: invoice.id,
-      referredCreditedAt: referredCredited ? now : null,
-      referrerCreditedAt: referrerCredited ? now : null,
-    },
-  });
+  if (canComplete) {
+    await database.referral.update({
+      where: { id: referral.id },
+      data: { status: "COMPLETED" },
+    });
+  }
 }
 
 /**
@@ -108,21 +136,33 @@ export async function applyPendingReferrerCredits(invoice: Stripe.Invoice) {
   const now = new Date();
 
   for (const referral of pendingReferrals) {
+    // Mark as credited FIRST for idempotency (before Stripe call)
+    await database.referral.update({
+      where: { id: referral.id },
+      data: { referrerCreditedAt: now },
+    });
+
     const credited = await applyCredit(
       customerId,
       `Referral bonus - ${referral.referredOrganization.name}`
     );
 
-    if (credited) {
-      // Check if referred was also credited to determine if we can complete
-      const canComplete = referral.referredCreditedAt !== null;
-
+    if (!credited) {
+      // Roll back timestamp if credit failed so it can be retried
       await database.referral.update({
         where: { id: referral.id },
-        data: {
-          referrerCreditedAt: now,
-          status: canComplete ? "COMPLETED" : "PENDING",
-        },
+        data: { referrerCreditedAt: null },
+      });
+      continue;
+    }
+
+    // Check if referred was also credited to determine if we can complete
+    const canComplete = referral.referredCreditedAt !== null;
+
+    if (canComplete) {
+      await database.referral.update({
+        where: { id: referral.id },
+        data: { status: "COMPLETED" },
       });
     }
   }

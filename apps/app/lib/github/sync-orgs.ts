@@ -117,6 +117,7 @@ export async function syncGitHubOrganizations(
   ];
 
   const syncedOrganizations: { id: string; slug: string }[] = [];
+  let referralApplied = false; // Track if referral has been applied
 
   // Ensure user exists in database
   await database.user.upsert({
@@ -196,9 +197,13 @@ export async function syncGitHubOrganizations(
       update: {}, // Don't update role if membership already exists
     });
 
-    // Process referral if code provided (processReferral handles duplicates gracefully)
-    if (referralCode) {
-      await processReferral(referralCode, organization.id);
+    // Process referral only for the first org (personal account) to prevent
+    // creating multiple referrals from a single signup
+    if (referralCode && !referralApplied) {
+      const result = await processReferral(referralCode, organization.id);
+      if (result.success) {
+        referralApplied = true;
+      }
     }
 
     // Check if GitHub App is already installed on this account

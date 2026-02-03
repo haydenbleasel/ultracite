@@ -147,9 +147,9 @@ model ReferralCode {
 
 model Referral {
   id                     String         @id @default(cuid())
-  referrerOrganization   Organization   @relation("ReferrerOrganization", fields: [referrerOrganizationId], references: [id])
+  referrerOrganization   Organization   @relation("ReferrerOrganization", fields: [referrerOrganizationId], references: [id], onDelete: Cascade)
   referrerOrganizationId String
-  referredOrganization   Organization   @relation("ReferredOrganization", fields: [referredOrganizationId], references: [id])
+  referredOrganization   Organization   @relation("ReferredOrganization", fields: [referredOrganizationId], references: [id], onDelete: Cascade)
   referredOrganizationId String         @unique // Each org referred once
   status                 ReferralStatus @default(PENDING)
   referrerCreditedAt     DateTime?
