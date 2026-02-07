@@ -1,5 +1,5 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { parse } from "jsonc-parser";
 
 export const exists = async (path: string) => {
@@ -103,38 +103,48 @@ export const ensureDirectory = async (path: string) => {
 
 export type Linter = "biome" | "eslint" | "oxlint";
 
-// Config file patterns for each linter
-const biomeConfigPaths = ["./biome.json", "./biome.jsonc"] as const;
+// Config file names for each linter
+const biomeConfigNames = ["biome.json", "biome.jsonc"] as const;
 
-const eslintConfigPaths = [
-  "./eslint.config.mjs",
-  "./eslint.config.js",
-  "./eslint.config.cjs",
-  "./eslint.config.ts",
-  "./eslint.config.mts",
-  "./eslint.config.cts",
+const eslintConfigNames = [
+  "eslint.config.mjs",
+  "eslint.config.js",
+  "eslint.config.cjs",
+  "eslint.config.ts",
+  "eslint.config.mts",
+  "eslint.config.cts",
 ] as const;
 
-const oxlintConfigPath = "./.oxlintrc.json";
+const oxlintConfigName = ".oxlintrc.json";
 
 export const detectLinter = async (): Promise<Linter | null> => {
-  // Check for biome config
-  for (const path of biomeConfigPaths) {
-    if (await exists(path)) {
-      return "biome";
-    }
-  }
+  let dir = process.cwd();
 
-  // Check for eslint config
-  for (const path of eslintConfigPaths) {
-    if (await exists(path)) {
-      return "eslint";
+  while (true) {
+    // Check for biome config
+    for (const name of biomeConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "biome";
+      }
     }
-  }
 
-  // Check for oxlint config
-  if (await exists(oxlintConfigPath)) {
-    return "oxlint";
+    // Check for eslint config
+    for (const name of eslintConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "eslint";
+      }
+    }
+
+    // Check for oxlint config
+    if (await exists(join(dir, oxlintConfigName))) {
+      return "oxlint";
+    }
+
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
   }
 
   return null;
