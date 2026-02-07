@@ -39,6 +39,18 @@ When you include the `core` preset, you're pulling in Ultracite's base configura
 
 All these defaults aim to enforce consistent style and prevent common errors without manual configuration.
 
+## Safe Fixes
+
+Most Ultracite rules only report errors — they don't automatically modify your code. However, a few rules are configured with `"fix": "safe"`, meaning they will auto-fix when you run `ultracite fix`. These fixes are non-breaking and safe to apply automatically:
+
+| Rule | Description |
+| --- | --- |
+| `noUnusedImports` | Removes unused import statements |
+| `useBlockStatements` | Wraps single-line control flow bodies in curly braces |
+| `useSortedClasses` | Sorts Tailwind CSS classes into a consistent order |
+
+If you want to disable auto-fixing for any of these, override the rule in your config and remove the `fix` property.
+
 ## Overriding Rules
 
 Each linter has its own way to disable or modify rules. For example, to disable the `noAutofocus` rule for Biome, you can do the following:
