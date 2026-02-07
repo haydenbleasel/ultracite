@@ -50,15 +50,23 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   const referrerOrg = referral.referrerOrganization;
   const now = new Date();
 
-  // Mark as credited FIRST for idempotency (before Stripe call)
-  // This prevents duplicate credits on webhook retry
-  await database.referral.update({
-    where: { id: referral.id },
+  // Atomic claim: only one concurrent request can set referredCreditedAt
+  // from null, preventing duplicate Stripe credits on webhook retry
+  const claimed = await database.referral.updateMany({
+    where: {
+      id: referral.id,
+      referredCreditedAt: null,
+      status: "PENDING",
+    },
     data: {
       paidInvoiceId: invoice.id,
       referredCreditedAt: now,
     },
   });
+
+  if (claimed.count === 0) {
+    return;
+  }
 
   // Apply credit to referred org
   const referredCredited = await applyCredit(
@@ -79,16 +87,28 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   // If not, we'll apply it when they subscribe (via applyPendingReferrerCredits)
   let referrerCredited = false;
   if (referrerOrg.stripeCustomerId) {
-    referrerCredited = await applyCredit(
-      referrerOrg.stripeCustomerId,
-      `Referral bonus - ${org.name}`
-    );
+    // Atomic claim for referrer credit
+    const referrerClaimed = await database.referral.updateMany({
+      where: {
+        id: referral.id,
+        referrerCreditedAt: null,
+      },
+      data: { referrerCreditedAt: now },
+    });
 
-    if (referrerCredited) {
-      await database.referral.update({
-        where: { id: referral.id },
-        data: { referrerCreditedAt: now },
-      });
+    if (referrerClaimed.count > 0) {
+      referrerCredited = await applyCredit(
+        referrerOrg.stripeCustomerId,
+        `Referral bonus - ${org.name}`
+      );
+
+      if (!referrerCredited) {
+        // Roll back timestamp if credit failed so it can be retried
+        await database.referral.update({
+          where: { id: referral.id },
+          data: { referrerCreditedAt: null },
+        });
+      }
     }
   }
 
@@ -127,6 +147,7 @@ export async function applyPendingReferrerCredits(invoice: Stripe.Invoice) {
       referrerOrganizationId: org.id,
       referrerCreditedAt: null,
       paidInvoiceId: { not: null }, // Referred org has already paid
+      referredCreditedAt: { not: null }, // Referred org credit was applied
     },
     include: {
       referredOrganization: true,
@@ -136,11 +157,19 @@ export async function applyPendingReferrerCredits(invoice: Stripe.Invoice) {
   const now = new Date();
 
   for (const referral of pendingReferrals) {
-    // Mark as credited FIRST for idempotency (before Stripe call)
-    await database.referral.update({
-      where: { id: referral.id },
+    // Atomic claim: only one concurrent request can set referrerCreditedAt
+    // from null, preventing duplicate Stripe credits on webhook retry
+    const claimed = await database.referral.updateMany({
+      where: {
+        id: referral.id,
+        referrerCreditedAt: null,
+      },
       data: { referrerCreditedAt: now },
     });
+
+    if (claimed.count === 0) {
+      continue;
+    }
 
     const credited = await applyCredit(
       customerId,
