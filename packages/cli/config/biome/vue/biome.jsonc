@@ -7,6 +7,16 @@
 			"indentScriptAndStyle": true
 		}
 	},
+	// Disable organizeImports for Vue files — Biome's import organizer
+	// incorrectly removes all imports in template-based files when used with
+	// experimentalFullSupportEnabled. Upstream: https://github.com/biomejs/biome/issues/8596
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "off"
+			}
+		}
+	},
 	"overrides": [
 		{
 			"includes": ["**/*.vue"],
