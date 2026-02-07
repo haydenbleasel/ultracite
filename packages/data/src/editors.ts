@@ -442,7 +442,7 @@ alwaysApply: false
   },
   {
     id: "trae",
-    name: "Trae AI",
+    name: "Trae",
     subtitle: "ByteDance's AI IDE",
     description:
       "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
