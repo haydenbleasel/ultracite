@@ -45,16 +45,14 @@ export async function runClaudeCode(
   const escapedApiKey = env.VERCEL_AI_GATEWAY_API_KEY.replace(/'/g, "'\\''");
 
   // Run claude with Vercel AI Gateway env vars set inline
-  let result;
-
-  try {
-    result = await sandbox.runCommand("sh", [
+  const result = await sandbox
+    .runCommand("sh", [
       "-c",
       `ANTHROPIC_BASE_URL='https://ai-gateway.vercel.sh' ANTHROPIC_AUTH_TOKEN='${escapedApiKey}' ANTHROPIC_API_KEY='' claude -p '${escapedPrompt}' --dangerously-skip-permissions --model claude-haiku-4-5 --max-turns 30 --output-format json`,
-    ]);
-  } catch (error) {
-    throw new Error(`Failed to run Claude Code: ${parseError(error)}`);
-  }
+    ])
+    .catch((error: unknown) => {
+      throw new Error(`Failed to run Claude Code: ${parseError(error)}`);
+    });
 
   // Get the output
   const output = await result.output("both");

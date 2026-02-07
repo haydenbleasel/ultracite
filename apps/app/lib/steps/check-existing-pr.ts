@@ -15,15 +15,13 @@ export async function checkExistingPR(
 
   const [owner, repo] = repoFullName.split("/");
 
-  let octokit;
-
-  try {
-    octokit = await getInstallationOctokit(installationId);
-  } catch (error) {
-    throw new Error(
-      `[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`
-    );
-  }
+  const octokit = await getInstallationOctokit(installationId).catch(
+    (error: unknown) => {
+      throw new Error(
+        `[checkExistingPR] Failed to get GitHub client: ${parseError(error)}`
+      );
+    }
+  );
 
   // List open PRs and check if any have a head branch starting with ultracite/fix-
   let pulls: Awaited<ReturnType<typeof octokit.rest.pulls.list>>["data"];

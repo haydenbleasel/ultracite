@@ -13,15 +13,13 @@ export async function recordBillingUsage(
   // Get the step's unique ID - stable across retries
   const { stepId } = getStepMetadata();
 
-  let lintRun;
-
-  try {
-    lintRun = await database.lintRun.findUnique({
+  const lintRun = await database.lintRun
+    .findUnique({
       where: { id: lintRunId },
+    })
+    .catch((error: unknown) => {
+      throw new Error(`Failed to fetch lint run: ${parseError(error)}`);
     });
-  } catch (error) {
-    throw new Error(`Failed to fetch lint run: ${parseError(error)}`);
-  }
 
   if (!lintRun) {
     throw new FatalError(`Lint run not found: ${lintRunId}`);

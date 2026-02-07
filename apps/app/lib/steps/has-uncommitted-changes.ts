@@ -16,15 +16,13 @@ export async function hasUncommittedChanges(
     );
   }
 
-  let diffResult;
-
-  try {
-    diffResult = await sandbox.runCommand("git", ["diff", "--name-only"]);
-  } catch (error) {
-    throw new Error(
-      `[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`
-    );
-  }
+  const diffResult = await sandbox
+    .runCommand("git", ["diff", "--name-only"])
+    .catch((error: unknown) => {
+      throw new Error(
+        `[hasUncommittedChanges] Failed to check git diff: ${parseError(error)}`
+      );
+    });
 
   const diffOutput = await diffResult.stdout();
 

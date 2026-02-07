@@ -1,5 +1,7 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { syncGitHubOrganizations } from "@/lib/github/sync-orgs";
+import { REFERRAL_COOKIE } from "@/lib/referral/constants";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -34,11 +36,21 @@ export async function GET(request: Request) {
 
   if (providerToken && userId) {
     try {
+      // Get referral code from cookie
+      const cookieStore = await cookies();
+      const referralCode = cookieStore.get(REFERRAL_COOKIE)?.value;
+
       const { organizations } = await syncGitHubOrganizations(
         providerToken,
         userId,
-        userEmail
+        userEmail,
+        referralCode
       );
+
+      // Clear referral cookie after use
+      if (referralCode) {
+        cookieStore.delete(REFERRAL_COOKIE);
+      }
 
       // Redirect to first organization if available
       if (organizations.length > 0 && next === "/") {

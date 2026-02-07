@@ -1024,7 +1024,7 @@ describe("initialize", () => {
         agents: [],
         integrations: [],
         frameworks: [],
-        });
+      });
     }).toThrow("Install failed");
 
     expect(mockLog.error).toHaveBeenCalled();

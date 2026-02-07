@@ -17,17 +17,11 @@ export async function createBranch(sandboxId: string): Promise<string> {
 
   const branchName = `ultracite/fix-${nanoid()}`;
 
-  let checkoutResult;
-
-  try {
-    checkoutResult = await sandbox.runCommand("git", [
-      "checkout",
-      "-b",
-      branchName,
-    ]);
-  } catch (error) {
-    throw new Error(`Failed to create branch: ${parseError(error)}`);
-  }
+  const checkoutResult = await sandbox
+    .runCommand("git", ["checkout", "-b", branchName])
+    .catch((error: unknown) => {
+      throw new Error(`Failed to create branch: ${parseError(error)}`);
+    });
 
   if (checkoutResult.exitCode !== 0) {
     const output = await checkoutResult.output("both");

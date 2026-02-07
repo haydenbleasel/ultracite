@@ -139,7 +139,7 @@ describe("fix", () => {
 
   test("exits with status code when biome fix finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -267,7 +267,7 @@ describe("fix", () => {
 
   test("eslint fix exits with status code when prettier fails", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -468,7 +468,7 @@ describe("fix", () => {
 
   test("oxlint fix exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
