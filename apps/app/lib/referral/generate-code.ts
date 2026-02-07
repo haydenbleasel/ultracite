@@ -2,6 +2,7 @@ import "server-only";
 
 import { database } from "@repo/backend/database";
 import { customAlphabet } from "nanoid";
+import { env } from "@/lib/env";
 
 // 8-char lowercase alphanumeric for clean URLs
 const generateCode = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 8);
@@ -58,7 +59,7 @@ export async function getOrCreateReferralCode(organizationId: string) {
 export function getReferralUrl(code: string) {
   const baseUrl =
     process.env.NODE_ENV === "production"
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3002";
 
   return `${baseUrl}/r/${code}`;
