@@ -37,12 +37,8 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
     },
   });
 
-  // Idempotency: skip if no referral, not pending, or already credited
-  if (
-    !org?.referralReceived ||
-    org.referralReceived.status !== "PENDING" ||
-    org.referralReceived.referredCreditedAt !== null
-  ) {
+  // Skip if no referral or already fully completed
+  if (!org?.referralReceived || org.referralReceived.status !== "PENDING") {
     return;
   }
 
@@ -50,43 +46,45 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   const referrerOrg = referral.referrerOrganization;
   const now = new Date();
 
-  // Atomic claim: only one concurrent request can set referredCreditedAt
-  // from null, preventing duplicate Stripe credits on webhook retry
-  const claimed = await database.referral.updateMany({
-    where: {
-      id: referral.id,
-      referredCreditedAt: null,
-      status: "PENDING",
-    },
-    data: {
-      paidInvoiceId: invoice.id,
-      referredCreditedAt: now,
-    },
-  });
-
-  if (claimed.count === 0) {
-    return;
-  }
-
-  // Apply credit to referred org
-  const referredCredited = await applyCredit(
-    customerId,
-    "Referral signup bonus"
-  );
+  // Apply referred org credit if not already done
+  let referredCredited = referral.referredCreditedAt !== null;
 
   if (!referredCredited) {
-    // Roll back claim if credit failed so it can be retried
-    await database.referral.update({
-      where: { id: referral.id },
-      data: { referredCreditedAt: null, paidInvoiceId: null },
+    // Atomic claim: only one concurrent request can set referredCreditedAt
+    // from null, preventing duplicate Stripe credits on webhook retry
+    const claimed = await database.referral.updateMany({
+      where: {
+        id: referral.id,
+        referredCreditedAt: null,
+        status: "PENDING",
+      },
+      data: {
+        paidInvoiceId: invoice.id,
+        referredCreditedAt: now,
+      },
     });
-    return;
+
+    if (claimed.count === 0) {
+      return;
+    }
+
+    referredCredited = await applyCredit(customerId, "Referral signup bonus");
+
+    if (!referredCredited) {
+      // Roll back claim if credit failed so it can be retried
+      await database.referral.update({
+        where: { id: referral.id },
+        data: { referredCreditedAt: null, paidInvoiceId: null },
+      });
+      return;
+    }
   }
 
   // Apply credit to referrer org only if they have a Stripe customer
   // If not, we'll apply it when they subscribe (via applyPendingReferrerCredits)
-  let referrerCredited = false;
-  if (referrerOrg.stripeCustomerId) {
+  let referrerCredited = referral.referrerCreditedAt !== null;
+
+  if (!referrerCredited && referrerOrg.stripeCustomerId) {
     // Atomic claim for referrer credit
     const referrerClaimed = await database.referral.updateMany({
       where: {
@@ -114,9 +112,7 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
 
   // Only mark completed if BOTH credits were actually applied
   // Keep as PENDING if referrer hasn't subscribed yet or credit failed
-  const canComplete = referredCredited && referrerCredited;
-
-  if (canComplete) {
+  if (referredCredited && referrerCredited) {
     await database.referral.update({
       where: { id: referral.id },
       data: { status: "COMPLETED" },
