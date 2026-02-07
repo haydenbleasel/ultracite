@@ -3,8 +3,7 @@ import "server-only";
 import { database } from "@repo/backend/database";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-
-const REFERRAL_CREDIT_CENTS = 500; // $5.00
+import { REFERRAL_CREDIT_CENTS } from "./constants";
 
 async function applyCredit(
   customerId: string,
@@ -31,10 +30,6 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
     where: { stripeCustomerId: customerId },
     include: {
       referralReceived: {
-        where: {
-          status: "PENDING",
-          referredCreditedAt: null, // Idempotency: skip if already credited
-        },
         include: {
           referrerOrganization: true,
         },
@@ -42,8 +37,13 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
     },
   });
 
-  if (!org?.referralReceived) {
-    return; // No pending referral or already credited
+  // Idempotency: skip if no referral, not pending, or already credited
+  if (
+    !org?.referralReceived ||
+    org.referralReceived.status !== "PENDING" ||
+    org.referralReceived.referredCreditedAt !== null
+  ) {
+    return;
   }
 
   const referral = org.referralReceived;

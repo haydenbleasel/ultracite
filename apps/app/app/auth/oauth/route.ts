@@ -2,8 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { syncGitHubOrganizations } from "@/lib/github/sync-orgs";
 import { createClient } from "@/lib/supabase/server";
-
-const REFERRAL_COOKIE = "ultracite_referral";
+import { REFERRAL_COOKIE } from "@/lib/referral/constants";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);

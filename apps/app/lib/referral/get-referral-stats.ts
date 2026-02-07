@@ -2,8 +2,7 @@ import "server-only";
 
 import { database } from "@repo/backend/database";
 import { stripe } from "@/lib/stripe";
-
-const REFERRAL_CREDIT_CENTS = 500; // $5.00
+import { REFERRAL_CREDIT_CENTS } from "./constants";
 
 export type ReferralStats = {
   creditBalanceCents: number;
