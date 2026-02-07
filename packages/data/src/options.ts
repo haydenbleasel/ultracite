@@ -14,6 +14,7 @@ export const frameworks = [
   "remix",
   "angular",
   "astro",
+  "nestjs",
 ] as const;
 
 export type Framework = (typeof frameworks)[number];

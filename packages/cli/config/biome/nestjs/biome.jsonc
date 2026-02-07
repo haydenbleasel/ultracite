@@ -1,0 +1,20 @@
+{
+	"root": false,
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"linter": {
+		"rules": {
+			"complexity": {
+				// NestJS uses dependency injection via constructor parameter properties
+				"noUselessConstructor": "off",
+				// NestJS modules are decorator-driven classes that may appear static-only
+				"noStaticOnlyClass": "off"
+			},
+			"style": {
+				// NestJS relies on constructor parameter properties for DI
+				"noParameterProperties": "off",
+				// NestJS ecosystem commonly uses enums for roles, status codes, etc.
+				"noEnum": "off"
+			}
+		}
+	}
+}

@@ -9,6 +9,7 @@ import type { ComponentType } from "react";
 import {
   Angular,
   Astro,
+  Nestjs,
   Nextjs,
   Qwik,
   React,
@@ -63,6 +64,11 @@ export const frameworks = [
     label: "Astro",
     logo: Astro,
     presets: ["core", "astro"],
+  },
+  {
+    label: "NestJS",
+    logo: Nestjs,
+    presets: ["core", "nestjs"],
   },
 ];
 

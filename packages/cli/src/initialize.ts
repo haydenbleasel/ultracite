@@ -796,6 +796,7 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Angular", value: "angular" },
             { label: "Remix / TanStack Router / React Router", value: "remix" },
             { label: "Astro", value: "astro" },
+            { label: "NestJS", value: "nestjs" },
           ],
           required: false,
         });
