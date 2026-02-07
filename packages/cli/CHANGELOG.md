@@ -1,5 +1,15 @@
 ## 5.6.0
 
+## 7.1.5
+
+### Patch Changes
+
+- c8fdacf: fix: detectLinter() doesn't walk up directory tree, Breaks monorepo subdirectory usage
+- c79c3b0: Fix lefthook file configuration
+- 4b9d206: Make useBlockStatements fix safe
+- 8e9e728: Add support for NestJS
+- d0ae8f3: Fix: Biome removes all imports in Svelte files on save instead of organizing them
+
 ## 7.1.4
 
 ### Patch Changes

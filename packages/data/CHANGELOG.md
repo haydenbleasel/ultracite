@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.1
+
+### Patch Changes
+
+- 8e9e728: Add support for NestJS
+
 ## 2.1.0
 
 ### Minor Changes
