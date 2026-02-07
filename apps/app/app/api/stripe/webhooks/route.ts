@@ -67,10 +67,17 @@ export const POST = async (request: NextRequest) => {
 
       // Only apply referral credits on first invoice (subscription creation)
       if (invoice.billing_reason === "subscription_create") {
-        // Apply credits to referred org and referrer (if they have a subscription)
-        await applyReferralCredits(invoice);
-        // Apply any pending referrer credits (if this org referred others who already paid)
-        await applyPendingReferrerCredits(invoice);
+        // Run independently so one failure doesn't block the other
+        const results = await Promise.allSettled([
+          applyReferralCredits(invoice),
+          applyPendingReferrerCredits(invoice),
+        ]);
+
+        for (const result of results) {
+          if (result.status === "rejected") {
+            console.error("Referral credit error:", result.reason);
+          }
+        }
       }
 
       return new Response("OK", { status: 200 });

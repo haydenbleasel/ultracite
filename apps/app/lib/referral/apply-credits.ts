@@ -75,10 +75,10 @@ export async function applyReferralCredits(invoice: Stripe.Invoice) {
   );
 
   if (!referredCredited) {
-    // Roll back the timestamp if credit failed so it can be retried
+    // Roll back claim if credit failed so it can be retried
     await database.referral.update({
       where: { id: referral.id },
-      data: { referredCreditedAt: null },
+      data: { referredCreditedAt: null, paidInvoiceId: null },
     });
     return;
   }
@@ -185,14 +185,10 @@ export async function applyPendingReferrerCredits(invoice: Stripe.Invoice) {
       continue;
     }
 
-    // Check if referred was also credited to determine if we can complete
-    const canComplete = referral.referredCreditedAt !== null;
-
-    if (canComplete) {
-      await database.referral.update({
-        where: { id: referral.id },
-        data: { status: "COMPLETED" },
-      });
-    }
+    // Referred credit already confirmed by query filter, mark completed
+    await database.referral.update({
+      where: { id: referral.id },
+      data: { status: "COMPLETED" },
+    });
   }
 }
