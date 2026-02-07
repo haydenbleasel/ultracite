@@ -19,14 +19,14 @@ const createLefthookConfig = (
 ) => `pre-commit:
   jobs:
     - run: ${createUltraciteCommand(packageManager)}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true
 `;
 
@@ -83,14 +83,14 @@ export const lefthook = {
       if (existingContents.includes("jobs:")) {
         // Add ultracite job to existing jobs array
         const ultraciteJob = `    - run: ${ultraciteCommand}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_JOBS_REGEX,
@@ -101,14 +101,14 @@ export const lefthook = {
         // Add jobs section to existing pre-commit
         const jobsSection = `  jobs:
     - run: ${ultraciteCommand}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_REGEX,
