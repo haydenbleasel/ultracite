@@ -114,7 +114,7 @@ describe("check", () => {
 
   test("exits with status code when biome check finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -415,7 +415,7 @@ describe("check", () => {
 
   test("eslint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -440,7 +440,7 @@ describe("check", () => {
 
   test("oxlint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => {});
+    const mockExit = mock(() => undefined);
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,

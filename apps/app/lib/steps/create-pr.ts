@@ -26,15 +26,13 @@ export async function createPullRequest(
     changelog,
   } = params;
 
-  let octokit;
-
-  try {
-    octokit = await getInstallationOctokit(installationId);
-  } catch (error) {
-    throw new Error(
-      `[createPullRequest] Failed to get GitHub client: ${parseError(error)}`
-    );
-  }
+  const octokit = await getInstallationOctokit(installationId).catch(
+    (error: unknown) => {
+      throw new Error(
+        `[createPullRequest] Failed to get GitHub client: ${parseError(error)}`
+      );
+    }
+  );
 
   const [owner, repo] = repoFullName.split("/");
 

@@ -81,6 +81,68 @@ async function checkGitHubAppInstallation(
   }
 }
 
+async function upsertOrganization(org: GitHubOrg) {
+  const slug = org.login.toLowerCase();
+
+  try {
+    return await database.organization.upsert({
+      where: { githubOrgId: org.id },
+      create: {
+        name: org.name ?? org.login,
+        slug,
+        githubOrgId: org.id,
+        githubOrgLogin: org.login,
+        githubOrgType: org.type,
+      },
+      update: {
+        name: org.name ?? org.login,
+        githubOrgLogin: org.login,
+        githubOrgType: org.type,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("Unique constraint")) {
+      const existing = await database.organization.findUnique({
+        where: { githubOrgId: org.id },
+      });
+
+      if (!existing) {
+        console.warn(
+          `Skipping org ${org.login}: slug "${slug}" is taken by another organization`
+        );
+      }
+
+      return existing;
+    }
+    throw error;
+  }
+}
+
+async function syncInstallation(
+  organization: { id: string; githubInstallationId: number | null },
+  org: GitHubOrg
+) {
+  if (organization.githubInstallationId) {
+    await syncRepositories(organization.id, organization.githubInstallationId);
+    return;
+  }
+
+  const installation = await checkGitHubAppInstallation(org.login, org.type);
+
+  if (installation) {
+    await database.organization.update({
+      where: { id: organization.id },
+      data: {
+        githubInstallationId: installation.id,
+        githubAccountLogin: org.login,
+        installedAt: new Date(installation.createdAt),
+      },
+    });
+
+    await syncRepositories(organization.id, installation.id);
+  }
+}
+
 export async function syncGitHubOrganizations(
   providerToken: string,
   userId: string,
@@ -89,18 +151,13 @@ export async function syncGitHubOrganizations(
 ): Promise<{ synced: number; organizations: { id: string; slug: string }[] }> {
   const octokit = new Octokit({ auth: providerToken });
 
-  // Fetch the authenticated user's info (for personal account)
   const { data: user } = await octokit.rest.users.getAuthenticated();
 
-  // Fetch all organizations the user belongs to (with pagination)
   const orgs = await octokit.paginate(
     octokit.rest.orgs.listForAuthenticatedUser,
-    {
-      per_page: 100,
-    }
+    { per_page: 100 }
   );
 
-  // Combine personal account and organizations
   const allOrgs: GitHubOrg[] = [
     {
       id: user.id,
@@ -112,14 +169,13 @@ export async function syncGitHubOrganizations(
       id: org.id,
       login: org.login,
       type: "Organization" as const,
-      name: org.login, // GitHub orgs don't always have a display name in this endpoint
+      name: org.login,
     })),
   ];
 
   const syncedOrganizations: { id: string; slug: string }[] = [];
-  let referralApplied = false; // Track if referral has been applied
+  let referralApplied = false;
 
-  // Ensure user exists in database
   await database.user.upsert({
     where: { id: userId },
     create: { id: userId, email: userEmail },
@@ -127,59 +183,12 @@ export async function syncGitHubOrganizations(
   });
 
   for (const org of allOrgs) {
-    // Generate a slug from the login (already lowercase with valid chars)
-    const slug = org.login.toLowerCase();
+    const organization = await upsertOrganization(org);
 
-    // Use upsert to atomically find-or-create the organization by GitHub ID
-    // This prevents race conditions when multiple users from the same org log in simultaneously
-    let organization: {
-      id: string;
-      slug: string;
-      githubInstallationId: number | null;
-    } | null = null;
-
-    try {
-      organization = await database.organization.upsert({
-        where: { githubOrgId: org.id },
-        create: {
-          name: org.name ?? org.login,
-          slug,
-          githubOrgId: org.id,
-          githubOrgLogin: org.login,
-          githubOrgType: org.type,
-        },
-        update: {
-          name: org.name ?? org.login,
-          githubOrgLogin: org.login,
-          githubOrgType: org.type,
-        },
-      });
-    } catch (error) {
-      // Handle slug unique constraint violation - another org already has this slug
-      // This can happen if a different GitHub org claimed the slug first
-      if (
-        error instanceof Error &&
-        error.message.includes("Unique constraint")
-      ) {
-        // Try to find the org by githubOrgId in case it was created by a concurrent request
-        organization = await database.organization.findUnique({
-          where: { githubOrgId: org.id },
-        });
-
-        if (!organization) {
-          // Slug is taken by a different org - skip this one
-          console.warn(
-            `Skipping org ${org.login}: slug "${slug}" is taken by another organization`
-          );
-          continue;
-        }
-      } else {
-        throw error;
-      }
+    if (!organization) {
+      continue;
     }
 
-    // Add user as member if not already (using upsert to prevent race conditions)
-    // For personal account, user is owner. For orgs, start as member
     const role = org.type === "User" ? "OWNER" : "MEMBER";
 
     await database.organizationMember.upsert({
@@ -194,11 +203,9 @@ export async function syncGitHubOrganizations(
         organizationId: organization.id,
         role,
       },
-      update: {}, // Don't update role if membership already exists
+      update: {},
     });
 
-    // Process referral only for the first org (personal account) to prevent
-    // creating multiple referrals from a single signup
     if (referralCode && !referralApplied) {
       const result = await processReferral(referralCode, organization.id);
       if (result.success) {
@@ -206,35 +213,7 @@ export async function syncGitHubOrganizations(
       }
     }
 
-    // Check if GitHub App is already installed on this account
-    // and auto-link if not already linked
-    if (organization.githubInstallationId) {
-      // Already has installation, just sync repos to ensure they're up to date
-      await syncRepositories(
-        organization.id,
-        organization.githubInstallationId
-      );
-    } else {
-      const installation = await checkGitHubAppInstallation(
-        org.login,
-        org.type
-      );
-
-      if (installation) {
-        // Link the installation to this organization
-        await database.organization.update({
-          where: { id: organization.id },
-          data: {
-            githubInstallationId: installation.id,
-            githubAccountLogin: org.login,
-            installedAt: new Date(installation.createdAt),
-          },
-        });
-
-        // Sync repositories from the installation
-        await syncRepositories(organization.id, installation.id);
-      }
-    }
+    await syncInstallation(organization, org);
 
     syncedOrganizations.push({
       id: organization.id,

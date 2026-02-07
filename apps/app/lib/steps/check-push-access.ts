@@ -16,15 +16,13 @@ export async function checkPushAccess(
 
   const [owner, repo] = repoFullName.split("/");
 
-  let octokit;
-
-  try {
-    octokit = await getInstallationOctokit(installationId);
-  } catch (error) {
-    throw new Error(
-      `[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`
-    );
-  }
+  const octokit = await getInstallationOctokit(installationId).catch(
+    (error: unknown) => {
+      throw new Error(
+        `[checkPushAccess] Failed to get GitHub client: ${parseError(error)}`
+      );
+    }
+  );
 
   // Check if the repository is archived
   let repoData: Awaited<ReturnType<typeof octokit.rest.repos.get>>["data"];

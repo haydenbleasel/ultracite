@@ -4,10 +4,8 @@ import { parseError } from "@/lib/error";
 export async function createLintRun(organizationId: string, repoId: string) {
   "use step";
 
-  let lintRun;
-
-  try {
-    lintRun = await database.lintRun.create({
+  const lintRun = await database.lintRun
+    .create({
       data: {
         organizationId,
         repoId,
@@ -17,10 +15,10 @@ export async function createLintRun(organizationId: string, repoId: string) {
       select: {
         id: true,
       },
+    })
+    .catch((error: unknown) => {
+      throw new Error(`Failed to create lint run: ${parseError(error)}`);
     });
-  } catch (error) {
-    throw new Error(`Failed to create lint run: ${parseError(error)}`);
-  }
 
   return lintRun.id;
 }

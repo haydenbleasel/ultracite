@@ -4,7 +4,7 @@ import { database } from "@repo/backend/database";
 import { stripe } from "@/lib/stripe";
 import { REFERRAL_CREDIT_CENTS } from "./constants";
 
-export type ReferralStats = {
+export interface ReferralStats {
   creditBalanceCents: number;
   totalReferrals: number;
   completedReferrals: number;
@@ -23,7 +23,7 @@ export type ReferralStats = {
     creditedAt: Date | null;
     createdAt: Date;
   } | null;
-};
+}
 
 export async function getReferralStats(
   organizationId: string,
@@ -68,7 +68,8 @@ export async function getReferralStats(
   const completedReferralsList = referralsGiven.filter(
     (r) => r.status === "COMPLETED"
   );
-  const totalEarnedCents = completedReferralsList.length * REFERRAL_CREDIT_CENTS;
+  const totalEarnedCents =
+    completedReferralsList.length * REFERRAL_CREDIT_CENTS;
 
   return {
     creditBalanceCents,

@@ -29,13 +29,11 @@ export async function installDependencies(sandboxId: string): Promise<void> {
   }
 
   // Detect the package manager using `ni -v`
-  let result;
-
-  try {
-    result = await sandbox.runCommand("ni", ["-v"]);
-  } catch (error) {
-    throw new Error(`Failed to detect package manager: ${parseError(error)}`);
-  }
+  const result = await sandbox
+    .runCommand("ni", ["-v"])
+    .catch((error: unknown) => {
+      throw new Error(`Failed to detect package manager: ${parseError(error)}`);
+    });
 
   const output = await result.stdout();
 

@@ -5,11 +5,11 @@ import {
   getReferralUrl,
 } from "@/lib/referral/generate-code";
 
-export type ReferralCode = {
+export interface ReferralCode {
   code: string;
   url: string;
   timesUsed: number;
-};
+}
 
 export async function getReferralCode(
   organizationId: string

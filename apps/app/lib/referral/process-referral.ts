@@ -70,7 +70,10 @@ export async function processReferral(
         return { success: false, error: "Organization already referred" };
       }
       if (error.message === "Organization already subscribed") {
-        return { success: false, error: "Organization already has a subscription" };
+        return {
+          success: false,
+          error: "Organization already has a subscription",
+        };
       }
       if (error.message.includes("Unique constraint")) {
         return { success: false, error: "Organization already referred" };

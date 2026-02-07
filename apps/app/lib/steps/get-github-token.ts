@@ -4,26 +4,19 @@ import { getInstallationOctokit } from "@/lib/github/app";
 export async function getGitHubToken(installationId: number): Promise<string> {
   "use step";
 
-  let octokit;
+  const octokit = await getInstallationOctokit(installationId).catch(
+    (error: unknown) => {
+      throw new Error(
+        `[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`
+      );
+    }
+  );
 
-  try {
-    octokit = await getInstallationOctokit(installationId);
-  } catch (error) {
-    throw new Error(
-      `[getGitHubToken] Failed to get GitHub client: ${parseError(error)}`
-    );
-  }
-
-  let token;
-
-  try {
-    const auth = (await octokit.auth({
-      type: "installation",
-    })) as { token: string };
-    token = auth.token;
-  } catch (error) {
+  const auth = await (
+    octokit.auth({ type: "installation" }) as Promise<{ token: string }>
+  ).catch((error: unknown) => {
     throw new Error(`Failed to get GitHub token: ${parseError(error)}`);
-  }
+  });
 
-  return token;
+  return auth.token;
 }

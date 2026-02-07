@@ -2,6 +2,7 @@ import { database } from "@repo/backend/database";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { REFERRAL_COOKIE } from "@/lib/referral/constants";
+
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 
 export const GET = async (
