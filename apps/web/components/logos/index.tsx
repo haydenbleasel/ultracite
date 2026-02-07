@@ -2,14 +2,19 @@ import Image from "next/image";
 import Adobe from "./adobe.svg";
 import Arcade from "./arcade.svg";
 import AlanTuringInstitute from "./ati.svg";
+import AugmentCode from "./augment.svg";
 import Axiom from "./axiom.svg";
 import Clerk from "./clerk.svg";
 import Consent from "./consent.svg";
 import ElevenLabs from "./elevenlabs.svg";
 import FrenchGovernment from "./french-government.svg";
 import MagicUI from "./magic-ui.svg";
+import Mintlify from "./mintlify.svg";
+import Moonshot from "./moonshot.svg";
 import Profound from "./profound.svg";
+import Raycast from "./raycast.svg";
 import Redpanda from "./redpanda.svg";
+import Sentry from "./sentry.svg";
 import Tencent from "./tencent.svg";
 import VA from "./va.svg";
 import Vercel from "./vercel.svg";
@@ -33,7 +38,7 @@ const logos = [
     src: Clerk,
   },
   {
-    name: "Alan Turing Institite",
+    name: "Alan Turing Institute",
     src: AlanTuringInstitute,
   },
   {
@@ -75,6 +80,26 @@ const logos = [
   {
     name: "ElevenLabs",
     src: ElevenLabs,
+  },
+  {
+    name: "Mintlify",
+    src: Mintlify,
+  },
+  {
+    name: "Sentry",
+    src: Sentry,
+  },
+  {
+    name: "Raycast",
+    src: Raycast,
+  },
+  {
+    name: "Moonshot",
+    src: Moonshot,
+  },
+  {
+    name: "Augment Code",
+    src: AugmentCode,
   },
 ];
 
