@@ -123,6 +123,7 @@ describe("husky", () => {
       const writeCall = mockWriteFile.mock.calls[0];
       expect(writeCall[0]).toBe("./.husky/pre-commit");
       expect(writeCall[1]).toContain("#!/bin/sh");
+      expect(writeCall[1]).toContain("set +e");
       expect(writeCall[1]).toContain("npx ultracite fix");
     });
   });
