@@ -8,77 +8,43 @@ import {
 } from "nypm";
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
-const createHookScript = (command: string) => `#!/bin/sh
+const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
+${lintStagedCommand}
+`;
+
+const createStandaloneHookScript = (command: string) => `#!/bin/sh
 # Exit on any error
 set -e
 
 # Check if there are any staged files
-if [ -z "$(git diff --cached --name-only)" ]; then
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+if [ -z "$STAGED_FILES" ]; then
   echo "No staged files to format"
   exit 0
 fi
 
-# Store the hash of staged changes to detect modifications
-STAGED_HASH=$(git diff --cached | sha256sum | cut -d' ' -f1)
-
-# Save list of staged files (handling all file states)
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
-PARTIALLY_STAGED=$(git diff --name-only)
-
-# Stash unstaged changes to preserve working directory
-# --keep-index keeps staged changes in working tree
-git stash push --quiet --keep-index --message "pre-commit-stash" || true
-STASHED=$?
-
-# Run formatter on the staged files
+# Run formatter
 ${command}
 FORMAT_EXIT_CODE=$?
 
-# Restore working directory state
-if [ $STASHED -eq 0 ]; then
-  # Re-stage the formatted files
-  if [ -n "$STAGED_FILES" ]; then
-    echo "$STAGED_FILES" | while IFS= read -r file; do
-      if [ -f "$file" ]; then
-        git add "$file"
-      fi
-    done
+# Re-stage files that were already staged
+echo "$STAGED_FILES" | while IFS= read -r file; do
+  if [ -f "$file" ]; then
+    git add "$file"
   fi
-  
-  # Restore unstaged changes
-  git stash pop --quiet || true
-  
-  # Restore partial staging if files were partially staged
-  if [ -n "$PARTIALLY_STAGED" ]; then
-    for file in $PARTIALLY_STAGED; do
-      if [ -f "$file" ] && echo "$STAGED_FILES" | grep -q "^$file$"; then
-        # File was partially staged - need to unstage the unstaged parts
-        git restore --staged "$file" 2>/dev/null || true
-        git add -p "$file" < /dev/null 2>/dev/null || git add "$file"
-      fi
-    done
-  fi
-else
-  # No stash was created, just re-add the formatted files
-  if [ -n "$STAGED_FILES" ]; then
-    echo "$STAGED_FILES" | while IFS= read -r file; do
-      if [ -f "$file" ]; then
-        git add "$file"
-      fi
-    done
-  fi
+done
+
+if [ $FORMAT_EXIT_CODE -ne 0 ]; then
+  echo "Ultracite found issues that could not be auto-fixed."
+  exit $FORMAT_EXIT_CODE
 fi
 
-# Check if staged files actually changed
-NEW_STAGED_HASH=$(git diff --cached | sha256sum | cut -d' ' -f1)
-if [ "$STAGED_HASH" != "$NEW_STAGED_HASH" ]; then
-  echo "✨ Files formatted by Ultracite"
-fi
-
-exit $FORMAT_EXIT_CODE
+echo "✨ Files formatted by Ultracite"
 `;
 
 const path = "./.husky/pre-commit";
+
+const ULTRACITE_MARKER = "# ultracite";
 
 export const husky = {
   exists: () => exists(path),
@@ -110,30 +76,66 @@ export const husky = {
       // Continue anyway as we'll create the hook file next
     }
   },
-  create: async (packageManager: PackageManagerName) => {
+  create: async (
+    packageManager: PackageManagerName,
+    useLintStaged = false
+  ) => {
     await mkdir(".husky", { recursive: true });
 
-    const command = dlxCommand(packageManager, "ultracite", {
-      args: ["fix"],
-      short: packageManager === "npm",
-    });
+    let hookScript: string;
 
-    // Create a pre-commit hook that preserves staging state robustly
-    const hookScript = createHookScript(command);
+    if (useLintStaged) {
+      const lintStagedCommand = dlxCommand(packageManager, "lint-staged", {
+        short: packageManager === "npm",
+      });
+      hookScript = createLintStagedHookScript(lintStagedCommand);
+    } else {
+      const command = dlxCommand(packageManager, "ultracite", {
+        args: ["fix"],
+        short: packageManager === "npm",
+      });
+      hookScript = createStandaloneHookScript(command);
+    }
 
-    await writeFile(path, hookScript);
+    await writeFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
   },
-  update: async (packageManager: PackageManagerName) => {
+  update: async (
+    packageManager: PackageManagerName,
+    useLintStaged = false
+  ) => {
     const existingContents = await readFile(path, "utf-8");
 
-    const command = dlxCommand(packageManager, "ultracite", {
-      args: ["fix"],
-      short: packageManager === "npm",
-    });
+    let hookScript: string;
 
-    // Create a pre-commit hook that preserves staging state robustly
-    const hookScript = createHookScript(command);
+    if (useLintStaged) {
+      const lintStagedCommand = dlxCommand(packageManager, "lint-staged", {
+        short: packageManager === "npm",
+      });
+      hookScript = createLintStagedHookScript(lintStagedCommand);
+    } else {
+      const command = dlxCommand(packageManager, "ultracite", {
+        args: ["fix"],
+        short: packageManager === "npm",
+      });
+      hookScript = createStandaloneHookScript(command);
+    }
 
-    await writeFile(path, `${existingContents}\n${hookScript}`);
+    // If the hook already contains an ultracite section, replace it
+    if (existingContents.includes(ULTRACITE_MARKER)) {
+      const lines = existingContents.split("\n");
+      const markerIndex = lines.indexOf(ULTRACITE_MARKER);
+      const before = lines.slice(0, markerIndex).join("\n");
+      await writeFile(
+        path,
+        before
+          ? `${before}\n${ULTRACITE_MARKER}\n${hookScript}`
+          : `${ULTRACITE_MARKER}\n${hookScript}`
+      );
+    } else {
+      await writeFile(
+        path,
+        `${existingContents}\n${ULTRACITE_MARKER}\n${hookScript}`
+      );
+    }
   },
 };

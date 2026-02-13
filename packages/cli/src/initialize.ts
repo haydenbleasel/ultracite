@@ -473,7 +473,8 @@ export const upsertOxfmtConfig = async (quiet = false) => {
 export const initializePrecommitHook = async (
   packageManager: PackageManager,
   install = true,
-  quiet = false
+  quiet = false,
+  useLintStaged = false
 ) => {
   const s = spinner();
 
@@ -500,7 +501,7 @@ export const initializePrecommitHook = async (
     if (!quiet) {
       s.message("Pre-commit hook found, updating...");
     }
-    await husky.update(packageManager.name);
+    await husky.update(packageManager.name, useLintStaged);
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
     }
@@ -510,7 +511,7 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Pre-commit hook not found, creating...");
   }
-  await husky.create(packageManager.name);
+  await husky.create(packageManager.name, useLintStaged);
   if (!quiet) {
     s.stop("Pre-commit hook created.");
   }
@@ -968,7 +969,13 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (integrations?.includes("husky")) {
-      await initializePrecommitHook(pmInfo, !opts.skipInstall, quiet);
+      const useLintStaged = integrations?.includes("lint-staged") ?? false;
+      await initializePrecommitHook(
+        pmInfo,
+        !opts.skipInstall,
+        quiet,
+        useLintStaged
+      );
     }
     if (integrations?.includes("lefthook")) {
       await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
