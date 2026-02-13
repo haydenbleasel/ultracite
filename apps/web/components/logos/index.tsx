@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Adobe from "./adobe.svg";
-import Arcade from "./arcade.svg";
 import AlanTuringInstitute from "./ati.svg";
 import AugmentCode from "./augment.svg";
 import Axiom from "./axiom.svg";
@@ -11,6 +10,7 @@ import FrenchGovernment from "./french-government.svg";
 import MagicUI from "./magic-ui.svg";
 import Mintlify from "./mintlify.svg";
 import Moonshot from "./moonshot.svg";
+import Posthog from "./posthog.svg";
 import Profound from "./profound.svg";
 import Raycast from "./raycast.svg";
 import Redpanda from "./redpanda.svg";
@@ -58,8 +58,8 @@ const logos = [
     src: Tencent,
   },
   {
-    name: "Arcade",
-    src: Arcade,
+    name: "Posthog",
+    src: Posthog,
   },
   {
     name: "Axiom",
