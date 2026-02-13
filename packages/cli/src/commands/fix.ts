@@ -2,10 +2,7 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectLinter, parseFilePaths } from "../utils";
 
-const runBiomeFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runBiomeFix = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
@@ -27,10 +24,7 @@ const runBiomeFix = async (
   }
 };
 
-const runEslintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runEslintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--fix",
     ...passthrough,
@@ -50,10 +44,7 @@ const runEslintFix = async (
   }
 };
 
-const runPrettierFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runPrettierFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,
@@ -73,10 +64,7 @@ const runPrettierFix = async (
   }
 };
 
-const runStylelintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runStylelintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--fix",
     ...passthrough,
@@ -96,10 +84,7 @@ const runStylelintFix = async (
   }
 };
 
-const runOxlintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxlintFix = (files: string[], passthrough: string[]): void => {
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
@@ -123,10 +108,7 @@ const runOxlintFix = async (
   }
 };
 
-const runOxfmtFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,

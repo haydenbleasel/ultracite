@@ -2,10 +2,7 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 import { detectLinter, parseFilePaths } from "../utils";
 
-const runBiomeCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
@@ -27,10 +24,7 @@ const runBiomeCheck = async (
   }
 };
 
-const runEslintCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runEslintCheck = (files: string[], passthrough: string[]): void => {
   const args = [
     ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -49,10 +43,7 @@ const runEslintCheck = async (
   }
 };
 
-const runPrettierCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runPrettierCheck = (files: string[], passthrough: string[]): void => {
   const args = [
     "--check",
     ...passthrough,
@@ -72,10 +63,7 @@ const runPrettierCheck = async (
   }
 };
 
-const runStylelintCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runStylelintCheck = (files: string[], passthrough: string[]): void => {
   const args = [
     ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -94,10 +82,7 @@ const runStylelintCheck = async (
   }
 };
 
-const runOxlintCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxlintCheck = (files: string[], passthrough: string[]): void => {
   const args = [
     ...passthrough,
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
@@ -116,10 +101,7 @@ const runOxlintCheck = async (
   }
 };
 
-const runOxfmtCheck = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
   const args = [
     "--check",
     ...passthrough,

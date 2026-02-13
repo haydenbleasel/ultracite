@@ -44,7 +44,7 @@ interface DiagnosticCheck {
 }
 
 // Check if Biome is installed
-const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
+const checkBiomeInstallation = (): DiagnosticCheck => {
   const biomeCheck = spawnSync("biome", ["--version"], {
     encoding: "utf-8",
   });
@@ -65,7 +65,7 @@ const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
 };
 
 // Check if ESLint is installed
-const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
+const checkEslintInstallation = (): DiagnosticCheck => {
   const eslintCheck = spawnSync("eslint", ["--version"], {
     encoding: "utf-8",
   });
@@ -86,7 +86,7 @@ const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
 };
 
 // Check if Oxlint is installed
-const checkOxlintInstallation = async (): Promise<DiagnosticCheck> => {
+const checkOxlintInstallation = (): DiagnosticCheck => {
   const oxlintCheck = spawnSync("oxlint", ["--version"], {
     encoding: "utf-8",
   });

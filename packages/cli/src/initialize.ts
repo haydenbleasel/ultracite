@@ -711,7 +711,9 @@ export const initialize = async (flags?: InitializeFlags) => {
     let { pm } = opts;
     let pmInfo: PackageManager;
 
-    if (!pm) {
+    if (pm) {
+      pmInfo = { name: pm, command: pm };
+    } else {
       const detected = await detectPackageManager(process.cwd());
 
       if (!detected) {
@@ -729,8 +731,6 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
       pm = detected.name;
       pmInfo = detected;
-    } else {
-      pmInfo = { name: pm, command: pm };
     }
 
     let linter = opts.linter;

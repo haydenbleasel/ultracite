@@ -76,10 +76,7 @@ export const husky = {
       // Continue anyway as we'll create the hook file next
     }
   },
-  create: async (
-    packageManager: PackageManagerName,
-    useLintStaged = false
-  ) => {
+  create: async (packageManager: PackageManagerName, useLintStaged = false) => {
     await mkdir(".husky", { recursive: true });
 
     let hookScript: string;
@@ -99,10 +96,7 @@ export const husky = {
 
     await writeFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
   },
-  update: async (
-    packageManager: PackageManagerName,
-    useLintStaged = false
-  ) => {
+  update: async (packageManager: PackageManagerName, useLintStaged = false) => {
     const existingContents = await readFile(path, "utf-8");
 
     let hookScript: string;
