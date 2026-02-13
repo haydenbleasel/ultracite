@@ -1,5 +1,16 @@
 ## 5.6.0
 
+## 7.2.0
+
+### Minor Changes
+
+- fe9acf6: Use local binaries
+
+### Patch Changes
+
+- 357be7e: Store full package manager info from detectPackageManager()
+- 8666788: Fix Husky precommit hook
+
 ## 7.1.5
 
 ### Patch Changes
