@@ -2,7 +2,12 @@ import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+import {
+  addDevDependency,
+  dlxCommand,
+  type PackageManager,
+  type PackageManagerName,
+} from "nypm";
 import { exists, isMonorepo } from "../utils";
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
@@ -294,7 +299,7 @@ export const lintStaged = {
 
     return false;
   },
-  install: async (packageManager: PackageManagerName) => {
+  install: async (packageManager: PackageManager) => {
     await addDevDependency("lint-staged", {
       packageManager,
       workspace: await isMonorepo(),

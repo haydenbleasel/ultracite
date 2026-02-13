@@ -16,6 +16,7 @@ import { providers } from "@repo/data/providers";
 import {
   addDevDependency,
   detectPackageManager,
+  type PackageManager,
   type PackageManagerName,
 } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
@@ -83,7 +84,7 @@ const addEslintFrameworkPackages = (
 };
 
 export const installDependencies = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   linter: Linter = "biome",
   install = true,
   quiet = false,
@@ -470,7 +471,7 @@ export const upsertOxfmtConfig = async (quiet = false) => {
 };
 
 export const initializePrecommitHook = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
   quiet = false
 ) => {
@@ -493,13 +494,13 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Initializing Husky...");
   }
-  husky.init(packageManager);
+  husky.init(packageManager.name);
 
   if (await husky.exists()) {
     if (!quiet) {
       s.message("Pre-commit hook found, updating...");
     }
-    await husky.update(packageManager);
+    await husky.update(packageManager.name);
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
     }
@@ -509,14 +510,14 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Pre-commit hook not found, creating...");
   }
-  await husky.create(packageManager);
+  await husky.create(packageManager.name);
   if (!quiet) {
     s.stop("Pre-commit hook created.");
   }
 };
 
 export const initializeLefthook = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
   quiet = false
 ) => {
@@ -539,7 +540,7 @@ export const initializeLefthook = async (
     if (!quiet) {
       s.message("lefthook.yml found, updating...");
     }
-    await lefthook.update(packageManager);
+    await lefthook.update(packageManager.name);
     if (!quiet) {
       s.stop("lefthook.yml updated.");
     }
@@ -549,14 +550,14 @@ export const initializeLefthook = async (
   if (!quiet) {
     s.message("lefthook.yml not found, creating...");
   }
-  await lefthook.create(packageManager);
+  await lefthook.create(packageManager.name);
   if (!quiet) {
     s.stop("lefthook.yml created.");
   }
 };
 
 export const initializeLintStaged = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
   quiet = false
 ) => {
@@ -579,7 +580,7 @@ export const initializeLintStaged = async (
     if (!quiet) {
       s.message("lint-staged found, updating...");
     }
-    await lintStaged.update(packageManager);
+    await lintStaged.update(packageManager.name);
     if (!quiet) {
       s.stop("lint-staged updated.");
     }
@@ -589,7 +590,7 @@ export const initializeLintStaged = async (
   if (!quiet) {
     s.message("lint-staged not found, creating...");
   }
-  await lintStaged.create(packageManager);
+  await lintStaged.create(packageManager.name);
   if (!quiet) {
     s.stop("lint-staged created.");
   }
@@ -707,6 +708,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
   try {
     let { pm } = opts;
+    let pmInfo: PackageManager;
 
     if (!pm) {
       const detected = await detectPackageManager(process.cwd());
@@ -725,6 +727,9 @@ export const initialize = async (flags?: InitializeFlags) => {
         log.info(`Detected lockfile, using ${detected.name}`);
       }
       pm = detected.name;
+      pmInfo = detected;
+    } else {
+      pmInfo = { name: pm, command: pm };
     }
 
     let linter = opts.linter;
@@ -924,7 +929,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     await installDependencies(
-      pm,
+      pmInfo,
       linter,
       !opts.skipInstall,
       quiet,
@@ -963,13 +968,13 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     if (integrations?.includes("husky")) {
-      await initializePrecommitHook(pm, !opts.skipInstall, quiet);
+      await initializePrecommitHook(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("lefthook")) {
-      await initializeLefthook(pm, !opts.skipInstall, quiet);
+      await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("lint-staged")) {
-      await initializeLintStaged(pm, !opts.skipInstall, quiet);
+      await initializeLintStaged(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("pre-commit")) {
       await initializePreCommit(pm, quiet);

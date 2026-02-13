@@ -1,6 +1,11 @@
 import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+import {
+  addDevDependency,
+  dlxCommand,
+  type PackageManager,
+  type PackageManagerName,
+} from "nypm";
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const createHookScript = (command: string) => `#!/bin/sh
@@ -77,7 +82,7 @@ const path = "./.husky/pre-commit";
 
 export const husky = {
   exists: () => exists(path),
-  install: async (packageManager: PackageManagerName) => {
+  install: async (packageManager: PackageManager) => {
     await addDevDependency("husky", {
       packageManager,
       workspace: await isMonorepo(),
