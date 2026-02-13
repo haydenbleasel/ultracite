@@ -7,7 +7,6 @@ const getOxlintConfigPath = (name: string) =>
 
 mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
-  execSync: mock(() => ""),
 }));
 
 mock.module("node:fs", () => ({
@@ -18,14 +17,6 @@ mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
-}));
-
-mock.module("nypm", () => ({
-  detectPackageManager: mock(async () => ({ name: "npm" })),
-  dlxCommand: mock(
-    (_pm, pkg, opts) =>
-      `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-  ),
 }));
 
 describe("doctor", () => {
@@ -40,7 +31,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -67,14 +57,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     // Doctor should complete without calling process.exit if successful
@@ -84,7 +66,6 @@ describe("doctor", () => {
   test("fails when Biome is not installed", async () => {
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 1, stdout: "" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -97,14 +78,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
@@ -115,7 +88,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -142,14 +114,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -162,7 +126,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -188,14 +151,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     // Doctor should complete without error exit even with warnings
@@ -209,7 +164,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -220,14 +174,6 @@ describe("doctor", () => {
       access: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
-    }));
-
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
 
     // Doctor should complete with warnings (not fail) when configs are missing
@@ -243,7 +189,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -267,14 +212,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -283,7 +220,6 @@ describe("doctor", () => {
   test("fails when biome config cannot be parsed", async () => {
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -305,14 +241,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
@@ -323,7 +251,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -348,14 +275,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -368,7 +287,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -395,14 +313,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -415,7 +325,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -444,14 +353,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -464,7 +365,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -493,14 +393,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -513,7 +405,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -544,14 +435,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -564,7 +447,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -593,14 +475,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await doctor();
 
     consoleLogSpy.mockRestore();
@@ -609,7 +483,6 @@ describe("doctor", () => {
   test("handles ESLint config read error", async () => {
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -637,21 +510,12 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
   test("handles Oxlint config parse error", async () => {
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -678,14 +542,6 @@ describe("doctor", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
-    }));
-
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
@@ -696,7 +552,6 @@ describe("doctor", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-      execSync: mock(() => ""),
     }));
 
     mock.module("node:fs", () => ({
@@ -724,14 +579,6 @@ describe("doctor", () => {
         return Promise.resolve("{}");
       }),
       writeFile: mock(() => Promise.resolve()),
-    }));
-
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
 
     await doctor();

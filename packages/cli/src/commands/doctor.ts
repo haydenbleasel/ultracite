@@ -5,7 +5,6 @@ import { join } from "node:path";
 import process from "node:process";
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
-import { detectPackageManager, dlxCommand } from "nypm";
 import packageJson from "../../package.json" with { type: "json" };
 
 // Config files to check for conflicting tools
@@ -46,16 +45,7 @@ interface DiagnosticCheck {
 
 // Check if Biome is installed
 const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "@biomejs/biome", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const biomeCheck = spawnSync(command, {
-    shell: true,
+  const biomeCheck = spawnSync("biome", ["--version"], {
     encoding: "utf-8",
   });
 
@@ -76,16 +66,7 @@ const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
 
 // Check if ESLint is installed
 const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "eslint", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const eslintCheck = spawnSync(command, {
-    shell: true,
+  const eslintCheck = spawnSync("eslint", ["--version"], {
     encoding: "utf-8",
   });
 
@@ -106,16 +87,7 @@ const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
 
 // Check if Oxlint is installed
 const checkOxlintInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "oxlint", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const oxlintCheck = spawnSync(command, {
-    shell: true,
+  const oxlintCheck = spawnSync("oxlint", ["--version"], {
     encoding: "utf-8",
   });
 
@@ -384,13 +356,6 @@ const runCheck = async (
 export const doctor = async (): Promise<void> => {
   intro(`Ultracite v${packageJson.version} Doctor`);
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-  const command = dlxCommand(pm, "ultracite", {
-    args: ["init"],
-    short: pm === "npm",
-  });
-
   const checks: DiagnosticCheck[] = [];
 
   // Run all checks with spinners
@@ -414,14 +379,14 @@ export const doctor = async (): Promise<void> => {
   );
 
   if (failCount > 0) {
-    log.error(`Some checks failed. Run '${command}' to fix issues.`);
+    log.error("Some checks failed. Run 'ultracite init' to fix issues.");
     outro("Doctor complete");
     throw new Error("Doctor checks failed");
   }
 
   if (warnCount > 0) {
     log.warn(
-      `Some optional improvements available. Run '${command}' to configure.`
+      "Some optional improvements available. Run 'ultracite init' to configure."
     );
     outro("Doctor complete");
     return;

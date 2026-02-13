@@ -11,14 +11,6 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -29,24 +21,17 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("npx @biomejs/biome check");
-    expect(callArgs[0]).toContain("--write");
-    expect(callArgs[0]).toContain("--no-errors-on-unmatched");
-    expect(callArgs[0]).toContain("./");
+    expect(callArgs[0]).toBe("biome");
+    expect(callArgs[1]).toContain("check");
+    expect(callArgs[1]).toContain("--write");
+    expect(callArgs[1]).toContain("--no-errors-on-unmatched");
+    expect(callArgs[1]).toContain("./");
   });
 
   test("runs biome fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -57,22 +42,14 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("src/index.ts");
-    expect(callArgs[0]).toContain("src/test.ts");
+    expect(callArgs[1]).toContain("src/index.ts");
+    expect(callArgs[1]).toContain("src/test.ts");
   });
 
   test("passes through --unsafe option to biome", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -83,21 +60,13 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).toContain("--unsafe");
+    expect(callArgs[1]).toContain("--unsafe");
   });
 
   test("does not include --unsafe when passthrough is empty", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -108,21 +77,13 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    expect(callArgs[0]).not.toContain("--unsafe");
+    expect(callArgs[1]).not.toContain("--unsafe");
   });
 
   test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -133,8 +94,7 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const callArgs = mockSpawn.mock.calls[0];
-    // The real parseFilePaths adds a trailing space
-    expect(callArgs[0]).toContain("'src/my file.ts' ");
+    expect(callArgs[1]).toContain("'src/my file.ts' ");
   });
 
   test("exits with status code when biome fix finds errors", async () => {
@@ -143,14 +103,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -170,14 +122,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "biome"),
@@ -191,14 +135,6 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => null),
@@ -212,14 +148,6 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -232,26 +160,18 @@ describe("fix", () => {
     const prettierCall = mockSpawn.mock.calls[0];
     const eslintCall = mockSpawn.mock.calls[1];
     const stylelintCall = mockSpawn.mock.calls[2];
-    expect(prettierCall[0]).toContain("npx prettier");
-    expect(prettierCall[0]).toContain("--write");
-    expect(eslintCall[0]).toContain("npx eslint");
-    expect(eslintCall[0]).toContain("--fix");
-    expect(stylelintCall[0]).toContain("npx stylelint");
-    expect(stylelintCall[0]).toContain("--fix");
+    expect(prettierCall[0]).toBe("prettier");
+    expect(prettierCall[1]).toContain("--write");
+    expect(eslintCall[0]).toBe("eslint");
+    expect(eslintCall[1]).toContain("--fix");
+    expect(stylelintCall[0]).toBe("stylelint");
+    expect(stylelintCall[1]).toContain("--fix");
   });
 
   test("runs eslint fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -262,7 +182,7 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     const eslintCall = mockSpawn.mock.calls[1];
-    expect(eslintCall[0]).toContain("src/index.ts");
+    expect(eslintCall[1]).toContain("src/index.ts");
   });
 
   test("eslint fix exits with status code when prettier fails", async () => {
@@ -271,14 +191,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -298,14 +210,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -332,14 +236,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -366,14 +262,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "eslint"),
@@ -389,14 +277,6 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -408,24 +288,16 @@ describe("fix", () => {
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxfmtCall = mockSpawn.mock.calls[0];
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxfmtCall[0]).toContain("npx oxfmt");
-    expect(oxfmtCall[0]).toContain("--write");
-    expect(oxlintCall[0]).toContain("npx oxlint");
-    expect(oxlintCall[0]).toContain("--fix");
+    expect(oxfmtCall[0]).toBe("oxfmt");
+    expect(oxfmtCall[1]).toContain("--write");
+    expect(oxlintCall[0]).toBe("oxlint");
+    expect(oxlintCall[1]).toContain("--fix");
   });
 
   test("runs oxlint fix with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -436,7 +308,7 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).toContain("src/index.ts");
+    expect(oxlintCall[1]).toContain("src/index.ts");
   });
 
   test("oxlint fix throws on spawn error", async () => {
@@ -447,14 +319,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -472,14 +336,6 @@ describe("fix", () => {
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -495,14 +351,6 @@ describe("fix", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -513,21 +361,13 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).toContain("--type-aware");
+    expect(oxlintCall[1]).toContain("--type-aware");
   });
 
   test("passes through --type-check flag to oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -538,21 +378,13 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).toContain("--type-check");
+    expect(oxlintCall[1]).toContain("--type-check");
   });
 
   test("passes through multiple flags to oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -563,22 +395,14 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).toContain("--type-aware");
-    expect(oxlintCall[0]).toContain("--type-check");
+    expect(oxlintCall[1]).toContain("--type-aware");
+    expect(oxlintCall[1]).toContain("--type-check");
   });
 
   test("does not include flags when passthrough is empty", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -589,22 +413,14 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).not.toContain("--type-aware");
-    expect(oxlintCall[0]).not.toContain("--type-check");
+    expect(oxlintCall[1]).not.toContain("--type-aware");
+    expect(oxlintCall[1]).not.toContain("--type-check");
   });
 
   test("converts --unsafe to --fix-dangerously for oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
-      execSync: mock(() => ""),
-    }));
-    mock.module("nypm", () => ({
-      detectPackageManager: mock(async () => ({ name: "npm" })),
-      dlxCommand: mock(
-        (_pm, pkg, opts) =>
-          `npx${pkg ? ` ${pkg}` : ""}${opts?.args ? ` ${opts.args.join(" ")}` : ""}`
-      ),
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(async () => "oxlint"),
@@ -615,7 +431,7 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const oxlintCall = mockSpawn.mock.calls[1];
-    expect(oxlintCall[0]).toContain("--fix-dangerously");
-    expect(oxlintCall[0]).not.toContain("--unsafe");
+    expect(oxlintCall[1]).toContain("--fix-dangerously");
+    expect(oxlintCall[1]).not.toContain("--unsafe");
   });
 });

@@ -1,6 +1,5 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import { detectPackageManager, dlxCommand } from "nypm";
 import { detectLinter, parseFilePaths } from "../utils";
 
 const runBiomeCheck = async (
@@ -15,17 +14,8 @@ const runBiomeCheck = async (
     args.push("./");
   }
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "@biomejs/biome", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("biome", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
@@ -46,17 +36,8 @@ const runEslintCheck = async (
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "eslint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("eslint", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
@@ -78,17 +59,8 @@ const runPrettierCheck = async (
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "prettier", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("prettier", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
@@ -109,17 +81,8 @@ const runStylelintCheck = async (
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "stylelint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("stylelint", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
@@ -140,17 +103,8 @@ const runOxlintCheck = async (
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "oxlint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("oxlint", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
@@ -172,17 +126,8 @@ const runOxfmtCheck = async (
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "oxfmt", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = spawnSync("oxfmt", args, {
     stdio: "inherit",
-    shell: true,
   });
 
   if (result.error) {
