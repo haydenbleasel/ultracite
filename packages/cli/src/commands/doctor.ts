@@ -47,6 +47,7 @@ interface DiagnosticCheck {
 const checkBiomeInstallation = (): DiagnosticCheck => {
   const biomeCheck = spawnSync("biome", ["--version"], {
     encoding: "utf-8",
+    shell: true,
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -68,6 +69,7 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 const checkEslintInstallation = (): DiagnosticCheck => {
   const eslintCheck = spawnSync("eslint", ["--version"], {
     encoding: "utf-8",
+    shell: true,
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -89,6 +91,7 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 const checkOxlintInstallation = (): DiagnosticCheck => {
   const oxlintCheck = spawnSync("oxlint", ["--version"], {
     encoding: "utf-8",
+    shell: true,
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {

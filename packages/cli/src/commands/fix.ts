@@ -13,6 +13,7 @@ const runBiomeFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("biome", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
@@ -33,6 +34,7 @@ const runEslintFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("eslint", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
@@ -53,6 +55,7 @@ const runPrettierFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("prettier", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
@@ -73,6 +76,7 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("stylelint", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
@@ -97,6 +101,7 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("oxlint", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
@@ -117,6 +122,7 @@ const runOxfmtFix = (files: string[], passthrough: string[]): void => {
 
   const result = spawnSync("oxfmt", args, {
     stdio: "inherit",
+    shell: true,
   });
 
   if (result.error) {
