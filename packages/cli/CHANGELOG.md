@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.2.1
+
+### Patch Changes
+
+- 0d21c46: Restore shell for windows
+
 ## 7.2.0
 
 ### Minor Changes
