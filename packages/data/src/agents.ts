@@ -131,7 +131,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     description:
       "Sourcegraph's AI coding agent that understands your entire codebase for intelligent assistance.",
     config: {
-      path: "AGENT.md",
+      path: "AGENTS.md",
       appendMode: true,
     },
     logo: ampLogo,
