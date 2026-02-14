@@ -27,7 +27,7 @@ export async function commitAndPush(
   let commitResult: CommandFinished | null = null;
 
   try {
-    commitResult = await sandbox.runCommand("HUSKY=0 git", [
+    commitResult = await sandbox.runCommand("git", [
       "commit",
       "--no-verify",
       "-m",
