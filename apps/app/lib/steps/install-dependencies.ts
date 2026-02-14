@@ -14,18 +14,22 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     );
   }
 
-  // Install ni and Claude Code first
-  try {
-    await sandbox.runCommand("npm", [
-      "install",
-      "-g",
-      "@antfu/ni",
-      "@anthropic-ai/claude-code",
-    ]);
-  } catch (error) {
-    throw new Error(
-      `Failed to install global dependencies: ${parseError(error)}`
-    );
+  // Install ni and Claude Code separately so one failure doesn't block the other
+  for (const pkg of ["@antfu/ni", "@anthropic-ai/claude-code"]) {
+    const result = await sandbox
+      .runCommand("npm", ["install", "-g", pkg])
+      .catch((error: unknown) => {
+        throw new Error(
+          `Failed to install ${pkg}: ${parseError(error)}`
+        );
+      });
+
+    if (result.exitCode !== 0) {
+      const output = await result.output("both");
+      throw new Error(
+        `Failed to install ${pkg} (exit code ${result.exitCode}): ${output.trim()}`
+      );
+    }
   }
 
   // Detect the package manager using `ni -v`
