@@ -6,6 +6,7 @@ import process from "node:process";
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 import packageJson from "../../package.json" with { type: "json" };
+import { shellOption } from "../utils";
 
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
@@ -47,7 +48,7 @@ interface DiagnosticCheck {
 const checkBiomeInstallation = (): DiagnosticCheck => {
   const biomeCheck = spawnSync("biome", ["--version"], {
     encoding: "utf-8",
-    shell: true,
+    shell: shellOption,
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -69,7 +70,7 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 const checkEslintInstallation = (): DiagnosticCheck => {
   const eslintCheck = spawnSync("eslint", ["--version"], {
     encoding: "utf-8",
-    shell: true,
+    shell: shellOption,
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -91,7 +92,7 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 const checkOxlintInstallation = (): DiagnosticCheck => {
   const oxlintCheck = spawnSync("oxlint", ["--version"], {
     encoding: "utf-8",
-    shell: true,
+    shell: shellOption,
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {

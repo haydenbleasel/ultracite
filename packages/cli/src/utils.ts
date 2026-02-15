@@ -1,6 +1,12 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import process from "node:process";
 import { parse } from "jsonc-parser";
+
+// Windows needs shell: true to resolve .cmd binaries (e.g. biome.cmd).
+// Other platforms don't need it, and Node >= 22.12 emits DEP0190 when
+// args are passed with shell: true.
+export const shellOption = process.platform === "win32";
 
 export const exists = async (path: string) => {
   try {
