@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.2.2
+
+### Patch Changes
+
+- 8db75d7: Only run shell: true on windows
+
 ## 7.2.1
 
 ### Patch Changes
