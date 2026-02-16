@@ -1,5 +1,11 @@
 ## 5.6.0
 
+## 7.2.3
+
+### Patch Changes
+
+- 3cd6e7b: Upgrade Biome to 2.4
+
 ## 7.2.2
 
 ### Patch Changes
