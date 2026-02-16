@@ -26,6 +26,7 @@ const vscodeBiomeConfig = {
   "[json]": { "editor.defaultFormatter": "biomejs.biome" },
   "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
   "editor.codeActionsOnSave": {
+    "source.action.noDuplicateClasses.biome": "explicit",
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
   },
