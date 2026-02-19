@@ -53,8 +53,8 @@ const providerTitles: Record<ProviderId, ReactNode> = {
 };
 
 interface ProviderSelectorProps {
-  value: string | null;
   onValueChange: (value: string | null) => void;
+  value: string | null;
 }
 
 export const ProviderSelector = ({

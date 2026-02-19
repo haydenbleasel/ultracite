@@ -10,8 +10,8 @@ import { WorkflowIcon } from "lucide-react";
 import { TriggerLintRunButton } from "./trigger-lint-run";
 
 interface RepoEmptyStateProps {
-  repoId: string;
   isSubscribed: boolean;
+  repoId: string;
 }
 
 export const RepoEmptyState = ({

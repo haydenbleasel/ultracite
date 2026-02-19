@@ -19,12 +19,12 @@ import { trackCost } from "@/lib/steps/track-cost";
 import { updateLintRun } from "@/lib/steps/update-lint-run";
 
 export interface ReviewPRParams {
-  installationId: number;
-  repoFullName: string;
-  prNumber: number;
-  prBranch: string;
   baseBranch: string;
+  installationId: number;
   lintRunId: string;
+  prBranch: string;
+  prNumber: number;
+  repoFullName: string;
   stripeCustomerId: string;
 }
 

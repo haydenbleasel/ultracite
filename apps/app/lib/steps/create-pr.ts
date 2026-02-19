@@ -3,13 +3,13 @@ import { getInstallationOctokit } from "@/lib/github/app";
 import type { PullRequestResult } from "./types";
 
 export interface CreatePRParams {
-  installationId: number;
-  repoFullName: string;
-  defaultBranch: string;
   branchName: string;
-  file: string;
-  isLLMFix: boolean;
   changelog?: string;
+  defaultBranch: string;
+  file: string;
+  installationId: number;
+  isLLMFix: boolean;
+  repoFullName: string;
 }
 
 export async function createPullRequest(

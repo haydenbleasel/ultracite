@@ -7,8 +7,8 @@ import {
 
 export interface ReferralCode {
   code: string;
-  url: string;
   timesUsed: number;
+  url: string;
 }
 
 export async function getReferralCode(

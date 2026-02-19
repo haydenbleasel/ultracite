@@ -152,11 +152,11 @@
     color: var(--color-foreground);
 
     & h1:not(.not-typography h1) {
-      scroll-margin: calc(var(--spacing) * 20);
       font-size: var(--text-4xl);
-      line-height: var(--text-4xl--line-height);
       font-weight: 600;
+      line-height: var(--text-4xl--line-height);
       letter-spacing: var(--tracking-tight);
+      scroll-margin: calc(var(--spacing) * 20);
 
       @media (min-width: 1024px) {
         font-size: var(--text-5xl);
@@ -165,14 +165,14 @@
     }
 
     & h2:not(.not-typography h2) {
+      padding-bottom: calc(var(--spacing) * 2);
+      margin-top: calc(var(--spacing) * 12);
+      font-size: var(--text-3xl);
+      font-weight: 600;
+      line-height: var(--text-3xl--line-height);
+      letter-spacing: var(--tracking-tight);
       scroll-margin: calc(var(--spacing) * 20);
       border-bottom: 1px solid var(--color-border);
-      padding-bottom: calc(var(--spacing) * 2);
-      font-size: var(--text-3xl);
-      line-height: var(--text-3xl--line-height);
-      font-weight: 600;
-      letter-spacing: var(--tracking-tight);
-      margin-top: calc(var(--spacing) * 12);
 
       &:first-child {
         margin-top: 0;
@@ -180,12 +180,12 @@
     }
 
     & h3:not(.not-typography h3) {
-      scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-2xl);
-      line-height: var(--text-2xl--line-height);
-      font-weight: 600;
-      letter-spacing: var(--tracking-tight);
       margin-top: calc(var(--spacing) * 12);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      line-height: var(--text-2xl--line-height);
+      letter-spacing: var(--tracking-tight);
+      scroll-margin: calc(var(--spacing) * 20);
 
       &:first-child {
         margin-top: 0;
@@ -193,12 +193,12 @@
     }
 
     & h4:not(.not-typography h4) {
-      scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-xl);
-      line-height: var(--text-xl--line-height);
-      font-weight: 600;
-      letter-spacing: var(--tracking-tight);
       margin-top: calc(var(--spacing) * 12);
+      font-size: var(--text-xl);
+      font-weight: 600;
+      line-height: var(--text-xl--line-height);
+      letter-spacing: var(--tracking-tight);
+      scroll-margin: calc(var(--spacing) * 20);
 
       &:first-child {
         margin-top: 0;
@@ -206,12 +206,12 @@
     }
 
     & h5:not(.not-typography h5) {
-      scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-lg);
-      line-height: var(--text-lg--line-height);
-      font-weight: 600;
-      letter-spacing: var(--tracking-tight);
       margin-top: calc(var(--spacing) * 12);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      line-height: var(--text-lg--line-height);
+      letter-spacing: var(--tracking-tight);
+      scroll-margin: calc(var(--spacing) * 20);
 
       &:first-child {
         margin-top: 0;
@@ -219,12 +219,12 @@
     }
 
     & h6:not(.not-typography h6) {
-      scroll-margin: calc(var(--spacing) * 20);
-      font-size: var(--text-base);
-      line-height: var(--text-base--line-height);
-      font-weight: 600;
-      letter-spacing: var(--tracking-tight);
       margin-top: calc(var(--spacing) * 12);
+      font-size: var(--text-base);
+      font-weight: 600;
+      line-height: var(--text-base--line-height);
+      letter-spacing: var(--tracking-tight);
+      scroll-margin: calc(var(--spacing) * 20);
 
       &:first-child {
         margin-top: 0;
@@ -262,22 +262,22 @@
     }
 
     & blockquote:not(.not-typography blockquote) {
-      margin-top: calc(var(--spacing) * 6);
-      border-left: 2px solid var(--color-border);
       padding-left: calc(var(--spacing) * 6);
+      margin-top: calc(var(--spacing) * 6);
       font-style: italic;
+      border-left: 2px solid var(--color-border);
     }
 
     & table:not(.not-typography table) {
+      width: 100%;
       margin-top: calc(var(--spacing) * 6);
       margin-bottom: calc(var(--spacing) * 6);
-      width: 100%;
       overflow-y: auto;
 
       & thead tr {
+        padding: 0;
         margin: 0;
         border-top: 1px solid var(--color-border);
-        padding: 0;
 
         &:nth-child(even) {
           background-color: var(--color-muted);
@@ -285,10 +285,10 @@
       }
 
       & th {
-        border: 1px solid var(--color-border);
         padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
-        text-align: left;
         font-weight: 700;
+        text-align: left;
+        border: 1px solid var(--color-border);
 
         &[align="center"] {
           text-align: center;
@@ -300,9 +300,9 @@
       }
 
       & tbody tr {
+        padding: 0;
         margin: 0;
         border-top: 1px solid var(--color-border);
-        padding: 0;
 
         &:nth-child(even) {
           background-color: var(--color-muted);
@@ -310,9 +310,9 @@
       }
 
       & td {
-        border: 1px solid var(--color-border);
         padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
         text-align: left;
+        border: 1px solid var(--color-border);
 
         &[align="center"] {
           text-align: center;
@@ -334,9 +334,9 @@
       }
 
       & p {
+        display: inline;
         margin-top: 0;
         margin-bottom: 0;
-        display: inline;
       }
     }
 
@@ -350,32 +350,32 @@
       }
 
       & p {
+        display: inline;
         margin-top: 0;
         margin-bottom: 0;
-        display: inline;
       }
     }
 
     & pre:not(.not-typography pre) {
-      background-color: var(--color-muted);
-      border-radius: calc(var(--radius) - 2px);
       padding: calc(var(--spacing) * 4);
       margin-top: calc(var(--spacing) * 6);
       margin-bottom: calc(var(--spacing) * 6);
+      overflow-y: auto;
       font-size: var(--text-sm);
       line-height: var(--text-sm--line-height);
-      overflow-y: auto;
+      background-color: var(--color-muted);
+      border-radius: calc(var(--radius) - 2px);
     }
 
     & code:not(pre code):not(.not-typography code) {
       position: relative;
-      border-radius: var(--radius);
-      background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.2) calc(var(--spacing) * 0.3);
       font-family: var(--font-mono);
       font-size: var(--text-sm);
-      line-height: var(--text-sm--line-height);
       font-weight: 600;
+      line-height: var(--text-sm--line-height);
+      background-color: var(--color-muted);
+      border-radius: var(--radius);
     }
 
     & .lead:not(.not-typography .lead) {
@@ -386,14 +386,14 @@
 
     & .large:not(.not-typography .large) {
       font-size: var(--text-lg);
-      line-height: var(--text-lg--line-height);
       font-weight: 600;
+      line-height: var(--text-lg--line-height);
     }
 
     & .small:not(.not-typography .small) {
       font-size: var(--text-sm);
-      line-height: var(--text-sm--line-height);
       font-weight: 500;
+      line-height: var(--text-sm--line-height);
     }
 
     & .muted:not(.not-typography .muted) {
@@ -415,12 +415,12 @@
     }
 
     & kbd:not(.not-typography kbd) {
-      border-radius: calc(var(--radius) - 2px);
-      background-color: var(--color-muted);
       padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
       font-size: var(--text-xs);
-      line-height: var(--text-xs--line-height);
       font-weight: 600;
+      line-height: var(--text-xs--line-height);
+      background-color: var(--color-muted);
+      border-radius: calc(var(--radius) - 2px);
     }
 
     & hr {
@@ -433,8 +433,8 @@
       margin-bottom: calc(var(--spacing) * 6);
 
       & dt {
-        font-weight: 600;
         margin-top: calc(var(--spacing) * 6);
+        font-weight: 600;
         letter-spacing: var(--tracking-tight);
 
         &:first-child {
@@ -447,10 +447,10 @@
       margin-top: calc(var(--spacing) * 6);
 
       & summary {
-        cursor: pointer;
-        font-weight: 600;
         margin-top: calc(var(--spacing) * 6);
+        font-weight: 600;
         letter-spacing: var(--tracking-tight);
+        cursor: pointer;
       }
 
       & p {

@@ -6,11 +6,11 @@ import { processReferral } from "@/lib/referral/process-referral";
 import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
+  avatar_url?: string;
   id: number;
   login: string;
-  type: "Organization" | "User";
   name?: string | null;
-  avatar_url?: string;
+  type: "Organization" | "User";
 }
 
 /**

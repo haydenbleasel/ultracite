@@ -19,9 +19,7 @@ export async function installDependencies(sandboxId: string): Promise<void> {
     const result = await sandbox
       .runCommand("npm", ["install", "-g", pkg])
       .catch((error: unknown) => {
-        throw new Error(
-          `Failed to install ${pkg}: ${parseError(error)}`
-        );
+        throw new Error(`Failed to install ${pkg}: ${parseError(error)}`);
       });
 
     if (result.exitCode !== 0) {

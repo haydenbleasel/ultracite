@@ -5,9 +5,9 @@ import type { HooksConfig } from "./types";
 export type { HooksConfig } from "./types";
 
 export interface HookIntegration {
+  hooks: HooksConfig;
   id: string;
   name: string;
-  hooks: HooksConfig;
 }
 
 const isEditorWithHooks = (

@@ -15,27 +15,27 @@ import type { HooksConfig } from "./types";
 
 /* e.g. .cursor/rules/ultracite.mdc */
 export interface EditorRulesConfig {
-  path: string;
-  header?: string;
   appendMode?: boolean;
+  header?: string;
+  path: string;
 }
 
 /* e.g. .vscode/settings.json */
 export interface EditorSettingsConfig {
-  path: string;
-  getContent: (linter?: ProviderId) => Record<string, unknown>;
   extensionCommand?: string;
+  getContent: (linter?: ProviderId) => Record<string, unknown>;
+  path: string;
 }
 
 export interface Editor {
-  id: string;
-  name: string;
-  subtitle: string;
-  description: string;
-  logo: StaticImageData;
-  rules?: EditorRulesConfig;
-  hooks?: HooksConfig;
   config: EditorSettingsConfig;
+  description: string;
+  hooks?: HooksConfig;
+  id: string;
+  logo: StaticImageData;
+  name: string;
+  rules?: EditorRulesConfig;
+  subtitle: string;
 }
 
 // VS Code base configuration

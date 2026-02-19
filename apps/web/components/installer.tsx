@@ -16,8 +16,8 @@ import { toast } from "sonner";
 const COPY_TIMEOUT = 2000;
 
 interface InstallerProps {
-  command: string;
   className?: string;
+  command: string;
 }
 
 export const Installer = ({ command, className }: InstallerProps) => {

@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 interface Organization {
+  githubOrgType?: string | null;
   id: string;
   name: string;
   slug: string;
-  githubOrgType?: string | null;
 }
 
 interface OrganizationListProps {

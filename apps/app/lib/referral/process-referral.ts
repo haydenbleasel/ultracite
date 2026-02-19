@@ -3,8 +3,8 @@ import "server-only";
 import { database } from "@repo/backend/database";
 
 interface ProcessReferralResult {
-  success: boolean;
   error?: string;
+  success: boolean;
 }
 
 export async function processReferral(

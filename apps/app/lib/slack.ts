@@ -2,11 +2,6 @@ import "server-only";
 import { env } from "./env";
 
 interface SlackMessagePayload {
-  text: string;
-  channel?: string;
-  username?: string;
-  icon_emoji?: string;
-  icon_url?: string;
   attachments?: Array<{
     color?: string;
     title?: string;
@@ -17,13 +12,18 @@ interface SlackMessagePayload {
       short?: boolean;
     }>;
   }>;
+  channel?: string;
+  icon_emoji?: string;
+  icon_url?: string;
+  text: string;
+  username?: string;
 }
 
 export interface SlackMessageOptions {
   channel?: string;
-  username?: string;
   icon_emoji?: string;
   icon_url?: string;
+  username?: string;
 }
 
 /**

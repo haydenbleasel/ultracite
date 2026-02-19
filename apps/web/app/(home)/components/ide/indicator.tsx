@@ -1,10 +1,10 @@
 import { cn } from "@repo/design-system/lib/utils";
 
 interface IndicatorProps {
-  title: string;
-  description: string;
   className?: string;
+  description: string;
   reverse?: boolean;
+  title: string;
 }
 
 export const Indicator = ({

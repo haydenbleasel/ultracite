@@ -79,8 +79,8 @@ export interface Framework {
 }
 
 interface FrameworkSelectorProps {
-  value: string | null;
   onValueChange: (value: string | null) => void;
+  value: string | null;
 }
 
 export const FrameworkSelector = ({

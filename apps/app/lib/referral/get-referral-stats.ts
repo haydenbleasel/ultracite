@@ -5,11 +5,15 @@ import { stripe } from "@/lib/stripe";
 import { REFERRAL_CREDIT_CENTS } from "./constants";
 
 export interface ReferralStats {
-  creditBalanceCents: number;
-  totalReferrals: number;
   completedReferrals: number;
+  creditBalanceCents: number;
   pendingReferrals: number;
-  totalEarnedCents: number;
+  referralReceived: {
+    referrerName: string;
+    status: "PENDING" | "COMPLETED" | "INVALID";
+    creditedAt: Date | null;
+    createdAt: Date;
+  } | null;
   referralsGiven: {
     id: string;
     referredName: string;
@@ -17,12 +21,8 @@ export interface ReferralStats {
     creditedAt: Date | null;
     createdAt: Date;
   }[];
-  referralReceived: {
-    referrerName: string;
-    status: "PENDING" | "COMPLETED" | "INVALID";
-    creditedAt: Date | null;
-    createdAt: Date;
-  } | null;
+  totalEarnedCents: number;
+  totalReferrals: number;
 }
 
 export async function getReferralStats(

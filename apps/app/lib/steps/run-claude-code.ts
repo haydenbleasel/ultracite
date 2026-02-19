@@ -4,9 +4,9 @@ import { env } from "../env";
 
 export interface ClaudeCodeResult {
   costUsd: number;
-  success: boolean;
-  output: string;
   errorMessage?: string;
+  output: string;
+  success: boolean;
 }
 
 const prompt = `You are fixing lint issues in a codebase.

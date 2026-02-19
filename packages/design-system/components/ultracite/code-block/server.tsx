@@ -14,9 +14,9 @@ import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import shikiWasm from "shiki/wasm";
 
 interface CodeBlockProps {
+  className?: string;
   code: string;
   lang: BundledLanguage;
-  className?: string;
 }
 
 let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;

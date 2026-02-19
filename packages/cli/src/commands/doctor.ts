@@ -39,9 +39,9 @@ const eslintConfigFiles = [
 ];
 
 interface DiagnosticCheck {
+  message: string;
   name: string;
   status: "pass" | "fail" | "warn";
-  message: string;
 }
 
 // Check if Biome is installed

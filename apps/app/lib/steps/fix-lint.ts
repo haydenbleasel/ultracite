@@ -2,9 +2,9 @@ import { Sandbox } from "@vercel/sandbox";
 import { parseError } from "@/lib/error";
 
 export interface FixLintResult {
-  output: string;
   hasChanges: boolean;
   hasRemainingIssues: boolean;
+  output: string;
 }
 
 export async function fixLint(sandboxId: string): Promise<FixLintResult> {

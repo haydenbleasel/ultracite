@@ -27,19 +27,19 @@ import warpLogo from "../logos/warp.svg";
 import type { HooksConfig } from "./types";
 
 export interface AgentConfig {
-  path: string;
   appendMode?: boolean;
   header?: string;
+  path: string;
 }
 
 export interface Agent {
+  config: AgentConfig;
+  description: string;
+  hooks?: HooksConfig;
   id: string;
+  logo: StaticImageData;
   name: string;
   subtitle: string;
-  description: string;
-  config: AgentConfig;
-  logo: StaticImageData;
-  hooks?: HooksConfig;
 }
 
 export const agents: Agent[] = [

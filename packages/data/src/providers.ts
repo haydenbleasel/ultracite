@@ -9,28 +9,28 @@ import stylelintLogo from "../logos/stylelint.svg";
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface ConfigFile {
-  name: string;
-  lang: "json" | "javascript";
   code: (presets: string[]) => string;
+  lang: "json" | "javascript";
+  name: string;
 }
 
 export interface ProviderBenefit {
-  title: string;
   description: string;
   icon: string;
+  title: string;
 }
 
 export interface Provider {
-  id: ProviderId;
-  name: string;
-  subtitle: string;
-  description: string;
+  additionalLogos?: StaticImageData[];
   benefits: ProviderBenefit[];
+  configFiles: ConfigFile[];
+  description: string;
+  id: ProviderId;
   includes?: string[];
   logo: StaticImageData;
-  additionalLogos?: StaticImageData[];
+  name: string;
+  subtitle: string;
   videos?: string[];
-  configFiles: ConfigFile[];
   vscodeExtensionId: string;
 }
 

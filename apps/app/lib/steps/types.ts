@@ -1,9 +1,9 @@
 export interface LintRepoParams {
-  organizationId: string;
-  repoId: string;
-  repoFullName: string;
   defaultBranch: string;
   installationId: number;
+  organizationId: string;
+  repoFullName: string;
+  repoId: string;
   stripeCustomerId: string;
 }
 

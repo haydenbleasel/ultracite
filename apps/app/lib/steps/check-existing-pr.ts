@@ -3,8 +3,8 @@ import { getInstallationOctokit } from "@/lib/github/app";
 
 export interface ExistingPRResult {
   hasExistingPR: boolean;
-  prUrl?: string;
   prNumber?: number;
+  prUrl?: string;
 }
 
 export async function checkExistingPR(
