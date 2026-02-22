@@ -12,7 +12,7 @@ export async function createSandbox(): Promise<string> {
     sandbox = await Sandbox.create({
       source: {
         type: "snapshot",
-        snapshotId: "snap_lDLlUFqp4PIxsAZHuueOTgvETX9N",
+        snapshotId: "snap_C7bRk0eKocK3L8QqZsNIz54Cwwk7",
       },
       timeout: FIVE_MINUTES_MS,
     });
