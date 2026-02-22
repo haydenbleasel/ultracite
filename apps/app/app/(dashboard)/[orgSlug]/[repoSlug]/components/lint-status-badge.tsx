@@ -1,12 +1,12 @@
-import type { LintRunStatus } from "@repo/backend/database";
+import type { LintRunStatus } from "@/lib/types";
 import { Badge } from "@repo/design-system/components/ui/badge";
 
 interface LintStatusBadgeProps {
-  status: LintRunStatus | null;
+  status: LintRunStatus | string | null;
 }
 
 const statusConfig: Record<
-  LintRunStatus,
+  string,
   {
     label: string;
     variant: "default" | "secondary" | "destructive" | "outline";
@@ -25,7 +25,10 @@ export const LintStatusBadge = ({ status }: LintStatusBadgeProps) => {
     return <Badge variant="outline">No runs</Badge>;
   }
 
-  const config = statusConfig[status];
+  const config = statusConfig[status] ?? {
+    label: status,
+    variant: "outline" as const,
+  };
 
   return <Badge variant={config.variant}>{config.label}</Badge>;
 };

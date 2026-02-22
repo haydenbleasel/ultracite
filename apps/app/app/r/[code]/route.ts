@@ -1,6 +1,7 @@
-import { database } from "@repo/backend/database";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
+import { api } from "../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { REFERRAL_COOKIE } from "@/lib/referral/constants";
 
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
@@ -11,16 +12,14 @@ export const GET = async (
 ) => {
   const { code } = await params;
 
-  // Validate code exists
-  const referralCode = await database.referralCode.findUnique({
-    where: { code },
+  const referralCode = await convexClient.query(api.referralCodes.getByCode, {
+    code,
   });
 
   if (!referralCode) {
     return NextResponse.redirect(new URL("/", _request.url));
   }
 
-  // Set referral cookie
   const cookieStore = await cookies();
   cookieStore.set(REFERRAL_COOKIE, code, {
     httpOnly: true,
@@ -30,5 +29,5 @@ export const GET = async (
     path: "/",
   });
 
-  return NextResponse.redirect(new URL("/auth/login", _request.url));
+  return NextResponse.redirect(new URL("/sign-in", _request.url));
 };

@@ -1,7 +1,8 @@
 import "server-only";
 
-import { database } from "@repo/backend/database";
 import type Stripe from "stripe";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "../convex";
 import { stripe } from "@/lib/stripe";
 import { REFERRAL_CREDIT_CENTS } from "./constants";
 
@@ -11,7 +12,7 @@ async function applyCredit(
 ): Promise<boolean> {
   try {
     await stripe.customers.createBalanceTransaction(customerId, {
-      amount: -REFERRAL_CREDIT_CENTS, // Negative = credit
+      amount: -REFERRAL_CREDIT_CENTS,
       currency: "usd",
       description,
     });
@@ -25,166 +26,137 @@ async function applyCredit(
 export async function applyReferralCredits(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
 
-  // Find org by Stripe customer ID
-  const org = await database.organization.findFirst({
-    where: { stripeCustomerId: customerId },
-    include: {
-      referralReceived: {
-        include: {
-          referrerOrganization: true,
-        },
-      },
-    },
-  });
+  const org = await convexClient.query(
+    api.organizations.getByStripeCustomerId,
+    { stripeCustomerId: customerId }
+  );
 
-  // Skip if no referral or already fully completed
-  if (!org?.referralReceived || org.referralReceived.status !== "PENDING") {
+  if (!org) {
     return;
   }
 
-  const referral = org.referralReceived;
-  const referrerOrg = referral.referrerOrganization;
-  const now = new Date();
+  const referralReceived = await convexClient.query(
+    api.referrals.getByReferredOrganizationId,
+    { referredOrganizationId: org._id }
+  );
 
-  // Apply referred org credit if not already done
-  let referredCredited = referral.referredCreditedAt !== null;
+  if (!referralReceived || referralReceived.status !== "PENDING") {
+    return;
+  }
+
+  let referredCredited = referralReceived.referredCreditedAt !== undefined;
 
   if (!referredCredited) {
-    // Atomic claim: only one concurrent request can set referredCreditedAt
-    // from null, preventing duplicate Stripe credits on webhook retry
-    const claimed = await database.referral.updateMany({
-      where: {
-        id: referral.id,
-        referredCreditedAt: null,
-        status: "PENDING",
-      },
-      data: {
+    const claimed = await convexClient.mutation(
+      api.referrals.claimReferredCredit,
+      {
+        id: referralReceived._id,
         paidInvoiceId: invoice.id,
-        referredCreditedAt: now,
-      },
-    });
+      }
+    );
 
-    if (claimed.count === 0) {
+    if (!claimed) {
       return;
     }
 
     referredCredited = await applyCredit(customerId, "Referral signup bonus");
 
     if (!referredCredited) {
-      // Roll back claim if credit failed so it can be retried
-      await database.referral.update({
-        where: { id: referral.id },
-        data: { referredCreditedAt: null, paidInvoiceId: null },
+      await convexClient.mutation(api.referrals.rollbackReferredCredit, {
+        id: referralReceived._id,
       });
       return;
     }
   }
 
-  // Apply credit to referrer org only if they have a Stripe customer
-  // If not, we'll apply it when they subscribe (via applyPendingReferrerCredits)
-  let referrerCredited = referral.referrerCreditedAt !== null;
+  // Get referrer org to check if they have a Stripe customer
+  const referrerOrgId = referralReceived.referrerOrganizationId;
+  // We need to look up the referrer org to get stripeCustomerId
+  const allOrgs = await convexClient.query(
+    api.organizations.getSubscribedWithInstallation,
+    {}
+  );
+  const referrerOrg = allOrgs.find((o) => o._id === referrerOrgId);
 
-  if (!referrerCredited && referrerOrg.stripeCustomerId) {
-    // Atomic claim for referrer credit
-    const referrerClaimed = await database.referral.updateMany({
-      where: {
-        id: referral.id,
-        referrerCreditedAt: null,
-      },
-      data: { referrerCreditedAt: now },
-    });
+  let referrerCredited = referralReceived.referrerCreditedAt !== undefined;
 
-    if (referrerClaimed.count > 0) {
+  if (!referrerCredited && referrerOrg?.stripeCustomerId) {
+    const referrerClaimed = await convexClient.mutation(
+      api.referrals.claimReferrerCredit,
+      { id: referralReceived._id }
+    );
+
+    if (referrerClaimed) {
       referrerCredited = await applyCredit(
         referrerOrg.stripeCustomerId,
         `Referral bonus - ${org.name}`
       );
 
       if (!referrerCredited) {
-        // Roll back timestamp if credit failed so it can be retried
-        await database.referral.update({
-          where: { id: referral.id },
-          data: { referrerCreditedAt: null },
+        await convexClient.mutation(api.referrals.rollbackReferrerCredit, {
+          id: referralReceived._id,
         });
       }
     }
   }
 
-  // Only mark completed if BOTH credits were actually applied
-  // Keep as PENDING if referrer hasn't subscribed yet or credit failed
   if (referredCredited && referrerCredited) {
-    await database.referral.update({
-      where: { id: referral.id },
-      data: { status: "COMPLETED" },
+    await convexClient.mutation(api.referrals.markCompleted, {
+      id: referralReceived._id,
     });
   }
 }
 
-/**
- * Apply pending referrer credits when an organization subscribes.
- * This handles the case where org A referred org B, B paid first,
- * and now A is subscribing and should receive their referrer credit.
- */
 export async function applyPendingReferrerCredits(invoice: Stripe.Invoice) {
   const customerId = invoice.customer as string;
 
-  // Find org by Stripe customer ID
-  const org = await database.organization.findFirst({
-    where: { stripeCustomerId: customerId },
-  });
+  const org = await convexClient.query(
+    api.organizations.getByStripeCustomerId,
+    { stripeCustomerId: customerId }
+  );
 
   if (!org) {
     return;
   }
 
-  // Find any referrals where this org is the referrer and hasn't been credited yet
-  const pendingReferrals = await database.referral.findMany({
-    where: {
-      referrerOrganizationId: org.id,
-      referrerCreditedAt: null,
-      paidInvoiceId: { not: null }, // Referred org has already paid
-      referredCreditedAt: { not: null }, // Referred org credit was applied
-    },
-    include: {
-      referredOrganization: true,
-    },
-  });
-
-  const now = new Date();
+  const pendingReferrals = await convexClient.query(
+    api.referrals.getPendingReferrerCredits,
+    { referrerOrganizationId: org._id }
+  );
 
   for (const referral of pendingReferrals) {
-    // Atomic claim: only one concurrent request can set referrerCreditedAt
-    // from null, preventing duplicate Stripe credits on webhook retry
-    const claimed = await database.referral.updateMany({
-      where: {
-        id: referral.id,
-        referrerCreditedAt: null,
-      },
-      data: { referrerCreditedAt: now },
-    });
+    const claimed = await convexClient.mutation(
+      api.referrals.claimReferrerCredit,
+      { id: referral._id }
+    );
 
-    if (claimed.count === 0) {
+    if (!claimed) {
       continue;
     }
 
+    // Get referred org name
+    const allOrgs = await convexClient.query(
+      api.organizations.getSubscribedWithInstallation,
+      {}
+    );
+    const referredOrg = allOrgs.find(
+      (o) => o._id === referral.referredOrganizationId
+    );
+
     const credited = await applyCredit(
       customerId,
-      `Referral bonus - ${referral.referredOrganization.name}`
+      `Referral bonus - ${referredOrg?.name ?? "Organization"}`
     );
 
     if (!credited) {
-      // Roll back timestamp if credit failed so it can be retried
-      await database.referral.update({
-        where: { id: referral.id },
-        data: { referrerCreditedAt: null },
+      await convexClient.mutation(api.referrals.rollbackReferrerCredit, {
+        id: referral._id,
       });
       continue;
     }
 
-    // Referred credit already confirmed by query filter, mark completed
-    await database.referral.update({
-      where: { id: referral.id },
-      data: { status: "COMPLETED" },
+    await convexClient.mutation(api.referrals.markCompleted, {
+      id: referral._id,
     });
   }
 }

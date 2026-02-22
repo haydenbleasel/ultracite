@@ -1,4 +1,3 @@
-import type { Organization, Repo } from "@repo/backend/database";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,6 +6,7 @@ import {
   SidebarMenuItem,
 } from "@repo/design-system/components/ui/sidebar";
 import { CreditCardIcon } from "lucide-react";
+import type { Organization, Repo } from "@/lib/types";
 import { RepoSidebarItem } from "./repo-sidebar-item";
 
 interface OrganizationSidebarGroupProps {
@@ -18,11 +18,11 @@ interface OrganizationSidebarGroupProps {
 export const OrganizationSidebarGroup = ({
   organization,
 }: OrganizationSidebarGroupProps) => (
-  <SidebarGroup key={organization.id}>
+  <SidebarGroup key={organization._id}>
     <SidebarGroupLabel className="gap-2">
       <span className="flex-1 truncate">{organization.slug}</span>
       <a
-        href={`/api/stripe/portal?organizationId=${organization.id}`}
+        href={`/api/stripe/portal?organizationId=${organization._id}`}
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -33,7 +33,7 @@ export const OrganizationSidebarGroup = ({
       <SidebarMenu>
         {organization.repos.map((repo) => (
           <RepoSidebarItem
-            key={repo.id}
+            key={repo._id}
             orgSlug={organization.slug}
             repoSlug={repo.name}
           />

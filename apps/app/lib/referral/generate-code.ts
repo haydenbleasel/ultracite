@@ -1,54 +1,51 @@
 import "server-only";
 
-import { database } from "@repo/backend/database";
 import { customAlphabet } from "nanoid";
+import type { Id } from "../../convex/_generated/dataModel";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "../convex";
 import { env } from "@/lib/env";
 
-// 8-char lowercase alphanumeric for clean URLs
 const generateCode = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 8);
 
-export async function getOrCreateReferralCode(organizationId: string) {
-  const existing = await database.referralCode.findUnique({
-    where: { organizationId },
-  });
+export async function getOrCreateReferralCode(
+  organizationId: Id<"organizations">
+) {
+  const existing = await convexClient.query(
+    api.referralCodes.getByOrganizationId,
+    { organizationId }
+  );
 
   if (existing) {
     return existing;
   }
 
-  // Generate unique code with collision check
   const maxAttempts = 5;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const code = generateCode();
-    const collision = await database.referralCode.findUnique({
-      where: { code },
+    const collision = await convexClient.query(api.referralCodes.getByCode, {
+      code,
     });
 
     if (!collision) {
       try {
-        return await database.referralCode.create({
-          data: {
-            code,
-            organizationId,
-          },
+        const id = await convexClient.mutation(api.referralCodes.create, {
+          code,
+          organizationId,
         });
-      } catch (error) {
-        // Handle race condition: another request created a code for this org
-        if (
-          error instanceof Error &&
-          error.message.includes("Unique constraint")
-        ) {
-          const created = await database.referralCode.findUnique({
-            where: { organizationId },
-          });
-          if (created) {
-            return created;
-          }
-          // If not found by organizationId, it was a code collision - retry
-          continue;
+        // Return a shape matching what callers expect
+        return { _id: id, code, organizationId, timesUsed: 0 };
+      } catch {
+        // Race condition — try again or return existing
+        const created = await convexClient.query(
+          api.referralCodes.getByOrganizationId,
+          { organizationId }
+        );
+        if (created) {
+          return created;
         }
-        throw error;
+        continue;
       }
     }
   }

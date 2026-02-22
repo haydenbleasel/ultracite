@@ -1,5 +1,4 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { database } from "@repo/backend/database";
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +10,8 @@ import {
 import { GiftIcon, LifeBuoyIcon } from "lucide-react";
 import Link from "next/link";
 import { getUserOrganizations } from "@/lib/auth";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { OrganizationSidebarGroup } from "./organization-sidebar-group";
 
 interface RepoSidebarProps {
@@ -19,29 +20,28 @@ interface RepoSidebarProps {
 
 export const RepoSidebar = async ({ orgSlug }: RepoSidebarProps) => {
   const userOrgs = await getUserOrganizations();
-  const organizations = await database.organization.findMany({
-    where: {
-      id: { in: userOrgs.map((o) => o.id) },
-    },
-    include: {
-      repos: {
-        orderBy: { createdAt: "desc" },
-        include: {
-          lintRuns: {
-            orderBy: { createdAt: "desc" },
-            take: 1,
-          },
-        },
-      },
-    },
-    orderBy: { name: "asc" },
-  });
+  const filteredOrgs = userOrgs.filter(
+    (org): org is NonNullable<typeof org> => org !== null
+  );
+  const organizations = await Promise.all(
+    filteredOrgs.map(async (org) => {
+      const withRepos = await convexClient.query(
+        api.organizations.getWithRepos,
+        { orgId: org._id }
+      );
+      return withRepos;
+    })
+  );
+
+  const validOrgs = organizations.filter(
+    (org): org is NonNullable<typeof org> => org !== null
+  );
 
   return (
     <Sidebar className="sticky top-(--navbar-height) h-[calc(100svh-var(--navbar-height))]">
       <SidebarContent>
-        {organizations.map((org) => (
-          <OrganizationSidebarGroup key={org.id} organization={org} />
+        {validOrgs.map((org) => (
+          <OrganizationSidebarGroup key={org._id} organization={org} />
         ))}
       </SidebarContent>
       <SidebarFooter>

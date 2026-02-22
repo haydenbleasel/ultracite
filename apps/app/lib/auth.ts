@@ -1,95 +1,85 @@
-import { database } from "@repo/backend/database";
-import { createClient } from "@/lib/supabase/server";
+import "server-only";
+
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
+import { api } from "../convex/_generated/api";
+import { convexClient } from "./convex";
 
 export async function getCurrentUser() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return null;
-  }
-
-  return user;
+  return currentUser();
 }
 
-export async function getOrCreateDbUser() {
-  const user = await getCurrentUser();
-  if (!user) {
-    return null;
-  }
-
-  const dbUser = await database.user.upsert({
-    where: { id: user.id },
-    create: {
-      id: user.id,
-      email: user.email ?? "",
-    },
-    update: {
-      email: user.email ?? "",
-    },
-  });
-
-  return dbUser;
-}
-
-/**
- * Get an organization by slug and verify the current user has access to it.
- * Returns null if the org doesn't exist or user is not a member.
- */
 export async function getOrganizationBySlug(slug: string) {
-  const user = await getCurrentUser();
-  if (!user) {
+  const { userId } = await auth();
+  if (!userId) {
     return null;
   }
 
-  const membership = await database.organizationMember.findFirst({
-    where: {
-      userId: user.id,
-      organization: {
-        OR: [{ slug }, { githubOrgLogin: slug }],
-      },
-    },
-    include: {
-      organization: true,
-    },
-  });
+  const org = await convexClient.query(api.organizations.getBySlug, { slug });
+  if (!org) {
+    return null;
+  }
 
-  return membership?.organization ?? null;
+  // Verify membership via Clerk
+  const clerk = await clerkClient();
+  try {
+    const memberships =
+      await clerk.organizations.getOrganizationMembershipList({
+        organizationId: org.clerkOrgId,
+      });
+    const isMember = memberships.data.some(
+      (m) => m.publicUserData?.userId === userId
+    );
+    if (!isMember) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+
+  return org;
 }
 
-/**
- * Get the first organization the user is a member of.
- * Used for redirecting after login/onboarding.
- */
 export async function getFirstOrganization() {
-  const user = await getCurrentUser();
-  if (!user) {
+  const { userId } = await auth();
+  if (!userId) {
     return null;
   }
 
-  const firstMembership = await database.organizationMember.findFirst({
-    where: { userId: user.id },
-    include: { organization: true },
-    orderBy: { createdAt: "asc" },
+  const clerk = await clerkClient();
+  const memberships = await clerk.users.getOrganizationMembershipList({
+    userId,
   });
 
-  return firstMembership?.organization ?? null;
+  if (memberships.data.length === 0) {
+    return null;
+  }
+
+  const firstMembership = memberships.data[0];
+  const clerkOrgId = firstMembership.organization.id;
+
+  return convexClient.query(api.organizations.getByClerkOrgId, { clerkOrgId });
 }
 
 export async function getUserOrganizations() {
-  const user = await getCurrentUser();
-  if (!user) {
+  const { userId } = await auth();
+  if (!userId) {
     return [];
   }
 
-  const memberships = await database.organizationMember.findMany({
-    where: { userId: user.id },
-    include: { organization: true },
-    orderBy: { createdAt: "asc" },
+  const clerk = await clerkClient();
+  const memberships = await clerk.users.getOrganizationMembershipList({
+    userId,
   });
 
-  return memberships.map((m) => m.organization);
+  const orgs = await Promise.all(
+    memberships.data.map(async (m) => {
+      const org = await convexClient.query(
+        api.organizations.getByClerkOrgId,
+        { clerkOrgId: m.organization.id }
+      );
+      return org;
+    })
+  );
+
+  return orgs.filter(Boolean);
 }

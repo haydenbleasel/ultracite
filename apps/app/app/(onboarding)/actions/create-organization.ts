@@ -1,7 +1,8 @@
 "use server";
 
-import { database } from "@repo/backend/database";
-import { getCurrentUser, getOrCreateDbUser } from "@/lib/auth";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { api } from "../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 
 interface CreateOrganizationInput {
   name: string;
@@ -19,46 +20,40 @@ export async function createOrganization({
   name,
   slug,
 }: CreateOrganizationInput): Promise<CreateOrganizationResult> {
-  const user = await getCurrentUser();
-  if (!user) {
+  const { userId } = await auth();
+  if (!userId) {
     return { error: "You must be logged in to create an organization." };
   }
 
-  // Ensure user exists in database
-  const dbUser = await getOrCreateDbUser();
-  if (!dbUser) {
-    return { error: "Failed to create user record." };
-  }
-
-  // Validate slug format
   if (!slugRegex.test(slug)) {
     return {
       error: "Slug must contain only lowercase letters, numbers, and hyphens.",
     };
   }
 
-  // Check if slug is already taken
-  const existingOrg = await database.organization.findUnique({
-    where: { slug },
+  // Check if slug is taken in Convex
+  const existingOrg = await convexClient.query(api.organizations.getBySlug, {
+    slug,
   });
 
   if (existingOrg) {
     return { error: "This URL slug is already taken. Please choose another." };
   }
 
-  // Create organization and add user as owner
-  const organization = await database.organization.create({
-    data: {
-      name,
-      slug,
-      members: {
-        create: {
-          userId: user.id,
-          role: "OWNER",
-        },
-      },
-    },
+  // Create Clerk organization
+  const clerk = await clerkClient();
+  const clerkOrg = await clerk.organizations.createOrganization({
+    name,
+    slug,
+    createdBy: userId,
   });
 
-  return { slug: organization.slug };
+  // Create Convex metadata record
+  await convexClient.mutation(api.organizations.upsertByClerkOrgId, {
+    clerkOrgId: clerkOrg.id,
+    name,
+    slug,
+  });
+
+  return { slug };
 }

@@ -1,7 +1,8 @@
 import { Button } from "@repo/design-system/components/ui/button";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getCurrentUser, getUserOrganizations } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
+import { getUserOrganizations } from "@/lib/auth";
 import { OrganizationList } from "./components/organization-list";
 
 export const metadata: Metadata = {
@@ -10,21 +11,18 @@ export const metadata: Metadata = {
 };
 
 const OnboardingPage = async () => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    redirect("/auth/login");
+  if (!userId) {
+    redirect("/sign-in");
   }
 
-  // Get user's organizations
   const organizations = await getUserOrganizations();
 
-  // If user has exactly one organization, redirect to it
-  if (organizations.length === 1) {
+  if (organizations.length === 1 && organizations[0]) {
     redirect(`/${organizations[0].slug}`);
   }
 
-  // If user has multiple organizations, let them choose
   if (organizations.length > 1) {
     return (
       <div className="container relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-lg flex-col items-center justify-center px-4">
@@ -43,8 +41,6 @@ const OnboardingPage = async () => {
     );
   }
 
-  // No organizations - this shouldn't happen since we sync on login
-  // but handle it gracefully
   return (
     <div className="container relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-lg flex-col items-center justify-center px-4">
       <div className="flex w-full flex-col gap-6">
@@ -58,7 +54,7 @@ const OnboardingPage = async () => {
           </p>
         </div>
         <Button asChild className="mx-auto w-fit">
-          <a href="/auth/login">Log in again</a>
+          <a href="/sign-in">Log in again</a>
         </Button>
       </div>
     </div>

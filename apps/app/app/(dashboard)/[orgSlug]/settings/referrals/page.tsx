@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
+import { getOrganizationBySlug } from "@/lib/auth";
 import { getReferralCode } from "@/lib/referral/get-referral-code";
 import { getReferralStats } from "@/lib/referral/get-referral-stats";
 import { ReferralDashboard } from "./components/referral-dashboard";
@@ -13,10 +14,10 @@ export const metadata: Metadata = {
 const ReferralsPage = async ({
   params,
 }: PageProps<"/[orgSlug]/settings/referrals">) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    redirect("/auth/login");
+  if (!userId) {
+    redirect("/sign-in");
   }
 
   const { orgSlug } = await params;
@@ -27,8 +28,8 @@ const ReferralsPage = async ({
   }
 
   const [referralCode, stats] = await Promise.all([
-    getReferralCode(organization.id),
-    getReferralStats(organization.id, organization.stripeCustomerId),
+    getReferralCode(organization._id),
+    getReferralStats(organization._id, organization.stripeCustomerId ?? null),
   ]);
 
   return (

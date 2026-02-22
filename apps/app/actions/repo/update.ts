@@ -1,22 +1,30 @@
 "use server";
 
-import { database, type Repo } from "@repo/backend/src/database";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { getInstallationOctokit } from "@/lib/github/app";
 
 const validateBranch = async (
   repoId: string,
   branchName: string
 ): Promise<{ valid: boolean; error?: string }> => {
-  const repo = await database.repo.findUnique({
-    where: { id: repoId },
-    include: { organization: true },
+  const repo = await convexClient.query(api.repos.getById, {
+    id: repoId as any,
   });
 
   if (!repo) {
     return { valid: false, error: "Repository not found" };
   }
 
-  const installationId = repo.organization.githubInstallationId;
+  const org = await (async () => {
+    const allOrgs = await convexClient.query(
+      api.organizations.getSubscribedWithInstallation,
+      {}
+    );
+    return allOrgs.find((o) => o._id === repo.organizationId) ?? null;
+  })();
+
+  const installationId = org?.githubInstallationId;
 
   if (!installationId) {
     return {
@@ -34,9 +42,7 @@ const validateBranch = async (
       owner,
       repo: repoName,
       branch: branchName,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
+      headers: { "X-GitHub-Api-Version": "2022-11-28" },
     });
 
     return { valid: true };
@@ -49,7 +55,14 @@ const validateBranch = async (
   }
 };
 
-export const updateRepo = async (repoId: string, data: Partial<Repo>) => {
+export const updateRepo = async (
+  repoId: string,
+  data: {
+    defaultBranch?: string;
+    dailyRunsEnabled?: boolean;
+    prReviewEnabled?: boolean;
+  }
+) => {
   try {
     if (data.defaultBranch) {
       const validation = await validateBranch(repoId, data.defaultBranch);
@@ -59,9 +72,9 @@ export const updateRepo = async (repoId: string, data: Partial<Repo>) => {
       }
     }
 
-    await database.repo.update({
-      where: { id: repoId },
-      data,
+    await convexClient.mutation(api.repos.update, {
+      id: repoId as any,
+      ...data,
     });
 
     return { success: true, error: undefined };

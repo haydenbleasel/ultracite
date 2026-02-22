@@ -1,30 +1,40 @@
 "use server";
 
-import { database } from "@repo/backend/database";
 import { start } from "workflow/api";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { lintRepoWorkflow } from "@/app/api/cron/lint/lint-repo";
 
 export const triggerLintRun = async (repoId: string) => {
   try {
-    const repo = await database.repo.findUnique({
-      where: { id: repoId },
-      include: { organization: true },
+    const repo = await convexClient.query(api.repos.getById, {
+      id: repoId as any,
     });
 
     if (!repo) {
       return { success: false, error: "Repository not found" };
     }
 
-    const { organization } = repo;
+    const org = await (async () => {
+      const allOrgs = await convexClient.query(
+        api.organizations.getSubscribedWithInstallation,
+        {}
+      );
+      return allOrgs.find((o) => o._id === repo.organizationId) ?? null;
+    })();
 
-    if (!organization.githubInstallationId) {
+    if (!org) {
+      return { success: false, error: "Organization not found" };
+    }
+
+    if (!org.githubInstallationId) {
       return {
         success: false,
         error: "GitHub App not installed for this organization",
       };
     }
 
-    if (!organization.stripeCustomerId) {
+    if (!org.stripeCustomerId) {
       return {
         success: false,
         error: "Billing not configured for this organization",
@@ -33,12 +43,12 @@ export const triggerLintRun = async (repoId: string) => {
 
     await start(lintRepoWorkflow, [
       {
-        organizationId: organization.id,
-        repoId: repo.id,
+        organizationId: org._id,
+        repoId: repo._id,
         repoFullName: repo.fullName,
         defaultBranch: repo.defaultBranch,
-        installationId: organization.githubInstallationId,
-        stripeCustomerId: organization.stripeCustomerId,
+        installationId: org.githubInstallationId,
+        stripeCustomerId: org.stripeCustomerId,
       },
     ]);
 
