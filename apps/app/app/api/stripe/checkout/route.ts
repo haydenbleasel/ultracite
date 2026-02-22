@@ -91,8 +91,8 @@ export const POST = async (request: NextRequest) => {
       customer: customer.id,
       mode: "subscription",
       line_items: [{ price: env.STRIPE_PRICE_ID }],
-      success_url: new URL(org.slug, origin).toString(),
-      cancel_url: new URL(org.slug, origin).toString(),
+      success_url: origin,
+      cancel_url: origin,
       metadata: { organizationId: org._id },
       subscription_data: {
         metadata: { organizationId: org._id },

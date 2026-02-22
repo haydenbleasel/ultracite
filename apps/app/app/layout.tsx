@@ -1,6 +1,6 @@
 import "./global.css";
 import { DesignSystemProvider } from "@repo/design-system";
-import { Navbar } from "@repo/design-system/components/ultracite/navbar";
+import { AppNavbar } from "@/components/app-navbar";
 import { fonts } from "@repo/design-system/lib/fonts";
 import type { ReactNode } from "react";
 import { ConvexClerkProvider } from "@/components/convex-clerk-provider";
@@ -14,7 +14,7 @@ const Layout = async ({ children }: LayoutProps) => (
     <body className={fonts}>
       <ConvexClerkProvider>
         <DesignSystemProvider>
-          <Navbar />
+          <AppNavbar />
           {children}
         </DesignSystemProvider>
       </ConvexClerkProvider>

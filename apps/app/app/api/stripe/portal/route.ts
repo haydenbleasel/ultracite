@@ -73,14 +73,8 @@ export const GET = async (request: NextRequest) => {
       customer: customer.id,
       mode: "subscription",
       line_items: [{ price: env.STRIPE_PRICE_ID }],
-      success_url: new URL(
-        `${org.slug}?checkout=success`,
-        origin
-      ).toString(),
-      cancel_url: new URL(
-        `${org.slug}?checkout=cancel`,
-        origin
-      ).toString(),
+      success_url: new URL("/?checkout=success", origin).toString(),
+      cancel_url: new URL("/?checkout=cancel", origin).toString(),
       metadata: { organizationId: org._id },
       subscription_data: {
         metadata: { organizationId: org._id },
@@ -99,7 +93,7 @@ export const GET = async (request: NextRequest) => {
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: org.stripeCustomerId,
-    return_url: `${origin}/${org.slug}`,
+    return_url: origin,
   });
 
   redirect(portalSession.url);

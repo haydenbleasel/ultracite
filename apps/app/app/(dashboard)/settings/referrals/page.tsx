@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { getOrganizationBySlug } from "@/lib/auth";
+import { getActiveOrganization } from "@/lib/auth";
 import { getReferralCode } from "@/lib/referral/get-referral-code";
 import { getReferralStats } from "@/lib/referral/get-referral-stats";
 import { ReferralDashboard } from "./components/referral-dashboard";
@@ -11,17 +11,14 @@ export const metadata: Metadata = {
   description: "Manage your referral program and earn credits.",
 };
 
-const ReferralsPage = async ({
-  params,
-}: PageProps<"/[orgSlug]/settings/referrals">) => {
+const ReferralsPage = async () => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const { orgSlug } = await params;
-  const organization = await getOrganizationBySlug(orgSlug);
+  const organization = await getActiveOrganization();
 
   if (!organization) {
     notFound();

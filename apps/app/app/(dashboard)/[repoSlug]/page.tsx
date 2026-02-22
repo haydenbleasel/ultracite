@@ -5,18 +5,18 @@ import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { convexClient } from "@/lib/convex";
-import { getOrganizationBySlug } from "@/lib/auth";
+import { getActiveOrganization } from "@/lib/auth";
 import { CostTracker } from "./components/cost-tracker";
 import { RepoSettings } from "./components/repo-settings";
 import { RepoTable } from "./components/repo-table";
 
 export const generateMetadata = async ({
   params,
-}: PageProps<"/[orgSlug]/[repoSlug]">): Promise<Metadata> => {
-  const { orgSlug, repoSlug } = await params;
-  const organization = await getOrganizationBySlug(orgSlug);
+}: PageProps<"/[repoSlug]">): Promise<Metadata> => {
+  const { repoSlug } = await params;
+  const organization = await getActiveOrganization();
 
   if (!organization) {
     return {
@@ -36,15 +36,15 @@ export const generateMetadata = async ({
   };
 };
 
-const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
+const RepoPage = async ({ params }: PageProps<"/[repoSlug]">) => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const { orgSlug, repoSlug } = await params;
-  const organization = await getOrganizationBySlug(orgSlug);
+  const { repoSlug } = await params;
+  const organization = await getActiveOrganization();
 
   if (!organization) {
     notFound();

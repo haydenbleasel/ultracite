@@ -39,7 +39,7 @@ export const GET = async (request: NextRequest) => {
 
     if (!accountLogin) {
       return NextResponse.redirect(
-        new URL("/onboarding?error=no-account", request.url)
+        new URL("/?error=no-account", request.url)
       );
     }
 
@@ -61,7 +61,7 @@ export const GET = async (request: NextRequest) => {
 
       if (!accountId) {
         return NextResponse.redirect(
-          new URL("/onboarding?error=no-account", request.url)
+          new URL("/?error=no-account", request.url)
         );
       }
 
@@ -101,9 +101,7 @@ export const GET = async (request: NextRequest) => {
 
         await syncRepositories(existingOrg._id, installationIdNum);
 
-        return NextResponse.redirect(
-          new URL(`/${existingOrg.slug}`, request.url)
-        );
+        return NextResponse.redirect(new URL("/", request.url));
       }
     } else {
       await convexClient.mutation(api.organizations.updateInstallation, {
@@ -115,14 +113,14 @@ export const GET = async (request: NextRequest) => {
 
       await syncRepositories(org._id, installationIdNum);
 
-      return NextResponse.redirect(new URL(`/${org.slug}`, request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
   const organization = await getFirstOrganization();
 
   if (!organization) {
-    return NextResponse.redirect(new URL("/onboarding", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (setupAction === "request") {
@@ -131,9 +129,7 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  return NextResponse.redirect(
-    new URL(`/${organization.slug}`, request.url)
-  );
+  return NextResponse.redirect(new URL("/", request.url));
 };
 
 const syncRepositories = async (

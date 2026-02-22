@@ -1,8 +1,6 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { api } from "../../../../convex/_generated/api";
-import { convexClient } from "@/lib/convex";
 import { REFERRAL_COOKIE } from "@/lib/referral/constants";
 import { syncGitHubOrganizations } from "@/lib/github/sync-orgs";
 
@@ -44,33 +42,11 @@ export const GET = async (request: Request) => {
     }
 
     if (organizations.length > 0) {
-      return NextResponse.redirect(
-        new URL(`/${organizations[0].slug}`, request.url)
-      );
+      return NextResponse.redirect(new URL("/", request.url));
     }
   } catch (error) {
     console.error("Failed to sync GitHub organizations:", error);
   }
 
-  // Fallback: check if user has any orgs
-  const firstOrg = await getFirstOrgForUser(userId);
-  if (firstOrg) {
-    return NextResponse.redirect(new URL(`/${firstOrg.slug}`, request.url));
-  }
-
   return NextResponse.redirect(new URL("/", request.url));
 };
-
-async function getFirstOrgForUser(userId: string) {
-  const clerk = await clerkClient();
-  const memberships = await clerk.users.getOrganizationMembershipList({
-    userId,
-  });
-
-  if (memberships.data.length === 0) {
-    return null;
-  }
-
-  const clerkOrgId = memberships.data[0].organization.id;
-  return convexClient.query(api.organizations.getByClerkOrgId, { clerkOrgId });
-}

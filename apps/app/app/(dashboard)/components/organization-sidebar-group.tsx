@@ -32,11 +32,7 @@ export const OrganizationSidebarGroup = ({
     <SidebarGroupContent>
       <SidebarMenu>
         {organization.repos.map((repo) => (
-          <RepoSidebarItem
-            key={repo._id}
-            orgSlug={organization.slug}
-            repoSlug={repo.name}
-          />
+          <RepoSidebarItem key={repo._id} repoSlug={repo.name} />
         ))}
         {organization.repos.length === 0 && (
           <SidebarMenuItem>

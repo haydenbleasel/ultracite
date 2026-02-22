@@ -1,27 +1,26 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../convex/_generated/api";
 import { convexClient } from "@/lib/convex";
-import { getOrganizationBySlug } from "@/lib/auth";
+import { getActiveOrganization } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Manage your connected repositories and lint runs.",
 };
 
-const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
+const DashboardPage = async () => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");
   }
 
-  const { orgSlug } = await params;
-  const organization = await getOrganizationBySlug(orgSlug);
+  const organization = await getActiveOrganization();
 
   if (!organization) {
-    notFound();
+    return null;
   }
 
   const firstRepo = await convexClient.query(
@@ -30,10 +29,10 @@ const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
   );
 
   if (firstRepo) {
-    redirect(`/${orgSlug}/${firstRepo.name}`);
+    redirect(`/${firstRepo.name}`);
   }
 
   return null;
 };
 
-export default OrgPage;
+export default DashboardPage;
