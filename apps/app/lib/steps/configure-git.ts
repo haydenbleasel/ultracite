@@ -18,8 +18,8 @@ export async function configureGit(
     );
   }
 
-  // Git user.name, user.email, and core.hooksPath are pre-configured
-  // in the sandbox snapshot. Only the authenticated remote URL is per-run.
+  // Git user.name, user.email, and core.hooksPath are pre-configured in the sandbox snapshot.
+  // The authenticated remote URL and local hooks override are per-run.
   const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
 
   try {
@@ -29,7 +29,16 @@ export async function configureGit(
       "origin",
       authenticatedUrl,
     ]);
+
+    // Disable hooks locally to override any hooks installed by package managers
+    // (e.g. husky's prepare script sets core.hooksPath to .husky/)
+    await sandbox.runCommand("git", [
+      "config",
+      "--local",
+      "core.hooksPath",
+      "/dev/null",
+    ]);
   } catch (error) {
-    throw new Error(`Failed to set remote URL: ${parseError(error)}`);
+    throw new Error(`Failed to configure git: ${parseError(error)}`);
   }
 }
