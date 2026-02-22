@@ -3,10 +3,7 @@ import { parseError } from "@/lib/error";
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
-export async function createSandbox(
-  repoFullName: string,
-  token: string
-): Promise<string> {
+export async function createSandbox(): Promise<string> {
   "use step";
 
   let sandbox: Sandbox | null = null;
@@ -19,13 +16,6 @@ export async function createSandbox(
       },
       timeout: FIVE_MINUTES_MS,
     });
-
-    await sandbox.runCommand("git", [
-      "clone",
-      "--depth",
-      "1",
-      `https://x-access-token:${token}@github.com/${repoFullName}`,
-    ]);
   } catch (error) {
     throw new Error(`Failed to create sandbox: ${parseError(error)}`);
   }

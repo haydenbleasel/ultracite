@@ -7,6 +7,7 @@ import { configureGit } from "@/lib/steps/configure-git";
 import { createBranch } from "@/lib/steps/create-branch";
 import { createLintRun } from "@/lib/steps/create-lint-run";
 import { createPullRequest } from "@/lib/steps/create-pr";
+import { cloneRepo } from "@/lib/steps/clone-repo";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { extendSandbox } from "@/lib/steps/extend-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
@@ -74,8 +75,11 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
   // Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Create sandbox with the repo (returns sandbox ID for serialization)
-  const sandboxId = await createSandbox(repoFullName, token);
+  // Create sandbox (returns sandbox ID for serialization)
+  const sandboxId = await createSandbox();
+
+  // Clone the repo into the sandbox
+  await cloneRepo(sandboxId, repoFullName, token);
 
   let result: LintStepResult;
 
