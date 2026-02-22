@@ -24,6 +24,7 @@ export async function cloneRepo(
       "--depth",
       "1",
       `https://x-access-token:${token}@github.com/${repoFullName}`,
+      ".",
     ]);
   } catch (error) {
     throw new Error(`Failed to clone repo: ${parseError(error)}`);
