@@ -3,10 +3,7 @@ import { parseError } from "@/lib/error";
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
-export async function createSandbox(
-  repoFullName: string,
-  token: string
-): Promise<string> {
+export async function createSandbox(): Promise<string> {
   "use step";
 
   let sandbox: Sandbox | null = null;
@@ -14,11 +11,8 @@ export async function createSandbox(
   try {
     sandbox = await Sandbox.create({
       source: {
-        type: "git",
-        url: `https://github.com/${repoFullName}`,
-        username: "x-access-token",
-        password: token,
-        depth: 1,
+        type: "snapshot",
+        snapshotId: "snap_C7bRk0eKocK3L8QqZsNIz54Cwwk7",
       },
       timeout: FIVE_MINUTES_MS,
     });

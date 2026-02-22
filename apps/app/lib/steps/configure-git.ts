@@ -18,10 +18,8 @@ export async function configureGit(
     );
   }
 
-  const name = "Ultracite";
-  const email = "ultracite@users.noreply.github.com";
-
-  // Configure remote URL with authentication token
+  // Git user.name, user.email, and core.hooksPath are pre-configured in the sandbox snapshot.
+  // The authenticated remote URL and local hooks override are per-run.
   const authenticatedUrl = `https://x-access-token:${token}@github.com/${repoFullName}.git`;
 
   try {
@@ -31,27 +29,16 @@ export async function configureGit(
       "origin",
       authenticatedUrl,
     ]);
-  } catch (error) {
-    throw new Error(`Failed to set remote URL: ${parseError(error)}`);
-  }
 
-  try {
-    await sandbox.runCommand("git", ["config", "user.email", email]);
+    // Disable hooks locally to override any hooks installed by package managers
+    // (e.g. husky's prepare script sets core.hooksPath to .husky/)
+    await sandbox.runCommand("git", [
+      "config",
+      "--local",
+      "core.hooksPath",
+      "/dev/null",
+    ]);
   } catch (error) {
-    throw new Error(`Failed to configure git email: ${parseError(error)}`);
-  }
-
-  try {
-    await sandbox.runCommand("git", ["config", "user.name", name]);
-  } catch (error) {
-    throw new Error(`Failed to configure git name: ${parseError(error)}`);
-  }
-
-  // Disable all git hooks in the sandbox to prevent TTY-dependent hooks
-  // (like prepare-commit-msg) from failing in non-interactive environments
-  try {
-    await sandbox.runCommand("git", ["config", "core.hooksPath", "/dev/null"]);
-  } catch (error) {
-    throw new Error(`Failed to disable git hooks: ${parseError(error)}`);
+    throw new Error(`Failed to configure git: ${parseError(error)}`);
   }
 }

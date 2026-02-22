@@ -5,6 +5,7 @@ import { checkPushAccess } from "@/lib/steps/check-push-access";
 import { checkoutBranch } from "@/lib/steps/checkout-branch";
 import { commitAndPush } from "@/lib/steps/commit-and-push";
 import { configureGit } from "@/lib/steps/configure-git";
+import { cloneRepo } from "@/lib/steps/clone-repo";
 import { createSandbox } from "@/lib/steps/create-sandbox";
 import { extendSandbox } from "@/lib/steps/extend-sandbox";
 import { fixLint } from "@/lib/steps/fix-lint";
@@ -81,10 +82,12 @@ Please ensure the Ultracite app has write access to this repository and branch.
   // Get GitHub access token
   const token = await getGitHubToken(installationId);
 
-  // Create sandbox with the repo (returns sandbox ID for serialization)
-  const sandboxId = await createSandbox(repoFullName, token);
+  // Create sandbox (returns sandbox ID for serialization)
+  const sandboxId = await createSandbox();
 
   try {
+    // Clone the repo into the sandbox
+    await cloneRepo(sandboxId, repoFullName, token);
     // Checkout the PR branch
     await checkoutBranch(sandboxId, prBranch);
 
