@@ -60,6 +60,18 @@ In the dashboard, enable the repositories you want Ultracite to lint. Once enabl
 
 All linting and fixes run in isolated sandbox environments. Your code is cloned, processed, and the sandbox is destroyed — we never store your source code.
 
+The sandbox is created from a snapshot with a simple, pre-configured environment which helps saves a few precious seconds on each run.
+
+```sh
+# Global tools
+npm install -g @antfu/ni @anthropic-ai/claude-code pnpm yarn bun
+
+# Git config (global so it applies to all cloned repos)
+git config --global user.name "Ultracite"
+git config --global user.email "ultracite@users.noreply.github.com"
+git config --global core.hooksPath /dev/null
+```
+
 ### AI-Powered Fixes
 
 When `ultracite fix` can't auto-fix an issue, Ultracite uses Claude Code to understand the context and apply intelligent fixes. This handles complex issues like:
