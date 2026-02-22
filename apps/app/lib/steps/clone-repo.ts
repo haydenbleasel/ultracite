@@ -29,8 +29,9 @@ export async function cloneRepo(
 
     if (result.exitCode !== 0) {
       const output = await result.output("both");
+      const sanitized = output.replaceAll(token, "***");
       throw new Error(
-        `git clone failed with exit code ${result.exitCode}: ${output.trim()}`
+        `git clone failed with exit code ${result.exitCode}: ${sanitized.trim()}`
       );
     }
   } catch (error) {
