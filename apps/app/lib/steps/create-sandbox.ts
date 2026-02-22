@@ -14,14 +14,18 @@ export async function createSandbox(
   try {
     sandbox = await Sandbox.create({
       source: {
-        type: "git",
-        url: `https://github.com/${repoFullName}`,
-        username: "x-access-token",
-        password: token,
-        depth: 1,
+        type: "snapshot",
+        snapshotId: "snap_lDLlUFqp4PIxsAZHuueOTgvETX9N",
       },
       timeout: FIVE_MINUTES_MS,
     });
+
+    await sandbox.runCommand("git", [
+      "clone",
+      "--depth",
+      "1",
+      `https://x-access-token:${token}@github.com/${repoFullName}`,
+    ]);
   } catch (error) {
     throw new Error(`Failed to create sandbox: ${parseError(error)}`);
   }
