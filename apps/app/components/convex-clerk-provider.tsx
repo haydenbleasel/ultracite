@@ -10,7 +10,10 @@ const convex = new ConvexReactClient(
 );
 
 export const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
-  <ClerkProvider>
+  <ClerkProvider
+    afterSignInUrl="/api/auth/sync"
+    afterSignUpUrl="/api/auth/sync"
+  >
     <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
       {children}
     </ConvexProviderWithClerk>

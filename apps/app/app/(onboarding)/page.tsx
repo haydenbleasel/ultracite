@@ -54,7 +54,7 @@ const OnboardingPage = async () => {
           </p>
         </div>
         <Button asChild className="mx-auto w-fit">
-          <a href="/sign-in">Log in again</a>
+          <a href="/api/auth/sync">Sync organizations</a>
         </Button>
       </div>
     </div>
