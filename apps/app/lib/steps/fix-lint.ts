@@ -19,7 +19,7 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
   }
 
   const result = await sandbox
-    .runCommand("nlx", ["ultracite", "fix"])
+    .runCommand("npx", ["ultracite", "fix"])
     .catch((error: unknown) => {
       throw new Error(`Failed to run ultracite fix: ${parseError(error)}`);
     });
@@ -40,7 +40,7 @@ export async function fixLint(sandboxId: string): Promise<FixLintResult> {
 
   // Run check to see if there are remaining issues (non-zero exit = issues remain)
   const checkResult = await sandbox
-    .runCommand("nlx", ["ultracite", "check"])
+    .runCommand("npx", ["ultracite", "check"])
     .catch((error: unknown) => {
       throw new Error(`Failed to run ultracite check: ${parseError(error)}`);
     });
