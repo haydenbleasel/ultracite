@@ -1,14 +1,16 @@
-import { database } from "@repo/backend/database";
+import { auth } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
-import { getCurrentUser, getFirstOrganization } from "@/lib/auth";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
+import { getFirstOrganization } from "@/lib/auth";
 import { getGitHubApp, getInstallationOctokit } from "@/lib/github/app";
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Complex callback
 export const GET = async (request: NextRequest) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+  if (!userId) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
   const searchParams = request.nextUrl.searchParams;
@@ -26,9 +28,7 @@ export const GET = async (request: NextRequest) => {
       "GET /app/installations/{installation_id}",
       {
         installation_id: installationIdNum,
-        headers: {
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
+        headers: { "X-GitHub-Api-Version": "2022-11-28" },
       }
     );
 
@@ -43,22 +43,13 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    // Ensure user exists in database
-    await database.user.upsert({
-      where: { id: user.id },
-      create: { id: user.id, email: user.email ?? "" },
-      update: {},
+    // Find org by GitHub login
+    const org = await convexClient.query(api.organizations.getBySlug, {
+      slug: accountLogin.toLowerCase(),
     });
 
-    // Find or create the organization that matches the GitHub account login
-    let organization = await database.organization.findFirst({
-      where: {
-        githubOrgLogin: accountLogin,
-      },
-    });
-
-    if (!organization) {
-      // Organization doesn't exist yet - create it from the installation data
+    if (!org) {
+      // Organization doesn't exist yet - create it
       const accountId =
         installation.account && "id" in installation.account
           ? installation.account.id
@@ -74,54 +65,60 @@ export const GET = async (request: NextRequest) => {
         );
       }
 
-      // Use upsert to handle race conditions with OAuth sync
-      organization = await database.organization.upsert({
-        where: { githubOrgId: accountId },
-        create: {
-          name: accountLogin,
-          slug: accountLogin.toLowerCase(),
-          githubOrgId: accountId,
-          githubOrgLogin: accountLogin,
-          githubOrgType: accountType,
-        },
-        update: {
-          githubOrgLogin: accountLogin,
-          githubOrgType: accountType,
-        },
-      });
-    }
+      // We need a Clerk org ID. Try to find one from existing org by GitHub ID.
+      let existingOrg = await convexClient.query(
+        api.organizations.getByGithubOrgId,
+        { githubOrgId: accountId }
+      );
 
-    // Ensure user is a member of the organization
-    await database.organizationMember.upsert({
-      where: {
-        userId_organizationId: {
-          userId: user.id,
-          organizationId: organization.id,
-        },
-      },
-      create: {
-        userId: user.id,
-        organizationId: organization.id,
-        role: "MEMBER",
-      },
-      update: {},
-    });
+      if (!existingOrg) {
+        // Create a placeholder org with a temporary Clerk org ID
+        // The sync flow will properly create the Clerk org later
+        const orgId = await convexClient.mutation(
+          api.organizations.upsertByClerkOrgId,
+          {
+            clerkOrgId: `pending_${accountId}`,
+            name: accountLogin,
+            slug: accountLogin.toLowerCase(),
+            githubOrgId: accountId,
+            githubOrgLogin: accountLogin,
+            githubOrgType: accountType,
+          }
+        );
+        existingOrg = await convexClient.query(
+          api.organizations.getByGithubOrgId,
+          { githubOrgId: accountId }
+        );
+      }
 
-    await database.organization.update({
-      where: { id: organization.id },
-      data: {
+      if (existingOrg) {
+        await convexClient.mutation(api.organizations.updateInstallation, {
+          orgId: existingOrg._id,
+          githubInstallationId: installationIdNum,
+          githubAccountLogin: accountLogin,
+          installedAt: new Date(installation.created_at).getTime(),
+        });
+
+        await syncRepositories(existingOrg._id, installationIdNum);
+
+        return NextResponse.redirect(
+          new URL(`/${existingOrg.slug}`, request.url)
+        );
+      }
+    } else {
+      await convexClient.mutation(api.organizations.updateInstallation, {
+        orgId: org._id,
         githubInstallationId: installationIdNum,
         githubAccountLogin: accountLogin,
-        installedAt: new Date(installation.created_at),
-      },
-    });
+        installedAt: new Date(installation.created_at).getTime(),
+      });
 
-    await syncRepositories(organization.id, installationIdNum);
+      await syncRepositories(org._id, installationIdNum);
 
-    return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
+      return NextResponse.redirect(new URL(`/${org.slug}`, request.url));
+    }
   }
 
-  // For non-install/update actions, fall back to first organization
   const organization = await getFirstOrganization();
 
   if (!organization) {
@@ -129,27 +126,25 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (setupAction === "request") {
-    await database.organization.update({
-      where: { id: organization.id },
-      data: {
-        githubInstallationId: null,
-        githubAccountLogin: null,
-        installedAt: null,
-      },
+    await convexClient.mutation(api.organizations.clearInstallation, {
+      orgId: organization._id,
     });
   }
 
-  return NextResponse.redirect(new URL(`/${organization.slug}`, request.url));
+  return NextResponse.redirect(
+    new URL(`/${organization.slug}`, request.url)
+  );
 };
 
-/**
- * Sync repositories for an organization using its GitHub App installation.
- * Handles pagination to support organizations with more than 100 repositories.
- */
-const syncRepositories = async (orgId: string, installationId: number) => {
+const syncRepositories = async (
+  orgId: Parameters<typeof convexClient.mutation>[1] extends {
+    organizationId: infer T;
+  }
+    ? T
+    : string,
+  installationId: number
+) => {
   const octokit = await getInstallationOctokit(installationId);
-
-  // Use pagination to fetch all repositories
   const repositories = await octokit.paginate(
     octokit.rest.apps.listReposAccessibleToInstallation,
     { per_page: 100 },
@@ -157,20 +152,12 @@ const syncRepositories = async (orgId: string, installationId: number) => {
   );
 
   for (const repo of repositories) {
-    await database.repo.upsert({
-      where: { githubRepoId: repo.id },
-      create: {
-        organizationId: orgId,
-        githubRepoId: repo.id,
-        name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
-      },
-      update: {
-        name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
-      },
+    await convexClient.mutation(api.repos.upsertByGithubRepoId, {
+      organizationId: orgId as any,
+      githubRepoId: repo.id,
+      name: repo.name,
+      fullName: repo.full_name,
+      defaultBranch: repo.default_branch,
     });
   }
 };

@@ -1,11 +1,13 @@
-import { database } from "@repo/backend/database";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarTrigger } from "@repo/design-system/components/ui/sidebar";
 import { CheckCircleIcon, ExternalLinkIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
+import { getOrganizationBySlug } from "@/lib/auth";
 import { CostTracker } from "./components/cost-tracker";
 import { RepoSettings } from "./components/repo-settings";
 import { RepoTable } from "./components/repo-table";
@@ -23,12 +25,9 @@ export const generateMetadata = async ({
     };
   }
 
-  const repo = await database.repo.findFirst({
-    where: {
-      name: repoSlug,
-      organizationId: organization.id,
-    },
-    select: { fullName: true },
+  const repo = await convexClient.query(api.repos.getWithLatestLintRun, {
+    organizationId: organization._id,
+    repoName: repoSlug,
   });
 
   return {
@@ -38,10 +37,10 @@ export const generateMetadata = async ({
 };
 
 const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    redirect("/auth/login");
+  if (!userId) {
+    redirect("/sign-in");
   }
 
   const { orgSlug, repoSlug } = await params;
@@ -51,21 +50,9 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
     notFound();
   }
 
-  const repo = await database.repo.findFirst({
-    where: {
-      name: repoSlug,
-      organizationId: organization.id,
-    },
-    include: {
-      lintRuns: {
-        orderBy: { createdAt: "desc" },
-      },
-      organization: {
-        select: {
-          stripeCustomerId: true,
-        },
-      },
-    },
+  const repo = await convexClient.query(api.repos.getWithLatestLintRun, {
+    organizationId: organization._id,
+    repoName: repoSlug,
   });
 
   if (!repo) {
@@ -98,7 +85,7 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
               defaultBranch={repo.defaultBranch}
               defaultDailyRunsEnabled={repo.dailyRunsEnabled}
               defaultPrReviewEnabled={repo.prReviewEnabled}
-              repoId={repo.id}
+              repoId={repo._id}
             />
             <Button asChild size="icon" variant="ghost">
               <a
@@ -114,8 +101,8 @@ const RepoPage = async ({ params }: PageProps<"/[orgSlug]/[repoSlug]">) => {
       </header>
       <main>
         <RepoTable
-          isSubscribed={Boolean(repo.organization.stripeCustomerId)}
-          repoId={repo.id}
+          isSubscribed={Boolean(organization.stripeCustomerId)}
+          repoId={repo._id}
           runs={repo.lintRuns}
         />
       </main>

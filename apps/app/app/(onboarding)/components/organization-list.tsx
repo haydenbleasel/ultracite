@@ -1,24 +1,22 @@
 import Link from "next/link";
-
-interface Organization {
-  githubOrgType?: string | null;
-  id: string;
-  name: string;
-  slug: string;
-}
+import type { Organization } from "@/lib/types";
 
 interface OrganizationListProps {
-  organizations: Organization[];
+  organizations: (Organization | null)[];
 }
 
 export const OrganizationList = ({ organizations }: OrganizationListProps) => {
+  const validOrgs = organizations.filter(
+    (org): org is Organization => org !== null
+  );
+
   return (
     <div className="flex flex-col gap-2">
-      {organizations.map((org) => (
+      {validOrgs.map((org) => (
         <Link
           className="flex items-center gap-3 rounded-lg border p-4 transition-colors hover:bg-accent"
           href={`/${org.slug}`}
-          key={org.id}
+          key={org._id}
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-medium text-muted-foreground">
             {org.name.charAt(0).toUpperCase()}

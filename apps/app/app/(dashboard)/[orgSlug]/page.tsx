@@ -1,7 +1,9 @@
-import { database } from "@repo/backend/database";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
+import { api } from "../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
+import { getOrganizationBySlug } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -9,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    redirect("/auth/login");
+  if (!userId) {
+    redirect("/sign-in");
   }
 
   const { orgSlug } = await params;
@@ -22,19 +24,15 @@ const OrgPage = async ({ params }: PageProps<"/[orgSlug]">) => {
     notFound();
   }
 
-  const firstRepo = await database.repo.findFirst({
-    where: {
-      organizationId: organization.id,
-    },
-    orderBy: { createdAt: "desc" },
-    select: { name: true },
-  });
+  const firstRepo = await convexClient.query(
+    api.repos.getFirstByOrganizationId,
+    { organizationId: organization._id }
+  );
 
   if (firstRepo) {
     redirect(`/${orgSlug}/${firstRepo.name}`);
   }
 
-  // Layout handles empty states, this is a fallback
   return null;
 };
 

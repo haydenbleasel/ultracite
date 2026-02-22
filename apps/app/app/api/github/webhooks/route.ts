@@ -4,9 +4,10 @@ import type {
   InstallationRepositoriesEvent,
   IssueCommentEvent,
 } from "@octokit/webhooks-types";
-import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { env } from "@/lib/env";
 import { getInstallationOctokit } from "@/lib/github/app";
 import { type ReviewPRParams, reviewPRWorkflow } from "./review-pr";
@@ -53,19 +54,17 @@ const handleInstallationEvent = async (data: InstallationEvent) => {
   const { action, installation } = data;
 
   if (action === "deleted") {
-    const org = await database.organization.findFirst({
-      where: { githubInstallationId: installation.id },
-    });
+    const org = await convexClient.query(
+      api.organizations.getByGithubInstallationId,
+      { installationId: installation.id }
+    );
 
     if (org) {
-      await database.repo.deleteMany({ where: { organizationId: org.id } });
-      await database.organization.update({
-        where: { id: org.id },
-        data: {
-          githubInstallationId: null,
-          githubAccountLogin: null,
-          installedAt: null,
-        },
+      await convexClient.mutation(api.repos.deleteByOrganizationId, {
+        organizationId: org._id,
+      });
+      await convexClient.mutation(api.organizations.clearInstallation, {
+        orgId: org._id,
       });
     }
   }
@@ -77,62 +76,46 @@ const handleInstallationRepositoriesEvent = async (
   const { action, installation, repositories_added, repositories_removed } =
     data;
 
-  const org = await database.organization.findFirst({
-    where: { githubInstallationId: installation.id },
-  });
+  const org = await convexClient.query(
+    api.organizations.getByGithubInstallationId,
+    { installationId: installation.id }
+  );
 
   if (!org) {
     return;
   }
 
   if (action === "added" && repositories_added) {
-    // Fetch repository details from GitHub API to get the default branch
     const octokit = await getInstallationOctokit(installation.id);
 
     for (const repo of repositories_added) {
-      // Fetch the full repository data to get the default branch
       const { data: repoData } = await octokit.request(
         "GET /repositories/{id}",
         {
           id: repo.id,
-          headers: {
-            "X-GitHub-Api-Version": "2022-11-28",
-          },
+          headers: { "X-GitHub-Api-Version": "2022-11-28" },
         }
       );
 
-      await database.repo.upsert({
-        where: { githubRepoId: repo.id },
-        create: {
-          organizationId: org.id,
-          githubRepoId: repo.id,
-          name: repo.name,
-          fullName: repo.full_name,
-          defaultBranch: repoData.default_branch,
-        },
-        update: {
-          name: repo.name,
-          fullName: repo.full_name,
-          defaultBranch: repoData.default_branch,
-        },
+      await convexClient.mutation(api.repos.upsertByGithubRepoId, {
+        organizationId: org._id,
+        githubRepoId: repo.id,
+        name: repo.name,
+        fullName: repo.full_name,
+        defaultBranch: repoData.default_branch,
       });
     }
   }
 
   if (action === "removed" && repositories_removed) {
     for (const repo of repositories_removed) {
-      await database.repo
-        .delete({
-          where: { githubRepoId: repo.id },
-        })
-        .catch(() => {
-          // Ignore if already deleted
-        });
+      await convexClient.mutation(api.repos.deleteByGithubRepoId, {
+        githubRepoId: repo.id,
+      });
     }
   }
 };
 
-// Check if comment matches trigger patterns
 const isReviewTrigger = (comment: string): boolean => {
   const normalized = comment.trim().toLowerCase();
   const appSlug = env.NEXT_PUBLIC_GITHUB_APP_SLUG.toLowerCase();
@@ -147,17 +130,14 @@ const isReviewTrigger = (comment: string): boolean => {
 const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
   const { action, installation, issue, comment, repository } = data;
 
-  // Only handle new comments
   if (action !== "created") {
     return;
   }
 
-  // Check if this is a PR comment (not a regular issue)
   if (!issue?.pull_request) {
     return;
   }
 
-  // Check if the comment is a review trigger
   if (!(comment && isReviewTrigger(comment.body))) {
     return;
   }
@@ -166,22 +146,36 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
     return;
   }
 
-  // Check if this repo is tracked by Ultracite
-  const repo = await database.repo.findFirst({
-    where: { githubRepoId: repository.id },
-    include: { organization: true },
+  const repo = await convexClient.query(api.repos.getByGithubRepoId, {
+    githubRepoId: repository.id,
   });
 
   if (!repo) {
     return;
   }
 
-  // Skip if PR reviews are disabled or organization is not subscribed
-  if (!(repo.prReviewEnabled && repo.organization.stripeCustomerId)) {
+  const org = await convexClient.query(api.organizations.getByClerkOrgId, {
+    clerkOrgId: "", // Need to look up by org ID instead
+  });
+
+  // Look up org directly
+  const organization = await (async () => {
+    // Use the repo's organizationId to get the org
+    const allOrgs = await convexClient.query(
+      api.organizations.getSubscribedWithInstallation,
+      {}
+    );
+    return allOrgs.find((o) => o._id === repo.organizationId) ?? null;
+  })();
+
+  if (!organization) {
     return;
   }
 
-  // Fetch PR details to get branch info
+  if (!(repo.prReviewEnabled && organization.stripeCustomerId)) {
+    return;
+  }
+
   const octokit = await getInstallationOctokit(installation.id);
   const [owner, repoName] = repository.full_name.split("/");
   const { data: pullRequest } = await octokit.request(
@@ -190,73 +184,24 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
       owner,
       repo: repoName,
       pull_number: issue.number,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
+      headers: { "X-GitHub-Api-Version": "2022-11-28" },
     }
   );
 
-  let lintRunId: string | undefined;
-
-  try {
-    lintRunId = await database.$transaction(
-      async (tx) => {
-        // Check if there's already a running review for this PR
-        const existingRun = await tx.lintRun.findFirst({
-          where: {
-            repoId: repo.id,
-            prNumber: issue.number,
-            status: {
-              in: ["PENDING", "RUNNING"],
-            },
-          },
-          select: {
-            id: true,
-          },
-        });
-
-        if (existingRun) {
-          // Skip - there's already a review in progress for this PR
-          return undefined;
-        }
-
-        // Create a lint run record within the same transaction
-        const lintRun = await tx.lintRun.create({
-          data: {
-            organizationId: repo.organizationId,
-            repoId: repo.id,
-            prNumber: issue.number,
-            status: "RUNNING",
-            startedAt: new Date(),
-          },
-          select: {
-            id: true,
-          },
-        });
-
-        return lintRun.id;
-      },
-      {
-        isolationLevel: "Serializable",
-      }
-    );
-  } catch (error) {
-    // Serialization failure means another transaction won the race - that's fine
-    if (
-      error instanceof Error &&
-      error.message.includes("could not serialize access")
-    ) {
-      return;
+  // Atomic check-and-create via Convex mutation
+  const lintRunId = await convexClient.mutation(
+    api.lintRuns.createIfNoRunning,
+    {
+      organizationId: repo.organizationId,
+      repoId: repo._id,
+      prNumber: issue.number,
     }
-    throw error;
-  }
+  );
 
   if (!lintRunId) {
-    // A review is already in progress for this PR
     return;
   }
 
-  // Run the review workflow
   const params: ReviewPRParams = {
     installationId: installation.id,
     repoFullName: repository.full_name,
@@ -264,21 +209,18 @@ const handleIssueCommentEvent = async (data: IssueCommentEvent) => {
     prBranch: pullRequest.head.ref,
     baseBranch: pullRequest.base.ref,
     lintRunId,
-    stripeCustomerId: repo.organization.stripeCustomerId,
+    stripeCustomerId: organization.stripeCustomerId,
   };
 
   try {
     await start(reviewPRWorkflow, [params]);
   } catch (error) {
-    // Mark the lint run as failed if workflow startup fails
-    await database.lintRun.update({
-      where: { id: lintRunId },
-      data: {
-        status: "FAILED",
-        completedAt: new Date(),
-        errorMessage:
-          error instanceof Error ? error.message : "Failed to start workflow",
-      },
+    await convexClient.mutation(api.lintRuns.update, {
+      id: lintRunId,
+      status: "FAILED",
+      completedAt: Date.now(),
+      errorMessage:
+        error instanceof Error ? error.message : "Failed to start workflow",
     });
     throw error;
   }

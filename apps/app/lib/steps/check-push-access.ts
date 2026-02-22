@@ -1,4 +1,5 @@
-import { database } from "@repo/backend/database";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "../convex";
 import { handleGitHubError, parseError } from "@/lib/error";
 import { getInstallationOctokit } from "@/lib/github/app";
 
@@ -24,7 +25,6 @@ export async function checkPushAccess(
     }
   );
 
-  // Check if the repository is archived
   let repoData: Awaited<ReturnType<typeof octokit.rest.repos.get>>["data"];
 
   try {
@@ -35,13 +35,8 @@ export async function checkPushAccess(
   }
 
   if (repoData.archived) {
-    // Disable the repo so we don't try to lint it again
-    await database.repo.updateMany({
-      where: { fullName: repoFullName },
-      data: {
-        dailyRunsEnabled: false,
-        prReviewEnabled: false,
-      },
+    await convexClient.mutation(api.repos.disableByFullName, {
+      fullName: repoFullName,
     });
 
     return {
@@ -50,7 +45,6 @@ export async function checkPushAccess(
     };
   }
 
-  // Check installation permissions for this repo
   let installation: Awaited<
     ReturnType<typeof octokit.rest.apps.getInstallation>
   >["data"];
@@ -64,7 +58,6 @@ export async function checkPushAccess(
     return handleGitHubError(error, "Failed to get installation info");
   }
 
-  // Check if the installation has write access to contents
   const permissions = installation.permissions;
 
   if (!permissions?.contents || permissions.contents === "read") {
@@ -74,7 +67,6 @@ export async function checkPushAccess(
     };
   }
 
-  // Check branch protection rules
   try {
     const { data: protection } = await octokit.rest.repos.getBranchProtection({
       owner,
@@ -82,11 +74,9 @@ export async function checkPushAccess(
       branch,
     });
 
-    // Check if there are restrictions on who can push
     if (protection.restrictions) {
-      // If there are restrictions, we need to check if apps are allowed
       const allowedApps = protection.restrictions.apps || [];
-      const appSlug = "ultracite"; // Your GitHub App slug
+      const appSlug = "ultracite";
 
       const isAppAllowed = allowedApps.some((app) => app.slug === appSlug);
       if (!isAppAllowed && allowedApps.length > 0) {
@@ -96,15 +86,7 @@ export async function checkPushAccess(
         };
       }
     }
-
-    // Check if required status checks would block us
-    if (protection.required_status_checks?.strict) {
-      // Strict mode requires branch to be up to date - this could block pushes
-      // but we'll allow it and let the push fail if needed
-    }
   } catch (error) {
-    // 404 means no branch protection - that's fine, we can push
-    // 403 can mean branch protection isn't available (requires GitHub Pro for private repos)
     if (
       error instanceof Error &&
       "status" in error &&

@@ -1,21 +1,22 @@
-import { database } from "@repo/backend/database";
+import type { Id } from "../../convex/_generated/dataModel";
+import { api } from "../../convex/_generated/api";
 import { FatalError, getStepMetadata } from "workflow";
+import { convexClient } from "../convex";
 import { parseError } from "@/lib/error";
 import { env } from "../env";
 import { stripe } from "../stripe";
 
 export async function recordBillingUsage(
-  lintRunId: string,
+  lintRunId: Id<"lintRuns"> | string,
   stripeCustomerId: string
 ): Promise<void> {
   "use step";
 
-  // Get the step's unique ID - stable across retries
   const { stepId } = getStepMetadata();
 
-  const lintRun = await database.lintRun
-    .findUnique({
-      where: { id: lintRunId },
+  const lintRun = await convexClient
+    .query(api.lintRuns.getById, {
+      id: lintRunId as Id<"lintRuns">,
     })
     .catch((error: unknown) => {
       throw new Error(`Failed to fetch lint run: ${parseError(error)}`);
@@ -25,15 +26,12 @@ export async function recordBillingUsage(
     throw new FatalError(`Lint run not found: ${lintRunId}`);
   }
 
-  const cost = lintRun.sandboxCostUsd.plus(lintRun.aiCostUsd ?? 0).toNumber();
+  const cost = lintRun.sandboxCostUsd + (lintRun.aiCostUsd ?? 0);
 
-  // Skip billing if there's no cost
   if (cost <= 0) {
     return;
   }
 
-  // Report usage to Stripe meters
-  // Convert USD to cents, rounding up to ensure we never undercharge
   const costCents = Math.ceil(cost * 100);
 
   try {
@@ -46,7 +44,6 @@ export async function recordBillingUsage(
         },
       },
       {
-        // Use stepId as idempotency key - stable across retries, unique per step
         idempotencyKey: stepId,
       }
     );

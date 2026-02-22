@@ -1,20 +1,22 @@
-import { database } from "@repo/backend/database";
 import {
   SidebarInset,
   SidebarProvider,
 } from "@repo/design-system/components/ui/sidebar";
 import { notFound, redirect } from "next/navigation";
-import { getCurrentUser, getOrganizationBySlug } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
+import { api } from "../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
+import { getOrganizationBySlug } from "@/lib/auth";
 import { InstallationEmptyState } from "./components/installation-empty-state";
 import { OrganizationEmptyState } from "./components/organization-empty-state";
 import { RepoSidebar } from "./components/repo-sidebar";
 import { SubscriptionBanner } from "./components/subscription-banner";
 
 const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
-    redirect("/auth/login");
+  if (!userId) {
+    redirect("/sign-in");
   }
 
   const { orgSlug } = await params;
@@ -24,20 +26,10 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
     notFound();
   }
 
-  const organization = await database.organization.findUnique({
-    where: { id: org.id },
-    include: {
-      repos: {
-        orderBy: { createdAt: "desc" },
-        include: {
-          lintRuns: {
-            orderBy: { createdAt: "desc" },
-            take: 1,
-          },
-        },
-      },
-    },
-  });
+  const organization = await convexClient.query(
+    api.organizations.getWithRepos,
+    { orgId: org._id }
+  );
 
   if (!organization) {
     notFound();
@@ -68,7 +60,7 @@ const OrgLayout = async ({ children, params }: LayoutProps<"/[orgSlug]">) => {
       <RepoSidebar orgSlug={orgSlug} />
       <SidebarInset>
         {!isSubscribed && (
-          <SubscriptionBanner organizationId={organization.id} />
+          <SubscriptionBanner organizationId={org._id} />
         )}
         {children}
       </SidebarInset>

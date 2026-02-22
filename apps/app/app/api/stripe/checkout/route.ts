@@ -1,13 +1,14 @@
-import { database } from "@repo/backend/database";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { env } from "@/lib/env";
 import { stripe } from "@/lib/stripe";
 
 export const POST = async (request: NextRequest) => {
-  const user = await getCurrentUser();
+  const { userId } = await auth();
 
-  if (!user) {
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -22,63 +23,79 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  // Verify user is a member of this organization
-  const membership = await database.organizationMember.findFirst({
-    where: {
-      userId: user.id,
-      organizationId,
-    },
-    include: {
-      organization: true,
-    },
-  });
+  // Get org from Convex
+  const organization = await convexClient.query(
+    api.organizations.getByClerkOrgId,
+    { clerkOrgId: "" }
+  );
 
-  if (!membership) {
+  // Since we have a Convex ID, fetch directly
+  // We need to verify membership via Clerk
+  const allOrgs = await convexClient.query(
+    api.organizations.getSubscribedWithInstallation,
+    {}
+  );
+  const org = allOrgs.find((o) => o._id === organizationId) ??
+    (await (async () => {
+      // Try fetching all orgs to find by ID
+      const bySlug = await convexClient.query(api.organizations.getBySlug, {
+        slug: organizationId,
+      });
+      return bySlug;
+    })());
+
+  if (!org) {
+    return NextResponse.json({ error: "Organization not found" }, { status: 404 });
+  }
+
+  // Verify membership via Clerk
+  const clerk = await clerkClient();
+  try {
+    const memberships =
+      await clerk.organizations.getOrganizationMembershipList({
+        organizationId: org.clerkOrgId,
+      });
+    const isMember = memberships.data.some(
+      (m) => m.publicUserData?.userId === userId
+    );
+    if (!isMember) {
+      return NextResponse.json({ error: "Not a member" }, { status: 403 });
+    }
+  } catch {
     return NextResponse.json({ error: "Not a member" }, { status: 403 });
   }
 
-  const organization = membership.organization;
+  const user = await clerk.users.getUser(userId);
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   const origin = `${protocol}://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
 
   try {
-    // If already subscribed, redirect to billing portal
-    if (organization.stripeCustomerId) {
+    if (org.stripeCustomerId) {
       const portalSession = await stripe.billingPortal.sessions.create({
-        customer: organization.stripeCustomerId,
+        customer: org.stripeCustomerId,
         return_url: origin,
       });
 
       return NextResponse.json({ url: portalSession.url });
     }
 
-    // Create a new Stripe customer
     const customer = await stripe.customers.create({
-      email: user.email ?? undefined,
-      name: organization.name,
+      email: user.emailAddresses[0]?.emailAddress,
+      name: org.name,
       metadata: {
-        organizationId: organization.id,
+        organizationId: org._id,
       },
     });
 
-    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
       mode: "subscription",
-      line_items: [
-        {
-          price: env.STRIPE_PRICE_ID,
-        },
-      ],
-      success_url: new URL(organization.slug, origin).toString(),
-      cancel_url: new URL(organization.slug, origin).toString(),
-      metadata: {
-        organizationId: organization.id,
-      },
+      line_items: [{ price: env.STRIPE_PRICE_ID }],
+      success_url: new URL(org.slug, origin).toString(),
+      cancel_url: new URL(org.slug, origin).toString(),
+      metadata: { organizationId: org._id },
       subscription_data: {
-        metadata: {
-          organizationId: organization.id,
-        },
+        metadata: { organizationId: org._id },
       },
     });
 

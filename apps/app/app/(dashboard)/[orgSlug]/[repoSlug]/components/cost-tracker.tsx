@@ -1,4 +1,4 @@
-import type { LintRun } from "@repo/backend/database";
+import type { LintRun } from "@/lib/types";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import {
   Popover,

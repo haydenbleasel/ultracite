@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { Id } from "../../convex/_generated/dataModel";
 import {
   getOrCreateReferralCode,
   getReferralUrl,
@@ -12,7 +13,7 @@ export interface ReferralCode {
 }
 
 export async function getReferralCode(
-  organizationId: string
+  organizationId: Id<"organizations">
 ): Promise<ReferralCode> {
   const referralCode = await getOrCreateReferralCode(organizationId);
   const referralUrl = getReferralUrl(referralCode.code);

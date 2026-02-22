@@ -36,7 +36,7 @@ interface ReferralDashboardProps {
 
 const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
-const formatDate = (date: Date) => new Date(date).toLocaleDateString();
+const formatDate = (date: Date | number) => new Date(date).toLocaleDateString();
 
 export const ReferralDashboard = ({
   referralCode,
@@ -50,7 +50,7 @@ export const ReferralDashboard = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const getStatusBadge = (status: "PENDING" | "COMPLETED" | "INVALID") => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
         return (
