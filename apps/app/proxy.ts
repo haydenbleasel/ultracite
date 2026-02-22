@@ -1,23 +1,24 @@
-import type { NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export async function proxy(request: NextRequest) {
-  return await updateSession(request);
-}
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/r/:code",
+  "/api/cron/(.*)",
+  "/api/stripe/webhooks",
+  "/api/github/webhooks",
+  "/api/clerk/webhooks",
+  "/.well-known/workflow/(.*)",
+]);
+
+export const proxy = clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect();
+  }
+});
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - .well-known/workflow/ (workflow files)
-     * - /api/cron (cron jobs)
-     * - /api/stripe/webhooks
-     * - /api/github/webhooks
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|\\.well-known/workflow/|api/cron|api/stripe/webhooks|api/github/webhooks|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

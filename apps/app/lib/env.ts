@@ -7,8 +7,10 @@ export const env = createEnv({
   server: {
     CRON_SECRET: z.string(),
 
-    // Database
-    POSTGRES_PRISMA_URL: z.string(),
+    // Clerk
+    CLERK_SECRET_KEY: z.string(),
+    CLERK_JWT_ISSUER_DOMAIN: z.string(),
+    CLERK_WEBHOOK_SECRET: z.string(),
 
     // GitHub App
     GITHUB_APP_ID: z.string(),
@@ -36,16 +38,23 @@ export const env = createEnv({
     SLACK_CHANNEL: z.string(),
   },
   client: {
-    // Supabase
-    NEXT_PUBLIC_SUPABASE_URL: z.string(),
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string(),
+    // Clerk
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+
+    // Convex
+    NEXT_PUBLIC_CONVEX_URL: z.string(),
 
     // GitHub App
     NEXT_PUBLIC_GITHUB_APP_SLUG: z.string(),
   },
   runtimeEnv: {
     CRON_SECRET: process.env.CRON_SECRET,
-    POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CLERK_JWT_ISSUER_DOMAIN: process.env.CLERK_JWT_ISSUER_DOMAIN,
+    CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     GITHUB_APP_ID: process.env.GITHUB_APP_ID,
     GITHUB_APP_PRIVATE_KEY: process.env.GITHUB_APP_PRIVATE_KEY,
     GITHUB_APP_WEBHOOK_SECRET: process.env.GITHUB_APP_WEBHOOK_SECRET,
@@ -53,9 +62,6 @@ export const env = createEnv({
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     GITHUB_REDIRECT_URI: process.env.GITHUB_REDIRECT_URI,
     NEXT_PUBLIC_GITHUB_APP_SLUG: process.env.NEXT_PUBLIC_GITHUB_APP_SLUG,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
     VERCEL_PROJECT_ID: process.env.VERCEL_PROJECT_ID,
     VERCEL_AI_GATEWAY_API_KEY: process.env.VERCEL_AI_GATEWAY_API_KEY,

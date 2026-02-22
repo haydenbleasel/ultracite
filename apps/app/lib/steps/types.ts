@@ -1,9 +1,11 @@
+import type { Id } from "../../convex/_generated/dataModel";
+
 export interface LintRepoParams {
   defaultBranch: string;
   installationId: number;
-  organizationId: string;
+  organizationId: Id<"organizations">;
   repoFullName: string;
-  repoId: string;
+  repoId: Id<"repos">;
   stripeCustomerId: string;
 }
 

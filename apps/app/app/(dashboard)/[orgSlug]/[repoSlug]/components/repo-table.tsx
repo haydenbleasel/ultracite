@@ -1,4 +1,4 @@
-import type { LintRun } from "@repo/backend/database";
+import type { LintRun } from "@/lib/types";
 import {
   Table,
   TableBody,
@@ -36,7 +36,7 @@ export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
         </TableHeader>
         <TableBody>
           {runs.map((run) => (
-            <TableRow key={run.id}>
+            <TableRow key={run._id}>
               <TableCell>
                 <LintStatusBadge status={run.status} />
               </TableCell>
@@ -55,7 +55,7 @@ export const RepoTable = ({ repoId, runs, isSubscribed }: RepoTableProps) => {
                 )}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {run.createdAt.toLocaleString()}
+                {new Date(run._creationTime).toLocaleString()}
               </TableCell>
               <TableCell className="text-muted-foreground">
                 {run.errorMessage ?? ""}

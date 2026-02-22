@@ -1,6 +1,7 @@
-import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { env } from "@/lib/env";
 import {
   applyPendingReferrerCredits,
@@ -40,9 +41,10 @@ export const POST = async (request: NextRequest) => {
       const customerId = session.customer as string;
 
       if (organizationId && customerId) {
-        await database.organization.update({
-          where: { id: organizationId },
-          data: { stripeCustomerId: customerId },
+        // organizationId here is a Convex ID string
+        await convexClient.mutation(api.organizations.setStripeCustomerId, {
+          orgId: organizationId as any,
+          stripeCustomerId: customerId,
         });
       }
 
@@ -53,11 +55,10 @@ export const POST = async (request: NextRequest) => {
       const subscription = event.data.object;
       const customerId = subscription.customer as string;
 
-      // Remove stripeCustomerId to disable linting
-      await database.organization.updateMany({
-        where: { stripeCustomerId: customerId },
-        data: { stripeCustomerId: null },
-      });
+      await convexClient.mutation(
+        api.organizations.clearStripeCustomerIdByCustomer,
+        { stripeCustomerId: customerId }
+      );
 
       return new Response("OK", { status: 200 });
     }
@@ -65,9 +66,7 @@ export const POST = async (request: NextRequest) => {
     case "invoice.paid": {
       const invoice = event.data.object as Stripe.Invoice;
 
-      // Only apply referral credits on first invoice (subscription creation)
       if (invoice.billing_reason === "subscription_create") {
-        // Run independently so one failure doesn't block the other
         const results = await Promise.allSettled([
           applyReferralCredits(invoice),
           applyPendingReferrerCredits(invoice),

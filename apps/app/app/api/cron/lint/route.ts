@@ -1,6 +1,7 @@
-import { database } from "@repo/backend/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { start } from "workflow/api";
+import { api } from "../../../../convex/_generated/api";
+import { convexClient } from "@/lib/convex";
 import { env } from "@/lib/env";
 import { lintRepoWorkflow } from "./lint-repo";
 
@@ -11,17 +12,10 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const organizations = await database.organization.findMany({
-    where: {
-      githubInstallationId: { not: null },
-      stripeCustomerId: { not: null },
-    },
-    include: {
-      repos: {
-        where: { dailyRunsEnabled: true },
-      },
-    },
-  });
+  const organizations = await convexClient.query(
+    api.organizations.getSubscribedWithInstallation,
+    {}
+  );
 
   const workflowsStarted: string[] = [];
   const workflowsFailed: { repo: string; error: string }[] = [];
@@ -31,13 +25,18 @@ export const GET = async (request: NextRequest) => {
       continue;
     }
 
-    for (const repo of org.repos) {
+    const repos = await convexClient.query(api.repos.getByOrganizationId, {
+      organizationId: org._id,
+    });
+
+    const enabledRepos = repos.filter((r) => r.dailyRunsEnabled);
+
+    for (const repo of enabledRepos) {
       try {
-        // Start a durable workflow for each repo
         await start(lintRepoWorkflow, [
           {
-            organizationId: org.id,
-            repoId: repo.id,
+            organizationId: org._id,
+            repoId: repo._id,
             repoFullName: repo.fullName,
             defaultBranch: repo.defaultBranch,
             installationId: org.githubInstallationId,
@@ -56,7 +55,6 @@ export const GET = async (request: NextRequest) => {
     }
   }
 
-  // Return appropriate status based on results
   if (workflowsFailed.length > 0 && workflowsStarted.length === 0) {
     return NextResponse.json(
       {
@@ -74,7 +72,7 @@ export const GET = async (request: NextRequest) => {
         repos: workflowsStarted,
         failed: workflowsFailed,
       },
-      { status: 207 } // Multi-Status for partial success
+      { status: 207 }
     );
   }
 

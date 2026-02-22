@@ -1,8 +1,10 @@
 import "server-only";
 
-import { database } from "@repo/backend/database";
+import { clerkClient } from "@clerk/nextjs/server";
 import { Octokit } from "octokit";
-import { processReferral } from "@/lib/referral/process-referral";
+import type { Id } from "../../convex/_generated/dataModel";
+import { api } from "../../convex/_generated/api";
+import { convexClient } from "../convex";
 import { getGitHubApp, getInstallationOctokit } from "./app";
 
 interface GitHubOrg {
@@ -13,14 +15,11 @@ interface GitHubOrg {
   type: "Organization" | "User";
 }
 
-/**
- * Sync repositories for an organization using its GitHub App installation.
- * Handles pagination to support organizations with more than 100 repositories.
- */
-async function syncRepositories(orgId: string, installationId: number) {
+async function syncRepositories(
+  orgId: Id<"organizations">,
+  installationId: number
+) {
   const octokit = await getInstallationOctokit(installationId);
-
-  // Use pagination to fetch all repositories
   const repositories = await octokit.paginate(
     octokit.rest.apps.listReposAccessibleToInstallation,
     { per_page: 100 },
@@ -28,28 +27,16 @@ async function syncRepositories(orgId: string, installationId: number) {
   );
 
   for (const repo of repositories) {
-    await database.repo.upsert({
-      where: { githubRepoId: repo.id },
-      create: {
-        organizationId: orgId,
-        githubRepoId: repo.id,
-        name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
-      },
-      update: {
-        name: repo.name,
-        fullName: repo.full_name,
-        defaultBranch: repo.default_branch,
-      },
+    await convexClient.mutation(api.repos.upsertByGithubRepoId, {
+      organizationId: orgId,
+      githubRepoId: repo.id,
+      name: repo.name,
+      fullName: repo.full_name,
+      defaultBranch: repo.default_branch,
     });
   }
 }
 
-/**
- * Check if the GitHub App is installed on a user or organization account.
- * Returns the installation details if found, null otherwise.
- */
 async function checkGitHubAppInstallation(
   login: string,
   type: "Organization" | "User"
@@ -60,97 +47,77 @@ async function checkGitHubAppInstallation(
       type === "Organization"
         ? "GET /orgs/{org}/installation"
         : "GET /users/{username}/installation";
-
     const params =
       type === "Organization" ? { org: login } : { username: login };
 
     const { data: installation } = await app.octokit.request(endpoint, {
       ...params,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
+      headers: { "X-GitHub-Api-Version": "2022-11-28" },
     });
 
-    return {
-      id: installation.id,
-      createdAt: installation.created_at,
-    };
+    return { id: installation.id, createdAt: installation.created_at };
   } catch {
-    // Installation not found (404) or other error
     return null;
   }
 }
 
-async function upsertOrganization(org: GitHubOrg) {
+async function upsertOrganization(org: GitHubOrg, clerkOrgId: string) {
   const slug = org.login.toLowerCase();
 
   try {
-    return await database.organization.upsert({
-      where: { githubOrgId: org.id },
-      create: {
+    const orgId = await convexClient.mutation(
+      api.organizations.upsertByGithubOrgId,
+      {
+        githubOrgId: org.id,
+        clerkOrgId,
         name: org.name ?? org.login,
         slug,
-        githubOrgId: org.id,
         githubOrgLogin: org.login,
         githubOrgType: org.type,
-      },
-      update: {
-        name: org.name ?? org.login,
-        githubOrgLogin: org.login,
-        githubOrgType: org.type,
-      },
-    });
-  } catch (error) {
-    if (error instanceof Error && error.message.includes("Unique constraint")) {
-      const existing = await database.organization.findUnique({
-        where: { githubOrgId: org.id },
-      });
-
-      if (!existing) {
-        console.warn(
-          `Skipping org ${org.login}: slug "${slug}" is taken by another organization`
-        );
       }
+    );
 
-      return existing;
-    }
-    throw error;
+    return { _id: orgId, slug };
+  } catch (error) {
+    console.warn(`Failed to upsert org ${org.login}:`, error);
+    return null;
   }
 }
 
 async function syncInstallation(
-  organization: { id: string; githubInstallationId: number | null },
+  orgId: Id<"organizations">,
   org: GitHubOrg
 ) {
-  if (organization.githubInstallationId) {
-    await syncRepositories(organization.id, organization.githubInstallationId);
+  const existingOrg = await convexClient.query(
+    api.organizations.getByGithubOrgId,
+    { githubOrgId: org.id }
+  );
+
+  if (existingOrg?.githubInstallationId) {
+    await syncRepositories(existingOrg._id, existingOrg.githubInstallationId);
     return;
   }
 
   const installation = await checkGitHubAppInstallation(org.login, org.type);
 
-  if (installation) {
-    await database.organization.update({
-      where: { id: organization.id },
-      data: {
-        githubInstallationId: installation.id,
-        githubAccountLogin: org.login,
-        installedAt: new Date(installation.createdAt),
-      },
+  if (installation && existingOrg) {
+    await convexClient.mutation(api.organizations.updateInstallation, {
+      orgId: existingOrg._id,
+      githubInstallationId: installation.id,
+      githubAccountLogin: org.login,
+      installedAt: new Date(installation.createdAt).getTime(),
     });
 
-    await syncRepositories(organization.id, installation.id);
+    await syncRepositories(existingOrg._id, installation.id);
   }
 }
 
 export async function syncGitHubOrganizations(
   providerToken: string,
   userId: string,
-  userEmail: string,
   referralCode?: string
-): Promise<{ synced: number; organizations: { id: string; slug: string }[] }> {
+): Promise<{ synced: number; organizations: { slug: string }[] }> {
   const octokit = new Octokit({ auth: providerToken });
-
   const { data: user } = await octokit.rest.users.getAuthenticated();
 
   const orgs = await octokit.paginate(
@@ -159,12 +126,7 @@ export async function syncGitHubOrganizations(
   );
 
   const allOrgs: GitHubOrg[] = [
-    {
-      id: user.id,
-      login: user.login,
-      type: "User",
-      name: user.name,
-    },
+    { id: user.id, login: user.login, type: "User", name: user.name },
     ...orgs.map((org) => ({
       id: org.id,
       login: org.login,
@@ -173,52 +135,81 @@ export async function syncGitHubOrganizations(
     })),
   ];
 
-  const syncedOrganizations: { id: string; slug: string }[] = [];
+  const syncedOrganizations: { slug: string }[] = [];
   let referralApplied = false;
-
-  await database.user.upsert({
-    where: { id: userId },
-    create: { id: userId, email: userEmail },
-    update: { email: userEmail },
-  });
+  const clerk = await clerkClient();
 
   for (const org of allOrgs) {
-    const organization = await upsertOrganization(org);
+    // Create or find Clerk organization
+    let clerkOrgId: string;
+    try {
+      // Try to find existing Clerk org by slug
+      const existingConvexOrg = await convexClient.query(
+        api.organizations.getByGithubOrgId,
+        { githubOrgId: org.id }
+      );
 
-    if (!organization) {
-      continue;
-    }
-
-    const role = org.type === "User" ? "OWNER" : "MEMBER";
-
-    await database.organizationMember.upsert({
-      where: {
-        userId_organizationId: {
-          userId,
-          organizationId: organization.id,
-        },
-      },
-      create: {
-        userId,
-        organizationId: organization.id,
-        role,
-      },
-      update: {},
-    });
-
-    if (referralCode && !referralApplied) {
-      const result = await processReferral(referralCode, organization.id);
-      if (result.success) {
-        referralApplied = true;
+      if (existingConvexOrg) {
+        clerkOrgId = existingConvexOrg.clerkOrgId;
+      } else {
+        // Create new Clerk organization
+        const clerkOrg = await clerk.organizations.createOrganization({
+          name: org.name ?? org.login,
+          slug: org.login.toLowerCase(),
+          createdBy: userId,
+        });
+        clerkOrgId = clerkOrg.id;
+      }
+    } catch {
+      // If creating fails (e.g., slug taken), try to find it
+      try {
+        const clerkOrg = await clerk.organizations.getOrganization({
+          slug: org.login.toLowerCase(),
+        });
+        clerkOrgId = clerkOrg.id;
+      } catch {
+        console.warn(`Failed to create/find Clerk org for ${org.login}`);
+        continue;
       }
     }
 
-    await syncInstallation(organization, org);
+    // Ensure user is a member of the Clerk organization
+    try {
+      await clerk.organizations.createOrganizationMembership({
+        organizationId: clerkOrgId,
+        userId,
+        role: org.type === "User" ? "org:admin" : "org:member",
+      });
+    } catch {
+      // Already a member - that's fine
+    }
 
-    syncedOrganizations.push({
-      id: organization.id,
-      slug: organization.slug,
-    });
+    const result = await upsertOrganization(org, clerkOrgId);
+    if (!result) {
+      continue;
+    }
+
+    if (referralCode && !referralApplied) {
+      const convexOrg = await convexClient.query(
+        api.organizations.getByGithubOrgId,
+        { githubOrgId: org.id }
+      );
+      if (convexOrg) {
+        const refResult = await convexClient.mutation(
+          api.referrals.processReferral,
+          {
+            referralCode,
+            referredOrganizationId: convexOrg._id,
+          }
+        );
+        if (refResult.success) {
+          referralApplied = true;
+        }
+      }
+    }
+
+    await syncInstallation(result._id, org);
+    syncedOrganizations.push({ slug: result.slug });
   }
 
   return {

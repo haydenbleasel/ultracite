@@ -2,18 +2,13 @@ import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 
 const config: NextConfig = {
-  transpilePackages: ["@repo/data", "@repo/backend"],
+  transpilePackages: ["@repo/data"],
 
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
 
-  serverExternalPackages: [
-    "shiki",
-    "@shikijs/engine-oniguruma",
-    "@prisma/client",
-    "@prisma/adapter-pg",
-  ],
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 
   images: {
     formats: ["image/avif", "image/webp"],
