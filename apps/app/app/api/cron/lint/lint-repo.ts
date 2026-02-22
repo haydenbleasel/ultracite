@@ -78,12 +78,11 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
   // Create sandbox (returns sandbox ID for serialization)
   const sandboxId = await createSandbox();
 
-  // Clone the repo into the sandbox
-  await cloneRepo(sandboxId, repoFullName, token);
-
   let result: LintStepResult;
 
   try {
+    // Clone the repo into the sandbox
+    await cloneRepo(sandboxId, repoFullName, token);
     // Install dependencies
     await installDependencies(sandboxId);
 

@@ -85,10 +85,9 @@ Please ensure the Ultracite app has write access to this repository and branch.
   // Create sandbox (returns sandbox ID for serialization)
   const sandboxId = await createSandbox();
 
-  // Clone the repo into the sandbox
-  await cloneRepo(sandboxId, repoFullName, token);
-
   try {
+    // Clone the repo into the sandbox
+    await cloneRepo(sandboxId, repoFullName, token);
     // Checkout the PR branch
     await checkoutBranch(sandboxId, prBranch);
 
