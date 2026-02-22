@@ -46,4 +46,12 @@ export async function configureGit(
   } catch (error) {
     throw new Error(`Failed to configure git name: ${parseError(error)}`);
   }
+
+  // Disable all git hooks in the sandbox to prevent TTY-dependent hooks
+  // (like prepare-commit-msg) from failing in non-interactive environments
+  try {
+    await sandbox.runCommand("git", ["config", "core.hooksPath", "/dev/null"]);
+  } catch (error) {
+    throw new Error(`Failed to disable git hooks: ${parseError(error)}`);
+  }
 }
