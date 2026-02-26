@@ -173,7 +173,8 @@ describe("createHooks", () => {
     });
 
     test("update merges hooks into existing config when ultracite not present", async () => {
-      const existingConfig = '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
+      const existingConfig =
+        '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({

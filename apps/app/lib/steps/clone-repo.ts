@@ -13,9 +13,7 @@ export async function cloneRepo(
   try {
     sandbox = await Sandbox.get({ sandboxId });
   } catch (error) {
-    throw new Error(
-      `[cloneRepo] Failed to get sandbox: ${parseError(error)}`
-    );
+    throw new Error(`[cloneRepo] Failed to get sandbox: ${parseError(error)}`);
   }
 
   try {
