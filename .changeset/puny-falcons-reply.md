@@ -1,5 +1,0 @@
----
-"ultracite": patch
----
-
-Create skill

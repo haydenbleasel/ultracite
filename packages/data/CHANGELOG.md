@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.2
+
+### Patch Changes
+
+- f72f2dc: Add support for copilot hooks
+
 ## 2.1.1
 
 ### Patch Changes

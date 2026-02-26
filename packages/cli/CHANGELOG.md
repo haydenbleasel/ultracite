@@ -1,5 +1,14 @@
 ## 5.6.0
 
+## 7.2.4
+
+### Patch Changes
+
+- cfaa912: Remove Jest and Vitest rules from non-test files
+- f72f2dc: Add support for copilot hooks
+- 66d51fd: Disable import/no-nodejs-modules for Chris Consent
+- d1e8490: Create skill
+
 ## 7.2.3
 
 ### Patch Changes
