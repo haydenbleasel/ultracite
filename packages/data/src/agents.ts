@@ -111,6 +111,19 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
     },
     logo: copilotLogo,
+    hooks: {
+      path: ".github/hooks/ultracite.json",
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              type: "command",
+              command,
+            },
+          ],
+        },
+      }),
+    },
   },
   {
     id: "cline",

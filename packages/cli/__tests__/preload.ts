@@ -130,6 +130,19 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
       },
       logo: mockSvg,
+      hooks: {
+        path: ".github/hooks/ultracite.json",
+        getContent: (command: string) => ({
+          hooks: {
+            PostToolUse: [
+              {
+                type: "command",
+                command,
+              },
+            ],
+          },
+        }),
+      },
     },
     {
       id: "cline",

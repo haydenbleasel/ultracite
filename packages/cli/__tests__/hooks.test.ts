@@ -149,6 +149,71 @@ describe("createHooks", () => {
     });
   });
 
+  describe("copilot hooks", () => {
+    test("create writes .github/hooks/ultracite.json with correct structure", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.create();
+
+      const writeCall = mockWriteFile.mock.calls[0];
+      expect(writeCall[0]).toBe(".github/hooks/ultracite.json");
+
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.hooks.PostToolUse).toHaveLength(1);
+      expect(content.hooks.PostToolUse[0].type).toBe("command");
+      expect(content.hooks.PostToolUse[0].command).toBe("npx ultracite fix");
+    });
+
+    test("update merges hooks into existing config when ultracite not present", async () => {
+      const existingConfig = '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const hooksWrite = mockWriteFile.mock.calls[0];
+      expect(hooksWrite[0]).toBe(".github/hooks/ultracite.json");
+
+      const merged = JSON.parse(hooksWrite[1] as string);
+      expect(merged.hooks.PostToolUse.length).toBe(2);
+      expect(merged.hooks.PostToolUse[1].command).toBe("npx ultracite fix");
+    });
+
+    test("update skips when ultracite hook already exists", async () => {
+      const existingConfig =
+        '{"hooks":{"PostToolUse":[{"type":"command","command":"npx ultracite fix"}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+        mkdir: mock(() => Promise.resolve()),
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+  });
+
   describe("claude hooks", () => {
     test("create writes .claude/settings.json with correct structure", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
