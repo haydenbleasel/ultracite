@@ -8,9 +8,7 @@
     "import",
     "jsdoc",
     "node",
-    "promise",
-    "jest",
-    "vitest"
+    "promise"
   ],
   "env": {
     "browser": true
@@ -92,8 +90,81 @@
     "oxc/no-optional-chaining": "off",
 
     "promise/catch-or-return": "off",
-    "promise/always-return": "off",
-
-    "vitest/prefer-called-times": "off"
-  }
+    "promise/always-return": "off"
+  },
+  "overrides": [
+    {
+      // Jest and Vitest plugins scoped to test files only.
+      // Categories don't auto-enable rules for override plugins,
+      // so each rule must be listed explicitly.
+      "files": [
+        "**/*.{test,spec}.{ts,tsx,js,jsx}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx}"
+      ],
+      "plugins": ["jest", "vitest"],
+      "rules": {
+        "jest/consistent-test-it": "error",
+        "jest/expect-expect": "error",
+        "jest/max-expects": "error",
+        "jest/max-nested-describe": "error",
+        "jest/no-alias-methods": "error",
+        "jest/no-commented-out-tests": "error",
+        "jest/no-conditional-expect": "error",
+        "jest/no-conditional-in-test": "error",
+        "jest/no-confusing-set-timeout": "error",
+        "jest/no-deprecated-functions": "error",
+        "jest/no-disabled-tests": "error",
+        "jest/no-done-callback": "error",
+        "jest/no-duplicate-hooks": "error",
+        "jest/no-export": "error",
+        "jest/no-focused-tests": "error",
+        "jest/no-hooks": "error",
+        "jest/no-identical-title": "error",
+        "jest/no-interpolation-in-snapshots": "error",
+        "jest/no-jasmine-globals": "error",
+        "jest/no-large-snapshots": "error",
+        "jest/no-mocks-import": "error",
+        "jest/no-restricted-jest-methods": "error",
+        "jest/no-restricted-matchers": "error",
+        "jest/no-standalone-expect": "error",
+        "jest/no-test-prefixes": "error",
+        "jest/no-test-return-statement": "error",
+        "jest/no-untyped-mock-factory": "error",
+        "jest/padding-around-test-blocks": "error",
+        "jest/prefer-called-with": "error",
+        "jest/prefer-comparison-matcher": "error",
+        "jest/prefer-each": "error",
+        "jest/prefer-equality-matcher": "error",
+        "jest/prefer-expect-resolves": "error",
+        "jest/prefer-hooks-in-order": "error",
+        "jest/prefer-hooks-on-top": "error",
+        "jest/prefer-jest-mocked": "error",
+        "jest/prefer-lowercase-title": "error",
+        "jest/prefer-mock-promise-shorthand": "error",
+        "jest/prefer-spy-on": "error",
+        "jest/prefer-strict-equal": "error",
+        "jest/prefer-to-be": "error",
+        "jest/prefer-to-contain": "error",
+        "jest/prefer-to-have-been-called": "error",
+        "jest/prefer-to-have-been-called-times": "error",
+        "jest/prefer-to-have-length": "error",
+        "jest/prefer-todo": "error",
+        "jest/require-hook": "error",
+        "jest/require-to-throw-message": "error",
+        "jest/require-top-level-describe": "error",
+        "jest/valid-describe-callback": "error",
+        "jest/valid-expect": "error",
+        "jest/valid-title": "error",
+        "vitest/consistent-test-filename": "error",
+        "vitest/consistent-vitest-vi": "error",
+        "vitest/no-conditional-tests": "error",
+        "vitest/no-import-node-test": "error",
+        "vitest/prefer-to-be-falsy": "error",
+        "vitest/prefer-to-be-object": "error",
+        "vitest/prefer-to-be-truthy": "error",
+        "vitest/require-local-test-context-for-concurrent-snapshots": "error",
+        "vitest/warn-todo": "error"
+      }
+    }
+  ]
 }
