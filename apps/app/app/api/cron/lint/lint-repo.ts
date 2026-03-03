@@ -168,10 +168,8 @@ export async function lintRepoWorkflow(params: LintRepoParams): Promise<void> {
           prUrl: prResult.prUrl,
         };
       } else {
-        // Claude Code ran successfully but made no changes - non-retryable
-        throw new FatalError(
-          "Claude Code completed but could not fix the lint issues (no changes made)"
-        );
+        // Claude Code ran but remaining issues were too complex to fix — not a failure
+        result = { prCreated: false };
       }
     } else {
       // No issues found

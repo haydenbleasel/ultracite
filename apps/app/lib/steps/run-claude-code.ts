@@ -9,7 +9,7 @@ export interface ClaudeCodeResult {
   success: boolean;
 }
 
-const prompt = `You are fixing lint issues in a codebase.
+const prompt = `You are fixing lint issues in a codebase. The auto-fixer already ran, so only issues it couldn't handle remain.
 
 Run "npx ultracite check" to see the current lint errors, then fix them one by one.
 
@@ -18,11 +18,12 @@ After each fix, run "npx ultracite check" again to verify the fix worked and che
 Stop when you have fixed 15 issues OR all issues are resolved, whichever comes first.
 
 Important:
-- Only fix SIMPLE issues (unused variables, missing semicolons, import ordering, formatting, simple type fixes, etc.)
-- SKIP complex issues that require architectural changes, major refactoring, or deep domain knowledge
-- If an issue would require changing more than ~10 lines or multiple files, skip it
+- These issues could NOT be auto-fixed, so they may require manual changes like renaming variables, adding type annotations, restructuring code, etc.
+- Attempt each issue at least once before skipping
+- SKIP issues that require major architectural changes or deep domain knowledge about the project's business logic
+- If an issue would require changing more than ~20 lines or more than 3 files, skip it
 - Don't modify files unnecessarily
-- Don't attempt the same issue more than twice - move on if you can't fix it easily`;
+- Don't attempt the same issue more than twice - move on if you can't fix it`;
 
 export async function runClaudeCode(
   sandboxId: string
