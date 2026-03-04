@@ -1,3 +1,10 @@
+## 7.2.5
+
+### Patch Changes
+
+- 83bafe4: Disable useValidLang rule for SvelteKit app.html to prevent false positives from %lang% placeholder
+- 4df6da9: Disable noUndeclaredVariables for Svelte files to fix false positives with template block variables like {#each}
+
 ## 5.6.0
 
 ## 7.2.4
