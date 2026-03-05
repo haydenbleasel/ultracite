@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Logos } from "@/components/logos";
 import { Social } from "@/components/social";
 import { Agents } from "./components/agents";
-import { Cloud } from "./components/cloud";
 import { Demo } from "./components/demo";
 import { Editors } from "./components/editors";
 import { Hero } from "./components/hero";
@@ -29,7 +28,6 @@ const Home = () => (
     <IDE />
     <Agents />
     <Editors />
-    <Cloud />
     <Social />
   </div>
 );

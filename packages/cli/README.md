@@ -38,12 +38,6 @@ Generate rules for 20+ AI agents including Claude Code, GitHub Copilot, Cursor, 
 ### 🏗️ Monorepo Ready
 Unified toolchain configuration across all packages and apps, eliminating duplicate config files while maintaining consistency.
 
-## Ultracite Cloud
-
-Automated linting and AI-powered fixes for your repositories. Connect your repos and let Ultracite automatically review pull requests, run scheduled lint checks, and fix issues with Claude.
-
-Learn more at [ultracite.ai/cloud](https://www.ultracite.ai/cloud)
-
 ---
 
 Read the [docs](https://docs.ultracite.ai/) for detailed setup instructions, configuration options, and examples.

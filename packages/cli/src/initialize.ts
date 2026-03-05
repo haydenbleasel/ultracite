@@ -990,10 +990,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (!quiet) {
       log.success("Successfully initialized Ultracite!");
       log.info(
-        "Make sure to check out https://ultracite.ai/cloud for our pro version."
-      );
-      log.info(
-        "Also, you can run `npx skills add haydenbleasel/ultracite` to install the Ultracite skill."
+        "You can also run `npx skills add haydenbleasel/ultracite` to install the Ultracite skill."
       );
     }
   } catch (error) {
