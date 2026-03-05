@@ -1,7 +1,7 @@
 "use client";
 
 import { agents } from "@repo/data/agents";
-import { appUrl, docsUrl, webUrl } from "@repo/data/consts";
+import { docsUrl, webUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import { Button } from "@repo/design-system/components/ui/button";
@@ -29,23 +29,6 @@ import { useState } from "react";
 import { Logo } from "./logo";
 
 const links = [
-  {
-    href: new URL("/cloud", webUrl).toString(),
-    label: "Cloud",
-    className: "text-primary",
-    isActive: (path: string) => path.startsWith("/cloud"),
-  },
-  {
-    href: docsUrl,
-    label: "Docs",
-    isActive: () => {
-      if (typeof window === "undefined") {
-        return false;
-      }
-
-      return window.location.origin.startsWith(docsUrl);
-    },
-  },
   {
     href: new URL("/social", webUrl).toString(),
     label: "Social",
@@ -204,7 +187,7 @@ export const Navbar = () => {
           ))}
         </div>
         <Button asChild>
-          <Link href={appUrl}>Dashboard</Link>
+          <Link href={docsUrl}>Read the docs</Link>
         </Button>
 
         <Sheet onOpenChange={setOpen} open={open}>
@@ -315,8 +298,8 @@ export const Navbar = () => {
 
               <div className="mt-auto flex flex-col gap-2 border-t pt-4">
                 <Button asChild className="w-full">
-                  <Link href={appUrl} onClick={() => setOpen(false)}>
-                    Dashboard
+                  <Link href={docsUrl} onClick={() => setOpen(false)}>
+                    Read the docs
                   </Link>
                 </Button>
               </div>

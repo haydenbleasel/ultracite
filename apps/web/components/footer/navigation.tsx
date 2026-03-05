@@ -27,10 +27,6 @@ const generalLinks = [
     label: "Home",
   },
   {
-    href: "/cloud",
-    label: "Cloud",
-  },
-  {
     href: docsUrl,
     label: "Docs",
   },
