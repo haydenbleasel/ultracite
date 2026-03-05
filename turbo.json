@@ -9,25 +9,13 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**",
-        "dist/**",
-        "src/database/generated/**"
+        "dist/**"
       ]
     },
-    "transit": {
-      "dependsOn": ["^transit"]
-    },
-    "test": {
-      "dependsOn": ["transit"]
-    },
-    "test:coverage": {
-      "dependsOn": ["transit"]
-    },
-    "lint": {
-      "dependsOn": ["transit"]
-    },
-    "check-types": {
-      "dependsOn": ["transit"]
-    },
+    "test": {},
+    "test:coverage": {},
+    "lint": {},
+    "check-types": {},
     "dev": {
       "cache": false,
       "persistent": true
