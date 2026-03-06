@@ -178,7 +178,6 @@ export const Navbar = () => {
           {links.map((link) => (
             <Button
               asChild
-              className={link.className}
               key={link.href}
               variant={link.isActive(pathname) ? "secondary" : "ghost"}
             >
@@ -210,7 +209,6 @@ export const Navbar = () => {
                   <Link
                     className={cn(
                       "rounded-md px-3 py-2 font-medium text-sm",
-                      link.className,
                       pathname === link.href ? "bg-muted" : "hover:bg-muted/50"
                     )}
                     href={link.href}
