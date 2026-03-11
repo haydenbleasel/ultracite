@@ -3,12 +3,36 @@ import { hooks } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { dlxCommand, type PackageManagerName } from "nypm";
+import type { PackageManagerName } from "nypm";
 import { ensureDirectory, exists } from "./utils";
+
+const runCommand = (
+  packageManager: PackageManagerName,
+  script: string,
+  args: string[] = []
+): string => {
+  const parts = [packageManager];
+
+  if (packageManager === "npm") {
+    parts.push("run");
+  }
+
+  parts.push(script);
+
+  if (args.length > 0) {
+    if (packageManager === "npm") {
+      parts.push("--");
+    }
+    parts.push(...args);
+  }
+
+  return parts.join(" ");
+};
 
 export const createHooks = (
   name: (typeof options.hooks)[number],
-  packageManager: PackageManagerName
+  packageManager: PackageManagerName,
+  linter: string = "biome"
 ) => {
   const hookIntegration = hooks.find((hook) => hook.id === name);
 
@@ -16,17 +40,19 @@ export const createHooks = (
     throw new Error(`Hook integration "${name}" not found`);
   }
 
-  const command = dlxCommand(packageManager, "ultracite", {
-    args: ["fix"],
-    short: packageManager === "npm",
-  });
+  const args =
+    linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+
+  const command = runCommand(packageManager, "fix", args);
   const content = hookIntegration.hooks.getContent(command);
 
   const isRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null && !Array.isArray(value);
 
-  const hasUltraciteHook = (obj: unknown): boolean =>
-    JSON.stringify(obj).includes("ultracite");
+  const hasUltraciteHook = (obj: unknown): boolean => {
+    const json = JSON.stringify(obj);
+    return json.includes("ultracite") || json.includes(command);
+  };
 
   const updateConfig = async (): Promise<void> => {
     const doesExist = await exists(hookIntegration.hooks.path);

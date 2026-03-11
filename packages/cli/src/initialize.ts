@@ -665,6 +665,7 @@ export const upsertAgents = async (
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
+  linter: Linter = "biome",
   quiet = false
 ) => {
   const s = spinner();
@@ -676,7 +677,7 @@ export const upsertHooks = async (
     s.start(`Checking for ${displayName} hooks...`);
   }
 
-  const hooks = createHooks(name, packageManager);
+  const hooks = createHooks(name, packageManager, linter);
 
   if (await hooks.exists()) {
     if (!quiet) {
@@ -965,7 +966,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     for (const hookName of hooks ?? []) {
-      await upsertHooks(hookName, pm, quiet);
+      await upsertHooks(hookName, pm, linter, quiet);
     }
 
     if (integrations?.includes("husky")) {

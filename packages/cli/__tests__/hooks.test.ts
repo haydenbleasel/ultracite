@@ -8,6 +8,8 @@ mock.module("node:fs/promises", () => ({
   mkdir: mock(() => Promise.resolve()),
 }));
 
+const npmBiomeCommand = "npm run fix -- --skip=correctness/noUnusedImports";
+
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
@@ -83,7 +85,7 @@ describe("createHooks", () => {
       const content = JSON.parse(writeCall[1] as string);
       expect(content.version).toBe(1);
       expect(content.hooks.afterFileEdit).toHaveLength(1);
-      expect(content.hooks.afterFileEdit[0].command).toBe("npx ultracite fix");
+      expect(content.hooks.afterFileEdit[0].command).toBe(npmBiomeCommand);
     });
 
     test("update creates hooks.json if it doesn't exist", async () => {
@@ -125,13 +127,12 @@ describe("createHooks", () => {
       const hooksContent = JSON.parse(hooksWrite[1] as string);
       expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
       expect(hooksContent.hooks.afterFileEdit[1].command).toBe(
-        "npx ultracite fix"
+        npmBiomeCommand
       );
     });
 
     test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {
-      const existingHooks =
-        '{"version": 1, "hooks": {"afterFileEdit": [{"command": "npx ultracite fix"}]}}';
+      const existingHooks = `{"version": 1, "hooks": {"afterFileEdit": [{"command": "${npmBiomeCommand}"}]}}`;
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -169,7 +170,7 @@ describe("createHooks", () => {
       const content = JSON.parse(writeCall[1] as string);
       expect(content.hooks.PostToolUse).toHaveLength(1);
       expect(content.hooks.PostToolUse[0].type).toBe("command");
-      expect(content.hooks.PostToolUse[0].command).toBe("npx ultracite fix");
+      expect(content.hooks.PostToolUse[0].command).toBe(npmBiomeCommand);
     });
 
     test("update merges hooks into existing config when ultracite not present", async () => {
@@ -193,12 +194,11 @@ describe("createHooks", () => {
 
       const merged = JSON.parse(hooksWrite[1] as string);
       expect(merged.hooks.PostToolUse.length).toBe(2);
-      expect(merged.hooks.PostToolUse[1].command).toBe("npx ultracite fix");
+      expect(merged.hooks.PostToolUse[1].command).toBe(npmBiomeCommand);
     });
 
     test("update skips when ultracite hook already exists", async () => {
-      const existingConfig =
-        '{"hooks":{"PostToolUse":[{"type":"command","command":"npx ultracite fix"}]}}';
+      const existingConfig = `{"hooks":{"PostToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]}}`;
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -237,7 +237,7 @@ describe("createHooks", () => {
       expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
       expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "npx ultracite fix"
+        npmBiomeCommand
       );
     });
 
@@ -265,8 +265,7 @@ describe("createHooks", () => {
     });
 
     test("update skips when ultracite hook already exists in settings", async () => {
-      const existingSettings =
-        '{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"npx ultracite fix"}]}]}}';
+      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"${npmBiomeCommand}"}]}]}}`;
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
