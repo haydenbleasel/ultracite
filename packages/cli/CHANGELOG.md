@@ -1,3 +1,15 @@
+## 7.3.0
+
+### Minor Changes
+
+- 0d27e68: fix noUnusedImports removing new imports in agent hooks
+
+### Patch Changes
+
+- 668fe62: Add --type-aware flag for biome
+- 4280484: Disable max-statements in Oxlint
+- d37b046: Disable jsdoc/require-param-type and jsdoc/require-returns-type for TS files
+
 ## 7.2.5
 
 ### Patch Changes
