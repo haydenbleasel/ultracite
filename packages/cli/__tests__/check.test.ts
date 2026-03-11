@@ -45,6 +45,41 @@ describe("check", () => {
     expect(callArgs[1]).toContain("src/test.ts");
   });
 
+  test("adds --skip=project to biome by default", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths,
+    }));
+
+    await check();
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[1]).toContain("--skip=project");
+  });
+
+  test("does not add --skip=project when --type-aware is passed to biome", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(async () => "biome"),
+      parseFilePaths,
+    }));
+
+    await check([], ["--type-aware"]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const callArgs = mockSpawn.mock.calls[0];
+    expect(callArgs[1]).not.toContain("--skip=project");
+    expect(callArgs[1]).not.toContain("--type-aware");
+  });
+
   test("passes through unknown options to biome", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({

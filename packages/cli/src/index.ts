@@ -22,7 +22,7 @@ program
   .option("--hooks <hooks...>", "Hooks to enable")
   .option("--frameworks <frameworks...>", "Frameworks being used")
   .option("--integrations <integrations...>", "Integrations to enable")
-  .option("--type-aware", "Enable type-aware linting (oxlint only)")
+  .option("--type-aware", "Enable type-aware linting (enables project/scanner rules)")
   .option("--skip-install", "Skip installing dependencies")
   .option("--quiet", "Suppress interactive prompts")
   .action(async (opts) => {

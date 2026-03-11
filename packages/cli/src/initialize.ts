@@ -181,10 +181,11 @@ export const installDependencies = async (
   }
 
   // Add ultracite scripts to package.json
+  const typeAwareFlag = typeAware ? " --type-aware" : "";
   await updatePackageJson({
     scripts: {
-      check: "ultracite check",
-      fix: "ultracite fix",
+      check: `ultracite check${typeAwareFlag}`,
+      fix: `ultracite fix${typeAwareFlag}`,
     },
   });
 
@@ -935,7 +936,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       linter,
       !opts.skipInstall,
       quiet,
-      linter === "oxlint" && opts["type-aware"],
+      opts["type-aware"],
       frameworks
     );
 
