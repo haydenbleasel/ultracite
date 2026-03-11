@@ -126,9 +126,7 @@ describe("createHooks", () => {
       expect(hooksWrite[0]).toBe(".cursor/hooks.json");
       const hooksContent = JSON.parse(hooksWrite[1] as string);
       expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
-      expect(hooksContent.hooks.afterFileEdit[1].command).toBe(
-        npmBiomeCommand
-      );
+      expect(hooksContent.hooks.afterFileEdit[1].command).toBe(npmBiomeCommand);
     });
 
     test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {

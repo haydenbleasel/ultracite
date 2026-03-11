@@ -32,7 +32,7 @@ const runCommand = (
 export const createHooks = (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
-  linter: string = "biome"
+  linter = "biome"
 ) => {
   const hookIntegration = hooks.find((hook) => hook.id === name);
 
@@ -40,8 +40,7 @@ export const createHooks = (
     throw new Error(`Hook integration "${name}" not found`);
   }
 
-  const args =
-    linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+  const args = linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
 
   const command = runCommand(packageManager, "fix", args);
   const content = hookIntegration.hooks.getContent(command);

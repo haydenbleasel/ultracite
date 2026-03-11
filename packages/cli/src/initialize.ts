@@ -83,6 +83,33 @@ const addEslintFrameworkPackages = (
   }
 };
 
+const buildNoInstallDevDependencies = (
+  linter: Linter,
+  typeAware: boolean
+): Record<string, string> => {
+  const devDependencies: Record<string, string> = {
+    ultracite: ultraciteVersion,
+  };
+
+  if (linter === "biome") {
+    devDependencies["@biomejs/biome"] = schemaVersion;
+  }
+  if (linter === "eslint") {
+    devDependencies.eslint = "latest";
+    devDependencies.prettier = "latest";
+    devDependencies.stylelint = "latest";
+  }
+  if (linter === "oxlint") {
+    devDependencies.oxlint = "latest";
+    devDependencies.oxfmt = "latest";
+    if (typeAware) {
+      devDependencies["oxlint-tsgolint"] = "latest";
+    }
+  }
+
+  return devDependencies;
+};
+
 export const installDependencies = async (
   packageManager: PackageManager,
   linter: Linter = "biome",
@@ -154,29 +181,7 @@ export const installDependencies = async (
       });
     }
   } else {
-    const devDependencies: Record<string, string> = {
-      ultracite: ultraciteVersion,
-    };
-
-    if (linter === "biome") {
-      devDependencies["@biomejs/biome"] = schemaVersion;
-    }
-    if (linter === "eslint") {
-      devDependencies.eslint = "latest";
-      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      devDependencies.prettier = "latest";
-      devDependencies.stylelint = "latest";
-    }
-    if (linter === "oxlint") {
-      devDependencies.oxlint = "latest";
-      // Oxlint is only a linter, so we need oxfmt for formatting
-      devDependencies.oxfmt = "latest";
-      // Type-aware linting requires oxlint-tsgolint
-      if (typeAware) {
-        devDependencies["oxlint-tsgolint"] = "latest";
-      }
-    }
-
+    const devDependencies = buildNoInstallDevDependencies(linter, typeAware);
     await updatePackageJson({ devDependencies });
   }
 
