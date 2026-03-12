@@ -7,5 +7,3 @@ export const webUrl = isProduction
 export const docsUrl = isProduction
   ? "https://docs.ultracite.ai"
   : "http://localhost:3001";
-
-export const statusUrl = "https://status.ultracite.ai";
