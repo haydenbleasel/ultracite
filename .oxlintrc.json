@@ -1,11 +1,20 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": ["./packages/cli/config/oxlint/core/.oxlintrc.json"],
+  "extends": [
+    "./packages/cli/config/oxlint/core/.oxlintrc.json",
+    "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
+    "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
+    "./node_modules/ultracite/config/oxlint/next/.oxlintrc.json"
+  ],
   "ignorePatterns": [
-    "apps/docs/components/ai-elements",
-    "apps/docs/components/ui",
-    "apps/docs/lib/utils.ts",
-    "apps/docs/hooks/use-mobile.ts",
+    "packages/design-system/components/ui",
+    "packages/design-system/components/kibo-ui",
+    "packages/design-system/lib/utils.ts",
+    "packages/design-system/hooks/use-mobile.ts",
+    "apps/web/components/ai-elements",
+    "apps/web/components/ui",
+    "apps/web/lib/utils.ts",
+    "apps/web/hooks/use-mobile.ts",
     "test"
   ],
   "rules": {
