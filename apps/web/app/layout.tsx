@@ -1,30 +1,35 @@
 import "./global.css";
-import { DesignSystemProvider } from "@repo/design-system";
-import { Navbar } from "@repo/design-system/components/ultracite/navbar";
-import { fonts } from "@repo/design-system/lib/fonts";
 import type { ReactNode } from "react";
 import { CTA } from "@/components/cta";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Navbar } from "@/components/ultracite/navbar";
+import { fonts } from "@/lib/fonts";
+import { ThemeProvider } from "@/providers/theme";
 import { Footer } from "../components/ultracite/footer";
 
 interface LayoutProps {
-  children: ReactNode;
+	children: ReactNode;
 }
 
 const Layout = async ({ children }: LayoutProps) => (
-  <html lang="en" suppressHydrationWarning>
-    <body className={fonts}>
-      <DesignSystemProvider>
-        <Navbar />
-        <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
-          {children}
-          <div className="mt-16 sm:mt-24 md:mt-32">
-            <CTA />
-            <Footer />
-          </div>
-        </div>
-      </DesignSystemProvider>
-    </body>
-  </html>
+	<html lang="en" suppressHydrationWarning>
+		<body className={fonts}>
+			<ThemeProvider>
+				<TooltipProvider>
+					<Navbar />
+					<div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
+						{children}
+						<div className="mt-16 sm:mt-24 md:mt-32">
+							<CTA />
+							<Footer />
+						</div>
+					</div>
+				</TooltipProvider>
+				<Toaster />
+				<Analytics />
+			</ThemeProvider>
+		</body>
+	</html>
 );
 
 export default Layout;

@@ -1,4 +1,4 @@
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/server";
+import { CodeBlock } from "@/components/ultracite/code-block/server";
 
 const mockCode = `import React from 'react';
 
@@ -20,9 +20,9 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 export default UserCard;`;
 
 export const Editor = () => (
-  <CodeBlock
-    className="overflow-auto rounded-none border-none bg-transparent!"
-    code={mockCode}
-    lang="tsx"
-  />
+	<CodeBlock
+		className="overflow-auto rounded-none border-none bg-transparent!"
+		code={mockCode}
+		lang="tsx"
+	/>
 );
