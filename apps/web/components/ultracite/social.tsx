@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Tweets } from "@/components/tweets";
 import { Button } from "@/components/ui/button";
+import { Tweets } from "@/components/ultracite/tweets";
 
 export const Social = () => (
 	<div className="grid gap-8">
