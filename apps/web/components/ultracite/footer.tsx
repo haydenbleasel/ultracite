@@ -38,11 +38,11 @@ const generalLinks = [
   },
 ];
 
-export const Navigation = () => {
+export const Footer = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <footer className="grid gap-8 lg:grid-cols-5">
+    <footer className="mt-24 mb-12 grid gap-8 lg:grid-cols-5">
       <div className="flex flex-col gap-4 lg:col-span-2">
         <div className="flex items-center gap-2">
           <Logo className="size-5" />

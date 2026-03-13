@@ -4,7 +4,7 @@ import { Navbar } from "@repo/design-system/components/ultracite/navbar";
 import { fonts } from "@repo/design-system/lib/fonts";
 import type { ReactNode } from "react";
 import { CTA } from "@/components/cta";
-import { Footer } from "../components/footer";
+import { Footer } from "../components/ultracite/footer";
 
 interface LayoutProps {
   children: ReactNode;
