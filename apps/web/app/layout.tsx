@@ -1,7 +1,9 @@
 import "./global.css";
+import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 import { CTA } from "@/components/cta";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/ultracite/navbar";
 import { fonts } from "@/lib/fonts";
@@ -19,7 +21,6 @@ const Layout = async ({ children }: LayoutProps) => (
 				defaultTheme="system"
 				disableTransitionOnChange
 				enableSystem
-				{...properties}
 			>
 				<TooltipProvider>
 					<Navbar />

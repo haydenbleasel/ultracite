@@ -1,3 +1,5 @@
+"use client";
+
 import { SiX } from "@icons-pack/react-simple-icons";
 import { agents } from "@repo/data/src/agents";
 import { docsUrl } from "@repo/data/src/consts";
