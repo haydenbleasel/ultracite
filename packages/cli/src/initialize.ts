@@ -186,11 +186,10 @@ export const installDependencies = async (
   }
 
   // Add ultracite scripts to package.json
-  const typeAwareFlag = typeAware ? " --type-aware" : "";
   await updatePackageJson({
     scripts: {
-      check: `ultracite check${typeAwareFlag}`,
-      fix: `ultracite fix${typeAwareFlag}`,
+      check: "ultracite check",
+      fix: "ultracite fix",
     },
   });
 
@@ -307,7 +306,8 @@ export const upsertEditorConfig = async (
 
 export const upsertBiomeConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
-  quiet = false
+  quiet = false,
+  typeAware = false
 ) => {
   const s = spinner();
 
@@ -319,7 +319,7 @@ export const upsertBiomeConfig = async (
     if (!quiet) {
       s.message("Biome configuration found, updating...");
     }
-    await biome.update({ frameworks });
+    await biome.update({ frameworks, typeAware });
     if (!quiet) {
       s.stop("Biome configuration updated.");
     }
@@ -329,7 +329,7 @@ export const upsertBiomeConfig = async (
   if (!quiet) {
     s.message("Biome configuration not found, creating...");
   }
-  await biome.create({ frameworks });
+  await biome.create({ frameworks, typeAware });
   if (!quiet) {
     s.stop("Biome configuration created.");
   }
@@ -949,7 +949,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(frameworks, quiet);
+      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);

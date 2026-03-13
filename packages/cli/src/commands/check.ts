@@ -3,16 +3,7 @@ import process from "node:process";
 import { detectLinter, parseFilePaths, shellOption } from "../utils";
 
 const runBiomeCheck = (files: string[], passthrough: string[]): void => {
-  const hasTypeAware = passthrough.includes("--type-aware");
-  const filtered = passthrough.filter((arg) => arg !== "--type-aware");
-
-  const args = ["check", "--no-errors-on-unmatched"];
-
-  if (!hasTypeAware) {
-    args.push("--skip=project");
-  }
-
-  args.push(...filtered);
+  const args = ["check", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
     args.push(...parseFilePaths(files));

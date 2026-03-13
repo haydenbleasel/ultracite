@@ -19,6 +19,7 @@ const getBiomeConfigPath = async (): Promise<string> => {
 
 interface BiomeOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  typeAware?: boolean;
 }
 
 export const biome = {
@@ -29,6 +30,11 @@ export const biome = {
   create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
     const extendsList = ["ultracite/biome/core"];
+
+    // Add type-aware config for project/scanner rules
+    if (opts?.typeAware) {
+      extendsList.push("ultracite/biome/type-aware");
+    }
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
@@ -65,6 +71,11 @@ export const biome = {
     // Add ultracite/biome/core if not present
     if (!newExtends.includes("ultracite/biome/core")) {
       newExtends.push("ultracite/biome/core");
+    }
+
+    // Add type-aware config for project/scanner rules
+    if (opts?.typeAware && !newExtends.includes("ultracite/biome/type-aware")) {
+      newExtends.push("ultracite/biome/type-aware");
     }
 
     // Add framework-specific configs if provided
