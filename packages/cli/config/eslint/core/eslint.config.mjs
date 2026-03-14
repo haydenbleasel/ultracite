@@ -8,8 +8,7 @@ import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as importPlugin from "eslint-plugin-import";
+import { importX } from "eslint-plugin-import-x";
 import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
@@ -35,7 +34,7 @@ import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
 const config = [
-  importPlugin.configs.typescript,
+  importX.flatConfigs.typescript,
   {
     ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
   },
@@ -62,7 +61,7 @@ const config = [
     plugins: {
       compat,
       github,
-      import: importPlugin,
+      "import-x": importX,
       n,
       prettier,
       promise,
@@ -85,11 +84,10 @@ const config = [
     },
 
     settings: {
-      // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
-      "import/parsers": {
+      "import-x/parsers": {
         espree: [".js", ".cjs", ".mjs", ".ts"],
       },
-      "import/resolver": {
+      "import-x/resolver": {
         node: true,
         typescript: true,
       },

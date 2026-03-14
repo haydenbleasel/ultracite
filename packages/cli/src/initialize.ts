@@ -143,7 +143,7 @@ export const installDependencies = async (
       "eslint-plugin-cypress@latest",
       "eslint-plugin-github@latest",
       "eslint-plugin-html@latest",
-      "eslint-plugin-import@latest",
+      "eslint-plugin-import-x@latest",
       "eslint-plugin-n@latest",
       "eslint-plugin-prettier@latest",
       "eslint-plugin-promise@latest",
