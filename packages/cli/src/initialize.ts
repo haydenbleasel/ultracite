@@ -800,6 +800,8 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Remix / TanStack Router / React Router", value: "remix" },
             { label: "Astro", value: "astro" },
             { label: "NestJS", value: "nestjs" },
+            { label: "Jest", value: "jest" },
+            { label: "Vitest / Bun", value: "vitest" },
           ],
           required: false,
         });
@@ -937,12 +939,16 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     await upsertTsConfig(quiet);
 
+    // Test frameworks (jest, vitest) only have oxlint configs
+    const testFrameworkIds = new Set(["jest", "vitest"]);
+    const uiFrameworks = frameworks?.filter((f) => !testFrameworkIds.has(f));
+
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
+      await upsertBiomeConfig(uiFrameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
-      await upsertEslintConfig(frameworks, quiet);
+      await upsertEslintConfig(uiFrameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(quiet);
       await upsertStylelintConfig(quiet);
