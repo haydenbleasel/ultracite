@@ -1,3 +1,11 @@
+## 7.3.1
+
+### Patch Changes
+
+- f84edff: Fix --type-aware for Biome
+- acf301c: Migrate from eslint-plugin-import to import-x
+- 5749eb1: Create test frameworks
+
 ## 7.3.0
 
 ### Minor Changes
