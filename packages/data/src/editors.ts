@@ -3,14 +3,15 @@
 import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 
-import antigravityLogo from "../logos/antigravity.svg";
-import cursorLogo from "../logos/cursor.svg";
-import kiroLogo from "../logos/kiro.svg";
-import traeLogo from "../logos/trae.svg";
-import voidLogo from "../logos/void.svg";
-import vscodeLogo from "../logos/vscode.svg";
-import windsurfLogo from "../logos/windsurf.svg";
-import zedLogo from "../logos/zed.svg";
+import antigravityLogo from "@/logos/antigravity.svg";
+import cursorLogo from "@/logos/cursor.svg";
+import kiroLogo from "@/logos/kiro.svg";
+import traeLogo from "@/logos/trae.svg";
+import voidLogo from "@/logos/void.svg";
+import vscodeLogo from "@/logos/vscode.svg";
+import windsurfLogo from "@/logos/windsurf.svg";
+import zedLogo from "@/logos/zed.svg";
+
 import type { ProviderId } from "./providers";
 import type { HooksConfig } from "./types";
 
@@ -52,53 +53,20 @@ const vscodeBaseConfig = {
 // Maps https://biomejs.dev/internals/language-support/
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeBiomeConfig = {
-  // JavaScript
-  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
-  // TypeScript
-  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // JSX
-  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // TSX
-  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // JSON
-  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // JSONC
-  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // HTML
-  "[html]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // Vue
-  "[vue]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // Svelte
-  "[svelte]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // Astro
-  // Astro not supported by VSCode
-
-  // CSS
   "[css]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // YAML
-  "[yaml]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // GraphQL
   "[graphql]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // Markdown
+  "[html]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
   "[markdown]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // MDX
   "[mdx]": { "editor.defaultFormatter": "biomejs.biome" },
-
-  // GritQL
-  // GritQL not supported by VSCode
-
+  "[svelte]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[vue]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[yaml]": { "editor.defaultFormatter": "biomejs.biome" },
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
@@ -109,45 +77,22 @@ export const vscodeBiomeConfig = {
 // Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {
-  // JS, JSX
+  "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[handlebars]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // TS, TSX
-  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // JSON, JSONC, JSON5
   "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  // JSON5 not supported by VSCode
-
-  // YAML
-  "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // HTML, Angular, Vue, MJML
-  "[html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  // Angular not supported by VSCode
-  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[vue-html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  // MJML not supported by VSCode
-
-  // Ember, Handlebars
-  // Ember not supported by VSCode
-  "[handlebars]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // CSS, SCSS, Less
-  "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[scss]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[less]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // GraphQL
-  "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-
-  // Markdown, MDX
   "[markdown]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  // MDX not supported by VSCode
-
+  "[scss]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[vue-html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
   },
@@ -198,36 +143,36 @@ export const zedBaseConfig = {
 const zedBiomeConfig = {
   languages: {
     JavaScript: {
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
       formatter: {
         language_server: {
           name: "biome",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true,
       },
     },
     TSX: {
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
       formatter: {
         language_server: {
           name: "biome",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true,
       },
     },
     TypeScript: {
+      code_actions_on_format: {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
       formatter: {
         language_server: {
           name: "biome",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true,
       },
     },
   },
@@ -236,36 +181,36 @@ const zedBiomeConfig = {
 const zedEslintConfig = {
   languages: {
     JavaScript: {
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
       formatter: {
         language_server: {
           name: "eslint",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
       },
     },
     TSX: {
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
       formatter: {
         language_server: {
           name: "eslint",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
       },
     },
     TypeScript: {
+      code_actions_on_format: {
+        "source.fixAll.eslint": true,
+        "source.organizeImports.eslint": true,
+      },
       formatter: {
         language_server: {
           name: "eslint",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
       },
     },
   },
@@ -274,36 +219,36 @@ const zedEslintConfig = {
 const zedOxcConfig = {
   languages: {
     JavaScript: {
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
       formatter: {
         language_server: {
           name: "oxfmt",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
     },
     TSX: {
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
       formatter: {
         language_server: {
           name: "oxfmt",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
     },
     TypeScript: {
+      code_actions_on_format: {
+        "source.fixAll.oxc": true,
+        "source.organizeImports.oxc": true,
+      },
       formatter: {
         language_server: {
           name: "oxfmt",
         },
-      },
-      code_actions_on_format: {
-        "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
     },
   },
@@ -355,9 +300,9 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
 export const editors: Editor[] = [
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
@@ -368,49 +313,49 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
     hooks: {
-      path: ".cursor/hooks.json",
       getContent: (command) => ({
-        version: 1,
         hooks: {
           afterFileEdit: [{ command }],
         },
+        version: 1,
       }),
+      path: ".cursor/hooks.json",
     },
     id: "cursor",
     logo: cursorLogo,
     name: "Cursor",
     rules: {
-      path: ".cursor/rules/ultracite.mdc",
       header: `---
 description: Ultracite Rules - AI-Ready Formatter and Linter
 globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
 alwaysApply: false
 ---`,
+      path: ".cursor/rules/ultracite.mdc",
     },
     subtitle: "The AI-first code editor",
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
     hooks: {
-      path: ".windsurf/hooks.json",
       getContent: (command) => ({
         hooks: {
           post_write_code: [{ command, show_output: true }],
         },
       }),
+      path: ".windsurf/hooks.json",
     },
     id: "windsurf",
     logo: windsurfLogo,
@@ -422,9 +367,9 @@ alwaysApply: false
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "An AI-powered development platform built on VS Code for building and deploying applications faster.",
@@ -435,9 +380,9 @@ alwaysApply: false
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "AWS's spec-driven AI development environment for building production-ready applications.",
@@ -451,9 +396,9 @@ alwaysApply: false
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
@@ -467,9 +412,9 @@ alwaysApply: false
   },
   {
     config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
     },
     description:
       "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
@@ -480,8 +425,8 @@ alwaysApply: false
   },
   {
     config: {
-      path: ".zed/settings.json",
       getContent: getZedConfig,
+      path: ".zed/settings.json",
     },
     description:
       "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
@@ -489,8 +434,8 @@ alwaysApply: false
     logo: zedLogo,
     name: "Zed",
     rules: {
-      path: ".rules",
       appendMode: true,
+      path: ".rules",
     },
     subtitle: "The high-performance editor",
   },

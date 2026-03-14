@@ -48,7 +48,8 @@ const getStylelintConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generateStylelintConfig = (): string => `export { default } from "ultracite/stylelint";
+const generateStylelintConfig =
+  (): string => `export { default } from "ultracite/stylelint";
 `;
 
 export const stylelint = {

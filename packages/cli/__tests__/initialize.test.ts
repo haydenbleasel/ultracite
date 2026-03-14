@@ -56,18 +56,18 @@ mock.module("@clack/prompts", () => ({
   intro: mock(noop),
   isCancel: mock(() => false),
   log: {
+    error: mock(noop),
     info: mock(noop),
     success: mock(noop),
-    error: mock(noop),
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
   outro: mock(noop),
   select: mock(() => Promise.resolve("biome")),
   spinner: mock(() => ({
+    message: mock(noop),
     start: mock(noop),
     stop: mock(noop),
-    message: mock(noop),
   })),
 }));
 
@@ -83,18 +83,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -129,18 +129,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -175,18 +175,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -222,18 +222,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -264,12 +264,14 @@ describe("initialize", () => {
     const mockCancel = mock(noop);
     let callCount = 0;
     const mockMultiselect = mock(() => {
-      callCount++;
+      callCount += 1;
       // First call is for editors, second for agents
       if (callCount === 1) {
-        return Promise.resolve([]); // Return empty for editors
+        // Return empty for editors
+        return Promise.resolve([]);
       }
-      return Symbol.for("cancel"); // Cancel for agents
+      // Cancel for agents
+      return Symbol.for("cancel");
     });
 
     mock.module("@clack/prompts", () => ({
@@ -277,18 +279,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
       select: mock(() => Promise.resolve("biome")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -329,18 +331,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       select: mock(() => Promise.resolve("eslint")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -382,18 +384,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       select: mock(() => Promise.resolve("oxlint")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -439,18 +441,18 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       select: mock(() => Promise.resolve("oxlint")),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -494,9 +496,9 @@ describe("initialize", () => {
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -538,9 +540,9 @@ describe("initialize", () => {
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -573,17 +575,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -614,17 +616,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -655,17 +657,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -696,17 +698,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -748,17 +750,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -790,17 +792,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -832,17 +834,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -874,17 +876,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -929,9 +931,9 @@ describe("initialize", () => {
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -960,17 +962,17 @@ describe("initialize", () => {
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
+        error: mock(noop),
         info: mock(noop),
         success: mock(noop),
-        error: mock(noop),
         warn: mock(noop),
       },
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 
@@ -1002,9 +1004,9 @@ describe("initialize", () => {
       multiselect: mock(() => Promise.resolve([])),
       outro: mock(noop),
       spinner: mock(() => ({
+        message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
-        message: mock(noop),
       })),
     }));
 

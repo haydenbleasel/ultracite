@@ -1,5 +1,5 @@
-import { editors } from '@repo/data/editors';
-import type { Editor } from '@repo/data/editors';
+import { editors } from "@repo/data/editors";
+import type { Editor } from "@repo/data/editors";
 import Image from "next/image";
 import Link from "next/link";
 

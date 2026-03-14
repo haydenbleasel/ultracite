@@ -51,7 +51,6 @@ const config = [
       "**/*.html",
     ],
     languageOptions: {
-      sourceType: "module",
       globals: {
         ...globals.browser,
         ...globals.node,
@@ -60,17 +59,18 @@ const config = [
         ecmaVersion: "latest",
         sourceType: "module",
       },
+      sourceType: "module",
     },
     plugins: {
-      prettier,
-      import: importPlugin,
-      promise,
-      n,
-      "unused-imports": unusedImports,
-      sonarjs,
       compat,
-      unicorn,
       github,
+      import: importPlugin,
+      n,
+      prettier,
+      promise,
+      sonarjs,
+      unicorn,
+      "unused-imports": unusedImports,
     },
     rules: {
       ...eslintRules,
@@ -92,8 +92,8 @@ const config = [
         espree: [".js", ".cjs", ".mjs", ".ts"],
       },
       "import/resolver": {
-        typescript: true,
         node: true,
+        typescript: true,
       },
     },
   },

@@ -81,7 +81,7 @@ describe("vscode editor config", () => {
       await vscode.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       // The default config includes various VS Code settings
@@ -106,7 +106,7 @@ describe("vscode editor config", () => {
       await vscode.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Verify the existing setting is preserved
       expect(writtenContent["editor.tabSize"]).toBe(4);
@@ -127,7 +127,7 @@ describe("vscode editor config", () => {
       await vscode.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Should still create valid config even with invalid input
       expect(typeof writtenContent).toBe("object");
@@ -148,7 +148,7 @@ describe("vscode editor config", () => {
       vscode.extension?.("biomejs.biome");
 
       expect(mockSpawn).toHaveBeenCalled();
-      const spawnCall = mockSpawn.mock.calls[0];
+      const [spawnCall] = mockSpawn.mock.calls;
       expect(spawnCall[0]).toContain("code --install-extension biomejs.biome");
     });
   });

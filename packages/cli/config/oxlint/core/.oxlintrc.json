@@ -107,6 +107,19 @@
       ],
       "plugins": ["jest", "vitest"],
       "rules": {
+        // Disabled: bun:test mock.module() must be called at top level
+        "jest/require-hook": "off",
+        // Disabled: mock factories use conditionals for path-based routing
+        "jest/no-conditional-in-test": "off",
+        // Disabled: bun:test uses beforeEach hooks for mock.restore()
+        "jest/no-hooks": "off",
+        // Disabled: bun:test mock factories return Promise.resolve/reject
+        "promise/prefer-await-to-then": "off",
+        // Disabled: test files import from parent src/ directory
+        "import/no-relative-parent-imports": "off",
+        // Disabled: mock callbacks often need empty functions
+        "no-empty-function": "off",
+
         "jest/consistent-test-it": "error",
         "jest/expect-expect": "error",
         "jest/max-expects": "error",
@@ -114,7 +127,6 @@
         "jest/no-alias-methods": "error",
         "jest/no-commented-out-tests": "error",
         "jest/no-conditional-expect": "error",
-        "jest/no-conditional-in-test": "error",
         "jest/no-confusing-set-timeout": "error",
         "jest/no-deprecated-functions": "error",
         "jest/no-disabled-tests": "error",
@@ -122,7 +134,6 @@
         "jest/no-duplicate-hooks": "error",
         "jest/no-export": "error",
         "jest/no-focused-tests": "error",
-        "jest/no-hooks": "error",
         "jest/no-identical-title": "error",
         "jest/no-interpolation-in-snapshots": "error",
         "jest/no-jasmine-globals": "error",
@@ -153,7 +164,6 @@
         "jest/prefer-to-have-been-called-times": "error",
         "jest/prefer-to-have-length": "error",
         "jest/prefer-todo": "error",
-        "jest/require-hook": "error",
         "jest/require-to-throw-message": "error",
         "jest/require-top-level-describe": "error",
         "jest/valid-describe-callback": "error",

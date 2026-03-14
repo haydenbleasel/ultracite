@@ -100,7 +100,7 @@ describe("tsconfig", () => {
       await tsconfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
       expect(writtenContent.compilerOptions.target).toBe("ES2020");
@@ -126,7 +126,7 @@ describe("tsconfig", () => {
       await tsconfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
       // Comments should be preserved
       expect(writtenContent).toContain("// This is a comment");
@@ -164,7 +164,7 @@ describe("tsconfig", () => {
       await tsconfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
     });

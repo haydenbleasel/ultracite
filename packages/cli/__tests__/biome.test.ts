@@ -70,7 +70,7 @@ describe("biome", () => {
       await biome.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
       expect(writtenContent.$schema).toBe(
@@ -89,7 +89,7 @@ describe("biome", () => {
       await biome.create({ frameworks: ["react", "next"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
@@ -118,7 +118,7 @@ describe("biome", () => {
       await biome.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toContain("ultracite/biome/core");
       expect(writtenContent.formatter.indentStyle).toBe("tab");
@@ -142,7 +142,7 @@ describe("biome", () => {
       await biome.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
     });
@@ -167,7 +167,7 @@ describe("biome", () => {
       await biome.update({ frameworks: ["react", "next"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
@@ -192,7 +192,7 @@ describe("biome", () => {
       await biome.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.extends).toContain("ultracite/biome/core");
     });

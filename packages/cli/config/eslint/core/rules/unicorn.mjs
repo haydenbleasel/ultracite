@@ -19,11 +19,11 @@ const overrideRules = {
     "error",
     {
       allowList: {
+        generateStaticParams: true,
         getInitialProps: true,
         getServerSideProps: true,
         getStaticPaths: true,
         getStaticProps: true,
-        generateStaticParams: true,
       },
     },
   ],

@@ -1,7 +1,7 @@
 import Prettier from "@repo/data/logos/prettier.svg";
 import Stylelint from "@repo/data/logos/stylelint.svg";
-import { providers } from '@repo/data/providers';
-import type { ProviderId } from '@repo/data/providers';
+import { providers } from "@repo/data/providers";
+import type { ProviderId } from "@repo/data/providers";
 import Image from "next/image";
 import type { ReactNode } from "react";
 

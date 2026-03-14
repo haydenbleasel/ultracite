@@ -29,7 +29,10 @@ export const ZeroConfig = () => {
   const selectedProvider = providers.find((p) => p.id === provider);
   const selectedFramework = frameworks.find((f) => f.label === framework);
 
-  const config = useMemo(() => selectedProvider?.configFiles ?? [], [selectedProvider]);
+  const config = useMemo(
+    () => selectedProvider?.configFiles ?? [],
+    [selectedProvider]
+  );
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
   // The value should always be valid for the current config; fallback to first available tab if needed.
@@ -58,7 +61,7 @@ export const ZeroConfig = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
-        <span className="text-muted-foreground text-sm">I'm using</span>
+        <span className="text-muted-foreground text-sm">I&apos;m using</span>
         <ProviderSelector onValueChange={setProvider} value={provider} />
         <span className="text-muted-foreground text-sm">on my</span>
         <FrameworkSelector onValueChange={setFramework} value={framework} />

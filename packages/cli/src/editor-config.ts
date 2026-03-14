@@ -12,7 +12,7 @@ export const createEditorConfig = (
   editorId: string,
   linter: Linter = "biome"
 ) => {
-  const editor = editors.find((editor) => editor.id === editorId);
+  const editor = editors.find((e) => e.id === editorId);
 
   if (!editor) {
     throw new Error(`Editor "${editorId}" not found`);
@@ -31,8 +31,8 @@ export const createEditorConfig = (
     extension: editor.config.extensionCommand
       ? (extensionId: string) =>
           spawnSync(`${editor.config.extensionCommand} ${extensionId}`, {
-            stdio: "pipe",
             shell: true,
+            stdio: "pipe",
           })
       : undefined,
 
@@ -45,7 +45,7 @@ export const createEditorConfig = (
         return;
       }
 
-      const existingContents = await readFile(editor.config.path, "utf-8");
+      const existingContents = await readFile(editor.config.path, "utf8");
       const existingConfig = parse(existingContents) as
         | Record<string, unknown>
         | undefined;

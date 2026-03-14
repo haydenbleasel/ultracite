@@ -125,7 +125,7 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.devDependencies).toEqual({
       "new-package": "2.0.0",
@@ -150,7 +150,7 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.dependencies).toEqual({
       "new-package": "2.0.0",
@@ -175,7 +175,7 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.scripts).toEqual({
       build: "tsc",

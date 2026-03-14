@@ -1,7 +1,7 @@
-import { agents } from './agents';
-import type { Agent } from './agents';
-import { editors } from './editors';
-import type { Editor } from './editors';
+import { agents } from "./agents";
+import type { Agent } from "./agents";
+import { editors } from "./editors";
+import type { Editor } from "./editors";
 import type { HooksConfig } from "./types";
 
 export type { HooksConfig } from "./types";

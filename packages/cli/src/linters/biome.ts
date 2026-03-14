@@ -54,7 +54,7 @@ export const biome = {
   },
   update: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

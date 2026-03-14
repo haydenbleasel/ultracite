@@ -73,7 +73,7 @@ describe("stylelint linter", () => {
       await stylelint.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./stylelint.config.mjs");
       expect(writeCall[1]).toContain("ultracite/stylelint");
     });

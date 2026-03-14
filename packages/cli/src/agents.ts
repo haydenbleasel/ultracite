@@ -4,8 +4,8 @@ import { agents } from "@repo/data/agents";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
 import { getRules } from "@repo/data/rules";
-import { dlxCommand } from 'nypm';
-import type { PackageManagerName } from 'nypm';
+import { dlxCommand } from "nypm";
+import type { PackageManagerName } from "nypm";
 
 import { ensureDirectory, exists } from "./utils";
 
@@ -14,13 +14,13 @@ export const createAgents = (
   packageManager: PackageManagerName,
   linter: (typeof options.linters)[number]
 ) => {
-  const agent = agents.find((agent) => agent.id === name);
+  const agent = agents.find((a) => a.id === name);
 
   if (!agent) {
     throw new Error(`Agent "${name}" not found`);
   }
 
-  const provider = providers.find((provider) => provider.id === linter);
+  const provider = providers.find((p) => p.id === linter);
 
   if (!provider) {
     throw new Error(`Provider "${linter}" not found`);
@@ -49,7 +49,7 @@ export const createAgents = (
         return;
       }
 
-      const existingContents = await readFile(agent.config.path, "utf-8");
+      const existingContents = await readFile(agent.config.path, "utf8");
 
       // Check if rules are already present to avoid duplicates
       if (existingContents.includes(rules.trim())) {

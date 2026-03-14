@@ -14,18 +14,18 @@ mock.module("@clack/prompts", () => ({
   intro: mock(noop),
   isCancel: mock(() => false),
   log: {
+    error: mock(noop),
     info: mock(noop),
     success: mock(noop),
-    error: mock(noop),
     warn: mock(noop),
   },
   multiselect: mock(() => Promise.resolve([])),
   outro: mock(noop),
   select: mock(() => Promise.resolve("biome")),
   spinner: mock(() => ({
+    message: mock(noop),
     start: mock(noop),
     stop: mock(noop),
-    message: mock(noop),
   })),
 }));
 

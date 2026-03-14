@@ -54,7 +54,7 @@ describe("pre-commit", () => {
       await preCommit.create("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.pre-commit-config.yaml");
       expect(writeCall[1]).toContain("repos:");
       expect(writeCall[1]).toContain("repo: local");
@@ -103,7 +103,7 @@ describe("pre-commit", () => {
       await preCommit.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("id: ultracite");
       expect(writeCall[1]).toContain("trailing-whitespace");
     });
@@ -120,7 +120,7 @@ describe("pre-commit", () => {
       await preCommit.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("repos:");
       expect(writeCall[1]).toContain("id: ultracite");
     });

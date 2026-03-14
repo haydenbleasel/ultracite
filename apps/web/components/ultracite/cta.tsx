@@ -1,6 +1,6 @@
 import { Installer } from "./installer";
 
-export const CTA = () => (
+export const CallToAction = () => (
   <div className="grid items-center gap-8 rounded-2xl bg-sidebar p-16 md:p-24">
     <div className="flex flex-col items-center justify-center gap-2 text-center">
       <h2 className="text-balance font-medium text-2xl tracking-tighter sm:text-3xl md:text-4xl">

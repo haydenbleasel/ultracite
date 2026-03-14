@@ -9,18 +9,20 @@ export const Assistant = () => (
       readOnly
       value="Generate me a new UserCard component."
     />
-    <p>Sure! I'll generate a new UserCard component for you.</p>
+    <p>Sure! I&apos;ll generate a new UserCard component for you.</p>
     <div className="flex items-center gap-2 rounded-full bg-secondary px-2.5 py-1">
       <WrenchIcon className="size-3" />
       <p>Using Ultracite</p>
     </div>
-    <p>I found several issues with the code. Here's a list of suggestions:</p>
+    <p>
+      I found several issues with the code. Here&apos;s a list of suggestions:
+    </p>
     <ol className="grid list-decimal gap-2 pl-4">
       <li>
         <p>
           React is imported but not used. This is a common pattern in React
-          codebases, but it's not necessary. You can destructure the import to
-          use the React object.
+          codebases, but it&apos;s not necessary. You can destructure the import
+          to use the React object.
         </p>
       </li>
       <li>

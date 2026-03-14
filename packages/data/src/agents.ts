@@ -1,30 +1,31 @@
 import type { StaticImageData } from "next/image";
 
-import aiderLogo from "../logos/aider.svg";
-import amazonQLogo from "../logos/amazon-q.svg";
-import ampLogo from "../logos/amp.svg";
-import augmentcodeLogo from "../logos/augmentcode.svg";
-import claudeLogo from "../logos/claude.svg";
-import clineLogo from "../logos/cline.svg";
-import codexLogo from "../logos/codex.svg";
-import copilotLogo from "../logos/copilot.svg";
-import crushLogo from "../logos/crush.svg";
-import cursorCliLogo from "../logos/cursor.svg";
-import droidLogo from "../logos/droid.svg";
-import firebaseStudioLogo from "../logos/firebase-studio.svg";
-import firebenderLogo from "../logos/firebender.svg";
-import geminiLogo from "../logos/gemini.svg";
-import gooseLogo from "../logos/goose.svg";
-import julesLogo from "../logos/jules.svg";
-import junieLogo from "../logos/junie.svg";
-import kiloCodeLogo from "../logos/kilo-code.svg";
-import mistralLogo from "../logos/mistral.svg";
-import openHandsLogo from "../logos/open-hands.svg";
-import opencodeLogo from "../logos/opencode.svg";
-import qwenLogo from "../logos/qwen.svg";
-import rooCodeLogo from "../logos/roo-code.svg";
-import vercelLogo from "../logos/vercel.svg";
-import warpLogo from "../logos/warp.svg";
+import aiderLogo from "@/logos/aider.svg";
+import amazonQLogo from "@/logos/amazon-q.svg";
+import ampLogo from "@/logos/amp.svg";
+import augmentcodeLogo from "@/logos/augmentcode.svg";
+import claudeLogo from "@/logos/claude.svg";
+import clineLogo from "@/logos/cline.svg";
+import codexLogo from "@/logos/codex.svg";
+import copilotLogo from "@/logos/copilot.svg";
+import crushLogo from "@/logos/crush.svg";
+import cursorCliLogo from "@/logos/cursor.svg";
+import droidLogo from "@/logos/droid.svg";
+import firebaseStudioLogo from "@/logos/firebase-studio.svg";
+import firebenderLogo from "@/logos/firebender.svg";
+import geminiLogo from "@/logos/gemini.svg";
+import gooseLogo from "@/logos/goose.svg";
+import julesLogo from "@/logos/jules.svg";
+import junieLogo from "@/logos/junie.svg";
+import kiloCodeLogo from "@/logos/kilo-code.svg";
+import mistralLogo from "@/logos/mistral.svg";
+import openHandsLogo from "@/logos/open-hands.svg";
+import opencodeLogo from "@/logos/opencode.svg";
+import qwenLogo from "@/logos/qwen.svg";
+import rooCodeLogo from "@/logos/roo-code.svg";
+import vercelLogo from "@/logos/vercel.svg";
+import warpLogo from "@/logos/warp.svg";
+
 import type { HooksConfig } from "./types";
 
 export interface AgentConfig {
@@ -46,28 +47,28 @@ export interface Agent {
 export const agents: Agent[] = [
   {
     config: {
-      path: ".claude/CLAUDE.md",
       appendMode: true,
+      path: ".claude/CLAUDE.md",
     },
     description:
       "Anthropic's official CLI for Claude, an agentic coding tool that lives in your terminal.",
     hooks: {
-      path: ".claude/settings.json",
       getContent: (command) => ({
         hooks: {
           PostToolUse: [
             {
-              matcher: "Write|Edit",
               hooks: [
                 {
-                  type: "command",
                   command,
+                  type: "command",
                 },
               ],
+              matcher: "Write|Edit",
             },
           ],
         },
       }),
+      path: ".claude/settings.json",
     },
     id: "claude",
     logo: claudeLogo,
@@ -76,8 +77,8 @@ export const agents: Agent[] = [
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "OpenAI's cloud-based coding agent for autonomous software development tasks.",
@@ -88,8 +89,8 @@ export const agents: Agent[] = [
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "Google's asynchronous AI coding agent that works in the background to complete development tasks.",
@@ -100,26 +101,26 @@ export const agents: Agent[] = [
   },
   {
     config: {
-      path: ".github/copilot-instructions.md",
       appendMode: true,
       header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
+      path: ".github/copilot-instructions.md",
     },
     description:
       "GitHub's AI pair programmer that suggests code completions and helps write code faster.",
     hooks: {
-      path: ".github/hooks/ultracite.json",
       getContent: (command) => ({
         hooks: {
           PostToolUse: [
             {
-              type: "command",
               command,
+              type: "command",
             },
           ],
         },
       }),
+      path: ".github/hooks/ultracite.json",
     },
     id: "copilot",
     logo: copilotLogo,
@@ -128,8 +129,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".clinerules",
       appendMode: true,
+      path: ".clinerules",
     },
     description:
       "An autonomous coding agent for VS Code that can create and edit files, run commands, and more.",
@@ -140,8 +141,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "Sourcegraph's AI coding agent that understands your entire codebase for intelligent assistance.",
@@ -163,8 +164,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".idx/airules.md",
       appendMode: true,
+      path: ".idx/airules.md",
     },
     description:
       "Google's AI-powered development environment integrated with Firebase services.",
@@ -175,8 +176,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".openhands/microagents/repo.md",
       appendMode: true,
+      path: ".openhands/microagents/repo.md",
     },
     description:
       "An open-source platform for AI software development agents with autonomous capabilities.",
@@ -187,8 +188,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "GEMINI.md",
       appendMode: true,
+      path: "GEMINI.md",
     },
     description:
       "Google's command-line interface for Gemini, bringing AI assistance to your terminal.",
@@ -199,8 +200,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".junie/guidelines.md",
       appendMode: true,
+      path: ".junie/guidelines.md",
     },
     description:
       "JetBrains' AI coding agent integrated into their IDE ecosystem.",
@@ -233,8 +234,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".goosehints",
       appendMode: true,
+      path: ".goosehints",
     },
     description:
       "Block's open-source AI developer agent for autonomous software development.",
@@ -245,8 +246,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".roo/rules/ultracite.md",
       appendMode: true,
+      path: ".roo/rules/ultracite.md",
     },
     description:
       "An AI coding assistant focused on understanding and navigating complex codebases.",
@@ -257,8 +258,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "A modern terminal with AI-powered command suggestions and workflow automation.",
@@ -269,8 +270,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "An AI development agent focused on automated code generation and task completion.",
@@ -281,8 +282,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "An open-source AI coding agent that runs in your terminal, desktop, or IDE with support for 75+ LLM providers.",
@@ -293,8 +294,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "CRUSH.md",
       appendMode: true,
+      path: "CRUSH.md",
     },
     description:
       "Charmbracelet's glamorous AI coding agent for your terminal with multi-model support.",
@@ -305,8 +306,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description:
       "Alibaba's command-line interface for Qwen3-Coder, enabling agentic coding with natural language.",
@@ -317,8 +318,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".amazonq/rules/ultracite.md",
       appendMode: true,
+      path: ".amazonq/rules/ultracite.md",
     },
     description:
       "Amazon's AI-powered CLI with command autocompletion, natural language chat, and AWS integration.",
@@ -340,8 +341,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: ".cursor/rules/ultracite.mdc",
       appendMode: true,
+      path: ".cursor/rules/ultracite.mdc",
     },
     description:
       "Cursor's CLI, built to help you ship right from your terminal.",
@@ -363,8 +364,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   },
   {
     config: {
-      path: "AGENTS.md",
       appendMode: true,
+      path: "AGENTS.md",
     },
     description: "Vercel's agent, powered by their AI Cloud.",
     id: "vercel",

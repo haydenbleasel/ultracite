@@ -16,7 +16,7 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/agents/[agent]">): Promise<Metadata> => {
   const { agent: agentId } = await params;
-  const agent = agents.find((agent) => agent.id === agentId);
+  const agent = agents.find((a) => a.id === agentId);
 
   if (!agent) {
     return {};
@@ -30,7 +30,7 @@ export const generateMetadata = async ({
 
 const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
   const { agent: agentId } = await params;
-  const agent = agents.find((agent) => agent.id === agentId);
+  const agent = agents.find((a) => a.id === agentId);
 
   if (!agent) {
     notFound();

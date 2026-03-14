@@ -5,7 +5,10 @@ import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Player = dynamic(
-  () => import("react-player").then((mod) => mod.default),
+  async () => {
+    const mod = await import("react-player");
+    return mod.default;
+  },
   { ssr: false }
 );
 

@@ -3,10 +3,11 @@ import { join } from "node:path";
 
 const configDir = join(import.meta.dirname, "../packages/cli/config/oxlint");
 
-const stripJsonComments = (content: string): string => content
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/.*$/gm, "")
-    .replace(/,(\s*[}\]])/g, "$1");
+const stripJsonComments = (content: string): string =>
+  content
+    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+    .replaceAll(/\/\/.*$/gm, "")
+    .replaceAll(/,(\s*[}\]])/g, "$1");
 
 const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
   try {

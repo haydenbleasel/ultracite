@@ -2,7 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { CheckIcon, CopyIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -24,7 +24,7 @@ interface InstallerProps {
 export const Installer = ({ command, className }: InstallerProps) => {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(command);
     toast.success("Copied to clipboard", {
       description: "Paste it into your terminal to install Ultracite.",
@@ -35,7 +35,7 @@ export const Installer = ({ command, className }: InstallerProps) => {
     setTimeout(() => {
       setCopied(false);
     }, COPY_TIMEOUT);
-  };
+  }, [command]);
 
   const Icon = copied ? CheckIcon : CopyIcon;
 

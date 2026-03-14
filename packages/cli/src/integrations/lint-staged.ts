@@ -3,8 +3,8 @@ import { pathToFileURL } from "node:url";
 
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { addDevDependency, dlxCommand } from 'nypm';
-import type { PackageManager, PackageManagerName } from 'nypm';
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
 
 import { exists, isMonorepo } from "../utils";
 
@@ -52,15 +52,13 @@ const processYamlLine = (
     const newCurrentKey = key.trim().replaceAll(/['"]/g, "");
 
     if (value && value !== "") {
-      if (value.startsWith("[") && value.endsWith("]")) {
-        // Handle inline arrays
-        result[newCurrentKey] = value
-          .slice(1, -1)
-          .split(",")
-          .map((v) => v.trim().replaceAll(/['"]/g, ""));
-      } else {
-        result[newCurrentKey] = value.replaceAll(/['"]/g, "");
-      }
+      result[newCurrentKey] =
+        value.startsWith("[") && value.endsWith("]")
+          ? value
+              .slice(1, -1)
+              .split(",")
+              .map((v) => v.trim().replaceAll(/['"]/g, ""))
+          : value.replaceAll(/['"]/g, "");
       return { newCurrentArray: [], newCurrentKey: null };
     }
     return { newCurrentArray: [], newCurrentKey };
@@ -146,14 +144,12 @@ const updatePackageJson = async (
     return;
   }
 
-  if (packageJson["lint-staged"]) {
-    packageJson["lint-staged"] = deepmerge(
-      packageJson["lint-staged"],
-      createLintStagedConfig(packageManager)
-    );
-  } else {
-    packageJson["lint-staged"] = createLintStagedConfig(packageManager);
-  }
+  packageJson["lint-staged"] = packageJson["lint-staged"]
+    ? deepmerge(
+        packageJson["lint-staged"],
+        createLintStagedConfig(packageManager)
+      )
+    : createLintStagedConfig(packageManager);
 
   await writeFile("./package.json", JSON.stringify(packageJson, null, 2));
 };
@@ -206,8 +202,8 @@ const updateEsmConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
   const fileUrl = pathToFileURL(filename).href;
-  const module = await import(fileUrl);
-  const existingConfig = module.default || {};
+  const imported = await import(fileUrl);
+  const existingConfig = imported.default || {};
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -223,10 +219,10 @@ const updateCjsConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  // For CommonJS, we need to be more careful about imports
-  // Let's create a temporary file and require it
-  delete require.cache[require.resolve(`./${filename}`)];
-  const existingConfig = require(`./${filename}`);
+  // Use dynamic import with cache-busting query to avoid stale modules
+  const fileUrl = `${pathToFileURL(filename).href}?t=${Date.now()}`;
+  const imported = await import(fileUrl);
+  const existingConfig = imported.default || imported;
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -305,10 +301,10 @@ export const lintStaged = {
   },
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lint-staged", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
       corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
     });
   },
   update: async (packageManager: PackageManagerName) => {

@@ -1,8 +1,8 @@
 import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 
-import { addDevDependency, dlxCommand } from 'nypm';
-import type { PackageManager, PackageManagerName } from 'nypm';
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
 
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
@@ -74,17 +74,17 @@ export const husky = {
 
     try {
       execSync(initCommand, { stdio: "pipe" });
-    } catch (_error) {
+    } catch {
       // If init fails, it might be because it's already initialized
       // Continue anyway as we'll create the hook file next
     }
   },
   install: async (packageManager: PackageManager) => {
     await addDevDependency("husky", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
       corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure husky is initialized
@@ -95,7 +95,7 @@ export const husky = {
     });
   },
   update: async (packageManager: PackageManagerName, useLintStaged = false) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
 
     let hookScript: string;
 

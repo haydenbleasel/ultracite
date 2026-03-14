@@ -88,7 +88,7 @@ describe("husky", () => {
       await husky.install("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.scripts?.prepare).toBe("husky");
     });
@@ -121,7 +121,7 @@ describe("husky", () => {
       await husky.create("npm", false);
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.husky/pre-commit");
       expect(writeCall[1]).toContain("#!/bin/sh");
       expect(writeCall[1]).toContain("npx ultracite");
@@ -146,7 +146,7 @@ describe("husky", () => {
       await husky.create("npm", true);
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.husky/pre-commit");
       expect(writeCall[1]).toContain("npx lint-staged");
       expect(writeCall[1]).not.toContain("npx ultracite");
@@ -163,7 +163,7 @@ describe("husky", () => {
 
       await husky.create("npm", false);
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).not.toContain("git stash");
     });
   });
@@ -182,7 +182,7 @@ describe("husky", () => {
       await husky.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("existing");
       expect(writeCall[1]).toContain("npx ultracite");
       expect(writeCall[1]).toContain("# ultracite");
@@ -201,7 +201,7 @@ describe("husky", () => {
 
       await husky.update("npm");
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const written = writeCall[1] as string;
       // Should contain the "other" line
       expect(written).toContain("other");
@@ -228,7 +228,7 @@ describe("husky", () => {
 
       await husky.update("npm", true);
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("npx lint-staged");
       expect(writeCall[1]).not.toContain("npx ultracite");
     });

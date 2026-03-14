@@ -57,7 +57,8 @@ const getPrettierConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generatePrettierConfig = (): string => `export { default } from "ultracite/prettier";
+const generatePrettierConfig =
+  (): string => `export { default } from "ultracite/prettier";
 `;
 
 export const prettier = {

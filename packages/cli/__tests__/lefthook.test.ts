@@ -147,7 +147,7 @@ describe("lefthook", () => {
       await lefthook.install("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.scripts?.prepare).toBe("lefthook install");
     });
@@ -177,7 +177,7 @@ describe("lefthook", () => {
       await lefthook.create("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./lefthook.yml");
       expect(writeCall[1]).toContain("pre-commit:");
       expect(writeCall[1]).toContain("jobs:");
@@ -239,7 +239,7 @@ describe("lefthook", () => {
       await lefthook.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("pre-commit:");
       expect(writeCall[1]).not.toContain("# EXAMPLE USAGE:");
     });
@@ -269,7 +269,7 @@ describe("lefthook", () => {
       await lefthook.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("npx ultracite fix");
       expect(writeCall[1]).toContain('echo "test"');
     });
@@ -299,7 +299,7 @@ describe("lefthook", () => {
       await lefthook.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("jobs:");
       expect(writeCall[1]).toContain("npx ultracite fix");
     });

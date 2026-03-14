@@ -38,7 +38,7 @@ describe("createEditorConfig", () => {
       await editorConfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
     });
 
@@ -56,7 +56,7 @@ describe("createEditorConfig", () => {
       await editorConfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent["editor.tabSize"]).toBe(4);
     });
@@ -140,9 +140,8 @@ describe("createEditorConfig", () => {
       }));
 
       // @ts-expect-error - Testing windsurf hooks if editor supports it
-      const hooks = await import("../src/hooks").then((m) =>
-        m.createHooks("windsurf", "npm")
-      );
+      const m = await import("../src/hooks");
+      const hooks = m.createHooks("windsurf", "npm");
       await hooks.create();
 
       expect(mockWriteFile).toHaveBeenCalled();

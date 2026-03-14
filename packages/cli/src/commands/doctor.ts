@@ -272,11 +272,11 @@ const checkUltraciteDependency = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
+    const pkgJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
     const version =
-      packageJson.dependencies?.ultracite ||
-      packageJson.devDependencies?.ultracite ||
-      packageJson.peerDependencies?.ultracite;
+      pkgJson.dependencies?.ultracite ||
+      pkgJson.devDependencies?.ultracite ||
+      pkgJson.peerDependencies?.ultracite;
 
     if (version) {
       return {
@@ -362,17 +362,17 @@ const runCheck = async (
 export const doctor = async (): Promise<void> => {
   intro(`Ultracite v${packageJson.version} Doctor`);
 
-  const checks: DiagnosticCheck[] = [];
-
   // Run all checks with spinners
-  checks.push(await runCheck(checkBiomeInstallation, "Biome installation"));
-  checks.push(await runCheck(checkEslintInstallation, "ESLint installation"));
-  checks.push(await runCheck(checkOxlintInstallation, "Oxlint installation"));
-  checks.push(await runCheck(checkBiomeConfig, "Biome configuration"));
-  checks.push(await runCheck(checkEslintConfig, "ESLint configuration"));
-  checks.push(await runCheck(checkOxlintConfig, "Oxlint configuration"));
-  checks.push(await runCheck(checkUltraciteDependency, "Ultracite dependency"));
-  checks.push(await runCheck(checkConflictingTools, "conflicting tools"));
+  const checks: DiagnosticCheck[] = [
+    await runCheck(checkBiomeInstallation, "Biome installation"),
+    await runCheck(checkEslintInstallation, "ESLint installation"),
+    await runCheck(checkOxlintInstallation, "Oxlint installation"),
+    await runCheck(checkBiomeConfig, "Biome configuration"),
+    await runCheck(checkEslintConfig, "ESLint configuration"),
+    await runCheck(checkOxlintConfig, "Oxlint configuration"),
+    await runCheck(checkUltraciteDependency, "Ultracite dependency"),
+    await runCheck(checkConflictingTools, "conflicting tools"),
+  ];
 
   // Calculate summary
   const passCount = checks.filter((c) => c.status === "pass").length;

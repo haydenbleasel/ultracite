@@ -96,7 +96,7 @@ describe("lintStaged", () => {
       await lintStaged.create("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".lintstagedrc.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Check for the actual key pattern that lint-staged uses
@@ -127,7 +127,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Verify lint-staged section exists and has been updated
       expect(writtenContent["lint-staged"]).toBeDefined();
@@ -152,7 +152,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       // Verify config has been updated with new patterns
       const keys = Object.keys(writtenContent);
@@ -170,7 +170,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".lintstagedrc.json");
     });
 
@@ -190,7 +190,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       // YAML format should be written
       expect(typeof writeCall[1]).toBe("string");
       expect(writeCall[1]).toContain("*.js");
@@ -340,7 +340,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(typeof writeCall[1]).toBe("string");
     });
 
@@ -400,7 +400,7 @@ describe("lintStaged", () => {
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent["lint-staged"]).toBeDefined();
     });
@@ -542,7 +542,7 @@ describe("lintStaged", () => {
 
       // Mock the dynamic import to return our mock module
       const originalImport = globalThis.import;
-      (globalThis as any).import = (path: string) => {
+      (globalThis as Record<string, unknown>).import = (path: string) => {
         if (path.includes("lint-staged.config.mjs")) {
           return Promise.resolve(mockModule);
         }
@@ -554,7 +554,7 @@ describe("lintStaged", () => {
         expect(mockWriteFile).toHaveBeenCalled();
       } finally {
         // Restore original import
-        (globalThis as any).import = originalImport;
+        (globalThis as Record<string, unknown>).import = originalImport;
       }
     });
 
@@ -624,18 +624,18 @@ describe("lintStaged", () => {
 
       // Mock the dynamic import to throw an error
       const originalImport = globalThis.import;
-      (globalThis as any).import = () =>
+      (globalThis as Record<string, unknown>).import = () =>
         Promise.reject(new Error("Cannot import ESM module"));
 
       try {
         await lintStaged.update("npm");
         // Should fallback to creating .lintstagedrc.json when ESM import fails
         expect(mockWriteFile).toHaveBeenCalled();
-        const writeCall = mockWriteFile.mock.calls[0];
+        const [writeCall] = mockWriteFile.mock.calls;
         expect(writeCall[0]).toBe(".lintstagedrc.json");
       } finally {
         // Restore original import
-        (globalThis as any).import = originalImport;
+        (globalThis as Record<string, unknown>).import = originalImport;
       }
     });
   });

@@ -7,7 +7,7 @@ import { Agents } from "./components/agents";
 import { Demo } from "./components/demo";
 import { Editors } from "./components/editors";
 import { Hero } from "./components/hero";
-import { IDE } from "./components/ide";
+import { IdePreview } from "./components/ide";
 import { ZeroConfig } from "./components/zero-config";
 
 const title =
@@ -27,7 +27,7 @@ const Home = () => (
     </Hero>
     <Logos />
     <ZeroConfig />
-    <IDE />
+    <IdePreview />
     <Agents />
     <Editors />
     <Social />

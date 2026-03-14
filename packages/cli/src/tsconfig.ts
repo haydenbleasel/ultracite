@@ -1,8 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 import { glob } from "glob";
-import { applyEdits, modify, parse } from 'jsonc-parser';
-import type { ModificationOptions } from 'jsonc-parser';
+import { applyEdits, modify, parse } from "jsonc-parser";
+import type { ModificationOptions } from "jsonc-parser";
 
 /**
  * Find all tsconfig.json files in the project

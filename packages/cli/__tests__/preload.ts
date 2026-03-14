@@ -37,7 +37,7 @@ const vscodeBiomeConfig = {
 mock.module("@repo/data/providers", () => ({
   providers: [
     {
-      configFiles: [{ name: "biome.jsonc", lang: "json", code: () => "{}" }],
+      configFiles: [{ code: () => "{}", lang: "json", name: "biome.jsonc" }],
       description: "Fast formatter and linter written in Rust",
       id: "biome",
       logo: mockSvg,
@@ -47,9 +47,9 @@ mock.module("@repo/data/providers", () => ({
     },
     {
       configFiles: [
-        { name: "eslint.config.mjs", lang: "javascript", code: () => "" },
-        { name: "prettier.config.mjs", lang: "javascript", code: () => "" },
-        { name: "stylelint.config.mjs", lang: "javascript", code: () => "" },
+        { code: () => "", lang: "javascript", name: "eslint.config.mjs" },
+        { code: () => "", lang: "javascript", name: "prettier.config.mjs" },
+        { code: () => "", lang: "javascript", name: "stylelint.config.mjs" },
       ],
       description: "Battle-tested linting solution",
       id: "eslint",
@@ -60,8 +60,8 @@ mock.module("@repo/data/providers", () => ({
     },
     {
       configFiles: [
-        { name: ".oxlintrc.json", lang: "json", code: () => "{}" },
-        { name: ".oxfmtrc.jsonc", lang: "json", code: () => "{}" },
+        { code: () => "{}", lang: "json", name: ".oxlintrc.json" },
+        { code: () => "{}", lang: "json", name: ".oxfmtrc.jsonc" },
       ],
       description: "50-100x faster than ESLint",
       id: "oxlint",
@@ -76,25 +76,25 @@ mock.module("@repo/data/providers", () => ({
 mock.module("@repo/data/agents", () => ({
   agents: [
     {
-      config: { path: ".claude/CLAUDE.md", appendMode: true },
+      config: { appendMode: true, path: ".claude/CLAUDE.md" },
       description: "Anthropic's official CLI for Claude",
       hooks: {
-        path: ".claude/settings.json",
         getContent: (command: string) => ({
           hooks: {
             PostToolUse: [
               {
-                matcher: "Write|Edit",
                 hooks: [
                   {
-                    type: "command",
                     command,
+                    type: "command",
                   },
                 ],
+                matcher: "Write|Edit",
               },
             ],
           },
         }),
+        path: ".claude/settings.json",
       },
       id: "claude",
       logo: mockSvg,
@@ -102,7 +102,7 @@ mock.module("@repo/data/agents", () => ({
       subtitle: "Anthropic's agentic CLI",
     },
     {
-      config: { path: "AGENTS.md", appendMode: true },
+      config: { appendMode: true, path: "AGENTS.md" },
       description: "OpenAI's cloud-based coding agent",
       id: "codex",
       logo: mockSvg,
@@ -110,7 +110,7 @@ mock.module("@repo/data/agents", () => ({
       subtitle: "OpenAI's coding agent",
     },
     {
-      config: { path: "AGENTS.md", appendMode: true },
+      config: { appendMode: true, path: "AGENTS.md" },
       description: "Google's asynchronous AI coding agent",
       id: "jules",
       logo: mockSvg,
@@ -119,25 +119,25 @@ mock.module("@repo/data/agents", () => ({
     },
     {
       config: {
-        path: ".github/copilot-instructions.md",
         appendMode: true,
         header: `---
 applyTo: "**/*.{ts,tsx,js,jsx}"
 ---`,
+        path: ".github/copilot-instructions.md",
       },
       description: "GitHub's AI pair programmer",
       hooks: {
-        path: ".github/hooks/ultracite.json",
         getContent: (command: string) => ({
           hooks: {
             PostToolUse: [
               {
-                type: "command",
                 command,
+                type: "command",
               },
             ],
           },
         }),
+        path: ".github/hooks/ultracite.json",
       },
       id: "copilot",
       logo: mockSvg,
@@ -145,7 +145,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "GitHub's AI pair programmer",
     },
     {
-      config: { path: ".clinerules", appendMode: true },
+      config: { appendMode: true, path: ".clinerules" },
       description: "An autonomous coding agent for VS Code",
       id: "cline",
       logo: mockSvg,
@@ -153,7 +153,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "Autonomous VS Code agent",
     },
     {
-      config: { path: ".roo/rules.md", appendMode: true },
+      config: { appendMode: true, path: ".roo/rules.md" },
       description: "AI code assistant",
       id: "roo-code",
       logo: mockSvg,
@@ -161,7 +161,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "AI-powered code assistant",
     },
     {
-      config: { path: ".aider/conventions.md", appendMode: true },
+      config: { appendMode: true, path: ".aider/conventions.md" },
       description: "AI pair programming tool",
       id: "aider",
       logo: mockSvg,
@@ -169,7 +169,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "AI pair programming in terminal",
     },
     {
-      config: { path: ".gemini/style-guide.md", appendMode: true },
+      config: { appendMode: true, path: ".gemini/style-guide.md" },
       description: "Google's AI coding assistant",
       id: "gemini",
       logo: mockSvg,
@@ -177,7 +177,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "Google's AI assistant",
     },
     {
-      config: { path: ".junie/guidelines.md", appendMode: true },
+      config: { appendMode: true, path: ".junie/guidelines.md" },
       description: "JetBrains AI coding assistant",
       id: "junie",
       logo: mockSvg,
@@ -191,9 +191,9 @@ mock.module("@repo/data/editors", () => ({
   editors: [
     {
       config: {
-        path: ".vscode/settings.json",
-        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
         extensionCommand: "code --install-extension",
+        getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
       },
       description: "Popular code editor",
       id: "vscode",
@@ -203,16 +203,16 @@ mock.module("@repo/data/editors", () => ({
     },
     {
       config: {
-        path: ".zed/settings.json",
         getContent: () => ({
-          formatter: "language_server",
           format_on_save: "on",
+          formatter: "language_server",
           languages: {
             JavaScript: {
               formatter: { language_server: { name: "biome" } },
             },
           },
         }),
+        path: ".zed/settings.json",
       },
       description: "Fast code editor",
       id: "zed",
@@ -222,24 +222,24 @@ mock.module("@repo/data/editors", () => ({
     },
     {
       config: {
-        path: ".vscode/settings.json",
         getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
       },
       description: "AI-powered code editor",
       hooks: {
-        path: ".cursor/hooks.json",
         getContent: (command: string) => ({
-          version: 1,
           hooks: {
             afterFileEdit: [
               {
-                event: "afterFileEdit",
                 command,
+                event: "afterFileEdit",
                 pattern: "**/*.{js,jsx,ts,tsx,json,css,md,mdx,html}",
               },
             ],
           },
+          version: 1,
         }),
+        path: ".cursor/hooks.json",
       },
       id: "cursor",
       logo: mockSvg,
@@ -248,24 +248,24 @@ mock.module("@repo/data/editors", () => ({
     },
     {
       config: {
-        path: ".vscode/settings.json",
         getContent: () => ({ ...vscodeBaseConfig, ...vscodeBiomeConfig }),
+        path: ".vscode/settings.json",
       },
       description: "AI-powered editor by Codeium",
       hooks: {
-        path: ".windsurf/hooks.json",
         getContent: (command: string) => ({
-          version: 1,
           hooks: {
             afterFileEdit: [
               {
-                event: "afterFileEdit",
                 command,
+                event: "afterFileEdit",
                 pattern: "**/*.{js,jsx,ts,tsx,json,css,md,mdx,html}",
               },
             ],
           },
+          version: 1,
         }),
+        path: ".windsurf/hooks.json",
       },
       id: "windsurf",
       logo: mockSvg,

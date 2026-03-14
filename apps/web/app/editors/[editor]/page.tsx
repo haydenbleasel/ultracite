@@ -16,7 +16,7 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/editors/[editor]">): Promise<Metadata> => {
   const { editor: editorId } = await params;
-  const editor = editors.find((editor) => editor.id === editorId);
+  const editor = editors.find((e) => e.id === editorId);
 
   if (!editor) {
     return {};
@@ -30,7 +30,7 @@ export const generateMetadata = async ({
 
 const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
   const { editor: editorId } = await params;
-  const editor = editors.find((editor) => editor.id === editorId);
+  const editor = editors.find((e) => e.id === editorId);
 
   if (!editor) {
     notFound();

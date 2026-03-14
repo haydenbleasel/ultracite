@@ -5,17 +5,16 @@ import type { ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { CTA } from "@/components/ultracite/cta";
+import { CallToAction } from "@/components/ultracite/cta";
+import { Footer } from "@/components/ultracite/footer";
 import { Navbar } from "@/components/ultracite/navbar";
 import { fonts } from "@/lib/fonts";
-
-import { Footer } from "../components/ultracite/footer";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => (
+const Layout = ({ children }: LayoutProps) => (
   <html lang="en" suppressHydrationWarning>
     <body className={fonts}>
       <ThemeProvider
@@ -29,7 +28,7 @@ const Layout = async ({ children }: LayoutProps) => (
           <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
             {children}
             <div className="mt-16 sm:mt-24 md:mt-32">
-              <CTA />
+              <CallToAction />
               <Footer />
             </div>
           </div>

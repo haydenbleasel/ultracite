@@ -76,7 +76,7 @@ describe("zed editor config", () => {
       await zed.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".zed/settings.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent).toBeTruthy();
@@ -98,7 +98,7 @@ describe("zed editor config", () => {
       await zed.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent.theme).toBe("dark");
     });
@@ -116,7 +116,7 @@ describe("zed editor config", () => {
       await zed.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent).toBeTruthy();
     });

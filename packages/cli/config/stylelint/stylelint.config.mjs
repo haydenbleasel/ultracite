@@ -18,14 +18,14 @@ const config = {
         ],
       },
     ],
-    "declaration-property-value-no-unknown": true,
-    "no-descending-specificity": null,
     "declaration-block-no-redundant-longhand-properties": [
       true,
       {
         ignoreShorthands: ["/flex/"],
       },
     ],
+    "declaration-property-value-no-unknown": true,
+    "no-descending-specificity": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {

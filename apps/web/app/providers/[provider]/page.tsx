@@ -21,7 +21,7 @@ export const generateMetadata = async ({
   params,
 }: ProviderPageProps): Promise<Metadata> => {
   const { provider: providerId } = await params;
-  const provider = providers.find((provider) => provider.id === providerId);
+  const provider = providers.find((p) => p.id === providerId);
 
   if (!provider) {
     return {};
@@ -35,7 +35,7 @@ export const generateMetadata = async ({
 
 const ProviderPage = async ({ params }: ProviderPageProps) => {
   const { provider: providerId } = await params;
-  const provider = providers.find((provider) => provider.id === providerId);
+  const provider = providers.find((p) => p.id === providerId);
 
   if (!provider) {
     notFound();

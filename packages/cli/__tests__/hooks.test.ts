@@ -81,7 +81,7 @@ describe("createHooks", () => {
       const hooks = createHooks("cursor", "npm");
       await hooks.create();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".cursor/hooks.json");
       const content = JSON.parse(writeCall[1] as string);
       expect(content.version).toBe(1);
@@ -103,7 +103,7 @@ describe("createHooks", () => {
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".cursor/hooks.json");
     });
 
@@ -123,7 +123,7 @@ describe("createHooks", () => {
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const hooksWrite = mockWriteFile.mock.calls[0];
+      const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".cursor/hooks.json");
       const hooksContent = JSON.parse(hooksWrite[1] as string);
       expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
@@ -163,7 +163,7 @@ describe("createHooks", () => {
       const hooks = createHooks("copilot", "npm");
       await hooks.create();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".github/hooks/ultracite.json");
 
       const content = JSON.parse(writeCall[1] as string);
@@ -188,7 +188,7 @@ describe("createHooks", () => {
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const hooksWrite = mockWriteFile.mock.calls[0];
+      const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".github/hooks/ultracite.json");
 
       const merged = JSON.parse(hooksWrite[1] as string);
@@ -228,7 +228,7 @@ describe("createHooks", () => {
       const hooks = createHooks("claude", "npm");
       await hooks.create();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".claude/settings.json");
 
       const content = JSON.parse(writeCall[1] as string);
@@ -255,7 +255,7 @@ describe("createHooks", () => {
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const hooksWrite = mockWriteFile.mock.calls[0];
+      const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".claude/settings.json");
 
       const merged = JSON.parse(hooksWrite[1] as string);

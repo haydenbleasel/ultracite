@@ -1,6 +1,21 @@
 import type { Provider } from "@repo/data/providers";
-import { ArrowUpDown, Box, Boxes, Bug, Code, FileCode, FolderTree, Layers, Package, Puzzle, RefreshCw, ShieldCheck, Target, Zap } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import {
+  ArrowUpDown,
+  Box,
+  Boxes,
+  Bug,
+  Code,
+  FileCode,
+  FolderTree,
+  Layers,
+  Package,
+  Puzzle,
+  RefreshCw,
+  ShieldCheck,
+  Target,
+  Zap,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface BenefitsProps {
   provider: Provider;

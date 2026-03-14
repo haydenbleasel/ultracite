@@ -1,8 +1,8 @@
 import { execSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 
-import { addDevDependency, dlxCommand } from 'nypm';
-import type { PackageManager, PackageManagerName } from 'nypm';
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
 
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
@@ -41,10 +41,10 @@ export const lefthook = {
   exists: () => exists(path),
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lefthook", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
       corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized
@@ -62,7 +62,7 @@ export const lefthook = {
     execSync(installCommand, { stdio: "pipe" });
   },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 

@@ -60,7 +60,7 @@ export const Benefits = ({ agent }: BenefitsProps) => (
       </h2>
       <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         AI coding assistants generate code faster, but without guidance they may
-        not follow your project's conventions.
+        not follow your project&apos;s conventions.
       </p>
     </div>
     <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">

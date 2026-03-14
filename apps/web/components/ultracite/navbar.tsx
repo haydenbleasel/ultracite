@@ -8,7 +8,7 @@ import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +41,7 @@ const links = [
 export const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const handleClose = useCallback(() => setOpen(false), []);
   const isProviderPage = pathname.startsWith("/providers");
   const isEditorPage = pathname.startsWith("/editors");
   const isAgentPage = pathname.startsWith("/agents");
@@ -215,7 +216,7 @@ export const Navbar = () => {
                     )}
                     href={link.href}
                     key={link.href}
-                    onClick={() => setOpen(false)}
+                    onClick={handleClose}
                   >
                     {link.label}
                   </Link>
@@ -234,7 +235,7 @@ export const Navbar = () => {
                       webUrl
                     ).toString()}
                     key={provider.id}
-                    onClick={() => setOpen(false)}
+                    onClick={handleClose}
                   >
                     <Image
                       alt={provider.name}
@@ -257,7 +258,7 @@ export const Navbar = () => {
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
                     href={new URL(`/editors/${editor.id}`, webUrl).toString()}
                     key={editor.id}
-                    onClick={() => setOpen(false)}
+                    onClick={handleClose}
                   >
                     <Image
                       alt={editor.name}
@@ -282,7 +283,7 @@ export const Navbar = () => {
                       className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
                       href={new URL(`/agents/${agent.id}`, webUrl).toString()}
                       key={agent.id}
-                      onClick={() => setOpen(false)}
+                      onClick={handleClose}
                     >
                       <Image
                         alt={agent.name}
@@ -298,7 +299,7 @@ export const Navbar = () => {
 
               <div className="mt-auto flex flex-col gap-2 border-t pt-4">
                 <Button asChild className="w-full">
-                  <Link href={docsUrl} onClick={() => setOpen(false)}>
+                  <Link href={docsUrl} onClick={handleClose}>
                     Read the docs
                   </Link>
                 </Button>

@@ -25,10 +25,10 @@ let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
 const getHighlighter = () => {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighterCore({
-      themes: [lightTheme, darkTheme],
-      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
       // `shiki/wasm` contains the wasm binary inlined as base64 string.
       engine: createOnigurumaEngine(shikiWasm),
+      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
+      themes: [lightTheme, darkTheme],
     });
   }
   return highlighterPromise;
@@ -70,14 +70,14 @@ export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
               "before:font-mono",
               "before:select-none"
             )}
-            // biome-ignore lint/suspicious/noArrayIndexKey: "This is a stable key."
-            key={index}
+            // eslint-disable-next-line react/no-array-index-key -- tokens have no unique ID
+            key={`line-${String(index)}`}
           >
             {row.map((token, tokenIndex) => (
               <span
                 className="dark:bg-(--shiki-dark-bg)! dark:text-(--shiki-dark)!"
-                // biome-ignore lint/suspicious/noArrayIndexKey: "This is a stable key."
-                key={tokenIndex}
+                // eslint-disable-next-line react/no-array-index-key -- tokens have no unique ID
+                key={`token-${String(index)}-${String(tokenIndex)}`}
                 style={{
                   backgroundColor: token.bgColor,
                   color: token.color,

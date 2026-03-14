@@ -14,14 +14,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
     await fix([]);
 
     expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
+    const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[0]).toBe("biome");
     expect(callArgs[1]).toContain("check");
     expect(callArgs[1]).toContain("--write");
@@ -35,14 +35,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
     await fix(["src/index.ts", "src/test.ts"]);
 
     expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
+    const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).toContain("src/index.ts");
     expect(callArgs[1]).toContain("src/test.ts");
   });
@@ -53,14 +53,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
     await fix([], ["--unsafe"]);
 
     expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
+    const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).toContain("--unsafe");
   });
 
@@ -70,14 +70,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
     await fix([], []);
 
     expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
+    const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).not.toContain("--unsafe");
   });
 
@@ -87,14 +87,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
     await fix(["src/my file.ts"]);
 
     expect(mockSpawn).toHaveBeenCalled();
-    const callArgs = mockSpawn.mock.calls[0];
+    const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).toContain("'src/my file.ts' ");
   });
 
@@ -106,7 +106,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
     process.exit = mockExit as never;
@@ -125,7 +125,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "biome"),
+      detectLinter: mock(() => Promise.resolve("biome")),
       parseFilePaths,
     }));
 
@@ -138,7 +138,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => null),
+      detectLinter: mock(() => Promise.resolve(null)),
       parseFilePaths,
     }));
 
@@ -151,16 +151,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
 
     await fix([]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
-    const prettierCall = mockSpawn.mock.calls[0];
-    const eslintCall = mockSpawn.mock.calls[1];
-    const stylelintCall = mockSpawn.mock.calls[2];
+    const [prettierCall, eslintCall, stylelintCall] = mockSpawn.mock.calls;
     expect(prettierCall[0]).toBe("prettier");
     expect(prettierCall[1]).toContain("--write");
     expect(eslintCall[0]).toBe("eslint");
@@ -175,14 +173,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
 
     await fix(["src/index.ts"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
-    const eslintCall = mockSpawn.mock.calls[1];
+    const [, eslintCall] = mockSpawn.mock.calls;
     expect(eslintCall[1]).toContain("src/index.ts");
   });
 
@@ -194,7 +192,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
     process.exit = mockExit as never;
@@ -213,7 +211,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
 
@@ -225,9 +223,10 @@ describe("fix", () => {
   test("eslint fix throws on eslint spawn error", async () => {
     let callCount = 0;
     const mockSpawn = mock(() => {
-      callCount++;
+      callCount += 1;
+      // prettier succeeds
       if (callCount === 1) {
-        return { status: 0 }; // prettier succeeds
+        return { status: 0 };
       }
       return {
         error: new Error("eslint spawn failed"),
@@ -239,7 +238,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
 
@@ -251,9 +250,10 @@ describe("fix", () => {
   test("eslint fix throws on stylelint spawn error", async () => {
     let callCount = 0;
     const mockSpawn = mock(() => {
-      callCount++;
+      callCount += 1;
+      // prettier and eslint succeed
       if (callCount <= 2) {
-        return { status: 0 }; // prettier and eslint succeed
+        return { status: 0 };
       }
       return {
         error: new Error("stylelint spawn failed"),
@@ -265,7 +265,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "eslint"),
+      detectLinter: mock(() => Promise.resolve("eslint")),
       parseFilePaths,
     }));
 
@@ -280,15 +280,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxfmtCall = mockSpawn.mock.calls[0];
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [oxfmtCall, oxlintCall] = mockSpawn.mock.calls;
     expect(oxfmtCall[0]).toBe("oxfmt");
     expect(oxfmtCall[1]).toContain("--write");
     expect(oxlintCall[0]).toBe("oxlint");
@@ -301,14 +300,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix(["src/index.ts"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("src/index.ts");
   });
 
@@ -322,7 +321,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
@@ -339,7 +338,7 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
     process.exit = mockExit as never;
@@ -354,14 +353,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([], ["--type-aware"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--type-aware");
   });
 
@@ -371,14 +370,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([], ["--type-check"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--type-check");
   });
 
@@ -388,14 +387,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([], ["--type-aware", "--type-check"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--type-aware");
     expect(oxlintCall[1]).toContain("--type-check");
   });
@@ -406,14 +405,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([], []);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).not.toContain("--type-aware");
     expect(oxlintCall[1]).not.toContain("--type-check");
   });
@@ -424,14 +423,14 @@ describe("fix", () => {
       spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(async () => "oxlint"),
+      detectLinter: mock(() => Promise.resolve("oxlint")),
       parseFilePaths,
     }));
 
     await fix([], ["--unsafe"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const oxlintCall = mockSpawn.mock.calls[1];
+    const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--fix-dangerously");
     expect(oxlintCall[1]).not.toContain("--unsafe");
   });

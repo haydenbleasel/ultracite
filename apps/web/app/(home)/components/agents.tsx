@@ -1,5 +1,5 @@
-import { agents } from '@repo/data/agents';
-import type { Agent } from '@repo/data/agents';
+import { agents } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
 import Image from "next/image";
 import Link from "next/link";
 

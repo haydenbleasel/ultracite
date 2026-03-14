@@ -40,11 +40,9 @@ export const oxlint = {
 
     return await writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
   },
-  exists: async () => {
-    return await exists(oxlintConfigPath);
-  },
+  exists: async () => await exists(oxlintConfigPath),
   update: async (opts?: OxlintOptions) => {
-    const existingContents = await readFile(oxlintConfigPath, "utf-8");
+    const existingContents = await readFile(oxlintConfigPath, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

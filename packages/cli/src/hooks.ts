@@ -8,6 +8,9 @@ import type { PackageManagerName } from "nypm";
 
 import { ensureDirectory, exists } from "./utils";
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
 const runCommand = (
   packageManager: PackageManagerName,
   script: string,
@@ -46,9 +49,6 @@ export const createHooks = (
 
   const command = runCommand(packageManager, "fix", args);
   const content = hookIntegration.hooks.getContent(command);
-
-  const isRecord = (value: unknown): value is Record<string, unknown> =>
-    typeof value === "object" && value !== null && !Array.isArray(value);
 
   const hasUltraciteHook = (obj: unknown): boolean => {
     const json = JSON.stringify(obj);

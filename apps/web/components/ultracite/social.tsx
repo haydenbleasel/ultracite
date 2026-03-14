@@ -10,8 +10,8 @@ export const Social = () => (
         What the community is saying
       </h2>
       <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
-        Here's what some of the most innovative and forward-thinking developers
-        in the React ecosystem have to say about Ultracite.
+        Here&apos;s what some of the most innovative and forward-thinking
+        developers in the React ecosystem have to say about Ultracite.
       </p>
     </div>
     <Tweets
