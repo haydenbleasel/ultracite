@@ -939,16 +939,18 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     await upsertTsConfig(quiet);
 
-    // Test frameworks (jest, vitest) only have oxlint configs
+    // Test frameworks (jest, vitest) don't have ESLint configs
     const testFrameworkIds = new Set(["jest", "vitest"]);
-    const uiFrameworks = frameworks?.filter((f) => !testFrameworkIds.has(f));
+    const eslintFrameworks = frameworks?.filter(
+      (f) => !testFrameworkIds.has(f)
+    );
 
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(uiFrameworks, quiet, opts["type-aware"]);
+      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
-      await upsertEslintConfig(uiFrameworks, quiet);
+      await upsertEslintConfig(eslintFrameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(quiet);
       await upsertStylelintConfig(quiet);
