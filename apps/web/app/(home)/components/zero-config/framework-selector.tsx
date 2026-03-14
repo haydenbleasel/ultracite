@@ -11,6 +11,7 @@ import {
 import {
   Angular,
   Astro,
+  Jest,
   Nestjs,
   Nextjs,
   Qwik,
@@ -18,6 +19,7 @@ import {
   Remix,
   Solid,
   Svelte,
+  Vitest,
   Vue,
 } from "./icons";
 
@@ -71,6 +73,16 @@ export const frameworks = [
     label: "NestJS",
     logo: Nestjs,
     presets: ["core", "nestjs"],
+  },
+  {
+    label: "Jest",
+    logo: Jest,
+    presets: ["core", "jest"],
+  },
+  {
+    label: "Vitest",
+    logo: Vitest,
+    presets: ["core", "vitest"],
   },
 ];
 
