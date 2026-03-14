@@ -10,7 +10,6 @@ import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
 import * as importPlugin from "eslint-plugin-import";
-import jest from "eslint-plugin-jest";
 import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
@@ -26,7 +25,6 @@ import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
 import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
-import jestRules from "./rules/jest.mjs";
 import nRules from "./rules/n.mjs";
 import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
@@ -112,20 +110,6 @@ const config = [
     rules: {
       ...eslintTypescriptRules,
       ...typescriptRules,
-    },
-  },
-  {
-    files: ["**/*.test.js", "tests/**/*.js"],
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
-    },
-    plugins: {
-      jest,
-    },
-    rules: {
-      ...jestRules,
     },
   },
   {

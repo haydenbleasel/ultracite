@@ -73,6 +73,24 @@ describe("oxlint linter", () => {
       expect(content.extends).toContain(getOxlintConfigPath("react"));
       expect(content.extends).toContain(getOxlintConfigPath("next"));
     });
+
+    test("creates oxlint config with test framework", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({ frameworks: ["vitest"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.extends).toContain(getOxlintConfigPath("vitest"));
+      expect(content.extends).not.toContain(getOxlintConfigPath("jest"));
+    });
   });
 
   describe("update", () => {
@@ -157,6 +175,27 @@ describe("oxlint linter", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("react"));
+    });
+
+    test("adds test framework configs during update", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      const existingConfig = JSON.stringify({
+        extends: [getOxlintConfigPath("core")],
+      });
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.update({ frameworks: ["jest"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.extends).toContain(getOxlintConfigPath("jest"));
+      expect(content.extends).not.toContain(getOxlintConfigPath("vitest"));
     });
 
     test("handles config without extends array", async () => {

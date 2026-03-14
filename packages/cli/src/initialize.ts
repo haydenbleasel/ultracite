@@ -56,6 +56,7 @@ interface InitializeFlags {
 const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   angular: ["@angular-eslint/eslint-plugin@latest"],
   astro: ["eslint-plugin-astro@latest"],
+  jest: ["eslint-plugin-jest@latest"],
   next: ["@next/eslint-plugin-next@latest"],
   qwik: ["eslint-plugin-qwik@latest"],
   react: [
@@ -67,6 +68,7 @@ const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   remix: ["eslint-plugin-remix@latest"],
   solid: ["eslint-plugin-solid@latest"],
   svelte: ["eslint-plugin-svelte@latest"],
+  vitest: ["@vitest/eslint-plugin@latest"],
   vue: ["eslint-plugin-vue@latest"],
 };
 const addEslintFrameworkPackages = (
@@ -142,7 +144,6 @@ export const installDependencies = async (
       "eslint-plugin-github@latest",
       "eslint-plugin-html@latest",
       "eslint-plugin-import@latest",
-      "eslint-plugin-jest@latest",
       "eslint-plugin-n@latest",
       "eslint-plugin-prettier@latest",
       "eslint-plugin-promise@latest",
@@ -800,6 +801,8 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Remix / TanStack Router / React Router", value: "remix" },
             { label: "Astro", value: "astro" },
             { label: "NestJS", value: "nestjs" },
+            { label: "Jest", value: "jest" },
+            { label: "Vitest / Bun", value: "vitest" },
           ],
           required: false,
         });
