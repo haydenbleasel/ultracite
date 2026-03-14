@@ -276,7 +276,7 @@ export const Navbar = () => {
                 <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                   Agents ({agents.length})
                 </span>
-                {agents
+                {[...agents]
                   .toSorted((a, b) => a.name.localeCompare(b.name))
                   .map((agent) => (
                     <Link

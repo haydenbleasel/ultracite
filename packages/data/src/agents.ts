@@ -1,31 +1,30 @@
 import type { StaticImageData } from "next/image";
 
-import aiderLogo from "@/logos/aider.svg";
-import amazonQLogo from "@/logos/amazon-q.svg";
-import ampLogo from "@/logos/amp.svg";
-import augmentcodeLogo from "@/logos/augmentcode.svg";
-import claudeLogo from "@/logos/claude.svg";
-import clineLogo from "@/logos/cline.svg";
-import codexLogo from "@/logos/codex.svg";
-import copilotLogo from "@/logos/copilot.svg";
-import crushLogo from "@/logos/crush.svg";
-import cursorCliLogo from "@/logos/cursor.svg";
-import droidLogo from "@/logos/droid.svg";
-import firebaseStudioLogo from "@/logos/firebase-studio.svg";
-import firebenderLogo from "@/logos/firebender.svg";
-import geminiLogo from "@/logos/gemini.svg";
-import gooseLogo from "@/logos/goose.svg";
-import julesLogo from "@/logos/jules.svg";
-import junieLogo from "@/logos/junie.svg";
-import kiloCodeLogo from "@/logos/kilo-code.svg";
-import mistralLogo from "@/logos/mistral.svg";
-import openHandsLogo from "@/logos/open-hands.svg";
-import opencodeLogo from "@/logos/opencode.svg";
-import qwenLogo from "@/logos/qwen.svg";
-import rooCodeLogo from "@/logos/roo-code.svg";
-import vercelLogo from "@/logos/vercel.svg";
-import warpLogo from "@/logos/warp.svg";
-
+import aiderLogo from "../logos/aider.svg";
+import amazonQLogo from "../logos/amazon-q.svg";
+import ampLogo from "../logos/amp.svg";
+import augmentcodeLogo from "../logos/augmentcode.svg";
+import claudeLogo from "../logos/claude.svg";
+import clineLogo from "../logos/cline.svg";
+import codexLogo from "../logos/codex.svg";
+import copilotLogo from "../logos/copilot.svg";
+import crushLogo from "../logos/crush.svg";
+import cursorCliLogo from "../logos/cursor.svg";
+import droidLogo from "../logos/droid.svg";
+import firebaseStudioLogo from "../logos/firebase-studio.svg";
+import firebenderLogo from "../logos/firebender.svg";
+import geminiLogo from "../logos/gemini.svg";
+import gooseLogo from "../logos/goose.svg";
+import julesLogo from "../logos/jules.svg";
+import junieLogo from "../logos/junie.svg";
+import kiloCodeLogo from "../logos/kilo-code.svg";
+import mistralLogo from "../logos/mistral.svg";
+import openHandsLogo from "../logos/open-hands.svg";
+import opencodeLogo from "../logos/opencode.svg";
+import qwenLogo from "../logos/qwen.svg";
+import rooCodeLogo from "../logos/roo-code.svg";
+import vercelLogo from "../logos/vercel.svg";
+import warpLogo from "../logos/warp.svg";
 import type { HooksConfig } from "./types";
 
 export interface AgentConfig {

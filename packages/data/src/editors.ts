@@ -3,15 +3,14 @@
 import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 
-import antigravityLogo from "@/logos/antigravity.svg";
-import cursorLogo from "@/logos/cursor.svg";
-import kiroLogo from "@/logos/kiro.svg";
-import traeLogo from "@/logos/trae.svg";
-import voidLogo from "@/logos/void.svg";
-import vscodeLogo from "@/logos/vscode.svg";
-import windsurfLogo from "@/logos/windsurf.svg";
-import zedLogo from "@/logos/zed.svg";
-
+import antigravityLogo from "../logos/antigravity.svg";
+import cursorLogo from "../logos/cursor.svg";
+import kiroLogo from "../logos/kiro.svg";
+import traeLogo from "../logos/trae.svg";
+import voidLogo from "../logos/void.svg";
+import vscodeLogo from "../logos/vscode.svg";
+import windsurfLogo from "../logos/windsurf.svg";
+import zedLogo from "../logos/zed.svg";
 import type { ProviderId } from "./providers";
 import type { HooksConfig } from "./types";
 

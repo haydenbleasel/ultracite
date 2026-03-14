@@ -1,11 +1,11 @@
 /* biome-ignore-all lint/style/useNamingConvention: "Provider configs use various naming conventions" */
 import type { StaticImageData } from "next/image";
 
-import biomeLogo from "@/logos/biome.svg";
-import eslintLogo from "@/logos/eslint.svg";
-import oxlintLogo from "@/logos/oxlint.svg";
-import prettierLogo from "@/logos/prettier.svg";
-import stylelintLogo from "@/logos/stylelint.svg";
+import biomeLogo from "../logos/biome.svg";
+import eslintLogo from "../logos/eslint.svg";
+import oxlintLogo from "../logos/oxlint.svg";
+import prettierLogo from "../logos/prettier.svg";
+import stylelintLogo from "../logos/stylelint.svg";
 
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
