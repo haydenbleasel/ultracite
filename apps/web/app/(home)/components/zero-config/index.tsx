@@ -22,12 +22,24 @@ export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(
     providers[1].id ?? null
   );
-  const [framework, setFramework] = useState<string | null>(
-    frameworks[0].label
-  );
+  const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([
+    frameworks[0].label,
+  ]);
 
   const selectedProvider = providers.find((p) => p.id === provider);
-  const selectedFramework = frameworks.find((f) => f.label === framework);
+
+  const mergedPresets = useMemo(() => {
+    const presets = new Set<string>(["core"]);
+    for (const label of selectedFrameworks) {
+      const fw = frameworks.find((f) => f.label === label);
+      if (fw) {
+        for (const p of fw.presets) {
+          presets.add(p);
+        }
+      }
+    }
+    return [...presets];
+  }, [selectedFrameworks]);
 
   const config = useMemo(
     () => selectedProvider?.configFiles ?? [],
@@ -63,9 +75,8 @@ export const ZeroConfig = () => {
       <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
         <span className="text-muted-foreground text-sm">I&apos;m using</span>
         <ProviderSelector onValueChange={setProvider} value={provider} />
-        <span className="text-muted-foreground text-sm">on my</span>
-        <FrameworkSelector onValueChange={setFramework} value={framework} />
-        <span className="text-muted-foreground text-sm">project</span>
+        <span className="text-muted-foreground text-sm">with</span>
+        <FrameworkSelector onValueChange={setSelectedFrameworks} values={selectedFrameworks} />
       </div>
 
       {config && (
@@ -93,7 +104,7 @@ export const ZeroConfig = () => {
             {config.map((f) => (
               <TabsContent key={f.name} value={f.name}>
                 <CodeBlock
-                  code={f.code(selectedFramework?.presets ?? [])}
+                  code={f.code(mergedPresets)}
                   lang={getLang(f.lang)}
                 />
               </TabsContent>

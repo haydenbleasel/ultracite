@@ -58,6 +58,7 @@ const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   astro: ["eslint-plugin-astro@latest"],
   jest: ["eslint-plugin-jest@latest"],
   next: ["@next/eslint-plugin-next@latest"],
+  vitest: ["@vitest/eslint-plugin@latest"],
   qwik: ["eslint-plugin-qwik@latest"],
   react: [
     "eslint-plugin-react@latest",
