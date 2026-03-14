@@ -23,7 +23,9 @@ export const ZeroConfig = () => {
     providers[1].id ?? null
   );
   const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([
-    frameworks[0].label,
+    "Next.js",
+    "React",
+    "Vitest",
   ]);
 
   const selectedProvider = providers.find((p) => p.id === provider);
