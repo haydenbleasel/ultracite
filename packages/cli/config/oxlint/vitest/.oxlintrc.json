@@ -12,6 +12,8 @@
         "import/no-relative-parent-imports": "off",
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
+        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
+        "promise/prefer-await-to-then": "off",
 
         "vitest/consistent-test-filename": "error",
         "vitest/consistent-vitest-vi": "error",
