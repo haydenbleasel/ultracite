@@ -56,6 +56,7 @@ interface InitializeFlags {
 const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   angular: ["@angular-eslint/eslint-plugin@latest"],
   astro: ["eslint-plugin-astro@latest"],
+  jest: ["eslint-plugin-jest@latest"],
   next: ["@next/eslint-plugin-next@latest"],
   qwik: ["eslint-plugin-qwik@latest"],
   react: [
@@ -142,7 +143,6 @@ export const installDependencies = async (
       "eslint-plugin-github@latest",
       "eslint-plugin-html@latest",
       "eslint-plugin-import@latest",
-      "eslint-plugin-jest@latest",
       "eslint-plugin-n@latest",
       "eslint-plugin-prettier@latest",
       "eslint-plugin-promise@latest",
@@ -939,18 +939,12 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     await upsertTsConfig(quiet);
 
-    // Test frameworks (jest, vitest) don't have ESLint configs
-    const testFrameworkIds = new Set(["jest", "vitest"]);
-    const eslintFrameworks = frameworks?.filter(
-      (f) => !testFrameworkIds.has(f)
-    );
-
     // Create config for selected linter
     if (linter === "biome") {
       await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
-      await upsertEslintConfig(eslintFrameworks, quiet);
+      await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(quiet);
       await upsertStylelintConfig(quiet);
