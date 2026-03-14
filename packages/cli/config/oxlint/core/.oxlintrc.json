@@ -50,6 +50,7 @@
     "sort-imports": "off",
     "no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
 
+    "import/no-relative-parent-imports": "off",
     "import/no-default-export": "off",
     "import/exports-last": "off",
     "import/no-named-export": "off",
@@ -105,8 +106,6 @@
         "**/__tests__/**/*.{ts,tsx,js,jsx}"
       ],
       "rules": {
-        // Disabled: test files import from parent src/ directory
-        "import/no-relative-parent-imports": "off",
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
         // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
