@@ -58,7 +58,6 @@ const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   astro: ["eslint-plugin-astro@latest"],
   jest: ["eslint-plugin-jest@latest"],
   next: ["@next/eslint-plugin-next@latest"],
-  vitest: ["@vitest/eslint-plugin@latest"],
   qwik: ["eslint-plugin-qwik@latest"],
   react: [
     "eslint-plugin-react@latest",
@@ -69,6 +68,7 @@ const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
   remix: ["eslint-plugin-remix@latest"],
   solid: ["eslint-plugin-solid@latest"],
   svelte: ["eslint-plugin-svelte@latest"],
+  vitest: ["@vitest/eslint-plugin@latest"],
   vue: ["eslint-plugin-vue@latest"],
 };
 const addEslintFrameworkPackages = (

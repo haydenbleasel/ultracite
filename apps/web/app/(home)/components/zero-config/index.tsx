@@ -78,7 +78,10 @@ export const ZeroConfig = () => {
         <span className="text-muted-foreground text-sm">I&apos;m using</span>
         <ProviderSelector onValueChange={setProvider} value={provider} />
         <span className="text-muted-foreground text-sm">with</span>
-        <FrameworkSelector onValueChange={setSelectedFrameworks} values={selectedFrameworks} />
+        <FrameworkSelector
+          onValueChange={setSelectedFrameworks}
+          values={selectedFrameworks}
+        />
       </div>
 
       {config && (

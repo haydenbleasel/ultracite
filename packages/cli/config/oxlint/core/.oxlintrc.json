@@ -108,7 +108,9 @@
         // Disabled: test files import from parent src/ directory
         "import/no-relative-parent-imports": "off",
         // Disabled: mock callbacks often need empty functions
-        "no-empty-function": "off"
+        "no-empty-function": "off",
+        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
+        "promise/prefer-await-to-then": "off"
       }
     }
   ]
