@@ -1,5 +1,5 @@
 ---
-"ultracite": minor
+"ultracite": patch
 "@repo/data": patch
 ---
 
