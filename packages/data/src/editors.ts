@@ -2,6 +2,7 @@
 
 import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
+
 import antigravityLogo from "../logos/antigravity.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
@@ -41,10 +42,10 @@ export interface Editor {
 // VS Code base configuration
 const vscodeBaseConfig = {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
   "emmet.showExpandedAbbreviation": "never",
+  "typescript.tsdk": "node_modules/typescript/lib",
 };
 
 // VS Code Biome configuration
@@ -162,21 +163,25 @@ export const vscodeEslintConfig = {
 
 export const getVscodeConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
-    case "biome":
+    case "biome": {
       return deepmerge(vscodeBaseConfig, vscodeBiomeConfig);
-    case "eslint":
+    }
+    case "eslint": {
       return deepmerge(vscodeBaseConfig, vscodeEslintConfig);
-    case "oxlint":
+    }
+    case "oxlint": {
       return deepmerge(vscodeBaseConfig, vscodeOxlintConfig);
-    default:
+    }
+    default: {
       return vscodeBaseConfig;
+    }
   }
 };
 
 // Zed Biome configuration
 export const zedBaseConfig = {
-  formatter: "language_server",
   format_on_save: "on",
+  formatter: "language_server",
   lsp: {
     "typescript-language-server": {
       settings: {
@@ -203,7 +208,7 @@ const zedBiomeConfig = {
         "source.organizeImports.biome": true,
       },
     },
-    TypeScript: {
+    TSX: {
       formatter: {
         language_server: {
           name: "biome",
@@ -214,7 +219,7 @@ const zedBiomeConfig = {
         "source.organizeImports.biome": true,
       },
     },
-    TSX: {
+    TypeScript: {
       formatter: {
         language_server: {
           name: "biome",
@@ -241,7 +246,7 @@ const zedEslintConfig = {
         "source.organizeImports.eslint": true,
       },
     },
-    TypeScript: {
+    TSX: {
       formatter: {
         language_server: {
           name: "eslint",
@@ -252,7 +257,7 @@ const zedEslintConfig = {
         "source.organizeImports.eslint": true,
       },
     },
-    TSX: {
+    TypeScript: {
       formatter: {
         language_server: {
           name: "eslint",
@@ -279,7 +284,7 @@ const zedOxcConfig = {
         "source.organizeImports.oxc": true,
       },
     },
-    TypeScript: {
+    TSX: {
       formatter: {
         language_server: {
           name: "oxfmt",
@@ -290,7 +295,7 @@ const zedOxcConfig = {
         "source.organizeImports.oxc": true,
       },
     },
-    TSX: {
+    TypeScript: {
       formatter: {
         language_server: {
           name: "oxfmt",
@@ -303,17 +308,6 @@ const zedOxcConfig = {
     },
   },
   lsp: {
-    oxlint: {
-      initialization_options: {
-        settings: {
-          disableNestedConfig: false,
-          fixKind: "safe_fix",
-          run: "onType",
-          typeAware: true,
-          unusedDisableDirectives: "deny",
-        },
-      },
-    },
     oxfmt: {
       initialization_options: {
         settings: {
@@ -327,51 +321,59 @@ const zedOxcConfig = {
         },
       },
     },
+    oxlint: {
+      initialization_options: {
+        settings: {
+          disableNestedConfig: false,
+          fixKind: "safe_fix",
+          run: "onType",
+          typeAware: true,
+          unusedDisableDirectives: "deny",
+        },
+      },
+    },
   },
 };
 
 export const getZedConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
-    case "biome":
+    case "biome": {
       return deepmerge(zedBaseConfig, zedBiomeConfig);
-    case "eslint":
+    }
+    case "eslint": {
       return deepmerge(zedBaseConfig, zedEslintConfig);
-    case "oxlint":
+    }
+    case "oxlint": {
       return deepmerge(zedBaseConfig, zedOxcConfig);
-    default:
+    }
+    default: {
       return zedBaseConfig;
+    }
   }
 };
 
 export const editors: Editor[] = [
   {
-    id: "vscode",
-    name: "Visual Studio Code",
-    subtitle: "The most popular code editor",
-    description:
-      "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
-    logo: vscodeLogo,
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
+    description:
+      "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
+    id: "vscode",
+    logo: vscodeLogo,
+    name: "Visual Studio Code",
+    subtitle: "The most popular code editor",
   },
   {
-    id: "cursor",
-    name: "Cursor",
-    subtitle: "The AI-first code editor",
+    config: {
+      path: ".vscode/settings.json",
+      getContent: getVscodeConfig,
+      extensionCommand: "code --install-extension",
+    },
     description:
       "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
-    logo: cursorLogo,
-    rules: {
-      path: ".cursor/rules/ultracite.mdc",
-      header: `---
-description: Ultracite Rules - AI-Ready Formatter and Linter
-globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
-alwaysApply: false
----`,
-    },
     hooks: {
       path: ".cursor/hooks.json",
       getContent: (command) => ({
@@ -381,22 +383,27 @@ alwaysApply: false
         },
       }),
     },
+    id: "cursor",
+    logo: cursorLogo,
+    name: "Cursor",
+    rules: {
+      path: ".cursor/rules/ultracite.mdc",
+      header: `---
+description: Ultracite Rules - AI-Ready Formatter and Linter
+globs: "**/*.{ts,tsx,js,jsx,json,jsonc,html,vue,svelte,astro,css,yaml,yml,graphql,gql,md,mdx,grit}"
+alwaysApply: false
+---`,
+    },
+    subtitle: "The AI-first code editor",
+  },
+  {
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
-  },
-  {
-    id: "windsurf",
-    name: "Windsurf",
-    subtitle: "The agentic IDE by Codeium",
     description:
       "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
-    logo: windsurfLogo,
-    rules: {
-      path: ".windsurf/rules/ultracite.md",
-    },
     hooks: {
       path: ".windsurf/hooks.json",
       getContent: (command) => ({
@@ -405,84 +412,86 @@ alwaysApply: false
         },
       }),
     },
+    id: "windsurf",
+    logo: windsurfLogo,
+    name: "Windsurf",
+    rules: {
+      path: ".windsurf/rules/ultracite.md",
+    },
+    subtitle: "The agentic IDE by Codeium",
+  },
+  {
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
-  },
-  {
-    id: "antigravity",
-    name: "Antigravity",
-    subtitle: "Google's next-generation IDE",
     description:
       "An AI-powered development platform built on VS Code for building and deploying applications faster.",
+    id: "antigravity",
     logo: antigravityLogo,
+    name: "Antigravity",
+    subtitle: "Google's next-generation IDE",
+  },
+  {
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
-  },
-  {
-    id: "kiro",
-    name: "Kiro",
-    subtitle: "AWS's spec-driven IDE",
     description:
       "AWS's spec-driven AI development environment for building production-ready applications.",
+    id: "kiro",
     logo: kiroLogo,
+    name: "Kiro",
     rules: {
       path: ".kiro/steering/ultracite.md",
     },
+    subtitle: "AWS's spec-driven IDE",
+  },
+  {
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
-  },
-  {
-    id: "trae",
-    name: "Trae",
-    subtitle: "ByteDance's AI IDE",
     description:
       "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
+    id: "trae",
     logo: traeLogo,
+    name: "Trae",
     rules: {
       path: ".trae/rules/project_rules.md",
     },
+    subtitle: "ByteDance's AI IDE",
+  },
+  {
     config: {
       path: ".vscode/settings.json",
       getContent: getVscodeConfig,
       extensionCommand: "code --install-extension",
     },
-  },
-  {
-    id: "void",
-    name: "Void",
-    subtitle: "Open-source AI editor",
     description:
       "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
+    id: "void",
     logo: voidLogo,
-    config: {
-      path: ".vscode/settings.json",
-      getContent: getVscodeConfig,
-      extensionCommand: "code --install-extension",
-    },
+    name: "Void",
+    subtitle: "Open-source AI editor",
   },
   {
-    id: "zed",
-    name: "Zed",
-    subtitle: "The high-performance editor",
-    description:
-      "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
-    logo: zedLogo,
-    rules: {
-      path: ".rules",
-      appendMode: true,
-    },
     config: {
       path: ".zed/settings.json",
       getContent: getZedConfig,
     },
+    description:
+      "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
+    id: "zed",
+    logo: zedLogo,
+    name: "Zed",
+    rules: {
+      path: ".rules",
+      appendMode: true,
+    },
+    subtitle: "The high-performance editor",
   },
 ];

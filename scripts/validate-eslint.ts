@@ -1,5 +1,6 @@
 import { access, readdir } from "node:fs/promises";
 import { join } from "node:path";
+
 import { $ } from "bun";
 
 const configDir = join(import.meta.dirname, "../packages/cli/config/eslint");

@@ -112,6 +112,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 ## Overrides
 
 Ultracite relaxes rules in specific contexts:
+
 - **Config files** (`*.config.{js,ts,...}`): Relaxed export and complexity rules
 - **Test files** (`*.test.*`, `__tests__/**`): No cognitive complexity limit, `console` and `any` allowed
 - **Scripts/bin files**: `console` and `process.env` allowed

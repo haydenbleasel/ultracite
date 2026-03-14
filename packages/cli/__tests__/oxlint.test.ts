@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { oxlint } from "../src/linters/oxlint";
 
 // Helper to generate the expected oxlint config path

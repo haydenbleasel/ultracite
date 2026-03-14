@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import Adobe from "./adobe.svg";
 import AlanTuringInstitute from "./ati.svg";
 import AugmentCode from "./augment.svg";

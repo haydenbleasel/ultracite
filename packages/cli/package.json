@@ -1,8 +1,24 @@
 {
   "name": "ultracite",
-  "description": "The AI-ready formatter that helps you write and generate code faster.",
   "version": "7.3.0",
-  "type": "module",
+  "description": "The AI-ready formatter that helps you write and generate code faster.",
+  "keywords": [
+    "biome",
+    "fixer",
+    "formatter",
+    "linter",
+    "ultracite"
+  ],
+  "homepage": "https://www.ultracite.ai/",
+  "bugs": {
+    "url": "https://github.com/haydenbleasel/ultracite/issues"
+  },
+  "license": "MIT",
+  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haydenbleasel/ultracite.git"
+  },
   "bin": {
     "ultracite": "dist/index.js"
   },
@@ -12,11 +28,7 @@
     "dist/index.d.ts",
     "README.md"
   ],
-  "scripts": {
-    "build": "tsup",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage"
-  },
+  "type": "module",
   "exports": {
     "./biome/*": "./config/biome/*/biome.jsonc",
     "./eslint/*": "./config/eslint/*/eslint.config.mjs",
@@ -25,26 +37,22 @@
     "./stylelint": "./config/stylelint/stylelint.config.mjs",
     "./*": "./config/biome/*/biome.jsonc"
   },
-  "author": "Hayden Bleasel <hello@haydenbleasel.com>",
-  "bugs": {
-    "url": "https://github.com/haydenbleasel/ultracite/issues"
-  },
-  "homepage": "https://www.ultracite.ai/",
-  "keywords": [
-    "ultracite",
-    "biome",
-    "linter",
-    "formatter",
-    "fixer"
-  ],
-  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/haydenbleasel/ultracite.git"
+  "scripts": {
+    "build": "tsup",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.1.0",
+    "commander": "^14.0.3",
+    "deepmerge": "^4.3.1",
+    "glob": "^13.0.6",
+    "jsonc-parser": "^3.3.1",
+    "nypm": "^0.6.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.5",
@@ -81,20 +89,12 @@
     "eslint-plugin-unused-imports": "^4.4.1",
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
+    "oxlint": "^1.51.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "stylelint-config-idiomatic-order": "^10.0.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-prettier": "^5.0.3",
-    "tsup": "^8.5.1",
-    "oxlint": "^1.51.0"
-  },
-  "dependencies": {
-    "@clack/prompts": "^1.1.0",
-    "commander": "^14.0.3",
-    "deepmerge": "^4.3.1",
-    "glob": "^13.0.6",
-    "jsonc-parser": "^3.3.1",
-    "nypm": "^0.6.5"
+    "tsup": "^8.5.1"
   },
   "peerDependencies": {
     "oxlint": "^1.0.0"

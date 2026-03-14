@@ -1,5 +1,6 @@
 /* biome-ignore-all lint/style/useNamingConvention: "Provider configs use various naming conventions" */
 import type { StaticImageData } from "next/image";
+
 import biomeLogo from "../logos/biome.svg";
 import eslintLogo from "../logos/eslint.svg";
 import oxlintLogo from "../logos/oxlint.svg";
@@ -36,11 +37,6 @@ export interface Provider {
 
 export const providers: Provider[] = [
   {
-    id: "biome",
-    name: "Biome",
-    subtitle: "The modern all-in-one toolchain",
-    description:
-      "The modern, all-in-one toolchain. Biome is a fast formatter and linter written in Rust that handles JavaScript, TypeScript, JSON, CSS, and more with a single tool.",
     benefits: [
       {
         title: "Lightning fast",
@@ -79,12 +75,6 @@ export const providers: Provider[] = [
         icon: "Package",
       },
     ],
-    logo: biomeLogo,
-    videos: [
-      "https://www.youtube.com/watch?v=lEkXbneUnWg",
-      "https://www.youtube.com/watch?v=b_F4LaycQcE",
-    ],
-
     configFiles: [
       {
         name: "biome.jsonc",
@@ -97,14 +87,21 @@ export const providers: Provider[] = [
 }`,
       },
     ],
+    description:
+      "The modern, all-in-one toolchain. Biome is a fast formatter and linter written in Rust that handles JavaScript, TypeScript, JSON, CSS, and more with a single tool.",
+    id: "biome",
+    logo: biomeLogo,
+    name: "Biome",
+    subtitle: "The modern all-in-one toolchain",
+
+    videos: [
+      "https://www.youtube.com/watch?v=lEkXbneUnWg",
+      "https://www.youtube.com/watch?v=b_F4LaycQcE",
+    ],
     vscodeExtensionId: "biomejs.biome",
   },
   {
-    id: "eslint",
-    name: "ESLint + Prettier + Stylelint",
-    subtitle: "The most mature linting ecosystem",
-    description:
-      "The most mature and comprehensive linting solution. Combines ESLint for JavaScript/TypeScript, Prettier for formatting, and Stylelint for CSS with 20+ plugins and hundreds of preconfigured rules.",
+    additionalLogos: [prettierLogo, stylelintLogo],
     benefits: [
       {
         title: "Battle-tested",
@@ -143,10 +140,6 @@ export const providers: Provider[] = [
         icon: "Target",
       },
     ],
-    includes: ["ESLint", "Prettier", "Stylelint"],
-    logo: eslintLogo,
-    additionalLogos: [prettierLogo, stylelintLogo],
-
     configFiles: [
       {
         name: "eslint.config.mjs",
@@ -175,14 +168,17 @@ export default defineConfig([
         code: () => `export { default } from "ultracite/stylelint";`,
       },
     ],
+    description:
+      "The most mature and comprehensive linting solution. Combines ESLint for JavaScript/TypeScript, Prettier for formatting, and Stylelint for CSS with 20+ plugins and hundreds of preconfigured rules.",
+    id: "eslint",
+    includes: ["ESLint", "Prettier", "Stylelint"],
+    logo: eslintLogo,
+    name: "ESLint + Prettier + Stylelint",
+
+    subtitle: "The most mature linting ecosystem",
     vscodeExtensionId: "dbaeumer.vscode-eslint",
   },
   {
-    id: "oxlint",
-    name: "Oxlint + Oxfmt",
-    subtitle: "The fastest linter available",
-    description:
-      "The fastest linter available. Oxlint is part of the Oxc project, running 50-100x faster than ESLint with a focus on catching bugs and reducing false positives.",
     benefits: [
       {
         title: "50-100x faster",
@@ -221,9 +217,6 @@ export default defineConfig([
         icon: "RefreshCw",
       },
     ],
-    includes: ["Oxlint", "Oxfmt"],
-    logo: oxlintLogo,
-
     configFiles: [
       {
         name: ".oxlintrc.json",
@@ -252,6 +245,14 @@ export default defineConfig([
 }`,
       },
     ],
+    description:
+      "The fastest linter available. Oxlint is part of the Oxc project, running 50-100x faster than ESLint with a focus on catching bugs and reducing false positives.",
+    id: "oxlint",
+    includes: ["Oxlint", "Oxfmt"],
+    logo: oxlintLogo,
+    name: "Oxlint + Oxfmt",
+
+    subtitle: "The fastest linter available",
     vscodeExtensionId: "oxc.oxc-vscode",
   },
 ];

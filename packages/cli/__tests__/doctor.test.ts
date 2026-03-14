@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+
 import { doctor } from "../src/commands/doctor";
 
 // Helper to generate the expected oxlint config path

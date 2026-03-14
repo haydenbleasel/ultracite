@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+
 import { check } from "../src/commands/check";
 import { parseFilePaths } from "../src/utils";
 
@@ -82,7 +83,7 @@ describe("check", () => {
 
   test("exits with status code when biome check finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => undefined);
+    const mockExit = mock(() => {});
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -295,7 +296,7 @@ describe("check", () => {
 
   test("eslint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => undefined);
+    const mockExit = mock(() => {});
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,
@@ -312,7 +313,7 @@ describe("check", () => {
 
   test("oxlint check exits with status code on failure", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
-    const mockExit = mock(() => undefined);
+    const mockExit = mock(() => {});
 
     mock.module("node:child_process", () => ({
       spawnSync: mockSpawn,

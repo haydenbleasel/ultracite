@@ -1,6 +1,7 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
 
 import angular from "@angular-eslint/eslint-plugin";
+
 import angularRules from "./rules/angular.mjs";
 
 const config = [

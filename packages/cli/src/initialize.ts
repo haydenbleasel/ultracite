@@ -1,4 +1,5 @@
 import process from "node:process";
+
 import {
   cancel,
   intro,
@@ -13,12 +14,9 @@ import { editors } from "@repo/data/editors";
 import { hooks as hookIntegrations } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
-import {
-  addDevDependency,
-  detectPackageManager,
-  type PackageManager,
-  type PackageManagerName,
-} from "nypm";
+import { addDevDependency, detectPackageManager } from 'nypm';
+import type { PackageManager, PackageManagerName } from 'nypm';
+
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents } from "./agents";
 import { createEditorConfig } from "./editor-config";
@@ -135,8 +133,7 @@ export const installDependencies = async (
 
     // Add Plugin eslint for core dependencies
     packages.push(
-      ...[
-        "@typescript-eslint/eslint-plugin@latest",
+      "@typescript-eslint/eslint-plugin@latest",
         "@typescript-eslint/parser@latest",
         "eslint-config-prettier@latest",
         "eslint-import-resolver-typescript@latest",
@@ -153,8 +150,7 @@ export const installDependencies = async (
         "eslint-plugin-storybook@latest",
         "eslint-plugin-unicorn@latest",
         "eslint-plugin-unused-imports@latest",
-        "globals@latest",
-      ]
+        "globals@latest"
     );
     addEslintFrameworkPackages(packages, frameworks);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
@@ -174,10 +170,10 @@ export const installDependencies = async (
   if (install) {
     for (const pkg of packages) {
       await addDevDependency(pkg, {
-        packageManager,
-        workspace: await isMonorepo(),
-        silent: true,
         corepack: false,
+        packageManager,
+        silent: true,
+        workspace: await isMonorepo(),
       });
     }
   } else {
@@ -719,7 +715,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     let pmInfo: PackageManager;
 
     if (pm) {
-      pmInfo = { name: pm, command: pm };
+      pmInfo = { command: pm, name: pm };
     } else {
       const detected = await detectPackageManager(process.cwd());
 
@@ -740,7 +736,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       pmInfo = detected;
     }
 
-    let linter = opts.linter;
+    let {linter} = opts;
     if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to biome only
       const hasOtherCliOptions =
@@ -782,7 +778,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let frameworks = opts.frameworks;
+    let {frameworks} = opts;
     if (frameworks === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -847,8 +843,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let agents = opts.agents;
-    let hooks = opts.hooks;
+    let {agents} = opts;
+    let {hooks} = opts;
 
     // Build agent options from shared data
     const agentsOptions = Object.fromEntries(
@@ -863,8 +859,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         const agentsResult = await multiselect({
           message: "Which agents do you want to enable (optional)?",
           options: Object.entries(agentsOptions).map(([value, label]) => ({
-            value,
             label,
+            value,
           })),
           required: false,
         });
@@ -891,8 +887,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         const hooksResult = await multiselect({
           message: "Which agent hooks do you want to enable (optional)?",
           options: Object.entries(hooksOptions).map(([value, label]) => ({
-            value,
             label,
+            value,
           })),
           required: false,
         });
@@ -906,7 +902,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let integrations = opts.integrations;
+    let {integrations} = opts;
     if (integrations === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts

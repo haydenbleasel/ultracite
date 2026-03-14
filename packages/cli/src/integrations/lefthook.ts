@@ -1,11 +1,9 @@
 import { execSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
-import {
-  addDevDependency,
-  dlxCommand,
-  type PackageManager,
-  type PackageManagerName,
-} from "nypm";
+
+import { addDevDependency, dlxCommand } from 'nypm';
+import type { PackageManager, PackageManagerName } from 'nypm';
+
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
@@ -36,6 +34,10 @@ const createLefthookConfig = (
 `;
 
 export const lefthook = {
+  create: async (packageManager: PackageManagerName) => {
+    const config = createLefthookConfig(packageManager);
+    await writeFile(path, config);
+  },
   exists: () => exists(path),
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lefthook", {
@@ -58,10 +60,6 @@ export const lefthook = {
     });
 
     execSync(installCommand, { stdio: "pipe" });
-  },
-  create: async (packageManager: PackageManagerName) => {
-    const config = createLefthookConfig(packageManager);
-    await writeFile(path, config);
   },
   update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, "utf-8");

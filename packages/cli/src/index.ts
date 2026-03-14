@@ -1,4 +1,5 @@
 import { Command } from "commander";
+
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
@@ -30,17 +31,17 @@ program
   .option("--quiet", "Suppress interactive prompts")
   .action(async (opts) => {
     await initialize({
-      pm: opts.pm,
-      linter: opts.linter,
-      editors: opts.editors,
       agents: opts.agents,
-      hooks: opts.hooks,
+      editors: opts.editors,
       frameworks: opts.frameworks,
+      hooks: opts.hooks,
       integrations: opts.integrations,
-      "type-aware": opts.typeAware,
-      skipInstall: opts.skipInstall,
+      linter: opts.linter,
+      pm: opts.pm,
       quiet:
         opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
+      skipInstall: opts.skipInstall,
+      "type-aware": opts.typeAware,
     });
   });
 

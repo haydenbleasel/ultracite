@@ -11,7 +11,6 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "jsx-a11y/no-autofocus": "off",
   "jsx-a11y/label-has-associated-control": [
     "error",
     {
@@ -20,6 +19,7 @@ const overrideRules = {
       depth: 3,
     },
   ],
+  "jsx-a11y/no-autofocus": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

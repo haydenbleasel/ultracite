@@ -1,7 +1,7 @@
 /** @type {import('stylelint').Config} */
 const config = {
-  plugins: ["stylelint-prettier"],
   extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
+  plugins: ["stylelint-prettier"],
   rules: {
     "at-rule-no-unknown": [
       true,

@@ -1,7 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
+
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+
 import { exists } from "../utils";
 
 const defaultConfig = {
@@ -23,10 +25,6 @@ interface BiomeOptions {
 }
 
 export const biome = {
-  exists: async () => {
-    const path = await getBiomeConfigPath();
-    return exists(path);
-  },
   create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
     const extendsList = ["ultracite/biome/core"];
@@ -49,6 +47,10 @@ export const biome = {
     };
 
     return writeFile(path, JSON.stringify(config, null, 2));
+  },
+  exists: async () => {
+    const path = await getBiomeConfigPath();
+    return exists(path);
   },
   update: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();

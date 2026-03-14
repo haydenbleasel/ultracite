@@ -31,10 +31,10 @@ export type Integration = (typeof integrations)[number];
 
 /** All CLI options consolidated */
 export const options = {
-  linters: providers.map((provider) => provider.id),
-  editorConfigs: editors.map((editor) => editor.id),
   agents: agents.map((agent) => agent.id),
-  integrations,
-  hooks: hooks.map((hook) => hook.id),
+  editorConfigs: editors.map((editor) => editor.id),
   frameworks,
+  hooks: hooks.map((hook) => hook.id),
+  integrations,
+  linters: providers.map((provider) => provider.id),
 } as const;

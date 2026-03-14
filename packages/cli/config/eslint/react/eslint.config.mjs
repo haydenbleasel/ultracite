@@ -4,10 +4,11 @@ import query from "@tanstack/eslint-plugin-query";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+
 import jsxA11yRules from "./rules/jsx-a11y.mjs";
 import queryRules from "./rules/query.mjs";
-import reactRules from "./rules/react.mjs";
 import reactHooksRules from "./rules/react-hooks.mjs";
+import reactRules from "./rules/react.mjs";
 
 const config = [
   {
@@ -20,10 +21,10 @@ const config = [
       },
     },
     plugins: {
+      "@tanstack/query": query,
+      "jsx-a11y": jsxA11y,
       react,
       "react-hooks": reactHooks,
-      "jsx-a11y": jsxA11y,
-      "@tanstack/query": query,
     },
     rules: {
       ...reactRules,

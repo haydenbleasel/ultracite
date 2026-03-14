@@ -19,10 +19,11 @@ import storybook from "eslint-plugin-storybook";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
+
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
-import eslintRules from "./rules/eslint.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
+import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
 import jestRules from "./rules/jest.mjs";
@@ -41,6 +42,14 @@ const config = [
     ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
   },
   {
+    files: [
+      "**/*.js",
+      "**/*.ts",
+      "**/*.json",
+      "**/*.mjs",
+      "**/*.cjs",
+      "**/*.html",
+    ],
     languageOptions: {
       sourceType: "module",
       globals: {
@@ -52,14 +61,6 @@ const config = [
         sourceType: "module",
       },
     },
-    files: [
-      "**/*.js",
-      "**/*.ts",
-      "**/*.json",
-      "**/*.mjs",
-      "**/*.cjs",
-      "**/*.html",
-    ],
     plugins: {
       prettier,
       import: importPlugin,

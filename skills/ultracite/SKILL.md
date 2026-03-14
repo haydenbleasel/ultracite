@@ -10,6 +10,7 @@ Zero-config linting and formatting for JS/TS projects. Supports three linter bac
 ## Detecting Ultracite
 
 Check if `ultracite` is in `package.json` devDependencies. Detect the active linter by looking for:
+
 - `biome.jsonc` → Biome
 - `eslint.config.mjs` → ESLint
 - `.oxlintrc.json` → Oxlint
@@ -50,6 +51,7 @@ bunx ultracite init \
 ```
 
 **Flags:**
+
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun`
 - `--linter` — `biome` (recommended) | `eslint` | `oxlint`
 - `--editors` — `vscode` | `zed` | `cursor` | `windsurf` | `antigravity` | `kiro` | `trae` | `void`
@@ -91,12 +93,14 @@ Key rules at a glance:
 ## Troubleshooting
 
 Run `bunx ultracite doctor` to diagnose. It checks:
+
 1. Linter installation (biome/eslint/oxlint binary available)
 2. Config validity (extends ultracite presets correctly)
 3. Ultracite in package.json dependencies
 4. Conflicting tools (old `.eslintrc.*`, `.prettierrc.*` files)
 
 Common fixes:
+
 - **Conflicting configs**: Delete legacy `.eslintrc.*` and `.prettierrc.*` files after migrating to Ultracite
 - **Missing dependency**: Run `bunx ultracite init` again or manually add `ultracite` to devDependencies
 - **Rules not applying**: Ensure config file extends the correct presets for your framework

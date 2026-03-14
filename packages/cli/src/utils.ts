@@ -1,6 +1,7 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import process from "node:process";
+
 import { parse } from "jsonc-parser";
 
 // Windows needs shell: true to resolve .cmd binaries (e.g. biome.cmd).
@@ -23,7 +24,7 @@ export const isMonorepo = async () => {
   }
 
   try {
-    const pkgJson = parse(await readFile("package.json", "utf-8")) as
+    const pkgJson = parse(await readFile("package.json", "utf8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -88,8 +89,7 @@ const SPECIAL_CHARS_PATTERN = /[ $(){}[\]&|;<>!"'`*?#~]/;
 const SINGLE_QUOTE_PATTERN = /'/g;
 
 // Parse and escape file paths to handle special characters
-export const parseFilePaths = (files: string[]): string[] => {
-  return files.map((file) => {
+export const parseFilePaths = (files: string[]): string[] => files.map((file) => {
     // Check if the path needs escaping (contains special shell characters)
     if (SPECIAL_CHARS_PATTERN.test(file)) {
       // Escape single quotes by replacing ' with '\'' and wrap in single quotes
@@ -97,7 +97,6 @@ export const parseFilePaths = (files: string[]): string[] => {
     }
     return file;
   });
-};
 
 export const ensureDirectory = async (path: string) => {
   const dir = dirname(path);

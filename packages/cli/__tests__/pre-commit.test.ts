@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { preCommit } from "../src/integrations/pre-commit";
 
 mock.module("node:fs/promises", () => ({
@@ -8,8 +9,8 @@ mock.module("node:fs/promises", () => ({
 }));
 
 mock.module("nypm", () => ({
-  dlxCommand: mock(() => "npx ultracite fix"),
   detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
+  dlxCommand: mock(() => "npx ultracite fix"),
 }));
 
 describe("pre-commit", () => {

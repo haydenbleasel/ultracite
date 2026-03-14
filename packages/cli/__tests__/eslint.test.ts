@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { eslint } from "../src/linters/eslint";
 
 mock.module("node:fs/promises", () => ({
