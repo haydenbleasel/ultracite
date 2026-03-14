@@ -1,6 +1,7 @@
 import type { Agent } from "@repo/data/agents";
 import { getRules } from "@repo/data/rules";
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/client";
+
+import { CodeBlock } from "@/components/ultracite/code-block/client";
 
 interface FilesProps {
   agent: Agent;
@@ -17,7 +18,7 @@ export const Files = ({ agent }: FilesProps) => (
         {agent.name}.
       </p>
       <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
-        This rules file teaches {agent.name} your project's code standards
+        This rules file teaches {agent.name} your project&apos;s code standards
         covering type safety, modern JavaScript patterns, React best practices,
         accessibility, security, and performance.
       </p>

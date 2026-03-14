@@ -3,16 +3,15 @@ import { join } from "node:path";
 
 const configDir = join(import.meta.dirname, "../packages/cli/config/biome");
 
-const stripJsonComments = (content: string): string => {
-  return content
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/.*$/gm, "")
-    .replace(/,(\s*[}\]])/g, "$1");
-};
+const stripJsonComments = (content: string): string =>
+  content
+    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+    .replaceAll(/\/\/.*$/gm, "")
+    .replaceAll(/,(\s*[}\]])/g, "$1");
 
 const validateBiomeConfig = async (configPath: string): Promise<boolean> => {
   try {
-    const content = await readFile(configPath, "utf-8");
+    const content = await readFile(configPath, "utf8");
     const cleanJson = stripJsonComments(content);
     const config = JSON.parse(cleanJson);
 

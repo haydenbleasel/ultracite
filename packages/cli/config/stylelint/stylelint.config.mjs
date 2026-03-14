@@ -1,7 +1,7 @@
 /** @type {import('stylelint').Config} */
 const config = {
-  plugins: ["stylelint-prettier"],
   extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
+  plugins: ["stylelint-prettier"],
   rules: {
     "at-rule-no-unknown": [
       true,
@@ -18,14 +18,14 @@ const config = {
         ],
       },
     ],
-    "declaration-property-value-no-unknown": true,
-    "no-descending-specificity": null,
     "declaration-block-no-redundant-longhand-properties": [
       true,
       {
         ignoreShorthands: ["/flex/"],
       },
     ],
+    "declaration-property-value-no-unknown": true,
+    "no-descending-specificity": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {

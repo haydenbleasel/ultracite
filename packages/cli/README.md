@@ -27,15 +27,19 @@ The interactive setup will guide you through selecting your formatter/linter, fr
 ## Key Features
 
 ### ⚡ Subsecond Performance
+
 Built on Rust-based tools for instant code analysis. On-save checks feel seamless without interrupting your workflow.
 
 ### 🎯 Zero-Config by Design
+
 Hundreds of preconfigured rules optimized for JavaScript and TypeScript projects. Customize when needed, but it works perfectly out of the box.
 
 ### 🤖 AI-Ready
+
 Generate rules for 20+ AI agents including Claude Code, GitHub Copilot, Cursor, Gemini, and more. Ensures consistent code style across all team members and AI models.
 
 ### 🏗️ Monorepo Ready
+
 Unified toolchain configuration across all packages and apps, eliminating duplicate config files while maintaining consistency.
 
 ---

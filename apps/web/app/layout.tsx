@@ -1,28 +1,41 @@
 import "./global.css";
-import { DesignSystemProvider } from "@repo/design-system";
-import { Navbar } from "@repo/design-system/components/ultracite/navbar";
-import { fonts } from "@repo/design-system/lib/fonts";
+import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
-import { CTA } from "@/components/cta";
-import { Footer } from "../components/ultracite/footer";
+
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { CallToAction } from "@/components/ultracite/cta";
+import { Footer } from "@/components/ultracite/footer";
+import { Navbar } from "@/components/ultracite/navbar";
+import { fonts } from "@/lib/fonts";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout = async ({ children }: LayoutProps) => (
+const Layout = ({ children }: LayoutProps) => (
   <html lang="en" suppressHydrationWarning>
     <body className={fonts}>
-      <DesignSystemProvider>
-        <Navbar />
-        <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
-          {children}
-          <div className="mt-16 sm:mt-24 md:mt-32">
-            <CTA />
-            <Footer />
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        disableTransitionOnChange
+        enableSystem
+      >
+        <TooltipProvider>
+          <Navbar />
+          <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
+            {children}
+            <div className="mt-16 sm:mt-24 md:mt-32">
+              <CallToAction />
+              <Footer />
+            </div>
           </div>
-        </div>
-      </DesignSystemProvider>
+        </TooltipProvider>
+        <Toaster />
+        <Analytics />
+      </ThemeProvider>
     </body>
   </html>
 );

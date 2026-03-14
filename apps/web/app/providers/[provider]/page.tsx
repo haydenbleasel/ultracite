@@ -1,8 +1,10 @@
 import { providers } from "@repo/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Logos } from "@/components/logos";
-import { Social } from "@/components/social";
+
+import { Logos } from "@/components/ultracite/logos";
+import { Social } from "@/components/ultracite/social";
+
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
 import { ProviderHero } from "./components/hero";
@@ -19,21 +21,21 @@ export const generateMetadata = async ({
   params,
 }: ProviderPageProps): Promise<Metadata> => {
   const { provider: providerId } = await params;
-  const provider = providers.find((provider) => provider.id === providerId);
+  const provider = providers.find((p) => p.id === providerId);
 
   if (!provider) {
     return {};
   }
 
   return {
-    title: `${provider.name} | Ultracite`,
     description: provider.description,
+    title: `${provider.name} | Ultracite`,
   };
 };
 
 const ProviderPage = async ({ params }: ProviderPageProps) => {
   const { provider: providerId } = await params;
-  const provider = providers.find((provider) => provider.id === providerId);
+  const provider = providers.find((p) => p.id === providerId);
 
   if (!provider) {
     notFound();

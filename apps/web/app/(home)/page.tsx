@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Logos } from "@/components/logos";
-import { Social } from "@/components/social";
+
+import { Logos } from "@/components/ultracite/logos";
+import { Social } from "@/components/ultracite/social";
+
 import { Agents } from "./components/agents";
 import { Demo } from "./components/demo";
 import { Editors } from "./components/editors";
 import { Hero } from "./components/hero";
-import { IDE } from "./components/ide";
+import { IdePreview } from "./components/ide";
 import { ZeroConfig } from "./components/zero-config";
 
 const title =
@@ -14,8 +16,8 @@ const description =
   "Ultracite is a highly opinionated preset for ESLint, Biome and Oxlint; designed to help you and your AI models write consistent and type-safe code without the hassle of configuration.";
 
 export const metadata: Metadata = {
-  title,
   description,
+  title,
 };
 
 const Home = () => (
@@ -25,7 +27,7 @@ const Home = () => (
     </Hero>
     <Logos />
     <ZeroConfig />
-    <IDE />
+    <IdePreview />
     <Agents />
     <Editors />
     <Social />

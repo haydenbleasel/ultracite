@@ -1,13 +1,9 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile, Provider } from "@repo/data/providers";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/design-system/components/ui/tabs";
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/server";
 import type { BundledLanguage } from "shiki";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CodeBlock } from "@/components/ultracite/code-block/server";
 
 interface ConfigProps {
   provider: Provider;

@@ -1,12 +1,14 @@
-import { type Agent, agents } from "@repo/data/agents";
+import { agents } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
-import { cn } from "@repo/design-system/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const featuredAgentIds = [
   "claude",

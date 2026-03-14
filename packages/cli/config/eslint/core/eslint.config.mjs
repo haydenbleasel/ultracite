@@ -19,10 +19,11 @@ import storybook from "eslint-plugin-storybook";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
+
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
-import eslintRules from "./rules/eslint.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
+import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
 import jestRules from "./rules/jest.mjs";
@@ -41,17 +42,6 @@ const config = [
     ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
   },
   {
-    languageOptions: {
-      sourceType: "module",
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-    },
     files: [
       "**/*.js",
       "**/*.ts",
@@ -60,16 +50,27 @@ const config = [
       "**/*.cjs",
       "**/*.html",
     ],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+      sourceType: "module",
+    },
     plugins: {
-      prettier,
-      import: importPlugin,
-      promise,
-      n,
-      "unused-imports": unusedImports,
-      sonarjs,
       compat,
-      unicorn,
       github,
+      import: importPlugin,
+      n,
+      prettier,
+      promise,
+      sonarjs,
+      unicorn,
+      "unused-imports": unusedImports,
     },
     rules: {
       ...eslintRules,
@@ -91,8 +92,8 @@ const config = [
         espree: [".js", ".cjs", ".mjs", ".ts"],
       },
       "import/resolver": {
-        typescript: true,
         node: true,
+        typescript: true,
       },
     },
   },

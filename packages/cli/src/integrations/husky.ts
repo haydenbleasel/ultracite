@@ -1,11 +1,9 @@
 import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import {
-  addDevDependency,
-  dlxCommand,
-  type PackageManager,
-  type PackageManagerName,
-} from "nypm";
+
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
+
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
@@ -47,35 +45,6 @@ const path = "./.husky/pre-commit";
 const ULTRACITE_MARKER = "# ultracite";
 
 export const husky = {
-  exists: () => exists(path),
-  install: async (packageManager: PackageManager) => {
-    await addDevDependency("husky", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
-      corepack: false,
-    });
-
-    // Add prepare script to package.json to ensure husky is initialized
-    await updatePackageJson({
-      scripts: {
-        prepare: "husky",
-      },
-    });
-  },
-  init: (packageManager: PackageManagerName) => {
-    // Initialize husky - this sets up git hooks infrastructure
-    const initCommand = dlxCommand(packageManager, "husky", {
-      args: ["init"],
-    });
-
-    try {
-      execSync(initCommand, { stdio: "pipe" });
-    } catch (_error) {
-      // If init fails, it might be because it's already initialized
-      // Continue anyway as we'll create the hook file next
-    }
-  },
   create: async (packageManager: PackageManagerName, useLintStaged = false) => {
     await mkdir(".husky", { recursive: true });
 
@@ -96,8 +65,37 @@ export const husky = {
 
     await writeFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
   },
+  exists: () => exists(path),
+  init: (packageManager: PackageManagerName) => {
+    // Initialize husky - this sets up git hooks infrastructure
+    const initCommand = dlxCommand(packageManager, "husky", {
+      args: ["init"],
+    });
+
+    try {
+      execSync(initCommand, { stdio: "pipe" });
+    } catch {
+      // If init fails, it might be because it's already initialized
+      // Continue anyway as we'll create the hook file next
+    }
+  },
+  install: async (packageManager: PackageManager) => {
+    await addDevDependency("husky", {
+      corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
+    });
+
+    // Add prepare script to package.json to ensure husky is initialized
+    await updatePackageJson({
+      scripts: {
+        prepare: "husky",
+      },
+    });
+  },
   update: async (packageManager: PackageManagerName, useLintStaged = false) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
 
     let hookScript: string;
 

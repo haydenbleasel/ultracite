@@ -1,8 +1,10 @@
 import { agents } from "@repo/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Logos } from "@/components/logos";
-import { Social } from "@/components/social";
+
+import { Logos } from "@/components/ultracite/logos";
+import { Social } from "@/components/ultracite/social";
+
 import { Benefits } from "./components/benefits";
 import { Files } from "./components/files";
 import { AgentHero } from "./components/hero";
@@ -14,21 +16,21 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/agents/[agent]">): Promise<Metadata> => {
   const { agent: agentId } = await params;
-  const agent = agents.find((agent) => agent.id === agentId);
+  const agent = agents.find((a) => a.id === agentId);
 
   if (!agent) {
     return {};
   }
 
   return {
-    title: `${agent.name} | Ultracite`,
     description: agent.description,
+    title: `${agent.name} | Ultracite`,
   };
 };
 
 const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
   const { agent: agentId } = await params;
-  const agent = agents.find((agent) => agent.id === agentId);
+  const agent = agents.find((a) => a.id === agentId);
 
   if (!agent) {
     notFound();

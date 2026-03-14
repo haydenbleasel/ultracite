@@ -1,12 +1,14 @@
-import { type Editor, editors } from "@repo/data/editors";
+import { editors } from "@repo/data/editors";
+import type { Editor } from "@repo/data/editors";
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
-import { cn } from "@repo/design-system/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const featuredEditorIds = [
   "vscode",

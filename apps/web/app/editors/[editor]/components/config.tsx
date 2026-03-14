@@ -1,6 +1,7 @@
 import { SiJson } from "@icons-pack/react-simple-icons";
 import type { Editor } from "@repo/data/editors";
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/server";
+
+import { CodeBlock } from "@/components/ultracite/code-block/server";
 
 interface ConfigProps {
   editor: Editor;

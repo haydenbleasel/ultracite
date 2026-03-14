@@ -6,25 +6,25 @@ const withMDX = createMDX({
 });
 
 const config: NextConfig = {
-  transpilePackages: ["@repo/data"],
-
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
-
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-
-  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
-        protocol: "https",
         hostname: "github.com",
+        protocol: "https",
       },
     ],
   },
+
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+
+  serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
+
+  transpilePackages: ["@repo/data"],
 };
 
 export default withMDX(config);

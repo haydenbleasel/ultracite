@@ -5,29 +5,30 @@ import {
   SiReact,
   SiTypescript,
 } from "@icons-pack/react-simple-icons";
-import { cn } from "@repo/design-system/lib/utils";
 import { FolderIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 const files = [
   {
+    icon: SiReact,
     name: "index.tsx",
-    icon: SiReact,
   },
   {
+    icon: SiReact,
     name: "layout.tsx",
-    icon: SiReact,
   },
   {
-    name: "utils.ts",
     icon: SiTypescript,
+    name: "utils.ts",
   },
   {
-    name: "globals.css",
     icon: SiCss,
+    name: "globals.css",
   },
   {
-    name: "biome.jsonc",
     icon: SiJson,
+    name: "biome.jsonc",
   },
 ];
 

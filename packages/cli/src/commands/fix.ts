@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
+
 import { detectLinter, parseFilePaths, shellOption } from "../utils";
 
 const runBiomeFix = (files: string[], passthrough: string[]): void => {
@@ -12,8 +13,8 @@ const runBiomeFix = (files: string[], passthrough: string[]): void => {
   }
 
   const result = spawnSync("biome", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -33,8 +34,8 @@ const runEslintFix = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("eslint", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -54,8 +55,8 @@ const runPrettierFix = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("prettier", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -75,8 +76,8 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("stylelint", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -100,8 +101,8 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("oxlint", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -121,8 +122,8 @@ const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("oxfmt", args, {
-    stdio: "inherit",
     shell: shellOption,
+    stdio: "inherit",
   });
 
   if (result.error) {
@@ -158,7 +159,8 @@ export const fix = async (
       await runOxlintFix(files, passthrough);
       break;
     }
-    default:
+    default: {
       await runBiomeFix(files, passthrough);
+    }
   }
 };

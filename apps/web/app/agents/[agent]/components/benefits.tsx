@@ -15,40 +15,40 @@ interface BenefitsProps {
 
 const benefits: { title: string; description: string; icon: LucideIcon }[] = [
   {
-    title: "Consistent output",
     description:
       "Generated code follows your linting rules from the start, reducing cleanup work.",
     icon: CheckCircleIcon,
+    title: "Consistent output",
   },
   {
-    title: "Fewer iterations",
     description:
       "The AI understands your standards upfront, producing acceptable code faster.",
     icon: ZapIcon,
+    title: "Fewer iterations",
   },
   {
-    title: "Team alignment",
     description:
       "Everyone's AI assistant generates code that matches your team's style guide.",
     icon: UsersIcon,
+    title: "Team alignment",
   },
   {
-    title: "Zero configuration",
     description:
       "Get started instantly with sensible defaults that work out of the box.",
     icon: RocketIcon,
+    title: "Zero configuration",
   },
   {
-    title: "Type-safe code",
     description:
       "Strict linting rules catch potential bugs and enforce type safety automatically.",
     icon: ShieldCheckIcon,
+    title: "Type-safe code",
   },
   {
-    title: "AI-ready rules",
     description:
       "Purpose-built rules that AI models understand and follow consistently.",
     icon: SparklesIcon,
+    title: "AI-ready rules",
   },
 ];
 
@@ -60,7 +60,7 @@ export const Benefits = ({ agent }: BenefitsProps) => (
       </h2>
       <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
         AI coding assistants generate code faster, but without guidance they may
-        not follow your project's conventions.
+        not follow your project&apos;s conventions.
       </p>
     </div>
     <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">

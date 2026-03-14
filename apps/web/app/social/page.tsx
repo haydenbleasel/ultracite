@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Tweets } from "@/components/tweets";
+
+import { Tweets } from "@/components/ultracite/tweets";
 
 const tweets = [
   "1937342910519038142",
@@ -160,8 +161,8 @@ const description =
   "Here's what some of the most innovative and forward-thinking developers in the React ecosystem have to say about Ultracite.";
 
 export const metadata: Metadata = {
-  title,
   description,
+  title,
 };
 
 const SocialPage = () => (

@@ -1,11 +1,13 @@
+import type { ComponentType } from "react";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/design-system/components/ui/select";
-import type { ComponentType } from "react";
+} from "@/components/ui/select";
+
 import {
   Angular,
   Astro,

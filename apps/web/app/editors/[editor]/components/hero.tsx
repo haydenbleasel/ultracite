@@ -1,8 +1,9 @@
 import type { Editor } from "@repo/data/editors";
-import { Logo } from "@repo/design-system/components/ultracite/logo";
 import { XIcon } from "lucide-react";
 import Image from "next/image";
-import { Installer } from "@/components/installer";
+
+import { Installer } from "@/components/ultracite/installer";
+import { Logo } from "@/components/ultracite/logo";
 
 interface EditorHeroProps {
   editor: Editor;

@@ -8,7 +8,6 @@ import {
   FileCode,
   FolderTree,
   Layers,
-  type LucideIcon,
   Package,
   Puzzle,
   RefreshCw,
@@ -16,6 +15,7 @@ import {
   Target,
   Zap,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface BenefitsProps {
   provider: Provider;

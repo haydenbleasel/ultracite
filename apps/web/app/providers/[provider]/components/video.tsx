@@ -1,10 +1,14 @@
 "use client";
 
-import { Skeleton } from "@repo/design-system/components/ui/skeleton";
 import dynamic from "next/dynamic";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 const Player = dynamic(
-  () => import("react-player").then((mod) => mod.default),
+  async () => {
+    const mod = await import("react-player");
+    return mod.default;
+  },
   { ssr: false }
 );
 
@@ -19,11 +23,11 @@ export const Video = ({ video }: VideoProps) => (
       controls
       src={video}
       style={{
+        height: "100%",
+        left: 0,
         position: "absolute",
         top: 0,
-        left: 0,
         width: "100%",
-        height: "100%",
         zIndex: 1,
       }}
     />

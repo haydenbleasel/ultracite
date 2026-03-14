@@ -1,12 +1,15 @@
+"use client";
+
 import { SiX } from "@icons-pack/react-simple-icons";
 import { agents } from "@repo/data/src/agents";
 import { docsUrl } from "@repo/data/src/consts";
 import { editors } from "@repo/data/src/editors";
 import { providers } from "@repo/data/src/providers";
-import { ThemeSwitcher } from "@repo/design-system/components/kibo-ui/theme-switcher";
-import { Logo } from "@repo/design-system/components/ultracite/logo";
-import Link from "next/link";
 import { useTheme } from "next-themes";
+import Link from "next/link";
+
+import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
+import { Logo } from "@/components/ultracite/logo";
 
 const legalLinks = [
   {

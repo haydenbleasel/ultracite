@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { oxlint } from "../src/linters/oxlint";
 
 // Helper to generate the expected oxlint config path
@@ -49,7 +50,7 @@ describe("oxlint linter", () => {
       await oxlint.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.oxlintrc.json");
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("core"));
@@ -67,7 +68,7 @@ describe("oxlint linter", () => {
       await oxlint.create({ frameworks: ["react", "next"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("react"));
       expect(content.extends).toContain(getOxlintConfigPath("next"));
@@ -91,7 +92,7 @@ describe("oxlint linter", () => {
       await oxlint.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("core"));
       expect(content.extends).toContain("some-other-config");
@@ -109,7 +110,7 @@ describe("oxlint linter", () => {
       await oxlint.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("core"));
     });
@@ -129,7 +130,7 @@ describe("oxlint linter", () => {
       await oxlint.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       // Should only appear once
       expect(
@@ -153,7 +154,7 @@ describe("oxlint linter", () => {
       await oxlint.update({ frameworks: ["react"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("react"));
     });
@@ -173,7 +174,7 @@ describe("oxlint linter", () => {
       await oxlint.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1] as string);
       expect(content.extends).toContain(getOxlintConfigPath("core"));
     });
