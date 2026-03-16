@@ -81,6 +81,33 @@ describe("fix", () => {
     expect(callArgs[1]).not.toContain("--unsafe");
   });
 
+  test("retries with .cmd when command is missing on Windows", async () => {
+    const mockSpawn = mock((command: string) => {
+      if (command === "biome") {
+        return {
+          error: { code: "ENOENT", message: "missing binary" },
+          status: null,
+        };
+      }
+
+      return { status: 0 };
+    });
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => Promise.resolve("biome")),
+      parseFilePaths,
+    }));
+
+    await fix([]);
+
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const [firstCall, secondCall] = mockSpawn.mock.calls;
+    expect(firstCall[0]).toBe("biome");
+    expect(secondCall[0]).toBe("biome.cmd");
+  });
+
   test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     mock.module("node:child_process", () => ({
@@ -95,7 +122,7 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
-    expect(callArgs[1]).toContain("'src/my file.ts' ");
+    expect(callArgs[1]).toContain("src/my file.ts");
   });
 
   test("exits with status code when biome fix finds errors", async () => {

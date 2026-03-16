@@ -191,36 +191,28 @@ describe("parseFilePaths", () => {
     expect(result).toEqual(files);
   });
 
-  test("wraps files with spaces in quotes", () => {
+  test("returns files with spaces unchanged", () => {
     const files = ["src/my file.ts", "test file.js"];
     const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/my file.ts' ", "'test file.js' "]);
+    expect(result).toEqual(files);
   });
 
-  test("escapes single quotes in file paths", () => {
+  test("returns files with single quotes unchanged", () => {
     const files = ["src/user's file.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/user'\\''s file.ts' "]);
+    expect(result).toEqual(files);
   });
 
-  test("wraps files with special characters in quotes", () => {
+  test("returns files with special characters unchanged", () => {
     const files = ["src/file(1).ts", "test[2].js", "file&test.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "'src/file(1).ts' ",
-      "'test[2].js' ",
-      "'file&test.ts' ",
-    ]);
+    expect(result).toEqual(files);
   });
 
   test("handles mixed file paths", () => {
     const files = ["normal.ts", "with space.js", "user's.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "normal.ts",
-      "'with space.js' ",
-      "'user'\\''s.ts' ",
-    ]);
+    expect(result).toEqual(files);
   });
 });
 

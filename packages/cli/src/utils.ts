@@ -4,11 +4,6 @@ import process from "node:process";
 
 import { parse } from "jsonc-parser";
 
-// Windows needs shell: true to resolve .cmd binaries (e.g. biome.cmd).
-// Other platforms don't need it, and Node >= 22.12 emits DEP0190 when
-// args are passed with shell: true.
-export const shellOption = process.platform === "win32";
-
 export const exists = async (path: string) => {
   try {
     await access(path);
@@ -84,20 +79,10 @@ export const updatePackageJson = async ({
   );
 };
 
-// Regex patterns for special characters that need escaping
-const SPECIAL_CHARS_PATTERN = /[ $(){}[\]&|;<>!"'`*?#~]/;
-const SINGLE_QUOTE_PATTERN = /'/g;
-
-// Parse and escape file paths to handle special characters
-export const parseFilePaths = (files: string[]): string[] =>
-  files.map((file) => {
-    // Check if the path needs escaping (contains special shell characters)
-    if (SPECIAL_CHARS_PATTERN.test(file)) {
-      // Escape single quotes by replacing ' with '\'' and wrap in single quotes
-      return `'${file.replace(SINGLE_QUOTE_PATTERN, "'\\''")}' `;
-    }
-    return file;
-  });
+// Parse file paths passed to child_process arg arrays.
+// We intentionally avoid shell escaping because commands are executed
+// without a shell to prevent DEP0190 warnings on newer Node.js versions.
+export const parseFilePaths = (files: string[]): string[] => files;
 
 export const ensureDirectory = async (path: string) => {
   const dir = dirname(path);

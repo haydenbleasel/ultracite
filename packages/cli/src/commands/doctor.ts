@@ -8,7 +8,24 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
-import { shellOption } from "../utils";
+const runCommand = (
+  command: string,
+  args: string[],
+  options: Parameters<typeof spawnSync>[2]
+) => {
+  const result = spawnSync(command, args, options);
+  const isMissingCommand =
+    process.platform === "win32" &&
+    result.error &&
+    "code" in result.error &&
+    result.error.code === "ENOENT";
+
+  if (!isMissingCommand) {
+    return result;
+  }
+
+  return spawnSync(`${command}.cmd`, args, options);
+};
 
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
@@ -48,9 +65,8 @@ interface DiagnosticCheck {
 
 // Check if Biome is installed
 const checkBiomeInstallation = (): DiagnosticCheck => {
-  const biomeCheck = spawnSync("biome", ["--version"], {
+  const biomeCheck = runCommand("biome", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -70,9 +86,8 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 
 // Check if ESLint is installed
 const checkEslintInstallation = (): DiagnosticCheck => {
-  const eslintCheck = spawnSync("eslint", ["--version"], {
+  const eslintCheck = runCommand("eslint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -92,9 +107,8 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 
 // Check if Oxlint is installed
 const checkOxlintInstallation = (): DiagnosticCheck => {
-  const oxlintCheck = spawnSync("oxlint", ["--version"], {
+  const oxlintCheck = runCommand("oxlint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
