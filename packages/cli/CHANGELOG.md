@@ -1,3 +1,9 @@
+## 7.3.2
+
+### Patch Changes
+
+- 8ffeb33: Add support for .oxlintrc.mjs and oxlint.config.ts
+
 ## 7.3.1
 
 ### Patch Changes
