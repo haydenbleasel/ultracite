@@ -121,7 +121,11 @@ const eslintConfigNames = [
   "eslint.config.cts",
 ] as const;
 
-const oxlintConfigName = ".oxlintrc.json";
+const oxlintConfigNames = [
+  ".oxlintrc.json",
+  ".oxlintrc.mjs",
+  "oxlint.config.ts",
+];
 
 export const detectLinter = async (): Promise<Linter | null> => {
   let dir = process.cwd();
@@ -142,8 +146,10 @@ export const detectLinter = async (): Promise<Linter | null> => {
     }
 
     // Check for oxlint config
-    if (await exists(join(dir, oxlintConfigName))) {
-      return "oxlint";
+    for (const name of oxlintConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "oxlint";
+      }
     }
 
     const parent = dirname(dir);
