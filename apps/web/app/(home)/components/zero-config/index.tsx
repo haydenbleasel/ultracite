@@ -4,7 +4,7 @@ import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
 import { providers } from "@repo/data/providers";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { BundledLanguage } from "shiki";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -57,19 +57,20 @@ export const ZeroConfig = () => {
     [selectedProvider]
   );
 
-  // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
-  // The value should always be valid for the current config; fallback to first available tab if needed.
   const [tabValue, setTabValue] = useState<string>(config[0]?.name ?? "");
+  const prevConfigRef = useRef(config);
 
-  // Whenever config changes, reset tab to first in config
-  // (guard against stale name if provider/framework is switched)
-  // This avoids uncontrolled->controlled warning.
-  // We only setTabValue if the name list changed and tabValue is not present.
-  useEffect(() => {
+  // Derive valid tab value during render instead of via useEffect
+  let effectiveTab = tabValue;
+  if (prevConfigRef.current !== config) {
+    prevConfigRef.current = config;
     if (!config.some((c) => c.name === tabValue)) {
-      setTabValue(config[0]?.name ?? "");
+      effectiveTab = config[0]?.name ?? "";
+      setTabValue(effectiveTab);
     }
-  }, [config, tabValue]);
+  } else if (!config.some((c) => c.name === tabValue)) {
+    effectiveTab = config[0]?.name ?? "";
+  }
 
   return (
     <div className="grid gap-8">
@@ -98,7 +99,7 @@ export const ZeroConfig = () => {
           <Tabs
             className="w-full gap-0"
             onValueChange={setTabValue}
-            value={tabValue}
+            value={effectiveTab}
           >
             <TabsList className="w-full justify-start overflow-auto rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
               {config.map((f) => {
