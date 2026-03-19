@@ -91,7 +91,7 @@ export const ZeroConfig = () => {
         />
       </div>
 
-      {config && (
+      {config.length > 0 && (
         <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
           <Tabs
             className="w-full gap-0"
