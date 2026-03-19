@@ -49,6 +49,7 @@ export const Hero = ({ description, children }: HeroProps) => (
                   height={48}
                   key={logo.name}
                   priority
+                  sizes="(max-width: 768px) 28px, (max-width: 1024px) 40px, 48px"
                   src={logo.src}
                   width={48}
                 />

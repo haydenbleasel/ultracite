@@ -133,6 +133,7 @@ export const Logos = () => (
             alt={logo.name}
             className="size-full object-contain dark:brightness-0 dark:invert"
             height={48}
+            sizes="(max-width: 1024px) 33vw, 20vw"
             src={logo.src}
             width={48}
           />
