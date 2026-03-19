@@ -115,7 +115,7 @@ export const Logos = () => (
         <a
           className="underline"
           href="https://github.com/haydenbleasel/ultracite/network/dependents"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           thousands
