@@ -52,10 +52,7 @@ export const ZeroConfig = () => {
     return [...presets];
   }, [selectedFrameworks]);
 
-  const config = useMemo(
-    () => selectedProvider?.configFiles ?? [],
-    [selectedProvider]
-  );
+  const config = selectedProvider?.configFiles ?? [];
 
   const [tabValue, setTabValue] = useState<string>(config[0]?.name ?? "");
   const prevConfigRef = useRef(config);
