@@ -1,5 +1,8 @@
+"use cache";
+
 import { providers } from "@repo/data/providers";
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { Logos } from "@/components/ultracite/logos";
@@ -34,6 +37,7 @@ export const generateMetadata = async ({
 };
 
 const ProviderPage = async ({ params }: ProviderPageProps) => {
+  cacheLife("days");
   const { provider: providerId } = await params;
   const provider = providers.find((p) => p.id === providerId);
 

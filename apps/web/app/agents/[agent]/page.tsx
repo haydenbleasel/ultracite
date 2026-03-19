@@ -1,5 +1,8 @@
+"use cache";
+
 import { agents } from "@repo/data/agents";
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { Logos } from "@/components/ultracite/logos";
@@ -29,6 +32,7 @@ export const generateMetadata = async ({
 };
 
 const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
+  cacheLife("days");
   const { agent: agentId } = await params;
   const agent = agents.find((a) => a.id === agentId);
 

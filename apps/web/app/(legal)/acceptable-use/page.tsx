@@ -1,4 +1,7 @@
+"use cache";
+
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 
 import Contents from "./contents.mdx";
 
@@ -8,6 +11,9 @@ export const metadata: Metadata = {
   title: "Acceptable Use Policy",
 };
 
-const AcceptableUsePolicyPage = () => <Contents />;
+const AcceptableUsePolicyPage = async () => {
+  cacheLife("max");
+  return <Contents />;
+};
 
 export default AcceptableUsePolicyPage;

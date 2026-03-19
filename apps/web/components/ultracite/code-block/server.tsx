@@ -13,6 +13,8 @@ import { createHighlighterCore } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import shikiWasm from "shiki/wasm";
 
+import { cacheLife } from "next/cache";
+
 import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
@@ -36,6 +38,9 @@ const getHighlighter = () => {
 };
 
 export const CodeBlock = async ({ code, lang, className }: CodeBlockProps) => {
+  "use cache";
+  cacheLife("max");
+
   const highlighter = await getHighlighter();
 
   const result = highlighter.codeToTokens(code, {

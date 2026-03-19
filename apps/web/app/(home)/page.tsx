@@ -1,4 +1,7 @@
+"use cache";
+
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
@@ -20,7 +23,10 @@ export const metadata: Metadata = {
   title,
 };
 
-const Home = () => (
+const Home = async () => {
+  cacheLife("max");
+
+  return (
   <div className="grid gap-16 sm:gap-24 md:gap-32">
     <Hero description={description}>
       <Demo />
@@ -32,6 +38,7 @@ const Home = () => (
     <Editors />
     <Social />
   </div>
-);
+  );
+};
 
 export default Home;

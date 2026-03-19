@@ -1,5 +1,8 @@
+"use cache";
+
 import { editors } from "@repo/data/editors";
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
 import { Logos } from "@/components/ultracite/logos";
@@ -29,6 +32,7 @@ export const generateMetadata = async ({
 };
 
 const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
+  cacheLife("days");
   const { editor: editorId } = await params;
   const editor = editors.find((e) => e.id === editorId);
 

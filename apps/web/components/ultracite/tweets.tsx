@@ -1,11 +1,13 @@
-import { unstable_cache } from "next/cache";
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { EmbeddedTweet, TweetNotFound, TweetSkeleton } from "react-tweet";
 import { getTweet as _getTweet } from "react-tweet/api";
 
-const getTweet = unstable_cache((id: string) => _getTweet(id), ["tweet"], {
-  revalidate: 3600 * 24,
-});
+const getTweet = async (id: string) => {
+  "use cache";
+  cacheLife("days");
+  return _getTweet(id);
+};
 
 const Tweet = async ({ id }: { id: string }) => {
   try {

@@ -6,6 +6,8 @@ const withMDX = createMDX({
 });
 
 const config: NextConfig = {
+  cacheComponents: true,
+
   experimental: {
     optimizePackageImports: [
       "@icons-pack/react-simple-icons",
