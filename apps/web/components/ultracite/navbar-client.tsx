@@ -29,6 +29,7 @@ import { Logo } from "./logo";
 import type { StaticImageData } from "next/image";
 
 interface NavItem {
+  href: string;
   id: string;
   logo: StaticImageData;
   name: string;
@@ -40,7 +41,6 @@ interface NavbarClientProps {
   docsUrl: string;
   editors: NavItem[];
   providers: NavItem[];
-  webUrl: string;
 }
 
 const links = [
@@ -56,7 +56,6 @@ export const NavbarClient = ({
   docsUrl,
   editors,
   providers,
-  webUrl,
 }: NavbarClientProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -89,10 +88,7 @@ export const NavbarClient = ({
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/providers/${provider.id}`,
-                            webUrl
-                          ).toString()}
+                          href={provider.href}
                         >
                           <Image
                             alt={provider.name}
@@ -129,10 +125,7 @@ export const NavbarClient = ({
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/editors/${editor.id}`,
-                            webUrl
-                          ).toString()}
+                          href={editor.href}
                         >
                           <Image
                             alt={editor.name}
@@ -172,10 +165,7 @@ export const NavbarClient = ({
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/agents/${agent.id}`,
-                            webUrl
-                          ).toString()}
+                          href={agent.href}
                         >
                           <Image
                             alt={agent.name}
@@ -249,10 +239,7 @@ export const NavbarClient = ({
                 {providers.map((provider) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={new URL(
-                      `/providers/${provider.id}`,
-                      webUrl
-                    ).toString()}
+                    href={provider.href}
                     key={provider.id}
                     onClick={handleClose}
                   >
@@ -275,10 +262,7 @@ export const NavbarClient = ({
                 {editors.map((editor) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={new URL(
-                      `/editors/${editor.id}`,
-                      webUrl
-                    ).toString()}
+                    href={editor.href}
                     key={editor.id}
                     onClick={handleClose}
                   >
@@ -303,10 +287,7 @@ export const NavbarClient = ({
                   .map((agent) => (
                     <Link
                       className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                      href={new URL(
-                        `/agents/${agent.id}`,
-                        webUrl
-                      ).toString()}
+                      href={agent.href}
                       key={agent.id}
                       onClick={handleClose}
                     >
