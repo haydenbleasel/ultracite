@@ -24,17 +24,20 @@ interface InstallerProps {
 export const Installer = ({ command, className }: InstallerProps) => {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(command);
-    toast.success("Copied to clipboard", {
-      description: "Paste it into your terminal to install Ultracite.",
-    });
-    setCopied(true);
-
-    track("Copied installer command");
-    setTimeout(() => {
-      setCopied(false);
-    }, COPY_TIMEOUT);
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      toast.success("Copied to clipboard", {
+        description: "Paste it into your terminal to install Ultracite.",
+      });
+      setCopied(true);
+      track("Copied installer command");
+      setTimeout(() => {
+        setCopied(false);
+      }, COPY_TIMEOUT);
+    } catch {
+      toast.error("Failed to copy to clipboard");
+    }
   }, [command]);
 
   const Icon = copied ? CheckIcon : CopyIcon;
