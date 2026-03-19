@@ -2,6 +2,7 @@ import bash from "@shikijs/langs/bash";
 import javascript from "@shikijs/langs/javascript";
 import json from "@shikijs/langs/json";
 import jsonc from "@shikijs/langs/jsonc";
+import markdown from "@shikijs/langs/markdown";
 import tsx from "@shikijs/langs/tsx";
 import typescript from "@shikijs/langs/typescript";
 import yaml from "@shikijs/langs/yaml";
@@ -27,7 +28,7 @@ const getHighlighter = () => {
     highlighterPromise = createHighlighterCore({
       // `shiki/wasm` contains the wasm binary inlined as base64 string.
       engine: createOnigurumaEngine(shikiWasm),
-      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml],
+      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml, markdown],
       themes: [lightTheme, darkTheme],
     });
   }

@@ -3,11 +3,20 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
 import { providers } from "@repo/data/providers";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeBlock } from "@/components/ultracite/code-block/client";
+
+const CodeBlock = dynamic(
+  () =>
+    import("@/components/ultracite/code-block/client").then(
+      (mod) => mod.CodeBlock
+    ),
+  { loading: () => <Skeleton className="h-64 w-full" /> }
+);
 
 import { FrameworkSelector, frameworks } from "./framework-selector";
 import { ProviderSelector } from "./provider-selector";
