@@ -1,5 +1,5 @@
 import { agents } from "@repo/data/agents";
-import { docsUrl, webUrl } from "@repo/data/consts";
+import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import { Suspense } from "react";
@@ -10,7 +10,7 @@ export const Navbar = () => (
   <Suspense>
     <NavbarClient
       agents={agents.map((a) => ({
-        href: new URL(`/agents/${a.id}`, webUrl).toString(),
+        href: `/agents/${a.id}`,
         id: a.id,
         logo: a.logo,
         name: a.name,
@@ -18,14 +18,14 @@ export const Navbar = () => (
       }))}
       docsUrl={docsUrl}
       editors={editors.map((e) => ({
-        href: new URL(`/editors/${e.id}`, webUrl).toString(),
+        href: `/editors/${e.id}`,
         id: e.id,
         logo: e.logo,
         name: e.name,
         subtitle: e.subtitle,
       }))}
       providers={providers.map((p) => ({
-        href: new URL(`/providers/${p.id}`, webUrl).toString(),
+        href: `/providers/${p.id}`,
         id: p.id,
         logo: p.logo,
         name: p.name,
