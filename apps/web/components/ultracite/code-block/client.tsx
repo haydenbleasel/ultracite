@@ -1,20 +1,8 @@
 "use client";
 
-import bash from "@shikijs/langs/bash";
-import javascript from "@shikijs/langs/javascript";
-import json from "@shikijs/langs/json";
-import jsonc from "@shikijs/langs/jsonc";
-import markdown from "@shikijs/langs/markdown";
-import tsx from "@shikijs/langs/tsx";
-import typescript from "@shikijs/langs/typescript";
-import yaml from "@shikijs/langs/yaml";
-import darkTheme from "@shikijs/themes/vitesse-dark";
-import lightTheme from "@shikijs/themes/vitesse-light";
 import { useEffect, useState } from "react";
 import type { BundledLanguage, ThemedToken } from "shiki";
-import { createHighlighterCore } from "shiki/core";
-import { createOnigurumaEngine } from "shiki/engine/oniguruma";
-import shikiWasm from "shiki/wasm";
+import type { createHighlighterCore } from "shiki/core";
 
 import { cn } from "@/lib/utils";
 
@@ -34,12 +22,51 @@ let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
 
 const getHighlighter = () => {
   if (!highlighterPromise) {
-    highlighterPromise = createHighlighterCore({
-      // `shiki/wasm` contains the wasm binary inlined as base64 string.
-      engine: createOnigurumaEngine(shikiWasm),
-      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml, markdown],
-      themes: [lightTheme, darkTheme],
-    });
+    highlighterPromise = Promise.all([
+      import("@shikijs/langs/bash"),
+      import("@shikijs/langs/javascript"),
+      import("@shikijs/langs/json"),
+      import("@shikijs/langs/jsonc"),
+      import("@shikijs/langs/markdown"),
+      import("@shikijs/langs/tsx"),
+      import("@shikijs/langs/typescript"),
+      import("@shikijs/langs/yaml"),
+      import("@shikijs/themes/vitesse-dark"),
+      import("@shikijs/themes/vitesse-light"),
+      import("shiki/core"),
+      import("shiki/engine/oniguruma"),
+      import("shiki/wasm"),
+    ]).then(
+      ([
+        bash,
+        javascript,
+        json,
+        jsonc,
+        markdown,
+        tsx,
+        typescript,
+        yaml,
+        darkTheme,
+        lightTheme,
+        { createHighlighterCore: create },
+        { createOnigurumaEngine },
+        shikiWasm,
+      ]) =>
+        create({
+          engine: createOnigurumaEngine(shikiWasm.default),
+          langs: [
+            bash.default,
+            javascript.default,
+            json.default,
+            jsonc.default,
+            markdown.default,
+            tsx.default,
+            typescript.default,
+            yaml.default,
+          ],
+          themes: [lightTheme.default, darkTheme.default],
+        })
+    );
   }
   return highlighterPromise;
 };
@@ -60,8 +87,8 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
       const tokens = highlighter.codeToTokens(code, {
         lang,
         themes: {
-          dark: darkTheme,
-          light: lightTheme,
+          dark: "vitesse-dark",
+          light: "vitesse-light",
         },
       });
 
