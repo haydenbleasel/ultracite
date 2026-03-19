@@ -48,7 +48,10 @@ export const Agents = () => (
                   "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
                   index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
                 )}
+                height={56}
+                sizes="(max-width: 640px) 40px, 56px"
                 src={agent.logo}
+                width={56}
               />
             </Link>
           </TooltipTrigger>
