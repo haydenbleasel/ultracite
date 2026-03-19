@@ -101,10 +101,10 @@ export const Demo = () => (
     <Image
       alt=""
       className="absolute top-0 left-0 size-full object-cover"
-      height={1000}
+      fill
       priority
+      sizes="100vw"
       src={Background}
-      width={1000}
     />
     <div className="size-full sm:px-16 sm:pt-16">
       <div className="max-h-128 overflow-hidden border border-white/10 bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">
