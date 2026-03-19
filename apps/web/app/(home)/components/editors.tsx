@@ -23,7 +23,7 @@ const featuredEditorIds = [
 
 const featuredEditors = featuredEditorIds
   .map((id) => editors.find((editor) => editor.id === id))
-  .filter(Boolean) as Editor[];
+  .filter((e): e is Editor => Boolean(e));
 
 export const Editors = () => (
   <div className="grid gap-8">

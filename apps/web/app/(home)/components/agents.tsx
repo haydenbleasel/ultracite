@@ -22,7 +22,7 @@ const featuredAgentIds = [
 
 const featuredAgents = featuredAgentIds
   .map((id) => agents.find((agent) => agent.id === id))
-  .filter(Boolean) as Agent[];
+  .filter((a): a is Agent => Boolean(a));
 
 const remainingCount = agents.length - featuredAgents.length;
 
