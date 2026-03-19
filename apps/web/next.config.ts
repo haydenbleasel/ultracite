@@ -7,6 +7,10 @@ const withMDX = createMDX({
 
 const config: NextConfig = {
   experimental: {
+    optimizePackageImports: [
+      "@icons-pack/react-simple-icons",
+      "lucide-react",
+    ],
     turbopackFileSystemCacheForDev: true,
   },
 
