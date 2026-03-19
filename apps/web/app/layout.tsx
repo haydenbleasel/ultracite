@@ -1,5 +1,7 @@
 import "./global.css";
+import { webUrl } from "@repo/data/consts";
 import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 
@@ -9,6 +11,16 @@ import { CallToAction } from "@/components/ultracite/cta";
 import { Footer } from "@/components/ultracite/footer";
 import { Navbar } from "@/components/ultracite/navbar";
 import { fonts } from "@/lib/fonts";
+
+export const metadata: Metadata = {
+  description:
+    "A highly opinionated, zero-configuration preset for ESLint, Biome and Oxlint.",
+  metadataBase: new URL(webUrl),
+  title: {
+    default: "Ultracite",
+    template: "%s | Ultracite",
+  },
+};
 
 interface LayoutProps {
   children: ReactNode;

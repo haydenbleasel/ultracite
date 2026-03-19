@@ -24,7 +24,7 @@ export const generateMetadata = async ({
 
   return {
     description: editor.description,
-    title: `${editor.name} | Ultracite`,
+    title: editor.name,
   };
 };
 

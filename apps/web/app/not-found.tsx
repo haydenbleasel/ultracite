@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Not Found | Ultracite",
+  title: "Not Found",
 };
 
 const NotFound = () => (
