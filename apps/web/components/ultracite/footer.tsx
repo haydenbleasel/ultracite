@@ -53,7 +53,7 @@ export const Footer = () => (
         <a
           className="text-primary underline"
           href="https://x.com/haydenbleasel"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           @haydenbleasel
@@ -62,7 +62,7 @@ export const Footer = () => (
         <a
           className="text-primary underline"
           href="https://github.com/haydenbleasel/ultracite"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           open source
@@ -73,7 +73,7 @@ export const Footer = () => (
         <a
           className="inline-flex items-center gap-1 hover:text-primary"
           href="https://x.com/haydenbleasel"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           target="_blank"
         >
           Follow me on <SiX className="inline-block size-3" />
