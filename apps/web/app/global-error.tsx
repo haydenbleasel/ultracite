@@ -3,10 +3,11 @@
 import { fonts } from "@/lib/fonts";
 
 interface GlobalErrorProps {
+  error: Error & { digest?: string };
   reset: () => void;
 }
 
-const GlobalError = ({ reset }: GlobalErrorProps) => (
+const GlobalError = ({ error, reset }: GlobalErrorProps) => (
   <html lang="en">
     <body className={fonts}>
       <div style={{ padding: "4rem", textAlign: "center" }}>

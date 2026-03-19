@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 
 interface ErrorProps {
+  error: Error & { digest?: string };
   reset: () => void;
 }
 
-const Error = ({ reset }: ErrorProps) => (
+const Error = ({ error, reset }: ErrorProps) => (
   <div className="grid gap-4 py-32 text-center">
     <h1 className="font-semibold text-4xl tracking-tighter">
       Something went wrong
