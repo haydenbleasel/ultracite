@@ -1,12 +1,14 @@
 "use client";
 
+import { fonts } from "@/lib/fonts";
+
 interface GlobalErrorProps {
   reset: () => void;
 }
 
 const GlobalError = ({ reset }: GlobalErrorProps) => (
   <html lang="en">
-    <body>
+    <body className={fonts}>
       <div style={{ padding: "4rem", textAlign: "center" }}>
         <h1>Something went wrong</h1>
         <p>An unexpected error occurred. Please try again.</p>
