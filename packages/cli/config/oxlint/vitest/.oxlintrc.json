@@ -35,6 +35,11 @@
         "vitest/no-test-prefixes": "error",
         "vitest/no-test-return-statement": "error",
         "vitest/prefer-called-with": "error",
+        // Disabled: conflicts with prefer-called-once — both rules enforce opposite styles
+        // prefer-called-times: use toHaveBeenCalledTimes(1) instead of toHaveBeenCalledOnce()
+        // prefer-called-once: use toHaveBeenCalledOnce() instead of toHaveBeenCalledTimes(1)
+        // Consistent with ESLint vitest config (packages/cli/config/eslint/vitest/rules/vitest.mjs)
+        "vitest/prefer-called-times": "off",
         "vitest/prefer-comparison-matcher": "error",
         "vitest/prefer-each": "error",
         "vitest/prefer-equality-matcher": "error",
