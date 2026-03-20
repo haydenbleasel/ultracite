@@ -49,6 +49,8 @@
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
     "no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
+    // Avoid conflict with typescript/no-floating-promises
+    "no-void": ["error", { "allowAsStatement": true }],
 
     "import/no-relative-parent-imports": "off",
     "import/no-default-export": "off",
