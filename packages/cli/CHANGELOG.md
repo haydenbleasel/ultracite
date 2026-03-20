@@ -1,3 +1,10 @@
+## 7.3.3
+
+### Patch Changes
+
+- 04d8455: Add no-void rule with allowAsStatement to complement no-floating-promises
+- fd7d05f: Disable conflicting `vitest/prefer-called-times` oxlint rule to resolve conflict with `vitest/prefer-called-once`
+
 ## 7.3.2
 
 ### Patch Changes
