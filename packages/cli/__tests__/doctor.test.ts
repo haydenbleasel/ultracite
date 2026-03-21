@@ -82,6 +82,43 @@ describe("doctor", () => {
     await expect(doctor()).rejects.toThrow("Doctor checks failed");
   });
 
+  test("retries with .cmd when version command is missing on Windows", async () => {
+    const mockSpawn = mock((command: string) => {
+      if (command === "biome") {
+        return {
+          error: { code: "ENOENT", message: "missing binary" },
+          status: null,
+          stdout: "",
+        };
+      }
+
+      return { status: 0, stdout: "1.0.0" };
+    });
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
+      // noop
+    });
+
+    mock.module("node:child_process", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("node:fs", () => ({
+      existsSync: mock(() => false),
+    }));
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve("{}")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    await doctor();
+
+    expect(mockSpawn).toHaveBeenCalled();
+    expect(mockSpawn.mock.calls.some((call) => call[0] === "biome.cmd")).toBe(
+      true
+    );
+    consoleLogSpy.mockRestore();
+  });
+
   test("warns when conflicting tools are present (prettier and eslint)", async () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
       // noop

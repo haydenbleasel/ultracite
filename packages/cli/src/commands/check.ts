@@ -1,7 +1,26 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 
-import { detectLinter, parseFilePaths, shellOption } from "../utils";
+import { detectLinter, parseFilePaths } from "../utils";
+
+const runCommand = (
+  command: string,
+  args: string[],
+  options: Parameters<typeof spawnSync>[2]
+) => {
+  const result = spawnSync(command, args, options);
+  const isMissingCommand =
+    process.platform === "win32" &&
+    result.error &&
+    "code" in result.error &&
+    result.error.code === "ENOENT";
+
+  if (!isMissingCommand) {
+    return result;
+  }
+
+  return spawnSync(`${command}.cmd`, args, options);
+};
 
 const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--no-errors-on-unmatched", ...passthrough];
@@ -12,8 +31,7 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
     args.push("./");
   }
 
-  const result = spawnSync("biome", args, {
-    shell: shellOption,
+  const result = runCommand("biome", args, {
     stdio: "inherit",
   });
 
@@ -32,8 +50,7 @@ const runEslintCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const result = spawnSync("eslint", args, {
-    shell: shellOption,
+  const result = runCommand("eslint", args, {
     stdio: "inherit",
   });
 
@@ -53,8 +70,7 @@ const runPrettierCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const result = spawnSync("prettier", args, {
-    shell: shellOption,
+  const result = runCommand("prettier", args, {
     stdio: "inherit",
   });
 
@@ -73,8 +89,7 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const result = spawnSync("stylelint", args, {
-    shell: shellOption,
+  const result = runCommand("stylelint", args, {
     stdio: "inherit",
   });
 
@@ -93,8 +108,7 @@ const runOxlintCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const result = spawnSync("oxlint", args, {
-    shell: shellOption,
+  const result = runCommand("oxlint", args, {
     stdio: "inherit",
   });
 
@@ -114,8 +128,7 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? parseFilePaths(files) : ["."]),
   ];
 
-  const result = spawnSync("oxfmt", args, {
-    shell: shellOption,
+  const result = runCommand("oxfmt", args, {
     stdio: "inherit",
   });
 
