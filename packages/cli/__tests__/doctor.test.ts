@@ -6,8 +6,8 @@ import { doctor } from "../src/commands/doctor";
 const getOxlintConfigPath = (name: string) =>
   `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
 
-mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
+mock.module("cross-spawn", () => ({
+  sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
 }));
 
 mock.module("node:fs", () => ({
@@ -30,8 +30,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -65,8 +65,8 @@ describe("doctor", () => {
   });
 
   test("fails when Biome is not installed", async () => {
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 1, stdout: "" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 1, stdout: "" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -87,8 +87,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -125,8 +125,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -163,8 +163,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -188,8 +188,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -219,8 +219,8 @@ describe("doctor", () => {
   });
 
   test("fails when biome config cannot be parsed", async () => {
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -250,8 +250,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -286,8 +286,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -324,8 +324,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -364,8 +364,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -404,8 +404,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -446,8 +446,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -482,8 +482,8 @@ describe("doctor", () => {
   });
 
   test("handles ESLint config read error", async () => {
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -515,8 +515,8 @@ describe("doctor", () => {
   });
 
   test("handles Oxlint config parse error", async () => {
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({
@@ -551,8 +551,8 @@ describe("doctor", () => {
       // noop
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
 
     mock.module("node:fs", () => ({

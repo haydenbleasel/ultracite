@@ -1,7 +1,7 @@
-import { spawnSync } from "node:child_process";
+import { sync as spawnSync } from "cross-spawn";
 import process from "node:process";
 
-import { detectLinter, parseFilePaths, shellOption } from "../utils";
+import { detectLinter, parseFilePaths } from "../utils";
 
 const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--no-errors-on-unmatched", ...passthrough];
@@ -13,7 +13,7 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   }
 
   const result = spawnSync("biome", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 
@@ -33,7 +33,7 @@ const runEslintCheck = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("eslint", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 
@@ -54,7 +54,7 @@ const runPrettierCheck = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("prettier", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 
@@ -74,7 +74,7 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("stylelint", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 
@@ -94,7 +94,7 @@ const runOxlintCheck = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("oxlint", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 
@@ -115,7 +115,7 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
   ];
 
   const result = spawnSync("oxfmt", args, {
-    shell: shellOption,
+    shell: false,
     stdio: "inherit",
   });
 

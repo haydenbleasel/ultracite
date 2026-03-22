@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { sync as spawnSync } from "cross-spawn";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -8,7 +8,6 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
-import { shellOption } from "../utils";
 
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
@@ -50,7 +49,7 @@ interface DiagnosticCheck {
 const checkBiomeInstallation = (): DiagnosticCheck => {
   const biomeCheck = spawnSync("biome", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
+    shell: false,
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -72,7 +71,7 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 const checkEslintInstallation = (): DiagnosticCheck => {
   const eslintCheck = spawnSync("eslint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
+    shell: false,
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -94,7 +93,7 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 const checkOxlintInstallation = (): DiagnosticCheck => {
   const oxlintCheck = spawnSync("oxlint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
+    shell: false,
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {

@@ -10,8 +10,8 @@ describe("check", () => {
 
   test("runs biome check with default options", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -30,8 +30,8 @@ describe("check", () => {
 
   test("runs biome check with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -48,8 +48,8 @@ describe("check", () => {
 
   test("passes through unknown options to biome", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -66,8 +66,8 @@ describe("check", () => {
 
   test("handles files with special characters", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -78,15 +78,15 @@ describe("check", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
-    expect(callArgs[1]).toContain("'src/my file.ts' ");
+    expect(callArgs[1]).toContain("src/my file.ts");
   });
 
   test("exits with status code when biome check finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     const mockExit = mock(() => {});
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -104,8 +104,8 @@ describe("check", () => {
       status: null,
     }));
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
@@ -117,8 +117,8 @@ describe("check", () => {
 
   test("throws when no linter configuration found", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve(null)),
@@ -130,8 +130,8 @@ describe("check", () => {
 
   test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -150,8 +150,8 @@ describe("check", () => {
 
   test("runs eslint check with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -171,8 +171,8 @@ describe("check", () => {
       status: null,
     }));
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -198,8 +198,8 @@ describe("check", () => {
       };
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -225,8 +225,8 @@ describe("check", () => {
       };
     });
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -240,8 +240,8 @@ describe("check", () => {
 
   test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -259,8 +259,8 @@ describe("check", () => {
 
   test("runs oxlint check with specific files", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -280,8 +280,8 @@ describe("check", () => {
       status: null,
     }));
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -297,8 +297,8 @@ describe("check", () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     const mockExit = mock(() => {});
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
@@ -314,8 +314,8 @@ describe("check", () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     const mockExit = mock(() => {});
 
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -329,8 +329,8 @@ describe("check", () => {
 
   test("passes through --type-aware flag to oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -346,8 +346,8 @@ describe("check", () => {
 
   test("passes through --type-check flag to oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -363,8 +363,8 @@ describe("check", () => {
 
   test("passes through multiple flags to oxlint", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -381,8 +381,8 @@ describe("check", () => {
 
   test("does not include flags when passthrough is empty", async () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("node:child_process", () => ({
-      spawnSync: mockSpawn,
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
@@ -395,5 +395,21 @@ describe("check", () => {
     const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).not.toContain("--type-aware");
     expect(oxlintCall[1]).not.toContain("--type-check");
+  });
+
+  test("never uses shell: true (guards against DEP0190 regression)", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => Promise.resolve("biome")),
+      parseFilePaths,
+    }));
+
+    await check();
+
+    const [, , options] = mockSpawn.mock.calls[0];
+    expect(options.shell).toBe(false);
   });
 });
