@@ -1,7 +1,7 @@
 "use client";
 
 import { agents } from "@repo/data/agents";
-import { docsUrl, webUrl } from "@repo/data/consts";
+import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import { MenuIcon } from "lucide-react";
@@ -32,7 +32,7 @@ import { Logo } from "./logo";
 
 const links = [
   {
-    href: new URL("/social", webUrl).toString(),
+    href: "/social",
     isActive: (path: string) => path.startsWith("/social"),
     label: "Social",
   },
@@ -70,10 +70,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/providers/${provider.id}`,
-                            webUrl
-                          ).toString()}
+                          href={`/providers/${provider.id}`}
                         >
                           <Image
                             alt={provider.name}
@@ -110,10 +107,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/editors/${editor.id}`,
-                            webUrl
-                          ).toString()}
+                          href={`/editors/${editor.id}`}
                         >
                           <Image
                             alt={editor.name}
@@ -153,10 +147,7 @@ export const Navbar = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex items-center gap-3"
-                          href={new URL(
-                            `/agents/${agent.id}`,
-                            webUrl
-                          ).toString()}
+                          href={`/agents/${agent.id}`}
                         >
                           <Image
                             alt={agent.name}
@@ -230,10 +221,7 @@ export const Navbar = () => {
                 {providers.map((provider) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={new URL(
-                      `/providers/${provider.id}`,
-                      webUrl
-                    ).toString()}
+                    href={`/providers/${provider.id}`}
                     key={provider.id}
                     onClick={handleClose}
                   >
@@ -256,7 +244,7 @@ export const Navbar = () => {
                 {editors.map((editor) => (
                   <Link
                     className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                    href={new URL(`/editors/${editor.id}`, webUrl).toString()}
+                    href={`/editors/${editor.id}`}
                     key={editor.id}
                     onClick={handleClose}
                   >
@@ -281,7 +269,7 @@ export const Navbar = () => {
                   .map((agent) => (
                     <Link
                       className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                      href={new URL(`/agents/${agent.id}`, webUrl).toString()}
+                      href={`/agents/${agent.id}`}
                       key={agent.id}
                       onClick={handleClose}
                     >
