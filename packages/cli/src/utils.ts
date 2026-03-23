@@ -90,11 +90,20 @@ const SINGLE_QUOTE_PATTERN = /'/g;
 
 // Parse and escape file paths to handle special characters
 export const parseFilePaths = (files: string[]): string[] =>
+  // When `shell` is false, Node passes args directly to the subprocess.
+  // In that mode, adding shell quotes makes the quotes part of the literal
+  // filename, which breaks valid paths like Next.js route groups `(app)`.
+  //
+  // Keep the existing quoting behavior only for Windows, where we enable
+  // `shell: true` to resolve `.cmd` binaries.
+  !shellOption
+    ? files
+    :
   files.map((file) => {
     // Check if the path needs escaping (contains special shell characters)
     if (SPECIAL_CHARS_PATTERN.test(file)) {
       // Escape single quotes by replacing ' with '\'' and wrap in single quotes
-      return `'${file.replace(SINGLE_QUOTE_PATTERN, "'\\''")}' `;
+      return `'${file.replace(SINGLE_QUOTE_PATTERN, "'\\''")}'`;
     }
     return file;
   });

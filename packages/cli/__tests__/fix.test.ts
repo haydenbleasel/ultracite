@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 
 import { fix } from "../src/commands/fix";
-import { parseFilePaths } from "../src/utils";
+import { parseFilePaths, shellOption } from "../src/utils";
 
 describe("fix", () => {
   afterEach(() => {
@@ -95,7 +95,9 @@ describe("fix", () => {
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
-    expect(callArgs[1]).toContain("'src/my file.ts' ");
+    expect(callArgs[1]).toContain(
+      shellOption ? "'src/my file.ts'" : "src/my file.ts"
+    );
   });
 
   test("exits with status code when biome fix finds errors", async () => {

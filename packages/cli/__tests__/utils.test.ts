@@ -4,6 +4,7 @@ import {
   exists,
   isMonorepo,
   parseFilePaths,
+  shellOption,
   updatePackageJson,
 } from "../src/utils";
 
@@ -194,33 +195,43 @@ describe("parseFilePaths", () => {
   test("wraps files with spaces in quotes", () => {
     const files = ["src/my file.ts", "test file.js"];
     const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/my file.ts' ", "'test file.js' "]);
+    expect(result).toEqual(
+      shellOption ? ["'src/my file.ts'", "'test file.js'"] : files
+    );
   });
 
   test("escapes single quotes in file paths", () => {
     const files = ["src/user's file.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/user'\\''s file.ts' "]);
+    expect(result).toEqual(
+      shellOption ? ["'src/user'\\''s file.ts'"] : files
+    );
   });
 
   test("wraps files with special characters in quotes", () => {
     const files = ["src/file(1).ts", "test[2].js", "file&test.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "'src/file(1).ts' ",
-      "'test[2].js' ",
-      "'file&test.ts' ",
-    ]);
+    expect(result).toEqual(
+      shellOption
+        ? ["'src/file(1).ts'", "'test[2].js'", "'file&test.ts'"]
+        : files
+    );
+  });
+
+  test("preserves Next.js route group paths when shell quoting is disabled", () => {
+    const files = ["src/app/(app)/dashboard/page.tsx"];
+    const result = parseFilePaths(files);
+    expect(result).toEqual(
+      shellOption ? ["'src/app/(app)/dashboard/page.tsx'"] : files
+    );
   });
 
   test("handles mixed file paths", () => {
     const files = ["normal.ts", "with space.js", "user's.ts"];
     const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "normal.ts",
-      "'with space.js' ",
-      "'user'\\''s.ts' ",
-    ]);
+    expect(result).toEqual(
+      shellOption ? ["normal.ts", "'with space.js'", "'user'\\''s.ts'"] : files
+    );
   });
 });
 
