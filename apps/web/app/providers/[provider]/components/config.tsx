@@ -3,7 +3,7 @@ import type { ConfigFile, Provider } from "@repo/data/providers";
 import type { BundledLanguage } from "shiki";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeBlock } from "@/components/ultracite/code-block/server";
+import { CodeBlock } from "@/components/ultracite/code-block/client";
 
 interface ConfigProps {
   provider: Provider;

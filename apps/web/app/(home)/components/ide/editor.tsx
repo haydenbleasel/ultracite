@@ -1,4 +1,4 @@
-import { CodeBlock } from "@/components/ultracite/code-block/server";
+import { CodeBlock } from "@/components/ultracite/code-block/client";
 
 const mockCode = `import React from 'react';
 

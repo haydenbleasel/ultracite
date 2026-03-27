@@ -11,6 +11,11 @@ const config: NextConfig = {
       {
         destination: "/",
         permanent: true,
+        source: "/cloud",
+      },
+      {
+        destination: "/",
+        permanent: true,
         source: "/social",
       },
     ];
