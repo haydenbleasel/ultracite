@@ -6,6 +6,16 @@ const withMDX = createMDX({
 });
 
 const config: NextConfig = {
+  async redirects() {
+    return [
+      {
+        destination: "/",
+        permanent: true,
+        source: "/social",
+      },
+    ];
+  },
+
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },

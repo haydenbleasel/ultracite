@@ -26,17 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-
 import { Logo } from "./logo";
-
-const links = [
-  {
-    href: "/social",
-    isActive: (path: string) => path.startsWith("/social"),
-    label: "Social",
-  },
-];
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -168,17 +158,6 @@ export const Navbar = () => {
         </NavigationMenu>
       </div>
       <div className="flex items-center gap-2">
-        <div className="hidden items-center gap-px lg:flex">
-          {links.map((link) => (
-            <Button
-              asChild
-              key={link.href}
-              variant={link.isActive(pathname) ? "secondary" : "ghost"}
-            >
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
-        </div>
         <Button asChild>
           <Link href={docsUrl}>Read the docs</Link>
         </Button>
@@ -198,22 +177,6 @@ export const Navbar = () => {
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-6 px-4 pb-4">
-              <div className="flex flex-col gap-2">
-                {links.map((link) => (
-                  <Link
-                    className={cn(
-                      "rounded-md px-3 py-2 font-medium text-sm",
-                      pathname === link.href ? "bg-muted" : "hover:bg-muted/50"
-                    )}
-                    href={link.href}
-                    key={link.href}
-                    onClick={handleClose}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-
               <div className="flex flex-col gap-2">
                 <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                   Providers

@@ -35,10 +35,6 @@ const generalLinks = [
     href: docsUrl,
     label: "Docs",
   },
-  {
-    href: "/social",
-    label: "Social",
-  },
 ];
 
 export const Footer = () => {

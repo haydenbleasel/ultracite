@@ -1,6 +1,3 @@
-import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
 import { Tweets } from "@/components/ultracite/tweets";
 
 export const Social = () => (
@@ -22,8 +19,5 @@ export const Social = () => (
         "1969727618237820980",
       ]}
     />
-    <Button asChild variant="link">
-      <Link href="/social">See all tweets</Link>
-    </Button>
   </div>
 );
