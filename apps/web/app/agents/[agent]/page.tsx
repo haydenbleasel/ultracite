@@ -2,8 +2,13 @@ import { agents } from "@repo/data/agents";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
+import {
+  createBreadcrumbStructuredData,
+  createPageMetadata,
+} from "@/lib/site-metadata";
 
 import { Benefits } from "./components/benefits";
 import { Files } from "./components/files";
@@ -22,10 +27,11 @@ export const generateMetadata = async ({
     return {};
   }
 
-  return {
-    description: agent.description,
-    title: `${agent.name} | Ultracite`,
-  };
+  return createPageMetadata({
+    description: `Set up Ultracite for ${agent.name}. ${agent.description}`,
+    path: `/agents/${agent.id}`,
+    title: `Ultracite for ${agent.name}`,
+  });
 };
 
 const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
@@ -37,13 +43,21 @@ const AgentPage = async ({ params }: PageProps<"/agents/[agent]">) => {
   }
 
   return (
-    <div className="grid gap-16 sm:gap-24 md:gap-32">
-      <AgentHero agent={agent} />
-      <Files agent={agent} />
-      <Benefits agent={agent} />
-      <Logos />
-      <Social />
-    </div>
+    <>
+      <JsonLd
+        data={createBreadcrumbStructuredData([
+          { name: "Home", path: "/" },
+          { name: agent.name, path: `/agents/${agent.id}` },
+        ])}
+      />
+      <div className="grid gap-16 sm:gap-24 md:gap-32">
+        <AgentHero agent={agent} />
+        <Files agent={agent} />
+        <Benefits agent={agent} />
+        <Logos />
+        <Social />
+      </div>
+    </>
   );
 };
 

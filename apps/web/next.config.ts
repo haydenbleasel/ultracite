@@ -5,9 +5,25 @@ const withMDX = createMDX({
   // Add markdown plugins here, as desired
 });
 
+const productionHost =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.ultracite.ai";
+const canonicalHost =
+  productionHost === "ultracite.ai" ? "www.ultracite.ai" : productionHost;
+
 const config: NextConfig = {
   async redirects() {
     return [
+      {
+        destination: `https://${canonicalHost}/:path*`,
+        has: [
+          {
+            type: "host",
+            value: "ultracite.ai",
+          },
+        ],
+        permanent: true,
+        source: "/:path*",
+      },
       {
         destination: "/",
         permanent: true,

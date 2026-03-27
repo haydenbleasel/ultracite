@@ -2,8 +2,13 @@ import { providers } from "@repo/data/providers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
+import {
+  createBreadcrumbStructuredData,
+  createPageMetadata,
+} from "@/lib/site-metadata";
 
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
@@ -27,10 +32,11 @@ export const generateMetadata = async ({
     return {};
   }
 
-  return {
-    description: provider.description,
-    title: `${provider.name} | Ultracite`,
-  };
+  return createPageMetadata({
+    description: `Use Ultracite with ${provider.name}. ${provider.description}`,
+    path: `/providers/${provider.id}`,
+    title: `Ultracite with ${provider.name}`,
+  });
 };
 
 const ProviderPage = async ({ params }: ProviderPageProps) => {
@@ -42,14 +48,22 @@ const ProviderPage = async ({ params }: ProviderPageProps) => {
   }
 
   return (
-    <div className="grid gap-16 sm:gap-24 md:gap-32">
-      <ProviderHero provider={provider} />
-      <Config provider={provider} />
-      <Benefits provider={provider} />
-      {provider.videos && <Videos data={provider.videos} />}
-      <Logos />
-      <Social />
-    </div>
+    <>
+      <JsonLd
+        data={createBreadcrumbStructuredData([
+          { name: "Home", path: "/" },
+          { name: provider.name, path: `/providers/${provider.id}` },
+        ])}
+      />
+      <div className="grid gap-16 sm:gap-24 md:gap-32">
+        <ProviderHero provider={provider} />
+        <Config provider={provider} />
+        <Benefits provider={provider} />
+        {provider.videos && <Videos data={provider.videos} />}
+        <Logos />
+        <Social />
+      </div>
+    </>
   );
 };
 

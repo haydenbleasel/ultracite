@@ -3,48 +3,48 @@ import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://ultracite.ai";
+import { createAbsoluteUrl } from "@/lib/site-metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       changeFrequency: "weekly",
       priority: 1,
-      url: siteUrl,
+      url: createAbsoluteUrl("/"),
     },
     {
       changeFrequency: "monthly",
       priority: 0.4,
-      url: `${siteUrl}/acceptable-use`,
+      url: createAbsoluteUrl("/acceptable-use"),
     },
     {
       changeFrequency: "monthly",
       priority: 0.4,
-      url: `${siteUrl}/privacy`,
+      url: createAbsoluteUrl("/privacy"),
     },
     {
       changeFrequency: "monthly",
       priority: 0.4,
-      url: `${siteUrl}/terms`,
+      url: createAbsoluteUrl("/terms"),
     },
   ];
 
   const agentRoutes: MetadataRoute.Sitemap = agents.map((agent) => ({
     changeFrequency: "weekly",
     priority: 0.8,
-    url: `${siteUrl}/agents/${agent.id}`,
+    url: createAbsoluteUrl(`/agents/${agent.id}`),
   }));
 
   const editorRoutes: MetadataRoute.Sitemap = editors.map((editor) => ({
     changeFrequency: "weekly",
     priority: 0.8,
-    url: `${siteUrl}/editors/${editor.id}`,
+    url: createAbsoluteUrl(`/editors/${editor.id}`),
   }));
 
   const providerRoutes: MetadataRoute.Sitemap = providers.map((provider) => ({
     changeFrequency: "weekly",
     priority: 0.8,
-    url: `${siteUrl}/providers/${provider.id}`,
+    url: createAbsoluteUrl(`/providers/${provider.id}`),
   }));
 
   return [...staticRoutes, ...agentRoutes, ...editorRoutes, ...providerRoutes];

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://ultracite.ai";
+import { createAbsoluteUrl, siteUrl } from "@/lib/site-metadata";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,10 +8,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         allow: "/",
-        disallow: ["/api/", "/.well-known/"],
+        disallow: "/api/",
         userAgent: "*",
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: createAbsoluteUrl("/sitemap.xml"),
   };
 }
