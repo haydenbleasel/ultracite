@@ -20,11 +20,13 @@ interface LayoutProps {
 
 export const metadata: Metadata = rootMetadata;
 
-const navbarAgents = agents.map(({ id, logo, name }) => ({
-  id,
-  logo,
-  name,
-}));
+const navbarAgents = agents
+  .toSorted((a, b) => a.name.localeCompare(b.name))
+  .map(({ id, logo, name }) => ({
+    id,
+    logo,
+    name,
+  }));
 
 const footerAgents = agents.map(({ id, name }) => ({
   id,

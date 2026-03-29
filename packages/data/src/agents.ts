@@ -7,6 +7,7 @@ import ampLogo from "../logos/amp.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
+import coderLogo from "../logos/coder.svg";
 import codexLogo from "../logos/codex.svg";
 import continueLogo from "../logos/continue.svg";
 import copilotLogo from "../logos/copilot.svg";
@@ -22,12 +23,10 @@ import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
 import kimiLogo from "../logos/kimi.svg";
-import kodeLogo from "../logos/kode.svg";
 import langchainLogo from "../logos/langchain.svg";
 import lovableLogo from "../logos/lovable.svg";
 import mcpjamLogo from "../logos/mcpjam.svg";
 import mistralLogo from "../logos/mistral.svg";
-import muxLogo from "../logos/mux.svg";
 import onaLogo from "../logos/ona.svg";
 import openHandsLogo from "../logos/open-hands.svg";
 import openclawLogo from "../logos/openclaw.svg";
@@ -937,57 +936,6 @@ export const agents: Agent[] = [
     subtitle: "Kimi's coding CLI",
   },
   {
-    category: "terminal-agent",
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
-    content: {
-      differentiators: [
-        differentiator(
-          "Open terminal workflow",
-          "Kode runs close to the shell, so a committed repo contract helps open agent sessions stay aligned with team expectations.",
-          "Terminal"
-        ),
-        differentiator(
-          "Simple AGENTS.md adoption",
-          "Using `AGENTS.md` keeps Kode easy to set up in repositories where you want transparent, reviewable guidance.",
-          "Layers"
-        ),
-        differentiator(
-          "Great for OSS experiments",
-          "Committed repo instructions make Kode more predictable when contributors test it across different environments or prompts.",
-          "ShieldCheck"
-        ),
-      ],
-      intro:
-        "Use Ultracite with Kode when you want an open terminal agent to follow explicit repo guidance instead of relying on repeated prompt setup. It is a good fit for experimental and open-source-heavy coding workflows.",
-      metaDescription:
-        "Add Ultracite to Kode through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
-      useCases: [
-        agentUseCase(
-          "Open-source coding experiments",
-          "Keep Kode grounded while you test it in real repositories without hidden local setup."
-        ),
-        agentUseCase(
-          "Terminal-driven implementation",
-          "Use one committed repo contract so Kode stays aligned during shell-based development sessions."
-        ),
-        agentUseCase(
-          "Cross-environment consistency",
-          "Reuse AGENTS.md across machines and contributors so Kode behaves more predictably."
-        ),
-      ],
-    },
-    description:
-      "ShareAI Lab's terminal agent for open coding workflows and repo-aware edits.",
-    id: "kode",
-    logo: kodeLogo,
-    logoFile: "kode.svg",
-    name: "Kode",
-    subtitle: "ShareAI Lab's agent",
-  },
-  {
     category: "cloud-agent",
     config: {
       appendMode: true,
@@ -1084,8 +1032,8 @@ export const agents: Agent[] = [
     description:
       "Coder's background agent system for cloud-executed engineering tasks across workspaces.",
     id: "mux",
-    logo: muxLogo,
-    logoFile: "mux.svg",
+    logo: coderLogo,
+    logoFile: "coder.svg",
     name: "Mux",
     subtitle: "Coder's background agents",
   },

@@ -207,14 +207,6 @@ mock.module("@repo/data/agents", () => ({
     },
     {
       config: { appendMode: true, path: "AGENTS.md" },
-      description: "ShareAI Lab's terminal agent",
-      id: "kode",
-      logo: mockSvg,
-      name: "Kode",
-      subtitle: "ShareAI Lab's agent",
-    },
-    {
-      config: { appendMode: true, path: "AGENTS.md" },
       description: "MCPJam's cloud agent workflow",
       id: "mcpjam",
       logo: mockSvg,
