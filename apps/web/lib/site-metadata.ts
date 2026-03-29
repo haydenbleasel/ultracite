@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const siteName = "Ultracite";
 export const siteDescription =
-  "Ultracite is a highly opinionated preset for ESLint, Biome and Oxlint; designed to help you and your AI models write consistent and type-safe code without the hassle of configuration.";
+  "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps teams and AI write consistent, type-safe code.";
 
 const ogImagePath = "/opengraph-image.png";
 const twitterHandle = "@haydenbleasel";

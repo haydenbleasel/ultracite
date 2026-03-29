@@ -82,7 +82,7 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       "Ultracite keeps the fast formatter-and-linter workflow that made you choose Biome in the first place, then adds a stronger default baseline for editor setup, team consistency, and repeatable project bootstrapping.",
     heroTitle: "Standardize your Biome workflow with Ultracite",
     metadataDescription:
-      "Migrate from standalone Biome to Ultracite while keeping the single-binary workflow. Learn what Ultracite adds on top of Biome, how the config changes, and when Biome is still the right fit.",
+      "Use Ultracite with Biome when you want a single-binary formatter and linter plus stronger shared defaults for editor setup and repo consistency.",
     metadataTitle: "Migrate from Biome to Ultracite",
     resources: [
       {
@@ -177,7 +177,7 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       "Ultracite preserves the mature ESLint, Prettier, and Stylelint workflow while packaging the defaults, plugin choices, and editor expectations that usually get copied from repo to repo by hand.",
     heroTitle: "Stay on ESLint, Prettier, and Stylelint with less setup burden",
     metadataDescription:
-      "Use Ultracite with ESLint, Prettier, and Stylelint when you want the mature ecosystem without the usual config sprawl. Learn what changes, what stays the same, and when ESLint is the right fit.",
+      "Use Ultracite with ESLint, Prettier, and Stylelint when you need mature plugin coverage with less config churn across repos.",
     metadataTitle: "Use Ultracite with ESLint, Prettier, and Stylelint",
     resources: [
       {
@@ -269,7 +269,7 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       "Ultracite keeps the Oxlint and Oxfmt stack your team already chose, then adds a reusable baseline for presets, editor defaults, and staged rollout so speed-first teams do not reinvent the setup in every repository.",
     heroTitle: "Standardize your Oxlint workflow with Ultracite",
     metadataDescription:
-      "Use Ultracite on top of Oxlint and Oxfmt when your team already chose the speed-first stack. Learn what Ultracite adds, how rollout works, and where Oxlint still differs from Biome and ESLint.",
+      "Use Ultracite with Oxlint and Oxfmt when your team wants speed-first linting plus shared presets, editor defaults, and a smoother rollout.",
     metadataTitle: "Use Ultracite with Oxlint and Oxfmt",
     resources: [
       {

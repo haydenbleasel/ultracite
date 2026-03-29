@@ -4,7 +4,7 @@ import Contents from "./contents.mdx";
 
 export const metadata = createPageMetadata({
   description:
-    "Your privacy is important to us. It is Ultracite's policy to respect your privacy and comply with any applicable law and regulation regarding any personal information we may collect about you, including across our website and other sites we own and operate.",
+    "Read how Ultracite collects, uses, and protects personal information across the website and any related services you use.",
   path: "/privacy",
   title: "Privacy Policy",
 });

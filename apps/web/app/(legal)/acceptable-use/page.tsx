@@ -4,7 +4,7 @@ import Contents from "./contents.mdx";
 
 export const metadata = createPageMetadata({
   description:
-    'This acceptable use policy covers the products, services, and technologies (collectively referred to as the "Products") provided by Ultracite under any ongoing agreement.',
+    "Review the rules for acceptable use of Ultracite's products, services, and related technologies under your agreement with us.",
   path: "/acceptable-use",
   title: "Acceptable Use Policy",
 });

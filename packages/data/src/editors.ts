@@ -473,7 +473,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for Cursor with Visual Studio Code settings, a `.cursor/rules/ultracite.mdc` file, and optional `.cursor/hooks.json` automation after AI edits.",
+        "Configure Ultracite for Cursor with shared VS Code settings, a `.cursor/rules/ultracite.mdc` file, and optional post-edit hooks.",
       summary:
         "Cursor works best with Ultracite when you combine committed workspace settings, a dedicated Cursor rules file, and optional post-edit hooks that run after AI-driven changes land in your repo.",
     },
@@ -545,7 +545,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Set up Ultracite for Windsurf with `.vscode/settings.json`, a `.windsurf/rules/ultracite.md` guidance file, and optional `.windsurf/hooks.json` post-write automation.",
+        "Set up Ultracite for Windsurf with shared VS Code settings, a `.windsurf/rules/ultracite.md` file, and optional post-write hooks.",
       summary:
         "Use Ultracite with Windsurf to pair standard VS Code workspace settings with Windsurf-specific rules and optional hooks that tidy AI-generated edits after every write.",
     },
@@ -611,7 +611,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for CodeBuddy with shared `.vscode/settings.json` defaults and a `CODEBUDDY.md` memory file so AI-generated code follows your repo standards.",
+        "Configure Ultracite for CodeBuddy with shared VS Code settings and a `CODEBUDDY.md` memory file so AI edits follow repo standards.",
       summary:
         "CodeBuddy works best with Ultracite when you combine committed workspace settings with a branded project memory file that teaches the AI how your repo expects code to be written.",
     },
@@ -673,7 +673,7 @@ alwaysApply: false
     name: "Antigravity",
     seo: {
       metaDescription:
-        "Configure Ultracite for Antigravity with a shared `.vscode/settings.json` so format on save, auto-fixes, and TypeScript defaults stay consistent across AI-assisted workflows.",
+        "Configure Ultracite for Antigravity with shared VS Code settings so format on save, auto-fixes, and repo defaults stay aligned.",
       summary:
         "Antigravity can plug into the same Ultracite-managed Visual Studio Code settings file, making it easy to evaluate Google's AI IDE without inventing a second configuration story for your team.",
     },
@@ -803,7 +803,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for Trae with shared `.vscode/settings.json` defaults and a `.trae/rules/project_rules.md` file to guide AI-generated code before it reaches review.",
+        "Configure Ultracite for Trae with shared VS Code settings and a `.trae/rules/project_rules.md` file for AI-generated code.",
       summary:
         "Trae works well with Ultracite when you keep the standard VS Code workspace settings in place and add a dedicated project rules file that teaches the AI how your repo expects code to look.",
     },
@@ -865,7 +865,7 @@ alwaysApply: false
     name: "Void",
     seo: {
       metaDescription:
-        "Use Ultracite with Void through a shared `.vscode/settings.json` so format on save, auto-fixes, and TypeScript defaults stay consistent in an open-source AI editor.",
+        "Use Ultracite with Void through shared VS Code settings so format on save, auto-fixes, and repo defaults stay consistent.",
       summary:
         "Void fits Ultracite well if you want an open-source AI editor that still uses the familiar VS Code workspace settings model for formatting, lint fixes, and consistent team defaults.",
     },
@@ -929,7 +929,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for Zed with native `.zed/settings.json` defaults and an appendable `.rules` file so high-performance editing still follows consistent repo standards.",
+        "Configure Ultracite for Zed with native `.zed/settings.json` defaults and an appendable `.rules` file for shared repo standards.",
       summary:
         "Zed uses a native Ultracite setup with `.zed/settings.json` for editor behavior and an appendable `.rules` file for repo guidance, making it a strong fit for teams that want speed without config drift.",
     },
