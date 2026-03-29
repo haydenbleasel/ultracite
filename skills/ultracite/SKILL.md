@@ -78,17 +78,17 @@ When writing code in a project with Ultracite, follow these standards. For the f
 
 Key rules at a glance:
 
-**Formatting:** 2-space indent, semicolons, double quotes, 80-char width, ES5 trailing commas, LF line endings.
+Formatting is handled by the project's configured linter/formatter. Respect the repository's existing formatter settings instead of forcing one fixed line width, quote style, or trailing comma policy.
 
-**Style:** Arrow functions preferred. `const` by default, never `var`. `for...of` over `.forEach()`. Template literals over concatenation. No enums (use objects with `as const`). No nested ternaries. Kebab-case filenames.
+**Type safety:** Use explicit types when they improve clarity. Prefer `unknown` over `any`. Use `as const` for immutable values and rely on type narrowing over blunt assertions.
 
-**Correctness:** No unused imports/variables. No `any` (use `unknown`). Always `await` promises in async functions. No `console.log`/`debugger`/`alert` in production.
+**Modern JavaScript/TypeScript:** Prefer `const`, destructuring, optional chaining, nullish coalescing, template literals, `for...of`, and concise arrow functions.
 
-**React:** Function components only. Hooks at top level. Exhaustive deps. `key` on iterables (no array index). No nested component definitions. Semantic HTML + ARIA.
+**Async and correctness:** Always `await` promises in async functions. Prefer `async/await` over promise chains. Remove `console.log`, `debugger`, and `alert` from production code.
 
-**Performance:** No accumulating spread in loops. No barrel files. No namespace imports. Top-level regex.
+**React and accessibility:** Use function components, keep hooks top-level with correct deps, avoid nested component definitions, and use semantic HTML with the right labels, headings, alt text, and keyboard affordances.
 
-**Security:** `rel="noopener"` on `target="_blank"`. No `dangerouslySetInnerHTML`. No `eval()`.
+**Organization, security, performance, and testing:** Keep functions focused, prefer early returns, avoid `dangerouslySetInnerHTML` and `eval()`, prefer specific imports and top-level regex, and keep tests free of `.only` and `.skip`.
 
 ## Troubleshooting
 

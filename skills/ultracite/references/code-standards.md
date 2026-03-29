@@ -1,5 +1,7 @@
 # Ultracite Code Standards
 
+Formatting is intentionally handled by your project's configured linter or formatter. Respect the repository's existing quote, width, semicolon, trailing comma, and line ending settings instead of forcing one global formatting style.
+
 ## Core Principles
 
 Write code that is **accessible, performant, type-safe, and maintainable**. Focus on clarity and explicit intent over brevity.
@@ -52,7 +54,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ## Code Organization
 
-- Keep functions focused and under reasonable cognitive complexity limits (max 20)
+- Keep functions focused and under reasonable cognitive complexity limits
 - Extract complex conditions into well-named boolean variables
 - Use early returns to reduce nesting
 - Prefer simple conditionals over nested ternary operators
@@ -73,30 +75,9 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Avoid barrel files (index files that re-export everything)
 - Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags
 
-## Formatting
-
-- 2-space indentation
-- LF line endings
-- 80-character line width
-- Semicolons always
-- Double quotes (single quotes in JSX)
-- ES5 trailing commas
-- Arrow parentheses always
-- Bracket spacing enabled
-
-## Style Rules
-
-- No enums — use objects with `as const`
-- No nested ternary operators
-- No non-null assertions (`!`)
-- Kebab-case filenames enforced
-- `useImportType` for type-only imports
-- Readonly class properties by default
-- Sorted imports, JSX attributes, interface members, and object properties
-
 ## Framework-Specific
 
-**Next.js:** Use `<Image>` component for images. Use App Router metadata API for head elements. Use Server Components for async data fetching.
+**Next.js:** Use `<Image>` component for images. Use `next/head` or the App Router metadata API for head elements. Use Server Components for async data fetching instead of async Client Components.
 
 **React 19+:** Use ref as a prop instead of `React.forwardRef`.
 
@@ -109,12 +90,13 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Don't use `.only` or `.skip` in committed code
 - Keep test suites reasonably flat — avoid excessive `describe` nesting
 
-## Overrides
+## When Your Linter Can't Help
 
-Ultracite relaxes rules in specific contexts:
+Your configured linter or formatter will catch most mechanical issues automatically. Focus your attention on:
 
-- **Config files** (`*.config.{js,ts,...}`): Relaxed export and complexity rules
-- **Test files** (`*.test.*`, `__tests__/**`): No cognitive complexity limit, `console` and `any` allowed
-- **Scripts/bin files**: `console` and `process.env` allowed
-- **Storybook files**: Unused variable/import rules relaxed
-- **Build output** (`dist/`, `.next/`, `node_modules/`): Formatter and linter disabled entirely
+1. Business logic correctness
+2. Meaningful naming
+3. Architecture decisions
+4. Edge cases
+5. User experience
+6. Documentation for genuinely complex logic

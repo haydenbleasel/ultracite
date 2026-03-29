@@ -7,6 +7,8 @@ Ultracite provides seamless integration with AI coding assistants by automatical
 
 The editor rules work alongside your linter's formatting and linting. While your linter handles code formatting and catches errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
 
+The generated rules intentionally focus on code quality and implementation guidance instead of hardcoding formatter-specific settings like line width, quote style, or trailing commas. That keeps the rules portable across repositories while still letting each project's configured formatter stay in charge.
+
 This dual approach ensures both automated code quality (through linting) and intelligent code generation (through AI coding rules).
 
 ## Setup
@@ -32,6 +34,10 @@ If you want to manually set things up, create the relevant file in your project 
 ## Supported Agents
 
 Ultracite supports a wide range of AI coding assistants. Check the **Agents** section in the navigation bar for the full list of supported agents, including setup instructions and configuration details for each one.
+
+## Reusable Skills
+
+If your AI tool supports installable reusable skills, see the [Agent Skills](/skills) guide. The global Ultracite skill gives you the same baseline guidance across repositories while leaving formatting decisions to each repo's configured linter and formatter.
 
 ## Benefits
 
