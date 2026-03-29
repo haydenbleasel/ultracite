@@ -4,12 +4,14 @@ import Image from "next/image";
 
 import { Installer } from "@/components/ultracite/installer";
 import { Logo } from "@/components/ultracite/logo";
+import type { ProviderPageContent } from "@/lib/provider-content";
 
 interface ProviderHeroProps {
+  content: ProviderPageContent;
   provider: Provider;
 }
 
-export const ProviderHero = ({ provider }: ProviderHeroProps) => (
+export const ProviderHero = ({ provider, content }: ProviderHeroProps) => (
   <div className="grid gap-8">
     <div className="flex items-center gap-2">
       <Logo className="size-10" />
@@ -34,11 +36,11 @@ export const ProviderHero = ({ provider }: ProviderHeroProps) => (
     </div>
 
     <div className="grid gap-4">
-      <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-        {provider.subtitle}
+      <h1 className="mb-0 max-w-4xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+        {content.heroTitle}
       </h1>
-      <p className="max-w-xl text-balance text-lg text-muted-foreground tracking-tight">
-        {provider.description}
+      <p className="max-w-3xl text-balance text-lg text-muted-foreground tracking-tight">
+        {content.heroDescription}
       </p>
       <Installer
         className="max-w-md"

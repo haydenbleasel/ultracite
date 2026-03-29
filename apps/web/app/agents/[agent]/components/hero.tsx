@@ -25,11 +25,10 @@ export const AgentHero = ({ agent }: AgentHeroProps) => (
 
     <div className="grid gap-4">
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-3xl leading-none tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-        {agent.name}
+        Ultracite for {agent.name}
       </h1>
       <p className="max-w-xl text-balance text-lg text-muted-foreground tracking-tight">
-        {agent.description} Integrate with Ultracite to ship better code,
-        faster.
+        {agent.content.intro}
       </p>
       <Installer
         className="max-w-md"

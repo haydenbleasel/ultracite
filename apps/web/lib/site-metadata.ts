@@ -73,17 +73,21 @@ export const rootMetadata: Metadata = {
 
 interface CreatePageMetadataOptions {
   description?: string;
+  imageAlt?: string;
+  imagePath?: string;
   path?: string;
   title: string;
 }
 
 export const createPageMetadata = ({
   description = siteDescription,
+  imageAlt = siteName,
+  imagePath = ogImagePath,
   path = "/",
   title,
 }: CreatePageMetadataOptions): Metadata => {
   const canonicalUrl = createAbsoluteUrl(path);
-  const imageUrl = createAbsoluteUrl(ogImagePath);
+  const imageUrl = createAbsoluteUrl(imagePath);
 
   return {
     alternates: {
@@ -94,7 +98,7 @@ export const createPageMetadata = ({
       description,
       images: [
         {
-          alt: siteName,
+          alt: imageAlt,
           height: 630,
           url: imageUrl,
           width: 1200,
@@ -122,6 +126,11 @@ export const createPageMetadata = ({
 interface BreadcrumbItem {
   name: string;
   path: string;
+}
+
+interface FaqItem {
+  answer: string;
+  question: string;
 }
 
 export const createSiteStructuredData = () => ({
@@ -179,5 +188,18 @@ export const createBreadcrumbStructuredData = (items: BreadcrumbItem[]) => ({
     item: createAbsoluteUrl(item.path),
     name: item.name,
     position: index + 1,
+  })),
+});
+
+export const createFaqStructuredData = (items: FaqItem[]) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map((item) => ({
+    "@type": "Question",
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+    name: item.question,
   })),
 });

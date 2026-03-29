@@ -1,9 +1,9 @@
 "use client";
 
-import { agents } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
+import type { Agent } from "@repo/data/agents";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +29,11 @@ import {
 
 import { Logo } from "./logo";
 
-export const Navbar = () => {
+interface NavbarProps {
+  agents: Pick<Agent, "id" | "logo" | "name">[];
+}
+
+export const Navbar = ({ agents }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => setOpen(false), []);
