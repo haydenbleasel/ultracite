@@ -1,11 +1,11 @@
+import { Fragment } from "react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Fragment } from "react";
-
 import { SectionIntro } from "@/components/ultracite/section-intro";
 import { cn } from "@/lib/utils";
 
@@ -30,24 +30,40 @@ const getFaqValue = (question: string, index: number) => {
   return value || `faq-${String(index + 1)}`;
 };
 
-const renderAnswer = (answer: string) =>
-  answer
+const getSegmentKey = (
+  source: string,
+  segment: string,
+  searchStart: { value: number }
+) => {
+  const start = source.indexOf(segment, searchStart.value);
+  searchStart.value = start + segment.length;
+
+  return `${String(start)}-${segment}`;
+};
+
+const renderAnswer = (answer: string) => {
+  const searchStart = { value: 0 };
+
+  return answer
     .split(/(`[^`]+`)/g)
     .filter(Boolean)
-    .map((segment, index) => {
+    .map((segment) => {
+      const key = getSegmentKey(answer, segment, searchStart);
+
       if (segment.startsWith("`") && segment.endsWith("`")) {
         return (
           <code
             className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
-            key={`${answer}-${String(index)}`}
+            key={key}
           >
             {segment.slice(1, -1)}
           </code>
         );
       }
 
-      return <Fragment key={`${answer}-${String(index)}`}>{segment}</Fragment>;
+      return <Fragment key={key}>{segment}</Fragment>;
     });
+};
 
 export const FaqSection = ({
   accordionClassName,
@@ -63,12 +79,18 @@ export const FaqSection = ({
     <div className="grid gap-8">
       <SectionIntro description={description} title={title} />
       <Accordion
-        className={cn("mx-auto w-full max-w-4xl rounded-[2rem] bg-card/40", accordionClassName)}
+        className={cn(
+          "mx-auto w-full max-w-4xl rounded-[2rem] bg-card/40",
+          accordionClassName
+        )}
         collapsible
         type="single"
       >
         {items.map((item, index) => (
-          <AccordionItem key={item.question} value={getFaqValue(item.question, index)}>
+          <AccordionItem
+            key={item.question}
+            value={getFaqValue(item.question, index)}
+          >
             <AccordionTrigger className="px-6 py-5 text-balance text-base tracking-tight hover:no-underline sm:text-lg">
               {item.question}
             </AccordionTrigger>

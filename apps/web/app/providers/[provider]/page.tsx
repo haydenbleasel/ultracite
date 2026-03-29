@@ -6,12 +6,12 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/ultracite/faq-section";
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
+import { getProviderPageContent } from "@/lib/provider-content";
 import {
   createBreadcrumbStructuredData,
   createFaqStructuredData,
   createPageMetadata,
 } from "@/lib/site-metadata";
-import { getProviderPageContent } from "@/lib/provider-content";
 
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";

@@ -1,14 +1,14 @@
 import type { StaticImageData } from "next/image";
 
-import aiderLogo from "../logos/aider.svg";
 import adalLogo from "../logos/adal.svg";
+import aiderLogo from "../logos/aider.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
-import continueLogo from "../logos/continue.svg";
 import codexLogo from "../logos/codex.svg";
+import continueLogo from "../logos/continue.svg";
 import copilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
 import cursorCliLogo from "../logos/cursor.svg";
@@ -21,8 +21,8 @@ import geminiLogo from "../logos/gemini.svg";
 import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
-import kimiCliLogo from "../logos/kimi-cli.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
+import kimiCliLogo from "../logos/kimi-cli.svg";
 import kodeLogo from "../logos/kode.svg";
 import lovableLogo from "../logos/lovable.svg";
 import mcpjamLogo from "../logos/mcpjam.svg";
@@ -35,8 +35,8 @@ import openclawLogo from "../logos/openclaw.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import piLogo from "../logos/pi.svg";
 import pochiLogo from "../logos/pochi.svg";
-import qwenLogo from "../logos/qwen.svg";
 import qoderLogo from "../logos/qoder.svg";
+import qwenLogo from "../logos/qwen.svg";
 import replitLogo from "../logos/replit.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
 import snowflakeCortexLogo from "../logos/snowflake-cortex.svg";
@@ -109,7 +109,7 @@ const defaultRulesProviderName = "Biome";
 const defaultHookPackageManager = "npm";
 const defaultHookLinter = "biome";
 
-const useCase = (title: string, description: string): AgentUseCase => ({
+const agentUseCase = (title: string, description: string): AgentUseCase => ({
   description,
   title,
 });
@@ -150,9 +150,7 @@ const runPackageScript = (
 
 export const getDefaultAgentHookCommand = () => {
   const args =
-    defaultHookLinter === "biome"
-      ? ["--skip=correctness/noUnusedImports"]
-      : [];
+    defaultHookLinter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
 
   return runPackageScript(defaultHookPackageManager, "fix", args);
 };
@@ -225,15 +223,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Claude Code with Ultracite so terminal-based agent runs follow your TypeScript, React, accessibility, and performance standards from the first edit.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Repo-wide refactors from the terminal",
           "Give Claude Code clear repo instructions before it edits many files, renames APIs, or updates patterns across a monorepo."
         ),
-        useCase(
+        agentUseCase(
           "Remote and SSH-heavy development",
           "Keep standards close to terminal workflows when you work in remote environments where editor-specific settings are less useful."
         ),
-        useCase(
+        agentUseCase(
           "Teams standardizing autonomous runs",
           "Share one CLAUDE.md contract so multiple developers can run Claude Code without each session drifting into a different style."
         ),
@@ -306,15 +304,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Codex via AGENTS.md so OpenAI's coding agent produces repo-aware code that matches your team's linting and architecture standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Async background implementation",
           "Give Codex a stable repo contract before it works through larger tasks outside your interactive editor session."
         ),
-        useCase(
+        agentUseCase(
           "Cross-repo standardization",
           "Use the same AGENTS.md pattern across repositories so Codex starts every task with familiar instructions and expectations."
         ),
-        useCase(
+        agentUseCase(
           "Review-heavy delivery",
           "Reduce cleanup during review by making type safety, accessibility, and framework conventions explicit before Codex writes code."
         ),
@@ -357,15 +355,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Jules with Ultracite through AGENTS.md so Google's async coding agent returns code that matches your repo standards and review expectations.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Queued maintenance work",
           "Keep standards stable when Jules handles dependency updates, cleanup tasks, or incremental fixes in the background."
         ),
-        useCase(
+        agentUseCase(
           "Distributed team handoffs",
           "Give every async run the same instructions so results stay consistent even when different teammates trigger the work."
         ),
-        useCase(
+        agentUseCase(
           "Multi-repo automation",
           "Reuse the same AGENTS.md pattern across several codebases where Jules needs clear project-specific expectations."
         ),
@@ -408,15 +406,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Replit Agent with Ultracite through replit.md so browser-based app generation follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Browser-based full-stack building",
           "Give Replit Agent a durable repo contract before it generates frontend, backend, and configuration code in the same workspace."
         ),
-        useCase(
+        agentUseCase(
           "Prototypes that need guardrails",
           "Keep early product iterations aligned with your team's typing, accessibility, and architecture expectations."
         ),
-        useCase(
+        agentUseCase(
           "Shared cloud workspaces",
           "Use one committed `replit.md` file so collaborators get the same coding guidance every time they open the project."
         ),
@@ -459,15 +457,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Devin through AGENTS.md so Cognition's software engineering agent follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Asynchronous task delegation",
           "Give Devin a stable repo contract before it works through larger implementation tasks outside the normal interactive development loop."
         ),
-        useCase(
+        agentUseCase(
           "Review-ready autonomous patches",
           "Reduce cleanup during review by making naming, typing, and framework conventions explicit before the task starts."
         ),
-        useCase(
+        agentUseCase(
           "Multi-step bug investigation",
           "Keep standards stable while Devin traces behavior, updates code in several places, and iterates on a fix."
         ),
@@ -510,15 +508,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Lovable with Ultracite through AGENTS.md so AI-generated apps follow your repo's coding, architecture, and review standards from the first commit.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Prompt-to-product builds",
           "Keep Lovable aligned when a generated app moves beyond a demo and into a codebase your team will keep shipping."
         ),
-        useCase(
+        agentUseCase(
           "Rapid iteration with guardrails",
           "Make architecture, typing, and framework conventions explicit before Lovable generates new pages, flows, or backend logic."
         ),
-        useCase(
+        agentUseCase(
           "Shared product experiments",
           "Use one committed AGENTS.md file so follow-up sessions and teammates inherit the same coding expectations."
         ),
@@ -561,15 +559,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Zencoder with Ultracite through AGENTS.md so its IDE agent follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Editor-assisted implementation",
           "Guide Zencoder before it creates or edits files so the first draft already reflects your repo conventions."
         ),
-        useCase(
+        agentUseCase(
           "Shared IDE workflows",
           "Use one committed AGENTS.md file so teammates get the same coding contract in every Zencoder session."
         ),
-        useCase(
+        agentUseCase(
           "Review-conscious AI edits",
           "Reduce cleanup after editor-side generations by making typing, naming, and structure explicit upfront."
         ),
@@ -612,15 +610,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Ona through AGENTS.md so its cloud agent follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Delegated background work",
           "Give Ona a durable repo contract before it works through larger implementation tasks asynchronously."
         ),
-        useCase(
+        agentUseCase(
           "Multi-repo consistency",
           "Reuse the same AGENTS.md pattern across repositories where Ona needs explicit project expectations."
         ),
-        useCase(
+        agentUseCase(
           "Review-ready delivery",
           "Reduce cleanup during review by making accessibility, naming, and architecture expectations explicit before code is written."
         ),
@@ -663,15 +661,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure OpenClaw with Ultracite through AGENTS.md so its open-source agent stack follows your repo's implementation and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Self-hosted agent experiments",
           "Keep OpenClaw grounded when you evaluate autonomous coding workflows in your own infrastructure."
         ),
-        useCase(
+        agentUseCase(
           "Reproducible repo demos",
           "Use a committed AGENTS.md file so contributors can see the same repo guidance every time OpenClaw runs."
         ),
-        useCase(
+        agentUseCase(
           "Open-source team workflows",
           "Share one durable coding contract so multiple users can run OpenClaw without style drift."
         ),
@@ -714,15 +712,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Continue with Ultracite through AGENTS.md so its terminal agent follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Terminal-heavy development",
           "Keep Continue aligned while you switch between shell commands, repo analysis, and code generation."
         ),
-        useCase(
+        agentUseCase(
           "Fast iterative fixes",
           "Use a committed AGENTS.md file to stabilize behavior across several short agent loops in the same task."
         ),
-        useCase(
+        agentUseCase(
           "Portable repo guidance",
           "Reuse one repo contract across environments where Continue needs clear coding expectations."
         ),
@@ -765,15 +763,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Snowflake Cortex through AGENTS.md so cloud-connected engineering work follows your repo's coding and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Data-aware application repos",
           "Keep Cortex aligned when application code, data logic, and supporting scripts change together."
         ),
-        useCase(
+        agentUseCase(
           "Platform-connected features",
           "Use a committed repo contract before Cortex works on code that touches product and platform concerns in the same task."
         ),
-        useCase(
+        agentUseCase(
           "Review-friendly data workflows",
           "Reduce cleanup by making naming, typing, and structure explicit before cloud-generated changes reach review."
         ),
@@ -816,15 +814,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Deepagents with Ultracite through AGENTS.md so terminal agent workflows follow your repo's linting, architecture, and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Multi-step implementation flows",
           "Keep Deepagents aligned when one task spans research, coding, and several follow-up changes."
         ),
-        useCase(
+        agentUseCase(
           "Agent framework prototypes",
           "Use a committed repo contract while you experiment with Deepagents in real repositories."
         ),
-        useCase(
+        agentUseCase(
           "Structured autonomous work",
           "Reduce drift by giving every Deepagents run the same durable coding baseline."
         ),
@@ -867,15 +865,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Qoder through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Fast terminal iteration",
           "Keep Qoder aligned while you move quickly from prompt to patch and refine the result in the shell."
         ),
-        useCase(
+        agentUseCase(
           "Portable repo setup",
           "Reuse one AGENTS.md pattern across repositories where Qoder needs explicit project expectations."
         ),
-        useCase(
+        agentUseCase(
           "Review-conscious generation",
           "Make repo standards explicit before terminal-generated edits reach human review."
         ),
@@ -918,15 +916,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Kimi CLI with Ultracite through AGENTS.md so its coding agent follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Natural-language terminal tasking",
           "Keep Kimi CLI aligned when broad prompt requests need to turn into code that still fits the project."
         ),
-        useCase(
+        agentUseCase(
           "Fast fix loops",
           "Use a committed repo contract to stabilize output during quick terminal-driven iterations."
         ),
-        useCase(
+        agentUseCase(
           "Shared coding standards",
           "Reuse one AGENTS.md file across repos where Kimi CLI needs explicit project guidance."
         ),
@@ -969,15 +967,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Kode through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Open-source coding experiments",
           "Keep Kode grounded while you test it in real repositories without hidden local setup."
         ),
-        useCase(
+        agentUseCase(
           "Terminal-driven implementation",
           "Use one committed repo contract so Kode stays aligned during shell-based development sessions."
         ),
-        useCase(
+        agentUseCase(
           "Cross-environment consistency",
           "Reuse AGENTS.md across machines and contributors so Kode behaves more predictably."
         ),
@@ -1020,15 +1018,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure MCPJam with Ultracite through AGENTS.md so hosted agent workflows follow your repo's implementation and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Tool-rich hosted workflows",
           "Keep MCPJam aligned when a task moves across several connected tools before changes land in the repo."
         ),
-        useCase(
+        agentUseCase(
           "Experimentation with guardrails",
           "Use AGENTS.md so exploratory agent work still respects the project's coding standards."
         ),
-        useCase(
+        agentUseCase(
           "Shared project contracts",
           "Commit one repo-level file so MCPJam sessions start from the same expectations every time."
         ),
@@ -1071,15 +1069,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Mux through AGENTS.md so its background agents follow your repo's coding and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Queued background implementation",
           "Give Mux a stable repo contract before several async tasks work through the same codebase."
         ),
-        useCase(
+        agentUseCase(
           "Parallel agent workspaces",
           "Use one AGENTS.md file so multiple workspaces inherit the same standards and expectations."
         ),
-        useCase(
+        agentUseCase(
           "Review-ready async delivery",
           "Reduce cleanup by making naming, structure, and framework conventions explicit before work starts."
         ),
@@ -1122,15 +1120,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Pi with Ultracite through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Focused terminal tasks",
           "Keep Pi aligned on quick fixes and small features where speed matters but standards still matter too."
         ),
-        useCase(
+        agentUseCase(
           "Portable repo guidance",
           "Use one AGENTS.md file so Pi behaves consistently across different repositories and environments."
         ),
-        useCase(
+        agentUseCase(
           "Prompt-driven coding loops",
           "Anchor output in repo rules so concise interactions still produce reviewable code."
         ),
@@ -1173,15 +1171,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Add Ultracite to Neovate through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Shell-driven development",
           "Keep Neovate aligned while you move between repo inspection, commands, and code edits in the terminal."
         ),
-        useCase(
+        agentUseCase(
           "Cross-repo consistency",
           "Use one committed AGENTS.md file to stabilize Neovate behavior across several projects."
         ),
-        useCase(
+        agentUseCase(
           "Review-friendly iteration",
           "Reduce cleanup by making naming, structure, and framework expectations explicit before generation."
         ),
@@ -1224,15 +1222,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure Pochi with Ultracite through AGENTS.md so its editor agent follows your repo's linting, architecture, and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "IDE-assisted generation",
           "Guide Pochi before it edits files so generated code already fits the repository's expectations."
         ),
-        useCase(
+        agentUseCase(
           "Shared editor workflows",
           "Use one AGENTS.md file so every contributor gets the same coding contract inside Pochi."
         ),
-        useCase(
+        agentUseCase(
           "Open-source-friendly collaboration",
           "Keep repo guidance visible and versioned when several users iterate with the same editor workflow."
         ),
@@ -1275,15 +1273,15 @@ export const agents: Agent[] = [
       metaDescription:
         "Configure AdaL with Ultracite through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Shell-first development",
           "Keep AdaL aligned while you move between commands, repo inspection, and generated edits in the terminal."
         ),
-        useCase(
+        agentUseCase(
           "Iterative implementation loops",
           "Use a committed repo contract to stabilize behavior across several small prompt-to-edit cycles."
         ),
-        useCase(
+        agentUseCase(
           "Cross-project reuse",
           "Reuse one AGENTS.md pattern across repos where AdaL needs explicit project expectations."
         ),
@@ -1341,15 +1339,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Set up GitHub Copilot with Ultracite so editor suggestions and AI-assisted edits follow your repo's formatting, typing, and framework conventions.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Day-to-day editor assistance",
           "Keep Copilot's inline suggestions aligned with your repo standards while developers stay inside their normal IDE workflow."
         ),
-        useCase(
+        agentUseCase(
           "Large teams using Copilot Chat",
           "Share one repo-level instruction file so Copilot behaves consistently across many contributors and feature branches."
         ),
-        useCase(
+        agentUseCase(
           "Automated post-edit cleanup",
           "Pair Copilot instructions with hooks when you want formatting and fix steps to run after AI edits land in the working tree."
         ),
@@ -1405,15 +1403,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Cline with Ultracite through `.clinerules` so autonomous VS Code edits follow your repo's linting, React, and TypeScript standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Autonomous edits in VS Code",
           "Guide Cline before it creates or modifies files so the first draft already reflects your team's standards."
         ),
-        useCase(
+        agentUseCase(
           "Mixed human and AI workflows",
           "Keep repo guidance in the same tool where developers inspect diffs, accept changes, and continue iterating."
         ),
-        useCase(
+        agentUseCase(
           "Existing `.clinerules` setups",
           "Append Ultracite without throwing away the project-specific instructions you already maintain for Cline."
         ),
@@ -1456,15 +1454,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to AMP via AGENTS.md so Sourcegraph's coding agent uses repo-aware search with explicit code quality and architecture guidance.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Large codebase navigation",
           "Give AMP a stable implementation contract before it reasons across many packages, modules, or services."
         ),
-        useCase(
+        agentUseCase(
           "Review-ready patches",
           "Reduce cleanup work after search-driven edits by making naming, typing, and framework conventions explicit upfront."
         ),
-        useCase(
+        agentUseCase(
           "Sourcegraph-heavy teams",
           "Keep one repo-level instruction file for teams already leaning on Sourcegraph to answer code questions and generate fixes."
         ),
@@ -1506,15 +1504,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Aider with Ultracite through `ultracite.md` so terminal pair-programming sessions follow your repo's code quality and framework rules.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Tight edit-review loops",
           "Keep Aider aligned while you iterate quickly on a fix, inspect the patch, and ask for the next change."
         ),
-        useCase(
+        agentUseCase(
           "Git-centric workflows",
           "Use a dedicated rules file when Aider is operating close to commits, diffs, and staged changes."
         ),
-        useCase(
+        agentUseCase(
           "Solo developer pair programming",
           "Give Aider a persistent repo contract so it behaves consistently across multiple terminal sessions."
         ),
@@ -1557,15 +1555,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Set up Firebase Studio with Ultracite so Google's cloud IDE follows your repo's linting, accessibility, and performance rules from the start.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Hosted app development",
           "Give Firebase Studio a clear repo contract before it generates or edits frontend and backend code."
         ),
-        useCase(
+        agentUseCase(
           "Shared cloud workspaces",
           "Keep standards stable when several developers open the same project in a managed IDE environment."
         ),
-        useCase(
+        agentUseCase(
           "Greenfield prototypes that need discipline",
           "Add strong defaults early so generated code in a new Firebase Studio project does not drift before the team establishes habits."
         ),
@@ -1608,15 +1606,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure OpenHands with Ultracite through its repo microagent file so autonomous code changes stay aligned with your repo standards and review process.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Autonomous task execution",
           "Keep OpenHands grounded when it handles longer implementation tasks or explores a repository without constant human steering."
         ),
-        useCase(
+        agentUseCase(
           "Open-source experimentation",
           "Commit a clear repo instruction file so contributors testing OpenHands get consistent behavior across environments."
         ),
-        useCase(
+        agentUseCase(
           "Reproducible agent demos",
           "Use the same microagent guidance to show how OpenHands behaves in a repo before and after changes to your coding standards."
         ),
@@ -1659,15 +1657,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Gemini through GEMINI.md so Google's terminal AI follows your repo's TypeScript, React, accessibility, and performance standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Terminal-first development",
           "Keep Gemini aligned while you work in the shell, inspect code, and iterate without switching into a dedicated AI editor."
         ),
-        useCase(
+        agentUseCase(
           "Cross-repo consistency",
           "Use a committed `GEMINI.md` file to keep standards stable as developers move between projects."
         ),
-        useCase(
+        agentUseCase(
           "Prompt reduction",
           "Avoid repeating architecture and style instructions every time you ask Gemini to help with a fix or refactor."
         ),
@@ -1710,15 +1708,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Junie with Ultracite so JetBrains' AI agent follows your repo's code quality rules and team conventions inside the IDE.",
       useCases: [
-        useCase(
+        agentUseCase(
           "JetBrains-centered teams",
           "Share one guidelines file so Junie behaves predictably across IntelliJ, WebStorm, and other JetBrains workflows."
         ),
-        useCase(
+        agentUseCase(
           "Typed refactors",
           "Give Junie a stable contract before it updates TypeScript-heavy code or makes larger structural edits."
         ),
-        useCase(
+        agentUseCase(
           "Repo onboarding",
           "Help new contributors inherit the same IDE-side AI behavior by committing standards directly into the repo."
         ),
@@ -1760,15 +1758,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Set up Augment Code with Ultracite so its team-focused AI assistant follows committed repo rules for linting, architecture, and code quality.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Shared enterprise workflows",
           "Store a deterministic rules file in the repo so Augment sessions across the team start from the same coding contract."
         ),
-        useCase(
+        agentUseCase(
           "Code review discipline",
           "Reduce review churn by making architecture and style expectations explicit before Augment suggests or edits code."
         ),
-        useCase(
+        agentUseCase(
           "Managed rules directories",
           "Use Augment's dedicated rules path when you want AI config to live in a predictable location alongside other team tooling."
         ),
@@ -1810,15 +1808,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Kilo Code with Ultracite so customizable VS Code AI assistance follows your repo's formatting, typing, and framework conventions.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Config-driven editor workflows",
           "Keep AI behavior grounded in committed repo standards instead of per-user prompt preferences."
         ),
-        useCase(
+        agentUseCase(
           "Repeatable VS Code assistance",
           "Give Kilo Code stable rules for day-to-day suggestions, edits, and explanations inside the editor."
         ),
-        useCase(
+        agentUseCase(
           "Team-managed AI setup",
           "Store the rules in the repo so contributors can share one source of truth for Kilo Code behavior."
         ),
@@ -1861,15 +1859,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Goose through `.goosehints` so Block's open-source AI agent follows your repo's standards and review expectations.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Terminal-heavy open-source workflows",
           "Keep Goose aligned in repos where developers want an open toolchain and committed AI guidance."
         ),
-        useCase(
+        agentUseCase(
           "Autonomous maintenance tasks",
           "Use hints to steer Goose through repetitive fixes or cleanup work without repeating instructions in each run."
         ),
-        useCase(
+        agentUseCase(
           "Experimental agent setups",
           "Commit repo guidance so Goose behavior stays stable while you tune the rest of your local tooling."
         ),
@@ -1912,15 +1910,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Roo Code with Ultracite so its codebase-navigation assistant follows your repo's architecture, typing, and framework rules.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Exploring large repositories",
           "Give Roo Code a stable contract before it hops between many modules, traces behavior, and applies edits in several places."
         ),
-        useCase(
+        agentUseCase(
           "Context-heavy refactors",
           "Use committed rules when Roo Code needs to understand existing architecture before changing it."
         ),
-        useCase(
+        agentUseCase(
           "Shared repo conventions",
           "Keep Roo Code aligned with the rest of the team by storing guidance in a dedicated project rules directory."
         ),
@@ -1963,15 +1961,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Warp through AGENTS.md so terminal AI suggestions and coding help stay aligned with your repo standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Command-line development loops",
           "Keep Warp aligned while you switch between shell commands, AI suggestions, and incremental code changes."
         ),
-        useCase(
+        agentUseCase(
           "Shared terminal environments",
           "Use one committed AGENTS.md file so teammates get the same guidance when they use Warp in the same repo."
         ),
-        useCase(
+        agentUseCase(
           "Automation-adjacent workflows",
           "Make repo rules explicit when Warp is part of a larger sequence of command-driven development tasks."
         ),
@@ -2014,15 +2012,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Droid with Ultracite through AGENTS.md so automated coding tasks follow your repo's linting, architecture, and review standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Repeated implementation tasks",
           "Keep Droid aligned on bug fixes, cleanup work, and structured feature tasks that show up again and again."
         ),
-        useCase(
+        agentUseCase(
           "Simple repo onboarding",
           "Add one AGENTS.md file so Droid starts with clear instructions and contributors do not need custom local setup."
         ),
-        useCase(
+        agentUseCase(
           "Review-conscious automation",
           "Make repo standards explicit before Droid generates changes that will be inspected by humans later."
         ),
@@ -2065,15 +2063,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to OpenCode through AGENTS.md so open-source coding sessions stay consistent across terminals, desktops, IDEs, and model providers.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Multi-surface development",
           "Keep OpenCode aligned whether you start from the terminal, a desktop app, or an IDE integration."
         ),
-        useCase(
+        agentUseCase(
           "Provider switching",
           "Use one repo contract to stabilize coding behavior even if your team experiments with different LLM providers."
         ),
-        useCase(
+        agentUseCase(
           "Open-source friendly workflows",
           "Commit repo guidance so contributors can reproduce the same OpenCode behavior without hidden local setup."
         ),
@@ -2116,15 +2114,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Crush with Ultracite through CRUSH.md so Charmbracelet's terminal coding agent follows your repo standards across models and sessions.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Styled terminal workflows",
           "Keep Crush productive in day-to-day shell usage by giving it committed repo standards instead of repeating guidance in prompts."
         ),
-        useCase(
+        agentUseCase(
           "Model experimentation",
           "Anchor output with one repo contract while switching among supported models inside Crush."
         ),
-        useCase(
+        agentUseCase(
           "Committed project guidance",
           "Use a dedicated `CRUSH.md` file when you want Crush-specific instructions that live alongside the codebase."
         ),
@@ -2167,15 +2165,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Qwen Code through AGENTS.md so Alibaba's coding CLI follows your repo's linting, architecture, and framework standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Fast terminal iteration",
           "Keep Qwen Code aligned while you move quickly from prompt to patch and refine the result in the shell."
         ),
-        useCase(
+        agentUseCase(
           "Natural-language tasking",
           "Use a committed repo contract so broad natural-language requests still produce code that fits the project."
         ),
-        useCase(
+        agentUseCase(
           "Portable agent setup",
           "Reuse the same AGENTS.md pattern across repos where Qwen Code needs explicit project expectations."
         ),
@@ -2218,15 +2216,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Amazon Q CLI with Ultracite so AWS's terminal AI follows your repo's coding standards in full-stack and cloud-adjacent projects.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Full-stack application repos",
           "Keep Amazon Q CLI aligned when it edits frontend, backend, and support scripts in one repository."
         ),
-        useCase(
+        agentUseCase(
           "Cloud-adjacent code changes",
           "Use committed repo rules when the same workflow touches infrastructure scripts and application logic."
         ),
-        useCase(
+        agentUseCase(
           "Terminal-first AWS teams",
           "Store guidance in Amazon Q's rules directory so every contributor gets the same coding contract."
         ),
@@ -2280,15 +2278,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Firebender with Ultracite through `firebender.json` so Android Studio AI assistance follows your repo's coding standards and review expectations.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Android teams in mixed repos",
           "Keep Firebender aligned when Android code, shared tooling, and supporting web or backend code live in the same repository."
         ),
-        useCase(
+        agentUseCase(
           "Deterministic IDE setup",
           "Use a dedicated JSON config file when you want AI guidance to be explicit, reviewable, and easy to diff."
         ),
-        useCase(
+        agentUseCase(
           "Mobile-focused review flows",
           "Reduce cleanup during review by giving Firebender repo-specific standards before it generates or edits code."
         ),
@@ -2331,15 +2329,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Cursor CLI through `.cursor/rules/ultracite.mdc` so terminal agent runs follow your repo's coding standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Shell-driven Cursor workflows",
           "Keep Cursor CLI aligned when you want to work in the terminal without losing the benefits of Cursor's rules system."
         ),
-        useCase(
+        agentUseCase(
           "Portable repo configuration",
           "Commit the `.mdc` rules file so Cursor CLI behaves the same across machines and developer environments."
         ),
-        useCase(
+        agentUseCase(
           "Fast task execution with guardrails",
           "Use committed standards to make quick terminal-generated edits easier to trust and review."
         ),
@@ -2381,15 +2379,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Configure Mistral Vibe with Ultracite through VIBE.md so its minimal coding CLI follows your repo's standards and quality expectations.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Focused terminal tasks",
           "Keep Mistral Vibe aligned on quick fixes and small features where speed matters but standards still matter too."
         ),
-        useCase(
+        agentUseCase(
           "Lightweight repo setup",
           "Use a dedicated `VIBE.md` file when you want a clear, minimal config surface for coding guidance."
         ),
-        useCase(
+        agentUseCase(
           "Model experiments with guardrails",
           "Anchor output in repo rules so concise interactions still produce code that fits the project."
         ),
@@ -2432,15 +2430,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       metaDescription:
         "Add Ultracite to Vercel Agent through AGENTS.md so cloud-connected coding tasks follow your repo's implementation and quality standards.",
       useCases: [
-        useCase(
+        agentUseCase(
           "Production-minded feature work",
           "Keep Vercel Agent aligned when code changes are likely to move quickly from implementation into deployment workflows."
         ),
-        useCase(
+        agentUseCase(
           "Platform-centric teams",
           "Use one committed AGENTS.md file so every repo in a Vercel-heavy stack shares the same coding contract."
         ),
-        useCase(
+        agentUseCase(
           "Fast feedback loops",
           "Reduce cleanup after AI-generated changes by making standards explicit before the work reaches preview or production environments."
         ),

@@ -39,7 +39,7 @@ describe("editor page helpers", () => {
         path: ".vscode/settings.json",
       },
       hooks: {
-        code: "{\"hooks\":{}}",
+        code: '{"hooks":{}}',
         path: ".cursor/hooks.json",
       },
       id: "cursor",

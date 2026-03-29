@@ -343,12 +343,15 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
 
 export const editors: Editor[] = [
   {
-    audience: "teams standardizing on the default editor across local and remote workflows",
+    audience:
+      "teams standardizing on the default editor across local and remote workflows",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
     differentiators: [
       {
         description:
@@ -366,8 +369,6 @@ export const editors: Editor[] = [
         title: "Low-friction onboarding",
       },
     ],
-    description:
-      "Microsoft's popular code editor with extensive extension support and built-in Git integration.",
     faq: [
       {
         answer:
@@ -391,13 +392,13 @@ export const editors: Editor[] = [
     id: "vscode",
     logo: vscodeLogo,
     name: "Visual Studio Code",
-    subtitle: "The most popular code editor",
     seo: {
       metaDescription:
         "Set up Ultracite for Visual Studio Code with a committed .vscode/settings.json, format on save, auto-fixes, and consistent linting for shared projects.",
       summary:
         "Use Ultracite to generate a clean Visual Studio Code settings file with format on save, auto-fixes, and TypeScript defaults that stay consistent across every contributor's workspace.",
     },
+    subtitle: "The most popular code editor",
     workflowHighlights: [
       "Run `npx ultracite@latest init --editors vscode` to generate `.vscode/settings.json` for the repo.",
       "Commit the workspace settings so every contributor inherits the same formatter and save-time fixes.",
@@ -405,12 +406,15 @@ export const editors: Editor[] = [
     ],
   },
   {
-    audience: "Cursor users who want AI output, workspace settings, and post-edit cleanup to follow the same standards",
+    audience:
+      "Cursor users who want AI output, workspace settings, and post-edit cleanup to follow the same standards",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
     differentiators: [
       {
         description:
@@ -428,8 +432,6 @@ export const editors: Editor[] = [
         title: "Keeps the VS Code ergonomics developers expect",
       },
     ],
-    description:
-      "The AI-first code editor built on VS Code with deep AI integration for coding assistance.",
     faq: [
       {
         answer:
@@ -469,13 +471,13 @@ alwaysApply: false
 ---`,
       path: ".cursor/rules/ultracite.mdc",
     },
-    subtitle: "The AI-first code editor",
     seo: {
       metaDescription:
         "Configure Ultracite for Cursor with Visual Studio Code settings, a `.cursor/rules/ultracite.mdc` file, and optional `.cursor/hooks.json` automation after AI edits.",
       summary:
         "Cursor works best with Ultracite when you combine committed workspace settings, a dedicated Cursor rules file, and optional post-edit hooks that run after AI-driven changes land in your repo.",
     },
+    subtitle: "The AI-first code editor",
     workflowHighlights: [
       "Generate the shared `.vscode/settings.json` file so Cursor inherits the same formatter and save behavior as the rest of the repo.",
       "Add `.cursor/rules/ultracite.mdc` so Cursor generates code that already matches Ultracite's expectations.",
@@ -483,12 +485,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "Windsurf teams leaning on agentic edits and wanting automated cleanup after every write",
+    audience:
+      "Windsurf teams leaning on agentic edits and wanting automated cleanup after every write",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
     differentiators: [
       {
         description:
@@ -506,8 +511,6 @@ alwaysApply: false
         title: "Keeps agent-driven edits reviewable",
       },
     ],
-    description:
-      "Codeium's agentic IDE that combines AI assistance with a powerful VS Code-based development environment.",
     faq: [
       {
         answer:
@@ -540,13 +543,13 @@ alwaysApply: false
     rules: {
       path: ".windsurf/rules/ultracite.md",
     },
-    subtitle: "The agentic IDE by Codeium",
     seo: {
       metaDescription:
         "Set up Ultracite for Windsurf with `.vscode/settings.json`, a `.windsurf/rules/ultracite.md` guidance file, and optional `.windsurf/hooks.json` post-write automation.",
       summary:
         "Use Ultracite with Windsurf to pair standard VS Code workspace settings with Windsurf-specific rules and optional hooks that tidy AI-generated edits after every write.",
     },
+    subtitle: "The agentic IDE by Codeium",
     workflowHighlights: [
       "Start with the shared `.vscode/settings.json` so Windsurf follows the repo's formatter and save-time fixes.",
       "Add `.windsurf/rules/ultracite.md` to steer Codeium agents toward Ultracite's code standards before they write code.",
@@ -554,12 +557,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "CodeBuddy teams who want shared workspace defaults plus a committed AI memory file for generated code",
+    audience:
+      "CodeBuddy teams who want shared workspace defaults plus a committed AI memory file for generated code",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "Tencent Cloud CodeBuddy is a next-generation AI code editor powered by the Tencent Yuanbao Code large model.",
     differentiators: [
       {
         description:
@@ -577,8 +583,6 @@ alwaysApply: false
         title: "Fits existing VS Code-style collaboration",
       },
     ],
-    description:
-      "Tencent Cloud CodeBuddy is a next-generation AI code editor powered by the Tencent Yuanbao Code large model.",
     faq: [
       {
         answer:
@@ -605,13 +609,13 @@ alwaysApply: false
       appendMode: true,
       path: "CODEBUDDY.md",
     },
-    subtitle: "Tencent Cloud's AI code editor",
     seo: {
       metaDescription:
         "Configure Ultracite for CodeBuddy with shared `.vscode/settings.json` defaults and a `CODEBUDDY.md` memory file so AI-generated code follows your repo standards.",
       summary:
         "CodeBuddy works best with Ultracite when you combine committed workspace settings with a branded project memory file that teaches the AI how your repo expects code to be written.",
     },
+    subtitle: "Tencent Cloud's AI code editor",
     workflowHighlights: [
       "Generate `.vscode/settings.json` so CodeBuddy follows the same formatter, code actions, and TypeScript defaults as the rest of the repo.",
       "Add `CODEBUDDY.md` to give CodeBuddy a committed memory file that reflects Ultracite's coding standards.",
@@ -619,12 +623,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "teams evaluating Google's AI IDE while keeping the same familiar VS Code workspace contract",
+    audience:
+      "teams evaluating Google's AI IDE while keeping the same familiar VS Code workspace contract",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "An AI-powered development platform built on VS Code for building and deploying applications faster.",
     differentiators: [
       {
         description:
@@ -642,8 +649,6 @@ alwaysApply: false
         title: "Simple setup with minimal moving parts",
       },
     ],
-    description:
-      "An AI-powered development platform built on VS Code for building and deploying applications faster.",
     faq: [
       {
         answer:
@@ -666,13 +671,13 @@ alwaysApply: false
     id: "antigravity",
     logo: antigravityLogo,
     name: "Antigravity",
-    subtitle: "Google's next-generation IDE",
     seo: {
       metaDescription:
         "Configure Ultracite for Antigravity with a shared `.vscode/settings.json` so format on save, auto-fixes, and TypeScript defaults stay consistent across AI-assisted workflows.",
       summary:
         "Antigravity can plug into the same Ultracite-managed Visual Studio Code settings file, making it easy to evaluate Google's AI IDE without inventing a second configuration story for your team.",
     },
+    subtitle: "Google's next-generation IDE",
     workflowHighlights: [
       "Generate `.vscode/settings.json` so Antigravity uses the same formatter and code actions as the rest of the repository.",
       "Commit the workspace config to keep Antigravity pilots aligned with teammates who still use Visual Studio Code or Cursor.",
@@ -680,12 +685,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "Kiro users who want spec-driven AI workflows to inherit repo rules before code generation starts",
+    audience:
+      "Kiro users who want spec-driven AI workflows to inherit repo rules before code generation starts",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "AWS's spec-driven AI development environment for building production-ready applications.",
     differentiators: [
       {
         description:
@@ -703,8 +711,6 @@ alwaysApply: false
         title: "Moves quality earlier in the workflow",
       },
     ],
-    description:
-      "AWS's spec-driven AI development environment for building production-ready applications.",
     faq: [
       {
         answer:
@@ -715,7 +721,8 @@ alwaysApply: false
       {
         answer:
           "Yes. Kiro still benefits from the shared `.vscode/settings.json`, so human edits and AI-assisted edits follow the same formatter and code action defaults.",
-        question: "Should I still commit the Visual Studio Code settings for Kiro?",
+        question:
+          "Should I still commit the Visual Studio Code settings for Kiro?",
       },
       {
         answer:
@@ -729,13 +736,13 @@ alwaysApply: false
     rules: {
       path: ".kiro/steering/ultracite.md",
     },
-    subtitle: "AWS's spec-driven IDE",
     seo: {
       metaDescription:
         "Set up Ultracite for Kiro with `.vscode/settings.json` plus a `.kiro/steering/ultracite.md` steering file so spec-driven AI work follows your repo standards.",
       summary:
         "Kiro pairs well with Ultracite when you combine shared VS Code workspace settings with a dedicated steering file that guides spec-driven AI work before code is generated.",
     },
+    subtitle: "AWS's spec-driven IDE",
     workflowHighlights: [
       "Use `.vscode/settings.json` to keep Kiro's editor behavior aligned with the rest of the repository.",
       "Add `.kiro/steering/ultracite.md` so Kiro sees Ultracite's code standards while turning specs into implementation work.",
@@ -743,12 +750,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "Trae users who want a dedicated AI rules file without losing the simplicity of VS Code workspace settings",
+    audience:
+      "Trae users who want a dedicated AI rules file without losing the simplicity of VS Code workspace settings",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
     differentiators: [
       {
         description:
@@ -766,8 +776,6 @@ alwaysApply: false
         title: "Balances generation quality with reliable formatting",
       },
     ],
-    description:
-      "ByteDance's AI-powered IDE built on VS Code - the real AI engineer.",
     faq: [
       {
         answer:
@@ -793,13 +801,13 @@ alwaysApply: false
     rules: {
       path: ".trae/rules/project_rules.md",
     },
-    subtitle: "ByteDance's AI IDE",
     seo: {
       metaDescription:
         "Configure Ultracite for Trae with shared `.vscode/settings.json` defaults and a `.trae/rules/project_rules.md` file to guide AI-generated code before it reaches review.",
       summary:
         "Trae works well with Ultracite when you keep the standard VS Code workspace settings in place and add a dedicated project rules file that teaches the AI how your repo expects code to look.",
     },
+    subtitle: "ByteDance's AI IDE",
     workflowHighlights: [
       "Generate `.vscode/settings.json` so Trae follows the same formatter, code actions, and TypeScript defaults as the rest of the repo.",
       "Create `.trae/rules/project_rules.md` to give Trae project-level instructions that reflect Ultracite's standards.",
@@ -807,12 +815,15 @@ alwaysApply: false
     ],
   },
   {
-    audience: "developers choosing an open-source AI editor and wanting a privacy-friendly setup with minimal repo overhead",
+    audience:
+      "developers choosing an open-source AI editor and wanting a privacy-friendly setup with minimal repo overhead",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
       path: ".vscode/settings.json",
     },
+    description:
+      "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
     differentiators: [
       {
         description:
@@ -830,13 +841,12 @@ alwaysApply: false
         title: "Good default for privacy-focused workflows",
       },
     ],
-    description:
-      "An open-source AI code editor built on VS Code with a focus on privacy and extensibility.",
     faq: [
       {
         answer:
           "Yes. Void uses the same `.vscode/settings.json` model, so Ultracite can configure it with the same shared workspace file used by other VS Code-based editors.",
-        question: "Can Void use the same workspace settings as Visual Studio Code?",
+        question:
+          "Can Void use the same workspace settings as Visual Studio Code?",
       },
       {
         answer:
@@ -853,13 +863,13 @@ alwaysApply: false
     id: "void",
     logo: voidLogo,
     name: "Void",
-    subtitle: "Open-source AI editor",
     seo: {
       metaDescription:
         "Use Ultracite with Void through a shared `.vscode/settings.json` so format on save, auto-fixes, and TypeScript defaults stay consistent in an open-source AI editor.",
       summary:
         "Void fits Ultracite well if you want an open-source AI editor that still uses the familiar VS Code workspace settings model for formatting, lint fixes, and consistent team defaults.",
     },
+    subtitle: "Open-source AI editor",
     workflowHighlights: [
       "Generate `.vscode/settings.json` so Void inherits the same formatter and save-time fixes as the rest of the repo.",
       "Commit the workspace settings to keep Void aligned with teammates using Visual Studio Code, Cursor, or other VS Code-based editors.",
@@ -867,11 +877,14 @@ alwaysApply: false
     ],
   },
   {
-    audience: "Zed users who want a native, high-performance editor without giving up shared repo conventions",
+    audience:
+      "Zed users who want a native, high-performance editor without giving up shared repo conventions",
     config: {
       getContent: getZedConfig,
       path: ".zed/settings.json",
     },
+    description:
+      "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
     differentiators: [
       {
         description:
@@ -889,8 +902,6 @@ alwaysApply: false
         title: "Keeps Zed's performance-focused workflow intact",
       },
     ],
-    description:
-      "A high-performance, multiplayer code editor built in Rust with built-in AI assistance.",
     faq: [
       {
         answer:
@@ -916,13 +927,13 @@ alwaysApply: false
       appendMode: true,
       path: ".rules",
     },
-    subtitle: "The high-performance editor",
     seo: {
       metaDescription:
         "Configure Ultracite for Zed with native `.zed/settings.json` defaults and an appendable `.rules` file so high-performance editing still follows consistent repo standards.",
       summary:
         "Zed uses a native Ultracite setup with `.zed/settings.json` for editor behavior and an appendable `.rules` file for repo guidance, making it a strong fit for teams that want speed without config drift.",
     },
+    subtitle: "The high-performance editor",
     workflowHighlights: [
       "Generate `.zed/settings.json` so Zed handles formatting, code actions, and TypeScript behavior the way Ultracite expects.",
       "Append Ultracite guidance into `.rules` so Zed keeps any existing repo instructions and gains a shared coding standard layer.",
@@ -951,7 +962,11 @@ const toEditorPageSource = (editor: Editor): EditorPageSource => ({
   },
   hooks: editor.hooks
     ? {
-        code: JSON.stringify(editor.hooks.getContent(defaultHookCommand), null, 2),
+        code: JSON.stringify(
+          editor.hooks.getContent(defaultHookCommand),
+          null,
+          2
+        ),
         path: editor.hooks.path,
       }
     : undefined,
@@ -1007,7 +1022,7 @@ export const getRelatedEditors = (editor: Editor, limit = 3) => {
 
   return editors
     .filter((candidate) => candidate.id !== editor.id)
-    .sort((left, right) => {
+    .toSorted((left, right) => {
       const leftScore = getRelatedScore(
         currentCapabilities,
         getEditorPageCapabilities(left)

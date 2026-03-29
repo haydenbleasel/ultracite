@@ -137,7 +137,8 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
   eslint: {
     benefitsDescription:
       "ESLint remains the safest choice when your team depends on plugin coverage, type-aware rules, or framework-specific linting behavior that has grown up around the wider JavaScript ecosystem.",
-    benefitsTitle: "Why teams keep the ESLint ecosystem and still use Ultracite",
+    benefitsTitle:
+      "Why teams keep the ESLint ecosystem and still use Ultracite",
     configDescription:
       "Ultracite keeps the three-tool model intact. You still get dedicated config for ESLint, Prettier, and Stylelint, but the presets absorb the repetitive setup work that usually sprawls across projects.",
     configTitle: "What changes in your ESLint, Prettier, and Stylelint setup",
@@ -150,7 +151,8 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       {
         answer:
           "Yes. That separation is deliberate. ESLint continues handling code quality, Prettier handles formatting, and Stylelint covers CSS so you keep the mature ecosystem behavior many teams already trust.",
-        question: "Why does Ultracite still generate three config files for ESLint?",
+        question:
+          "Why does Ultracite still generate three config files for ESLint?",
       },
       {
         answer:
@@ -173,8 +175,7 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
     faqsTitle: "ESLint migration FAQ",
     heroDescription:
       "Ultracite preserves the mature ESLint, Prettier, and Stylelint workflow while packaging the defaults, plugin choices, and editor expectations that usually get copied from repo to repo by hand.",
-    heroTitle:
-      "Stay on ESLint, Prettier, and Stylelint with less setup burden",
+    heroTitle: "Stay on ESLint, Prettier, and Stylelint with less setup burden",
     metadataDescription:
       "Use Ultracite with ESLint, Prettier, and Stylelint when you want the mature ecosystem without the usual config sprawl. Learn what changes, what stays the same, and when ESLint is the right fit.",
     metadataTitle: "Use Ultracite with ESLint, Prettier, and Stylelint",
@@ -236,7 +237,8 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       {
         answer:
           "Yes. Ultracite is designed to sit on top of the Oxlint stack your team already chose. The value is not changing providers. The value is packaging the shared rules, defaults, and editor behavior so every repo does not drift.",
-        question: "Can I use Ultracite if my team already standardized on Oxlint?",
+        question:
+          "Can I use Ultracite if my team already standardized on Oxlint?",
       },
       {
         answer:
@@ -246,7 +248,8 @@ const providerContent: Record<ProviderId, ProviderPageContent> = {
       {
         answer:
           "Ultracite keeps the staged-adoption path open. Teams often use it to define the Oxlint baseline now, then simplify the surrounding tooling over time rather than forcing a single all-at-once migration.",
-        question: "Can Ultracite still help if we are rolling Oxlint out gradually?",
+        question:
+          "Can Ultracite still help if we are rolling Oxlint out gradually?",
       },
       {
         answer:

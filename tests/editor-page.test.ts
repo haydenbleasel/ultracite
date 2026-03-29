@@ -28,26 +28,28 @@ const loadEditorSummary = () => {
 
   expect(result.exitCode).toBe(0);
 
-  return JSON.parse(decoder.decode(result.stdout)) as Array<{
+  return JSON.parse(decoder.decode(result.stdout)) as {
     differentiatorKey: string;
     id: string;
     metaDescription: string;
     relatedEditors: string[];
     title: string;
-  }>;
+  }[];
 };
 
 describe("editor page content", () => {
   test("every editor has unique titles, meta descriptions, and differentiator sets", () => {
     const summary = loadEditorSummary();
 
-    expect(new Set(summary.map((item) => item.title)).size).toBe(summary.length);
+    expect(new Set(summary.map((item) => item.title)).size).toBe(
+      summary.length
+    );
     expect(new Set(summary.map((item) => item.metaDescription)).size).toBe(
       summary.length
     );
-    expect(
-      new Set(summary.map((item) => item.differentiatorKey)).size
-    ).toBe(summary.length);
+    expect(new Set(summary.map((item) => item.differentiatorKey)).size).toBe(
+      summary.length
+    );
   });
 
   test("related editors never include the current editor", () => {

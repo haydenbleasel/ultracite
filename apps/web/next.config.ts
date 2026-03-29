@@ -11,7 +11,23 @@ const canonicalHost =
   productionHost === "ultracite.ai" ? "www.ultracite.ai" : productionHost;
 
 const config: NextConfig = {
-  async redirects() {
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
+
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        hostname: "github.com",
+        protocol: "https",
+      },
+    ],
+  },
+
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+
+  redirects() {
     return [
       {
         destination: `https://${canonicalHost}/:path*`,
@@ -36,22 +52,6 @@ const config: NextConfig = {
       },
     ];
   },
-
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-  },
-
-  images: {
-    formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      {
-        hostname: "github.com",
-        protocol: "https",
-      },
-    ],
-  },
-
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 
   serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
 

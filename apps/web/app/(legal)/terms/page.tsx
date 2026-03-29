@@ -1,4 +1,5 @@
 import { createPageMetadata } from "@/lib/site-metadata";
+
 import Contents from "./contents.mdx";
 
 export const metadata = createPageMetadata({

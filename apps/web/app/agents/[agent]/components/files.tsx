@@ -1,8 +1,8 @@
 import {
   getDefaultAgentHookContent,
   getDefaultAgentRulesContent,
-  type Agent,
 } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";

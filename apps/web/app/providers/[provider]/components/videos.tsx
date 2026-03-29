@@ -1,6 +1,7 @@
 import { SectionIntro } from "@/components/ultracite/section-intro";
-import { Video } from "./video";
 import type { ProviderPageContent } from "@/lib/provider-content";
+
+import { Video } from "./video";
 
 interface VideosProps {
   content: ProviderPageContent;

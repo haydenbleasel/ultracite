@@ -23,10 +23,10 @@ export const createAbsoluteUrl = (path = "/") =>
   new URL(path, siteUrl).toString();
 
 export const rootMetadata: Metadata = {
-  applicationName: siteName,
   alternates: {
     canonical: createAbsoluteUrl("/"),
   },
+  applicationName: siteName,
   description: siteDescription,
   metadataBase: new URL(siteUrl),
   openGraph: {

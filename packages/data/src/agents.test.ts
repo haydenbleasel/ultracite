@@ -5,7 +5,7 @@ import {
   getAgentSetupFacts,
   getDefaultAgentHookContent,
   getDefaultAgentRulesContent,
-} from "./agents";
+} from "./agents.ts";
 
 describe("agents content", () => {
   test("every agent includes the required SEO content fields", () => {
@@ -48,7 +48,11 @@ describe("agents content", () => {
     expect(copilot).toBeDefined();
     expect(codex).toBeDefined();
 
-    expect(getDefaultAgentRulesContent(copilot!)).toContain("applyTo:");
-    expect(getDefaultAgentRulesContent(codex!)).not.toContain("applyTo:");
+    if (!copilot || !codex) {
+      throw new Error("Expected copilot and codex fixtures to exist");
+    }
+
+    expect(getDefaultAgentRulesContent(copilot)).toContain("applyTo:");
+    expect(getDefaultAgentRulesContent(codex)).not.toContain("applyTo:");
   });
 });

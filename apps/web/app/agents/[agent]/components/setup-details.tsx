@@ -1,8 +1,8 @@
 import {
   getAgentSetupFacts,
   getDefaultAgentHookCommand,
-  type Agent,
 } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
 import type { LucideIcon } from "lucide-react";
 import {
   FileCode2Icon,
@@ -18,12 +18,12 @@ interface SetupDetailsProps {
 
 export const SetupDetails = ({ agent }: SetupDetailsProps) => {
   const facts = getAgentSetupFacts(agent);
-  const items: Array<{
+  const items: {
     description: string;
     icon: LucideIcon;
     label: string;
     value: string;
-  }> = [
+  }[] = [
     {
       description:
         "Ultracite writes to this exact file when you initialize or update the agent integration.",

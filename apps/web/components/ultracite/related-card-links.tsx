@@ -61,7 +61,12 @@ export const RelatedCardLinks = ({
                 </span>
               </div>
             </div>
-            <p className={cn("text-pretty text-muted-foreground text-sm", descriptionClassName)}>
+            <p
+              className={cn(
+                "text-pretty text-muted-foreground text-sm",
+                descriptionClassName
+              )}
+            >
               {item.description}
             </p>
           </Link>

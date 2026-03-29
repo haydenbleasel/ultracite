@@ -29,9 +29,14 @@ export const FeatureGrid = ({
   >
     {items.map((item) => (
       <div className="p-6 last:border-r last:border-b" key={item.title}>
-        {item.icon ? item.icon : null}
+        {item.icon ?? null}
         <h3 className={cn("mb-2 font-medium", titleClassName)}>{item.title}</h3>
-        <p className={cn("text-pretty text-muted-foreground text-sm", descriptionClassName)}>
+        <p
+          className={cn(
+            "text-pretty text-muted-foreground text-sm",
+            descriptionClassName
+          )}
+        >
           {item.description}
         </p>
       </div>

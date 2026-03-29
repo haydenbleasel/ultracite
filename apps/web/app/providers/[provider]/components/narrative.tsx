@@ -32,7 +32,10 @@ export const Narrative = ({ content }: NarrativeProps) => (
     />
     <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">
       {content.sections.map((section) => (
-        <section className="p-6 last:border-r last:border-b" key={section.title}>
+        <section
+          className="p-6 last:border-r last:border-b"
+          key={section.title}
+        >
           {(() => {
             const Icon = iconMap[section.icon];
 

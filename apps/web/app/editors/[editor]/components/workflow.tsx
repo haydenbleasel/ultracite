@@ -7,24 +7,40 @@ interface WorkflowProps {
   editor: Editor;
 }
 
-const renderStep = (step: string) =>
-  step
+const getSegmentKey = (
+  source: string,
+  segment: string,
+  searchStart: { value: number }
+) => {
+  const start = source.indexOf(segment, searchStart.value);
+  searchStart.value = start + segment.length;
+
+  return `${String(start)}-${segment}`;
+};
+
+const renderStep = (step: string) => {
+  const searchStart = { value: 0 };
+
+  return step
     .split(/(`[^`]+`)/g)
     .filter(Boolean)
-    .map((segment, index) => {
+    .map((segment) => {
+      const key = getSegmentKey(step, segment, searchStart);
+
       if (segment.startsWith("`") && segment.endsWith("`")) {
         return (
           <code
             className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
-            key={`${step}-${String(index)}`}
+            key={key}
           >
             {segment.slice(1, -1)}
           </code>
         );
       }
 
-      return <Fragment key={`${step}-${String(index)}`}>{segment}</Fragment>;
+      return <Fragment key={key}>{segment}</Fragment>;
     });
+};
 
 export const Workflow = ({ editor }: WorkflowProps) => (
   <div className="grid gap-8">

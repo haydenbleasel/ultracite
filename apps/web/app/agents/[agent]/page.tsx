@@ -12,8 +12,8 @@ import {
   createPageMetadata,
 } from "@/lib/site-metadata";
 
-import { BestFor } from "./components/best-for";
 import { Benefits } from "./components/benefits";
+import { BestFor } from "./components/best-for";
 import { Files } from "./components/files";
 import { AgentHero } from "./components/hero";
 import { RelatedAgents } from "./components/related-agents";
