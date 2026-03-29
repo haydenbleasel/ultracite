@@ -239,22 +239,6 @@ mock.module("@repo/data/agents", () => ({
     },
     {
       config: { appendMode: true, path: "AGENTS.md" },
-      description: "Neovate's terminal coding agent",
-      id: "neovate",
-      logo: mockSvg,
-      name: "Neovate",
-      subtitle: "Neovate's coding agent",
-    },
-    {
-      config: { appendMode: true, path: "AGENTS.md" },
-      description: "Pochi's editor agent",
-      id: "pochi",
-      logo: mockSvg,
-      name: "Pochi",
-      subtitle: "Pochi's IDE agent",
-    },
-    {
-      config: { appendMode: true, path: "AGENTS.md" },
       description: "Sylph's coding CLI",
       id: "adal",
       logo: mockSvg,

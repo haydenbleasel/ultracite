@@ -12,7 +12,6 @@ import continueLogo from "../logos/continue.svg";
 import copilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
 import cursorCliLogo from "../logos/cursor.svg";
-import deepagentsLogo from "../logos/deepagents.svg";
 import devinLogo from "../logos/devin.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
@@ -22,24 +21,23 @@ import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
-import kimiCliLogo from "../logos/kimi-cli.svg";
+import kimiLogo from "../logos/kimi.svg";
 import kodeLogo from "../logos/kode.svg";
+import langchainLogo from "../logos/langchain.svg";
 import lovableLogo from "../logos/lovable.svg";
 import mcpjamLogo from "../logos/mcpjam.svg";
 import mistralLogo from "../logos/mistral.svg";
 import muxLogo from "../logos/mux.svg";
-import neovateLogo from "../logos/neovate.svg";
 import onaLogo from "../logos/ona.svg";
 import openHandsLogo from "../logos/open-hands.svg";
 import openclawLogo from "../logos/openclaw.svg";
 import opencodeLogo from "../logos/opencode.svg";
 import piLogo from "../logos/pi.svg";
-import pochiLogo from "../logos/pochi.svg";
 import qoderLogo from "../logos/qoder.svg";
 import qwenLogo from "../logos/qwen.svg";
 import replitLogo from "../logos/replit.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
-import snowflakeCortexLogo from "../logos/snowflake-cortex.svg";
+import snowflakeLogo from "../logos/snowflake.svg";
 import vercelLogo from "../logos/vercel.svg";
 import warpLogo from "../logos/warp.svg";
 import zencoderLogo from "../logos/zencoder.svg";
@@ -780,7 +778,7 @@ export const agents: Agent[] = [
     description:
       "Snowflake's cloud AI platform for engineering and data-adjacent development workflows.",
     id: "snowflake-cortex",
-    logo: snowflakeCortexLogo,
+    logo: snowflakeLogo,
     logoFile: "snowflake-cortex.svg",
     name: "Snowflake Cortex",
     subtitle: "Snowflake's AI platform agent",
@@ -831,7 +829,7 @@ export const agents: Agent[] = [
     description:
       "LangChain's deep agent framework for multi-step terminal-driven coding workflows.",
     id: "deepagents",
-    logo: deepagentsLogo,
+    logo: langchainLogo,
     logoFile: "deepagents.svg",
     name: "Deepagents",
     subtitle: "LangChain's deep agent framework",
@@ -933,7 +931,7 @@ export const agents: Agent[] = [
     description:
       "Kimi's terminal coding CLI for natural-language implementation tasks.",
     id: "kimi-cli",
-    logo: kimiCliLogo,
+    logo: kimiLogo,
     logoFile: "kimi-cli.svg",
     name: "Kimi CLI",
     subtitle: "Kimi's coding CLI",
@@ -1141,108 +1139,6 @@ export const agents: Agent[] = [
     logoFile: "pi.svg",
     name: "Pi",
     subtitle: "Pi's coding CLI",
-  },
-  {
-    category: "terminal-agent",
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
-    content: {
-      differentiators: [
-        differentiator(
-          "Terminal-native implementation",
-          "Neovate works close to the shell, so a committed repo contract helps generated changes stay aligned with existing project structure and standards.",
-          "Terminal"
-        ),
-        differentiator(
-          "Portable AGENTS.md guidance",
-          "Using `AGENTS.md` keeps the setup easy to commit, audit, and reuse across repositories.",
-          "Layers"
-        ),
-        differentiator(
-          "Helpful for iterative work",
-          "Ultracite gives Neovate a stable baseline across repeated prompt-to-edit loops and follow-up refinements.",
-          "Workflow"
-        ),
-      ],
-      intro:
-        "Use Ultracite with Neovate when you want terminal agent sessions to follow a durable repo contract instead of repeated prompt setup. It is a practical fit for developers who like shell-driven coding with predictable standards.",
-      metaDescription:
-        "Add Ultracite to Neovate through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
-      useCases: [
-        agentUseCase(
-          "Shell-driven development",
-          "Keep Neovate aligned while you move between repo inspection, commands, and code edits in the terminal."
-        ),
-        agentUseCase(
-          "Cross-repo consistency",
-          "Use one committed AGENTS.md file to stabilize Neovate behavior across several projects."
-        ),
-        agentUseCase(
-          "Review-friendly iteration",
-          "Reduce cleanup by making naming, structure, and framework expectations explicit before generation."
-        ),
-      ],
-    },
-    description:
-      "Neovate's terminal coding agent for shell-first, repo-aware development work.",
-    id: "neovate",
-    logo: neovateLogo,
-    logoFile: "neovate.svg",
-    name: "Neovate",
-    subtitle: "Neovate's coding agent",
-  },
-  {
-    category: "editor-agent",
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
-    content: {
-      differentiators: [
-        differentiator(
-          "Editor-native repo guidance",
-          "Pochi benefits from a committed repo contract because AI-assisted edits happen close to the IDE review loop.",
-          "Monitor"
-        ),
-        differentiator(
-          "Portable AGENTS.md setup",
-          "Using `AGENTS.md` keeps Pochi aligned with a shared convention instead of hiding instructions inside per-user editor settings.",
-          "Layers"
-        ),
-        differentiator(
-          "Great for open editor workflows",
-          "Ultracite helps Pochi stay consistent when contributors use an open, collaborative editor-driven setup across the same repo.",
-          "Users"
-        ),
-      ],
-      intro:
-        "Use Ultracite with Pochi when you want editor-side AI assistance to inherit a durable project contract instead of relying on local-only instructions. It is especially useful for teams that want open, collaborative IDE workflows with predictable output.",
-      metaDescription:
-        "Configure Pochi with Ultracite through AGENTS.md so its editor agent follows your repo's linting, architecture, and review standards.",
-      useCases: [
-        agentUseCase(
-          "IDE-assisted generation",
-          "Guide Pochi before it edits files so generated code already fits the repository's expectations."
-        ),
-        agentUseCase(
-          "Shared editor workflows",
-          "Use one AGENTS.md file so every contributor gets the same coding contract inside Pochi."
-        ),
-        agentUseCase(
-          "Open-source-friendly collaboration",
-          "Keep repo guidance visible and versioned when several users iterate with the same editor workflow."
-        ),
-      ],
-    },
-    description:
-      "Pochi's editor agent for AI-assisted coding with a committed repo contract.",
-    id: "pochi",
-    logo: pochiLogo,
-    logoFile: "pochi.svg",
-    name: "Pochi",
-    subtitle: "Pochi's IDE agent",
   },
   {
     category: "terminal-agent",
