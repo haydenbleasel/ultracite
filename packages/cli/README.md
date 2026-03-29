@@ -18,6 +18,20 @@ npx ultracite init
 
 The interactive setup will guide you through selecting your formatter/linter, framework, editor, and AI agents.
 
+## Oxlint TypeScript Configs
+
+If you're using `oxlint.config.ts`, import the typed presets instead of the raw JSON files:
+
+```ts
+import { defineConfig } from "oxlint";
+
+import { core, next, react } from "ultracite/oxlint";
+
+export default defineConfig({
+  extends: [core, react, next],
+});
+```
+
 ## Supported Tools
 
 - **Biome** — All-in-one formatting and linting

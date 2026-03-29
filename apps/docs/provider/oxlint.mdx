@@ -49,6 +49,18 @@ Add framework presets as needed:
 }
 ```
 
+If you prefer `oxlint.config.ts`, use Ultracite's typed exports instead of importing the JSON presets directly:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+import { core, next, react } from "ultracite/oxlint";
+
+export default defineConfig({
+  extends: [core, react, next],
+});
+```
+
 ## Configuration Approach
 
 Ultracite's Oxlint configuration uses an **opt-out** approach. This means we enable all rule categories at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.

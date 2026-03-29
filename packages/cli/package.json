@@ -24,12 +24,15 @@
   },
   "files": [
     "config",
-    "dist/index.js",
-    "dist/index.d.ts",
+    "dist",
     "README.md"
   ],
   "type": "module",
   "exports": {
+    "./oxlint": {
+      "types": "./dist/oxlint.d.ts",
+      "default": "./dist/oxlint.js"
+    },
     "./biome/*": "./config/biome/*/biome.jsonc",
     "./eslint/*": "./config/eslint/*/eslint.config.mjs",
     "./oxlint/*": "./config/oxlint/*/.oxlintrc.json",
