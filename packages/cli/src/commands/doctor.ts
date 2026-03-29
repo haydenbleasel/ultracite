@@ -1,4 +1,3 @@
-import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -8,7 +7,7 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
-import { shellOption } from "../utils";
+import { runCommandSync } from "../run-command";
 
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
@@ -48,9 +47,8 @@ interface DiagnosticCheck {
 
 // Check if Biome is installed
 const checkBiomeInstallation = (): DiagnosticCheck => {
-  const biomeCheck = spawnSync("biome", ["--version"], {
+  const biomeCheck = runCommandSync("biome", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -70,9 +68,8 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 
 // Check if ESLint is installed
 const checkEslintInstallation = (): DiagnosticCheck => {
-  const eslintCheck = spawnSync("eslint", ["--version"], {
+  const eslintCheck = runCommandSync("eslint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -92,9 +89,8 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 
 // Check if Oxlint is installed
 const checkOxlintInstallation = (): DiagnosticCheck => {
-  const oxlintCheck = spawnSync("oxlint", ["--version"], {
+  const oxlintCheck = runCommandSync("oxlint", ["--version"], {
     encoding: "utf8",
-    shell: shellOption,
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
