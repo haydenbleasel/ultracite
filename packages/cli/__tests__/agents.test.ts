@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 
-import { createAgents } from "../src/agents";
+import { createAgents, getAgentFileTargets } from "../src/agents";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -206,5 +206,38 @@ describe("createAgents", () => {
       // Should not be called for root-level AGENTS.md
       expect(mockMkdir).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe("getAgentFileTargets", () => {
+  test("groups AGENTS.md integrations into a universal option", () => {
+    const targets = getAgentFileTargets();
+    const universalTarget = targets.find((target) => target.id === "universal");
+
+    expect(universalTarget).toEqual(
+      expect.objectContaining({
+        displayName: "Universal",
+        path: "AGENTS.md",
+        representativeAgentId: "codex",
+      })
+    );
+    expect(universalTarget?.agentIds).toEqual(
+      expect.arrayContaining(["codex", "jules", "devin"])
+    );
+    expect(universalTarget?.promptLabel).toContain("creates AGENTS.md");
+  });
+
+  test("keeps agent-specific files as dedicated options", () => {
+    const targets = getAgentFileTargets();
+    const claudeTarget = targets.find((target) => target.id === "claude");
+
+    expect(claudeTarget).toEqual(
+      expect.objectContaining({
+        displayName: "Claude",
+        path: ".claude/CLAUDE.md",
+        promptLabel: "Claude (creates .claude/CLAUDE.md)",
+        representativeAgentId: "claude",
+      })
+    );
   });
 });

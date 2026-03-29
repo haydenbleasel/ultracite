@@ -61,10 +61,10 @@ const Output = () => (
       <Gray>│</Gray>
     </Line>
     <Line>
-      <Green>◇</Green> Which agents do you want to enable?
+      <Green>◇</Green> Which agent files do you want to add?
     </Line>
     <Line>
-      <Gray>│</Gray> <Gray>Cursor, Claude Code</Gray>
+      <Gray>│</Gray> <Gray>Universal, Claude</Gray>
     </Line>
     <Line>
       <Gray>│</Gray>

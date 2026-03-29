@@ -18,7 +18,11 @@ import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
-import { createAgents } from "./agents";
+import {
+  createAgents,
+  getAgentFileTargets,
+  type AgentFileTarget,
+} from "./agents";
 import { createEditorConfig } from "./editor-config";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
@@ -700,6 +704,23 @@ export const upsertAgents = async (
   }
 };
 
+export const upsertAgentFile = async (
+  target: AgentFileTarget,
+  packageManager: PackageManagerName,
+  linter: (typeof options.linters)[number],
+  quiet = false
+) => {
+  const agentLabel = `${target.displayName} (${target.path})`;
+
+  await upsertAgents(
+    target.representativeAgentId,
+    agentLabel,
+    packageManager,
+    linter,
+    quiet
+  );
+};
+
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
@@ -882,6 +903,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let { agents } = opts;
+    let selectedAgentFiles: AgentFileTarget[] = [];
     let { hooks } = opts;
 
     // Build agent options from shared data
@@ -894,11 +916,12 @@ export const initialize = async (flags?: InitializeFlags) => {
         // In quiet mode, default to no agents
         agents = [];
       } else {
+        const agentFileTargets = getAgentFileTargets();
         const agentsResult = await multiselect({
-          message: "Which agents do you want to enable (optional)?",
-          options: Object.entries(agentsOptions).map(([value, label]) => ({
-            label,
-            value,
+          message: "Which agent files do you want to add (optional)?",
+          options: agentFileTargets.map((target) => ({
+            label: target.promptLabel,
+            value: target.id,
           })),
           required: false,
         });
@@ -908,7 +931,9 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        agents = agentsResult as (typeof options.agents)[number][];
+        selectedAgentFiles = agentFileTargets.filter((target) =>
+          (agentsResult as AgentFileTarget["id"][]).includes(target.id)
+        );
       }
     }
 
@@ -999,6 +1024,10 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     for (const editorId of editorConfig ?? []) {
       await upsertEditorConfig(editorId, linter, quiet);
+    }
+
+    for (const target of selectedAgentFiles) {
+      await upsertAgentFile(target, pm, linter, quiet);
     }
 
     for (const ruleName of agents ?? []) {

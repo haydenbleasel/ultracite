@@ -7,6 +7,7 @@ import {
   initializePreCommit,
   initializePrecommitHook,
   installDependencies,
+  upsertAgentFile,
   upsertAgents,
   upsertBiomeConfig,
   upsertEditorConfig,
@@ -18,6 +19,7 @@ import {
   upsertStylelintConfig,
   upsertTsConfig,
 } from "../src/initialize";
+import { getAgentFileTargets } from "../src/agents";
 
 // Data package mocks are in preload.ts (must run before imports)
 
@@ -121,7 +123,7 @@ describe("initialize", () => {
     expect(mockMultiselect).toHaveBeenCalled();
   });
 
-  test("shows agents prompt when agents not specified", async () => {
+  test("shows agent file prompt when agents not specified", async () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
 
     mock.module("@clack/prompts", () => ({
@@ -164,7 +166,22 @@ describe("initialize", () => {
       skipInstall: true,
     });
 
-    expect(mockMultiselect).toHaveBeenCalled();
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Which agent files do you want to add (optional)?",
+        options: expect.arrayContaining([
+          expect.objectContaining({
+            label:
+              "Universal (creates AGENTS.md for Codex, Jules, Devin, and more)",
+            value: "universal",
+          }),
+          expect.objectContaining({
+            label: "Claude (creates .claude/CLAUDE.md)",
+            value: "claude",
+          }),
+        ]),
+      })
+    );
   });
 
   test("shows hooks prompt when hooks not specified", async () => {
@@ -2124,6 +2141,38 @@ describe("helper functions", () => {
 
       await upsertAgents("claude", "Claude Code", "npm", "biome");
       expect(mockWriteFile).toHaveBeenCalled();
+    });
+  });
+
+  describe("upsertAgentFile", () => {
+    test("creates the universal AGENTS.md target once", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      const universalTarget = getAgentFileTargets().find(
+        (target) => target.id === "universal"
+      );
+
+      expect(universalTarget).toBeDefined();
+
+      await upsertAgentFile(universalTarget!, "npm", "biome");
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("AGENTS.md");
     });
   });
 });
