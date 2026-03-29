@@ -404,7 +404,8 @@ describe("check", () => {
 
     await check(["src/my file.ts"]);
 
-    const [command, , options] = mockSpawn.mock.calls[0];
+    const [firstCall] = mockSpawn.mock.calls;
+    const [command, , options] = firstCall;
     expect(command).toBe("biome");
     expect(options.shell).toBe(false);
   });

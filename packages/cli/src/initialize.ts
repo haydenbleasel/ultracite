@@ -53,39 +53,99 @@ interface InitializeFlags {
   "type-aware"?: boolean;
 }
 
-const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
-  angular: ["@angular-eslint/eslint-plugin@latest"],
-  astro: ["eslint-plugin-astro@latest"],
-  jest: ["eslint-plugin-jest@latest"],
-  next: ["@next/eslint-plugin-next@latest"],
-  qwik: ["eslint-plugin-qwik@latest"],
-  react: [
-    "eslint-plugin-react@latest",
-    "eslint-plugin-react-hooks@latest",
-    "eslint-plugin-jsx-a11y@latest",
-    "@tanstack/eslint-plugin-query@latest",
-  ],
-  remix: ["eslint-plugin-remix@latest"],
-  solid: ["eslint-plugin-solid@latest"],
-  svelte: ["eslint-plugin-svelte@latest"],
-  vitest: ["@vitest/eslint-plugin@latest"],
-  vue: ["eslint-plugin-vue@latest"],
+const supportedEslintVersion = "^9.0.0";
+const eslintCoreDevDependencies: Record<string, string> = {
+  "@eslint/js": supportedEslintVersion,
+  "@typescript-eslint/eslint-plugin":
+    packageJson.devDependencies["@typescript-eslint/eslint-plugin"],
+  "@typescript-eslint/parser":
+    packageJson.devDependencies["@typescript-eslint/parser"],
+  eslint: supportedEslintVersion,
+  "eslint-config-prettier":
+    packageJson.devDependencies["eslint-config-prettier"],
+  "eslint-import-resolver-typescript":
+    packageJson.devDependencies["eslint-import-resolver-typescript"],
+  "eslint-plugin-compat": packageJson.devDependencies["eslint-plugin-compat"],
+  "eslint-plugin-cypress": packageJson.devDependencies["eslint-plugin-cypress"],
+  "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
+  "eslint-plugin-html": packageJson.devDependencies["eslint-plugin-html"],
+  "eslint-plugin-import-x":
+    packageJson.devDependencies["eslint-plugin-import-x"],
+  "eslint-plugin-n": packageJson.devDependencies["eslint-plugin-n"],
+  "eslint-plugin-prettier":
+    packageJson.devDependencies["eslint-plugin-prettier"],
+  "eslint-plugin-promise": packageJson.devDependencies["eslint-plugin-promise"],
+  "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+  "eslint-plugin-storybook":
+    packageJson.devDependencies["eslint-plugin-storybook"],
+  "eslint-plugin-unicorn": packageJson.devDependencies["eslint-plugin-unicorn"],
+  "eslint-plugin-unused-imports":
+    packageJson.devDependencies["eslint-plugin-unused-imports"],
+  globals: packageJson.devDependencies.globals,
+  prettier: "latest",
+  stylelint: "latest",
 };
-const addEslintFrameworkPackages = (
-  packages: string[],
+const eslintFrameworkDevDependencies: Partial<
+  Record<Frameworks, Record<string, string>>
+> = {
+  angular: {
+    "@angular-eslint/eslint-plugin": "latest",
+  },
+  astro: {
+    "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
+  },
+  jest: {
+    "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
+  },
+  next: {
+    "@next/eslint-plugin-next":
+      packageJson.devDependencies["@next/eslint-plugin-next"],
+  },
+  qwik: {
+    "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
+  },
+  react: {
+    "@tanstack/eslint-plugin-query":
+      packageJson.devDependencies["@tanstack/eslint-plugin-query"],
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
+    "eslint-plugin-react": packageJson.devDependencies["eslint-plugin-react"],
+    "eslint-plugin-react-hooks":
+      packageJson.devDependencies["eslint-plugin-react-hooks"],
+  },
+  remix: {
+    "eslint-plugin-remix": packageJson.devDependencies["eslint-plugin-remix"],
+  },
+  solid: {
+    "eslint-plugin-solid": packageJson.devDependencies["eslint-plugin-solid"],
+  },
+  svelte: {
+    "eslint-plugin-svelte": packageJson.devDependencies["eslint-plugin-svelte"],
+  },
+  vitest: {
+    "@vitest/eslint-plugin":
+      packageJson.devDependencies["@vitest/eslint-plugin"],
+  },
+  vue: {
+    "eslint-plugin-vue": packageJson.devDependencies["eslint-plugin-vue"],
+  },
+};
+const buildEslintDevDependencies = (
   frameworks: Frameworks[]
-) => {
+): Record<string, string> => {
+  const devDependencies = { ...eslintCoreDevDependencies };
+
   for (const framework of frameworks) {
-    const deps = eslintFrameworkPackages[framework];
-    if (deps) {
-      packages.push(...deps);
-    }
+    Object.assign(devDependencies, eslintFrameworkDevDependencies[framework]);
   }
+
+  return devDependencies;
 };
 
 const buildNoInstallDevDependencies = (
   linter: Linter,
-  typeAware: boolean
+  typeAware: boolean,
+  frameworks: Frameworks[]
 ): Record<string, string> => {
   const devDependencies: Record<string, string> = {
     ultracite: ultraciteVersion,
@@ -95,9 +155,7 @@ const buildNoInstallDevDependencies = (
     devDependencies["@biomejs/biome"] = schemaVersion;
   }
   if (linter === "eslint") {
-    devDependencies.eslint = "latest";
-    devDependencies.prettier = "latest";
-    devDependencies.stylelint = "latest";
+    Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
   }
   if (linter === "oxlint") {
     devDependencies.oxlint = "latest";
@@ -131,32 +189,11 @@ export const installDependencies = async (
     packages.push(`@biomejs/biome@${schemaVersion}`);
   }
   if (linter === "eslint") {
-    packages.push("eslint@latest");
-
-    // Add Plugin eslint for core dependencies
     packages.push(
-      "@typescript-eslint/eslint-plugin@latest",
-      "@typescript-eslint/parser@latest",
-      "eslint-config-prettier@latest",
-      "eslint-import-resolver-typescript@latest",
-      "eslint-plugin-compat@latest",
-      "eslint-plugin-cypress@latest",
-      "eslint-plugin-github@latest",
-      "eslint-plugin-html@latest",
-      "eslint-plugin-import-x@latest",
-      "eslint-plugin-n@latest",
-      "eslint-plugin-prettier@latest",
-      "eslint-plugin-promise@latest",
-      "eslint-plugin-sonarjs@latest",
-      "eslint-plugin-storybook@latest",
-      "eslint-plugin-unicorn@latest",
-      "eslint-plugin-unused-imports@latest",
-      "globals@latest"
+      ...Object.entries(buildEslintDevDependencies(frameworks)).map(
+        ([name, version]) => `${name}@${version}`
+      )
     );
-    addEslintFrameworkPackages(packages, frameworks);
-    // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-    packages.push("prettier@latest");
-    packages.push("stylelint@latest");
   }
   if (linter === "oxlint") {
     packages.push("oxlint@latest");
@@ -178,7 +215,11 @@ export const installDependencies = async (
       });
     }
   } else {
-    const devDependencies = buildNoInstallDevDependencies(linter, typeAware);
+    const devDependencies = buildNoInstallDevDependencies(
+      linter,
+      typeAware,
+      frameworks
+    );
     await updatePackageJson({ devDependencies });
   }
 

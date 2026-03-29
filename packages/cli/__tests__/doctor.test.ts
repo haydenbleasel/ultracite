@@ -102,7 +102,8 @@ describe("doctor", () => {
 
     await doctor();
 
-    const [command, args, options] = mockSpawn.mock.calls[0];
+    const [firstCall] = mockSpawn.mock.calls;
+    const [command, args, options] = firstCall;
     expect(command).toBe("biome");
     expect(args).toEqual(["--version"]);
     expect(options.shell).toBe(false);

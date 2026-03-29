@@ -242,7 +242,8 @@ describe("createHooks", () => {
     });
 
     test("update merges hooks into existing settings when ultracite is not present", async () => {
-      const existingSettings = '{"model":"yuanbao-code","permissions":{"bash":true}}';
+      const existingSettings =
+        '{"model":"yuanbao-code","permissions":{"bash":true}}';
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({

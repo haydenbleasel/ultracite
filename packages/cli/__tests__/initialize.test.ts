@@ -1084,7 +1084,11 @@ describe("helper functions", () => {
     });
 
     test("installs eslint dependencies when linter is eslint", async () => {
-      const mockAddDep = mock(() => Promise.resolve());
+      const installedPackages: string[] = [];
+      const mockAddDep = mock((pkg: string) => {
+        installedPackages.push(pkg);
+        return Promise.resolve();
+      });
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
@@ -1105,6 +1109,10 @@ describe("helper functions", () => {
 
       await installDependencies("npm", "eslint", true);
       expect(mockAddDep).toHaveBeenCalled();
+      expect(installedPackages).toContain("eslint@^9.0.0");
+      expect(installedPackages).toContain("@eslint/js@^9.0.0");
+      expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
+      expect(installedPackages).not.toContain("eslint@latest");
     });
 
     test("installs oxlint dependencies when linter is oxlint", async () => {
@@ -1132,7 +1140,11 @@ describe("helper functions", () => {
     });
 
     test("updates package.json with eslint deps when install is false", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const writtenContents: string[] = [];
+      const mockWriteFile = mock((_path: string, content: string) => {
+        writtenContents.push(content);
+        return Promise.resolve();
+      });
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -1150,6 +1162,16 @@ describe("helper functions", () => {
 
       await installDependencies("npm", "eslint", false);
       expect(mockWriteFile).toHaveBeenCalled();
+      expect(
+        writtenContents.some((content) =>
+          content.includes('"eslint": "^9.0.0"')
+        )
+      ).toBe(true);
+      expect(
+        writtenContents.some((content) =>
+          content.includes('"eslint-plugin-github": "6.0.0"')
+        )
+      ).toBe(true);
     });
 
     test("updates package.json with oxlint deps when install is false", async () => {

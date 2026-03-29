@@ -1,10 +1,6 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 
-import {
-  exists,
-  isMonorepo,
-  updatePackageJson,
-} from "../src/utils";
+import { exists, isMonorepo, updatePackageJson } from "../src/utils";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),

@@ -17,11 +17,7 @@ const runBiomeFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runEslintFix = (files: string[], passthrough: string[]): void => {
-  const args = [
-    "--fix",
-    ...passthrough,
-    ...(files.length > 0 ? files : ["."]),
-  ];
+  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
 
   const result = runCommandSync("eslint", args, {
     stdio: "inherit",
@@ -43,11 +39,7 @@ const runPrettierFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runStylelintFix = (files: string[], passthrough: string[]): void => {
-  const args = [
-    "--fix",
-    ...passthrough,
-    ...(files.length > 0 ? files : ["."]),
-  ];
+  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
 
   const result = runCommandSync("stylelint", args, {
     stdio: "inherit",
