@@ -4,6 +4,7 @@ import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 
 import antigravityLogo from "../logos/antigravity.svg";
+import codebuddyLogo from "../logos/codebuddy.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
 import traeLogo from "../logos/trae.svg";
@@ -550,6 +551,71 @@ alwaysApply: false
       "Start with the shared `.vscode/settings.json` so Windsurf follows the repo's formatter and save-time fixes.",
       "Add `.windsurf/rules/ultracite.md` to steer Codeium agents toward Ultracite's code standards before they write code.",
       "Turn on `.windsurf/hooks.json` if you want Ultracite to run automatically after Windsurf finishes writing files.",
+    ],
+  },
+  {
+    audience: "CodeBuddy teams who want shared workspace defaults plus a committed AI memory file for generated code",
+    config: {
+      extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
+    },
+    differentiators: [
+      {
+        description:
+          "CodeBuddy can pair shared VS Code-style workspace settings with a branded memory file, so editor behavior and AI guidance stay aligned in one repo contract.",
+        title: "Pairs shared settings with project memory",
+      },
+      {
+        description:
+          "Using `CODEBUDDY.md` makes repo guidance explicit before CodeBuddy generates code, instead of relying only on after-the-fact cleanup.",
+        title: "Moves quality earlier in the workflow",
+      },
+      {
+        description:
+          "The setup stays familiar for teams already standardizing on `.vscode/settings.json`, which keeps onboarding simple even in an AI-heavy editor.",
+        title: "Fits existing VS Code-style collaboration",
+      },
+    ],
+    description:
+      "Tencent Cloud CodeBuddy is a next-generation AI code editor powered by the Tencent Yuanbao Code large model.",
+    faq: [
+      {
+        answer:
+          "The workspace settings control format on save and code actions, while `CODEBUDDY.md` gives CodeBuddy repo-level instructions for how generated code should look.",
+        question:
+          "Why does the CodeBuddy setup use both settings and CODEBUDDY.md?",
+      },
+      {
+        answer:
+          "Yes. Ultracite keeps the shared `.vscode/settings.json` file as the baseline so CodeBuddy can stay aligned with teammates using other VS Code-style editors.",
+        question:
+          "Can CodeBuddy share the same committed workspace settings as other editors?",
+      },
+      {
+        answer:
+          "Teams that rely on AI-assisted edits throughout the day tend to benefit the most, because the memory file reduces how much style cleanup is needed after generation.",
+        question: "Who is the CodeBuddy setup best for?",
+      },
+    ],
+    id: "codebuddy",
+    logo: codebuddyLogo,
+    name: "CodeBuddy",
+    rules: {
+      appendMode: true,
+      path: "CODEBUDDY.md",
+    },
+    subtitle: "Tencent Cloud's AI code editor",
+    seo: {
+      metaDescription:
+        "Configure Ultracite for CodeBuddy with shared `.vscode/settings.json` defaults and a `CODEBUDDY.md` memory file so AI-generated code follows your repo standards.",
+      summary:
+        "CodeBuddy works best with Ultracite when you combine committed workspace settings with a branded project memory file that teaches the AI how your repo expects code to be written.",
+    },
+    workflowHighlights: [
+      "Generate `.vscode/settings.json` so CodeBuddy follows the same formatter, code actions, and TypeScript defaults as the rest of the repo.",
+      "Add `CODEBUDDY.md` to give CodeBuddy a committed memory file that reflects Ultracite's coding standards.",
+      "Treat the memory file as durable repo guidance and update it when your team's coding expectations change.",
     ],
   },
   {

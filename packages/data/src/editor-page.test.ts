@@ -87,4 +87,35 @@ describe("editor page helpers", () => {
       ".rules",
     ]);
   });
+
+  test("derives rules without hooks for ai-vscode editors", () => {
+    const source = {
+      config: {
+        code: "{}",
+        extensionCommand: "code --install-extension",
+        path: ".vscode/settings.json",
+      },
+      id: "codebuddy",
+      name: "CodeBuddy",
+      rules: {
+        appendMode: true,
+        code: "# Rules",
+        path: "CODEBUDDY.md",
+      },
+    };
+
+    expect(getEditorPageCapabilities(source)).toEqual({
+      configFormat: "json",
+      configPath: ".vscode/settings.json",
+      family: "ai-vscode",
+      hasExtensionInstall: true,
+      hasHooks: false,
+      hasRules: true,
+      supportsAppendRules: true,
+    });
+    expect(getEditorSetupFiles(source).map((item) => item.path)).toEqual([
+      ".vscode/settings.json",
+      "CODEBUDDY.md",
+    ]);
+  });
 });

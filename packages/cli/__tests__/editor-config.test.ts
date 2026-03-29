@@ -126,6 +126,24 @@ describe("createEditorConfig", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test("creates codebuddy config with biome linter", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      const editorConfig = createEditorConfig("codebuddy", "biome");
+      await editorConfig.create();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".vscode/settings.json");
+    });
   });
 
   describe("windsurf hooks", () => {

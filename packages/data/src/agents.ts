@@ -1,15 +1,19 @@
 import type { StaticImageData } from "next/image";
 
 import aiderLogo from "../logos/aider.svg";
+import adalLogo from "../logos/adal.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
+import continueLogo from "../logos/continue.svg";
 import codexLogo from "../logos/codex.svg";
 import copilotLogo from "../logos/copilot.svg";
 import crushLogo from "../logos/crush.svg";
 import cursorCliLogo from "../logos/cursor.svg";
+import deepagentsLogo from "../logos/deepagents.svg";
+import devinLogo from "../logos/devin.svg";
 import droidLogo from "../logos/droid.svg";
 import firebaseStudioLogo from "../logos/firebase-studio.svg";
 import firebenderLogo from "../logos/firebender.svg";
@@ -17,14 +21,28 @@ import geminiLogo from "../logos/gemini.svg";
 import gooseLogo from "../logos/goose.svg";
 import julesLogo from "../logos/jules.svg";
 import junieLogo from "../logos/junie.svg";
+import kimiCliLogo from "../logos/kimi-cli.svg";
 import kiloCodeLogo from "../logos/kilo-code.svg";
+import kodeLogo from "../logos/kode.svg";
+import lovableLogo from "../logos/lovable.svg";
+import mcpjamLogo from "../logos/mcpjam.svg";
 import mistralLogo from "../logos/mistral.svg";
+import muxLogo from "../logos/mux.svg";
+import neovateLogo from "../logos/neovate.svg";
+import onaLogo from "../logos/ona.svg";
 import openHandsLogo from "../logos/open-hands.svg";
+import openclawLogo from "../logos/openclaw.svg";
 import opencodeLogo from "../logos/opencode.svg";
+import piLogo from "../logos/pi.svg";
+import pochiLogo from "../logos/pochi.svg";
 import qwenLogo from "../logos/qwen.svg";
+import qoderLogo from "../logos/qoder.svg";
+import replitLogo from "../logos/replit.svg";
 import rooCodeLogo from "../logos/roo-code.svg";
+import snowflakeCortexLogo from "../logos/snowflake-cortex.svg";
 import vercelLogo from "../logos/vercel.svg";
 import warpLogo from "../logos/warp.svg";
+import zencoderLogo from "../logos/zencoder.svg";
 import { getRules } from "./rules";
 import type { HooksConfig } from "./types";
 
@@ -360,6 +378,924 @@ export const agents: Agent[] = [
     logoFile: "jules.svg",
     name: "Jules",
     subtitle: "Google's async agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "replit.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Workspace-native instructions",
+          "Replit Agent already expects repo guidance in `replit.md`, so Ultracite can fit naturally into the browser workflow without introducing another config surface.",
+          "Cloud"
+        ),
+        differentiator(
+          "Fast prototype-to-product loop",
+          "Replit is strong for building quickly in the browser, and explicit repo rules help generated code stay maintainable once the project grows beyond a demo.",
+          "Rocket"
+        ),
+        differentiator(
+          "Collaborative workspace fit",
+          "Because Replit projects are often shared across teammates, a committed rules file helps keep the coding contract stable between sessions and handoffs.",
+          "Users"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Replit Agent when you want browser-based app generation to stay aligned with the same standards you expect in a maintained codebase. It is especially useful for full-stack products that start fast, but still need reviewable, team-friendly code as they evolve.",
+      metaDescription:
+        "Configure Replit Agent with Ultracite through replit.md so browser-based app generation follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Browser-based full-stack building",
+          "Give Replit Agent a durable repo contract before it generates frontend, backend, and configuration code in the same workspace."
+        ),
+        useCase(
+          "Prototypes that need guardrails",
+          "Keep early product iterations aligned with your team's typing, accessibility, and architecture expectations."
+        ),
+        useCase(
+          "Shared cloud workspaces",
+          "Use one committed `replit.md` file so collaborators get the same coding guidance every time they open the project."
+        ),
+      ],
+    },
+    description:
+      "Replit's cloud agent for building and iterating on apps directly in the browser.",
+    id: "replit",
+    logo: replitLogo,
+    logoFile: "replit.svg",
+    name: "Replit Agent",
+    subtitle: "Replit's cloud agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Agent-first execution",
+          "Devin is built around autonomous software work, so explicit repo rules help long-running tasks come back as reviewable changes instead of cleanup-heavy drafts.",
+          "Bot"
+        ),
+        differentiator(
+          "Native AGENTS.md support",
+          "Devin uses `AGENTS.md`, which keeps the integration portable and consistent with other cloud agents already in the Ultracite dataset.",
+          "Layers"
+        ),
+        differentiator(
+          "Strong for multi-step tasks",
+          "Persistent repo guidance helps Devin stay aligned across investigation, implementation, and follow-up passes on the same task.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Devin when you want delegated engineering work to stay inside a clear repo contract from the first file read to the final patch. It is a strong fit for teams assigning real implementation work and expecting the result to hold up in review.",
+      metaDescription:
+        "Add Ultracite to Devin through AGENTS.md so Cognition's software engineering agent follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Asynchronous task delegation",
+          "Give Devin a stable repo contract before it works through larger implementation tasks outside the normal interactive development loop."
+        ),
+        useCase(
+          "Review-ready autonomous patches",
+          "Reduce cleanup during review by making naming, typing, and framework conventions explicit before the task starts."
+        ),
+        useCase(
+          "Multi-step bug investigation",
+          "Keep standards stable while Devin traces behavior, updates code in several places, and iterates on a fix."
+        ),
+      ],
+    },
+    description:
+      "Cognition's autonomous software engineering agent for completing development tasks in the background.",
+    id: "devin",
+    logo: devinLogo,
+    logoFile: "devin.svg",
+    name: "Devin",
+    subtitle: "Cognition's async agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Product-focused generation",
+          "Lovable can move from prompt to working app quickly, so explicit repo rules help generated code stay maintainable once the prototype becomes a real product.",
+          "Sparkles"
+        ),
+        differentiator(
+          "Portable repo guidance",
+          "Using `AGENTS.md` gives Lovable a committed project contract that can live alongside other agent tools instead of hiding standards in workspace-only settings.",
+          "Layers"
+        ),
+        differentiator(
+          "Better prototype handoff",
+          "Ultracite helps Lovable output feel closer to team-owned production code, which makes the handoff from idea to review much smoother.",
+          "ShieldCheck"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Lovable when you want fast app generation without dropping the quality bar your team expects from maintained code. It is especially helpful when a quick prototype is likely to turn into a shipped product with ongoing review and iteration.",
+      metaDescription:
+        "Configure Lovable with Ultracite through AGENTS.md so AI-generated apps follow your repo's coding, architecture, and review standards from the first commit.",
+      useCases: [
+        useCase(
+          "Prompt-to-product builds",
+          "Keep Lovable aligned when a generated app moves beyond a demo and into a codebase your team will keep shipping."
+        ),
+        useCase(
+          "Rapid iteration with guardrails",
+          "Make architecture, typing, and framework conventions explicit before Lovable generates new pages, flows, or backend logic."
+        ),
+        useCase(
+          "Shared product experiments",
+          "Use one committed AGENTS.md file so follow-up sessions and teammates inherit the same coding expectations."
+        ),
+      ],
+    },
+    description:
+      "Lovable's AI app builder for generating and iterating on full-stack products in the cloud.",
+    id: "lovable",
+    logo: lovableLogo,
+    logoFile: "lovable.svg",
+    name: "Lovable",
+    subtitle: "Lovable's app builder",
+  },
+  {
+    category: "editor-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "IDE-first guidance",
+          "Zencoder is designed to work close to the editor, so a committed `AGENTS.md` file helps steer generated edits before they become review feedback.",
+          "Monitor"
+        ),
+        differentiator(
+          "Portable repo contract",
+          "Using `AGENTS.md` keeps Zencoder aligned with the same repository guidance other agent tools can reuse across the stack.",
+          "Layers"
+        ),
+        differentiator(
+          "Useful for team handoffs",
+          "Explicit repo standards help Zencoder stay consistent when several developers bounce between the same editor-assisted workflow.",
+          "Users"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Zencoder when you want an editor-native coding agent to follow the same repo contract your team expects from human contributors. It fits best when AI-assisted edits happen close to the IDE, but still need to land cleanly in review.",
+      metaDescription:
+        "Configure Zencoder with Ultracite through AGENTS.md so its IDE agent follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Editor-assisted implementation",
+          "Guide Zencoder before it creates or edits files so the first draft already reflects your repo conventions."
+        ),
+        useCase(
+          "Shared IDE workflows",
+          "Use one committed AGENTS.md file so teammates get the same coding contract in every Zencoder session."
+        ),
+        useCase(
+          "Review-conscious AI edits",
+          "Reduce cleanup after editor-side generations by making typing, naming, and structure explicit upfront."
+        ),
+      ],
+    },
+    description:
+      "Zencoder's IDE coding agent for generating and refining code inside the editor workflow.",
+    id: "zencoder",
+    logo: zencoderLogo,
+    logoFile: "zencoder.svg",
+    name: "Zencoder",
+    subtitle: "Zencoder's IDE agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Background-first execution",
+          "Ona is designed around delegated work, so a committed repo contract helps long-running tasks return reviewable code instead of cleanup-heavy drafts.",
+          "Cloud"
+        ),
+        differentiator(
+          "Shared AGENTS.md setup",
+          "Using `AGENTS.md` keeps the integration simple and portable across repositories without introducing another product-specific file.",
+          "Layers"
+        ),
+        differentiator(
+          "Strong for async delivery",
+          "Ultracite gives Ona a stable coding baseline before work is handed off, resumed later, or reviewed by another teammate.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Ona when you want cloud-executed engineering work to inherit the same repo standards your team uses locally. It is a strong fit for async delivery where handoff quality matters as much as speed.",
+      metaDescription:
+        "Add Ultracite to Ona through AGENTS.md so its cloud agent follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Delegated background work",
+          "Give Ona a durable repo contract before it works through larger implementation tasks asynchronously."
+        ),
+        useCase(
+          "Multi-repo consistency",
+          "Reuse the same AGENTS.md pattern across repositories where Ona needs explicit project expectations."
+        ),
+        useCase(
+          "Review-ready delivery",
+          "Reduce cleanup during review by making accessibility, naming, and architecture expectations explicit before code is written."
+        ),
+      ],
+    },
+    description:
+      "Ona's cloud coding agent for asynchronous implementation and engineering tasks.",
+    id: "ona",
+    logo: onaLogo,
+    logoFile: "ona.svg",
+    name: "Ona",
+    subtitle: "Ona's cloud agent",
+  },
+  {
+    category: "open-source-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Open-source agent gateway",
+          "OpenClaw benefits from an explicit repo contract because it can orchestrate several coding flows across an open, self-hostable stack.",
+          "Globe"
+        ),
+        differentiator(
+          "Portable AGENTS.md contract",
+          "Using `AGENTS.md` keeps OpenClaw aligned with a convention that is easy to commit, audit, and reuse across repos.",
+          "Layers"
+        ),
+        differentiator(
+          "Reproducible experiments",
+          "Committed repo guidance makes OpenClaw easier to evaluate across environments because the same standards follow every run.",
+          "ShieldCheck"
+        ),
+      ],
+      intro:
+        "Use Ultracite with OpenClaw when you want an open-source agent stack to follow explicit repo guidance instead of relying on ad hoc prompts. It is especially useful for teams experimenting with self-hosted or reproducible AI development workflows.",
+      metaDescription:
+        "Configure OpenClaw with Ultracite through AGENTS.md so its open-source agent stack follows your repo's implementation and review standards.",
+      useCases: [
+        useCase(
+          "Self-hosted agent experiments",
+          "Keep OpenClaw grounded when you evaluate autonomous coding workflows in your own infrastructure."
+        ),
+        useCase(
+          "Reproducible repo demos",
+          "Use a committed AGENTS.md file so contributors can see the same repo guidance every time OpenClaw runs."
+        ),
+        useCase(
+          "Open-source team workflows",
+          "Share one durable coding contract so multiple users can run OpenClaw without style drift."
+        ),
+      ],
+    },
+    description:
+      "An open-source agent gateway for orchestrating coding workflows with a committed repo contract.",
+    id: "openclaw",
+    logo: openclawLogo,
+    logoFile: "openclaw.svg",
+    name: "OpenClaw",
+    subtitle: "Open-source agent gateway",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Terminal-native control",
+          "Continue can work close to terminal and automation workflows, so repo guidance helps keep broad code changes aligned with the project contract.",
+          "Terminal"
+        ),
+        differentiator(
+          "Simple AGENTS.md adoption",
+          "Using `AGENTS.md` gives Continue a repo-scoped instruction file that is easy to review and reuse across environments.",
+          "Layers"
+        ),
+        differentiator(
+          "Good for iterative agent loops",
+          "Ultracite helps Continue stay consistent during repeated investigate-edit-review cycles where drift can build up over time.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Continue when you want terminal-driven agent work to stay anchored to a committed repo contract. It is a practical fit for teams that want lightweight adoption without giving up reviewable code quality.",
+      metaDescription:
+        "Configure Continue with Ultracite through AGENTS.md so its terminal agent follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Terminal-heavy development",
+          "Keep Continue aligned while you switch between shell commands, repo analysis, and code generation."
+        ),
+        useCase(
+          "Fast iterative fixes",
+          "Use a committed AGENTS.md file to stabilize behavior across several short agent loops in the same task."
+        ),
+        useCase(
+          "Portable repo guidance",
+          "Reuse one repo contract across environments where Continue needs clear coding expectations."
+        ),
+      ],
+    },
+    description:
+      "Continue's terminal coding agent for iterative implementation and repo-aware edits.",
+    id: "continue",
+    logo: continueLogo,
+    logoFile: "continue.svg",
+    name: "Continue",
+    subtitle: "Continue's terminal agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Data-platform context",
+          "Snowflake Cortex sits close to data and platform workflows, so explicit repo guidance helps generated code stay aligned with broader engineering standards.",
+          "Cloud"
+        ),
+        differentiator(
+          "Shared AGENTS.md contract",
+          "Using `AGENTS.md` keeps Cortex guidance portable and easy to commit even when code spans data, application, and operational concerns.",
+          "Layers"
+        ),
+        differentiator(
+          "Useful for full-stack data work",
+          "Ultracite helps Cortex produce changes that are easier to review when SQL-adjacent logic and app code live in the same repository.",
+          "Boxes"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Snowflake Cortex when you want cloud-connected code generation to respect the same repo standards your team expects across application and data-oriented work. It is especially useful where data logic and shipped code evolve together.",
+      metaDescription:
+        "Add Ultracite to Snowflake Cortex through AGENTS.md so cloud-connected engineering work follows your repo's coding and review standards.",
+      useCases: [
+        useCase(
+          "Data-aware application repos",
+          "Keep Cortex aligned when application code, data logic, and supporting scripts change together."
+        ),
+        useCase(
+          "Platform-connected features",
+          "Use a committed repo contract before Cortex works on code that touches product and platform concerns in the same task."
+        ),
+        useCase(
+          "Review-friendly data workflows",
+          "Reduce cleanup by making naming, typing, and structure explicit before cloud-generated changes reach review."
+        ),
+      ],
+    },
+    description:
+      "Snowflake's cloud AI platform for engineering and data-adjacent development workflows.",
+    id: "snowflake-cortex",
+    logo: snowflakeCortexLogo,
+    logoFile: "snowflake-cortex.svg",
+    name: "Snowflake Cortex",
+    subtitle: "Snowflake's AI platform agent",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Framework-backed autonomy",
+          "Deepagents is built for multi-step agent flows, so explicit repo standards help each step stay aligned with the codebase contract.",
+          "Bot"
+        ),
+        differentiator(
+          "Portable AGENTS.md file",
+          "Using `AGENTS.md` keeps guidance close to the repo rather than hidden in agent runtime settings.",
+          "Layers"
+        ),
+        differentiator(
+          "Good for long task chains",
+          "Committed repo instructions help Deepagents stay consistent across research, planning, and implementation passes.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Deepagents when you want agentic task chains to inherit the same repo standards your team expects from direct edits. It is a good fit for multi-step work where consistency matters across several sub-tasks.",
+      metaDescription:
+        "Configure Deepagents with Ultracite through AGENTS.md so terminal agent workflows follow your repo's linting, architecture, and review standards.",
+      useCases: [
+        useCase(
+          "Multi-step implementation flows",
+          "Keep Deepagents aligned when one task spans research, coding, and several follow-up changes."
+        ),
+        useCase(
+          "Agent framework prototypes",
+          "Use a committed repo contract while you experiment with Deepagents in real repositories."
+        ),
+        useCase(
+          "Structured autonomous work",
+          "Reduce drift by giving every Deepagents run the same durable coding baseline."
+        ),
+      ],
+    },
+    description:
+      "LangChain's deep agent framework for multi-step terminal-driven coding workflows.",
+    id: "deepagents",
+    logo: deepagentsLogo,
+    logoFile: "deepagents.svg",
+    name: "Deepagents",
+    subtitle: "LangChain's deep agent framework",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "CLI-first coding flow",
+          "Qoder works well in terminal-centric development, so a committed repo contract helps generated patches stay aligned with local workflows.",
+          "Terminal"
+        ),
+        differentiator(
+          "Shared AGENTS.md setup",
+          "Using `AGENTS.md` keeps the integration portable and easy to audit when Qoder is used across several repositories.",
+          "Layers"
+        ),
+        differentiator(
+          "Fast prompt-to-patch loops",
+          "Ultracite gives Qoder a stable baseline during rapid iteration where output quality can otherwise vary widely.",
+          "Gauge"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Qoder when you want a fast CLI coding agent to move quickly without abandoning the repo standards your team depends on. It is a strong fit for terminal-heavy workflows and quick implementation loops.",
+      metaDescription:
+        "Add Ultracite to Qoder through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Fast terminal iteration",
+          "Keep Qoder aligned while you move quickly from prompt to patch and refine the result in the shell."
+        ),
+        useCase(
+          "Portable repo setup",
+          "Reuse one AGENTS.md pattern across repositories where Qoder needs explicit project expectations."
+        ),
+        useCase(
+          "Review-conscious generation",
+          "Make repo standards explicit before terminal-generated edits reach human review."
+        ),
+      ],
+    },
+    description:
+      "Qoder's terminal coding agent for fast prompt-to-patch development loops.",
+    id: "qoder",
+    logo: qoderLogo,
+    logoFile: "qoder.svg",
+    name: "Qoder",
+    subtitle: "Qoder's terminal agent",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Dedicated coding CLI",
+          "Kimi CLI is built for agentic coding from the terminal, so committed repo standards help broad natural-language tasks resolve into consistent implementation choices.",
+          "Command"
+        ),
+        differentiator(
+          "Portable AGENTS.md contract",
+          "The integration uses a shared repo file that is easy to commit, review, and reuse across codebases.",
+          "Layers"
+        ),
+        differentiator(
+          "Useful for rapid iteration",
+          "Ultracite helps Kimi CLI stay disciplined during fast prompt-driven loops where output quality can otherwise swing a lot.",
+          "Gauge"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Kimi CLI when you want a coding-focused terminal agent to move quickly without drifting away from your repo's standards. It is a practical fit for natural-language tasking and shell-first development.",
+      metaDescription:
+        "Configure Kimi CLI with Ultracite through AGENTS.md so its coding agent follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Natural-language terminal tasking",
+          "Keep Kimi CLI aligned when broad prompt requests need to turn into code that still fits the project."
+        ),
+        useCase(
+          "Fast fix loops",
+          "Use a committed repo contract to stabilize output during quick terminal-driven iterations."
+        ),
+        useCase(
+          "Shared coding standards",
+          "Reuse one AGENTS.md file across repos where Kimi CLI needs explicit project guidance."
+        ),
+      ],
+    },
+    description:
+      "Kimi's terminal coding CLI for natural-language implementation tasks.",
+    id: "kimi-cli",
+    logo: kimiCliLogo,
+    logoFile: "kimi-cli.svg",
+    name: "Kimi CLI",
+    subtitle: "Kimi's coding CLI",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Open terminal workflow",
+          "Kode runs close to the shell, so a committed repo contract helps open agent sessions stay aligned with team expectations.",
+          "Terminal"
+        ),
+        differentiator(
+          "Simple AGENTS.md adoption",
+          "Using `AGENTS.md` keeps Kode easy to set up in repositories where you want transparent, reviewable guidance.",
+          "Layers"
+        ),
+        differentiator(
+          "Great for OSS experiments",
+          "Committed repo instructions make Kode more predictable when contributors test it across different environments or prompts.",
+          "ShieldCheck"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Kode when you want an open terminal agent to follow explicit repo guidance instead of relying on repeated prompt setup. It is a good fit for experimental and open-source-heavy coding workflows.",
+      metaDescription:
+        "Add Ultracite to Kode through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
+      useCases: [
+        useCase(
+          "Open-source coding experiments",
+          "Keep Kode grounded while you test it in real repositories without hidden local setup."
+        ),
+        useCase(
+          "Terminal-driven implementation",
+          "Use one committed repo contract so Kode stays aligned during shell-based development sessions."
+        ),
+        useCase(
+          "Cross-environment consistency",
+          "Reuse AGENTS.md across machines and contributors so Kode behaves more predictably."
+        ),
+      ],
+    },
+    description:
+      "ShareAI Lab's terminal agent for open coding workflows and repo-aware edits.",
+    id: "kode",
+    logo: kodeLogo,
+    logoFile: "kode.svg",
+    name: "Kode",
+    subtitle: "ShareAI Lab's agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Cloud-based MCP workflow",
+          "MCPJam fits hosted coordination and evaluation workflows, so a committed repo contract helps keep generated changes aligned with project standards.",
+          "Cloud"
+        ),
+        differentiator(
+          "Shared AGENTS.md convention",
+          "Using `AGENTS.md` gives MCPJam a portable repo instruction file that works well across several projects and collaborators.",
+          "Layers"
+        ),
+        differentiator(
+          "Good for tool-rich experiments",
+          "Ultracite helps MCPJam stay consistent when work spans several tools, prompts, and follow-up iterations.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with MCPJam when you want hosted, tool-connected agent workflows to follow the same repo standards your team expects elsewhere. It is especially useful when experimentation still needs a durable project contract behind it.",
+      metaDescription:
+        "Configure MCPJam with Ultracite through AGENTS.md so hosted agent workflows follow your repo's implementation and review standards.",
+      useCases: [
+        useCase(
+          "Tool-rich hosted workflows",
+          "Keep MCPJam aligned when a task moves across several connected tools before changes land in the repo."
+        ),
+        useCase(
+          "Experimentation with guardrails",
+          "Use AGENTS.md so exploratory agent work still respects the project's coding standards."
+        ),
+        useCase(
+          "Shared project contracts",
+          "Commit one repo-level file so MCPJam sessions start from the same expectations every time."
+        ),
+      ],
+    },
+    description:
+      "MCPJam's cloud agent workflow for connected, repo-aware engineering tasks.",
+    id: "mcpjam",
+    logo: mcpjamLogo,
+    logoFile: "mcpjam.svg",
+    name: "MCPJam",
+    subtitle: "MCPJam's cloud agent",
+  },
+  {
+    category: "cloud-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Background agent execution",
+          "Mux is built for asynchronous agent work, so explicit repo rules help the result come back reviewable and consistent.",
+          "Cloud"
+        ),
+        differentiator(
+          "Portable AGENTS.md setup",
+          "Using `AGENTS.md` keeps Mux aligned with a repo-level convention that is easy to version and share across workspaces.",
+          "Layers"
+        ),
+        differentiator(
+          "Strong for queued tasks",
+          "Ultracite helps Mux keep standards intact when several background tasks or workspaces touch the same repository over time.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Mux when you want background coding agents to follow the same repo standards your team expects from local development. It is a strong fit for queued work, parallel sessions, and async implementation handoffs.",
+      metaDescription:
+        "Add Ultracite to Mux through AGENTS.md so its background agents follow your repo's coding and review standards.",
+      useCases: [
+        useCase(
+          "Queued background implementation",
+          "Give Mux a stable repo contract before several async tasks work through the same codebase."
+        ),
+        useCase(
+          "Parallel agent workspaces",
+          "Use one AGENTS.md file so multiple workspaces inherit the same standards and expectations."
+        ),
+        useCase(
+          "Review-ready async delivery",
+          "Reduce cleanup by making naming, structure, and framework conventions explicit before work starts."
+        ),
+      ],
+    },
+    description:
+      "Coder's background agent system for cloud-executed engineering tasks across workspaces.",
+    id: "mux",
+    logo: muxLogo,
+    logoFile: "mux.svg",
+    name: "Mux",
+    subtitle: "Coder's background agents",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Terminal-first coding flow",
+          "Pi lives close to the shell, so a committed repo contract helps AI assistance stay disciplined while you work through real repository changes.",
+          "Terminal"
+        ),
+        differentiator(
+          "Simple AGENTS.md contract",
+          "Using `AGENTS.md` gives Pi a portable setup that is easy to commit and reuse across several projects.",
+          "Layers"
+        ),
+        differentiator(
+          "Good for focused implementation",
+          "Ultracite helps Pi stay consistent during fast prompt-to-code loops where output quality needs guardrails.",
+          "Gauge"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Pi when you want a shell-first coding agent to move quickly without drifting away from your repo standards. It is a good fit for focused terminal work and fast iteration.",
+      metaDescription:
+        "Configure Pi with Ultracite through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Focused terminal tasks",
+          "Keep Pi aligned on quick fixes and small features where speed matters but standards still matter too."
+        ),
+        useCase(
+          "Portable repo guidance",
+          "Use one AGENTS.md file so Pi behaves consistently across different repositories and environments."
+        ),
+        useCase(
+          "Prompt-driven coding loops",
+          "Anchor output in repo rules so concise interactions still produce reviewable code."
+        ),
+      ],
+    },
+    description:
+      "Pi's shell-first coding CLI for focused implementation and repo-aware edits.",
+    id: "pi",
+    logo: piLogo,
+    logoFile: "pi.svg",
+    name: "Pi",
+    subtitle: "Pi's coding CLI",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Terminal-native implementation",
+          "Neovate works close to the shell, so a committed repo contract helps generated changes stay aligned with existing project structure and standards.",
+          "Terminal"
+        ),
+        differentiator(
+          "Portable AGENTS.md guidance",
+          "Using `AGENTS.md` keeps the setup easy to commit, audit, and reuse across repositories.",
+          "Layers"
+        ),
+        differentiator(
+          "Helpful for iterative work",
+          "Ultracite gives Neovate a stable baseline across repeated prompt-to-edit loops and follow-up refinements.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Neovate when you want terminal agent sessions to follow a durable repo contract instead of repeated prompt setup. It is a practical fit for developers who like shell-driven coding with predictable standards.",
+      metaDescription:
+        "Add Ultracite to Neovate through AGENTS.md so its terminal agent follows your repo's coding and review standards.",
+      useCases: [
+        useCase(
+          "Shell-driven development",
+          "Keep Neovate aligned while you move between repo inspection, commands, and code edits in the terminal."
+        ),
+        useCase(
+          "Cross-repo consistency",
+          "Use one committed AGENTS.md file to stabilize Neovate behavior across several projects."
+        ),
+        useCase(
+          "Review-friendly iteration",
+          "Reduce cleanup by making naming, structure, and framework expectations explicit before generation."
+        ),
+      ],
+    },
+    description:
+      "Neovate's terminal coding agent for shell-first, repo-aware development work.",
+    id: "neovate",
+    logo: neovateLogo,
+    logoFile: "neovate.svg",
+    name: "Neovate",
+    subtitle: "Neovate's coding agent",
+  },
+  {
+    category: "editor-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Editor-native repo guidance",
+          "Pochi benefits from a committed repo contract because AI-assisted edits happen close to the IDE review loop.",
+          "Monitor"
+        ),
+        differentiator(
+          "Portable AGENTS.md setup",
+          "Using `AGENTS.md` keeps Pochi aligned with a shared convention instead of hiding instructions inside per-user editor settings.",
+          "Layers"
+        ),
+        differentiator(
+          "Great for open editor workflows",
+          "Ultracite helps Pochi stay consistent when contributors use an open, collaborative editor-driven setup across the same repo.",
+          "Users"
+        ),
+      ],
+      intro:
+        "Use Ultracite with Pochi when you want editor-side AI assistance to inherit a durable project contract instead of relying on local-only instructions. It is especially useful for teams that want open, collaborative IDE workflows with predictable output.",
+      metaDescription:
+        "Configure Pochi with Ultracite through AGENTS.md so its editor agent follows your repo's linting, architecture, and review standards.",
+      useCases: [
+        useCase(
+          "IDE-assisted generation",
+          "Guide Pochi before it edits files so generated code already fits the repository's expectations."
+        ),
+        useCase(
+          "Shared editor workflows",
+          "Use one AGENTS.md file so every contributor gets the same coding contract inside Pochi."
+        ),
+        useCase(
+          "Open-source-friendly collaboration",
+          "Keep repo guidance visible and versioned when several users iterate with the same editor workflow."
+        ),
+      ],
+    },
+    description:
+      "Pochi's editor agent for AI-assisted coding with a committed repo contract.",
+    id: "pochi",
+    logo: pochiLogo,
+    logoFile: "pochi.svg",
+    name: "Pochi",
+    subtitle: "Pochi's IDE agent",
+  },
+  {
+    category: "terminal-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "CLI-oriented coding flow",
+          "AdaL fits shell-based implementation work, so explicit repo standards help prompt-driven edits stay consistent with the existing codebase.",
+          "Terminal"
+        ),
+        differentiator(
+          "Portable AGENTS.md contract",
+          "Using `AGENTS.md` gives AdaL a simple, shareable setup that works across repositories and contributors.",
+          "Layers"
+        ),
+        differentiator(
+          "Good for repeated task loops",
+          "Ultracite keeps AdaL aligned across several small implementation steps where drift can otherwise build up quickly.",
+          "Workflow"
+        ),
+      ],
+      intro:
+        "Use Ultracite with AdaL when you want a coding CLI to stay inside a durable repo contract instead of relying on repeated prompt context. It is a good fit for shell-first development and iterative implementation work.",
+      metaDescription:
+        "Configure AdaL with Ultracite through AGENTS.md so its coding CLI follows your repo's linting, architecture, and framework standards.",
+      useCases: [
+        useCase(
+          "Shell-first development",
+          "Keep AdaL aligned while you move between commands, repo inspection, and generated edits in the terminal."
+        ),
+        useCase(
+          "Iterative implementation loops",
+          "Use a committed repo contract to stabilize behavior across several small prompt-to-edit cycles."
+        ),
+        useCase(
+          "Cross-project reuse",
+          "Reuse one AGENTS.md pattern across repos where AdaL needs explicit project expectations."
+        ),
+      ],
+    },
+    description:
+      "Sylph's coding CLI for shell-first implementation and repo-aware edits.",
+    id: "adal",
+    logo: adalLogo,
+    logoFile: "adal.svg",
+    name: "AdaL",
+    subtitle: "Sylph's coding CLI",
   },
   {
     category: "editor-agent",
