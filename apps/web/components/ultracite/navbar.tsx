@@ -1,9 +1,9 @@
 "use client";
 
+import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
-import type { Agent } from "@repo/data/agents";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -137,7 +137,7 @@ export const Navbar = ({ agents }: NavbarProps) => {
                   </span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-2xl grid-cols-4 gap-1 p-2">
+                  <ul className="grid w-3xl grid-cols-4 gap-1 p-2">
                     {agents.map((agent) => (
                       <li key={agent.id}>
                         <NavigationMenuLink asChild>
