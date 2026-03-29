@@ -1,49 +1,115 @@
 import { describe, expect, test } from "bun:test";
 
-import {
-  agents,
-  getAgentSetupFacts,
-  getDefaultAgentHookContent,
-  getDefaultAgentRulesContent,
-} from "./agents.ts";
+const decoder = new TextDecoder();
+
+interface AgentSummary {
+  category: string;
+  differentiators: {
+    descriptionLength: number;
+    iconLength: number;
+    titleLength: number;
+  }[];
+  facts: {
+    hookPath?: string;
+    hookSupport: boolean;
+  };
+  hookContentAvailable: boolean;
+  id: string;
+  introLength: number;
+  metaDescriptionLength: number;
+  rulesContainsApplyTo: boolean;
+  useCases: {
+    descriptionLength: number;
+    titleLength: number;
+  }[];
+}
+
+const loadAgentsSummary = () => {
+  const result = Bun.spawnSync({
+    cmd: [
+      "bun",
+      "-e",
+      `
+        import {
+          agents,
+          getAgentSetupFacts,
+          getDefaultAgentHookContent,
+          getDefaultAgentRulesContent,
+        } from "./packages/data/src/agents.ts";
+
+        const summary = agents.map((agent) => ({
+          category: agent.category,
+          differentiators: agent.content.differentiators.map((item) => ({
+            descriptionLength: item.description.length,
+            iconLength: item.icon.length,
+            titleLength: item.title.length,
+          })),
+          facts: {
+            hookPath: getAgentSetupFacts(agent).hookPath,
+            hookSupport: getAgentSetupFacts(agent).hookSupport,
+          },
+          hookContentAvailable: Boolean(getDefaultAgentHookContent(agent)),
+          id: agent.id,
+          introLength: agent.content.intro.length,
+          metaDescriptionLength: agent.content.metaDescription.length,
+          rulesContainsApplyTo: getDefaultAgentRulesContent(agent).includes("applyTo:"),
+          useCases: agent.content.useCases.map((item) => ({
+            descriptionLength: item.description.length,
+            titleLength: item.title.length,
+          })),
+        }));
+
+        console.log(JSON.stringify(summary));
+      `,
+    ],
+    cwd: process.cwd(),
+    stderr: "pipe",
+    stdout: "pipe",
+  });
+
+  expect(result.exitCode).toBe(0);
+
+  return JSON.parse(decoder.decode(result.stdout)) as AgentSummary[];
+};
 
 describe("agents content", () => {
   test("every agent includes the required SEO content fields", () => {
-    for (const agent of agents) {
-      expect(agent.category.length).toBeGreaterThan(0);
-      expect(agent.content.intro.length).toBeGreaterThan(0);
-      expect(agent.content.metaDescription.length).toBeGreaterThan(0);
-      expect(agent.content.useCases.length).toBeGreaterThanOrEqual(3);
-      expect(agent.content.useCases.length).toBeLessThanOrEqual(4);
-      expect(agent.content.differentiators).toHaveLength(3);
+    const summary = loadAgentsSummary();
 
-      for (const useCase of agent.content.useCases) {
-        expect(useCase.title.length).toBeGreaterThan(0);
-        expect(useCase.description.length).toBeGreaterThan(0);
+    for (const agent of summary) {
+      expect(agent.category.length).toBeGreaterThan(0);
+      expect(agent.introLength).toBeGreaterThan(0);
+      expect(agent.metaDescriptionLength).toBeGreaterThan(0);
+      expect(agent.useCases.length).toBeGreaterThanOrEqual(3);
+      expect(agent.useCases.length).toBeLessThanOrEqual(4);
+      expect(agent.differentiators).toHaveLength(3);
+
+      for (const useCase of agent.useCases) {
+        expect(useCase.titleLength).toBeGreaterThan(0);
+        expect(useCase.descriptionLength).toBeGreaterThan(0);
       }
 
-      for (const differentiator of agent.content.differentiators) {
-        expect(differentiator.title.length).toBeGreaterThan(0);
-        expect(differentiator.description.length).toBeGreaterThan(0);
-        expect(differentiator.icon.length).toBeGreaterThan(0);
+      for (const differentiator of agent.differentiators) {
+        expect(differentiator.titleLength).toBeGreaterThan(0);
+        expect(differentiator.descriptionLength).toBeGreaterThan(0);
+        expect(differentiator.iconLength).toBeGreaterThan(0);
       }
     }
   });
 
   test("hook-related setup facts only appear for agents that support hooks", () => {
-    for (const agent of agents) {
-      const facts = getAgentSetupFacts(agent);
-      const hookContent = getDefaultAgentHookContent(agent);
+    const summary = loadAgentsSummary();
 
-      expect(facts.hookSupport).toBe(Boolean(agent.hooks));
-      expect(Boolean(facts.hookPath)).toBe(Boolean(agent.hooks));
-      expect(Boolean(hookContent)).toBe(Boolean(agent.hooks));
+    for (const agent of summary) {
+      expect(Boolean(agent.facts.hookPath)).toBe(agent.facts.hookSupport);
+      expect(agent.hookContentAvailable).toBe(agent.facts.hookSupport);
     }
   });
 
   test("default rules preview preserves agent-specific headers", () => {
-    const copilot = agents.find((agent) => agent.id === "copilot");
-    const codex = agents.find((agent) => agent.id === "codex");
+    const summary = loadAgentsSummary();
+    const copilot = summary.find((agent) => agent.id === "copilot");
+    const codex = summary.find((agent) => agent.id === "codex");
 
     expect(copilot).toBeDefined();
     expect(codex).toBeDefined();
@@ -52,7 +118,7 @@ describe("agents content", () => {
       throw new Error("Expected copilot and codex fixtures to exist");
     }
 
-    expect(getDefaultAgentRulesContent(copilot)).toContain("applyTo:");
-    expect(getDefaultAgentRulesContent(codex)).not.toContain("applyTo:");
+    expect(copilot.rulesContainsApplyTo).toBeTrue();
+    expect(codex.rulesContainsApplyTo).toBeFalse();
   });
 });

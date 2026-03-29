@@ -9,6 +9,31 @@ const productionHost =
   process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.ultracite.ai";
 const canonicalHost =
   productionHost === "ultracite.ai" ? "www.ultracite.ai" : productionHost;
+const docsBaseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://docs.ultracite.ai"
+    : "http://localhost:3001";
+
+const legacyDocsRedirects = [
+  ["/configuration", "/configuration"],
+  ["/examples", "/usage"],
+  ["/faq", "/faq"],
+  ["/integration/husky", "/git-hooks"],
+  ["/integration/lefthook", "/git-hooks"],
+  ["/introduction", "/"],
+  ["/mcp", "/mcp-server"],
+  ["/migrate/biome", "/migrate/biome"],
+  ["/preset/core", "/configuration"],
+  ["/rules", "/rules"],
+  ["/setup", "/setup"],
+  ["/support", "/troubleshooting"],
+  ["/troubleshooting", "/troubleshooting"],
+  ["/upgrade/v6", "/upgrade/v6"],
+].map(([source, destination]) => ({
+  destination: `${docsBaseUrl}${destination}`,
+  permanent: true,
+  source,
+}));
 
 const config: NextConfig = {
   experimental: {
@@ -50,6 +75,7 @@ const config: NextConfig = {
         permanent: true,
         source: "/social",
       },
+      ...legacyDocsRedirects,
     ];
   },
 
