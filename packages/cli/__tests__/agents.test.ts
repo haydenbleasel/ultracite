@@ -131,6 +131,26 @@ describe("createAgents", () => {
     });
   });
 
+  describe("replit agent", () => {
+    test("create creates replit.md file", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const agents = createAgents("replit", "npm", "biome");
+      await agents.create();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("replit.md");
+    });
+  });
+
   describe("claude agent", () => {
     test("create creates CLAUDE.md file", async () => {
       const mockWriteFile = mock(() => Promise.resolve());

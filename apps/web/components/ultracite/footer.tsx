@@ -1,7 +1,7 @@
 "use client";
 
 import { SiX } from "@icons-pack/react-simple-icons";
-import { agents } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
@@ -37,7 +37,11 @@ const generalLinks = [
   },
 ];
 
-export const Footer = () => {
+interface FooterProps {
+  agents: Pick<Agent, "id" | "name">[];
+}
+
+export const Footer = ({ agents }: FooterProps) => {
   const { theme, setTheme } = useTheme();
 
   return (

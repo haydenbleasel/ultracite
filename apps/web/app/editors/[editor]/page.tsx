@@ -1,18 +1,22 @@
-import { editors } from "@repo/data/editors";
+import { editors, getEditorById, getEditorPageData } from "@repo/data/editors";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/json-ld";
+import { FaqSection } from "@/components/ultracite/faq-section";
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
 import {
   createBreadcrumbStructuredData,
+  createFaqStructuredData,
   createPageMetadata,
 } from "@/lib/site-metadata";
 
 import { Benefits } from "./components/benefits";
-import { Config } from "./components/config";
 import { EditorHero } from "./components/hero";
+import { RelatedEditors } from "./components/related-editors";
+import { SetupFiles } from "./components/setup-files";
+import { Workflow } from "./components/workflow";
 
 export const generateStaticParams = () =>
   editors.map((editor) => ({ editor: editor.id }));
@@ -21,26 +25,30 @@ export const generateMetadata = async ({
   params,
 }: PageProps<"/editors/[editor]">): Promise<Metadata> => {
   const { editor: editorId } = await params;
-  const editor = editors.find((e) => e.id === editorId);
+  const editor = getEditorById(editorId);
 
   if (!editor) {
     return {};
   }
 
+  const pageData = getEditorPageData(editor);
+
   return createPageMetadata({
-    description: `Configure ${editor.name} to use Ultracite for format on save, auto-fixes, and consistent linting. ${editor.description}`,
+    description: pageData.metaDescription,
     path: `/editors/${editor.id}`,
-    title: `Ultracite for ${editor.name}`,
+    title: pageData.title,
   });
 };
 
 const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
   const { editor: editorId } = await params;
-  const editor = editors.find((e) => e.id === editorId);
+  const editor = getEditorById(editorId);
 
   if (!editor) {
     notFound();
   }
+
+  const pageData = getEditorPageData(editor);
 
   return (
     <>
@@ -50,10 +58,23 @@ const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
           { name: editor.name, path: `/editors/${editor.id}` },
         ])}
       />
+      {editor.faq.length > 0 && (
+        <JsonLd data={createFaqStructuredData(editor.faq)} />
+      )}
       <div className="grid gap-16 sm:gap-24 md:gap-32">
         <EditorHero editor={editor} />
-        <Config editor={editor} />
+        <SetupFiles editor={editor} pageData={pageData} />
         <Benefits editor={editor} />
+        <Workflow editor={editor} />
+        <FaqSection
+          description={`Editor-specific answers for teams rolling out Ultracite in ${editor.name}.`}
+          items={editor.faq}
+          title={`${editor.name} FAQ`}
+        />
+        <RelatedEditors
+          editor={editor}
+          relatedEditors={pageData.relatedEditors}
+        />
         <Logos />
         <Social />
       </div>

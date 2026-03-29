@@ -3,28 +3,29 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/json-ld";
+import { FaqSection } from "@/components/ultracite/faq-section";
 import { Logos } from "@/components/ultracite/logos";
 import { Social } from "@/components/ultracite/social";
+import { getProviderPageContent } from "@/lib/provider-content";
 import {
   createBreadcrumbStructuredData,
+  createFaqStructuredData,
   createPageMetadata,
 } from "@/lib/site-metadata";
 
 import { Benefits } from "./components/benefits";
 import { Config } from "./components/config";
 import { ProviderHero } from "./components/hero";
+import { Narrative } from "./components/narrative";
+import { RelatedResources } from "./components/related-resources";
 import { Videos } from "./components/videos";
-
-interface ProviderPageProps {
-  params: Promise<{ provider: string }>;
-}
 
 export const generateStaticParams = () =>
   providers.map((provider) => ({ provider: provider.id }));
 
 export const generateMetadata = async ({
   params,
-}: ProviderPageProps): Promise<Metadata> => {
+}: PageProps<"/providers/[provider]">): Promise<Metadata> => {
   const { provider: providerId } = await params;
   const provider = providers.find((p) => p.id === providerId);
 
@@ -32,20 +33,24 @@ export const generateMetadata = async ({
     return {};
   }
 
+  const content = getProviderPageContent(provider.id);
+
   return createPageMetadata({
-    description: `Use Ultracite with ${provider.name}. ${provider.description}`,
+    description: content.metadataDescription,
     path: `/providers/${provider.id}`,
-    title: `Ultracite with ${provider.name}`,
+    title: content.metadataTitle,
   });
 };
 
-const ProviderPage = async ({ params }: ProviderPageProps) => {
+const ProviderPage = async ({ params }: PageProps<"/providers/[provider]">) => {
   const { provider: providerId } = await params;
   const provider = providers.find((p) => p.id === providerId);
 
   if (!provider) {
     notFound();
   }
+
+  const content = getProviderPageContent(provider.id);
 
   return (
     <>
@@ -55,11 +60,21 @@ const ProviderPage = async ({ params }: ProviderPageProps) => {
           { name: provider.name, path: `/providers/${provider.id}` },
         ])}
       />
+      <JsonLd data={createFaqStructuredData(content.faqs)} />
       <div className="grid gap-16 sm:gap-24 md:gap-32">
-        <ProviderHero provider={provider} />
-        <Config provider={provider} />
-        <Benefits provider={provider} />
-        {provider.videos && <Videos data={provider.videos} />}
+        <ProviderHero content={content} provider={provider} />
+        <Narrative content={content} />
+        <Config content={content} provider={provider} />
+        <Benefits content={content} provider={provider} />
+        {provider.videos && content.videosTitle && content.videosDescription ? (
+          <Videos content={content} data={provider.videos} />
+        ) : null}
+        <FaqSection
+          description={content.faqsDescription}
+          items={content.faqs}
+          title={content.faqsTitle}
+        />
+        <RelatedResources content={content} />
         <Logos />
         <Social />
       </div>

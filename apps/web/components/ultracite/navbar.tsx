@@ -1,6 +1,6 @@
 "use client";
 
-import { agents } from "@repo/data/agents";
+import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
 import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
@@ -29,7 +29,11 @@ import {
 
 import { Logo } from "./logo";
 
-export const Navbar = () => {
+interface NavbarProps {
+  agents: Pick<Agent, "id" | "logo" | "name">[];
+}
+
+export const Navbar = ({ agents }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => setOpen(false), []);
@@ -133,7 +137,7 @@ export const Navbar = () => {
                   </span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-2xl grid-cols-4 gap-1 p-2">
+                  <ul className="grid w-3xl grid-cols-4 gap-1 p-2">
                     {agents.map((agent) => (
                       <li key={agent.id}>
                         <NavigationMenuLink asChild>
@@ -229,25 +233,23 @@ export const Navbar = () => {
                   <span className="px-3 font-semibold text-muted-foreground text-xs uppercase">
                     Agents ({agents.length})
                   </span>
-                  {[...agents]
-                    .toSorted((a, b) => a.name.localeCompare(b.name))
-                    .map((agent) => (
-                      <Link
-                        className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
-                        href={`/agents/${agent.id}`}
-                        key={agent.id}
-                        onClick={handleClose}
-                      >
-                        <Image
-                          alt={agent.name}
-                          className="size-5 rounded-full"
-                          height={20}
-                          src={agent.logo}
-                          width={20}
-                        />
-                        <span className="text-sm">{agent.name}</span>
-                      </Link>
-                    ))}
+                  {agents.map((agent) => (
+                    <Link
+                      className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-muted/50"
+                      href={`/agents/${agent.id}`}
+                      key={agent.id}
+                      onClick={handleClose}
+                    >
+                      <Image
+                        alt={agent.name}
+                        className="size-5 rounded-full"
+                        height={20}
+                        src={agent.logo}
+                        width={20}
+                      />
+                      <span className="text-sm">{agent.name}</span>
+                    </Link>
+                  ))}
                 </div>
 
                 <div className="mt-auto flex flex-col gap-2 border-t pt-4">

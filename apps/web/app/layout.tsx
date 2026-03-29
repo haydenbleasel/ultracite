@@ -1,4 +1,5 @@
 import "./global.css";
+import { agents } from "@repo/data/agents";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -19,6 +20,19 @@ interface LayoutProps {
 
 export const metadata: Metadata = rootMetadata;
 
+const navbarAgents = agents
+  .toSorted((a, b) => a.name.localeCompare(b.name))
+  .map(({ id, logo, name }) => ({
+    id,
+    logo,
+    name,
+  }));
+
+const footerAgents = agents.map(({ id, name }) => ({
+  id,
+  name,
+}));
+
 const Layout = ({ children }: LayoutProps) => (
   <html lang="en" suppressHydrationWarning>
     <body className={fonts}>
@@ -30,12 +44,12 @@ const Layout = ({ children }: LayoutProps) => (
         enableSystem
       >
         <TooltipProvider>
-          <Navbar />
+          <Navbar agents={navbarAgents} />
           <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
             {children}
             <div className="mt-16 sm:mt-24 md:mt-32">
               <CallToAction />
-              <Footer />
+              <Footer agents={footerAgents} />
             </div>
           </div>
         </TooltipProvider>
