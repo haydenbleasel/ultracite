@@ -76,6 +76,24 @@ describe("check", () => {
     expect(callArgs[1]).toContain("src/my file.ts");
   });
 
+  test("passes absolute Next.js route-group paths through without quoting", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    const routeGroupFile =
+      "/abs/path/apps/app/src/app/(app)/dashboard/page.tsx";
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => Promise.resolve("biome")),
+    }));
+
+    await check([routeGroupFile]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const [callArgs] = mockSpawn.mock.calls;
+    expect(callArgs[1]).toContain(routeGroupFile);
+  });
+
   test("exits with status code when biome check finds errors", async () => {
     const mockSpawn = mock(() => ({ status: 1 }));
     const mockExit = mock(() => {});
