@@ -1,92 +1,58 @@
-import { spawnSync } from "node:child_process";
-import process from "node:process";
-
-import { detectLinter, parseFilePaths, shellOption } from "../utils";
+import { exitOnCommandFailure, runCommandSync } from "../run-command";
+import { detectLinter } from "../utils";
 
 const runBiomeFix = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
-    args.push(...parseFilePaths(files));
+    args.push(...files);
   } else {
     args.push("./");
   }
 
-  const result = spawnSync("biome", args, {
-    shell: shellOption,
+  const result = runCommandSync("biome", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Biome: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Biome", result);
 };
 
 const runEslintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--fix",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("eslint", args, {
-    shell: shellOption,
+  const result = runCommandSync("eslint", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run ESLint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("ESLint", result);
 };
 
 const runPrettierFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("prettier", args, {
-    shell: shellOption,
+  const result = runCommandSync("prettier", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Prettier: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Prettier", result);
 };
 
 const runStylelintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--fix",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("stylelint", args, {
-    shell: shellOption,
+  const result = runCommandSync("stylelint", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Stylelint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Stylelint", result);
 };
 
 const runOxlintFix = (files: string[], passthrough: string[]): void => {
@@ -97,42 +63,26 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("oxlint", args, {
-    shell: shellOption,
+  const result = runCommandSync("oxlint", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Oxlint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Oxlint", result);
 };
 
 const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("oxfmt", args, {
-    shell: shellOption,
+  const result = runCommandSync("oxfmt", args, {
     stdio: "inherit",
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run oxfmt: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("oxfmt", result);
 };
 
 export const fix = async (
