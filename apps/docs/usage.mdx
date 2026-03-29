@@ -57,6 +57,11 @@ You can also apply unsafe fixes (fixes that may change code behavior):
 npx ultracite fix --unsafe
 ```
 
+Some Biome fixes are intentionally marked unsafe because they can change runtime
+behavior. For example, Ultracite already enables Biome's `noSubstr` rule, but
+rewriting `substring()` or `substr()` to `slice()` only happens when you run
+`ultracite fix --unsafe`.
+
 ### Type-Aware Linting
 
 Type-aware linting enables deeper analysis rules that leverage TypeScript's type system and project structure. The `--type-aware` flag is passed during `ultracite init` and configures your project accordingly.

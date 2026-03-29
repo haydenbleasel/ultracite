@@ -53,6 +53,11 @@ Yes, check the [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/mai
 
 Not all, but many. Ultracite will auto-fix issues that are safe and deterministic to fix. These include formatting issues and many lint errors (particularly stylistic or simple code transformations like removing unused imports, adding missing parentheses, changing `==` to `===`, etc.).
 
+Some fixes are available but intentionally require `--unsafe` because they may
+change behavior. For example, Ultracite enables Biome's `noSubstr` rule, but
+rewriting `substring()` or `substr()` to `slice()` only happens when you run
+`ultracite fix --unsafe`.
+
 More complex issues (business logic or things that require developer intention) are left for you to fix. For example, it won’t magically rename variables to follow a naming convention or add missing error handling code – it will just warn you.
 
 The philosophy is similar to ESLint’s: provide fixes where possible, but don’t risk altering code behavior. Always review the Problems panel or CLI output for any remaining warnings after auto-fix.
