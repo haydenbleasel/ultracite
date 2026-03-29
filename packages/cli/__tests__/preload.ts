@@ -372,6 +372,25 @@ mock.module("@repo/data/editors", () => ({
         path: ".vscode/settings.json",
       },
       description: "Tencent Cloud's AI code editor",
+      hooks: {
+        getContent: (command: string) => ({
+          hooks: {
+            PostToolUse: [
+              {
+                hooks: [
+                  {
+                    command,
+                    timeout: 20,
+                    type: "command",
+                  },
+                ],
+                matcher: "Write|Edit",
+              },
+            ],
+          },
+        }),
+        path: ".codebuddy/settings.json",
+      },
       id: "codebuddy",
       logo: mockSvg,
       name: "CodeBuddy",

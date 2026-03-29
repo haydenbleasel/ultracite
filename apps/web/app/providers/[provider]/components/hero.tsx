@@ -25,11 +25,11 @@ export const ProviderHero = ({ provider, content }: ProviderHeroProps) => (
       />
       {provider.additionalLogos?.map((logo) => (
         <Image
-          alt=""
+          alt={logo.alt}
           className="-ml-3 size-10 rounded-full ring-2 ring-background"
           height={40}
-          key={logo.src}
-          src={logo}
+          key={logo.alt}
+          src={logo.src}
           width={40}
         />
       ))}

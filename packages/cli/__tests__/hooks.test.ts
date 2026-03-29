@@ -214,6 +214,78 @@ describe("createHooks", () => {
     });
   });
 
+  describe("codebuddy hooks", () => {
+    test("create writes .codebuddy/settings.json with PostToolUse hooks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.create();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".codebuddy/settings.json");
+
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.hooks.PostToolUse).toHaveLength(1);
+      expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
+      expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
+      expect(content.hooks.PostToolUse[0].hooks[0].timeout).toBe(20);
+      expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
+    test("update merges hooks into existing settings when ultracite is not present", async () => {
+      const existingSettings = '{"model":"yuanbao-code","permissions":{"bash":true}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
+
+      const merged = JSON.parse(hooksWrite[1] as string);
+      expect(merged.model).toBe("yuanbao-code");
+      expect(merged.permissions.bash).toBe(true);
+      expect(merged.hooks.PostToolUse).toHaveLength(1);
+      expect(merged.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
+    test("update skips when ultracite hook already exists in settings", async () => {
+      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommand}"}]}]}}`;
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+  });
+
   describe("claude hooks", () => {
     test("create writes .claude/settings.json with correct structure", async () => {
       const mockWriteFile = mock(() => Promise.resolve());

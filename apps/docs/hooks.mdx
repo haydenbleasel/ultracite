@@ -11,7 +11,7 @@ The hooks work alongside your linter's formatting. After an AI coding assistant 
 
 ## Setup
 
-Some tools like Cursor, Windsurf, and Claude Code support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
+Some tools like Cursor, Windsurf, CodeBuddy, and Claude Code support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
 
 ### Automatic Setup
 
@@ -21,6 +21,7 @@ When you run `npx ultracite init`, you'll be prompted to select which editor hoo
 ? Which agent hooks do you want to enable (optional)?
   ◯ Cursor
   ◯ Windsurf
+  ◯ CodeBuddy
   ◯ Claude Code
 ```
 
@@ -30,6 +31,7 @@ Ultracite writes the following files:
 
 - Cursor: `.cursor/hooks.json`
 - Windsurf: `.windsurf/hooks.json`
+- CodeBuddy: `.codebuddy/settings.json`
 - Claude Code: `.claude/settings.json`
 
 ### Manual Setup
@@ -37,7 +39,7 @@ Ultracite writes the following files:
 If you want to manually set things up or add hooks after initialization, run:
 
 ```bash
-npx ultracite init --hooks cursor windsurf claude
+npx ultracite init --hooks cursor windsurf codebuddy claude
 ```
 
 Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.

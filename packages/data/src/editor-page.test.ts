@@ -88,12 +88,16 @@ describe("editor page helpers", () => {
     ]);
   });
 
-  test("derives rules without hooks for ai-vscode editors", () => {
+  test("derives CodeBuddy rules and hooks for ai-vscode editors", () => {
     const source = {
       config: {
         code: "{}",
         extensionCommand: "code --install-extension",
         path: ".vscode/settings.json",
+      },
+      hooks: {
+        code: '{"hooks":{"PostToolUse":[]}}',
+        path: ".codebuddy/settings.json",
       },
       id: "codebuddy",
       name: "CodeBuddy",
@@ -109,13 +113,14 @@ describe("editor page helpers", () => {
       configPath: ".vscode/settings.json",
       family: "ai-vscode",
       hasExtensionInstall: true,
-      hasHooks: false,
+      hasHooks: true,
       hasRules: true,
       supportsAppendRules: true,
     });
     expect(getEditorSetupFiles(source).map((item) => item.path)).toEqual([
       ".vscode/settings.json",
       "CODEBUDDY.md",
+      ".codebuddy/settings.json",
     ]);
   });
 });

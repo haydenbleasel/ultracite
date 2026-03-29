@@ -21,8 +21,13 @@ export interface ProviderBenefit {
   title: string;
 }
 
+export interface ProviderSupplementaryLogo {
+  alt: string;
+  src: StaticImageData;
+}
+
 export interface Provider {
-  additionalLogos?: StaticImageData[];
+  additionalLogos?: ProviderSupplementaryLogo[];
   benefits: ProviderBenefit[];
   configFiles: ConfigFile[];
   description: string;
@@ -101,7 +106,16 @@ export const providers: Provider[] = [
     vscodeExtensionId: "biomejs.biome",
   },
   {
-    additionalLogos: [prettierLogo, stylelintLogo],
+    additionalLogos: [
+      {
+        alt: "Prettier",
+        src: prettierLogo,
+      },
+      {
+        alt: "Stylelint",
+        src: stylelintLogo,
+      },
+    ],
     benefits: [
       {
         description:

@@ -810,7 +810,7 @@ describe("initialize", () => {
       agents: [],
       editors: [],
       frameworks: [],
-      hooks: ["cursor", "windsurf", "claude"],
+      hooks: ["cursor", "windsurf", "codebuddy", "claude"],
       integrations: [],
       pm: "npm",
       skipInstall: true,

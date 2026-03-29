@@ -558,7 +558,7 @@ alwaysApply: false
   },
   {
     audience:
-      "CodeBuddy teams who want shared workspace defaults plus a committed AI memory file for generated code",
+      "CodeBuddy teams who want shared workspace defaults, a committed memory file, and automated cleanup after AI edits",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
@@ -569,13 +569,13 @@ alwaysApply: false
     differentiators: [
       {
         description:
-          "CodeBuddy can pair shared VS Code-style workspace settings with a branded memory file, so editor behavior and AI guidance stay aligned in one repo contract.",
-        title: "Pairs shared settings with project memory",
+          "CodeBuddy can pair shared VS Code-style workspace settings with both a branded memory file and project-level hooks, so editor behavior and AI cleanup stay aligned in one repo contract.",
+        title: "Combines memory, settings, and hooks",
       },
       {
         description:
-          "Using `CODEBUDDY.md` makes repo guidance explicit before CodeBuddy generates code, instead of relying only on after-the-fact cleanup.",
-        title: "Moves quality earlier in the workflow",
+          "Using `CODEBUDDY.md` makes repo guidance explicit before CodeBuddy generates code, while hooks in `.codebuddy/settings.json` can clean up what is still auto-fixable after edits land.",
+        title: "Covers both pre- and post-edit quality",
       },
       {
         description:
@@ -586,9 +586,9 @@ alwaysApply: false
     faq: [
       {
         answer:
-          "The workspace settings control format on save and code actions, while `CODEBUDDY.md` gives CodeBuddy repo-level instructions for how generated code should look.",
+          "The workspace settings control format on save and code actions, `CODEBUDDY.md` gives CodeBuddy repo-level instructions for how generated code should look, and `.codebuddy/settings.json` can run Ultracite automatically after AI edits.",
         question:
-          "Why does the CodeBuddy setup use both settings and CODEBUDDY.md?",
+          "Why does the CodeBuddy setup use settings, CODEBUDDY.md, and hooks?",
       },
       {
         answer:
@@ -598,10 +598,29 @@ alwaysApply: false
       },
       {
         answer:
-          "Teams that rely on AI-assisted edits throughout the day tend to benefit the most, because the memory file reduces how much style cleanup is needed after generation.",
-        question: "Who is the CodeBuddy setup best for?",
+          "The memory file shapes how CodeBuddy writes code up front, while the hook config lets Ultracite run after `Write` and `Edit` actions so formatting and safe fixes happen automatically.",
+        question: "What do CodeBuddy hooks add on top of CODEBUDDY.md?",
       },
     ],
+    hooks: {
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              hooks: [
+                {
+                  command,
+                  timeout: 20,
+                  type: "command",
+                },
+              ],
+              matcher: "Write|Edit",
+            },
+          ],
+        },
+      }),
+      path: ".codebuddy/settings.json",
+    },
     id: "codebuddy",
     logo: codebuddyLogo,
     name: "CodeBuddy",
@@ -611,15 +630,15 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for CodeBuddy with shared VS Code settings and a `CODEBUDDY.md` memory file so AI edits follow repo standards.",
+        "Configure Ultracite for CodeBuddy with shared VS Code settings, a `CODEBUDDY.md` memory file, and optional `.codebuddy/settings.json` hooks.",
       summary:
-        "CodeBuddy works best with Ultracite when you combine committed workspace settings with a branded project memory file that teaches the AI how your repo expects code to be written.",
+        "CodeBuddy works best with Ultracite when you combine committed workspace settings, a branded project memory file, and optional PostToolUse hooks that clean up AI edits after they land.",
     },
     subtitle: "Tencent Cloud's AI code editor",
     workflowHighlights: [
       "Generate `.vscode/settings.json` so CodeBuddy follows the same formatter, code actions, and TypeScript defaults as the rest of the repo.",
       "Add `CODEBUDDY.md` to give CodeBuddy a committed memory file that reflects Ultracite's coding standards.",
-      "Treat the memory file as durable repo guidance and update it when your team's coding expectations change.",
+      "Enable `.codebuddy/settings.json` when you want Ultracite to run after CodeBuddy `Write` and `Edit` actions and clean up AI-generated changes automatically.",
     ],
   },
   {
