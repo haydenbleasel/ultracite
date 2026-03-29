@@ -1,3 +1,17 @@
+## 7.4.0
+
+### Minor Changes
+
+- c189cf1: Add support for new agent integrations including Zencoder, Ona, OpenClaw, Continue, Snowflake Cortex, Deepagents, Qoder, Kimi CLI, Kode, MCPJam, Mux, Pi, Neovate, Pochi, and AdaL, plus add CodeBuddy as a supported editor.
+
+### Patch Changes
+
+- 04d8455: Add no-void rule with allowAsStatement to complement no-floating-promises
+- e38d579: Fix DEP0190 deprecation warnings in `check`, `fix`, and `doctor` by routing CLI subprocesses through a shared `cross-spawn` runner with `shell: false`, while preserving Windows command resolution and direct file-path argument passing.
+- 98cb8c2: Pin ESLint initialization to a peer-compatible dependency set so `ultracite init` no longer installs an incompatible `eslint@latest` with `eslint-plugin-github`
+- fd7d05f: Disable conflicting `vitest/prefer-called-times` oxlint rule to resolve conflict with `vitest/prefer-called-once`
+- 581ea40: Add typed `ultracite/oxlint` exports for use in `oxlint.config.ts`.
+
 ## 7.3.2
 
 ### Patch Changes
