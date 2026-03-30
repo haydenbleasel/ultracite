@@ -36,7 +36,7 @@ describe("createAgents", () => {
   });
 
   describe("copilot agent", () => {
-    test("create creates copilot instructions with header", async () => {
+    test("create creates AGENTS.md instructions", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -51,8 +51,8 @@ describe("createAgents", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe(".github/copilot-instructions.md");
-      expect(writeCall[1]).toContain("applyTo:");
+      expect(writeCall[0]).toBe("AGENTS.md");
+      expect(writeCall[1]).not.toContain("applyTo:");
     });
 
     test("update uses append mode", async () => {
@@ -75,7 +75,7 @@ describe("createAgents", () => {
   });
 
   describe("cline agent", () => {
-    test("create creates .clinerules file", async () => {
+    test("create creates AGENTS.md file", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -90,11 +90,11 @@ describe("createAgents", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe(".clinerules");
+      expect(writeCall[0]).toBe("AGENTS.md");
     });
 
-    test("update appends to .clinerules file", async () => {
-      const existingContent = "Existing cline rules";
+    test("update appends to AGENTS.md file", async () => {
+      const existingContent = "Existing AGENTS rules";
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -108,7 +108,7 @@ describe("createAgents", () => {
       await agents.update();
 
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[1]).toContain("Existing cline rules");
+      expect(writeCall[1]).toContain("Existing AGENTS rules");
     });
 
     test("update creates file when it does not exist in append mode", async () => {
@@ -127,7 +127,7 @@ describe("createAgents", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       // Should write the content since file doesn't exist
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe(".clinerules");
+      expect(writeCall[0]).toBe("AGENTS.md");
     });
   });
 
@@ -182,12 +182,12 @@ describe("createAgents", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
-      const agents = createAgents("junie", "npm", "biome");
+      const agents = createAgents("claude", "npm", "biome");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
       const [mkdirCall] = mockMkdir.mock.calls;
-      expect(mkdirCall[0]).toBe(".junie");
+      expect(mkdirCall[0]).toBe(".claude");
     });
 
     test("does not create directory for root-level files", async () => {
@@ -222,7 +222,7 @@ describe("getAgentFileTargets", () => {
       })
     );
     expect(universalTarget?.agentIds).toEqual(
-      expect.arrayContaining(["codex", "jules", "devin"])
+      expect.arrayContaining(["codex", "jules", "devin", "copilot", "cline"])
     );
     expect(universalTarget?.promptLabel).toContain("creates AGENTS.md");
   });

@@ -106,7 +106,7 @@ describe("agents content", () => {
     }
   });
 
-  test("default rules preview preserves agent-specific headers", () => {
+  test("default rules preview omits frontmatter when agent config has no header", () => {
     const summary = loadAgentsSummary();
     const copilot = summary.find((agent) => agent.id === "copilot");
     const codex = summary.find((agent) => agent.id === "codex");
@@ -118,7 +118,7 @@ describe("agents content", () => {
       throw new Error("Expected copilot and codex fixtures to exist");
     }
 
-    expect(copilot.rulesContainsApplyTo).toBeTrue();
+    expect(copilot.rulesContainsApplyTo).toBeFalse();
     expect(codex.rulesContainsApplyTo).toBeFalse();
   });
 });

@@ -238,13 +238,7 @@ mock.module("@repo/data/agents", () => ({
       subtitle: "Sylph's coding CLI",
     },
     {
-      config: {
-        appendMode: true,
-        header: `---
-applyTo: "**/*.{ts,tsx,js,jsx}"
----`,
-        path: ".github/copilot-instructions.md",
-      },
+      config: { appendMode: true, path: "AGENTS.md" },
       description: "GitHub's AI pair programmer",
       hooks: {
         getContent: (command: string) => ({
@@ -265,7 +259,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "GitHub's AI pair programmer",
     },
     {
-      config: { appendMode: true, path: ".clinerules" },
+      config: { appendMode: true, path: "AGENTS.md" },
       description: "An autonomous coding agent for VS Code",
       id: "cline",
       logo: mockSvg,
@@ -297,7 +291,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       subtitle: "Google's AI assistant",
     },
     {
-      config: { appendMode: true, path: ".junie/guidelines.md" },
+      config: { appendMode: true, path: "AGENTS.md" },
       description: "JetBrains AI coding assistant",
       id: "junie",
       logo: mockSvg,

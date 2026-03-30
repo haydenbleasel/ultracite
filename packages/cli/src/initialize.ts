@@ -43,9 +43,10 @@ const ultraciteVersion = packageJson.version;
 
 type Linter = (typeof options.linters)[number];
 type Frameworks = (typeof options.frameworks)[number];
+type AgentSelection = (typeof options.agents)[number] | "universal";
 
 interface InitializeFlags {
-  agents?: (typeof options.agents)[number][];
+  agents?: AgentSelection[];
   editors?: (typeof options.editorConfigs)[number][];
   frameworks?: (typeof options.frameworks)[number][];
   hooks?: (typeof options.hooks)[number][];
@@ -905,6 +906,10 @@ export const initialize = async (flags?: InitializeFlags) => {
     let { agents } = opts;
     let selectedAgentFiles: AgentFileTarget[] = [];
     let { hooks } = opts;
+    const agentFileTargets = getAgentFileTargets();
+    const universalAgentTarget = agentFileTargets.find(
+      (target) => target.id === "universal"
+    );
 
     // Build agent options from shared data
     const agentsOptions = Object.fromEntries(
@@ -916,7 +921,6 @@ export const initialize = async (flags?: InitializeFlags) => {
         // In quiet mode, default to no agents
         agents = [];
       } else {
-        const agentFileTargets = getAgentFileTargets();
         const agentsResult = await multiselect({
           message: "Which agent files do you want to add (optional)?",
           options: agentFileTargets.map((target) => ({
@@ -935,6 +939,17 @@ export const initialize = async (flags?: InitializeFlags) => {
           (agentsResult as AgentFileTarget["id"][]).includes(target.id)
         );
       }
+    } else if (agents.includes("universal") && universalAgentTarget) {
+      selectedAgentFiles = [universalAgentTarget];
+      const coveredAgentIds = new Set(universalAgentTarget.agentIds);
+
+      agents = agents.filter(
+        (
+          agent
+        ): agent is Exclude<AgentSelection, "universal"> &
+          (typeof options.agents)[number] =>
+          agent !== "universal" && !coveredAgentIds.has(agent)
+      );
     }
 
     // Build hooks options from supported hook integrations

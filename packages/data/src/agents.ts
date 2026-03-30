@@ -1143,10 +1143,7 @@ export const agents: Agent[] = [
     category: "editor-agent",
     config: {
       appendMode: true,
-      header: `---
-applyTo: "**/*.{ts,tsx,js,jsx}"
----`,
-      path: ".github/copilot-instructions.md",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1156,9 +1153,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Github"
         ),
         differentiator(
-          "Scoped header support",
-          "Ultracite adds the required frontmatter header so Copilot instructions apply to the right file types without extra manual setup.",
-          "Wrench"
+          "Shared AGENTS.md contract",
+          "Copilot can now read `AGENTS.md`, which lets teams keep one committed repo contract across Copilot and other compatible agents.",
+          "Layers"
         ),
         differentiator(
           "Optional edit hooks",
@@ -1169,8 +1166,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       faq: [
         {
           answer:
-            "Copilot instructions live in `.github/copilot-instructions.md`, and Ultracite adds the `applyTo` frontmatter Copilot expects for code files.",
-          question: "Why does the Copilot file include a header?",
+            "Ultracite now writes Copilot guidance to `AGENTS.md`, which GitHub Copilot can read alongside other compatible tools. That keeps one shared repo contract instead of a Copilot-only file.",
+          question: "Why does Ultracite use AGENTS.md for Copilot now?",
         },
         {
           answer:
@@ -1181,7 +1178,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with GitHub Copilot when you want inline completions, chat suggestions, and editor-side edits to stay inside your project's coding contract. It is especially useful for teams that rely on Copilot daily and want fewer stylistic cleanups during review.",
       metaDescription:
-        "Set up GitHub Copilot with Ultracite so editor suggestions and AI-assisted edits follow your repo's formatting, typing, and framework conventions.",
+        "Set up GitHub Copilot with Ultracite via AGENTS.md so suggestions and AI-assisted edits follow your repo's formatting and framework standards.",
       useCases: [
         agentUseCase(
           "Day-to-day editor assistance",
@@ -1189,7 +1186,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
         ),
         agentUseCase(
           "Large teams using Copilot Chat",
-          "Share one repo-level instruction file so Copilot behaves consistently across many contributors and feature branches."
+          "Share one AGENTS.md file so Copilot behaves consistently across many contributors, feature branches, and compatible agent tools."
         ),
         agentUseCase(
           "Automated post-edit cleanup",
@@ -1222,18 +1219,18 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "editor-agent",
     config: {
       appendMode: true,
-      path: ".clinerules",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
         differentiator(
           "VS Code-native autonomous flow",
-          "Cline acts directly inside VS Code, so `.clinerules` lets Ultracite shape autonomous edits where developers already review and approve changes.",
+          "Cline acts directly inside VS Code, and `AGENTS.md` lets Ultracite shape autonomous edits where developers already review and approve changes.",
           "Monitor"
         ),
         differentiator(
-          "Append-friendly instructions",
-          "Ultracite appends to `.clinerules`, which means teams can keep existing workflow notes and add standards without replacing them.",
+          "Portable repo guidance",
+          "Using `AGENTS.md` keeps Cline aligned with the same repository guidance other compatible agent tools can reuse.",
           "Layers"
         ),
         differentiator(
@@ -1245,7 +1242,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with Cline when you want an autonomous VS Code agent to make changes that already match your repo rules. It is a practical fit for developers who approve edits in-editor and want less style drift from long multi-file sessions.",
       metaDescription:
-        "Configure Cline with Ultracite through `.clinerules` so autonomous VS Code edits follow your repo's linting, React, and TypeScript standards.",
+        "Configure Cline with Ultracite through AGENTS.md so autonomous VS Code edits follow your repo's linting, React, and TypeScript standards.",
       useCases: [
         agentUseCase(
           "Autonomous edits in VS Code",
@@ -1256,8 +1253,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Keep repo guidance in the same tool where developers inspect diffs, accept changes, and continue iterating."
         ),
         agentUseCase(
-          "Existing `.clinerules` setups",
-          "Append Ultracite without throwing away the project-specific instructions you already maintain for Cline."
+          "Cross-tool repo standards",
+          "Use one AGENTS.md file when you want Cline and other compatible agents to inherit the same coding contract."
         ),
       ],
     },
@@ -1374,7 +1371,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "cloud-agent",
     config: {
       appendMode: true,
-      path: ".idx/airules.md",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1384,9 +1381,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Cloud"
         ),
         differentiator(
-          "Project-scoped guidance",
-          "Placing instructions in `.idx/airules.md` keeps them close to the workspace instead of relying on one developer's personal IDE state.",
-          "Monitor"
+          "AGENTS.md compatibility",
+          "Firebase Studio can read `AGENTS.md`, which makes repo guidance easier to share across Studio and other compatible agent tools.",
+          "Layers"
         ),
         differentiator(
           "Good for app stacks",
@@ -1397,7 +1394,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with Firebase Studio when you want a hosted IDE workspace to inherit the same project standards every time it boots. It is especially useful when multiple developers or generated workspaces touch the same app codebase.",
       metaDescription:
-        "Set up Firebase Studio with Ultracite so Google's cloud IDE follows your repo's linting, accessibility, and performance rules from the start.",
+        "Set up Firebase Studio with Ultracite through AGENTS.md so Google's cloud IDE follows your repo's linting, accessibility, and performance rules from the start.",
       useCases: [
         agentUseCase(
           "Hosted app development",
@@ -1425,7 +1422,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "open-source-agent",
     config: {
       appendMode: true,
-      path: ".openhands/microagents/repo.md",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1435,9 +1432,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Bot"
         ),
         differentiator(
-          "Microagent-specific path",
-          "Ultracite writes to OpenHands' repo microagent file, which makes the setup feel native to the way OpenHands structures guidance.",
-          "FolderGit2"
+          "Always-on repo guidance",
+          "Using `AGENTS.md` gives OpenHands a root-level instruction file it can keep in context across longer autonomous runs.",
+          "Layers"
         ),
         differentiator(
           "Useful for reproducible runs",
@@ -1448,7 +1445,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with OpenHands when you want an open-source autonomous agent to follow explicit project standards while it works through development tasks. The integration is a good fit for teams experimenting with reproducible agent runs in real repositories.",
       metaDescription:
-        "Configure OpenHands with Ultracite through its repo microagent file so autonomous code changes stay aligned with your repo standards and review process.",
+        "Configure OpenHands with Ultracite through AGENTS.md so autonomous code changes stay aligned with your repo standards and review process.",
       useCases: [
         agentUseCase(
           "Autonomous task execution",
@@ -1527,7 +1524,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "ide-agent",
     config: {
       appendMode: true,
-      path: ".junie/guidelines.md",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1537,9 +1534,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Laptop"
         ),
         differentiator(
-          "Project-level persistence",
-          "Committing `.junie/guidelines.md` means every checkout has the same rules instead of depending on local IDE preferences alone.",
-          "FolderGit2"
+          "Portable AGENTS.md setup",
+          "Committing `AGENTS.md` means Junie can share the same repo contract as other compatible tools instead of relying on local IDE preferences alone.",
+          "Layers"
         ),
         differentiator(
           "Useful for typed codebases",
@@ -1554,7 +1551,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       useCases: [
         agentUseCase(
           "JetBrains-centered teams",
-          "Share one guidelines file so Junie behaves predictably across IntelliJ, WebStorm, and other JetBrains workflows."
+          "Share one AGENTS.md file so Junie behaves predictably across IntelliJ, WebStorm, and other JetBrains workflows."
         ),
         agentUseCase(
           "Typed refactors",
@@ -1577,14 +1574,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   {
     category: "editor-agent",
     config: {
-      path: ".augment/rules/ultracite.md",
+      appendMode: true,
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
         differentiator(
-          "Enterprise-friendly rules path",
-          "Augment Code uses a dedicated rules directory, which makes it easier to manage project standards alongside other team-level configuration.",
-          "Building2"
+          "Hierarchical AGENTS.md support",
+          "Augment Code can read `AGENTS.md`, which makes it easier to share repo standards across Augment and other compatible agents.",
+          "Layers"
         ),
         differentiator(
           "Designed for collaboration",
@@ -1604,15 +1602,15 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       useCases: [
         agentUseCase(
           "Shared enterprise workflows",
-          "Store a deterministic rules file in the repo so Augment sessions across the team start from the same coding contract."
+          "Store a deterministic AGENTS.md file in the repo so Augment sessions across the team start from the same coding contract."
         ),
         agentUseCase(
           "Code review discipline",
           "Reduce review churn by making architecture and style expectations explicit before Augment suggests or edits code."
         ),
         agentUseCase(
-          "Managed rules directories",
-          "Use Augment's dedicated rules path when you want AI config to live in a predictable location alongside other team tooling."
+          "Cross-tool repo guidance",
+          "Use AGENTS.md when you want Augment and other compatible tools to inherit the same committed AI setup."
         ),
       ],
     },
@@ -1627,18 +1625,19 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   {
     category: "editor-agent",
     config: {
-      path: ".kilocode/rules/ultracite.md",
+      appendMode: true,
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
         differentiator(
-          "Customizable VS Code setup",
-          "Kilo Code is built around configurable assistant behavior, so a committed Ultracite rules file becomes a practical source of truth.",
-          "Wrench"
+          "Default AGENTS.md support",
+          "Kilo Code now supports `AGENTS.md` by default, which makes a committed repo contract the practical source of truth.",
+          "Layers"
         ),
         differentiator(
-          "Dedicated rules directory",
-          "The integration lives in a predictable `.kilocode/rules` path, which keeps repo standards easy to find and maintain.",
+          "Portable repo guidance",
+          "Using `AGENTS.md` keeps Kilo Code aligned with the same repository guidance other compatible agents can reuse.",
           "FolderGit2"
         ),
         differentiator(
@@ -1662,7 +1661,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
         ),
         agentUseCase(
           "Team-managed AI setup",
-          "Store the rules in the repo so contributors can share one source of truth for Kilo Code behavior."
+          "Store one AGENTS.md file in the repo so contributors can share one source of truth for Kilo Code behavior."
         ),
       ],
     },
@@ -1678,7 +1677,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "open-source-agent",
     config: {
       appendMode: true,
-      path: ".goosehints",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1688,9 +1687,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Terminal"
         ),
         differentiator(
-          "Hints-based integration",
-          "Ultracite plugs into `.goosehints`, which keeps setup lightweight while still giving Goose a durable coding contract.",
-          "Command"
+          "AGENTS.md-first discovery",
+          "Goose looks for `AGENTS.md` before `.goosehints`, which makes a shared repo contract the lightweight default.",
+          "Layers"
         ),
         differentiator(
           "Autonomy with guardrails",
@@ -1701,7 +1700,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with Goose when you want an open-source developer agent to work from a committed set of repo standards. It is a strong fit for terminal-heavy teams that want autonomy, but still need predictable edits and reviewable output.",
       metaDescription:
-        "Add Ultracite to Goose through `.goosehints` so Block's open-source AI agent follows your repo's standards and review expectations.",
+        "Add Ultracite to Goose through AGENTS.md so Block's open-source AI agent follows your repo's standards and review expectations.",
       useCases: [
         agentUseCase(
           "Terminal-heavy open-source workflows",
@@ -1933,7 +1932,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "terminal-agent",
     config: {
       appendMode: true,
-      path: "CRUSH.md",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -1943,9 +1942,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Terminal"
         ),
         differentiator(
-          "Dedicated file convention",
-          "Ultracite writes to `CRUSH.md`, which gives Crush a clear, tool-specific place for coding guidance.",
-          "Command"
+          "Default AGENTS.md setup",
+          "Crush initializes projects with `AGENTS.md` by default, which makes repo guidance portable across Crush and other compatible tools.",
+          "Layers"
         ),
         differentiator(
           "Model-flexible setup",
@@ -1956,7 +1955,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with Crush when you want a terminal-native coding agent to feel polished without losing repo discipline. It is a good fit for developers who like model flexibility, but still want a durable project contract behind every interaction.",
       metaDescription:
-        "Configure Crush with Ultracite through CRUSH.md so Charmbracelet's terminal coding agent follows your repo standards across models and sessions.",
+        "Configure Crush with Ultracite through AGENTS.md so Charmbracelet's terminal coding agent follows your repo standards across models and sessions.",
       useCases: [
         agentUseCase(
           "Styled terminal workflows",
@@ -1968,7 +1967,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
         ),
         agentUseCase(
           "Committed project guidance",
-          "Use a dedicated `CRUSH.md` file when you want Crush-specific instructions that live alongside the codebase."
+          "Use a shared AGENTS.md file when you want Crush and other compatible agents to inherit the same project instructions."
         ),
       ],
     },
@@ -2148,7 +2147,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
     category: "terminal-agent",
     config: {
       appendMode: true,
-      path: ".cursor/rules/ultracite.mdc",
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -2158,20 +2157,20 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Terminal"
         ),
         differentiator(
-          "Native Cursor rules path",
-          "Ultracite uses Cursor's `.mdc` rules format so the setup feels native instead of relying on a generic shared file.",
-          "Command"
+          "AGENTS.md compatibility",
+          "Cursor CLI reads `AGENTS.md`, which lets repo guidance travel cleanly between Cursor CLI and other compatible tools.",
+          "Layers"
         ),
         differentiator(
           "Useful for repo portability",
-          "Committing the rules file helps developers carry the same Cursor CLI behavior across checkouts and environments.",
+          "Committing `AGENTS.md` helps developers carry the same Cursor CLI behavior across checkouts and environments.",
           "ShieldCheck"
         ),
       ],
       intro:
         "Use Ultracite with Cursor CLI when you want terminal-based agent work to stay aligned with the same standards you expect from the wider Cursor workflow. It is a solid choice for developers who like shell-driven tasks but still want tool-native project rules.",
       metaDescription:
-        "Add Ultracite to Cursor CLI through `.cursor/rules/ultracite.mdc` so terminal agent runs follow your repo's coding standards.",
+        "Add Ultracite to Cursor CLI through AGENTS.md so shell-driven agent runs follow your repo's coding, typing, and framework standards.",
       useCases: [
         agentUseCase(
           "Shell-driven Cursor workflows",
@@ -2179,7 +2178,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
         ),
         agentUseCase(
           "Portable repo configuration",
-          "Commit the `.mdc` rules file so Cursor CLI behaves the same across machines and developer environments."
+          "Commit AGENTS.md so Cursor CLI behaves the same across machines and developer environments."
         ),
         agentUseCase(
           "Fast task execution with guardrails",
@@ -2198,7 +2197,8 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
   {
     category: "terminal-agent",
     config: {
-      path: "VIBE.md",
+      appendMode: true,
+      path: "AGENTS.md",
     },
     content: {
       differentiators: [
@@ -2208,9 +2208,9 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
           "Terminal"
         ),
         differentiator(
-          "Dedicated tool file",
-          "Ultracite writes to `VIBE.md`, which gives the integration a clear place to store coding expectations.",
-          "Command"
+          "Root-level AGENTS.md support",
+          "Mistral Vibe reads `AGENTS.md` from the workspace root, which gives the integration a simple and portable place to store coding expectations.",
+          "Layers"
         ),
         differentiator(
           "Good for focused tasks",
@@ -2221,7 +2221,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
       intro:
         "Use Ultracite with Mistral Vibe when you want a lightweight terminal coding agent to stay anchored to repo standards. It is a good fit for focused tasks where you value speed and simplicity, but still want reviewable, consistent output.",
       metaDescription:
-        "Configure Mistral Vibe with Ultracite through VIBE.md so its minimal coding CLI follows your repo's standards and quality expectations.",
+        "Configure Mistral Vibe with Ultracite through AGENTS.md so its minimal coding CLI follows your repo's standards and quality expectations.",
       useCases: [
         agentUseCase(
           "Focused terminal tasks",
@@ -2229,7 +2229,7 @@ applyTo: "**/*.{ts,tsx,js,jsx}"
         ),
         agentUseCase(
           "Lightweight repo setup",
-          "Use a dedicated `VIBE.md` file when you want a clear, minimal config surface for coding guidance."
+          "Use a shared AGENTS.md file when you want a clear, minimal config surface for coding guidance."
         ),
         agentUseCase(
           "Model experiments with guardrails",
