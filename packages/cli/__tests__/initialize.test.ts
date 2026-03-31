@@ -1,5 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
+import type { AgentFileTarget } from "../src/agents";
+import { getAgentFileTargets } from "../src/agents";
 import {
   initialize,
   initializeLefthook,
@@ -19,7 +21,6 @@ import {
   upsertStylelintConfig,
   upsertTsConfig,
 } from "../src/initialize";
-import { getAgentFileTargets } from "../src/agents";
 
 // Data package mocks are in preload.ts (must run before imports)
 
@@ -2373,7 +2374,7 @@ describe("helper functions", () => {
 
       expect(universalTarget).toBeDefined();
 
-      await upsertAgentFile(universalTarget!, "npm", "biome");
+      await upsertAgentFile(universalTarget as AgentFileTarget, "npm", "biome");
 
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("AGENTS.md");

@@ -44,30 +44,26 @@ export const getAgentFileTargets = (): AgentFileTarget[] => {
     groupedTargets.set(agent.config.path, existingGroup);
   }
 
-  const targets = Array.from(groupedTargets.entries()).map(
-    ([path, groupedAgents]) => {
-      const representativeAgent = groupedAgents[0]!;
-      const agentNames = groupedAgents.map((agent) =>
-        normalizeAgentName(agent.name)
-      );
-      const isUniversal = path === "AGENTS.md" && groupedAgents.length > 1;
+  const targets = [...groupedTargets.entries()].map(([path, groupedAgents]) => {
+    const [representativeAgent] = groupedAgents;
+    const agentNames = groupedAgents.map((agent) =>
+      normalizeAgentName(agent.name)
+    );
+    const isUniversal = path === "AGENTS.md" && groupedAgents.length > 1;
 
-      return {
-        agentIds: groupedAgents.map((agent) => agent.id as AgentId),
-        displayName: isUniversal
-          ? "Universal"
-          : normalizeAgentName(representativeAgent.name),
-        id: isUniversal
-          ? "universal"
-          : (representativeAgent.id as AgentId),
-        path,
-        promptLabel: buildPromptLabel(path, agentNames),
-        representativeAgentId: representativeAgent.id as AgentId,
-      };
-    }
-  );
+    return {
+      agentIds: groupedAgents.map((agent) => agent.id as AgentId),
+      displayName: isUniversal
+        ? "Universal"
+        : normalizeAgentName(representativeAgent.name),
+      id: isUniversal ? "universal" : (representativeAgent.id as AgentId),
+      path,
+      promptLabel: buildPromptLabel(path, agentNames),
+      representativeAgentId: representativeAgent.id as AgentId,
+    };
+  });
 
-  return targets.sort((left, right) => {
+  return targets.toSorted((left, right) => {
     if (left.path === "AGENTS.md") {
       return -1;
     }

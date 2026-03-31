@@ -19,14 +19,14 @@ program
   .option("--pm <pm>", "Package manager to use")
   .option("--linter <linter>", "Linter to use")
   .option("--editors <editors...>", "Editors to configure")
-  .option("--agents <agents...>", "Agents to enable (use universal for AGENTS.md)")
+  .option(
+    "--agents <agents...>",
+    "Agents to enable (use universal for AGENTS.md)"
+  )
   .option("--hooks <hooks...>", "Hooks to enable")
   .option("--frameworks <frameworks...>", "Frameworks being used")
   .option("--integrations <integrations...>", "Integrations to enable")
-  .option(
-    "--install-skill",
-    "Install the reusable Ultracite skill after setup"
-  )
+  .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
     "--type-aware",
     "Enable type-aware linting (enables project/scanner rules)"

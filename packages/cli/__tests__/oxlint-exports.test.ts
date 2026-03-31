@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
+
 import { parse } from "jsonc-parser";
 
 import { configs, core, next, react } from "../src/oxlint";
@@ -18,11 +19,12 @@ const readOxlintConfig = async (name: string) => {
 };
 
 describe("oxlint TypeScript exports", () => {
-  for (const [name, config] of Object.entries(configs)) {
-    test(`${name} matches the published JSON preset`, async () => {
+  test.each(Object.entries(configs))(
+    "%s matches the published JSON preset",
+    async (name, config) => {
       expect(config).toEqual(await readOxlintConfig(name));
-    });
-  }
+    }
+  );
 
   test("core, react, and next compose in extends arrays", () => {
     expect([core, react, next]).toHaveLength(3);

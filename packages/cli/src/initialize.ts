@@ -18,11 +18,8 @@ import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
-import {
-  createAgents,
-  getAgentFileTargets,
-  type AgentFileTarget,
-} from "./agents";
+import { createAgents, getAgentFileTargets } from "./agents";
+import type { AgentFileTarget } from "./agents";
 import { createEditorConfig } from "./editor-config";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
