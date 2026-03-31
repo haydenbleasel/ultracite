@@ -1,4 +1,5 @@
 import { join } from "node:path";
+
 import { $ } from "bun";
 
 const scriptsDir = import.meta.dirname;

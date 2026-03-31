@@ -1,8 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
-import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
+
 import { exists, isMonorepo } from "../utils";
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
@@ -46,32 +49,30 @@ const processYamlLine = (
 
     const [key, ...valueParts] = trimmed.split(":");
     const value = valueParts.join(":").trim();
-    const newCurrentKey = key.trim().replace(/['"]/g, "");
+    const newCurrentKey = key.trim().replaceAll(/['"]/g, "");
 
     if (value && value !== "") {
-      if (value.startsWith("[") && value.endsWith("]")) {
-        // Handle inline arrays
-        result[newCurrentKey] = value
-          .slice(1, -1)
-          .split(",")
-          .map((v) => v.trim().replace(/['"]/g, ""));
-      } else {
-        result[newCurrentKey] = value.replace(/['"]/g, "");
-      }
-      return { newCurrentKey: null, newCurrentArray: [] };
+      result[newCurrentKey] =
+        value.startsWith("[") && value.endsWith("]")
+          ? value
+              .slice(1, -1)
+              .split(",")
+              .map((v) => v.trim().replaceAll(/['"]/g, ""))
+          : value.replaceAll(/['"]/g, "");
+      return { newCurrentArray: [], newCurrentKey: null };
     }
-    return { newCurrentKey, newCurrentArray: [] };
+    return { newCurrentArray: [], newCurrentKey };
   }
 
   if (trimmed.startsWith("-") && currentKey) {
     const newCurrentArray = [
       ...currentArray,
-      trimmed.slice(1).trim().replace(/['"]/g, ""),
+      trimmed.slice(1).trim().replaceAll(/['"]/g, ""),
     ];
-    return { newCurrentKey: currentKey, newCurrentArray };
+    return { newCurrentArray, newCurrentKey: currentKey };
   }
 
-  return { newCurrentKey: currentKey, newCurrentArray: currentArray };
+  return { newCurrentArray: currentArray, newCurrentKey: currentKey };
 };
 
 // Simple YAML parser for basic objects (limited but functional)
@@ -116,7 +117,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile("./package.json", "utf-8")) as
+    const packageJson = parse(await readFile("./package.json", "utf8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -134,7 +135,7 @@ const isProjectEsm = async (): Promise<boolean> => {
 const updatePackageJson = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const packageJson = parse(await readFile("./package.json", "utf-8")) as
+  const packageJson = parse(await readFile("./package.json", "utf8")) as
     | Record<string, unknown>
     | undefined;
 
@@ -143,14 +144,12 @@ const updatePackageJson = async (
     return;
   }
 
-  if (packageJson["lint-staged"]) {
-    packageJson["lint-staged"] = deepmerge(
-      packageJson["lint-staged"],
-      createLintStagedConfig(packageManager)
-    );
-  } else {
-    packageJson["lint-staged"] = createLintStagedConfig(packageManager);
-  }
+  packageJson["lint-staged"] = packageJson["lint-staged"]
+    ? deepmerge(
+        packageJson["lint-staged"],
+        createLintStagedConfig(packageManager)
+      )
+    : createLintStagedConfig(packageManager);
 
   await writeFile("./package.json", JSON.stringify(packageJson, null, 2));
 };
@@ -160,7 +159,7 @@ const updateJsonConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, "utf-8");
+  const content = await readFile(filename, "utf8");
   const existingConfig = parse(content) as Record<string, unknown> | undefined;
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
@@ -180,7 +179,7 @@ const updateYamlConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, "utf-8");
+  const content = await readFile(filename, "utf8");
   const existingConfig = parseSimpleYaml(content) as
     | Record<string, unknown>
     | undefined;
@@ -203,8 +202,8 @@ const updateEsmConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
   const fileUrl = pathToFileURL(filename).href;
-  const module = await import(fileUrl);
-  const existingConfig = module.default || {};
+  const imported = await import(fileUrl);
+  const existingConfig = imported.default || {};
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -220,10 +219,10 @@ const updateCjsConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  // For CommonJS, we need to be more careful about imports
-  // Let's create a temporary file and require it
-  delete require.cache[require.resolve(`./${filename}`)];
-  const existingConfig = require(`./${filename}`);
+  // Use dynamic import with cache-busting query to avoid stale modules
+  const fileUrl = `${pathToFileURL(filename).href}?t=${Date.now()}`;
+  const imported = await import(fileUrl);
+  const existingConfig = imported.default || imported;
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -285,6 +284,12 @@ const handleConfigFileUpdate = async (
 };
 
 export const lintStaged = {
+  create: async (packageManager: PackageManagerName) => {
+    await writeFile(
+      ".lintstagedrc.json",
+      JSON.stringify(createLintStagedConfig(packageManager), null, 2)
+    );
+  },
   exists: async () => {
     for (const file of configFiles) {
       if (await exists(file)) {
@@ -294,19 +299,13 @@ export const lintStaged = {
 
     return false;
   },
-  install: async (packageManager: PackageManagerName) => {
+  install: async (packageManager: PackageManager) => {
     await addDevDependency("lint-staged", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
       corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
     });
-  },
-  create: async (packageManager: PackageManagerName) => {
-    await writeFile(
-      ".lintstagedrc.json",
-      JSON.stringify(createLintStagedConfig(packageManager), null, 2)
-    );
   },
   update: async (packageManager: PackageManagerName) => {
     let existingConfigFile: string | null = null;

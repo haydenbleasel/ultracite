@@ -1,4 +1,139 @@
+## 7.4.0
+
+### Minor Changes
+
+- c189cf1: Add support for new agent integrations including Zencoder, Ona, OpenClaw, Continue, Snowflake Cortex, Deepagents, Qoder, Kimi CLI, Kode, MCPJam, Mux, Pi, Neovate, Pochi, and AdaL, plus add CodeBuddy as a supported editor.
+
+### Patch Changes
+
+- 04d8455: Add no-void rule with allowAsStatement to complement no-floating-promises
+- e38d579: Fix DEP0190 deprecation warnings in `check`, `fix`, and `doctor` by routing CLI subprocesses through a shared `cross-spawn` runner with `shell: false`, while preserving Windows command resolution and direct file-path argument passing.
+- 98cb8c2: Pin ESLint initialization to a peer-compatible dependency set so `ultracite init` no longer installs an incompatible `eslint@latest` with `eslint-plugin-github`
+- fd7d05f: Disable conflicting `vitest/prefer-called-times` oxlint rule to resolve conflict with `vitest/prefer-called-once`
+- 581ea40: Add typed `ultracite/oxlint` exports for use in `oxlint.config.ts`.
+
+## 7.3.2
+
+### Patch Changes
+
+- 8ffeb33: Add support for .oxlintrc.mjs and oxlint.config.ts
+
+## 7.3.1
+
+### Patch Changes
+
+- f84edff: Fix --type-aware for Biome
+- acf301c: Migrate from eslint-plugin-import to import-x
+- 5749eb1: Create test frameworks
+
+## 7.3.0
+
+### Minor Changes
+
+- 0d27e68: fix noUnusedImports removing new imports in agent hooks
+
+### Patch Changes
+
+- 668fe62: Add --type-aware flag for biome
+- 4280484: Disable max-statements in Oxlint
+- d37b046: Disable jsdoc/require-param-type and jsdoc/require-returns-type for TS files
+
+## 7.2.5
+
+### Patch Changes
+
+- 83bafe4: Disable useValidLang rule for SvelteKit app.html to prevent false positives from %lang% placeholder
+- 4df6da9: Disable noUndeclaredVariables for Svelte files to fix false positives with template block variables like {#each}
+
 ## 5.6.0
+
+## 7.2.4
+
+### Patch Changes
+
+- cfaa912: Remove Jest and Vitest rules from non-test files
+- f72f2dc: Add support for copilot hooks
+- 66d51fd: Disable import/no-nodejs-modules for Chris Consent
+- d1e8490: Create skill
+
+## 7.2.3
+
+### Patch Changes
+
+- 3cd6e7b: Upgrade Biome to 2.4
+
+## 7.2.2
+
+### Patch Changes
+
+- 8db75d7: Only run shell: true on windows
+
+## 7.2.1
+
+### Patch Changes
+
+- 0d21c46: Restore shell for windows
+
+## 7.2.0
+
+### Minor Changes
+
+- fe9acf6: Use local binaries
+
+### Patch Changes
+
+- 357be7e: Store full package manager info from detectPackageManager()
+- 8666788: Fix Husky precommit hook
+
+## 7.1.5
+
+### Patch Changes
+
+- c8fdacf: fix: detectLinter() doesn't walk up directory tree, Breaks monorepo subdirectory usage
+- c79c3b0: Fix lefthook file configuration
+- 4b9d206: Make useBlockStatements fix safe
+- 8e9e728: Add support for NestJS
+- d0ae8f3: Fix: Biome removes all imports in Svelte files on save instead of organizing them
+
+## 7.1.4
+
+### Patch Changes
+
+- 34c79bb: Fix conflicting oxlint rules
+
+## 7.1.3
+
+### Patch Changes
+
+- c60533d: Fix oxlint import/consistent-type-specifier-style
+
+## 7.1.2
+
+### Patch Changes
+
+- 9d443b6: Fix func-style config in oxlint
+- 3d9b488: Fix: argument --unsafe cannot be used multiple times in this context
+- f06808f: Don't pass options to formatters, only linters
+
+## 7.1.1
+
+### Patch Changes
+
+- 0e9af01: Automatically add scripts to root package.json
+- 656f6d7: fix(oxlint-remix): ignore unicorn rules for generated routeTree.gen.ts
+
+## 7.1.0
+
+### Minor Changes
+
+- c201da4: Switch to commander.js, fix multiple agents args
+- e022697: Add support for all provider flags
+
+### Patch Changes
+
+- 64e79c7: fix(eslint): fix eslint rules config
+- a5ae91c: fix(eslint): Remove eslint-plugin-tailwindcss due to v4 incompatibility
+- 5c349a9: Enable tsconfig.json to have comments
 
 ## 7.0.12
 

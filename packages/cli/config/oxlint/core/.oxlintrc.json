@@ -8,9 +8,7 @@
     "import",
     "jsdoc",
     "node",
-    "promise",
-    "jest",
-    "vitest"
+    "promise"
   ],
   "env": {
     "browser": true
@@ -35,21 +33,26 @@
     "id-length": "off",
     "func-style": [
       "error",
+      "expression",
       {
-        "allowArrowFunctions": true,
-        "style": "expression"
+        "allowArrowFunctions": true
       }
     ],
     "arrow-body-style": ["error", "as-needed"],
     "max-depth": "off",
     "max-params": "off",
+    "max-statements": "off",
     "capitalized-comments": "off",
     "new-cap": "off",
     "no-continue": "off",
     "init-declarations": "off",
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
+    "no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
+    // Avoid conflict with typescript/no-floating-promises
+    "no-void": ["error", { "allowAsStatement": true }],
 
+    "import/no-relative-parent-imports": "off",
     "import/no-default-export": "off",
     "import/exports-last": "off",
     "import/no-named-export": "off",
@@ -62,12 +65,15 @@
     "import/group-exports": "off",
     "import/no-commonjs": "off",
     "import/unambiguous": "off",
-    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
+    "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
     "import/no-dynamic-require": "off",
     "import/no-unassigned-import": "off",
+    "import/no-nodejs-modules": "off",
 
     "jsdoc/require-param": "off",
+    "jsdoc/require-param-type": "off",
     "jsdoc/require-returns": "off",
+    "jsdoc/require-returns-type": "off",
 
     "unicorn/explicit-length-check": "off",
     "unicorn/no-array-callback-reference": "off",
@@ -75,6 +81,7 @@
     "unicorn/prefer-global-this": "off",
     "unicorn/no-null": "off",
     "unicorn/prefer-top-level-await": "off",
+    "unicorn/prefer-string-raw": "off",
 
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
@@ -91,5 +98,21 @@
 
     "promise/catch-or-return": "off",
     "promise/always-return": "off"
-  }
+  },
+  "overrides": [
+    {
+      // Shared test file overrides — framework-specific test rules
+      // are in separate jest/ and vitest/ configs to avoid conflicts.
+      "files": [
+        "**/*.{test,spec}.{ts,tsx,js,jsx}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx}"
+      ],
+      "rules": {
+        // Disabled: mock callbacks often need empty functions
+        "no-empty-function": "off",
+        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
+        "promise/prefer-await-to-then": "off"
+      }
+    }
+  ]
 }

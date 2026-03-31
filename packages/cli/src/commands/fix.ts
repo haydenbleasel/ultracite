@@ -1,142 +1,53 @@
-import { spawnSync } from "node:child_process";
-import process from "node:process";
-import { detectPackageManager, dlxCommand } from "nypm";
-import { detectLinter, parseFilePaths } from "../utils";
+import { exitOnCommandFailure, runCommandSync } from "../run-command";
+import { detectLinter } from "../utils";
 
-const runBiomeFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runBiomeFix = (files: string[], passthrough: string[]): void => {
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
-    args.push(...parseFilePaths(files));
+    args.push(...files);
   } else {
     args.push("./");
   }
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "@biomejs/biome", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("biome", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Biome: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Biome", result);
 };
 
-const runEslintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
-  const args = [
-    "--fix",
-    ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
-  ];
+const runEslintFix = (files: string[], passthrough: string[]): void => {
+  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "eslint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("eslint", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run ESLint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("ESLint", result);
 };
 
-const runPrettierFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runPrettierFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "prettier", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("prettier", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Prettier: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Prettier", result);
 };
 
-const runStylelintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
-  const args = [
-    "--fix",
-    ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
-  ];
+const runStylelintFix = (files: string[], passthrough: string[]): void => {
+  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "stylelint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("stylelint", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Stylelint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Stylelint", result);
 };
 
-const runOxlintFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxlintFix = (files: string[], passthrough: string[]): void => {
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
@@ -144,61 +55,26 @@ const runOxlintFix = async (
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "oxlint", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("oxlint", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run Oxlint: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("Oxlint", result);
 };
 
-const runOxfmtFix = async (
-  files: string[],
-  passthrough: string[]
-): Promise<void> => {
+const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   const args = [
     "--write",
     ...passthrough,
-    ...(files.length > 0 ? parseFilePaths(files) : ["."]),
+    ...(files.length > 0 ? files : ["."]),
   ];
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const fullCommand = dlxCommand(pm, "oxfmt", {
-    args,
-    short: pm === "npm",
-  });
-
-  const result = spawnSync(fullCommand, {
+  const result = runCommandSync("oxfmt", args, {
     stdio: "inherit",
-    shell: true,
   });
-
-  if (result.error) {
-    throw new Error(`Failed to run oxfmt: ${result.error.message}`);
-  }
-
-  if (result.status !== 0) {
-    process.exit(result.status ?? 1);
-  }
+  exitOnCommandFailure("oxfmt", result);
 };
 
 export const fix = async (
@@ -215,17 +91,18 @@ export const fix = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierFix(files, passthrough);
+      await runPrettierFix(files, []);
       await runEslintFix(files, passthrough);
-      await runStylelintFix(files, passthrough);
+      await runStylelintFix(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtFix(files, passthrough);
+      await runOxfmtFix(files, []);
       await runOxlintFix(files, passthrough);
       break;
     }
-    default:
+    default: {
       await runBiomeFix(files, passthrough);
+    }
   }
 };

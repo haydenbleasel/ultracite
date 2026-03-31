@@ -1,0 +1,19 @@
+{
+	"root": false,
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noPrivateImports": "error",
+				"noUndeclaredDependencies": "error",
+				"noUnresolvedImports": "error",
+				"useImportExtensions": "error",
+				"useJsonImportAttributes": "error"
+			},
+			"suspicious": {
+				"noDeprecatedImports": "error",
+				"noImportCycles": "error"
+			}
+		}
+	}
+}

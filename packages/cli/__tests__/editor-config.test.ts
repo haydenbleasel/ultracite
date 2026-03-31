@@ -1,11 +1,12 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { createEditorConfig } from "../src/editor-config";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("node:child_process", () => ({
@@ -28,16 +29,16 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("vscode");
       await editorConfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
     });
 
@@ -46,16 +47,16 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"editor.tabSize": 4}')),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("vscode");
       await editorConfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
       expect(writtenContent["editor.tabSize"]).toBe(4);
     });
@@ -67,9 +68,9 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("vscode", "eslint");
@@ -83,9 +84,9 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("vscode", "oxlint");
@@ -99,9 +100,9 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("zed", "eslint");
@@ -115,15 +116,33 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const editorConfig = createEditorConfig("zed", "oxlint");
       await editorConfig.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
+    });
+
+    test("creates codebuddy config with biome linter", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      const editorConfig = createEditorConfig("codebuddy", "biome");
+      await editorConfig.create();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".vscode/settings.json");
     });
   });
 
@@ -133,15 +152,14 @@ describe("createEditorConfig", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       // @ts-expect-error - Testing windsurf hooks if editor supports it
-      const hooks = await import("../src/hooks").then((m) =>
-        m.createHooks("windsurf", "npm")
-      );
+      const m = await import("../src/hooks");
+      const hooks = m.createHooks("windsurf", "npm");
       await hooks.create();
 
       expect(mockWriteFile).toHaveBeenCalled();

@@ -6,28 +6,12 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env.*.local"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**",
-        "src/database/generated/**"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
-    "transit": {
-      "dependsOn": ["^transit"]
-    },
-    "test": {
-      "dependsOn": ["transit"]
-    },
-    "test:coverage": {
-      "dependsOn": ["transit"]
-    },
-    "lint": {
-      "dependsOn": ["transit"]
-    },
-    "check-types": {
-      "dependsOn": ["transit"]
-    },
+    "test": {},
+    "test:coverage": {},
+    "lint": {},
+    "check-types": {},
     "dev": {
       "cache": false,
       "persistent": true

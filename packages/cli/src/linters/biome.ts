@@ -1,7 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
+
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+
 import { exists } from "../utils";
 
 const defaultConfig = {
@@ -19,16 +21,18 @@ const getBiomeConfigPath = async (): Promise<string> => {
 
 interface BiomeOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  typeAware?: boolean;
 }
 
 export const biome = {
-  exists: async () => {
-    const path = await getBiomeConfigPath();
-    return exists(path);
-  },
   create: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
     const extendsList = ["ultracite/biome/core"];
+
+    // Add type-aware config for project/scanner rules
+    if (opts?.typeAware) {
+      extendsList.push("ultracite/biome/type-aware");
+    }
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
@@ -44,9 +48,13 @@ export const biome = {
 
     return writeFile(path, JSON.stringify(config, null, 2));
   },
+  exists: async () => {
+    const path = await getBiomeConfigPath();
+    return exists(path);
+  },
   update: async (opts?: BiomeOptions) => {
     const path = await getBiomeConfigPath();
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
@@ -65,6 +73,11 @@ export const biome = {
     // Add ultracite/biome/core if not present
     if (!newExtends.includes("ultracite/biome/core")) {
       newExtends.push("ultracite/biome/core");
+    }
+
+    // Add type-aware config for project/scanner rules
+    if (opts?.typeAware && !newExtends.includes("ultracite/biome/type-aware")) {
+      newExtends.push("ultracite/biome/type-aware");
     }
 
     // Add framework-specific configs if provided

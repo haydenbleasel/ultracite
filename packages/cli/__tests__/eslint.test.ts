@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { eslint } from "../src/linters/eslint";
 
 mock.module("node:fs/promises", () => ({
@@ -50,7 +51,7 @@ describe("eslint linter", () => {
       await eslint.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./eslint.config.mjs");
       expect(writeCall[1]).toContain("ultracite");
     });
@@ -67,7 +68,7 @@ describe("eslint linter", () => {
       await eslint.create({ frameworks: ["react", "next"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain(
         'import react from "ultracite/eslint/react"'
       );

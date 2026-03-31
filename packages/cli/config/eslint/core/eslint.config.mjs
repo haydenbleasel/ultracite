@@ -8,9 +8,7 @@ import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as importPlugin from "eslint-plugin-import";
-import jest from "eslint-plugin-jest";
+import { importX } from "eslint-plugin-import-x";
 import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
@@ -19,13 +17,13 @@ import storybook from "eslint-plugin-storybook";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
+
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
-import eslintRules from "./rules/eslint.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
+import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
-import jestRules from "./rules/jest.mjs";
 import nRules from "./rules/n.mjs";
 import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
@@ -36,22 +34,11 @@ import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
 const config = [
-  importPlugin.configs.typescript,
+  importX.flatConfigs.typescript,
   {
     ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
   },
   {
-    languageOptions: {
-      sourceType: "module",
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-    },
     files: [
       "**/*.js",
       "**/*.ts",
@@ -60,16 +47,27 @@ const config = [
       "**/*.cjs",
       "**/*.html",
     ],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+      sourceType: "module",
+    },
     plugins: {
-      prettier,
-      import: importPlugin,
-      promise,
-      n,
-      "unused-imports": unusedImports,
-      sonarjs,
       compat,
-      unicorn,
       github,
+      "import-x": importX,
+      n,
+      prettier,
+      promise,
+      sonarjs,
+      unicorn,
+      "unused-imports": unusedImports,
     },
     rules: {
       ...eslintRules,
@@ -86,13 +84,12 @@ const config = [
     },
 
     settings: {
-      // https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561
-      "import/parsers": {
+      "import-x/parsers": {
         espree: [".js", ".cjs", ".mjs", ".ts"],
       },
-      "import/resolver": {
-        typescript: true,
+      "import-x/resolver": {
         node: true,
+        typescript: true,
       },
     },
   },
@@ -111,20 +108,6 @@ const config = [
     rules: {
       ...eslintTypescriptRules,
       ...typescriptRules,
-    },
-  },
-  {
-    files: ["**/*.test.js", "tests/**/*.js"],
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
-    },
-    plugins: {
-      jest,
-    },
-    rules: {
-      ...jestRules,
     },
   },
   {

@@ -1,20 +1,21 @@
 import { describe, expect, mock, test } from "bun:test";
-import { createAgents } from "../src/agents";
+
+import { createAgents, getAgentFileTargets } from "../src/agents";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
 
 mock.module("nypm", () => ({
-  detectPackageManager: mock(async () => ({ name: "npm" })),
+  detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
   dlxCommand: mock((pm, pkg) => {
     const prefixMap: Record<string, string> = {
       bun: "bunx",
-      yarn: "yarn dlx",
       pnpm: "pnpm dlx",
+      yarn: "yarn dlx",
     };
     const prefix = prefixMap[pm] || "npx";
     return pkg ? `${prefix} ${pkg}` : prefix;
@@ -35,23 +36,23 @@ describe("createAgents", () => {
   });
 
   describe("copilot agent", () => {
-    test("create creates copilot instructions with header", async () => {
+    test("create creates AGENTS.md instructions", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("copilot", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe(".github/copilot-instructions.md");
-      expect(writeCall[1]).toContain("applyTo:");
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("AGENTS.md");
+      expect(writeCall[1]).not.toContain("applyTo:");
     });
 
     test("update uses append mode", async () => {
@@ -60,67 +61,64 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("copilot", "npm", "biome");
       await agents.update();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("Existing instructions");
     });
   });
 
   describe("cline agent", () => {
-    test("create creates .clinerules file", async () => {
+    test("create creates AGENTS.md file", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe(".clinerules");
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("AGENTS.md");
     });
 
-    test("update appends to .clinerules file", async () => {
-      const existingContent = "Existing cline rules";
+    test("update appends to AGENTS.md file", async () => {
+      const existingContent = "Existing AGENTS rules";
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
       await agents.update();
 
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[1]).toContain("Existing cline rules");
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("Existing AGENTS rules");
     });
 
     test("update creates file when it does not exist in append mode", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
-        access: mock((_path: string) => {
-          // File doesn't exist
-          return Promise.reject(new Error("ENOENT"));
-        }),
+        access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("cline", "npm", "biome");
@@ -128,8 +126,28 @@ describe("createAgents", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       // Should write the content since file doesn't exist
-      const writeCall = mockWriteFile.mock.calls[0];
-      expect(writeCall[0]).toBe(".clinerules");
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("AGENTS.md");
+    });
+  });
+
+  describe("replit agent", () => {
+    test("create creates replit.md file", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const agents = createAgents("replit", "npm", "biome");
+      await agents.create();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("replit.md");
     });
   });
 
@@ -139,16 +157,16 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const agents = createAgents("claude", "npm", "biome");
       await agents.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".claude/CLAUDE.md");
     });
   });
@@ -159,17 +177,17 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
-      const agents = createAgents("junie", "npm", "biome");
+      const agents = createAgents("claude", "npm", "biome");
       await agents.create();
 
       expect(mockMkdir).toHaveBeenCalled();
-      const mkdirCall = mockMkdir.mock.calls[0];
-      expect(mkdirCall[0]).toBe(".junie");
+      const [mkdirCall] = mockMkdir.mock.calls;
+      expect(mkdirCall[0]).toBe(".claude");
     });
 
     test("does not create directory for root-level files", async () => {
@@ -177,9 +195,9 @@ describe("createAgents", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mockMkdir,
       }));
 
       const agents = createAgents("codex", "npm", "biome");
@@ -188,5 +206,38 @@ describe("createAgents", () => {
       // Should not be called for root-level AGENTS.md
       expect(mockMkdir).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe("getAgentFileTargets", () => {
+  test("groups AGENTS.md integrations into a universal option", () => {
+    const targets = getAgentFileTargets();
+    const universalTarget = targets.find((target) => target.id === "universal");
+
+    expect(universalTarget).toEqual(
+      expect.objectContaining({
+        displayName: "Universal",
+        path: "AGENTS.md",
+        representativeAgentId: "codex",
+      })
+    );
+    expect(universalTarget?.agentIds).toEqual(
+      expect.arrayContaining(["codex", "jules", "devin", "copilot", "cline"])
+    );
+    expect(universalTarget?.promptLabel).toContain("creates AGENTS.md");
+  });
+
+  test("keeps agent-specific files as dedicated options", () => {
+    const targets = getAgentFileTargets();
+    const claudeTarget = targets.find((target) => target.id === "claude");
+
+    expect(claudeTarget).toEqual(
+      expect.objectContaining({
+        displayName: "Claude",
+        path: ".claude/CLAUDE.md",
+        promptLabel: "Claude (creates .claude/CLAUDE.md)",
+        representativeAgentId: "claude",
+      })
+    );
   });
 });

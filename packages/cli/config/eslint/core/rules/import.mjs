@@ -1,23 +1,28 @@
-import { rules } from "eslint-plugin-import";
+import { rules } from "eslint-plugin-import-x";
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated
 );
 
 const baseRules = Object.fromEntries(
-  availableKeys.map((key) => [`import/${key}`, "error"])
+  availableKeys.map((key) => [`import-x/${key}`, "error"])
 );
 
 const overrideRules = {
-  "import/no-unresolved": "off",
-  "import/no-internal-modules": "off",
-  "import/no-relative-parent-imports": "off",
-  "import/no-named-as-default": "off",
-  "import/exports-last": "off",
-  "import/no-namespace": "off",
-  "import/enforce-node-protocol-usage": ["error", "always"],
-  "import/extensions": "off",
-  "import/order": [
+  "import-x/enforce-node-protocol-usage": ["error", "always"],
+  "import-x/exports-last": "off",
+  "import-x/extensions": "off",
+  "import-x/group-exports": "off",
+  "import-x/max-dependencies": "off",
+  "import-x/no-default-export": "off",
+  "import-x/no-internal-modules": "off",
+  "import-x/no-named-as-default": "off",
+  "import-x/no-named-export": "off",
+  "import-x/no-namespace": "off",
+  "import-x/no-relative-parent-imports": "off",
+  "import-x/no-unassigned-import": "off",
+  "import-x/no-unresolved": "off",
+  "import-x/order": [
     "error",
     {
       groups: [
@@ -32,12 +37,7 @@ const overrideRules = {
       ],
     },
   ],
-  "import/prefer-default-export": "off",
-  "import/max-dependencies": "off",
-  "import/no-unassigned-import": "off",
-  "import/no-default-export": "off",
-  "import/no-named-export": "off",
-  "import/group-exports": "off",
+  "import-x/prefer-default-export": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

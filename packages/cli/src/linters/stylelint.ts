@@ -1,4 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
+
 import { exists } from "../utils";
 
 // All possible Stylelint config file locations
@@ -24,7 +25,7 @@ const defaultConfigPath = "./stylelint.config.mjs";
 
 const hasStylelintKeyInPackageJson = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
+    const packageJson = JSON.parse(await readFile("./package.json", "utf8"));
     return "stylelint" in packageJson;
   } catch {
     return false;
@@ -47,19 +48,18 @@ const getStylelintConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generateStylelintConfig = (): string => {
-  return `export { default } from "ultracite/stylelint";
+const generateStylelintConfig =
+  (): string => `export { default } from "ultracite/stylelint";
 `;
-};
 
 export const stylelint = {
-  exists: async () => {
-    const path = await getStylelintConfigPath();
-    return path !== null;
-  },
   create: async () => {
     const config = generateStylelintConfig();
     await writeFile(defaultConfigPath, config);
+  },
+  exists: async () => {
+    const path = await getStylelintConfigPath();
+    return path !== null;
   },
   update: async () => {
     const config = generateStylelintConfig();

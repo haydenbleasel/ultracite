@@ -1,12 +1,15 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { createHooks } from "../src/hooks";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
+  mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve("")),
   writeFile: mock(() => Promise.resolve()),
-  mkdir: mock(() => Promise.resolve()),
 }));
+
+const npmBiomeCommand = "npm run fix -- --skip=correctness/noUnusedImports";
 
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
@@ -37,9 +40,9 @@ describe("createHooks", () => {
           }
           return Promise.reject(new Error("ENOENT"));
         }),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("cursor", "npm");
@@ -53,9 +56,9 @@ describe("createHooks", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mockMkdir,
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mockMkdir,
       }));
 
       const hooks = createHooks("cursor", "npm");
@@ -70,20 +73,20 @@ describe("createHooks", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("cursor", "npm");
       await hooks.create();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".cursor/hooks.json");
       const content = JSON.parse(writeCall[1] as string);
       expect(content.version).toBe(1);
       expect(content.hooks.afterFileEdit).toHaveLength(1);
-      expect(content.hooks.afterFileEdit[0].command).toBe("npx ultracite fix");
+      expect(content.hooks.afterFileEdit[0].command).toBe(npmBiomeCommand);
     });
 
     test("update creates hooks.json if it doesn't exist", async () => {
@@ -91,16 +94,16 @@ describe("createHooks", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".cursor/hooks.json");
     });
 
@@ -111,34 +114,31 @@ describe("createHooks", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingHooks)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const hooksWrite = mockWriteFile.mock.calls[0];
+      const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".cursor/hooks.json");
       const hooksContent = JSON.parse(hooksWrite[1] as string);
       expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
-      expect(hooksContent.hooks.afterFileEdit[1].command).toBe(
-        "npx ultracite fix"
-      );
+      expect(hooksContent.hooks.afterFileEdit[1].command).toBe(npmBiomeCommand);
     });
 
     test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {
-      const existingHooks =
-        '{"version": 1, "hooks": {"afterFileEdit": [{"command": "npx ultracite fix"}]}}';
+      const existingHooks = `{"version": 1, "hooks": {"afterFileEdit": [{"command": "${npmBiomeCommand}"}]}}`;
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingHooks)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("cursor", "npm");
@@ -149,21 +149,159 @@ describe("createHooks", () => {
     });
   });
 
+  describe("copilot hooks", () => {
+    test("create writes .github/hooks/ultracite.json with correct structure", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.create();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".github/hooks/ultracite.json");
+
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.hooks.PostToolUse).toHaveLength(1);
+      expect(content.hooks.PostToolUse[0].type).toBe("command");
+      expect(content.hooks.PostToolUse[0].command).toBe(npmBiomeCommand);
+    });
+
+    test("update merges hooks into existing config when ultracite not present", async () => {
+      const existingConfig =
+        '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      expect(hooksWrite[0]).toBe(".github/hooks/ultracite.json");
+
+      const merged = JSON.parse(hooksWrite[1] as string);
+      expect(merged.hooks.PostToolUse.length).toBe(2);
+      expect(merged.hooks.PostToolUse[1].command).toBe(npmBiomeCommand);
+    });
+
+    test("update skips when ultracite hook already exists", async () => {
+      const existingConfig = `{"hooks":{"PostToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]}}`;
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("copilot", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("codebuddy hooks", () => {
+    test("create writes .codebuddy/settings.json with PostToolUse hooks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.create();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".codebuddy/settings.json");
+
+      const content = JSON.parse(writeCall[1] as string);
+      expect(content.hooks.PostToolUse).toHaveLength(1);
+      expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
+      expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
+      expect(content.hooks.PostToolUse[0].hooks[0].timeout).toBe(20);
+      expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
+    test("update merges hooks into existing settings when ultracite is not present", async () => {
+      const existingSettings =
+        '{"model":"yuanbao-code","permissions":{"bash":true}}';
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
+
+      const merged = JSON.parse(hooksWrite[1] as string);
+      expect(merged.model).toBe("yuanbao-code");
+      expect(merged.permissions.bash).toBe(true);
+      expect(merged.hooks.PostToolUse).toHaveLength(1);
+      expect(merged.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
+    test("update skips when ultracite hook already exists in settings", async () => {
+      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommand}"}]}]}}`;
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+  });
+
   describe("claude hooks", () => {
     test("create writes .claude/settings.json with correct structure", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("claude", "npm");
       await hooks.create();
 
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".claude/settings.json");
 
       const content = JSON.parse(writeCall[1] as string);
@@ -171,7 +309,7 @@ describe("createHooks", () => {
       expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
       expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "npx ultracite fix"
+        npmBiomeCommand
       );
     });
 
@@ -181,16 +319,16 @@ describe("createHooks", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("claude", "npm");
       await hooks.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const hooksWrite = mockWriteFile.mock.calls[0];
+      const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".claude/settings.json");
 
       const merged = JSON.parse(hooksWrite[1] as string);
@@ -199,15 +337,14 @@ describe("createHooks", () => {
     });
 
     test("update skips when ultracite hook already exists in settings", async () => {
-      const existingSettings =
-        '{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"npx ultracite fix"}]}]}}';
+      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"${npmBiomeCommand}"}]}]}}`;
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
-        mkdir: mock(() => Promise.resolve()),
       }));
 
       const hooks = createHooks("claude", "npm");

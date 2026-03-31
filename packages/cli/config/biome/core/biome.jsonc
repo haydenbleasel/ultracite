@@ -65,7 +65,13 @@
         // Enforce attribute sorting in JSX elements.
         "useSortedAttributes": "on",
         // Enforce ordering of a JS object properties.
-        "useSortedKeys": "off"
+        "useSortedKeys": "off",
+        // Enforce no duplicate classes in the file.
+        "noDuplicateClasses": "on",
+        // Enforce ordering of a TypeScript interface members.
+        "useSortedInterfaceMembers": "on",
+        // Enforce ordering of a JavaScript object properties.
+        "useSortedProperties": "on"
       }
     }
   },
@@ -130,7 +136,6 @@
             "maxAllowedComplexity": 20
           }
         },
-        "noExcessiveNestedTestSuites": "error",
         "noExtraBooleanCast": "error",
         "noFlatMapIdentity": "error",
         "noForEach": "error",
@@ -220,9 +225,10 @@
         "noProcessGlobal": "off",
         "useUniqueElementIds": "off",
 
-        /** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/
+        /** ------ Project/Scanner rules. Use ultracite/biome/type-aware to enable. ------ **/
         "noPrivateImports": "off",
         "noUndeclaredDependencies": "off",
+        "noUnresolvedImports": "off",
         "useImportExtensions": "off",
         "useJsonImportAttributes": "off",
 
@@ -280,7 +286,6 @@
       "style": {
         /** ------------------------ JavaScript Rules ------------------------ **/
 
-        "noDoneCallback": "error",
         "noEnum": "error",
         "noExportedImports": "error",
         "noInferrableTypes": "error",
@@ -301,7 +306,10 @@
         "useArrayLiterals": "error",
         "useAsConstAssertion": "error",
         "useAtIndex": "error",
-        "useBlockStatements": "error",
+        "useBlockStatements": {
+          "fix": "safe",
+          "level": "error"
+        },
         "useCollapsedElseIf": "error",
         "useCollapsedIf": "error",
         "useConsistentArrayType": "error",
@@ -393,15 +401,12 @@
         "noDuplicateFields": "error",
         "noDuplicateObjectKeys": "error",
         "noDuplicateParameters": "error",
-        "noDuplicateTestHooks": "error",
         "noEmptyBlockStatements": "error",
         "noEmptyInterface": "error",
         "noEvolvingTypes": "error",
         "noExplicitAny": "error",
-        "noExportsInTest": "error",
         "noExtraNonNullAssertion": "error",
         "noFallthroughSwitchClause": "error",
-        "noFocusedTests": "error",
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",
         "noGlobalIsFinite": "error",
@@ -412,7 +417,6 @@
         "noLabelVar": "error",
         "noMisleadingCharacterClass": "error",
         "noMisleadingInstantiator": "error",
-        "noMisplacedAssertion": "error",
         "noMisrefactoredShorthandAssign": "error",
         "noOctalEscape": "error",
         "noPrototypeBuiltins": "error",
@@ -421,7 +425,6 @@
         "noRedundantUseStrict": "error",
         "noSelfCompare": "error",
         "noShadowRestrictedNames": "error",
-        "noSkippedTests": "error",
         "noSparseArray": "error",
         "noTemplateCurlyInString": "error",
         "noThenProperty": "error",
@@ -450,6 +453,10 @@
         "noNonNullAssertedOptionalChain": "error",
 
         "noConsole": "off",
+
+        /** ------ Project/Scanner rules. Use ultracite/biome/type-aware to enable. ------ **/
+        "noDeprecatedImports": "off",
+        "noImportCycles": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDuplicateAtImportRules": "error",

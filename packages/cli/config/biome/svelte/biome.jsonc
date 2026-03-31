@@ -13,15 +13,21 @@
 			"linter": {
 				"rules": {
 					"correctness": {
-						"noUnusedVariables": "off",
+						"noUndeclaredVariables": "off",
 						"noUnusedImports": "off"
-					},
-					"style": {
-						"useConst": "off",
-						"useImportType": "off"
 					},
 					"suspicious": {
 						"noReactSpecificProps": "error"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/app.html"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"useValidLang": "off"
 					}
 				}
 			}

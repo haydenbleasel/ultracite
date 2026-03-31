@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+
 import { prettier } from "../src/linters/prettier";
 
 mock.module("node:fs/promises", () => ({
@@ -72,7 +73,7 @@ describe("prettier linter", () => {
       await prettier.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./prettier.config.mjs");
       expect(writeCall[1]).toContain("ultracite/prettier");
     });

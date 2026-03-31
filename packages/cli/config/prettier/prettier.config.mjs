@@ -1,15 +1,15 @@
 /** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions & import('prettier-plugin-svelte').PluginConfig} */
 const config = {
-  tabWidth: 2,
-  useTabs: false,
+  arrowParens: "always",
+  bracketSpacing: true,
+  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  printWidth: 80,
+  proseWrap: "never",
   semi: true,
   singleQuote: false,
+  tabWidth: 2,
   trailingComma: "es5",
-  bracketSpacing: true,
-  arrowParens: "always",
-  proseWrap: "never",
-  printWidth: 80,
-  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  useTabs: false,
 };
 
 export default config;

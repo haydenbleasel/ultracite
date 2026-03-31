@@ -1,4 +1,5 @@
 import process from "node:process";
+
 import {
   cancel,
   intro,
@@ -13,13 +14,15 @@ import { editors } from "@repo/data/editors";
 import { hooks as hookIntegrations } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import { providers } from "@repo/data/providers";
-import {
-  addDevDependency,
-  detectPackageManager,
-  type PackageManagerName,
-} from "nypm";
+import { addDevDependency, detectPackageManager } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
+
 import packageJson from "../package.json" with { type: "json" };
-import { createAgents } from "./agents";
+import {
+  createAgents,
+  getAgentFileTargets,
+  type AgentFileTarget,
+} from "./agents";
 import { createEditorConfig } from "./editor-config";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
@@ -32,6 +35,10 @@ import { oxfmt } from "./linters/oxfmt";
 import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
+import {
+  getUltraciteSkillInstallCommand,
+  maybeInstallUltraciteSkill,
+} from "./skill";
 import { tsconfig } from "./tsconfig";
 import { isMonorepo, updatePackageJson } from "./utils";
 
@@ -40,50 +47,139 @@ const ultraciteVersion = packageJson.version;
 
 type Linter = (typeof options.linters)[number];
 type Frameworks = (typeof options.frameworks)[number];
+type AgentSelection = (typeof options.agents)[number] | "universal";
 
 interface InitializeFlags {
-  pm?: PackageManagerName;
-  linter?: Linter;
+  agents?: AgentSelection[];
   editors?: (typeof options.editorConfigs)[number][];
-  agents?: (typeof options.agents)[number][];
+  frameworks?: (typeof options.frameworks)[number][];
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
-  frameworks?: (typeof options.frameworks)[number][];
-  skipInstall?: boolean;
+  installSkill?: boolean;
+  linter?: Linter;
+  pm?: PackageManagerName;
   quiet?: boolean;
+  skipInstall?: boolean;
   "type-aware"?: boolean;
 }
 
-const eslintFrameworkPackages: Partial<Record<Frameworks, string[]>> = {
-  angular: ["@angular-eslint/eslint-plugin@latest"],
-  astro: ["eslint-plugin-astro@latest"],
-  next: ["@next/eslint-plugin-next@latest"],
-  qwik: ["eslint-plugin-qwik@latest"],
-  react: [
-    "eslint-plugin-react@latest",
-    "eslint-plugin-react-hooks@latest",
-    "eslint-plugin-jsx-a11y@latest",
-    "@tanstack/eslint-plugin-query@latest",
-  ],
-  remix: ["eslint-plugin-remix@latest"],
-  solid: ["eslint-plugin-solid@latest"],
-  svelte: ["eslint-plugin-svelte@latest"],
-  vue: ["eslint-plugin-vue@latest"],
+const supportedEslintVersion = "^9.0.0";
+const eslintCoreDevDependencies: Record<string, string> = {
+  "@eslint/js": supportedEslintVersion,
+  "@typescript-eslint/eslint-plugin":
+    packageJson.devDependencies["@typescript-eslint/eslint-plugin"],
+  "@typescript-eslint/parser":
+    packageJson.devDependencies["@typescript-eslint/parser"],
+  eslint: supportedEslintVersion,
+  "eslint-config-prettier":
+    packageJson.devDependencies["eslint-config-prettier"],
+  "eslint-import-resolver-typescript":
+    packageJson.devDependencies["eslint-import-resolver-typescript"],
+  "eslint-plugin-compat": packageJson.devDependencies["eslint-plugin-compat"],
+  "eslint-plugin-cypress": packageJson.devDependencies["eslint-plugin-cypress"],
+  "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
+  "eslint-plugin-html": packageJson.devDependencies["eslint-plugin-html"],
+  "eslint-plugin-import-x":
+    packageJson.devDependencies["eslint-plugin-import-x"],
+  "eslint-plugin-n": packageJson.devDependencies["eslint-plugin-n"],
+  "eslint-plugin-prettier":
+    packageJson.devDependencies["eslint-plugin-prettier"],
+  "eslint-plugin-promise": packageJson.devDependencies["eslint-plugin-promise"],
+  "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+  "eslint-plugin-storybook":
+    packageJson.devDependencies["eslint-plugin-storybook"],
+  "eslint-plugin-unicorn": packageJson.devDependencies["eslint-plugin-unicorn"],
+  "eslint-plugin-unused-imports":
+    packageJson.devDependencies["eslint-plugin-unused-imports"],
+  globals: packageJson.devDependencies.globals,
+  prettier: "latest",
+  stylelint: "latest",
 };
-const addEslintFrameworkPackages = (
-  packages: string[],
+const eslintFrameworkDevDependencies: Partial<
+  Record<Frameworks, Record<string, string>>
+> = {
+  angular: {
+    "@angular-eslint/eslint-plugin": "latest",
+  },
+  astro: {
+    "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
+  },
+  jest: {
+    "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
+  },
+  next: {
+    "@next/eslint-plugin-next":
+      packageJson.devDependencies["@next/eslint-plugin-next"],
+  },
+  qwik: {
+    "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
+  },
+  react: {
+    "@tanstack/eslint-plugin-query":
+      packageJson.devDependencies["@tanstack/eslint-plugin-query"],
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
+    "eslint-plugin-react": packageJson.devDependencies["eslint-plugin-react"],
+    "eslint-plugin-react-hooks":
+      packageJson.devDependencies["eslint-plugin-react-hooks"],
+  },
+  remix: {
+    "eslint-plugin-remix": packageJson.devDependencies["eslint-plugin-remix"],
+  },
+  solid: {
+    "eslint-plugin-solid": packageJson.devDependencies["eslint-plugin-solid"],
+  },
+  svelte: {
+    "eslint-plugin-svelte": packageJson.devDependencies["eslint-plugin-svelte"],
+  },
+  vitest: {
+    "@vitest/eslint-plugin":
+      packageJson.devDependencies["@vitest/eslint-plugin"],
+  },
+  vue: {
+    "eslint-plugin-vue": packageJson.devDependencies["eslint-plugin-vue"],
+  },
+};
+const buildEslintDevDependencies = (
   frameworks: Frameworks[]
-) => {
+): Record<string, string> => {
+  const devDependencies = { ...eslintCoreDevDependencies };
+
   for (const framework of frameworks) {
-    const deps = eslintFrameworkPackages[framework];
-    if (deps) {
-      packages.push(...deps);
+    Object.assign(devDependencies, eslintFrameworkDevDependencies[framework]);
+  }
+
+  return devDependencies;
+};
+
+const buildNoInstallDevDependencies = (
+  linter: Linter,
+  typeAware: boolean,
+  frameworks: Frameworks[]
+): Record<string, string> => {
+  const devDependencies: Record<string, string> = {
+    ultracite: ultraciteVersion,
+  };
+
+  if (linter === "biome") {
+    devDependencies["@biomejs/biome"] = schemaVersion;
+  }
+  if (linter === "eslint") {
+    Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
+  }
+  if (linter === "oxlint") {
+    devDependencies.oxlint = "latest";
+    devDependencies.oxfmt = "latest";
+    if (typeAware) {
+      devDependencies["oxlint-tsgolint"] = "latest";
     }
   }
+
+  return devDependencies;
 };
 
 export const installDependencies = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   linter: Linter = "biome",
   install = true,
   quiet = false,
@@ -103,35 +199,11 @@ export const installDependencies = async (
     packages.push(`@biomejs/biome@${schemaVersion}`);
   }
   if (linter === "eslint") {
-    packages.push("eslint@latest");
-
-    // Add Plugin eslint for core dependencies
     packages.push(
-      ...[
-        "@typescript-eslint/eslint-plugin@latest",
-        "@typescript-eslint/parser@latest",
-        "eslint-config-prettier@latest",
-        "eslint-import-resolver-typescript@latest",
-        "eslint-plugin-compat@latest",
-        "eslint-plugin-cypress@latest",
-        "eslint-plugin-github@latest",
-        "eslint-plugin-html@latest",
-        "eslint-plugin-import@latest",
-        "eslint-plugin-jest@latest",
-        "eslint-plugin-n@latest",
-        "eslint-plugin-prettier@latest",
-        "eslint-plugin-promise@latest",
-        "eslint-plugin-sonarjs@latest",
-        "eslint-plugin-storybook@latest",
-        "eslint-plugin-unicorn@latest",
-        "eslint-plugin-unused-imports@latest",
-        "globals@latest",
-      ]
+      ...Object.entries(buildEslintDevDependencies(frameworks)).map(
+        ([name, version]) => `${name}@${version}`
+      )
     );
-    addEslintFrameworkPackages(packages, frameworks);
-    // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-    packages.push("prettier@latest");
-    packages.push("stylelint@latest");
   }
   if (linter === "oxlint") {
     packages.push("oxlint@latest");
@@ -146,36 +218,18 @@ export const installDependencies = async (
   if (install) {
     for (const pkg of packages) {
       await addDevDependency(pkg, {
-        packageManager,
-        workspace: await isMonorepo(),
-        silent: true,
         corepack: false,
+        packageManager,
+        silent: true,
+        workspace: await isMonorepo(),
       });
     }
   } else {
-    const devDependencies: Record<string, string> = {
-      ultracite: ultraciteVersion,
-    };
-
-    if (linter === "biome") {
-      devDependencies["@biomejs/biome"] = schemaVersion;
-    }
-    if (linter === "eslint") {
-      devDependencies.eslint = "latest";
-      // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      devDependencies.prettier = "latest";
-      devDependencies.stylelint = "latest";
-    }
-    if (linter === "oxlint") {
-      devDependencies.oxlint = "latest";
-      // Oxlint is only a linter, so we need oxfmt for formatting
-      devDependencies.oxfmt = "latest";
-      // Type-aware linting requires oxlint-tsgolint
-      if (typeAware) {
-        devDependencies["oxlint-tsgolint"] = "latest";
-      }
-    }
-
+    const devDependencies = buildNoInstallDevDependencies(
+      linter,
+      typeAware,
+      frameworks
+    );
     await updatePackageJson({ devDependencies });
   }
 
@@ -221,7 +275,7 @@ export const upsertEditorConfig = async (
   quiet = false
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Editor configuration requires multiple conditional paths
 ) => {
-  const editor = editors.find((editor) => editor.id === editorId);
+  const editor = editors.find((e) => e.id === editorId);
 
   if (!editor) {
     throw new Error(`Editor "${editorId}" not found`);
@@ -300,7 +354,8 @@ export const upsertEditorConfig = async (
 
 export const upsertBiomeConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
-  quiet = false
+  quiet = false,
+  typeAware = false
 ) => {
   const s = spinner();
 
@@ -312,7 +367,7 @@ export const upsertBiomeConfig = async (
     if (!quiet) {
       s.message("Biome configuration found, updating...");
     }
-    await biome.update({ frameworks });
+    await biome.update({ frameworks, typeAware });
     if (!quiet) {
       s.stop("Biome configuration updated.");
     }
@@ -322,7 +377,7 @@ export const upsertBiomeConfig = async (
   if (!quiet) {
     s.message("Biome configuration not found, creating...");
   }
-  await biome.create({ frameworks });
+  await biome.create({ frameworks, typeAware });
   if (!quiet) {
     s.stop("Biome configuration created.");
   }
@@ -470,9 +525,10 @@ export const upsertOxfmtConfig = async (quiet = false) => {
 };
 
 export const initializePrecommitHook = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
-  quiet = false
+  quiet = false,
+  useLintStaged = false
 ) => {
   const s = spinner();
 
@@ -481,25 +537,23 @@ export const initializePrecommitHook = async (
     s.message("Installing Husky...");
   }
 
-  if (install) {
-    await husky.install(packageManager);
-  } else {
-    await updatePackageJson({
-      devDependencies: { husky: "latest" },
-      scripts: { prepare: "husky" },
-    });
-  }
+  await (install
+    ? husky.install(packageManager)
+    : updatePackageJson({
+        devDependencies: { husky: "latest" },
+        scripts: { prepare: "husky" },
+      }));
 
   if (!quiet) {
     s.message("Initializing Husky...");
   }
-  husky.init(packageManager);
+  husky.init(packageManager.name);
 
   if (await husky.exists()) {
     if (!quiet) {
       s.message("Pre-commit hook found, updating...");
     }
-    await husky.update(packageManager);
+    await husky.update(packageManager.name, useLintStaged);
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
     }
@@ -509,14 +563,14 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Pre-commit hook not found, creating...");
   }
-  await husky.create(packageManager);
+  await husky.create(packageManager.name, useLintStaged);
   if (!quiet) {
     s.stop("Pre-commit hook created.");
   }
 };
 
 export const initializeLefthook = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
   quiet = false
 ) => {
@@ -527,19 +581,17 @@ export const initializeLefthook = async (
     s.message("Installing lefthook...");
   }
 
-  if (install) {
-    await lefthook.install(packageManager);
-  } else {
-    await updatePackageJson({
-      devDependencies: { lefthook: "latest" },
-    });
-  }
+  await (install
+    ? lefthook.install(packageManager)
+    : updatePackageJson({
+        devDependencies: { lefthook: "latest" },
+      }));
 
   if (await lefthook.exists()) {
     if (!quiet) {
       s.message("lefthook.yml found, updating...");
     }
-    await lefthook.update(packageManager);
+    await lefthook.update(packageManager.name);
     if (!quiet) {
       s.stop("lefthook.yml updated.");
     }
@@ -549,14 +601,14 @@ export const initializeLefthook = async (
   if (!quiet) {
     s.message("lefthook.yml not found, creating...");
   }
-  await lefthook.create(packageManager);
+  await lefthook.create(packageManager.name);
   if (!quiet) {
     s.stop("lefthook.yml created.");
   }
 };
 
 export const initializeLintStaged = async (
-  packageManager: PackageManagerName,
+  packageManager: PackageManager,
   install = true,
   quiet = false
 ) => {
@@ -567,19 +619,17 @@ export const initializeLintStaged = async (
     s.message("Installing lint-staged...");
   }
 
-  if (install) {
-    await lintStaged.install(packageManager);
-  } else {
-    await updatePackageJson({
-      devDependencies: { "lint-staged": "latest" },
-    });
-  }
+  await (install
+    ? lintStaged.install(packageManager)
+    : updatePackageJson({
+        devDependencies: { "lint-staged": "latest" },
+      }));
 
   if (await lintStaged.exists()) {
     if (!quiet) {
       s.message("lint-staged found, updating...");
     }
-    await lintStaged.update(packageManager);
+    await lintStaged.update(packageManager.name);
     if (!quiet) {
       s.stop("lint-staged updated.");
     }
@@ -589,7 +639,7 @@ export const initializeLintStaged = async (
   if (!quiet) {
     s.message("lint-staged not found, creating...");
   }
-  await lintStaged.create(packageManager);
+  await lintStaged.create(packageManager.name);
   if (!quiet) {
     s.stop("lint-staged created.");
   }
@@ -660,9 +710,27 @@ export const upsertAgents = async (
   }
 };
 
+export const upsertAgentFile = async (
+  target: AgentFileTarget,
+  packageManager: PackageManagerName,
+  linter: (typeof options.linters)[number],
+  quiet = false
+) => {
+  const agentLabel = `${target.displayName} (${target.path})`;
+
+  await upsertAgents(
+    target.representativeAgentId,
+    agentLabel,
+    packageManager,
+    linter,
+    quiet
+  );
+};
+
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
+  linter: Linter = "biome",
   quiet = false
 ) => {
   const s = spinner();
@@ -674,7 +742,7 @@ export const upsertHooks = async (
     s.start(`Checking for ${displayName} hooks...`);
   }
 
-  const hooks = createHooks(name, packageManager);
+  const hooks = createHooks(name, packageManager, linter);
 
   if (await hooks.exists()) {
     if (!quiet) {
@@ -707,8 +775,11 @@ export const initialize = async (flags?: InitializeFlags) => {
 
   try {
     let { pm } = opts;
+    let pmInfo: PackageManager;
 
-    if (!pm) {
+    if (pm) {
+      pmInfo = { command: pm, name: pm };
+    } else {
       const detected = await detectPackageManager(process.cwd());
 
       if (!detected) {
@@ -725,9 +796,10 @@ export const initialize = async (flags?: InitializeFlags) => {
         log.info(`Detected lockfile, using ${detected.name}`);
       }
       pm = detected.name;
+      pmInfo = detected;
     }
 
-    let linter = opts.linter;
+    let { linter } = opts;
     if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to biome only
       const hasOtherCliOptions =
@@ -769,7 +841,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let frameworks = opts.frameworks;
+    let { frameworks } = opts;
     if (frameworks === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -796,6 +868,9 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Angular", value: "angular" },
             { label: "Remix / TanStack Router / React Router", value: "remix" },
             { label: "Astro", value: "astro" },
+            { label: "NestJS", value: "nestjs" },
+            { label: "Jest", value: "jest" },
+            { label: "Vitest / Bun", value: "vitest" },
           ],
           required: false,
         });
@@ -833,8 +908,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let agents = opts.agents;
-    let hooks = opts.hooks;
+    let { agents } = opts;
+    let selectedAgentFiles: AgentFileTarget[] = [];
+    let { hooks } = opts;
+    const agentFileTargets = getAgentFileTargets();
+    const universalAgentTarget = agentFileTargets.find(
+      (target) => target.id === "universal"
+    );
 
     // Build agent options from shared data
     const agentsOptions = Object.fromEntries(
@@ -847,10 +927,10 @@ export const initialize = async (flags?: InitializeFlags) => {
         agents = [];
       } else {
         const agentsResult = await multiselect({
-          message: "Which agents do you want to enable (optional)?",
-          options: Object.entries(agentsOptions).map(([value, label]) => ({
-            value,
-            label,
+          message: "Which agent files do you want to add (optional)?",
+          options: agentFileTargets.map((target) => ({
+            label: target.promptLabel,
+            value: target.id,
           })),
           required: false,
         });
@@ -860,8 +940,21 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        agents = agentsResult as (typeof options.agents)[number][];
+        selectedAgentFiles = agentFileTargets.filter((target) =>
+          (agentsResult as AgentFileTarget["id"][]).includes(target.id)
+        );
       }
+    } else if (agents.includes("universal") && universalAgentTarget) {
+      selectedAgentFiles = [universalAgentTarget];
+      const coveredAgentIds = new Set(universalAgentTarget.agentIds);
+
+      agents = agents.filter(
+        (
+          agent
+        ): agent is Exclude<AgentSelection, "universal"> &
+          (typeof options.agents)[number] =>
+          agent !== "universal" && !coveredAgentIds.has(agent)
+      );
     }
 
     // Build hooks options from supported hook integrations
@@ -877,8 +970,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         const hooksResult = await multiselect({
           message: "Which agent hooks do you want to enable (optional)?",
           options: Object.entries(hooksOptions).map(([value, label]) => ({
-            value,
             label,
+            value,
           })),
           required: false,
         });
@@ -892,7 +985,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    let integrations = opts.integrations;
+    let { integrations } = opts;
     if (integrations === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -923,11 +1016,11 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     await installDependencies(
-      pm,
+      pmInfo,
       linter,
       !opts.skipInstall,
       quiet,
-      linter === "oxlint" && opts["type-aware"],
+      opts["type-aware"],
       frameworks
     );
 
@@ -935,7 +1028,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(frameworks, quiet);
+      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
@@ -953,30 +1046,50 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertEditorConfig(editorId, linter, quiet);
     }
 
+    for (const target of selectedAgentFiles) {
+      await upsertAgentFile(target, pm, linter, quiet);
+    }
+
     for (const ruleName of agents ?? []) {
       await upsertAgents(ruleName, agentsOptions[ruleName], pm, linter, quiet);
     }
 
     for (const hookName of hooks ?? []) {
-      await upsertHooks(hookName, pm, quiet);
+      await upsertHooks(hookName, pm, linter, quiet);
     }
 
     if (integrations?.includes("husky")) {
-      await initializePrecommitHook(pm, !opts.skipInstall, quiet);
+      const useLintStaged = integrations?.includes("lint-staged") ?? false;
+      await initializePrecommitHook(
+        pmInfo,
+        !opts.skipInstall,
+        quiet,
+        useLintStaged
+      );
     }
     if (integrations?.includes("lefthook")) {
-      await initializeLefthook(pm, !opts.skipInstall, quiet);
+      await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("lint-staged")) {
-      await initializeLintStaged(pm, !opts.skipInstall, quiet);
+      await initializeLintStaged(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("pre-commit")) {
       await initializePreCommit(pm, quiet);
     }
 
     if (!quiet) {
-      log.success(
-        "Successfully initialized Ultracite! Make sure to check out ultracite.ai/cloud for our pro version."
+      log.success("Successfully initialized Ultracite!");
+    }
+
+    const didInstallSkill = await maybeInstallUltraciteSkill({
+      packageManager: pm,
+      quiet,
+      shouldInstall: opts.installSkill,
+    });
+
+    if (!quiet && !didInstallSkill) {
+      log.info(
+        `You can install the Ultracite skill later with \`${getUltraciteSkillInstallCommand(pm)}\`.`
       );
     }
   } catch (error) {

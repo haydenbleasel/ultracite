@@ -1,6 +1,9 @@
 import { execSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
-import { addDevDependency, dlxCommand, type PackageManagerName } from "nypm";
+
+import { addDevDependency, dlxCommand } from "nypm";
+import type { PackageManager, PackageManagerName } from "nypm";
+
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
@@ -19,25 +22,29 @@ const createLefthookConfig = (
 ) => `pre-commit:
   jobs:
     - run: ${createUltraciteCommand(packageManager)}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true
 `;
 
 export const lefthook = {
+  create: async (packageManager: PackageManagerName) => {
+    const config = createLefthookConfig(packageManager);
+    await writeFile(path, config);
+  },
   exists: () => exists(path),
-  install: async (packageManager: PackageManagerName) => {
+  install: async (packageManager: PackageManager) => {
     await addDevDependency("lefthook", {
-      packageManager,
-      workspace: await isMonorepo(),
-      silent: true,
       corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized
@@ -54,12 +61,8 @@ export const lefthook = {
 
     execSync(installCommand, { stdio: "pipe" });
   },
-  create: async (packageManager: PackageManagerName) => {
-    const config = createLefthookConfig(packageManager);
-    await writeFile(path, config);
-  },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf-8");
+    const existingContents = await readFile(path, "utf8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 
@@ -83,14 +86,14 @@ export const lefthook = {
       if (existingContents.includes("jobs:")) {
         // Add ultracite job to existing jobs array
         const ultraciteJob = `    - run: ${ultraciteCommand}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_JOBS_REGEX,
@@ -101,14 +104,14 @@ export const lefthook = {
         // Add jobs section to existing pre-commit
         const jobsSection = `  jobs:
     - run: ${ultraciteCommand}
-      glob: 
-        - "*.js"
-        - "*.jsx"
-        - "*.ts"
-        - "*.tsx"
-        - "*.json"
-        - "*.jsonc"
-        - "*.css"
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_REGEX,

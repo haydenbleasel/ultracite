@@ -4,7 +4,6 @@ import plugin from "@eslint/js";
 const baseRules = { ...plugin.configs.all.rules };
 
 const overrideRules = {
-  "no-unused-private-class-members": "off",
   "capitalized-comments": "off",
   complexity: "off",
   "id-length": ["error", { exceptions: ["x", "y", "z"] }],
@@ -14,6 +13,7 @@ const overrideRules = {
   "max-statements": "off",
   "no-ternary": "off",
   "no-undefined": "off",
+  "no-unused-private-class-members": "off",
   "one-var": "off",
   "prefer-destructuring": [
     "error",

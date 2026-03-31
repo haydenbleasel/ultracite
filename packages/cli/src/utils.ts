@@ -1,5 +1,7 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
+import process from "node:process";
+
 import { parse } from "jsonc-parser";
 
 export const exists = async (path: string) => {
@@ -17,7 +19,7 @@ export const isMonorepo = async () => {
   }
 
   try {
-    const pkgJson = parse(await readFile("package.json", "utf-8")) as
+    const pkgJson = parse(await readFile("package.json", "utf8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -77,22 +79,6 @@ export const updatePackageJson = async ({
   );
 };
 
-// Regex patterns for special characters that need escaping
-const SPECIAL_CHARS_PATTERN = /[ $(){}[\]&|;<>!"'`*?#~]/;
-const SINGLE_QUOTE_PATTERN = /'/g;
-
-// Parse and escape file paths to handle special characters
-export const parseFilePaths = (files: string[]): string[] => {
-  return files.map((file) => {
-    // Check if the path needs escaping (contains special shell characters)
-    if (SPECIAL_CHARS_PATTERN.test(file)) {
-      // Escape single quotes by replacing ' with '\'' and wrap in single quotes
-      return `'${file.replace(SINGLE_QUOTE_PATTERN, "'\\''")}' `;
-    }
-    return file;
-  });
-};
-
 export const ensureDirectory = async (path: string) => {
   const dir = dirname(path);
   if (dir !== ".") {
@@ -103,38 +89,54 @@ export const ensureDirectory = async (path: string) => {
 
 export type Linter = "biome" | "eslint" | "oxlint";
 
-// Config file patterns for each linter
-const biomeConfigPaths = ["./biome.json", "./biome.jsonc"] as const;
+// Config file names for each linter
+const biomeConfigNames = ["biome.json", "biome.jsonc"] as const;
 
-const eslintConfigPaths = [
-  "./eslint.config.mjs",
-  "./eslint.config.js",
-  "./eslint.config.cjs",
-  "./eslint.config.ts",
-  "./eslint.config.mts",
-  "./eslint.config.cts",
+const eslintConfigNames = [
+  "eslint.config.mjs",
+  "eslint.config.js",
+  "eslint.config.cjs",
+  "eslint.config.ts",
+  "eslint.config.mts",
+  "eslint.config.cts",
 ] as const;
 
-const oxlintConfigPath = "./.oxlintrc.json";
+const oxlintConfigNames = [
+  ".oxlintrc.json",
+  ".oxlintrc.mjs",
+  "oxlint.config.ts",
+];
 
 export const detectLinter = async (): Promise<Linter | null> => {
-  // Check for biome config
-  for (const path of biomeConfigPaths) {
-    if (await exists(path)) {
-      return "biome";
-    }
-  }
+  let dir = process.cwd();
 
-  // Check for eslint config
-  for (const path of eslintConfigPaths) {
-    if (await exists(path)) {
-      return "eslint";
+  while (true) {
+    // Check for biome config
+    for (const name of biomeConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "biome";
+      }
     }
-  }
 
-  // Check for oxlint config
-  if (await exists(oxlintConfigPath)) {
-    return "oxlint";
+    // Check for eslint config
+    for (const name of eslintConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "eslint";
+      }
+    }
+
+    // Check for oxlint config
+    for (const name of oxlintConfigNames) {
+      if (await exists(join(dir, name))) {
+        return "oxlint";
+      }
+    }
+
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
   }
 
   return null;

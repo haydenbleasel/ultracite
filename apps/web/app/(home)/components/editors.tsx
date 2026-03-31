@@ -1,27 +1,13 @@
-import { type Editor, editors } from "@repo/data/editors";
+import { editors } from "@repo/data/editors";
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
-import { cn } from "@repo/design-system/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
-
-const featuredEditorIds = [
-  "vscode",
-  "cursor",
-  "windsurf",
-  "antigravity",
-  "kiro",
-  "trae",
-  "void",
-  "zed",
-];
-
-const featuredEditors = featuredEditorIds
-  .map((id) => editors.find((editor) => editor.id === id))
-  .filter(Boolean) as Editor[];
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 export const Editors = () => (
   <div className="grid gap-8">
@@ -35,7 +21,7 @@ export const Editors = () => (
       </p>
     </div>
     <div className="mx-auto flex items-center justify-center -space-x-1">
-      {featuredEditors.map((editor, index) => (
+      {editors.map((editor, index) => (
         <Tooltip delayDuration={0} key={editor.id}>
           <TooltipTrigger>
             <Link href={`/editors/${editor.id}`}>

@@ -1,4 +1,5 @@
 import { Command } from "commander";
+
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
@@ -18,26 +19,34 @@ program
   .option("--pm <pm>", "Package manager to use")
   .option("--linter <linter>", "Linter to use")
   .option("--editors <editors...>", "Editors to configure")
-  .option("--agents <agents...>", "Agents to enable")
+  .option("--agents <agents...>", "Agents to enable (use universal for AGENTS.md)")
   .option("--hooks <hooks...>", "Hooks to enable")
   .option("--frameworks <frameworks...>", "Frameworks being used")
   .option("--integrations <integrations...>", "Integrations to enable")
-  .option("--type-aware", "Enable type-aware linting (oxlint only)")
+  .option(
+    "--install-skill",
+    "Install the reusable Ultracite skill after setup"
+  )
+  .option(
+    "--type-aware",
+    "Enable type-aware linting (enables project/scanner rules)"
+  )
   .option("--skip-install", "Skip installing dependencies")
   .option("--quiet", "Suppress interactive prompts")
   .action(async (opts) => {
     await initialize({
-      pm: opts.pm,
-      linter: opts.linter,
-      editors: opts.editors,
       agents: opts.agents,
-      hooks: opts.hooks,
+      editors: opts.editors,
       frameworks: opts.frameworks,
+      hooks: opts.hooks,
+      installSkill: opts.installSkill,
       integrations: opts.integrations,
-      "type-aware": opts.typeAware,
-      skipInstall: opts.skipInstall,
+      linter: opts.linter,
+      pm: opts.pm,
       quiet:
         opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
+      skipInstall: opts.skipInstall,
+      "type-aware": opts.typeAware,
     });
   });
 
@@ -52,7 +61,11 @@ program
     const cmdIndex = process.argv.indexOf("check");
     const allArgs = process.argv.slice(cmdIndex + 1);
     const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    await check(files, passthrough);
+    // Filter out any flags that Commander may have included in files
+    const filteredFiles = files.filter(
+      (file: string) => !file.startsWith("--")
+    );
+    await check(filteredFiles, passthrough);
   });
 
 program
@@ -66,7 +79,11 @@ program
     const cmdIndex = process.argv.indexOf("fix");
     const allArgs = process.argv.slice(cmdIndex + 1);
     const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    await fix(files, passthrough);
+    // Filter out any flags that Commander may have included in files
+    const filteredFiles = files.filter(
+      (file: string) => !file.startsWith("--")
+    );
+    await fix(filteredFiles, passthrough);
   });
 
 program

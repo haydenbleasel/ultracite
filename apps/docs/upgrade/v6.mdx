@@ -1,6 +1,6 @@
 ---
 title: Upgrade to v6
-description: Guide for upgrading from Ultracite v5 to v6 with the new preset system.
+description: Upgrade from Ultracite v5 to v6 and adopt the new preset system with guidance on changed config structure and migration steps.
 ---
 
 Ultracite v6 introduces framework-specific presets that give you more control over which rules apply to your project.
@@ -9,15 +9,15 @@ Ultracite v6 introduces framework-specific presets that give you more control ov
 
 v6 introduces [framework-specific presets](/configuration#framework-specific-configurations):
 
-- [`ultracite/core`](/preset/core) - Base JavaScript/TypeScript rules
-- [`ultracite/react`](/preset/react) - React-specific rules
-- [`ultracite/next`](/preset/next) - Next.js-specific rules
-- [`ultracite/solid`](/preset/solid) - Solid.js rules
-- [`ultracite/vue`](/preset/vue) - Vue.js rules
-- [`ultracite/svelte`](/preset/svelte) - Svelte rules
-- [`ultracite/qwik`](/preset/qwik) - Qwik rules
-- [`ultracite/angular`](/preset/angular) - Angular HTML parser
-- [`ultracite/remix`](/preset/remix) - File-based routing support
+- [`ultracite/core`](/configuration#framework-presets) - Base JavaScript/TypeScript rules
+- [`ultracite/react`](/configuration#framework-presets) - React-specific rules
+- [`ultracite/next`](/configuration#framework-presets) - Next.js-specific rules
+- [`ultracite/solid`](/configuration#framework-presets) - Solid.js rules
+- [`ultracite/vue`](/configuration#framework-presets) - Vue.js rules
+- [`ultracite/svelte`](/configuration#framework-presets) - Svelte rules
+- [`ultracite/qwik`](/configuration#framework-presets) - Qwik rules
+- [`ultracite/angular`](/configuration#framework-presets) - Angular HTML parser
+- [`ultracite/remix`](/configuration#framework-presets) - File-based routing support
 
 ## Migration
 
@@ -27,7 +27,7 @@ Update your `biome.jsonc` to extend the appropriate presets:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
 }
 ```
 
@@ -37,7 +37,7 @@ Switch to the core preset if you're not using React:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite/core"]
+  "extends": ["ultracite/core"],
 }
 ```
 
@@ -70,6 +70,6 @@ Combine presets as needed:
 
 ```jsonc title="biome.jsonc"
 {
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/solid"],
 }
 ```

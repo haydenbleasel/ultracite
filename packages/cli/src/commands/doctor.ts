@@ -1,12 +1,13 @@
-import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import process from "node:process";
+
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
-import { detectPackageManager, dlxCommand } from "nypm";
+
 import packageJson from "../../package.json" with { type: "json" };
+import { runCommandSync } from "../run-command";
 
 // Config files to check for conflicting tools
 const prettierConfigFiles = [
@@ -39,98 +40,71 @@ const eslintConfigFiles = [
 ];
 
 interface DiagnosticCheck {
+  message: string;
   name: string;
   status: "pass" | "fail" | "warn";
-  message: string;
 }
 
 // Check if Biome is installed
-const checkBiomeInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "@biomejs/biome", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const biomeCheck = spawnSync(command, {
-    shell: true,
-    encoding: "utf-8",
+const checkBiomeInstallation = (): DiagnosticCheck => {
+  const biomeCheck = runCommandSync("biome", ["--version"], {
+    encoding: "utf8",
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
     return {
+      message: `Biome is installed (${biomeCheck.stdout.trim()})`,
       name: "Biome installation",
       status: "pass",
-      message: `Biome is installed (${biomeCheck.stdout.trim()})`,
     };
   }
 
   return {
+    message: "Biome is not installed or not accessible",
     name: "Biome installation",
     status: "fail",
-    message: "Biome is not installed or not accessible",
   };
 };
 
 // Check if ESLint is installed
-const checkEslintInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "eslint", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const eslintCheck = spawnSync(command, {
-    shell: true,
-    encoding: "utf-8",
+const checkEslintInstallation = (): DiagnosticCheck => {
+  const eslintCheck = runCommandSync("eslint", ["--version"], {
+    encoding: "utf8",
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
     return {
+      message: `ESLint is installed (${eslintCheck.stdout.trim()})`,
       name: "ESLint installation",
       status: "pass",
-      message: `ESLint is installed (${eslintCheck.stdout.trim()})`,
     };
   }
 
   return {
+    message: "ESLint is not installed (optional)",
     name: "ESLint installation",
     status: "warn",
-    message: "ESLint is not installed (optional)",
   };
 };
 
 // Check if Oxlint is installed
-const checkOxlintInstallation = async (): Promise<DiagnosticCheck> => {
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-
-  const command = dlxCommand(pm, "oxlint", {
-    args: ["--version"],
-    short: pm === "npm",
-  });
-
-  const oxlintCheck = spawnSync(command, {
-    shell: true,
-    encoding: "utf-8",
+const checkOxlintInstallation = (): DiagnosticCheck => {
+  const oxlintCheck = runCommandSync("oxlint", ["--version"], {
+    encoding: "utf8",
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
     return {
+      message: `Oxlint is installed (${oxlintCheck.stdout.trim()})`,
       name: "Oxlint installation",
       status: "pass",
-      message: `Oxlint is installed (${oxlintCheck.stdout.trim()})`,
     };
   }
 
   return {
+    message: "Oxlint is not installed (optional)",
     name: "Oxlint installation",
     status: "warn",
-    message: "Oxlint is not installed (optional)",
   };
 };
 
@@ -148,14 +122,14 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
 
   if (!configPath) {
     return {
+      message: "No biome.json or biome.jsonc file found",
       name: "Biome configuration",
       status: "warn",
-      message: "No biome.json or biome.jsonc file found",
     };
   }
 
   try {
-    const configContent = await readFile(configPath, "utf-8");
+    const configContent = await readFile(configPath, "utf8");
     const config = parse(configContent);
 
     if (
@@ -163,22 +137,22 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
       config.extends.includes("ultracite/biome/core")
     ) {
       return {
+        message: "biome.json(c) extends ultracite/biome/core",
         name: "Biome configuration",
         status: "pass",
-        message: "biome.json(c) extends ultracite/biome/core",
       };
     }
 
     return {
+      message: "biome.json(c) exists but doesn't extend ultracite/biome/core",
       name: "Biome configuration",
       status: "warn",
-      message: "biome.json(c) exists but doesn't extend ultracite/biome/core",
     };
   } catch {
     return {
+      message: "Could not parse biome.json(c) file",
       name: "Biome configuration",
       status: "fail",
-      message: "Could not parse biome.json(c) file",
     };
   }
 };
@@ -205,33 +179,33 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
 
   if (!configPath) {
     return {
+      message: "No eslint.config.* file found (optional)",
       name: "ESLint configuration",
       status: "warn",
-      message: "No eslint.config.* file found (optional)",
     };
   }
 
   try {
-    const configContent = await readFile(configPath, "utf-8");
+    const configContent = await readFile(configPath, "utf8");
 
     if (configContent.includes("ultracite/eslint")) {
       return {
+        message: "eslint.config.* imports ultracite/eslint",
         name: "ESLint configuration",
         status: "pass",
-        message: "eslint.config.* imports ultracite/eslint",
       };
     }
 
     return {
+      message: "eslint.config.* exists but doesn't import ultracite/eslint",
       name: "ESLint configuration",
       status: "warn",
-      message: "eslint.config.* exists but doesn't import ultracite/eslint",
     };
   } catch {
     return {
+      message: "Could not read eslint.config.* file",
       name: "ESLint configuration",
       status: "fail",
-      message: "Could not read eslint.config.* file",
     };
   }
 };
@@ -246,14 +220,14 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
 
   if (!existsSync(oxlintConfigPath)) {
     return {
+      message: "No .oxlintrc.json file found (optional)",
       name: "Oxlint configuration",
       status: "warn",
-      message: "No .oxlintrc.json file found (optional)",
     };
   }
 
   try {
-    const configContent = await readFile(oxlintConfigPath, "utf-8");
+    const configContent = await readFile(oxlintConfigPath, "utf8");
     const config = parse(configContent);
 
     if (
@@ -261,22 +235,22 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
       config.extends.includes(getOxlintConfigPath("core"))
     ) {
       return {
+        message: ".oxlintrc.json extends ultracite oxlint config",
         name: "Oxlint configuration",
         status: "pass",
-        message: ".oxlintrc.json extends ultracite oxlint config",
       };
     }
 
     return {
+      message: ".oxlintrc.json exists but doesn't extend ultracite config",
       name: "Oxlint configuration",
       status: "warn",
-      message: ".oxlintrc.json exists but doesn't extend ultracite config",
     };
   } catch {
     return {
+      message: "Could not parse .oxlintrc.json file",
       name: "Oxlint configuration",
       status: "fail",
-      message: "Could not parse .oxlintrc.json file",
     };
   }
 };
@@ -287,37 +261,37 @@ const checkUltraciteDependency = async (): Promise<DiagnosticCheck> => {
 
   if (!existsSync(packageJsonPath)) {
     return {
+      message: "No package.json found",
       name: "Ultracite dependency",
       status: "warn",
-      message: "No package.json found",
     };
   }
 
   try {
-    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
+    const pkgJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
     const version =
-      packageJson.dependencies?.ultracite ||
-      packageJson.devDependencies?.ultracite ||
-      packageJson.peerDependencies?.ultracite;
+      pkgJson.dependencies?.ultracite ||
+      pkgJson.devDependencies?.ultracite ||
+      pkgJson.peerDependencies?.ultracite;
 
     if (version) {
       return {
+        message: `Ultracite is in package.json (${version})`,
         name: "Ultracite dependency",
         status: "pass",
-        message: `Ultracite is in package.json (${version})`,
       };
     }
 
     return {
+      message: "Ultracite not found in package.json dependencies",
       name: "Ultracite dependency",
       status: "warn",
-      message: "Ultracite not found in package.json dependencies",
     };
   } catch {
     return {
+      message: "Could not parse package.json",
       name: "Ultracite dependency",
       status: "warn",
-      message: "Could not parse package.json",
     };
   }
 };
@@ -347,16 +321,16 @@ const checkConflictingTools = (): DiagnosticCheck => {
     }
 
     return {
+      message: `Found potentially conflicting tools: ${conflicts.join(", ")}`,
       name: "Conflicting tools",
       status: "warn",
-      message: `Found potentially conflicting tools: ${conflicts.join(", ")}`,
     };
   }
 
   return {
+    message: "No conflicting formatting/linting tools found",
     name: "Conflicting tools",
     status: "pass",
-    message: "No conflicting formatting/linting tools found",
   };
 };
 
@@ -384,24 +358,17 @@ const runCheck = async (
 export const doctor = async (): Promise<void> => {
   intro(`Ultracite v${packageJson.version} Doctor`);
 
-  const detected = await detectPackageManager(process.cwd());
-  const pm = detected?.name || "npm";
-  const command = dlxCommand(pm, "ultracite", {
-    args: ["init"],
-    short: pm === "npm",
-  });
-
-  const checks: DiagnosticCheck[] = [];
-
   // Run all checks with spinners
-  checks.push(await runCheck(checkBiomeInstallation, "Biome installation"));
-  checks.push(await runCheck(checkEslintInstallation, "ESLint installation"));
-  checks.push(await runCheck(checkOxlintInstallation, "Oxlint installation"));
-  checks.push(await runCheck(checkBiomeConfig, "Biome configuration"));
-  checks.push(await runCheck(checkEslintConfig, "ESLint configuration"));
-  checks.push(await runCheck(checkOxlintConfig, "Oxlint configuration"));
-  checks.push(await runCheck(checkUltraciteDependency, "Ultracite dependency"));
-  checks.push(await runCheck(checkConflictingTools, "conflicting tools"));
+  const checks: DiagnosticCheck[] = [
+    await runCheck(checkBiomeInstallation, "Biome installation"),
+    await runCheck(checkEslintInstallation, "ESLint installation"),
+    await runCheck(checkOxlintInstallation, "Oxlint installation"),
+    await runCheck(checkBiomeConfig, "Biome configuration"),
+    await runCheck(checkEslintConfig, "ESLint configuration"),
+    await runCheck(checkOxlintConfig, "Oxlint configuration"),
+    await runCheck(checkUltraciteDependency, "Ultracite dependency"),
+    await runCheck(checkConflictingTools, "conflicting tools"),
+  ];
 
   // Calculate summary
   const passCount = checks.filter((c) => c.status === "pass").length;
@@ -414,14 +381,14 @@ export const doctor = async (): Promise<void> => {
   );
 
   if (failCount > 0) {
-    log.error(`Some checks failed. Run '${command}' to fix issues.`);
+    log.error("Some checks failed. Run 'ultracite init' to fix issues.");
     outro("Doctor complete");
     throw new Error("Doctor checks failed");
   }
 
   if (warnCount > 0) {
     log.warn(
-      `Some optional improvements available. Run '${command}' to configure.`
+      "Some optional improvements available. Run 'ultracite init' to configure."
     );
     outro("Doctor complete");
     return;

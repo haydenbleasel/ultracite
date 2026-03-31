@@ -1,14 +1,28 @@
 import { defineConfig } from "tsup";
 
-export default defineConfig({
+const sharedConfig = {
   dts: true,
-  entry: ["src/index.ts"],
-  format: ["esm"],
+  format: ["esm"] as const,
   minify: true,
+  noExternal: ["@repo/data"],
   outDir: "dist",
   sourcemap: false,
-  banner: {
-    js: "#!/usr/bin/env node",
-  },
-  noExternal: ["@repo/data"],
-});
+};
+
+export default [
+  defineConfig({
+    ...sharedConfig,
+    banner: {
+      js: "#!/usr/bin/env node",
+    },
+    entry: {
+      index: "src/index.ts",
+    },
+  }),
+  defineConfig({
+    ...sharedConfig,
+    entry: {
+      oxlint: "src/oxlint.ts",
+    },
+  }),
+];

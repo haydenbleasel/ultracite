@@ -2,16 +2,17 @@ import { docsUrl } from "@repo/data/consts";
 import Prettier from "@repo/data/logos/prettier.svg";
 import Stylelint from "@repo/data/logos/stylelint.svg";
 import { providers } from "@repo/data/providers";
-import { Button } from "@repo/design-system/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
+
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
-import Image from "next/image";
-import Link from "next/link";
-import type { ReactNode } from "react";
-import { Installer } from "@/components/installer";
+} from "@/components/ui/tooltip";
+import { Installer } from "@/components/ultracite/installer";
 
 interface HeroProps {
   children: ReactNode;

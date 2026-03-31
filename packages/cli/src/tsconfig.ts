@@ -1,11 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
+
 import { glob } from "glob";
-import {
-  applyEdits,
-  type ModificationOptions,
-  modify,
-  parse,
-} from "jsonc-parser";
+import { applyEdits, modify, parse } from "jsonc-parser";
+import type { ModificationOptions } from "jsonc-parser";
 
 /**
  * Find all tsconfig.json files in the project
@@ -13,13 +10,13 @@ import {
 const findTsConfigFiles = async (): Promise<string[]> => {
   try {
     const files = await glob("**/tsconfig*.json", {
+      absolute: false,
       ignore: [
         "**/node_modules/**",
         "**/dist/**",
         "**/build/**",
         "**/.next/**",
       ],
-      absolute: false,
     });
     return files;
   } catch {
@@ -64,7 +61,7 @@ const hasStrictNullChecks = (
  */
 const updateTsConfigFile = async (filePath: string): Promise<void> => {
   try {
-    const existingContents = await readFile(filePath, "utf-8");
+    const existingContents = await readFile(filePath, "utf8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;
@@ -88,8 +85,8 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
     // Use jsonc-parser's modify to preserve comments
     const modifyOptions: ModificationOptions = {
       formattingOptions: {
-        tabSize: 2,
         insertSpaces: true,
+        tabSize: 2,
       },
     };
 

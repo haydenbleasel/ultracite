@@ -1,10 +1,6 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import {
-  exists,
-  isMonorepo,
-  parseFilePaths,
-  updatePackageJson,
-} from "../src/utils";
+
+import { exists, isMonorepo, updatePackageJson } from "../src/utils";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
@@ -124,11 +120,11 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.devDependencies).toEqual({
-      old: "1.0.0",
       "new-package": "2.0.0",
+      old: "1.0.0",
     });
   });
 
@@ -149,11 +145,11 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.dependencies).toEqual({
-      old: "1.0.0",
       "new-package": "2.0.0",
+      old: "1.0.0",
     });
   });
 
@@ -174,52 +170,12 @@ describe("updatePackageJson", () => {
     });
 
     expect(mockWriteFile).toHaveBeenCalled();
-    const writeCall = mockWriteFile.mock.calls[0];
+    const [writeCall] = mockWriteFile.mock.calls;
     const writtenContent = JSON.parse(writeCall[1] as string);
     expect(writtenContent.scripts).toEqual({
-      test: "echo test",
       build: "tsc",
+      test: "echo test",
     });
-  });
-});
-
-describe("parseFilePaths", () => {
-  test("returns files without special characters unchanged", () => {
-    const files = ["src/index.ts", "test.js", "README.md"];
-    const result = parseFilePaths(files);
-    expect(result).toEqual(files);
-  });
-
-  test("wraps files with spaces in quotes", () => {
-    const files = ["src/my file.ts", "test file.js"];
-    const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/my file.ts' ", "'test file.js' "]);
-  });
-
-  test("escapes single quotes in file paths", () => {
-    const files = ["src/user's file.ts"];
-    const result = parseFilePaths(files);
-    expect(result).toEqual(["'src/user'\\''s file.ts' "]);
-  });
-
-  test("wraps files with special characters in quotes", () => {
-    const files = ["src/file(1).ts", "test[2].js", "file&test.ts"];
-    const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "'src/file(1).ts' ",
-      "'test[2].js' ",
-      "'file&test.ts' ",
-    ]);
-  });
-
-  test("handles mixed file paths", () => {
-    const files = ["normal.ts", "with space.js", "user's.ts"];
-    const result = parseFilePaths(files);
-    expect(result).toEqual([
-      "normal.ts",
-      "'with space.js' ",
-      "'user'\\''s.ts' ",
-    ]);
   });
 });
 

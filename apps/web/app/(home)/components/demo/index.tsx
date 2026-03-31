@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import Background from "./background.jpg";
 
 const Line = ({ children }: { children?: React.ReactNode }) => (
@@ -60,10 +61,10 @@ const Output = () => (
       <Gray>│</Gray>
     </Line>
     <Line>
-      <Green>◇</Green> Which agents do you want to enable?
+      <Green>◇</Green> Which agent files do you want to add?
     </Line>
     <Line>
-      <Gray>│</Gray> <Gray>Cursor, Claude Code</Gray>
+      <Gray>│</Gray> <Gray>Universal, Claude</Gray>
     </Line>
     <Line>
       <Gray>│</Gray>

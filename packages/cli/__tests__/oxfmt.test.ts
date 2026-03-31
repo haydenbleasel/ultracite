@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import { oxfmt } from "../src/linters/oxfmt";
 
 mock.module("node:fs/promises", () => ({
@@ -53,7 +54,7 @@ describe("oxfmt", () => {
       await oxfmt.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
       // Verify the content contains the expected header
@@ -97,7 +98,7 @@ describe("oxfmt", () => {
       await oxfmt.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
       // Parse the JSON part (after the comments)
@@ -130,7 +131,7 @@ describe("oxfmt", () => {
       await oxfmt.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
-      const writeCall = mockWriteFile.mock.calls[0];
+      const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
       // Parse the JSON part (after the comments)

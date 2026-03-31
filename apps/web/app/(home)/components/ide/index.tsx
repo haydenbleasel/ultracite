@@ -4,7 +4,7 @@ import { Indicator } from "./indicator";
 import { Problems } from "./problems";
 import { Sidebar } from "./sidebar";
 
-export const IDE = () => (
+export const IdePreview = () => (
   <div className="grid gap-8">
     <div className="mx-auto grid max-w-3xl gap-4 text-center">
       <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">

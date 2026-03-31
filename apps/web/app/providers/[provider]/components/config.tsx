@@ -1,15 +1,13 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile, Provider } from "@repo/data/providers";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/design-system/components/ui/tabs";
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/server";
 import type { BundledLanguage } from "shiki";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CodeBlock } from "@/components/ultracite/code-block/client";
+import type { ProviderPageContent } from "@/lib/provider-content";
+
 interface ConfigProps {
+  content: ProviderPageContent;
   provider: Provider;
 }
 
@@ -19,22 +17,17 @@ const getIcon = (lang: ConfigFile["lang"]) =>
 const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
   lang === "json" ? "json" : "js";
 
-export const Config = ({ provider }: ConfigProps) => {
+export const Config = ({ provider, content }: ConfigProps) => {
   const { configFiles } = provider;
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-3">
       <div className="grid gap-4">
         <h2 className="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl">
-          Configuration
+          {content.configTitle}
         </h2>
         <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
-          Simple configuration files which extend the Ultracite configuration,
-          giving you control over each aspect of linting and formatting.
-        </p>
-        <p className="text-balance text-muted-foreground tracking-tight sm:text-lg">
-          Each config file is designed to be minimal while providing maximum
-          coverage through Ultracite presets.
+          {content.configDescription}
         </p>
       </div>
 

@@ -1,6 +1,4 @@
-import plugin from "eslint-plugin-storybook";
-
-const { rules } = plugin;
+import { rules } from "eslint-plugin-storybook";
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated

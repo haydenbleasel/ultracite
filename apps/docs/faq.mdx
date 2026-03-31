@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Here are answers to some frequently asked questions about Ultracite.
+description: Find answers to common questions about Ultracite, including setup, supported toolchains, editor integrations, and migration choices.
 ---
 
 ## Q: What exactly is Ultracite – how is it different from Biome or ESLint?
@@ -52,6 +52,11 @@ Yes, check the [biome.jsonc](https://github.com/haydenbleasel/ultracite/blob/mai
 ## Q: Can Ultracite fix all issues it finds?
 
 Not all, but many. Ultracite will auto-fix issues that are safe and deterministic to fix. These include formatting issues and many lint errors (particularly stylistic or simple code transformations like removing unused imports, adding missing parentheses, changing `==` to `===`, etc.).
+
+Some fixes are available but intentionally require `--unsafe` because they may
+change behavior. For example, Ultracite enables Biome's `noSubstr` rule, but
+rewriting `substring()` or `substr()` to `slice()` only happens when you run
+`ultracite fix --unsafe`.
 
 More complex issues (business logic or things that require developer intention) are left for you to fix. For example, it won’t magically rename variables to follow a naming convention or add missing error handling code – it will just warn you.
 

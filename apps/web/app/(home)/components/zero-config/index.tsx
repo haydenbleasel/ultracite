@@ -3,15 +3,12 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
 import { providers } from "@repo/data/providers";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/design-system/components/ui/tabs";
-import { CodeBlock } from "@repo/design-system/components/ultracite/code-block/client";
 import { useEffect, useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CodeBlock } from "@/components/ultracite/code-block/client";
+
 import { FrameworkSelector, frameworks } from "./framework-selector";
 import { ProviderSelector } from "./provider-selector";
 
@@ -25,16 +22,31 @@ export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(
     providers[1].id ?? null
   );
-  const [framework, setFramework] = useState<string | null>(
-    frameworks[0].label
-  );
+  const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([
+    "Next.js",
+    "React",
+    "Vitest",
+  ]);
 
   const selectedProvider = providers.find((p) => p.id === provider);
-  const selectedFramework = frameworks.find((f) => f.label === framework);
 
-  const config = useMemo(() => {
-    return selectedProvider?.configFiles ?? [];
-  }, [selectedProvider]);
+  const mergedPresets = useMemo(() => {
+    const presets = new Set<string>(["core"]);
+    for (const label of selectedFrameworks) {
+      const fw = frameworks.find((f) => f.label === label);
+      if (fw) {
+        for (const p of fw.presets) {
+          presets.add(p);
+        }
+      }
+    }
+    return [...presets];
+  }, [selectedFrameworks]);
+
+  const config = useMemo(
+    () => selectedProvider?.configFiles ?? [],
+    [selectedProvider]
+  );
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
   // The value should always be valid for the current config; fallback to first available tab if needed.
@@ -63,11 +75,13 @@ export const ZeroConfig = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
-        <span className="text-muted-foreground text-sm">I'm using</span>
+        <span className="text-muted-foreground text-sm">I&apos;m using</span>
         <ProviderSelector onValueChange={setProvider} value={provider} />
-        <span className="text-muted-foreground text-sm">on my</span>
-        <FrameworkSelector onValueChange={setFramework} value={framework} />
-        <span className="text-muted-foreground text-sm">project</span>
+        <span className="text-muted-foreground text-sm">with</span>
+        <FrameworkSelector
+          onValueChange={setSelectedFrameworks}
+          values={selectedFrameworks}
+        />
       </div>
 
       {config && (
@@ -95,7 +109,7 @@ export const ZeroConfig = () => {
             {config.map((f) => (
               <TabsContent key={f.name} value={f.name}>
                 <CodeBlock
-                  code={f.code(selectedFramework?.presets ?? [])}
+                  code={f.code(mergedPresets)}
                   lang={getLang(f.lang)}
                 />
               </TabsContent>
