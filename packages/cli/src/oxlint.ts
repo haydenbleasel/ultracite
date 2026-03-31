@@ -232,9 +232,9 @@ export const react = {
     "react/jsx-max-depth": "off",
     "react/no-multi-comp": "off",
 
-    "react_perf/jsx-no-jsx-as-prop": "off",
-    "react_perf/jsx-no-new-object-as-prop": "off",
-    "react_perf/jsx-no-new-array-as-prop": "off",
+    "react-perf/jsx-no-jsx-as-prop": "off",
+    "react-perf/jsx-no-new-object-as-prop": "off",
+    "react-perf/jsx-no-new-array-as-prop": "off",
 
     "jsx-a11y/no-autofocus": "off",
   },
