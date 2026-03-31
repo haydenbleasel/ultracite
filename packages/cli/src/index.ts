@@ -24,6 +24,10 @@ program
   .option("--frameworks <frameworks...>", "Frameworks being used")
   .option("--integrations <integrations...>", "Integrations to enable")
   .option(
+    "--install-skill",
+    "Install the reusable Ultracite skill after setup"
+  )
+  .option(
     "--type-aware",
     "Enable type-aware linting (enables project/scanner rules)"
   )
@@ -35,6 +39,7 @@ program
       editors: opts.editors,
       frameworks: opts.frameworks,
       hooks: opts.hooks,
+      installSkill: opts.installSkill,
       integrations: opts.integrations,
       linter: opts.linter,
       pm: opts.pm,

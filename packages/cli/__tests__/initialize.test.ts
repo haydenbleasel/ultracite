@@ -745,6 +745,165 @@ describe("initialize", () => {
     expect(agentWrites).toHaveLength(1);
   });
 
+  test("prompts to install the Ultracite skill after initialization", async () => {
+    const mockSelect = mock(() => Promise.resolve("skip"));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mockSelect,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
+    });
+
+    expect(mockSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Do you want to install the Ultracite skill?",
+        options: [
+          expect.objectContaining({
+            label: "Yes, install it",
+            value: "install",
+          }),
+          expect.objectContaining({
+            label: "No, I'll do it later",
+            value: "skip",
+          }),
+        ],
+      })
+    );
+  });
+
+  test("installs the Ultracite skill when requested", async () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    const mockSelect = mock(() => Promise.resolve("skip"));
+
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock((_pm: string, pkg: string) =>
+        pkg === "skills"
+          ? "npx skills add haydenbleasel/ultracite"
+          : "npx ultracite fix"
+      ),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mockSelect,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      installSkill: true,
+      integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
+    });
+
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockSpawn).toHaveBeenCalledWith(
+      "npx skills add haydenbleasel/ultracite",
+      [],
+      expect.objectContaining({
+        shell: true,
+        stdio: "pipe",
+      })
+    );
+  });
+
+  test("skips the skill prompt in quiet mode", async () => {
+    const mockSelect = mock(() => Promise.resolve("install"));
+    const mockSpawn = mock(() => ({ status: 0 }));
+
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mockSelect,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      linter: "biome",
+      pm: "npm",
+      quiet: true,
+      skipInstall: true,
+    });
+
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockSpawn).not.toHaveBeenCalled();
+  });
+
   test("sets up integrations when specified", async () => {
     const mockWriteFile = mock(() => Promise.resolve());
 

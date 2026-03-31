@@ -35,6 +35,10 @@ import { oxfmt } from "./linters/oxfmt";
 import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
+import {
+  getUltraciteSkillInstallCommand,
+  maybeInstallUltraciteSkill,
+} from "./skill";
 import { tsconfig } from "./tsconfig";
 import { isMonorepo, updatePackageJson } from "./utils";
 
@@ -51,6 +55,7 @@ interface InitializeFlags {
   frameworks?: (typeof options.frameworks)[number][];
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
+  installSkill?: boolean;
   linter?: Linter;
   pm?: PackageManagerName;
   quiet?: boolean;
@@ -1074,8 +1079,17 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     if (!quiet) {
       log.success("Successfully initialized Ultracite!");
+    }
+
+    const didInstallSkill = await maybeInstallUltraciteSkill({
+      packageManager: pm,
+      quiet,
+      shouldInstall: opts.installSkill,
+    });
+
+    if (!quiet && !didInstallSkill) {
       log.info(
-        "You can also run `npx skills add haydenbleasel/ultracite` to install the Ultracite skill."
+        `You can install the Ultracite skill later with \`${getUltraciteSkillInstallCommand(pm)}\`.`
       );
     }
   } catch (error) {

@@ -17,6 +17,7 @@ npx ultracite init
 ```
 
 The interactive setup will guide you through selecting your formatter/linter, framework, editor, and AI agents.
+It can also offer to install the reusable Ultracite skill, or you can pass `--install-skill` in non-interactive flows.
 
 ## Oxlint TypeScript Configs
 
