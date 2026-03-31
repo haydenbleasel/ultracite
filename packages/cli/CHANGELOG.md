@@ -1,3 +1,9 @@
+## 7.4.2
+
+### Patch Changes
+
+- 94e770e: Remove non-existent oxlint rules (`import/no-unresolved`, `vitest/no-done-callback`) for compatibility with oxlint 1.58.0+
+
 ## 7.4.1
 
 ### Patch Changes
