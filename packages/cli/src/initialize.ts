@@ -93,6 +93,10 @@ const eslintCoreDevDependencies: Record<string, string> = {
     packageJson.devDependencies["eslint-plugin-unused-imports"],
   globals: packageJson.devDependencies.globals,
   prettier: "latest",
+  "prettier-plugin-svelte":
+    packageJson.devDependencies["prettier-plugin-svelte"],
+  "prettier-plugin-tailwindcss":
+    packageJson.devDependencies["prettier-plugin-tailwindcss"],
   stylelint: "latest",
 };
 const eslintFrameworkDevDependencies: Partial<
