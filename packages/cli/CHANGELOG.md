@@ -1,3 +1,12 @@
+## 7.4.1
+
+### Patch Changes
+
+- 7a14fb2: Prompt users to install the reusable Ultracite skill during `ultracite init` and add a `--install-skill` flag for non-interactive setup.
+- 4f0cd02: Fix incorrect react-perf rule names (react_perf → react-perf)
+- f78c934: Redesign Agents initialization
+- 969b271: Add Svelte and Tailwind CSS plugins to Prettier config
+
 ## 7.4.0
 
 ### Minor Changes
