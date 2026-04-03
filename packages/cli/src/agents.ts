@@ -116,7 +116,7 @@ export const createAgents = (
         return;
       }
 
-      const existingContents = await readFile(agent.config.path, "utf8");
+      const existingContents = await readFile(agent.config.path, "utf-8");
 
       // Check if rules are already present to avoid duplicates
       if (existingContents.includes(rules.trim())) {

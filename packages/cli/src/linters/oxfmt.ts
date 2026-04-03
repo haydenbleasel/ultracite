@@ -41,7 +41,7 @@ ${JSON.stringify(defaultConfig, null, 2)}
   },
   exists: async () => await exists(oxfmtConfigPath),
   update: async () => {
-    const existingContents = await readFile(oxfmtConfigPath, "utf8");
+    const existingContents = await readFile(oxfmtConfigPath, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

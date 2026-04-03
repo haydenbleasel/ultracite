@@ -11,7 +11,6 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "unicorn/text-encoding-identifier-case": ["error", { "withDash": true }],
   "unicorn/no-array-callback-reference": "off",
   "unicorn/no-keyword-prefix": "off",
   "unicorn/no-null": "off",
@@ -28,6 +27,7 @@ const overrideRules = {
       },
     },
   ],
+  "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
 };
 
 const config = Object.assign(baseRules, overrideRules);

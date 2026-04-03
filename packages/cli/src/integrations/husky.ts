@@ -95,7 +95,7 @@ export const husky = {
     });
   },
   update: async (packageManager: PackageManagerName, useLintStaged = false) => {
-    const existingContents = await readFile(path, "utf8");
+    const existingContents = await readFile(path, "utf-8");
 
     let hookScript: string;
 

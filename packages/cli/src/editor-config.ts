@@ -45,7 +45,7 @@ export const createEditorConfig = (
         return;
       }
 
-      const existingContents = await readFile(editor.config.path, "utf8");
+      const existingContents = await readFile(editor.config.path, "utf-8");
       const existingConfig = parse(existingContents) as
         | Record<string, unknown>
         | undefined;

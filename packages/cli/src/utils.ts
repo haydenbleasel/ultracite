@@ -19,7 +19,7 @@ export const isMonorepo = async () => {
   }
 
   try {
-    const pkgJson = parse(await readFile("package.json", "utf8")) as
+    const pkgJson = parse(await readFile("package.json", "utf-8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -42,7 +42,7 @@ export const updatePackageJson = async ({
   devDependencies?: Record<string, string>;
   scripts?: Record<string, string>;
 }) => {
-  const packageJsonContent = await readFile("package.json", "utf8");
+  const packageJsonContent = await readFile("package.json", "utf-8");
   const packageJsonObject = JSON.parse(packageJsonContent);
 
   const newPackageJsonObject = {

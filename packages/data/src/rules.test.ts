@@ -25,8 +25,8 @@ describe("rules content", () => {
   });
 
   test("installable skill docs stay portable across repositories", () => {
-    const skill = readFileSync(skillPath, "utf8");
-    const standards = readFileSync(standardsPath, "utf8");
+    const skill = readFileSync(skillPath, "utf-8");
+    const standards = readFileSync(standardsPath, "utf-8");
 
     expect(skill).not.toContain("**Formatting:**");
     expect(skill).toContain(

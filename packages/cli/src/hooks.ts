@@ -66,7 +66,7 @@ export const createHooks = (
       return;
     }
 
-    const existingContent = await readFile(hookIntegration.hooks.path, "utf8");
+    const existingContent = await readFile(hookIntegration.hooks.path, "utf-8");
     const parsed = parse(existingContent) as unknown;
     const existingJson = isRecord(parsed) ? parsed : {};
 

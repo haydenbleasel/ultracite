@@ -117,7 +117,7 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile("./package.json", "utf8")) as
+    const packageJson = parse(await readFile("./package.json", "utf-8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -135,7 +135,7 @@ const isProjectEsm = async (): Promise<boolean> => {
 const updatePackageJson = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const packageJson = parse(await readFile("./package.json", "utf8")) as
+  const packageJson = parse(await readFile("./package.json", "utf-8")) as
     | Record<string, unknown>
     | undefined;
 
@@ -159,7 +159,7 @@ const updateJsonConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, "utf8");
+  const content = await readFile(filename, "utf-8");
   const existingConfig = parse(content) as Record<string, unknown> | undefined;
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
@@ -179,7 +179,7 @@ const updateYamlConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, "utf8");
+  const content = await readFile(filename, "utf-8");
   const existingConfig = parseSimpleYaml(content) as
     | Record<string, unknown>
     | undefined;

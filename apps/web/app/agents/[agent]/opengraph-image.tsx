@@ -18,7 +18,7 @@ interface AgentImageProps {
 const getLogoDataUrl = async (logoFile: string) => {
   const svg = await readFile(
     path.resolve(process.cwd(), "../../packages/data/logos", logoFile),
-    "utf8"
+    "utf-8"
   );
 
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;

@@ -25,7 +25,7 @@ const defaultConfigPath = "./stylelint.config.mjs";
 
 const hasStylelintKeyInPackageJson = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf8"));
+    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
     return "stylelint" in packageJson;
   } catch {
     return false;

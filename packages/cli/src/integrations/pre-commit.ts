@@ -32,7 +32,7 @@ export const preCommit = {
   },
   exists: () => exists(path),
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf8");
+    const existingContents = await readFile(path, "utf-8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
 
     // Check if ultracite hook is already present

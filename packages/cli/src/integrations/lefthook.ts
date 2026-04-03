@@ -62,7 +62,7 @@ export const lefthook = {
     execSync(installCommand, { stdio: "pipe" });
   },
   update: async (packageManager: PackageManagerName) => {
-    const existingContents = await readFile(path, "utf8");
+    const existingContents = await readFile(path, "utf-8");
     const ultraciteCommand = createUltraciteCommand(packageManager);
     const lefthookConfig = createLefthookConfig(packageManager);
 

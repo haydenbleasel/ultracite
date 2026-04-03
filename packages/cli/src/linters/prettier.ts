@@ -34,7 +34,7 @@ const defaultConfigPath = "./prettier.config.mjs";
 
 const hasPrettierKeyInPackageJson = async (): Promise<boolean> => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf8"));
+    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
     return "prettier" in packageJson;
   } catch {
     return false;

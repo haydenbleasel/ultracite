@@ -61,7 +61,7 @@ const hasStrictNullChecks = (
  */
 const updateTsConfigFile = async (filePath: string): Promise<void> => {
   try {
-    const existingContents = await readFile(filePath, "utf8");
+    const existingContents = await readFile(filePath, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>
       | undefined;

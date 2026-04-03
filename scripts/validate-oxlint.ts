@@ -11,7 +11,7 @@ const stripJsonComments = (content: string): string =>
 
 const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
   try {
-    const content = await readFile(configPath, "utf8");
+    const content = await readFile(configPath, "utf-8");
     const cleanJson = stripJsonComments(content);
     const config = JSON.parse(cleanJson);
 

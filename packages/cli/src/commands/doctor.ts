@@ -48,7 +48,7 @@ interface DiagnosticCheck {
 // Check if Biome is installed
 const checkBiomeInstallation = (): DiagnosticCheck => {
   const biomeCheck = runCommandSync("biome", ["--version"], {
-    encoding: "utf8",
+    encoding: "utf-8",
   });
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
@@ -69,7 +69,7 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 // Check if ESLint is installed
 const checkEslintInstallation = (): DiagnosticCheck => {
   const eslintCheck = runCommandSync("eslint", ["--version"], {
-    encoding: "utf8",
+    encoding: "utf-8",
   });
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
@@ -90,7 +90,7 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 // Check if Oxlint is installed
 const checkOxlintInstallation = (): DiagnosticCheck => {
   const oxlintCheck = runCommandSync("oxlint", ["--version"], {
-    encoding: "utf8",
+    encoding: "utf-8",
   });
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
@@ -129,7 +129,7 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(configPath, "utf8");
+    const configContent = await readFile(configPath, "utf-8");
     const config = parse(configContent);
 
     if (
@@ -186,7 +186,7 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(configPath, "utf8");
+    const configContent = await readFile(configPath, "utf-8");
 
     if (configContent.includes("ultracite/eslint")) {
       return {
@@ -227,7 +227,7 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(oxlintConfigPath, "utf8");
+    const configContent = await readFile(oxlintConfigPath, "utf-8");
     const config = parse(configContent);
 
     if (
@@ -268,7 +268,7 @@ const checkUltraciteDependency = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const pkgJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
+    const pkgJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
     const version =
       pkgJson.dependencies?.ultracite ||
       pkgJson.devDependencies?.ultracite ||
