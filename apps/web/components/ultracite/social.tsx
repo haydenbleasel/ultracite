@@ -1,4 +1,14 @@
-import { Tweets } from "@/components/ultracite/tweets";
+"use client";
+
+import dynamic from "next/dynamic";
+
+const Tweets = dynamic(
+  async () => {
+    const mod = await import("@/components/ultracite/tweets");
+    return mod.Tweets;
+  },
+  { ssr: false }
+);
 
 export const Social = () => (
   <div className="grid gap-8">

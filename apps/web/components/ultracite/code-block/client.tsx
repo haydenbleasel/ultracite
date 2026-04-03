@@ -1,17 +1,9 @@
 "use client";
 
-import bash from "@shikijs/langs/bash";
-import javascript from "@shikijs/langs/javascript";
-import json from "@shikijs/langs/json";
-import jsonc from "@shikijs/langs/jsonc";
-import markdown from "@shikijs/langs/markdown";
-import tsx from "@shikijs/langs/tsx";
-import typescript from "@shikijs/langs/typescript";
-import yaml from "@shikijs/langs/yaml";
 import darkTheme from "@shikijs/themes/vitesse-dark";
 import lightTheme from "@shikijs/themes/vitesse-light";
 import { useEffect, useState } from "react";
-import type { BundledLanguage, ThemedToken } from "shiki";
+import type { BundledLanguage, HighlighterCore, ThemedToken } from "shiki";
 import { createHighlighterCore } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import shikiWasm from "shiki/wasm";
@@ -30,18 +22,49 @@ interface TokenResult {
   tokens: ThemedToken[][];
 }
 
-let highlighterPromise: ReturnType<typeof createHighlighterCore> | null = null;
+const langLoaders: Record<string, () => Promise<unknown>> = {
+  bash: () => import("@shikijs/langs/bash"),
+  javascript: () => import("@shikijs/langs/javascript"),
+  json: () => import("@shikijs/langs/json"),
+  jsonc: () => import("@shikijs/langs/jsonc"),
+  markdown: () => import("@shikijs/langs/markdown"),
+  tsx: () => import("@shikijs/langs/tsx"),
+  typescript: () => import("@shikijs/langs/typescript"),
+  yaml: () => import("@shikijs/langs/yaml"),
+};
+
+let highlighterPromise: Promise<HighlighterCore> | null = null;
 
 const getHighlighter = () => {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighterCore({
-      // `shiki/wasm` contains the wasm binary inlined as base64 string.
       engine: createOnigurumaEngine(shikiWasm),
-      langs: [javascript, json, bash, typescript, jsonc, tsx, yaml, markdown],
+      langs: [],
       themes: [lightTheme, darkTheme],
     });
   }
   return highlighterPromise;
+};
+
+const loadedLangs = new Set<string>();
+
+const ensureLang = async (
+  highlighter: HighlighterCore,
+  lang: string
+): Promise<void> => {
+  if (loadedLangs.has(lang)) {
+    return;
+  }
+  const loader = langLoaders[lang];
+  if (loader) {
+    const mod = await loader();
+    await highlighter.loadLanguage(
+      (mod as { default: unknown }).default as Parameters<
+        HighlighterCore["loadLanguage"]
+      >[0]
+    );
+    loadedLangs.add(lang);
+  }
 };
 
 export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
@@ -52,6 +75,7 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
 
     const highlight = async () => {
       const highlighter = await getHighlighter();
+      await ensureLang(highlighter, lang);
 
       if (cancelled) {
         return;

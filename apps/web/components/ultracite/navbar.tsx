@@ -2,8 +2,8 @@
 
 import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
-import { editors } from "@repo/data/editors";
-import { providers } from "@repo/data/providers";
+import type { Editor } from "@repo/data/editors";
+import type { Provider } from "@repo/data/providers";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,9 +31,11 @@ import { Logo } from "./logo";
 
 interface NavbarProps {
   agents: Pick<Agent, "id" | "logo" | "name">[];
+  editors: Pick<Editor, "id" | "logo" | "name" | "subtitle">[];
+  providers: Pick<Provider, "id" | "logo" | "name" | "subtitle">[];
 }
 
-export const Navbar = ({ agents }: NavbarProps) => {
+export const Navbar = ({ agents, editors, providers }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => setOpen(false), []);

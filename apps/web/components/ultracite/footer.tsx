@@ -3,8 +3,8 @@
 import { SiX } from "@icons-pack/react-simple-icons";
 import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
-import { editors } from "@repo/data/editors";
-import { providers } from "@repo/data/providers";
+import type { Editor } from "@repo/data/editors";
+import type { Provider } from "@repo/data/providers";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
@@ -39,9 +39,11 @@ const generalLinks = [
 
 interface FooterProps {
   agents: Pick<Agent, "id" | "name">[];
+  editors: Pick<Editor, "id" | "name">[];
+  providers: Pick<Provider, "id" | "name">[];
 }
 
-export const Footer = ({ agents }: FooterProps) => {
+export const Footer = ({ agents, editors, providers }: FooterProps) => {
   const { theme, setTheme } = useTheme();
 
   return (
