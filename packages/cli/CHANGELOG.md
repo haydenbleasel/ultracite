@@ -1,3 +1,10 @@
+## 7.4.3
+
+### Patch Changes
+
+- 42b3552: Update the bundled VS Code settings to use `js/ts.tsdk.path` and `js/ts.tsdk.promptToUseWorkspaceVersion` instead of the deprecated `typescript.tsdk` setting.
+- a0a03c6: Allow `utf-8` values in the `unicorn/text-encoding-identifier-case` rule across the bundled ESLint and Oxlint configs.
+
 ## 7.4.2
 
 ### Patch Changes
