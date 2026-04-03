@@ -95,6 +95,7 @@ export const core = {
     "unicorn/no-null": "off",
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prefer-string-raw": "off",
+    "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
 
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
