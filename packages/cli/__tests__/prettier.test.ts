@@ -61,7 +61,7 @@ describe("prettier linter", () => {
   });
 
   describe("create", () => {
-    test("creates prettier config file", async () => {
+    test("creates prettier config with no frameworks (re-exports core)", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
@@ -76,6 +76,76 @@ describe("prettier linter", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./prettier.config.mjs");
       expect(writeCall[1]).toContain("ultracite/prettier");
+    });
+
+    test("creates prettier config with svelte framework", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create(["svelte"]);
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("ultracite/prettier/svelte");
+      expect(writeCall[1]).toContain("ultracite/prettier/core");
+    });
+
+    test("creates prettier config with astro framework", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create(["astro"]);
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("ultracite/prettier/astro");
+    });
+
+    test("creates prettier config with svelte and astro merging plugins", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create(["svelte", "astro"]);
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("ultracite/prettier/svelte");
+      expect(writeCall[1]).toContain("ultracite/prettier/astro");
+      // Should explicitly merge plugins for multi-framework
+      expect(writeCall[1]).toContain("plugins:");
+    });
+
+    test("ignores non-prettier frameworks", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create(["react", "next"]);
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      // React/next have no prettier plugins, so falls back to core re-export
+      expect(writeCall[1]).toContain("ultracite/prettier");
+      expect(writeCall[1]).not.toContain("ultracite/prettier/react");
     });
   });
 
@@ -93,5 +163,22 @@ describe("prettier linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
     });
+
+    test("updates prettier config with framework", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.update(["svelte"]);
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("ultracite/prettier/svelte");
+    });
   });
 });
+

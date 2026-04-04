@@ -1,5 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+import type { options } from "@repo/data/options";
+
 import { exists } from "../utils";
 
 // All possible Prettier config file locations
@@ -57,21 +59,66 @@ const getPrettierConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generatePrettierConfig =
-  (): string => `export { default } from "ultracite/prettier";
+// Frameworks that have dedicated Prettier plugins
+const prettierPluginFrameworks = ["svelte", "astro"] as const;
+type PrettierPluginFramework = (typeof prettierPluginFrameworks)[number];
+
+const isPrettierPluginFramework = (f: string): f is PrettierPluginFramework =>
+  prettierPluginFrameworks.includes(f as PrettierPluginFramework);
+
+const generatePrettierConfig = (
+  frameworks: (typeof options.frameworks)[number][] = []
+): string => {
+  const relevantFrameworks = frameworks.filter(isPrettierPluginFramework);
+
+  if (relevantFrameworks.length === 0) {
+    return `export { default } from "ultracite/prettier";\n`;
+  }
+
+  const imports = relevantFrameworks
+    .map((f) => `import ${f} from "ultracite/prettier/${f}";`)
+    .join("\n");
+
+  if (relevantFrameworks.length === 1) {
+    const [fw] = relevantFrameworks;
+    return `import core from "ultracite/prettier/core";
+${imports}
+
+export default {
+  ...core,
+  ...${fw},
+};
 `;
+  }
+
+  // Multiple frameworks — spread all and explicitly merge plugins arrays
+  const spreads = relevantFrameworks.map((f) => `  ...${f},`).join("\n");
+  const pluginMerge = relevantFrameworks
+    .map((f) => `...(${f}.plugins ?? [])`)
+    .join(", ");
+
+  return `import core from "ultracite/prettier/core";
+${imports}
+
+export default {
+  ...core,
+${spreads}
+  plugins: [${pluginMerge}],
+};
+`;
+};
 
 export const prettier = {
-  create: async () => {
-    const config = generatePrettierConfig();
+  create: async (frameworks: (typeof options.frameworks)[number][] = []) => {
+    const config = generatePrettierConfig(frameworks);
     await writeFile(defaultConfigPath, config);
   },
   exists: async () => {
     const path = await getPrettierConfigPath();
     return path !== null;
   },
-  update: async () => {
-    const config = generatePrettierConfig();
+  update: async (frameworks: (typeof options.frameworks)[number][] = []) => {
+    const config = generatePrettierConfig(frameworks);
     await writeFile(defaultConfigPath, config);
   },
 };

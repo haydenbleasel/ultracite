@@ -1,12 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
-import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
 import { exists } from "../utils";
 
-const oxlintConfigPath = "./.oxlintrc.json";
+const oxlintConfigPath = "./oxlint.config.ts";
+const oxlintLegacyConfigPath = "./.oxlintrc.json";
 
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
@@ -17,9 +17,30 @@ interface OxlintOptions {
 const getOxlintConfigPath = (name: string) =>
   `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
 
-const defaultConfig = {
-  $schema: "./node_modules/oxlint/configuration_schema.json",
-  extends: [getOxlintConfigPath("core")],
+const generateOxlintConfig = (extendsList: string[]): string => {
+  const extendsStr = extendsList.map((p) => `    "${p}",`).join("\n");
+  return `import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+${extendsStr}
+  ],
+  // Alpha: JS plugin for complexity checking (feature parity with Biome's noExcessiveCognitiveComplexity)
+  jsPlugins: ["oxlint-plugin-complexity"],
+  rules: {
+    "complexity/cognitive-complexity": ["error", 20],
+  },
+});
+`;
+};
+
+const extractExtendsFromTs = (content: string): string[] => {
+  const match = content.match(/extends:\s*\[([\s\S]*?)\]/);
+  if (!match) return [];
+  return match[1]
+    .split(",")
+    .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+    .filter((s) => s.length > 0);
 };
 
 export const oxlint = {
@@ -33,28 +54,25 @@ export const oxlint = {
       }
     }
 
-    const config = {
-      ...defaultConfig,
-      extends: extendsList,
-    };
-
-    return await writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
+    return await writeFile(oxlintConfigPath, generateOxlintConfig(extendsList));
   },
-  exists: async () => await exists(oxlintConfigPath),
+  exists: async () =>
+    (await exists(oxlintConfigPath)) || (await exists(oxlintLegacyConfigPath)),
   update: async (opts?: OxlintOptions) => {
-    const existingContents = await readFile(oxlintConfigPath, "utf-8");
-    const existingConfig = parse(existingContents) as
-      | Record<string, unknown>
-      | undefined;
+    let existingExtends: string[] = [];
 
-    // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
-    const configToWork = existingConfig || {};
-
-    // Check if ultracite is already in the extends array
-    const existingExtends =
-      configToWork.extends && Array.isArray(configToWork.extends)
-        ? configToWork.extends
-        : [];
+    // Check for new TS config format first
+    if (await exists(oxlintConfigPath)) {
+      const content = await readFile(oxlintConfigPath, "utf-8");
+      existingExtends = extractExtendsFromTs(content);
+    } else if (await exists(oxlintLegacyConfigPath)) {
+      // Migrate from legacy JSON format
+      const content = await readFile(oxlintLegacyConfigPath, "utf-8");
+      const parsed = parse(content) as Record<string, unknown> | undefined;
+      if (parsed?.extends && Array.isArray(parsed.extends)) {
+        existingExtends = parsed.extends as string[];
+      }
+    }
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
@@ -76,14 +94,6 @@ export const oxlint = {
       }
     }
 
-    configToWork.extends = newExtends;
-
-    // Merge other properties from defaultConfig
-    const configToMerge = {
-      $schema: defaultConfig.$schema,
-    };
-    const newConfig = deepmerge(configToWork, configToMerge);
-
-    await writeFile(oxlintConfigPath, JSON.stringify(newConfig, null, 2));
+    await writeFile(oxlintConfigPath, generateOxlintConfig(newExtends));
   },
 };
