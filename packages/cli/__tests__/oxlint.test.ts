@@ -6,9 +6,26 @@ import { oxlint } from "../src/linters/oxlint";
 const getOxlintConfigPath = (name: string) =>
   `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
 
+// Helper to build a valid oxlint.config.ts string for test mocks
+const buildTsConfig = (extendsList: string[]): string => {
+  const extendsStr = extendsList.map((p) => `    "${p}",`).join("\n");
+  return `import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+${extendsStr}
+  ],
+  jsPlugins: ["oxlint-plugin-complexity"],
+  rules: {
+    "complexity/cognitive-complexity": ["error", 20],
+  },
+});
+`;
+};
+
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
-  readFile: mock(() => Promise.resolve("{}")),
+  readFile: mock(() => Promise.resolve(buildTsConfig([]))),
   writeFile: mock(() => Promise.resolve()),
 }));
 
@@ -17,7 +34,7 @@ describe("oxlint linter", () => {
     test("returns true when oxlint config exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("{}")),
+        readFile: mock(() => Promise.resolve(buildTsConfig([]))),
         writeFile: mock(() => Promise.resolve()),
       }));
 
@@ -28,7 +45,7 @@ describe("oxlint linter", () => {
     test("returns false when no oxlint config exists", async () => {
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("{}")),
+        readFile: mock(() => Promise.resolve(buildTsConfig([]))),
         writeFile: mock(() => Promise.resolve()),
       }));
 
@@ -43,7 +60,7 @@ describe("oxlint linter", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("{}")),
+        readFile: mock(() => Promise.resolve(buildTsConfig([]))),
         writeFile: mockWriteFile,
       }));
 
@@ -51,9 +68,11 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("./.oxlintrc.json");
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("core"));
+      expect(writeCall[0]).toBe("./oxlint.config.ts");
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("core")}"`);
+      expect(content).toContain("defineConfig");
+      expect(content).toContain("oxlint-plugin-complexity");
     });
 
     test("creates oxlint config with frameworks", async () => {
@@ -61,7 +80,7 @@ describe("oxlint linter", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("{}")),
+        readFile: mock(() => Promise.resolve(buildTsConfig([]))),
         writeFile: mockWriteFile,
       }));
 
@@ -69,9 +88,9 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("react"));
-      expect(content.extends).toContain(getOxlintConfigPath("next"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("react")}"`);
+      expect(content).toContain(`"${getOxlintConfigPath("next")}"`);
     });
 
     test("creates oxlint config with test framework", async () => {
@@ -79,7 +98,7 @@ describe("oxlint linter", () => {
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        readFile: mock(() => Promise.resolve("{}")),
+        readFile: mock(() => Promise.resolve(buildTsConfig([]))),
         writeFile: mockWriteFile,
       }));
 
@@ -87,22 +106,22 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("vitest"));
-      expect(content.extends).not.toContain(getOxlintConfigPath("jest"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("vitest")}"`);
+      expect(content).not.toContain(`"${getOxlintConfigPath("jest")}"`);
     });
   });
 
   describe("update", () => {
     test("updates oxlint config file with existing extends", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      const existingConfig = JSON.stringify({
-        extends: ["some-other-config"],
-        rules: { "no-console": "warn" },
-      });
+      const existingConfig = buildTsConfig(["some-other-config"]);
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
       }));
@@ -111,17 +130,20 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("core"));
-      expect(content.extends).toContain("some-other-config");
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("core")}"`);
+      expect(content).toContain('"some-other-config"');
     });
 
-    test("updates oxlint config with invalid JSON", async () => {
+    test("updates oxlint config with unrecognised content gracefully", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("invalid json")),
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve("// empty")),
         writeFile: mockWriteFile,
       }));
 
@@ -129,18 +151,19 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("core"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("core")}"`);
     });
 
-    test("skips adding ultracite config if already present (new format)", async () => {
+    test("skips adding ultracite config if already present", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      const existingConfig = JSON.stringify({
-        extends: [getOxlintConfigPath("core")],
-      });
+      const existingConfig = buildTsConfig([getOxlintConfigPath("core")]);
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
       }));
@@ -149,22 +172,28 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
+      const content = writeCall[1] as string;
       // Should only appear once
-      expect(
-        content.extends.filter((e: string) => e === getOxlintConfigPath("core"))
-          .length
-      ).toBe(1);
+      const occurrences = (
+        content.match(
+          new RegExp(
+            getOxlintConfigPath("core").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+            "g"
+          )
+        ) ?? []
+      ).length;
+      expect(occurrences).toBe(1);
     });
 
     test("adds framework configs during update", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      const existingConfig = JSON.stringify({
-        extends: [getOxlintConfigPath("core")],
-      });
+      const existingConfig = buildTsConfig([getOxlintConfigPath("core")]);
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
       }));
@@ -173,18 +202,19 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("react"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("react")}"`);
     });
 
     test("adds test framework configs during update", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      const existingConfig = JSON.stringify({
-        extends: [getOxlintConfigPath("core")],
-      });
+      const existingConfig = buildTsConfig([getOxlintConfigPath("core")]);
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
       }));
@@ -193,19 +223,47 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("jest"));
-      expect(content.extends).not.toContain(getOxlintConfigPath("vitest"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("jest")}"`);
+      expect(content).not.toContain(`"${getOxlintConfigPath("vitest")}"`);
     });
 
-    test("handles config without extends array", async () => {
+    test("migrates from legacy .oxlintrc.json to oxlint.config.ts", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      const existingConfig = JSON.stringify({
+      const legacyConfig = JSON.stringify({
+        extends: ["some-other-config"],
         rules: { "no-console": "warn" },
       });
 
       mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
+        access: mock((path: string) => {
+          if (path === "./.oxlintrc.json") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() => Promise.resolve(legacyConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("./oxlint.config.ts");
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("core")}"`);
+      expect(content).toContain('"some-other-config"');
+      expect(content).toContain("defineConfig");
+    });
+
+    test("handles config without extends array", async () => {
+      const mockWriteFile = mock(() => Promise.resolve());
+      const existingConfig = buildTsConfig([]);
+
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./oxlint.config.ts") return Promise.resolve();
+          return Promise.reject(new Error("ENOENT"));
+        }),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
       }));
@@ -214,8 +272,9 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = JSON.parse(writeCall[1] as string);
-      expect(content.extends).toContain(getOxlintConfigPath("core"));
+      const content = writeCall[1] as string;
+      expect(content).toContain(`"${getOxlintConfigPath("core")}"`);
     });
   });
 });
+

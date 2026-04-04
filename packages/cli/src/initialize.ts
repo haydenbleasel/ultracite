@@ -171,6 +171,7 @@ const buildNoInstallDevDependencies = (
   if (linter === "oxlint") {
     devDependencies.oxlint = "latest";
     devDependencies.oxfmt = "latest";
+    devDependencies["oxlint-plugin-complexity"] = "latest";
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] = "latest";
     }
@@ -210,6 +211,8 @@ export const installDependencies = async (
     packages.push("oxlint@latest");
     // Oxlint is only a linter, so we need oxfmt for formatting
     packages.push("oxfmt@latest");
+    // JS plugin for complexity checking (feature parity with Biome)
+    packages.push("oxlint-plugin-complexity@latest");
     // Type-aware linting requires oxlint-tsgolint
     if (typeAware) {
       packages.push("oxlint-tsgolint@latest");
@@ -444,7 +447,10 @@ export const upsertOxlintConfig = async (
   }
 };
 
-export const upsertPrettierConfig = async (quiet = false) => {
+export const upsertPrettierConfig = async (
+  quiet = false,
+  frameworks: (typeof options.frameworks)[number][] = []
+) => {
   const s = spinner();
 
   if (!quiet) {
@@ -455,7 +461,7 @@ export const upsertPrettierConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("Prettier configuration found, updating...");
     }
-    await prettier.update();
+    await prettier.update(frameworks);
     if (!quiet) {
       s.stop("Prettier configuration updated.");
     }
@@ -465,7 +471,7 @@ export const upsertPrettierConfig = async (quiet = false) => {
   if (!quiet) {
     s.message("Prettier configuration not found, creating...");
   }
-  await prettier.create();
+  await prettier.create(frameworks);
   if (!quiet) {
     s.stop("Prettier configuration created.");
   }
@@ -1034,7 +1040,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      await upsertPrettierConfig(quiet);
+      await upsertPrettierConfig(quiet, frameworks);
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
