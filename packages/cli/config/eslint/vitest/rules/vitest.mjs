@@ -24,6 +24,13 @@ const overrideRules = {
   // Too strict for general use
   "vitest/prefer-expect-assertions": "off",
   "vitest/prefer-importing-vitest-globals": "off",
+
+  // Conflicts with prefer-to-be-truthy and prefer-to-be-falsy (#645)
+  // prefer-strict-boolean-matchers: use toBe(true)/toBe(false)
+  // prefer-to-be-truthy/falsy: use toBeTruthy()/toBeFalsy()
+  "vitest/prefer-strict-boolean-matchers": "off",
+
+  // Too strict for general use
   "vitest/prefer-to-have-been-called-times": "off",
 
   // Too strict — matching oxlint jest disabled rules

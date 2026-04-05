@@ -306,6 +306,8 @@ export const vitest = {
         "vitest/prefer-mock-promise-shorthand": "error",
         "vitest/prefer-spy-on": "error",
         "vitest/prefer-strict-equal": "error",
+        // Conflicts with prefer-to-be-truthy and prefer-to-be-falsy (#645)
+        "vitest/prefer-strict-boolean-matchers": "off",
         "vitest/prefer-to-be": "error",
         "vitest/prefer-to-be-falsy": "error",
         "vitest/prefer-to-be-object": "error",

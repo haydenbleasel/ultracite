@@ -61,4 +61,41 @@ describe("oxlint vitest config", () => {
       ).toBe(false);
     });
   });
+
+  /**
+   * prefer-to-be-truthy/falsy vs prefer-strict-boolean-matchers
+   *
+   * These rules are mutually exclusive and enforce opposite styles:
+   * - prefer-to-be-truthy: enforce toBeTruthy() over toBe(true)
+   * - prefer-to-be-falsy: enforce toBeFalsy() over toBe(false)
+   * - prefer-strict-boolean-matchers: enforce toBe(true)/toBe(false) over toBeTruthy()/toBeFalsy()
+   *
+   * Enabling both causes an unfixable conflict. The ESLint vitest config resolves this by
+   * disabling prefer-strict-boolean-matchers (see packages/cli/config/eslint/vitest/rules/vitest.mjs).
+   * The oxlint vitest config must be consistent.
+   */
+  describe("prefer-to-be-truthy/falsy vs prefer-strict-boolean-matchers conflict", () => {
+    test("prefer-strict-boolean-matchers is explicitly disabled to avoid conflict", async () => {
+      const config = await readOxlintConfig("vitest");
+      const rules = config.overrides?.[0]?.rules ?? {};
+
+      expect(rules["vitest/prefer-strict-boolean-matchers"]).toBe("off");
+    });
+
+    test("prefer-strict-boolean-matchers is not enabled alongside prefer-to-be-truthy or prefer-to-be-falsy", async () => {
+      const config = await readOxlintConfig("vitest");
+      const rules = config.overrides?.[0]?.rules ?? {};
+
+      const strictBooleanEnabled = isEnabled(
+        rules["vitest/prefer-strict-boolean-matchers"]
+      );
+      const truthyEnabled = isEnabled(rules["vitest/prefer-to-be-truthy"]);
+      const falsyEnabled = isEnabled(rules["vitest/prefer-to-be-falsy"]);
+
+      expect(
+        strictBooleanEnabled && (truthyEnabled || falsyEnabled),
+        "prefer-strict-boolean-matchers conflicts with prefer-to-be-truthy/prefer-to-be-falsy — they enforce opposite matcher styles"
+      ).toBe(false);
+    });
+  });
 });
