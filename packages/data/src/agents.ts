@@ -1657,7 +1657,7 @@ export const agents: Agent[] = [
       intro:
         "Use Ultracite with IBM Bob when you want an enterprise-focused AI coding partner in the IDE with committed rules under `.bob/rules/`. It suits organizations that combine agentic modes, editor assistance, and terminal workflows while keeping implementation rules reviewable in version control.",
       metaDescription:
-        "Configure IBM Bob with Ultracite through `.bob/rules/ultracite.md` so IBM's AI coding assistant follows your repo's linting, TypeScript, and quality standards in the IDE and beyond.",
+        "Set up IBM Bob with Ultracite via `.bob/rules/ultracite.md` so IBM's AI assistant applies your repo's linting, TypeScript, and quality standards in the IDE.",
       useCases: [
         agentUseCase(
           "Team-wide AI standards",

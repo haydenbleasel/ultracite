@@ -760,7 +760,7 @@ alwaysApply: false
     },
     seo: {
       metaDescription:
-        "Configure Ultracite for IBM Bob with `.vscode/settings.json` and an appendable `.bob/rules/ultracite.md` file so IBM's AI assistant follows your repo's formatters, linters, and coding standards.",
+        "Wire Ultracite to IBM Bob with `.vscode/settings.json` and `.bob/rules/ultracite.md` so IBM's AI follows formatters, linters, and repo coding standards.",
       summary:
         "IBM Bob works well with Ultracite when you pair shared Visual Studio Code workspace settings with committed rules under `.bob/rules/`—matching how Bob loads workspace rules while keeping editor behavior predictable.",
     },
