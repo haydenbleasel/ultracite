@@ -4,6 +4,7 @@ import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 
 import antigravityLogo from "../logos/antigravity.svg";
+import bobLogo from "../logos/bob.svg";
 import codebuddyLogo from "../logos/codebuddy.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
@@ -702,6 +703,72 @@ alwaysApply: false
       "Generate `.vscode/settings.json` so Antigravity uses the same formatter and code actions as the rest of the repository.",
       "Commit the workspace config to keep Antigravity pilots aligned with teammates who still use Visual Studio Code or Cursor.",
       "Use the shared editor settings as the baseline, then layer Antigravity-specific workflow experiments on top without changing repo-level standards.",
+    ],
+  },
+  {
+    audience:
+      "IBM Bob teams who want VS Code-style workspace defaults plus committed rules under `.bob/rules/` for IBM's AI coding assistant",
+    config: {
+      extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
+    },
+    description:
+      "IBM's AI coding assistant for the IDE, built for agentic modes, literate coding, and enterprise workflows alongside familiar editor ergonomics.",
+    differentiators: [
+      {
+        description:
+          "IBM Bob reads workspace rules from `.bob/rules/` (and can load optional root `AGENTS.md`). Ultracite writes `.bob/rules/ultracite.md` so team standards live where Bob expects them while staying version-controlled.",
+        title: "Native `.bob/rules/` workflow",
+      },
+      {
+        description:
+          "Ultracite still targets the normal `.vscode/settings.json` surface, so format on save, the linter extension, and TypeScript defaults behave like other VS Code–compatible editors.",
+        title: "Same workspace settings story as Visual Studio Code",
+      },
+      {
+        description:
+          "You can combine editor behavior (settings) with Bob's guidance file so AI output and human edits meet the same bar before review.",
+        title: "Editor defaults plus AI rules in one repo",
+      },
+    ],
+    faq: [
+      {
+        answer:
+          "`--editors bob` updates `.vscode/settings.json`. `--agents bob` creates or appends `.bob/rules/ultracite.md` with Ultracite's coding rules. Use both when you want formatter defaults and Bob-readable project standards in one pass.",
+        question:
+          "Should I run Ultracite with both `--editors bob` and `--agents bob`?",
+      },
+      {
+        answer:
+          "No. Bob supports `.bob/rules/`, `.bobrules`, mode-specific files, and optionally root `AGENTS.md`. Ultracite targets `.bob/rules/ultracite.md` for IBM Bob so rules sit in Bob's preferred workspace layout; you can still add `AGENTS.md` separately for tools that only read that file.",
+        question: "Does Bob only read AGENTS.md for workspace rules?",
+      },
+      {
+        answer:
+          "Bob is distributed as its own IDE experience; when it remains compatible with the VS Code settings and extension model, the same Biome, ESLint, or Oxlint extension install path applies as for Cursor or Windsurf.",
+        question:
+          "Is the Visual Studio Code extension install step the same for IBM Bob?",
+      },
+    ],
+    id: "bob",
+    logo: bobLogo,
+    name: "IBM Bob",
+    rules: {
+      appendMode: true,
+      path: ".bob/rules/ultracite.md",
+    },
+    seo: {
+      metaDescription:
+        "Configure Ultracite for IBM Bob with `.vscode/settings.json` and an appendable `.bob/rules/ultracite.md` file so IBM's AI assistant follows your repo's formatters, linters, and coding standards.",
+      summary:
+        "IBM Bob works well with Ultracite when you pair shared Visual Studio Code workspace settings with committed rules under `.bob/rules/`—matching how Bob loads workspace rules while keeping editor behavior predictable.",
+    },
+    subtitle: "IBM's AI coding assistant",
+    workflowHighlights: [
+      "Run `npx ultracite@latest init --editors bob` to generate `.vscode/settings.json` and the linter extension defaults Bob-compatible editors expect.",
+      "Run with `--agents bob` (or init both) to append `.bob/rules/ultracite.md` so Bob picks up Ultracite standards from the rules directory.",
+      "Optionally add root `AGENTS.md` or extra files under `.bob/rules/` for team-only instructions that complement Ultracite's file.",
     ],
   },
   {
