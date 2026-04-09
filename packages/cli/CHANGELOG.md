@@ -1,3 +1,10 @@
+## 7.4.4
+
+### Patch Changes
+
+- e9db6f1: Add IBM Bob agent, editor, and logo
+- 5341bcc: Disable vitest/prefer-strict-boolean-matchers to resolve conflict with prefer-to-be-truthy and prefer-to-be-falsy
+
 ## 7.4.3
 
 ### Patch Changes
