@@ -5,6 +5,7 @@ import aiderLogo from "../logos/aider.svg";
 import amazonQLogo from "../logos/amazon-q.svg";
 import ampLogo from "../logos/amp.svg";
 import augmentcodeLogo from "../logos/augmentcode.svg";
+import bobLogo from "../logos/bob.svg";
 import claudeLogo from "../logos/claude.svg";
 import clineLogo from "../logos/cline.svg";
 import coderLogo from "../logos/coder.svg";
@@ -1621,6 +1622,64 @@ export const agents: Agent[] = [
     logoFile: "augmentcode.svg",
     name: "Augment Code",
     subtitle: "Enterprise AI assistant",
+  },
+  {
+    category: "ide-agent",
+    config: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    content: {
+      differentiators: [
+        differentiator(
+          "Enterprise IDE workflows",
+          "Bob is built for teams adopting agentic coding inside the editor, with modes, governance-minded defaults, and integrations suited to large organizations.",
+          "Building2"
+        ),
+        differentiator(
+          "Shared AGENTS.md rules",
+          "IBM Bob reads the standard `AGENTS.md` rules file, the same format used by many AI coding tools. Ultracite writes your standards there so they work across agents.",
+          "Layers"
+        ),
+        differentiator(
+          "Beyond the editor",
+          "With literate coding, in-flow reviews, and Bob Shell for the terminal, a single committed contract keeps standards consistent across the surfaces where Bob works.",
+          "Workflow"
+        ),
+      ],
+      faq: [
+        {
+          answer:
+            "Bob supports `.bob/rules/`, `.bobrules`, mode-specific files, global `~/.bob/rules/`, and `AGENTS.md`. Ultracite targets `AGENTS.md` so your standards are shared across Bob and other AI coding tools that read the same file.",
+          question: "Does IBM Bob only use AGENTS.md for rules?",
+        },
+      ],
+      intro:
+        "Use Ultracite with IBM Bob when you want an enterprise-focused AI coding partner in the IDE with committed rules in `AGENTS.md`. It suits organizations that combine agentic modes, editor assistance, and terminal workflows while keeping implementation rules reviewable in version control.",
+      metaDescription:
+        "Set up IBM Bob with Ultracite via AGENTS.md so IBM's AI assistant applies your repo's linting, TypeScript, and quality standards in the IDE.",
+      useCases: [
+        agentUseCase(
+          "Team-wide AI standards",
+          "Commit `AGENTS.md` so every developer using Bob starts from the same coding, testing, and documentation expectations."
+        ),
+        agentUseCase(
+          "Agentic mode discipline",
+          "Give Bob explicit guardrails before it works in specialized modes or across larger refactors."
+        ),
+        agentUseCase(
+          "Editor and shell together",
+          "Keep `AGENTS.md` aligned when developers use Bob in the IDE and Bob Shell in the pipeline or locally."
+        ),
+      ],
+    },
+    description:
+      "IBM's AI coding assistant for the IDE with agentic modes, literate coding, reviews, and Bob Shell for terminal workflows.",
+    id: "bob",
+    logo: bobLogo,
+    logoFile: "bob.svg",
+    name: "IBM Bob",
+    subtitle: "IBM's AI coding assistant",
   },
   {
     category: "editor-agent",

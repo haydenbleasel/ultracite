@@ -4,6 +4,7 @@ import deepmerge from "deepmerge";
 import type { StaticImageData } from "next/image";
 
 import antigravityLogo from "../logos/antigravity.svg";
+import bobLogo from "../logos/bob.svg";
 import codebuddyLogo from "../logos/codebuddy.svg";
 import cursorLogo from "../logos/cursor.svg";
 import kiroLogo from "../logos/kiro.svg";
@@ -702,6 +703,72 @@ alwaysApply: false
       "Generate `.vscode/settings.json` so Antigravity uses the same formatter and code actions as the rest of the repository.",
       "Commit the workspace config to keep Antigravity pilots aligned with teammates who still use Visual Studio Code or Cursor.",
       "Use the shared editor settings as the baseline, then layer Antigravity-specific workflow experiments on top without changing repo-level standards.",
+    ],
+  },
+  {
+    audience:
+      "IBM Bob teams who want VS Code-style workspace defaults plus committed rules in `AGENTS.md` for IBM's AI coding assistant",
+    config: {
+      extensionCommand: "code --install-extension",
+      getContent: getVscodeConfig,
+      path: ".vscode/settings.json",
+    },
+    description:
+      "IBM's AI coding assistant for the IDE, built for agentic modes, literate coding, and enterprise workflows alongside familiar editor ergonomics.",
+    differentiators: [
+      {
+        description:
+          "IBM Bob reads `AGENTS.md`, the same rules file used by many AI coding tools. Ultracite writes your standards there so they work across agents while staying version-controlled.",
+        title: "Shared AGENTS.md rules",
+      },
+      {
+        description:
+          "Ultracite still targets the normal `.vscode/settings.json` surface, so format on save, the linter extension, and TypeScript defaults behave like other VS Code–compatible editors.",
+        title: "Same workspace settings story as Visual Studio Code",
+      },
+      {
+        description:
+          "You can combine editor behavior (settings) with Bob's guidance file so AI output and human edits meet the same bar before review.",
+        title: "Editor defaults plus AI rules in one repo",
+      },
+    ],
+    faq: [
+      {
+        answer:
+          "`--editors bob` updates `.vscode/settings.json`. `--agents bob` creates or appends `AGENTS.md` with Ultracite's coding rules. Use both when you want formatter defaults and Bob-readable project standards in one pass.",
+        question:
+          "Should I run Ultracite with both `--editors bob` and `--agents bob`?",
+      },
+      {
+        answer:
+          "Bob supports `.bob/rules/`, `.bobrules`, mode-specific files, and `AGENTS.md`. Ultracite targets `AGENTS.md` so your standards are shared across Bob and other AI coding tools that read the same file.",
+        question: "Does Bob only read AGENTS.md for workspace rules?",
+      },
+      {
+        answer:
+          "Bob is distributed as its own IDE experience; when it remains compatible with the VS Code settings and extension model, the same Biome, ESLint, or Oxlint extension install path applies as for Cursor or Windsurf.",
+        question:
+          "Is the Visual Studio Code extension install step the same for IBM Bob?",
+      },
+    ],
+    id: "bob",
+    logo: bobLogo,
+    name: "IBM Bob",
+    rules: {
+      appendMode: true,
+      path: "AGENTS.md",
+    },
+    seo: {
+      metaDescription:
+        "Wire Ultracite to IBM Bob with `.vscode/settings.json` and `AGENTS.md` so IBM's AI follows formatters, linters, and repo coding standards.",
+      summary:
+        "IBM Bob works well with Ultracite when you pair shared Visual Studio Code workspace settings with `AGENTS.md` rules—matching the standard format while keeping editor behavior predictable.",
+    },
+    subtitle: "IBM's AI coding assistant",
+    workflowHighlights: [
+      "Run `npx ultracite@latest init --editors bob` to generate `.vscode/settings.json` and the linter extension defaults Bob-compatible editors expect.",
+      "Run with `--agents bob` (or init both) to append `AGENTS.md` so Bob picks up Ultracite standards from the shared rules file.",
+      "Optionally add extra files under `.bob/rules/` for Bob-specific instructions that complement `AGENTS.md`.",
     ],
   },
   {
