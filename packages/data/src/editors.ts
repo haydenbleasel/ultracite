@@ -707,7 +707,7 @@ alwaysApply: false
   },
   {
     audience:
-      "IBM Bob teams who want VS Code-style workspace defaults plus committed rules under `.bob/rules/` for IBM's AI coding assistant",
+      "IBM Bob teams who want VS Code-style workspace defaults plus committed rules in `AGENTS.md` for IBM's AI coding assistant",
     config: {
       extensionCommand: "code --install-extension",
       getContent: getVscodeConfig,
@@ -718,8 +718,8 @@ alwaysApply: false
     differentiators: [
       {
         description:
-          "IBM Bob reads workspace rules from `.bob/rules/` (and can load optional root `AGENTS.md`). Ultracite writes `.bob/rules/ultracite.md` so team standards live where Bob expects them while staying version-controlled.",
-        title: "Native `.bob/rules/` workflow",
+          "IBM Bob reads `AGENTS.md`, the same rules file used by many AI coding tools. Ultracite writes your standards there so they work across agents while staying version-controlled.",
+        title: "Shared AGENTS.md rules",
       },
       {
         description:
@@ -735,13 +735,13 @@ alwaysApply: false
     faq: [
       {
         answer:
-          "`--editors bob` updates `.vscode/settings.json`. `--agents bob` creates or appends `.bob/rules/ultracite.md` with Ultracite's coding rules. Use both when you want formatter defaults and Bob-readable project standards in one pass.",
+          "`--editors bob` updates `.vscode/settings.json`. `--agents bob` creates or appends `AGENTS.md` with Ultracite's coding rules. Use both when you want formatter defaults and Bob-readable project standards in one pass.",
         question:
           "Should I run Ultracite with both `--editors bob` and `--agents bob`?",
       },
       {
         answer:
-          "No. Bob supports `.bob/rules/`, `.bobrules`, mode-specific files, and optionally root `AGENTS.md`. Ultracite targets `.bob/rules/ultracite.md` for IBM Bob so rules sit in Bob's preferred workspace layout; you can still add `AGENTS.md` separately for tools that only read that file.",
+          "Bob supports `.bob/rules/`, `.bobrules`, mode-specific files, and `AGENTS.md`. Ultracite targets `AGENTS.md` so your standards are shared across Bob and other AI coding tools that read the same file.",
         question: "Does Bob only read AGENTS.md for workspace rules?",
       },
       {
@@ -756,19 +756,19 @@ alwaysApply: false
     name: "IBM Bob",
     rules: {
       appendMode: true,
-      path: ".bob/rules/ultracite.md",
+      path: "AGENTS.md",
     },
     seo: {
       metaDescription:
-        "Wire Ultracite to IBM Bob with `.vscode/settings.json` and `.bob/rules/ultracite.md` so IBM's AI follows formatters, linters, and repo coding standards.",
+        "Wire Ultracite to IBM Bob with `.vscode/settings.json` and `AGENTS.md` so IBM's AI follows formatters, linters, and repo coding standards.",
       summary:
-        "IBM Bob works well with Ultracite when you pair shared Visual Studio Code workspace settings with committed rules under `.bob/rules/`—matching how Bob loads workspace rules while keeping editor behavior predictable.",
+        "IBM Bob works well with Ultracite when you pair shared Visual Studio Code workspace settings with `AGENTS.md` rules—matching the standard format while keeping editor behavior predictable.",
     },
     subtitle: "IBM's AI coding assistant",
     workflowHighlights: [
       "Run `npx ultracite@latest init --editors bob` to generate `.vscode/settings.json` and the linter extension defaults Bob-compatible editors expect.",
-      "Run with `--agents bob` (or init both) to append `.bob/rules/ultracite.md` so Bob picks up Ultracite standards from the rules directory.",
-      "Optionally add root `AGENTS.md` or extra files under `.bob/rules/` for team-only instructions that complement Ultracite's file.",
+      "Run with `--agents bob` (or init both) to append `AGENTS.md` so Bob picks up Ultracite standards from the shared rules file.",
+      "Optionally add extra files under `.bob/rules/` for Bob-specific instructions that complement `AGENTS.md`.",
     ],
   },
   {
