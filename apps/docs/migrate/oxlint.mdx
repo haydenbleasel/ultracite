@@ -51,9 +51,7 @@ If you prefer more control over the process, create an `oxlint.config.ts` that e
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  extends: [
-    "./node_modules/ultracite/config/oxlint/core/oxlint.config.ts",
-  ],
+  extends: ["./node_modules/ultracite/config/oxlint/core/index.ts"],
 });
 ```
 

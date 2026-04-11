@@ -4,7 +4,7 @@ import { doctor } from "../src/commands/doctor";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
+  `./node_modules/ultracite/config/oxlint/${name}`;
 
 mock.module("cross-spawn", () => ({
   sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),

@@ -1,12 +1,11 @@
 import { defineConfig } from "oxlint";
 
+import core from "./packages/cli/config/oxlint/core/index.ts";
+import next from "./packages/cli/config/oxlint/next/index.ts";
+import react from "./packages/cli/config/oxlint/react/index.ts";
+
 export default defineConfig({
-  extends: [
-    "./packages/cli/config/oxlint/core/oxlint.config.ts",
-    "./packages/cli/config/oxlint/react/oxlint.config.ts",
-    "./packages/cli/config/oxlint/next/oxlint.config.ts",
-    "./packages/cli/config/oxlint/vitest/oxlint.config.ts",
-  ],
+  extends: [core, react, next],
   ignorePatterns: [
     "packages/design-system/components/ui",
     "packages/design-system/components/kibo-ui",
@@ -19,16 +18,19 @@ export default defineConfig({
     "packages/cli/config/biome",
     "test",
   ],
-  rules: {
-    "max-statements": "off",
-    complexity: "off",
-  },
   overrides: [
     {
-      files: ["packages/cli/src/oxlint.ts"],
+      files: [
+        "packages/cli/src/oxlint.ts",
+        "packages/cli/config/oxlint/**/*.ts",
+      ],
       rules: {
         "sort-keys": "off",
       },
     },
   ],
+  rules: {
+    complexity: "off",
+    "max-statements": "off",
+  },
 });

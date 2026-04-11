@@ -1,24 +1,10 @@
 import { defineConfig } from "oxfmt";
 
 export default defineConfig({
-  printWidth: 80,
-  tabWidth: 2,
-  useTabs: false,
-  semi: true,
-  singleQuote: false,
-  quoteProps: "as-needed",
-  jsxSingleQuote: false,
-  trailingComma: "es5",
-  bracketSpacing: true,
-  bracketSameLine: false,
   arrowParens: "always",
+  bracketSameLine: false,
+  bracketSpacing: true,
   endOfLine: "lf",
-  sortPackageJson: true,
-  sortImports: {
-    ignoreCase: true,
-    newlinesBetween: true,
-    order: "asc",
-  },
   ignorePatterns: [
     "packages/design-system/components/ui",
     "packages/design-system/components/kibo-ui",
@@ -31,4 +17,18 @@ export default defineConfig({
     "packages/cli/config/biome",
     "test",
   ],
+  jsxSingleQuote: false,
+  printWidth: 80,
+  quoteProps: "as-needed",
+  semi: true,
+  singleQuote: false,
+  sortImports: {
+    ignoreCase: true,
+    newlinesBetween: true,
+    order: "asc",
+  },
+  sortPackageJson: true,
+  tabWidth: 2,
+  trailingComma: "es5",
+  useTabs: false,
 });

@@ -4,10 +4,7 @@ import { join } from "node:path";
 import { configs, core, next, react } from "../src/oxlint";
 
 const readOxlintConfig = async (name: string) => {
-  const configPath = join(
-    import.meta.dirname,
-    `../config/oxlint/${name}/oxlint.config.ts`
-  );
+  const configPath = join(import.meta.dirname, `../config/oxlint/${name}`);
   const mod = await import(configPath);
 
   return mod.default;

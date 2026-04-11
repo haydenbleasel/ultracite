@@ -1,6 +1,33 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
+  categories: {
+    correctness: "error",
+    pedantic: "error",
+    perf: "error",
+    restriction: "error",
+    style: "error",
+    suspicious: "error",
+  },
+  env: {
+    browser: true,
+  },
+  overrides: [
+    {
+      // Shared test file overrides — framework-specific test rules
+      // are in separate jest/ and vitest/ configs to avoid conflicts.
+      files: [
+        "**/*.{test,spec}.{ts,tsx,js,jsx}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx}",
+      ],
+      rules: {
+        // Disabled: mock callbacks often need empty functions
+        "no-empty-function": "off",
+        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
+        "promise/prefer-await-to-then": "off",
+      },
+    },
+  ],
   plugins: [
     "eslint",
     "typescript",
@@ -11,17 +38,6 @@ export default defineConfig({
     "node",
     "promise",
   ],
-  env: {
-    browser: true,
-  },
-  categories: {
-    correctness: "error",
-    perf: "error",
-    restriction: "error",
-    suspicious: "error",
-    pedantic: "error",
-    style: "error",
-  },
   rules: {
     "no-await-in-loop": "off",
     "max-lines-per-function": "off",
@@ -100,20 +116,4 @@ export default defineConfig({
     "promise/catch-or-return": "off",
     "promise/always-return": "off",
   },
-  overrides: [
-    {
-      // Shared test file overrides — framework-specific test rules
-      // are in separate jest/ and vitest/ configs to avoid conflicts.
-      files: [
-        "**/*.{test,spec}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}",
-      ],
-      rules: {
-        // Disabled: mock callbacks often need empty functions
-        "no-empty-function": "off",
-        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
-        "promise/prefer-await-to-then": "off",
-      },
-    },
-  ],
 });

@@ -57,9 +57,7 @@ describe("oxfmt", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
-      expect(writtenContent).toContain(
-        'import { defineConfig } from "oxfmt"'
-      );
+      expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
       expect(writtenContent).toContain("defineConfig(");
       expect(writtenContent).toContain('"printWidth": 80');
       expect(writtenContent).toContain('"tabWidth": 2');

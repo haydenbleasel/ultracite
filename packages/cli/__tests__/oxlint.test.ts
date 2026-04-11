@@ -4,7 +4,7 @@ import { oxlint } from "../src/linters/oxlint";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
+  `./node_modules/ultracite/config/oxlint/${name}`;
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -162,7 +162,10 @@ export default defineConfig({
       const content = writeCall[1] as string;
       // Should only appear once
       const coreMatches = content.match(
-        new RegExp(getOxlintConfigPath("core").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")
+        new RegExp(
+          getOxlintConfigPath("core").replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+          "g"
+        )
       );
       expect(coreMatches?.length).toBe(1);
     });

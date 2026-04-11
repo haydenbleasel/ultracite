@@ -13,12 +13,10 @@ interface OxlintOptions {
 // Helper to generate the full node_modules path for oxlint configs
 // Oxlint doesn't support Node.js package exports, so we need explicit paths
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
+  `./node_modules/ultracite/config/oxlint/${name}`;
 
 const generateConfigContent = (extendsList: string[]) => {
-  const extendsFormatted = extendsList
-    .map((ext) => `    "${ext}",`)
-    .join("\n");
+  const extendsFormatted = extendsList.map((ext) => `    "${ext}",`).join("\n");
 
   return `import { defineConfig } from "oxlint";
 
@@ -41,16 +39,17 @@ export const oxlint = {
       }
     }
 
-    return await writeFile(oxlintConfigPath, generateConfigContent(extendsList));
+    return await writeFile(
+      oxlintConfigPath,
+      generateConfigContent(extendsList)
+    );
   },
   exists: async () => await exists(oxlintConfigPath),
   update: async (opts?: OxlintOptions) => {
     const existingContents = await readFile(oxlintConfigPath, "utf-8");
 
     // Extract extends array from existing TS config
-    const extendsMatch = existingContents.match(
-      /extends:\s*\[([\s\S]*?)\]/
-    );
+    const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/);
     const existingExtends: string[] = [];
 
     if (extendsMatch?.[1]) {

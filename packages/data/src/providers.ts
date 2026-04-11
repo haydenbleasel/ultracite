@@ -237,7 +237,7 @@ export default defineConfig([
 
 export default defineConfig({
   extends: [
-    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}/oxlint.config.ts"`).join(",\n    ")}
+    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}"`).join(",\n    ")}
   ],
 });`,
         lang: "typescript",

@@ -14,9 +14,7 @@ const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.error(
-      `  Error: ${error instanceof Error ? error.message : error}`
-    );
+    console.error(`  Error: ${error instanceof Error ? error.message : error}`);
     return false;
   }
 };
@@ -30,7 +28,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, "oxlint.config.ts");
+    const configPath = join(configDir, framework, "index.ts");
     const valid = await validateOxlintConfig(configPath);
 
     results.push({ framework, valid });

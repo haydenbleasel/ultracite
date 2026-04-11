@@ -9,10 +9,7 @@ import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 
 const readOxlintConfig = async (name: string) => {
-  const configPath = join(
-    import.meta.dirname,
-    `../config/oxlint/${name}/oxlint.config.ts`
-  );
+  const configPath = join(import.meta.dirname, `../config/oxlint/${name}`);
   const mod = await import(configPath);
   return mod.default;
 };

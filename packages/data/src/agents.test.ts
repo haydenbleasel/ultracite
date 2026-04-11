@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
+import { resolve } from "node:path";
 
 const decoder = new TextDecoder();
+const monorepoRoot = resolve(import.meta.dir, "../../..");
 
 interface AgentSummary {
   category: string;
@@ -62,7 +64,7 @@ const loadAgentsSummary = () => {
         console.log(JSON.stringify(summary));
       `,
     ],
-    cwd: process.cwd(),
+    cwd: monorepoRoot,
     stderr: "pipe",
     stdout: "pipe",
   });
