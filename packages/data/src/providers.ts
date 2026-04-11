@@ -235,7 +235,7 @@ export default defineConfig([
       {
         code: (presets: string[]) => `import { defineConfig } from "oxlint";
 
-${presets.map((p) => `import ${p} from "ultracite/config/oxlint/${p}/index.js";`).join("\n")}
+${presets.map((p) => `import ${p} from "ultracite/oxlint/${p}/index.js";`).join("\n")}
 
 export default defineConfig({
   extends: [
@@ -246,19 +246,9 @@ export default defineConfig({
         name: "oxlint.config.ts",
       },
       {
-        code: () => `import { defineConfig } from "oxfmt";
+        code: () => `import config from "ultracite/oxfmt";
 
-export default defineConfig({
-  tabWidth: 2,
-  useTabs: false,
-  semi: true,
-  singleQuote: true,
-  trailingComma: "es5",
-  bracketSpacing: true,
-  arrowParens: "always",
-  proseWrap: "never",
-  printWidth: 80,
-});`,
+export default config;`,
         lang: "typescript",
         name: "oxfmt.config.ts",
       },

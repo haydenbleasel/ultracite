@@ -11,7 +11,7 @@ interface OxlintOptions {
 }
 
 // Helper to generate the module path for oxlint config imports
-const getOxlintConfigPath = (name: string) => `ultracite/config/oxlint/${name}`;
+const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 
 // Helper to generate a valid import identifier from a config name
 const getOxlintConfigIdentifier = (configPath: string) => {
@@ -66,12 +66,12 @@ export const oxlint = {
     // Extract import paths from existing config (supports both string extends and JS imports)
     const existingExtends: string[] = [];
 
-    // Check for JS imports: import x from "ultracite/config/oxlint/..."
+    // Check for JS imports: import x from "ultracite/oxlint/..."
     const importMatches = existingContents.matchAll(
       /import \w+ from ["']([^"']+)["']/g
     );
     for (const match of importMatches) {
-      if (match[1].startsWith("ultracite/config/oxlint/")) {
+      if (match[1].startsWith("ultracite/oxlint/")) {
         existingExtends.push(match[1].replace(/\/index\.[tj]s$/, ""));
       }
     }
@@ -85,7 +85,7 @@ export const oxlint = {
           // Convert legacy node_modules paths to new format
           const converted = match[1].replace(
             /^\.\/node_modules\/ultracite\/config\/oxlint\//,
-            "ultracite/config/oxlint/"
+            "ultracite/oxlint/"
           );
           existingExtends.push(converted);
         }
