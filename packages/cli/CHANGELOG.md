@@ -1,3 +1,9 @@
+## 7.5.5
+
+### Patch Changes
+
+- 5437f81: Attempt to fix oxlint/oxfmt AGAIN
+
 ## 7.5.4
 
 ### Patch Changes
