@@ -1038,6 +1038,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
+      // Oxlint + Oxfmt config files use ESM imports, so ensure "type": "module" is set
+      await updatePackageJson({ type: "module" });
       await upsertOxlintConfig(frameworks, quiet);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);

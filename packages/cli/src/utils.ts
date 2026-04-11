@@ -37,10 +37,12 @@ export const updatePackageJson = async ({
   dependencies,
   devDependencies,
   scripts,
+  type,
 }: {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
   scripts?: Record<string, string>;
+  type?: string;
 }) => {
   const packageJsonContent = await readFile("package.json", "utf-8");
   const packageJsonObject = JSON.parse(packageJsonContent);
@@ -48,6 +50,10 @@ export const updatePackageJson = async ({
   const newPackageJsonObject = {
     ...packageJsonObject,
   };
+
+  if (type) {
+    newPackageJsonObject.type = type;
+  }
 
   // Only add devDependencies if they exist in the original package.json or are being added
   if (packageJsonObject.devDependencies || devDependencies) {

@@ -23,7 +23,7 @@ const generateConfigContent = (extendsList: string[]) => {
   const imports = extendsList
     .map(
       (ext) =>
-        `import ${getOxlintConfigIdentifier(ext)} from "${ext}/index.ts";`
+        `import ${getOxlintConfigIdentifier(ext)} from "${ext}/index.js";`
     )
     .join("\n");
 
@@ -72,7 +72,7 @@ export const oxlint = {
     );
     for (const match of importMatches) {
       if (match[1].startsWith("ultracite/config/oxlint/")) {
-        existingExtends.push(match[1].replace(/\/index\.ts$/, ""));
+        existingExtends.push(match[1].replace(/\/index\.[tj]s$/, ""));
       }
     }
 
