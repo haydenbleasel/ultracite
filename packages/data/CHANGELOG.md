@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.8
+
+### Patch Changes
+
+- 6a583d1: Fix oxfmt setup config
+
 ## 2.1.7
 
 ### Patch Changes
