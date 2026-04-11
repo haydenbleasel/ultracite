@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 
 import { editors } from "@repo/data/editors";
-import type { Linter } from "@repo/data/providers";
+import type { ProviderId } from "@repo/data/providers";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
@@ -10,7 +10,7 @@ import { ensureDirectory, exists } from "./utils";
 
 export const createEditorConfig = (
   editorId: string,
-  linter: Linter = "biome"
+  linter: ProviderId = "biome"
 ) => {
   const editor = editors.find((e) => e.id === editorId);
 

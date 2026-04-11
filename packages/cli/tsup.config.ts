@@ -1,8 +1,9 @@
+import type { Options } from "tsup";
 import { defineConfig } from "tsup";
 
-const sharedConfig = {
+const sharedConfig: Options = {
   dts: true,
-  format: ["esm"] as const,
+  format: ["esm"],
   minify: true,
   noExternal: ["@repo/data"],
   outDir: "dist",

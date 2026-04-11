@@ -54,9 +54,9 @@ export const lefthook = {
       },
     });
 
-    const installCommand = dlxCommand(packageManager, "lefthook", {
+    const installCommand = dlxCommand(packageManager.name, "lefthook", {
       args: ["install"],
-      short: packageManager === "npm",
+      short: packageManager.name === "npm",
     });
 
     execSync(installCommand, { stdio: "pipe" });

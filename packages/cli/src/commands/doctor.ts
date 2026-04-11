@@ -53,7 +53,7 @@ const checkBiomeInstallation = (): DiagnosticCheck => {
 
   if (biomeCheck.status === 0 && biomeCheck.stdout) {
     return {
-      message: `Biome is installed (${biomeCheck.stdout.trim()})`,
+      message: `Biome is installed (${String(biomeCheck.stdout).trim()})`,
       name: "Biome installation",
       status: "pass",
     };
@@ -74,7 +74,7 @@ const checkEslintInstallation = (): DiagnosticCheck => {
 
   if (eslintCheck.status === 0 && eslintCheck.stdout) {
     return {
-      message: `ESLint is installed (${eslintCheck.stdout.trim()})`,
+      message: `ESLint is installed (${String(eslintCheck.stdout).trim()})`,
       name: "ESLint installation",
       status: "pass",
     };
@@ -95,7 +95,7 @@ const checkOxlintInstallation = (): DiagnosticCheck => {
 
   if (oxlintCheck.status === 0 && oxlintCheck.stdout) {
     return {
-      message: `Oxlint is installed (${oxlintCheck.stdout.trim()})`,
+      message: `Oxlint is installed (${String(oxlintCheck.stdout).trim()})`,
       name: "Oxlint installation",
       status: "pass",
     };

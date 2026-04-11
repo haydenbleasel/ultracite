@@ -16,7 +16,7 @@ const runCommand = (
   script: string,
   args: string[] = []
 ): string => {
-  const parts = [packageManager];
+  const parts: string[] = [packageManager];
 
   if (packageManager === "npm") {
     parts.push("run");
