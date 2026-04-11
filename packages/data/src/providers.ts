@@ -11,7 +11,7 @@ export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface ConfigFile {
   code: (presets: string[]) => string;
-  lang: "json" | "javascript";
+  lang: "json" | "javascript" | "typescript";
   name: string;
 }
 
