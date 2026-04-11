@@ -44,7 +44,9 @@ describe("oxfmt", () => {
 
   describe("create", () => {
     test("creates oxfmt config with default settings", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -70,7 +72,9 @@ describe("oxfmt", () => {
 
   describe("update", () => {
     test("merges existing config with defaults", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       const existingConfig = `import { defineConfig } from "oxfmt";
 
 export default defineConfig({
@@ -104,7 +108,9 @@ export default defineConfig({
     });
 
     test("handles invalid config gracefully", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./oxfmt.config.ts") {

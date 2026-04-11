@@ -64,7 +64,9 @@ describe("zed editor config", () => {
     });
 
     test("creates settings.json with default config", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -86,7 +88,9 @@ describe("zed editor config", () => {
   describe("update", () => {
     test("merges with existing settings", async () => {
       const existingSettings = '{"theme": "dark"}';
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -104,7 +108,9 @@ describe("zed editor config", () => {
     });
 
     test("handles invalid JSON gracefully", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),

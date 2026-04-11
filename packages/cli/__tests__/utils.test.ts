@@ -104,7 +104,9 @@ describe("isMonorepo", () => {
 
 describe("updatePackageJson", () => {
   test("updates devDependencies", async () => {
-    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -129,7 +131,9 @@ describe("updatePackageJson", () => {
   });
 
   test("updates dependencies", async () => {
-    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -154,7 +158,9 @@ describe("updatePackageJson", () => {
   });
 
   test("updates scripts", async () => {
-    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>

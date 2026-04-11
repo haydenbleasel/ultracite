@@ -83,7 +83,12 @@ describe("doctor", () => {
   });
 
   test("checks biome using the bare executable with shell disabled", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0, stdout: "1.0.0" }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+        stdout: "1.0.0",
+      })
+    );
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {
       // noop
     });

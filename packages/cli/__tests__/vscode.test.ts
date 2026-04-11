@@ -69,7 +69,9 @@ describe("vscode editor config", () => {
     });
 
     test("creates settings.json with default config", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -94,7 +96,9 @@ describe("vscode editor config", () => {
   describe("update", () => {
     test("merges with existing settings", async () => {
       const existingSettings = '{"editor.tabSize": 4}';
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -115,7 +119,9 @@ describe("vscode editor config", () => {
     });
 
     test("handles invalid JSON gracefully", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),

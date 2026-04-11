@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+
 import type { PackageManager } from "nypm";
 
 import { lefthook } from "../src/integrations/lefthook";
 
-const npmPm = { name: "npm", command: "npm" } as PackageManager;
+const npmPm = { command: "npm", name: "npm" } as PackageManager;
 
 mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
@@ -121,8 +122,12 @@ describe("lefthook", () => {
     });
 
     test("adds prepare script to package.json", async () => {
-      const mockReadFile = mock((_path: string) => Promise.resolve('{"name": "test"}'));
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockReadFile = mock((_path: string) =>
+        Promise.resolve('{"name": "test"}')
+      );
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -158,7 +163,9 @@ describe("lefthook", () => {
 
   describe("create", () => {
     test("creates lefthook.yml with correct content", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -192,7 +199,9 @@ describe("lefthook", () => {
     test("skips update if ultracite command already present", async () => {
       const existingContent =
         "pre-commit:\n  jobs:\n    - run: npx ultracite fix";
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -219,7 +228,9 @@ describe("lefthook", () => {
 
     test("replaces default template with ultracite config", async () => {
       const existingContent = "# EXAMPLE USAGE:\n# pre-commit:\n#   commands:";
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -249,7 +260,9 @@ describe("lefthook", () => {
 
     test("adds ultracite job to existing jobs section", async () => {
       const existingContent = 'pre-commit:\n  jobs:\n    - run: echo "test"';
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -279,7 +292,9 @@ describe("lefthook", () => {
 
     test("adds jobs section to pre-commit without jobs", async () => {
       const existingContent = "pre-commit:\n  parallel: true";
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),

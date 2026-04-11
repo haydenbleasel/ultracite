@@ -85,7 +85,9 @@ describe("tsconfig", () => {
     });
 
     test("adds strictNullChecks when not present", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("glob", () => ({
         glob: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
@@ -107,7 +109,9 @@ describe("tsconfig", () => {
     });
 
     test("preserves comments when modifying tsconfig", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       const tsconfigWithComments = `{
   // This is a comment
   "compilerOptions": {
@@ -127,7 +131,7 @@ describe("tsconfig", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = writeCall[1];
+      const [, writtenContent] = writeCall;
       // Comments should be preserved
       expect(writtenContent).toContain("// This is a comment");
     });
@@ -151,7 +155,9 @@ describe("tsconfig", () => {
     });
 
     test("handles invalid JSON gracefully", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
       mock.module("glob", () => ({
         glob: mock(() => Promise.resolve(["tsconfig.json"])),
       }));

@@ -8,7 +8,11 @@ describe("fix", () => {
   });
 
   test("runs biome check with --write flag", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -28,7 +32,11 @@ describe("fix", () => {
   });
 
   test("runs biome fix with specific files", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -45,7 +53,11 @@ describe("fix", () => {
   });
 
   test("passes through --unsafe option to biome", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -61,7 +73,11 @@ describe("fix", () => {
   });
 
   test("does not include --unsafe when passthrough is empty", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -77,7 +93,11 @@ describe("fix", () => {
   });
 
   test("handles files with special characters", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -93,7 +113,11 @@ describe("fix", () => {
   });
 
   test("passes absolute Next.js route-group paths through without quoting", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     const routeGroupFile =
       "/abs/path/apps/app/src/app/(app)/dashboard/page.tsx";
     mock.module("cross-spawn", () => ({
@@ -111,7 +135,11 @@ describe("fix", () => {
   });
 
   test("exits with status code when biome fix finds errors", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 1 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 1,
+      })
+    );
     const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
@@ -127,10 +155,12 @@ describe("fix", () => {
   });
 
   test("exits when spawn returns error", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
-      error: new Error("spawn failed"),
-      status: null,
-    }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        error: new Error("spawn failed"),
+        status: null,
+      })
+    );
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -143,7 +173,11 @@ describe("fix", () => {
   });
 
   test("throws when no linter configuration found", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -155,7 +189,11 @@ describe("fix", () => {
   });
 
   test("runs eslint fix when linter is eslint (runs prettier, eslint, stylelint)", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -176,7 +214,11 @@ describe("fix", () => {
   });
 
   test("runs eslint fix with specific files", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -192,7 +234,11 @@ describe("fix", () => {
   });
 
   test("eslint fix exits with status code when prettier fails", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 1 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 1,
+      })
+    );
     const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
@@ -208,10 +254,12 @@ describe("fix", () => {
   });
 
   test("eslint fix throws on prettier spawn error", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
-      error: new Error("prettier spawn failed"),
-      status: null,
-    }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        error: new Error("prettier spawn failed"),
+        status: null,
+      })
+    );
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -227,17 +275,19 @@ describe("fix", () => {
 
   test("eslint fix throws on eslint spawn error", async () => {
     let callCount = 0;
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
-      callCount += 1;
-      // prettier succeeds
-      if (callCount === 1) {
-        return { status: 0 };
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+        callCount += 1;
+        // prettier succeeds
+        if (callCount === 1) {
+          return { status: 0 };
+        }
+        return {
+          error: new Error("eslint spawn failed"),
+          status: null,
+        };
       }
-      return {
-        error: new Error("eslint spawn failed"),
-        status: null,
-      };
-    });
+    );
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -253,17 +303,19 @@ describe("fix", () => {
 
   test("eslint fix throws on stylelint spawn error", async () => {
     let callCount = 0;
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
-      callCount += 1;
-      // prettier and eslint succeed
-      if (callCount <= 2) {
-        return { status: 0 };
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+        callCount += 1;
+        // prettier and eslint succeed
+        if (callCount <= 2) {
+          return { status: 0 };
+        }
+        return {
+          error: new Error("stylelint spawn failed"),
+          status: null,
+        };
       }
-      return {
-        error: new Error("stylelint spawn failed"),
-        status: null,
-      };
-    });
+    );
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -278,7 +330,11 @@ describe("fix", () => {
   });
 
   test("runs oxlint fix when linter is oxlint (runs oxfmt, oxlint)", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -297,7 +353,11 @@ describe("fix", () => {
   });
 
   test("runs oxlint fix with specific files", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -313,10 +373,12 @@ describe("fix", () => {
   });
 
   test("oxlint fix throws on spawn error", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
-      error: new Error("oxfmt spawn failed"),
-      status: null,
-    }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        error: new Error("oxfmt spawn failed"),
+        status: null,
+      })
+    );
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -331,7 +393,11 @@ describe("fix", () => {
   });
 
   test("oxlint fix exits with status code on failure", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 1 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 1,
+      })
+    );
     const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
@@ -347,7 +413,11 @@ describe("fix", () => {
   });
 
   test("passes through --type-aware flag to oxlint", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -363,7 +433,11 @@ describe("fix", () => {
   });
 
   test("passes through --type-check flag to oxlint", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -379,7 +453,11 @@ describe("fix", () => {
   });
 
   test("passes through multiple flags to oxlint", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -396,7 +474,11 @@ describe("fix", () => {
   });
 
   test("does not include flags when passthrough is empty", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -413,7 +495,11 @@ describe("fix", () => {
   });
 
   test("converts --unsafe to --fix-dangerously for oxlint", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));
@@ -430,7 +516,11 @@ describe("fix", () => {
   });
 
   test("keeps bare biome resolution with shell disabled for Windows compatibility", async () => {
-    const mockSpawn = mock((_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({ status: 0 }));
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
     }));

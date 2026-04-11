@@ -37,7 +37,9 @@ describe("createAgents", () => {
 
   describe("copilot agent", () => {
     test("create creates AGENTS.md instructions", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
@@ -57,7 +59,9 @@ describe("createAgents", () => {
 
     test("update uses append mode", async () => {
       const existingContent = "Existing instructions";
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -76,7 +80,9 @@ describe("createAgents", () => {
 
   describe("cline agent", () => {
     test("create creates AGENTS.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -95,7 +101,9 @@ describe("createAgents", () => {
 
     test("update appends to AGENTS.md file", async () => {
       const existingContent = "Existing AGENTS rules";
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -112,7 +120,9 @@ describe("createAgents", () => {
     });
 
     test("update creates file when it does not exist in append mode", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
@@ -133,7 +143,9 @@ describe("createAgents", () => {
 
   describe("replit agent", () => {
     test("create creates replit.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -153,7 +165,9 @@ describe("createAgents", () => {
 
   describe("claude agent", () => {
     test("create creates CLAUDE.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -173,7 +187,9 @@ describe("createAgents", () => {
 
   describe("directory creation", () => {
     test("creates parent directory when needed", async () => {
-      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) => Promise.resolve());
+      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -191,7 +207,9 @@ describe("createAgents", () => {
     });
 
     test("does not create directory for root-level files", async () => {
-      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) => Promise.resolve());
+      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) =>
+        Promise.resolve()
+      );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
