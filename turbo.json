@@ -11,7 +11,9 @@
     "test": {},
     "test:coverage": {},
     "lint": {},
-    "check-types": {},
+    "check-types": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
