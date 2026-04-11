@@ -1,32 +1,22 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 const configDir = join(import.meta.dirname, "../packages/cli/config/oxlint");
 
-const stripJsonComments = (content: string): string =>
-  content
-    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
-    .replaceAll(/\/\/.*$/gm, "")
-    .replaceAll(/,(\s*[}\]])/g, "$1");
-
 const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
   try {
-    const content = await readFile(configPath, "utf-8");
-    const cleanJson = stripJsonComments(content);
-    const config = JSON.parse(cleanJson);
+    const mod = await import(configPath);
 
-    if (typeof config !== "object" || config === null) {
-      return false;
-    }
-
-    if (!config.$schema?.includes("oxlint")) {
-      console.error("  Missing or invalid $schema");
+    if (typeof mod.default !== "object" || mod.default === null) {
+      console.error("  Missing or invalid default export");
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error(`  Error: ${error instanceof Error ? error.message : error}`);
+    console.error(
+      `  Error: ${error instanceof Error ? error.message : error}`
+    );
     return false;
   }
 };
@@ -40,7 +30,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, ".oxlintrc.json");
+    const configPath = join(configDir, framework, "oxlint.config.ts");
     const valid = await validateOxlintConfig(configPath);
 
     results.push({ framework, valid });

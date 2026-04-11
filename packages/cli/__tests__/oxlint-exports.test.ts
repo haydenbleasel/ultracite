@@ -1,26 +1,21 @@
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 
-import { parse } from "jsonc-parser";
-
 import { configs, core, next, react } from "../src/oxlint";
 
 const readOxlintConfig = async (name: string) => {
   const configPath = join(
     import.meta.dirname,
-    `../config/oxlint/${name}/.oxlintrc.json`
+    `../config/oxlint/${name}/oxlint.config.ts`
   );
-  const content = await Bun.file(configPath).text();
-  const config = parse(content) as Record<string, unknown>;
+  const mod = await import(configPath);
 
-  delete config.$schema;
-
-  return config;
+  return mod.default;
 };
 
 describe("oxlint TypeScript exports", () => {
   test.each(Object.entries(configs))(
-    "%s matches the published JSON preset",
+    "%s matches the published TS preset",
     async (name, config) => {
       expect(config).toEqual(await readOxlintConfig(name));
     }

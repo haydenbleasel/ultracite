@@ -1822,7 +1822,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
-          if (path === "./.oxlintrc.json") {
+          if (path === "./oxlint.config.ts") {
             return Promise.resolve();
           }
           return Promise.reject(new Error("ENOENT"));

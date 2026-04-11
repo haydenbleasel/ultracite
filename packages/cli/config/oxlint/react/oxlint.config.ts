@@ -1,7 +1,8 @@
-{
-  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "react-perf", "jsx-a11y"],
-  "rules": {
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  plugins: ["react", "react-perf", "jsx-a11y"],
+  rules: {
     "react/only-export-components": "off",
     "react/jsx-boolean-value": "off",
     "react/react-in-jsx-scope": "off",
@@ -15,6 +16,6 @@
     "react-perf/jsx-no-new-object-as-prop": "off",
     "react-perf/jsx-no-new-array-as-prop": "off",
 
-    "jsx-a11y/no-autofocus": "off"
-  }
-}
+    "jsx-a11y/no-autofocus": "off",
+  },
+});

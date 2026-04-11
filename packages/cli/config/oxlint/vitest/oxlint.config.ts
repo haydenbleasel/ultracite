@@ -1,13 +1,14 @@
-{
-  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
-  "overrides": [
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  overrides: [
     {
-      "files": [
+      files: [
         "**/*.{test,spec}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}"
+        "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
-      "plugins": ["vitest"],
-      "rules": {
+      plugins: ["vitest"],
+      rules: {
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
         // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
@@ -66,8 +67,8 @@
         "vitest/valid-describe-callback": "error",
         "vitest/valid-expect": "error",
         "vitest/valid-title": "error",
-        "vitest/warn-todo": "error"
-      }
-    }
-  ]
-}
+        "vitest/warn-todo": "error",
+      },
+    },
+  ],
+});

@@ -1,13 +1,14 @@
-{
-  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
-  "overrides": [
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  overrides: [
     {
-      "files": [
+      files: [
         "**/*.{test,spec}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}"
+        "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
-      "plugins": ["jest"],
-      "rules": {
+      plugins: ["jest"],
+      rules: {
         // Disabled: bun:test mock.module() must be called at top level
         "jest/require-hook": "off",
         // Disabled: mock factories use conditionals for path-based routing
@@ -67,8 +68,8 @@
         "jest/require-top-level-describe": "error",
         "jest/valid-describe-callback": "error",
         "jest/valid-expect": "error",
-        "jest/valid-title": "error"
-      }
-    }
-  ]
-}
+        "jest/valid-title": "error",
+      },
+    },
+  ],
+});

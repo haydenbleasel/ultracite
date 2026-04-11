@@ -89,16 +89,18 @@ If you'd like to switch to the fastest option:
 npx ultracite init --linter oxlint
 ```
 
-This will create `.oxlintrc.json` and `.oxfmtrc.jsonc` files:
+This will create `oxlint.config.ts` and `oxfmt.config.ts` files:
 
-```jsonc title=".oxlintrc.json"
-{
-  "extends": [
-    "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
-    "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
-    "./node_modules/ultracite/config/oxlint/next/.oxlintrc.json",
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    "./node_modules/ultracite/config/oxlint/core/oxlint.config.ts",
+    "./node_modules/ultracite/config/oxlint/react/oxlint.config.ts",
+    "./node_modules/ultracite/config/oxlint/next/oxlint.config.ts",
   ],
-}
+});
 ```
 
 ## Quick Upgrade

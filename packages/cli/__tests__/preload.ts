@@ -61,8 +61,8 @@ mock.module("@repo/data/providers", () => ({
     },
     {
       configFiles: [
-        { code: () => "{}", lang: "json", name: ".oxlintrc.json" },
-        { code: () => "{}", lang: "json", name: ".oxfmtrc.jsonc" },
+        { code: () => "", lang: "typescript", name: "oxlint.config.ts" },
+        { code: () => "", lang: "typescript", name: "oxfmt.config.ts" },
       ],
       description: "50-100x faster than ESLint",
       id: "oxlint",

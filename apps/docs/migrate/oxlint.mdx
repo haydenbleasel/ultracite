@@ -19,7 +19,7 @@ Make sure you have:
 
 - An existing project using Oxlint
 - Node.js v14.18+ (Node 18+ recommended)
-- An Oxlint configuration file (e.g., `.oxlintrc.json`)
+- An Oxlint configuration file (e.g., `oxlint.config.ts`)
 
 ## Migration Options
 
@@ -34,23 +34,27 @@ npx ultracite init
 When prompted, select **Oxlint** as your linting provider. This will:
 
 - Install Ultracite as a dependency
-- Merge your existing `.oxlintrc.json` with Ultracite's preset
-- Create an `.oxfmtrc.jsonc` for formatting configuration
+- Merge your existing `oxlint.config.ts` with Ultracite's preset
+- Create an `oxfmt.config.ts` for formatting configuration
 - Merge your existing `.vscode/settings.json` with Ultracite's preset
 - Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
 - Preserve your custom rules and settings
 - Set up editor integrations
 
-Following the upgrade, you may want to review your `.oxlintrc.json` file to remove any overrides that are now handled by Ultracite's preset.
+Following the upgrade, you may want to review your `oxlint.config.ts` file to remove any overrides that are now handled by Ultracite's preset.
 
 ### Option 2: Manual Migration
 
-If you prefer more control over the process, update your `.oxlintrc.json` to extend Ultracite:
+If you prefer more control over the process, create an `oxlint.config.ts` that extends Ultracite:
 
-```jsonc title=".oxlintrc.json"
-{
-  "extends": ["./node_modules/ultracite/config/oxlint/core/.oxlintrc.json"],
-}
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    "./node_modules/ultracite/config/oxlint/core/oxlint.config.ts",
+  ],
+});
 ```
 
 After the migration, restart your editor to ensure the new configuration is applied.

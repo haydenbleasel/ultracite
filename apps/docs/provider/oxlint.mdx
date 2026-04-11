@@ -16,40 +16,48 @@ description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritiz
 
 ## Usage
 
-Ultracite generates two config files for Oxlint:
+Ultracite generates two TypeScript config files for Oxlint:
 
-```jsonc title=".oxlintrc.json"
-{
-  "extends": ["./node_modules/ultracite/config/oxlint/core/.oxlintrc.json"],
-}
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    "./node_modules/ultracite/config/oxlint/core/oxlint.config.ts",
+  ],
+});
 ```
 
-```jsonc title=".oxfmtrc.jsonc"
-{
-  "tabWidth": 2,
-  "useTabs": false,
-  "semi": true,
-  "singleQuote": false,
-  "trailingComma": "es5",
-  "bracketSpacing": true,
-  "arrowParens": "always",
-  "printWidth": 80,
-}
+```ts title="oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+
+export default defineConfig({
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  singleQuote: false,
+  trailingComma: "es5",
+  bracketSpacing: true,
+  arrowParens: "always",
+  printWidth: 80,
+});
 ```
 
 Add framework presets as needed:
 
-```jsonc title=".oxlintrc.json"
-{
-  "extends": [
-    "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json",
-    "./node_modules/ultracite/config/oxlint/react/.oxlintrc.json",
-    "./node_modules/ultracite/config/oxlint/next/.oxlintrc.json",
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    "./node_modules/ultracite/config/oxlint/core/oxlint.config.ts",
+    "./node_modules/ultracite/config/oxlint/react/oxlint.config.ts",
+    "./node_modules/ultracite/config/oxlint/next/oxlint.config.ts",
   ],
-}
+});
 ```
 
-If you prefer `oxlint.config.ts`, use Ultracite's typed exports instead of importing the JSON presets directly:
+You can also use Ultracite's typed exports for a more ergonomic API:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
