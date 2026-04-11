@@ -37,7 +37,7 @@ Hundreds of preconfigured rules optimized for JavaScript and TypeScript projects
 
 ### 🤖 AI-Ready
 
-Generate rules for 20+ AI agents including Claude Code, GitHub Copilot, Cursor, Gemini, and more. Ensures consistent code style across all team members and AI models.
+Generate rules for 40+ AI agents including Claude Code, GitHub Copilot, Cursor, Gemini, and more. Ensures consistent code style across all team members and AI models.
 
 ### 🏗️ Monorepo Ready
 

@@ -20,17 +20,17 @@ export const IdePreview = () => (
       <div className="order-1 grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:order-0 xl:grid-cols-1 xl:gap-0">
         <Indicator
           className="xl:mt-5"
-          description="Add formatting rules for AI agents and run Ultracite in agent loops."
+          description="Ultracite supports 40+ agents for formatting rules and hooks."
           title="Agent Integration"
         />
         <Indicator
           className="xl:mt-10"
-          description="Automatically generate editor-specific rule files to work with Ultracite."
+          description="Automatically generate editor files for format on save, auto-fixes, and TypeScript defaults."
           title="Editor configuration"
         />
         <Indicator
           className="xl:mt-24"
-          description="Zero configuration Biome configuration out of the box."
+          description="Zero configuration linter and formatter config out of the box."
           title="Configurable spec"
         />
       </div>
@@ -51,7 +51,7 @@ export const IdePreview = () => (
         />
         <Indicator
           className="xl:mt-24"
-          description="Biome uses the VS Code output panel to show problems."
+          description="Ultracite uses the VS Code output panel to show problems."
           reverse
           title="Output panel"
         />
