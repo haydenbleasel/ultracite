@@ -15,8 +15,7 @@ import { ProviderSelector } from "./provider-selector";
 const getIcon = (lang: ConfigFile["lang"]) =>
   lang === "json" ? SiJson : SiJavascript;
 
-const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
-  lang === "json" ? "json" : "js";
+const getLang = (lang: ConfigFile["lang"]): BundledLanguage => lang;
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(

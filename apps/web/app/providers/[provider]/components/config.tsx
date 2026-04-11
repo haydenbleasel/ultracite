@@ -14,8 +14,7 @@ interface ConfigProps {
 const getIcon = (lang: ConfigFile["lang"]) =>
   lang === "json" ? SiJson : SiJavascript;
 
-const getLang = (lang: ConfigFile["lang"]): BundledLanguage =>
-  lang === "json" ? "json" : "js";
+const getLang = (lang: ConfigFile["lang"]): BundledLanguage => lang;
 
 export const Config = ({ provider, content }: ConfigProps) => {
   const { configFiles } = provider;
