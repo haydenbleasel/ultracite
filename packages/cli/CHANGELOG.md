@@ -1,3 +1,9 @@
+## 7.5.1
+
+### Patch Changes
+
+- e96c55a: Switch oxlint.config.ts to js imports
+
 ## 7.5.0
 
 ### Minor Changes
