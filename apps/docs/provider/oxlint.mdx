@@ -27,18 +27,9 @@ export default defineConfig({
 ```
 
 ```ts title="oxfmt.config.ts"
-import { defineConfig } from "oxfmt";
+import config from "ultracite/oxfmt";
 
-export default defineConfig({
-  tabWidth: 2,
-  useTabs: false,
-  semi: true,
-  singleQuote: false,
-  trailingComma: "es5",
-  bracketSpacing: true,
-  arrowParens: "always",
-  printWidth: 80,
-});
+export default config;
 ```
 
 Add framework presets as needed:
