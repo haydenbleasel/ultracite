@@ -7,23 +7,23 @@ const oxfmtConfigPath = "./oxfmt.config.ts";
 // oxfmt configuration matching Ultracite's formatting standards
 // https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
 const defaultConfig = {
-  arrowParens: "always" as const,
+  arrowParens: "always",
   bracketSameLine: false,
   bracketSpacing: true,
-  endOfLine: "lf" as const,
+  endOfLine: "lf",
   jsxSingleQuote: false,
   printWidth: 80,
-  quoteProps: "as-needed" as const,
+  quoteProps: "as-needed",
   semi: true,
   singleQuote: false,
   sortImports: {
     ignoreCase: true,
     newlinesBetween: true,
-    order: "asc" as const,
+    order: "asc",
   },
   sortPackageJson: true,
   tabWidth: 2,
-  trailingComma: "es5" as const,
+  trailingComma: "es5",
   useTabs: false,
 };
 
