@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.6
+
+### Patch Changes
+
+- 97c3938: Fix oxlint and oxfmt import paths
+
 ## 2.1.5
 
 ### Patch Changes

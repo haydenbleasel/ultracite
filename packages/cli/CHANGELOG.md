@@ -1,3 +1,9 @@
+## 7.5.3
+
+### Patch Changes
+
+- 97c3938: Fix oxlint and oxfmt import paths
+
 ## 7.5.2
 
 ### Patch Changes
