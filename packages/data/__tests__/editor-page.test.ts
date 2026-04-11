@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   getEditorPageCapabilities,
   getEditorSetupFiles,
-} from "./editor-page.ts";
+} from "../src/editor-page";
 
 describe("editor page helpers", () => {
   test("derives a settings-only VS Code page shape", () => {

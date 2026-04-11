@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { providers } from "./providers.ts";
+import { providers } from "../src/providers";
 
 describe("providers content", () => {
   test("supplementary logos include accessible alt text", () => {
