@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.4
+
+### Patch Changes
+
+- 7861cf7: Migrate oxlint and oxfmt configurations from JSON to TypeScript using `defineConfig`. The CLI now generates `oxlint.config.ts` and `oxfmt.config.ts` instead of `.oxlintrc.json` and `.oxfmtrc.jsonc`, and all internal framework presets have been converted to TypeScript.
+
 ## 2.1.3
 
 ### Patch Changes
