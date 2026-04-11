@@ -21,10 +21,7 @@ const getOxlintConfigIdentifier = (configPath: string) => {
 
 const generateConfigContent = (extendsList: string[]) => {
   const imports = extendsList
-    .map(
-      (ext) =>
-        `import ${getOxlintConfigIdentifier(ext)} from "${ext}/index.js";`
-    )
+    .map((ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`)
     .join("\n");
 
   const identifiers = extendsList
