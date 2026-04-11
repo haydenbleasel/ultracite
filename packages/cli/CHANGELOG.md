@@ -1,3 +1,13 @@
+## 7.5.0
+
+### Minor Changes
+
+- 7861cf7: Migrate oxlint and oxfmt configurations from JSON to TypeScript using `defineConfig`. The CLI now generates `oxlint.config.ts` and `oxfmt.config.ts` instead of `.oxlintrc.json` and `.oxfmtrc.jsonc`, and all internal framework presets have been converted to TypeScript.
+
+### Patch Changes
+
+- fdb1493: Exclude package manager lock files (bun.lock, bun.lockb, package-lock.json, yarn.lock, pnpm-lock.yaml) from Biome linting and formatting
+
 ## 7.4.4
 
 ### Patch Changes
