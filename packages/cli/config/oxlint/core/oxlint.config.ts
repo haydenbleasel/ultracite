@@ -1,6 +1,7 @@
-{
-  "$schema": "../../../node_modules/oxlint/configuration_schema.json",
-  "plugins": [
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  plugins: [
     "eslint",
     "typescript",
     "unicorn",
@@ -8,20 +9,20 @@
     "import",
     "jsdoc",
     "node",
-    "promise"
+    "promise",
   ],
-  "env": {
-    "browser": true
+  env: {
+    browser: true,
   },
-  "categories": {
-    "correctness": "error",
-    "perf": "error",
-    "restriction": "error",
-    "suspicious": "error",
-    "pedantic": "error",
-    "style": "error"
+  categories: {
+    correctness: "error",
+    perf: "error",
+    restriction: "error",
+    suspicious: "error",
+    pedantic: "error",
+    style: "error",
   },
-  "rules": {
+  rules: {
     "no-await-in-loop": "off",
     "max-lines-per-function": "off",
     "no-implicit-coercion": "off",
@@ -35,8 +36,8 @@
       "error",
       "expression",
       {
-        "allowArrowFunctions": true
-      }
+        allowArrowFunctions: true,
+      },
     ],
     "arrow-body-style": ["error", "as-needed"],
     "max-depth": "off",
@@ -48,9 +49,9 @@
     "init-declarations": "off",
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
-    "no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
+    "no-duplicate-imports": ["error", { allowSeparateTypeImports: true }],
     // Avoid conflict with typescript/no-floating-promises
-    "no-void": ["error", { "allowAsStatement": true }],
+    "no-void": ["error", { allowAsStatement: true }],
 
     "import/no-relative-parent-imports": "off",
     "import/no-default-export": "off",
@@ -81,7 +82,7 @@
     "unicorn/no-null": "off",
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prefer-string-raw": "off",
-    "unicorn/text-encoding-identifier-case": ["error", { "withDash": true }],
+    "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
 
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
@@ -97,22 +98,22 @@
     "oxc/no-optional-chaining": "off",
 
     "promise/catch-or-return": "off",
-    "promise/always-return": "off"
+    "promise/always-return": "off",
   },
-  "overrides": [
+  overrides: [
     {
       // Shared test file overrides — framework-specific test rules
       // are in separate jest/ and vitest/ configs to avoid conflicts.
-      "files": [
+      files: [
         "**/*.{test,spec}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}"
+        "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
-      "rules": {
+      rules: {
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
         // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
-        "promise/prefer-await-to-then": "off"
-      }
-    }
-  ]
-}
+        "promise/prefer-await-to-then": "off",
+      },
+    },
+  ],
+});

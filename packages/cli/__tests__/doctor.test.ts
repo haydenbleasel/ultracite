@@ -4,7 +4,7 @@ import { doctor } from "../src/commands/doctor";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
 
 mock.module("cross-spawn", () => ({
   sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
@@ -442,7 +442,7 @@ describe("doctor", () => {
         return (
           pathStr.includes("biome.json") ||
           pathStr.includes("package.json") ||
-          pathStr.includes(".oxlintrc.json")
+          pathStr.includes("oxlint.config.ts")
         );
       }),
     }));
@@ -454,9 +454,9 @@ describe("doctor", () => {
         if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
-        if (pathStr.includes(".oxlintrc.json")) {
+        if (pathStr.includes("oxlint.config.ts")) {
           return Promise.resolve(
-            `{"extends": ["${getOxlintConfigPath("core")}"]}`
+            `import { defineConfig } from "oxlint";\nexport default defineConfig({ extends: ["${getOxlintConfigPath("core")}"] });`
           );
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
@@ -484,7 +484,7 @@ describe("doctor", () => {
         return (
           pathStr.includes("biome.json") ||
           pathStr.includes("package.json") ||
-          pathStr.includes(".oxlintrc.json")
+          pathStr.includes("oxlint.config.ts")
         );
       }),
     }));
@@ -496,8 +496,10 @@ describe("doctor", () => {
         if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
-        if (pathStr.includes(".oxlintrc.json")) {
-          return Promise.resolve('{"extends": []}');
+        if (pathStr.includes("oxlint.config.ts")) {
+          return Promise.resolve(
+            'import { defineConfig } from "oxlint";\nexport default defineConfig({});'
+          );
         }
         return Promise.resolve('{"devDependencies": {"ultracite": "1.0.0"}}');
       }),
@@ -551,7 +553,7 @@ describe("doctor", () => {
       existsSync: mock((path: string) => {
         const pathStr = String(path);
         return (
-          pathStr.includes("biome.json") || pathStr.includes(".oxlintrc.json")
+          pathStr.includes("biome.json") || pathStr.includes("oxlint.config.ts")
         );
       }),
     }));
@@ -563,7 +565,7 @@ describe("doctor", () => {
         if (pathStr.includes("biome.json")) {
           return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
         }
-        if (pathStr.includes(".oxlintrc.json")) {
+        if (pathStr.includes("oxlint.config.ts")) {
           throw new Error("Read error");
         }
         return Promise.resolve("{}");

@@ -8,20 +8,13 @@ import { describe, expect, test } from "bun:test";
  */
 import { join } from "node:path";
 
-const stripJsonComments = (content: string): string =>
-  content
-    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
-    .replaceAll(/\/\/.*$/gm, "")
-    .replaceAll(/,(\s*[}\]])/g, "$1");
-
 const readOxlintConfig = async (name: string) => {
   const configPath = join(
     import.meta.dirname,
-    `../config/oxlint/${name}/.oxlintrc.json`
+    `../config/oxlint/${name}/oxlint.config.ts`
   );
-  // Use Bun.file to avoid node:fs/promises mocks from other test files
-  const content = await Bun.file(configPath).text();
-  return JSON.parse(stripJsonComments(content));
+  const mod = await import(configPath);
+  return mod.default;
 };
 
 const isEnabled = (rule: unknown) => rule === "error" || rule === "warn";

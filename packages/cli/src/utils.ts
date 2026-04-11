@@ -101,11 +101,7 @@ const eslintConfigNames = [
   "eslint.config.cts",
 ] as const;
 
-const oxlintConfigNames = [
-  ".oxlintrc.json",
-  ".oxlintrc.mjs",
-  "oxlint.config.ts",
-];
+const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 
 export const detectLinter = async (): Promise<Linter | null> => {
   let dir = process.cwd();

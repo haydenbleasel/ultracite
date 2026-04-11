@@ -233,30 +233,32 @@ export default defineConfig([
     ],
     configFiles: [
       {
-        code: (presets: string[]) => `{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": [
-    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}/.oxlintrc.json"`).join(",\n    ")}
-  ]
-}`,
-        lang: "json",
-        name: ".oxlintrc.json",
+        code: (presets: string[]) => `import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}/oxlint.config.ts"`).join(",\n    ")}
+  ],
+});`,
+        lang: "typescript",
+        name: "oxlint.config.ts",
       },
       {
-        code: () => `{
-  "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "tabWidth": 2,
-  "useTabs": false,
-  "semi": true,
-  "singleQuote": true,
-  "trailingComma": "es5",
-  "bracketSpacing": true,
-  "arrowParens": "always",
-  "proseWrap": "never",
-  "printWidth": 80,
-}`,
-        lang: "json",
-        name: ".oxfmtrc.jsonc",
+        code: () => `import { defineConfig } from "oxfmt";
+
+export default defineConfig({
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  singleQuote: true,
+  trailingComma: "es5",
+  bracketSpacing: true,
+  arrowParens: "always",
+  proseWrap: "never",
+  printWidth: 80,
+});`,
+        lang: "typescript",
+        name: "oxfmt.config.ts",
       },
     ],
     description:

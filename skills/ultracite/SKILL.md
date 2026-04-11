@@ -13,7 +13,7 @@ Check if `ultracite` is in `package.json` devDependencies. Detect the active lin
 
 - `biome.jsonc` → Biome
 - `eslint.config.mjs` → ESLint
-- `.oxlintrc.json` → Oxlint
+- `oxlint.config.ts` → Oxlint
 
 ## CLI Commands
 

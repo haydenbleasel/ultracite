@@ -1,12 +1,10 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
-import deepmerge from "deepmerge";
-import { parse } from "jsonc-parser";
 
 import { exists } from "../utils";
 
-const oxlintConfigPath = "./.oxlintrc.json";
+const oxlintConfigPath = "./oxlint.config.ts";
 
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
@@ -15,11 +13,21 @@ interface OxlintOptions {
 // Helper to generate the full node_modules path for oxlint configs
 // Oxlint doesn't support Node.js package exports, so we need explicit paths
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
 
-const defaultConfig = {
-  $schema: "./node_modules/oxlint/configuration_schema.json",
-  extends: [getOxlintConfigPath("core")],
+const generateConfigContent = (extendsList: string[]) => {
+  const extendsFormatted = extendsList
+    .map((ext) => `    "${ext}",`)
+    .join("\n");
+
+  return `import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+${extendsFormatted}
+  ],
+});
+`;
 };
 
 export const oxlint = {
@@ -33,32 +41,28 @@ export const oxlint = {
       }
     }
 
-    const config = {
-      ...defaultConfig,
-      extends: extendsList,
-    };
-
-    return await writeFile(oxlintConfigPath, JSON.stringify(config, null, 2));
+    return await writeFile(oxlintConfigPath, generateConfigContent(extendsList));
   },
   exists: async () => await exists(oxlintConfigPath),
   update: async (opts?: OxlintOptions) => {
     const existingContents = await readFile(oxlintConfigPath, "utf-8");
-    const existingConfig = parse(existingContents) as
-      | Record<string, unknown>
-      | undefined;
 
-    // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
-    const configToWork = existingConfig || {};
+    // Extract extends array from existing TS config
+    const extendsMatch = existingContents.match(
+      /extends:\s*\[([\s\S]*?)\]/
+    );
+    const existingExtends: string[] = [];
 
-    // Check if ultracite is already in the extends array
-    const existingExtends =
-      configToWork.extends && Array.isArray(configToWork.extends)
-        ? configToWork.extends
-        : [];
+    if (extendsMatch?.[1]) {
+      const matches = extendsMatch[1].matchAll(/"([^"]+)"/g);
+      for (const match of matches) {
+        existingExtends.push(match[1]);
+      }
+    }
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
-      existingExtends.some((ext: string) => ext === getOxlintConfigPath(name));
+      existingExtends.some((ext) => ext === getOxlintConfigPath(name));
 
     const newExtends = [...existingExtends];
 
@@ -76,14 +80,6 @@ export const oxlint = {
       }
     }
 
-    configToWork.extends = newExtends;
-
-    // Merge other properties from defaultConfig
-    const configToMerge = {
-      $schema: defaultConfig.$schema,
-    };
-    const newConfig = deepmerge(configToWork, configToMerge);
-
-    await writeFile(oxlintConfigPath, JSON.stringify(newConfig, null, 2));
+    await writeFile(oxlintConfigPath, generateConfigContent(newExtends));
   },
 };

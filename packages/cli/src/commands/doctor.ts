@@ -212,15 +212,15 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
 
 // Helper to generate the full node_modules path for oxlint configs
 const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}/.oxlintrc.json`;
+  `./node_modules/ultracite/config/oxlint/${name}/oxlint.config.ts`;
 
-// Check if .oxlintrc.json exists and extends ultracite
+// Check if oxlint.config.ts exists and extends ultracite
 const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
-  const oxlintConfigPath = join(process.cwd(), ".oxlintrc.json");
+  const oxlintConfigPath = join(process.cwd(), "oxlint.config.ts");
 
   if (!existsSync(oxlintConfigPath)) {
     return {
-      message: "No .oxlintrc.json file found (optional)",
+      message: "No oxlint.config.ts file found (optional)",
       name: "Oxlint configuration",
       status: "warn",
     };
@@ -228,27 +228,23 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
 
   try {
     const configContent = await readFile(oxlintConfigPath, "utf-8");
-    const config = parse(configContent);
 
-    if (
-      Array.isArray(config?.extends) &&
-      config.extends.includes(getOxlintConfigPath("core"))
-    ) {
+    if (configContent.includes(getOxlintConfigPath("core"))) {
       return {
-        message: ".oxlintrc.json extends ultracite oxlint config",
+        message: "oxlint.config.ts extends ultracite oxlint config",
         name: "Oxlint configuration",
         status: "pass",
       };
     }
 
     return {
-      message: ".oxlintrc.json exists but doesn't extend ultracite config",
+      message: "oxlint.config.ts exists but doesn't extend ultracite config",
       name: "Oxlint configuration",
       status: "warn",
     };
   } catch {
     return {
-      message: "Could not parse .oxlintrc.json file",
+      message: "Could not read oxlint.config.ts file",
       name: "Oxlint configuration",
       status: "fail",
     };
