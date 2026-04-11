@@ -10,20 +10,12 @@ const sharedConfig: Options = {
   sourcemap: false,
 };
 
-export default [
-  defineConfig({
-    ...sharedConfig,
-    banner: {
-      js: "#!/usr/bin/env node",
-    },
-    entry: {
-      index: "src/index.ts",
-    },
-  }),
-  defineConfig({
-    ...sharedConfig,
-    entry: {
-      oxlint: "src/oxlint.ts",
-    },
-  }),
-];
+export default defineConfig({
+  ...sharedConfig,
+  banner: {
+    js: "#!/usr/bin/env node",
+  },
+  entry: {
+    index: "src/index.ts",
+  },
+});
