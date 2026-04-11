@@ -1,3 +1,12 @@
+## 7.5.6
+
+### Patch Changes
+
+- acf4a97: Update oxlint jest rules
+- 6905932: Fix vitest/no-importing-vitest-globals conflict
+- 4e4dc03: Update oxlint vitest rules
+- 6a583d1: Fix oxfmt setup config
+
 ## 7.5.5
 
 ### Patch Changes
