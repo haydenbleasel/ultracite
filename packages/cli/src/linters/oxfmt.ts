@@ -1,65 +1,16 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 
 import { exists } from "../utils";
 
 const oxfmtConfigPath = "./oxfmt.config.ts";
 
-// oxfmt configuration matching Ultracite's formatting standards
-// https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
-const defaultConfig = {
-  arrowParens: "always",
-  bracketSameLine: false,
-  bracketSpacing: true,
-  endOfLine: "lf",
-  jsxSingleQuote: false,
-  printWidth: 80,
-  quoteProps: "as-needed",
-  semi: true,
-  singleQuote: false,
-  sortImports: {
-    ignoreCase: true,
-    newlinesBetween: true,
-    order: "asc",
-  },
-  sortPackageJson: true,
-  tabWidth: 2,
-  trailingComma: "es5",
-  useTabs: false,
-};
+const configContent = `import config from "ultracite/oxfmt";
 
-const generateConfigContent = (config: Record<string, unknown>) =>
-  `import { defineConfig } from "oxfmt";
-
-export default defineConfig(${JSON.stringify(config, null, 2)});
+export default config;
 `;
 
 export const oxfmt = {
-  create: async () =>
-    await writeFile(oxfmtConfigPath, generateConfigContent(defaultConfig)),
+  create: async () => await writeFile(oxfmtConfigPath, configContent),
   exists: async () => await exists(oxfmtConfigPath),
-  update: async () => {
-    const existingContents = await readFile(oxfmtConfigPath, "utf-8");
-
-    // Extract the config object from existing TS file
-    const configMatch = existingContents.match(
-      /defineConfig\(([\s\S]*)\);?\s*$/
-    );
-
-    let existingConfig: Record<string, unknown> = {};
-
-    if (configMatch?.[1]) {
-      try {
-        // Try to parse the JSON-like object from defineConfig(...)
-        existingConfig = JSON.parse(configMatch[1]) as Record<string, unknown>;
-      } catch {
-        // If parsing fails, treat as empty config
-        existingConfig = {};
-      }
-    }
-
-    // Merge: default config values take precedence, but preserve user's custom options
-    const newConfig = { ...existingConfig, ...defaultConfig };
-
-    await writeFile(oxfmtConfigPath, generateConfigContent(newConfig));
-  },
+  update: async () => await writeFile(oxfmtConfigPath, configContent),
 };

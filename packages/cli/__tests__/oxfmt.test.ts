@@ -43,7 +43,7 @@ describe("oxfmt", () => {
   });
 
   describe("create", () => {
-    test("creates oxfmt config with default settings", async () => {
+    test("creates oxfmt config that imports from ultracite/oxfmt", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -59,29 +59,16 @@ describe("oxfmt", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
-      expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
-      expect(writtenContent).toContain("defineConfig(");
-      expect(writtenContent).toContain('"printWidth": 80');
-      expect(writtenContent).toContain('"tabWidth": 2');
-      expect(writtenContent).toContain('"useTabs": false');
-      expect(writtenContent).toContain('"semi": true');
-      expect(writtenContent).toContain('"singleQuote": false');
-      expect(writtenContent).toContain('"endOfLine": "lf"');
+      expect(writtenContent).toContain('import config from "ultracite/oxfmt"');
+      expect(writtenContent).toContain("export default config");
     });
   });
 
   describe("update", () => {
-    test("merges existing config with defaults", async () => {
+    test("writes config that imports from ultracite/oxfmt", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
-      const existingConfig = `import { defineConfig } from "oxfmt";
-
-export default defineConfig({
-  "printWidth": 100,
-  "customOption": true
-});
-`;
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
@@ -90,7 +77,7 @@ export default defineConfig({
           }
           return Promise.reject(new Error("ENOENT"));
         }),
-        readFile: mock(() => Promise.resolve(existingConfig)),
+        readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
       }));
 
@@ -100,37 +87,8 @@ export default defineConfig({
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
-      // Default values should override existing
-      expect(writtenContent).toContain('"printWidth": 80');
-      expect(writtenContent).toContain('"tabWidth": 2');
-      // Custom options should be preserved
-      expect(writtenContent).toContain('"customOption": true');
-    });
-
-    test("handles invalid config gracefully", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-      mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
-          if (path === "./oxfmt.config.ts") {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error("ENOENT"));
-        }),
-        readFile: mock(() => Promise.resolve("invalid content")),
-        writeFile: mockWriteFile,
-      }));
-
-      await oxfmt.update();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = writeCall[1] as string;
-
-      // Should still have default values
-      expect(writtenContent).toContain('"printWidth": 80');
-      expect(writtenContent).toContain('"tabWidth": 2');
+      expect(writtenContent).toContain('import config from "ultracite/oxfmt"');
+      expect(writtenContent).toContain("export default config");
     });
   });
 });
