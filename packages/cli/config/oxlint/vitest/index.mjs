@@ -23,6 +23,8 @@ export default defineConfig({
         "vitest/no-conditional-tests": "error",
         "vitest/no-disabled-tests": "error",
         "vitest/no-duplicate-hooks": "error",
+        // Disabled: explicit imports are preferred over globals
+        "vitest/no-importing-vitest-globals": "off",
         "vitest/no-focused-tests": "error",
         "vitest/no-identical-title": "error",
         "vitest/no-import-node-test": "error",
@@ -46,6 +48,7 @@ export default defineConfig({
         "vitest/prefer-expect-resolves": "error",
         "vitest/prefer-hooks-in-order": "error",
         "vitest/prefer-hooks-on-top": "error",
+        "vitest/prefer-importing-vitest-globals": "error",
         "vitest/prefer-lowercase-title": "error",
         "vitest/prefer-mock-promise-shorthand": "error",
         "vitest/prefer-spy-on": "error",
