@@ -9,17 +9,6 @@ export default defineConfig({
       ],
       plugins: ["jest"],
       rules: {
-        // Disabled: bun:test mock.module() must be called at top level
-        "jest/require-hook": "off",
-        // Disabled: mock factories use conditionals for path-based routing
-        "jest/no-conditional-in-test": "off",
-        // Disabled: bun:test uses beforeEach hooks for mock.restore()
-        "jest/no-hooks": "off",
-        // Disabled: bun:test mock factories return Promise.resolve/reject
-        "promise/prefer-await-to-then": "off",
-        // Disabled: mock callbacks often need empty functions
-        "no-empty-function": "off",
-
         "jest/consistent-test-it": "error",
         "jest/expect-expect": "error",
         "jest/max-expects": "error",
@@ -44,7 +33,9 @@ export default defineConfig({
         "jest/no-standalone-expect": "error",
         "jest/no-test-prefixes": "error",
         "jest/no-test-return-statement": "error",
+        "jest/no-unneeded-async-expect-function": "error",
         "jest/no-untyped-mock-factory": "error",
+        "jest/padding-around-after-all-blocks": "error",
         "jest/padding-around-test-blocks": "error",
         "jest/prefer-called-with": "error",
         "jest/prefer-comparison-matcher": "error",
@@ -56,6 +47,8 @@ export default defineConfig({
         "jest/prefer-jest-mocked": "error",
         "jest/prefer-lowercase-title": "error",
         "jest/prefer-mock-promise-shorthand": "error",
+        "jest/prefer-mock-return-shorthand": "error",
+        "jest/prefer-snapshot-hint": "error",
         "jest/prefer-spy-on": "error",
         "jest/prefer-strict-equal": "error",
         "jest/prefer-to-be": "error",
@@ -69,6 +62,21 @@ export default defineConfig({
         "jest/valid-describe-callback": "error",
         "jest/valid-expect": "error",
         "jest/valid-title": "error",
+
+        // Disabled: bun:test mock.module() must be called at top level
+        "jest/require-hook": "off",
+
+        // Disabled: mock factories use conditionals for path-based routing
+        "jest/no-conditional-in-test": "off",
+
+        // Disabled: bun:test uses beforeEach hooks for mock.restore()
+        "jest/no-hooks": "off",
+
+        // Disabled: bun:test mock factories return Promise.resolve/reject
+        "promise/prefer-await-to-then": "off",
+
+        // Disabled: mock callbacks often need empty functions
+        "no-empty-function": "off",
       },
     },
   ],
