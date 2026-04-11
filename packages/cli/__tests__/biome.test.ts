@@ -60,7 +60,7 @@ describe("biome", () => {
 
   describe("create", () => {
     test("creates biome config with default extends", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -79,7 +79,7 @@ describe("biome", () => {
     });
 
     test("creates biome config with framework extends", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -101,7 +101,7 @@ describe("biome", () => {
 
   describe("update", () => {
     test("adds ultracite/biome/core to existing config", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
@@ -125,7 +125,7 @@ describe("biome", () => {
     });
 
     test("does not duplicate ultracite/biome/core in extends", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
@@ -148,7 +148,7 @@ describe("biome", () => {
     });
 
     test("adds framework extends without duplicates", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
@@ -177,7 +177,7 @@ describe("biome", () => {
     });
 
     test("handles invalid JSON gracefully", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {

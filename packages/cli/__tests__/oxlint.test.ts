@@ -39,7 +39,7 @@ describe("oxlint linter", () => {
 
   describe("create", () => {
     test("creates oxlint config file", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -58,7 +58,7 @@ describe("oxlint linter", () => {
     });
 
     test("creates oxlint config with frameworks", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -76,7 +76,7 @@ describe("oxlint linter", () => {
     });
 
     test("creates oxlint config with test framework", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -96,7 +96,7 @@ describe("oxlint linter", () => {
 
   describe("update", () => {
     test("updates oxlint config file with existing extends", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -122,7 +122,7 @@ export default defineConfig({
     });
 
     test("updates oxlint config with empty file", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -139,7 +139,7 @@ export default defineConfig({
     });
 
     test("skips adding ultracite config if already present", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -171,7 +171,7 @@ export default defineConfig({
     });
 
     test("adds framework configs during update", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -196,7 +196,7 @@ export default defineConfig({
     });
 
     test("adds test framework configs during update", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -222,7 +222,7 @@ export default defineConfig({
     });
 
     test("handles config without extends array", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({});

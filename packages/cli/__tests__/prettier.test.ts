@@ -62,7 +62,7 @@ describe("prettier linter", () => {
 
   describe("create", () => {
     test("creates prettier config file", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),

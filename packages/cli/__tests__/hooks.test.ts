@@ -18,14 +18,12 @@ describe("createHooks", () => {
   describe("invalid editor or hook integration", () => {
     test("throws error for invalid editor or hook integration name", () => {
       expect(() => {
-        // @ts-expect-error - Testing invalid hook integration name
         createHooks("invalid-editor-name", "npm");
       }).toThrow('Hook integration "invalid-editor-name" not found');
     });
 
     test("throws error for editor without hooks support", () => {
       expect(() => {
-        // @ts-expect-error - Testing editor that may not support hooks
         createHooks("zed", "npm");
       }).toThrow('Hook integration "zed" not found');
     });
@@ -51,8 +49,8 @@ describe("createHooks", () => {
     });
 
     test("create creates directory and hooks.json file", async () => {
-      const mockMkdir = mock(() => Promise.resolve());
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockMkdir = mock((_path: string) => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -69,7 +67,7 @@ describe("createHooks", () => {
     });
 
     test("create writes hooks.json with correct structure", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -90,7 +88,7 @@ describe("createHooks", () => {
     });
 
     test("update creates hooks.json if it doesn't exist", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -110,7 +108,7 @@ describe("createHooks", () => {
     test("update adds ultracite hook when not present in hooks.json", async () => {
       const existingHooks =
         '{"version": 1, "hooks": {"afterFileEdit": [{"command": "echo test"}]}}';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -132,7 +130,7 @@ describe("createHooks", () => {
 
     test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {
       const existingHooks = `{"version": 1, "hooks": {"afterFileEdit": [{"command": "${npmBiomeCommand}"}]}}`;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -151,7 +149,7 @@ describe("createHooks", () => {
 
   describe("copilot hooks", () => {
     test("create writes .github/hooks/ultracite.json with correct structure", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -175,7 +173,7 @@ describe("createHooks", () => {
     test("update merges hooks into existing config when ultracite not present", async () => {
       const existingConfig =
         '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -198,7 +196,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists", async () => {
       const existingConfig = `{"hooks":{"PostToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]}}`;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -216,7 +214,7 @@ describe("createHooks", () => {
 
   describe("codebuddy hooks", () => {
     test("create writes .codebuddy/settings.json with PostToolUse hooks", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -244,7 +242,7 @@ describe("createHooks", () => {
     test("update merges hooks into existing settings when ultracite is not present", async () => {
       const existingSettings =
         '{"model":"yuanbao-code","permissions":{"bash":true}}';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -271,7 +269,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists in settings", async () => {
       const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommand}"}]}]}}`;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -289,7 +287,7 @@ describe("createHooks", () => {
 
   describe("claude hooks", () => {
     test("create writes .claude/settings.json with correct structure", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -315,7 +313,7 @@ describe("createHooks", () => {
 
     test("update merges hooks into existing settings when ultracite not present", async () => {
       const existingSettings = '{"model": "claude-3-5-sonnet"}';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -338,7 +336,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists in settings", async () => {
       const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"${npmBiomeCommand}"}]}]}}`;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),

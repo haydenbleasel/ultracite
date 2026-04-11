@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import type { PackageManager } from "nypm";
 
 import { husky } from "../src/integrations/husky";
+
+const npmPm = { name: "npm", command: "npm" } as PackageManager;
 
 mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
@@ -62,14 +65,14 @@ describe("husky", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      await husky.install("npm");
+      await husky.install(npmPm);
 
       expect(mockAddDep).toHaveBeenCalledWith("husky", expect.any(Object));
     });
 
     test("adds prepare script to package.json", async () => {
-      const mockReadFile = mock(() => Promise.resolve('{"name": "test"}'));
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockReadFile = mock((_path: string) => Promise.resolve('{"name": "test"}'));
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -85,7 +88,7 @@ describe("husky", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      await husky.install("npm");
+      await husky.install(npmPm);
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
@@ -110,7 +113,7 @@ describe("husky", () => {
     });
 
     test("creates standalone hook when useLintStaged is false", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -129,7 +132,7 @@ describe("husky", () => {
     });
 
     test("creates lint-staged hook when useLintStaged is true", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -153,7 +156,7 @@ describe("husky", () => {
     });
 
     test("standalone hook does not use git stash", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -171,7 +174,7 @@ describe("husky", () => {
   describe("update", () => {
     test("appends to existing hook that has no ultracite marker", async () => {
       const existingContent = '#!/bin/sh\necho "existing"';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -191,7 +194,7 @@ describe("husky", () => {
     test("replaces existing ultracite section on re-run", async () => {
       const existingContent =
         '#!/bin/sh\necho "other"\n# ultracite\n#!/bin/sh\nnpx ultracite fix\n';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -212,7 +215,7 @@ describe("husky", () => {
 
     test("uses lint-staged hook when useLintStaged is true", async () => {
       const existingContent = "#!/bin/sh";
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),

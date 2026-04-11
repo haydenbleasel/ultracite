@@ -17,7 +17,6 @@ describe("createEditorConfig", () => {
   describe("invalid editor", () => {
     test("throws error for invalid editor id", () => {
       expect(() => {
-        // @ts-expect-error - Testing invalid editor id
         createEditorConfig("invalid-editor-id");
       }).toThrow('Editor "invalid-editor-id" not found');
     });
@@ -25,7 +24,7 @@ describe("createEditorConfig", () => {
 
   describe("update", () => {
     test("creates file when it does not exist", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -43,7 +42,7 @@ describe("createEditorConfig", () => {
     });
 
     test("merges with existing config when file exists", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -64,7 +63,7 @@ describe("createEditorConfig", () => {
 
   describe("linter configurations", () => {
     test("creates vscode config with eslint linter", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -80,7 +79,7 @@ describe("createEditorConfig", () => {
     });
 
     test("creates vscode config with oxlint linter", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -96,7 +95,7 @@ describe("createEditorConfig", () => {
     });
 
     test("creates zed config with eslint linter", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -112,7 +111,7 @@ describe("createEditorConfig", () => {
     });
 
     test("creates zed config with oxlint linter", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -128,7 +127,7 @@ describe("createEditorConfig", () => {
     });
 
     test("creates codebuddy config with biome linter", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -148,7 +147,7 @@ describe("createEditorConfig", () => {
 
   describe("windsurf hooks", () => {
     test("creates windsurf hooks config", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -157,7 +156,6 @@ describe("createEditorConfig", () => {
         writeFile: mockWriteFile,
       }));
 
-      // @ts-expect-error - Testing windsurf hooks if editor supports it
       const m = await import("../src/hooks");
       const hooks = m.createHooks("windsurf", "npm");
       await hooks.create();

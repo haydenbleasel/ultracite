@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import type { PackageManager } from "nypm";
 
 import { lintStaged } from "../src/integrations/lint-staged";
+
+const npmPm = { name: "npm", command: "npm" } as PackageManager;
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -75,7 +78,7 @@ describe("lintStaged", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      await lintStaged.install("npm");
+      await lintStaged.install(npmPm);
 
       expect(mockAddDep).toHaveBeenCalledWith(
         "lint-staged",
@@ -86,7 +89,7 @@ describe("lintStaged", () => {
 
   describe("create", () => {
     test("creates .lintstagedrc.json with correct content", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -108,7 +111,7 @@ describe("lintStaged", () => {
 
   describe("update", () => {
     test("updates package.json lint-staged config", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
@@ -137,7 +140,7 @@ describe("lintStaged", () => {
     });
 
     test("updates JSON config file", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
@@ -160,7 +163,7 @@ describe("lintStaged", () => {
     });
 
     test("creates fallback config when no config file exists", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -175,7 +178,7 @@ describe("lintStaged", () => {
     });
 
     test("handles YAML config files", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -197,7 +200,7 @@ describe("lintStaged", () => {
     });
 
     test("handles .lintstagedrc file (JSON without extension)", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc") {
@@ -215,7 +218,7 @@ describe("lintStaged", () => {
     });
 
     test("handles ESM config files (.mjs)", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.mjs") {
@@ -243,7 +246,7 @@ describe("lintStaged", () => {
     });
 
     test("handles CommonJS config files (.cjs)", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.cjs") {
@@ -263,7 +266,7 @@ describe("lintStaged", () => {
     });
 
     test("handles .js files in ESM projects", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.js") {
@@ -289,7 +292,7 @@ describe("lintStaged", () => {
     });
 
     test("handles .js files in CommonJS projects", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.js") {
@@ -307,7 +310,7 @@ describe("lintStaged", () => {
     });
 
     test("handles YAML with inline arrays", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -325,7 +328,7 @@ describe("lintStaged", () => {
     });
 
     test("handles YAML with string values", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yml") {
@@ -345,7 +348,7 @@ describe("lintStaged", () => {
     });
 
     test("handles invalid JSON in .lintstagedrc", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc") {
@@ -364,7 +367,7 @@ describe("lintStaged", () => {
     });
 
     test("handles invalid YAML in .lintstagedrc.yaml", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -383,7 +386,7 @@ describe("lintStaged", () => {
     });
 
     test("handles package.json without lint-staged key", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
@@ -406,7 +409,7 @@ describe("lintStaged", () => {
     });
 
     test("handles package.json type module for ESM detection", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
@@ -429,7 +432,7 @@ describe("lintStaged", () => {
     });
 
     test("handles YAML with multiline arrays", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -449,7 +452,7 @@ describe("lintStaged", () => {
     });
 
     test("gracefully handles package.json with invalid JSON that cannot be parsed", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
@@ -474,7 +477,7 @@ describe("lintStaged", () => {
     });
 
     test("gracefully handles .lintstagedrc.json with unparseable content", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
@@ -493,7 +496,7 @@ describe("lintStaged", () => {
     });
 
     test("gracefully handles .lintstagedrc.yaml with completely broken content", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -512,7 +515,7 @@ describe("lintStaged", () => {
     });
 
     test("handles ESM config file successfully", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       // Create a temporary ESM config module that can be imported
       const mockModule = {
@@ -541,7 +544,7 @@ describe("lintStaged", () => {
       }));
 
       // Mock the dynamic import to return our mock module
-      const originalImport = globalThis.import;
+      const originalImport = (globalThis as Record<string, unknown>).import as ((path: string) => Promise<unknown>) | undefined;
       (globalThis as Record<string, unknown>).import = (path: string) => {
         if (path.includes("lint-staged.config.mjs")) {
           return Promise.resolve(mockModule);
@@ -559,7 +562,7 @@ describe("lintStaged", () => {
     });
 
     test("handles YAML with multiple keys and arrays", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
@@ -579,7 +582,7 @@ describe("lintStaged", () => {
     });
 
     test("handles package.json that parses to null", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
@@ -599,7 +602,7 @@ describe("lintStaged", () => {
     });
 
     test("handles ESM config import error by creating fallback", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
 
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
@@ -623,7 +626,7 @@ describe("lintStaged", () => {
       }));
 
       // Mock the dynamic import to throw an error
-      const originalImport = globalThis.import;
+      const originalImport = (globalThis as Record<string, unknown>).import as ((path: string) => Promise<unknown>) | undefined;
       (globalThis as Record<string, unknown>).import = () =>
         Promise.reject(new Error("Cannot import ESM module"));
 

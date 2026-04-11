@@ -104,7 +104,7 @@ describe("isMonorepo", () => {
 
 describe("updatePackageJson", () => {
   test("updates devDependencies", async () => {
-    const mockWriteFile = mock(() => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -121,7 +121,7 @@ describe("updatePackageJson", () => {
 
     expect(mockWriteFile).toHaveBeenCalled();
     const [writeCall] = mockWriteFile.mock.calls;
-    const writtenContent = JSON.parse(writeCall[1] as string);
+    const writtenContent = JSON.parse(writeCall[1]);
     expect(writtenContent.devDependencies).toEqual({
       "new-package": "2.0.0",
       old: "1.0.0",
@@ -129,7 +129,7 @@ describe("updatePackageJson", () => {
   });
 
   test("updates dependencies", async () => {
-    const mockWriteFile = mock(() => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -146,7 +146,7 @@ describe("updatePackageJson", () => {
 
     expect(mockWriteFile).toHaveBeenCalled();
     const [writeCall] = mockWriteFile.mock.calls;
-    const writtenContent = JSON.parse(writeCall[1] as string);
+    const writtenContent = JSON.parse(writeCall[1]);
     expect(writtenContent.dependencies).toEqual({
       "new-package": "2.0.0",
       old: "1.0.0",
@@ -154,7 +154,7 @@ describe("updatePackageJson", () => {
   });
 
   test("updates scripts", async () => {
-    const mockWriteFile = mock(() => Promise.resolve());
+    const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -171,7 +171,7 @@ describe("updatePackageJson", () => {
 
     expect(mockWriteFile).toHaveBeenCalled();
     const [writeCall] = mockWriteFile.mock.calls;
-    const writtenContent = JSON.parse(writeCall[1] as string);
+    const writtenContent = JSON.parse(writeCall[1]);
     expect(writtenContent.scripts).toEqual({
       build: "tsc",
       test: "echo test",

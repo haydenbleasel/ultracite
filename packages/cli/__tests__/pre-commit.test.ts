@@ -44,7 +44,7 @@ describe("pre-commit", () => {
 
   describe("create", () => {
     test("creates .pre-commit-config.yaml with correct content", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -74,7 +74,7 @@ describe("pre-commit", () => {
         entry: npx ultracite fix
         language: system
 `;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
@@ -93,7 +93,7 @@ describe("pre-commit", () => {
     hooks:
       - id: trailing-whitespace
 `;
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
@@ -110,7 +110,7 @@ describe("pre-commit", () => {
 
     test("creates repos section if not present", async () => {
       const existingContent = "# pre-commit configuration\n";
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),

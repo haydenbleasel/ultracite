@@ -69,7 +69,7 @@ describe("vscode editor config", () => {
     });
 
     test("creates settings.json with default config", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -83,7 +83,7 @@ describe("vscode editor config", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // The default config includes various VS Code settings
       // Just verify it's a valid object with some expected keys
       expect(typeof writtenContent).toBe("object");
@@ -94,7 +94,7 @@ describe("vscode editor config", () => {
   describe("update", () => {
     test("merges with existing settings", async () => {
       const existingSettings = '{"editor.tabSize": 4}';
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -107,7 +107,7 @@ describe("vscode editor config", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // Verify the existing setting is preserved
       expect(writtenContent["editor.tabSize"]).toBe(4);
       // Verify new settings are added
@@ -115,7 +115,7 @@ describe("vscode editor config", () => {
     });
 
     test("handles invalid JSON gracefully", async () => {
-      const mockWriteFile = mock(() => Promise.resolve());
+      const mockWriteFile = mock((_path: string, _content: string) => Promise.resolve());
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -128,7 +128,7 @@ describe("vscode editor config", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // Should still create valid config even with invalid input
       expect(typeof writtenContent).toBe("object");
       expect(Object.keys(writtenContent).length).toBeGreaterThan(0);
@@ -137,7 +137,7 @@ describe("vscode editor config", () => {
 
   describe("extension", () => {
     test("attempts to install Biome extension", () => {
-      const mockSpawn = mock(() => ({ status: 0 }));
+      const mockSpawn = mock((_cmd: string) => ({ status: 0 }));
       mock.module("node:child_process", () => ({
         execSync: mock(() => ""),
         spawnSync: mockSpawn,
