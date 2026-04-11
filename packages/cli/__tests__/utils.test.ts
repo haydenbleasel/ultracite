@@ -197,3 +197,8 @@ describe("isMonorepo error handling", () => {
     expect(result).toBe(false);
   });
 });
+
+// Note: detectLinter is tested indirectly through fix.test.ts and check.test.ts
+// which mock ../src/utils and test all linter detection paths (biome, eslint, oxlint, null).
+// Direct testing here causes mock leaking issues since fix.test.ts replaces the
+// ../src/utils module, which affects detectLinter when both files run in the same process.

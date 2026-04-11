@@ -101,6 +101,49 @@ describe("biome", () => {
         "ultracite/biome/next",
       ]);
     });
+
+    test("creates biome config with type-aware extends", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await biome.create({ typeAware: true });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent.extends).toEqual([
+        "ultracite/biome/core",
+        "ultracite/biome/type-aware",
+      ]);
+    });
+
+    test("creates biome config with type-aware and frameworks", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await biome.create({ frameworks: ["react"], typeAware: true });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent.extends).toEqual([
+        "ultracite/biome/core",
+        "ultracite/biome/type-aware",
+        "ultracite/biome/react",
+      ]);
+    });
   });
 
   describe("update", () => {

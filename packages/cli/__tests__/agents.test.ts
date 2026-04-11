@@ -33,6 +33,13 @@ describe("createAgents", () => {
         createAgents("invalid-agent-name", "npm");
       }).toThrow('Agent "invalid-agent-name" not found');
     });
+
+    test("throws error for invalid linter name", () => {
+      expect(() => {
+        // @ts-expect-error - Testing invalid linter name
+        createAgents("claude", "npm", "invalid-linter");
+      }).toThrow('Provider "invalid-linter" not found');
+    });
   });
 
   describe("copilot agent", () => {

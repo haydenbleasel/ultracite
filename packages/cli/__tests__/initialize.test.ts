@@ -2469,4 +2469,234 @@ describe("helper functions", () => {
       expect(writeCall[0]).toBe("AGENTS.md");
     });
   });
+
+  describe("interactive prompts", () => {
+    test("cancels when user cancels linter prompt in fully interactive mode", async () => {
+      const mockCancel = mock(noop);
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mockCancel,
+        intro: mock(noop),
+        isCancel: mock((val) => val === Symbol.for("cancel")),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mock(() => Promise.resolve([])),
+        outro: mock(noop),
+        select: mock(() => Symbol.for("cancel")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      // Fully interactive mode - no options at all triggers all prompts
+      await initialize({
+        skipInstall: true,
+      });
+
+      expect(mockCancel).toHaveBeenCalled();
+    });
+
+    test("cancels when user cancels frameworks prompt in fully interactive mode", async () => {
+      const mockCancel = mock(noop);
+      // In fully interactive mode, frameworks is the first multiselect call
+      const mockMultiselect = mock(() => Symbol.for("cancel"));
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mockCancel,
+        intro: mock(noop),
+        isCancel: mock((val) => val === Symbol.for("cancel")),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mockMultiselect,
+        outro: mock(noop),
+        select: mock(() => Promise.resolve("biome")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      // Fully interactive mode - no options except linter to skip select prompt
+      await initialize({
+        linter: "biome",
+        skipInstall: true,
+      });
+
+      expect(mockCancel).toHaveBeenCalled();
+    });
+
+    test("cancels when user cancels hooks prompt in fully interactive mode", async () => {
+      const mockCancel = mock(noop);
+      let multiselectCallCount = 0;
+      const mockMultiselect = mock(() => {
+        multiselectCallCount += 1;
+        // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4)
+        if (multiselectCallCount <= 3) {
+          return Promise.resolve([]);
+        }
+        // Cancel on hooks prompt
+        return Symbol.for("cancel");
+      });
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mockCancel,
+        intro: mock(noop),
+        isCancel: mock((val) => val === Symbol.for("cancel")),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mockMultiselect,
+        outro: mock(noop),
+        select: mock(() => Promise.resolve("biome")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      // Fully interactive mode - no options except linter to skip select prompt
+      await initialize({
+        linter: "biome",
+        skipInstall: true,
+      });
+
+      expect(mockCancel).toHaveBeenCalled();
+    });
+
+    test("cancels when user cancels integrations prompt in fully interactive mode", async () => {
+      const mockCancel = mock(noop);
+      let multiselectCallCount = 0;
+      const mockMultiselect = mock(() => {
+        multiselectCallCount += 1;
+        // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4), integrations(5)
+        if (multiselectCallCount <= 4) {
+          return Promise.resolve([]);
+        }
+        // Cancel on integrations prompt
+        return Symbol.for("cancel");
+      });
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mockCancel,
+        intro: mock(noop),
+        isCancel: mock((val) => val === Symbol.for("cancel")),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mockMultiselect,
+        outro: mock(noop),
+        select: mock(() => Promise.resolve("biome")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      // Fully interactive mode - no options except linter to skip select prompt
+      await initialize({
+        linter: "biome",
+        skipInstall: true,
+      });
+
+      expect(mockCancel).toHaveBeenCalled();
+    });
+
+    test("defaults options in quiet mode without prompting", async () => {
+      const mockMultiselect = mock(() => Promise.resolve([]));
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mock(noop),
+        intro: mock(noop),
+        isCancel: mock(() => false),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mockMultiselect,
+        outro: mock(noop),
+        select: mock(() => Promise.resolve("biome")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      // Quiet mode with only pm should default all options without prompting
+      await initialize({
+        pm: "npm",
+        quiet: true,
+        skipInstall: true,
+      });
+
+      // In quiet mode, multiselect should not be called for linter/frameworks/editors/agents/hooks/integrations
+      expect(mockMultiselect).not.toHaveBeenCalled();
+    });
+  });
 });
