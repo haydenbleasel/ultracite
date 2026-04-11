@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 import { doctor } from "../src/commands/doctor";
 
 // Helper to generate the expected oxlint config path
-const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}`;
+const getOxlintConfigPath = (name: string) => `ultracite/config/oxlint/${name}`;
 
 mock.module("cross-spawn", () => ({
   sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),

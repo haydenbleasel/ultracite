@@ -210,9 +210,8 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
   }
 };
 
-// Helper to generate the full node_modules path for oxlint configs
-const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}`;
+// Helper to generate the module path for oxlint configs
+const getOxlintConfigPath = (name: string) => `ultracite/config/oxlint/${name}`;
 
 // Check if oxlint.config.ts exists and extends ultracite
 const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {

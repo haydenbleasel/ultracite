@@ -3,8 +3,7 @@ import { describe, expect, mock, test } from "bun:test";
 import { oxlint } from "../src/linters/oxlint";
 
 // Helper to generate the expected oxlint config path
-const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}`;
+const getOxlintConfigPath = (name: string) => `ultracite/config/oxlint/${name}`;
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),

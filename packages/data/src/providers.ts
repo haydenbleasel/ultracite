@@ -235,9 +235,11 @@ export default defineConfig([
       {
         code: (presets: string[]) => `import { defineConfig } from "oxlint";
 
+${presets.map((p) => `import ${p} from "ultracite/config/oxlint/${p}/index.ts";`).join("\n")}
+
 export default defineConfig({
   extends: [
-    ${presets.map((p) => `"./node_modules/ultracite/config/oxlint/${p}"`).join(",\n    ")}
+    ${presets.join(",\n    ")}
   ],
 });`,
         lang: "typescript",

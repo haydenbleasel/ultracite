@@ -10,19 +10,34 @@ interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
 }
 
-// Helper to generate the full node_modules path for oxlint configs
-// Oxlint doesn't support Node.js package exports, so we need explicit paths
-const getOxlintConfigPath = (name: string) =>
-  `./node_modules/ultracite/config/oxlint/${name}`;
+// Helper to generate the module path for oxlint config imports
+const getOxlintConfigPath = (name: string) => `ultracite/config/oxlint/${name}`;
+
+// Helper to generate a valid import identifier from a config name
+const getOxlintConfigIdentifier = (configPath: string) => {
+  const name = configPath.split("/").pop();
+  return name === "core" ? "core" : name;
+};
 
 const generateConfigContent = (extendsList: string[]) => {
-  const extendsFormatted = extendsList.map((ext) => `    "${ext}",`).join("\n");
+  const imports = extendsList
+    .map(
+      (ext) =>
+        `import ${getOxlintConfigIdentifier(ext)} from "${ext}/index.ts";`
+    )
+    .join("\n");
+
+  const identifiers = extendsList
+    .map((ext) => `    ${getOxlintConfigIdentifier(ext)},`)
+    .join("\n");
 
   return `import { defineConfig } from "oxlint";
 
+${imports}
+
 export default defineConfig({
   extends: [
-${extendsFormatted}
+${identifiers}
   ],
 });
 `;
@@ -48,14 +63,32 @@ export const oxlint = {
   update: async (opts?: OxlintOptions) => {
     const existingContents = await readFile(oxlintConfigPath, "utf-8");
 
-    // Extract extends array from existing TS config
-    const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/);
+    // Extract import paths from existing config (supports both string extends and JS imports)
     const existingExtends: string[] = [];
 
-    if (extendsMatch?.[1]) {
-      const matches = extendsMatch[1].matchAll(/"([^"]+)"/g);
-      for (const match of matches) {
-        existingExtends.push(match[1]);
+    // Check for JS imports: import x from "ultracite/config/oxlint/..."
+    const importMatches = existingContents.matchAll(
+      /import \w+ from ["']([^"']+)["']/g
+    );
+    for (const match of importMatches) {
+      if (match[1].startsWith("ultracite/config/oxlint/")) {
+        existingExtends.push(match[1].replace(/\/index\.ts$/, ""));
+      }
+    }
+
+    // Fallback: check for string extends (legacy format)
+    if (existingExtends.length === 0) {
+      const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/);
+      if (extendsMatch?.[1]) {
+        const matches = extendsMatch[1].matchAll(/"([^"]+)"/g);
+        for (const match of matches) {
+          // Convert legacy node_modules paths to new format
+          const converted = match[1].replace(
+            /^\.\/node_modules\/ultracite\/config\/oxlint\//,
+            "ultracite/config/oxlint/"
+          );
+          existingExtends.push(converted);
+        }
       }
     }
 
