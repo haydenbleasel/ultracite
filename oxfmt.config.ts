@@ -1,6 +1,6 @@
 import { defineConfig } from "oxfmt";
 
-import base from "./packages/cli/config/oxfmt/index.ts";
+import base from "./packages/cli/config/oxfmt/index.mjs";
 
 export default defineConfig({
   ...base,

@@ -1,8 +1,8 @@
 import { defineConfig } from "oxlint";
 
-import core from "./packages/cli/config/oxlint/core/index.ts";
-import next from "./packages/cli/config/oxlint/next/index.ts";
-import react from "./packages/cli/config/oxlint/react/index.ts";
+import core from "./packages/cli/config/oxlint/core/index.mjs";
+import next from "./packages/cli/config/oxlint/next/index.mjs";
+import react from "./packages/cli/config/oxlint/react/index.mjs";
 
 export default defineConfig({
   extends: [core, react, next],
@@ -22,7 +22,7 @@ export default defineConfig({
     {
       files: [
         "packages/cli/src/oxlint.ts",
-        "packages/cli/config/oxlint/**/*.ts",
+        "packages/cli/config/oxlint/**/*.mjs",
       ],
       rules: {
         "sort-keys": "off",
