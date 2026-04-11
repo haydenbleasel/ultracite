@@ -246,9 +246,12 @@ export default defineConfig({
         name: "oxlint.config.ts",
       },
       {
-        code: () => `import config from "ultracite/oxfmt";
+        code: () => `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
 
-export default config;`,
+export default defineConfig({
+  extends: [ultracite],
+});`,
         lang: "typescript",
         name: "oxfmt.config.ts",
       },

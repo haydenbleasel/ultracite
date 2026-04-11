@@ -59,8 +59,11 @@ describe("oxfmt", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
-      expect(writtenContent).toContain('import config from "ultracite/oxfmt"');
-      expect(writtenContent).toContain("export default config");
+      expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
+      expect(writtenContent).toContain(
+        'import ultracite from "ultracite/oxfmt"'
+      );
+      expect(writtenContent).toContain("defineConfig");
     });
   });
 
@@ -87,8 +90,11 @@ describe("oxfmt", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = writeCall[1] as string;
 
-      expect(writtenContent).toContain('import config from "ultracite/oxfmt"');
-      expect(writtenContent).toContain("export default config");
+      expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
+      expect(writtenContent).toContain(
+        'import ultracite from "ultracite/oxfmt"'
+      );
+      expect(writtenContent).toContain("defineConfig");
     });
   });
 });

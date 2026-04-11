@@ -4,9 +4,12 @@ import { exists } from "../utils";
 
 const oxfmtConfigPath = "./oxfmt.config.ts";
 
-const configContent = `import config from "ultracite/oxfmt";
+const configContent = `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
 
-export default config;
+export default defineConfig({
+  extends: [ultracite],
+});
 `;
 
 export const oxfmt = {
