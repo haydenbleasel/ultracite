@@ -1,3 +1,9 @@
+## 7.5.2
+
+### Patch Changes
+
+- 22df7a5: Fix oxlint import issues
+
 ## 7.5.1
 
 ### Patch Changes

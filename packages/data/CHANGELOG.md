@@ -1,5 +1,11 @@
 # @repo/data
 
+## 2.1.5
+
+### Patch Changes
+
+- 22df7a5: Fix oxlint import issues
+
 ## 2.1.4
 
 ### Patch Changes
