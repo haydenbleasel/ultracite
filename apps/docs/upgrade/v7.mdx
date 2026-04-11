@@ -94,12 +94,12 @@ This will create `oxlint.config.ts` and `oxfmt.config.ts` files:
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import react from "ultracite/oxlint/react";
+
 export default defineConfig({
-  extends: [
-    "./node_modules/ultracite/config/oxlint/core/index.ts",
-    "./node_modules/ultracite/config/oxlint/react/index.ts",
-    "./node_modules/ultracite/config/oxlint/next/index.ts",
-  ],
+  extends: [core, react, next],
 });
 ```
 

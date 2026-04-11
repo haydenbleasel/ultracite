@@ -21,8 +21,10 @@ Ultracite generates two TypeScript config files for Oxlint:
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 
+import core from "ultracite/oxlint/core";
+
 export default defineConfig({
-  extends: ["./node_modules/ultracite/config/oxlint/core/index.ts"],
+  extends: [core],
 });
 ```
 
@@ -37,21 +39,9 @@ Add framework presets as needed:
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 
-export default defineConfig({
-  extends: [
-    "./node_modules/ultracite/config/oxlint/core/index.ts",
-    "./node_modules/ultracite/config/oxlint/react/index.ts",
-    "./node_modules/ultracite/config/oxlint/next/index.ts",
-  ],
-});
-```
-
-You can also use Ultracite's typed exports for a more ergonomic API:
-
-```ts title="oxlint.config.ts"
-import { defineConfig } from "oxlint";
-
-import { core, next, react } from "ultracite/oxlint";
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import react from "ultracite/oxlint/react";
 
 export default defineConfig({
   extends: [core, react, next],
