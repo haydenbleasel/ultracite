@@ -1,3 +1,9 @@
+## 7.5.4
+
+### Patch Changes
+
+- 66999e0: Fix oxlint and oxfmt yet again
+
 ## 7.5.3
 
 ### Patch Changes
