@@ -31,8 +31,14 @@
   "exports": {
     "./biome/*": "./config/biome/*/biome.jsonc",
     "./eslint/*": "./config/eslint/*/eslint.config.mjs",
-    "./oxlint/*": "./config/oxlint/*/index.mjs",
-    "./oxfmt": "./config/oxfmt/index.mjs",
+    "./oxlint/*": {
+      "types": "./config/oxlint/*/index.d.mts",
+      "default": "./config/oxlint/*/index.mjs"
+    },
+    "./oxfmt": {
+      "types": "./config/oxfmt/index.d.mts",
+      "default": "./config/oxfmt/index.mjs"
+    },
     "./prettier": "./config/prettier/prettier.config.mjs",
     "./stylelint": "./config/stylelint/stylelint.config.mjs",
     "./*": "./config/biome/*/biome.jsonc"
