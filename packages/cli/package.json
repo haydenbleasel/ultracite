@@ -48,6 +48,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prebuild": "bun run scripts/generate-dts.ts",
     "build": "tsup",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
@@ -108,9 +109,13 @@
     "tsup": "^8.5.1"
   },
   "peerDependencies": {
+    "oxfmt": ">=0.1.0",
     "oxlint": "^1.0.0"
   },
   "peerDependenciesMeta": {
+    "oxfmt": {
+      "optional": true
+    },
     "oxlint": {
       "optional": true
     }

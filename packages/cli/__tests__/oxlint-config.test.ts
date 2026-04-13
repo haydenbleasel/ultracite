@@ -54,7 +54,7 @@ describe("oxlint package exports", () => {
       join(import.meta.dirname, "../config/oxfmt")
     );
 
-    expect(oxfmtFiles.includes("index.d.mts")).toBe(true);
+    expect(oxfmtFiles).toContain("index.d.mts");
   });
 });
 
