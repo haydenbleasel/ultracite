@@ -43,6 +43,17 @@ describe("createHooks", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === ".cursor/hooks.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const hooks = createHooks("cursor", "npm");
       const result = await hooks.exists();
       expect(result).toBe(true);
@@ -125,6 +136,12 @@ describe("createHooks", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const hooks = createHooks("cursor", "npm");
       await hooks.update();
 
@@ -147,6 +164,12 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingHooks)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const hooks = createHooks("cursor", "npm");
@@ -196,6 +219,12 @@ describe("createHooks", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const hooks = createHooks("copilot", "npm");
       await hooks.update();
 
@@ -219,6 +248,12 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const hooks = createHooks("copilot", "npm");
@@ -271,6 +306,12 @@ describe("createHooks", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const hooks = createHooks("codebuddy", "npm");
       await hooks.update();
 
@@ -298,6 +339,12 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const hooks = createHooks("codebuddy", "npm");
@@ -348,6 +395,12 @@ describe("createHooks", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const hooks = createHooks("claude", "npm");
       await hooks.update();
 
@@ -371,6 +424,12 @@ describe("createHooks", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingSettings)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const hooks = createHooks("claude", "npm");

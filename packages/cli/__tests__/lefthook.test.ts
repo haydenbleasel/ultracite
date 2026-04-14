@@ -42,6 +42,12 @@ describe("lefthook", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await lefthook.exists();
       expect(result).toBe(true);
     });
@@ -51,6 +57,14 @@ describe("lefthook", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await lefthook.exists();
@@ -72,6 +86,12 @@ describe("lefthook", () => {
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve('{"name": "test"}')),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       mock.module("nypm", () => ({
@@ -104,6 +124,12 @@ describe("lefthook", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
@@ -133,6 +159,12 @@ describe("lefthook", () => {
         access: mock(() => Promise.resolve()),
         readFile: mockReadFile,
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       mock.module("nypm", () => ({
@@ -209,6 +241,12 @@ describe("lefthook", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
@@ -236,6 +274,12 @@ describe("lefthook", () => {
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       mock.module("nypm", () => ({
@@ -270,6 +314,12 @@ describe("lefthook", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
@@ -300,6 +350,12 @@ describe("lefthook", () => {
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       mock.module("nypm", () => ({

@@ -13,6 +13,12 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
+mock.module("node:fs", () => ({
+  accessSync: mock(() => {}),
+  existsSync: mock(() => false),
+  readFileSync: mock(() => "{}"),
+}));
+
 describe("exists", () => {
   beforeEach(() => {
     mock.restore();
@@ -25,6 +31,12 @@ describe("exists", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     const result = await exists("./test.txt");
     expect(result).toBe(true);
   });
@@ -34,6 +46,14 @@ describe("exists", () => {
       access: mock(() => Promise.reject(new Error("ENOENT"))),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     const result = await exists("./nonexistent.txt");
@@ -58,6 +78,17 @@ describe("isMonorepo", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock((path: string) => {
+        if (path === "pnpm-workspace.yaml") {
+          return;
+        }
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     const result = await isMonorepo();
     expect(result).toBe(true);
   });
@@ -67,6 +98,14 @@ describe("isMonorepo", () => {
       access: mock(() => Promise.reject(new Error("ENOENT"))),
       readFile: mock(() => Promise.resolve('{"workspaces": ["packages/*"]}')),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     const result = await isMonorepo();
@@ -80,6 +119,14 @@ describe("isMonorepo", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     const result = await isMonorepo();
     expect(result).toBe(true);
   });
@@ -91,6 +138,14 @@ describe("isMonorepo", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     const result = await isMonorepo();
     expect(result).toBe(false);
   });
@@ -100,6 +155,14 @@ describe("isMonorepo", () => {
       access: mock(() => Promise.reject(new Error("ENOENT"))),
       readFile: mock(() => Promise.resolve("null")),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     const result = await isMonorepo();
@@ -118,6 +181,12 @@ describe("updatePackageJson", () => {
         Promise.resolve('{"name": "test", "devDependencies": {"old": "1.0.0"}}')
       ),
       writeFile: mockWriteFile,
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     await updatePackageJson({
@@ -147,6 +216,12 @@ describe("updatePackageJson", () => {
       writeFile: mockWriteFile,
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     await updatePackageJson({
       dependencies: {
         "new-package": "2.0.0",
@@ -172,6 +247,12 @@ describe("updatePackageJson", () => {
       writeFile: mockWriteFile,
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     await updatePackageJson({ type: "module" });
 
     expect(mockWriteFile).toHaveBeenCalled();
@@ -190,6 +271,12 @@ describe("updatePackageJson", () => {
         Promise.resolve('{"name": "test", "scripts": {"test": "echo test"}}')
       ),
       writeFile: mockWriteFile,
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     await updatePackageJson({
@@ -216,6 +303,14 @@ describe("isMonorepo error handling", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {
+        throw new Error("ENOENT");
+      }),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     const result = await isMonorepo();
     expect(result).toBe(false);
   });
@@ -235,6 +330,12 @@ describe("ensureDirectory", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     await ensureDirectory("some/nested/file.txt");
     expect(mockMkdir).toHaveBeenCalledWith("some/nested", { recursive: true });
   });
@@ -248,6 +349,12 @@ describe("ensureDirectory", () => {
       writeFile: mock(() => Promise.resolve()),
     }));
 
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
+    }));
+
     await ensureDirectory("./some/file.txt");
     expect(mockMkdir).toHaveBeenCalledWith("some", { recursive: true });
   });
@@ -259,6 +366,12 @@ describe("ensureDirectory", () => {
       mkdir: mockMkdir,
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
     await ensureDirectory("file.txt");

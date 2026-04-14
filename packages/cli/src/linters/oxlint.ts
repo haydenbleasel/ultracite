@@ -56,7 +56,7 @@ export const oxlint = {
       generateConfigContent(extendsList)
     );
   },
-  exists: async () => await exists(oxlintConfigPath),
+  exists: () => exists(oxlintConfigPath),
   update: async (opts?: OxlintOptions) => {
     const existingContents = await readFile(oxlintConfigPath, "utf-8");
 

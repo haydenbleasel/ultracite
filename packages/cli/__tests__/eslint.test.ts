@@ -22,6 +22,17 @@ describe("eslint linter", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./eslint.config.mjs") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await eslint.exists();
       expect(result).toBe(true);
     });
@@ -31,6 +42,14 @@ describe("eslint linter", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await eslint.exists();

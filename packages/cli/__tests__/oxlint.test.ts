@@ -20,6 +20,12 @@ describe("oxlint linter", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await oxlint.exists();
       expect(result).toBe(true);
     });
@@ -29,6 +35,14 @@ describe("oxlint linter", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await oxlint.exists();
@@ -119,6 +133,12 @@ export default defineConfig({
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await oxlint.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -137,6 +157,12 @@ export default defineConfig({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await oxlint.update();
@@ -164,6 +190,12 @@ export default defineConfig({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await oxlint.update();
@@ -200,6 +232,12 @@ export default defineConfig({
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await oxlint.update({ frameworks: ["react"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -227,6 +265,12 @@ export default defineConfig({
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await oxlint.update({ frameworks: ["jest"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -249,6 +293,12 @@ export default defineConfig({});
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingConfig)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await oxlint.update();

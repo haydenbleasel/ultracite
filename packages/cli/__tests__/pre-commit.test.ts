@@ -26,6 +26,12 @@ describe("pre-commit", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await preCommit.exists();
       expect(result).toBe(true);
     });
@@ -35,6 +41,14 @@ describe("pre-commit", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await preCommit.exists();
@@ -85,6 +99,12 @@ describe("pre-commit", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await preCommit.update("npm");
 
       expect(mockWriteFile).not.toHaveBeenCalled();
@@ -106,6 +126,12 @@ describe("pre-commit", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await preCommit.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -123,6 +149,12 @@ describe("pre-commit", () => {
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await preCommit.update("npm");

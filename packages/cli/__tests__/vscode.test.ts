@@ -33,6 +33,17 @@ describe("vscode editor config", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === ".vscode/settings.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const vscode = createEditorConfig("vscode");
       const result = await vscode.exists();
       expect(result).toBe(true);
@@ -44,6 +55,14 @@ describe("vscode editor config", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -106,6 +125,12 @@ describe("vscode editor config", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const vscode = createEditorConfig("vscode");
       await vscode.update();
 
@@ -127,6 +152,12 @@ describe("vscode editor config", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const vscode = createEditorConfig("vscode");

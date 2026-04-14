@@ -17,9 +17,9 @@ const eslintConfigPaths = [
 
 const defaultConfigPath = "./eslint.config.mjs";
 
-const getEslintConfigPath = async (): Promise<string | null> => {
+const getEslintConfigPath = (): string | null => {
   for (const path of eslintConfigPaths) {
-    if (await exists(path)) {
+    if (exists(path)) {
       return path;
     }
   }
@@ -55,8 +55,8 @@ export const eslint = {
     const config = generateEslintConfig(opts);
     await writeFile(defaultConfigPath, config);
   },
-  exists: async () => {
-    const path = await getEslintConfigPath();
+  exists: () => {
+    const path = getEslintConfigPath();
     return path !== null;
   },
   update: async (opts?: EslintOptions) => {

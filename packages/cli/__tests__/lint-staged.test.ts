@@ -37,6 +37,17 @@ describe("lintStaged", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await lintStaged.exists();
       expect(result).toBe(true);
     });
@@ -53,6 +64,17 @@ describe("lintStaged", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await lintStaged.exists();
       expect(result).toBe(true);
     });
@@ -62,6 +84,14 @@ describe("lintStaged", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await lintStaged.exists();
@@ -132,6 +162,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -159,6 +200,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -177,6 +229,14 @@ describe("lintStaged", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -201,6 +261,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -223,6 +294,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve('{"*.js": ["eslint"]}')),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -253,6 +335,20 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (
+            path === "./lint-staged.config.mjs" ||
+            path === "./package.json"
+          ) {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       // This will try to import the .mjs file, which will fail
       // It should fall back to creating a .lintstagedrc.json
       await lintStaged.update("npm");
@@ -273,6 +369,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./lint-staged.config.cjs") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       // This will try to require the .cjs file, which will fail
@@ -305,6 +412,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./lint-staged.config.js" || path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -323,6 +441,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.js") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -345,6 +474,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -363,6 +503,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("*.js: eslint --fix")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -387,6 +538,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       // Should create fallback config when JSON is invalid
@@ -406,6 +568,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("invalid:\n  yaml:\n    - - -")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -429,6 +602,17 @@ describe("lintStaged", () => {
           Promise.resolve('{"name": "test", "version": "1.0.0"}')
         ),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -459,6 +643,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -479,6 +674,17 @@ describe("lintStaged", () => {
           Promise.resolve("*.js:\n  - eslint\n  - prettier")
         ),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -507,6 +713,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       // Should fallback to creating .lintstagedrc.json
@@ -528,6 +745,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       // Should gracefully skip update when JSON is completely broken
@@ -547,6 +775,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("this is not yaml at all")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -586,6 +825,20 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (
+            path === "./lint-staged.config.mjs" ||
+            path === "./package.json"
+          ) {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       // Mock the dynamic import to return our mock module
       const originalImport = (globalThis as Record<string, unknown>).import as
         | ((path: string) => Promise<unknown>)
@@ -623,6 +876,17 @@ describe("lintStaged", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.yaml") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await lintStaged.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -641,6 +905,17 @@ describe("lintStaged", () => {
         }),
         readFile: mock(() => Promise.resolve("null")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await lintStaged.update("npm");
@@ -674,6 +949,17 @@ describe("lintStaged", () => {
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./lint-staged.config.mjs" || path === "package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       // Mock the dynamic import to throw an error

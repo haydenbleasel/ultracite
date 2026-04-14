@@ -41,7 +41,7 @@ export const createEditorConfig = (
 
     update: async () => {
       await ensureDirectory(editor.config.path);
-      const doesExist = await exists(editor.config.path);
+      const doesExist = exists(editor.config.path);
 
       if (!doesExist) {
         await writeFile(

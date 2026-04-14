@@ -39,6 +39,12 @@ describe("husky", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await husky.exists();
       expect(result).toBe(true);
     });
@@ -49,6 +55,14 @@ describe("husky", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await husky.exists();
@@ -84,6 +98,12 @@ describe("husky", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mockReadFile,
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       mock.module("nypm", () => ({
@@ -195,6 +215,12 @@ describe("husky", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await husky.update("npm");
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -215,6 +241,12 @@ describe("husky", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await husky.update("npm");
@@ -239,6 +271,13 @@ describe("husky", () => {
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
       }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       mock.module("nypm", () => ({
         addDevDependency: mock(() => Promise.resolve()),
         detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),

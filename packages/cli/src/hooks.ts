@@ -56,7 +56,7 @@ export const createHooks = (
   };
 
   const updateConfig = async (): Promise<void> => {
-    const doesExist = await exists(hookIntegration.hooks.path);
+    const doesExist = exists(hookIntegration.hooks.path);
 
     if (!doesExist) {
       await writeFile(

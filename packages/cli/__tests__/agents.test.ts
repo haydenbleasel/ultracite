@@ -77,6 +77,12 @@ describe("createAgents", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const agents = createAgents("copilot", "npm", "biome");
       await agents.update();
 
@@ -117,6 +123,12 @@ describe("createAgents", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const agents = createAgents("cline", "npm", "biome");

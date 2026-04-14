@@ -1,12 +1,13 @@
-import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { accessSync } from "node:fs";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import process from "node:process";
 
 import { parse } from "jsonc-parser";
 
-export const exists = async (path: string) => {
+export const exists = (path: string): boolean => {
   try {
-    await access(path);
+    accessSync(path);
     return true;
   } catch {
     return false;
@@ -14,7 +15,7 @@ export const exists = async (path: string) => {
 };
 
 export const isMonorepo = async () => {
-  if (await exists("pnpm-workspace.yaml")) {
+  if (exists("pnpm-workspace.yaml")) {
     return true;
   }
 
@@ -109,29 +110,24 @@ const eslintConfigNames = [
 
 const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 
-export const detectLinter = async (
-  startDir = process.cwd()
-): Promise<Linter | null> => {
+export const detectLinter = (startDir = process.cwd()): Linter | null => {
   let dir = startDir;
 
   while (true) {
-    // Check for biome config
     for (const name of biomeConfigNames) {
-      if (await exists(join(dir, name))) {
+      if (exists(join(dir, name))) {
         return "biome";
       }
     }
 
-    // Check for eslint config
     for (const name of eslintConfigNames) {
-      if (await exists(join(dir, name))) {
+      if (exists(join(dir, name))) {
         return "eslint";
       }
     }
 
-    // Check for oxlint config
     for (const name of oxlintConfigNames) {
-      if (await exists(join(dir, name))) {
+      if (exists(join(dir, name))) {
         return "oxlint";
       }
     }

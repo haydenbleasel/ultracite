@@ -8,6 +8,12 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
+mock.module("node:fs", () => ({
+  accessSync: mock(() => {}),
+  existsSync: mock(() => false),
+  readFileSync: mock(() => "{}"),
+}));
+
 describe("oxfmt", () => {
   beforeEach(() => {
     mock.restore();
@@ -26,6 +32,17 @@ describe("oxfmt", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./oxfmt.config.ts") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await oxfmt.exists();
       expect(result).toBe(true);
     });
@@ -35,6 +52,14 @@ describe("oxfmt", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await oxfmt.exists();
@@ -82,6 +107,17 @@ describe("oxfmt", () => {
         }),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./oxfmt.config.ts") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await oxfmt.update();

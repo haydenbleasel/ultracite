@@ -1,9 +1,35 @@
 import { mock } from "bun:test";
+import {
+  readdirSync as _realReaddirSync,
+  readFileSync as _realReadFileSync,
+} from "node:fs";
+
+// Capture real fs functions before mocking so tests that need them can use them
+(globalThis as Record<string, unknown>).__realReaddirSync = _realReaddirSync;
+(globalThis as Record<string, unknown>).__realReadFileSync = _realReadFileSync;
 
 // Mock glob module before any imports that use it
 // This is needed for tsconfig.test.ts and other tests that use glob
 mock.module("glob", () => ({
   glob: mock(() => Promise.resolve([])),
+}));
+
+// Mock node:fs to provide accessSync (used by the sync exists() helper)
+// Individual tests can override this by calling mock.module("node:fs", ...) themselves
+// readdirSync passes through to the real implementation because
+// oxlint-config.test.ts needs it to read real config files from disk.
+mock.module("node:fs", () => ({
+  accessSync: mock(() => {
+    throw new Error("ENOENT");
+  }),
+  existsSync: mock(() => false),
+  mkdirSync: mock(() => {}),
+  readFileSync: mock(() => "{}"),
+  readdirSync: (...args: unknown[]) =>
+    (
+      globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
+    ).__realReaddirSync(...args),
+  writeFileSync: mock(() => {}),
 }));
 
 // Mock SVG for StaticImageData type

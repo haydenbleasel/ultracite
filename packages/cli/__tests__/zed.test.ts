@@ -28,6 +28,17 @@ describe("zed editor config", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === ".zed/settings.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const zed = createEditorConfig("zed");
       const result = await zed.exists();
       expect(result).toBe(true);
@@ -39,6 +50,14 @@ describe("zed editor config", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const zed = createEditorConfig("zed");
@@ -98,6 +117,12 @@ describe("zed editor config", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const zed = createEditorConfig("zed");
       await zed.update();
 
@@ -116,6 +141,12 @@ describe("zed editor config", () => {
         mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const zed = createEditorConfig("zed");

@@ -8,6 +8,12 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
+mock.module("node:fs", () => ({
+  accessSync: mock(() => {}),
+  existsSync: mock(() => false),
+  readFileSync: mock(() => "{}"),
+}));
+
 describe("biome", () => {
   beforeEach(() => {
     mock.restore();
@@ -26,6 +32,17 @@ describe("biome", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await biome.exists();
       expect(result).toBe(true);
     });
@@ -42,6 +59,17 @@ describe("biome", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await biome.exists();
       expect(result).toBe(true);
     });
@@ -51,6 +79,14 @@ describe("biome", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       const result = await biome.exists();
@@ -164,6 +200,17 @@ describe("biome", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await biome.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -188,6 +235,17 @@ describe("biome", () => {
           Promise.resolve('{"extends": ["ultracite/biome/core"]}')
         ),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await biome.update();
@@ -217,6 +275,17 @@ describe("biome", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       await biome.update({ frameworks: ["react", "next"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -242,6 +311,17 @@ describe("biome", () => {
         }),
         readFile: mock(() => Promise.resolve("invalid json")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
       }));
 
       await biome.update();

@@ -14,6 +14,6 @@ export default defineConfig({
 
 export const oxfmt = {
   create: async () => await writeFile(oxfmtConfigPath, configContent),
-  exists: async () => await exists(oxfmtConfigPath),
+  exists: () => exists(oxfmtConfigPath),
   update: async () => await writeFile(oxfmtConfigPath, configContent),
 };

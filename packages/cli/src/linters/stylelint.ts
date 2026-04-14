@@ -1,4 +1,5 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 
 import { exists } from "../utils";
 
@@ -23,24 +24,24 @@ const stylelintConfigPaths = [
 
 const defaultConfigPath = "./stylelint.config.mjs";
 
-const hasStylelintKeyInPackageJson = async (): Promise<boolean> => {
+const hasStylelintKeyInPackageJson = (): boolean => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
+    const packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
     return "stylelint" in packageJson;
   } catch {
     return false;
   }
 };
 
-const getStylelintConfigPath = async (): Promise<string | null> => {
+const getStylelintConfigPath = (): string | null => {
   // Check for "stylelint" key in package.json first
-  if (await hasStylelintKeyInPackageJson()) {
+  if (hasStylelintKeyInPackageJson()) {
     return "./package.json";
   }
 
   // Check for config files
   for (const path of stylelintConfigPaths) {
-    if (await exists(path)) {
+    if (exists(path)) {
       return path;
     }
   }
@@ -57,8 +58,8 @@ export const stylelint = {
     const config = generateStylelintConfig();
     await writeFile(defaultConfigPath, config);
   },
-  exists: async () => {
-    const path = await getStylelintConfigPath();
+  exists: () => {
+    const path = getStylelintConfigPath();
     return path !== null;
   },
   update: async () => {

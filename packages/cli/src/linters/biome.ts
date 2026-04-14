@@ -11,9 +11,9 @@ const defaultConfig = {
   extends: ["ultracite/biome/core"],
 };
 
-const getBiomeConfigPath = async (): Promise<string> => {
+const getBiomeConfigPath = (): string => {
   // Check for biome.json first, then fall back to biome.jsonc
-  if (await exists("./biome.json")) {
+  if (exists("./biome.json")) {
     return "./biome.json";
   }
   return "./biome.jsonc";
@@ -25,8 +25,8 @@ interface BiomeOptions {
 }
 
 export const biome = {
-  create: async (opts?: BiomeOptions) => {
-    const path = await getBiomeConfigPath();
+  create: (opts?: BiomeOptions) => {
+    const path = getBiomeConfigPath();
     const extendsList = ["ultracite/biome/core"];
 
     // Add type-aware config for project/scanner rules
@@ -48,12 +48,12 @@ export const biome = {
 
     return writeFile(path, `${JSON.stringify(config, null, 2)}\n`);
   },
-  exists: async () => {
-    const path = await getBiomeConfigPath();
+  exists: () => {
+    const path = getBiomeConfigPath();
     return exists(path);
   },
   update: async (opts?: BiomeOptions) => {
-    const path = await getBiomeConfigPath();
+    const path = getBiomeConfigPath();
     const existingContents = await readFile(path, "utf-8");
     const existingConfig = parse(existingContents) as
       | Record<string, unknown>

@@ -17,6 +17,12 @@ describe("prettier linter", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => '{"prettier": {"semi": true}}'),
+      }));
+
       const result = await prettier.exists();
       expect(result).toBe(true);
     });
@@ -33,6 +39,17 @@ describe("prettier linter", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.prettierrc.mjs") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await prettier.exists();
       expect(result).toBe(true);
     });
@@ -44,6 +61,14 @@ describe("prettier linter", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const result = await prettier.exists();
       expect(result).toBe(false);
     });
@@ -53,6 +78,16 @@ describe("prettier linter", () => {
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.reject(new Error("Read error"))),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => {
+          throw new Error("Read error");
+        }),
       }));
 
       const result = await prettier.exists();

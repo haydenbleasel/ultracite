@@ -55,6 +55,12 @@ describe("createEditorConfig", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const editorConfig = createEditorConfig("vscode");
       await editorConfig.update();
 

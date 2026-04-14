@@ -63,7 +63,7 @@ group("detectLinter", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 2. exists — the building block for config detection
+// 2. exists (async)
 // ---------------------------------------------------------------------------
 
 group("exists", () => {
@@ -81,9 +81,110 @@ group("exists", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 3. check command dispatch (mocked child processes)
-//    Measures overhead of linter detection + command dispatch, not the
-//    linters themselves.
+// 3. Config file lookups — sequential exists() loops in linter modules
+// ---------------------------------------------------------------------------
+
+group("config lookups", () => {
+  // Prettier: 18 sequential checks (worst case — no config found)
+  const prettierNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+  // Prettier: best case — first path matches
+  const prettierHitDir = tmpDir({
+    "package.json": JSON.stringify({ prettier: {} }),
+  });
+
+  bench("prettier config — miss (18 checks)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(prettierNoneDir);
+    try {
+      const { prettier } = await import("../src/linters/prettier");
+      await prettier.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  bench("prettier config — hit (package.json key)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(prettierHitDir);
+    try {
+      const { prettier } = await import("../src/linters/prettier");
+      await prettier.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  // Stylelint: 11 sequential checks (worst case)
+  const stylelintNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+  const stylelintHitDir = tmpDir({
+    "package.json": JSON.stringify({ stylelint: {} }),
+  });
+
+  bench("stylelint config — miss (11 checks)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(stylelintNoneDir);
+    try {
+      const { stylelint } = await import("../src/linters/stylelint");
+      await stylelint.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  bench("stylelint config — hit (package.json key)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(stylelintHitDir);
+    try {
+      const { stylelint } = await import("../src/linters/stylelint");
+      await stylelint.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  // ESLint: 6 sequential checks
+  const eslintNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+  const eslintHitDir = tmpDir({ "eslint.config.mjs": "" });
+
+  bench("eslint config — miss (6 checks)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(eslintNoneDir);
+    try {
+      const { eslint } = await import("../src/linters/eslint");
+      await eslint.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  bench("eslint config — hit (first path)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(eslintHitDir);
+    try {
+      const { eslint } = await import("../src/linters/eslint");
+      await eslint.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  // lint-staged: 11 sequential checks
+  const lintStagedNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+
+  bench("lint-staged config — miss (11 checks)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(lintStagedNoneDir);
+    try {
+      const { lintStaged } = await import("../src/integrations/lint-staged");
+      await lintStaged.exists();
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 4. check command dispatch (mocked child processes)
 // ---------------------------------------------------------------------------
 
 const mockSpawn = () => ({ status: 0, stderr: "", stdout: "" });
@@ -124,7 +225,7 @@ group("check command dispatch", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 4. doctor (mocked) — runs 8 sequential checks
+// 5. doctor (mocked)
 // ---------------------------------------------------------------------------
 
 group("doctor", () => {
@@ -173,7 +274,7 @@ group("doctor", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. isMonorepo detection
+// 6. isMonorepo detection
 // ---------------------------------------------------------------------------
 
 group("isMonorepo", () => {

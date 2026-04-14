@@ -293,9 +293,9 @@ export const lintStaged = {
       `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
     );
   },
-  exists: async () => {
+  exists: () => {
     for (const file of configFiles) {
-      if (await exists(file)) {
+      if (exists(file)) {
         return true;
       }
     }
@@ -314,7 +314,7 @@ export const lintStaged = {
     let existingConfigFile: string | null = null;
 
     for (const file of configFiles) {
-      if (await exists(file)) {
+      if (exists(file)) {
         existingConfigFile = file;
         break;
       }

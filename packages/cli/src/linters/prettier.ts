@@ -1,4 +1,5 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
@@ -34,24 +35,24 @@ const prettierConfigPaths = [
 
 const defaultConfigPath = "./prettier.config.mjs";
 
-const hasPrettierKeyInPackageJson = async (): Promise<boolean> => {
+const hasPrettierKeyInPackageJson = (): boolean => {
   try {
-    const packageJson = JSON.parse(await readFile("./package.json", "utf-8"));
+    const packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
     return "prettier" in packageJson;
   } catch {
     return false;
   }
 };
 
-const getPrettierConfigPath = async (): Promise<string | null> => {
+const getPrettierConfigPath = (): string | null => {
   // Check for "prettier" key in package.json first
-  if (await hasPrettierKeyInPackageJson()) {
+  if (hasPrettierKeyInPackageJson()) {
     return "./package.json";
   }
 
   // Check for config files
   for (const path of prettierConfigPaths) {
-    if (await exists(path)) {
+    if (exists(path)) {
       return path;
     }
   }
@@ -96,8 +97,8 @@ export const prettier = {
     const config = generatePrettierConfig(opts);
     await writeFile(defaultConfigPath, config);
   },
-  exists: async () => {
-    const path = await getPrettierConfigPath();
+  exists: () => {
+    const path = getPrettierConfigPath();
     return path !== null;
   },
   update: async (opts?: PrettierOptions) => {
