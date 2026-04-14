@@ -1,3 +1,12 @@
+## 7.5.7
+
+### Patch Changes
+
+- a63d9c5: Fix cross-config leaking rules
+- d18d0e7: Configure Prettier with frameworks context
+- 1d6de0d: Add declaration files for `ultracite/oxlint/*` and `ultracite/oxfmt` so TypeScript config imports resolve without `ts(7016)` errors.
+- 1073f34: Ensure init'ed JSON files have newlines
+
 ## 7.5.6
 
 ### Patch Changes
