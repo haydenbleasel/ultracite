@@ -1,5 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+import type { options } from "@repo/data/options";
+
 import { exists } from "../utils";
 
 // All possible Prettier config file locations
@@ -57,21 +59,49 @@ const getPrettierConfigPath = async (): Promise<string | null> => {
   return null;
 };
 
-const generatePrettierConfig =
-  (): string => `export { default } from "ultracite/prettier";
+const frameworkPlugins: Record<string, string> = {
+  astro: "prettier-plugin-astro",
+  svelte: "prettier-plugin-svelte",
+};
+
+interface PrettierOptions {
+  frameworks?: (typeof options.frameworks)[number][];
+}
+
+const generatePrettierConfig = (opts?: PrettierOptions): string => {
+  const plugins: string[] = [];
+
+  if (opts?.frameworks) {
+    for (const fw of opts.frameworks) {
+      if (fw in frameworkPlugins) {
+        plugins.push(frameworkPlugins[fw]);
+      }
+    }
+  }
+
+  // Tailwind CSS plugin is always included and must be last
+  plugins.push("prettier-plugin-tailwindcss");
+
+  return `import config from "ultracite/prettier";
+
+export default {
+  ...config,
+  plugins: [${plugins.map((p) => `"${p}"`).join(", ")}],
+};
 `;
+};
 
 export const prettier = {
-  create: async () => {
-    const config = generatePrettierConfig();
+  create: async (opts?: PrettierOptions) => {
+    const config = generatePrettierConfig(opts);
     await writeFile(defaultConfigPath, config);
   },
   exists: async () => {
     const path = await getPrettierConfigPath();
     return path !== null;
   },
-  update: async () => {
-    const config = generatePrettierConfig();
+  update: async (opts?: PrettierOptions) => {
+    const config = generatePrettierConfig(opts);
     await writeFile(defaultConfigPath, config);
   },
 };

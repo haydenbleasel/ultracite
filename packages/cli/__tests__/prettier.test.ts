@@ -61,7 +61,7 @@ describe("prettier linter", () => {
   });
 
   describe("create", () => {
-    test("creates prettier config file", async () => {
+    test("creates prettier config with tailwindcss plugin by default", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -78,6 +78,87 @@ describe("prettier linter", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./prettier.config.mjs");
       expect(writeCall[1]).toContain("ultracite/prettier");
+      expect(writeCall[1]).toContain("prettier-plugin-tailwindcss");
+    });
+
+    test("creates prettier config with svelte plugin when svelte framework selected", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create({ frameworks: ["svelte"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("prettier-plugin-svelte");
+      expect(writeCall[1]).toContain("prettier-plugin-tailwindcss");
+    });
+
+    test("creates prettier config with astro plugin when astro framework selected", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create({ frameworks: ["astro"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain("prettier-plugin-astro");
+      expect(writeCall[1]).toContain("prettier-plugin-tailwindcss");
+    });
+
+    test("does not include framework plugins for frameworks without prettier plugins", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create({ frameworks: ["react", "next"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).not.toContain("prettier-plugin-svelte");
+      expect(writeCall[1]).not.toContain("prettier-plugin-astro");
+      expect(writeCall[1]).toContain("prettier-plugin-tailwindcss");
+    });
+
+    test("tailwindcss plugin is always last in plugins array", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await prettier.create({ frameworks: ["svelte", "astro"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [[, content]] = mockWriteFile.mock.calls;
+      const tailwindIndex = content.indexOf("prettier-plugin-tailwindcss");
+      const svelteIndex = content.indexOf("prettier-plugin-svelte");
+      const astroIndex = content.indexOf("prettier-plugin-astro");
+      expect(tailwindIndex).toBeGreaterThan(svelteIndex);
+      expect(tailwindIndex).toBeGreaterThan(astroIndex);
     });
   });
 

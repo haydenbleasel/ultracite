@@ -90,8 +90,6 @@ const eslintCoreDevDependencies: Record<string, string> = {
     packageJson.devDependencies["eslint-plugin-unused-imports"],
   globals: packageJson.devDependencies.globals,
   prettier: "latest",
-  "prettier-plugin-svelte":
-    packageJson.devDependencies["prettier-plugin-svelte"],
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
   stylelint: "latest",
@@ -104,6 +102,8 @@ const eslintFrameworkDevDependencies: Partial<
   },
   astro: {
     "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
+    "prettier-plugin-astro":
+      packageJson.devDependencies["prettier-plugin-astro"],
   },
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
@@ -132,6 +132,8 @@ const eslintFrameworkDevDependencies: Partial<
   },
   svelte: {
     "eslint-plugin-svelte": packageJson.devDependencies["eslint-plugin-svelte"],
+    "prettier-plugin-svelte":
+      packageJson.devDependencies["prettier-plugin-svelte"],
   },
   vitest: {
     "@vitest/eslint-plugin":
@@ -444,7 +446,10 @@ export const upsertOxlintConfig = async (
   }
 };
 
-export const upsertPrettierConfig = async (quiet = false) => {
+export const upsertPrettierConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
   const s = spinner();
 
   if (!quiet) {
@@ -455,7 +460,7 @@ export const upsertPrettierConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("Prettier configuration found, updating...");
     }
-    await prettier.update();
+    await prettier.update({ frameworks });
     if (!quiet) {
       s.stop("Prettier configuration updated.");
     }
@@ -465,7 +470,7 @@ export const upsertPrettierConfig = async (quiet = false) => {
   if (!quiet) {
     s.message("Prettier configuration not found, creating...");
   }
-  await prettier.create();
+  await prettier.create({ frameworks });
   if (!quiet) {
     s.stop("Prettier configuration created.");
   }
@@ -1034,7 +1039,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      await upsertPrettierConfig(quiet);
+      await upsertPrettierConfig(frameworks, quiet);
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
