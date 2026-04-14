@@ -1,3 +1,16 @@
+## 7.5.8
+
+### Patch Changes
+
+- c35a1b3: Performance improvements - doctor
+- 56e4c00: Remove process.exit() - swap with typed Error
+- d35d03c: Performance optimizations - mkdir(), readFile()
+- ee224a6: Use Commander.js args properly
+- a2b7a46: Rework doctor command
+- cf4a044: Fix angular eslint plugin typo
+- 25eb24f: Optimize dev dep install
+- b46537a: Performance optimizations - exists()
+
 ## 7.5.7
 
 ### Patch Changes
