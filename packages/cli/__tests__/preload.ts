@@ -38,7 +38,18 @@ const vscodeBiomeConfig = {
 mock.module("@repo/data/providers", () => ({
   providers: [
     {
-      configFiles: [{ code: () => "{}", lang: "json", name: "biome.jsonc" }],
+      configFiles: [
+        {
+          code: (presets: string[]) => `{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
+  ]
+}`,
+          lang: "json",
+          name: "biome.jsonc",
+        },
+      ],
       description: "Fast formatter and linter written in Rust",
       id: "biome",
       logo: mockSvg,
@@ -48,9 +59,32 @@ mock.module("@repo/data/providers", () => ({
     },
     {
       configFiles: [
-        { code: () => "", lang: "javascript", name: "eslint.config.mjs" },
-        { code: () => "", lang: "javascript", name: "prettier.config.mjs" },
-        { code: () => "", lang: "javascript", name: "stylelint.config.mjs" },
+        {
+          code: (
+            presets: string[]
+          ) => `import { defineConfig } from "eslint/config";
+${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
+
+export default defineConfig([
+  {
+    extends: [
+      ${presets.join(",\n      ")}
+    ],
+  },
+]);`,
+          lang: "javascript",
+          name: "eslint.config.mjs",
+        },
+        {
+          code: () => 'export { default } from "ultracite/prettier";',
+          lang: "javascript",
+          name: "prettier.config.mjs",
+        },
+        {
+          code: () => 'export { default } from "ultracite/stylelint";',
+          lang: "javascript",
+          name: "stylelint.config.mjs",
+        },
       ],
       description: "Battle-tested linting solution",
       id: "eslint",
@@ -61,8 +95,29 @@ mock.module("@repo/data/providers", () => ({
     },
     {
       configFiles: [
-        { code: () => "", lang: "typescript", name: "oxlint.config.ts" },
-        { code: () => "", lang: "typescript", name: "oxfmt.config.ts" },
+        {
+          code: (presets: string[]) => `import { defineConfig } from "oxlint";
+
+${presets.map((p) => `import ${p} from "ultracite/oxlint/${p}";`).join("\n")}
+
+export default defineConfig({
+  extends: [
+    ${presets.join(",\n    ")}
+  ],
+});`,
+          lang: "typescript",
+          name: "oxlint.config.ts",
+        },
+        {
+          code: () => `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  extends: [ultracite],
+});`,
+          lang: "typescript",
+          name: "oxfmt.config.ts",
+        },
       ],
       description: "50-100x faster than ESLint",
       id: "oxlint",
