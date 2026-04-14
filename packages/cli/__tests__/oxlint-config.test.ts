@@ -6,7 +6,10 @@ import { describe, expect, test } from "bun:test";
  * not both enabled simultaneously. When two rules conflict, one must be
  * explicitly disabled.
  */
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
+
+import packageJson from "../package.json";
 
 const readOxlintConfig = async (name: string) => {
   const configPath = join(import.meta.dirname, `../config/oxlint/${name}`);
@@ -15,6 +18,45 @@ const readOxlintConfig = async (name: string) => {
 };
 
 const isEnabled = (rule: unknown) => rule === "error" || rule === "warn";
+
+describe("oxlint package exports", () => {
+  test("publishes typed oxlint subpath exports", () => {
+    expect(packageJson.exports["./oxlint/*"]).toEqual({
+      default: "./config/oxlint/*/index.mjs",
+      types: "./config/oxlint/*/index.d.mts",
+    });
+  });
+
+  test("ships declaration files for each oxlint config", () => {
+    const oxlintConfigDirectory = join(import.meta.dirname, "../config/oxlint");
+    const configs = readdirSync(oxlintConfigDirectory, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .toSorted();
+
+    const typedConfigs = configs.filter((config) => {
+      const configFiles = readdirSync(join(oxlintConfigDirectory, config));
+      return configFiles.includes("index.d.mts");
+    });
+
+    expect(typedConfigs).toEqual(configs);
+  });
+
+  test("publishes typed oxfmt export", () => {
+    expect(packageJson.exports["./oxfmt"]).toEqual({
+      default: "./config/oxfmt/index.mjs",
+      types: "./config/oxfmt/index.d.mts",
+    });
+  });
+
+  test("ships oxfmt declaration file", () => {
+    const oxfmtFiles = readdirSync(
+      join(import.meta.dirname, "../config/oxfmt")
+    );
+
+    expect(oxfmtFiles).toContain("index.d.mts");
+  });
+});
 
 describe("oxlint vitest config", () => {
   /**
