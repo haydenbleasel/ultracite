@@ -1,5 +1,4 @@
-import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import process from "node:process";
 
@@ -109,7 +108,7 @@ const checkOxlintInstallation = (): DiagnosticCheck => {
 };
 
 // Check if biome.json exists and extends ultracite
-const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
+const checkBiomeConfig = (): DiagnosticCheck => {
   const biomeConfigPath = join(process.cwd(), "biome.json");
   const biomeJsoncPath = join(process.cwd(), "biome.jsonc");
 
@@ -129,7 +128,7 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(configPath, "utf-8");
+    const configContent = readFileSync(configPath, "utf-8");
     const config = parse(configContent);
 
     if (
@@ -158,7 +157,7 @@ const checkBiomeConfig = async (): Promise<DiagnosticCheck> => {
 };
 
 // Check if eslint.config.* exists and uses ultracite
-const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
+const checkEslintConfig = (): DiagnosticCheck => {
   const eslintConfigPaths = [
     "eslint.config.mjs",
     "eslint.config.js",
@@ -186,7 +185,7 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(configPath, "utf-8");
+    const configContent = readFileSync(configPath, "utf-8");
 
     if (configContent.includes("ultracite/eslint")) {
       return {
@@ -214,7 +213,7 @@ const checkEslintConfig = async (): Promise<DiagnosticCheck> => {
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 
 // Check if oxlint.config.ts exists and extends ultracite
-const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
+const checkOxlintConfig = (): DiagnosticCheck => {
   const oxlintConfigPath = join(process.cwd(), "oxlint.config.ts");
 
   if (!existsSync(oxlintConfigPath)) {
@@ -226,7 +225,7 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const configContent = await readFile(oxlintConfigPath, "utf-8");
+    const configContent = readFileSync(oxlintConfigPath, "utf-8");
 
     if (configContent.includes(getOxlintConfigPath("core"))) {
       return {
@@ -251,7 +250,7 @@ const checkOxlintConfig = async (): Promise<DiagnosticCheck> => {
 };
 
 // Check if Ultracite is in package.json
-const checkUltraciteDependency = async (): Promise<DiagnosticCheck> => {
+const checkUltraciteDependency = (): DiagnosticCheck => {
   const packageJsonPath = join(process.cwd(), "package.json");
 
   if (!existsSync(packageJsonPath)) {
@@ -263,7 +262,7 @@ const checkUltraciteDependency = async (): Promise<DiagnosticCheck> => {
   }
 
   try {
-    const pkgJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
+    const pkgJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
     const version =
       pkgJson.dependencies?.ultracite ||
       pkgJson.devDependencies?.ultracite ||
@@ -329,48 +328,45 @@ const checkConflictingTools = (): DiagnosticCheck => {
   };
 };
 
-const runCheck = async (
-  checkFn: () => DiagnosticCheck | Promise<DiagnosticCheck>,
-  checkName: string
-): Promise<DiagnosticCheck> => {
-  const s = spinner();
-  s.start(`Checking ${checkName}...`);
-
-  const result = await checkFn();
-
-  if (result.status === "pass") {
-    s.stop(result.message);
-  } else if (result.status === "warn") {
-    s.stop(result.message);
-  } else {
-    s.stop(result.message);
-  }
-
-  return result;
-};
+// All check functions — run in order, all sync
+const allChecks: { fn: () => DiagnosticCheck; name: string }[] = [
+  { fn: checkBiomeInstallation, name: "Biome installation" },
+  { fn: checkEslintInstallation, name: "ESLint installation" },
+  { fn: checkOxlintInstallation, name: "Oxlint installation" },
+  { fn: checkBiomeConfig, name: "Biome configuration" },
+  { fn: checkEslintConfig, name: "ESLint configuration" },
+  { fn: checkOxlintConfig, name: "Oxlint configuration" },
+  { fn: checkUltraciteDependency, name: "Ultracite dependency" },
+  { fn: checkConflictingTools, name: "conflicting tools" },
+];
 
 // Main doctor function
-export const doctor = async (): Promise<void> => {
+export const doctor = (): void => {
   intro(`Ultracite v${packageJson.version} Doctor`);
 
-  // Run all checks with spinners
-  const checks: DiagnosticCheck[] = [
-    await runCheck(checkBiomeInstallation, "Biome installation"),
-    await runCheck(checkEslintInstallation, "ESLint installation"),
-    await runCheck(checkOxlintInstallation, "Oxlint installation"),
-    await runCheck(checkBiomeConfig, "Biome configuration"),
-    await runCheck(checkEslintConfig, "ESLint configuration"),
-    await runCheck(checkOxlintConfig, "Oxlint configuration"),
-    await runCheck(checkUltraciteDependency, "Ultracite dependency"),
-    await runCheck(checkConflictingTools, "conflicting tools"),
-  ];
+  const s = spinner();
+  s.start("Running diagnostics...");
+
+  const checks: DiagnosticCheck[] = allChecks.map(({ fn }) => fn());
+
+  s.stop("Diagnostics complete.");
+
+  // Log individual results
+  for (const check of checks) {
+    if (check.status === "pass") {
+      log.success(check.message);
+    } else if (check.status === "warn") {
+      log.warn(check.message);
+    } else {
+      log.error(check.message);
+    }
+  }
 
   // Calculate summary
   const passCount = checks.filter((c) => c.status === "pass").length;
   const failCount = checks.filter((c) => c.status === "fail").length;
   const warnCount = checks.filter((c) => c.status === "warn").length;
 
-  // Log results with appropriate styling
   log.info(
     `Summary: ${passCount} passed, ${warnCount} warnings, ${failCount} failed`
   );

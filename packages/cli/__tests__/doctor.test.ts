@@ -63,22 +63,17 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
-  test("fails when Biome is not installed", async () => {
+  test("fails when Biome is not installed", () => {
     mock.module("cross-spawn", () => ({
       sync: mock(() => ({ status: 1, stdout: "" })),
     }));
 
     mock.module("node:fs", () => ({
       existsSync: mock(() => false),
+      readFileSync: mock(() => "{}"),
     }));
 
-    mock.module("node:fs/promises", () => ({
-      access: mock(() => Promise.resolve()),
-      readFile: mock(() => Promise.resolve("{}")),
-      writeFile: mock(() => Promise.resolve()),
-    }));
-
-    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+    expect(() => doctor()).toThrow("Doctor checks failed");
   });
 
   test("checks biome using the bare executable with shell disabled", async () => {
@@ -250,7 +245,7 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
-  test("fails when biome config cannot be parsed", async () => {
+  test("fails when biome config cannot be parsed", () => {
     mock.module("cross-spawn", () => ({
       sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
@@ -260,21 +255,16 @@ describe("doctor", () => {
         const pathStr = String(path);
         return pathStr.includes("biome.jsonc");
       }),
-    }));
-
-    mock.module("node:fs/promises", () => ({
-      access: mock(() => Promise.resolve()),
-      readFile: mock((path: string) => {
+      readFileSync: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.jsonc")) {
           throw new Error("Read error");
         }
-        return Promise.resolve("{}");
+        return "{}";
       }),
-      writeFile: mock(() => Promise.resolve()),
     }));
 
-    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+    expect(() => doctor()).toThrow("Doctor checks failed");
   });
 
   test("warns when package.json is missing", async () => {
@@ -515,7 +505,7 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
-  test("handles ESLint config read error", async () => {
+  test("handles ESLint config read error", () => {
     mock.module("cross-spawn", () => ({
       sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
@@ -528,27 +518,22 @@ describe("doctor", () => {
           pathStr.includes("eslint.config.mjs")
         );
       }),
-    }));
-
-    mock.module("node:fs/promises", () => ({
-      access: mock(() => Promise.resolve()),
-      readFile: mock((path: string) => {
+      readFileSync: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+          return '{"extends": ["ultracite/biome/core"]}';
         }
         if (pathStr.includes("eslint.config")) {
           throw new Error("Read error");
         }
-        return Promise.resolve("{}");
+        return "{}";
       }),
-      writeFile: mock(() => Promise.resolve()),
     }));
 
-    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+    expect(() => doctor()).toThrow("Doctor checks failed");
   });
 
-  test("handles Oxlint config parse error", async () => {
+  test("handles Oxlint config parse error", () => {
     mock.module("cross-spawn", () => ({
       sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
@@ -560,24 +545,19 @@ describe("doctor", () => {
           pathStr.includes("biome.json") || pathStr.includes("oxlint.config.ts")
         );
       }),
-    }));
-
-    mock.module("node:fs/promises", () => ({
-      access: mock(() => Promise.resolve()),
-      readFile: mock((path: string) => {
+      readFileSync: mock((path: string) => {
         const pathStr = String(path);
         if (pathStr.includes("biome.json")) {
-          return Promise.resolve('{"extends": ["ultracite/biome/core"]}');
+          return '{"extends": ["ultracite/biome/core"]}';
         }
         if (pathStr.includes("oxlint.config.ts")) {
           throw new Error("Read error");
         }
-        return Promise.resolve("{}");
+        return "{}";
       }),
-      writeFile: mock(() => Promise.resolve()),
     }));
 
-    await expect(doctor()).rejects.toThrow("Doctor checks failed");
+    expect(() => doctor()).toThrow("Doctor checks failed");
   });
 
   test("warns when ultracite is not in package.json dependencies", async () => {
