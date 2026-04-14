@@ -5,7 +5,12 @@ import { describe, expect, test } from "bun:test";
  * These tests validate that mutually exclusive rules in oxlint configs are
  * not both enabled simultaneously. When two rules conflict, one must be
  * explicitly disabled.
+ *
+ * The core config also validates that it only contains rules from core plugins
+ * (not jest, vitest, react, etc.) to prevent cross-plugin conflicts when
+ * framework configs activate their plugins (#660).
  */
+import { execSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 
@@ -18,6 +23,54 @@ const readOxlintConfig = async (name: string) => {
 };
 
 const isEnabled = (rule: unknown) => rule === "error" || rule === "warn";
+
+const CORE_PLUGINS = [
+  "eslint",
+  "typescript",
+  "unicorn",
+  "oxc",
+  "import",
+  "jsdoc",
+  "node",
+  "promise",
+];
+
+/**
+ * Parse `oxlint --rules` output to extract non-nursery rules for specific plugins.
+ * Returns rule names in the format used by config files (e.g. "no-eval", "typescript/no-explicit-any").
+ */
+const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
+  const output = execSync("./node_modules/.bin/oxlint --rules", {
+    encoding: "utf-8",
+  });
+  const rules: string[] = [];
+  let inNursery = false;
+
+  for (const line of output.split("\n")) {
+    if (line.startsWith("## Nursery")) {
+      inNursery = true;
+      continue;
+    }
+    if (inNursery) {
+      continue;
+    }
+    if (
+      !line.startsWith("|") ||
+      line.startsWith("| ---") ||
+      line.startsWith("| Rule name")
+    ) {
+      continue;
+    }
+
+    const [, ruleName, plugin] = line.split("|").map((col) => col.trim());
+
+    if (ruleName && plugin && plugins.includes(plugin)) {
+      rules.push(plugin === "eslint" ? ruleName : `${plugin}/${ruleName}`);
+    }
+  }
+
+  return rules.toSorted();
+};
 
 describe("oxlint package exports", () => {
   test("publishes typed oxlint subpath exports", () => {
@@ -55,6 +108,60 @@ describe("oxlint package exports", () => {
     );
 
     expect(oxfmtFiles).toContain("index.d.mts");
+  });
+});
+
+describe("oxlint core config", () => {
+  /**
+   * Core config must only contain rules from core plugins (#660).
+   *
+   * Previously, the core config used `categories: { correctness: "error", ... }` which
+   * armed ALL rules across ALL plugins. These rules stayed inert until a framework config
+   * activated their plugin — at which point non-core rules (jest, vitest, react, etc.)
+   * would fire unexpectedly, causing cross-plugin conflicts.
+   *
+   * Now the core config explicitly lists rules for core plugins only.
+   */
+  test("does not use categories (uses explicit rules instead)", async () => {
+    const config = await readOxlintConfig("core");
+    expect(
+      config.categories,
+      "core config must not use categories — use explicit rules to avoid arming non-core plugin rules"
+    ).toBeUndefined();
+  });
+
+  test("contains all non-nursery rules for core plugins", async () => {
+    const expectedRules = getOxlintRulesForPlugins(CORE_PLUGINS);
+    const config = await readOxlintConfig("core");
+    const configRules = new Set(Object.keys(config.rules ?? {}).toSorted());
+
+    const missingRules = expectedRules.filter((rule) => !configRules.has(rule));
+    expect(
+      missingRules,
+      `Core config is missing ${missingRules.length} rules from core plugins: ${missingRules.join(", ")}`
+    ).toEqual([]);
+  });
+
+  test("does not contain rules from non-core plugins", async () => {
+    const config = await readOxlintConfig("core");
+    const configRules = Object.keys(config.rules ?? {});
+
+    // Also check overrides
+    const overrideRules = (config.overrides ?? []).flatMap(
+      (override: { rules?: Record<string, unknown> }) =>
+        Object.keys(override.rules ?? {})
+    );
+
+    const allRules = [...configRules, ...overrideRules];
+    const nonCoreRules = allRules.filter((rule) => {
+      const plugin = rule.includes("/") ? rule.split("/")[0] : "eslint";
+      return !CORE_PLUGINS.includes(plugin);
+    });
+
+    expect(
+      nonCoreRules,
+      `Core config contains rules from non-core plugins: ${nonCoreRules.join(", ")}`
+    ).toEqual([]);
   });
 });
 
