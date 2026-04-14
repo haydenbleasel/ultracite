@@ -60,15 +60,10 @@ program
     "Run linter without fixing files. Unknown options are passed to the underlying linter."
   )
   .allowUnknownOption()
-  .action(async (files) => {
-    const cmdIndex = process.argv.indexOf("check");
-    const allArgs = process.argv.slice(cmdIndex + 1);
-    const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    // Filter out any flags that Commander may have included in files
-    const filteredFiles = files.filter(
-      (file: string) => !file.startsWith("--")
-    );
-    await check(filteredFiles, passthrough);
+  .action(async (args: string[]) => {
+    const files = args.filter((arg) => !arg.startsWith("-"));
+    const passthrough = args.filter((arg) => arg.startsWith("-"));
+    await check(files, passthrough);
   });
 
 program
@@ -78,15 +73,10 @@ program
     "Run linter and fix files. Unknown options are passed to the underlying linter."
   )
   .allowUnknownOption()
-  .action(async (files) => {
-    const cmdIndex = process.argv.indexOf("fix");
-    const allArgs = process.argv.slice(cmdIndex + 1);
-    const passthrough = allArgs.filter((arg) => arg.startsWith("-"));
-    // Filter out any flags that Commander may have included in files
-    const filteredFiles = files.filter(
-      (file: string) => !file.startsWith("--")
-    );
-    await fix(filteredFiles, passthrough);
+  .action(async (args: string[]) => {
+    const files = args.filter((arg) => !arg.startsWith("-"));
+    const passthrough = args.filter((arg) => arg.startsWith("-"));
+    await fix(files, passthrough);
   });
 
 program
