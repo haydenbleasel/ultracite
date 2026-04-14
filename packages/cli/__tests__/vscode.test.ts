@@ -73,18 +73,29 @@ describe("vscode editor config", () => {
 
   describe("create", () => {
     test("creates .vscode directory", async () => {
-      const mockMkdir = mock(() => Promise.resolve());
+      const mockMkdirSync = mock(() => {});
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mockMkdir,
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mockMkdirSync,
+        readFileSync: mock(() => "{}"),
       }));
 
       const vscode = createEditorConfig("vscode");
       await vscode.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith(".vscode", { recursive: true });
+      expect(mockMkdirSync).toHaveBeenCalledWith(".vscode", {
+        recursive: true,
+      });
     });
 
     test("creates settings.json with default config", async () => {

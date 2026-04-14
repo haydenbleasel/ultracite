@@ -5,7 +5,13 @@ import { join } from "node:path";
 
 import { bench, group, run } from "mitata";
 
-import { detectLinter, exists, isMonorepo } from "../src/utils";
+import {
+  detectLinter,
+  ensureDirectory,
+  exists,
+  isMonorepo,
+  updatePackageJson,
+} from "../src/utils";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -45,25 +51,25 @@ group("detectLinter", () => {
   const oxlintDir = tmpDir({ "oxlint.config.ts": "" });
   const emptyDir = tmpDir();
 
-  bench("biome config in cwd", async () => {
-    await detectLinter(biomeDir);
+  bench("biome config in cwd", () => {
+    detectLinter(biomeDir);
   });
 
-  bench("eslint config in cwd", async () => {
-    await detectLinter(eslintDir);
+  bench("eslint config in cwd", () => {
+    detectLinter(eslintDir);
   });
 
-  bench("oxlint config in cwd", async () => {
-    await detectLinter(oxlintDir);
+  bench("oxlint config in cwd", () => {
+    detectLinter(oxlintDir);
   });
 
-  bench("no config (full traversal to root)", async () => {
-    await detectLinter(emptyDir);
+  bench("no config (full traversal to root)", () => {
+    detectLinter(emptyDir);
   });
 });
 
 // ---------------------------------------------------------------------------
-// 2. exists (async)
+// 2. exists
 // ---------------------------------------------------------------------------
 
 group("exists", () => {
@@ -71,23 +77,21 @@ group("exists", () => {
   const filePath = join(dir, "test.txt");
   const missingPath = join(dir, "missing.txt");
 
-  bench("existing file", async () => {
-    await exists(filePath);
+  bench("existing file", () => {
+    exists(filePath);
   });
 
-  bench("missing file", async () => {
-    await exists(missingPath);
+  bench("missing file", () => {
+    exists(missingPath);
   });
 });
 
 // ---------------------------------------------------------------------------
-// 3. Config file lookups — sequential exists() loops in linter modules
+// 3. Config file lookups
 // ---------------------------------------------------------------------------
 
 group("config lookups", () => {
-  // Prettier: 18 sequential checks (worst case — no config found)
   const prettierNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
-  // Prettier: best case — first path matches
   const prettierHitDir = tmpDir({
     "package.json": JSON.stringify({ prettier: {} }),
   });
@@ -97,7 +101,7 @@ group("config lookups", () => {
     process.chdir(prettierNoneDir);
     try {
       const { prettier } = await import("../src/linters/prettier");
-      await prettier.exists();
+      prettier.exists();
     } finally {
       process.chdir(origCwd);
     }
@@ -108,13 +112,12 @@ group("config lookups", () => {
     process.chdir(prettierHitDir);
     try {
       const { prettier } = await import("../src/linters/prettier");
-      await prettier.exists();
+      prettier.exists();
     } finally {
       process.chdir(origCwd);
     }
   });
 
-  // Stylelint: 11 sequential checks (worst case)
   const stylelintNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
   const stylelintHitDir = tmpDir({
     "package.json": JSON.stringify({ stylelint: {} }),
@@ -125,7 +128,7 @@ group("config lookups", () => {
     process.chdir(stylelintNoneDir);
     try {
       const { stylelint } = await import("../src/linters/stylelint");
-      await stylelint.exists();
+      stylelint.exists();
     } finally {
       process.chdir(origCwd);
     }
@@ -136,13 +139,12 @@ group("config lookups", () => {
     process.chdir(stylelintHitDir);
     try {
       const { stylelint } = await import("../src/linters/stylelint");
-      await stylelint.exists();
+      stylelint.exists();
     } finally {
       process.chdir(origCwd);
     }
   });
 
-  // ESLint: 6 sequential checks
   const eslintNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
   const eslintHitDir = tmpDir({ "eslint.config.mjs": "" });
 
@@ -151,7 +153,7 @@ group("config lookups", () => {
     process.chdir(eslintNoneDir);
     try {
       const { eslint } = await import("../src/linters/eslint");
-      await eslint.exists();
+      eslint.exists();
     } finally {
       process.chdir(origCwd);
     }
@@ -162,13 +164,12 @@ group("config lookups", () => {
     process.chdir(eslintHitDir);
     try {
       const { eslint } = await import("../src/linters/eslint");
-      await eslint.exists();
+      eslint.exists();
     } finally {
       process.chdir(origCwd);
     }
   });
 
-  // lint-staged: 11 sequential checks
   const lintStagedNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
 
   bench("lint-staged config — miss (11 checks)", async () => {
@@ -176,7 +177,7 @@ group("config lookups", () => {
     process.chdir(lintStagedNoneDir);
     try {
       const { lintStaged } = await import("../src/integrations/lint-staged");
-      await lintStaged.exists();
+      lintStaged.exists();
     } finally {
       process.chdir(origCwd);
     }
@@ -194,7 +195,7 @@ group("check command dispatch", () => {
     mock.module("cross-spawn", () => ({ sync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
-      exists: () => Promise.resolve(true),
+      exists: () => true,
     }));
     const { check } = await import("../src/commands/check");
     await check();
@@ -205,7 +206,7 @@ group("check command dispatch", () => {
     mock.module("cross-spawn", () => ({ sync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
-      exists: () => Promise.resolve(true),
+      exists: () => true,
     }));
     const { check } = await import("../src/commands/check");
     await check();
@@ -216,7 +217,7 @@ group("check command dispatch", () => {
     mock.module("cross-spawn", () => ({ sync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
-      exists: () => Promise.resolve(true),
+      exists: () => true,
     }));
     const { check } = await import("../src/commands/check");
     await check();
@@ -314,6 +315,79 @@ group("isMonorepo", () => {
     } finally {
       process.chdir(origCwd);
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 7. updatePackageJson — called 2-3x during installDependencies
+// ---------------------------------------------------------------------------
+
+group("updatePackageJson", () => {
+  const dir = tmpDir({
+    "package.json": JSON.stringify({
+      devDependencies: {},
+      name: "test",
+      scripts: {},
+    }),
+  });
+
+  bench("single call", async () => {
+    const origCwd = process.cwd();
+    process.chdir(dir);
+    try {
+      await updatePackageJson({
+        scripts: { check: "ultracite check", fix: "ultracite fix" },
+      });
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  bench("two sequential calls (current init pattern)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(dir);
+    try {
+      await updatePackageJson({
+        devDependencies: { ultracite: "^7.0.0" },
+      });
+      await updatePackageJson({
+        scripts: { check: "ultracite check", fix: "ultracite fix" },
+      });
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+
+  bench("three sequential calls (oxlint init pattern)", async () => {
+    const origCwd = process.cwd();
+    process.chdir(dir);
+    try {
+      await updatePackageJson({
+        devDependencies: { ultracite: "^7.0.0" },
+      });
+      await updatePackageJson({
+        scripts: { check: "ultracite check", fix: "ultracite fix" },
+      });
+      await updatePackageJson({ type: "module" });
+    } finally {
+      process.chdir(origCwd);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 8. ensureDirectory
+// ---------------------------------------------------------------------------
+
+group("ensureDirectory", () => {
+  const baseDir = tmpDir();
+
+  bench("shallow path", async () => {
+    await ensureDirectory(join(baseDir, "a/file.txt"));
+  });
+
+  bench("deep nested path", async () => {
+    await ensureDirectory(join(baseDir, "a/b/c/d/file.txt"));
   });
 });
 

@@ -68,18 +68,27 @@ describe("zed editor config", () => {
 
   describe("create", () => {
     test("creates .zed directory", async () => {
-      const mockMkdir = mock(() => Promise.resolve());
+      const mockMkdirSync = mock(() => {});
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mockMkdir,
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("{}")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mockMkdirSync,
+        readFileSync: mock(() => "{}"),
       }));
 
       const zed = createEditorConfig("zed");
       await zed.create();
 
-      expect(mockMkdir).toHaveBeenCalledWith(".zed", { recursive: true });
+      expect(mockMkdirSync).toHaveBeenCalledWith(".zed", { recursive: true });
     });
 
     test("creates settings.json with default config", async () => {

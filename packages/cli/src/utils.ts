@@ -1,5 +1,5 @@
-import { accessSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { accessSync, mkdirSync, readFileSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import process from "node:process";
 
@@ -14,13 +14,13 @@ export const exists = (path: string): boolean => {
   }
 };
 
-export const isMonorepo = async () => {
+export const isMonorepo = (): boolean => {
   if (exists("pnpm-workspace.yaml")) {
     return true;
   }
 
   try {
-    const pkgJson = parse(await readFile("package.json", "utf-8")) as
+    const pkgJson = parse(readFileSync("package.json", "utf-8")) as
       | Record<string, unknown>
       | undefined;
 
@@ -86,11 +86,11 @@ export const updatePackageJson = async ({
   );
 };
 
-export const ensureDirectory = async (path: string) => {
+export const ensureDirectory = (path: string): void => {
   const dir = dirname(path);
   if (dir !== ".") {
     const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
-    await mkdir(cleanDir, { recursive: true });
+    mkdirSync(cleanDir, { recursive: true });
   }
 };
 

@@ -218,29 +218,29 @@ export const installDependencies = async (
     }
   }
 
+  const scripts = {
+    check: "ultracite check",
+    fix: "ultracite fix",
+  };
+
   if (install) {
     await addDevDependency(packages, {
       corepack: false,
       packageManager,
       silent: true,
-      workspace: await isMonorepo(),
+      workspace: isMonorepo(),
     });
+    // Add ultracite scripts to package.json
+    await updatePackageJson({ scripts });
   } else {
     const devDependencies = buildNoInstallDevDependencies(
       linter,
       typeAware,
       frameworks
     );
-    await updatePackageJson({ devDependencies });
+    // Batch devDependencies and scripts into a single read/write
+    await updatePackageJson({ devDependencies, scripts });
   }
-
-  // Add ultracite scripts to package.json
-  await updatePackageJson({
-    scripts: {
-      check: "ultracite check",
-      fix: "ultracite fix",
-    },
-  });
 
   if (!quiet) {
     s.stop("Dependencies installed.");

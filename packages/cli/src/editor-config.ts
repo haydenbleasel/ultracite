@@ -22,7 +22,7 @@ export const createEditorConfig = (
 
   return {
     create: async () => {
-      await ensureDirectory(editor.config.path);
+      ensureDirectory(editor.config.path);
       await writeFile(
         editor.config.path,
         `${JSON.stringify(content, null, 2)}\n`
@@ -40,7 +40,7 @@ export const createEditorConfig = (
       : undefined,
 
     update: async () => {
-      await ensureDirectory(editor.config.path);
+      ensureDirectory(editor.config.path);
       const doesExist = exists(editor.config.path);
 
       if (!doesExist) {

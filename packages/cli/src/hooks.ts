@@ -81,7 +81,7 @@ export const createHooks = (
 
   return {
     create: async () => {
-      await ensureDirectory(hookIntegration.hooks.path);
+      ensureDirectory(hookIntegration.hooks.path);
       await writeFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(content, null, 2)}\n`
@@ -89,7 +89,7 @@ export const createHooks = (
     },
     exists: () => exists(hookIntegration.hooks.path),
     update: async () => {
-      await ensureDirectory(hookIntegration.hooks.path);
+      ensureDirectory(hookIntegration.hooks.path);
       await updateConfig();
     },
   };

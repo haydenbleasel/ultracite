@@ -84,7 +84,7 @@ export const husky = {
       corepack: false,
       packageManager,
       silent: true,
-      workspace: await isMonorepo(),
+      workspace: isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure husky is initialized

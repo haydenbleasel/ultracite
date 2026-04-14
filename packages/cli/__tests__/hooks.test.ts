@@ -60,22 +60,31 @@ describe("createHooks", () => {
     });
 
     test("create creates directory and hooks.json file", async () => {
-      const mockMkdir = mock((_path: string) => Promise.resolve());
+      const mockMkdirSync = mock((_path: string) => {});
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mockMkdir,
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mockMkdirSync,
+        readFileSync: mock(() => "{}"),
       }));
 
       const hooks = createHooks("cursor", "npm");
       await hooks.create();
 
-      expect(mockMkdir).toHaveBeenCalled();
+      expect(mockMkdirSync).toHaveBeenCalled();
       expect(mockWriteFile).toHaveBeenCalledTimes(1);
     });
 

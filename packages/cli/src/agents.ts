@@ -101,14 +101,14 @@ export const createAgents = (
 
   return {
     create: async () => {
-      await ensureDirectory(agent.config.path);
+      ensureDirectory(agent.config.path);
       await writeFile(agent.config.path, content);
     },
 
     exists: () => exists(agent.config.path),
 
     update: async () => {
-      await ensureDirectory(agent.config.path);
+      ensureDirectory(agent.config.path);
       const doesExist = exists(agent.config.path);
 
       if (!(agent.config.appendMode && doesExist)) {

@@ -105,7 +105,7 @@ describe("isMonorepo", () => {
         throw new Error("ENOENT");
       }),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock(() => '{"workspaces": ["packages/*"]}'),
     }));
 
     const result = await isMonorepo();
@@ -124,7 +124,7 @@ describe("isMonorepo", () => {
         throw new Error("ENOENT");
       }),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock(() => '{"workspace": true}'),
     }));
 
     const result = await isMonorepo();
@@ -322,10 +322,10 @@ describe("ensureDirectory", () => {
   });
 
   test("creates parent directory for nested paths", async () => {
-    const mockMkdir = mock(() => Promise.resolve());
+    const mockMkdirSync = mock(() => {});
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
-      mkdir: mockMkdir,
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -333,18 +333,21 @@ describe("ensureDirectory", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
+      mkdirSync: mockMkdirSync,
       readFileSync: mock(() => "{}"),
     }));
 
     await ensureDirectory("some/nested/file.txt");
-    expect(mockMkdir).toHaveBeenCalledWith("some/nested", { recursive: true });
+    expect(mockMkdirSync).toHaveBeenCalledWith("some/nested", {
+      recursive: true,
+    });
   });
 
   test("strips leading ./ from directory path", async () => {
-    const mockMkdir = mock(() => Promise.resolve());
+    const mockMkdirSync = mock(() => {});
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
-      mkdir: mockMkdir,
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -352,18 +355,19 @@ describe("ensureDirectory", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
+      mkdirSync: mockMkdirSync,
       readFileSync: mock(() => "{}"),
     }));
 
     await ensureDirectory("./some/file.txt");
-    expect(mockMkdir).toHaveBeenCalledWith("some", { recursive: true });
+    expect(mockMkdirSync).toHaveBeenCalledWith("some", { recursive: true });
   });
 
   test("does not create directory for root-level files", async () => {
-    const mockMkdir = mock(() => Promise.resolve());
+    const mockMkdirSync = mock(() => {});
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
-      mkdir: mockMkdir,
+      mkdir: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve("{}")),
       writeFile: mock(() => Promise.resolve()),
     }));
@@ -371,11 +375,12 @@ describe("ensureDirectory", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
+      mkdirSync: mockMkdirSync,
       readFileSync: mock(() => "{}"),
     }));
 
     await ensureDirectory("file.txt");
-    expect(mockMkdir).not.toHaveBeenCalled();
+    expect(mockMkdirSync).not.toHaveBeenCalled();
   });
 });
 

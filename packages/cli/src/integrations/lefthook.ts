@@ -44,7 +44,7 @@ export const lefthook = {
       corepack: false,
       packageManager,
       silent: true,
-      workspace: await isMonorepo(),
+      workspace: isMonorepo(),
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized

@@ -206,42 +206,60 @@ describe("createAgents", () => {
 
   describe("directory creation", () => {
     test("creates parent directory when needed", async () => {
-      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) =>
-        Promise.resolve()
+      const mockMkdirSync = mock(
+        (_path: string, _opts?: Record<string, unknown>) => {}
       );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mockMkdir,
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mockMkdirSync,
+        readFileSync: mock(() => "{}"),
       }));
 
       const agents = createAgents("claude", "npm", "biome");
       await agents.create();
 
-      expect(mockMkdir).toHaveBeenCalled();
-      const [mkdirCall] = mockMkdir.mock.calls;
+      expect(mockMkdirSync).toHaveBeenCalled();
+      const [mkdirCall] = mockMkdirSync.mock.calls;
       expect(mkdirCall[0]).toBe(".claude");
     });
 
     test("does not create directory for root-level files", async () => {
-      const mockMkdir = mock((_path: string, _opts?: Record<string, unknown>) =>
-        Promise.resolve()
+      const mockMkdirSync = mock(
+        (_path: string, _opts?: Record<string, unknown>) => {}
       );
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mockMkdir,
+        mkdir: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mockMkdirSync,
+        readFileSync: mock(() => "{}"),
       }));
 
       const agents = createAgents("codex", "npm", "biome");
       await agents.create();
 
       // Should not be called for root-level AGENTS.md
-      expect(mockMkdir).not.toHaveBeenCalled();
+      expect(mockMkdirSync).not.toHaveBeenCalled();
     });
   });
 });
