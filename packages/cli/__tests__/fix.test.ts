@@ -134,13 +134,12 @@ describe("fix", () => {
     expect(callArgs[1]).toContain(routeGroupFile);
   });
 
-  test("exits with status code when biome fix finds errors", async () => {
+  test("throws LinterExitError when biome fix finds errors", async () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
       })
     );
-    const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -148,10 +147,8 @@ describe("fix", () => {
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("biome")),
     }));
-    process.exit = mockExit as never;
 
-    await fix([]);
-    expect(mockExit).toHaveBeenCalledWith(1);
+    await expect(fix([])).rejects.toThrow("Biome exited with code 1");
   });
 
   test("exits when spawn returns error", async () => {
@@ -233,13 +230,12 @@ describe("fix", () => {
     expect(eslintCall[1]).toContain("src/index.ts");
   });
 
-  test("eslint fix exits with status code when prettier fails", async () => {
+  test("eslint fix throws LinterExitError when prettier fails", async () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
       })
     );
-    const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -247,10 +243,8 @@ describe("fix", () => {
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("eslint")),
     }));
-    process.exit = mockExit as never;
 
-    await fix([]);
-    expect(mockExit).toHaveBeenCalledWith(1);
+    await expect(fix([])).rejects.toThrow("Prettier exited with code 1");
   });
 
   test("eslint fix throws on prettier spawn error", async () => {
@@ -392,13 +386,12 @@ describe("fix", () => {
     );
   });
 
-  test("oxlint fix exits with status code on failure", async () => {
+  test("oxlint fix throws LinterExitError on failure", async () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
       })
     );
-    const mockExit = mock(() => {});
 
     mock.module("cross-spawn", () => ({
       sync: mockSpawn,
@@ -406,10 +399,8 @@ describe("fix", () => {
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => Promise.resolve("oxlint")),
     }));
-    process.exit = mockExit as never;
 
-    await fix([]);
-    expect(mockExit).toHaveBeenCalledWith(1);
+    await expect(fix([])).rejects.toThrow("oxfmt exited with code 1");
   });
 
   test("passes through --type-aware flag to oxlint", async () => {

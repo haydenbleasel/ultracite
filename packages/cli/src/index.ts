@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import { Command } from "commander";
 
 import packageJson from "../package.json" with { type: "json" };
@@ -5,6 +7,7 @@ import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { initialize } from "./initialize";
+import { LinterExitError } from "./run-command";
 
 const program = new Command();
 
@@ -94,7 +97,14 @@ program
   });
 
 if (!process.env.TEST) {
-  program.parse();
+  try {
+    await program.parseAsync();
+  } catch (error: unknown) {
+    if (error instanceof LinterExitError) {
+      process.exit(error.exitCode);
+    }
+    throw error;
+  }
 }
 
 export { program };

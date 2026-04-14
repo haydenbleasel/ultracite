@@ -1,9 +1,18 @@
-import process from "node:process";
-
 import { sync as crossSpawnSync } from "cross-spawn";
 
 type RunCommandOptions = NonNullable<Parameters<typeof crossSpawnSync>[2]>;
 type RunCommandResult = ReturnType<typeof crossSpawnSync>;
+
+export class LinterExitError extends Error {
+  readonly exitCode: number;
+
+  override readonly name = "LinterExitError";
+
+  constructor(commandName: string, exitCode: number) {
+    super(`${commandName} exited with code ${exitCode}`);
+    this.exitCode = exitCode;
+  }
+}
 
 export const runCommandSync = (
   command: string,
@@ -33,6 +42,6 @@ export const exitOnCommandFailure = (
   }
 
   if (result.status !== 0) {
-    process.exit(result.status ?? 1);
+    throw new LinterExitError(commandName, result.status ?? 1);
   }
 };
