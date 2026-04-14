@@ -46,7 +46,7 @@ export const biome = {
       extends: extendsList,
     };
 
-    return writeFile(path, JSON.stringify(config, null, 2));
+    return writeFile(path, `${JSON.stringify(config, null, 2)}\n`);
   },
   exists: async () => {
     const path = await getBiomeConfigPath();
@@ -98,6 +98,6 @@ export const biome = {
     };
     const newConfig = deepmerge(configToWork, configToMerge);
 
-    await writeFile(path, JSON.stringify(newConfig, null, 2));
+    await writeFile(path, `${JSON.stringify(newConfig, null, 2)}\n`);
   },
 };

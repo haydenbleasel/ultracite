@@ -23,7 +23,10 @@ export const createEditorConfig = (
   return {
     create: async () => {
       await ensureDirectory(editor.config.path);
-      await writeFile(editor.config.path, JSON.stringify(content, null, 2));
+      await writeFile(
+        editor.config.path,
+        `${JSON.stringify(content, null, 2)}\n`
+      );
     },
 
     exists: () => exists(editor.config.path),
@@ -41,7 +44,10 @@ export const createEditorConfig = (
       const doesExist = await exists(editor.config.path);
 
       if (!doesExist) {
-        await writeFile(editor.config.path, JSON.stringify(content, null, 2));
+        await writeFile(
+          editor.config.path,
+          `${JSON.stringify(content, null, 2)}\n`
+        );
         return;
       }
 
@@ -54,7 +60,10 @@ export const createEditorConfig = (
       const configToMerge = existingConfig || {};
       const newConfig = deepmerge(configToMerge, content);
 
-      await writeFile(editor.config.path, JSON.stringify(newConfig, null, 2));
+      await writeFile(
+        editor.config.path,
+        `${JSON.stringify(newConfig, null, 2)}\n`
+      );
     },
   };
 };

@@ -61,7 +61,7 @@ export const createHooks = (
     if (!doesExist) {
       await writeFile(
         hookIntegration.hooks.path,
-        JSON.stringify(content, null, 2)
+        `${JSON.stringify(content, null, 2)}\n`
       );
       return;
     }
@@ -74,7 +74,7 @@ export const createHooks = (
       const merged = deepmerge(existingJson, content);
       await writeFile(
         hookIntegration.hooks.path,
-        JSON.stringify(merged, null, 2)
+        `${JSON.stringify(merged, null, 2)}\n`
       );
     }
   };
@@ -84,7 +84,7 @@ export const createHooks = (
       await ensureDirectory(hookIntegration.hooks.path);
       await writeFile(
         hookIntegration.hooks.path,
-        JSON.stringify(content, null, 2)
+        `${JSON.stringify(content, null, 2)}\n`
       );
     },
     exists: () => exists(hookIntegration.hooks.path),

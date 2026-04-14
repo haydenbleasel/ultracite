@@ -81,7 +81,7 @@ export const updatePackageJson = async ({
 
   await writeFile(
     "package.json",
-    JSON.stringify(newPackageJsonObject, null, 2)
+    `${JSON.stringify(newPackageJsonObject, null, 2)}\n`
   );
 };
 

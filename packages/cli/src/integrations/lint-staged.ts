@@ -151,7 +151,10 @@ const updatePackageJson = async (
       )
     : createLintStagedConfig(packageManager);
 
-  await writeFile("./package.json", JSON.stringify(packageJson, null, 2));
+  await writeFile(
+    "./package.json",
+    `${JSON.stringify(packageJson, null, 2)}\n`
+  );
 };
 
 // Update JSON config files
@@ -171,7 +174,7 @@ const updateJsonConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
-  await writeFile(filename, JSON.stringify(mergedConfig, null, 2));
+  await writeFile(filename, `${JSON.stringify(mergedConfig, null, 2)}\n`);
 };
 
 // Update YAML config files
@@ -239,7 +242,7 @@ const createFallbackConfig = async (
 ): Promise<void> => {
   await writeFile(
     ".lintstagedrc.json",
-    JSON.stringify(createLintStagedConfig(packageManager), null, 2)
+    `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
   );
 };
 
@@ -287,7 +290,7 @@ export const lintStaged = {
   create: async (packageManager: PackageManagerName) => {
     await writeFile(
       ".lintstagedrc.json",
-      JSON.stringify(createLintStagedConfig(packageManager), null, 2)
+      `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
     );
   },
   exists: async () => {

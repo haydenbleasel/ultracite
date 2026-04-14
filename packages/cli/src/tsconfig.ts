@@ -78,7 +78,7 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
           strictNullChecks: true,
         },
       };
-      await writeFile(filePath, JSON.stringify(freshConfig, null, 2));
+      await writeFile(filePath, `${JSON.stringify(freshConfig, null, 2)}\n`);
       return;
     }
 
