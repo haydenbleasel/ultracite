@@ -1,8 +1,13 @@
 import { describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { readFileSync as _readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { getRules } from "../src/rules";
+
+// When running from the monorepo root, the CLI preload mocks node:fs.
+// Use the real readFileSync stashed on globalThis, falling back to the import.
+const readFileSync = ((globalThis as Record<string, unknown>)
+  .__realReadFileSync ?? _readFileSync) as typeof _readFileSync;
 
 const repoRoot = join(import.meta.dir, "..", "..", "..");
 const skillPath = join(repoRoot, "skills", "ultracite", "SKILL.md");

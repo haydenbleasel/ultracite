@@ -93,6 +93,9 @@ if (!process.env.TEST) {
     if (error instanceof LinterExitError) {
       process.exit(error.exitCode);
     }
+    if (error instanceof Error && error.message === "Doctor checks failed") {
+      process.exit(1);
+    }
     throw error;
   }
 }
