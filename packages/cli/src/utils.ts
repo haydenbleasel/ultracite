@@ -109,8 +109,10 @@ const eslintConfigNames = [
 
 const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 
-export const detectLinter = async (): Promise<Linter | null> => {
-  let dir = process.cwd();
+export const detectLinter = async (
+  startDir = process.cwd()
+): Promise<Linter | null> => {
+  let dir = startDir;
 
   while (true) {
     // Check for biome config
