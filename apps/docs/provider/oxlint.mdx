@@ -97,6 +97,28 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules
 
+## Adding Third-Party Plugins
+
+Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
+
+```bash title="Terminal"
+npm install -D oxlint-plugin-complexity
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import complexity from "oxlint-plugin-complexity";
+
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  plugins: [complexity],
+});
+```
+
+This approach lets you opt in to additional checks without Ultracite taking on third-party dependencies in its core preset.
+
 ## Formatter Settings (Oxfmt)
 
 Ultracite configures Oxfmt with these defaults:
