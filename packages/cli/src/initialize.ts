@@ -219,14 +219,12 @@ export const installDependencies = async (
   }
 
   if (install) {
-    for (const pkg of packages) {
-      await addDevDependency(pkg, {
-        corepack: false,
-        packageManager,
-        silent: true,
-        workspace: await isMonorepo(),
-      });
-    }
+    await addDevDependency(packages, {
+      corepack: false,
+      packageManager,
+      silent: true,
+      workspace: await isMonorepo(),
+    });
   } else {
     const devDependencies = buildNoInstallDevDependencies(
       linter,

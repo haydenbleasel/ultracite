@@ -450,8 +450,8 @@ describe("initialize", () => {
 
   test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {
     const installedPackages: string[] = [];
-    const mockAddDep = mock((pkg: string) => {
-      installedPackages.push(pkg);
+    const mockAddDep = mock((pkg: string | string[]) => {
+      installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
       return Promise.resolve();
     });
 
@@ -1333,8 +1333,8 @@ describe("helper functions", () => {
 
     test("installs eslint dependencies when linter is eslint", async () => {
       const installedPackages: string[] = [];
-      const mockAddDep = mock((pkg: string) => {
-        installedPackages.push(pkg);
+      const mockAddDep = mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
         return Promise.resolve();
       });
 
@@ -1447,8 +1447,8 @@ describe("helper functions", () => {
 
     test("installs oxlint-tsgolint when type-aware is true", async () => {
       const installedPackages: string[] = [];
-      const mockAddDep = mock((pkg: string) => {
-        installedPackages.push(pkg);
+      const mockAddDep = mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
         return Promise.resolve();
       });
 
