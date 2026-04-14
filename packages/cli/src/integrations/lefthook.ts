@@ -59,7 +59,13 @@ export const lefthook = {
       short: packageManager.name === "npm",
     });
 
-    execSync(installCommand, { stdio: "pipe" });
+    try {
+      execSync(installCommand, { stdio: "pipe" });
+    } catch {
+      // lefthook install fails with exit code 128 when not in a git repository.
+      // The dependency and prepare script are still set up, so lefthook will
+      // initialize hooks on the next `prepare` run after git is initialized.
+    }
   },
   update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, "utf-8");
