@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 
-import { exists, isMonorepo, updatePackageJson } from "../src/utils";
+import {
+  ensureDirectory,
+  exists,
+  isMonorepo,
+  updatePackageJson,
+} from "../src/utils";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
@@ -157,6 +162,24 @@ describe("updatePackageJson", () => {
     });
   });
 
+  test("updates type field", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      writeFile: mockWriteFile,
+    }));
+
+    await updatePackageJson({ type: "module" });
+
+    expect(mockWriteFile).toHaveBeenCalled();
+    const [writeCall] = mockWriteFile.mock.calls;
+    const writtenContent = JSON.parse(writeCall[1]);
+    expect(writtenContent.type).toBe("module");
+  });
+
   test("updates scripts", async () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
@@ -198,7 +221,50 @@ describe("isMonorepo error handling", () => {
   });
 });
 
-// Note: detectLinter is tested indirectly through fix.test.ts and check.test.ts
-// which mock ../src/utils and test all linter detection paths (biome, eslint, oxlint, null).
-// Direct testing here causes mock leaking issues since fix.test.ts replaces the
-// ../src/utils module, which affects detectLinter when both files run in the same process.
+describe("ensureDirectory", () => {
+  beforeEach(() => {
+    mock.restore();
+  });
+
+  test("creates parent directory for nested paths", async () => {
+    const mockMkdir = mock(() => Promise.resolve());
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      mkdir: mockMkdir,
+      readFile: mock(() => Promise.resolve("{}")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    await ensureDirectory("some/nested/file.txt");
+    expect(mockMkdir).toHaveBeenCalledWith("some/nested", { recursive: true });
+  });
+
+  test("strips leading ./ from directory path", async () => {
+    const mockMkdir = mock(() => Promise.resolve());
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      mkdir: mockMkdir,
+      readFile: mock(() => Promise.resolve("{}")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    await ensureDirectory("./some/file.txt");
+    expect(mockMkdir).toHaveBeenCalledWith("some", { recursive: true });
+  });
+
+  test("does not create directory for root-level files", async () => {
+    const mockMkdir = mock(() => Promise.resolve());
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      mkdir: mockMkdir,
+      readFile: mock(() => Promise.resolve("{}")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    await ensureDirectory("file.txt");
+    expect(mockMkdir).not.toHaveBeenCalled();
+  });
+});
+
+// Note: detectLinter tests live in detect-linter.test.ts to avoid mock leaking
+// from fix.test.ts and check.test.ts which replace the ../src/utils module.
