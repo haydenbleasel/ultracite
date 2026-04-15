@@ -36,7 +36,13 @@ import unusedImportsRules from "./rules/unused-imports.mjs";
 const config = [
   importX.flatConfigs.typescript,
   {
-    ignores: ["**/dist/", "**/build/", "**/.next/", "**/.turbo/"],
+    ignores: [
+      "**/dist/",
+      "**/build/",
+      "**/.next/",
+      "**/.open-next/",
+      "**/.turbo/",
+    ],
   },
   {
     files: [
