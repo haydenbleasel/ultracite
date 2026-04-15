@@ -213,6 +213,40 @@ describe("oxlint vitest config", () => {
    * disabling prefer-strict-boolean-matchers (see packages/cli/config/eslint/vitest/rules/vitest.mjs).
    * The oxlint vitest config must be consistent.
    */
+  /**
+   * prefer-describe-function-title vs valid-title (#665)
+   *
+   * These rules are mutually exclusive:
+   * - prefer-describe-function-title: enforce describe(fn, ...) with a function reference
+   * - valid-title: enforce describe('string', ...) with a string literal
+   *
+   * Enabling both causes an unfixable conflict: prefer-describe-function-title auto-fixes
+   * string titles to function references, then valid-title flags the result as an error.
+   */
+  describe("prefer-describe-function-title vs valid-title conflict", () => {
+    test("valid-title is explicitly disabled to avoid conflict with prefer-describe-function-title", async () => {
+      const config = await readOxlintConfig("vitest");
+      const rules = config.overrides?.[0]?.rules ?? {};
+
+      expect(rules["vitest/valid-title"]).toBe("off");
+    });
+
+    test("valid-title and prefer-describe-function-title are not both enabled", async () => {
+      const config = await readOxlintConfig("vitest");
+      const rules = config.overrides?.[0]?.rules ?? {};
+
+      const validTitleEnabled = isEnabled(rules["vitest/valid-title"]);
+      const preferDescribeFnEnabled = isEnabled(
+        rules["vitest/prefer-describe-function-title"]
+      );
+
+      expect(
+        validTitleEnabled && preferDescribeFnEnabled,
+        "valid-title and prefer-describe-function-title are both enabled — they conflict: one requires string titles, the other requires function references"
+      ).toBe(false);
+    });
+  });
+
   describe("prefer-to-be-truthy/falsy vs prefer-strict-boolean-matchers conflict", () => {
     test("prefer-strict-boolean-matchers is explicitly disabled to avoid conflict", async () => {
       const config = await readOxlintConfig("vitest");

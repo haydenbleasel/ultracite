@@ -61,7 +61,8 @@ export default defineConfig({
         "vitest/require-top-level-describe": "error",
         "vitest/valid-describe-callback": "error",
         "vitest/valid-expect": "error",
-        "vitest/valid-title": "error",
+        // Disabled: conflicts with prefer-describe-function-title — function refs aren't string titles (#665)
+        "vitest/valid-title": "off",
         "vitest/warn-todo": "error",
 
         // Disabled: mock callbacks often need empty functions
