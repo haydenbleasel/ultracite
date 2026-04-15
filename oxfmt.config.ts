@@ -14,6 +14,7 @@ export default defineConfig({
     "apps/web/lib/utils.ts",
     "apps/web/hooks/use-mobile.ts",
     "packages/cli/config/biome",
+    "packages/cli/config/shared/ignores.jsonc",
     "test",
   ],
 });

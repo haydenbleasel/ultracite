@@ -1,9 +1,12 @@
 import { defineConfig } from "oxlint";
 
+import { ignorePatterns } from "../../shared/ignores.mjs";
+
 export default defineConfig({
   env: {
     browser: true,
   },
+  ignorePatterns,
   overrides: [
     {
       // Shared test file overrides — framework-specific test rules

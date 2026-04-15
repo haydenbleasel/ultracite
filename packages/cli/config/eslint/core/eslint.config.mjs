@@ -18,6 +18,7 @@ import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
+import { ignorePatterns } from "../../shared/ignores.mjs";
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
@@ -36,13 +37,7 @@ import unusedImportsRules from "./rules/unused-imports.mjs";
 const config = [
   importX.flatConfigs.typescript,
   {
-    ignores: [
-      "**/dist/",
-      "**/build/",
-      "**/.next/",
-      "**/.open-next/",
-      "**/.turbo/",
-    ],
+    ignores: ignorePatterns,
   },
   {
     files: [
