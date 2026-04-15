@@ -63,7 +63,7 @@ const EditorPage = async ({ params }: PageProps<"/editors/[editor]">) => {
       )}
       <div className="grid gap-16 sm:gap-24 md:gap-32">
         <EditorHero editor={editor} />
-        <SetupFiles editor={editor} pageData={pageData} />
+        <SetupFiles editorName={editor.name} setupFiles={pageData.setupFiles} />
         <Benefits editor={editor} />
         <Workflow editor={editor} />
         <FaqSection

@@ -1,3 +1,4 @@
+import { SiJson, SiMarkdown } from "@icons-pack/react-simple-icons";
 import {
   getDefaultAgentHookContent,
   getDefaultAgentRulesContent,
@@ -30,18 +31,26 @@ export const Files = ({ agent }: FilesProps) => {
         </p>
       </div>
 
-      <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
+      <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border">
         <Tabs className="gap-0" defaultValue="rules">
-          <div className="border-b bg-secondary px-4 py-3">
-            <TabsList>
-              <TabsTrigger value="rules">{agent.config.path}</TabsTrigger>
-              {hookContent ? (
-                <TabsTrigger value="hooks">
-                  {agent.hooks?.path ?? "Hook config"}
-                </TabsTrigger>
-              ) : null}
-            </TabsList>
-          </div>
+          <TabsList className="w-full justify-start rounded-none border-b bg-secondary px-4 py-3 group-data-horizontal/tabs:h-auto">
+            <TabsTrigger
+              className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
+              value="rules"
+            >
+              <SiMarkdown className="size-3.5 text-muted-foreground" />
+              <span>{agent.config.path}</span>
+            </TabsTrigger>
+            {hookContent ? (
+              <TabsTrigger
+                className="inline-flex flex-auto grow-0 items-center gap-2 rounded-sm px-2 py-1 text-xs"
+                value="hooks"
+              >
+                <SiJson className="size-3.5 text-muted-foreground" />
+                <span>{agent.hooks?.path ?? "Hook config"}</span>
+              </TabsTrigger>
+            ) : null}
+          </TabsList>
           <TabsContent className="mt-0" value="rules">
             <div className="mx-auto h-96 w-full max-w-3xl overflow-auto">
               <CodeBlock code={rulesContent} lang="markdown" />

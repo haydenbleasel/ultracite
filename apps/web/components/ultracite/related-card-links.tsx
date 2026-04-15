@@ -2,6 +2,7 @@ import type { ImageProps } from "next/image";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SectionIntro } from "@/components/ultracite/section-intro";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +16,6 @@ export interface RelatedCardLink {
 }
 
 interface RelatedCardLinksProps {
-  cardClassName?: string;
   description: string;
   descriptionClassName?: string;
   items: RelatedCardLink[];
@@ -23,7 +23,6 @@ interface RelatedCardLinksProps {
 }
 
 export const RelatedCardLinks = ({
-  cardClassName,
   description,
   descriptionClassName,
   items,
@@ -38,37 +37,38 @@ export const RelatedCardLinks = ({
       <SectionIntro description={description} title={title} />
       <div className="grid gap-4 md:grid-cols-3">
         {items.map((item) => (
-          <Link
-            className={cn(
-              "grid gap-4 rounded-[1.5rem] border bg-card/40 p-6 transition-colors duration-200 hover:bg-secondary/20",
-              cardClassName
-            )}
-            href={item.href}
-            key={item.href}
-          >
-            <div className="flex items-center gap-3">
-              <Image
-                alt={item.imageAlt}
-                className="size-10 rounded-full"
-                height={40}
-                src={item.imageSrc}
-                width={40}
-              />
-              <div className="grid gap-0.5">
-                <span className="font-medium tracking-tight">{item.title}</span>
-                <span className="text-muted-foreground text-sm">
-                  {item.subtitle}
-                </span>
-              </div>
-            </div>
-            <p
-              className={cn(
-                "text-pretty text-muted-foreground text-sm",
-                descriptionClassName
-              )}
-            >
-              {item.description}
-            </p>
+          <Link href={item.href} key={item.href}>
+            <Card className="h-full transition-colors duration-200 hover:bg-secondary">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Image
+                    alt={item.imageAlt}
+                    className="size-10 rounded-full"
+                    height={40}
+                    src={item.imageSrc}
+                    width={40}
+                  />
+                  <div className="grid gap-0.5">
+                    <span className="font-medium tracking-tight">
+                      {item.title}
+                    </span>
+                    <span className="text-muted-foreground text-sm">
+                      {item.subtitle}
+                    </span>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p
+                  className={cn(
+                    "text-pretty text-muted-foreground text-sm",
+                    descriptionClassName
+                  )}
+                >
+                  {item.description}
+                </p>
+              </CardContent>
+            </Card>
           </Link>
         ))}
       </div>

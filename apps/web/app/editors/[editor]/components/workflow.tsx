@@ -1,6 +1,7 @@
 import type { Editor } from "@repo/data/editors";
 import { Fragment } from "react";
 
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SectionIntro } from "@/components/ultracite/section-intro";
 
 interface WorkflowProps {
@@ -51,17 +52,16 @@ export const Workflow = ({ editor }: WorkflowProps) => (
 
     <div className="grid gap-4 md:grid-cols-3">
       {editor.workflowHighlights.map((step, index) => (
-        <div
-          className="grid gap-4 rounded-[1.75rem] border bg-card/40 p-6 transition-colors hover:bg-card/70"
-          key={step}
-        >
-          <span className="inline-flex size-9 items-center justify-center rounded-full bg-secondary font-mono text-sm text-muted-foreground">
-            {index + 1}
-          </span>
-          <p className="text-pretty leading-7 tracking-tight">
-            {renderStep(step)}
-          </p>
-        </div>
+        <Card className="gap-2" key={step}>
+          <CardHeader>
+            <span className="mb-3 inline-flex size-9 items-center justify-center rounded-full bg-secondary font-mono text-sm text-muted-foreground">
+              {index + 1}
+            </span>
+          </CardHeader>
+          <CardContent>
+            <p className="text-pretty text-sm">{renderStep(step)}</p>
+          </CardContent>
+        </Card>
       ))}
     </div>
   </div>

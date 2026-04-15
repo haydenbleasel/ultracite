@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export interface FeatureGridItem {
@@ -22,24 +23,29 @@ export const FeatureGrid = ({
   titleClassName,
 }: FeatureGridProps) => (
   <div
-    className={cn(
-      "grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3",
-      gridClassName
-    )}
+    className={cn("grid gap-4 sm:grid-cols-2 lg:grid-cols-3", gridClassName)}
   >
     {items.map((item) => (
-      <div className="p-6 last:border-r last:border-b" key={item.title}>
-        {item.icon ?? null}
-        <h3 className={cn("mb-2 font-medium", titleClassName)}>{item.title}</h3>
-        <p
-          className={cn(
-            "text-pretty text-muted-foreground text-sm",
-            descriptionClassName
-          )}
-        >
-          {item.description}
-        </p>
-      </div>
+      <Card className="gap-2" key={item.title}>
+        <CardHeader>
+          {item.icon ?? null}
+          <CardTitle
+            className={cn("text-balance tracking-tight", titleClassName)}
+          >
+            {item.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p
+            className={cn(
+              "text-pretty text-muted-foreground text-sm",
+              descriptionClassName
+            )}
+          >
+            {item.description}
+          </p>
+        </CardContent>
+      </Card>
     ))}
   </div>
 );

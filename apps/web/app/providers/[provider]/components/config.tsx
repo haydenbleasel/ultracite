@@ -30,7 +30,7 @@ export const Config = ({ provider, content }: ConfigProps) => {
         </p>
       </div>
 
-      <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-lg border">
+      <div className="col-span-2 mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border">
         <Tabs className="w-full gap-0" defaultValue={configFiles[0]?.name}>
           <TabsList className="w-full justify-start rounded-none border-b bg-secondary px-4 py-3 group-data-horizontal/tabs:h-auto">
             {configFiles.map((file) => {

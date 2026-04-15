@@ -8,6 +8,7 @@ import {
   Zap,
 } from "lucide-react";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SectionIntro } from "@/components/ultracite/section-intro";
 import type { ProviderPageContent } from "@/lib/provider-content";
 
@@ -30,36 +31,33 @@ export const Narrative = ({ content }: NarrativeProps) => (
       description={content.sectionsDescription}
       title={content.sectionsTitle}
     />
-    <div className="grid divide-x divide-y border-t border-l sm:grid-cols-2 lg:grid-cols-3">
-      {content.sections.map((section) => (
-        <section
-          className="p-6 last:border-r last:border-b"
-          key={section.title}
-        >
-          {(() => {
-            const Icon = iconMap[section.icon];
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {content.sections.map((section) => {
+        const Icon = iconMap[section.icon];
 
-            return (
-              <>
-                {Icon ? (
-                  <Icon className="mb-3 size-5 text-muted-foreground" />
-                ) : null}
-                <h3 className="mb-2 max-w-[26ch] text-balance font-medium tracking-tight">
-                  {section.title}
-                </h3>
-                {section.paragraphs.map((paragraph) => (
-                  <p
-                    className="mb-4 text-pretty text-muted-foreground text-sm leading-6 last:mb-0"
-                    key={paragraph}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </>
-            );
-          })()}
-        </section>
-      ))}
+        return (
+          <Card className="gap-2" key={section.title}>
+            <CardHeader>
+              {Icon ? (
+                <Icon className="mb-3 size-5 text-muted-foreground" />
+              ) : null}
+              <CardTitle className="max-w-[26ch] text-balance tracking-tight">
+                {section.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              {section.paragraphs.map((paragraph) => (
+                <p
+                  className="text-pretty text-muted-foreground text-sm leading-6"
+                  key={paragraph}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   </div>
 );
