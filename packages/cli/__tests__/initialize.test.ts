@@ -40,12 +40,20 @@ mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0 })),
 }));
 
+mock.module("cross-spawn", () => ({
+  sync: mock(() => ({ status: 0, stdout: "[]" })),
+}));
+
 mock.module("nypm", () => ({
   addDevDependency: mock(() => Promise.resolve()),
   detectPackageManager: mock(() =>
     Promise.resolve({ name: "npm", warnings: [] })
   ),
-  dlxCommand: mock(() => "npx ultracite fix"),
+  dlxCommand: mock((_pm: string, pkg: string, options?: { args?: string[] }) =>
+    pkg === "skills"
+      ? `npx skills ${options?.args?.join(" ") ?? ""}`.trim()
+      : "npx ultracite fix"
+  ),
   removeDependency: mock(() => Promise.resolve()),
 }));
 
@@ -808,6 +816,199 @@ describe("initialize", () => {
           }),
         ],
       })
+    );
+  });
+
+  test("skips the skill prompt when the Ultracite skill is installed globally", async () => {
+    const mockInfo = mock(noop);
+    const mockSelect = mock(() => Promise.resolve("skip"));
+    const mockSpawn = mock((_command: string, args: string[]) => {
+      if (args[1] === "list" && !args.includes("-g")) {
+        return { status: 0, stdout: "[]" };
+      }
+
+      if (args[1] === "list" && args.includes("-g")) {
+        return {
+          status: 0,
+          stdout: JSON.stringify([
+            {
+              agents: ["Claude Code"],
+              name: "ultracite",
+              path: "/Users/test/.claude/skills/ultracite",
+              scope: "global",
+            },
+          ]),
+        };
+      }
+
+      return { status: 0, stdout: "[]" };
+    });
+
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(
+        (_pm: string, pkg: string, options?: { args?: string[] }) =>
+          pkg === "skills"
+            ? `npx skills ${options?.args?.join(" ") ?? ""}`.trim()
+            : "npx ultracite fix"
+      ),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mockInfo,
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mockSelect,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
+    });
+
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockSpawn).toHaveBeenCalledWith(
+      "npx",
+      ["skills", "list", "--json"],
+      expect.objectContaining({
+        encoding: "utf-8",
+        shell: false,
+        stdio: "pipe",
+      })
+    );
+    expect(mockSpawn).toHaveBeenCalledWith(
+      "npx",
+      ["skills", "list", "-g", "--json"],
+      expect.objectContaining({
+        encoding: "utf-8",
+        shell: false,
+        stdio: "pipe",
+      })
+    );
+    expect(mockSpawn).not.toHaveBeenCalledWith(
+      "npx",
+      ["skills", "add", "haydenbleasel/ultracite"],
+      expect.anything()
+    );
+    expect(mockInfo).not.toHaveBeenCalledWith(
+      expect.stringContaining("You can install the Ultracite skill later")
+    );
+  });
+
+  test("skips the skill prompt when the Ultracite skill is installed locally", async () => {
+    const mockInfo = mock(noop);
+    const mockSelect = mock(() => Promise.resolve("skip"));
+    const mockSpawn = mock((_command: string, args: string[]) => {
+      if (args[1] === "list" && !args.includes("-g")) {
+        return {
+          status: 0,
+          stdout: JSON.stringify([
+            {
+              agents: ["Claude Code"],
+              name: "ultracite",
+              path: "/repo/.claude/skills/ultracite",
+              scope: "project",
+            },
+          ]),
+        };
+      }
+
+      return { status: 0, stdout: "[]" };
+    });
+
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(
+        (_pm: string, pkg: string, options?: { args?: string[] }) =>
+          pkg === "skills"
+            ? `npx skills ${options?.args?.join(" ") ?? ""}`.trim()
+            : "npx ultracite fix"
+      ),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mockInfo,
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mockSelect,
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      linter: "biome",
+      pm: "npm",
+      skipInstall: true,
+    });
+
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockSpawn).toHaveBeenCalledWith(
+      "npx",
+      ["skills", "list", "--json"],
+      expect.objectContaining({
+        encoding: "utf-8",
+        shell: false,
+        stdio: "pipe",
+      })
+    );
+    expect(mockSpawn).not.toHaveBeenCalledWith(
+      "npx",
+      ["skills", "list", "-g", "--json"],
+      expect.anything()
+    );
+    expect(mockInfo).not.toHaveBeenCalledWith(
+      expect.stringContaining("You can install the Ultracite skill later")
     );
   });
 

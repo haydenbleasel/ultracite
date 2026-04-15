@@ -5,6 +5,7 @@ import type { PackageManagerName } from "nypm";
 import { runCommandSync } from "./run-command";
 
 const ultraciteSkillRepo = "haydenbleasel/ultracite";
+const ultraciteSkillName = "ultracite";
 
 interface MaybeInstallUltraciteSkillOptions {
   packageManager: PackageManagerName;
@@ -19,6 +20,49 @@ const buildUltraciteSkillInstallCommand = (
     args: ["add", ultraciteSkillRepo],
     short: packageManager === "npm",
   });
+
+const buildUltraciteSkillListCommand = (
+  packageManager: PackageManagerName,
+  global = false
+) =>
+  dlxCommand(packageManager, "skills", {
+    args: global ? ["list", "-g", "--json"] : ["list", "--json"],
+    short: packageManager === "npm",
+  });
+
+const isUltraciteSkillInstalledInScope = (
+  packageManager: PackageManagerName,
+  global = false
+) => {
+  const fullCommand = buildUltraciteSkillListCommand(packageManager, global);
+  const [command, ...args] = fullCommand.split(" ");
+  const result = runCommandSync(command, args, {
+    encoding: "utf-8",
+    stdio: "pipe",
+  });
+
+  if (result.error || result.status !== 0 || !result.stdout) {
+    return false;
+  }
+
+  try {
+    const installedSkills = JSON.parse(
+      typeof result.stdout === "string"
+        ? result.stdout
+        : result.stdout.toString("utf-8")
+    ) as {
+      name?: string;
+    }[];
+
+    return installedSkills.some((skill) => skill.name === ultraciteSkillName);
+  } catch {
+    return false;
+  }
+};
+
+const hasUltraciteSkillInstalled = (packageManager: PackageManagerName) =>
+  isUltraciteSkillInstalledInScope(packageManager) ||
+  isUltraciteSkillInstalledInScope(packageManager, true);
 
 const promptToInstallUltraciteSkill = async () => {
   const installSkillResult = await select({
@@ -47,6 +91,14 @@ export const maybeInstallUltraciteSkill = async ({
   quiet = false,
   shouldInstall,
 }: MaybeInstallUltraciteSkillOptions) => {
+  if (
+    shouldInstall === undefined &&
+    !quiet &&
+    hasUltraciteSkillInstalled(packageManager)
+  ) {
+    return true;
+  }
+
   const wantsInstall =
     shouldInstall ?? (!quiet && (await promptToInstallUltraciteSkill()));
 
