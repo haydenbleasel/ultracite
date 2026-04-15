@@ -28,7 +28,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, "index.ts");
+    const configPath = join(configDir, framework, "index.mjs");
     const valid = await validateOxlintConfig(configPath);
 
     results.push({ framework, valid });
