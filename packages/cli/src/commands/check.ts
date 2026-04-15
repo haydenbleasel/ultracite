@@ -69,11 +69,11 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("oxfmt", result);
 };
 
-export const check = async (
+export const check = (
   files: string[] = [],
   passthrough: string[] = []
-): Promise<void> => {
-  const linter = await detectLinter();
+): void => {
+  const linter = detectLinter();
 
   if (!linter) {
     throw new Error(
@@ -83,18 +83,18 @@ export const check = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierCheck(files, []);
-      await runEslintCheck(files, passthrough);
-      await runStylelintCheck(files, []);
+      runPrettierCheck(files, []);
+      runEslintCheck(files, passthrough);
+      runStylelintCheck(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtCheck(files, []);
-      await runOxlintCheck(files, passthrough);
+      runOxfmtCheck(files, []);
+      runOxlintCheck(files, passthrough);
       break;
     }
     default: {
-      await runBiomeCheck(files, passthrough);
+      runBiomeCheck(files, passthrough);
     }
   }
 };

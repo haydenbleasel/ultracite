@@ -7,7 +7,7 @@ describe("check", () => {
     mock.restore();
   });
 
-  test("runs biome check with default options", async () => {
+  test("runs biome check with default options", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -17,10 +17,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check();
+    check();
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
@@ -30,7 +30,7 @@ describe("check", () => {
     expect(callArgs[1]).toContain("./");
   });
 
-  test("runs biome check with specific files", async () => {
+  test("runs biome check with specific files", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -40,10 +40,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check(["src/index.ts", "src/test.ts"]);
+    check(["src/index.ts", "src/test.ts"]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
@@ -51,7 +51,7 @@ describe("check", () => {
     expect(callArgs[1]).toContain("src/test.ts");
   });
 
-  test("passes through unknown options to biome", async () => {
+  test("passes through unknown options to biome", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -61,10 +61,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check([], ["--diagnostic-level=error", "--error-on-warnings"]);
+    check([], ["--diagnostic-level=error", "--error-on-warnings"]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
@@ -72,7 +72,7 @@ describe("check", () => {
     expect(callArgs[1]).toContain("--error-on-warnings");
   });
 
-  test("handles files with special characters", async () => {
+  test("handles files with special characters", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -82,17 +82,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check(["src/my file.ts"]);
+    check(["src/my file.ts"]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).toContain("src/my file.ts");
   });
 
-  test("passes absolute Next.js route-group paths through without quoting", async () => {
+  test("passes absolute Next.js route-group paths through without quoting", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -104,17 +104,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check([routeGroupFile]);
+    check([routeGroupFile]);
 
     expect(mockSpawn).toHaveBeenCalled();
     const [callArgs] = mockSpawn.mock.calls;
     expect(callArgs[1]).toContain(routeGroupFile);
   });
 
-  test("throws LinterExitError when biome check finds errors", async () => {
+  test("throws LinterExitError when biome check finds errors", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
@@ -125,13 +125,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await expect(check()).rejects.toThrow("Biome exited with code 1");
+    expect(() => check()).toThrow("Biome exited with code 1");
   });
 
-  test("exits when spawn returns error", async () => {
+  test("exits when spawn returns error", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         error: new Error("spawn failed"),
@@ -143,13 +143,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await expect(check()).rejects.toThrow("Failed to run Biome: spawn failed");
+    expect(() => check()).toThrow("Failed to run Biome: spawn failed");
   });
 
-  test("throws when no linter configuration found", async () => {
+  test("throws when no linter configuration found", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -159,13 +159,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve(null)),
+      detectLinter: mock(() => null),
     }));
 
-    await expect(check()).rejects.toThrow("No linter configuration found");
+    expect(() => check()).toThrow("No linter configuration found");
   });
 
-  test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", async () => {
+  test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -175,10 +175,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await check();
+    check();
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     const [prettierCall, eslintCall, stylelintCall] = mockSpawn.mock.calls;
@@ -188,7 +188,7 @@ describe("check", () => {
     expect(stylelintCall[0]).toBe("stylelint");
   });
 
-  test("runs eslint check with specific files", async () => {
+  test("runs eslint check with specific files", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -198,17 +198,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await check(["src/index.ts"]);
+    check(["src/index.ts"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
     const [, eslintCall] = mockSpawn.mock.calls;
     expect(eslintCall[1]).toContain("src/index.ts");
   });
 
-  test("eslint check throws on spawn error", async () => {
+  test("eslint check throws on spawn error", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         error: new Error("prettier spawn failed"),
@@ -220,15 +220,15 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await expect(check()).rejects.toThrow(
+    expect(() => check()).toThrow(
       "Failed to run Prettier: prettier spawn failed"
     );
   });
 
-  test("eslint check throws on eslint spawn error", async () => {
+  test("eslint check throws on eslint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
@@ -248,15 +248,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await expect(check()).rejects.toThrow(
-      "Failed to run ESLint: eslint spawn failed"
-    );
+    expect(() => check()).toThrow("Failed to run ESLint: eslint spawn failed");
   });
 
-  test("eslint check throws on stylelint spawn error", async () => {
+  test("eslint check throws on stylelint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
@@ -276,15 +274,15 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await expect(check()).rejects.toThrow(
+    expect(() => check()).toThrow(
       "Failed to run Stylelint: stylelint spawn failed"
     );
   });
 
-  test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", async () => {
+  test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -294,10 +292,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check();
+    check();
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [oxfmtCall, oxlintCall] = mockSpawn.mock.calls;
@@ -306,7 +304,7 @@ describe("check", () => {
     expect(oxlintCall[0]).toBe("oxlint");
   });
 
-  test("runs oxlint check with specific files", async () => {
+  test("runs oxlint check with specific files", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -316,17 +314,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check(["src/index.ts"]);
+    check(["src/index.ts"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("src/index.ts");
   });
 
-  test("oxlint check throws on spawn error", async () => {
+  test("oxlint check throws on spawn error", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         error: new Error("oxfmt spawn failed"),
@@ -338,15 +336,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await expect(check()).rejects.toThrow(
-      "Failed to run oxfmt: oxfmt spawn failed"
-    );
+    expect(() => check()).toThrow("Failed to run oxfmt: oxfmt spawn failed");
   });
 
-  test("eslint check throws LinterExitError on failure", async () => {
+  test("eslint check throws LinterExitError on failure", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
@@ -357,13 +353,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("eslint")),
+      detectLinter: mock(() => "eslint"),
     }));
 
-    await expect(check()).rejects.toThrow("Prettier exited with code 1");
+    expect(() => check()).toThrow("Prettier exited with code 1");
   });
 
-  test("oxlint check throws LinterExitError on failure", async () => {
+  test("oxlint check throws LinterExitError on failure", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 1,
@@ -374,13 +370,13 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await expect(check()).rejects.toThrow("oxfmt exited with code 1");
+    expect(() => check()).toThrow("oxfmt exited with code 1");
   });
 
-  test("passes through --type-aware flag to oxlint", async () => {
+  test("passes through --type-aware flag to oxlint", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -390,17 +386,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check([], ["--type-aware"]);
+    check([], ["--type-aware"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--type-aware");
   });
 
-  test("passes through --type-check flag to oxlint", async () => {
+  test("passes through --type-check flag to oxlint", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -410,17 +406,17 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check([], ["--type-check"]);
+    check([], ["--type-check"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, oxlintCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("--type-check");
   });
 
-  test("passes through multiple flags to oxlint", async () => {
+  test("passes through multiple flags to oxlint", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -430,10 +426,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check([], ["--type-aware", "--type-check"]);
+    check([], ["--type-aware", "--type-check"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, oxlintCall] = mockSpawn.mock.calls;
@@ -441,7 +437,7 @@ describe("check", () => {
     expect(oxlintCall[1]).toContain("--type-check");
   });
 
-  test("does not include flags when passthrough is empty", async () => {
+  test("does not include flags when passthrough is empty", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -451,10 +447,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("oxlint")),
+      detectLinter: mock(() => "oxlint"),
     }));
 
-    await check([], []);
+    check([], []);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, oxlintCall] = mockSpawn.mock.calls;
@@ -462,7 +458,7 @@ describe("check", () => {
     expect(oxlintCall[1]).not.toContain("--type-check");
   });
 
-  test("keeps bare biome resolution with shell disabled for Windows compatibility", async () => {
+  test("keeps bare biome resolution with shell disabled for Windows compatibility", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
         status: 0,
@@ -472,10 +468,10 @@ describe("check", () => {
       sync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
-      detectLinter: mock(() => Promise.resolve("biome")),
+      detectLinter: mock(() => "biome"),
     }));
 
-    await check(["src/my file.ts"]);
+    check(["src/my file.ts"]);
 
     const [firstCall] = mockSpawn.mock.calls;
     const [command, , options] = firstCall;

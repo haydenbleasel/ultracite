@@ -77,11 +77,8 @@ const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("oxfmt", result);
 };
 
-export const fix = async (
-  files: string[],
-  passthrough: string[] = []
-): Promise<void> => {
-  const linter = await detectLinter();
+export const fix = (files: string[], passthrough: string[] = []): void => {
+  const linter = detectLinter();
 
   if (!linter) {
     throw new Error(
@@ -91,18 +88,18 @@ export const fix = async (
 
   switch (linter) {
     case "eslint": {
-      await runPrettierFix(files, []);
-      await runEslintFix(files, passthrough);
-      await runStylelintFix(files, []);
+      runPrettierFix(files, []);
+      runEslintFix(files, passthrough);
+      runStylelintFix(files, []);
       break;
     }
     case "oxlint": {
-      await runOxfmtFix(files, []);
-      await runOxlintFix(files, passthrough);
+      runOxfmtFix(files, []);
+      runOxlintFix(files, passthrough);
       break;
     }
     default: {
-      await runBiomeFix(files, passthrough);
+      runBiomeFix(files, passthrough);
     }
   }
 };
