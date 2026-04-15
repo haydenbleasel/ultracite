@@ -36,8 +36,7 @@ export const readPackageJsonSync = (
 ): PackageJson | undefined => {
   try {
     const content = readFileSync(path, "utf-8");
-    const result = packageJsonSchema.safeParse(JSON.parse(content));
-    return result.success ? result.data : undefined;
+    return parsePackageJson(content);
   } catch {
     return undefined;
   }
@@ -48,8 +47,7 @@ export const readPackageJson = async (
 ): Promise<PackageJson | undefined> => {
   try {
     const content = await readFile(path, "utf-8");
-    const result = packageJsonSchema.safeParse(JSON.parse(content));
-    return result.success ? result.data : undefined;
+    return parsePackageJson(content);
   } catch {
     return undefined;
   }
