@@ -175,6 +175,25 @@ describe("tsconfig", () => {
       expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
     });
 
+    test("handles write error gracefully", async () => {
+      const mockWriteFile = mock(() =>
+        Promise.reject(new Error("Permission denied"))
+      );
+      mock.module("glob", () => ({
+        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      }));
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve('{"compilerOptions": {"target": "ES2020"}}')
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      // Should not throw - logs warning instead
+      await tsconfig.update();
+    });
+
     test("does nothing when no tsconfig files found", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
       mock.module("glob", () => ({

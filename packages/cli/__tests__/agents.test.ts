@@ -282,6 +282,16 @@ describe("getAgentFileTargets", () => {
     expect(universalTarget?.promptLabel).toContain("creates AGENTS.md");
   });
 
+  test("sorts AGENTS.md target to the front", () => {
+    const targets = getAgentFileTargets();
+    // AGENTS.md (universal) should always be first
+    expect(targets[0].path).toBe("AGENTS.md");
+    // Non-AGENTS.md targets should come after
+    for (let i = 1; i < targets.length; i += 1) {
+      expect(targets[i].path).not.toBe("AGENTS.md");
+    }
+  });
+
   test("keeps agent-specific files as dedicated options", () => {
     const targets = getAgentFileTargets();
     const claudeTarget = targets.find((target) => target.id === "claude");

@@ -5,6 +5,7 @@ import {
   exists,
   isMonorepo,
   updatePackageJson,
+  validateFrameworkName,
 } from "../src/utils";
 
 mock.module("node:fs/promises", () => ({
@@ -381,6 +382,52 @@ describe("ensureDirectory", () => {
 
     await ensureDirectory("file.txt");
     expect(mockMkdirSync).not.toHaveBeenCalled();
+  });
+});
+
+describe("updatePackageJson error handling", () => {
+  test("throws when readPackageJson returns null", () => {
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve("null")),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      readFileSync: mock(() => "null"),
+    }));
+
+    expect(
+      updatePackageJson({ devDependencies: { test: "1.0.0" } })
+    ).rejects.toThrow("Failed to parse package.json");
+  });
+});
+
+describe("validateFrameworkName", () => {
+  test("returns valid framework names", () => {
+    expect(validateFrameworkName("react")).toBe("react");
+    expect(validateFrameworkName("next")).toBe("next");
+    expect(validateFrameworkName("solid-js")).toBe("solid-js");
+  });
+
+  test("throws for names with uppercase characters", () => {
+    expect(() => validateFrameworkName("React")).toThrow(
+      "Invalid framework name"
+    );
+  });
+
+  test("throws for names starting with a number", () => {
+    expect(() => validateFrameworkName("123start")).toThrow(
+      "Invalid framework name"
+    );
+  });
+
+  test("throws for names with special characters", () => {
+    expect(() => validateFrameworkName("react@latest")).toThrow(
+      "Invalid framework name"
+    );
   });
 });
 

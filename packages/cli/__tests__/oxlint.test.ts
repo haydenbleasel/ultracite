@@ -280,6 +280,77 @@ export default defineConfig({
       expect(content).not.toContain(getOxlintConfigPath("vitest"));
     });
 
+    test("parses JS import statements for ultracite configs", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+
+export default defineConfig({
+  extends: [
+    core,
+    react,
+  ],
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update({ frameworks: ["next"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      // Should preserve existing imports and add next
+      expect(content).toContain(getOxlintConfigPath("core"));
+      expect(content).toContain(getOxlintConfigPath("react"));
+      expect(content).toContain(getOxlintConfigPath("next"));
+    });
+
+    test("warns when file mentions ultracite but extends cannot be parsed", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const consoleWarnSpy = mock(() => {});
+      const originalWarn = console.warn;
+      console.warn = consoleWarnSpy;
+
+      const existingConfig = `// This config references ultracite/oxlint but has no valid imports or extends
+const config = "ultracite/oxlint";
+export default {};
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      console.warn = originalWarn;
+    });
+
     test("handles config without extends array", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

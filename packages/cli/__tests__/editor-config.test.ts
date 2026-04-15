@@ -35,12 +35,24 @@ describe("createEditorConfig", () => {
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        mkdirSync: mock(() => {}),
+        readFileSync: mock(() => "{}"),
+      }));
+
       const editorConfig = createEditorConfig("vscode");
       await editorConfig.update();
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
+      // Should write default content, not merged content
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent).toBeDefined();
     });
 
     test("merges with existing config when file exists", async () => {
