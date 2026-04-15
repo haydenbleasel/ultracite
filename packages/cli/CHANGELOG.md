@@ -1,3 +1,19 @@
+## 7.5.9
+
+### Patch Changes
+
+- 77e9b41: Aggregate all ignore patterns
+- 73fc21c: Code reliability improvements
+- 63f7426: Migrate remaining json parsing to jsonc-parser
+- aa199d1: fix conflicting prefer-describe-function-title / valid-title rules in vitest
+- 402908e: Replace custom yaml parser with dependency
+- 3dbfe5c: Validate framework name to prevent injection
+- a2cdc0f: Warn if the file looks like it has ultracite config but we couldn't parse it
+- 95718bb: Use cross-spawn for cross-platform spawn compatibility
+- d09174b: Ignore `.open-next` in the Biome and ESLint core presets.
+- 71aeca4: Remove remaining execSync calls
+- e81a604: Add zod for safer json parsing
+
 ## 7.5.8
 
 ### Patch Changes
