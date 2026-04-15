@@ -94,6 +94,21 @@ export const ensureDirectory = (path: string): void => {
   }
 };
 
+const SAFE_IDENTIFIER = /^[a-z][a-z0-9-]*$/;
+
+/**
+ * Validates that a framework name is safe to interpolate into generated code.
+ * Throws if the name contains characters outside [a-z0-9-].
+ */
+export const validateFrameworkName = (name: string): string => {
+  if (!SAFE_IDENTIFIER.test(name)) {
+    throw new Error(
+      `Invalid framework name "${name}": must match ${SAFE_IDENTIFIER}`
+    );
+  }
+  return name;
+};
+
 export type Linter = "biome" | "eslint" | "oxlint";
 
 // Config file names for each linter

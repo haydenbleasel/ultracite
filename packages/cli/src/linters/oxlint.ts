@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
-import { exists } from "../utils";
+import { exists, validateFrameworkName } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";
 
@@ -47,7 +47,8 @@ export const oxlint = {
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        extendsList.push(getOxlintConfigPath(framework));
+        const name = validateFrameworkName(framework);
+        extendsList.push(getOxlintConfigPath(name));
       }
     }
 
@@ -103,8 +104,9 @@ export const oxlint = {
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        if (!hasConfig(framework)) {
-          newExtends.push(getOxlintConfigPath(framework));
+        const name = validateFrameworkName(framework);
+        if (!hasConfig(name)) {
+          newExtends.push(getOxlintConfigPath(name));
         }
       }
     }

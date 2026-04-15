@@ -4,7 +4,7 @@ import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
-import { exists } from "../utils";
+import { exists, validateFrameworkName } from "../utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
@@ -37,7 +37,8 @@ export const biome = {
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        extendsList.push(`ultracite/biome/${framework}`);
+        const name = validateFrameworkName(framework);
+        extendsList.push(`ultracite/biome/${name}`);
       }
     }
 
@@ -83,7 +84,8 @@ export const biome = {
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        const frameworkConfig = `ultracite/biome/${framework}`;
+        const name = validateFrameworkName(framework);
+        const frameworkConfig = `ultracite/biome/${name}`;
         if (!newExtends.includes(frameworkConfig)) {
           newExtends.push(frameworkConfig);
         }

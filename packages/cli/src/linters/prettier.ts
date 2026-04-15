@@ -3,7 +3,7 @@ import { writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
-import { exists } from "../utils";
+import { exists, validateFrameworkName } from "../utils";
 
 // All possible Prettier config file locations
 // https://prettier.io/docs/en/configuration.html
@@ -74,8 +74,9 @@ const generatePrettierConfig = (opts?: PrettierOptions): string => {
 
   if (opts?.frameworks) {
     for (const fw of opts.frameworks) {
-      if (fw in frameworkPlugins) {
-        plugins.push(frameworkPlugins[fw]);
+      const name = validateFrameworkName(fw);
+      if (name in frameworkPlugins) {
+        plugins.push(frameworkPlugins[name]);
       }
     }
   }

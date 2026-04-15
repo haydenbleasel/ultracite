@@ -2,7 +2,7 @@ import { writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
-import { exists } from "../utils";
+import { exists, validateFrameworkName } from "../utils";
 
 // All possible ESLint flat config file locations
 // https://eslint.org/docs/latest/use/configure/configuration-files
@@ -37,8 +37,9 @@ const generateEslintConfig = (opts?: EslintOptions): string => {
   // Add framework-specific configs
   if (opts?.frameworks && opts.frameworks.length > 0) {
     for (const framework of opts.frameworks) {
-      imports.push(`import ${framework} from "ultracite/eslint/${framework}";`);
-      configs.push(`...${framework}`);
+      const name = validateFrameworkName(framework);
+      imports.push(`import ${name} from "ultracite/eslint/${name}";`);
+      configs.push(`...${name}`);
     }
   }
 
