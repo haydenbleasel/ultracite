@@ -1,6 +1,6 @@
-import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 
+import { readPackageJsonSync } from "../schemas";
 import { exists } from "../utils";
 
 // All possible Stylelint config file locations
@@ -25,12 +25,8 @@ const stylelintConfigPaths = [
 const defaultConfigPath = "./stylelint.config.mjs";
 
 const hasStylelintKeyInPackageJson = (): boolean => {
-  try {
-    const packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
-    return "stylelint" in packageJson;
-  } catch {
-    return false;
-  }
+  const packageJson = readPackageJsonSync("./package.json");
+  return packageJson?.stylelint !== undefined;
 };
 
 const getStylelintConfigPath = (): string | null => {

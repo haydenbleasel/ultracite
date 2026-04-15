@@ -6,6 +6,7 @@ import { parse } from "jsonc-parser";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
+import { parsePackageJson } from "../schemas";
 import { exists, isMonorepo } from "../utils";
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
@@ -117,15 +118,9 @@ const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
   try {
-    const packageJson = parse(await readFile("./package.json", "utf-8")) as
-      | Record<string, unknown>
-      | undefined;
-
-    if (!packageJson) {
-      return false;
-    }
-
-    return packageJson.type === "module";
+    const content = await readFile("./package.json", "utf-8");
+    const packageJson = parsePackageJson(content);
+    return packageJson?.type === "module";
   } catch {
     return false;
   }
@@ -135,9 +130,8 @@ const isProjectEsm = async (): Promise<boolean> => {
 const updatePackageJson = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const packageJson = parse(await readFile("./package.json", "utf-8")) as
-    | Record<string, unknown>
-    | undefined;
+  const content = await readFile("./package.json", "utf-8");
+  const packageJson = parsePackageJson(content);
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!packageJson) {

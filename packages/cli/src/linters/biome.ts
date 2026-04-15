@@ -2,8 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
-import { parse } from "jsonc-parser";
 
+import { biomeConfigSchema, parseJsonc } from "../schemas";
 import { exists, validateFrameworkName } from "../utils";
 
 const defaultConfig = {
@@ -56,18 +56,13 @@ export const biome = {
   update: async (opts?: BiomeOptions) => {
     const path = getBiomeConfigPath();
     const existingContents = await readFile(path, "utf-8");
-    const existingConfig = parse(existingContents) as
-      | Record<string, unknown>
-      | undefined;
+    const existingConfig = parseJsonc(existingContents, biomeConfigSchema);
 
     // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
     const configToWork = existingConfig || {};
 
     // Check if ultracite is already in the extends array
-    const existingExtends =
-      configToWork.extends && Array.isArray(configToWork.extends)
-        ? configToWork.extends
-        : [];
+    const existingExtends = configToWork.extends ?? [];
 
     const newExtends = [...existingExtends];
 

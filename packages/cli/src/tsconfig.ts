@@ -2,8 +2,11 @@ import { readFile, writeFile } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
 import { glob } from "glob";
-import { applyEdits, modify, parse } from "jsonc-parser";
+import { applyEdits, modify } from "jsonc-parser";
 import type { ModificationOptions } from "jsonc-parser";
+import type { z } from "zod";
+
+import { parseJsonc, tsConfigSchema } from "./schemas";
 
 /**
  * Find all tsconfig.json files in the project
@@ -25,35 +28,23 @@ const findTsConfigFiles = async (): Promise<string[]> => {
   }
 };
 
+type TsConfig = z.infer<typeof tsConfigSchema>;
+
 /**
  * Check if strictNullChecks is already enabled (directly or via strict: true)
  */
-const hasStrictNullChecks = (
-  config: Record<string, unknown> | undefined
-): boolean => {
-  if (!config) {
-    return false;
-  }
-
-  const compilerOptions = config.compilerOptions as
-    | Record<string, unknown>
-    | undefined;
-
-  if (!compilerOptions) {
+const hasStrictNullChecks = (config: TsConfig | undefined): boolean => {
+  if (!config?.compilerOptions) {
     return false;
   }
 
   // strict: true enables strictNullChecks
-  if (compilerOptions.strict === true) {
+  if (config.compilerOptions.strict === true) {
     return true;
   }
 
   // strictNullChecks is explicitly set
-  if (compilerOptions.strictNullChecks === true) {
-    return true;
-  }
-
-  return false;
+  return config.compilerOptions.strictNullChecks === true;
 };
 
 /**
@@ -63,9 +54,7 @@ const hasStrictNullChecks = (
 const updateTsConfigFile = async (filePath: string): Promise<void> => {
   try {
     const existingContents = await readFile(filePath, "utf-8");
-    const existingConfig = parse(existingContents) as
-      | Record<string, unknown>
-      | undefined;
+    const existingConfig = parseJsonc(existingContents, tsConfigSchema);
 
     // Skip if strictNullChecks is already enabled (directly or via strict: true)
     if (hasStrictNullChecks(existingConfig)) {

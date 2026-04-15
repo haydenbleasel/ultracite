@@ -7,6 +7,7 @@ import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
 import { runCommandSync } from "../run-command";
+import { readPackageJsonSync } from "../schemas";
 import { detectLinter } from "../utils";
 import type { Linter } from "../utils";
 
@@ -294,33 +295,34 @@ const checkUltraciteDependency = (): DiagnosticCheck => {
     };
   }
 
-  try {
-    const pkgJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-    const version =
-      pkgJson.dependencies?.ultracite ||
-      pkgJson.devDependencies?.ultracite ||
-      pkgJson.peerDependencies?.ultracite;
+  const pkgJson = readPackageJsonSync(packageJsonPath);
 
-    if (version) {
-      return {
-        message: `Ultracite is in package.json (${version})`,
-        name: "Ultracite dependency",
-        status: "pass",
-      };
-    }
-
-    return {
-      message: "Ultracite not found in package.json dependencies",
-      name: "Ultracite dependency",
-      status: "warn",
-    };
-  } catch {
+  if (!pkgJson) {
     return {
       message: "Could not parse package.json",
       name: "Ultracite dependency",
       status: "warn",
     };
   }
+
+  const version =
+    pkgJson.dependencies?.ultracite ||
+    pkgJson.devDependencies?.ultracite ||
+    pkgJson.peerDependencies?.ultracite;
+
+  if (version) {
+    return {
+      message: `Ultracite is in package.json (${version})`,
+      name: "Ultracite dependency",
+      status: "pass",
+    };
+  }
+
+  return {
+    message: "Ultracite not found in package.json dependencies",
+    name: "Ultracite dependency",
+    status: "warn",
+  };
 };
 
 const checkConflictingTools = (linter: Linter): DiagnosticCheck => {

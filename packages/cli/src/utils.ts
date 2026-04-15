@@ -1,9 +1,9 @@
-import { accessSync, mkdirSync, readFileSync } from "node:fs";
-import { readFile, writeFile } from "node:fs/promises";
+import { accessSync, mkdirSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import process from "node:process";
 
-import { parse } from "jsonc-parser";
+import { readPackageJson, readPackageJsonSync } from "./schemas";
 
 export const exists = (path: string): boolean => {
   try {
@@ -19,19 +19,12 @@ export const isMonorepo = (): boolean => {
     return true;
   }
 
-  try {
-    const pkgJson = parse(readFileSync("package.json", "utf-8")) as
-      | Record<string, unknown>
-      | undefined;
-
-    if (!pkgJson) {
-      return false;
-    }
-
-    return !!pkgJson.workspaces || !!pkgJson.workspace;
-  } catch {
+  const pkgJson = readPackageJsonSync();
+  if (!pkgJson) {
     return false;
   }
+
+  return !!pkgJson.workspaces || !!pkgJson.workspace;
 };
 
 export const updatePackageJson = async ({
@@ -45,16 +38,9 @@ export const updatePackageJson = async ({
   scripts?: Record<string, string>;
   type?: string;
 }) => {
-  const packageJsonContent = await readFile("package.json", "utf-8");
-
-  let packageJsonObject: Record<string, unknown>;
-  try {
-    packageJsonObject = JSON.parse(packageJsonContent) as Record<
-      string,
-      unknown
-    >;
-  } catch {
-    throw new Error("Failed to parse package.json: file contains invalid JSON");
+  const packageJsonObject = await readPackageJson();
+  if (!packageJsonObject) {
+    throw new Error("Failed to parse package.json: file is missing or invalid");
   }
 
   const newPackageJsonObject = {
@@ -68,9 +54,7 @@ export const updatePackageJson = async ({
   // Only add devDependencies if they exist in the original package.json or are being added
   if (packageJsonObject.devDependencies || devDependencies) {
     newPackageJsonObject.devDependencies = {
-      ...(packageJsonObject.devDependencies as
-        | Record<string, string>
-        | undefined),
+      ...packageJsonObject.devDependencies,
       ...devDependencies,
     };
   }
@@ -78,7 +62,7 @@ export const updatePackageJson = async ({
   // Only add dependencies if they exist in the original package.json or are being added
   if (packageJsonObject.dependencies || dependencies) {
     newPackageJsonObject.dependencies = {
-      ...(packageJsonObject.dependencies as Record<string, string> | undefined),
+      ...packageJsonObject.dependencies,
       ...dependencies,
     };
   }
@@ -86,7 +70,7 @@ export const updatePackageJson = async ({
   // Only add scripts if they exist in the original package.json or are being added
   if (packageJsonObject.scripts || scripts) {
     newPackageJsonObject.scripts = {
-      ...(packageJsonObject.scripts as Record<string, string> | undefined),
+      ...packageJsonObject.scripts,
       ...scripts,
     };
   }

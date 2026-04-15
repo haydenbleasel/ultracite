@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
+import { readPackageJsonSync } from "../schemas";
 import { exists, validateFrameworkName } from "../utils";
 
 // All possible Prettier config file locations
@@ -36,12 +36,8 @@ const prettierConfigPaths = [
 const defaultConfigPath = "./prettier.config.mjs";
 
 const hasPrettierKeyInPackageJson = (): boolean => {
-  try {
-    const packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
-    return "prettier" in packageJson;
-  } catch {
-    return false;
-  }
+  const packageJson = readPackageJsonSync("./package.json");
+  return packageJson?.prettier !== undefined;
 };
 
 const getPrettierConfigPath = (): string | null => {
