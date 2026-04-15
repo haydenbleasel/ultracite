@@ -1,8 +1,8 @@
-import { spawnSync } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 
 import { editors } from "@repo/data/editors";
 import type { ProviderId } from "@repo/data/providers";
+import { sync as spawnSync } from "cross-spawn";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
@@ -33,8 +33,7 @@ export const createEditorConfig = (
 
     extension: editor.config.extensionCommand
       ? (extensionId: string) =>
-          spawnSync(`${editor.config.extensionCommand} ${extensionId}`, {
-            shell: true,
+          spawnSync(editor.config.extensionCommand as string, [extensionId], {
             stdio: "pipe",
           })
       : undefined,

@@ -185,10 +185,11 @@ describe("vscode editor config", () => {
 
   describe("extension", () => {
     test("attempts to install Biome extension", () => {
-      const mockSpawn = mock((_cmd: string) => ({ status: 0 }));
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mockSpawn,
+      const mockSpawn = mock((_cmd: string, _args: string[]) => ({
+        status: 0,
+      }));
+      mock.module("cross-spawn", () => ({
+        sync: mockSpawn,
       }));
 
       const vscode = createEditorConfig("vscode");
@@ -197,7 +198,8 @@ describe("vscode editor config", () => {
 
       expect(mockSpawn).toHaveBeenCalled();
       const [spawnCall] = mockSpawn.mock.calls;
-      expect(spawnCall[0]).toContain("code --install-extension biomejs.biome");
+      expect(spawnCall[0]).toBe("code --install-extension");
+      expect(spawnCall[1]).toEqual(["biomejs.biome"]);
     });
   });
 });
