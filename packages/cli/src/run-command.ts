@@ -24,15 +24,6 @@ export const runCommandSync = (
     shell: false,
   });
 
-export const runCommandShellSync = (
-  command: string,
-  options: RunCommandOptions
-): RunCommandResult =>
-  crossSpawnSync(command, [], {
-    ...options,
-    shell: true,
-  });
-
 export const exitOnCommandFailure = (
   commandName: string,
   result: RunCommandResult

@@ -866,10 +866,10 @@ describe("initialize", () => {
 
     expect(mockSelect).not.toHaveBeenCalled();
     expect(mockSpawn).toHaveBeenCalledWith(
-      "npx skills add haydenbleasel/ultracite",
-      [],
+      "npx",
+      ["skills", "add", "haydenbleasel/ultracite"],
       expect.objectContaining({
-        shell: true,
+        shell: false,
         stdio: "pipe",
       })
     );

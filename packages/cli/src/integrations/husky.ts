@@ -1,9 +1,9 @@
-import { execSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
+import { runCommandSync } from "../run-command";
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
 const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
@@ -68,13 +68,13 @@ export const husky = {
   exists: () => exists(path),
   init: (packageManager: PackageManagerName) => {
     // Initialize husky - this sets up git hooks infrastructure
-    const initCommand = dlxCommand(packageManager, "husky", {
+    const [command, ...args] = dlxCommand(packageManager, "husky", {
       args: ["init"],
-    });
+    }).split(" ");
 
-    try {
-      execSync(initCommand, { stdio: "pipe" });
-    } catch {
+    const result = runCommandSync(command, args, { stdio: "pipe" });
+
+    if (result.error || (result.status !== null && result.status !== 0)) {
       // If init fails, it might be because it's already initialized
       // Continue anyway as we'll create the hook file next
     }

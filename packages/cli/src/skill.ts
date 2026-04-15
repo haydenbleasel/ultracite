@@ -2,7 +2,7 @@ import { isCancel, select, spinner } from "@clack/prompts";
 import { dlxCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
-import { runCommandShellSync } from "./run-command";
+import { runCommandSync } from "./run-command";
 
 const ultraciteSkillRepo = "haydenbleasel/ultracite";
 
@@ -54,14 +54,15 @@ export const maybeInstallUltraciteSkill = async ({
     return false;
   }
 
-  const command = buildUltraciteSkillInstallCommand(packageManager);
+  const fullCommand = buildUltraciteSkillInstallCommand(packageManager);
+  const [command, ...args] = fullCommand.split(" ");
   const s = spinner();
 
   if (!quiet) {
     s.start("Installing the Ultracite skill...");
   }
 
-  const result = runCommandShellSync(command, {
+  const result = runCommandSync(command, args, {
     stdio: "pipe",
   });
   const didInstall = !result.error && result.status === 0;
