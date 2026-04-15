@@ -5,6 +5,7 @@ import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
+import YAML from "yaml";
 
 import { parsePackageJson } from "../schemas";
 import { exists, isMonorepo } from "../utils";
@@ -32,88 +33,6 @@ const configFiles = [
   "./.lintstagedrc.yml",
   "./.lintstagedrc",
 ];
-
-// Helper function to process YAML lines
-const processYamlLine = (
-  line: string,
-  result: Record<string, unknown>,
-  currentKey: string | null,
-  currentArray: string[]
-): { newCurrentKey: string | null; newCurrentArray: string[] } => {
-  const trimmed = line.trim();
-
-  if (trimmed.includes(":") && !trimmed.startsWith("-")) {
-    // Save previous array if exists
-    if (currentKey && currentArray.length > 0) {
-      result[currentKey] = currentArray;
-    }
-
-    const [key, ...valueParts] = trimmed.split(":");
-    const value = valueParts.join(":").trim();
-    const newCurrentKey = key.trim().replaceAll(/['"]/g, "");
-
-    if (value && value !== "") {
-      result[newCurrentKey] =
-        value.startsWith("[") && value.endsWith("]")
-          ? value
-              .slice(1, -1)
-              .split(",")
-              .map((v) => v.trim().replaceAll(/['"]/g, ""))
-          : value.replaceAll(/['"]/g, "");
-      return { newCurrentArray: [], newCurrentKey: null };
-    }
-    return { newCurrentArray: [], newCurrentKey };
-  }
-
-  if (trimmed.startsWith("-") && currentKey) {
-    const newCurrentArray = [
-      ...currentArray,
-      trimmed.slice(1).trim().replaceAll(/['"]/g, ""),
-    ];
-    return { newCurrentArray, newCurrentKey: currentKey };
-  }
-
-  return { newCurrentArray: currentArray, newCurrentKey: currentKey };
-};
-
-// Simple YAML parser for basic objects (limited but functional)
-const parseSimpleYaml = (content: string): Record<string, unknown> => {
-  const lines = content
-    .split("\n")
-    .filter((line) => line.trim() && !line.trim().startsWith("#"));
-  const result: Record<string, unknown> = {};
-  let currentKey: string | null = null;
-  let currentArray: string[] = [];
-
-  for (const line of lines) {
-    const processed = processYamlLine(line, result, currentKey, currentArray);
-    currentKey = processed.newCurrentKey;
-    currentArray = processed.newCurrentArray;
-  }
-
-  // Save final array if exists
-  if (currentKey && currentArray.length > 0) {
-    result[currentKey] = currentArray;
-  }
-
-  return result;
-};
-
-// Convert object to simple YAML format
-const stringifySimpleYaml = (obj: Record<string, unknown>): string => {
-  let yaml = "";
-  for (const [key, value] of Object.entries(obj)) {
-    if (Array.isArray(value)) {
-      yaml += `${key}:\n`;
-      for (const item of value) {
-        yaml += `  - '${item}'\n`;
-      }
-    } else {
-      yaml += `${key}: '${value}'\n`;
-    }
-  }
-  return yaml;
-};
 
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
@@ -171,17 +90,29 @@ const updateJsonConfig = async (
   await writeFile(filename, `${JSON.stringify(mergedConfig, null, 2)}\n`);
 };
 
+// Quote unquoted glob pattern keys that YAML would misinterpret as aliases or tags
+const quoteGlobKeys = (content: string): string =>
+  content.replaceAll(
+    /^([*?{[][^\n:]*):(.*)$/gm,
+    (_match, key: string, rest: string) => `'${key}':${rest}`
+  );
+
 // Update YAML config files
 const updateYamlConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile(filename, "utf-8");
-  const existingConfig = parseSimpleYaml(content) as
-    | Record<string, unknown>
-    | undefined;
+  const raw = await readFile(filename, "utf-8");
+  const content = quoteGlobKeys(raw);
 
-  // If parsing fails (invalid YAML), treat as empty config and proceed gracefully
+  let existingConfig: Record<string, unknown> | undefined;
+  try {
+    existingConfig = YAML.parse(content) as Record<string, unknown> | undefined;
+  } catch {
+    // If parsing fails (invalid YAML), treat as empty config and proceed gracefully
+    return;
+  }
+
   if (!existingConfig) {
     return;
   }
@@ -190,7 +121,7 @@ const updateYamlConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
-  await writeFile(filename, stringifySimpleYaml(mergedConfig));
+  await writeFile(filename, YAML.stringify(mergedConfig));
 };
 
 // Update ESM config files
