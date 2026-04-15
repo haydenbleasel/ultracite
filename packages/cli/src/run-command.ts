@@ -41,7 +41,13 @@ export const exitOnCommandFailure = (
     throw new Error(`Failed to run ${commandName}: ${result.error.message}`);
   }
 
+  if (result.status === null) {
+    throw new Error(
+      `${commandName} was killed by signal ${result.signal ?? "unknown"}`
+    );
+  }
+
   if (result.status !== 0) {
-    throw new LinterExitError(commandName, result.status ?? 1);
+    throw new LinterExitError(commandName, result.status);
   }
 };

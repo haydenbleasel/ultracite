@@ -46,7 +46,16 @@ export const updatePackageJson = async ({
   type?: string;
 }) => {
   const packageJsonContent = await readFile("package.json", "utf-8");
-  const packageJsonObject = JSON.parse(packageJsonContent);
+
+  let packageJsonObject: Record<string, unknown>;
+  try {
+    packageJsonObject = JSON.parse(packageJsonContent) as Record<
+      string,
+      unknown
+    >;
+  } catch {
+    throw new Error("Failed to parse package.json: file contains invalid JSON");
+  }
 
   const newPackageJsonObject = {
     ...packageJsonObject,
@@ -59,7 +68,9 @@ export const updatePackageJson = async ({
   // Only add devDependencies if they exist in the original package.json or are being added
   if (packageJsonObject.devDependencies || devDependencies) {
     newPackageJsonObject.devDependencies = {
-      ...packageJsonObject.devDependencies,
+      ...(packageJsonObject.devDependencies as
+        | Record<string, string>
+        | undefined),
       ...devDependencies,
     };
   }
@@ -67,7 +78,7 @@ export const updatePackageJson = async ({
   // Only add dependencies if they exist in the original package.json or are being added
   if (packageJsonObject.dependencies || dependencies) {
     newPackageJsonObject.dependencies = {
-      ...packageJsonObject.dependencies,
+      ...(packageJsonObject.dependencies as Record<string, string> | undefined),
       ...dependencies,
     };
   }
@@ -75,7 +86,7 @@ export const updatePackageJson = async ({
   // Only add scripts if they exist in the original package.json or are being added
   if (packageJsonObject.scripts || scripts) {
     newPackageJsonObject.scripts = {
-      ...packageJsonObject.scripts,
+      ...(packageJsonObject.scripts as Record<string, string> | undefined),
       ...scripts,
     };
   }

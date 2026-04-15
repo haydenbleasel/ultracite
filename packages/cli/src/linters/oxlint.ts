@@ -15,7 +15,7 @@ const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 
 // Helper to generate a valid import identifier from a config name
 const getOxlintConfigIdentifier = (configPath: string) => {
-  const name = configPath.split("/").pop();
+  const name = configPath.split("/").pop() ?? configPath;
   return name === "core" ? "core" : name;
 };
 

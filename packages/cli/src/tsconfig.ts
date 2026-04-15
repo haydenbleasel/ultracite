@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+import { log } from "@clack/prompts";
 import { glob } from "glob";
 import { applyEdits, modify, parse } from "jsonc-parser";
 import type { ModificationOptions } from "jsonc-parser";
@@ -101,7 +102,9 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
     await writeFile(filePath, newContents);
   } catch (error) {
     // Log error but don't fail the entire operation
-    console.warn(`Failed to update ${filePath}:`, error);
+    log.warn(
+      `Failed to update ${filePath}: ${error instanceof Error ? error.message : error}`
+    );
   }
 };
 
@@ -120,7 +123,6 @@ export const tsconfig = {
     const files = await findTsConfigFiles();
 
     if (files.length === 0) {
-      console.warn("No tsconfig.json files found in the project");
       return;
     }
 
