@@ -90,6 +90,16 @@ export const oxlint = {
       }
     }
 
+    // Warn if the file looks like it has ultracite config but we couldn't parse it
+    if (
+      existingExtends.length === 0 &&
+      existingContents.includes("ultracite/oxlint")
+    ) {
+      console.warn(
+        "Warning: could not parse existing extends from oxlint.config.ts. The file will be regenerated."
+      );
+    }
+
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
       existingExtends.some((ext) => ext === getOxlintConfigPath(name));
