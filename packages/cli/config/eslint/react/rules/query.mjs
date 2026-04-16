@@ -1,4 +1,6 @@
-import { rules } from "@tanstack/eslint-plugin-query";
+import pluginQuery from "@tanstack/eslint-plugin-query";
+
+const { rules } = pluginQuery;
 
 const availableKeys = Object.keys(rules).filter(
   (key) => !rules[key].meta.deprecated

@@ -28,10 +28,12 @@ For Biome, add patterns to your `biome.jsonc`:
 ```json title="biome.jsonc"
 {
   "files": {
-    "includes": ["!components/ui/**", "!lib/**", "!hooks/**"]
+    "includes": ["**", "!components/ui/**", "!lib/**", "!hooks/**"]
   }
 }
 ```
+
+**Important:** You must include `"**"` as the first entry when using negated patterns in `files.includes`. Ultracite's base config sets `files.includes` to match all files (with its own exclusions). If you override `files.includes` with only negated patterns (e.g. `["!components/ui/**"]`), Biome will match zero files because there's no positive glob to start from. Always lead with `"**"` to include everything, then negate what you want to exclude.
 
 By default, all linters should ignore `node_modules`, but if you opened a file manually from there, the extension might still try to lint it. Generally, ignore generated files or third-party code.
 
