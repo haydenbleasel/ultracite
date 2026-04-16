@@ -84,6 +84,21 @@ Ultracite configures Biome's formatter with these defaults:
 
 For the complete list of rules and their settings, see the [Biome configuration on GitHub](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/biome).
 
+## Excluding Files
+
+Ultracite's base config uses `files.includes` to match all files while excluding common build outputs and generated code. If you need to exclude additional files or directories, add them to `files.includes` in your `biome.jsonc` with negated patterns:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core"],
+  "files": {
+    "includes": ["**", "!components/ui/**", "!prisma/client", "!public"],
+  },
+}
+```
+
+**Important:** Always include `"**"` as the first entry. Using only negated patterns (e.g. `["!public", "!prisma/client"]`) will result in zero files being matched, because Biome needs at least one positive glob to start from.
+
 ## VS Code Extension
 
 Install the [Biome extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) for VS Code:
