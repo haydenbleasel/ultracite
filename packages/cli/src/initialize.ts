@@ -1087,13 +1087,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       log.success("Successfully initialized Ultracite!");
     }
 
-    const didInstallSkill = await maybeInstallUltraciteSkill({
+    const hasUltraciteSkill = await maybeInstallUltraciteSkill({
       packageManager: pm,
       quiet,
       shouldInstall: opts.installSkill,
     });
 
-    if (!quiet && !didInstallSkill) {
+    if (!quiet && !hasUltraciteSkill) {
       log.info(
         `You can install the Ultracite skill later with \`${getUltraciteSkillInstallCommand(pm)}\`.`
       );
