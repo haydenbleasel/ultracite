@@ -40,10 +40,12 @@ export default defineConfig({
         "jest/prefer-called-with": "error",
         "jest/prefer-comparison-matcher": "error",
         "jest/prefer-each": "error",
+        "jest/prefer-ending-with-an-expect": "error",
         "jest/prefer-equality-matcher": "error",
         "jest/prefer-expect-resolves": "error",
         "jest/prefer-hooks-in-order": "error",
         "jest/prefer-hooks-on-top": "error",
+        "jest/prefer-importing-jest-globals": "error",
         "jest/prefer-jest-mocked": "error",
         "jest/prefer-lowercase-title": "error",
         "jest/prefer-mock-promise-shorthand": "error",
@@ -61,6 +63,7 @@ export default defineConfig({
         "jest/require-top-level-describe": "error",
         "jest/valid-describe-callback": "error",
         "jest/valid-expect": "error",
+        "jest/valid-expect-in-promise": "error",
         "jest/valid-title": "error",
 
         // Disabled: bun:test mock.module() must be called at top level
