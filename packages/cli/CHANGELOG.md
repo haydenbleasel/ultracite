@@ -1,3 +1,15 @@
+## 7.6.0
+
+### Minor Changes
+
+- 67227c9: Add new Biome rules
+- f506624: Add new oxlint 1.160.0 rules
+
+### Patch Changes
+
+- a684c4a: Fix Tanstack Query ESLint plugin import
+- 4983eaa: Skip the init skill-install prompt when the Ultracite skill is already installed in the current project or globally.
+
 ## 7.5.9
 
 ### Patch Changes
