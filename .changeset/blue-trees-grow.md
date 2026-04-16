@@ -1,5 +1,5 @@
 ---
-"ultracite": patch
+"ultracite": minor
 ---
 
 Add new Biome rules
