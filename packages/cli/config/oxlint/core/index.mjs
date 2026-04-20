@@ -403,7 +403,7 @@ export default defineConfig({
     "typescript/prefer-nullish-coalescing": "error",
     "typescript/prefer-promise-reject-errors": "error",
     "typescript/prefer-readonly": "error",
-    "typescript/prefer-readonly-parameter-types": "error",
+    "typescript/prefer-readonly-parameter-types": "off",
     "typescript/prefer-reduce-type-parameter": "error",
     "typescript/prefer-regexp-exec": "error",
     "typescript/prefer-return-this-type": "error",
