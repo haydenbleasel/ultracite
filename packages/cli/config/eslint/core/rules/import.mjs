@@ -9,7 +9,6 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "import-x/enforce-node-protocol-usage": ["error", "always"],
   "import-x/exports-last": "off",
   "import-x/extensions": "off",
   "import-x/group-exports": "off",
