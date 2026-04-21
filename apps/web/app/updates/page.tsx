@@ -22,8 +22,8 @@ const UpdatesPage = async () => {
         version.
       </p>
       {releases.map((release) => (
-        <section key={release.id}>
-          <h2>
+        <section className="mt-16 first:mt-12" key={release.id}>
+          <h2 className="!mt-0">
             <Link
               className="no-underline hover:underline"
               href={`/updates/${release.id}`}
