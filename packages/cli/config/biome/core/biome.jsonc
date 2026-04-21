@@ -1,9 +1,61 @@
 {
   "root": false,
   "$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["../../shared/ignores.jsonc"],
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    // Populated by scripts/generate-dts.ts from config/shared/ignores.mjs.
+    // Inlined (rather than extended from a separate jsonc file) so the !!
+    // globs survive merge when consumers define their own files.includes —
+    // see issue #679.
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!!**/build",
+      "!!**/out",
+      "!!**/.next",
+      "!!**/.open-next",
+      "!!**/.nuxt",
+      "!!**/.output",
+      "!!**/.svelte-kit",
+      "!!**/.vitepress/cache",
+      "!!**/.vitepress/dist",
+      "!!**/.turbo",
+      "!!**/.vercel",
+      "!!**/.netlify",
+      "!!**/.docusaurus",
+      "!!**/.cache",
+      "!!**/.parcel-cache",
+      "!!**/.vite",
+      "!!**/.astro",
+      "!!**/_astro",
+      "!!**/public/build",
+      "!!**/storybook-static",
+      "!!**/_generated",
+      "!!**/*.gen.*",
+      "!!**/*.generated.*",
+      "!!**/*.auto.*",
+      "!!**/generated",
+      "!!**/auto-generated",
+      "!!**/codegen",
+      "!!**/__generated__",
+      "!!**/graphql-types.*",
+      "!!**/schema.d.ts",
+      "!!**/schema.graphql.d.ts",
+      "!!**/*.d.ts.map",
+      "!!**/coverage",
+      "!!**/.nyc_output",
+      "!!**/.expo",
+      "!!**/.expo-shared",
+      "!!**/android/build",
+      "!!**/ios/build",
+      "!!**/DerivedData/**/*",
+      "!!**/bun.lock",
+      "!!**/bun.lockb",
+      "!!**/package-lock.json",
+      "!!**/yarn.lock",
+      "!!**/pnpm-lock.yaml",
+      "!!**/next-env.d.ts"
+    ]
   },
   "formatter": {
     "enabled": true,

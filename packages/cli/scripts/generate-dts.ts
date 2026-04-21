@@ -1,10 +1,12 @@
 /**
  * Generates declaration files (.d.mts) for oxlint and oxfmt config exports,
- * and generates ignores.jsonc from the shared ignore patterns for biome.
+ * and syncs biome/core's files.includes from the shared ignore patterns.
  * Run as part of the build to keep types and configs in sync.
  */
-import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+
+import { applyEdits, modify } from "jsonc-parser";
 
 const configDir = join(import.meta.dirname, "../config");
 
@@ -39,24 +41,22 @@ const oxfmtDir = join(configDir, "oxfmt");
 mkdirSync(oxfmtDir, { recursive: true });
 writeFileSync(join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
 
-// Generate ignores.jsonc from the shared ignore patterns (for biome extends)
+// Sync biome/core's files.includes from the shared ignore patterns. Inlined
+// (rather than extended from a separate jsonc file) because Biome's extend
+// merge doesn't carry files.includes through a transitive chain when the
+// consumer defines its own — see issue #679.
 const { ignorePatterns } = await import("../config/shared/ignores.mjs");
 const biomeIncludes = ["**", ...ignorePatterns.map((p: string) => `!!${p}`)];
-const includesJson = JSON.stringify(biomeIncludes, null, 2)
-  .split("\n")
-  .map((line, i) => (i === 0 ? line : `    ${line}`))
-  .join("\n");
-
-const ignoresJsonc = `{
-  // Auto-generated from ignores.mjs — do not edit directly.
-  // This file exists so biome can extend it via "extends".
-  "files": {
-    "includes": ${includesJson}
-  }
-}
-`;
-writeFileSync(join(configDir, "shared/ignores.jsonc"), ignoresJsonc);
+const biomeCorePath = join(configDir, "biome/core/biome.jsonc");
+const biomeCoreSource = readFileSync(biomeCorePath, "utf-8");
+const biomeCoreEdits = modify(
+  biomeCoreSource,
+  ["files", "includes"],
+  biomeIncludes,
+  { formattingOptions: { insertSpaces: true, tabSize: 2 } }
+);
+writeFileSync(biomeCorePath, applyEdits(biomeCoreSource, biomeCoreEdits));
 
 console.log(
-  `Generated declaration files for ${String(configs.length)} oxlint configs and oxfmt, and ignores.jsonc`
+  `Generated declaration files for ${String(configs.length)} oxlint configs and oxfmt, and synced biome/core includes`
 );

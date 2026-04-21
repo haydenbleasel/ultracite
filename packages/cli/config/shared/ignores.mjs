@@ -1,9 +1,9 @@
 /**
  * Canonical ignore patterns shared across all linters and formatters.
  *
- * This file is the single source of truth. The prebuild script generates
- * ignores.jsonc from this list (for biome's `extends`). Other tools
- * (oxlint, oxfmt, eslint) import this module directly.
+ * This file is the single source of truth. The prebuild script syncs these
+ * patterns into biome/core's files.includes (as `!!`-prefixed globs). Other
+ * tools (oxlint, oxfmt, eslint) import this module directly.
  */
 export const ignorePatterns = [
   // ── Build / framework output ──────────────────────────────────────
