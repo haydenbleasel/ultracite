@@ -166,6 +166,9 @@ export const Navbar = ({ agents, editors, providers }: NavbarProps) => {
           </NavigationMenu>
         </div>
         <div className="flex items-center gap-2">
+          <Button asChild className="hidden sm:inline-flex" variant="ghost">
+            <Link href="/updates">Updates</Link>
+          </Button>
           <Button asChild>
             <Link href={docsUrl}>Read the docs</Link>
           </Button>
@@ -255,6 +258,11 @@ export const Navbar = ({ agents, editors, providers }: NavbarProps) => {
                 </div>
 
                 <div className="mt-auto flex flex-col gap-2 border-t pt-4">
+                  <Button asChild className="w-full" variant="outline">
+                    <Link href="/updates" onClick={handleClose}>
+                      Updates
+                    </Link>
+                  </Button>
                   <Button asChild className="w-full">
                     <Link href={docsUrl} onClick={handleClose}>
                       Read the docs
