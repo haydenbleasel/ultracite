@@ -31,13 +31,13 @@
 ### Patch Changes
 
 - c35a1b3: Performance improvements - doctor
-- 56e4c00: Remove process.exit() - swap with typed Error
-- d35d03c: Performance optimizations - mkdir(), readFile()
+- 56e4c00: Remove `process.exit()` - swap with typed Error
+- d35d03c: Performance optimizations - `mkdir()`, `readFile()`
 - ee224a6: Use Commander.js args properly
 - a2b7a46: Rework doctor command
 - cf4a044: Fix angular eslint plugin typo
 - 25eb24f: Optimize dev dep install
-- b46537a: Performance optimizations - exists()
+- b46537a: Performance optimizations - `exists()`
 
 ## 7.5.7
 
@@ -53,7 +53,7 @@
 ### Patch Changes
 
 - acf4a97: Update oxlint jest rules
-- 6905932: Fix vitest/no-importing-vitest-globals conflict
+- 6905932: Fix `vitest/no-importing-vitest-globals` conflict
 - 4e4dc03: Update oxlint vitest rules
 - 6a583d1: Fix oxfmt setup config
 
@@ -95,14 +95,14 @@
 
 ### Patch Changes
 
-- fdb1493: Exclude package manager lock files (bun.lock, bun.lockb, package-lock.json, yarn.lock, pnpm-lock.yaml) from Biome linting and formatting
+- fdb1493: Exclude package manager lock files (`bun.lock`, `bun.lockb`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`) from Biome linting and formatting
 
 ## 7.4.4
 
 ### Patch Changes
 
 - e9db6f1: Add IBM Bob agent, editor, and logo
-- 5341bcc: Disable vitest/prefer-strict-boolean-matchers to resolve conflict with prefer-to-be-truthy and prefer-to-be-falsy
+- 5341bcc: Disable `vitest/prefer-strict-boolean-matchers` to resolve conflict with prefer-to-be-truthy and prefer-to-be-falsy
 
 ## 7.4.3
 
@@ -158,20 +158,20 @@
 
 ### Minor Changes
 
-- 0d27e68: fix noUnusedImports removing new imports in agent hooks
+- 0d27e68: fix `noUnusedImports` removing new imports in agent hooks
 
 ### Patch Changes
 
 - 668fe62: Add --type-aware flag for biome
 - 4280484: Disable max-statements in Oxlint
-- d37b046: Disable jsdoc/require-param-type and jsdoc/require-returns-type for TS files
+- d37b046: Disable `jsdoc/require-param-type` and `jsdoc/require-returns-type` for TS files
 
 ## 7.2.5
 
 ### Patch Changes
 
-- 83bafe4: Disable useValidLang rule for SvelteKit app.html to prevent false positives from %lang% placeholder
-- 4df6da9: Disable noUndeclaredVariables for Svelte files to fix false positives with template block variables like {#each}
+- 83bafe4: Disable `useValidLang` rule for SvelteKit app.html to prevent false positives from %lang% placeholder
+- 4df6da9: Disable `noUndeclaredVariables` for Svelte files to fix false positives with template block variables like `{#each}`
 
 ## 5.6.0
 
@@ -181,7 +181,7 @@
 
 - cfaa912: Remove Jest and Vitest rules from non-test files
 - f72f2dc: Add support for copilot hooks
-- 66d51fd: Disable import/no-nodejs-modules for Chris Consent
+- 66d51fd: Disable `import/no-nodejs-modules` for Chris Consent
 - d1e8490: Create skill
 
 ## 7.2.3
@@ -210,16 +210,16 @@
 
 ### Patch Changes
 
-- 357be7e: Store full package manager info from detectPackageManager()
+- 357be7e: Store full package manager info from `detectPackageManager()`
 - 8666788: Fix Husky precommit hook
 
 ## 7.1.5
 
 ### Patch Changes
 
-- c8fdacf: fix: detectLinter() doesn't walk up directory tree, Breaks monorepo subdirectory usage
+- c8fdacf: fix: `detectLinter()` doesn't walk up directory tree, Breaks monorepo subdirectory usage
 - c79c3b0: Fix lefthook file configuration
-- 4b9d206: Make useBlockStatements fix safe
+- 4b9d206: Make `useBlockStatements` fix safe
 - 8e9e728: Add support for NestJS
 - d0ae8f3: Fix: Biome removes all imports in Svelte files on save instead of organizing them
 
@@ -233,7 +233,7 @@
 
 ### Patch Changes
 
-- c60533d: Fix oxlint import/consistent-type-specifier-style
+- c60533d: Fix oxlint `import/consistent-type-specifier-style`
 
 ## 7.1.2
 
@@ -247,7 +247,7 @@
 
 ### Patch Changes
 
-- 0e9af01: Automatically add scripts to root package.json
+- 0e9af01: Automatically add scripts to root `package.json`
 - 656f6d7: fix(oxlint-remix): ignore unicorn rules for generated routeTree.gen.ts
 
 ## 7.1.0
@@ -261,7 +261,7 @@
 
 - 64e79c7: fix(eslint): fix eslint rules config
 - a5ae91c: fix(eslint): Remove eslint-plugin-tailwindcss due to v4 incompatibility
-- 5c349a9: Enable tsconfig.json to have comments
+- 5c349a9: Enable `tsconfig.json` to have comments
 
 ## 7.0.12
 
@@ -292,8 +292,8 @@
 ### Patch Changes
 
 - 95dd898: Disable sort-imports in favor of oxfmt
-- c72d2b3: Disable react/jsx-max-depth
-- 2ae8976: Disable typescript/require-await
+- c72d2b3: Disable `react/jsx-max-depth`
+- 2ae8976: Disable `typescript/require-await`
 
 ## 7.0.8
 
@@ -364,7 +364,7 @@
 - e1b6be6: Fix undefined input to fix command
 - 618ae17: Fix changesets
 - Updated dependencies [c4a205f]
-  - @repo/data@2.0.0
+  - `@repo/data@2.0.0`
 
 ## 6.5.1
 
@@ -504,16 +504,16 @@
 ### Patch Changes
 
 - 0fed52b: Upgrade Biome to 2.3.4
-- a9347c8: Disable noMagicNumbers and noConsole
-- aa7f769: Updated tsconfig, package.json selector
+- a9347c8: Disable `noMagicNumbers` and `noConsole`
+- aa7f769: Updated tsconfig, `package.json` selector
 
 ## 6.2.1
 
 ### Patch Changes
 
 - 527e737: Update to Biome 2.3.3
-- d5f9d64: Disable useAwait on page.tsx and layout.tsx files in Next.js
-- eb77e3f: add allowForLoopAfterthoughts to noIncrementDecrement
+- d5f9d64: Disable `useAwait` on page.tsx and layout.tsx files in Next.js
+- eb77e3f: add allowForLoopAfterthoughts to `noIncrementDecrement`
 
 ## 6.2.0
 
@@ -545,7 +545,7 @@
 ### Patch Changes
 
 - 5f00bd3: Use overrides in presets
-- 30f488e: Upgrade Biome to 2.3.2, add "noIncrementDecrement"
+- 30f488e: Upgrade Biome to 2.3.2, add "`noIncrementDecrement`"
 
 ## 6.0.4
 
@@ -606,7 +606,7 @@
 
 ### Patch Changes
 
-- 7b515fe: Disable useAwait rule in next config files
+- 7b515fe: Disable `useAwait` rule in next config files
 - 7b515fe: Improve test coverage
 - c3a9dad: Bump deps
 - 3faa8c2: Add Roo Code editor rules support
@@ -655,7 +655,7 @@
 ### ⚠️ Pushed to `main`
 
 - Increase branch test coverage from 89.21% → 91.02% ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 - Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
 - Add Videos section to homepage ([@haydenbleasel](https://github.com/haydenbleasel))
 - Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
@@ -699,11 +699,11 @@
 
 ### 🚀 Enhancement
 
-- Bump @types/node from 24.5.2 to 24.6.1 [#292](https://github.com/haydenbleasel/ultracite/pull/292) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@types/node` from 24.5.2 to 24.6.1 [#292](https://github.com/haydenbleasel/ultracite/pull/292) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### 🔩 Dependency Updates
 
-- Bump @trpc/server from 11.5.1 to 11.6.0 [#291](https://github.com/haydenbleasel/ultracite/pull/291) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@trpc/server` from 11.5.1 to 11.6.0 [#291](https://github.com/haydenbleasel/ultracite/pull/291) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 1
 
@@ -731,7 +731,7 @@ Thank you, Daniel Costrasel ([@ohkimur](https://github.com/ohkimur)), for all yo
 
 ### 🐛 Bug Fix
 
-- fix: disable useNamingConvention; improve comments consistency [#289](https://github.com/haydenbleasel/ultracite/pull/289) ([@ohkimur](https://github.com/ohkimur))
+- fix: disable `useNamingConvention`; improve comments consistency [#289](https://github.com/haydenbleasel/ultracite/pull/289) ([@ohkimur](https://github.com/ohkimur))
 
 ### Authors: 1
 
@@ -1084,7 +1084,7 @@ Thank you, Kevin Wolf ([@kvnwolf](https://github.com/kvnwolf)), for all your wor
 
 ### ⚠️ Pushed to `main`
 
-- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -1162,7 +1162,7 @@ Thank you, Melvyn ([@Melvynx](https://github.com/Melvynx)), for all your work!
 ### ⚠️ Pushed to `main`
 
 - Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create util for updating package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create util for updating `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -1309,7 +1309,7 @@ Thank you, Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01)),
 ### 🐛 Bug Fix
 
 - feat: migrate cli from commander.js to trpc-cli with flag support [#215](https://github.com/haydenbleasel/ultracite/pull/215) ([@AmanVarshney01](https://github.com/AmanVarshney01) [@haydenbleasel](https://github.com/haydenbleasel))
-- Fix Bun detection for projects using bun.lock lockfile format [#227](https://github.com/haydenbleasel/ultracite/pull/227) ([@Copilot](https://github.com/Copilot))
+- Fix Bun detection for projects using `bun.lock` lockfile format [#227](https://github.com/haydenbleasel/ultracite/pull/227) ([@Copilot](https://github.com/Copilot))
 
 ### ⚠️ Pushed to `main`
 
@@ -1466,7 +1466,7 @@ Thank you, aditya ([@adiadd](https://github.com/adiadd)), for all your work!
 
 - Upgrade Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
 - Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -1588,8 +1588,8 @@ Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), 
 ### ⚠️ Pushed to `main`
 
 - Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 - Resolves #195 ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
@@ -1602,7 +1602,7 @@ Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), 
 
 ### 🐛 Bug Fix
 
-- Bump @types/node from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@types/node` from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 1
 
@@ -1656,7 +1656,7 @@ Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), 
 
 ### 🐛 Bug Fix
 
-- Improve biome update flow to support both biome.json and biome.jsonc [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
+- Improve biome update flow to support both `biome.json` and `biome.jsonc` [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
 
 ### Authors: 1
 
@@ -1712,15 +1712,15 @@ Thanks for all your work!
 
 ### 🐛 Bug Fix
 
-- feat: Add TanStack Router file convention support to useFilenamingConvention rule [#174](https://github.com/haydenbleasel/ultracite/pull/174) ([@Copilot](https://github.com/Copilot))
+- feat: Add TanStack Router file convention support to `useFilenamingConvention` rule [#174](https://github.com/haydenbleasel/ultracite/pull/174) ([@Copilot](https://github.com/Copilot))
 - Fix Yarn 4.9.2 compatibility by replacing --save-exact with -E flag [#173](https://github.com/haydenbleasel/ultracite/pull/173) ([@Copilot](https://github.com/Copilot))
-- fix: replace 'npx biome' with 'npx @biomejs/biome' [#170](https://github.com/haydenbleasel/ultracite/pull/170) ([@tommideso](https://github.com/tommideso))
+- fix: replace 'npx biome' with 'npx `@biomejs/biome`' [#170](https://github.com/haydenbleasel/ultracite/pull/170) ([@tommideso](https://github.com/tommideso))
 - feat: Add "tv" to allowed functions in linter options [#169](https://github.com/haydenbleasel/ultracite/pull/169) ([@harryevans1997](https://github.com/harryevans1997))
 
 ### ⚠️ Pushed to `main`
 
 - Update format.ts ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete package-lock.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 - Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
 - Resolves #167 ([@haydenbleasel](https://github.com/haydenbleasel))
 
@@ -1805,7 +1805,7 @@ Thank you, Luke Nittmann ([@lnittman](https://github.com/lnittman)), for all you
 ### ⚠️ Pushed to `main`
 
 - Run formatting ([@haydenbleasel](https://github.com/haydenbleasel))
-- Parse biome.json properly ([@haydenbleasel](https://github.com/haydenbleasel))
+- Parse `biome.json` properly ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -1983,7 +1983,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 - Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
@@ -2365,8 +2365,8 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 ### ⚠️ Pushed to `main`
 
 - Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update biome.json ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update pnpm-lock.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `biome.json` ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### 🔩 Dependency Updates
 
@@ -2408,7 +2408,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 ### ⚠️ Pushed to `main`
 
 - Update Biome ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update biome.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `biome.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2504,7 +2504,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Disable useExplicitLengthCheck ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable `useExplicitLengthCheck` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2516,7 +2516,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Disable useSimplifiedLogicExpression ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable `useSimplifiedLogicExpression` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2568,7 +2568,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 - Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
 - Bump website deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove useAsync from exhaustive deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove `useAsync` from exhaustive deps ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2689,7 +2689,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Disable unicorn/no-array-callback-reference ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable `unicorn/no-array-callback-reference` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2725,7 +2725,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Swap no-undef-init for unicorn/no-null ([@haydenbleasel](https://github.com/haydenbleasel))
+- Swap no-undef-init for `unicorn/no-null` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2797,7 +2797,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Disable unicorn/no-keyword-prefix for React className ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable `unicorn/no-keyword-prefix` for React className ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -2996,7 +2996,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Fix exports in package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix exports in `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -3098,7 +3098,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -3310,7 +3310,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @babel/traverse from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/ultracite/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@babel/traverse` from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/ultracite/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 2
 
@@ -3692,9 +3692,9 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.50.0 to 5.57.0 [#112](https://github.com/haydenbleasel/ultracite/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.50.0 to 5.57.0 [#112](https://github.com/haydenbleasel/ultracite/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/haydenbleasel/ultracite/pull/111) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.1.6 to 13.2.4 [#110](https://github.com/haydenbleasel/ultracite/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 13.1.6 to 13.2.4 [#110](https://github.com/haydenbleasel/ultracite/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/haydenbleasel/ultracite/pull/109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/haydenbleasel/ultracite/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/haydenbleasel/ultracite/pull/105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
@@ -3728,13 +3728,13 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.48.1 to 5.50.0 [#88](https://github.com/haydenbleasel/ultracite/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.48.1 to 5.50.0 [#88](https://github.com/haydenbleasel/ultracite/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/haydenbleasel/ultracite/pull/86) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/haydenbleasel/ultracite/pull/87) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/haydenbleasel/ultracite/pull/89) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.1.2 to 13.1.6 [#90](https://github.com/haydenbleasel/ultracite/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 13.1.2 to 13.1.6 [#90](https://github.com/haydenbleasel/ultracite/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/haydenbleasel/ultracite/pull/91) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.48.1 to 5.50.0 [#92](https://github.com/haydenbleasel/ultracite/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.48.1 to 5.50.0 [#92](https://github.com/haydenbleasel/ultracite/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/haydenbleasel/ultracite/pull/93) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/haydenbleasel/ultracite/pull/85) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
@@ -3823,7 +3823,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Update package.json ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
 
@@ -3846,15 +3846,15 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 ### 🔩 Dependency Updates
 
 - Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/haydenbleasel/ultracite/pull/84) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.42.1 to 5.47.1 [#79](https://github.com/haydenbleasel/ultracite/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.42.1 to 5.47.1 [#79](https://github.com/haydenbleasel/ultracite/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/haydenbleasel/ultracite/pull/69) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/haydenbleasel/ultracite/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/haydenbleasel/ultracite/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/haydenbleasel/ultracite/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 13.0.3 to 13.1.1 [#76](https://github.com/haydenbleasel/ultracite/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 13.0.3 to 13.1.1 [#76](https://github.com/haydenbleasel/ultracite/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/haydenbleasel/ultracite/pull/77) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/haydenbleasel/ultracite/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.42.1 to 5.47.1 [#80](https://github.com/haydenbleasel/ultracite/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.42.1 to 5.47.1 [#80](https://github.com/haydenbleasel/ultracite/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/haydenbleasel/ultracite/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/haydenbleasel/ultracite/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
@@ -3941,11 +3941,11 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### ⚠️ Pushed to `main`
 
-- Bump deps, disable promise/no-native ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps, disable `promise/no-native` ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/ultracite/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/ultracite/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/ultracite/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 2
@@ -3978,14 +3978,14 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/eslint-plugin from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/ultracite/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/ultracite/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/ultracite/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/ultracite/pull/46) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/ultracite/pull/50) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/ultracite/pull/53) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/ultracite/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/ultracite/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/ultracite/pull/56) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/ultracite/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/ultracite/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/ultracite/pull/58) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/ultracite/pull/59) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
@@ -4055,19 +4055,19 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @next/eslint-plugin-next from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/ultracite/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/ultracite/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.21.0 to 8.23.0 [#37](https://github.com/haydenbleasel/ultracite/pull/37) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/ultracite/pull/38) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/ultracite/pull/38) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.9.1 to 14.11.0 [#39](https://github.com/haydenbleasel/ultracite/pull/39) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/ultracite/pull/40) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/ultracite/pull/40) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.7.4 to 4.8.2 [#41](https://github.com/haydenbleasel/ultracite/pull/41) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react from 7.30.1 to 7.31.1 [#42](https://github.com/haydenbleasel/ultracite/pull/42) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/ultracite/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/ultracite/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.18.0 to 8.21.0 [#30](https://github.com/haydenbleasel/ultracite/pull/30) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-jsx-a11y from 6.6.0 to 6.6.1 [#31](https://github.com/haydenbleasel/ultracite/pull/31) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @next/eslint-plugin-next from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/ultracite/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@next/eslint-plugin-next` from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/ultracite/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.1.11 to 0.1.13 [#33](https://github.com/haydenbleasel/ultracite/pull/33) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/parser from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/ultracite/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/ultracite/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 2
 
@@ -4147,13 +4147,13 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/ultracite/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/ultracite/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/ultracite/pull/28) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/ultracite/pull/27) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/ultracite/pull/26) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/ultracite/pull/25) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/ultracite/pull/23) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/ultracite/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/ultracite/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
 ### Authors: 2
 
@@ -4179,7 +4179,7 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 ### ⚠️ Pushed to `main`
 
 - Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Use next/core-web-vitals instead of custom config ([@haydenbleasel](https://github.com/haydenbleasel))
+- Use `next/core-web-vitals` instead of custom config ([@haydenbleasel](https://github.com/haydenbleasel))
 - Revert "Attempt fixing Next format" ([@haydenbleasel](https://github.com/haydenbleasel))
 
 ### Authors: 1
@@ -4234,14 +4234,14 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/ultracite/pull/17) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/ultracite/pull/17) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-import from 2.25.4 to 2.26.0 [#11](https://github.com/haydenbleasel/ultracite/pull/11) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.6.1 to 14.8.1 [#12](https://github.com/haydenbleasel/ultracite/pull/12) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier from 2.6.1 to 2.6.2 [#13](https://github.com/haydenbleasel/ultracite/pull/13) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier-plugin-tailwindcss from 0.1.8 to 0.1.10 [#14](https://github.com/haydenbleasel/ultracite/pull/14) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint from 8.12.0 to 8.14.0 [#15](https://github.com/haydenbleasel/ultracite/pull/15) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-config-next from 12.1.4 to 12.1.5 [#16](https://github.com/haydenbleasel/ultracite/pull/16) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/ultracite/pull/18) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/ultracite/pull/18) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react-hooks from 4.4.0 to 4.5.0 [#19](https://github.com/haydenbleasel/ultracite/pull/19) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump typescript from 4.6.3 to 4.6.4 [#20](https://github.com/haydenbleasel/ultracite/pull/20) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 
@@ -4261,8 +4261,8 @@ Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for 
 
 ### 🔩 Dependency Updates
 
-- Bump @typescript-eslint/parser from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/ultracite/pull/10) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump @typescript-eslint/eslint-plugin from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/ultracite/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/parser` from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/ultracite/pull/10) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump `@typescript-eslint/eslint-plugin` from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/ultracite/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump stylelint from 14.6.0 to 14.6.1 [#7](https://github.com/haydenbleasel/ultracite/pull/7) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump eslint-plugin-react-hooks from 4.3.0 to 4.4.0 [#8](https://github.com/haydenbleasel/ultracite/pull/8) ([@dependabot[bot]](https://github.com/dependabot[bot]))
 - Bump prettier from 2.6.0 to 2.6.1 [#2](https://github.com/haydenbleasel/ultracite/pull/2) ([@dependabot[bot]](https://github.com/dependabot[bot]))
