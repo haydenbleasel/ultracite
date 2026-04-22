@@ -2,6 +2,9 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkGithub from "remark-github";
+
+const githubRepo = "haydenbleasel/ultracite";
 
 const components: Components = {
   a: ({ href, children, ...props }) => {
@@ -31,7 +34,10 @@ interface ReleaseMarkdownProps {
 }
 
 export const ReleaseMarkdown = ({ children }: ReleaseMarkdownProps) => (
-  <ReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+  <ReactMarkdown
+    components={components}
+    remarkPlugins={[remarkGfm, [remarkGithub, { repository: githubRepo }]]}
+  >
     {children}
   </ReactMarkdown>
 );
