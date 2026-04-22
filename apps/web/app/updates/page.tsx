@@ -1,8 +1,7 @@
-import Link from "next/link";
-
-import { ReleaseMarkdown } from "@/components/ultracite/release-markdown";
-import { getReleases } from "@/lib/changelog";
+import { getReleaseGroups } from "@/lib/changelog";
 import { createPageMetadata } from "@/lib/site-metadata";
+
+import { ReleaseList } from "./components/release-list";
 
 export const metadata = createPageMetadata({
   description:
@@ -12,7 +11,7 @@ export const metadata = createPageMetadata({
 });
 
 const UpdatesPage = async () => {
-  const releases = await getReleases();
+  const groups = await getReleaseGroups();
 
   return (
     <div className="typography mx-auto">
@@ -21,19 +20,7 @@ const UpdatesPage = async () => {
         The latest releases, changes, and improvements to Ultracite across every
         version.
       </p>
-      {releases.map((release) => (
-        <section className="mt-16 first:mt-12" key={release.id}>
-          <h2 className="!mt-0">
-            <Link
-              className="no-underline hover:underline"
-              href={`/updates/${release.id}`}
-            >
-              {release.title}
-            </Link>
-          </h2>
-          <ReleaseMarkdown>{release.content}</ReleaseMarkdown>
-        </section>
-      ))}
+      <ReleaseList groups={groups} />
     </div>
   );
 };

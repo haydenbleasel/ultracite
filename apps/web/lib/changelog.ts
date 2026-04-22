@@ -58,3 +58,32 @@ export const getReleaseById = async (
   const releases = await getReleases();
   return releases.find((release) => release.id === id);
 };
+
+export interface ReleaseGroup {
+  major: number;
+  releases: Release[];
+}
+
+const getReleaseMajor = (release: Release): number => {
+  const match = release.id.match(/^(\d+)/);
+  return match ? Number(match[1]) : 0;
+};
+
+export const getReleaseGroups = async (): Promise<ReleaseGroup[]> => {
+  const releases = await getReleases();
+  const byMajor = new Map<number, Release[]>();
+
+  for (const release of releases) {
+    const major = getReleaseMajor(release);
+    const existing = byMajor.get(major);
+    if (existing) {
+      existing.push(release);
+    } else {
+      byMajor.set(major, [release]);
+    }
+  }
+
+  return [...byMajor.entries()]
+    .toSorted(([a], [b]) => b - a)
+    .map(([major, groupReleases]) => ({ major, releases: groupReleases }));
+};
