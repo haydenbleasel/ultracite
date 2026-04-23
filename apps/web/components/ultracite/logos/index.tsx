@@ -10,10 +10,10 @@ import ElevenLabs from "./elevenlabs.svg";
 import FrenchGovernment from "./french-government.svg";
 import Mintlify from "./mintlify.svg";
 import Moonshot from "./moonshot.svg";
+import OpenAI from "./openai.svg";
 import Posthog from "./posthog.svg";
 import Profound from "./profound.svg";
 import Raycast from "./raycast.svg";
-import Redpanda from "./redpanda.svg";
 import Resend from "./resend.svg";
 import Sentry from "./sentry.svg";
 import Tencent from "./tencent.svg";
@@ -22,6 +22,10 @@ import Vercel from "./vercel.svg";
 import Workday from "./workday.svg";
 
 const logos = [
+  {
+    name: "OpenAI",
+    src: OpenAI,
+  },
   {
     name: "Vercel",
     src: Vercel,
@@ -69,10 +73,6 @@ const logos = [
   {
     name: "Resend",
     src: Resend,
-  },
-  {
-    name: "Redpanda",
-    src: Redpanda,
   },
   {
     name: "Workday",
