@@ -87,7 +87,6 @@ export interface Editor {
 
 // VS Code base configuration
 const vscodeBaseConfig = {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "emmet.showExpandedAbbreviation": "never",
@@ -113,6 +112,7 @@ export const vscodeBiomeConfig = {
   "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
   "[vue]": { "editor.defaultFormatter": "biomejs.biome" },
   "[yaml]": { "editor.defaultFormatter": "biomejs.biome" },
+  "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
@@ -139,6 +139,7 @@ export const vscodeOxlintConfig = {
   "[vue-html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
   "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
   },
@@ -146,6 +147,7 @@ export const vscodeOxlintConfig = {
 
 // VS Code ESLint/Prettier configuration
 export const vscodeEslintConfig = {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
