@@ -10,8 +10,8 @@
 
 ### Minor Changes
 
-- 67227c9: Add new Biome rules
-- f506624: Add new oxlint 1.160.0 rules
+- 67227c9: Enable additional Biome rules across core and framework presets. Core gets `noUselessCatchBinding`, `noUselessUndefined`, `useConsistentArrowReturn`, `noUnusedExpressions`, and CSS `noEmptySource` (with `useMaxParams` and `noJsxLiterals` turned off); Next.js adds `noNextAsyncClientComponent`; Qwik adds `useQwikMethodUsage` and `useQwikValidLexicalScope`; React adds `noReactForwardRef`; Vue adds `noVueDataObjectDeclaration`, `noVueDuplicateKeys`, `noVueReservedKeys`, `noVueReservedProps`, and `noVueSetupPropsReactivityLoss`.
+- f506624: Enable newly-available rules from oxlint 1.160.0. Core: `typescript/no-unnecessary-qualifier`, `typescript/no-unnecessary-type-parameters`, `typescript/no-useless-default-assignment`, `typescript/prefer-readonly-parameter-types`, `typescript/strict-void-return`, `unicorn/consistent-template-literal-escape`. Jest: `jest/prefer-ending-with-an-expect`, `jest/prefer-importing-jest-globals`, `jest/valid-expect-in-promise`. Vitest: `vitest/valid-expect-in-promise`.
 
 ### Patch Changes
 
@@ -22,8 +22,8 @@
 
 ### Patch Changes
 
-- 77e9b41: Aggregate all ignore patterns
-- 73fc21c: Code reliability improvements
+- 77e9b41: Consolidate build-output, framework-generated, and lockfile ignore patterns (`**/dist`, `**/.next`, `**/.turbo`, `**/*.gen.*`, `bun.lock`, `pnpm-lock.yaml`, etc.) into a single canonical list at `config/shared/ignores.mjs`. A generated `config/shared/ignores.jsonc` is provided for Biome's `extends`, and the same module is imported directly by oxlint, oxfmt, and ESLint so every tool ignores the same paths.
+- 73fc21c: Throw a descriptive error when `package.json` contains invalid JSON instead of surfacing a raw `SyntaxError` from `updatePackageJson`. Detect and report when a linter subprocess is terminated by a signal in `run-command`. Route `tsconfig` update warnings through `@clack/prompts`' `log.warn` for consistent CLI output, and silently return when no `tsconfig.json` files are found.
 - 63f7426: Migrate remaining json parsing to jsonc-parser
 - aa199d1: fix conflicting prefer-describe-function-title / valid-title rules in vitest
 - 402908e: Replace custom yaml parser with dependency
@@ -38,20 +38,20 @@
 
 ### Patch Changes
 
-- c35a1b3: Performance improvements - doctor
+- c35a1b3: Speed up the `doctor` command by running diagnostic checks synchronously with `readFileSync`/`existsSync` in a single pass instead of awaiting each check behind its own spinner, removing the per-check async overhead and startup delay.
 - 56e4c00: Remove `process.exit()` - swap with typed Error
-- d35d03c: Performance optimizations - `mkdir()`, `readFile()`
-- ee224a6: Use Commander.js args properly
-- a2b7a46: Rework doctor command
+- d35d03c: Switch hot-path init and agent/editor/hook setup calls from async `mkdir`/`readFile` to their sync counterparts where I/O already happens serially, and batch the second `package.json` write (to add `check`/`fix` scripts) into the same `updatePackageJson` call that writes devDependencies in no-install mode, saving a redundant read/write per init.
+- ee224a6: Read positional file arguments from Commander's action callback directly in the `check` and `fix` commands instead of re-parsing `process.argv` to separate files from passthrough flags.
+- a2b7a46: Rewrite `doctor` around `detectLinter` so it only runs the checks relevant to the linter configured in the project (Biome, ESLint, or Oxlint) instead of running every check unconditionally. Generalize installation checks into a single `checkToolInstallation` helper and add detection for Prettier and Stylelint configuration conflicts.
 - cf4a044: Fix angular eslint plugin typo
-- 25eb24f: Optimize dev dep install
-- b46537a: Performance optimizations - `exists()`
+- 25eb24f: Pass the full dependency list to `addDevDependency` in one call during `init` instead of looping per-package, so package managers resolve and install all Ultracite devDependencies in a single invocation.
+- b46537a: Convert `exists()` and `detectLinter()` in `utils.ts` from async (`fs.promises.access`) to sync (`accessSync`), and update all call sites across the linter, agent, editor, hook, and integration modules. The function is used in hot init paths where the async overhead gave no benefit.
 
 ## 7.5.7
 
 ### Patch Changes
 
-- a63d9c5: Fix cross-config leaking rules
+- a63d9c5: Replace oxlint's `categories` block (`correctness`, `pedantic`, `perf`, `restriction`, `style`, and `suspicious` all set to `error`) in the core preset with an explicit, exhaustively-listed rule set. Category-level defaults were letting rules not present in the core config leak through to consumer configs that extended ours, producing unexpected violations.
 - d18d0e7: Configure Prettier with frameworks context
 - 1d6de0d: Add declaration files for `ultracite/oxlint/*` and `ultracite/oxfmt` so TypeScript config imports resolve without `ts(7016)` errors.
 - 1073f34: Ensure init'ed JSON files have newlines
@@ -60,22 +60,22 @@
 
 ### Patch Changes
 
-- acf4a97: Update oxlint jest rules
+- acf4a97: Add newly-available oxlint jest rules: `jest/no-unneeded-async-expect-function`, `jest/padding-around-after-all-blocks`, `jest/prefer-mock-return-shorthand`, and `jest/prefer-snapshot-hint`. Reorganize the config so disabled rules (with their rationale comments) sit at the bottom of the rules block for readability.
 - 6905932: Fix `vitest/no-importing-vitest-globals` conflict
-- 4e4dc03: Update oxlint vitest rules
-- 6a583d1: Fix oxfmt setup config
+- 4e4dc03: Add newly-available oxlint vitest rules: `vitest/consistent-each-for`, `vitest/hoisted-apis-on-top`, `vitest/prefer-called-exactly-once-with`, `vitest/prefer-called-once`, `vitest/prefer-describe-function-title`, `vitest/prefer-expect-type-of`, `vitest/prefer-import-in-mock`, `vitest/require-awaited-expect-poll`, and `vitest/require-mock-type-parameters`. Drop `vitest/prefer-lowercase-title`.
+- 6a583d1: Fix the generated `oxfmt.config.ts` template, which was re-exporting Ultracite's config directly (a form oxfmt doesn't accept). Wrap it in `defineConfig({ extends: [ultracite] })` so oxfmt picks up the shared rules.
 
 ## 7.5.5
 
 ### Patch Changes
 
-- 5437f81: Attempt to fix oxlint/oxfmt AGAIN
+- 5437f81: Rename bundled oxlint and oxfmt config files from `.ts` to `.mjs` so consumers can load them without a TypeScript loader, and update Ultracite's own generated `oxlint.config.ts`/`oxfmt.config.ts` imports to match.
 
 ## 7.5.4
 
 ### Patch Changes
 
-- 66999e0: Fix oxlint and oxfmt yet again
+- 66999e0: Rename bundled oxlint and oxfmt configs from `.js` back to `.ts`, and fix the Next.js and React oxlint preset imports that were still pointing at the old extension.
 
 ## 7.5.3
 
@@ -87,7 +87,7 @@
 
 ### Patch Changes
 
-- 22df7a5: Fix oxlint import issues
+- 22df7a5: Rename bundled oxlint and oxfmt configs from `.ts` to `.js` so consumers importing `ultracite/oxlint/*` no longer need a TypeScript loader at runtime, and update Ultracite's own generated `oxlint.config.ts` imports to match.
 
 ## 7.5.1
 
@@ -131,7 +131,7 @@
 
 - 7a14fb2: Prompt users to install the reusable Ultracite skill during `ultracite init` and add a `--install-skill` flag for non-interactive setup.
 - 4f0cd02: Fix incorrect react-perf rule names (react_perf → react-perf)
-- f78c934: Redesign Agents initialization
+- f78c934: Group agents that share the same rules file path (e.g. `AGENTS.md`) under a single prompt option during `ultracite init` instead of listing every agent individually, so selecting one creates the file once for all compatible agents. Adds a "Universal" option that writes `AGENTS.md` for the full set of agents that support it.
 - 969b271: Add Svelte and Tailwind CSS plugins to Prettier config
 
 ## 7.4.0
@@ -160,7 +160,7 @@
 
 - f84edff: Fix --type-aware for Biome
 - acf301c: Migrate from eslint-plugin-import to import-x
-- 5749eb1: Create test frameworks
+- 5749eb1: Split Jest and Vitest rules out of the core presets into their own opt-in framework presets (`ultracite/biome/jest`, `ultracite/biome/vitest`, `ultracite/eslint/jest`, `ultracite/eslint/vitest`, `ultracite/oxlint/jest`, `ultracite/oxlint/vitest`), selectable through the framework selector during init. Resolves the oxlint rule overlap (#604) where jest and vitest blocks were both applied to every file in the core config.
 
 ## 7.3.0
 
@@ -384,20 +384,20 @@
 
 ### Minor Changes
 
-- 628a5c3: Disable nursery rules
+- 628a5c3: Disable most nursery rules in the core preset. Nursery rules are experimental and may change or be removed across Biome versions, so they're no longer enabled by default; `useSortedClasses` stays on due to popular demand.
 
 ### Patch Changes
 
-- a942392: Use `interface` as consistent type definition
+- a942392: Switch `useConsistentTypeDefinitions` in the core preset from `type` to `interface`, matching TypeScript's recommended declaration style for object shapes.
 
 ## 6.4.3
 
 ### Patch Changes
 
-- 393a0d1: Explicitly enable css
-- 127c1c6: Fix reporter bug for --unsafe flag
-- 41a73ba: Fix file-based metadata
-- 43b07be: Fix tsconfig patching
+- 393a0d1: Set `css.formatter.enabled: true` explicitly in the core preset so Biome always formats CSS files, rather than relying on the upstream default.
+- 127c1c6: Show a hint in the `fix` reporter summary when suggested (unsafe) fixes are skipped, pointing users at `--unsafe` to apply them.
+- 41a73ba: Widen the docs site's Next.js proxy matcher to exclude Next's file-based metadata routes (`icon.png`, `apple-icon.png`, `opengraph-image.png`, `twitter-image.png`, `sitemap.xml`, `robots.txt`, `manifest.webmanifest`) so they aren't rewritten.
+- 43b07be: Rewrite `tsconfig` patching to edit files in place with `jsonc-parser`'s `modify`/`applyEdits` (preserving comments and formatting) instead of deep-merging and rewriting the whole file. Skip the write entirely when `strictNullChecks` is already enabled — either directly or via `strict: true`.
 - 9d1d374: Add support for pre-commit (python)
 - f9256db: Add support for Antigravity
 
@@ -405,43 +405,43 @@
 
 ### Patch Changes
 
-- 42fc700: Disable scanner rules
-- aff09df: Fix plugin install logging
+- 42fc700: Disable Biome scanner-based rules in the core preset (`useAwaitThenable`, `useFind`, `useRegexpExec`, `noPrivateImports`, `noUndeclaredDependencies`, `useImportExtensions`). These rely on Biome's project scanner, which is significantly slower than single-file linting.
+- aff09df: Silence noisy subprocess output during `init` by passing `silent: true` to `addDevDependency` and switching the Husky and Lefthook initialization `execSync` calls from `stdio: "inherit"` to `stdio: "pipe"`, so installer chatter no longer bleeds into the interactive CLI.
 - 0f57252: Upgrade to Biome 2.3.9
-- c15b770: Fix reporter
-- 99dda79: Fix extension install logging
+- c15b770: Improve the custom reporter: show every remaining diagnostic instead of filtering to only un-fixable ones (if Biome fixed a finding it's already removed from the list), and append a documentation link (`https://biomejs.dev/linter/rules/<rule>/`) under each lint diagnostic.
+- 99dda79: Switch the VS Code Biome extension installer's `stdio` from `inherit` to `pipe` and surface a clean status message based on exit code (`settings.json created and Biome extension installed.` on success, `settings.json created. Install Biome extension manually.` otherwise) instead of leaking `code --install-extension` output into the CLI.
 - d759789: Bump Biome to 2.3.10
 
 ## 6.4.1
 
 ### Patch Changes
 
-- a8570b3: respect package manager in generated rules and commands
+- a8570b3: Use the detected package manager (`npm`/`bun`/`yarn`/`pnpm`) when generating agent rules files, Claude hooks, and doctor messages, so emitted commands (`bun x ultracite fix`, `pnpm dlx ultracite fix`, etc.) match the project's tooling instead of being hardcoded to `npx`.
 
 ## 6.4.0
 
 ### Minor Changes
 
-- 6201822: Add custom reporter
+- 6201822: Replace Biome's default output with a custom Ultracite reporter (`packages/cli/src/reporter.ts`) that renders diagnostics, summary counts, durations, and per-rule details with color and formatting tailored to the CLI.
 
 ## 6.3.12
 
 ### Patch Changes
 
-- 635acd1: Fix "canceled" bug for realsies this time
+- 635acd1: Pipe the Lefthook `install` subprocess through `stdio: "inherit"` so its prompts reach the terminal, fixing the step appearing to be "canceled" when it was actually waiting on hidden input.
 
 ## 6.3.11
 
 ### Patch Changes
 
-- 84d1cef: Add lefthook prepare script
+- 84d1cef: Add a `prepare: "lefthook install"` script to `package.json` when the Lefthook integration is selected, matching the Husky behavior so Lefthook hooks are reinstalled automatically after `install`.
 
 ## 6.3.10
 
 ### Patch Changes
 
-- bc7d89f: Fix nested next.config.ts detection
-- d292922: Replace hardcoded npx commands
+- bc7d89f: Fix the `useAwait`-off override in the Next.js preset to match `**/next.config.*` instead of `next.config.*`, so Next config files nested inside monorepo apps are covered.
+- d292922: Use `nypm`'s `dlxCommand` with the detected package manager when invoking Biome from `check`, `fix`, and `doctor`, instead of hardcoding `npx @biomejs/biome`.
 
 ## 6.3.9
 
@@ -467,16 +467,16 @@
 ### Patch Changes
 
 - 99a417c: Fix docs on quotes
-- 5fb7031: Add support for max diagnostics flag
-- c66c232: Remove process.exit from CLI
+- 5fb7031: Pass `--max-diagnostics=none` to Biome in `check` and `fix` so the full list of diagnostics is reported instead of being truncated by Biome's default cap (stop-gap for #401).
+- c66c232: Replace `process.exit()` calls across `check`, `fix`, `doctor`, and `initialize` with thrown `Error`s, so Ultracite can be invoked programmatically as a library without tearing down the host process.
 
 ## 6.3.5
 
 ### Patch Changes
 
 - 1bccc30: Upgrade Biome to 2.3.7
-- 3837d19: Fix Zed config
-- 06a8871: Use force-ignore pattern
+- 3837d19: Remove the invalid `JSX` language block from the generated Zed settings. Zed doesn't recognize `JSX` as a language identifier, and the `TSX` block already covers JSX files.
+- 06a8871: Switch core preset ignore globs from `!` to `!!` (force-ignore) so patterns like `**/dist/**`, `**/.next/**`, and `**/*.gen.*` can't be accidentally re-included by consumer configs.
 
 ## 6.3.4
 
@@ -495,25 +495,25 @@
 
 ### Patch Changes
 
-- 7537f01: Improve CI support
+- 7537f01: Add a `--quiet` flag to `ultracite init` that skips all interactive prompts, suppresses ASCII art/spinners/log messages, applies sensible defaults, and exits 0/1 for pipeline consumption. Automatically enabled when `CI=true` or `CI=1`.
 
 ## 6.3.1
 
 ### Patch Changes
 
-- 908ac57: Add missing hooks cli definition
+- 908ac57: Register the missing `--hooks` option on `ultracite init` so hook selections made via CLI flags are actually passed through to the router.
 
 ## 6.3.0
 
 ### Minor Changes
 
-- a5a1510: Add new hooks flag, add Claude hooks support
+- a5a1510: Add a `--hooks` flag (and matching interactive prompt) to `ultracite init` for selecting agent hooks separately from agent rules. Split hook handling into its own `src/hooks/` module, and add Claude Code as a supported hook target alongside Cursor.
 
 ### Patch Changes
 
 - 0fed52b: Upgrade Biome to 2.3.4
 - a9347c8: Disable `noMagicNumbers` and `noConsole`
-- aa7f769: Updated tsconfig, `package.json` selector
+- aa7f769: Widen the JSON override's `includes` patterns in the core preset from repo-root-only (`package.json`, `tsconfig.json`, `tsconfig.*.json`) to recursive (`**/package.json`, `**/tsconfig.json`, `**/tsconfig.*.json`) so the JSON-specific settings apply to deeply-nested configs in monorepos.
 
 ## 6.2.1
 
@@ -527,13 +527,13 @@
 
 ### Minor Changes
 
-- 4035389: add cursor hooks functionality
-- 18ed1f3: Refactor rules based on hooks and feedback from Cursor team
+- 4035389: Generate a `.cursor/hooks.json` with an `afterFileEdit` command that runs `npx ultracite fix` when Cursor is selected during `init`, replacing the previous Cursor rules-file approach.
+- 18ed1f3: Rewrite the bundled agent rules file (`.cursor/rules/ultracite.mdc`, `.claude/...`, etc.): collapse hundreds of short-hand directives into a shorter, structured markdown document tailored for AI coding agents, incorporating feedback from the Cursor team.
 
 ### Patch Changes
 
-- 7aa5fd8: pass diagnostic-level filter option (stop-gap)
-- f9e2141: Update existing tsconfig files instead of creating a new root one
+- 7aa5fd8: Add a `--diagnostic-level` option to `ultracite check` that forwards to Biome's `--diagnostic-level=info|warn|error`, letting users filter output down to warnings or errors only.
+- f9e2141: Use `glob` to find every `tsconfig*.json` in the project and patch each one to enable `strictNullChecks`, instead of only creating/updating a single root `./tsconfig.json` (which broke monorepos with no root config).
 
 ## 6.1.0
 
@@ -545,14 +545,14 @@
 
 - ba72503: Fix husky initialization
 - b038a60: Fix overrides in Astro, Svelte, Vue presets having no effect
-- b7451ee: Improve core glob
+- b7451ee: Change the core preset's root include glob from `**/*` to `**` so directory-level ignores evaluate more efficiently.
 - f7ebeb8: Improve test coverage for agents
 
 ## 6.0.5
 
 ### Patch Changes
 
-- 5f00bd3: Use overrides in presets
+- 5f00bd3: Move framework-specific rules (Next, Astro, Qwik, React, Remix, Solid, Svelte, Vue, Angular) into `overrides` blocks scoped to each framework's file patterns, so extending multiple presets no longer applies framework-only rules to unrelated files.
 - 30f488e: Upgrade Biome to 2.3.2, add "`noIncrementDecrement`"
 
 ## 6.0.4
@@ -565,7 +565,7 @@
 
 ### Patch Changes
 
-- 82e5353: Drop legacy ultracite preset
+- 82e5353: Remove the legacy top-level `ultracite` preset (`config/ultracite/biome.jsonc`) that bundled `core + react + next`. Consumers now extend the specific presets they want (`ultracite/core`, `ultracite/react`, `ultracite/next`, etc.) directly.
 
 ## 6.0.2
 
@@ -577,13 +577,13 @@
 
 ### Patch Changes
 
-- 5848800: Fix legacy ultracite config
+- 5848800: Fix the bundled legacy `ultracite` preset's `extends` paths — use relative file paths (`../core/biome.jsonc`, etc.) instead of package specifiers (`ultracite/core`), which Biome couldn't resolve from inside the package.
 
 ## 6.0.0
 
 ### Major Changes
 
-- 86ee61e: Add specific Ultracite configurations
+- 86ee61e: Split the monolithic config into framework-specific presets (`ultracite/core`, `ultracite/react`, `ultracite/next`, `ultracite/angular`, `ultracite/astro`, `ultracite/qwik`, `ultracite/remix`, `ultracite/solid`, `ultracite/svelte`, `ultracite/vue`) that consumers compose via `extends`, and add framework selection to `ultracite init`.
 
 ### Minor Changes
 
@@ -591,12 +591,12 @@
 
 ### Patch Changes
 
-- c5c7ca1: Disable project rules
-- ff83b52: Compress Ultracite agent rules
+- c5c7ca1: Disable Biome project-scanner rules (`noDeprecatedImports`, `noFloatingPromises`, `noMisusedPromises`, `noUnresolvedImports`, `noImportCycles`, `useExhaustiveSwitchCases`, `useJsonImportAttributes`) in the core preset — they rely on the slower project scanner, which was making Ultracite too slow to run on large codebases.
+- ff83b52: Compress the agent rules bundled into `.cursor/rules/ultracite.mdc` and related files (abbreviate "TypeScript" to "TS", merge related patterns, drop redundant "don't use" prefixes) to fit under Windsurf's 12,000-character context limit — previously ~16,700.
 - 8987c58: Upgrade to Biome 2.3.0
 - acd8c42: Brand and docs update
 - ed1bcb6: Docs updates and bump deps
-- d0ba90b: Tie framework selection to agent context
+- d0ba90b: Generate agent rules files from the same per-framework rule lists that drive the Biome presets, so selecting frameworks during `init` produces a `.cursor/rules/ultracite.mdc` scoped to exactly the frameworks in use.
 
 ## 5.6.4
 
@@ -627,3826 +627,1938 @@
 
 ### Minor Changes
 
-- 762ef70: Workflow improvements
+- 762ef70: Replace `auto` with Changesets for release management — add `.changeset/config.json` and its README, move the release workflow from `release.yaml` to `release.yml`, delete `.autorc`, and update `CONTRIBUTING.md` to document the new flow.
 
 ### Patch Changes
 
 - f3ec41b: Backport changelog
 
-## v5.5.5 (Tue Oct 07 2025)
+## 5.5.5
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Remove unused deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove unused deps
 
-### Authors: 1
+## 5.5.4
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Potential fix for code scanning alert no. 13: Workflow does not contain permissions [#297](https://github.com/haydenbleasel/ultracite/pull/297)
+- Potential fix for code scanning alert no. 12: Workflow does not contain permissions [#298](https://github.com/haydenbleasel/ultracite/pull/298)
 
-## v5.5.4 (Tue Oct 07 2025)
+## 5.5.3
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- Potential fix for code scanning alert no. 13: Workflow does not contain permissions [#297](https://github.com/haydenbleasel/ultracite/pull/297) ([@haydenbleasel](https://github.com/haydenbleasel))
-- Potential fix for code scanning alert no. 12: Workflow does not contain permissions [#298](https://github.com/haydenbleasel/ultracite/pull/298) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Increase branch test coverage from 89.21% → 91.02%
+- Update `package.json`
+- Fix unit tests
+- Add Videos section to homepage
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Handle `cancel` for the migrations, editor-config, and editor-rules `multiselect` prompts in `ultracite init` so Ctrl+C exits cleanly with a "cancelled" message instead of crashing (#280)
+- Make migration dep parsing lazier
+- Drop the custom `match` regex from `useFilenamingConvention` in `biome.jsonc` so the rule uses Biome's default matcher (#287)
+- Enable Biome's HTML formatter (`html.formatter.enabled: true`) in the shipped config (#290)
+- Configure `noUnusedImports` with `fix: "safe"` so unused imports are auto-removed on format rather than only reported (#294)
 
-### Authors: 1
+## 5.5.2
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update logos
 
-## v5.5.3 (Tue Oct 07 2025)
+## 5.5.1
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Increase branch test coverage from 89.21% → 91.02% ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add Videos section to homepage ([@haydenbleasel](https://github.com/haydenbleasel))
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #280 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Make migration dep parsing lazier ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #287 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #290 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #294 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Upgrade Biome to 2.2.5
 
-### Authors: 1
+## 5.5.0
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Minor Changes
 
----
+- Bump `@types/node` from 24.5.2 to 24.6.1 [#292](https://github.com/haydenbleasel/ultracite/pull/292)
+- Bump `@trpc/server` from 11.5.1 to 11.6.0 [#291](https://github.com/haydenbleasel/ultracite/pull/291)
 
-## v5.5.2 (Tue Oct 07 2025)
+## 5.4.7
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update logos ([@haydenbleasel](https://github.com/haydenbleasel))
+- Extract and update logos
 
-### Authors: 1
+## 5.4.6
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- fix: disable `useNamingConvention`; improve comments consistency [#289](https://github.com/haydenbleasel/ultracite/pull/289)
 
-## v5.5.1 (Mon Oct 06 2025)
+## 5.4.5
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Upgrade Biome to 2.2.5 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update open-in-chat.tsx
 
-### Authors: 1
+## 5.4.4
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Fix nav
 
-## v5.5.0 (Thu Oct 02 2025)
+## 5.4.3
 
-### 🚀 Enhancement
+### Patch Changes
 
-- Bump `@types/node` from 24.5.2 to 24.6.1 [#292](https://github.com/haydenbleasel/ultracite/pull/292) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Fix docs layout
+- Fix SVG attributes
 
-### 🔩 Dependency Updates
+## 5.4.2
 
-- Bump `@trpc/server` from 11.5.1 to 11.6.0 [#291](https://github.com/haydenbleasel/ultracite/pull/291) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Patch Changes
 
-### Authors: 1
+- Update zero-config.tsx
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+## 5.4.1
 
----
+### Patch Changes
 
-## v5.4.7 (Thu Oct 02 2025)
+- Update README.md
 
-### ⚠️ Pushed to `main`
+## 5.4.0
 
-- Extract and update logos ([@haydenbleasel](https://github.com/haydenbleasel))
+### Minor Changes
 
-### Authors: 1
+- Upgrade to Biome 2.2.4 [#283](https://github.com/haydenbleasel/ultracite/pull/283)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.3.11
 
----
+### Patch Changes
 
-## v5.4.6 (Mon Sep 29 2025)
+- Docs update [#282](https://github.com/haydenbleasel/ultracite/pull/282)
 
-:tada: This release contains work from a new contributor! :tada:
+## 5.3.10
 
-Thank you, Daniel Costrasel ([@ohkimur](https://github.com/ohkimur)), for all your work!
+### Patch Changes
 
-### 🐛 Bug Fix
+- Update ultracite.mdc
+- Bump vite from 6.3.5 to 7.1.5 in the npm_and_yarn group across 1 directory [#279](https://github.com/haydenbleasel/ultracite/pull/279)
 
-- fix: disable `useNamingConvention`; improve comments consistency [#289](https://github.com/haydenbleasel/ultracite/pull/289) ([@ohkimur](https://github.com/ohkimur))
+## 5.3.9
 
-### Authors: 1
+### Patch Changes
 
-- Daniel Costrasel ([@ohkimur](https://github.com/ohkimur))
+- Update validate.yml
 
----
+## 5.3.8
 
-## v5.4.5 (Sun Sep 21 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Rename file, cleanup steps
 
-- Update open-in-chat.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.3.7
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update build.yml
 
----
+## 5.3.6
 
-## v5.4.4 (Sun Sep 21 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update workflows
 
-- Fix nav ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.3.5
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- update docs with correct cli option for integrations [#281](https://github.com/haydenbleasel/ultracite/pull/281)
 
----
+## 5.3.4
 
-## v5.4.3 (Sun Sep 21 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update monorepos.mdx turbo task names [#277](https://github.com/haydenbleasel/ultracite/pull/277)
 
-- Fix docs layout ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix SVG attributes ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.3.3
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Point `biome.jsonc`'s `$schema` to `./node_modules/@biomejs/biome/configuration_schema.json` instead of a version-pinned `https://biomejs.dev/schemas/<version>/schema.json` URL, so the schema always tracks the installed Biome version
+- Don't emit diagnostics on unhandled files
 
----
+## 5.3.2
 
-## v5.4.2 (Sun Sep 21 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Pass `--no-errors-on-unmatched` to Biome in `check` and `fix` so running Ultracite on a directory with no matching files exits cleanly instead of failing (#240)
 
-- Update zero-config.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.3.1
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Rewrite the generated Husky pre-commit hook to run the formatter only against staged files, stash unstaged changes via `git stash push --keep-index` while it runs, re-stage the formatted files, and preserve partial staging — fixing earlier hook behavior that mangled unstaged work or failed on empty commits (#262)
+- Update dependabot.yml
+- Bump actions/checkout from 4 to 5 [#275](https://github.com/haydenbleasel/ultracite/pull/275)
 
----
+## 5.3.0
 
-## v5.4.1 (Sun Sep 21 2025)
+### Minor Changes
 
-### ⚠️ Pushed to `main`
+- Rename the documented CLI subcommands `lint` → `check` and `format` → `fix` across the usage and monorepo guides to match the actual commands, and add a "Validating Setup" section covering `ultracite doctor` [#272](https://github.com/haydenbleasel/ultracite/pull/272)
+- Release 5.3 [#270](https://github.com/haydenbleasel/ultracite/pull/270)
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.2.17
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix unit tests
+- Restore the `npx` prefix on the `format` and `lint` subcommands — without it, Ultracite tried to invoke `@biomejs/biome` directly, which only works when Biome is globally installed (#263)
 
----
+## 5.2.16
 
-## v5.4.0 (Sun Sep 21 2025)
+### Patch Changes
 
-### 🚀 Enhancement
+- Update push.yaml
 
-- Upgrade to Biome 2.2.4 [#283](https://github.com/haydenbleasel/ultracite/pull/283) ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.2.12
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- feat: ignore generated files [#216](https://github.com/haydenbleasel/ultracite/pull/216)
+- Potential fix for code scanning alert no. 8: Workflow does not contain permissions [#261](https://github.com/haydenbleasel/ultracite/pull/261)
+- Update push.yaml
+- Ship an `overrides` block in `biome.jsonc` covering config files, scripts/CLI tools, Storybook stories, `.d.ts`, build output, JSON config files, and router-generated files — relaxing or disabling irrelevant rules (`noConsole` in scripts, `noUnusedVariables` in `.d.ts`, formatter/linter off for generated files, etc.) so Ultracite doesn't flag false positives in these file types (#255)
 
----
+## 5.2.11
 
-## v5.3.11 (Sun Sep 21 2025)
+### Patch Changes
 
-### 🐛 Bug Fix
+- Increase test coverage lines from 93.61% to 94.18%
+- Increase test coverage lines from 88.43% to 93.61%
+- Increase test coverage lines from 87.22% to 88.43%
+- Add unit tests
+- Wrap file-path arguments to Biome in single quotes (escaping any existing quotes) when they contain shell-special characters, and route the call through `shell: true` so paths with spaces, parens, `$`, etc. run correctly (#260)
 
-- Docs update [#282](https://github.com/haydenbleasel/ultracite/pull/282) ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.2.10
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Replace execSync commands with spawnSync [#259](https://github.com/haydenbleasel/ultracite/pull/259)
 
----
+## 5.2.9
 
-## v5.3.10 (Fri Sep 19 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Ship a starter `lefthook.yml` in the Lefthook integration, and detect Lefthook's default commented `EXAMPLE USAGE` template so `ultracite init` overwrites it rather than appending the Ultracite config below (#205)
 
-- Update ultracite.mdc ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.2.8
 
-### 🔩 Dependency Updates
+### Patch Changes
 
-- Bump vite from 6.3.5 to 7.1.5 in the npm_and_yarn group across 1 directory [#279](https://github.com/haydenbleasel/ultracite/pull/279) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Fix recharts dep
 
-### Authors: 2
+## 5.2.7
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update `pnpm-lock.yaml`
 
-## v5.3.9 (Thu Sep 18 2025)
+## 5.2.6
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update validate.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps
+- Upgrade Biome to 2.2.2
 
-### Authors: 1
+## 5.2.5
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- DOCS : Fix error in the troubleshooting page [#257](https://github.com/haydenbleasel/ultracite/pull/257)
 
-## v5.3.8 (Wed Sep 17 2025)
+## 5.2.4
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Rename file, cleanup steps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Docs: Fix the docs with the latest version in biome [#252](https://github.com/haydenbleasel/ultracite/pull/252)
 
-### Authors: 1
+## 5.2.3
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update editor rules docs
 
-## v5.3.7 (Wed Sep 17 2025)
+## 5.2.2
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update build.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Support more AI agents [#250](https://github.com/haydenbleasel/ultracite/pull/250)
 
-### Authors: 1
+## 5.2.1
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Fix unit tests
+- Create util for updating `package.json`
 
-## v5.3.6 (Wed Sep 17 2025)
+## 5.2.0
 
-### ⚠️ Pushed to `main`
+### Minor Changes
 
-- Update workflows ([@haydenbleasel](https://github.com/haydenbleasel))
+- Replace the hand-rolled package-manager detection and install helpers with `nypm`, which handles npm/pnpm/yarn/bun/deno detection, monorepo workspace targeting, and dlx-style commands through a single consistent API [#249](https://github.com/haydenbleasel/ultracite/pull/249)
 
-### Authors: 1
+## 5.1.9
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Run formatter
+- Rename the `eslint-cleanup`/`prettier-cleanup` test and source files to `eslint`/`prettier` to match the CLI module layout, and consolidate the per-editor rules tests into a single location
+- Enable `noBarrelFile` in `biome.jsonc` (was previously set to `off`) (#233)
+- Disable `noImplicitCoercions` (e.g. `!!value`, `+string`) in `biome.jsonc`, and annotate the existing `noExcessiveLinesPerFunction: off` with a reference to the upstream TypeScript issue (microsoft/TypeScript#16655) that motivates it (#247)
 
-## v5.3.5 (Wed Sep 17 2025)
+## 5.1.8
 
-:tada: This release contains work from a new contributor! :tada:
+### Patch Changes
 
-Thank you, Piotr Kulpinski ([@piotrkulpinski](https://github.com/piotrkulpinski)), for all your work!
+- Add `"kiro"` to the accepted editor-rules values in the CLI router and `initialize.ts` so selecting Kiro via `--rules` no longer fails schema validation
+- Fix missing Kiro option
 
-### 🐛 Bug Fix
+## 5.1.7
 
-- update docs with correct cli option for integrations [#281](https://github.com/haydenbleasel/ultracite/pull/281) ([@piotrkulpinski](https://github.com/piotrkulpinski))
+### Patch Changes
 
-### Authors: 1
+- Widen ESLint cleanup's package-name detection to match all `@eslint/*` scoped packages (e.g. `@eslint/js`, `@eslint/eslintrc`), not only `@eslint/js` (#248)
 
-- Piotr Kulpinski ([@piotrkulpinski](https://github.com/piotrkulpinski))
+## 5.1.6
 
----
+### Patch Changes
 
-## v5.3.4 (Fri Sep 05 2025)
+- Disable `noExcessiveLinesPerFunction` and `noSolidDestructuredProps` in `biome.jsonc` — both produced too many false positives across general TS codebases (#246)
 
-:tada: This release contains work from a new contributor! :tada:
+## 5.1.5
 
-Thank you, David ([@thedevdavid](https://github.com/thedevdavid)), for all your work!
+### Patch Changes
 
-### 🐛 Bug Fix
+- Update zero-config.tsx
 
-- Update monorepos.mdx turbo task names [#277](https://github.com/haydenbleasel/ultracite/pull/277) ([@thedevdavid](https://github.com/thedevdavid))
+## 5.1.4
 
-### Authors: 1
+### Patch Changes
 
-- David ([@thedevdavid](https://github.com/thedevdavid))
+- Bump trpc-cli from 0.10.0 to 0.10.2 [#238](https://github.com/haydenbleasel/ultracite/pull/238)
+- Bump zod from 4.0.5 to 4.0.14 [#239](https://github.com/haydenbleasel/ultracite/pull/239)
 
----
+## 5.1.3
 
-## v5.3.3 (Wed Sep 03 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Upgrade to Biome 2.2.0 [#245](https://github.com/haydenbleasel/ultracite/pull/245)
 
-- Use local Biome schema ([@haydenbleasel](https://github.com/haydenbleasel))
-- Don't emit diagnostics on unhandled files ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.1.2
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- feat: add --skip-install flag to skip installing dependencies [#231](https://github.com/haydenbleasel/ultracite/pull/231)
 
----
+## 5.1.1
 
-## v5.3.2 (Tue Sep 02 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Fix CLI to not prompt for features when other options are provided [#230](https://github.com/haydenbleasel/ultracite/pull/230)
 
-- Resolves #240 ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.1.0
 
-### Authors: 1
+### Minor Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- 5.1 [#228](https://github.com/haydenbleasel/ultracite/pull/228)
+- feat: migrate cli from commander.js to trpc-cli with flag support [#215](https://github.com/haydenbleasel/ultracite/pull/215)
+- Fix Bun detection for projects using `bun.lock` lockfile format [#227](https://github.com/haydenbleasel/ultracite/pull/227)
+- Update vscode-settings.ts
+- Update settings.json
 
----
+## 5.0.49
 
-## v5.3.1 (Tue Sep 02 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update faq.mdx
 
-- Resolves #262 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update dependabot.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.48
 
-### 🔩 Dependency Updates
+### Patch Changes
 
-- Bump actions/checkout from 4 to 5 [#275](https://github.com/haydenbleasel/ultracite/pull/275) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- fix: updating claude desktop mcp file path [#225](https://github.com/haydenbleasel/ultracite/pull/225)
 
-### Authors: 2
+## 5.0.47
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Add YAML frontmatter to the generated `.cursor/rules/ultracite.mdc` (description, `globs`, `alwaysApply: true`) and to the generated `.github/copilot-instructions.md` (`applyTo` glob), so Cursor and Copilot scope the rules to JS/TS files instead of treating them as global prose (#221, #222)
 
-## v5.3.0 (Sun Aug 31 2025)
+## 5.0.46
 
-### 🚀 Enhancement
+### Patch Changes
 
-- Update docs, misc fixes [#272](https://github.com/haydenbleasel/ultracite/pull/272) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update rules.mdx
 
-### 🐛 Bug Fix
+## 5.0.45
 
-- Release 5.3 [#270](https://github.com/haydenbleasel/ultracite/pull/270) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update global.css
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.44
 
----
+### Patch Changes
 
-## v5.2.17 (Sun Aug 31 2025)
+- Add Kiro IDE support with steering files integration [#220](https://github.com/haydenbleasel/ultracite/pull/220)
 
-### ⚠️ Pushed to `main`
+## 5.0.43
 
-- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #263 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update shadcn/ui
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.42
 
----
+### Patch Changes
 
-## v5.2.16 (Sun Aug 31 2025)
+- Fix skip-ci file path
 
-### ⚠️ Pushed to `main`
+## 5.0.41
 
-- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Revert "Update vercel.json"
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.40
 
----
+### Patch Changes
 
-## v5.2.12 (Sun Aug 31 2025)
+- Update vercel.json
 
-:tada: This release contains work from a new contributor! :tada:
+## 5.0.39
 
-Thank you, Kevin Wolf ([@kvnwolf](https://github.com/kvnwolf)), for all your work!
+### Patch Changes
 
-### 🐛 Bug Fix
+- Update route.ts
 
-- feat: ignore generated files [#216](https://github.com/haydenbleasel/ultracite/pull/216) ([@kvnwolf](https://github.com/kvnwolf) [@haydenbleasel](https://github.com/haydenbleasel))
-- Potential fix for code scanning alert no. 8: Workflow does not contain permissions [#261](https://github.com/haydenbleasel/ultracite/pull/261) ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.38
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #255 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Upgrade Biome version
+- Bump deps
+- Delete `package-lock.json`
 
-### Authors: 2
+## 5.0.37
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-- Kevin Wolf ([@kvnwolf](https://github.com/kvnwolf))
+### Patch Changes
 
----
+- Migrate the docs MCP handler from `@vercel/mcp-adapter` to the `mcp-handler` package and move the endpoint from `/api/mcp/http` to `/api/mcp/mcp` to match the new handler's `basePath` convention (#217)
 
-## v5.2.11 (Sat Aug 30 2025)
+## 5.0.36
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Increase test coverage lines from 93.61% to 94.18% ([@haydenbleasel](https://github.com/haydenbleasel))
-- Increase test coverage lines from 88.43% to 93.61% ([@haydenbleasel](https://github.com/haydenbleasel))
-- Increase test coverage lines from 87.22% to 88.43% ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #260 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update sidebar.tsx
 
-### Authors: 1
+## 5.0.35
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Fix npm peer dependency conflicts when initializing Ultracite in Shadcn projects [#212](https://github.com/haydenbleasel/ultracite/pull/212)
 
-## v5.2.10 (Thu Aug 28 2025)
+## 5.0.34
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- Replace execSync commands with spawnSync [#259](https://github.com/haydenbleasel/ultracite/pull/259) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Upgrade to Biome 2.1.1 [#209](https://github.com/haydenbleasel/ultracite/pull/209)
+- Add option to remove other formatters during init [#198](https://github.com/haydenbleasel/ultracite/pull/198)
+- feat: Optimize AI assistant rules with structured markdown format [#183](https://github.com/haydenbleasel/ultracite/pull/183)
 
-### Authors: 1
+## 5.0.33
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- feat: update filename convention rule to support $ prefix [#206](https://github.com/haydenbleasel/ultracite/pull/206)
 
-## v5.2.9 (Thu Aug 28 2025)
+## 5.0.32
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Resolves #205 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump next from 15.3.1 to 15.3.3 in /docs in the npm_and_yarn group across 1 directory [#204](https://github.com/haydenbleasel/ultracite/pull/204)
 
-### Authors: 1
+## 5.0.31
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Add monorepos docs [#201](https://github.com/haydenbleasel/ultracite/pull/201)
 
-## v5.2.8 (Thu Aug 28 2025)
+## 5.0.30
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Fix recharts dep ([@haydenbleasel](https://github.com/haydenbleasel))
+- Zed Settings [#191](https://github.com/haydenbleasel/ultracite/pull/191)
 
-### Authors: 1
+## 5.0.29
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Run formatter
+- Update `pnpm-lock.yaml`
+- Delete `package-lock.json`
+- Bump Biome to 2.0.6 in the shipped `biome.jsonc` schema URL, install command, and docs (#195)
 
-## v5.2.7 (Thu Aug 28 2025)
+## 5.0.28
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump `@types/node` from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194)
 
-### Authors: 1
+## 5.0.27
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update tweets.tsx
 
-## v5.2.6 (Thu Aug 28 2025)
+## 5.0.26
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Upgrade Biome to 2.2.2 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix file path quoting for special characters in biome commands [#176](https://github.com/haydenbleasel/ultracite/pull/176)
 
-### Authors: 1
+## 5.0.25
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Create v5 migration guide
+- Add ESLint and Prettier migration guides
+- Update tweets.tsx
+- Create biome migration guide
+- Create llms.txt
 
-## v5.2.5 (Thu Aug 21 2025)
+## 5.0.24
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- DOCS : Fix error in the troubleshooting page [#257](https://github.com/haydenbleasel/ultracite/pull/257) ([@Melvynx](https://github.com/Melvynx))
+- Improve biome update flow to support both `biome.json` and `biome.jsonc` [#185](https://github.com/haydenbleasel/ultracite/pull/185)
 
-### Authors: 1
+## 5.0.23
 
-- Melvyn ([@Melvynx](https://github.com/Melvynx))
+### Patch Changes
 
----
+- Update meta.json
 
-## v5.2.4 (Sun Aug 17 2025)
+## 5.0.22
 
-:tada: This release contains work from a new contributor! :tada:
+### Patch Changes
 
-Thank you, Melvyn ([@Melvynx](https://github.com/Melvynx)), for all your work!
+- Add support for lefthook as git hooks manager [#178](https://github.com/haydenbleasel/ultracite/pull/178)
 
-### 🐛 Bug Fix
+## 5.0.21
 
-- Docs: Fix the docs with the latest version in biome [#252](https://github.com/haydenbleasel/ultracite/pull/252) ([@Melvynx](https://github.com/Melvynx))
+### Patch Changes
 
-### Authors: 1
+- Fix Yarn monorepo support by removing invalid -W flag [#180](https://github.com/haydenbleasel/ultracite/pull/180)
 
-- Melvyn ([@Melvynx](https://github.com/Melvynx))
+## 5.0.20
 
----
+### Patch Changes
 
-## v5.2.3 (Sat Aug 16 2025)
+- feat: Add TanStack Router file convention support to `useFilenamingConvention` rule [#174](https://github.com/haydenbleasel/ultracite/pull/174)
+- Fix Yarn 4.9.2 compatibility by replacing --save-exact with -E flag [#173](https://github.com/haydenbleasel/ultracite/pull/173)
+- fix: replace 'npx biome' with 'npx `@biomejs/biome`' [#170](https://github.com/haydenbleasel/ultracite/pull/170)
+- feat: Add "tv" to allowed functions in linter options [#169](https://github.com/haydenbleasel/ultracite/pull/169)
+- Update format.ts
+- Delete `package-lock.json`
+- Update tweets.tsx
+- Resolves #167
 
-### ⚠️ Pushed to `main`
+## 5.0.19
 
-- Update editor rules docs ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update tweets.tsx
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.18
 
----
+### Patch Changes
 
-## v5.2.2 (Sat Aug 16 2025)
+- Update rules.mdx
 
-### 🐛 Bug Fix
+## 5.0.17
 
-- Support more AI agents [#250](https://github.com/haydenbleasel/ultracite/pull/250) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- feat: Add support for Claude Code and OpenAI Codex AI assistants [#166](https://github.com/haydenbleasel/ultracite/pull/166)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.16
 
----
+### Patch Changes
 
-## v5.2.1 (Sat Aug 16 2025)
+- Add more unit tests for jsonc files
 
-### ⚠️ Pushed to `main`
+## 5.0.15
 
-- Fix unit tests ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create util for updating `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Fix unit tests, handle parsing issues gracefully
+- Type parse responses correctly
+- Parse all JSON files using jsonc-parser
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.14
 
----
+### Patch Changes
 
-## v5.2.0 (Sat Aug 16 2025)
+- Run formatting
+- Parse `biome.json` properly
 
-### 🚀 Enhancement
+## 5.0.13
 
-- nypm [#249](https://github.com/haydenbleasel/ultracite/pull/249) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Fix: Add support for comments in VS Code settings.json [#165](https://github.com/haydenbleasel/ultracite/pull/165)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.12
 
----
+### Patch Changes
 
-## v5.1.9 (Sat Aug 16 2025)
+- Bump Biome to 2.0.5
 
-### ⚠️ Pushed to `main`
+## 5.0.11
 
-- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
-- Improve file organization ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #233 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #247 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Remove -w flag from bun
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.10
 
----
+### Patch Changes
 
-## v5.1.8 (Sat Aug 16 2025)
+- Update installer.tsx
 
-### ⚠️ Pushed to `main`
+## 5.0.9
 
-- More kiro fixes ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix missing Kiro option ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update tweets.tsx
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.8
 
----
+### Patch Changes
 
-## v5.1.7 (Fri Aug 15 2025)
+- Update package-manager.ts
 
-### ⚠️ Pushed to `main`
+## 5.0.7
 
-- Resolves #248 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update ultracite.mdc
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.6
 
----
+### Patch Changes
 
-## v5.1.6 (Fri Aug 15 2025)
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Run Ultracite
 
-### ⚠️ Pushed to `main`
+## 5.0.5
 
-- Resolves #246 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Misc design fixes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.4
 
----
+### Patch Changes
 
-## v5.1.5 (Thu Aug 14 2025)
+- Drop schema rewrite (breaks types)
 
-### ⚠️ Pushed to `main`
+## 5.0.3
 
-- Update zero-config.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Create dependabot.yml
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 5.0.2
 
----
+### Patch Changes
 
-## v5.1.4 (Thu Aug 14 2025)
+- Update README.md
 
-### 🐛 Bug Fix
+## 5.0.1
 
-- Bump trpc-cli from 0.10.0 to 0.10.2 [#238](https://github.com/haydenbleasel/ultracite/pull/238) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump zod from 4.0.5 to 4.0.14 [#239](https://github.com/haydenbleasel/ultracite/pull/239) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Patch Changes
 
-### Authors: 1
+- Add support for installing in monorepos
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+## 5.0.0
 
----
+### Major Changes
 
-## v5.1.3 (Thu Aug 14 2025)
+- Ultracite v5 [#162](https://github.com/haydenbleasel/ultracite/pull/162)
+- Update `package.json`
+- Update README.md
 
-### 🐛 Bug Fix
+## 4.2.13
 
-- Upgrade to Biome 2.2.0 [#245](https://github.com/haydenbleasel/ultracite/pull/245) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Accept optional positional file arguments on `ultracite lint` and `ultracite format`, forwarding them to `npx biome check`/`biome check --write` instead of always targeting `./`
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.2.12
 
----
+### Patch Changes
 
-## v5.1.2 (Mon Jul 28 2025)
+- Pin the Biome version installed by Ultracite's CLI and shown in the setup docs to `@biomejs/biome@1.9.4` — Biome 2.x had just released with breaking config changes that Ultracite's config doesn't yet support
 
-### 🐛 Bug Fix
+## 4.2.11
 
-- feat: add --skip-install flag to skip installing dependencies [#231](https://github.com/haydenbleasel/ultracite/pull/231) ([@AmanVarshney01](https://github.com/AmanVarshney01) [@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 2
+- Feature/mobile menu [#161](https://github.com/haydenbleasel/ultracite/pull/161)
 
-- Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01))
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.2.10
 
----
+### Patch Changes
 
-## v5.1.1 (Sat Jul 26 2025)
+- Create opengraph-image.jpg
 
-### 🐛 Bug Fix
+## 4.2.9
 
-- Fix CLI to not prompt for features when other options are provided [#230](https://github.com/haydenbleasel/ultracite/pull/230) ([@Copilot](https://github.com/Copilot))
+### Patch Changes
 
-### Authors: 1
+- New landing page [#160](https://github.com/haydenbleasel/ultracite/pull/160)
 
-- [@Copilot](https://github.com/Copilot)
+## 4.2.8
 
----
+### Patch Changes
 
-## v5.1.0 (Sat Jul 26 2025)
+- Bump Commander
 
-:tada: This release contains work from a new contributor! :tada:
+## 4.2.7
 
-Thank you, Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01)), for all your work!
+### Patch Changes
 
-### 🚀 Enhancement
+- Correct the `license` field in `package.json`
 
-- 5.1 [#228](https://github.com/haydenbleasel/ultracite/pull/228) ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.2.6
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- feat: migrate cli from commander.js to trpc-cli with flag support [#215](https://github.com/haydenbleasel/ultracite/pull/215) ([@AmanVarshney01](https://github.com/AmanVarshney01) [@haydenbleasel](https://github.com/haydenbleasel))
-- Fix Bun detection for projects using `bun.lock` lockfile format [#227](https://github.com/haydenbleasel/ultracite/pull/227) ([@Copilot](https://github.com/Copilot))
+- Update bug_report.md
 
-### ⚠️ Pushed to `main`
+## 4.2.5
 
-- Update vscode-settings.ts ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 3
+- Update OG image
+- Fix opengraph metadata
 
-- [@Copilot](https://github.com/Copilot)
-- Aman Varshney ([@AmanVarshney01](https://github.com/AmanVarshney01))
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.2.4
 
----
+### Patch Changes
 
-## v5.0.49 (Fri Jul 25 2025)
+- Update index.mdx
 
-### ⚠️ Pushed to `main`
+## 4.2.3
 
-- Update faq.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update goals.mdx
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.2.2
 
----
+### Patch Changes
 
-## v5.0.48 (Wed Jul 23 2025)
+- New website [#158](https://github.com/haydenbleasel/ultracite/pull/158)
 
-:tada: This release contains work from a new contributor! :tada:
+## 4.2.1
 
-Thank you, aditya ([@adiadd](https://github.com/adiadd)), for all your work!
+### Patch Changes
 
-### 🐛 Bug Fix
+- Bump next from 15.2.3 to 15.2.4 in /website [#155](https://github.com/haydenbleasel/ultracite/pull/155)
 
-- fix: updating claude desktop mcp file path [#225](https://github.com/haydenbleasel/ultracite/pull/225) ([@adiadd](https://github.com/adiadd))
+## 4.2.0
 
-### Authors: 1
+### Minor Changes
 
-- aditya ([@adiadd](https://github.com/adiadd))
+- Bump next from 15.1.2 to 15.2.3 in /website [#154](https://github.com/haydenbleasel/ultracite/pull/154)
 
----
+## 4.1.21
 
-## v5.0.47 (Sun Jul 20 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update action on save config [#153](https://github.com/haydenbleasel/ultracite/pull/153)
 
-- Resolves #221, resolves #222 ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.20
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Revert "Add support for init in monorepos"
 
----
+## 4.1.19
 
-## v5.0.46 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Add support for init in monorepos
 
-- Update rules.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.18
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add basic init command
 
----
+## 4.1.17
 
-## v5.0.45 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update README.md
 
-- Update global.css ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.16
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
----
+## 4.1.15
 
-## v5.0.44 (Fri Jul 18 2025)
+### Patch Changes
 
-### 🐛 Bug Fix
+- Hardcode the CLI's name/description in Commander instead of importing them from `package.json` via an import assertion — the assertion syntax was tripping up older Node versions consumers were running Ultracite on (#148)
+- Bump next from 15.0.4 to 15.1.2 in /website [#149](https://github.com/haydenbleasel/ultracite/pull/149)
 
-- Add Kiro IDE support with steering files integration [#220](https://github.com/haydenbleasel/ultracite/pull/220) ([@Copilot](https://github.com/Copilot))
+## 4.1.14
 
-### Authors: 1
+### Patch Changes
 
-- [@Copilot](https://github.com/Copilot)
+- Update README.md
 
----
+## 4.1.13
 
-## v5.0.43 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Remove the shipped `files.ignore: ["**/components/ui/**"]` block from `biome.json` — ignoring shadcn/ui components by default was surprising consumers who wanted Ultracite to run on every file in their project (#147)
+- Bump nanoid from 3.3.7 to 3.3.8 in /website [#146](https://github.com/haydenbleasel/ultracite/pull/146)
 
-- Update shadcn/ui ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.12
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Replace the single-action `scripts/run.js` CLI with a Commander-based `scripts/run.mjs` that exposes `lint` and `format` subcommands (wrapping `biome check` and `biome check --write`), and add `commander` as a runtime dependency
+- Update tailwind.css
 
----
+## 4.1.11
 
-## v5.0.42 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Update files
+- Cleanup website deps
 
-- Fix skip-ci file path ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.10
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update octokit.ts
 
----
+## 4.1.9
 
-## v5.0.41 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Sync the shipped `biome.json` with the ruleset used by next-forge: turn off `noNodejsModules`, `noCommonJs`, `noSecrets`, `useConsistentCurlyBraces`, `noNamespaceImport`, `useNamingConvention`, `noArrayIndexKey`, `noBarrelFile`, and `noReExportAll`; configure `useSortedClasses` with `className`/`clsx`/`cva`/`tw`/`twMerge`/`cn`/`twJoin` recognition and a safe auto-fix
 
-- Revert "Update vercel.json" ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.8
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update push.yaml
+- Bump cross-spawn from 7.0.3 to 7.0.6 in /website [#145](https://github.com/haydenbleasel/ultracite/pull/145)
 
----
+## 4.1.7
 
-## v5.0.40 (Fri Jul 18 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update README.md
+- Ship a `bin` entry (`ultracite` → `scripts/run.js`) with a minimal CLI that runs `npx biome check --write ./`, so users can invoke `npx ultracite` instead of calling Biome directly (#130)
 
-- Update vercel.json ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.6
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps
+- Update `biome.json`
+- Update `pnpm-lock.yaml`
+- Bump micromatch from 4.0.7 to 4.0.8 in /website [#144](https://github.com/haydenbleasel/ultracite/pull/144)
 
----
+## 4.1.5
 
-## v5.0.39 (Thu Jul 17 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Bump biome
 
-- Update route.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.4
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Disable `useExplicitFunctionReturnType` and `useComponentExportOnlyModules` in the shipped `biome.json`; both were firing on too much valid TS/React code to be defaults (#142, #143)
 
----
+## 4.1.3
 
-## v5.0.38 (Thu Jul 17 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update Biome
+- Update `biome.json`
 
-- Upgrade Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.2
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps
 
----
+## 4.1.1
 
-## v5.0.37 (Thu Jul 17 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update website
 
-- Resolves #217 ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.1.0
 
-### Authors: 1
+### Minor Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Biome 1.9.0 [#141](https://github.com/haydenbleasel/ultracite/pull/141)
 
----
+## 4.0.6
 
-## v5.0.36 (Mon Jul 14 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Update tailwind.css
 
-- Update sidebar.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+## 4.0.5
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
----
+## 4.0.4
 
-## v5.0.35 (Sun Jul 13 2025)
+### Patch Changes
 
-### 🐛 Bug Fix
+- Update README.md
 
-- Fix npm peer dependency conflicts when initializing Ultracite in Shadcn projects [#212](https://github.com/haydenbleasel/ultracite/pull/212) ([@Copilot](https://github.com/Copilot))
+## 4.0.3
 
-### Authors: 1
+### Patch Changes
 
-- [@Copilot](https://github.com/Copilot)
+- Update README.md
 
----
+## 4.0.2
 
-## v5.0.34 (Sun Jul 13 2025)
+### Patch Changes
 
-### 🐛 Bug Fix
+- Disable `useExplicitLengthCheck`
 
-- Upgrade to Biome 2.1.1 [#209](https://github.com/haydenbleasel/ultracite/pull/209) ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add option to remove other formatters during init [#198](https://github.com/haydenbleasel/ultracite/pull/198) ([@Copilot](https://github.com/Copilot) [@haydenbleasel](https://github.com/haydenbleasel))
-- feat: Optimize AI assistant rules with structured markdown format [#183](https://github.com/haydenbleasel/ultracite/pull/183) ([@haydenbleasel](https://github.com/haydenbleasel) [@lnittman](https://github.com/lnittman))
+## 4.0.1
 
-### Authors: 3
+### Patch Changes
 
-- [@Copilot](https://github.com/Copilot)
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-- Luke Nittmann ([@lnittman](https://github.com/lnittman))
+- Disable `useSimplifiedLogicExpression`
 
----
+## 4.0.0
 
-## v5.0.33 (Sun Jul 13 2025)
+### Major Changes
 
-:tada: This release contains work from a new contributor! :tada:
+- Switch from ESLint, Prettier and Stylelint to Biome [#140](https://github.com/haydenbleasel/ultracite/pull/140)
 
-Thank you, Rabah Tahraoui ([@rabah](https://github.com/rabah)), for all your work!
+## 3.9.11
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- feat: update filename convention rule to support $ prefix [#206](https://github.com/haydenbleasel/ultracite/pull/206) ([@rabah](https://github.com/rabah))
+- Fix website lockfile
+- Turn off `github/unescaped-html-literal` and `unicorn/prefer-dom-node-dataset` — both conflicted with other rules in the config
 
-### Authors: 1
+## 3.9.10
 
-- Rabah Tahraoui ([@rabah](https://github.com/rabah))
+### Patch Changes
 
----
+- Ignore .next and .turbo folders by default
+- Ignore dist and build folders by default
 
-## v5.0.32 (Fri Jul 04 2025)
+## 3.9.9
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- Bump next from 15.3.1 to 15.3.3 in /docs in the npm_and_yarn group across 1 directory [#204](https://github.com/haydenbleasel/ultracite/pull/204) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update settings.json
+- Bump website deps
+- Remove `useAsync` from exhaustive deps
 
-### Authors: 1
+## 3.9.8
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+### Patch Changes
 
----
+- Update README.md
 
-## v5.0.31 (Thu Jul 03 2025)
+## 3.9.7
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- Add monorepos docs [#201](https://github.com/haydenbleasel/ultracite/pull/201) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update inspector
+- Rewrite the ESLint core rules config to extend `@eslint/js`'s `configs.all.rules` and override only a handful of rules (`id-length`, `max-*`, `no-ternary`, `prefer-destructuring`, `sort-imports`, etc.) instead of hand-listing every rule
 
-### Authors: 1
+## 3.9.6
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update next.config.mjs
 
-## v5.0.30 (Thu Jul 03 2025)
+## 3.9.5
 
-:tada: This release contains work from a new contributor! :tada:
+### Patch Changes
 
-Thank you, Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes)), for all your work!
+- Add Inspector to website
 
-### 🐛 Bug Fix
+## 3.9.4
 
-- Zed Settings [#191](https://github.com/haydenbleasel/ultracite/pull/191) ([@luizvergennes](https://github.com/luizvergennes) [@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 2
+- Update README.md
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-- Luiz Vergennes ([@luizvergennes](https://github.com/luizvergennes))
+## 3.9.3
 
----
+### Patch Changes
 
-## v5.0.29 (Tue Jul 01 2025)
+- Update README.md
 
-### ⚠️ Pushed to `main`
+## 3.9.2
 
-- Run formatter ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #195 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Correct the `main` field in `package.json` so Ultracite resolves to the bundled ESLint config entrypoint
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.9.1
 
----
+### Patch Changes
 
-## v5.0.28 (Tue Jul 01 2025)
+- Update README.md
 
-### 🐛 Bug Fix
+## 3.9.0
 
-- Bump `@types/node` from 24.0.3 to 24.0.8 [#194](https://github.com/haydenbleasel/ultracite/pull/194) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Minor Changes
 
-### Authors: 1
+- Add `@tanstack/eslint-plugin-query` [#137](https://github.com/haydenbleasel/ultracite/pull/137)
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+## 3.8.6
 
----
+### Patch Changes
 
-## v5.0.27 (Tue Jul 01 2025)
+- Disable `unicorn/no-array-callback-reference`
 
-### ⚠️ Pushed to `main`
+## 3.8.5
 
-- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Disable `sonarjs/elseif-without-else`
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.8.4
 
----
+### Patch Changes
 
-## v5.0.26 (Fri Jun 27 2025)
+- Revert `eslint-plugin-unused-imports` to ESLint 8 compatible version
 
-### 🐛 Bug Fix
+## 3.8.3
 
-- Fix file path quoting for special characters in biome commands [#176](https://github.com/haydenbleasel/ultracite/pull/176) ([@Copilot](https://github.com/Copilot) [@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 2
+- Swap no-undef-init for `unicorn/no-null`
 
-- [@Copilot](https://github.com/Copilot)
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.8.2
 
----
+### Patch Changes
 
-## v5.0.25 (Fri Jun 27 2025)
+- Disable `no-undef-init` (interferes with `unicorn/no-null`
 
-### ⚠️ Pushed to `main`
+## 3.8.1
 
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create v5 migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add ESLint and Prettier migration guides ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create biome migration guide ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create llms.txt ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Add documentation on monorepos
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.8.0
 
----
+### Minor Changes
 
-## v5.0.24 (Fri Jun 27 2025)
+- Add `eslint-plugin-github` [#136](https://github.com/haydenbleasel/ultracite/pull/136)
 
-### 🐛 Bug Fix
+## 3.7.4
 
-- Improve biome update flow to support both `biome.json` and `biome.jsonc` [#185](https://github.com/haydenbleasel/ultracite/pull/185) ([@Copilot](https://github.com/Copilot))
+### Patch Changes
 
-### Authors: 1
+- Update unicorn's preventAbbreviations allowList for Next.js
 
-- [@Copilot](https://github.com/Copilot)
+## 3.7.3
 
----
+### Patch Changes
 
-## v5.0.23 (Thu Jun 26 2025)
+- Fix release pagination
 
-### ⚠️ Pushed to `main`
+## 3.7.2
 
-- Update meta.json ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Disable `unicorn/no-keyword-prefix` for React className
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.7.1
 
----
+### Patch Changes
 
-## v5.0.22 (Thu Jun 26 2025)
+- Update README.md
 
-### 🐛 Bug Fix
+## 3.7.0
 
-- Add support for lefthook as git hooks manager [#178](https://github.com/haydenbleasel/ultracite/pull/178) ([@Copilot](https://github.com/Copilot))
+### Minor Changes
 
-### Authors: 1
+- Add `eslint-plugin-unicorn` [#135](https://github.com/haydenbleasel/ultracite/pull/135)
 
-- [@Copilot](https://github.com/Copilot)
+## 3.6.2
 
----
+### Patch Changes
 
-## v5.0.21 (Thu Jun 26 2025)
+- Add styles for GitHub Markdown alerts
 
-### 🐛 Bug Fix
+## 3.6.1
 
-- Fix Yarn monorepo support by removing invalid -W flag [#180](https://github.com/haydenbleasel/ultracite/pull/180) ([@Copilot](https://github.com/Copilot))
+### Patch Changes
 
-### Authors: 1
+- Improve page design
 
-- [@Copilot](https://github.com/Copilot)
+## 3.6.0
 
----
+### Minor Changes
 
-## v5.0.20 (Wed Jun 25 2025)
+- Add `eslint-plugin-compat` [#134](https://github.com/haydenbleasel/ultracite/pull/134)
 
-:tada: This release contains work from new contributors! :tada:
+## 3.5.2
 
-Thanks for all your work!
+### Patch Changes
 
-:heart: null[@tommideso](https://github.com/tommideso)
+- Update README.md
 
-:heart: Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
+## 3.5.1
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- feat: Add TanStack Router file convention support to `useFilenamingConvention` rule [#174](https://github.com/haydenbleasel/ultracite/pull/174) ([@Copilot](https://github.com/Copilot))
-- Fix Yarn 4.9.2 compatibility by replacing --save-exact with -E flag [#173](https://github.com/haydenbleasel/ultracite/pull/173) ([@Copilot](https://github.com/Copilot))
-- fix: replace 'npx biome' with 'npx `@biomejs/biome`' [#170](https://github.com/haydenbleasel/ultracite/pull/170) ([@tommideso](https://github.com/tommideso))
-- feat: Add "tv" to allowed functions in linter options [#169](https://github.com/haydenbleasel/ultracite/pull/169) ([@harryevans1997](https://github.com/harryevans1997))
+- Update README.md
+- Update settings.json
+- Add React / React DOM devDeps
+- Bump deps
 
-### ⚠️ Pushed to `main`
+## 3.5.0
 
-- Update format.ts ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete `package-lock.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #167 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Minor Changes
 
-### Authors: 4
+- Add `eslint-plugin-html` [#133](https://github.com/haydenbleasel/ultracite/pull/133)
 
-- [@Copilot](https://github.com/Copilot)
-- [@tommideso](https://github.com/tommideso)
-- Harry Evans ([@harryevans1997](https://github.com/harryevans1997))
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.4.2
 
----
+### Patch Changes
 
-## v5.0.19 (Tue Jun 24 2025)
+- Misc fix
 
-### ⚠️ Pushed to `main`
+## 3.4.1
 
-- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Bundle release notes on website on the same day
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.4.0
 
----
+### Minor Changes
 
-## v5.0.18 (Tue Jun 24 2025)
+- Add SonarJS plugin [#132](https://github.com/haydenbleasel/ultracite/pull/132)
+- Upgrade GitHub Actions workflow
 
-### ⚠️ Pushed to `main`
+## 3.3.7
 
-- Update rules.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update README.md
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.3.6
 
----
+### Patch Changes
 
-## v5.0.17 (Tue Jun 24 2025)
+- Create apple-icon.png
 
-:tada: This release contains work from a new contributor! :tada:
+## 3.3.5
 
-Thank you, Luke Nittmann ([@lnittman](https://github.com/lnittman)), for all your work!
+### Patch Changes
 
-### 🐛 Bug Fix
+- Add better feature definitions to README
 
-- feat: Add support for Claude Code and OpenAI Codex AI assistants [#166](https://github.com/haydenbleasel/ultracite/pull/166) ([@lnittman](https://github.com/lnittman) [@haydenbleasel](https://github.com/haydenbleasel))
+## 3.3.4
 
-### Authors: 2
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-- Luke Nittmann ([@lnittman](https://github.com/lnittman))
+- Update README.md
 
----
+## 3.3.3
 
-## v5.0.16 (Tue Jun 24 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Add an `exports` map to `package.json` so consumers can import `ultracite` (ESLint), `ultracite/prettier`, and `ultracite/stylelint` as separate entrypoints
 
-- Add more unit tests for jsonc files ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.3.2
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Document the file-based setup (`eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs` with `export { default } from 'ultracite/...'`) and drop the old `package.json`-embedded `prettier`/`stylelint` keys
+- Rename `prettier.js` / `stylelint.js` to `prettier.config.mjs` / `stylelint.config.mjs` and convert them from `module.exports =` to ESM `export default`
 
----
+## 3.3.1
 
-## v5.0.15 (Tue Jun 24 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Add `prettier.js`/`stylelint.js` to the tsup entry list and disable code splitting so each config bundles as a single output file
 
-- Fix unit tests, handle parsing issues gracefully ([@haydenbleasel](https://github.com/haydenbleasel))
-- Type parse responses correctly ([@haydenbleasel](https://github.com/haydenbleasel))
-- Parse all JSON files using jsonc-parser ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.3.0
 
-### Authors: 1
+### Minor Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bundle [#131](https://github.com/haydenbleasel/ultracite/pull/131)
 
----
+## 3.2.5
 
-## v5.0.14 (Tue Jun 24 2025)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Add Vercel Analytics to site
 
-- Run formatting ([@haydenbleasel](https://github.com/haydenbleasel))
-- Parse `biome.json` properly ([@haydenbleasel](https://github.com/haydenbleasel))
+## 3.2.4
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Remove logo from readme
 
----
+## 3.2.3
 
-## v5.0.13 (Tue Jun 24 2025)
+### Patch Changes
 
-:tada: This release contains work from a new contributor! :tada:
+- Fix baseUrl on website
 
-Thank you, Denis Avakov ([@denis-avakov](https://github.com/denis-avakov)), for all your work!
+## 3.2.2
 
-### 🐛 Bug Fix
+### Patch Changes
 
-- Fix: Add support for comments in VS Code settings.json [#165](https://github.com/haydenbleasel/ultracite/pull/165) ([@denis-avakov](https://github.com/denis-avakov) [@haydenbleasel](https://github.com/haydenbleasel))
+- Bump the pinned Ultracite version in the website's own `package.json` so the docs build against the current release
 
-### Authors: 2
+## 3.1.12
 
-- Denis Avakov ([@denis-avakov](https://github.com/denis-avakov))
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Rebrand from `eslint-config-harmony` to `ultracite` [#129](https://github.com/haydenbleasel/ultracite/pull/129)
+- Update `package.json`
 
-## v5.0.12 (Mon Jun 23 2025)
+## 3.1.11
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Bump Biome to 2.0.5 ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
-### Authors: 1
+## 3.1.10
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update README.md
 
-## v5.0.11 (Mon Jun 23 2025)
+## 3.1.9
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Remove -w flag from bun ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
-### Authors: 1
+## 3.1.8
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update README.md
 
-## v5.0.10 (Mon Jun 23 2025)
+## 3.1.7
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update installer.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Create SECURITY.md
+- Create license.md
 
-### Authors: 1
+## 3.1.6
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Drop `stylelint-config-prettier` and the `prettier/prettier` rule — Stylelint 15 stopped bundling conflicting formatting rules, so the Prettier compatibility shim is no longer needed. Replace the removed `declaration-block-trailing-semicolon` with `declaration-property-value-no-unknown`
 
-## v5.0.9 (Sun Jun 22 2025)
+## 3.1.5
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update tweets.tsx ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Remove ESLint 8.53 deprecated rules
+- Bump deps
+- Update settings.json
 
-### Authors: 1
+## 3.1.4
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Temporarily disable eslint-config-tailwindcss
 
-## v5.0.8 (Sun Jun 22 2025)
+## 3.1.3
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update package-manager.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+- Bump deps
 
-### Authors: 1
+## 3.1.2
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update README.md
 
-## v5.0.7 (Sun Jun 22 2025)
+## 3.1.1
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update ultracite.mdc ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update tailwindcss.mjs
 
-### Authors: 1
+## 3.1.0
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Minor Changes
 
----
+- Add support for Tailwind rules [#127](https://github.com/haydenbleasel/ultracite/pull/127)
 
-## v5.0.6 (Sun Jun 22 2025)
+## 3.0.9
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Run Ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
+- Allow the single-letter identifiers `x`, `y`, `z` through ESLint's `id-length` rule, for code working with geometry/coordinate systems
 
-### Authors: 1
+## 3.0.8
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Bump deps
 
-## v5.0.5 (Sun Jun 22 2025)
+## 3.0.7
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Misc design fixes ([@haydenbleasel](https://github.com/haydenbleasel))
+- Set `settings.react.version = 'detect'` in `eslint.config.mjs` so `eslint-plugin-react` auto-detects the consumer's installed React version
 
-### Authors: 1
+## 3.0.6
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update README.md
 
-## v5.0.4 (Sun Jun 22 2025)
+## 3.0.5
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Drop schema rewrite (breaks types) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
+- Bump `@babel/traverse` from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/ultracite/pull/126)
 
-### Authors: 1
+## 3.0.4
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Switch `@typescript-eslint/eslint-plugin` imports from namespace (`import * as typescript`) to default imports to match the plugin's ESM export shape
+- Bump deps
 
-## v5.0.3 (Sun Jun 22 2025)
+## 3.0.3
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Create dependabot.yml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Switch from Yarn to pnpm, upgrade workflow
 
-### Authors: 1
+## 3.0.2
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Update eslint.config.mjs
 
-## v5.0.2 (Sun Jun 22 2025)
+## 3.0.1
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update eslint.config.mjs
 
-### Authors: 1
+## 3.0.0
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Major Changes
 
----
+- V3 [#125](https://github.com/haydenbleasel/ultracite/pull/125)
+- Update push.yaml
+- Create FUNDING.yml
+- Bump postcss from 8.4.24 to 8.4.31 [#124](https://github.com/haydenbleasel/ultracite/pull/124)
 
-## v5.0.1 (Sun Jun 22 2025)
+## 2.5.3
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Add support for installing in monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
+- Automatically remove unused imports
 
-### Authors: 1
+## 2.5.2
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Configure `jsx-a11y/label-has-associated-control` to recognize custom component names (`Label`, `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`) with a depth of 3; the rule previously only matched native HTML elements
 
-## v5.0.0 (Sun Jun 22 2025)
+## 2.5.1
 
-### 💥 Breaking Change
+### Patch Changes
 
-- Ultracite v5 [#162](https://github.com/haydenbleasel/ultracite/pull/162) ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
-### ⚠️ Pushed to `main`
+## 2.5.0
 
-- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+### Minor Changes
 
-### Authors: 1
+- Add Storybook [#123](https://github.com/haydenbleasel/ultracite/pull/123)
+- Bump word-wrap from 1.2.3 to 1.2.4 in /website [#122](https://github.com/haydenbleasel/ultracite/pull/122)
+- Bump semver from 6.3.0 to 6.3.1 in /website [#121](https://github.com/haydenbleasel/ultracite/pull/121)
+- Bump semver from 6.3.0 to 6.3.1 [#120](https://github.com/haydenbleasel/ultracite/pull/120)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.4.6
 
----
+### Patch Changes
 
-## v4.2.13 (Wed Jun 18 2025)
+- Bump `eslint-plugin-prettier` to `5.0.0-alpha.2` to pick up `synckit` support and restore compatibility with newer Prettier / ESLint flat configs
 
-### ⚠️ Pushed to `main`
+## 2.4.5
 
-- Allow for passing files to lint and format ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Bump deps
+- Bump stylelint from 15.8.0 to 15.10.1 [#119](https://github.com/haydenbleasel/ultracite/pull/119)
+- Bump stylelint from 15.8.0 to 15.10.1 in /website [#118](https://github.com/haydenbleasel/ultracite/pull/118)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.4.4
 
----
+### Patch Changes
 
-## v4.2.12 (Tue Jun 17 2025)
+- Fix layout bug
 
-### ⚠️ Pushed to `main`
+## 2.4.3
 
-- Fix Biome version ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Fix up images and responsive layout
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.4.2
 
----
+### Patch Changes
 
-## v4.2.11 (Mon Jun 16 2025)
+- Create favicon.ico
 
-### 🐛 Bug Fix
+## 2.4.1
 
-- Feature/mobile menu [#161](https://github.com/haydenbleasel/ultracite/pull/161) ([@chocochu](https://github.com/chocochu))
+### Patch Changes
 
-### Authors: 1
+- Fix footer issue
 
-- Choco ([@chocochu](https://github.com/chocochu))
+## 2.4.0
 
----
+### Minor Changes
 
-## v4.2.10 (Wed Jun 11 2025)
+- Enhance website, general updates [#116](https://github.com/haydenbleasel/ultracite/pull/116)
 
-### ⚠️ Pushed to `main`
+## 2.3.1
 
-- Create opengraph-image.jpg ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Disable the `@typescript-eslint/*` stylistic/formatting rules (`block-spacing`, `brace-style`, `comma-dangle`, `indent`, `key-spacing`, `keyword-spacing`, `member-delimiter-style`, `quotes`, `semi`, `space-*`, `type-annotation-spacing`, etc.) that conflict with Prettier's formatting output
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.3.0
 
----
+### Minor Changes
 
-## v4.2.9 (Wed Jun 11 2025)
+- Migrate to opt-in config [#115](https://github.com/haydenbleasel/ultracite/pull/115)
 
-### 🐛 Bug Fix
+## 2.2.8
 
-- New landing page [#160](https://github.com/haydenbleasel/ultracite/pull/160) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update README.md
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.2.7
 
----
+### Patch Changes
 
-## v4.2.8 (Wed Jun 04 2025)
+- Remove AudioWorkletGlobalScope
 
-### ⚠️ Pushed to `main`
+## 2.2.6
 
-- Bump Commander ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Attempt to patch AudioWorkletGlobalScope issue
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.2.5
 
----
+### Patch Changes
 
-## v4.2.7 (Wed Jun 04 2025)
+- Create website [#114](https://github.com/haydenbleasel/ultracite/pull/114)
 
-### ⚠️ Pushed to `main`
+## 2.2.4
 
-- Fix license ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Add Typescript import resolver
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.2.3
 
----
+### Patch Changes
 
-## v4.2.6 (Tue Jun 03 2025)
+- Re-enable `eslint-plugin-import` and set `parserOptions.ecmaVersion = 'latest'` / `sourceType = 'module'` on the flat config so import rules parse modern ESM syntax correctly
 
-### ⚠️ Pushed to `main`
+## 2.2.2
 
-- Update bug_report.md ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Register `.ts` and `.tsx` extensions with `import/parsers.espree` in the ESLint config so `eslint-plugin-import` parses TypeScript files through espree (workaround for import-js/eslint-plugin-import#2556)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.1.3
 
----
+### Patch Changes
 
-## v4.2.5 (Fri May 16 2025)
+- Bump version
+- Re-enable `eslint-plugin-import` throughout the flat config (was commented out awaiting upstream fixes) and move the `AudioWorkletGlobalScope` globals patch up to a top-level `globals.browser` adjustment
+- Disable ESLint's core `sort-imports` (eslint/eslint#11542) and configure `import/order` with explicit group ordering `builtin → external → internal → parent → sibling → index → object → type`
 
-### ⚠️ Pushed to `main`
+## 2.1.2
 
-- Update OG image ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix opengraph metadata ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Re-enable sorted imports
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.0.12
 
----
+### Patch Changes
 
-## v4.2.4 (Sun May 04 2025)
+- Split the Yarn install step out of the `auto shipit` release step in the push workflow so dependencies install as a distinct, cacheable job step
 
-### ⚠️ Pushed to `main`
+## 2.0.11
 
-- Update index.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Update push.yaml
+- Bump deps
+- Delete dependabot.yaml
+- Patch AudioWorkletGlobalScope issue
+- Bump `@typescript-eslint/parser` from 5.50.0 to 5.57.0 [#112](https://github.com/haydenbleasel/ultracite/pull/112)
+- Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/haydenbleasel/ultracite/pull/111)
+- Bump `@next/eslint-plugin-next` from 13.1.6 to 13.2.4 [#110](https://github.com/haydenbleasel/ultracite/pull/110)
+- Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/haydenbleasel/ultracite/pull/109)
+- Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/haydenbleasel/ultracite/pull/108)
+- Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/haydenbleasel/ultracite/pull/105)
+- Bump stylelint-config-prettier from 9.0.4 to 9.0.5 [#101](https://github.com/haydenbleasel/ultracite/pull/101)
+- Bump stylelint-prettier from 2.0.0 to 3.0.0 [#94](https://github.com/haydenbleasel/ultracite/pull/94)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.0.10
 
----
+### Patch Changes
 
-## v4.2.3 (Sat May 03 2025)
+- Add FAQ
 
-### ⚠️ Pushed to `main`
+## 2.0.9
 
-- Update goals.mdx ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Add Cypress support
+- Bump `@typescript-eslint/parser` from 5.48.1 to 5.50.0 [#88](https://github.com/haydenbleasel/ultracite/pull/88)
+- Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/haydenbleasel/ultracite/pull/86)
+- Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/haydenbleasel/ultracite/pull/87)
+- Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/haydenbleasel/ultracite/pull/89)
+- Bump `@next/eslint-plugin-next` from 13.1.2 to 13.1.6 [#90](https://github.com/haydenbleasel/ultracite/pull/90)
+- Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/haydenbleasel/ultracite/pull/91)
+- Bump `@typescript-eslint/eslint-plugin` from 5.48.1 to 5.50.0 [#92](https://github.com/haydenbleasel/ultracite/pull/92)
+- Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/haydenbleasel/ultracite/pull/93)
+- Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/haydenbleasel/ultracite/pull/85)
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.0.8
 
----
+### Patch Changes
 
-## v4.2.2 (Sat May 03 2025)
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Fix typo
 
-### 🐛 Bug Fix
+## 2.0.7
 
-- New website [#158](https://github.com/haydenbleasel/ultracite/pull/158) ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Fix typo
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 2.0.6
 
----
+### Patch Changes
 
-## v4.2.1 (Wed Apr 02 2025)
+- Temporarily disable eslint-plugin-import
 
-### 🐛 Bug Fix
+## 2.0.5
 
-- Bump next from 15.2.3 to 15.2.4 in /website [#155](https://github.com/haydenbleasel/ultracite/pull/155) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Patch Changes
 
-### Authors: 1
+- Bump deps
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+## 2.0.4
 
----
+### Patch Changes
 
-## v4.2.0 (Fri Mar 21 2025)
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Add import/resolver settings
 
-### 🚀 Enhancement
+## 2.0.3
 
-- Bump next from 15.1.2 to 15.2.3 in /website [#154](https://github.com/haydenbleasel/ultracite/pull/154) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Patch Changes
 
-### Authors: 1
+- Update README.md
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
+## 2.0.2
 
----
+### Patch Changes
 
-## v4.1.21 (Mon Mar 10 2025)
+- Update `package.json`
 
-### 🐛 Bug Fix
+## 1.1.10
 
-- Update action on save config [#153](https://github.com/haydenbleasel/ultracite/pull/153) ([@haydenbarnett](https://github.com/haydenbarnett))
+### Patch Changes
 
-### Authors: 1
+- V2 [#83](https://github.com/haydenbleasel/ultracite/pull/83)
+- Fix typo
+- Ensure package is public
+- Remove tsup, fix typo
+- Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/haydenbleasel/ultracite/pull/84)
+- Bump `@typescript-eslint/eslint-plugin` from 5.42.1 to 5.47.1 [#79](https://github.com/haydenbleasel/ultracite/pull/79)
+- Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/haydenbleasel/ultracite/pull/69)
+- Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/haydenbleasel/ultracite/pull/73)
+- Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/haydenbleasel/ultracite/pull/74)
+- Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/haydenbleasel/ultracite/pull/75)
+- Bump `@next/eslint-plugin-next` from 13.0.3 to 13.1.1 [#76](https://github.com/haydenbleasel/ultracite/pull/76)
+- Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/haydenbleasel/ultracite/pull/77)
+- Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/haydenbleasel/ultracite/pull/78)
+- Bump `@typescript-eslint/parser` from 5.42.1 to 5.47.1 [#80](https://github.com/haydenbleasel/ultracite/pull/80)
+- Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/haydenbleasel/ultracite/pull/81)
+- Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/haydenbleasel/ultracite/pull/82)
 
-- Hayden Barnett ([@haydenbarnett](https://github.com/haydenbarnett))
+## 1.1.9
 
----
+### Patch Changes
 
-## v4.1.20 (Wed Feb 19 2025)
+- Allow finally in promises
 
-### ⚠️ Pushed to `main`
+## 1.1.8
 
-- Revert "Add support for init in monorepos" ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Turn off `n/no-missing-import` and `n/file-extension-in-import` — both fire constantly in TypeScript projects where imports resolve through the TS path map rather than literal file paths
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.1.7
 
----
+### Patch Changes
 
-## v4.1.19 (Wed Feb 12 2025)
+- Update the ESLint `plugins` array from `'node'` to `'n'` to match the plugin rename from `eslint-plugin-node` to `eslint-plugin-n`
 
-### ⚠️ Pushed to `main`
+## 1.1.6
 
-- Add support for init in monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Replace eslint-plugin-node with eslint-plugin-n
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.1.5
 
----
+### Patch Changes
 
-## v4.1.18 (Sat Feb 01 2025)
+- Set `parserOptions.ecmaVersion = 'latest'` in the ESLint config so the parser accepts modern ES syntax
 
-### ⚠️ Pushed to `main`
+## 1.1.4
 
-- Add basic init command ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Register `node` in the ESLint `plugins` array — the `n/*` rules defined in the config had no plugin declaration to bind to
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.1.3
 
----
+### Patch Changes
 
-## v4.1.17 (Fri Jan 24 2025)
+- Bump deps, disable `promise/no-native`
+- Bump `@typescript-eslint/parser` from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/ultracite/pull/60)
+- Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/ultracite/pull/61)
 
-### ⚠️ Pushed to `main`
+## 1.1.2
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Add missing jest deps
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.32
 
----
+### Patch Changes
 
-## v4.1.16 (Thu Jan 23 2025)
+- Update description, bump minor version
+- Add eslint-plugin-node
+- Add eslint-plugin-promise
+- Fix devDeps -> peerDeps
+- Bump `@typescript-eslint/eslint-plugin` from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/ultracite/pull/62)
+- Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/ultracite/pull/45)
+- Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/ultracite/pull/46)
+- Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/ultracite/pull/50)
+- Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/ultracite/pull/53)
+- Bump `@typescript-eslint/parser` from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/ultracite/pull/55)
+- Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/ultracite/pull/56)
+- Bump `@next/eslint-plugin-next` from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/ultracite/pull/57)
+- Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/ultracite/pull/58)
+- Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/ultracite/pull/59)
 
-### ⚠️ Pushed to `main`
+## 1.0.31
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Fix typo
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.30
 
----
+### Patch Changes
 
-## v4.1.15 (Sun Jan 12 2025)
+- Add jest install to docs
 
-### ⚠️ Pushed to `main`
+## 1.0.29
 
-- Resolves #148 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### 🔩 Dependency Updates
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Fix prefix for jest rules
 
-- Bump next from 15.0.4 to 15.1.2 in /website [#149](https://github.com/haydenbleasel/ultracite/pull/149) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+## 1.0.28
 
-### Authors: 2
+### Patch Changes
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Fix typo
 
----
+## 1.0.27
 
-## v4.1.14 (Sun Dec 15 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Bump runner to Node 16
+- Add core Jest support
+- Bump `@next/eslint-plugin-next` from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/ultracite/pull/36)
+- Bump eslint from 8.21.0 to 8.23.0 [#37](https://github.com/haydenbleasel/ultracite/pull/37)
+- Bump `@typescript-eslint/parser` from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/ultracite/pull/38)
+- Bump stylelint from 14.9.1 to 14.11.0 [#39](https://github.com/haydenbleasel/ultracite/pull/39)
+- Bump `@typescript-eslint/eslint-plugin` from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/ultracite/pull/40)
+- Bump typescript from 4.7.4 to 4.8.2 [#41](https://github.com/haydenbleasel/ultracite/pull/41)
+- Bump eslint-plugin-react from 7.30.1 to 7.31.1 [#42](https://github.com/haydenbleasel/ultracite/pull/42)
+- Bump `@typescript-eslint/eslint-plugin` from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/ultracite/pull/29)
+- Bump eslint from 8.18.0 to 8.21.0 [#30](https://github.com/haydenbleasel/ultracite/pull/30)
+- Bump eslint-plugin-jsx-a11y from 6.6.0 to 6.6.1 [#31](https://github.com/haydenbleasel/ultracite/pull/31)
+- Bump `@next/eslint-plugin-next` from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/ultracite/pull/32)
+- Bump prettier-plugin-tailwindcss from 0.1.11 to 0.1.13 [#33](https://github.com/haydenbleasel/ultracite/pull/33)
+- Bump `@typescript-eslint/parser` from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/ultracite/pull/34)
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.26
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
 
----
+## 1.0.25
 
-## v4.1.13 (Sun Dec 15 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Comment out `@next/next/no-assign-module-variable` in the Next preset; the rule had been deprecated and was failing with an unknown-rule error
 
-- Resolves #147 ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.24
 
-### 🔩 Dependency Updates
+### Patch Changes
 
-- Bump nanoid from 3.3.7 to 3.3.8 in /website [#146](https://github.com/haydenbleasel/ultracite/pull/146) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Bump deps
+- Update eslint-next.js
 
-### Authors: 2
+## 1.0.23
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Add react-native plugin dependency
 
-## v4.1.12 (Fri Dec 13 2024)
+## 1.0.22
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Improve CLI ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update tailwind.css ([@haydenbleasel](https://github.com/haydenbleasel))
+- Split the ESLint config into `eslint.js` (core), `eslint-next.js` (Next.js-specific `@next/next/*` rules, extending core), and `eslint-expo.js` (React Native rules + `react-native` plugin, extending core) so consumers extend only what they need
 
-### Authors: 1
+## 1.0.21
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Switch the `stylelint` entry in `package.json` from a bare string (`./stylelint.js`) to Stylelint's object form (`{ extends: "./stylelint.js" }`) so Stylelint actually picks up the shared config
+- Bump `@typescript-eslint/parser` from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/ultracite/pull/24)
+- Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/ultracite/pull/28)
+- Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/ultracite/pull/27)
+- Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/ultracite/pull/26)
+- Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/ultracite/pull/25)
+- Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/ultracite/pull/23)
+- Bump `@typescript-eslint/eslint-plugin` from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/ultracite/pull/22)
 
-## v4.1.11 (Tue Dec 10 2024)
+## 1.0.20
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update files ([@haydenbleasel](https://github.com/haydenbleasel))
-- Cleanup website deps ([@haydenbleasel](https://github.com/haydenbleasel))
+- Allow HTTP header literals to break naming convention [#21](https://github.com/haydenbleasel/ultracite/pull/21)
 
-### Authors: 1
+## 1.0.19
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Merge branch 'main' of https://github.com/haydenbleasel/ultracite
+- Use `next/core-web-vitals` instead of custom config
+- Revert "Attempt fixing Next format"
 
-## v4.1.10 (Tue Dec 10 2024)
+## 1.0.18
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update octokit.ts ([@haydenbleasel](https://github.com/haydenbleasel))
+- Attempt to register the Next.js ESLint plugin under the short `next/*` prefix instead of `@next/next/*` (reverted in v1.0.19 in favor of `next/core-web-vitals`)
 
-### Authors: 1
+## 1.0.17
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Remove extended Next configs, fix duplicate rules
 
-## v4.1.9 (Tue Dec 10 2024)
+## 1.0.16
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- next-forge changes ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix package lockfile
+- Drop `@next/next/no-assign-module-variable` and `@next/next/no-before-interactive-script-outside-document` from the Next preset; add `@next/next/link-passhref` and `@next/next/no-script-in-document`
+- Bump deps
 
-### Authors: 1
+## 1.0.15
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
----
+- Expand the Next preset with the current Next 12.1 rule set: `inline-script-id`, `next-script-for-ga`, `no-assign-module-variable`, `no-before-interactive-script-outside-document`, `no-duplicate-head`, `no-head-element`, `no-script-component-in-head`, `no-server-import-in-page`
+- Bump `@typescript-eslint/parser` from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/ultracite/pull/17)
+- Bump eslint-plugin-import from 2.25.4 to 2.26.0 [#11](https://github.com/haydenbleasel/ultracite/pull/11)
+- Bump stylelint from 14.6.1 to 14.8.1 [#12](https://github.com/haydenbleasel/ultracite/pull/12)
+- Bump prettier from 2.6.1 to 2.6.2 [#13](https://github.com/haydenbleasel/ultracite/pull/13)
+- Bump prettier-plugin-tailwindcss from 0.1.8 to 0.1.10 [#14](https://github.com/haydenbleasel/ultracite/pull/14)
+- Bump eslint from 8.12.0 to 8.14.0 [#15](https://github.com/haydenbleasel/ultracite/pull/15)
+- Bump eslint-config-next from 12.1.4 to 12.1.5 [#16](https://github.com/haydenbleasel/ultracite/pull/16)
+- Bump `@typescript-eslint/eslint-plugin` from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/ultracite/pull/18)
+- Bump eslint-plugin-react-hooks from 4.4.0 to 4.5.0 [#19](https://github.com/haydenbleasel/ultracite/pull/19)
+- Bump typescript from 4.6.3 to 4.6.4 [#20](https://github.com/haydenbleasel/ultracite/pull/20)
 
-## v4.1.8 (Mon Dec 02 2024)
+## 1.0.14
 
-### ⚠️ Pushed to `main`
+### Patch Changes
 
-- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
+- Update README.md
+- Remove React dependency
+- Bump `@typescript-eslint/parser` from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/ultracite/pull/10)
+- Bump `@typescript-eslint/eslint-plugin` from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/ultracite/pull/6)
+- Bump stylelint from 14.6.0 to 14.6.1 [#7](https://github.com/haydenbleasel/ultracite/pull/7)
+- Bump eslint-plugin-react-hooks from 4.3.0 to 4.4.0 [#8](https://github.com/haydenbleasel/ultracite/pull/8)
+- Bump prettier from 2.6.0 to 2.6.1 [#2](https://github.com/haydenbleasel/ultracite/pull/2)
+- Bump eslint from 8.11.0 to 8.12.0 [#3](https://github.com/haydenbleasel/ultracite/pull/3)
+- Bump eslint-config-next from 12.1.0 to 12.1.4 [#9](https://github.com/haydenbleasel/ultracite/pull/9)
+- Bump minimist from 1.2.5 to 1.2.6 [#1](https://github.com/haydenbleasel/ultracite/pull/1)
 
-### 🔩 Dependency Updates
+## 1.0.13
 
-- Bump cross-spawn from 7.0.3 to 7.0.6 in /website [#145](https://github.com/haydenbleasel/ultracite/pull/145) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+### Patch Changes
 
-### Authors: 2
+- Update README.md
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.12
 
----
+### Patch Changes
 
-## v4.1.7 (Wed Nov 20 2024)
+- Add Typescript to peerDeps
+- Fix devDeps, peerDeps, file formatting and installation
 
-### ⚠️ Pushed to `main`
+## 1.0.11
 
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-- Resolves #130 ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### Authors: 1
+- Move files to root folder
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.10
 
----
+### Patch Changes
 
-## v4.1.6 (Tue Oct 22 2024)
+- Update README.md
 
-### ⚠️ Pushed to `main`
+## 1.0.9
 
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update `biome.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update `pnpm-lock.yaml` ([@haydenbleasel](https://github.com/haydenbleasel))
+### Patch Changes
 
-### 🔩 Dependency Updates
+- Document that consumers need to set `parserOptions.project = './tsconfig.json'` alongside the Harmony `extends`, so type-aware TypeScript rules resolve correctly
 
-- Bump micromatch from 4.0.7 to 4.0.8 in /website [#144](https://github.com/haydenbleasel/ultracite/pull/144) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+## 1.0.8
 
-### Authors: 2
+### Patch Changes
 
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add snake_case support for APIs, disable misused-promises error
 
----
+## 1.0.7
 
-## v4.1.5 (Fri Oct 18 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Add publishConfig
 
-- Bump biome ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.6
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Add VS Code extensions
 
----
+## 1.0.5
 
-## v4.1.4 (Tue Oct 01 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Temporarily document the configs with explicit `./node_modules/@haydenbleasel/harmony/src/<name>.js` paths in place of the short `@haydenbleasel/harmony/<name>` package-import form, as a workaround until the `exports` map resolved correctly in all tools
 
-- Resolves #142, resolves #143 ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.4
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Prefix the `exports` keys in `package.json` with `./` (`./eslint`, `./prettier`, `./stylelint`) so Node resolves `@haydenbleasel/harmony/eslint` etc. correctly
 
----
+## 1.0.3
 
-## v4.1.3 (Tue Oct 01 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
+- Remove index file, expose multiple exports
 
-- Update Biome ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update `biome.json` ([@haydenbleasel](https://github.com/haydenbleasel))
+## 1.0.2
 
-### Authors: 1
+### Patch Changes
 
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Run auto init, generate labels
 
----
+## 1.0.1
 
-## v4.1.2 (Mon Sep 30 2024)
+### Patch Changes
 
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.1.1 (Mon Sep 16 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update website ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.1.0 (Mon Sep 16 2024)
-
-### 🚀 Enhancement
-
-- Biome 1.9.0 [#141](https://github.com/haydenbleasel/ultracite/pull/141) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.6 (Sun Aug 18 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update tailwind.css ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.5 (Sat Aug 10 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.4 (Fri Jul 19 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.3 (Fri Jul 19 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.2 (Fri Jul 19 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `useExplicitLengthCheck` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.1 (Fri Jul 19 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `useSimplifiedLogicExpression` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v4.0.0 (Fri Jul 19 2024)
-
-### 💥 Breaking Change
-
-- Switch from ESLint, Prettier and Stylelint to Biome [#140](https://github.com/haydenbleasel/ultracite/pull/140) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.11 (Fri Jul 19 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix website lockfile ([@haydenbleasel](https://github.com/haydenbleasel))
-- Disable conflicting rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.10 (Thu Jul 18 2024)
-
-### ⚠️ Pushed to `main`
-
-- Ignore .next and .turbo folders by default ([@haydenbleasel](https://github.com/haydenbleasel))
-- Ignore dist and build folders by default ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.9 (Mon Jul 15 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump website deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove `useAsync` from exhaustive deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.8 (Wed Jul 03 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.7 (Sat Jun 29 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update inspector ([@haydenbleasel](https://github.com/haydenbleasel))
-- Use new eslint/js for rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.6 (Sat Jun 29 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update next.config.mjs ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.5 (Sat Jun 29 2024)
-
-### ⚠️ Pushed to `main`
-
-- Add Inspector to website ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.4 (Tue Jun 25 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.3 (Sat Jun 01 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.2 (Sat Jun 01 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix main package ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.1 (Fri May 31 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.9.0 (Thu May 30 2024)
-
-### 🚀 Enhancement
-
-- Add `@tanstack/eslint-plugin-query` [#137](https://github.com/haydenbleasel/ultracite/pull/137) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.6 (Wed May 29 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `unicorn/no-array-callback-reference` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.5 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `sonarjs/elseif-without-else` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.4 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Revert `eslint-plugin-unused-imports` to ESLint 8 compatible version ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.3 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Swap no-undef-init for `unicorn/no-null` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.2 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `no-undef-init` (interferes with `unicorn/no-null` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.1 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Add documentation on monorepos ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.8.0 (Tue May 28 2024)
-
-### 🚀 Enhancement
-
-- Add `eslint-plugin-github` [#136](https://github.com/haydenbleasel/ultracite/pull/136) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.7.4 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update unicorn's preventAbbreviations allowList for Next.js ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.7.3 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix release pagination ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.7.2 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Disable `unicorn/no-keyword-prefix` for React className ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.7.1 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.7.0 (Tue May 28 2024)
-
-### 🚀 Enhancement
-
-- Add `eslint-plugin-unicorn` [#135](https://github.com/haydenbleasel/ultracite/pull/135) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.6.2 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Add styles for GitHub Markdown alerts ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.6.1 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Improve page design ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.6.0 (Tue May 28 2024)
-
-### 🚀 Enhancement
-
-- Add `eslint-plugin-compat` [#134](https://github.com/haydenbleasel/ultracite/pull/134) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.5.2 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.5.1 (Tue May 28 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add React / React DOM devDeps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.5.0 (Tue May 28 2024)
-
-### 🚀 Enhancement
-
-- Add `eslint-plugin-html` [#133](https://github.com/haydenbleasel/ultracite/pull/133) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.4.2 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Misc fix ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.4.1 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Bundle release notes on website on the same day ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.4.0 (Mon May 27 2024)
-
-### 🚀 Enhancement
-
-- Add SonarJS plugin [#132](https://github.com/haydenbleasel/ultracite/pull/132) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### ⚠️ Pushed to `main`
-
-- Upgrade GitHub Actions workflow ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.7 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.6 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Create apple-icon.png ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.5 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Add better feature definitions to README ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.4 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.3 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix exports in `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.2 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Switch to config files, use default export syntax ([@haydenbleasel](https://github.com/haydenbleasel))
-- Switch js to mjs files ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.1 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update tsup.config.ts ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.3.0 (Mon May 27 2024)
-
-### 🚀 Enhancement
-
-- Bundle [#131](https://github.com/haydenbleasel/ultracite/pull/131) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.2.5 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Add Vercel Analytics to site ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.2.4 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Remove logo from readme ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.2.3 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix baseUrl on website ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.2.2 (Mon May 27 2024)
-
-### ⚠️ Pushed to `main`
-
-- Fix ultracite version ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.12 (Mon May 27 2024)
-
-### 🐛 Bug Fix
-
-- Rebrand from `eslint-config-harmony` to `ultracite` [#129](https://github.com/haydenbleasel/ultracite/pull/129) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### ⚠️ Pushed to `main`
-
-- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.11 (Mon May 06 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.10 (Sun May 05 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.9 (Fri Mar 01 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.8 (Sun Jan 07 2024)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.7 (Tue Dec 26 2023)
-
-### ⚠️ Pushed to `main`
-
-- Create SECURITY.md ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create license.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.6 (Sun Dec 24 2023)
-
-### ⚠️ Pushed to `main`
-
-- Stylelint v15 updates ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.5 (Thu Dec 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove ESLint 8.53 deprecated rules ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update settings.json ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.4 (Thu Nov 23 2023)
-
-### ⚠️ Pushed to `main`
-
-- Temporarily disable eslint-config-tailwindcss ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.3 (Thu Nov 23 2023)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.2 (Wed Nov 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.1 (Tue Nov 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update tailwindcss.mjs ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.1.0 (Tue Nov 14 2023)
-
-### 🚀 Enhancement
-
-- Add support for Tailwind rules [#127](https://github.com/haydenbleasel/ultracite/pull/127) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.9 (Mon Nov 13 2023)
-
-### ⚠️ Pushed to `main`
-
-- Add support for geometry coordinates ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.8 (Wed Nov 08 2023)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.7 (Mon Nov 06 2023)
-
-### ⚠️ Pushed to `main`
-
-- Detect React version ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.6 (Tue Oct 31 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.5 (Tue Oct 31 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@babel/traverse` from 7.23.0 to 7.23.2 [#126](https://github.com/haydenbleasel/ultracite/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.4 (Sun Oct 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix typescript-eslint issue ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.3 (Mon Oct 09 2023)
-
-### ⚠️ Pushed to `main`
-
-- Switch from Yarn to pnpm, upgrade workflow ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.2 (Mon Oct 09 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update eslint.config.mjs ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.1 (Mon Oct 09 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update eslint.config.mjs ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v3.0.0 (Mon Oct 09 2023)
-
-### 💥 Breaking Change
-
-- V3 [#125](https://github.com/haydenbleasel/ultracite/pull/125) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### ⚠️ Pushed to `main`
-
-- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create FUNDING.yml ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump postcss from 8.4.24 to 8.4.31 [#124](https://github.com/haydenbleasel/ultracite/pull/124) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.5.3 (Mon Aug 28 2023)
-
-### ⚠️ Pushed to `main`
-
-- Automatically remove unused imports ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.5.2 (Mon Aug 28 2023)
-
-### ⚠️ Pushed to `main`
-
-- Tweak jsx-a11y to support custom associated controls ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.5.1 (Fri Aug 04 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.5.0 (Mon Jul 31 2023)
-
-### 🚀 Enhancement
-
-- Add Storybook [#123](https://github.com/haydenbleasel/ultracite/pull/123) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump word-wrap from 1.2.3 to 1.2.4 in /website [#122](https://github.com/haydenbleasel/ultracite/pull/122) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump semver from 6.3.0 to 6.3.1 in /website [#121](https://github.com/haydenbleasel/ultracite/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump semver from 6.3.0 to 6.3.1 [#120](https://github.com/haydenbleasel/ultracite/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.6 (Sat Jul 08 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix eslint-plugin-prettier issue ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.5 (Sat Jul 08 2023)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump stylelint from 15.8.0 to 15.10.1 [#119](https://github.com/haydenbleasel/ultracite/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 15.8.0 to 15.10.1 in /website [#118](https://github.com/haydenbleasel/ultracite/pull/118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.4 (Sat Jun 24 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix layout bug ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.3 (Sat Jun 24 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix up images and responsive layout ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.2 (Sat Jun 24 2023)
-
-### ⚠️ Pushed to `main`
-
-- Create favicon.ico ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.1 (Fri Jun 23 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix footer issue ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.4.0 (Fri Jun 23 2023)
-
-### 🚀 Enhancement
-
-- Enhance website, general updates [#116](https://github.com/haydenbleasel/ultracite/pull/116) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.3.1 (Fri Jun 09 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix typescript-eslint/prettier issues ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.3.0 (Fri Jun 09 2023)
-
-### 🚀 Enhancement
-
-- Migrate to opt-in config [#115](https://github.com/haydenbleasel/ultracite/pull/115) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.8 (Sat May 06 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.7 (Sun Apr 30 2023)
-
-### ⚠️ Pushed to `main`
-
-- Remove AudioWorkletGlobalScope ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.6 (Sat Apr 29 2023)
-
-### ⚠️ Pushed to `main`
-
-- Attempt to patch AudioWorkletGlobalScope issue ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.5 (Sat Apr 22 2023)
-
-### 🐛 Bug Fix
-
-- Create website [#114](https://github.com/haydenbleasel/ultracite/pull/114) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.4 (Sun Apr 16 2023)
-
-### ⚠️ Pushed to `main`
-
-- Add Typescript import resolver ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.3 (Sat Apr 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Possibly fix import issue ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.2.2 (Sat Apr 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Add TS and TSX to espree ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.1.3 (Sat Apr 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Bump version ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix import-order ([@haydenbleasel](https://github.com/haydenbleasel))
-- Make import ordering stricter ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.1.2 (Sat Apr 15 2023)
-
-### ⚠️ Pushed to `main`
-
-- Re-enable sorted imports ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.12 (Sat Apr 01 2023)
-
-### ⚠️ Pushed to `main`
-
-- Minor bump, improve release file ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.11 (Sat Apr 01 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update push.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Delete dependabot.yaml ([@haydenbleasel](https://github.com/haydenbleasel))
-- Patch AudioWorkletGlobalScope issue ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.50.0 to 5.57.0 [#112](https://github.com/haydenbleasel/ultracite/pull/112) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.2.2 to 0.2.6 [#111](https://github.com/haydenbleasel/ultracite/pull/111) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@next/eslint-plugin-next` from 13.1.6 to 13.2.4 [#110](https://github.com/haydenbleasel/ultracite/pull/110) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.33.0 to 8.37.0 [#109](https://github.com/haydenbleasel/ultracite/pull/109) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.8.3 to 2.8.7 [#108](https://github.com/haydenbleasel/ultracite/pull/108) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump jest from 29.4.1 to 29.5.0 [#105](https://github.com/haydenbleasel/ultracite/pull/105) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-prettier from 9.0.4 to 9.0.5 [#101](https://github.com/haydenbleasel/ultracite/pull/101) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-prettier from 2.0.0 to 3.0.0 [#94](https://github.com/haydenbleasel/ultracite/pull/94) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.10 (Sat Mar 18 2023)
-
-### ⚠️ Pushed to `main`
-
-- Add FAQ ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.9 (Sat Mar 18 2023)
-
-### ⚠️ Pushed to `main`
-
-- Add Cypress support ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.48.1 to 5.50.0 [#88](https://github.com/haydenbleasel/ultracite/pull/88) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump jest from 29.3.1 to 29.4.1 [#86](https://github.com/haydenbleasel/ultracite/pull/86) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.32.0 to 7.32.2 [#87](https://github.com/haydenbleasel/ultracite/pull/87) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-import from 2.27.4 to 2.27.5 [#89](https://github.com/haydenbleasel/ultracite/pull/89) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@next/eslint-plugin-next` from 13.1.2 to 13.1.6 [#90](https://github.com/haydenbleasel/ultracite/pull/90) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.9.4 to 4.9.5 [#91](https://github.com/haydenbleasel/ultracite/pull/91) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.48.1 to 5.50.0 [#92](https://github.com/haydenbleasel/ultracite/pull/92) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.2.1 to 0.2.2 [#93](https://github.com/haydenbleasel/ultracite/pull/93) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.31.0 to 8.33.0 [#85](https://github.com/haydenbleasel/ultracite/pull/85) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.8 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.7 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.6 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Temporarily disable eslint-plugin-import ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.5 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.4 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add import/resolver settings ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.3 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v2.0.2 (Sat Jan 14 2023)
-
-### ⚠️ Pushed to `main`
-
-- Update `package.json` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.10 (Sat Jan 14 2023)
-
-### 🐛 Bug Fix
-
-- V2 [#83](https://github.com/haydenbleasel/ultracite/pull/83) ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### ⚠️ Pushed to `main`
-
-- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-- Ensure package is public ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove tsup, fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump json5 from 1.0.1 to 1.0.2 [#84](https://github.com/haydenbleasel/ultracite/pull/84) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.42.1 to 5.47.1 [#79](https://github.com/haydenbleasel/ultracite/pull/79) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.31.10 to 7.31.11 [#69](https://github.com/haydenbleasel/ultracite/pull/69) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jest from 27.1.5 to 27.2.0 [#73](https://github.com/haydenbleasel/ultracite/pull/73) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.27.0 to 8.31.0 [#74](https://github.com/haydenbleasel/ultracite/pull/74) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.7.1 to 2.8.1 [#75](https://github.com/haydenbleasel/ultracite/pull/75) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@next/eslint-plugin-next` from 13.0.3 to 13.1.1 [#76](https://github.com/haydenbleasel/ultracite/pull/76) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.13 to 0.2.1 [#77](https://github.com/haydenbleasel/ultracite/pull/77) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.14.1 to 14.16.1 [#78](https://github.com/haydenbleasel/ultracite/pull/78) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/parser` from 5.42.1 to 5.47.1 [#80](https://github.com/haydenbleasel/ultracite/pull/80) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-n from 15.5.1 to 15.6.0 [#81](https://github.com/haydenbleasel/ultracite/pull/81) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.8.4 to 4.9.4 [#82](https://github.com/haydenbleasel/ultracite/pull/82) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.9 (Sat Nov 19 2022)
-
-### ⚠️ Pushed to `main`
-
-- Allow finally in promises ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.8 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Remove dumb rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.7 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix n plugin ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.6 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Replace eslint-plugin-node with eslint-plugin-n ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.5 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add ecmaVersion ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.4 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add missing plugin ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.3 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps, disable `promise/no-native` ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.42.0 to 5.42.1 [#60](https://github.com/haydenbleasel/ultracite/pull/60) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-standard from 26.0.0 to 29.0.0 [#61](https://github.com/haydenbleasel/ultracite/pull/61) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.1.2 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add missing jest deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.32 (Fri Nov 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update description, bump minor version ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add eslint-plugin-node ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add eslint-plugin-promise ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix devDeps -> peerDeps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/eslint-plugin` from 5.36.1 to 5.42.1 [#62](https://github.com/haydenbleasel/ultracite/pull/62) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-idiomatic-order from 8.1.0 to 9.0.0 [#45](https://github.com/haydenbleasel/ultracite/pull/45) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.8.2 to 4.8.4 [#46](https://github.com/haydenbleasel/ultracite/pull/46) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint-config-standard from 26.0.0 to 28.0.0 [#50](https://github.com/haydenbleasel/ultracite/pull/50) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jest from 27.0.1 to 27.1.3 [#53](https://github.com/haydenbleasel/ultracite/pull/53) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/parser` from 5.36.1 to 5.42.0 [#55](https://github.com/haydenbleasel/ultracite/pull/55) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.23.0 to 8.26.0 [#56](https://github.com/haydenbleasel/ultracite/pull/56) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@next/eslint-plugin-next` from 12.2.5 to 13.0.1 [#57](https://github.com/haydenbleasel/ultracite/pull/57) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.31.1 to 7.31.10 [#58](https://github.com/haydenbleasel/ultracite/pull/58) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.11.0 to 14.14.0 [#59](https://github.com/haydenbleasel/ultracite/pull/59) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.31 (Sat Oct 01 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.30 (Thu Sep 15 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add jest install to docs ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.29 (Sat Sep 03 2022)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix prefix for jest rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.28 (Sat Sep 03 2022)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix typo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.27 (Sat Sep 03 2022)
-
-### ⚠️ Pushed to `main`
-
-- Bump runner to Node 16 ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add core Jest support ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@next/eslint-plugin-next` from 12.2.3 to 12.2.5 [#36](https://github.com/haydenbleasel/ultracite/pull/36) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.21.0 to 8.23.0 [#37](https://github.com/haydenbleasel/ultracite/pull/37) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/parser` from 5.31.0 to 5.36.1 [#38](https://github.com/haydenbleasel/ultracite/pull/38) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.9.1 to 14.11.0 [#39](https://github.com/haydenbleasel/ultracite/pull/39) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.31.0 to 5.36.1 [#40](https://github.com/haydenbleasel/ultracite/pull/40) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.7.4 to 4.8.2 [#41](https://github.com/haydenbleasel/ultracite/pull/41) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.30.1 to 7.31.1 [#42](https://github.com/haydenbleasel/ultracite/pull/42) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.30.0 to 5.31.0 [#29](https://github.com/haydenbleasel/ultracite/pull/29) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.18.0 to 8.21.0 [#30](https://github.com/haydenbleasel/ultracite/pull/30) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-jsx-a11y from 6.6.0 to 6.6.1 [#31](https://github.com/haydenbleasel/ultracite/pull/31) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@next/eslint-plugin-next` from 12.2.0 to 12.2.3 [#32](https://github.com/haydenbleasel/ultracite/pull/32) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.11 to 0.1.13 [#33](https://github.com/haydenbleasel/ultracite/pull/33) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/parser` from 5.30.0 to 5.31.0 [#34](https://github.com/haydenbleasel/ultracite/pull/34) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.26 (Mon Jul 11 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.25 (Fri Jul 01 2022)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove deprecated (?) rule ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.24 (Fri Jul 01 2022)
-
-### ⚠️ Pushed to `main`
-
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update eslint-next.js ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.23 (Sat Jun 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add react-native plugin dependency ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.22 (Sat Jun 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Attempt to split config into core, Next and Expo ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.21 (Tue Jun 14 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix stylelint extend ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.22.0 to 5.27.0 [#24](https://github.com/haydenbleasel/ultracite/pull/24) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.6.4 to 4.7.2 [#28](https://github.com/haydenbleasel/ultracite/pull/28) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.10 to 0.1.11 [#27](https://github.com/haydenbleasel/ultracite/pull/27) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.15.0 to 8.16.0 [#26](https://github.com/haydenbleasel/ultracite/pull/26) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react from 7.29.4 to 7.30.0 [#25](https://github.com/haydenbleasel/ultracite/pull/25) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.8.2 to 14.8.5 [#23](https://github.com/haydenbleasel/ultracite/pull/23) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.22.0 to 5.27.0 [#22](https://github.com/haydenbleasel/ultracite/pull/22) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.20 (Wed May 25 2022)
-
-### 🐛 Bug Fix
-
-- Allow HTTP header literals to break naming convention [#21](https://github.com/haydenbleasel/ultracite/pull/21) ([@marktheunissen](https://github.com/marktheunissen))
-
-### Authors: 1
-
-- Mark Theunissen ([@marktheunissen](https://github.com/marktheunissen))
-
----
-
-## v1.0.19 (Fri May 20 2022)
-
-### ⚠️ Pushed to `main`
-
-- Merge branch 'main' of https://github.com/haydenbleasel/ultracite ([@haydenbleasel](https://github.com/haydenbleasel))
-- Use `next/core-web-vitals` instead of custom config ([@haydenbleasel](https://github.com/haydenbleasel))
-- Revert "Attempt fixing Next format" ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.18 (Fri May 20 2022)
-
-### ⚠️ Pushed to `main`
-
-- Attempt fixing Next format ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.17 (Fri May 20 2022)
-
-### ⚠️ Pushed to `main`
-
-- Remove extended Next configs, fix duplicate rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.16 (Sun May 08 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix package lockfile ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix new Next rules ([@haydenbleasel](https://github.com/haydenbleasel))
-- Bump deps ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.15 (Sun May 08 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update Next rules ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.19.0 to 5.21.0 [#17](https://github.com/haydenbleasel/ultracite/pull/17) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-import from 2.25.4 to 2.26.0 [#11](https://github.com/haydenbleasel/ultracite/pull/11) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.6.1 to 14.8.1 [#12](https://github.com/haydenbleasel/ultracite/pull/12) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.6.1 to 2.6.2 [#13](https://github.com/haydenbleasel/ultracite/pull/13) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier-plugin-tailwindcss from 0.1.8 to 0.1.10 [#14](https://github.com/haydenbleasel/ultracite/pull/14) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.12.0 to 8.14.0 [#15](https://github.com/haydenbleasel/ultracite/pull/15) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-config-next from 12.1.4 to 12.1.5 [#16](https://github.com/haydenbleasel/ultracite/pull/16) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.17.0 to 5.21.0 [#18](https://github.com/haydenbleasel/ultracite/pull/18) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react-hooks from 4.4.0 to 4.5.0 [#19](https://github.com/haydenbleasel/ultracite/pull/19) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump typescript from 4.6.3 to 4.6.4 [#20](https://github.com/haydenbleasel/ultracite/pull/20) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.14 (Fri Apr 15 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-- Remove React dependency ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### 🔩 Dependency Updates
-
-- Bump `@typescript-eslint/parser` from 5.16.0 to 5.19.0 [#10](https://github.com/haydenbleasel/ultracite/pull/10) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump `@typescript-eslint/eslint-plugin` from 5.16.0 to 5.17.0 [#6](https://github.com/haydenbleasel/ultracite/pull/6) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump stylelint from 14.6.0 to 14.6.1 [#7](https://github.com/haydenbleasel/ultracite/pull/7) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-plugin-react-hooks from 4.3.0 to 4.4.0 [#8](https://github.com/haydenbleasel/ultracite/pull/8) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump prettier from 2.6.0 to 2.6.1 [#2](https://github.com/haydenbleasel/ultracite/pull/2) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint from 8.11.0 to 8.12.0 [#3](https://github.com/haydenbleasel/ultracite/pull/3) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump eslint-config-next from 12.1.0 to 12.1.4 [#9](https://github.com/haydenbleasel/ultracite/pull/9) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-- Bump minimist from 1.2.5 to 1.2.6 [#1](https://github.com/haydenbleasel/ultracite/pull/1) ([@dependabot[bot]](https://github.com/dependabot[bot]))
-
-### Authors: 2
-
-- [@dependabot[bot]](https://github.com/dependabot[bot])
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.13 (Fri Mar 25 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.12 (Fri Mar 25 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add Typescript to peerDeps ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix devDeps, peerDeps, file formatting and installation ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.11 (Fri Mar 25 2022)
-
-### ⚠️ Pushed to `main`
-
-- Move files to root folder ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.10 (Sat Mar 19 2022)
-
-### ⚠️ Pushed to `main`
-
-- Update README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.9 (Sat Mar 19 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix note about ESLint parserOptions ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.8 (Sat Mar 19 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add snake_case support for APIs, disable misused-promises error ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.7 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add publishConfig ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.6 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Add VS Code extensions ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.5 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Swap out package imports for paths for now ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.4 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix export names ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.3 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Remove index file, expose multiple exports ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.2 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Run auto init, generate labels ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
-
----
-
-## v1.0.1 (Fri Mar 18 2022)
-
-### ⚠️ Pushed to `main`
-
-- Fix deploy script ([@haydenbleasel](https://github.com/haydenbleasel))
-- Fix release ([@haydenbleasel](https://github.com/haydenbleasel))
-- Add Dependabot and Release config, update package name ([@haydenbleasel](https://github.com/haydenbleasel))
-- Eat own dogfood ([@haydenbleasel](https://github.com/haydenbleasel))
-- Improve README ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create VSCode settings file ([@haydenbleasel](https://github.com/haydenbleasel))
-- Update description ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create README.md ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create Stylelint configuration ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create Prettier configuration ([@haydenbleasel](https://github.com/haydenbleasel))
-- Create ESLint configuration ([@haydenbleasel](https://github.com/haydenbleasel))
-- Initial commit ([@haydenbleasel](https://github.com/haydenbleasel))
-
-### Authors: 1
-
-- Hayden Bleasel ([@haydenbleasel](https://github.com/haydenbleasel))
+- Fix deploy script
+- Fix release
+- Add Dependabot and Release config, update package name
+- Eat own dogfood
+- Improve README
+- Create VSCode settings file
+- Update description
+- Create README.md
+- Create Stylelint configuration
+- Create Prettier configuration
+- Create ESLint configuration
+- Initial commit
