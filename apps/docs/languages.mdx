@@ -1,0 +1,100 @@
+---
+title: Language Support
+description: Compare language and file-format coverage across Biome, Oxlint, Oxfmt, ESLint, Prettier, and Stylelint to pick the toolchain that fits your project.
+---
+
+Each of the tools Ultracite wraps has a different coverage story. Biome and Oxlint/Oxfmt are Rust-based and lean on what their own parsers natively support. ESLint and Prettier lean heavily on their plugin ecosystems, which means wider coverage but more moving parts. Stylelint is CSS-focused by design.
+
+This page summarises what each tool supports natively today so you can choose a toolchain that fits the languages your project actually uses.
+
+## Legend
+
+| Symbol | Meaning                                               |
+| ------ | ----------------------------------------------------- |
+| ✅     | Full, stable native support                           |
+| 🟡     | Experimental or partial (e.g. `<script>` blocks only) |
+| ⌛     | In progress per official docs                         |
+| 🔌     | Supported via an official or community plugin         |
+| ❌     | Not supported                                         |
+
+## Linting Support
+
+| Language   | Biome | Oxlint     | ESLint | Stylelint |
+| ---------- | ----- | ---------- | ------ | --------- |
+| JavaScript | ✅    | ✅         | ✅     | ❌        |
+| TypeScript | ✅    | ✅         | 🔌     | ❌        |
+| JSX        | ✅    | ✅         | ✅     | ❌        |
+| TSX        | ✅    | ✅         | 🔌     | ❌        |
+| JSON       | ✅    | ❌         | 🔌     | ❌        |
+| JSONC      | ✅    | ❌         | 🔌     | ❌        |
+| CSS        | ✅    | ❌         | 🔌     | ✅        |
+| SCSS       | ❌    | ❌         | ❌     | 🔌        |
+| Sass       | ❌    | ❌         | ❌     | 🔌        |
+| Less       | ❌    | ❌         | ❌     | 🔌        |
+| HTML       | ✅    | ❌         | 🔌     | 🔌        |
+| Vue        | 🟡    | 🟡 scripts | 🔌     | 🔌        |
+| Svelte     | 🟡    | 🟡 scripts | 🔌     | 🔌        |
+| Astro      | 🟡    | 🟡 scripts | 🔌     | 🔌        |
+| GraphQL    | ✅    | ❌         | 🔌     | ❌        |
+| Markdown   | ❌    | ❌         | 🔌     | ❌        |
+| MDX        | ❌    | ❌         | 🔌     | ❌        |
+| YAML       | ❌    | ❌         | 🔌     | ❌        |
+
+## Formatting Support
+
+| Language   | Biome | Oxfmt | Prettier |
+| ---------- | ----- | ----- | -------- |
+| JavaScript | ✅    | ✅    | ✅       |
+| TypeScript | ✅    | ✅    | ✅       |
+| JSX        | ✅    | ✅    | ✅       |
+| TSX        | ✅    | ✅    | ✅       |
+| JSON       | ✅    | ✅    | ✅       |
+| JSONC      | ✅    | ✅    | ✅       |
+| CSS        | ✅    | ✅    | ✅       |
+| SCSS       | ⌛    | ✅    | ✅       |
+| Sass       | ❌    | ❌    | 🔌       |
+| Less       | ❌    | ✅    | ✅       |
+| HTML       | ✅    | ✅    | ✅       |
+| Vue        | 🟡    | ✅    | ✅       |
+| Svelte     | 🟡    | 🟡    | 🔌       |
+| Astro      | 🟡    | 🟡    | 🔌       |
+| GraphQL    | ✅    | ✅    | ✅       |
+| Markdown   | ⌛    | ✅    | ✅       |
+| MDX        | ❌    | ✅    | ✅       |
+| YAML       | ⌛    | ✅    | ✅       |
+
+## Notes
+
+### Biome
+
+Biome is the only tool here that explicitly tracks parse, format, and lint support per language as separate columns. The [official language-support matrix](https://biomejs.dev/internals/language-support/) is the source of truth. Vue, Svelte, and Astro are flagged as experimental and subject to change. SCSS, YAML, and Markdown are listed as in-progress for formatting, with linting not yet started.
+
+### Oxlint
+
+Oxlint is a JavaScript and TypeScript linter — that's it. For framework files (`.vue`, `.svelte`, `.astro`) it lints only the `<script>` block; templates are not parsed. If you need linting for CSS, JSON, YAML, or similar formats, Oxlint is not the right tool and you'll need to pair it with something else.
+
+### Oxfmt
+
+Oxfmt targets Prettier-style formatting breadth and is much wider than Oxlint. Its docs list JavaScript, JSX, TypeScript, TSX, JSON, JSONC, JSON5, YAML, TOML, HTML, Angular, Vue, CSS, SCSS, Less, Markdown, MDX, GraphQL, Ember, and Handlebars as supported. Svelte and Astro currently land in the partial/experimental bucket across the Oxc stack.
+
+### ESLint
+
+Core ESLint only parses JavaScript (and JSX with `ecmaFeatures.jsx`). Everything else — TypeScript, Vue, Svelte, Astro, JSON, YAML, Markdown, HTML, CSS — requires a custom parser or dedicated plugin (`@typescript-eslint`, `eslint-plugin-vue`, `@eslint/json`, `@eslint/markdown`, `@eslint/css`, etc.). That plugin ecosystem is by far the largest of any tool on this page, but it comes with more configuration surface area.
+
+### Prettier
+
+Prettier ships the widest built-in language coverage of any tool here, including Vue and Angular templates natively. Svelte and Astro are the notable exceptions: both are commonly used but rely on community plugins (`prettier-plugin-svelte`, `prettier-plugin-astro`). Indented Sass also requires a plugin.
+
+### Stylelint
+
+Stylelint natively handles CSS. Everything else CSS-adjacent — SCSS, Sass, Less, CSS-in-JS, `<style>` blocks inside HTML or framework files — works through PostCSS custom-syntax plugins (`postcss-scss`, `postcss-less`, `postcss-html`, and so on). It does not lint JavaScript, TypeScript, JSON, or other non-style formats.
+
+## Choosing a toolchain
+
+Three quick rules of thumb:
+
+- If your project is primarily **JavaScript, TypeScript, JSON, CSS, and GraphQL**, Biome gives you the tightest, fastest single-binary experience.
+- If you need the **widest language coverage** or rely on language-specific ecosystem rules (e.g. deep Vue, Svelte, or Astro tooling), ESLint + Prettier + Stylelint is still the most complete option.
+- If **raw lint speed** on a large JS/TS codebase matters most, Oxlint + Oxfmt is the fastest of the three. Pair it with Stylelint if you also need CSS linting.
+
+See the individual provider pages ([Biome](/provider/biome), [ESLint](/provider/eslint), [Oxlint](/provider/oxlint)) for Ultracite-specific setup details.
