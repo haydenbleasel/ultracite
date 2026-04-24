@@ -298,7 +298,7 @@ describe("biome", () => {
       ]);
     });
 
-    test("replaces legacy ultracite/core with ultracite/biome/core", async () => {
+    test("migrates all legacy ultracite/<name> entries to ultracite/biome/<name>", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -310,7 +310,9 @@ describe("biome", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
-          Promise.resolve('{"extends": ["ultracite/core"]}')
+          Promise.resolve(
+            '{"extends": ["ultracite/core", "ultracite/react", "ultracite/type-aware"]}'
+          )
         ),
         writeFile: mockWriteFile,
       }));
@@ -331,8 +333,52 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
-      expect(writtenContent.extends).not.toContain("ultracite/core");
+      expect(writtenContent.extends).toEqual([
+        "ultracite/biome/core",
+        "ultracite/biome/react",
+        "ultracite/biome/type-aware",
+      ]);
+    });
+
+    test("does not remap already-correct ultracite/biome/* entries", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() =>
+          Promise.resolve(
+            '{"extends": ["ultracite/biome/core", "ultracite/biome/react"]}'
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await biome.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent.extends).toEqual([
+        "ultracite/biome/core",
+        "ultracite/biome/react",
+      ]);
     });
 
     test("handles invalid JSON gracefully", async () => {

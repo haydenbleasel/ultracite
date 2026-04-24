@@ -2,4 +2,4 @@
 "ultracite": patch
 ---
 
-Fix `update` command not removing legacy `ultracite/core` extends entry when migrating to `ultracite/biome/core`.
+Fix `update` command not migrating legacy `ultracite/<name>` extends entries to `ultracite/biome/<name>` (e.g. `ultracite/core`, `ultracite/react`, `ultracite/type-aware`, etc.).

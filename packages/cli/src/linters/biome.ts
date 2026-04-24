@@ -64,10 +64,11 @@ export const biome = {
     // Check if ultracite is already in the extends array
     const existingExtends = configToWork.extends ?? [];
 
-    // Remove legacy ultracite/core entry and replace with ultracite/biome/core
-    const newExtends = existingExtends.filter(
-      (ext) => ext !== "ultracite/core"
-    );
+    // Migrate legacy ultracite/<name> entries to ultracite/biome/<name>
+    const newExtends = existingExtends.map((ext) => {
+      const legacyMatch = /^ultracite\/(?!biome\/)(.+)$/.exec(ext);
+      return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
+    });
 
     // Add ultracite/biome/core if not present
     if (!newExtends.includes("ultracite/biome/core")) {
