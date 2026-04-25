@@ -26,13 +26,15 @@
   "scripts": {
     "test": "bun test",
     "test:coverage": "bun test --coverage",
-    "check-types": "tsc --noEmit"
+    "types": "tsgo --noEmit"
   },
   "dependencies": {
     "deepmerge": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/bun": "^1.3.13",
+    "@types/node": "^25.6.0",
     "next": "catalog:"
   },
   "peerDependencies": {

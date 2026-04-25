@@ -1,11 +1,11 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     },
+    "types": ["node", "bun"],
     "strictNullChecks": true,
     "allowImportingTsExtensions": true
   },

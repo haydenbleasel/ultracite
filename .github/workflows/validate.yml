@@ -112,7 +112,7 @@ jobs:
       - name: Check linting and formatting
         run: bun run check
 
-  check-types:
+  types:
     runs-on: ubuntu-latest
 
     steps:
@@ -126,7 +126,7 @@ jobs:
         run: bun install
 
       - name: Check types
-        run: bun run check-types
+        run: bun run types
 
   build-web:
     runs-on: ubuntu-latest
