@@ -11,6 +11,8 @@ const defaultConfig = {
   extends: ["ultracite/biome/core"],
 };
 
+const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/;
+
 const getBiomeConfigPath = (): string => {
   // Check for biome.json first, then fall back to biome.jsonc
   if (exists("./biome.json")) {
@@ -64,7 +66,13 @@ export const biome = {
     // Check if ultracite is already in the extends array
     const existingExtends = configToWork.extends ?? [];
 
-    const newExtends = [...existingExtends];
+    // Migrate legacy ultracite/<name> entries to ultracite/biome/<name>,
+    // deduping in case both legacy and new forms coexist.
+    const remapped = existingExtends.map((ext) => {
+      const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
+      return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
+    });
+    const newExtends = [...new Set(remapped)];
 
     // Add ultracite/biome/core if not present
     if (!newExtends.includes("ultracite/biome/core")) {
