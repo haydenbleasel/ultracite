@@ -55,7 +55,7 @@ const Output = () => (
       <Green>◇</Green> Which editors do you want to configure?
     </Line>
     <Line>
-      <Gray>│</Gray> <Gray>VSCode / Cursor / Windsurf</Gray>
+      <Gray>│</Gray> <Gray>Universal</Gray>
     </Line>
     <Line>
       <Gray>│</Gray>

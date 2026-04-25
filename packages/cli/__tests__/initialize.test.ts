@@ -721,6 +721,53 @@ describe("initialize", () => {
     expect(mockWriteFile).toHaveBeenCalled();
   });
 
+  test("supports --editors universal as a .vscode/settings.json alias", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      writeFile: mockWriteFile,
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: ["universal", "vscode"],
+      frameworks: [],
+      integrations: [],
+      pm: "npm",
+      skipInstall: true,
+    });
+
+    const editorWrites = mockWriteFile.mock.calls.filter(
+      (call) => call[0] === ".vscode/settings.json"
+    );
+
+    expect(editorWrites).toHaveLength(1);
+  });
+
   test("supports --agents universal as an AGENTS.md alias", async () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
