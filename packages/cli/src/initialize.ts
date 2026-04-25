@@ -21,6 +21,8 @@ import packageJson from "../package.json" with { type: "json" };
 import { createAgents, getAgentFileTargets } from "./agents";
 import type { AgentFileTarget } from "./agents";
 import { createEditorConfig } from "./editor-config";
+import { getEditorFileTargets } from "./editors";
+import type { EditorFileTarget } from "./editors";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
@@ -45,10 +47,11 @@ const ultraciteVersion = packageJson.version;
 type Linter = (typeof options.linters)[number];
 type Frameworks = (typeof options.frameworks)[number];
 type AgentSelection = (typeof options.agents)[number] | "universal";
+type EditorSelection = (typeof options.editorConfigs)[number] | "universal";
 
 interface InitializeFlags {
   agents?: AgentSelection[];
-  editors?: (typeof options.editorConfigs)[number][];
+  editors?: EditorSelection[];
   frameworks?: (typeof options.frameworks)[number][];
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
@@ -731,6 +734,14 @@ export const upsertAgentFile = async (
   );
 };
 
+export const upsertEditorFile = async (
+  target: EditorFileTarget,
+  linter: Linter = "biome",
+  quiet = false
+) => {
+  await upsertEditorConfig(target.representativeEditorId, linter, quiet);
+};
+
 export const upsertHooks = async (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
@@ -891,6 +902,12 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let editorConfig = opts.editors;
+    let selectedEditorFiles: EditorFileTarget[] = [];
+    const editorFileTargets = getEditorFileTargets();
+    const universalEditorTarget = editorFileTargets.find(
+      (target) => target.id === "universal"
+    );
+
     if (!editorConfig) {
       if (quiet) {
         // In quiet mode, default to no editor config
@@ -898,10 +915,10 @@ export const initialize = async (flags?: InitializeFlags) => {
       } else {
         const editorConfigResult = await multiselect({
           message: "Which editors do you want to configure (recommended)?",
-          options: [
-            { label: "VSCode / Cursor / Windsurf", value: "vscode" },
-            { label: "Zed", value: "zed" },
-          ],
+          options: editorFileTargets.map((target) => ({
+            label: target.promptLabel,
+            value: target.id,
+          })),
           required: false,
         });
 
@@ -910,8 +927,22 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        editorConfig = editorConfigResult;
+        selectedEditorFiles = editorFileTargets.filter((target) =>
+          (editorConfigResult as EditorFileTarget["id"][]).includes(target.id)
+        );
+        editorConfig = [];
       }
+    } else if (editorConfig.includes("universal") && universalEditorTarget) {
+      selectedEditorFiles = [universalEditorTarget];
+      const coveredEditorIds = new Set(universalEditorTarget.editorIds);
+
+      editorConfig = editorConfig.filter(
+        (
+          editor
+        ): editor is Exclude<EditorSelection, "universal"> &
+          (typeof options.editorConfigs)[number] =>
+          editor !== "universal" && !coveredEditorIds.has(editor)
+      );
     }
 
     let { agents } = opts;
@@ -1048,6 +1079,10 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertOxlintConfig(frameworks, quiet);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
+    }
+
+    for (const target of selectedEditorFiles) {
+      await upsertEditorFile(target, linter, quiet);
     }
 
     for (const editorId of editorConfig ?? []) {

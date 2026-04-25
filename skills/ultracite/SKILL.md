@@ -43,7 +43,7 @@ Replace `bunx` with `npx`, `pnpx`, or `yarn dlx` depending on the package manage
 bunx ultracite init \
   --pm bun \
   --linter biome \
-  --editors vscode cursor \
+  --editors universal \
   --agents claude copilot \
   --frameworks react next \
   --integrations husky lint-staged \
@@ -54,7 +54,7 @@ bunx ultracite init \
 
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun`
 - `--linter` — `biome` (recommended) | `eslint` | `oxlint`
-- `--editors` — `vscode` | `zed` | `cursor` | `windsurf` | `antigravity` | `kiro` | `trae` | `void`
+- `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `zed` | `cursor` | `windsurf` | `antigravity` | `kiro` | `trae` | `void` | `bob` | `codebuddy`
 - `--agents` — `claude` | `codex` | `copilot` | `cline` | `amp` | `gemini` | `cursor-cli` + 19 more
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `angular` | `astro` | `nestjs`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`

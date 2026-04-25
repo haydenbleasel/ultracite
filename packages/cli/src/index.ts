@@ -21,7 +21,10 @@ program
   .description("Initialize Ultracite in the current directory")
   .option("--pm <pm>", "Package manager to use")
   .option("--linter <linter>", "Linter to use")
-  .option("--editors <editors...>", "Editors to configure")
+  .option(
+    "--editors <editors...>",
+    "Editors to configure (use universal for .vscode/settings.json)"
+  )
   .option(
     "--agents <agents...>",
     "Agents to enable (use universal for AGENTS.md)"
