@@ -63,4 +63,5 @@ export const ignorePatterns = [
 
   // ── Framework type definitions ────────────────────────────────────
   "**/next-env.d.ts",
+  "**/worker-configuration.d.ts",
 ];
