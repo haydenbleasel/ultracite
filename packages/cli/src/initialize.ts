@@ -37,7 +37,7 @@ import {
   maybeInstallUltraciteSkill,
 } from "./skill";
 import { tsconfig } from "./tsconfig";
-import { isMonorepo, updatePackageJson } from "./utils";
+import { detectFrameworks, isMonorepo, updatePackageJson } from "./utils";
 
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
@@ -860,7 +860,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       if (hasOtherCliOptions) {
         frameworks = [];
       } else {
+        const detected = await detectFrameworks();
         const frameworksResult = await multiselect({
+          initialValues: detected,
           message: "Which frameworks are you using (optional)?",
           options: [
             { label: "React", value: "react" },

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 
 import {
+  detectFrameworks,
   ensureDirectory,
   exists,
   isMonorepo,
@@ -428,6 +429,166 @@ describe("validateFrameworkName", () => {
     expect(() => validateFrameworkName("react@latest")).toThrow(
       "Invalid framework name"
     );
+  });
+});
+
+describe("detectFrameworks", () => {
+  beforeEach(() => {
+    mock.restore();
+  });
+
+  const mockFs = (
+    files: Record<string, string>,
+    globResults: string[] = []
+  ) => {
+    mock.module("node:fs/promises", () => ({
+      access: mock((path: string) =>
+        path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+      ),
+      readFile: mock((path: string) =>
+        path in files
+          ? Promise.resolve(files[path])
+          : Promise.reject(new Error("ENOENT"))
+      ),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+    mock.module("node:fs", () => ({
+      accessSync: mock((path: string) => {
+        if (!(path in files)) {
+          throw new Error("ENOENT");
+        }
+      }),
+      existsSync: mock((path: string) => path in files),
+      readFileSync: mock((path: string) => {
+        if (path in files) {
+          return files[path];
+        }
+        throw new Error("ENOENT");
+      }),
+    }));
+    mock.module("glob", () => ({
+      glob: mock(() => Promise.resolve(globResults)),
+    }));
+  };
+
+  test("detects frameworks from root package.json deps", async () => {
+    mockFs({
+      "package.json": JSON.stringify({
+        dependencies: { next: "^15.0.0" },
+        devDependencies: { vitest: "^2.0.0" },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["next", "react", "vitest"]));
+  });
+
+  test("expands meta-framework deps to implied frameworks", async () => {
+    mockFs({
+      "package.json": JSON.stringify({
+        dependencies: { "@remix-run/react": "^2.0.0" },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["react", "remix"]));
+  });
+
+  test("handles peerDependencies", async () => {
+    mockFs({
+      "package.json": JSON.stringify({
+        peerDependencies: { svelte: "^5.0.0" },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(result).toEqual(["svelte"]);
+  });
+
+  test("returns empty array when no known framework deps present", async () => {
+    mockFs({
+      "package.json": JSON.stringify({
+        dependencies: { lodash: "^4.0.0" },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(result).toEqual([]);
+  });
+
+  test("returns empty array when package.json is missing", async () => {
+    mockFs({});
+    const result = await detectFrameworks();
+    expect(result).toEqual([]);
+  });
+
+  test("scans workspace package.jsons in npm/yarn/bun monorepos", async () => {
+    mockFs(
+      {
+        "apps/web/package.json": JSON.stringify({
+          dependencies: { next: "^15.0.0" },
+        }),
+        "package.json": JSON.stringify({ workspaces: ["apps/*"] }),
+        "packages/ui/package.json": JSON.stringify({
+          devDependencies: { vitest: "^2.0.0" },
+        }),
+      },
+      ["apps/web/package.json", "packages/ui/package.json"]
+    );
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["next", "react", "vitest"]));
+  });
+
+  test("handles workspaces declared as object form (yarn classic)", async () => {
+    mockFs(
+      {
+        "apps/web/package.json": JSON.stringify({
+          dependencies: { astro: "^4.0.0" },
+        }),
+        "package.json": JSON.stringify({
+          workspaces: { packages: ["apps/*"] },
+        }),
+      },
+      ["apps/web/package.json"]
+    );
+
+    const result = await detectFrameworks();
+    expect(result).toEqual(["astro"]);
+  });
+
+  test("scans workspace package.jsons in pnpm monorepos", async () => {
+    mockFs(
+      {
+        "apps/web/package.json": JSON.stringify({
+          dependencies: { vue: "^3.0.0" },
+        }),
+        "package.json": JSON.stringify({ name: "root" }),
+        "pnpm-workspace.yaml": "packages:\n  - apps/*\n",
+      },
+      ["apps/web/package.json"]
+    );
+
+    const result = await detectFrameworks();
+    expect(result).toEqual(["vue"]);
+  });
+
+  test("deduplicates frameworks across workspaces", async () => {
+    mockFs(
+      {
+        "apps/a/package.json": JSON.stringify({
+          dependencies: { next: "^15.0.0" },
+        }),
+        "apps/b/package.json": JSON.stringify({
+          dependencies: { next: "^15.0.0" },
+        }),
+        "package.json": JSON.stringify({ workspaces: ["apps/*"] }),
+      },
+      ["apps/a/package.json", "apps/b/package.json"]
+    );
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["next", "react"]));
   });
 });
 
