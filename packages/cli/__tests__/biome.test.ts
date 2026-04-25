@@ -381,6 +381,47 @@ describe("biome", () => {
       ]);
     });
 
+    test("dedupes when both legacy and new forms coexist", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() =>
+          Promise.resolve(
+            '{"extends": ["ultracite/core", "ultracite/biome/core", "ultracite/react"]}'
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./biome.jsonc") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await biome.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const writtenContent = JSON.parse(writeCall[1] as string);
+      expect(writtenContent.extends).toEqual([
+        "ultracite/biome/core",
+        "ultracite/biome/react",
+      ]);
+    });
+
     test("handles invalid JSON gracefully", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
