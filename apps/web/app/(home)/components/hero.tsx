@@ -1,12 +1,9 @@
-import { docsUrl } from "@repo/data/consts";
 import Prettier from "@repo/data/logos/prettier.svg";
 import Stylelint from "@repo/data/logos/stylelint.svg";
 import { providers } from "@repo/data/providers";
 import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -62,10 +59,7 @@ export const Hero = ({ description, children }: HeroProps) => (
         {description}
       </p>
       <div className="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row">
-        <Installer command="npx ultracite@latest init" />
-        <Button asChild className="px-4" size="lg" variant="link">
-          <Link href={docsUrl}>Read the docs</Link>
-        </Button>
+        <Installer />
       </div>
     </div>
     {children}

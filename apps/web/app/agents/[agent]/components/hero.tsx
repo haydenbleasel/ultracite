@@ -32,7 +32,7 @@ export const AgentHero = ({ agent }: AgentHeroProps) => (
       </p>
       <Installer
         className="max-w-md"
-        command={`npx ultracite@latest init --agents ${agent.id}`}
+        human={`npx ultracite@latest init --agents ${agent.id}`}
       />
     </div>
   </div>

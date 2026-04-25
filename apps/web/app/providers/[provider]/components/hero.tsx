@@ -44,7 +44,7 @@ export const ProviderHero = ({ provider, content }: ProviderHeroProps) => (
       </p>
       <Installer
         className="max-w-md"
-        command={`npx ultracite@latest init --linter ${provider.id}`}
+        human={`npx ultracite@latest init --linter ${provider.id}`}
       />
     </div>
   </div>

@@ -59,8 +59,8 @@ export const CallToAction = () => {
             Install Ultracite and start shipping code faster in seconds.
           </p>
         </div>
-        <div className="mx-auto w-full max-w-xs">
-          <Installer command="npx ultracite@latest init" />
+        <div className="mx-auto w-full max-w-md">
+          <Installer />
         </div>
       </div>
     </div>
