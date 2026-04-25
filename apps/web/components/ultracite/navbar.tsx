@@ -166,11 +166,16 @@ export const Navbar = ({ agents, editors, providers }: NavbarProps) => {
           </NavigationMenu>
         </div>
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden sm:inline-flex" variant="ghost">
-            <Link href="/updates">Updates</Link>
-          </Button>
+          <div className="flex items-center gap-px">
+            <Button asChild className="hidden sm:inline-flex" variant="ghost">
+              <Link href="/updates">Updates</Link>
+            </Button>
+            <Button asChild className="hidden sm:inline-flex" variant="ghost">
+              <Link href={docsUrl}>Docs</Link>
+            </Button>
+          </div>
           <Button asChild>
-            <Link href={docsUrl}>Read the docs</Link>
+            <Link href="/install">Install</Link>
           </Button>
 
           <Sheet onOpenChange={setOpen} open={open}>
