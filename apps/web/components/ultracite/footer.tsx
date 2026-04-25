@@ -35,6 +35,10 @@ const generalLinks = [
     href: docsUrl,
     label: "Docs",
   },
+  {
+    href: "/updates",
+    label: "Updates",
+  },
 ];
 
 interface FooterProps {
