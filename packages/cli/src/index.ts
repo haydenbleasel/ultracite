@@ -13,7 +13,7 @@ const program = new Command();
 
 program
   .name("ultracite")
-  .version(packageJson.version)
+  .version(packageJson.version, "-v, --version")
   .description(packageJson.description);
 
 program
