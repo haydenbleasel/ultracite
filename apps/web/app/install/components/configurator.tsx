@@ -43,10 +43,12 @@ export interface FrameworkOption {
   name: string;
 }
 
-export interface EditorOption {
+export interface EditorTarget {
   configPath: string;
+  editorNames: string[];
   id: string;
-  logo: StaticImageData;
+  logo: StaticImageData | null;
+  logos?: StaticImageData[];
   name: string;
 }
 
@@ -55,6 +57,7 @@ export interface AgentTarget {
   configPath: string;
   id: string;
   logo: StaticImageData | null;
+  logos?: StaticImageData[];
   name: string;
 }
 
@@ -70,7 +73,7 @@ export interface IntegrationOption {
 
 interface ConfiguratorProps {
   agentTargets: AgentTarget[];
-  editors: EditorOption[];
+  editorTargets: EditorTarget[];
   frameworks: FrameworkOption[];
   hooks: HookOption[];
   integrations: IntegrationOption[];
@@ -116,29 +119,53 @@ const useToggle = <T extends string>(initial: T[] = []) => {
 
 interface LogoTitleProps {
   logo?: StaticImageData | null;
+  logos?: StaticImageData[];
   name: string;
 }
 
-const LogoTitle = ({ logo, name }: LogoTitleProps) => (
-  <FieldTitle>
-    {logo ? (
-      <Image
-        alt=""
-        className="size-5 shrink-0 rounded-sm"
-        height={20}
-        src={logo}
-        width={20}
-      />
-    ) : null}
-    {name}
-  </FieldTitle>
-);
+const LogoTitle = ({ logo, logos, name }: LogoTitleProps) => {
+  if (logos && logos.length > 0) {
+    return (
+      <FieldTitle>
+        <div className="-space-x-1.5 flex shrink-0">
+          {logos.map((image) => (
+            <Image
+              alt=""
+              className="size-5 shrink-0 rounded-sm ring-2 ring-card"
+              height={20}
+              key={image.src}
+              src={image}
+              width={20}
+            />
+          ))}
+        </div>
+        {name}
+      </FieldTitle>
+    );
+  }
+
+  return (
+    <FieldTitle>
+      {logo ? (
+        <Image
+          alt=""
+          className="size-5 shrink-0 rounded-sm"
+          height={20}
+          src={logo}
+          width={20}
+        />
+      ) : null}
+      {name}
+    </FieldTitle>
+  );
+};
 
 interface CheckboxChoiceProps {
   checked: boolean;
   description?: string;
   id: string;
   logo?: StaticImageData | null;
+  logos?: StaticImageData[];
   name: string;
   onCheckedChange: () => void;
 }
@@ -148,13 +175,14 @@ const CheckboxChoice = ({
   description,
   id,
   logo,
+  logos,
   name,
   onCheckedChange,
 }: CheckboxChoiceProps) => (
   <FieldLabel htmlFor={id}>
     <Field orientation="horizontal">
       <FieldContent>
-        <LogoTitle logo={logo} name={name} />
+        <LogoTitle logo={logo} logos={logos} name={name} />
         {description ? (
           <FieldDescription>{description}</FieldDescription>
         ) : null}
@@ -166,7 +194,7 @@ const CheckboxChoice = ({
 
 export const Configurator = ({
   agentTargets,
-  editors,
+  editorTargets,
   frameworks,
   hooks,
   integrations,
@@ -356,13 +384,14 @@ export const Configurator = ({
             the box.
           </FieldDescription>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {editors.map((option) => (
+            {editorTargets.map((option) => (
               <CheckboxChoice
                 checked={selectedEditors.includes(option.id)}
                 description={option.configPath}
                 id={`editor-${option.id}`}
                 key={option.id}
                 logo={option.logo}
+                logos={option.logos}
                 name={option.name}
                 onCheckedChange={() => toggleEditor(option.id)}
               />
@@ -383,6 +412,7 @@ export const Configurator = ({
                 id={`agent-${option.id}`}
                 key={option.id}
                 logo={option.logo}
+                logos={option.logos}
                 name={option.name}
                 onCheckedChange={() => toggleAgent(option.id)}
               />

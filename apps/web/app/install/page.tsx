@@ -12,7 +12,7 @@ import {
 import { Configurator } from "./components/configurator";
 import type {
   AgentTarget,
-  EditorOption,
+  EditorTarget,
   FrameworkOption,
   HookOption,
   IntegrationOption,
@@ -42,15 +42,63 @@ const frameworkOptions: FrameworkOption[] = [
   { id: "vitest", name: "Vitest / Bun" },
 ];
 
-const editorOptions: EditorOption[] = editors.map((editor) => ({
-  configPath: editor.config.path,
-  id: editor.id,
-  logo: editor.logo,
-  name: editor.name,
-}));
+const universalEditorPreviewIds = ["vscode", "cursor", "windsurf"] as const;
+
+const getUniversalEditorLogos = (groupEditors: typeof editors) =>
+  universalEditorPreviewIds.flatMap((id) => {
+    const logo = groupEditors.find((editor) => editor.id === id)?.logo;
+    return logo ? [logo] : [];
+  });
+
+const buildEditorTargets = (): EditorTarget[] => {
+  const grouped = new Map<string, typeof editors>();
+
+  for (const editor of editors) {
+    const list = grouped.get(editor.config.path) ?? [];
+    list.push(editor);
+    grouped.set(editor.config.path, list);
+  }
+
+  const targets: EditorTarget[] = [...grouped.entries()].map(
+    ([path, groupEditors]) => {
+      const [first] = groupEditors;
+      const isUniversal = groupEditors.length > 1;
+      const displayName = isUniversal ? `Universal (${path})` : first.name;
+
+      return {
+        configPath: path,
+        editorNames: groupEditors.map((editor) => editor.name),
+        id: isUniversal ? "universal" : first.id,
+        logo: isUniversal ? null : first.logo,
+        logos: isUniversal ? getUniversalEditorLogos(groupEditors) : undefined,
+        name: displayName,
+      };
+    }
+  );
+
+  return targets.toSorted((left, right) => {
+    if (left.id === "universal") {
+      return -1;
+    }
+    if (right.id === "universal") {
+      return 1;
+    }
+    return left.name.localeCompare(right.name);
+  });
+};
+
+const editorTargets = buildEditorTargets();
 
 const normalizeAgentName = (name: string) =>
   name.replace(/ Code$/, "").replace(/ Agent$/, "");
+
+const universalAgentPreviewIds = ["codex", "copilot", "cursor-cli"] as const;
+
+const getUniversalAgentLogos = (groupAgents: typeof agents) =>
+  universalAgentPreviewIds.flatMap((id) => {
+    const logo = groupAgents.find((agent) => agent.id === id)?.logo;
+    return logo ? [logo] : [];
+  });
 
 const buildAgentTargets = (): AgentTarget[] => {
   const grouped = new Map<string, typeof agents>();
@@ -74,6 +122,7 @@ const buildAgentTargets = (): AgentTarget[] => {
         configPath: path,
         id: isUniversal ? "universal" : first.id,
         logo: isUniversal ? null : first.logo,
+        logos: isUniversal ? getUniversalAgentLogos(groupAgents) : undefined,
         name: displayName,
       };
     }
@@ -126,7 +175,7 @@ const InstallPage = () => (
       <InstallHero description={description} title={title} />
       <Configurator
         agentTargets={agentTargets}
-        editors={editorOptions}
+        editorTargets={editorTargets}
         frameworks={frameworkOptions}
         hooks={hookOptions}
         integrations={integrationOptions}
