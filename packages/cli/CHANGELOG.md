@@ -1,3 +1,13 @@
+## 7.6.2
+
+### Patch Changes
+
+- 5be860c: Automatically detect frameworks during the `init` process.
+- 10d9e95: Support `-v` as a short alias for `--version` on the CLI (previously only `-V` worked).
+- 8ff1b96: Fix `update` command not migrating legacy `ultracite/<name>` extends entries to `ultracite/biome/<name>` (e.g. `ultracite/core`, `ultracite/react`, `ultracite/type-aware`, etc.).
+- 5e055ce: Ignore Cloudflare Workers' generated `worker-configuration.d.ts` (produced by `wrangler types`), matching the existing handling of `next-env.d.ts`.
+- 9cc7416: Add a `universal` editor target that creates `.vscode/settings.json` for every VS Code-based editor (VS Code, Cursor, Windsurf, CodeBuddy, Antigravity, IBM Bob, Kiro, Trae, Void) with a single selection. The `init` prompt now offers a "Universal" option, and `--editors universal` works as an alias on the CLI.
+
 ## 7.6.1
 
 ### Patch Changes
