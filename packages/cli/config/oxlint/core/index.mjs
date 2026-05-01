@@ -489,7 +489,8 @@ export default defineConfig({
     "unicorn/no-useless-switch-case": "error",
     "unicorn/no-useless-undefined": "error",
     "unicorn/no-zero-fractions": "error",
-    "unicorn/number-literal-case": "error",
+    // Disabled due to https://github.com/oxc-project/oxc/issues/21949
+    "unicorn/number-literal-case": "off",
     "unicorn/numeric-separators-style": "error",
     "unicorn/prefer-add-event-listener": "error",
     "unicorn/prefer-array-find": "error",
