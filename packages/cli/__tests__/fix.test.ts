@@ -502,6 +502,51 @@ describe("fix", () => {
     expect(oxlintCall[1]).not.toContain("--unsafe");
   });
 
+  test("oxlint fix still runs oxlint when oxfmt exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+        if (cmd === "oxfmt") {
+          return { status: 1 };
+        }
+        return { status: 0 };
+      }
+    );
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    expect(() => fix([])).toThrow("oxfmt exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const [, oxlintCall] = mockSpawn.mock.calls;
+    expect(oxlintCall[0]).toBe("oxlint");
+  });
+
+  test("eslint fix still runs eslint and stylelint when prettier exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+        if (cmd === "prettier") {
+          return { status: 1 };
+        }
+        return { status: 0 };
+      }
+    );
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    expect(() => fix([])).toThrow("Prettier exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    const [, eslintCall, stylelintCall] = mockSpawn.mock.calls;
+    expect(eslintCall[0]).toBe("eslint");
+    expect(stylelintCall[0]).toBe("stylelint");
+  });
+
   test("keeps bare biome resolution with shell disabled for Windows compatibility", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({

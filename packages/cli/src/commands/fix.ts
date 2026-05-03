@@ -1,4 +1,4 @@
-import { exitOnCommandFailure, runCommandSync } from "../run-command";
+import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
 import { detectLinter } from "../utils";
 
 const runBiomeFix = (files: string[], passthrough: string[]): void => {
@@ -88,14 +88,18 @@ export const fix = (files: string[], passthrough: string[] = []): void => {
 
   switch (linter) {
     case "eslint": {
-      runPrettierFix(files, []);
-      runEslintFix(files, passthrough);
-      runStylelintFix(files, []);
+      runSteps([
+        () => runPrettierFix(files, []),
+        () => runEslintFix(files, passthrough),
+        () => runStylelintFix(files, []),
+      ]);
       break;
     }
     case "oxlint": {
-      runOxfmtFix(files, []);
-      runOxlintFix(files, passthrough);
+      runSteps([
+        () => runOxfmtFix(files, []),
+        () => runOxlintFix(files, passthrough),
+      ]);
       break;
     }
     default: {
