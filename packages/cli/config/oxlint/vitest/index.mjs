@@ -14,6 +14,8 @@ export default defineConfig({
         "vitest/consistent-vitest-vi": "error",
         "vitest/expect-expect": "error",
         "vitest/hoisted-apis-on-top": "error",
+        "vitest/max-expects": "error",
+        "vitest/max-nested-describe": "error",
         "vitest/no-alias-methods": "error",
         "vitest/no-commented-out-tests": "error",
         "vitest/no-conditional-expect": "error",
@@ -86,6 +88,15 @@ export default defineConfig({
 
         // Disabled: too strict for general use — not all async tests need explicit timeouts
         "vitest/require-test-timeout": "off",
+
+        // Disabled: mock factories use conditionals for path-based routing
+        "vitest/no-conditional-in-test": "off",
+
+        // Disabled: bun:test uses beforeEach hooks for mock.restore()
+        "vitest/no-hooks": "off",
+
+        // Disabled: too strict for general use — not all tests need explicit assertion counts
+        "vitest/prefer-expect-assertions": "off",
       },
     },
   ],

@@ -7,6 +7,7 @@ export default defineConfig({
     "react-perf/jsx-no-jsx-as-prop": "off",
     "react-perf/jsx-no-new-array-as-prop": "off",
     "react-perf/jsx-no-new-object-as-prop": "off",
+    "react/forbid-component-props": "off",
     "react/jsx-boolean-value": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-max-depth": "off",

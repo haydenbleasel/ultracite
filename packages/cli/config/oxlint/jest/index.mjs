@@ -66,6 +66,9 @@ export default defineConfig({
         "jest/valid-expect-in-promise": "error",
         "jest/valid-title": "error",
 
+        // Disabled: too strict for general use — not all tests need explicit assertion counts
+        "jest/prefer-expect-assertions": "off",
+
         // Disabled: bun:test mock.module() must be called at top level
         "jest/require-hook": "off",
 

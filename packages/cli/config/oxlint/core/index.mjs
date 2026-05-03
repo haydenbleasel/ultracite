@@ -49,6 +49,7 @@ export default defineConfig({
     "default-param-last": "error",
     eqeqeq: "error",
     "for-direction": "error",
+    "func-name-matching": "error",
     "func-names": "error",
     "func-style": [
       "error",
@@ -160,6 +161,7 @@ export default defineConfig({
     "no-throw-literal": "error",
     "no-unassigned-vars": "error",
     "no-undefined": "off",
+    "no-underscore-dangle": "off",
     "no-unexpected-multiline": "error",
     "no-unmodified-loop-condition": "error",
     "no-unneeded-ternary": "error",
@@ -333,6 +335,7 @@ export default defineConfig({
     "typescript/consistent-type-imports": "error",
     "typescript/dot-notation": "error",
     "typescript/explicit-function-return-type": "off",
+    "typescript/explicit-member-accessibility": "off",
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-array-delete": "error",
     "typescript/no-base-to-string": "error",
