@@ -15,5 +15,6 @@ export default defineConfig({
     "apps/web/hooks/use-mobile.ts",
     "packages/cli/config/biome",
     "test",
+    "**/CHANGELOG.md",
   ],
 });
