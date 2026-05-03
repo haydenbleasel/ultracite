@@ -1,3 +1,21 @@
+## 7.6.3
+
+### Patch Changes
+
+- f584d93: Disable `unicorn/number-literal-case` due to [oxc-project/oxc#21949](https://github.com/oxc-project/oxc/issues/21949).
+- ef5c3ae: Fix `ultracite check` and `ultracite fix` short-circuiting after the formatter step. Previously, when the formatter (oxfmt or Prettier) exited non-zero, the linter (oxlint, ESLint, Stylelint) was never invoked, hiding lint errors until formatting was clean. The commands now run every step, accumulate failures, and exit with the first failing tool's status. Fixes [#690](https://github.com/haydenbleasel/ultracite/issues/690).
+- 3ecb159: Fix the generated `oxfmt.config.ts` template, which used `extends: [ultracite]` — a key oxfmt does not recognize, so the preset was silently dropped and built-in options like `sortImports` never took effect. The template now spreads the preset (`...ultracite`) so its options are actually applied. Fixes [#689](https://github.com/haydenbleasel/ultracite/issues/689).
+- 5a18ec8: Add new oxlint 1.61.0 and 1.62.0 rules:
+
+  - `eslint/func-name-matching` → `"error"` — function names should match the variable they're assigned to; matches the project's strict baseline.
+  - `eslint/no-underscore-dangle` → `"off"` — common patterns like `_id` (Mongo) and `_internal` make this rule too noisy in practice.
+  - `typescript/explicit-member-accessibility` → `"off"` — forcing `public`/`private` on every class member is verbose and not idiomatic in modern TS.
+  - `jest/prefer-expect-assertions` → `"off"` and `vitest/prefer-expect-assertions` → `"off"` — requiring `expect.assertions(n)` in every test is too strict for general use; not all tests need explicit assertion counts.
+  - `vitest/max-expects` → `"error"` and `vitest/max-nested-describe` → `"error"` — newly split out from the jest plugin; mirrors the existing jest config which has both enabled.
+  - `vitest/no-conditional-in-test` → `"off"` — newly split out from jest; disabled to mirror jest config (mock factories use conditionals for path-based routing).
+  - `vitest/no-hooks` → `"off"` — newly split out from jest; disabled to mirror jest config (bun:test uses `beforeEach` for `mock.restore()`).
+  - `react/forbid-component-props` → `"off"` — parity with the ESLint config, which already disables this rule.
+
 ## 7.6.2
 
 ### Patch Changes
