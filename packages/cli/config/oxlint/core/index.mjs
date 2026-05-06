@@ -138,7 +138,7 @@ export default defineConfig({
     "no-obj-calls": "error",
     "no-object-constructor": "error",
     "no-param-reassign": "error",
-    "no-plusplus": "error",
+    "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     "no-promise-executor-return": "error",
     "no-proto": "error",
     "no-prototype-builtins": "error",
