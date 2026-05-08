@@ -206,8 +206,11 @@ export default defineConfig({
       // Should only appear once
       const coreMatches = content.match(
         new RegExp(
-          getOxlintConfigPath("core").replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-          "g"
+          getOxlintConfigPath("core").replaceAll(
+            /[.*+?^${}()|[\]\\]/gu,
+            "\\$&"
+          ),
+          "gu"
         )
       );
       expect(coreMatches?.length).toBe(1);

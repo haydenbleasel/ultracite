@@ -24,8 +24,8 @@ interface FaqSectionProps {
 const getFaqValue = (question: string, index: number) => {
   const value = question
     .toLowerCase()
-    .replaceAll(/[^a-z0-9]+/g, "-")
-    .replaceAll(/(^-|-$)/g, "");
+    .replaceAll(/[^a-z0-9]+/gu, "-")
+    .replaceAll(/(^-|-$)/gu, "");
 
   return value || `faq-${String(index + 1)}`;
 };
@@ -45,7 +45,7 @@ const renderAnswer = (answer: string) => {
   const searchStart = { value: 0 };
 
   return answer
-    .split(/(`[^`]+`)/g)
+    .split(/(`[^`]+`)/gu)
     .filter(Boolean)
     .map((segment) => {
       const key = getSegmentKey(answer, segment, searchStart);

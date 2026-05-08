@@ -11,7 +11,7 @@ const defaultConfig = {
   extends: ["ultracite/biome/core"],
 };
 
-const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/;
+const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/u;
 
 const getBiomeConfigPath = (): string => {
   // Check for biome.json first, then fall back to biome.jsonc

@@ -3,34 +3,35 @@ import { join } from "node:path";
 
 const target = process.argv[2] ?? join("packages", "cli", "CHANGELOG.md");
 
-const protectedPattern = /(`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)|https?:\/\/\S+)/g;
+const protectedPattern = /(`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)|https?:\/\/\S+)/gu;
 
 const transforms: { pattern: RegExp; wrap: (m: string) => string }[] = [
   {
-    pattern: /\b[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)*\(\)/g,
+    pattern: /\b[a-zA-Z_][\w]*(?:\.[a-zA-Z_][\w]*)*\(\)/gu,
     wrap: (m) => `\`${m}\``,
   },
   {
-    pattern: /\{[#:/][a-zA-Z]+\}/g,
-    wrap: (m) => `\`${m}\``,
-  },
-  {
-    pattern:
-      /\b(?:bun\.lock|bun\.lockb|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|biome\.jsonc?|tsconfig\.json|package\.json)\b/g,
+    pattern: /\{[#:/][a-zA-Z]+\}/gu,
     wrap: (m) => `\`${m}\``,
   },
   {
     pattern:
-      /(?<![-@\w])@[a-z][a-z0-9-]*\/[a-z][a-z0-9-]+(?:@[\w.+~-]+)?(?![\w-])/g,
+      /\b(?:bun\.lock|bun\.lockb|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|biome\.jsonc?|tsconfig\.json|package\.json)\b/gu,
     wrap: (m) => `\`${m}\``,
   },
   {
     pattern:
-      /(?<![-@\w/])[a-z][a-z0-9]*\/[a-z][a-z0-9]*(?:-[a-z0-9]+)+(?![\w-/])/g,
+      /(?<![-@\w])@[a-z][a-z0-9-]*\/[a-z][a-z0-9-]+(?:@[\w.+~-]+)?(?![\w-])/gu,
     wrap: (m) => `\`${m}\``,
   },
   {
-    pattern: /\b(?:use|no|prefer|require|valid|consistent)[A-Z][a-zA-Z0-9]+\b/g,
+    pattern:
+      /(?<![-@\w/])[a-z][a-z0-9]*\/[a-z][a-z0-9]*(?:-[a-z0-9]+)+(?![\w/-])/gu,
+    wrap: (m) => `\`${m}\``,
+  },
+  {
+    pattern:
+      /\b(?:use|no|prefer|require|valid|consistent)[A-Z][a-zA-Z0-9]+\b/gu,
     wrap: (m) => `\`${m}\``,
   },
 ];

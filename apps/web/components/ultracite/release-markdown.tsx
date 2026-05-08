@@ -12,7 +12,7 @@ const components: Components = {
       return <span {...props}>{children}</span>;
     }
 
-    const isExternal = /^https?:\/\//.test(href);
+    const isExternal = /^https?:\/\//u.test(href);
     if (isExternal) {
       return (
         <a href={href} rel="noopener" target="_blank" {...props}>

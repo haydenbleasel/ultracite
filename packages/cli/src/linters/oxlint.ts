@@ -66,23 +66,23 @@ export const oxlint = {
 
     // Check for JS imports: import x from "ultracite/oxlint/..."
     const importMatches = existingContents.matchAll(
-      /import \w+ from ["']([^"']+)["']/g
+      /import \w+ from ["']([^"']+)["']/gu
     );
     for (const match of importMatches) {
       if (match[1].startsWith("ultracite/oxlint/")) {
-        existingExtends.push(match[1].replace(/\/index\.[tj]s$/, ""));
+        existingExtends.push(match[1].replace(/\/index\.[tj]s$/u, ""));
       }
     }
 
     // Fallback: check for string extends (legacy format)
     if (existingExtends.length === 0) {
-      const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/);
+      const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/u);
       if (extendsMatch?.[1]) {
-        const matches = extendsMatch[1].matchAll(/"([^"]+)"/g);
+        const matches = extendsMatch[1].matchAll(/"([^"]+)"/gu);
         for (const match of matches) {
           // Convert legacy node_modules paths to new format
           const converted = match[1].replace(
-            /^\.\/node_modules\/ultracite\/config\/oxlint\//,
+            /^\.\/node_modules\/ultracite\/config\/oxlint\//u,
             "ultracite/oxlint/"
           );
           existingExtends.push(converted);

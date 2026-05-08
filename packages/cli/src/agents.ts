@@ -21,7 +21,7 @@ export interface AgentFileTarget {
 }
 
 const normalizeAgentName = (name: string) =>
-  name.replace(/ Code$/, "").replace(/ Agent$/, "");
+  name.replace(/ Code$/u, "").replace(/ Agent$/u, "");
 
 const buildPromptLabel = (path: string, agentNames: string[]) => {
   if (path === "AGENTS.md" && agentNames.length > 1) {

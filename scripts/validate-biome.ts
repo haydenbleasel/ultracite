@@ -5,9 +5,9 @@ const configDir = join(import.meta.dirname, "../packages/cli/config/biome");
 
 const stripJsonComments = (content: string): string =>
   content
-    .replaceAll(/\/\*[\s\S]*?\*\//g, "")
-    .replaceAll(/\/\/.*$/gm, "")
-    .replaceAll(/,(\s*[}\]])/g, "$1");
+    .replaceAll(/\/\*[\s\S]*?\*\//gu, "")
+    .replaceAll(/\/\/.*$/gmu, "")
+    .replaceAll(/,(\s*[}\]])/gu, "$1");
 
 const validateBiomeConfig = async (configPath: string): Promise<boolean> => {
   try {

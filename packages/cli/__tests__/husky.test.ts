@@ -256,7 +256,7 @@ describe("husky", () => {
       // Should contain the "other" line
       expect(written).toContain("other");
       // Should have exactly one ultracite marker
-      const markerCount = (written.match(/# ultracite/g) || []).length;
+      const markerCount = (written.match(/# ultracite/gu) || []).length;
       expect(markerCount).toBe(1);
     });
 

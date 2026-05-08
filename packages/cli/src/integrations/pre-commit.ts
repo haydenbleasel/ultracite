@@ -6,7 +6,7 @@ import type { PackageManagerName } from "nypm";
 import { exists } from "../utils";
 
 const path = "./.pre-commit-config.yaml";
-const REPOS_REGEX = /^repos:\s*\n/m;
+const REPOS_REGEX = /^repos:\s*\n/mu;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, "ultracite", {

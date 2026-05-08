@@ -90,7 +90,7 @@ const buildEditorTargets = (): EditorTarget[] => {
 const editorTargets = buildEditorTargets();
 
 const normalizeAgentName = (name: string) =>
-  name.replace(/ Code$/, "").replace(/ Agent$/, "");
+  name.replace(/ Code$/u, "").replace(/ Agent$/u, "");
 
 const universalAgentPreviewIds = ["codex", "copilot", "cursor-cli"] as const;
 

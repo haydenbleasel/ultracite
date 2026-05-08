@@ -94,7 +94,7 @@ export const ensureDirectory = (path: string): void => {
   }
 };
 
-const SAFE_IDENTIFIER = /^[a-z][a-z0-9-]*$/;
+const SAFE_IDENTIFIER = /^[a-z][a-z0-9-]*$/u;
 
 /**
  * Validates that a framework name is safe to interpolate into generated code.
@@ -214,7 +214,7 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
     if (patterns.length > 0) {
       const pkgJsonPaths = await glob(
         patterns.map(
-          (pattern) => `${pattern.replace(/\/+$/, "")}/package.json`
+          (pattern) => `${pattern.replace(/\/+$/u, "")}/package.json`
         ),
         { absolute: false, ignore: ["**/node_modules/**"] }
       );

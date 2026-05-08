@@ -17,8 +17,8 @@ const changelogPath = join(
 );
 
 const toReleaseId = (title: string): string => {
-  const firstToken = title.split(/\s+/)[0] ?? title;
-  return firstToken.replace(/^v/, "");
+  const firstToken = title.split(/\s+/u)[0] ?? title;
+  return firstToken.replace(/^v/u, "");
 };
 
 let cached: Release[] | undefined;
@@ -29,7 +29,7 @@ export const getReleases = async (): Promise<Release[]> => {
   }
 
   const raw = await readFile(changelogPath, "utf-8");
-  const chunks = raw.split(/^## /m).slice(1);
+  const chunks = raw.split(/^## /mu).slice(1);
   const seen = new Set<string>();
 
   const releases: Release[] = [];
@@ -65,7 +65,7 @@ export interface ReleaseGroup {
 }
 
 const getReleaseMajor = (release: Release): number => {
-  const match = release.id.match(/^(\d+)/);
+  const match = release.id.match(/^(\d+)/u);
   return match ? Number(match[1]) : 0;
 };
 

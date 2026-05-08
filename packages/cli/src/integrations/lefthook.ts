@@ -6,8 +6,8 @@ import type { PackageManager, PackageManagerName } from "nypm";
 
 import { exists, isMonorepo, updatePackageJson } from "../utils";
 
-const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/;
-const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/;
+const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/u;
+const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/u;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, "ultracite", {
