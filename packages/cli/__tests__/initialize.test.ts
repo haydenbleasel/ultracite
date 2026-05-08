@@ -1777,6 +1777,91 @@ describe("helper functions", () => {
         true
       );
     });
+
+    test("does not pass workspace flag to npm in a monorepo", async () => {
+      // Regression: npm's `--workspaces` installs in every workspace package,
+      // so passing it for a root dev-dep install fails with
+      // "No workspaces found!" when patterns match nothing. See issues #214,
+      // #241 and a 2026-05 report against 7.6.4.
+      const calls: { workspace: boolean | string }[] = [];
+      const mockAddDep = mock(
+        (_pkg: string | string[], opts: { workspace: boolean | string }) => {
+          calls.push({ workspace: opts.workspace });
+          return Promise.resolve();
+        }
+      );
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => '{"workspaces": ["packages/*"]}'),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "biome", true);
+
+      expect(mockAddDep).toHaveBeenCalled();
+      expect(calls.every((c) => c.workspace === false)).toBe(true);
+    });
+
+    test("passes workspace flag to pnpm in a monorepo", async () => {
+      const pnpmPm = { command: "pnpm", name: "pnpm" } as PackageManager;
+      const calls: { workspace: boolean | string }[] = [];
+      const mockAddDep = mock(
+        (_pkg: string | string[], opts: { workspace: boolean | string }) => {
+          calls.push({ workspace: opts.workspace });
+          return Promise.resolve();
+        }
+      );
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => '{"workspaces": ["packages/*"]}'),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "pnpm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "pnpm dlx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(pnpmPm, "biome", true);
+
+      expect(mockAddDep).toHaveBeenCalled();
+      expect(calls.some((c) => c.workspace === true)).toBe(true);
+    });
   });
 
   describe("upsertTsConfig", () => {

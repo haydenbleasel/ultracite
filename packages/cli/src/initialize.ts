@@ -231,7 +231,10 @@ export const installDependencies = async (
       corepack: false,
       packageManager,
       silent: true,
-      workspace: isMonorepo(),
+      // npm's `--workspaces` installs in every workspace package — for a root
+      // dev dependency we want the default (no flag), so the npm root install
+      // doesn't fail with "No workspaces found!" when patterns match nothing.
+      workspace: isMonorepo() && packageManager.name !== "npm",
     });
     // Add ultracite scripts to package.json
     await updatePackageJson({ scripts });

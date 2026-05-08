@@ -44,7 +44,9 @@ export const lefthook = {
       corepack: false,
       packageManager,
       silent: true,
-      workspace: isMonorepo(),
+      // npm's `--workspaces` installs in every workspace package; we want a
+      // root install, which is the default when no flag is passed.
+      workspace: isMonorepo() && packageManager.name !== "npm",
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized
