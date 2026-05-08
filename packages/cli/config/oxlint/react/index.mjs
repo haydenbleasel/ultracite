@@ -3,6 +3,7 @@ import { defineConfig } from "oxlint";
 export default defineConfig({
   plugins: ["react", "react-perf", "jsx-a11y"],
   rules: {
+    "jsx-a11y/interactive-supports-focus": "error",
     "jsx-a11y/no-autofocus": "off",
     "react-perf/jsx-no-jsx-as-prop": "off",
     "react-perf/jsx-no-new-array-as-prop": "off",

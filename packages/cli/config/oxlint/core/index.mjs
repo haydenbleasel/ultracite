@@ -62,6 +62,7 @@ export default defineConfig({
     "guard-for-in": "error",
     "id-length": "off",
     "init-declarations": "off",
+    "logical-assignment-operators": "error",
     "max-classes-per-file": "error",
     "max-depth": "off",
     "max-lines": "off",
@@ -146,6 +147,8 @@ export default defineConfig({
     "no-regex-spaces": "error",
     "no-restricted-globals": "error",
     "no-restricted-imports": "error",
+    // Disabled: requires project-specific configuration to be useful
+    "no-restricted-properties": "off",
     "no-return-assign": "error",
     "no-script-url": "error",
     "no-self-assign": "error",
@@ -202,6 +205,7 @@ export default defineConfig({
     "preserve-caught-error": "error",
     radix: "error",
     "require-await": "error",
+    "require-unicode-regexp": "error",
     "require-yield": "error",
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
@@ -465,6 +469,7 @@ export default defineConfig({
     "unicorn/no-length-as-slice-end": "error",
     "unicorn/no-lonely-if": "error",
     "unicorn/no-magic-array-flat-depth": "error",
+    "unicorn/no-negated-condition": "error",
     "unicorn/no-negation-in-equality-check": "error",
     "unicorn/no-nested-ternary": "error",
     "unicorn/no-new-array": "error",
