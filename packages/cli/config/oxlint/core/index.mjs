@@ -422,7 +422,7 @@ export default defineConfig({
     "typescript/require-await": "off",
     "typescript/restrict-plus-operands": "error",
     "typescript/restrict-template-expressions": "error",
-    "typescript/return-await": "error",
+    "typescript/return-await": ["error", "always"],
     "typescript/strict-boolean-expressions": "error",
     "typescript/strict-void-return": "error",
     "typescript/switch-exhaustiveness-check": "error",
