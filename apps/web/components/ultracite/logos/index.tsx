@@ -5,13 +5,13 @@ import AlanTuringInstitute from "./ati.svg";
 import AugmentCode from "./augment.svg";
 import Axiom from "./axiom.svg";
 import Clerk from "./clerk.svg";
-import Consent from "./consent.svg";
 import ElevenLabs from "./elevenlabs.svg";
 import FrenchGovernment from "./french-government.svg";
 import Mintlify from "./mintlify.svg";
 import Moonshot from "./moonshot.svg";
 import OpenAI from "./openai.svg";
 import Posthog from "./posthog.svg";
+import Prisma from "./prisma.svg";
 import Profound from "./profound.svg";
 import Raycast from "./raycast.svg";
 import Resend from "./resend.svg";
@@ -47,8 +47,8 @@ const logos = [
     src: AlanTuringInstitute,
   },
   {
-    name: "Consent",
-    src: Consent,
+    name: "Prisma",
+    src: Prisma,
   },
   {
     name: "VA",
