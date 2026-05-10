@@ -8,9 +8,7 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`react-hooks/${key}`, "error"])
 );
 
-const overrideRules = {
-  "react-hooks/exhaustive-deps": "error",
-};
+const overrideRules = {};
 
 const config = Object.assign(baseRules, overrideRules);
 
