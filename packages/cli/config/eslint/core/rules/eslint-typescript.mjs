@@ -1,5 +1,7 @@
 const config = {
-  // ESLint Disabled for Typescript-ESLint
+  // ESLint core rules disabled because either:
+  //  - @typescript-eslint provides a type-aware equivalent (no-shadow, no-unused-vars, etc.), OR
+  //  - Prettier/Oxfmt owns formatting (brace-style, indent, semi, quotes, etc.)
   "brace-style": "off",
   camelcase: "off",
   "comma-dangle": "off",
