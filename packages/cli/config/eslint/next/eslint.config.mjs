@@ -14,6 +14,12 @@ const config = [
       ...nextRules,
     },
   },
+  {
+    files: ["**/next-env.d.ts"],
+    rules: {
+      "import-x/no-unassigned-import": "off",
+    },
+  },
 ];
 
 export default config;

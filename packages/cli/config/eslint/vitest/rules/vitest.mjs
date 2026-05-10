@@ -15,7 +15,7 @@ const overrideRules = {
   "vitest/no-conditional-in-test": "off",
   "vitest/no-hooks": "off",
 
-  // Project-specific — depends on vitest globals config
+  // Explicit imports are preferred over globals
   "vitest/no-importing-vitest-globals": "off",
 
   // Conflicts with prefer-called-once (the original #604 issue)
@@ -23,19 +23,21 @@ const overrideRules = {
 
   // Too strict for general use
   "vitest/prefer-expect-assertions": "off",
-  "vitest/prefer-importing-vitest-globals": "off",
+
+  // Conflicts with prefer-describe-function-title — function names aren't lowercase strings
+  "vitest/prefer-lowercase-title": "off",
 
   // Conflicts with prefer-to-be-truthy and prefer-to-be-falsy (#645)
   // prefer-strict-boolean-matchers: use toBe(true)/toBe(false)
   // prefer-to-be-truthy/falsy: use toBeTruthy()/toBeFalsy()
   "vitest/prefer-strict-boolean-matchers": "off",
 
-  // Too strict for general use
-  "vitest/prefer-to-have-been-called-times": "off",
-
   // Too strict — matching oxlint jest disabled rules
   "vitest/require-hook": "off",
   "vitest/require-test-timeout": "off",
+
+  // Conflicts with prefer-describe-function-title — function refs aren't string titles (#665)
+  "vitest/valid-title": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

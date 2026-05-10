@@ -25,12 +25,9 @@ const overrideRules = {
       selector: "objectLiteralProperty",
     },
   ],
-  "@typescript-eslint/no-confusing-void-expression": "off",
   "@typescript-eslint/no-magic-numbers": "off",
-  "@typescript-eslint/no-misused-promises": "off",
-  "@typescript-eslint/prefer-readonly": "off",
   "@typescript-eslint/prefer-readonly-parameter-types": "off",
-  "@typescript-eslint/strict-boolean-expressions": "off",
+  "@typescript-eslint/return-await": ["error", "always"],
 };
 
 const config = Object.assign(baseRules, overrideRules);

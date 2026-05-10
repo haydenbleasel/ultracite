@@ -14,6 +14,13 @@ const config = [
       ...remixRules,
     },
   },
+  {
+    files: ["**/routeTree.gen.ts"],
+    rules: {
+      "unicorn/filename-case": "off",
+      "unicorn/no-abusive-eslint-disable": "off",
+    },
+  },
 ];
 
 export default config;

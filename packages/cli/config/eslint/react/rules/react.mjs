@@ -18,6 +18,7 @@ const overrideRules = {
       namedComponents: "arrow-function",
     },
   ],
+  "react/jsx-boolean-value": "off",
   "react/jsx-filename-extension": [
     "error",
     {
@@ -36,7 +37,9 @@ const overrideRules = {
   "react/no-arrow-function-lifecycle": "off",
   "react/no-invalid-html-attribute": "off",
   "react/no-multi-comp": "off",
+  "react/no-unknown-property": "off",
   "react/no-unused-class-component-methods": "off",
+  "react/only-export-components": "off",
   "react/react-in-jsx-scope": "off",
   "react/require-default-props": "off",
 };

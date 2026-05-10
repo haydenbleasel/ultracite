@@ -7,7 +7,10 @@ import jestRules from "./rules/jest.mjs";
 
 const config = [
   {
-    files: ["**/*.test.{js,ts,jsx,tsx}", "tests/**/*.{js,ts,jsx,tsx}"],
+    files: [
+      "**/*.{test,spec}.{ts,tsx,js,jsx}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+    ],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -18,6 +21,10 @@ const config = [
     },
     rules: {
       ...jestRules,
+      // Mock callbacks often need empty functions
+      "no-empty-function": "off",
+      // Mock factories use Promise.resolve/reject (conflicts with require-await)
+      "promise/prefer-await-to-then": "off",
     },
   },
 ];

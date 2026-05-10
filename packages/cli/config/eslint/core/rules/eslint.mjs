@@ -5,7 +5,6 @@ const baseRules = { ...plugin.configs.all.rules };
 
 const overrideRules = {
   "capitalized-comments": "off",
-  complexity: "off",
   "id-length": ["error", { exceptions: ["x", "y", "z"] }],
   "max-lines": "off",
   "max-lines-per-function": "off",
@@ -13,19 +12,9 @@ const overrideRules = {
   "max-statements": "off",
   "no-ternary": "off",
   "no-undefined": "off",
-  "no-unused-private-class-members": "off",
   "one-var": "off",
-  "prefer-destructuring": [
-    "error",
-    {
-      array: false,
-      object: true,
-    },
-  ],
   // https://github.com/eslint/eslint/issues/11542
   "sort-imports": "off",
-  "sort-keys": "off",
-  "sort-vars": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);
