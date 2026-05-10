@@ -1,3 +1,39 @@
+## 7.7.0
+
+### Minor Changes
+
+- 24b0d27: Wire up the `nestjs` ESLint preset to actually enforce rules. Previously the preset exported an empty `const config = []`, meaning users who imported `ultracite/eslint/nestjs` got nothing. It now layers `@darraghor/eslint-plugin-nestjs-typed` (22 rules covering NestJS conventions, dependency injection correctness, and class-validator/Swagger usage) using the same dynamic-enable pattern as the other framework presets.
+
+  Consumers who already had the empty preset in their config may see new violations on first run.
+
+### Patch Changes
+
+- 161418a: Add missing Biome stable rules to the core config:
+
+  - `suspicious/noDuplicateDependencies` → `"error"` — flags a dependency listed multiple times in the same group, or across `dependencies` and `devDependencies`, in `package.json`.
+  - `suspicious/useDeprecatedDate` → `"off"` — GraphQL-only convention requiring a `deletionDate` argument on `@deprecated`; too opinionated for the default preset.
+
+- 9a2b548: Pin `@angular-eslint/eslint-plugin` to `^21.3.1` in `packages/cli/package.json`. Previously declared as `"latest"`, which defeats lockfile reproducibility and means each `bun install` could pull a newer version than what was tested at publish time. The current resolved version (21.3.1) is unchanged.
+- 44f6d7f: Align ESLint presets with the oxlint configs (the maintained source of truth). Mostly tightens ESLint where oxlint was stricter; a few documented behavioural exceptions oxlint carries (rule conflicts, bun:test compat) are mirrored back.
+
+  **core** — `eslint.mjs` now enforces `complexity`, `no-unused-private-class-members`, `sort-keys`, `sort-vars`, and full `prefer-destructuring` (object + array). `typescript.mjs` now enforces `no-confusing-void-expression`, `no-misused-promises`, `prefer-readonly`, `strict-boolean-expressions`, and sets `return-await: ["error", "always"]`. `import.mjs` now sets `consistent-type-specifier-style: ["error", "prefer-top-level"]`.
+
+  **next** — added `next-env.d.ts` override that disables `import-x/no-unassigned-import` on the generated file.
+
+  **remix** — added `routeTree.gen.ts` override that disables `unicorn/filename-case` and `unicorn/no-abusive-eslint-disable` on the generated file.
+
+  **react** — disabled `react/jsx-boolean-value`, `react/no-unknown-property`, and `react/only-export-components` to match oxlint.
+
+  **jest** — broadened test globs to `**/*.{test,spec}.{ts,tsx,js,jsx}` + `**/__tests__/**/*.{ts,tsx,js,jsx}` (previously missed `*.spec.*` and `__tests__/`). Disabled `no-empty-function` and `promise/prefer-await-to-then` in test scope. Disabled `jest/require-hook`, `jest/no-conditional-in-test`, `jest/no-hooks`, `jest/prefer-expect-assertions` to mirror oxlint's bun:test/mocking accommodations.
+
+  **vitest** — same test-glob broadening; same `no-empty-function` / `promise/prefer-await-to-then` test-scope disables. Removed the `prefer-importing-vitest-globals` and `prefer-to-have-been-called-times` disables (oxlint enforces these). Added `prefer-lowercase-title: off` and `valid-title: off` to resolve the documented conflict with `prefer-describe-function-title` (#665).
+
+- 63f6a18: Drop the redundant `react-hooks/exhaustive-deps: "error"` override in `config/eslint/react/rules/react-hooks.mjs`. The dynamic-enable pattern already sets every non-deprecated `react-hooks/*` rule to `"error"`, so the override was dead code. No behavior change.
+- 5a0ce67: Refresh the misleading header comment in `config/eslint/core/rules/eslint-typescript.mjs`. The disables for the formatting rules (`brace-style`, `comma-dangle`, `indent`, etc.) used to defer to `@typescript-eslint`'s typed equivalents, but those rules were removed in v8. They're now disabled because Prettier/Oxfmt owns formatting. Updated the comment to reflect the actual rationale.
+- d681f70: Clean up `config/eslint/core/rules/typescript.mjs`: remove 22 stale overrides that referenced rules no longer present in `@typescript-eslint/eslint-plugin` v8.
+
+  Most were formatting rules moved out to `@stylistic` (`block-spacing`, `brace-style`, `comma-dangle`, `comma-spacing`, `func-call-spacing`, `indent`, `key-spacing`, `keyword-spacing`, `lines-around-comment`, `lines-between-class-members`, `member-delimiter-style`, `no-extra-parens`, `object-curly-spacing`, `padding-line-between-statements`, `quotes`, `semi`, `space-before-blocks`, `space-before-function-paren`, `space-infix-ops`, `type-annotation-spacing`). The remaining two (`no-type-alias`, `sort-type-union-intersection-members`) were removed/deprecated upstream. All were dead no-ops — no behavior change.
+
 ## 7.6.5
 
 ### Patch Changes
