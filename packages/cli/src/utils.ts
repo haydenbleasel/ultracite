@@ -112,7 +112,12 @@ export const validateFrameworkName = (name: string): string => {
 export type Linter = "biome" | "eslint" | "oxlint";
 
 // Config file names for each linter
-const biomeConfigNames = ["biome.json", "biome.jsonc"] as const;
+const biomeConfigNames = [
+  "biome.json",
+  "biome.jsonc",
+  ".biome.json",
+  ".biome.jsonc",
+] as const;
 
 const eslintConfigNames = [
   "eslint.config.mjs",

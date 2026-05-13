@@ -250,6 +250,9 @@ group("doctor", () => {
       mock.module("cross-spawn", () => ({
         sync: () => ({ status: 0, stderr: "", stdout: "1.0.0\n" }),
       }));
+      mock.module("../src/utils", () => ({
+        detectLinter: () => "biome",
+      }));
       mock.module("@clack/prompts", () => ({
         intro: noop,
         log: {

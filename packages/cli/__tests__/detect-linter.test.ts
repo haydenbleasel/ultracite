@@ -18,7 +18,12 @@ const realExists = async (path: string) => {
   }
 };
 
-const biomeConfigNames = ["biome.json", "biome.jsonc"];
+const biomeConfigNames = [
+  "biome.json",
+  "biome.jsonc",
+  ".biome.json",
+  ".biome.jsonc",
+];
 const eslintConfigNames = [
   "eslint.config.mjs",
   "eslint.config.js",
@@ -68,6 +73,19 @@ const cwd = process.cwd();
 describe("detectLinter", () => {
   test("returns biome when biome.json exists in cwd", async () => {
     const targetPath = join(cwd, "biome.json");
+    mockAccess = mock((path: string) => {
+      if (path === targetPath) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("ENOENT"));
+    });
+
+    const result = await realDetectLinter();
+    expect(result).toBe("biome");
+  });
+
+  test("returns biome when .biome.jsonc exists in cwd", async () => {
+    const targetPath = join(cwd, ".biome.jsonc");
     mockAccess = mock((path: string) => {
       if (path === targetPath) {
         return Promise.resolve();

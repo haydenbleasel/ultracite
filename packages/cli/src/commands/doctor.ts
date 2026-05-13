@@ -47,19 +47,29 @@ const checkToolInstallation = (
 // ---------------------------------------------------------------------------
 
 const checkBiomeConfig = (): DiagnosticCheck => {
-  const biomeConfigPath = join(process.cwd(), "biome.json");
-  const biomeJsoncPath = join(process.cwd(), "biome.jsonc");
+  // Biome supports configuration files, in the following order
+  const biomeConfigFiles = [
+    "biome.json",
+    "biome.jsonc",
+    ".biome.json",
+    ".biome.jsonc",
+  ];
 
   let configPath: string | null = null;
-  if (existsSync(biomeConfigPath)) {
-    configPath = biomeConfigPath;
-  } else if (existsSync(biomeJsoncPath)) {
-    configPath = biomeJsoncPath;
+  let biomeConfigFile: string | null = null;
+
+  for (const fileName of biomeConfigFiles) {
+    const fullPath = join(process.cwd(), fileName);
+    if (existsSync(fullPath)) {
+      configPath = fullPath;
+      biomeConfigFile = fileName;
+      break;
+    }
   }
 
   if (!configPath) {
     return {
-      message: "No biome.json or biome.jsonc file found",
+      message: `No Biome config file found (expected one of: ${biomeConfigFiles.join(", ")})`,
       name: "Biome configuration",
       status: "fail",
     };
@@ -74,20 +84,20 @@ const checkBiomeConfig = (): DiagnosticCheck => {
       config.extends.includes("ultracite/biome/core")
     ) {
       return {
-        message: "biome.json(c) extends ultracite/biome/core",
+        message: `${biomeConfigFile} extends ultracite/biome/core`,
         name: "Biome configuration",
         status: "pass",
       };
     }
 
     return {
-      message: "biome.json(c) exists but doesn't extend ultracite/biome/core",
+      message: `${biomeConfigFile} exists but doesn't extend ultracite/biome/core`,
       name: "Biome configuration",
       status: "warn",
     };
   } catch {
     return {
-      message: "Could not parse biome.json(c) file",
+      message: `Could not parse ${biomeConfigFile} file`,
       name: "Biome configuration",
       status: "fail",
     };

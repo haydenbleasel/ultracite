@@ -14,10 +14,19 @@ const defaultConfig = {
 const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/u;
 
 const getBiomeConfigPath = (): string => {
-  // Check for biome.json first, then fall back to biome.jsonc
-  if (exists("./biome.json")) {
-    return "./biome.json";
+  // Check for Biome supported configuration files, in the following order
+  const biomeConfigFiles = [
+    "biome.json",
+    "biome.jsonc",
+    ".biome.json",
+    ".biome.jsonc",
+  ];
+  for (const file of biomeConfigFiles) {
+    if (exists(`./${file}`)) {
+      return `./${file}`;
+    }
   }
+  // Default to biome.jsonc if none found
   return "./biome.jsonc";
 };
 
