@@ -34,10 +34,10 @@ import { ignorePatterns } from "ultracite/oxlint/ignores";
 ${imports}
 
 export default defineConfig({
-  ignorePatterns,
   extends: [
 ${identifiers}
   ],
+  ignorePatterns,
 });
 `;
 };
