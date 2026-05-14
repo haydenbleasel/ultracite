@@ -69,6 +69,10 @@ describe("oxlint linter", () => {
       expect(writeCall[0]).toBe("./oxlint.config.ts");
       const content = writeCall[1] as string;
       expect(content).toContain('import { defineConfig } from "oxlint"');
+      expect(content).toContain(
+        'import { ignorePatterns } from "ultracite/oxlint/ignores"'
+      );
+      expect(content).toContain("ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
     });
 

@@ -17,6 +17,9 @@ declare const config: OxlintConfig;
 export default config;
 `;
 
+const oxlintIgnoresDeclaration = `export declare const ignorePatterns: string[];
+`;
+
 const oxfmtDeclaration = `import type { OxfmtConfig } from "oxfmt";
 
 declare const config: OxfmtConfig;
@@ -33,7 +36,10 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
 for (const config of configs) {
   const dir = join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.d.mts"), oxlintDeclaration);
+  writeFileSync(
+    join(dir, "index.d.mts"),
+    config === "ignores" ? oxlintIgnoresDeclaration : oxlintDeclaration
+  );
 }
 
 // Generate oxfmt declaration
