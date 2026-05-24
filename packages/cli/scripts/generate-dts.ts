@@ -17,9 +17,6 @@ declare const config: OxlintConfig;
 export default config;
 `;
 
-const oxlintIgnoresDeclaration = `export declare const ignorePatterns: string[];
-`;
-
 const oxfmtDeclaration = `import type { OxfmtConfig } from "oxfmt";
 
 declare const config: OxfmtConfig;
@@ -36,10 +33,7 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
 for (const config of configs) {
   const dir = join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(
-    join(dir, "index.d.mts"),
-    config === "ignores" ? oxlintIgnoresDeclaration : oxlintDeclaration
-  );
+  writeFileSync(join(dir, "index.d.mts"), oxlintDeclaration);
 }
 
 // Generate oxfmt declaration
@@ -64,5 +58,5 @@ const biomeCoreEdits = modify(
 writeFileSync(biomeCorePath, applyEdits(biomeCoreSource, biomeCoreEdits));
 
 console.log(
-  `Generated declaration files for ${String(configs.length)} oxlint configs and oxfmt, and synced biome/core includes`
+  `Generated declaration files for ${String(configs.length)} oxlint presets, oxfmt, and synced biome/core includes`
 );

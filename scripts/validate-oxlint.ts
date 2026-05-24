@@ -28,12 +28,6 @@ const main = async () => {
       continue;
     }
 
-    // `ignores` is not a preset — it re-exports shared ignore patterns
-    if (framework === "ignores") {
-      console.log(`- oxlint/${framework} (skipped, not a preset)`);
-      continue;
-    }
-
     const configPath = join(configDir, framework, "index.mjs");
     const valid = await validateOxlintConfig(configPath);
 

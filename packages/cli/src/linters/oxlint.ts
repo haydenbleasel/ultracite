@@ -29,7 +29,7 @@ const generateConfigContent = (extendsList: string[]) => {
     .join("\n");
 
   return `import { defineConfig } from "oxlint";
-import { ignorePatterns } from "ultracite/oxlint/ignores";
+import { ignorePatterns } from "ultracite/ignores";
 
 ${imports}
 
