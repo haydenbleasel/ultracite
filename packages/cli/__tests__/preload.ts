@@ -130,6 +130,7 @@ export default defineConfig({
   extends: [
     ${presets.join(",\n    ")}
   ],
+  ignorePatterns: core.ignorePatterns,
 });`,
           lang: "typescript",
           name: "oxlint.config.ts",
