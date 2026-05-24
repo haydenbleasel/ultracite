@@ -65,6 +65,34 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
+  test("passes when biome is configured via a .biome.jsonc dotfile", () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+
+    mock.module("../src/utils", () => ({
+      detectLinter: () => "biome",
+    }));
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    }));
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((path: string) => {
+        const p = String(path);
+        return p.endsWith(".biome.jsonc") || p.endsWith("package.json");
+      }),
+      readFileSync: mock((path: string) => {
+        const p = String(path);
+        if (p.endsWith(".biome.jsonc")) {
+          return '{"extends": ["ultracite/biome/core"]}';
+        }
+        return '{"devDependencies": {"ultracite": "1.0.0"}}';
+      }),
+    }));
+
+    doctor();
+    consoleLogSpy.mockRestore();
+  });
+
   test("fails when biome is not installed", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",

@@ -250,6 +250,10 @@ group("doctor", () => {
       mock.module("cross-spawn", () => ({
         sync: () => ({ status: 0, stderr: "", stdout: "1.0.0\n" }),
       }));
+      // detectLinter walks up the directory tree calling exists() at every
+      // ancestor, so its cost is filesystem- and machine-dependent. Stub it so
+      // this bench measures the doctor logic deterministically. doctor.ts only
+      // consumes detectLinter from ../utils, so replacing the module is safe.
       mock.module("../src/utils", () => ({
         detectLinter: () => "biome",
       }));

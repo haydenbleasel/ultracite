@@ -8,7 +8,7 @@ import { parse } from "jsonc-parser";
 import packageJson from "../../package.json" with { type: "json" };
 import { runCommandSync } from "../run-command";
 import { readPackageJsonSync } from "../schemas";
-import { detectLinter } from "../utils";
+import { biomeConfigNames, detectLinter } from "../utils";
 import type { Linter } from "../utils";
 
 interface DiagnosticCheck {
@@ -47,18 +47,10 @@ const checkToolInstallation = (
 // ---------------------------------------------------------------------------
 
 const checkBiomeConfig = (): DiagnosticCheck => {
-  // Biome supports configuration files, in the following order
-  const biomeConfigFiles = [
-    "biome.json",
-    "biome.jsonc",
-    ".biome.json",
-    ".biome.jsonc",
-  ];
-
   let configPath: string | null = null;
   let biomeConfigFile: string | null = null;
 
-  for (const fileName of biomeConfigFiles) {
+  for (const fileName of biomeConfigNames) {
     const fullPath = join(process.cwd(), fileName);
     if (existsSync(fullPath)) {
       configPath = fullPath;
@@ -69,7 +61,7 @@ const checkBiomeConfig = (): DiagnosticCheck => {
 
   if (!configPath) {
     return {
-      message: `No Biome config file found (expected one of: ${biomeConfigFiles.join(", ")})`,
+      message: `No Biome config file found (expected one of: ${biomeConfigNames.join(", ")})`,
       name: "Biome configuration",
       status: "fail",
     };
