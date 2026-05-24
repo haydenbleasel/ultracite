@@ -69,10 +69,7 @@ describe("oxlint linter", () => {
       expect(writeCall[0]).toBe("./oxlint.config.ts");
       const content = writeCall[1] as string;
       expect(content).toContain('import { defineConfig } from "oxlint"');
-      expect(content).toContain(
-        'import { ignorePatterns } from "ultracite/ignores"'
-      );
-      expect(content).toContain("ignorePatterns,");
+      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
     });
 
@@ -388,18 +385,15 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const content = writeCall[1] as string;
-      expect(content).toContain(
-        'import { ignorePatterns } from "ultracite/ignores"'
-      );
-      expect(content).toContain("ignorePatterns,");
+      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
     });
 
-    test("replaces old ultracite/oxlint/ignores import with new path", async () => {
+    test("drops legacy ignorePatterns import when migrating", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
       const existingConfig = `import { defineConfig } from "oxlint";
-import { ignorePatterns } from "ultracite/oxlint/ignores";
+import { ignorePatterns } from "ultracite/ignores";
 
 import core from "${getOxlintConfigPath("core")}";
 
@@ -428,11 +422,8 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const content = writeCall[1] as string;
-      expect(content).toContain(
-        'import { ignorePatterns } from "ultracite/ignores"'
-      );
-      expect(content).not.toContain("ultracite/oxlint/ignores");
-      expect(content).toContain("ignorePatterns,");
+      expect(content).not.toContain('from "ultracite/ignores"');
+      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
     });
 
     test("handles config without extends array", async () => {

@@ -29,7 +29,6 @@ const generateConfigContent = (extendsList: string[]) => {
     .join("\n");
 
   return `import { defineConfig } from "oxlint";
-import { ignorePatterns } from "ultracite/ignores";
 
 ${imports}
 
@@ -37,7 +36,7 @@ export default defineConfig({
   extends: [
 ${identifiers}
   ],
-  ignorePatterns,
+  ignorePatterns: core.ignorePatterns,
 });
 `;
 };
