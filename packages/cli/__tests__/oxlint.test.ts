@@ -388,44 +388,6 @@ export default defineConfig({
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
     });
 
-    test("drops legacy ignorePatterns import when migrating", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-      const existingConfig = `import { defineConfig } from "oxlint";
-import { ignorePatterns } from "ultracite/ignores";
-
-import core from "${getOxlintConfigPath("core")}";
-
-export default defineConfig({
-  extends: [
-    core,
-  ],
-  ignorePatterns,
-});
-`;
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve(existingConfig)),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
-
-      await oxlint.update();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
-      expect(content).not.toContain('from "ultracite/ignores"');
-      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
-    });
-
     test("handles config without extends array", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

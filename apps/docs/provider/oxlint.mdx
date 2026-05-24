@@ -25,6 +25,7 @@ import core from "ultracite/oxlint/core";
 
 export default defineConfig({
   extends: [core],
+  ignorePatterns: core.ignorePatterns,
 });
 ```
 
@@ -48,6 +49,7 @@ import react from "ultracite/oxlint/react";
 
 export default defineConfig({
   extends: [core, react, next],
+  ignorePatterns: core.ignorePatterns,
 });
 ```
 
@@ -113,6 +115,7 @@ import core from "ultracite/oxlint/core";
 
 export default defineConfig({
   extends: [core],
+  ignorePatterns: core.ignorePatterns,
   plugins: [complexity],
 });
 ```
