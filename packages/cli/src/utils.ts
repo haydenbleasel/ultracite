@@ -111,8 +111,15 @@ export const validateFrameworkName = (name: string): string => {
 
 export type Linter = "biome" | "eslint" | "oxlint";
 
-// Config file names for each linter
-const biomeConfigNames = ["biome.json", "biome.jsonc"] as const;
+// Config file names for each linter. Exported as the canonical Biome list so
+// doctor.ts and the Biome resolver stay in sync (Biome's documented resolution
+// order: https://biomejs.dev/guides/configure-biome/#configuration-file-resolution).
+export const biomeConfigNames = [
+  "biome.json",
+  "biome.jsonc",
+  ".biome.json",
+  ".biome.jsonc",
+] as const;
 
 const eslintConfigNames = [
   "eslint.config.mjs",

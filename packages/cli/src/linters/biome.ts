@@ -4,7 +4,7 @@ import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 
 import { biomeConfigSchema, parseJsonc } from "../schemas";
-import { exists, validateFrameworkName } from "../utils";
+import { biomeConfigNames, exists, validateFrameworkName } from "../utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
@@ -14,10 +14,13 @@ const defaultConfig = {
 const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/u;
 
 const getBiomeConfigPath = (): string => {
-  // Check for biome.json first, then fall back to biome.jsonc
-  if (exists("./biome.json")) {
-    return "./biome.json";
+  // Check for Biome's supported configuration files, in resolution order.
+  for (const file of biomeConfigNames) {
+    if (exists(`./${file}`)) {
+      return `./${file}`;
+    }
   }
+  // Default to biome.jsonc if none found
   return "./biome.jsonc";
 };
 
