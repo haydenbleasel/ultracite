@@ -494,6 +494,21 @@ describe("detectFrameworks", () => {
     expect(new Set(result)).toEqual(new Set(["react", "remix"]));
   });
 
+  test("maps TanStack deps to the tanstack preset", async () => {
+    mockFs({
+      "package.json": JSON.stringify({
+        dependencies: {
+          "@tanstack/react-query": "^5.0.0",
+          "@tanstack/react-router": "^1.0.0",
+          "@tanstack/react-start": "^1.0.0",
+        },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["react", "tanstack"]));
+  });
+
   test("handles peerDependencies", async () => {
     mockFs({
       "package.json": JSON.stringify({

@@ -12,6 +12,7 @@ export const frameworks = [
   "svelte",
   "qwik",
   "remix",
+  "tanstack",
   "angular",
   "astro",
   "nestjs",

@@ -18,6 +18,7 @@ import {
   Remix,
   Solid,
   Svelte,
+  TanStack,
   Vitest,
   Vue,
 } from "./icons";
@@ -62,6 +63,11 @@ export const frameworks = [
     label: "Remix",
     logo: Remix,
     presets: ["remix"],
+  },
+  {
+    label: "TanStack",
+    logo: TanStack,
+    presets: ["tanstack"],
   },
   {
     label: "Astro",

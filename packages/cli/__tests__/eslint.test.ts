@@ -88,7 +88,7 @@ describe("eslint linter", () => {
         writeFile: mockWriteFile,
       }));
 
-      await eslint.create({ frameworks: ["react", "next"] });
+      await eslint.create({ frameworks: ["react", "next", "tanstack"] });
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
@@ -98,8 +98,12 @@ describe("eslint linter", () => {
       expect(writeCall[1]).toContain(
         'import next from "ultracite/eslint/next"'
       );
+      expect(writeCall[1]).toContain(
+        'import tanstack from "ultracite/eslint/tanstack"'
+      );
       expect(writeCall[1]).toContain("...react");
       expect(writeCall[1]).toContain("...next");
+      expect(writeCall[1]).toContain("...tanstack");
     });
   });
 

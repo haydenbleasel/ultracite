@@ -119,8 +119,6 @@ const eslintFrameworkDevDependencies: Partial<
     "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
   },
   react: {
-    "@tanstack/eslint-plugin-query":
-      packageJson.devDependencies["@tanstack/eslint-plugin-query"],
     "eslint-plugin-jsx-a11y":
       packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "eslint-plugin-react": packageJson.devDependencies["eslint-plugin-react"],
@@ -137,6 +135,14 @@ const eslintFrameworkDevDependencies: Partial<
     "eslint-plugin-svelte": packageJson.devDependencies["eslint-plugin-svelte"],
     "prettier-plugin-svelte":
       packageJson.devDependencies["prettier-plugin-svelte"],
+  },
+  tanstack: {
+    "@tanstack/eslint-plugin-query":
+      packageJson.devDependencies["@tanstack/eslint-plugin-query"],
+    "@tanstack/eslint-plugin-router":
+      packageJson.devDependencies["@tanstack/eslint-plugin-router"],
+    "@tanstack/eslint-plugin-start":
+      packageJson.devDependencies["@tanstack/eslint-plugin-start"],
   },
   vitest: {
     "@vitest/eslint-plugin":
@@ -886,7 +892,14 @@ export const initialize = async (flags?: InitializeFlags) => {
             { label: "Svelte", value: "svelte" },
             { label: "Qwik", value: "qwik" },
             { label: "Angular", value: "angular" },
-            { label: "Remix / TanStack Router / React Router", value: "remix" },
+            {
+              label: "Remix / React Router (file-route conventions)",
+              value: "remix",
+            },
+            {
+              label: "TanStack (Query, Router, Start)",
+              value: "tanstack",
+            },
             { label: "Astro", value: "astro" },
             { label: "NestJS", value: "nestjs" },
             { label: "Jest", value: "jest" },
