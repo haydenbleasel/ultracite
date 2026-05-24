@@ -69,6 +69,7 @@ describe("oxlint linter", () => {
       expect(writeCall[0]).toBe("./oxlint.config.ts");
       const content = writeCall[1] as string;
       expect(content).toContain('import { defineConfig } from "oxlint"');
+      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
     });
 
@@ -352,6 +353,39 @@ export default {};
 
       expect(consoleWarnSpy).toHaveBeenCalled();
       console.warn = originalWarn;
+    });
+
+    test("adds ignorePatterns when migrating old config", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  extends: [
+    "${getOxlintConfigPath("core")}",
+  ],
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      expect(content).toContain("ignorePatterns: core.ignorePatterns,");
     });
 
     test("handles config without extends array", async () => {

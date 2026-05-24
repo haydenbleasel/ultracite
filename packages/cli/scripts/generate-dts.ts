@@ -58,5 +58,5 @@ const biomeCoreEdits = modify(
 writeFileSync(biomeCorePath, applyEdits(biomeCoreSource, biomeCoreEdits));
 
 console.log(
-  `Generated declaration files for ${String(configs.length)} oxlint configs and oxfmt, and synced biome/core includes`
+  `Generated declaration files for ${String(configs.length)} oxlint presets, oxfmt, and synced biome/core includes`
 );

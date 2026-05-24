@@ -53,6 +53,7 @@ describe("providers content", () => {
     const output = config.code(["core", "react"]);
     expect(output).toContain('import core from "ultracite/oxlint/core"');
     expect(output).toContain('import react from "ultracite/oxlint/react"');
+    expect(output).toContain("ignorePatterns: core.ignorePatterns,");
     expect(output).toContain("defineConfig");
   });
 });

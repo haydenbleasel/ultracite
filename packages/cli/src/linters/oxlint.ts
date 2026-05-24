@@ -36,6 +36,7 @@ export default defineConfig({
   extends: [
 ${identifiers}
   ],
+  ignorePatterns: core.ignorePatterns,
 });
 `;
 };
