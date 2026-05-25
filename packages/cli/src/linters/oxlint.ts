@@ -20,22 +20,21 @@ const getOxlintConfigIdentifier = (configPath: string) => {
 };
 
 const generateConfigContent = (extendsList: string[]) => {
-  const imports = extendsList
-    .map((ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`)
-    .join("\n");
+  const imports = [
+    `import { defineConfig } from "oxlint";`,
+    ...extendsList.map(
+      (ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
+    ),
+  ].join("\n");
 
   const identifiers = extendsList
-    .map((ext) => `    ${getOxlintConfigIdentifier(ext)},`)
-    .join("\n");
+    .map((ext) => getOxlintConfigIdentifier(ext))
+    .join(", ");
 
-  return `import { defineConfig } from "oxlint";
-
-${imports}
+  return `${imports}
 
 export default defineConfig({
-  extends: [
-${identifiers}
-  ],
+  extends: [${identifiers}],
   ignorePatterns: core.ignorePatterns,
 });
 `;
