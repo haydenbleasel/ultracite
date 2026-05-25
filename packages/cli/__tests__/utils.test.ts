@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 
 import {
   detectFrameworks,
@@ -7,6 +7,7 @@ import {
   isMonorepo,
   updatePackageJson,
   validateFrameworkName,
+  writeProjectFile,
 } from "../src/utils";
 
 mock.module("node:fs/promises", () => ({
@@ -383,6 +384,58 @@ describe("ensureDirectory", () => {
 
     await ensureDirectory("file.txt");
     expect(mockMkdirSync).not.toHaveBeenCalled();
+  });
+});
+
+describe("writeProjectFile", () => {
+  beforeEach(() => {
+    mock.restore();
+  });
+
+  afterEach(() => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      lstatSync: mock(() => ({
+        isSymbolicLink: () => false,
+      })),
+      mkdirSync: mock(() => {}),
+      readFileSync: mock(() => "{}"),
+      readdirSync: (...args: unknown[]) =>
+        (
+          globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
+        ).__realReaddirSync(...args),
+      realpathSync: mock((path: string) => path),
+      writeFileSync: mock(() => {}),
+    }));
+  });
+
+  test("rejects symbolic link targets before writing", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve("{}")),
+      writeFile: mockWriteFile,
+    }));
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(() => false),
+      lstatSync: mock(() => ({
+        isSymbolicLink: () => true,
+      })),
+      mkdirSync: mock(() => {}),
+      readFileSync: mock(() => "{}"),
+      realpathSync: mock((path: string) => path),
+    }));
+
+    await expect(
+      writeProjectFile(".vscode/settings.json", "{}")
+    ).rejects.toThrow("Refusing to write through symbolic link");
+    expect(mockWriteFile).not.toHaveBeenCalled();
   });
 });
 

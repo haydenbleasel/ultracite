@@ -1,6 +1,4 @@
-import { writeFile } from "node:fs/promises";
-
-import { exists } from "../utils";
+import { exists, writeProjectFile } from "../utils";
 
 const oxfmtConfigPath = "./oxfmt.config.ts";
 
@@ -13,7 +11,7 @@ export default defineConfig({
 `;
 
 export const oxfmt = {
-  create: async () => await writeFile(oxfmtConfigPath, configContent),
+  create: async () => await writeProjectFile(oxfmtConfigPath, configContent),
   exists: () => exists(oxfmtConfigPath),
-  update: async () => await writeFile(oxfmtConfigPath, configContent),
+  update: async () => await writeProjectFile(oxfmtConfigPath, configContent),
 };

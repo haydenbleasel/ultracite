@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
 import deepmerge from "deepmerge";
@@ -8,7 +8,7 @@ import type { PackageManager, PackageManagerName } from "nypm";
 import YAML from "yaml";
 
 import { parsePackageJson } from "../schemas";
-import { exists, isMonorepo } from "../utils";
+import { exists, isMonorepo, writeProjectFile } from "../utils";
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
@@ -64,7 +64,7 @@ const updatePackageJson = async (
       )
     : createLintStagedConfig(packageManager);
 
-  await writeFile(
+  await writeProjectFile(
     "./package.json",
     `${JSON.stringify(packageJson, null, 2)}\n`
   );
@@ -87,7 +87,10 @@ const updateJsonConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
-  await writeFile(filename, `${JSON.stringify(mergedConfig, null, 2)}\n`);
+  await writeProjectFile(
+    filename,
+    `${JSON.stringify(mergedConfig, null, 2)}\n`
+  );
 };
 
 // Quote unquoted glob pattern keys that YAML would misinterpret as aliases or tags
@@ -121,7 +124,7 @@ const updateYamlConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
-  await writeFile(filename, YAML.stringify(mergedConfig));
+  await writeProjectFile(filename, YAML.stringify(mergedConfig));
 };
 
 // Update ESM config files
@@ -139,7 +142,7 @@ const updateEsmConfig = async (
 
   const esmContent = `export default ${JSON.stringify(mergedConfig, null, 2)};
 `;
-  await writeFile(filename, esmContent);
+  await writeProjectFile(filename, esmContent);
 };
 
 // Update CommonJS config files
@@ -158,14 +161,14 @@ const updateCjsConfig = async (
 
   const cjsContent = `module.exports = ${JSON.stringify(mergedConfig, null, 2)};
 `;
-  await writeFile(filename, cjsContent);
+  await writeProjectFile(filename, cjsContent);
 };
 
 // Create fallback config file
 const createFallbackConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  await writeFile(
+  await writeProjectFile(
     ".lintstagedrc.json",
     `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
   );
@@ -213,7 +216,7 @@ const handleConfigFileUpdate = async (
 
 export const lintStaged = {
   create: async (packageManager: PackageManagerName) => {
-    await writeFile(
+    await writeProjectFile(
       ".lintstagedrc.json",
       `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
     );

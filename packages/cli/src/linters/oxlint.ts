@@ -1,8 +1,8 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 
-import { exists, validateFrameworkName } from "../utils";
+import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";
 
@@ -53,7 +53,7 @@ export const oxlint = {
       }
     }
 
-    return await writeFile(
+    return await writeProjectFile(
       oxlintConfigPath,
       generateConfigContent(extendsList)
     );
@@ -122,6 +122,6 @@ export const oxlint = {
       }
     }
 
-    await writeFile(oxlintConfigPath, generateConfigContent(newExtends));
+    await writeProjectFile(oxlintConfigPath, generateConfigContent(newExtends));
   },
 };

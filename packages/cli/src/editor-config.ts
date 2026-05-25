@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { editors } from "@repo/data/editors";
 import type { ProviderId } from "@repo/data/providers";
@@ -6,7 +6,7 @@ import { sync as spawnSync } from "cross-spawn";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
-import { ensureDirectory, exists } from "./utils";
+import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 export const createEditorConfig = (
   editorId: string,
@@ -23,7 +23,7 @@ export const createEditorConfig = (
   return {
     create: async () => {
       ensureDirectory(editor.config.path);
-      await writeFile(
+      await writeProjectFile(
         editor.config.path,
         `${JSON.stringify(content, null, 2)}\n`
       );
@@ -43,7 +43,7 @@ export const createEditorConfig = (
       const doesExist = exists(editor.config.path);
 
       if (!doesExist) {
-        await writeFile(
+        await writeProjectFile(
           editor.config.path,
           `${JSON.stringify(content, null, 2)}\n`
         );
@@ -59,7 +59,7 @@ export const createEditorConfig = (
       const configToMerge = existingConfig || {};
       const newConfig = deepmerge(configToMerge, content);
 
-      await writeFile(
+      await writeProjectFile(
         editor.config.path,
         `${JSON.stringify(newConfig, null, 2)}\n`
       );

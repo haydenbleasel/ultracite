@@ -35,6 +35,10 @@ import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
+  assertSupportedPackageManagerName,
+  normalizePackageManager,
+} from "./package-manager";
+import {
   getUltraciteSkillInstallCommand,
   maybeInstallUltraciteSkill,
 } from "./skill";
@@ -57,7 +61,7 @@ interface InitializeFlags {
   integrations?: (typeof options.integrations)[number][];
   installSkill?: boolean;
   linter?: Linter;
-  pm?: PackageManagerName;
+  pm?: string;
   quiet?: boolean;
   skipInstall?: boolean;
   "type-aware"?: boolean;
@@ -798,10 +802,11 @@ export const initialize = async (flags?: InitializeFlags) => {
   }
 
   try {
-    let { pm } = opts;
+    let pm: PackageManagerName;
     let pmInfo: PackageManager;
 
-    if (pm) {
+    if (opts.pm) {
+      pm = assertSupportedPackageManagerName(opts.pm);
       pmInfo = { command: pm, name: pm };
     } else {
       const detected = await detectPackageManager(process.cwd());
@@ -819,8 +824,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       if (!quiet) {
         log.info(`Detected lockfile, using ${detected.name}`);
       }
-      pm = detected.name;
-      pmInfo = detected;
+      pmInfo = normalizePackageManager(detected);
+      pm = pmInfo.name;
     }
 
     let { linter } = opts;

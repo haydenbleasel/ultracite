@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { agents } from "@repo/data/agents";
 import type { options } from "@repo/data/options";
@@ -7,7 +7,7 @@ import { getRules } from "@repo/data/rules";
 import { dlxCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
-import { ensureDirectory, exists } from "./utils";
+import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 type AgentId = (typeof options.agents)[number];
 
@@ -102,7 +102,7 @@ export const createAgents = (
   return {
     create: async () => {
       ensureDirectory(agent.config.path);
-      await writeFile(agent.config.path, content);
+      await writeProjectFile(agent.config.path, content);
     },
 
     exists: () => exists(agent.config.path),
@@ -112,7 +112,7 @@ export const createAgents = (
       const doesExist = exists(agent.config.path);
 
       if (!(agent.config.appendMode && doesExist)) {
-        await writeFile(agent.config.path, content);
+        await writeProjectFile(agent.config.path, content);
         return;
       }
 
@@ -123,7 +123,10 @@ export const createAgents = (
         return;
       }
 
-      await writeFile(agent.config.path, `${existingContents}\n\n${rules}`);
+      await writeProjectFile(
+        agent.config.path,
+        `${existingContents}\n\n${rules}`
+      );
     },
   };
 };

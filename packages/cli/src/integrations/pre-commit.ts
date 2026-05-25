@@ -1,9 +1,9 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { dlxCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
-import { exists } from "../utils";
+import { exists, writeProjectFile } from "../utils";
 
 const path = "./.pre-commit-config.yaml";
 const REPOS_REGEX = /^repos:\s*\n/mu;
@@ -28,7 +28,7 @@ const createPreCommitConfig = (packageManager: PackageManagerName) => `repos:
 export const preCommit = {
   create: async (packageManager: PackageManagerName) => {
     const config = createPreCommitConfig(packageManager);
-    await writeFile(path, config);
+    await writeProjectFile(path, config);
   },
   exists: () => exists(path),
   update: async (packageManager: PackageManagerName) => {
@@ -58,10 +58,13 @@ export const preCommit = {
         REPOS_REGEX,
         `repos:\n${ultraciteHook}`
       );
-      await writeFile(path, updatedConfig);
+      await writeProjectFile(path, updatedConfig);
     } else {
       // Create new repos section
-      await writeFile(path, `${existingContents}\nrepos:\n${ultraciteHook}`);
+      await writeProjectFile(
+        path,
+        `${existingContents}\nrepos:\n${ultraciteHook}`
+      );
     }
   },
 };

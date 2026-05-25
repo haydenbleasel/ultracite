@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { hooks } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
@@ -6,7 +6,8 @@ import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import type { PackageManagerName } from "nypm";
 
-import { ensureDirectory, exists } from "./utils";
+import { assertSupportedPackageManagerName } from "./package-manager";
+import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -16,16 +17,17 @@ const runCommand = (
   script: string,
   args: string[] = []
 ): string => {
-  const parts: string[] = [packageManager];
+  const safePackageManager = assertSupportedPackageManagerName(packageManager);
+  const parts: string[] = [safePackageManager];
 
-  if (packageManager === "npm") {
+  if (safePackageManager === "npm") {
     parts.push("run");
   }
 
   parts.push(script);
 
   if (args.length > 0) {
-    if (packageManager === "npm") {
+    if (safePackageManager === "npm") {
       parts.push("--");
     }
     parts.push(...args);
@@ -59,7 +61,7 @@ export const createHooks = (
     const doesExist = exists(hookIntegration.hooks.path);
 
     if (!doesExist) {
-      await writeFile(
+      await writeProjectFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(content, null, 2)}\n`
       );
@@ -72,7 +74,7 @@ export const createHooks = (
 
     if (!hasUltraciteHook(existingJson)) {
       const merged = deepmerge(existingJson, content);
-      await writeFile(
+      await writeProjectFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(merged, null, 2)}\n`
       );
@@ -82,7 +84,7 @@ export const createHooks = (
   return {
     create: async () => {
       ensureDirectory(hookIntegration.hooks.path);
-      await writeFile(
+      await writeProjectFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(content, null, 2)}\n`
       );

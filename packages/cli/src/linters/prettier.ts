@@ -1,9 +1,7 @@
-import { writeFile } from "node:fs/promises";
-
 import type { options } from "@repo/data/options";
 
 import { readPackageJsonSync } from "../schemas";
-import { exists, validateFrameworkName } from "../utils";
+import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 // All possible Prettier config file locations
 // https://prettier.io/docs/en/configuration.html
@@ -92,7 +90,7 @@ export default {
 export const prettier = {
   create: async (opts?: PrettierOptions) => {
     const config = generatePrettierConfig(opts);
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
   exists: () => {
     const path = getPrettierConfigPath();
@@ -100,6 +98,6 @@ export const prettier = {
   },
   update: async (opts?: PrettierOptions) => {
     const config = generatePrettierConfig(opts);
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
 };

@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
 import { glob } from "glob";
@@ -7,6 +7,7 @@ import type { ModificationOptions } from "jsonc-parser";
 import type { z } from "zod";
 
 import { parseJsonc, tsConfigSchema } from "./schemas";
+import { writeProjectFile } from "./utils";
 
 /**
  * Find all tsconfig.json files in the project
@@ -68,7 +69,10 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
           strictNullChecks: true,
         },
       };
-      await writeFile(filePath, `${JSON.stringify(freshConfig, null, 2)}\n`);
+      await writeProjectFile(
+        filePath,
+        `${JSON.stringify(freshConfig, null, 2)}\n`
+      );
       return;
     }
 
@@ -88,7 +92,7 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
     );
 
     const newContents = applyEdits(existingContents, edits);
-    await writeFile(filePath, newContents);
+    await writeProjectFile(filePath, newContents);
   } catch (error) {
     // Log error but don't fail the entire operation
     log.warn(

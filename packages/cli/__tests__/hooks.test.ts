@@ -27,6 +27,12 @@ describe("createHooks", () => {
         createHooks("zed", "npm");
       }).toThrow('Hook integration "zed" not found');
     });
+
+    test("throws error for unsupported package manager names", () => {
+      expect(() => {
+        createHooks("claude", "node" as never);
+      }).toThrow('Unsupported package manager "node"');
+    });
   });
 
   describe("cursor hooks", () => {

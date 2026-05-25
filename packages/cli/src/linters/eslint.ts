@@ -1,8 +1,6 @@
-import { writeFile } from "node:fs/promises";
-
 import type { options } from "@repo/data/options";
 
-import { exists, validateFrameworkName } from "../utils";
+import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 // All possible ESLint flat config file locations
 // https://eslint.org/docs/latest/use/configure/configuration-files
@@ -54,7 +52,7 @@ export default [
 export const eslint = {
   create: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
   exists: () => {
     const path = getEslintConfigPath();
@@ -62,6 +60,6 @@ export const eslint = {
   },
   update: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
 };

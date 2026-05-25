@@ -1,10 +1,15 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import { runCommandSync } from "../run-command";
-import { exists, isMonorepo, updatePackageJson } from "../utils";
+import {
+  exists,
+  isMonorepo,
+  updatePackageJson,
+  writeProjectFile,
+} from "../utils";
 
 const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
 ${lintStagedCommand}
@@ -28,7 +33,7 @@ FORMAT_EXIT_CODE=$?
 # Re-stage files that were already staged
 echo "$STAGED_FILES" | while IFS= read -r file; do
   if [ -f "$file" ]; then
-    git add "$file"
+    git add -- "$file"
   fi
 done
 
@@ -63,7 +68,7 @@ export const husky = {
       hookScript = createStandaloneHookScript(command);
     }
 
-    await writeFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
+    await writeProjectFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
   },
   exists: () => exists(path),
   init: (packageManager: PackageManagerName) => {
@@ -119,14 +124,14 @@ export const husky = {
       const lines = existingContents.split("\n");
       const markerIndex = lines.indexOf(ULTRACITE_MARKER);
       const before = lines.slice(0, markerIndex).join("\n");
-      await writeFile(
+      await writeProjectFile(
         path,
         before
           ? `${before}\n${ULTRACITE_MARKER}\n${hookScript}`
           : `${ULTRACITE_MARKER}\n${hookScript}`
       );
     } else {
-      await writeFile(
+      await writeProjectFile(
         path,
         `${existingContents}\n${ULTRACITE_MARKER}\n${hookScript}`
       );

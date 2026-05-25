@@ -200,6 +200,23 @@ describe("husky", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).not.toContain("git stash");
     });
+
+    test("standalone hook terminates git add options before filenames", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await husky.create("npm", false);
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[1]).toContain('git add -- "$file"');
+    });
   });
 
   describe("update", () => {

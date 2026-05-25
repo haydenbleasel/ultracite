@@ -34,12 +34,16 @@ mock.module("node:fs", () => ({
     throw new Error("ENOENT");
   }),
   existsSync: mock(() => false),
+  lstatSync: mock(() => ({
+    isSymbolicLink: () => false,
+  })),
   mkdirSync: mock(() => {}),
   readFileSync: mock(() => "{}"),
   readdirSync: (...args: unknown[]) =>
     (
       globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
     ).__realReaddirSync(...args),
+  realpathSync: mock((path: string) => path),
   writeFileSync: mock(() => {}),
 }));
 

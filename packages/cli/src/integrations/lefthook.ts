@@ -1,10 +1,15 @@
 import { execSync } from "node:child_process";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
-import { exists, isMonorepo, updatePackageJson } from "../utils";
+import {
+  exists,
+  isMonorepo,
+  updatePackageJson,
+  writeProjectFile,
+} from "../utils";
 
 const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/u;
 const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/u;
@@ -36,7 +41,7 @@ const createLefthookConfig = (
 export const lefthook = {
   create: async (packageManager: PackageManagerName) => {
     const config = createLefthookConfig(packageManager);
-    await writeFile(path, config);
+    await writeProjectFile(path, config);
   },
   exists: () => exists(path),
   install: async (packageManager: PackageManager) => {
@@ -84,7 +89,7 @@ export const lefthook = {
 
     if (isDefaultTemplate) {
       // Replace the entire default template with our config
-      await writeFile(path, lefthookConfig);
+      await writeProjectFile(path, lefthookConfig);
       return;
     }
 
@@ -107,7 +112,7 @@ export const lefthook = {
           PRE_COMMIT_JOBS_REGEX,
           `$1${ultraciteJob}\n`
         );
-        await writeFile(path, updatedConfig);
+        await writeProjectFile(path, updatedConfig);
       } else {
         // Add jobs section to existing pre-commit
         const jobsSection = `  jobs:
@@ -125,11 +130,11 @@ export const lefthook = {
           PRE_COMMIT_REGEX,
           `$1${jobsSection}\n`
         );
-        await writeFile(path, updatedConfig);
+        await writeProjectFile(path, updatedConfig);
       }
     } else {
       // Append new pre-commit section
-      await writeFile(path, `${existingContents}\n${lefthookConfig}`);
+      await writeProjectFile(path, `${existingContents}\n${lefthookConfig}`);
     }
   },
 };

@@ -1,7 +1,5 @@
-import { writeFile } from "node:fs/promises";
-
 import { readPackageJsonSync } from "../schemas";
-import { exists } from "../utils";
+import { exists, writeProjectFile } from "../utils";
 
 // All possible Stylelint config file locations
 // https://stylelint.io/user-guide/configure
@@ -52,7 +50,7 @@ const generateStylelintConfig =
 export const stylelint = {
   create: async () => {
     const config = generateStylelintConfig();
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
   exists: () => {
     const path = getStylelintConfigPath();
@@ -60,6 +58,6 @@ export const stylelint = {
   },
   update: async () => {
     const config = generateStylelintConfig();
-    await writeFile(defaultConfigPath, config);
+    await writeProjectFile(defaultConfigPath, config);
   },
 };

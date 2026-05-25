@@ -1,10 +1,15 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 
 import { biomeConfigSchema, parseJsonc } from "../schemas";
-import { biomeConfigNames, exists, validateFrameworkName } from "../utils";
+import {
+  biomeConfigNames,
+  exists,
+  validateFrameworkName,
+  writeProjectFile,
+} from "../utils";
 
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
@@ -52,7 +57,7 @@ export const biome = {
       extends: extendsList,
     };
 
-    return writeFile(path, `${JSON.stringify(config, null, 2)}\n`);
+    return writeProjectFile(path, `${JSON.stringify(config, null, 2)}\n`);
   },
   exists: () => {
     const path = getBiomeConfigPath();
@@ -106,6 +111,6 @@ export const biome = {
     };
     const newConfig = deepmerge(configToWork, configToMerge);
 
-    await writeFile(path, `${JSON.stringify(newConfig, null, 2)}\n`);
+    await writeProjectFile(path, `${JSON.stringify(newConfig, null, 2)}\n`);
   },
 };

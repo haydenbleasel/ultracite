@@ -592,6 +592,59 @@ describe("initialize", () => {
     expect(mockLog.info).toHaveBeenCalled();
   });
 
+  test("rejects unsupported explicit package managers before installing", async () => {
+    const mockAddDep = mock(() => Promise.resolve());
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await expect(
+      initialize({
+        agents: [],
+        editors: [],
+        frameworks: [],
+        hooks: [],
+        integrations: [],
+        linter: "biome",
+        pm: "node",
+        quiet: true,
+      })
+    ).rejects.toThrow('Unsupported package manager "node"');
+    expect(mockAddDep).not.toHaveBeenCalled();
+  });
+
+  test("rejects unsupported detected package managers before installing", async () => {
+    const mockAddDep = mock(() => Promise.resolve());
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ command: "node", name: "node", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await expect(
+      initialize({
+        agents: [],
+        editors: [],
+        frameworks: [],
+        hooks: [],
+        integrations: [],
+        linter: "biome",
+        quiet: true,
+      })
+    ).rejects.toThrow('Unsupported package manager "node"');
+    expect(mockAddDep).not.toHaveBeenCalled();
+  });
+
   test("installs dependencies when skipInstall is false", async () => {
     const mockAddDep = mock(() => Promise.resolve());
 
