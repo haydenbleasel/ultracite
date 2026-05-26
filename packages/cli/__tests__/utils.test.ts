@@ -22,6 +22,40 @@ mock.module("node:fs", () => ({
   readFileSync: mock(() => "{}"),
 }));
 
+const mockDetectFrameworkFs = (
+  files: Record<string, string>,
+  globResults: string[] = []
+) => {
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+    ),
+    readFile: mock((path: string) =>
+      path in files
+        ? Promise.resolve(files[path])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    writeFile: mock(() => Promise.resolve()),
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      if (!(path in files)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock((path: string) => path in files),
+    readFileSync: mock((path: string) => {
+      if (path in files) {
+        return files[path];
+      }
+      throw new Error("ENOENT");
+    }),
+  }));
+  mock.module("glob", () => ({
+    glob: mock(() => Promise.resolve(globResults)),
+  }));
+};
+
 describe("exists", () => {
   beforeEach(() => {
     mock.restore();
@@ -490,42 +524,8 @@ describe("detectFrameworks", () => {
     mock.restore();
   });
 
-  const mockFs = (
-    files: Record<string, string>,
-    globResults: string[] = []
-  ) => {
-    mock.module("node:fs/promises", () => ({
-      access: mock((path: string) =>
-        path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
-      ),
-      readFile: mock((path: string) =>
-        path in files
-          ? Promise.resolve(files[path])
-          : Promise.reject(new Error("ENOENT"))
-      ),
-      writeFile: mock(() => Promise.resolve()),
-    }));
-    mock.module("node:fs", () => ({
-      accessSync: mock((path: string) => {
-        if (!(path in files)) {
-          throw new Error("ENOENT");
-        }
-      }),
-      existsSync: mock((path: string) => path in files),
-      readFileSync: mock((path: string) => {
-        if (path in files) {
-          return files[path];
-        }
-        throw new Error("ENOENT");
-      }),
-    }));
-    mock.module("glob", () => ({
-      glob: mock(() => Promise.resolve(globResults)),
-    }));
-  };
-
   test("detects frameworks from root package.json deps", async () => {
-    mockFs({
+    mockDetectFrameworkFs({
       "package.json": JSON.stringify({
         dependencies: { next: "^15.0.0" },
         devDependencies: { vitest: "^2.0.0" },
@@ -537,7 +537,7 @@ describe("detectFrameworks", () => {
   });
 
   test("expands meta-framework deps to implied frameworks", async () => {
-    mockFs({
+    mockDetectFrameworkFs({
       "package.json": JSON.stringify({
         dependencies: { "@remix-run/react": "^2.0.0" },
       }),
@@ -548,7 +548,7 @@ describe("detectFrameworks", () => {
   });
 
   test("maps TanStack deps to the tanstack preset", async () => {
-    mockFs({
+    mockDetectFrameworkFs({
       "package.json": JSON.stringify({
         dependencies: {
           "@tanstack/react-query": "^5.0.0",
@@ -563,7 +563,7 @@ describe("detectFrameworks", () => {
   });
 
   test("handles peerDependencies", async () => {
-    mockFs({
+    mockDetectFrameworkFs({
       "package.json": JSON.stringify({
         peerDependencies: { svelte: "^5.0.0" },
       }),
@@ -574,7 +574,7 @@ describe("detectFrameworks", () => {
   });
 
   test("returns empty array when no known framework deps present", async () => {
-    mockFs({
+    mockDetectFrameworkFs({
       "package.json": JSON.stringify({
         dependencies: { lodash: "^4.0.0" },
       }),
@@ -585,13 +585,13 @@ describe("detectFrameworks", () => {
   });
 
   test("returns empty array when package.json is missing", async () => {
-    mockFs({});
+    mockDetectFrameworkFs({});
     const result = await detectFrameworks();
     expect(result).toEqual([]);
   });
 
   test("scans workspace package.jsons in npm/yarn/bun monorepos", async () => {
-    mockFs(
+    mockDetectFrameworkFs(
       {
         "apps/web/package.json": JSON.stringify({
           dependencies: { next: "^15.0.0" },
@@ -609,7 +609,7 @@ describe("detectFrameworks", () => {
   });
 
   test("handles workspaces declared as object form (yarn classic)", async () => {
-    mockFs(
+    mockDetectFrameworkFs(
       {
         "apps/web/package.json": JSON.stringify({
           dependencies: { astro: "^4.0.0" },
@@ -626,7 +626,7 @@ describe("detectFrameworks", () => {
   });
 
   test("scans workspace package.jsons in pnpm monorepos", async () => {
-    mockFs(
+    mockDetectFrameworkFs(
       {
         "apps/web/package.json": JSON.stringify({
           dependencies: { vue: "^3.0.0" },
@@ -642,7 +642,7 @@ describe("detectFrameworks", () => {
   });
 
   test("deduplicates frameworks across workspaces", async () => {
-    mockFs(
+    mockDetectFrameworkFs(
       {
         "apps/a/package.json": JSON.stringify({
           dependencies: { next: "^15.0.0" },
