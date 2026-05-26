@@ -519,6 +519,37 @@ describe("validateFrameworkName", () => {
   });
 });
 
+const mockFs = (files: Record<string, string>, globResults: string[] = []) => {
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+    ),
+    readFile: mock((path: string) =>
+      path in files
+        ? Promise.resolve(files[path])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    writeFile: mock(() => Promise.resolve()),
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      if (!(path in files)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock((path: string) => path in files),
+    readFileSync: mock((path: string) => {
+      if (path in files) {
+        return files[path];
+      }
+      throw new Error("ENOENT");
+    }),
+  }));
+  mock.module("glob", () => ({
+    glob: mock(() => Promise.resolve(globResults)),
+  }));
+};
+
 describe("detectFrameworks", () => {
   beforeEach(() => {
     mock.restore();
