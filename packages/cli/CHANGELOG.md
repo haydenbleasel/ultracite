@@ -1,3 +1,26 @@
+## 7.8.0
+
+### Minor Changes
+
+- 4e2fea0: Add a dedicated `tanstack` framework preset for Biome, ESLint, and Oxlint. The ESLint preset layers `@tanstack/eslint-plugin-query`, `@tanstack/eslint-plugin-router`, and `@tanstack/eslint-plugin-start`, while the Biome and Oxlint presets relax file-naming conventions for `routes/` directories and the generated `routeTree.gen.ts`. Framework detection now maps `@tanstack/react-query`, `@tanstack/react-router`, and `@tanstack/react-start` to the new `tanstack` preset.
+
+  Two behavior changes for existing consumers: TanStack Query rules now live in the `tanstack` preset instead of `react`, so projects that relied on Query rules must opt into `tanstack`; and TanStack Router projects now resolve to the `tanstack` preset rather than `remix`.
+
+### Patch Changes
+
+- 51a2af0: Recognize `.biome.json` and `.biome.jsonc` as valid Biome config files across the CLI. `detectLinter`, the `doctor` command, and the Biome config resolver now match the dot-prefixed names alongside `biome.json`/`biome.jsonc`, following Biome's [documented configuration file resolution order](https://biomejs.dev/guides/configure-biome/#configuration-file-resolution). Closes #700.
+- 14b557c: Harden the generated standalone Husky hook by using `git add -- "$file"` when restaging formatted files. This prevents option-shaped filenames from being interpreted as Git options during the hook.
+- baa3dd0: Add `ignorePatterns` to the generated oxlint config at the root level so they are actually applied. Oxlint does not merge `ignorePatterns` through `extends` (see oxc-project/oxc#10223), so patterns set in the core preset were silently ignored. The generated config now sets `ignorePatterns: core.ignorePatterns` at the top level, reusing the patterns from the imported core preset.
+- bd27fd4: Add newly supported Oxlint rules from the latest release to the core, React, and Vitest presets:
+
+  - Core: `id-match`, `no-implicit-globals`, `no-implied-eval`, `prefer-arrow-callback`, `prefer-regex-literals`, `import/newline-after-import`, `jsdoc/require-throws-description`, `jsdoc/require-throws-type`, and `jsdoc/require-yields-type`
+  - React: `jsx-a11y/control-has-associated-label`, `jsx-a11y/no-interactive-element-to-noninteractive-role`, `jsx-a11y/no-noninteractive-element-interactions`, `jsx-a11y/no-noninteractive-element-to-interactive-role`, `react/no-object-type-as-default-prop`, and `react/no-unstable-nested-components`
+  - Vitest: `vitest/padding-around-after-all-blocks`
+
+- 14b557c: Reject symlinked generated config targets before writing project files. CLI config writers now route through a shared project-file write guard that checks for symlinks and project-root escapes before mutating files.
+- 14b557c: Validate package-manager names before generating agent and editor hook commands. Hook configuration now only uses supported package-manager prefixes, preventing unsafe values from being persisted into later-executed hook commands.
+- 14b557c: Reject unsupported package-manager names during `ultracite init`. Explicit `--pm` values and detected `packageManager` metadata are now runtime-validated against the supported package managers before dependency installation, preventing malicious project metadata from selecting an arbitrary executable.
+
 ## 7.7.0
 
 ### Minor Changes
