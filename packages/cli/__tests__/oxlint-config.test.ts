@@ -272,3 +272,33 @@ describe("oxlint vitest config", () => {
     });
   });
 });
+
+describe("oxlint tanstack config", () => {
+  test("disables filename-case for TanStack route files", async () => {
+    const config = await readOxlintConfig("tanstack");
+
+    const routeOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
+        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+    );
+
+    expect(routeOverride).toBeDefined();
+    expect(routeOverride?.rules?.["unicorn/filename-case"]).toBe("off");
+  });
+
+  test("keeps routeTree.gen.ts filename-case override", async () => {
+    const config = await readOxlintConfig("tanstack");
+
+    const routeTreeOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/routeTree.gen.ts")
+    );
+
+    expect(routeTreeOverride).toBeDefined();
+    expect(routeTreeOverride?.rules?.["unicorn/filename-case"]).toBe("off");
+    expect(
+      routeTreeOverride?.rules?.["unicorn/no-abusive-eslint-disable"]
+    ).toBe("off");
+  });
+});
