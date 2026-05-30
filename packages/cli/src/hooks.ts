@@ -4,6 +4,7 @@ import { hooks } from "@repo/data/hooks";
 import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import { runScriptCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
 import { assertSupportedPackageManagerName } from "./package-manager";
@@ -12,28 +13,12 @@ import { ensureDirectory, exists, writeProjectFile } from "./utils";
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
-const runCommand = (
+const createFixCommand = (
   packageManager: PackageManagerName,
-  script: string,
   args: string[] = []
 ): string => {
   const safePackageManager = assertSupportedPackageManagerName(packageManager);
-  const parts: string[] = [safePackageManager];
-
-  if (safePackageManager === "npm") {
-    parts.push("run");
-  }
-
-  parts.push(script);
-
-  if (args.length > 0) {
-    if (safePackageManager === "npm") {
-      parts.push("--");
-    }
-    parts.push(...args);
-  }
-
-  return parts.join(" ");
+  return runScriptCommand(safePackageManager, "fix", { args });
 };
 
 export const createHooks = (
@@ -49,7 +34,7 @@ export const createHooks = (
 
   const args = linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
 
-  const command = runCommand(packageManager, "fix", args);
+  const command = createFixCommand(packageManager, args);
   const content = hookIntegration.hooks.getContent(command);
 
   const hasUltraciteHook = (obj: unknown): boolean => {

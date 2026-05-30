@@ -134,6 +134,27 @@ describe("fix", () => {
     expect(callArgs[1]).toContain(routeGroupFile);
   });
 
+  test("prefixes hyphen-starting file paths before linter delegation", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "biome"),
+    }));
+
+    fix(["--config=evil.mjs"]);
+
+    expect(mockSpawn).toHaveBeenCalled();
+    const [callArgs] = mockSpawn.mock.calls;
+    expect(callArgs[1]).toContain("./--config=evil.mjs");
+    expect(callArgs[1]).not.toContain("--config=evil.mjs");
+  });
+
   test("throws LinterExitError when biome fix finds errors", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({

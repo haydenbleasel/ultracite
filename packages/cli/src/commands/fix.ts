@@ -1,3 +1,4 @@
+import { normalizeFileArgs } from "../linter-args";
 import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
 import { detectLinter } from "../utils";
 
@@ -79,6 +80,7 @@ const runOxfmtFix = (files: string[], passthrough: string[]): void => {
 
 export const fix = (files: string[], passthrough: string[] = []): void => {
   const linter = detectLinter();
+  const normalizedFiles = normalizeFileArgs(files);
 
   if (!linter) {
     throw new Error(
@@ -89,21 +91,21 @@ export const fix = (files: string[], passthrough: string[] = []): void => {
   switch (linter) {
     case "eslint": {
       runSteps([
-        () => runPrettierFix(files, []),
-        () => runEslintFix(files, passthrough),
-        () => runStylelintFix(files, []),
+        () => runPrettierFix(normalizedFiles, []),
+        () => runEslintFix(normalizedFiles, passthrough),
+        () => runStylelintFix(normalizedFiles, []),
       ]);
       break;
     }
     case "oxlint": {
       runSteps([
-        () => runOxfmtFix(files, []),
-        () => runOxlintFix(files, passthrough),
+        () => runOxfmtFix(normalizedFiles, []),
+        () => runOxlintFix(normalizedFiles, passthrough),
       ]);
       break;
     }
     default: {
-      runBiomeFix(files, passthrough);
+      runBiomeFix(normalizedFiles, passthrough);
     }
   }
 };

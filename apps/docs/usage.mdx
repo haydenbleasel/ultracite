@@ -34,6 +34,7 @@ In many cases, the VS Code extension for your linter provides quick fix suggesti
 Ultracite comes with a CLI that wraps your chosen linter. The commands work the same regardless of which toolchain you're using.
 
 Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome).
+If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
 
 ### Checking Code
 

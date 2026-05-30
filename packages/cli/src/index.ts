@@ -7,9 +7,15 @@ import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { initialize } from "./initialize";
+import { splitLinterArgs } from "./linter-args";
 import { LinterExitError } from "./run-command";
 
+type CommandWithRawArgs = Command & { rawArgs?: string[] };
+
 const program = new Command();
+
+const getRawArgs = (command: Command): string[] | undefined =>
+  (command.parent as CommandWithRawArgs | null | undefined)?.rawArgs;
 
 program
   .name("ultracite")
@@ -63,9 +69,12 @@ program
     "Run linter without fixing files. Unknown options are passed to the underlying linter."
   )
   .allowUnknownOption()
-  .action(async (args: string[]) => {
-    const files = args.filter((arg) => !arg.startsWith("-"));
-    const passthrough = args.filter((arg) => arg.startsWith("-"));
+  .action(async (args: string[], _opts: unknown, command: Command) => {
+    const { files, passthrough } = splitLinterArgs({
+      commandName: "check",
+      parsedArgs: args,
+      rawArgs: getRawArgs(command),
+    });
     await check(files, passthrough);
   });
 
@@ -76,9 +85,12 @@ program
     "Run linter and fix files. Unknown options are passed to the underlying linter."
   )
   .allowUnknownOption()
-  .action(async (args: string[]) => {
-    const files = args.filter((arg) => !arg.startsWith("-"));
-    const passthrough = args.filter((arg) => arg.startsWith("-"));
+  .action(async (args: string[], _opts: unknown, command: Command) => {
+    const { files, passthrough } = splitLinterArgs({
+      commandName: "fix",
+      parsedArgs: args,
+      rawArgs: getRawArgs(command),
+    });
     await fix(files, passthrough);
   });
 
