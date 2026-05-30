@@ -2,7 +2,7 @@
 
 **A production-grade, zero-configuration preset for ESLint, Biome, and Oxlint.**
 
-Ultracite is designed to help you and your AI models write consistent and type-safe code without the hassle of configuration. Choose your preferred toolchain and get started in seconds.
+Ultracite helps you and your AI models write consistent, type-safe code without the hassle of configuration. Pick your preferred toolchain, run one command, and get hundreds of battle-tested rules wired up in seconds — across single repos and monorepos alike.
 
 <div>
   <img src="https://img.shields.io/npm/dy/ultracite" alt="" />
@@ -16,33 +16,73 @@ Ultracite is designed to help you and your AI models write consistent and type-s
 npx ultracite init
 ```
 
-The interactive setup will guide you through selecting your formatter/linter, framework, editor, and AI agents.
-It can also offer to install the reusable Ultracite skill, or you can pass `--install-skill` in non-interactive flows.
+The interactive setup guides you through choosing your formatter/linter, framework, editor, and AI agents, then installs and configures everything for you. Re-run it any time to adjust your setup.
+
+> Prefer a different package manager? Ultracite detects yours automatically, or you can run it with `pnpm dlx`, `yarn dlx`, or `bunx`.
+
+## Commands
+
+| Command                      | Description                                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `ultracite init`             | Initialize Ultracite in the current directory (interactive by default).                  |
+| `ultracite check [files...]` | Lint without writing changes. Unknown flags are passed through to the underlying linter. |
+| `ultracite fix [files...]`   | Lint and auto-fix. Unknown flags are passed through to the underlying linter.            |
+| `ultracite doctor`           | Verify your Ultracite setup and diagnose configuration issues.                           |
+
+`check` and `fix` accept an optional list of files or globs; omit them to run against the whole project. Add `-v` / `--version` or `-h` / `--help` for CLI details.
+
+Common `init` flags for non-interactive / CI use:
+
+| Flag                           | Description                                                         |
+| ------------------------------ | ------------------------------------------------------------------- |
+| `--linter <linter>`            | Toolchain to configure (Biome, ESLint, or Oxlint).                  |
+| `--pm <pm>`                    | Package manager to use.                                             |
+| `--editors <editors...>`       | Editors to configure (use `universal` for `.vscode/settings.json`). |
+| `--agents <agents...>`         | AI agents to enable (use `universal` for `AGENTS.md`).              |
+| `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules.                       |
+| `--type-aware`                 | Enable type-aware linting.                                          |
+| `--install-skill`              | Install the reusable Ultracite skill after setup.                   |
+| `--skip-install`               | Configure without installing dependencies.                          |
+| `--quiet`                      | Suppress interactive prompts (auto-enabled in CI).                  |
+
+See the [CLI reference](https://docs.ultracite.ai/) for the full, current list of options.
 
 ## Supported Tools
 
-- **Biome** — All-in-one formatting and linting
-- **ESLint + Prettier + Stylelint** — Most mature ecosystem with the largest plugin support
-- **Oxlint + Oxfmt** — 50-100x faster than ESLint, part of the Oxc ecosystem
+- **Biome** — All-in-one formatting and linting in a single fast binary.
+- **ESLint + Prettier + Stylelint** — The most mature ecosystem with the largest plugin support.
+- **Oxlint + Oxfmt** — Rust-based tooling that runs dramatically faster than ESLint, part of the Oxc ecosystem.
 
 ## Key Features
 
 ### ⚡ Subsecond Performance
 
-Built on Rust-based tools for instant code analysis. On-save checks feel seamless without interrupting your workflow.
+Built around Rust-based tooling for near-instant analysis. On-save checks feel seamless and stay out of your way.
 
 ### 🎯 Zero-Config by Design
 
-Hundreds of preconfigured rules optimized for JavaScript and TypeScript projects. Customize when needed, but it works perfectly out of the box.
+Hundreds of preconfigured rules tuned for modern JavaScript and TypeScript. It works out of the box, and you can override anything when you need to.
 
 ### 🤖 AI-Ready
 
-Generate rules for 40+ AI agents including Claude Code, GitHub Copilot, Cursor, Gemini, and more. Ensures consistent code style across all team members and AI models.
+Generate ruleset and context files for a wide range of AI agents — Claude Code, GitHub Copilot, Cursor, Gemini, and many more — so humans and models share one consistent style.
 
 ### 🏗️ Monorepo Ready
 
-Unified toolchain configuration across all packages and apps, eliminating duplicate config files while maintaining consistency.
+One unified toolchain configuration across every package and app, eliminating duplicate config files while keeping standards consistent.
 
----
+## Using the presets directly
 
-Read the [docs](https://docs.ultracite.ai/) for detailed setup instructions, configuration options, and examples.
+Beyond the CLI, Ultracite publishes ready-made config presets you can extend in your own setup (Biome, ESLint, Oxlint, Oxfmt, Prettier, and Stylelint). `ultracite init` wires these up for you; if you'd rather reference them by hand, the [configuration docs](https://docs.ultracite.ai/) list the exact import paths and extension points for each toolchain.
+
+## Documentation
+
+Full setup guides, configuration options, rule references, framework and editor integrations, and examples live in the docs:
+
+- **Docs:** https://docs.ultracite.ai/
+- **Website:** https://www.ultracite.ai/
+- **Issues & discussions:** https://github.com/haydenbleasel/ultracite
+
+## License
+
+MIT © [Hayden Bleasel](https://github.com/haydenbleasel)
