@@ -48,7 +48,7 @@
   },
   "scripts": {
     "prebuild": "bun run scripts/generate-dts.ts",
-    "build": "tsup",
+    "build": "tsgo --noEmit && bun run build.ts",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "bench": "bun run benchmarks/cli.bench.ts",
@@ -112,8 +112,7 @@
     "prettier-plugin-tailwindcss": "^0.8.0",
     "stylelint-config-idiomatic-order": "^10.0.0",
     "stylelint-config-standard": "^40.0.0",
-    "stylelint-prettier": "^5.0.3",
-    "tsup": "^8.5.1"
+    "stylelint-prettier": "^5.0.3"
   },
   "peerDependencies": {
     "oxfmt": ">=0.1.0",
