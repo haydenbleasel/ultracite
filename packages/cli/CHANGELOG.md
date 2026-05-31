@@ -1,3 +1,13 @@
+## 7.8.1
+
+### Patch Changes
+
+- 8335be7: Build the CLI with `bun build` and a `tsgo` type-check gate instead of tsup.
+- f747449: Fix the Oxlint TanStack preset so route files under `routes/` and `app/routes/` are exempt from `unicorn/filename-case`, matching the documented 7.8.0 behavior.
+- 092597e: Fix generated `oxlint.config.ts` to be pre-formatted according to oxfmt rules, so `ultracite check` passes immediately after `ultracite init` without requiring a separate format step.
+- 81da6e8: Generate agent and editor hook commands through nypm's package-manager script helper.
+- 81da6e8: Keep hyphen-prefixed file operands from being forwarded to linters as options.
+
 ## 7.8.0
 
 ### Minor Changes
