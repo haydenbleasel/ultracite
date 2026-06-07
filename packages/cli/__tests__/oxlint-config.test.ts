@@ -12,12 +12,12 @@ import { describe, expect, test } from "bun:test";
  */
 import { execSync } from "node:child_process";
 import { readdirSync } from "node:fs";
-import { join } from "node:path";
+import path from "node:path";
 
 import packageJson from "../package.json";
 
 const readOxlintConfig = async (name: string) => {
-  const configPath = join(import.meta.dirname, `../config/oxlint/${name}`);
+  const configPath = path.join(import.meta.dirname, `../config/oxlint/${name}`);
   const mod = await import(configPath);
   return mod.default;
 };
@@ -81,14 +81,17 @@ describe("oxlint package exports", () => {
   });
 
   test("ships declaration files for each oxlint config", () => {
-    const oxlintConfigDirectory = join(import.meta.dirname, "../config/oxlint");
+    const oxlintConfigDirectory = path.join(
+      import.meta.dirname,
+      "../config/oxlint"
+    );
     const configs = readdirSync(oxlintConfigDirectory, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .toSorted();
 
     const typedConfigs = configs.filter((config) => {
-      const configFiles = readdirSync(join(oxlintConfigDirectory, config));
+      const configFiles = readdirSync(path.join(oxlintConfigDirectory, config));
       return configFiles.includes("index.d.mts");
     });
 
@@ -104,7 +107,7 @@ describe("oxlint package exports", () => {
 
   test("ships oxfmt declaration file", () => {
     const oxfmtFiles = readdirSync(
-      join(import.meta.dirname, "../config/oxfmt")
+      path.join(import.meta.dirname, "../config/oxfmt")
     );
 
     expect(oxfmtFiles).toContain("index.d.mts");

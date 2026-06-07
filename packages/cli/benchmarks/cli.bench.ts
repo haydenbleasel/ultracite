@@ -1,7 +1,7 @@
 import { mock } from "bun:test";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 
 import { bench, group, run } from "mitata";
 
@@ -21,14 +21,14 @@ import {
 const noop = () => {};
 
 const makeTmpDir = (files: Record<string, string> = {}): string => {
-  const dir = join(
+  const dir = path.join(
     tmpdir(),
     `ultracite-bench-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(dir, { recursive: true });
   for (const [name, content] of Object.entries(files)) {
-    const filePath = join(dir, name);
-    mkdirSync(join(filePath, ".."), { recursive: true });
+    const filePath = path.join(dir, name);
+    mkdirSync(path.join(filePath, ".."), { recursive: true });
     writeFileSync(filePath, content);
   }
   return dir;
@@ -74,8 +74,8 @@ group("detectLinter", () => {
 
 group("exists", () => {
   const dir = tmpDir({ "test.txt": "hello" });
-  const filePath = join(dir, "test.txt");
-  const missingPath = join(dir, "missing.txt");
+  const filePath = path.join(dir, "test.txt");
+  const missingPath = path.join(dir, "missing.txt");
 
   bench("existing file", () => {
     exists(filePath);
@@ -390,11 +390,11 @@ group("ensureDirectory", () => {
   const baseDir = tmpDir();
 
   bench("shallow path", async () => {
-    await ensureDirectory(join(baseDir, "a/file.txt"));
+    await ensureDirectory(path.join(baseDir, "a/file.txt"));
   });
 
   bench("deep nested path", async () => {
-    await ensureDirectory(join(baseDir, "a/b/c/d/file.txt"));
+    await ensureDirectory(path.join(baseDir, "a/b/c/d/file.txt"));
   });
 });
 

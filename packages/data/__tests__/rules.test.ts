@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync as _readFileSync } from "node:fs";
-import { join } from "node:path";
+import path from "node:path";
 
 import { getRules } from "../src/rules";
 
@@ -9,9 +9,9 @@ import { getRules } from "../src/rules";
 const readFileSync = ((globalThis as Record<string, unknown>)
   .__realReadFileSync ?? _readFileSync) as typeof _readFileSync;
 
-const repoRoot = join(import.meta.dir, "..", "..", "..");
-const skillPath = join(repoRoot, "skills", "ultracite", "SKILL.md");
-const standardsPath = join(
+const repoRoot = path.join(import.meta.dir, "..", "..", "..");
+const skillPath = path.join(repoRoot, "skills", "ultracite", "SKILL.md");
+const standardsPath = path.join(
   repoRoot,
   "skills",
   "ultracite",

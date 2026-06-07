@@ -1,13 +1,16 @@
 import { readdir, readFile } from "node:fs/promises";
-import { join } from "node:path";
+import path from "node:path";
 
-const configDir = join(import.meta.dirname, "../packages/cli/config/biome");
+const configDir = path.join(
+  import.meta.dirname,
+  "../packages/cli/config/biome"
+);
 
 const stripJsonComments = (content: string): string =>
   content
     .replaceAll(/\/\*[\s\S]*?\*\//gu, "")
     .replaceAll(/\/\/.*$/gmu, "")
-    .replaceAll(/,(\s*[}\]])/gu, "$1");
+    .replaceAll(/,(?<trailing>\s*[}\]])/gu, "$<trailing>");
 
 const validateBiomeConfig = async (configPath: string): Promise<boolean> => {
   try {
@@ -40,7 +43,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, "biome.jsonc");
+    const configPath = path.join(configDir, framework, "biome.jsonc");
     const valid = await validateBiomeConfig(configPath);
 
     results.push({ framework, valid });

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import path from "node:path";
 import process from "node:process";
 
 import { intro, log, outro, spinner } from "@clack/prompts";
@@ -51,7 +51,7 @@ const checkBiomeConfig = (): DiagnosticCheck => {
   let biomeConfigFile: string | null = null;
 
   for (const fileName of biomeConfigNames) {
-    const fullPath = join(process.cwd(), fileName);
+    const fullPath = path.join(process.cwd(), fileName);
     if (existsSync(fullPath)) {
       configPath = fullPath;
       biomeConfigFile = fileName;
@@ -107,8 +107,8 @@ const checkEslintConfig = (): DiagnosticCheck => {
   ];
 
   let configPath: string | null = null;
-  for (const path of eslintConfigPaths) {
-    const fullPath = join(process.cwd(), path);
+  for (const eslintPath of eslintConfigPaths) {
+    const fullPath = path.join(process.cwd(), eslintPath);
     if (existsSync(fullPath)) {
       configPath = fullPath;
       break;
@@ -163,10 +163,10 @@ const checkPrettierConfig = (): DiagnosticCheck => {
     ".prettierrc.yaml",
   ];
 
-  for (const path of prettierConfigPaths) {
-    if (existsSync(join(process.cwd(), path))) {
+  for (const prettierPath of prettierConfigPaths) {
+    if (existsSync(path.join(process.cwd(), prettierPath))) {
       return {
-        message: `Prettier configuration found (${path})`,
+        message: `Prettier configuration found (${prettierPath})`,
         name: "Prettier configuration",
         status: "pass",
       };
@@ -193,10 +193,10 @@ const checkStylelintConfig = (): DiagnosticCheck => {
     ".stylelintrc.yaml",
   ];
 
-  for (const path of stylelintConfigPaths) {
-    if (existsSync(join(process.cwd(), path))) {
+  for (const stylelintPath of stylelintConfigPaths) {
+    if (existsSync(path.join(process.cwd(), stylelintPath))) {
       return {
-        message: `Stylelint configuration found (${path})`,
+        message: `Stylelint configuration found (${stylelintPath})`,
         name: "Stylelint configuration",
         status: "pass",
       };
@@ -211,7 +211,7 @@ const checkStylelintConfig = (): DiagnosticCheck => {
 };
 
 const checkOxlintConfig = (): DiagnosticCheck => {
-  const oxlintConfigPath = join(process.cwd(), "oxlint.config.ts");
+  const oxlintConfigPath = path.join(process.cwd(), "oxlint.config.ts");
 
   if (!existsSync(oxlintConfigPath)) {
     return {
@@ -247,7 +247,7 @@ const checkOxlintConfig = (): DiagnosticCheck => {
 };
 
 const checkOxfmtConfig = (): DiagnosticCheck => {
-  const oxfmtConfigPath = join(process.cwd(), "oxfmt.config.ts");
+  const oxfmtConfigPath = path.join(process.cwd(), "oxfmt.config.ts");
 
   if (!existsSync(oxfmtConfigPath)) {
     return {
@@ -287,7 +287,7 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
 // ---------------------------------------------------------------------------
 
 const checkUltraciteDependency = (): DiagnosticCheck => {
-  const packageJsonPath = join(process.cwd(), "package.json");
+  const packageJsonPath = path.join(process.cwd(), "package.json");
 
   if (!existsSync(packageJsonPath)) {
     return {
@@ -346,7 +346,9 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
     ];
 
     if (
-      prettierConfigFiles.some((file) => existsSync(join(process.cwd(), file)))
+      prettierConfigFiles.some((file) =>
+        existsSync(path.join(process.cwd(), file))
+      )
     ) {
       conflicts.push("Prettier");
     }
@@ -364,7 +366,9 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
   ];
 
   if (
-    legacyEslintConfigs.some((file) => existsSync(join(process.cwd(), file)))
+    legacyEslintConfigs.some((file) =>
+      existsSync(path.join(process.cwd(), file))
+    )
   ) {
     conflicts.push("ESLint (legacy config)");
   }

@@ -1,9 +1,10 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import path from "node:path";
 
-const target = process.argv[2] ?? join("packages", "cli", "CHANGELOG.md");
+const target = process.argv[2] ?? path.join("packages", "cli", "CHANGELOG.md");
 
-const protectedPattern = /(`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)|https?:\/\/\S+)/gu;
+const protectedPattern =
+  /(?:`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\)|https?:\/\/\S+)/gu;
 
 const transforms: { pattern: RegExp; wrap: (m: string) => string }[] = [
   {

@@ -4,11 +4,11 @@
  * Run as part of the build to keep types and configs in sync.
  */
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import path from "node:path";
 
 import { applyEdits, modify } from "jsonc-parser";
 
-const configDir = join(import.meta.dirname, "../config");
+const configDir = path.join(import.meta.dirname, "../config");
 
 const oxlintDeclaration = `import type { OxlintConfig } from "oxlint";
 
@@ -25,21 +25,21 @@ export default config;
 `;
 
 // Generate oxlint declarations
-const oxlintDir = join(configDir, "oxlint");
+const oxlintDir = path.join(configDir, "oxlint");
 const configs = readdirSync(oxlintDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name);
 
 for (const config of configs) {
-  const dir = join(oxlintDir, config);
+  const dir = path.join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "index.d.mts"), oxlintDeclaration);
+  writeFileSync(path.join(dir, "index.d.mts"), oxlintDeclaration);
 }
 
 // Generate oxfmt declaration
-const oxfmtDir = join(configDir, "oxfmt");
+const oxfmtDir = path.join(configDir, "oxfmt");
 mkdirSync(oxfmtDir, { recursive: true });
-writeFileSync(join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
+writeFileSync(path.join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
 
 // Sync biome/core's files.includes from the shared ignore patterns. Inlined
 // (rather than extended from a separate jsonc file) because Biome's extend
@@ -47,7 +47,7 @@ writeFileSync(join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
 // consumer defines its own — see issue #679.
 const { ignorePatterns } = await import("../config/shared/ignores.mjs");
 const biomeIncludes = ["**", ...ignorePatterns.map((p: string) => `!!${p}`)];
-const biomeCorePath = join(configDir, "biome/core/biome.jsonc");
+const biomeCorePath = path.join(configDir, "biome/core/biome.jsonc");
 const biomeCoreSource = readFileSync(biomeCorePath, "utf-8");
 const biomeCoreEdits = modify(
   biomeCoreSource,

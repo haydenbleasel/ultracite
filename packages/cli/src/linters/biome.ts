@@ -16,7 +16,7 @@ const defaultConfig = {
   extends: ["ultracite/biome/core"],
 };
 
-const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(.+)$/u;
+const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(?<rest>.+)$/u;
 
 const getBiomeConfigPath = (): string => {
   // Check for Biome's supported configuration files, in resolution order.

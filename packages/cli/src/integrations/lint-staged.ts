@@ -96,7 +96,7 @@ const updateJsonConfig = async (
 // Quote unquoted glob pattern keys that YAML would misinterpret as aliases or tags
 const quoteGlobKeys = (content: string): string =>
   content.replaceAll(
-    /^([*?{[][^\n:]*):(.*)$/gmu,
+    /^(?<key>[*?{[][^\n:]*):(?<rest>.*)$/gmu,
     (_match, key: string, rest: string) => `'${key}':${rest}`
   );
 

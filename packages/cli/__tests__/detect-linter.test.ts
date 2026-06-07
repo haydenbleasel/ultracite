@@ -1,5 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
-import { dirname, join } from "node:path";
+import path from "node:path";
 
 // We must re-register ../src/utils with real implementations because
 // fix.test.ts and check.test.ts mock the entire module and bun shares
@@ -9,9 +9,9 @@ let mockAccess: ReturnType<typeof mock>;
 
 mockAccess = mock(() => Promise.reject(new Error("ENOENT")));
 
-const realExists = async (path: string) => {
+const realExists = async (filePath: string) => {
   try {
-    await mockAccess(path);
+    await mockAccess(filePath);
     return true;
   } catch {
     return false;
@@ -41,24 +41,24 @@ const realDetectLinter = async (): Promise<
 
   while (true) {
     for (const name of biomeConfigNames) {
-      if (await realExists(join(dir, name))) {
+      if (await realExists(path.join(dir, name))) {
         return "biome";
       }
     }
 
     for (const name of eslintConfigNames) {
-      if (await realExists(join(dir, name))) {
+      if (await realExists(path.join(dir, name))) {
         return "eslint";
       }
     }
 
     for (const name of oxlintConfigNames) {
-      if (await realExists(join(dir, name))) {
+      if (await realExists(path.join(dir, name))) {
         return "oxlint";
       }
     }
 
-    const parent = dirname(dir);
+    const parent = path.dirname(dir);
     if (parent === dir) {
       break;
     }
@@ -72,9 +72,9 @@ const cwd = process.cwd();
 
 describe("detectLinter", () => {
   test("returns biome when biome.json exists in cwd", async () => {
-    const targetPath = join(cwd, "biome.json");
-    mockAccess = mock((path: string) => {
-      if (path === targetPath) {
+    const targetPath = path.join(cwd, "biome.json");
+    mockAccess = mock((filePath: string) => {
+      if (filePath === targetPath) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("ENOENT"));
@@ -85,9 +85,9 @@ describe("detectLinter", () => {
   });
 
   test("returns biome when .biome.json exists in cwd", async () => {
-    const targetPath = join(cwd, ".biome.json");
-    mockAccess = mock((path: string) => {
-      if (path === targetPath) {
+    const targetPath = path.join(cwd, ".biome.json");
+    mockAccess = mock((filePath: string) => {
+      if (filePath === targetPath) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("ENOENT"));
@@ -98,9 +98,9 @@ describe("detectLinter", () => {
   });
 
   test("returns biome when .biome.jsonc exists in cwd", async () => {
-    const targetPath = join(cwd, ".biome.jsonc");
-    mockAccess = mock((path: string) => {
-      if (path === targetPath) {
+    const targetPath = path.join(cwd, ".biome.jsonc");
+    mockAccess = mock((filePath: string) => {
+      if (filePath === targetPath) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("ENOENT"));
@@ -111,9 +111,9 @@ describe("detectLinter", () => {
   });
 
   test("returns eslint when eslint config exists in cwd", async () => {
-    const targetPath = join(cwd, "eslint.config.js");
-    mockAccess = mock((path: string) => {
-      if (path === targetPath) {
+    const targetPath = path.join(cwd, "eslint.config.js");
+    mockAccess = mock((filePath: string) => {
+      if (filePath === targetPath) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("ENOENT"));
@@ -124,9 +124,9 @@ describe("detectLinter", () => {
   });
 
   test("returns oxlint when oxlint config exists in cwd", async () => {
-    const targetPath = join(cwd, "oxlint.config.ts");
-    mockAccess = mock((path: string) => {
-      if (path === targetPath) {
+    const targetPath = path.join(cwd, "oxlint.config.ts");
+    mockAccess = mock((filePath: string) => {
+      if (filePath === targetPath) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("ENOENT"));

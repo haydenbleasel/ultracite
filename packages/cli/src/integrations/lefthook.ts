@@ -11,8 +11,9 @@ import {
   writeProjectFile,
 } from "../utils";
 
-const PRE_COMMIT_JOBS_REGEX = /(pre-commit:\s*\n\s*jobs:\s*\n)/u;
-const PRE_COMMIT_REGEX = /(pre-commit:\s*\n)/u;
+const PRE_COMMIT_JOBS_REGEX =
+  /(?<preCommitJobs>pre-commit:\s*\n\s*jobs:\s*\n)/u;
+const PRE_COMMIT_REGEX = /(?<preCommit>pre-commit:\s*\n)/u;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
   dlxCommand(packageManager, "ultracite", {
@@ -110,7 +111,7 @@ export const lefthook = {
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_JOBS_REGEX,
-          `$1${ultraciteJob}\n`
+          `$<preCommitJobs>${ultraciteJob}\n`
         );
         await writeProjectFile(path, updatedConfig);
       } else {
@@ -128,7 +129,7 @@ export const lefthook = {
       stage_fixed: true`;
         const updatedConfig = existingContents.replace(
           PRE_COMMIT_REGEX,
-          `$1${jobsSection}\n`
+          `$<preCommit>${jobsSection}\n`
         );
         await writeProjectFile(path, updatedConfig);
       }

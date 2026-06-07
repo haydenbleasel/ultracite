@@ -1,7 +1,10 @@
 import { readdir } from "node:fs/promises";
-import { join } from "node:path";
+import path from "node:path";
 
-const configDir = join(import.meta.dirname, "../packages/cli/config/oxlint");
+const configDir = path.join(
+  import.meta.dirname,
+  "../packages/cli/config/oxlint"
+);
 
 const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
   try {
@@ -28,7 +31,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, "index.mjs");
+    const configPath = path.join(configDir, framework, "index.mjs");
     const valid = await validateOxlintConfig(configPath);
 
     results.push({ framework, valid });

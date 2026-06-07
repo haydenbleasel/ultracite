@@ -1,6 +1,6 @@
 import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-import { dirname, isAbsolute, join, relative, resolve } from "node:path";
+import path from "node:path";
 import process from "node:process";
 
 import type { Framework } from "@repo/data/options";
@@ -10,9 +10,9 @@ import YAML from "yaml";
 import type { PackageJson } from "./schemas";
 import { readPackageJson, readPackageJsonSync } from "./schemas";
 
-export const exists = (path: string): boolean => {
+export const exists = (filePath: string): boolean => {
   try {
-    accessSync(path);
+    accessSync(filePath);
     return true;
   } catch {
     return false;
@@ -32,8 +32,8 @@ export const isMonorepo = (): boolean => {
   return !!pkgJson.workspaces || !!pkgJson.workspace;
 };
 
-export const ensureDirectory = (path: string): void => {
-  const dir = dirname(path);
+export const ensureDirectory = (filePath: string): void => {
+  const dir = path.dirname(filePath);
   if (dir !== ".") {
     const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
     mkdirSync(cleanDir, { recursive: true });
@@ -41,25 +41,27 @@ export const ensureDirectory = (path: string): void => {
 };
 
 const isInsidePath = (target: string, root: string): boolean => {
-  const relativePath = relative(root, target);
+  const relativePath = path.relative(root, target);
   return (
     relativePath === "" ||
-    (!relativePath.startsWith("..") && !isAbsolute(relativePath))
+    (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
   );
 };
 
-const getRealPath = (path: string): string =>
-  typeof realpathSync === "function" ? realpathSync(path) : resolve(path);
+const getRealPath = (filePath: string): string =>
+  typeof realpathSync === "function"
+    ? realpathSync(filePath)
+    : path.resolve(filePath);
 
-export const assertWritableProjectPath = (path: string): void => {
+export const assertWritableProjectPath = (filePath: string): void => {
   const projectRoot = getRealPath(process.cwd());
-  const targetPath = resolve(process.cwd(), path);
+  const targetPath = path.resolve(process.cwd(), filePath);
 
   if (!isInsidePath(targetPath, projectRoot)) {
-    throw new Error(`Refusing to write outside project: ${path}`);
+    throw new Error(`Refusing to write outside project: ${filePath}`);
   }
 
-  const parentPath = dirname(targetPath);
+  const parentPath = path.dirname(targetPath);
   const realParentPath = getRealPath(parentPath);
 
   if (!isInsidePath(realParentPath, projectRoot)) {
@@ -73,12 +75,12 @@ export const assertWritableProjectPath = (path: string): void => {
       typeof lstatSync === "function" ? lstatSync(targetPath) : undefined;
 
     if (targetStats?.isSymbolicLink()) {
-      throw new Error(`Refusing to write through symbolic link: ${path}`);
+      throw new Error(`Refusing to write through symbolic link: ${filePath}`);
     }
 
     const realTargetPath = getRealPath(targetPath);
     if (!isInsidePath(realTargetPath, projectRoot)) {
-      throw new Error(`Refusing to write outside project: ${path}`);
+      throw new Error(`Refusing to write outside project: ${filePath}`);
     }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
@@ -90,12 +92,12 @@ export const assertWritableProjectPath = (path: string): void => {
 };
 
 export const writeProjectFile = async (
-  path: string,
+  filePath: string,
   content: string
 ): Promise<void> => {
-  ensureDirectory(path);
-  assertWritableProjectPath(path);
-  await writeFile(path, content);
+  ensureDirectory(filePath);
+  assertWritableProjectPath(filePath);
+  await writeFile(filePath, content);
 };
 
 export const updatePackageJson = async ({
@@ -286,7 +288,7 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
         { absolute: false, ignore: ["**/node_modules/**"] }
       );
       const workspacePkgs = await Promise.all(
-        pkgJsonPaths.map((path) => readPackageJson(path))
+        pkgJsonPaths.map((pkgPath) => readPackageJson(pkgPath))
       );
       for (const pkg of workspacePkgs) {
         for (const dep of collectDeps(pkg)) {
@@ -315,24 +317,24 @@ export const detectLinter = (startDir = process.cwd()): Linter | null => {
 
   while (true) {
     for (const name of biomeConfigNames) {
-      if (exists(join(dir, name))) {
+      if (exists(path.join(dir, name))) {
         return "biome";
       }
     }
 
     for (const name of eslintConfigNames) {
-      if (exists(join(dir, name))) {
+      if (exists(path.join(dir, name))) {
         return "eslint";
       }
     }
 
     for (const name of oxlintConfigNames) {
-      if (exists(join(dir, name))) {
+      if (exists(path.join(dir, name))) {
         return "oxlint";
       }
     }
 
-    const parent = dirname(dir);
+    const parent = path.dirname(dir);
     if (parent === dir) {
       break;
     }

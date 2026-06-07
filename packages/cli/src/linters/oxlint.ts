@@ -66,7 +66,7 @@ export const oxlint = {
 
     // Check for JS imports: import x from "ultracite/oxlint/..."
     const importMatches = existingContents.matchAll(
-      /import \w+ from ["']([^"']+)["']/gu
+      /import \w+ from ["'](?<source>[^"']+)["']/gu
     );
     for (const match of importMatches) {
       if (match[1].startsWith("ultracite/oxlint/")) {
@@ -76,9 +76,11 @@ export const oxlint = {
 
     // Fallback: check for string extends (legacy format)
     if (existingExtends.length === 0) {
-      const extendsMatch = existingContents.match(/extends:\s*\[([\s\S]*?)\]/u);
+      const extendsMatch = existingContents.match(
+        /extends:\s*\[(?<body>[\s\S]*?)\]/u
+      );
       if (extendsMatch?.[1]) {
-        const matches = extendsMatch[1].matchAll(/"([^"]+)"/gu);
+        const matches = extendsMatch[1].matchAll(/"(?<value>[^"]+)"/gu);
         for (const match of matches) {
           // Convert legacy node_modules paths to new format
           const converted = match[1].replace(

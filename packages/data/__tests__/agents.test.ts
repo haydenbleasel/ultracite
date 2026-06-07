@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { resolve } from "node:path";
+import path from "node:path";
 
 const decoder = new TextDecoder();
-const monorepoRoot = resolve(import.meta.dir, "../../..");
+const monorepoRoot = path.resolve(import.meta.dir, "../../..");
 
 interface AgentSummary {
   category: string;

@@ -1,9 +1,12 @@
 import { access, readdir } from "node:fs/promises";
-import { join } from "node:path";
+import path from "node:path";
 
 import { $ } from "bun";
 
-const configDir = join(import.meta.dirname, "../packages/cli/config/eslint");
+const configDir = path.join(
+  import.meta.dirname,
+  "../packages/cli/config/eslint"
+);
 
 const validateEslintConfig = async (configPath: string): Promise<boolean> => {
   try {
@@ -34,7 +37,7 @@ const main = async () => {
       continue;
     }
 
-    const configPath = join(configDir, framework, "eslint.config.mjs");
+    const configPath = path.join(configDir, framework, "eslint.config.mjs");
     const valid = await validateEslintConfig(configPath);
 
     results.push({ framework, valid });

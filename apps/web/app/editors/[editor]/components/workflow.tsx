@@ -23,7 +23,7 @@ const renderStep = (step: string) => {
   const searchStart = { value: 0 };
 
   return step
-    .split(/(`[^`]+`)/gu)
+    .split(/(?<code>`[^`]+`)/gu)
     .filter(Boolean)
     .map((segment) => {
       const key = getSegmentKey(step, segment, searchStart);
