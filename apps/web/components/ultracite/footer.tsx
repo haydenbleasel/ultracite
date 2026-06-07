@@ -39,10 +39,6 @@ const generalLinks = [
     href: "/install",
     label: "Install",
   },
-  {
-    href: "/updates",
-    label: "Updates",
-  },
 ];
 
 interface FooterProps {

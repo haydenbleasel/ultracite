@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Installer } from "@/components/ultracite/installer";
 
+import { LatestRelease } from "./latest-release";
+
 interface HeroProps {
   children: ReactNode;
   description: string;
@@ -34,6 +36,7 @@ const logos = [
 export const Hero = ({ description, children }: HeroProps) => (
   <div className="grid gap-8 sm:gap-20">
     <div className="grid gap-4">
+      <LatestRelease />
       <h1 className="mb-0 max-w-xl text-balance font-semibold text-4xl leading-none tracking-tighter md:text-5xl lg:text-6xl">
         A production-grade, zero-configuration preset for{" "}
         <span className="inline-flex translate-y-0.5 items-center -space-x-1 md:translate-y-1">

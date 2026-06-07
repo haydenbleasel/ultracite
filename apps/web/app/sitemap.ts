@@ -3,20 +3,14 @@ import { editors } from "@repo/data/editors";
 import { providers } from "@repo/data/providers";
 import type { MetadataRoute } from "next";
 
-import { getReleases } from "@/lib/changelog";
 import { createAbsoluteUrl } from "@/lib/site-metadata";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       changeFrequency: "weekly",
       priority: 1,
       url: createAbsoluteUrl("/"),
-    },
-    {
-      changeFrequency: "weekly",
-      priority: 0.6,
-      url: createAbsoluteUrl("/updates"),
     },
     {
       changeFrequency: "monthly",
@@ -53,18 +47,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: createAbsoluteUrl(`/providers/${provider.id}`),
   }));
 
-  const releases = await getReleases();
-  const releaseRoutes: MetadataRoute.Sitemap = releases.map((release) => ({
-    changeFrequency: "yearly",
-    priority: 0.3,
-    url: createAbsoluteUrl(`/updates/${release.id}`),
-  }));
-
-  return [
-    ...staticRoutes,
-    ...agentRoutes,
-    ...editorRoutes,
-    ...providerRoutes,
-    ...releaseRoutes,
-  ];
+  return [...staticRoutes, ...agentRoutes, ...editorRoutes, ...providerRoutes];
 }

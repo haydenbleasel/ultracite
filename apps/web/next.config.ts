@@ -13,6 +13,7 @@ const docsBaseUrl =
   process.env.NODE_ENV === "production"
     ? "https://docs.ultracite.ai"
     : "http://localhost:3001";
+const releasesBaseUrl = "https://github.com/haydenbleasel/ultracite/releases";
 
 const legacyDocsRedirects = [
   ["/configuration", "/configuration"],
@@ -74,6 +75,16 @@ const config: NextConfig = {
         destination: "/",
         permanent: true,
         source: "/social",
+      },
+      {
+        destination: releasesBaseUrl,
+        permanent: true,
+        source: "/updates",
+      },
+      {
+        destination: `${releasesBaseUrl}/tag/ultracite%40:version`,
+        permanent: true,
+        source: "/updates/:version",
       },
       ...legacyDocsRedirects,
     ];
