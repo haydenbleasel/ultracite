@@ -25,6 +25,7 @@ const config = {
       },
     ],
     "declaration-property-value-no-unknown": true,
+    "display-notation": "short",
     "no-descending-specificity": null,
     "selector-pseudo-class-no-unknown": [
       true,
