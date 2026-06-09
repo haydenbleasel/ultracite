@@ -24,17 +24,18 @@ const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
 
 const main = async () => {
   const frameworks = await readdir(configDir);
-  const results: { framework: string; valid: boolean }[] = [];
 
-  for (const framework of frameworks) {
-    if (framework.startsWith(".")) {
-      continue;
-    }
+  const results = await Promise.all(
+    frameworks
+      .filter((framework) => !framework.startsWith("."))
+      .map(async (framework) => {
+        const configPath = path.join(configDir, framework, "index.mjs");
+        const valid = await validateOxlintConfig(configPath);
+        return { framework, valid };
+      })
+  );
 
-    const configPath = path.join(configDir, framework, "index.mjs");
-    const valid = await validateOxlintConfig(configPath);
-
-    results.push({ framework, valid });
+  for (const { framework, valid } of results) {
     console.log(`${valid ? "✓" : "✗"} oxlint/${framework}`);
   }
 

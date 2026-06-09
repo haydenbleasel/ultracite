@@ -37,32 +37,43 @@ const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 const realDetectLinter = async (): Promise<
   "biome" | "eslint" | "oxlint" | null
 > => {
+  // Collect ancestor directories from cwd up to the filesystem root.
+  const dirs: string[] = [];
   let dir = process.cwd();
-
   while (true) {
-    for (const name of biomeConfigNames) {
-      if (await realExists(path.join(dir, name))) {
-        return "biome";
-      }
-    }
-
-    for (const name of eslintConfigNames) {
-      if (await realExists(path.join(dir, name))) {
-        return "eslint";
-      }
-    }
-
-    for (const name of oxlintConfigNames) {
-      if (await realExists(path.join(dir, name))) {
-        return "oxlint";
-      }
-    }
-
+    dirs.push(dir);
     const parent = path.dirname(dir);
     if (parent === dir) {
       break;
     }
     dir = parent;
+  }
+
+  // Linters in precedence order; the nearest directory's first match wins.
+  const linterConfigs = [
+    { linter: "biome" as const, names: biomeConfigNames },
+    { linter: "eslint" as const, names: eslintConfigNames },
+    { linter: "oxlint" as const, names: oxlintConfigNames },
+  ];
+
+  // Probe every directory/config-name combination concurrently. The flat order
+  // (dir-by-dir, then biome → eslint → oxlint, then by name) matches the
+  // original sequential walk, so the first existing config still wins.
+  const checks = dirs.flatMap((currentDir) =>
+    linterConfigs.flatMap(({ linter, names }) =>
+      names.map(async (name) => ({
+        found: await realExists(path.join(currentDir, name)),
+        linter,
+      }))
+    )
+  );
+
+  const results = await Promise.all(checks);
+
+  for (const { linter, found } of results) {
+    if (found) {
+      return linter;
+    }
   }
 
   return null;

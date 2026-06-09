@@ -1102,25 +1102,33 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertOxfmtConfig(quiet);
     }
 
-    for (const target of selectedEditorFiles) {
-      await upsertEditorFile(target, linter, quiet);
-    }
+    await Promise.all(
+      selectedEditorFiles.map((target) =>
+        upsertEditorFile(target, linter, quiet)
+      )
+    );
 
-    for (const editorId of editorConfig ?? []) {
-      await upsertEditorConfig(editorId, linter, quiet);
-    }
+    await Promise.all(
+      (editorConfig ?? []).map((editorId) =>
+        upsertEditorConfig(editorId, linter, quiet)
+      )
+    );
 
-    for (const target of selectedAgentFiles) {
-      await upsertAgentFile(target, pm, linter, quiet);
-    }
+    await Promise.all(
+      selectedAgentFiles.map((target) =>
+        upsertAgentFile(target, pm, linter, quiet)
+      )
+    );
 
-    for (const ruleName of agents ?? []) {
-      await upsertAgents(ruleName, agentsOptions[ruleName], pm, linter, quiet);
-    }
+    await Promise.all(
+      (agents ?? []).map((ruleName) =>
+        upsertAgents(ruleName, agentsOptions[ruleName], pm, linter, quiet)
+      )
+    );
 
-    for (const hookName of hooks ?? []) {
-      await upsertHooks(hookName, pm, linter, quiet);
-    }
+    await Promise.all(
+      (hooks ?? []).map((hookName) => upsertHooks(hookName, pm, linter, quiet))
+    );
 
     if (integrations?.includes("husky")) {
       const useLintStaged = integrations?.includes("lint-staged") ?? false;
