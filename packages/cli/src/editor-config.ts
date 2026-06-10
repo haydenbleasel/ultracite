@@ -32,10 +32,16 @@ export const createEditorConfig = (
     exists: () => exists(editor.config.path),
 
     extension: editor.config.extensionCommand
-      ? (extensionId: string) =>
-          spawnSync(editor.config.extensionCommand as string, [extensionId], {
+      ? (extensionId: string) => {
+          // extensionCommand is a full command line, e.g.
+          // "code --install-extension" — split it so spawn gets a real binary
+          const [command, ...commandArgs] = (
+            editor.config.extensionCommand as string
+          ).split(" ");
+          return spawnSync(command, [...commandArgs, extensionId], {
             stdio: "pipe",
-          })
+          });
+        }
       : undefined,
 
     update: async () => {

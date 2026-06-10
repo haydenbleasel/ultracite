@@ -198,8 +198,8 @@ describe("vscode editor config", () => {
 
       expect(mockSpawn).toHaveBeenCalled();
       const [spawnCall] = mockSpawn.mock.calls;
-      expect(spawnCall[0]).toBe("code --install-extension");
-      expect(spawnCall[1]).toEqual(["biomejs.biome"]);
+      expect(spawnCall[0]).toBe("code");
+      expect(spawnCall[1]).toEqual(["--install-extension", "biomejs.biome"]);
     });
   });
 });
