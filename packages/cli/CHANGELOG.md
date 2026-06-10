@@ -1,3 +1,87 @@
+## 7.8.3
+
+### Patch Changes
+
+- c863d09: Fix automatic editor extension installation during `ultracite init`.
+
+  The whole command line (e.g. `code --install-extension`) was passed to
+  `spawnSync` as the executable name, which always failed with `ENOENT` and
+  silently fell back to the "install manually" message. The command is now split
+  into the binary and its arguments, so the linter extension actually installs
+  for VS Code-based editors.
+
+- 6888129: Enable the `eslint/no-await-in-loop` rule as an error in the core Oxlint
+  preset.
+
+  Awaiting inside a loop forces each iteration to run sequentially, which can
+  lead to serious performance issues when the asynchronous operations could
+  otherwise run concurrently. Promoting this rule to an error encourages
+  collecting promises and resolving them together (e.g. with `Promise.all`)
+  instead of blocking on each one in turn.
+
+- 62a9b5c: Fix the generated Husky pre-commit hook's error handling and section
+  replacement.
+
+  The standalone hook script set `set -e` and then tried to capture the
+  formatter's exit code, re-stage files, and print a failure message — but a
+  non-zero formatter exit terminated the script immediately, so none of that
+  ever ran. The script now captures the exit code with `|| FORMAT_EXIT_CODE=$?`
+  so files are re-staged and failures are reported with the right exit code.
+
+  Re-running `ultracite init` also deleted everything from the `# ultracite`
+  marker to the end of the hook, including commands the user added after the
+  ultracite section. The section is now terminated with an explicit
+  `# ultracite end` marker and updates replace only the section between the
+  markers (legacy sections without an end marker are detected by their closing
+  echo line).
+
+- 6608ceb: Make the lint-staged integration idempotent and respect dedicated config
+  files.
+
+  `package.json` was always treated as the lint-staged config because the file
+  exists in every project, so `ultracite init` wrote the lint-staged config into
+  `package.json` even when a dedicated `.lintstagedrc.*` or
+  `lint-staged.config.*` file was present — leaving two conflicting configs.
+  `package.json` now only counts when it actually has a `lint-staged` key;
+  otherwise the dedicated config file is updated (or `.lintstagedrc.json` is
+  created).
+
+  Re-running `ultracite init` also appended another `npx ultracite fix` entry on
+  every run because the merge concatenates arrays. Updates are now skipped when
+  the existing config already references ultracite.
+
+- 4e847f7: Insert `--` before script arguments in npm hook commands.
+
+  The post-edit hook command generated for npm projects was
+  `npm run fix --skip=correctness/noUnusedImports`, where npm consumes the
+  `--skip` flag itself instead of forwarding it to the script — so agent hooks
+  ran a plain `ultracite fix`, including the unused-import removal the flag
+  exists to prevent mid-edit. The generated command is now
+  `npm run fix -- --skip=correctness/noUnusedImports`, matching the documented
+  form.
+
+- ecb0d5b: Scope the Stylelint step of `ultracite check` and `ultracite fix` (ESLint mode)
+  to style files.
+
+  Stylelint was previously given the same targets as ESLint and Prettier (or `.`
+  when no files were passed), so it tried to parse `.ts`/`.json` files as CSS and
+  failed with `CssSyntaxError`. Style files now pass through unchanged, directory
+  targets become `**/*.{css,scss,sass,less}` globs, other files are dropped, and
+  the step is skipped entirely when no style targets remain.
+  `--allow-empty-input` is passed so projects without CSS still succeed.
+
+- 61ea0a1: Fix the project-path write guard's error message and ordering.
+
+  The "Refusing to write through directory outside project" error interpolated
+  the `node:path` module instead of the offending file path, printing
+  `[object Object]`. It now reports the actual path.
+
+  `writeProjectFile` also created directories (`mkdir -p`) before running the
+  path-escape check, so directories could be created outside the project before
+  the guard threw. Validation now happens first; the parent-directory check
+  resolves the nearest existing ancestor so writes into not-yet-created nested
+  directories still work.
+
 ## 7.8.2
 
 ### Patch Changes
