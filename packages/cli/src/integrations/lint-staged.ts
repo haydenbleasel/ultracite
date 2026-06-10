@@ -19,9 +19,10 @@ const createLintStagedConfig = (packageManager: PackageManagerName) => ({
   ],
 });
 
-// Check for existing configuration files in order of preference
+// Check for existing dedicated configuration files in order of preference.
+// package.json is handled separately — it only counts as lint-staged config
+// when it actually has a "lint-staged" key.
 const configFiles = [
-  "./package.json",
   "./.lintstagedrc.json",
   "./.lintstagedrc.js",
   "./.lintstagedrc.cjs",
@@ -33,6 +34,21 @@ const configFiles = [
   "./.lintstagedrc.yml",
   "./.lintstagedrc",
 ];
+
+// deepmerge concatenates arrays, so re-running init would append another
+// ultracite command on every run — skip configs that already reference it
+const hasUltraciteCommand = (config: unknown): boolean =>
+  JSON.stringify(config).includes("ultracite");
+
+const readPackageJsonLintStaged = async (): Promise<unknown> => {
+  try {
+    const content = await readFile("./package.json", "utf-8");
+    const packageJson = parsePackageJson(content);
+    return packageJson?.["lint-staged"];
+  } catch {
+    return undefined;
+  }
+};
 
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
@@ -54,6 +70,10 @@ const updatePackageJson = async (
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!packageJson) {
+    return;
+  }
+
+  if (hasUltraciteCommand(packageJson["lint-staged"])) {
     return;
   }
 
@@ -80,6 +100,10 @@ const updateJsonConfig = async (
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!existingConfig) {
+    return;
+  }
+
+  if (hasUltraciteCommand(existingConfig)) {
     return;
   }
 
@@ -120,6 +144,10 @@ const updateYamlConfig = async (
     return;
   }
 
+  if (hasUltraciteCommand(existingConfig)) {
+    return;
+  }
+
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -135,6 +163,11 @@ const updateEsmConfig = async (
   const fileUrl = pathToFileURL(filename).href;
   const imported = await import(fileUrl);
   const existingConfig = imported.default || {};
+
+  if (hasUltraciteCommand(existingConfig)) {
+    return;
+  }
+
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -154,6 +187,11 @@ const updateCjsConfig = async (
   const fileUrl = `${pathToFileURL(filename).href}?t=${Date.now()}`;
   const imported = await import(fileUrl);
   const existingConfig = imported.default || imported;
+
+  if (hasUltraciteCommand(existingConfig)) {
+    return;
+  }
+
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -179,11 +217,6 @@ const handleConfigFileUpdate = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  if (filename === "./package.json") {
-    await updatePackageJson(packageManager);
-    return;
-  }
-
   if (filename.endsWith(".json") || filename === "./.lintstagedrc") {
     await updateJsonConfig(filename, packageManager);
     return;
@@ -221,14 +254,12 @@ export const lintStaged = {
       `${JSON.stringify(createLintStagedConfig(packageManager), null, 2)}\n`
     );
   },
-  exists: () => {
-    for (const file of configFiles) {
-      if (exists(file)) {
-        return true;
-      }
+  exists: async () => {
+    if (await readPackageJsonLintStaged()) {
+      return true;
     }
 
-    return false;
+    return configFiles.some((file) => exists(file));
   },
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lint-staged", {
@@ -241,14 +272,14 @@ export const lintStaged = {
     });
   },
   update: async (packageManager: PackageManagerName) => {
-    let existingConfigFile: string | null = null;
-
-    for (const file of configFiles) {
-      if (exists(file)) {
-        existingConfigFile = file;
-        break;
-      }
+    // package.json only wins when it actually holds the lint-staged config —
+    // otherwise a dedicated config file would shadow whatever we write there
+    if (await readPackageJsonLintStaged()) {
+      await updatePackageJson(packageManager);
+      return;
     }
+
+    const existingConfigFile = configFiles.find((file) => exists(file));
 
     // If no config file found, create a fallback config
     if (!existingConfigFile) {

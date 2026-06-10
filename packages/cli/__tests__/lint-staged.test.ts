@@ -587,7 +587,7 @@ describe("lintStaged", () => {
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
-    test("handles package.json without lint-staged key", async () => {
+    test("creates fallback config when package.json has no lint-staged key", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -617,10 +617,122 @@ describe("lintStaged", () => {
 
       await lintStaged.update("npm");
 
+      // package.json without a lint-staged key is not lint-staged config —
+      // a dedicated fallback file is created instead of touching package.json
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".lintstagedrc.json");
+    });
+
+    test("skips package.json update when ultracite is already configured", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./package.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock(() =>
+          Promise.resolve(
+            '{"name": "test", "lint-staged": {"*.js": ["npx ultracite fix"]}}'
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("skips JSON config update when ultracite is already configured", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return Promise.resolve('{"*.js": ["npx ultracite fix"]}');
+          }
+          return Promise.resolve("{}");
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./.lintstagedrc.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("updates dedicated config file even when package.json exists", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) => {
+          if (path === "./package.json" || path === "./.lintstagedrc.json") {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error("ENOENT"));
+        }),
+        readFile: mock((path: string) => {
+          if (path === "./package.json") {
+            return Promise.resolve('{"name": "test"}');
+          }
+          return Promise.resolve('{"*.css": ["stylelint --fix"]}');
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (path === "./package.json" || path === "./.lintstagedrc.json") {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await lintStaged.update("npm");
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe("./.lintstagedrc.json");
       const writtenContent = JSON.parse(writeCall[1] as string);
-      expect(writtenContent["lint-staged"]).toBeDefined();
+      expect(writtenContent["*.css"]).toEqual(["stylelint --fix"]);
     });
 
     test("handles package.json type module for ESM detection", async () => {
