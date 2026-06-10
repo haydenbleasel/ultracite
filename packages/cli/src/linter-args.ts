@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+import path from "node:path";
 
 type PathExists = (path: string) => boolean;
 
@@ -25,6 +26,48 @@ const getCommandArgs = (
 
 export const normalizeFileArgs = (files: string[]): string[] =>
   files.map((file) => (file.startsWith("-") ? `./${file}` : file));
+
+const STYLE_FILE_GLOB = "**/*.{css,scss,sass,less}";
+
+const styleExtensions = [".css", ".scss", ".sass", ".less"];
+
+const hasStyleExtension = (file: string): boolean => {
+  const lowered = file.toLowerCase();
+  return styleExtensions.some((extension) => lowered.endsWith(extension));
+};
+
+/**
+ * Stylelint has no extension filtering of its own, so handing it the same
+ * targets as ESLint/Prettier makes it parse .ts/.json files as CSS and fail.
+ * Style files pass through, extension-less targets (directories) become
+ * style-scoped globs, and other files are dropped. An empty result means
+ * Stylelint has nothing to lint and should be skipped.
+ */
+export const toStylelintTargets = (files: string[]): string[] => {
+  if (files.length === 0) {
+    return [STYLE_FILE_GLOB];
+  }
+
+  const targets: string[] = [];
+
+  for (const file of files) {
+    if (hasStyleExtension(file)) {
+      targets.push(file);
+      continue;
+    }
+
+    if (path.extname(file) === "") {
+      const base = file.replace(/\/+$/u, "");
+      targets.push(
+        base === "." || base === ""
+          ? STYLE_FILE_GLOB
+          : `${base}/${STYLE_FILE_GLOB}`
+      );
+    }
+  }
+
+  return targets;
+};
 
 export const splitLinterArgs = ({
   commandName,

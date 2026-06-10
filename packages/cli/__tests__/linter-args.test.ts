@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
 
-import { normalizeFileArgs, splitLinterArgs } from "../src/linter-args";
+import {
+  normalizeFileArgs,
+  splitLinterArgs,
+  toStylelintTargets,
+} from "../src/linter-args";
 
 describe("linter args", () => {
   test("keeps existing hyphen-prefixed paths as files", () => {
@@ -55,5 +59,27 @@ describe("linter args", () => {
     expect(normalizeFileArgs(["--config=evil.mjs", "-hyphen-file.ts"])).toEqual(
       ["./--config=evil.mjs", "./-hyphen-file.ts"]
     );
+  });
+
+  test("returns a style glob when no files are given", () => {
+    expect(toStylelintTargets([])).toEqual(["**/*.{css,scss,sass,less}"]);
+  });
+
+  test("keeps style files and drops other files", () => {
+    expect(
+      toStylelintTargets(["src/styles.css", "theme.SCSS", "src/index.ts"])
+    ).toEqual(["src/styles.css", "theme.SCSS"]);
+  });
+
+  test("maps directories to style-scoped globs", () => {
+    expect(toStylelintTargets(["src", "./lib/", "."])).toEqual([
+      "src/**/*.{css,scss,sass,less}",
+      "./lib/**/*.{css,scss,sass,less}",
+      "**/*.{css,scss,sass,less}",
+    ]);
+  });
+
+  test("returns no targets when only non-style files are given", () => {
+    expect(toStylelintTargets(["src/index.ts", "package.json"])).toEqual([]);
   });
 });

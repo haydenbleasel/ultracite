@@ -1,4 +1,4 @@
-import { normalizeFileArgs } from "../linter-args";
+import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
 import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
 import { detectLinter } from "../utils";
 
@@ -40,7 +40,13 @@ const runPrettierFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runStylelintFix = (files: string[], passthrough: string[]): void => {
-  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
+  const targets = toStylelintTargets(files);
+
+  if (targets.length === 0) {
+    return;
+  }
+
+  const args = ["--fix", ...passthrough, "--allow-empty-input", ...targets];
 
   const result = runCommandSync("stylelint", args, {
     stdio: "inherit",

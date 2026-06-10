@@ -246,9 +246,37 @@ describe("fix", () => {
 
     fix(["src/index.ts"]);
 
-    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    // stylelint is skipped because no CSS-like targets remain after filtering
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
     const [, eslintCall] = mockSpawn.mock.calls;
     expect(eslintCall[1]).toContain("src/index.ts");
+  });
+
+  test("eslint fix scopes stylelint to style files and directories", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+        status: 0,
+      })
+    );
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    fix(["src/styles.css", "src/index.ts", "lib"]);
+
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    const [prettierCall, eslintCall, stylelintCall] = mockSpawn.mock.calls;
+    expect(prettierCall[0]).toBe("prettier");
+    expect(eslintCall[0]).toBe("eslint");
+    expect(stylelintCall[0]).toBe("stylelint");
+    expect(stylelintCall[1]).toContain("--fix");
+    expect(stylelintCall[1]).toContain("--allow-empty-input");
+    expect(stylelintCall[1]).toContain("src/styles.css");
+    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,sass,less}");
+    expect(stylelintCall[1]).not.toContain("src/index.ts");
   });
 
   test("eslint fix throws LinterExitError when prettier fails", () => {
