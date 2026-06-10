@@ -18,7 +18,10 @@ const createFixCommand = (
   args: string[] = []
 ): string => {
   const safePackageManager = assertSupportedPackageManagerName(packageManager);
-  return runScriptCommand(safePackageManager, "fix", { args });
+  // npm swallows flags after `npm run <script>` unless they come after `--`
+  const scriptArgs =
+    safePackageManager === "npm" && args.length > 0 ? ["--", ...args] : args;
+  return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
 export const createHooks = (

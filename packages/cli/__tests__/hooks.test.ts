@@ -9,7 +9,7 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-const npmBiomeCommand = "npm run fix --skip=correctness/noUnusedImports";
+const npmBiomeCommand = "npm run fix -- --skip=correctness/noUnusedImports";
 
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
