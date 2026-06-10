@@ -53,6 +53,29 @@ const getRealPath = (filePath: string): string =>
     ? realpathSync(filePath)
     : path.resolve(filePath);
 
+// Resolve the real path of the nearest existing ancestor so the escape check
+// works for directories that haven't been created yet — segments that don't
+// exist can't be symlinks, so checking the existing ancestor is sufficient.
+const getRealPathOfNearestExistingAncestor = (target: string): string => {
+  let current = target;
+
+  while (true) {
+    try {
+      return getRealPath(current);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+        throw error;
+      }
+
+      const parent = path.dirname(current);
+      if (parent === current) {
+        return path.resolve(current);
+      }
+      current = parent;
+    }
+  }
+};
+
 export const assertWritableProjectPath = (filePath: string): void => {
   const projectRoot = getRealPath(process.cwd());
   const targetPath = path.resolve(process.cwd(), filePath);
@@ -62,11 +85,11 @@ export const assertWritableProjectPath = (filePath: string): void => {
   }
 
   const parentPath = path.dirname(targetPath);
-  const realParentPath = getRealPath(parentPath);
+  const realParentPath = getRealPathOfNearestExistingAncestor(parentPath);
 
   if (!isInsidePath(realParentPath, projectRoot)) {
     throw new Error(
-      `Refusing to write through directory outside project: ${path}`
+      `Refusing to write through directory outside project: ${filePath}`
     );
   }
 
@@ -95,8 +118,10 @@ export const writeProjectFile = async (
   filePath: string,
   content: string
 ): Promise<void> => {
-  ensureDirectory(filePath);
+  // Validate before creating directories so the guard can't be used to
+  // mkdir outside the project
   assertWritableProjectPath(filePath);
+  ensureDirectory(filePath);
   await writeFile(filePath, content);
 };
 
