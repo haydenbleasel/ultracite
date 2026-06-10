@@ -16,9 +16,6 @@ ${lintStagedCommand}
 `;
 
 const createStandaloneHookScript = (command: string) => `#!/bin/sh
-# Exit on any error
-set -e
-
 # Check if there are any staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
 if [ -z "$STAGED_FILES" ]; then
@@ -26,9 +23,9 @@ if [ -z "$STAGED_FILES" ]; then
   exit 0
 fi
 
-# Run formatter
-${command}
-FORMAT_EXIT_CODE=$?
+# Run formatter, capturing the exit code so we can still re-stage and report
+FORMAT_EXIT_CODE=0
+${command} || FORMAT_EXIT_CODE=$?
 
 # Re-stage files that were already staged
 echo "$STAGED_FILES" | while IFS= read -r file; do
@@ -48,6 +45,30 @@ echo "✨ Files formatted by Ultracite"
 const path = "./.husky/pre-commit";
 
 const ULTRACITE_MARKER = "# ultracite";
+const ULTRACITE_END_MARKER = "# ultracite end";
+
+const renderSection = (hookScript: string): string =>
+  `${ULTRACITE_MARKER}\n${hookScript}${ULTRACITE_END_MARKER}`;
+
+const findSectionEnd = (lines: string[], markerIndex: number): number => {
+  // Sections written by current versions carry an explicit end marker
+  const endIndex = lines.indexOf(ULTRACITE_END_MARKER, markerIndex + 1);
+  if (endIndex !== -1) {
+    return endIndex + 1;
+  }
+
+  // Legacy standalone sections end with the success message
+  const successIndex = lines.findIndex(
+    (line, index) =>
+      index > markerIndex && line.includes("Files formatted by Ultracite")
+  );
+  if (successIndex !== -1) {
+    return successIndex + 1;
+  }
+
+  // Unknown section shape — assume it runs to the end of the file
+  return lines.length;
+};
 
 export const husky = {
   create: async (packageManager: PackageManagerName, useLintStaged = false) => {
@@ -68,7 +89,7 @@ export const husky = {
       hookScript = createStandaloneHookScript(command);
     }
 
-    await writeProjectFile(path, `${ULTRACITE_MARKER}\n${hookScript}`);
+    await writeProjectFile(path, `${renderSection(hookScript)}\n`);
   },
   exists: () => exists(path),
   init: (packageManager: PackageManagerName) => {
@@ -119,21 +140,28 @@ export const husky = {
       hookScript = createStandaloneHookScript(command);
     }
 
-    // If the hook already contains an ultracite section, replace it
+    // If the hook already contains an ultracite section, replace only that
+    // section and keep whatever the user added before or after it
     if (existingContents.includes(ULTRACITE_MARKER)) {
       const lines = existingContents.split("\n");
       const markerIndex = lines.indexOf(ULTRACITE_MARKER);
+      const sectionEnd = findSectionEnd(lines, markerIndex);
       const before = lines.slice(0, markerIndex).join("\n");
-      await writeProjectFile(
-        path,
-        before
-          ? `${before}\n${ULTRACITE_MARKER}\n${hookScript}`
-          : `${ULTRACITE_MARKER}\n${hookScript}`
+      const after = lines
+        .slice(sectionEnd)
+        .join("\n")
+        .replace(/^\n+/u, "")
+        .replace(/\n+$/u, "");
+
+      const parts = [before, renderSection(hookScript), after].filter(
+        (part) => part !== ""
       );
+      await writeProjectFile(path, `${parts.join("\n")}\n`);
     } else {
+      const trimmedContents = existingContents.replace(/\n+$/u, "");
       await writeProjectFile(
         path,
-        `${existingContents}\n${ULTRACITE_MARKER}\n${hookScript}`
+        `${trimmedContents}\n${renderSection(hookScript)}\n`
       );
     }
   },

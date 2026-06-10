@@ -272,9 +272,109 @@ describe("husky", () => {
       const written = writeCall[1] as string;
       // Should contain the "other" line
       expect(written).toContain("other");
-      // Should have exactly one ultracite marker
-      const markerCount = (written.match(/# ultracite/gu) || []).length;
+      // Should have exactly one ultracite start marker
+      const markerCount = written
+        .split("\n")
+        .filter((line) => line === "# ultracite").length;
       expect(markerCount).toBe(1);
+    });
+
+    test("keeps user commands after the ultracite section on re-run", async () => {
+      const existingContent = [
+        '#!/bin/sh\necho "before"',
+        "# ultracite",
+        "#!/bin/sh",
+        "npx ultracite fix",
+        "# ultracite end",
+        "npm test",
+        "",
+      ].join("\n");
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await husky.update("npm");
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      const written = writeCall[1] as string;
+      expect(written).toContain('echo "before"');
+      expect(written).toContain("npm test");
+      const markerCount = written
+        .split("\n")
+        .filter((line) => line === "# ultracite").length;
+      expect(markerCount).toBe(1);
+      // npm test must come after the replaced section
+      expect(written.indexOf("npm test")).toBeGreaterThan(
+        written.indexOf("# ultracite end")
+      );
+    });
+
+    test("keeps user commands after a legacy standalone section", async () => {
+      const existingContent = [
+        "# ultracite",
+        "#!/bin/sh",
+        "npx ultracite fix",
+        'echo "✨ Files formatted by Ultracite"',
+        "npm test",
+        "",
+      ].join("\n");
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingContent)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await husky.update("npm");
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      const written = writeCall[1] as string;
+      expect(written).toContain("npm test");
+      expect(written.indexOf("npm test")).toBeGreaterThan(
+        written.indexOf("# ultracite end")
+      );
+    });
+
+    test("standalone hook captures formatter failures without set -e", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await husky.create("npm", false);
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      const written = writeCall[1] as string;
+      // set -e would abort the script before the failure-handling block runs
+      expect(written).not.toContain("set -e");
+      expect(written).toContain("|| FORMAT_EXIT_CODE=$?");
+      expect(written).toContain("exit $FORMAT_EXIT_CODE");
     });
 
     test("uses lint-staged hook when useLintStaged is true", async () => {
