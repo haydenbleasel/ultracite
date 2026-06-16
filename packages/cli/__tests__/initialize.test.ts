@@ -11,6 +11,7 @@ import {
   initializePreCommit,
   initializePrecommitHook,
   installDependencies,
+  migrateLinterConfig,
   upsertAgentFile,
   upsertAgents,
   upsertBiomeConfig,
@@ -32,6 +33,7 @@ mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   mkdir: mock(() => Promise.resolve()),
   readFile: mock(() => Promise.resolve('{"name": "test"}')),
+  rm: mock(() => Promise.resolve()),
   writeFile: mock(() => Promise.resolve()),
 }));
 
@@ -1914,6 +1916,134 @@ describe("helper functions", () => {
 
       expect(mockAddDep).toHaveBeenCalled();
       expect(calls.some((c) => c.workspace === true)).toBe(true);
+    });
+  });
+
+  describe("migrateLinterConfig", () => {
+    test("removes stale Biome and ESLint config when migrating to oxlint", async () => {
+      const removedFiles: string[] = [];
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (
+            [
+              "./biome.jsonc",
+              "./eslint.config.mjs",
+              "./prettier.config.mjs",
+              "./stylelint.config.mjs",
+            ].includes(path)
+          ) {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+        mkdirSync: mock(() => {}),
+        realpathSync: mock((path: string) => path),
+      }));
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              devDependencies: {
+                "@biomejs/biome": "latest",
+                eslint: "latest",
+                oxfmt: "latest",
+                oxlint: "latest",
+                prettier: "latest",
+                stylelint: "latest",
+                ultracite: "latest",
+              },
+              prettier: {},
+              stylelint: {},
+            })
+          )
+        ),
+        rm: mock((path: string) => {
+          removedFiles.push(path);
+          return Promise.resolve();
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      await migrateLinterConfig("oxlint", true);
+
+      expect(removedFiles).toContain("./biome.jsonc");
+      expect(removedFiles).toContain("./eslint.config.mjs");
+      expect(removedFiles).toContain("./prettier.config.mjs");
+      expect(removedFiles).toContain("./stylelint.config.mjs");
+      expect(removedFiles).not.toContain("./oxlint.config.ts");
+      expect(removedFiles).not.toContain("./oxfmt.config.ts");
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] as string
+      );
+      expect(packageJson.devDependencies).toEqual({
+        oxfmt: "latest",
+        oxlint: "latest",
+        ultracite: "latest",
+      });
+      expect(packageJson.prettier).toBeUndefined();
+      expect(packageJson.stylelint).toBeUndefined();
+    });
+
+    test("removes stale Oxlint config when migrating to biome", async () => {
+      const removedFiles: string[] = [];
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (["./oxlint.config.ts", "./oxfmt.config.ts"].includes(path)) {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+        mkdirSync: mock(() => {}),
+        realpathSync: mock((path: string) => path),
+      }));
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              devDependencies: {
+                "@biomejs/biome": "latest",
+                oxfmt: "latest",
+                oxlint: "latest",
+                ultracite: "latest",
+              },
+            })
+          )
+        ),
+        rm: mock((path: string) => {
+          removedFiles.push(path);
+          return Promise.resolve();
+        }),
+        writeFile: mockWriteFile,
+      }));
+
+      await migrateLinterConfig("biome", true);
+
+      expect(removedFiles).toContain("./oxlint.config.ts");
+      expect(removedFiles).toContain("./oxfmt.config.ts");
+      expect(removedFiles).not.toContain("./biome.jsonc");
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] as string
+      );
+      expect(packageJson.devDependencies).toEqual({
+        "@biomejs/biome": "latest",
+        ultracite: "latest",
+      });
     });
   });
 

@@ -58,6 +58,12 @@ export const stylelint = {
   },
   update: async () => {
     const config = generateStylelintConfig();
-    await writeProjectFile(defaultConfigPath, config);
+    const existingPath = getStylelintConfigPath();
+    await writeProjectFile(
+      existingPath === "./package.json"
+        ? defaultConfigPath
+        : (existingPath ?? defaultConfigPath),
+      config
+    );
   },
 };

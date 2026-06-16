@@ -98,6 +98,12 @@ export const prettier = {
   },
   update: async (opts?: PrettierOptions) => {
     const config = generatePrettierConfig(opts);
-    await writeProjectFile(defaultConfigPath, config);
+    const existingPath = getPrettierConfigPath();
+    await writeProjectFile(
+      existingPath === "./package.json"
+        ? defaultConfigPath
+        : (existingPath ?? defaultConfigPath),
+      config
+    );
   },
 };

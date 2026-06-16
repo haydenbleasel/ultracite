@@ -60,6 +60,6 @@ export const eslint = {
   },
   update: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    await writeProjectFile(defaultConfigPath, config);
+    await writeProjectFile(getEslintConfigPath() ?? defaultConfigPath, config);
   },
 };
