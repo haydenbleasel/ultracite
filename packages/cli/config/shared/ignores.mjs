@@ -42,6 +42,7 @@ export const ignorePatterns = [
   "**/schema.d.ts",
   "**/schema.graphql.d.ts",
   "**/*.d.ts.map",
+  "**/.yarn",
 
   // ── Test coverage ─────────────────────────────────────────────────
   "**/coverage",
