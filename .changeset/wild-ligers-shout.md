@@ -2,4 +2,4 @@
 "ultracite": patch
 ---
 
-Ignore `.wrangler` output directories by default
+Ignore `.wrangler` and `.wrangler-dry-run` output directories by default
