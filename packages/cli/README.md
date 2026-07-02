@@ -22,28 +22,28 @@ The interactive setup guides you through choosing your formatter/linter, framewo
 
 ## Commands
 
-| Command                      | Description                                                                              |
-| ---------------------------- | ---------------------------------------------------------------------------------------- |
-| `ultracite init`             | Initialize Ultracite in the current directory (interactive by default).                  |
+| Command | Description |
+| --- | --- |
+| `ultracite init` | Initialize Ultracite in the current directory (interactive by default). |
 | `ultracite check [files...]` | Lint without writing changes. Unknown flags are passed through to the underlying linter. |
-| `ultracite fix [files...]`   | Lint and auto-fix. Unknown flags are passed through to the underlying linter.            |
-| `ultracite doctor`           | Verify your Ultracite setup and diagnose configuration issues.                           |
+| `ultracite fix [files...]` | Lint and auto-fix. Unknown flags are passed through to the underlying linter. |
+| `ultracite doctor` | Verify your Ultracite setup and diagnose configuration issues. |
 
 `check` and `fix` accept an optional list of files or globs; omit them to run against the whole project. Add `-v` / `--version` or `-h` / `--help` for CLI details.
 
 Common `init` flags for non-interactive / CI use:
 
-| Flag                           | Description                                                         |
-| ------------------------------ | ------------------------------------------------------------------- |
-| `--linter <linter>`            | Toolchain to configure (Biome, ESLint, or Oxlint).                  |
-| `--pm <pm>`                    | Package manager to use.                                             |
-| `--editors <editors...>`       | Editors to configure (use `universal` for `.vscode/settings.json`). |
-| `--agents <agents...>`         | AI agents to enable (use `universal` for `AGENTS.md`).              |
-| `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules.                       |
-| `--type-aware`                 | Enable type-aware linting.                                          |
-| `--install-skill`              | Install the reusable Ultracite skill after setup.                   |
-| `--skip-install`               | Configure without installing dependencies.                          |
-| `--quiet`                      | Suppress interactive prompts (auto-enabled in CI).                  |
+| Flag | Description |
+| --- | --- |
+| `--linter <linter>` | Toolchain to configure (Biome, ESLint, or Oxlint). |
+| `--pm <pm>` | Package manager to use. |
+| `--editors <editors...>` | Editors to configure (use `universal` for `.vscode/settings.json`). |
+| `--agents <agents...>` | AI agents to enable (use `universal` for `AGENTS.md`). |
+| `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules. |
+| `--type-aware` | Enable type-aware linting. |
+| `--install-skill` | Install the reusable Ultracite skill after setup. |
+| `--skip-install` | Configure without installing dependencies. |
+| `--quiet` | Suppress interactive prompts (auto-enabled in CI). |
 
 See the [CLI reference](https://docs.ultracite.ai/) for the full, current list of options.
 

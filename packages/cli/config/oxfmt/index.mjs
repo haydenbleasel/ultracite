@@ -10,6 +10,7 @@ export default defineConfig({
   ignorePatterns,
   jsxSingleQuote: false,
   printWidth: 80,
+  proseWrap: "never",
   quoteProps: "as-needed",
   semi: true,
   singleQuote: false,
