@@ -20,6 +20,8 @@ export const ignorePatterns = [
   "**/.turbo",
   "**/.vercel",
   "**/.netlify",
+  "**/.wrangler",
+  "**/.wrangler-dry-run",
   "**/.docusaurus",
   "**/.cache",
   "**/.parcel-cache",
