@@ -1,3 +1,11 @@
+## 7.8.4
+
+### Patch Changes
+
+- e4ddd22: Ignore `.yarn` directories by default
+- a1d5c06: Configure Oxfmt to never wrap prose (`proseWrap: "never"`)
+- df709a4: Ignore `.wrangler` and `.wrangler-dry-run` output directories by default
+
 ## 7.8.3
 
 ### Patch Changes
