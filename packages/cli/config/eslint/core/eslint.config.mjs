@@ -81,6 +81,11 @@ const config = [
       ...nRules,
       ...prettierRules,
       ...eslintPrettier.rules,
+      // eslint-config-prettier disables these defensively, but they don't
+      // conflict with our Prettier settings and the oxlint config enforces
+      // them alongside oxfmt.
+      curly: "error",
+      "no-unexpected-multiline": "error",
       ...unusedImportsRules,
       ...sonarjsRules,
       ...compatRules,

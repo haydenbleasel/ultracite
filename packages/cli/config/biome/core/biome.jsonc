@@ -78,8 +78,9 @@
         "organizeImports": "on",
         // Enforce attribute sorting in JSX elements.
         "useSortedAttributes": "on",
-        // Enforce ordering of a JS object properties.
-        "useSortedKeys": "off",
+        // Enforce ordering of a JS object properties. Matches sort-keys in
+        // the oxlint/ESLint configs.
+        "useSortedKeys": "on",
         // Enforce ordering of TypeScript enum members. Off because reordering
         // members changes the implicit numeric values of the enum.
         "useSortedEnumMembers": "off",
@@ -300,6 +301,7 @@
         /** ------------------------ JavaScript Rules ------------------------ **/
 
         "noAccumulatingSpread": "error",
+        "noAwaitInLoops": "error",
         "noBarrelFile": "error",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
@@ -310,7 +312,6 @@
         "useGoogleFontPreconnect": "error",
         "useTopLevelRegex": "error",
 
-        "noAwaitInLoops": "off",
         "noReExportAll": "off"
       },
       "security": {
@@ -329,6 +330,8 @@
 
         "noEnum": "error",
         "noExportedImports": "error",
+        // Matches no-plusplus in the oxlint/ESLint configs.
+        "noIncrementDecrement": "error",
         "noInferrableTypes": "error",
         "noMultiAssign": "error",
         "noMultilineString": "error",
@@ -388,7 +391,6 @@
         },
         "useForOf": "error",
         "useFragmentSyntax": "error",
-        "useGlobalThis": "error",
         "useGraphqlNamingConvention": "error",
         "useGroupedAccessorPairs": "error",
         "useImportType": "error",
@@ -419,8 +421,9 @@
         "noExcessiveLinesPerFile": "off",
         "noHexColors": "off",
         "noImplicitBoolean": "off",
-        "noIncrementDecrement": "off",
         "noJsxLiterals": "off",
+        // Matches unicorn/prefer-global-this being off in the oxlint config.
+        "useGlobalThis": "off",
         "noMagicNumbers": "off",
         "noProcessEnv": "off",
         "noTernary": "off",
