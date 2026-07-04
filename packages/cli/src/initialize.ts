@@ -38,12 +38,26 @@ import {
   assertSupportedPackageManagerName,
   normalizePackageManager,
 } from "./package-manager";
+import { readPackageJson } from "./schemas";
 import {
   getUltraciteSkillInstallCommand,
   maybeInstallUltraciteSkill,
 } from "./skill";
 import { tsconfig } from "./tsconfig";
-import { detectFrameworks, isMonorepo, updatePackageJson } from "./utils";
+import {
+  biomeConfigNames,
+  detectFrameworks,
+  eslintConfigNames,
+  exists,
+  isMonorepo,
+  legacyEslintConfigNames,
+  oxfmtConfigNames,
+  oxlintConfigNames,
+  prettierConfigNames,
+  stylelintConfigNames,
+  updatePackageJson,
+  writeProjectFile,
+} from "./utils";
 
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
@@ -192,6 +206,153 @@ const buildNoInstallDevDependencies = (
   }
 
   return devDependencies;
+};
+
+const eslintDevDependencyNames = new Set([
+  ...Object.keys(eslintCoreDevDependencies),
+  ...Object.values(eslintFrameworkDevDependencies).flatMap((dependencies) =>
+    Object.keys(dependencies ?? {})
+  ),
+]);
+
+const dependencyNamesByLinter: Record<Linter, Set<string>> = {
+  biome: new Set(["@biomejs/biome"]),
+  eslint: eslintDevDependencyNames,
+  oxlint: new Set(["oxfmt", "oxlint", "oxlint-tsgolint"]),
+};
+
+const removeProjectFile = async (filePath: string): Promise<boolean> => {
+  const normalizedPath = filePath.startsWith("./") ? filePath : `./${filePath}`;
+  if (!exists(normalizedPath)) {
+    return false;
+  }
+
+  const { rm } = await import("node:fs/promises");
+  await rm(normalizedPath, { force: true });
+  return true;
+};
+
+const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
+  const packageJsonObject = await readPackageJson();
+  if (!packageJsonObject) {
+    return false;
+  }
+
+  const dependencyNamesToRemove = new Set<string>();
+  for (const [tool, dependencyNames] of Object.entries(
+    dependencyNamesByLinter
+  )) {
+    if (tool !== linter) {
+      for (const dependencyName of dependencyNames) {
+        dependencyNamesToRemove.add(dependencyName);
+      }
+    }
+  }
+
+  let changed = false;
+  const nextPackageJson = { ...packageJsonObject };
+
+  for (const key of [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+  ] as const) {
+    const dependencies = nextPackageJson[key];
+    if (!dependencies) {
+      continue;
+    }
+
+    const dependencyEntries = Object.entries(dependencies);
+    const nextDependencyEntries = dependencyEntries.filter(
+      ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
+    );
+    if (nextDependencyEntries.length !== dependencyEntries.length) {
+      changed = true;
+    }
+    const nextDependencies = Object.fromEntries(nextDependencyEntries);
+
+    nextPackageJson[key] = nextDependencies;
+  }
+
+  if ("prettier" in nextPackageJson) {
+    delete nextPackageJson.prettier;
+    changed = true;
+  }
+  if ("stylelint" in nextPackageJson) {
+    delete nextPackageJson.stylelint;
+    changed = true;
+  }
+
+  if (!changed) {
+    return false;
+  }
+
+  await writeProjectFile(
+    "package.json",
+    `${JSON.stringify(nextPackageJson, null, 2)}\n`
+  );
+  return true;
+};
+
+export const migrateLinterConfig = async (
+  linter: Linter,
+  quiet = false
+): Promise<void> => {
+  const s = spinner();
+
+  if (!quiet) {
+    s.start("Checking for stale linter configuration...");
+  }
+
+  const filesToRemove = new Set<string>();
+
+  if (linter !== "biome") {
+    for (const file of biomeConfigNames) {
+      filesToRemove.add(file);
+    }
+  }
+
+  if (linter !== "eslint") {
+    for (const file of eslintConfigNames) {
+      filesToRemove.add(file);
+    }
+    for (const file of prettierConfigNames) {
+      filesToRemove.add(file);
+    }
+    for (const file of stylelintConfigNames) {
+      filesToRemove.add(file);
+    }
+  }
+
+  // Legacy (pre-flat) ESLint configs are always removed: Ultracite's ESLint
+  // setup writes a flat config, and a leftover .eslintrc would conflict with it
+  // even when ESLint remains the selected linter.
+  for (const file of legacyEslintConfigNames) {
+    filesToRemove.add(file);
+  }
+
+  if (linter !== "oxlint") {
+    for (const file of oxlintConfigNames) {
+      filesToRemove.add(file);
+    }
+    for (const file of oxfmtConfigNames) {
+      filesToRemove.add(file);
+    }
+  }
+
+  const removedFiles = await Promise.all(
+    [...filesToRemove].map((file) => removeProjectFile(file))
+  );
+  const prunedPackageJson = await prunePackageJsonForLinter(linter);
+  const changed = removedFiles.some(Boolean) || prunedPackageJson;
+
+  if (!quiet) {
+    s.stop(
+      changed
+        ? "Stale linter configuration migrated."
+        : "No stale linter configuration found."
+    );
+  }
 };
 
 export const installDependencies = async (
@@ -1083,6 +1244,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     );
 
     await upsertTsConfig(quiet);
+    await migrateLinterConfig(linter, quiet);
 
     // Create config for selected linter
     if (linter === "biome") {

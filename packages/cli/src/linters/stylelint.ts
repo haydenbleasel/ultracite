@@ -1,24 +1,7 @@
 import { readPackageJsonSync } from "../schemas";
-import { exists, writeProjectFile } from "../utils";
+import { exists, stylelintConfigNames, writeProjectFile } from "../utils";
 
-// All possible Stylelint config file locations
-// https://stylelint.io/user-guide/configure
-const stylelintConfigPaths = [
-  // JS configs (ESM)
-  "./.stylelintrc.mjs",
-  "./stylelint.config.mjs",
-  // JS configs (CJS)
-  "./.stylelintrc.cjs",
-  "./stylelint.config.cjs",
-  // JS configs (depends on package.json type)
-  "./.stylelintrc.js",
-  "./stylelint.config.js",
-  // JSON/YAML configs
-  "./.stylelintrc",
-  "./.stylelintrc.json",
-  "./.stylelintrc.yml",
-  "./.stylelintrc.yaml",
-] as const;
+const stylelintConfigPaths = stylelintConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./stylelint.config.mjs";
 
@@ -58,6 +41,12 @@ export const stylelint = {
   },
   update: async () => {
     const config = generateStylelintConfig();
-    await writeProjectFile(defaultConfigPath, config);
+    const existingPath = getStylelintConfigPath();
+    await writeProjectFile(
+      existingPath === "./package.json"
+        ? defaultConfigPath
+        : (existingPath ?? defaultConfigPath),
+      config
+    );
   },
 };
