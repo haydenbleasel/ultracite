@@ -1,35 +1,14 @@
 import type { options } from "@repo/data/options";
 
 import { readPackageJsonSync } from "../schemas";
-import { exists, validateFrameworkName, writeProjectFile } from "../utils";
+import {
+  exists,
+  prettierConfigNames,
+  validateFrameworkName,
+  writeProjectFile,
+} from "../utils";
 
-// All possible Prettier config file locations
-// https://prettier.io/docs/en/configuration.html
-const prettierConfigPaths = [
-  // JS/TS configs (ESM)
-  "./.prettierrc.mjs",
-  "./prettier.config.mjs",
-  "./.prettierrc.mts",
-  "./prettier.config.mts",
-  // JS/TS configs (CJS)
-  "./.prettierrc.cjs",
-  "./prettier.config.cjs",
-  "./.prettierrc.cts",
-  "./prettier.config.cts",
-  // JS/TS configs (depends on package.json type)
-  "./.prettierrc.js",
-  "./prettier.config.js",
-  "./.prettierrc.ts",
-  "./prettier.config.ts",
-  // JSON/YAML configs
-  "./.prettierrc",
-  "./.prettierrc.json",
-  "./.prettierrc.json5",
-  "./.prettierrc.yml",
-  "./.prettierrc.yaml",
-  // TOML config
-  "./.prettierrc.toml",
-] as const;
+const prettierConfigPaths = prettierConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./prettier.config.mjs";
 

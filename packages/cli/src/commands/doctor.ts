@@ -8,7 +8,13 @@ import { parse } from "jsonc-parser";
 import packageJson from "../../package.json" with { type: "json" };
 import { runCommandSync } from "../run-command";
 import { readPackageJsonSync } from "../schemas";
-import { biomeConfigNames, detectLinter } from "../utils";
+import {
+  biomeConfigNames,
+  detectLinter,
+  eslintConfigNames,
+  prettierConfigNames,
+  stylelintConfigNames,
+} from "../utils";
 import type { Linter } from "../utils";
 
 interface DiagnosticCheck {
@@ -97,17 +103,8 @@ const checkBiomeConfig = (): DiagnosticCheck => {
 };
 
 const checkEslintConfig = (): DiagnosticCheck => {
-  const eslintConfigPaths = [
-    "eslint.config.mjs",
-    "eslint.config.js",
-    "eslint.config.cjs",
-    "eslint.config.ts",
-    "eslint.config.mts",
-    "eslint.config.cts",
-  ];
-
   let configPath: string | null = null;
-  for (const eslintPath of eslintConfigPaths) {
+  for (const eslintPath of eslintConfigNames) {
     const fullPath = path.join(process.cwd(), eslintPath);
     if (existsSync(fullPath)) {
       configPath = fullPath;
@@ -149,21 +146,7 @@ const checkEslintConfig = (): DiagnosticCheck => {
 };
 
 const checkPrettierConfig = (): DiagnosticCheck => {
-  const prettierConfigPaths = [
-    "prettier.config.mjs",
-    "prettier.config.js",
-    "prettier.config.cjs",
-    "prettier.config.ts",
-    ".prettierrc",
-    ".prettierrc.json",
-    ".prettierrc.mjs",
-    ".prettierrc.cjs",
-    ".prettierrc.js",
-    ".prettierrc.yml",
-    ".prettierrc.yaml",
-  ];
-
-  for (const prettierPath of prettierConfigPaths) {
+  for (const prettierPath of prettierConfigNames) {
     if (existsSync(path.join(process.cwd(), prettierPath))) {
       return {
         message: `Prettier configuration found (${prettierPath})`,
@@ -181,19 +164,7 @@ const checkPrettierConfig = (): DiagnosticCheck => {
 };
 
 const checkStylelintConfig = (): DiagnosticCheck => {
-  const stylelintConfigPaths = [
-    "stylelint.config.mjs",
-    "stylelint.config.js",
-    "stylelint.config.cjs",
-    ".stylelintrc",
-    ".stylelintrc.json",
-    ".stylelintrc.mjs",
-    ".stylelintrc.js",
-    ".stylelintrc.yml",
-    ".stylelintrc.yaml",
-  ];
-
-  for (const stylelintPath of stylelintConfigPaths) {
+  for (const stylelintPath of stylelintConfigNames) {
     if (existsSync(path.join(process.cwd(), stylelintPath))) {
       return {
         message: `Stylelint configuration found (${stylelintPath})`,

@@ -1,17 +1,13 @@
 import type { options } from "@repo/data/options";
 
-import { exists, validateFrameworkName, writeProjectFile } from "../utils";
+import {
+  eslintConfigNames,
+  exists,
+  validateFrameworkName,
+  writeProjectFile,
+} from "../utils";
 
-// All possible ESLint flat config file locations
-// https://eslint.org/docs/latest/use/configure/configuration-files
-const eslintConfigPaths = [
-  "./eslint.config.mjs",
-  "./eslint.config.js",
-  "./eslint.config.cjs",
-  "./eslint.config.ts",
-  "./eslint.config.mts",
-  "./eslint.config.cts",
-] as const;
+const eslintConfigPaths = eslintConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./eslint.config.mjs";
 

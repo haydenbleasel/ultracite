@@ -47,8 +47,14 @@ import { tsconfig } from "./tsconfig";
 import {
   biomeConfigNames,
   detectFrameworks,
+  eslintConfigNames,
   exists,
   isMonorepo,
+  legacyEslintConfigNames,
+  oxfmtConfigNames,
+  oxlintConfigNames,
+  prettierConfigNames,
+  stylelintConfigNames,
   updatePackageJson,
   writeProjectFile,
 } from "./utils";
@@ -202,61 +208,6 @@ const buildNoInstallDevDependencies = (
   return devDependencies;
 };
 
-const eslintConfigFiles = [
-  "eslint.config.mjs",
-  "eslint.config.js",
-  "eslint.config.cjs",
-  "eslint.config.ts",
-  "eslint.config.mts",
-  "eslint.config.cts",
-] as const;
-
-const legacyEslintConfigFiles = [
-  ".eslintrc",
-  ".eslintrc.json",
-  ".eslintrc.js",
-  ".eslintrc.cjs",
-  ".eslintrc.yaml",
-  ".eslintrc.yml",
-] as const;
-
-const prettierConfigFiles = [
-  ".prettierrc",
-  ".prettierrc.json",
-  ".prettierrc.json5",
-  ".prettierrc.js",
-  ".prettierrc.cjs",
-  ".prettierrc.mjs",
-  ".prettierrc.ts",
-  ".prettierrc.cts",
-  ".prettierrc.mts",
-  ".prettierrc.yaml",
-  ".prettierrc.yml",
-  ".prettierrc.toml",
-  "prettier.config.js",
-  "prettier.config.cjs",
-  "prettier.config.mjs",
-  "prettier.config.ts",
-  "prettier.config.cts",
-  "prettier.config.mts",
-] as const;
-
-const stylelintConfigFiles = [
-  ".stylelintrc",
-  ".stylelintrc.json",
-  ".stylelintrc.js",
-  ".stylelintrc.cjs",
-  ".stylelintrc.mjs",
-  ".stylelintrc.yaml",
-  ".stylelintrc.yml",
-  "stylelint.config.js",
-  "stylelint.config.cjs",
-  "stylelint.config.mjs",
-] as const;
-
-const oxlintConfigFiles = [".oxlintrc.json", "oxlint.config.ts"] as const;
-const oxfmtConfigFiles = ["oxfmt.config.ts"] as const;
-
 const eslintDevDependencyNames = new Set([
   ...Object.keys(eslintCoreDevDependencies),
   ...Object.values(eslintFrameworkDevDependencies).flatMap((dependencies) =>
@@ -362,26 +313,29 @@ export const migrateLinterConfig = async (
   }
 
   if (linter !== "eslint") {
-    for (const file of eslintConfigFiles) {
+    for (const file of eslintConfigNames) {
       filesToRemove.add(file);
     }
-    for (const file of prettierConfigFiles) {
+    for (const file of prettierConfigNames) {
       filesToRemove.add(file);
     }
-    for (const file of stylelintConfigFiles) {
+    for (const file of stylelintConfigNames) {
       filesToRemove.add(file);
     }
   }
 
-  for (const file of legacyEslintConfigFiles) {
+  // Legacy (pre-flat) ESLint configs are always removed: Ultracite's ESLint
+  // setup writes a flat config, and a leftover .eslintrc would conflict with it
+  // even when ESLint remains the selected linter.
+  for (const file of legacyEslintConfigNames) {
     filesToRemove.add(file);
   }
 
   if (linter !== "oxlint") {
-    for (const file of oxlintConfigFiles) {
+    for (const file of oxlintConfigNames) {
       filesToRemove.add(file);
     }
-    for (const file of oxfmtConfigFiles) {
+    for (const file of oxfmtConfigNames) {
       filesToRemove.add(file);
     }
   }

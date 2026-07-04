@@ -196,9 +196,10 @@ export const validateFrameworkName = (name: string): string => {
 
 export type Linter = "biome" | "eslint" | "oxlint";
 
-// Config file names for each linter. Exported as the canonical Biome list so
-// doctor.ts and the Biome resolver stay in sync (Biome's documented resolution
-// order: https://biomejs.dev/guides/configure-biome/#configuration-file-resolution).
+// Canonical config file-name lists for each tool. These are the single source
+// of truth shared by the linter writers, the init migration step, and doctor.ts
+// so the lists can't drift apart. Ordering matters: the writers return the first
+// existing match, so entries are listed in resolution precedence.
 export const biomeConfigNames = [
   "biome.json",
   "biome.jsonc",
@@ -206,7 +207,9 @@ export const biomeConfigNames = [
   ".biome.jsonc",
 ] as const;
 
-const eslintConfigNames = [
+// ESLint flat config file locations.
+// https://eslint.org/docs/latest/use/configure/configuration-files
+export const eslintConfigNames = [
   "eslint.config.mjs",
   "eslint.config.js",
   "eslint.config.cjs",
@@ -215,7 +218,68 @@ const eslintConfigNames = [
   "eslint.config.cts",
 ] as const;
 
-const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
+// Legacy (pre-flat) ESLint config file locations, migrated away from on init.
+export const legacyEslintConfigNames = [
+  ".eslintrc",
+  ".eslintrc.json",
+  ".eslintrc.js",
+  ".eslintrc.cjs",
+  ".eslintrc.yaml",
+  ".eslintrc.yml",
+] as const;
+
+// Prettier config file locations.
+// https://prettier.io/docs/en/configuration.html
+export const prettierConfigNames = [
+  // JS/TS configs (ESM)
+  ".prettierrc.mjs",
+  "prettier.config.mjs",
+  ".prettierrc.mts",
+  "prettier.config.mts",
+  // JS/TS configs (CJS)
+  ".prettierrc.cjs",
+  "prettier.config.cjs",
+  ".prettierrc.cts",
+  "prettier.config.cts",
+  // JS/TS configs (depends on package.json type)
+  ".prettierrc.js",
+  "prettier.config.js",
+  ".prettierrc.ts",
+  "prettier.config.ts",
+  // JSON/YAML configs
+  ".prettierrc",
+  ".prettierrc.json",
+  ".prettierrc.json5",
+  ".prettierrc.yml",
+  ".prettierrc.yaml",
+  // TOML config
+  ".prettierrc.toml",
+] as const;
+
+// Stylelint config file locations.
+// https://stylelint.io/user-guide/configure
+export const stylelintConfigNames = [
+  // JS configs (ESM)
+  ".stylelintrc.mjs",
+  "stylelint.config.mjs",
+  // JS configs (CJS)
+  ".stylelintrc.cjs",
+  "stylelint.config.cjs",
+  // JS configs (depends on package.json type)
+  ".stylelintrc.js",
+  "stylelint.config.js",
+  // JSON/YAML configs
+  ".stylelintrc",
+  ".stylelintrc.json",
+  ".stylelintrc.yml",
+  ".stylelintrc.yaml",
+] as const;
+
+export const oxlintConfigNames = [
+  ".oxlintrc.json",
+  "oxlint.config.ts",
+] as const;
+export const oxfmtConfigNames = ["oxfmt.config.ts"] as const;
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
 // meta-frameworks (e.g. Next.js implies React).
