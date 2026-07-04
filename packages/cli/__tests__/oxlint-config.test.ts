@@ -305,3 +305,66 @@ describe("oxlint tanstack config", () => {
     ).toBe("off");
   });
 });
+
+describe("oxlint JS plugin presets", () => {
+  const jsPluginPresets = [
+    { plugin: "eslint-plugin-github", preset: "github" },
+    { plugin: "eslint-plugin-sonarjs", preset: "sonarjs" },
+  ];
+
+  for (const { plugin, preset } of jsPluginPresets) {
+    test(`${preset} preset only references rules that exist in ${plugin}`, async () => {
+      const config = await readOxlintConfig(preset);
+      const mod = await import(plugin);
+      const { rules } = mod.default as {
+        rules: Record<string, { meta?: { deprecated?: boolean } }>;
+      };
+
+      const unknown = Object.keys(config.rules ?? {}).filter((key) => {
+        const name = key.replace(`${preset}/`, "");
+        return !(key.startsWith(`${preset}/`) && name in rules);
+      });
+
+      expect(unknown).toEqual([]);
+    });
+
+    test(`${preset} preset declares the ${plugin} JS plugin`, async () => {
+      const config = await readOxlintConfig(preset);
+
+      expect(config.jsPlugins).toEqual([{ name: preset, specifier: plugin }]);
+    });
+  }
+
+  test("sonarjs preset does not enable rules that require type checking", async () => {
+    const config = await readOxlintConfig("sonarjs");
+    const mod = await import("eslint-plugin-sonarjs");
+    const { rules } = mod.default as {
+      rules: Record<
+        string,
+        { meta?: { docs?: { requiresTypeChecking?: boolean } } }
+      >;
+    };
+
+    const typeAware = Object.entries(config.rules ?? {})
+      .filter(([, severity]) => severity !== "off")
+      .map(([key]) => key.replace("sonarjs/", ""))
+      .filter((name) => rules[name]?.meta?.docs?.requiresTypeChecking);
+
+    expect(typeAware).toEqual([]);
+  });
+
+  test("sonarjs preset does not enable deprecated rules", async () => {
+    const config = await readOxlintConfig("sonarjs");
+    const mod = await import("eslint-plugin-sonarjs");
+    const { rules } = mod.default as {
+      rules: Record<string, { meta?: { deprecated?: boolean } }>;
+    };
+
+    const deprecated = Object.entries(config.rules ?? {})
+      .filter(([, severity]) => severity !== "off")
+      .map(([key]) => key.replace("sonarjs/", ""))
+      .filter((name) => rules[name]?.meta?.deprecated);
+
+    expect(deprecated).toEqual([]);
+  });
+});

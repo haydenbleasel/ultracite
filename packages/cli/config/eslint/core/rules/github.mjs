@@ -10,7 +10,11 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`github/${key}`, "error"])
 );
 
+// Overrides mirror the oxlint github preset (config/oxlint/github), which
+// is the benchmark for rule decisions across linters.
 const overrideRules = {
+  // Conflicts with unicorn/prefer-dom-node-dataset, which is the benchmark.
+  "github/no-dataset": "off",
   "github/unescaped-html-literal": "off",
 };
 

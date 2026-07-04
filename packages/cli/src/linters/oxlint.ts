@@ -40,9 +40,18 @@ export default defineConfig({
 `;
 };
 
+// ESLint plugins run through oxlint's JS plugin support to close the gap
+// with the ESLint preset. Shipped as separate presets (rather than inside
+// core) so existing configs keep working without the extra dependencies
+// and so either preset can be dropped to opt out.
+const jsPluginConfigs = ["github", "sonarjs"];
+
 export const oxlint = {
   create: async (opts?: OxlintOptions) => {
-    const extendsList = [getOxlintConfigPath("core")];
+    const extendsList = [
+      getOxlintConfigPath("core"),
+      ...jsPluginConfigs.map(getOxlintConfigPath),
+    ];
 
     // Add framework-specific configs
     if (opts?.frameworks && opts.frameworks.length > 0) {
@@ -111,6 +120,13 @@ export const oxlint = {
     // Add core config if not present
     if (!hasConfig("core")) {
       newExtends.push(getOxlintConfigPath("core"));
+    }
+
+    // Add the JS plugin presets if not present
+    for (const name of jsPluginConfigs) {
+      if (!hasConfig(name)) {
+        newExtends.push(getOxlintConfigPath(name));
+      }
     }
 
     // Add framework-specific configs if provided

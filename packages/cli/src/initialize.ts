@@ -191,6 +191,14 @@ const buildEslintDevDependencies = (
   return devDependencies;
 };
 
+// The generated oxlint config extends the github and sonarjs presets, which
+// run ESLint plugins via oxlint's JS plugin support — the plugins must be
+// installed in the target project for oxlint to resolve their specifiers.
+const oxlintJsPluginDevDependencies: Record<string, string> = {
+  "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
+  "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+};
+
 // Oxlint framework configs load the React Doctor rules via a JS plugin, which
 // must be installed in the target project for oxlint to resolve its specifier.
 const oxlintFrameworkDevDependencies: Partial<
@@ -244,6 +252,7 @@ const buildNoInstallDevDependencies = (
     }
     Object.assign(
       devDependencies,
+      oxlintJsPluginDevDependencies,
       buildOxlintFrameworkDevDependencies(frameworks)
     );
   }
@@ -261,7 +270,13 @@ const eslintDevDependencyNames = new Set([
 const dependencyNamesByLinter: Record<Linter, Set<string>> = {
   biome: new Set(["@biomejs/biome"]),
   eslint: eslintDevDependencyNames,
-  oxlint: new Set(["oxfmt", "oxlint", "oxlint-tsgolint"]),
+  oxlint: new Set([
+    "oxfmt",
+    "oxlint",
+    "oxlint-plugin-react-doctor",
+    "oxlint-tsgolint",
+    ...Object.keys(oxlintJsPluginDevDependencies),
+  ]),
 };
 
 const removeProjectFile = async (filePath: string): Promise<boolean> => {
@@ -290,6 +305,12 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
         dependencyNamesToRemove.add(dependencyName);
       }
     }
+  }
+  // Dependencies shared between linters (e.g. eslint-plugin-github and
+  // eslint-plugin-sonarjs, which the oxlint presets run as JS plugins)
+  // must survive the prune when the selected linter needs them.
+  for (const dependencyName of dependencyNamesByLinter[linter]) {
+    dependencyNamesToRemove.delete(dependencyName);
   }
 
   let changed = false;
