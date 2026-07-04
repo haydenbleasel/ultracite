@@ -3,7 +3,7 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
 import { providers } from "@repo/data/providers";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { BundledLanguage } from "shiki";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -48,18 +48,14 @@ export const ZeroConfig = () => {
   );
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
-  // The value should always be valid for the current config; fallback to first available tab if needed.
   const [tabValue, setTabValue] = useState<string>(config[0]?.name ?? "");
 
-  // Whenever config changes, reset tab to first in config
-  // (guard against stale name if provider/framework is switched)
-  // This avoids uncontrolled->controlled warning.
-  // We only setTabValue if the name list changed and tabValue is not present.
-  useEffect(() => {
-    if (!config.some((c) => c.name === tabValue)) {
-      setTabValue(config[0]?.name ?? "");
-    }
-  }, [config, tabValue]);
+  // Derive the active tab during render: if the selected tab is no longer valid
+  // for the current config (e.g. provider/framework switched), fall back to the
+  // first available tab. This avoids an effect that resets state.
+  const activeTab = config.some((c) => c.name === tabValue)
+    ? tabValue
+    : (config[0]?.name ?? "");
 
   return (
     <div className="grid gap-8">
@@ -88,7 +84,7 @@ export const ZeroConfig = () => {
           <Tabs
             className="w-full gap-0"
             onValueChange={setTabValue}
-            value={tabValue}
+            value={activeTab}
           >
             <TabsList className="w-full justify-start overflow-auto rounded-none border-b px-4 py-3 group-data-horizontal/tabs:h-auto">
               {config.map((f) => {

@@ -3,9 +3,22 @@
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 import { cn } from "@/lib/utils";
+
+const emptySubscribe = (): (() => void) => () => {
+  // no-op: mount state never changes after the first client render
+};
+
+// Returns false during SSR and the first render, true once mounted on the
+// client — the SSR-safe way to guard against hydration mismatches.
+const useIsMounted = (): boolean =>
+  useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
 const themes = [
   {
@@ -43,7 +56,7 @@ export const ThemeSwitcher = ({
     onChange,
     prop: value,
   });
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsMounted();
 
   const handleClickByKey = useMemo(
     () =>
@@ -55,11 +68,6 @@ export const ThemeSwitcher = ({
       ) as Record<string, () => void>,
     [setTheme]
   );
-
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   if (!mounted) {
     return null;

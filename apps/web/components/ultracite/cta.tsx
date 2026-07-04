@@ -2,28 +2,30 @@
 
 import { Dithering } from "@paper-design/shaders-react";
 import { formatHex, parse } from "culori";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import { Installer } from "./installer";
 
-const useCssColor = (cssVar: string, fallback: string): string => {
-  const [hex, setHex] = useState(fallback);
-
-  useEffect(() => {
-    const raw = getComputedStyle(document.documentElement)
-      .getPropertyValue(cssVar)
-      .trim();
-    if (!raw) {
-      return;
-    }
-    const parsed = parse(raw);
-    if (parsed) {
-      setHex(formatHex(parsed));
-    }
-  }, [cssVar]);
-
-  return hex;
+// CSS custom properties are read once on mount; there is nothing to subscribe to.
+const subscribe = (): (() => void) => () => {
+  // no-op
 };
+
+const useCssColor = (cssVar: string, fallback: string): string =>
+  useSyncExternalStore(
+    subscribe,
+    () => {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue(cssVar)
+        .trim();
+      if (!raw) {
+        return fallback;
+      }
+      const parsed = parse(raw);
+      return parsed ? formatHex(parsed) : fallback;
+    },
+    () => fallback
+  );
 
 export const CallToAction = () => {
   const colorBack = useCssColor("--sidebar", "#FAFAFA");

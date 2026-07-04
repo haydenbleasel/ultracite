@@ -16,9 +16,7 @@ export default defineConfig({
         "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
       rules: {
-        // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
-        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
         "promise/prefer-await-to-then": "off",
       },
     },
@@ -150,7 +148,6 @@ export default defineConfig({
     "no-regex-spaces": "error",
     "no-restricted-globals": "error",
     "no-restricted-imports": "error",
-    // Disabled: requires project-specific configuration to be useful
     "no-restricted-properties": "off",
     "no-return-assign": "error",
     "no-script-url": "error",
@@ -286,9 +283,11 @@ export default defineConfig({
     "node/global-require": "error",
     "node/handle-callback-err": "error",
     "node/no-exports-assign": "error",
+    "node/no-mixed-requires": "error",
     "node/no-new-require": "error",
     "node/no-path-concat": "error",
     "node/no-process-env": "off",
+    "node/no-sync": "off",
 
     // ── oxc ────────────────────────────────────────────────────────────
     "oxc/approx-constant": "error",
@@ -459,11 +458,13 @@ export default defineConfig({
     "unicorn/explicit-length-check": "off",
     "unicorn/filename-case": "error",
     "unicorn/import-style": "error",
+    "unicorn/max-nested-calls": "off",
     "unicorn/new-for-builtins": "error",
     "unicorn/no-abusive-eslint-disable": "error",
     "unicorn/no-accessor-recursion": "error",
     "unicorn/no-anonymous-default-export": "error",
     "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-fill-with-reference-type": "error",
     "unicorn/no-array-for-each": "error",
     "unicorn/no-array-method-this-argument": "error",
     "unicorn/no-array-reduce": "error",
@@ -546,6 +547,7 @@ export default defineConfig({
     "unicorn/prefer-native-coercion-functions": "error",
     "unicorn/prefer-negative-index": "error",
     "unicorn/prefer-node-protocol": "error",
+    "unicorn/prefer-number-coercion": "error",
     "unicorn/prefer-number-properties": "error",
     "unicorn/prefer-object-from-entries": "error",
     "unicorn/prefer-optional-catch-binding": "error",

@@ -16,6 +16,7 @@ export default defineConfig({
     "react/jsx-boolean-value": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-max-depth": "off",
+    "react/jsx-no-literals": "off",
     "react/jsx-props-no-spreading": "off",
 
     "react/no-multi-comp": "off",
@@ -24,6 +25,7 @@ export default defineConfig({
     "react/no-unstable-nested-components": "error",
     "react/only-export-components": "off",
 
+    "react/react-compiler": "error",
     "react/react-in-jsx-scope": "off",
   },
 });
