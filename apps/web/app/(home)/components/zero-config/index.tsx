@@ -3,19 +3,22 @@
 import { SiJavascript, SiJson } from "@icons-pack/react-simple-icons";
 import type { ConfigFile } from "@repo/data/providers";
 import { providers } from "@repo/data/providers";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { BundledLanguage } from "shiki";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock } from "@/components/ultracite/code-block/client";
 
-import { FrameworkSelector, frameworks } from "./framework-selector";
+import { FrameworkSelector } from "./framework-selector";
+import { frameworks } from "./frameworks";
 import { ProviderSelector } from "./provider-selector";
 
 const getIcon = (lang: ConfigFile["lang"]) =>
   lang === "json" ? SiJson : SiJavascript;
 
 const getLang = (lang: ConfigFile["lang"]): BundledLanguage => lang;
+
+const frameworkByLabel = new Map(frameworks.map((f) => [f.label, f]));
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(
@@ -29,23 +32,18 @@ export const ZeroConfig = () => {
 
   const selectedProvider = providers.find((p) => p.id === provider);
 
-  const mergedPresets = useMemo(() => {
-    const presets = new Set<string>(["core"]);
-    for (const label of selectedFrameworks) {
-      const fw = frameworks.find((f) => f.label === label);
-      if (fw) {
-        for (const p of fw.presets) {
-          presets.add(p);
-        }
+  const presetSet = new Set<string>(["core"]);
+  for (const label of selectedFrameworks) {
+    const fw = frameworkByLabel.get(label);
+    if (fw) {
+      for (const p of fw.presets) {
+        presetSet.add(p);
       }
     }
-    return [...presets];
-  }, [selectedFrameworks]);
+  }
+  const mergedPresets = [...presetSet];
 
-  const config = useMemo(
-    () => selectedProvider?.configFiles ?? [],
-    [selectedProvider]
-  );
+  const config = selectedProvider?.configFiles ?? [];
 
   // Make Tabs a controlled component: Tabs' value is the open tab, set by state.
   const [tabValue, setTabValue] = useState<string>(config[0]?.name ?? "");

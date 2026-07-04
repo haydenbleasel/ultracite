@@ -8,7 +8,7 @@ import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,7 +38,7 @@ interface NavbarProps {
 export const Navbar = ({ agents, editors, providers }: NavbarProps) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const handleClose = useCallback(() => setOpen(false), []);
+  const handleClose = () => setOpen(false);
   const isProviderPage = pathname.startsWith("/providers");
   const isEditorPage = pathname.startsWith("/editors");
   const isAgentPage = pathname.startsWith("/agents");

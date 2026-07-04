@@ -4,7 +4,7 @@ import { track } from "@vercel/analytics";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -107,13 +107,13 @@ const buildCommand = (
 
 const useToggle = <T extends string>(initial: T[] = []) => {
   const [values, setValues] = useState<T[]>(initial);
-  const toggle = useCallback((value: T) => {
+  const toggle = (value: T) => {
     setValues((current) =>
       current.includes(value)
         ? current.filter((item) => item !== value)
         : [...current, value]
     );
-  }, []);
+  };
   return [values, toggle, setValues] as const;
 };
 
@@ -229,52 +229,39 @@ export const Configurator = ({
     return () => observer.disconnect();
   }, []);
 
-  const command = useMemo(() => {
-    const flags: string[] = [];
+  const flags: string[] = [];
 
-    if (linter) {
-      flags.push("--linter", linter);
-    }
-    if (selectedFrameworks.length > 0) {
-      flags.push("--frameworks", ...selectedFrameworks);
-    }
-    if (selectedEditors.length > 0) {
-      flags.push("--editors", ...selectedEditors);
-    }
-    if (selectedAgents.length > 0) {
-      flags.push("--agents", ...selectedAgents);
-    }
-    if (selectedHooks.length > 0) {
-      flags.push("--hooks", ...selectedHooks);
-    }
-    if (selectedIntegrations.length > 0) {
-      flags.push("--integrations", ...selectedIntegrations);
-    }
-    if (typeAware) {
-      flags.push("--type-aware");
-    }
-    if (installSkill) {
-      flags.push("--install-skill");
-    }
-    if (skipInstall) {
-      flags.push("--skip-install");
-    }
+  if (linter) {
+    flags.push("--linter", linter);
+  }
+  if (selectedFrameworks.length > 0) {
+    flags.push("--frameworks", ...selectedFrameworks);
+  }
+  if (selectedEditors.length > 0) {
+    flags.push("--editors", ...selectedEditors);
+  }
+  if (selectedAgents.length > 0) {
+    flags.push("--agents", ...selectedAgents);
+  }
+  if (selectedHooks.length > 0) {
+    flags.push("--hooks", ...selectedHooks);
+  }
+  if (selectedIntegrations.length > 0) {
+    flags.push("--integrations", ...selectedIntegrations);
+  }
+  if (typeAware) {
+    flags.push("--type-aware");
+  }
+  if (installSkill) {
+    flags.push("--install-skill");
+  }
+  if (skipInstall) {
+    flags.push("--skip-install");
+  }
 
-    return buildCommand(packageManager, flags);
-  }, [
-    installSkill,
-    linter,
-    packageManager,
-    selectedAgents,
-    selectedEditors,
-    selectedFrameworks,
-    selectedHooks,
-    selectedIntegrations,
-    skipInstall,
-    typeAware,
-  ]);
+  const command = buildCommand(packageManager, flags);
 
-  const handleCopy = useCallback(() => {
+  const handleCopy = () => {
     navigator.clipboard.writeText(command);
     toast.success("Copied to clipboard", {
       description: "Paste it into your terminal to install Ultracite.",
@@ -284,7 +271,7 @@ export const Configurator = ({
     setTimeout(() => {
       setCopied(false);
     }, COPY_TIMEOUT);
-  }, [command, linter, packageManager]);
+  };
 
   const CopyIconComponent = copied ? CheckIcon : CopyIcon;
 

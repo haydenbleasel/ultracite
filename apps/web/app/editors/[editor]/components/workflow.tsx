@@ -8,25 +8,16 @@ interface WorkflowProps {
   editor: Editor;
 }
 
-const getSegmentKey = (
-  source: string,
-  segment: string,
-  searchStart: { value: number }
-) => {
-  const start = source.indexOf(segment, searchStart.value);
-  searchStart.value = start + segment.length;
-
-  return `${String(start)}-${segment}`;
-};
-
-const renderStep = (step: string) => {
-  const searchStart = { value: 0 };
+const StepText = ({ step }: { step: string }) => {
+  let searchStart = 0;
 
   return step
     .split(/(?<code>`[^`]+`)/gu)
     .filter(Boolean)
     .map((segment) => {
-      const key = getSegmentKey(step, segment, searchStart);
+      const start = step.indexOf(segment, searchStart);
+      searchStart = start + segment.length;
+      const key = `${String(start)}-${segment}`;
 
       if (segment.startsWith("`") && segment.endsWith("`")) {
         return (
@@ -59,7 +50,9 @@ export const Workflow = ({ editor }: WorkflowProps) => (
             </span>
           </CardHeader>
           <CardContent>
-            <p className="text-pretty text-sm">{renderStep(step)}</p>
+            <p className="text-pretty text-sm">
+              <StepText step={step} />
+            </p>
           </CardContent>
         </Card>
       ))}

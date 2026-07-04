@@ -380,10 +380,12 @@ export const migrateLinterConfig = async (
     }
   }
 
-  const removedFiles = await Promise.all(
-    [...filesToRemove].map((file) => removeProjectFile(file))
-  );
-  const prunedPackageJson = await prunePackageJsonForLinter(linter);
+  // Removing stale config files and pruning package.json touch different
+  // files, so run them together instead of one after the other.
+  const [removedFiles, prunedPackageJson] = await Promise.all([
+    Promise.all([...filesToRemove].map((file) => removeProjectFile(file))),
+    prunePackageJsonForLinter(linter),
+  ]);
   const changed = removedFiles.some(Boolean) || prunedPackageJson;
 
   if (!quiet) {
@@ -526,6 +528,7 @@ export const upsertEditorConfig = async (
   if (!quiet) {
     s.message(`${editor.config.path} not found, creating...`);
   }
+  // oxlint-disable-next-line react-doctor/async-defer-await -- create() is a required side effect that must complete before the extension-install branches below
   await editorConfig.create();
 
   // Install extension for VS Code-based editors
@@ -808,6 +811,7 @@ export const initializeLefthook = async (
     s.message("Installing lefthook...");
   }
 
+  // oxlint-disable-next-line react-doctor/async-defer-await -- installing the tool is a required side effect that must run before the config exists()/update guard below
   await (install
     ? lefthook.install(packageManager)
     : updatePackageJson({
@@ -846,6 +850,7 @@ export const initializeLintStaged = async (
     s.message("Installing lint-staged...");
   }
 
+  // oxlint-disable-next-line react-doctor/async-defer-await -- installing the tool is a required side effect that must run before the config exists()/update guard below
   await (install
     ? lintStaged.install(packageManager)
     : updatePackageJson({
@@ -1280,6 +1285,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
+    /* oxlint-disable react-doctor/async-parallel -- these steps read-modify-write
+       the shared package.json and emit ordered installer progress, so they must
+       run sequentially; parallelizing would race on package.json and scramble output */
     await installDependencies(
       pmInfo,
       linter,
@@ -1337,6 +1345,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     await Promise.all(
       (hooks ?? []).map((hookName) => upsertHooks(hookName, pm, linter, quiet))
     );
+    /* oxlint-enable react-doctor/async-parallel */
 
     if (integrations?.includes("husky")) {
       const useLintStaged = integrations?.includes("lint-staged") ?? false;

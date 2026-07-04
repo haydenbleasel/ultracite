@@ -2,10 +2,15 @@
 
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import { Monitor, Moon, Sun } from "lucide-react";
-import { motion } from "motion/react";
-import { useMemo, useSyncExternalStore } from "react";
+import { LazyMotion, m } from "motion/react";
+import { useSyncExternalStore } from "react";
 
 import { cn } from "@/lib/utils";
+
+const loadMotionFeatures = async () => {
+  const mod = await import("motion/react");
+  return mod.domMax;
+};
 
 const emptySubscribe = (): (() => void) => () => {
   // no-op: mount state never changes after the first client render
@@ -58,55 +63,53 @@ export const ThemeSwitcher = ({
   });
   const mounted = useIsMounted();
 
-  const handleClickByKey = useMemo(
-    () =>
-      Object.fromEntries(
-        themes.map((t) => [
-          t.key,
-          () => setTheme(t.key as "light" | "dark" | "system"),
-        ])
-      ) as Record<string, () => void>,
-    [setTheme]
-  );
+  const handleClickByKey = Object.fromEntries(
+    themes.map((t) => [
+      t.key,
+      () => setTheme(t.key as "light" | "dark" | "system"),
+    ])
+  ) as Record<string, () => void>;
 
   if (!mounted) {
     return null;
   }
 
   return (
-    <div
-      className={cn(
-        "relative isolate flex h-8 w-fit rounded-full bg-background p-1 ring-1 ring-border",
-        className
-      )}
-    >
-      {themes.map(({ key, icon: Icon, label }) => {
-        const isActive = theme === key;
+    <LazyMotion features={loadMotionFeatures}>
+      <div
+        className={cn(
+          "relative isolate flex h-8 w-fit rounded-full bg-background p-1 ring-1 ring-border",
+          className
+        )}
+      >
+        {themes.map(({ key, icon: Icon, label }) => {
+          const isActive = theme === key;
 
-        return (
-          <button
-            aria-label={label}
-            className="relative h-6 w-6 rounded-full"
-            key={key}
-            onClick={handleClickByKey[key]}
-            type="button"
-          >
-            {isActive && (
-              <motion.div
-                className="absolute inset-0 rounded-full bg-secondary"
-                layoutId="activeTheme"
-                transition={{ duration: 0.5, type: "spring" }}
-              />
-            )}
-            <Icon
-              className={cn(
-                "relative z-10 m-auto h-4 w-4",
-                isActive ? "text-foreground" : "text-muted-foreground"
+          return (
+            <button
+              aria-label={label}
+              className="relative h-6 w-6 rounded-full"
+              key={key}
+              onClick={handleClickByKey[key]}
+              type="button"
+            >
+              {isActive && (
+                <m.div
+                  className="absolute inset-0 rounded-full bg-secondary"
+                  layoutId="activeTheme"
+                  transition={{ duration: 0.5, type: "spring" }}
+                />
               )}
-            />
-          </button>
-        );
-      })}
-    </div>
+              <Icon
+                className={cn(
+                  "relative z-10 m-auto h-4 w-4",
+                  isActive ? "text-foreground" : "text-muted-foreground"
+                )}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </LazyMotion>
   );
 };

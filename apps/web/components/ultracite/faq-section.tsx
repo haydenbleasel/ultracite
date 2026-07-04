@@ -30,25 +30,16 @@ const getFaqValue = (question: string, index: number) => {
   return value || `faq-${String(index + 1)}`;
 };
 
-const getSegmentKey = (
-  source: string,
-  segment: string,
-  searchStart: { value: number }
-) => {
-  const start = source.indexOf(segment, searchStart.value);
-  searchStart.value = start + segment.length;
-
-  return `${String(start)}-${segment}`;
-};
-
-const renderAnswer = (answer: string) => {
-  const searchStart = { value: 0 };
+const AnswerText = ({ answer }: { answer: string }) => {
+  let searchStart = 0;
 
   return answer
     .split(/(?<code>`[^`]+`)/gu)
     .filter(Boolean)
     .map((segment) => {
-      const key = getSegmentKey(answer, segment, searchStart);
+      const start = answer.indexOf(segment, searchStart);
+      searchStart = start + segment.length;
+      const key = `${String(start)}-${segment}`;
 
       if (segment.startsWith("`") && segment.endsWith("`")) {
         return (
@@ -95,7 +86,9 @@ export const FaqSection = ({
               {item.question}
             </AccordionTrigger>
             <AccordionContent className="px-6 text-base text-pretty text-muted-foreground leading-7">
-              <p>{renderAnswer(item.answer)}</p>
+              <p>
+                <AnswerText answer={item.answer} />
+              </p>
             </AccordionContent>
           </AccordionItem>
         ))}

@@ -21,18 +21,18 @@ const isAgentWithHooks = (
 ): agent is Agent & { hooks: HooksConfig } => Boolean(agent.hooks);
 
 const getEditorHookIntegrations = (): HookIntegration[] =>
-  editors.filter(isEditorWithHooks).map((editor) => ({
-    hooks: editor.hooks,
-    id: editor.id,
-    name: editor.name,
-  }));
+  editors.flatMap((editor) =>
+    isEditorWithHooks(editor)
+      ? [{ hooks: editor.hooks, id: editor.id, name: editor.name }]
+      : []
+  );
 
 const getAgentHookIntegrations = (): HookIntegration[] =>
-  agents.filter(isAgentWithHooks).map((agent) => ({
-    hooks: agent.hooks,
-    id: agent.id,
-    name: agent.name,
-  }));
+  agents.flatMap((agent) =>
+    isAgentWithHooks(agent)
+      ? [{ hooks: agent.hooks, id: agent.id, name: agent.name }]
+      : []
+  );
 
 export const hooks: HookIntegration[] = [
   ...getEditorHookIntegrations(),

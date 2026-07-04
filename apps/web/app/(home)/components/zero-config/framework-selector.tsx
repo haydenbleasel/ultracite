@@ -2,100 +2,12 @@
 
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { Popover as PopoverPrimitive } from "radix-ui";
-import type { ComponentType } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import {
-  Angular,
-  Astro,
-  Jest,
-  Nestjs,
-  Nextjs,
-  Qwik,
-  React,
-  Remix,
-  Solid,
-  Svelte,
-  TanStack,
-  Vitest,
-  Vue,
-} from "./icons";
-
-export const frameworks = [
-  {
-    label: "Next.js",
-    logo: Nextjs,
-    presets: ["next"],
-  },
-  {
-    label: "React",
-    logo: React,
-    presets: ["react"],
-  },
-  {
-    label: "Solid",
-    logo: Solid,
-    presets: ["solid"],
-  },
-  {
-    label: "Vue",
-    logo: Vue,
-    presets: ["vue"],
-  },
-  {
-    label: "Svelte",
-    logo: Svelte,
-    presets: ["svelte"],
-  },
-  {
-    label: "Qwik",
-    logo: Qwik,
-    presets: ["qwik"],
-  },
-  {
-    label: "Angular",
-    logo: Angular,
-    presets: ["angular"],
-  },
-  {
-    label: "Remix",
-    logo: Remix,
-    presets: ["remix"],
-  },
-  {
-    label: "TanStack",
-    logo: TanStack,
-    presets: ["tanstack"],
-  },
-  {
-    label: "Astro",
-    logo: Astro,
-    presets: ["astro"],
-  },
-  {
-    label: "NestJS",
-    logo: Nestjs,
-    presets: ["nestjs"],
-  },
-  {
-    label: "Jest",
-    logo: Jest,
-    presets: ["jest"],
-  },
-  {
-    label: "Vitest",
-    logo: Vitest,
-    presets: ["vitest"],
-  },
-];
-
-export interface Framework {
-  label: string;
-  logo: ComponentType<{ className?: string }>;
-  presets: string[];
-}
+import type { Framework } from "./frameworks";
+import { frameworks } from "./frameworks";
 
 interface FrameworkOptionProps {
   framework: Framework;
@@ -108,9 +20,9 @@ const FrameworkOption = ({
   onToggle,
   selected,
 }: FrameworkOptionProps) => {
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     onToggle(framework.label);
-  }, [onToggle, framework.label]);
+  };
 
   return (
     <button
@@ -131,6 +43,37 @@ const FrameworkOption = ({
   );
 };
 
+interface TriggerContentProps {
+  selectedFrameworks: Framework[];
+}
+
+const TriggerContent = ({ selectedFrameworks }: TriggerContentProps) => {
+  if (selectedFrameworks.length === 0) {
+    return <span className="text-muted-foreground">Select frameworks</span>;
+  }
+
+  if (selectedFrameworks.length === 1) {
+    const Logo = selectedFrameworks[0].logo;
+    return (
+      <div className="flex items-center gap-1.5">
+        <Logo className="size-4" />
+        {selectedFrameworks[0].label}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <div className="flex gap-0.5">
+        {selectedFrameworks.slice(0, 3).map((f) => (
+          <f.logo key={f.label} className="size-4" />
+        ))}
+      </div>
+      <span>{selectedFrameworks.length} frameworks</span>
+    </div>
+  );
+};
+
 interface FrameworkSelectorProps {
   onValueChange: (values: string[]) => void;
   values: string[];
@@ -145,42 +88,12 @@ export const FrameworkSelector = ({
 
   const selectedFrameworks = frameworks.filter((f) => values.includes(f.label));
 
-  const toggle = useCallback(
-    (label: string) => {
-      if (values.includes(label)) {
-        onValueChange(values.filter((v) => v !== label));
-      } else {
-        onValueChange([...values, label]);
-      }
-    },
-    [values, onValueChange]
-  );
-
-  const renderTriggerContent = () => {
-    if (selectedFrameworks.length === 0) {
-      return <span className="text-muted-foreground">Select frameworks</span>;
+  const toggle = (label: string) => {
+    if (values.includes(label)) {
+      onValueChange(values.filter((v) => v !== label));
+    } else {
+      onValueChange([...values, label]);
     }
-
-    if (selectedFrameworks.length === 1) {
-      const Logo = selectedFrameworks[0].logo;
-      return (
-        <div className="flex items-center gap-1.5">
-          <Logo className="size-4" />
-          {selectedFrameworks[0].label}
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center gap-1">
-        <div className="flex gap-0.5">
-          {selectedFrameworks.slice(0, 3).map((f) => (
-            <f.logo key={f.label} className="size-4" />
-          ))}
-        </div>
-        <span>{selectedFrameworks.length} frameworks</span>
-      </div>
-    );
   };
 
   return (
@@ -189,7 +102,7 @@ export const FrameworkSelector = ({
         ref={triggerRef}
         className="flex w-fit items-center justify-between gap-1.5 rounded-4xl border border-input bg-input/30 px-3 py-2 text-sm whitespace-nowrap transition-colors outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 h-9 [&_svg]:pointer-events-none [&_svg]:shrink-0"
       >
-        {renderTriggerContent()}
+        <TriggerContent selectedFrameworks={selectedFrameworks} />
         <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>

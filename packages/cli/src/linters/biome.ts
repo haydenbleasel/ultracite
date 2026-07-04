@@ -81,25 +81,28 @@ export const biome = {
       return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
     });
     const newExtends = [...new Set(remapped)];
+    // Track membership in a Set for constant-time lookups while preserving
+    // the array's insertion order.
+    const seenExtends = new Set(newExtends);
+    const addExtend = (ext: string) => {
+      if (!seenExtends.has(ext)) {
+        seenExtends.add(ext);
+        newExtends.push(ext);
+      }
+    };
 
     // Add ultracite/biome/core if not present
-    if (!newExtends.includes("ultracite/biome/core")) {
-      newExtends.push("ultracite/biome/core");
-    }
+    addExtend("ultracite/biome/core");
 
     // Add type-aware config for project/scanner rules
-    if (opts?.typeAware && !newExtends.includes("ultracite/biome/type-aware")) {
-      newExtends.push("ultracite/biome/type-aware");
+    if (opts?.typeAware) {
+      addExtend("ultracite/biome/type-aware");
     }
 
     // Add framework-specific configs if provided
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
-        const name = validateFrameworkName(framework);
-        const frameworkConfig = `ultracite/biome/${name}`;
-        if (!newExtends.includes(frameworkConfig)) {
-          newExtends.push(frameworkConfig);
-        }
+        addExtend(`ultracite/biome/${validateFrameworkName(framework)}`);
       }
     }
 

@@ -1,5 +1,4 @@
 import { agents } from "@repo/data/agents";
-import type { Agent } from "@repo/data/agents";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,9 +19,10 @@ const featuredAgentIds = [
   "copilot",
 ];
 
-const featuredAgents = featuredAgentIds
-  .map((id) => agents.find((agent) => agent.id === id))
-  .filter(Boolean) as Agent[];
+const featuredAgents = featuredAgentIds.flatMap((id) => {
+  const agent = agents.find((a) => a.id === id);
+  return agent ? [agent] : [];
+});
 
 const remainingCount = agents.length - featuredAgents.length;
 

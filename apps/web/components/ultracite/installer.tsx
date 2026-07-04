@@ -2,7 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { BotIcon, CheckIcon, CopyIcon, UserIcon } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -46,7 +46,7 @@ export const Installer = ({
 
   const command = mode === "human" ? human : agent;
 
-  const handleCopy = useCallback(() => {
+  const handleCopy = () => {
     navigator.clipboard.writeText(command);
     toast.success("Copied to clipboard", {
       description: "Paste it into your terminal to install Ultracite.",
@@ -57,9 +57,7 @@ export const Installer = ({
     setTimeout(() => {
       setCopied(false);
     }, COPY_TIMEOUT);
-  }, [command, mode]);
-
-  const CopyButtonIcon = copied ? CheckIcon : CopyIcon;
+  };
 
   return (
     <InputGroup
@@ -100,7 +98,11 @@ export const Installer = ({
               onClick={handleCopy}
               size="icon-sm"
             >
-              <CopyButtonIcon className="size-3.5" size={14} />
+              {copied ? (
+                <CheckIcon className="size-3.5" size={14} />
+              ) : (
+                <CopyIcon className="size-3.5" size={14} />
+              )}
             </InputGroupButton>
           </TooltipTrigger>
           <TooltipContent>Copy</TooltipContent>

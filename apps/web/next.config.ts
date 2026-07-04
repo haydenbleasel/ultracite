@@ -53,6 +53,8 @@ const config: NextConfig = {
 
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 
+  reactCompiler: true,
+
   redirects() {
     return [
       {
