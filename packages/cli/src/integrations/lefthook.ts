@@ -96,6 +96,7 @@ export const lefthook = {
 
     // Parse existing YAML and add ultracite job
     if (existingContents.includes("pre-commit:")) {
+      let updatedConfig: string;
       // Check if jobs section exists
       if (existingContents.includes("jobs:")) {
         // Add ultracite job to existing jobs array
@@ -109,11 +110,10 @@ export const lefthook = {
         - "**/*.jsonc"
         - "**/*.css"
       stage_fixed: true`;
-        const updatedConfig = existingContents.replace(
+        updatedConfig = existingContents.replace(
           PRE_COMMIT_JOBS_REGEX,
           `$<preCommitJobs>${ultraciteJob}\n`
         );
-        await writeProjectFile(path, updatedConfig);
       } else {
         // Add jobs section to existing pre-commit
         const jobsSection = `  jobs:
@@ -127,12 +127,12 @@ export const lefthook = {
         - "**/*.jsonc"
         - "**/*.css"
       stage_fixed: true`;
-        const updatedConfig = existingContents.replace(
+        updatedConfig = existingContents.replace(
           PRE_COMMIT_REGEX,
           `$<preCommit>${jobsSection}\n`
         );
-        await writeProjectFile(path, updatedConfig);
       }
+      await writeProjectFile(path, updatedConfig);
     } else {
       // Append new pre-commit section
       await writeProjectFile(path, `${existingContents}\n${lefthookConfig}`);

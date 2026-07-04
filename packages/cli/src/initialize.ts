@@ -449,19 +449,23 @@ export const installDependencies = async (
     );
   }
   if (linter === "oxlint") {
-    packages.push("oxlint@latest");
-    // Oxlint is only a linter, so we need oxfmt for formatting
-    packages.push("oxfmt@latest");
-    // Type-aware linting requires oxlint-tsgolint
-    if (typeAware) {
-      packages.push("oxlint-tsgolint@latest");
-    }
-    // Framework configs pull in the React Doctor oxlint plugin
     packages.push(
+      "oxlint@latest",
+      // Oxlint is only a linter, so we need oxfmt for formatting
+      "oxfmt@latest",
+      // The generated config runs ESLint plugins via oxlint's JS plugins
+      ...Object.entries(oxlintJsPluginDevDependencies).map(
+        ([name, version]) => `${name}@${version}`
+      ),
+      // Framework configs pull in the React Doctor oxlint plugin
       ...Object.entries(buildOxlintFrameworkDevDependencies(frameworks)).map(
         ([name, version]) => `${name}@${version}`
       )
     );
+    // Type-aware linting requires oxlint-tsgolint
+    if (typeAware) {
+      packages.push("oxlint-tsgolint@latest");
+    }
   }
 
   const scripts = {
@@ -1166,10 +1170,8 @@ export const initialize = async (flags?: InitializeFlags) => {
     );
 
     if (!editorConfig) {
-      if (quiet) {
-        // In quiet mode, default to no editor config
-        editorConfig = [];
-      } else {
+      // Quiet mode defaults to no editor config
+      if (!quiet) {
         const editorConfigResult = await multiselect({
           message: "Which editors do you want to configure (recommended)?",
           options: editorFileTargets.map((target) => ({
@@ -1187,8 +1189,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         selectedEditorFiles = editorFileTargets.filter((target) =>
           (editorConfigResult as EditorFileTarget["id"][]).includes(target.id)
         );
-        editorConfig = [];
       }
+      editorConfig = [];
     } else if (editorConfig.includes("universal") && universalEditorTarget) {
       selectedEditorFiles = [universalEditorTarget];
       const coveredEditorIds = new Set(universalEditorTarget.editorIds);

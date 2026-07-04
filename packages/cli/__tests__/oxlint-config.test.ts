@@ -10,7 +10,6 @@ import { describe, expect, test } from "bun:test";
  * (not jest, vitest, react, etc.) to prevent cross-plugin conflicts when
  * framework configs activate their plugins (#660).
  */
-import { execSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import path from "node:path";
 
@@ -36,37 +35,46 @@ const CORE_PLUGINS = [
 ];
 
 /**
- * Parse `oxlint --rules` output to extract non-nursery rules for specific plugins.
- * Returns rule names in the format used by config files (e.g. "no-eval", "typescript/no-explicit-any").
+ * Parse `oxlint --rules --format=json` output to extract non-nursery rules
+ * for specific plugins. Returns rule names in the format used by config
+ * files (e.g. "no-eval", "typescript/no-explicit-any"). The plain markdown
+ * output of `--rules` is empty as of oxlint 1.72, which made the previous
+ * text-parsing version of this helper silently return nothing.
  */
 const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
-  const output = execSync("./node_modules/.bin/oxlint --rules", {
-    encoding: "utf-8",
-  });
+  // Bun.spawnSync rather than node:child_process — several test files
+  // install module-level mocks of node:child_process that leak across
+  // files when the suite runs without --isolate.
+  const result = Bun.spawnSync([
+    "./node_modules/.bin/oxlint",
+    "--rules",
+    "--format=json",
+  ]);
+  const output = result.stdout.toString();
+  const entries = JSON.parse(output) as {
+    scope: string;
+    value: string;
+    category: string;
+  }[];
+
   const rules: string[] = [];
-  let inNursery = false;
-
-  for (const line of output.split("\n")) {
-    if (line.startsWith("## Nursery")) {
-      inNursery = true;
+  for (const entry of entries) {
+    if (entry.category === "nursery") {
       continue;
     }
-    if (inNursery) {
-      continue;
+    // JSON scopes use underscores (react_perf); config prefixes use hyphens.
+    const plugin = entry.scope.replaceAll("_", "-");
+    if (plugins.includes(plugin)) {
+      rules.push(
+        plugin === "eslint" ? entry.value : `${plugin}/${entry.value}`
+      );
     }
-    if (
-      !line.startsWith("|") ||
-      line.startsWith("| ---") ||
-      line.startsWith("| Rule name")
-    ) {
-      continue;
-    }
+  }
 
-    const [, ruleName, plugin] = line.split("|").map((col) => col.trim());
-
-    if (ruleName && plugin && plugins.includes(plugin)) {
-      rules.push(plugin === "eslint" ? ruleName : `${plugin}/${ruleName}`);
-    }
+  if (rules.length === 0) {
+    throw new Error(
+      `oxlint --rules returned no rules for plugins: ${plugins.join(", ")}`
+    );
   }
 
   return rules.toSorted();
@@ -366,5 +374,49 @@ describe("oxlint JS plugin presets", () => {
       .filter((name) => rules[name]?.meta?.deprecated);
 
     expect(deprecated).toEqual([]);
+  });
+});
+
+describe("oxlint react config", () => {
+  const REACT_PLUGINS = ["react", "react-perf", "jsx-a11y"];
+
+  test("contains all non-nursery rules for react plugins", async () => {
+    const expectedRules = getOxlintRulesForPlugins(REACT_PLUGINS);
+    const config = await readOxlintConfig("react");
+    const configRules = new Set(Object.keys(config.rules ?? {}).toSorted());
+
+    const missingRules = expectedRules.filter((rule) => !configRules.has(rule));
+    expect(
+      missingRules,
+      `React config is missing ${missingRules.length} rules from react plugins: ${missingRules.join(", ")}`
+    ).toEqual([]);
+  });
+
+  test("mirrors the ESLint react preset's off decisions", async () => {
+    const config = await readOxlintConfig("react");
+
+    // Rules turned off in config/eslint/react/rules — keep in sync.
+    for (const rule of [
+      "react/forward-ref-uses-ref",
+      "react/jsx-filename-extension",
+      "react/no-array-index-key",
+      "jsx-a11y/no-autofocus",
+    ]) {
+      expect(config.rules?.[rule], `${rule} should be off`).toBe("off");
+    }
+  });
+});
+
+describe("oxlint next config", () => {
+  test("contains all non-nursery nextjs rules", async () => {
+    const expectedRules = getOxlintRulesForPlugins(["nextjs"]);
+    const config = await readOxlintConfig("next");
+    const configRules = new Set(Object.keys(config.rules ?? {}).toSorted());
+
+    const missingRules = expectedRules.filter((rule) => !configRules.has(rule));
+    expect(
+      missingRules,
+      `Next config is missing ${missingRules.length} nextjs rules: ${missingRules.join(", ")}`
+    ).toEqual([]);
   });
 });

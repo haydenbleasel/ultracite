@@ -8,7 +8,10 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`astro/${key}`, "error"])
 );
 
-const overrideRules = {};
+const overrideRules = {
+  // Prettier owns formatting for .astro files.
+  "astro/semi": "off",
+};
 
 const config = Object.assign(baseRules, overrideRules);
 

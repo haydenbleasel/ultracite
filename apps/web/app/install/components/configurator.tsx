@@ -348,7 +348,7 @@ export const Configurator = ({
         <FieldSet>
           <FieldLegend variant="label">Frameworks</FieldLegend>
           <FieldDescription>
-            Enable framework-specific rules. Pick everything that's in your
+            Enable framework-specific rules. Pick everything that&apos;s in your
             stack.
           </FieldDescription>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

@@ -10,8 +10,15 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`svelte/${key}`, "error"])
 );
 
-const overrideRules = {};
+// prettier-plugin-svelte owns formatting for .svelte files, so keep the
+// formatting rules that the plugin's own prettier preset disables off.
+const prettierConfig = plugin.configs["flat/prettier"];
+const prettierOverrides = Object.fromEntries(
+  (Array.isArray(prettierConfig) ? prettierConfig : [prettierConfig])
+    .flatMap((entry) => Object.entries(entry.rules ?? {}))
+    .filter(([key]) => key.startsWith("svelte/"))
+);
 
-const config = Object.assign(baseRules, overrideRules);
+const config = Object.assign(baseRules, prettierOverrides);
 
 export default config;

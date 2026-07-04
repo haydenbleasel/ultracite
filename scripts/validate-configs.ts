@@ -17,7 +17,18 @@ const main = async () => {
   const oxlint =
     await $`bun ${path.join(scriptsDir, "validate-oxlint.ts")}`.nothrow();
 
-  const failed = [biome, eslint, oxlint].filter((r) => r.exitCode !== 0);
+  console.log("\nChecking ESLint/oxlint rule parity...\n");
+  const parityScript = path.join(
+    scriptsDir,
+    "../packages/cli/scripts/compare-rule-parity.ts"
+  );
+  const parity = await $`bun ${parityScript}`
+    .cwd(path.join(scriptsDir, "../packages/cli"))
+    .nothrow();
+
+  const failed = [biome, eslint, oxlint, parity].filter(
+    (r) => r.exitCode !== 0
+  );
 
   if (failed.length > 0) {
     process.exit(1);

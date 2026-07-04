@@ -11,6 +11,16 @@ import reactDoctorRules from "./rules/react-doctor.mjs";
 import reactHooksRules from "./rules/react-hooks.mjs";
 import reactRules from "./rules/react.mjs";
 
+// Only the react/ entries — this block merges after the core one, so the
+// all-on react rules would otherwise re-enable the JSX formatting rules
+// that eslint-config-prettier turns off (several crash under ESLint 10).
+// Filtered to react/ so the spread can't clobber core-block decisions.
+const reactPrettierOverrides = Object.fromEntries(
+  Object.entries(eslintPrettier.rules).filter(([key]) =>
+    key.startsWith("react/")
+  )
+);
+
 const config = [
   {
     files: ["**/*.jsx", "**/*.tsx"],
@@ -32,14 +42,7 @@ const config = [
       ...reactHooksRules,
       ...jsxA11yRules,
       ...reactDoctorRules,
-      // Re-applied here because this config block merges after the core
-      // one, which would otherwise re-enable the JSX formatting rules
-      // that eslint-config-prettier turns off (several of them also
-      // crash under ESLint 10).
-      ...eslintPrettier.rules,
-      // Kept enabled past eslint-config-prettier, mirroring the core config.
-      curly: "error",
-      "no-unexpected-multiline": "error",
+      ...reactPrettierOverrides,
     },
     settings: {
       react: {

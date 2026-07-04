@@ -18,6 +18,7 @@ const overrideRules = {
   "new-cap": "off",
   "no-console": "off",
   "no-continue": "off",
+  "no-duplicate-imports": ["error", { allowSeparateTypeImports: true }],
   "no-implicit-coercion": "off",
   "no-restricted-properties": "off",
   "no-ternary": "off",
