@@ -1,12 +1,12 @@
 import { agents } from "@repo/data/agents";
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { agentLogos } from "@/lib/logos";
 import { cn } from "@/lib/utils";
 
 const featuredAgentIds = [
@@ -41,16 +41,14 @@ export const Agents = () => (
       {featuredAgents.map((agent, index) => (
         <Tooltip delayDuration={0} key={agent.id}>
           <TooltipTrigger>
-            <Link href={`/agents/${agent.id}`}>
-              <Image
-                alt={agent.name}
-                className={cn(
-                  "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
-                  index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
-                )}
-                src={agent.logo}
-              />
-            </Link>
+            <Image
+              alt={agent.name}
+              className={cn(
+                "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
+                index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
+              )}
+              src={agentLogos[agent.id]}
+            />
           </TooltipTrigger>
           <TooltipContent>{agent.name}</TooltipContent>
         </Tooltip>

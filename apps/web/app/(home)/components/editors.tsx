@@ -1,12 +1,12 @@
 import { editors } from "@repo/data/editors";
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { editorLogos } from "@/lib/logos";
 import { cn } from "@/lib/utils";
 
 export const Editors = () => (
@@ -24,16 +24,14 @@ export const Editors = () => (
       {editors.map((editor, index) => (
         <Tooltip delayDuration={0} key={editor.id}>
           <TooltipTrigger>
-            <Link href={`/editors/${editor.id}`}>
-              <Image
-                alt={editor.name}
-                className={cn(
-                  "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
-                  index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
-                )}
-                src={editor.logo}
-              />
-            </Link>
+            <Image
+              alt={editor.name}
+              className={cn(
+                "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
+                index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3"
+              )}
+              src={editorLogos[editor.id]}
+            />
           </TooltipTrigger>
           <TooltipContent>{editor.name}</TooltipContent>
         </Tooltip>

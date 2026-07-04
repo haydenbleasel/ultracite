@@ -88,6 +88,26 @@ const config: NextConfig = {
         permanent: true,
         source: "/updates/:version",
       },
+      {
+        destination: "/",
+        permanent: true,
+        source: "/providers/:path*",
+      },
+      {
+        destination: "/",
+        permanent: true,
+        source: "/editors/:path*",
+      },
+      {
+        destination: "/",
+        permanent: true,
+        source: "/agents/:path*",
+      },
+      {
+        destination: "/",
+        permanent: true,
+        source: "/install/:path*",
+      },
       ...legacyDocsRedirects,
     ];
   },

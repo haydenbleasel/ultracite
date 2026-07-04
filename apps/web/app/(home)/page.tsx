@@ -13,6 +13,7 @@ import { Editors } from "./components/editors";
 import { Hero } from "./components/hero";
 import { IdePreview } from "./components/ide";
 import { Sponsors } from "./components/sponsors";
+import { Videos } from "./components/videos";
 import { ZeroConfig } from "./components/zero-config";
 
 const title = "Zero-Config Linting for Biome, ESLint, and Oxlint";
@@ -34,6 +35,7 @@ const Home = () => (
       <Logos />
       <ZeroConfig />
       <IdePreview />
+      <Videos />
       <Agents />
       <Editors />
       <Sponsors />

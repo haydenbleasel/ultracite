@@ -1,5 +1,3 @@
-import Prettier from "@repo/data/logos/prettier.svg";
-import Stylelint from "@repo/data/logos/stylelint.svg";
 import { providers } from "@repo/data/providers";
 import type { ProviderId } from "@repo/data/providers";
 import Image from "next/image";
@@ -12,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { prettierLogo, providerLogos, stylelintLogo } from "@/lib/logos";
 
 const eslintProvider = providers.find((p) => p.id === "eslint");
 const biomeProvider = providers.find((p) => p.id === "biome");
@@ -23,7 +22,7 @@ const providerTitles: Record<ProviderId, ReactNode> = {
       <Image
         alt="Biome"
         className="size-4 rounded-full"
-        src={biomeProvider.logo}
+        src={providerLogos.biome}
       />
       <span>Biome</span>
     </span>
@@ -33,12 +32,20 @@ const providerTitles: Record<ProviderId, ReactNode> = {
       <Image
         alt="ESLint"
         className="size-4 rounded-full"
-        src={eslintProvider.logo}
+        src={providerLogos.eslint}
       />
       <span>ESLint, </span>
-      <Image alt="Prettier" className="size-4 rounded-full" src={Prettier} />
+      <Image
+        alt="Prettier"
+        className="size-4 rounded-full"
+        src={prettierLogo}
+      />
       <span>Prettier and </span>
-      <Image alt="Stylelint" className="size-4 rounded-full" src={Stylelint} />
+      <Image
+        alt="Stylelint"
+        className="size-4 rounded-full"
+        src={stylelintLogo}
+      />
       <span>Stylelint</span>
     </span>
   ) : null,
@@ -47,7 +54,7 @@ const providerTitles: Record<ProviderId, ReactNode> = {
       <Image
         alt="Oxlint"
         className="size-4 rounded-full"
-        src={oxlintProvider.logo}
+        src={providerLogos.oxlint}
       />
       <span>Oxlint and Oxfmt</span>
     </span>

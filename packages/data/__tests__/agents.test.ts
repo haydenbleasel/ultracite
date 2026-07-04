@@ -5,25 +5,13 @@ const decoder = new TextDecoder();
 const monorepoRoot = path.resolve(import.meta.dir, "../../..");
 
 interface AgentSummary {
-  category: string;
-  differentiators: {
-    descriptionLength: number;
-    iconLength: number;
-    titleLength: number;
-  }[];
   facts: {
     hookPath?: string;
     hookSupport: boolean;
   };
   hookContentAvailable: boolean;
   id: string;
-  introLength: number;
-  metaDescriptionLength: number;
   rulesContainsApplyTo: boolean;
-  useCases: {
-    descriptionLength: number;
-    titleLength: number;
-  }[];
 }
 
 const loadAgentsSummary = () => {
@@ -40,25 +28,13 @@ const loadAgentsSummary = () => {
         } from "./packages/data/src/agents.ts";
 
         const summary = agents.map((agent) => ({
-          category: agent.category,
-          differentiators: agent.content.differentiators.map((item) => ({
-            descriptionLength: item.description.length,
-            iconLength: item.icon.length,
-            titleLength: item.title.length,
-          })),
           facts: {
             hookPath: getAgentSetupFacts(agent).hookPath,
             hookSupport: getAgentSetupFacts(agent).hookSupport,
           },
           hookContentAvailable: Boolean(getDefaultAgentHookContent(agent)),
           id: agent.id,
-          introLength: agent.content.intro.length,
-          metaDescriptionLength: agent.content.metaDescription.length,
           rulesContainsApplyTo: getDefaultAgentRulesContent(agent).includes("applyTo:"),
-          useCases: agent.content.useCases.map((item) => ({
-            descriptionLength: item.description.length,
-            titleLength: item.title.length,
-          })),
         }));
 
         console.log(JSON.stringify(summary));
@@ -75,30 +51,6 @@ const loadAgentsSummary = () => {
 };
 
 describe("agents content", () => {
-  test("every agent includes the required SEO content fields", () => {
-    const summary = loadAgentsSummary();
-
-    for (const agent of summary) {
-      expect(agent.category.length).toBeGreaterThan(0);
-      expect(agent.introLength).toBeGreaterThan(0);
-      expect(agent.metaDescriptionLength).toBeGreaterThan(0);
-      expect(agent.useCases.length).toBeGreaterThanOrEqual(3);
-      expect(agent.useCases.length).toBeLessThanOrEqual(4);
-      expect(agent.differentiators).toHaveLength(3);
-
-      for (const useCase of agent.useCases) {
-        expect(useCase.titleLength).toBeGreaterThan(0);
-        expect(useCase.descriptionLength).toBeGreaterThan(0);
-      }
-
-      for (const differentiator of agent.differentiators) {
-        expect(differentiator.titleLength).toBeGreaterThan(0);
-        expect(differentiator.descriptionLength).toBeGreaterThan(0);
-        expect(differentiator.iconLength).toBeGreaterThan(0);
-      }
-    }
-  });
-
   test("hook-related setup facts only appear for agents that support hooks", () => {
     const summary = loadAgentsSummary();
 

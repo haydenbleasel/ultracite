@@ -1,10 +1,7 @@
 "use client";
 
 import { SiGithub, SiX } from "@icons-pack/react-simple-icons";
-import type { Agent } from "@repo/data/agents";
 import { docsUrl } from "@repo/data/consts";
-import type { Editor } from "@repo/data/editors";
-import type { Provider } from "@repo/data/providers";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
@@ -35,118 +32,24 @@ const generalLinks = [
     href: docsUrl,
     label: "Docs",
   },
-  {
-    href: "/install",
-    label: "Install",
-  },
 ];
 
-interface FooterProps {
-  agents: Pick<Agent, "id" | "name">[];
-  editors: Pick<Editor, "id" | "name">[];
-  providers: Pick<Provider, "id" | "name">[];
-}
-
-export const Footer = ({ agents, editors, providers }: FooterProps) => {
+export const Footer = () => {
   const { theme, setTheme } = useTheme();
-  const sortedAgents = [...agents].toSorted((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  const sortedEditors = [...editors].toSorted((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  const sortedProviders = [...providers].toSorted((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  const agentsThird = Math.ceil(sortedAgents.length / 3);
-  const agentsCol1 = sortedAgents.slice(0, agentsThird);
-  const agentsCol2 = sortedAgents.slice(agentsThird, agentsThird * 2);
-  const agentsCol3 = sortedAgents.slice(agentsThird * 2);
 
   return (
     <footer className="mt-24 mb-12 flex flex-col gap-12">
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-6">
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm">General</p>
-          {generalLinks.map((link) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={link.href}
-              key={link.href}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm">Providers</p>
-          {sortedProviders.map((provider) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={`/providers/${provider.id}`}
-              key={provider.id}
-            >
-              {provider.name}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm">Editors</p>
-          {sortedEditors.map((editor) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={`/editors/${editor.id}`}
-              key={editor.id}
-            >
-              {editor.name}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm">Agents</p>
-          {agentsCol1.map((agent) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={`/agents/${agent.id}`}
-              key={agent.id}
-            >
-              {agent.name}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm max-sm:hidden">
-            &nbsp;
-          </p>
-          {agentsCol2.map((agent) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={`/agents/${agent.id}`}
-              key={agent.id}
-            >
-              {agent.name}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium text-muted-foreground text-sm max-sm:hidden">
-            &nbsp;
-          </p>
-          {agentsCol3.map((agent) => (
-            <Link
-              className="text-sm transition-colors hover:text-primary"
-              href={`/agents/${agent.id}`}
-              key={agent.id}
-            >
-              {agent.name}
-            </Link>
-          ))}
-        </div>
+      <div className="flex flex-col gap-2">
+        <p className="font-medium text-muted-foreground text-sm">General</p>
+        {generalLinks.map((link) => (
+          <Link
+            className="text-sm transition-colors hover:text-primary"
+            href={link.href}
+            key={link.href}
+          >
+            {link.label}
+          </Link>
+        ))}
       </div>
 
       <div className="flex flex-col gap-6 border-t pt-8">

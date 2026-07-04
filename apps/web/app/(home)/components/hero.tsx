@@ -1,5 +1,3 @@
-import Prettier from "@repo/data/logos/prettier.svg";
-import Stylelint from "@repo/data/logos/stylelint.svg";
 import { providers } from "@repo/data/providers";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -10,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Installer } from "@/components/ultracite/installer";
+import { prettierLogo, providerLogos, stylelintLogo } from "@/lib/logos";
 
 import { LatestRelease } from "./latest-release";
 
@@ -21,15 +20,15 @@ interface HeroProps {
 const logos = [
   ...providers.map((provider) => ({
     name: provider.name.split(" ")[0],
-    src: provider.logo,
+    src: providerLogos[provider.id],
   })),
   {
     name: "Prettier",
-    src: Prettier,
+    src: prettierLogo,
   },
   {
     name: "Stylelint",
-    src: Stylelint,
+    src: stylelintLogo,
   },
 ];
 

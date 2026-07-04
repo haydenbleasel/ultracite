@@ -1,7 +1,4 @@
 import "./global.css";
-import { agents } from "@repo/data/agents";
-import { editors } from "@repo/data/editors";
-import { providers } from "@repo/data/providers";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -22,28 +19,6 @@ interface LayoutProps {
 
 export const metadata: Metadata = rootMetadata;
 
-const navbarAgents = agents
-  .toSorted((a, b) => a.name.localeCompare(b.name))
-  .map(({ id, logo, name }) => ({ id, logo, name }));
-
-const navbarEditors = editors.map(({ id, logo, name, subtitle }) => ({
-  id,
-  logo,
-  name,
-  subtitle,
-}));
-
-const navbarProviders = providers.map(({ id, logo, name, subtitle }) => ({
-  id,
-  logo,
-  name,
-  subtitle,
-}));
-
-const footerAgents = agents.map(({ id, name }) => ({ id, name }));
-const footerEditors = editors.map(({ id, name }) => ({ id, name }));
-const footerProviders = providers.map(({ id, name }) => ({ id, name }));
-
 const Layout = ({ children }: LayoutProps) => (
   <html lang="en" suppressHydrationWarning>
     <body className={fonts}>
@@ -55,20 +30,12 @@ const Layout = ({ children }: LayoutProps) => (
         enableSystem
       >
         <TooltipProvider>
-          <Navbar
-            agents={navbarAgents}
-            editors={navbarEditors}
-            providers={navbarProviders}
-          />
+          <Navbar />
           <div className="container relative mx-auto mt-16 grid px-4 sm:mt-24 2xl:max-w-7xl">
             {children}
             <div className="mt-16 sm:mt-24 md:mt-32">
               <CallToAction />
-              <Footer
-                agents={footerAgents}
-                editors={footerEditors}
-                providers={footerProviders}
-              />
+              <Footer />
             </div>
           </div>
         </TooltipProvider>

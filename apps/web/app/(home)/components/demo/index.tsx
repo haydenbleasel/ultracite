@@ -21,7 +21,7 @@ const Cyan = ({ children }: { children: React.ReactNode }) => (
 const Output = () => (
   <>
     <Line>
-      <Gray>$</Gray> bun x ultracite@latest init
+      <Gray>$</Gray> npx ultracite@latest init
     </Line>
     <br />
     <Line>
@@ -37,7 +37,7 @@ const Output = () => (
       <Green>◇</Green> Which formatters / linters do you want to use?
     </Line>
     <Line>
-      <Gray>│</Gray> <Gray>Biome</Gray>
+      <Gray>│</Gray> <Gray>Oxlint + Oxfmt</Gray>
     </Line>
     <Line>
       <Gray>│</Gray>
@@ -46,7 +46,7 @@ const Output = () => (
       <Green>◇</Green> Which frameworks are you using?
     </Line>
     <Line>
-      <Gray>│</Gray> <Gray>React, Next.js</Gray>
+      <Gray>│</Gray> <Gray>React, Next.js, Bun</Gray>
     </Line>
     <Line>
       <Gray>│</Gray>
@@ -101,10 +101,10 @@ export const Demo = () => (
     <Image
       alt=""
       className="absolute top-0 left-0 size-full object-cover"
-      height={1000}
+      height={1152}
       priority
       src={Background}
-      width={1000}
+      width={2496}
     />
     <div className="size-full sm:px-16 sm:pt-16">
       <div className="max-h-128 overflow-hidden border border-white/10 bg-black/80 p-8 backdrop-blur-sm sm:rounded-x-2xl sm:rounded-t-2xl">

@@ -25,21 +25,6 @@ const result = await Bun.build({
   format: "esm",
   minify: true,
   outdir: "dist",
-  // @repo/data's agent/provider logos are colocated with the data so the
-  // website can build from a single source of truth, but the CLI never reads
-  // them. Stub the .svg imports to an empty module so they aren't emitted as
-  // assets into the published package.
-  plugins: [
-    {
-      name: "stub-svg",
-      setup(build) {
-        build.onLoad({ filter: /\.svg$/u }, () => ({
-          contents: "export default ''",
-          loader: "js",
-        }));
-      },
-    },
-  ],
   target: "node",
 });
 
