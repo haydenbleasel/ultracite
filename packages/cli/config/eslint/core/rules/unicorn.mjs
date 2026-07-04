@@ -11,11 +11,10 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
-  "unicorn/no-array-callback-reference": "off",
-  "unicorn/no-keyword-prefix": "off",
-  "unicorn/no-null": "off",
-  "unicorn/prefer-dom-node-dataset": "off",
-  "unicorn/prevent-abbreviations": [
+  // Renamed from unicorn/prefer-dom-node-dataset in v65.
+  "unicorn/dom-node-dataset": "off",
+  // Renamed from unicorn/prevent-abbreviations in v68; same allowList option.
+  "unicorn/name-replacements": [
     "error",
     {
       allowList: {
@@ -27,6 +26,15 @@ const overrideRules = {
       },
     },
   ],
+  "unicorn/no-array-callback-reference": "off",
+  // Strips the leading `*` from JSDoc lines, fighting the conventional
+  // documentation-comment style that the formatter preserves.
+  "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
+  "unicorn/no-keyword-prefix": "off",
+  "unicorn/no-null": "off",
+  // Enforces Temporal over Date, but Temporal still lacks broad runtime
+  // support; unicorn ships it off by default. Premature to enforce.
+  "unicorn/prefer-temporal": "off",
   "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
 };
 
