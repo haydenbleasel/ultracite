@@ -132,6 +132,8 @@ const eslintFrameworkDevDependencies: Partial<
   next: {
     "@next/eslint-plugin-next":
       packageJson.devDependencies["@next/eslint-plugin-next"],
+    "eslint-plugin-react-doctor":
+      packageJson.devDependencies["eslint-plugin-react-doctor"],
   },
   qwik: {
     "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
@@ -140,6 +142,8 @@ const eslintFrameworkDevDependencies: Partial<
     "eslint-plugin-jsx-a11y":
       packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "eslint-plugin-react": packageJson.devDependencies["eslint-plugin-react"],
+    "eslint-plugin-react-doctor":
+      packageJson.devDependencies["eslint-plugin-react-doctor"],
     "eslint-plugin-react-hooks":
       packageJson.devDependencies["eslint-plugin-react-hooks"],
   },
@@ -161,6 +165,8 @@ const eslintFrameworkDevDependencies: Partial<
       packageJson.devDependencies["@tanstack/eslint-plugin-router"],
     "@tanstack/eslint-plugin-start":
       packageJson.devDependencies["@tanstack/eslint-plugin-start"],
+    "eslint-plugin-react-doctor":
+      packageJson.devDependencies["eslint-plugin-react-doctor"],
   },
   vitest: {
     "@vitest/eslint-plugin":
@@ -177,6 +183,36 @@ const buildEslintDevDependencies = (
 
   for (const framework of frameworks) {
     Object.assign(devDependencies, eslintFrameworkDevDependencies[framework]);
+  }
+
+  return devDependencies;
+};
+
+// Oxlint framework configs load the React Doctor rules via a JS plugin, which
+// must be installed in the target project for oxlint to resolve its specifier.
+const oxlintFrameworkDevDependencies: Partial<
+  Record<Frameworks, Record<string, string>>
+> = {
+  next: {
+    "oxlint-plugin-react-doctor":
+      packageJson.devDependencies["oxlint-plugin-react-doctor"],
+  },
+  react: {
+    "oxlint-plugin-react-doctor":
+      packageJson.devDependencies["oxlint-plugin-react-doctor"],
+  },
+  tanstack: {
+    "oxlint-plugin-react-doctor":
+      packageJson.devDependencies["oxlint-plugin-react-doctor"],
+  },
+};
+const buildOxlintFrameworkDevDependencies = (
+  frameworks: Frameworks[]
+): Record<string, string> => {
+  const devDependencies: Record<string, string> = {};
+
+  for (const framework of frameworks) {
+    Object.assign(devDependencies, oxlintFrameworkDevDependencies[framework]);
   }
 
   return devDependencies;
@@ -203,6 +239,10 @@ const buildNoInstallDevDependencies = (
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] = "latest";
     }
+    Object.assign(
+      devDependencies,
+      buildOxlintFrameworkDevDependencies(frameworks)
+    );
   }
 
   return devDependencies;
@@ -390,6 +430,12 @@ export const installDependencies = async (
     if (typeAware) {
       packages.push("oxlint-tsgolint@latest");
     }
+    // Framework configs pull in the React Doctor oxlint plugin
+    packages.push(
+      ...Object.entries(buildOxlintFrameworkDevDependencies(frameworks)).map(
+        ([name, version]) => `${name}@${version}`
+      )
+    );
   }
 
   const scripts = {

@@ -1,6 +1,9 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
+  jsPlugins: [
+    { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
+  ],
   overrides: [
     {
       files: ["**/next-env.d.ts"],
@@ -10,5 +13,29 @@ export default defineConfig({
     },
   ],
   plugins: ["nextjs"],
-  rules: {},
+  rules: {
+    "react-doctor/nextjs-async-client-component": "error",
+    "react-doctor/nextjs-error-boundary-missing-use-client": "error",
+    "react-doctor/nextjs-global-error-missing-html-body": "error",
+    "react-doctor/nextjs-image-missing-sizes": "error",
+    "react-doctor/nextjs-inline-script-missing-id": "error",
+    "react-doctor/nextjs-missing-metadata": "error",
+    "react-doctor/nextjs-no-a-element": "error",
+    "react-doctor/nextjs-no-client-fetch-for-server-data": "error",
+    "react-doctor/nextjs-no-client-side-redirect": "error",
+    "react-doctor/nextjs-no-css-link": "error",
+    "react-doctor/nextjs-no-default-export-in-route-handler": "error",
+    "react-doctor/nextjs-no-edge-og-runtime": "error",
+    "react-doctor/nextjs-no-font-link": "error",
+    "react-doctor/nextjs-no-google-analytics-script": "error",
+    "react-doctor/nextjs-no-head-import": "error",
+    "react-doctor/nextjs-no-img-element": "error",
+    "react-doctor/nextjs-no-native-script": "error",
+    "react-doctor/nextjs-no-polyfill-script": "error",
+    "react-doctor/nextjs-no-redirect-in-try-catch": "error",
+    "react-doctor/nextjs-no-script-in-head": "error",
+    "react-doctor/nextjs-no-side-effect-in-get-handler": "error",
+    "react-doctor/nextjs-no-use-search-params-without-suspense": "error",
+    "react-doctor/nextjs-no-vercel-og-import": "error",
+  },
 });
