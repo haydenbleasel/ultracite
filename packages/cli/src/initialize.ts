@@ -99,6 +99,7 @@ const eslintCoreDevDependencies: Record<string, string> = {
   "eslint-plugin-html": packageJson.devDependencies["eslint-plugin-html"],
   "eslint-plugin-import-x":
     packageJson.devDependencies["eslint-plugin-import-x"],
+  "eslint-plugin-jsdoc": packageJson.devDependencies["eslint-plugin-jsdoc"],
   "eslint-plugin-n": packageJson.devDependencies["eslint-plugin-n"],
   "eslint-plugin-prettier":
     packageJson.devDependencies["eslint-plugin-prettier"],

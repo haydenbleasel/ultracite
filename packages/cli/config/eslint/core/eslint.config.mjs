@@ -9,6 +9,7 @@ import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
 import { importX } from "eslint-plugin-import-x";
+import jsdocPlugin from "eslint-plugin-jsdoc";
 import n from "eslint-plugin-n";
 import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
@@ -25,6 +26,7 @@ import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
 import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
+import jsdocRules from "./rules/jsdoc.mjs";
 import nRules from "./rules/n.mjs";
 import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
@@ -63,6 +65,7 @@ const config = [
       compat,
       github,
       "import-x": importX,
+      jsdoc: jsdocPlugin,
       n,
       prettier,
       promise,
@@ -73,6 +76,7 @@ const config = [
     rules: {
       ...eslintRules,
       ...importRules,
+      ...jsdocRules,
       ...promiseRules,
       ...nRules,
       ...prettierRules,
