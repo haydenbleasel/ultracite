@@ -12,7 +12,6 @@ export interface Provider {
   configFiles: ConfigFile[];
   id: ProviderId;
   name: string;
-  vscodeExtensionId: string;
 }
 
 export const providers: Provider[] = [
@@ -31,7 +30,6 @@ export const providers: Provider[] = [
     ],
     id: "biome",
     name: "Biome",
-    vscodeExtensionId: "biomejs.biome",
   },
   {
     configFiles: [
@@ -64,7 +62,6 @@ export default defineConfig([
     ],
     id: "eslint",
     name: "ESLint + Prettier + Stylelint",
-    vscodeExtensionId: "dbaeumer.vscode-eslint",
   },
   {
     configFiles: [
@@ -95,6 +92,5 @@ export default defineConfig({
     ],
     id: "oxlint",
     name: "Oxlint + Oxfmt",
-    vscodeExtensionId: "oxc.oxc-vscode",
   },
 ];

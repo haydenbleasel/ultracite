@@ -1,4 +1,3 @@
-import { editors } from "@repo/data/editors";
 import Image from "next/image";
 
 import {
@@ -6,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { editors } from "@/lib/editors";
 import { editorLogos } from "@/lib/logos";
 import { cn } from "@/lib/utils";
 

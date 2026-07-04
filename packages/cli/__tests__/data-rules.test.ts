@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync as _readFileSync } from "node:fs";
 import path from "node:path";
 
-import { getRules } from "../src/rules";
+import { getRules } from "../src/data/rules";
 
 // When running from the monorepo root, the CLI preload mocks node:fs.
 // Use the real readFileSync stashed on globalThis, falling back to the import.

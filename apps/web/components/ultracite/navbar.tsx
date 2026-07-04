@@ -1,7 +1,7 @@
-import { docsUrl } from "@repo/data/consts";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { docsUrl } from "@/lib/consts";
 
 import { Logo } from "./logo";
 

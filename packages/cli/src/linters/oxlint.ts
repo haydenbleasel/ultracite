@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 
-import type { options } from "@repo/data/options";
-
+import type { options } from "../data/options";
 import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";

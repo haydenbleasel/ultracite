@@ -1,5 +1,4 @@
-import type { options } from "@repo/data/options";
-
+import type { options } from "../data/options";
 import {
   eslintConfigNames,
   exists,

@@ -113,8 +113,6 @@ const config: NextConfig = {
   },
 
   serverExternalPackages: ["shiki", "@shikijs/engine-oniguruma"],
-
-  transpilePackages: ["@repo/data"],
 };
 
 export default withMDX(config);

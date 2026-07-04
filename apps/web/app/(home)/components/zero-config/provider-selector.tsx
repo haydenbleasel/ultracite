@@ -1,5 +1,3 @@
-import { providers } from "@repo/data/providers";
-import type { ProviderId } from "@repo/data/providers";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
@@ -11,6 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { prettierLogo, providerLogos, stylelintLogo } from "@/lib/logos";
+import { providers } from "@/lib/providers";
+import type { ProviderId } from "@/lib/providers";
 
 const eslintProvider = providers.find((p) => p.id === "eslint");
 const biomeProvider = providers.find((p) => p.id === "biome");

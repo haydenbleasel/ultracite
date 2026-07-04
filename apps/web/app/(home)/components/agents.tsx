@@ -1,4 +1,3 @@
-import { agents } from "@repo/data/agents";
 import Image from "next/image";
 
 import {
@@ -6,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { agents } from "@/lib/agents";
 import { agentLogos } from "@/lib/logos";
 import { cn } from "@/lib/utils";
 

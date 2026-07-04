@@ -25,7 +25,7 @@ const loadAgentsSummary = () => {
           getAgentSetupFacts,
           getDefaultAgentHookContent,
           getDefaultAgentRulesContent,
-        } from "./packages/data/src/agents.ts";
+        } from "./packages/cli/src/data/agents.ts";
 
         const summary = agents.map((agent) => ({
           facts: {

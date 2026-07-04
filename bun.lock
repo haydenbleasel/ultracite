@@ -35,7 +35,6 @@
         "@next/mdx": "^16.2.7",
         "@paper-design/shaders-react": "^0.0.76",
         "@radix-ui/react-use-controllable-state": "^1.2.3",
-        "@repo/data": "workspace:*",
         "@shikijs/langs": "^4.2.0",
         "@shikijs/themes": "^4.2.0",
         "@types/mdx": "^2.0.14",
@@ -97,7 +96,6 @@
         "@darraghor/eslint-plugin-nestjs-typed": "^7.2.5",
         "@eslint/js": "^10.0.0",
         "@next/eslint-plugin-next": "^16.2.10",
-        "@repo/data": "workspace:*",
         "@tanstack/eslint-plugin-query": "^5.101.2",
         "@tanstack/eslint-plugin-router": "^1.162.0",
         "@tanstack/eslint-plugin-start": "^0.1.0",
@@ -151,25 +149,6 @@
       "optionalPeers": [
         "oxfmt",
         "oxlint",
-      ],
-    },
-    "packages/data": {
-      "name": "@repo/data",
-      "version": "2.1.8",
-      "dependencies": {
-        "deepmerge": "^4.3.1",
-      },
-      "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
-        "@types/bun": "^1.3.14",
-        "@types/node": "^25.9.2",
-        "next": "16.2.7",
-      },
-      "peerDependencies": {
-        "next": ">=14.0.0",
-      },
-      "optionalPeers": [
-        "next",
       ],
     },
     "packages/typescript-config": {
@@ -900,8 +879,6 @@
     "@radix-ui/react-visually-hidden": ["@radix-ui/react-visually-hidden@1.2.5", "", { "dependencies": { "@radix-ui/react-primitive": "2.1.5" }, "peerDependencies": { "@types/react": "*", "@types/react-dom": "*", "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-tPcHNI3FajdDBFpl/Ez1m2WL0ufJqBKyHxMDBvKitopamK36WwBGOMicuMEZKkM5Wce41QxUyv6BsiqfrWBiGg=="],
 
     "@radix-ui/rect": ["@radix-ui/rect@1.1.2", "", {}, "sha512-xnXE7wG13PI+cxieVssYXlQJuYVRhH9NBoxt3KNwzghDIA69GMm7d4wXRouHIYjE+KvS6U/MsMO73NdS2MH9ZA=="],
-
-    "@repo/data": ["@repo/data@workspace:packages/data"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 

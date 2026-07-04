@@ -9,17 +9,17 @@ import {
   select,
   spinner,
 } from "@clack/prompts";
-import { agents as agentsData } from "@repo/data/agents";
-import { editors } from "@repo/data/editors";
-import { hooks as hookIntegrations } from "@repo/data/hooks";
-import type { options } from "@repo/data/options";
-import { providers } from "@repo/data/providers";
 import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents, getAgentFileTargets } from "./agents";
 import type { AgentFileTarget } from "./agents";
+import { agents as agentsData } from "./data/agents";
+import { editors } from "./data/editors";
+import { hooks as hookIntegrations } from "./data/hooks";
+import type { options } from "./data/options";
+import { providers } from "./data/providers";
 import { createEditorConfig } from "./editor-config";
 import { getEditorFileTargets } from "./editors";
 import type { EditorFileTarget } from "./editors";

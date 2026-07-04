@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { providers } from "../src/providers";
+import { providers } from "../lib/providers";
 
 describe("providers content", () => {
   test("config file code generators produce valid output for each provider", () => {

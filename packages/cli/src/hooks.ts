@@ -1,12 +1,12 @@
 import { readFile } from "node:fs/promises";
 
-import { hooks } from "@repo/data/hooks";
-import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { runScriptCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
+import { hooks } from "./data/hooks";
+import type { options } from "./data/options";
 import { assertSupportedPackageManagerName } from "./package-manager";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 

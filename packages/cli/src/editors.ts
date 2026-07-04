@@ -1,5 +1,5 @@
-import { editors } from "@repo/data/editors";
-import type { options } from "@repo/data/options";
+import { editors } from "./data/editors";
+import type { options } from "./data/options";
 
 type EditorId = (typeof options.editorConfigs)[number];
 

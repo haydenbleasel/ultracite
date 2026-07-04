@@ -1,12 +1,12 @@
 "use client";
 
 import { SiGithub, SiX } from "@icons-pack/react-simple-icons";
-import { docsUrl } from "@repo/data/consts";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
 import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import { Logo } from "@/components/ultracite/logo";
+import { docsUrl } from "@/lib/consts";
 
 const legalLinks = [
   {

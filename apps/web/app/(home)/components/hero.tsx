@@ -1,4 +1,3 @@
-import { providers } from "@repo/data/providers";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Installer } from "@/components/ultracite/installer";
 import { prettierLogo, providerLogos, stylelintLogo } from "@/lib/logos";
+import { providers } from "@/lib/providers";
 
 import { LatestRelease } from "./latest-release";
 

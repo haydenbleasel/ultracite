@@ -3,10 +3,10 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import type { Framework } from "@repo/data/options";
 import { glob } from "glob";
 import YAML from "yaml";
 
+import type { Framework } from "./data/options";
 import type { PackageJson } from "./schemas";
 import { readPackageJson, readPackageJsonSync } from "./schemas";
 
