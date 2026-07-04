@@ -27,6 +27,9 @@ const overrideRules = {
   "import-x/no-relative-parent-imports": "off",
   "import-x/no-unassigned-import": "off",
   "import-x/no-unresolved": "off",
+  // No-op under ESLint 10 (the FileEnumerator API it needs was removed)
+  // and it prints a warning on every run while enabled.
+  "import-x/no-unused-modules": "off",
   "import-x/order": [
     "error",
     {

@@ -1660,8 +1660,8 @@ describe("helper functions", () => {
 
       await installDependencies(npmPm, "eslint", true);
       expect(mockAddDep).toHaveBeenCalled();
-      expect(installedPackages).toContain("eslint@^9.0.0");
-      expect(installedPackages).toContain("@eslint/js@^9.0.0");
+      expect(installedPackages).toContain("eslint@^10.0.0");
+      expect(installedPackages).toContain("@eslint/js@^10.0.0");
       expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
       expect(installedPackages).not.toContain("eslint@latest");
     });
@@ -1715,7 +1715,7 @@ describe("helper functions", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       expect(
         writtenContents.some((content) =>
-          content.includes('"eslint": "^9.0.0"')
+          content.includes('"eslint": "^10.0.0"')
         )
       ).toBe(true);
       expect(

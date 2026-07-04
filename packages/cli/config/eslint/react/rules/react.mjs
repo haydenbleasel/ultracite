@@ -12,6 +12,10 @@ const baseRules = Object.fromEntries(
 
 const overrideRules = {
   "react/forbid-component-props": "off",
+  // Crashes under ESLint 10 (uses the removed context.getSourceCode());
+  // forwardRef is deprecated in React 19 and
+  // react-doctor/no-react19-deprecated-apis covers it.
+  "react/forward-ref-uses-ref": "off",
   "react/function-component-definition": [
     "error",
     {
@@ -19,12 +23,9 @@ const overrideRules = {
     },
   ],
   "react/jsx-boolean-value": "off",
-  "react/jsx-filename-extension": [
-    "error",
-    {
-      extensions: [".tsx"],
-    },
-  ],
+  // Off in the oxlint react config, and its implementation uses the
+  // removed context.getFilename() under ESLint 10.
+  "react/jsx-filename-extension": "off",
   "react/jsx-max-depth": "off",
   "react/jsx-max-props-per-line": "off",
   "react/jsx-newline": "off",

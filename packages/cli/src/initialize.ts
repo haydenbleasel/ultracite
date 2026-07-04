@@ -81,7 +81,9 @@ interface InitializeFlags {
   "type-aware"?: boolean;
 }
 
-const supportedEslintVersion = "^9.0.0";
+// eslint-plugin-unicorn@70 and eslint-plugin-astro@2 require ESLint >= 10;
+// the whole preset is verified against ESLint 10.
+const supportedEslintVersion = "^10.0.0";
 const eslintCoreDevDependencies: Record<string, string> = {
   "@eslint/js": supportedEslintVersion,
   "@typescript-eslint/eslint-plugin":
