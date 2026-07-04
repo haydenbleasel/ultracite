@@ -22,7 +22,7 @@ const frameworkByLabel = new Map(frameworks.map((f) => [f.label, f]));
 
 export const ZeroConfig = () => {
   const [provider, setProvider] = useState<string | null>(
-    providers[1].id ?? null
+    providers.find((p) => p.id === "oxlint")?.id ?? null
   );
   const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>([
     "Next.js",

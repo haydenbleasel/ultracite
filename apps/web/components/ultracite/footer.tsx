@@ -8,21 +8,6 @@ import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher";
 import { Logo } from "@/components/ultracite/logo";
 import { docsUrl } from "@/lib/consts";
 
-const legalLinks = [
-  {
-    href: "/privacy",
-    label: "Privacy Policy",
-  },
-  {
-    href: "/terms",
-    label: "Terms of Service",
-  },
-  {
-    href: "/acceptable-use",
-    label: "Acceptable Use Policy",
-  },
-];
-
 const generalLinks = [
   {
     href: "/",
@@ -97,17 +82,6 @@ export const Footer = () => {
               @haydenbleasel
             </a>
           </p>
-          <nav className="flex flex-wrap gap-4" aria-label="Legal">
-            {legalLinks.map((link) => (
-              <Link
-                className="text-muted-foreground text-sm transition-colors hover:text-primary"
-                href={link.href}
-                key={link.href}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
       </div>
     </footer>

@@ -9,20 +9,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       url: createAbsoluteUrl("/"),
     },
-    {
-      changeFrequency: "monthly",
-      priority: 0.4,
-      url: createAbsoluteUrl("/acceptable-use"),
-    },
-    {
-      changeFrequency: "monthly",
-      priority: 0.4,
-      url: createAbsoluteUrl("/privacy"),
-    },
-    {
-      changeFrequency: "monthly",
-      priority: 0.4,
-      url: createAbsoluteUrl("/terms"),
-    },
   ];
 }

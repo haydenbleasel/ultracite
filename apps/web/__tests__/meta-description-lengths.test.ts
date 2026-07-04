@@ -28,24 +28,6 @@ const loadFailingDescriptions = () => {
 
         const descriptions = [
           { description: siteDescription, label: "site" },
-          {
-            description: readDescriptionFromSource(
-              "apps/web/app/(legal)/acceptable-use/page.tsx",
-            ),
-            label: "acceptable-use",
-          },
-          {
-            description: readDescriptionFromSource(
-              "apps/web/app/(legal)/privacy/page.tsx",
-            ),
-            label: "privacy",
-          },
-          {
-            description: readDescriptionFromSource(
-              "apps/web/app/(legal)/terms/page.tsx",
-            ),
-            label: "terms",
-          },
           ...Array.from(new Bun.Glob("**/*.mdx").scanSync({ cwd: "apps/docs" })).map(
             (path) => ({
               description: readDescriptionFromSource(\`apps/docs/\${path}\`),

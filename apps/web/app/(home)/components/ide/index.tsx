@@ -1,4 +1,3 @@
-import { Assistant } from "./assistant";
 import { Editor } from "./editor";
 import { Indicator } from "./indicator";
 import { Problems } from "./problems";
@@ -34,21 +33,14 @@ export const IdePreview = () => (
           title="Configurable spec"
         />
       </div>
-      <div className="hidden aspect-video grid-cols-[180px_1fr_200px] divide-x overflow-hidden rounded-2xl border bg-sidebar md:grid">
+      <div className="hidden aspect-video grid-cols-[180px_1fr] divide-x overflow-hidden rounded-2xl border bg-sidebar md:grid">
         <Sidebar />
         <div className="grid grid-rows-[2fr_1fr] overflow-hidden">
           <Editor />
           <Problems />
         </div>
-        <Assistant />
       </div>
       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-1 xl:gap-0 xl:text-right">
-        <Indicator
-          className="xl:mt-38"
-          description="Lint and format code without needing to run Ultracite locally."
-          reverse
-          title="MCP Support"
-        />
         <Indicator
           className="xl:mt-24"
           description="Ultracite uses the VS Code output panel to show problems."
