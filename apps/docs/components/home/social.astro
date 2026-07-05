@@ -3,16 +3,27 @@ import { getTweet } from "../../lib/get-tweet";
 import Icon from "./icon.astro";
 import SectionIntro from "./section-intro.astro";
 
-const tweetIds = [
-  "1937342910519038142",
-  "1955312886265368856",
-  "1976732830487958011",
-  "1939996143338860558",
-  "1969727618237820980",
+// Hand-picked testimonials. `text` overrides the fetched body for long "note"
+// tweets, which the public syndication endpoint truncates.
+const entries = [
+  { id: "1937342910519038142" },
+  { id: "1955312886265368856" },
+  { id: "1976732830487958011" },
+  { id: "1939996143338860558" },
+  {
+    id: "1969727618237820980",
+    text: "One of the biggest lessons I learned from my first startup is to set the bar extremely high for code quality and linting from day one. If you do not, it turns into an impossible escalator you can never step off.\n\nWe are big believers in ultracite.ai, and I am always giving @haydenbleasel feedback on how he can make the tool the best it can be.",
+  },
 ];
 
-const fetched = await Promise.all(tweetIds.map((id) => getTweet(id)));
-const tweets = fetched.filter((tweet) => tweet !== null);
+const fetched = await Promise.all(entries.map((entry) => getTweet(entry.id)));
+const tweets = fetched.flatMap((tweet, index) => {
+  if (!tweet) {
+    return [];
+  }
+  const override = entries[index]?.text;
+  return [override ? { ...tweet, text: override } : tweet];
+});
 ---
 
 <div class="grid gap-8">
