@@ -53,30 +53,8 @@ const footerNav = [
 ---
 
 <footer class="mt-24 mb-12 flex flex-col gap-12">
-  <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
-    {
-      footerNav.map((section) => (
-        <div class="flex flex-col gap-3">
-          <p class="font-medium text-sm">{section.title}</p>
-          <ul class="flex flex-col gap-2">
-            {section.links.map((link) => (
-              <li>
-                <a
-                  class="text-muted-foreground text-sm transition-colors hover:text-accent"
-                  href={link.href}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
-  </div>
-
   <div
-    class="flex flex-col items-center gap-4 border-t pt-8 text-center sm:grid sm:grid-cols-3 sm:items-center"
+    class="flex flex-col items-center gap-4 text-center sm:grid sm:grid-cols-3 sm:items-center"
   >
     <div class="flex items-center gap-3 sm:justify-self-start">
       <Logo class="size-5" />
@@ -111,5 +89,29 @@ const footerNav = [
         <Icon class="size-4" name="github" />
       </a>
     </div>
+  </div>
+
+  <div
+    class="grid grid-cols-2 gap-8 border-t pt-8 sm:grid-cols-3 lg:grid-cols-5"
+  >
+    {
+      footerNav.map((section) => (
+        <div class="flex flex-col gap-3">
+          <p class="font-medium text-sm">{section.title}</p>
+          <ul class="flex flex-col gap-2">
+            {section.links.map((link) => (
+              <li>
+                <a
+                  class="text-muted-foreground text-sm transition-colors hover:text-accent"
+                  href={link.href}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </footer>
