@@ -1667,7 +1667,11 @@ describe("helper functions", () => {
     });
 
     test("installs oxlint dependencies when linter is oxlint", async () => {
-      const mockAddDep = mock(() => Promise.resolve());
+      const installedPackages: string[] = [];
+      const mockAddDep = mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+        return Promise.resolve();
+      });
 
       mock.module("nypm", () => ({
         addDevDependency: mockAddDep,
@@ -1688,6 +1692,9 @@ describe("helper functions", () => {
 
       await installDependencies(npmPm, "oxlint", true);
       expect(mockAddDep).toHaveBeenCalled();
+      expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
+      expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.1.0");
+      expect(installedPackages).toContain("typescript@5.8.3");
     });
 
     test("updates package.json with eslint deps when install is false", async () => {
@@ -1726,9 +1733,11 @@ describe("helper functions", () => {
     });
 
     test("updates package.json with oxlint deps when install is false", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
+      const writtenContents: string[] = [];
+      const mockWriteFile = mock((_path: string, content: string) => {
+        writtenContents.push(content);
+        return Promise.resolve();
+      });
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -1746,6 +1755,21 @@ describe("helper functions", () => {
 
       await installDependencies(npmPm, "oxlint", false);
       expect(mockWriteFile).toHaveBeenCalled();
+      expect(
+        writtenContents.some((content) =>
+          content.includes('"eslint-plugin-github": "6.0.0"')
+        )
+      ).toBe(true);
+      expect(
+        writtenContents.some((content) =>
+          content.includes('"eslint-plugin-sonarjs": "^4.1.0"')
+        )
+      ).toBe(true);
+      expect(
+        writtenContents.some((content) =>
+          content.includes('"typescript": "5.8.3"')
+        )
+      ).toBe(true);
     });
 
     test("installs oxlint-tsgolint when type-aware is true", async () => {

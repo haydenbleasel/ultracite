@@ -55,9 +55,34 @@ export const readPackageJson = async (
 
 // -- Config files --
 
+export interface BiomeConfig {
+  extends?: string[];
+  [key: string]: unknown;
+}
+
+export interface TsConfig {
+  compilerOptions?: {
+    strict?: boolean;
+    strictNullChecks?: boolean;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+interface JsonSchema<T> {
+  safeParse: (value: unknown) =>
+    | {
+        data: T;
+        success: true;
+      }
+    | {
+        success: false;
+      };
+}
+
 export const biomeConfigSchema = z.looseObject({
   extends: z.array(z.string()).optional(),
-});
+}) as JsonSchema<BiomeConfig>;
 
 export const tsConfigSchema = z.looseObject({
   compilerOptions: z
@@ -66,11 +91,11 @@ export const tsConfigSchema = z.looseObject({
       strictNullChecks: z.boolean().optional(),
     })
     .optional(),
-});
+}) as JsonSchema<TsConfig>;
 
 export const parseJsonc = <T>(
   content: string,
-  schema: z.ZodType<T>
+  schema: JsonSchema<T>
 ): T | undefined => {
   const parsed = parse(content);
   const result = schema.safeParse(parsed);

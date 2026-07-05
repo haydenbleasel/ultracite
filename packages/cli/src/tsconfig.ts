@@ -4,8 +4,8 @@ import { log } from "@clack/prompts";
 import { glob } from "glob";
 import { applyEdits, modify } from "jsonc-parser";
 import type { ModificationOptions } from "jsonc-parser";
-import type { z } from "zod";
 
+import type { TsConfig } from "./schemas";
 import { parseJsonc, tsConfigSchema } from "./schemas";
 import { writeProjectFile } from "./utils";
 
@@ -28,8 +28,6 @@ const findTsConfigFiles = async (): Promise<string[]> => {
     return [];
   }
 };
-
-type TsConfig = z.infer<typeof tsConfigSchema>;
 
 /**
  * Check if strictNullChecks is already enabled (directly or via strict: true)

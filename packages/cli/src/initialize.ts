@@ -191,12 +191,19 @@ const buildEslintDevDependencies = (
   return devDependencies;
 };
 
+const supportedSonarjsTypescriptVersion =
+  packageJson.devDependencies.typescript;
+
 // The generated oxlint config extends the github and sonarjs presets, which
 // run ESLint plugins via oxlint's JS plugin support — the plugins must be
 // installed in the target project for oxlint to resolve their specifiers.
 const oxlintJsPluginDevDependencies: Record<string, string> = {
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+  // eslint-plugin-sonarjs depends on `typescript >=5`, which can resolve to
+  // TS builds whose CommonJS output throws during plugin loading. Keep
+  // JS-plugin loading on the last verified stable compiler build.
+  typescript: supportedSonarjsTypescriptVersion,
 };
 
 // Oxlint framework configs load the React Doctor rules via a JS plugin, which
@@ -275,7 +282,8 @@ const dependencyNamesByLinter: Record<Linter, Set<string>> = {
     "oxlint",
     "oxlint-plugin-react-doctor",
     "oxlint-tsgolint",
-    ...Object.keys(oxlintJsPluginDevDependencies),
+    "eslint-plugin-github",
+    "eslint-plugin-sonarjs",
   ]),
 };
 
