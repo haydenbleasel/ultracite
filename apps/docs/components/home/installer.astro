@@ -16,14 +16,14 @@ const {
 
 <div
   class:list={[
-    "hp-installer flex h-10 w-full items-center gap-1 rounded-full border bg-card px-1 font-mono text-sm",
+    "hp-installer flex h-10 w-full items-center gap-1 rounded-full border bg-background px-1 font-mono text-sm",
     className,
   ]}
   data-human={human}
   data-agent={agent}
 >
   <div class="flex items-center gap-1 pl-px">
-    <div class="flex gap-0.5 rounded-full bg-secondary p-0.5">
+    <div class="flex gap-0.5 rounded-full bg-muted p-0.5">
       <button
         aria-label="Human command"
         aria-pressed="true"
@@ -56,7 +56,7 @@ const {
 
   <button
     aria-label="Copy"
-    class="hp-copy mr-1 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+    class="hp-copy mr-1 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
     title="Copy"
     type="button"
   >

@@ -25,7 +25,7 @@ const tweets = fetched.filter((tweet) => tweet !== null);
       <div class="md:columns-2 xl:columns-3">
         {tweets.map((tweet) => (
           <a
-            class="mb-4 block break-inside-avoid rounded-2xl border bg-card p-4 text-card-foreground transition-colors hover:border-foreground/20"
+            class="mb-4 block break-inside-avoid rounded-2xl border bg-muted p-4 text-foreground transition-colors hover:border-foreground/20"
             href={tweet.url}
             rel="noopener noreferrer"
             target="_blank"
@@ -47,7 +47,7 @@ const tweets = fetched.filter((tweet) => tweet !== null);
                   {tweet.verified && (
                     <svg
                       aria-label="Verified"
-                      class="size-4 shrink-0 text-primary"
+                      class="size-4 shrink-0 text-accent"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
