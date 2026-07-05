@@ -11,6 +11,7 @@ import { describe, expect, test } from "bun:test";
  * framework configs activate their plugins (#660).
  */
 import { readdirSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 import packageJson from "../package.json";
@@ -45,11 +46,19 @@ const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
   // Bun.spawnSync rather than node:child_process — several test files
   // install module-level mocks of node:child_process that leak across
   // files when the suite runs without --isolate.
-  const result = Bun.spawnSync([
-    "./node_modules/.bin/oxlint",
-    "--rules",
-    "--format=json",
-  ]);
+  //
+  // Run from the system temp dir with an absolute binary path so oxlint
+  // does not walk up and auto-discover the repo's `oxlint.config.ts`. The
+  // rule catalog is config-independent, and node <22.18 (e.g. the node-20
+  // CI matrix runtime) cannot load a TypeScript config file, which would
+  // otherwise make oxlint print a load error instead of the rules JSON.
+  const oxlintBin = path.join(
+    import.meta.dirname,
+    "../node_modules/.bin/oxlint"
+  );
+  const result = Bun.spawnSync([oxlintBin, "--rules", "--format=json"], {
+    cwd: os.tmpdir(),
+  });
   const output = result.stdout.toString();
   const entries = JSON.parse(output) as {
     scope: string;
