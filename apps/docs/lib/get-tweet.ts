@@ -12,6 +12,11 @@ export interface TweetData {
   verified: boolean;
 }
 
+interface UrlEntity {
+  url?: string;
+  display_url?: string;
+}
+
 interface SyndicationTweet {
   id_str?: string;
   text?: string;
@@ -22,7 +27,32 @@ interface SyndicationTweet {
     verified?: boolean;
     is_blue_verified?: boolean;
   };
+  entities?: {
+    urls?: UrlEntity[];
+    media?: { url?: string }[];
+  };
 }
+
+// The syndication text keeps t.co short links. Swap each linked URL for its
+// human-readable display form (e.g. ultracite.ai) and drop trailing media
+// links (the pic.x.com attachment), matching how an embedded tweet reads.
+const formatText = (
+  text: string,
+  entities: SyndicationTweet["entities"]
+): string => {
+  let out = text;
+  for (const entity of entities?.urls ?? []) {
+    if (entity.url && entity.display_url) {
+      out = out.replaceAll(entity.url, entity.display_url);
+    }
+  }
+  for (const media of entities?.media ?? []) {
+    if (media.url) {
+      out = out.replaceAll(media.url, "");
+    }
+  }
+  return out.trim();
+};
 
 // Mirrors react-tweet's token derivation for the syndication API.
 const getToken = (id: string): string =>
@@ -54,7 +84,7 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
       handle: user.screen_name,
       id,
       name: user.name ?? user.screen_name,
-      text: data.text,
+      text: formatText(data.text, data.entities),
       url: `https://x.com/${user.screen_name}/status/${id}`,
       verified: Boolean(user.verified || user.is_blue_verified),
     };
