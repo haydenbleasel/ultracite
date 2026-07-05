@@ -1,26 +1,14 @@
 ---
 // Single sponsor for now; the CodeRabbit wordmark is inlined so it inherits
 // currentColor and needs no extra asset.
+import SectionIntro from "./section-intro.astro";
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-3xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      Supported by our sponsors
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      Ultracite is a community-driven project, powered by the generosity of
-      these companies.{" "}
-      <a
-        class="underline"
-        href="https://github.com/sponsors/haydenbleasel"
-        rel="noopener noreferrer"
-        target="_blank">Become a sponsor</a
-      >.
-    </p>
-  </div>
+  <SectionIntro
+    description='Ultracite is a community-driven project, powered by the generosity of these companies. <a class="underline" href="https://github.com/sponsors/haydenbleasel" rel="noopener noreferrer" target="_blank">Become a sponsor</a>.'
+    title="Supported by our sponsors"
+  />
   <div
     class="mx-auto flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-foreground sm:gap-x-20"
   >

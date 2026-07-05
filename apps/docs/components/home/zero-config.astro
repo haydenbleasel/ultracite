@@ -4,6 +4,7 @@ import Tab from "blume/components/content/Tab.astro";
 import Tabs from "blume/components/content/Tabs.astro";
 import { providerLogos } from "../../lib/logos";
 import { providers } from "../../lib/providers";
+import SectionIntro from "./section-intro.astro";
 
 // A representative, fixed preset set. The live multi-select from the old React
 // homepage is replaced by build-time-highlighted examples so the page ships no
@@ -27,17 +28,11 @@ const defaultProvider = ordered[0]?.id;
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      Zero-config by design
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      Hundreds of rules for your framework to optimize your JavaScript /
-      TypeScript code, while still allowing you to customize when needed.
-    </p>
-  </div>
+  <SectionIntro
+    description="Hundreds of rules for your framework to optimize your JavaScript / TypeScript code, while still allowing you to customize when needed."
+    maxWidth="max-w-xl"
+    title="Zero-config by design"
+  />
 
   <div class="flex flex-col items-center justify-center gap-3">
     <span class="text-muted-foreground text-sm">I'm using</span>

@@ -1,4 +1,4 @@
-export const siteName = "Ultracite";
+const siteName = "Ultracite";
 export const siteDescription =
   "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps teams and AI write consistent, type-safe code.";
 

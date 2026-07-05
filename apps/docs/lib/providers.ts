@@ -1,5 +1,3 @@
-/* biome-ignore-all lint/style/useNamingConvention: "Provider configs use various naming conventions" */
-
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface ConfigFile {

@@ -1,6 +1,7 @@
 ---
 import { getTweet } from "../../lib/get-tweet";
 import Icon from "./icon.astro";
+import SectionIntro from "./section-intro.astro";
 
 const tweetIds = [
   "1937342910519038142",
@@ -14,17 +15,10 @@ const tweets = fetched.filter((tweet) => tweet !== null);
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-3xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      What the community is saying
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      Here's what some of the most innovative and forward-thinking developers in
-      the React ecosystem have to say about Ultracite.
-    </p>
-  </div>
+  <SectionIntro
+    description="Here's what some of the most innovative and forward-thinking developers in the React ecosystem have to say about Ultracite."
+    title="What the community is saying"
+  />
 
   {
     tweets.length > 0 && (

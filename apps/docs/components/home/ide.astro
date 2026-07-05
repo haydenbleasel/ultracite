@@ -1,6 +1,7 @@
 ---
 import CodeBlock from "blume/components/content/CodeBlock.astro";
 import Icon from "./icon.astro";
+import SectionIntro from "./section-intro.astro";
 
 const mockCode = `import React from 'react';
 
@@ -42,18 +43,10 @@ const indicators = [
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-3xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      Designed for humans and AI
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      Ensure consistent code style and quality across all team members and AI
-      models, eliminating debates over formatting and reducing code review
-      friction.
-    </p>
-  </div>
+  <SectionIntro
+    description="Ensure consistent code style and quality across all team members and AI models, eliminating debates over formatting and reducing code review friction."
+    title="Designed for humans and AI"
+  />
   <div class="grid items-start gap-8 xl:grid-cols-[200px_1fr_200px]">
     <div
       class="order-1 grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:order-0 xl:grid-cols-1 xl:gap-0"
@@ -136,7 +129,7 @@ const indicators = [
         >
           <div class="flex items-center justify-between gap-2">
             <p class="font-medium">Problems</p>
-            <div class="-mx-1 -mt-1 rounded-full bg-sidebar px-2.5 py-1">
+            <div class="-mx-1 -mt-1 rounded-full bg-muted px-2.5 py-1">
               <p>Ultracite</p>
             </div>
           </div>

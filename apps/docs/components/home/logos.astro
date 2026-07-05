@@ -1,4 +1,6 @@
 ---
+import SectionIntro from "./section-intro.astro";
+
 const logos = [
   { file: "openai", name: "OpenAI" },
   { file: "vercel", name: "Vercel" },
@@ -24,23 +26,11 @@ const logos = [
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      Trusted by top companies
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      And used by{" "}
-      <a
-        class="underline"
-        href="https://github.com/haydenbleasel/ultracite/network/dependents"
-        rel="noreferrer"
-        target="_blank">thousands</a
-      >{" "}
-      of open source projects.
-    </p>
-  </div>
+  <SectionIntro
+    description='And used by <a class="underline" href="https://github.com/haydenbleasel/ultracite/network/dependents" rel="noreferrer" target="_blank">thousands</a> of open source projects.'
+    maxWidth="max-w-xl"
+    title="Trusted by top companies"
+  />
   <div
     class="grid grid-cols-2 divide-x divide-y border-t border-l sm:grid-cols-3 lg:grid-cols-5"
   >

@@ -1,6 +1,7 @@
 ---
 import { agents } from "../../lib/agents";
 import { agentLogos } from "../../lib/logos";
+import SectionIntro from "./section-intro.astro";
 
 const featuredAgentIds = [
   "claude",
@@ -21,17 +22,10 @@ const remainingCount = agents.length - featuredAgents.length;
 ---
 
 <div class="grid gap-8">
-  <div class="mx-auto grid max-w-3xl gap-4 text-center">
-    <h2
-      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
-    >
-      Works with all your favourite agents...
-    </h2>
-    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
-      Ultracite can generate rules files for all these popular IDEs and agents,
-      so you can get the most of out of your AI integrations.
-    </p>
-  </div>
+  <SectionIntro
+    description="Ultracite can generate rules files for all these popular IDEs and agents, so you can get the most of out of your AI integrations."
+    title="Works with all your favourite agents..."
+  />
   <div class="mx-auto flex items-center justify-center -space-x-1">
     {
       featuredAgents.map((agent, index) => (
