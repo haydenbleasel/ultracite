@@ -71,11 +71,10 @@ export default defineConfig({
   ],
 
   theme: {
-    // colors.primary
-    accent: "#4F46E5",
-    // colors.light
-    accentDark: "#6159E8",
-    // colors.dark
+    accent: {
+      dark: "#6159E8",
+      light: "#4F46E5",
+    },
     action: "#473FCE",
   },
 
