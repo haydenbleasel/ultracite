@@ -33,6 +33,14 @@ Add framework presets as needed:
 }
 ```
 
+For type-aware, project-graph rules (`noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`), add the optional `type-aware` preset — or pass `--type-aware` to `npx ultracite init`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core", "ultracite/biome/type-aware"],
+}
+```
+
 ## Configuration Approach
 
 Ultracite's Biome configuration uses an **opt-in** approach. This means every rule is explicitly specified in the configuration — nothing is implicitly inherited. This gives you full visibility into exactly which rules are enabled and at what level.

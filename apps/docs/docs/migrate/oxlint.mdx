@@ -18,7 +18,7 @@ If you're already using Oxlint and want to switch to Ultracite's preconfigured s
 Make sure you have:
 
 - An existing project using Oxlint
-- Node.js v14.18+ (Node 18+ recommended)
+- Node.js 20+
 - An Oxlint configuration file (e.g., `oxlint.config.ts`)
 
 ## Migration Options
@@ -37,7 +37,7 @@ When prompted, select **Oxlint** as your linting provider. This will:
 - Merge your existing `oxlint.config.ts` with Ultracite's preset
 - Create an `oxfmt.config.ts` for formatting configuration
 - Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
 - Preserve your custom rules and settings
 - Set up editor integrations
 

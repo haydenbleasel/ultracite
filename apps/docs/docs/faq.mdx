@@ -5,21 +5,21 @@ description: Find answers to common questions about Ultracite, including setup, 
 
 ## Q: What exactly is Ultracite – how is it different from Biome or ESLint?
 
-Ultracite is essentially a preset configuration built on Biome. Think of Ultracite as a curated bundle of rules and settings, whereas Biome is the engine that actually formats / lints code. You can use Biome by itself, but you’d have to decide which rules to enable and configure its options manually. Ultracite saves you that effort by providing a ready-to-go setup that uses best practices from across the ecosystem.
+Ultracite is essentially a preset configuration built on top of an existing toolchain. Think of Ultracite as a curated bundle of rules and settings, whereas the underlying engine — [Biome](/provider/biome), [ESLint + Prettier + Stylelint](/provider/eslint), or [Oxlint + Oxfmt](/provider/oxlint) — is what actually formats / lints code. You can use any of those tools by themselves, but you’d have to decide which rules to enable and configure their options manually. Ultracite saves you that effort by providing a ready-to-go setup that uses best practices from across the ecosystem.
 
-Compared to ESLint + Prettier, Biome is faster thanks to its Rust implementation and unified (one tool instead of two or three). If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
+Compared to ESLint + Prettier, Biome and Oxlint are faster thanks to their Rust implementations, and Biome is unified (one tool instead of two or three). If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
 
-In short: Biome is the engine (linter / formatter), Ultracite is the configuration.
+In short: Biome / ESLint / Oxlint is the engine (linter / formatter), Ultracite is the configuration.
 
 ## Q: Do I still need ESLint or Prettier if I use Ultracite?
 
-No – Ultracite (via Biome) replaces the functionality of ESLint and Prettier for your Javascript / Typescript code. You do not need to run ESLint or Prettier at all. In fact, it’s recommended to remove those configs to avoid conflicts. Ultracite’s output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
+It depends on which provider you choose. With the default Biome provider (or the Oxlint + Oxfmt provider), Ultracite replaces the functionality of ESLint and Prettier for your Javascript / Typescript code — you do not need to run them at all, and it’s recommended to remove those configs to avoid conflicts (init does this automatically). Ultracite’s output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
 
-The only case you might still use them is if you have some edge-case plugin not supported by Biome (for example, a very specialized ESLint rule). But ideally, you’d work with Ultracite’s ecosystem entirely.
+If you prefer to stay in the ESLint ecosystem — for example, because you rely on a specialized ESLint plugin — you can choose Ultracite’s [ESLint + Prettier + Stylelint provider](/provider/eslint) instead, which gives you the same curated preset on top of those tools.
 
 ## Q: What about my non-JS/TS files? Does Ultracite handle those?
 
-Ultracite, via Biome, provides various levels of linting and formatting support for JavaScript, TypeScript, JSX, CSS and GraphQL.
+Ultracite, via Biome, provides various levels of linting and formatting support for JavaScript, TypeScript, JSX, JSON, CSS and GraphQL. See the [Languages](/docs/languages) page for a full breakdown per provider.
 
 ## Q: How often is Ultracite updated?
 

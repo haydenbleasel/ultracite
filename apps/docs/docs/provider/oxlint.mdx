@@ -20,14 +20,17 @@ Ultracite generates two TypeScript config files for Oxlint:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
-
 import core from "ultracite/oxlint/core";
+import github from "ultracite/oxlint/github";
+import sonarjs from "ultracite/oxlint/sonarjs";
 
 export default defineConfig({
-  extends: [core],
+  extends: [core, github, sonarjs],
   ignorePatterns: core.ignorePatterns,
 });
 ```
+
+The `github` and `sonarjs` presets run `eslint-plugin-github` and `eslint-plugin-sonarjs` through Oxlint's JS plugin support to close the gap with the ESLint preset. They're shipped as separate presets so you can drop either one to opt out.
 
 ```ts title="oxfmt.config.ts"
 import { defineConfig } from "oxfmt";
@@ -42,20 +45,21 @@ Add framework presets as needed:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
-
 import core from "ultracite/oxlint/core";
+import github from "ultracite/oxlint/github";
+import sonarjs from "ultracite/oxlint/sonarjs";
 import next from "ultracite/oxlint/next";
 import react from "ultracite/oxlint/react";
 
 export default defineConfig({
-  extends: [core, react, next],
+  extends: [core, github, sonarjs, react, next],
   ignorePatterns: core.ignorePatterns,
 });
 ```
 
 ## Configuration Approach
 
-Ultracite's Oxlint configuration uses an **opt-out** approach. This means we enable all rule categories at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
+Ultracite's Oxlint configuration uses an **opt-out** approach. This means we explicitly enable rules from every category at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
 
 ## Rule Categories
 
@@ -97,7 +101,9 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **jsdoc** — JSDoc comment validation
 - **node** — Node.js-specific rules
 - **promise** — Promise and async/await best practices
-- **jest** / **vitest** — Testing framework rules
+- **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
+
+In addition, the default generated config bundles **github** (`eslint-plugin-github`) and **sonarjs** (`eslint-plugin-sonarjs`) as separate presets via Oxlint's JS plugin support.
 
 ## Adding Third-Party Plugins
 
@@ -109,14 +115,15 @@ npm install -D oxlint-plugin-complexity
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
-import complexity from "oxlint-plugin-complexity";
-
 import core from "ultracite/oxlint/core";
 
 export default defineConfig({
   extends: [core],
   ignorePatterns: core.ignorePatterns,
-  plugins: [complexity],
+  jsPlugins: ["oxlint-plugin-complexity"],
+  rules: {
+    "complexity/complexity": ["error", { cognitive: 15 }],
+  },
 });
 ```
 

@@ -49,7 +49,7 @@ If it bothers you, you can turn off VS Code's TS validator (`"typescript.validat
 
 ## "Pre-commit hook/CI is failing due to Ultracite."
 
-If your pre-commit hook runs `ultracite check` and fails, it means there are issues that weren't auto-fixed (or someone bypassed running it). Run `ultracite fix` locally to auto-fix what can be fixed, then inspect the remaining output.
+If your pre-commit hook fails, it means Ultracite found issues that couldn't be auto-fixed (the generated hooks run `ultracite fix`, which fixes what it can and fails on the rest). Run `ultracite fix` locally to auto-fix what can be fixed, then inspect the remaining output.
 
 Address any remaining issues manually, then commit. If CI is failing on `ultracite check`, do the same: run it locally to see what issues were found. Treat Ultracite failures like failing tests — something to correct in code.
 

@@ -5,13 +5,13 @@ description: Run Ultracite after AI-assisted file edits with editor hooks so for
 
 Ultracite can automatically format and fix code after AI coding assistants make edits through hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
-The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs `npx ultracite fix` to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
+The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs your project's `fix` script (which runs `ultracite fix`) to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
 
 > **Note:** Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
 
 ## Setup
 
-Some tools like Cursor, Windsurf, CodeBuddy, and Claude Code support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
+Some tools like Cursor, Windsurf, CodeBuddy, Claude Code, and GitHub Copilot support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
 
 ### Automatic Setup
 
@@ -23,6 +23,7 @@ When you run `npx ultracite init`, you'll be prompted to select which editor hoo
   ◯ Windsurf
   ◯ CodeBuddy
   ◯ Claude Code
+  ◯ GitHub Copilot
 ```
 
 This will create the relevant hook configuration file in your project directory.
@@ -33,20 +34,21 @@ Ultracite writes the following files:
 - Windsurf: `.windsurf/hooks.json`
 - CodeBuddy: `.codebuddy/settings.json`
 - Claude Code: `.claude/settings.json`
+- GitHub Copilot: `.github/hooks/ultracite.json`
 
 ### Manual Setup
 
 If you want to manually set things up or add hooks after initialization, run:
 
 ```bash
-npx ultracite init --hooks cursor windsurf codebuddy claude
+npx ultracite init --hooks cursor windsurf codebuddy claude copilot
 ```
 
 Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
 
 ## How It Works
 
-1. **Automatic Execution**: After the AI agent edits a file, the hook automatically runs `npx ultracite fix`
+1. **Automatic Execution**: After the AI agent edits a file, the hook automatically runs your project's `fix` script (added to `package.json` during init). On Biome projects, the hook passes `--skip=correctness/noUnusedImports` to avoid removing imports mid-edit.
 2. **Code Formatting**: Ultracite formats the edited code according to your linter configuration
 3. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
 4. **Seamless Integration**: The process happens transparently without interrupting your workflow

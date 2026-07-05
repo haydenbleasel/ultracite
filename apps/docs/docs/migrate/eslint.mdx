@@ -18,7 +18,7 @@ If you're already using ESLint and want to switch to Ultracite's preconfigured s
 Make sure you have:
 
 - An existing project using ESLint
-- Node.js v14.18+ (Node 18+ recommended)
+- Node.js 20+
 - An ESLint configuration file (e.g., `.eslintrc`, `eslint.config.js`)
 
 ## Migration Options
@@ -37,16 +37,15 @@ This will:
 - Install Ultracite and the necessary dependencies
 - Create or merge your linter configuration with Ultracite's preset
 - Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
 - Set up editor integrations
 
-When prompted, choose to remove the existing ESLint configuration if you're switching to Biome or Oxlint. This will:
+If you switch to Biome or Oxlint, Ultracite automatically removes the existing ESLint configuration. This will:
 
 - Remove ESLint and any related dependencies
-- Remove any ESLint configuration files
-- Remove any ESLint related commands from your `.vscode/settings.json` file
+- Remove any ESLint configuration files (including legacy `.eslintrc*` files)
 
-If you choose ESLint as your provider, Ultracite will update your existing ESLint configuration to use Ultracite's preset instead.
+If you choose ESLint as your provider, Ultracite will update your existing ESLint flat config to use Ultracite's preset instead (legacy `.eslintrc*` files are replaced by an `eslint.config.mjs`). If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new linter.
 
 ### Option 2: Manual Migration
 

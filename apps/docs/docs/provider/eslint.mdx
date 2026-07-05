@@ -19,37 +19,34 @@ description: Learn when Ultracite is the right fit for ESLint, Prettier, and Sty
 Ultracite generates three config files for ESLint:
 
 ```javascript title="eslint.config.mjs"
-import { defineConfig } from "eslint/config";
 import core from "ultracite/eslint/core";
 
-export default defineConfig([
-  {
-    extends: [core],
-  },
-]);
+export default [...core];
 ```
 
 ```javascript title="prettier.config.mjs"
-export { default } from "ultracite/prettier";
+import config from "ultracite/prettier";
+
+export default {
+  ...config,
+  plugins: ["prettier-plugin-tailwindcss"],
+};
 ```
 
 ```javascript title="stylelint.config.mjs"
 export { default } from "ultracite/stylelint";
 ```
 
+The `prettier-plugin-tailwindcss` plugin is always included (and must stay last); selecting the Astro or Svelte frameworks adds `prettier-plugin-astro` or `prettier-plugin-svelte` before it.
+
 Add framework presets as needed:
 
 ```javascript title="eslint.config.mjs"
-import { defineConfig } from "eslint/config";
 import core from "ultracite/eslint/core";
 import react from "ultracite/eslint/react";
 import next from "ultracite/eslint/next";
 
-export default defineConfig([
-  {
-    extends: [core, react, next],
-  },
-]);
+export default [...core, ...react, ...next];
 ```
 
 ## Configuration Approach
@@ -80,11 +77,12 @@ Ultracite's ESLint configuration includes the following plugins:
 - **jsx-a11y** — Accessibility rules for JSX elements
 - **tanstack** — [`@tanstack/eslint-plugin-query`](https://tanstack.com/query/latest/docs/eslint/eslint-plugin-query), [`@tanstack/eslint-plugin-router`](https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router), and [`@tanstack/eslint-plugin-start`](https://tanstack.com/start/latest/docs/eslint) when you opt into the **`tanstack`** framework preset
 - **@next/next** — Next.js-specific rules
-- **vue** / **svelte** / **solid** / **astro** / **angular** / **qwik** / **nestjs** — Framework-specific rules
+- **vue** / **svelte** / **solid** / **astro** / **angular** / **qwik** / **remix** / **nestjs** — Framework-specific rules
 
 ### Testing
 
 - **jest** — Jest testing best practices
+- **vitest** — Vitest testing best practices
 - **cypress** — Cypress testing best practices
 - **storybook** — Storybook component documentation rules
 
@@ -102,7 +100,7 @@ Ultracite configures Prettier with these defaults:
 - **Indentation**: 2 spaces
 - **Line Width**: 80 characters
 - **Semicolons**: Always required
-- **Single Quotes**: Yes
+- **Double Quotes**: Yes
 - **Trailing Commas**: ES5 style
 - **Arrow Parentheses**: Always include
 

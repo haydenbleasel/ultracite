@@ -18,7 +18,7 @@ If you're already using Stylelint and want to switch to Ultracite's preconfigure
 Make sure you have:
 
 - An existing project using Stylelint
-- Node.js v14.18+ (Node 18+ recommended)
+- Node.js 20+
 - A Stylelint configuration file (e.g., `.stylelintrc`, `stylelint.config.js`)
 
 ## Migration Options
@@ -37,14 +37,15 @@ This will:
 - Install Ultracite and the necessary dependencies
 - Create or merge your linter configuration with Ultracite's preset
 - Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
 - Set up editor integrations
 
-When prompted, choose to remove the existing Stylelint configuration if you're switching to Biome or Oxlint (which have built-in CSS support). This will:
+If you switch to Biome or Oxlint (which have built-in CSS support), Ultracite automatically removes the existing Stylelint configuration. This will:
 
 - Remove Stylelint and any related dependencies
 - Remove any Stylelint configuration files
-- Remove any Stylelint related commands from your `.vscode/settings.json` file
+
+If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new toolchain.
 
 If you choose ESLint as your provider, Ultracite will configure Stylelint alongside ESLint using Ultracite's preset.
 

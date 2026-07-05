@@ -10,7 +10,7 @@ Ultracite integrates with popular Git hook tools to automatically format and lin
 During initialization, you can select which Git hook tool to use:
 
 ```bash
-npx ultracite init --integrations husky,lint-staged
+npx ultracite init --integrations husky lint-staged
 ```
 
 Or select them interactively when prompted.
@@ -19,11 +19,39 @@ Or select them interactively when prompted.
 
 ### Husky
 
-[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite creates a `.husky/pre-commit` file that runs `npx ultracite fix` before each commit.
+[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file that runs `ultracite fix` on your staged files, re-stages them, and fails the commit if any issues couldn't be auto-fixed:
 
 ```bash title=".husky/pre-commit"
-npx ultracite fix
+# ultracite
+#!/bin/sh
+# Check if there are any staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+if [ -z "$STAGED_FILES" ]; then
+  echo "No staged files to format"
+  exit 0
+fi
+
+# Run formatter, capturing the exit code so we can still re-stage and report
+FORMAT_EXIT_CODE=0
+npx ultracite fix || FORMAT_EXIT_CODE=$?
+
+# Re-stage files that were already staged
+echo "$STAGED_FILES" | while IFS= read -r file; do
+  if [ -f "$file" ]; then
+    git add -- "$file"
+  fi
+done
+
+if [ $FORMAT_EXIT_CODE -ne 0 ]; then
+  echo "Ultracite found issues that could not be auto-fixed."
+  exit $FORMAT_EXIT_CODE
+fi
+
+echo "✨ Files formatted by Ultracite"
+# ultracite end
 ```
+
+Anything you've added to the hook outside the `# ultracite` markers is preserved when Ultracite updates it. If you also select lint-staged, the hook runs lint-staged instead of the script above.
 
 ### lefthook
 
@@ -33,17 +61,25 @@ npx ultracite fix
 pre-commit:
   jobs:
     - run: npx ultracite fix
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
       stage_fixed: true
 ```
 
 ### lint-staged
 
-[lint-staged](https://github.com/okonet/lint-staged) runs linters only on staged files. Ultracite adds configuration to your `package.json` or creates a `.lintstagedrc` file:
+[lint-staged](https://github.com/okonet/lint-staged) runs linters only on staged files. Ultracite adds configuration to your existing lint-staged config (or `package.json`), or creates a `.lintstagedrc.json` file:
 
 ```json title="package.json"
 {
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css}": ["npx ultracite fix"]
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
   }
 }
 ```

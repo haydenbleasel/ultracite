@@ -18,7 +18,7 @@ If you're already using Biome and want to switch to Ultracite's preconfigured se
 Make sure you have:
 
 - An existing project using Biome
-- Node.js v14.18+ (Node 18+ recommended)
+- Node.js 20+
 - A `biome.json` or `biome.jsonc` file
 
 ## Migration Options
@@ -36,7 +36,7 @@ When prompted, select **Biome** as your linting provider. This will:
 - Install Ultracite as a dependency
 - Merge your existing `biome.json` / `biome.jsonc` with Ultracite's preset
 - Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your `tsconfig.json` file (or create one if it doesn't exist)
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
 - Preserve your custom rules and settings
 - Set up editor integrations
 
