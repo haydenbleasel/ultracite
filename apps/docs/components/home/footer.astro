@@ -2,68 +2,114 @@
 import Icon from "./icon.astro";
 import Logo from "./logo.astro";
 
-const generalLinks = [
-  { href: "/", label: "Home" },
-  { href: "/docs", label: "Docs" },
+const footerNav = [
+  {
+    links: [
+      { href: "/docs/setup", label: "Setup" },
+      { href: "/docs/usage", label: "Usage" },
+      { href: "/docs/configuration", label: "Configuration" },
+      { href: "/docs/languages", label: "Languages" },
+      { href: "/docs/troubleshooting", label: "Troubleshooting" },
+    ],
+    title: "Getting Started",
+  },
+  {
+    links: [
+      { href: "/docs/provider/biome", label: "Biome" },
+      { href: "/docs/provider/eslint", label: "ESLint" },
+      { href: "/docs/provider/oxlint", label: "Oxlint" },
+    ],
+    title: "Providers",
+  },
+  {
+    links: [
+      { href: "/docs/rules", label: "Rules" },
+      { href: "/docs/skills", label: "Skills" },
+      { href: "/docs/hooks", label: "Hooks" },
+      { href: "/docs/mcp-server", label: "MCP Server" },
+    ],
+    title: "AI Integration",
+  },
+  {
+    links: [
+      { href: "/docs/migrate/biome", label: "Biome" },
+      { href: "/docs/migrate/eslint", label: "ESLint" },
+      { href: "/docs/migrate/oxlint", label: "Oxlint" },
+      { href: "/docs/migrate/prettier", label: "Prettier" },
+      { href: "/docs/migrate/stylelint", label: "Stylelint" },
+    ],
+    title: "Migrations",
+  },
+  {
+    links: [
+      { href: "/docs/git-hooks", label: "Git Hooks" },
+      { href: "/docs/monorepos", label: "Monorepos" },
+      { href: "/docs/faq", label: "FAQ" },
+      { href: "/changelog", label: "Changelog" },
+    ],
+    title: "More",
+  },
 ];
 ---
 
 <footer class="mt-24 mb-12 flex flex-col gap-12">
-  <div class="flex flex-col gap-2">
-    <p class="font-medium text-muted-foreground text-sm">General</p>
+  <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
     {
-      generalLinks.map((link) => (
-        <a
-          class="text-sm transition-colors hover:text-accent"
-          href={link.href}
-        >
-          {link.label}
-        </a>
+      footerNav.map((section) => (
+        <div class="flex flex-col gap-3">
+          <p class="font-medium text-sm">{section.title}</p>
+          <ul class="flex flex-col gap-2">
+            {section.links.map((link) => (
+              <li>
+                <a
+                  class="text-muted-foreground text-sm transition-colors hover:text-accent"
+                  href={link.href}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))
     }
   </div>
 
-  <div class="flex flex-col gap-6 border-t pt-8">
-    <div
-      class="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center"
-    >
-      <div class="flex items-center gap-3">
-        <Logo class="size-5" />
-        <span class="font-semibold text-lg tracking-tight">Ultracite</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <a
-          aria-label="Follow on X"
-          class="text-muted-foreground transition-colors hover:text-accent"
-          href="https://x.com/haydenbleasel"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <Icon class="size-4" name="x" />
-        </a>
-        <a
-          aria-label="View on GitHub"
-          class="text-muted-foreground transition-colors hover:text-accent"
-          href="https://github.com/haydenbleasel/ultracite"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <Icon class="size-4" name="github" />
-        </a>
-      </div>
+  <div
+    class="flex flex-col items-center gap-4 border-t pt-8 text-center sm:grid sm:grid-cols-3 sm:items-center"
+  >
+    <div class="flex items-center gap-3 sm:justify-self-start">
+      <Logo class="size-5" />
+      <span class="font-semibold text-lg tracking-tight">Ultracite</span>
     </div>
-    <div
-      class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
-    >
-      <p class="text-muted-foreground text-sm">
-        Free and open source, forever. Made by{" "}
-        <a
-          class="text-accent underline"
-          href="https://x.com/haydenbleasel"
-          rel="noreferrer"
-          target="_blank">@haydenbleasel</a
-        >
-      </p>
+    <p class="text-muted-foreground text-sm sm:justify-self-center">
+      Free and open source, forever. Made by{" "}
+      <a
+        class="text-accent underline"
+        href="https://x.com/haydenbleasel"
+        rel="noreferrer"
+        target="_blank">@haydenbleasel</a
+      >
+    </p>
+    <div class="flex items-center gap-4 sm:justify-self-end">
+      <a
+        aria-label="Follow on X"
+        class="text-muted-foreground transition-colors hover:text-accent"
+        href="https://x.com/haydenbleasel"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <Icon class="size-4" name="x" />
+      </a>
+      <a
+        aria-label="View on GitHub"
+        class="text-muted-foreground transition-colors hover:text-accent"
+        href="https://github.com/haydenbleasel/ultracite"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <Icon class="size-4" name="github" />
+      </a>
     </div>
   </div>
 </footer>
