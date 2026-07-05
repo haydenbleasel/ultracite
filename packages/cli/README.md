@@ -45,7 +45,7 @@ Common `init` flags for non-interactive / CI use:
 | `--skip-install` | Configure without installing dependencies. |
 | `--quiet` | Suppress interactive prompts (auto-enabled in CI). |
 
-See the [CLI reference](https://docs.ultracite.ai/) for the full, current list of options.
+See the [CLI reference](https://ultracite.ai/) for the full, current list of options.
 
 ## Supported Tools
 
@@ -73,13 +73,12 @@ One unified toolchain configuration across every package and app, eliminating du
 
 ## Using the presets directly
 
-Beyond the CLI, Ultracite publishes ready-made config presets you can extend in your own setup (Biome, ESLint, Oxlint, Oxfmt, Prettier, and Stylelint). `ultracite init` wires these up for you; if you'd rather reference them by hand, the [configuration docs](https://docs.ultracite.ai/) list the exact import paths and extension points for each toolchain.
+Beyond the CLI, Ultracite publishes ready-made config presets you can extend in your own setup (Biome, ESLint, Oxlint, Oxfmt, Prettier, and Stylelint). `ultracite init` wires these up for you; if you'd rather reference them by hand, the [configuration docs](https://ultracite.ai/) list the exact import paths and extension points for each toolchain.
 
 ## Documentation
 
 Full setup guides, configuration options, rule references, framework and editor integrations, and examples live in the docs:
 
-- **Docs:** https://docs.ultracite.ai/
 - **Website:** https://www.ultracite.ai/
 - **Issues & discussions:** https://github.com/haydenbleasel/ultracite
 
