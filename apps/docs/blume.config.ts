@@ -68,7 +68,6 @@ export default defineConfig({
     { from: "/rules", to: "/docs/rules" },
     { from: "/skills", to: "/docs/skills" },
     { from: "/hooks", to: "/docs/hooks" },
-    { from: "/mcp-server", to: "/docs/mcp-server" },
     { from: "/migrate/biome", to: "/docs/migrate/biome" },
     { from: "/migrate/eslint", to: "/docs/migrate/eslint" },
     { from: "/migrate/oxlint", to: "/docs/migrate/oxlint" },
@@ -80,10 +79,13 @@ export default defineConfig({
     { from: "/git-hooks", to: "/docs/git-hooks" },
     { from: "/monorepos", to: "/docs/monorepos" },
     { from: "/faq", to: "/docs/faq" },
+    // The MCP docs page was removed — send it (and its old aliases) home.
+    { from: "/docs/mcp-server", to: "/" },
+    { from: "/mcp-server", to: "/" },
+    { from: "/mcp", to: "/" },
     // Legacy slugs previously redirected by the standalone marketing site.
     { from: "/introduction", to: "/docs" },
     { from: "/examples", to: "/docs/usage" },
-    { from: "/mcp", to: "/docs/mcp-server" },
     { from: "/support", to: "/docs/troubleshooting" },
     { from: "/preset/core", to: "/docs/configuration" },
     { from: "/integration/husky", to: "/docs/git-hooks" },
