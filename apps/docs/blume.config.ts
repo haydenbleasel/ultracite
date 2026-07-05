@@ -6,14 +6,9 @@ export default defineConfig({
   },
 
   content: {
-    // content.root drives the collection base and the folder-meta scan; keep it
-    // "." so both line up with the filesystem source below (root ".", docs under
-    // docs/). This is what makes /docs/* resolve in dev AND lets docs/*/meta.ts
-    // groups match.
-    root: ".",
     sources: [
       // Local docs under docs/ → /docs/* (the marketing homepage owns "/").
-      { include: ["docs/**/*.mdx"], root: ".", type: "filesystem" },
+      { prefix: "docs", root: "docs", type: "filesystem" },
       // Ultracite's GitHub releases become the changelog timeline at /changelog
       // (each release is a type:changelog entry). Set GITHUB_TOKEN in CI to
       // avoid rate limits; a failed fetch degrades to an empty changelog.
