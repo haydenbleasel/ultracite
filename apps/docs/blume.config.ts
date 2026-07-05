@@ -1,6 +1,10 @@
 import { defineConfig } from "blume";
 
 export default defineConfig({
+  analytics: {
+    vercel: true,
+  },
+
   content: {
     sources: [
       // Local docs live under docs/ so the marketing homepage
@@ -20,6 +24,10 @@ export default defineConfig({
     ],
   },
 
+  deployment: {
+    adapter: "vercel",
+  },
+
   description: "Documentation for Ultracite.",
 
   github: {
@@ -29,8 +37,6 @@ export default defineConfig({
   },
 
   logo: {
-    // The SVG already includes the "Ultracite" wordmark, so render the mark
-    // alone (no site title beside it).
     image: "/logo/logo.svg",
     text: "",
   },
@@ -85,11 +91,7 @@ export default defineConfig({
   ],
 
   theme: {
-    accent: {
-      dark: "#6159E8",
-      light: "#4F46E5",
-    },
-    action: "#473FCE",
+    accent: "purple",
   },
 
   title: "Ultracite",
