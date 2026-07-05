@@ -1,0 +1,73 @@
+---
+import PageLayout from "blume/components/layout/PageLayout.astro";
+import data from "blume:data";
+import "../styles/home.css";
+
+import Agents from "../components/home/agents.astro";
+import Cta from "../components/home/cta.astro";
+import Demo from "../components/home/demo.astro";
+import Editors from "../components/home/editors.astro";
+import Footer from "../components/home/footer.astro";
+import Hero from "../components/home/hero.astro";
+import Ide from "../components/home/ide.astro";
+import Logos from "../components/home/logos.astro";
+import Social from "../components/home/social.astro";
+import Sponsors from "../components/home/sponsors.astro";
+import Videos from "../components/home/videos.astro";
+import ZeroConfig from "../components/home/zero-config.astro";
+import { getLatestVersion, getReleaseUrl } from "../lib/latest-version";
+import { siteDescription, siteJsonLd, softwareAppJsonLd } from "../lib/seo";
+
+const { config } = data;
+const version = await getLatestVersion();
+const releaseUrl = getReleaseUrl(version);
+
+const structuredData = [siteJsonLd(config.site), softwareAppJsonLd(config.site)];
+---
+
+<PageLayout
+  analytics={config.analytics}
+  appleIcon={config.appleIcon}
+  banner={config.banner}
+  favicon={config.favicon}
+  fontCssVars={data.fontCssVars}
+  logo={config.logo}
+  navigation={data.navigation}
+  ogEnabled={config.og.enabled}
+  ogImage="/opengraph-image.png"
+  page={{
+    description: siteDescription,
+    title: "Ultracite — Zero-Config Linting for Biome, ESLint, and Oxlint",
+  }}
+  searchEnabled={config.search.enabled}
+  site={{ title: config.title, description: siteDescription }}
+  siteUrl={config.site}
+  themeMode={config.theme.mode}
+>
+  {
+    structuredData.map((schema) => (
+      <script is:inline set:html={JSON.stringify(schema)} type="application/ld+json" />
+    ))
+  }
+
+  <div
+    class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
+  >
+    <Hero description={siteDescription} releaseUrl={releaseUrl} version={version}>
+      <Demo />
+    </Hero>
+    <Logos />
+    <ZeroConfig />
+    <Ide />
+    <Videos />
+    <Agents />
+    <Editors />
+    <Sponsors />
+    <Social />
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4" slot="footer">
+    <Cta />
+    <Footer />
+  </div>
+</PageLayout>

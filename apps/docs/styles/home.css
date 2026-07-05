@@ -1,0 +1,69 @@
+/* Homepage-only presentational CSS (imported by pages/index.astro). Plain CSS
+   only — no @theme/@apply here; token utilities live in ../theme.css. */
+
+/* Tailwind v4 makes the bare `border`/`divide-*` utilities fall back to
+   currentColor (near-white in dark mode). Restore a sensible default border
+   color so unspecified borders use the theme token. Explicit color utilities
+   (border-white/10, border-primary, …) have higher specificity and still win.
+   Scoped to the homepage because this file only loads there. */
+*,
+::before,
+::after {
+  border-color: var(--color-border);
+}
+
+/* --- CSS-only hover/focus tooltip (replaces the React Tooltip) --- */
+.hp-tt {
+  position: relative;
+}
+.hp-tt > [data-tt] {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 40;
+  translate: -50% 0;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  background-color: var(--blume-foreground);
+  color: var(--blume-background);
+  padding: 0.25rem 0.5rem;
+  /* Reset typography so the tooltip doesn't inherit a host's tracking/weight
+     (e.g. the hero <h1>'s tracking-tighter resolves to -3px and crams text). */
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.hp-tt:hover > [data-tt],
+.hp-tt:focus-within > [data-tt] {
+  opacity: 1;
+}
+
+/* --- ZeroConfig provider panels toggled by vanilla JS --- */
+[data-hp-panel][hidden] {
+  display: none;
+}
+
+.hp-provider {
+  border-color: var(--blume-border);
+  color: var(--blume-muted-foreground);
+}
+.hp-provider[aria-selected="true"] {
+  border-color: var(--primary);
+  color: var(--blume-foreground);
+  background-color: color-mix(in oklch, var(--primary) 8%, transparent);
+}
+
+/* Blume's header-less CodeBlock inside a Blume Tab: strip its own
+   margin/border/radius so it sits flush in the tab panel. */
+.hp-code :is(.prose, figure, pre) {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.hp-code pre {
+  background: transparent;
+}

@@ -1,0 +1,27 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  class?: string;
+  maxWidth?: string;
+}
+const {
+  title,
+  description,
+  class: className,
+  maxWidth = "max-w-3xl",
+} = Astro.props;
+---
+
+<div class:list={["mx-auto grid gap-4 text-center", maxWidth, className]}>
+  <h2
+    class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
+  >
+    {title}
+  </h2>
+  <p
+    class="text-balance text-muted-foreground tracking-tight sm:text-lg"
+    set:html={description}
+  >
+  </p>
+</div>

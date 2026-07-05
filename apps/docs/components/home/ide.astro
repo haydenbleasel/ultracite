@@ -1,0 +1,178 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+import Icon from "./icon.astro";
+
+const mockCode = `import React from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserCard: React.FC<{ user: User }> = ({ user }) => {
+  return (
+    <div className="p-4 border rounded-lg shadow-sm">
+      <h3 className="text-lg font-semibold">{user.name}</h3>
+      <p className="text-gray-600">{user.email}</p>
+    </div>
+  );
+};
+
+export default UserCard;`;
+
+const indicators = [
+  {
+    className: "xl:mt-5",
+    description: "Ultracite supports 40+ agents for formatting rules and hooks.",
+    title: "Agent Integration",
+  },
+  {
+    className: "xl:mt-10",
+    description:
+      "Automatically generate editor files for format on save, auto-fixes, and TypeScript defaults.",
+    title: "Editor configuration",
+  },
+  {
+    className: "xl:mt-24",
+    description: "Zero configuration linter and formatter config out of the box.",
+    title: "Configurable spec",
+  },
+];
+---
+
+<div class="grid gap-8">
+  <div class="mx-auto grid max-w-3xl gap-4 text-center">
+    <h2
+      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
+    >
+      Designed for humans and AI
+    </h2>
+    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
+      Ensure consistent code style and quality across all team members and AI
+      models, eliminating debates over formatting and reducing code review
+      friction.
+    </p>
+  </div>
+  <div class="grid items-start gap-8 xl:grid-cols-[200px_1fr_200px]">
+    <div
+      class="order-1 grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:order-0 xl:grid-cols-1 xl:gap-0"
+    >
+      {
+        indicators.map((indicator) => (
+          <div class:list={["flex flex-col gap-1", indicator.className]}>
+            <div class="flex items-center gap-2">
+              <p class="shrink-0 font-medium xl:text-sm">{indicator.title}</p>
+              <div class="hidden h-px flex-1 bg-foreground/10 xl:block" />
+            </div>
+            <p class="text-muted-foreground xl:text-xs">
+              {indicator.description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div
+      class="hidden aspect-video grid-cols-[180px_1fr] divide-x overflow-hidden rounded-2xl border bg-background md:grid"
+    >
+      <div
+        class="flex flex-col gap-1 px-2 py-4 font-mono text-muted-foreground text-xs"
+      >
+        <div class="flex flex-col gap-px">
+          <div class="flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="folder" />
+            <p class="font-medium">.cursor</p>
+          </div>
+          <div class="ml-2 flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="json" />
+            <p class="font-medium">hooks.json</p>
+          </div>
+          <div class="ml-2 flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="folder" />
+            <p class="font-medium">rules</p>
+          </div>
+          <div class="ml-4 flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="markdown" />
+            <p class="font-medium">ultracite.mdc</p>
+          </div>
+          <div class="flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="folder" />
+            <p class="font-medium">.vscode</p>
+          </div>
+          <div class="ml-2 flex items-center gap-2 rounded-md px-2 py-1">
+            <Icon class="size-3 shrink-0" name="json" />
+            <p class="font-medium">settings.json</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 rounded-md px-2 py-1">
+          <Icon class="size-3 shrink-0" name="react" />
+          <p class="font-medium">index.tsx</p>
+        </div>
+        <div class="flex items-center gap-2 rounded-md px-2 py-1">
+          <Icon class="size-3 shrink-0" name="react" />
+          <p class="font-medium">layout.tsx</p>
+        </div>
+        <div class="flex items-center gap-2 rounded-md px-2 py-1">
+          <Icon class="size-3 shrink-0" name="typescript" />
+          <p class="font-medium">utils.ts</p>
+        </div>
+        <div class="flex items-center gap-2 rounded-md px-2 py-1">
+          <Icon class="size-3 shrink-0" name="css" />
+          <p class="font-medium">globals.css</p>
+        </div>
+        <div class="flex items-center gap-2 rounded-md px-2 py-1">
+          <Icon class="size-3 shrink-0" name="json" />
+          <p class="font-medium">biome.jsonc</p>
+        </div>
+      </div>
+
+      <div class="grid grid-rows-[2fr_1fr] overflow-hidden">
+        <div class="hp-code overflow-auto p-2 text-sm">
+          <CodeBlock code={mockCode} icons={false} lang="tsx" />
+        </div>
+        <div
+          class="flex flex-col gap-2 overflow-y-auto border-t p-4 text-muted-foreground text-xs"
+        >
+          <div class="flex items-center justify-between gap-2">
+            <p class="font-medium">Problems</p>
+            <div class="-mx-1 -mt-1 rounded-full bg-sidebar px-2.5 py-1">
+              <p>Ultracite</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <Icon class="size-3" name="react" />
+              <p class="text-foreground">index.tsx</p>
+              <p>/index.tsx</p>
+            </div>
+            <div class="ml-4 flex items-center gap-2">
+              <Icon class="size-3" name="x-circle" />
+              <p class="truncate">React is imported but not used</p>
+            </div>
+            <div class="ml-4 flex items-center gap-2">
+              <Icon class="size-3" name="x-circle" />
+              <p class="truncate">
+                It is not necessary to wrap the return statement in a div.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-1 xl:gap-0 xl:text-right"
+    >
+      <div class="flex flex-col gap-1 xl:mt-24">
+        <div class="flex items-center gap-2 xl:flex-row-reverse">
+          <p class="shrink-0 font-medium xl:text-sm">Output panel</p>
+          <div class="hidden h-px flex-1 bg-foreground/10 xl:block"></div>
+        </div>
+        <p class="text-muted-foreground xl:text-xs">
+          Ultracite uses the VS Code output panel to show problems.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

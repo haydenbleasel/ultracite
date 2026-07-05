@@ -1,0 +1,35 @@
+---
+import { editors } from "../../lib/editors";
+import { editorLogos } from "../../lib/logos";
+---
+
+<div class="grid gap-8">
+  <div class="mx-auto grid max-w-3xl gap-4 text-center">
+    <h2
+      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
+    >
+      ... and all your favourite editors
+    </h2>
+    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
+      Ultracite can generate configuration files for all these popular editors,
+      so you can get the most of out of your AI integrations.
+    </p>
+  </div>
+  <div class="mx-auto flex items-center justify-center -space-x-1">
+    {
+      editors.map((editor, index) => (
+        <span class="hp-tt inline-flex" tabindex="0">
+          <img
+            alt={editor.name}
+            class:list={[
+              "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
+              index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3",
+            ]}
+            src={editorLogos[editor.id]}
+          />
+          <span data-tt>{editor.name}</span>
+        </span>
+      ))
+    }
+  </div>
+</div>

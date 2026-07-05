@@ -1,0 +1,109 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+import Tab from "blume/components/content/Tab.astro";
+import Tabs from "blume/components/content/Tabs.astro";
+import { providerLogos } from "../../lib/logos";
+import { providers } from "../../lib/providers";
+
+// A representative, fixed preset set. The live multi-select from the old React
+// homepage is replaced by build-time-highlighted examples so the page ships no
+// client-side highlighter.
+const PRESETS = ["core", "next", "react", "vitest"];
+
+const langFor = (lang: string): string => {
+  if (lang === "json") {
+    return "json";
+  }
+  if (lang === "typescript") {
+    return "typescript";
+  }
+  return "javascript";
+};
+
+// oxlint first, to match the previous default selection.
+const rank = (id: string): number => (id === "oxlint" ? 0 : 1);
+const ordered = providers.toSorted((a, b) => rank(a.id) - rank(b.id));
+const defaultProvider = ordered[0]?.id;
+---
+
+<div class="grid gap-8">
+  <div class="mx-auto grid max-w-xl gap-4 text-center">
+    <h2
+      class="text-balance font-semibold text-2xl tracking-tighter sm:text-3xl md:text-4xl"
+    >
+      Zero-config by design
+    </h2>
+    <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
+      Hundreds of rules for your framework to optimize your JavaScript /
+      TypeScript code, while still allowing you to customize when needed.
+    </p>
+  </div>
+
+  <div class="flex flex-col items-center justify-center gap-3">
+    <span class="text-muted-foreground text-sm">I'm using</span>
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      {
+        ordered.map((provider) => (
+          <button
+            aria-selected={provider.id === defaultProvider}
+            class="hp-provider flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
+            data-provider={provider.id}
+            type="button"
+          >
+            {providerLogos[provider.id] && (
+              <img
+                alt=""
+                class="size-4 rounded-full"
+                src={providerLogos[provider.id]}
+              />
+            )}
+            <span>{provider.name}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mx-auto w-full max-w-3xl">
+    {
+      ordered.map((provider) => (
+        <div data-hp-panel={provider.id} hidden={provider.id !== defaultProvider}>
+          <Tabs hash={false} sync={false}>
+            {provider.configFiles.map((file) => (
+              <Tab class="hp-code p-0!" title={file.name}>
+                <CodeBlock
+                  code={file.code(PRESETS)}
+                  icons={false}
+                  lang={langFor(file.lang)}
+                />
+              </Tab>
+            ))}
+          </Tabs>
+        </div>
+      ))
+    }
+    <p class="mt-3 text-center text-muted-foreground text-xs">
+      Example config with the <code>core</code>, Next.js, React and Vitest
+      presets.
+    </p>
+  </div>
+</div>
+
+<script>
+  const panels = document.querySelectorAll<HTMLElement>("[data-hp-panel]");
+  const providerButtons =
+    document.querySelectorAll<HTMLButtonElement>(".hp-provider");
+
+  const showProvider = (id: string) => {
+    for (const button of providerButtons) {
+      button.setAttribute("aria-selected", String(button.dataset.provider === id));
+    }
+    for (const panel of panels) {
+      panel.hidden = panel.dataset.hpPanel !== id;
+    }
+  };
+
+  for (const button of providerButtons) {
+    button.addEventListener("click", () => showProvider(button.dataset.provider ?? ""));
+  }
+</script>

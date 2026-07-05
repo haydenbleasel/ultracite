@@ -65,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: "" # Workaround for https://github.com/changesets/action/pull/545
 
-      - name: Deploy web to Vercel
+      - name: Deploy site to Vercel
         if: steps.changesets.outputs.published == 'true'
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
