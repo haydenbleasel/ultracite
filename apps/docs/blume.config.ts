@@ -21,11 +21,7 @@ export default defineConfig({
   logo: {
     // The SVG already includes the "Ultracite" wordmark, so render the mark
     // alone (no site title beside it).
-    image: {
-      alt: "Ultracite",
-      dark: "/logo/dark.svg",
-      light: "/logo/light.svg",
-    },
+    image: "/logo/logo.svg",
     text: "",
   },
 
@@ -81,10 +77,6 @@ export default defineConfig({
     accentDark: "#6159E8",
     // colors.dark
     action: "#473FCE",
-    fonts: {
-      body: "geist",
-      display: "geist",
-    },
   },
 
   title: "Ultracite",
