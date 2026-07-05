@@ -6,12 +6,14 @@ export default defineConfig({
   },
 
   content: {
+    // content.root drives the collection base and the folder-meta scan; keep it
+    // "." so both line up with the filesystem source below (root ".", docs under
+    // docs/). This is what makes /docs/* resolve in dev AND lets docs/*/meta.ts
+    // groups match.
+    root: ".",
     sources: [
-      // Local docs live under docs/ so the marketing homepage
-      // (pages/index.astro) can own "/". root is the docs/ folder and prefix
-      // nests every page under /docs/* — keeping the route entryId aligned with
-      // the content-collection base (root ".") breaks entry lookups in dev.
-      { prefix: "docs", root: "docs", type: "filesystem" },
+      // Local docs under docs/ → /docs/* (the marketing homepage owns "/").
+      { include: ["docs/**/*.mdx"], root: ".", type: "filesystem" },
       // Ultracite's GitHub releases become the changelog timeline at /changelog
       // (each release is a type:changelog entry). Set GITHUB_TOKEN in CI to
       // avoid rate limits; a failed fetch degrades to an empty changelog.
@@ -65,9 +67,13 @@ export default defineConfig({
     { from: "/provider/biome", to: "/docs/provider/biome" },
     { from: "/provider/eslint", to: "/docs/provider/eslint" },
     { from: "/provider/oxlint", to: "/docs/provider/oxlint" },
-    { from: "/rules", to: "/docs/rules" },
-    { from: "/skills", to: "/docs/skills" },
-    { from: "/hooks", to: "/docs/hooks" },
+    // Rules / Skills / Hooks moved under /docs/ai/*.
+    { from: "/rules", to: "/docs/ai/rules" },
+    { from: "/skills", to: "/docs/ai/skills" },
+    { from: "/hooks", to: "/docs/ai/hooks" },
+    { from: "/docs/rules", to: "/docs/ai/rules" },
+    { from: "/docs/skills", to: "/docs/ai/skills" },
+    { from: "/docs/hooks", to: "/docs/ai/hooks" },
     { from: "/migrate/biome", to: "/docs/migrate/biome" },
     { from: "/migrate/eslint", to: "/docs/migrate/eslint" },
     { from: "/migrate/oxlint", to: "/docs/migrate/oxlint" },
