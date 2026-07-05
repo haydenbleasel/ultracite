@@ -1,0 +1,101 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/sponsors", "destination": "/", "permanent": true },
+
+    { "source": "/setup", "destination": "/docs/setup", "permanent": true },
+    { "source": "/usage", "destination": "/docs/usage", "permanent": true },
+    {
+      "source": "/configuration",
+      "destination": "/docs/configuration",
+      "permanent": true
+    },
+    {
+      "source": "/languages",
+      "destination": "/docs/languages",
+      "permanent": true
+    },
+    {
+      "source": "/troubleshooting",
+      "destination": "/docs/troubleshooting",
+      "permanent": true
+    },
+    {
+      "source": "/git-hooks",
+      "destination": "/docs/git-hooks",
+      "permanent": true
+    },
+    {
+      "source": "/monorepos",
+      "destination": "/docs/monorepos",
+      "permanent": true
+    },
+    { "source": "/faq", "destination": "/docs/faq", "permanent": true },
+
+    {
+      "source": "/provider/:path*",
+      "destination": "/docs/provider/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/migrate/:path*",
+      "destination": "/docs/migrate/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/upgrade/:path*",
+      "destination": "/docs/upgrade/:path*",
+      "permanent": true
+    },
+
+    { "source": "/rules", "destination": "/docs/ai/rules", "permanent": true },
+    {
+      "source": "/skills",
+      "destination": "/docs/ai/skills",
+      "permanent": true
+    },
+    { "source": "/hooks", "destination": "/docs/ai/hooks", "permanent": true },
+    {
+      "source": "/docs/rules",
+      "destination": "/docs/ai/rules",
+      "permanent": true
+    },
+    {
+      "source": "/docs/skills",
+      "destination": "/docs/ai/skills",
+      "permanent": true
+    },
+    {
+      "source": "/docs/hooks",
+      "destination": "/docs/ai/hooks",
+      "permanent": true
+    },
+
+    { "source": "/mcp", "destination": "/", "permanent": true },
+    { "source": "/mcp-server", "destination": "/", "permanent": true },
+    { "source": "/docs/mcp-server", "destination": "/", "permanent": true },
+
+    { "source": "/introduction", "destination": "/docs", "permanent": true },
+    { "source": "/examples", "destination": "/docs/usage", "permanent": true },
+    {
+      "source": "/support",
+      "destination": "/docs/troubleshooting",
+      "permanent": true
+    },
+    {
+      "source": "/preset/core",
+      "destination": "/docs/configuration",
+      "permanent": true
+    },
+    {
+      "source": "/integration/husky",
+      "destination": "/docs/git-hooks",
+      "permanent": true
+    },
+    {
+      "source": "/integration/lefthook",
+      "destination": "/docs/git-hooks",
+      "permanent": true
+    }
+  ]
+}
