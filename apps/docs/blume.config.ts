@@ -10,10 +10,6 @@ export default defineConfig({
     root: ".",
   },
 
-  deployment: {
-    site: "https://www.ultracite.ai",
-  },
-
   description: "Documentation for Ultracite.",
 
   github: {
@@ -34,56 +30,10 @@ export default defineConfig({
   },
 
   navigation: {
-    // Explicit sidebar: the source groups are config-only (loose top-level
-    // files, not folders), so declaring them here preserves both the grouping
-    // and every existing URL without moving a single page.
-    sidebar: [
-      { href: "/", label: "Home" },
+    tabs: [
       {
-        items: [
-          "/docs",
-          "/docs/setup",
-          "/docs/usage",
-          "/docs/configuration",
-          "/docs/languages",
-          "/docs/troubleshooting",
-        ],
-        label: "Getting Started",
-      },
-      {
-        items: [
-          "/docs/provider/biome",
-          "/docs/provider/eslint",
-          "/docs/provider/oxlint",
-        ],
-        label: "Providers",
-      },
-      {
-        items: [
-          "/docs/rules",
-          "/docs/skills",
-          "/docs/hooks",
-          "/docs/mcp-server",
-        ],
-        label: "AI Integration",
-      },
-      {
-        items: [
-          "/docs/migrate/biome",
-          "/docs/migrate/eslint",
-          "/docs/migrate/oxlint",
-          "/docs/migrate/prettier",
-          "/docs/migrate/stylelint",
-        ],
-        label: "Migrations",
-      },
-      {
-        items: ["/docs/upgrade/v7", "/docs/upgrade/v6", "/docs/upgrade/v5"],
-        label: "Upgrade Guides",
-      },
-      {
-        items: ["/docs/git-hooks", "/docs/monorepos", "/docs/faq"],
-        label: "Other",
+        label: "Docs",
+        path: "/docs",
       },
     ],
   },
