@@ -128,7 +128,7 @@ jobs:
       - name: Check types
         run: bun run types
 
-  build-web:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -141,8 +141,8 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Build web
-        run: bun run build --filter web
+      - name: Build docs
+        run: bun run build --filter docs
 
   validate-configs:
     runs-on: ubuntu-latest

@@ -1,0 +1,103 @@
+---
+import Icon from "./icon.astro";
+import Logo from "./logo.astro";
+
+const footerNav = [
+  {
+    links: [
+      { href: "/docs/setup", label: "Setup" },
+      { href: "/docs/usage", label: "Usage" },
+      { href: "/docs/configuration", label: "Configuration" },
+      { href: "/docs/languages", label: "Languages" },
+      { href: "/docs/troubleshooting", label: "Troubleshooting" },
+    ],
+    title: "Getting Started",
+  },
+  {
+    links: [
+      { href: "/docs/provider/biome", label: "Biome" },
+      { href: "/docs/provider/eslint", label: "ESLint" },
+      { href: "/docs/provider/oxlint", label: "Oxlint" },
+    ],
+    title: "Providers",
+  },
+  {
+    links: [
+      { href: "/docs/ai/rules", label: "Agent Rules" },
+      { href: "/docs/ai/skills", label: "Agent Skills" },
+      { href: "/docs/ai/hooks", label: "Agent Hooks" },
+    ],
+    title: "AI Integration",
+  },
+  {
+    links: [
+      { href: "/docs/migrate/biome", label: "Biome" },
+      { href: "/docs/migrate/eslint", label: "ESLint" },
+      { href: "/docs/migrate/oxlint", label: "Oxlint" },
+      { href: "/docs/migrate/prettier", label: "Prettier" },
+      { href: "/docs/migrate/stylelint", label: "Stylelint" },
+    ],
+    title: "Migrations",
+  },
+  {
+    links: [
+      { href: "/docs/git-hooks", label: "Git Hooks" },
+      { href: "/docs/monorepos", label: "Monorepos" },
+      { href: "/docs/faq", label: "FAQ" },
+      { href: "/changelog", label: "Changelog" },
+    ],
+    title: "More",
+  },
+];
+---
+
+<footer class="mb-24 flex flex-col gap-6">
+  <div class="flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <Logo class="size-5" />
+      <span class="font-semibold text-lg tracking-tight">Ultracite</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <a
+        aria-label="Follow on X"
+        class="text-muted-foreground transition-colors hover:text-accent"
+        href="https://x.com/haydenbleasel"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <Icon class="size-4" name="x" />
+      </a>
+      <a
+        aria-label="View on GitHub"
+        class="text-muted-foreground transition-colors hover:text-accent"
+        href="https://github.com/haydenbleasel/ultracite"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <Icon class="size-4" name="github" />
+      </a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+    {
+      footerNav.map((section) => (
+        <div class="flex flex-col gap-3">
+          <p class="font-medium text-sm">{section.title}</p>
+          <ul class="flex flex-col gap-2">
+            {section.links.map((link) => (
+              <li>
+                <a
+                  class="text-muted-foreground text-sm transition-colors hover:text-accent"
+                  href={link.href}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</footer>

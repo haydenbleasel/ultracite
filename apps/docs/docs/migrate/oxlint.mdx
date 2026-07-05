@@ -1,0 +1,72 @@
+---
+title: Migrate from Oxlint
+description: Move from standalone Oxlint to Ultracite so speed-focused projects gain shared presets, editor defaults, and a cleaner rollout path.
+---
+
+If you're already using Oxlint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while preserving your code quality standards.
+
+## Why Migrate to Ultracite?
+
+- **Zero Configuration**: Ultracite provides a highly configured preset of rules
+- **Editor Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistent Workflow**: Standardized setup across projects and teams
+- **Additional Tooling**: Optional Git hooks, lint-staged integration
+- **Maintained Rules**: Regular updates with new best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using Oxlint
+- Node.js 20+
+- An Oxlint configuration file (e.g., `oxlint.config.ts`)
+
+## Migration Options
+
+### Option 1: Quick Migration (Recommended)
+
+The fastest way is to run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+When prompted, select **Oxlint** as your linting provider. This will:
+
+- Install Ultracite as a dependency
+- Merge your existing `oxlint.config.ts` with Ultracite's preset
+- Create an `oxfmt.config.ts` for formatting configuration
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
+- Preserve your custom rules and settings
+- Set up editor integrations
+
+Following the upgrade, you may want to review your `oxlint.config.ts` file to remove any overrides that are now handled by Ultracite's preset.
+
+### Option 2: Manual Migration
+
+If you prefer more control over the process, create an `oxlint.config.ts` that extends Ultracite:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+Then create an `oxfmt.config.ts` that imports Ultracite's formatting preset:
+
+```ts title="oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+});
+```
+
+After the migration, restart your editor to ensure the new configuration is applied.

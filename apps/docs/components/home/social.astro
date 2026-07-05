@@ -1,0 +1,86 @@
+---
+import { getTweet } from "../../lib/get-tweet";
+import Icon from "./icon.astro";
+import SectionIntro from "./section-intro.astro";
+
+// Hand-picked testimonials. `text` overrides the fetched body for long "note"
+// tweets, which the public syndication endpoint truncates.
+const entries = [
+  { id: "1937342910519038142" },
+  { id: "1955312886265368856" },
+  { id: "1976732830487958011" },
+  { id: "1939996143338860558" },
+  {
+    id: "1969727618237820980",
+    text: "One of the biggest lessons I learned from my first startup is to set the bar extremely high for code quality and linting from day one. If you do not, it turns into an impossible escalator you can never step off.\n\nWe are big believers in ultracite.ai, and I am always giving @haydenbleasel feedback on how he can make the tool the best it can be.",
+  },
+];
+
+const fetched = await Promise.all(entries.map((entry) => getTweet(entry.id)));
+const tweets = fetched.flatMap((tweet, index) => {
+  if (!tweet) {
+    return [];
+  }
+  const override = entries[index]?.text;
+  return [override ? { ...tweet, text: override } : tweet];
+});
+---
+
+<div class="grid gap-8">
+  <SectionIntro
+    description="Here's what some of the most innovative and forward-thinking developers in the React ecosystem have to say about Ultracite."
+    title="What the community is saying"
+  />
+
+  {
+    tweets.length > 0 && (
+      <div class="md:columns-2 xl:columns-3">
+        {tweets.map((tweet) => (
+          <a
+            class="mb-4 block break-inside-avoid rounded-2xl border bg-muted p-4 text-foreground transition-colors hover:border-foreground/20"
+            href={tweet.url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="flex items-center gap-3">
+              {tweet.avatar && (
+                <img
+                  alt={tweet.name}
+                  class="size-10 rounded-full"
+                  height="40"
+                  loading="lazy"
+                  src={tweet.avatar}
+                  width="40"
+                />
+              )}
+              <div class="flex min-w-0 flex-col">
+                <span class="flex items-center gap-1 font-semibold">
+                  <span class="truncate">{tweet.name}</span>
+                  {tweet.verified && (
+                    <svg
+                      aria-label="Verified"
+                      class="size-4 shrink-0 text-accent"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.26 3.91.81c.67 1.31 1.91 2.19 3.34 2.19s2.68-.88 3.34-2.19c1.39.45 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z" />
+                    </svg>
+                  )}
+                </span>
+                <span class="truncate text-muted-foreground text-sm">
+                  @{tweet.handle}
+                </span>
+              </div>
+              <span class="ml-auto text-muted-foreground">
+                <Icon class="size-4" name="x" />
+              </span>
+            </div>
+            <p class="mt-3 whitespace-pre-wrap text-[15px] leading-normal">
+              {tweet.text}
+            </p>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</div>

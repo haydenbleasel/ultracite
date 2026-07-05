@@ -22,7 +22,6 @@
     "changeset:publish": "turbo run build && changeset publish",
     "bump-deps": "npx npm-check-updates --deep -u -x \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
     "bump-tools": "npx npm-check-updates --deep -u --filter \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
-    "bump-ui": "cd apps/docs && npx shadcn@latest add --all --overwrite && npx shadcn@latest migrate radix",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -42,5 +41,8 @@
   "overrides": {
     "@typescript-eslint/utils": "^8.62.1"
   },
-  "packageManager": "bun@1.3.14"
+  "packageManager": "bun@1.3.14",
+  "patchedDependencies": {
+    "oxfmt@0.55.0": "patches/oxfmt@0.55.0.patch"
+  }
 }

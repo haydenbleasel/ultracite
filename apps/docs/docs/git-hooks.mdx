@@ -1,0 +1,130 @@
+---
+title: Git Hooks
+description: Run Ultracite automatically before each commit with Husky, Lefthook, lint-staged, or pre-commit so staged files stay clean and consistent.
+---
+
+Ultracite integrates with popular Git hook tools to automatically format and lint your code before every commit. This ensures all committed code follows your project's standards without manual intervention.
+
+## Setup
+
+During initialization, you can select which Git hook tool to use:
+
+```bash
+npx ultracite init --integrations husky lint-staged
+```
+
+Or select them interactively when prompted.
+
+## Supported Tools
+
+### Husky
+
+[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file that runs `ultracite fix` on your staged files, re-stages them, and fails the commit if any issues couldn't be auto-fixed:
+
+```bash title=".husky/pre-commit"
+# ultracite
+#!/bin/sh
+# Check if there are any staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+if [ -z "$STAGED_FILES" ]; then
+  echo "No staged files to format"
+  exit 0
+fi
+
+# Run formatter, capturing the exit code so we can still re-stage and report
+FORMAT_EXIT_CODE=0
+npx ultracite fix || FORMAT_EXIT_CODE=$?
+
+# Re-stage files that were already staged
+echo "$STAGED_FILES" | while IFS= read -r file; do
+  if [ -f "$file" ]; then
+    git add -- "$file"
+  fi
+done
+
+if [ $FORMAT_EXIT_CODE -ne 0 ]; then
+  echo "Ultracite found issues that could not be auto-fixed."
+  exit $FORMAT_EXIT_CODE
+fi
+
+echo "✨ Files formatted by Ultracite"
+# ultracite end
+```
+
+Anything you've added to the hook outside the `# ultracite` markers is preserved when Ultracite updates it. If you also select lint-staged, the hook runs lint-staged instead of the script above.
+
+### lefthook
+
+[lefthook](https://lefthook.dev/) is a fast Git hooks manager written in Go. Ultracite creates a `lefthook.yml` configuration:
+
+```yaml title="lefthook.yml"
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+```
+
+### lint-staged
+
+[lint-staged](https://github.com/okonet/lint-staged) runs linters only on staged files. Ultracite adds configuration to your existing lint-staged config (or `package.json`), or creates a `.lintstagedrc.json` file:
+
+```json title="package.json"
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  }
+}
+```
+
+Note: lint-staged is typically used alongside Husky or lefthook to trigger the pre-commit hook.
+
+### pre-commit
+
+[pre-commit](https://pre-commit.com/) is a Python-based framework for managing Git hooks. Ultracite creates a `.pre-commit-config.yaml`:
+
+```yaml title=".pre-commit-config.yaml"
+repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json, css]
+        pass_filenames: false
+```
+
+After setup, run `pre-commit install` to activate the hooks.
+
+## How It Works
+
+1. You make changes and stage files with `git add`
+2. You run `git commit`
+3. The pre-commit hook runs `npx ultracite fix`
+4. Code is formatted and auto-fixable issues are resolved
+5. The commit proceeds with properly formatted code
+
+## Benefits
+
+- **Consistency**: All committed code follows the same standards
+- **Automation**: No need to remember to format code manually
+- **Clean History**: Formatting issues never enter your repository
+- **Team Collaboration**: Everyone follows the same rules automatically
+
+## Bypassing Hooks
+
+In rare cases where you need to skip the pre-commit hook:
+
+```bash
+git commit --no-verify
+```
+
+Use this sparingly, as it bypasses the automated formatting.

@@ -1,12 +1,12 @@
 import { readFile } from "node:fs/promises";
 
-import { agents } from "@repo/data/agents";
-import type { options } from "@repo/data/options";
-import { providers } from "@repo/data/providers";
-import { getRules } from "@repo/data/rules";
 import { dlxCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
+import { agents } from "./data/agents";
+import type { options } from "./data/options";
+import { providers } from "./data/providers";
+import { getRules } from "./data/rules";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 type AgentId = (typeof options.agents)[number];

@@ -1,0 +1,70 @@
+---
+import SectionIntro from "./section-intro.astro";
+
+// YouTube facade: ship a thumbnail + play button, swap in the iframe on click.
+const videos = [
+  { id: "lEkXbneUnWg", title: "Ultracite Biome migration walkthrough" },
+  { id: "b_F4LaycQcE", title: "Ultracite setup in a real project" },
+];
+---
+
+<div class="grid gap-8">
+  <SectionIntro
+    description="These walkthroughs focus on the Biome migration path and show what the setup looks like in a real project instead of a generic landing-page demo."
+    title="Watch the Biome migration flow in action"
+  />
+  <div class="grid w-full gap-8 sm:grid-cols-2">
+    {
+      videos.map((video) => (
+        <button
+          aria-label={`Play: ${video.title}`}
+          class="hp-video group relative isolate block aspect-video w-full overflow-hidden rounded-lg border bg-muted"
+          data-video-id={video.id}
+          type="button"
+        >
+          <img
+            alt={video.title}
+            class="absolute inset-0 size-full object-cover"
+            loading="lazy"
+            src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+          />
+          <span
+            class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30"
+          >
+            <span
+              class="flex size-16 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition-transform group-hover:scale-105"
+            >
+              <svg
+                aria-hidden="true"
+                class="size-7 translate-x-0.5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+            </span>
+          </span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  for (const el of document.querySelectorAll<HTMLButtonElement>(".hp-video")) {
+    el.addEventListener("click", () => {
+      const id = el.dataset.videoId;
+      if (!id) {
+        return;
+      }
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+      iframe.title = el.getAttribute("aria-label") ?? "YouTube video";
+      iframe.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.className = "absolute inset-0 size-full border-0";
+      el.replaceChildren(iframe);
+    });
+  }
+</script>

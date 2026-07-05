@@ -1,0 +1,122 @@
+---
+import Icon from "./icon.astro";
+
+interface Props {
+  human?: string;
+  agent?: string;
+  class?: string;
+}
+
+const {
+  human = "npx ultracite@latest init",
+  agent = "npx skills add haydenbleasel/ultracite",
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "hp-installer flex h-10 w-full items-center gap-1 rounded-full border bg-background px-1 font-mono text-sm",
+    className,
+  ]}
+  data-human={human}
+  data-agent={agent}
+>
+  <div class="flex items-center gap-1 pl-px">
+    <div class="flex gap-0.5 rounded-full bg-muted p-0.5">
+      <button
+        aria-label="Human command"
+        aria-pressed="true"
+        class="hp-mode flex size-6 items-center justify-center rounded-full transition-colors"
+        data-mode="human"
+        title="Human"
+        type="button"
+      >
+        <Icon class="size-3.5" name="user" />
+      </button>
+      <button
+        aria-label="Agent command"
+        aria-pressed="false"
+        class="hp-mode flex size-6 items-center justify-center rounded-full transition-colors"
+        data-mode="agent"
+        title="Agent"
+        type="button"
+      >
+        <Icon class="size-3.5" name="bot" />
+      </button>
+    </div>
+    <span class="px-1 text-muted-foreground">$</span>
+  </div>
+
+  <input
+    class="hp-cmd min-w-0 flex-1 bg-transparent text-foreground outline-none"
+    readonly
+    value={human}
+  />
+
+  <button
+    aria-label="Copy"
+    class="hp-copy mr-1 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+    title="Copy"
+    type="button"
+  >
+    <Icon class="hp-copy-icon size-3.5" name="copy" />
+    <Icon class="hp-check-icon hidden size-3.5" name="check" />
+  </button>
+</div>
+
+<script>
+  const ACTIVE = ["bg-background", "text-foreground", "shadow-sm"];
+
+  for (const el of document.querySelectorAll<HTMLElement>(".hp-installer")) {
+    const input = el.querySelector<HTMLInputElement>(".hp-cmd");
+    const modes = el.querySelectorAll<HTMLButtonElement>(".hp-mode");
+    const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
+    const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
+    const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
+    if (!(input && copyBtn && copyIcon && checkIcon)) {
+      continue;
+    }
+
+    const commands: Record<string, string> = {
+      agent: el.dataset.agent ?? "",
+      human: el.dataset.human ?? "",
+    };
+    let mode = "human";
+
+    const setMode = (next: string) => {
+      mode = next;
+      input.value = commands[next] ?? "";
+      for (const button of modes) {
+        const active = button.dataset.mode === next;
+        button.setAttribute("aria-pressed", String(active));
+        button.classList.toggle("text-muted-foreground", !active);
+        for (const cls of ACTIVE) {
+          button.classList.toggle(cls, active);
+        }
+      }
+    };
+
+    for (const button of modes) {
+      button.addEventListener("click", () => setMode(button.dataset.mode ?? "human"));
+    }
+
+    let timer: ReturnType<typeof setTimeout>;
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(commands[mode] ?? "");
+      } catch {
+        // Clipboard access can be blocked; fail silently.
+      }
+      copyIcon.classList.add("hidden");
+      checkIcon.classList.remove("hidden");
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        copyIcon.classList.remove("hidden");
+        checkIcon.classList.add("hidden");
+      }, 2000);
+    });
+
+    setMode("human");
+  }
+</script>

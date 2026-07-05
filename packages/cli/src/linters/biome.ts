@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
 
-import type { options } from "@repo/data/options";
 import deepmerge from "deepmerge";
 
+import type { options } from "../data/options";
 import { biomeConfigSchema, parseJsonc } from "../schemas";
 import {
   biomeConfigNames,

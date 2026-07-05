@@ -1,0 +1,54 @@
+---
+title: Migrate from ESLint
+description: Migrate an ESLint-based project to Ultracite while keeping plugin-driven workflows, formatter alignment, and project-specific overrides.
+---
+
+If you're already using ESLint and want to switch to Ultracite's preconfigured setup, this guide will help you migrate while preserving your code quality standards.
+
+## Why Migrate to Ultracite?
+
+- **Multiple Providers**: Choose between Biome, ESLint + Prettier + Stylelint, or Oxlint
+- **Zero Configuration**: Ultracite provides highly configured presets for each provider
+- **Editor Integration**: Built-in support for AI-powered editors (Cursor, Windsurf, GitHub Copilot)
+- **Consistent Workflow**: Standardized setup across projects and teams
+- **Maintained Rules**: Regular updates with new best practices
+
+## Before You Start
+
+Make sure you have:
+
+- An existing project using ESLint
+- Node.js 20+
+- An ESLint configuration file (e.g., `.eslintrc`, `eslint.config.js`)
+
+## Migration Options
+
+### Option 1: Quick Migration (Recommended)
+
+The fastest way is to run the [automatic setup script](/setup#automatic-installation).
+
+```package-install
+npx ultracite init
+```
+
+This will:
+
+- Prompt you to choose a linting provider (Biome, ESLint, or Oxlint)
+- Install Ultracite and the necessary dependencies
+- Create or merge your linter configuration with Ultracite's preset
+- Merge your existing `.vscode/settings.json` with Ultracite's preset
+- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
+- Set up editor integrations
+
+If you switch to Biome or Oxlint, Ultracite automatically removes the existing ESLint configuration. This will:
+
+- Remove ESLint and any related dependencies
+- Remove any ESLint configuration files (including legacy `.eslintrc*` files)
+
+If you choose ESLint as your provider, Ultracite will update your existing ESLint flat config to use Ultracite's preset instead (legacy `.eslintrc*` files are replaced by an `eslint.config.mjs`). If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new linter.
+
+### Option 2: Manual Migration
+
+If you prefer more control over the process, follow the [Manual Setup](/setup#manual-setup) steps and manually remove ESLint and its configuration files.
+
+After the migration, restart your editor to ensure the new configuration is applied.

@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises";
 
-import { editors } from "@repo/data/editors";
-import type { ProviderId } from "@repo/data/providers";
 import { sync as spawnSync } from "cross-spawn";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
+import { editors } from "./data/editors";
+import type { ProviderId } from "./data/providers";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 export const createEditorConfig = (

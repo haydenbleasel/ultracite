@@ -1,0 +1,51 @@
+---
+import SectionIntro from "./section-intro.astro";
+
+const logos = [
+  { file: "openai", name: "OpenAI" },
+  { file: "vercel", name: "Vercel" },
+  { file: "profound", name: "Profound" },
+  { file: "adobe", name: "Adobe" },
+  { file: "clerk", name: "Clerk" },
+  { file: "ati", name: "Alan Turing Institute" },
+  { file: "prisma", name: "Prisma" },
+  { file: "va", name: "VA" },
+  { file: "french-government", name: "French Government" },
+  { file: "tencent", name: "Tencent" },
+  { file: "posthog", name: "Posthog" },
+  { file: "axiom", name: "Axiom" },
+  { file: "resend", name: "Resend" },
+  { file: "workday", name: "Workday" },
+  { file: "elevenlabs", name: "ElevenLabs" },
+  { file: "mintlify", name: "Mintlify" },
+  { file: "sentry", name: "Sentry" },
+  { file: "raycast", name: "Raycast" },
+  { file: "moonshot", name: "Moonshot" },
+  { file: "augment", name: "Augment Code" },
+];
+---
+
+<div class="grid gap-8">
+  <SectionIntro
+    description='And used by <a class="underline" href="https://github.com/haydenbleasel/ultracite/network/dependents" rel="noreferrer" target="_blank">thousands</a> of open source projects.'
+    maxWidth="max-w-xl"
+    title="Trusted by top companies"
+  />
+  <div
+    class="grid grid-cols-2 divide-x divide-y border-t border-l sm:grid-cols-3 lg:grid-cols-5"
+  >
+    {
+      logos.map((logo) => (
+        <div class="flex aspect-video w-full items-center justify-center p-8 last:border-r last:border-b sm:p-8 md:p-12 lg:p-8 xl:p-12">
+          <img
+            alt={logo.name}
+            class="max-h-8 w-auto object-contain dark:brightness-0 dark:invert"
+            height="48"
+            src={`/sponsors/${logo.file}.svg`}
+            width="48"
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>

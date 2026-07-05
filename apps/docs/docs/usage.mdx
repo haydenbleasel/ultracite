@@ -1,0 +1,110 @@
+---
+title: Usage
+description: This section covers how to use Ultracite on a day-to-day basis — covering the command-line interface, editor integration details, and typical workflows.
+---
+
+## IDE Integration
+
+Ultracite works best when integrated into your editor, so you get immediate feedback as you write code. It is designed to run automatically on save.
+
+To test it out, open a project in your IDE. As you edit files, you should see formatting take effect on save. Try introducing a small code style mistake (like an extra semicolon or a wrongly indented line) and hit Save — Ultracite will instantly reformat the file.
+
+If you introduce a lint issue (like an unused variable), you'll see a squiggly underline or a warning in the Problems panel. On save, Ultracite will attempt to fix it if it's auto-fixable (for example, removing an unused import) or otherwise leave a warning for you to address.
+
+### Instant formatting
+
+Every time you save a file, your chosen linter formats the code. You don't need to run a separate formatter or worry about style — it's taken care of.
+
+Thanks to the `codeActionsOnSave` settings, VS Code will also apply "fix all" actions on save. This means any lint rule with an auto-fix (like converting `!=` to `!==`, adding missing parentheses, fixing import order, etc.) will be applied automatically.
+
+We also enable `formatOnPaste` — so if you paste code from elsewhere, it will immediately be formatted to match your style.
+
+The key advantage is instant feedback. You write code, and Ultracite continuously keeps it clean. Over time, you'll spend little to no time fixing lint errors — Ultracite either fixes them for you or points them out early.
+
+### Problems panel integration
+
+Any issues that require your attention will show up in the Problems panel. For example, if Ultracite finds an error it can't fix (like a deprecated API or an unhandled Promise rejection), it will list it as an error or warning. Click it to jump to the location in code.
+
+### Quick fixes
+
+In many cases, the VS Code extension for your linter provides quick fix suggestions. If you see a yellow lightbulb or a suggestion popup, you can apply fixes manually as well.
+
+## CLI Usage
+
+Ultracite comes with a CLI that wraps your chosen linter. The commands work the same regardless of which toolchain you're using.
+
+Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome). If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
+
+### Checking Code
+
+The `check` command runs the linter without modifying files:
+
+```bash title="Terminal"
+npx ultracite check
+```
+
+### Fixing Code
+
+The `fix` command runs the linter and auto-fixes issues:
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+You can also apply unsafe fixes (fixes that may change code behavior):
+
+```bash title="Terminal"
+npx ultracite fix --unsafe
+```
+
+Some Biome fixes are intentionally marked unsafe because they can change runtime behavior. For example, Ultracite already enables Biome's `noSubstr` rule, but rewriting `substring()` or `substr()` to `slice()` only happens when you run `ultracite fix --unsafe`.
+
+### Type-Aware Linting
+
+Type-aware linting enables deeper analysis rules that leverage TypeScript's type system and project structure. The `--type-aware` flag is passed during `ultracite init` and configures your project accordingly.
+
+#### Biome
+
+For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables project/scanner rules like `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, and `noDeprecatedImports`.
+
+```bash title="Terminal"
+npx ultracite init --linter biome --type-aware
+```
+
+Since the rules are baked into your Biome config, they work in both the CLI and your IDE automatically — no runtime flags needed.
+
+#### Oxlint
+
+For Oxlint, `--type-aware` installs the required `oxlint-tsgolint` dependency. You then pass the flag at runtime when checking or fixing:
+
+```bash title="Terminal"
+npx ultracite check --type-aware
+npx ultracite fix --type-aware
+```
+
+This enables rules like `no-floating-promises`, `no-misused-promises`, and `await-thenable` that catch bugs by analyzing types.
+
+You can also enable TypeScript compiler diagnostics (experimental):
+
+```bash title="Terminal"
+npx ultracite check --type-check
+npx ultracite fix --type-check
+```
+
+Both flags can be combined:
+
+```bash title="Terminal"
+npx ultracite fix --type-aware --type-check
+```
+
+:::note
+The `--type-aware` and `--type-check` runtime flags only apply to Oxlint. For Biome, type-aware rules are configured at init time and require no runtime flags.
+:::
+
+### Validating Setup
+
+The `doctor` command checks your setup for issues and provides recommendations. This is useful to run after installing Ultracite to ensure everything is configured correctly:
+
+```bash title="Terminal"
+npx ultracite doctor
+```

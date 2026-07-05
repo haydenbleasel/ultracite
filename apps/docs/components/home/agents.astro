@@ -1,0 +1,56 @@
+---
+import { agents } from "../../lib/agents";
+import { agentLogos } from "../../lib/logos";
+import SectionIntro from "./section-intro.astro";
+
+const featuredAgentIds = [
+  "claude",
+  "codex",
+  "gemini",
+  "warp",
+  "opencode",
+  "qwen",
+  "copilot",
+];
+
+const featuredAgents = featuredAgentIds.flatMap((id) => {
+  const agent = agents.find((a) => a.id === id);
+  return agent ? [agent] : [];
+});
+
+const remainingCount = agents.length - featuredAgents.length;
+---
+
+<div class="grid gap-8">
+  <SectionIntro
+    description="Ultracite can generate rules files for all these popular IDEs and agents, so you can get the most of out of your AI integrations."
+    title="Works with all your favourite agents..."
+  />
+  <div class="mx-auto flex items-center justify-center -space-x-1">
+    {
+      featuredAgents.map((agent, index) => (
+        <span class="hp-tt inline-flex" tabindex="0">
+          <img
+            alt={agent.name}
+            class:list={[
+              "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
+              index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3",
+            ]}
+            src={agentLogos[agent.id]}
+          />
+          <span data-tt>{agent.name}</span>
+        </span>
+      ))
+    }
+    <span class="hp-tt inline-flex" tabindex="0">
+      <span
+        class="flex size-10 items-center justify-center overflow-hidden rounded-full border bg-muted ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3 sm:size-14"
+      >
+        <span class="text-muted-foreground text-xs sm:text-sm">
+          + {remainingCount}
+        </span>
+      </span>
+      <span data-tt>+ {remainingCount} more agents</span>
+    </span>
+  </div>
+</div>

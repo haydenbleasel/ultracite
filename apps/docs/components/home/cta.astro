@@ -1,0 +1,24 @@
+---
+import Installer from "./installer.astro";
+---
+
+<div class="rounded-2xl bg-muted">
+  <div
+    class="flex flex-col gap-8 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:gap-12"
+  >
+    <div class="flex flex-col gap-2">
+      <h2
+        class="text-balance font-medium text-2xl tracking-tight sm:text-3xl"
+      >
+        Try it in your terminal
+      </h2>
+      <p class="text-balance text-muted-foreground tracking-tight sm:text-lg">
+        One command to install. Zero config, works with Biome, ESLint, and
+        Oxlint.
+      </p>
+    </div>
+    <div class="w-full shrink-0 lg:w-[26rem]">
+      <Installer />
+    </div>
+  </div>
+</div>
