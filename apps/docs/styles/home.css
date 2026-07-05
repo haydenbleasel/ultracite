@@ -2,14 +2,16 @@
    only — no @theme/@apply here; token utilities live in ../theme.css. */
 
 /* Tailwind v4 makes the bare `border`/`divide-*` utilities fall back to
-   currentColor (near-white in dark mode). Restore a sensible default border
-   color so unspecified borders use the theme token. Explicit color utilities
-   (border-white/10, border-primary, …) have higher specificity and still win.
-   Scoped to the homepage because this file only loads there. */
-*,
-::before,
-::after {
-  border-color: var(--color-border);
+   currentColor (near-white in dark mode). Restore a token default — inside
+   @layer base so Tailwind's own utilities layer (border-accent on the active
+   tab, border-white/10, …) still wins. Scoped to the homepage (this file only
+   loads there). */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
 }
 
 /* --- CSS-only hover/focus tooltip (replaces the React Tooltip) --- */
