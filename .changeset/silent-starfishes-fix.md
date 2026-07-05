@@ -2,4 +2,4 @@
 "ultracite": patch
 ---
 
-Pin TypeScript for Oxlint JS plugin installs so the SonarJS preset does not resolve broken compiler builds during plugin loading.
+Fix Oxlint initialization by installing a verified TypeScript build alongside the GitHub and SonarJS JS plugin presets, preventing `eslint-plugin-sonarjs` from resolving compiler builds that crash while loading.
