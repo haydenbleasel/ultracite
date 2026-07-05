@@ -2,12 +2,21 @@ import { defineConfig } from "blume";
 
 export default defineConfig({
   content: {
-    exclude: ["**/node_modules/**", "**/_*", "**/.*"],
-    // Docs live under docs/ so the marketing homepage (pages/index.astro) can
-    // own "/". A route is the file path relative to root, so docs/setup.mdx
-    // serves at /docs/setup.
-    include: ["docs/**/*.mdx"],
-    root: ".",
+    sources: [
+      // Local docs live under docs/ so the marketing homepage
+      // (pages/index.astro) can own "/". A route is the file path relative to
+      // root, so docs/setup.mdx serves at /docs/setup.
+      { include: ["docs/**/*.mdx"], root: ".", type: "filesystem" },
+      // Ultracite's GitHub releases become the changelog timeline at /changelog
+      // (each release is a type:changelog entry). Set GITHUB_TOKEN in CI to
+      // avoid rate limits; a failed fetch degrades to an empty changelog.
+      {
+        owner: "haydenbleasel",
+        prefix: "changelog",
+        repo: "ultracite",
+        type: "github-releases",
+      },
+    ],
   },
 
   description: "Documentation for Ultracite.",
@@ -30,6 +39,10 @@ export default defineConfig({
       {
         label: "Docs",
         path: "/docs",
+      },
+      {
+        label: "Changelog",
+        path: "/changelog",
       },
     ],
   },
