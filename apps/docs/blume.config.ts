@@ -34,8 +34,8 @@ export default defineConfig({
   },
 
   logo: {
-    image: "/logo/logo.svg",
-    text: "",
+    image: "/logo.svg",
+    text: "Ultracite",
   },
 
   navigation: {

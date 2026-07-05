@@ -16,13 +16,11 @@ import Sponsors from "../components/home/sponsors.astro";
 import Videos from "../components/home/videos.astro";
 import ZeroConfig from "../components/home/zero-config.astro";
 import { getLatestVersion, getReleaseUrl } from "../lib/latest-version";
-import { siteDescription, siteJsonLd, softwareAppJsonLd } from "../lib/seo";
 
 const { config } = data;
 const version = await getLatestVersion();
 const releaseUrl = getReleaseUrl(version);
-
-const structuredData = [siteJsonLd(config.site), softwareAppJsonLd(config.site)];
+const siteDescription = "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps teams and AI write consistent, type-safe code.";
 ---
 
 <PageLayout
@@ -44,12 +42,6 @@ const structuredData = [siteJsonLd(config.site), softwareAppJsonLd(config.site)]
   siteUrl={config.site}
   themeMode={config.theme.mode}
 >
-  {
-    structuredData.map((schema) => (
-      <script is:inline set:html={JSON.stringify(schema)} type="application/ld+json" />
-    ))
-  }
-
   <div
     class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
   >
