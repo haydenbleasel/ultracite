@@ -4,9 +4,10 @@ export default defineConfig({
   content: {
     sources: [
       // Local docs live under docs/ so the marketing homepage
-      // (pages/index.astro) can own "/". A route is the file path relative to
-      // root, so docs/setup.mdx serves at /docs/setup.
-      { include: ["docs/**/*.mdx"], root: ".", type: "filesystem" },
+      // (pages/index.astro) can own "/". root is the docs/ folder and prefix
+      // nests every page under /docs/* — keeping the route entryId aligned with
+      // the content-collection base (root ".") breaks entry lookups in dev.
+      { prefix: "docs", root: "docs", type: "filesystem" },
       // Ultracite's GitHub releases become the changelog timeline at /changelog
       // (each release is a type:changelog entry). Set GITHUB_TOKEN in CI to
       // avoid rate limits; a failed fetch degrades to an empty changelog.
