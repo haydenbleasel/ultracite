@@ -35,6 +35,14 @@ const CORE_PLUGINS = [
   "promise",
 ];
 
+// ESLint plugins bridged into core via oxlint's JS plugin support. They are
+// not part of oxlint's native rule catalog, so they are validated separately
+// (against the plugin's own rule metadata) rather than against `oxlint --rules`.
+const CORE_JS_PLUGINS = [
+  { plugin: "eslint-plugin-github", prefix: "github" },
+  { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
+];
+
 /**
  * Parse `oxlint --rules --format=json` output to extract non-nursery rules
  * for specific plugins. Returns rule names in the format used by config
@@ -172,10 +180,14 @@ describe("oxlint core config", () => {
         Object.keys(override.rules ?? {})
     );
 
+    const allowedPlugins = [
+      ...CORE_PLUGINS,
+      ...CORE_JS_PLUGINS.map(({ prefix }) => prefix),
+    ];
     const allRules = [...configRules, ...overrideRules];
     const nonCoreRules = allRules.filter((rule) => {
       const plugin = rule.includes("/") ? rule.split("/")[0] : "eslint";
-      return !CORE_PLUGINS.includes(plugin);
+      return !allowedPlugins.includes(plugin);
     });
 
     expect(
@@ -323,37 +335,81 @@ describe("oxlint tanstack config", () => {
   });
 });
 
-describe("oxlint JS plugin presets", () => {
-  const jsPluginPresets = [
-    { plugin: "eslint-plugin-github", preset: "github" },
-    { plugin: "eslint-plugin-sonarjs", preset: "sonarjs" },
-  ];
+describe("oxlint core JS plugins", () => {
+  test("declares the github and sonarjs JS plugins", async () => {
+    const config = await readOxlintConfig("core");
 
-  for (const { plugin, preset } of jsPluginPresets) {
-    test(`${preset} preset only references rules that exist in ${plugin}`, async () => {
-      const config = await readOxlintConfig(preset);
+    expect(config.jsPlugins).toEqual([
+      { name: "github", specifier: "eslint-plugin-github" },
+      { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+    ]);
+  });
+
+  // Regression guard: oxlint's JS plugin bridge only registers a subset of
+  // each ESLint plugin's rules, and naming a rule it does not register makes
+  // oxlint hard-fail config parsing. Statically reading the config object
+  // can't catch this, so actually run oxlint with core loaded via a committed
+  // fixture (oxlint resolves the JS plugin specifiers relative to the entry
+  // config's directory, which walks up to the repo's node_modules).
+  test("core loads through oxlint with all bridged rules registered", () => {
+    const cliDir = path.join(import.meta.dirname, "..");
+    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "core-load"
+    );
+
+    const result = Bun.spawnSync(
+      [
+        oxlintBin,
+        "-c",
+        path.join(fixtureDir, "entry.mjs"),
+        path.join(fixtureDir, "sample.ts"),
+      ],
+      { cwd: cliDir }
+    );
+    const output = result.stdout.toString() + result.stderr.toString();
+
+    expect(output).not.toContain("not found in plugin");
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+  });
+
+  for (const { plugin, prefix } of CORE_JS_PLUGINS) {
+    test(`core only references ${prefix} rules that exist in ${plugin}`, async () => {
+      const config = await readOxlintConfig("core");
       const mod = await import(plugin);
       const { rules } = mod.default as {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
       };
 
-      const unknown = Object.keys(config.rules ?? {}).filter((key) => {
-        const name = key.replace(`${preset}/`, "");
-        return !(key.startsWith(`${preset}/`) && name in rules);
-      });
+      const unknown = Object.keys(config.rules ?? {})
+        .filter((key) => key.startsWith(`${prefix}/`))
+        .filter((key) => !(key.replace(`${prefix}/`, "") in rules));
 
       expect(unknown).toEqual([]);
     });
 
-    test(`${preset} preset declares the ${plugin} JS plugin`, async () => {
-      const config = await readOxlintConfig(preset);
+    test(`core does not enable deprecated ${prefix} rules`, async () => {
+      const config = await readOxlintConfig("core");
+      const mod = await import(plugin);
+      const { rules } = mod.default as {
+        rules: Record<string, { meta?: { deprecated?: boolean } }>;
+      };
 
-      expect(config.jsPlugins).toEqual([{ name: preset, specifier: plugin }]);
+      const deprecated = Object.entries(config.rules ?? {})
+        .filter(([key]) => key.startsWith(`${prefix}/`))
+        .filter(([, severity]) => severity !== "off")
+        .map(([key]) => key.replace(`${prefix}/`, ""))
+        .filter((name) => rules[name]?.meta?.deprecated);
+
+      expect(deprecated).toEqual([]);
     });
   }
 
-  test("sonarjs preset does not enable rules that require type checking", async () => {
-    const config = await readOxlintConfig("sonarjs");
+  test("core does not enable sonarjs rules that require type checking", async () => {
+    const config = await readOxlintConfig("core");
     const mod = await import("eslint-plugin-sonarjs");
     const { rules } = mod.default as {
       rules: Record<
@@ -363,26 +419,12 @@ describe("oxlint JS plugin presets", () => {
     };
 
     const typeAware = Object.entries(config.rules ?? {})
+      .filter(([key]) => key.startsWith("sonarjs/"))
       .filter(([, severity]) => severity !== "off")
       .map(([key]) => key.replace("sonarjs/", ""))
       .filter((name) => rules[name]?.meta?.docs?.requiresTypeChecking);
 
     expect(typeAware).toEqual([]);
-  });
-
-  test("sonarjs preset does not enable deprecated rules", async () => {
-    const config = await readOxlintConfig("sonarjs");
-    const mod = await import("eslint-plugin-sonarjs");
-    const { rules } = mod.default as {
-      rules: Record<string, { meta?: { deprecated?: boolean } }>;
-    };
-
-    const deprecated = Object.entries(config.rules ?? {})
-      .filter(([, severity]) => severity !== "off")
-      .map(([key]) => key.replace("sonarjs/", ""))
-      .filter((name) => rules[name]?.meta?.deprecated);
-
-    expect(deprecated).toEqual([]);
   });
 });
 

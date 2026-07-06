@@ -191,16 +191,17 @@ const buildEslintDevDependencies = (
   return devDependencies;
 };
 
-// The generated oxlint config extends the github and sonarjs presets, which
-// run ESLint plugins via oxlint's JS plugin support — the plugins must be
-// installed in the target project for oxlint to resolve their specifiers.
+// The oxlint core config runs eslint-plugin-github and eslint-plugin-sonarjs
+// via oxlint's JS plugin support. oxlint resolves the specifiers from the
+// project root, so the plugins must be installed in the target project.
 const oxlintJsPluginDevDependencies: Record<string, string> = {
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
 };
 
-// Oxlint framework configs load the React Doctor rules via a JS plugin, which
-// must be installed in the target project for oxlint to resolve its specifier.
+// The react/next/tanstack oxlint presets load the React Doctor rules via a JS
+// plugin, which (like the core JS plugins above) oxlint resolves from the
+// project root — so it must be installed in the target project.
 const oxlintFrameworkDevDependencies: Partial<
   Record<Frameworks, Record<string, string>>
 > = {

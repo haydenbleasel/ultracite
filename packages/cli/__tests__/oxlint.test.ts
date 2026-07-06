@@ -71,8 +71,8 @@ describe("oxlint linter", () => {
       expect(content).toContain('import { defineConfig } from "oxlint"');
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
-      expect(content).toContain(getOxlintConfigPath("github"));
-      expect(content).toContain(getOxlintConfigPath("sonarjs"));
+      expect(content).not.toContain(getOxlintConfigPath("github"));
+      expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
     });
 
     test("creates oxlint config with frameworks", async () => {
@@ -148,8 +148,8 @@ export default defineConfig({
       const [writeCall] = mockWriteFile.mock.calls;
       const content = writeCall[1] as string;
       expect(content).toContain(getOxlintConfigPath("core"));
-      expect(content).toContain(getOxlintConfigPath("github"));
-      expect(content).toContain(getOxlintConfigPath("sonarjs"));
+      expect(content).not.toContain(getOxlintConfigPath("github"));
+      expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
       expect(content).toContain("some-other-config");
     });
 
@@ -176,8 +176,8 @@ export default defineConfig({
       const [writeCall] = mockWriteFile.mock.calls;
       const content = writeCall[1] as string;
       expect(content).toContain(getOxlintConfigPath("core"));
-      expect(content).toContain(getOxlintConfigPath("github"));
-      expect(content).toContain(getOxlintConfigPath("sonarjs"));
+      expect(content).not.toContain(getOxlintConfigPath("github"));
+      expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
     });
 
     test("skips adding ultracite config if already present", async () => {
@@ -326,8 +326,8 @@ export default defineConfig({
       const content = writeCall[1] as string;
       // Should preserve existing imports and add next
       expect(content).toContain(getOxlintConfigPath("core"));
-      expect(content).toContain(getOxlintConfigPath("github"));
-      expect(content).toContain(getOxlintConfigPath("sonarjs"));
+      expect(content).not.toContain(getOxlintConfigPath("github"));
+      expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
       expect(content).toContain(getOxlintConfigPath("react"));
       expect(content).toContain(getOxlintConfigPath("next"));
     });
@@ -423,8 +423,8 @@ export default defineConfig({});
       const [writeCall] = mockWriteFile.mock.calls;
       const content = writeCall[1] as string;
       expect(content).toContain(getOxlintConfigPath("core"));
-      expect(content).toContain(getOxlintConfigPath("github"));
-      expect(content).toContain(getOxlintConfigPath("sonarjs"));
+      expect(content).not.toContain(getOxlintConfigPath("github"));
+      expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
     });
   });
 });

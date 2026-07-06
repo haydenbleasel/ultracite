@@ -161,19 +161,19 @@ const surfaces: Surface[] = [
     eslintConfigs: ["core"],
     file: "src/example.ts",
     name: "core (TypeScript)",
-    oxlintConfigs: ["core", "github", "sonarjs"],
+    oxlintConfigs: ["core"],
   },
   {
     eslintConfigs: ["core", "react"],
     file: "src/component.tsx",
     name: "react (TSX)",
-    oxlintConfigs: ["core", "github", "sonarjs", "react"],
+    oxlintConfigs: ["core", "react"],
   },
   {
     eslintConfigs: ["core", "react", "next"],
     file: "app/page.tsx",
     name: "next (TSX)",
-    oxlintConfigs: ["core", "github", "sonarjs", "react", "next"],
+    oxlintConfigs: ["core", "react", "next"],
   },
 ];
 
@@ -295,7 +295,7 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
 
   // Direction 2: rules the ESLint preset enables must be enabled in the
   // oxlint presets when oxlint can run them (natively or via the JS
-  // plugin presets).
+  // plugins bridged into core).
   for (const [name, state] of eslintState) {
     if (!state.enabled) {
       continue;
