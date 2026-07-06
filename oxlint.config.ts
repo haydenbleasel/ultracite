@@ -1,11 +1,11 @@
 import { defineConfig } from "oxlint";
 
+import astro from "./packages/cli/config/oxlint/astro/index.mjs";
 import core from "./packages/cli/config/oxlint/core/index.mjs";
-import next from "./packages/cli/config/oxlint/next/index.mjs";
 import react from "./packages/cli/config/oxlint/react/index.mjs";
 
 export default defineConfig({
-  extends: [core, react, next],
+  extends: [core, react, astro],
   ignorePatterns: [
     "packages/design-system/components/ui",
     "packages/design-system/components/kibo-ui",
