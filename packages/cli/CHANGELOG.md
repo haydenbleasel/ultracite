@@ -1,3 +1,19 @@
+## 7.9.1
+
+### Patch Changes
+
+- ecd10cc: Disable `sonarjs/no-implicit-dependencies` and `github/no-implicit-buggy-globals` in the oxlint and ESLint presets. Both produce false positives through oxlint's JS plugin bridge: `no-implicit-dependencies` has no dependency-manifest resolution so it flags builtin (`bun:test`) and workspace imports as missing dependencies, and `no-implicit-buggy-globals` misreads module-scoped declarations such as Astro frontmatter as implicit globals.
+- c76f59d: Disable `sonarjs/file-name-differ-from-class` in the oxlint and ESLint presets. It fires on any file whose name differs from an exported class, which is noise for the many config and module files that export objects rather than classes.
+- 29e30ce: Fold the github and sonarjs rules into the oxlint core preset. The standalone `ultracite/oxlint/github` and `ultracite/oxlint/sonarjs` presets are removed — ultracite ships framework presets, not individual plugins. Their rules now live in `ultracite/oxlint/core`, so every oxlint setup gets eslint-plugin-github and eslint-plugin-sonarjs through oxlint's JS plugin bridge, matching how the ESLint preset already bundles them into core.
+
+  This is a breaking change to generated configs: `ultracite/oxlint/github` and `ultracite/oxlint/sonarjs` no longer exist. Re-run `ultracite init` to regenerate `oxlint.config.ts`.
+
+  Also fixed: nine sonarjs rules (`async-test-assertions`, `hooks-before-test-cases`, `no-duplicate-test-title`, `no-empty-test-title`, `no-floating-point-equality`, `no-forced-browser-interaction`, `no-trivial-assertions`, `prefer-specific-assertions`, `super-linear-regex`) that exist in eslint-plugin-sonarjs but that oxlint's JS plugin bridge does not register. Naming them made oxlint hard-fail config parsing, which broke `ultracite fix`/`check` for oxlint projects using the sonarjs preset. They are omitted from oxlint core (still enabled in the ESLint preset), and a test now runs oxlint against core to catch this class of regression.
+
+  The React Doctor, github, and sonarjs plugins are installed into your project's devDependencies at init (as the ESLint plugins already were), rather than bundled as dependencies of ultracite — oxlint resolves JS plugin specifiers from the project root, so they must be installed there directly.
+
+- 8a4291f: Upgrade to Oxlint 1.72.0 and Oxfmt 0.57.0. Oxfmt 0.57 adds native CSS and GraphQL formatters. The five new non-nursery Oxlint rules from the 1.71/1.72 releases are already covered by the presets (`node/no-sync`, `node/no-mixed-requires`, `unicorn/prefer-number-coercion`, `unicorn/max-nested-calls`, `vue/no-async-in-computed-properties`). The markdown `:::` container-directive fence patch (which keeps `proseWrap: "never"` from folding fences into prose) was regenerated against the 0.57 bundle.
+
 ## 7.9.0
 
 ### Minor Changes
