@@ -429,7 +429,9 @@ export default defineConfig({
     "sonarjs/expression-complexity": "error",
     // Requires a headerFormat option; errors on every file without one.
     "sonarjs/file-header": "off",
-    "sonarjs/file-name-differ-from-class": "error",
+    // Fires on any file whose name differs from an exported class, which is
+    // noise for config and module files that export objects, not classes.
+    "sonarjs/file-name-differ-from-class": "off",
     "sonarjs/file-permissions": "error",
     "sonarjs/file-uploads": "error",
     "sonarjs/fixme-tag": "error",

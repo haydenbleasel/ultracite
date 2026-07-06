@@ -20,6 +20,9 @@ const overrideRules = {
   // Duplicate of the core complexity rule.
   "sonarjs/cyclomatic-complexity": "off",
   "sonarjs/elseif-without-else": "off",
+  // Fires on any file whose name differs from an exported class, which is
+  // noise for config and module files that export objects, not classes.
+  "sonarjs/file-name-differ-from-class": "off",
   // Requires a headerFormat option; errors on every file without one.
   "sonarjs/file-header": "off",
   // The preset disables max-lines everywhere.
