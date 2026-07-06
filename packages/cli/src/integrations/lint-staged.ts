@@ -10,6 +10,8 @@ import YAML from "yaml";
 import { parsePackageJson } from "../schemas";
 import { exists, isMonorepo, writeProjectFile } from "../utils";
 
+const packageJsonPath = "./package.json";
+
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
   "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
     dlxCommand(packageManager, "ultracite", {
@@ -42,7 +44,7 @@ const hasUltraciteCommand = (config: unknown): boolean =>
 
 const readPackageJsonLintStaged = async (): Promise<unknown> => {
   try {
-    const content = await readFile("./package.json", "utf-8");
+    const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
     return packageJson?.["lint-staged"];
   } catch {
@@ -53,7 +55,7 @@ const readPackageJsonLintStaged = async (): Promise<unknown> => {
 // Check if project uses ESM
 const isProjectEsm = async (): Promise<boolean> => {
   try {
-    const content = await readFile("./package.json", "utf-8");
+    const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
     return packageJson?.type === "module";
   } catch {
@@ -65,7 +67,7 @@ const isProjectEsm = async (): Promise<boolean> => {
 const updatePackageJson = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const content = await readFile("./package.json", "utf-8");
+  const content = await readFile(packageJsonPath, "utf-8");
   const packageJson = parsePackageJson(content);
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
@@ -85,7 +87,7 @@ const updatePackageJson = async (
     : createLintStagedConfig(packageManager);
 
   await writeProjectFile(
-    "./package.json",
+    packageJsonPath,
     `${JSON.stringify(packageJson, null, 2)}\n`
   );
 };

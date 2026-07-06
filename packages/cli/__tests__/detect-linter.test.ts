@@ -34,9 +34,9 @@ const eslintConfigNames = [
 ];
 const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 
-const realDetectLinter = async (): Promise<
-  "biome" | "eslint" | "oxlint" | null
-> => {
+type Linter = "biome" | "eslint" | "oxlint";
+
+const realDetectLinter = async (): Promise<Linter | null> => {
   // Collect ancestor directories from cwd up to the filesystem root.
   const dirs: string[] = [];
   let dir = process.cwd();

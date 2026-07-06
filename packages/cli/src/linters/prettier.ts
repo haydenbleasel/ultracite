@@ -7,19 +7,21 @@ import {
   writeProjectFile,
 } from "../utils";
 
+const packageJsonPath = "./package.json";
+
 const prettierConfigPaths = prettierConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./prettier.config.mjs";
 
 const hasPrettierKeyInPackageJson = (): boolean => {
-  const packageJson = readPackageJsonSync("./package.json");
+  const packageJson = readPackageJsonSync(packageJsonPath);
   return packageJson?.prettier !== undefined;
 };
 
 const getPrettierConfigPath = (): string | null => {
   // Check for "prettier" key in package.json first
   if (hasPrettierKeyInPackageJson()) {
-    return "./package.json";
+    return packageJsonPath;
   }
 
   // Check for config files
@@ -78,7 +80,7 @@ export const prettier = {
     const config = generatePrettierConfig(opts);
     const existingPath = getPrettierConfigPath();
     await writeProjectFile(
-      existingPath === "./package.json"
+      existingPath === packageJsonPath
         ? defaultConfigPath
         : (existingPath ?? defaultConfigPath),
       config

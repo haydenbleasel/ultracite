@@ -23,6 +23,17 @@ interface DiagnosticCheck {
   status: "fail" | "pass" | "warn";
 }
 
+// Check names, each reused across a check's pass/warn/fail branches.
+const BIOME_CHECK = "Biome configuration";
+const ESLINT_CHECK = "ESLint configuration";
+const PRETTIER_CHECK = "Prettier configuration";
+const STYLELINT_CHECK = "Stylelint configuration";
+const OXLINT_CHECK = "Oxlint configuration";
+const OXFMT_CHECK = "oxfmt configuration";
+const ULTRACITE_DEP_CHECK = "Ultracite dependency";
+const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
+const DOCTOR_COMPLETE = "Doctor complete";
+
 // ---------------------------------------------------------------------------
 // Installation checks
 // ---------------------------------------------------------------------------
@@ -68,7 +79,7 @@ const checkBiomeConfig = (): DiagnosticCheck => {
   if (!configPath) {
     return {
       message: `No Biome config file found (expected one of: ${biomeConfigNames.join(", ")})`,
-      name: "Biome configuration",
+      name: BIOME_CHECK,
       status: "fail",
     };
   }
@@ -83,20 +94,20 @@ const checkBiomeConfig = (): DiagnosticCheck => {
     ) {
       return {
         message: `${biomeConfigFile} extends ultracite/biome/core`,
-        name: "Biome configuration",
+        name: BIOME_CHECK,
         status: "pass",
       };
     }
 
     return {
       message: `${biomeConfigFile} exists but doesn't extend ultracite/biome/core`,
-      name: "Biome configuration",
+      name: BIOME_CHECK,
       status: "warn",
     };
   } catch {
     return {
       message: `Could not parse ${biomeConfigFile} file`,
-      name: "Biome configuration",
+      name: BIOME_CHECK,
       status: "fail",
     };
   }
@@ -115,7 +126,7 @@ const checkEslintConfig = (): DiagnosticCheck => {
   if (!configPath) {
     return {
       message: "No eslint.config.* file found",
-      name: "ESLint configuration",
+      name: ESLINT_CHECK,
       status: "fail",
     };
   }
@@ -126,20 +137,20 @@ const checkEslintConfig = (): DiagnosticCheck => {
     if (configContent.includes("ultracite/eslint")) {
       return {
         message: "eslint.config.* imports ultracite/eslint",
-        name: "ESLint configuration",
+        name: ESLINT_CHECK,
         status: "pass",
       };
     }
 
     return {
       message: "eslint.config.* exists but doesn't import ultracite/eslint",
-      name: "ESLint configuration",
+      name: ESLINT_CHECK,
       status: "warn",
     };
   } catch {
     return {
       message: "Could not read eslint.config.* file",
-      name: "ESLint configuration",
+      name: ESLINT_CHECK,
       status: "fail",
     };
   }
@@ -150,7 +161,7 @@ const checkPrettierConfig = (): DiagnosticCheck => {
     if (existsSync(path.join(process.cwd(), prettierPath))) {
       return {
         message: `Prettier configuration found (${prettierPath})`,
-        name: "Prettier configuration",
+        name: PRETTIER_CHECK,
         status: "pass",
       };
     }
@@ -158,7 +169,7 @@ const checkPrettierConfig = (): DiagnosticCheck => {
 
   return {
     message: "No Prettier configuration found",
-    name: "Prettier configuration",
+    name: PRETTIER_CHECK,
     status: "fail",
   };
 };
@@ -168,7 +179,7 @@ const checkStylelintConfig = (): DiagnosticCheck => {
     if (existsSync(path.join(process.cwd(), stylelintPath))) {
       return {
         message: `Stylelint configuration found (${stylelintPath})`,
-        name: "Stylelint configuration",
+        name: STYLELINT_CHECK,
         status: "pass",
       };
     }
@@ -176,7 +187,7 @@ const checkStylelintConfig = (): DiagnosticCheck => {
 
   return {
     message: "No Stylelint configuration found",
-    name: "Stylelint configuration",
+    name: STYLELINT_CHECK,
     status: "warn",
   };
 };
@@ -187,7 +198,7 @@ const checkOxlintConfig = (): DiagnosticCheck => {
   if (!existsSync(oxlintConfigPath)) {
     return {
       message: "No oxlint.config.ts file found",
-      name: "Oxlint configuration",
+      name: OXLINT_CHECK,
       status: "fail",
     };
   }
@@ -198,20 +209,20 @@ const checkOxlintConfig = (): DiagnosticCheck => {
     if (configContent.includes("ultracite/oxlint/")) {
       return {
         message: "oxlint.config.ts extends ultracite oxlint config",
-        name: "Oxlint configuration",
+        name: OXLINT_CHECK,
         status: "pass",
       };
     }
 
     return {
       message: "oxlint.config.ts exists but doesn't extend ultracite config",
-      name: "Oxlint configuration",
+      name: OXLINT_CHECK,
       status: "warn",
     };
   } catch {
     return {
       message: "Could not read oxlint.config.ts file",
-      name: "Oxlint configuration",
+      name: OXLINT_CHECK,
       status: "fail",
     };
   }
@@ -223,7 +234,7 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
   if (!existsSync(oxfmtConfigPath)) {
     return {
       message: "No oxfmt.config.ts file found",
-      name: "oxfmt configuration",
+      name: OXFMT_CHECK,
       status: "fail",
     };
   }
@@ -234,20 +245,20 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
     if (configContent.includes("ultracite/oxfmt")) {
       return {
         message: "oxfmt.config.ts extends ultracite oxfmt config",
-        name: "oxfmt configuration",
+        name: OXFMT_CHECK,
         status: "pass",
       };
     }
 
     return {
       message: "oxfmt.config.ts exists but doesn't extend ultracite config",
-      name: "oxfmt configuration",
+      name: OXFMT_CHECK,
       status: "warn",
     };
   } catch {
     return {
       message: "Could not read oxfmt.config.ts file",
-      name: "oxfmt configuration",
+      name: OXFMT_CHECK,
       status: "fail",
     };
   }
@@ -263,7 +274,7 @@ const checkUltraciteDependency = (): DiagnosticCheck => {
   if (!existsSync(packageJsonPath)) {
     return {
       message: "No package.json found",
-      name: "Ultracite dependency",
+      name: ULTRACITE_DEP_CHECK,
       status: "warn",
     };
   }
@@ -273,7 +284,7 @@ const checkUltraciteDependency = (): DiagnosticCheck => {
   if (!pkgJson) {
     return {
       message: "Could not parse package.json",
-      name: "Ultracite dependency",
+      name: ULTRACITE_DEP_CHECK,
       status: "warn",
     };
   }
@@ -286,14 +297,14 @@ const checkUltraciteDependency = (): DiagnosticCheck => {
   if (version) {
     return {
       message: `Ultracite is in package.json (${version})`,
-      name: "Ultracite dependency",
+      name: ULTRACITE_DEP_CHECK,
       status: "pass",
     };
   }
 
   return {
     message: "Ultracite not found in package.json dependencies",
-    name: "Ultracite dependency",
+    name: ULTRACITE_DEP_CHECK,
     status: "warn",
   };
 };
@@ -347,14 +358,14 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
   if (conflicts.length > 0) {
     return {
       message: `Found potentially conflicting tools: ${conflicts.join(", ")}`,
-      name: "Conflicting tools",
+      name: CONFLICTING_TOOLS_CHECK,
       status: "warn",
     };
   }
 
   return {
     message: "No conflicting formatting/linting tools found",
-    name: "Conflicting tools",
+    name: CONFLICTING_TOOLS_CHECK,
     status: "pass",
   };
 };
@@ -375,7 +386,7 @@ const getChecksForLinter = (
           fn: () => checkToolInstallation("biome", true),
           name: "Biome installation",
         },
-        { fn: checkBiomeConfig, name: "Biome configuration" }
+        { fn: checkBiomeConfig, name: BIOME_CHECK }
       );
       break;
     }
@@ -385,17 +396,17 @@ const getChecksForLinter = (
           fn: () => checkToolInstallation("eslint", true),
           name: "ESLint installation",
         },
-        { fn: checkEslintConfig, name: "ESLint configuration" },
+        { fn: checkEslintConfig, name: ESLINT_CHECK },
         {
           fn: () => checkToolInstallation("prettier", true),
           name: "Prettier installation",
         },
-        { fn: checkPrettierConfig, name: "Prettier configuration" },
+        { fn: checkPrettierConfig, name: PRETTIER_CHECK },
         {
           fn: () => checkToolInstallation("stylelint", false),
           name: "Stylelint installation",
         },
-        { fn: checkStylelintConfig, name: "Stylelint configuration" }
+        { fn: checkStylelintConfig, name: STYLELINT_CHECK }
       );
       break;
     }
@@ -405,12 +416,12 @@ const getChecksForLinter = (
           fn: () => checkToolInstallation("oxlint", true),
           name: "Oxlint installation",
         },
-        { fn: checkOxlintConfig, name: "Oxlint configuration" },
+        { fn: checkOxlintConfig, name: OXLINT_CHECK },
         {
           fn: () => checkToolInstallation("oxfmt", true),
           name: "oxfmt installation",
         },
-        { fn: checkOxfmtConfig, name: "oxfmt configuration" }
+        { fn: checkOxfmtConfig, name: OXFMT_CHECK }
       );
       break;
     }
@@ -421,10 +432,10 @@ const getChecksForLinter = (
 
   // Shared checks
   checks.push(
-    { fn: checkUltraciteDependency, name: "Ultracite dependency" },
+    { fn: checkUltraciteDependency, name: ULTRACITE_DEP_CHECK },
     {
       fn: () => checkConflictingTools(linter),
-      name: "Conflicting tools",
+      name: CONFLICTING_TOOLS_CHECK,
     }
   );
 
@@ -444,7 +455,7 @@ export const doctor = (): void => {
     log.error(
       "No linter configuration found. Run `ultracite init` to set up a linter."
     );
-    outro("Doctor complete");
+    outro(DOCTOR_COMPLETE);
     throw new Error("Doctor checks failed");
   }
 
@@ -478,7 +489,7 @@ export const doctor = (): void => {
 
   if (failCount > 0) {
     log.error("Some checks failed. Run 'ultracite init' to fix issues.");
-    outro("Doctor complete");
+    outro(DOCTOR_COMPLETE);
     throw new Error("Doctor checks failed");
   }
 
@@ -486,10 +497,10 @@ export const doctor = (): void => {
     log.warn(
       "Some optional improvements available. Run 'ultracite init' to configure."
     );
-    outro("Doctor complete");
+    outro(DOCTOR_COMPLETE);
     return;
   }
 
   log.success("Everything looks good!");
-  outro("Doctor complete");
+  outro(DOCTOR_COMPLETE);
 };

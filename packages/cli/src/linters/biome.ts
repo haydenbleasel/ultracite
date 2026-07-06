@@ -11,9 +11,11 @@ import {
   writeProjectFile,
 } from "../utils";
 
+const biomeCoreConfig = "ultracite/biome/core";
+
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
-  extends: ["ultracite/biome/core"],
+  extends: [biomeCoreConfig],
 };
 
 const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(?<rest>.+)$/u;
@@ -37,7 +39,7 @@ interface BiomeOptions {
 export const biome = {
   create: (opts?: BiomeOptions) => {
     const path = getBiomeConfigPath();
-    const extendsList = ["ultracite/biome/core"];
+    const extendsList = [biomeCoreConfig];
 
     // Add type-aware config for project/scanner rules
     if (opts?.typeAware) {
@@ -92,7 +94,7 @@ export const biome = {
     };
 
     // Add ultracite/biome/core if not present
-    addExtend("ultracite/biome/core");
+    addExtend(biomeCoreConfig);
 
     // Add type-aware config for project/scanner rules
     if (opts?.typeAware) {

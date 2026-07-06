@@ -62,6 +62,9 @@ import {
 const schemaVersion = packageJson.devDependencies["@biomejs/biome"];
 const ultraciteVersion = packageJson.version;
 
+const OPERATION_CANCELLED = "Operation cancelled.";
+const LINT_STAGED = "lint-staged";
+
 type Linter = (typeof options.linters)[number];
 type Frameworks = (typeof options.frameworks)[number];
 type AgentSelection = (typeof options.agents)[number] | "universal";
@@ -1103,7 +1106,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         });
 
         if (isCancel(linterResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1155,7 +1158,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         });
 
         if (isCancel(frameworksResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1183,7 +1186,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         });
 
         if (isCancel(editorConfigResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1233,7 +1236,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         });
 
         if (isCancel(agentsResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1274,7 +1277,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         });
 
         if (isCancel(hooksResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1297,14 +1300,14 @@ export const initialize = async (flags?: InitializeFlags) => {
           options: [
             { label: "Husky pre-commit hook", value: "husky" },
             { label: "Lefthook pre-commit hook", value: "lefthook" },
-            { label: "Lint-staged", value: "lint-staged" },
+            { label: "Lint-staged", value: LINT_STAGED },
             { label: "pre-commit (Python framework)", value: "pre-commit" },
           ],
           required: false,
         });
 
         if (isCancel(integrationsResult)) {
-          cancel("Operation cancelled.");
+          cancel(OPERATION_CANCELLED);
           return;
         }
 
@@ -1375,7 +1378,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     /* oxlint-enable react-doctor/async-parallel */
 
     if (integrations?.includes("husky")) {
-      const useLintStaged = integrations?.includes("lint-staged") ?? false;
+      const useLintStaged = integrations?.includes(LINT_STAGED) ?? false;
       await initializePrecommitHook(
         pmInfo,
         !opts.skipInstall,
@@ -1386,7 +1389,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (integrations?.includes("lefthook")) {
       await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
     }
-    if (integrations?.includes("lint-staged")) {
+    if (integrations?.includes(LINT_STAGED)) {
       await initializeLintStaged(pmInfo, !opts.skipInstall, quiet);
     }
     if (integrations?.includes("pre-commit")) {

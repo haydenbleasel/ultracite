@@ -10,6 +10,8 @@ import type { Framework } from "./data/options";
 import type { PackageJson } from "./schemas";
 import { readPackageJson, readPackageJsonSync } from "./schemas";
 
+const pnpmWorkspaceFile = "pnpm-workspace.yaml";
+
 export const exists = (filePath: string): boolean => {
   try {
     accessSync(filePath);
@@ -20,7 +22,7 @@ export const exists = (filePath: string): boolean => {
 };
 
 export const isMonorepo = (): boolean => {
-  if (exists("pnpm-workspace.yaml")) {
+  if (exists(pnpmWorkspaceFile)) {
     return true;
   }
 
@@ -337,9 +339,9 @@ const getWorkspacePatterns = async (
     }
   }
 
-  if (exists("pnpm-workspace.yaml")) {
+  if (exists(pnpmWorkspaceFile)) {
     try {
-      const content = await readFile("pnpm-workspace.yaml", "utf-8");
+      const content = await readFile(pnpmWorkspaceFile, "utf-8");
       const parsed = YAML.parse(content) as { packages?: unknown };
       if (Array.isArray(parsed?.packages)) {
         for (const pattern of parsed.packages) {

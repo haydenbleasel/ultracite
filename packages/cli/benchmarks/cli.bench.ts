@@ -13,6 +13,11 @@ import {
   updatePackageJson,
 } from "../src/utils";
 
+const CROSS_SPAWN_MODULE = "cross-spawn";
+const UTILS_MODULE = "../src/utils";
+const ULTRACITE_CHECK_SCRIPT = "ultracite check";
+const ULTRACITE_FIX_SCRIPT = "ultracite fix";
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -23,6 +28,7 @@ const noop = () => {};
 const makeTmpDir = (files: Record<string, string> = {}): string => {
   const dir = path.join(
     tmpdir(),
+    // oxlint-disable-next-line sonarjs/pseudo-random -- benchmark temp dir suffix, not security-sensitive
     `ultracite-bench-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
   mkdirSync(dir, { recursive: true });
@@ -192,8 +198,8 @@ const mockSpawn = () => ({ status: 0, stderr: "", stdout: "" });
 
 group("check command dispatch", () => {
   bench("biome check (mocked)", async () => {
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
-    mock.module("../src/utils", () => ({
+    mock.module(CROSS_SPAWN_MODULE, () => ({ sync: mockSpawn }));
+    mock.module(UTILS_MODULE, () => ({
       detectLinter: () => "biome",
       exists: () => true,
     }));
@@ -203,8 +209,8 @@ group("check command dispatch", () => {
   });
 
   bench("eslint check — 3 sequential tools (mocked)", async () => {
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
-    mock.module("../src/utils", () => ({
+    mock.module(CROSS_SPAWN_MODULE, () => ({ sync: mockSpawn }));
+    mock.module(UTILS_MODULE, () => ({
       detectLinter: () => "eslint",
       exists: () => true,
     }));
@@ -214,8 +220,8 @@ group("check command dispatch", () => {
   });
 
   bench("oxlint check — 2 sequential tools (mocked)", async () => {
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
-    mock.module("../src/utils", () => ({
+    mock.module(CROSS_SPAWN_MODULE, () => ({ sync: mockSpawn }));
+    mock.module(UTILS_MODULE, () => ({
       detectLinter: () => "oxlint",
       exists: () => true,
     }));
@@ -247,14 +253,14 @@ group("doctor", () => {
       return;
     }
     try {
-      mock.module("cross-spawn", () => ({
+      mock.module(CROSS_SPAWN_MODULE, () => ({
         sync: () => ({ status: 0, stderr: "", stdout: "1.0.0\n" }),
       }));
       // detectLinter walks up the directory tree calling exists() at every
       // ancestor, so its cost is filesystem- and machine-dependent. Stub it so
       // this bench measures the doctor logic deterministically. doctor.ts only
       // consumes detectLinter from ../utils, so replacing the module is safe.
-      mock.module("../src/utils", () => ({
+      mock.module(UTILS_MODULE, () => ({
         detectLinter: () => "biome",
       }));
       mock.module("@clack/prompts", () => ({
@@ -343,7 +349,7 @@ group("updatePackageJson", () => {
     process.chdir(dir);
     try {
       await updatePackageJson({
-        scripts: { check: "ultracite check", fix: "ultracite fix" },
+        scripts: { check: ULTRACITE_CHECK_SCRIPT, fix: ULTRACITE_FIX_SCRIPT },
       });
     } finally {
       process.chdir(origCwd);
@@ -358,7 +364,7 @@ group("updatePackageJson", () => {
         devDependencies: { ultracite: "^7.0.0" },
       });
       await updatePackageJson({
-        scripts: { check: "ultracite check", fix: "ultracite fix" },
+        scripts: { check: ULTRACITE_CHECK_SCRIPT, fix: ULTRACITE_FIX_SCRIPT },
       });
     } finally {
       process.chdir(origCwd);
@@ -373,7 +379,7 @@ group("updatePackageJson", () => {
         devDependencies: { ultracite: "^7.0.0" },
       });
       await updatePackageJson({
-        scripts: { check: "ultracite check", fix: "ultracite fix" },
+        scripts: { check: ULTRACITE_CHECK_SCRIPT, fix: ULTRACITE_FIX_SCRIPT },
       });
       await updatePackageJson({ type: "module" });
     } finally {

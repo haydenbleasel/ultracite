@@ -1,19 +1,21 @@
 import { readPackageJsonSync } from "../schemas";
 import { exists, stylelintConfigNames, writeProjectFile } from "../utils";
 
+const packageJsonPath = "./package.json";
+
 const stylelintConfigPaths = stylelintConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./stylelint.config.mjs";
 
 const hasStylelintKeyInPackageJson = (): boolean => {
-  const packageJson = readPackageJsonSync("./package.json");
+  const packageJson = readPackageJsonSync(packageJsonPath);
   return packageJson?.stylelint !== undefined;
 };
 
 const getStylelintConfigPath = (): string | null => {
   // Check for "stylelint" key in package.json first
   if (hasStylelintKeyInPackageJson()) {
-    return "./package.json";
+    return packageJsonPath;
   }
 
   // Check for config files
@@ -43,7 +45,7 @@ export const stylelint = {
     const config = generateStylelintConfig();
     const existingPath = getStylelintConfigPath();
     await writeProjectFile(
-      existingPath === "./package.json"
+      existingPath === packageJsonPath
         ? defaultConfigPath
         : (existingPath ?? defaultConfigPath),
       config

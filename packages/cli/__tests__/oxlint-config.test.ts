@@ -180,14 +180,14 @@ describe("oxlint core config", () => {
         Object.keys(override.rules ?? {})
     );
 
-    const allowedPlugins = [
+    const allowedPlugins = new Set([
       ...CORE_PLUGINS,
       ...CORE_JS_PLUGINS.map(({ prefix }) => prefix),
-    ];
+    ]);
     const allRules = [...configRules, ...overrideRules];
     const nonCoreRules = allRules.filter((rule) => {
       const plugin = rule.includes("/") ? rule.split("/")[0] : "eslint";
-      return !allowedPlugins.includes(plugin);
+      return !allowedPlugins.has(plugin);
     });
 
     expect(
@@ -354,11 +354,7 @@ describe("oxlint core JS plugins", () => {
   test("core loads through oxlint with all bridged rules registered", () => {
     const cliDir = path.join(import.meta.dirname, "..");
     const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-    const fixtureDir = path.join(
-      import.meta.dirname,
-      "fixtures",
-      "core-load"
-    );
+    const fixtureDir = path.join(import.meta.dirname, "fixtures", "core-load");
 
     const result = Bun.spawnSync(
       [

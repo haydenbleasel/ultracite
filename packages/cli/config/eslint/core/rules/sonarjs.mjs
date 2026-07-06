@@ -20,20 +20,20 @@ const overrideRules = {
   // Duplicate of the core complexity rule.
   "sonarjs/cyclomatic-complexity": "off",
   "sonarjs/elseif-without-else": "off",
+  // Requires a headerFormat option; errors on every file without one.
+  "sonarjs/file-header": "off",
   // Fires on any file whose name differs from an exported class, which is
   // noise for config and module files that export objects, not classes.
   "sonarjs/file-name-differ-from-class": "off",
-  // Requires a headerFormat option; errors on every file without one.
-  "sonarjs/file-header": "off",
-  // No dependency-manifest resolution in oxlint's JS plugin bridge, so this
-  // flags builtin (bun:test) and workspace imports as missing dependencies.
-  // Off in both linters to keep parity.
-  "sonarjs/no-implicit-dependencies": "off",
   // The preset disables max-lines everywhere.
   "sonarjs/max-lines": "off",
   "sonarjs/max-lines-per-function": "off",
   // Duplicate of max-depth, which is off.
   "sonarjs/nested-control-flow": "off",
+  // No dependency-manifest resolution in oxlint's JS plugin bridge, so this
+  // flags builtin (bun:test) and workspace imports as missing dependencies.
+  // Off in both linters to keep parity.
+  "sonarjs/no-implicit-dependencies": "off",
   // Conflicts with sort-keys.
   "sonarjs/shorthand-property-grouping": "off",
 };

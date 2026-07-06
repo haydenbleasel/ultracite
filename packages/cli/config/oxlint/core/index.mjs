@@ -17,6 +17,9 @@ export default defineConfig({
       ],
       rules: {
         "no-empty-function": "off",
+        // Repeated string literals (test titles, expected values) are normal
+        // and idiomatic in test files.
+        "sonarjs/no-duplicate-string": "off",
         "promise/prefer-await-to-then": "off",
       },
     },

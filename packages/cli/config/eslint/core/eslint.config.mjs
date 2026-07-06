@@ -1,9 +1,9 @@
 import typescript from "@typescript-eslint/eslint-plugin";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
-import * as typescriptParser from "@typescript-eslint/parser";
+import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import eslintPrettier from "eslint-config-prettier";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as importTypescriptResolver from "eslint-import-resolver-typescript";
+import * as importTypescriptResolver from "eslint-import-resolver-typescript"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint resolver compatibility
 import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
@@ -150,6 +150,17 @@ const config = [
     },
     settings: {
       "html/javascript-tag-names": ["script", "Script"],
+    },
+  },
+  {
+    // Repeated string literals (test titles, expected values) are normal and
+    // idiomatic in test files. Mirrors the oxlint core test override.
+    files: [
+      "**/*.{test,spec}.{ts,tsx,js,jsx}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+    ],
+    rules: {
+      "sonarjs/no-duplicate-string": "off",
     },
   },
 ];

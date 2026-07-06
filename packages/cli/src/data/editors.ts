@@ -29,24 +29,30 @@ const vscodeBaseConfig = {
   "js/ts.tsdk.promptToUseWorkspaceVersion": true,
 };
 
+// Extension IDs and shared VS Code paths, extracted to avoid repeated literals.
+const BIOME_FORMATTER = "biomejs.biome";
+const OXC_FORMATTER = "oxc.oxc-vscode";
+const VSCODE_INSTALL_COMMAND = "code --install-extension";
+const VSCODE_SETTINGS_PATH = ".vscode/settings.json";
+
 // VS Code Biome configuration
 // Maps https://biomejs.dev/internals/language-support/
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeBiomeConfig = {
-  "[css]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[graphql]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[html]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[javascriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[markdown]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[mdx]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[svelte]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[vue]": { "editor.defaultFormatter": "biomejs.biome" },
-  "[yaml]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[css]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[graphql]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[html]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[javascript]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[javascriptreact]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[json]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[jsonc]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[markdown]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[mdx]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[svelte]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[typescript]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[typescriptreact]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[vue]": { "editor.defaultFormatter": BIOME_FORMATTER },
+  "[yaml]": { "editor.defaultFormatter": BIOME_FORMATTER },
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit",
@@ -57,22 +63,22 @@ export const vscodeBiomeConfig = {
 // Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {
-  "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[graphql]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[handlebars]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[less]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[markdown]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[scss]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[vue-html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[vue]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
-  "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+  "[css]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[graphql]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[handlebars]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[html]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[javascript]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[javascriptreact]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[json]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[jsonc]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[less]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[markdown]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[scss]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[typescript]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[typescriptreact]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[vue-html]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[vue]": { "editor.defaultFormatter": OXC_FORMATTER },
+  "[yaml]": { "editor.defaultFormatter": OXC_FORMATTER },
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
   },
@@ -280,18 +286,18 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
 export const editors: Editor[] = [
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "vscode",
     name: "Visual Studio Code",
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     hooks: {
       getContent: (command) => ({
@@ -307,9 +313,9 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     hooks: {
       getContent: (command) => ({
@@ -324,9 +330,9 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     hooks: {
       getContent: (command) => ({
@@ -352,45 +358,45 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "antigravity",
     name: "Antigravity",
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "bob",
     name: "IBM Bob",
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "kiro",
     name: "Kiro",
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "trae",
     name: "Trae",
   },
   {
     config: {
-      extensionCommand: "code --install-extension",
+      extensionCommand: VSCODE_INSTALL_COMMAND,
       getContent: getVscodeConfig,
-      path: ".vscode/settings.json",
+      path: VSCODE_SETTINGS_PATH,
     },
     id: "void",
     name: "Void",

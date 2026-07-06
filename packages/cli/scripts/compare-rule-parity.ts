@@ -62,8 +62,10 @@ const isOptionSubset = (subset: unknown, superset: unknown): boolean => {
   return JSON.stringify(subset) === JSON.stringify(superset);
 };
 
+const typescriptPrefix = "typescript/";
+
 const prefixToOxlint: [string, string][] = [
-  ["@typescript-eslint/", "typescript/"],
+  ["@typescript-eslint/", typescriptPrefix],
   ["import-x/", "import/"],
   ["n/", "node/"],
   ["react-hooks/", "react/"],
@@ -225,10 +227,10 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     }
   }
   for (const [name, state] of oxlintState) {
-    if (!(name.startsWith("typescript/") && state.enabled)) {
+    if (!(name.startsWith(typescriptPrefix) && state.enabled)) {
       continue;
     }
-    const base = name.slice("typescript/".length);
+    const base = name.slice(typescriptPrefix.length);
     if (oxlintState.has(base) && !oxlintState.get(base)?.enabled) {
       oxlintState.set(base, state);
     }
@@ -236,8 +238,8 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
   // Base rules cover their typescript/ twins and vice versa on both sides.
   const twinsOf = (name: string): string[] => {
     const twins = [name];
-    if (name.startsWith("typescript/")) {
-      twins.push(name.slice("typescript/".length));
+    if (name.startsWith(typescriptPrefix)) {
+      twins.push(name.slice(typescriptPrefix.length));
     } else {
       twins.push(`typescript/${name}`);
     }
