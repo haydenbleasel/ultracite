@@ -10,11 +10,14 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`github/${key}`, "error"])
 );
 
-// Overrides mirror the oxlint github preset (config/oxlint/github), which
-// is the benchmark for rule decisions across linters.
+// Overrides mirror the oxlint core preset (config/oxlint/core), which is the
+// benchmark for rule decisions across linters.
 const overrideRules = {
   // Conflicts with unicorn/prefer-dom-node-dataset, which is the benchmark.
   "github/no-dataset": "off",
+  // oxlint's JS plugin bridge misreads module-scoped declarations (e.g. Astro
+  // frontmatter) as implicit globals. Off in both linters to keep parity.
+  "github/no-implicit-buggy-globals": "off",
   "github/unescaped-html-literal": "off",
 };
 

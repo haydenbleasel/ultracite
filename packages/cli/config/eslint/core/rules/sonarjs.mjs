@@ -10,8 +10,8 @@ const baseRules = Object.fromEntries(
   availableKeys.map((key) => [`sonarjs/${key}`, "error"])
 );
 
-// Overrides mirror the oxlint sonarjs preset (config/oxlint/sonarjs), which
-// is the benchmark for rule decisions across linters.
+// Overrides mirror the oxlint core preset (config/oxlint/core), which is the
+// benchmark for rule decisions across linters.
 const overrideRules = {
   // Fights the formatter (arrowParentheses: always).
   "sonarjs/arrow-function-convention": "off",
@@ -25,6 +25,10 @@ const overrideRules = {
   "sonarjs/file-name-differ-from-class": "off",
   // Requires a headerFormat option; errors on every file without one.
   "sonarjs/file-header": "off",
+  // No dependency-manifest resolution in oxlint's JS plugin bridge, so this
+  // flags builtin (bun:test) and workspace imports as missing dependencies.
+  // Off in both linters to keep parity.
+  "sonarjs/no-implicit-dependencies": "off",
   // The preset disables max-lines everywhere.
   "sonarjs/max-lines": "off",
   "sonarjs/max-lines-per-function": "off",

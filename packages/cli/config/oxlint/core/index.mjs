@@ -248,7 +248,9 @@ export default defineConfig({
     // Conflicts with unicorn/prefer-dom-node-dataset, which is the benchmark.
     "github/no-dataset": "off",
     "github/no-dynamic-script-tag": "error",
-    "github/no-implicit-buggy-globals": "error",
+    // The JS plugin bridge misreads module-scoped declarations (e.g. Astro
+    // frontmatter) as implicit globals, producing false positives.
+    "github/no-implicit-buggy-globals": "off",
     "github/no-inner-html": "error",
     "github/no-innerText": "error",
     "github/no-then": "error",
@@ -490,7 +492,9 @@ export default defineConfig({
     "sonarjs/no-identical-expressions": "error",
     "sonarjs/no-identical-functions": "error",
     "sonarjs/no-ignored-exceptions": "error",
-    "sonarjs/no-implicit-dependencies": "error",
+    // The JS plugin bridge has no dependency-manifest resolution, so this
+    // flags builtin (bun:test) and workspace imports as missing dependencies.
+    "sonarjs/no-implicit-dependencies": "off",
     "sonarjs/no-implicit-global": "error",
     "sonarjs/no-incomplete-assertions": "error",
     "sonarjs/no-internal-api-use": "error",
