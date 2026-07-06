@@ -6,6 +6,13 @@
  * tools (oxlint, oxfmt, eslint) import this module directly.
  */
 export const ignorePatterns = [
+  // ── Dependencies / VCS ────────────────────────────────────────────
+  // oxlint only skips node_modules when a .gitignore lists it, so without
+  // this entry `ultracite fix` rewrites installed packages in projects
+  // that have no .gitignore (see issue #737).
+  "**/node_modules",
+  "**/.git",
+
   // ── Build / framework output ──────────────────────────────────────
   "**/dist",
   "**/build",
