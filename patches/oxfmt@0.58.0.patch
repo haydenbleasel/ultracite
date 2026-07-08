@@ -1,0 +1,20 @@
+diff --git a/dist/markdown-BjyDFyaO.js b/dist/markdown-BjyDFyaO.js
+index 1905aa7563e612808426e26f1ed28bebbef3456f..0771fc23dbfd3043aa1b7c739d8a1ff8cc46a8b2 100644
+--- a/dist/markdown-BjyDFyaO.js
++++ b/dist/markdown-BjyDFyaO.js
+@@ -4830,7 +4830,14 @@ function lu(e, t, r) {
+ 		case "sentence": return Mh(e, r);
+ 		case "word": return t.parser !== "mdx" ? Vh(e, t) : Gh(e);
+ 		case "whitespace": {
+-			let { next: i } = e, u = i && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(i.value) && !ME(e) && !(t.proseWrap === "preserve" && zE(e)) ? "never" : t.proseWrap;
++			let { next: i, previous: oxfmtFencePrev } = e;
++			// Preserve line breaks that sit directly against a `:::` container
++			// directive fence, so `proseWrap: "never"` keeps the opening/closing
++			// fence on their own lines instead of joining them into the prose (which
++			// breaks the directive). Ordinary prose still wraps per proseWrap.
++			// See prettier/prettier#19040.
++			let oxfmtIsFence = (w) => w != null && typeof w.value === "string" && w.value.startsWith(":::");
++			let u = oxfmtIsFence(oxfmtFencePrev) || oxfmtIsFence(i) ? "preserve" : i && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(i.value) && !ME(e) && !(t.proseWrap === "preserve" && zE(e)) ? "never" : t.proseWrap;
+ 			return ou(e, n.value, u, !1, t);
+ 		}
+ 		case "emphasis": {
