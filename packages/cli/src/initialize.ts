@@ -64,6 +64,32 @@ const ultraciteVersion = packageJson.version;
 
 const OPERATION_CANCELLED = "Operation cancelled.";
 const LINT_STAGED = "lint-staged";
+const oxlintJsPlugins = [
+  "eslint-plugin-github",
+  "eslint-plugin-sonarjs",
+  "oxlint-plugin-react-doctor",
+] as const;
+
+type OxlintJsPlugin = (typeof oxlintJsPlugins)[number];
+
+const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES: Record<OxlintJsPlugin, string> = {
+  "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
+  "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+  "oxlint-plugin-react-doctor":
+    packageJson.devDependencies["oxlint-plugin-react-doctor"],
+};
+
+const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
+  if (oxlintJsPlugins.includes(value as OxlintJsPlugin)) {
+    return value as OxlintJsPlugin;
+  }
+
+  throw new Error(
+    `Unsupported Oxlint JS plugin "${value}". Supported plugins: ${oxlintJsPlugins.join(
+      ", "
+    )}`
+  );
+};
 
 type Linter = (typeof options.linters)[number];
 type Frameworks = (typeof options.frameworks)[number];
@@ -77,6 +103,7 @@ interface InitializeFlags {
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
   installSkill?: boolean;
+  "js-plugins"?: OxlintJsPlugin[];
   linter?: Linter;
   pm?: string;
   quiet?: boolean;
@@ -207,7 +234,8 @@ const buildEslintDevDependencies = (
 const buildNoInstallDevDependencies = (
   linter: Linter,
   typeAware: boolean,
-  frameworks: Frameworks[]
+  frameworks: Frameworks[],
+  jsPlugins: OxlintJsPlugin[] = []
 ): Record<string, string> => {
   const devDependencies: Record<string, string> = {
     ultracite: ultraciteVersion,
@@ -225,6 +253,9 @@ const buildNoInstallDevDependencies = (
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] = "latest";
     }
+    for (const jsPlugin of jsPlugins) {
+      devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
+    }
   }
 
   return devDependencies;
@@ -241,6 +272,8 @@ const dependencyNamesByLinter: Record<Linter, Set<string>> = {
   biome: new Set(["@biomejs/biome"]),
   eslint: eslintDevDependencyNames,
   oxlint: new Set([
+    "eslint-plugin-github",
+    "eslint-plugin-sonarjs",
     "oxfmt",
     "oxlint",
     "oxlint-plugin-react-doctor",
@@ -395,7 +428,8 @@ export const installDependencies = async (
   install = true,
   quiet = false,
   typeAware = false,
-  frameworks: Frameworks[] = ["react"]
+  frameworks: Frameworks[] = ["react"],
+  jsPlugins: OxlintJsPlugin[] = []
 ) => {
   const s = spinner();
 
@@ -426,6 +460,12 @@ export const installDependencies = async (
     if (typeAware) {
       packages.push("oxlint-tsgolint@latest");
     }
+    packages.push(
+      ...jsPlugins.map(
+        (jsPlugin) =>
+          `${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`
+      )
+    );
   }
 
   const scripts = {
@@ -449,7 +489,8 @@ export const installDependencies = async (
     const devDependencies = buildNoInstallDevDependencies(
       linter,
       typeAware,
-      frameworks
+      frameworks,
+      jsPlugins
     );
     // Batch devDependencies and scripts into a single read/write
     await updatePackageJson({ devDependencies, scripts });
@@ -630,7 +671,8 @@ export const upsertEslintConfig = async (
 
 export const upsertOxlintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
-  quiet = false
+  quiet = false,
+  jsPlugins: OxlintJsPlugin[] = []
 ) => {
   const s = spinner();
 
@@ -642,7 +684,7 @@ export const upsertOxlintConfig = async (
     if (!quiet) {
       s.message("Oxlint configuration found, updating...");
     }
-    await oxlint.update({ frameworks });
+    await oxlint.update({ frameworks, jsPlugins });
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
     }
@@ -652,7 +694,7 @@ export const upsertOxlintConfig = async (
   if (!quiet) {
     s.message("Oxlint configuration not found, creating...");
   }
-  await oxlint.create({ frameworks });
+  await oxlint.create({ frameworks, jsPlugins });
   if (!quiet) {
     s.stop("Oxlint configuration created.");
   }
@@ -1122,6 +1164,36 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
+    let jsPlugins = (opts["js-plugins"] ?? []).map(assertOxlintJsPlugin);
+    if (linter === "oxlint" && opts["js-plugins"] === undefined) {
+      const hasOtherCliOptions =
+        quiet ||
+        opts.pm ||
+        opts.editors ||
+        opts.agents ||
+        opts.hooks ||
+        opts.integrations !== undefined ||
+        opts.frameworks !== undefined;
+
+      if (!hasOtherCliOptions) {
+        const jsPluginsResult = await multiselect({
+          message: "Which JS plugins would you like to add (optional)?",
+          options: oxlintJsPlugins.map((jsPlugin) => ({
+            label: jsPlugin,
+            value: jsPlugin,
+          })),
+          required: false,
+        });
+
+        if (isCancel(jsPluginsResult)) {
+          cancel(OPERATION_CANCELLED);
+          return;
+        }
+
+        jsPlugins = jsPluginsResult as OxlintJsPlugin[];
+      }
+    }
+
     let editorConfig = opts.editors;
     let selectedEditorFiles: EditorFileTarget[] = [];
     const editorFileTargets = getEditorFileTargets();
@@ -1280,7 +1352,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.skipInstall,
       quiet,
       opts["type-aware"],
-      frameworks
+      frameworks,
+      jsPlugins
     );
 
     await upsertTsConfig(quiet);
@@ -1299,7 +1372,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (linter === "oxlint") {
       // Oxlint + Oxfmt config files use ESM imports, so ensure "type": "module" is set
       await updatePackageJson({ type: "module" });
-      await upsertOxlintConfig(frameworks, quiet);
+      await upsertOxlintConfig(frameworks, quiet, jsPlugins);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
     }

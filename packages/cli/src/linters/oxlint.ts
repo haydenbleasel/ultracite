@@ -5,9 +5,30 @@ import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";
 
+const oxlintJsPluginNames = [
+  "eslint-plugin-github",
+  "eslint-plugin-sonarjs",
+  "oxlint-plugin-react-doctor",
+] as const;
+
+type OxlintJsPlugin = (typeof oxlintJsPluginNames)[number];
+
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  jsPlugins?: OxlintJsPlugin[];
 }
+
+const oxlintJsPluginConfig: Record<
+  OxlintJsPlugin,
+  { name: string; rulePrefix: string }
+> = {
+  "eslint-plugin-github": { name: "github", rulePrefix: "github" },
+  "eslint-plugin-sonarjs": { name: "sonarjs", rulePrefix: "sonarjs" },
+  "oxlint-plugin-react-doctor": {
+    name: "react-doctor",
+    rulePrefix: "react-doctor",
+  },
+};
 
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -15,23 +36,70 @@ const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 // Helper to generate a valid import identifier from a config name
 const getOxlintConfigIdentifier = (configPath: string) => {
   const name = configPath.split("/").pop() ?? configPath;
-  return name === "core" ? "core" : name;
+  return name.replaceAll(/-(?<letter>[a-z])/gu, (_, letter: string) =>
+    letter.toUpperCase()
+  );
 };
 
-const generateConfigContent = (extendsList: string[]) => {
+const generateSelectedJsPluginsConfig = (jsPlugins: OxlintJsPlugin[]) => {
+  if (jsPlugins.length === 0) {
+    return "";
+  }
+
+  const pluginNames = jsPlugins.map(
+    (jsPlugin) => oxlintJsPluginConfig[jsPlugin].name
+  );
+  const rulePrefixes = jsPlugins.map(
+    (jsPlugin) => oxlintJsPluginConfig[jsPlugin].rulePrefix
+  );
+
+  return `
+const selectedJsPluginNames = new Set(${JSON.stringify(pluginNames)});
+const selectedJsPluginRulePrefixes = new Set(${JSON.stringify(rulePrefixes)});
+
+const selectedJsPlugins = {
+  ...jsPlugins,
+  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
+    selectedJsPluginNames.has(plugin.name)
+  ),
+  overrides: jsPlugins.overrides?.map((override) => ({
+    ...override,
+    rules: Object.fromEntries(
+      Object.entries(override.rules ?? {}).filter(([ruleName]) =>
+        selectedJsPluginRulePrefixes.has(ruleName.split("/")[0] ?? ruleName)
+      )
+    ),
+  })),
+  rules: Object.fromEntries(
+    Object.entries(jsPlugins.rules ?? {}).filter(([ruleName]) =>
+      selectedJsPluginRulePrefixes.has(ruleName.split("/")[0] ?? ruleName)
+    )
+  ),
+};
+`;
+};
+
+const generateConfigContent = (
+  extendsList: string[],
+  jsPlugins: OxlintJsPlugin[] = []
+) => {
+  const hasJsPlugins = jsPlugins.length > 0;
   const imports = [
     `import { defineConfig } from "oxlint";`,
     ...extendsList.map(
       (ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
     ),
-  ].join("\n");
+    hasJsPlugins ? `import jsPlugins from "ultracite/oxlint/js-plugins";` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
 
-  const identifiers = extendsList
-    .map((ext) => getOxlintConfigIdentifier(ext))
-    .join(", ");
+  const identifiers = [
+    ...extendsList.map((ext) => getOxlintConfigIdentifier(ext)),
+    ...(hasJsPlugins ? ["selectedJsPlugins"] : []),
+  ].join(", ");
 
-  return `${imports}
-
+  return `${imports}${generateSelectedJsPluginsConfig(jsPlugins)}
 export default defineConfig({
   extends: [${identifiers}],
   ignorePatterns: core.ignorePatterns,
@@ -53,7 +121,7 @@ export const oxlint = {
 
     return await writeProjectFile(
       oxlintConfigPath,
-      generateConfigContent(extendsList)
+      generateConfigContent(extendsList, opts?.jsPlugins)
     );
   },
   exists: () => exists(oxlintConfigPath),
@@ -122,6 +190,9 @@ export const oxlint = {
       }
     }
 
-    await writeProjectFile(oxlintConfigPath, generateConfigContent(newExtends));
+    await writeProjectFile(
+      oxlintConfigPath,
+      generateConfigContent(newExtends, opts?.jsPlugins)
+    );
   },
 };
