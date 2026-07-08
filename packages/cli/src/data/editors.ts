@@ -30,6 +30,7 @@ const vscodeBaseConfig = {
 };
 
 // Extension IDs and shared VS Code paths, extracted to avoid repeated literals.
+const ASTRO_FORMATTER = "astro-build.astro-vscode";
 const BIOME_FORMATTER = "biomejs.biome";
 const OXC_FORMATTER = "oxc.oxc-vscode";
 const VSCODE_INSTALL_COMMAND = "code --install-extension";
@@ -63,6 +64,7 @@ export const vscodeBiomeConfig = {
 // Maps https://oxc.rs/docs/guide/usage/formatter.html#supported-languages
 // to https://code.visualstudio.com/docs/languages/identifiers
 export const vscodeOxlintConfig = {
+  "[astro]": { "editor.defaultFormatter": ASTRO_FORMATTER },
   "[css]": { "editor.defaultFormatter": OXC_FORMATTER },
   "[graphql]": { "editor.defaultFormatter": OXC_FORMATTER },
   "[handlebars]": { "editor.defaultFormatter": OXC_FORMATTER },
