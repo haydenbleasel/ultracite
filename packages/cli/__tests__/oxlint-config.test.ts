@@ -342,12 +342,13 @@ describe("oxlint js-plugins config", () => {
     expect(config.jsPlugins).toBeUndefined();
   });
 
-  test("declares the github and sonarjs JS plugins", async () => {
+  test("declares the github, sonarjs, and react-doctor JS plugins", async () => {
     const config = await readOxlintConfig("js-plugins");
 
     expect(config.jsPlugins).toEqual([
       { name: "github", specifier: "eslint-plugin-github" },
       { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+      { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
     ]);
   });
 

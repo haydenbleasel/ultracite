@@ -53,12 +53,14 @@ export default defineConfig({
 
 ## ESLint Parity (Optional)
 
-The core preset runs entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github) and [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs) through Oxlint's JS plugin support.
+The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
 
-This is **off by default** because it adds two dependencies and runs a slower JavaScript lint pass instead of the native Rust one. Opt in only if you want the extra rules and accept the trade-off.
+This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. Opt in only if you want the extra rules and accept the trade-off.
+
+> **Note:** The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
 
 ```bash title="Terminal"
-npm install -D eslint-plugin-github eslint-plugin-sonarjs
+npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
 ```ts title="oxlint.config.ts"
@@ -118,7 +120,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`) and **sonarjs** (`eslint-plugin-sonarjs`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default.
+For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`), **sonarjs** (`eslint-plugin-sonarjs`), and **react-doctor** (`oxlint-plugin-react-doctor`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default.
 
 ## Adding Third-Party Plugins
 

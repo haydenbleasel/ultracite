@@ -163,7 +163,7 @@ const updateEsmConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
   const fileUrl = pathToFileURL(filename).href;
-  // oxlint-disable-next-line react-doctor/no-dynamic-import-path -- intentionally loading the user's config file at runtime; the path is not statically known
+  // Intentionally loading the user's config file at runtime; the path is not statically known
   const imported = await import(fileUrl);
   const existingConfig = imported.default || {};
 
@@ -188,7 +188,7 @@ const updateCjsConfig = async (
 ): Promise<void> => {
   // Use dynamic import with cache-busting query to avoid stale modules
   const fileUrl = `${pathToFileURL(filename).href}?t=${Date.now()}`;
-  // oxlint-disable-next-line react-doctor/no-dynamic-import-path -- intentionally loading the user's config file at runtime; the path is not statically known
+  // Intentionally loading the user's config file at runtime; the path is not statically known
   const imported = await import(fileUrl);
   const existingConfig = imported.default || imported;
 

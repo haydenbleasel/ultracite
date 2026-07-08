@@ -204,37 +204,6 @@ const buildEslintDevDependencies = (
   return devDependencies;
 };
 
-// The react/next/tanstack oxlint presets load the React Doctor rules via a JS
-// plugin, which oxlint resolves from the project root — so it must be
-// installed in the target project.
-const oxlintFrameworkDevDependencies: Partial<
-  Record<Frameworks, Record<string, string>>
-> = {
-  next: {
-    "oxlint-plugin-react-doctor":
-      packageJson.devDependencies["oxlint-plugin-react-doctor"],
-  },
-  react: {
-    "oxlint-plugin-react-doctor":
-      packageJson.devDependencies["oxlint-plugin-react-doctor"],
-  },
-  tanstack: {
-    "oxlint-plugin-react-doctor":
-      packageJson.devDependencies["oxlint-plugin-react-doctor"],
-  },
-};
-const buildOxlintFrameworkDevDependencies = (
-  frameworks: Frameworks[]
-): Record<string, string> => {
-  const devDependencies: Record<string, string> = {};
-
-  for (const framework of frameworks) {
-    Object.assign(devDependencies, oxlintFrameworkDevDependencies[framework]);
-  }
-
-  return devDependencies;
-};
-
 const buildNoInstallDevDependencies = (
   linter: Linter,
   typeAware: boolean,
@@ -256,10 +225,6 @@ const buildNoInstallDevDependencies = (
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] = "latest";
     }
-    Object.assign(
-      devDependencies,
-      buildOxlintFrameworkDevDependencies(frameworks)
-    );
   }
 
   return devDependencies;
@@ -455,11 +420,7 @@ export const installDependencies = async (
     packages.push(
       "oxlint@latest",
       // Oxlint is only a linter, so we need oxfmt for formatting
-      "oxfmt@latest",
-      // Framework configs pull in the React Doctor oxlint plugin
-      ...Object.entries(buildOxlintFrameworkDevDependencies(frameworks)).map(
-        ([name, version]) => `${name}@${version}`
-      )
+      "oxfmt@latest"
     );
     // Type-aware linting requires oxlint-tsgolint
     if (typeAware) {
@@ -555,7 +516,7 @@ export const upsertEditorConfig = async (
   if (!quiet) {
     s.message(`${editor.config.path} not found, creating...`);
   }
-  // oxlint-disable-next-line react-doctor/async-defer-await -- create() is a required side effect that must complete before the extension-install branches below
+  // create() is a required side effect that must complete before the extension-install branches below
   await editorConfig.create();
 
   // Install extension for VS Code-based editors
@@ -838,7 +799,7 @@ export const initializeLefthook = async (
     s.message("Installing lefthook...");
   }
 
-  // oxlint-disable-next-line react-doctor/async-defer-await -- installing the tool is a required side effect that must run before the config exists()/update guard below
+  // installing the tool is a required side effect that must run before the config exists()/update guard below
   await (install
     ? lefthook.install(packageManager)
     : updatePackageJson({
@@ -877,7 +838,7 @@ export const initializeLintStaged = async (
     s.message("Installing lint-staged...");
   }
 
-  // oxlint-disable-next-line react-doctor/async-defer-await -- installing the tool is a required side effect that must run before the config exists()/update guard below
+  // installing the tool is a required side effect that must run before the config exists()/update guard below
   await (install
     ? lintStaged.install(packageManager)
     : updatePackageJson({
@@ -1310,9 +1271,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
-    /* oxlint-disable react-doctor/async-parallel -- these steps read-modify-write
-       the shared package.json and emit ordered installer progress, so they must
-       run sequentially; parallelizing would race on package.json and scramble output */
+    // These steps read-modify-write the shared package.json and emit ordered
+    // installer progress, so they must run sequentially; parallelizing would
+    // race on package.json and scramble output.
     await installDependencies(
       pmInfo,
       linter,
@@ -1370,7 +1331,6 @@ export const initialize = async (flags?: InitializeFlags) => {
     await Promise.all(
       (hooks ?? []).map((hookName) => upsertHooks(hookName, pm, linter, quiet))
     );
-    /* oxlint-enable react-doctor/async-parallel */
 
     if (integrations?.includes("husky")) {
       const useLintStaged = integrations?.includes(LINT_STAGED) ?? false;

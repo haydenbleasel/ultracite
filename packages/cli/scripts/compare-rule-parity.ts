@@ -158,8 +158,9 @@ interface Surface {
   oxlintConfigs: string[];
 }
 
-// The github/sonarjs rules live in the opt-in `js-plugins` oxlint preset, so
-// parity is measured against core + js-plugins (the full-parity opt-in set).
+// The github/sonarjs/react-doctor rules live in the opt-in `js-plugins` oxlint
+// preset, so parity is measured against core + js-plugins (the full-parity
+// opt-in set).
 const surfaces: Surface[] = [
   {
     eslintConfigs: ["core"],
