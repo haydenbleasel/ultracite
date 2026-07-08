@@ -19,6 +19,7 @@ const overrideRules = {
   // Matches unicorn/no-process-exit being off in the oxlint config.
   "n/no-process-exit": "off",
   "n/no-sync": "off",
+  "n/no-unpublished-import": "off",
   "n/no-unsupported-features/es-builtins": "off",
   "n/no-unsupported-features/es-syntax": "off",
   "n/no-unsupported-features/node-builtins": "off",
