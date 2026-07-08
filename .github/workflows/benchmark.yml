@@ -1,0 +1,57 @@
+name: Benchmark
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# Only the latest commit on a PR needs benchmarking.
+concurrency:
+  group: benchmark-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history for the base ref)
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+
+      - uses: oven-sh/setup-bun@v2
+        name: Install Bun
+
+      # Build + pack the PR (head) build under test.
+      - name: Build and pack head
+        run: |
+          bun install
+          bun run build --filter ultracite
+          cd packages/cli
+          npm pack --loglevel=error
+          mv ultracite-*.tgz "$GITHUB_WORKSPACE/head.tgz"
+
+      # Build + pack the PR's base (main) build in a worktree, on the same
+      # runner, so the comparison cancels out machine speed.
+      - name: Build and pack base
+        run: |
+          git worktree add /tmp/ultracite-base ${{ github.event.pull_request.base.sha }}
+          cd /tmp/ultracite-base
+          bun install
+          bun run build --filter ultracite
+          cd packages/cli
+          npm pack --loglevel=error
+          mv ultracite-*.tgz "$GITHUB_WORKSPACE/base.tgz"
+
+      # Interleaved head-vs-base benchmark. Fails the job on a statistically
+      # significant regression (see benchmark/README.md for the gate).
+      - name: Run benchmark
+        run: bun ./benchmark/index.ts --base base.tgz --head head.tgz

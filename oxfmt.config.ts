@@ -10,7 +10,8 @@ export default defineConfig({
     "packages/design-system/lib/utils.ts",
     "packages/design-system/hooks/use-mobile.ts",
     "packages/cli/config/biome",
-    "test",
+    "benchmark/fixtures",
+    "benchmark/.work",
     "**/CHANGELOG.md",
   ],
 });

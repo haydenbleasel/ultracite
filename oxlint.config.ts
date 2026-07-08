@@ -13,6 +13,8 @@ export default defineConfig({
     "packages/design-system/hooks/use-mobile.ts",
     "packages/cli/config/biome",
     "test",
+    "benchmark/fixtures",
+    "benchmark/.work",
   ],
   overrides: [
     {

@@ -1,0 +1,40 @@
+:root {
+  --color-bg: #ffffff;
+  --color-fg: #1a1a1a;
+  --color-accent: #2563eb;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --radius: 0.375rem;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  color: var(--color-fg);
+  background-color: var(--color-bg);
+}
+
+.task-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius);
+}
+
+.task-list__button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+@media (width <= 640px) {
+  .task-list {
+    padding: var(--spacing-sm);
+  }
+}
