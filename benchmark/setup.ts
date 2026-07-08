@@ -23,15 +23,14 @@ const CLI_PACKAGE_JSON = path.join(
 );
 
 /**
- * The ESLint preset needs a few packages that `ultracite init --linter eslint`
- * does not record in the target project:
- *   - the stylelint config packages its generated stylelint config extends
- *     (`stylelint` alone can't resolve them), and
- *   - `storybook`, a required peer of `eslint-plugin-storybook` that the flat
- *     config imports unconditionally.
- * The perf gate measures a working toolchain, so we install them here — at the
- * versions the repo tests against where available. This is benchmark-only
- * setup and does not change what ultracite ships.
+ * The ESLint toolchain needs a few packages the generated config uses: the
+ * stylelint config packages its stylelint config extends (`stylelint` alone
+ * can't resolve them) and `storybook`, a required peer of the unconditionally
+ * imported `eslint-plugin-storybook`. Newer `ultracite init --linter eslint`
+ * installs these, but a `base` build predating that fix does not, so we install
+ * them here to keep both builds runnable. Versions come from the CLI's own
+ * package.json so they never drift. Benchmark-only setup — it does not change
+ * what ultracite ships, and it is harmless when init already added them.
  */
 const extraDevDependencies = (provider: Provider): Record<string, string> => {
   if (provider !== "eslint") {
@@ -43,16 +42,14 @@ const extraDevDependencies = (provider: Provider): Record<string, string> => {
     devDependencies?: Record<string, string>;
   };
   const devDependencies = cliPackageJson.devDependencies ?? {};
-  const result: Record<string, string> = {
-    // Peer of eslint-plugin-storybook; not in the CLI's own devDependencies.
-    storybook: "^10.0.0",
-  };
-  const fromCli = [
+  const names = [
+    "storybook",
     "stylelint-config-standard",
     "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ];
-  for (const name of fromCli) {
+  const result: Record<string, string> = {};
+  for (const name of names) {
     const version = devDependencies[name];
     if (version) {
       result[name] = version;

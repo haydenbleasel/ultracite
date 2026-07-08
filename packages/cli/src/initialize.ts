@@ -119,7 +119,17 @@ const eslintCoreDevDependencies: Record<string, string> = {
   prettier: "latest",
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
+  // Required peer of eslint-plugin-storybook, which the flat config imports
+  // unconditionally — without it the config fails to load.
+  storybook: packageJson.devDependencies.storybook,
   stylelint: "latest",
+  // The generated stylelint config extends/uses these; `stylelint` alone
+  // cannot resolve them.
+  "stylelint-config-idiomatic-order":
+    packageJson.devDependencies["stylelint-config-idiomatic-order"],
+  "stylelint-config-standard":
+    packageJson.devDependencies["stylelint-config-standard"],
+  "stylelint-prettier": packageJson.devDependencies["stylelint-prettier"],
 };
 const eslintFrameworkDevDependencies: Partial<
   Record<Frameworks, Record<string, string>>
