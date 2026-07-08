@@ -194,17 +194,9 @@ const buildEslintDevDependencies = (
   return devDependencies;
 };
 
-// The oxlint core config runs eslint-plugin-github and eslint-plugin-sonarjs
-// via oxlint's JS plugin support. oxlint resolves the specifiers from the
-// project root, so the plugins must be installed in the target project.
-const oxlintJsPluginDevDependencies: Record<string, string> = {
-  "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
-  "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
-};
-
 // The react/next/tanstack oxlint presets load the React Doctor rules via a JS
-// plugin, which (like the core JS plugins above) oxlint resolves from the
-// project root — so it must be installed in the target project.
+// plugin, which oxlint resolves from the project root — so it must be
+// installed in the target project.
 const oxlintFrameworkDevDependencies: Partial<
   Record<Frameworks, Record<string, string>>
 > = {
@@ -256,7 +248,6 @@ const buildNoInstallDevDependencies = (
     }
     Object.assign(
       devDependencies,
-      oxlintJsPluginDevDependencies,
       buildOxlintFrameworkDevDependencies(frameworks)
     );
   }
@@ -279,7 +270,6 @@ const dependencyNamesByLinter: Record<Linter, Set<string>> = {
     "oxlint",
     "oxlint-plugin-react-doctor",
     "oxlint-tsgolint",
-    ...Object.keys(oxlintJsPluginDevDependencies),
   ]),
 };
 
@@ -310,9 +300,8 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
       }
     }
   }
-  // Dependencies shared between linters (e.g. eslint-plugin-github and
-  // eslint-plugin-sonarjs, which the oxlint presets run as JS plugins)
-  // must survive the prune when the selected linter needs them.
+  // Dependencies shared between linters must survive the prune when the
+  // selected linter needs them.
   for (const dependencyName of dependencyNamesByLinter[linter]) {
     dependencyNamesToRemove.delete(dependencyName);
   }
@@ -457,10 +446,6 @@ export const installDependencies = async (
       "oxlint@latest",
       // Oxlint is only a linter, so we need oxfmt for formatting
       "oxfmt@latest",
-      // The generated config runs ESLint plugins via oxlint's JS plugins
-      ...Object.entries(oxlintJsPluginDevDependencies).map(
-        ([name, version]) => `${name}@${version}`
-      ),
       // Framework configs pull in the React Doctor oxlint plugin
       ...Object.entries(buildOxlintFrameworkDevDependencies(frameworks)).map(
         ([name, version]) => `${name}@${version}`

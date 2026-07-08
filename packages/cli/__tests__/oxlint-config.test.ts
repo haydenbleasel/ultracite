@@ -35,10 +35,11 @@ const CORE_PLUGINS = [
   "promise",
 ];
 
-// ESLint plugins bridged into core via oxlint's JS plugin support. They are
-// not part of oxlint's native rule catalog, so they are validated separately
-// (against the plugin's own rule metadata) rather than against `oxlint --rules`.
-const CORE_JS_PLUGINS = [
+// ESLint plugins bridged into the opt-in js-plugins preset via oxlint's JS
+// plugin support. They are not part of oxlint's native rule catalog, so they
+// are validated separately (against the plugin's own rule metadata) rather
+// than against `oxlint --rules`.
+const JS_PLUGINS = [
   { plugin: "eslint-plugin-github", prefix: "github" },
   { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
 ];
@@ -180,10 +181,9 @@ describe("oxlint core config", () => {
         Object.keys(override.rules ?? {})
     );
 
-    const allowedPlugins = new Set([
-      ...CORE_PLUGINS,
-      ...CORE_JS_PLUGINS.map(({ prefix }) => prefix),
-    ]);
+    // The github/sonarjs JS-plugin rules live in the separate js-plugins
+    // preset now, so core must contain only native core-plugin rules.
+    const allowedPlugins = new Set(CORE_PLUGINS);
     const allRules = [...configRules, ...overrideRules];
     const nonCoreRules = allRules.filter((rule) => {
       const plugin = rule.includes("/") ? rule.split("/")[0] : "eslint";
@@ -335,9 +335,15 @@ describe("oxlint tanstack config", () => {
   });
 });
 
-describe("oxlint core JS plugins", () => {
-  test("declares the github and sonarjs JS plugins", async () => {
+describe("oxlint js-plugins config", () => {
+  test("core does not declare any JS plugins", async () => {
     const config = await readOxlintConfig("core");
+
+    expect(config.jsPlugins).toBeUndefined();
+  });
+
+  test("declares the github and sonarjs JS plugins", async () => {
+    const config = await readOxlintConfig("js-plugins");
 
     expect(config.jsPlugins).toEqual([
       { name: "github", specifier: "eslint-plugin-github" },
@@ -348,13 +354,17 @@ describe("oxlint core JS plugins", () => {
   // Regression guard: oxlint's JS plugin bridge only registers a subset of
   // each ESLint plugin's rules, and naming a rule it does not register makes
   // oxlint hard-fail config parsing. Statically reading the config object
-  // can't catch this, so actually run oxlint with core loaded via a committed
-  // fixture (oxlint resolves the JS plugin specifiers relative to the entry
-  // config's directory, which walks up to the repo's node_modules).
-  test("core loads through oxlint with all bridged rules registered", () => {
+  // can't catch this, so actually run oxlint with core + js-plugins loaded via
+  // a committed fixture (oxlint resolves the JS plugin specifiers relative to
+  // the entry config's directory, which walks up to the repo's node_modules).
+  test("js-plugins loads through oxlint with all bridged rules registered", () => {
     const cliDir = path.join(import.meta.dirname, "..");
     const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-    const fixtureDir = path.join(import.meta.dirname, "fixtures", "core-load");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "js-plugins-load"
+    );
 
     const result = Bun.spawnSync(
       [
@@ -372,9 +382,9 @@ describe("oxlint core JS plugins", () => {
     expect(output).not.toContain("Failed to load JS plugin");
   });
 
-  for (const { plugin, prefix } of CORE_JS_PLUGINS) {
-    test(`core only references ${prefix} rules that exist in ${plugin}`, async () => {
-      const config = await readOxlintConfig("core");
+  for (const { plugin, prefix } of JS_PLUGINS) {
+    test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
+      const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
       const { rules } = mod.default as {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
@@ -387,8 +397,8 @@ describe("oxlint core JS plugins", () => {
       expect(unknown).toEqual([]);
     });
 
-    test(`core does not enable deprecated ${prefix} rules`, async () => {
-      const config = await readOxlintConfig("core");
+    test(`js-plugins does not enable deprecated ${prefix} rules`, async () => {
+      const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
       const { rules } = mod.default as {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
@@ -404,8 +414,8 @@ describe("oxlint core JS plugins", () => {
     });
   }
 
-  test("core does not enable sonarjs rules that require type checking", async () => {
-    const config = await readOxlintConfig("core");
+  test("js-plugins does not enable sonarjs rules that require type checking", async () => {
+    const config = await readOxlintConfig("js-plugins");
     const mod = await import("eslint-plugin-sonarjs");
     const { rules } = mod.default as {
       rules: Record<

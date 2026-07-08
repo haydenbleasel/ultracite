@@ -28,10 +28,5 @@ export default defineConfig({
   rules: {
     complexity: "off",
     "max-statements": "off",
-    // The CLI's init orchestration is intentionally large; the sonarjs
-    // complexity family mirrors the core complexity rules disabled above.
-    "sonarjs/cognitive-complexity": "off",
-    "sonarjs/expression-complexity": "off",
-    "sonarjs/too-many-break-or-continue-in-loop": "off",
   },
 });

@@ -158,24 +158,26 @@ interface Surface {
   oxlintConfigs: string[];
 }
 
+// The github/sonarjs rules live in the opt-in `js-plugins` oxlint preset, so
+// parity is measured against core + js-plugins (the full-parity opt-in set).
 const surfaces: Surface[] = [
   {
     eslintConfigs: ["core"],
     file: "src/example.ts",
     name: "core (TypeScript)",
-    oxlintConfigs: ["core"],
+    oxlintConfigs: ["core", "js-plugins"],
   },
   {
     eslintConfigs: ["core", "react"],
     file: "src/component.tsx",
     name: "react (TSX)",
-    oxlintConfigs: ["core", "react"],
+    oxlintConfigs: ["core", "js-plugins", "react"],
   },
   {
     eslintConfigs: ["core", "react", "next"],
     file: "app/page.tsx",
     name: "next (TSX)",
-    oxlintConfigs: ["core", "react", "next"],
+    oxlintConfigs: ["core", "js-plugins", "react", "next"],
   },
 ];
 
@@ -297,7 +299,7 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
 
   // Direction 2: rules the ESLint preset enables must be enabled in the
   // oxlint presets when oxlint can run them (natively or via the JS
-  // plugins bridged into core).
+  // plugins in the opt-in js-plugins preset).
   for (const [name, state] of eslintState) {
     if (!state.enabled) {
       continue;

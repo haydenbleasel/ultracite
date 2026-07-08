@@ -21,16 +21,12 @@ Ultracite generates two TypeScript config files for Oxlint:
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
-import github from "ultracite/oxlint/github";
-import sonarjs from "ultracite/oxlint/sonarjs";
 
 export default defineConfig({
-  extends: [core, github, sonarjs],
+  extends: [core],
   ignorePatterns: core.ignorePatterns,
 });
 ```
-
-The `github` and `sonarjs` presets run `eslint-plugin-github` and `eslint-plugin-sonarjs` through Oxlint's JS plugin support to close the gap with the ESLint preset. They're shipped as separate presets so you can drop either one to opt out.
 
 ```ts title="oxfmt.config.ts"
 import { defineConfig } from "oxfmt";
@@ -46,13 +42,32 @@ Add framework presets as needed:
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
-import github from "ultracite/oxlint/github";
-import sonarjs from "ultracite/oxlint/sonarjs";
 import next from "ultracite/oxlint/next";
 import react from "ultracite/oxlint/react";
 
 export default defineConfig({
-  extends: [core, github, sonarjs, react, next],
+  extends: [core, react, next],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+## ESLint Parity (Optional)
+
+The core preset runs entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github) and [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs) through Oxlint's JS plugin support.
+
+This is **off by default** because it adds two dependencies and runs a slower JavaScript lint pass instead of the native Rust one. Opt in only if you want the extra rules and accept the trade-off.
+
+```bash title="Terminal"
+npm install -D eslint-plugin-github eslint-plugin-sonarjs
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [core, jsPlugins],
   ignorePatterns: core.ignorePatterns,
 });
 ```
@@ -103,7 +118,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-In addition, the default generated config bundles **github** (`eslint-plugin-github`) and **sonarjs** (`eslint-plugin-sonarjs`) as separate presets via Oxlint's JS plugin support.
+For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`) and **sonarjs** (`eslint-plugin-sonarjs`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default.
 
 ## Adding Third-Party Plugins
 
