@@ -6,6 +6,7 @@ import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
+import { canResolveUltracite } from "../config-resolution";
 import { runCommandSync } from "../run-command";
 import { readPackageJsonSync } from "../schemas";
 import {
@@ -268,7 +269,7 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
 // Shared checks
 // ---------------------------------------------------------------------------
 
-const checkUltraciteDependency = (): DiagnosticCheck => {
+const checkUltraciteDependency = (linter: Linter): DiagnosticCheck => {
   const packageJsonPath = path.join(process.cwd(), "package.json");
 
   if (!existsSync(packageJsonPath)) {
@@ -294,9 +295,22 @@ const checkUltraciteDependency = (): DiagnosticCheck => {
     pkgJson.devDependencies?.ultracite ||
     pkgJson.peerDependencies?.ultracite;
 
+  // Being listed in package.json isn't enough: the generated configs are
+  // resolved out of the project's node_modules by Biome/ESLint/Oxlint
+  // themselves, so an uninstalled dependency fails there with an opaque error.
+  if (!canResolveUltracite(linter)) {
+    return {
+      message: version
+        ? `Ultracite is in package.json (${version}) but isn't installed — run your package manager's install`
+        : "Ultracite is not installed in this project — install it as a dev dependency",
+      name: ULTRACITE_DEP_CHECK,
+      status: "fail",
+    };
+  }
+
   if (version) {
     return {
-      message: `Ultracite is in package.json (${version})`,
+      message: `Ultracite is installed (${version})`,
       name: ULTRACITE_DEP_CHECK,
       status: "pass",
     };
@@ -432,7 +446,7 @@ const getChecksForLinter = (
 
   // Shared checks
   checks.push(
-    { fn: checkUltraciteDependency, name: ULTRACITE_DEP_CHECK },
+    { fn: () => checkUltraciteDependency(linter), name: ULTRACITE_DEP_CHECK },
     {
       fn: () => checkConflictingTools(linter),
       name: CONFLICTING_TOOLS_CHECK,

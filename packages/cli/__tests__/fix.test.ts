@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import path from "node:path";
+import process from "node:process";
 
 import { fix } from "../src/commands/fix";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 describe("fix", () => {
   afterEach(() => {
@@ -615,5 +618,28 @@ describe("fix", () => {
     const [command, , options] = firstCall;
     expect(command).toBe("biome");
     expect(options.shell).toBe(false);
+  });
+
+  // A biome.jsonc extending ultracite, with no ultracite in node_modules: Biome
+  // would fail here with an opaque "module not found", so we stop first.
+  test("fails before running biome when its extends cannot be resolved", () => {
+    const mockSpawn = mock(() => ({ status: 0 }));
+    mock.module("cross-spawn", () => ({
+      sync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "biome"),
+    }));
+    mockFileSystem({
+      [path.join(process.cwd(), "biome.jsonc")]:
+        '{"extends": ["ultracite/biome/core"]}',
+    });
+
+    try {
+      expect(() => fix([])).toThrow(/could not be resolved/u);
+      expect(mockSpawn).not.toHaveBeenCalled();
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 });

@@ -1,11 +1,13 @@
 import process from "node:process";
 
+import { log } from "@clack/prompts";
 import { Command } from "commander";
 
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
 import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
+import { UltraciteSetupError } from "./config-resolution";
 import { initialize } from "./initialize";
 import { splitLinterArgs } from "./linter-args";
 import { LinterExitError } from "./run-command";
@@ -112,6 +114,10 @@ if (!process.env.TEST) {
   } catch (error: unknown) {
     if (error instanceof LinterExitError) {
       process.exit(error.exitCode);
+    }
+    if (error instanceof UltraciteSetupError) {
+      log.error(error.message);
+      process.exit(1);
     }
     if (error instanceof Error && error.message === "Doctor checks failed") {
       process.exit(1);

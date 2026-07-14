@@ -6,6 +6,15 @@ mock.module("cross-spawn", () => ({
   sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
 }));
 
+// Resolution walks the real node_modules tree, which the mocked fs below can't
+// represent — config-resolution.test.ts covers it directly. Tests that care
+// flip this instead.
+const resolution = { resolvable: true };
+
+mock.module("../src/config-resolution", () => ({
+  canResolveUltracite: () => resolution.resolvable,
+}));
+
 mock.module("node:fs", () => ({
   accessSync: mock(() => {
     throw new Error("ENOENT");
@@ -663,6 +672,40 @@ describe("doctor", () => {
 
     doctor();
     consoleLogSpy.mockRestore();
+  });
+
+  test("fails when ultracite is in package.json but not installed", () => {
+    const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+
+    mock.module("../src/utils", () => ({
+      detectLinter: () => "biome",
+    }));
+    mock.module("cross-spawn", () => ({
+      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    }));
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((path: string) => {
+        const p = String(path);
+        return p.includes("biome.json") || p.includes("package.json");
+      }),
+      readFileSync: mock((path: string) => {
+        const p = String(path);
+        if (p.includes("biome.json")) {
+          return '{"extends": ["ultracite/biome/core"]}';
+        }
+        return '{"devDependencies": {"ultracite": "1.0.0"}}';
+      }),
+    }));
+
+    resolution.resolvable = false;
+
+    try {
+      expect(() => doctor()).toThrow("Doctor checks failed");
+    } finally {
+      resolution.resolvable = true;
+      consoleLogSpy.mockRestore();
+    }
   });
 
   test("warns when package.json cannot be parsed", () => {

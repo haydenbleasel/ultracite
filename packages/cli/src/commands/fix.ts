@@ -1,8 +1,21 @@
+import {
+  buildUnresolvableBiomeConfigMessage,
+  findUnresolvableBiomeConfig,
+  UltraciteSetupError,
+} from "../config-resolution";
 import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
 import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
 import { detectLinter } from "../utils";
 
 const runBiomeFix = (files: string[], passthrough: string[]): void => {
+  const unresolvableConfig = findUnresolvableBiomeConfig();
+
+  if (unresolvableConfig) {
+    throw new UltraciteSetupError(
+      buildUnresolvableBiomeConfigMessage(unresolvableConfig)
+    );
+  }
+
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
 
   if (files.length > 0) {
