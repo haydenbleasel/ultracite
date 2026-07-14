@@ -55,11 +55,17 @@ export default defineConfig({
 
 The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
 
-This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. Opt in only if you want the extra rules and accept the trade-off.
+This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. You can enable it during setup: interactive `ultracite init` lets you choose individual JS plugins when you choose Oxlint, and non-interactive setup accepts package names via `--js-plugins`.
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
+```
 
 > **Note:** The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
 
-```bash title="Terminal"
+If you're adding the preset manually instead of through `init`, install the plugins yourself:
+
+```package-install
 npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
@@ -126,7 +132,7 @@ For extra ESLint parity, the optional **js-plugins** preset adds **github** (`es
 
 Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
 
-```bash title="Terminal"
+```package-install
 npm install -D oxlint-plugin-complexity
 ```
 

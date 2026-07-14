@@ -40,6 +40,7 @@ Common `init` flags for non-interactive / CI use:
 | `--editors <editors...>` | Editors to configure (use `universal` for `.vscode/settings.json`). |
 | `--agents <agents...>` | AI agents to enable (use `universal` for `AGENTS.md`). |
 | `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules. |
+| `--js-plugins <plugins...>` | Optional Oxlint JS plugins to enable (`eslint-plugin-github`, `eslint-plugin-sonarjs`, `oxlint-plugin-react-doctor`). |
 | `--type-aware` | Enable type-aware linting. |
 | `--install-skill` | Install the reusable Ultracite skill after setup. |
 | `--skip-install` | Configure without installing dependencies. |

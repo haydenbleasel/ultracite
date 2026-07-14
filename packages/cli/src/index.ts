@@ -40,6 +40,10 @@ program
   .option("--integrations <integrations...>", "Integrations to enable")
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
+    "--js-plugins <plugins...>",
+    "Oxlint JS plugins to enable (eslint-plugin-github, eslint-plugin-sonarjs, oxlint-plugin-react-doctor)"
+  )
+  .option(
     "--type-aware",
     "Enable type-aware linting (enables project/scanner rules)"
   )
@@ -53,6 +57,7 @@ program
       hooks: opts.hooks,
       installSkill: opts.installSkill,
       integrations: opts.integrations,
+      "js-plugins": opts.jsPlugins,
       linter: opts.linter,
       pm: opts.pm,
       quiet:

@@ -11,6 +11,7 @@ const noop = () => {
 // Mock all modules before importing
 mock.module("@clack/prompts", () => ({
   cancel: mock(noop),
+  confirm: mock(() => Promise.resolve(false)),
   intro: mock(noop),
   isCancel: mock(() => false),
   log: {

@@ -70,6 +70,7 @@ const noop = () => {
 
 mock.module("@clack/prompts", () => ({
   cancel: mock(noop),
+  confirm: mock(() => Promise.resolve(false)),
   intro: mock(noop),
   isCancel: mock(() => false),
   log: {
@@ -97,6 +98,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -143,6 +145,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -204,6 +207,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -251,6 +255,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mockCancel,
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
@@ -308,6 +313,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mockCancel,
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock((val) => val === Symbol.for("cancel")),
       log: {
@@ -362,6 +368,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -417,6 +424,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -458,6 +466,125 @@ describe("initialize", () => {
     expect(mockWriteFile).toHaveBeenCalled();
   });
 
+  test("asks which optional Oxlint JS plugins to enable in interactive setup", async () => {
+    const mockMultiselect = mock((promptOptions: { message?: string }) => {
+      if (promptOptions.message?.includes("JS plugins")) {
+        return Promise.resolve([
+          "eslint-plugin-github",
+          "eslint-plugin-sonarjs",
+          "oxlint-plugin-react-doctor",
+        ]);
+      }
+      return Promise.resolve([]);
+    });
+    const writtenContents: string[] = [];
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      writeFile: mock((_path: string, content: string) => {
+        writtenContents.push(content);
+        return Promise.resolve();
+      }),
+    }));
+
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mockMultiselect,
+      outro: mock(noop),
+      select: mock(() => Promise.resolve("oxlint")),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await initialize({ skipInstall: true });
+
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Which JS plugins would you like to add (optional)?",
+        options: [
+          { label: "eslint-plugin-github", value: "eslint-plugin-github" },
+          { label: "eslint-plugin-sonarjs", value: "eslint-plugin-sonarjs" },
+          {
+            label: "oxlint-plugin-react-doctor",
+            value: "oxlint-plugin-react-doctor",
+          },
+        ],
+      })
+    );
+    expect(
+      writtenContents.some((content) =>
+        content.includes('"ultracite/oxlint/js-plugins"')
+      )
+    ).toBe(true);
+  });
+
+  test("installs Oxlint JS plugin dependencies when js-plugins flag is set", async () => {
+    const installedPackages: string[] = [];
+    const mockAddDep = mock((pkg: string | string[]) => {
+      installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+      return Promise.resolve();
+    });
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      writeFile: mock(() => Promise.resolve()),
+    }));
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      "js-plugins": [
+        "eslint-plugin-github",
+        "eslint-plugin-sonarjs",
+        "oxlint-plugin-react-doctor",
+      ],
+      linter: "oxlint",
+      pm: "npm",
+      skipInstall: false,
+    });
+
+    expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
+    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.1.0");
+    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.7.1");
+  });
+
   test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {
     const installedPackages: string[] = [];
     const mockAddDep = mock((pkg: string | string[]) => {
@@ -474,6 +601,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -526,6 +654,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: mockLog,
@@ -570,6 +699,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: mockLog,
@@ -661,6 +791,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -704,6 +835,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -747,6 +879,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -790,6 +923,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -837,6 +971,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -875,6 +1010,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -966,6 +1102,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1065,6 +1202,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1137,6 +1275,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1188,6 +1327,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1236,6 +1376,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1290,6 +1431,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1334,6 +1476,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1378,6 +1521,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1422,6 +1566,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1474,6 +1619,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: mockLog,
@@ -1508,6 +1654,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: {
@@ -1547,6 +1694,7 @@ describe("initialize", () => {
 
     mock.module("@clack/prompts", () => ({
       cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
       isCancel: mock(() => false),
       log: mockLog,
@@ -2992,6 +3140,7 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         cancel: mockCancel,
+        confirm: mock(() => Promise.resolve(false)),
         intro: mock(noop),
         isCancel: mock((val) => val === Symbol.for("cancel")),
         log: {
@@ -3034,6 +3183,7 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         cancel: mockCancel,
+        confirm: mock(() => Promise.resolve(false)),
         intro: mock(noop),
         isCancel: mock((val) => val === Symbol.for("cancel")),
         log: {
@@ -3085,6 +3235,7 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         cancel: mockCancel,
+        confirm: mock(() => Promise.resolve(false)),
         intro: mock(noop),
         isCancel: mock((val) => val === Symbol.for("cancel")),
         log: {
@@ -3136,6 +3287,7 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         cancel: mockCancel,
+        confirm: mock(() => Promise.resolve(false)),
         intro: mock(noop),
         isCancel: mock((val) => val === Symbol.for("cancel")),
         log: {
@@ -3177,6 +3329,7 @@ describe("helper functions", () => {
 
       mock.module("@clack/prompts", () => ({
         cancel: mock(noop),
+        confirm: mock(() => Promise.resolve(false)),
         intro: mock(noop),
         isCancel: mock(() => false),
         log: {
