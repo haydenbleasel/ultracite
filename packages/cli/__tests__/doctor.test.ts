@@ -6,14 +6,19 @@ mock.module("cross-spawn", () => ({
   sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
 }));
 
-// Resolution walks the real node_modules tree, which the mocked fs below can't
-// represent — config-resolution.test.ts covers it directly. Tests that care
-// flip this instead.
-const resolution = { resolvable: true };
+// Doctor resolves ultracite out of node_modules, so the fs mocks below have to
+// describe it. Tests exercising the "not installed" state omit it instead.
+const ULTRACITE_PACKAGE_JSON = JSON.stringify({
+  exports: {
+    "./biome/*": "./config/biome/*/biome.jsonc",
+    "./eslint/*": "./config/eslint/*/eslint.config.mjs",
+    "./oxlint/*": { default: "./config/oxlint/*/index.mjs" },
+  },
+  name: "ultracite",
+});
 
-mock.module("../src/config-resolution", () => ({
-  canResolveUltracite: () => resolution.resolvable,
-}));
+const isNodeModulesPath = (filePath: string): boolean =>
+  filePath.includes("node_modules");
 
 mock.module("node:fs", () => ({
   accessSync: mock(() => {
@@ -63,6 +68,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -91,6 +99,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.endsWith(".biome.jsonc")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -112,7 +123,9 @@ describe("doctor", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock((path: string) =>
+        isNodeModulesPath(String(path)) ? ULTRACITE_PACKAGE_JSON : "{}"
+      ),
     }));
 
     expect(() => doctor()).toThrow("Doctor checks failed");
@@ -156,6 +169,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"formatter": {"indentStyle": "space"}}';
         }
@@ -186,7 +202,9 @@ describe("doctor", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock((path: string) =>
+        isNodeModulesPath(String(path)) ? ULTRACITE_PACKAGE_JSON : "{}"
+      ),
     }));
 
     // Will warn but not fail (config missing is warn-level for shared checks)
@@ -225,6 +243,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -262,6 +283,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("eslint.config")) {
           return "import ultracite/eslint";
         }
@@ -294,6 +318,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("eslint.config")) {
           return 'import core from "ultracite/eslint/core";';
         }
@@ -354,6 +381,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
@@ -389,6 +419,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "some-other-config";';
         }
@@ -425,6 +458,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
@@ -454,6 +490,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
@@ -477,7 +516,9 @@ describe("doctor", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock((path: string) =>
+        isNodeModulesPath(String(path)) ? ULTRACITE_PACKAGE_JSON : "{}"
+      ),
     }));
 
     expect(() => doctor()).toThrow("Doctor checks failed");
@@ -521,7 +562,9 @@ describe("doctor", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
       existsSync: mock(() => false),
-      readFileSync: mock(() => "{}"),
+      readFileSync: mock((path: string) =>
+        isNodeModulesPath(String(path)) ? ULTRACITE_PACKAGE_JSON : "{}"
+      ),
     }));
 
     expect(() => doctor()).toThrow("Doctor checks failed");
@@ -548,6 +591,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("eslint.config")) {
           return 'import something from "some-other-config";';
         }
@@ -580,6 +626,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -608,6 +657,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -663,6 +715,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
@@ -683,10 +738,21 @@ describe("doctor", () => {
     mock.module("cross-spawn", () => ({
       sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
+    // Nothing under node_modules: ultracite is declared but never installed,
+    // which is the state Biome fails on.
     mock.module("node:fs", () => ({
-      accessSync: mock(() => {}),
+      accessSync: mock((path: string) => {
+        if (isNodeModulesPath(String(path))) {
+          throw new Error("ENOENT");
+        }
+      }),
       existsSync: mock((path: string) => {
         const p = String(path);
+
+        if (isNodeModulesPath(p)) {
+          return false;
+        }
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
@@ -698,12 +764,9 @@ describe("doctor", () => {
       }),
     }));
 
-    resolution.resolvable = false;
-
     try {
       expect(() => doctor()).toThrow("Doctor checks failed");
     } finally {
-      resolution.resolvable = true;
       consoleLogSpy.mockRestore();
     }
   });
@@ -725,6 +788,9 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+        if (isNodeModulesPath(p)) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
