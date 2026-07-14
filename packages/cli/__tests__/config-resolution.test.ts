@@ -104,6 +104,22 @@ describe("config-resolution", () => {
 
       expect(canResolveUltracite("biome", PROJECT, fileSystem)).toBe(false);
     });
+
+    // Node substitutes every `*` in the target, so a target using the wildcard
+    // more than once has to expand in full — replacing only the first would
+    // resolve to a path that doesn't exist.
+    test("substitutes every wildcard in the export target", () => {
+      writeFile(
+        "node_modules/ultracite/package.json",
+        JSON.stringify({
+          exports: { "./biome/*": "./config/biome/*/*.jsonc" },
+          name: "ultracite",
+        })
+      );
+      writeFile("node_modules/ultracite/config/biome/core/core.jsonc", "{}");
+
+      expect(canResolveUltracite("biome", PROJECT, fileSystem)).toBe(true);
+    });
   });
 
   describe("findUnresolvableBiomeConfig", () => {

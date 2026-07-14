@@ -104,7 +104,10 @@ const matchExportKey = (
 
   const wildcard = subpath.slice(prefix.length, subpath.length - suffix.length);
 
-  return target.replace("*", wildcard);
+  // Node substitutes every `*` in the target, not just the first
+  // (PACKAGE_TARGET_RESOLVE), so a two-wildcard target must expand the same way
+  // here or we'd resolve a path the linter never looks at.
+  return target.replaceAll("*", wildcard);
 };
 
 /**
