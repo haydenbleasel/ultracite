@@ -1,3 +1,12 @@
+## 7.9.4
+
+### Patch Changes
+
+- f480c12: Upgrade Biome to 2.5.3 to fix the LSP scanner deadlock ([#10845](https://github.com/biomejs/biome/issues/10845)) where editors get stuck on "Biome is scanning the project".
+- 1d70c40: Fail fast with an actionable message when Biome can't resolve `ultracite/biome/core`. Biome resolves that config out of the project's `node_modules`, so it errors with an opaque "module not found" whenever Ultracite isn't installed there — a state `npx ultracite check` / `bunx ultracite check` hide, because they run the CLI from a temp cache regardless. `check` and `fix` now detect it before invoking Biome and say what's actually wrong, and `doctor` verifies that Ultracite resolves rather than just appearing in `package.json` ([#750](https://github.com/haydenbleasel/ultracite/issues/750)).
+- 38d10bc: Move Biome's `noUnknownAttribute` rule out of the core preset and into the `react` preset. The rule only recognises React's JSX attribute names, so projects using Solid, Svelte, Vue, or Qwik were incorrectly flagged for framework-standard attributes such as `class`.
+- cf723bd: Add interactive and non-interactive selection for optional Oxlint JS plugins during init.
+
 ## 7.9.3
 
 ### Patch Changes
