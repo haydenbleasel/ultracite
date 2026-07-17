@@ -9,7 +9,7 @@ import {
   select,
   spinner,
 } from "@clack/prompts";
-import { addDevDependency, detectPackageManager } from "nypm";
+import { addDevDependency } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
@@ -36,6 +36,7 @@ import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
   assertSupportedPackageManagerName,
+  detectPackageManager,
   normalizePackageManager,
 } from "./package-manager";
 import { readPackageJson } from "./schemas";

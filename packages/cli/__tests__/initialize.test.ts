@@ -24,6 +24,7 @@ import {
   upsertStylelintConfig,
   upsertTsConfig,
 } from "../src/initialize";
+import { preferBunPackageManager } from "../src/package-manager";
 
 const npmPm = { command: "npm", name: "npm" } as PackageManager;
 
@@ -594,6 +595,14 @@ describe("initialize", () => {
     expect(mockLog.info).toHaveBeenCalled();
   });
 
+  test("prefers Bun when nypm misdetects a Bun lockfile as npm", () => {
+    const detected = preferBunPackageManager(
+      { command: "npm", name: "npm" } as PackageManager,
+      true
+    );
+
+    expect(detected).toMatchObject({ command: "bun", name: "bun" });
+  });
   test("rejects unsupported explicit package managers before installing", async () => {
     const mockAddDep = mock(() => Promise.resolve());
 

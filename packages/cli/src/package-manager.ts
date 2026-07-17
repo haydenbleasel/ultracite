@@ -1,3 +1,7 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+
+import { detectPackageManager as detectNypmPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 const supportedPackageManagers = [
@@ -36,3 +40,24 @@ export const normalizePackageManager = (
     name,
   };
 };
+
+export const preferBunPackageManager = <T extends PackageManager | undefined>(
+  detected: T,
+  hasBunLockfile: boolean
+): T => {
+  if (detected?.name !== "npm" || !hasBunLockfile) {
+    return detected;
+  }
+
+  return {
+    ...detected,
+    command: "bun",
+    name: "bun",
+  } as T;
+};
+
+export const detectPackageManager = async (cwd: string) =>
+  preferBunPackageManager(
+    await detectNypmPackageManager(cwd),
+    existsSync(path.join(cwd, "bun.lock"))
+  );
