@@ -60,7 +60,7 @@ const selectedJsPluginRulePrefixes = new Set(${JSON.stringify(rulePrefixes)});
 const selectedJsPlugins = {
   ...jsPlugins,
   jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
-    selectedJsPluginNames.has(plugin.name)
+    selectedJsPluginNames.has(typeof plugin === "string" ? plugin : plugin.name)
   ),
   overrides: jsPlugins.overrides?.map((override) => ({
     ...override,
