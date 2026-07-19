@@ -17,6 +17,8 @@ npx ultracite init
 
 Then follow the [Usage](/docs/usage) guide to get started, or check out [Setup](/docs/setup) for more granular control.
 
+Coming from an existing setup? There are step-by-step guides for migrating from [ESLint](/docs/migrate/eslint), [Prettier](/docs/migrate/prettier), [Stylelint](/docs/migrate/stylelint), [Biome](/docs/migrate/biome), and [Oxlint](/docs/migrate/oxlint).
+
 ## How does Ultracite work?
 
 Once set up, Ultracite runs mostly in the background — automatically formatting your code and applying fixes every time you save your files. Because the underlying tools are highly optimized (especially the Rust-based Biome and Oxlint), running Ultracite's checks is extremely fast and can comfortably run on every save without lag. This means you can focus on building and shipping instead of manually correcting style issues or debugging runtime errors.
@@ -46,3 +48,12 @@ Ultracite is designed to be as type-safe as possible. It uses TypeScript's stric
 ### Plays nice with others
 
 Ultracite works alongside other tools and libraries without conflict. You can choose the toolchain that best fits your project's needs.
+
+## Next steps
+
+- Run checks from the command line and your editor with the [Usage](/docs/usage) guide.
+- Enforce clean commits with [Git hooks](/docs/git-hooks), or set Ultracite up across a [monorepo](/docs/monorepos).
+- Wire up your AI tooling with editor [rules](/docs/ai/rules), [hooks](/docs/ai/hooks), and [skills](/docs/ai/skills).
+- Upgrading from an older major? Follow the guides for [v5](/docs/upgrade/v5), [v6](/docs/upgrade/v6), and [v7](/docs/upgrade/v7).
+- Stuck on something? Check the [FAQ](/docs/faq) and [Troubleshooting](/docs/troubleshooting) pages.
+- Keep up with new releases on the [changelog](/changelog).
