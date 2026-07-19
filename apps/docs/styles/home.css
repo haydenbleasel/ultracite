@@ -2,14 +2,17 @@
    only — no @theme/@apply here; token utilities live in ../theme.css. */
 
 /* Tailwind v4 makes the bare `border`/`divide-*` utilities fall back to
-   currentColor (near-white in dark mode). Restore a token default — inside
+   currentColor (black in light mode). Restore a token default — inside
    @layer base so Tailwind's own utilities layer (border-accent on the active
-   tab, border-white/10, …) still wins. Scoped to the homepage (this file only
-   loads there). */
+   tab, border-white/10, …) still wins. The `:root` prefix outweighs
+   preflight's zero-specificity `border: 0 solid` reset, which is required:
+   Astro inlines this sheet into the page BEFORE the linked Tailwind
+   stylesheet, so with equal specificity preflight would win on source order.
+   Scoped to the homepage (this file only loads there). */
 @layer base {
-  *,
-  ::before,
-  ::after {
+  :root *,
+  :root ::before,
+  :root ::after {
     border-color: var(--color-border);
   }
 }
