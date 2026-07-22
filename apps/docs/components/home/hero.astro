@@ -7,10 +7,9 @@ import Installer from "./installer.astro";
 interface Props {
   description: string;
   version: string;
-  releaseUrl: string;
 }
 
-const { description, version, releaseUrl } = Astro.props;
+const { description, version } = Astro.props;
 
 const logos = [
   ...providers.map((provider) => ({
@@ -26,9 +25,7 @@ const logos = [
   <div class="grid justify-items-center gap-4 text-center">
     <a
       class="group flex w-fit items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
-      href={releaseUrl}
-      rel="noopener noreferrer"
-      target="_blank"
+      href="/changelog"
     >
       <span
         aria-hidden="true"

@@ -10,8 +10,6 @@ const packageJsonPath = path.join(
   "package.json"
 );
 
-const repoUrl = "https://github.com/haydenbleasel/ultracite";
-
 let cached: string | undefined;
 
 export const getLatestVersion = async (): Promise<string> => {
@@ -25,6 +23,3 @@ export const getLatestVersion = async (): Promise<string> => {
   cached = version;
   return version;
 };
-
-export const getReleaseUrl = (version: string): string =>
-  `${repoUrl}/releases/tag/ultracite%40${version}`;

@@ -15,11 +15,10 @@ import Social from "../components/home/social.astro";
 import Sponsors from "../components/home/sponsors.astro";
 import Videos from "../components/home/videos.astro";
 import ZeroConfig from "../components/home/zero-config.astro";
-import { getLatestVersion, getReleaseUrl } from "../lib/latest-version";
+import { getLatestVersion } from "../lib/latest-version";
 
 const { config } = data;
 const version = await getLatestVersion();
-const releaseUrl = getReleaseUrl(version);
 const siteDescription = "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps teams and AI write consistent, type-safe code.";
 ---
 
@@ -45,7 +44,7 @@ const siteDescription = "Ultracite is a zero-config preset for ESLint, Biome, an
   <div
     class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
   >
-    <Hero description={siteDescription} releaseUrl={releaseUrl} version={version}>
+    <Hero description={siteDescription} version={version}>
       <Demo />
     </Hero>
     <Logos />
