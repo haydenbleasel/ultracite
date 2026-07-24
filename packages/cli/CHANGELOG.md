@@ -1,3 +1,9 @@
+## 7.9.5
+
+### Patch Changes
+
+- ba61c02: Fix generated oxlint.config.ts accessing plugin.name on ExternalPluginEntry without narrowing the string form, which caused a TypeScript error in projects that type-check the config (#753)
+
 ## 7.9.4
 
 ### Patch Changes
