@@ -715,6 +715,14 @@
     {
       // Package.json and similar JSON config files
       "includes": ["**/package.json", ".github/**/*.json"],
+      "assist": {
+        "enabled": true,
+        "actions": {
+          "source": {
+            "useSortedKeys": "off"
+          }
+        }
+      },
       "json": {
         "parser": {
           "allowTrailingCommas": true
