@@ -19,6 +19,12 @@ const prettierOverrides = Object.fromEntries(
     .filter(([key]) => key.startsWith("svelte/"))
 );
 
-const config = Object.assign(baseRules, prettierOverrides);
+const overrideRules = {
+  // Requires a user-supplied list of elements to restrict; its schema
+  // rejects a bare "error" with no options.
+  "svelte/no-restricted-html-elements": "off",
+};
+
+const config = Object.assign(baseRules, prettierOverrides, overrideRules);
 
 export default config;

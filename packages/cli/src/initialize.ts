@@ -111,7 +111,7 @@ interface InitializeFlags {
   "type-aware"?: boolean;
 }
 
-// eslint-plugin-unicorn@70 and eslint-plugin-astro@2 require ESLint >= 10;
+// eslint-plugin-unicorn@72 and eslint-plugin-astro@3 require ESLint >= 10;
 // the whole preset is verified against ESLint 10.
 const supportedEslintVersion = "^10.0.0";
 const eslintCoreDevDependencies: Record<string, string> = {

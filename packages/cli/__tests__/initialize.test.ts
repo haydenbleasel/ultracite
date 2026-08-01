@@ -580,8 +580,8 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
-    expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
-    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.1.0");
+    expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
+    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.0");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.7.1");
   });
 
@@ -1810,7 +1810,7 @@ describe("helper functions", () => {
       expect(mockAddDep).toHaveBeenCalled();
       expect(installedPackages).toContain("eslint@^10.0.0");
       expect(installedPackages).toContain("@eslint/js@^10.0.0");
-      expect(installedPackages).toContain("eslint-plugin-github@6.0.0");
+      expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
       expect(installedPackages).not.toContain("eslint@latest");
     });
 
@@ -1868,7 +1868,7 @@ describe("helper functions", () => {
       ).toBe(true);
       expect(
         writtenContents.some((content) =>
-          content.includes('"eslint-plugin-github": "6.0.0"')
+          content.includes('"eslint-plugin-github": "6.1.2"')
         )
       ).toBe(true);
     });

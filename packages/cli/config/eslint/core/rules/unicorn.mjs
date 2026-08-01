@@ -3,7 +3,12 @@ import plugin from "eslint-plugin-unicorn";
 const { rules } = plugin;
 
 const availableKeys = Object.keys(rules).filter(
-  (key) => !rules[key].meta.deprecated
+  (key) =>
+    !rules[key].meta.deprecated &&
+    // CSS-only rules (meta.languages without "js/js", e.g.
+    // prefer-explicit-viewport-units) fail config validation when
+    // configured for JS files under ESLint 10.
+    (rules[key].meta.languages?.includes("js/js") ?? true)
 );
 
 const baseRules = Object.fromEntries(
