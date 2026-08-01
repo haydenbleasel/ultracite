@@ -35,6 +35,7 @@ export default defineConfig({
         "vitest/no-test-return-statement": "error",
         "vitest/no-unneeded-async-expect-function": "error",
         "vitest/padding-around-after-all-blocks": "error",
+        "vitest/padding-around-test-blocks": "error",
         "vitest/prefer-called-exactly-once-with": "error",
         "vitest/prefer-called-once": "error",
         "vitest/prefer-called-with": "error",

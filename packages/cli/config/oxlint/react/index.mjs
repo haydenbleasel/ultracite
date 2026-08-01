@@ -59,6 +59,12 @@ export default defineConfig({
     // forwardRef is deprecated in React 19; react-doctor/no-react19-deprecated-apis
     // (opt-in js-plugins preset) covers it.
     "react/forward-ref-uses-ref": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: "arrow-function",
+      },
+    ],
     "react/hook-use-state": "error",
     "react/iframe-missing-sandbox": "error",
     "react/jsx-boolean-value": "off",

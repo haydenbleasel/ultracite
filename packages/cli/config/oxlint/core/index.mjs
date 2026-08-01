@@ -59,6 +59,7 @@ export default defineConfig({
     "getter-return": "error",
     "grouped-accessor-pairs": "error",
     "guard-for-in": "error",
+    "id-denylist": "error",
     "id-length": "off",
     "id-match": "error",
     "init-declarations": "off",
@@ -283,6 +284,7 @@ export default defineConfig({
 
     // ── node ───────────────────────────────────────────────────────────
     "node/callback-return": "error",
+    "node/exports-style": "error",
     "node/global-require": "error",
     "node/handle-callback-err": "error",
     "node/no-exports-assign": "error",
@@ -291,6 +293,9 @@ export default defineConfig({
     "node/no-path-concat": "error",
     "node/no-process-env": "off",
     "node/no-sync": "off",
+    // Top-level await is idiomatic in ESM — Astro frontmatter, build
+    // scripts, and CLI entry points all rely on it.
+    "node/no-top-level-await": "off",
 
     // ── oxc ────────────────────────────────────────────────────────────
     "oxc/approx-constant": "error",
@@ -298,6 +303,7 @@ export default defineConfig({
     "oxc/bad-bitwise-operator": "error",
     "oxc/bad-char-at-comparison": "error",
     "oxc/bad-comparison-sequence": "error",
+    "oxc/bad-match-all-arg": "error",
     "oxc/bad-min-max-func": "error",
     "oxc/bad-object-literal-comparison": "error",
     "oxc/bad-replace-all-arg": "error",
