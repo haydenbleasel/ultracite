@@ -1,3 +1,38 @@
+## 7.10.0
+
+### Minor Changes
+
+- cd0a36c: Add `--claude` and `--codex` flags to `ultracite fix`. After the normal autofix pass, remaining diagnostics are handed to the Claude Code or Codex CLI non-interactively, one agent run per affected file, with a live per-issue spinner that flips to ✓/✗ once the fix is verified by a re-lint. Fixes that don't survive verification are retried (up to 3 attempts per file) with the fresh diagnostics and feedback that the previous approach failed. Works with all three linter modes (Oxlint, Biome, ESLint); exits non-zero if any issues remain, matching the plain `fix` contract.
+- e089510: Scope React Doctor's framework-specific rules to per-framework add-on presets (#752)
+
+  The `ultracite/oxlint/js-plugins` preset no longer enables React Doctor's `nextjs-*` and TanStack (`query-*`, `tanstack-start-*`) rules for every consumer. Rules like `nextjs-no-img-element` and `tanstack-start-no-anchor-element` fire on plain `<img>`/`<a>` JSX and recommend framework replacements, which falsely errored in Vite + React and other non-Next/non-TanStack projects.
+
+  Those rules now live in two new add-on presets:
+
+  - `ultracite/oxlint/next/js-plugins`
+  - `ultracite/oxlint/tanstack/js-plugins`
+
+  `ultracite init` wires the matching add-on automatically when you select the framework together with `oxlint-plugin-react-doctor`. If you manage `oxlint.config.ts` by hand and use Next.js or TanStack, add the matching add-on preset to `extends` alongside `js-plugins` to keep those rules — or re-run `npx ultracite init`.
+
+  Also fixes re-running `init` on a config that already extends `js-plugins` producing a duplicate `import jsPlugins` declaration.
+
+### Patch Changes
+
+- 3320cd8: Update Biome to 2.5.6. No stable (non-nursery) rules were added, removed, or promoted between 2.5.3 and 2.5.6, so the preset configs are unchanged.
+- 477cd6e: Update ESLint to 10.8.0 and all ESLint plugins to their latest versions. Highlights:
+
+  - `eslint-plugin-react-doctor` 0.9.3: the react preset expands from 149 to 417 rules, adopting the upstream `recommended` set (react-router, three.js/r3f, ink, motion, remotion, zustand/valtio/mobx, and more) while excluding rules that duplicate already-enabled `react`, `react-hooks`, and `jsx-a11y` rules. The next preset gains `nextjs-async-dynamic-api-not-awaited` and `nextjs-metadata-url-consistency`; the tanstack preset gains `tanstack-start-missing-scripts`, `query-floating-mutate-async`, and `query-no-mutation-in-effect-as-read`.
+  - `eslint-plugin-unicorn` 72: adds `no-missing-local-resource`, `no-multiple-promise-resolver-calls`, `no-shorthand-property-overrides`, `no-transition-all`, `no-unnecessary-string-trim`, `no-useless-re-export`, `prefer-then-catch`, and `require-frontmatter-fields`. CSS-only rules are excluded from the preset since they fail config validation for JS files.
+  - `eslint-plugin-sonarjs` 4.2: adds 11 rules including `no-fixed-wait-in-tests`, `parameterized-tests`, `assertions-in-test-cases`, `prefer-native-lodash-alternative`, and `explicit-test-skip`.
+  - `typescript-eslint` 8.65: `@typescript-eslint/no-loop-func` and `@typescript-eslint/no-restricted-imports` were deprecated upstream in favor of the base rules, which now apply to TypeScript files.
+  - `eslint-plugin-astro` 3: removes `astro/no-omitted-end-tags` and `astro/valid-compile`.
+  - `eslint-plugin-svelte` 3.22: adds `no-bind-value-on-checkable-inputs` and `no-conflicting-module-names`; `no-restricted-html-elements` is now off because its schema requires a user-supplied element list.
+  - `@angular-eslint/eslint-plugin` 22.1: adds `inject-at-top` and `prefer-service-decorator`.
+
+- b81578b: Fix the useSortedPackageJson action not being executed by turning on assist actions for package.json-like files.
+- 9ec454a: Update oxlint to 1.76.0 and oxfmt to 0.61.0. New stable rules added to the presets: `oxc/bad-match-all-arg`, `id-denylist`, `node/exports-style` (core), `react/function-component-definition` with arrow-function components (react), and `vitest/padding-around-test-blocks` (vitest). `node/no-top-level-await` is off — top-level await is idiomatic in ESM, Astro frontmatter, and build scripts — and the ESLint preset's `n/no-top-level-await` is now off to match. No rules were removed or promoted out of nursery.
+- ba61c02: Fix generated oxlint.config.ts accessing plugin.name on ExternalPluginEntry without narrowing the string form, which caused a TypeScript error in projects that type-check the config (#753)
+
 ## 7.9.4
 
 ### Patch Changes
