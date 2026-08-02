@@ -1,0 +1,76 @@
+---
+// Static terminal mock of `npx ultracite fix --claude`, frozen mid-run: one
+// file settled, one being fixed, one queued — mirroring the real renderer.
+import SectionIntro from "./section-intro.astro";
+
+const settledIssues = [
+  {
+    location: "src/queue.ts:2:22",
+    message: "Promise executor functions…",
+    rule: "no-async-promise-executor",
+  },
+  {
+    location: "src/queue.ts:2:22",
+    message: "Async function has no `await` expression.",
+    rule: "require-await",
+  },
+  {
+    location: "src/queue.ts:23:26",
+    message: "Async function has no `await` expression.",
+    rule: "require-await",
+  },
+];
+
+const activeIssues = [
+  {
+    location: "src/config-loader.ts:3:10",
+    message: "eval can be harmful.",
+    rule: "no-eval",
+  },
+  {
+    location: "src/config-loader.ts:10:22",
+    message: "Expected === and instead saw ==",
+    rule: "eqeqeq",
+  },
+  {
+    location: "src/config-loader.ts:18:10",
+    message: "Both sides of this comparison…",
+    rule: "no-self-compare",
+  },
+];
+
+---
+
+<div class="grid gap-8">
+  <SectionIntro
+    description="Autofix handles the mechanical issues. For everything else, <code>ultracite fix --claude</code> or <code>--codex</code> hands the remaining diagnostics to your local agent CLI — an autonomous harness that repairs your codebase file by file and proves every fix."
+    title="Fix everything, not just the autofixable"
+  />
+
+  <div class="mx-auto w-full max-w-3xl">
+    <div
+      class="overflow-hidden rounded-xl border border-border bg-background sm:rounded-2xl"
+    >
+      <div
+        class="pointer-events-none grid select-none grid-cols-3 items-center border-b px-4 py-3"
+      >
+        <div class="flex items-center gap-2">
+          <div class="size-2 rounded-full bg-border"></div>
+          <div class="size-2 rounded-full bg-border"></div>
+          <div class="size-2 rounded-full bg-border"></div>
+        </div>
+        <div class="flex items-center justify-center">
+          <p class="font-mono text-muted-foreground text-xs">Terminal</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto p-6 sm:p-8">
+        <pre
+          class="font-mono text-foreground text-xs sm:text-sm"><code><div class="mb-4"><span class="text-muted-foreground">$</span> npx ultracite fix --claude</div><div><span class="text-muted-foreground">┌</span>  ultracite fix — powered by Claude Code</div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span>  Autofix complete. 9 issues in 3 files left for Claude Code.</div>{settledIssues.map((issue) => (<div><span class="text-green-600 dark:text-green-400">✓</span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}{activeIssues.map((issue) => (<div><span class="hp-agent-spinner text-cyan-600 dark:text-cyan-400"></span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}<div><span class="text-muted-foreground">… 3 more issues in 1 file</span></div></code></pre>
+      </div>
+    </div>
+    <p class="mt-3 text-center text-muted-foreground text-xs">
+      Requires the Claude Code or Codex CLI. Agents run non-interactively with
+      edit-only permissions.
+    </p>
+  </div>
+</div>
