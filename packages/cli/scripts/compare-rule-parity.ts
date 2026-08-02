@@ -178,7 +178,7 @@ const surfaces: Surface[] = [
     eslintConfigs: ["core", "react", "next"],
     file: "app/page.tsx",
     name: "next (TSX)",
-    oxlintConfigs: ["core", "js-plugins", "react", "next"],
+    oxlintConfigs: ["core", "js-plugins", "react", "next", "next/js-plugins"],
   },
 ];
 

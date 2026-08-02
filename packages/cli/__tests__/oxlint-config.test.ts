@@ -111,9 +111,13 @@ describe("oxlint package exports", () => {
       import.meta.dirname,
       "../config/oxlint"
     );
-    const configs = readdirSync(oxlintConfigDirectory, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name)
+    // Presets can nest one level deep (e.g. next/js-plugins).
+    const configs = readdirSync(oxlintConfigDirectory, {
+      recursive: true,
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isFile() && entry.name === "index.mjs")
+      .map((entry) => path.relative(oxlintConfigDirectory, entry.parentPath))
       .toSorted();
 
     const typedConfigs = configs.filter((config) => {
@@ -412,6 +416,42 @@ describe("oxlint js-plugins config", () => {
         .filter((name) => rules[name]?.meta?.deprecated);
 
       expect(deprecated).toEqual([]);
+    });
+  }
+
+  // Framework-specific react-doctor rules fire on generic JSX (<img>, <a>)
+  // and recommend framework replacements, so they live in per-framework
+  // add-on presets rather than the base js-plugins preset (#752).
+  test("js-plugins does not contain framework-specific react-doctor rules", async () => {
+    const config = await readOxlintConfig("js-plugins");
+
+    const frameworkRules = Object.keys(config.rules ?? {}).filter(
+      (rule) =>
+        rule.startsWith("react-doctor/nextjs-") ||
+        rule.startsWith("react-doctor/query-") ||
+        rule.startsWith("react-doctor/tanstack-")
+    );
+
+    expect(frameworkRules).toEqual([]);
+  });
+
+  for (const [addOn, prefixes] of [
+    ["next/js-plugins", ["react-doctor/nextjs-"]],
+    ["tanstack/js-plugins", ["react-doctor/query-", "react-doctor/tanstack-"]],
+  ] as const) {
+    test(`${addOn} declares react-doctor and only contains framework rules`, async () => {
+      const config = await readOxlintConfig(addOn);
+
+      expect(config.jsPlugins).toEqual([
+        { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
+      ]);
+
+      const ruleNames = Object.keys(config.rules ?? {});
+      expect(ruleNames.length).toBeGreaterThan(0);
+      const misplaced = ruleNames.filter(
+        (rule) => !prefixes.some((prefix) => rule.startsWith(prefix))
+      );
+      expect(misplaced).toEqual([]);
     });
   }
 

@@ -23,16 +23,23 @@ const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
 };
 
 const main = async () => {
-  const frameworks = await readdir(configDir);
+  const entries = await readdir(configDir, {
+    recursive: true,
+    withFileTypes: true,
+  });
+  // Presets can nest one level deep (e.g. next/js-plugins); every preset
+  // directory is identified by its index.mjs.
+  const frameworks = entries
+    .filter((entry) => entry.isFile() && entry.name === "index.mjs")
+    .map((entry) => path.relative(configDir, entry.parentPath))
+    .toSorted();
 
   const results = await Promise.all(
-    frameworks
-      .filter((framework) => !framework.startsWith("."))
-      .map(async (framework) => {
-        const configPath = path.join(configDir, framework, "index.mjs");
-        const valid = await validateOxlintConfig(configPath);
-        return { framework, valid };
-      })
+    frameworks.map(async (framework) => {
+      const configPath = path.join(configDir, framework, "index.mjs");
+      const valid = await validateOxlintConfig(configPath);
+      return { framework, valid };
+    })
   );
 
   for (const { framework, valid } of results) {

@@ -95,6 +95,80 @@ describe("oxlint linter", () => {
       expect(content).toContain(getOxlintConfigPath("next"));
     });
 
+    test("adds framework js-plugins add-ons when react-doctor is selected", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        frameworks: ["react", "next", "tanstack"],
+        jsPlugins: ["oxlint-plugin-react-doctor"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      expect(content).toContain(
+        'import nextJsPlugins from "ultracite/oxlint/next/js-plugins";'
+      );
+      expect(content).toContain(
+        'import tanstackJsPlugins from "ultracite/oxlint/tanstack/js-plugins";'
+      );
+      expect(content).toContain("nextJsPlugins, tanstackJsPlugins");
+    });
+
+    test("does not add framework js-plugins add-ons without react-doctor", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        frameworks: ["react", "next"],
+        jsPlugins: ["eslint-plugin-github", "eslint-plugin-sonarjs"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      expect(content).not.toContain("ultracite/oxlint/next/js-plugins");
+      expect(content).not.toContain("ultracite/oxlint/tanstack/js-plugins");
+    });
+
+    test("does not add framework js-plugins add-ons without the framework", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        frameworks: ["react"],
+        jsPlugins: ["oxlint-plugin-react-doctor"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      expect(content).not.toContain("ultracite/oxlint/next/js-plugins");
+      expect(content).not.toContain("ultracite/oxlint/tanstack/js-plugins");
+    });
+
     test("creates oxlint config with test framework", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -330,6 +404,52 @@ export default defineConfig({
       expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
       expect(content).toContain(getOxlintConfigPath("react"));
       expect(content).toContain(getOxlintConfigPath("next"));
+    });
+
+    test("does not duplicate js-plugins import when updating a config that already has it", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [core, next, nextJsPlugins, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update({
+        frameworks: ["next"],
+        jsPlugins: ["oxlint-plugin-react-doctor"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = writeCall[1] as string;
+      const jsPluginsImports = content.match(
+        /import jsPlugins from "ultracite\/oxlint\/js-plugins";/gu
+      );
+      expect(jsPluginsImports?.length).toBe(1);
+      const nextAddOnImports = content.match(
+        /import nextJsPlugins from "ultracite\/oxlint\/next\/js-plugins";/gu
+      );
+      expect(nextAddOnImports?.length).toBe(1);
     });
 
     test("warns when file mentions ultracite but extends cannot be parsed", async () => {

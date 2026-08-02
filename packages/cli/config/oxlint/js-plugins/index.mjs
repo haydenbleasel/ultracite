@@ -8,7 +8,11 @@ import { defineConfig } from "oxlint";
 // that require type information are not supported by the JS plugin bridge and
 // are excluded. The react-doctor rules were previously bundled into the
 // react/next/tanstack presets; they live here now so those framework presets
-// run entirely on oxlint's native Rust rules.
+// run entirely on oxlint's native Rust rules. Framework-specific react-doctor
+// rules (Next.js, TanStack) are NOT included here — they fire on generic JSX
+// and would false-positive in other frameworks. Extend
+// ultracite/oxlint/next/js-plugins or ultracite/oxlint/tanstack/js-plugins
+// alongside this preset when using those frameworks.
 //
 // Install the plugins in your project, then extend the preset:
 //
@@ -424,51 +428,5 @@ export default defineConfig({
     "react-doctor/zod-v4-no-deprecated-error-customization": "error",
     "react-doctor/zod-v4-no-deprecated-schema-apis": "error",
     "react-doctor/zod-v4-prefer-top-level-string-formats": "error",
-    // Next.js rules.
-    "react-doctor/nextjs-async-client-component": "error",
-    "react-doctor/nextjs-error-boundary-missing-use-client": "error",
-    "react-doctor/nextjs-global-error-missing-html-body": "error",
-    "react-doctor/nextjs-image-missing-sizes": "error",
-    "react-doctor/nextjs-inline-script-missing-id": "error",
-    "react-doctor/nextjs-missing-metadata": "error",
-    "react-doctor/nextjs-no-a-element": "error",
-    "react-doctor/nextjs-no-client-fetch-for-server-data": "error",
-    "react-doctor/nextjs-no-client-side-redirect": "error",
-    "react-doctor/nextjs-no-css-link": "error",
-    "react-doctor/nextjs-no-default-export-in-route-handler": "error",
-    "react-doctor/nextjs-no-edge-og-runtime": "error",
-    "react-doctor/nextjs-no-font-link": "error",
-    "react-doctor/nextjs-no-google-analytics-script": "error",
-    "react-doctor/nextjs-no-head-import": "error",
-    "react-doctor/nextjs-no-img-element": "error",
-    "react-doctor/nextjs-no-native-script": "error",
-    "react-doctor/nextjs-no-polyfill-script": "error",
-    "react-doctor/nextjs-no-redirect-in-try-catch": "error",
-    "react-doctor/nextjs-no-script-in-head": "error",
-    "react-doctor/nextjs-no-side-effect-in-get-handler": "error",
-    "react-doctor/nextjs-no-use-search-params-without-suspense": "error",
-    "react-doctor/nextjs-no-vercel-og-import": "error",
-    // TanStack Query/Router/Start rules.
-    "react-doctor/query-destructure-result": "error",
-    "react-doctor/query-mutation-missing-invalidation": "error",
-    "react-doctor/query-no-query-in-effect": "error",
-    "react-doctor/query-no-rest-destructuring": "error",
-    "react-doctor/query-no-usequery-for-mutation": "error",
-    "react-doctor/query-no-void-query-fn": "error",
-    "react-doctor/query-stable-query-client": "error",
-    "react-doctor/tanstack-start-get-mutation": "error",
-    "react-doctor/tanstack-start-loader-parallel-fetch": "error",
-    "react-doctor/tanstack-start-missing-head-content": "error",
-    "react-doctor/tanstack-start-no-anchor-element": "error",
-    "react-doctor/tanstack-start-no-direct-fetch-in-loader": "error",
-    "react-doctor/tanstack-start-no-dynamic-server-fn-import": "error",
-    "react-doctor/tanstack-start-no-navigate-in-render": "error",
-    "react-doctor/tanstack-start-no-secrets-in-loader": "error",
-    "react-doctor/tanstack-start-no-use-server-in-handler": "error",
-    "react-doctor/tanstack-start-no-useeffect-fetch": "error",
-    "react-doctor/tanstack-start-redirect-in-try-catch": "error",
-    "react-doctor/tanstack-start-route-property-order": "error",
-    "react-doctor/tanstack-start-server-fn-method-order": "error",
-    "react-doctor/tanstack-start-server-fn-validate-input": "error",
   },
 });

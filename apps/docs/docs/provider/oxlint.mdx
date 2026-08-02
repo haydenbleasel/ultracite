@@ -63,6 +63,11 @@ npx ultracite init --linter oxlint --js-plugins eslint-plugin-github eslint-plug
 
 > **Note:** The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
 
+React Doctor's framework-specific rules are split into per-framework add-on presets so they only run where they apply — `nextjs-*` rules like `nextjs-no-img-element` fire on plain `<img>`/`<a>` JSX and would false-positive in non-Next.js apps. `init` wires these up automatically when you pick the matching framework together with `oxlint-plugin-react-doctor`:
+
+- `ultracite/oxlint/next/js-plugins` — React Doctor's Next.js rules
+- `ultracite/oxlint/tanstack/js-plugins` — React Doctor's TanStack Query/Router/Start rules
+
 If you're adding the preset manually instead of through `init`, install the plugins yourself:
 
 ```package-install
@@ -76,6 +81,21 @@ import jsPlugins from "ultracite/oxlint/js-plugins";
 
 export default defineConfig({
   extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+In a Next.js or TanStack app, add the matching add-on preset as well:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
+
+export default defineConfig({
+  extends: [core, next, jsPlugins, nextJsPlugins],
   ignorePatterns: core.ignorePatterns,
 });
 ```

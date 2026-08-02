@@ -33,9 +33,17 @@ const oxlintJsPluginConfig: Record<
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 
-// Helper to generate a valid import identifier from a config name
+// Frameworks with a react-doctor add-on preset (ultracite/oxlint/<name>/js-plugins)
+// holding their framework-specific rules.
+const reactDoctorFrameworkAddOns = ["next", "tanstack"];
+
+// Helper to generate a valid import identifier from a config name. Nested
+// paths keep every segment (next/js-plugins -> nextJsPlugins) so they never
+// collide with the base js-plugins identifier.
 const getOxlintConfigIdentifier = (configPath: string) => {
-  const name = configPath.split("/").pop() ?? configPath;
+  const name = configPath
+    .replace(/^ultracite\/oxlint\//u, "")
+    .replaceAll("/", "-");
   return name.replaceAll(/-(?<letter>[a-z])/gu, (_, letter: string) =>
     letter.toUpperCase()
   );
@@ -84,9 +92,31 @@ const generateConfigContent = (
   jsPlugins: OxlintJsPlugin[] = []
 ) => {
   const hasJsPlugins = jsPlugins.length > 0;
+
+  // When plugins are selected, the base js-plugins preset is imported and
+  // wrapped as selectedJsPlugins below — drop it from the plain extends so
+  // the import isn't declared twice (e.g. on update of an existing config).
+  const resolvedExtends = extendsList.filter(
+    (ext) => !(hasJsPlugins && ext === getOxlintConfigPath("js-plugins"))
+  );
+
+  // Framework-specific react-doctor rules live in per-framework add-on
+  // presets; wire them up when the framework preset is present.
+  if (jsPlugins.includes("oxlint-plugin-react-doctor")) {
+    for (const framework of reactDoctorFrameworkAddOns) {
+      const addOn = getOxlintConfigPath(`${framework}/js-plugins`);
+      if (
+        resolvedExtends.includes(getOxlintConfigPath(framework)) &&
+        !resolvedExtends.includes(addOn)
+      ) {
+        resolvedExtends.push(addOn);
+      }
+    }
+  }
+
   const imports = [
     `import { defineConfig } from "oxlint";`,
-    ...extendsList.map(
+    ...resolvedExtends.map(
       (ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
     ),
     hasJsPlugins ? `import jsPlugins from "ultracite/oxlint/js-plugins";` : "",
@@ -95,7 +125,7 @@ const generateConfigContent = (
     .join("\n");
 
   const identifiers = [
-    ...extendsList.map((ext) => getOxlintConfigIdentifier(ext)),
+    ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
     ...(hasJsPlugins ? ["selectedJsPlugins"] : []),
   ].join(", ");
 

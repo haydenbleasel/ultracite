@@ -24,11 +24,19 @@ declare const config: OxfmtConfig;
 export default config;
 `;
 
-// Generate oxlint declarations
+// Generate oxlint declarations. Presets can nest one level deep (e.g.
+// next/js-plugins), so include subdirectories that hold an index.mjs.
 const oxlintDir = path.join(configDir, "oxlint");
 const configs = readdirSync(oxlintDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
-  .map((entry) => entry.name);
+  .flatMap((entry) => {
+    const nested = readdirSync(path.join(oxlintDir, entry.name), {
+      withFileTypes: true,
+    })
+      .filter((child) => child.isDirectory())
+      .map((child) => `${entry.name}/${child.name}`);
+    return [entry.name, ...nested];
+  });
 
 for (const config of configs) {
   const dir = path.join(oxlintDir, config);
