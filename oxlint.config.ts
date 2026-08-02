@@ -15,6 +15,13 @@ export default defineConfig({
     "test",
     "benchmark/fixtures",
     "benchmark/.work",
+    // Vendored remocn registry components (shadcn-style) in the video package
+    // are upstream content, not project source; linting them just diverges
+    // from upstream and gets clobbered on the next registry update.
+    "packages/video/src/components",
+    "packages/video/src/lib/utils.ts",
+    "packages/video/src/lib/remocn-ui",
+    "packages/video/.agents/skills",
   ],
   overrides: [
     {
