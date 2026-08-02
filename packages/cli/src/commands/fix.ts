@@ -1,9 +1,11 @@
+import { runAgentFix } from "../agent-fix";
 import {
   buildUnresolvableBiomeConfigMessage,
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
 import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
+import type { FixAgent } from "../linter-args";
 import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
 import { detectLinter } from "../utils";
 
@@ -97,7 +99,17 @@ const runOxfmtFix = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("oxfmt", result);
 };
 
-export const fix = (files: string[], passthrough: string[] = []): void => {
+interface FixOptions {
+  agent?: FixAgent | null;
+}
+
+// The plain path stays synchronous (and throws synchronously); only agent
+// mode returns a promise. The command action awaits either shape.
+export const fix = (
+  files: string[],
+  passthrough: string[] = [],
+  { agent }: FixOptions = {}
+): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
 
@@ -105,6 +117,15 @@ export const fix = (files: string[], passthrough: string[] = []): void => {
     throw new Error(
       "No linter configuration found. Run `ultracite init` to set up a linter."
     );
+  }
+
+  if (agent) {
+    return runAgentFix({
+      agent,
+      files: normalizedFiles,
+      linter,
+      passthrough,
+    });
   }
 
   switch (linter) {

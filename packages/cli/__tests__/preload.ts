@@ -38,11 +38,13 @@ mock.module("node:fs", () => ({
     isSymbolicLink: () => false,
   })),
   mkdirSync: mock(() => {}),
+  mkdtempSync: mock((prefix: string) => `${prefix}mock`),
   readFileSync: mock(() => "{}"),
   readdirSync: (...args: unknown[]) =>
     (
       globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
     ).__realReaddirSync(...args),
   realpathSync: mock((path: string) => path),
+  rmSync: mock(() => {}),
   writeFileSync: mock(() => {}),
 }));

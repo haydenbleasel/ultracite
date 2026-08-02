@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  extractAgentFlags,
   normalizeFileArgs,
   splitLinterArgs,
   toStylelintTargets,
@@ -81,5 +82,39 @@ describe("linter args", () => {
 
   test("returns no targets when only non-style files are given", () => {
     expect(toStylelintTargets(["src/index.ts", "package.json"])).toEqual([]);
+  });
+
+  test("extracts --claude and strips it from passthrough", () => {
+    expect(extractAgentFlags(["--claude", "--type-aware"])).toEqual({
+      agent: "claude",
+      passthrough: ["--type-aware"],
+    });
+  });
+
+  test("extracts --codex and strips it from passthrough", () => {
+    expect(extractAgentFlags(["--unsafe", "--codex"])).toEqual({
+      agent: "codex",
+      passthrough: ["--unsafe"],
+    });
+  });
+
+  test("returns no agent when neither flag is present", () => {
+    expect(extractAgentFlags(["--type-aware"])).toEqual({
+      agent: null,
+      passthrough: ["--type-aware"],
+    });
+  });
+
+  test("deduplicates a repeated agent flag", () => {
+    expect(extractAgentFlags(["--claude", "--claude"])).toEqual({
+      agent: "claude",
+      passthrough: [],
+    });
+  });
+
+  test("throws when both agent flags are passed", () => {
+    expect(() => extractAgentFlags(["--claude", "--codex"])).toThrow(
+      "Pass either --claude or --codex, not both."
+    );
   });
 });

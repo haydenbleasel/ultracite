@@ -27,6 +27,8 @@ The interactive setup guides you through choosing your formatter/linter, framewo
 
 `check` and `fix` accept an optional list of files or globs; omit them to run against the whole project. Add `-v` / `--version` or `-h` / `--help` for CLI details.
 
+`fix` also accepts `--claude` or `--codex` to hand any remaining unfixable issues to the Claude Code or Codex CLI, which repairs them autonomously file by file — each fix verified by a re-lint before it's marked done.
+
 Common `init` flags for non-interactive / CI use:
 
 | Flag | Description |

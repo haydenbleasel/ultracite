@@ -59,6 +59,24 @@ npx ultracite fix --unsafe
 
 Some Biome fixes are intentionally marked unsafe because they can change runtime behavior. For example, Ultracite already enables Biome's `noSubstr` rule, but rewriting `substring()` or `substr()` to `slice()` only happens when you run `ultracite fix --unsafe`.
 
+### AI-Powered Fixing
+
+The `--claude` and `--codex` flags hand any issues that survive the autofix pass to a local agent CLI, which repairs them autonomously — file by file, with a live per-issue status line that flips to ✓ once the fix is verified:
+
+```bash title="Terminal"
+npx ultracite fix --claude
+npx ultracite fix --codex
+```
+
+The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixable) diagnostics, and then invokes the agent once per affected file with the full, untruncated diagnostics — including rule help text and documentation URLs. After each agent run, Ultracite re-lints the file and only marks an issue fixed if the diagnostic actually cleared. The command exits non-zero if any issues remain, matching the plain `fix` contract.
+
+Requirements and behavior:
+
+- `--claude` requires the [Claude Code CLI](https://claude.com/claude-code) (`npm install -g @anthropic-ai/claude-code`); `--codex` requires the [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`). Both must be authenticated.
+- Agents run non-interactively with scoped permissions: Claude Code uses `--permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --full-auto`.
+- Each file gets a 5-minute budget; a failed or timed-out agent run marks that file's issues as unfixed and the run continues with the next file.
+- Other flags combine as usual, e.g. `npx ultracite fix --claude --type-aware --unsafe`.
+
 ### Type-Aware Linting
 
 Type-aware linting enables deeper analysis rules that leverage TypeScript's type system and project structure. The `--type-aware` flag is passed during `ultracite init` and configures your project accordingly.
