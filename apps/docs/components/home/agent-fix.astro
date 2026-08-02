@@ -1,5 +1,5 @@
 ---
-// Static terminal mock of `npx ultracite fix --claude`, frozen mid-run: one
+// Static terminal mock of `npx ultracite fix --codex`, frozen mid-run: one
 // file settled, one being fixed, one queued — mirroring the real renderer.
 import SectionIntro from "./section-intro.astro";
 
@@ -65,7 +65,7 @@ const activeIssues = [
       </div>
       <div class="overflow-x-auto p-6 sm:p-8">
         <pre
-          class="font-mono text-foreground text-xs sm:text-sm"><code><div class="mb-4"><span class="text-muted-foreground">$</span> npx ultracite fix --claude</div><div><span class="text-muted-foreground">┌</span>  ultracite fix — powered by Claude Code</div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span>  Autofix complete. 9 issues in 3 files left for Claude Code.</div>{settledIssues.map((issue) => (<div><span class="text-green-600 dark:text-green-400">✓</span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}{activeIssues.map((issue) => (<div><span class="hp-agent-spinner text-cyan-600 dark:text-cyan-400"></span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}<div><span class="text-muted-foreground">… 3 more issues in 1 file</span></div></code></pre>
+          class="font-mono text-foreground text-xs leading-[1.35] sm:text-sm"><code><div><span class="text-muted-foreground">$</span> npx ultracite fix --codex</div><div> </div><div><span class="text-muted-foreground">┌</span>  ultracite fix — powered by Codex</div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span>  Autofix complete. 9 issues in 3 files left for Codex.</div>{settledIssues.map((issue) => (<div><span class="text-green-600 dark:text-green-400">✓</span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}{activeIssues.map((issue) => (<div><span class="hp-agent-spinner text-cyan-600 dark:text-cyan-400"></span> <span class="text-muted-foreground">{issue.location}</span>  {issue.rule} — {issue.message}</div>))}<div><span class="text-muted-foreground">… 3 more issues in 1 file</span></div></code></pre>
       </div>
     </div>
     <p class="mt-3 text-center text-muted-foreground text-xs">
