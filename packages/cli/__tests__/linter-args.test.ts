@@ -117,4 +117,13 @@ describe("linter args", () => {
       "Pass either --claude or --codex, not both."
     );
   });
+
+  test("does not treat inherited object keys as agent flags", () => {
+    expect(
+      extractAgentFlags(["constructor", "toString", "hasOwnProperty"])
+    ).toEqual({
+      agent: null,
+      passthrough: ["constructor", "toString", "hasOwnProperty"],
+    });
+  });
 });

@@ -74,7 +74,7 @@ Requirements and behavior:
 
 - `--claude` requires the [Claude Code CLI](https://claude.com/claude-code) (`npm install -g @anthropic-ai/claude-code`); `--codex` requires the [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`). Both must be authenticated.
 - Agents run non-interactively with scoped permissions: Claude Code uses `--permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --full-auto`.
-- Each file gets a 5-minute budget; a failed or timed-out agent run marks that file's issues as unfixed and the run continues with the next file.
+- Each agent attempt gets a 5-minute budget, and the re-lint decides the outcome either way — even a failed or timed-out run gets credit for diagnostics it managed to clear. Whatever remains unfixed after the attempts is marked ✗ and the run continues with the next file.
 - Other flags combine as usual, e.g. `npx ultracite fix --claude --type-aware --unsafe`.
 
 ### Type-Aware Linting

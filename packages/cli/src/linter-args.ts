@@ -73,10 +73,13 @@ export const toStylelintTargets = (files: string[]): string[] => {
 
 export type FixAgent = "claude" | "codex";
 
-const agentFlags: Record<string, FixAgent> = {
-  "--claude": "claude",
-  "--codex": "codex",
-};
+// A Map, not a plain object: passthrough can contain arbitrary user tokens
+// (everything before a `--` separator), and an object lookup would resolve
+// inherited keys like "constructor" as if they were agent flags.
+const agentFlags = new Map<string, FixAgent>([
+  ["--claude", "claude"],
+  ["--codex", "codex"],
+]);
 
 /**
  * `--claude` and `--codex` are Ultracite's own flags, but `splitLinterArgs`
@@ -90,7 +93,7 @@ export const extractAgentFlags = (
   const remaining: string[] = [];
 
   for (const arg of passthrough) {
-    const agent = agentFlags[arg];
+    const agent = agentFlags.get(arg);
 
     if (agent) {
       agents.add(agent);

@@ -101,6 +101,16 @@ describe("agent adapters", () => {
     expect(call[1]).toEqual(["--version"]);
   });
 
+  test("assertAgentAvailable accepts a clean exit with empty stdout", () => {
+    const mockSpawn = mock((_cmd: string, _args: string[]) => ({
+      status: 0,
+      stdout: "",
+    }));
+    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+
+    expect(() => assertAgentAvailable(agentAdapters.claude)).not.toThrow();
+  });
+
   test("assertAgentAvailable throws an install hint when the CLI is missing", () => {
     const mockSpawn = mock(() => ({
       error: new Error("ENOENT"),

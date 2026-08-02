@@ -42,7 +42,9 @@ export const assertAgentAvailable = (adapter: AgentAdapter): void => {
     encoding: "utf-8",
   });
 
-  if (result.status === 0 && result.stdout) {
+  // A clean exit is enough — some CLIs print the version to stderr. A missing
+  // binary surfaces as a spawn error with a null status, not an exit code.
+  if (result.status === 0) {
     return;
   }
 
