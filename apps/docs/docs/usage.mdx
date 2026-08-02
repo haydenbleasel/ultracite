@@ -68,7 +68,7 @@ npx ultracite fix --claude
 npx ultracite fix --codex
 ```
 
-The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixable) diagnostics, and then invokes the agent once per affected file with the full, untruncated diagnostics — including rule help text and documentation URLs. After each agent run, Ultracite re-lints the file and only marks an issue fixed if the diagnostic actually cleared. The command exits non-zero if any issues remain, matching the plain `fix` contract.
+The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixable) diagnostics, and then invokes the agent once per affected file with the full, untruncated diagnostics — including rule help text and documentation URLs. After each agent run, Ultracite re-lints the file and only marks an issue fixed if the diagnostic actually cleared. If any diagnostics survive, the agent gets up to two more attempts on that file, each with the fresh post-edit diagnostics and explicit feedback that the previous approach failed — so a superficial edit that dodges the symptom rather than the rule gets caught and retried instead of reported as fixed. The command exits non-zero if any issues remain, matching the plain `fix` contract.
 
 Requirements and behavior:
 

@@ -744,6 +744,40 @@ describe("fix with an agent", () => {
     );
   });
 
+  test("retries with a follow-up prompt when the first attempt leaves issues", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      // Autofix pass reports one issue; the first verify still reports it
+      // (superficial fix); the second verify comes back clean.
+      oxlintOutputs: [
+        oxlintDiagnostics,
+        oxlintDiagnostics,
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(2);
+    const retryCall = mockRunAgent.mock.calls.at(1) as unknown as [
+      { command: string },
+      string,
+    ];
+    expect(retryCall[1]).toContain("attempt 2");
+    expect(retryCall[1]).toContain("did not resolve");
+  });
+
+  test("stops retrying after the attempt limit and reports failure", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: [oxlintDiagnostics, oxlintDiagnostics],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(3);
+  });
+
   test("does not spawn an agent when autofix leaves no issues", async () => {
     const { mockRunAgent } = mockAgentEnvironment({
       oxlintOutputs: ['{"diagnostics":[]}'],

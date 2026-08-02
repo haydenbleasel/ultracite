@@ -10,7 +10,7 @@ import type { Linter } from "../utils";
 import { agentAdapters, assertAgentAvailable } from "./agents";
 import { partitionByRemaining } from "./diff";
 import { getLinterAdapter } from "./linters";
-import { buildPrompt, writeDiagnosticsFile } from "./prompt";
+import { buildPrompt, buildRetryPrompt, writeDiagnosticsFile } from "./prompt";
 import { createRenderer } from "./renderer";
 import type { FileGroup } from "./renderer";
 import { AGENT_TIMEOUT_MS, runAgent } from "./run-agent";
@@ -18,6 +18,7 @@ import type { Diagnostic, LinterAdapter } from "./types";
 
 const MS_PER_MINUTE = 60_000;
 const STDERR_NOTE_LENGTH = 200;
+const MAX_AGENT_ATTEMPTS = 3;
 
 export interface AgentFixOptions {
   agent: FixAgent;
@@ -84,26 +85,69 @@ interface FileFixContext {
   tempDir: string;
 }
 
-const fixFileGroup = async (
+interface FileFixAttemptResult {
+  agentResult: Awaited<ReturnType<typeof runAgent>>;
+  attempts: number;
+  verified: ReturnType<typeof verifySafely>;
+}
+
+/**
+ * Runs the agent, re-lints, and — when diagnostics survive — retries with a
+ * prompt that carries the file's fresh diagnostics and calls out that the
+ * previous approach failed. This is what stops a plausible-but-superficial
+ * edit (e.g. re-spelling an escape sequence) from ending the run.
+ */
+const attemptFileFix = async (
   context: FileFixContext,
-  group: FileGroup
-): Promise<{ fixed: number; remaining: number }> => {
-  const { agentAdapter, linterAdapter, passthrough, renderer, tempDir } =
-    context;
+  group: FileGroup,
+  issues: Diagnostic[],
+  attempt: number
+): Promise<FileFixAttemptResult> => {
+  const { agentAdapter, linterAdapter, passthrough, tempDir } = context;
 
-  renderer.startFile(group.file);
-
-  const jsonPath = writeDiagnosticsFile(tempDir, group.file, group.issues);
-  const prompt = buildPrompt(group.file, group.issues, jsonPath);
+  const jsonPath = writeDiagnosticsFile(tempDir, group.file, issues);
+  const prompt =
+    attempt === 1
+      ? buildPrompt(group.file, issues, jsonPath)
+      : buildRetryPrompt(group.file, issues, jsonPath, attempt);
   const agentResult = await runAgent(agentAdapter, prompt);
 
   // Verify even after an agent failure — a timed-out agent may still have
   // fixed some issues, and the re-lint is what the icons must reflect.
   const verified = verifySafely(linterAdapter, group.file, passthrough);
+
+  const { remaining } = verified;
+  const canRetry = !agentResult.timedOut && attempt < MAX_AGENT_ATTEMPTS;
+
+  if (remaining !== null && remaining.length > 0 && canRetry) {
+    return attemptFileFix(context, group, remaining, attempt + 1);
+  }
+
+  return { agentResult, attempts: attempt, verified };
+};
+
+const fixFileGroup = async (
+  context: FileFixContext,
+  group: FileGroup
+): Promise<{ fixed: number; remaining: number }> => {
+  const { renderer } = context;
+
+  renderer.startFile(group.file);
+
+  const { agentResult, attempts, verified } = await attemptFileFix(
+    context,
+    group,
+    group.issues,
+    1
+  );
   const notes: string[] = [];
 
   if (!agentResult.ok) {
-    notes.push(buildFailureNote(agentAdapter.label, agentResult));
+    notes.push(buildFailureNote(context.agentAdapter.label, agentResult));
+  }
+
+  if (attempts > 1) {
+    notes.push(`Took ${attempts} attempts.`);
   }
 
   if (verified.remaining === null) {

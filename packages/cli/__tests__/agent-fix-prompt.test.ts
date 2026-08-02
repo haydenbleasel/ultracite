@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { agentAdapters, assertAgentAvailable } from "../src/agent-fix/agents";
 import { partitionByRemaining } from "../src/agent-fix/diff";
-import { buildPrompt } from "../src/agent-fix/prompt";
+import { buildPrompt, buildRetryPrompt } from "../src/agent-fix/prompt";
 import type { Diagnostic } from "../src/agent-fix/types";
 
 const diagnostic = (overrides: Partial<Diagnostic> = {}): Diagnostic => ({
@@ -42,6 +42,24 @@ describe("agent-fix prompt", () => {
     );
     expect(prompt).toContain("/tmp/ultracite-x/foo.ts.json");
     expect(prompt).toContain("Edit only the file above.");
+    expect(prompt).toContain("Do not add suppression comments");
+    expect(prompt).toContain("Fix the underlying problem");
+  });
+
+  test("retry prompt calls out the failed previous attempt", () => {
+    const prompt = buildRetryPrompt(
+      "src/foo.ts",
+      [diagnostic()],
+      "/tmp/ultracite-x/foo.ts.json",
+      2
+    );
+
+    expect(prompt).toContain("This is attempt 2");
+    expect(prompt).toContain("did not resolve them");
+    expect(prompt).toContain("structurally different approach");
+    expect(prompt).toContain(
+      "1. line 12, col 5 — eslint(no-unused-vars): 'result' is assigned a value but never used."
+    );
     expect(prompt).toContain("Do not add suppression comments");
   });
 });
