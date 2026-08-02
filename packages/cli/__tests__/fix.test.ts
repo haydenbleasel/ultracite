@@ -1,9 +1,18 @@
-import { afterEach, describe, expect, mock, test } from "bun:test";
+import { afterAll, afterEach, describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 import process from "node:process";
 
+import * as runAgentModule from "../src/agent-fix/run-agent";
 import { fix } from "../src/commands/fix";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
+
+// mock.restore() does not undo mock.module(), and namespace imports are live
+// views that would reflect the mock. Copy the real exports at load time so
+// afterAll can re-install them and keep the mock from leaking into other files.
+const realRunAgent = {
+  AGENT_TIMEOUT_MS: runAgentModule.AGENT_TIMEOUT_MS,
+  runAgent: runAgentModule.runAgent,
+};
 
 describe("fix", () => {
   afterEach(() => {
@@ -641,5 +650,213 @@ describe("fix", () => {
     } finally {
       restoreFileSystemMock();
     }
+  });
+});
+
+const oxlintDiagnostics = JSON.stringify({
+  diagnostics: [
+    {
+      code: "eslint(no-eval)",
+      filename: "src/bad.ts",
+      help: "Avoid eval().",
+      labels: [{ span: { column: 13, line: 4 } }],
+      message: "eval can be harmful.",
+      severity: "error",
+    },
+  ],
+});
+
+const mockAgentEnvironment = ({
+  agentOk = true,
+  oxlintOutputs,
+}: {
+  agentOk?: boolean;
+  oxlintOutputs: string[];
+}) => {
+  let oxlintCalls = 0;
+  const mockSpawn = mock((cmd: string, _args: string[]) => {
+    if (cmd === "claude" || cmd === "codex") {
+      return { status: 0, stdout: "2.0.0" };
+    }
+    if (cmd === "oxlint") {
+      const stdout =
+        oxlintOutputs[Math.min(oxlintCalls, oxlintOutputs.length - 1)];
+      oxlintCalls += 1;
+      return { status: 0, stdout };
+    }
+    return { status: 0, stdout: "" };
+  });
+  const mockRunAgent = mock(() =>
+    Promise.resolve({ ok: agentOk, stderr: "", timedOut: false })
+  );
+
+  mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => "oxlint"),
+  }));
+  mock.module("../src/agent-fix/run-agent", () => ({
+    AGENT_TIMEOUT_MS: 300_000,
+    runAgent: mockRunAgent,
+  }));
+
+  return { mockRunAgent, mockSpawn };
+};
+
+describe("fix with an agent", () => {
+  afterEach(() => {
+    mock.restore();
+  });
+
+  afterAll(() => {
+    mock.module("../src/agent-fix/run-agent", () => realRunAgent);
+  });
+
+  test("runs the agent per file and succeeds when verification clears all issues", async () => {
+    const { mockRunAgent, mockSpawn } = mockAgentEnvironment({
+      oxlintOutputs: [oxlintDiagnostics, '{"diagnostics":[]}'],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(1);
+    const [agentCall] = mockRunAgent.mock.calls as unknown as [
+      [{ command: string }, string],
+    ];
+    expect(agentCall[0].command).toBe("claude");
+    expect(agentCall[1]).toContain("eslint(no-eval)");
+    expect(agentCall[1]).toContain("eval can be harmful.");
+
+    // Version check, autofix pass (oxfmt + oxlint), verify pass (oxfmt + oxlint).
+    const commands = mockSpawn.mock.calls.map((call) => call[0]);
+    expect(commands).toEqual(["claude", "oxfmt", "oxlint", "oxfmt", "oxlint"]);
+
+    const verifyCall = mockSpawn.mock.calls.at(4);
+    expect(verifyCall?.[1]).toContain("src/bad.ts");
+  });
+
+  test("throws a LinterExitError when issues remain after the agent run", async () => {
+    mockAgentEnvironment({
+      oxlintOutputs: [oxlintDiagnostics, oxlintDiagnostics],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+  });
+
+  test("retries with a follow-up prompt when the first attempt leaves issues", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      // Autofix pass reports one issue; the first verify still reports it
+      // (superficial fix); the second verify comes back clean.
+      oxlintOutputs: [
+        oxlintDiagnostics,
+        oxlintDiagnostics,
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(2);
+    const retryCall = mockRunAgent.mock.calls.at(1) as unknown as [
+      { command: string },
+      string,
+    ];
+    expect(retryCall[1]).toContain("attempt 2");
+    expect(retryCall[1]).toContain("did not resolve");
+  });
+
+  test("stops retrying after the attempt limit and reports failure", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: [oxlintDiagnostics, oxlintDiagnostics],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(3);
+  });
+
+  test("does not spawn an agent when autofix leaves no issues", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: ['{"diagnostics":[]}'],
+    });
+
+    await fix([], [], { agent: "codex" });
+
+    expect(mockRunAgent).not.toHaveBeenCalled();
+  });
+
+  test("maps --unsafe to --fix-dangerously in agent mode", async () => {
+    const { mockSpawn } = mockAgentEnvironment({
+      oxlintOutputs: ['{"diagnostics":[]}'],
+    });
+
+    await fix([], ["--unsafe"], { agent: "claude" });
+
+    const oxlintCall = mockSpawn.mock.calls.find(
+      (call) => call[0] === "oxlint"
+    );
+    expect(oxlintCall?.[1]).toContain("--fix-dangerously");
+    expect(oxlintCall?.[1]).not.toContain("--unsafe");
+  });
+
+  test("throws a setup error when the agent CLI is not installed", async () => {
+    const mockSpawn = mock(() => ({
+      error: new Error("ENOENT"),
+      status: null,
+    }));
+    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "npm install -g @anthropic-ai/claude-code"
+    );
+  });
+
+  test("agent mode works with the biome adapter", async () => {
+    const biomeDiagnostics = JSON.stringify({
+      diagnostics: [
+        {
+          category: "lint/security/noGlobalEval",
+          location: { path: "src/bad.ts", start: { column: 13, line: 4 } },
+          message: "eval() exposes to security risks.",
+          severity: "error",
+        },
+      ],
+    });
+    let biomeCalls = 0;
+    const mockSpawn = mock((cmd: string, _args: string[]) => {
+      if (cmd === "claude") {
+        return { status: 0, stdout: "2.0.0" };
+      }
+      if (cmd === "biome") {
+        biomeCalls += 1;
+        return {
+          status: 0,
+          stdout: biomeCalls === 1 ? biomeDiagnostics : '{"diagnostics":[]}',
+        };
+      }
+      return { status: 0, stdout: "" };
+    });
+    const mockRunAgent = mock(() =>
+      Promise.resolve({ ok: true, stderr: "", timedOut: false })
+    );
+    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "biome"),
+    }));
+    mock.module("../src/agent-fix/run-agent", () => ({
+      AGENT_TIMEOUT_MS: 300_000,
+      runAgent: mockRunAgent,
+    }));
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(1);
+    expect(biomeCalls).toBe(2);
   });
 });

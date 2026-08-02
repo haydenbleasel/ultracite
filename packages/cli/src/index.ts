@@ -9,7 +9,7 @@ import { doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { UltraciteSetupError } from "./config-resolution";
 import { initialize } from "./initialize";
-import { splitLinterArgs } from "./linter-args";
+import { extractAgentFlags, splitLinterArgs } from "./linter-args";
 import { LinterExitError } from "./run-command";
 
 type CommandWithRawArgs = Command & { rawArgs?: string[] };
@@ -91,14 +91,17 @@ program
   .description(
     "Run linter and fix files. Unknown options are passed to the underlying linter."
   )
+  .option("--claude", "Fix remaining issues with the Claude Code CLI")
+  .option("--codex", "Fix remaining issues with the Codex CLI")
   .allowUnknownOption()
   .action(async (args: string[], _opts: unknown, command: Command) => {
-    const { files, passthrough } = splitLinterArgs({
+    const split = splitLinterArgs({
       commandName: "fix",
       parsedArgs: args,
       rawArgs: getRawArgs(command),
     });
-    await fix(files, passthrough);
+    const { agent, passthrough } = extractAgentFlags(split.passthrough);
+    await fix(split.files, passthrough, { agent });
   });
 
 program

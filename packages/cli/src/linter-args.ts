@@ -1,6 +1,8 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
+import { UltraciteSetupError } from "./config-resolution";
+
 type PathExists = (path: string) => boolean;
 
 interface SplitLinterArgsOptions {
@@ -67,6 +69,47 @@ export const toStylelintTargets = (files: string[]): string[] => {
   }
 
   return targets;
+};
+
+export type FixAgent = "claude" | "codex";
+
+// A Map, not a plain object: passthrough can contain arbitrary user tokens
+// (everything before a `--` separator), and an object lookup would resolve
+// inherited keys like "constructor" as if they were agent flags.
+const agentFlags = new Map<string, FixAgent>([
+  ["--claude", "claude"],
+  ["--codex", "codex"],
+]);
+
+/**
+ * `--claude` and `--codex` are Ultracite's own flags, but `splitLinterArgs`
+ * classifies every `-`-prefixed token as linter passthrough, so they must be
+ * stripped here before the passthrough reaches oxlint/biome/eslint.
+ */
+export const extractAgentFlags = (
+  passthrough: string[]
+): { agent: FixAgent | null; passthrough: string[] } => {
+  const agents = new Set<FixAgent>();
+  const remaining: string[] = [];
+
+  for (const arg of passthrough) {
+    const agent = agentFlags.get(arg);
+
+    if (agent) {
+      agents.add(agent);
+      continue;
+    }
+
+    remaining.push(arg);
+  }
+
+  if (agents.size > 1) {
+    throw new UltraciteSetupError("Pass either --claude or --codex, not both.");
+  }
+
+  const [agent = null] = agents;
+
+  return { agent, passthrough: remaining };
 };
 
 export const splitLinterArgs = ({
