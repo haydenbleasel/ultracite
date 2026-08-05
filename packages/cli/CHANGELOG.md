@@ -1,3 +1,21 @@
+## 7.10.1
+
+### Patch Changes
+
+- d018b7f: Fix several agent fix mode (`fix --claude`/`--codex`) issues: runs no longer abort with ENOBUFS when linter JSON output exceeds 1MB, user-supplied format/reporter flags can no longer override the JSON reporter and break parsing, a stuck agent process is force-killed 10 seconds after the timeout instead of hanging forever, and the progress renderer no longer garbles TTY output when file paths and rule names exceed the terminal width.
+- d018b7f: Fix Biome config migration leaving the legacy bare `"extends": ["ultracite"]` form in place, which breaks Biome's module resolution since the package has no root export. It's now mapped to `ultracite/biome/core`.
+- d018b7f: Fix `ultracite doctor` reporting spurious failures: config checks now walk up parent directories (matching `check`/`fix` and the linters themselves) so monorepo packages inheriting a root config pass, `.oxlintrc.json` is accepted as a valid oxlint config (with a migration suggestion), and Prettier/Stylelint configs declared via `package.json` keys are recognized.
+- d018b7f: Fix `ultracite init` corrupting existing Prettier/Stylelint/ESLint configs by writing an ESM module into JSON/YAML/TOML/CJS config files (e.g. `.prettierrc`, `eslint.config.cjs`). Updates now write the default `.mjs` config instead and remove the incompatible file so it can't shadow the new one.
+- d018b7f: Fix `ultracite check`/`fix` misrouting space-separated flag values (e.g. `--max-warnings 10`) into the file list, which scrambled the underlying linter invocation and made formatters fail on bogus targets. Positional files listed before a `--` separator are also kept as lint targets instead of being reclassified as passthrough, which could silently widen formatter runs to the whole project.
+- d018b7f: Fix Lefthook and pre-commit YAML updates silently doing nothing on common config shapes: the Lefthook job is now inserted correctly when `jobs:` isn't the first key under `pre-commit:` (and no longer matches a `jobs:` key in a different hook), `repos: []` in `.pre-commit-config.yaml` is handled, and shapes that can't be safely edited produce a warning instead of writing the file back unchanged.
+- d018b7f: Fix the Husky integration overwriting an existing `.husky/pre-commit` hook: `ultracite init` ran `husky init`, which unconditionally replaces the hook with `npm test`. It now runs plain `husky` to set up the hooks infrastructure without touching the hook file.
+- d018b7f: Fix `ultracite init` destroying user files it couldn't parse or merge: unparseable `tsconfig.json` files are no longer replaced with a minimal config, unparseable `.vscode`/`.zed` settings are no longer overwritten wholesale, and lint-staged configs with function-valued entries are left untouched — all now warn and skip instead.
+- d018b7f: Fix re-running `ultracite init` on an oxlint setup silently enabling the full js-plugins preset — the previously selected JS plugins are now preserved when no new selection is made. Init also no longer flips an explicit `"type": "commonjs"` in package.json to `"module"`; it warns instead.
+- d018b7f: Fix switching linters removing `storybook` from the project's dependencies. It was swept into the removal set as a peer of `eslint-plugin-storybook`, but it's a user-facing tool a project may use independently of linting.
+- d018b7f: Fix Stylelint target generation dropping directories with a dot in their name (e.g. `app.web`) and producing non-matching globs from Windows-style backslash paths. Framework detection also handles negated workspace patterns (`!packages/legacy`) again.
+- d018b7f: Fix the CLI becoming a silent no-op (exiting 0 without linting anything) when a generic `TEST` environment variable is set, as is common in CI matrices. The internal test guard now uses `ULTRACITE_TEST`.
+- 36c7b80: Move @typescript-eslint/utils from dependencies to devDependencies. It was accidentally shipped as a runtime dependency in 7.9.0, pulling eslint and the typescript-eslint packages into every consumer's install (including oxlint-only setups) via npm's automatic peer dependency installation. Nothing in the published package imports it — it only exists to support the workspace-internal rule-parity script.
+
 ## 7.10.0
 
 ### Minor Changes
