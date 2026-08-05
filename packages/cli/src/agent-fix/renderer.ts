@@ -46,6 +46,13 @@ export interface Renderer {
 const pluralize = (count: number, noun: string): string =>
   `${count} ${noun}${count === 1 ? "" : "s"}`;
 
+const truncateEnd = (text: string, max: number): string => {
+  if (text.length <= max) {
+    return text;
+  }
+  return max <= 1 ? text.slice(0, max) : `${text.slice(0, max - 1)}…`;
+};
+
 export const createRenderer = (
   groups: FileGroup[],
   options: RendererOptions
@@ -66,21 +73,31 @@ export const createRenderer = (
   const color = (code: string, text: string): string =>
     useColor ? `${code}${text}${RESET}` : text;
 
+  // Every part is truncated so the whole line fits in one terminal row — a
+  // wrapped line would break the cursor-up math used to rewrite the block.
   const issueLine = (
     icon: string,
     iconColor: string,
     issue: Diagnostic
   ): string => {
-    const location = `${issue.file}:${issue.line}:${issue.column}`;
-    const mid = `  ${issue.rule} — `;
-    const available = columns - 2 - location.length - mid.length;
+    const budget = columns - 2;
+    let location = `${issue.file}:${issue.line}:${issue.column}`;
+    let mid = `  ${issue.rule} — `;
     let { message } = issue;
 
-    if (message.length > available) {
-      message =
-        available < MIN_MESSAGE_WIDTH
-          ? ""
-          : `${message.slice(0, available - 1)}…`;
+    if (location.length >= budget) {
+      location = truncateEnd(location, budget);
+      mid = "";
+      message = "";
+    } else if (location.length + mid.length >= budget) {
+      mid = truncateEnd(mid, budget - location.length);
+      message = "";
+    } else {
+      const available = budget - location.length - mid.length;
+      if (message.length > available) {
+        message =
+          available < MIN_MESSAGE_WIDTH ? "" : truncateEnd(message, available);
+      }
     }
 
     return `${color(iconColor, icon)} ${color(DIM, location)}${mid}${message}`;

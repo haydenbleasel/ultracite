@@ -93,16 +93,16 @@ export const husky = {
   },
   exists: () => exists(path),
   init: (packageManager: PackageManagerName) => {
-    // Initialize husky - this sets up git hooks infrastructure
-    const [command, ...args] = dlxCommand(packageManager, "husky", {
-      args: ["init"],
-    }).split(" ");
+    // Set up the git hooks infrastructure by running plain `husky` — NOT
+    // `husky init`, which unconditionally overwrites .husky/pre-commit with
+    // `npm test`, destroying any existing user hook.
+    const [command, ...args] = dlxCommand(packageManager, "husky").split(" ");
 
     const result = runCommandSync(command, args, { stdio: "pipe" });
 
     if (result.error || (result.status !== null && result.status !== 0)) {
-      // If init fails, it might be because it's already initialized
-      // Continue anyway as we'll create the hook file next
+      // If setup fails (e.g. not a git repository yet), continue anyway —
+      // the prepare script will initialize hooks on the next install
     }
   },
   install: async (packageManager: PackageManager) => {

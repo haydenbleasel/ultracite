@@ -1,6 +1,9 @@
+import { rm } from "node:fs/promises";
+
 import type { options } from "../data/options";
 import { readPackageJsonSync } from "../schemas";
 import {
+  canHoldEsmConfig,
   exists,
   prettierConfigNames,
   validateFrameworkName,
@@ -79,11 +82,20 @@ export const prettier = {
   update: async (opts?: PrettierOptions) => {
     const config = generatePrettierConfig(opts);
     const existingPath = getPrettierConfigPath();
-    await writeProjectFile(
-      existingPath === packageJsonPath
-        ? defaultConfigPath
-        : (existingPath ?? defaultConfigPath),
-      config
-    );
+    const existingFile = existingPath === packageJsonPath ? null : existingPath;
+
+    // Only overwrite a config file that can hold the generated ESM module;
+    // JSON/YAML/TOML/CJS configs get the default .mjs file instead, and the
+    // stale file is removed so Prettier's config resolution doesn't keep
+    // picking it up over the new one.
+    const targetPath =
+      existingFile && canHoldEsmConfig(existingFile)
+        ? existingFile
+        : defaultConfigPath;
+    await writeProjectFile(targetPath, config);
+
+    if (existingFile && existingFile !== targetPath) {
+      await rm(existingFile, { force: true });
+    }
   },
 };

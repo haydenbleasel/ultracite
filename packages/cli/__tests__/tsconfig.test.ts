@@ -154,7 +154,7 @@ describe("tsconfig", () => {
       expect(mockWriteFile).toHaveBeenCalledTimes(2);
     });
 
-    test("handles invalid JSON gracefully", async () => {
+    test("skips files with invalid JSON instead of replacing them", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -169,10 +169,9 @@ describe("tsconfig", () => {
 
       await tsconfig.update();
 
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1]);
-      expect(writtenContent.compilerOptions.strictNullChecks).toBe(true);
+      // An unparseable tsconfig must not be replaced — that would wipe the
+      // user's compiler options
+      expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
     test("handles write error gracefully", async () => {

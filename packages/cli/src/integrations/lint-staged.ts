@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
+import { log } from "@clack/prompts";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 import { addDevDependency, dlxCommand } from "nypm";
@@ -39,8 +40,32 @@ const configFiles = [
 
 // deepmerge concatenates arrays, so re-running init would append another
 // ultracite command on every run — skip configs that already reference it
+// JSON.stringify returns undefined for a top-level function config, so guard
+// the includes call.
 const hasUltraciteCommand = (config: unknown): boolean =>
-  JSON.stringify(config).includes("ultracite");
+  JSON.stringify(config)?.includes("ultracite") ?? false;
+
+// Function-valued entries are a documented lint-staged pattern, but they
+// can't survive a JSON.stringify round-trip — rewriting such a config would
+// silently delete the user's functions.
+const containsFunction = (value: unknown): boolean => {
+  if (typeof value === "function") {
+    return true;
+  }
+  if (Array.isArray(value)) {
+    return value.some((entry) => containsFunction(entry));
+  }
+  if (value && typeof value === "object") {
+    return Object.values(value).some((entry) => containsFunction(entry));
+  }
+  return false;
+};
+
+const warnUnmergeableConfig = (filename: string): void => {
+  log.warn(
+    `${filename} contains function-based entries that can't be merged automatically. Add "npx ultracite fix" (or your package manager's equivalent) to it manually.`
+  );
+};
 
 const readPackageJsonLintStaged = async (): Promise<unknown> => {
   try {
@@ -171,6 +196,11 @@ const updateEsmConfig = async (
     return;
   }
 
+  if (containsFunction(existingConfig)) {
+    warnUnmergeableConfig(filename);
+    return;
+  }
+
   const mergedConfig = deepmerge(
     existingConfig,
     createLintStagedConfig(packageManager)
@@ -193,6 +223,11 @@ const updateCjsConfig = async (
   const existingConfig = imported.default || imported;
 
   if (hasUltraciteCommand(existingConfig)) {
+    return;
+  }
+
+  if (containsFunction(existingConfig)) {
+    warnUnmergeableConfig(filename);
     return;
   }
 

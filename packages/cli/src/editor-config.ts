@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 
+import { log } from "@clack/prompts";
 import { sync as spawnSync } from "cross-spawn";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
@@ -61,9 +62,16 @@ export const createEditorConfig = (
         | Record<string, unknown>
         | undefined;
 
-      // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
-      const configToMerge = existingConfig || {};
-      const newConfig = deepmerge(configToMerge, content);
+      // An unparseable settings file must not be replaced wholesale — that
+      // would destroy whatever the user had in it.
+      if (existingConfig === undefined) {
+        log.warn(
+          `Could not parse ${editor.config.path}; fix its syntax and re-run \`ultracite init\` to add the Ultracite settings.`
+        );
+        return;
+      }
+
+      const newConfig = deepmerge(existingConfig, content);
 
       await writeProjectFile(
         editor.config.path,

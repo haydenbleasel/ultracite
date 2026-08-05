@@ -111,7 +111,7 @@ program
     await doctor();
   });
 
-if (!process.env.TEST) {
+if (!process.env.ULTRACITE_TEST) {
   try {
     await program.parseAsync();
   } catch (error: unknown) {

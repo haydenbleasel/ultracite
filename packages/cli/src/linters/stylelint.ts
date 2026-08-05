@@ -1,5 +1,12 @@
+import { rm } from "node:fs/promises";
+
 import { readPackageJsonSync } from "../schemas";
-import { exists, stylelintConfigNames, writeProjectFile } from "../utils";
+import {
+  canHoldEsmConfig,
+  exists,
+  stylelintConfigNames,
+  writeProjectFile,
+} from "../utils";
 
 const packageJsonPath = "./package.json";
 
@@ -44,11 +51,20 @@ export const stylelint = {
   update: async () => {
     const config = generateStylelintConfig();
     const existingPath = getStylelintConfigPath();
-    await writeProjectFile(
-      existingPath === packageJsonPath
-        ? defaultConfigPath
-        : (existingPath ?? defaultConfigPath),
-      config
-    );
+    const existingFile = existingPath === packageJsonPath ? null : existingPath;
+
+    // Only overwrite a config file that can hold the generated ESM module;
+    // JSON/YAML/CJS configs get the default .mjs file instead, and the stale
+    // file is removed so Stylelint's config resolution doesn't keep picking
+    // it up over the new one.
+    const targetPath =
+      existingFile && canHoldEsmConfig(existingFile)
+        ? existingFile
+        : defaultConfigPath;
+    await writeProjectFile(targetPath, config);
+
+    if (existingFile && existingFile !== targetPath) {
+      await rm(existingFile, { force: true });
+    }
   },
 };

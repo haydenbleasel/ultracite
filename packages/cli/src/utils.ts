@@ -1,4 +1,10 @@
-import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
+import {
+  accessSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  realpathSync,
+} from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -179,6 +185,23 @@ export const updatePackageJson = async ({
     "package.json",
     `${JSON.stringify(newPackageJsonObject, null, 2)}\n`
   );
+};
+
+/**
+ * The config writers generate ESM modules. Writing one into a JSON/YAML/TOML
+ * rc file or a CommonJS module corrupts the config, so updates must check the
+ * target can actually hold ESM before overwriting it in place.
+ */
+export const canHoldEsmConfig = (filePath: string): boolean => {
+  if (filePath.endsWith(".mjs") || filePath.endsWith(".mts")) {
+    return true;
+  }
+
+  if (filePath.endsWith(".js") || filePath.endsWith(".ts")) {
+    return readPackageJsonSync()?.type === "module";
+  }
+
+  return false;
 };
 
 const SAFE_IDENTIFIER = /^[a-z][a-z0-9-]*$/u;
@@ -371,12 +394,20 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
     const deps = new Set(collectDeps(rootPkg));
 
     const patterns = await getWorkspacePatterns(rootPkg);
-    if (patterns.length > 0) {
+    // The installed glob no longer supports `!` negation inside patterns, so
+    // negated workspace entries must be passed as ignores instead.
+    const includePatterns = patterns.filter(
+      (pattern) => !pattern.startsWith("!")
+    );
+    const ignorePatterns = patterns
+      .filter((pattern) => pattern.startsWith("!"))
+      .map((pattern) => `${pattern.slice(1).replace(/\/+$/u, "")}/**`);
+    if (includePatterns.length > 0) {
       const pkgJsonPaths = await glob(
-        patterns.map(
+        includePatterns.map(
           (pattern) => `${pattern.replace(/\/+$/u, "")}/package.json`
         ),
-        { absolute: false, ignore: ["**/node_modules/**"] }
+        { absolute: false, ignore: ["**/node_modules/**", ...ignorePatterns] }
       );
       const workspacePkgs = await Promise.all(
         pkgJsonPaths.map((pkgPath) => readPackageJson(pkgPath))
@@ -401,6 +432,33 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
   }
 
   return [...detected];
+};
+
+/**
+ * Walk up from startDir looking for the first existing file from fileNames,
+ * mirroring how the linters themselves (and detectLinter) resolve configs —
+ * so doctor's checks agree with what check/fix actually use in monorepos.
+ */
+export const findNearestFile = (
+  fileNames: readonly string[],
+  startDir = process.cwd()
+): { dir: string; fileName: string; path: string } | null => {
+  let dir = startDir;
+
+  while (true) {
+    for (const name of fileNames) {
+      const fullPath = path.join(dir, name);
+      if (existsSync(fullPath)) {
+        return { dir, fileName: name, path: fullPath };
+      }
+    }
+
+    const parent = path.dirname(dir);
+    if (parent === dir) {
+      return null;
+    }
+    dir = parent;
+  }
 };
 
 export const detectLinter = (startDir = process.cwd()): Linter | null => {

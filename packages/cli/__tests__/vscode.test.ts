@@ -154,7 +154,7 @@ describe("vscode editor config", () => {
       expect(Object.keys(writtenContent).length).toBeGreaterThan(1);
     });
 
-    test("handles invalid JSON gracefully", async () => {
+    test("skips invalid JSON instead of replacing the file", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -174,12 +174,9 @@ describe("vscode editor config", () => {
       const vscode = createEditorConfig("vscode");
       await vscode.update();
 
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1]);
-      // Should still create valid config even with invalid input
-      expect(typeof writtenContent).toBe("object");
-      expect(Object.keys(writtenContent).length).toBeGreaterThan(0);
+      // An unparseable settings file must not be replaced wholesale — that
+      // would destroy the user's settings
+      expect(mockWriteFile).not.toHaveBeenCalled();
     });
   });
 

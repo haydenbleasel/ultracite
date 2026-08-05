@@ -141,7 +141,7 @@ describe("zed editor config", () => {
       expect(writtenContent.theme).toBe("dark");
     });
 
-    test("handles invalid JSON gracefully", async () => {
+    test("skips invalid JSON instead of replacing the file", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -161,10 +161,9 @@ describe("zed editor config", () => {
       const zed = createEditorConfig("zed");
       await zed.update();
 
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1]);
-      expect(writtenContent).toBeTruthy();
+      // An unparseable settings file must not be replaced wholesale — that
+      // would destroy the user's settings
+      expect(mockWriteFile).not.toHaveBeenCalled();
     });
   });
 

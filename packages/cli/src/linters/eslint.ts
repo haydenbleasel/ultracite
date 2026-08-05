@@ -1,5 +1,8 @@
+import { rm } from "node:fs/promises";
+
 import type { options } from "../data/options";
 import {
+  canHoldEsmConfig,
   eslintConfigNames,
   exists,
   validateFrameworkName,
@@ -55,6 +58,20 @@ export const eslint = {
   },
   update: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts);
-    await writeProjectFile(getEslintConfigPath() ?? defaultConfigPath, config);
+    const existingPath = getEslintConfigPath();
+
+    // Only overwrite a config file that can hold the generated ESM module;
+    // CJS configs (eslint.config.cjs/.cts) get the default .mjs file instead,
+    // and the stale file is removed so ESLint doesn't resolve it over the
+    // new one.
+    const targetPath =
+      existingPath && canHoldEsmConfig(existingPath)
+        ? existingPath
+        : defaultConfigPath;
+    await writeProjectFile(targetPath, config);
+
+    if (existingPath && existingPath !== targetPath) {
+      await rm(existingPath, { force: true });
+    }
   },
 };

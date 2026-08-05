@@ -13,6 +13,10 @@ import {
   biomeConfigNames,
   detectLinter,
   eslintConfigNames,
+  findNearestFile,
+  legacyEslintConfigNames,
+  oxfmtConfigNames,
+  oxlintConfigNames,
   prettierConfigNames,
   stylelintConfigNames,
 } from "../utils";
@@ -65,17 +69,11 @@ const checkToolInstallation = (
 // ---------------------------------------------------------------------------
 
 const checkBiomeConfig = (): DiagnosticCheck => {
-  let configPath: string | null = null;
-  let biomeConfigFile: string | null = null;
-
-  for (const fileName of biomeConfigNames) {
-    const fullPath = path.join(process.cwd(), fileName);
-    if (existsSync(fullPath)) {
-      configPath = fullPath;
-      biomeConfigFile = fileName;
-      break;
-    }
-  }
+  // Walk up like detectLinter (and Biome itself) so monorepo packages that
+  // inherit a root config don't fail the check.
+  const found = findNearestFile(biomeConfigNames);
+  const configPath = found?.path ?? null;
+  const biomeConfigFile = found?.fileName ?? null;
 
   if (!configPath) {
     return {
@@ -115,14 +113,7 @@ const checkBiomeConfig = (): DiagnosticCheck => {
 };
 
 const checkEslintConfig = (): DiagnosticCheck => {
-  let configPath: string | null = null;
-  for (const eslintPath of eslintConfigNames) {
-    const fullPath = path.join(process.cwd(), eslintPath);
-    if (existsSync(fullPath)) {
-      configPath = fullPath;
-      break;
-    }
-  }
+  const configPath = findNearestFile(eslintConfigNames)?.path ?? null;
 
   if (!configPath) {
     return {
@@ -157,15 +148,29 @@ const checkEslintConfig = (): DiagnosticCheck => {
   }
 };
 
+// The Prettier/Stylelint writers treat a matching package.json key as a
+// valid existing config, so doctor must too.
+const hasPackageJsonKey = (key: "prettier" | "stylelint"): boolean => {
+  const pkgJson = readPackageJsonSync(path.join(process.cwd(), "package.json"));
+  return pkgJson?.[key] !== undefined;
+};
+
 const checkPrettierConfig = (): DiagnosticCheck => {
-  for (const prettierPath of prettierConfigNames) {
-    if (existsSync(path.join(process.cwd(), prettierPath))) {
-      return {
-        message: `Prettier configuration found (${prettierPath})`,
-        name: PRETTIER_CHECK,
-        status: "pass",
-      };
-    }
+  if (hasPackageJsonKey("prettier")) {
+    return {
+      message: "Prettier configuration found (package.json)",
+      name: PRETTIER_CHECK,
+      status: "pass",
+    };
+  }
+
+  const found = findNearestFile(prettierConfigNames);
+  if (found) {
+    return {
+      message: `Prettier configuration found (${found.fileName})`,
+      name: PRETTIER_CHECK,
+      status: "pass",
+    };
   }
 
   return {
@@ -176,14 +181,21 @@ const checkPrettierConfig = (): DiagnosticCheck => {
 };
 
 const checkStylelintConfig = (): DiagnosticCheck => {
-  for (const stylelintPath of stylelintConfigNames) {
-    if (existsSync(path.join(process.cwd(), stylelintPath))) {
-      return {
-        message: `Stylelint configuration found (${stylelintPath})`,
-        name: STYLELINT_CHECK,
-        status: "pass",
-      };
-    }
+  if (hasPackageJsonKey("stylelint")) {
+    return {
+      message: "Stylelint configuration found (package.json)",
+      name: STYLELINT_CHECK,
+      status: "pass",
+    };
+  }
+
+  const found = findNearestFile(stylelintConfigNames);
+  if (found) {
+    return {
+      message: `Stylelint configuration found (${found.fileName})`,
+      name: STYLELINT_CHECK,
+      status: "pass",
+    };
   }
 
   return {
@@ -194,18 +206,28 @@ const checkStylelintConfig = (): DiagnosticCheck => {
 };
 
 const checkOxlintConfig = (): DiagnosticCheck => {
-  const oxlintConfigPath = path.join(process.cwd(), "oxlint.config.ts");
+  const found = findNearestFile(oxlintConfigNames);
 
-  if (!existsSync(oxlintConfigPath)) {
+  if (!found) {
     return {
-      message: "No oxlint.config.ts file found",
+      message: `No oxlint config file found (expected one of: ${oxlintConfigNames.join(", ")})`,
       name: OXLINT_CHECK,
       status: "fail",
     };
   }
 
+  // detectLinter accepts .oxlintrc.json, so its presence must not hard-fail —
+  // but the ultracite setup uses oxlint.config.ts, so suggest migrating.
+  if (found.fileName !== "oxlint.config.ts") {
+    return {
+      message: `${found.fileName} found — run \`ultracite init\` to migrate to oxlint.config.ts`,
+      name: OXLINT_CHECK,
+      status: "warn",
+    };
+  }
+
   try {
-    const configContent = readFileSync(oxlintConfigPath, "utf-8");
+    const configContent = readFileSync(found.path, "utf-8");
 
     if (configContent.includes("ultracite/oxlint/")) {
       return {
@@ -230,9 +252,9 @@ const checkOxlintConfig = (): DiagnosticCheck => {
 };
 
 const checkOxfmtConfig = (): DiagnosticCheck => {
-  const oxfmtConfigPath = path.join(process.cwd(), "oxfmt.config.ts");
+  const found = findNearestFile(oxfmtConfigNames);
 
-  if (!existsSync(oxfmtConfigPath)) {
+  if (!found) {
     return {
       message: "No oxfmt.config.ts file found",
       name: OXFMT_CHECK,
@@ -241,7 +263,7 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
   }
 
   try {
-    const configContent = readFileSync(oxfmtConfigPath, "utf-8");
+    const configContent = readFileSync(found.path, "utf-8");
 
     if (configContent.includes("ultracite/oxfmt")) {
       return {
@@ -327,42 +349,18 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
   const conflicts: string[] = [];
 
   // Only warn about Prettier if NOT using ESLint (ESLint setup includes Prettier)
-  if (linter !== "eslint") {
-    const prettierConfigFiles = [
-      ".prettierrc",
-      ".prettierrc.js",
-      ".prettierrc.cjs",
-      ".prettierrc.mjs",
-      ".prettierrc.json",
-      ".prettierrc.yaml",
-      ".prettierrc.yml",
-      "prettier.config.js",
-      "prettier.config.mjs",
-      "prettier.config.cjs",
-    ];
-
-    if (
-      prettierConfigFiles.some((file) =>
-        existsSync(path.join(process.cwd(), file))
-      )
-    ) {
-      conflicts.push("Prettier");
-    }
+  if (
+    linter !== "eslint" &&
+    prettierConfigNames.some((file) =>
+      existsSync(path.join(process.cwd(), file))
+    )
+  ) {
+    conflicts.push("Prettier");
   }
 
   // Check for old ESLint config files (legacy .eslintrc format)
-  const legacyEslintConfigs = [
-    ".eslintrc",
-    ".eslintrc.js",
-    ".eslintrc.cjs",
-    ".eslintrc.mjs",
-    ".eslintrc.json",
-    ".eslintrc.yaml",
-    ".eslintrc.yml",
-  ];
-
   if (
-    legacyEslintConfigs.some((file) =>
+    legacyEslintConfigNames.some((file) =>
       existsSync(path.join(process.cwd(), file))
     )
   ) {

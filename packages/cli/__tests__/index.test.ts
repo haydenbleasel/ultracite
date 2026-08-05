@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 // Set environment BEFORE any imports
-process.env.TEST = "true";
+process.env.ULTRACITE_TEST = "true";
 
 // noop function to satisfy linter
 const noop = () => {
@@ -73,12 +73,12 @@ describe("CLI Router", () => {
     // - doctor.test.ts
     // - initialize.test.ts
     // This test ensures the index file can be imported without auto-running
-    expect(process.env.TEST).toBe("true");
+    expect(process.env.ULTRACITE_TEST).toBe("true");
   });
 
   test("environment variable prevents CLI auto-run", () => {
-    // The TEST env var should prevent the CLI from auto-running
+    // The ULTRACITE_TEST env var should prevent the CLI from auto-running
     // This is important for testing the CLI without actually executing it
-    expect(process.env.TEST).toBe("true");
+    expect(process.env.ULTRACITE_TEST).toBe("true");
   });
 });

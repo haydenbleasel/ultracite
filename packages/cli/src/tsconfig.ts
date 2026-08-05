@@ -62,16 +62,11 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
       return;
     }
 
-    // If the file contains invalid JSON, write a fresh config
+    // A config that can't be parsed (or doesn't match the expected shape)
+    // must not be replaced — that would wipe the user's compiler options.
     if (existingConfig === undefined) {
-      const freshConfig = {
-        compilerOptions: {
-          strictNullChecks: true,
-        },
-      };
-      await writeProjectFile(
-        filePath,
-        `${JSON.stringify(freshConfig, null, 2)}\n`
+      log.warn(
+        `Could not parse ${filePath}; skipping the strictNullChecks update for it.`
       );
       return;
     }

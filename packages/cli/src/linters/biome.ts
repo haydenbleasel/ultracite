@@ -77,8 +77,14 @@ export const biome = {
     const existingExtends = configToWork.extends ?? [];
 
     // Migrate legacy ultracite/<name> entries to ultracite/biome/<name>,
-    // deduping in case both legacy and new forms coexist.
+    // deduping in case both legacy and new forms coexist. The bare "ultracite"
+    // form (the original documented format) maps to the core config — the
+    // package has no root export, so leaving it would break Biome's module
+    // resolution.
     const remapped = existingExtends.map((ext) => {
+      if (ext === "ultracite") {
+        return biomeCoreConfig;
+      }
       const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
       return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
     });

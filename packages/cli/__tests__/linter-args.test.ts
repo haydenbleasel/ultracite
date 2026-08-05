@@ -22,6 +22,33 @@ describe("linter args", () => {
     });
   });
 
+  test("keeps a flag's space-separated value adjacent to the flag", () => {
+    const result = splitLinterArgs({
+      commandName: "check",
+      parsedArgs: ["src", "--max-warnings", "10"],
+      pathExists: (path) => path === "src",
+    });
+
+    expect(result).toEqual({
+      files: ["src"],
+      passthrough: ["--max-warnings", "10"],
+    });
+  });
+
+  test("keeps positional files listed before the separator as files", () => {
+    const result = splitLinterArgs({
+      commandName: "fix",
+      parsedArgs: ["src", "other.ts"],
+      pathExists: (path) => path === "src",
+      rawArgs: ["bun", "ultracite", "fix", "src", "--", "other.ts"],
+    });
+
+    expect(result).toEqual({
+      files: ["src", "other.ts"],
+      passthrough: [],
+    });
+  });
+
   test("keeps non-path hyphen-prefixed args as linter passthrough", () => {
     const result = splitLinterArgs({
       commandName: "check",

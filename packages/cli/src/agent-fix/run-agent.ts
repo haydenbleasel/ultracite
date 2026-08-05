@@ -6,6 +6,10 @@ import type { AgentAdapter } from "./agents";
 
 export const AGENT_TIMEOUT_MS = 5 * 60 * 1000;
 
+// Grace period after SIGTERM before escalating to SIGKILL — an agent CLI that
+// traps or ignores SIGTERM would otherwise hang the run forever.
+export const KILL_GRACE_MS = 10 * 1000;
+
 const STDERR_CAP = 8192;
 
 export interface AgentRunResult {
@@ -16,6 +20,7 @@ export interface AgentRunResult {
 
 interface RunAgentOptions {
   cwd?: string;
+  killGraceMs?: number;
   /** Injectable for tests — node:child_process cannot be module-mocked here. */
   spawnFn?: typeof nodeSpawn;
   timeoutMs?: number;
@@ -26,6 +31,7 @@ export const runAgent = async (
   prompt: string,
   {
     cwd = process.cwd(),
+    killGraceMs = KILL_GRACE_MS,
     spawnFn = nodeSpawn,
     timeoutMs = AGENT_TIMEOUT_MS,
   }: RunAgentOptions = {}
@@ -45,9 +51,13 @@ export const runAgent = async (
     stderr = (stderr + String(chunk)).slice(-STDERR_CAP);
   });
 
+  let killTimer: ReturnType<typeof setTimeout> | null = null;
   const timer = setTimeout(() => {
     timedOut = true;
     child.kill("SIGTERM");
+    killTimer = setTimeout(() => {
+      child.kill("SIGKILL");
+    }, killGraceMs);
   }, timeoutMs);
 
   try {
@@ -62,5 +72,8 @@ export const runAgent = async (
     };
   } finally {
     clearTimeout(timer);
+    if (killTimer) {
+      clearTimeout(killTimer);
+    }
   }
 };

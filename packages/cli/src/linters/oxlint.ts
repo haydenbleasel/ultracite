@@ -137,6 +137,43 @@ export default defineConfig({
 `;
 };
 
+const SELECTED_JS_PLUGIN_NAMES_RE =
+  /selectedJsPluginNames = new Set\((?<names>\[[^\]]*\])\)/u;
+
+const jsPluginsByConfigName = Object.fromEntries(
+  Object.entries(oxlintJsPluginConfig).map(([plugin, { name }]) => [
+    name,
+    plugin as OxlintJsPlugin,
+  ])
+);
+
+/**
+ * Recover the js-plugins selection encoded in a previously generated config
+ * so re-running init without an explicit selection preserves it — otherwise
+ * the regenerated config would extend the full js-plugins preset and silently
+ * enable plugins the user never opted into.
+ */
+const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
+  const match = SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
+  if (!match?.groups?.names) {
+    return [];
+  }
+
+  try {
+    const names = JSON.parse(match.groups.names) as unknown;
+    if (!Array.isArray(names)) {
+      return [];
+    }
+    return names
+      .map((name) =>
+        typeof name === "string" ? jsPluginsByConfigName[name] : undefined
+      )
+      .filter((plugin): plugin is OxlintJsPlugin => plugin !== undefined);
+  } catch {
+    return [];
+  }
+};
+
 export const oxlint = {
   create: async (opts?: OxlintOptions) => {
     const extendsList = [getOxlintConfigPath("core")];
@@ -220,9 +257,16 @@ export const oxlint = {
       }
     }
 
+    // Without an explicit new selection, keep the plugins the existing
+    // config had selected.
+    const jsPlugins =
+      opts?.jsPlugins && opts.jsPlugins.length > 0
+        ? opts.jsPlugins
+        : parseExistingJsPlugins(existingContents);
+
     await writeProjectFile(
       oxlintConfigPath,
-      generateConfigContent(newExtends, opts?.jsPlugins)
+      generateConfigContent(newExtends, jsPlugins)
     );
   },
 };

@@ -313,6 +313,10 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   for (const dependencyName of dependencyNamesByLinter[linter]) {
     dependencyNamesToRemove.delete(dependencyName);
   }
+  // storybook is only in the eslint set as a required peer of
+  // eslint-plugin-storybook, but it's a user-facing tool the project may use
+  // independently of linting — never prune it.
+  dependencyNamesToRemove.delete("storybook");
 
   let changed = false;
   const nextPackageJson = { ...packageJsonObject };
@@ -598,7 +602,7 @@ export const upsertEditorConfig = async (
 
   // Non-VS Code editors (like Zed)
   if (!quiet) {
-    if (editorId === "zed") {
+    if (editorId === "zed" && linter === "biome") {
       s.stop(
         `${editor.config.path} created. Install the Biome extension: https://biomejs.dev/reference/zed/`
       );
@@ -1370,8 +1374,17 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
-      // Oxlint + Oxfmt config files use ESM imports, so ensure "type": "module" is set
-      await updatePackageJson({ type: "module" });
+      // Oxlint + Oxfmt config files use ESM imports, so ensure
+      // "type": "module" is set — but never flip an explicit "commonjs",
+      // which would change how every .js file in the project is interpreted.
+      const pkgJsonForType = await readPackageJson();
+      if (pkgJsonForType?.type === undefined) {
+        await updatePackageJson({ type: "module" });
+      } else if (pkgJsonForType.type !== "module" && !quiet) {
+        log.warn(
+          'package.json sets "type": "commonjs" — the generated oxlint/oxfmt configs use ESM imports and may not load. Consider "type": "module".'
+        );
+      }
       await upsertOxlintConfig(frameworks, quiet, jsPlugins);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);

@@ -14,8 +14,15 @@ const STDERR_TAIL_LENGTH = 500;
  * Linters exit non-zero whenever diagnostics remain, which is the expected
  * state here — only a failure to spawn or a signal kill is an actual error.
  */
+// spawnSync's default maxBuffer is 1MB — a repo with a few thousand remaining
+// diagnostics easily exceeds that and would abort the run with ENOBUFS.
+const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
+
 const runPiped = (command: string, args: string[]): string => {
-  const result = runCommandSync(command, args, { encoding: "utf-8" });
+  const result = runCommandSync(command, args, {
+    encoding: "utf-8",
+    maxBuffer: PIPED_MAX_BUFFER,
+  });
 
   if (result.error) {
     throw new Error(`Failed to run ${command}: ${result.error.message}`);
@@ -94,11 +101,13 @@ const runOxlintPass = (
 
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
+  // The JSON reporter goes after the passthrough so a user-supplied format
+  // flag can't override it and break the parser.
   const stdout = runPiped("oxlint", [
     hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filteredPassthrough,
     "-f",
     "json",
-    ...filteredPassthrough,
     ...toTargets(files, "."),
   ]);
 
@@ -167,12 +176,14 @@ const runBiomePass = (files: string[], passthrough: string[]): Diagnostic[] => {
     );
   }
 
+  // The JSON reporter goes after the passthrough so a user-supplied reporter
+  // flag can't override it and break the parser.
   const stdout = runPiped("biome", [
     "check",
     "--write",
     "--no-errors-on-unmatched",
-    "--reporter=json",
     ...passthrough,
+    "--reporter=json",
     ...toTargets(files, "./"),
   ]);
 
@@ -233,11 +244,13 @@ const runEslintPass = (
 ): Diagnostic[] => {
   runPiped("prettier", ["--write", ...toTargets(files, ".")]);
 
+  // The JSON reporter goes after the passthrough so a user-supplied format
+  // flag can't override it and break the parser.
   const stdout = runPiped("eslint", [
     "--fix",
+    ...passthrough,
     "-f",
     "json",
-    ...passthrough,
     ...toTargets(files, "."),
   ]);
 
