@@ -4,6 +4,16 @@
 	"overrides": [
 		{
 			"includes": ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+			"assist": {
+				"actions": {
+					"source": {
+						// Route option types are order-sensitive: `head`/`component`
+						// infer `loaderData` from properties declared before them, so
+						// alphabetical sorting breaks type inference.
+						"useSortedKeys": "off"
+					}
+				}
+			},
 			"linter": {
 				"rules": {
 					"style": {

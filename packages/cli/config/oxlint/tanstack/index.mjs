@@ -5,6 +5,10 @@ export default defineConfig({
     {
       files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
       rules: {
+        // Route option types are order-sensitive (`head`/`component` infer
+        // `loaderData` from properties declared before them), so alphabetical
+        // ordering conflicts with tanstack-start-route-property-order.
+        "sort-keys": "off",
         "unicorn/filename-case": "off",
       },
     },
