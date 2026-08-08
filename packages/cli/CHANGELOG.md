@@ -1,3 +1,10 @@
+## 7.10.2
+
+### Patch Changes
+
+- 1c48c68: Enable Tailwind CSS class sorting (`sortTailwindcss`) in the Oxfmt preset. Classes in `class`/`className` attributes and in `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, and `tv` calls are now sorted using the same algorithm as `prettier-plugin-tailwindcss`, matching the behavior of the Prettier preset (which always loads the Tailwind plugin) and the Biome preset's `useSortedClasses` rule. Projects without Tailwind installed are unaffected beyond class strings being sorted against the default theme, and oxfmt versions older than 0.35.0 ignore the option.
+- dc78be4: Stop sorting TanStack route option keys in route files. TanStack Router's route option types are order-sensitive (`head`/`component` infer `loaderData` from properties declared before them), so the Biome `useSortedKeys` source action rewrote `createFileRoute` literals into an order that breaks type inference (`loaderData` becomes `never`). The Biome TanStack preset now disables `useSortedKeys` for route files, and the oxlint TanStack preset disables `sort-keys` there so route files aren't caught between it and `react-doctor/tanstack-start-route-property-order`.
+
 ## 7.10.1
 
 ### Patch Changes
