@@ -182,6 +182,22 @@ Ultracite configures Oxfmt with these defaults:
 - **Double Quotes**: Yes
 - **Trailing Commas**: ES5 style
 - **Arrow Parentheses**: Always include
+- **Tailwind Class Sorting**: Enabled, including inside `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, and `tv` calls
+
+Tailwind class sorting uses the same algorithm as `prettier-plugin-tailwindcss`. If you use Tailwind CSS v4 with a custom theme, point Oxfmt at your stylesheet so sorting respects your custom utilities:
+
+```ts title="oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  sortTailwindcss: {
+    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+    stylesheet: "./app/globals.css",
+  },
+});
+```
 
 ## Rule Reference
 

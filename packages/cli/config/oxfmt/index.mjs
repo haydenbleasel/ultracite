@@ -20,6 +20,9 @@ export default defineConfig({
     order: "asc",
   },
   sortPackageJson: true,
+  sortTailwindcss: {
+    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+  },
   tabWidth: 2,
   trailingComma: "es5",
   useTabs: false,
