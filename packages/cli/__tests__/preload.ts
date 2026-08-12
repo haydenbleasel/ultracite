@@ -25,6 +25,12 @@ mock.module("glob", () => ({
   glob: mock(() => Promise.resolve([])),
 }));
 
+// Mock find-workspaces (used by detectFrameworks) so tests never scan the real
+// filesystem for monorepo members; utils.test.ts overrides this per test.
+mock.module("find-workspaces", () => ({
+  findWorkspaces: mock(() => []),
+}));
+
 // Mock node:fs to provide accessSync (used by the sync exists() helper)
 // Individual tests can override this by calling mock.module("node:fs", ...) themselves
 // readdirSync passes through to the real implementation because

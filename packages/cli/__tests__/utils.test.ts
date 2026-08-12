@@ -24,7 +24,7 @@ mock.module("node:fs", () => ({
 
 const mockDetectFrameworkFs = (
   files: Record<string, string>,
-  globResults: string[] = []
+  workspacePackageJsonPaths: string[] = []
 ) => {
   mock.module("node:fs/promises", () => ({
     access: mock((path: string) =>
@@ -51,8 +51,16 @@ const mockDetectFrameworkFs = (
       throw new Error("ENOENT");
     }),
   }));
-  mock.module("glob", () => ({
-    glob: mock(() => Promise.resolve(globResults)),
+  // detectFrameworks reads workspace packages through find-workspaces, so the
+  // helper maps the given package.json paths onto the library's Workspace
+  // shape instead of mocking the filesystem it scans.
+  mock.module("find-workspaces", () => ({
+    findWorkspaces: mock(() =>
+      workspacePackageJsonPaths.map((pkgPath) => ({
+        location: pkgPath.replace(/\/package\.json$/u, ""),
+        package: JSON.parse(files[pkgPath] ?? "{}"),
+      }))
+    ),
   }));
 };
 

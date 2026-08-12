@@ -1,14 +1,12 @@
 import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
 import { any as findUpAny } from "empathic/find";
-import { glob } from "glob";
-import YAML from "yaml";
+import { findWorkspaces } from "find-workspaces";
 
 import type { Framework } from "./data/options";
-import type { PackageJson } from "./schemas";
 import { readPackageJson, readPackageJsonSync } from "./schemas";
 
 const pnpmWorkspaceFile = "pnpm-workspace.yaml";
@@ -325,7 +323,13 @@ const FRAMEWORK_DEPENDENCIES: Record<string, readonly Framework[]> = {
   vue: ["vue"],
 };
 
-const collectDeps = (pkg: PackageJson | undefined): string[] => {
+interface DependencyFields {
+  dependencies?: Record<string, string | undefined>;
+  devDependencies?: Record<string, string | undefined>;
+  peerDependencies?: Record<string, string | undefined>;
+}
+
+const collectDeps = (pkg: DependencyFields | undefined): string[] => {
   if (!pkg) {
     return [];
   }
@@ -334,46 +338,6 @@ const collectDeps = (pkg: PackageJson | undefined): string[] => {
     ...Object.keys(pkg.devDependencies ?? {}),
     ...Object.keys(pkg.peerDependencies ?? {}),
   ];
-};
-
-const getWorkspacePatterns = async (
-  rootPkg: PackageJson | undefined
-): Promise<string[]> => {
-  const patterns = new Set<string>();
-
-  const ws = rootPkg?.workspaces;
-  if (Array.isArray(ws)) {
-    for (const pattern of ws) {
-      patterns.add(pattern);
-    }
-  } else if (ws && typeof ws === "object") {
-    const { packages } = ws as { packages?: unknown };
-    if (Array.isArray(packages)) {
-      for (const pattern of packages) {
-        if (typeof pattern === "string") {
-          patterns.add(pattern);
-        }
-      }
-    }
-  }
-
-  if (exists(pnpmWorkspaceFile)) {
-    try {
-      const content = await readFile(pnpmWorkspaceFile, "utf-8");
-      const parsed = YAML.parse(content) as { packages?: unknown };
-      if (Array.isArray(parsed?.packages)) {
-        for (const pattern of parsed.packages) {
-          if (typeof pattern === "string") {
-            patterns.add(pattern);
-          }
-        }
-      }
-    } catch {
-      // ignore malformed pnpm-workspace.yaml
-    }
-  }
-
-  return [...patterns];
 };
 
 /**
@@ -388,29 +352,11 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
     const rootPkg = await readPackageJson();
     const deps = new Set(collectDeps(rootPkg));
 
-    const patterns = await getWorkspacePatterns(rootPkg);
-    // The installed glob no longer supports `!` negation inside patterns, so
-    // negated workspace entries must be passed as ignores instead.
-    const includePatterns = patterns.filter(
-      (pattern) => !pattern.startsWith("!")
-    );
-    const ignorePatterns = patterns
-      .filter((pattern) => pattern.startsWith("!"))
-      .map((pattern) => `${pattern.slice(1).replace(/\/+$/u, "")}/**`);
-    if (includePatterns.length > 0) {
-      const pkgJsonPaths = await glob(
-        includePatterns.map(
-          (pattern) => `${pattern.replace(/\/+$/u, "")}/package.json`
-        ),
-        { absolute: false, ignore: ["**/node_modules/**", ...ignorePatterns] }
-      );
-      const workspacePkgs = await Promise.all(
-        pkgJsonPaths.map((pkgPath) => readPackageJson(pkgPath))
-      );
-      for (const pkg of workspacePkgs) {
-        for (const dep of collectDeps(pkg)) {
-          deps.add(dep);
-        }
+    // find-workspaces resolves npm/yarn/pnpm/lerna workspace declarations
+    // (including negated globs) to the member packages of a monorepo.
+    for (const workspace of findWorkspaces() ?? []) {
+      for (const dep of collectDeps(workspace.package)) {
+        deps.add(dep);
       }
     }
 
