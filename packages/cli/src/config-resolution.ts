@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { parse } from "jsonc-parser";
+import { exports as resolvePackageExports } from "resolve.exports";
 
 import { biomeConfigNames, exists } from "./utils";
 import type { Linter } from "./utils";
@@ -18,8 +19,6 @@ const linterSpecifiers: Record<Linter, string> = {
   eslint: "ultracite/eslint/core",
   oxlint: "ultracite/oxlint/core",
 };
-
-type ExportsEntry = Record<string, unknown> | string;
 
 /**
  * The filesystem reads this module needs, injectable so tests can describe a
@@ -64,52 +63,6 @@ const findUltracitePackage = (
     return fs.exists(path.join(packageDir, "package.json")) ? packageDir : null;
   });
 
-// Conditional exports ({ types, default }) resolve to their "default" branch —
-// the only condition a linter reading a config file off disk cares about.
-const resolveTarget = (entry: ExportsEntry): string | null => {
-  if (typeof entry === "string") {
-    return entry;
-  }
-
-  const fallback = entry.default;
-  return typeof fallback === "string" ? fallback : null;
-};
-
-// Matches an exports key against a subpath, supporting the single-`*` pattern
-// form Ultracite uses (e.g. "./biome/*" → "./config/biome/*/biome.jsonc").
-const matchExportKey = (
-  key: string,
-  entry: ExportsEntry,
-  subpath: string
-): string | null => {
-  const target = resolveTarget(entry);
-
-  if (!target) {
-    return null;
-  }
-
-  if (!key.includes("*")) {
-    return key === subpath ? target : null;
-  }
-
-  const [prefix, suffix] = key.split("*");
-
-  if (
-    !subpath.startsWith(prefix) ||
-    !subpath.endsWith(suffix) ||
-    subpath.length < prefix.length + suffix.length
-  ) {
-    return null;
-  }
-
-  const wildcard = subpath.slice(prefix.length, subpath.length - suffix.length);
-
-  // Node substitutes every `*` in the target, not just the first
-  // (PACKAGE_TARGET_RESOLVE), so a two-wildcard target must expand the same way
-  // here or we'd resolve a path the linter never looks at.
-  return target.replaceAll("*", wildcard);
-};
-
 /**
  * Resolve a package specifier the way Biome/ESLint/Oxlint do: through the
  * project's node_modules and the `exports` map found there.
@@ -129,27 +82,38 @@ export const resolveFrom = (
     return null;
   }
 
-  let exportsField: Record<string, ExportsEntry>;
+  let pkg: Record<string, unknown>;
 
   try {
-    const pkg = JSON.parse(fs.readFile(path.join(packageDir, "package.json")));
-    exportsField = pkg?.exports ?? {};
+    pkg = JSON.parse(fs.readFile(path.join(packageDir, "package.json")));
   } catch {
     return null;
   }
 
   const subpath = `.${specifier.slice(PACKAGE_NAME.length)}`;
 
-  for (const [key, entry] of Object.entries(exportsField)) {
-    const target = matchExportKey(key, entry, subpath);
+  let targets: readonly string[] | undefined;
 
-    if (target) {
-      const resolved = path.join(packageDir, target);
-      return fs.exists(resolved) ? resolved : null;
-    }
+  try {
+    // Conditional exports ({ types, default }) resolve to their "default"
+    // branch — the only condition a linter reading a config file off disk
+    // cares about. `unsafe` keeps resolve.exports from adding the node/import
+    // conditions on top of it.
+    targets =
+      resolvePackageExports(pkg, subpath, { unsafe: true }) ?? undefined;
+  } catch {
+    // resolve.exports throws when the subpath matches no export entry.
+    return null;
   }
 
-  return null;
+  const [target] = targets ?? [];
+
+  if (!target) {
+    return null;
+  }
+
+  const resolved = path.join(packageDir, target);
+  return fs.exists(resolved) ? resolved : null;
 };
 
 export const canResolveUltracite = (
