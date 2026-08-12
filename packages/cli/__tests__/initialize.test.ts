@@ -42,8 +42,8 @@ mock.module("node:child_process", () => ({
   spawnSync: mock(() => ({ status: 0 })),
 }));
 
-mock.module("cross-spawn", () => ({
-  sync: mock(() => ({ status: 0, stdout: "[]" })),
+mock.module("../src/spawn-sync", () => ({
+  spawnSync: mock(() => ({ status: 0, stdout: "[]" })),
 }));
 
 mock.module("nypm", () => ({
@@ -1082,8 +1082,8 @@ describe("initialize", () => {
       return { status: 0, stdout: "[]" };
     });
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
 
     mock.module("nypm", () => ({
@@ -1137,8 +1137,6 @@ describe("initialize", () => {
       "npx",
       ["skills", "list", "--json"],
       expect.objectContaining({
-        encoding: "utf-8",
-        shell: false,
         stdio: "pipe",
       })
     );
@@ -1146,8 +1144,6 @@ describe("initialize", () => {
       "npx",
       ["skills", "list", "-g", "--json"],
       expect.objectContaining({
-        encoding: "utf-8",
-        shell: false,
         stdio: "pipe",
       })
     );
@@ -1182,8 +1178,8 @@ describe("initialize", () => {
       return { status: 0, stdout: "[]" };
     });
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
 
     mock.module("nypm", () => ({
@@ -1237,8 +1233,6 @@ describe("initialize", () => {
       "npx",
       ["skills", "list", "--json"],
       expect.objectContaining({
-        encoding: "utf-8",
-        shell: false,
         stdio: "pipe",
       })
     );
@@ -1256,8 +1250,8 @@ describe("initialize", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
     const mockSelect = mock(() => Promise.resolve("skip"));
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
 
     mock.module("nypm", () => ({
@@ -1311,7 +1305,6 @@ describe("initialize", () => {
       "npx",
       ["skills", "add", "haydenbleasel/ultracite"],
       expect.objectContaining({
-        shell: false,
         stdio: "pipe",
       })
     );
@@ -1321,8 +1314,8 @@ describe("initialize", () => {
     const mockSelect = mock(() => Promise.resolve("install"));
     const mockSpawn = mock(() => ({ status: 0 }));
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
 
     mock.module("@clack/prompts", () => ({

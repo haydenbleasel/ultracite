@@ -1,12 +1,12 @@
 import { readFile } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
-import { sync as spawnSync } from "cross-spawn";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
 
 import { editors } from "./data/editors";
 import type { ProviderId } from "./data/providers";
+import { spawnSync } from "./spawn-sync";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 export const createEditorConfig = (

@@ -2,8 +2,8 @@ import { describe, expect, mock, spyOn, test } from "bun:test";
 
 import { doctor } from "../src/commands/doctor";
 
-mock.module("cross-spawn", () => ({
-  sync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
+mock.module("../src/spawn-sync", () => ({
+  spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
 }));
 
 // Doctor resolves ultracite out of node_modules, so the fs mocks below have to
@@ -57,8 +57,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -88,8 +88,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -117,8 +117,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 1, stdout: "" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 1, stdout: "" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -135,8 +135,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -158,8 +158,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -196,8 +196,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -214,11 +214,12 @@ describe("doctor", () => {
       // May fail due to missing config — that's OK, we're checking spawn args
     }
 
+    // Shell interpretation is disabled inside the spawn-sync adapter (see
+    // spawn-sync.test.ts), so the bare executable name is spawned directly.
     const [firstCall] = mockSpawn.mock.calls;
-    const [command, args, options] = firstCall;
+    const [command, args] = firstCall;
     expect(command).toBe("biome");
     expect(args).toEqual(["--version"]);
-    expect(options.shell).toBe(false);
     consoleLogSpy.mockRestore();
   });
 
@@ -228,8 +229,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -267,8 +268,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -303,8 +304,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -336,8 +337,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -366,8 +367,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -404,8 +405,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -443,8 +444,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -479,8 +480,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -510,8 +511,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -528,8 +529,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "oxlint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -556,8 +557,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -576,8 +577,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "eslint",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -611,8 +612,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -646,8 +647,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -677,8 +678,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -704,8 +705,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -735,8 +736,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     // Nothing under node_modules: ultracite is declared but never installed,
     // which is the state Biome fails on.
@@ -777,8 +778,8 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mock.module("cross-spawn", () => ({
-      sync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),

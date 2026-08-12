@@ -37,7 +37,6 @@ const isUltraciteSkillInstalledInScope = (
   const fullCommand = buildUltraciteSkillListCommand(packageManager, global);
   const [command, ...args] = fullCommand.split(" ");
   const result = runCommandSync(command, args, {
-    encoding: "utf-8",
     stdio: "pipe",
   });
 
@@ -46,11 +45,7 @@ const isUltraciteSkillInstalledInScope = (
   }
 
   try {
-    const installedSkills = JSON.parse(
-      typeof result.stdout === "string"
-        ? result.stdout
-        : result.stdout.toString("utf-8")
-    ) as {
+    const installedSkills = JSON.parse(result.stdout) as {
       name?: string;
     }[];
 

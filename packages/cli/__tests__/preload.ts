@@ -4,6 +4,8 @@ import {
   readFileSync as _realReadFileSync,
 } from "node:fs";
 
+import { spawnSync as _realSpawnSync } from "../src/spawn-sync";
+
 // Eagerly link nypm (and its transitive tinyexec, which does
 // `import { spawn, spawnSync } from "node:child_process"`) against the real
 // node:child_process before any test installs a partial mock of it. Several
@@ -18,6 +20,11 @@ import "nypm";
 // Capture real fs functions before mocking so tests that need them can use them
 (globalThis as Record<string, unknown>).__realReaddirSync = _realReaddirSync;
 (globalThis as Record<string, unknown>).__realReadFileSync = _realReadFileSync;
+
+// Capture the real spawn-sync adapter before any test file mocks the module,
+// so spawn-sync.test.ts can exercise the actual implementation regardless of
+// test-file order.
+(globalThis as Record<string, unknown>).__realSpawnSync = _realSpawnSync;
 
 // Mock fast-glob before any imports that use it
 // This is needed for tsconfig.test.ts and other tests that scan for files

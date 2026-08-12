@@ -185,8 +185,8 @@ describe("vscode editor config", () => {
       const mockSpawn = mock((_cmd: string, _args: string[]) => ({
         status: 0,
       }));
-      mock.module("cross-spawn", () => ({
-        sync: mockSpawn,
+      mock.module("../src/spawn-sync", () => ({
+        spawnSync: mockSpawn,
       }));
 
       const vscode = createEditorConfig("vscode");

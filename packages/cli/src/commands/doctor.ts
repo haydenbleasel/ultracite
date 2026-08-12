@@ -47,7 +47,7 @@ const checkToolInstallation = (
   tool: string,
   required: boolean
 ): DiagnosticCheck => {
-  const result = runCommandSync(tool, ["--version"], { encoding: "utf-8" });
+  const result = runCommandSync(tool, ["--version"]);
 
   if (result.status === 0 && result.stdout) {
     return {

@@ -16,8 +16,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -39,8 +39,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -60,8 +60,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -81,8 +81,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -103,8 +103,8 @@ describe("check", () => {
     );
     const routeGroupFile =
       "/abs/path/apps/app/src/app/(app)/dashboard/page.tsx";
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -124,8 +124,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -142,8 +142,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -158,8 +158,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => null),
@@ -174,8 +174,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -197,8 +197,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -218,8 +218,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -244,8 +244,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -272,8 +272,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -300,8 +300,8 @@ describe("check", () => {
       }
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -326,8 +326,8 @@ describe("check", () => {
       }
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -344,8 +344,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -366,8 +366,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -388,8 +388,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -405,8 +405,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -422,8 +422,8 @@ describe("check", () => {
       })
     );
 
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -438,8 +438,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -458,8 +458,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -478,8 +478,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -499,8 +499,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -523,8 +523,8 @@ describe("check", () => {
         return { status: 0 };
       }
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -545,8 +545,8 @@ describe("check", () => {
         return { status: 0 };
       }
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -565,8 +565,8 @@ describe("check", () => {
         status: 0,
       })
     );
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),
@@ -574,18 +574,20 @@ describe("check", () => {
 
     check(["src/my file.ts"]);
 
+    // Shell interpretation is disabled inside the spawn-sync adapter (see
+    // spawn-sync.test.ts), so a spaced filename must survive as one argument.
     const [firstCall] = mockSpawn.mock.calls;
-    const [command, , options] = firstCall;
+    const [command, args] = firstCall;
     expect(command).toBe("biome");
-    expect(options.shell).toBe(false);
+    expect(args).toContain("src/my file.ts");
   });
 
   // A biome.jsonc extending ultracite, with no ultracite in node_modules: Biome
   // would fail here with an opaque "module not found", so we stop first.
   test("fails before running biome when its extends cannot be resolved", () => {
     const mockSpawn = mock(() => ({ status: 0 }));
-    mock.module("cross-spawn", () => ({
-      sync: mockSpawn,
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
     }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),

@@ -59,7 +59,7 @@ describe("agent-fix linter adapters", () => {
       status: cmd === "oxlint" ? 1 : 0,
       stdout: cmd === "oxlint" ? oxlintJson : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("oxlint").fixAndCollect([], []);
 
@@ -89,7 +89,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? '{"diagnostics":[]}' : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("oxlint").fixAndCollect(
       ["src/a.ts"],
@@ -108,7 +108,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? '{"diagnostics":[]}' : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("oxlint").verify("src/a.ts", []);
 
@@ -119,7 +119,7 @@ describe("agent-fix linter adapters", () => {
 
   test("oxlint adapter throws on spawn failure", () => {
     const mockSpawn = mock(() => ({ error: new Error("spawn failed") }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => getLinterAdapter("oxlint").fixAndCollect([], [])).toThrow(
       "Failed to run oxfmt: spawn failed"
@@ -131,7 +131,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? "not json" : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => getLinterAdapter("oxlint").fixAndCollect([], [])).toThrow(
       "Failed to parse JSON output from oxlint"
@@ -143,7 +143,7 @@ describe("agent-fix linter adapters", () => {
       status: 1,
       stdout: biomeJson,
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("biome").fixAndCollect([], []);
 
@@ -184,7 +184,7 @@ describe("agent-fix linter adapters", () => {
       ],
     });
     const mockSpawn = mock(() => ({ status: 0, stdout: objectPathJson }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const [diagnostic] = getLinterAdapter("biome").fixAndCollect([], []);
     expect(diagnostic.file).toBe("src/other.ts");
@@ -197,7 +197,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "eslint" ? eslintJson : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("eslint").fixAndCollect([], []);
 
@@ -225,7 +225,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "eslint" ? "[]" : "",
     }));
-    mock.module("cross-spawn", () => ({ sync: mockSpawn }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("eslint").verify("src/a.ts", []);
 
