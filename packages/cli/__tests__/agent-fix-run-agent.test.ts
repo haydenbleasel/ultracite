@@ -1,137 +1,130 @@
 import { describe, expect, mock, test } from "bun:test";
+import process from "node:process";
 
+import type { execa } from "execa";
+
+import type { AgentAdapter } from "../src/agent-fix/agents";
 import { agentAdapters } from "../src/agent-fix/agents";
 import { runAgent } from "../src/agent-fix/run-agent";
 
-type Listener = (...args: unknown[]) => void;
+const STDERR_CAP = 8192;
 
-/**
- * Minimal EventEmitter-shaped fake (on/once/emit/removeListener) — enough for
- * runAgent's listeners and node:events `once()` to work against. removeListener
- * replaces the handler array rather than mutating it, so emit's iteration over
- * a previously fetched array stays safe when a once-wrapper removes itself.
- */
-const createEmitter = () => {
-  const handlers = new Map<string, Listener[]>();
+/** Adapter that runs the current runtime binary instead of a real agent CLI. */
+const scriptAdapter = (script: string): AgentAdapter => ({
+  buildArgs: () => ["-e", script],
+  command: process.execPath,
+  id: "claude",
+  installHint: "",
+  label: "Test",
+});
 
-  const emitter = {
-    emit: (event: string, ...args: unknown[]): void => {
-      for (const handler of handlers.get(event) ?? []) {
-        handler(...args);
-      }
-    },
-    on: (event: string, listener: Listener): void => {
-      handlers.set(event, [...(handlers.get(event) ?? []), listener]);
-    },
-    once: (event: string, listener: Listener): void => {
-      const wrapper: Listener & { listener?: Listener } = (...args) => {
-        emitter.removeListener(event, wrapper);
-        listener(...args);
-      };
-      wrapper.listener = listener;
-      emitter.on(event, wrapper);
-    },
-    removeListener: (event: string, listener: Listener): void => {
-      handlers.set(
-        event,
-        (handlers.get(event) ?? []).filter(
-          (handler) =>
-            handler !== listener &&
-            (handler as { listener?: Listener }).listener !== listener
-        )
-      );
-    },
-  };
+type ExecaFn = typeof execa;
 
-  return emitter;
-};
-
-const createFakeChild = () => {
-  const child = {
-    ...createEmitter(),
-    kill: (signal?: string): void => {
-      child.killedWith = signal ?? "SIGTERM";
-      setTimeout(() => child.emit("close", null), 0);
-    },
-    killedWith: null as string | null,
-    stderr: createEmitter(),
-    stdout: { resume: (): void => undefined },
-  };
-
-  return child;
-};
-
-type FakeChild = ReturnType<typeof createFakeChild>;
-
-type SpawnFn = NonNullable<Parameters<typeof runAgent>[2]>["spawnFn"];
-
-const fakeSpawn = (child: FakeChild) => {
-  const spawnFn = mock(() => child);
-  return { spawnFn: spawnFn as unknown as SpawnFn, spawnMock: spawnFn };
+const fakeExeca = (result: Record<string, unknown>) => {
+  const execaMock = mock(() => Promise.resolve(result));
+  return { execaFn: execaMock as unknown as ExecaFn, execaMock };
 };
 
 describe("runAgent", () => {
   test("resolves ok on exit code 0", async () => {
-    const child = createFakeChild();
-    const { spawnFn, spawnMock } = fakeSpawn(child);
+    const result = await runAgent(scriptAdapter("process.exit(0)"), "prompt");
 
-    const resultPromise = runAgent(agentAdapters.claude, "prompt", { spawnFn });
-    child.emit("close", 0);
+    expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
+  });
 
-    expect(await resultPromise).toEqual({
-      ok: true,
+  test("resolves not-ok with captured stderr on non-zero exit", async () => {
+    const result = await runAgent(
+      scriptAdapter("console.error('something broke'); process.exit(1)"),
+      "prompt"
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.stderr).toContain("something broke");
+    expect(result.timedOut).toBe(false);
+  });
+
+  test("resolves not-ok when spawning fails", async () => {
+    const missing: AgentAdapter = {
+      ...agentAdapters.claude,
+      command: "definitely-not-a-real-agent-cli",
+    };
+
+    const result = await runAgent(missing, "prompt");
+
+    expect(result.ok).toBe(false);
+    expect(result.stderr).not.toBe("");
+    expect(result.timedOut).toBe(false);
+  });
+
+  test("kills the agent and reports a timeout when the deadline passes", async () => {
+    const result = await runAgent(
+      scriptAdapter("setTimeout(() => {}, 60_000)"),
+      "prompt",
+      { timeoutMs: 100 }
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.timedOut).toBe(true);
+  });
+
+  test("passes the adapter command, prompt args, and kill options to execa", async () => {
+    const { execaFn, execaMock } = fakeExeca({
+      failed: false,
       stderr: "",
       timedOut: false,
     });
 
-    const [call] = spawnMock.mock.calls as unknown as [
+    const result = await runAgent(agentAdapters.claude, "prompt", {
+      cwd: "/some/project",
+      execaFn,
+      killGraceMs: 1234,
+      timeoutMs: 5678,
+    });
+
+    expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
+
+    const [call] = execaMock.mock.calls as unknown as [
       [string, string[], Record<string, unknown>],
     ];
     expect(call[0]).toBe("claude");
     expect(call[1]).toContain("-p");
-    expect(call[2]).toMatchObject({ shell: false });
+    expect(call[1]).toContain("prompt");
+    expect(call[2]).toMatchObject({
+      cwd: "/some/project",
+      forceKillAfterDelay: 1234,
+      reject: false,
+      timeout: 5678,
+    });
   });
 
-  test("resolves not-ok with captured stderr on non-zero exit", async () => {
-    const child = createFakeChild();
-    const { spawnFn } = fakeSpawn(child);
-
-    const resultPromise = runAgent(agentAdapters.codex, "prompt", { spawnFn });
-    child.stderr.emit("data", "something broke");
-    child.emit("close", 1);
-
-    expect(await resultPromise).toEqual({
-      ok: false,
-      stderr: "something broke",
+  test("caps captured stderr at the tail", async () => {
+    const { execaFn } = fakeExeca({
+      failed: true,
+      stderr: `${"x".repeat(STDERR_CAP)}tail`,
       timedOut: false,
     });
-  });
 
-  test("resolves not-ok when spawning fails", async () => {
-    const child = createFakeChild();
-    const { spawnFn } = fakeSpawn(child);
+    const result = await runAgent(agentAdapters.claude, "prompt", { execaFn });
 
-    const resultPromise = runAgent(agentAdapters.claude, "prompt", { spawnFn });
-    child.emit("error", new Error("spawn claude ENOENT"));
-
-    expect(await resultPromise).toEqual({
-      ok: false,
-      stderr: "spawn claude ENOENT",
-      timedOut: false,
-    });
-  });
-
-  test("kills the agent and reports a timeout when the deadline passes", async () => {
-    const child = createFakeChild();
-    const { spawnFn } = fakeSpawn(child);
-
-    const result = await runAgent(agentAdapters.claude, "prompt", {
-      spawnFn,
-      timeoutMs: 5,
-    });
-
-    expect(child.killedWith).toBe("SIGTERM");
     expect(result.ok).toBe(false);
-    expect(result.timedOut).toBe(true);
+    expect(result.stderr).toHaveLength(STDERR_CAP);
+    expect(result.stderr.endsWith("tail")).toBe(true);
+  });
+
+  test("falls back to execa's failure summary when stderr is empty", async () => {
+    const { execaFn } = fakeExeca({
+      failed: true,
+      shortMessage: "Command failed with ENOENT: claude",
+      stderr: "",
+      timedOut: false,
+    });
+
+    const result = await runAgent(agentAdapters.claude, "prompt", { execaFn });
+
+    expect(result).toEqual({
+      ok: false,
+      stderr: "Command failed with ENOENT: claude",
+      timedOut: false,
+    });
   });
 });

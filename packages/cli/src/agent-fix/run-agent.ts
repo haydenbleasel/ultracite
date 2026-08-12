@@ -1,6 +1,6 @@
-import { spawn as nodeSpawn } from "node:child_process";
-import { once } from "node:events";
 import process from "node:process";
+
+import { execa } from "execa";
 
 import type { AgentAdapter } from "./agents";
 
@@ -20,9 +20,9 @@ export interface AgentRunResult {
 
 interface RunAgentOptions {
   cwd?: string;
+  /** Injectable for tests — the real execa spawns actual processes. */
+  execaFn?: typeof execa;
   killGraceMs?: number;
-  /** Injectable for tests — node:child_process cannot be module-mocked here. */
-  spawnFn?: typeof nodeSpawn;
   timeoutMs?: number;
 }
 
@@ -31,49 +31,35 @@ export const runAgent = async (
   prompt: string,
   {
     cwd = process.cwd(),
+    execaFn = execa,
     killGraceMs = KILL_GRACE_MS,
-    spawnFn = nodeSpawn,
     timeoutMs = AGENT_TIMEOUT_MS,
   }: RunAgentOptions = {}
 ): Promise<AgentRunResult> => {
-  const child = spawnFn(adapter.command, adapter.buildArgs(prompt), {
+  // reject: false — a failed run (non-zero exit, timeout, missing CLI) is an
+  // expected outcome reported through the result, not an exception.
+  const result = await execaFn(adapter.command, adapter.buildArgs(prompt), {
     cwd,
-    shell: false,
-    stdio: ["ignore", "pipe", "pipe"],
+    forceKillAfterDelay: killGraceMs,
+    reject: false,
+    stderr: "pipe",
+    stdin: "ignore",
+    // stdout must be discarded or the child stalls once the pipe buffer fills.
+    stdout: "ignore",
+    timeout: timeoutMs,
   });
 
-  let stderr = "";
-  let timedOut = false;
+  // No stderr usually means the process never ran (e.g. the CLI is missing) —
+  // surface execa's failure summary instead.
+  const failureSummary = (result.failed && result.shortMessage) || "";
+  const stderrText =
+    typeof result.stderr === "string" && result.stderr.length > 0
+      ? result.stderr
+      : failureSummary;
 
-  // stdout must be drained or the child stalls once the pipe buffer fills.
-  child.stdout?.resume();
-  child.stderr?.on("data", (chunk: Buffer | string) => {
-    stderr = (stderr + String(chunk)).slice(-STDERR_CAP);
-  });
-
-  let killTimer: ReturnType<typeof setTimeout> | null = null;
-  const timer = setTimeout(() => {
-    timedOut = true;
-    child.kill("SIGTERM");
-    killTimer = setTimeout(() => {
-      child.kill("SIGKILL");
-    }, killGraceMs);
-  }, timeoutMs);
-
-  try {
-    // once() rejects if the child emits "error" (e.g. the CLI is missing).
-    const [code] = (await once(child, "close")) as [number | null];
-    return { ok: !timedOut && code === 0, stderr, timedOut };
-  } catch (error) {
-    return {
-      ok: false,
-      stderr: error instanceof Error ? error.message : String(error),
-      timedOut,
-    };
-  } finally {
-    clearTimeout(timer);
-    if (killTimer) {
-      clearTimeout(killTimer);
-    }
-  }
+  return {
+    ok: !result.failed,
+    stderr: stderrText.slice(-STDERR_CAP),
+    timedOut: result.timedOut === true,
+  };
 };
