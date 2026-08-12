@@ -1,14 +1,9 @@
-import {
-  accessSync,
-  existsSync,
-  lstatSync,
-  mkdirSync,
-  realpathSync,
-} from "node:fs";
+import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
+import { any as findUpAny } from "empathic/find";
 import { glob } from "glob";
 import YAML from "yaml";
 
@@ -443,52 +438,41 @@ export const findNearestFile = (
   fileNames: readonly string[],
   startDir = process.cwd()
 ): { dir: string; fileName: string; path: string } | null => {
-  let dir = startDir;
+  // empathic checks the names in order within each directory before moving to
+  // the parent, matching how the linters themselves resolve configs.
+  const found = findUpAny([...fileNames], { cwd: startDir });
 
-  while (true) {
-    for (const name of fileNames) {
-      const fullPath = path.join(dir, name);
-      if (existsSync(fullPath)) {
-        return { dir, fileName: name, path: fullPath };
-      }
-    }
-
-    const parent = path.dirname(dir);
-    if (parent === dir) {
-      return null;
-    }
-    dir = parent;
+  if (!found) {
+    return null;
   }
+
+  return {
+    dir: path.dirname(found),
+    fileName: path.basename(found),
+    path: found,
+  };
 };
 
 export const detectLinter = (startDir = process.cwd()): Linter | null => {
-  let dir = startDir;
+  // Precedence is per-directory: the nearest directory wins, and within a
+  // directory Biome beats ESLint beats Oxlint — the concatenated name list
+  // preserves that order at every level of the walk.
+  const found = findNearestFile(
+    [...biomeConfigNames, ...eslintConfigNames, ...oxlintConfigNames],
+    startDir
+  );
 
-  while (true) {
-    for (const name of biomeConfigNames) {
-      if (exists(path.join(dir, name))) {
-        return "biome";
-      }
-    }
-
-    for (const name of eslintConfigNames) {
-      if (exists(path.join(dir, name))) {
-        return "eslint";
-      }
-    }
-
-    for (const name of oxlintConfigNames) {
-      if (exists(path.join(dir, name))) {
-        return "oxlint";
-      }
-    }
-
-    const parent = path.dirname(dir);
-    if (parent === dir) {
-      break;
-    }
-    dir = parent;
+  if (!found) {
+    return null;
   }
 
-  return null;
+  if ((biomeConfigNames as readonly string[]).includes(found.fileName)) {
+    return "biome";
+  }
+
+  if ((eslintConfigNames as readonly string[]).includes(found.fileName)) {
+    return "eslint";
+  }
+
+  return "oxlint";
 };
