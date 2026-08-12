@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { log } from "@clack/prompts";
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
+import { generateCode, parseModule } from "magicast";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 import YAML from "yaml";
@@ -182,33 +183,56 @@ const updateYamlConfig = async (
   await writeProjectFile(filename, YAML.stringify(mergedConfig));
 };
 
-// Update ESM config files
+// Update ESM config files. magicast edits the module's AST in place, so
+// comments and function-valued entries elsewhere in the config survive the
+// update — the previous import()-and-serialize approach destroyed both.
 const updateEsmConfig = async (
   filename: string,
   packageManager: PackageManagerName
 ): Promise<void> => {
-  const fileUrl = pathToFileURL(filename).href;
-  // Intentionally loading the user's config file at runtime; the path is not statically known
-  const imported = await import(fileUrl);
-  const existingConfig = imported.default || {};
+  const content = await readFile(filename, "utf-8");
 
-  if (hasUltraciteCommand(existingConfig)) {
+  if (content.includes("ultracite")) {
     return;
   }
 
-  if (containsFunction(existingConfig)) {
+  const mod = parseModule(content);
+
+  const [entry] = Object.entries(createLintStagedConfig(packageManager));
+  const [pattern, commands] = entry as [string, string[]];
+
+  try {
+    const config = mod.exports.default;
+
+    if (config === undefined) {
+      // No default export to merge into — add one with just our entry.
+      mod.exports.default = { [pattern]: commands };
+    } else if (config.$type === "object") {
+      const existing = config[pattern];
+
+      if (existing === undefined) {
+        config[pattern] = commands;
+      } else if (Array.isArray(existing)) {
+        existing.push(...commands);
+      } else {
+        // A function or other non-array value owns our pattern; replacing it
+        // would delete the user's config.
+        warnUnmergeableConfig(filename);
+        return;
+      }
+    } else {
+      // e.g. `export default defineConfig(...)` or a function config.
+      warnUnmergeableConfig(filename);
+      return;
+    }
+  } catch {
+    // magicast can't proxy every node kind (some template literals, etc.).
     warnUnmergeableConfig(filename);
     return;
   }
 
-  const mergedConfig = deepmerge(
-    existingConfig,
-    createLintStagedConfig(packageManager)
-  );
-
-  const esmContent = `export default ${JSON.stringify(mergedConfig, null, 2)};
-`;
-  await writeProjectFile(filename, esmContent);
+  const { code } = generateCode(mod);
+  await writeProjectFile(filename, code.endsWith("\n") ? code : `${code}\n`);
 };
 
 // Update CommonJS config files

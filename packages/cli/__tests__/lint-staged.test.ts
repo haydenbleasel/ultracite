@@ -356,6 +356,58 @@ describe("lintStaged", () => {
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
+    test("preserves comments and function entries when updating ESM configs", async () => {
+      const written = new Map<string, string>();
+      const mjsSource = `// team-specific overrides
+export default {
+  "*.py": ["ruff check"],
+  "*.md": (files) => "mdlint " + files.join(" "),
+};
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock((path: string) =>
+          path === "./lint-staged.config.mjs" || path === "./package.json"
+            ? Promise.resolve()
+            : Promise.reject(new Error("ENOENT"))
+        ),
+        readFile: mock((path: string) =>
+          path === "./package.json"
+            ? Promise.resolve("{}")
+            : Promise.resolve(mjsSource)
+        ),
+        writeFile: mock((path: string, content: string) => {
+          written.set(path, content);
+          return Promise.resolve();
+        }),
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock((path: string) => {
+          if (
+            path === "./lint-staged.config.mjs" ||
+            path === "./package.json"
+          ) {
+            return;
+          }
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock((path: string) =>
+          path === "./lint-staged.config.mjs" ? mjsSource : "{}"
+        ),
+      }));
+
+      await lintStaged.update("npm");
+
+      const output = written.get("./lint-staged.config.mjs");
+      expect(output).toBeDefined();
+      expect(output).toContain("// team-specific overrides");
+      expect(output).toContain('"*.py"');
+      expect(output).toContain("mdlint");
+      expect(output).toContain("npx ultracite fix");
+    });
+
     test("handles CommonJS config files (.cjs)", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -1037,7 +1089,7 @@ describe("lintStaged", () => {
       expect(true).toBe(true);
     });
 
-    test("handles ESM config import error by creating fallback", async () => {
+    test("handles unparseable ESM config by creating fallback", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -1058,7 +1110,8 @@ describe("lintStaged", () => {
           if (path === "package.json") {
             return Promise.resolve('{"type": "module"}');
           }
-          return Promise.resolve("{}");
+          // Syntactically broken config — magicast cannot parse it.
+          return Promise.resolve("export default {");
         }),
         writeFile: mockWriteFile,
       }));
@@ -1074,23 +1127,12 @@ describe("lintStaged", () => {
         readFileSync: mock(() => "{}"),
       }));
 
-      // Mock the dynamic import to throw an error
-      const originalImport = (globalThis as Record<string, unknown>).import as
-        | ((path: string) => Promise<unknown>)
-        | undefined;
-      (globalThis as Record<string, unknown>).import = () =>
-        Promise.reject(new Error("Cannot import ESM module"));
+      await lintStaged.update("npm");
 
-      try {
-        await lintStaged.update("npm");
-        // Should fallback to creating .lintstagedrc.json when ESM import fails
-        expect(mockWriteFile).toHaveBeenCalled();
-        const [writeCall] = mockWriteFile.mock.calls;
-        expect(writeCall[0]).toBe(".lintstagedrc.json");
-      } finally {
-        // Restore original import
-        (globalThis as Record<string, unknown>).import = originalImport;
-      }
+      // Should fall back to creating .lintstagedrc.json when parsing fails
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(writeCall[0]).toBe(".lintstagedrc.json");
     });
   });
 });
