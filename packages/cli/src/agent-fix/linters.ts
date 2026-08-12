@@ -4,7 +4,7 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import { toStylelintTargets } from "../linter-args";
-import { runCommandSync } from "../run-command";
+import { spawnSync } from "../spawn-sync";
 import type { Linter } from "../utils";
 import type { Diagnostic, LinterAdapter } from "./types";
 
@@ -19,7 +19,7 @@ const STDERR_TAIL_LENGTH = 500;
 const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
 
 const runPiped = (command: string, args: string[]): string => {
-  const result = runCommandSync(command, args, {
+  const result = spawnSync(command, args, {
     maxBuffer: PIPED_MAX_BUFFER,
   });
 

@@ -3,7 +3,7 @@ import { mkdir, readFile } from "node:fs/promises";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
-import { runCommandSync } from "../run-command";
+import { spawnSync } from "../spawn-sync";
 import {
   exists,
   isMonorepo,
@@ -98,7 +98,7 @@ export const husky = {
     // `npm test`, destroying any existing user hook.
     const [command, ...args] = dlxCommand(packageManager, "husky").split(" ");
 
-    const result = runCommandSync(command, args, { stdio: "pipe" });
+    const result = spawnSync(command, args, { stdio: "pipe" });
 
     if (result.error || (result.status !== null && result.status !== 0)) {
       // If setup fails (e.g. not a git repository yet), continue anyway —

@@ -4,7 +4,8 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
-import { exitOnCommandFailure, runCommandSync, runSteps } from "../run-command";
+import { exitOnCommandFailure, runSteps } from "../run-command";
+import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
 
 const runBiomeCheck = (files: string[], passthrough: string[]): void => {
@@ -24,7 +25,7 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
     args.push("./");
   }
 
-  const result = runCommandSync("biome", args, {
+  const result = spawnSync("biome", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("Biome", result);
@@ -33,7 +34,7 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
 const runEslintCheck = (files: string[], passthrough: string[]): void => {
   const args = [...passthrough, ...(files.length > 0 ? files : ["."])];
 
-  const result = runCommandSync("eslint", args, {
+  const result = spawnSync("eslint", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("ESLint", result);
@@ -46,7 +47,7 @@ const runPrettierCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = runCommandSync("prettier", args, {
+  const result = spawnSync("prettier", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("Prettier", result);
@@ -61,7 +62,7 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
 
   const args = [...passthrough, "--allow-empty-input", ...targets];
 
-  const result = runCommandSync("stylelint", args, {
+  const result = spawnSync("stylelint", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("Stylelint", result);
@@ -70,7 +71,7 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
 const runOxlintCheck = (files: string[], passthrough: string[]): void => {
   const args = [...passthrough, ...(files.length > 0 ? files : ["."])];
 
-  const result = runCommandSync("oxlint", args, {
+  const result = spawnSync("oxlint", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("Oxlint", result);
@@ -83,7 +84,7 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
     ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = runCommandSync("oxfmt", args, {
+  const result = spawnSync("oxfmt", args, {
     stdio: "inherit",
   });
   exitOnCommandFailure("oxfmt", result);

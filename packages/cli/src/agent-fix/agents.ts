@@ -1,6 +1,6 @@
 import { UltraciteSetupError } from "../config-resolution";
 import type { FixAgent } from "../linter-args";
-import { runCommandSync } from "../run-command";
+import { spawnSync } from "../spawn-sync";
 
 export interface AgentAdapter {
   buildArgs: (prompt: string) => string[];
@@ -38,7 +38,7 @@ export const agentAdapters: Record<FixAgent, AgentAdapter> = {
 };
 
 export const assertAgentAvailable = (adapter: AgentAdapter): void => {
-  const result = runCommandSync(adapter.command, ["--version"]);
+  const result = spawnSync(adapter.command, ["--version"]);
 
   // A clean exit is enough — some CLIs print the version to stderr. A missing
   // binary surfaces as a spawn error with a null status, not an exit code.

@@ -7,8 +7,8 @@ import { parse } from "jsonc-parser";
 
 import packageJson from "../../package.json" with { type: "json" };
 import { canResolveUltracite } from "../config-resolution";
-import { runCommandSync } from "../run-command";
 import { readPackageJsonSync } from "../schemas";
+import { spawnSync } from "../spawn-sync";
 import {
   biomeConfigNames,
   detectLinter,
@@ -47,7 +47,7 @@ const checkToolInstallation = (
   tool: string,
   required: boolean
 ): DiagnosticCheck => {
-  const result = runCommandSync(tool, ["--version"]);
+  const result = spawnSync(tool, ["--version"]);
 
   if (result.status === 0 && result.stdout) {
     return {

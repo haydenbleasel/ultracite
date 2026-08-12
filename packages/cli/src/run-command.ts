@@ -1,8 +1,4 @@
-import { spawnSync } from "./spawn-sync";
-import type { SpawnSyncOptions, SpawnSyncResult } from "./spawn-sync";
-
-type RunCommandOptions = SpawnSyncOptions;
-type RunCommandResult = SpawnSyncResult;
+import type { SpawnSyncResult } from "./spawn-sync";
 
 export class LinterExitError extends Error {
   readonly commandName: string;
@@ -18,15 +14,9 @@ export class LinterExitError extends Error {
   }
 }
 
-export const runCommandSync = (
-  command: string,
-  args: string[],
-  options: RunCommandOptions = {}
-): RunCommandResult => spawnSync(command, args, options);
-
 export const exitOnCommandFailure = (
   commandName: string,
-  result: RunCommandResult
+  result: SpawnSyncResult
 ): void => {
   if (result.error) {
     throw new Error(`Failed to run ${commandName}: ${result.error.message}`);
