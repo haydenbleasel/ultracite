@@ -2,8 +2,8 @@ import { describe, expect, mock, test } from "bun:test";
 
 import { tsconfig } from "../src/tsconfig";
 
-mock.module("glob", () => ({
-  glob: mock(() => Promise.resolve([])),
+mock.module("fast-glob", () => ({
+  default: mock(() => Promise.resolve([])),
 }));
 
 mock.module("node:fs/promises", () => ({
@@ -18,8 +18,8 @@ describe("tsconfig", () => {
 
   describe("exists", () => {
     test("returns true when tsconfig files are found", async () => {
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
 
       const result = await tsconfig.exists();
@@ -27,8 +27,8 @@ describe("tsconfig", () => {
     });
 
     test("returns false when no tsconfig files are found", async () => {
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve([])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve([])),
       }));
 
       const result = await tsconfig.exists();
@@ -36,8 +36,8 @@ describe("tsconfig", () => {
     });
 
     test("returns false when glob throws an error", async () => {
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.reject(new Error("Glob error"))),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.reject(new Error("Glob error"))),
       }));
 
       const result = await tsconfig.exists();
@@ -48,8 +48,8 @@ describe("tsconfig", () => {
   describe("update", () => {
     test("skips modification when strict: true is already set", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -67,8 +67,8 @@ describe("tsconfig", () => {
 
     test("skips modification when strictNullChecks: true is already set", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -88,8 +88,8 @@ describe("tsconfig", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -118,8 +118,8 @@ describe("tsconfig", () => {
     "target": "ES2020"
   }
 }`;
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -138,8 +138,8 @@ describe("tsconfig", () => {
 
     test("updates multiple tsconfig files", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module("glob", () => ({
-        glob: mock(() =>
+      mock.module("fast-glob", () => ({
+        default: mock(() =>
           Promise.resolve(["tsconfig.json", "tsconfig.base.json"])
         ),
       }));
@@ -158,8 +158,8 @@ describe("tsconfig", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -178,8 +178,8 @@ describe("tsconfig", () => {
       const mockWriteFile = mock(() =>
         Promise.reject(new Error("Permission denied"))
       );
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -195,8 +195,8 @@ describe("tsconfig", () => {
 
     test("does nothing when no tsconfig files found", async () => {
       const mockWriteFile = mock(() => Promise.resolve());
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve([])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve([])),
       }));
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),

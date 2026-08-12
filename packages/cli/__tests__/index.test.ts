@@ -55,8 +55,8 @@ mock.module("nypm", () => ({
   removeDependency: mock(() => Promise.resolve()),
 }));
 
-mock.module("glob", () => ({
-  glob: mock(() => Promise.resolve([])),
+mock.module("fast-glob", () => ({
+  default: mock(() => Promise.resolve([])),
 }));
 
 // We need to manually create a simple test version due to CLI auto-run issues

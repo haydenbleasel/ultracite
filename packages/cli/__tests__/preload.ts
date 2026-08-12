@@ -19,10 +19,10 @@ import "nypm";
 (globalThis as Record<string, unknown>).__realReaddirSync = _realReaddirSync;
 (globalThis as Record<string, unknown>).__realReadFileSync = _realReadFileSync;
 
-// Mock glob module before any imports that use it
-// This is needed for tsconfig.test.ts and other tests that use glob
-mock.module("glob", () => ({
-  glob: mock(() => Promise.resolve([])),
+// Mock fast-glob before any imports that use it
+// This is needed for tsconfig.test.ts and other tests that scan for files
+mock.module("fast-glob", () => ({
+  default: mock(() => Promise.resolve([])),
 }));
 
 // Mock find-workspaces (used by detectFrameworks) so tests never scan the real

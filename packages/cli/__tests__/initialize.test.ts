@@ -59,8 +59,8 @@ mock.module("nypm", () => ({
   removeDependency: mock(() => Promise.resolve()),
 }));
 
-mock.module("glob", () => ({
-  glob: mock(() => Promise.resolve([])),
+mock.module("fast-glob", () => ({
+  default: mock(() => Promise.resolve([])),
 }));
 
 // noop function to satisfy linter
@@ -2212,8 +2212,8 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve(["./tsconfig.json"])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve(["./tsconfig.json"])),
       }));
 
       mock.module("@clack/prompts", () => ({
@@ -2236,8 +2236,8 @@ describe("helper functions", () => {
         writeFile: mock(() => Promise.resolve()),
       }));
 
-      mock.module("glob", () => ({
-        glob: mock(() => Promise.resolve([])),
+      mock.module("fast-glob", () => ({
+        default: mock(() => Promise.resolve([])),
       }));
 
       mock.module("@clack/prompts", () => ({

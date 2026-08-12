@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
-import { glob } from "glob";
+import fastGlob from "fast-glob";
 import { applyEdits, modify } from "jsonc-parser";
 import type { ModificationOptions } from "jsonc-parser";
 import type { z } from "zod";
@@ -14,7 +14,7 @@ import { writeProjectFile } from "./utils";
  */
 const findTsConfigFiles = async (): Promise<string[]> => {
   try {
-    const files = await glob("**/tsconfig*.json", {
+    const files = await fastGlob("**/tsconfig*.json", {
       absolute: false,
       ignore: [
         "**/node_modules/**",
