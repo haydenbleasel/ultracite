@@ -1,5 +1,9 @@
 import process from "node:process";
 
+import cliTruncate from "cli-truncate";
+import { createLogUpdate } from "log-update";
+import stringWidth from "string-width";
+
 import type { Diagnostic } from "./types";
 
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
@@ -12,8 +16,6 @@ const GREEN = "\u001B[32m";
 const RED = "\u001B[31m";
 const DIM = "\u001B[2m";
 const RESET = "\u001B[0m";
-const CURSOR_UP = (lines: number): string => `\u001B[${lines}A`;
-const CLEAR_LINE = "\r\u001B[2K";
 
 export interface FileGroup {
   file: string;
@@ -46,13 +48,6 @@ export interface Renderer {
 const pluralize = (count: number, noun: string): string =>
   `${count} ${noun}${count === 1 ? "" : "s"}`;
 
-const truncateEnd = (text: string, max: number): string => {
-  if (text.length <= max) {
-    return text;
-  }
-  return max <= 1 ? text.slice(0, max) : `${text.slice(0, max - 1)}…`;
-};
-
 export const createRenderer = (
   groups: FileGroup[],
   options: RendererOptions
@@ -63,10 +58,18 @@ export const createRenderer = (
   const columns = options.columns ?? process.stdout.columns ?? DEFAULT_COLUMNS;
   const frameIntervalMs = options.frameIntervalMs ?? FRAME_INTERVAL_MS;
 
+  // log-update tracks how many lines the previous render produced and rewrites
+  // exactly that block on the next call — replacing the manual cursor-up /
+  // clear-line bookkeeping. defaultWidth keeps its wrap math in sync with the
+  // truncation budget when the sink doesn't report a width of its own.
+  const logUpdate = createLogUpdate(out as unknown as NodeJS.WriteStream, {
+    defaultWidth: columns,
+    showCursor: true,
+  });
+
   const pending = new Map(groups.map((group) => [group.file, group.issues]));
   let activeFile: string | null = null;
   let activeIssues: Diagnostic[] = [];
-  let activeHasSummaryLine = false;
   let frame = 0;
   let timer: ReturnType<typeof setInterval> | null = null;
 
@@ -74,7 +77,9 @@ export const createRenderer = (
     useColor ? `${code}${text}${RESET}` : text;
 
   // Every part is truncated so the whole line fits in one terminal row — a
-  // wrapped line would break the cursor-up math used to rewrite the block.
+  // wrapped line would double-count against log-update's block height. Widths
+  // are measured with string-width, so emoji and CJK text in lint messages
+  // can't overflow the budget the way code-unit counts would.
   const issueLine = (
     icon: string,
     iconColor: string,
@@ -85,18 +90,20 @@ export const createRenderer = (
     let mid = `  ${issue.rule} — `;
     let { message } = issue;
 
-    if (location.length >= budget) {
-      location = truncateEnd(location, budget);
+    const locationWidth = stringWidth(location);
+
+    if (locationWidth >= budget) {
+      location = cliTruncate(location, budget);
       mid = "";
       message = "";
-    } else if (location.length + mid.length >= budget) {
-      mid = truncateEnd(mid, budget - location.length);
+    } else if (locationWidth + stringWidth(mid) >= budget) {
+      mid = cliTruncate(mid, budget - locationWidth);
       message = "";
     } else {
-      const available = budget - location.length - mid.length;
-      if (message.length > available) {
+      const available = budget - locationWidth - stringWidth(mid);
+      if (stringWidth(message) > available) {
         message =
-          available < MIN_MESSAGE_WIDTH ? "" : truncateEnd(message, available);
+          available < MIN_MESSAGE_WIDTH ? "" : cliTruncate(message, available);
       }
     }
 
@@ -125,25 +132,17 @@ export const createRenderer = (
     );
   };
 
-  const drawActiveBlock = (rewrite: boolean): void => {
-    const summary = queuedSummary();
+  const drawActiveBlock = (): void => {
     const lines = activeIssues.map((issue) =>
       issueLine(SPINNER_FRAMES[frame % SPINNER_FRAMES.length], CYAN, issue)
     );
+    const summary = queuedSummary();
 
     if (summary) {
       lines.push(summary);
     }
 
-    const previousLineCount =
-      activeIssues.length + (activeHasSummaryLine ? 1 : 0);
-
-    if (rewrite) {
-      out.write(CURSOR_UP(previousLineCount));
-    }
-
-    out.write(lines.map((line) => `${CLEAR_LINE}${line}\n`).join(""));
-    activeHasSummaryLine = summary !== null;
+    logUpdate(lines.join("\n"));
   };
 
   const stopTimer = (): void => {
@@ -164,11 +163,10 @@ export const createRenderer = (
       return;
     }
 
-    activeHasSummaryLine = false;
-    drawActiveBlock(false);
+    drawActiveBlock();
     timer = setInterval(() => {
       frame += 1;
-      drawActiveBlock(true);
+      drawActiveBlock();
     }, frameIntervalMs);
   };
 
@@ -197,26 +195,18 @@ export const createRenderer = (
 
     stopTimer();
 
-    const lineCount = activeIssues.length + (activeHasSummaryLine ? 1 : 0);
-    out.write(CURSOR_UP(lineCount));
-    out.write(
-      settledLines(settled)
-        .map((line) => `${CLEAR_LINE}${line}\n`)
-        .join("")
-    );
-
-    // The settled block can be shorter than what was drawn (the queued-summary
-    // line goes away); clear the leftover line and leave the cursor there.
-    if (activeHasSummaryLine) {
-      out.write(CLEAR_LINE);
-    }
+    const lines = settledLines(settled);
 
     if (note) {
-      out.write(`${CLEAR_LINE}${color(DIM, note)}\n`);
+      lines.push(color(DIM, note));
     }
 
+    logUpdate(lines.join("\n"));
+    // Persist the settled block so the next file's spinner renders below it
+    // instead of overwriting it.
+    logUpdate.done();
+
     activeFile = null;
-    activeHasSummaryLine = false;
   };
 
   return { settleFile, startFile, stop: stopTimer };

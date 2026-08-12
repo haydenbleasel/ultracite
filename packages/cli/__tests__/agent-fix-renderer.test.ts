@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
+import stringWidth from "string-width";
+
 import { createRenderer } from "../src/agent-fix/renderer";
 import type { FileGroup } from "../src/agent-fix/renderer";
 import type { Diagnostic } from "../src/agent-fix/types";
@@ -100,8 +102,11 @@ describe("agent-fix renderer", () => {
     const output = sink.output();
     expect(output).toContain("✓");
     expect(output).toContain("✗");
-    // Settling rewrites the animated block in place via cursor movement.
-    expect(output).toContain("\u001B[3A");
+    // Settling rewrites the animated block in place — log-update erases the
+    // previous render (clear-line + cursor-up) before writing the settled
+    // lines.
+    expect(output).toContain("\u001B[2K");
+    expect(output).toContain("\u001B[1A");
   });
 
   test("TTY mode truncates long messages to the terminal width", () => {
@@ -121,6 +126,34 @@ describe("agent-fix renderer", () => {
     renderer.stop();
     for (const line of sink.output().split("\n")) {
       expect(stripAnsi(line).length).toBeLessThanOrEqual(60);
+    }
+  });
+
+  // Emoji and CJK glyphs occupy two terminal cells but one-plus code units, so
+  // a code-unit budget would let these lines overflow and wrap, breaking the
+  // in-place block rewrite.
+  test("TTY mode truncates by display width, not code units", () => {
+    const sink = createSink();
+    const renderer = createRenderer(
+      [
+        {
+          file: "src/foo.ts",
+          issues: [issue({ message: "🚫🚫🚫 禁止事項".repeat(20) })],
+        },
+      ],
+      {
+        agentLabel: "Claude Code",
+        columns: 60,
+        frameIntervalMs: 60_000,
+        isTTY: true,
+        out: sink,
+      }
+    );
+
+    renderer.startFile("src/foo.ts");
+    renderer.stop();
+    for (const line of sink.output().split("\n")) {
+      expect(stringWidth(stripAnsi(line))).toBeLessThanOrEqual(60);
     }
   });
 });
