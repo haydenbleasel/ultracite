@@ -511,12 +511,29 @@ describe("oxlint anti-slop config", () => {
     const registered = Object.keys(rules)
       .map((name) => `anti-slop/${name}`)
       .toSorted();
-    const configured = Object.keys(config.rules ?? {}).toSorted();
+    const configuredEntries = Object.entries(config.rules ?? {});
+    const configured = configuredEntries
+      .map(([name]) => name)
+      .filter((name) => name.startsWith("anti-slop/"))
+      .toSorted();
 
     expect(configured).toEqual(registered);
-    for (const severity of Object.values(config.rules ?? {})) {
-      expect(severity).toBe("error");
+    for (const [name, severity] of configuredEntries) {
+      expect(severity).toBe(name.startsWith("anti-slop/") ? "error" : "off");
     }
+  });
+
+  test("turns off the core rules that conflict with anti-slop", async () => {
+    const config = await readOxlintConfig("anti-slop");
+
+    // consistent-indexed-object-style's autofix rewrites index-signature
+    // interfaces into `Record` aliases that no-known-value-widening re-flags,
+    // and no-immediate-mutation bans the empty-accumulator escape from the
+    // same rule — so extending this preset after core disables both.
+    expect(config.rules["typescript/consistent-indexed-object-style"]).toBe(
+      "off"
+    );
+    expect(config.rules["unicorn/no-immediate-mutation"]).toBe("off");
   });
 
   // Run oxlint for real with core + anti-slop loaded via a committed fixture

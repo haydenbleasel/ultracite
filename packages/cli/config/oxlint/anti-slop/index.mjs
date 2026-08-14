@@ -50,5 +50,13 @@ export default defineConfig({
     "anti-slop/no-unsafe-dictionary-type": "error",
     "anti-slop/no-widen-then-assert": "error",
     "anti-slop/require-safety-comment-for-type-assertion": "error",
+    // Core rules that pinch against anti-slop when both are enabled:
+    // consistent-indexed-object-style's autofix rewrites index-signature
+    // interfaces into `Record` aliases, which no-known-value-widening
+    // resolves and re-flags (a fix/break loop), and no-immediate-mutation
+    // bans the empty-accumulator escape from the same rule. Extending this
+    // preset after core turns them off by default.
+    "typescript/consistent-indexed-object-style": "off",
+    "unicorn/no-immediate-mutation": "off",
   },
 });
