@@ -4,6 +4,7 @@ import process from "node:process";
 
 import { parse } from "jsonc-parser";
 import { exports as resolvePackageExports } from "resolve.exports";
+import type { Package } from "resolve.exports";
 
 import { biomeConfigNames, exists } from "./utils";
 import type { Linter } from "./utils";
@@ -14,11 +15,11 @@ export const BIOME_EXTENDS_SPECIFIER = "ultracite/biome/core";
 
 // The package specifier each linter's generated config resolves at runtime.
 // Ultracite has no "." export, so resolution always goes through a subpath.
-const linterSpecifiers: Record<Linter, string> = {
+const linterSpecifiers = {
   biome: BIOME_EXTENDS_SPECIFIER,
   eslint: "ultracite/eslint/core",
   oxlint: "ultracite/oxlint/core",
-};
+} satisfies Record<Linter, string>;
 
 /**
  * The filesystem reads this module needs, injectable so tests can describe a
@@ -82,7 +83,9 @@ export const resolveFrom = (
     return null;
   }
 
-  let pkg: Record<string, unknown>;
+  // resolve.exports's own Package type is the contract the parsed manifest is
+  // read against; the library tolerates missing/malformed exports fields.
+  let pkg: Package;
 
   try {
     pkg = JSON.parse(fs.readFile(path.join(packageDir, "package.json")));

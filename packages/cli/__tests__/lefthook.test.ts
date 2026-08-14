@@ -4,7 +4,7 @@ import type { PackageManager } from "nypm";
 
 import { lefthook } from "../src/integrations/lefthook";
 
-const npmPm = { command: "npm", name: "npm" } as PackageManager;
+const npmPm: PackageManager = { command: "npm", name: "npm" };
 
 mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
@@ -188,7 +188,7 @@ describe("lefthook", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.scripts?.prepare).toBe("lefthook install");
     });
   });

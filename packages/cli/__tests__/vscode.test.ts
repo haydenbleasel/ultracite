@@ -118,7 +118,7 @@ describe("vscode editor config", () => {
       const writtenContent = JSON.parse(writeCall[1]);
       // The default config includes various VS Code settings
       // Just verify it's a valid object with some expected keys
-      expect(typeof writtenContent).toBe("object");
+      expect(writtenContent).toBeTypeOf("object");
       expect(Object.keys(writtenContent).length).toBeGreaterThan(0);
     });
   });

@@ -37,10 +37,10 @@ const getPrettierConfigPath = (): string | null => {
   return null;
 };
 
-const frameworkPlugins: Record<string, string> = {
-  astro: "prettier-plugin-astro",
-  svelte: "prettier-plugin-svelte",
-};
+const frameworkPlugins = new Map<string, string>([
+  ["astro", "prettier-plugin-astro"],
+  ["svelte", "prettier-plugin-svelte"],
+]);
 
 interface PrettierOptions {
   frameworks?: (typeof options.frameworks)[number][];
@@ -52,8 +52,9 @@ const generatePrettierConfig = (opts?: PrettierOptions): string => {
   if (opts?.frameworks) {
     for (const fw of opts.frameworks) {
       const name = validateFrameworkName(fw);
-      if (name in frameworkPlugins) {
-        plugins.push(frameworkPlugins[name]);
+      const plugin = frameworkPlugins.get(name);
+      if (plugin) {
+        plugins.push(plugin);
       }
     }
   }

@@ -18,17 +18,14 @@ interface OxlintOptions {
   jsPlugins?: OxlintJsPlugin[];
 }
 
-const oxlintJsPluginConfig: Record<
-  OxlintJsPlugin,
-  { name: string; rulePrefix: string }
-> = {
+const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github", rulePrefix: "github" },
   "eslint-plugin-sonarjs": { name: "sonarjs", rulePrefix: "sonarjs" },
   "oxlint-plugin-react-doctor": {
     name: "react-doctor",
     rulePrefix: "react-doctor",
   },
-};
+} satisfies Record<OxlintJsPlugin, { name: string; rulePrefix: string }>;
 
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -140,11 +137,10 @@ export default defineConfig({
 const SELECTED_JS_PLUGIN_NAMES_RE =
   /selectedJsPluginNames = new Set\((?<names>\[[^\]]*\])\)/u;
 
-const jsPluginsByConfigName = Object.fromEntries(
-  Object.entries(oxlintJsPluginConfig).map(([plugin, { name }]) => [
-    name,
-    plugin as OxlintJsPlugin,
-  ])
+const jsPluginsByConfigName = new Map(
+  oxlintJsPluginNames.map(
+    (plugin) => [oxlintJsPluginConfig[plugin].name, plugin] as const
+  )
 );
 
 /**
@@ -160,13 +156,14 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
   }
 
   try {
-    const names = JSON.parse(match.groups.names) as unknown;
+    const names: unknown = JSON.parse(match.groups.names);
     if (!Array.isArray(names)) {
       return [];
     }
     return names
       .map((name) =>
-        typeof name === "string" ? jsPluginsByConfigName[name] : undefined
+        // oxlint-disable-next-line anti-slop/no-runtime-typeof -- hand-rolled validation of the JSON-parsed plugin-name array recovered from a generated config file
+        typeof name === "string" ? jsPluginsByConfigName.get(name) : undefined
       )
       .filter((plugin): plugin is OxlintJsPlugin => plugin !== undefined);
   } catch {

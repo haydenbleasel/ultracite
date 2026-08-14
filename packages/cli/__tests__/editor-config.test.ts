@@ -51,7 +51,7 @@ describe("createEditorConfig", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".vscode/settings.json");
       // Should write default content, not merged content
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent).toBeDefined();
     });
 
@@ -78,7 +78,7 @@ describe("createEditorConfig", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent["editor.tabSize"]).toBe(4);
     });
   });

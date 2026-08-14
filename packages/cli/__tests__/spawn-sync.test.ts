@@ -1,12 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import process from "node:process";
 
-import type { spawnSync as spawnSyncType } from "../src/spawn-sync";
-
 // Other test files mock ../src/spawn-sync globally, so the real
-// implementation is captured by preload.ts before any mock is registered.
-const spawnSync = (globalThis as Record<string, unknown>)
-  .__realSpawnSync as typeof spawnSyncType;
+// implementation is captured (and typed via `declare global`) by preload.ts
+// before any mock is registered.
+const spawnSync = globalThis.__realSpawnSync;
 
 const node = process.execPath;
 

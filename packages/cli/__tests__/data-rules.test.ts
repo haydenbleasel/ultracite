@@ -6,8 +6,11 @@ import { getRules } from "../src/data/rules";
 
 // When running from the monorepo root, the CLI preload mocks node:fs.
 // Use the real readFileSync stashed on globalThis, falling back to the import.
-const readFileSync = ((globalThis as Record<string, unknown>)
-  .__realReadFileSync ?? _readFileSync) as typeof _readFileSync;
+// SAFETY: preload.ts stashes the unmocked node:fs readFileSync on globalThis
+// under this key before installing the fs mock.
+const readFileSync =
+  (globalThis as { __realReadFileSync?: typeof _readFileSync })
+    .__realReadFileSync ?? _readFileSync;
 
 const repoRoot = path.join(import.meta.dir, "..", "..", "..");
 const skillPath = path.join(repoRoot, "skills", "ultracite", "SKILL.md");

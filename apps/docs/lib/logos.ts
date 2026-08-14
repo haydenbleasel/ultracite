@@ -2,36 +2,44 @@
 // them as-is (SVGs are not run through the asset pipeline), so a plain string
 // path is all a component needs for an <img src>.
 
+import type { ProviderId } from "./providers";
+
 const logo = (name: string): string => `/logos/${name}.svg`;
 
-export const agentLogos: Record<string, string> = {
-  claude: logo("claude"),
-  codex: logo("codex"),
-  copilot: logo("copilot"),
-  gemini: logo("gemini"),
-  opencode: logo("opencode"),
-  qwen: logo("qwen"),
-  warp: logo("warp"),
-};
+// Partial lookup from a tool id to its logo URL. Agent/editor ids are open
+// strings and only some have logos, so consumers index with arbitrary ids and
+// handle a miss themselves.
+const logoMap = (ids: readonly string[]): Readonly<Record<string, string>> =>
+  Object.fromEntries(ids.map((id): [string, string] => [id, logo(id)]));
 
-export const editorLogos: Record<string, string> = {
-  antigravity: logo("antigravity"),
-  bob: logo("bob"),
-  codebuddy: logo("codebuddy"),
-  cursor: logo("cursor"),
-  kiro: logo("kiro"),
-  trae: logo("trae"),
-  void: logo("void"),
-  vscode: logo("vscode"),
-  windsurf: logo("windsurf"),
-  zed: logo("zed"),
-};
+export const agentLogos = logoMap([
+  "claude",
+  "codex",
+  "copilot",
+  "gemini",
+  "opencode",
+  "qwen",
+  "warp",
+]);
 
-export const providerLogos: Record<string, string> = {
+export const editorLogos = logoMap([
+  "antigravity",
+  "bob",
+  "codebuddy",
+  "cursor",
+  "kiro",
+  "trae",
+  "void",
+  "vscode",
+  "windsurf",
+  "zed",
+]);
+
+export const providerLogos = {
   biome: logo("biome"),
   eslint: logo("eslint"),
   oxlint: logo("oxlint"),
-};
+} satisfies Record<ProviderId, string>;
 
 export const prettierLogo = logo("prettier");
 export const stylelintLogo = logo("stylelint");

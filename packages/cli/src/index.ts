@@ -14,8 +14,19 @@ import { LinterExitError } from "./run-command";
 
 type CommandWithRawArgs = Command & { rawArgs?: string[] };
 
+// `check`/`fix` declare no parsed options of their own beyond these; unknown
+// flags pass through to the underlying linter via the raw argv.
+type CheckCommandOptions = Record<string, never>;
+
+interface FixCommandOptions {
+  claude?: boolean;
+  codex?: boolean;
+}
+
 const program = new Command();
 
+// SAFETY: commander doesn't type `rawArgs`, but it stores the argv it parsed
+// on the invoked subcommand's parent `Command`; when present it is a string[].
 const getRawArgs = (command: Command): string[] | undefined =>
   (command.parent as CommandWithRawArgs | null | undefined)?.rawArgs;
 
@@ -76,14 +87,16 @@ program
     "Run linter without fixing files. Unknown options are passed to the underlying linter."
   )
   .allowUnknownOption()
-  .action(async (args: string[], _opts: unknown, command: Command) => {
-    const { files, passthrough } = splitLinterArgs({
-      commandName: "check",
-      parsedArgs: args,
-      rawArgs: getRawArgs(command),
-    });
-    await check(files, passthrough);
-  });
+  .action(
+    async (args: string[], _opts: CheckCommandOptions, command: Command) => {
+      const { files, passthrough } = splitLinterArgs({
+        commandName: "check",
+        parsedArgs: args,
+        rawArgs: getRawArgs(command),
+      });
+      await check(files, passthrough);
+    }
+  );
 
 program
   .command("fix")
@@ -94,15 +107,17 @@ program
   .option("--claude", "Fix remaining issues with the Claude Code CLI")
   .option("--codex", "Fix remaining issues with the Codex CLI")
   .allowUnknownOption()
-  .action(async (args: string[], _opts: unknown, command: Command) => {
-    const split = splitLinterArgs({
-      commandName: "fix",
-      parsedArgs: args,
-      rawArgs: getRawArgs(command),
-    });
-    const { agent, passthrough } = extractAgentFlags(split.passthrough);
-    await fix(split.files, passthrough, { agent });
-  });
+  .action(
+    async (args: string[], _opts: FixCommandOptions, command: Command) => {
+      const split = splitLinterArgs({
+        commandName: "fix",
+        parsedArgs: args,
+        rawArgs: getRawArgs(command),
+      });
+      const { agent, passthrough } = extractAgentFlags(split.passthrough);
+      await fix(split.files, passthrough, { agent });
+    }
+  );
 
 program
   .command("doctor")

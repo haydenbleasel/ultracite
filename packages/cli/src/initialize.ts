@@ -72,16 +72,22 @@ const oxlintJsPlugins = [
 
 type OxlintJsPlugin = (typeof oxlintJsPlugins)[number];
 
-const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES: Record<OxlintJsPlugin, string> = {
+const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
   "oxlint-plugin-react-doctor":
     packageJson.devDependencies["oxlint-plugin-react-doctor"],
-};
+} satisfies Record<OxlintJsPlugin, string>;
+
+// Widened view of the list so `.includes` can take an arbitrary string.
+const oxlintJsPluginNames: readonly string[] = oxlintJsPlugins;
+
+const isOxlintJsPlugin = (value: string): value is OxlintJsPlugin =>
+  oxlintJsPluginNames.includes(value);
 
 const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
-  if (oxlintJsPlugins.includes(value as OxlintJsPlugin)) {
-    return value as OxlintJsPlugin;
+  if (isOxlintJsPlugin(value)) {
+    return value;
   }
 
   throw new Error(
@@ -114,7 +120,7 @@ interface InitializeFlags {
 // eslint-plugin-unicorn@72 and eslint-plugin-astro@3 require ESLint >= 10;
 // the whole preset is verified against ESLint 10.
 const supportedEslintVersion = "^10.0.0";
-const eslintCoreDevDependencies: Record<string, string> = {
+const eslintCoreDevDependencies = {
   "@eslint/js": supportedEslintVersion,
   "@typescript-eslint/eslint-plugin":
     packageJson.devDependencies["@typescript-eslint/eslint-plugin"],
@@ -157,10 +163,9 @@ const eslintCoreDevDependencies: Record<string, string> = {
   "stylelint-config-standard":
     packageJson.devDependencies["stylelint-config-standard"],
   "stylelint-prettier": packageJson.devDependencies["stylelint-prettier"],
-};
-const eslintFrameworkDevDependencies: Partial<
-  Record<Frameworks, Record<string, string>>
-> = {
+} satisfies Record<string, string>;
+// Extra ESLint devDependencies, keyed by the framework that needs them.
+const eslintFrameworkDevDependencies = {
   angular: {
     "@angular-eslint/eslint-plugin": "latest",
   },
@@ -172,6 +177,8 @@ const eslintFrameworkDevDependencies: Partial<
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
   },
+  // NestJS needs no ESLint plugins beyond the core set.
+  nestjs: {},
   next: {
     "@next/eslint-plugin-next":
       packageJson.devDependencies["@next/eslint-plugin-next"],
@@ -218,11 +225,16 @@ const eslintFrameworkDevDependencies: Partial<
   vue: {
     "eslint-plugin-vue": packageJson.devDependencies["eslint-plugin-vue"],
   },
-};
-const buildEslintDevDependencies = (
-  frameworks: Frameworks[]
-): Record<string, string> => {
-  const devDependencies = { ...eslintCoreDevDependencies };
+} satisfies Record<Frameworks, Record<string, string>>;
+
+// Opens a dependency→version literal into a mutable accumulator so entries can
+// be added under computed names without widening the literal's known type.
+const asDependencyVersionMap = (map: Record<string, string>) => map;
+
+const buildEslintDevDependencies = (frameworks: Frameworks[]) => {
+  const devDependencies = asDependencyVersionMap({
+    ...eslintCoreDevDependencies,
+  });
 
   for (const framework of frameworks) {
     Object.assign(devDependencies, eslintFrameworkDevDependencies[framework]);
@@ -236,10 +248,10 @@ const buildNoInstallDevDependencies = (
   typeAware: boolean,
   frameworks: Frameworks[],
   jsPlugins: OxlintJsPlugin[] = []
-): Record<string, string> => {
-  const devDependencies: Record<string, string> = {
+) => {
+  const devDependencies = asDependencyVersionMap({
     ultracite: ultraciteVersion,
-  };
+  });
 
   if (linter === "biome") {
     devDependencies["@biomejs/biome"] = schemaVersion;
@@ -268,7 +280,7 @@ const eslintDevDependencyNames = new Set([
   ),
 ]);
 
-const dependencyNamesByLinter: Record<Linter, Set<string>> = {
+const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
   eslint: eslintDevDependencyNames,
   oxlint: new Set([
@@ -279,7 +291,7 @@ const dependencyNamesByLinter: Record<Linter, Set<string>> = {
     "oxlint-plugin-react-doctor",
     "oxlint-tsgolint",
   ]),
-};
+} satisfies Record<Linter, Set<string>>;
 
 const removeProjectFile = async (filePath: string): Promise<boolean> => {
   const normalizedPath = filePath.startsWith("./") ? filePath : `./${filePath}`;
@@ -1089,7 +1101,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       if (hasOtherCliOptions) {
         linter = "biome";
       } else {
-        const linterResult = await select({
+        const linterResult = await select<Linter>({
           message: "Which linter do you want to use?",
           options: [
             {
@@ -1112,7 +1124,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        linter = linterResult as Linter;
+        linter = linterResult;
       }
     }
 
@@ -1132,7 +1144,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         frameworks = [];
       } else {
         const detected = await detectFrameworks();
-        const frameworksResult = await multiselect({
+        const frameworksResult = await multiselect<Frameworks>({
           initialValues: detected,
           message: "Which frameworks are you using (optional)?",
           options: [
@@ -1164,7 +1176,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        frameworks = frameworksResult as (typeof options.frameworks)[number][];
+        frameworks = frameworksResult;
       }
     }
 
@@ -1180,7 +1192,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.frameworks !== undefined;
 
       if (!hasOtherCliOptions) {
-        const jsPluginsResult = await multiselect({
+        const jsPluginsResult = await multiselect<OxlintJsPlugin>({
           message: "Which JS plugins would you like to add (optional)?",
           options: oxlintJsPlugins.map((jsPlugin) => ({
             label: jsPlugin,
@@ -1194,7 +1206,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        jsPlugins = jsPluginsResult as OxlintJsPlugin[];
+        jsPlugins = jsPluginsResult;
       }
     }
 
@@ -1223,7 +1235,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         }
 
         selectedEditorFiles = editorFileTargets.filter((target) =>
-          (editorConfigResult as EditorFileTarget["id"][]).includes(target.id)
+          editorConfigResult.includes(target.id)
         );
       }
       editorConfig = [];
@@ -1251,7 +1263,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     // Build agent options from shared data
     const agentsOptions = Object.fromEntries(
       agentsData.map((agent) => [agent.id, agent.name])
-    ) as Record<(typeof options.agents)[number], string>;
+    );
 
     if (!agents) {
       if (quiet) {
@@ -1273,7 +1285,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         }
 
         selectedAgentFiles = agentFileTargets.filter((target) =>
-          (agentsResult as AgentFileTarget["id"][]).includes(target.id)
+          agentsResult.includes(target.id)
         );
       }
     } else if (agents.includes("universal") && universalAgentTarget) {
@@ -1292,7 +1304,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     // Build hooks options from supported hook integrations
     const hooksOptions = Object.fromEntries(
       hookIntegrations.map((hook) => [hook.id, hook.name])
-    ) as Record<(typeof options.hooks)[number], string>;
+    );
 
     if (!hooks) {
       if (quiet) {
@@ -1313,7 +1325,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           return;
         }
 
-        hooks = hooksResult as (typeof options.hooks)[number][];
+        hooks = hooksResult;
       }
     }
 

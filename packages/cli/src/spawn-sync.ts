@@ -34,6 +34,7 @@ export const spawnSync = (
     shell: false,
   });
 
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- I/O boundary decoding execa's loosely-typed stdout: a string only when piped, absent for ignore/inherit stdio
   const stdout = typeof result.stdout === "string" ? result.stdout : undefined;
 
   // No exit code and no signal means the process never ran.

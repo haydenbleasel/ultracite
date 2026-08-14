@@ -32,10 +32,13 @@ const CLI_PACKAGE_JSON = path.join(
  * package.json so they never drift. Benchmark-only setup — it does not change
  * what ultracite ships, and it is harmless when init already added them.
  */
-const extraDevDependencies = (provider: Provider): Record<string, string> => {
+const extraDevDependencies = (provider: Provider) => {
+  const result: Record<string, string> = {};
   if (provider !== "eslint") {
-    return {};
+    return result;
   }
+  // SAFETY: packages/cli/package.json is a repo-owned npm manifest, so
+  // `devDependencies` (when present) is the standard name→version map.
   const cliPackageJson = JSON.parse(
     readFileSync(CLI_PACKAGE_JSON, "utf-8")
   ) as {
@@ -48,7 +51,6 @@ const extraDevDependencies = (provider: Provider): Record<string, string> => {
     "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ];
-  const result: Record<string, string> = {};
   for (const name of names) {
     const version = devDependencies[name];
     if (version) {
@@ -208,6 +210,9 @@ export const prepareProject = (options: {
   // 3. Keep ultracite pinned to the tarball (init records a version range for
   //    it); then install the provider tools it wrote into package.json.
   const packageJsonPath = path.join(dir, "package.json");
+  // SAFETY: this package.json was written above and then edited by `ultracite
+  // init`, so it is an npm manifest whose dependency fields (when present) are
+  // name→version maps.
   const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8")) as {
     dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;

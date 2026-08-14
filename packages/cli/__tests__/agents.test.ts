@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+import type { MakeDirectoryOptions } from "node:fs";
 
 import { createAgents, getAgentFileTargets } from "../src/agents";
 
@@ -12,12 +13,12 @@ mock.module("node:fs/promises", () => ({
 mock.module("nypm", () => ({
   detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
   dlxCommand: mock((pm: string, pkg: string) => {
-    const prefixMap: Record<string, string> = {
-      bun: "bunx",
-      pnpm: "pnpm dlx",
-      yarn: "yarn dlx",
-    };
-    const prefix = prefixMap[pm] || "npx";
+    const prefixMap = new Map([
+      ["bun", "bunx"],
+      ["pnpm", "pnpm dlx"],
+      ["yarn", "yarn dlx"],
+    ]);
+    const prefix = prefixMap.get(pm) ?? "npx";
     return pkg ? `${prefix} ${pkg}` : prefix;
   }),
 }));
@@ -207,7 +208,7 @@ describe("createAgents", () => {
   describe("directory creation", () => {
     test("creates parent directory when needed", async () => {
       const mockMkdirSync = mock(
-        (_path: string, _opts?: Record<string, unknown>) => {}
+        (_path: string, _opts?: MakeDirectoryOptions) => {}
       );
 
       mock.module("node:fs/promises", () => ({
@@ -236,7 +237,7 @@ describe("createAgents", () => {
 
     test("does not create directory for root-level files", async () => {
       const mockMkdirSync = mock(
-        (_path: string, _opts?: Record<string, unknown>) => {}
+        (_path: string, _opts?: MakeDirectoryOptions) => {}
       );
 
       mock.module("node:fs/promises", () => ({

@@ -22,7 +22,10 @@ const readOxlintConfig = async (name: string) => {
   return mod.default;
 };
 
-const isEnabled = (rule: unknown) => rule === "error" || rule === "warn";
+type OxlintRuleSeverity = "error" | "warn" | "off";
+
+const isEnabled = (rule: OxlintRuleSeverity | undefined) =>
+  rule === "error" || rule === "warn";
 
 const CORE_PLUGINS = [
   "eslint",
@@ -69,6 +72,8 @@ const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
     cwd: os.tmpdir(),
   });
   const output = result.stdout.toString();
+  // SAFETY: decoding oxlint's own `--rules --format=json` output, whose
+  // entries carry scope/value/category strings.
   const entries = JSON.parse(output) as {
     scope: string;
     value: string;
@@ -181,7 +186,7 @@ describe("oxlint core config", () => {
 
     // Also check overrides
     const overrideRules = (config.overrides ?? []).flatMap(
-      (override: { rules?: Record<string, unknown> }) =>
+      (override: { rules?: Record<string, OxlintRuleSeverity> }) =>
         Object.keys(override.rules ?? {})
     );
 
@@ -391,6 +396,8 @@ describe("oxlint js-plugins config", () => {
     test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
       const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
+      // SAFETY: adapting the untyped ESLint plugin module — its default export
+      // is a plugin object whose rules map holds rule objects with optional meta.
       const { rules } = mod.default as {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
       };
@@ -405,6 +412,8 @@ describe("oxlint js-plugins config", () => {
     test(`js-plugins does not enable deprecated ${prefix} rules`, async () => {
       const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
+      // SAFETY: adapting the untyped ESLint plugin module — its default export
+      // is a plugin object whose rules map holds rule objects with optional meta.
       const { rules } = mod.default as {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
       };
@@ -458,6 +467,8 @@ describe("oxlint js-plugins config", () => {
   test("js-plugins does not enable sonarjs rules that require type checking", async () => {
     const config = await readOxlintConfig("js-plugins");
     const mod = await import("eslint-plugin-sonarjs");
+    // SAFETY: adapting the untyped ESLint plugin module — its default export
+    // is a plugin object whose rules map holds rule objects with optional meta.
     const { rules } = mod.default as {
       rules: Record<
         string,
@@ -491,7 +502,11 @@ describe("oxlint anti-slop config", () => {
   test("enables exactly the rules the vendored plugin registers", async () => {
     const config = await readOxlintConfig("anti-slop");
     const mod = await import("../config/oxlint/anti-slop/plugin.mjs");
-    const { rules } = mod.default as { rules: Record<string, unknown> };
+    // SAFETY: adapting the untyped vendored plugin bundle — its default export
+    // is a plugin object whose rules map holds rule objects with meta/docs.
+    const { rules } = mod.default as {
+      rules: Record<string, { meta?: { docs?: { description?: string } } }>;
+    };
 
     const registered = Object.keys(rules)
       .map((name) => `anti-slop/${name}`)

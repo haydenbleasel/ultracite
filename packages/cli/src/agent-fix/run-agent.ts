@@ -52,10 +52,7 @@ export const runAgent = async (
   // No stderr usually means the process never ran (e.g. the CLI is missing) —
   // surface execa's failure summary instead.
   const failureSummary = (result.failed && result.shortMessage) || "";
-  const stderrText =
-    typeof result.stderr === "string" && result.stderr.length > 0
-      ? result.stderr
-      : failureSummary;
+  const stderrText = result.stderr || failureSummary;
 
   return {
     ok: !result.failed,

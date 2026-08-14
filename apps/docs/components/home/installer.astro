@@ -78,15 +78,15 @@ const {
       continue;
     }
 
-    const commands: Record<string, string> = {
+    const commands = {
       agent: el.dataset.agent ?? "",
       human: el.dataset.human ?? "",
     };
-    let mode = "human";
+    let mode: keyof typeof commands = "human";
 
-    const setMode = (next: string) => {
+    const setMode = (next: keyof typeof commands) => {
       mode = next;
-      input.value = commands[next] ?? "";
+      input.value = commands[next];
       for (const button of modes) {
         const active = button.dataset.mode === next;
         button.setAttribute("aria-pressed", String(active));
@@ -98,13 +98,15 @@ const {
     };
 
     for (const button of modes) {
-      button.addEventListener("click", () => setMode(button.dataset.mode ?? "human"));
+      button.addEventListener("click", () =>
+        setMode(button.dataset.mode === "agent" ? "agent" : "human")
+      );
     }
 
     let timer: ReturnType<typeof setTimeout>;
     copyBtn.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(commands[mode] ?? "");
+        await navigator.clipboard.writeText(commands[mode]);
       } catch {
         // Clipboard access can be blocked; fail silently.
       }

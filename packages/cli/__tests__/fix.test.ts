@@ -2,8 +2,10 @@ import { afterAll, afterEach, describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 import process from "node:process";
 
+import type { AgentAdapter } from "../src/agent-fix/agents";
 import * as runAgentModule from "../src/agent-fix/run-agent";
 import { fix } from "../src/commands/fix";
+import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 // mock.restore() does not undo mock.module(), and namespace imports are live
@@ -21,7 +23,7 @@ describe("fix", () => {
 
   test("runs biome check with --write flag", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -45,7 +47,7 @@ describe("fix", () => {
 
   test("runs biome fix with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -66,7 +68,7 @@ describe("fix", () => {
 
   test("passes through --unsafe option to biome", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -86,7 +88,7 @@ describe("fix", () => {
 
   test("does not include --unsafe when passthrough is empty", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -106,7 +108,7 @@ describe("fix", () => {
 
   test("handles files with special characters", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -126,7 +128,7 @@ describe("fix", () => {
 
   test("passes absolute Next.js route-group paths through without quoting", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -148,7 +150,7 @@ describe("fix", () => {
 
   test("prefixes hyphen-starting file paths before linter delegation", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -169,7 +171,7 @@ describe("fix", () => {
 
   test("throws LinterExitError when biome fix finds errors", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -186,7 +188,7 @@ describe("fix", () => {
 
   test("exits when spawn returns error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("spawn failed"),
         status: null,
       })
@@ -204,7 +206,7 @@ describe("fix", () => {
 
   test("throws when no linter configuration found", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -220,7 +222,7 @@ describe("fix", () => {
 
   test("runs eslint fix when linter is eslint (runs prettier, eslint, stylelint)", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -245,7 +247,7 @@ describe("fix", () => {
 
   test("runs eslint fix with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -266,7 +268,7 @@ describe("fix", () => {
 
   test("eslint fix scopes stylelint to style files and directories", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -293,7 +295,7 @@ describe("fix", () => {
 
   test("eslint fix throws LinterExitError when prettier fails", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -310,7 +312,7 @@ describe("fix", () => {
 
   test("eslint fix throws on prettier spawn error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("prettier spawn failed"),
         status: null,
       })
@@ -331,7 +333,7 @@ describe("fix", () => {
   test("eslint fix throws on eslint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
         // prettier succeeds
         if (callCount === 1) {
@@ -357,7 +359,7 @@ describe("fix", () => {
   test("eslint fix throws on stylelint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
         // prettier and eslint succeed
         if (callCount <= 2) {
@@ -384,7 +386,7 @@ describe("fix", () => {
 
   test("runs oxlint fix when linter is oxlint (runs oxfmt, oxlint)", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -407,7 +409,7 @@ describe("fix", () => {
 
   test("runs oxlint fix with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -427,7 +429,7 @@ describe("fix", () => {
 
   test("oxlint fix throws on spawn error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("oxfmt spawn failed"),
         status: null,
       })
@@ -445,7 +447,7 @@ describe("fix", () => {
 
   test("oxlint fix throws LinterExitError on failure", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -462,7 +464,7 @@ describe("fix", () => {
 
   test("passes through --type-aware flag to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -482,7 +484,7 @@ describe("fix", () => {
 
   test("passes through --type-check flag to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -502,7 +504,7 @@ describe("fix", () => {
 
   test("passes through multiple flags to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -523,7 +525,7 @@ describe("fix", () => {
 
   test("does not include flags when passthrough is empty", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -544,7 +546,7 @@ describe("fix", () => {
 
   test("converts --unsafe to --fix-dangerously for oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -565,7 +567,7 @@ describe("fix", () => {
 
   test("oxlint fix still runs oxlint when oxfmt exits non-zero", () => {
     const mockSpawn = mock(
-      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         if (cmd === "oxfmt") {
           return { status: 1 };
         }
@@ -587,7 +589,7 @@ describe("fix", () => {
 
   test("eslint fix still runs eslint and stylelint when prettier exits non-zero", () => {
     const mockSpawn = mock(
-      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         if (cmd === "prettier") {
           return { status: 1 };
         }
@@ -610,7 +612,7 @@ describe("fix", () => {
 
   test("keeps bare biome resolution with shell disabled for Windows compatibility", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -688,7 +690,7 @@ const mockAgentEnvironment = ({
     }
     return { status: 0, stdout: "" };
   });
-  const mockRunAgent = mock(() =>
+  const mockRunAgent = mock((_adapter: AgentAdapter, _prompt: string) =>
     Promise.resolve({ ok: agentOk, stderr: "", timedOut: false })
   );
 
@@ -721,9 +723,7 @@ describe("fix with an agent", () => {
     await fix([], [], { agent: "claude" });
 
     expect(mockRunAgent).toHaveBeenCalledTimes(1);
-    const [agentCall] = mockRunAgent.mock.calls as unknown as [
-      [{ command: string }, string],
-    ];
+    const [agentCall] = mockRunAgent.mock.calls;
     expect(agentCall[0].command).toBe("claude");
     expect(agentCall[1]).toContain("eslint(no-eval)");
     expect(agentCall[1]).toContain("eval can be harmful.");
@@ -760,12 +760,9 @@ describe("fix with an agent", () => {
     await fix([], [], { agent: "claude" });
 
     expect(mockRunAgent).toHaveBeenCalledTimes(2);
-    const retryCall = mockRunAgent.mock.calls.at(1) as unknown as [
-      { command: string },
-      string,
-    ];
-    expect(retryCall[1]).toContain("attempt 2");
-    expect(retryCall[1]).toContain("did not resolve");
+    const retryCall = mockRunAgent.mock.calls.at(1);
+    expect(retryCall?.[1]).toContain("attempt 2");
+    expect(retryCall?.[1]).toContain("did not resolve");
   });
 
   test("stops retrying after the attempt limit and reports failure", async () => {

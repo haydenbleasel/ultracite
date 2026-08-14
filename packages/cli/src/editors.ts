@@ -41,11 +41,11 @@ export const getEditorFileTargets = (): EditorFileTarget[] => {
 
       return {
         displayName: isUniversal ? "Universal" : representativeEditor.name,
-        editorIds: groupedEditors.map((editor) => editor.id as EditorId),
-        id: isUniversal ? "universal" : (representativeEditor.id as EditorId),
+        editorIds: groupedEditors.map((editor) => editor.id),
+        id: isUniversal ? "universal" : representativeEditor.id,
         path,
         promptLabel: buildPromptLabel(path, editorNames),
-        representativeEditorId: representativeEditor.id as EditorId,
+        representativeEditorId: representativeEditor.id,
       } satisfies EditorFileTarget;
     }
   );

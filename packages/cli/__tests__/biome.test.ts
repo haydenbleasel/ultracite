@@ -109,7 +109,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
       expect(writtenContent.$schema).toBe(
         "./node_modules/@biomejs/biome/configuration_schema.json"
@@ -130,7 +130,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/react",
@@ -152,7 +152,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/type-aware",
@@ -173,7 +173,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/type-aware",
@@ -243,7 +243,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toContain("ultracite/biome/core");
       expect(writtenContent.formatter.indentStyle).toBe("tab");
     });
@@ -280,7 +280,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual(["ultracite/biome/core"]);
     });
 
@@ -318,7 +318,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/react",
@@ -360,7 +360,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/react",
@@ -402,7 +402,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/react",
@@ -443,7 +443,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toEqual([
         "ultracite/biome/core",
         "ultracite/biome/react",
@@ -480,7 +480,7 @@ describe("biome", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.extends).toContain("ultracite/biome/core");
     });
   });

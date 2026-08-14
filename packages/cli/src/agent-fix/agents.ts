@@ -10,7 +10,7 @@ export interface AgentAdapter {
   label: string;
 }
 
-export const agentAdapters: Record<FixAgent, AgentAdapter> = {
+export const agentAdapters = {
   claude: {
     // acceptEdits auto-approves file edits; the allowed-tools list keeps the
     // agent to reading and editing — Bash and network tools are denied.
@@ -35,7 +35,7 @@ export const agentAdapters: Record<FixAgent, AgentAdapter> = {
     installHint: "npm install -g @openai/codex",
     label: "Codex",
   },
-};
+} satisfies Record<FixAgent, AgentAdapter>;
 
 export const assertAgentAvailable = (adapter: AgentAdapter): void => {
   const result = spawnSync(adapter.command, ["--version"]);

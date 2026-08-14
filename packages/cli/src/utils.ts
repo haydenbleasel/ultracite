@@ -50,6 +50,7 @@ const isInsidePath = (target: string, root: string): boolean => {
 };
 
 const getRealPath = (filePath: string): string =>
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- the test suites mock node:fs partially; when a mock omits realpathSync the guard falls back to path.resolve
   typeof realpathSync === "function"
     ? realpathSync(filePath)
     : path.resolve(filePath);
@@ -64,6 +65,9 @@ const getRealPathOfNearestExistingAncestor = (target: string): string => {
     try {
       return getRealPath(current);
     } catch (error) {
+      // SAFETY: errors thrown by fs realpath calls carry the ErrnoException
+      // `code` field; on any other Error the read yields undefined, which
+      // safely rethrows below.
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
         throw error;
       }
@@ -96,6 +100,7 @@ export const assertWritableProjectPath = (filePath: string): void => {
 
   try {
     const targetStats =
+      // oxlint-disable-next-line anti-slop/no-runtime-typeof -- the test suites mock node:fs partially; when a mock omits lstatSync the symlink check is skipped
       typeof lstatSync === "function" ? lstatSync(targetPath) : undefined;
 
     if (targetStats?.isSymbolicLink()) {
@@ -107,6 +112,9 @@ export const assertWritableProjectPath = (filePath: string): void => {
       throw new Error(`Refusing to write outside project: ${filePath}`);
     }
   } catch (error) {
+    // SAFETY: errors thrown by fs lstat/realpath calls carry the
+    // ErrnoException `code` field; on any other Error the read yields
+    // undefined, which safely rethrows below.
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return;
     }
@@ -301,27 +309,27 @@ export const oxfmtConfigNames = ["oxfmt.config.ts"] as const;
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
 // meta-frameworks (e.g. Next.js implies React).
-const FRAMEWORK_DEPENDENCIES: Record<string, readonly Framework[]> = {
-  "@angular/core": ["angular"],
-  "@builder.io/qwik": ["qwik"],
-  "@nestjs/core": ["nestjs"],
-  "@qwik.dev/core": ["qwik"],
-  "@remix-run/node": ["remix"],
-  "@remix-run/react": ["react", "remix"],
-  "@tanstack/react-query": ["react", "tanstack"],
-  "@tanstack/react-router": ["react", "tanstack"],
-  "@tanstack/react-start": ["react", "tanstack"],
-  astro: ["astro"],
-  jest: ["jest"],
-  next: ["react", "next"],
-  nuxt: ["vue"],
-  react: ["react"],
-  "react-router": ["react", "remix"],
-  "solid-js": ["solid"],
-  svelte: ["svelte"],
-  vitest: ["vitest"],
-  vue: ["vue"],
-};
+const FRAMEWORK_DEPENDENCIES = new Map<string, readonly Framework[]>([
+  ["@angular/core", ["angular"]],
+  ["@builder.io/qwik", ["qwik"]],
+  ["@nestjs/core", ["nestjs"]],
+  ["@qwik.dev/core", ["qwik"]],
+  ["@remix-run/node", ["remix"]],
+  ["@remix-run/react", ["react", "remix"]],
+  ["@tanstack/react-query", ["react", "tanstack"]],
+  ["@tanstack/react-router", ["react", "tanstack"]],
+  ["@tanstack/react-start", ["react", "tanstack"]],
+  ["astro", ["astro"]],
+  ["jest", ["jest"]],
+  ["next", ["react", "next"]],
+  ["nuxt", ["vue"]],
+  ["react", ["react"]],
+  ["react-router", ["react", "remix"]],
+  ["solid-js", ["solid"]],
+  ["svelte", ["svelte"]],
+  ["vitest", ["vitest"]],
+  ["vue", ["vue"]],
+]);
 
 interface DependencyFields {
   dependencies?: Record<string, string | undefined>;
@@ -361,7 +369,7 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
     }
 
     for (const dep of deps) {
-      const frameworks = FRAMEWORK_DEPENDENCIES[dep];
+      const frameworks = FRAMEWORK_DEPENDENCIES.get(dep);
       if (frameworks) {
         for (const framework of frameworks) {
           detected.add(framework);
@@ -412,11 +420,11 @@ export const detectLinter = (startDir = process.cwd()): Linter | null => {
     return null;
   }
 
-  if ((biomeConfigNames as readonly string[]).includes(found.fileName)) {
+  if (biomeConfigNames.some((name) => name === found.fileName)) {
     return "biome";
   }
 
-  if ((eslintConfigNames as readonly string[]).includes(found.fileName)) {
+  if (eslintConfigNames.some((name) => name === found.fileName)) {
     return "eslint";
   }
 

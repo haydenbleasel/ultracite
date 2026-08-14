@@ -10,6 +10,7 @@ const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
   try {
     const mod = await import(configPath);
 
+    // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this is the I/O boundary decoding the untyped default export of a dynamically imported config module
     if (typeof mod.default !== "object" || mod.default === null) {
       console.error("  Missing or invalid default export");
       return false;

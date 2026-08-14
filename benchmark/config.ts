@@ -56,7 +56,7 @@ export const ACTIVE_COMMANDS: readonly Command[] = (() => {
     .split(",")
     .map((value) => value.trim())
     .filter((value): value is Command =>
-      (COMMANDS as readonly string[]).includes(value)
+      COMMANDS.some((command) => command === value)
     );
   return requested.length > 0 ? requested : COMMANDS;
 })();
@@ -71,7 +71,7 @@ export const ACTIVE_PROVIDERS: readonly Provider[] = (() => {
     .split(",")
     .map((value) => value.trim())
     .filter((value): value is Provider =>
-      (PROVIDERS as readonly string[]).includes(value)
+      PROVIDERS.some((provider) => provider === value)
     );
   return requested.length > 0 ? requested : PROVIDERS;
 })();

@@ -45,9 +45,9 @@ const isUltraciteSkillInstalledInScope = (
   }
 
   try {
-    const installedSkills = JSON.parse(result.stdout) as {
-      name?: string;
-    }[];
+    // JSON.parse output is untyped; `skills list --json` prints an array of
+    // skill records, and a mismatched payload throws below and is caught.
+    const installedSkills: { name?: string }[] = JSON.parse(result.stdout);
 
     return installedSkills.some((skill) => skill.name === ultraciteSkillName);
   } catch {

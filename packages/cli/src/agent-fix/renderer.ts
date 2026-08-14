@@ -28,7 +28,7 @@ export interface SettledIssue {
 }
 
 export interface RendererSink {
-  write: (text: string) => unknown;
+  write: (text: string) => void;
 }
 
 export interface RendererOptions {
@@ -62,7 +62,9 @@ export const createRenderer = (
   // exactly that block on the next call — replacing the manual cursor-up /
   // clear-line bookkeeping. defaultWidth keeps its wrap math in sync with the
   // truncation budget when the sink doesn't report a width of its own.
-  const logUpdate = createLogUpdate(out as unknown as NodeJS.WriteStream, {
+  // SAFETY: log-update only calls `write` and reads the stream's width, which
+  // defaultWidth backfills when the sink is not a real terminal stream.
+  const logUpdate = createLogUpdate(out as NodeJS.WriteStream, {
     defaultWidth: columns,
     showCursor: true,
   });

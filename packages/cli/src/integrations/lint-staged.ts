@@ -39,23 +39,38 @@ const configFiles = [
   "./.lintstagedrc",
 ];
 
+// The task forms a lint-staged glob can map to: a command, a list of
+// commands, or (in JS configs) a function that builds commands from the
+// staged file list.
+type LintStagedTask =
+  | string
+  | string[]
+  | ((files: string[]) => string | string[] | Promise<string | string[]>);
+
+// A parsed lint-staged config: glob patterns mapping to tasks.
+type LintStagedConfig = Record<string, LintStagedTask>;
+
 // deepmerge concatenates arrays, so re-running init would append another
 // ultracite command on every run — skip configs that already reference it
 // JSON.stringify returns undefined for a top-level function config, so guard
 // the includes call.
-const hasUltraciteCommand = (config: unknown): boolean =>
+const hasUltraciteCommand = (config: LintStagedConfig | undefined): boolean =>
   JSON.stringify(config)?.includes("ultracite") ?? false;
 
 // Function-valued entries are a documented lint-staged pattern, but they
 // can't survive a JSON.stringify round-trip — rewriting such a config would
 // silently delete the user's functions.
-const containsFunction = (value: unknown): boolean => {
+const containsFunction = (
+  value: LintStagedConfig | LintStagedTask
+): boolean => {
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- walking a config loaded from the user's JS module, where function-valued entries are exactly what's being detected
   if (typeof value === "function") {
     return true;
   }
   if (Array.isArray(value)) {
     return value.some((entry) => containsFunction(entry));
   }
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same untyped-module boundary: distinguishes nested config objects from command strings
   if (value && typeof value === "object") {
     return Object.values(value).some((entry) => containsFunction(entry));
   }
@@ -68,13 +83,13 @@ const warnUnmergeableConfig = (filename: string): void => {
   );
 };
 
-const readPackageJsonLintStaged = async (): Promise<unknown> => {
+const hasPackageJsonLintStaged = async (): Promise<boolean> => {
   try {
     const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
-    return packageJson?.["lint-staged"];
+    return Boolean(packageJson?.["lint-staged"]);
   } catch {
-    return undefined;
+    return false;
   }
 };
 
@@ -101,7 +116,10 @@ const updatePackageJson = async (
     return;
   }
 
-  if (hasUltraciteCommand(packageJson["lint-staged"])) {
+  // SAFETY: the package.json "lint-staged" field is zod-typed as unknown but
+  // holds a lint-staged config by contract; hasUltraciteCommand only
+  // stringifies it to scan for an existing ultracite entry.
+  if (hasUltraciteCommand(packageJson["lint-staged"] as LintStagedConfig)) {
     return;
   }
 
@@ -124,7 +142,10 @@ const updateJsonConfig = async (
   packageManager: PackageManagerName
 ): Promise<void> => {
   const content = await readFile(filename, "utf-8");
-  const existingConfig = parse(content) as Record<string, unknown> | undefined;
+  // SAFETY: a .lintstagedrc JSON file holds a lint-staged config by contract;
+  // the parsed value is only scanned and deep-merged, so a malformed file
+  // still round-trips unchanged.
+  const existingConfig = parse(content) as LintStagedConfig | undefined;
 
   // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
   if (!existingConfig) {
@@ -160,9 +181,12 @@ const updateYamlConfig = async (
   const raw = await readFile(filename, "utf-8");
   const content = quoteGlobKeys(raw);
 
-  let existingConfig: Record<string, unknown> | undefined;
+  let existingConfig: LintStagedConfig | undefined;
   try {
-    existingConfig = YAML.parse(content) as Record<string, unknown> | undefined;
+    // SAFETY: a .lintstagedrc YAML file holds a lint-staged config by
+    // contract; the parsed value is only scanned and deep-merged, so a
+    // malformed file still round-trips unchanged.
+    existingConfig = YAML.parse(content) as LintStagedConfig | undefined;
   } catch {
     // If parsing fails (invalid YAML), treat as empty config and proceed gracefully
     return;
@@ -199,7 +223,7 @@ const updateEsmConfig = async (
   const mod = parseModule(content);
 
   const [entry] = Object.entries(createLintStagedConfig(packageManager));
-  const [pattern, commands] = entry as [string, string[]];
+  const [pattern, commands] = entry;
 
   try {
     const config = mod.exports.default;
@@ -318,7 +342,7 @@ export const lintStaged = {
     );
   },
   exists: async () => {
-    if (await readPackageJsonLintStaged()) {
+    if (await hasPackageJsonLintStaged()) {
       return true;
     }
 
@@ -337,7 +361,7 @@ export const lintStaged = {
   update: async (packageManager: PackageManagerName) => {
     // package.json only wins when it actually holds the lint-staged config —
     // otherwise a dedicated config file would shadow whatever we write there
-    if (await readPackageJsonLintStaged()) {
+    if (await hasPackageJsonLintStaged()) {
       await updatePackageJson(packageManager);
       return;
     }

@@ -30,6 +30,8 @@ describe("createHooks", () => {
 
     test("throws error for unsupported package manager names", () => {
       expect(() => {
+        // SAFETY: deliberately bypasses the PackageManagerName union to
+        // exercise the runtime validation error for unsupported names.
         createHooks("claude", "node" as never);
       }).toThrow('Unsupported package manager "node"');
     });
@@ -111,7 +113,7 @@ describe("createHooks", () => {
 
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".cursor/hooks.json");
-      const content = JSON.parse(writeCall[1] as string);
+      const content = JSON.parse(writeCall[1]);
       expect(content.version).toBe(1);
       expect(content.hooks.afterFileEdit).toHaveLength(1);
       expect(content.hooks.afterFileEdit[0].command).toBe(npmBiomeCommand);
@@ -163,7 +165,7 @@ describe("createHooks", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".cursor/hooks.json");
-      const hooksContent = JSON.parse(hooksWrite[1] as string);
+      const hooksContent = JSON.parse(hooksWrite[1]);
       expect(hooksContent.hooks.afterFileEdit.length).toBe(2);
       expect(hooksContent.hooks.afterFileEdit[1].command).toBe(npmBiomeCommand);
     });
@@ -214,7 +216,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".github/hooks/ultracite.json");
 
-      const content = JSON.parse(writeCall[1] as string);
+      const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse).toHaveLength(1);
       expect(content.hooks.PostToolUse[0].type).toBe("command");
       expect(content.hooks.PostToolUse[0].command).toBe(npmBiomeCommand);
@@ -247,7 +249,7 @@ describe("createHooks", () => {
       const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".github/hooks/ultracite.json");
 
-      const merged = JSON.parse(hooksWrite[1] as string);
+      const merged = JSON.parse(hooksWrite[1]);
       expect(merged.hooks.PostToolUse.length).toBe(2);
       expect(merged.hooks.PostToolUse[1].command).toBe(npmBiomeCommand);
     });
@@ -297,7 +299,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".codebuddy/settings.json");
 
-      const content = JSON.parse(writeCall[1] as string);
+      const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse).toHaveLength(1);
       expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
       expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
@@ -334,7 +336,7 @@ describe("createHooks", () => {
       const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
 
-      const merged = JSON.parse(hooksWrite[1] as string);
+      const merged = JSON.parse(hooksWrite[1]);
       expect(merged.model).toBe("yuanbao-code");
       expect(merged.permissions.bash).toBe(true);
       expect(merged.hooks.PostToolUse).toHaveLength(1);
@@ -388,7 +390,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".claude/settings.json");
 
-      const content = JSON.parse(writeCall[1] as string);
+      const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse).toHaveLength(1);
       expect(content.hooks.PostToolUse[0].matcher).toBe("Write|Edit");
       expect(content.hooks.PostToolUse[0].hooks[0].type).toBe("command");
@@ -423,7 +425,7 @@ describe("createHooks", () => {
       const [hooksWrite] = mockWriteFile.mock.calls;
       expect(hooksWrite[0]).toBe(".claude/settings.json");
 
-      const merged = JSON.parse(hooksWrite[1] as string);
+      const merged = JSON.parse(hooksWrite[1]);
       expect(merged.model).toBe("claude-3-5-sonnet");
       expect(merged.hooks.PostToolUse).toHaveLength(1);
     });

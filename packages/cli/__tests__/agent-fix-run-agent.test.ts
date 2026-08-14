@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 import process from "node:process";
 
-import type { execa } from "execa";
+import type { execa, Options } from "execa";
 
 import type { AgentAdapter } from "../src/agent-fix/agents";
 import { agentAdapters } from "../src/agent-fix/agents";
@@ -20,9 +20,22 @@ const scriptAdapter = (script: string): AgentAdapter => ({
 
 type ExecaFn = typeof execa;
 
-const fakeExeca = (result: Record<string, unknown>) => {
-  const execaMock = mock(() => Promise.resolve(result));
-  return { execaFn: execaMock as unknown as ExecaFn, execaMock };
+/** The subset of execa's result that runAgent reads. */
+interface FakeExecaResult {
+  failed: boolean;
+  shortMessage?: string;
+  stderr: string;
+  timedOut: boolean;
+}
+
+const fakeExeca = (result: FakeExecaResult) => {
+  const execaMock = mock(
+    (_file: string, _args: readonly string[], _options: Options) =>
+      Promise.resolve(result)
+  );
+  // oxlint-disable-next-line anti-slop/no-chained-type-assertions -- SAFETY: runAgent calls execaFn positionally with (command, args, options) and only reads failed/stderr/shortMessage/timedOut, which the fake provides; execa's method type is an intersection of call signatures (bind, template-tag, array forms) that no concrete mock is directly comparable to, so the conversion must pass through unknown.
+  const execaFn = execaMock as unknown as ExecaFn;
+  return { execaFn, execaMock };
 };
 
 describe("runAgent", () => {
@@ -83,9 +96,7 @@ describe("runAgent", () => {
 
     expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
 
-    const [call] = execaMock.mock.calls as unknown as [
-      [string, string[], Record<string, unknown>],
-    ];
+    const [call] = execaMock.mock.calls;
     expect(call[0]).toBe("claude");
     expect(call[1]).toContain("-p");
     expect(call[1]).toContain("prompt");

@@ -8,9 +8,9 @@ import { mock } from "bun:test";
  * puts back the defaults the test preload installs, keeping the blast radius
  * to the test that opted in.
  */
-const realReaddirSync = (
-  globalThis as unknown as Record<string, (...args: unknown[]) => unknown>
-).__realReaddirSync;
+// The real readdirSync captured (and typed via `declare global`) by the test
+// preload before it installs the default node:fs mock.
+const realReaddirSync = globalThis.__realReaddirSync;
 
 export const mockFileSystem = (files: Record<string, string>): void => {
   mock.module("node:fs", () => ({
@@ -31,7 +31,7 @@ export const mockFileSystem = (files: Record<string, string>): void => {
 
       return content;
     }),
-    readdirSync: (...args: unknown[]) => realReaddirSync(...args),
+    readdirSync: realReaddirSync,
     realpathSync: mock((filePath: string) => filePath),
     writeFileSync: mock(() => {}),
   }));
@@ -46,7 +46,7 @@ export const restoreFileSystemMock = (): void => {
     lstatSync: mock(() => ({ isSymbolicLink: () => false })),
     mkdirSync: mock(() => {}),
     readFileSync: mock(() => "{}"),
-    readdirSync: (...args: unknown[]) => realReaddirSync(...args),
+    readdirSync: realReaddirSync,
     realpathSync: mock((filePath: string) => filePath),
     writeFileSync: mock(() => {}),
   }));

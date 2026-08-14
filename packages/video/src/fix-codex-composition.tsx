@@ -245,8 +245,9 @@ const SceneCta = () => (
 const SceneLogo = () => <UltraciteLogo color={WHITE} />;
 
 // Wire the shipped Geist faces to the CSS variables every remocn component
-// reads (`var(--font-geist-sans)` / `var(--font-geist-mono)`). Asserted because
-// CSSProperties doesn't type custom `--*` keys in this @types/react version.
+// reads (`var(--font-geist-sans)` / `var(--font-geist-mono)`).
+// SAFETY: custom `--*` properties are valid inline-style keys at runtime;
+// CSSProperties just doesn't type them in this @types/react version.
 const FONT_VARS = {
   "--font-geist-mono": GEIST_MONO,
   "--font-geist-sans": GEIST_SANS,

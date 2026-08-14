@@ -6,6 +6,7 @@ import { parse } from "jsonc-parser";
 
 import { editors } from "./data/editors";
 import type { ProviderId } from "./data/providers";
+import type { JsonObject } from "./data/types";
 import { spawnSync } from "./spawn-sync";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
@@ -20,6 +21,7 @@ export const createEditorConfig = (
   }
 
   const content = editor.config.getContent(linter);
+  const { extensionCommand } = editor.config;
 
   return {
     create: async () => {
@@ -32,13 +34,11 @@ export const createEditorConfig = (
 
     exists: () => exists(editor.config.path),
 
-    extension: editor.config.extensionCommand
+    extension: extensionCommand
       ? (extensionId: string) => {
           // extensionCommand is a full command line, e.g.
           // "code --install-extension" — split it so spawn gets a real binary
-          const [command, ...commandArgs] = (
-            editor.config.extensionCommand as string
-          ).split(" ");
+          const [command, ...commandArgs] = extensionCommand.split(" ");
           return spawnSync(command, [...commandArgs, extensionId], {
             stdio: "pipe",
           });
@@ -58,9 +58,9 @@ export const createEditorConfig = (
       }
 
       const existingContents = await readFile(editor.config.path, "utf-8");
-      const existingConfig = parse(existingContents) as
-        | Record<string, unknown>
-        | undefined;
+      // jsonc-parser's output is untyped; a JSONC settings document parses to
+      // an object at its root, or undefined when unparseable.
+      const existingConfig: JsonObject | undefined = parse(existingContents);
 
       // An unparseable settings file must not be replaced wholesale — that
       // would destroy whatever the user had in it.

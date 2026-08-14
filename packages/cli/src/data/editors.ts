@@ -3,12 +3,12 @@
 import deepmerge from "deepmerge";
 
 import type { ProviderId } from "./providers";
-import type { HooksConfig } from "./types";
+import type { HooksConfig, JsonObject } from "./types";
 
 /* e.g. .vscode/settings.json */
 export interface EditorSettingsConfig {
   extensionCommand?: string;
-  getContent: (linter?: ProviderId) => Record<string, unknown>;
+  getContent: (linter?: ProviderId) => JsonObject;
   path: string;
 }
 

@@ -60,7 +60,7 @@ const verifySafely = (
   adapter: LinterAdapter,
   file: string,
   passthrough: string[]
-): { error: string | null; remaining: Diagnostic[] | null } => {
+) => {
   try {
     const allRemaining = adapter.verify(file, passthrough);
     // Single-file verify runs can still surface diagnostics for other files

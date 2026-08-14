@@ -73,6 +73,9 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
       return null;
     }
 
+    // SAFETY: this is the fetch boundary decoding the syndication endpoint's
+    // JSON. SyndicationTweet declares every field optional, and each field is
+    // checked before use below.
     const data = (await response.json()) as SyndicationTweet;
     const { user } = data;
     if (!(data.text && user?.screen_name)) {

@@ -18,6 +18,8 @@ export const getLatestVersion = async (): Promise<string> => {
   }
 
   const raw = await readFile(packageJsonPath, "utf-8");
+  // SAFETY: this reads packages/cli/package.json from this workspace, whose
+  // string `version` field is maintained by changesets.
   const { version } = JSON.parse(raw) as { version: string };
 
   cached = version;

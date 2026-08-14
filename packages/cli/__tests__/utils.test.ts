@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import type { readdirSync as nodeReaddirSync } from "node:fs";
 
 import {
   detectFrameworks,
@@ -9,6 +10,12 @@ import {
   validateFrameworkName,
   writeProjectFile,
 } from "../src/utils";
+
+// SAFETY: preload.ts stashes the unmocked node:fs readdirSync on globalThis
+// under this key before installing the fs mock.
+const realReaddirSync = (
+  globalThis as { __realReaddirSync: typeof nodeReaddirSync }
+).__realReaddirSync;
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.resolve()),
@@ -443,10 +450,7 @@ describe("writeProjectFile", () => {
       })),
       mkdirSync: mock(() => {}),
       readFileSync: mock(() => "{}"),
-      readdirSync: (...args: unknown[]) =>
-        (
-          globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
-        ).__realReaddirSync(...args),
+      readdirSync: realReaddirSync,
       realpathSync: mock((path: string) => path),
       writeFileSync: mock(() => {}),
     }));

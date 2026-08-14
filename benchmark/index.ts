@@ -106,6 +106,12 @@ interface Sample {
   head: number[];
 }
 
+/** Measured durations collected per build label. */
+interface BuildSamples {
+  base: number[];
+  head: number[];
+}
+
 const collectSamples = (
   projects: { base?: PreparedProject; head: PreparedProject },
   provider: Provider,
@@ -118,7 +124,7 @@ const collectSamples = (
     builds.unshift({ label: "base", project: projects.base });
   }
 
-  const samples: Record<"base" | "head", number[]> = { base: [], head: [] };
+  const samples: BuildSamples = { base: [], head: [] };
 
   const runOnce = (project: PreparedProject): number => {
     if (command === "fix") {
@@ -176,6 +182,8 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
       `| --- | --- | ---: | ---: | ---: | ---: | :---: |`
     );
     for (const sample of samples) {
+      // SAFETY: compareMode is only true when the `samples.every` check above
+      // confirmed every sample carries base timings.
       const base = sample.base as number[];
       const baseMedian = median(base);
       const headMedian = median(sample.head);

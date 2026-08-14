@@ -4,7 +4,7 @@ import type { PackageManager } from "nypm";
 
 import { husky } from "../src/integrations/husky";
 
-const npmPm = { command: "npm", name: "npm" } as PackageManager;
+const npmPm: PackageManager = { command: "npm", name: "npm" };
 
 mock.module("node:child_process", () => ({
   execSync: mock(() => ""),
@@ -117,7 +117,7 @@ describe("husky", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent.scripts?.prepare).toBe("husky");
     });
   });
@@ -269,7 +269,7 @@ describe("husky", () => {
       await husky.update("npm");
 
       const [writeCall] = mockWriteFile.mock.calls;
-      const written = writeCall[1] as string;
+      const [, written] = writeCall;
       // Should contain the "other" line
       expect(written).toContain("other");
       // Should have exactly one ultracite start marker
@@ -308,7 +308,7 @@ describe("husky", () => {
       await husky.update("npm");
 
       const [writeCall] = mockWriteFile.mock.calls;
-      const written = writeCall[1] as string;
+      const [, written] = writeCall;
       expect(written).toContain('echo "before"');
       expect(written).toContain("npm test");
       const markerCount = written
@@ -349,7 +349,7 @@ describe("husky", () => {
       await husky.update("npm");
 
       const [writeCall] = mockWriteFile.mock.calls;
-      const written = writeCall[1] as string;
+      const [, written] = writeCall;
       expect(written).toContain("npm test");
       expect(written.indexOf("npm test")).toBeGreaterThan(
         written.indexOf("# ultracite end")
@@ -370,7 +370,7 @@ describe("husky", () => {
       await husky.create("npm", false);
 
       const [writeCall] = mockWriteFile.mock.calls;
-      const written = writeCall[1] as string;
+      const [, written] = writeCall;
       // set -e would abort the script before the failure-handling block runs
       expect(written).not.toContain("set -e");
       expect(written).toContain("|| FORMAT_EXIT_CODE=$?");

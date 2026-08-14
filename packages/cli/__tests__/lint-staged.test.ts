@@ -4,7 +4,7 @@ import type { PackageManager } from "nypm";
 
 import { lintStaged } from "../src/integrations/lint-staged";
 
-const npmPm = { command: "npm", name: "npm" } as PackageManager;
+const npmPm = { command: "npm", name: "npm" } satisfies PackageManager;
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -134,7 +134,7 @@ describe("lintStaged", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe(".lintstagedrc.json");
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // Check for the actual key pattern that lint-staged uses
       const keys = Object.keys(writtenContent);
       expect(keys.length).toBeGreaterThan(0);
@@ -177,7 +177,7 @@ describe("lintStaged", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // Verify lint-staged section exists and has been updated
       expect(writtenContent["lint-staged"]).toBeDefined();
       expect(Object.keys(writtenContent["lint-staged"]).length).toBeGreaterThan(
@@ -215,7 +215,7 @@ describe("lintStaged", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       // Verify config has been updated with new patterns
       const keys = Object.keys(writtenContent);
       expect(keys.length).toBeGreaterThan(0);
@@ -277,7 +277,7 @@ describe("lintStaged", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       // YAML format should be written
-      expect(typeof writeCall[1]).toBe("string");
+      expect(writeCall[1]).toBeTypeOf("string");
       expect(writeCall[1]).toContain("*.js");
     });
 
@@ -572,7 +572,7 @@ export default {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(typeof writeCall[1]).toBe("string");
+      expect(writeCall[1]).toBeTypeOf("string");
     });
 
     test("handles invalid JSON in .lintstagedrc", async () => {
@@ -783,7 +783,7 @@ export default {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.lintstagedrc.json");
-      const writtenContent = JSON.parse(writeCall[1] as string);
+      const writtenContent = JSON.parse(writeCall[1]);
       expect(writtenContent["*.css"]).toEqual(["stylelint --fix"]);
     });
 
@@ -1004,10 +1004,14 @@ export default {
       }));
 
       // Mock the dynamic import to return our mock module
-      const originalImport = (globalThis as Record<string, unknown>).import as
-        | ((path: string) => Promise<unknown>)
-        | undefined;
-      (globalThis as Record<string, unknown>).import = (path: string) => {
+      type DynamicImport = (path: string) => Promise<typeof mockModule>;
+      // SAFETY: `import` is a non-standard, test-only hook on globalThis; the
+      // intersection only makes that property visible to the type system.
+      const globalWithImport = globalThis as typeof globalThis & {
+        import?: DynamicImport;
+      };
+      const originalImport = globalWithImport.import;
+      globalWithImport.import = (path: string) => {
         if (path.includes("lint-staged.config.mjs")) {
           return Promise.resolve(mockModule);
         }
@@ -1019,7 +1023,7 @@ export default {
         expect(mockWriteFile).toHaveBeenCalled();
       } finally {
         // Restore original import
-        (globalThis as Record<string, unknown>).import = originalImport;
+        globalWithImport.import = originalImport;
       }
     });
 

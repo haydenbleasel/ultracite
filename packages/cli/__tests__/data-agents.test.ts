@@ -47,6 +47,8 @@ const loadAgentsSummary = () => {
 
   expect(result.exitCode).toBe(0);
 
+  // SAFETY: decoding the JSON printed by the inline script above, which
+  // constructs exactly this AgentSummary structure per agent.
   return JSON.parse(decoder.decode(result.stdout)) as AgentSummary[];
 };
 

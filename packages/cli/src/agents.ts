@@ -52,14 +52,14 @@ export const getAgentFileTargets = (): AgentFileTarget[] => {
     const isUniversal = path === "AGENTS.md" && groupedAgents.length > 1;
 
     return {
-      agentIds: groupedAgents.map((agent) => agent.id as AgentId),
+      agentIds: groupedAgents.map((agent) => agent.id),
       displayName: isUniversal
         ? "Universal"
         : normalizeAgentName(representativeAgent.name),
-      id: isUniversal ? "universal" : (representativeAgent.id as AgentId),
+      id: isUniversal ? "universal" : representativeAgent.id,
       path,
       promptLabel: buildPromptLabel(path, agentNames),
-      representativeAgentId: representativeAgent.id as AgentId,
+      representativeAgentId: representativeAgent.id,
     };
   });
 

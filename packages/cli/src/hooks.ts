@@ -7,10 +7,12 @@ import type { PackageManagerName } from "nypm";
 
 import { hooks } from "./data/hooks";
 import type { options } from "./data/options";
+import type { JsonObject, JsonValue } from "./data/types";
 import { assertSupportedPackageManagerName } from "./package-manager";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
+const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this is the I/O boundary classifying jsonc-parser's untyped parse output
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const createFixCommand = (
@@ -40,7 +42,7 @@ export const createHooks = (
   const command = createFixCommand(packageManager, args);
   const content = hookIntegration.hooks.getContent(command);
 
-  const hasUltraciteHook = (obj: unknown): boolean => {
+  const hasUltraciteHook = (obj: JsonObject): boolean => {
     const json = JSON.stringify(obj);
     return json.includes("ultracite") || json.includes(command);
   };
@@ -57,8 +59,10 @@ export const createHooks = (
     }
 
     const existingContent = await readFile(hookIntegration.hooks.path, "utf-8");
-    const parsed = parse(existingContent) as unknown;
-    const existingJson = isRecord(parsed) ? parsed : {};
+    // jsonc-parser's output is untyped; a JSONC document parses to a JSON
+    // value, or undefined when unparseable.
+    const parsed: JsonValue | undefined = parse(existingContent);
+    const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
 
     if (!hasUltraciteHook(existingJson)) {
       const merged = deepmerge(existingJson, content);

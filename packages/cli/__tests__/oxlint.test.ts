@@ -67,7 +67,7 @@ describe("oxlint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./oxlint.config.ts");
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain('import { defineConfig } from "oxlint"');
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
@@ -90,7 +90,7 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("react"));
       expect(content).toContain(getOxlintConfigPath("next"));
     });
@@ -113,7 +113,7 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(
         'import nextJsPlugins from "ultracite/oxlint/next/js-plugins";'
       );
@@ -141,7 +141,7 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).not.toContain("ultracite/oxlint/next/js-plugins");
       expect(content).not.toContain("ultracite/oxlint/tanstack/js-plugins");
     });
@@ -164,7 +164,7 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).not.toContain("ultracite/oxlint/next/js-plugins");
       expect(content).not.toContain("ultracite/oxlint/tanstack/js-plugins");
     });
@@ -184,7 +184,7 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("vitest"));
       expect(content).not.toContain(getOxlintConfigPath("jest"));
     });
@@ -220,7 +220,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("core"));
       expect(content).not.toContain(getOxlintConfigPath("github"));
       expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
@@ -248,7 +248,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("core"));
       expect(content).not.toContain(getOxlintConfigPath("github"));
       expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
@@ -283,7 +283,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       // Should only appear once
       const coreMatches = content.match(
         new RegExp(
@@ -326,7 +326,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("react"));
     });
 
@@ -359,7 +359,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("jest"));
       expect(content).not.toContain(getOxlintConfigPath("vitest"));
     });
@@ -397,7 +397,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       // Should preserve existing imports and add next
       expect(content).toContain(getOxlintConfigPath("core"));
       expect(content).not.toContain(getOxlintConfigPath("github"));
@@ -441,7 +441,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       const jsPluginsImports = content.match(
         /import jsPlugins from "ultracite\/oxlint\/js-plugins";/gu
       );
@@ -512,7 +512,7 @@ export default defineConfig({
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
     });
 
@@ -541,7 +541,7 @@ export default defineConfig({});
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const content = writeCall[1] as string;
+      const [, content] = writeCall;
       expect(content).toContain(getOxlintConfigPath("core"));
       expect(content).not.toContain(getOxlintConfigPath("github"));
       expect(content).not.toContain(getOxlintConfigPath("sonarjs"));

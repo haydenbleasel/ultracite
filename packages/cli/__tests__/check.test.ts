@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { check } from "../src/commands/check";
+import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 describe("check", () => {
@@ -12,7 +13,7 @@ describe("check", () => {
 
   test("runs biome check with default options", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -35,7 +36,7 @@ describe("check", () => {
 
   test("runs biome check with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -56,7 +57,7 @@ describe("check", () => {
 
   test("passes through unknown options to biome", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -77,7 +78,7 @@ describe("check", () => {
 
   test("handles files with special characters", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -97,7 +98,7 @@ describe("check", () => {
 
   test("passes absolute Next.js route-group paths through without quoting", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -119,7 +120,7 @@ describe("check", () => {
 
   test("throws LinterExitError when biome check finds errors", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -136,7 +137,7 @@ describe("check", () => {
 
   test("exits when spawn returns error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("spawn failed"),
         status: null,
       })
@@ -154,7 +155,7 @@ describe("check", () => {
 
   test("throws when no linter configuration found", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -170,7 +171,7 @@ describe("check", () => {
 
   test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -193,7 +194,7 @@ describe("check", () => {
 
   test("runs eslint check with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -214,7 +215,7 @@ describe("check", () => {
 
   test("eslint check scopes stylelint to style files and directories", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -240,7 +241,7 @@ describe("check", () => {
 
   test("eslint check runs stylelint with a style glob when no files given", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -266,7 +267,7 @@ describe("check", () => {
 
   test("eslint check throws on spawn error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("prettier spawn failed"),
         status: null,
       })
@@ -287,7 +288,7 @@ describe("check", () => {
   test("eslint check throws on eslint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
         // prettier succeeds
         if (callCount === 1) {
@@ -313,7 +314,7 @@ describe("check", () => {
   test("eslint check throws on stylelint spawn error", () => {
     let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
         // prettier and eslint succeed
         if (callCount <= 2) {
@@ -340,7 +341,7 @@ describe("check", () => {
 
   test("runs oxlint check when linter is oxlint (runs oxfmt, oxlint)", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -362,7 +363,7 @@ describe("check", () => {
 
   test("runs oxlint check with specific files", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -382,7 +383,7 @@ describe("check", () => {
 
   test("oxlint check throws on spawn error", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("oxfmt spawn failed"),
         status: null,
       })
@@ -400,7 +401,7 @@ describe("check", () => {
 
   test("eslint check throws LinterExitError on failure", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -417,7 +418,7 @@ describe("check", () => {
 
   test("oxlint check throws LinterExitError on failure", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 1,
       })
     );
@@ -434,7 +435,7 @@ describe("check", () => {
 
   test("passes through --type-aware flag to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -454,7 +455,7 @@ describe("check", () => {
 
   test("passes through --type-check flag to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -474,7 +475,7 @@ describe("check", () => {
 
   test("passes through multiple flags to oxlint", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -495,7 +496,7 @@ describe("check", () => {
 
   test("does not include flags when passthrough is empty", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );
@@ -516,7 +517,7 @@ describe("check", () => {
 
   test("oxlint check still runs oxlint when oxfmt reports formatting issues", () => {
     const mockSpawn = mock(
-      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         if (cmd === "oxfmt") {
           return { status: 1 };
         }
@@ -538,7 +539,7 @@ describe("check", () => {
 
   test("eslint check still runs eslint and stylelint when prettier reports issues", () => {
     const mockSpawn = mock(
-      (cmd: string, _args: string[], _opts: Record<string, unknown>) => {
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         if (cmd === "prettier") {
           return { status: 1 };
         }
@@ -561,7 +562,7 @@ describe("check", () => {
 
   test("keeps bare biome resolution with shell disabled for Windows compatibility", () => {
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
       })
     );

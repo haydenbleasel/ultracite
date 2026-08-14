@@ -8,10 +8,13 @@ const supportedPackageManagers = [
   "deno",
 ] as const satisfies readonly PackageManagerName[];
 
+// Widened view of the list so `.includes` can take an arbitrary string.
+const supportedPackageManagerNames: readonly string[] =
+  supportedPackageManagers;
+
 export const isSupportedPackageManagerName = (
   name: string
-): name is PackageManagerName =>
-  (supportedPackageManagers as readonly string[]).includes(name);
+): name is PackageManagerName => supportedPackageManagerNames.includes(name);
 
 export const assertSupportedPackageManagerName = (
   name: string

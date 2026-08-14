@@ -18,6 +18,7 @@ const validateBiomeConfig = async (configPath: string): Promise<boolean> => {
     const cleanJson = stripJsonComments(content);
     const config = JSON.parse(cleanJson);
 
+    // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this is the I/O boundary decoding untyped JSON.parse output of the config file
     if (typeof config !== "object" || config === null) {
       return false;
     }

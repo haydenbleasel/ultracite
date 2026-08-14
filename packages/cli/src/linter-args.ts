@@ -100,9 +100,7 @@ const agentFlags = new Map<string, FixAgent>([
  * classifies every `-`-prefixed token as linter passthrough, so they must be
  * stripped here before the passthrough reaches oxlint/biome/eslint.
  */
-export const extractAgentFlags = (
-  passthrough: string[]
-): { agent: FixAgent | null; passthrough: string[] } => {
+export const extractAgentFlags = (passthrough: string[]) => {
   const agents = new Set<FixAgent>();
   const remaining: string[] = [];
 
@@ -139,10 +137,7 @@ const looksLikeTarget = (arg: string, pathExists: PathExists): boolean =>
   PATH_SEPARATOR_RE.test(arg) ||
   FILE_EXTENSION_RE.test(arg);
 
-const classifyArgs = (
-  args: string[],
-  pathExists: PathExists
-): { files: string[]; passthrough: string[] } => {
+const classifyArgs = (args: string[], pathExists: PathExists) => {
   const files: string[] = [];
   const passthrough: string[] = [];
   let previousFlagMayTakeValue = false;
@@ -178,10 +173,7 @@ export const splitLinterArgs = ({
   parsedArgs,
   pathExists = existsSync,
   rawArgs,
-}: SplitLinterArgsOptions): {
-  files: string[];
-  passthrough: string[];
-} => {
+}: SplitLinterArgsOptions) => {
   const args = getCommandArgs(commandName, parsedArgs, rawArgs);
   const separatorIndex = args.indexOf("--");
 

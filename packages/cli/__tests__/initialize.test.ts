@@ -25,7 +25,7 @@ import {
   upsertTsConfig,
 } from "../src/initialize";
 
-const npmPm = { command: "npm", name: "npm" } as PackageManager;
+const npmPm: PackageManager = { command: "npm", name: "npm" };
 
 // Data package mocks are in preload.ts (must run before imports)
 
@@ -2019,7 +2019,7 @@ describe("helper functions", () => {
     });
 
     test("passes workspace flag to pnpm in a monorepo", async () => {
-      const pnpmPm = { command: "pnpm", name: "pnpm" } as PackageManager;
+      const pnpmPm: PackageManager = { command: "pnpm", name: "pnpm" };
       const calls: { workspace: boolean | string }[] = [];
       const mockAddDep = mock(
         (_pkg: string | string[], opts: { workspace: boolean | string }) => {
@@ -2122,7 +2122,7 @@ describe("helper functions", () => {
       expect(removedFiles).not.toContain("./oxfmt.config.ts");
 
       const packageJson = JSON.parse(
-        mockWriteFile.mock.calls.at(-1)?.[1] as string
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
       );
       expect(packageJson.devDependencies).toEqual({
         oxfmt: "latest",
@@ -2179,7 +2179,7 @@ describe("helper functions", () => {
       expect(removedFiles).not.toContain("./biome.jsonc");
 
       const packageJson = JSON.parse(
-        mockWriteFile.mock.calls.at(-1)?.[1] as string
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
       );
       expect(packageJson.devDependencies).toEqual({
         "@biomejs/biome": "latest",
@@ -3120,6 +3120,7 @@ describe("helper functions", () => {
 
       expect(universalTarget).toBeDefined();
 
+      // SAFETY: the expect above guarantees the universal target was found.
       await upsertAgentFile(universalTarget as AgentFileTarget, "npm", "biome");
 
       const [writeCall] = mockWriteFile.mock.calls;

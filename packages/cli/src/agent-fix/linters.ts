@@ -36,9 +36,17 @@ const runPiped = (command: string, args: string[]): string => {
   return String(result.stdout ?? "");
 };
 
-const parseJsonOutput = (command: string, stdout: string): unknown => {
+/**
+ * Parse a linter's JSON report. The type argument names the reporter's
+ * schema; every field in those schemas is optional and defaulted by the
+ * caller, so a payload that doesn't match degrades to empty diagnostics
+ * instead of crashing.
+ */
+const parseJsonOutput = <T>(command: string, stdout: string): T => {
   try {
-    return JSON.parse(stdout);
+    // SAFETY: T is a reporter schema whose fields are all optional and
+    // defaulted downstream, so an unexpected payload can't be misused.
+    return JSON.parse(stdout) as T;
   } catch {
     throw new Error(
       `Failed to parse JSON output from ${command}: ${stdout.slice(0, STDERR_TAIL_LENGTH) || "(empty output)"}`
@@ -63,10 +71,12 @@ interface OxlintDiagnostic {
   url?: string;
 }
 
+interface OxlintReport {
+  diagnostics?: OxlintDiagnostic[];
+}
+
 const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
-  const parsed = parseJsonOutput("oxlint", stdout) as {
-    diagnostics?: OxlintDiagnostic[];
-  };
+  const parsed = parseJsonOutput<OxlintReport>("oxlint", stdout);
   const diagnostics: Diagnostic[] = [];
 
   for (const diagnostic of parsed.diagnostics ?? []) {
@@ -132,6 +142,7 @@ interface BiomeDiagnostic {
 const biomeDiagnosticFile = (diagnostic: BiomeDiagnostic): string | null => {
   const diagnosticPath = diagnostic.location?.path;
 
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- decoding Biome's JSON reporter, where `location.path` is either a string or a { file } object
   if (typeof diagnosticPath === "string") {
     return diagnosticPath;
   }
@@ -139,10 +150,12 @@ const biomeDiagnosticFile = (diagnostic: BiomeDiagnostic): string | null => {
   return diagnosticPath?.file ?? null;
 };
 
+interface BiomeReport {
+  diagnostics?: BiomeDiagnostic[];
+}
+
 const parseBiomeDiagnostics = (stdout: string): Diagnostic[] => {
-  const parsed = parseJsonOutput("biome", stdout) as {
-    diagnostics?: BiomeDiagnostic[];
-  };
+  const parsed = parseJsonOutput<BiomeReport>("biome", stdout);
   const diagnostics: Diagnostic[] = [];
 
   for (const diagnostic of parsed.diagnostics ?? []) {
@@ -209,7 +222,7 @@ interface EslintResult {
 }
 
 const parseEslintDiagnostics = (stdout: string): Diagnostic[] => {
-  const parsed = parseJsonOutput("eslint", stdout) as EslintResult[];
+  const parsed = parseJsonOutput<EslintResult[]>("eslint", stdout);
   const diagnostics: Diagnostic[] = [];
 
   for (const result of Array.isArray(parsed) ? parsed : []) {
@@ -275,11 +288,11 @@ const eslintAdapter: LinterAdapter = {
   verify: (file, passthrough) => runEslintPass([file], passthrough),
 };
 
-const linterAdapters: Record<Linter, LinterAdapter> = {
+const linterAdapters = {
   biome: biomeAdapter,
   eslint: eslintAdapter,
   oxlint: oxlintAdapter,
-};
+} satisfies Record<Linter, LinterAdapter>;
 
 export const getLinterAdapter = (linter: Linter): LinterAdapter =>
   linterAdapters[linter];

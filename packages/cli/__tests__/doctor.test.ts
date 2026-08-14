@@ -1,6 +1,7 @@
 import { describe, expect, mock, spyOn, test } from "bun:test";
 
 import { doctor } from "../src/commands/doctor";
+import type { SpawnSyncOptions } from "../src/spawn-sync";
 
 mock.module("../src/spawn-sync", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
@@ -187,7 +188,7 @@ describe("doctor", () => {
   test("checks biome using the bare executable with shell disabled", () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: Record<string, unknown>) => ({
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
         stdout: "1.0.0",
       })

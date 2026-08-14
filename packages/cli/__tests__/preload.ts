@@ -17,14 +17,22 @@ import { spawnSync as _realSpawnSync } from "../src/spawn-sync";
 // 'node:child_process'". Linking it here makes resolution order-independent.
 import "nypm";
 
+// Typed globals for the real implementations captured below, so consumers
+// (mock-fs.ts, spawn-sync.test.ts) can read them without type assertions.
+declare global {
+  var __realReaddirSync: typeof _realReaddirSync;
+  var __realReadFileSync: typeof _realReadFileSync;
+  var __realSpawnSync: typeof _realSpawnSync;
+}
+
 // Capture real fs functions before mocking so tests that need them can use them
-(globalThis as Record<string, unknown>).__realReaddirSync = _realReaddirSync;
-(globalThis as Record<string, unknown>).__realReadFileSync = _realReadFileSync;
+globalThis.__realReaddirSync = _realReaddirSync;
+globalThis.__realReadFileSync = _realReadFileSync;
 
 // Capture the real spawn-sync adapter before any test file mocks the module,
 // so spawn-sync.test.ts can exercise the actual implementation regardless of
 // test-file order.
-(globalThis as Record<string, unknown>).__realSpawnSync = _realSpawnSync;
+globalThis.__realSpawnSync = _realSpawnSync;
 
 // Mock fast-glob before any imports that use it
 // This is needed for tsconfig.test.ts and other tests that scan for files
@@ -53,10 +61,7 @@ mock.module("node:fs", () => ({
   mkdirSync: mock(() => {}),
   mkdtempSync: mock((prefix: string) => `${prefix}mock`),
   readFileSync: mock(() => "{}"),
-  readdirSync: (...args: unknown[]) =>
-    (
-      globalThis as unknown as Record<string, (...a: unknown[]) => unknown>
-    ).__realReaddirSync(...args),
+  readdirSync: _realReaddirSync,
   realpathSync: mock((path: string) => path),
   rmSync: mock(() => {}),
   writeFileSync: mock(() => {}),

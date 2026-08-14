@@ -13,6 +13,8 @@
  */
 import path from "node:path";
 
+import type { Linter } from "eslint";
+
 type Severity = "off" | "warn" | "error";
 type OxlintRuleEntry = Severity | [Severity, ...unknown[]];
 
@@ -22,18 +24,28 @@ const here = import.meta.dirname;
  * Intentional divergences between the ESLint and oxlint presets.
  * Keyed by oxlint-normalized rule name.
  */
-const allowlist: Record<string, string> = {
+const allowlist = new Map([
   // Off in oxlint because the JS plugin bridge provides no globals, so
   // the rule flags every identifier. ESLint resolves globals correctly.
-  "sonarjs/no-reference-error": "jsPlugins bridge provides no globals",
+  ["sonarjs/no-reference-error", "jsPlugins bridge provides no globals"],
   // Off in oxlint due to https://github.com/oxc-project/oxc/issues/21949.
-  "unicorn/number-literal-case": "oxc autofix bug",
-};
+  ["unicorn/number-literal-case", "oxc autofix bug"],
+]);
 
 // Base rules whose @typescript-eslint twin has a different name.
-const twinAliases: Record<string, string> = {
-  "no-throw-literal": "typescript/only-throw-error",
-};
+const twinAliases = new Map([
+  ["no-throw-literal", "typescript/only-throw-error"],
+]);
+
+/** A rule options value decoded from JSON (options round-trip through JSON). */
+type JsonValue = boolean | number | string | null | JsonValue[] | JsonObject;
+interface JsonObject {
+  [key: string]: JsonValue;
+}
+
+const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this predicate is the JSON boundary: telling the untagged object branch of JSON.parse output apart from primitives needs a representation check
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
 /**
  * True when every entry oxlint's options specify is present with the same
@@ -41,17 +53,13 @@ const twinAliases: Record<string, string> = {
  * defaults into the effective config, so exact equality would flag every
  * rule where oxlint only spells out the non-default part.
  */
-const isOptionSubset = (subset: unknown, superset: unknown): boolean => {
-  if (
-    typeof subset === "object" &&
-    subset !== null &&
-    typeof superset === "object" &&
-    superset !== null &&
-    !Array.isArray(subset) &&
-    !Array.isArray(superset)
-  ) {
+const isOptionSubset = (
+  subset: JsonValue,
+  superset: JsonValue | undefined
+): boolean => {
+  if (isJsonObject(subset) && isJsonObject(superset)) {
     return Object.entries(subset).every(([key, value]) =>
-      isOptionSubset(value, (superset as Record<string, unknown>)[key])
+      isOptionSubset(value, superset[key])
     );
   }
   if (Array.isArray(subset) && Array.isArray(superset)) {
@@ -87,6 +95,8 @@ const getNativeOxlintRules = (): Set<string> => {
     ["./node_modules/.bin/oxlint", "--rules", "--format=json"],
     { cwd: path.join(here, "..") }
   );
+  // SAFETY: decoding trusted `oxlint --rules --format=json` output, which is
+  // an array of { scope, value, category } entries.
   const entries = JSON.parse(result.stdout.toString()) as {
     scope: string;
     value: string;
@@ -129,12 +139,14 @@ const loadEslintEffectiveRules = async (
         import(path.join(here, `../config/eslint/${name}/eslint.config.mjs`))
     )
   );
-  const configs: unknown[] = mods.flatMap((mod) => mod.default);
+  const configs: Linter.Config[] = mods.flatMap((mod) => mod.default);
   const eslint = new ESLint({
     cwd: path.join(here, ".."),
-    overrideConfig: configs as never,
+    overrideConfig: configs,
     overrideConfigFile: true,
   });
+  // SAFETY: adapting ESLint's untyped (`Promise<any>`) calculateConfigForFile
+  // result; the effective flat config stores rules as severity-first arrays.
   const config = (await eslint.calculateConfigForFile(filePath)) as {
     rules?: Record<string, [number, ...unknown[]]>;
   };
@@ -246,8 +258,9 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     } else {
       twins.push(`typescript/${name}`);
     }
-    if (twinAliases[name]) {
-      twins.push(twinAliases[name]);
+    const twinAlias = twinAliases.get(name);
+    if (twinAlias) {
+      twins.push(twinAlias);
     }
     return twins;
   };
@@ -257,8 +270,9 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     twinsOf(name).some((twin) => eslintState.get(twin)?.enabled === true);
 
   const report = (rule: string, message: string) => {
-    if (allowlist[rule]) {
-      allowlisted.add(`${rule} (${allowlist[rule]})`);
+    const allowReason = allowlist.get(rule);
+    if (allowReason) {
+      allowlisted.add(`${rule} (${allowReason})`);
       return;
     }
     violations.push(`[${surface.name}] ${rule}: ${message}`);
@@ -320,7 +334,7 @@ console.log(`Allowlisted divergences (${allowlisted.size}):`);
 for (const entry of [...allowlisted].toSorted()) {
   console.log(`  ~ ${entry}`);
 }
-const unusedAllowlist = Object.keys(allowlist).filter(
+const unusedAllowlist = [...allowlist.keys()].filter(
   (rule) => ![...allowlisted].some((entry) => entry.startsWith(`${rule} (`))
 );
 for (const rule of unusedAllowlist) {

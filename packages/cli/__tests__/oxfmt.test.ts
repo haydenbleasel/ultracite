@@ -82,7 +82,7 @@ describe("oxfmt", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = writeCall[1] as string;
+      const [, writtenContent] = writeCall;
 
       expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
       expect(writtenContent).toContain(
@@ -124,7 +124,7 @@ describe("oxfmt", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = writeCall[1] as string;
+      const [, writtenContent] = writeCall;
 
       expect(writtenContent).toContain('import { defineConfig } from "oxfmt"');
       expect(writtenContent).toContain(
