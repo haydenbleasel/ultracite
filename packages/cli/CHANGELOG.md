@@ -1,3 +1,10 @@
+## 7.10.4
+
+### Patch Changes
+
+- 417a85a: Add an opt-in `ultracite/oxlint/anti-slop` preset that ships a vendored, self-contained build of the [anti-slop](https://github.com/dmmulroy/anti-slop) Oxlint plugin — fifteen rules that reject low-evidence TypeScript and JavaScript patterns (unjustified type assertions, `unknown` leaking through signatures, `Reflect`-based access, module mocking, and more). Extend it alongside `ultracite/oxlint/core`; nothing extra to install. The preset also turns off two core rules that conflict with anti-slop's widening checks (`typescript/consistent-indexed-object-style` and `unicorn/no-immediate-mutation`) when extended after core.
+- 4d3fab8: Move `suspicious/useArraySortCompare` from the Biome core config to the opt-in type-aware config. The rule is in Biome's `types` domain — it type-infers the receiver of every method call before checking the method name, which made `ultracite check` up to ~260x slower on projects with expensive library types (zod, better-auth, Prisma). It now only runs when type-aware linting is explicitly enabled, alongside the other type/project-domain rules. Fixes #768.
+
 ## 7.10.3
 
 ### Patch Changes
