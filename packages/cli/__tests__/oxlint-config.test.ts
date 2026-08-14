@@ -475,6 +475,67 @@ describe("oxlint js-plugins config", () => {
   });
 });
 
+describe("oxlint anti-slop config", () => {
+  test("declares the vendored anti-slop JS plugin via an absolute path", async () => {
+    const config = await readOxlintConfig("anti-slop");
+
+    expect(config.jsPlugins).toHaveLength(1);
+    const [plugin] = config.jsPlugins;
+    expect(plugin.name).toBe("anti-slop");
+    // The specifier is computed from the preset's own location so the
+    // vendored bundle resolves regardless of the consumer's package layout.
+    expect(path.isAbsolute(plugin.specifier)).toBe(true);
+    expect(plugin.specifier.endsWith("plugin.mjs")).toBe(true);
+  });
+
+  test("enables exactly the rules the vendored plugin registers", async () => {
+    const config = await readOxlintConfig("anti-slop");
+    const mod = await import("../config/oxlint/anti-slop/plugin.mjs");
+    const { rules } = mod.default as { rules: Record<string, unknown> };
+
+    const registered = Object.keys(rules)
+      .map((name) => `anti-slop/${name}`)
+      .toSorted();
+    const configured = Object.keys(config.rules ?? {}).toSorted();
+
+    expect(configured).toEqual(registered);
+    for (const severity of Object.values(config.rules ?? {})) {
+      expect(severity).toBe("error");
+    }
+  });
+
+  // Run oxlint for real with core + anti-slop loaded via a committed fixture
+  // and assert the vendored plugin's diagnostics actually fire — a config
+  // that loads but silently registers nothing would pass the static checks.
+  test("anti-slop loads through oxlint and reports violations", () => {
+    const cliDir = path.join(import.meta.dirname, "..");
+    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "anti-slop-load"
+    );
+
+    const result = Bun.spawnSync(
+      [
+        oxlintBin,
+        "-c",
+        path.join(fixtureDir, "entry.mjs"),
+        path.join(fixtureDir, "sample.ts"),
+      ],
+      { cwd: cliDir }
+    );
+    const output = result.stdout.toString() + result.stderr.toString();
+
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+    expect(output).toContain("anti-slop(no-reflect-get)");
+    expect(output).toContain(
+      "anti-slop(require-safety-comment-for-type-assertion)"
+    );
+  });
+});
+
 describe("oxlint react config", () => {
   const REACT_PLUGINS = ["react", "react-perf", "jsx-a11y"];
 

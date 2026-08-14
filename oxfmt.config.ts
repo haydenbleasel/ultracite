@@ -17,5 +17,8 @@ export default defineConfig({
     "packages/video/src/lib/utils.ts",
     "packages/video/src/lib/remocn-ui",
     "packages/video/.agents/skills",
+    // Generated bundle of the vendored anti-slop oxlint plugin — see
+    // packages/cli/scripts/vendor-anti-slop.ts.
+    "packages/cli/config/oxlint/anti-slop/plugin.mjs",
   ],
 });

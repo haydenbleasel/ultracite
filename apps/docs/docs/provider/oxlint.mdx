@@ -100,6 +100,25 @@ export default defineConfig({
 });
 ```
 
+## Anti-Slop Rules (Optional)
+
+Ultracite also ships an opt-in `anti-slop` preset built on [anti-slop](https://github.com/dmmulroy/anti-slop), Dillon Mulroy's set of opinionated Oxlint rules that reject low-evidence, low-signal TypeScript and JavaScript patterns — unjustified type assertions, `unknown` leaking through function signatures, `Reflect`-based property access, module mocking, and similar escape hatches.
+
+Upstream is deliberately not published to npm (its distribution model is "copy the source into your repo"), so Ultracite vendors a self-contained bundled build of the plugin — there is nothing extra to install. Like `js-plugins`, this preset is **off by default** because it is strongly opinionated and runs through Oxlint's slower JS-plugin pass:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core, antiSlop],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+All fifteen rules are enabled at the `error` level, including `require-safety-comment-for-type-assertion` (every `as` assertion needs a `SAFETY:` comment stating the checked invariant), `no-unknown-returns` / `no-unknown-parameters` (parse values into named domain types at boundaries), and `no-module-mocking` (inject dependencies instead of mocking modules). If a rule doesn't fit your codebase — `no-module-mocking` is a common example in test-heavy projects — turn it off in your own config's `rules` block.
+
 ## Configuration Approach
 
 Ultracite's Oxlint configuration uses an **opt-out** approach. This means we explicitly enable rules from every category at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
