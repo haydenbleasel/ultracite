@@ -582,7 +582,7 @@ describe("initialize", () => {
 
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.0");
-    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.7.1");
+    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.12");
   });
 
   test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {
