@@ -361,6 +361,48 @@ describe("oxlint js-plugins config", () => {
     ]);
   });
 
+  test("selectJsPlugins narrows plugins and rules to the selection", async () => {
+    const configDir = path.join(
+      import.meta.dirname,
+      "../config/oxlint/js-plugins"
+    );
+    const { selectJsPlugins } = await import(configDir);
+    const full = await readOxlintConfig("js-plugins");
+
+    const selected = selectJsPlugins(["github", "sonarjs"]);
+
+    expect(selected.jsPlugins).toEqual([
+      { name: "github", specifier: "eslint-plugin-github" },
+      { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+    ]);
+
+    const selectedRules = Object.keys(selected.rules ?? {});
+    expect(selectedRules.length).toBeGreaterThan(0);
+    expect(
+      selectedRules.every(
+        (rule) => rule.startsWith("github/") || rule.startsWith("sonarjs/")
+      )
+    ).toBe(true);
+    // Every selected-plugin rule from the full preset survives the filter.
+    expect(selectedRules).toEqual(
+      Object.keys(full.rules ?? {}).filter(
+        (rule) => rule.startsWith("github/") || rule.startsWith("sonarjs/")
+      )
+    );
+
+    // Per-override rules are filtered the same way.
+    for (const override of selected.overrides ?? []) {
+      expect(
+        Object.keys(override.rules ?? {}).every(
+          (rule) => rule.startsWith("github/") || rule.startsWith("sonarjs/")
+        )
+      ).toBe(true);
+    }
+
+    // The full preset export is left untouched.
+    expect(full.jsPlugins?.length).toBe(3);
+  });
+
   // Regression guard: oxlint's JS plugin bridge only registers a subset of
   // each ESLint plugin's rules, and naming a rule it does not register makes
   // oxlint hard-fail config parsing. Statically reading the config object

@@ -120,7 +120,39 @@ describe("oxlint linter", () => {
       expect(content).toContain(
         'import tanstackJsPlugins from "ultracite/oxlint/tanstack/js-plugins";'
       );
-      expect(content).toContain("nextJsPlugins, tanstackJsPlugins");
+      expect(content).toMatch(
+        /extends: \[[\s\S]*nextJsPlugins,[\s\S]*tanstackJsPlugins,[\s\S]*selectJsPlugins\(\["react-doctor"\]\)/u
+      );
+    });
+
+    test("wraps a subset selection in selectJsPlugins", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["eslint-plugin-github", "eslint-plugin-sonarjs"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+      );
+      expect(content).toContain('selectJsPlugins(["github", "sonarjs"])');
+      // The filtering logic lives inside ultracite, not the generated file,
+      // so user-side lint presets (e.g. anti-slop) cannot flag it — see #770.
+      expect(content).not.toContain("typeof");
+      // A blank line must separate the imports from the config so the file
+      // is born compliant with import/newline-after-import.
+      expect(content).toContain('";\n\nexport default defineConfig({');
     });
 
     test("does not add framework js-plugins add-ons without react-doctor", async () => {
@@ -442,14 +474,141 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const [, content] = writeCall;
-      const jsPluginsImports = content.match(
-        /import jsPlugins from "ultracite\/oxlint\/js-plugins";/gu
+      // The legacy full-preset default import is migrated to the named
+      // selectJsPlugins helper rather than kept alongside it.
+      expect(content).not.toContain(
+        'import jsPlugins from "ultracite/oxlint/js-plugins";'
       );
-      expect(jsPluginsImports?.length).toBe(1);
+      const selectImports = content.match(
+        /import \{ selectJsPlugins \} from "ultracite\/oxlint\/js-plugins";/gu
+      );
+      expect(selectImports?.length).toBe(1);
       const nextAddOnImports = content.match(
         /import nextJsPlugins from "ultracite\/oxlint\/next\/js-plugins";/gu
       );
       expect(nextAddOnImports?.length).toBe(1);
+    });
+
+    test("preserves a legacy inline js-plugins selection during update", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+const selectedJsPluginNames = new Set(["github","sonarjs"]);
+const selectedJsPluginRulePrefixes = new Set(["github","sonarjs"]);
+
+const selectedJsPlugins = {
+  ...jsPlugins,
+  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
+    selectedJsPluginNames.has(typeof plugin === "string" ? plugin : plugin.name)
+  ),
+};
+
+export default defineConfig({
+  extends: [core, selectedJsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain('selectJsPlugins(["github", "sonarjs"])');
+      expect(content).not.toContain("selectedJsPluginNames");
+      expect(content).not.toContain("typeof");
+    });
+
+    test("preserves a selectJsPlugins selection during update", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [core, selectJsPlugins(["react-doctor"])],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain('selectJsPlugins(["react-doctor"])');
+    });
+
+    test("preserves a selection reformatted across multiple lines", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [
+    core,
+    selectJsPlugins([
+      "github",
+      "sonarjs",
+      "react-doctor",
+    ]),
+  ],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'selectJsPlugins(["github", "sonarjs", "react-doctor"])'
+      );
     });
 
     test("warns when file mentions ultracite but extends cannot be parsed", async () => {

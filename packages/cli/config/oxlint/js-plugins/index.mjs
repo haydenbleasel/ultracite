@@ -26,12 +26,17 @@ import { defineConfig } from "oxlint";
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //   });
-export default defineConfig({
-  jsPlugins: [
-    { name: "github", specifier: "eslint-plugin-github" },
-    { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
-    { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
-  ],
+//
+// To enable only some of the plugins, extend selectJsPlugins(...) instead of
+// the full preset — see its doc comment below.
+const jsPluginEntries = [
+  { name: "github", specifier: "eslint-plugin-github" },
+  { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+  { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
+];
+
+const config = defineConfig({
+  jsPlugins: jsPluginEntries,
   overrides: [
     {
       files: [
@@ -430,3 +435,37 @@ export default defineConfig({
     "react-doctor/zod-v4-prefer-top-level-string-formats": "error",
   },
 });
+
+export default config;
+
+// Returns a copy of this preset narrowed to the given plugin names ("github",
+// "sonarjs", "react-doctor"): only the selected jsPlugins entries are loaded
+// and only their rules (top-level and per-override) are kept. `ultracite init`
+// wires this into generated configs when a subset of the plugins is chosen,
+// so the generated file stays a one-line extend instead of inlining the
+// filtering logic:
+//
+//   import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+//
+//   export default defineConfig({
+//     extends: [core, selectJsPlugins(["github", "sonarjs"])],
+//     ignorePatterns: core.ignorePatterns,
+//   });
+export const selectJsPlugins = (pluginNames) => {
+  const names = new Set(pluginNames);
+  const isSelectedRule = ([ruleName]) => names.has(ruleName.split("/")[0]);
+
+  return defineConfig({
+    ...config,
+    jsPlugins: jsPluginEntries.filter((plugin) => names.has(plugin.name)),
+    overrides: config.overrides?.map((override) => ({
+      ...override,
+      rules: Object.fromEntries(
+        Object.entries(override.rules ?? {}).filter(isSelectedRule)
+      ),
+    })),
+    rules: Object.fromEntries(
+      Object.entries(config.rules ?? {}).filter(isSelectedRule)
+    ),
+  });
+};

@@ -19,13 +19,10 @@ interface OxlintOptions {
 }
 
 const oxlintJsPluginConfig = {
-  "eslint-plugin-github": { name: "github", rulePrefix: "github" },
-  "eslint-plugin-sonarjs": { name: "sonarjs", rulePrefix: "sonarjs" },
-  "oxlint-plugin-react-doctor": {
-    name: "react-doctor",
-    rulePrefix: "react-doctor",
-  },
-} satisfies Record<OxlintJsPlugin, { name: string; rulePrefix: string }>;
+  "eslint-plugin-github": { name: "github" },
+  "eslint-plugin-sonarjs": { name: "sonarjs" },
+  "oxlint-plugin-react-doctor": { name: "react-doctor" },
+} satisfies Record<OxlintJsPlugin, { name: string }>;
 
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -46,43 +43,9 @@ const getOxlintConfigIdentifier = (configPath: string) => {
   );
 };
 
-const generateSelectedJsPluginsConfig = (jsPlugins: OxlintJsPlugin[]) => {
-  if (jsPlugins.length === 0) {
-    return "";
-  }
-
-  const pluginNames = jsPlugins.map(
-    (jsPlugin) => oxlintJsPluginConfig[jsPlugin].name
-  );
-  const rulePrefixes = jsPlugins.map(
-    (jsPlugin) => oxlintJsPluginConfig[jsPlugin].rulePrefix
-  );
-
-  return `
-const selectedJsPluginNames = new Set(${JSON.stringify(pluginNames)});
-const selectedJsPluginRulePrefixes = new Set(${JSON.stringify(rulePrefixes)});
-
-const selectedJsPlugins = {
-  ...jsPlugins,
-  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
-    selectedJsPluginNames.has(typeof plugin === "string" ? plugin : plugin.name)
-  ),
-  overrides: jsPlugins.overrides?.map((override) => ({
-    ...override,
-    rules: Object.fromEntries(
-      Object.entries(override.rules ?? {}).filter(([ruleName]) =>
-        selectedJsPluginRulePrefixes.has(ruleName.split("/")[0] ?? ruleName)
-      )
-    ),
-  })),
-  rules: Object.fromEntries(
-    Object.entries(jsPlugins.rules ?? {}).filter(([ruleName]) =>
-      selectedJsPluginRulePrefixes.has(ruleName.split("/")[0] ?? ruleName)
-    )
-  ),
-};
-`;
-};
+// oxfmt's print width; the generated extends array switches to one entry per
+// line beyond this so the file is emitted already formatted.
+const generatedLineWidth = 80;
 
 const generateConfigContent = (
   extendsList: string[],
@@ -116,24 +79,43 @@ const generateConfigContent = (
     ...resolvedExtends.map(
       (ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
     ),
-    hasJsPlugins ? `import jsPlugins from "ultracite/oxlint/js-plugins";` : "",
+    hasJsPlugins
+      ? `import { selectJsPlugins } from "ultracite/oxlint/js-plugins";`
+      : "",
   ]
     .filter(Boolean)
     .join("\n");
 
-  const identifiers = [
+  const pluginNames = jsPlugins
+    .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
+    .join(", ");
+  const extendsEntries = [
     ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
-    ...(hasJsPlugins ? ["selectedJsPlugins"] : []),
-  ].join(", ");
+    ...(hasJsPlugins ? [`selectJsPlugins([${pluginNames}])`] : []),
+  ];
 
-  return `${imports}${generateSelectedJsPluginsConfig(jsPlugins)}
+  const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
+  const extendsBlock =
+    singleLineExtends.length <= generatedLineWidth
+      ? singleLineExtends
+      : `  extends: [\n${extendsEntries
+          .map((entry) => `    ${entry},`)
+          .join("\n")}\n  ],`;
+
+  return `${imports}
+
 export default defineConfig({
-  extends: [${identifiers}],
+${extendsBlock}
   ignorePatterns: core.ignorePatterns,
 });
 `;
 };
 
+// Current generated form: extends: [..., selectJsPlugins(["github", ...])]
+const SELECT_JS_PLUGINS_RE = /selectJsPlugins\(\s*(?<names>\[[^\]]*\])\s*\)/u;
+
+// Legacy generated form: an inlined filtering block driven by
+// selectedJsPluginNames = new Set(["github", ...])
 const SELECTED_JS_PLUGIN_NAMES_RE =
   /selectedJsPluginNames = new Set\((?<names>\[[^\]]*\])\)/u;
 
@@ -147,28 +129,20 @@ const jsPluginsByConfigName = new Map(
  * Recover the js-plugins selection encoded in a previously generated config
  * so re-running init without an explicit selection preserves it — otherwise
  * the regenerated config would extend the full js-plugins preset and silently
- * enable plugins the user never opted into.
+ * enable plugins the user never opted into. Supports both the current
+ * selectJsPlugins([...]) form and the legacy inlined-filtering form.
  */
 const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
-  const match = SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
+  const match =
+    SELECT_JS_PLUGINS_RE.exec(contents) ??
+    SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
   if (!match?.groups?.names) {
     return [];
   }
 
-  try {
-    const names: unknown = JSON.parse(match.groups.names);
-    if (!Array.isArray(names)) {
-      return [];
-    }
-    return names
-      .map((name) =>
-        // oxlint-disable-next-line anti-slop/no-runtime-typeof -- hand-rolled validation of the JSON-parsed plugin-name array recovered from a generated config file
-        typeof name === "string" ? jsPluginsByConfigName.get(name) : undefined
-      )
-      .filter((plugin): plugin is OxlintJsPlugin => plugin !== undefined);
-  } catch {
-    return [];
-  }
+  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)]
+    .map((nameMatch) => jsPluginsByConfigName.get(nameMatch.groups?.name ?? ""))
+    .filter((plugin): plugin is OxlintJsPlugin => plugin !== undefined);
 };
 
 export const oxlint = {

@@ -17,6 +17,21 @@ declare const config: OxlintConfig;
 export default config;
 `;
 
+// js-plugins additionally exports the selectJsPlugins helper that generated
+// configs use to enable a subset of the plugins.
+const oxlintJsPluginsDeclaration = `${oxlintDeclaration}
+export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+
+/**
+ * Returns a copy of the js-plugins preset narrowed to the given plugin
+ * names: only the selected jsPlugins entries are loaded and only their
+ * rules (top-level and per-override) are kept.
+ */
+export declare const selectJsPlugins: (
+  pluginNames: readonly OxlintJsPluginName[]
+) => OxlintConfig;
+`;
+
 const oxfmtDeclaration = `import type { OxfmtConfig } from "oxfmt";
 
 declare const config: OxfmtConfig;
@@ -41,7 +56,10 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
 for (const config of configs) {
   const dir = path.join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(path.join(dir, "index.d.mts"), oxlintDeclaration);
+  writeFileSync(
+    path.join(dir, "index.d.mts"),
+    config === "js-plugins" ? oxlintJsPluginsDeclaration : oxlintDeclaration
+  );
 }
 
 // Generate oxfmt declaration
