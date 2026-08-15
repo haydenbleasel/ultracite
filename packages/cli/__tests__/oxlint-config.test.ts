@@ -561,7 +561,14 @@ describe("oxlint anti-slop config", () => {
 
     expect(configured).toEqual(registered);
     for (const [name, severity] of configuredEntries) {
-      expect(severity).toBe(name.startsWith("anti-slop/") ? "error" : "off");
+      if (name.startsWith("anti-slop/")) {
+        // Configured rules are "error", optionally with rule options
+        // (e.g. no-runtime-typeof's allowInTypeGuards).
+        const level = Array.isArray(severity) ? severity[0] : severity;
+        expect(level).toBe("error");
+      } else {
+        expect(severity).toBe("off");
+      }
     }
   });
 

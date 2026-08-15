@@ -42,7 +42,11 @@ export default defineConfig({
     "anti-slop/no-object-parameters": "error",
     "anti-slop/no-reflect-apply": "error",
     "anti-slop/no-reflect-get": "error",
-    "anti-slop/no-runtime-typeof": "error",
+    // allowInTypeGuards exempts `typeof` inside type predicate functions
+    // ((x): x is T) — predicates are the named-boundary pattern the rule
+    // pushes toward, and hand-rolled JSON/boundary validation has no other
+    // way to write the check (dmmulroy/anti-slop#10).
+    "anti-slop/no-runtime-typeof": ["error", { allowInTypeGuards: true }],
     "anti-slop/no-shape-in-symbol-names": "error",
     "anti-slop/no-unknown-parameters": "error",
     "anti-slop/no-unknown-returns": "error",

@@ -12,7 +12,6 @@ import { assertSupportedPackageManagerName } from "./package-manager";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
-  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this is the I/O boundary classifying jsonc-parser's untyped parse output
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const createFixCommand = (

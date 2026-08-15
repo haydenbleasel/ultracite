@@ -44,7 +44,6 @@ interface JsonObject {
 }
 
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
-  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this predicate is the JSON boundary: telling the untagged object branch of JSON.parse output apart from primitives needs a representation check
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 /**
