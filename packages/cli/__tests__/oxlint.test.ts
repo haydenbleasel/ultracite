@@ -181,6 +181,59 @@ describe("oxlint linter", () => {
       expect(content).toContain('";\n\nexport default defineConfig({');
     });
 
+    test("adds the vendored anti-slop preset as a plain extend", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["anti-slop"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import antiSlop from "ultracite/oxlint/anti-slop";'
+      );
+      expect(content).toMatch(/extends: \[[\s\S]*antiSlop[\s\S]*\]/u);
+      // anti-slop is vendored, not an npm plugin — it must not pull in the
+      // selectJsPlugins machinery on its own.
+      expect(content).not.toContain("selectJsPlugins");
+      expect(content).not.toContain('"ultracite/oxlint/js-plugins"');
+    });
+
+    test("combines anti-slop with npm js-plugins", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["anti-slop", "eslint-plugin-github"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import antiSlop from "ultracite/oxlint/anti-slop";'
+      );
+      expect(content).toContain('selectJsPlugins(["github"])');
+      expect(content).not.toContain('selectJsPlugins(["anti-slop"');
+    });
+
     test("does not add framework js-plugins add-ons without react-doctor", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -513,6 +566,48 @@ export default defineConfig({
         /import nextJsPlugins from "ultracite\/oxlint\/next\/js-plugins";/gu
       );
       expect(nextAddOnImports?.length).toBe(1);
+    });
+
+    test("preserves an existing anti-slop extend during update without duplicating it", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core, antiSlop],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      // Re-running with an explicit anti-slop selection (e.g. re-selecting it
+      // in the init prompt) must not add the extend a second time.
+      await oxlint.update({ jsPlugins: ["anti-slop"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      const antiSlopImports = content.match(
+        /import antiSlop from "ultracite\/oxlint\/anti-slop";/gu
+      );
+      expect(antiSlopImports?.length).toBe(1);
+      const antiSlopExtends = content.match(/antiSlop/gu);
+      // One import identifier plus one extends entry.
+      expect(antiSlopExtends?.length).toBe(2);
     });
 
     test("preserves a legacy inline js-plugins selection during update", async () => {

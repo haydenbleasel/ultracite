@@ -108,7 +108,15 @@ export default defineConfig({
 
 Ultracite also ships an opt-in `anti-slop` preset built on [anti-slop](https://github.com/dmmulroy/anti-slop), Dillon Mulroy's set of opinionated Oxlint rules that reject low-evidence, low-signal TypeScript and JavaScript patterns — unjustified type assertions, `unknown` leaking through function signatures, `Reflect`-based property access, module mocking, and similar escape hatches.
 
-Upstream is deliberately not published to npm (its distribution model is "copy the source into your repo"), so Ultracite vendors a self-contained bundled build of the plugin — there is nothing extra to install. Like `js-plugins`, this preset is **off by default** because it is strongly opinionated and runs through Oxlint's slower JS-plugin pass:
+Upstream is deliberately not published to npm (its distribution model is "copy the source into your repo"), so Ultracite vendors a self-contained bundled build of the plugin — there is nothing extra to install. Like `js-plugins`, this preset is **off by default** because it is strongly opinionated and runs through Oxlint's slower JS-plugin pass.
+
+You can enable it during setup: it appears as `anti-slop` in the same JS-plugins prompt as the packages above, and non-interactive setup accepts it via `--js-plugins`:
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins anti-slop
+```
+
+Or add it to your config manually:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";

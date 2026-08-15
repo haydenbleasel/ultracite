@@ -65,6 +65,7 @@ const ultraciteVersion = packageJson.version;
 const OPERATION_CANCELLED = "Operation cancelled.";
 const LINT_STAGED = "lint-staged";
 const oxlintJsPlugins = [
+  "anti-slop",
   "eslint-plugin-github",
   "eslint-plugin-sonarjs",
   "oxlint-plugin-react-doctor",
@@ -72,12 +73,20 @@ const oxlintJsPlugins = [
 
 type OxlintJsPlugin = (typeof oxlintJsPlugins)[number];
 
+// anti-slop is vendored inside the ultracite package, so it has no dev
+// dependency to install.
+type OxlintNpmJsPlugin = Exclude<OxlintJsPlugin, "anti-slop">;
+
+const isOxlintNpmJsPlugin = (
+  jsPlugin: OxlintJsPlugin
+): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== "anti-slop";
+
 const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
   "oxlint-plugin-react-doctor":
     packageJson.devDependencies["oxlint-plugin-react-doctor"],
-} satisfies Record<OxlintJsPlugin, string>;
+} satisfies Record<OxlintNpmJsPlugin, string>;
 
 // Widened view of the list so `.includes` can take an arbitrary string.
 const oxlintJsPluginNames: readonly string[] = oxlintJsPlugins;
@@ -266,7 +275,9 @@ const buildNoInstallDevDependencies = (
       devDependencies["oxlint-tsgolint"] = "latest";
     }
     for (const jsPlugin of jsPlugins) {
-      devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
+      if (isOxlintNpmJsPlugin(jsPlugin)) {
+        devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
+      }
     }
   }
 
@@ -477,10 +488,12 @@ export const installDependencies = async (
       packages.push("oxlint-tsgolint@latest");
     }
     packages.push(
-      ...jsPlugins.map(
-        (jsPlugin) =>
-          `${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`
-      )
+      ...jsPlugins
+        .filter(isOxlintNpmJsPlugin)
+        .map(
+          (jsPlugin) =>
+            `${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`
+        )
     );
   }
 
@@ -1195,6 +1208,10 @@ export const initialize = async (flags?: InitializeFlags) => {
         const jsPluginsResult = await multiselect<OxlintJsPlugin>({
           message: "Which JS plugins would you like to add (optional)?",
           options: oxlintJsPlugins.map((jsPlugin) => ({
+            hint:
+              jsPlugin === "anti-slop"
+                ? "vendored opinionated preset, nothing to install"
+                : undefined,
             label: jsPlugin,
             value: jsPlugin,
           })),

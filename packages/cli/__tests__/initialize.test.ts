@@ -470,6 +470,7 @@ describe("initialize", () => {
     const mockMultiselect = mock((promptOptions: { message?: string }) => {
       if (promptOptions.message?.includes("JS plugins")) {
         return Promise.resolve([
+          "anti-slop",
           "eslint-plugin-github",
           "eslint-plugin-sonarjs",
           "oxlint-plugin-react-doctor",
@@ -525,6 +526,11 @@ describe("initialize", () => {
       expect.objectContaining({
         message: "Which JS plugins would you like to add (optional)?",
         options: [
+          {
+            hint: "vendored opinionated preset, nothing to install",
+            label: "anti-slop",
+            value: "anti-slop",
+          },
           { label: "eslint-plugin-github", value: "eslint-plugin-github" },
           { label: "eslint-plugin-sonarjs", value: "eslint-plugin-sonarjs" },
           {
@@ -537,6 +543,11 @@ describe("initialize", () => {
     expect(
       writtenContents.some((content) =>
         content.includes('"ultracite/oxlint/js-plugins"')
+      )
+    ).toBe(true);
+    expect(
+      writtenContents.some((content) =>
+        content.includes('"ultracite/oxlint/anti-slop"')
       )
     ).toBe(true);
   });
@@ -571,6 +582,7 @@ describe("initialize", () => {
       hooks: [],
       integrations: [],
       "js-plugins": [
+        "anti-slop",
         "eslint-plugin-github",
         "eslint-plugin-sonarjs",
         "oxlint-plugin-react-doctor",
@@ -583,6 +595,10 @@ describe("initialize", () => {
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.0");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.12");
+    // anti-slop is vendored inside ultracite — nothing to install for it.
+    expect(installedPackages.every((pkg) => !pkg.includes("anti-slop"))).toBe(
+      true
+    );
   });
 
   test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {

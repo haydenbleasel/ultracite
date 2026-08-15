@@ -5,13 +5,24 @@ import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";
 
-const oxlintJsPluginNames = [
+// Vendored preset shipped inside the ultracite package — enabled as a plain
+// `ultracite/oxlint/anti-slop` extend rather than through selectJsPlugins,
+// and with nothing extra to install.
+const antiSlopPreset = "anti-slop";
+
+const oxlintNpmJsPluginNames = [
   "eslint-plugin-github",
   "eslint-plugin-sonarjs",
   "oxlint-plugin-react-doctor",
 ] as const;
 
+const oxlintJsPluginNames = [
+  antiSlopPreset,
+  ...oxlintNpmJsPluginNames,
+] as const;
+
 type OxlintJsPlugin = (typeof oxlintJsPluginNames)[number];
+type OxlintNpmJsPlugin = (typeof oxlintNpmJsPluginNames)[number];
 
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
@@ -22,7 +33,7 @@ const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
   "eslint-plugin-sonarjs": { name: "sonarjs" },
   "oxlint-plugin-react-doctor": { name: "react-doctor" },
-} satisfies Record<OxlintJsPlugin, { name: string }>;
+} satisfies Record<OxlintNpmJsPlugin, { name: string }>;
 
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -51,7 +62,12 @@ const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = []
 ) => {
-  const hasJsPlugins = jsPlugins.length > 0;
+  // anti-slop is vendored, so it becomes a plain extend below instead of a
+  // selectJsPlugins entry.
+  const npmJsPlugins = jsPlugins.filter(
+    (jsPlugin): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== antiSlopPreset
+  );
+  const hasJsPlugins = npmJsPlugins.length > 0;
 
   // When plugins are selected, the base js-plugins preset is imported and
   // wrapped as selectedJsPlugins below — drop it from the plain extends so
@@ -62,7 +78,7 @@ const generateConfigContent = (
 
   // Framework-specific react-doctor rules live in per-framework add-on
   // presets; wire them up when the framework preset is present.
-  if (jsPlugins.includes("oxlint-plugin-react-doctor")) {
+  if (npmJsPlugins.includes("oxlint-plugin-react-doctor")) {
     for (const framework of reactDoctorFrameworkAddOns) {
       const addOn = getOxlintConfigPath(`${framework}/js-plugins`);
       if (
@@ -74,10 +90,20 @@ const generateConfigContent = (
     }
   }
 
+  // Last among the plain extends so its core-rule overrides win.
+  if (
+    jsPlugins.includes(antiSlopPreset) &&
+    !resolvedExtends.includes(getOxlintConfigPath(antiSlopPreset))
+  ) {
+    resolvedExtends.push(getOxlintConfigPath(antiSlopPreset));
+  }
+
   // oxlint does not merge `settings` from extended configs, so react-doctor's
   // settings (curated ported-rule mode, #771) must be applied on the root
   // config rather than ride along inside the js-plugins preset.
-  const hasJsPluginSettings = jsPlugins.includes("oxlint-plugin-react-doctor");
+  const hasJsPluginSettings = npmJsPlugins.includes(
+    "oxlint-plugin-react-doctor"
+  );
   const jsPluginImports = ["selectJsPlugins"];
   if (hasJsPluginSettings) {
     jsPluginImports.unshift("jsPluginSettings");
@@ -95,7 +121,7 @@ const generateConfigContent = (
     .filter(Boolean)
     .join("\n");
 
-  const pluginNames = jsPlugins
+  const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
     .join(", ");
   const extendsEntries = [
@@ -133,7 +159,7 @@ const SELECTED_JS_PLUGIN_NAMES_RE =
   /selectedJsPluginNames = new Set\((?<names>\[[^\]]*\])\)/u;
 
 const jsPluginsByConfigName = new Map(
-  oxlintJsPluginNames.map(
+  oxlintNpmJsPluginNames.map(
     (plugin) => [oxlintJsPluginConfig[plugin].name, plugin] as const
   )
 );
@@ -155,7 +181,7 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
 
   return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)]
     .map((nameMatch) => jsPluginsByConfigName.get(nameMatch.groups?.name ?? ""))
-    .filter((plugin): plugin is OxlintJsPlugin => plugin !== undefined);
+    .filter((plugin): plugin is OxlintNpmJsPlugin => plugin !== undefined);
 };
 
 export const oxlint = {
