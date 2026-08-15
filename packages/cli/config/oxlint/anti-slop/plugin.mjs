@@ -1,5 +1,5 @@
 // Vendored build of the anti-slop oxlint plugin.
-// Source: https://github.com/dmmulroy/anti-slop (MIT) at commit cd064fe602b5915ff35e1e1c20836ca9bcb3729a.
+// Source: https://github.com/dmmulroy/anti-slop (MIT) at commit 446268e5d15baa968eaec669ff65358d36ae6259.
 // Its @oxlint/plugins dependency (MIT) is inlined so this file is
 // self-contained. See license.md for the full license texts.
 //
@@ -821,6 +821,50 @@ var noModuleMockingRule = defineRule({
   }
 });
 
+// src/shared/lexical-type-parameters.ts
+function isNode(value) {
+  return typeof value === "object" && value !== null && "type" in value && typeof value.type === "string";
+}
+function collectInferTypeParameterNames(node, visitorKeys, names) {
+  if (node.type === "TSInferType")
+    names.add(node.typeParameter.name.name);
+  const record = node;
+  for (const key of visitorKeys[node.type] ?? []) {
+    const value = record[key];
+    if (isNode(value)) {
+      collectInferTypeParameterNames(value, visitorKeys, names);
+      continue;
+    }
+    if (!Array.isArray(value))
+      continue;
+    for (const child of value) {
+      if (isNode(child))
+        collectInferTypeParameterNames(child, visitorKeys, names);
+    }
+  }
+}
+function lexicalTypeParameterNames(node, visitorKeys) {
+  const names = new Set;
+  let descendant = node;
+  let current = node;
+  while (current !== null && current.type !== "Program") {
+    if ("typeParameters" in current) {
+      for (const parameter of current.typeParameters?.params ?? []) {
+        names.add(parameter.name.name);
+      }
+    }
+    if (current.type === "TSMappedType" && (descendant === current.nameType || descendant === current.typeAnnotation)) {
+      names.add(current.key.name);
+    }
+    if (current.type === "TSConditionalType" && descendant === current.trueType) {
+      collectInferTypeParameterNames(current.extendsType, visitorKeys, names);
+    }
+    descendant = current;
+    current = current.parent;
+  }
+  return names;
+}
+
 // src/rules/no-object-parameters.ts
 function parameterAnnotation(parameter) {
   if (parameter.type === "TSParameterProperty") {
@@ -836,23 +880,6 @@ function parameterAnnotation(parameter) {
 }
 function parameterName(parameter, sourceCode) {
   return parameter.type === "Identifier" ? parameter.name : sourceCode.getText(parameter).replace(/\s*:\s*object\s*$/u, "");
-}
-function lexicalTypeParameterNames(node) {
-  const names = new Set;
-  let current = node;
-  while (current !== null && current.type !== "Program") {
-    if ("typeParameters" in current) {
-      for (const parameter of current.typeParameters?.params ?? []) {
-        names.add(parameter.name.name);
-      }
-    }
-    if (current.type === "TSMappedType")
-      names.add(current.key.name);
-    if (current.type === "TSInferType")
-      names.add(current.typeParameter.name.name);
-    current = current.parent;
-  }
-  return names;
 }
 var noObjectParametersRule = defineRule({
   meta: {
@@ -885,7 +912,7 @@ var noObjectParametersRule = defineRule({
       return resolvesToObject(alias, shadowedAliases, nextVisited);
     };
     const checkParameters = (node) => {
-      const shadowedAliases = lexicalTypeParameterNames(node);
+      const shadowedAliases = lexicalTypeParameterNames(node, context.sourceCode.visitorKeys);
       for (const parameter of node.params) {
         const annotation = parameterAnnotation(parameter);
         if (annotation === null || annotation === undefined)
@@ -1000,6 +1027,19 @@ var noReflectGetRule = defineRule({
 });
 
 // src/rules/no-runtime-typeof.ts
+function isRuntimeFunction(node) {
+  return node.type === "ArrowFunctionExpression" || node.type === "FunctionDeclaration" || node.type === "FunctionExpression";
+}
+function isInsideTypeGuard(node) {
+  let current = node.parent;
+  while (current !== null && current.type !== "Program") {
+    if (isRuntimeFunction(current)) {
+      return current.returnType?.typeAnnotation.type === "TSTypePredicate";
+    }
+    current = current.parent;
+  }
+  return false;
+}
 var noRuntimeTypeofRule = defineRule({
   meta: {
     type: "problem",
@@ -1008,12 +1048,24 @@ var noRuntimeTypeofRule = defineRule({
     },
     messages: {
       runtimeTypeof: "A `typeof` check narrows a representation without establishing its contract. Parse input at its I/O boundary, then branch on the domain value."
-    }
+    },
+    schema: [
+      {
+        type: "object",
+        properties: {
+          allowInTypeGuards: { type: "boolean" }
+        },
+        additionalProperties: false
+      }
+    ],
+    defaultOptions: [{ allowInTypeGuards: false }]
   },
   createOnce(context) {
     return {
       UnaryExpression(node) {
-        if (node.operator === "typeof") {
+        const option = context.options?.[0];
+        const allowInTypeGuards = typeof option === "object" && option !== null && !Array.isArray(option) && option.allowInTypeGuards === true;
+        if (node.operator === "typeof" && (!allowInTypeGuards || !isInsideTypeGuard(node))) {
           context.report({ node, messageId: "runtimeTypeof" });
         }
       }
@@ -1128,19 +1180,6 @@ function referencedAliasName(type) {
     return null;
   return type.typeArguments === null || type.typeArguments === undefined || type.typeArguments.params.length === 0 ? type.typeName.name : null;
 }
-function lexicalTypeParameterNames2(node) {
-  const names = new Set;
-  let current = node;
-  while (current !== null && current.type !== "Program") {
-    if ("typeParameters" in current) {
-      for (const parameter of current.typeParameters?.params ?? []) {
-        names.add(parameter.name.name);
-      }
-    }
-    current = current.parent;
-  }
-  return names;
-}
 var noUnknownReturnsRule = defineRule({
   meta: {
     type: "problem",
@@ -1181,8 +1220,9 @@ var noUnknownReturnsRule = defineRule({
       const annotation = node.returnType;
       if (annotation === null || annotation === undefined)
         return;
-      if (!resolvesToUnknown(annotation.typeAnnotation, lexicalTypeParameterNames2(node)))
+      if (!resolvesToUnknown(annotation.typeAnnotation, lexicalTypeParameterNames(node, context.sourceCode.visitorKeys))) {
         return;
+      }
       context.report({ node: annotation.typeAnnotation, messageId: "unknownReturn" });
     };
     return {
