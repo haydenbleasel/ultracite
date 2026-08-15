@@ -17,10 +17,18 @@ declare const config: OxlintConfig;
 export default config;
 `;
 
-// js-plugins additionally exports the selectJsPlugins helper that generated
-// configs use to enable a subset of the plugins.
+// js-plugins additionally exports the jsPluginSettings object and the
+// selectJsPlugins helper that generated configs use to apply react-doctor's
+// settings and enable a subset of the plugins.
 const oxlintJsPluginsDeclaration = `${oxlintDeclaration}
 export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+
+/**
+ * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
+ * merge \`settings\` from extended configs, so apply these on the root
+ * config: \`settings: jsPluginSettings\`.
+ */
+export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
 
 /**
  * Returns a copy of the js-plugins preset narrowed to the given plugin

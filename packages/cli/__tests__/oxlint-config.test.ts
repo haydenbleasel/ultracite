@@ -10,11 +10,20 @@ import { describe, expect, test } from "bun:test";
  * (not jest, vitest, react, etc.) to prevent cross-plugin conflicts when
  * framework configs activate their plugins (#660).
  */
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
 import packageJson from "../package.json";
+
+// The test preload mocks node:fs (readFileSync returns "{}"), so read real
+// declaration files through the unmocked readFileSync it stashes on
+// globalThis, falling back to the import.
+// SAFETY: preload.ts stashes the unmocked node:fs readFileSync on globalThis
+// under this key before installing the fs mock.
+const readFileSync =
+  (globalThis as { __realReadFileSync?: typeof _readFileSync })
+    .__realReadFileSync ?? _readFileSync;
 
 const readOxlintConfig = async (name: string) => {
   const configPath = path.join(import.meta.dirname, `../config/oxlint/${name}`);
@@ -146,6 +155,60 @@ describe("oxlint package exports", () => {
     );
 
     expect(oxfmtFiles).toContain("index.d.mts");
+  });
+
+  /**
+   * The declaration files are hand-authored templates in
+   * scripts/generate-dts.ts, not generated from the source, so they can
+   * silently drift when a preset gains a runtime export — jsPluginSettings
+   * was missing from the js-plugins declaration this way (#773).
+   */
+  test("declaration files declare every runtime export", async () => {
+    const configDirectory = path.join(import.meta.dirname, "../config");
+    const oxlintConfigDirectory = path.join(configDirectory, "oxlint");
+    // Presets can nest one level deep (e.g. next/js-plugins).
+    const presetDirectories = readdirSync(oxlintConfigDirectory, {
+      recursive: true,
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isFile() && entry.name === "index.mjs")
+      .map((entry) => entry.parentPath)
+      .toSorted();
+    presetDirectories.push(path.join(configDirectory, "oxfmt"));
+
+    const presets = await Promise.all(
+      presetDirectories.map(async (presetDirectory) => ({
+        exportNames: Object.keys(
+          await import(path.join(presetDirectory, "index.mjs"))
+        ),
+        presetDirectory,
+      }))
+    );
+
+    const declaredDefaultPattern = /^export default /mu;
+    const missing: string[] = [];
+    for (const { exportNames, presetDirectory } of presets) {
+      const declaration = readFileSync(
+        path.join(presetDirectory, "index.d.mts"),
+        "utf-8"
+      );
+      for (const exportName of exportNames) {
+        const declared =
+          exportName === "default"
+            ? declaredDefaultPattern.test(declaration)
+            : new RegExp(
+                `^export declare (?:const|function|let) ${exportName}\\b`,
+                "mu"
+              ).test(declaration);
+        if (!declared) {
+          missing.push(
+            `${path.relative(configDirectory, presetDirectory)}: ${exportName}`
+          );
+        }
+      }
+    }
+
+    expect(missing).toEqual([]);
   });
 });
 
