@@ -1,3 +1,13 @@
+## 7.10.5
+
+### Patch Changes
+
+- 8df6ad0: Offer the vendored `anti-slop` Oxlint preset during `ultracite init` — it now appears in the JS-plugins prompt when you pick Oxlint, and non-interactive setup accepts it via `--js-plugins anti-slop`. Selecting it adds `ultracite/oxlint/anti-slop` to the generated config's `extends`; since the preset is vendored inside Ultracite, nothing extra is installed.
+- cd229e9: Bump the `oxlint-plugin-react-doctor` pin from `^0.7.1` to `^0.9.12`, so `ultracite init` installs the current plugin. All react-doctor rules enabled by the js-plugins presets still exist in 0.9.12, and the ported rules run in curated mode via the settings shipped alongside this release (#771).
+- e1ac886: Pin React Doctor's ported rules to their framework-aware "curated" mode (#771). react-doctor 0.9.x rewrote its ported oxc/react-refresh rules — notably `only-export-components` — with a stripped-down default mode: no framework detection, no route-file skipping, and `allowConstantExport` off, so Next.js route-segment exports like `export const dynamic = "force-static"` or `metadata` were flagged as non-component exports in every route file. The ESLint react preset now sets `settings["react-doctor"].portedRuleMode: "curated"`, and generated oxlint configs apply a new `jsPluginSettings` export from `ultracite/oxlint/js-plugins` on the root config (oxlint does not merge `settings` from extended configs, so the setting cannot ride along inside the preset). If you extend the js-plugins preset manually, add `settings: jsPluginSettings` to your root oxlint config.
+- c27fe36: Generate oxlint configs that enable a subset of the JS plugins via a new `selectJsPlugins` export from `ultracite/oxlint/js-plugins`, instead of inlining the filtering logic into the generated file. The inlined block contained a `typeof` check that user-side lint presets flagged (`anti-slop/no-runtime-typeof`, #770); the generated config is now a one-line extend, is emitted already formatted (including the previously missing blank line after imports), and re-running `ultracite init` migrates existing configs with the old inlined block automatically.
+- 0616523: Update the vendored `anti-slop` Oxlint plugin to upstream commit `446268e`, picking up fixes to `no-object-parameters` and `no-unknown-returns` (respect lexical type binders in alias resolution) and a new `allowInTypeGuards` option on `no-runtime-typeof`. The `ultracite/oxlint/anti-slop` preset enables `allowInTypeGuards`, so `typeof` checks inside type predicate functions (`(x): x is T`) no longer need disable comments — predicates are the named-boundary pattern the rule pushes toward (dmmulroy/anti-slop#10).
+
 ## 7.10.4
 
 ### Patch Changes
