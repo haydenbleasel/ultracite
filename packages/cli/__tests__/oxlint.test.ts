@@ -125,6 +125,32 @@ describe("oxlint linter", () => {
       );
     });
 
+    test("applies jsPluginSettings on the root config when react-doctor is selected", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["oxlint-plugin-react-doctor"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      // oxlint does not merge `settings` from extended configs, so the
+      // react-doctor settings must be emitted on the root config (#771).
+      expect(content).toContain(
+        'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+      );
+      expect(content).toContain("settings: jsPluginSettings,");
+    });
+
     test("wraps a subset selection in selectJsPlugins", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -480,7 +506,7 @@ export default defineConfig({
         'import jsPlugins from "ultracite/oxlint/js-plugins";'
       );
       const selectImports = content.match(
-        /import \{ selectJsPlugins \} from "ultracite\/oxlint\/js-plugins";/gu
+        /import \{ jsPluginSettings, selectJsPlugins \} from "ultracite\/oxlint\/js-plugins";/gu
       );
       expect(selectImports?.length).toBe(1);
       const nextAddOnImports = content.match(

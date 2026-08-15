@@ -51,6 +51,15 @@ const config = [
         // 19+ (see the react-doctor rules), so pin instead of detecting.
         version: "19.0.0",
       },
+      // react-doctor 0.9.x rewrote its ported oxc/react-refresh rules (notably
+      // only-export-components) with a stripped-down default mode: no framework
+      // detection, no route-file skipping, and allowConstantExport off — so
+      // Next.js route-segment exports (`export const dynamic = ...`, metadata,
+      // etc.) false-positive in every route file (#771). "curated" restores the
+      // framework-aware behavior these rule selections were curated against.
+      "react-doctor": {
+        portedRuleMode: "curated",
+      },
     },
   },
 ];

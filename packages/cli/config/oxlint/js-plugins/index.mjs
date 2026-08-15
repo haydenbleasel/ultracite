@@ -20,11 +20,12 @@ import { defineConfig } from "oxlint";
 //
 //   import { defineConfig } from "oxlint";
 //   import core from "ultracite/oxlint/core";
-//   import jsPlugins from "ultracite/oxlint/js-plugins";
+//   import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 //
 //   export default defineConfig({
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
+//     settings: jsPluginSettings,
 //   });
 //
 // To enable only some of the plugins, extend selectJsPlugins(...) instead of
@@ -35,8 +36,34 @@ const jsPluginEntries = [
   { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
 ];
 
+// react-doctor 0.9.x rewrote its ported oxc/react-refresh rules (notably
+// only-export-components) with a stripped-down default mode: no framework
+// detection, no route-file skipping, and allowConstantExport off — so Next.js
+// route-segment exports (`export const dynamic = ...`, metadata, etc.)
+// false-positive in every route file (#771). "curated" restores the
+// framework-aware behavior these rule selections were curated against.
+//
+// oxlint does not merge `settings` from extended configs, so this preset
+// carrying the settings is not enough — they must land on the root config:
+//
+//   export default defineConfig({
+//     extends: [core, jsPlugins],
+//     ignorePatterns: core.ignorePatterns,
+//     settings: jsPluginSettings,
+//   });
+//
+// `ultracite init` wires this into generated configs automatically.
+export const jsPluginSettings = {
+  "react-doctor": {
+    portedRuleMode: "curated",
+  },
+};
+
 const config = defineConfig({
   jsPlugins: jsPluginEntries,
+  // Inert until oxlint merges settings from extends; the root config applies
+  // jsPluginSettings itself (see above).
+  settings: jsPluginSettings,
   overrides: [
     {
       files: [

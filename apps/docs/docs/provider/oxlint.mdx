@@ -77,13 +77,16 @@ npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-do
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
-import jsPlugins from "ultracite/oxlint/js-plugins";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 
 export default defineConfig({
   extends: [core, jsPlugins],
   ignorePatterns: core.ignorePatterns,
+  settings: jsPluginSettings,
 });
 ```
+
+> **Note:** `settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
 
 In a Next.js or TanStack app, add the matching add-on preset as well:
 
@@ -91,12 +94,13 @@ In a Next.js or TanStack app, add the matching add-on preset as well:
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import next from "ultracite/oxlint/next";
-import jsPlugins from "ultracite/oxlint/js-plugins";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 
 export default defineConfig({
   extends: [core, next, jsPlugins, nextJsPlugins],
   ignorePatterns: core.ignorePatterns,
+  settings: jsPluginSettings,
 });
 ```
 
