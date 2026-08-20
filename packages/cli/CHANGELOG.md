@@ -1,3 +1,11 @@
+## 7.10.6
+
+### Patch Changes
+
+- 972b946: Update the oxlint presets for oxlint 1.79: replace the removed `react/react-compiler` rule with the 22 new React Compiler rules in the react preset, add `jsdoc/no-blank-blocks` and `one-var` to the core preset (mirrored in the ESLint presets), and require oxlint ^1.79.0
+- 2d5bbdb: Declare the `jsPluginSettings` named export in the `ultracite/oxlint/js-plugins` type declarations, so the documented (and `ultracite init`-generated) `import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins"` type-checks (#773)
+- 56aef65: Refresh the toolchain versions that `ultracite init` installs into projects: `@biomejs/biome` 2.5.9, the ESLint plugin family (including eslint-plugin-cypress 7, eslint-plugin-jsdoc 64, eslint-plugin-solid 0.15, and eslint-plugin-unicorn 73 — the dynamic presets adopt their new rules automatically), and `prettier-plugin-svelte` 4.1.1 / `prettier-plugin-tailwindcss` 0.8.1
+
 ## 7.10.5
 
 ### Patch Changes
