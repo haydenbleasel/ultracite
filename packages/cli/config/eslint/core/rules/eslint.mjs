@@ -26,7 +26,7 @@ const overrideRules = {
   "no-underscore-dangle": "off",
   // Avoid conflict with @typescript-eslint/no-floating-promises
   "no-void": ["error", { allowAsStatement: true }],
-  "one-var": "off",
+  "one-var": ["error", "never"],
   // https://github.com/eslint/eslint/issues/11542
   "sort-imports": "off",
 };

@@ -9,6 +9,7 @@ const config = {
   "jsdoc/check-tag-names": "error",
   "jsdoc/empty-tags": "error",
   "jsdoc/implements-on-classes": "error",
+  "jsdoc/no-blank-blocks": "error",
   "jsdoc/no-defaults": "error",
   "jsdoc/require-param": "off",
   "jsdoc/require-param-description": "error",
