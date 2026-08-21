@@ -29,6 +29,8 @@ export const ignorePatterns = [
   "**/.netlify",
   "**/.wrangler",
   "**/.wrangler-dry-run",
+  // Alchemy (alchemy.run) stores local state and generated bindings here
+  "**/.alchemy",
   "**/.docusaurus",
   "**/.cache",
   "**/.parcel-cache",
