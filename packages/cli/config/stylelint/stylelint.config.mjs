@@ -2,9 +2,6 @@
 const config = {
   extends: ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
   plugins: ["stylelint-prettier"],
-  // Alchemy (alchemy.run) writes local state and generated bindings to a
-  // .alchemy directory; keep it out of stylelint runs.
-  ignoreFiles: ["**/.alchemy/**"],
   rules: {
     "at-rule-no-unknown": [
       true,
