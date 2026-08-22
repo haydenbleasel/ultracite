@@ -29,6 +29,7 @@ export const ignorePatterns = [
   "**/.netlify",
   "**/.wrangler",
   "**/.wrangler-dry-run",
+  "**/.alchemy",
   "**/.docusaurus",
   "**/.cache",
   "**/.parcel-cache",
