@@ -1,3 +1,9 @@
+## 7.10.7
+
+### Patch Changes
+
+- 20b06bf: Ignore `.alchemy` across all linters and formatters. Alchemy (alchemy.run) writes local state and generated bindings to a `.alchemy` directory. It is now part of the shared ignore patterns synced into Biome's `files.includes` and imported by oxlint, oxfmt, and ESLint, and the Stylelint preset ignores it via `ignoreFiles`. Prettier needs no change: it already respects `.gitignore`/`.prettierignore`.
+
 ## 7.10.6
 
 ### Patch Changes
