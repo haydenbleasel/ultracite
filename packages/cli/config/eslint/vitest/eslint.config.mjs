@@ -7,7 +7,7 @@ import vitestRules from "./rules/vitest.mjs";
 const config = [
   {
     files: [
-      "**/*.{test,spec}.{ts,tsx,js,jsx}",
+      "**/*.{test,spec,test-d}.{ts,tsx,js,jsx}",
       "**/__tests__/**/*.{ts,tsx,js,jsx}",
     ],
     plugins: {

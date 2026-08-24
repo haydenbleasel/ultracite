@@ -12,7 +12,7 @@ export default defineConfig({
       // Shared test file overrides — framework-specific test rules
       // are in separate jest/ and vitest/ configs to avoid conflicts.
       files: [
-        "**/*.{test,spec}.{ts,tsx,js,jsx}",
+        "**/*.{test,spec,test-d}.{ts,tsx,js,jsx}",
         "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
       rules: {

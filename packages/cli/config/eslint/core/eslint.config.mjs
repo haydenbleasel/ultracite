@@ -156,7 +156,7 @@ const config = [
     // Repeated string literals (test titles, expected values) are normal and
     // idiomatic in test files. Mirrors the oxlint core test override.
     files: [
-      "**/*.{test,spec}.{ts,tsx,js,jsx}",
+      "**/*.{test,spec,test-d}.{ts,tsx,js,jsx}",
       "**/__tests__/**/*.{ts,tsx,js,jsx}",
     ],
     rules: {
