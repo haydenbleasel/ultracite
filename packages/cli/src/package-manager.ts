@@ -50,7 +50,7 @@ export const normalizePackageManager = (
 // refused. nypm builds flags from `packageManager.name` but executes
 // `packageManager.command`, so presenting these as pnpm yields e.g.
 // `nub add --workspace-root --save-dev ultracite`, which nub accepts.
-// Remove once nypm handles nub/aube in getWorkspaceArgs upstream.
+// Remove once https://github.com/unjs/nypm/pull/260 ships in a nypm release.
 const pnpmCompatiblePackageManagers = new Set<PackageManagerName>([
   "nub",
   "aube",
