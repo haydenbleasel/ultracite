@@ -2,11 +2,6 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 
 import { createEditorConfig } from "../src/editor-config";
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
-  spawnSync: mock(() => ({ status: 0 })),
-}));
-
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   mkdir: mock(() => Promise.resolve()),

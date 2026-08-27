@@ -1,5 +1,3 @@
-import { spawnSync as nodeSpawnSync } from "node:child_process";
-
 import { execaSync } from "execa";
 
 export interface SpawnSyncOptions {
@@ -19,29 +17,17 @@ export interface SpawnSyncResult {
   stdout?: string;
 }
 
-type SpawnSyncImplementation = (
+/**
+ * Run a command synchronously through execa (which owns Windows spawn
+ * semantics), adapted to the spawnSync result shape. Output is always decoded
+ * as UTF-8 strings; `shell` is always off so arguments can't be interpreted
+ * by a shell.
+ */
+export const spawnSync = (
   command: string,
   args: string[],
-  options?: SpawnSyncOptions
-) => SpawnSyncResult;
-
-/**
- * execa's default output ceiling. Node's native default is only 1 MiB, so the
- * native path applies this explicitly to keep the two implementations
- * interchangeable for callers that don't set `maxBuffer`.
- */
-const DEFAULT_MAX_BUFFER = 1000 * 1000 * 100;
-
-/**
- * Run a command through execa's sync API, which owns the Windows spawn
- * semantics: it resolves `.cmd`/`.bat` shims such as `node_modules/.bin/oxlint`
- * via PATHEXT, something libuv won't do without a shell.
- */
-export const execaSpawnSync: SpawnSyncImplementation = (
-  command,
-  args,
-  options = {}
-) => {
+  options: SpawnSyncOptions = {}
+): SpawnSyncResult => {
   const result = execaSync(command, args, {
     ...options,
     reject: false,
@@ -66,61 +52,3 @@ export const execaSpawnSync: SpawnSyncImplementation = (
     stdout,
   };
 };
-
-/**
- * Run a command through the native child-process API. Mirrors execa's
- * defaults (`windowsHide`, `maxBuffer`) so the two paths behave the same.
- */
-export const nativeSpawnSync: SpawnSyncImplementation = (
-  command,
-  args,
-  options = {}
-) => {
-  const result = nodeSpawnSync(command, args, {
-    ...options,
-    encoding: "utf-8",
-    maxBuffer: options.maxBuffer ?? DEFAULT_MAX_BUFFER,
-    shell: false,
-    windowsHide: true,
-  });
-
-  const stdout = result.stdout ?? undefined;
-
-  if (result.error) {
-    return {
-      error: result.error,
-      status: null,
-      stdout,
-    };
-  }
-
-  if (result.signal) {
-    return {
-      signal: result.signal,
-      status: null,
-      stdout,
-    };
-  }
-
-  return {
-    status: result.status ?? null,
-    stdout,
-  };
-};
-
-/**
- * Bun's `spawnSync` on Windows doesn't return the `output` array that execa's
- * sync path dereferences (`TypeError: undefined is not an object (evaluating
- * 'output.map')`), so under Bun the native API is used directly. Node keeps
- * execa for its Windows command resolution.
- */
-const isBun = process.versions.bun !== undefined;
-
-/**
- * Run a command synchronously, adapted to the spawnSync result shape. Output
- * is always decoded as UTF-8 strings; `shell` is always off so arguments can't
- * be interpreted by a shell.
- */
-export const spawnSync: SpawnSyncImplementation = isBun
-  ? nativeSpawnSync
-  : execaSpawnSync;

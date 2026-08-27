@@ -37,11 +37,6 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
-  spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
-}));
-
 mock.module("node:fs", () => ({
   existsSync: mock(() => false),
 }));

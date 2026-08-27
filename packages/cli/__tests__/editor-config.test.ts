@@ -9,10 +9,6 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-mock.module("node:child_process", () => ({
-  spawnSync: mock(() => ({ status: 0 })),
-}));
-
 describe("createEditorConfig", () => {
   describe("invalid editor", () => {
     test("throws error for invalid editor id", () => {
