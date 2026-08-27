@@ -1,4 +1,12 @@
-import { execaSync } from "execa";
+import process from "node:process";
+
+const childProcess = process.getBuiltinModule("node:child_process");
+
+if (!childProcess) {
+  throw new Error("The node:child_process builtin is unavailable");
+}
+
+const { spawnSync: nodeSpawnSync } = childProcess;
 
 export interface SpawnSyncOptions {
   maxBuffer?: number;
@@ -18,37 +26,41 @@ export interface SpawnSyncResult {
 }
 
 /**
- * Run a command synchronously through execa (which owns Windows spawn
- * semantics), adapted to the spawnSync result shape. Output is always decoded
- * as UTF-8 strings; `shell` is always off so arguments can't be interpreted
- * by a shell.
+ * Run a command synchronously through the native child-process API, adapted to
+ * the result shape callers consume. Output is decoded as UTF-8 strings; the
+ * shell is always off so arguments cannot be interpreted by a shell.
  */
 export const spawnSync = (
   command: string,
   args: string[],
   options: SpawnSyncOptions = {}
 ): SpawnSyncResult => {
-  const result = execaSync(command, args, {
+  const result = nodeSpawnSync(command, args, {
     ...options,
-    reject: false,
+    encoding: "utf-8",
     shell: false,
   });
 
-  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- I/O boundary decoding execa's loosely-typed stdout: a string only when piped, absent for ignore/inherit stdio
-  const stdout = typeof result.stdout === "string" ? result.stdout : undefined;
+  const stdout = result.stdout ?? undefined;
 
-  // No exit code and no signal means the process never ran.
-  if (result.exitCode === undefined && result.signal === undefined) {
+  if (result.error) {
     return {
-      error: new Error(result.shortMessage ?? `Failed to run ${command}`),
+      error: result.error,
+      status: null,
+      stdout,
+    };
+  }
+
+  if (result.signal) {
+    return {
+      signal: result.signal,
       status: null,
       stdout,
     };
   }
 
   return {
-    signal: result.signal,
-    status: result.signal === undefined ? (result.exitCode ?? null) : null,
+    status: result.status ?? null,
     stdout,
   };
 };

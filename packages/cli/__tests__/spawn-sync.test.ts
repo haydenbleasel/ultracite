@@ -31,11 +31,18 @@ describe("spawnSync", () => {
     expect(result.status).toBeNull();
   });
 
-  test("maps a signal kill to a null status with the signal set", () => {
+  test("maps process termination according to the host platform", () => {
     const result = spawnSync(node, [
       "-e",
       "process.kill(process.pid, 'SIGKILL')",
     ]);
+
+    if (process.platform === "win32") {
+      // Windows does not expose POSIX signals through child_process.
+      expect(result.status).not.toBe(0);
+      expect(result.signal).toBeUndefined();
+      return;
+    }
 
     expect(result.status).toBeNull();
     expect(result.signal).toBe("SIGKILL");
