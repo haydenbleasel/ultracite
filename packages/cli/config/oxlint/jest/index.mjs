@@ -3,6 +3,8 @@ import { defineConfig } from "oxlint";
 export default defineConfig({
   overrides: [
     {
+      // Vitest type-test files (*.test-d.ts, *.spec-d.ts) are intentionally
+      // excluded — Jest has no typecheck mode, so its rules don't apply to them.
       files: [
         "**/*.{test,spec}.{ts,tsx,js,jsx}",
         "**/__tests__/**/*.{ts,tsx,js,jsx}",
