@@ -5,12 +5,8 @@ import { log } from "@clack/prompts";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
-import {
-  exists,
-  isMonorepo,
-  updatePackageJson,
-  writeProjectFile,
-} from "../utils";
+import { getRootInstallOptions } from "../package-manager";
+import { exists, updatePackageJson, writeProjectFile } from "../utils";
 
 // The top-level pre-commit hook and its indented block (including blank
 // lines) — the ultracite job must be inserted inside this block, not
@@ -52,11 +48,8 @@ export const lefthook = {
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lefthook", {
       corepack: false,
-      packageManager,
       silent: true,
-      // npm's `--workspaces` installs in every workspace package; we want a
-      // root install, which is the default when no flag is passed.
-      workspace: isMonorepo() && packageManager.name !== "npm",
+      ...getRootInstallOptions(packageManager),
     });
 
     // Add prepare script to package.json to ensure lefthook is initialized

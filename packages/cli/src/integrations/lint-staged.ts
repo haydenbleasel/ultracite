@@ -9,8 +9,9 @@ import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 import YAML from "yaml";
 
+import { getRootInstallOptions } from "../package-manager";
 import { parsePackageJson } from "../schemas";
-import { exists, isMonorepo, writeProjectFile } from "../utils";
+import { exists, writeProjectFile } from "../utils";
 
 const packageJsonPath = "./package.json";
 
@@ -351,11 +352,8 @@ export const lintStaged = {
   install: async (packageManager: PackageManager) => {
     await addDevDependency("lint-staged", {
       corepack: false,
-      packageManager,
       silent: true,
-      // npm's `--workspaces` installs in every workspace package; we want a
-      // root install, which is the default when no flag is passed.
-      workspace: isMonorepo() && packageManager.name !== "npm",
+      ...getRootInstallOptions(packageManager),
     });
   },
   update: async (packageManager: PackageManagerName) => {

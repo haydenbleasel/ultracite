@@ -3,13 +3,9 @@ import { mkdir, readFile } from "node:fs/promises";
 import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
+import { getRootInstallOptions } from "../package-manager";
 import { spawnSync } from "../spawn-sync";
-import {
-  exists,
-  isMonorepo,
-  updatePackageJson,
-  writeProjectFile,
-} from "../utils";
+import { exists, updatePackageJson, writeProjectFile } from "../utils";
 
 const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
 ${lintStagedCommand}
@@ -108,11 +104,8 @@ export const husky = {
   install: async (packageManager: PackageManager) => {
     await addDevDependency("husky", {
       corepack: false,
-      packageManager,
       silent: true,
-      // npm's `--workspaces` installs in every workspace package; we want a
-      // root install, which is the default when no flag is passed.
-      workspace: isMonorepo() && packageManager.name !== "npm",
+      ...getRootInstallOptions(packageManager),
     });
 
     // Add prepare script to package.json to ensure husky is initialized

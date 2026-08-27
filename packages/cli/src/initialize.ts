@@ -36,6 +36,7 @@ import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
   assertSupportedPackageManagerName,
+  getRootInstallOptions,
   normalizePackageManager,
 } from "./package-manager";
 import { readPackageJson } from "./schemas";
@@ -49,7 +50,6 @@ import {
   detectFrameworks,
   eslintConfigNames,
   exists,
-  isMonorepo,
   legacyEslintConfigNames,
   oxfmtConfigNames,
   oxlintConfigNames,
@@ -505,12 +505,8 @@ export const installDependencies = async (
   if (install) {
     await addDevDependency(packages, {
       corepack: false,
-      packageManager,
       silent: true,
-      // npm's `--workspaces` installs in every workspace package — for a root
-      // dev dependency we want the default (no flag), so the npm root install
-      // doesn't fail with "No workspaces found!" when patterns match nothing.
-      workspace: isMonorepo() && packageManager.name !== "npm",
+      ...getRootInstallOptions(packageManager),
     });
     // Add ultracite scripts to package.json
     await updatePackageJson({ scripts });
