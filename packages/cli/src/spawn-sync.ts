@@ -37,16 +37,8 @@ export const spawnSync = (
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- I/O boundary decoding execa's loosely-typed stdout: a string only when piped, absent for ignore/inherit stdio
   const stdout = typeof result.stdout === "string" ? result.stdout : undefined;
 
-  // A spawn-level failure (the binary is missing, not executable, ...) means
-  // the process never ran. execa keeps the underlying system error as
-  // `cause`; a plain non-zero exit has none. Node reports such failures with
-  // no exit code, but Bun on Windows also reports a numeric status alongside
-  // the error, so the exit code alone can't be trusted.
-  const spawnFailed =
-    (result.cause !== undefined && result.signal === undefined) ||
-    (result.exitCode === undefined && result.signal === undefined);
-
-  if (spawnFailed) {
+  // No exit code and no signal means the process never ran.
+  if (result.exitCode === undefined && result.signal === undefined) {
     return {
       error: new Error(result.shortMessage ?? `Failed to run ${command}`),
       status: null,

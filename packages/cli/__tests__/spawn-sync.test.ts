@@ -24,8 +24,17 @@ describe("spawnSync", () => {
     expect(result.status).toBe(3);
   });
 
-  test("maps a spawn failure to an error with a null status", () => {
+  test("maps a missing command according to the host platform", () => {
     const result = spawnSync("definitely-not-a-real-command", []);
+
+    if (process.platform === "win32") {
+      // execa can't resolve the command, so it runs it through cmd.exe, which
+      // exits non-zero with "is not recognized" — the process did spawn.
+      expect(result.error).toBeUndefined();
+      expect(result.status).not.toBe(0);
+      expect(result.status).not.toBeNull();
+      return;
+    }
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.status).toBeNull();
