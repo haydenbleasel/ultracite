@@ -36,6 +36,7 @@ export const spawnSync = (
   const result = nodeSpawnSync(command, args, {
     ...options,
     encoding: "utf-8",
+    maxBuffer: options.maxBuffer ?? 100_000_000,
     shell: false,
   });
 
