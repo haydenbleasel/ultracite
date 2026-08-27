@@ -372,6 +372,28 @@ describe("createHooks", () => {
   });
 
   describe("claude hooks", () => {
+    test("create uses the nub run script for nub projects", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("claude", "nub");
+      await hooks.create();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = JSON.parse(writeCall[1]);
+      expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
+        "nub run fix --skip=correctness/noUnusedImports"
+      );
+    });
+
     test("create writes .claude/settings.json with correct structure", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
