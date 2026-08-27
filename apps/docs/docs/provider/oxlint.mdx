@@ -203,6 +203,53 @@ export default defineConfig({
 
 This approach lets you opt in to additional checks without Ultracite taking on third-party dependencies in its core preset.
 
+## Enforcing Path Aliases
+
+Ultracite's core preset does not assume a project layout, so it does not force `@/*` (or `#/*`) aliases over relative imports — that convention depends on your `tsconfig.json`, and it would false-positive in monorepos, libraries, and projects without a `src` directory. If your project maps `@/*` to `src/*` and you want to ban `../` imports between source modules, add an override scoped to `src`:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  overrides: [
+    {
+      files: ["src/**"],
+      rules: {
+        "import/no-relative-parent-imports": "error",
+      },
+    },
+  ],
+});
+```
+
+`import/no-relative-parent-imports` is a native Oxlint rule: it flags `../` in imports, type imports, and re-exports at any depth, while still allowing `./sibling` imports within a directory. Scoping it to `src/**` keeps tests, scripts, and config files that legitimately reach into `src` unaffected.
+
+If you would rather point people at the alias in the diagnostic itself, use `no-restricted-imports` with a pattern instead:
+
+```ts title="oxlint.config.ts"
+overrides: [
+  {
+    files: ["src/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^\\.\\./",
+              message: "Use the @/* alias for imports between src modules.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+],
+```
+
 ## Formatter Settings (Oxfmt)
 
 Ultracite configures Oxfmt with these defaults:
