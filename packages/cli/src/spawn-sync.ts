@@ -1,10 +1,8 @@
-import process from "node:process";
+import type * as ChildProcess from "node:child_process";
+import { createRequire } from "node:module";
 
-const childProcess = process.getBuiltinModule("node:child_process");
-
-if (!childProcess) {
-  throw new Error("The node:child_process builtin is unavailable");
-}
+const require = createRequire(import.meta.url);
+const childProcess: typeof ChildProcess = require("node:child_process");
 
 const { spawnSync: nodeSpawnSync } = childProcess;
 
