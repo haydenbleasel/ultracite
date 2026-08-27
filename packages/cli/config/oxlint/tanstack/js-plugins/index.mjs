@@ -14,6 +14,7 @@ import { defineConfig } from "oxlint";
 //   export default defineConfig({
 //     extends: [core, tanstack, jsPlugins, tanstackJsPlugins],
 //     ignorePatterns: core.ignorePatterns,
+//     jsPlugins: jsPlugins.jsPlugins,
 //   });
 export default defineConfig({
   jsPlugins: [

@@ -14,6 +14,7 @@ import { defineConfig } from "oxlint";
 //   export default defineConfig({
 //     extends: [core, next, jsPlugins, nextJsPlugins],
 //     ignorePatterns: core.ignorePatterns,
+//     jsPlugins: jsPlugins.jsPlugins,
 //   });
 export default defineConfig({
   jsPlugins: [

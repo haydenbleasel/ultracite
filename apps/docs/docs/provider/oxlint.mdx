@@ -82,9 +82,12 @@ import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 export default defineConfig({
   extends: [core, jsPlugins],
   ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
   settings: jsPluginSettings,
 });
 ```
+
+> **Note:** `jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on your root config. Oxlint already loads them from the extended preset, but dependency analyzers such as [Knip](https://knip.dev) only read `jsPlugins` from the root config and would otherwise report the packages as unused devDependencies. `ultracite init` emits this line for you.
 
 > **Note:** `settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
 
@@ -100,6 +103,7 @@ import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 export default defineConfig({
   extends: [core, next, jsPlugins, nextJsPlugins],
   ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
   settings: jsPluginSettings,
 });
 ```

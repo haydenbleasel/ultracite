@@ -25,8 +25,14 @@ import { defineConfig } from "oxlint";
 //   export default defineConfig({
 //     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
+//     jsPlugins: jsPlugins.jsPlugins,
 //     settings: jsPluginSettings,
 //   });
+//
+// `jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on the
+// root config: oxlint loads them from the extended preset either way, but
+// dependency analyzers such as Knip only read `jsPlugins` off the root and
+// would otherwise flag the packages as unused (#784).
 //
 // To enable only some of the plugins, extend selectJsPlugins(...) instead of
 // the full preset — see its doc comment below.
@@ -474,9 +480,12 @@ export default config;
 //
 //   import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
 //
+//   const jsPlugins = selectJsPlugins(["github", "sonarjs"]);
+//
 //   export default defineConfig({
-//     extends: [core, selectJsPlugins(["github", "sonarjs"])],
+//     extends: [core, jsPlugins],
 //     ignorePatterns: core.ignorePatterns,
+//     jsPlugins: jsPlugins.jsPlugins,
 //   });
 export const selectJsPlugins = (pluginNames) => {
   const names = new Set(pluginNames);

@@ -120,8 +120,11 @@ describe("oxlint linter", () => {
       expect(content).toContain(
         'import tanstackJsPlugins from "ultracite/oxlint/tanstack/js-plugins";'
       );
+      expect(content).toContain(
+        'const jsPlugins = selectJsPlugins(["react-doctor"]);'
+      );
       expect(content).toMatch(
-        /extends: \[[\s\S]*nextJsPlugins,[\s\S]*tanstackJsPlugins,[\s\S]*selectJsPlugins\(\["react-doctor"\]\)/u
+        /extends: \[[\s\S]*nextJsPlugins,[\s\S]*tanstackJsPlugins,\s*jsPlugins,?\s*\]/u
       );
     });
 
@@ -172,13 +175,39 @@ describe("oxlint linter", () => {
       expect(content).toContain(
         'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
       );
-      expect(content).toContain('selectJsPlugins(["github", "sonarjs"])');
+      expect(content).toContain(
+        'const jsPlugins = selectJsPlugins(["github", "sonarjs"]);'
+      );
+      expect(content).toContain("extends: [core, jsPlugins],");
+      // Knip and similar tools only read `jsPlugins` off the root config, so
+      // the selection is hoisted there too (#784).
+      expect(content).toContain("jsPlugins: jsPlugins.jsPlugins,");
       // The filtering logic lives inside ultracite, not the generated file,
       // so user-side lint presets (e.g. anti-slop) cannot flag it — see #770.
       expect(content).not.toContain("typeof");
-      // A blank line must separate the imports from the config so the file
-      // is born compliant with import/newline-after-import.
-      expect(content).toContain('";\n\nexport default defineConfig({');
+      // Blank lines must separate the imports, the selection, and the config
+      // so the file is born compliant with import/newline-after-import.
+      expect(content).toContain('";\n\nconst jsPlugins = ');
+      expect(content).toContain(");\n\nexport default defineConfig({");
+    });
+
+    test("does not hoist jsPlugins without a js-plugins preset", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({ jsPlugins: ["anti-slop"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).not.toContain("jsPlugins:");
     });
 
     test("adds the vendored anti-slop preset as a plain extend", async () => {
@@ -653,6 +682,45 @@ export default defineConfig({
       expect(content).toContain('selectJsPlugins(["github", "sonarjs"])');
       expect(content).not.toContain("selectedJsPluginNames");
       expect(content).not.toContain("typeof");
+    });
+
+    test("hoists jsPlugins when the full js-plugins preset is extended", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import jsPlugins from "ultracite/oxlint/js-plugins";'
+      );
+      expect(content).toContain("extends: [core, jsPlugins],");
+      expect(content).toContain("jsPlugins: jsPlugins.jsPlugins,");
+      expect(content).not.toContain("selectJsPlugins");
     });
 
     test("preserves a selectJsPlugins selection during update", async () => {

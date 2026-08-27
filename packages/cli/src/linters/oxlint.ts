@@ -124,10 +124,29 @@ const generateConfigContent = (
   const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
     .join(", ");
+  // The selection is bound to a `jsPlugins` const (mirroring the full
+  // preset's default-import identifier) so it can be both extended and
+  // hoisted onto the root config below.
+  const jsPluginsIdentifier = getOxlintConfigIdentifier(
+    getOxlintConfigPath("js-plugins")
+  );
+  const selectionBlock = hasJsPlugins
+    ? `\nconst ${jsPluginsIdentifier} = selectJsPlugins([${pluginNames}]);\n`
+    : "";
   const extendsEntries = [
     ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
-    ...(hasJsPlugins ? [`selectJsPlugins([${pluginNames}])`] : []),
+    ...(hasJsPlugins ? [jsPluginsIdentifier] : []),
   ];
+
+  // Dependency analyzers such as Knip only read `jsPlugins` off the root
+  // config — they never walk `extends` — so re-declare the selected plugin
+  // specifiers there or the packages are reported as unused (#784). oxlint
+  // dedupes a plugin that appears in both the root and an extended config.
+  const hasJsPluginsPreset =
+    hasJsPlugins || resolvedExtends.includes(getOxlintConfigPath("js-plugins"));
+  const jsPluginsLine = hasJsPluginsPreset
+    ? `\n  jsPlugins: ${jsPluginsIdentifier}.jsPlugins,`
+    : "";
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
   const extendsBlock =
@@ -142,15 +161,15 @@ const generateConfigContent = (
     : "";
 
   return `${imports}
-
+${selectionBlock}
 export default defineConfig({
 ${extendsBlock}
-  ignorePatterns: core.ignorePatterns,${settingsLine}
+  ignorePatterns: core.ignorePatterns,${jsPluginsLine}${settingsLine}
 });
 `;
 };
 
-// Current generated form: extends: [..., selectJsPlugins(["github", ...])]
+// Current generated form: const jsPlugins = selectJsPlugins(["github", ...])
 const SELECT_JS_PLUGINS_RE = /selectJsPlugins\(\s*(?<names>\[[^\]]*\])\s*\)/u;
 
 // Legacy generated form: an inlined filtering block driven by
