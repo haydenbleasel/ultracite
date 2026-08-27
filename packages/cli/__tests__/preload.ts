@@ -6,17 +6,6 @@ import {
 
 import { spawnSync as _realSpawnSync } from "../src/spawn-sync";
 
-// Eagerly link nypm (and its transitive tinyexec, which does
-// `import { spawn, spawnSync } from "node:child_process"`) against the real
-// node:child_process before any test installs a partial mock of it. Several
-// tests mock node:child_process with only a subset of exports (e.g. just
-// spawnSync); because Bun's mock.module is global, whichever partial mock is
-// active when tinyexec first links determines whether `spawn` resolves. Test
-// file order differs between platforms, so on CI (Linux) a spawn-less mock can
-// be active first, throwing "Export named 'spawn' not found in module
-// 'node:child_process'". Linking it here makes resolution order-independent.
-import "nypm";
-
 // Typed globals for the real implementations captured below, so consumers
 // (mock-fs.ts, spawn-sync.test.ts) can read them without type assertions.
 declare global {

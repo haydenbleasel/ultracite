@@ -6,11 +6,6 @@ import { husky } from "../src/integrations/husky";
 
 const npmPm: PackageManager = { command: "npm", name: "npm" };
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
-  spawnSync: mock(() => ({ status: 0 })),
-}));
-
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   mkdir: mock(() => Promise.resolve()),

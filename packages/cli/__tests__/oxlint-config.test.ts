@@ -64,9 +64,9 @@ const JS_PLUGINS = [
  * text-parsing version of this helper silently return nothing.
  */
 const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
-  // Bun.spawnSync rather than node:child_process — several test files
-  // install module-level mocks of node:child_process that leak across
-  // files when the suite runs without --isolate.
+  // Bun.spawnSync rather than the ../src/spawn-sync adapter — several test
+  // files install module-level mocks of that adapter which leak across files
+  // when the suite runs without --isolate.
   //
   // Run from the system temp dir with an absolute binary path so oxlint
   // does not walk up and auto-discover the repo's `oxlint.config.ts`. The

@@ -1,4 +1,3 @@
-import { execSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 
 import { log } from "@clack/prompts";
@@ -6,6 +5,7 @@ import { addDevDependency, dlxCommand } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import { getRootInstallOptions } from "../package-manager";
+import { spawnSync } from "../spawn-sync";
 import { exists, updatePackageJson, writeProjectFile } from "../utils";
 
 // The top-level pre-commit hook and its indented block (including blank
@@ -59,18 +59,18 @@ export const lefthook = {
       },
     });
 
-    const installCommand = dlxCommand(packageManager.name, "lefthook", {
+    // dlxCommand returns a full command line, e.g. "npx lefthook install" —
+    // split it so spawn gets a real binary and never a shell.
+    const [command, ...args] = dlxCommand(packageManager.name, "lefthook", {
       args: ["install"],
       short: packageManager.name === "npm",
-    });
+    }).split(" ");
 
-    try {
-      execSync(installCommand, { stdio: "pipe" });
-    } catch {
-      // lefthook install fails with exit code 128 when not in a git repository.
-      // The dependency and prepare script are still set up, so lefthook will
-      // initialize hooks on the next `prepare` run after git is initialized.
-    }
+    // The result is deliberately ignored: lefthook install fails with exit
+    // code 128 when not in a git repository. The dependency and prepare script
+    // are still set up, so lefthook will initialize hooks on the next
+    // `prepare` run after git is initialized.
+    spawnSync(command, args, { stdio: "pipe" });
   },
   update: async (packageManager: PackageManagerName) => {
     const existingContents = await readFile(path, "utf-8");

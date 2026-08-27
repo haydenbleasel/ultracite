@@ -37,11 +37,6 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
-  spawnSync: mock(() => ({ status: 0 })),
-}));
-
 mock.module("../src/spawn-sync", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "[]" })),
 }));
@@ -2425,11 +2420,6 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
-      }));
-
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
           message: mock(noop),
@@ -2481,12 +2471,12 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      // Mock extension install to throw error
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => {
-          throw new Error("Extension install failed");
-        }),
+      // Mock extension install failing to spawn
+      mock.module("../src/spawn-sync", () => ({
+        spawnSync: mock(() => ({
+          error: new Error("Extension install failed"),
+          status: null,
+        })),
       }));
 
       mock.module("@clack/prompts", () => ({
@@ -2998,11 +2988,6 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
-      }));
-
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
           message: mock(noop),
@@ -3036,11 +3021,6 @@ describe("helper functions", () => {
           return Promise.resolve("#!/bin/sh\necho test");
         }),
         writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("@clack/prompts", () => ({
