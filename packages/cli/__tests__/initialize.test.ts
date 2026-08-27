@@ -850,6 +850,34 @@ describe("initialize", () => {
     expect(mockAddDep.mock.calls[0]?.[1].packageManager.name).toBe("nub");
   });
 
+  test("accepts aube as an explicit package manager", async () => {
+    const mockAddDep = mock(
+      (_packages: string[], _options: { packageManager: { name: string } }) =>
+        Promise.resolve()
+    );
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() => Promise.resolve()),
+      dlxCommand: mock(() => "aube dlx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      hooks: [],
+      integrations: [],
+      linter: "biome",
+      pm: "aube",
+      quiet: true,
+    });
+
+    expect(mockAddDep).toHaveBeenCalled();
+    expect(mockAddDep.mock.calls[0]?.[1].packageManager.name).toBe("aube");
+  });
+
   test("installs dependencies when skipInstall is false", async () => {
     const mockAddDep = mock(() => Promise.resolve());
 

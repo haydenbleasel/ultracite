@@ -7,6 +7,7 @@ const supportedPackageManagers = [
   "bun",
   "deno",
   "nub",
+  "aube",
 ] as const satisfies readonly PackageManagerName[];
 
 // Widened view of the list so `.includes` can take an arbitrary string.

@@ -394,6 +394,28 @@ describe("createHooks", () => {
       );
     });
 
+    test("create uses the aube run script for aube projects", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      const hooks = createHooks("claude", "aube");
+      await hooks.create();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      const content = JSON.parse(writeCall[1]);
+      expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
+        "aube run fix --skip=correctness/noUnusedImports"
+      );
+    });
+
     test("create writes .claude/settings.json with correct structure", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
