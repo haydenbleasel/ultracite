@@ -716,10 +716,64 @@ export default defineConfig({
       const [writeCall] = mockWriteFile.mock.calls;
       const [, content] = writeCall;
       expect(content).toContain(
-        'import jsPlugins from "ultracite/oxlint/js-plugins";'
+        'import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";'
       );
       expect(content).toContain("extends: [core, jsPlugins],");
       expect(content).toContain("jsPlugins: jsPlugins.jsPlugins,");
+      // The full preset includes react-doctor, so its settings must be
+      // applied on the root config (#771).
+      expect(content).toContain("settings: jsPluginSettings,");
+      expect(content).not.toContain("selectJsPlugins");
+    });
+
+    test("recognises a default-plus-named js-plugins import during update", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      // The documented manual form. Previously the import parser only
+      // matched `import x from`, so the preset was silently dropped from
+      // extends on update.
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
+
+export default defineConfig({
+  extends: [core, next, jsPlugins, nextJsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  settings: jsPluginSettings,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";'
+      );
+      expect(content).toContain(
+        'import nextJsPlugins from "ultracite/oxlint/next/js-plugins";'
+      );
+      expect(content).toContain(
+        "extends: [core, next, jsPlugins, nextJsPlugins],"
+      );
+      expect(content).toContain("jsPlugins: jsPlugins.jsPlugins,");
+      expect(content).toContain("settings: jsPluginSettings,");
       expect(content).not.toContain("selectJsPlugins");
     });
 

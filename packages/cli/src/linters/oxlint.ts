@@ -98,12 +98,18 @@ const generateConfigContent = (
     resolvedExtends.push(getOxlintConfigPath(antiSlopPreset));
   }
 
+  // The full js-plugins preset (every plugin, no selection) stays a plain
+  // extend — e.g. a hand-written config being updated.
+  const jsPluginsPath = getOxlintConfigPath("js-plugins");
+  const hasFullJsPluginsPreset = resolvedExtends.includes(jsPluginsPath);
+
   // oxlint does not merge `settings` from extended configs, so react-doctor's
   // settings (curated ported-rule mode, #771) must be applied on the root
-  // config rather than ride along inside the js-plugins preset.
-  const hasJsPluginSettings = npmJsPlugins.includes(
-    "oxlint-plugin-react-doctor"
-  );
+  // config rather than ride along inside the js-plugins preset. The full
+  // preset always includes react-doctor.
+  const hasJsPluginSettings =
+    npmJsPlugins.includes("oxlint-plugin-react-doctor") ||
+    hasFullJsPluginsPreset;
   const jsPluginImports = ["selectJsPlugins"];
   if (hasJsPluginSettings) {
     jsPluginImports.unshift("jsPluginSettings");
@@ -111,8 +117,10 @@ const generateConfigContent = (
 
   const imports = [
     `import { defineConfig } from "oxlint";`,
-    ...resolvedExtends.map(
-      (ext) => `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
+    ...resolvedExtends.map((ext) =>
+      ext === jsPluginsPath
+        ? `import ${getOxlintConfigIdentifier(ext)}, { jsPluginSettings } from "${ext}";`
+        : `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
     ),
     hasJsPlugins
       ? `import { ${jsPluginImports.join(", ")} } from "ultracite/oxlint/js-plugins";`
@@ -142,11 +150,10 @@ const generateConfigContent = (
   // config — they never walk `extends` — so re-declare the selected plugin
   // specifiers there or the packages are reported as unused (#784). oxlint
   // dedupes a plugin that appears in both the root and an extended config.
-  const hasJsPluginsPreset =
-    hasJsPlugins || resolvedExtends.includes(getOxlintConfigPath("js-plugins"));
-  const jsPluginsLine = hasJsPluginsPreset
-    ? `\n  jsPlugins: ${jsPluginsIdentifier}.jsPlugins,`
-    : "";
+  const jsPluginsLine =
+    hasJsPlugins || hasFullJsPluginsPreset
+      ? `\n  jsPlugins: ${jsPluginsIdentifier}.jsPlugins,`
+      : "";
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
   const extendsBlock =
@@ -227,9 +234,12 @@ export const oxlint = {
     // Extract import paths from existing config (supports both string extends and JS imports)
     const existingExtends: string[] = [];
 
-    // Check for JS imports: import x from "ultracite/oxlint/..."
+    // Check for JS imports: import x from "ultracite/oxlint/..." — a default
+    // import, optionally alongside named imports (import x, { y } from ...).
+    // Named-only imports (import { selectJsPlugins } from ...) are not
+    // extends and are deliberately skipped.
     const importMatches = existingContents.matchAll(
-      /import \w+ from ["'](?<source>[^"']+)["']/gu
+      /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
     );
     for (const match of importMatches) {
       if (match[1].startsWith("ultracite/oxlint/")) {
