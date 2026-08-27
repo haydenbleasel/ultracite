@@ -25,6 +25,7 @@
   "files": [
     "config",
     "dist",
+    "skills",
     "README.md"
   ],
   "type": "module",
@@ -48,6 +49,7 @@
   },
   "scripts": {
     "prebuild": "bun run scripts/generate-dts.ts",
+    "prepack": "bun run scripts/copy-skill.ts",
     "build": "tsgo --noEmit && bun run build.ts",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
