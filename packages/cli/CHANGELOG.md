@@ -1,3 +1,19 @@
+## 7.10.7
+
+### Patch Changes
+
+- 15f7ae0: Add support for the Aube package manager: `ultracite init --pm aube` is now accepted and projects with an `aube-lock.yaml` lockfile are detected automatically
+- 1afc8fe: Re-declare selected Oxlint JS plugins on the root config so dependency analyzers see them. `ultracite init --linter oxlint --js-plugins ...` now generates `const jsPlugins = selectJsPlugins([...])` and adds `jsPlugins: jsPlugins.jsPlugins` to the root config (also when the full `ultracite/oxlint/js-plugins` preset is extended). Knip only resolves `jsPlugins` from the root Oxlint config and never walks `extends`, so `eslint-plugin-github`, `eslint-plugin-sonarjs`, and `oxlint-plugin-react-doctor` were reported as unused devDependencies. Oxlint dedupes the plugin between the root and the extended preset, so linting is unchanged.
+
+  Also fix `ultracite update` dropping the `js-plugins` preset from `extends` when the config used the documented `import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins"` form: the import parser only matched bare default imports. The regenerated full-preset config keeps `settings: jsPluginSettings` on the root as well.
+
+- 20b06bf: Ignore `.alchemy` across all linters and formatters. Alchemy (alchemy.run) writes local state and generated bindings to a `.alchemy` directory. It is now part of the shared ignore patterns synced into Biome's `files.includes` and imported by oxlint, oxfmt, and ESLint, and the Stylelint preset ignores it via `ignoreFiles`. Prettier needs no change: it already respects `.gitignore`/`.prettierignore`.
+- 6e9286c: Run `lefthook install` during `ultracite init` through the same spawn adapter as every other tool invocation instead of `execSync`, so it no longer goes through a shell and gets the same Windows command resolution as `husky`, the linters, and editor extension installs.
+- 8b24f34: Add support for the Nub package manager: `ultracite init --pm nub` is now accepted and projects with a `nub.lock` lockfile are detected automatically (requires nypm ^0.6.9)
+- 240cb6b: Install into the workspace root correctly for Nub and Aube monorepos: nypm emits no root selector for them, so `nub add` ran without `-w` and was refused. Ultracite now hands nypm pnpm's flag set for these pnpm-compatible CLIs, producing `nub add --workspace-root --save-dev ultracite`
+- 44ecbba: Add Vitest type-test files (`**/*.{test-d,spec-d}.{ts,tsx,js,jsx}`) to the test-file globs so the shared test relaxations and the Vitest rule overrides apply to them, and enable the Vitest plugin's `typecheck` setting in the ESLint preset so `expectTypeOf`/`assertType` count as assertions.
+- 7ba6bb8: Package the reusable Ultracite agent skill with the npm distribution.
+
 ## 7.10.6
 
 ### Patch Changes
