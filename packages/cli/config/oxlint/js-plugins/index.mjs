@@ -67,7 +67,7 @@ const config = defineConfig({
   overrides: [
     {
       files: [
-        "**/*.{test,spec,test-d}.{ts,tsx,js,jsx}",
+        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
         "**/__tests__/**/*.{ts,tsx,js,jsx}",
       ],
       rules: {
