@@ -6,8 +6,7 @@ import { lefthook } from "../src/integrations/lefthook";
 
 const npmPm: PackageManager = { command: "npm", name: "npm" };
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
+mock.module("../src/spawn-sync", () => ({
   spawnSync: mock(() => ({ status: 0 })),
 }));
 
@@ -75,12 +74,6 @@ describe("lefthook", () => {
   describe("install", () => {
     test("installs lefthook dependency", async () => {
       const mockAddDep = mock(() => Promise.resolve());
-      const mockExecSync = mock(() => "");
-
-      mock.module("node:child_process", () => ({
-        execSync: mockExecSync,
-        spawnSync: mock(() => ({ status: 0 })),
-      }));
 
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
@@ -112,10 +105,9 @@ describe("lefthook", () => {
     });
 
     test("runs lefthook install command", async () => {
-      const mockExecSync = mock(() => "");
-      mock.module("node:child_process", () => ({
-        execSync: mockExecSync,
-        spawnSync: mock(() => ({ status: 0 })),
+      const mockSpawnSync = mock(() => ({ status: 0 }));
+      mock.module("../src/spawn-sync", () => ({
+        spawnSync: mockSpawnSync,
       }));
 
       mock.module("node:fs/promises", () => ({
@@ -144,7 +136,13 @@ describe("lefthook", () => {
 
       await lefthook.install(npmPm);
 
-      expect(mockExecSync).toHaveBeenCalled();
+      expect(mockSpawnSync).toHaveBeenCalledWith(
+        "npx",
+        ["lefthook", "install"],
+        {
+          stdio: "pipe",
+        }
+      );
     });
 
     test("adds prepare script to package.json", async () => {
@@ -177,11 +175,6 @@ describe("lefthook", () => {
           return "npx ultracite fix";
         }),
         removeDependency: mock(() => Promise.resolve()),
-      }));
-
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       await lefthook.install(npmPm);

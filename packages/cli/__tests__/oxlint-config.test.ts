@@ -64,9 +64,9 @@ const JS_PLUGINS = [
  * text-parsing version of this helper silently return nothing.
  */
 const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
-  // Bun.spawnSync rather than node:child_process — several test files
-  // install module-level mocks of node:child_process that leak across
-  // files when the suite runs without --isolate.
+  // Bun.spawnSync rather than the ../src/spawn-sync adapter — several test
+  // files install module-level mocks of that adapter which leak across files
+  // when the suite runs without --isolate.
   //
   // Run from the system temp dir with an absolute binary path so oxlint
   // does not walk up and auto-discover the repo's `oxlint.config.ts`. The
@@ -721,5 +721,80 @@ describe("oxlint next config", () => {
       missingRules,
       `Next config is missing ${missingRules.length} nextjs rules: ${missingRules.join(", ")}`
     ).toEqual([]);
+  });
+});
+
+describe("test file globs", () => {
+  const TEST_FILE_GLOB = "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}";
+  const TESTS_DIR_GLOB = "**/__tests__/**/*.{ts,tsx,js,jsx}";
+
+  interface FilesEntry {
+    files?: string[];
+  }
+
+  const readEslintConfig = async (name: string) => {
+    const configPath = path.join(
+      import.meta.dirname,
+      `../config/eslint/${name}/eslint.config.mjs`
+    );
+    const mod = await import(configPath);
+    // SAFETY: every eslint preset in config/eslint exports a flat-config array.
+    return mod.default as FilesEntry[];
+  };
+
+  const findTestOverride = (entries: FilesEntry[] | undefined) =>
+    entries?.find((entry) => entry.files?.includes(TESTS_DIR_GLOB));
+
+  test("oxlint core, js-plugins and vitest share the same test file glob", async () => {
+    const names = ["core", "js-plugins", "vitest"];
+    const configs = await Promise.all(names.map(readOxlintConfig));
+
+    for (const [index, config] of configs.entries()) {
+      const name = names[index];
+      const override = findTestOverride(config.overrides);
+
+      expect(
+        override,
+        `${name} should have a test file override`
+      ).toBeDefined();
+      expect(override?.files, `${name} test file glob`).toContain(
+        TEST_FILE_GLOB
+      );
+    }
+  });
+
+  test("eslint core and vitest share the same test file glob", () => {
+    // Read as text rather than importing: the core preset pulls in plugins
+    // that touch node:fs at import time, which other test files mock.
+    for (const name of ["core", "vitest"]) {
+      const configPath = path.join(
+        import.meta.dirname,
+        `../config/eslint/${name}/eslint.config.mjs`
+      );
+      const source = readFileSync(configPath, "utf-8");
+
+      expect(source, `${name} test file glob`).toContain(`"${TEST_FILE_GLOB}"`);
+    }
+  });
+
+  test("biome core relaxes rules for type-test files", () => {
+    const biomePath = path.join(
+      import.meta.dirname,
+      "../config/biome/core/biome.jsonc"
+    );
+    const biome = readFileSync(biomePath, "utf-8");
+
+    expect(biome).toContain(`"${TEST_FILE_GLOB}"`);
+  });
+
+  test("eslint vitest enables typecheck so expectTypeOf counts as an assertion", async () => {
+    const config = await readEslintConfig("vitest");
+    // SAFETY: the vitest preset's test override is a flat-config entry, which
+    // may carry a `settings` block alongside `files`.
+    const override = findTestOverride(config) as
+      | { settings?: { vitest?: { typecheck?: boolean } } }
+      | undefined;
+
+    expect(override?.settings?.vitest?.typecheck).toBe(true);
   });
 });

@@ -24,18 +24,34 @@ describe("spawnSync", () => {
     expect(result.status).toBe(3);
   });
 
-  test("maps a spawn failure to an error with a null status", () => {
+  test("maps a missing command according to the host platform", () => {
     const result = spawnSync("definitely-not-a-real-command", []);
+
+    if (process.platform === "win32") {
+      // execa can't resolve the command, so it runs it through cmd.exe, which
+      // exits non-zero with "is not recognized" — the process did spawn.
+      expect(result.error).toBeUndefined();
+      expect(result.status).not.toBe(0);
+      expect(result.status).not.toBeNull();
+      return;
+    }
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.status).toBeNull();
   });
 
-  test("maps a signal kill to a null status with the signal set", () => {
+  test("maps process termination according to the host platform", () => {
     const result = spawnSync(node, [
       "-e",
       "process.kill(process.pid, 'SIGKILL')",
     ]);
+
+    if (process.platform === "win32") {
+      // Windows does not expose POSIX signals through child_process.
+      expect(result.status).not.toBe(0);
+      expect(result.signal).toBeUndefined();
+      return;
+    }
 
     expect(result.status).toBeNull();
     expect(result.signal).toBe("SIGKILL");
@@ -55,12 +71,25 @@ describe("spawnSync", () => {
     expect(result.stdout?.trim()).toBe(tricky);
   });
 
-  test("does not capture stdout when stdio is inherit", () => {
+  test("does not capture stdout when stdio is ignore", () => {
     const result = spawnSync(node, ["-e", "process.exit(0)"], {
       stdio: "ignore",
     });
 
     expect(result.status).toBe(0);
     expect(result.stdout).toBeUndefined();
+  });
+
+  // Callers such as `skills list --json` don't set maxBuffer and rely on
+  // execa's 100 MB default rather than Node's 1 MiB.
+  test("captures more than Node's 1 MiB default maxBuffer", () => {
+    const result = spawnSync(node, [
+      "-e",
+      "process.stdout.write('x'.repeat(2 * 1024 * 1024))",
+    ]);
+
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(0);
+    expect(result.stdout?.length).toBe(2 * 1024 * 1024);
   });
 });

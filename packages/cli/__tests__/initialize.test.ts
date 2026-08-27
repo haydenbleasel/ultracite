@@ -37,11 +37,6 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-mock.module("node:child_process", () => ({
-  execSync: mock(() => ""),
-  spawnSync: mock(() => ({ status: 0 })),
-}));
-
 mock.module("../src/spawn-sync", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "[]" })),
 }));
@@ -795,8 +790,10 @@ describe("initialize", () => {
 
   test("accepts nub as an explicit package manager", async () => {
     const mockAddDep = mock(
-      (_packages: string[], _options: { packageManager: { name: string } }) =>
-        Promise.resolve()
+      (
+        _packages: string[],
+        _options: { packageManager: { command: string } }
+      ) => Promise.resolve()
     );
 
     mock.module("nypm", () => ({
@@ -818,13 +815,15 @@ describe("initialize", () => {
     });
 
     expect(mockAddDep).toHaveBeenCalled();
-    expect(mockAddDep.mock.calls[0]?.[1].packageManager.name).toBe("nub");
+    expect(mockAddDep.mock.calls[0]?.[1].packageManager.command).toBe("nub");
   });
 
   test("accepts nub when detected from a lockfile", async () => {
     const mockAddDep = mock(
-      (_packages: string[], _options: { packageManager: { name: string } }) =>
-        Promise.resolve()
+      (
+        _packages: string[],
+        _options: { packageManager: { command: string } }
+      ) => Promise.resolve()
     );
 
     mock.module("nypm", () => ({
@@ -847,13 +846,15 @@ describe("initialize", () => {
     });
 
     expect(mockAddDep).toHaveBeenCalled();
-    expect(mockAddDep.mock.calls[0]?.[1].packageManager.name).toBe("nub");
+    expect(mockAddDep.mock.calls[0]?.[1].packageManager.command).toBe("nub");
   });
 
   test("accepts aube as an explicit package manager", async () => {
     const mockAddDep = mock(
-      (_packages: string[], _options: { packageManager: { name: string } }) =>
-        Promise.resolve()
+      (
+        _packages: string[],
+        _options: { packageManager: { command: string } }
+      ) => Promise.resolve()
     );
 
     mock.module("nypm", () => ({
@@ -875,7 +876,7 @@ describe("initialize", () => {
     });
 
     expect(mockAddDep).toHaveBeenCalled();
-    expect(mockAddDep.mock.calls[0]?.[1].packageManager.name).toBe("aube");
+    expect(mockAddDep.mock.calls[0]?.[1].packageManager.command).toBe("aube");
   });
 
   test("installs dependencies when skipInstall is false", async () => {
@@ -2159,6 +2160,61 @@ describe("helper functions", () => {
       expect(mockAddDep).toHaveBeenCalled();
       expect(calls.some((c) => c.workspace === true)).toBe(true);
     });
+
+    test("presents nub as pnpm so nypm adds --workspace-root in a monorepo", async () => {
+      // nypm only knows how to select the workspace root for pnpm/npm/yarn,
+      // and nub refuses root installs without `-w`. nypm builds flags from
+      // `name` but runs `command`, so we hand it pnpm's name with nub's binary.
+      const nubPm: PackageManager = { command: "nub", name: "nub" };
+      const calls: { packageManager: PackageManager; workspace: boolean }[] =
+        [];
+      const mockAddDep = mock(
+        (
+          _pkg: string | string[],
+          opts: { packageManager: PackageManager; workspace: boolean }
+        ) => {
+          calls.push({
+            packageManager: opts.packageManager,
+            workspace: opts.workspace,
+          });
+          return Promise.resolve();
+        }
+      );
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {
+          throw new Error("ENOENT");
+        }),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => '{"workspaces": ["packages/*"]}'),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "nub", warnings: [] })
+        ),
+        dlxCommand: mock(() => "nub dlx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(nubPm, "biome", true);
+
+      expect(calls.length).toBeGreaterThan(0);
+      expect(calls[0]?.workspace).toBe(true);
+      expect(calls[0]?.packageManager).toEqual({
+        command: "nub",
+        name: "pnpm",
+      });
+    });
   });
 
   describe("migrateLinterConfig", () => {
@@ -2364,11 +2420,6 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
-      }));
-
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
           message: mock(noop),
@@ -2420,12 +2471,12 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      // Mock extension install to throw error
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => {
-          throw new Error("Extension install failed");
-        }),
+      // Mock extension install failing to spawn
+      mock.module("../src/spawn-sync", () => ({
+        spawnSync: mock(() => ({
+          error: new Error("Extension install failed"),
+          status: null,
+        })),
       }));
 
       mock.module("@clack/prompts", () => ({
@@ -2937,11 +2988,6 @@ describe("helper functions", () => {
         writeFile: mockWriteFile,
       }));
 
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
-      }));
-
       mock.module("@clack/prompts", () => ({
         spinner: mock(() => ({
           message: mock(noop),
@@ -2975,11 +3021,6 @@ describe("helper functions", () => {
           return Promise.resolve("#!/bin/sh\necho test");
         }),
         writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:child_process", () => ({
-        execSync: mock(() => ""),
-        spawnSync: mock(() => ({ status: 0 })),
       }));
 
       mock.module("@clack/prompts", () => ({
