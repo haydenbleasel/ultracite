@@ -130,18 +130,21 @@ export const fix = (
   }
 
   switch (linter) {
+    // Lint fixes first, then the formatter: a fixer can insert unformatted
+    // code (curly braces, split imports), and only a later format pass makes
+    // one `fix` run idempotent.
     case "eslint": {
       runSteps([
-        () => runPrettierFix(normalizedFiles, []),
         () => runEslintFix(normalizedFiles, passthrough),
+        () => runPrettierFix(normalizedFiles, []),
         () => runStylelintFix(normalizedFiles, []),
       ]);
       break;
     }
     case "oxlint": {
       runSteps([
-        () => runOxfmtFix(normalizedFiles, []),
         () => runOxlintFix(normalizedFiles, passthrough),
+        () => runOxfmtFix(normalizedFiles, []),
       ]);
       break;
     }
