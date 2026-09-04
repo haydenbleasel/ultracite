@@ -7,3 +7,12 @@ updates:
     schedule:
       interval: "monthly"
     labels: ["dependencies", "github_actions"]
+
+  # Security updates only for npm dependencies (bun.lock). Version bumps are
+  # managed manually, so the PR limit is 0 to disable non-security updates.
+  - package-ecosystem: "bun"
+    directory: "/"
+    open-pull-requests-limit: 0
+    schedule:
+      interval: "monthly"
+    labels: ["dependencies"]
