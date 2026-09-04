@@ -131,13 +131,14 @@ export const fix = (
 
   switch (linter) {
     // Lint fixes first, then the formatter: a fixer can insert unformatted
-    // code (curly braces, split imports), and only a later format pass makes
-    // one `fix` run idempotent.
+    // code (curly braces, split imports, requoted font names), and only a
+    // later format pass leaves the file in the formatter's shape. The agent
+    // adapters in agent-fix/linters.ts follow the same order.
     case "eslint": {
       runSteps([
         () => runEslintFix(normalizedFiles, passthrough),
-        () => runPrettierFix(normalizedFiles, []),
         () => runStylelintFix(normalizedFiles, []),
+        () => runPrettierFix(normalizedFiles, []),
       ]);
       break;
     }

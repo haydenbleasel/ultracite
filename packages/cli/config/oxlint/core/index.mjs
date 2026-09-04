@@ -500,7 +500,10 @@ export default defineConfig({
     "unicorn/no-magic-array-flat-depth": "error",
     "unicorn/no-negated-condition": "error",
     "unicorn/no-negation-in-equality-check": "error",
-    "unicorn/no-nested-ternary": "error",
+    // Its fixer wraps the inner ternary in parentheses that oxfmt strips, so
+    // every `fix` run ping-pongs. eslint-config-prettier disables it for the
+    // same reason; the core `no-nested-ternary` still reports the construct.
+    "unicorn/no-nested-ternary": "off",
     "unicorn/no-new-array": "error",
     "unicorn/no-new-buffer": "error",
     "unicorn/no-null": "off",

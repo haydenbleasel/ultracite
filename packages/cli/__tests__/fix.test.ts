@@ -220,7 +220,7 @@ describe("fix", () => {
     expect(() => fix([])).toThrow("No linter configuration found");
   });
 
-  test("runs eslint fix when linter is eslint (runs eslint, prettier, stylelint)", () => {
+  test("runs eslint fix when linter is eslint (runs eslint, stylelint, prettier)", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
@@ -236,13 +236,13 @@ describe("fix", () => {
     fix([]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
-    const [eslintCall, prettierCall, stylelintCall] = mockSpawn.mock.calls;
+    const [eslintCall, stylelintCall, prettierCall] = mockSpawn.mock.calls;
     expect(eslintCall[0]).toBe("eslint");
     expect(eslintCall[1]).toContain("--fix");
-    expect(prettierCall[0]).toBe("prettier");
-    expect(prettierCall[1]).toContain("--write");
     expect(stylelintCall[0]).toBe("stylelint");
     expect(stylelintCall[1]).toContain("--fix");
+    expect(prettierCall[0]).toBe("prettier");
+    expect(prettierCall[1]).toContain("--write");
   });
 
   test("runs eslint fix with specific files", () => {
@@ -282,10 +282,10 @@ describe("fix", () => {
     fix(["src/styles.css", "src/index.ts", "lib"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(3);
-    const [eslintCall, prettierCall, stylelintCall] = mockSpawn.mock.calls;
+    const [eslintCall, stylelintCall, prettierCall] = mockSpawn.mock.calls;
     expect(eslintCall[0]).toBe("eslint");
-    expect(prettierCall[0]).toBe("prettier");
     expect(stylelintCall[0]).toBe("stylelint");
+    expect(prettierCall[0]).toBe("prettier");
     expect(stylelintCall[1]).toContain("--fix");
     expect(stylelintCall[1]).toContain("--allow-empty-input");
     expect(stylelintCall[1]).toContain("src/styles.css");
@@ -308,6 +308,26 @@ describe("fix", () => {
     }));
 
     expect(() => fix([])).toThrow("ESLint exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+  });
+
+  test("eslint fix still runs stylelint and prettier when eslint exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: cmd === "eslint" ? 1 : 0,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    expect(() => fix([])).toThrow("ESLint exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(3);
+    const commands = mockSpawn.mock.calls.map((call) => call[0]);
+    expect(commands).toEqual(["eslint", "stylelint", "prettier"]);
   });
 
   test("eslint fix throws on eslint spawn error when it is the first step", () => {
@@ -329,18 +349,15 @@ describe("fix", () => {
   });
 
   test("eslint fix throws on prettier spawn error", () => {
-    let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
-        callCount += 1;
-        // eslint succeeds
-        if (callCount === 1) {
-          return { status: 0 };
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
+        if (cmd === "prettier") {
+          return {
+            error: new Error("prettier spawn failed"),
+            status: null,
+          };
         }
-        return {
-          error: new Error("prettier spawn failed"),
-          status: null,
-        };
+        return { status: 0 };
       }
     );
 
@@ -357,18 +374,15 @@ describe("fix", () => {
   });
 
   test("eslint fix throws on stylelint spawn error", () => {
-    let callCount = 0;
     const mockSpawn = mock(
-      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
-        callCount += 1;
-        // prettier and eslint succeed
-        if (callCount <= 2) {
-          return { status: 0 };
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
+        if (cmd === "stylelint") {
+          return {
+            error: new Error("stylelint spawn failed"),
+            status: null,
+          };
         }
-        return {
-          error: new Error("stylelint spawn failed"),
-          status: null,
-        };
+        return { status: 0 };
       }
     );
 
@@ -427,7 +441,7 @@ describe("fix", () => {
     expect(oxlintCall[1]).toContain("src/index.ts");
   });
 
-  test("oxlint fix throws on spawn error", () => {
+  test("oxlint fix throws on oxlint spawn error when it is the first step", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         error: new Error("oxlint spawn failed"),
@@ -445,6 +459,30 @@ describe("fix", () => {
     expect(() => fix([])).toThrow("Failed to run Oxlint: oxlint spawn failed");
   });
 
+  test("oxlint fix throws on oxfmt spawn error", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
+        if (cmd === "oxfmt") {
+          return {
+            error: new Error("oxfmt spawn failed"),
+            status: null,
+          };
+        }
+        return { status: 0 };
+      }
+    );
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    expect(() => fix([])).toThrow("Failed to run oxfmt: oxfmt spawn failed");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+  });
+
   test("oxlint fix throws LinterExitError on failure", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
@@ -460,6 +498,27 @@ describe("fix", () => {
     }));
 
     expect(() => fix([])).toThrow("Oxlint exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+  });
+
+  test("oxlint fix still runs oxfmt when oxlint exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: cmd === "oxlint" ? 1 : 0,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    expect(() => fix([])).toThrow("Oxlint exited with code 1");
+    expect(mockSpawn).toHaveBeenCalledTimes(2);
+    const [oxlintCall, oxfmtCall] = mockSpawn.mock.calls;
+    expect(oxlintCall[0]).toBe("oxlint");
+    expect(oxfmtCall[0]).toBe("oxfmt");
   });
 
   test("passes through --type-aware flag to oxlint", () => {
@@ -605,7 +664,7 @@ describe("fix", () => {
 
     expect(() => fix([])).toThrow("Prettier exited with code 1");
     expect(mockSpawn).toHaveBeenCalledTimes(3);
-    const [eslintCall, , stylelintCall] = mockSpawn.mock.calls;
+    const [eslintCall, stylelintCall] = mockSpawn.mock.calls;
     expect(eslintCall[0]).toBe("eslint");
     expect(stylelintCall[0]).toBe("stylelint");
   });
@@ -728,11 +787,11 @@ describe("fix with an agent", () => {
     expect(agentCall[1]).toContain("eslint(no-eval)");
     expect(agentCall[1]).toContain("eval can be harmful.");
 
-    // Version check, autofix pass (oxfmt + oxlint), verify pass (oxfmt + oxlint).
+    // Version check, autofix pass (oxlint + oxfmt), verify pass (oxlint + oxfmt).
     const commands = mockSpawn.mock.calls.map((call) => call[0]);
-    expect(commands).toEqual(["claude", "oxfmt", "oxlint", "oxfmt", "oxlint"]);
+    expect(commands).toEqual(["claude", "oxlint", "oxfmt", "oxlint", "oxfmt"]);
 
-    const verifyCall = mockSpawn.mock.calls.at(4);
+    const verifyCall = mockSpawn.mock.calls.at(3);
     expect(verifyCall?.[1]).toContain("src/bad.ts");
   });
 
