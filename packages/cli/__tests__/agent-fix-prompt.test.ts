@@ -80,10 +80,11 @@ describe("agent adapters", () => {
     ]);
   });
 
-  test("codex adapter builds a full-auto exec invocation", () => {
+  test("codex adapter builds a workspace-write sandboxed exec invocation", () => {
     expect(agentAdapters.codex.buildArgs("do the fix")).toEqual([
       "exec",
-      "--full-auto",
+      "--sandbox",
+      "workspace-write",
       "do the fix",
     ]);
   });

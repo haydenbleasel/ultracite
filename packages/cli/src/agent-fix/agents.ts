@@ -28,8 +28,9 @@ export const agentAdapters = {
     label: "Claude Code",
   },
   codex: {
-    // --full-auto runs non-interactively in the workspace-write sandbox.
-    buildArgs: (prompt) => ["exec", "--full-auto", prompt],
+    // exec is non-interactive; the workspace-write sandbox lets the agent edit
+    // files without prompting. (--full-auto was removed from recent Codex CLIs.)
+    buildArgs: (prompt) => ["exec", "--sandbox", "workspace-write", prompt],
     command: "codex",
     id: "codex",
     installHint: "npm install -g @openai/codex",
