@@ -640,12 +640,15 @@ describe("oxlint anti-slop config", () => {
 
     // consistent-indexed-object-style's autofix rewrites index-signature
     // interfaces into `Record` aliases that no-known-value-widening re-flags,
-    // and no-immediate-mutation bans the empty-accumulator escape from the
-    // same rule — so extending this preset after core disables both.
+    // no-immediate-mutation bans the empty-accumulator escape from the same
+    // rule, and prefer-reflect-apply recommends the `Reflect.apply` call that
+    // no-reflect-apply rejects — so extending this preset after core disables
+    // all three.
     expect(config.rules["typescript/consistent-indexed-object-style"]).toBe(
       "off"
     );
     expect(config.rules["unicorn/no-immediate-mutation"]).toBe("off");
+    expect(config.rules["unicorn/prefer-reflect-apply"]).toBe("off");
   });
 
   // Run oxlint for real with core + anti-slop loaded via a committed fixture

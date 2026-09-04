@@ -57,10 +57,15 @@ export default defineConfig({
     // Core rules that pinch against anti-slop when both are enabled:
     // consistent-indexed-object-style's autofix rewrites index-signature
     // interfaces into `Record` aliases, which no-known-value-widening
-    // resolves and re-flags (a fix/break loop), and no-immediate-mutation
-    // bans the empty-accumulator escape from the same rule. Extending this
-    // preset after core turns them off by default.
+    // resolves and re-flags (a fix/break loop), no-immediate-mutation
+    // bans the empty-accumulator escape from the same rule, and
+    // prefer-reflect-apply steers `Function#apply()` toward the very
+    // `Reflect.apply` call that no-reflect-apply rejects (#792). Extending
+    // this preset after core turns them off by default; `.apply()` callers
+    // are still nudged toward a direct call by eslint/prefer-spread and
+    // eslint/no-useless-call.
     "typescript/consistent-indexed-object-style": "off",
     "unicorn/no-immediate-mutation": "off",
+    "unicorn/prefer-reflect-apply": "off",
   },
 });
