@@ -105,24 +105,32 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
 // Lint fixes first, then the formatter, matching the plain `fix` path: a
 // fixer can insert unformatted code and oxfmt is not a diagnostic source, so
 // a formatter-first pass would report "no issues" on a file that still fails
-// `oxfmt --check`.
+// `oxfmt --check`. The diagnostics handed to the agent come from a final
+// report-only pass so their line numbers reflect the formatted file.
 const runOxlintPass = (
   files: string[],
   passthrough: string[]
 ): Diagnostic[] => {
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
+  const targets = toTargets(files, ".");
+
+  runPiped("oxlint", [
+    hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filteredPassthrough,
+    ...targets,
+  ]);
+
+  runPiped("oxfmt", ["--write", ...targets]);
+
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
   const stdout = runPiped("oxlint", [
-    hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
     "-f",
     "json",
-    ...toTargets(files, "."),
+    ...targets,
   ]);
-
-  runPiped("oxfmt", ["--write", ...toTargets(files, ".")]);
 
   return parseOxlintDiagnostics(stdout);
 };
@@ -253,21 +261,17 @@ const parseEslintDiagnostics = (stdout: string): Diagnostic[] => {
 /**
  * Stylelint and Prettier run as plain autofix steps — their issues are not
  * handed to the agent in v1. The order matches the plain fix flow: ESLint,
- * then Stylelint, then Prettier, so every fixer's output gets formatted.
+ * then Stylelint, then Prettier, so every fixer's output gets formatted. A
+ * final report-only ESLint pass collects the diagnostics so their line
+ * numbers reflect the formatted file.
  */
 const runEslintPass = (
   files: string[],
   passthrough: string[]
 ): Diagnostic[] => {
-  // The JSON reporter goes after the passthrough so a user-supplied format
-  // flag can't override it and break the parser.
-  const stdout = runPiped("eslint", [
-    "--fix",
-    ...passthrough,
-    "-f",
-    "json",
-    ...toTargets(files, "."),
-  ]);
+  const targets = toTargets(files, ".");
+
+  runPiped("eslint", ["--fix", ...passthrough, ...targets]);
 
   const stylelintTargets = toStylelintTargets(files);
 
@@ -279,7 +283,11 @@ const runEslintPass = (
     ]);
   }
 
-  runPiped("prettier", ["--write", ...toTargets(files, ".")]);
+  runPiped("prettier", ["--write", ...targets]);
+
+  // The JSON reporter goes after the passthrough so a user-supplied format
+  // flag can't override it and break the parser.
+  const stdout = runPiped("eslint", [...passthrough, "-f", "json", ...targets]);
 
   return parseEslintDiagnostics(stdout);
 };

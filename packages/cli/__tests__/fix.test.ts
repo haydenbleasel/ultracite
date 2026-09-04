@@ -736,15 +736,17 @@ const mockAgentEnvironment = ({
   agentOk?: boolean;
   oxlintOutputs: string[];
 }) => {
-  let oxlintCalls = 0;
-  const mockSpawn = mock((cmd: string, _args: string[]) => {
+  let collectCalls = 0;
+  const mockSpawn = mock((cmd: string, args: string[]) => {
     if (cmd === "claude" || cmd === "codex") {
       return { status: 0, stdout: "2.0.0" };
     }
-    if (cmd === "oxlint") {
+    // Each pass runs oxlint twice: a fix pass whose output is discarded and
+    // a report-only pass whose JSON feeds the agent. Outputs map to the latter.
+    if (cmd === "oxlint" && args.includes("-f")) {
       const stdout =
-        oxlintOutputs[Math.min(oxlintCalls, oxlintOutputs.length - 1)];
-      oxlintCalls += 1;
+        oxlintOutputs[Math.min(collectCalls, oxlintOutputs.length - 1)];
+      collectCalls += 1;
       return { status: 0, stdout };
     }
     return { status: 0, stdout: "" };
@@ -787,12 +789,23 @@ describe("fix with an agent", () => {
     expect(agentCall[1]).toContain("eslint(no-eval)");
     expect(agentCall[1]).toContain("eval can be harmful.");
 
-    // Version check, autofix pass (oxlint + oxfmt), verify pass (oxlint + oxfmt).
+    // Version check, then autofix and verify passes of
+    // oxlint --fix, oxfmt --write, and a report-only oxlint.
     const commands = mockSpawn.mock.calls.map((call) => call[0]);
-    expect(commands).toEqual(["claude", "oxlint", "oxfmt", "oxlint", "oxfmt"]);
+    expect(commands).toEqual([
+      "claude",
+      "oxlint",
+      "oxfmt",
+      "oxlint",
+      "oxlint",
+      "oxfmt",
+      "oxlint",
+    ]);
 
-    const verifyCall = mockSpawn.mock.calls.at(3);
-    expect(verifyCall?.[1]).toContain("src/bad.ts");
+    const verifyCalls = mockSpawn.mock.calls.slice(4);
+    for (const call of verifyCalls) {
+      expect(call[1]).toContain("src/bad.ts");
+    }
   });
 
   test("throws a LinterExitError when issues remain after the agent run", async () => {
@@ -853,11 +866,13 @@ describe("fix with an agent", () => {
 
     await fix([], ["--unsafe"], { agent: "claude" });
 
-    const oxlintCall = mockSpawn.mock.calls.find(
+    const [fixCall, collectCall] = mockSpawn.mock.calls.filter(
       (call) => call[0] === "oxlint"
     );
-    expect(oxlintCall?.[1]).toContain("--fix-dangerously");
-    expect(oxlintCall?.[1]).not.toContain("--unsafe");
+    expect(fixCall?.[1]).toContain("--fix-dangerously");
+    expect(fixCall?.[1]).not.toContain("--unsafe");
+    expect(collectCall?.[1]).not.toContain("--fix-dangerously");
+    expect(collectCall?.[1]).not.toContain("--unsafe");
   });
 
   test("throws a setup error when the agent CLI is not installed", async () => {
