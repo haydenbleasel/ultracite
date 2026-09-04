@@ -1,5 +1,0 @@
----
-"ultracite": patch
----
-
-Update the vendored `anti-slop` Oxlint plugin to upstream v0.1.2 (commit `e8c4880`). The rule set is unchanged; this picks up a round of correctness fixes: `no-known-value-widening` now also reports known values passed into local `unknown`-typed type predicates, `no-object-parameters`, `no-unknown-parameters`, `no-unknown-returns` and `no-unknown-type-aliases` resolve scoped and transparent generic aliases (including block-scoped aliases and forward references), `no-unknown-returns` covers `PromiseLike<unknown>`, `no-unsafe-dictionary-type` allows generic constraints such as `T extends Record<string, unknown>`, `no-runtime-typeof` always allows existence probes against `"undefined"`, `no-shape-in-symbol-names` allows static member reads such as Zod's `schema.shape`, and `require-safety-comment-for-type-assertion` rejects empty justifications and gains a `markers` option (default `["SAFETY"]`). Upstream also added a separate opt-in `anti-slop-effect` plugin for Effect projects, which is not vendored.
