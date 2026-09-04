@@ -54,7 +54,7 @@ describe("agent-fix linter adapters", () => {
     mock.restore();
   });
 
-  test("oxlint adapter runs oxfmt then oxlint --fix with JSON output and parses diagnostics", () => {
+  test("oxlint adapter runs oxlint --fix, oxfmt, then a report-only oxlint pass and parses its diagnostics", () => {
     const mockSpawn = mock((cmd: string, _args: string[]) => ({
       status: cmd === "oxlint" ? 1 : 0,
       stdout: cmd === "oxlint" ? oxlintJson : "",
@@ -63,11 +63,13 @@ describe("agent-fix linter adapters", () => {
 
     const diagnostics = getLinterAdapter("oxlint").fixAndCollect([], []);
 
-    const [oxfmtCall, oxlintCall] = mockSpawn.mock.calls;
+    const [fixCall, oxfmtCall, collectCall] = mockSpawn.mock.calls;
+    expect(fixCall[0]).toBe("oxlint");
+    expect(fixCall[1]).toEqual(["--fix", "."]);
     expect(oxfmtCall[0]).toBe("oxfmt");
     expect(oxfmtCall[1]).toEqual(["--write", "."]);
-    expect(oxlintCall[0]).toBe("oxlint");
-    expect(oxlintCall[1]).toEqual(["--fix", "-f", "json", "."]);
+    expect(collectCall[0]).toBe("oxlint");
+    expect(collectCall[1]).toEqual(["-f", "json", "."]);
 
     expect(diagnostics).toEqual([
       {
@@ -96,11 +98,12 @@ describe("agent-fix linter adapters", () => {
       ["--unsafe", "--type-aware"]
     );
 
-    const [, oxlintCall] = mockSpawn.mock.calls;
-    expect(oxlintCall[1]).toContain("--fix-dangerously");
-    expect(oxlintCall[1]).not.toContain("--unsafe");
-    expect(oxlintCall[1]).toContain("--type-aware");
-    expect(oxlintCall[1]).toContain("src/a.ts");
+    const [fixCall, , collectCall] = mockSpawn.mock.calls;
+    expect(fixCall[1]).toContain("--fix-dangerously");
+    expect(fixCall[1]).not.toContain("--unsafe");
+    expect(fixCall[1]).toContain("--type-aware");
+    expect(fixCall[1]).toContain("src/a.ts");
+    expect(collectCall[1]).toEqual(["--type-aware", "-f", "json", "src/a.ts"]);
   });
 
   test("oxlint adapter verify targets the single file", () => {
@@ -112,9 +115,10 @@ describe("agent-fix linter adapters", () => {
 
     getLinterAdapter("oxlint").verify("src/a.ts", []);
 
-    const [oxfmtCall, oxlintCall] = mockSpawn.mock.calls;
+    const [fixCall, oxfmtCall, collectCall] = mockSpawn.mock.calls;
+    expect(fixCall[1]).toEqual(["--fix", "src/a.ts"]);
     expect(oxfmtCall[1]).toEqual(["--write", "src/a.ts"]);
-    expect(oxlintCall[1]).toEqual(["--fix", "-f", "json", "src/a.ts"]);
+    expect(collectCall[1]).toEqual(["-f", "json", "src/a.ts"]);
   });
 
   test("oxlint adapter throws on spawn failure", () => {
@@ -122,7 +126,7 @@ describe("agent-fix linter adapters", () => {
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => getLinterAdapter("oxlint").fixAndCollect([], [])).toThrow(
-      "Failed to run oxfmt: spawn failed"
+      "Failed to run oxlint: spawn failed"
     );
   });
 
@@ -192,7 +196,7 @@ describe("agent-fix linter adapters", () => {
     expect(diagnostic.column).toBe(1);
   });
 
-  test("eslint adapter runs prettier, eslint --fix with JSON, and stylelint autofix", () => {
+  test("eslint adapter runs eslint --fix, stylelint, prettier, then a report-only eslint pass", () => {
     const mockSpawn = mock((cmd: string, _args: string[]) => ({
       status: 0,
       stdout: cmd === "eslint" ? eslintJson : "",
@@ -202,10 +206,12 @@ describe("agent-fix linter adapters", () => {
     const diagnostics = getLinterAdapter("eslint").fixAndCollect([], []);
 
     const commands = mockSpawn.mock.calls.map((call) => call[0]);
-    expect(commands).toEqual(["prettier", "eslint", "stylelint"]);
+    expect(commands).toEqual(["eslint", "stylelint", "prettier", "eslint"]);
 
-    const [, eslintCall] = mockSpawn.mock.calls;
-    expect(eslintCall[1]).toEqual(["--fix", "-f", "json", "."]);
+    const [fixCall] = mockSpawn.mock.calls;
+    const collectCall = mockSpawn.mock.calls.at(-1);
+    expect(fixCall[1]).toEqual(["--fix", "."]);
+    expect(collectCall?.[1]).toEqual(["-f", "json", "."]);
 
     expect(diagnostics).toEqual([
       {
@@ -230,6 +236,6 @@ describe("agent-fix linter adapters", () => {
     getLinterAdapter("eslint").verify("src/a.ts", []);
 
     const commands = mockSpawn.mock.calls.map((call) => call[0]);
-    expect(commands).toEqual(["prettier", "eslint"]);
+    expect(commands).toEqual(["eslint", "prettier", "eslint"]);
   });
 });

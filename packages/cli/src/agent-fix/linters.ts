@@ -102,22 +102,34 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
   return diagnostics;
 };
 
+// Lint fixes first, then the formatter, matching the plain `fix` path: a
+// fixer can insert unformatted code and oxfmt is not a diagnostic source, so
+// a formatter-first pass would report "no issues" on a file that still fails
+// `oxfmt --check`. The diagnostics handed to the agent come from a final
+// report-only pass so their line numbers reflect the formatted file.
 const runOxlintPass = (
   files: string[],
   passthrough: string[]
 ): Diagnostic[] => {
-  runPiped("oxfmt", ["--write", ...toTargets(files, ".")]);
-
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
+  const targets = toTargets(files, ".");
+
+  runPiped("oxlint", [
+    hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filteredPassthrough,
+    ...targets,
+  ]);
+
+  runPiped("oxfmt", ["--write", ...targets]);
+
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
   const stdout = runPiped("oxlint", [
-    hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
     "-f",
     "json",
-    ...toTargets(files, "."),
+    ...targets,
   ]);
 
   return parseOxlintDiagnostics(stdout);
@@ -247,43 +259,41 @@ const parseEslintDiagnostics = (stdout: string): Diagnostic[] => {
 };
 
 /**
- * Prettier and Stylelint run as plain autofix steps — their issues are not
- * handed to the agent in v1, matching the ESLint-centric plain fix flow.
+ * Stylelint and Prettier run as plain autofix steps — their issues are not
+ * handed to the agent in v1. The order matches the plain fix flow: ESLint,
+ * then Stylelint, then Prettier, so every fixer's output gets formatted. A
+ * final report-only ESLint pass collects the diagnostics so their line
+ * numbers reflect the formatted file.
  */
 const runEslintPass = (
   files: string[],
   passthrough: string[]
 ): Diagnostic[] => {
-  runPiped("prettier", ["--write", ...toTargets(files, ".")]);
+  const targets = toTargets(files, ".");
+
+  runPiped("eslint", ["--fix", ...passthrough, ...targets]);
+
+  const stylelintTargets = toStylelintTargets(files);
+
+  if (stylelintTargets.length > 0) {
+    runPiped("stylelint", [
+      "--fix",
+      "--allow-empty-input",
+      ...stylelintTargets,
+    ]);
+  }
+
+  runPiped("prettier", ["--write", ...targets]);
 
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
-  const stdout = runPiped("eslint", [
-    "--fix",
-    ...passthrough,
-    "-f",
-    "json",
-    ...toTargets(files, "."),
-  ]);
+  const stdout = runPiped("eslint", [...passthrough, "-f", "json", ...targets]);
 
   return parseEslintDiagnostics(stdout);
 };
 
 const eslintAdapter: LinterAdapter = {
-  fixAndCollect: (files, passthrough) => {
-    const diagnostics = runEslintPass(files, passthrough);
-    const stylelintTargets = toStylelintTargets(files);
-
-    if (stylelintTargets.length > 0) {
-      runPiped("stylelint", [
-        "--fix",
-        "--allow-empty-input",
-        ...stylelintTargets,
-      ]);
-    }
-
-    return diagnostics;
-  },
+  fixAndCollect: runEslintPass,
   name: "ESLint",
   verify: (file, passthrough) => runEslintPass([file], passthrough),
 };
