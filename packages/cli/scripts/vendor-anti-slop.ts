@@ -21,7 +21,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 const REPO_URL = "https://github.com/dmmulroy/anti-slop.git";
-const PINNED_REF = "446268e5d15baa968eaec669ff65358d36ae6259";
+const PINNED_REF = "e8c4880471b23ab7f216fba7b27d173a6ef07d4c";
 
 const ref = process.argv[2] ?? PINNED_REF;
 const outFile = path.join(
