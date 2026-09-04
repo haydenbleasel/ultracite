@@ -27,6 +27,13 @@ const config = {
     "declaration-property-value-no-unknown": true,
     "display-notation": "short",
     "no-descending-specificity": null,
+    // The *-layout-mappings rules (property, unit, value-keyword) are left
+    // off: they reject every physical property, unit and keyword (margin-left,
+    // vw, float: left) and can only autofix with a per-project
+    // languageOptions.directionality setting.
+    "relative-selector-nesting-notation": "explicit",
+    "selector-no-deprecated": true,
+    "selector-no-invalid": true,
     "selector-pseudo-class-no-unknown": [
       true,
       {
