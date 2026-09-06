@@ -3503,5 +3503,63 @@ describe("helper functions", () => {
       // In quiet mode, multiselect should not be called for linter/frameworks/editors/agents/hooks/integrations
       expect(mockMultiselect).not.toHaveBeenCalled();
     });
+
+    test("defaults to oxlint in quiet mode when no linter is given", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        cancel: mock(noop),
+        confirm: mock(() => Promise.resolve(false)),
+        intro: mock(noop),
+        isCancel: mock(() => false),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mock(() => Promise.resolve([])),
+        outro: mock(noop),
+        select: mock(() => Promise.resolve("biome")),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() => Promise.resolve()),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      await initialize({
+        pm: "npm",
+        quiet: true,
+        skipInstall: true,
+      });
+
+      const writtenPaths = mockWriteFile.mock.calls.map(([path]) =>
+        String(path)
+      );
+
+      expect(writtenPaths.some((p) => p.endsWith("oxlint.config.ts"))).toBe(
+        true
+      );
+      expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(false);
+    });
   });
 });

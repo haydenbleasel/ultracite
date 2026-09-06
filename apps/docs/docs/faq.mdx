@@ -13,7 +13,7 @@ In short: Biome / ESLint / Oxlint is the engine (linter / formatter), Ultracite 
 
 ## Q: Do I still need ESLint or Prettier if I use Ultracite?
 
-It depends on which provider you choose. With the default Biome provider (or the Oxlint + Oxfmt provider), Ultracite replaces the functionality of ESLint and Prettier for your Javascript / Typescript code — you do not need to run them at all, and it’s recommended to remove those configs to avoid conflicts (init does this automatically). Ultracite’s output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
+It depends on which provider you choose. With the default Oxlint + Oxfmt provider (or the Biome provider), Ultracite replaces the functionality of ESLint and Prettier for your Javascript / Typescript code — you do not need to run them at all, and it’s recommended to remove those configs to avoid conflicts (init does this automatically). Ultracite’s output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
 
 If you prefer to stay in the ESLint ecosystem — for example, because you rely on a specialized ESLint plugin — you can choose Ultracite’s [ESLint + Prettier + Stylelint provider](/docs/provider/eslint) instead, which gives you the same curated preset on top of those tools.
 

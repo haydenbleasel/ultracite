@@ -1097,7 +1097,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     let { linter } = opts;
     if (linter === undefined) {
-      // If quiet mode or other CLI options are provided, default to biome only
+      // If quiet mode or other CLI options are provided, default to oxlint only
       const hasOtherCliOptions =
         quiet ||
         opts.pm ||
@@ -1108,7 +1108,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
-        linter = "biome";
+        linter = "oxlint";
       } else {
         const linterResult = await select<Linter>({
           message: "Which linter do you want to use?",

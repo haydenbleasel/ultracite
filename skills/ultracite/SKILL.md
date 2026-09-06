@@ -62,7 +62,7 @@ bunx ultracite init \
 - `--type-aware` — Enable type-aware linting (Biome: extends the `type-aware` preset; Oxlint: installs `oxlint-tsgolint`)
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
-- `--quiet` — Suppress prompts (auto-detected when `CI=true`)
+- `--quiet` — Suppress prompts (auto-detected when `CI=true`); defaults to `oxlint` when `--linter` is omitted
 
 Init creates config that extends Ultracite presets:
 
