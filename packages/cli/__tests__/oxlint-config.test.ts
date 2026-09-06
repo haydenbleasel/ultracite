@@ -391,6 +391,18 @@ describe("oxlint tanstack config", () => {
     expect(routeOverride?.rules?.["unicorn/filename-case"]).toBe("off");
   });
 
+  test("disables no-use-before-define for TanStack route files", async () => {
+    const config = await readOxlintConfig("tanstack");
+
+    const routeOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
+        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+    );
+
+    expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
+  });
+
   test("keeps routeTree.gen.ts filename-case override", async () => {
     const config = await readOxlintConfig("tanstack");
 
