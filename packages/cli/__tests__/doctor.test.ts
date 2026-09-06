@@ -1,6 +1,6 @@
 import { describe, expect, mock, spyOn, test } from "bun:test";
 
-import { doctor } from "../src/commands/doctor";
+import { doctor, runDiagnostics } from "../src/commands/doctor";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 
 mock.module("../src/spawn-sync", () => ({
@@ -34,6 +34,53 @@ mock.module("node:fs/promises", () => ({
   readFile: mock(() => Promise.resolve("{}")),
   writeFile: mock(() => Promise.resolve()),
 }));
+
+// Describe a project where every path exists, the linter config extends
+// ultracite, and node_modules holds the given tool manifests.
+const mockInstalledVersions = (versions: Record<string, string>) => {
+  mock.module("../src/spawn-sync", () => ({
+    spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      const p = String(path);
+      const match =
+        /node_modules\/(?<name>@?[^/]+(?:\/[^/]+)?)\/package\.json$/u.exec(p);
+      const name = match?.groups?.name;
+      if (name && name !== "ultracite" && !(name in versions)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(() => true),
+    readFileSync: mock((path: string) => {
+      const p = String(path);
+      for (const [name, version] of Object.entries(versions)) {
+        if (p.includes(`node_modules/${name}/package.json`)) {
+          return JSON.stringify({ name, version });
+        }
+      }
+      if (isNodeModulesPath(p)) {
+        return ULTRACITE_PACKAGE_JSON;
+      }
+      if (p.includes("biome.json")) {
+        return '{"extends": ["ultracite/biome/core"]}';
+      }
+      if (p.includes("eslint.config")) {
+        return 'import core from "ultracite/eslint/core";';
+      }
+      if (p.includes("oxlint.config.ts")) {
+        return 'import core from "ultracite/oxlint/core";';
+      }
+      if (p.includes("oxfmt.config.ts")) {
+        return 'import ultracite from "ultracite/oxfmt";';
+      }
+      return '{"devDependencies": {"ultracite": "1.0.0"}}';
+    }),
+  }));
+};
+
+const versionCheck = (linter: "biome" | "eslint" | "oxlint", name: string) =>
+  runDiagnostics(linter).find((check) => check.name === `${name} version`);
 
 describe("doctor", () => {
   // ---------------------------------------------------------------------------
@@ -802,5 +849,89 @@ describe("doctor", () => {
 
     doctor();
     consoleLogSpy.mockRestore();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Toolchain version checks
+  // ---------------------------------------------------------------------------
+
+  test("passes when the installed biome satisfies the supported range", () => {
+    mockInstalledVersions({ "@biomejs/biome": "2.5.12" });
+
+    expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
+      message: "@biomejs/biome 2.5.12 satisfies ^2.5.0",
+      status: "pass",
+    });
+  });
+
+  test("fails when the installed biome is older than the presets require", () => {
+    mock.module("../src/utils", () => ({
+      detectLinter: () => "biome",
+    }));
+    mockInstalledVersions({ "@biomejs/biome": "2.4.9" });
+
+    expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
+      message: expect.stringContaining(
+        "@biomejs/biome 2.4.9 is older than Ultracite"
+      ),
+      status: "fail",
+    });
+    expect(versionCheck("biome", "@biomejs/biome")?.message).toContain(
+      "run `ultracite upgrade`"
+    );
+    expect(() => doctor()).toThrow("Doctor checks failed");
+  });
+
+  test("warns when the installed biome is newer than the verified range", () => {
+    mockInstalledVersions({ "@biomejs/biome": "3.0.0" });
+
+    expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
+      message: expect.stringContaining("is newer than Ultracite"),
+      status: "warn",
+    });
+  });
+
+  test("warns when a required tool's version cannot be determined", () => {
+    mockInstalledVersions({});
+
+    expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
+      message: expect.stringContaining(
+        "Could not determine the installed @biomejs/biome version"
+      ),
+      status: "warn",
+    });
+  });
+
+  test("checks eslint, prettier and stylelint versions for eslint setups", () => {
+    mockInstalledVersions({
+      eslint: "10.9.1",
+      prettier: "2.8.8",
+      stylelint: "17.2.0",
+    });
+
+    expect(versionCheck("eslint", "eslint")).toMatchObject({ status: "pass" });
+    expect(versionCheck("eslint", "prettier")).toMatchObject({
+      message: expect.stringContaining("prettier 2.8.8 is older"),
+      status: "fail",
+    });
+    expect(versionCheck("eslint", "stylelint")).toMatchObject({
+      status: "pass",
+    });
+  });
+
+  test("skips the optional stylelint version check when it isn't installed", () => {
+    mockInstalledVersions({ eslint: "10.9.1", prettier: "3.8.1" });
+
+    expect(versionCheck("eslint", "stylelint")).toBeUndefined();
+  });
+
+  test("checks oxlint and oxfmt versions for oxlint setups", () => {
+    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.81.0" });
+
+    expect(versionCheck("oxlint", "oxlint")).toMatchObject({ status: "pass" });
+    expect(versionCheck("oxlint", "oxfmt")).toMatchObject({
+      message: expect.stringContaining("oxfmt 0.30.0 is older"),
+      status: "fail",
+    });
   });
 });

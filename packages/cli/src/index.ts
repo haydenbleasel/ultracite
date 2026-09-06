@@ -1,12 +1,13 @@
 import process from "node:process";
 
 import { log } from "@clack/prompts";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 
 import packageJson from "../package.json" with { type: "json" };
 import { check } from "./commands/check";
-import { doctor } from "./commands/doctor";
+import { DOCTOR_FAILED, doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
+import { upgrade } from "./commands/upgrade";
 import { UltraciteSetupError } from "./config-resolution";
 import { initialize } from "./initialize";
 import { extractAgentFlags, splitLinterArgs } from "./linter-args";
@@ -21,6 +22,11 @@ type CheckCommandOptions = Record<string, never>;
 interface FixCommandOptions {
   claude?: boolean;
   codex?: boolean;
+}
+
+interface UpgradeCommandOptions {
+  pm?: string;
+  skipSelf?: boolean;
 }
 
 const program = new Command();
@@ -126,6 +132,21 @@ program
     await doctor();
   });
 
+program
+  .command("upgrade")
+  .description(
+    "Update Ultracite and sync your linter toolchain to the versions it supports"
+  )
+  .option("--pm <pm>", "Package manager to use")
+  .addOption(
+    // Internal: set when a newly installed CLI is re-invoked to finish the
+    // upgrade with its own toolchain pins.
+    new Option("--skip-self", "Skip updating the ultracite package").hideHelp()
+  )
+  .action(async (opts: UpgradeCommandOptions) => {
+    process.exitCode = await upgrade({ pm: opts.pm, skipSelf: opts.skipSelf });
+  });
+
 if (!process.env.ULTRACITE_TEST) {
   try {
     await program.parseAsync();
@@ -137,7 +158,7 @@ if (!process.env.ULTRACITE_TEST) {
       log.error(error.message);
       process.exit(1);
     }
-    if (error instanceof Error && error.message === "Doctor checks failed") {
+    if (error instanceof Error && error.message === DOCTOR_FAILED) {
       process.exit(1);
     }
     throw error;

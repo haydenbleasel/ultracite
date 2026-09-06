@@ -4,9 +4,15 @@ import process from "node:process";
 
 import { intro, log, outro, spinner } from "@clack/prompts";
 import { parse } from "jsonc-parser";
+import { gtr, satisfies, valid } from "semver";
 
 import packageJson from "../../package.json" with { type: "json" };
-import { canResolveUltracite } from "../config-resolution";
+import {
+  canResolveUltracite,
+  findInstalledPackage,
+} from "../config-resolution";
+import { toolchainPeerRanges } from "../dependencies";
+import type { ToolchainPackageName } from "../dependencies";
 import { readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
@@ -22,7 +28,7 @@ import {
 } from "../utils";
 import type { Linter } from "../utils";
 
-interface DiagnosticCheck {
+export interface DiagnosticCheck {
   message: string;
   name: string;
   status: "fail" | "pass" | "warn";
@@ -38,6 +44,7 @@ const OXFMT_CHECK = "oxfmt configuration";
 const ULTRACITE_DEP_CHECK = "Ultracite dependency";
 const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
 const DOCTOR_COMPLETE = "Doctor complete";
+export const DOCTOR_FAILED = "Doctor checks failed";
 
 // ---------------------------------------------------------------------------
 // Installation checks
@@ -61,6 +68,66 @@ const checkToolInstallation = (
     message: `${tool} is not installed${required ? "" : " (optional)"}`,
     name: `${tool} installation`,
     status: required ? "fail" : "warn",
+  };
+};
+
+/**
+ * Compare the tool installed in the project against the range this Ultracite
+ * release was verified with (its optional peer dependency). Presets reference
+ * rule keys by name, so a tool that's too old rejects the config outright —
+ * the "Found an unknown key" crash — which is exactly what this catches before
+ * `check`/`fix` run into it.
+ */
+const checkToolVersion = (
+  packageName: ToolchainPackageName,
+  required: boolean
+): DiagnosticCheck | null => {
+  const range = toolchainPeerRanges[packageName];
+  const name = `${packageName} version`;
+  const version = findInstalledPackage(packageName)?.manifest.version;
+
+  if (!version) {
+    // Optional tools that aren't installed are already reported by the
+    // installation check; there's no version to compare.
+    if (!required) {
+      return null;
+    }
+
+    return {
+      message: `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
+      name,
+      status: "warn",
+    };
+  }
+
+  if (!valid(version)) {
+    return {
+      message: `${packageName} reports an unrecognised version (${version}); Ultracite ${packageJson.version} was verified against ${range}`,
+      name,
+      status: "warn",
+    };
+  }
+
+  if (satisfies(version, range, { includePrerelease: true })) {
+    return {
+      message: `${packageName} ${version} satisfies ${range}`,
+      name,
+      status: "pass",
+    };
+  }
+
+  if (gtr(version, range, { includePrerelease: true })) {
+    return {
+      message: `${packageName} ${version} is newer than Ultracite ${packageJson.version} supports (${range}) — update Ultracite once a release supports it`,
+      name,
+      status: "warn",
+    };
+  }
+
+  return {
+    message: `${packageName} ${version} is older than Ultracite ${packageJson.version} requires (${range}) — run \`ultracite upgrade\``,
+    name,
+    status: "fail",
   };
 };
 
@@ -386,10 +453,14 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
 // Build linter-specific check list
 // ---------------------------------------------------------------------------
 
-const getChecksForLinter = (
-  linter: Linter
-): { fn: () => DiagnosticCheck; name: string }[] => {
-  const checks: { fn: () => DiagnosticCheck; name: string }[] = [];
+interface CheckEntry {
+  // null means the check doesn't apply to this project and is skipped.
+  fn: () => DiagnosticCheck | null;
+  name: string;
+}
+
+const getChecksForLinter = (linter: Linter): CheckEntry[] => {
+  const checks: CheckEntry[] = [];
 
   switch (linter) {
     case "biome": {
@@ -397,6 +468,10 @@ const getChecksForLinter = (
         {
           fn: () => checkToolInstallation("biome", true),
           name: "Biome installation",
+        },
+        {
+          fn: () => checkToolVersion("@biomejs/biome", true),
+          name: "Biome version",
         },
         { fn: checkBiomeConfig, name: BIOME_CHECK }
       );
@@ -408,15 +483,27 @@ const getChecksForLinter = (
           fn: () => checkToolInstallation("eslint", true),
           name: "ESLint installation",
         },
+        {
+          fn: () => checkToolVersion("eslint", true),
+          name: "ESLint version",
+        },
         { fn: checkEslintConfig, name: ESLINT_CHECK },
         {
           fn: () => checkToolInstallation("prettier", true),
           name: "Prettier installation",
         },
+        {
+          fn: () => checkToolVersion("prettier", true),
+          name: "Prettier version",
+        },
         { fn: checkPrettierConfig, name: PRETTIER_CHECK },
         {
           fn: () => checkToolInstallation("stylelint", false),
           name: "Stylelint installation",
+        },
+        {
+          fn: () => checkToolVersion("stylelint", false),
+          name: "Stylelint version",
         },
         { fn: checkStylelintConfig, name: STYLELINT_CHECK }
       );
@@ -428,10 +515,18 @@ const getChecksForLinter = (
           fn: () => checkToolInstallation("oxlint", true),
           name: "Oxlint installation",
         },
+        {
+          fn: () => checkToolVersion("oxlint", true),
+          name: "Oxlint version",
+        },
         { fn: checkOxlintConfig, name: OXLINT_CHECK },
         {
           fn: () => checkToolInstallation("oxfmt", true),
           name: "oxfmt installation",
+        },
+        {
+          fn: () => checkToolVersion("oxfmt", true),
+          name: "oxfmt version",
         },
         { fn: checkOxfmtConfig, name: OXFMT_CHECK }
       );
@@ -458,29 +553,34 @@ const getChecksForLinter = (
 // Main doctor function
 // ---------------------------------------------------------------------------
 
-export const doctor = (): void => {
-  intro(`Ultracite v${packageJson.version} Doctor`);
+/**
+ * Run every diagnostic that applies to the detected toolchain. Shared with
+ * `ultracite upgrade`, which verifies the project the same way once the
+ * dependencies are synced.
+ */
+export const runDiagnostics = (linter: Linter): DiagnosticCheck[] => {
+  const checks: DiagnosticCheck[] = [];
 
-  const linter = detectLinter();
-
-  if (!linter) {
-    log.error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
-    outro(DOCTOR_COMPLETE);
-    throw new Error("Doctor checks failed");
+  for (const { fn } of getChecksForLinter(linter)) {
+    const check = fn();
+    if (check) {
+      checks.push(check);
+    }
   }
 
-  log.info(`Detected linter: ${linter}`);
+  return checks;
+};
 
-  const s = spinner();
-  s.start("Running diagnostics...");
+export interface DiagnosticSummary {
+  failCount: number;
+  passCount: number;
+  warnCount: number;
+}
 
-  const checksToRun = getChecksForLinter(linter);
-  const checks: DiagnosticCheck[] = checksToRun.map(({ fn }) => fn());
-
-  s.stop("Diagnostics complete.");
-
+/** Print each check and its summary line; returns the counts for the caller. */
+export const reportDiagnostics = (
+  checks: DiagnosticCheck[]
+): DiagnosticSummary => {
   for (const check of checks) {
     if (check.status === "pass") {
       log.success(check.message);
@@ -499,10 +599,39 @@ export const doctor = (): void => {
     `Summary: ${passCount} passed, ${warnCount} warnings, ${failCount} failed`
   );
 
-  if (failCount > 0) {
-    log.error("Some checks failed. Run 'ultracite init' to fix issues.");
+  return { failCount, passCount, warnCount };
+};
+
+export const doctor = (): void => {
+  intro(`Ultracite v${packageJson.version} Doctor`);
+
+  const linter = detectLinter();
+
+  if (!linter) {
+    log.error(
+      "No linter configuration found. Run `ultracite init` to set up a linter."
+    );
     outro(DOCTOR_COMPLETE);
-    throw new Error("Doctor checks failed");
+    throw new Error(DOCTOR_FAILED);
+  }
+
+  log.info(`Detected linter: ${linter}`);
+
+  const s = spinner();
+  s.start("Running diagnostics...");
+
+  const checks = runDiagnostics(linter);
+
+  s.stop("Diagnostics complete.");
+
+  const { failCount, warnCount } = reportDiagnostics(checks);
+
+  if (failCount > 0) {
+    log.error(
+      "Some checks failed. Run 'ultracite upgrade' for version mismatches or 'ultracite init' for configuration issues."
+    );
+    outro(DOCTOR_COMPLETE);
+    throw new Error(DOCTOR_FAILED);
   }
 
   if (warnCount > 0) {

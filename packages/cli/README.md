@@ -23,7 +23,8 @@ The interactive setup guides you through choosing your formatter/linter, framewo
 | `ultracite init` | Initialize Ultracite in the current directory (interactive by default). |
 | `ultracite check [files...]` | Lint without writing changes. Unknown flags are passed through to the underlying linter. |
 | `ultracite fix [files...]` | Lint and auto-fix. Unknown flags are passed through to the underlying linter. |
-| `ultracite doctor` | Verify your Ultracite setup and diagnose configuration issues. |
+| `ultracite doctor` | Verify your Ultracite setup and diagnose configuration issues, including linter version mismatches. |
+| `ultracite upgrade` | Update Ultracite and reinstall your linter toolchain at the versions it supports. |
 
 `check` and `fix` accept an optional list of files or globs; omit them to run against the whole project. Add `-v` / `--version` or `-h` / `--help` for CLI details.
 

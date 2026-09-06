@@ -126,3 +126,24 @@ The `doctor` command checks your setup for issues and provides recommendations. 
 ```bash title="Terminal"
 npx ultracite doctor
 ```
+
+Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt. A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
+
+### Upgrading
+
+Ultracite's presets are pinned to specific linter releases, so bumping `ultracite` on its own can leave the linter behind. The `upgrade` command moves both together:
+
+```bash title="Terminal"
+npx ultracite upgrade
+```
+
+It:
+
+1. Installs the latest `ultracite` release and prints a link to the release notes between your previous and new versions.
+2. Hands off to the freshly installed CLI, so the rest of the upgrade uses the versions that release was verified with rather than the ones baked into the older copy.
+3. Reinstalls your toolchain at those versions — Biome; ESLint, Prettier, Stylelint and every plugin the preset imports; or Oxlint and Oxfmt. Optional extras you've already opted into (framework plugins, Oxlint JS plugins, `oxlint-tsgolint`) are bumped too; ones you never installed are left alone.
+4. Runs the same diagnostics as `doctor` and exits non-zero if anything still fails.
+
+Your configuration files are never rewritten. If the release notes call out preset changes, re-run `npx ultracite init` to regenerate them.
+
+Pass `--pm <pm>` to choose the package manager when it can't be detected from a lockfile.

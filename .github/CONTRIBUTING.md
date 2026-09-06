@@ -72,6 +72,17 @@ We use [Changesets](https://github.com/changesets/changesets) to manage versions
 - Performance improvements
 - Documentation updates that affect usage
 
+**Bumping a linter or formatter version:**
+
+Every release is verified against the toolchain versions in `packages/cli/package.json`: the exact `@biomejs/biome` dev dependency and the plugin versions that `ultracite init` installs, plus the optional `peerDependencies` ranges for `@biomejs/biome`, `eslint`, `prettier`, `stylelint`, `oxlint` and `oxfmt`. Those ranges are what package managers warn against and what `ultracite doctor` checks, so they must reflect the oldest tool release the presets actually work with.
+
+When a bump enables rules (or config options) that older tool releases don't know about:
+
+1. Raise the matching `peerDependencies` range to the new minimum.
+2. State the new minimum in the changeset, on its own line, e.g. `Requires Biome >= 2.5.0` — users on an older tool get a hard "unknown key" crash rather than a warning, so it must be impossible to miss in the changelog.
+
+If the bump adds no new rules, say so in the changeset ("the peer range stays at ...") so readers know no action is needed.
+
 **When NOT to create a changeset:**
 
 - Internal refactoring with no user-facing changes

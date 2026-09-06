@@ -70,6 +70,7 @@
     "magicast": "^0.5.4",
     "nypm": "^0.6.9",
     "resolve.exports": "^2.0.3",
+    "semver": "^7.7.5",
     "string-width": "^8.2.2",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
@@ -85,6 +86,7 @@
     "@tanstack/eslint-plugin-start": "^0.1.0",
     "@types/bun": "^1.4.0",
     "@types/node": "^25.9.2",
+    "@types/semver": "^7.8.0",
     "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.69.0",
     "@typescript-eslint/utils": "^8.69.0",
@@ -128,14 +130,30 @@
     "stylelint-prettier": "^5.0.3"
   },
   "peerDependencies": {
-    "oxfmt": ">=0.1.0",
-    "oxlint": "^1.79.0"
+    "@biomejs/biome": "^2.5.0",
+    "eslint": "^10.0.0",
+    "oxfmt": ">=0.40.0",
+    "oxlint": "^1.79.0",
+    "prettier": "^3.0.0",
+    "stylelint": "^17.0.0"
   },
   "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
     "oxfmt": {
       "optional": true
     },
     "oxlint": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    },
+    "stylelint": {
       "optional": true
     }
   },

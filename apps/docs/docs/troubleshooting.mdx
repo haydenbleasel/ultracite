@@ -13,6 +13,20 @@ Also ensure there's no conflicting formatter or linter extension enabled. If you
 
 You may need to disable VS Code's built-in Format On Save if another formatter is grabbing the file. Try running the "Format Document" command manually and see if the correct formatter is used or if any error appears.
 
+## "Found an unknown key `...`" / "Biome exited because the configuration resulted in errors."
+
+Your linter is older than the Ultracite release you're on. Each Ultracite release enables rules from a specific linter version, and Biome, ESLint and Oxlint all reject a config that names a rule they don't have yet — so bumping `ultracite` without bumping the linter fails on the next `check` or `fix`. ESLint reports this as `Definition for rule '...' was not found` or a plugin load error; Oxlint as an unknown rule or plugin.
+
+Run the upgrade command, which installs the linter versions the current release was verified with:
+
+```bash title="Terminal"
+npx ultracite upgrade
+```
+
+`npx ultracite doctor` reports the same mismatch (as a failed version check) without changing anything. Ultracite also declares these versions as optional peer dependencies, so your package manager warns on install when they drift.
+
+If the versions already line up, the stale rule usually comes from your own overrides — check your `biome.jsonc` (or ESLint/Oxlint config) for a rule that was renamed or moved between linter releases.
+
 ## "I installed Ultracite, but VS Code still uses my old linter."
 
 Ensure you removed or turned off your old configs. For example, if you have leftover `.eslintrc`, `.prettierrc`, or `biome.jsonc` files from a previous setup, VS Code extensions might still pick them up and cause duplicate diagnostics.

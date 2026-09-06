@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   buildUnresolvableBiomeConfigMessage,
   canResolveUltracite,
+  findInstalledPackage,
   findUnresolvableBiomeConfig,
 } from "../src/config-resolution";
 import type { ConfigFileSystem } from "../src/config-resolution";
@@ -167,5 +168,43 @@ describe("config-resolution", () => {
     expect(message).toContain("ultracite/biome/core");
     expect(message).toContain("/app");
     expect(message).toContain("install");
+  });
+
+  describe("findInstalledPackage", () => {
+    test("reads the manifest of a package in the nearest node_modules", () => {
+      writeFile(
+        "node_modules/@biomejs/biome/package.json",
+        JSON.stringify({ name: "@biomejs/biome", version: "2.5.12" })
+      );
+
+      expect(
+        findInstalledPackage(
+          "@biomejs/biome",
+          path.join(PROJECT, "packages/app"),
+          fileSystem
+        )
+      ).toMatchObject({
+        dir: path.join(PROJECT, "node_modules/@biomejs/biome"),
+        manifest: { version: "2.5.12" },
+      });
+    });
+
+    test("normalises a string bin to the record form", () => {
+      writeFile(
+        "node_modules/ultracite/package.json",
+        JSON.stringify({ bin: "dist/index.js", version: "7.11.0" })
+      );
+
+      expect(
+        findInstalledPackage("ultracite", PROJECT, fileSystem)?.manifest.bin
+      ).toEqual({ ultracite: "dist/index.js" });
+    });
+
+    test("returns null when the package is missing or unreadable", () => {
+      expect(findInstalledPackage("oxlint", PROJECT, fileSystem)).toBeNull();
+
+      writeFile("node_modules/oxlint/package.json", "not json");
+      expect(findInstalledPackage("oxlint", PROJECT, fileSystem)).toBeNull();
+    });
   });
 });

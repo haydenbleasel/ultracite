@@ -5,6 +5,7 @@ import process from "node:process";
 import { parse } from "jsonc-parser";
 import { exports as resolvePackageExports } from "resolve.exports";
 import type { Package } from "resolve.exports";
+import { z } from "zod";
 
 import { biomeConfigNames, exists } from "./utils";
 import type { Linter } from "./utils";
@@ -55,14 +56,71 @@ const walkUp = <T>(
   }
 };
 
-const findUltracitePackage = (
+const findPackageDir = (
+  name: string,
   startDir: string,
   fs: ConfigFileSystem
 ): string | null =>
   walkUp(startDir, (dir) => {
-    const packageDir = path.join(dir, "node_modules", PACKAGE_NAME);
+    const packageDir = path.join(dir, "node_modules", name);
     return fs.exists(path.join(packageDir, "package.json")) ? packageDir : null;
   });
+
+const findUltracitePackage = (
+  startDir: string,
+  fs: ConfigFileSystem
+): string | null => findPackageDir(PACKAGE_NAME, startDir, fs);
+
+// The manifest fields the version and hand-off checks read; everything else
+// in an installed package.json is irrelevant here. A string `bin` is npm's
+// shorthand for a single executable named after the package, so it's
+// normalised to the record form at the parse boundary.
+const installedPackageManifestSchema = (name: string) =>
+  z.looseObject({
+    bin: z
+      .union([
+        z.string().transform((bin) => ({ [name]: bin })),
+        z.record(z.string(), z.string()),
+      ])
+      .optional(),
+    version: z.string().optional(),
+  });
+
+export interface InstalledPackage {
+  dir: string;
+  manifest: {
+    bin?: Record<string, string>;
+    version?: string;
+  };
+}
+
+/**
+ * Locate a package the way the linters do — through the nearest node_modules
+ * walking up from `cwd` — and read its manifest. Returns null when it isn't
+ * installed in the project or its package.json can't be parsed. Like
+ * `resolveFrom`, this deliberately avoids `require.resolve`, which under Bun
+ * can fall back to a global cache and report packages the project lacks.
+ */
+export const findInstalledPackage = (
+  name: string,
+  cwd = process.cwd(),
+  fs: ConfigFileSystem = nodeFileSystem
+): InstalledPackage | null => {
+  const dir = findPackageDir(name, cwd, fs);
+
+  if (!dir) {
+    return null;
+  }
+
+  try {
+    const manifest = installedPackageManifestSchema(name).safeParse(
+      JSON.parse(fs.readFile(path.join(dir, "package.json")))
+    );
+    return manifest.success ? { dir, manifest: manifest.data } : null;
+  } catch {
+    return null;
+  }
+};
 
 /**
  * Resolve a package specifier the way Biome/ESLint/Oxlint do: through the
