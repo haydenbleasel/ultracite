@@ -18,6 +18,11 @@ const ULTRACITE_PACKAGE_JSON = JSON.stringify({
   name: "ultracite",
 });
 
+// The CLI builds paths with path.join, so on Windows they arrive with
+// backslashes. Normalise before matching so the mocks work on every OS.
+const toPosixPath = (filePath: string): string =>
+  String(filePath).replaceAll("\\", "/");
+
 const isNodeModulesPath = (filePath: string): boolean =>
   filePath.includes("node_modules");
 
@@ -43,7 +48,7 @@ const mockInstalledVersions = (versions: Record<string, string>) => {
   }));
   mock.module("node:fs", () => ({
     accessSync: mock((path: string) => {
-      const p = String(path);
+      const p = toPosixPath(path);
       const match =
         /node_modules\/(?<name>@?[^/]+(?:\/[^/]+)?)\/package\.json$/u.exec(p);
       const name = match?.groups?.name;
@@ -53,7 +58,7 @@ const mockInstalledVersions = (versions: Record<string, string>) => {
     }),
     existsSync: mock(() => true),
     readFileSync: mock((path: string) => {
-      const p = String(path);
+      const p = toPosixPath(path);
       for (const [name, version] of Object.entries(versions)) {
         if (p.includes(`node_modules/${name}/package.json`)) {
           return JSON.stringify({ name, version });

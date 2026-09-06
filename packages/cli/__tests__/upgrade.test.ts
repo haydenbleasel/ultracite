@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, mock, test } from "bun:test";
+import path from "node:path";
 import process from "node:process";
 
 import * as nypm from "nypm";
@@ -247,7 +248,7 @@ describe("upgrade", () => {
     const [[command, args, options]] = harness.spawnSync.mock.calls;
     expect(command).toBe(process.execPath);
     expect(args).toEqual([
-      "/project/node_modules/ultracite/dist/index.js",
+      path.join("/project/node_modules/ultracite", "dist/index.js"),
       "upgrade",
       "--skip-self",
       "--pm",
