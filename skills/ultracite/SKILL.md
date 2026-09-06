@@ -5,7 +5,7 @@ description: "Ultracite is a zero-config linting and formatting preset for JavaS
 
 # Ultracite
 
-Zero-config linting and formatting for JS/TS projects. Supports three linter backends: **Biome** (recommended), **ESLint** + Prettier + Stylelint, and **Oxlint** + Oxfmt.
+Zero-config linting and formatting for JS/TS projects. Supports three linter backends: **Oxlint** + Oxfmt (recommended), **Biome**, and **ESLint** + Prettier + Stylelint.
 
 ## Detecting Ultracite
 
@@ -53,7 +53,7 @@ bunx ultracite init \
 **Flags:**
 
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun` | `deno` | `nub` | `aube`
-- `--linter` — `biome` (recommended) | `eslint` | `oxlint`
+- `--linter` — `oxlint` (recommended) | `biome` | `eslint`
 - `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `cursor` | `windsurf` | `codebuddy` | `antigravity` | `bob` | `kiro` | `trae` | `void` | `zed`
 - `--agents` — `universal` (writes `AGENTS.md`) | `claude` | `codex` | `copilot` | `cline` | `amp` | `gemini` | `cursor-cli` + 34 more (41 agents supported)
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest`

@@ -1114,16 +1114,16 @@ export const initialize = async (flags?: InitializeFlags) => {
           message: "Which linter do you want to use?",
           options: [
             {
-              label: "Biome (Recommended)",
+              label: "Oxlint + Oxfmt (Recommended)",
+              value: "oxlint",
+            },
+            {
+              label: "Biome",
               value: "biome",
             },
             {
               label: "ESLint + Prettier + Stylelint",
               value: "eslint",
-            },
-            {
-              label: "Oxlint + Oxfmt",
-              value: "oxlint",
             },
           ],
         });
