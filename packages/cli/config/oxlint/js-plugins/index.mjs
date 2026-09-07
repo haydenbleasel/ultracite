@@ -1,5 +1,7 @@
 import { defineConfig } from "oxlint";
 
+import { githubFilenameRegex } from "../../shared/filenames.mjs";
+
 // eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
 // run through oxlint's JS plugin support to close the gap with the ESLint
 // preset and to add React Doctor's extra checks. This preset is opt-in: extend
@@ -94,7 +96,9 @@ const config = defineConfig({
     "github/async-currenttarget": "error",
     "github/async-preventdefault": "error",
     "github/authenticity-token": "error",
-    "github/filenames-match-regex": "error",
+    // Keep filename enforcement enabled while accepting TanStack Router's
+    // documented file-route grammar when one of its routing tokens is present.
+    "github/filenames-match-regex": ["error", githubFilenameRegex],
     "github/get-attribute": "error",
     "github/js-class-name": "error",
     "github/no-blur": "error",
