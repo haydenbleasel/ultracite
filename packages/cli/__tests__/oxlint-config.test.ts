@@ -531,7 +531,9 @@ describe("oxlint js-plugins config", () => {
   // Regression guard for #799: TanStack route filenames (`__root.tsx`,
   // `$.tsx`, `posts.$postId.tsx`) must pass github/filenames-match-regex
   // inside route directories, while the rule keeps rejecting non-kebab-case
-  // names everywhere else.
+  // names everywhere else. The fixture deliberately omits the tanstack
+  // preset: in a non-TanStack project, core's unicorn/filename-case still
+  // flags `routes/BadName.tsx`, so the override does not open a bypass.
   test("route override exempts route files but not other files", () => {
     const cliDir = path.join(import.meta.dirname, "..");
     const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
@@ -552,12 +554,20 @@ describe("oxlint js-plugins config", () => {
       { cwd: cliDir }
     );
     const output = result.stdout.toString() + result.stderr.toString();
-    const flagged = output
-      .split("\n")
-      .filter((line) => line.includes("github(filenames-match-regex)"))
-      .map((line) => path.basename(line.split(":")[0] ?? ""));
+    const flaggedBy = (rule: string) =>
+      output
+        .split("\n")
+        .filter((line) => line.includes(rule))
+        .map((line) => path.basename(line.split(":")[0] ?? ""))
+        .toSorted();
 
-    expect(flagged).toEqual(["Button.test.tsx"]);
+    expect(flaggedBy("github(filenames-match-regex)")).toEqual([
+      "Button.test.tsx",
+    ]);
+    expect(flaggedBy("unicorn(filename-case)")).toEqual([
+      "BadName.tsx",
+      "Button.test.tsx",
+    ]);
   });
 
   for (const { plugin, prefix } of JS_PLUGINS) {
