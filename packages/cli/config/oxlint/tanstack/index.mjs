@@ -10,10 +10,6 @@ export default defineConfig({
         // No declaration order satisfies the rule, and `tsc` still catches
         // real temporal dead zone crashes (TS2448).
         "no-use-before-define": "off",
-        // Route option types are order-sensitive (`head`/`component` infer
-        // `loaderData` from properties declared before them), so alphabetical
-        // ordering conflicts with tanstack-start-route-property-order.
-        "sort-keys": "off",
         "unicorn/filename-case": "off",
       },
     },
@@ -25,4 +21,16 @@ export default defineConfig({
       },
     },
   ],
+  rules: {
+    // TanStack option objects are order-sensitive. TypeScript infers the
+    // generic parameters of `createFileRoute`, `useMutation`,
+    // `mutationOptions`, `useInfiniteQuery` etc. from context-sensitive
+    // callbacks in source order, so alphabetical sorting breaks inference:
+    // `head`/`component` lose `loaderData`, and `onError`/`onSettled` see
+    // the `onMutate` context as `{}`. Query and mutation options are declared
+    // anywhere (hooks, components, colocated files), so a path-scoped
+    // exemption cannot cover them. The TanStack ESLint plugins'
+    // `*-property-order` rules enforce the inference-safe order instead.
+    "sort-keys": "off",
+  },
 });

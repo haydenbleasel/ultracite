@@ -403,6 +403,12 @@ describe("oxlint tanstack config", () => {
     expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
   });
 
+  test("disables sort-keys for all files", async () => {
+    const config = await readOxlintConfig("tanstack");
+
+    expect(config.rules?.["sort-keys"]).toBe("off");
+  });
+
   test("keeps routeTree.gen.ts filename-case override", async () => {
     const config = await readOxlintConfig("tanstack");
 
