@@ -2,4 +2,4 @@
 "ultracite": patch
 ---
 
-Keep `github/filenames-match-regex` enabled while allowing TanStack Router's documented file-route syntax, including `__root`, dynamic and splat segments, pathless and non-nested routes, escaped characters, optional params, and braced param patterns. Ordinary filenames keep the existing GitHub convention, and the same regex is used by the Oxlint and ESLint presets.
+Disable `github/filenames-match-regex` for file-based route directories (`**/routes/**`) in the oxlint js-plugins preset, matching the existing `unicorn/filename-case` exemption in the TanStack preset. TanStack Router filenames such as `__root.tsx`, `$.tsx`, and `posts.$postId.tsx` no longer fail the GitHub filename rule. Resolves #799.

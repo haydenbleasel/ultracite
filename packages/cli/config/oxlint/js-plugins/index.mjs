@@ -1,7 +1,5 @@
 import { defineConfig } from "oxlint";
 
-import { githubFilenameRegex } from "../../shared/filenames.mjs";
-
 // eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
 // run through oxlint's JS plugin support to close the gap with the ESLint
 // preset and to add React Doctor's extra checks. This preset is opt-in: extend
@@ -84,6 +82,21 @@ const config = defineConfig({
         "sonarjs/no-duplicate-string": "off",
       },
     },
+    {
+      files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      rules: {
+        // File-based routers (TanStack Router, React Router) encode routing
+        // in the filename: `__root.tsx`, `$.tsx`, `posts.$postId.tsx`,
+        // `_layout.tsx`, `{-$slug}.tsx`. The GitHub kebab-case regex cannot
+        // express that grammar, and the tanstack preset already exempts these
+        // globs from unicorn/filename-case for the same reason (#799). This
+        // lives here rather than in tanstack/js-plugins because selectJsPlugins
+        // filters override rules by plugin; an override naming `github/*` from
+        // a separately extended preset fails config parsing when the github
+        // plugin was not selected.
+        "github/filenames-match-regex": "off",
+      },
+    },
   ],
   rules: {
     // ── github ─────────────────────────────────────────────────────────
@@ -96,9 +109,7 @@ const config = defineConfig({
     "github/async-currenttarget": "error",
     "github/async-preventdefault": "error",
     "github/authenticity-token": "error",
-    // Keep filename enforcement enabled while accepting TanStack Router's
-    // documented file-route grammar when one of its routing tokens is present.
-    "github/filenames-match-regex": ["error", githubFilenameRegex],
+    "github/filenames-match-regex": "error",
     "github/get-attribute": "error",
     "github/js-class-name": "error",
     "github/no-blur": "error",

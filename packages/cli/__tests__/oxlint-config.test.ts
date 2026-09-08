@@ -515,6 +515,51 @@ describe("oxlint js-plugins config", () => {
     expect(output).not.toContain("Failed to load JS plugin");
   });
 
+  test("disables github/filenames-match-regex for route files", async () => {
+    const config = await readOxlintConfig("js-plugins");
+
+    const routeOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
+        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+    );
+
+    expect(routeOverride).toBeDefined();
+    expect(routeOverride?.rules?.["github/filenames-match-regex"]).toBe("off");
+  });
+
+  // Regression guard for #799: TanStack route filenames (`__root.tsx`,
+  // `$.tsx`, `posts.$postId.tsx`) must pass github/filenames-match-regex
+  // inside route directories, while the rule keeps rejecting non-kebab-case
+  // names everywhere else.
+  test("route override exempts route files but not other files", () => {
+    const cliDir = path.join(import.meta.dirname, "..");
+    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "route-filenames"
+    );
+
+    const result = Bun.spawnSync(
+      [
+        oxlintBin,
+        "-c",
+        path.join(fixtureDir, "entry.mjs"),
+        "--format=unix",
+        path.join(fixtureDir, "src"),
+      ],
+      { cwd: cliDir }
+    );
+    const output = result.stdout.toString() + result.stderr.toString();
+    const flagged = output
+      .split("\n")
+      .filter((line) => line.includes("github(filenames-match-regex)"))
+      .map((line) => path.basename(line.split(":")[0] ?? ""));
+
+    expect(flagged).toEqual(["Button.test.tsx"]);
+  });
+
   for (const { plugin, prefix } of JS_PLUGINS) {
     test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
       const config = await readOxlintConfig("js-plugins");
