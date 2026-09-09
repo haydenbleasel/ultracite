@@ -168,7 +168,12 @@ export default defineConfig({
     "no-undefined": "off",
     "no-underscore-dangle": "off",
     "no-unexpected-multiline": "error",
-    "no-unmodified-loop-condition": "error",
+    // Each branch of a ternary in a loop condition must be modified inside
+    // the loop, not just the expression as a whole.
+    "no-unmodified-loop-condition": [
+      "error",
+      { checkConditionalExpressions: true },
+    ],
     "no-unneeded-ternary": "error",
     "no-unreachable": "error",
     "no-unreachable-loop": "error",

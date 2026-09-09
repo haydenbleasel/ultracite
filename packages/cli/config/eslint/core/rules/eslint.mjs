@@ -24,6 +24,12 @@ const overrideRules = {
   "no-ternary": "off",
   "no-undefined": "off",
   "no-underscore-dangle": "off",
+  // Each branch of a ternary in a loop condition must be modified inside
+  // the loop, not just the expression as a whole.
+  "no-unmodified-loop-condition": [
+    "error",
+    { checkConditionalExpressions: true },
+  ],
   // Avoid conflict with @typescript-eslint/no-floating-promises
   "no-void": ["error", { allowAsStatement: true }],
   "one-var": ["error", "never"],

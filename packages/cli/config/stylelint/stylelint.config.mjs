@@ -34,6 +34,7 @@ const config = {
     "relative-selector-nesting-notation": "explicit",
     "selector-no-deprecated": true,
     "selector-no-invalid": true,
+    "selector-no-unmatchable": true,
     "selector-pseudo-class-no-unknown": [
       true,
       {
