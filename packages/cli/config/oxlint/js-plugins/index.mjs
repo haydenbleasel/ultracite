@@ -82,6 +82,21 @@ const config = defineConfig({
         "sonarjs/no-duplicate-string": "off",
       },
     },
+    {
+      files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      rules: {
+        // File-based routers (TanStack Router, React Router) encode routing
+        // in the filename: `__root.tsx`, `$.tsx`, `posts.$postId.tsx`,
+        // `_layout.tsx`, `{-$slug}.tsx`. The GitHub kebab-case regex cannot
+        // express that grammar, and the tanstack preset already exempts these
+        // globs from unicorn/filename-case for the same reason (#799). This
+        // lives here rather than in tanstack/js-plugins because selectJsPlugins
+        // filters override rules by plugin; an override naming `github/*` from
+        // a separately extended preset fails config parsing when the github
+        // plugin was not selected.
+        "github/filenames-match-regex": "off",
+      },
+    },
   ],
   rules: {
     // ── github ─────────────────────────────────────────────────────────
