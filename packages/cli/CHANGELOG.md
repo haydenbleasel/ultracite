@@ -1,3 +1,13 @@
+## 7.11.1
+
+### Patch Changes
+
+- 24b2797: Update oxfmt to 0.67.0 and re-target the markdown `:::` fence patch to the new dist chunk. The release changes no options; it fixes CSS/SCSS/Less comment preservation and a few JSDoc-cast edge cases in member chains.
+- 24b2797: Update oxlint to 1.82.0. The release adds and removes no rules, so the presets are unchanged apart from one new option: `no-unmodified-loop-condition` now runs with `checkConditionalExpressions: true` in the oxlint and ESLint core presets, so each branch of a ternary in a loop condition must be modified inside the loop rather than only the expression as a whole.
+- 24b2797: Update the ESLint family: `@angular-eslint/eslint-plugin` 22.5, `@typescript-eslint/*` 8.70, `eslint-plugin-solid` 0.18, `eslint-plugin-vue` 10.11, `eslint-plugin-jsdoc` 64.3.8, `eslint-plugin-cypress` 7.0.2, `@darraghor/eslint-plugin-nestjs-typed` 7.5.2 and `prettier-plugin-astro` 1.0. The dynamic presets pick up the seven new rules automatically: `@typescript-eslint/no-generated-empty-object-type`, `@angular-eslint/reactive-context-must-read-signal`, `vue/no-shadow-native-events`, and Solid's `no-boolean-enumerated-attribute`, `no-store-mutation-outside-setter`, `no-unused-signal` and `no-write-in-pure-computation`. Note that `prettier-plugin-astro` 1.0 is a rewrite on the Astro 7 Rust compiler (Node 22.12+); expect whitespace diffs on first run and mirror any custom `compressHTML` via its new `astroCompressHTML` option.
+- 24b2797: Refresh the stylelint lock to 17.15.0 and enable its new `selector-no-unmatchable` rule, which flags selectors that can never match (for example `label:checked`, `::before:first-child` or `:is(::before)`).
+- a71dda4: Stop sorting object keys across the whole TanStack presets, not just route files. TanStack Query mutation options are order-sensitive too: TypeScript infers the `onMutate` context from context-sensitive callbacks in source order, so moving `onError`/`onSettled` above `onMutate` turns the context into `{}` and `ultracite fix` broke type-correct code (`TS2339: Property '...' does not exist on type '{}'`). Mutation and query options live anywhere (hooks, components, colocated files), so the route-file exemption could not cover them. `ultracite/oxlint/tanstack` now sets `sort-keys` to `off` and `ultracite/biome/tanstack` now sets `useSortedKeys` to `off` for all files.
+- a9db61c: Disable `github/filenames-match-regex` for file-based route directories (`**/routes/**`) in the oxlint js-plugins preset, matching the existing `unicorn/filename-case` exemption in the TanStack preset. TanStack Router filenames such as `__root.tsx`, `$.tsx`, and `posts.$postId.tsx` no longer fail the GitHub filename rule. Resolves #799.
 ## 7.11.0
 
 ### Minor Changes
