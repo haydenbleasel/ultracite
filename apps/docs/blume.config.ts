@@ -1,9 +1,28 @@
 import { defineConfig } from "blume";
+import type { BlumeConfig } from "blume";
+
+// Cloudflare Web Analytics beacon token (Cloudflare dashboard → Analytics &
+// Logs → Web Analytics → your site → JS snippet). Set it in the Worker's build
+// environment; when it's absent no analytics script is rendered.
+const cloudflareAnalyticsToken = process.env.CLOUDFLARE_WEB_ANALYTICS_TOKEN;
+const analytics: BlumeConfig["analytics"] = cloudflareAnalyticsToken
+  ? {
+      scripts: [
+        {
+          attributes: {
+            "data-cf-beacon": JSON.stringify({
+              token: cloudflareAnalyticsToken,
+            }),
+          },
+          src: "https://static.cloudflareinsights.com/beacon.min.js",
+          strategy: "defer",
+        },
+      ],
+    }
+  : undefined;
 
 export default defineConfig({
-  analytics: {
-    vercel: true,
-  },
+  analytics,
 
   content: {
     sources: [
@@ -22,7 +41,11 @@ export default defineConfig({
   },
 
   deployment: {
-    adapter: "vercel",
+    // Static build served by Cloudflare Workers static assets (see
+    // wrangler.jsonc). Workers Builds doesn't expose a site URL the way Pages
+    // does, so the canonical origin is pinned here for the sitemap and OG
+    // images.
+    site: "https://www.ultracite.ai",
   },
 
   description: "Documentation for Ultracite.",
@@ -51,9 +74,9 @@ export default defineConfig({
     ],
   },
 
-  // Redirects live in public/vercel.json so we can use Vercel wildcard
-  // redirects (e.g. /migrate/:path*). Blume copies public/ into the build
-  // output and leaves an existing vercel.json untouched.
+  // Redirects live in public/_redirects so we can use Cloudflare's wildcard
+  // rules (e.g. /migrate/*). Blume copies public/ into the build output and
+  // leaves an existing _redirects untouched.
 
   theme: {
     accent: "purple",

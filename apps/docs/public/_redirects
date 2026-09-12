@@ -1,0 +1,38 @@
+# Cloudflare redirects (Workers static assets / Pages). Blume ships this file
+# as-is because it's in public/; keep every redirect here.
+/sponsors / 301
+
+# Old root URLs → /docs/*
+/setup /docs/setup 301
+/usage /docs/usage 301
+/configuration /docs/configuration 301
+/languages /docs/languages 301
+/troubleshooting /docs/troubleshooting 301
+/git-hooks /docs/git-hooks 301
+/monorepos /docs/monorepos 301
+/faq /docs/faq 301
+
+/provider/* /docs/provider/:splat 301
+/migrate/* /docs/migrate/:splat 301
+/upgrade/* /docs/upgrade/:splat 301
+
+# AI integrations moved under /docs/ai
+/rules /docs/ai/rules 301
+/skills /docs/ai/skills 301
+/hooks /docs/ai/hooks 301
+/docs/rules /docs/ai/rules 301
+/docs/skills /docs/ai/skills 301
+/docs/hooks /docs/ai/hooks 301
+
+# Retired MCP server pages
+/mcp / 301
+/mcp-server / 301
+/docs/mcp-server / 301
+
+# Legacy pages
+/introduction /docs 301
+/examples /docs/usage 301
+/support /docs/troubleshooting 301
+/preset/core /docs/configuration 301
+/integration/husky /docs/git-hooks 301
+/integration/lefthook /docs/git-hooks 301

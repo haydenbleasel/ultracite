@@ -1,0 +1,53 @@
+name: Deploy
+
+# Builds the docs site (apps/docs) and ships it to Cloudflare Workers. Runs on
+# every push to main, on demand, and from release.yml after a publish so the
+# changelog picks up the new GitHub release.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        name: Install Bun
+        with:
+          bun-version: 1.4.0
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        name: Setup Bun cache
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build docs
+        env:
+          # Changelog is built from GitHub releases; the token avoids rate limits.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Cloudflare Web Analytics beacon token (optional).
+          CLOUDFLARE_WEB_ANALYTICS_TOKEN: ${{ vars.CLOUDFLARE_WEB_ANALYTICS_TOKEN }}
+        run: bunx turbo run build --filter=docs
+
+      - name: Deploy docs to Cloudflare Workers
+        working-directory: apps/docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bun run deploy

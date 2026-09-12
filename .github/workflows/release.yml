@@ -16,6 +16,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
 
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
 
@@ -64,10 +66,10 @@ jobs:
           version-script: npm run changeset version
           publish-script: npm run changeset publish
 
-      - name: Deploy site to Vercel
-        if: steps.changesets.outputs.published == 'true'
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
-        run: bunx vercel --prod --token=$VERCEL_TOKEN
+  # Redeploy the docs site once a release is out so the changelog (built from
+  # GitHub releases) includes it. Pushes to main deploy on their own via deploy.yml.
+  deploy:
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit

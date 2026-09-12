@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ultracite-docs",
+  "compatibility_date": "2026-09-01",
+  // Production hostname, attached as a Workers custom domain (DNS record and
+  // certificate are managed by Cloudflare). Other hostnames redirect here via
+  // zone Redirect Rules.
+  "routes": [{ "pattern": "www.ultracite.ai", "custom_domain": true }],
+  "assets": {
+    "directory": "./dist",
+    // Blume builds directory-style pages (/docs/usage/index.html) and links to
+    // them without a trailing slash; the default auto-trailing-slash mode would
+    // 307 every page to /docs/usage/. Drop it to keep the canonical URLs.
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page",
+  },
+  "observability": {
+    "enabled": true,
+  },
+}
