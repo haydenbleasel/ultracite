@@ -269,6 +269,45 @@ describe("oxlint core config", () => {
   });
 });
 
+describe("oxlint astro config", () => {
+  test("disables prefer-module for Astro files", async () => {
+    const config = await readOxlintConfig("astro");
+
+    const astroOverride = config.overrides?.find(
+      (override: { files?: string[] }) => override.files?.includes("**/*.astro")
+    );
+
+    expect(astroOverride).toBeDefined();
+    expect(astroOverride?.files).toEqual(["**/*.astro"]);
+    expect(astroOverride?.rules?.["unicorn/prefer-module"]).toBe("off");
+  });
+
+  test("allows top-level Response returns in Astro frontmatter", () => {
+    const cliDir = path.join(import.meta.dirname, "..");
+    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "astro-prefer-module"
+    );
+
+    const result = Bun.spawnSync(
+      [
+        oxlintBin,
+        "-c",
+        path.join(fixtureDir, "entry.mjs"),
+        "--format=unix",
+        path.join(fixtureDir, "src", "response.astro"),
+      ],
+      { cwd: cliDir }
+    );
+    const output = result.stdout.toString() + result.stderr.toString();
+
+    expect(result.exitCode).toBe(0);
+    expect(output).not.toContain("unicorn(prefer-module)");
+  });
+});
+
 describe("oxlint vitest config", () => {
   /**
    * prefer-called-once vs prefer-called-times
