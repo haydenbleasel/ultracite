@@ -65,6 +65,12 @@ export const jsPluginSettings = {
   },
 };
 
+// Filename grammar for file-based page routes: one or more kebab-case tokens
+// or bracketed route params (`[slug]`, `[...slug]`, `[[...slug]]`), followed
+// by at most one extra dotted segment (`rss.xml`, `[slug].json`).
+const PAGE_ROUTE_FILENAME_PATTERN =
+  "^(?:\\[\\[\\.\\.\\.[a-z0-9-]+\\]\\]|\\[(?:\\.\\.\\.)?[a-z0-9-]+\\]|[a-z0-9-]+)+(?:\\.[a-z0-9-]+)?$";
+
 const config = defineConfig({
   jsPlugins: jsPluginEntries,
   // Inert until oxlint merges settings from extends; the root config applies
@@ -98,12 +104,16 @@ const config = defineConfig({
       },
     },
     {
-      files: ["**/pages/**/*.{astro,js,ts}"],
+      files: ["**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx}"],
       rules: {
-        // Astro's file-based routing encodes dynamic and rest parameters in
-        // bracketed page filenames (`[slug].astro`, `[...slug].astro`). The
-        // GitHub filename regex cannot express that route grammar (#804).
-        "github/filenames-match-regex": "off",
+        // Astro and Next.js (pages router) encode dynamic, rest and optional
+        // route parameters in bracketed page filenames: `[slug].astro`,
+        // `[...slug].astro`, `[[...slug]].tsx`, `[lang]-[version].astro`
+        // (#804). Rather than switching the rule off, pass a bracket-aware
+        // regex so non-route names in `pages/` (`BadPage.ts`) are still
+        // rejected. Like the default, one extra dotted segment is allowed for
+        // endpoints such as `rss.xml.ts` and `[slug].json.ts`.
+        "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
       },
     },
   ],
