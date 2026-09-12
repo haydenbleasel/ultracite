@@ -570,6 +570,53 @@ describe("oxlint js-plugins config", () => {
     ]);
   });
 
+  test("disables github/filenames-match-regex for Astro page files", async () => {
+    const config = await readOxlintConfig("js-plugins");
+
+    const pagesOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/pages/**/*.{astro,js,ts}")
+    );
+
+    expect(pagesOverride).toBeDefined();
+    expect(pagesOverride?.rules?.["github/filenames-match-regex"]).toBe("off");
+  });
+
+  // Regression guard for #804: Astro page routes use bracketed filenames such
+  // as `[slug].astro` and `[...slug].astro`. The fixture also includes a
+  // malformed filename outside `pages/` to ensure the normal checks remain
+  // active elsewhere.
+  test("exempts Astro page routes but not files outside pages", () => {
+    const cliDir = path.join(import.meta.dirname, "..");
+    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+    const fixtureDir = path.join(
+      import.meta.dirname,
+      "fixtures",
+      "astro-route-filenames"
+    );
+
+    const result = Bun.spawnSync(
+      [
+        oxlintBin,
+        "-c",
+        path.join(fixtureDir, "entry.mjs"),
+        "--format=unix",
+        path.join(fixtureDir, "src"),
+      ],
+      { cwd: cliDir }
+    );
+    const output = result.stdout.toString() + result.stderr.toString();
+    const flaggedBy = (rule: string) =>
+      output
+        .split("\n")
+        .filter((line) => line.includes(rule))
+        .map((line) => path.basename(line.split(":")[0] ?? ""))
+        .toSorted();
+
+    expect(flaggedBy("github(filenames-match-regex)")).toEqual(["BadName.ts"]);
+    expect(flaggedBy("unicorn(filename-case)")).toEqual(["BadName.ts"]);
+  });
+
   for (const { plugin, prefix } of JS_PLUGINS) {
     test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
       const config = await readOxlintConfig("js-plugins");

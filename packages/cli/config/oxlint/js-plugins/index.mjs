@@ -97,6 +97,15 @@ const config = defineConfig({
         "github/filenames-match-regex": "off",
       },
     },
+    {
+      files: ["**/pages/**/*.{astro,js,ts}"],
+      rules: {
+        // Astro's file-based routing encodes dynamic and rest parameters in
+        // bracketed page filenames (`[slug].astro`, `[...slug].astro`). The
+        // GitHub filename regex cannot express that route grammar (#804).
+        "github/filenames-match-regex": "off",
+      },
+    },
   ],
   rules: {
     // ── github ─────────────────────────────────────────────────────────
