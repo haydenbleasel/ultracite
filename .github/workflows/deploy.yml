@@ -9,6 +9,11 @@ on:
   workflow_dispatch:
   workflow_call:
 
+# The GITHUB_TOKEN only reads public releases for the changelog; deploys
+# authenticate to Cloudflare with their own secret.
+permissions:
+  contents: read
+
 concurrency:
   group: deploy-docs
   cancel-in-progress: true
@@ -41,8 +46,6 @@ jobs:
         env:
           # Changelog is built from GitHub releases; the token avoids rate limits.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Cloudflare Web Analytics beacon token (optional).
-          CLOUDFLARE_WEB_ANALYTICS_TOKEN: ${{ vars.CLOUDFLARE_WEB_ANALYTICS_TOKEN }}
         run: bunx turbo run build --filter=docs
 
       - name: Deploy docs to Cloudflare Workers

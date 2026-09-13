@@ -1,29 +1,6 @@
 import { defineConfig } from "blume";
-import type { BlumeConfig } from "blume";
-
-// Cloudflare Web Analytics beacon token (Cloudflare dashboard → Analytics &
-// Logs → Web Analytics → your site → JS snippet). Set it in the Worker's build
-// environment; when it's absent no analytics script is rendered.
-const cloudflareAnalyticsToken = process.env.CLOUDFLARE_WEB_ANALYTICS_TOKEN;
-const analytics: BlumeConfig["analytics"] = cloudflareAnalyticsToken
-  ? {
-      scripts: [
-        {
-          attributes: {
-            "data-cf-beacon": JSON.stringify({
-              token: cloudflareAnalyticsToken,
-            }),
-          },
-          src: "https://static.cloudflareinsights.com/beacon.min.js",
-          strategy: "defer",
-        },
-      ],
-    }
-  : undefined;
 
 export default defineConfig({
-  analytics,
-
   content: {
     sources: [
       // Local docs under docs/ → /docs/* (the marketing homepage owns "/").
