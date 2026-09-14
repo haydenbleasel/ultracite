@@ -1,0 +1,41 @@
+---
+title: Markdown for Agents
+description: Enable Markdown for Agents on the Ultracite documentation site so agents can request Markdown without changing the browser experience.
+---
+
+The documentation site supports Cloudflare's [Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/) content negotiation.
+
+## Enable the feature
+
+Markdown conversion is configured at the Cloudflare zone level because the site is deployed as Workers Static Assets. In the Cloudflare dashboard:
+
+1. Open the `ultracite.ai` zone.
+2. Open **AI Crawl Control**.
+3. Enable **Markdown for Agents**.
+
+The same setting can be enabled with the Cloudflare API by setting `content_converter` to `on` for the zone. This is a one-time zone configuration, not an application build setting.
+
+## Request Markdown
+
+Agents can request a Markdown response by including `text/markdown` in the `Accept` header:
+
+```bash
+curl -i https://www.ultracite.ai/docs \
+  -H "Accept: text/markdown"
+```
+
+The converted response uses `Content-Type: text/markdown; charset=utf-8`. Cloudflare also adds `x-markdown-tokens` when a token estimate is available.
+
+Requests without `Accept: text/markdown` continue to receive the normal HTML response. Cloudflare includes `Accept` in `Vary` for converted responses so Markdown and HTML can be cached separately.
+
+## Verify the deployment
+
+Check both representations after enabling the zone setting:
+
+```bash
+curl -sSI https://www.ultracite.ai/docs
+curl -sSI https://www.ultracite.ai/docs \
+  -H "Accept: text/markdown"
+```
+
+The first response should be HTML. The second should include `Content-Type: text/markdown` and, when available, `x-markdown-tokens`.

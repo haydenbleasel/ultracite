@@ -11,5 +11,6 @@ export default defineMeta({
     "git-hooks",
     "faq",
     "troubleshooting",
+    "markdown-for-agents",
   ],
 });
