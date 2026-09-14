@@ -1,11 +1,9 @@
 name: Deploy
 
-# Builds the docs site (apps/docs) and ships it to Cloudflare Workers. Runs on
-# every push to main, on demand, and from release.yml after a publish so the
-# changelog picks up the new GitHub release.
+# Builds the docs site (apps/docs) and ships it to Cloudflare Workers. Runs
+# from release.yml after a changesets publish so the site and changelog track
+# the published package, and on demand. Plain pushes to main do not deploy.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
   workflow_call:
 

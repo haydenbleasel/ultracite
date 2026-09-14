@@ -67,7 +67,8 @@ jobs:
           publish-script: npm run changeset publish
 
   # Redeploy the docs site once a release is out so the changelog (built from
-  # GitHub releases) includes it. Pushes to main deploy on their own via deploy.yml.
+  # GitHub releases) includes it. This is the only automatic deploy; plain pushes
+  # to main do not ship the site.
   deploy:
     needs: release
     if: needs.release.outputs.published == 'true'
