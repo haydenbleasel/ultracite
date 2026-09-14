@@ -1,6 +1,6 @@
 # Ultracite
 
-**A production-grade, zero-configuration preset for ESLint, Biome, and Oxlint.**
+**The linter and formatter for agentic development.**
 
 Ultracite helps you and your AI models write consistent, type-safe code without the hassle of configuration. Pick your preferred toolchain, run one command, and get hundreds of battle-tested rules wired up in seconds — across single repos and monorepos alike.
 

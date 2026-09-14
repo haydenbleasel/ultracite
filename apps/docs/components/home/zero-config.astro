@@ -2,7 +2,7 @@
 import CodeBlock from "blume/components/content/CodeBlock.astro";
 import Tab from "blume/components/content/Tab.astro";
 import Tabs from "blume/components/content/Tabs.astro";
-import { providerLogos } from "../../lib/logos";
+import { providerLogos, prettierLogo, stylelintLogo } from "../../lib/logos";
 import { providers } from "../../lib/providers";
 import SectionIntro from "./section-intro.astro";
 
@@ -25,13 +25,38 @@ const langFor = (lang: string): string => {
 const rank = (id: string): number => (id === "oxlint" ? 0 : 1);
 const ordered = providers.toSorted((a, b) => rank(a.id) - rank(b.id));
 const defaultProvider = ordered[0]?.id;
+
+const logos = [
+  ...providers.map((provider) => ({
+    name: provider.name.split(" ")[0],
+    src: providerLogos[provider.id],
+  })),
+  { name: "Prettier", src: prettierLogo },
+  { name: "Stylelint", src: stylelintLogo },
+];
 ---
 
 <div class="grid gap-8">
+  <span class="flex justify-center items-center -space-x-1">
+    {
+      logos.map((logo) => (
+        <span class="hp-tt inline-flex" tabindex="0">
+          <img
+            alt={logo.name}
+            class="size-7 overflow-hidden rounded-full object-cover ring-2 ring-background md:size-10 lg:size-12"
+            height="48"
+            src={logo.src}
+            width="48"
+          />
+          <span data-tt>{logo.name}</span>
+        </span>
+      ))
+    }
+  </span>
   <SectionIntro
     description="Hundreds of rules for your framework to optimize your JavaScript / TypeScript code, while still allowing you to customize when needed."
     maxWidth="max-w-xl"
-    title="Zero-config by design"
+    title="Works with your favourite tools"
   />
 
   <div class="flex flex-col items-center justify-center gap-3">
@@ -64,7 +89,10 @@ const defaultProvider = ordered[0]?.id;
   <div class="mx-auto w-full max-w-3xl">
     {
       ordered.map((provider) => (
-        <div data-hp-panel={provider.id} hidden={provider.id !== defaultProvider}>
+        <div
+          data-hp-panel={provider.id}
+          hidden={provider.id !== defaultProvider}
+        >
           <Tabs hash={false} sync={false}>
             {provider.configFiles.map((file) => (
               <Tab class="hp-code p-0!" title={file.name}>
@@ -93,7 +121,10 @@ const defaultProvider = ordered[0]?.id;
 
   const showProvider = (id: string) => {
     for (const button of providerButtons) {
-      button.setAttribute("aria-selected", String(button.dataset.provider === id));
+      button.setAttribute(
+        "aria-selected",
+        String(button.dataset.provider === id),
+      );
     }
     for (const panel of panels) {
       panel.hidden = panel.dataset.hpPanel !== id;
@@ -101,6 +132,8 @@ const defaultProvider = ordered[0]?.id;
   };
 
   for (const button of providerButtons) {
-    button.addEventListener("click", () => showProvider(button.dataset.provider ?? ""));
+    button.addEventListener("click", () =>
+      showProvider(button.dataset.provider ?? ""),
+    );
   }
 </script>

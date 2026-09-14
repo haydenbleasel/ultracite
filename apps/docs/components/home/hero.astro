@@ -1,6 +1,4 @@
 ---
-import { providerLogos, prettierLogo, stylelintLogo } from "../../lib/logos";
-import { providers } from "../../lib/providers";
 import Icon from "./icon.astro";
 import Installer from "./installer.astro";
 
@@ -10,15 +8,6 @@ interface Props {
 }
 
 const { description, version } = Astro.props;
-
-const logos = [
-  ...providers.map((provider) => ({
-    name: provider.name.split(" ")[0],
-    src: providerLogos[provider.id],
-  })),
-  { name: "Prettier", src: prettierLogo },
-  { name: "Stylelint", src: stylelintLogo },
-];
 ---
 
 <div class="grid gap-8 sm:gap-20">
@@ -40,35 +29,17 @@ const logos = [
     <h1
       class="mb-0 max-w-2xl text-balance font-medium text-4xl leading-none tracking-tight md:text-5xl lg:text-6xl"
     >
-      A production-grade, zero-configuration preset for{" "}
-      <span
-        class="inline-flex translate-y-0.5 items-center -space-x-1 md:translate-y-1"
-      >
-        {
-          logos.map((logo) => (
-            <span class="hp-tt inline-flex" tabindex="0">
-              <img
-                alt={logo.name}
-                class="size-7 overflow-hidden rounded-full object-cover ring-2 ring-background md:size-10 lg:size-12"
-                height="48"
-                src={logo.src}
-                width="48"
-              />
-              <span data-tt>{logo.name}</span>
-            </span>
-          ))
-        }
-      </span>
+      The linter and formatter for agentic development
     </h1>
 
     <p
-      class="max-w-xl text-balance text-muted-foreground tracking-tight sm:text-lg"
+      class="max-w-xl text-balance text-muted-foreground tracking-tight sm:text-lg md:text-xl leading-normal"
     >
       {description}
     </p>
 
     <div
-      class="flex w-full max-w-md flex-col items-center gap-2 sm:flex-row"
+      class="mt-4 flex w-full max-w-md flex-col items-center gap-2 sm:flex-row"
     >
       <Installer />
     </div>
