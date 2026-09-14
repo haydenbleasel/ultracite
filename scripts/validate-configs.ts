@@ -6,22 +6,27 @@ const scriptsDir = import.meta.dirname;
 
 const main = async () => {
   console.log("Validating Biome configs...\n");
+
   const biome =
     await $`bun ${path.join(scriptsDir, "validate-biome.ts")}`.nothrow();
 
   console.log("\nValidating ESLint configs...\n");
+
   const eslint =
     await $`bun ${path.join(scriptsDir, "validate-eslint.ts")}`.nothrow();
 
   console.log("\nValidating Oxlint configs...\n");
+
   const oxlint =
     await $`bun ${path.join(scriptsDir, "validate-oxlint.ts")}`.nothrow();
 
   console.log("\nChecking ESLint/oxlint rule parity...\n");
+
   const parityScript = path.join(
     scriptsDir,
     "../packages/cli/scripts/compare-rule-parity.ts"
   );
+
   const parity = await $`bun ${parityScript}`
     .cwd(path.join(scriptsDir, "../packages/cli"))
     .nothrow();

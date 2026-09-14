@@ -73,11 +73,15 @@ import {
 const ultraciteVersion = packageJson.version;
 
 const OPERATION_CANCELLED = "Operation cancelled.";
+
 const LINT_STAGED = "lint-staged";
 
 type Linter = (typeof options.linters)[number];
+
 type Frameworks = (typeof options.frameworks)[number];
+
 type AgentSelection = (typeof options.agents)[number] | "universal";
+
 type EditorSelection = (typeof options.editorConfigs)[number] | "universal";
 
 interface InitializeFlags {
@@ -108,15 +112,19 @@ const buildNoInstallDevDependencies = (
   if (linter === "biome") {
     devDependencies["@biomejs/biome"] = biomeVersion;
   }
+
   if (linter === "eslint") {
     Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
   }
+
   if (linter === "oxlint") {
     devDependencies.oxlint = "latest";
     devDependencies.oxfmt = "latest";
+
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] = "latest";
     }
+
     for (const jsPlugin of jsPlugins) {
       if (isOxlintNpmJsPlugin(jsPlugin)) {
         devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
@@ -129,22 +137,26 @@ const buildNoInstallDevDependencies = (
 
 const removeProjectFile = async (filePath: string): Promise<boolean> => {
   const normalizedPath = filePath.startsWith("./") ? filePath : `./${filePath}`;
+
   if (!exists(normalizedPath)) {
     return false;
   }
 
   const { rm } = await import("node:fs/promises");
   await rm(normalizedPath, { force: true });
+
   return true;
 };
 
 const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   const packageJsonObject = await readPackageJson();
+
   if (!packageJsonObject) {
     return false;
   }
 
   const dependencyNamesToRemove = new Set<string>();
+
   for (const [tool, dependencyNames] of Object.entries(
     dependencyNamesByLinter
   )) {
@@ -154,11 +166,13 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
       }
     }
   }
+
   // Dependencies shared between linters must survive the prune when the
   // selected linter needs them.
   for (const dependencyName of dependencyNamesByLinter[linter]) {
     dependencyNamesToRemove.delete(dependencyName);
   }
+
   // storybook is only in the eslint set as a required peer of
   // eslint-plugin-storybook, but it's a user-facing tool the project may use
   // independently of linting — never prune it.
@@ -173,17 +187,21 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
     "peerDependencies",
   ] as const) {
     const dependencies = nextPackageJson[key];
+
     if (!dependencies) {
       continue;
     }
 
     const dependencyEntries = Object.entries(dependencies);
+
     const nextDependencyEntries = dependencyEntries.filter(
       ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
     );
+
     if (nextDependencyEntries.length !== dependencyEntries.length) {
       changed = true;
     }
+
     const nextDependencies = Object.fromEntries(nextDependencyEntries);
 
     nextPackageJson[key] = nextDependencies;
@@ -193,6 +211,7 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
     delete nextPackageJson.prettier;
     changed = true;
   }
+
   if ("stylelint" in nextPackageJson) {
     delete nextPackageJson.stylelint;
     changed = true;
@@ -206,6 +225,7 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
     "package.json",
     `${JSON.stringify(nextPackageJson, null, 2)}\n`
   );
+
   return true;
 };
 
@@ -231,9 +251,11 @@ export const migrateLinterConfig = async (
     for (const file of eslintConfigNames) {
       filesToRemove.add(file);
     }
+
     for (const file of prettierConfigNames) {
       filesToRemove.add(file);
     }
+
     for (const file of stylelintConfigNames) {
       filesToRemove.add(file);
     }
@@ -250,6 +272,7 @@ export const migrateLinterConfig = async (
     for (const file of oxlintConfigNames) {
       filesToRemove.add(file);
     }
+
     for (const file of oxfmtConfigNames) {
       filesToRemove.add(file);
     }
@@ -261,6 +284,7 @@ export const migrateLinterConfig = async (
     Promise.all([...filesToRemove].map((file) => removeProjectFile(file))),
     prunePackageJsonForLinter(linter),
   ]);
+
   const changed = removedFiles.some(Boolean) || prunedPackageJson;
 
   if (!quiet) {
@@ -293,6 +317,7 @@ export const installDependencies = async (
   if (linter === "biome") {
     packages.push(`@biomejs/biome@${biomeVersion}`);
   }
+
   if (linter === "eslint") {
     packages.push(
       ...Object.entries(buildEslintDevDependencies(frameworks)).map(
@@ -300,23 +325,25 @@ export const installDependencies = async (
       )
     );
   }
+
   if (linter === "oxlint") {
     packages.push(
       "oxlint@latest",
       // Oxlint is only a linter, so we need oxfmt for formatting
       "oxfmt@latest"
     );
+
     // Type-aware linting requires oxlint-tsgolint
     if (typeAware) {
       packages.push("oxlint-tsgolint@latest");
     }
+
     packages.push(
-      ...jsPlugins
-        .filter(isOxlintNpmJsPlugin)
-        .map(
-          (jsPlugin) =>
-            `${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`
-        )
+      ...jsPlugins.flatMap((jsPlugin) =>
+        isOxlintNpmJsPlugin(jsPlugin)
+          ? [`${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`]
+          : []
+      )
     );
   }
 
@@ -340,6 +367,7 @@ export const installDependencies = async (
       frameworks,
       jsPlugins
     );
+
     // Batch devDependencies and scripts into a single read/write
     await updatePackageJson({ devDependencies, scripts });
   }
@@ -360,10 +388,13 @@ export const upsertTsConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("Found tsconfig.json files, updating with strictNullChecks...");
     }
+
     await tsconfig.update();
+
     if (!quiet) {
       s.stop("tsconfig.json files updated.");
     }
+
     return;
   }
 
@@ -395,16 +426,20 @@ export const upsertEditorConfig = async (
     if (!quiet) {
       s.message(`${editor.config.path} found, updating...`);
     }
+
     await editorConfig.update();
+
     if (!quiet) {
       s.stop(`${editor.config.path} updated.`);
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(`${editor.config.path} not found, creating...`);
   }
+
   // create() is a required side effect that must complete before the extension-install branches below
   await editorConfig.create();
 
@@ -424,12 +459,14 @@ export const upsertEditorConfig = async (
 
     try {
       const result = editorConfig.extension(linterExtension);
+
       if (result.status === 0) {
         if (!quiet) {
           s.stop(
             `${editor.config.path} created and ${linterExtension} extension installed.`
           );
         }
+
         return;
       }
     } catch {
@@ -441,6 +478,7 @@ export const upsertEditorConfig = async (
         `${editor.config.path} created. Install ${linterExtension} extension manually.`
       );
     }
+
     return;
   }
 
@@ -471,17 +509,22 @@ export const upsertBiomeConfig = async (
     if (!quiet) {
       s.message("Biome configuration found, updating...");
     }
+
     await biome.update({ frameworks, typeAware });
+
     if (!quiet) {
       s.stop("Biome configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Biome configuration not found, creating...");
   }
+
   await biome.create({ frameworks, typeAware });
+
   if (!quiet) {
     s.stop("Biome configuration created.");
   }
@@ -501,17 +544,22 @@ export const upsertEslintConfig = async (
     if (!quiet) {
       s.message("ESLint configuration found, updating...");
     }
+
     await eslint.update({ frameworks });
+
     if (!quiet) {
       s.stop("ESLint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("ESLint configuration not found, creating...");
   }
+
   await eslint.create({ frameworks });
+
   if (!quiet) {
     s.stop("ESLint configuration created.");
   }
@@ -532,17 +580,22 @@ export const upsertOxlintConfig = async (
     if (!quiet) {
       s.message("Oxlint configuration found, updating...");
     }
+
     await oxlint.update({ frameworks, jsPlugins });
+
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Oxlint configuration not found, creating...");
   }
+
   await oxlint.create({ frameworks, jsPlugins });
+
   if (!quiet) {
     s.stop("Oxlint configuration created.");
   }
@@ -562,17 +615,22 @@ export const upsertPrettierConfig = async (
     if (!quiet) {
       s.message("Prettier configuration found, updating...");
     }
+
     await prettier.update({ frameworks });
+
     if (!quiet) {
       s.stop("Prettier configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Prettier configuration not found, creating...");
   }
+
   await prettier.create({ frameworks });
+
   if (!quiet) {
     s.stop("Prettier configuration created.");
   }
@@ -589,17 +647,22 @@ export const upsertStylelintConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("Stylelint configuration found, updating...");
     }
+
     await stylelint.update();
+
     if (!quiet) {
       s.stop("Stylelint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Stylelint configuration not found, creating...");
   }
+
   await stylelint.create();
+
   if (!quiet) {
     s.stop("Stylelint configuration created.");
   }
@@ -616,17 +679,22 @@ export const upsertOxfmtConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("oxfmt configuration found, updating...");
     }
+
     await oxfmt.update();
+
     if (!quiet) {
       s.stop("oxfmt configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("oxfmt configuration not found, creating...");
   }
+
   await oxfmt.create();
+
   if (!quiet) {
     s.stop("oxfmt configuration created.");
   }
@@ -655,23 +723,29 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Initializing Husky...");
   }
+
   husky.init(packageManager.name);
 
   if (await husky.exists()) {
     if (!quiet) {
       s.message("Pre-commit hook found, updating...");
     }
+
     await husky.update(packageManager.name, useLintStaged);
+
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Pre-commit hook not found, creating...");
   }
+
   await husky.create(packageManager.name, useLintStaged);
+
   if (!quiet) {
     s.stop("Pre-commit hook created.");
   }
@@ -700,17 +774,22 @@ export const initializeLefthook = async (
     if (!quiet) {
       s.message("lefthook.yml found, updating...");
     }
+
     await lefthook.update(packageManager.name);
+
     if (!quiet) {
       s.stop("lefthook.yml updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("lefthook.yml not found, creating...");
   }
+
   await lefthook.create(packageManager.name);
+
   if (!quiet) {
     s.stop("lefthook.yml created.");
   }
@@ -739,17 +818,22 @@ export const initializeLintStaged = async (
     if (!quiet) {
       s.message("lint-staged found, updating...");
     }
+
     await lintStaged.update(packageManager.name);
+
     if (!quiet) {
       s.stop("lint-staged updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("lint-staged not found, creating...");
   }
+
   await lintStaged.create(packageManager.name);
+
   if (!quiet) {
     s.stop("lint-staged created.");
   }
@@ -769,17 +853,22 @@ export const initializePreCommit = async (
     if (!quiet) {
       s.message(".pre-commit-config.yaml found, updating...");
     }
+
     await preCommit.update(packageManager);
+
     if (!quiet) {
       s.stop(".pre-commit-config.yaml updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(".pre-commit-config.yaml not found, creating...");
   }
+
   await preCommit.create(packageManager);
+
   if (!quiet) {
     s.stop(".pre-commit-config.yaml created.");
   }
@@ -804,17 +893,22 @@ export const upsertAgents = async (
     if (!quiet) {
       s.message(`${displayName} found, updating...`);
     }
+
     await agents.update();
+
     if (!quiet) {
       s.stop(`${displayName} updated.`);
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(`${displayName} not found, creating...`);
   }
+
   await agents.create();
+
   if (!quiet) {
     s.stop(`${displayName} created.`);
   }
@@ -866,17 +960,22 @@ export const upsertHooks = async (
     if (!quiet) {
       s.message(`${displayName} hooks found, updating...`);
     }
+
     await hooks.update();
+
     if (!quiet) {
       s.stop(`${displayName} hooks updated.`);
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(`${displayName} hooks not found, creating...`);
   }
+
   await hooks.create();
+
   if (!quiet) {
     s.stop(`${displayName} hooks created.`);
   }
@@ -914,11 +1013,13 @@ export const initialize = async (flags?: InitializeFlags) => {
       if (!quiet) {
         log.info(`Detected lockfile, using ${detected.name}`);
       }
+
       pmInfo = normalizePackageManager(detected);
       pm = pmInfo.name;
     }
 
     let { linter } = opts;
+
     if (linter === undefined) {
       // If quiet mode or other CLI options are provided, default to oxlint only
       const hasOtherCliOptions =
@@ -953,6 +1054,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(linterResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -961,6 +1063,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let { frameworks } = opts;
+
     if (frameworks === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -976,6 +1079,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         frameworks = [];
       } else {
         const detected = await detectFrameworks();
+
         const frameworksResult = await multiselect<Frameworks>({
           initialValues: detected,
           message: "Which frameworks are you using (optional)?",
@@ -1005,6 +1109,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(frameworksResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1013,6 +1118,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let jsPlugins = (opts["js-plugins"] ?? []).map(assertOxlintJsPlugin);
+
     if (linter === "oxlint" && opts["js-plugins"] === undefined) {
       const hasOtherCliOptions =
         quiet ||
@@ -1039,6 +1145,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(jsPluginsResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1049,6 +1156,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     let editorConfig = opts.editors;
     let selectedEditorFiles: EditorFileTarget[] = [];
     const editorFileTargets = getEditorFileTargets();
+
     const universalEditorTarget = editorFileTargets.find(
       (target) => target.id === "universal"
     );
@@ -1067,6 +1175,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(editorConfigResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1074,6 +1183,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           editorConfigResult.includes(target.id)
         );
       }
+
       editorConfig = [];
     } else if (editorConfig.includes("universal") && universalEditorTarget) {
       selectedEditorFiles = [universalEditorTarget];
@@ -1092,6 +1202,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     let selectedAgentFiles: AgentFileTarget[] = [];
     let { hooks } = opts;
     const agentFileTargets = getAgentFileTargets();
+
     const universalAgentTarget = agentFileTargets.find(
       (target) => target.id === "universal"
     );
@@ -1117,6 +1228,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(agentsResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1158,6 +1270,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(hooksResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1166,6 +1279,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
 
     let { integrations } = opts;
+
     if (integrations === undefined) {
       // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
       // This allows programmatic usage without interactive prompts
@@ -1188,6 +1302,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
         if (isCancel(integrationsResult)) {
           cancel(OPERATION_CANCELLED);
+
           return;
         }
 
@@ -1215,17 +1330,20 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (linter === "biome") {
       await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
+
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
       await upsertPrettierConfig(frameworks, quiet);
       await upsertStylelintConfig(quiet);
     }
+
     if (linter === "oxlint") {
       // Oxlint + Oxfmt config files use ESM imports, so ensure
       // "type": "module" is set — but never flip an explicit "commonjs",
       // which would change how every .js file in the project is interpreted.
       const pkgJsonForType = await readPackageJson();
+
       if (pkgJsonForType?.type === undefined) {
         await updatePackageJson({ type: "module" });
       } else if (pkgJsonForType.type !== "module" && !quiet) {
@@ -1233,6 +1351,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           'package.json sets "type": "commonjs" — the generated oxlint/oxfmt configs use ESM imports and may not load. Consider "type": "module".'
         );
       }
+
       await upsertOxlintConfig(frameworks, quiet, jsPlugins);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
@@ -1275,12 +1394,15 @@ export const initialize = async (flags?: InitializeFlags) => {
         useLintStaged
       );
     }
+
     if (integrations?.includes("lefthook")) {
       await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
     }
+
     if (integrations?.includes(LINT_STAGED)) {
       await initializeLintStaged(pmInfo, !opts.skipInstall, quiet);
     }
+
     if (integrations?.includes("pre-commit")) {
       await initializePreCommit(pm, quiet);
     }
@@ -1302,9 +1424,11 @@ export const initialize = async (flags?: InitializeFlags) => {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
+
     if (!quiet) {
       log.error(`Failed to initialize Ultracite configuration: ${message}`);
     }
+
     throw error;
   }
 };

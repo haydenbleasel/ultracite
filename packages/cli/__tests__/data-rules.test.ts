@@ -13,7 +13,9 @@ const readFileSync =
     .__realReadFileSync ?? _readFileSync;
 
 const repoRoot = path.join(import.meta.dir, "..", "..", "..");
+
 const skillPath = path.join(repoRoot, "skills", "ultracite", "SKILL.md");
+
 const standardsPath = path.join(
   repoRoot,
   "skills",

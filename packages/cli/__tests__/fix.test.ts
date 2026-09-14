@@ -27,6 +27,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -51,6 +52,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -72,6 +74,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -92,6 +95,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -112,6 +116,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -132,8 +137,10 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     const routeGroupFile =
       "/abs/path/apps/app/src/app/(app)/dashboard/page.tsx";
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -154,6 +161,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -210,6 +218,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -226,6 +235,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -251,6 +261,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -272,6 +283,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -317,6 +329,7 @@ describe("fix", () => {
         status: cmd === "eslint" ? 1 : 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -357,6 +370,7 @@ describe("fix", () => {
             status: null,
           };
         }
+
         return { status: 0 };
       }
     );
@@ -382,6 +396,7 @@ describe("fix", () => {
             status: null,
           };
         }
+
         return { status: 0 };
       }
     );
@@ -404,6 +419,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -427,6 +443,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -468,6 +485,7 @@ describe("fix", () => {
             status: null,
           };
         }
+
         return { status: 0 };
       }
     );
@@ -507,6 +525,7 @@ describe("fix", () => {
         status: cmd === "oxlint" ? 1 : 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -527,6 +546,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -547,6 +567,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -567,6 +588,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -588,6 +610,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -609,6 +632,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -630,9 +654,11 @@ describe("fix", () => {
         if (cmd === "oxfmt") {
           return { status: 1 };
         }
+
         return { status: 0 };
       }
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -652,9 +678,11 @@ describe("fix", () => {
         if (cmd === "prettier") {
           return { status: 1 };
         }
+
         return { status: 0 };
       }
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -675,6 +703,7 @@ describe("fix", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -737,20 +766,26 @@ const mockAgentEnvironment = ({
   oxlintOutputs: string[];
 }) => {
   let collectCalls = 0;
+
   const mockSpawn = mock((cmd: string, args: string[]) => {
     if (cmd === "claude" || cmd === "codex") {
       return { status: 0, stdout: "2.0.0" };
     }
+
     // Each pass runs oxlint twice: a fix pass whose output is discarded and
     // a report-only pass whose JSON feeds the agent. Outputs map to the latter.
     if (cmd === "oxlint" && args.includes("-f")) {
       const stdout =
         oxlintOutputs[Math.min(collectCalls, oxlintOutputs.length - 1)];
+
       collectCalls += 1;
+
       return { status: 0, stdout };
     }
+
     return { status: 0, stdout: "" };
   });
+
   const mockRunAgent = mock((_adapter: AgentAdapter, _prompt: string) =>
     Promise.resolve({ ok: agentOk, stderr: "", timedOut: false })
   );
@@ -803,6 +838,7 @@ describe("fix with an agent", () => {
     ]);
 
     const verifyCalls = mockSpawn.mock.calls.slice(4);
+
     for (const call of verifyCalls) {
       expect(call[1]).toContain("src/bad.ts");
     }
@@ -869,6 +905,7 @@ describe("fix with an agent", () => {
     const [fixCall, collectCall] = mockSpawn.mock.calls.filter(
       (call) => call[0] === "oxlint"
     );
+
     expect(fixCall?.[1]).toContain("--fix-dangerously");
     expect(fixCall?.[1]).not.toContain("--unsafe");
     expect(collectCall?.[1]).not.toContain("--fix-dangerously");
@@ -880,6 +917,7 @@ describe("fix with an agent", () => {
       error: new Error("ENOENT"),
       status: null,
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -901,23 +939,30 @@ describe("fix with an agent", () => {
         },
       ],
     });
+
     let biomeCalls = 0;
+
     const mockSpawn = mock((cmd: string, _args: string[]) => {
       if (cmd === "claude") {
         return { status: 0, stdout: "2.0.0" };
       }
+
       if (cmd === "biome") {
         biomeCalls += 1;
+
         return {
           status: 0,
           stdout: biomeCalls === 1 ? biomeDiagnostics : '{"diagnostics":[]}',
         };
       }
+
       return { status: 0, stdout: "" };
     });
+
     const mockRunAgent = mock(() =>
       Promise.resolve({ ok: true, stderr: "", timedOut: false })
     );
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "biome"),

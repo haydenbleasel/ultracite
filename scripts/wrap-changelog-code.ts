@@ -39,22 +39,27 @@ const transforms: { pattern: RegExp; wrap: (m: string) => string }[] = [
 
 const transformSegment = (text: string): string => {
   let out = text;
+
   for (const { pattern, wrap } of transforms) {
     out = out.replace(pattern, wrap);
   }
+
   return out;
 };
 
 const raw = await readFile(target, "utf-8");
 
 let output = "";
+
 let lastIndex = 0;
+
 for (const match of raw.matchAll(protectedPattern)) {
   const start = match.index ?? 0;
   output += transformSegment(raw.slice(lastIndex, start));
   output += match[0];
   lastIndex = start + match[0].length;
 }
+
 output += transformSegment(raw.slice(lastIndex));
 
 await writeFile(target, output);

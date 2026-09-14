@@ -59,6 +59,7 @@ describe("agent-fix linter adapters", () => {
       status: cmd === "oxlint" ? 1 : 0,
       stdout: cmd === "oxlint" ? oxlintJson : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("oxlint").fixAndCollect([], []);
@@ -91,6 +92,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? '{"diagnostics":[]}' : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("oxlint").fixAndCollect(
@@ -111,6 +113,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? '{"diagnostics":[]}' : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("oxlint").verify("src/a.ts", []);
@@ -135,6 +138,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "oxlint" ? "not json" : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => getLinterAdapter("oxlint").fixAndCollect([], [])).toThrow(
@@ -147,6 +151,7 @@ describe("agent-fix linter adapters", () => {
       status: 1,
       stdout: biomeJson,
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("biome").fixAndCollect([], []);
@@ -187,6 +192,7 @@ describe("agent-fix linter adapters", () => {
         },
       ],
     });
+
     const mockSpawn = mock(() => ({ status: 0, stdout: objectPathJson }));
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
@@ -201,6 +207,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "eslint" ? eslintJson : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("eslint").fixAndCollect([], []);
@@ -231,6 +238,7 @@ describe("agent-fix linter adapters", () => {
       status: 0,
       stdout: cmd === "eslint" ? "[]" : "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     getLinterAdapter("eslint").verify("src/a.ts", []);

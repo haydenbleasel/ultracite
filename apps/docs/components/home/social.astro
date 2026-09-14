@@ -17,11 +17,14 @@ const entries = [
 ];
 
 const fetched = await Promise.all(entries.map((entry) => getTweet(entry.id)));
+
 const tweets = fetched.flatMap((tweet, index) => {
   if (!tweet) {
     return [];
   }
+
   const override = entries[index]?.text;
+
   return [override ? { ...tweet, text: override } : tweet];
 });
 ---

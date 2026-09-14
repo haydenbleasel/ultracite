@@ -19,9 +19,11 @@ const createFixCommand = (
   args: string[] = []
 ): string => {
   const safePackageManager = assertSupportedPackageManagerName(packageManager);
+
   // npm swallows flags after `npm run <script>` unless they come after `--`
   const scriptArgs =
     safePackageManager === "npm" && args.length > 0 ? ["--", ...args] : args;
+
   return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
@@ -43,6 +45,7 @@ export const createHooks = (
 
   const hasUltraciteHook = (obj: JsonObject): boolean => {
     const json = JSON.stringify(obj);
+
     return json.includes("ultracite") || json.includes(command);
   };
 
@@ -54,6 +57,7 @@ export const createHooks = (
         hookIntegration.hooks.path,
         `${JSON.stringify(content, null, 2)}\n`
       );
+
       return;
     }
 

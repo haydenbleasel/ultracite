@@ -21,6 +21,7 @@ describe("vscode editor config", () => {
           if (path === ".vscode/settings.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -33,6 +34,7 @@ describe("vscode editor config", () => {
           if (path === ".vscode/settings.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -97,6 +99,7 @@ describe("vscode editor config", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -121,9 +124,11 @@ describe("vscode editor config", () => {
   describe("update", () => {
     test("merges with existing settings", async () => {
       const existingSettings = '{"editor.tabSize": 4}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -153,6 +158,7 @@ describe("vscode editor config", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -180,6 +186,7 @@ describe("vscode editor config", () => {
       const mockSpawn = mock((_cmd: string, _args: string[]) => ({
         status: 0,
       }));
+
       mock.module("../src/spawn-sync", () => ({
         spawnSync: mockSpawn,
       }));

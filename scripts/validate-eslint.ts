@@ -14,16 +14,19 @@ const validateEslintConfig = async (configPath: string): Promise<boolean> => {
 
     const result =
       await $`node --check ${configPath} 2>&1 || echo "syntax_ok"`.quiet();
+
     const output = result.text();
 
     if (output.includes("SyntaxError")) {
       console.error(`  Syntax error in ${configPath}`);
+
       return false;
     }
 
     return true;
   } catch (error) {
     console.error(`  Error: ${error instanceof Error ? error.message : error}`);
+
     return false;
   }
 };
@@ -37,6 +40,7 @@ const main = async () => {
       .map(async (framework) => {
         const configPath = path.join(configDir, framework, "eslint.config.mjs");
         const valid = await validateEslintConfig(configPath);
+
         return { framework, valid };
       })
   );

@@ -14,6 +14,7 @@ const pnpmWorkspaceFile = "pnpm-workspace.yaml";
 export const exists = (filePath: string): boolean => {
   try {
     accessSync(filePath);
+
     return true;
   } catch {
     return false;
@@ -26,6 +27,7 @@ export const isMonorepo = (): boolean => {
   }
 
   const pkgJson = readPackageJsonSync();
+
   if (!pkgJson) {
     return false;
   }
@@ -35,6 +37,7 @@ export const isMonorepo = (): boolean => {
 
 export const ensureDirectory = (filePath: string): void => {
   const dir = path.dirname(filePath);
+
   if (dir !== ".") {
     const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
     mkdirSync(cleanDir, { recursive: true });
@@ -43,6 +46,7 @@ export const ensureDirectory = (filePath: string): void => {
 
 const isInsidePath = (target: string, root: string): boolean => {
   const relativePath = path.relative(root, target);
+
   return (
     relativePath === "" ||
     (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
@@ -73,9 +77,11 @@ const getRealPathOfNearestExistingAncestor = (target: string): string => {
       }
 
       const parent = path.dirname(current);
+
       if (parent === current) {
         return path.resolve(current);
       }
+
       current = parent;
     }
   }
@@ -108,6 +114,7 @@ export const assertWritableProjectPath = (filePath: string): void => {
     }
 
     const realTargetPath = getRealPath(targetPath);
+
     if (!isInsidePath(realTargetPath, projectRoot)) {
       throw new Error(`Refusing to write outside project: ${filePath}`);
     }
@@ -146,6 +153,7 @@ export const updatePackageJson = async ({
   type?: string;
 }) => {
   const packageJsonObject = await readPackageJson();
+
   if (!packageJsonObject) {
     throw new Error("Failed to parse package.json: file is missing or invalid");
   }
@@ -217,6 +225,7 @@ export const validateFrameworkName = (name: string): string => {
       `Invalid framework name "${name}": must match ${SAFE_IDENTIFIER}`
     );
   }
+
   return name;
 };
 
@@ -305,6 +314,7 @@ export const oxlintConfigNames = [
   ".oxlintrc.json",
   "oxlint.config.ts",
 ] as const;
+
 export const oxfmtConfigNames = ["oxfmt.config.ts"] as const;
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
@@ -341,6 +351,7 @@ const collectDeps = (pkg: DependencyFields | undefined): string[] => {
   if (!pkg) {
     return [];
   }
+
   return [
     ...Object.keys(pkg.dependencies ?? {}),
     ...Object.keys(pkg.devDependencies ?? {}),
@@ -370,6 +381,7 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
 
     for (const dep of deps) {
       const frameworks = FRAMEWORK_DEPENDENCIES.get(dep);
+
       if (frameworks) {
         for (const framework of frameworks) {
           detected.add(framework);

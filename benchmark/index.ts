@@ -27,19 +27,23 @@ interface CliArgs {
 const parseArgs = (argv: readonly string[]): CliArgs => {
   let base: string | undefined;
   let head: string | undefined;
+
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
+
     if (arg === "--base") {
       base = argv[(index += 1)];
     } else if (arg === "--head") {
       head = argv[(index += 1)];
     }
   }
+
   if (!head) {
     throw new Error(
       "Usage: bun benchmark/index.ts --head <tarball> [--base <tarball>]"
     );
   }
+
   return { base, head };
 };
 
@@ -57,7 +61,9 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
     "dist",
     "index.js"
   );
+
   const start = performance.now();
+
   const result = spawnSync("node", [ultraciteBin, command, "src"], {
     cwd: project.dir,
     encoding: "utf-8",
@@ -69,6 +75,7 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
     maxBuffer: 64 * 1024 * 1024,
     stdio: ["ignore", "ignore", "pipe"],
   });
+
   return {
     durationMs: performance.now() - start,
     status: result.status ?? 1,
@@ -89,9 +96,11 @@ const FATAL_PATTERNS = [
 
 const assertRunnable = (project: PreparedProject, command: Command): void => {
   const outcome = runCommand(project, command);
+
   const fatal = FATAL_PATTERNS.find((pattern) =>
     outcome.stderr.includes(pattern)
   );
+
   if (fatal) {
     throw new Error(
       `${project.buildLabel}/${project.provider} ${command} could not run (${fatal}):\n${outcome.stderr}`
@@ -120,6 +129,7 @@ const collectSamples = (
   const builds: { label: "base" | "head"; project: PreparedProject }[] = [
     { label: "head", project: projects.head },
   ];
+
   if (projects.base) {
     builds.unshift({ label: "base", project: projects.base });
   }
@@ -130,6 +140,7 @@ const collectSamples = (
     if (command === "fix") {
       resetSrc(project);
     }
+
     return runCommand(project, command).durationMs;
   };
 
@@ -144,6 +155,7 @@ const collectSamples = (
   // round so a transient slow period hits both roughly equally.
   for (let sample = 0; sample < SAMPLE_RUNS; sample += 1) {
     const order = sample % 2 === 0 ? builds : [...builds].toReversed();
+
     for (const { label, project } of order) {
       samples[label].push(runOnce(project));
     }
@@ -172,6 +184,7 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
   const summary: string[] = [];
 
   const compareMode = samples.every((sample) => sample.base);
+
   if (compareMode) {
     lines.push(
       "provider  command  base median  head median  ratio    p-value  verdict",
@@ -181,6 +194,7 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
       `| provider | command | base | head | ratio | p-value | verdict |`,
       `| --- | --- | ---: | ---: | ---: | ---: | :---: |`
     );
+
     for (const sample of samples) {
       // SAFETY: compareMode is only true when the `samples.every` check above
       // confirmed every sample carries base timings.
@@ -191,6 +205,7 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
       const { pValue } = mannWhitneyU(base, sample.head);
       const regressed = ratio > REGRESSION_RATIO && pValue < ALPHA;
       const verdict = regressed ? "REGRESSION" : "ok";
+
       if (regressed) {
         regressions.push({
           command: sample.command,
@@ -199,6 +214,7 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
           ratio,
         });
       }
+
       lines.push(
         `${sample.provider.padEnd(9)} ${sample.command.padEnd(7)} ${fmt(
           baseMedian
@@ -225,6 +241,7 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
       `| provider | command | median | mean | stdev |`,
       `| --- | --- | ---: | ---: | ---: |`
     );
+
     for (const sample of samples) {
       lines.push(
         `${sample.provider.padEnd(9)} ${sample.command.padEnd(7)} ${fmt(
@@ -252,17 +269,21 @@ const analyze = (samples: readonly Sample[]): Regression[] => {
   }
 
   const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+
   if (summaryPath) {
     const title = compareMode
       ? "## Ultracite performance benchmark (head vs base)"
       : "## Ultracite performance benchmark";
+
     let footer = "";
+
     if (compareMode) {
       footer =
         regressions.length > 0
           ? `\n**${regressions.length} regression(s) detected.**\n`
           : "\nNo statistically significant regressions.\n";
     }
+
     appendFileSync(
       summaryPath,
       `${title}\n\n${summary.join("\n")}\n${footer}\n`
@@ -294,12 +315,14 @@ const main = (): void => {
 
   for (const provider of ACTIVE_PROVIDERS) {
     console.log(`\nPreparing ${provider}...`);
+
     const head = prepareProject({
       buildLabel: "head",
       provider,
       tarball: args.head,
       workRoot: WORK_ROOT,
     });
+
     const base = args.base
       ? prepareProject({
           buildLabel: "base",
@@ -311,9 +334,11 @@ const main = (): void => {
 
     for (const command of ACTIVE_COMMANDS) {
       assertRunnable(head, command);
+
       if (base) {
         assertRunnable(base, command);
       }
+
       console.log(`  benchmarking ${provider} ${command}...`);
       samples.push(collectSamples({ base, head }, provider, command));
     }
@@ -323,6 +348,7 @@ const main = (): void => {
 
   if (regressions.length > 0) {
     console.error(`\n✗ ${regressions.length} performance regression(s):`);
+
     for (const regression of regressions) {
       console.error(
         `  ${regression.provider} ${regression.command}: ${regression.ratio.toFixed(
@@ -330,6 +356,7 @@ const main = (): void => {
         )}x slower (p=${regression.pValue.toFixed(4)})`
       );
     }
+
     process.exit(1);
   }
 

@@ -27,6 +27,7 @@ const getBiomeConfigPath = (): string => {
       return `./${file}`;
     }
   }
+
   // Default to biome.jsonc if none found
   return "./biome.jsonc";
 };
@@ -63,6 +64,7 @@ export const biome = {
   },
   exists: () => {
     const path = getBiomeConfigPath();
+
     return exists(path);
   },
   update: async (opts?: BiomeOptions) => {
@@ -85,13 +87,17 @@ export const biome = {
       if (ext === "ultracite") {
         return biomeCoreConfig;
       }
+
       const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
+
       return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
     });
+
     const newExtends = [...new Set(remapped)];
     // Track membership in a Set for constant-time lookups while preserving
     // the array's insertion order.
     const seenExtends = new Set(newExtends);
+
     const addExtend = (ext: string) => {
       if (!seenExtends.has(ext)) {
         seenExtends.add(ext);
@@ -120,6 +126,7 @@ export const biome = {
     const configToMerge = {
       $schema: defaultConfig.$schema,
     };
+
     const newConfig = deepmerge(configToWork, configToMerge);
 
     await writeProjectFile(path, `${JSON.stringify(newConfig, null, 2)}\n`);

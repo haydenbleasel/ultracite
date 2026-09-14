@@ -29,8 +29,11 @@ import type { Linter } from "../utils";
 import { DOCTOR_FAILED, reportDiagnostics, runDiagnostics } from "./doctor";
 
 const PACKAGE_NAME = "ultracite";
+
 const REPOSITORY_URL = "https://github.com/haydenbleasel/ultracite";
+
 const RELEASES_URL = `${REPOSITORY_URL}/releases`;
+
 const UPGRADE_COMPLETE = "Upgrade complete";
 
 export interface UpgradeOptions {
@@ -50,6 +53,7 @@ const resolvePackageManager = async (
 ): Promise<PackageManager> => {
   if (requested) {
     const name = assertSupportedPackageManagerName(requested);
+
     return { command: name, name };
   }
 
@@ -66,6 +70,7 @@ const resolvePackageManager = async (
   }
 
   log.info(`Detected lockfile, using ${detected.name}`);
+
   return normalizePackageManager(detected);
 };
 
@@ -96,10 +101,12 @@ export const getToolchainPackages = (
       packages.set("@biomejs/biome", biomeVersion);
       break;
     }
+
     case "eslint": {
       for (const [name, version] of Object.entries(eslintCoreDevDependencies)) {
         packages.set(name, version);
       }
+
       for (const dependencies of Object.values(
         eslintFrameworkDevDependencies
       )) {
@@ -109,16 +116,20 @@ export const getToolchainPackages = (
           }
         }
       }
+
       break;
     }
+
     case "oxlint": {
       // Mirrors init: oxlint and oxfmt track their latest release, while the
       // peer ranges guard against a preset/tool mismatch.
       packages.set("oxlint", "latest");
       packages.set("oxfmt", "latest");
+
       if (projectDependencies.has("oxlint-tsgolint")) {
         packages.set("oxlint-tsgolint", "latest");
       }
+
       for (const [name, version] of Object.entries(
         OXLINT_JS_PLUGIN_DEV_DEPENDENCIES
       )) {
@@ -126,8 +137,10 @@ export const getToolchainPackages = (
           packages.set(name, version);
         }
       }
+
       break;
     }
+
     default: {
       break;
     }
@@ -144,6 +157,7 @@ const resolveInstalledBin = (installed: InstalledPackage): string | null => {
   }
 
   const binPath = path.join(installed.dir, relativeBin);
+
   return exists(binPath) ? binPath : null;
 };
 
@@ -168,6 +182,7 @@ const updateSelf = async (
 
   if (!current) {
     s.stop("Ultracite updated.");
+
     return null;
   }
 
@@ -212,6 +227,7 @@ const handOffToInstalled = (
 
   if (result.error) {
     log.warn(`Could not run the installed Ultracite: ${result.error.message}`);
+
     return null;
   }
 
@@ -253,6 +269,7 @@ export const upgrade = async (
   log.info(`Detected linter: ${linter}`);
 
   const packageManager = await resolvePackageManager(options.pm);
+
   const installOptions: InstallOptions = {
     corepack: false,
     silent: true,
@@ -261,6 +278,7 @@ export const upgrade = async (
 
   if (!options.skipSelf) {
     const newer = await updateSelf(installOptions);
+
     const handOffStatus = newer
       ? handOffToInstalled(newer, packageManager)
       : null;
@@ -291,5 +309,6 @@ export const upgrade = async (
   }
 
   outro(UPGRADE_COMPLETE);
+
   return 0;
 };

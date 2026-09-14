@@ -100,6 +100,7 @@ program
         parsedArgs: args,
         rawArgs: getRawArgs(command),
       });
+
       await check(files, passthrough);
     }
   );
@@ -120,6 +121,7 @@ program
         parsedArgs: args,
         rawArgs: getRawArgs(command),
       });
+
       const { agent, passthrough } = extractAgentFlags(split.passthrough);
       await fix(split.files, passthrough, { agent });
     }
@@ -154,13 +156,16 @@ if (!process.env.ULTRACITE_TEST) {
     if (error instanceof LinterExitError) {
       process.exit(error.exitCode);
     }
+
     if (error instanceof UltraciteSetupError) {
       log.error(error.message);
       process.exit(1);
     }
+
     if (error instanceof Error && error.message === DOCTOR_FAILED) {
       process.exit(1);
     }
+
     throw error;
   }
 }

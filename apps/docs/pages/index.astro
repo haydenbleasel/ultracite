@@ -19,7 +19,9 @@ import ZeroConfig from "../components/home/zero-config.astro";
 import { getLatestVersion } from "../lib/latest-version";
 
 const { config } = data;
+
 const version = await getLatestVersion();
+
 const siteDescription =
   "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps humans and agents write consistent, type-safe code.";
 ---

@@ -25,12 +25,14 @@ const validateBiomeConfig = async (configPath: string): Promise<boolean> => {
 
     if (!config.$schema?.includes("biome")) {
       console.error("  Missing or invalid $schema");
+
       return false;
     }
 
     return true;
   } catch (error) {
     console.error(`  Error: ${error instanceof Error ? error.message : error}`);
+
     return false;
   }
 };
@@ -44,6 +46,7 @@ const main = async () => {
       .map(async (framework) => {
         const configPath = path.join(configDir, framework, "biome.jsonc");
         const valid = await validateBiomeConfig(configPath);
+
         return { framework, valid };
       })
   );

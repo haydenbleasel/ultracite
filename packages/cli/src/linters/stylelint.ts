@@ -16,6 +16,7 @@ const defaultConfigPath = "./stylelint.config.mjs";
 
 const hasStylelintKeyInPackageJson = (): boolean => {
   const packageJson = readPackageJsonSync(packageJsonPath);
+
   return packageJson?.stylelint !== undefined;
 };
 
@@ -46,6 +47,7 @@ export const stylelint = {
   },
   exists: () => {
     const path = getStylelintConfigPath();
+
     return path !== null;
   },
   update: async () => {
@@ -61,6 +63,7 @@ export const stylelint = {
       existingFile && canHoldEsmConfig(existingFile)
         ? existingFile
         : defaultConfigPath;
+
     await writeProjectFile(targetPath, config);
 
     if (existingFile && existingFile !== targetPath) {

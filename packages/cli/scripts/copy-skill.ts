@@ -9,9 +9,11 @@ import { cp, rm } from "node:fs/promises";
 import path from "node:path";
 
 const skillSource = path.join(import.meta.dirname, "../../../skills/ultracite");
+
 const skillDestination = path.join(import.meta.dirname, "../skills/ultracite");
 
 await rm(skillDestination, { force: true, recursive: true });
+
 await cp(skillSource, skillDestination, { recursive: true });
 
 console.log(

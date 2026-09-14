@@ -42,6 +42,7 @@ const isBrandName = (icon: Props["name"]): icon is keyof typeof brand =>
   icon in brand;
 
 const isBrand = isBrandName(name);
+
 const body = isBrand ? `<path d="${brand[name]}"/>` : lucide[name];
 ---
 

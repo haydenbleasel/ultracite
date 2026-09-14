@@ -31,9 +31,13 @@ const vscodeBaseConfig = {
 
 // Extension IDs and shared VS Code paths, extracted to avoid repeated literals.
 const ASTRO_FORMATTER = "astro-build.astro-vscode";
+
 const BIOME_FORMATTER = "biomejs.biome";
+
 const OXC_FORMATTER = "oxc.oxc-vscode";
+
 const VSCODE_INSTALL_COMMAND = "code --install-extension";
+
 const VSCODE_SETTINGS_PATH = ".vscode/settings.json";
 
 // VS Code Biome configuration
@@ -99,12 +103,15 @@ export const getVscodeConfig = (linter: ProviderId = "biome") => {
     case "biome": {
       return deepmerge(vscodeBaseConfig, vscodeBiomeConfig);
     }
+
     case "eslint": {
       return deepmerge(vscodeBaseConfig, vscodeEslintConfig);
     }
+
     case "oxlint": {
       return deepmerge(vscodeBaseConfig, vscodeOxlintConfig);
     }
+
     default: {
       return vscodeBaseConfig;
     }
@@ -273,12 +280,15 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
     case "biome": {
       return deepmerge(zedBaseConfig, zedBiomeConfig);
     }
+
     case "eslint": {
       return deepmerge(zedBaseConfig, zedEslintConfig);
     }
+
     case "oxlint": {
       return deepmerge(zedBaseConfig, zedOxcConfig);
     }
+
     default: {
       return zedBaseConfig;
     }

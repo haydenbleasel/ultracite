@@ -133,7 +133,7 @@ export default defineConfig({
 });
 ```
 
-All fifteen rules are enabled at the `error` level, including `require-safety-comment-for-type-assertion` (every `as` assertion needs a `SAFETY:` comment stating the checked invariant), `no-unknown-returns` / `no-unknown-parameters` (parse values into named domain types at boundaries), and `no-module-mocking` (inject dependencies instead of mocking modules). If a rule doesn't fit your codebase — `no-module-mocking` is a common example in test-heavy projects — turn it off in your own config's `rules` block.
+All eighteen rules are enabled at the `error` level, including `require-safety-comment-for-type-assertion` (every `as` assertion needs a `SAFETY:` comment stating the checked invariant), `no-unknown-returns` / `no-unknown-parameters` (parse values into named domain types at boundaries), `no-module-mocking` (inject dependencies instead of mocking modules), and `require-readable-spacing` (blank lines around top-level declarations, multiline bindings, control flow, returns, and blocks — a pattern AI-generated code tends to pack together; the fix only inserts whitespace, so `ultracite fix` restores the spacing without fighting the formatter). If a rule doesn't fit your codebase — `no-module-mocking` is a common example in test-heavy projects — turn it off in your own config's `rules` block.
 
 ## Configuration Approach
 

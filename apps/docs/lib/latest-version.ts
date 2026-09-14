@@ -23,5 +23,6 @@ export const getLatestVersion = async (): Promise<string> => {
   const { version } = JSON.parse(raw) as { version: string };
 
   cached = version;
+
   return version;
 };

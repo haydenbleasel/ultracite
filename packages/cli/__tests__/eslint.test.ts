@@ -16,6 +16,7 @@ describe("eslint linter", () => {
           if (path === "./eslint.config.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -27,6 +28,7 @@ describe("eslint linter", () => {
           if (path === "./eslint.config.mjs") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),

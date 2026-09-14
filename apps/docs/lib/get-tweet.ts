@@ -41,16 +41,19 @@ const formatText = (
   entities: SyndicationTweet["entities"]
 ): string => {
   let out = text;
+
   for (const entity of entities?.urls ?? []) {
     if (entity.url && entity.display_url) {
       out = out.replaceAll(entity.url, entity.display_url);
     }
   }
+
   for (const media of entities?.media ?? []) {
     if (media.url) {
       out = out.replaceAll(media.url, "");
     }
   }
+
   return out.trim();
 };
 
@@ -69,6 +72,7 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
     const response = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; UltraciteBot/1.0)" },
     });
+
     if (!response.ok) {
       return null;
     }
@@ -78,6 +82,7 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
     // checked before use below.
     const data = (await response.json()) as SyndicationTweet;
     const { user } = data;
+
     if (!(data.text && user?.screen_name)) {
       return null;
     }

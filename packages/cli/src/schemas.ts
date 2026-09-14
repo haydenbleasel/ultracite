@@ -28,6 +28,7 @@ export type PackageJson = z.infer<typeof packageJsonSchema>;
 export const parsePackageJson = (content: string): PackageJson | undefined => {
   const parsed = parse(content);
   const result = packageJsonSchema.safeParse(parsed);
+
   return result.success ? result.data : undefined;
 };
 
@@ -36,6 +37,7 @@ export const readPackageJsonSync = (
 ): PackageJson | undefined => {
   try {
     const content = readFileSync(path, "utf-8");
+
     return parsePackageJson(content);
   } catch {
     return undefined;
@@ -47,6 +49,7 @@ export const readPackageJson = async (
 ): Promise<PackageJson | undefined> => {
   try {
     const content = await readFile(path, "utf-8");
+
     return parsePackageJson(content);
   } catch {
     return undefined;
@@ -74,5 +77,6 @@ export const parseJsonc = <T>(
 ): T | undefined => {
   const parsed = parse(content);
   const result = schema.safeParse(parsed);
+
   return result.success ? result.data : undefined;
 };

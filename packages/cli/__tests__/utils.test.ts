@@ -55,6 +55,7 @@ const mockDetectFrameworkFs = (
       if (path in files) {
         return files[path];
       }
+
       throw new Error("ENOENT");
     }),
   }));
@@ -124,6 +125,7 @@ describe("isMonorepo", () => {
         if (path === "pnpm-workspace.yaml") {
           return Promise.resolve();
         }
+
         return Promise.reject(new Error("ENOENT"));
       }),
       readFile: mock(() => Promise.resolve("{}")),
@@ -135,6 +137,7 @@ describe("isMonorepo", () => {
         if (path === "pnpm-workspace.yaml") {
           return;
         }
+
         throw new Error("ENOENT");
       }),
       existsSync: mock(() => false),
@@ -227,6 +230,7 @@ describe("updatePackageJson", () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
     );
+
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -260,6 +264,7 @@ describe("updatePackageJson", () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
     );
+
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>
@@ -293,6 +298,7 @@ describe("updatePackageJson", () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
     );
+
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
@@ -317,6 +323,7 @@ describe("updatePackageJson", () => {
     const mockWriteFile = mock((_path: string, _content: string) =>
       Promise.resolve()
     );
+
     mock.module("node:fs/promises", () => ({
       access: mock(() => Promise.resolve()),
       readFile: mock(() =>

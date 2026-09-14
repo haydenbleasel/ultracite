@@ -35,6 +35,7 @@ const styleExtensions = [".css", ".scss", ".sass", ".less"];
 
 const hasStyleExtension = (file: string): boolean => {
   const lowered = file.toLowerCase();
+
   return styleExtensions.some((extension) => lowered.endsWith(extension));
 };
 
@@ -125,7 +126,9 @@ export const extractAgentFlags = (passthrough: string[]) => {
 };
 
 const GLOB_CHARS_RE = /[*?[\]{}]/u;
+
 const PATH_SEPARATOR_RE = /[\\/]/u;
+
 const FILE_EXTENSION_RE = /\.[a-z]{1,10}$/iu;
 
 // A token that names a path, a glob, or an extensioned file is a lint
@@ -182,6 +185,7 @@ export const splitLinterArgs = ({
     // `ultracite fix src -- other.ts`) are still lint targets — dropping
     // them into passthrough would silently widen formatter runs to `.`.
     const classified = classifyArgs(args.slice(0, separatorIndex), pathExists);
+
     return {
       files: [...classified.files, ...args.slice(separatorIndex + 1)],
       passthrough: classified.passthrough,

@@ -32,12 +32,14 @@ const { fontFamily: GEIST_SANS } = loadGeistSans("normal", {
   subsets: ["latin"],
   weights: ["400", "500", "600", "700", "800"],
 });
+
 const { fontFamily: GEIST_MONO } = loadGeistMono("normal", {
   subsets: ["latin"],
   weights: ["400", "500", "600"],
 });
 
 const WHITE = "#ffffff";
+
 const SANS =
   "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif";
 
@@ -97,6 +99,7 @@ const WordPopLine = ({
   fontSize: number;
 }) => {
   const frame = useCurrentFrame();
+
   return (
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
       <span
@@ -114,6 +117,7 @@ const WordPopLine = ({
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           });
+
           return (
             <span
               key={`${word}-${i}`}
@@ -154,6 +158,7 @@ const Rattle = ({
     </Sequence>
     {lines.slice(1).map((line, i) => {
       const isLast = i === lines.length - 2;
+
       return (
         <Sequence
           key={line}
@@ -257,15 +262,21 @@ const FONT_VARS = {
 // uniformly to whatever 16:9 resolution the composition is set to (720p → 1080p
 // is an exact 1.5×), so nothing has to be re-laid-out per resolution.
 const REF_W = 1280;
+
 const REF_H = 720;
 
 // Scene starts, derived so the card scene can grow without hand-retiming
 // everything after it.
 const TAGLINE_END = 90;
+
 const PIVOT_END = TAGLINE_END + PIVOT_DURATION;
+
 const RUN_END = PIVOT_END + FIX_CODEX_TERMINAL_DURATION;
+
 const FEATURES_END = RUN_END + FEATURES_DURATION;
+
 const CTA_END = FEATURES_END + 90;
+
 export const FIX_CODEX_VIDEO_DURATION = CTA_END + 90;
 
 export const FixCodexVideo = () => {

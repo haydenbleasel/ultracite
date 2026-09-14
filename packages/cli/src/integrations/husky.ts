@@ -41,6 +41,7 @@ echo "✨ Files formatted by Ultracite"
 const path = "./.husky/pre-commit";
 
 const ULTRACITE_MARKER = "# ultracite";
+
 const ULTRACITE_END_MARKER = "# ultracite end";
 
 const renderSection = (hookScript: string): string =>
@@ -49,6 +50,7 @@ const renderSection = (hookScript: string): string =>
 const findSectionEnd = (lines: string[], markerIndex: number): number => {
   // Sections written by current versions carry an explicit end marker
   const endIndex = lines.indexOf(ULTRACITE_END_MARKER, markerIndex + 1);
+
   if (endIndex !== -1) {
     return endIndex + 1;
   }
@@ -58,6 +60,7 @@ const findSectionEnd = (lines: string[], markerIndex: number): number => {
     (line, index) =>
       index > markerIndex && line.includes("Files formatted by Ultracite")
   );
+
   if (successIndex !== -1) {
     return successIndex + 1;
   }
@@ -76,12 +79,14 @@ export const husky = {
       const lintStagedCommand = dlxCommand(packageManager, "lint-staged", {
         short: packageManager === "npm",
       });
+
       hookScript = createLintStagedHookScript(lintStagedCommand);
     } else {
       const command = dlxCommand(packageManager, "ultracite", {
         args: ["fix"],
         short: packageManager === "npm",
       });
+
       hookScript = createStandaloneHookScript(command);
     }
 
@@ -124,12 +129,14 @@ export const husky = {
       const lintStagedCommand = dlxCommand(packageManager, "lint-staged", {
         short: packageManager === "npm",
       });
+
       hookScript = createLintStagedHookScript(lintStagedCommand);
     } else {
       const command = dlxCommand(packageManager, "ultracite", {
         args: ["fix"],
         short: packageManager === "npm",
       });
+
       hookScript = createStandaloneHookScript(command);
     }
 
@@ -140,6 +147,7 @@ export const husky = {
       const markerIndex = lines.indexOf(ULTRACITE_MARKER);
       const sectionEnd = findSectionEnd(lines, markerIndex);
       const before = lines.slice(0, markerIndex).join("\n");
+
       const after = lines
         .slice(sectionEnd)
         .join("\n")
@@ -149,6 +157,7 @@ export const husky = {
       const parts = [before, renderSection(hookScript), after].filter(
         (part) => part !== ""
       );
+
       await writeProjectFile(path, `${parts.join("\n")}\n`);
     } else {
       const trimmedContents = existingContents.replace(/\n+$/u, "");

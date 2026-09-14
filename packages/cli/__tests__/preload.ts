@@ -16,6 +16,7 @@ declare global {
 
 // Capture real fs functions before mocking so tests that need them can use them
 globalThis.__realReaddirSync = _realReaddirSync;
+
 globalThis.__realReadFileSync = _realReadFileSync;
 
 // Capture the real spawn-sync adapter before any test file mocks the module,

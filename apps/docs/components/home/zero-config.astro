@@ -15,15 +15,19 @@ const langFor = (lang: string): string => {
   if (lang === "json") {
     return "json";
   }
+
   if (lang === "typescript") {
     return "typescript";
   }
+
   return "javascript";
 };
 
 // oxlint first, to match the previous default selection.
 const rank = (id: string): number => (id === "oxlint" ? 0 : 1);
+
 const ordered = providers.toSorted((a, b) => rank(a.id) - rank(b.id));
+
 const defaultProvider = ordered[0]?.id;
 
 const logos = [
@@ -116,6 +120,7 @@ const logos = [
 
 <script>
   const panels = document.querySelectorAll<HTMLElement>("[data-hp-panel]");
+
   const providerButtons =
     document.querySelectorAll<HTMLButtonElement>(".hp-provider");
 
@@ -126,6 +131,7 @@ const logos = [
         String(button.dataset.provider === id),
       );
     }
+
     for (const panel of panels) {
       panel.hidden = panel.dataset.hpPanel !== id;
     }

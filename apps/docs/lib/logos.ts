@@ -42,4 +42,5 @@ export const providerLogos = {
 } satisfies Record<ProviderId, string>;
 
 export const prettierLogo = logo("prettier");
+
 export const stylelintLogo = logo("stylelint");

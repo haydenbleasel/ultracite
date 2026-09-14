@@ -26,6 +26,7 @@ describe("oxfmt", () => {
           if (path === "./oxfmt.config.ts") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("")),
@@ -37,6 +38,7 @@ describe("oxfmt", () => {
           if (path === "./oxfmt.config.ts") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -72,6 +74,7 @@ describe("oxfmt", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -103,6 +106,7 @@ describe("oxfmt", () => {
           if (path === "./oxfmt.config.ts") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("")),
@@ -114,6 +118,7 @@ describe("oxfmt", () => {
           if (path === "./oxfmt.config.ts") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),

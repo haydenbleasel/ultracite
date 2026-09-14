@@ -7,7 +7,9 @@ import type { PackageManagerName } from "nypm";
 import { exists, writeProjectFile } from "../utils";
 
 const path = "./.pre-commit-config.yaml";
+
 const REPOS_REGEX = /^repos:[^\S\n]*\n/mu;
+
 const EMPTY_REPOS_REGEX = /^repos:[^\S\n]*\[[^\S\n]*\][^\S\n]*$/mu;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
@@ -59,7 +61,9 @@ export const preCommit = {
         EMPTY_REPOS_REGEX,
         `repos:\n${ultraciteHook.replace(/\n$/u, "")}`
       );
+
       await writeProjectFile(path, updatedConfig);
+
       return;
     }
 
@@ -70,7 +74,9 @@ export const preCommit = {
         REPOS_REGEX,
         `repos:\n${ultraciteHook}`
       );
+
       await writeProjectFile(path, updatedConfig);
+
       return;
     }
 
@@ -80,6 +86,7 @@ export const preCommit = {
       log.warn(
         `Could not add the Ultracite hook to ${path} automatically. Add a local repo entry running \`${ultraciteCommand}\`.`
       );
+
       return;
     }
 
