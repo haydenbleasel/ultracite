@@ -33,6 +33,9 @@ export default defineConfig({
     // Deliberately uses TanStack route filenames (`$.tsx`, `__root.tsx`) and a
     // PascalCase component so the route override test can assert on both.
     "packages/cli/__tests__/fixtures/route-filenames",
+    // Deliberately uses Astro's bracketed page-route filenames and an invalid
+    // component filename for the JS-plugin override test.
+    "packages/cli/__tests__/fixtures/astro-route-filenames",
   ],
   overrides: [
     {

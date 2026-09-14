@@ -33,6 +33,36 @@ const readOxlintConfig = async (name: string) => {
 
 type OxlintRuleSeverity = "error" | "warn" | "off";
 
+// Runs oxlint (core + js-plugins via the fixture's entry config) over a
+// committed fixture and returns the basenames flagged by a given rule. oxlint
+// resolves the JS plugin specifiers relative to the entry config's directory,
+// which walks up to the repo's node_modules.
+const lintFixture = (fixture: string, target = "src") => {
+  const cliDir = path.join(import.meta.dirname, "..");
+  const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+  const fixtureDir = path.join(import.meta.dirname, "fixtures", fixture);
+
+  const result = Bun.spawnSync(
+    [
+      oxlintBin,
+      "-c",
+      path.join(fixtureDir, "entry.mjs"),
+      "--format=unix",
+      path.join(fixtureDir, target),
+    ],
+    { cwd: cliDir }
+  );
+  const output = result.stdout.toString() + result.stderr.toString();
+  const flaggedBy = (rule: string) =>
+    output
+      .split("\n")
+      .filter((line) => line.includes(rule))
+      .map((line) => path.basename(line.split(":")[0] ?? ""))
+      .toSorted();
+
+  return { flaggedBy, output };
+};
+
 const isEnabled = (rule: OxlintRuleSeverity | undefined) =>
   rule === "error" || rule === "warn";
 
@@ -488,27 +518,9 @@ describe("oxlint js-plugins config", () => {
   // each ESLint plugin's rules, and naming a rule it does not register makes
   // oxlint hard-fail config parsing. Statically reading the config object
   // can't catch this, so actually run oxlint with core + js-plugins loaded via
-  // a committed fixture (oxlint resolves the JS plugin specifiers relative to
-  // the entry config's directory, which walks up to the repo's node_modules).
+  // a committed fixture.
   test("js-plugins loads through oxlint with all bridged rules registered", () => {
-    const cliDir = path.join(import.meta.dirname, "..");
-    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-    const fixtureDir = path.join(
-      import.meta.dirname,
-      "fixtures",
-      "js-plugins-load"
-    );
-
-    const result = Bun.spawnSync(
-      [
-        oxlintBin,
-        "-c",
-        path.join(fixtureDir, "entry.mjs"),
-        path.join(fixtureDir, "sample.ts"),
-      ],
-      { cwd: cliDir }
-    );
-    const output = result.stdout.toString() + result.stderr.toString();
+    const { output } = lintFixture("js-plugins-load", "sample.ts");
 
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
@@ -535,31 +547,7 @@ describe("oxlint js-plugins config", () => {
   // preset: in a non-TanStack project, core's unicorn/filename-case still
   // flags `routes/BadName.tsx`, so the override does not open a bypass.
   test("route override exempts route files but not other files", () => {
-    const cliDir = path.join(import.meta.dirname, "..");
-    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-    const fixtureDir = path.join(
-      import.meta.dirname,
-      "fixtures",
-      "route-filenames"
-    );
-
-    const result = Bun.spawnSync(
-      [
-        oxlintBin,
-        "-c",
-        path.join(fixtureDir, "entry.mjs"),
-        "--format=unix",
-        path.join(fixtureDir, "src"),
-      ],
-      { cwd: cliDir }
-    );
-    const output = result.stdout.toString() + result.stderr.toString();
-    const flaggedBy = (rule: string) =>
-      output
-        .split("\n")
-        .filter((line) => line.includes(rule))
-        .map((line) => path.basename(line.split(":")[0] ?? ""))
-        .toSorted();
+    const { flaggedBy } = lintFixture("route-filenames");
 
     expect(flaggedBy("github(filenames-match-regex)")).toEqual([
       "Button.test.tsx",
@@ -567,6 +555,58 @@ describe("oxlint js-plugins config", () => {
     expect(flaggedBy("unicorn(filename-case)")).toEqual([
       "BadName.tsx",
       "Button.test.tsx",
+    ]);
+  });
+
+  test("uses a bracket-aware filenames-match-regex for page route files", async () => {
+    const config = await readOxlintConfig("js-plugins");
+
+    const pagesOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx}")
+    );
+
+    expect(pagesOverride).toBeDefined();
+
+    const [severity, pattern] =
+      pagesOverride?.rules?.["github/filenames-match-regex"] ?? [];
+    expect(severity).toBe("error");
+
+    const regex = new RegExp(pattern, "u");
+    for (const name of [
+      "[slug]",
+      "[...slug]",
+      "[[...slug]]",
+      "[lang]-[version]",
+      "[slug].json",
+      "rss.xml",
+      "index",
+      "404",
+    ]) {
+      expect(regex.test(name), name).toBe(true);
+    }
+    for (const name of ["BadPage", "[Slug]", "[slug", "a.b.c", "_app"]) {
+      expect(regex.test(name), name).toBe(false);
+    }
+  });
+
+  // Regression guard for #804: Astro and Next.js page routes use bracketed
+  // filenames such as `[slug].astro`, `[...slug].ts` and `[[...slug]].tsx`
+  // across every extension the routers accept. The rule stays live inside
+  // `pages/` (`BadPage.ts`) and everywhere else (`BadName.ts`,
+  // `BadName.astro` — the latter also proves `.astro` files reach the plugin).
+  test("exempts page route filenames but not other names", () => {
+    const { flaggedBy } = lintFixture("astro-route-filenames");
+
+    expect(flaggedBy("github(filenames-match-regex)")).toEqual([
+      "BadName.astro",
+      "BadName.ts",
+      "BadPage.ts",
+    ]);
+    expect(flaggedBy("unicorn(filename-case)")).toEqual([
+      "BadName.astro",
+      "BadName.ts",
+      "BadPage.ts",
     ]);
   });
 
