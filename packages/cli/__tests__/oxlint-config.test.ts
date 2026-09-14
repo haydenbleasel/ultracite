@@ -33,10 +33,10 @@ const readOxlintConfig = async (name: string) => {
 
 type OxlintRuleSeverity = "error" | "warn" | "off";
 
-// Runs oxlint (core + js-plugins via the fixture's entry config) over a
-// committed fixture and returns the basenames flagged by a given rule. oxlint
-// resolves the JS plugin specifiers relative to the entry config's directory,
-// which walks up to the repo's node_modules.
+// Runs oxlint over a committed fixture using the fixture's entry config and
+// returns the spawn result, the combined output, and the basenames flagged by
+// a given rule. oxlint resolves any JS plugin specifiers relative to the entry
+// config's directory, which walks up to the repo's node_modules.
 const lintFixture = (fixture: string, target = "src") => {
   const cliDir = path.join(import.meta.dirname, "..");
   const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
@@ -60,7 +60,7 @@ const lintFixture = (fixture: string, target = "src") => {
       .map((line) => path.basename(line.split(":")[0] ?? ""))
       .toSorted();
 
-  return { flaggedBy, output };
+  return { flaggedBy, output, result };
 };
 
 const isEnabled = (rule: OxlintRuleSeverity | undefined) =>
@@ -296,6 +296,51 @@ describe("oxlint core config", () => {
       nonCoreRules,
       `Core config contains rules from non-core plugins: ${nonCoreRules.join(", ")}`
     ).toEqual([]);
+  });
+
+  // Regression guard for #805: Astro compiles frontmatter into a render
+  // function, so a top-level `return` is valid there. The override lives in
+  // core (not the astro preset) because oxlint lints `.astro` files by
+  // default, so a core-only config hits the false positive too.
+  test("disables prefer-module for Astro files", async () => {
+    const config = await readOxlintConfig("core");
+
+    const astroOverride = config.overrides?.find(
+      (override: { files?: string[] }) => override.files?.includes("**/*.astro")
+    );
+
+    expect(astroOverride?.files).toEqual(["**/*.astro"]);
+    expect(astroOverride?.rules?.["unicorn/prefer-module"]).toBe("off");
+  });
+
+  test("allows top-level returns in Astro frontmatter", () => {
+    const { output, result } = lintFixture(
+      "astro-prefer-module",
+      "src/response.astro"
+    );
+
+    expect(output).not.toContain("unicorn(prefer-module)");
+    expect(result.exitCode).toBe(0);
+  });
+
+  // prefer-module has no option to allow only `return`, so turning it off
+  // also drops its CommonJS checks; the override backfills those with rules
+  // that do take options.
+  test("still rejects CommonJS in Astro frontmatter", () => {
+    const { flaggedBy } = lintFixture(
+      "astro-prefer-module",
+      "src/commonjs.astro"
+    );
+
+    expect(flaggedBy("import(no-commonjs)")).toEqual([
+      "commonjs.astro",
+      "commonjs.astro",
+      "commonjs.astro",
+    ]);
+    expect(flaggedBy("eslint(no-restricted-globals)")).toEqual([
+      "commonjs.astro",
+      "commonjs.astro",
+    ]);
   });
 });
 
@@ -768,24 +813,7 @@ describe("oxlint anti-slop config", () => {
   // and assert the vendored plugin's diagnostics actually fire — a config
   // that loads but silently registers nothing would pass the static checks.
   test("anti-slop loads through oxlint and reports violations", () => {
-    const cliDir = path.join(import.meta.dirname, "..");
-    const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-    const fixtureDir = path.join(
-      import.meta.dirname,
-      "fixtures",
-      "anti-slop-load"
-    );
-
-    const result = Bun.spawnSync(
-      [
-        oxlintBin,
-        "-c",
-        path.join(fixtureDir, "entry.mjs"),
-        path.join(fixtureDir, "sample.ts"),
-      ],
-      { cwd: cliDir }
-    );
-    const output = result.stdout.toString() + result.stderr.toString();
+    const { output } = lintFixture("anti-slop-load", "sample.ts");
 
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
