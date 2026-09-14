@@ -1,11 +1,3 @@
 ---
-export const prerender = false;
-
-const getResponse = (): Response => new Response("ok");
-
-return getResponse();
+return new Response("ok");
 ---
-
-<html lang="en">
-  <body>ok</body>
-</html>

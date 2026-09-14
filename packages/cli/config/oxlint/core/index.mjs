@@ -20,6 +20,18 @@ export default defineConfig({
         "promise/prefer-await-to-then": "off",
       },
     },
+    {
+      // Astro compiles frontmatter into the page's server-side render
+      // function, so a top-level `return` is valid there (#805). The rule
+      // has no options to allow only `return`, so turn it off and keep the
+      // CommonJS checks it also covered via rules that do take options.
+      files: ["**/*.astro"],
+      rules: {
+        "import/no-commonjs": "error",
+        "no-restricted-globals": ["error", "__dirname", "__filename"],
+        "unicorn/prefer-module": "off",
+      },
+    },
   ],
   plugins: [
     "eslint",
