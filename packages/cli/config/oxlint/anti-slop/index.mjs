@@ -35,11 +35,13 @@ export default defineConfig({
     },
   ],
   rules: {
+    "anti-slop/no-array-filter-map": "error",
     "anti-slop/no-chained-type-assertions": "error",
     "anti-slop/no-conditional-empty-object-spread": "error",
     "anti-slop/no-known-value-widening": "error",
     "anti-slop/no-module-mocking": "error",
     "anti-slop/no-object-parameters": "error",
+    "anti-slop/no-reduce-accumulator-copy": "error",
     "anti-slop/no-reflect-apply": "error",
     "anti-slop/no-reflect-get": "error",
     // allowInTypeGuards exempts `typeof` inside type predicate functions
@@ -53,6 +55,11 @@ export default defineConfig({
     "anti-slop/no-unknown-type-aliases": "error",
     "anti-slop/no-unsafe-dictionary-type": "error",
     "anti-slop/no-widen-then-assert": "error",
+    // Restores blank lines around structural boundaries (top-level
+    // declarations, multiline bindings, control flow, returns, blocks). The
+    // autofix only inserts whitespace and never removes existing blank
+    // lines, so it is stable under oxfmt (#803).
+    "anti-slop/require-readable-spacing": "error",
     "anti-slop/require-safety-comment-for-type-assertion": "error",
     // Core rules that pinch against anti-slop when both are enabled:
     // consistent-indexed-object-style's autofix rewrites index-signature

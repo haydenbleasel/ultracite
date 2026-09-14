@@ -74,6 +74,7 @@ const {
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
+
     if (!(input && copyBtn && copyIcon && checkIcon)) {
       continue;
     }
@@ -82,15 +83,18 @@ const {
       agent: el.dataset.agent ?? "",
       human: el.dataset.human ?? "",
     };
+
     let mode: keyof typeof commands = "human";
 
     const setMode = (next: keyof typeof commands) => {
       mode = next;
       input.value = commands[next];
+
       for (const button of modes) {
         const active = button.dataset.mode === next;
         button.setAttribute("aria-pressed", String(active));
         button.classList.toggle("text-muted-foreground", !active);
+
         for (const cls of ACTIVE) {
           button.classList.toggle(cls, active);
         }
@@ -110,6 +114,7 @@ const {
       } catch {
         // Clipboard access can be blocked; fail silently.
       }
+
       copyIcon.classList.add("hidden");
       checkIcon.classList.remove("hidden");
       clearTimeout(timer);

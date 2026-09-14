@@ -36,14 +36,23 @@ export interface DiagnosticCheck {
 
 // Check names, each reused across a check's pass/warn/fail branches.
 const BIOME_CHECK = "Biome configuration";
+
 const ESLINT_CHECK = "ESLint configuration";
+
 const PRETTIER_CHECK = "Prettier configuration";
+
 const STYLELINT_CHECK = "Stylelint configuration";
+
 const OXLINT_CHECK = "Oxlint configuration";
+
 const OXFMT_CHECK = "oxfmt configuration";
+
 const ULTRACITE_DEP_CHECK = "Ultracite dependency";
+
 const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
+
 const DOCTOR_COMPLETE = "Doctor complete";
+
 export const DOCTOR_FAILED = "Doctor checks failed";
 
 // ---------------------------------------------------------------------------
@@ -219,6 +228,7 @@ const checkEslintConfig = (): DiagnosticCheck => {
 // valid existing config, so doctor must too.
 const hasPackageJsonKey = (key: "prettier" | "stylelint"): boolean => {
   const pkgJson = readPackageJsonSync(path.join(process.cwd(), "package.json"));
+
   return pkgJson?.[key] !== undefined;
 };
 
@@ -232,6 +242,7 @@ const checkPrettierConfig = (): DiagnosticCheck => {
   }
 
   const found = findNearestFile(prettierConfigNames);
+
   if (found) {
     return {
       message: `Prettier configuration found (${found.fileName})`,
@@ -257,6 +268,7 @@ const checkStylelintConfig = (): DiagnosticCheck => {
   }
 
   const found = findNearestFile(stylelintConfigNames);
+
   if (found) {
     return {
       message: `Stylelint configuration found (${found.fileName})`,
@@ -477,6 +489,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     case "eslint": {
       checks.push(
         {
@@ -509,6 +522,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     case "oxlint": {
       checks.push(
         {
@@ -532,6 +546,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     default: {
       break;
     }
@@ -563,6 +578,7 @@ export const runDiagnostics = (linter: Linter): DiagnosticCheck[] => {
 
   for (const { fn } of getChecksForLinter(linter)) {
     const check = fn();
+
     if (check) {
       checks.push(check);
     }
@@ -639,6 +655,7 @@ export const doctor = (): void => {
       "Some optional improvements available. Run 'ultracite init' to configure."
     );
     outro(DOCTOR_COMPLETE);
+
     return;
   }
 

@@ -49,9 +49,12 @@ const mockInstalledVersions = (versions: Record<string, string>) => {
   mock.module("node:fs", () => ({
     accessSync: mock((path: string) => {
       const p = toPosixPath(path);
+
       const match =
         /node_modules\/(?<name>@?[^/]+(?:\/[^/]+)?)\/package\.json$/u.exec(p);
+
       const name = match?.groups?.name;
+
       if (name && name !== "ultracite" && !(name in versions)) {
         throw new Error("ENOENT");
       }
@@ -59,26 +62,33 @@ const mockInstalledVersions = (versions: Record<string, string>) => {
     existsSync: mock(() => true),
     readFileSync: mock((path: string) => {
       const p = toPosixPath(path);
+
       for (const [name, version] of Object.entries(versions)) {
         if (p.includes(`node_modules/${name}/package.json`)) {
           return JSON.stringify({ name, version });
         }
       }
+
       if (isNodeModulesPath(p)) {
         return ULTRACITE_PACKAGE_JSON;
       }
+
       if (p.includes("biome.json")) {
         return '{"extends": ["ultracite/biome/core"]}';
       }
+
       if (p.includes("eslint.config")) {
         return 'import core from "ultracite/eslint/core";';
       }
+
       if (p.includes("oxlint.config.ts")) {
         return 'import core from "ultracite/oxlint/core";';
       }
+
       if (p.includes("oxfmt.config.ts")) {
         return 'import ultracite from "ultracite/oxfmt";';
       }
+
       return '{"devDependencies": {"ultracite": "1.0.0"}}';
     }),
   }));
@@ -117,16 +127,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -148,16 +162,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.endsWith(".biome.jsonc") || p.endsWith("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.endsWith(".biome.jsonc")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -198,6 +216,7 @@ describe("doctor", () => {
         if (String(path).includes("biome.jsonc")) {
           throw new Error("Read error");
         }
+
         return "{}";
       }),
     }));
@@ -218,16 +237,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"formatter": {"indentStyle": "space"}}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -239,6 +262,7 @@ describe("doctor", () => {
 
   test("checks biome using the bare executable with shell disabled", () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
+
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
         status: 0,
@@ -289,6 +313,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes(".prettierrc") ||
           p.includes("biome.json") ||
@@ -297,12 +322,15 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -328,6 +356,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes(".prettierrc") ||
           p.includes("eslint.config.mjs") ||
@@ -337,12 +366,15 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("eslint.config")) {
           return "import ultracite/eslint";
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -364,6 +396,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("eslint.config.mjs") ||
           p.includes("prettier.config.mjs") ||
@@ -372,12 +405,15 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("eslint.config")) {
           return 'import core from "ultracite/eslint/core";';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -397,12 +433,14 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("eslint.config.mjs");
       }),
       readFileSync: mock((path: string) => {
         if (String(path).includes("eslint.config")) {
           throw new Error("Read error");
         }
+
         return "{}";
       }),
     }));
@@ -427,6 +465,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("oxlint.config.ts") ||
           p.includes("oxfmt.config.ts") ||
@@ -435,15 +474,19 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
+
         if (p.includes("oxfmt.config.ts")) {
           return 'import ultracite from "ultracite/oxfmt";';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -465,6 +508,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("oxlint.config.ts") ||
           p.includes("oxfmt.config.ts") ||
@@ -473,15 +517,19 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "some-other-config";';
         }
+
         if (p.includes("oxfmt.config.ts")) {
           return 'import config from "some-other-config";';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -504,6 +552,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("oxlint.config.ts") ||
           p.includes("oxfmt.config.ts") ||
@@ -512,15 +561,19 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
+
         if (p.includes("oxfmt.config.ts")) {
           return 'import config from "some-other-oxfmt";';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -540,19 +593,24 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("oxlint.config.ts") || p.includes("oxfmt.config.ts");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("oxlint.config.ts")) {
           return 'import core from "ultracite/oxlint/core";';
         }
+
         if (p.includes("oxfmt.config.ts")) {
           throw new Error("Read error");
         }
+
         return "{}";
       }),
     }));
@@ -589,12 +647,14 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("oxlint.config.ts");
       }),
       readFileSync: mock((path: string) => {
         if (String(path).includes("oxlint.config.ts")) {
           throw new Error("Read error");
         }
+
         return "{}";
       }),
     }));
@@ -637,6 +697,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("eslint.config.mjs") ||
           p.includes("prettier.config.mjs") ||
@@ -645,12 +706,15 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("eslint.config")) {
           return 'import something from "some-other-config";';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -672,6 +736,7 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return (
           p.includes("biome.json") ||
           p.includes(".eslintrc.json") ||
@@ -680,12 +745,15 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -707,16 +775,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return "null";
       }),
     }));
@@ -741,9 +813,11 @@ describe("doctor", () => {
         if (String(path).includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         if (String(path).includes("package.json")) {
           throw new Error("File not found");
         }
+
         return "{}";
       }),
     }));
@@ -765,16 +839,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"name": "test", "dependencies": {}, "devDependencies": {}}';
       }),
     }));
@@ -811,9 +889,11 @@ describe("doctor", () => {
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return '{"devDependencies": {"ultracite": "1.0.0"}}';
       }),
     }));
@@ -838,16 +918,20 @@ describe("doctor", () => {
       accessSync: mock(() => {}),
       existsSync: mock((path: string) => {
         const p = String(path);
+
         return p.includes("biome.json") || p.includes("package.json");
       }),
       readFileSync: mock((path: string) => {
         const p = String(path);
+
         if (isNodeModulesPath(p)) {
           return ULTRACITE_PACKAGE_JSON;
         }
+
         if (p.includes("biome.json")) {
           return '{"extends": ["ultracite/biome/core"]}';
         }
+
         return "invalid json {";
       }),
     }));

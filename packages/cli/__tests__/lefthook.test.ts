@@ -23,6 +23,7 @@ mock.module("nypm", () => ({
     if (name === "ultracite") {
       return "npx ultracite fix";
     }
+
     return `npx ${name} install`;
   }),
   removeDependency: mock(() => Promise.resolve()),
@@ -94,6 +95,7 @@ describe("lefthook", () => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
+
           return "npx ultracite fix";
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -129,6 +131,7 @@ describe("lefthook", () => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
+
           return "npx ultracite fix";
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -149,6 +152,7 @@ describe("lefthook", () => {
       const mockReadFile = mock((_path: string) =>
         Promise.resolve('{"name": "test"}')
       );
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -172,6 +176,7 @@ describe("lefthook", () => {
           if (name === "lefthook") {
             return "npx lefthook install";
           }
+
           return "npx ultracite fix";
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -191,6 +196,7 @@ describe("lefthook", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -204,6 +210,7 @@ describe("lefthook", () => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
+
           return `npx ${name} install`;
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -224,6 +231,7 @@ describe("lefthook", () => {
     test("skips update if ultracite command already present", async () => {
       const existingContent =
         "pre-commit:\n  jobs:\n    - run: npx ultracite fix";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -247,6 +255,7 @@ describe("lefthook", () => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
+
           return `npx ${name} install`;
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -259,6 +268,7 @@ describe("lefthook", () => {
 
     test("replaces default template with ultracite config", async () => {
       const existingContent = "# EXAMPLE USAGE:\n# pre-commit:\n#   commands:";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -282,6 +292,7 @@ describe("lefthook", () => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
+
           return `npx ${name} install`;
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -297,6 +308,7 @@ describe("lefthook", () => {
 
     test("adds ultracite job to existing jobs section", async () => {
       const existingContent = 'pre-commit:\n  jobs:\n    - run: echo "test"';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -320,6 +332,7 @@ describe("lefthook", () => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
+
           return `npx ${name} install`;
         }),
         removeDependency: mock(() => Promise.resolve()),
@@ -335,6 +348,7 @@ describe("lefthook", () => {
 
     test("adds jobs section to pre-commit without jobs", async () => {
       const existingContent = "pre-commit:\n  parallel: true";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -358,6 +372,7 @@ describe("lefthook", () => {
           if (name === "ultracite") {
             return "npx ultracite fix";
           }
+
           return `npx ${name} install`;
         }),
         removeDependency: mock(() => Promise.resolve()),

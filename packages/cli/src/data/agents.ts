@@ -23,8 +23,11 @@ export interface AgentSetupFacts {
 }
 
 const defaultRulesRunner = "npx";
+
 const defaultRulesProviderName = "Biome";
+
 const defaultHookPackageManager = "npm";
+
 const defaultHookLinter = "biome";
 
 const runPackageScript = (

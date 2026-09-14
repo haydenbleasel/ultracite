@@ -28,6 +28,7 @@ const readFileSync =
 const readOxlintConfig = async (name: string) => {
   const configPath = path.join(import.meta.dirname, `../config/oxlint/${name}`);
   const mod = await import(configPath);
+
   return mod.default;
 };
 
@@ -52,7 +53,9 @@ const lintFixture = (fixture: string, target = "src") => {
     ],
     { cwd: cliDir }
   );
+
   const output = result.stdout.toString() + result.stderr.toString();
+
   const flaggedBy = (rule: string) =>
     output
       .split("\n")
@@ -107,10 +110,13 @@ const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
     import.meta.dirname,
     "../node_modules/.bin/oxlint"
   );
+
   const result = Bun.spawnSync([oxlintBin, "--rules", "--format=json"], {
     cwd: os.tmpdir(),
   });
+
   const output = result.stdout.toString();
+
   // SAFETY: decoding oxlint's own `--rules --format=json` output, whose
   // entries carry scope/value/category strings.
   const entries = JSON.parse(output) as {
@@ -120,12 +126,15 @@ const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
   }[];
 
   const rules: string[] = [];
+
   for (const entry of entries) {
     if (entry.category === "nursery") {
       continue;
     }
+
     // JSON scopes use underscores (react_perf); config prefixes use hyphens.
     const plugin = entry.scope.replaceAll("_", "-");
+
     if (plugins.includes(plugin)) {
       rules.push(
         plugin === "eslint" ? entry.value : `${plugin}/${entry.value}`
@@ -155,6 +164,7 @@ describe("oxlint package exports", () => {
       import.meta.dirname,
       "../config/oxlint"
     );
+
     // Presets can nest one level deep (e.g. next/js-plugins).
     const configs = readdirSync(oxlintConfigDirectory, {
       recursive: true,
@@ -166,6 +176,7 @@ describe("oxlint package exports", () => {
 
     const typedConfigs = configs.filter((config) => {
       const configFiles = readdirSync(path.join(oxlintConfigDirectory, config));
+
       return configFiles.includes("index.d.mts");
     });
 
@@ -196,6 +207,7 @@ describe("oxlint package exports", () => {
   test("declaration files declare every runtime export", async () => {
     const configDirectory = path.join(import.meta.dirname, "../config");
     const oxlintConfigDirectory = path.join(configDirectory, "oxlint");
+
     // Presets can nest one level deep (e.g. next/js-plugins).
     const presetDirectories = readdirSync(oxlintConfigDirectory, {
       recursive: true,
@@ -204,6 +216,7 @@ describe("oxlint package exports", () => {
       .filter((entry) => entry.isFile() && entry.name === "index.mjs")
       .map((entry) => entry.parentPath)
       .toSorted();
+
     presetDirectories.push(path.join(configDirectory, "oxfmt"));
 
     const presets = await Promise.all(
@@ -217,11 +230,13 @@ describe("oxlint package exports", () => {
 
     const declaredDefaultPattern = /^export default /mu;
     const missing: string[] = [];
+
     for (const { exportNames, presetDirectory } of presets) {
       const declaration = readFileSync(
         path.join(presetDirectory, "index.d.mts"),
         "utf-8"
       );
+
       for (const exportName of exportNames) {
         const declared =
           exportName === "default"
@@ -230,6 +245,7 @@ describe("oxlint package exports", () => {
                 `^export declare (?:const|function|let) ${exportName}\\b`,
                 "mu"
               ).test(declaration);
+
         if (!declared) {
           missing.push(
             `${path.relative(configDirectory, presetDirectory)}: ${exportName}`
@@ -287,8 +303,10 @@ describe("oxlint core config", () => {
     // preset now, so core must contain only native core-plugin rules.
     const allowedPlugins = new Set(CORE_PLUGINS);
     const allRules = [...configRules, ...overrideRules];
+
     const nonCoreRules = allRules.filter((rule) => {
       const plugin = rule.includes("/") ? rule.split("/")[0] : "eslint";
+
       return !allowedPlugins.has(plugin);
     });
 
@@ -415,6 +433,7 @@ describe("oxlint vitest config", () => {
       const rules = config.overrides?.[0]?.rules ?? {};
 
       const validTitleEnabled = isEnabled(rules["vitest/valid-title"]);
+
       const preferDescribeFnEnabled = isEnabled(
         rules["vitest/prefer-describe-function-title"]
       );
@@ -441,6 +460,7 @@ describe("oxlint vitest config", () => {
       const strictBooleanEnabled = isEnabled(
         rules["vitest/prefer-strict-boolean-matchers"]
       );
+
       const truthyEnabled = isEnabled(rules["vitest/prefer-to-be-truthy"]);
       const falsyEnabled = isEnabled(rules["vitest/prefer-to-be-falsy"]);
 
@@ -522,6 +542,7 @@ describe("oxlint js-plugins config", () => {
       import.meta.dirname,
       "../config/oxlint/js-plugins"
     );
+
     const { selectJsPlugins } = await import(configDir);
     const full = await readOxlintConfig("js-plugins");
 
@@ -615,9 +636,11 @@ describe("oxlint js-plugins config", () => {
 
     const [severity, pattern] =
       pagesOverride?.rules?.["github/filenames-match-regex"] ?? [];
+
     expect(severity).toBe("error");
 
     const regex = new RegExp(pattern, "u");
+
     for (const name of [
       "[slug]",
       "[...slug]",
@@ -630,6 +653,7 @@ describe("oxlint js-plugins config", () => {
     ]) {
       expect(regex.test(name), name).toBe(true);
     }
+
     for (const name of ["BadPage", "[Slug]", "[slug", "a.b.c", "_app"]) {
       expect(regex.test(name), name).toBe(false);
     }
@@ -659,6 +683,7 @@ describe("oxlint js-plugins config", () => {
     test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
       const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
+
       // SAFETY: adapting the untyped ESLint plugin module — its default export
       // is a plugin object whose rules map holds rule objects with optional meta.
       const { rules } = mod.default as {
@@ -675,6 +700,7 @@ describe("oxlint js-plugins config", () => {
     test(`js-plugins does not enable deprecated ${prefix} rules`, async () => {
       const config = await readOxlintConfig("js-plugins");
       const mod = await import(plugin);
+
       // SAFETY: adapting the untyped ESLint plugin module — its default export
       // is a plugin object whose rules map holds rule objects with optional meta.
       const { rules } = mod.default as {
@@ -720,9 +746,11 @@ describe("oxlint js-plugins config", () => {
 
       const ruleNames = Object.keys(config.rules ?? {});
       expect(ruleNames.length).toBeGreaterThan(0);
+
       const misplaced = ruleNames.filter(
         (rule) => !prefixes.some((prefix) => rule.startsWith(prefix))
       );
+
       expect(misplaced).toEqual([]);
     });
   }
@@ -730,6 +758,7 @@ describe("oxlint js-plugins config", () => {
   test("js-plugins does not enable sonarjs rules that require type checking", async () => {
     const config = await readOxlintConfig("js-plugins");
     const mod = await import("eslint-plugin-sonarjs");
+
     // SAFETY: adapting the untyped ESLint plugin module — its default export
     // is a plugin object whose rules map holds rule objects with optional meta.
     const { rules } = mod.default as {
@@ -765,6 +794,7 @@ describe("oxlint anti-slop config", () => {
   test("enables exactly the rules the vendored plugin registers", async () => {
     const config = await readOxlintConfig("anti-slop");
     const mod = await import("../config/oxlint/anti-slop/plugin.mjs");
+
     // SAFETY: adapting the untyped vendored plugin bundle — its default export
     // is a plugin object whose rules map holds rule objects with meta/docs.
     const { rules } = mod.default as {
@@ -774,13 +804,16 @@ describe("oxlint anti-slop config", () => {
     const registered = Object.keys(rules)
       .map((name) => `anti-slop/${name}`)
       .toSorted();
+
     const configuredEntries = Object.entries(config.rules ?? {});
+
     const configured = configuredEntries
       .map(([name]) => name)
       .filter((name) => name.startsWith("anti-slop/"))
       .toSorted();
 
     expect(configured).toEqual(registered);
+
     for (const [name, severity] of configuredEntries) {
       if (name.startsWith("anti-slop/")) {
         // Configured rules are "error", optionally with rule options
@@ -881,7 +914,9 @@ describe("test file globs", () => {
       import.meta.dirname,
       `../config/eslint/${name}/eslint.config.mjs`
     );
+
     const mod = await import(configPath);
+
     // SAFETY: every eslint preset in config/eslint exports a flat-config array.
     return mod.default as FilesEntry[];
   };
@@ -915,6 +950,7 @@ describe("test file globs", () => {
         import.meta.dirname,
         `../config/eslint/${name}/eslint.config.mjs`
       );
+
       const source = readFileSync(configPath, "utf-8");
 
       expect(source, `${name} test file glob`).toContain(`"${TEST_FILE_GLOB}"`);
@@ -926,6 +962,7 @@ describe("test file globs", () => {
       import.meta.dirname,
       "../config/biome/core/biome.jsonc"
     );
+
     const biome = readFileSync(biomePath, "utf-8");
 
     expect(biome).toContain(`"${TEST_FILE_GLOB}"`);
@@ -933,6 +970,7 @@ describe("test file globs", () => {
 
   test("eslint vitest enables typecheck so expectTypeOf counts as an assertion", async () => {
     const config = await readEslintConfig("vitest");
+
     // SAFETY: the vitest preset's test override is a flat-config entry, which
     // may carry a `settings` block alongside `files`.
     const override = findTestOverride(config) as

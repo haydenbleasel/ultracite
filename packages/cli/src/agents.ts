@@ -27,6 +27,7 @@ const buildPromptLabel = (path: string, agentNames: string[]) => {
   if (path === "AGENTS.md" && agentNames.length > 1) {
     const previewNames = agentNames.slice(0, 3);
     const suffix = agentNames.length > previewNames.length ? ", and more" : "";
+
     return `Universal (creates ${path} for ${previewNames.join(", ")}${suffix})`;
   }
 
@@ -46,9 +47,11 @@ export const getAgentFileTargets = (): AgentFileTarget[] => {
 
   const targets = [...groupedTargets.entries()].map(([path, groupedAgents]) => {
     const [representativeAgent] = groupedAgents;
+
     const agentNames = groupedAgents.map((agent) =>
       normalizeAgentName(agent.name)
     );
+
     const isUniversal = path === "AGENTS.md" && groupedAgents.length > 1;
 
     return {
@@ -95,6 +98,7 @@ export const createAgents = (
 
   const dlx = dlxCommand(packageManager, "");
   const rules = getRules(dlx, provider.name);
+
   const content = agent.config.header
     ? `${agent.config.header}\n\n${rules}`
     : rules;
@@ -113,6 +117,7 @@ export const createAgents = (
 
       if (!(agent.config.appendMode && doesExist)) {
         await writeProjectFile(agent.config.path, content);
+
         return;
       }
 

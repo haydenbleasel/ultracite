@@ -75,16 +75,19 @@ export const UltraciteLogo = ({
 
   const wordEasing = Easing.bezier(0.22, 1, 0.36, 1);
   const wl = frame - wordmarkDelay;
+
   const wordOpacity = interpolate(wl, [0, 20], [0, 1], {
     easing: wordEasing,
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+
   const wordX = interpolate(wl, [0, 20], [-14, 0], {
     easing: wordEasing,
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+
   const wordBlur = interpolate(wl, [0, 20], [10, 0], {
     easing: wordEasing,
     extrapolateLeft: "clamp",
@@ -98,6 +101,7 @@ export const UltraciteLogo = ({
     fps,
     frame,
   });
+
   const markRotate = interpolate(markSpring, [0, 1], [-24, 0]);
 
   const containerStyle = {
@@ -140,17 +144,22 @@ export const UltraciteLogo = ({
       >
         {RAYS.map((ray) => {
           const local = frame - ray.order * rayStagger;
+
           const s = spring({
             config: { damping: 12, mass: 0.6, stiffness: 200 },
             fps,
             frame: local,
           });
+
           const scale = interpolate(s, [0, 1], [0, 1]);
+
           const opacity = interpolate(local, [0, 6], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           });
+
           const blur = interpolate(s, [0, 1], [7, 0]);
+
           return (
             <path
               key={ray.order}

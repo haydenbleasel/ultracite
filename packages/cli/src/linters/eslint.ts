@@ -19,6 +19,7 @@ const getEslintConfigPath = (): string | null => {
       return path;
     }
   }
+
   return null;
 };
 
@@ -54,6 +55,7 @@ export const eslint = {
   },
   exists: () => {
     const path = getEslintConfigPath();
+
     return path !== null;
   },
   update: async (opts?: EslintOptions) => {
@@ -68,6 +70,7 @@ export const eslint = {
       existingPath && canHoldEsmConfig(existingPath)
         ? existingPath
         : defaultConfigPath;
+
     await writeProjectFile(targetPath, config);
 
     if (existingPath && existingPath !== targetPath) {

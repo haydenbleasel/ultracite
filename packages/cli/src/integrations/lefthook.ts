@@ -13,6 +13,7 @@ import { exists, updatePackageJson, writeProjectFile } from "../utils";
 // wherever a `jobs:` key happens to appear elsewhere in the file.
 const PRE_COMMIT_BLOCK_REGEX =
   /^pre-commit:[^\S\n]*\n(?<block>(?:[ \t]+[^\n]*\n?|[ \t]*\n)*)/mu;
+
 const JOBS_LINE_REGEX = /^(?<indent>[ \t]+)jobs:[^\S\n]*\n/mu;
 
 const createUltraciteCommand = (packageManager: PackageManagerName) =>
@@ -88,6 +89,7 @@ export const lefthook = {
     if (isDefaultTemplate) {
       // Replace the entire default template with our config
       await writeProjectFile(path, lefthookConfig);
+
       return;
     }
 
@@ -96,6 +98,7 @@ export const lefthook = {
     if (!blockMatch) {
       // No pre-commit hook yet — append a new pre-commit section
       await writeProjectFile(path, `${existingContents}\n${lefthookConfig}`);
+
       return;
     }
 
@@ -123,9 +126,11 @@ export const lefthook = {
       // jobs: line, matching its indentation
       const insertAt =
         blockStart + (jobsMatch.index ?? 0) + jobsMatch[0].length;
+
       const jobsIndent = jobsMatch.groups?.indent ?? "  ";
       const updatedConfig = `${existingContents.slice(0, insertAt)}${renderJob(`${jobsIndent}  `)}${existingContents.slice(insertAt)}`;
       await writeProjectFile(path, updatedConfig);
+
       return;
     }
 
@@ -136,6 +141,7 @@ export const lefthook = {
       log.warn(
         `Could not add the Ultracite job to ${path} automatically. Add this to the pre-commit jobs list:\n  - run: ${ultraciteCommand}`
       );
+
       return;
     }
 

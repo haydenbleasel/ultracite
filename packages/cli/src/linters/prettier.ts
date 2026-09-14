@@ -18,6 +18,7 @@ const defaultConfigPath = "./prettier.config.mjs";
 
 const hasPrettierKeyInPackageJson = (): boolean => {
   const packageJson = readPackageJsonSync(packageJsonPath);
+
   return packageJson?.prettier !== undefined;
 };
 
@@ -53,6 +54,7 @@ const generatePrettierConfig = (opts?: PrettierOptions): string => {
     for (const fw of opts.frameworks) {
       const name = validateFrameworkName(fw);
       const plugin = frameworkPlugins.get(name);
+
       if (plugin) {
         plugins.push(plugin);
       }
@@ -78,6 +80,7 @@ export const prettier = {
   },
   exists: () => {
     const path = getPrettierConfigPath();
+
     return path !== null;
   },
   update: async (opts?: PrettierOptions) => {
@@ -93,6 +96,7 @@ export const prettier = {
       existingFile && canHoldEsmConfig(existingFile)
         ? existingFile
         : defaultConfigPath;
+
     await writeProjectFile(targetPath, config);
 
     if (existingFile && existingFile !== targetPath) {

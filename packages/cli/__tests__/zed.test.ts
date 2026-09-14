@@ -21,6 +21,7 @@ describe("zed editor config", () => {
           if (path === ".zed/settings.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -33,6 +34,7 @@ describe("zed editor config", () => {
           if (path === ".zed/settings.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -95,6 +97,7 @@ describe("zed editor config", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -116,9 +119,11 @@ describe("zed editor config", () => {
   describe("update", () => {
     test("merges with existing settings", async () => {
       const existingSettings = '{"theme": "dark"}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -145,6 +150,7 @@ describe("zed editor config", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),

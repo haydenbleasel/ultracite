@@ -33,10 +33,12 @@ const stripAnsi = (line: string): string =>
 
 const createSink = () => {
   const chunks: string[] = [];
+
   return {
     output: () => chunks.join(""),
     write: (text: string) => {
       chunks.push(text);
+
       return true;
     },
   };
@@ -45,6 +47,7 @@ const createSink = () => {
 describe("agent-fix renderer", () => {
   test("non-TTY mode prints plain per-file and per-issue lines without ANSI", () => {
     const sink = createSink();
+
     const renderer = createRenderer(groups, {
       agentLabel: "Claude Code",
       isTTY: false,
@@ -79,6 +82,7 @@ describe("agent-fix renderer", () => {
 
   test("TTY mode animates the active block and settles lines with icons", () => {
     const sink = createSink();
+
     const renderer = createRenderer(groups, {
       agentLabel: "Claude Code",
       columns: 120,
@@ -111,6 +115,7 @@ describe("agent-fix renderer", () => {
 
   test("TTY mode truncates long messages to the terminal width", () => {
     const sink = createSink();
+
     const renderer = createRenderer(
       [{ file: "src/foo.ts", issues: [issue({ message: "x".repeat(300) })] }],
       {
@@ -124,6 +129,7 @@ describe("agent-fix renderer", () => {
 
     renderer.startFile("src/foo.ts");
     renderer.stop();
+
     for (const line of sink.output().split("\n")) {
       expect(stripAnsi(line).length).toBeLessThanOrEqual(60);
     }
@@ -134,6 +140,7 @@ describe("agent-fix renderer", () => {
   // in-place block rewrite.
   test("TTY mode truncates by display width, not code units", () => {
     const sink = createSink();
+
     const renderer = createRenderer(
       [
         {
@@ -152,6 +159,7 @@ describe("agent-fix renderer", () => {
 
     renderer.startFile("src/foo.ts");
     renderer.stop();
+
     for (const line of sink.output().split("\n")) {
       expect(stringWidth(stripAnsi(line))).toBeLessThanOrEqual(60);
     }

@@ -18,7 +18,9 @@ mock.module("nypm", () => ({
       ["pnpm", "pnpm dlx"],
       ["yarn", "yarn dlx"],
     ]);
+
     const prefix = prefixMap.get(pm) ?? "npx";
+
     return pkg ? `${prefix} ${pkg}` : prefix;
   }),
 }));
@@ -67,6 +69,7 @@ describe("createAgents", () => {
 
     test("update uses append mode", async () => {
       const existingContent = "Existing instructions";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -115,6 +118,7 @@ describe("createAgents", () => {
 
     test("update appends to AGENTS.md file", async () => {
       const existingContent = "Existing AGENTS rules";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -287,6 +291,7 @@ describe("getAgentFileTargets", () => {
     const targets = getAgentFileTargets();
     // AGENTS.md (universal) should always be first
     expect(targets[0].path).toBe("AGENTS.md");
+
     // Non-AGENTS.md targets should come after
     for (let i = 1; i < targets.length; i += 1) {
       expect(targets[i].path).not.toBe("AGENTS.md");

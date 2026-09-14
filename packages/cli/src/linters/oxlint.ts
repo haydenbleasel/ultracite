@@ -22,6 +22,7 @@ const oxlintJsPluginNames = [
 ] as const;
 
 type OxlintJsPlugin = (typeof oxlintJsPluginNames)[number];
+
 type OxlintNpmJsPlugin = (typeof oxlintNpmJsPluginNames)[number];
 
 interface OxlintOptions {
@@ -49,6 +50,7 @@ const getOxlintConfigIdentifier = (configPath: string) => {
   const name = configPath
     .replace(/^ultracite\/oxlint\//u, "")
     .replaceAll("/", "-");
+
   return name.replaceAll(/-(?<letter>[a-z])/gu, (_, letter: string) =>
     letter.toUpperCase()
   );
@@ -67,6 +69,7 @@ const generateConfigContent = (
   const npmJsPlugins = jsPlugins.filter(
     (jsPlugin): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== antiSlopPreset
   );
+
   const hasJsPlugins = npmJsPlugins.length > 0;
 
   // When plugins are selected, the base js-plugins preset is imported and
@@ -81,6 +84,7 @@ const generateConfigContent = (
   if (npmJsPlugins.includes("oxlint-plugin-react-doctor")) {
     for (const framework of reactDoctorFrameworkAddOns) {
       const addOn = getOxlintConfigPath(`${framework}/js-plugins`);
+
       if (
         resolvedExtends.includes(getOxlintConfigPath(framework)) &&
         !resolvedExtends.includes(addOn)
@@ -110,7 +114,9 @@ const generateConfigContent = (
   const hasJsPluginSettings =
     npmJsPlugins.includes("oxlint-plugin-react-doctor") ||
     hasFullJsPluginsPreset;
+
   const jsPluginImports = ["selectJsPlugins"];
+
   if (hasJsPluginSettings) {
     jsPluginImports.unshift("jsPluginSettings");
   }
@@ -132,15 +138,18 @@ const generateConfigContent = (
   const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
     .join(", ");
+
   // The selection is bound to a `jsPlugins` const (mirroring the full
   // preset's default-import identifier) so it can be both extended and
   // hoisted onto the root config below.
   const jsPluginsIdentifier = getOxlintConfigIdentifier(
     getOxlintConfigPath("js-plugins")
   );
+
   const selectionBlock = hasJsPlugins
     ? `\nconst ${jsPluginsIdentifier} = selectJsPlugins([${pluginNames}]);\n`
     : "";
+
   const extendsEntries = [
     ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
     ...(hasJsPlugins ? [jsPluginsIdentifier] : []),
@@ -156,6 +165,7 @@ const generateConfigContent = (
       : "";
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
+
   const extendsBlock =
     singleLineExtends.length <= generatedLineWidth
       ? singleLineExtends
@@ -201,13 +211,18 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
   const match =
     SELECT_JS_PLUGINS_RE.exec(contents) ??
     SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
+
   if (!match?.groups?.names) {
     return [];
   }
 
-  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)]
-    .map((nameMatch) => jsPluginsByConfigName.get(nameMatch.groups?.name ?? ""))
-    .filter((plugin): plugin is OxlintNpmJsPlugin => plugin !== undefined);
+  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)].flatMap(
+    (nameMatch) => {
+      const plugin = jsPluginsByConfigName.get(nameMatch.groups?.name ?? "");
+
+      return plugin === undefined ? [] : [plugin];
+    }
+  );
 };
 
 export const oxlint = {
@@ -241,6 +256,7 @@ export const oxlint = {
     const importMatches = existingContents.matchAll(
       /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
     );
+
     for (const match of importMatches) {
       if (match[1].startsWith("ultracite/oxlint/")) {
         existingExtends.push(match[1].replace(/\/index\.[tj]s$/u, ""));
@@ -252,14 +268,17 @@ export const oxlint = {
       const extendsMatch = existingContents.match(
         /extends:\s*\[(?<body>[\s\S]*?)\]/u
       );
+
       if (extendsMatch?.[1]) {
         const matches = extendsMatch[1].matchAll(/"(?<value>[^"]+)"/gu);
+
         for (const match of matches) {
           // Convert legacy node_modules paths to new format
           const converted = match[1].replace(
             /^\.\/node_modules\/ultracite\/config\/oxlint\//u,
             "ultracite/oxlint/"
           );
+
           existingExtends.push(converted);
         }
       }
@@ -290,6 +309,7 @@ export const oxlint = {
     if (opts?.frameworks && opts.frameworks.length > 0) {
       for (const framework of opts.frameworks) {
         const name = validateFrameworkName(framework);
+
         if (!hasConfig(name)) {
           newExtends.push(getOxlintConfigPath(name));
         }

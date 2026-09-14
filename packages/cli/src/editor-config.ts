@@ -39,6 +39,7 @@ export const createEditorConfig = (
           // extensionCommand is a full command line, e.g.
           // "code --install-extension" — split it so spawn gets a real binary
           const [command, ...commandArgs] = extensionCommand.split(" ");
+
           return spawnSync(command, [...commandArgs, extensionId], {
             stdio: "pipe",
           });
@@ -54,6 +55,7 @@ export const createEditorConfig = (
           editor.config.path,
           `${JSON.stringify(content, null, 2)}\n`
         );
+
         return;
       }
 
@@ -68,6 +70,7 @@ export const createEditorConfig = (
         log.warn(
           `Could not parse ${editor.config.path}; fix its syntax and re-run \`ultracite init\` to add the Ultracite settings.`
         );
+
         return;
       }
 

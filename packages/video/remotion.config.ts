@@ -11,6 +11,7 @@ import { Config } from "@remotion/cli/config";
 import { enableTailwind } from "@remotion/tailwind-v4";
 
 Config.setVideoImageFormat("jpeg");
+
 Config.setOverwriteOutput(true);
 
 // enableTailwind + the `@/*` → `src/*` path alias the remocn components import
@@ -18,6 +19,7 @@ Config.setOverwriteOutput(true);
 // alias has to be wired in here or the component graph fails to resolve.
 Config.overrideWebpackConfig((currentConfig) => {
   const withTailwind = enableTailwind(currentConfig);
+
   return {
     ...withTailwind,
     resolve: {

@@ -2,6 +2,7 @@ import packageJson from "../package.json" with { type: "json" };
 import type { options } from "./data/options";
 
 type Linter = (typeof options.linters)[number];
+
 type Frameworks = (typeof options.frameworks)[number];
 
 /**
@@ -71,6 +72,7 @@ export const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
 // eslint-plugin-unicorn@72 and eslint-plugin-astro@3 require ESLint >= 10;
 // the whole preset is verified against ESLint 10.
 const supportedEslintVersion = toolchainPeerRanges.eslint;
+
 export const eslintCoreDevDependencies = {
   "@eslint/js": supportedEslintVersion,
   "@typescript-eslint/eslint-plugin":
@@ -115,6 +117,7 @@ export const eslintCoreDevDependencies = {
     packageJson.devDependencies["stylelint-config-standard"],
   "stylelint-prettier": packageJson.devDependencies["stylelint-prettier"],
 } satisfies Record<string, string>;
+
 // Extra ESLint devDependencies, keyed by the framework that needs them.
 export const eslintFrameworkDevDependencies = {
   angular: {

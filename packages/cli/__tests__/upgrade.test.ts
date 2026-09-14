@@ -17,9 +17,13 @@ import * as utils from "../src/utils";
 // as they are when this file loads — before any of its mocks — so afterAll
 // can put the modules back exactly as it found them.
 const realNypm = { ...nypm };
+
 const realDoctor = { ...doctorModule };
+
 const realConfigResolution = { ...configResolution };
+
 const realSchemas = { ...schemas };
+
 const realUtils = { ...utils };
 
 const noop = () => {
@@ -101,9 +105,11 @@ const setup = (options: SetupOptions = {}): Harness => {
     projectDependencies = {},
     versions = [],
   } = options;
+
   const addDevDependency = mock(() => Promise.resolve());
   const spawnSync = mock(() => ({ status: 0 }));
   const findInstalledPackage = mock((): InstalledPackage | null => null);
+
   for (const version of versions) {
     findInstalledPackage.mockReturnValueOnce(version);
   }
@@ -145,6 +151,7 @@ const setup = (options: SetupOptions = {}): Harness => {
 
 const loadUpgrade = async () => {
   const module = await import("../src/commands/upgrade");
+
   return module;
 };
 
@@ -222,13 +229,16 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed(runningVersion)],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
 
     expect(harness.addDevDependency).toHaveBeenCalledTimes(2);
+
     const [[selfPackages], [toolchainPackages]] =
       harness.addDevDependency.mock.calls;
+
     expect(selfPackages).toEqual(["ultracite@latest"]);
     expect(toolchainPackages).toEqual([`@biomejs/biome@${biomeVersion}`]);
     expect(harness.spawnSync).not.toHaveBeenCalled();
@@ -238,6 +248,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
@@ -261,6 +272,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     harness.spawnSync.mockReturnValue({ status: 1 });
     const { upgrade } = await loadUpgrade();
 
@@ -271,6 +283,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0", {})],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await upgrade({ pm: "npm" });
@@ -284,6 +297,7 @@ describe("upgrade", () => {
       linter: "eslint",
       projectDependencies: { "eslint-plugin-react": "^7.0.0" },
     });
+
     const { upgrade } = await loadUpgrade();
 
     await upgrade({ pm: "npm", skipSelf: true });

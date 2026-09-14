@@ -84,6 +84,7 @@ describe("husky", () => {
       const mockReadFile = mock((_path: string) =>
         Promise.resolve('{"name": "test"}')
       );
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -136,6 +137,7 @@ describe("husky", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -157,6 +159,7 @@ describe("husky", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -183,6 +186,7 @@ describe("husky", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -200,6 +204,7 @@ describe("husky", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -217,9 +222,11 @@ describe("husky", () => {
   describe("update", () => {
     test("appends to existing hook that has no ultracite marker", async () => {
       const existingContent = '#!/bin/sh\necho "existing"';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -245,9 +252,11 @@ describe("husky", () => {
     test("replaces existing ultracite section on re-run", async () => {
       const existingContent =
         '#!/bin/sh\necho "other"\n# ultracite\n#!/bin/sh\nnpx ultracite fix\n';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -267,10 +276,12 @@ describe("husky", () => {
       const [, written] = writeCall;
       // Should contain the "other" line
       expect(written).toContain("other");
+
       // Should have exactly one ultracite start marker
       const markerCount = written
         .split("\n")
         .filter((line) => line === "# ultracite").length;
+
       expect(markerCount).toBe(1);
     });
 
@@ -284,9 +295,11 @@ describe("husky", () => {
         "npm test",
         "",
       ].join("\n");
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -306,9 +319,11 @@ describe("husky", () => {
       const [, written] = writeCall;
       expect(written).toContain('echo "before"');
       expect(written).toContain("npm test");
+
       const markerCount = written
         .split("\n")
         .filter((line) => line === "# ultracite").length;
+
       expect(markerCount).toBe(1);
       // npm test must come after the replaced section
       expect(written.indexOf("npm test")).toBeGreaterThan(
@@ -325,9 +340,11 @@ describe("husky", () => {
         "npm test",
         "",
       ].join("\n");
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -355,6 +372,7 @@ describe("husky", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -374,9 +392,11 @@ describe("husky", () => {
 
     test("uses lint-staged hook when useLintStaged is true", async () => {
       const existingContent = "#!/bin/sh";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),

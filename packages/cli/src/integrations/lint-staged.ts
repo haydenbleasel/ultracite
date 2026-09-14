@@ -68,13 +68,16 @@ const containsFunction = (
   if (typeof value === "function") {
     return true;
   }
+
   if (Array.isArray(value)) {
     return value.some((entry) => containsFunction(entry));
   }
+
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same untyped-module boundary: distinguishes nested config objects from command strings
   if (value && typeof value === "object") {
     return Object.values(value).some((entry) => containsFunction(entry));
   }
+
   return false;
 };
 
@@ -88,6 +91,7 @@ const hasPackageJsonLintStaged = async (): Promise<boolean> => {
   try {
     const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
+
     return Boolean(packageJson?.["lint-staged"]);
   } catch {
     return false;
@@ -99,6 +103,7 @@ const isProjectEsm = async (): Promise<boolean> => {
   try {
     const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
+
     return packageJson?.type === "module";
   } catch {
     return false;
@@ -161,6 +166,7 @@ const updateJsonConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
+
   await writeProjectFile(
     filename,
     `${JSON.stringify(mergedConfig, null, 2)}\n`
@@ -183,6 +189,7 @@ const updateYamlConfig = async (
   const content = quoteGlobKeys(raw);
 
   let existingConfig: LintStagedConfig | undefined;
+
   try {
     // SAFETY: a .lintstagedrc YAML file holds a lint-staged config by
     // contract; the parsed value is only scanned and deep-merged, so a
@@ -205,6 +212,7 @@ const updateYamlConfig = async (
     existingConfig,
     createLintStagedConfig(packageManager)
   );
+
   await writeProjectFile(filename, YAML.stringify(mergedConfig));
 };
 
@@ -243,16 +251,19 @@ const updateEsmConfig = async (
         // A function or other non-array value owns our pattern; replacing it
         // would delete the user's config.
         warnUnmergeableConfig(filename);
+
         return;
       }
     } else {
       // e.g. `export default defineConfig(...)` or a function config.
       warnUnmergeableConfig(filename);
+
       return;
     }
   } catch {
     // magicast can't proxy every node kind (some template literals, etc.).
     warnUnmergeableConfig(filename);
+
     return;
   }
 
@@ -277,6 +288,7 @@ const updateCjsConfig = async (
 
   if (containsFunction(existingConfig)) {
     warnUnmergeableConfig(filename);
+
     return;
   }
 
@@ -287,6 +299,7 @@ const updateCjsConfig = async (
 
   const cjsContent = `module.exports = ${JSON.stringify(mergedConfig, null, 2)};
 `;
+
   await writeProjectFile(filename, cjsContent);
 };
 
@@ -307,11 +320,13 @@ const handleConfigFileUpdate = async (
 ): Promise<void> => {
   if (filename.endsWith(".json") || filename === "./.lintstagedrc") {
     await updateJsonConfig(filename, packageManager);
+
     return;
   }
 
   if (filename.endsWith(".yaml") || filename.endsWith(".yml")) {
     await updateYamlConfig(filename, packageManager);
+
     return;
   }
 
@@ -323,6 +338,7 @@ const handleConfigFileUpdate = async (
     } catch {
       await createFallbackConfig(packageManager);
     }
+
     return;
   }
 
@@ -361,6 +377,7 @@ export const lintStaged = {
     // otherwise a dedicated config file would shadow whatever we write there
     if (await hasPackageJsonLintStaged()) {
       await updatePackageJson(packageManager);
+
       return;
     }
 
@@ -369,6 +386,7 @@ export const lintStaged = {
     // If no config file found, create a fallback config
     if (!existingConfigFile) {
       await createFallbackConfig(packageManager);
+
       return;
     }
 

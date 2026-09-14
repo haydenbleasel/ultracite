@@ -295,13 +295,16 @@ describe("initialize", () => {
   test("cancels when user cancels agents prompt", async () => {
     const mockCancel = mock(noop);
     let callCount = 0;
+
     const mockMultiselect = mock(() => {
       callCount += 1;
+
       // First call is for editors, second for agents
       if (callCount === 1) {
         // Return empty for editors
         return Promise.resolve([]);
       }
+
       // Cancel for agents
       return Symbol.for("cancel");
     });
@@ -471,8 +474,10 @@ describe("initialize", () => {
           "oxlint-plugin-react-doctor",
         ]);
       }
+
       return Promise.resolve([]);
     });
+
     const writtenContents: string[] = [];
 
     mock.module("node:fs/promises", () => ({
@@ -481,6 +486,7 @@ describe("initialize", () => {
       readFile: mock(() => Promise.resolve('{"name": "test"}')),
       writeFile: mock((_path: string, content: string) => {
         writtenContents.push(content);
+
         return Promise.resolve();
       }),
     }));
@@ -549,8 +555,10 @@ describe("initialize", () => {
 
   test("installs Oxlint JS plugin dependencies when js-plugins flag is set", async () => {
     const installedPackages: string[] = [];
+
     const mockAddDep = mock((pkg: string | string[]) => {
       installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
       return Promise.resolve();
     });
 
@@ -598,8 +606,10 @@ describe("initialize", () => {
 
   test("installs oxlint-tsgolint when type-aware flag is set with oxlint", async () => {
     const installedPackages: string[] = [];
+
     const mockAddDep = mock((pkg: string | string[]) => {
       installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
       return Promise.resolve();
     });
 
@@ -694,6 +704,7 @@ describe("initialize", () => {
     const mockDetect = mock(() =>
       Promise.resolve({ name: "pnpm", warnings: [] })
     );
+
     const mockLog = {
       error: mock(noop),
       info: mock(noop),
@@ -1162,6 +1173,7 @@ describe("initialize", () => {
   test("skips the skill prompt when the Ultracite skill is installed globally", async () => {
     const mockInfo = mock(noop);
     const mockSelect = mock(() => Promise.resolve("skip"));
+
     const mockSpawn = mock((_command: string, args: string[]) => {
       if (args[1] === "list" && !args.includes("-g")) {
         return { status: 0, stdout: "[]" };
@@ -1262,6 +1274,7 @@ describe("initialize", () => {
   test("skips the skill prompt when the Ultracite skill is installed locally", async () => {
     const mockInfo = mock(noop);
     const mockSelect = mock(() => Promise.resolve("skip"));
+
     const mockSpawn = mock((_command: string, args: string[]) => {
       if (args[1] === "list" && !args.includes("-g")) {
         return {
@@ -1512,6 +1525,7 @@ describe("initialize", () => {
         if (path === "./.husky/pre-commit") {
           return Promise.resolve();
         }
+
         return Promise.reject(new Error("ENOENT"));
       }),
       mkdir: mock(() => Promise.resolve()),
@@ -1519,6 +1533,7 @@ describe("initialize", () => {
         if (path === "./.husky/pre-commit") {
           return Promise.resolve('#!/bin/sh\necho "existing"');
         }
+
         return Promise.resolve('{"name": "test"}');
       }),
       writeFile: mockWriteFile,
@@ -1858,6 +1873,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -1879,8 +1895,10 @@ describe("helper functions", () => {
 
     test("installs eslint dependencies when linter is eslint", async () => {
       const installedPackages: string[] = [];
+
       const mockAddDep = mock((pkg: string | string[]) => {
         installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
         return Promise.resolve();
       });
 
@@ -1935,10 +1953,13 @@ describe("helper functions", () => {
 
     test("updates package.json with eslint deps when install is false", async () => {
       const writtenContents: string[] = [];
+
       const mockWriteFile = mock((_path: string, content: string) => {
         writtenContents.push(content);
+
         return Promise.resolve();
       });
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -1972,6 +1993,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -1993,8 +2015,10 @@ describe("helper functions", () => {
 
     test("installs oxlint-tsgolint when type-aware is true", async () => {
       const installedPackages: string[] = [];
+
       const mockAddDep = mock((pkg: string | string[]) => {
         installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
         return Promise.resolve();
       });
 
@@ -2021,8 +2045,10 @@ describe("helper functions", () => {
 
     test("does not install oxlint-tsgolint when type-aware is false", async () => {
       const installedPackages: string[] = [];
+
       const mockAddDep = mock((pkg: string) => {
         installedPackages.push(pkg);
+
         return Promise.resolve();
       });
 
@@ -2049,8 +2075,10 @@ describe("helper functions", () => {
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
       const writtenContents: string[] = [];
+
       const mockWriteFile = mock((_path: string, content: string) => {
         writtenContents.push(content);
+
         return Promise.resolve();
       });
 
@@ -2082,9 +2110,11 @@ describe("helper functions", () => {
       // "No workspaces found!" when patterns match nothing. See issues #214,
       // #241 and a 2026-05 report against 7.6.4.
       const calls: { workspace: boolean | string }[] = [];
+
       const mockAddDep = mock(
         (_pkg: string | string[], opts: { workspace: boolean | string }) => {
           calls.push({ workspace: opts.workspace });
+
           return Promise.resolve();
         }
       );
@@ -2123,9 +2153,11 @@ describe("helper functions", () => {
     test("passes workspace flag to pnpm in a monorepo", async () => {
       const pnpmPm: PackageManager = { command: "pnpm", name: "pnpm" };
       const calls: { workspace: boolean | string }[] = [];
+
       const mockAddDep = mock(
         (_pkg: string | string[], opts: { workspace: boolean | string }) => {
           calls.push({ workspace: opts.workspace });
+
           return Promise.resolve();
         }
       );
@@ -2166,8 +2198,10 @@ describe("helper functions", () => {
       // and nub refuses root installs without `-w`. nypm builds flags from
       // `name` but runs `command`, so we hand it pnpm's name with nub's binary.
       const nubPm: PackageManager = { command: "nub", name: "nub" };
+
       const calls: { packageManager: PackageManager; workspace: boolean }[] =
         [];
+
       const mockAddDep = mock(
         (
           _pkg: string | string[],
@@ -2177,6 +2211,7 @@ describe("helper functions", () => {
             packageManager: opts.packageManager,
             workspace: opts.workspace,
           });
+
           return Promise.resolve();
         }
       );
@@ -2220,6 +2255,7 @@ describe("helper functions", () => {
   describe("migrateLinterConfig", () => {
     test("removes stale Biome and ESLint config when migrating to oxlint", async () => {
       const removedFiles: string[] = [];
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -2236,6 +2272,7 @@ describe("helper functions", () => {
           ) {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         lstatSync: mock(() => ({ isSymbolicLink: () => false })),
@@ -2264,6 +2301,7 @@ describe("helper functions", () => {
         ),
         rm: mock((path: string) => {
           removedFiles.push(path);
+
           return Promise.resolve();
         }),
         writeFile: mockWriteFile,
@@ -2281,6 +2319,7 @@ describe("helper functions", () => {
       const packageJson = JSON.parse(
         mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
       );
+
       expect(packageJson.devDependencies).toEqual({
         oxfmt: "latest",
         oxlint: "latest",
@@ -2292,6 +2331,7 @@ describe("helper functions", () => {
 
     test("removes stale Oxlint config when migrating to biome", async () => {
       const removedFiles: string[] = [];
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -2301,6 +2341,7 @@ describe("helper functions", () => {
           if (["./oxlint.config.ts", "./oxfmt.config.ts"].includes(path)) {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         lstatSync: mock(() => ({ isSymbolicLink: () => false })),
@@ -2324,6 +2365,7 @@ describe("helper functions", () => {
         ),
         rm: mock((path: string) => {
           removedFiles.push(path);
+
           return Promise.resolve();
         }),
         writeFile: mockWriteFile,
@@ -2338,6 +2380,7 @@ describe("helper functions", () => {
       const packageJson = JSON.parse(
         mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
       );
+
       expect(packageJson.devDependencies).toEqual({
         "@biomejs/biome": "latest",
         ultracite: "latest",
@@ -2350,11 +2393,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./tsconfig.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2413,6 +2458,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2436,11 +2482,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === ".vscode/settings.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2464,6 +2512,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2496,6 +2545,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2519,11 +2569,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === ".zed/settings.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2549,6 +2601,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2572,11 +2625,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2604,6 +2659,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2627,11 +2683,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./eslint.config.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2657,6 +2715,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2680,11 +2739,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./oxlint.config.ts") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2710,6 +2771,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2733,11 +2795,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./prettier.config.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2763,6 +2827,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2786,11 +2851,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./stylelint.config.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2816,6 +2883,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2839,6 +2907,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         mkdir: mock(() => Promise.resolve()),
@@ -2864,6 +2933,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2887,11 +2957,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === ".cursor/hooks.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2917,6 +2989,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         mkdir: mock(() => Promise.resolve()),
@@ -2940,11 +3013,13 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.pre-commit-config.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -2968,6 +3043,7 @@ describe("helper functions", () => {
   describe("initializePrecommitHook", () => {
     test("installs and creates husky hook", async () => {
       const mockAddDep = mock(() => Promise.resolve());
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -3011,6 +3087,7 @@ describe("helper functions", () => {
           if (path === ".husky/pre-commit") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -3018,6 +3095,7 @@ describe("helper functions", () => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test", "devDependencies": {}}');
           }
+
           return Promise.resolve("#!/bin/sh\necho test");
         }),
         writeFile: mockWriteFile,
@@ -3041,6 +3119,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const mockAddDep = mock(() => Promise.resolve());
 
       mock.module("nypm", () => ({
@@ -3082,6 +3161,7 @@ describe("helper functions", () => {
           if (path === "./lefthook.yml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -3089,6 +3169,7 @@ describe("helper functions", () => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test"}');
           }
+
           return Promise.resolve(
             "pre-commit:\n  commands:\n    test:\n      run: echo test"
           );
@@ -3114,6 +3195,7 @@ describe("helper functions", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const mockAddDep = mock(() => Promise.resolve());
 
       mock.module("nypm", () => ({
@@ -3155,6 +3237,7 @@ describe("helper functions", () => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -3162,6 +3245,7 @@ describe("helper functions", () => {
           if (path === "package.json") {
             return Promise.resolve('{"name": "test"}');
           }
+
           return Promise.resolve('{"*.js": ["eslint"]}');
         }),
         writeFile: mockWriteFile,
@@ -3215,6 +3299,7 @@ describe("helper functions", () => {
           if (path === ".claude/CLAUDE.md") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -3359,12 +3444,15 @@ describe("helper functions", () => {
     test("cancels when user cancels hooks prompt in fully interactive mode", async () => {
       const mockCancel = mock(noop);
       let multiselectCallCount = 0;
+
       const mockMultiselect = mock(() => {
         multiselectCallCount += 1;
+
         // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4)
         if (multiselectCallCount <= 3) {
           return Promise.resolve([]);
         }
+
         // Cancel on hooks prompt
         return Symbol.for("cancel");
       });
@@ -3411,12 +3499,15 @@ describe("helper functions", () => {
     test("cancels when user cancels integrations prompt in fully interactive mode", async () => {
       const mockCancel = mock(noop);
       let multiselectCallCount = 0;
+
       const mockMultiselect = mock(() => {
         multiselectCallCount += 1;
+
         // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4), integrations(5)
         if (multiselectCallCount <= 4) {
           return Promise.resolve([]);
         }
+
         // Cancel on integrations prompt
         return Symbol.for("cancel");
       });

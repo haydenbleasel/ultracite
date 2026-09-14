@@ -44,6 +44,7 @@ export const runSteps = (steps: (() => void)[]): void => {
         firstFailure ??= error;
         continue;
       }
+
       throw error;
     }
   }

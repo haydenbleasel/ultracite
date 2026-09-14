@@ -12,6 +12,7 @@ mockAccess = mock(() => Promise.reject(new Error("ENOENT")));
 const realExists = async (filePath: string) => {
   try {
     await mockAccess(filePath);
+
     return true;
   } catch {
     return false;
@@ -24,6 +25,7 @@ const biomeConfigNames = [
   ".biome.json",
   ".biome.jsonc",
 ];
+
 const eslintConfigNames = [
   "eslint.config.mjs",
   "eslint.config.js",
@@ -32,6 +34,7 @@ const eslintConfigNames = [
   "eslint.config.mts",
   "eslint.config.cts",
 ];
+
 const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
 
 type Linter = "biome" | "eslint" | "oxlint";
@@ -40,12 +43,15 @@ const realDetectLinter = async (): Promise<Linter | null> => {
   // Collect ancestor directories from cwd up to the filesystem root.
   const dirs: string[] = [];
   let dir = process.cwd();
+
   while (true) {
     dirs.push(dir);
     const parent = path.dirname(dir);
+
     if (parent === dir) {
       break;
     }
+
     dir = parent;
   }
 
@@ -88,6 +94,7 @@ describe("detectLinter", () => {
       if (filePath === targetPath) {
         return Promise.resolve();
       }
+
       return Promise.reject(new Error("ENOENT"));
     });
 
@@ -101,6 +108,7 @@ describe("detectLinter", () => {
       if (filePath === targetPath) {
         return Promise.resolve();
       }
+
       return Promise.reject(new Error("ENOENT"));
     });
 
@@ -114,6 +122,7 @@ describe("detectLinter", () => {
       if (filePath === targetPath) {
         return Promise.resolve();
       }
+
       return Promise.reject(new Error("ENOENT"));
     });
 
@@ -127,6 +136,7 @@ describe("detectLinter", () => {
       if (filePath === targetPath) {
         return Promise.resolve();
       }
+
       return Promise.reject(new Error("ENOENT"));
     });
 
@@ -140,6 +150,7 @@ describe("detectLinter", () => {
       if (filePath === targetPath) {
         return Promise.resolve();
       }
+
       return Promise.reject(new Error("ENOENT"));
     });
 

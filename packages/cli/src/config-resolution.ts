@@ -44,14 +44,17 @@ const walkUp = <T>(
 
   while (true) {
     const result = visit(dir);
+
     if (result !== null) {
       return result;
     }
 
     const parent = path.dirname(dir);
+
     if (parent === dir) {
       return null;
     }
+
     dir = parent;
   }
 };
@@ -63,6 +66,7 @@ const findPackageDir = (
 ): string | null =>
   walkUp(startDir, (dir) => {
     const packageDir = path.join(dir, "node_modules", name);
+
     return fs.exists(path.join(packageDir, "package.json")) ? packageDir : null;
   });
 
@@ -116,6 +120,7 @@ export const findInstalledPackage = (
     const manifest = installedPackageManifestSchema(name).safeParse(
       JSON.parse(fs.readFile(path.join(dir, "package.json")))
     );
+
     return manifest.success ? { dir, manifest: manifest.data } : null;
   } catch {
     return null;
@@ -174,6 +179,7 @@ export const resolveFrom = (
   }
 
   const resolved = path.join(packageDir, target);
+
   return fs.exists(resolved) ? resolved : null;
 };
 
@@ -190,10 +196,12 @@ const findBiomeConfig = (
   walkUp(startDir, (dir) => {
     for (const name of biomeConfigNames) {
       const configPath = path.join(dir, name);
+
       if (fs.exists(configPath)) {
         return configPath;
       }
     }
+
     return null;
   });
 

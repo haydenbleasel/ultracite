@@ -16,6 +16,7 @@ const buildPromptLabel = (path: string, editorNames: string[]) => {
   if (editorNames.length > 1) {
     const previewNames = editorNames.slice(0, 3);
     const suffix = editorNames.length > previewNames.length ? ", and more" : "";
+
     return `Universal (creates ${path} for ${previewNames.join(", ")}${suffix})`;
   }
 

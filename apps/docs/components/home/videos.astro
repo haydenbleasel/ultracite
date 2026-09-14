@@ -56,9 +56,11 @@ const videos = [
   for (const el of document.querySelectorAll<HTMLButtonElement>(".hp-video")) {
     el.addEventListener("click", () => {
       const id = el.dataset.videoId;
+
       if (!id) {
         return;
       }
+
       const iframe = document.createElement("iframe");
       iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
       iframe.title = el.getAttribute("aria-label") ?? "YouTube video";

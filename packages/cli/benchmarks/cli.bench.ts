@@ -14,8 +14,11 @@ import {
 } from "../src/utils";
 
 const CROSS_SPAWN_MODULE = "cross-spawn";
+
 const UTILS_MODULE = "../src/utils";
+
 const ULTRACITE_CHECK_SCRIPT = "ultracite check";
+
 const ULTRACITE_FIX_SCRIPT = "ultracite fix";
 
 // ---------------------------------------------------------------------------
@@ -31,19 +34,24 @@ const makeTmpDir = (files: Record<string, string> = {}): string => {
     // oxlint-disable-next-line sonarjs/pseudo-random -- benchmark temp dir suffix, not security-sensitive
     `ultracite-bench-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
+
   mkdirSync(dir, { recursive: true });
+
   for (const [name, content] of Object.entries(files)) {
     const filePath = path.join(dir, name);
     mkdirSync(path.join(filePath, ".."), { recursive: true });
     writeFileSync(filePath, content);
   }
+
   return dir;
 };
 
 const dirs: string[] = [];
+
 const tmpDir = (files: Record<string, string> = {}): string => {
   const dir = makeTmpDir(files);
   dirs.push(dir);
+
   return dir;
 };
 
@@ -98,6 +106,7 @@ group("exists", () => {
 
 group("config lookups", () => {
   const prettierNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+
   const prettierHitDir = tmpDir({
     "package.json": JSON.stringify({ prettier: {} }),
   });
@@ -105,6 +114,7 @@ group("config lookups", () => {
   bench("prettier config — miss (18 checks)", async () => {
     const origCwd = process.cwd();
     process.chdir(prettierNoneDir);
+
     try {
       const { prettier } = await import("../src/linters/prettier");
       prettier.exists();
@@ -116,6 +126,7 @@ group("config lookups", () => {
   bench("prettier config — hit (package.json key)", async () => {
     const origCwd = process.cwd();
     process.chdir(prettierHitDir);
+
     try {
       const { prettier } = await import("../src/linters/prettier");
       prettier.exists();
@@ -125,6 +136,7 @@ group("config lookups", () => {
   });
 
   const stylelintNoneDir = tmpDir({ "package.json": JSON.stringify({}) });
+
   const stylelintHitDir = tmpDir({
     "package.json": JSON.stringify({ stylelint: {} }),
   });
@@ -132,6 +144,7 @@ group("config lookups", () => {
   bench("stylelint config — miss (11 checks)", async () => {
     const origCwd = process.cwd();
     process.chdir(stylelintNoneDir);
+
     try {
       const { stylelint } = await import("../src/linters/stylelint");
       stylelint.exists();
@@ -143,6 +156,7 @@ group("config lookups", () => {
   bench("stylelint config — hit (package.json key)", async () => {
     const origCwd = process.cwd();
     process.chdir(stylelintHitDir);
+
     try {
       const { stylelint } = await import("../src/linters/stylelint");
       stylelint.exists();
@@ -157,6 +171,7 @@ group("config lookups", () => {
   bench("eslint config — miss (6 checks)", async () => {
     const origCwd = process.cwd();
     process.chdir(eslintNoneDir);
+
     try {
       const { eslint } = await import("../src/linters/eslint");
       eslint.exists();
@@ -168,6 +183,7 @@ group("config lookups", () => {
   bench("eslint config — hit (first path)", async () => {
     const origCwd = process.cwd();
     process.chdir(eslintHitDir);
+
     try {
       const { eslint } = await import("../src/linters/eslint");
       eslint.exists();
@@ -181,6 +197,7 @@ group("config lookups", () => {
   bench("lint-staged config — miss (11 checks)", async () => {
     const origCwd = process.cwd();
     process.chdir(lintStagedNoneDir);
+
     try {
       const { lintStaged } = await import("../src/integrations/lint-staged");
       lintStaged.exists();
@@ -247,11 +264,13 @@ group("doctor", () => {
 
   bench("full doctor run (mocked)", async () => {
     const origCwd = process.cwd();
+
     try {
       process.chdir(fullDir);
     } catch {
       return;
     }
+
     try {
       mock.module(CROSS_SPAWN_MODULE, () => ({
         sync: () => ({ status: 0, stderr: "", stdout: "1.0.0\n" }),
@@ -295,14 +314,17 @@ group("isMonorepo", () => {
   const pnpmDir = tmpDir({
     "pnpm-workspace.yaml": "packages:\n  - packages/*",
   });
+
   const npmDir = tmpDir({
     "package.json": JSON.stringify({ workspaces: ["packages/*"] }),
   });
+
   const plainDir = tmpDir({ "package.json": JSON.stringify({}) });
 
   bench("pnpm workspace", async () => {
     const origCwd = process.cwd();
     process.chdir(pnpmDir);
+
     try {
       await isMonorepo();
     } finally {
@@ -313,6 +335,7 @@ group("isMonorepo", () => {
   bench("npm workspaces", async () => {
     const origCwd = process.cwd();
     process.chdir(npmDir);
+
     try {
       await isMonorepo();
     } finally {
@@ -323,6 +346,7 @@ group("isMonorepo", () => {
   bench("plain project (no workspaces)", async () => {
     const origCwd = process.cwd();
     process.chdir(plainDir);
+
     try {
       await isMonorepo();
     } finally {
@@ -347,6 +371,7 @@ group("updatePackageJson", () => {
   bench("single call", async () => {
     const origCwd = process.cwd();
     process.chdir(dir);
+
     try {
       await updatePackageJson({
         scripts: { check: ULTRACITE_CHECK_SCRIPT, fix: ULTRACITE_FIX_SCRIPT },
@@ -359,6 +384,7 @@ group("updatePackageJson", () => {
   bench("two sequential calls (current init pattern)", async () => {
     const origCwd = process.cwd();
     process.chdir(dir);
+
     try {
       await updatePackageJson({
         devDependencies: { ultracite: "^7.0.0" },
@@ -374,6 +400,7 @@ group("updatePackageJson", () => {
   bench("three sequential calls (oxlint init pattern)", async () => {
     const origCwd = process.cwd();
     process.chdir(dir);
+
     try {
       await updatePackageJson({
         devDependencies: { ultracite: "^7.0.0" },

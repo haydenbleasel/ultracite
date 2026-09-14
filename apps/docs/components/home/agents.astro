@@ -15,6 +15,7 @@ const featuredAgentIds = [
 
 const featuredAgents = featuredAgentIds.flatMap((id) => {
   const agent = agents.find((a) => a.id === id);
+
   return agent ? [agent] : [];
 });
 

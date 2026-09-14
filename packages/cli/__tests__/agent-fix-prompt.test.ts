@@ -94,6 +94,7 @@ describe("agent adapters", () => {
       status: 0,
       stdout: "2.0.1",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => assertAgentAvailable(agentAdapters.claude)).not.toThrow();
@@ -107,6 +108,7 @@ describe("agent adapters", () => {
       status: 0,
       stdout: "",
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => assertAgentAvailable(agentAdapters.claude)).not.toThrow();
@@ -117,6 +119,7 @@ describe("agent adapters", () => {
       error: new Error("ENOENT"),
       status: null,
     }));
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     expect(() => assertAgentAvailable(agentAdapters.codex)).toThrow(

@@ -5,6 +5,7 @@ import type { PackageManagerName } from "nypm";
 import { spawnSync } from "./spawn-sync";
 
 const ultraciteSkillRepo = "haydenbleasel/ultracite";
+
 const ultraciteSkillName = "ultracite";
 
 interface MaybeInstallUltraciteSkillOptions {
@@ -36,6 +37,7 @@ const isUltraciteSkillInstalledInScope = (
 ) => {
   const fullCommand = buildUltraciteSkillListCommand(packageManager, global);
   const [command, ...args] = fullCommand.split(" ");
+
   const result = spawnSync(command, args, {
     stdio: "pipe",
   });
@@ -112,6 +114,7 @@ export const maybeInstallUltraciteSkill = async ({
   const result = spawnSync(command, args, {
     stdio: "pipe",
   });
+
   const didInstall = !result.error && result.status === 0;
 
   if (!quiet) {

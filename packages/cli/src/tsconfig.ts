@@ -23,6 +23,7 @@ const findTsConfigFiles = async (): Promise<string[]> => {
         "**/.next/**",
       ],
     });
+
     return files;
   } catch {
     return [];
@@ -68,6 +69,7 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
       log.warn(
         `Could not parse ${filePath}; skipping the strictNullChecks update for it.`
       );
+
       return;
     }
 
@@ -102,6 +104,7 @@ export const tsconfig = {
    */
   exists: async (): Promise<boolean> => {
     const files = await findTsConfigFiles();
+
     return files.length > 0;
   },
   /**

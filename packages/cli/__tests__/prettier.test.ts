@@ -33,6 +33,7 @@ describe("prettier linter", () => {
           if (path === "./.prettierrc.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -44,6 +45,7 @@ describe("prettier linter", () => {
           if (path === "./.prettierrc.mjs") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),

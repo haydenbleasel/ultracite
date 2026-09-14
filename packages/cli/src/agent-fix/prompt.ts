@@ -79,6 +79,7 @@ export const writeDiagnosticsFile = (
     .update(file)
     .digest("hex")
     .slice(0, HASH_LENGTH);
+
   const jsonPath = path.join(dir, `${path.basename(file)}.${hash}.json`);
 
   writeFileSync(

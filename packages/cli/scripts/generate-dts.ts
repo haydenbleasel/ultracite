@@ -50,6 +50,7 @@ export default config;
 // Generate oxlint declarations. Presets can nest one level deep (e.g.
 // next/js-plugins), so include subdirectories that hold an index.mjs.
 const oxlintDir = path.join(configDir, "oxlint");
+
 const configs = readdirSync(oxlintDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .flatMap((entry) => {
@@ -58,6 +59,7 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
     })
       .filter((child) => child.isDirectory())
       .map((child) => `${entry.name}/${child.name}`);
+
     return [entry.name, ...nested];
   });
 
@@ -72,7 +74,9 @@ for (const config of configs) {
 
 // Generate oxfmt declaration
 const oxfmtDir = path.join(configDir, "oxfmt");
+
 mkdirSync(oxfmtDir, { recursive: true });
+
 writeFileSync(path.join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
 
 // Sync biome/core's files.includes from the shared ignore patterns. Inlined
@@ -80,15 +84,20 @@ writeFileSync(path.join(oxfmtDir, "index.d.mts"), oxfmtDeclaration);
 // merge doesn't carry files.includes through a transitive chain when the
 // consumer defines its own — see issue #679.
 const { ignorePatterns } = await import("../config/shared/ignores.mjs");
+
 const biomeIncludes = ["**", ...ignorePatterns.map((p: string) => `!!${p}`)];
+
 const biomeCorePath = path.join(configDir, "biome/core/biome.jsonc");
+
 const biomeCoreSource = readFileSync(biomeCorePath, "utf-8");
+
 const biomeCoreEdits = modify(
   biomeCoreSource,
   ["files", "includes"],
   biomeIncludes,
   { formattingOptions: { insertSpaces: true, tabSize: 2 } }
 );
+
 writeFileSync(biomeCorePath, applyEdits(biomeCoreSource, biomeCoreEdits));
 
 console.log(

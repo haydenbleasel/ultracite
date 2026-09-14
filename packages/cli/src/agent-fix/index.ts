@@ -17,7 +17,9 @@ import { AGENT_TIMEOUT_MS, runAgent } from "./run-agent";
 import type { Diagnostic, LinterAdapter } from "./types";
 
 const MS_PER_MINUTE = 60_000;
+
 const STDERR_NOTE_LENGTH = 200;
+
 const MAX_AGENT_ATTEMPTS = 3;
 
 export interface AgentFixOptions {
@@ -53,6 +55,7 @@ const buildFailureNote = (
   }
 
   const stderrTail = result.stderr.trim().slice(-STDERR_NOTE_LENGTH);
+
   return `${agentLabel} exited with an error${stderrTail ? `: ${stderrTail}` : "."}`;
 };
 
@@ -63,6 +66,7 @@ const verifySafely = (
 ) => {
   try {
     const allRemaining = adapter.verify(file, passthrough);
+
     // Single-file verify runs can still surface diagnostics for other files
     // (e.g. project-level rules); only this file's results matter here.
     return {
@@ -106,10 +110,12 @@ const attemptFileFix = async (
   const { agentAdapter, linterAdapter, passthrough, tempDir } = context;
 
   const jsonPath = writeDiagnosticsFile(tempDir, group.file, issues);
+
   const prompt =
     attempt === 1
       ? buildPrompt(group.file, issues, jsonPath)
       : buildRetryPrompt(group.file, issues, jsonPath, attempt);
+
   const agentResult = await runAgent(agentAdapter, prompt);
 
   // Verify even after an agent failure — a timed-out agent may still have
@@ -140,6 +146,7 @@ const fixFileGroup = async (
     group.issues,
     1
   );
+
   const notes: string[] = [];
 
   if (!agentResult.ok) {
@@ -157,6 +164,7 @@ const fixFileGroup = async (
       group.issues.map((issue) => ({ fixed: false, issue })),
       notes.join(" ")
     );
+
     return { fixed: 0, remaining: group.issues.length };
   }
 
@@ -211,6 +219,7 @@ export const runAgentFix = async ({
   if (diagnostics.length === 0) {
     autofixSpinner.stop("Autofix complete.");
     outro(`No issues remaining — nothing for ${agentAdapter.label} to do.`);
+
     return;
   }
 
@@ -221,6 +230,7 @@ export const runAgentFix = async ({
 
   const tempDir = mkdtempSync(path.join(tmpdir(), "ultracite-"));
   const renderer = createRenderer(groups, { agentLabel: agentAdapter.label });
+
   const context: FileFixContext = {
     agentAdapter,
     linterAdapter,
@@ -228,6 +238,7 @@ export const runAgentFix = async ({
     renderer,
     tempDir,
   };
+
   const totals = { fixed: 0, remaining: 0 };
 
   // Files are fixed strictly one at a time — concurrent agents could race on
