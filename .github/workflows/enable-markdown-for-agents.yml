@@ -1,0 +1,39 @@
+name: Enable Markdown for Agents
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable content converter
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          set -euo pipefail
+
+          response=$(curl --fail-with-body --silent --show-error \
+            --request PATCH \
+            --url "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/settings/content_converter" \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            --header "Content-Type: application/json" \
+            --data '{"value":"on"}')
+
+          echo "${response}" | jq --exit-status '.success == true'
+
+      - name: Verify Markdown negotiation
+        env:
+          SITE_URL: https://www.ultracite.ai/
+        run: |
+          set -euo pipefail
+
+          headers=$(curl --fail --silent --show-error --dump-header - --output /dev/null \
+            --header 'Accept: text/markdown' "${SITE_URL}")
+
+          echo "${headers}"
+          echo "${headers}" | grep --ignore-case --fixed-strings 'content-type: text/markdown' >/dev/null

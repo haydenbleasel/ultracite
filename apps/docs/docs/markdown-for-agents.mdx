@@ -13,6 +13,8 @@ Markdown conversion is configured at the Cloudflare zone level because the site 
 2. Open **AI Crawl Control**.
 3. Enable **Markdown for Agents**.
 
+Repository maintainers can instead run the **Enable Markdown for Agents** workflow. It requires `CLOUDFLARE_API_TOKEN` with Zone Settings: Edit permission and a `CLOUDFLARE_ZONE_ID` repository secret. The workflow enables the zone setting and verifies that the production site returns `text/markdown`.
+
 The same setting can be enabled with the Cloudflare API by setting `content_converter` to `on` for the zone. This is a one-time zone configuration, not an application build setting or a per-page MDX option.
 
 ## Request Markdown
