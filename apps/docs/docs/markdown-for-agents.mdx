@@ -1,9 +1,9 @@
 ---
-title: Markdown for Agents
-description: Enable Markdown for Agents on the Ultracite documentation site so agents can request Markdown without changing the browser experience.
+title: Configure Markdown for Agents
+description: Configure Markdown for Agents for every eligible Ultracite documentation page without changing the browser experience.
 ---
 
-The documentation site supports Cloudflare's [Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/) content negotiation.
+The documentation site uses Cloudflare's [Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/) content negotiation. This is a zone-level feature: enabling it applies to every eligible HTML page on `www.ultracite.ai`, not just this documentation page.
 
 ## Enable the feature
 
@@ -13,7 +13,7 @@ Markdown conversion is configured at the Cloudflare zone level because the site 
 2. Open **AI Crawl Control**.
 3. Enable **Markdown for Agents**.
 
-The same setting can be enabled with the Cloudflare API by setting `content_converter` to `on` for the zone. This is a one-time zone configuration, not an application build setting.
+The same setting can be enabled with the Cloudflare API by setting `content_converter` to `on` for the zone. This is a one-time zone configuration, not an application build setting or a per-page MDX option.
 
 ## Request Markdown
 
