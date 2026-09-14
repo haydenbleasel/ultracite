@@ -33,6 +33,36 @@ const readOxlintConfig = async (name: string) => {
 
 type OxlintRuleSeverity = "error" | "warn" | "off";
 
+// Runs oxlint over a committed fixture using the fixture's entry config and
+// returns the spawn result, the combined output, and the basenames flagged by
+// a given rule. oxlint resolves any JS plugin specifiers relative to the entry
+// config's directory, which walks up to the repo's node_modules.
+const lintFixture = (fixture: string, target = "src") => {
+  const cliDir = path.join(import.meta.dirname, "..");
+  const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
+  const fixtureDir = path.join(import.meta.dirname, "fixtures", fixture);
+
+  const result = Bun.spawnSync(
+    [
+      oxlintBin,
+      "-c",
+      path.join(fixtureDir, "entry.mjs"),
+      "--format=unix",
+      path.join(fixtureDir, target),
+    ],
+    { cwd: cliDir }
+  );
+  const output = result.stdout.toString() + result.stderr.toString();
+  const flaggedBy = (rule: string) =>
+    output
+      .split("\n")
+      .filter((line) => line.includes(rule))
+      .map((line) => path.basename(line.split(":")[0] ?? ""))
+      .toSorted();
+
+  return { flaggedBy, output, result };
+};
+
 const isEnabled = (rule: OxlintRuleSeverity | undefined) =>
   rule === "error" || rule === "warn";
 
@@ -56,42 +86,6 @@ const JS_PLUGINS = [
   { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
 ];
 
-const cliDir = path.join(import.meta.dirname, "..");
-
-// The tests below spawn this binary with Bun.spawnSync rather than the
-// ../src/spawn-sync adapter — several test files install module-level mocks
-// of that adapter which leak across files when the suite runs without
-// --isolate.
-const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
-
-/**
- * Run oxlint for real against a committed fixture under `__tests__/fixtures`,
- * using the fixture's `entry.mjs` as the config. `targets` are resolved
- * relative to the fixture directory. Returns the spawn result plus combined
- * stdout and stderr, since oxlint splits diagnostics and load errors across
- * the two streams.
- */
-const runOxlintOnFixture = (
-  fixture: string,
-  targets: string[],
-  flags: string[] = []
-) => {
-  const fixtureDir = path.join(import.meta.dirname, "fixtures", fixture);
-  const result = Bun.spawnSync(
-    [
-      oxlintBin,
-      "-c",
-      path.join(fixtureDir, "entry.mjs"),
-      ...flags,
-      ...targets.map((target) => path.join(fixtureDir, target)),
-    ],
-    { cwd: cliDir }
-  );
-  const output = result.stdout.toString() + result.stderr.toString();
-
-  return { output, result };
-};
-
 /**
  * Parse `oxlint --rules --format=json` output to extract non-nursery rules
  * for specific plugins. Returns rule names in the format used by config
@@ -100,11 +94,19 @@ const runOxlintOnFixture = (
  * text-parsing version of this helper silently return nothing.
  */
 const getOxlintRulesForPlugins = (plugins: string[]): string[] => {
+  // Bun.spawnSync rather than the ../src/spawn-sync adapter — several test
+  // files install module-level mocks of that adapter which leak across files
+  // when the suite runs without --isolate.
+  //
   // Run from the system temp dir with an absolute binary path so oxlint
   // does not walk up and auto-discover the repo's `oxlint.config.ts`. The
   // rule catalog is config-independent, and node <22.18 (e.g. the node-20
   // CI matrix runtime) cannot load a TypeScript config file, which would
   // otherwise make oxlint print a load error instead of the rules JSON.
+  const oxlintBin = path.join(
+    import.meta.dirname,
+    "../node_modules/.bin/oxlint"
+  );
   const result = Bun.spawnSync([oxlintBin, "--rules", "--format=json"], {
     cwd: os.tmpdir(),
   });
@@ -312,10 +314,9 @@ describe("oxlint core config", () => {
   });
 
   test("allows top-level returns in Astro frontmatter", () => {
-    const { output, result } = runOxlintOnFixture(
+    const { output, result } = lintFixture(
       "astro-prefer-module",
-      ["src/response.astro"],
-      ["--format=unix"]
+      "src/response.astro"
     );
 
     expect(output).not.toContain("unicorn(prefer-module)");
@@ -326,23 +327,19 @@ describe("oxlint core config", () => {
   // also drops its CommonJS checks; the override backfills those with rules
   // that do take options.
   test("still rejects CommonJS in Astro frontmatter", () => {
-    const { output } = runOxlintOnFixture(
+    const { flaggedBy } = lintFixture(
       "astro-prefer-module",
-      ["src/commonjs.astro"],
-      ["--format=unix"]
+      "src/commonjs.astro"
     );
-    const flagged = output
-      .split("\n")
-      .filter((line) => line.includes("commonjs.astro:"))
-      .map((line) => line.slice(line.indexOf("[")))
-      .toSorted();
 
-    expect(flagged).toEqual([
-      "[Error/eslint(no-restricted-globals)]",
-      "[Error/eslint(no-restricted-globals)]",
-      "[Error/import(no-commonjs)]",
-      "[Error/import(no-commonjs)]",
-      "[Error/import(no-commonjs)]",
+    expect(flaggedBy("import(no-commonjs)")).toEqual([
+      "commonjs.astro",
+      "commonjs.astro",
+      "commonjs.astro",
+    ]);
+    expect(flaggedBy("eslint(no-restricted-globals)")).toEqual([
+      "commonjs.astro",
+      "commonjs.astro",
     ]);
   });
 });
@@ -566,10 +563,9 @@ describe("oxlint js-plugins config", () => {
   // each ESLint plugin's rules, and naming a rule it does not register makes
   // oxlint hard-fail config parsing. Statically reading the config object
   // can't catch this, so actually run oxlint with core + js-plugins loaded via
-  // a committed fixture (oxlint resolves the JS plugin specifiers relative to
-  // the entry config's directory, which walks up to the repo's node_modules).
+  // a committed fixture.
   test("js-plugins loads through oxlint with all bridged rules registered", () => {
-    const { output } = runOxlintOnFixture("js-plugins-load", ["sample.ts"]);
+    const { output } = lintFixture("js-plugins-load", "sample.ts");
 
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
@@ -596,17 +592,7 @@ describe("oxlint js-plugins config", () => {
   // preset: in a non-TanStack project, core's unicorn/filename-case still
   // flags `routes/BadName.tsx`, so the override does not open a bypass.
   test("route override exempts route files but not other files", () => {
-    const { output } = runOxlintOnFixture(
-      "route-filenames",
-      ["src"],
-      ["--format=unix"]
-    );
-    const flaggedBy = (rule: string) =>
-      output
-        .split("\n")
-        .filter((line) => line.includes(rule))
-        .map((line) => path.basename(line.split(":")[0] ?? ""))
-        .toSorted();
+    const { flaggedBy } = lintFixture("route-filenames");
 
     expect(flaggedBy("github(filenames-match-regex)")).toEqual([
       "Button.test.tsx",
@@ -614,6 +600,58 @@ describe("oxlint js-plugins config", () => {
     expect(flaggedBy("unicorn(filename-case)")).toEqual([
       "BadName.tsx",
       "Button.test.tsx",
+    ]);
+  });
+
+  test("uses a bracket-aware filenames-match-regex for page route files", async () => {
+    const config = await readOxlintConfig("js-plugins");
+
+    const pagesOverride = config.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx}")
+    );
+
+    expect(pagesOverride).toBeDefined();
+
+    const [severity, pattern] =
+      pagesOverride?.rules?.["github/filenames-match-regex"] ?? [];
+    expect(severity).toBe("error");
+
+    const regex = new RegExp(pattern, "u");
+    for (const name of [
+      "[slug]",
+      "[...slug]",
+      "[[...slug]]",
+      "[lang]-[version]",
+      "[slug].json",
+      "rss.xml",
+      "index",
+      "404",
+    ]) {
+      expect(regex.test(name), name).toBe(true);
+    }
+    for (const name of ["BadPage", "[Slug]", "[slug", "a.b.c", "_app"]) {
+      expect(regex.test(name), name).toBe(false);
+    }
+  });
+
+  // Regression guard for #804: Astro and Next.js page routes use bracketed
+  // filenames such as `[slug].astro`, `[...slug].ts` and `[[...slug]].tsx`
+  // across every extension the routers accept. The rule stays live inside
+  // `pages/` (`BadPage.ts`) and everywhere else (`BadName.ts`,
+  // `BadName.astro` — the latter also proves `.astro` files reach the plugin).
+  test("exempts page route filenames but not other names", () => {
+    const { flaggedBy } = lintFixture("astro-route-filenames");
+
+    expect(flaggedBy("github(filenames-match-regex)")).toEqual([
+      "BadName.astro",
+      "BadName.ts",
+      "BadPage.ts",
+    ]);
+    expect(flaggedBy("unicorn(filename-case)")).toEqual([
+      "BadName.astro",
+      "BadName.ts",
+      "BadPage.ts",
     ]);
   });
 
@@ -775,7 +813,7 @@ describe("oxlint anti-slop config", () => {
   // and assert the vendored plugin's diagnostics actually fire — a config
   // that loads but silently registers nothing would pass the static checks.
   test("anti-slop loads through oxlint and reports violations", () => {
-    const { output } = runOxlintOnFixture("anti-slop-load", ["sample.ts"]);
+    const { output } = lintFixture("anti-slop-load", "sample.ts");
 
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
