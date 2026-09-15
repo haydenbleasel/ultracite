@@ -30,6 +30,9 @@ export default defineConfig({
     // Deliberately violates anti-slop rules so the plugin load test can
     // assert the vendored plugin's diagnostics actually fire.
     "packages/cli/__tests__/fixtures/anti-slop-load",
+    // Deliberately violates the @shadcn/lint rules so the plugin load test
+    // can assert the design-system diagnostics actually fire.
+    "packages/cli/__tests__/fixtures/shadcn-load",
     // Deliberately uses TanStack route filenames (`$.tsx`, `__root.tsx`) and a
     // PascalCase component so the route override test can assert on both.
     "packages/cli/__tests__/fixtures/route-filenames",

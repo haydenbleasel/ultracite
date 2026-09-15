@@ -465,6 +465,7 @@ describe("initialize", () => {
     const mockMultiselect = mock((promptOptions: { message?: string }) => {
       if (promptOptions.message?.includes("JS plugins")) {
         return Promise.resolve([
+          "@shadcn/lint",
           "anti-slop",
           "eslint-plugin-github",
           "eslint-plugin-sonarjs",
@@ -522,6 +523,11 @@ describe("initialize", () => {
         message: "Which JS plugins would you like to add (optional)?",
         options: [
           {
+            hint: "design-system rules for Tailwind v4 components",
+            label: "@shadcn/lint",
+            value: "@shadcn/lint",
+          },
+          {
             hint: "vendored opinionated preset, nothing to install",
             label: "anti-slop",
             value: "anti-slop",
@@ -543,6 +549,11 @@ describe("initialize", () => {
     expect(
       writtenContents.some((content) =>
         content.includes('"ultracite/oxlint/anti-slop"')
+      )
+    ).toBe(true);
+    expect(
+      writtenContents.some((content) =>
+        content.includes('"ultracite/oxlint/shadcn"')
       )
     ).toBe(true);
   });
@@ -577,6 +588,7 @@ describe("initialize", () => {
       hooks: [],
       integrations: [],
       "js-plugins": [
+        "@shadcn/lint",
         "anti-slop",
         "eslint-plugin-github",
         "eslint-plugin-sonarjs",
@@ -587,6 +599,7 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
+    expect(installedPackages).toContain("@shadcn/lint@^0.1.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.0");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.13");

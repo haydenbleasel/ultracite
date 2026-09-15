@@ -27,6 +27,7 @@ export const toolchainPeerRanges = packageJson.peerDependencies;
 export type ToolchainPackageName = keyof typeof toolchainPeerRanges;
 
 export const oxlintJsPlugins = [
+  "@shadcn/lint",
   "anti-slop",
   "eslint-plugin-github",
   "eslint-plugin-sonarjs",
@@ -44,6 +45,7 @@ export const isOxlintNpmJsPlugin = (
 ): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== "anti-slop";
 
 export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
+  "@shadcn/lint": packageJson.devDependencies["@shadcn/lint"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
   "oxlint-plugin-react-doctor":
@@ -205,6 +207,7 @@ export const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
   eslint: eslintDevDependencyNames,
   oxlint: new Set([
+    "@shadcn/lint",
     "eslint-plugin-github",
     "eslint-plugin-sonarjs",
     "oxfmt",

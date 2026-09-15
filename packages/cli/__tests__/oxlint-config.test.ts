@@ -824,6 +824,107 @@ describe("oxlint anti-slop config", () => {
   });
 });
 
+describe("oxlint shadcn config", () => {
+  const SHADCN_RULES = [
+    "shadcn/no-arbitrary-values",
+    "shadcn/no-inline-styles",
+    "shadcn/no-raw-colors",
+    "shadcn/no-restyle",
+    "shadcn/no-unknown-classes",
+    "shadcn/require-static-classes",
+  ];
+
+  test("declares the @shadcn/lint JS plugin", async () => {
+    const config = await readOxlintConfig("shadcn");
+
+    expect(config.jsPlugins).toEqual([
+      { name: "shadcn", specifier: "@shadcn/lint" },
+    ]);
+  });
+
+  test("enables every rule the plugin registers at error", async () => {
+    const config = await readOxlintConfig("shadcn");
+    const mod = await import("@shadcn/lint");
+    // SAFETY: adapting the plugin's untyped runtime export — its `plugin`
+    // object holds a rules map keyed by rule name, each with ESLint meta.
+    const { rules } = mod.plugin as {
+      rules: Record<string, { meta?: { docs?: { description?: string } } }>;
+    };
+
+    const registered = Object.keys(rules)
+      .map((name) => `shadcn/${name}`)
+      .toSorted();
+    expect(registered).toEqual(SHADCN_RULES);
+
+    const configuredEntries = Object.entries(config.rules ?? {});
+    expect(configuredEntries.map(([name]) => name).toSorted()).toEqual(
+      SHADCN_RULES
+    );
+    for (const [, severity] of configuredEntries) {
+      const level = Array.isArray(severity) ? severity[0] : severity;
+      expect(level).toBe("error");
+    }
+  });
+
+  test("lets pages place components while keeping their appearance", async () => {
+    const config = await readOxlintConfig("shadcn");
+
+    // The upstream recommended policy: margin/width/flex are the page's
+    // business, padding/colors/typography/shape belong to the component.
+    expect(config.rules["shadcn/no-restyle"]).toEqual([
+      "error",
+      { allow: ["layout"] },
+    ]);
+    expect(config.rules["shadcn/no-arbitrary-values"]).toEqual([
+      "error",
+      { allow: ["layout"] },
+    ]);
+  });
+
+  test("relaxes the component-authoring rules inside the UI directory", async () => {
+    const config = await readOxlintConfig("shadcn");
+
+    expect(config.overrides).toHaveLength(1);
+    const [override] = config.overrides;
+    expect(override.files).toEqual(["**/components/ui/**"]);
+    // Components restyle siblings, use structural arbitrary values, and call
+    // their own variant functions — but token and inline-style rules stay on.
+    expect(override.rules).toEqual({
+      "shadcn/no-arbitrary-values": "off",
+      "shadcn/no-restyle": "off",
+      "shadcn/require-static-classes": "off",
+    });
+  });
+
+  // Run oxlint for real with core + shadcn loaded via a committed fixture
+  // and assert the plugin's diagnostics actually fire — a config that loads
+  // but silently registers nothing would pass the static checks.
+  test("shadcn loads through oxlint and reports violations", () => {
+    const { flaggedBy, output } = lintFixture("shadcn-load", "src");
+
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+    for (const rule of SHADCN_RULES) {
+      expect(flaggedBy(rule.replace("/", "("))).toContain("page.tsx");
+    }
+  });
+
+  test("component-directory override carries through extends", () => {
+    const { flaggedBy } = lintFixture("shadcn-load", "src");
+
+    // card.tsx restyles Button, uses ring-[3px], and builds a dynamic class
+    // inside components/ui — none of which may be reported there.
+    for (const rule of [
+      "shadcn(no-restyle)",
+      "shadcn(no-arbitrary-values)",
+      "shadcn(require-static-classes)",
+    ]) {
+      expect(flaggedBy(rule)).not.toContain("card.tsx");
+      expect(flaggedBy(rule)).not.toContain("button.tsx");
+    }
+  });
+});
+
 describe("oxlint react config", () => {
   const REACT_PLUGINS = ["react", "react-perf", "jsx-a11y"];
 

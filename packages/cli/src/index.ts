@@ -60,7 +60,7 @@ program
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
     "--js-plugins <plugins...>",
-    "Oxlint JS plugins to enable (anti-slop, eslint-plugin-github, eslint-plugin-sonarjs, oxlint-plugin-react-doctor)"
+    "Oxlint JS plugins to enable (@shadcn/lint, anti-slop, eslint-plugin-github, eslint-plugin-sonarjs, oxlint-plugin-react-doctor)"
   )
   .option(
     "--type-aware",

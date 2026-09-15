@@ -5,12 +5,17 @@ import { exists, validateFrameworkName, writeProjectFile } from "../utils";
 
 const oxlintConfigPath = "./oxlint.config.ts";
 
-// Vendored preset shipped inside the ultracite package — enabled as a plain
-// `ultracite/oxlint/anti-slop` extend rather than through selectJsPlugins,
-// and with nothing extra to install.
+// Standalone presets are enabled as a plain `ultracite/oxlint/<preset>`
+// extend rather than through selectJsPlugins: anti-slop is vendored inside
+// the ultracite package (nothing extra to install), and @shadcn/lint ships
+// its own design-system preset at ultracite/oxlint/shadcn.
 const antiSlopPreset = "anti-slop";
+const shadcnPlugin = "@shadcn/lint";
+const shadcnPreset = "shadcn";
 
-const oxlintNpmJsPluginNames = [
+// Plugins bridged through the js-plugins preset and its selectJsPlugins
+// helper.
+const oxlintSelectableJsPluginNames = [
   "eslint-plugin-github",
   "eslint-plugin-sonarjs",
   "oxlint-plugin-react-doctor",
@@ -18,11 +23,17 @@ const oxlintNpmJsPluginNames = [
 
 const oxlintJsPluginNames = [
   antiSlopPreset,
-  ...oxlintNpmJsPluginNames,
+  shadcnPlugin,
+  ...oxlintSelectableJsPluginNames,
 ] as const;
 
 type OxlintJsPlugin = (typeof oxlintJsPluginNames)[number];
-type OxlintNpmJsPlugin = (typeof oxlintNpmJsPluginNames)[number];
+type OxlintSelectableJsPlugin = (typeof oxlintSelectableJsPluginNames)[number];
+
+const isSelectableJsPlugin = (
+  jsPlugin: OxlintJsPlugin
+): jsPlugin is OxlintSelectableJsPlugin =>
+  jsPlugin !== antiSlopPreset && jsPlugin !== shadcnPlugin;
 
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
@@ -33,7 +44,7 @@ const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
   "eslint-plugin-sonarjs": { name: "sonarjs" },
   "oxlint-plugin-react-doctor": { name: "react-doctor" },
-} satisfies Record<OxlintNpmJsPlugin, { name: string }>;
+} satisfies Record<OxlintSelectableJsPlugin, { name: string }>;
 
 // Helper to generate the module path for oxlint config imports
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -62,11 +73,9 @@ const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = []
 ) => {
-  // anti-slop is vendored, so it becomes a plain extend below instead of a
-  // selectJsPlugins entry.
-  const npmJsPlugins = jsPlugins.filter(
-    (jsPlugin): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== antiSlopPreset
-  );
+  // anti-slop and @shadcn/lint have their own presets, so they become plain
+  // extends below instead of selectJsPlugins entries.
+  const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
 
   // When plugins are selected, the base js-plugins preset is imported and
@@ -88,6 +97,13 @@ const generateConfigContent = (
         resolvedExtends.push(addOn);
       }
     }
+  }
+
+  if (
+    jsPlugins.includes(shadcnPlugin) &&
+    !resolvedExtends.includes(getOxlintConfigPath(shadcnPreset))
+  ) {
+    resolvedExtends.push(getOxlintConfigPath(shadcnPreset));
   }
 
   // Last among the plain extends so its core-rule overrides win.
@@ -150,10 +166,24 @@ const generateConfigContent = (
   // config — they never walk `extends` — so re-declare the selected plugin
   // specifiers there or the packages are reported as unused (#784). oxlint
   // dedupes a plugin that appears in both the root and an extended config.
-  const jsPluginsLine =
-    hasJsPlugins || hasFullJsPluginsPreset
-      ? `\n  jsPlugins: ${jsPluginsIdentifier}.jsPlugins,`
-      : "";
+  // The shadcn preset declares its own plugin package, so it is hoisted the
+  // same way (spread together with the js-plugins selection when both are
+  // present).
+  const hoistedJsPluginIdentifiers = [
+    ...(hasJsPlugins || hasFullJsPluginsPreset ? [jsPluginsIdentifier] : []),
+    ...(resolvedExtends.includes(getOxlintConfigPath(shadcnPreset))
+      ? [getOxlintConfigIdentifier(getOxlintConfigPath(shadcnPreset))]
+      : []),
+  ];
+  let jsPluginsLine = "";
+  if (hoistedJsPluginIdentifiers.length === 1) {
+    jsPluginsLine = `\n  jsPlugins: ${hoistedJsPluginIdentifiers[0]}.jsPlugins,`;
+  } else if (hoistedJsPluginIdentifiers.length > 1) {
+    const spread = hoistedJsPluginIdentifiers
+      .map((identifier) => `...${identifier}.jsPlugins`)
+      .join(", ");
+    jsPluginsLine = `\n  jsPlugins: [${spread}],`;
+  }
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
   const extendsBlock =
@@ -185,7 +215,7 @@ const SELECTED_JS_PLUGIN_NAMES_RE =
   /selectedJsPluginNames = new Set\((?<names>\[[^\]]*\])\)/u;
 
 const jsPluginsByConfigName = new Map(
-  oxlintNpmJsPluginNames.map(
+  oxlintSelectableJsPluginNames.map(
     (plugin) => [oxlintJsPluginConfig[plugin].name, plugin] as const
   )
 );
@@ -207,7 +237,9 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
 
   return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)]
     .map((nameMatch) => jsPluginsByConfigName.get(nameMatch.groups?.name ?? ""))
-    .filter((plugin): plugin is OxlintNpmJsPlugin => plugin !== undefined);
+    .filter(
+      (plugin): plugin is OxlintSelectableJsPlugin => plugin !== undefined
+    );
 };
 
 export const oxlint = {

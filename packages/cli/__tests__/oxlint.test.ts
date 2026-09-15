@@ -263,6 +263,70 @@ describe("oxlint linter", () => {
       expect(content).not.toContain('selectJsPlugins(["anti-slop"');
     });
 
+    test("adds the shadcn preset as a plain extend and hoists its jsPlugins", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["@shadcn/lint"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import shadcn from "ultracite/oxlint/shadcn";'
+      );
+      expect(content).toContain("extends: [core, shadcn],");
+      // The preset declares the @shadcn/lint package itself, so it is
+      // re-declared on the root config for dependency analyzers (#784).
+      expect(content).toContain("jsPlugins: shadcn.jsPlugins,");
+      // @shadcn/lint is not part of the ESLint-parity js-plugins preset.
+      expect(content).not.toContain("selectJsPlugins");
+      expect(content).not.toContain('"ultracite/oxlint/js-plugins"');
+      expect(content).not.toContain("jsPluginSettings");
+    });
+
+    test("combines the shadcn preset with npm js-plugins and anti-slop", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["@shadcn/lint", "anti-slop", "eslint-plugin-github"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'import shadcn from "ultracite/oxlint/shadcn";'
+      );
+      expect(content).toContain('selectJsPlugins(["github"])');
+      expect(content).not.toContain('selectJsPlugins(["shadcn"');
+      // shadcn sits before anti-slop so anti-slop's core-rule overrides
+      // stay last; the js-plugins selection follows the plain extends.
+      expect(content).toContain(
+        "extends: [core, shadcn, antiSlop, jsPlugins],"
+      );
+      expect(content).toContain(
+        "jsPlugins: [...jsPlugins.jsPlugins, ...shadcn.jsPlugins],"
+      );
+    });
+
     test("does not add framework js-plugins add-ons without react-doctor", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -595,6 +659,41 @@ export default defineConfig({
         /import nextJsPlugins from "ultracite\/oxlint\/next\/js-plugins";/gu
       );
       expect(nextAddOnImports?.length).toBe(1);
+    });
+
+    test("preserves an existing shadcn extend during update and keeps its jsPlugins hoisted", async () => {
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import shadcn from "ultracite/oxlint/shadcn";
+
+export default defineConfig({
+  extends: [core, shadcn],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: shadcn.jsPlugins,
+});
+`;
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      // No explicit selection: the previously enabled preset must survive.
+      await oxlint.update({ frameworks: ["react"] });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(
+        content.match(/import shadcn from "ultracite\/oxlint\/shadcn";/gu)
+          ?.length
+      ).toBe(1);
+      expect(content).toContain("extends: [core, shadcn, react],");
+      expect(content).toContain("jsPlugins: shadcn.jsPlugins,");
     });
 
     test("preserves an existing anti-slop extend during update without duplicating it", async () => {

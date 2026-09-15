@@ -135,6 +135,72 @@ export default defineConfig({
 
 All fifteen rules are enabled at the `error` level, including `require-safety-comment-for-type-assertion` (every `as` assertion needs a `SAFETY:` comment stating the checked invariant), `no-unknown-returns` / `no-unknown-parameters` (parse values into named domain types at boundaries), and `no-module-mocking` (inject dependencies instead of mocking modules). If a rule doesn't fit your codebase — `no-module-mocking` is a common example in test-heavy projects — turn it off in your own config's `rules` block.
 
+## Design System Rules with @shadcn/lint (Optional)
+
+Ultracite also ships an opt-in `shadcn` preset built on [`@shadcn/lint`](https://github.com/shadcn-ui/lint), shadcn's agent-first linter for Tailwind v4 design systems. It reads your components, variants, and theme, and when a class breaks the design system the error explains what is wrong and what to use instead — the component's variants, sizes, theme tokens, and the file to edit. shadcn/ui is not required: it works with any Tailwind v4 component directory and theme.
+
+Like `js-plugins`, this preset is **off by default** because it adds a dependency and runs through Oxlint's slower JS-plugin pass. You can enable it during setup: it appears as `@shadcn/lint` in the same JS-plugins prompt as the packages above, and non-interactive setup accepts it via `--js-plugins`:
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins @shadcn/lint
+```
+
+Or add it to your config manually:
+
+```package-install
+npm install -D @shadcn/lint
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import shadcn from "ultracite/oxlint/shadcn";
+
+export default defineConfig({
+  extends: [core, shadcn],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: shadcn.jsPlugins,
+});
+```
+
+All six rules are enabled at the `error` level:
+
+| Rule | What it catches |
+| --- | --- |
+| `no-restyle` | Restyling a design-system component through `className`. |
+| `no-raw-colors` | Raw palette colors such as `bg-pink-500` and undeclared tokens. |
+| `no-arbitrary-values` | Arbitrary values such as `p-[13px]` when a scale value exists. |
+| `no-inline-styles` | Inline `style` props and `<style>` elements. |
+| `no-unknown-classes` | Classes your Tailwind cannot generate, such as `rounded-huge`. |
+| `require-static-classes` | Component class values the linter cannot read, such as `` `bg-${color}` ``. |
+
+`no-restyle` and `no-arbitrary-values` use the upstream recommended `allow: ["layout"]` policy: pages may place a component (`mt-4`, `w-full`, `flex-1`, `absolute`) but its padding, colors, typography, and shape stay in the component's variants. The preset also turns `no-restyle`, `no-arbitrary-values`, and `require-static-classes` off inside `**/components/ui/**`, where components style themselves and call their own variant functions; `no-raw-colors`, `no-inline-styles`, and `no-unknown-classes` stay on there.
+
+Components and the theme are discovered from `components.json`, or from `components/ui` / `src/components/ui` next to the nearest `package.json`. If your design system lives elsewhere, point the plugin at it with `settings.shadcn` on your root config — Oxlint does not merge `settings` from extended configs — and add a matching override for that directory:
+
+```ts title="oxlint.config.ts"
+export default defineConfig({
+  extends: [core, shadcn],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: shadcn.jsPlugins,
+  settings: {
+    shadcn: { ui: "@workspace/ui/components" },
+  },
+  overrides: [
+    {
+      files: ["packages/ui/src/components/**"],
+      rules: {
+        "shadcn/no-arbitrary-values": "off",
+        "shadcn/no-restyle": "off",
+        "shadcn/require-static-classes": "off",
+      },
+    },
+  ],
+});
+```
+
+Per-component policies (`contracts`), custom messages, and exceptions for external stylesheets are configured on the rules themselves — see the [`@shadcn/lint` documentation](https://github.com/shadcn-ui/lint/blob/main/docs/rules.md). `no-unknown-classes` asks your installed Tailwind v4 which classes exist; when Tailwind or the theme cannot be loaded it falls back to a bundled grammar and warns once.
+
 ## Configuration Approach
 
 Ultracite's Oxlint configuration uses an **opt-out** approach. This means we explicitly enable rules from every category at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
@@ -181,7 +247,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`), **sonarjs** (`eslint-plugin-sonarjs`), and **react-doctor** (`oxlint-plugin-react-doctor`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default.
+For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`), **sonarjs** (`eslint-plugin-sonarjs`), and **react-doctor** (`oxlint-plugin-react-doctor`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
 
 ## Adding Third-Party Plugins
 

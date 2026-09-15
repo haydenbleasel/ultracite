@@ -95,6 +95,18 @@ interface InitializeFlags {
   "type-aware"?: boolean;
 }
 
+// @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
+// `typeof CANCEL_SYMBOL`, which no longer strips the `symbol` half off a
+// prompt's `T | symbol` result. Prompts only ever resolve to that one symbol,
+// so a `symbol` predicate stays truthful and restores the narrowing.
+const isCancelled = (value: unknown): value is symbol => isCancel(value);
+
+// Prompt hints for the JS plugins that need a word of explanation.
+const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
+  "@shadcn/lint": "design-system rules for Tailwind v4 components",
+  "anti-slop": "vendored opinionated preset, nothing to install",
+};
+
 const buildNoInstallDevDependencies = (
   linter: Linter,
   typeAware: boolean,
@@ -951,7 +963,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           ],
         });
 
-        if (isCancel(linterResult)) {
+        if (isCancelled(linterResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1003,7 +1015,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           required: false,
         });
 
-        if (isCancel(frameworksResult)) {
+        if (isCancelled(frameworksResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1027,17 +1039,14 @@ export const initialize = async (flags?: InitializeFlags) => {
         const jsPluginsResult = await multiselect<OxlintJsPlugin>({
           message: "Which JS plugins would you like to add (optional)?",
           options: oxlintJsPlugins.map((jsPlugin) => ({
-            hint:
-              jsPlugin === "anti-slop"
-                ? "vendored opinionated preset, nothing to install"
-                : undefined,
+            hint: oxlintJsPluginHints[jsPlugin],
             label: jsPlugin,
             value: jsPlugin,
           })),
           required: false,
         });
 
-        if (isCancel(jsPluginsResult)) {
+        if (isCancelled(jsPluginsResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1065,7 +1074,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           required: false,
         });
 
-        if (isCancel(editorConfigResult)) {
+        if (isCancelled(editorConfigResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1115,7 +1124,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           required: false,
         });
 
-        if (isCancel(agentsResult)) {
+        if (isCancelled(agentsResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1156,7 +1165,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           required: false,
         });
 
-        if (isCancel(hooksResult)) {
+        if (isCancelled(hooksResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
@@ -1186,7 +1195,7 @@ export const initialize = async (flags?: InitializeFlags) => {
           required: false,
         });
 
-        if (isCancel(integrationsResult)) {
+        if (isCancelled(integrationsResult)) {
           cancel(OPERATION_CANCELLED);
           return;
         }
