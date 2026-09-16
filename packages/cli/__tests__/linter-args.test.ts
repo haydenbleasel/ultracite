@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   extractAgentFlags,
+  extractHookFlag,
   normalizeFileArgs,
   splitLinterArgs,
   toStylelintTargets,
@@ -109,6 +110,19 @@ describe("linter args", () => {
 
   test("returns no targets when only non-style files are given", () => {
     expect(toStylelintTargets(["src/index.ts", "package.json"])).toEqual([]);
+  });
+
+  test("extracts --hook and strips it from passthrough", () => {
+    expect(
+      extractHookFlag(["--skip=correctness/noUnusedImports", "--hook"])
+    ).toEqual({
+      hook: true,
+      passthrough: ["--skip=correctness/noUnusedImports"],
+    });
+    expect(extractHookFlag(["--unsafe"])).toEqual({
+      hook: false,
+      passthrough: ["--unsafe"],
+    });
   });
 
   test("extracts --claude and strips it from passthrough", () => {

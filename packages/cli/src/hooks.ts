@@ -36,14 +36,18 @@ export const createHooks = (
     throw new Error(`Hook integration "${name}" not found`);
   }
 
-  const args = linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+  const linterArgs =
+    linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
 
-  const command = createFixCommand(packageManager, args);
+  const command = createFixCommand(packageManager, [...linterArgs, "--hook"]);
+  // The command from before `--hook` existed. The current command extends it,
+  // so matching it recognises both, and a re-run never adds a second hook.
+  const commandWithoutHook = createFixCommand(packageManager, linterArgs);
   const content = hookIntegration.hooks.getContent(command);
 
   const hasUltraciteHook = (obj: JsonObject): boolean => {
     const json = JSON.stringify(obj);
-    return json.includes("ultracite") || json.includes(command);
+    return json.includes("ultracite") || json.includes(commandWithoutHook);
   };
 
   const updateConfig = async (): Promise<void> => {

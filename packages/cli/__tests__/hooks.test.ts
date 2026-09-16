@@ -9,7 +9,10 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-const npmBiomeCommand = "npm run fix -- --skip=correctness/noUnusedImports";
+const npmBiomeCommand =
+  "npm run fix -- --skip=correctness/noUnusedImports --hook";
+const npmBiomeCommandWithoutHook =
+  "npm run fix -- --skip=correctness/noUnusedImports";
 
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
@@ -369,6 +372,31 @@ describe("createHooks", () => {
 
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
+
+    test("update skips when a hook from before --hook already exists in settings", async () => {
+      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommandWithoutHook}"}]}]}}`;
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
   });
 
   describe("claude hooks", () => {
@@ -390,7 +418,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "nub run fix --skip=correctness/noUnusedImports"
+        "nub run fix --skip=correctness/noUnusedImports --hook"
       );
     });
 
@@ -412,7 +440,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "aube run fix --skip=correctness/noUnusedImports"
+        "aube run fix --skip=correctness/noUnusedImports --hook"
       );
     });
 

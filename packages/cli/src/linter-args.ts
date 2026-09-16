@@ -124,6 +124,15 @@ export const extractAgentFlags = (passthrough: string[]) => {
   return { agent, passthrough: remaining };
 };
 
+/**
+ * `--hook` is Ultracite's own flag for agent post-edit hooks: lint only the file
+ * the agent's payload names. Stripped for the same reason as the agent flags.
+ */
+export const extractHookFlag = (passthrough: string[]) => ({
+  hook: passthrough.includes("--hook"),
+  passthrough: passthrough.filter((arg) => arg !== "--hook"),
+});
+
 const GLOB_CHARS_RE = /[*?[\]{}]/u;
 const PATH_SEPARATOR_RE = /[\\/]/u;
 const FILE_EXTENSION_RE = /\.[a-z]{1,10}$/iu;
