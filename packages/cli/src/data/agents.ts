@@ -53,7 +53,9 @@ const runPackageScript = (
 
 export const getDefaultAgentHookCommand = () => {
   const args =
-    defaultHookLinter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+    defaultHookLinter === "biome"
+      ? ["--skip=correctness/noUnusedImports", "--hook"]
+      : ["--hook"];
 
   return runPackageScript(defaultHookPackageManager, "fix", args);
 };

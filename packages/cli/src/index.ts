@@ -9,8 +9,13 @@ import { DOCTOR_FAILED, doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { upgrade } from "./commands/upgrade";
 import { UltraciteSetupError } from "./config-resolution";
+import { hookTargets } from "./hook-input";
 import { initialize } from "./initialize";
-import { extractAgentFlags, splitLinterArgs } from "./linter-args";
+import {
+  extractAgentFlags,
+  extractHookFlag,
+  splitLinterArgs,
+} from "./linter-args";
 import { LinterExitError } from "./run-command";
 
 type CommandWithRawArgs = Command & { rawArgs?: string[] };
@@ -22,6 +27,7 @@ type CheckCommandOptions = Record<string, never>;
 interface FixCommandOptions {
   claude?: boolean;
   codex?: boolean;
+  hook?: boolean;
 }
 
 interface UpgradeCommandOptions {
@@ -112,6 +118,10 @@ program
   )
   .option("--claude", "Fix remaining issues with the Claude Code CLI")
   .option("--codex", "Fix remaining issues with the Codex CLI")
+  .option(
+    "--hook",
+    "Fix only the file an agent hook payload on stdin names (used by agent hooks)"
+  )
   .allowUnknownOption()
   .action(
     async (args: string[], _opts: FixCommandOptions, command: Command) => {
@@ -120,7 +130,23 @@ program
         parsedArgs: args,
         rawArgs: getRawArgs(command),
       });
-      const { agent, passthrough } = extractAgentFlags(split.passthrough);
+      const agentFlags = extractAgentFlags(split.passthrough);
+      const { hook, passthrough } = extractHookFlag(agentFlags.passthrough);
+      const { agent } = agentFlags;
+
+      if (hook) {
+        const targets = await hookTargets({ targets: split.files });
+
+        // The agent edited a file outside the project or the command's own
+        // targets, or one that is gone.
+        if (targets?.length === 0) {
+          return;
+        }
+
+        await fix(targets ?? split.files, passthrough, { agent });
+        return;
+      }
+
       await fix(split.files, passthrough, { agent });
     }
   );

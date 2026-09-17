@@ -2,7 +2,7 @@ import type { PackageManager, PackageManagerName } from "nypm";
 
 import { isMonorepo } from "./utils";
 
-const supportedPackageManagers = [
+export const supportedPackageManagers = [
   "npm",
   "yarn",
   "pnpm",

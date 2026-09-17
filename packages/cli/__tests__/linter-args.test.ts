@@ -2,8 +2,10 @@ import { describe, expect, test } from "bun:test";
 
 import {
   extractAgentFlags,
+  extractHookFlag,
   normalizeFileArgs,
   splitLinterArgs,
+  toOxlintTargets,
   toStylelintTargets,
 } from "../src/linter-args";
 
@@ -109,6 +111,35 @@ describe("linter args", () => {
 
   test("returns no targets when only non-style files are given", () => {
     expect(toStylelintTargets(["src/index.ts", "package.json"])).toEqual([]);
+  });
+
+  test("keeps only the targets oxlint can lint", () => {
+    expect(toOxlintTargets([])).toEqual(["."]);
+    expect(
+      toOxlintTargets([
+        "src/index.ts",
+        "README.md",
+        "package.json",
+        "Dockerfile",
+        "App.vue",
+        "src/**/*.tsx",
+        ".",
+      ])
+    ).toEqual(["src/index.ts", "App.vue", "src/**/*.tsx", "."]);
+    expect(toOxlintTargets(["README.md", ".env"])).toEqual([]);
+  });
+
+  test("extracts --hook and strips it from passthrough", () => {
+    expect(
+      extractHookFlag(["--skip=correctness/noUnusedImports", "--hook"])
+    ).toEqual({
+      hook: true,
+      passthrough: ["--skip=correctness/noUnusedImports"],
+    });
+    expect(extractHookFlag(["--unsafe"])).toEqual({
+      hook: false,
+      passthrough: ["--unsafe"],
+    });
   });
 
   test("extracts --claude and strips it from passthrough", () => {

@@ -8,11 +8,54 @@ import type { PackageManagerName } from "nypm";
 import { hooks } from "./data/hooks";
 import type { options } from "./data/options";
 import type { JsonObject, JsonValue } from "./data/types";
-import { assertSupportedPackageManagerName } from "./package-manager";
+import {
+  assertSupportedPackageManagerName,
+  supportedPackageManagers,
+} from "./package-manager";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   typeof value === "object" && value !== null && !Array.isArray(value);
+
+/**
+ * `existing` with the hook command replaced by `command` wherever `template`
+ * (the content this integration generates) places its command and `existing`
+ * holds one of `outdated` there. Only that position is touched: a user's own
+ * hook that happens to run the fix script elsewhere is left alone. Arrays in
+ * the template hold one entry, which stands for any entry in `existing`.
+ */
+const upgradeCommand = (
+  existing: JsonValue,
+  template: JsonValue,
+  outdated: ReadonlySet<JsonValue>,
+  command: string
+): JsonValue => {
+  if (template === command) {
+    return outdated.has(existing) ? command : existing;
+  }
+
+  if (Array.isArray(template) && Array.isArray(existing)) {
+    const [entry] = template;
+    return entry === undefined
+      ? existing
+      : existing.map((item) => upgradeCommand(item, entry, outdated, command));
+  }
+
+  if (isJsonObject(template) && isJsonObject(existing)) {
+    return Object.fromEntries(
+      Object.entries(existing).map(([key, value]) => [
+        key,
+        Object.hasOwn(template, key)
+          ? upgradeCommand(value, template[key], outdated, command)
+          : value,
+      ])
+    );
+  }
+
+  return existing;
+};
+
+const biomeHookArgs = ["--skip=correctness/noUnusedImports"];
 
 const createFixCommand = (
   packageManager: PackageManagerName,
@@ -25,6 +68,18 @@ const createFixCommand = (
   return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
+// Every hook command an earlier `init` may have generated: each package
+// manager, with and without the Biome skip, with and without `--hook`.
+const generatedFixCommands = (): Set<string> =>
+  new Set(
+    supportedPackageManagers.flatMap((packageManager) =>
+      [[], biomeHookArgs].flatMap((linterArgs) => [
+        createFixCommand(packageManager, linterArgs),
+        createFixCommand(packageManager, [...linterArgs, "--hook"]),
+      ])
+    )
+  );
+
 export const createHooks = (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
@@ -36,9 +91,15 @@ export const createHooks = (
     throw new Error(`Hook integration "${name}" not found`);
   }
 
-  const args = linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+  const linterArgs = linter === "biome" ? biomeHookArgs : [];
 
-  const command = createFixCommand(packageManager, args);
+  const command = createFixCommand(packageManager, [...linterArgs, "--hook"]);
+  // A re-run rewrites a command from an earlier `init` in place, so an
+  // existing install picks up the single-file hook, and a changed package
+  // manager or linter, instead of keeping the old command or gaining a
+  // second hook.
+  const outdatedCommands = generatedFixCommands();
+  outdatedCommands.delete(command);
   const content = hookIntegration.hooks.getContent(command);
 
   const hasUltraciteHook = (obj: JsonObject): boolean => {
@@ -62,6 +123,24 @@ export const createHooks = (
     // value, or undefined when unparseable.
     const parsed: JsonValue | undefined = parse(existingContent);
     const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
+
+    const upgraded = upgradeCommand(
+      existingJson,
+      content,
+      outdatedCommands,
+      command
+    );
+
+    if (
+      isJsonObject(upgraded) &&
+      JSON.stringify(upgraded) !== JSON.stringify(existingJson)
+    ) {
+      await writeProjectFile(
+        hookIntegration.hooks.path,
+        `${JSON.stringify(upgraded, null, 2)}\n`
+      );
+      return;
+    }
 
     if (!hasUltraciteHook(existingJson)) {
       const merged = deepmerge(existingJson, content);

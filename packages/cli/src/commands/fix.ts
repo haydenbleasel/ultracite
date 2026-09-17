@@ -4,7 +4,11 @@ import {
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
-import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
+import {
+  normalizeFileArgs,
+  toOxlintTargets,
+  toStylelintTargets,
+} from "../linter-args";
 import type { FixAgent } from "../linter-args";
 import { exitOnCommandFailure, runSteps } from "../run-command";
 import { spawnSync } from "../spawn-sync";
@@ -43,8 +47,12 @@ const runEslintFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runPrettierFix = (files: string[], passthrough: string[]): void => {
+  // An explicit file Prettier has no parser for (a Dockerfile, .env) is an
+  // error without this; with it, Prettier skips the file as it does when
+  // expanding a directory.
   const args = [
     "--write",
+    "--ignore-unknown",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
@@ -71,6 +79,12 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runOxlintFix = (files: string[], passthrough: string[]): void => {
+  const targets = toOxlintTargets(files);
+
+  if (targets.length === 0) {
+    return;
+  }
+
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
@@ -78,7 +92,7 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
-    ...(files.length > 0 ? files : ["."]),
+    ...targets,
   ];
 
   const result = spawnSync("oxlint", args, {
@@ -88,8 +102,11 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
 };
 
 const runOxfmtFix = (files: string[], passthrough: string[]): void => {
+  // An explicit file oxfmt does not format (a Dockerfile, .env) is an error
+  // without this; with it, oxfmt reports zero files and exits 0.
   const args = [
     "--write",
+    "--no-error-on-unmatched-pattern",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
