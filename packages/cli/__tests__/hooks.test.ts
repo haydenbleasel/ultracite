@@ -373,7 +373,7 @@ describe("createHooks", () => {
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
-    test("update skips when a hook from before --hook already exists in settings", async () => {
+    test("update upgrades a hook from before --hook to the current command", async () => {
       const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommandWithoutHook}"}]}]}}`;
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -395,7 +395,17 @@ describe("createHooks", () => {
       const hooks = createHooks("codebuddy", "npm");
       await hooks.update();
 
-      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
+
+      const upgraded = JSON.parse(hooksWrite[1]);
+      expect(upgraded.hooks.PostToolUse).toHaveLength(1);
+      expect(upgraded.hooks.PostToolUse[0].hooks[0]).toEqual({
+        command: npmBiomeCommand,
+        timeout: 20,
+        type: "command",
+      });
     });
   });
 

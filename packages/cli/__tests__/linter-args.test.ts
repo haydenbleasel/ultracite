@@ -5,6 +5,7 @@ import {
   extractHookFlag,
   normalizeFileArgs,
   splitLinterArgs,
+  toOxlintTargets,
   toStylelintTargets,
 } from "../src/linter-args";
 
@@ -110,6 +111,22 @@ describe("linter args", () => {
 
   test("returns no targets when only non-style files are given", () => {
     expect(toStylelintTargets(["src/index.ts", "package.json"])).toEqual([]);
+  });
+
+  test("keeps only the targets oxlint can lint", () => {
+    expect(toOxlintTargets([])).toEqual(["."]);
+    expect(
+      toOxlintTargets([
+        "src/index.ts",
+        "README.md",
+        "package.json",
+        "Dockerfile",
+        "App.vue",
+        "src/**/*.tsx",
+        "src",
+      ])
+    ).toEqual(["src/index.ts", "App.vue", "src/**/*.tsx", "src"]);
+    expect(toOxlintTargets(["README.md", ".env"])).toEqual([]);
   });
 
   test("extracts --hook and strips it from passthrough", () => {

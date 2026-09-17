@@ -243,6 +243,7 @@ describe("fix", () => {
     expect(stylelintCall[1]).toContain("--fix");
     expect(prettierCall[0]).toBe("prettier");
     expect(prettierCall[1]).toContain("--write");
+    expect(prettierCall[1]).toContain("--ignore-unknown");
   });
 
   test("runs eslint fix with specific files", () => {
@@ -437,8 +438,31 @@ describe("fix", () => {
     fix(["src/index.ts"]);
 
     expect(mockSpawn).toHaveBeenCalledTimes(2);
-    const [oxlintCall] = mockSpawn.mock.calls;
+    const [oxlintCall, oxfmtCall] = mockSpawn.mock.calls;
     expect(oxlintCall[1]).toContain("src/index.ts");
+    expect(oxfmtCall[1]).toContain("src/index.ts");
+    expect(oxfmtCall[1]).toContain("--no-error-on-unmatched-pattern");
+  });
+
+  test("skips oxlint for a file it does not lint and still runs oxfmt", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: 0,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    fix(["README.md"]);
+
+    expect(mockSpawn).toHaveBeenCalledTimes(1);
+    const [oxfmtCall] = mockSpawn.mock.calls;
+    expect(oxfmtCall[0]).toBe("oxfmt");
+    expect(oxfmtCall[1]).toContain("README.md");
   });
 
   test("oxlint fix throws on oxlint spawn error when it is the first step", () => {

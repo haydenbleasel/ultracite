@@ -134,15 +134,16 @@ program
       const { hook, passthrough } = extractHookFlag(agentFlags.passthrough);
       const { agent } = agentFlags;
 
-      if (hook && split.files.length === 0) {
-        const targets = hookTargets();
+      if (hook) {
+        const targets = await hookTargets({ targets: split.files });
 
-        // The agent edited a file outside the project, or one that is gone.
+        // The agent edited a file outside the project or the command's own
+        // targets, or one that is gone.
         if (targets?.length === 0) {
           return;
         }
 
-        await fix(targets ?? [], passthrough, { agent });
+        await fix(targets ?? split.files, passthrough, { agent });
         return;
       }
 

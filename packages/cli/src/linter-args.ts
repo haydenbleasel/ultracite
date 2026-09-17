@@ -29,14 +29,21 @@ const getCommandArgs = (
 export const normalizeFileArgs = (files: string[]): string[] =>
   files.map((file) => (file.startsWith("-") ? `./${file}` : file));
 
+const GLOB_CHARS_RE = /[*?[\]{}]/u;
+
+export const isGlobPattern = (arg: string): boolean => GLOB_CHARS_RE.test(arg);
+
 const STYLE_FILE_GLOB = "**/*.{css,scss,sass,less}";
 
 const styleExtensions = [".css", ".scss", ".sass", ".less"];
 
-const hasStyleExtension = (file: string): boolean => {
+const hasExtension = (file: string, extensions: string[]): boolean => {
   const lowered = file.toLowerCase();
-  return styleExtensions.some((extension) => lowered.endsWith(extension));
+  return extensions.some((extension) => lowered.endsWith(extension));
 };
+
+const hasStyleExtension = (file: string): boolean =>
+  hasExtension(file, styleExtensions);
 
 const isDirectory = (file: string): boolean => {
   try {
@@ -83,6 +90,41 @@ export const toStylelintTargets = (files: string[]): string[] => {
   }
 
   return targets;
+};
+
+// The file types Oxlint lints. It has no option to extend them, and an explicit
+// file outside this list makes it exit 1 with "No files found to lint".
+const oxlintExtensions = [
+  ".js",
+  ".mjs",
+  ".cjs",
+  ".jsx",
+  ".ts",
+  ".mts",
+  ".cts",
+  ".tsx",
+  ".vue",
+  ".astro",
+  ".svelte",
+];
+
+/**
+ * Oxlint fails on an explicit file it does not lint (a README, package.json,
+ * a Dockerfile), so those are dropped. Directories and globs pass through,
+ * since Oxlint filters their contents itself. An empty result means Oxlint
+ * has nothing to lint and should be skipped.
+ */
+export const toOxlintTargets = (files: string[]): string[] => {
+  if (files.length === 0) {
+    return ["."];
+  }
+
+  return files.filter(
+    (file) =>
+      hasExtension(file, oxlintExtensions) ||
+      isGlobPattern(file) ||
+      isDirectory(file)
+  );
 };
 
 export type FixAgent = "claude" | "codex";
@@ -133,7 +175,6 @@ export const extractHookFlag = (passthrough: string[]) => ({
   passthrough: passthrough.filter((arg) => arg !== "--hook"),
 });
 
-const GLOB_CHARS_RE = /[*?[\]{}]/u;
 const PATH_SEPARATOR_RE = /[\\/]/u;
 const FILE_EXTENSION_RE = /\.[a-z]{1,10}$/iu;
 
@@ -142,7 +183,7 @@ const FILE_EXTENSION_RE = /\.[a-z]{1,10}$/iu;
 // treated as that flag's value.
 const looksLikeTarget = (arg: string, pathExists: PathExists): boolean =>
   pathExists(arg) ||
-  GLOB_CHARS_RE.test(arg) ||
+  isGlobPattern(arg) ||
   PATH_SEPARATOR_RE.test(arg) ||
   FILE_EXTENSION_RE.test(arg);
 

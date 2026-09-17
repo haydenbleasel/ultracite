@@ -14,6 +14,35 @@ import { ensureDirectory, exists, writeProjectFile } from "./utils";
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+const mapValues = (
+  obj: JsonObject,
+  map: (value: JsonValue) => JsonValue
+): JsonObject =>
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, map(value)])
+  );
+
+// The same JSON with every string equal to `from` replaced by `to`.
+const replaceString = (
+  value: JsonValue,
+  from: string,
+  to: string
+): JsonValue => {
+  if (value === from) {
+    return to;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => replaceString(item, from, to));
+  }
+
+  if (isJsonObject(value)) {
+    return mapValues(value, (item) => replaceString(item, from, to));
+  }
+
+  return value;
+};
+
 const createFixCommand = (
   packageManager: PackageManagerName,
   args: string[] = []
@@ -40,14 +69,14 @@ export const createHooks = (
     linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
 
   const command = createFixCommand(packageManager, [...linterArgs, "--hook"]);
-  // The command from before `--hook` existed. The current command extends it,
-  // so matching it recognises both, and a re-run never adds a second hook.
+  // The command from before `--hook` existed. A re-run upgrades it in place,
+  // so an existing install picks up the single-file hook.
   const commandWithoutHook = createFixCommand(packageManager, linterArgs);
   const content = hookIntegration.hooks.getContent(command);
 
   const hasUltraciteHook = (obj: JsonObject): boolean => {
     const json = JSON.stringify(obj);
-    return json.includes("ultracite") || json.includes(commandWithoutHook);
+    return json.includes("ultracite") || json.includes(command);
   };
 
   const updateConfig = async (): Promise<void> => {
@@ -66,6 +95,18 @@ export const createHooks = (
     // value, or undefined when unparseable.
     const parsed: JsonValue | undefined = parse(existingContent);
     const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
+
+    const upgraded = mapValues(existingJson, (value) =>
+      replaceString(value, commandWithoutHook, command)
+    );
+
+    if (JSON.stringify(upgraded) !== JSON.stringify(existingJson)) {
+      await writeProjectFile(
+        hookIntegration.hooks.path,
+        `${JSON.stringify(upgraded, null, 2)}\n`
+      );
+      return;
+    }
 
     if (!hasUltraciteHook(existingJson)) {
       const merged = deepmerge(existingJson, content);
