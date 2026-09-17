@@ -384,6 +384,72 @@ describe("createHooks", () => {
       "bun run fix --hook",
     ];
 
+    test("update leaves a user's own hook alone while upgrading the generated one", async () => {
+      const userHook = `{"hooks":[{"type":"command","command":"npm run fix"}]}`;
+      const existingSettings = `{"hooks":{"Stop":[${userHook}],"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommandWithoutHook}"}]}]}}`;
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      const upgraded = JSON.parse(hooksWrite[1]);
+      expect(upgraded.hooks.Stop).toEqual([JSON.parse(userHook)]);
+      expect(upgraded.hooks.PostToolUse).toHaveLength(1);
+      expect(upgraded.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
+    test("update adds the hook next to a user's own hook that runs the fix script", async () => {
+      const userHook = `{"hooks":[{"type":"command","command":"npm run fix"}]}`;
+      const existingSettings = `{"hooks":{"Stop":[${userHook}]}}`;
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      const hooks = createHooks("codebuddy", "npm");
+      await hooks.update();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      const [hooksWrite] = mockWriteFile.mock.calls;
+      const merged = JSON.parse(hooksWrite[1]);
+      expect(merged.hooks.Stop).toEqual([JSON.parse(userHook)]);
+      expect(merged.hooks.PostToolUse).toHaveLength(1);
+      expect(merged.hooks.PostToolUse[0].hooks[0].command).toBe(
+        npmBiomeCommand
+      );
+    });
+
     for (const outdatedCommand of outdatedCommands) {
       test(`update upgrades an outdated hook command (${outdatedCommand})`, async () => {
         const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${outdatedCommand}"}]}]}}`;

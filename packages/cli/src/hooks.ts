@@ -17,33 +17,42 @@ import { ensureDirectory, exists, writeProjectFile } from "./utils";
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
-const mapValues = (
-  obj: JsonObject,
-  map: (value: JsonValue) => JsonValue
-): JsonObject =>
-  Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key, map(value)])
-  );
-
-// The same JSON with every string in `from` replaced by `to`.
-const replaceStrings = (
-  value: JsonValue,
-  from: ReadonlySet<JsonValue>,
-  to: string
+/**
+ * `existing` with the hook command replaced by `command` wherever `template`
+ * (the content this integration generates) places its command and `existing`
+ * holds one of `outdated` there. Only that position is touched: a user's own
+ * hook that happens to run the fix script elsewhere is left alone. Arrays in
+ * the template hold one entry, which stands for any entry in `existing`.
+ */
+const upgradeCommand = (
+  existing: JsonValue,
+  template: JsonValue,
+  outdated: ReadonlySet<JsonValue>,
+  command: string
 ): JsonValue => {
-  if (from.has(value)) {
-    return to;
+  if (template === command) {
+    return outdated.has(existing) ? command : existing;
   }
 
-  if (Array.isArray(value)) {
-    return value.map((item) => replaceStrings(item, from, to));
+  if (Array.isArray(template) && Array.isArray(existing)) {
+    const [entry] = template;
+    return entry === undefined
+      ? existing
+      : existing.map((item) => upgradeCommand(item, entry, outdated, command));
   }
 
-  if (isJsonObject(value)) {
-    return mapValues(value, (item) => replaceStrings(item, from, to));
+  if (isJsonObject(template) && isJsonObject(existing)) {
+    return Object.fromEntries(
+      Object.entries(existing).map(([key, value]) => [
+        key,
+        Object.hasOwn(template, key)
+          ? upgradeCommand(value, template[key], outdated, command)
+          : value,
+      ])
+    );
   }
 
-  return value;
+  return existing;
 };
 
 const biomeHookArgs = ["--skip=correctness/noUnusedImports"];
@@ -115,11 +124,17 @@ export const createHooks = (
     const parsed: JsonValue | undefined = parse(existingContent);
     const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
 
-    const upgraded = mapValues(existingJson, (value) =>
-      replaceStrings(value, outdatedCommands, command)
+    const upgraded = upgradeCommand(
+      existingJson,
+      content,
+      outdatedCommands,
+      command
     );
 
-    if (JSON.stringify(upgraded) !== JSON.stringify(existingJson)) {
+    if (
+      isJsonObject(upgraded) &&
+      JSON.stringify(upgraded) !== JSON.stringify(existingJson)
+    ) {
       await writeProjectFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(upgraded, null, 2)}\n`

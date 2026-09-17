@@ -4,9 +4,9 @@ import path from "node:path";
 import process from "node:process";
 import type { Readable } from "node:stream";
 
-import { parse } from "jsonc-parser";
 import { z } from "zod";
 
+import type { JsonValue } from "./data/types";
 import { isGlobPattern } from "./linter-args";
 
 const editedFileSchema = z.looseObject({ file_path: z.string().min(1) });
@@ -17,6 +17,17 @@ const toolInputPayloadSchema = z.looseObject({ tool_input: editedFileSchema });
 // Windsurf `post_write_code`.
 const toolInfoPayloadSchema = z.looseObject({ tool_info: editedFileSchema });
 
+// Strict: a lenient parser would recover a file path from a truncated payload
+// and lint one file where the whole-project run is the safe fallback.
+const parseJson = (text: string): JsonValue | null => {
+  try {
+    const value: JsonValue = JSON.parse(text);
+    return value;
+  } catch {
+    return null;
+  }
+};
+
 /**
  * The file an agent's post-edit hook payload names. Claude Code and CodeBuddy
  * send `tool_input.file_path`, Cursor's `afterFileEdit` sends `file_path`, and
@@ -24,7 +35,7 @@ const toolInfoPayloadSchema = z.looseObject({ tool_info: editedFileSchema });
  * JSON, names no file.
  */
 export const editedFileFromHookPayload = (payload: string): string | null => {
-  const parsed = parse(payload);
+  const parsed = parseJson(payload);
 
   const toolInput = toolInputPayloadSchema.safeParse(parsed);
   if (toolInput.success) {
@@ -45,14 +56,7 @@ export const editedFileFromHookPayload = (payload: string): string | null => {
 // writing anything, which would otherwise block the hook until its timeout.
 const STDIN_DEADLINE_MS = 1000;
 
-const isCompleteJson = (text: string): boolean => {
-  try {
-    JSON.parse(text);
-    return true;
-  } catch {
-    return false;
-  }
-};
+const isCompleteJson = (text: string): boolean => parseJson(text) !== null;
 
 type HookStdin = Readable & { isTTY?: boolean };
 

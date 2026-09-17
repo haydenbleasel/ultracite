@@ -46,6 +46,9 @@ describe("editedFileFromHookPayload", () => {
     );
     expect(editedFileFromHookPayload("[]")).toBe(null);
     expect(editedFileFromHookPayload("not json")).toBe(null);
+    expect(
+      editedFileFromHookPayload('{"tool_input":{"file_path":"/repo/a.ts"')
+    ).toBe(null);
     expect(editedFileFromHookPayload("")).toBe(null);
   });
 });
