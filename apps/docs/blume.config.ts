@@ -18,10 +18,14 @@ export default defineConfig({
   },
 
   deployment: {
-    // Static build served by Cloudflare Workers static assets (see
-    // wrangler.jsonc). Workers Builds doesn't expose a site URL the way Pages
-    // does, so the canonical origin is pinned here for the sitemap and OG
-    // images.
+    // Server build on Cloudflare Workers. Every page is still prerendered and
+    // served from static assets, but the server output lets Blume generate a
+    // small Worker in front of the content routes that honors
+    // `Accept: text/markdown` (see dist/server/wrangler.json after a build).
+    // Workers Builds doesn't expose a site URL the way Pages does, so the
+    // canonical origin is pinned here for the sitemap and OG images.
+    adapter: "cloudflare",
+    output: "server",
     site: "https://www.ultracite.ai",
   },
 
@@ -51,9 +55,20 @@ export default defineConfig({
     ],
   },
 
-  // Redirects live in public/_redirects so we can use Cloudflare's wildcard
-  // rules (e.g. /migrate/*). Blume copies public/ into the build output and
-  // leaves an existing _redirects untouched.
+  // Most redirects live in public/_redirects so we can use Cloudflare's
+  // wildcard rules (e.g. /migrate/*). Blume copies public/ into the build
+  // output and leaves an existing _redirects untouched. Redirects under the
+  // content routes (/, /docs/*, /changelog/*) must be declared here instead:
+  // those routes run through the generated Worker, which never consults
+  // _redirects, so it answers these from its own table.
+  redirects: [
+    // AI integrations moved under /docs/ai
+    { from: "/docs/rules", to: "/docs/ai/rules" },
+    { from: "/docs/skills", to: "/docs/ai/skills" },
+    { from: "/docs/hooks", to: "/docs/ai/hooks" },
+    // Retired MCP server page
+    { from: "/docs/mcp-server", to: "/" },
+  ],
 
   theme: {
     accent: "purple",

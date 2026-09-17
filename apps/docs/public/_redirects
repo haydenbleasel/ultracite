@@ -1,5 +1,7 @@
-# Cloudflare redirects (Workers static assets / Pages). Blume ships this file
-# as-is because it's in public/; keep every redirect here.
+# Cloudflare redirects served by the static asset layer. Blume ships this file
+# as-is because it's in public/. Paths under the content routes (/docs/*,
+# /changelog/*) never reach this file because the generated Worker handles
+# them first; declare those in blume.config.ts `redirects` instead.
 /sponsors / 301
 
 # Old root URLs → /docs/*
@@ -20,14 +22,10 @@
 /rules /docs/ai/rules 301
 /skills /docs/ai/skills 301
 /hooks /docs/ai/hooks 301
-/docs/rules /docs/ai/rules 301
-/docs/skills /docs/ai/skills 301
-/docs/hooks /docs/ai/hooks 301
 
 # Retired MCP server pages
 /mcp / 301
 /mcp-server / 301
-/docs/mcp-server / 301
 
 # Legacy pages
 /introduction /docs 301

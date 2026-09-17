@@ -6,12 +6,13 @@
     "dev": "blume dev",
     "build": "blume build",
     "audit": "blume audit",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
     "blume": "^1.6.6"
   },
   "devDependencies": {
+    "@astrojs/cloudflare": "^14.3.2",
     "wrangler": "^4.129.1"
   }
 }

@@ -1,3 +1,7 @@
+// Base Worker config. `blume build` merges it into dist/server/wrangler.json,
+// adding the generated `main` entry and the `assets.run_worker_first` rules
+// that route content pages through the Worker for `Accept: text/markdown`
+// negotiation; deploy from that file (see the `deploy` script).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ultracite-docs",
