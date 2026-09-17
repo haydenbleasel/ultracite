@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import path from "node:path";
 import { PassThrough } from "node:stream";
 
 import {
@@ -89,50 +90,57 @@ describe("readHookStdin", () => {
 // Every path exists, at itself.
 const exists = (target: string) => target;
 
-// macOS resolves `/tmp` to `/private/tmp`.
-const throughSymlink = (target: string) =>
-  target.replace(/^\/tmp\//u, "/private/tmp/");
+// Platform-native absolute paths, so the expectations hold on Windows too.
+const repo = path.resolve("/repo");
+const inRepo = (...segments: string[]) => path.join(repo, ...segments);
+const edited = path.join("src", "a.ts");
 
 describe("hookTargets", () => {
   test("targets the edited file, relative to the project, when it exists inside it", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
-        read: () => payloadFor("/repo/src/a.ts"),
+        cwd: repo,
+        read: () => payloadFor(inRepo("src", "a.ts")),
         resolvePath: exists,
       })
-    ).toEqual(["src/a.ts"]);
+    ).toEqual([edited]);
     expect(
       await hookTargets({
-        cwd: "/repo",
+        cwd: repo,
         read: () => payloadFor("src/a.ts"),
         resolvePath: exists,
       })
-    ).toEqual(["src/a.ts"]);
+    ).toEqual([edited]);
   });
 
   test("targets the edited file when the project is opened through a symlink", async () => {
+    // macOS resolves `/tmp` to `/private/tmp`.
+    const link = path.resolve("/tmp/repo");
+    const real = path.resolve("/private/tmp/repo");
+    const throughSymlink = (target: string) =>
+      target.startsWith(link) ? `${real}${target.slice(link.length)}` : target;
+
     expect(
       await hookTargets({
-        cwd: "/private/tmp/repo",
-        read: () => payloadFor("/tmp/repo/src/a.ts"),
+        cwd: real,
+        read: () => payloadFor(path.join(link, "src", "a.ts")),
         resolvePath: throughSymlink,
       })
-    ).toEqual(["src/a.ts"]);
+    ).toEqual([edited]);
   });
 
   test("targets nothing when the edited file is outside the project", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
-        read: () => payloadFor("/tmp/notes.md"),
+        cwd: repo,
+        read: () => payloadFor(path.resolve("/tmp/notes.md")),
         resolvePath: exists,
       })
     ).toEqual([]);
     expect(
       await hookTargets({
-        cwd: "/repo",
-        read: () => payloadFor("/repo-other/a.ts"),
+        cwd: repo,
+        read: () => payloadFor(path.resolve("/repo-other/a.ts")),
         resolvePath: exists,
       })
     ).toEqual([]);
@@ -141,25 +149,25 @@ describe("hookTargets", () => {
   test("targets nothing when the edited file no longer exists", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
-        read: () => payloadFor("/repo/src/a.ts"),
-        resolvePath: (target) => (target === "/repo" ? target : null),
+        cwd: repo,
+        read: () => payloadFor(inRepo("src", "a.ts")),
+        resolvePath: (target) => (target === repo ? target : null),
       })
     ).toEqual([]);
   });
 
   test("narrows the command line's own targets to the edited file", async () => {
     const options = {
-      cwd: "/repo",
-      read: () => payloadFor("/repo/src/a.ts"),
+      cwd: repo,
+      read: () => payloadFor(inRepo("src", "a.ts")),
       resolvePath: exists,
     };
 
     expect(await hookTargets({ ...options, targets: ["src"] })).toEqual([
-      "src/a.ts",
+      edited,
     ]);
     expect(await hookTargets({ ...options, targets: ["src/a.ts"] })).toEqual([
-      "src/a.ts",
+      edited,
     ]);
     expect(
       await hookTargets({ ...options, targets: ["docs", "lib/a.ts"] })
@@ -169,8 +177,8 @@ describe("hookTargets", () => {
   test("keeps the command line's targets when they are globs", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
-        read: () => payloadFor("/repo/src/a.ts"),
+        cwd: repo,
+        read: () => payloadFor(inRepo("src", "a.ts")),
         resolvePath: exists,
         targets: ["src/**/*.ts"],
       })
@@ -180,7 +188,7 @@ describe("hookTargets", () => {
   test("keeps the whole-project run when the payload names no file", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
+        cwd: repo,
         read: () => '{"toolArgs":{"path":"a.ts"}}',
       })
     ).toBe(null);
@@ -189,7 +197,7 @@ describe("hookTargets", () => {
   test("keeps the whole-project run when stdin cannot be read", async () => {
     expect(
       await hookTargets({
-        cwd: "/repo",
+        cwd: repo,
         read: () => Promise.reject(new Error("EAGAIN")),
       })
     ).toBe(null);

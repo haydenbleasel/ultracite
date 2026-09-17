@@ -123,9 +123,9 @@ describe("linter args", () => {
         "Dockerfile",
         "App.vue",
         "src/**/*.tsx",
-        "src",
+        ".",
       ])
-    ).toEqual(["src/index.ts", "App.vue", "src/**/*.tsx", "src"]);
+    ).toEqual(["src/index.ts", "App.vue", "src/**/*.tsx", "."]);
     expect(toOxlintTargets(["README.md", ".env"])).toEqual([]);
   });
 
