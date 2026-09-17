@@ -373,40 +373,53 @@ describe("createHooks", () => {
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
-    test("update upgrades a hook from before --hook to the current command", async () => {
-      const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommandWithoutHook}"}]}]}}`;
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
+    // The pre-`--hook` command, and commands from an earlier init with a
+    // different linter or package manager, are all rewritten to the current
+    // command rather than kept or joined by a second hook.
+    const outdatedCommands = [
+      npmBiomeCommandWithoutHook,
+      "npm run fix",
+      "npm run fix -- --hook",
+      "pnpm run fix --skip=correctness/noUnusedImports",
+      "bun run fix --hook",
+    ];
 
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve(existingSettings)),
-        writeFile: mockWriteFile,
-      }));
+    for (const outdatedCommand of outdatedCommands) {
+      test(`update upgrades an outdated hook command (${outdatedCommand})`, async () => {
+        const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${outdatedCommand}"}]}]}}`;
+        const mockWriteFile = mock((_path: string, _content: string) =>
+          Promise.resolve()
+        );
 
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
+        mock.module("node:fs/promises", () => ({
+          access: mock(() => Promise.resolve()),
+          mkdir: mock(() => Promise.resolve()),
+          readFile: mock(() => Promise.resolve(existingSettings)),
+          writeFile: mockWriteFile,
+        }));
 
-      const hooks = createHooks("codebuddy", "npm");
-      await hooks.update();
+        mock.module("node:fs", () => ({
+          accessSync: mock(() => {}),
+          existsSync: mock(() => false),
+          readFileSync: mock(() => "{}"),
+        }));
 
-      expect(mockWriteFile).toHaveBeenCalledTimes(1);
-      const [hooksWrite] = mockWriteFile.mock.calls;
-      expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
+        const hooks = createHooks("codebuddy", "npm");
+        await hooks.update();
 
-      const upgraded = JSON.parse(hooksWrite[1]);
-      expect(upgraded.hooks.PostToolUse).toHaveLength(1);
-      expect(upgraded.hooks.PostToolUse[0].hooks[0]).toEqual({
-        command: npmBiomeCommand,
-        timeout: 20,
-        type: "command",
+        expect(mockWriteFile).toHaveBeenCalledTimes(1);
+        const [hooksWrite] = mockWriteFile.mock.calls;
+        expect(hooksWrite[0]).toBe(".codebuddy/settings.json");
+
+        const upgraded = JSON.parse(hooksWrite[1]);
+        expect(upgraded.hooks.PostToolUse).toHaveLength(1);
+        expect(upgraded.hooks.PostToolUse[0].hooks[0]).toEqual({
+          command: npmBiomeCommand,
+          timeout: 20,
+          type: "command",
+        });
       });
-    });
+    }
   });
 
   describe("claude hooks", () => {

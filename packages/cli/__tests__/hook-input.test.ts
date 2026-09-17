@@ -172,6 +172,21 @@ describe("hookTargets", () => {
     expect(
       await hookTargets({ ...options, targets: ["docs", "lib/a.ts"] })
     ).toEqual([]);
+    expect(await hookTargets({ ...options, targets: ["missing"] })).toEqual([]);
+  });
+
+  test("narrows a symlinked directory target to the edited file under it", async () => {
+    const throughSymlink = (target: string) =>
+      target === inRepo("src-link") ? inRepo("src") : target;
+
+    expect(
+      await hookTargets({
+        cwd: repo,
+        read: () => payloadFor(inRepo("src", "a.ts")),
+        resolvePath: throughSymlink,
+        targets: ["src-link"],
+      })
+    ).toEqual([edited]);
   });
 
   test("keeps the command line's targets when they are globs", async () => {

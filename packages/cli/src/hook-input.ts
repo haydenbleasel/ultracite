@@ -116,11 +116,9 @@ const realPath = (target: string): string | null => {
   }
 };
 
-const covers = (root: string, target: string, file: string): boolean => {
-  const targetPath = path.resolve(root, target);
-  const filePath = path.resolve(root, file);
-  return targetPath === filePath || isInside(targetPath, filePath);
-};
+// Whether a command line target (a real path) is the file or contains it.
+const covers = (target: string | null, file: string): boolean =>
+  target !== null && (target === file || isInside(target, file));
 
 interface HookTargetsOptions {
   cwd?: string;
@@ -179,7 +177,11 @@ export const hookTargets = async ({
     return null;
   }
 
-  return targets.some((target) => covers(root, target, relative))
-    ? [relative]
-    : [];
+  // Targets resolve like the file did, so a symlinked directory on the
+  // command line still contains the files under it.
+  const covered = targets.some((target) =>
+    covers(resolvePath(path.resolve(root, target)), resolved)
+  );
+
+  return covered ? [relative] : [];
 };

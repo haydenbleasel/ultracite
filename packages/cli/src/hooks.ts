@@ -8,7 +8,10 @@ import type { PackageManagerName } from "nypm";
 import { hooks } from "./data/hooks";
 import type { options } from "./data/options";
 import type { JsonObject, JsonValue } from "./data/types";
-import { assertSupportedPackageManagerName } from "./package-manager";
+import {
+  assertSupportedPackageManagerName,
+  supportedPackageManagers,
+} from "./package-manager";
 import { ensureDirectory, exists, writeProjectFile } from "./utils";
 
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
@@ -22,26 +25,28 @@ const mapValues = (
     Object.entries(obj).map(([key, value]) => [key, map(value)])
   );
 
-// The same JSON with every string equal to `from` replaced by `to`.
-const replaceString = (
+// The same JSON with every string in `from` replaced by `to`.
+const replaceStrings = (
   value: JsonValue,
-  from: string,
+  from: ReadonlySet<JsonValue>,
   to: string
 ): JsonValue => {
-  if (value === from) {
+  if (from.has(value)) {
     return to;
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => replaceString(item, from, to));
+    return value.map((item) => replaceStrings(item, from, to));
   }
 
   if (isJsonObject(value)) {
-    return mapValues(value, (item) => replaceString(item, from, to));
+    return mapValues(value, (item) => replaceStrings(item, from, to));
   }
 
   return value;
 };
+
+const biomeHookArgs = ["--skip=correctness/noUnusedImports"];
 
 const createFixCommand = (
   packageManager: PackageManagerName,
@@ -54,6 +59,18 @@ const createFixCommand = (
   return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
+// Every hook command an earlier `init` may have generated: each package
+// manager, with and without the Biome skip, with and without `--hook`.
+const generatedFixCommands = (): Set<string> =>
+  new Set(
+    supportedPackageManagers.flatMap((packageManager) =>
+      [[], biomeHookArgs].flatMap((linterArgs) => [
+        createFixCommand(packageManager, linterArgs),
+        createFixCommand(packageManager, [...linterArgs, "--hook"]),
+      ])
+    )
+  );
+
 export const createHooks = (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
@@ -65,13 +82,15 @@ export const createHooks = (
     throw new Error(`Hook integration "${name}" not found`);
   }
 
-  const linterArgs =
-    linter === "biome" ? ["--skip=correctness/noUnusedImports"] : [];
+  const linterArgs = linter === "biome" ? biomeHookArgs : [];
 
   const command = createFixCommand(packageManager, [...linterArgs, "--hook"]);
-  // The command from before `--hook` existed. A re-run upgrades it in place,
-  // so an existing install picks up the single-file hook.
-  const commandWithoutHook = createFixCommand(packageManager, linterArgs);
+  // A re-run rewrites a command from an earlier `init` in place, so an
+  // existing install picks up the single-file hook, and a changed package
+  // manager or linter, instead of keeping the old command or gaining a
+  // second hook.
+  const outdatedCommands = generatedFixCommands();
+  outdatedCommands.delete(command);
   const content = hookIntegration.hooks.getContent(command);
 
   const hasUltraciteHook = (obj: JsonObject): boolean => {
@@ -97,7 +116,7 @@ export const createHooks = (
     const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
 
     const upgraded = mapValues(existingJson, (value) =>
-      replaceString(value, commandWithoutHook, command)
+      replaceStrings(value, outdatedCommands, command)
     );
 
     if (JSON.stringify(upgraded) !== JSON.stringify(existingJson)) {
