@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "blume dev",
-    "build": "blume build",
+    "build": "blume build && bun scripts/generate-agent-skills.ts",
     "audit": "blume audit",
     "deploy": "wrangler deploy --config dist/server/wrangler.json"
   },
