@@ -57,6 +57,21 @@ const parseJsonOutput = <T>(command: string, stdout: string): T => {
 const toTargets = (files: string[], fallback: string): string[] =>
   files.length > 0 ? files : [fallback];
 
+const withConfig = (
+  linter: Linter,
+  configPath: string | undefined,
+  args: string[]
+): string[] => {
+  if (!configPath) {
+    return args;
+  }
+  if (linter === "biome") {
+    const [command, ...rest] = args;
+    return [command, `--config-path=${configPath}`, ...rest];
+  }
+  return ["--config", configPath, ...args];
+};
+
 interface OxlintLabel {
   span?: { column?: number; line?: number };
 }
@@ -109,28 +124,35 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
 // report-only pass so their line numbers reflect the formatted file.
 const runOxlintPass = (
   files: string[],
-  passthrough: string[]
+  passthrough: string[],
+  configPath?: string
 ): Diagnostic[] => {
   const hasUnsafe = passthrough.includes("--unsafe");
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
   const targets = toTargets(files, ".");
 
-  runPiped("oxlint", [
-    hasUnsafe ? "--fix-dangerously" : "--fix",
-    ...filteredPassthrough,
-    ...targets,
-  ]);
+  runPiped(
+    "oxlint",
+    withConfig("oxlint", configPath, [
+      hasUnsafe ? "--fix-dangerously" : "--fix",
+      ...filteredPassthrough,
+      ...targets,
+    ])
+  );
 
   runPiped("oxfmt", ["--write", ...targets]);
 
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
-  const stdout = runPiped("oxlint", [
-    ...filteredPassthrough,
-    "-f",
-    "json",
-    ...targets,
-  ]);
+  const stdout = runPiped(
+    "oxlint",
+    withConfig("oxlint", configPath, [
+      ...filteredPassthrough,
+      "-f",
+      "json",
+      ...targets,
+    ])
+  );
 
   return parseOxlintDiagnostics(stdout);
 };
@@ -191,7 +213,11 @@ const parseBiomeDiagnostics = (stdout: string): Diagnostic[] => {
   return diagnostics;
 };
 
-const runBiomePass = (files: string[], passthrough: string[]): Diagnostic[] => {
+const runBiomePass = (
+  files: string[],
+  passthrough: string[],
+  configPath?: string
+): Diagnostic[] => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
 
   if (unresolvableConfig) {
@@ -202,14 +228,17 @@ const runBiomePass = (files: string[], passthrough: string[]): Diagnostic[] => {
 
   // The JSON reporter goes after the passthrough so a user-supplied reporter
   // flag can't override it and break the parser.
-  const stdout = runPiped("biome", [
-    "check",
-    "--write",
-    "--no-errors-on-unmatched",
-    ...passthrough,
-    "--reporter=json",
-    ...toTargets(files, "./"),
-  ]);
+  const stdout = runPiped(
+    "biome",
+    withConfig("biome", configPath, [
+      "check",
+      "--write",
+      "--no-errors-on-unmatched",
+      ...passthrough,
+      "--reporter=json",
+      ...toTargets(files, "./"),
+    ])
+  );
 
   return parseBiomeDiagnostics(stdout);
 };
@@ -267,11 +296,15 @@ const parseEslintDiagnostics = (stdout: string): Diagnostic[] => {
  */
 const runEslintPass = (
   files: string[],
-  passthrough: string[]
+  passthrough: string[],
+  configPath?: string
 ): Diagnostic[] => {
   const targets = toTargets(files, ".");
 
-  runPiped("eslint", ["--fix", ...passthrough, ...targets]);
+  runPiped(
+    "eslint",
+    withConfig("eslint", configPath, ["--fix", ...passthrough, ...targets])
+  );
 
   const stylelintTargets = toStylelintTargets(files);
 
@@ -287,7 +320,10 @@ const runEslintPass = (
 
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
-  const stdout = runPiped("eslint", [...passthrough, "-f", "json", ...targets]);
+  const stdout = runPiped(
+    "eslint",
+    withConfig("eslint", configPath, [...passthrough, "-f", "json", ...targets])
+  );
 
   return parseEslintDiagnostics(stdout);
 };
@@ -304,5 +340,40 @@ const linterAdapters = {
   oxlint: oxlintAdapter,
 } satisfies Record<Linter, LinterAdapter>;
 
-export const getLinterAdapter = (linter: Linter): LinterAdapter =>
-  linterAdapters[linter];
+export const getLinterAdapter = (
+  linter: Linter,
+  configPath?: string
+): LinterAdapter => {
+  if (!configPath) {
+    return linterAdapters[linter];
+  }
+  switch (linter) {
+    case "biome": {
+      return {
+        ...biomeAdapter,
+        fixAndCollect: (files, passthrough) =>
+          runBiomePass(files, passthrough, configPath),
+        verify: (file, passthrough) =>
+          runBiomePass([file], passthrough, configPath),
+      };
+    }
+    case "eslint": {
+      return {
+        ...eslintAdapter,
+        fixAndCollect: (files, passthrough) =>
+          runEslintPass(files, passthrough, configPath),
+        verify: (file, passthrough) =>
+          runEslintPass([file], passthrough, configPath),
+      };
+    }
+    default: {
+      return {
+        ...oxlintAdapter,
+        fixAndCollect: (files, passthrough) =>
+          runOxlintPass(files, passthrough, configPath),
+        verify: (file, passthrough) =>
+          runOxlintPass([file], passthrough, configPath),
+      };
+    }
+  }
+};

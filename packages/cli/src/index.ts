@@ -62,6 +62,12 @@ program
   )
   .option("--hooks <hooks...>", "Hooks to enable")
   .option("--frameworks <frameworks...>", "Frameworks being used")
+  .option(
+    "--workspace-framework <path=framework>",
+    "Apply a framework preset to a project-relative workspace (repeatable)",
+    (value: string, previous: string[] = []) => [...previous, value],
+    []
+  )
   .option("--integrations <integrations...>", "Integrations to enable")
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
@@ -89,6 +95,10 @@ program
         opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
       skipInstall: opts.skipInstall,
       "type-aware": opts.typeAware,
+      workspaceFrameworks:
+        opts.workspaceFramework?.length > 0
+          ? opts.workspaceFramework
+          : undefined,
     });
   });
 

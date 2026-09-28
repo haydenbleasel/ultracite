@@ -22,6 +22,7 @@ const MAX_AGENT_ATTEMPTS = 3;
 
 export interface AgentFixOptions {
   agent: FixAgent;
+  configPath?: string;
   files: string[];
   linter: Linter;
   passthrough: string[];
@@ -185,12 +186,13 @@ const fixFileGroup = async (
 
 export const runAgentFix = async ({
   agent,
+  configPath,
   files,
   linter,
   passthrough,
 }: AgentFixOptions): Promise<void> => {
   const agentAdapter = agentAdapters[agent];
-  const linterAdapter = getLinterAdapter(linter);
+  const linterAdapter = getLinterAdapter(linter, configPath);
 
   assertAgentAvailable(agentAdapter);
 

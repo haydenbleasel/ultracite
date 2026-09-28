@@ -21,6 +21,29 @@ The concept is the same across all supported linters — pull in the `core` pres
 }
 ```
 
+## Path-Scoped Configuration
+
+Use `ultracite.config.ts` when framework presets should apply only to part of a repository. Import `defineConfig` from `ultracite/config` for type checking; Ultracite translates the shared preset DSL into the selected provider's native config before each root `check` or `fix` run.
+
+```ts title="ultracite.config.ts"
+import { defineConfig } from "ultracite/config";
+
+export default defineConfig({
+  extends: ["ultracite/core"],
+  overrides: [
+    {
+      files: ["apps/web/**/*"],
+      extends: ["ultracite/react", "ultracite/tanstack"],
+    },
+    { files: ["apps/docs/**/*"], extends: ["ultracite/astro"] },
+  ],
+});
+```
+
+Files outside the override paths receive only the root presets. Workspace configs are scoped to their containing directory and inherit only configs they explicitly list in `extends`; parent layers resolve before child layers, and sibling workspaces are isolated. Both `check` and `fix` refresh generated configs in `node_modules/.cache/ultracite`, leaving the source DSL and existing provider config files untouched. Repositories without this file continue to use the provider-native config path.
+
+`files` accepts project-relative glob patterns using `*`, `?`, `**`, character classes, and comma-separated brace alternatives (for example, `apps/{web,docs}/src/**/*.{ts,tsx}`). Parent-directory (`..`) and absolute patterns are rejected.
+
 ## Default Configuration
 
 When you include the `core` preset, you're pulling in Ultracite's base configuration. This preset includes framework-agnostic rules and settings. Some notable aspects:

@@ -121,6 +121,31 @@ describe("agent-fix linter adapters", () => {
     expect(collectCall[1]).toEqual(["-f", "json", "src/a.ts"]);
   });
 
+  test("uses a materialized scoped config for agent-fix and verification passes", () => {
+    const mockSpawn = mock((cmd: string, _args: string[]) => ({
+      status: cmd === "oxlint" ? 1 : 0,
+      stdout: cmd === "oxlint" ? oxlintJson : "",
+    }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    getLinterAdapter(
+      "oxlint",
+      "node_modules/.cache/ultracite/oxlint.config.mjs"
+    ).fixAndCollect(["apps/web/src/a.tsx"], ["--type-aware"]);
+
+    const [fixCall, oxfmtCall, collectCall] = mockSpawn.mock.calls;
+    expect(fixCall[1]).toContain("--config");
+    expect(fixCall[1]).toContain(
+      "node_modules/.cache/ultracite/oxlint.config.mjs"
+    );
+    expect(fixCall[1]).toContain("--type-aware");
+    expect(oxfmtCall[1]).toEqual(["--write", "apps/web/src/a.tsx"]);
+    expect(collectCall[1]).toContain("--config");
+    expect(collectCall[1]).toContain(
+      "node_modules/.cache/ultracite/oxlint.config.mjs"
+    );
+  });
+
   test("oxlint adapter throws on spawn failure", () => {
     const mockSpawn = mock(() => ({ error: new Error("spawn failed") }));
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));

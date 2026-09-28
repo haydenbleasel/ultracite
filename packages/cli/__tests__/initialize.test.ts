@@ -5,6 +5,7 @@ import type { PackageManager } from "nypm";
 import type { AgentFileTarget } from "../src/agents";
 import { getAgentFileTargets } from "../src/agents";
 import {
+  createPathConfigSource,
   initialize,
   initializeLefthook,
   initializeLintStaged,
@@ -87,6 +88,36 @@ mock.module("@clack/prompts", () => ({
 describe("initialize", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
+
+  test("rejects unsafe or unknown workspace-framework selections", async () => {
+    await expect(
+      initialize({ workspaceFrameworks: ["../outside=react"] })
+    ).rejects.toThrow("Invalid --workspace-framework");
+    await expect(
+      initialize({ workspaceFrameworks: ["C:\\outside=react"] })
+    ).rejects.toThrow("Invalid --workspace-framework");
+    await expect(
+      initialize({ workspaceFrameworks: ["apps/web=unknown"] })
+    ).rejects.toThrow("Unsupported framework");
+    await expect(
+      initialize({ workspaceFrameworks: ["C:\\outside=react"] })
+    ).rejects.toThrow("Invalid --workspace-framework");
+  });
+
+  test("generates centralized workspace framework scopes", () => {
+    const pathConfig = createPathConfigSource(
+      [
+        { framework: "react", workspace: "apps/web" },
+        { framework: "astro", workspace: "apps/docs" },
+      ],
+      []
+    );
+    expect(pathConfig).toContain('"ultracite/core"');
+    expect(pathConfig).toContain('"apps/web/**/*"');
+    expect(pathConfig).toContain('"ultracite/react"');
+    expect(pathConfig).toContain('"apps/docs/**/*"');
+    expect(pathConfig).toContain('"ultracite/astro"');
+  });
 
   test("shows editor config prompt when editors not specified", async () => {
     const mockMultiselect = mock(() => Promise.resolve([]));

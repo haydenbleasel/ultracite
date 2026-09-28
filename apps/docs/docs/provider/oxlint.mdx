@@ -16,6 +16,8 @@ description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritiz
 
 ## Usage
 
+In mixed-framework monorepos, the shared `ultracite.config.ts` format translates presets into Oxlint native scoped overrides. JS plugins and settings are hoisted to the root config as required by Oxlint, while framework rules stay limited to their matching files. See [Monorepos](/docs/monorepos) for both config placement styles.
+
 Ultracite generates two TypeScript config files for Oxlint:
 
 ```ts title="oxlint.config.ts"

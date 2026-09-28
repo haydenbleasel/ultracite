@@ -42,6 +42,9 @@ export default defineConfig({
     // Deliberately uses CommonJS in Astro frontmatter so the astro override
     // test can assert the backfilled rules still fire.
     "packages/cli/__tests__/fixtures/astro-prefer-module",
+    // Deliberately violates no-alert to prove path-config adapters preserve
+    // rules from an existing native Oxlint config.
+    "packages/cli/__tests__/fixtures/path-config",
   ],
   overrides: [
     {

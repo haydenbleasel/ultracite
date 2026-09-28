@@ -16,6 +16,8 @@ description: Learn when Ultracite is the right fit for ESLint, Prettier, and Sty
 
 ## Usage
 
+In mixed-framework monorepos, the shared `ultracite.config.ts` format scopes ESLint preset entries with flat-config `files` patterns. The generated adapter config is refreshed by `ultracite check` and `ultracite fix`; see [Monorepos](/docs/monorepos) for centralized and workspace-local examples.
+
 Ultracite generates three config files for ESLint:
 
 ```javascript title="eslint.config.mjs"

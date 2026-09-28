@@ -10,11 +10,17 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
+import { findPathConfigFiles, resolvePathConfig } from "../path-config";
+import { materializePathConfig } from "../path-config-adapters";
 import { exitOnCommandFailure, runSteps } from "../run-command";
 import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
 
-const runBiomeFix = (files: string[], passthrough: string[]): void => {
+const runBiomeFix = (
+  files: string[],
+  passthrough: string[],
+  configPath?: string
+): void => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
 
   if (unresolvableConfig) {
@@ -24,6 +30,9 @@ const runBiomeFix = (files: string[], passthrough: string[]): void => {
   }
 
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
+  if (configPath) {
+    args.push(`--config-path=${configPath}`);
+  }
 
   if (files.length > 0) {
     args.push(...files);
@@ -37,8 +46,16 @@ const runBiomeFix = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("Biome", result);
 };
 
-const runEslintFix = (files: string[], passthrough: string[]): void => {
-  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
+const runEslintFix = (
+  files: string[],
+  passthrough: string[],
+  configPath?: string
+): void => {
+  const args = ["--fix", ...passthrough];
+  if (configPath) {
+    args.push("--config", configPath);
+  }
+  args.push(...(files.length > 0 ? files : ["."]));
 
   const result = spawnSync("eslint", args, {
     stdio: "inherit",
@@ -78,7 +95,11 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("Stylelint", result);
 };
 
-const runOxlintFix = (files: string[], passthrough: string[]): void => {
+const runOxlintFix = (
+  files: string[],
+  passthrough: string[],
+  configPath?: string
+): void => {
   const targets = toOxlintTargets(files);
 
   if (targets.length === 0) {
@@ -92,6 +113,7 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
+    ...(configPath ? ["--config", configPath] : []),
     ...targets,
   ];
 
@@ -130,6 +152,7 @@ export const fix = (
 ): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
+  const configFiles = findPathConfigFiles(process.cwd());
 
   if (!linter) {
     throw new Error(
@@ -138,12 +161,60 @@ export const fix = (
   }
 
   if (agent) {
+    if (configFiles.length > 0) {
+      return resolvePathConfig(process.cwd(), configFiles).then(
+        async (resolved) => {
+          if (!resolved) {
+            return;
+          }
+          const configPath = await materializePathConfig(linter, resolved);
+          await runAgentFix({
+            agent,
+            configPath,
+            files: normalizedFiles,
+            linter,
+            passthrough,
+          });
+        }
+      );
+    }
     return runAgentFix({
       agent,
       files: normalizedFiles,
       linter,
       passthrough,
     });
+  }
+
+  if (configFiles.length > 0) {
+    return resolvePathConfig(process.cwd(), configFiles).then(
+      async (resolved) => {
+        if (!resolved) {
+          return;
+        }
+        const configPath = await materializePathConfig(linter, resolved);
+        switch (linter) {
+          case "eslint": {
+            runSteps([
+              () => runEslintFix(normalizedFiles, passthrough, configPath),
+              () => runStylelintFix(normalizedFiles, []),
+              () => runPrettierFix(normalizedFiles, []),
+            ]);
+            break;
+          }
+          case "oxlint": {
+            runSteps([
+              () => runOxlintFix(normalizedFiles, passthrough, configPath),
+              () => runOxfmtFix(normalizedFiles, []),
+            ]);
+            break;
+          }
+          default: {
+            runBiomeFix(normalizedFiles, passthrough, configPath);
+          }
+        }
+      }
+    );
   }
 
   switch (linter) {

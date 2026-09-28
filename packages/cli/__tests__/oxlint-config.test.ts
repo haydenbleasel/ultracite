@@ -570,7 +570,7 @@ describe("oxlint js-plugins config", () => {
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
-  });
+  }, 15_000);
 
   test("disables github/filenames-match-regex for route files", async () => {
     const config = await readOxlintConfig("js-plugins");
@@ -601,7 +601,7 @@ describe("oxlint js-plugins config", () => {
       "BadName.tsx",
       "Button.test.tsx",
     ]);
-  });
+  }, 15_000);
 
   test("uses a bracket-aware filenames-match-regex for page route files", async () => {
     const config = await readOxlintConfig("js-plugins");

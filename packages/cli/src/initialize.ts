@@ -1,3 +1,4 @@
+import path from "node:path";
 import process from "node:process";
 
 import {
@@ -18,7 +19,7 @@ import type { AgentFileTarget } from "./agents";
 import { agents as agentsData } from "./data/agents";
 import { editors } from "./data/editors";
 import { hooks as hookIntegrations } from "./data/hooks";
-import type { options } from "./data/options";
+import { options } from "./data/options";
 import { providers } from "./data/providers";
 import {
   assertOxlintJsPlugin,
@@ -66,6 +67,7 @@ import {
   oxlintConfigNames,
   prettierConfigNames,
   stylelintConfigNames,
+  validateFrameworkName,
   updatePackageJson,
   writeProjectFile,
 } from "./utils";
@@ -93,6 +95,7 @@ interface InitializeFlags {
   quiet?: boolean;
   skipInstall?: boolean;
   "type-aware"?: boolean;
+  workspaceFrameworks?: string[];
 }
 
 // @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
@@ -894,10 +897,64 @@ export const upsertHooks = async (
   }
 };
 
+export const createPathConfigSource = (
+  workspaceFrameworks: { framework: Frameworks; workspace: string }[],
+  frameworks: Frameworks[]
+): string => {
+  const extendsList = [
+    '"ultracite/core"',
+    ...frameworks.map(
+      (framework) => `"ultracite/${validateFrameworkName(framework)}"`
+    ),
+  ];
+  const overrides = workspaceFrameworks
+    .map(
+      ({ framework, workspace }) =>
+        `    { files: [${JSON.stringify(`${workspace}/**/*`)}], extends: [${JSON.stringify(`ultracite/${framework}`)}] },`
+    )
+    .join("\n");
+  return `import { defineConfig } from "ultracite/config";\n\nexport default defineConfig({\n  extends: [${extendsList.join(", ")}],\n  overrides: [\n${overrides}\n  ],\n});\n`;
+};
+
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
 export const initialize = async (flags?: InitializeFlags) => {
   const opts = flags ?? {};
   const quiet = opts.quiet ?? false;
+  const workspaceFrameworks = (opts.workspaceFrameworks ?? []).map(
+    (selection) => {
+      const [workspace, framework, extra] = selection.split("=");
+      if (
+        !workspace ||
+        !framework ||
+        extra ||
+        path.isAbsolute(workspace) ||
+        path.win32.isAbsolute(workspace) ||
+        workspace.split(/[\\/]/u).includes("..")
+      ) {
+        throw new Error(
+          `Invalid --workspace-framework "${selection}". Use <project-relative-path>=<framework>.`
+        );
+      }
+      validateFrameworkName(framework);
+      const knownFramework = options.frameworks.find(
+        (item) => item === framework
+      );
+      if (!knownFramework) {
+        throw new Error(
+          `Unsupported framework "${framework}" in --workspace-framework.`
+        );
+      }
+      return {
+        framework: knownFramework,
+        workspace: workspace.replaceAll("\\", "/"),
+      };
+    }
+  );
+  if (workspaceFrameworks.length > 0 && exists("./ultracite.config.ts")) {
+    throw new Error(
+      "ultracite.config.ts already exists. Add the workspace overrides to it instead of replacing the existing config."
+    );
+  }
 
   if (!quiet) {
     intro(`Ultracite v${ultraciteVersion} Initialization`);
@@ -940,6 +997,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
+        opts.workspaceFrameworks !== undefined ||
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
@@ -982,7 +1040,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.hooks ||
-        opts.integrations !== undefined;
+        opts.integrations !== undefined ||
+        opts.workspaceFrameworks !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -1033,6 +1092,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
+        opts.workspaceFrameworks !== undefined ||
         opts.frameworks !== undefined;
 
       if (!hasOtherCliOptions) {
@@ -1213,21 +1273,48 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.skipInstall,
       quiet,
       opts["type-aware"],
-      frameworks,
+      [
+        ...new Set([
+          ...frameworks,
+          ...workspaceFrameworks.map(({ framework }) => framework),
+        ]),
+      ],
       jsPlugins
     );
 
     await upsertTsConfig(quiet);
     await migrateLinterConfig(linter, quiet);
 
+    if (workspaceFrameworks.length > 0) {
+      await writeProjectFile(
+        "./ultracite.config.ts",
+        createPathConfigSource(workspaceFrameworks, frameworks)
+      );
+    }
+
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
+      await upsertBiomeConfig(
+        workspaceFrameworks.length > 0 ? [] : frameworks,
+        quiet,
+        opts["type-aware"]
+      );
     }
     if (linter === "eslint") {
-      await upsertEslintConfig(frameworks, quiet);
+      await upsertEslintConfig(
+        workspaceFrameworks.length > 0 ? [] : frameworks,
+        quiet
+      );
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      await upsertPrettierConfig(frameworks, quiet);
+      await upsertPrettierConfig(
+        workspaceFrameworks.length > 0
+          ? [
+              ...frameworks,
+              ...workspaceFrameworks.map(({ framework }) => framework),
+            ]
+          : frameworks,
+        quiet
+      );
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
@@ -1242,7 +1329,11 @@ export const initialize = async (flags?: InitializeFlags) => {
           'package.json sets "type": "commonjs" — the generated oxlint/oxfmt configs use ESM imports and may not load. Consider "type": "module".'
         );
       }
-      await upsertOxlintConfig(frameworks, quiet, jsPlugins);
+      await upsertOxlintConfig(
+        workspaceFrameworks.length > 0 ? [] : frameworks,
+        quiet,
+        jsPlugins
+      );
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
     }

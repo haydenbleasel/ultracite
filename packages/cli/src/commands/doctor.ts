@@ -13,6 +13,8 @@ import {
 } from "../config-resolution";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
+import { findPathConfigFiles, resolvePathConfig } from "../path-config";
+import { assertPathConfigPresetsAvailable } from "../path-config-adapters";
 import { readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
@@ -549,6 +551,34 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
   return checks;
 };
 
+/** Validate DSL files before check/fix needs to materialize a provider config. */
+export const validatePathConfigs = async (
+  root = process.cwd(),
+  configFiles = findPathConfigFiles(root),
+  linter?: Linter
+): Promise<DiagnosticCheck | null> => {
+  if (configFiles.length === 0) {
+    return null;
+  }
+  try {
+    const config = await resolvePathConfig(root, configFiles);
+    if (config && linter) {
+      assertPathConfigPresetsAvailable(linter, config);
+    }
+    return {
+      message: `Validated ${configFiles.length} path-scoped Ultracite config${configFiles.length === 1 ? "" : "s"}${config ? ` across ${config.scopes.length} preset scopes` : ""}`,
+      name: "Path-scoped Ultracite configuration",
+      status: "pass",
+    };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : String(error),
+      name: "Path-scoped Ultracite configuration",
+      status: "fail",
+    };
+  }
+};
+
 // ---------------------------------------------------------------------------
 // Main doctor function
 // ---------------------------------------------------------------------------
@@ -602,28 +632,7 @@ export const reportDiagnostics = (
   return { failCount, passCount, warnCount };
 };
 
-export const doctor = (): void => {
-  intro(`Ultracite v${packageJson.version} Doctor`);
-
-  const linter = detectLinter();
-
-  if (!linter) {
-    log.error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
-    outro(DOCTOR_COMPLETE);
-    throw new Error(DOCTOR_FAILED);
-  }
-
-  log.info(`Detected linter: ${linter}`);
-
-  const s = spinner();
-  s.start("Running diagnostics...");
-
-  const checks = runDiagnostics(linter);
-
-  s.stop("Diagnostics complete.");
-
+const finishDoctor = (checks: DiagnosticCheck[]): void => {
   const { failCount, warnCount } = reportDiagnostics(checks);
 
   if (failCount > 0) {
@@ -644,4 +653,40 @@ export const doctor = (): void => {
 
   log.success("Everything looks good!");
   outro(DOCTOR_COMPLETE);
+};
+
+export const doctor = (): void | Promise<void> => {
+  intro(`Ultracite v${packageJson.version} Doctor`);
+
+  const linter = detectLinter();
+
+  if (!linter) {
+    log.error(
+      "No linter configuration found. Run `ultracite init` to set up a linter."
+    );
+    outro(DOCTOR_COMPLETE);
+    throw new Error(DOCTOR_FAILED);
+  }
+
+  log.info(`Detected linter: ${linter}`);
+
+  const s = spinner();
+  s.start("Running diagnostics...");
+
+  const checks = runDiagnostics(linter);
+  const pathConfigFiles = findPathConfigFiles(process.cwd());
+  if (pathConfigFiles.length > 0) {
+    return validatePathConfigs(process.cwd(), pathConfigFiles, linter).then(
+      (pathConfigCheck) => {
+        if (pathConfigCheck) {
+          checks.push(pathConfigCheck);
+        }
+        s.stop("Diagnostics complete.");
+        finishDoctor(checks);
+      }
+    );
+  }
+
+  s.stop("Diagnostics complete.");
+  finishDoctor(checks);
 };
