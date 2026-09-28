@@ -273,6 +273,50 @@ export default defineConfig({
 
 This approach lets you opt in to additional checks without Ultracite taking on third-party dependencies in its core preset.
 
+### Effect
+
+[Effect](https://effect.website/)'s type-aware diagnostics — floating Effects, unhandled error and requirement channels, Layer and Scope mistakes, and Effect-native alternatives to `console`, `Date`, `process.env`, and friends — are available to Oxlint through [`@effect/tsgo`](https://github.com/Effect-TS/tsgo). Ultracite doesn't ship an Effect preset because the `effecttsgo` plugin isn't part of stock Oxlint: `@effect/tsgo` replaces the installed `oxlint` and `oxlint-tsgolint` binaries with builds that include it, and only supports specific versions of each. Layer it on top of `core` yourself:
+
+```package-install
+npm install -D @effect/tsgo oxlint-tsgolint
+```
+
+Patch the binaries after every install with a `prepare` script (`--no-typescript` limits the patch to Oxlint; drop it if you also want Effect's TypeScript-Go integration):
+
+```json title="package.json"
+{
+  "scripts": {
+    "prepare": "effect-tsgo patch --no-typescript --oxlint"
+  }
+}
+```
+
+Then extend one of the presets `@effect/tsgo` ships:
+
+```ts title="oxlint.config.ts"
+import { strict } from "@effect/tsgo/oxlint-presets";
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core, strict],
+  ignorePatterns: core.ignorePatterns,
+  rules: {
+    "effecttsgo/global-console-in-effect": "error",
+    "effecttsgo/global-date-in-effect": "error",
+  },
+});
+```
+
+`strict` raises every Effect diagnostic that is on by default to `error`; use `recommended` instead to keep upstream's severities. Both presets turn on Oxlint's type-aware mode, so `--type-aware` isn't needed — and core's type-aware rules, such as `typescript/no-floating-promises`, run too. Upstream leaves some rules off, like the `*-in-effect` family above; enable the ones you want in `rules`, but skip `effecttsgo/strict-boolean-expressions`, which duplicates core's `typescript/strict-boolean-expressions`. Some rules only apply to Effect 3 or Effect 4 and do nothing on the other major version — see the [rule list](https://github.com/Effect-TS/tsgo#diagnostic-status).
+
+A few things to keep in mind:
+
+- Unpatched Oxlint fails the whole run with `Unknown plugin: 'effecttsgo'`, so the patch has to be in place everywhere you lint, CI included.
+- Reinstalling or upgrading `oxlint` or `oxlint-tsgolint` (including through `ultracite upgrade`) can restore the stock binaries without re-running `prepare`. Run `npx effect-tsgo patch --no-typescript --oxlint` again afterwards.
+- The patch refuses versions it doesn't support, which fails the install. Check the supported versions in the [`@effect/tsgo` README](https://github.com/Effect-TS/tsgo#supported-package-versions) before upgrading either package.
+- Effect's fixes are reported as suggestions, so `ultracite fix` only applies them with `--unsafe`.
+
 ## Enforcing Path Aliases
 
 Ultracite's core preset does not assume a project layout, so it does not force `@/*` (or `#/*`) aliases over relative imports — that convention depends on your `tsconfig.json`, and it would false-positive in monorepos, libraries, and projects without a `src` directory. If your project maps `@/*` to `src/*` and you want to ban `../` imports between source modules, add an override scoped to `src`:
