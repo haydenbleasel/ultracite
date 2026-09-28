@@ -98,6 +98,10 @@ const repo = path.resolve("/repo");
 const inRepo = (...segments: string[]) => path.join(repo, ...segments);
 const edited = path.join("src", "a.ts");
 
+// `src-link` is a symlink to `src`; every other path resolves to itself.
+const throughSrcLink = (target: string) =>
+  target === inRepo("src-link") ? inRepo("src") : target;
+
 describe("hookTargets", () => {
   test("targets the edited file, relative to the project, when it exists inside it", async () => {
     expect(
@@ -179,14 +183,11 @@ describe("hookTargets", () => {
   });
 
   test("narrows a symlinked directory target to the edited file under it", async () => {
-    const throughSymlink = (target: string) =>
-      target === inRepo("src-link") ? inRepo("src") : target;
-
     expect(
       await hookTargets({
         cwd: repo,
         read: () => payloadFor(inRepo("src", "a.ts")),
-        resolvePath: throughSymlink,
+        resolvePath: throughSrcLink,
         targets: ["src-link"],
       })
     ).toEqual([edited]);
