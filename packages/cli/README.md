@@ -4,7 +4,7 @@
 
 Ultracite helps you and your AI models write consistent, type-safe code without the hassle of configuration. Pick your preferred toolchain, run one command, and get hundreds of battle-tested rules wired up in seconds — across single repos and monorepos alike.
 
-[![npm downloads](https://img.shields.io/npm/dm/ultracite.svg)](https://www.npmjs.com/package/ultracite) [![Socket Badge](https://socket.dev/api/badge/npm/package/ultracite)](https://socket.dev/npm/package/ultracite) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/haydenbleasel/ultracite?utm_source=oss&utm_medium=github&utm_campaign=haydenbleasel%2Fultracite&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+[![npm downloads](https://img.shields.io/npm/dm/ultracite.svg)](https://www.npmjs.com/package/ultracite) [![Socket Badge](https://badge.socket.dev/npm/package/ultracite/latest)](https://socket.dev/npm/package/ultracite/overview/latest)![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/haydenbleasel/ultracite?utm_source=oss&utm_medium=github&utm_campaign=haydenbleasel%2Fultracite&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## Quick Start
 
