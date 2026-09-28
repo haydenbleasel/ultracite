@@ -1,6 +1,13 @@
 import { defineConfig } from "blume";
 
 export default defineConfig({
+  ai: {
+    // Publish the repo's agent skills under /.well-known/agent-skills/ with a
+    // discovery index. Skills with supporting files (like ultracite's
+    // references/) ship as .tar.gz archives so their relative links resolve.
+    skills: "../../skills",
+  },
+
   content: {
     sources: [
       // Local docs under docs/ → /docs/* (the marketing homepage owns "/").
