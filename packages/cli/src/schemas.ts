@@ -7,7 +7,7 @@ import { z } from "zod";
 
 // -- Package.json --
 
-const packageJsonSchema = z.looseObject({
+export const packageJsonSchema = z.looseObject({
   dependencies: z.record(z.string(), z.string()).optional(),
   devDependencies: z.record(z.string(), z.string()).optional(),
   "lint-staged": z.unknown().optional(),
@@ -26,10 +26,29 @@ const packageJsonSchema = z.looseObject({
 
 export type PackageJson = z.infer<typeof packageJsonSchema>;
 
+// zod emits the schema's keys first, so a parsed package.json written back as
+// is would come out reordered (name after devDependencies, main at the end).
+// Put the keys back in the order the document had them.
+const inDocumentOrder = (
+  data: PackageJson,
+  documentKeys: string[]
+): PackageJson => {
+  const ordered = Object.fromEntries(
+    documentKeys.filter((key) => key in data).map((key) => [key, data[key]])
+  );
+
+  // SAFETY: `ordered` holds exactly the entries of `data`, which zod just
+  // validated against packageJsonSchema, only in a different key order.
+  return Object.assign(ordered, data) as PackageJson;
+};
+
 export const parsePackageJson = (content: string): PackageJson | undefined => {
   const parsed = parse(content);
   const result = packageJsonSchema.safeParse(parsed);
-  return result.success ? result.data : undefined;
+
+  return result.success
+    ? inDocumentOrder(result.data, Object.keys(parsed))
+    : undefined;
 };
 
 export const readPackageJsonSync = (

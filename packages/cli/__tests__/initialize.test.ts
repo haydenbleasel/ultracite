@@ -1863,6 +1863,89 @@ describe("helper functions", () => {
   // with module re-loading when the tests transition between each other
 
   describe("installDependencies", () => {
+    test("keeps a project's own check script and adds the missing fix script", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const warn = mock((_message: string) => {});
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              name: "app",
+              scripts: { check: "tsc --noEmit && vitest run" },
+            })
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "oxlint", false, false);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
+      );
+      expect(packageJson.scripts).toEqual({
+        check: "tsc --noEmit && vitest run",
+        fix: "ultracite fix",
+      });
+      expect(warn.mock.calls[0]?.[0]).toContain(
+        'package.json already has a "check" script'
+      );
+    });
+
+    test("leaves Ultracite scripts with extra flags alone without warning", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const warn = mock((_message: string) => {});
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              name: "app",
+              scripts: {
+                check: "ultracite check --type-aware",
+                fix: "ultracite fix --type-aware",
+              },
+            })
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "oxlint", false, false);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
+      );
+      expect(packageJson.scripts).toEqual({
+        check: "ultracite check --type-aware",
+        fix: "ultracite fix --type-aware",
+      });
+      expect(warn).not.toHaveBeenCalled();
+    });
+
     test("installs dependencies when install is true", async () => {
       const mockAddDep = mock(() => Promise.resolve());
       mock.module("nypm", () => ({
@@ -2320,6 +2403,56 @@ describe("helper functions", () => {
       });
       expect(packageJson.prettier).toBeUndefined();
       expect(packageJson.stylelint).toBeUndefined();
+    });
+
+    test("prunes other linters from devDependencies only, keeping key order", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mockFileSystem({});
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            `{
+	"name": "plugin",
+	"version": "1.0.0",
+	"dependencies": { "prettier": "^3.0.0", "globals": "^15.0.0" },
+	"peerDependencies": { "eslint": ">=9" },
+	"devDependencies": { "eslint": "^10.0.0", "typescript": "^5.0.0" },
+	"main": "index.js"
+}
+`
+          )
+        ),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mockWriteFile,
+      }));
+
+      try {
+        await migrateLinterConfig("oxlint", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      const written = mockWriteFile.mock.calls.at(-1)?.[1] ?? "";
+      const packageJson = JSON.parse(written);
+      expect(Object.keys(packageJson)).toEqual([
+        "name",
+        "version",
+        "dependencies",
+        "peerDependencies",
+        "devDependencies",
+        "main",
+      ]);
+      expect(packageJson.dependencies).toEqual({
+        globals: "^15.0.0",
+        prettier: "^3.0.0",
+      });
+      expect(packageJson.peerDependencies).toEqual({ eslint: ">=9" });
+      expect(packageJson.devDependencies).toEqual({ typescript: "^5.0.0" });
+      expect(written).toStartWith('{\n\t"name": "plugin",');
     });
 
     test("removes stale Oxlint config when migrating to biome", async () => {

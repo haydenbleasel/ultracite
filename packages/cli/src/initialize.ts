@@ -63,14 +63,15 @@ import {
   detectFrameworks,
   detectLinter,
   eslintConfigNames,
+  editPackageJson,
   exists,
+  isJsonObject,
   legacyEslintConfigNames,
   oxfmtConfigNames,
   oxlintConfigNames,
   prettierConfigNames,
   stylelintConfigNames,
   updatePackageJson,
-  writeProjectFile,
 } from "./utils";
 
 const ultraciteVersion = packageJson.version;
@@ -239,49 +240,34 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   // independently of linting — never prune it.
   dependencyNamesToRemove.delete("storybook");
 
-  let changed = false;
-  const nextPackageJson = { ...packageJsonObject };
+  return await editPackageJson((manifest) => {
+    let changed = false;
 
-  for (const key of [
-    "dependencies",
-    "devDependencies",
-    "peerDependencies",
-  ] as const) {
-    const dependencies = nextPackageJson[key];
-    if (!dependencies) {
-      continue;
+    // Only devDependencies are pruned: a package in dependencies or
+    // peerDependencies (prettier used at runtime, eslint as the peer of a
+    // published plugin) is there for a reason other than linting.
+    const { devDependencies } = manifest;
+    if (isJsonObject(devDependencies)) {
+      const kept = Object.entries(devDependencies).filter(
+        ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
+      );
+      if (kept.length !== Object.keys(devDependencies).length) {
+        manifest.devDependencies = Object.fromEntries(kept);
+        changed = true;
+      }
     }
 
-    const dependencyEntries = Object.entries(dependencies);
-    const nextDependencyEntries = dependencyEntries.filter(
-      ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
-    );
-    if (nextDependencyEntries.length !== dependencyEntries.length) {
+    if ("prettier" in manifest) {
+      delete manifest.prettier;
       changed = true;
     }
-    const nextDependencies = Object.fromEntries(nextDependencyEntries);
+    if ("stylelint" in manifest) {
+      delete manifest.stylelint;
+      changed = true;
+    }
 
-    nextPackageJson[key] = nextDependencies;
-  }
-
-  if ("prettier" in nextPackageJson) {
-    delete nextPackageJson.prettier;
-    changed = true;
-  }
-  if ("stylelint" in nextPackageJson) {
-    delete nextPackageJson.stylelint;
-    changed = true;
-  }
-
-  if (!changed) {
-    return false;
-  }
-
-  await writeProjectFile(
-    "package.json",
-    `${JSON.stringify(nextPackageJson, null, 2)}\n`
-  );
-  return true;
+    return changed;
+  });
 };
 
 export const migrateLinterConfig = async (
@@ -347,6 +333,38 @@ export const migrateLinterConfig = async (
   }
 };
 
+const ultraciteScripts = {
+  check: "ultracite check",
+  fix: "ultracite fix",
+};
+
+/**
+ * The `check`/`fix` scripts to add. A project's own script with the same
+ * name (e.g. `"check": "tsc --noEmit"`) is left alone, and so is one that
+ * already runs Ultracite with extra flags.
+ */
+const getScriptsToAdd = async (
+  quiet: boolean
+): Promise<Record<string, string> | undefined> => {
+  const existingPackageJson = await readPackageJson();
+  const existingScripts = existingPackageJson?.scripts ?? {};
+  const scripts: Record<string, string> = {};
+
+  for (const [name, command] of Object.entries(ultraciteScripts)) {
+    const existing = existingScripts[name];
+
+    if (existing === undefined) {
+      scripts[name] = command;
+    } else if (!existing.includes("ultracite") && !quiet) {
+      log.warn(
+        `package.json already has a "${name}" script (\`${existing}\`), so it was left unchanged. Run \`${command}\` directly or add it to that script.`
+      );
+    }
+  }
+
+  return Object.keys(scripts).length > 0 ? scripts : undefined;
+};
+
 export const installDependencies = async (
   packageManager: PackageManager,
   linter: Linter = "biome",
@@ -395,10 +413,7 @@ export const installDependencies = async (
     );
   }
 
-  const scripts = {
-    check: "ultracite check",
-    fix: "ultracite fix",
-  };
+  const scripts = await getScriptsToAdd(quiet);
 
   if (install) {
     await addDevDependency(packages, {
@@ -407,7 +422,9 @@ export const installDependencies = async (
       ...getRootInstallOptions(packageManager),
     });
     // Add ultracite scripts to package.json
-    await updatePackageJson({ scripts });
+    if (scripts) {
+      await updatePackageJson({ scripts });
+    }
   } else {
     const devDependencies = buildNoInstallDevDependencies(
       linter,
@@ -420,7 +437,11 @@ export const installDependencies = async (
   }
 
   if (!quiet) {
-    s.stop("Dependencies installed.");
+    s.stop(
+      install
+        ? "Dependencies installed."
+        : "Dependencies added to package.json."
+    );
   }
 };
 

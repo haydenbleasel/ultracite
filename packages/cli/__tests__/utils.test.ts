@@ -347,6 +347,33 @@ describe("updatePackageJson", () => {
   });
 });
 
+describe("updatePackageJson formatting", () => {
+  test("keeps key order, tab indentation and CRLF line endings", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.resolve()),
+      readFile: mock(() =>
+        Promise.resolve(
+          '{\r\n\t"name": "app",\r\n\t"version": "1.0.0",\r\n\t"private": true,\r\n\t"devDependencies": {\r\n\t\t"typescript": "^5"\r\n\t},\r\n\t"main": "index.js"\r\n}\r\n'
+        )
+      ),
+      writeFile: mockWriteFile,
+    }));
+
+    await updatePackageJson({
+      devDependencies: { ultracite: "7.0.0" },
+      scripts: { check: "ultracite check" },
+    });
+
+    const [[, written]] = mockWriteFile.mock.calls;
+    expect(written).toBe(
+      '{\r\n\t"name": "app",\r\n\t"version": "1.0.0",\r\n\t"private": true,\r\n\t"devDependencies": {\r\n\t\t"typescript": "^5",\r\n\t\t"ultracite": "7.0.0"\r\n\t},\r\n\t"main": "index.js",\r\n\t"scripts": {\r\n\t\t"check": "ultracite check"\r\n\t}\r\n}\r\n'
+    );
+  });
+});
+
 describe("isMonorepo error handling", () => {
   test("returns false when readFile throws an error", async () => {
     mock.module("node:fs/promises", () => ({

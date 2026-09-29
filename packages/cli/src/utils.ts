@@ -1,13 +1,21 @@
 import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
 import { any as findUpAny } from "empathic/find";
 import { findWorkspaces } from "find-workspaces";
+import { z } from "zod";
 
 import type { Framework } from "./data/options";
-import { readPackageJson, readPackageJsonSync } from "./schemas";
+import type { JsonObject, JsonValue } from "./data/types";
+import {
+  detectJsonFormatting,
+  packageJsonSchema,
+  parseJsoncStrict,
+  readPackageJson,
+  readPackageJsonSync,
+} from "./schemas";
 
 const pnpmWorkspaceFile = "pnpm-workspace.yaml";
 
@@ -134,6 +142,78 @@ export const writeProjectFile = async (
   await writeFile(filePath, content);
 };
 
+const packageJsonPath = "package.json";
+
+const jsonObjectSchema = z.record(z.string(), z.json());
+
+export const isJsonObject = (
+  value: JsonValue | undefined
+): value is JsonObject =>
+  value !== undefined &&
+  value !== null &&
+  !Array.isArray(value) &&
+  jsonObjectSchema.safeParse(value).success;
+
+/**
+ * Read package.json, let `edit` change it in place, and write it back with the
+ * file's own indentation and line endings. The raw document is edited rather
+ * than a schema-parsed copy so every key keeps its position; new keys are
+ * appended. Returning false from `edit` skips the write.
+ */
+export const editPackageJson = async (
+  edit: (packageJson: JsonObject) => boolean | undefined
+): Promise<boolean> => {
+  let content: string | undefined;
+
+  try {
+    content = await readFile(packageJsonPath, "utf-8");
+  } catch {
+    content = undefined;
+  }
+
+  const packageJson =
+    content === undefined
+      ? undefined
+      : parseJsoncStrict(content, jsonObjectSchema);
+
+  if (
+    content === undefined ||
+    !packageJson ||
+    !packageJsonSchema.safeParse(packageJson).success
+  ) {
+    throw new Error("Failed to parse package.json: file is missing or invalid");
+  }
+
+  if (edit(packageJson) === false) {
+    return false;
+  }
+
+  const { eol = "\n", insertSpaces, tabSize } = detectJsonFormatting(content);
+  const indent = insertSpaces ? tabSize : "\t";
+  const serialized = JSON.stringify(packageJson, null, indent).replaceAll(
+    "\n",
+    eol
+  );
+
+  await writeProjectFile(packageJsonPath, `${serialized}${eol}`);
+  return true;
+};
+
+const mergeInto = (
+  packageJson: JsonObject,
+  key: string,
+  values: Record<string, string>
+): void => {
+  const existing = packageJson[key];
+  const merged: JsonObject = {};
+
+  if (isJsonObject(existing)) {
+    Object.assign(merged, existing);
+  }
+
+  packageJson[key] = Object.assign(merged, values);
+};
+
 export const updatePackageJson = async ({
   dependencies,
   devDependencies,
@@ -145,47 +225,25 @@ export const updatePackageJson = async ({
   scripts?: Record<string, string>;
   type?: string;
 }) => {
-  const packageJsonObject = await readPackageJson();
-  if (!packageJsonObject) {
-    throw new Error("Failed to parse package.json: file is missing or invalid");
-  }
+  await editPackageJson((packageJson) => {
+    if (type) {
+      packageJson.type = type;
+    }
 
-  const newPackageJsonObject = {
-    ...packageJsonObject,
-  };
+    if (devDependencies) {
+      mergeInto(packageJson, "devDependencies", devDependencies);
+    }
 
-  if (type) {
-    newPackageJsonObject.type = type;
-  }
+    if (dependencies) {
+      mergeInto(packageJson, "dependencies", dependencies);
+    }
 
-  // Only add devDependencies if they exist in the original package.json or are being added
-  if (packageJsonObject.devDependencies || devDependencies) {
-    newPackageJsonObject.devDependencies = {
-      ...packageJsonObject.devDependencies,
-      ...devDependencies,
-    };
-  }
+    if (scripts) {
+      mergeInto(packageJson, "scripts", scripts);
+    }
 
-  // Only add dependencies if they exist in the original package.json or are being added
-  if (packageJsonObject.dependencies || dependencies) {
-    newPackageJsonObject.dependencies = {
-      ...packageJsonObject.dependencies,
-      ...dependencies,
-    };
-  }
-
-  // Only add scripts if they exist in the original package.json or are being added
-  if (packageJsonObject.scripts || scripts) {
-    newPackageJsonObject.scripts = {
-      ...packageJsonObject.scripts,
-      ...scripts,
-    };
-  }
-
-  await writeProjectFile(
-    "package.json",
-    `${JSON.stringify(newPackageJsonObject, null, 2)}\n`
-  );
+    return true;
+  });
 };
 
 /**
