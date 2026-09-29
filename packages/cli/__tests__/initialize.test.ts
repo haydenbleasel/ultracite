@@ -2455,6 +2455,32 @@ describe("helper functions", () => {
       expect(written).toStartWith('{\n\t"name": "plugin",');
     });
 
+    test("leaves package.json Prettier and Stylelint configs to their writers on ESLint", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mockFileSystem({});
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            '{"name": "app", "prettier": "ultracite/prettier", "stylelint": {"extends": "ultracite/stylelint"}}'
+          )
+        ),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mockWriteFile,
+      }));
+
+      try {
+        await migrateLinterConfig("eslint", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
     test("removes stale Oxlint config when migrating to biome", async () => {
       const removedFiles: string[] = [];
       const mockWriteFile = mock((_path: string, _content: string) =>

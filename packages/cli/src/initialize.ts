@@ -257,11 +257,13 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
       }
     }
 
-    if ("prettier" in manifest) {
+    // Moving off ESLint + Prettier + Stylelint drops their package.json
+    // configs too; staying on it, their writers update them instead.
+    if (linter !== "eslint" && "prettier" in manifest) {
       delete manifest.prettier;
       changed = true;
     }
-    if ("stylelint" in manifest) {
+    if (linter !== "eslint" && "stylelint" in manifest) {
       delete manifest.stylelint;
       changed = true;
     }
