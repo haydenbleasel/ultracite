@@ -92,7 +92,7 @@ describe("linter args", () => {
   });
 
   test("returns a style glob when no files are given", () => {
-    expect(toStylelintTargets([])).toEqual(["**/*.{css,scss,sass,less}"]);
+    expect(toStylelintTargets([])).toEqual(["**/*.{css,scss,less}"]);
   });
 
   test("keeps style files and drops other files", () => {
@@ -103,9 +103,22 @@ describe("linter args", () => {
 
   test("maps directories to style-scoped globs", () => {
     expect(toStylelintTargets(["src", "./lib/", "."])).toEqual([
-      "src/**/*.{css,scss,sass,less}",
-      "./lib/**/*.{css,scss,sass,less}",
-      "**/*.{css,scss,sass,less}",
+      "src/**/*.{css,scss,less}",
+      "./lib/**/*.{css,scss,less}",
+      "**/*.{css,scss,less}",
+    ]);
+  });
+
+  test("escapes glob metacharacters in directory names", () => {
+    expect(toStylelintTargets(["app/(marketing)", "src/[slug]/"])).toEqual([
+      String.raw`app/\(marketing\)/**/*.{css,scss,less}`,
+      String.raw`src/\[slug\]/**/*.{css,scss,less}`,
+    ]);
+  });
+
+  test("drops indented .sass files, which have no maintained parser", () => {
+    expect(toStylelintTargets(["theme.sass", "theme.scss"])).toEqual([
+      "theme.scss",
     ]);
   });
 

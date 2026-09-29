@@ -290,7 +290,7 @@ describe("fix", () => {
     expect(stylelintCall[1]).toContain("--fix");
     expect(stylelintCall[1]).toContain("--allow-empty-input");
     expect(stylelintCall[1]).toContain("src/styles.css");
-    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,sass,less}");
+    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,less}");
     expect(stylelintCall[1]).not.toContain("src/index.ts");
   });
 

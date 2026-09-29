@@ -33,9 +33,20 @@ const GLOB_CHARS_RE = /[*?[\]{}]/u;
 
 export const isGlobPattern = (arg: string): boolean => GLOB_CHARS_RE.test(arg);
 
-const STYLE_FILE_GLOB = "**/*.{css,scss,sass,less}";
+// The Stylelint preset parses SCSS and Less through custom syntaxes. The
+// indented `.sass` syntax has no maintained PostCSS parser, so it is left out
+// rather than failing every file with CssSyntaxError.
+const STYLE_FILE_GLOB = "**/*.{css,scss,less}";
 
-const styleExtensions = [".css", ".scss", ".sass", ".less"];
+const styleExtensions = [".css", ".scss", ".less"];
+
+// Stylelint expands targets as globs, so a directory named like a Next.js
+// route group (`app/(marketing)`) or dynamic segment matches nothing unless
+// its glob metacharacters are escaped.
+const GLOB_SPECIAL_CHARS_RE = /[!()*+?@[\]{|}]/gu;
+
+const escapeGlobPath = (dir: string): string =>
+  dir.replaceAll(GLOB_SPECIAL_CHARS_RE, String.raw`\$&`);
 
 const hasExtension = (file: string, extensions: string[]): boolean => {
   const lowered = file.toLowerCase();
@@ -84,7 +95,7 @@ export const toStylelintTargets = (files: string[]): string[] => {
       targets.push(
         base === "." || base === ""
           ? STYLE_FILE_GLOB
-          : `${base}/${STYLE_FILE_GLOB}`
+          : `${escapeGlobPath(base)}/${STYLE_FILE_GLOB}`
       );
     }
   }

@@ -235,7 +235,7 @@ describe("check", () => {
     expect(stylelintCall[0]).toBe("stylelint");
     expect(stylelintCall[1]).toContain("--allow-empty-input");
     expect(stylelintCall[1]).toContain("src/styles.css");
-    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,sass,less}");
+    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,less}");
     expect(stylelintCall[1]).not.toContain("src/index.ts");
   });
 
@@ -261,7 +261,7 @@ describe("check", () => {
     expect(stylelintCall[0]).toBe("stylelint");
     expect(stylelintCall[1]).toEqual([
       "--allow-empty-input",
-      "**/*.{css,scss,sass,less}",
+      "**/*.{css,scss,less}",
     ]);
   });
 

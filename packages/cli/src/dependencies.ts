@@ -102,6 +102,9 @@ export const eslintCoreDevDependencies = {
   "eslint-plugin-unused-imports":
     packageJson.devDependencies["eslint-plugin-unused-imports"],
   globals: packageJson.devDependencies.globals,
+  // The Stylelint preset parses .less and .scss files with these syntaxes.
+  "postcss-less": packageJson.devDependencies["postcss-less"],
+  "postcss-scss": packageJson.devDependencies["postcss-scss"],
   prettier: toolchainPeerRanges.prettier,
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
