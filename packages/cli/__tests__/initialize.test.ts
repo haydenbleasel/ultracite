@@ -2276,10 +2276,9 @@ describe("helper functions", () => {
       expect(calls.some((c) => c.workspace === true)).toBe(true);
     });
 
-    test("presents nub as pnpm so nypm adds --workspace-root in a monorepo", async () => {
-      // nypm only knows how to select the workspace root for pnpm/npm/yarn,
-      // and nub refuses root installs without `-w`. nypm builds flags from
-      // `name` but runs `command`, so we hand it pnpm's name with nub's binary.
+    test("installs at the workspace root with nub in a monorepo", async () => {
+      // nub refuses root installs without `--workspace-root`, which nypm
+      // passes for nub (as for pnpm and aube) when `workspace` is set.
       const nubPm: PackageManager = { command: "nub", name: "nub" };
       const calls: { packageManager: PackageManager; workspace: boolean }[] =
         [];
@@ -2327,7 +2326,7 @@ describe("helper functions", () => {
       expect(calls[0]?.workspace).toBe(true);
       expect(calls[0]?.packageManager).toEqual({
         command: "nub",
-        name: "pnpm",
+        name: "nub",
       });
     });
   });

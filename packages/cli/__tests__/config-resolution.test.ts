@@ -7,6 +7,7 @@ import {
   findEffectiveBiomeConfig,
   findInstalledPackage,
   findUnresolvableBiomeConfig,
+  isYarnPnp,
 } from "../src/config-resolution";
 import type { ConfigFileSystem } from "../src/config-resolution";
 
@@ -182,6 +183,19 @@ describe("config-resolution", () => {
           fileSystem
         )
       ).toBeNull();
+    });
+  });
+
+  describe("isYarnPnp", () => {
+    test("finds a Plug'n'Play manifest in the project or above it", () => {
+      expect(isYarnPnp(path.join(PROJECT, "packages/app"), fileSystem)).toBe(
+        false
+      );
+
+      writeFile(".pnp.cjs", "");
+      expect(isYarnPnp(path.join(PROJECT, "packages/app"), fileSystem)).toBe(
+        true
+      );
     });
   });
 

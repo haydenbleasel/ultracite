@@ -1,7 +1,11 @@
+import { readFileSync } from "node:fs";
+import process from "node:process";
+
+import { detectPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import { UltraciteSetupError } from "./config-resolution";
-import { isMonorepo } from "./utils";
+import { findNearestFile, isMonorepo } from "./utils";
 
 export const supportedPackageManagers = [
   "npm",
@@ -33,29 +37,80 @@ export const assertSupportedPackageManagerName = (
   );
 };
 
-export const normalizePackageManager = (
-  packageManager: PackageManager
+// Yarn 2+ (Berry) writes .yarnrc.yml, and its yarn.lock starts with a
+// __metadata block that Yarn 1 lockfiles don't have.
+const YARN_BERRY_LOCKFILE_RE = /^__metadata:/mu;
+
+const isYarnBerryProject = (cwd: string): boolean => {
+  if (findNearestFile([".yarnrc.yml"], cwd)) {
+    return true;
+  }
+
+  const lockfile = findNearestFile(["yarn.lock"], cwd);
+
+  try {
+    return lockfile
+      ? YARN_BERRY_LOCKFILE_RE.test(readFileSync(lockfile.path, "utf-8"))
+      : false;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * nypm passes Yarn 1's `-W` (workspace root) flag unless it knows the Yarn
+ * major version, and Yarn 2+ rejects that flag. The version is only known when
+ * package.json's `packageManager` field names it, so fill it in from the
+ * project's Yarn files otherwise. Any major other than "1" selects nypm's
+ * Yarn 2+ behaviour.
+ */
+const withYarnMajorVersion = (
+  packageManager: PackageManager,
+  cwd: string
 ): PackageManager => {
-  const name = assertSupportedPackageManagerName(packageManager.name);
+  if (packageManager.name !== "yarn" || packageManager.majorVersion) {
+    return packageManager;
+  }
 
   return {
     ...packageManager,
-    command: name,
-    name,
+    majorVersion: isYarnBerryProject(cwd) ? "2" : "1",
   };
 };
 
-// Package managers that speak pnpm's CLI but that nypm can't select the
-// workspace root for: nypm's `workspace` option only emits a root flag for
-// pnpm, npm and yarn, so `nub add` in a monorepo would run without `-w` and be
-// refused. nypm builds flags from `packageManager.name` but executes
-// `packageManager.command`, so presenting these as pnpm yields e.g.
-// `nub add --workspace-root --save-dev ultracite`, which nub accepts.
-// Remove once https://github.com/unjs/nypm/pull/260 ships in a nypm release.
-const pnpmCompatiblePackageManagers = new Set<PackageManagerName>([
-  "nub",
-  "aube",
-]);
+export const normalizePackageManager = (
+  packageManager: PackageManager,
+  cwd = process.cwd()
+): PackageManager => {
+  const name = assertSupportedPackageManagerName(packageManager.name);
+
+  return withYarnMajorVersion(
+    {
+      ...packageManager,
+      command: name,
+      name,
+    },
+    cwd
+  );
+};
+
+/**
+ * The package manager a `--pm` flag names. When it's the one the project
+ * uses, the detected details (such as the Yarn major version from
+ * `packageManager`) are kept, so the right flags are passed.
+ */
+export const resolveRequestedPackageManager = async (
+  requested: string,
+  cwd = process.cwd()
+): Promise<PackageManager> => {
+  const name = assertSupportedPackageManagerName(requested);
+  const detected = await detectPackageManager(cwd);
+
+  return normalizePackageManager(
+    detected?.name === name ? detected : { command: name, name },
+    cwd
+  );
+};
 
 interface RootInstallOptions {
   packageManager: PackageManager;
@@ -68,15 +123,9 @@ export const getRootInstallOptions = (
   // npm's `--workspaces` installs in every workspace package — for a root
   // dev dependency we want the default (no flag), so the npm root install
   // doesn't fail with "No workspaces found!" when patterns match nothing.
+  // pnpm, nub and aube get --workspace-root, and Yarn 1 gets -W.
   if (!isMonorepo() || packageManager.name === "npm") {
     return { packageManager, workspace: false };
-  }
-
-  if (pnpmCompatiblePackageManagers.has(packageManager.name)) {
-    return {
-      packageManager: { ...packageManager, name: "pnpm" },
-      workspace: true,
-    };
   }
 
   return { packageManager, workspace: true };

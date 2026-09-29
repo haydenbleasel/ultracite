@@ -599,6 +599,47 @@ describe("doctor", () => {
     });
   });
 
+  test("only warns about unverifiable packages in a Yarn Plug'n'Play project", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock((filePath: string) => {
+        if (!String(filePath).endsWith(".pnp.cjs")) {
+          throw new Error("ENOENT");
+        }
+      }),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.ts", "oxfmt.config.ts", "package.json"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.includes("oxlint.config.ts")) {
+          return 'import core from "ultracite/oxlint/core";';
+        }
+        if (p.includes("oxfmt.config.ts")) {
+          return 'import ultracite from "ultracite/oxfmt";';
+        }
+        return '{"devDependencies": {"ultracite": "7.0.0"}}';
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Ultracite dependency")
+    ).toMatchObject({
+      message: expect.stringContaining("Yarn Plug'n'Play"),
+      status: "warn",
+    });
+    expect(
+      checks.find((check) => check.name === "oxlint version")
+    ).toMatchObject({
+      message: expect.stringContaining("yarn why oxlint"),
+      status: "warn",
+    });
+    expect(checks.some((check) => check.status === "fail")).toBe(false);
+  });
+
   test("suggests migrating a lone .oxfmtrc.json", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -961,11 +1002,11 @@ describe("doctor", () => {
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
-    // Nothing under node_modules: ultracite is declared but never installed,
-    // which is the state Biome fails on.
+    // Nothing under node_modules (and no Plug'n'Play manifest): ultracite is
+    // declared but never installed, which is the state Biome fails on.
     mock.module("node:fs", () => ({
       accessSync: mock((path: string) => {
-        if (isNodeModulesPath(String(path))) {
+        if (isNodeModulesPath(String(path)) || String(path).includes(".pnp.")) {
           throw new Error("ENOENT");
         }
       }),

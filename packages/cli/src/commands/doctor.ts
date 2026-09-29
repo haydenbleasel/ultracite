@@ -10,6 +10,7 @@ import packageJson from "../../package.json" with { type: "json" };
 import {
   canResolveUltracite,
   findInstalledPackage,
+  isYarnPnp,
 } from "../config-resolution";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
@@ -94,7 +95,9 @@ const checkToolVersion = (
     }
 
     return {
-      message: `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
+      message: isYarnPnp()
+        ? `Could not determine the installed ${packageName} version — Yarn Plug'n'Play keeps packages out of node_modules, where doctor looks. Check that it satisfies ${range} with \`yarn why ${packageName}\``
+        : `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
       name,
       status: "warn",
     };
@@ -454,6 +457,16 @@ const checkUltraciteDependency = (linter: Linter): DiagnosticCheck => {
   // resolved out of the project's node_modules by Biome/ESLint/Oxlint
   // themselves, so an uninstalled dependency fails there with an opaque error.
   if (!canResolveUltracite(linter)) {
+    // Plug'n'Play resolves packages without node_modules, so an Ultracite
+    // listed in package.json may well be installed.
+    if (version && isYarnPnp()) {
+      return {
+        message: `Ultracite is in package.json (${version}), but this project uses Yarn Plug'n'Play, so doctor can't confirm it's installed`,
+        name: ULTRACITE_DEP_CHECK,
+        status: "warn",
+      };
+    }
+
     return {
       message: version
         ? `Ultracite is in package.json (${version}) but isn't installed — run your package manager's install`

@@ -48,9 +48,9 @@ import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
-  assertSupportedPackageManagerName,
   getRootInstallOptions,
   normalizePackageManager,
+  resolveRequestedPackageManager,
   supportedPackageManagers,
 } from "./package-manager";
 import { readPackageJson } from "./schemas";
@@ -1009,12 +1009,10 @@ export const initialize = async (flags?: InitializeFlags) => {
   try {
     validateInitializeFlags(opts);
 
-    let pm: PackageManagerName;
     let pmInfo: PackageManager;
 
     if (opts.pm) {
-      pm = assertSupportedPackageManagerName(opts.pm);
-      pmInfo = { command: pm, name: pm };
+      pmInfo = await resolveRequestedPackageManager(opts.pm);
     } else {
       const detected = await detectPackageManager(process.cwd());
 
@@ -1034,8 +1032,9 @@ export const initialize = async (flags?: InitializeFlags) => {
         log.info(`Detected lockfile, using ${detected.name}`);
       }
       pmInfo = normalizePackageManager(detected);
-      pm = pmInfo.name;
     }
+
+    const pm: PackageManagerName = pmInfo.name;
 
     let { linter } = opts;
     if (linter === undefined) {

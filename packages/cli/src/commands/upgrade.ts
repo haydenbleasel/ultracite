@@ -19,9 +19,9 @@ import {
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
 } from "../dependencies";
 import {
-  assertSupportedPackageManagerName,
   getRootInstallOptions,
   normalizePackageManager,
+  resolveRequestedPackageManager,
 } from "../package-manager";
 import { readPackageJson } from "../schemas";
 import { spawnSync } from "../spawn-sync";
@@ -55,8 +55,7 @@ const resolvePackageManager = async (
   requested?: string
 ): Promise<PackageManager> => {
   if (requested) {
-    const name = assertSupportedPackageManagerName(requested);
-    return { command: name, name };
+    return await resolveRequestedPackageManager(requested);
   }
 
   const detected = await detectPackageManager(process.cwd());
@@ -226,7 +225,7 @@ const updateSelf = async (
  */
 const handOffToInstalled = (
   installed: InstalledPackage,
-  packageManager: PackageManager
+  requestedPackageManager: string | undefined
 ): number | null => {
   const bin = resolveInstalledBin(installed);
 
@@ -238,9 +237,17 @@ const handOffToInstalled = (
     `Handing off to Ultracite ${installed.manifest.version} to sync the toolchain...`
   );
 
+  // Forward --pm only when the user passed it. Otherwise the new CLI
+  // detects the package manager itself, with the details (like the Yarn
+  // major version) a bare name would lose.
   const result = spawnSync(
     process.execPath,
-    [bin, "upgrade", "--skip-self", "--pm", packageManager.name],
+    [
+      bin,
+      "upgrade",
+      "--skip-self",
+      ...(requestedPackageManager ? ["--pm", requestedPackageManager] : []),
+    ],
     { stdio: "inherit" }
   );
 
@@ -296,9 +303,7 @@ export const upgrade = async (
 
   if (!options.skipSelf) {
     const newer = await updateSelf(installOptions);
-    const handOffStatus = newer
-      ? handOffToInstalled(newer, packageManager)
-      : null;
+    const handOffStatus = newer ? handOffToInstalled(newer, options.pm) : null;
 
     if (handOffStatus !== null) {
       return handOffStatus;

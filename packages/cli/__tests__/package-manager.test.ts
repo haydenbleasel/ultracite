@@ -1,11 +1,22 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
+
+import * as nypm from "nypm";
 
 import {
   assertSupportedPackageManagerName,
   getRootInstallOptions,
   isSupportedPackageManagerName,
   normalizePackageManager,
+  resolveRequestedPackageManager,
 } from "../src/package-manager";
+import { restoreFileSystemMock } from "./mock-fs";
+
+// mock.module is process-wide; put nypm and node:fs back for later suites.
+const realNypm = { ...nypm };
+afterAll(() => {
+  mock.module("nypm", () => realNypm);
+  restoreFileSystemMock();
+});
 
 // isMonorepo() looks for pnpm-workspace.yaml, then a `workspaces` field in
 // package.json — drive it through node:fs like the initialize tests do.
@@ -77,16 +88,92 @@ describe("getRootInstallOptions", () => {
     });
   });
 
-  test("presents nub and aube as pnpm so nypm emits --workspace-root", () => {
+  test("passes the workspace flag to nub and aube as they are", () => {
     mockMonorepo(true);
 
     expect(getRootInstallOptions({ command: "nub", name: "nub" })).toEqual({
-      packageManager: { command: "nub", name: "pnpm" },
+      packageManager: { command: "nub", name: "nub" },
       workspace: true,
     });
     expect(getRootInstallOptions({ command: "aube", name: "aube" })).toEqual({
-      packageManager: { command: "aube", name: "pnpm" },
+      packageManager: { command: "aube", name: "aube" },
       workspace: true,
+    });
+  });
+});
+
+// A project with the given files; every other path is missing.
+const mockYarnProject = (files: Record<string, string>) => {
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {
+      throw new Error("ENOENT");
+    }),
+    existsSync: mock((filePath: string) =>
+      Object.keys(files).some((name) => String(filePath).endsWith(name))
+    ),
+    readFileSync: mock((filePath: string) => {
+      const name = Object.keys(files).find((file) =>
+        String(filePath).endsWith(file)
+      );
+      if (name === undefined) {
+        throw new Error("ENOENT");
+      }
+      return files[name];
+    }),
+  }));
+};
+
+describe("Yarn major version", () => {
+  test("marks a Yarn project with .yarnrc.yml as Yarn 2+", () => {
+    mockYarnProject({ ".yarnrc.yml": "nodeLinker: node-modules\n" });
+
+    expect(
+      normalizePackageManager({ command: "yarn", name: "yarn" }).majorVersion
+    ).toBe("2");
+  });
+
+  test("marks a Yarn 2+ lockfile as Yarn 2+", () => {
+    mockYarnProject({
+      "yarn.lock": "# This file is generated\n\n__metadata:\n  version: 8\n",
+    });
+
+    expect(
+      normalizePackageManager({ command: "yarn", name: "yarn" }).majorVersion
+    ).toBe("2");
+  });
+
+  test("marks a Yarn 1 project as Yarn 1", () => {
+    mockYarnProject({ "yarn.lock": "# yarn lockfile v1\n" });
+
+    expect(
+      normalizePackageManager({ command: "yarn", name: "yarn" }).majorVersion
+    ).toBe("1");
+  });
+
+  test("keeps a major version nypm detected from packageManager", () => {
+    mockYarnProject({});
+
+    expect(
+      normalizePackageManager({
+        command: "yarn",
+        majorVersion: "4",
+        name: "yarn",
+      }).majorVersion
+    ).toBe("4");
+  });
+
+  test("keeps detected details when --pm names the project's package manager", async () => {
+    mockYarnProject({});
+    mock.module("nypm", () => ({
+      detectPackageManager: mock(() =>
+        Promise.resolve({ command: "yarn", majorVersion: "4", name: "yarn" })
+      ),
+    }));
+
+    expect(await resolveRequestedPackageManager("yarn")).toEqual({
+      command: "yarn",
+      majorVersion: "4",
+      name: "yarn",
     });
   });
 });

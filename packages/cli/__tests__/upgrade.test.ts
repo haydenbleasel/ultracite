@@ -295,6 +295,22 @@ describe("upgrade", () => {
     expect(options).toEqual({ stdio: "inherit" });
   });
 
+  test("lets the handed-off CLI detect the package manager when --pm wasn't passed", async () => {
+    const harness = setup({
+      versions: [installed("7.4.2"), installed("99.0.0")],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade()).resolves.toBe(0);
+
+    const [[, args]] = harness.spawnSync.mock.calls;
+    expect(args).toEqual([
+      path.join("/project/node_modules/ultracite", "dist/index.js"),
+      "upgrade",
+      "--skip-self",
+    ]);
+  });
+
   test("carries the handed-off CLI's exit code", async () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],

@@ -178,6 +178,18 @@ export const resolveFrom = (
   return fs.exists(resolved) ? resolved : null;
 };
 
+// Yarn Plug'n'Play installs packages without a node_modules folder, so the
+// node_modules lookups above can't see them.
+const pnpManifests = [".pnp.cjs", ".pnp.js"];
+
+export const isYarnPnp = (
+  cwd = process.cwd(),
+  fs: ConfigFileSystem = nodeFileSystem
+): boolean =>
+  walkUp(cwd, (dir) =>
+    pnpManifests.some((name) => fs.exists(path.join(dir, name))) ? true : null
+  ) ?? false;
+
 export const canResolveUltracite = (
   linter: Linter,
   cwd = process.cwd(),
