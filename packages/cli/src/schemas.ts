@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 
 import { parse } from "jsonc-parser";
+import type { FormattingOptions, ParseError } from "jsonc-parser";
 import { z } from "zod";
 
 // -- Package.json --
@@ -55,8 +56,10 @@ export const readPackageJson = async (
 
 // -- Config files --
 
+// Biome's `extends` is a list of configs, or the string "//" in a nested
+// monorepo config that inherits the root configuration.
 export const biomeConfigSchema = z.looseObject({
-  extends: z.array(z.string()).optional(),
+  extends: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
 export const tsConfigSchema = z.looseObject({
@@ -67,6 +70,42 @@ export const tsConfigSchema = z.looseObject({
     })
     .optional(),
 });
+
+/**
+ * Parse a JSONC document that is about to be edited and written back. Unlike
+ * `parse`, which recovers what it can from a broken document, this returns
+ * undefined on any syntax error: writing back a partial recovery would drop
+ * whatever came after the error.
+ */
+export const parseJsoncStrict = <T>(
+  content: string,
+  schema: z.ZodType<T>
+): T | undefined => {
+  const errors: ParseError[] = [];
+  const parsed = parse(content, errors, { allowTrailingComma: true });
+
+  if (errors.length > 0) {
+    return undefined;
+  }
+
+  const result = schema.safeParse(parsed);
+  return result.success ? result.data : undefined;
+};
+
+const INDENTED_LINE_RE = /^(?<indent>[ \t]+)\S/mu;
+
+/**
+ * The indentation and line endings of an existing JSON document, so edits made
+ * with jsonc-parser's `modify` match the rest of the file.
+ */
+export const detectJsonFormatting = (content: string): FormattingOptions => {
+  const indent = INDENTED_LINE_RE.exec(content)?.groups?.indent ?? "  ";
+  const eol = content.includes("\r\n") ? "\r\n" : "\n";
+
+  return indent.startsWith("\t")
+    ? { eol, insertSpaces: false, tabSize: 1 }
+    : { eol, insertSpaces: true, tabSize: indent.length };
+};
 
 export const parseJsonc = <T>(
   content: string,

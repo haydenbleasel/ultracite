@@ -13,7 +13,7 @@ import {
 } from "../config-resolution";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
-import { readPackageJsonSync } from "../schemas";
+import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
   biomeConfigNames,
@@ -135,10 +135,44 @@ const checkToolVersion = (
 // Config checks
 // ---------------------------------------------------------------------------
 
+// A nested Biome config that extends "//" inherits the root config of the
+// monorepo, which is the one that has to extend Ultracite.
+const extendsBiomeRoot = (configPath: string): boolean => {
+  try {
+    const config = biomeConfigSchema.safeParse(
+      parse(readFileSync(configPath, "utf-8"))
+    );
+    return config.success && [config.data.extends].flat().includes("//");
+  } catch {
+    return false;
+  }
+};
+
+const findRootBiomeConfig = (): ReturnType<typeof findNearestFile> => {
+  let found = findNearestFile(biomeConfigNames);
+
+  while (found && extendsBiomeRoot(found.path)) {
+    const parentDir = path.dirname(found.dir);
+    const rootConfig =
+      parentDir === found.dir
+        ? null
+        : findNearestFile(biomeConfigNames, parentDir);
+
+    if (!rootConfig) {
+      return found;
+    }
+
+    found = rootConfig;
+  }
+
+  return found;
+};
+
 const checkBiomeConfig = (): DiagnosticCheck => {
   // Walk up like detectLinter (and Biome itself) so monorepo packages that
-  // inherit a root config don't fail the check.
-  const found = findNearestFile(biomeConfigNames);
+  // inherit a root config — directly or through a nested config extending
+  // "//" — don't fail the check.
+  const found = findRootBiomeConfig();
   const configPath = found?.path ?? null;
   const biomeConfigFile = found?.fileName ?? null;
 

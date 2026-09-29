@@ -7,6 +7,7 @@ import { exports as resolvePackageExports } from "resolve.exports";
 import type { Package } from "resolve.exports";
 import { z } from "zod";
 
+import { biomeConfigSchema } from "./schemas";
 import { biomeConfigNames, exists } from "./utils";
 import type { Linter } from "./utils";
 
@@ -197,21 +198,54 @@ const findBiomeConfig = (
     return null;
   });
 
-const extendsUltracite = (
+// The `extends` entries of a Biome config; a string is Biome's "//"
+// shorthand for inheriting the root config of a monorepo.
+const readBiomeExtends = (
   configPath: string,
   fs: ConfigFileSystem
-): boolean => {
+): string[] => {
   try {
-    const config = parse(fs.readFile(configPath));
-
-    return (
-      Array.isArray(config?.extends) &&
-      config.extends.includes(BIOME_EXTENDS_SPECIFIER)
-    );
+    const config = biomeConfigSchema.safeParse(parse(fs.readFile(configPath)));
+    return config.success ? [config.data.extends ?? []].flat() : [];
   } catch {
-    return false;
+    return [];
   }
 };
+
+const BIOME_ROOT_EXTENDS = "//";
+
+/**
+ * The Biome config that applies from `startDir`. A nested monorepo config
+ * that extends "//" inherits the root config, which is where Ultracite's
+ * presets live, so resolution continues above it.
+ */
+export const findEffectiveBiomeConfig = (
+  startDir = process.cwd(),
+  fs: ConfigFileSystem = nodeFileSystem
+): string | null => {
+  let configPath = findBiomeConfig(startDir, fs);
+
+  while (
+    configPath &&
+    readBiomeExtends(configPath, fs).includes(BIOME_ROOT_EXTENDS)
+  ) {
+    const configDir = path.dirname(configPath);
+    const parentDir = path.dirname(configDir);
+    const rootConfig =
+      parentDir === configDir ? null : findBiomeConfig(parentDir, fs);
+
+    if (!rootConfig) {
+      return configPath;
+    }
+
+    configPath = rootConfig;
+  }
+
+  return configPath;
+};
+
+const extendsUltracite = (configPath: string, fs: ConfigFileSystem): boolean =>
+  readBiomeExtends(configPath, fs).includes(BIOME_EXTENDS_SPECIFIER);
 
 /**
  * Biome resolves `extends` package specifiers itself, from the config file's
@@ -228,7 +262,7 @@ export const findUnresolvableBiomeConfig = (
   cwd = process.cwd(),
   fs: ConfigFileSystem = nodeFileSystem
 ): string | null => {
-  const configPath = findBiomeConfig(cwd, fs);
+  const configPath = findEffectiveBiomeConfig(cwd, fs);
 
   if (!configPath || !extendsUltracite(configPath, fs)) {
     return null;

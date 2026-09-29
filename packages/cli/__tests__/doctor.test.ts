@@ -1,4 +1,6 @@
 import { describe, expect, mock, spyOn, test } from "bun:test";
+import nodePath from "node:path";
+import process from "node:process";
 
 import { doctor, runDiagnostics } from "../src/commands/doctor";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
@@ -203,6 +205,45 @@ describe("doctor", () => {
     }));
 
     expect(() => doctor()).toThrow("Doctor checks failed");
+  });
+
+  test("checks the root config when a nested biome config extends //", () => {
+    const nestedDir = process.cwd();
+    const rootConfig = nodePath.join(
+      nodePath.dirname(nestedDir),
+      "biome.jsonc"
+    );
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(
+        (filePath: string) =>
+          filePath === nodePath.join(nestedDir, "biome.json") ||
+          filePath === rootConfig
+      ),
+      readFileSync: mock((filePath: string) => {
+        if (filePath === rootConfig) {
+          return '{"extends": ["ultracite/biome/core"]}';
+        }
+        if (String(filePath).includes("biome.json")) {
+          return '{"root": false, "extends": "//"}';
+        }
+        if (isNodeModulesPath(String(filePath))) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
+        return '{"devDependencies": {"ultracite": "1.0.0"}}';
+      }),
+    }));
+
+    const checks = runDiagnostics("biome");
+    const biomeCheck = checks.find(
+      (check) => check.name === "Biome configuration"
+    );
+
+    expect(biomeCheck?.status).toBe("pass");
+    expect(biomeCheck?.message).toBe(
+      "biome.jsonc extends ultracite/biome/core"
+    );
   });
 
   test("warns when biome config does not extend ultracite", () => {
