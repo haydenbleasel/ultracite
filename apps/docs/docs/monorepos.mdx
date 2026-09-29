@@ -14,14 +14,14 @@ my-turborepo/
 ├── apps/
 ├── packages/
 ├── turbo.json
-└── biome.jsonc (or eslint.config.mjs, oxlint.config.ts, etc.)
+└── oxlint.config.ts + oxfmt.config.ts (or biome.jsonc, eslint.config.mjs, etc.)
 ```
 
 ## Adding scripts
 
 Because Ultracite's underlying tools are fast (especially the Rust-based Biome and Oxlint), you can run a single root script rather than creating separate scripts in each package.
 
-Add the `check` and `fix` scripts to your root `package.json`:
+`ultracite init` adds `check` and `fix` scripts to your root `package.json`. If you set Ultracite up by hand, add them yourself:
 
 ```json title="package.json"
 {

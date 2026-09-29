@@ -61,7 +61,9 @@ This is **off by default** because it adds dependencies and runs a slower JavaSc
 npx ultracite init --linter oxlint --js-plugins eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
-> **Note:** The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
+:::note
+The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
+:::
 
 React Doctor's framework-specific rules are split into per-framework add-on presets so they only run where they apply — `nextjs-*` rules like `nextjs-no-img-element` fire on plain `<img>`/`<a>` JSX and would false-positive in non-Next.js apps. `init` wires these up automatically when you pick the matching framework together with `oxlint-plugin-react-doctor`:
 
@@ -87,9 +89,13 @@ export default defineConfig({
 });
 ```
 
-> **Note:** `jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on your root config. Oxlint already loads them from the extended preset, but dependency analyzers such as [Knip](https://knip.dev) only read `jsPlugins` from the root config and would otherwise report the packages as unused devDependencies. `ultracite init` emits this line for you.
+:::note
+`jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on your root config. Oxlint already loads them from the extended preset, but dependency analyzers such as [Knip](https://knip.dev) only read `jsPlugins` from the root config and would otherwise report the packages as unused devDependencies. `ultracite init` emits this line for you.
+:::
 
-> **Note:** `settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
+:::note
+`settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
+:::
 
 In a Next.js or TanStack app, add the matching add-on preset as well:
 

@@ -11,7 +11,7 @@ Ultracite v5 is a major release with significant improvements and breaking chang
 - **New Configuration Format**: Switch from `biome.json` to `biome.jsonc`
 - **Enhanced CLI**: Rewritten in TypeScript with better error handling
 - **Editor Integrations**: Built-in support for Cursor, Windsurf, Zed, and GitHub Copilot
-- **Git Hooks**: Optional integrations including Husky, lint-staged and lefthook
+- **Git Hooks**: Optional integrations including Husky, lint-staged, and Lefthook
 - **Improved Schema**: New schema URL with better validation
 - **Simplified VS Code Settings**: Combined filetype overrides into a single line
 
@@ -33,18 +33,18 @@ This will:
 - Offer to set up AI editor rules (Cursor, Windsurf, Zed, etc.)
 - Offer to set up new integrations (Git hooks, lint-staged, etc.)
 
-After the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides. Additionally, restart your editor to ensure the new configuration is applied.
+After the upgrade, you may want to review your `biome.json` / `biome.jsonc` file to remove any overrides, then restart your editor to ensure the new configuration is applied.
 
-Additionally, please review the Biome [v2 upgrade guide](https://biomejs.dev/guides/upgrade-to-biome-v2/) for more information on schema / rule changes.
+Also review the Biome [v2 upgrade guide](https://biomejs.dev/guides/upgrade-to-biome-v2/) for more information on schema / rule changes.
 
 ### Manual Migration
 
 If you prefer more control over the process, migrate by hand:
 
-- Installing the updated versions of Ultracite and Biome manually
-- Updating your `biome.json` file to the new schema version
-- Updating the `.vscode/settings.json` file (optional)
-- Adding an AI editor rules file (optional)
-- Adding new integrations (optional)
+- Install the updated versions of Ultracite and Biome
+- Update your `biome.json` file to the new schema version
+- Update the `.vscode/settings.json` file (optional)
+- Add an AI editor rules file (optional)
+- Add new integrations (optional)
 
 After the migration, restart your editor to ensure the new configuration is applied.

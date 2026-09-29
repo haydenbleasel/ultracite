@@ -7,7 +7,9 @@ Ultracite can automatically format and fix code after AI coding assistants make 
 
 The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs your project's `fix` script (which runs `ultracite fix`) to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
 
-> **Note:** Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+:::note
+Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+:::
 
 ## Setup
 
@@ -17,7 +19,7 @@ Some tools like Cursor, Windsurf, CodeBuddy, Claude Code, and GitHub Copilot sup
 
 When you run `npx ultracite init`, you'll be prompted to select which agent hooks you want to enable:
 
-```bash
+```text
 ? Which agent hooks do you want to enable (optional)?
   ◯ Cursor
   ◯ Windsurf
