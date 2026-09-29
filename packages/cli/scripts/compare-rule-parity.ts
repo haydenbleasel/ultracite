@@ -25,9 +25,6 @@ const here = import.meta.dirname;
  * Keyed by oxlint-normalized rule name.
  */
 const allowlist = new Map([
-  // Off in oxlint because the JS plugin bridge provides no globals, so
-  // the rule flags every identifier. ESLint resolves globals correctly.
-  ["sonarjs/no-reference-error", "jsPlugins bridge provides no globals"],
   // Off in oxlint due to https://github.com/oxc-project/oxc/issues/21949.
   ["unicorn/number-literal-case", "oxc autofix bug"],
 ]);
