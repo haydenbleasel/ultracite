@@ -32,9 +32,14 @@ const allowlist = new Map([
   ["unicorn/number-literal-case", "oxc autofix bug"],
 ]);
 
-// Base rules whose @typescript-eslint twin has a different name.
-const twinAliases = new Map([
+// Base rules whose @typescript-eslint twin has a different name, looked up
+// in both directions so either name finds the other.
+const twinAliasPairs: [string, string][] = [
   ["no-throw-literal", "typescript/only-throw-error"],
+];
+const twinAliases = new Map([
+  ...twinAliasPairs,
+  ...twinAliasPairs.map(([base, twin]): [string, string] => [twin, base]),
 ]);
 
 /** A rule options value decoded from JSON (options round-trip through JSON). */

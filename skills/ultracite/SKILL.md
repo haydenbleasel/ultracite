@@ -31,7 +31,7 @@ bunx ultracite doctor
 bunx ultracite init
 ```
 
-Replace `bunx` with `npx`, `pnpx`, or `yarn dlx` depending on the package manager.
+Replace `bunx` with `npx`, `pnpm exec`, or `yarn` depending on the package manager, so the project's installed Ultracite runs (`pnpm dlx` and `yarn dlx` download the latest release instead, and Yarn 1 has no `dlx`). Only `init` in a project without Ultracite needs a download runner such as `pnpm dlx`.
 
 `check` and `fix` accept optional file paths: `bunx ultracite check src/index.ts`. Unknown options are passed through to the underlying linter (e.g. `bunx ultracite check --max-warnings 0`).
 
@@ -59,6 +59,7 @@ bunx ultracite init \
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
 - `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `windsurf` | `codebuddy`
+- `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-sonarjs` | `oxlint-plugin-react-doctor`
 - `--type-aware` — Enable type-aware linting (Biome: extends the `type-aware` preset; Oxlint: installs `oxlint-tsgolint`)
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
@@ -88,7 +89,7 @@ export default defineConfig({
 });
 ```
 
-Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`; Oxlint also has `github` and `sonarjs` (ESLint plugins run via oxlint's JS plugin support, included by default on init).
+Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`.
 
 ## Code Standards
 
