@@ -34,7 +34,7 @@ All these defaults aim to enforce consistent style and prevent common errors wit
 
 ## Type-Aware Rules
 
-Ultracite ships an optional `type-aware` preset for Biome that enables project-graph rules — `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, and `noDeprecatedImports`. These rules require Biome's scanner, so they're slower and shipped as a separate layer:
+Ultracite ships an optional `type-aware` preset for Biome that enables project-graph and type-aware rules — `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, and `useArraySortCompare`. Note that `useImportExtensions` requires relative imports to include their file extension. These rules require Biome's scanner, so they're slower and shipped as a separate layer:
 
 ```jsonc title="biome.jsonc"
 {
@@ -44,9 +44,9 @@ Ultracite ships an optional `type-aware` preset for Biome that enables project-g
 
 You can also enable this at setup time with `npx ultracite init --type-aware`. For Oxlint, the same flag installs `oxlint-tsgolint` for type-aware linting instead.
 
-## Safe Fixes
+## Safe Fixes (Biome)
 
-Most Ultracite rules only report errors — they don't automatically modify your code. However, a few rules are configured with `"fix": "safe"`, meaning they will auto-fix when you run `ultracite fix`. These fixes are non-breaking and safe to apply automatically:
+Most Ultracite rules only report errors — they don't automatically modify your code. However, a few rules in the Biome preset are configured with `"fix": "safe"`, meaning they will auto-fix when you run `ultracite fix`. These fixes are non-breaking and safe to apply automatically:
 
 | Rule                 | Description                                           |
 | -------------------- | ----------------------------------------------------- |

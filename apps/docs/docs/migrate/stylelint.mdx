@@ -18,7 +18,7 @@ If you're already using Stylelint and want to switch to Ultracite's preconfigure
 Make sure you have:
 
 - An existing project using Stylelint
-- Node.js 20+
+- Node.js 20.19+ (or 22.13+ on Node 22)
 - A Stylelint configuration file (e.g., `.stylelintrc`, `stylelint.config.js`)
 
 ## Migration Options
@@ -40,7 +40,7 @@ This will:
 - Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
 - Set up editor integrations
 
-If you switch to Biome or Oxlint (which have built-in CSS support), Ultracite automatically removes the existing Stylelint configuration. This will:
+If you switch to Biome or Oxlint, Ultracite automatically removes the existing Stylelint configuration. Biome lints CSS itself, but Oxlint doesn't lint CSS at all (Oxfmt only formats it), so pick Biome or ESLint + Prettier + Stylelint if you still need CSS linting. Switching will:
 
 - Remove Stylelint and any related dependencies
 - Remove any Stylelint configuration files

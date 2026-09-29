@@ -33,7 +33,7 @@ Add framework presets as needed:
 }
 ```
 
-For type-aware, project-graph rules (`noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`), add the optional `type-aware` preset — or pass `--type-aware` to `npx ultracite init`:
+For type-aware and project-graph rules (`noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, `useArraySortCompare`), add the optional `type-aware` preset — or pass `--type-aware` to `npx ultracite init`:
 
 ```jsonc title="biome.jsonc"
 {
@@ -76,6 +76,10 @@ Rules that enforce consistent code style. Examples include preferring `const` ov
 ### Suspicious
 
 Rules that catch suspicious patterns that might indicate bugs. Examples include flagging `debugger` statements, duplicate object keys, and implicit type coercion.
+
+### Nursery
+
+Rules that are still in development and may change between releases. Ultracite leaves nursery rules off, except `useSortedClasses`, which sorts Tailwind CSS classes and was widely requested.
 
 ## Formatter Settings
 

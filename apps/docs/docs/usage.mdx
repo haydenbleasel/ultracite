@@ -83,7 +83,7 @@ Type-aware linting enables deeper analysis rules that leverage TypeScript's type
 
 #### Biome
 
-For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables project/scanner rules like `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, and `noDeprecatedImports`.
+For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, and `useArraySortCompare`.
 
 ```bash title="Terminal"
 npx ultracite init --linter biome --type-aware

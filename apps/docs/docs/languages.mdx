@@ -29,7 +29,7 @@ This page summarises what each tool supports natively today so you can choose a 
 | JSONC      | ✅    | ❌         | 🔌     | ❌        |
 | CSS        | ✅    | ❌         | 🔌     | ✅        |
 | SCSS       | ❌    | ❌         | ❌     | 🔌        |
-| Sass       | ❌    | ❌         | ❌     | 🔌        |
+| Sass       | ❌    | ❌         | ❌     | ❌        |
 | Less       | ❌    | ❌         | ❌     | 🔌        |
 | HTML       | ✅    | ❌         | 🔌     | 🔌        |
 | Vue        | 🟡    | 🟡 scripts | 🔌     | 🔌        |
@@ -52,7 +52,7 @@ This page summarises what each tool supports natively today so you can choose a 
 | JSONC      | ✅    | ✅    | ✅       |
 | CSS        | ✅    | ✅    | ✅       |
 | SCSS       | ⌛    | ✅    | ✅       |
-| Sass       | ❌    | ❌    | 🔌       |
+| Sass       | ❌    | ❌    | ❌       |
 | Less       | ❌    | ✅    | ✅       |
 | HTML       | ✅    | ✅    | ✅       |
 | Vue        | 🟡    | ✅    | ✅       |
@@ -79,15 +79,15 @@ Oxfmt targets Prettier-style formatting breadth and is much wider than Oxlint. I
 
 ### ESLint
 
-Core ESLint only parses JavaScript (and JSX with `ecmaFeatures.jsx`). Everything else — TypeScript, Vue, Svelte, Astro, JSON, YAML, Markdown, HTML, CSS — requires a custom parser or dedicated plugin (`@typescript-eslint`, `eslint-plugin-vue`, `@eslint/json`, `@eslint/markdown`, `@eslint/css`, etc.). That plugin ecosystem is by far the largest of any tool on this page, but it comes with more configuration surface area.
+Core ESLint only parses JavaScript (and JSX with `ecmaFeatures.jsx`). Everything else — TypeScript, Vue, Svelte, Astro, JSON, YAML, Markdown, HTML, CSS — requires a custom parser or dedicated plugin (`@typescript-eslint`, `eslint-plugin-vue`, `@eslint/json`, `@eslint/markdown`, `@eslint/css`, etc.). That plugin ecosystem is by far the largest of any tool on this page, but it comes with more configuration surface area. Ultracite's ESLint preset lints JavaScript and TypeScript modules and inline scripts in HTML, plus Vue, Svelte, and Astro files through their framework presets. It doesn't lint JSON, Markdown, or YAML; Prettier formats those.
 
 ### Prettier
 
-Prettier ships the widest built-in language coverage of any tool here, including Vue and Angular templates natively. Svelte and Astro are the notable exceptions: both are commonly used but rely on community plugins (`prettier-plugin-svelte`, `prettier-plugin-astro`). Indented Sass also requires a plugin.
+Prettier ships the widest built-in language coverage of any tool here, including Vue and Angular templates natively. Svelte and Astro are the notable exceptions: both are commonly used but rely on community plugins (`prettier-plugin-svelte`, `prettier-plugin-astro`). Indented Sass (`.sass`) isn't supported.
 
 ### Stylelint
 
-Stylelint natively handles CSS. Everything else CSS-adjacent — SCSS, Sass, Less, CSS-in-JS, `<style>` blocks inside HTML or framework files — works through PostCSS custom-syntax plugins (`postcss-scss`, `postcss-less`, `postcss-html`, and so on). It does not lint JavaScript, TypeScript, JSON, or other non-style formats.
+Stylelint natively handles CSS. Other CSS-adjacent syntaxes — SCSS, Less, CSS-in-JS, `<style>` blocks inside HTML or framework files — work through PostCSS custom-syntax plugins (`postcss-scss`, `postcss-less`, `postcss-html`, and so on). It does not lint JavaScript, TypeScript, JSON, or other non-style formats. Ultracite's Stylelint preset lints `.css`, `.scss`, and `.less` files (`init` installs `postcss-scss` and `postcss-less`); indented Sass (`.sass`) isn't linted.
 
 ## Choosing a toolchain
 

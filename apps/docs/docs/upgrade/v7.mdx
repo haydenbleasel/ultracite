@@ -11,9 +11,9 @@ Ultracite v7 introduces support for multiple linting providers: Biome, ESLint + 
 
 Ultracite now supports three linting toolchains:
 
-- **[Biome](/docs/provider/biome)** — The modern, all-in-one toolchain (default)
+- **[Oxlint + Oxfmt](/docs/provider/oxlint)** — The fastest option, recommended and the default since v7.11
+- **[Biome](/docs/provider/biome)** — The modern, all-in-one toolchain (the default before v7.11)
 - **[ESLint + Prettier + Stylelint](/docs/provider/eslint)** — The most mature ecosystem
-- **[Oxlint + Oxfmt](/docs/provider/oxlint)** — The fastest option
 
 ### Updated Preset Paths
 
@@ -44,7 +44,7 @@ npx ultracite init --linter oxlint
 
 ## Migration
 
-### For Biome Users (Default)
+### For Biome Users
 
 Update your `biome.jsonc` to use the new preset paths. A v6 config like this:
 

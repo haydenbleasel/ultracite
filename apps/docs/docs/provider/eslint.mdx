@@ -9,9 +9,9 @@ description: Learn when Ultracite is the right fit for ESLint, Prettier, and Sty
 
 - **Battle-tested** — Used by millions of developers worldwide with the largest plugin ecosystem
 - **20+ plugins included** — React, TypeScript, JSX A11y, Import, Next.js, Unicorn, SonarJS, and more
-- **Three tools in one** — ESLint for code quality, Prettier for formatting, Stylelint for CSS
+- **Three tools in one** — ESLint for code quality, Prettier for formatting, Stylelint for CSS, SCSS, and Less
 - **Framework-aware** — First-class support for React, Next.js, Vue, Svelte, and more
-- **Type-aware linting** — Deep TypeScript integration with type-aware rules
+- **Type-aware linting** — typescript-eslint's project service finds the nearest `tsconfig.json` for each file, so monorepos and solution-style configs get type information without extra setup
 - **Maximum coverage** — Hundreds of rules covering accessibility, security, performance, and best practices
 
 ## Usage
@@ -39,6 +39,8 @@ export { default } from "ultracite/stylelint";
 
 The `prettier-plugin-tailwindcss` plugin is always included (and must stay last); selecting the Astro or Svelte frameworks adds `prettier-plugin-astro` or `prettier-plugin-svelte` before it.
 
+The ESLint preset lints JavaScript and TypeScript modules (`.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts`, `.cts`) and inline scripts in HTML files; the Vue, Svelte, and Astro presets add their own file types. It doesn't lint JSON — Prettier formats it. Stylelint lints `.css`, `.scss`, and `.less` files (`init` installs `postcss-scss` and `postcss-less` for the last two) and understands Tailwind CSS v4 at-rules, functions, and theme variables.
+
 Add framework presets as needed:
 
 ```javascript title="eslint.config.mjs"
@@ -51,7 +53,7 @@ export default [...core, ...react, ...next];
 
 ## Configuration Approach
 
-Ultracite's ESLint configuration uses an **opt-out** approach. This means we enable all recommended rules from each plugin, then selectively disable or adjust rules that don't fit our opinionated defaults. This ensures maximum coverage while avoiding overly strict or conflicting rules.
+Ultracite's ESLint configuration uses an **opt-out** approach. This means we enable every non-deprecated rule from each plugin at the `error` level, then selectively disable or adjust rules that don't fit our opinionated defaults. This ensures maximum coverage while avoiding overly strict or conflicting rules.
 
 ## Included Plugins
 
@@ -69,7 +71,8 @@ Ultracite's ESLint configuration includes the following plugins:
 - **unicorn** — Opinionated rules for cleaner, more readable code
 - **sonarjs** — Bug detection and code smell identification
 - **promise** — Best practices for Promises and async/await
-- **import** — Import/export syntax validation and organization
+- **import-x** — Import/export syntax validation and organization
+- **jsdoc** — JSDoc comment validation (the rules Oxlint also implements)
 
 ### Framework Support
 
@@ -103,6 +106,7 @@ Ultracite configures Prettier with these defaults:
 - **Double Quotes**: Yes
 - **Trailing Commas**: ES5 style
 - **Arrow Parentheses**: Always include
+- **Tailwind Class Sorting**: Enabled through `prettier-plugin-tailwindcss`, including inside `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, and `tv` calls
 
 ## Rule Reference
 
