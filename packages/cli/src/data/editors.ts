@@ -111,13 +111,20 @@ export const getVscodeConfig = (linter: ProviderId = "biome") => {
   }
 };
 
-// Zed Biome configuration
+// Zed configuration shared by every linter. Zed's default TypeScript and
+// JavaScript language server is vtsls, which reads TypeScript preferences
+// from `lsp.vtsls.settings`.
 export const zedBaseConfig = {
   format_on_save: "on",
   formatter: "language_server",
   lsp: {
-    "typescript-language-server": {
+    vtsls: {
       settings: {
+        javascript: {
+          preferences: {
+            includePackageJsonAutoImports: "on",
+          },
+        },
         typescript: {
           preferences: {
             includePackageJsonAutoImports: "on",

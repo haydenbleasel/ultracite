@@ -55,6 +55,91 @@ const upgradeCommand = (
   return existing;
 };
 
+/**
+ * The strings `existing` holds wherever `template` places its command (see
+ * upgradeCommand). Only hook commands count: a settings file that mentions
+ * ultracite elsewhere, e.g. in a permission rule, has no ultracite hook.
+ */
+const commandsAt = (
+  existing: JsonValue,
+  template: JsonValue,
+  command: string
+): string[] => {
+  if (template === command) {
+    // oxlint-disable-next-line anti-slop/no-runtime-typeof -- decoding a user's hook settings, where the command position may hold any JSON value
+    return typeof existing === "string" ? [existing] : [];
+  }
+
+  if (Array.isArray(template) && Array.isArray(existing)) {
+    const [entry] = template;
+    return entry === undefined
+      ? []
+      : existing.flatMap((item) => commandsAt(item, entry, command));
+  }
+
+  if (isJsonObject(template) && isJsonObject(existing)) {
+    return Object.entries(existing).flatMap(([key, value]) =>
+      Object.hasOwn(template, key)
+        ? commandsAt(value, template[key], command)
+        : []
+    );
+  }
+
+  return [];
+};
+
+/**
+ * `existing` without the entries of `template`'s arrays whose command is one
+ * `isGenerated` accepts, and without keys that leaves empty. Used to retire a
+ * hook written in a format this integration no longer generates.
+ */
+const removeGeneratedEntries = (
+  existing: JsonValue,
+  template: JsonValue,
+  command: string,
+  isGenerated: (value: string) => boolean
+): JsonValue => {
+  if (Array.isArray(template) && Array.isArray(existing)) {
+    const [entry] = template;
+    return entry === undefined
+      ? existing
+      : existing.filter(
+          (item) => !commandsAt(item, entry, command).some(isGenerated)
+        );
+  }
+
+  if (isJsonObject(template) && isJsonObject(existing)) {
+    const entries: [string, JsonValue][] = [];
+
+    for (const [key, value] of Object.entries(existing)) {
+      if (!Object.hasOwn(template, key)) {
+        entries.push([key, value]);
+        continue;
+      }
+
+      const pruned = removeGeneratedEntries(
+        value,
+        template[key],
+        command,
+        isGenerated
+      );
+      const becameEmpty =
+        JSON.stringify(pruned) !== JSON.stringify(value) &&
+        (Array.isArray(pruned)
+          ? pruned.length === 0
+          : isJsonObject(pruned) && Object.keys(pruned).length === 0);
+
+      if (!becameEmpty) {
+        entries.push([key, pruned]);
+      }
+    }
+
+    return Object.fromEntries(entries);
+  }
+
+  return existing;
+};
+
 const biomeHookArgs = ["--skip=correctness/noUnusedImports"];
 
 const createFixCommand = (
@@ -68,14 +153,30 @@ const createFixCommand = (
   return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
+// The script commands of ultracite 7.8.0 and earlier: `npm run fix -- ...`
+// for npm and a bare `<pm> fix ...` for every other package manager.
+const legacyFixCommand = (
+  packageManager: PackageManagerName,
+  args: string[]
+): string =>
+  packageManager === "npm"
+    ? ["npm", "run", "fix", ...(args.length > 0 ? ["--", ...args] : [])].join(
+        " "
+      )
+    : [packageManager, "fix", ...args].join(" ");
+
 // Every hook command an earlier `init` may have generated: each package
-// manager, with and without the Biome skip, with and without `--hook`.
+// manager, with and without the Biome skip, with and without `--hook`, plus
+// the bare `<pm> fix` scripts of 7.8.0 and earlier and the `npm run fix
+// --skip=...` (flag swallowed by npm) of 7.8.1 and 7.8.2.
 const generatedFixCommands = (): Set<string> =>
   new Set(
     supportedPackageManagers.flatMap((packageManager) =>
       [[], biomeHookArgs].flatMap((linterArgs) => [
         createFixCommand(packageManager, linterArgs),
         createFixCommand(packageManager, [...linterArgs, "--hook"]),
+        legacyFixCommand(packageManager, linterArgs),
+        runScriptCommand(packageManager, "fix", { args: linterArgs }),
       ])
     )
   );
@@ -102,9 +203,31 @@ export const createHooks = (
   outdatedCommands.delete(command);
   const content = hookIntegration.hooks.getContent(command);
 
-  const hasUltraciteHook = (obj: JsonObject): boolean => {
-    const json = JSON.stringify(obj);
-    return json.includes("ultracite") || json.includes(command);
+  const isGeneratedCommand = (value: string): boolean =>
+    value === command || outdatedCommands.has(value);
+
+  const hasUltraciteHook = (obj: JsonObject): boolean =>
+    commandsAt(obj, content, command).some(
+      (hookCommand) =>
+        isGeneratedCommand(hookCommand) || hookCommand.includes("ultracite")
+    );
+
+  // Drops hooks written in a format this integration no longer generates,
+  // so the current one isn't added next to them and run twice.
+  const retireLegacyFormat = (existing: JsonObject): JsonObject => {
+    const { getLegacyContent } = hookIntegration.hooks;
+
+    if (!getLegacyContent) {
+      return existing;
+    }
+
+    const pruned = removeGeneratedEntries(
+      existing,
+      getLegacyContent(command),
+      command,
+      isGeneratedCommand
+    );
+    return isJsonObject(pruned) ? pruned : existing;
   };
 
   const updateConfig = async (): Promise<void> => {
@@ -123,30 +246,27 @@ export const createHooks = (
     // value, or undefined when unparseable.
     const parsed: JsonValue | undefined = parse(existingContent);
     const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
+    const current = retireLegacyFormat(existingJson);
 
     const upgraded = upgradeCommand(
-      existingJson,
+      current,
       content,
       outdatedCommands,
       command
     );
 
-    if (
-      isJsonObject(upgraded) &&
-      JSON.stringify(upgraded) !== JSON.stringify(existingJson)
-    ) {
-      await writeProjectFile(
-        hookIntegration.hooks.path,
-        `${JSON.stringify(upgraded, null, 2)}\n`
-      );
+    if (!isJsonObject(upgraded)) {
       return;
     }
 
-    if (!hasUltraciteHook(existingJson)) {
-      const merged = deepmerge(existingJson, content);
+    const next = hasUltraciteHook(upgraded)
+      ? upgraded
+      : deepmerge(upgraded, content);
+
+    if (JSON.stringify(next) !== JSON.stringify(existingJson)) {
       await writeProjectFile(
         hookIntegration.hooks.path,
-        `${JSON.stringify(merged, null, 2)}\n`
+        `${JSON.stringify(next, null, 2)}\n`
       );
     }
   };

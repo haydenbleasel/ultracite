@@ -13,5 +13,10 @@ export type JsonObject = Record<string, JsonValue>;
 /* e.g. .cursor/hooks.json, .claude/settings.json, or .codebuddy/settings.json */
 export interface HooksConfig {
   getContent: (command: string) => JsonObject;
+  /**
+   * The shape earlier versions wrote, when it differs from getContent: a
+   * re-run removes generated hooks in that shape so they don't run twice.
+   */
+  getLegacyContent?: (command: string) => JsonObject;
   path: string;
 }

@@ -255,7 +255,22 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     hooks: {
+      // The Copilot CLI and cloud agent read `.github/hooks/*.json` only in
+      // this format (numeric `version`, camelCase events); VS Code maps it
+      // onto its own. Neither applies matchers the same way, so `fix --hook`
+      // itself skips tools that don't edit files.
       getContent: (command) => ({
+        hooks: {
+          postToolUse: [
+            {
+              command,
+              type: "command",
+            },
+          ],
+        },
+        version: 1,
+      }),
+      getLegacyContent: (command) => ({
         hooks: {
           PostToolUse: [
             {
