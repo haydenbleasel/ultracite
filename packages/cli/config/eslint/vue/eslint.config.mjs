@@ -32,6 +32,20 @@ const config = [
       ...vuePrettierOverrides,
     },
   },
+  {
+    // Nuxt and file-based Vue Router setups derive routes and layouts from
+    // these filenames (`pages/index.vue`, `layouts/default.vue`, `error.vue`,
+    // `app.vue`), so they cannot be renamed to multi-word names.
+    files: [
+      "**/app.vue",
+      "**/error.vue",
+      "**/layouts/**/*.vue",
+      "**/pages/**/*.vue",
+    ],
+    rules: {
+      "vue/multi-word-component-names": "off",
+    },
+  },
 ];
 
 export default config;

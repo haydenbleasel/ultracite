@@ -11,6 +11,7 @@ export default defineConfig({
       rules: {
         "vitest/consistent-each-for": "error",
         "vitest/consistent-test-filename": "error",
+        "vitest/consistent-test-it": "error",
         "vitest/consistent-vitest-vi": "error",
         "vitest/expect-expect": "error",
         "vitest/hoisted-apis-on-top": "error",

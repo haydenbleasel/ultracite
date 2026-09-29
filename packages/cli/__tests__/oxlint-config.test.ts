@@ -963,6 +963,42 @@ describe("oxlint react config", () => {
   });
 });
 
+describe("oxlint vue config", () => {
+  test("contains all non-nursery vue rules", async () => {
+    const expectedRules = getOxlintRulesForPlugins(["vue"]);
+    const config = await readOxlintConfig("vue");
+    const configRules = new Set(Object.keys(config.rules ?? {}));
+
+    const missingRules = expectedRules.filter((rule) => !configRules.has(rule));
+    expect(
+      missingRules,
+      `Vue config is missing ${missingRules.length} vue rules: ${missingRules.join(", ")}`
+    ).toEqual([]);
+  });
+});
+
+describe("oxlint test framework configs", () => {
+  for (const plugin of ["jest", "vitest"]) {
+    test(`${plugin} contains all non-nursery ${plugin} rules`, async () => {
+      const expectedRules = getOxlintRulesForPlugins([plugin]);
+      const config = await readOxlintConfig(plugin);
+      const configRules = new Set(
+        config.overrides?.flatMap((override: { rules?: object }) =>
+          Object.keys(override.rules ?? {})
+        )
+      );
+
+      const missingRules = expectedRules.filter(
+        (rule) => !configRules.has(rule)
+      );
+      expect(
+        missingRules,
+        `${plugin} config is missing ${missingRules.length} rules: ${missingRules.join(", ")}`
+      ).toEqual([]);
+    });
+  }
+});
+
 describe("oxlint next config", () => {
   test("contains all non-nursery nextjs rules", async () => {
     const expectedRules = getOxlintRulesForPlugins(["nextjs"]);
