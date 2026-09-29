@@ -306,12 +306,28 @@ const checkStylelintConfig = (): DiagnosticCheck => {
   };
 };
 
+// Oxlint and oxfmt each refuse to load any config when a JSON config and the
+// TS config sit in the same directory.
+const findConflictingConfigs = (
+  dir: string,
+  names: readonly string[]
+): string[] => names.filter((name) => existsSync(path.join(dir, name)));
+
 const checkOxlintConfig = (): DiagnosticCheck => {
   const found = findNearestFile(oxlintConfigNames);
 
   if (!found) {
     return {
       message: `No oxlint config file found (expected one of: ${oxlintConfigNames.join(", ")})`,
+      name: OXLINT_CHECK,
+      status: "fail",
+    };
+  }
+
+  const conflicting = findConflictingConfigs(found.dir, oxlintConfigNames);
+  if (conflicting.length > 1) {
+    return {
+      message: `${conflicting.join(" and ")} are both present, so Oxlint won't load either — run \`ultracite init\` to migrate .oxlintrc.json into oxlint.config.ts`,
       name: OXLINT_CHECK,
       status: "fail",
     };
@@ -360,6 +376,23 @@ const checkOxfmtConfig = (): DiagnosticCheck => {
       message: "No oxfmt.config.ts file found",
       name: OXFMT_CHECK,
       status: "fail",
+    };
+  }
+
+  const conflicting = findConflictingConfigs(found.dir, oxfmtConfigNames);
+  if (conflicting.length > 1) {
+    return {
+      message: `${conflicting.join(" and ")} are both present, so oxfmt won't load either — run \`ultracite init\` to migrate them into oxfmt.config.ts`,
+      name: OXFMT_CHECK,
+      status: "fail",
+    };
+  }
+
+  if (found.fileName !== "oxfmt.config.ts") {
+    return {
+      message: `${found.fileName} found — run \`ultracite init\` to migrate to oxfmt.config.ts`,
+      name: OXFMT_CHECK,
+      status: "warn",
     };
   }
 

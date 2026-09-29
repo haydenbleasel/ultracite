@@ -493,6 +493,72 @@ describe("doctor", () => {
     consoleLogSpy.mockRestore();
   });
 
+  test("fails when JSON and TS oxc configs sit side by side", () => {
+    const present = new Set([
+      ".oxlintrc.json",
+      "oxlint.config.ts",
+      ".oxfmtrc.json",
+      "oxfmt.config.ts",
+    ]);
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        present.has(nodePath.basename(String(filePath)))
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.includes("oxlint.config.ts")) {
+          return 'import core from "ultracite/oxlint/core";';
+        }
+        if (p.includes("oxfmt.config.ts")) {
+          return 'import ultracite from "ultracite/oxfmt";';
+        }
+        return "{}";
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        ".oxlintrc.json and oxlint.config.ts are both present"
+      ),
+      status: "fail",
+    });
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "oxfmt.config.ts and .oxfmtrc.json are both present"
+      ),
+      status: "fail",
+    });
+  });
+
+  test("suggests migrating a lone .oxfmtrc.json", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        [".oxfmtrc.json", "oxlint.config.ts"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock(() => 'import core from "ultracite/oxlint/core";'),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message:
+        ".oxfmtrc.json found — run `ultracite init` to migrate to oxfmt.config.ts",
+      status: "warn",
+    });
+  });
+
   test("warns when oxlint config does not extend ultracite", () => {
     const consoleLogSpy = spyOn(console, "log").mockImplementation(() => {});
 

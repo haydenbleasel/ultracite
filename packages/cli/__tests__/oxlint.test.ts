@@ -11,6 +11,13 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
+// Every path exists except an .oxlintrc.json, which init would migrate.
+const onlyOxlintConfig = (filePath: string) => {
+  if (String(filePath).includes("oxlintrc")) {
+    throw new Error("ENOENT");
+  }
+};
+
 describe("oxlint linter", () => {
   describe("exists", () => {
     test("returns true when oxlint config exists", async () => {
@@ -21,7 +28,7 @@ describe("oxlint linter", () => {
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -415,7 +422,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -443,7 +450,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -478,7 +485,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -521,7 +528,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -554,7 +561,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -592,7 +599,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -633,7 +640,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -717,7 +724,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -768,7 +775,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -804,7 +811,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -852,7 +859,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -897,7 +904,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -938,7 +945,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -953,14 +960,10 @@ export default defineConfig({
       );
     });
 
-    test("warns when file mentions ultracite but extends cannot be parsed", async () => {
+    test("keeps unrelated statements in a config without Ultracite presets", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
-      const consoleWarnSpy = mock(() => {});
-      const originalWarn = console.warn;
-      console.warn = consoleWarnSpy;
-
       const existingConfig = `// This config references ultracite/oxlint but has no valid imports or extends
 const config = "ultracite/oxlint";
 export default {};
@@ -973,15 +976,18 @@ export default {};
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
 
       await oxlint.update();
 
-      expect(consoleWarnSpy).toHaveBeenCalled();
-      console.warn = originalWarn;
+      const [[, content]] = mockWriteFile.mock.calls;
+      expect(content).toContain('const config = "ultracite/oxlint";');
+      expect(content).toContain(
+        `import core from "${getOxlintConfigPath("core")}";`
+      );
     });
 
     test("adds ignorePatterns when migrating old config", async () => {
@@ -1004,7 +1010,7 @@ export default defineConfig({
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -1033,7 +1039,7 @@ export default defineConfig({});
       }));
 
       mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
+        accessSync: mock(onlyOxlintConfig),
         existsSync: mock(() => false),
         readFileSync: mock(() => "{}"),
       }));
@@ -1047,5 +1053,171 @@ export default defineConfig({});
       expect(content).not.toContain(getOxlintConfigPath("github"));
       expect(content).not.toContain(getOxlintConfigPath("sonarjs"));
     });
+  });
+});
+
+// A project whose files are given as path → contents; every other path is
+// missing. Returns the mocks that record what update wrote and removed.
+const mockProject = (files: Record<string, string>) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  const rm = mock((_path: string) => Promise.resolve());
+  const warn = mock((_message: string) => {});
+  const info = mock((_message: string) => {});
+  const has = (filePath: string) => String(filePath) in files;
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock((filePath: string) =>
+      has(filePath)
+        ? Promise.resolve(files[String(filePath)])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    rm,
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((filePath: string) => {
+      if (!has(filePath)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(() => false),
+    readFileSync: mock(() => "{}"),
+  }));
+  mock.module("@clack/prompts", () => ({
+    log: { error: mock(), info, success: mock(), warn },
+  }));
+
+  return { info, rm, warn, writeFile };
+};
+
+describe("oxlint update keeps user content", () => {
+  test("carries over custom rules, extends, imports and comments", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+import effect from "@effect/tsgo/oxlint"; // Effect diagnostics
+
+const localRules = { "no-console": "off" };
+
+export default defineConfig({
+  extends: [core, react, effect],
+  // generated code lives in generated/
+  ignorePatterns: [...core.ignorePatterns, "generated/**"],
+  rules: {
+    ...localRules,
+    "eqeqeq": "off",
+  },
+});
+`,
+    });
+
+    await oxlint.update({ frameworks: ["vitest"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import effect from "@effect/tsgo/oxlint"; // Effect diagnostics'
+    );
+    expect(content).toContain('const localRules = { "no-console": "off" };');
+    expect(content).toContain("    effect,");
+    expect(content).toContain("vitest,");
+    expect(content).toContain("// generated code lives in generated/");
+    expect(content).toContain(
+      'ignorePatterns: [...core.ignorePatterns, "generated/**"],'
+    );
+    expect(content).not.toContain("ignorePatterns: core.ignorePatterns");
+    expect(content).toContain('"eqeqeq": "off",');
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("leaves a config it can't parse unchanged", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": "export default defineConfig({ extends: [core,",
+    });
+
+    await oxlint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn).toHaveBeenCalled();
+  });
+
+  test("migrates .oxlintrc.json into oxlint.config.ts and removes it", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": `{
+  // from oxlint --init
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./node_modules/ultracite/config/oxlint/react/.oxlintrc.json", "./base.json"],
+  "ignorePatterns": ["vendor/**"],
+  "rules": { "no-console": "off" },
+  "settings": { "react": { "version": "19" } },
+  "env": { "builtin": true },
+}`,
+    });
+
+    expect(oxlint.exists()).toBe(true);
+    await oxlint.update();
+
+    const [[writtenPath, content]] = project.writeFile.mock.calls;
+    expect(writtenPath).toBe("./oxlint.config.ts");
+    expect(content).toContain('import react from "ultracite/oxlint/react";');
+    expect(content).toContain("...core.ignorePatterns,");
+    expect(content).toContain('"vendor/**",');
+    expect(content).toContain('rules: {\n    "no-console": "off"\n  },');
+    expect(content).toContain("settings: {");
+    expect(content).toContain('"version": "19"');
+    expect(content).toContain("env: {");
+    expect(content).not.toContain("$schema");
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.oxlintrc.json",
+    ]);
+    expect(project.warn.mock.calls.at(-1)?.[0]).toContain("./base.json");
+  });
+
+  test("merges .oxlintrc.json settings with the react-doctor settings", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json": '{ "settings": { "next": { "rootDir": "app" } } }',
+    });
+
+    await oxlint.update({ jsPlugins: ["oxlint-plugin-react-doctor"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("settings: {\n    ...jsPluginSettings,");
+    expect(content).toContain('"rootDir": "app"');
+  });
+
+  test("keeps oxlint.config.ts settings over .oxlintrc.json when both exist", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json":
+        '{ "rules": { "eqeqeq": "error" }, "env": { "node": true } }',
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  rules: { "eqeqeq": "off" },
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('rules: { "eqeqeq": "off" },');
+    expect(content).not.toContain('"eqeqeq": "error"');
+    expect(content).toContain('"node": true');
+    expect(project.rm).toHaveBeenCalled();
+  });
+
+  test("leaves everything unchanged when .oxlintrc.json can't be parsed", async () => {
+    const project = mockProject({ "./.oxlintrc.json": '{ "rules": ' });
+
+    await oxlint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.rm).not.toHaveBeenCalled();
+    expect(project.warn.mock.calls[0]?.[0]).toContain(".oxlintrc.json");
   });
 });

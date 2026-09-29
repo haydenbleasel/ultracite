@@ -1,9 +1,30 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
+
+import { log } from "@clack/prompts";
+import { z } from "zod";
 
 import type { options } from "../data/options";
+import type { JsonObject, JsonValue } from "../data/types";
+import { parseJsoncStrict } from "../schemas";
 import { exists, validateFrameworkName, writeProjectFile } from "../utils";
+import {
+  arrayEntries,
+  identifierName,
+  parseConfigModule,
+  renderEntries,
+  renderImport,
+  renderJsonProperty,
+  renderJsonValue,
+} from "./config-module";
+import type { ConfigEntry, ConfigModule, RenderedEntry } from "./config-module";
 
 const oxlintConfigPath = "./oxlint.config.ts";
+const oxlintConfigFile = "oxlint.config.ts";
+
+// Oxlint refuses to run when this sits next to oxlint.config.ts, so init
+// migrates it into the TS config and removes it.
+const oxlintRcPath = "./.oxlintrc.json";
+const oxlintRcFile = ".oxlintrc.json";
 
 // Standalone presets are enabled as a plain `ultracite/oxlint/<preset>`
 // extend rather than through selectJsPlugins: anti-slop is vendored inside
@@ -69,9 +90,58 @@ const getOxlintConfigIdentifier = (configPath: string) => {
 // line beyond this so the file is emitted already formatted.
 const generatedLineWidth = 80;
 
+// The properties Ultracite writes on the root config that a user may have
+// customised; a customised one is kept as written instead of regenerated.
+type OverridableProperty = "ignorePatterns" | "jsPlugins" | "settings";
+
+// What the regenerated config provides, for overrides that extend it rather
+// than replace it (e.g. .oxlintrc.json ignorePatterns on top of core's).
+interface GeneratedProperties {
+  hasJsPluginSettings: boolean;
+  hoistedJsPlugins: string[];
+}
+
+type PropertyOverride =
+  | { build: (generated: GeneratedProperties) => RenderedEntry }
+  | { entry: RenderedEntry };
+
+// Everything in an existing config that isn't Ultracite's: carried over into
+// the regenerated file as written.
+interface OxlintExtras {
+  danglingComments: string[];
+  extendsEntries: RenderedEntry[];
+  imports: string[];
+  overrides: Partial<Record<OverridableProperty, PropertyOverride>>;
+  oxlintSpecifiers: string[];
+  properties: RenderedEntry[];
+  statements: string[];
+}
+
+const emptyExtras = (): OxlintExtras => ({
+  danglingComments: [],
+  extendsEntries: [],
+  imports: [],
+  overrides: {},
+  oxlintSpecifiers: [],
+  properties: [],
+  statements: [],
+});
+
+const renderOverride = (
+  override: PropertyOverride | undefined,
+  generated: GeneratedProperties
+): RenderedEntry | null => {
+  if (!override) {
+    return null;
+  }
+
+  return "entry" in override ? override.entry : override.build(generated);
+};
+
 const generateConfigContent = (
   extendsList: string[],
-  jsPlugins: OxlintJsPlugin[] = []
+  jsPlugins: OxlintJsPlugin[] = [],
+  extras: OxlintExtras = emptyExtras()
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain
   // extends below instead of selectJsPlugins entries.
@@ -132,7 +202,7 @@ const generateConfigContent = (
   }
 
   const imports = [
-    `import { defineConfig } from "oxlint";`,
+    renderImport("oxlint", ["defineConfig", ...extras.oxlintSpecifiers]),
     ...resolvedExtends.map((ext) =>
       ext === jsPluginsPath
         ? `import ${getOxlintConfigIdentifier(ext)}, { jsPluginSettings } from "${ext}";`
@@ -141,6 +211,7 @@ const generateConfigContent = (
     hasJsPlugins
       ? `import { ${jsPluginImports.join(", ")} } from "ultracite/oxlint/js-plugins";`
       : "",
+    ...extras.imports,
   ]
     .filter(Boolean)
     .join("\n");
@@ -175,33 +246,58 @@ const generateConfigContent = (
       ? [getOxlintConfigIdentifier(getOxlintConfigPath(shadcnPreset))]
       : []),
   ];
-  let jsPluginsLine = "";
+  let jsPluginsValue: string | null = null;
   if (hoistedJsPluginIdentifiers.length === 1) {
-    jsPluginsLine = `\n  jsPlugins: ${hoistedJsPluginIdentifiers[0]}.jsPlugins,`;
+    jsPluginsValue = `${hoistedJsPluginIdentifiers[0]}.jsPlugins`;
   } else if (hoistedJsPluginIdentifiers.length > 1) {
     const spread = hoistedJsPluginIdentifiers
       .map((identifier) => `...${identifier}.jsPlugins`)
       .join(", ");
-    jsPluginsLine = `\n  jsPlugins: [${spread}],`;
+    jsPluginsValue = `[${spread}]`;
   }
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
   const extendsBlock =
-    singleLineExtends.length <= generatedLineWidth
+    singleLineExtends.length <= generatedLineWidth &&
+    extras.extendsEntries.length === 0
       ? singleLineExtends
-      : `  extends: [\n${extendsEntries
-          .map((entry) => `    ${entry},`)
-          .join("\n")}\n  ],`;
+      : `  extends: [\n${renderEntries(
+          [
+            ...extendsEntries.map((text) => ({ comment: null, text })),
+            ...extras.extendsEntries,
+          ],
+          [],
+          "    "
+        )}\n  ],`;
 
-  const settingsLine = hasJsPluginSettings
-    ? "\n  settings: jsPluginSettings,"
-    : "";
+  const generated: GeneratedProperties = {
+    hasJsPluginSettings,
+    hoistedJsPlugins: hoistedJsPluginIdentifiers,
+  };
+  const generatedProperty = (
+    property: OverridableProperty,
+    value: string | null
+  ): RenderedEntry | null =>
+    renderOverride(extras.overrides[property], generated) ??
+    (value === null ? null : { comment: null, text: `${property}: ${value}` });
+
+  const properties = [
+    generatedProperty("ignorePatterns", "core.ignorePatterns"),
+    generatedProperty("jsPlugins", jsPluginsValue),
+    generatedProperty(
+      "settings",
+      hasJsPluginSettings ? "jsPluginSettings" : null
+    ),
+    ...extras.properties,
+  ].filter((property) => property !== null);
+
+  const statements = extras.statements.join("\n\n");
 
   return `${imports}
-${selectionBlock}
+${selectionBlock}${statements ? `\n${statements}\n` : ""}
 export default defineConfig({
 ${extendsBlock}
-  ignorePatterns: core.ignorePatterns,${jsPluginsLine}${settingsLine}
+${renderEntries(properties, extras.danglingComments)}
 });
 `;
 };
@@ -242,6 +338,339 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
     );
 };
 
+// Any reference to an Ultracite oxlint preset: an import source
+// (`ultracite/oxlint/core`), a legacy node_modules path, or an
+// .oxlintrc.json extends entry.
+const ULTRACITE_PRESET_RE =
+  /ultracite\/(?:config\/)?oxlint\/(?<preset>[a-z0-9-]+(?:\/js-plugins)?)/u;
+
+const toUltracitePreset = (reference: string): string | null => {
+  const preset = ULTRACITE_PRESET_RE.exec(reference)?.groups?.preset;
+  return preset ? getOxlintConfigPath(preset) : null;
+};
+
+// Constants earlier Ultracite releases generated for a js-plugins selection.
+const legacySelectionConsts = new Set([
+  "selectedJsPluginNames",
+  "selectedJsPluginRulePrefixes",
+  "selectedJsPlugins",
+]);
+
+// Named imports the regenerated config declares itself.
+const generatedNamedImports = new Set(["jsPluginSettings", "selectJsPlugins"]);
+
+const GENERATED_JS_PLUGINS_RE =
+  /^(?:\w+\.jsPlugins|\[(?:\.\.\.\w+\.jsPlugins,?)+\])$/u;
+
+const WHITESPACE_RE = /\s/gu;
+
+const compact = (text: string | null): string =>
+  (text ?? "").replaceAll(WHITESPACE_RE, "");
+
+const toRendered = (entry: ConfigEntry): RenderedEntry => ({
+  comment: entry.comment,
+  text: entry.text,
+});
+
+interface ExistingConfig {
+  extras: OxlintExtras;
+  presets: string[];
+}
+
+// Split an existing oxlint.config.ts into the Ultracite presets it extends
+// and everything else, which is carried over as written.
+const readExistingConfig = (
+  source: string,
+  config: ConfigModule
+): ExistingConfig | null => {
+  if (config.container !== "object") {
+    return null;
+  }
+
+  const extras = emptyExtras();
+  const presets: string[] = [];
+  const ownedIdentifiers = new Set(legacySelectionConsts);
+
+  for (const moduleImport of config.imports) {
+    const preset = toUltracitePreset(moduleImport.source);
+
+    if (
+      moduleImport.typeOnly ||
+      (!preset && moduleImport.source !== "oxlint")
+    ) {
+      extras.imports.push(moduleImport.text);
+      continue;
+    }
+
+    if (moduleImport.source === "oxlint") {
+      extras.oxlintSpecifiers.push(
+        ...moduleImport.namedSpecifiers
+          .filter((specifier) => specifier.local !== "defineConfig")
+          .map((specifier) => specifier.text)
+      );
+      continue;
+    }
+
+    if (moduleImport.defaultLocal && preset) {
+      ownedIdentifiers.add(moduleImport.defaultLocal);
+      presets.push(preset);
+    }
+
+    const userSpecifiers = moduleImport.namedSpecifiers.filter(
+      (specifier) => !generatedNamedImports.has(specifier.local)
+    );
+    if (userSpecifiers.length > 0) {
+      extras.imports.push(
+        renderImport(
+          moduleImport.source,
+          userSpecifiers.map((specifier) => specifier.text)
+        )
+      );
+    }
+  }
+
+  for (const statement of config.statements) {
+    const isGenerated =
+      statement.declaredNames.length > 0 &&
+      statement.declaredNames.every(
+        (name) =>
+          legacySelectionConsts.has(name) ||
+          (name === "jsPlugins" && statement.initCallee === "selectJsPlugins")
+      );
+
+    if (isGenerated) {
+      for (const name of statement.declaredNames) {
+        ownedIdentifiers.add(name);
+      }
+    } else {
+      extras.statements.push(statement.text);
+    }
+  }
+
+  for (const entry of config.entries) {
+    if (entry.key === "extends") {
+      const elements = arrayEntries(source, entry.value);
+
+      if (!elements) {
+        return null;
+      }
+
+      for (const element of elements) {
+        const legacyPreset =
+          element.identifier === null ? toUltracitePreset(element.text) : null;
+
+        if (legacyPreset) {
+          presets.push(legacyPreset);
+        } else if (
+          !(element.identifier && ownedIdentifiers.has(element.identifier))
+        ) {
+          extras.extendsEntries.push(toRendered(element));
+        }
+      }
+    } else if (entry.key === "ignorePatterns") {
+      if (compact(entry.valueText) !== "core.ignorePatterns") {
+        extras.overrides.ignorePatterns = { entry: toRendered(entry) };
+      }
+    } else if (entry.key === "jsPlugins") {
+      if (!GENERATED_JS_PLUGINS_RE.test(compact(entry.valueText))) {
+        extras.overrides.jsPlugins = { entry: toRendered(entry) };
+      }
+    } else if (entry.key === "settings") {
+      if (identifierName(entry.value) !== "jsPluginSettings") {
+        extras.overrides.settings = { entry: toRendered(entry) };
+      }
+    } else {
+      extras.properties.push(toRendered(entry));
+    }
+  }
+
+  extras.danglingComments.push(...config.danglingComments);
+
+  return { extras, presets };
+};
+
+// The pre-parser way of finding presets, for a file init can't restructure:
+// default imports of Ultracite presets, then legacy string extends.
+const findPresetReferences = (contents: string): string[] => {
+  const presets = [
+    ...contents.matchAll(
+      /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
+    ),
+  ]
+    .map((match) => toUltracitePreset(match.groups?.source ?? ""))
+    .filter((preset) => preset !== null);
+
+  if (presets.length > 0) {
+    return presets;
+  }
+
+  const body = /extends:\s*\[(?<body>[\s\S]*?)\]/u.exec(contents)?.groups?.body;
+
+  return [...(body ?? "").matchAll(/"(?<value>[^"]+)"/gu)]
+    .map((match) => toUltracitePreset(match.groups?.value ?? ""))
+    .filter((preset) => preset !== null);
+};
+
+const rcSchema = z.record(z.string(), z.json());
+
+const JSON_ARRAY_INDENT = "    ";
+
+const renderArrayItems = (items: JsonValue[]): string[] =>
+  items.map((item) => renderJsonValue(item, JSON_ARRAY_INDENT));
+
+const renderSpreadArray = (
+  property: string,
+  spreads: string[],
+  items: JsonValue[]
+): RenderedEntry => ({
+  comment: null,
+  text: `${property}: [\n${[
+    ...spreads.map((spread) => `...${spread}`),
+    ...renderArrayItems(items),
+  ]
+    .map((item) => `${JSON_ARRAY_INDENT}${item},`)
+    .join("\n")}\n  ]`,
+});
+
+const renderSpreadObject = (
+  property: string,
+  spreads: string[],
+  value: JsonObject
+): RenderedEntry => ({
+  comment: null,
+  text: `${property}: {\n${[
+    ...spreads.map((spread) => `${JSON_ARRAY_INDENT}...${spread},`),
+    ...Object.entries(value).map(
+      ([key, item]) =>
+        `${JSON_ARRAY_INDENT}${renderJsonProperty(key, item, JSON_ARRAY_INDENT).text},`
+    ),
+  ].join("\n")}\n  }`,
+});
+
+const isJsonArray = (value: JsonValue): value is JsonValue[] =>
+  Array.isArray(value);
+
+const isJsonObject = (value: JsonValue): value is JsonObject =>
+  value !== null && !Array.isArray(value) && value === Object(value);
+
+/**
+ * Carry an .oxlintrc.json's settings over into the regenerated config: its
+ * rules, overrides, plugins and the like become root properties, its
+ * ignorePatterns, jsPlugins and settings are added to the ones Ultracite
+ * generates, and its Ultracite extends become presets. Returns the extends
+ * entries that can't be carried over (paths to other JSON configs).
+ */
+const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
+  const { extras, presets } = existing;
+  const unmigrated: string[] = [];
+  const presentKeys = new Set(
+    extras.properties.map((property) => property.text.split(":")[0]?.trim())
+  );
+
+  for (const [key, value] of Object.entries(rc)) {
+    if (key === "$schema") {
+      continue;
+    }
+
+    if (key === "extends" && isJsonArray(value)) {
+      for (const reference of value) {
+        const preset = toUltracitePreset(String(reference));
+        if (preset) {
+          presets.push(preset);
+        } else {
+          unmigrated.push(String(reference));
+        }
+      }
+    } else if (key === "ignorePatterns" && isJsonArray(value)) {
+      if (!extras.overrides.ignorePatterns && value.length > 0) {
+        extras.overrides.ignorePatterns = {
+          entry: renderSpreadArray(key, ["core.ignorePatterns"], value),
+        };
+      }
+    } else if (key === "jsPlugins" && isJsonArray(value)) {
+      extras.overrides.jsPlugins ??= {
+        build: ({ hoistedJsPlugins }) =>
+          renderSpreadArray(
+            key,
+            hoistedJsPlugins.map((identifier) => `${identifier}.jsPlugins`),
+            value
+          ),
+      };
+    } else if (key === "settings" && isJsonObject(value)) {
+      extras.overrides.settings ??= {
+        build: ({ hasJsPluginSettings }) =>
+          renderSpreadObject(
+            key,
+            hasJsPluginSettings ? ["jsPluginSettings"] : [],
+            value
+          ),
+      };
+    } else if (!presentKeys.has(key)) {
+      extras.properties.push(renderJsonProperty(key, value));
+    }
+  }
+
+  return unmigrated;
+};
+
+type OxlintRc =
+  | { config: JsonObject; kind: "config" }
+  | { kind: "invalid" }
+  | null;
+
+const readOxlintRc = async (): Promise<OxlintRc> => {
+  if (!exists(oxlintRcPath)) {
+    return null;
+  }
+
+  const config = parseJsoncStrict(
+    await readFile(oxlintRcPath, "utf-8"),
+    rcSchema
+  );
+
+  return config ? { config, kind: "config" } : { kind: "invalid" };
+};
+
+const readExistingOxlintConfig = async (): Promise<
+  | { existing: ExistingConfig; jsPlugins: OxlintJsPlugin[]; kind: "config" }
+  | { kind: "unparseable" }
+> => {
+  if (!exists(oxlintConfigPath)) {
+    return {
+      existing: { extras: emptyExtras(), presets: [] },
+      jsPlugins: [],
+      kind: "config",
+    };
+  }
+
+  const contents = await readFile(oxlintConfigPath, "utf-8");
+  const parsed = parseConfigModule(contents);
+
+  if (parsed.kind === "unparseable") {
+    return { kind: "unparseable" };
+  }
+
+  const existing =
+    parsed.kind === "module"
+      ? readExistingConfig(contents, parsed.module)
+      : null;
+
+  if (!existing) {
+    log.warn(
+      `${oxlintConfigFile} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
+    );
+  }
+
+  return {
+    existing: existing ?? {
+      extras: emptyExtras(),
+      presets: findPresetReferences(contents),
+    },
+    jsPlugins: parseExistingJsPlugins(contents),
+    kind: "config",
+  };
+};
+
 export const oxlint = {
   create: async (opts?: OxlintOptions) => {
     const extendsList = [getOxlintConfigPath("core")];
@@ -259,72 +688,48 @@ export const oxlint = {
       generateConfigContent(extendsList, opts?.jsPlugins)
     );
   },
-  exists: () => exists(oxlintConfigPath),
+  exists: () => exists(oxlintConfigPath) || exists(oxlintRcPath),
   update: async (opts?: OxlintOptions) => {
-    const existingContents = await readFile(oxlintConfigPath, "utf-8");
+    const rc = await readOxlintRc();
 
-    // Extract import paths from existing config (supports both string extends and JS imports)
-    const existingExtends: string[] = [];
-
-    // Check for JS imports: import x from "ultracite/oxlint/..." — a default
-    // import, optionally alongside named imports (import x, { y } from ...).
-    // Named-only imports (import { selectJsPlugins } from ...) are not
-    // extends and are deliberately skipped.
-    const importMatches = existingContents.matchAll(
-      /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
-    );
-    for (const match of importMatches) {
-      if (match[1].startsWith("ultracite/oxlint/")) {
-        existingExtends.push(match[1].replace(/\/index\.[tj]s$/u, ""));
-      }
-    }
-
-    // Fallback: check for string extends (legacy format)
-    if (existingExtends.length === 0) {
-      const extendsMatch = existingContents.match(
-        /extends:\s*\[(?<body>[\s\S]*?)\]/u
+    // Writing oxlint.config.ts next to an .oxlintrc.json that can't be
+    // migrated would leave Oxlint unable to load either.
+    if (rc?.kind === "invalid") {
+      log.warn(
+        `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${oxlintConfigFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
       );
-      if (extendsMatch?.[1]) {
-        const matches = extendsMatch[1].matchAll(/"(?<value>[^"]+)"/gu);
-        for (const match of matches) {
-          // Convert legacy node_modules paths to new format
-          const converted = match[1].replace(
-            /^\.\/node_modules\/ultracite\/config\/oxlint\//u,
-            "ultracite/oxlint/"
-          );
-          existingExtends.push(converted);
-        }
-      }
+      return;
     }
 
-    // Warn if the file looks like it has ultracite config but we couldn't parse it
-    if (
-      existingExtends.length === 0 &&
-      existingContents.includes("ultracite/oxlint")
-    ) {
-      console.warn(
-        "Warning: could not parse existing extends from oxlint.config.ts. The file will be regenerated."
+    const current = await readExistingOxlintConfig();
+
+    // A config that doesn't parse can't be carried over, and Oxlint can't
+    // load it either; leave it for the user to fix rather than discard it.
+    if (current.kind === "unparseable") {
+      log.warn(
+        `Could not parse ${oxlintConfigFile}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
+      return;
     }
+
+    const { existing } = current;
+    const unmigrated = rc ? mergeRcConfig(rc.config, existing) : [];
+    const newExtends = [...new Set(existing.presets)];
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
-      existingExtends.some((ext) => ext === getOxlintConfigPath(name));
-
-    const newExtends = [...existingExtends];
+      newExtends.includes(getOxlintConfigPath(name));
 
     // Add core config if not present
     if (!hasConfig("core")) {
-      newExtends.push(getOxlintConfigPath("core"));
+      newExtends.unshift(getOxlintConfigPath("core"));
     }
 
     // Add framework-specific configs if provided
-    if (opts?.frameworks && opts.frameworks.length > 0) {
-      for (const framework of opts.frameworks) {
-        const name = validateFrameworkName(framework);
-        if (!hasConfig(name)) {
-          newExtends.push(getOxlintConfigPath(name));
-        }
+    for (const framework of opts?.frameworks ?? []) {
+      const name = validateFrameworkName(framework);
+      if (!hasConfig(name)) {
+        newExtends.push(getOxlintConfigPath(name));
       }
     }
 
@@ -333,11 +738,24 @@ export const oxlint = {
     const jsPlugins =
       opts?.jsPlugins && opts.jsPlugins.length > 0
         ? opts.jsPlugins
-        : parseExistingJsPlugins(existingContents);
+        : current.jsPlugins;
 
     await writeProjectFile(
       oxlintConfigPath,
-      generateConfigContent(newExtends, jsPlugins)
+      generateConfigContent(newExtends, jsPlugins, existing.extras)
     );
+
+    if (rc) {
+      await rm(oxlintRcPath, { force: true });
+      log.info(
+        `Moved the settings from ${oxlintRcFile} into ${oxlintConfigFile} and removed ${oxlintRcFile}.`
+      );
+    }
+
+    if (unmigrated.length > 0) {
+      log.warn(
+        `${oxlintRcFile} extended ${unmigrated.join(", ")}, which ${oxlintConfigFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
+      );
+    }
   },
 };

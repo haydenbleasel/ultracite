@@ -27,6 +27,7 @@ import {
   validateInitializeFlags,
 } from "../src/initialize";
 import * as utils from "../src/utils";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const npmPm: PackageManager = { command: "npm", name: "npm" };
 
@@ -533,6 +534,7 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
+    restoreFileSystemMock();
     await initialize({ skipInstall: true });
 
     expect(mockMultiselect).toHaveBeenCalledWith(
@@ -2718,11 +2720,17 @@ describe("helper functions", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('{"extends": []}')),
+        readFile: mock(() =>
+          Promise.resolve(
+            'import { defineConfig } from "oxlint";\n\nexport default defineConfig({ extends: [] });\n'
+          )
+        ),
         writeFile: mockWriteFile,
       }));
+      mockFileSystem({ "./oxlint.config.ts": "" });
 
       mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
         spinner: mock(() => ({
           message: mock(noop),
           start: mock(noop),
@@ -2730,7 +2738,11 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertOxlintConfig();
+      try {
+        await upsertOxlintConfig();
+      } finally {
+        restoreFileSystemMock();
+      }
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });
@@ -3576,6 +3588,7 @@ describe("helper functions", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
+      restoreFileSystemMock();
       await initialize({
         pm: "npm",
         quiet: true,

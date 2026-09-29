@@ -134,3 +134,134 @@ describe("oxfmt", () => {
     });
   });
 });
+
+// A project whose files are given as path → contents; every other path is
+// missing. Returns the mocks that record what update wrote and removed.
+const mockOxfmtProject = (files: Record<string, string>) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  const rm = mock((_path: string) => Promise.resolve());
+  const warn = mock((_message: string) => {});
+  const has = (filePath: string) => String(filePath) in files;
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock((filePath: string) =>
+      has(filePath)
+        ? Promise.resolve(files[String(filePath)])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    rm,
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((filePath: string) => {
+      if (!has(filePath)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(() => false),
+    readFileSync: mock(() => "{}"),
+  }));
+  mock.module("@clack/prompts", () => ({
+    log: { error: mock(), info: mock(), success: mock(), warn },
+  }));
+
+  return { rm, warn, writeFile };
+};
+
+describe("oxfmt update keeps user content", () => {
+  test("carries over options and imports added to oxfmt.config.ts", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+import { printWidth } from "./shared-format.mjs";
+
+export default defineConfig({
+  ...ultracite,
+  // wider lines for this repo
+  printWidth,
+  ignorePatterns: [...ultracite.ignorePatterns, "fixtures/**"],
+});
+`,
+    });
+
+    await oxfmt.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { printWidth } from "./shared-format.mjs";'
+    );
+    expect(content).toContain(
+      "  ...ultracite,\n  // wider lines for this repo\n  printWidth,"
+    );
+    expect(content).toContain(
+      'ignorePatterns: [...ultracite.ignorePatterns, "fixtures/**"],'
+    );
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("migrates .oxfmtrc.json into oxfmt.config.ts and removes it", async () => {
+    const project = mockOxfmtProject({
+      "./.oxfmtrc.json": `{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": ["vendor/**"],
+  "semi": false
+}`,
+    });
+
+    expect(oxfmt.exists()).toBe(true);
+    await oxfmt.update();
+
+    const [[writtenPath, content]] = project.writeFile.mock.calls;
+    expect(writtenPath).toBe("./oxfmt.config.ts");
+    expect(content).toContain(
+      'ignorePatterns: [\n    ...ultracite.ignorePatterns,\n    "vendor/**",\n  ],'
+    );
+    expect(content).toContain("semi: false,");
+    expect(content).not.toContain("$schema");
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.oxfmtrc.json",
+    ]);
+  });
+
+  test("drops the empty ignorePatterns oxfmt --init writes", async () => {
+    const project = mockOxfmtProject({
+      "./.oxfmtrc.jsonc": '{ "ignorePatterns": [] }',
+      "./oxfmt.config.ts": `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+});
+`,
+    });
+
+    await oxfmt.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).not.toContain("ignorePatterns");
+    expect(project.rm).toHaveBeenCalled();
+  });
+
+  test("leaves everything unchanged when .oxfmtrc.json can't be parsed", async () => {
+    const project = mockOxfmtProject({ "./.oxfmtrc.json": '{ "semi": ' });
+
+    await oxfmt.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.rm).not.toHaveBeenCalled();
+    expect(project.warn).toHaveBeenCalled();
+  });
+
+  test("leaves an oxfmt.config.ts it can't parse unchanged", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": "export default defineConfig({",
+    });
+
+    await oxfmt.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn).toHaveBeenCalled();
+  });
+});

@@ -305,7 +305,13 @@ export const oxlintConfigNames = [
   ".oxlintrc.json",
   "oxlint.config.ts",
 ] as const;
-export const oxfmtConfigNames = ["oxfmt.config.ts"] as const;
+// Ultracite writes oxfmt.config.ts; the JSON forms are what `oxfmt --init`
+// creates, and oxfmt refuses to run when one sits next to the TS config.
+export const oxfmtConfigNames = [
+  "oxfmt.config.ts",
+  ".oxfmtrc.json",
+  ".oxfmtrc.jsonc",
+] as const;
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
 // meta-frameworks (e.g. Next.js implies React).
