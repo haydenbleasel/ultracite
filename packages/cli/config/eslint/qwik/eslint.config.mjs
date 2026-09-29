@@ -14,6 +14,15 @@ const config = [
       ...qwikRules,
     },
   },
+  {
+    // Reads TypeScript type information, which only the core preset's
+    // TypeScript block provides. On .jsx files it throws and aborts the
+    // whole ESLint run.
+    files: ["**/*.jsx"],
+    rules: {
+      "qwik/valid-lexical-scope": "off",
+    },
+  },
 ];
 
 export default config;

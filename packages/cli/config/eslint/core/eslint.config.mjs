@@ -124,21 +124,19 @@ const config = [
     },
   },
   {
-    files: ["**/*.cy.js"],
-    languageOptions: {
-      globals: {
-        ...globals.cypress,
-      },
-    },
-    plugins: {
-      cypress,
-    },
+    // Registers the plugin plus the cy, Cypress, Mocha and Chai globals that
+    // specs and support files use without importing them.
+    ...cypress.configs.globals,
+    files: [
+      "**/*.cy.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+      "**/cypress/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+    ],
     rules: {
       ...cypressRules,
     },
   },
   {
-    files: ["**/*.stories.js", "**/*.stories.ts"],
+    files: ["**/*.{stories,story}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
     plugins: {
       storybook,
     },
