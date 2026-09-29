@@ -29,11 +29,22 @@ This will create the relevant rule file(s) in your project directory.
 
 ### Manual Setup
 
-If you want to manually set things up, create the relevant file in your project directory. You can find the rule file location for each agent on their respective pages. Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/blob/main/packages/cli/src/data/rules.ts) into the file.
+If you want to manually set things up, create the rule file for your agent (see [Supported Agents](#supported-agents) below) in your project directory. Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/blob/main/packages/cli/src/data/rules.ts) into the file.
 
 ## Supported Agents
 
-Ultracite supports a wide range of AI coding assistants. Check the **Agents** section in the navigation bar for the full list of supported agents, including setup instructions and configuration details for each one.
+Each agent reads its rules from one file. Pass the ID to `--agents` to write that file:
+
+| File | Agents (`--agents` ID) |
+| --- | --- |
+| `AGENTS.md` | Codex (`codex`), Jules (`jules`), Devin (`devin`), Lovable (`lovable`), Zencoder (`zencoder`), Ona (`ona`), OpenClaw (`openclaw`), Continue (`continue`), Snowflake Cortex (`snowflake-cortex`), Deepagents (`deepagents`), Qoder (`qoder`), Kimi CLI (`kimi-cli`), MCPJam (`mcpjam`), Mux (`mux`), Pi (`pi`), AdaL (`adal`), GitHub Copilot (`copilot`), Cline (`cline`), AMP (`amp`), Firebase Studio (`firebase-studio`), OpenHands (`open-hands`), Junie (`junie`), Augment Code (`augmentcode`), IBM Bob (`bob`), Kilo Code (`kilo-code`), Goose (`goose`), Warp (`warp`), Droid (`droid`), OpenCode (`opencode`), Crush (`crush`), Qwen Code (`qwen`), Cursor CLI (`cursor-cli`), Mistral Vibe (`mistral-vibe`), Vercel Agent (`vercel`). Use `universal` to write it once for all of them. |
+| `.claude/CLAUDE.md` | Claude Code (`claude`) |
+| `GEMINI.md` | Gemini (`gemini`) |
+| `replit.md` | Replit Agent (`replit`) |
+| `.roo/rules/ultracite.md` | Roo Code (`roo-code`) |
+| `.amazonq/rules/ultracite.md` | Amazon Q CLI (`amazon-q-cli`) |
+| `.firebender/rules/ultracite.mdc` | Firebender (`firebender`) |
+| `ultracite.md` | Aider (`aider`) |
 
 ## Reusable Skills
 

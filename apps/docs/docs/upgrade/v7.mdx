@@ -46,15 +46,23 @@ npx ultracite init --linter oxlint
 
 ### For Biome Users (Default)
 
-Update your `biome.jsonc` to use the new preset paths:
+Update your `biome.jsonc` to use the new preset paths. A v6 config like this:
 
 ```jsonc title="biome.jsonc"
 {
-  // Before (v6)
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
+}
+```
 
-  // After (v7)
-  "extends": ["ultracite/biome/core", "ultracite/biome/react", "ultracite/biome/next"]
+becomes:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next",
+  ],
 }
 ```
 

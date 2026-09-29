@@ -5,6 +5,10 @@ description: Upgrade from Ultracite v5 to v6 and adopt the new preset system wit
 
 Ultracite v6 introduces framework-specific presets that give you more control over which rules apply to your project.
 
+:::note
+This guide uses the v6 preset paths (`ultracite/core`, `ultracite/react`, and so on). v7 moved them under `ultracite/biome/`, so if you're installing the current release, follow the [v7 upgrade guide](/docs/upgrade/v7) as well.
+:::
+
 ## What Changed
 
 v6 introduces [framework-specific presets](/docs/configuration#framework-presets):
@@ -43,24 +47,11 @@ Switch to the core preset if you're not using React:
 
 ### Other Frameworks
 
-Use the appropriate preset for your framework:
+Pair `ultracite/core` with the preset for your framework: `ultracite/solid`, `ultracite/vue`, `ultracite/svelte`, `ultracite/qwik`, or `ultracite/angular`. For example, a Vue project:
 
 ```jsonc title="biome.jsonc"
 {
-  // Solid.js
-  "extends": ["ultracite/core", "ultracite/solid"]
-
-  // Vue.js
-  "extends": ["ultracite/core", "ultracite/vue"]
-
-  // Svelte
-  "extends": ["ultracite/core", "ultracite/svelte"]
-
-  // Qwik
-  "extends": ["ultracite/core", "ultracite/qwik"]
-
-  // Angular
-  "extends": ["ultracite/core", "ultracite/angular"]
+  "extends": ["ultracite/core", "ultracite/vue"],
 }
 ```
 
