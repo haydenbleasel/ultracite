@@ -33,21 +33,22 @@ npx ultracite init
 
 This will:
 
-- Prompt you to choose a linting provider (Biome, ESLint, or Oxlint)
+- Prompt you to choose a linting provider (Oxlint, Biome, or ESLint)
 - Install Ultracite and the necessary dependencies
-- Create or merge your linter configuration with Ultracite's preset
-- Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
+- Create your linter configuration from Ultracite's presets (see below for what happens to your existing config)
+- Add `check` and `fix` scripts to `package.json` (an existing `check` or `fix` script that doesn't run Ultracite is kept, with a warning)
+- Update your `.vscode/settings.json` in place, keeping your settings and comments (if you set up a VS Code-based editor)
+- Enable `strictNullChecks` in your `tsconfig.json` files, unless it's already on (directly or through `extends`) or explicitly set to `false`, which init leaves alone with a warning
 - Set up editor integrations
 
-If you switch to Biome or Oxlint (which have built-in formatters), Ultracite automatically removes the existing Prettier configuration. This will:
+If you switch to Biome or Oxlint (which have built-in formatters), Ultracite automatically removes the existing Prettier setup. This will:
 
-- Remove Prettier and any related dependencies
-- Remove any Prettier configuration files
+- Remove the ESLint, Prettier, and Stylelint packages Ultracite installs from `devDependencies` (anything in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, are left alone)
+- Remove any ESLint, Prettier, and Stylelint configuration files (including legacy `.eslintrc*` files) and the `"prettier"` and `"stylelint"` keys in `package.json`
 
-If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new toolchain.
+Your `.vscode/settings.json` is merged rather than replaced, so settings for your previous tools (such as a default formatter) may remain; remove any that conflict with the new toolchain.
 
-If you choose ESLint as your provider, Ultracite will configure Prettier alongside ESLint using Ultracite's preset.
+If you choose ESLint as your provider, Ultracite configures Prettier alongside ESLint with a config that builds on Ultracite's Prettier preset. An ES module config is updated in place; a JSON, YAML, TOML, or CommonJS config, or a `"prettier"` key in `package.json`, is replaced by `prettier.config.mjs`. A config that doesn't use Ultracite's preset yet has its options replaced, and a warning names the file, so re-add anything you need. Once it spreads `ultracite/prettier`, re-running init keeps your own options and plugins. A config init can't parse is left unchanged with a warning.
 
 ### Option 2: Manual Migration
 

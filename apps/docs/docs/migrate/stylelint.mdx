@@ -33,21 +33,22 @@ npx ultracite init
 
 This will:
 
-- Prompt you to choose a linting provider (Biome, ESLint, or Oxlint)
+- Prompt you to choose a linting provider (Oxlint, Biome, or ESLint)
 - Install Ultracite and the necessary dependencies
-- Create or merge your linter configuration with Ultracite's preset
-- Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
+- Create your linter configuration from Ultracite's presets (see below for what happens to your existing config)
+- Add `check` and `fix` scripts to `package.json` (an existing `check` or `fix` script that doesn't run Ultracite is kept, with a warning)
+- Update your `.vscode/settings.json` in place, keeping your settings and comments (if you set up a VS Code-based editor)
+- Enable `strictNullChecks` in your `tsconfig.json` files, unless it's already on (directly or through `extends`) or explicitly set to `false`, which init leaves alone with a warning
 - Set up editor integrations
 
 If you switch to Biome or Oxlint, Ultracite automatically removes the existing Stylelint configuration. Biome lints CSS itself, but Oxlint doesn't lint CSS at all (Oxfmt only formats it), so pick Biome or ESLint + Prettier + Stylelint if you still need CSS linting. Switching will:
 
-- Remove Stylelint and any related dependencies
-- Remove any Stylelint configuration files
+- Remove the ESLint, Prettier, and Stylelint packages Ultracite installs from `devDependencies` (anything in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, are left alone)
+- Remove any ESLint, Prettier, and Stylelint configuration files (including legacy `.eslintrc*` files) and the `"prettier"` and `"stylelint"` keys in `package.json`
 
-If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new toolchain.
+Your `.vscode/settings.json` is merged rather than replaced, so settings for your previous tools (such as a default formatter) may remain; remove any that conflict with the new toolchain.
 
-If you choose ESLint as your provider, Ultracite will configure Stylelint alongside ESLint using Ultracite's preset.
+If you choose ESLint as your provider, Ultracite configures Stylelint alongside ESLint with a `stylelint.config.mjs` that re-exports Ultracite's config. An existing config that doesn't reference `ultracite/stylelint` is replaced (JSON, YAML, and CommonJS configs, and a `"stylelint"` key in `package.json`, move to `stylelint.config.mjs`), and a warning names the file so you can re-add your own rules. A config that already references `ultracite/stylelint`, for example one that extends it and adds rules, is left as it is.
 
 ### Option 2: Manual Migration
 

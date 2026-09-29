@@ -92,7 +92,7 @@ If you'd like to switch to the fastest option:
 npx ultracite init --linter oxlint
 ```
 
-This will create `oxlint.config.ts` and `oxfmt.config.ts` files:
+This will create `oxlint.config.ts` and `oxfmt.config.ts` files (`.mts` if your `package.json` doesn't set `"type": "module"`):
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";

@@ -23,7 +23,7 @@ It depends on the provider. With the default Oxlint + Oxfmt, Oxlint lints JavaSc
 
 ## Q: How often is Ultracite updated?
 
-Ultracite is updated as needed, often following the release cycles of Oxlint, Oxfmt, and Biome. Since those tools add rules frequently, you might see frequent minor releases to Ultracite. These updates can bring new rules, bug fixes, or adjustments to defaults. Given it's pinned via `-E`, you won't get surprise updates unless you choose to upgrade.
+Ultracite is updated as needed, often following the release cycles of Oxlint, Oxfmt, and Biome. Since those tools add rules frequently, you might see frequent minor releases to Ultracite. These updates can bring new rules, bug fixes, or adjustments to defaults. `init` doesn't pin Ultracite to an exact version, so `package.json` typically records a `^x.y.z` range. Your lockfile keeps installs reproducible, and you pick up new releases when you update dependencies or run `npx ultracite upgrade`.
 
 It's a good idea to watch the Ultracite repo for releases or check the [Releases](https://github.com/haydenbleasel/ultracite/releases) page. When updating Ultracite, read the release notes: occasionally a new rule is enabled that could surface new warnings in your project (which is a good thing for catching issues, but you should be aware of it).
 
@@ -33,7 +33,7 @@ Each release is verified against specific linter versions, and release notes sta
 
 You have a few options:
 
-- Configure it off or to a different level in your linter config (`oxlint.config.ts`, `biome.jsonc`, or `eslint.config.mjs`) as a quick fix for your project. See [Configuration](/docs/configuration#overriding-rules).
+- Configure it off or to a different level in your linter config (`oxlint.config.ts` or `.mts`, `biome.jsonc`, or `eslint.config.mjs`) as a quick fix for your project. See [Configuration](/docs/configuration#overriding-rules).
 - Open a [discussion](https://github.com/haydenbleasel/ultracite/discussions/) on the GitHub repo if the rule should be adjusted for everyone. The maintainers might agree it's too strict or could be optional.
 - If it's a stylistic thing, remember the goal of Ultracite is to have convention over configuration: sometimes it's worth adapting to the tool's style for consistency across projects. But of course, your project's needs come first.
 
@@ -69,7 +69,7 @@ Understanding the underlying tool can help you better understand Ultracite's cap
 
 ## Q: How do I disable Ultracite for a specific project or file?
 
-If you have a project where you temporarily don't want Ultracite, remove the Ultracite presets from your linter config (the `ultracite/...` imports in `oxlint.config.ts` and `oxfmt.config.ts`, the `extends` entries in `biome.jsonc`, or the imports in `eslint.config.mjs`), or remove the config files. If your editor's linter extension is installed, it may still format on save using the tool's defaults; to fully disable it, turn off `formatOnSave` or disable the extension for that workspace.
+If you have a project where you temporarily don't want Ultracite, remove the Ultracite presets from your linter config (the `ultracite/...` imports in `oxlint.config.ts` and `oxfmt.config.ts`, or their `.mts` versions, the `extends` entries in `biome.jsonc`, or the imports in `eslint.config.mjs`), or remove the config files. If your editor's linter extension is installed, it may still format on save using the tool's defaults; to fully disable it, turn off `formatOnSave` or disable the extension for that workspace.
 
 For a specific file, use your linter's ignore comments (`// oxlint-disable`, `// biome-ignore`, or `/* eslint-disable */`) or add the file to its ignore patterns (`ignorePatterns` for Oxlint and Oxfmt, `files.includes` for Biome, `ignores` for ESLint). Essentially, Ultracite is opt-in per project via the config: if it's not configured, it won't run.
 

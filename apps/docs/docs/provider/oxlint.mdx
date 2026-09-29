@@ -16,7 +16,7 @@ description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritiz
 
 ## Usage
 
-Ultracite generates two TypeScript config files for Oxlint:
+Ultracite generates two TypeScript config files for Oxlint. They're named `oxlint.config.ts` and `oxfmt.config.ts` in an ES module package (`"type": "module"` in `package.json`) and `oxlint.config.mts` and `oxfmt.config.mts` otherwise, because Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`. The examples on this page use `.ts`:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
