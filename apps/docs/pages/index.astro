@@ -16,12 +16,12 @@ import Social from "../components/home/social.astro";
 import Sponsors from "../components/home/sponsors.astro";
 import Videos from "../components/home/videos.astro";
 import ZeroConfig from "../components/home/zero-config.astro";
-import { getLatestVersion } from "../lib/latest-version";
+import { latestVersion } from "../lib/latest-version";
 
 const { config } = data;
-const version = await getLatestVersion();
-const siteDescription =
-  "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.";
+// blume.config.ts `description` is the single source for the homepage's meta
+// description and hero subtitle, llms.txt, and the docs pages' fallback.
+const siteDescription = config.description ?? "";
 ---
 
 <PageLayout
@@ -34,6 +34,8 @@ const siteDescription =
   navigation={data.navigation}
   ogEnabled={config.og.enabled}
   ogImage="/opengraph-image.png"
+  ogImageAlt="The Ultracite logo over a painted seascape"
+  ogImageSize={{ height: 630, width: 1200 }}
   page={{
     description: siteDescription,
     title: "Ultracite — Zero-Config Linting for Oxlint, Biome & ESLint",
@@ -42,12 +44,13 @@ const siteDescription =
   site={{ title: config.title, description: siteDescription }}
   siteUrl={config.site}
   themeMode={config.theme.mode}
+  x={config.x}
 >
   <div
     class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
   >
-    <Hero description={siteDescription} version={version}>
-      <Demo version={version} />
+    <Hero description={siteDescription} version={latestVersion}>
+      <Demo version={latestVersion} />
     </Hero>
     <Logos />
     <ZeroConfig />

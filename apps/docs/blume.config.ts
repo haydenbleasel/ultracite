@@ -34,7 +34,9 @@ export default defineConfig({
   // the sitemap and OG images.
   deployment: cloudflare({ site: "https://www.ultracite.ai" }),
 
-  description: "Documentation for Ultracite.",
+  // Also the homepage's meta description and hero subtitle (pages/index.astro).
+  description:
+    "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.",
 
   github: {
     dir: "apps/docs",
@@ -106,6 +108,11 @@ export default defineConfig({
     { from: "/integration/husky", to: "/docs/git-hooks" },
     { from: "/integration/lefthook", to: "/docs/git-hooks" },
   ],
+
+  seo: {
+    // twitter:site on every page; the footer's "Follow on X" account.
+    x: { handle: "haydenbleasel" },
+  },
 
   theme: {
     accent: "purple",
