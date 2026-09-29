@@ -4,6 +4,7 @@ import {
   getUltraciteSkillInstallCommand,
   maybeInstallUltraciteSkill,
 } from "../src/skill";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 // A dlxCommand that spells out its arguments, so the test sees exactly what
 // would be spawned whatever other suites mocked nypm with.
@@ -32,17 +33,55 @@ describe("maybeInstallUltraciteSkill", () => {
     // With piped stdio and no --yes, `skills add` cancels its own prompts
     // and exits without installing anything.
     const spawn = mockSpawn(0);
+    mockFileSystem({});
 
     const installed = await maybeInstallUltraciteSkill({
       packageManager: "npm",
       quiet: true,
       shouldInstall: true,
     });
+    restoreFileSystemMock();
 
     expect(installed).toBe(true);
+    // Naming the agents stops `--yes` from installing to "all agents" when
+    // it detects none, which wrote a stray top-level agent/ directory.
     expect(spawn).toHaveBeenCalledWith(
       "npx",
-      ["skills", "add", "haydenbleasel/ultracite", "--yes"],
+      [
+        "skills",
+        "add",
+        "haydenbleasel/ultracite",
+        "--yes",
+        "--agent",
+        "universal",
+      ],
+      { stdio: "pipe" }
+    );
+  });
+
+  test("also installs for agents whose project directory exists", async () => {
+    const spawn = mockSpawn(0);
+    mockFileSystem({ ".claude": "", ".windsurf": "" });
+
+    await maybeInstallUltraciteSkill({
+      packageManager: "npm",
+      quiet: true,
+      shouldInstall: true,
+    });
+    restoreFileSystemMock();
+
+    expect(spawn).toHaveBeenCalledWith(
+      "npx",
+      [
+        "skills",
+        "add",
+        "haydenbleasel/ultracite",
+        "--yes",
+        "--agent",
+        "universal",
+        "claude-code",
+        "windsurf",
+      ],
       { stdio: "pipe" }
     );
   });
