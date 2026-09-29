@@ -5,6 +5,7 @@ import router from "@tanstack/eslint-plugin-router";
 import start from "@tanstack/eslint-plugin-start";
 import reactDoctor from "eslint-plugin-react-doctor";
 
+import { ROUTE_FILE_GLOB } from "../../shared/route-filenames.mjs";
 import queryRules from "./rules/query.mjs";
 import reactDoctorRules from "./rules/react-doctor.mjs";
 import routerRules from "./rules/router.mjs";
@@ -50,7 +51,7 @@ const config = [
     },
   },
   {
-    files: ["**/routes/**/*.{js,jsx,ts,tsx}"],
+    files: [ROUTE_FILE_GLOB],
     rules: {
       // File routes are mutually recursive: `Route` references the component
       // via `component`, and the component calls `Route.useParams()` etc.

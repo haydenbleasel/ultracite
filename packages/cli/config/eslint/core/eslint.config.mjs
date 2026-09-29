@@ -18,6 +18,10 @@ import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
 import { ignorePatterns } from "../../shared/ignores.mjs";
+import {
+  PAGE_ROUTE_FILENAME_PATTERN,
+  ROUTE_FILE_GLOB,
+} from "../../shared/route-filenames.mjs";
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
@@ -169,6 +173,24 @@ const config = [
     ],
     rules: {
       "sonarjs/no-duplicate-string": "off",
+    },
+  },
+  {
+    // File-based routers encode the URL in route filenames (`__root.tsx`,
+    // `$.tsx`, `posts.$postId.tsx`, `+page.ts`), which the kebab-case regex
+    // cannot express. Mirrors the oxlint js-plugins preset (#799).
+    files: [ROUTE_FILE_GLOB],
+    rules: {
+      "github/filenames-match-regex": "off",
+    },
+  },
+  {
+    // Page routes (`[slug].ts`, `[...slug].ts`, `_app.tsx`) get a
+    // route-aware regex instead, so other names in `pages/` are still
+    // checked. Mirrors the oxlint js-plugins preset (#804).
+    files: ["**/pages/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+    rules: {
+      "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
     },
   },
 ];

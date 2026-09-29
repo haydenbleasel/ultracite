@@ -1,5 +1,10 @@
 import { defineConfig } from "oxlint";
 
+import {
+  PAGE_ROUTE_FILENAME_PATTERN,
+  ROUTE_FILE_GLOB,
+} from "../../shared/route-filenames.mjs";
+
 // eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
 // run through oxlint's JS plugin support to close the gap with the ESLint
 // preset and to add React Doctor's extra checks. This preset is opt-in: extend
@@ -65,12 +70,6 @@ export const jsPluginSettings = {
   },
 };
 
-// Filename grammar for file-based page routes: one or more kebab-case tokens
-// or bracketed route params (`[slug]`, `[...slug]`, `[[...slug]]`), followed
-// by at most one extra dotted segment (`rss.xml`, `[slug].json`).
-const PAGE_ROUTE_FILENAME_PATTERN =
-  "^(?:\\[\\[\\.\\.\\.[a-z0-9-]+\\]\\]|\\[(?:\\.\\.\\.)?[a-z0-9-]+\\]|[a-z0-9-]+)+(?:\\.[a-z0-9-]+)?$";
-
 const config = defineConfig({
   jsPlugins: jsPluginEntries,
   // Inert until oxlint merges settings from extends; the root config applies
@@ -89,11 +88,12 @@ const config = defineConfig({
       },
     },
     {
-      files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      files: [ROUTE_FILE_GLOB],
       rules: {
-        // File-based routers (TanStack Router, React Router) encode routing
-        // in the filename: `__root.tsx`, `$.tsx`, `posts.$postId.tsx`,
-        // `_layout.tsx`, `{-$slug}.tsx`. The GitHub kebab-case regex cannot
+        // File-based routers (TanStack Router, React Router, SvelteKit)
+        // encode routing in the filename: `__root.tsx`, `$.tsx`,
+        // `posts.$postId.tsx`, `_layout.tsx`, `{-$slug}.tsx`, `+page.ts`.
+        // The GitHub kebab-case regex cannot
         // express that grammar, and the tanstack preset already exempts these
         // globs from unicorn/filename-case for the same reason (#799). This
         // lives here rather than in tanstack/js-plugins because selectJsPlugins
@@ -109,10 +109,11 @@ const config = defineConfig({
         // Astro and Next.js (pages router) encode dynamic, rest and optional
         // route parameters in bracketed page filenames: `[slug].astro`,
         // `[...slug].astro`, `[[...slug]].tsx`, `[lang]-[version].astro`
-        // (#804). Rather than switching the rule off, pass a bracket-aware
-        // regex so non-route names in `pages/` (`BadPage.ts`) are still
-        // rejected. Like the default, one extra dotted segment is allowed for
-        // endpoints such as `rss.xml.ts` and `[slug].json.ts`.
+        // (#804), and Next.js requires `_app`, `_document` and `_error`.
+        // Rather than switching the rule off, pass a route-aware regex so
+        // non-route names in `pages/` (`BadPage.ts`) are still rejected. Like
+        // the default, one extra dotted segment is allowed for endpoints such
+        // as `rss.xml.ts` and `[slug].json.ts`.
         "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
       },
     },

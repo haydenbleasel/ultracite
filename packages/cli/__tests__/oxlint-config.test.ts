@@ -458,8 +458,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -471,8 +470,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
@@ -577,8 +575,7 @@ describe("oxlint js-plugins config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -627,10 +624,21 @@ describe("oxlint js-plugins config", () => {
       "rss.xml",
       "index",
       "404",
+      "_app",
+      "_document",
+      "_error",
     ]) {
       expect(regex.test(name), name).toBe(true);
     }
-    for (const name of ["BadPage", "[Slug]", "[slug", "a.b.c", "_app"]) {
+    for (const name of [
+      "BadPage",
+      "[Slug]",
+      "[slug",
+      "a.b.c",
+      "__app",
+      "_BadPage",
+      "[postId]",
+    ]) {
       expect(regex.test(name), name).toBe(false);
     }
   });
