@@ -116,7 +116,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ## When ${providerName} Can't Help
 
-${providerName}'s linter will catch most issues automatically. Focus your attention on:
+${providerName} will catch most mechanical issues automatically. Focus your attention on:
 
 1. **Business logic correctness** - ${providerName} can't validate your algorithms
 2. **Meaningful naming** - Use descriptive names for functions, variables, and types

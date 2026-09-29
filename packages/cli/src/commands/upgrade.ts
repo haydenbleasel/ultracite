@@ -70,7 +70,7 @@ const resolvePackageManager = async (
     log.warn(warning);
   }
 
-  log.info(`Detected lockfile, using ${detected.name}`);
+  log.info(`Using ${detected.name} (detected from the project)`);
   return normalizePackageManager(detected);
 };
 

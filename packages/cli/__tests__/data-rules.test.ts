@@ -32,6 +32,15 @@ describe("rules content", () => {
     );
   });
 
+  test("reads naturally with a multi-tool provider name", () => {
+    const rules = getRules("npx ultracite", "Oxlint + Oxfmt");
+
+    expect(rules).not.toContain("Oxfmt's linter");
+    expect(rules).toContain(
+      "Oxlint + Oxfmt will catch most mechanical issues automatically."
+    );
+  });
+
   test("installable skill docs stay portable across repositories", () => {
     const skill = readFileSync(skillPath, "utf-8");
     const standards = readFileSync(standardsPath, "utf-8");

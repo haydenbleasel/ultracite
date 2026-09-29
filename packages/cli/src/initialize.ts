@@ -1038,7 +1038,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
 
       if (!quiet) {
-        log.info(`Detected lockfile, using ${detected.name}`);
+        log.info(`Using ${detected.name} (detected from the project)`);
       }
       pmInfo = normalizePackageManager(detected);
     }

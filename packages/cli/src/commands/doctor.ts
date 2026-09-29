@@ -105,7 +105,7 @@ const checkToolVersion = (
 
   if (!valid(version)) {
     return {
-      message: `${packageName} reports an unrecognised version (${version}); Ultracite ${packageJson.version} was verified against ${range}`,
+      message: `${packageName} reports an unrecognized version (${version}); Ultracite ${packageJson.version} was verified against ${range}`,
       name,
       status: "warn",
     };
@@ -707,7 +707,7 @@ export const doctor = (): void => {
 
   if (failCount > 0) {
     log.error(
-      "Some checks failed. Run 'ultracite upgrade' for version mismatches or 'ultracite init' for configuration issues."
+      "Some checks failed. Run `ultracite upgrade` for version mismatches or `ultracite init` for configuration issues."
     );
     outro(DOCTOR_COMPLETE);
     throw new Error(DOCTOR_FAILED);
@@ -715,7 +715,7 @@ export const doctor = (): void => {
 
   if (warnCount > 0) {
     log.warn(
-      "Some optional improvements available. Run 'ultracite init' to configure."
+      "Some checks have warnings. Run `ultracite init` to update the configuration."
     );
     outro(DOCTOR_COMPLETE);
     return;

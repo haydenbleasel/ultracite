@@ -9,6 +9,7 @@ import { DOCTOR_FAILED, doctor } from "./commands/doctor";
 import { fix } from "./commands/fix";
 import { upgrade } from "./commands/upgrade";
 import { UltraciteSetupError } from "./config-resolution";
+import { options } from "./data/options";
 import { hookTargets } from "./hook-input";
 import { initialize } from "./initialize";
 import {
@@ -16,6 +17,7 @@ import {
   extractHookFlag,
   splitLinterArgs,
 } from "./linter-args";
+import { supportedPackageManagers } from "./package-manager";
 import { LinterExitError } from "./run-command";
 
 type CommandWithRawArgs = Command & { rawArgs?: string[] };
@@ -50,8 +52,11 @@ program
 program
   .command("init")
   .description("Initialize Ultracite in the current directory")
-  .option("--pm <pm>", "Package manager to use")
-  .option("--linter <linter>", "Linter to use")
+  .option(
+    "--pm <pm>",
+    `Package manager to use (${supportedPackageManagers.join(", ")})`
+  )
+  .option("--linter <linter>", `Linter to use (${options.linters.join(", ")})`)
   .option(
     "--editors <editors...>",
     "Editors to configure (use universal for .vscode/settings.json)"
@@ -60,9 +65,18 @@ program
     "--agents <agents...>",
     "Agents to enable (use universal for AGENTS.md)"
   )
-  .option("--hooks <hooks...>", "Hooks to enable")
-  .option("--frameworks <frameworks...>", "Frameworks being used")
-  .option("--integrations <integrations...>", "Integrations to enable")
+  .option(
+    "--hooks <hooks...>",
+    `Agent hooks to enable (${options.hooks.join(", ")})`
+  )
+  .option(
+    "--frameworks <frameworks...>",
+    `Frameworks being used (${options.frameworks.join(", ")})`
+  )
+  .option(
+    "--integrations <integrations...>",
+    `Integrations to enable (${options.integrations.join(", ")})`
+  )
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
     "--js-plugins <plugins...>",
@@ -70,7 +84,7 @@ program
   )
   .option(
     "--type-aware",
-    "Enable type-aware linting (enables project/scanner rules)"
+    "Enable type-aware linting (Biome: adds the type-aware preset; Oxlint: installs oxlint-tsgolint)"
   )
   .option("--skip-install", "Skip installing dependencies")
   .option("--quiet", "Suppress interactive prompts")
