@@ -291,11 +291,12 @@ export const biomeConfigNames = [
   ".biome.jsonc",
 ] as const;
 
-// ESLint flat config file locations.
+// ESLint flat config file locations, in the order ESLint looks for them
+// (FLAT_CONFIG_FILENAMES in eslint/lib/config/config-loader.js).
 // https://eslint.org/docs/latest/use/configure/configuration-files
 export const eslintConfigNames = [
-  "eslint.config.mjs",
   "eslint.config.js",
+  "eslint.config.mjs",
   "eslint.config.cjs",
   "eslint.config.ts",
   "eslint.config.mts",
@@ -312,51 +313,47 @@ export const legacyEslintConfigNames = [
   ".eslintrc.yml",
 ] as const;
 
-// Prettier config file locations.
-// https://prettier.io/docs/en/configuration.html
+// Prettier config file locations, in the order Prettier searches a
+// directory (after the "prettier" key in package.json).
+// https://prettier.io/docs/configuration
 export const prettierConfigNames = [
-  // JS/TS configs (ESM)
-  ".prettierrc.mjs",
-  "prettier.config.mjs",
-  ".prettierrc.mts",
-  "prettier.config.mts",
-  // JS/TS configs (CJS)
-  ".prettierrc.cjs",
-  "prettier.config.cjs",
-  ".prettierrc.cts",
-  "prettier.config.cts",
-  // JS/TS configs (depends on package.json type)
+  ".prettierrc",
+  ".prettierrc.json",
+  ".prettierrc.yml",
+  ".prettierrc.yaml",
+  ".prettierrc.json5",
   ".prettierrc.js",
   "prettier.config.js",
   ".prettierrc.ts",
   "prettier.config.ts",
-  // JSON/YAML configs
-  ".prettierrc",
-  ".prettierrc.json",
-  ".prettierrc.json5",
-  ".prettierrc.yml",
-  ".prettierrc.yaml",
-  // TOML config
+  ".prettierrc.mjs",
+  "prettier.config.mjs",
+  ".prettierrc.mts",
+  "prettier.config.mts",
+  ".prettierrc.cjs",
+  "prettier.config.cjs",
+  ".prettierrc.cts",
+  "prettier.config.cts",
   ".prettierrc.toml",
 ] as const;
 
-// Stylelint config file locations.
+// Stylelint config file locations, in the order Stylelint (through
+// cosmiconfig) searches a directory, after the "stylelint" key in
+// package.json.
 // https://stylelint.io/user-guide/configure
 export const stylelintConfigNames = [
-  // JS configs (ESM)
-  ".stylelintrc.mjs",
-  "stylelint.config.mjs",
-  // JS configs (CJS)
-  ".stylelintrc.cjs",
-  "stylelint.config.cjs",
-  // JS configs (depends on package.json type)
-  ".stylelintrc.js",
-  "stylelint.config.js",
-  // JSON/YAML configs
   ".stylelintrc",
   ".stylelintrc.json",
-  ".stylelintrc.yml",
   ".stylelintrc.yaml",
+  ".stylelintrc.yml",
+  ".stylelintrc.js",
+  ".stylelintrc.ts",
+  ".stylelintrc.cjs",
+  ".stylelintrc.mjs",
+  "stylelint.config.js",
+  "stylelint.config.ts",
+  "stylelint.config.cjs",
+  "stylelint.config.mjs",
 ] as const;
 
 // Oxlint and oxfmt each load exactly one config per directory and refuse to

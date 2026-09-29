@@ -248,3 +248,19 @@ export default defineConfig([...core, { rules: { eqeqeq: "off" } }]);
     expect(project.warn).toHaveBeenCalled();
   });
 });
+
+describe("eslint config precedence", () => {
+  test("updates the config ESLint loads when several exist", async () => {
+    const config =
+      'import core from "ultracite/eslint/core";\n\nexport default [\n  ...core,\n];\n';
+    const project = mockProject({
+      "./eslint.config.js": config,
+      "./eslint.config.mjs": config,
+      "package.json": '{"type": "module"}',
+    });
+
+    await eslint.update();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./eslint.config.js");
+  });
+});

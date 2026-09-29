@@ -323,3 +323,19 @@ export default {
     expect(project.warn.mock.calls[0]?.[0]).toContain("Replaced .prettierrc");
   });
 });
+
+describe("prettier config precedence", () => {
+  test("replaces the .prettierrc.json Prettier loads before prettier.config.mjs", async () => {
+    const project = mockProject({
+      "./.prettierrc.json": '{ "semi": false }',
+      "./prettier.config.mjs":
+        'import config from "ultracite/prettier";\n\nexport default { ...config };\n',
+    });
+
+    await prettier.update();
+
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.prettierrc.json",
+    ]);
+  });
+});

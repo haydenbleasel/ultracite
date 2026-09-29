@@ -212,3 +212,19 @@ export default { ...ultracite, rules: { ...ultracite.rules, "color-named": null 
     );
   });
 });
+
+describe("stylelint config precedence", () => {
+  test("replaces the .stylelintrc.json Stylelint loads before stylelint.config.mjs", async () => {
+    const project = mockProject({
+      "./.stylelintrc.json": '{ "extends": "stylelint-config-standard" }',
+      "./stylelint.config.mjs":
+        'export { default } from "ultracite/stylelint";\n',
+    });
+
+    await stylelint.update();
+
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.stylelintrc.json",
+    ]);
+  });
+});
