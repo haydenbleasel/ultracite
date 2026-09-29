@@ -1,14 +1,14 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import remix from "eslint-plugin-remix";
+import remixPlugin from "eslint-plugin-remix";
 
 import remixRules from "./rules/remix.mjs";
 
-const config = [
+const remix = [
   {
     files: ["**/*.jsx", "**/*.tsx"],
     plugins: {
-      remix,
+      remix: remixPlugin,
     },
     rules: {
       ...remixRules,
@@ -16,4 +16,4 @@ const config = [
   },
 ];
 
-export default config;
+export default remix;

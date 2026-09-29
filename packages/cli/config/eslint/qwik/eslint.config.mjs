@@ -1,14 +1,14 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import qwik from "eslint-plugin-qwik";
+import qwikPlugin from "eslint-plugin-qwik";
 
 import qwikRules from "./rules/qwik.mjs";
 
-const config = [
+const qwik = [
   {
     files: ["**/*.jsx", "**/*.tsx"],
     plugins: {
-      qwik,
+      qwik: qwikPlugin,
     },
     rules: {
       ...qwikRules,
@@ -25,4 +25,4 @@ const config = [
   },
 ];
 
-export default config;
+export default qwik;

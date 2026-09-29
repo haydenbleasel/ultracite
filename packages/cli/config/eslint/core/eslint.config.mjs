@@ -38,7 +38,7 @@ import typescriptRules from "./rules/typescript.mjs";
 import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
-const config = [
+const core = [
   importX.flatConfigs.typescript,
   {
     ignores: ignorePatterns,
@@ -195,4 +195,4 @@ const config = [
   },
 ];
 
-export default config;
+export default core;

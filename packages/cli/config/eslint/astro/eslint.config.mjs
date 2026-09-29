@@ -7,7 +7,7 @@ import { configs } from "eslint-plugin-astro";
 
 import astroRules from "./rules/astro.mjs";
 
-const config = [
+const astro = [
   // The plugin's base config registers astro-eslint-parser (from the
   // plugin's own dependencies) and the processor that extracts client-side
   // <script> tags.
@@ -48,4 +48,4 @@ const config = [
   },
 ];
 
-export default config;
+export default astro;

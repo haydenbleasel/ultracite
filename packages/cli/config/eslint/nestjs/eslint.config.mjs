@@ -4,7 +4,7 @@ import { plugin as nestjsTyped } from "@darraghor/eslint-plugin-nestjs-typed";
 
 import nestjsRules from "./rules/nestjs.mjs";
 
-const config = [
+const nestjs = [
   {
     files: ["**/*.ts"],
     plugins: {
@@ -16,4 +16,4 @@ const config = [
   },
 ];
 
-export default config;
+export default nestjs;

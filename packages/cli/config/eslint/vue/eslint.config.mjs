@@ -3,7 +3,7 @@
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import eslintPrettier from "eslint-config-prettier";
-import vue from "eslint-plugin-vue";
+import vuePlugin from "eslint-plugin-vue";
 
 import vueRules from "./rules/vue.mjs";
 
@@ -14,10 +14,10 @@ const vuePrettierOverrides = Object.fromEntries(
   Object.entries(eslintPrettier.rules).filter(([key]) => key.startsWith("vue/"))
 );
 
-const config = [
+const vue = [
   // The plugin's base config registers vue-eslint-parser (from the plugin's
   // own dependencies) and the SFC processor for .vue files.
-  ...vue.configs["flat/base"],
+  ...vuePlugin.configs["flat/base"],
   {
     files: ["**/*.vue"],
     languageOptions: {
@@ -48,4 +48,4 @@ const config = [
   },
 ];
 
-export default config;
+export default vue;

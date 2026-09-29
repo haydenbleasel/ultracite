@@ -3,7 +3,7 @@
 import { createRequire } from "node:module";
 import path from "node:path";
 
-import jest from "eslint-plugin-jest";
+import jestPlugin from "eslint-plugin-jest";
 import globals from "globals";
 
 import jestRules from "./rules/jest.mjs";
@@ -29,7 +29,7 @@ const detectJestMajor = () => {
   }
 };
 
-const config = [
+const jest = [
   {
     // Vitest type-test files (*.test-d.ts, *.spec-d.ts) are intentionally
     // excluded — Jest has no typecheck mode, so its rules don't apply to them.
@@ -43,7 +43,7 @@ const config = [
       },
     },
     plugins: {
-      jest,
+      jest: jestPlugin,
     },
     rules: {
       ...jestRules,
@@ -60,4 +60,4 @@ const config = [
   },
 ];
 
-export default config;
+export default jest;

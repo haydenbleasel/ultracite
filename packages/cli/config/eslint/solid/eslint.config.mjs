@@ -1,14 +1,14 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import solid from "eslint-plugin-solid";
+import solidPlugin from "eslint-plugin-solid";
 
 import solidRules from "./rules/solid.mjs";
 
-const config = [
+const solid = [
   {
     files: ["**/*.jsx", "**/*.tsx"],
     plugins: {
-      solid,
+      solid: solidPlugin,
     },
     rules: {
       ...solidRules,
@@ -16,4 +16,4 @@ const config = [
   },
 ];
 
-export default config;
+export default solid;

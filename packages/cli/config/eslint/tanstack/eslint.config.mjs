@@ -11,7 +11,7 @@ import reactDoctorRules from "./rules/react-doctor.mjs";
 import routerRules from "./rules/router.mjs";
 import startRules from "./rules/start.mjs";
 
-const config = [
+const tanstack = [
   {
     // Query and router options are declared anywhere, including plain .ts
     // hooks and query-option modules, not only in components.
@@ -67,4 +67,4 @@ const config = [
   },
 ];
 
-export default config;
+export default tanstack;

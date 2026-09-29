@@ -1,14 +1,14 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import angular from "@angular-eslint/eslint-plugin";
+import angularPlugin from "@angular-eslint/eslint-plugin";
 
 import angularRules from "./rules/angular.mjs";
 
-const config = [
+const angular = [
   {
     files: ["**/*.ts"],
     plugins: {
-      "@angular-eslint": angular,
+      "@angular-eslint": angularPlugin,
     },
     rules: {
       ...angularRules,
@@ -16,4 +16,4 @@ const config = [
   },
 ];
 
-export default config;
+export default angular;

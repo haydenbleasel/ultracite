@@ -1,17 +1,17 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import vitest from "@vitest/eslint-plugin";
+import vitestPlugin from "@vitest/eslint-plugin";
 
 import vitestRules from "./rules/vitest.mjs";
 
-const config = [
+const vitest = [
   {
     files: [
       "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
       "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
     ],
     plugins: {
-      vitest,
+      vitest: vitestPlugin,
     },
     rules: {
       ...vitestRules,
@@ -31,4 +31,4 @@ const config = [
   },
 ];
 
-export default config;
+export default vitest;
