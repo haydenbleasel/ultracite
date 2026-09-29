@@ -31,7 +31,7 @@ If the versions already line up, the stale rule usually comes from your own over
 
 Ensure you removed or turned off your old configs. For example, if you have leftover `.eslintrc`, `.prettierrc`, or `biome.jsonc` files from a previous setup, VS Code extensions might still pick them up and cause duplicate diagnostics.
 
-It's recommended to remove those configs (or at least disable the corresponding extensions) when switching linters to avoid confusion. Let your chosen Ultracite toolchain take over as the sole linter/formatter.
+It's recommended to remove those configs (or at least disable the corresponding extensions) when switching linters to avoid confusion. Also check `.vscode/settings.json`: `init` merges its settings into the existing file, so a default formatter or code action from your previous linter can remain there. Let your chosen Ultracite toolchain take over as the sole linter/formatter.
 
 ## "Ultracite is throwing parse errors for files I don't want it to check."
 
