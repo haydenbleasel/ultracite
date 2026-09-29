@@ -24,7 +24,7 @@ const standardsPath = path.join(
 
 describe("rules content", () => {
   test("generated agent rules leave formatter details to the configured provider", () => {
-    const rules = getRules("npx", "Biome");
+    const rules = getRules("npx ultracite", "Biome");
 
     expect(rules).not.toContain("## Formatting");
     expect(rules).toContain(

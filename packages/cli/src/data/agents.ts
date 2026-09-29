@@ -5,6 +5,11 @@ export interface AgentConfig {
   appendMode?: boolean;
   header?: string;
   path: string;
+  /**
+   * A file an earlier version wrote the rules into by mistake, reset to
+   * `emptyContent` when it still holds exactly those rules.
+   */
+  supersedes?: { emptyContent: string; path: string };
 }
 
 export interface Agent {
@@ -22,7 +27,7 @@ export interface AgentSetupFacts {
   writeMode: "append" | "replace";
 }
 
-const defaultRulesRunner = "npx";
+const defaultRulesUltraciteCommand = "npx ultracite";
 const defaultRulesProviderName = "Biome";
 const defaultHookPackageManager = "npm";
 const defaultHookLinter = "biome";
@@ -61,7 +66,10 @@ export const getDefaultAgentHookCommand = () => {
 };
 
 export const getDefaultAgentRulesContent = (agent: Agent) => {
-  const rules = getRules(defaultRulesRunner, defaultRulesProviderName);
+  const rules = getRules(
+    defaultRulesUltraciteCommand,
+    defaultRulesProviderName
+  );
 
   return agent.config.header ? `${agent.config.header}\n\n${rules}` : rules;
 };
@@ -429,8 +437,15 @@ export const agents: Agent[] = [
     name: "Amazon Q CLI",
   },
   {
+    // Firebender reads project rules from `.firebender/rules/*.mdc`; the
+    // `rules` field of firebender.json is deprecated and must be JSON.
     config: {
-      path: "firebender.json",
+      header: `---
+description: Ultracite code standards for JavaScript and TypeScript
+alwaysApply: true
+---`,
+      path: ".firebender/rules/ultracite.mdc",
+      supersedes: { emptyContent: "{}\n", path: "firebender.json" },
     },
     id: "firebender",
     name: "Firebender",

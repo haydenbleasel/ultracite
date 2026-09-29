@@ -1,7 +1,13 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { MakeDirectoryOptions } from "node:fs";
 
-import { createAgents, getAgentFileTargets } from "../src/agents";
+import {
+  createAgents,
+  getAgentFileTargets,
+  replaceRulesBlock,
+} from "../src/agents";
+import { getRules } from "../src/data/rules";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 mock.module("node:fs/promises", () => ({
   access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
@@ -10,18 +16,34 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock((_path: string, _content: string) => Promise.resolve()),
 }));
 
-mock.module("nypm", () => ({
-  detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
-  dlxCommand: mock((pm: string, pkg: string) => {
-    const prefixMap = new Map([
-      ["bun", "bunx"],
-      ["pnpm", "pnpm dlx"],
-      ["yarn", "yarn dlx"],
-    ]);
-    const prefix = prefixMap.get(pm) ?? "npx";
-    return pkg ? `${prefix} ${pkg}` : prefix;
-  }),
-}));
+// A project whose files are exactly `files`; returns what gets written.
+const mockProject = (files: Record<string, string>) => {
+  const written = new Map<string, string>();
+
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+    ),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock((path: string) =>
+      path in files
+        ? Promise.resolve(files[path])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    writeFile: mock((path: string, content: string) => {
+      written.set(path, content);
+      return Promise.resolve();
+    }),
+  }));
+  mockFileSystem(files);
+
+  return written;
+};
+
+const countHeaders = (text: string | undefined): number =>
+  (text ?? "")
+    .split(/\r?\n/u)
+    .filter((line) => line === "# Ultracite Code Standards").length;
 
 describe("createAgents", () => {
   // Note: We don't call mock.restore() here because it causes issues
@@ -305,5 +327,130 @@ describe("getAgentFileTargets", () => {
         representativeAgentId: "claude",
       })
     );
+  });
+});
+
+describe("rule file re-runs", () => {
+  test("replaces the block when the linter changes instead of adding one", async () => {
+    const written = mockProject({
+      "AGENTS.md": `# Team notes\n\n${getRules("npx ultracite", "Biome")}\n## Our own section\n\nKeep me.\n`,
+    });
+
+    await createAgents("codex", "npm", "oxlint").update();
+    restoreFileSystemMock();
+
+    const output = written.get("AGENTS.md");
+    expect(countHeaders(output)).toBe(1);
+    expect(output).toContain("# Team notes");
+    expect(output).toContain("fixed by Oxlint + Oxfmt.");
+    expect(output).not.toContain("fixed by Biome.");
+    expect(output).toContain("## Our own section\n\nKeep me.\n");
+  });
+
+  test("collapses duplicate blocks written by earlier versions", async () => {
+    const written = mockProject({
+      "AGENTS.md": [
+        "Intro",
+        getRules("npm exec -- ultracite", "Biome"),
+        getRules("npm exec -- ultracite", "Oxlint + Oxfmt"),
+        getRules("bun x ultracite", "Oxlint + Oxfmt"),
+      ].join("\n\n"),
+    });
+
+    await createAgents("codex", "bun", "oxlint").update();
+    restoreFileSystemMock();
+
+    const output = written.get("AGENTS.md") ?? "";
+    expect(countHeaders(output)).toBe(1);
+    expect(output.startsWith("Intro\n\n# Ultracite Code Standards")).toBe(true);
+    expect(output).toContain("`bunx ultracite fix`");
+  });
+
+  test("replaces the block of a CRLF file and keeps its line endings", async () => {
+    const rules = getRules("npx ultracite", "Biome").replaceAll("\n", "\r\n");
+    const written = mockProject({ "AGENTS.md": `Intro\r\n\r\n${rules}` });
+
+    await createAgents("codex", "yarn", "biome").update();
+    restoreFileSystemMock();
+
+    const output = written.get("AGENTS.md") ?? "";
+    expect(countHeaders(output)).toBe(1);
+    expect(output).toContain("`yarn ultracite fix`");
+    expect(output.replaceAll("\r\n", "")).not.toContain("\n");
+  });
+
+  test("leaves the file alone when the block is already current", async () => {
+    const written = mockProject({
+      "AGENTS.md": `Intro\n\n${getRules("npx ultracite", "Biome")}`,
+    });
+
+    await createAgents("codex", "npm", "biome").update();
+    restoreFileSystemMock();
+
+    expect(written.size).toBe(0);
+  });
+
+  test("replaceRulesBlock stops at the next heading when a block has no closing line", () => {
+    const replaced = replaceRulesBlock(
+      "# Ultracite Code Standards\n\nOld rules\n\n# Mine\n\nKeep\n",
+      "# Ultracite Code Standards\n\nNew rules\n"
+    );
+
+    expect(replaced).toBe(
+      "# Ultracite Code Standards\n\nNew rules\n\n# Mine\n\nKeep\n"
+    );
+  });
+
+  test.each([
+    ["deno", "`deno run -A npm:ultracite fix`"],
+    ["yarn", "`yarn ultracite fix`"],
+    ["pnpm", "`pnpm exec ultracite fix`"],
+  ] as const)(
+    "tells agents how to run the installed CLI with %s",
+    async (packageManager, expected) => {
+      const written = mockProject({});
+
+      await createAgents("codex", packageManager, "biome").create();
+      restoreFileSystemMock();
+
+      expect(written.get("AGENTS.md")).toContain(expected);
+    }
+  );
+});
+
+describe("firebender rules", () => {
+  test("writes an always-applied .mdc rule instead of Markdown in firebender.json", async () => {
+    const written = mockProject({});
+
+    await createAgents("firebender", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    const rule = written.get(".firebender/rules/ultracite.mdc") ?? "";
+    expect(rule.startsWith("---\n")).toBe(true);
+    expect(rule).toContain("alwaysApply: true");
+    expect(rule).toContain("# Ultracite Code Standards");
+    expect(written.has("firebender.json")).toBe(false);
+  });
+
+  test("resets a firebender.json that an earlier version filled with Markdown", async () => {
+    const written = mockProject({
+      "firebender.json": getRules("npx ultracite", "Biome"),
+    });
+
+    await createAgents("firebender", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    expect(written.get("firebender.json")).toBe("{}\n");
+  });
+
+  test("leaves a real firebender.json alone", async () => {
+    const written = mockProject({
+      "firebender.json": '{"rules":["Use Kotlin"]}',
+    });
+
+    await createAgents("firebender", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    expect(written.has("firebender.json")).toBe(false);
   });
 });

@@ -1,5 +1,9 @@
+/**
+ * The rules file for AI agents. `ultracite` is how the project runs its
+ * installed CLI, e.g. `npx ultracite` or `pnpm exec ultracite`.
+ */
 export const getRules = (
-  runner: string,
+  ultracite: string,
   providerName: string
 ) => `# Ultracite Code Standards
 
@@ -7,9 +11,9 @@ This project uses **Ultracite**, a zero-config preset that enforces strict code 
 
 ## Quick Reference
 
-- **Format code**: \`${runner} ultracite fix\`
-- **Check for issues**: \`${runner} ultracite check\`
-- **Diagnose setup**: \`${runner} ultracite doctor\`
+- **Format code**: \`${ultracite} fix\`
+- **Check for issues**: \`${ultracite} check\`
+- **Diagnose setup**: \`${ultracite} doctor\`
 
 ${providerName} (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
 
@@ -123,5 +127,5 @@ ${providerName}'s linter will catch most issues automatically. Focus your attent
 
 ---
 
-Most formatting and common issues are automatically fixed by ${providerName}. Run \`${runner} ultracite fix\` before committing to ensure compliance.
+Most formatting and common issues are automatically fixed by ${providerName}. Run \`${ultracite} fix\` before committing to ensure compliance.
 `;
