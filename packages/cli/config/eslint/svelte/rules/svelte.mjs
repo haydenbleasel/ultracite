@@ -20,6 +20,13 @@ const prettierOverrides = Object.fromEntries(
 );
 
 const overrideRules = {
+  // With no options the rule only allows blocks without a `lang` attribute,
+  // which rejects every `<script lang="ts">`. Allow TypeScript scripts and the
+  // style languages the Stylelint preset parses.
+  "svelte/block-lang": [
+    "error",
+    { script: [null, "ts"], style: [null, "less", "scss"] },
+  ],
   // Requires a user-supplied list of elements to restrict; its schema
   // rejects a bare "error" with no options.
   "svelte/no-restricted-html-elements": "off",

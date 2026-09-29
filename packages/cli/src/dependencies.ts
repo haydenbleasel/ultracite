@@ -127,6 +127,10 @@ export const eslintFrameworkDevDependencies = {
   },
   astro: {
     "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
+    // Loaded by the astro/jsx-a11y/* rules the Astro preset enables; without
+    // it every .astro file reports "you need to install eslint-plugin-jsx-a11y".
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "prettier-plugin-astro":
       packageJson.devDependencies["prettier-plugin-astro"],
   },
