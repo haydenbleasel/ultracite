@@ -220,6 +220,30 @@ describe("fix", () => {
     expect(() => fix([])).toThrow("No linter configuration found");
   });
 
+  test("drops --unsafe for ESLint, which has no unsafe fixes", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: 0,
+      })
+    );
+    const warn = mock((_message: string) => {});
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+    mock.module("@clack/prompts", () => ({
+      log: { error: mock(), info: mock(), success: mock(), warn },
+    }));
+
+    fix([], ["--unsafe", "--max-warnings", "0"]);
+
+    const eslintArgs = mockSpawn.mock.calls.find(
+      ([command]) => command === "eslint"
+    )?.[1];
+    expect(eslintArgs).toEqual(["--fix", "--max-warnings", "0", "."]);
+    expect(warn.mock.calls[0]?.[0]).toContain("--unsafe was ignored");
+  });
+
   test("runs eslint fix when linter is eslint (runs eslint, stylelint, prettier)", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({

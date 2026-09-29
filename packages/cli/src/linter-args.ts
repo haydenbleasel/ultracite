@@ -189,6 +189,106 @@ export const extractHookFlag = (passthrough: string[]) => ({
 const PATH_SEPARATOR_RE = /[\\/]/u;
 const FILE_EXTENSION_RE = /\.[a-z]{1,10}$/iu;
 
+// Linter flags that take a value, whose value often looks like a lint target
+// (a path, a glob, a `plugin/rule` name): `--tsconfig tsconfig.json`,
+// `--only lint/suspicious`, `-c .oxlintrc.json`. The token after one is
+// always its value.
+const valueFlags = new Set([
+  // Biome
+  "--config-path",
+  "--diagnostic-level",
+  "--files-max-size",
+  "--log-file",
+  "--log-kind",
+  "--log-level",
+  "--log-path",
+  "--max-diagnostics",
+  "--only",
+  "--reporter",
+  "--reporter-file",
+  "--since",
+  "--skip",
+  "--stdin-file-path",
+  "--vcs-root",
+  // ESLint
+  "-c",
+  "-f",
+  "-o",
+  "--cache-file",
+  "--cache-location",
+  "--cache-strategy",
+  "--concurrency",
+  "--config",
+  "--ext",
+  "--fix-type",
+  "--flag",
+  "--format",
+  "--global",
+  "--ignore-pattern",
+  "--max-warnings",
+  "--output-file",
+  "--parser",
+  "--parser-options",
+  "--plugin",
+  "--report-unused-disable-directives-severity",
+  "--report-unused-inline-configs",
+  "--rule",
+  "--stdin-filename",
+  "--suppress-rule",
+  "--suppressions-location",
+  // Oxlint
+  "-A",
+  "-D",
+  "-W",
+  "--allow",
+  "--deny",
+  "--ignore-path",
+  "--threads",
+  "--tsconfig",
+  "--warn",
+]);
+
+// Flags known to take no value, including Ultracite's own. The token after
+// one is never its value, so `fix --hook app` lints `app` even when `app`
+// doesn't exist yet.
+const booleanFlags = new Set([
+  "--cache",
+  "--changed",
+  "--claude",
+  "--codex",
+  "--deny-warnings",
+  "--disable-nested-config",
+  "--error-on-warnings",
+  "--fix",
+  "--fix-dangerously",
+  "--fix-suggestions",
+  "--hook",
+  "--quiet",
+  "--report-unused-disable-directives",
+  "--silent",
+  "--staged",
+  "--type-aware",
+  "--type-check",
+  "--unsafe",
+  "--verbose",
+  "--write",
+]);
+
+type FlagValue = "maybe" | "no" | "yes";
+
+const takesValue = (flag: string): FlagValue => {
+  // A flag with an inline `=value` already carries its value.
+  if (flag.includes("=")) {
+    return "no";
+  }
+
+  if (valueFlags.has(flag)) {
+    return "yes";
+  }
+
+  return booleanFlags.has(flag) || flag.startsWith("--no-") ? "no" : "maybe";
+};
+
 // A token that names a path, a glob, or an extensioned file is a lint
 // target even when it doesn't exist yet; anything else following a flag is
 // treated as that flag's value.
@@ -201,29 +301,30 @@ const looksLikeTarget = (arg: string, pathExists: PathExists): boolean =>
 const classifyArgs = (args: string[], pathExists: PathExists) => {
   const files: string[] = [];
   const passthrough: string[] = [];
-  let previousFlagMayTakeValue = false;
+  let previousFlag: FlagValue = "no";
 
   for (const arg of args) {
     if (arg.startsWith("-") && !pathExists(arg)) {
       passthrough.push(arg);
-      // A flag with an inline `=value` already carries its value; anything
-      // else may consume the next token as a space-separated value.
-      previousFlagMayTakeValue = !arg.includes("=");
+      previousFlag = takesValue(arg);
       continue;
     }
 
-    // A token right after a flag that doesn't look like a lint target is
-    // almost certainly the flag's value (e.g. `--max-warnings 0`) — keep it
-    // adjacent to its flag in the linter invocation instead of treating it
-    // as a target.
-    if (previousFlagMayTakeValue && !looksLikeTarget(arg, pathExists)) {
+    // The value of a known value flag stays with it, even when it looks
+    // like a target (`--tsconfig tsconfig.json`). After an unknown flag, a
+    // token that doesn't look like a lint target is almost certainly the
+    // flag's value (e.g. `--max-warnings 0`) — keep it adjacent to its flag
+    // in the linter invocation instead of treating it as a target.
+    const isValue =
+      previousFlag === "yes" ||
+      (previousFlag === "maybe" && !looksLikeTarget(arg, pathExists));
+    previousFlag = "no";
+
+    if (isValue) {
       passthrough.push(arg);
-      previousFlagMayTakeValue = false;
-      continue;
+    } else {
+      files.push(arg);
     }
-
-    previousFlagMayTakeValue = false;
-    files.push(arg);
   }
 
   return { files, passthrough };

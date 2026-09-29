@@ -1,10 +1,21 @@
+import { log } from "@clack/prompts";
+
 import {
   buildUnresolvableBiomeConfigMessage,
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
-import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
-import { exitOnCommandFailure, runSteps } from "../run-command";
+import {
+  normalizeFileArgs,
+  toOxlintTargets,
+  toStylelintTargets,
+} from "../linter-args";
+import {
+  exitOnCommandFailure,
+  NO_LINTER_CONFIG_MESSAGE,
+  runSteps,
+  STYLELINT_MISSING_MESSAGE,
+} from "../run-command";
 import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
 
@@ -41,8 +52,11 @@ const runEslintCheck = (files: string[], passthrough: string[]): void => {
 };
 
 const runPrettierCheck = (files: string[], passthrough: string[]): void => {
+  // An explicit file Prettier has no parser for (a Dockerfile, .env) is an
+  // error without --ignore-unknown, as it is for `fix`.
   const args = [
     "--check",
+    "--ignore-unknown",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
@@ -65,11 +79,25 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("stylelint", args, {
     stdio: "inherit",
   });
+
+  if (result.errorCode === "ENOENT") {
+    log.warn(STYLELINT_MISSING_MESSAGE);
+    return;
+  }
+
   exitOnCommandFailure("Stylelint", result);
 };
 
 const runOxlintCheck = (files: string[], passthrough: string[]): void => {
-  const args = [...passthrough, ...(files.length > 0 ? files : ["."])];
+  // Oxlint exits 1 on an explicit file it doesn't lint (a README, a
+  // Dockerfile), so those are dropped as they are for `fix`.
+  const targets = toOxlintTargets(files);
+
+  if (targets.length === 0) {
+    return;
+  }
+
+  const args = [...passthrough, ...targets];
 
   const result = spawnSync("oxlint", args, {
     stdio: "inherit",
@@ -78,8 +106,11 @@ const runOxlintCheck = (files: string[], passthrough: string[]): void => {
 };
 
 const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
+  // An explicit file oxfmt does not format is an error without
+  // --no-error-on-unmatched-pattern, as it is for `fix`.
   const args = [
     "--check",
+    "--no-error-on-unmatched-pattern",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
@@ -98,9 +129,7 @@ export const check = (
   const normalizedFiles = normalizeFileArgs(files);
 
   if (!linter) {
-    throw new Error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
+    throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);
   }
 
   switch (linter) {

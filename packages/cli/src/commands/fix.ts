@@ -1,3 +1,5 @@
+import { log } from "@clack/prompts";
+
 import { runAgentFix } from "../agent-fix";
 import {
   buildUnresolvableBiomeConfigMessage,
@@ -10,9 +12,29 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
-import { exitOnCommandFailure, runSteps } from "../run-command";
+import {
+  exitOnCommandFailure,
+  NO_LINTER_CONFIG_MESSAGE,
+  runSteps,
+  STYLELINT_MISSING_MESSAGE,
+} from "../run-command";
 import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
+
+const UNSAFE_FLAG = "--unsafe";
+
+// ESLint has no unsafe tier of fixes and rejects an unknown --unsafe flag, so
+// it's dropped rather than failing the whole run.
+const dropUnsupportedUnsafe = (passthrough: string[]): string[] => {
+  if (!passthrough.includes(UNSAFE_FLAG)) {
+    return passthrough;
+  }
+
+  log.warn(
+    "ESLint has no unsafe fixes, so --unsafe was ignored. It applies Biome's unsafe fixes and Oxlint's dangerous fixes."
+  );
+  return passthrough.filter((arg) => arg !== UNSAFE_FLAG);
+};
 
 const runBiomeFix = (files: string[], passthrough: string[]): void => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
@@ -75,6 +97,12 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("stylelint", args, {
     stdio: "inherit",
   });
+
+  if (result.errorCode === "ENOENT") {
+    log.warn(STYLELINT_MISSING_MESSAGE);
+    return;
+  }
+
   exitOnCommandFailure("Stylelint", result);
 };
 
@@ -86,8 +114,8 @@ const runOxlintFix = (files: string[], passthrough: string[]): void => {
   }
 
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
-  const hasUnsafe = passthrough.includes("--unsafe");
-  const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
+  const hasUnsafe = passthrough.includes(UNSAFE_FLAG);
+  const filteredPassthrough = passthrough.filter((arg) => arg !== UNSAFE_FLAG);
 
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
@@ -125,17 +153,18 @@ interface FixOptions {
 // mode returns a promise. The command action awaits either shape.
 export const fix = (
   files: string[],
-  passthrough: string[] = [],
+  linterArgs: string[] = [],
   { agent }: FixOptions = {}
 ): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
 
   if (!linter) {
-    throw new Error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
+    throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);
   }
+
+  const passthrough =
+    linter === "eslint" ? dropUnsupportedUnsafe(linterArgs) : linterArgs;
 
   if (agent) {
     return runAgentFix({

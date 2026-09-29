@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import path from "node:path";
 import process from "node:process";
 
 // Other test files mock ../src/spawn-sync globally, so the real
@@ -38,6 +39,32 @@ describe("spawnSync", () => {
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.status).toBeNull();
+  });
+
+  test("reports ENOENT for a missing command on POSIX", () => {
+    const result = spawnSync("definitely-not-a-real-command", []);
+
+    expect(result.errorCode).toBe(
+      process.platform === "win32" ? undefined : "ENOENT"
+    );
+  });
+
+  // Running `./node_modules/.bin/ultracite check` directly (or from a global
+  // install) doesn't put the project's .bin on PATH; the linters must still
+  // be found there.
+  test("finds binaries in the project's node_modules/.bin without PATH", () => {
+    const originalPath = process.env.PATH;
+    // Keep only the directory Node lives in: the bin shims run through it.
+    process.env.PATH = path.dirname(Bun.which("node") ?? node);
+
+    try {
+      const result = spawnSync("oxlint", ["--version"]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.status).toBe(0);
+    } finally {
+      process.env.PATH = originalPath;
+    }
   });
 
   test("maps process termination according to the host platform", () => {
