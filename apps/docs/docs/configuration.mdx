@@ -46,7 +46,7 @@ You can also enable this at setup time with `npx ultracite init --type-aware`. F
 
 ## Safe Fixes (Biome)
 
-Most Ultracite rules only report errors — they don't automatically modify your code. However, a few rules in the Biome preset are configured with `"fix": "safe"`, meaning they will auto-fix when you run `ultracite fix`. These fixes are non-breaking and safe to apply automatically:
+With Biome, `ultracite fix` runs `biome check --write`, which applies every rule's safe fixes. Fixes that Biome marks as unsafe, because they can change behavior, only run with `ultracite fix --unsafe`. The Biome preset sets `"fix": "safe"` on a few rules whose fixes Biome marks unsafe by default, so plain `ultracite fix` applies them too. These fixes are non-breaking in practice:
 
 | Rule                 | Description                                           |
 | -------------------- | ----------------------------------------------------- |
@@ -54,7 +54,7 @@ Most Ultracite rules only report errors — they don't automatically modify your
 | `useBlockStatements` | Wraps single-line control flow bodies in curly braces |
 | `useSortedClasses`   | Sorts Tailwind CSS classes into a consistent order    |
 
-If you want to disable auto-fixing for any of these, override the rule in your config and remove the `fix` property.
+To stop `ultracite fix` applying one of these, override the rule in your config without the `fix` property (its fix goes back to Biome's default and only runs with `--unsafe`), or set `"fix": "none"` to turn the fix off entirely.
 
 ## Overriding Rules
 
