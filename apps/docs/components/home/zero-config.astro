@@ -115,25 +115,39 @@ const logos = [
 </div>
 
 <script>
-  const panels = document.querySelectorAll<HTMLElement>("[data-hp-panel]");
-  const providerButtons =
-    document.querySelectorAll<HTMLButtonElement>(".hp-provider");
-
   const showProvider = (id: string) => {
-    for (const button of providerButtons) {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      ".hp-provider",
+    )) {
       button.setAttribute(
         "aria-selected",
         String(button.dataset.provider === id),
       );
     }
-    for (const panel of panels) {
+    for (const panel of document.querySelectorAll<HTMLElement>(
+      "[data-hp-panel]",
+    )) {
       panel.hidden = panel.dataset.hpPanel !== id;
     }
   };
 
-  for (const button of providerButtons) {
-    button.addEventListener("click", () =>
-      showProvider(button.dataset.provider ?? ""),
-    );
-  }
+  // Runs now and on every `astro:page-load`: the client router executes this
+  // module once, so a homepage swapped back in after a navigation would
+  // otherwise get buttons with no listeners. `hpBound` prevents double binding.
+  const init = () => {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      ".hp-provider",
+    )) {
+      if (button.dataset.hpBound) {
+        continue;
+      }
+      button.dataset.hpBound = "true";
+      button.addEventListener("click", () =>
+        showProvider(button.dataset.provider ?? ""),
+      );
+    }
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
 </script>

@@ -68,15 +68,23 @@ const {
 <script>
   const ACTIVE = ["bg-background", "text-foreground", "shadow-sm"];
 
-  for (const el of document.querySelectorAll<HTMLElement>(".hp-installer")) {
+  // Blume's layouts use Astro's client router, which runs this module once per
+  // session and never again after a navigation swaps the homepage back in. So
+  // setup runs now (interactive before `load`) and again on every
+  // `astro:page-load`; the `hpBound` flag keeps it from binding twice.
+  const setupInstaller = (el: HTMLElement) => {
+    if (el.dataset.hpBound) {
+      return;
+    }
     const input = el.querySelector<HTMLInputElement>(".hp-cmd");
     const modes = el.querySelectorAll<HTMLButtonElement>(".hp-mode");
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
     if (!(input && copyBtn && copyIcon && checkIcon)) {
-      continue;
+      return;
     }
+    el.dataset.hpBound = "true";
 
     const commands = {
       agent: el.dataset.agent ?? "",
@@ -120,5 +128,14 @@ const {
     });
 
     setMode("human");
-  }
+  };
+
+  const init = () => {
+    for (const el of document.querySelectorAll<HTMLElement>(".hp-installer")) {
+      setupInstaller(el);
+    }
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
 </script>
