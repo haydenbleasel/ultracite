@@ -1141,11 +1141,20 @@ describe("doctor", () => {
   });
 
   test("checks oxlint and oxfmt versions for oxlint setups", () => {
-    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.81.0" });
+    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.82.0" });
 
     expect(versionCheck("oxlint", "oxlint")).toMatchObject({ status: "pass" });
     expect(versionCheck("oxlint", "oxfmt")).toMatchObject({
       message: expect.stringContaining("oxfmt 0.30.0 is older"),
+      status: "fail",
+    });
+  });
+
+  test("fails oxlint releases that can't load the presets", () => {
+    mockInstalledVersions({ oxlint: "1.81.0" });
+
+    expect(versionCheck("oxlint", "oxlint")).toMatchObject({
+      message: expect.stringContaining("oxlint 1.81.0 is older"),
       status: "fail",
     });
   });
