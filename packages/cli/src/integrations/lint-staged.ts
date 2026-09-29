@@ -17,6 +17,7 @@ import {
   isGeneratedUltraciteFixCommand,
   ultraciteFixCommand,
 } from "./project-command";
+import { renderYamlDocument, replaceYamlStrings } from "./yaml-document";
 
 const packageJsonPath = "./package.json";
 const packageYamlPaths = ["./package.yaml", "./package.yml"];
@@ -287,28 +288,6 @@ const quoteGlobKeys = (content: string): string =>
     (_match, key: string, rest: string) => `'${key}':${rest}`
   );
 
-// Swap generated dlx commands for the current one in every string value.
-const upgradeYamlCommands = (node: YAML.YAMLMap, command: string): boolean => {
-  let changed = false;
-
-  YAML.visit(node, {
-    Scalar(key, scalar) {
-      if (
-        key !== "key" &&
-        // oxlint-disable-next-line anti-slop/no-runtime-typeof -- YAML scalars hold strings, numbers, booleans or null
-        typeof scalar.value === "string" &&
-        scalar.value !== command &&
-        isGeneratedUltraciteFixCommand(scalar.value)
-      ) {
-        scalar.value = command;
-        changed = true;
-      }
-    },
-  });
-
-  return changed;
-};
-
 /**
  * Adds the ultracite task to a YAML lint-staged config in place, through the
  * yaml Document API so comments and formatting elsewhere in the file survive.
@@ -320,7 +299,7 @@ const addUltraciteTaskToYaml = (
   command: string
 ): boolean | null => {
   if (mentionsUltracite(config.toJSON())) {
-    return upgradeYamlCommands(config, command);
+    return replaceYamlStrings(config, isGeneratedUltraciteFixCommand, command);
   }
 
   const existing = config.get(ULTRACITE_PATTERN, true);
@@ -375,7 +354,7 @@ const updateYamlConfig = async (
   }
 
   if (changed) {
-    await writeProjectFile(filename, doc.toString());
+    await writeProjectFile(filename, renderYamlDocument(doc, content));
   }
 };
 
