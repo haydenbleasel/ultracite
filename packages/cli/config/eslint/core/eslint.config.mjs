@@ -77,17 +77,24 @@ const config = [
       ...promiseRules,
       ...nRules,
       ...prettierRules,
+      ...unusedImportsRules,
+      ...sonarjsRules,
+      ...compatRules,
+      ...unicornRules,
+      ...githubRules,
+      // eslint-config-prettier goes after every plugin spread: the all-on
+      // plugin rule sets would otherwise re-enable the formatting rules it
+      // turns off. unicorn/number-literal-case was the visible casualty —
+      // it demands `0xABCD` while Prettier prints `0xabcd`, so no hex
+      // literal could satisfy both.
       ...eslintPrettier.rules,
       // eslint-config-prettier disables these defensively, but they don't
       // conflict with our Prettier settings and the oxlint config enforces
       // them alongside oxfmt.
       curly: "error",
       "no-unexpected-multiline": "error",
-      ...unusedImportsRules,
-      ...sonarjsRules,
-      ...compatRules,
-      ...unicornRules,
-      ...githubRules,
+      // Prettier prints empty braces as `{}` too, so this cannot fight it.
+      "unicorn/empty-brace-spaces": "error",
     },
 
     settings: {

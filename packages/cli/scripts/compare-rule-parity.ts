@@ -24,10 +24,7 @@ const here = import.meta.dirname;
  * Intentional divergences between the ESLint and oxlint presets.
  * Keyed by oxlint-normalized rule name.
  */
-const allowlist = new Map([
-  // Off in oxlint due to https://github.com/oxc-project/oxc/issues/21949.
-  ["unicorn/number-literal-case", "oxc autofix bug"],
-]);
+const allowlist = new Map<string, string>();
 
 // Base rules whose @typescript-eslint twin has a different name, looked up
 // in both directions so either name finds the other.
