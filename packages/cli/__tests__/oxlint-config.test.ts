@@ -970,8 +970,9 @@ describe("oxlint next config", () => {
 });
 
 describe("test file globs", () => {
-  const TEST_FILE_GLOB = "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}";
-  const TESTS_DIR_GLOB = "**/__tests__/**/*.{ts,tsx,js,jsx}";
+  const TEST_FILE_GLOB =
+    "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}";
+  const TESTS_DIR_GLOB = "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}";
 
   interface FilesEntry {
     files?: string[];

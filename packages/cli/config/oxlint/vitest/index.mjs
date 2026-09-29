@@ -4,8 +4,8 @@ export default defineConfig({
   overrides: [
     {
       files: [
-        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}",
+        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
       ],
       plugins: ["vitest"],
       rules: {

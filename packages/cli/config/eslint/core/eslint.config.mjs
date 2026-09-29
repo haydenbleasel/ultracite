@@ -164,8 +164,8 @@ const config = [
     // Repeated string literals (test titles, expected values) are normal and
     // idiomatic in test files. Mirrors the oxlint core test override.
     files: [
-      "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
-      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+      "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
     ],
     rules: {
       "sonarjs/no-duplicate-string": "off",

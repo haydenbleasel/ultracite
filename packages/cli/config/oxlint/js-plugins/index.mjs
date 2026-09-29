@@ -79,8 +79,8 @@ const config = defineConfig({
   overrides: [
     {
       files: [
-        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}",
+        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
       ],
       rules: {
         // Repeated string literals (test titles, expected values) are normal

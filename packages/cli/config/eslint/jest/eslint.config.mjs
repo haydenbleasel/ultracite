@@ -34,8 +34,8 @@ const config = [
     // Vitest type-test files (*.test-d.ts, *.spec-d.ts) are intentionally
     // excluded — Jest has no typecheck mode, so its rules don't apply to them.
     files: [
-      "**/*.{test,spec}.{ts,tsx,js,jsx}",
-      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+      "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
     ],
     languageOptions: {
       globals: {
