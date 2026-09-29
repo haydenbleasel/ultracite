@@ -13,11 +13,19 @@ interface MaybeInstallUltraciteSkillOptions {
   shouldInstall?: boolean;
 }
 
+// `skills add` asks which agents to install to and where, which it can only
+// do on a terminal. init runs it with piped stdio, so without `--yes` it
+// either exits 1 ("Interactive prompt required") or cancels the prompt and
+// exits 0 with nothing installed — which init reported as installed. With
+// `--yes` it installs into the project for the agents it detects.
 const buildUltraciteSkillInstallCommand = (
-  packageManager: PackageManagerName
+  packageManager: PackageManagerName,
+  nonInteractive = false
 ) =>
   dlxCommand(packageManager, "skills", {
-    args: ["add", ultraciteSkillRepo],
+    args: nonInteractive
+      ? ["add", ultraciteSkillRepo, "--yes"]
+      : ["add", ultraciteSkillRepo],
     short: packageManager === "npm",
   });
 
@@ -101,7 +109,7 @@ export const maybeInstallUltraciteSkill = async ({
     return false;
   }
 
-  const fullCommand = buildUltraciteSkillInstallCommand(packageManager);
+  const fullCommand = buildUltraciteSkillInstallCommand(packageManager, true);
   const [command, ...args] = fullCommand.split(" ");
   const s = spinner();
 
