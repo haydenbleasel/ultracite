@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import type { JsonObject } from "../data/types";
 import { parseJsoncStrict } from "../schemas";
-import { exists, writeProjectFile } from "../utils";
+import { exists, resolveEsmConfigPath, writeProjectFile } from "../utils";
 import {
   parseConfigModule,
   renderEntries,
@@ -15,8 +15,15 @@ import {
 } from "./config-module";
 import type { ConfigModule, RenderedEntry } from "./config-module";
 
-const oxfmtConfigPath = "./oxfmt.config.ts";
-const oxfmtConfigFile = "oxfmt.config.ts";
+// Written as .ts in an ES module package and .mts otherwise; an existing
+// config keeps its name (see resolveEsmConfigPath).
+const oxfmtTsConfigPath = "./oxfmt.config.ts";
+const oxfmtMtsConfigPath = "./oxfmt.config.mts";
+
+const resolveOxfmtConfigPath = () =>
+  resolveEsmConfigPath(oxfmtTsConfigPath, oxfmtMtsConfigPath);
+
+const fileName = (filePath: string): string => filePath.slice(2);
 
 // oxfmt refuses to run when one of these sits next to oxfmt.config.ts, so
 // init migrates them into the TS config and removes them.
@@ -150,12 +157,14 @@ type ExistingOxfmtConfig =
   | { extras: OxfmtExtras; kind: "config" }
   | { kind: "unparseable" };
 
-const readExistingOxfmtConfig = async (): Promise<ExistingOxfmtConfig> => {
-  if (!exists(oxfmtConfigPath)) {
+const readExistingOxfmtConfig = async (
+  configPath: string | null
+): Promise<ExistingOxfmtConfig> => {
+  if (!configPath) {
     return { extras: emptyExtras(), kind: "config" };
   }
 
-  const parsed = parseConfigModule(await readFile(oxfmtConfigPath, "utf-8"));
+  const parsed = parseConfigModule(await readFile(configPath, "utf-8"));
 
   if (parsed.kind === "unparseable") {
     return { kind: "unparseable" };
@@ -166,7 +175,7 @@ const readExistingOxfmtConfig = async (): Promise<ExistingOxfmtConfig> => {
 
   if (!extras) {
     log.warn(
-      `${oxfmtConfigFile} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
+      `${fileName(configPath)} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
     );
   }
 
@@ -175,9 +184,25 @@ const readExistingOxfmtConfig = async (): Promise<ExistingOxfmtConfig> => {
 
 export const oxfmt = {
   create: async () =>
-    await writeProjectFile(oxfmtConfigPath, generateConfigContent()),
-  exists: () => exists(oxfmtConfigPath) || oxfmtRcPaths.some(exists),
+    await writeProjectFile(
+      resolveOxfmtConfigPath().target,
+      generateConfigContent()
+    ),
+  exists: () =>
+    exists(oxfmtTsConfigPath) ||
+    exists(oxfmtMtsConfigPath) ||
+    oxfmtRcPaths.some(exists),
   update: async () => {
+    const paths = resolveOxfmtConfigPath();
+    const configFile = fileName(paths.target);
+
+    if (paths.conflict) {
+      log.warn(
+        `Both ${fileName(oxfmtTsConfigPath)} and ${fileName(oxfmtMtsConfigPath)} exist, and oxfmt won't load either, so they were left unchanged. Delete one and re-run \`ultracite init\`.`
+      );
+      return;
+    }
+
     const rcPaths = oxfmtRcPaths.filter(exists);
     const rcContents = await Promise.all(
       rcPaths.map((rcPath) => readFile(rcPath, "utf-8"))
@@ -188,11 +213,11 @@ export const oxfmt = {
       const config = parseJsoncStrict(contents, rcSchema);
       const rcFile = rcPaths[index]?.slice(2);
 
-      // Writing oxfmt.config.ts next to an rc file that can't be migrated
+      // Writing the TS config next to an rc file that can't be migrated
       // would leave oxfmt unable to load either.
       if (!config) {
         log.warn(
-          `Could not parse ${rcFile}, so the oxfmt config was left unchanged. oxfmt won't run with both ${rcFile} and ${oxfmtConfigFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
+          `Could not parse ${rcFile}, so the oxfmt config was left unchanged. oxfmt won't run with both ${rcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
         );
         return;
       }
@@ -200,11 +225,11 @@ export const oxfmt = {
       rcConfigs.push(config);
     }
 
-    const current = await readExistingOxfmtConfig();
+    const current = await readExistingOxfmtConfig(paths.existing);
 
     if (current.kind === "unparseable") {
       log.warn(
-        `Could not parse ${oxfmtConfigFile}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
+        `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
       return;
     }
@@ -213,16 +238,26 @@ export const oxfmt = {
       mergeRcConfig(config, current.extras);
     }
 
-    await writeProjectFile(
-      oxfmtConfigPath,
-      generateConfigContent(current.extras)
+    await writeProjectFile(paths.target, generateConfigContent(current.extras));
+
+    // A .ts config in a "commonjs" package can't load, so it moved to .mts.
+    const renamed =
+      paths.existing && paths.existing !== paths.target ? paths.existing : null;
+    await Promise.all(
+      [...rcPaths, ...(renamed ? [renamed] : [])].map((stalePath) =>
+        rm(stalePath, { force: true })
+      )
     );
 
-    await Promise.all(rcPaths.map((rcPath) => rm(rcPath, { force: true })));
+    if (renamed) {
+      log.info(
+        `Renamed ${fileName(renamed)} to ${configFile}: package.json sets "type": "commonjs", so Node can't load the ES module syntax of a .ts config.`
+      );
+    }
 
     for (const rcPath of rcPaths) {
       log.info(
-        `Moved the options from ${rcPath.slice(2)} into ${oxfmtConfigFile} and removed ${rcPath.slice(2)}.`
+        `Moved the options from ${fileName(rcPath)} into ${configFile} and removed ${fileName(rcPath)}.`
       );
     }
   },

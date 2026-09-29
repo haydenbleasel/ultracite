@@ -161,7 +161,10 @@ const mockOxfmtProject = (files: Record<string, string>) => {
       }
     }),
     existsSync: mock(() => false),
-    readFileSync: mock(() => "{}"),
+    // package.json, read synchronously to pick the config's file name.
+    readFileSync: mock((filePath: string) =>
+      has(filePath) ? files[String(filePath)] : "{}"
+    ),
   }));
   mock.module("@clack/prompts", () => ({
     log: { error: mock(), info: mock(), success: mock(), warn },
@@ -201,7 +204,7 @@ export default defineConfig({
     expect(project.warn).not.toHaveBeenCalled();
   });
 
-  test("migrates .oxfmtrc.json into oxfmt.config.ts and removes it", async () => {
+  test("migrates .oxfmtrc.json into the TS config and removes it", async () => {
     const project = mockOxfmtProject({
       "./.oxfmtrc.json": `{
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
@@ -214,7 +217,7 @@ export default defineConfig({
     await oxfmt.update();
 
     const [[writtenPath, content]] = project.writeFile.mock.calls;
-    expect(writtenPath).toBe("./oxfmt.config.ts");
+    expect(writtenPath).toBe("./oxfmt.config.mts");
     expect(content).toContain(
       'ignorePatterns: [\n    ...ultracite.ignorePatterns,\n    "vendor/**",\n  ],'
     );
@@ -263,5 +266,57 @@ export default defineConfig({
 
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.warn).toHaveBeenCalled();
+  });
+});
+
+describe("oxfmt config file name", () => {
+  const config = `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+});
+`;
+
+  test("writes oxfmt.config.mts in a package without a type", async () => {
+    const project = mockOxfmtProject({ "package.json": '{"name": "app"}' });
+
+    await oxfmt.create();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxfmt.config.mts");
+  });
+
+  test("writes oxfmt.config.ts in an ES module package", async () => {
+    const project = mockOxfmtProject({ "package.json": '{"type": "module"}' });
+
+    await oxfmt.create();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxfmt.config.ts");
+  });
+
+  test("keeps an existing config's name on re-run", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": config,
+      "package.json": '{"name": "app"}',
+    });
+
+    await oxfmt.update();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxfmt.config.ts");
+    expect(project.rm).not.toHaveBeenCalled();
+  });
+
+  test("moves a .ts config in a CommonJS package to .mts", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": config,
+      "package.json": '{"type": "commonjs"}',
+    });
+
+    await oxfmt.update();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxfmt.config.mts");
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./oxfmt.config.ts",
+    ]);
   });
 });

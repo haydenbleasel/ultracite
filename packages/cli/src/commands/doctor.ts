@@ -306,120 +306,119 @@ const checkStylelintConfig = (): DiagnosticCheck => {
   };
 };
 
-// Oxlint and oxfmt each refuse to load any config when a JSON config and the
-// TS config sit in the same directory.
+// Oxlint and oxfmt each load one config per directory and refuse to run when
+// two of their config files (JSON or TS) sit in the same directory.
 const findConflictingConfigs = (
   dir: string,
   names: readonly string[]
 ): string[] => names.filter((name) => existsSync(path.join(dir, name)));
 
-const checkOxlintConfig = (): DiagnosticCheck => {
-  const found = findNearestFile(oxlintConfigNames);
+interface OxcConfigCheck {
+  checkName: string;
+  // The base name of the TS config, e.g. "oxlint.config".
+  configName: string;
+  names: readonly string[];
+  // Text an Ultracite-based config contains.
+  presetMarker: string;
+  tool: string;
+}
+
+const checkOxcConfig = ({
+  checkName,
+  configName,
+  names,
+  presetMarker,
+  tool,
+}: OxcConfigCheck): DiagnosticCheck => {
+  const found = findNearestFile(names);
 
   if (!found) {
     return {
-      message: `No oxlint config file found (expected one of: ${oxlintConfigNames.join(", ")})`,
-      name: OXLINT_CHECK,
+      message: `No ${tool} config file found (expected one of: ${names.join(", ")})`,
+      name: checkName,
       status: "fail",
     };
   }
 
-  const conflicting = findConflictingConfigs(found.dir, oxlintConfigNames);
+  const tsName = `${configName}.ts`;
+  const mtsName = `${configName}.mts`;
+  const conflicting = findConflictingConfigs(found.dir, names);
+
   if (conflicting.length > 1) {
+    const hasJsonConfig = conflicting.some((name) => name.endsWith("json"));
     return {
-      message: `${conflicting.join(" and ")} are both present, so Oxlint won't load either — run \`ultracite init\` to migrate .oxlintrc.json into oxlint.config.ts`,
-      name: OXLINT_CHECK,
+      message: `${conflicting.join(" and ")} are both present, so ${tool} won't load either — ${hasJsonConfig ? "run `ultracite init` to migrate the JSON config into the TS one" : "delete one of them"}`,
+      name: checkName,
       status: "fail",
     };
   }
 
-  // detectLinter accepts .oxlintrc.json, so its presence must not hard-fail —
-  // but the ultracite setup uses oxlint.config.ts, so suggest migrating.
-  if (found.fileName !== "oxlint.config.ts") {
+  const packageType = readPackageJsonSync(
+    path.join(found.dir, "package.json")
+  )?.type;
+
+  // detectLinter accepts the JSON configs, so their presence must not
+  // hard-fail — but the Ultracite setup uses a TS config, so suggest
+  // migrating.
+  if (found.fileName !== tsName && found.fileName !== mtsName) {
     return {
-      message: `${found.fileName} found — run \`ultracite init\` to migrate to oxlint.config.ts`,
-      name: OXLINT_CHECK,
+      message: `${found.fileName} found — run \`ultracite init\` to migrate to ${packageType === "module" ? tsName : mtsName}`,
+      name: checkName,
       status: "warn",
+    };
+  }
+
+  // Node can't load ES module syntax from a .ts file in a CommonJS package.
+  if (found.fileName === tsName && packageType === "commonjs") {
+    return {
+      message: `${tsName} can't load because package.json sets "type": "commonjs" — run \`ultracite init\` to rename it to ${mtsName}`,
+      name: checkName,
+      status: "fail",
     };
   }
 
   try {
     const configContent = readFileSync(found.path, "utf-8");
 
-    if (configContent.includes("ultracite/oxlint/")) {
+    if (configContent.includes(presetMarker)) {
       return {
-        message: "oxlint.config.ts extends ultracite oxlint config",
-        name: OXLINT_CHECK,
+        message: `${found.fileName} extends ultracite ${tool} config`,
+        name: checkName,
         status: "pass",
       };
     }
 
     return {
-      message: "oxlint.config.ts exists but doesn't extend ultracite config",
-      name: OXLINT_CHECK,
+      message: `${found.fileName} exists but doesn't extend ultracite config`,
+      name: checkName,
       status: "warn",
     };
   } catch {
     return {
-      message: "Could not read oxlint.config.ts file",
-      name: OXLINT_CHECK,
+      message: `Could not read ${found.fileName} file`,
+      name: checkName,
       status: "fail",
     };
   }
 };
 
-const checkOxfmtConfig = (): DiagnosticCheck => {
-  const found = findNearestFile(oxfmtConfigNames);
+const checkOxlintConfig = (): DiagnosticCheck =>
+  checkOxcConfig({
+    checkName: OXLINT_CHECK,
+    configName: "oxlint.config",
+    names: oxlintConfigNames,
+    presetMarker: "ultracite/oxlint/",
+    tool: "oxlint",
+  });
 
-  if (!found) {
-    return {
-      message: "No oxfmt.config.ts file found",
-      name: OXFMT_CHECK,
-      status: "fail",
-    };
-  }
-
-  const conflicting = findConflictingConfigs(found.dir, oxfmtConfigNames);
-  if (conflicting.length > 1) {
-    return {
-      message: `${conflicting.join(" and ")} are both present, so oxfmt won't load either — run \`ultracite init\` to migrate them into oxfmt.config.ts`,
-      name: OXFMT_CHECK,
-      status: "fail",
-    };
-  }
-
-  if (found.fileName !== "oxfmt.config.ts") {
-    return {
-      message: `${found.fileName} found — run \`ultracite init\` to migrate to oxfmt.config.ts`,
-      name: OXFMT_CHECK,
-      status: "warn",
-    };
-  }
-
-  try {
-    const configContent = readFileSync(found.path, "utf-8");
-
-    if (configContent.includes("ultracite/oxfmt")) {
-      return {
-        message: "oxfmt.config.ts extends ultracite oxfmt config",
-        name: OXFMT_CHECK,
-        status: "pass",
-      };
-    }
-
-    return {
-      message: "oxfmt.config.ts exists but doesn't extend ultracite config",
-      name: OXFMT_CHECK,
-      status: "warn",
-    };
-  } catch {
-    return {
-      message: "Could not read oxfmt.config.ts file",
-      name: OXFMT_CHECK,
-      status: "fail",
-    };
-  }
-};
+const checkOxfmtConfig = (): DiagnosticCheck =>
+  checkOxcConfig({
+    checkName: OXFMT_CHECK,
+    configName: "oxfmt.config",
+    names: oxfmtConfigNames,
+    presetMarker: "ultracite/oxfmt",
+    tool: "oxfmt",
+  });
 
 // ---------------------------------------------------------------------------
 // Shared checks

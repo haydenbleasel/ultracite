@@ -1,6 +1,9 @@
 import { describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 
+import type * as utilsModule from "../src/utils";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
+
 // We must re-register ../src/utils with real implementations because
 // fix.test.ts and check.test.ts mock the entire module and bun shares
 // module state across test files in the same process.
@@ -32,7 +35,11 @@ const eslintConfigNames = [
   "eslint.config.mts",
   "eslint.config.cts",
 ];
-const oxlintConfigNames = [".oxlintrc.json", "oxlint.config.ts"];
+const oxlintConfigNames = [
+  ".oxlintrc.json",
+  "oxlint.config.ts",
+  "oxlint.config.mts",
+];
 
 type Linter = "biome" | "eslint" | "oxlint";
 
@@ -152,5 +159,34 @@ describe("detectLinter", () => {
 
     const result = await realDetectLinter();
     expect(result).toBeNull();
+  });
+});
+
+// Other suites replace utils.detectLinter with stubs that outlive them, so
+// load a separate copy of the module to exercise the real implementation.
+const loadRealUtils = async (): Promise<typeof utilsModule> =>
+  await import(`../src/utils.ts?real=${Date.now()}`);
+
+describe("detectLinter (real implementation)", () => {
+  test("detects Oxlint from oxlint.config.mts", async () => {
+    const { detectLinter } = await loadRealUtils();
+    mockFileSystem({ [path.join(cwd, "oxlint.config.mts")]: "" });
+
+    try {
+      expect(detectLinter()).toBe("oxlint");
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
+  test("still detects Oxlint from oxlint.config.ts", async () => {
+    const { detectLinter } = await loadRealUtils();
+    mockFileSystem({ [path.join(cwd, "oxlint.config.ts")]: "" });
+
+    try {
+      expect(detectLinter()).toBe("oxlint");
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 });

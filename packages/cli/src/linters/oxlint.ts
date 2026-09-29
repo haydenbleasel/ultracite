@@ -6,7 +6,12 @@ import { z } from "zod";
 import type { options } from "../data/options";
 import type { JsonObject, JsonValue } from "../data/types";
 import { parseJsoncStrict } from "../schemas";
-import { exists, validateFrameworkName, writeProjectFile } from "../utils";
+import {
+  exists,
+  resolveEsmConfigPath,
+  validateFrameworkName,
+  writeProjectFile,
+} from "../utils";
 import {
   arrayEntries,
   identifierName,
@@ -18,8 +23,15 @@ import {
 } from "./config-module";
 import type { ConfigEntry, ConfigModule, RenderedEntry } from "./config-module";
 
-const oxlintConfigPath = "./oxlint.config.ts";
-const oxlintConfigFile = "oxlint.config.ts";
+// Written as .ts in an ES module package and .mts otherwise; an existing
+// config keeps its name (see resolveEsmConfigPath).
+const oxlintTsConfigPath = "./oxlint.config.ts";
+const oxlintMtsConfigPath = "./oxlint.config.mts";
+
+const resolveOxlintConfigPath = () =>
+  resolveEsmConfigPath(oxlintTsConfigPath, oxlintMtsConfigPath);
+
+const fileName = (filePath: string): string => filePath.slice(2);
 
 // Oxlint refuses to run when this sits next to oxlint.config.ts, so init
 // migrates it into the TS config and removes it.
@@ -631,11 +643,13 @@ const readOxlintRc = async (): Promise<OxlintRc> => {
   return config ? { config, kind: "config" } : { kind: "invalid" };
 };
 
-const readExistingOxlintConfig = async (): Promise<
+const readExistingOxlintConfig = async (
+  configPath: string | null
+): Promise<
   | { existing: ExistingConfig; jsPlugins: OxlintJsPlugin[]; kind: "config" }
   | { kind: "unparseable" }
 > => {
-  if (!exists(oxlintConfigPath)) {
+  if (!configPath) {
     return {
       existing: { extras: emptyExtras(), presets: [] },
       jsPlugins: [],
@@ -643,7 +657,7 @@ const readExistingOxlintConfig = async (): Promise<
     };
   }
 
-  const contents = await readFile(oxlintConfigPath, "utf-8");
+  const contents = await readFile(configPath, "utf-8");
   const parsed = parseConfigModule(contents);
 
   if (parsed.kind === "unparseable") {
@@ -657,7 +671,7 @@ const readExistingOxlintConfig = async (): Promise<
 
   if (!existing) {
     log.warn(
-      `${oxlintConfigFile} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
+      `${fileName(configPath)} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
     );
   }
 
@@ -684,30 +698,43 @@ export const oxlint = {
     }
 
     return await writeProjectFile(
-      oxlintConfigPath,
+      resolveOxlintConfigPath().target,
       generateConfigContent(extendsList, opts?.jsPlugins)
     );
   },
-  exists: () => exists(oxlintConfigPath) || exists(oxlintRcPath),
+  exists: () =>
+    exists(oxlintTsConfigPath) ||
+    exists(oxlintMtsConfigPath) ||
+    exists(oxlintRcPath),
   update: async (opts?: OxlintOptions) => {
-    const rc = await readOxlintRc();
+    const paths = resolveOxlintConfigPath();
+    const configFile = fileName(paths.target);
 
-    // Writing oxlint.config.ts next to an .oxlintrc.json that can't be
-    // migrated would leave Oxlint unable to load either.
-    if (rc?.kind === "invalid") {
+    if (paths.conflict) {
       log.warn(
-        `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${oxlintConfigFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
+        `Both ${fileName(oxlintTsConfigPath)} and ${fileName(oxlintMtsConfigPath)} exist, and Oxlint won't load either, so they were left unchanged. Delete one and re-run \`ultracite init\`.`
       );
       return;
     }
 
-    const current = await readExistingOxlintConfig();
+    const rc = await readOxlintRc();
+
+    // Writing the TS config next to an .oxlintrc.json that can't be migrated
+    // would leave Oxlint unable to load either.
+    if (rc?.kind === "invalid") {
+      log.warn(
+        `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
+      );
+      return;
+    }
+
+    const current = await readExistingOxlintConfig(paths.existing);
 
     // A config that doesn't parse can't be carried over, and Oxlint can't
     // load it either; leave it for the user to fix rather than discard it.
     if (current.kind === "unparseable") {
       log.warn(
-        `Could not parse ${oxlintConfigFile}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
+        `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
       return;
     }
@@ -741,20 +768,28 @@ export const oxlint = {
         : current.jsPlugins;
 
     await writeProjectFile(
-      oxlintConfigPath,
+      paths.target,
       generateConfigContent(newExtends, jsPlugins, existing.extras)
     );
+
+    // A .ts config in a "commonjs" package can't load, so it moved to .mts.
+    if (paths.existing && paths.existing !== paths.target) {
+      await rm(paths.existing, { force: true });
+      log.info(
+        `Renamed ${fileName(paths.existing)} to ${configFile}: package.json sets "type": "commonjs", so Node can't load the ES module syntax of a .ts config.`
+      );
+    }
 
     if (rc) {
       await rm(oxlintRcPath, { force: true });
       log.info(
-        `Moved the settings from ${oxlintRcFile} into ${oxlintConfigFile} and removed ${oxlintRcFile}.`
+        `Moved the settings from ${oxlintRcFile} into ${configFile} and removed ${oxlintRcFile}.`
       );
     }
 
     if (unmigrated.length > 0) {
       log.warn(
-        `${oxlintRcFile} extended ${unmigrated.join(", ")}, which ${oxlintConfigFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
+        `${oxlintRcFile} extended ${unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
       );
     }
   },

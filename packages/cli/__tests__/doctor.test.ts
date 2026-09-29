@@ -537,6 +537,68 @@ describe("doctor", () => {
     });
   });
 
+  test("finds .mts configs", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.mts", "oxfmt.config.mts"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) =>
+        String(filePath).includes("oxfmt")
+          ? 'import ultracite from "ultracite/oxfmt";'
+          : 'import core from "ultracite/oxlint/core";'
+      ),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: "oxlint.config.mts extends ultracite oxlint config",
+      status: "pass",
+    });
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message: "oxfmt.config.mts extends ultracite oxfmt config",
+      status: "pass",
+    });
+  });
+
+  test("fails a .ts config in a CommonJS package, which can't load it", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.ts", "oxfmt.config.mts", "package.json"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.endsWith("package.json")) {
+          return '{"type": "commonjs"}';
+        }
+        return p.includes("oxfmt")
+          ? 'import ultracite from "ultracite/oxfmt";'
+          : 'import core from "ultracite/oxlint/core";';
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        'oxlint.config.ts can\'t load because package.json sets "type": "commonjs"'
+      ),
+      status: "fail",
+    });
+  });
+
   test("suggests migrating a lone .oxfmtrc.json", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
@@ -554,7 +616,7 @@ describe("doctor", () => {
       checks.find((check) => check.name === "oxfmt configuration")
     ).toMatchObject({
       message:
-        ".oxfmtrc.json found — run `ultracite init` to migrate to oxfmt.config.ts",
+        ".oxfmtrc.json found — run `ultracite init` to migrate to oxfmt.config.mts",
       status: "warn",
     });
   });

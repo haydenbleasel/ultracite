@@ -359,17 +359,70 @@ export const stylelintConfigNames = [
   ".stylelintrc.yaml",
 ] as const;
 
+// Oxlint and oxfmt each load exactly one config per directory and refuse to
+// run when two of these sit side by side. Ultracite writes the .ts form in an
+// ES module package and the .mts form otherwise (see resolveEsmConfigPath);
+// the JSON forms are what `oxlint --init` / `oxfmt --init` create.
 export const oxlintConfigNames = [
   ".oxlintrc.json",
   "oxlint.config.ts",
+  "oxlint.config.mts",
 ] as const;
-// Ultracite writes oxfmt.config.ts; the JSON forms are what `oxfmt --init`
-// creates, and oxfmt refuses to run when one sits next to the TS config.
 export const oxfmtConfigNames = [
   "oxfmt.config.ts",
+  "oxfmt.config.mts",
   ".oxfmtrc.json",
   ".oxfmtrc.jsonc",
 ] as const;
+
+export interface EsmConfigPaths {
+  // Both forms exist, which the tools refuse to load; nothing can be written.
+  conflict: boolean;
+  existing: string | null;
+  target: string;
+}
+
+/**
+ * Which of a TS config's two names (`name.ts` / `name.mts`) to read and
+ * write. Node loads ES module syntax from a .ts file only when package.json
+ * says "type": "module": without a "type" it prints a
+ * MODULE_TYPELESS_PACKAGE_JSON warning on every run, and with "commonjs" it
+ * can't load it at all. A .mts file is always an ES module, so a new config
+ * gets .ts in an ES module package and .mts otherwise. An existing config
+ * keeps its name, except a .ts config in a "commonjs" package, which can't
+ * load and moves to .mts. init never changes "type" itself: that would
+ * change how every .js file in the package is loaded.
+ */
+export const resolveEsmConfigPath = (
+  tsPath: string,
+  mtsPath: string
+): EsmConfigPaths => {
+  const hasTs = exists(tsPath);
+  const hasMts = exists(mtsPath);
+  const type = readPackageJsonSync()?.type;
+
+  if (hasTs && hasMts) {
+    return { conflict: true, existing: null, target: tsPath };
+  }
+
+  if (hasMts) {
+    return { conflict: false, existing: mtsPath, target: mtsPath };
+  }
+
+  if (hasTs) {
+    return {
+      conflict: false,
+      existing: tsPath,
+      target: type === "commonjs" ? mtsPath : tsPath,
+    };
+  }
+
+  return {
+    conflict: false,
+    existing: null,
+    target: type === "module" ? tsPath : mtsPath,
+  };
+};
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
 // meta-frameworks (e.g. Next.js implies React).

@@ -1325,17 +1325,10 @@ export const initialize = async (flags?: InitializeFlags) => {
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
-      // Oxlint + Oxfmt config files use ESM imports, so ensure
-      // "type": "module" is set — but never flip an explicit "commonjs",
-      // which would change how every .js file in the project is interpreted.
-      const pkgJsonForType = await readPackageJson();
-      if (pkgJsonForType?.type === undefined) {
-        await updatePackageJson({ type: "module" });
-      } else if (pkgJsonForType.type !== "module" && !quiet) {
-        log.warn(
-          'package.json sets "type": "commonjs" — the generated oxlint/oxfmt configs use ESM imports and may not load. Consider "type": "module".'
-        );
-      }
+      // The Oxlint and oxfmt configs use ES module syntax. Init never changes
+      // package.json's "type" to make them load, since that changes how
+      // every .js file is loaded; outside an ES module package the configs
+      // are written as .mts instead (see resolveEsmConfigPath).
       await upsertOxlintConfig(frameworks, quiet, jsPlugins);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);

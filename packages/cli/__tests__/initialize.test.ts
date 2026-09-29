@@ -3758,7 +3758,8 @@ describe("helper functions", () => {
         String(path)
       );
 
-      expect(writtenPaths.some((p) => p.endsWith("oxlint.config.ts"))).toBe(
+      // No "type": "module" in package.json, so the config is .mts.
+      expect(writtenPaths.some((p) => p.endsWith("oxlint.config.mts"))).toBe(
         true
       );
       expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(false);
@@ -3933,5 +3934,88 @@ describe("init flag validation", () => {
     expect(mockSelect).toHaveBeenCalledWith(
       expect.objectContaining({ initialValue: "eslint" })
     );
+  });
+});
+
+// Runs a prompt-free oxlint init on a package.json with the given contents.
+// Returns the package.json documents init wrote and every path it wrote.
+const runOxlintInit = async (packageJson: string) => {
+  const mockWriteFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(packageJson)),
+    rm: mock(() => Promise.resolve()),
+    writeFile: mockWriteFile,
+  }));
+  mock.module("@clack/prompts", quietPrompts);
+  mock.module("nypm", () => ({
+    addDevDependency: mock(() => Promise.resolve()),
+    detectPackageManager: mock(() =>
+      Promise.resolve({ name: "npm", warnings: [] })
+    ),
+    dlxCommand: mock(() => "npx ultracite fix"),
+  }));
+  mockFileSystem({ "package.json": packageJson });
+
+  try {
+    await initialize({
+      agents: [],
+      editors: [],
+      hooks: [],
+      integrations: [],
+      linter: "oxlint",
+      pm: "npm",
+      skipInstall: true,
+    });
+  } finally {
+    restoreFileSystemMock();
+  }
+
+  const writes = mockWriteFile.mock.calls.map(([filePath, content]) => ({
+    content,
+    filePath: String(filePath),
+  }));
+
+  return {
+    packageJsons: writes
+      .filter(({ filePath }) => filePath === "package.json")
+      .map(({ content }) => JSON.parse(content)),
+    paths: writes.map(({ filePath }) => filePath),
+  };
+};
+
+describe("package.json module type", () => {
+  test("keeps a package without a type as it is and writes .mts configs", async () => {
+    const { packageJsons, paths } = await runOxlintInit('{"name": "app"}');
+
+    expect(packageJsons.length).toBeGreaterThan(0);
+    for (const packageJson of packageJsons) {
+      expect(packageJson.type).toBeUndefined();
+    }
+    expect(paths).toContain("./oxlint.config.mts");
+    expect(paths).toContain("./oxfmt.config.mts");
+  });
+
+  test("writes .mts configs in a CommonJS package", async () => {
+    const { packageJsons, paths } = await runOxlintInit(
+      '{"name": "app", "type": "commonjs"}'
+    );
+
+    for (const packageJson of packageJsons) {
+      expect(packageJson.type).toBe("commonjs");
+    }
+    expect(paths).toContain("./oxlint.config.mts");
+    expect(paths).toContain("./oxfmt.config.mts");
+  });
+
+  test("writes .ts configs in an ES module package", async () => {
+    const { paths } = await runOxlintInit('{"name": "app", "type": "module"}');
+
+    expect(paths).toContain("./oxlint.config.ts");
+    expect(paths).toContain("./oxfmt.config.ts");
   });
 });

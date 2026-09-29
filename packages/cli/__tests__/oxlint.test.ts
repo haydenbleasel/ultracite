@@ -11,9 +11,13 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock(() => Promise.resolve()),
 }));
 
-// Every path exists except an .oxlintrc.json, which init would migrate.
+// Every path exists except an .oxlintrc.json, which init would migrate, and
+// an oxlint.config.mts, which would sit next to the oxlint.config.ts.
 const onlyOxlintConfig = (filePath: string) => {
-  if (String(filePath).includes("oxlintrc")) {
+  if (
+    String(filePath).includes("oxlintrc") ||
+    String(filePath).endsWith(".mts")
+  ) {
     throw new Error("ENOENT");
   }
 };
@@ -73,7 +77,8 @@ describe("oxlint linter", () => {
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("./oxlint.config.ts");
+      // No "type": "module" in package.json, so the config is .mts.
+      expect(writeCall[0]).toBe("./oxlint.config.mts");
       const [, content] = writeCall;
       expect(content).toContain('import { defineConfig } from "oxlint"');
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
@@ -1083,7 +1088,10 @@ const mockProject = (files: Record<string, string>) => {
       }
     }),
     existsSync: mock(() => false),
-    readFileSync: mock(() => "{}"),
+    // package.json, read synchronously to pick the config's file name.
+    readFileSync: mock((filePath: string) =>
+      has(filePath) ? files[String(filePath)] : "{}"
+    ),
   }));
   mock.module("@clack/prompts", () => ({
     log: { error: mock(), info, success: mock(), warn },
@@ -1143,7 +1151,7 @@ export default defineConfig({
     expect(project.warn).toHaveBeenCalled();
   });
 
-  test("migrates .oxlintrc.json into oxlint.config.ts and removes it", async () => {
+  test("migrates .oxlintrc.json into the TS config and removes it", async () => {
     const project = mockProject({
       "./.oxlintrc.json": `{
   // from oxlint --init
@@ -1160,7 +1168,7 @@ export default defineConfig({
     await oxlint.update();
 
     const [[writtenPath, content]] = project.writeFile.mock.calls;
-    expect(writtenPath).toBe("./oxlint.config.ts");
+    expect(writtenPath).toBe("./oxlint.config.mts");
     expect(content).toContain('import react from "ultracite/oxlint/react";');
     expect(content).toContain("...core.ignorePatterns,");
     expect(content).toContain('"vendor/**",');
@@ -1219,5 +1227,78 @@ export default defineConfig({
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.rm).not.toHaveBeenCalled();
     expect(project.warn.mock.calls[0]?.[0]).toContain(".oxlintrc.json");
+  });
+});
+
+describe("oxlint config file name", () => {
+  const config = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+  test("writes oxlint.config.mts in a package without a type", async () => {
+    const project = mockProject({ "package.json": '{"name": "app"}' });
+
+    await oxlint.create();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.mts");
+  });
+
+  test("writes oxlint.config.ts in an ES module package", async () => {
+    const project = mockProject({ "package.json": '{"type": "module"}' });
+
+    await oxlint.create();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.ts");
+  });
+
+  test("keeps an existing config's name on re-run", async () => {
+    const typeless = mockProject({
+      "./oxlint.config.ts": config,
+      "package.json": '{"name": "app"}',
+    });
+    await oxlint.update();
+    expect(typeless.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.ts");
+    expect(typeless.rm).not.toHaveBeenCalled();
+
+    const esm = mockProject({
+      "./oxlint.config.mts": config,
+      "package.json": '{"type": "module"}',
+    });
+    await oxlint.update();
+    expect(esm.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.mts");
+  });
+
+  test("moves a .ts config in a CommonJS package to .mts", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": config,
+      "package.json": '{"type": "commonjs"}',
+    });
+
+    await oxlint.update();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.mts");
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./oxlint.config.ts",
+    ]);
+    expect(project.info.mock.calls[0]?.[0]).toContain(
+      "Renamed oxlint.config.ts to oxlint.config.mts"
+    );
+  });
+
+  test("leaves both names alone when .ts and .mts exist", async () => {
+    const project = mockProject({
+      "./oxlint.config.mts": config,
+      "./oxlint.config.ts": config,
+    });
+
+    await oxlint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn).toHaveBeenCalled();
   });
 });
