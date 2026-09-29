@@ -3167,6 +3167,43 @@ describe("helper functions", () => {
   });
 
   describe("initializePrecommitHook", () => {
+    test("keeps an existing prepare script when skipping the install", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock((filePath: string) =>
+          String(filePath).includes("package.json")
+            ? Promise.resolve(
+                '{"name": "app", "scripts": {"prepare": "svelte-kit sync"}}'
+              )
+            : Promise.reject(new Error("ENOENT"))
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+      restoreFileSystemMock();
+
+      await initializePrecommitHook(npmPm, false, true);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.find(
+          ([filePath]) => filePath === "package.json"
+        )?.[1] ?? "{}"
+      );
+      expect(packageJson.scripts.prepare).toBe("svelte-kit sync && husky");
+      expect(packageJson.devDependencies).toEqual({ husky: "latest" });
+    });
+
     test("installs and creates husky hook", async () => {
       const mockAddDep = mock(() => Promise.resolve());
       const mockWriteFile = mock((_path: string, _content: string) =>
@@ -3238,6 +3275,44 @@ describe("helper functions", () => {
   });
 
   describe("initializeLefthook", () => {
+    test("names the lefthook config file the project actually uses", async () => {
+      const messages: string[] = [];
+      const record = (message: string) => {
+        messages.push(message);
+      };
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock((filePath: string) =>
+          Promise.resolve(
+            String(filePath).includes("package.json")
+              ? '{"name": "app"}'
+              : "pre-commit:\n  jobs:\n    - run: echo hi\n"
+          )
+        ),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
+        spinner: mock(() => ({
+          message: mock(record),
+          start: mock(noop),
+          stop: mock(record),
+        })),
+      }));
+      mockFileSystem({ "./.lefthook.yaml": "" });
+
+      try {
+        await initializeLefthook(npmPm, false);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      expect(messages).toContain(".lefthook.yaml found, updating...");
+      expect(messages).toContain(".lefthook.yaml updated.");
+      expect(messages.join("\n")).not.toContain("lefthook.yml");
+    });
+
     test("creates lefthook config", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

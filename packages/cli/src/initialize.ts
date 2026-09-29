@@ -40,6 +40,7 @@ import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
+import { chainScript } from "./integrations/project-command";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
 import { oxfmt } from "./linters/oxfmt";
@@ -77,6 +78,7 @@ import {
 const ultraciteVersion = packageJson.version;
 
 const OPERATION_CANCELLED = "Operation cancelled.";
+const HUSKY_PREPARE_RE = /\bhusky\b/u;
 const LINT_STAGED = "lint-staged";
 
 type Linter = (typeof options.linters)[number];
@@ -743,12 +745,23 @@ export const initializePrecommitHook = async (
     s.message("Installing Husky...");
   }
 
-  await (install
-    ? husky.install(packageManager)
-    : updatePackageJson({
-        devDependencies: { husky: "latest" },
-        scripts: { prepare: "husky" },
-      }));
+  if (install) {
+    await husky.install(packageManager);
+  } else {
+    // Keep a prepare script the project already has (e.g. `svelte-kit
+    // sync`), as husky.install does.
+    const existingPackageJson = await readPackageJson();
+    await updatePackageJson({
+      devDependencies: { husky: "latest" },
+      scripts: {
+        prepare: chainScript(
+          existingPackageJson?.scripts?.prepare,
+          "husky",
+          HUSKY_PREPARE_RE
+        ),
+      },
+    });
+  }
 
   if (!quiet) {
     s.message("Initializing Husky...");
@@ -794,23 +807,27 @@ export const initializeLefthook = async (
         devDependencies: { lefthook: "latest" },
       }));
 
+  // Whichever lefthook config file name the project uses (lefthook.yml,
+  // .lefthook.yaml, ...), or lefthook.yml when there is none yet.
+  const configFile = lefthook.configPath();
+
   if (await lefthook.exists()) {
     if (!quiet) {
-      s.message("lefthook.yml found, updating...");
+      s.message(`${configFile} found, updating...`);
     }
     await lefthook.update(packageManager.name);
     if (!quiet) {
-      s.stop("lefthook.yml updated.");
+      s.stop(`${configFile} updated.`);
     }
     return;
   }
 
   if (!quiet) {
-    s.message("lefthook.yml not found, creating...");
+    s.message(`${configFile} not found, creating...`);
   }
   await lefthook.create(packageManager.name);
   if (!quiet) {
-    s.stop("lefthook.yml created.");
+    s.stop(`${configFile} created.`);
   }
 };
 

@@ -199,6 +199,8 @@ const addUltraciteJob = (
 };
 
 export const lefthook = {
+  // The config file update edits (or create writes), for messages.
+  configPath: () => (findConfigPath() ?? defaultPath).slice(2),
   create: async (packageManager: PackageManagerName) => {
     const config = createLefthookConfig(packageManager);
     await writeProjectFile(defaultPath, config);
