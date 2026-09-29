@@ -2,8 +2,6 @@ import typescript from "@typescript-eslint/eslint-plugin";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import eslintPrettier from "eslint-config-prettier";
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as importTypescriptResolver from "eslint-import-resolver-typescript"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint resolver compatibility
 import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
@@ -42,20 +40,19 @@ const config = [
     ignores: ignorePatterns,
   },
   {
-    files: [
-      "**/*.js",
-      "**/*.ts",
-      "**/*.json",
-      "**/*.mjs",
-      "**/*.cjs",
-      "**/*.html",
-    ],
+    // Every JavaScript and TypeScript module extension, plus inline scripts
+    // in HTML. JSON is deliberately absent: espree cannot parse it, and the
+    // oxlint benchmark does not lint JSON either.
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/*.html"],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
       },
       parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
         ecmaVersion: "latest",
         sourceType: "module",
       },
@@ -94,8 +91,10 @@ const config = [
     },
 
     settings: {
+      // TypeScript extensions are mapped to @typescript-eslint/parser by
+      // importX.flatConfigs.typescript above.
       "import-x/parsers": {
-        espree: [".js", ".cjs", ".mjs", ".ts"],
+        espree: [".js", ".jsx", ".cjs", ".mjs"],
       },
       "import-x/resolver": {
         node: true,
@@ -104,16 +103,20 @@ const config = [
     },
   },
   {
-    files: ["**/*.ts"],
+    files: ["**/*.{ts,tsx,mts,cts}"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
-        project: "./tsconfig.json",
+        // The project service finds the nearest tsconfig for each file, so
+        // solution-style configs (`"files": []` plus `references`, as in the
+        // Vite templates) and monorepo packages get type information. A
+        // fixed `project: "./tsconfig.json"` failed every file in those
+        // layouts.
+        projectService: true,
       },
     },
     plugins: {
       "@typescript-eslint": typescript,
-      "import/typescript": importTypescriptResolver,
     },
     rules: {
       ...eslintTypescriptRules,
