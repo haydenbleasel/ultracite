@@ -194,3 +194,81 @@ describe("createEditorConfig", () => {
     });
   });
 });
+
+// A settings file at .vscode/settings.json with the given contents. Returns
+// the mocks that record writes, warnings and directory creation.
+const mockSettingsFile = (
+  contents: string,
+  { realParent = (filePath: string) => filePath } = {}
+) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  const mkdirSync = mock(() => {});
+  const warn = mock((_message: string) => {});
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock(() => Promise.resolve(contents)),
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {}),
+    existsSync: mock(() => true),
+    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    mkdirSync,
+    readFileSync: mock(() => "{}"),
+    realpathSync: mock(realParent),
+  }));
+  mock.module("@clack/prompts", () => ({
+    log: { error: mock(), info: mock(), success: mock(), warn },
+  }));
+
+  return { mkdirSync, warn, writeFile };
+};
+
+describe("updating existing settings", () => {
+  test("keeps comments, formatting and unrelated settings", async () => {
+    const settings = mockSettingsFile(`{
+    // Team settings
+    "editor.tabSize": 4,
+    "editor.codeActionsOnSave": {
+        "source.addMissingImports": "explicit" // keep
+    },
+}
+`);
+
+    await createEditorConfig("vscode", "oxlint").update();
+
+    const [[, written]] = settings.writeFile.mock.calls;
+    expect(written).toContain("// Team settings");
+    expect(written).toContain('"source.addMissingImports": "explicit"');
+    expect(written).toContain("// keep");
+    expect(written).toContain('    "editor.tabSize": 4');
+    expect(written).toContain('"source.fixAll.oxc": "explicit"');
+    expect(written).toContain('"editor.formatOnSave": true');
+  });
+
+  test("leaves a settings file with a syntax error unchanged", async () => {
+    const settings = mockSettingsFile(
+      '{ "editor.tabSize": 2, "files.exclude": { "**/.git": true }, "x": '
+    );
+
+    await createEditorConfig("vscode", "biome").update();
+
+    expect(settings.writeFile).not.toHaveBeenCalled();
+    expect(settings.warn).toHaveBeenCalled();
+  });
+
+  test("doesn't create directories through a path outside the project", async () => {
+    const settings = mockSettingsFile("{}", {
+      // .vscode is a symlink that resolves outside the project.
+      realParent: (filePath: string) =>
+        String(filePath).includes(".vscode") ? "/elsewhere/.vscode" : filePath,
+    });
+
+    await expect(createEditorConfig("vscode").create()).rejects.toThrow(
+      "Refusing to write"
+    );
+    expect(settings.mkdirSync).not.toHaveBeenCalled();
+  });
+});

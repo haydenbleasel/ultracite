@@ -2599,6 +2599,33 @@ describe("helper functions", () => {
       }).toThrow('Editor "invalid-editor" not found');
     });
 
+    test("installs the Prettier extension too for the ESLint toolchain", async () => {
+      const mockSpawn = mock((_command: string, _args: string[]) => ({
+        status: 0,
+      }));
+      mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+      restoreFileSystemMock();
+
+      await upsertEditorConfig("vscode", "eslint");
+
+      expect(mockSpawn.mock.calls.map(([, args]) => args.at(-1))).toEqual([
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+      ]);
+    });
+
     test("creates vscode settings when not exists", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

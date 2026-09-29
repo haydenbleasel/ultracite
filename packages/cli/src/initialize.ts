@@ -472,6 +472,12 @@ export const upsertTsConfig = async (quiet = false) => {
   }
 };
 
+// The ESLint toolchain formats with Prettier, and its VS Code settings make
+// the Prettier extension the default formatter, so it's installed too.
+const additionalVscodeExtensions: Partial<Record<Linter, string[]>> = {
+  eslint: ["esbenp.prettier-vscode"],
+};
+
 export const upsertEditorConfig = async (
   editorId: string,
   linter: Linter = "biome",
@@ -510,6 +516,7 @@ export const upsertEditorConfig = async (
 
   // Install extension for VS Code-based editors
   if (editorConfig.extension) {
+    const { extension } = editorConfig;
     const linterExtension = providers.find(
       (provider) => provider.id === linter
     )?.vscodeExtensionId;
@@ -518,27 +525,29 @@ export const upsertEditorConfig = async (
       throw new Error(`Linter extension not found for ${linter}`);
     }
 
+    const extensionIds = [
+      linterExtension,
+      ...(additionalVscodeExtensions[linter] ?? []),
+    ];
+    const extensionList = extensionIds.join(" and ");
+
     if (!quiet) {
-      s.message(`Installing ${linterExtension} extension...`);
+      s.message(`Installing ${extensionList}...`);
     }
 
-    try {
-      const result = editorConfig.extension(linterExtension);
-      if (result.status === 0) {
-        if (!quiet) {
-          s.stop(
-            `${editor.config.path} created and ${linterExtension} extension installed.`
-          );
-        }
-        return;
+    const installed = extensionIds.every((extensionId) => {
+      try {
+        return extension(extensionId).status === 0;
+      } catch {
+        return false;
       }
-    } catch {
-      // Fall through to manual install message
-    }
+    });
 
     if (!quiet) {
       s.stop(
-        `${editor.config.path} created. Install ${linterExtension} extension manually.`
+        installed
+          ? `${editor.config.path} created and ${extensionList} installed.`
+          : `${editor.config.path} created. Install ${extensionList} manually.`
       );
     }
     return;
