@@ -1,11 +1,11 @@
 ---
 title: Agent Rules
-description: Generate editor rule files for Cursor, Claude Code, and other AI tools so code suggestions start closer to your repo standards.
+description: Generate agent rule files for Claude Code, Codex, Copilot, and other AI tools so code suggestions start closer to your repo standards.
 ---
 
-Ultracite provides seamless integration with AI coding assistants by automatically generating editor-specific rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
+Ultracite provides seamless integration with AI coding assistants by automatically generating agent rule files. These rules help guide AI assistants to write better, more consistent code that follows best practices.
 
-The editor rules work alongside your linter's formatting and linting. While your linter handles code formatting and catches errors, the editor rules guide AI assistants to write better code from the start, reducing the need for fixes later.
+The agent rules work alongside your linter's formatting and linting. While your linter handles code formatting and catches errors, the agent rules guide AI assistants to write better code from the start, reducing the need for fixes later.
 
 The generated rules intentionally focus on code quality and implementation guidance instead of hardcoding formatter-specific settings like line width, quote style, or trailing commas. That keeps the rules portable across repositories while still letting each project's configured formatter stay in charge.
 
@@ -26,6 +26,10 @@ When you run `npx ultracite init`, you'll be prompted to select which agent file
 ```
 
 This will create the relevant rule file(s) in your project directory.
+
+Files that other tools also write to, like `AGENTS.md` and `.claude/CLAUDE.md`, get an Ultracite block (starting at `# Ultracite Code Standards`) added below your own content. Re-running `init` replaces that block in place, removes any duplicate blocks earlier versions appended, and keeps the file's line endings. The rules tell agents to run your project's installed CLI, such as `npx ultracite fix` or `pnpm exec ultracite fix`.
+
+Firebender's rules go in `.firebender/rules/ultracite.mdc` with `alwaysApply: true`. Earlier versions wrote them into `firebender.json` by mistake; if that file still holds only those rules, `init` resets it to `{}`.
 
 ### Manual Setup
 
@@ -52,7 +56,7 @@ If your AI tool supports installable reusable skills, see the [Agent Skills](/do
 
 ## Benefits
 
-Using Ultracite editor rules provides several advantages:
+Using Ultracite agent rules provides several advantages:
 
 - **Consistency**: All AI-generated code follows the same conventions
 - **Quality**: Rules enforce best practices and prevent common mistakes
@@ -64,6 +68,6 @@ Using Ultracite editor rules provides several advantages:
 
 While the default rules are comprehensive, you can customize them for your specific needs:
 
-1. **Modify existing rules**: Edit the rule files directly
+1. **Modify existing rules**: Edit the rule files directly, but keep your changes outside the Ultracite block in shared files like `AGENTS.md`, since re-running `init` replaces it
 2. **Add project-specific rules**: Append additional guidelines
 3. **Disable rules**: Remove or comment out rules that don't apply to your project
