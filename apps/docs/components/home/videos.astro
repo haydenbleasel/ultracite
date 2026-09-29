@@ -1,53 +1,84 @@
 ---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
 import SectionIntro from "./section-intro.astro";
 
 // YouTube facade: ship a thumbnail + play button, swap in the iframe on click.
+// Titles and channels are the videos' own, so each creator gets credit.
 const videos = [
-  { id: "lEkXbneUnWg", title: "Ultracite Biome migration walkthrough" },
-  { id: "b_F4LaycQcE", title: "Ultracite setup in a real project" },
+  {
+    author: "Better Stack",
+    authorUrl: "https://www.youtube.com/@betterstack",
+    id: "lEkXbneUnWg",
+    title:
+      "The EASIEST Way To Switch From ESLint & Prettier to Biome — Ultracite",
+  },
+  {
+    author: "OrcDev",
+    authorUrl: "https://www.youtube.com/@orcdev",
+    id: "b_F4LaycQcE",
+    title: "This New Tool Made Me Delete ESLint Without Regret",
+  },
 ];
 ---
 
 <div class="grid gap-8">
   <SectionIntro
-    description="These walkthroughs focus on the Biome migration path and show what the setup looks like in a real project instead of a generic landing-page demo."
-    title="Watch the Biome migration flow in action"
+    description="Two community walkthroughs of replacing ESLint and Prettier with Ultracite's Biome preset in a real project."
+    title="See Ultracite in action"
   />
   <div class="grid w-full gap-8 sm:grid-cols-2">
     {
       videos.map((video) => (
-        <button
-          aria-label={`Play: ${video.title}`}
-          class="hp-video group relative isolate block aspect-video w-full overflow-hidden rounded-lg border bg-muted"
-          data-video-id={video.id}
-          data-video-title={video.title}
-          type="button"
-        >
-          <img
-            alt=""
-            class="absolute inset-0 size-full object-cover"
-            height="360"
-            loading="lazy"
-            src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
-            width="480"
-          />
-          <span
-            class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30"
+        <figure class="grid gap-3">
+          <button
+            aria-label={`Play: ${video.title}`}
+            class="hp-video group relative isolate block aspect-video w-full overflow-hidden rounded-lg border bg-muted"
+            data-video-id={video.id}
+            data-video-title={video.title}
+            type="button"
           >
+            <img
+              alt=""
+              class="absolute inset-0 size-full object-cover"
+              height="360"
+              loading="lazy"
+              src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+              width="480"
+            />
             <span
-              class="flex size-16 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition-transform group-hover:scale-105"
+              class="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/30"
             >
-              <svg
-                aria-hidden="true"
-                class="size-7 translate-x-0.5"
-                fill="currentColor"
-                viewBox="0 0 24 24"
+              <span
+                class="flex size-16 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition-transform group-hover:scale-105"
               >
-                <path d="M8 5v14l11-7z"></path>
-              </svg>
+                <svg
+                  aria-hidden="true"
+                  class="size-7 translate-x-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z"></path>
+                </svg>
+              </span>
             </span>
-          </span>
-        </button>
+          </button>
+          <figcaption class="grid gap-0.5 text-sm">
+            <span class="font-medium">{video.title}</span>
+            <span class="text-muted-foreground">
+              by{" "}
+              <a
+                aria-describedby={NEW_TAB_HINT_ID}
+                class="underline"
+                href={video.authorUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {video.author}
+              </a>
+            </span>
+          </figcaption>
+        </figure>
       ))
     }
   </div>

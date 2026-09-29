@@ -1,5 +1,8 @@
 ---
 import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import { agents } from "../../lib/agents";
+import { hookIntegrations } from "../../lib/hooks";
 import Icon from "./icon.astro";
 import SectionIntro from "./section-intro.astro";
 
@@ -22,12 +25,16 @@ const UserCard: React.FC<{ user: User }> = ({ user }) => {
 
 export default UserCard;`;
 
+const hookNames = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+}).format(hookIntegrations.map((hook) => hook.name));
+
 const indicators = [
   {
     className: "xl:mt-5",
-    description:
-      "Ultracite supports 40+ agents for formatting rules and hooks.",
-    title: "Agent Integration",
+    description: `Rules files for ${agents.length} agents, plus hooks that fix every file an agent edits in ${hookNames}.`,
+    title: "Agent integration",
   },
   {
     className: "xl:mt-10",
@@ -38,10 +45,19 @@ const indicators = [
   {
     className: "xl:mt-24",
     description:
-      "Zero configuration linter and formatter config out of the box.",
-    title: "Configurable spec",
+      "Strict linter and formatter defaults out of the box, with every rule still yours to override.",
+    title: "Configurable presets",
   },
 ];
+
+// The one diagnostic Ultracite's Oxlint core and React presets report for
+// `mockCode` above (checked with oxlint).
+const problem = {
+  column: 58,
+  line: 9,
+  message: "Unexpected block statement surrounding arrow body.",
+  rule: "arrow-body-style",
+};
 ---
 
 <div class="grid gap-8">
@@ -129,26 +145,24 @@ const indicators = [
         <div
           class="flex flex-col gap-2 overflow-y-auto border-t p-4 text-muted-foreground text-xs"
         >
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
             <p class="font-medium">Problems</p>
-            <div class="-mx-1 -mt-1 rounded-full bg-muted px-2.5 py-1">
-              <p>Ultracite</p>
+            <div class="rounded-full bg-muted px-2 py-0.5">
+              <p>1</p>
             </div>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
               <Icon class="size-3" name="react" />
               <p class="text-foreground">index.tsx</p>
-              <p>/index.tsx</p>
             </div>
-            <div class="ml-4 flex items-center gap-2">
-              <Icon class="size-3" name="x-circle" />
-              <p class="truncate">React is imported but not used</p>
-            </div>
-            <div class="ml-4 flex items-center gap-2">
-              <Icon class="size-3" name="x-circle" />
+            <div class="ml-4 flex min-w-0 items-center gap-2">
+              <Icon class="size-3 shrink-0" name="x-circle" />
               <p class="truncate">
-                It is not necessary to wrap the return statement in a div.
+                {problem.message}{" "}
+                <span class="opacity-70">
+                  {problem.rule} [Ln {problem.line}, Col {problem.column}]
+                </span>
               </p>
             </div>
           </div>
@@ -161,11 +175,12 @@ const indicators = [
     >
       <div class="flex flex-col gap-1 xl:mt-72">
         <div class="flex items-center gap-2 xl:flex-row-reverse">
-          <p class="shrink-0 font-medium xl:text-sm">Output panel</p>
+          <p class="shrink-0 font-medium xl:text-sm">Problems panel</p>
           <div class="hidden h-px flex-1 bg-foreground/10 xl:block"></div>
         </div>
         <p class="text-muted-foreground xl:text-xs">
-          Ultracite uses the VS Code output panel to show problems.
+          Diagnostics from your linter's editor extension show up in the VS
+          Code Problems panel.
         </p>
       </div>
     </div>

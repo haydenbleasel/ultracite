@@ -21,7 +21,7 @@ import { getLatestVersion } from "../lib/latest-version";
 const { config } = data;
 const version = await getLatestVersion();
 const siteDescription =
-  "Ultracite is a zero-config preset for ESLint, Biome, and Oxlint that helps humans and agents write consistent, type-safe code.";
+  "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.";
 ---
 
 <PageLayout
@@ -36,7 +36,7 @@ const siteDescription =
   ogImage="/opengraph-image.png"
   page={{
     description: siteDescription,
-    title: "Ultracite — Zero-Config Linting for Biome, ESLint & Oxlint",
+    title: "Ultracite — Zero-Config Linting for Oxlint, Biome & ESLint",
   }}
   searchEnabled={config.search.enabled}
   site={{ title: config.title, description: siteDescription }}
@@ -47,7 +47,7 @@ const siteDescription =
     class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
   >
     <Hero description={siteDescription} version={version}>
-      <Demo />
+      <Demo version={version} />
     </Hero>
     <Logos />
     <ZeroConfig />
