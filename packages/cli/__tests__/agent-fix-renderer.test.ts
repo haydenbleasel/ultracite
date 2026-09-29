@@ -156,4 +156,47 @@ describe("agent-fix renderer", () => {
       expect(stringWidth(stripAnsi(line))).toBeLessThanOrEqual(60);
     }
   });
+
+  test("non-TTY mode keeps the full message for logs", () => {
+    const sink = createSink();
+    const message = "x".repeat(300);
+    const renderer = createRenderer(
+      [{ file: "src/foo.ts", issues: [issue({ message })] }],
+      { agentLabel: "Claude Code", columns: 60, isTTY: false, out: sink }
+    );
+
+    renderer.startFile("src/foo.ts");
+    renderer.settleFile("src/foo.ts", [
+      { fixed: false, issue: issue({ message }) },
+    ]);
+    renderer.stop();
+
+    expect(sink.output()).toContain(message);
+  });
+
+  test("TTY mode keeps every settled line when a file has more issues than the terminal has rows", () => {
+    const sink = createSink();
+    const issues = Array.from({ length: 12 }, (_, index) =>
+      issue({ line: index + 1 })
+    );
+    const renderer = createRenderer([{ file: "src/foo.ts", issues }], {
+      agentLabel: "Claude Code",
+      columns: 80,
+      frameIntervalMs: 60_000,
+      isTTY: true,
+      out: Object.assign(sink, { rows: 5 }),
+    });
+
+    renderer.startFile("src/foo.ts");
+    renderer.settleFile(
+      "src/foo.ts",
+      issues.map((settled) => ({ fixed: true, issue: settled }))
+    );
+    renderer.stop();
+
+    const output = stripAnsi(sink.output());
+    for (const settled of issues) {
+      expect(output).toContain(`✓ src/foo.ts:${settled.line}:5`);
+    }
+  });
 });

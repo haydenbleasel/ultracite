@@ -38,12 +38,14 @@ export const runAgent = async (
 ): Promise<AgentRunResult> => {
   // reject: false — a failed run (non-zero exit, timeout, missing CLI) is an
   // expected outcome reported through the result, not an exception.
-  const result = await execaFn(adapter.command, adapter.buildArgs(prompt), {
+  const result = await execaFn(adapter.command, [...adapter.args], {
     cwd,
     forceKillAfterDelay: killGraceMs,
+    // The prompt goes in on stdin (see AgentAdapter.args), which is then
+    // closed so the agent never waits for more input.
+    input: prompt,
     reject: false,
     stderr: "pipe",
-    stdin: "ignore",
     // stdout must be discarded or the child stalls once the pipe buffer fills.
     stdout: "ignore",
     timeout: timeoutMs,

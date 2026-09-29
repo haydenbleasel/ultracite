@@ -78,19 +78,25 @@ export const createRenderer = (
   const color = (code: string, text: string): string =>
     useColor ? `${code}${text}${RESET}` : text;
 
-  // Every part is truncated so the whole line fits in one terminal row — a
-  // wrapped line would double-count against log-update's block height. Widths
-  // are measured with string-width, so emoji and CJK text in lint messages
-  // can't overflow the budget the way code-unit counts would.
+  // On a terminal every part is truncated so the whole line fits in one row —
+  // a wrapped line would double-count against log-update's block height.
+  // Widths are measured with string-width, so emoji and CJK text in lint
+  // messages can't overflow the budget the way code-unit counts would. Piped
+  // output (CI logs, files) keeps the full message: nothing rewrites it.
   const issueLine = (
     icon: string,
     iconColor: string,
     issue: Diagnostic
   ): string => {
-    const budget = columns - 2;
     let location = `${issue.file}:${issue.line}:${issue.column}`;
     let mid = `  ${issue.rule} — `;
     let { message } = issue;
+
+    if (!isTTY) {
+      return `${color(iconColor, icon)} ${color(DIM, location)}${mid}${message}`;
+    }
+
+    const budget = columns - 2;
 
     const locationWidth = stringWidth(location);
 
@@ -203,10 +209,11 @@ export const createRenderer = (
       lines.push(color(DIM, note));
     }
 
-    logUpdate(lines.join("\n"));
-    // Persist the settled block so the next file's spinner renders below it
-    // instead of overwriting it.
-    logUpdate.done();
+    // Replace the animated block with the settled one and keep it, so the
+    // next file's spinner renders below it. persist writes every line: a
+    // plain render is clipped to the terminal height, which dropped the
+    // results of a file with more issues than the terminal has rows.
+    logUpdate.persist(lines.join("\n"));
 
     activeFile = null;
   };
