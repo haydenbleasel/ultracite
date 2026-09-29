@@ -1,6 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 import { createHooks } from "../src/hooks";
+import { restoreFileSystemMock } from "./mock-fs";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -722,5 +723,45 @@ describe("createHooks", () => {
         version: 1,
       });
     });
+  });
+});
+
+// A project whose `dir` is a symlink resolving outside it. Returns the
+// mkdirSync mock, which must not run before the write is refused.
+const mockEscapingDirectory = (dir: string) => {
+  const mkdirSync = mock(() => {});
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock(() => Promise.reject(new Error("ENOENT"))),
+    writeFile: mock(() => Promise.resolve()),
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {
+      throw new Error("ENOENT");
+    }),
+    existsSync: mock(() => false),
+    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    mkdirSync,
+    readFileSync: mock(() => "{}"),
+    realpathSync: mock((filePath: string) =>
+      String(filePath).includes(dir) ? `/elsewhere/${dir}` : filePath
+    ),
+  }));
+
+  return mkdirSync;
+};
+
+describe("writing outside the project", () => {
+  test("refuses before creating the hook's directory", async () => {
+    const mkdirSync = mockEscapingDirectory(".cursor");
+
+    try {
+      await expect(createHooks("cursor", "npm").create()).rejects.toThrow(
+        "Refusing to write"
+      );
+      expect(mkdirSync).not.toHaveBeenCalled();
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 });

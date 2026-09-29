@@ -12,7 +12,7 @@ import {
   assertSupportedPackageManagerName,
   supportedPackageManagers,
 } from "./package-manager";
-import { ensureDirectory, exists, writeProjectFile } from "./utils";
+import { exists, writeProjectFile } from "./utils";
 
 const isJsonObject = (value: JsonValue | undefined): value is JsonObject =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -273,7 +273,6 @@ export const createHooks = (
 
   return {
     create: async () => {
-      ensureDirectory(hookIntegration.hooks.path);
       await writeProjectFile(
         hookIntegration.hooks.path,
         `${JSON.stringify(content, null, 2)}\n`
@@ -281,7 +280,6 @@ export const createHooks = (
     },
     exists: () => exists(hookIntegration.hooks.path),
     update: async () => {
-      ensureDirectory(hookIntegration.hooks.path);
       await updateConfig();
     },
   };

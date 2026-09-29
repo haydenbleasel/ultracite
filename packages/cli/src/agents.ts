@@ -7,7 +7,7 @@ import type { options } from "./data/options";
 import { providers } from "./data/providers";
 import { getRules } from "./data/rules";
 import { localBinCommand } from "./integrations/project-command";
-import { ensureDirectory, exists, writeProjectFile } from "./utils";
+import { exists, writeProjectFile } from "./utils";
 
 type AgentId = (typeof options.agents)[number];
 
@@ -204,7 +204,6 @@ export const createAgents = (
 
   return {
     create: async () => {
-      ensureDirectory(agent.config.path);
       await writeProjectFile(agent.config.path, content);
       await repairSupersededFile();
     },
@@ -212,7 +211,6 @@ export const createAgents = (
     exists: () => exists(agent.config.path),
 
     update: async () => {
-      ensureDirectory(agent.config.path);
       const doesExist = exists(agent.config.path);
 
       if (!(agent.config.appendMode && doesExist)) {
