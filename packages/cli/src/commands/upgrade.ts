@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -24,7 +25,12 @@ import {
 } from "../package-manager";
 import { readPackageJson } from "../schemas";
 import { spawnSync } from "../spawn-sync";
-import { detectLinter, exists } from "../utils";
+import {
+  detectLinter,
+  eslintConfigNames,
+  exists,
+  findNearestFile,
+} from "../utils";
 import type { Linter } from "../utils";
 import { DOCTOR_FAILED, reportDiagnostics, runDiagnostics } from "./doctor";
 
@@ -78,6 +84,32 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
   ]);
 };
 
+const ESLINT_PRESET_RE = /ultracite\/eslint\/(?<preset>[a-z-]+)/gu;
+
+/**
+ * The framework presets the project's ESLint config imports. Their plugins are
+ * reinstalled even when package.json lacks them, so a preset that gained a
+ * plugin in a newer release (e.g. nestjs) gets it on upgrade.
+ */
+export const getConfiguredEslintFrameworks = (): Set<string> => {
+  const found = findNearestFile(eslintConfigNames);
+
+  if (!found) {
+    return new Set();
+  }
+
+  try {
+    const content = readFileSync(found.path, "utf-8");
+    return new Set(
+      [...content.matchAll(ESLINT_PRESET_RE)].map(
+        (match) => match.groups?.preset ?? ""
+      )
+    );
+  } catch {
+    return new Set();
+  }
+};
+
 /**
  * The `name@version` specs to (re)install for a toolchain: everything the
  * preset requires — including packages newer presets added — plus the
@@ -87,7 +119,8 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
  */
 export const getToolchainPackages = (
   linter: Linter,
-  projectDependencies: ReadonlySet<string>
+  projectDependencies: ReadonlySet<string>,
+  configuredFrameworks: ReadonlySet<string> = new Set()
 ): string[] => {
   const packages = new Map<string, string>();
 
@@ -100,11 +133,12 @@ export const getToolchainPackages = (
       for (const [name, version] of Object.entries(eslintCoreDevDependencies)) {
         packages.set(name, version);
       }
-      for (const dependencies of Object.values(
+      for (const [framework, dependencies] of Object.entries(
         eslintFrameworkDevDependencies
       )) {
+        const configured = configuredFrameworks.has(framework);
         for (const [name, version] of Object.entries(dependencies)) {
-          if (projectDependencies.has(name)) {
+          if (configured || projectDependencies.has(name)) {
             packages.set(name, version);
           }
         }
@@ -225,7 +259,8 @@ const syncToolchain = async (
 ): Promise<void> => {
   const packages = getToolchainPackages(
     linter,
-    await collectProjectDependencyNames()
+    await collectProjectDependencyNames(),
+    linter === "eslint" ? getConfiguredEslintFrameworks() : new Set()
   );
 
   const s = spinner();

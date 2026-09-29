@@ -138,8 +138,10 @@ export const eslintFrameworkDevDependencies = {
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
   },
-  // NestJS needs no ESLint plugins beyond the core set.
-  nestjs: {},
+  nestjs: {
+    "@darraghor/eslint-plugin-nestjs-typed":
+      packageJson.devDependencies["@darraghor/eslint-plugin-nestjs-typed"],
+  },
   next: {
     "@next/eslint-plugin-next":
       packageJson.devDependencies["@next/eslint-plugin-next"],
