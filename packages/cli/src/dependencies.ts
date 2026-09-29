@@ -1,4 +1,5 @@
 import packageJson from "../package.json" with { type: "json" };
+import { UltraciteSetupError } from "./config-resolution";
 import type { options } from "./data/options";
 
 type Linter = (typeof options.linters)[number];
@@ -63,10 +64,10 @@ export const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
     return value;
   }
 
-  throw new Error(
+  throw new UltraciteSetupError(
     `Unsupported Oxlint JS plugin "${value}". Supported plugins: ${oxlintJsPlugins.join(
       ", "
-    )}`
+    )}.`
   );
 };
 

@@ -1,5 +1,6 @@
 import type { PackageManager, PackageManagerName } from "nypm";
 
+import { UltraciteSetupError } from "./config-resolution";
 import { isMonorepo } from "./utils";
 
 export const supportedPackageManagers = [
@@ -27,7 +28,7 @@ export const assertSupportedPackageManagerName = (
     return name;
   }
 
-  throw new Error(
+  throw new UltraciteSetupError(
     `Unsupported package manager "${name}". Supported package managers: ${supportedPackageManagers.join(", ")}.`
   );
 };

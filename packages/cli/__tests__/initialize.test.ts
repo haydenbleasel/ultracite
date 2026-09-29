@@ -1,9 +1,10 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 
 import type { PackageManager } from "nypm";
 
 import type { AgentFileTarget } from "../src/agents";
 import { getAgentFileTargets } from "../src/agents";
+import { UltraciteSetupError } from "../src/config-resolution";
 import {
   initialize,
   initializeLefthook,
@@ -23,9 +24,25 @@ import {
   upsertPrettierConfig,
   upsertStylelintConfig,
   upsertTsConfig,
+  validateInitializeFlags,
 } from "../src/initialize";
+import * as utils from "../src/utils";
 
 const npmPm: PackageManager = { command: "npm", name: "npm" };
+
+// Other suites mock utils.detectLinter and the mock outlives them, so pin it
+// here: init only falls back to the detected linter when no --linter is given,
+// and these tests expect a project with no linter config.
+const realUtils = { ...utils };
+const mockDetectLinter = mock((): utils.Linter | null => null);
+mock.module("../src/utils", () => ({
+  ...realUtils,
+  detectLinter: mockDetectLinter,
+}));
+
+afterAll(() => {
+  mock.module("../src/utils", () => realUtils);
+});
 
 // Data package mocks are in preload.ts (must run before imports)
 
@@ -771,7 +788,7 @@ describe("initialize", () => {
         pm: "node",
         quiet: true,
       })
-    ).rejects.toThrow('Unsupported package manager "node"');
+    ).rejects.toThrow('Unknown --pm value "node"');
     expect(mockAddDep).not.toHaveBeenCalled();
   });
 
@@ -1789,7 +1806,7 @@ describe("initialize", () => {
         integrations: [],
         skipInstall: true,
       });
-    }).toThrow("No package manager specified or detected");
+    }).toThrow("No package manager detected");
   });
 
   test("exits with error on failure", async () => {
@@ -3574,5 +3591,175 @@ describe("helper functions", () => {
       );
       expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(false);
     });
+  });
+});
+
+const quietPrompts = () => ({
+  cancel: mock(noop),
+  confirm: mock(() => Promise.resolve(false)),
+  intro: mock(noop),
+  isCancel: mock(() => false),
+  log: {
+    error: mock(noop),
+    info: mock(noop),
+    success: mock(noop),
+    warn: mock(noop),
+  },
+  multiselect: mock(() => Promise.resolve([])),
+  outro: mock(noop),
+  select: mock(() => Promise.resolve("biome")),
+  spinner: mock(() => ({
+    message: mock(noop),
+    start: mock(noop),
+    stop: mock(noop),
+  })),
+});
+
+describe("init flag validation", () => {
+  test("rejects an unknown --linter before touching the project", async () => {
+    const mockAddDep = mock(() => Promise.resolve());
+    const mockRm = mock(() => Promise.resolve());
+    const mockWriteFile = mock(() => Promise.resolve());
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mockRm,
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", quietPrompts);
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+
+    const flags: Parameters<typeof initialize>[0] = { pm: "npm", quiet: true };
+    // Commander passes flag values through unchecked, so plant a value
+    // outside the Linter union the way a mistyped flag arrives.
+    Reflect.set(flags ?? {}, "linter", "Biome");
+    const result = initialize(flags);
+
+    await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
+    await expect(result).rejects.toThrow(
+      'Unknown --linter value "Biome". Valid values: biome, eslint, oxlint.'
+    );
+    expect(mockAddDep).not.toHaveBeenCalled();
+    expect(mockRm).not.toHaveBeenCalled();
+    expect(mockWriteFile).not.toHaveBeenCalled();
+  });
+
+  test("rejects unknown values for every list flag", () => {
+    const cases: [Parameters<typeof validateInitializeFlags>[0], string][] = [
+      [
+        { frameworks: ["react", "nextjs"] },
+        'Unknown --frameworks value "nextjs"',
+      ],
+      [{ editors: ["vsc"] }, 'Unknown --editors value "vsc"'],
+      [
+        { agents: ["claude-code", "x"] },
+        'Unknown --agents values "claude-code", "x"',
+      ],
+      [{ hooks: ["vim"] }, 'Unknown --hooks value "vim"'],
+      [
+        { integrations: ["simple-git-hooks"] },
+        'Unknown --integrations value "simple-git-hooks"',
+      ],
+      [
+        { "js-plugins": ["eslint-plugin-foo"] },
+        'Unknown --js-plugins value "eslint-plugin-foo"',
+      ],
+      [{ pm: "pip" }, 'Unknown --pm value "pip"'],
+    ];
+
+    for (const [flags, message] of cases) {
+      expect(() => validateInitializeFlags(flags)).toThrow(message);
+    }
+  });
+
+  test("accepts known values, including universal editors and agents", () => {
+    expect(() =>
+      validateInitializeFlags({
+        agents: ["universal", "claude"],
+        editors: ["universal", "zed"],
+        frameworks: ["react", "next"],
+        hooks: ["cursor"],
+        integrations: ["husky", "lint-staged"],
+        "js-plugins": ["anti-slop"],
+        linter: "eslint",
+        pm: "bun",
+      })
+    ).not.toThrow();
+  });
+
+  test("keeps the detected linter when prompts are skipped", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+    const mockRm = mock((_path: string) => Promise.resolve());
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mockRm,
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", quietPrompts);
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+    mockDetectLinter.mockImplementation(() => "biome");
+
+    try {
+      await initialize({ agents: [], pm: "npm", skipInstall: true });
+    } finally {
+      mockDetectLinter.mockImplementation(() => null);
+    }
+
+    const writtenPaths = mockWriteFile.mock.calls.map(([filePath]) =>
+      String(filePath)
+    );
+    const removedPaths = mockRm.mock.calls.map(([filePath]) =>
+      String(filePath)
+    );
+
+    expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(true);
+    expect(writtenPaths.some((p) => p.endsWith("oxlint.config.ts"))).toBe(
+      false
+    );
+    expect(removedPaths.some((p) => p.includes("biome"))).toBe(false);
+  });
+
+  test("preselects the detected linter in the prompt", async () => {
+    const prompts = quietPrompts();
+    const mockSelect = mock(() => Promise.resolve("eslint"));
+
+    mock.module("@clack/prompts", () => ({ ...prompts, select: mockSelect }));
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+    mockDetectLinter.mockImplementation(() => "eslint");
+
+    try {
+      await initialize({ skipInstall: true });
+    } finally {
+      mockDetectLinter.mockImplementation(() => null);
+    }
+
+    expect(mockSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ initialValue: "eslint" })
+    );
   });
 });

@@ -15,10 +15,11 @@ import type { PackageManager, PackageManagerName } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents, getAgentFileTargets } from "./agents";
 import type { AgentFileTarget } from "./agents";
+import { UltraciteSetupError } from "./config-resolution";
 import { agents as agentsData } from "./data/agents";
 import { editors } from "./data/editors";
 import { hooks as hookIntegrations } from "./data/hooks";
-import type { options } from "./data/options";
+import { options } from "./data/options";
 import { providers } from "./data/providers";
 import {
   assertOxlintJsPlugin,
@@ -49,6 +50,7 @@ import {
   assertSupportedPackageManagerName,
   getRootInstallOptions,
   normalizePackageManager,
+  supportedPackageManagers,
 } from "./package-manager";
 import { readPackageJson } from "./schemas";
 import {
@@ -59,6 +61,7 @@ import { tsconfig } from "./tsconfig";
 import {
   biomeConfigNames,
   detectFrameworks,
+  detectLinter,
   eslintConfigNames,
   exists,
   legacyEslintConfigNames,
@@ -100,6 +103,66 @@ interface InitializeFlags {
 // prompt's `T | symbol` result. Prompts only ever resolve to that one symbol,
 // so a `symbol` predicate stays truthful and restores the narrowing.
 const isCancelled = (value: unknown): value is symbol => isCancel(value);
+
+const UNIVERSAL = "universal";
+
+const quoteValues = (values: readonly string[]): string =>
+  values.map((value) => `"${value}"`).join(", ");
+
+// Commander hands flag values through as raw strings, so each one is checked
+// against its allowed list before init touches the project: an unknown
+// --linter used to fall through to the migration step, which deletes every
+// linter config that doesn't belong to the chosen linter.
+const assertAllowedValues = (
+  flag: string,
+  values: readonly string[] | string | undefined,
+  allowed: readonly string[]
+): void => {
+  if (values === undefined) {
+    return;
+  }
+
+  const invalid = [values].flat().filter((value) => !allowed.includes(value));
+
+  if (invalid.length === 0) {
+    return;
+  }
+
+  throw new UltraciteSetupError(
+    `Unknown ${flag} ${invalid.length === 1 ? "value" : "values"} ${quoteValues(invalid)}. Valid values: ${allowed.join(", ")}.`
+  );
+};
+
+// The list-valued and linter flags as Commander hands them over: raw strings
+// that haven't been checked against the option tables yet.
+interface RawInitializeFlags {
+  agents?: readonly string[];
+  editors?: readonly string[];
+  frameworks?: readonly string[];
+  hooks?: readonly string[];
+  integrations?: readonly string[];
+  "js-plugins"?: readonly string[];
+  linter?: string;
+  pm?: string;
+}
+
+export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
+  assertAllowedValues("--linter", flags.linter, options.linters);
+  assertAllowedValues("--pm", flags.pm, supportedPackageManagers);
+  assertAllowedValues("--frameworks", flags.frameworks, options.frameworks);
+  assertAllowedValues("--editors", flags.editors, [
+    UNIVERSAL,
+    ...options.editorConfigs,
+  ]);
+  assertAllowedValues("--agents", flags.agents, [UNIVERSAL, ...options.agents]);
+  assertAllowedValues("--hooks", flags.hooks, options.hooks);
+  assertAllowedValues(
+    "--integrations",
+    flags.integrations,
+    options.integrations
+  );
+  assertAllowedValues("--js-plugins", flags["js-plugins"], oxlintJsPlugins);
+};
 
 // Prompt hints for the JS plugins that need a word of explanation.
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
@@ -904,6 +967,8 @@ export const initialize = async (flags?: InitializeFlags) => {
   }
 
   try {
+    validateInitializeFlags(opts);
+
     let pm: PackageManagerName;
     let pmInfo: PackageManager;
 
@@ -914,7 +979,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       const detected = await detectPackageManager(process.cwd());
 
       if (!detected) {
-        throw new Error("No package manager specified or detected");
+        throw new UltraciteSetupError(
+          "No package manager detected. Pass one with `--pm` (e.g. `ultracite init --pm npm`)."
+        );
       }
 
       if (!quiet && detected.warnings) {
@@ -932,7 +999,10 @@ export const initialize = async (flags?: InitializeFlags) => {
 
     let { linter } = opts;
     if (linter === undefined) {
-      // If quiet mode or other CLI options are provided, default to oxlint only
+      // A project that already has a linter keeps it, so re-running init to
+      // add agents or editors doesn't migrate the project to another linter.
+      const defaultLinter = detectLinter() ?? "oxlint";
+      // If quiet mode or other CLI options are provided, don't prompt
       const hasOtherCliOptions =
         quiet ||
         opts.pm ||
@@ -943,9 +1013,10 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
-        linter = "oxlint";
+        linter = defaultLinter;
       } else {
         const linterResult = await select<Linter>({
+          initialValue: defaultLinter,
           message: "Which linter do you want to use?",
           options: [
             {
@@ -1310,8 +1381,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       );
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    if (!quiet) {
+    // Setup errors are reported by the CLI entry point as a plain message.
+    if (!quiet && !(error instanceof UltraciteSetupError)) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       log.error(`Failed to initialize Ultracite configuration: ${message}`);
     }
     throw error;
