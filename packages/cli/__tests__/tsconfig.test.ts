@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+import path from "node:path";
 
 import { tsconfig } from "../src/tsconfig";
 
@@ -208,5 +209,108 @@ describe("tsconfig", () => {
 
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
+  });
+});
+
+// tsconfig files on disk as path → contents (paths relative to the cwd, like
+// fast-glob returns them), of which `updated` are the ones the glob finds.
+// Returns the writeFile and warn mocks.
+const mockTsConfigs = (
+  files: Record<string, string>,
+  updated = ["tsconfig.json"]
+) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  const warn = mock((_message: string) => {});
+  const byPath = new Map(
+    Object.entries(files).map(([file, content]) => [
+      path.resolve(file),
+      content,
+    ])
+  );
+  const read = (filePath: string) => {
+    const content = byPath.get(path.resolve(String(filePath)));
+    if (content === undefined) {
+      throw new Error("ENOENT");
+    }
+    return content;
+  };
+
+  mock.module("fast-glob", () => ({
+    default: mock(() => Promise.resolve(updated)),
+  }));
+  mock.module("node:fs/promises", () => ({
+    readFile: mock((filePath: string) => Promise.resolve(read(filePath))),
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((filePath: string) => {
+      read(filePath);
+    }),
+    existsSync: mock(() => false),
+    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    mkdirSync: mock(() => {}),
+    readFileSync: mock(() => "{}"),
+    realpathSync: mock((filePath: string) => filePath),
+  }));
+  mock.module("@clack/prompts", () => ({
+    log: { error: mock(), info: mock(), success: mock(), warn },
+  }));
+
+  return { warn, writeFile };
+};
+
+describe("strictNullChecks decisions", () => {
+  test("leaves an explicit strictNullChecks: false alone", async () => {
+    const project = mockTsConfigs({
+      "tsconfig.json": '{ "compilerOptions": { "strictNullChecks": false } }',
+    });
+
+    await tsconfig.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn.mock.calls[0]?.[0]).toContain(
+      "turns strictNullChecks off"
+    );
+  });
+
+  test("skips a config that inherits strict from a relative base", async () => {
+    const project = mockTsConfigs(
+      {
+        "packages/app/tsconfig.json": '{ "extends": "../../tsconfig.base" }',
+        "tsconfig.base.json": '{ "compilerOptions": { "strict": true } }',
+      },
+      ["packages/app/tsconfig.json"]
+    );
+
+    await tsconfig.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("skips a config that inherits strict from a package", async () => {
+    const project = mockTsConfigs({
+      "node_modules/@tsconfig/strictest/tsconfig.json":
+        '{ "compilerOptions": { "strict": true } }',
+      "tsconfig.json": '{ "extends": ["@tsconfig/strictest/tsconfig.json"] }',
+    });
+
+    await tsconfig.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("still enables strictNullChecks when the base doesn't", async () => {
+    const project = mockTsConfigs({
+      "tsconfig.base.json": '{ "compilerOptions": { "target": "es2022" } }',
+      "tsconfig.json": '{ "extends": "./tsconfig.base.json" }',
+    });
+
+    await tsconfig.update();
+
+    const [[writtenPath, content]] = project.writeFile.mock.calls;
+    expect(writtenPath).toBe("tsconfig.json");
+    expect(JSON.parse(content).compilerOptions.strictNullChecks).toBe(true);
   });
 });

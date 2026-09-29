@@ -88,6 +88,7 @@ export const tsConfigSchema = z.looseObject({
       strictNullChecks: z.boolean().optional(),
     })
     .optional(),
+  extends: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
 /**
