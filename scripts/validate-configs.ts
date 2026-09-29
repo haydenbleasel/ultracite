@@ -13,6 +13,12 @@ const main = async () => {
   const eslint =
     await $`bun ${path.join(scriptsDir, "validate-eslint.ts")}`.nothrow();
 
+  console.log("\nLinting fixtures with every ESLint preset...\n");
+  const eslintSmoke = await $`bun ${path.join(
+    scriptsDir,
+    "../packages/cli/scripts/eslint-smoke.ts"
+  )}`.nothrow();
+
   console.log("\nValidating Oxlint configs...\n");
   const oxlint =
     await $`bun ${path.join(scriptsDir, "validate-oxlint.ts")}`.nothrow();
@@ -32,7 +38,7 @@ const main = async () => {
     .cwd(path.join(scriptsDir, "../packages/cli"))
     .nothrow();
 
-  const failed = [biome, eslint, oxlint, stylelint, parity].filter(
+  const failed = [biome, eslint, eslintSmoke, oxlint, stylelint, parity].filter(
     (r) => r.exitCode !== 0
   );
 
