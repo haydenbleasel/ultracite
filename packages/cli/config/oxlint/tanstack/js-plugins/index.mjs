@@ -8,13 +8,14 @@ import { defineConfig } from "oxlint";
 //   import { defineConfig } from "oxlint";
 //   import core from "ultracite/oxlint/core";
 //   import tanstack from "ultracite/oxlint/tanstack";
-//   import jsPlugins from "ultracite/oxlint/js-plugins";
+//   import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 //   import tanstackJsPlugins from "ultracite/oxlint/tanstack/js-plugins";
 //
 //   export default defineConfig({
 //     extends: [core, tanstack, jsPlugins, tanstackJsPlugins],
 //     ignorePatterns: core.ignorePatterns,
 //     jsPlugins: jsPlugins.jsPlugins,
+//     settings: jsPluginSettings,
 //   });
 export default defineConfig({
   jsPlugins: [

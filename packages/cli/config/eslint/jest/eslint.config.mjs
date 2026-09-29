@@ -1,4 +1,4 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import { createRequire } from "node:module";
 import path from "node:path";

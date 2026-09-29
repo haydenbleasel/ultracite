@@ -1,4 +1,4 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import query from "@tanstack/eslint-plugin-query";
 import router from "@tanstack/eslint-plugin-router";

@@ -1,4 +1,4 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import remix from "eslint-plugin-remix";
 
@@ -12,13 +12,6 @@ const config = [
     },
     rules: {
       ...remixRules,
-    },
-  },
-  {
-    files: ["**/routeTree.gen.ts"],
-    rules: {
-      "unicorn/filename-case": "off",
-      "unicorn/no-abusive-eslint-disable": "off",
     },
   },
 ];

@@ -1,4 +1,4 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import eslintPrettier from "eslint-config-prettier";
 import jsxA11y from "eslint-plugin-jsx-a11y";

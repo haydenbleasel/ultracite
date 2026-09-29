@@ -16,6 +16,10 @@ export default defineConfig({
       },
     },
     {
+      // TanStack Router's generated route tree. The shared ignore list
+      // already skips `**/*.gen.*`, but oxlint does not apply ignorePatterns
+      // from extended configs, so this still matters for configs that do not
+      // re-declare `ignorePatterns: core.ignorePatterns`.
       files: ["**/routeTree.gen.ts"],
       rules: {
         "unicorn/filename-case": "off",

@@ -188,6 +188,9 @@ export default defineConfig({
     ],
     "no-unneeded-ternary": "error",
     "no-unreachable": "error",
+    // A nursery rule in oxlint, enabled deliberately (the non-nursery
+    // coverage test does not require it); ESLint's no-unreachable-loop is on
+    // too.
     "no-unreachable-loop": "error",
     "no-unsafe-finally": "error",
     "no-unsafe-negation": "error",
@@ -232,7 +235,7 @@ export default defineConfig({
     "require-await": "error",
     "require-unicode-regexp": "error",
     "require-yield": "error",
-    // Rely on oxfmt `experimentalSortImports` instead
+    // Rely on oxfmt `sortImports` instead
     "sort-imports": "off",
     "sort-keys": "error",
     "sort-vars": "error",

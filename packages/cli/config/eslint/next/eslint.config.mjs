@@ -1,4 +1,4 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import next from "@next/eslint-plugin-next";
 import reactDoctor from "eslint-plugin-react-doctor";
@@ -16,12 +16,6 @@ const config = [
     rules: {
       ...nextRules,
       ...reactDoctorRules,
-    },
-  },
-  {
-    files: ["**/next-env.d.ts"],
-    rules: {
-      "import-x/no-unassigned-import": "off",
     },
   },
 ];
