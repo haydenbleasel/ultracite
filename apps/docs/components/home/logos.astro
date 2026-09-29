@@ -1,4 +1,6 @@
 ---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
 import SectionIntro from "./section-intro.astro";
 
 // Logos render at a fixed 32px height; `width` is each file's aspect ratio at
@@ -33,7 +35,7 @@ const logos = [
 
 <div class="grid gap-8">
   <SectionIntro
-    description='And used by <a class="underline" href="https://github.com/haydenbleasel/ultracite/network/dependents" rel="noreferrer" target="_blank">thousands</a> of open source projects.'
+    description={`And used by <a aria-describedby="${NEW_TAB_HINT_ID}" class="underline" href="https://github.com/haydenbleasel/ultracite/network/dependents" rel="noreferrer" target="_blank">thousands</a> of open source projects.`}
     maxWidth="max-w-xl"
     title="Trusted by top companies"
   />

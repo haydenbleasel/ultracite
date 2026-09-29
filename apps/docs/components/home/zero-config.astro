@@ -37,10 +37,10 @@ const logos = [
 ---
 
 <div class="grid gap-8">
-  <span class="flex justify-center items-center -space-x-1">
+  <ul class="flex items-center justify-center -space-x-1">
     {
       logos.map((logo) => (
-        <span class="hp-tt inline-flex" tabindex="0">
+        <li class="hp-tt inline-flex">
           <img
             alt={logo.name}
             class="size-7 overflow-hidden rounded-full object-cover ring-2 ring-background md:size-10 lg:size-12"
@@ -48,11 +48,13 @@ const logos = [
             src={logo.src}
             width="48"
           />
-          <span data-tt>{logo.name}</span>
-        </span>
+          <span aria-hidden="true" data-tt>
+            {logo.name}
+          </span>
+        </li>
       ))
     }
-  </span>
+  </ul>
   <SectionIntro
     description="Hundreds of rules for your framework to optimize your JavaScript / TypeScript code, while still allowing you to customize when needed."
     maxWidth="max-w-xl"
@@ -60,12 +62,18 @@ const logos = [
   />
 
   <div class="flex flex-col items-center justify-center gap-3">
-    <span class="text-muted-foreground text-sm">I'm using</span>
-    <div class="flex flex-wrap items-center justify-center gap-2">
+    <span class="text-muted-foreground text-sm" id="hp-provider-label">
+      I'm using
+    </span>
+    <div
+      aria-labelledby="hp-provider-label"
+      class="flex flex-wrap items-center justify-center gap-2"
+      role="group"
+    >
       {
         ordered.map((provider) => (
           <button
-            aria-selected={provider.id === defaultProvider}
+            aria-pressed={String(provider.id === defaultProvider)}
             class="hp-provider flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
             data-provider={provider.id}
             type="button"
@@ -120,7 +128,7 @@ const logos = [
       ".hp-provider",
     )) {
       button.setAttribute(
-        "aria-selected",
+        "aria-pressed",
         String(button.dataset.provider === id),
       );
     }

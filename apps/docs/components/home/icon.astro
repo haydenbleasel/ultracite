@@ -5,9 +5,15 @@
 interface Props {
   name: keyof typeof brand | keyof typeof lucide;
   class?: string;
+  /**
+   * Accessible name for an icon that carries meaning on its own. Omit it for
+   * the usual case (an icon beside text, or inside a labeled link or button)
+   * and the icon is hidden from assistive technology.
+   */
+  label?: string;
 }
 
-const { name, class: className } = Astro.props;
+const { name, class: className, label } = Astro.props;
 
 // Brand icons: single filled path, viewBox 0 0 24 24, uses currentColor.
 const brand = {
@@ -43,20 +49,24 @@ const isBrandName = (icon: Props["name"]): icon is keyof typeof brand =>
 
 const isBrand = isBrandName(name);
 const body = isBrand ? `<path d="${brand[name]}"/>` : lucide[name];
+const a11y = label
+  ? { "aria-label": label, role: "img" }
+  : { "aria-hidden": "true" as const };
 ---
 
 {
   isBrand ? (
     <svg
+      {...a11y}
       class={className}
       fill="currentColor"
-      role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       set:html={body}
     />
   ) : (
     <svg
+      {...a11y}
       class={className}
       fill="none"
       stroke="currentColor"

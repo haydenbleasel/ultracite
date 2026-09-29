@@ -20,10 +20,11 @@ const videos = [
           aria-label={`Play: ${video.title}`}
           class="hp-video group relative isolate block aspect-video w-full overflow-hidden rounded-lg border bg-muted"
           data-video-id={video.id}
+          data-video-title={video.title}
           type="button"
         >
           <img
-            alt={video.title}
+            alt=""
             class="absolute inset-0 size-full object-cover"
             height="360"
             loading="lazy"
@@ -53,6 +54,9 @@ const videos = [
 </div>
 
 <script>
+  // Swap the whole facade button for a plain wrapper around the player: an
+  // iframe inside a <button> is invalid HTML, and a button's children are
+  // presentational, which hides the player's controls from screen readers.
   const play = (el: HTMLButtonElement) => {
     const id = el.dataset.videoId;
     if (!id) {
@@ -60,12 +64,18 @@ const videos = [
     }
     const iframe = document.createElement("iframe");
     iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
-    iframe.title = el.getAttribute("aria-label") ?? "YouTube video";
+    iframe.title = el.dataset.videoTitle ?? "YouTube video";
     iframe.allow =
       "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
     iframe.className = "absolute inset-0 size-full border-0";
-    el.replaceChildren(iframe);
+
+    const player = document.createElement("div");
+    player.className =
+      "relative isolate block aspect-video w-full overflow-hidden rounded-lg border bg-muted";
+    player.append(iframe);
+    el.replaceWith(player);
+    iframe.focus();
   };
 
   // Runs now and on every `astro:page-load`: the client router executes this

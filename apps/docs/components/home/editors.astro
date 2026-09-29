@@ -9,10 +9,10 @@ import SectionIntro from "./section-intro.astro";
     description="Ultracite can generate configuration files for all these popular editors, so you can get the most of out of your AI integrations."
     title="... and all your favourite editors"
   />
-  <div class="mx-auto flex items-center justify-center -space-x-1">
+  <ul class="mx-auto flex items-center justify-center -space-x-1">
     {
       editors.map((editor, index) => (
-        <span class="hp-tt inline-flex" tabindex="0">
+        <li class="hp-tt inline-flex">
           <img
             alt={editor.name}
             class:list={[
@@ -23,9 +23,11 @@ import SectionIntro from "./section-intro.astro";
             src={editorLogos[editor.id]}
             width="56"
           />
-          <span data-tt>{editor.name}</span>
-        </span>
+          <span aria-hidden="true" data-tt>
+            {editor.name}
+          </span>
+        </li>
       ))
     }
-  </div>
+  </ul>
 </div>

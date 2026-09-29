@@ -48,21 +48,27 @@ const {
     <span class="px-1 text-muted-foreground">$</span>
   </div>
 
+  {/*
+    No outline-none here: Blume's base :focus-visible ring is the only focus
+    indicator this read-only field has.
+  */}
   <input
-    class="hp-cmd min-w-0 flex-1 bg-transparent text-foreground outline-none"
+    aria-label="Install command"
+    class="hp-cmd min-w-0 flex-1 rounded-sm bg-transparent text-foreground"
     readonly
     value={human}
   />
 
   <button
-    aria-label="Copy"
+    aria-label="Copy command"
     class="hp-copy mr-1 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-    title="Copy"
+    title="Copy command"
     type="button"
   >
     <Icon class="hp-copy-icon size-3.5" name="copy" />
     <Icon class="hp-check-icon hidden size-3.5" name="check" />
   </button>
+  <span aria-live="polite" class="hp-copy-status sr-only"></span>
 </div>
 
 <script>
@@ -81,7 +87,8 @@ const {
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
-    if (!(input && copyBtn && copyIcon && checkIcon)) {
+    const status = el.querySelector<HTMLElement>(".hp-copy-status");
+    if (!(input && copyBtn && copyIcon && checkIcon && status)) {
       return;
     }
     el.dataset.hpBound = "true";
@@ -113,17 +120,24 @@ const {
 
     let timer: ReturnType<typeof setTimeout>;
     copyBtn.addEventListener("click", async () => {
+      clearTimeout(timer);
       try {
         await navigator.clipboard.writeText(commands[mode]);
       } catch {
-        // Clipboard access can be blocked; fail silently.
+        // Clipboard access can be blocked (permissions, insecure context).
+        // Select the command so it can be copied by hand instead of flashing
+        // a success check for a copy that never happened.
+        input.select();
+        status.textContent = "Copy failed. The command is selected.";
+        return;
       }
       copyIcon.classList.add("hidden");
       checkIcon.classList.remove("hidden");
-      clearTimeout(timer);
+      status.textContent = "Copied to clipboard";
       timer = setTimeout(() => {
         copyIcon.classList.remove("hidden");
         checkIcon.classList.add("hidden");
+        status.textContent = "";
       }, 2000);
     });
 

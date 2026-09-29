@@ -1,4 +1,6 @@
 ---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
 import { getTweet } from "../../lib/get-tweet";
 import Icon from "./icon.astro";
 import SectionIntro from "./section-intro.astro";
@@ -49,6 +51,7 @@ const tweets = fetched.flatMap((tweet, index) => {
       <div class="md:columns-2 xl:columns-3">
         {tweets.map((tweet) => (
           <a
+            aria-describedby={NEW_TAB_HINT_ID}
             class="mb-4 block break-inside-avoid rounded-2xl border bg-muted p-4 text-foreground transition-colors hover:border-foreground/20"
             href={tweet.url}
             rel="noopener noreferrer"
