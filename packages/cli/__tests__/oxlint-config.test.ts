@@ -1077,6 +1077,19 @@ describe("test file globs", () => {
     expect(biome).toContain(`"${TEST_FILE_GLOB}"`);
   });
 
+  test("biome jest declares the Jest globals for test files", () => {
+    const biomePath = path.join(
+      import.meta.dirname,
+      "../config/biome/jest/biome.jsonc"
+    );
+    const biome = readFileSync(biomePath, "utf-8");
+
+    expect(biome).toContain('"**/__tests__/**/*"');
+    for (const name of ["describe", "expect", "it", "jest", "test"]) {
+      expect(biome, name).toContain(`"${name}"`);
+    }
+  });
+
   test("eslint vitest enables typecheck so expectTypeOf counts as an assertion", async () => {
     const config = await readEslintConfig("vitest");
     // SAFETY: the vitest preset's test override is a flat-config entry, which
