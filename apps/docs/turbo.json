@@ -3,7 +3,11 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_EXTENDS$", "$TURBO_ROOT$/skills/**"]
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "$TURBO_ROOT$/skills/**",
+        "$TURBO_ROOT$/packages/cli/src/data/**"
+      ]
     }
   }
 }

@@ -13,9 +13,10 @@ const featuredAgentIds = [
   "copilot",
 ];
 
+// Only agents the CLI still supports and that have a logo are featured.
 const featuredAgents = featuredAgentIds.flatMap((id) => {
   const agent = agents.find((a) => a.id === id);
-  return agent ? [agent] : [];
+  return agent && agentLogos[id] ? [agent] : [];
 });
 
 const remainingCount = agents.length - featuredAgents.length;

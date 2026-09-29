@@ -2,6 +2,9 @@
 import { editors } from "../../lib/editors";
 import { editorLogos } from "../../lib/logos";
 import SectionIntro from "./section-intro.astro";
+
+// The list comes from the CLI, so an editor can appear before its logo lands
+// in public/logos; that one renders its initial instead of a broken image.
 ---
 
 <div class="grid gap-8">
@@ -13,16 +16,26 @@ import SectionIntro from "./section-intro.astro";
     {
       editors.map((editor, index) => (
         <li class="hp-tt inline-flex">
-          <img
-            alt={editor.name}
-            class:list={[
-              "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
-              index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3",
-            ]}
-            height="56"
-            src={editorLogos[editor.id]}
-            width="56"
-          />
+          {editorLogos[editor.id] ? (
+            <img
+              alt={editor.name}
+              class:list={[
+                "size-10 overflow-hidden rounded-full ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 sm:size-14",
+                index % 2 === 0 ? "hover:rotate-3" : "hover:-rotate-3",
+              ]}
+              height="56"
+              src={editorLogos[editor.id]}
+              width="56"
+            />
+          ) : (
+            <span
+              class="flex size-10 items-center justify-center rounded-full border bg-muted font-medium text-muted-foreground ring-2 ring-background sm:size-14"
+              role="img"
+              aria-label={editor.name}
+            >
+              {editor.name.charAt(0)}
+            </span>
+          )}
           <span aria-hidden="true" data-tt>
             {editor.name}
           </span>
