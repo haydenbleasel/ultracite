@@ -4,6 +4,8 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import { assertSuccessfulRun } from "./command";
+import type { RunOutcome } from "./command";
 import {
   ACTIVE_COMMANDS,
   ACTIVE_PROVIDERS,
@@ -43,12 +45,6 @@ const parseArgs = (argv: readonly string[]): CliArgs => {
   return { base, head };
 };
 
-interface RunOutcome {
-  durationMs: number;
-  status: number;
-  stderr: string;
-}
-
 const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
   const ultraciteBin = path.join(
     project.dir,
@@ -76,27 +72,13 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
   };
 };
 
-// A run that couldn't even start the linter (missing config, unresolved
-// binary) returns near-instantly and would poison the numbers, so treat these
-// as setup failures rather than fast results.
-const FATAL_PATTERNS = [
-  "No linter configuration found",
-  "Failed to run",
-  "command not found",
-  "Could not find",
-  "Cannot find",
-];
-
 const assertRunnable = (project: PreparedProject, command: Command): void => {
   const outcome = runCommand(project, command);
-  const fatal = FATAL_PATTERNS.find((pattern) =>
-    outcome.stderr.includes(pattern)
+  assertSuccessfulRun(
+    outcome,
+    `${project.buildLabel}/${project.provider}`,
+    command
   );
-  if (fatal) {
-    throw new Error(
-      `${project.buildLabel}/${project.provider} ${command} could not run (${fatal}):\n${outcome.stderr}`
-    );
-  }
 };
 
 interface Sample {
@@ -130,7 +112,13 @@ const collectSamples = (
     if (command === "fix") {
       resetSrc(project);
     }
-    return runCommand(project, command).durationMs;
+    const outcome = runCommand(project, command);
+    assertSuccessfulRun(
+      outcome,
+      `${project.buildLabel}/${project.provider}`,
+      command
+    );
+    return outcome.durationMs;
   };
 
   // Warmup — untimed, per build.
