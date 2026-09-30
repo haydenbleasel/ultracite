@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { appendFileSync, mkdirSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
@@ -18,8 +19,12 @@ import type { Command, Provider } from "./config";
 import { prepareProject, resetSrc } from "./setup";
 import type { PreparedProject } from "./setup";
 import { mannWhitneyU, mean, median, stdev } from "./stats";
+import { getBenchmarkWorkRoot } from "./work-root";
 
-const WORK_ROOT = path.join(import.meta.dirname, ".work");
+// The repo's .gitignore excludes benchmark/.work. Linters honor ancestor
+// ignore rules, so keeping fixture projects under the repo makes them look
+// empty even after the files are copied there.
+const WORK_ROOT = getBenchmarkWorkRoot(tmpdir(), process.pid);
 
 interface CliArgs {
   base?: string;
