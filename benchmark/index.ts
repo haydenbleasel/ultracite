@@ -5,7 +5,7 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
-import { assertSuccessfulRun } from "./command";
+import { assertRunnable } from "./command";
 import type { RunOutcome } from "./command";
 import {
   ACTIVE_COMMANDS,
@@ -68,22 +68,22 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
       PATH: `${project.binPath}${path.delimiter}${process.env.PATH ?? ""}`,
     },
     maxBuffer: 64 * 1024 * 1024,
-    stdio: ["ignore", "ignore", "pipe"],
+    stdio: ["ignore", "pipe", "pipe"],
   });
   return {
     durationMs: performance.now() - start,
     status: result.status ?? 1,
     stderr: result.stderr ?? "",
+    stdout: result.stdout ?? "",
   };
 };
 
-const assertRunnable = (project: PreparedProject, command: Command): void => {
+const assertProjectRunnable = (
+  project: PreparedProject,
+  command: Command
+): void => {
   const outcome = runCommand(project, command);
-  assertSuccessfulRun(
-    outcome,
-    `${project.buildLabel}/${project.provider}`,
-    command
-  );
+  assertRunnable(outcome, `${project.buildLabel}/${project.provider}`, command);
 };
 
 interface Sample {
@@ -118,7 +118,7 @@ const collectSamples = (
       resetSrc(project);
     }
     const outcome = runCommand(project, command);
-    assertSuccessfulRun(
+    assertRunnable(
       outcome,
       `${project.buildLabel}/${project.provider}`,
       command
@@ -303,9 +303,9 @@ const main = (): void => {
       : undefined;
 
     for (const command of ACTIVE_COMMANDS) {
-      assertRunnable(head, command);
+      assertProjectRunnable(head, command);
       if (base) {
-        assertRunnable(base, command);
+        assertProjectRunnable(base, command);
       }
       console.log(`  benchmarking ${provider} ${command}...`);
       samples.push(collectSamples({ base, head }, provider, command));
