@@ -1,9 +1,12 @@
 import { spawnSync } from "node:child_process";
 import { appendFileSync, mkdirSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import { assertRunnable } from "./command";
+import type { RunOutcome } from "./command";
 import {
   ACTIVE_COMMANDS,
   ACTIVE_PROVIDERS,
@@ -16,8 +19,12 @@ import type { Command, Provider } from "./config";
 import { prepareProject, resetSrc } from "./setup";
 import type { PreparedProject } from "./setup";
 import { mannWhitneyU, mean, median, stdev } from "./stats";
+import { getBenchmarkWorkRoot } from "./work-root";
 
-const WORK_ROOT = path.join(import.meta.dirname, ".work");
+// The repo's .gitignore excludes benchmark/.work. Linters honor ancestor
+// ignore rules, so keeping fixture projects under the repo makes them look
+// empty even after the files are copied there.
+const WORK_ROOT = getBenchmarkWorkRoot(tmpdir(), process.pid);
 
 interface CliArgs {
   base?: string;
@@ -43,12 +50,6 @@ const parseArgs = (argv: readonly string[]): CliArgs => {
   return { base, head };
 };
 
-interface RunOutcome {
-  durationMs: number;
-  status: number;
-  stderr: string;
-}
-
 const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
   const ultraciteBin = path.join(
     project.dir,
@@ -67,36 +68,22 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
       PATH: `${project.binPath}${path.delimiter}${process.env.PATH ?? ""}`,
     },
     maxBuffer: 64 * 1024 * 1024,
-    stdio: ["ignore", "ignore", "pipe"],
+    stdio: ["ignore", "pipe", "pipe"],
   });
   return {
     durationMs: performance.now() - start,
     status: result.status ?? 1,
     stderr: result.stderr ?? "",
+    stdout: result.stdout ?? "",
   };
 };
 
-// A run that couldn't even start the linter (missing config, unresolved
-// binary) returns near-instantly and would poison the numbers, so treat these
-// as setup failures rather than fast results.
-const FATAL_PATTERNS = [
-  "No linter configuration found",
-  "Failed to run",
-  "command not found",
-  "Could not find",
-  "Cannot find",
-];
-
-const assertRunnable = (project: PreparedProject, command: Command): void => {
+const assertProjectRunnable = (
+  project: PreparedProject,
+  command: Command
+): void => {
   const outcome = runCommand(project, command);
-  const fatal = FATAL_PATTERNS.find((pattern) =>
-    outcome.stderr.includes(pattern)
-  );
-  if (fatal) {
-    throw new Error(
-      `${project.buildLabel}/${project.provider} ${command} could not run (${fatal}):\n${outcome.stderr}`
-    );
-  }
+  assertRunnable(outcome, `${project.buildLabel}/${project.provider}`, command);
 };
 
 interface Sample {
@@ -130,7 +117,13 @@ const collectSamples = (
     if (command === "fix") {
       resetSrc(project);
     }
-    return runCommand(project, command).durationMs;
+    const outcome = runCommand(project, command);
+    assertRunnable(
+      outcome,
+      `${project.buildLabel}/${project.provider}`,
+      command
+    );
+    return outcome.durationMs;
   };
 
   // Warmup — untimed, per build.
@@ -310,9 +303,9 @@ const main = (): void => {
       : undefined;
 
     for (const command of ACTIVE_COMMANDS) {
-      assertRunnable(head, command);
+      assertProjectRunnable(head, command);
       if (base) {
-        assertRunnable(base, command);
+        assertProjectRunnable(base, command);
       }
       console.log(`  benchmarking ${provider} ${command}...`);
       samples.push(collectSamples({ base, head }, provider, command));
