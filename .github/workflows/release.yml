@@ -15,7 +15,7 @@ on:
 # what the action will do
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       published: ${{ steps.changesets.outputs.published }}
 
