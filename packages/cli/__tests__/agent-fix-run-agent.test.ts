@@ -111,17 +111,14 @@ describe("runAgent", () => {
 
   test("hands a multi-line prompt to the agent intact on stdin", async () => {
     // A `.cmd` shim on Windows would cut an argument at its first newline.
+    // The script echoes stdin back on stderr, which runAgent captures.
     const prompt = "line one\nline two\nline three";
     const result = await runAgent(
-      scriptAdapter(
-        `let s='';process.stdin.on('data',(c)=>{s+=c});process.stdin.on('end',()=>{process.exit(s===${JSON.stringify(
-          prompt
-        )}?0:1)})`
-      ),
+      scriptAdapter("process.exitCode=1;process.stdin.pipe(process.stderr)"),
       prompt
     );
 
-    expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
+    expect(result).toEqual({ ok: false, stderr: prompt, timedOut: false });
   });
 
   test("caps captured stderr at the tail", async () => {

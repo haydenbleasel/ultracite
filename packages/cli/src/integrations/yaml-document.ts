@@ -2,9 +2,10 @@ import YAML from "yaml";
 
 // A mapping key line followed (past blank and comment lines) by the first
 // item of a block sequence under it: compares where the dash sits relative
-// to the key.
+// to the key. Only `\r?` may match a carriage return, otherwise CRLF comment
+// lines can be split several ways and backtracking turns exponential.
 const BLOCK_SEQUENCE_RE =
-  /^(?<keyIndent>[ \t]*)[^\s#-][^\n]*:[^\S\n]*(?:#[^\n]*)?\r?\n(?:[^\S\n]*(?:#[^\n]*)?\r?\n)*(?<dashIndent>[ \t]*)- /mu;
+  /^(?<keyIndent>[ \t]*)[^\s#-][^\r\n]*:[^\S\r\n]*(?:#[^\r\n]*)?\r?\n(?:[^\S\r\n]*(?:#[^\r\n]*)?\r?\n)*(?<dashIndent>[ \t]*)- /mu;
 
 /**
  * Whether a YAML file indents block sequences under their key (`key:\n  -`)
