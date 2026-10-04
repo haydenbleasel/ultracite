@@ -634,7 +634,7 @@ describe("initialize", () => {
 
     expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
-    expect(installedPackages).toContain("eslint-plugin-jsdoc@^64.5.4");
+    expect(installedPackages).toContain("eslint-plugin-jsdoc@^62.4.0");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.1");
     expect(installedPackages).toContain("eslint-plugin-tsdoc@^0.5.4");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.14");
