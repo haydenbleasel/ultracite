@@ -12,6 +12,7 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
+import { isCommandAvailable } from "../resolve-command";
 import {
   exitOnCommandFailure,
   NO_LINTER_CONFIG_MESSAGE,
@@ -99,6 +100,19 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
   });
 
   if (result.errorCode === "ENOENT") {
+    log.warn(STYLELINT_MISSING_MESSAGE);
+    return;
+  }
+
+  // On Windows a missing executable surfaces as a generic non-zero exit
+  // rather than ENOENT. Only skip when the binary cannot be resolved, so a
+  // real Stylelint failure still fails.
+  if (
+    result.error === undefined &&
+    result.status !== null &&
+    result.status !== 0 &&
+    !isCommandAvailable("stylelint")
+  ) {
     log.warn(STYLELINT_MISSING_MESSAGE);
     return;
   }

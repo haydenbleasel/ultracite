@@ -423,6 +423,50 @@ describe("fix", () => {
     );
   });
 
+  test("skips Stylelint on a Windows-shaped missing result", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "stylelint" ? { status: 1 } : { status: 0 }
+    );
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+    mockFileSystem({});
+
+    try {
+      expect(() => fix([])).not.toThrow();
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
+  test("fails when an installed Stylelint exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "stylelint" ? { status: 2 } : { status: 0 }
+    );
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+    mockFileSystem({
+      [path.join(process.cwd(), "node_modules", ".bin", "stylelint.CMD")]: "",
+    });
+
+    try {
+      expect(() => fix([])).toThrow("Stylelint exited with code 2");
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
   test("runs oxlint fix when linter is oxlint (runs oxlint, oxfmt)", () => {
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
