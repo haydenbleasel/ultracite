@@ -27,21 +27,36 @@ const NO_INPUT_PATTERNS = [
   "All matched files may have been excluded by ignore rules",
 ];
 
-// Lint diagnostics alone can produce a nonzero status, and those runs are
-// still valid samples, so the exit status isn't checked.
-export const assertRunnable = (
-  outcome: RunOutcome,
-  label: string,
-  command: Command
-): void => {
-  const reason =
+const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
+  // A nonzero status with no output at all means the CLI never ran: a spawn
+  // error or a killed process, both of which runCommand reports as status 1.
+  if (
+    outcome.status !== 0 &&
+    !outcome.stdout.trim() &&
+    !outcome.stderr.trim()
+  ) {
+    return "no output";
+  }
+
+  return (
     SETUP_FAILURE_PATTERNS.find((pattern) =>
       outcome.stderr.includes(pattern)
     ) ??
     NO_INPUT_PATTERNS.find(
       (pattern) =>
         outcome.stdout.includes(pattern) || outcome.stderr.includes(pattern)
-    );
+    )
+  );
+};
+
+// Lint diagnostics alone can produce a nonzero status, and those runs are
+// still valid samples, so a nonzero status is only rejected without output.
+export const assertRunnable = (
+  outcome: RunOutcome,
+  label: string,
+  command: Command
+): void => {
+  const reason = findUnrunnableReason(outcome);
   if (reason) {
     const diagnostics = [outcome.stdout, outcome.stderr]
       .filter(Boolean)

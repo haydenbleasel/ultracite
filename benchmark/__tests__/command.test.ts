@@ -77,6 +77,22 @@ describe("assertRunnable", () => {
     );
   });
 
+  test.each([
+    ["no output", ""],
+    ["whitespace-only output", "\n  \n"],
+  ])("rejects nonzero status with %s", (_name, output) => {
+    const outcome: RunOutcome = {
+      durationMs: 1,
+      status: 1,
+      stderr: output,
+      stdout: output,
+    };
+
+    expect(() => assertRunnable(outcome, "head/oxlint", "check")).toThrow(
+      "head/oxlint check could not run (status 1; no output)"
+    );
+  });
+
   test("accepts setup-failure wording quoted in lint output on stdout", () => {
     const outcome: RunOutcome = {
       durationMs: 125,
