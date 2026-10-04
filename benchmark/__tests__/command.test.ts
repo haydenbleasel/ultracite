@@ -93,6 +93,35 @@ describe("assertRunnable", () => {
     );
   });
 
+  test("rejects a child that failed to start", () => {
+    const outcome: RunOutcome = {
+      durationMs: 1,
+      error: new Error("spawnSync node ENOENT"),
+      signal: null,
+      status: 1,
+      stderr: "",
+      stdout: "",
+    };
+
+    expect(() => assertRunnable(outcome, "head/oxlint", "check")).toThrow(
+      "head/oxlint check could not run (status 1; process error: spawnSync node ENOENT)"
+    );
+  });
+
+  test("rejects a killed child even after it printed lint output", () => {
+    const outcome: RunOutcome = {
+      durationMs: 80,
+      signal: "SIGTERM",
+      status: 1,
+      stderr: "",
+      stdout: "src/example.ts:1:1: Unexpected console statement",
+    };
+
+    expect(() => assertRunnable(outcome, "head/oxlint", "check")).toThrow(
+      "head/oxlint check could not run (status 1; killed by SIGTERM)"
+    );
+  });
+
   test("accepts setup-failure wording quoted in lint output on stdout", () => {
     const outcome: RunOutcome = {
       durationMs: 125,

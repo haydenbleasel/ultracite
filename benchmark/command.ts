@@ -2,6 +2,10 @@ import type { Command } from "./config";
 
 export interface RunOutcome {
   durationMs: number;
+  /** Set when the child couldn't start or was cut off (spawnSync's error). */
+  error?: Error;
+  /** The signal that killed the child, which leaves no exit status. */
+  signal?: NodeJS.Signals | null;
   status: number;
   stderr: string;
   stdout: string;
@@ -28,8 +32,18 @@ const NO_INPUT_PATTERNS = [
 ];
 
 const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
-  // A nonzero status with no output at all means the CLI never ran: a spawn
-  // error or a killed process, both of which runCommand reports as status 1.
+  // A child that failed to start, or was killed partway (including for
+  // overrunning maxBuffer), didn't time a full run, even if it had already
+  // printed some lint output.
+  if (outcome.error) {
+    return `process error: ${outcome.error.message}`;
+  }
+  if (outcome.signal) {
+    return `killed by ${outcome.signal}`;
+  }
+
+  // A nonzero status with no output at all isn't a lint run: a check or fix
+  // that fails always prints the diagnostics or files behind the failure.
   if (
     outcome.status !== 0 &&
     !outcome.stdout.trim() &&

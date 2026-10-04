@@ -71,6 +71,8 @@ const runCommand = (project: PreparedProject, command: Command): RunOutcome => {
   });
   return {
     durationMs: performance.now() - start,
+    error: result.error,
+    signal: result.signal,
     status: result.status ?? 1,
     stderr: result.stderr ?? "",
     stdout: result.stdout ?? "",
