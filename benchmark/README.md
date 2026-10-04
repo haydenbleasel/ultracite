@@ -4,7 +4,7 @@ Guards against performance regressions in `ultracite check` / `ultracite fix` ac
 
 ## How it works
 
-For each provider the harness builds a self-contained project, installs the provider's real tools, runs `ultracite init` to generate the actual config, and copies in a fixed fixture tree (`fixtures/`). It then times the real `ultracite check` / `ultracite fix` command many times and reports the median.
+For each provider the harness builds a self-contained project in the OS temp directory (`ultracite-benchmark`, cleared at the start of each run), installs the provider's real tools, runs `ultracite init` to generate the actual config, and copies in a fixed fixture tree (`fixtures/`). It then times the real `ultracite check` / `ultracite fix` command many times and reports the median.
 
 Only the lint invocations are timed — all setup (installs, `init`, fixture copies) happens up front and is excluded.
 

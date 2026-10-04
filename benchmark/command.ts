@@ -7,35 +7,47 @@ export interface RunOutcome {
   stdout: string;
 }
 
-// These indicate setup failures or no lintable input, not a useful run. Lint
-// diagnostics themselves can produce a nonzero status and are still timed.
-const UNRUNNABLE_PATTERNS = [
+// The linter couldn't start (missing config, unresolved binary). Matched on
+// stderr only: stdout carries lint output, including code frames quoted from
+// the fixtures, which can contain any of these phrases.
+const SETUP_FAILURE_PATTERNS = [
   "No linter configuration found",
   "Failed to run",
   "command not found",
   "Could not find",
   "Cannot find",
+];
+
+// The linter started but had nothing to lint. Oxlint and Oxfmt print these on
+// either stream, and such a run would time as a meaningless fast result.
+const NO_INPUT_PATTERNS = [
   "No files found to lint",
   "No files found matching the given patterns",
   "Expected at least one target file",
   "All matched files may have been excluded by ignore rules",
 ];
 
+// Lint diagnostics alone can produce a nonzero status, and those runs are
+// still valid samples, so the exit status isn't checked.
 export const assertRunnable = (
   outcome: RunOutcome,
   label: string,
   command: Command
 ): void => {
-  const diagnostics = [outcome.stdout, outcome.stderr]
-    .filter(Boolean)
-    .join("\n");
-  const loweredDiagnostics = diagnostics.toLowerCase();
-  const unrunnable = UNRUNNABLE_PATTERNS.find((pattern) =>
-    loweredDiagnostics.includes(pattern.toLowerCase())
-  );
-  if (unrunnable) {
+  const reason =
+    SETUP_FAILURE_PATTERNS.find((pattern) =>
+      outcome.stderr.includes(pattern)
+    ) ??
+    NO_INPUT_PATTERNS.find(
+      (pattern) =>
+        outcome.stdout.includes(pattern) || outcome.stderr.includes(pattern)
+    );
+  if (reason) {
+    const diagnostics = [outcome.stdout, outcome.stderr]
+      .filter(Boolean)
+      .join("\n");
     throw new Error(
-      `${label} ${command} could not run (status ${outcome.status}; ${unrunnable}):\n${diagnostics}`
+      `${label} ${command} could not run (status ${outcome.status}; ${reason}):\n${diagnostics}`
     );
   }
 };

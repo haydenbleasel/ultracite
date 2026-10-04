@@ -19,12 +19,11 @@ import type { Command, Provider } from "./config";
 import { prepareProject, resetSrc } from "./setup";
 import type { PreparedProject } from "./setup";
 import { mannWhitneyU, mean, median, stdev } from "./stats";
-import { getBenchmarkWorkRoot } from "./work-root";
 
-// The repo's .gitignore excludes benchmark/.work. Linters honor ancestor
-// ignore rules, so keeping fixture projects under the repo makes them look
-// empty even after the files are copied there.
-const WORK_ROOT = getBenchmarkWorkRoot(tmpdir(), process.pid);
+// Build the fixture projects outside the repo. Linters apply the ignore rules
+// of an enclosing git repo, so a project under a gitignored path looks empty to
+// them. A fixed name lets each run clear the previous one's installs.
+const WORK_ROOT = path.join(tmpdir(), "ultracite-benchmark");
 
 interface CliArgs {
   base?: string;

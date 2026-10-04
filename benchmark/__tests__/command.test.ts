@@ -76,4 +76,18 @@ describe("assertRunnable", () => {
       "head/eslint check could not run (status 0; Failed to run):\nFailed to run linter: executable not found"
     );
   });
+
+  test("accepts setup-failure wording quoted in lint output on stdout", () => {
+    const outcome: RunOutcome = {
+      durationMs: 125,
+      status: 1,
+      stderr: "",
+      stdout: [
+        "src/api.ts:12:3: Unexpected console statement",
+        '  12 |   throw new Error("Could not find user");',
+      ].join("\n"),
+    };
+
+    expect(() => assertRunnable(outcome, "head/oxlint", "check")).not.toThrow();
+  });
 });
