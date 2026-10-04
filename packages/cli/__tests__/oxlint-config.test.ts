@@ -85,7 +85,6 @@ const CORE_PLUGINS = [
 // than against `oxlint --rules`.
 const JS_PLUGINS = [
   { plugin: "eslint-plugin-github", prefix: "github" },
-  { plugin: "eslint-plugin-jsdoc", prefix: "jsdoc-js" },
   { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
   { plugin: "eslint-plugin-tsdoc", prefix: "tsdoc" },
 ];
