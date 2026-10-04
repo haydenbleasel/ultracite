@@ -263,7 +263,7 @@ const generateConfigContent = (
     jsPluginsValue = `${hoistedJsPluginIdentifiers[0]}.jsPlugins`;
   } else if (hoistedJsPluginIdentifiers.length > 1) {
     const spread = hoistedJsPluginIdentifiers
-      .map((identifier) => `...(${identifier}.jsPlugins ?? [])`)
+      .map((identifier) => `...${identifier}.jsPlugins`)
       .join(", ");
     jsPluginsValue = `[${spread}]`;
   }

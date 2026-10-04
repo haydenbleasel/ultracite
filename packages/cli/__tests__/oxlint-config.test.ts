@@ -14,6 +14,13 @@ import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
+import antiSlop from "../config/oxlint/anti-slop/index.mjs";
+import jsPlugins, {
+  selectJsPlugins,
+} from "../config/oxlint/js-plugins/index.mjs";
+import nextJsPlugins from "../config/oxlint/next/js-plugins/index.mjs";
+import shadcn from "../config/oxlint/shadcn/index.mjs";
+import tanstackJsPlugins from "../config/oxlint/tanstack/js-plugins/index.mjs";
 import packageJson from "../package.json";
 
 // The test preload mocks node:fs (readFileSync returns "{}"), so read real
@@ -241,20 +248,23 @@ describe("oxlint package exports", () => {
     expect(missing).toEqual([]);
   });
 
-  test("js-plugins declarations preserve the non-null jsPlugins type", () => {
-    const oxlintConfigDirectory = path.join(
-      import.meta.dirname,
-      "../config/oxlint"
-    );
-    const jsPluginsDeclaration = readFileSync(
-      path.join(oxlintConfigDirectory, "js-plugins/index.d.mts"),
-      "utf-8"
-    );
+  /**
+   * Generated configs spread these presets' jsPlugins onto the root config
+   * (#784), so their declarations must type it as non-null: `bun run types`
+   * fails here with TS2488 otherwise (#834), and the spreads throw at
+   * runtime if a preset stops shipping jsPlugins.
+   */
+  test("presets that ship plugins declare jsPlugins as non-null", () => {
+    const combined = [
+      ...jsPlugins.jsPlugins,
+      ...selectJsPlugins(["github"]).jsPlugins,
+      ...shadcn.jsPlugins,
+      ...antiSlop.jsPlugins,
+      ...nextJsPlugins.jsPlugins,
+      ...tanstackJsPlugins.jsPlugins,
+    ];
 
-    expect(jsPluginsDeclaration).toContain(
-      'jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>'
-    );
-    expect(jsPluginsDeclaration).toContain(") => SelectedJsPluginsConfig;");
+    expect(combined.length).toBeGreaterThan(0);
   });
 });
 
@@ -532,11 +542,6 @@ describe("oxlint js-plugins config", () => {
   });
 
   test("selectJsPlugins narrows plugins and rules to the selection", async () => {
-    const configDir = path.join(
-      import.meta.dirname,
-      "../config/oxlint/js-plugins"
-    );
-    const { selectJsPlugins } = await import(configDir);
     const full = await readOxlintConfig("js-plugins");
 
     const selected = selectJsPlugins(["github", "sonarjs"]);
