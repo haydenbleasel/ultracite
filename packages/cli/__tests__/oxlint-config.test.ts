@@ -14,6 +14,8 @@ import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
+import type { OxlintOverride } from "oxlint";
+
 import packageJson from "../package.json";
 
 // The test preload mocks node:fs (readFileSync returns "{}"), so read real
@@ -580,13 +582,11 @@ describe("oxlint js-plugins config", () => {
 
     const jsdoc = selectJsPlugins(["jsdoc-js"]);
     const tsdoc = selectJsPlugins(["tsdoc"]);
-    const jsdocRules = jsdoc.overrides?.find(
-      (override: { files?: string[] }) =>
-        override.files?.includes("**/*.{ts,tsx,mts,cts}")
+    const jsdocRules = jsdoc.overrides?.find((override: { files?: string[] }) =>
+      override.files?.includes("**/*.{ts,tsx,mts,cts}")
     )?.rules;
-    const tsdocRules = tsdoc.overrides?.find(
-      (override: { files?: string[] }) =>
-        override.files?.includes("**/*.{ts,tsx,mts,cts}")
+    const tsdocRules = tsdoc.overrides?.find((override: { files?: string[] }) =>
+      override.files?.includes("**/*.{ts,tsx,mts,cts}")
     )?.rules;
 
     expect(jsdoc.jsPlugins).toEqual([
@@ -733,9 +733,8 @@ describe("oxlint js-plugins config", () => {
 
       const configuredRules = [
         ...Object.entries(config.rules ?? {}),
-        ...(config.overrides ?? []).flatMap(
-          (override: { rules?: Record<string, unknown> }) =>
-            Object.entries(override.rules ?? {})
+        ...(config.overrides ?? []).flatMap((override: OxlintOverride) =>
+          Object.entries(override.rules ?? {})
         ),
       ];
       const unknown = configuredRules
@@ -757,9 +756,8 @@ describe("oxlint js-plugins config", () => {
 
       const configuredRules = [
         ...Object.entries(config.rules ?? {}),
-        ...(config.overrides ?? []).flatMap(
-          (override: { rules?: Record<string, unknown> }) =>
-            Object.entries(override.rules ?? {})
+        ...(config.overrides ?? []).flatMap((override: OxlintOverride) =>
+          Object.entries(override.rules ?? {})
         ),
       ];
       const deprecated = configuredRules
