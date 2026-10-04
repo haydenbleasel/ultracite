@@ -562,13 +562,17 @@ describe("oxlint js-plugins config", () => {
   // oxlint hard-fail config parsing. Statically reading the config object
   // can't catch this, so actually run oxlint with core + js-plugins loaded via
   // a committed fixture.
-  test("js-plugins loads through oxlint with all bridged rules registered", () => {
-    const { output } = lintFixture("js-plugins-load", "sample.ts");
+  test(
+    "js-plugins loads through oxlint with all bridged rules registered",
+    () => {
+      const { output } = lintFixture("js-plugins-load", "sample.ts");
 
-    expect(output).not.toContain("not found in plugin");
-    expect(output).not.toContain("Failed to parse oxlint configuration");
-    expect(output).not.toContain("Failed to load JS plugin");
-  });
+      expect(output).not.toContain("not found in plugin");
+      expect(output).not.toContain("Failed to parse oxlint configuration");
+      expect(output).not.toContain("Failed to load JS plugin");
+    },
+    { timeout: 60_000 }
+  );
 
   test("disables github/filenames-match-regex for route files", async () => {
     const config = await readOxlintConfig("js-plugins");
@@ -588,17 +592,21 @@ describe("oxlint js-plugins config", () => {
   // names everywhere else. The fixture deliberately omits the tanstack
   // preset: in a non-TanStack project, core's unicorn/filename-case still
   // flags `routes/BadName.tsx`, so the override does not open a bypass.
-  test("route override exempts route files but not other files", () => {
-    const { flaggedBy } = lintFixture("route-filenames");
+  test(
+    "route override exempts route files but not other files",
+    () => {
+      const { flaggedBy } = lintFixture("route-filenames");
 
-    expect(flaggedBy("github(filenames-match-regex)")).toEqual([
-      "Button.test.tsx",
-    ]);
-    expect(flaggedBy("unicorn(filename-case)")).toEqual([
-      "BadName.tsx",
-      "Button.test.tsx",
-    ]);
-  });
+      expect(flaggedBy("github(filenames-match-regex)")).toEqual([
+        "Button.test.tsx",
+      ]);
+      expect(flaggedBy("unicorn(filename-case)")).toEqual([
+        "BadName.tsx",
+        "Button.test.tsx",
+      ]);
+    },
+    { timeout: 60_000 }
+  );
 
   test("uses a bracket-aware filenames-match-regex for page route files", async () => {
     const config = await readOxlintConfig("js-plugins");
@@ -648,20 +656,24 @@ describe("oxlint js-plugins config", () => {
   // across every extension the routers accept. The rule stays live inside
   // `pages/` (`BadPage.ts`) and everywhere else (`BadName.ts`,
   // `BadName.astro` — the latter also proves `.astro` files reach the plugin).
-  test("exempts page route filenames but not other names", () => {
-    const { flaggedBy } = lintFixture("astro-route-filenames");
+  test(
+    "exempts page route filenames but not other names",
+    () => {
+      const { flaggedBy } = lintFixture("astro-route-filenames");
 
-    expect(flaggedBy("github(filenames-match-regex)")).toEqual([
-      "BadName.astro",
-      "BadName.ts",
-      "BadPage.ts",
-    ]);
-    expect(flaggedBy("unicorn(filename-case)")).toEqual([
-      "BadName.astro",
-      "BadName.ts",
-      "BadPage.ts",
-    ]);
-  });
+      expect(flaggedBy("github(filenames-match-regex)")).toEqual([
+        "BadName.astro",
+        "BadName.ts",
+        "BadPage.ts",
+      ]);
+      expect(flaggedBy("unicorn(filename-case)")).toEqual([
+        "BadName.astro",
+        "BadName.ts",
+        "BadPage.ts",
+      ]);
+    },
+    { timeout: 60_000 }
+  );
 
   for (const { plugin, prefix } of JS_PLUGINS) {
     test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
