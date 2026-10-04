@@ -5,6 +5,9 @@ declare const config: OxlintConfig;
 export default config;
 
 export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+type SelectedJsPluginsConfig = OxlintConfig & {
+  jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
+};
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
@@ -20,4 +23,4 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfig;
+) => SelectedJsPluginsConfig;

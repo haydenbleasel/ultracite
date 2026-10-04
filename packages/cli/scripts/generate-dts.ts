@@ -22,6 +22,9 @@ export default config;
 // settings and enable a subset of the plugins.
 const oxlintJsPluginsDeclaration = `${oxlintDeclaration}
 export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+type SelectedJsPluginsConfig = OxlintConfig & {
+  jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
+};
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
@@ -37,7 +40,7 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfig;
+) => SelectedJsPluginsConfig;
 `;
 
 const oxfmtDeclaration = `import type { OxfmtConfig } from "oxfmt";
@@ -64,10 +67,9 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
 for (const config of configs) {
   const dir = path.join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(
-    path.join(dir, "index.d.mts"),
-    config === "js-plugins" ? oxlintJsPluginsDeclaration : oxlintDeclaration
-  );
+  const declaration =
+    config === "js-plugins" ? oxlintJsPluginsDeclaration : oxlintDeclaration;
+  writeFileSync(path.join(dir, "index.d.mts"), declaration);
 }
 
 // Generate oxfmt declaration

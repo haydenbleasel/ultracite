@@ -240,6 +240,22 @@ describe("oxlint package exports", () => {
 
     expect(missing).toEqual([]);
   });
+
+  test("js-plugins declarations preserve the non-null jsPlugins type", () => {
+    const oxlintConfigDirectory = path.join(
+      import.meta.dirname,
+      "../config/oxlint"
+    );
+    const jsPluginsDeclaration = readFileSync(
+      path.join(oxlintConfigDirectory, "js-plugins/index.d.mts"),
+      "utf-8"
+    );
+
+    expect(jsPluginsDeclaration).toContain(
+      'jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>'
+    );
+    expect(jsPluginsDeclaration).toContain(") => SelectedJsPluginsConfig;");
+  });
 });
 
 describe("oxlint core config", () => {

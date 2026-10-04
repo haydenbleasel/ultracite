@@ -335,7 +335,7 @@ describe("oxlint linter", () => {
         "extends: [core, shadcn, antiSlop, jsPlugins],"
       );
       expect(content).toContain(
-        "jsPlugins: [...jsPlugins.jsPlugins, ...shadcn.jsPlugins],"
+        "jsPlugins: [...(jsPlugins.jsPlugins ?? []), ...(shadcn.jsPlugins ?? [])],"
       );
     });
 
