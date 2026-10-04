@@ -52,7 +52,9 @@ const shadcnPreset = "shadcn";
 // helper.
 const oxlintSelectableJsPluginNames = [
   "eslint-plugin-github",
+  "eslint-plugin-jsdoc",
   "eslint-plugin-sonarjs",
+  "eslint-plugin-tsdoc",
   "oxlint-plugin-react-doctor",
 ] as const;
 
@@ -70,6 +72,14 @@ const isSelectableJsPlugin = (
 ): jsPlugin is OxlintSelectableJsPlugin =>
   jsPlugin !== antiSlopPreset && jsPlugin !== shadcnPlugin;
 
+// The plugins the full js-plugins preset enables; the documentation plugins
+// are only ever selected explicitly.
+const fullPresetJsPlugins = [
+  "eslint-plugin-github",
+  "eslint-plugin-sonarjs",
+  "oxlint-plugin-react-doctor",
+] as const satisfies readonly OxlintSelectableJsPlugin[];
+
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
   jsPlugins?: OxlintJsPlugin[];
@@ -77,7 +87,9 @@ interface OxlintOptions {
 
 const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
+  "eslint-plugin-jsdoc": { name: "jsdoc-js" },
   "eslint-plugin-sonarjs": { name: "sonarjs" },
+  "eslint-plugin-tsdoc": { name: "tsdoc" },
   "oxlint-plugin-react-doctor": { name: "react-doctor" },
 } satisfies Record<OxlintSelectableJsPlugin, { name: string }>;
 
@@ -862,10 +874,20 @@ export const oxlint = {
 
     // Without an explicit new selection, keep the plugins the existing
     // config had selected.
-    const jsPlugins =
-      opts?.jsPlugins && opts.jsPlugins.length > 0
-        ? opts.jsPlugins
-        : current.jsPlugins;
+    const requestedJsPlugins = opts?.jsPlugins ?? [];
+    let { jsPlugins } = current;
+    if (requestedJsPlugins.length > 0) {
+      // The full js-plugins preset already enables its plugins, so a
+      // selection made on top of it (e.g. adding the documentation plugins)
+      // keeps them rather than replacing the preset with just the new ones.
+      const extendsFullJsPluginsPreset =
+        current.jsPlugins.length === 0 && hasConfig("js-plugins");
+      jsPlugins =
+        extendsFullJsPluginsPreset &&
+        requestedJsPlugins.some(isSelectableJsPlugin)
+          ? [...new Set([...fullPresetJsPlugins, ...requestedJsPlugins])]
+          : requestedJsPlugins;
+    }
 
     await writeProjectFile(
       paths.target,

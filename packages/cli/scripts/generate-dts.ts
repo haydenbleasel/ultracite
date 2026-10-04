@@ -34,7 +34,12 @@ const oxlintJsPluginsDeclaration = `${renderOxlintDeclaration("OxlintConfigWithJ
 /** An Oxlint config whose \`jsPlugins\` is always set. */
 export type OxlintConfigWithJsPlugins = ${oxlintConfigWithJsPluginsType};
 
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not

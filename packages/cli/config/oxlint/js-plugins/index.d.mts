@@ -9,7 +9,12 @@ export type OxlintConfigWithJsPlugins = OxlintConfig & {
   jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
 };
 
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not

@@ -14,10 +14,13 @@ import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
+import type { OxlintOverride } from "oxlint";
+
 import antiSlop from "../config/oxlint/anti-slop/index.mjs";
 import jsPlugins, {
   selectJsPlugins,
 } from "../config/oxlint/js-plugins/index.mjs";
+import type { OxlintJsPluginName } from "../config/oxlint/js-plugins/index.mjs";
 import nextJsPlugins from "../config/oxlint/next/js-plugins/index.mjs";
 import shadcn from "../config/oxlint/shadcn/index.mjs";
 import tanstackJsPlugins from "../config/oxlint/tanstack/js-plugins/index.mjs";
@@ -90,8 +93,65 @@ const CORE_PLUGINS = [
 // than against `oxlint --rules`.
 const JS_PLUGINS = [
   { plugin: "eslint-plugin-github", prefix: "github" },
+  { plugin: "eslint-plugin-jsdoc", prefix: "jsdoc-js" },
   { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
+  { plugin: "eslint-plugin-tsdoc", prefix: "tsdoc" },
 ];
+
+// Every rule the js-plugins preset can enable: the full preset's, plus the
+// documentation override that only an explicit selection adds.
+const readEverySelectableJsPluginRule = () => {
+  const config = selectJsPlugins([
+    "github",
+    "jsdoc-js",
+    "react-doctor",
+    "sonarjs",
+    "tsdoc",
+  ]);
+
+  return [
+    ...Object.entries(config.rules ?? {}),
+    ...(config.overrides ?? []).flatMap((override: OxlintOverride) =>
+      Object.entries(override.rules ?? {})
+    ),
+  ];
+};
+
+const readDocumentationRules = (pluginNames: OxlintJsPluginName[]) =>
+  selectJsPlugins(pluginNames).overrides?.find(
+    (override: OxlintOverride) =>
+      override.files?.includes("**/*.{ts,tsx,mts,cts}") &&
+      Object.keys(override.rules ?? {}).some((rule) => rule.startsWith("jsdoc"))
+  )?.rules;
+
+const pluginRuleDeprecations = new Map<string, Record<string, boolean>>();
+
+// Rule name → whether it's deprecated, read in a separate process: some
+// plugins (eslint-plugin-jsdoc) read files while loading, which a node:fs
+// mock leaked from another test file breaks.
+const readPluginRuleDeprecations = (plugin: string) => {
+  const cached = pluginRuleDeprecations.get(plugin);
+  if (cached) {
+    return cached;
+  }
+
+  const script = `const { default: plugin } = await import(${JSON.stringify(plugin)});
+console.log(JSON.stringify(Object.fromEntries(Object.entries(plugin.rules).map(([name, rule]) => [name, Boolean(rule.meta?.deprecated)]))));`;
+  const result = Bun.spawnSync([process.execPath, "-e", script], {
+    cwd: path.join(import.meta.dirname, ".."),
+  });
+  // SAFETY: decoding the JSON object the script above prints.
+  const deprecations = JSON.parse(result.stdout.toString()) as Record<
+    string,
+    boolean
+  >;
+  pluginRuleDeprecations.set(plugin, deprecations);
+
+  return deprecations;
+};
+
+const DOCUMENTATION_DIAGNOSTIC_RE =
+  /\[(?:Error|Warning)\/(?:jsdoc|jsdoc-js|tsdoc)\(/u;
 
 /**
  * Parse `oxlint --rules --format=json` output to extract non-nursery rules
@@ -531,7 +591,7 @@ describe("oxlint js-plugins config", () => {
     expect(config.jsPlugins).toBeUndefined();
   });
 
-  test("declares the github, sonarjs, and react-doctor JS plugins", async () => {
+  test("declares the bridged JavaScript plugins", async () => {
     const config = await readOxlintConfig("js-plugins");
 
     expect(config.jsPlugins).toEqual([
@@ -574,8 +634,53 @@ describe("oxlint js-plugins config", () => {
       ).toBe(true);
     }
 
-    // The full preset export is left untouched.
+    // The full preset export is left untouched, and only an explicit
+    // selection adds the documentation plugins' rules.
     expect(full.jsPlugins?.length).toBe(3);
+    const fullRules = [
+      ...Object.keys(full.rules ?? {}),
+      ...(full.overrides ?? []).flatMap((override: OxlintOverride) =>
+        Object.keys(override.rules ?? {})
+      ),
+    ];
+    expect(fullRules.filter((rule) => rule.startsWith("jsdoc"))).toEqual([]);
+    expect(fullRules.filter((rule) => rule.startsWith("tsdoc/"))).toEqual([]);
+  });
+
+  test("selects TSDoc and public API documentation rules by plugin alias", () => {
+    expect(selectJsPlugins(["jsdoc-js"]).jsPlugins).toEqual([
+      { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
+    ]);
+    expect(selectJsPlugins(["tsdoc"]).jsPlugins).toEqual([
+      { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
+    ]);
+    expect(readDocumentationRules(["jsdoc-js"])).toEqual({
+      "jsdoc-js/require-jsdoc": [
+        "error",
+        {
+          contexts: expect.any(Array),
+          require: { FunctionDeclaration: false },
+        },
+      ],
+      "jsdoc/require-param": "error",
+      "jsdoc/require-returns": "error",
+    });
+    expect(readDocumentationRules(["tsdoc"])).toEqual({
+      "jsdoc/check-tag-names": [
+        "error",
+        { definedTags: expect.arrayContaining(["remarks", "typeParam"]) },
+      ],
+      "jsdoc/require-yields": "off",
+      "jsdoc/require-yields-type": "off",
+      "tsdoc/syntax": "error",
+    });
+    // TSDoc can't name destructured properties, so only the parameter
+    // itself is required when both are selected.
+    const combinedRules = readDocumentationRules(["jsdoc-js", "tsdoc"]);
+    expect(combinedRules?.["jsdoc/require-param"]).toEqual([
+      "error",
+      { checkDestructured: false },
+    ]);
   });
 
   // Regression guard: oxlint's JS plugin bridge only registers a subset of
@@ -589,6 +694,29 @@ describe("oxlint js-plugins config", () => {
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
+  }, 15_000);
+
+  test("enforces public TSDoc without requiring duplicated TS types", () => {
+    const { flaggedBy, output } = lintFixture("jsdoc-load", "sample.ts");
+
+    expect(output).not.toContain("not found in plugin");
+    expect(output).not.toContain("Failed to load JS plugin");
+    // Five exported declarations, an exported class with three public
+    // members, and two exports that wrap a function.
+    expect(flaggedBy("jsdoc-js(require-jsdoc)")).toHaveLength(11);
+    expect(flaggedBy("tsdoc(syntax)")).toEqual(["sample.ts"]);
+    expect(output).not.toContain("jsdoc(require-param-type)");
+    expect(output).not.toContain("jsdoc(require-returns-type)");
+  });
+
+  test("accepts TSDoc that satisfies core's native jsdoc rules", () => {
+    const { output } = lintFixture("jsdoc-load", "compat.ts");
+
+    expect(
+      output
+        .split("\n")
+        .filter((line) => DOCUMENTATION_DIAGNOSTIC_RE.test(line))
+    ).toEqual([]);
   });
 
   test("disables github/filenames-match-regex for route files", async () => {
@@ -685,36 +813,25 @@ describe("oxlint js-plugins config", () => {
   });
 
   for (const { plugin, prefix } of JS_PLUGINS) {
-    test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
-      const config = await readOxlintConfig("js-plugins");
-      const mod = await import(plugin);
-      // SAFETY: adapting the untyped ESLint plugin module — its default export
-      // is a plugin object whose rules map holds rule objects with optional meta.
-      const { rules } = mod.default as {
-        rules: Record<string, { meta?: { deprecated?: boolean } }>;
-      };
-
-      const unknown = Object.keys(config.rules ?? {})
+    test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, () => {
+      const rules = readPluginRuleDeprecations(plugin);
+      const configuredRules = readEverySelectableJsPluginRule();
+      const unknown = configuredRules
+        .map(([rule]) => rule)
         .filter((key) => key.startsWith(`${prefix}/`))
         .filter((key) => !(key.replace(`${prefix}/`, "") in rules));
 
       expect(unknown).toEqual([]);
     });
 
-    test(`js-plugins does not enable deprecated ${prefix} rules`, async () => {
-      const config = await readOxlintConfig("js-plugins");
-      const mod = await import(plugin);
-      // SAFETY: adapting the untyped ESLint plugin module — its default export
-      // is a plugin object whose rules map holds rule objects with optional meta.
-      const { rules } = mod.default as {
-        rules: Record<string, { meta?: { deprecated?: boolean } }>;
-      };
-
-      const deprecated = Object.entries(config.rules ?? {})
+    test(`js-plugins does not enable deprecated ${prefix} rules`, () => {
+      const rules = readPluginRuleDeprecations(plugin);
+      const configuredRules = readEverySelectableJsPluginRule();
+      const deprecated = configuredRules
         .filter(([key]) => key.startsWith(`${prefix}/`))
         .filter(([, severity]) => severity !== "off")
         .map(([key]) => key.replace(`${prefix}/`, ""))
-        .filter((name) => rules[name]?.meta?.deprecated);
+        .filter((name) => rules[name]);
 
       expect(deprecated).toEqual([]);
     });
