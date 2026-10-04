@@ -5,13 +5,14 @@ import {
   ROUTE_FILE_GLOB,
 } from "../../shared/route-filenames.mjs";
 
-// eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
-// run through oxlint's JS plugin support to close the gap with the ESLint
-// preset and to add React Doctor's extra checks. This preset is opt-in: extend
-// it alongside core (and any framework preset) only when you want those rules
-// and accept the extra dependencies plus the slower JS-plugin lint pass. Rules
-// that require type information are not supported by the JS plugin bridge and
-// are excluded. The react-doctor rules were previously bundled into the
+// eslint-plugin-github, eslint-plugin-jsdoc, eslint-plugin-sonarjs,
+// eslint-plugin-tsdoc, and oxlint-plugin-react-doctor run through oxlint's JS
+// plugin support to close the gap with the ESLint preset and to add opt-in
+// TSDoc/public API checks and React Doctor's extra checks. This preset is
+// opt-in: extend it alongside core (and any framework preset) only when you
+// want those rules and accept the extra dependencies plus the slower JS-plugin
+// lint pass. Rules that require type information are not supported by the JS
+// plugin bridge and are excluded. React Doctor's rules once lived in the
 // react/next/tanstack presets; they live here now so those framework presets
 // run entirely on oxlint's native Rust rules. Framework-specific react-doctor
 // rules (Next.js, TanStack) are NOT included here — they fire on generic JSX
@@ -21,7 +22,7 @@ import {
 //
 // Install the plugins in your project, then extend the preset:
 //
-//   npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
+//   npm install -D eslint-plugin-github eslint-plugin-jsdoc eslint-plugin-sonarjs eslint-plugin-tsdoc oxlint-plugin-react-doctor
 //
 //   import { defineConfig } from "oxlint";
 //   import core from "ultracite/oxlint/core";
@@ -43,7 +44,9 @@ import {
 // the full preset — see its doc comment below.
 const jsPluginEntries = [
   { name: "github", specifier: "eslint-plugin-github" },
+  { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
   { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+  { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
   { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
 ];
 
@@ -76,6 +79,46 @@ const config = defineConfig({
   // jsPluginSettings itself (see above).
   settings: jsPluginSettings,
   overrides: [
+    {
+      files: ["**/*.{ts,tsx,mts,cts}"],
+      rules: {
+        // Use the JS implementation only for the missing public API
+        // requirement; Oxlint's native jsdoc rules remain authoritative for
+        // comment completeness and do not require duplicated TS types.
+        "jsdoc-js/require-jsdoc": [
+          "error",
+          {
+            contexts: [
+              "ArrowFunctionExpression",
+              "ClassDeclaration",
+              "ClassExpression",
+              "FunctionDeclaration",
+              "FunctionExpression",
+              "MethodDefinition",
+              "TSEnumDeclaration",
+              "TSInterfaceDeclaration",
+              "TSTypeAliasDeclaration",
+            ],
+            publicOnly: true,
+            require: {
+              ArrowFunctionExpression: true,
+              ClassDeclaration: true,
+              ClassExpression: true,
+              FunctionDeclaration: true,
+              FunctionExpression: true,
+              MethodDefinition: true,
+            },
+          },
+        ],
+        "jsdoc/require-param": "error",
+        "jsdoc/require-param-description": "error",
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-returns": "error",
+        "jsdoc/require-returns-description": "error",
+        "jsdoc/require-returns-type": "off",
+        "tsdoc/syntax": "error",
+      },
+    },
     {
       files: [
         "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
@@ -539,11 +582,13 @@ const config = defineConfig({
 export default config;
 
 // Returns a copy of this preset narrowed to the given plugin names ("github",
-// "sonarjs", "react-doctor"): only the selected jsPlugins entries are loaded
-// and only their rules (top-level and per-override) are kept. `ultracite init`
-// wires this into generated configs when a subset of the plugins is chosen,
-// so the generated file stays a one-line extend instead of inlining the
-// filtering logic:
+// "jsdoc-js", "sonarjs", "tsdoc", "react-doctor"): only the selected
+// jsPlugins entries are loaded and only their rules (top-level and
+// per-override) are kept. Selecting "jsdoc-js" also retains the native
+// "jsdoc/*" rules configured alongside the bridged public API rule.
+// `ultracite init` wires this into generated configs when a subset of the
+// plugins is chosen, so the generated file stays a one-line extend instead
+// of inlining the filtering logic:
 //
 //   import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
 //
@@ -556,7 +601,14 @@ export default config;
 //   });
 export const selectJsPlugins = (pluginNames) => {
   const names = new Set(pluginNames);
-  const isSelectedRule = ([ruleName]) => names.has(ruleName.split("/")[0]);
+  const isSelectedRule = ([ruleName]) => {
+    const [pluginName] = ruleName.split("/");
+    // eslint-plugin-jsdoc uses a non-reserved alias, but its companion rules
+    // use Oxlint's native jsdoc namespace.
+    return (
+      names.has(pluginName) || (names.has("jsdoc-js") && pluginName === "jsdoc")
+    );
+  };
 
   return defineConfig({
     ...config,

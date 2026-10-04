@@ -486,7 +486,9 @@ describe("initialize", () => {
           "@shadcn/lint",
           "anti-slop",
           "eslint-plugin-github",
+          "eslint-plugin-jsdoc",
           "eslint-plugin-sonarjs",
+          "eslint-plugin-tsdoc",
           "oxlint-plugin-react-doctor",
         ]);
       }
@@ -552,7 +554,17 @@ describe("initialize", () => {
             value: "anti-slop",
           },
           { label: "eslint-plugin-github", value: "eslint-plugin-github" },
+          {
+            hint: "require docs for public TypeScript APIs",
+            label: "eslint-plugin-jsdoc",
+            value: "eslint-plugin-jsdoc",
+          },
           { label: "eslint-plugin-sonarjs", value: "eslint-plugin-sonarjs" },
+          {
+            hint: "validate TSDoc syntax in TypeScript comments",
+            label: "eslint-plugin-tsdoc",
+            value: "eslint-plugin-tsdoc",
+          },
           {
             label: "oxlint-plugin-react-doctor",
             value: "oxlint-plugin-react-doctor",
@@ -610,7 +622,9 @@ describe("initialize", () => {
         "@shadcn/lint",
         "anti-slop",
         "eslint-plugin-github",
+        "eslint-plugin-jsdoc",
         "eslint-plugin-sonarjs",
+        "eslint-plugin-tsdoc",
         "oxlint-plugin-react-doctor",
       ],
       linter: "oxlint",
@@ -620,7 +634,9 @@ describe("initialize", () => {
 
     expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
+    expect(installedPackages).toContain("eslint-plugin-jsdoc@^64.5.4");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.1");
+    expect(installedPackages).toContain("eslint-plugin-tsdoc@^0.5.4");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.14");
     // anti-slop is vendored inside ultracite — nothing to install for it.
     expect(installedPackages.every((pkg) => !pkg.includes("anti-slop"))).toBe(

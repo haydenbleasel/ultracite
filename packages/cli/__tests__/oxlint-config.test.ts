@@ -83,7 +83,9 @@ const CORE_PLUGINS = [
 // than against `oxlint --rules`.
 const JS_PLUGINS = [
   { plugin: "eslint-plugin-github", prefix: "github" },
+  { plugin: "eslint-plugin-jsdoc", prefix: "jsdoc-js" },
   { plugin: "eslint-plugin-sonarjs", prefix: "sonarjs" },
+  { plugin: "eslint-plugin-tsdoc", prefix: "tsdoc" },
 ];
 
 /**
@@ -239,6 +241,16 @@ describe("oxlint package exports", () => {
     }
 
     expect(missing).toEqual([]);
+  });
+
+  test("declares the selectable TSDoc plugin aliases", () => {
+    const declaration = readFileSync(
+      path.join(import.meta.dirname, "../config/oxlint/js-plugins/index.d.mts"),
+      "utf-8"
+    );
+
+    expect(declaration).toContain('"jsdoc-js"');
+    expect(declaration).toContain('"tsdoc"');
   });
 });
 
@@ -505,12 +517,14 @@ describe("oxlint js-plugins config", () => {
     expect(config.jsPlugins).toBeUndefined();
   });
 
-  test("declares the github, sonarjs, and react-doctor JS plugins", async () => {
+  test("declares the bridged JavaScript plugins", async () => {
     const config = await readOxlintConfig("js-plugins");
 
     expect(config.jsPlugins).toEqual([
       { name: "github", specifier: "eslint-plugin-github" },
+      { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
       { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
+      { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
       { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
     ]);
   });
@@ -554,7 +568,42 @@ describe("oxlint js-plugins config", () => {
     }
 
     // The full preset export is left untouched.
-    expect(full.jsPlugins?.length).toBe(3);
+    expect(full.jsPlugins?.length).toBe(5);
+  });
+
+  test("selects TSDoc and public API documentation rules by plugin alias", async () => {
+    const configDir = path.join(
+      import.meta.dirname,
+      "../config/oxlint/js-plugins"
+    );
+    const { selectJsPlugins } = await import(configDir);
+
+    const jsdoc = selectJsPlugins(["jsdoc-js"]);
+    const tsdoc = selectJsPlugins(["tsdoc"]);
+    const jsdocRules = jsdoc.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/*.{ts,tsx,mts,cts}")
+    )?.rules;
+    const tsdocRules = tsdoc.overrides?.find(
+      (override: { files?: string[] }) =>
+        override.files?.includes("**/*.{ts,tsx,mts,cts}")
+    )?.rules;
+
+    expect(jsdoc.jsPlugins).toEqual([
+      { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
+    ]);
+    expect(jsdocRules).toMatchObject({
+      "jsdoc-js/require-jsdoc": [
+        "error",
+        expect.objectContaining({ publicOnly: true }),
+      ],
+      "jsdoc/require-param-type": "off",
+      "jsdoc/require-returns-type": "off",
+    });
+    expect(tsdoc.jsPlugins).toEqual([
+      { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
+    ]);
+    expect(tsdocRules).toEqual({ "tsdoc/syntax": "error" });
   });
 
   // Regression guard: oxlint's JS plugin bridge only registers a subset of
@@ -568,6 +617,15 @@ describe("oxlint js-plugins config", () => {
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
+  }, 15_000);
+
+  test("enforces public TSDoc without requiring duplicated TS types", () => {
+    const { flaggedBy, output } = lintFixture("jsdoc-load", "sample.ts");
+
+    expect(flaggedBy("jsdoc-js(require-jsdoc)")).toHaveLength(4);
+    expect(flaggedBy("tsdoc(syntax)")).toEqual(["sample.ts"]);
+    expect(output).not.toContain("jsdoc/require-param-type");
+    expect(output).not.toContain("jsdoc/require-returns-type");
   });
 
   test("disables github/filenames-match-regex for route files", async () => {
@@ -673,7 +731,15 @@ describe("oxlint js-plugins config", () => {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
       };
 
-      const unknown = Object.keys(config.rules ?? {})
+      const configuredRules = [
+        ...Object.entries(config.rules ?? {}),
+        ...(config.overrides ?? []).flatMap(
+          (override: { rules?: Record<string, unknown> }) =>
+            Object.entries(override.rules ?? {})
+        ),
+      ];
+      const unknown = configuredRules
+        .map(([rule]) => rule)
         .filter((key) => key.startsWith(`${prefix}/`))
         .filter((key) => !(key.replace(`${prefix}/`, "") in rules));
 
@@ -689,7 +755,14 @@ describe("oxlint js-plugins config", () => {
         rules: Record<string, { meta?: { deprecated?: boolean } }>;
       };
 
-      const deprecated = Object.entries(config.rules ?? {})
+      const configuredRules = [
+        ...Object.entries(config.rules ?? {}),
+        ...(config.overrides ?? []).flatMap(
+          (override: { rules?: Record<string, unknown> }) =>
+            Object.entries(override.rules ?? {})
+        ),
+      ];
+      const deprecated = configuredRules
         .filter(([key]) => key.startsWith(`${prefix}/`))
         .filter(([, severity]) => severity !== "off")
         .map(([key]) => key.replace(`${prefix}/`, ""))

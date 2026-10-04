@@ -4,7 +4,12 @@ declare const config: OxlintConfig;
 
 export default config;
 
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not

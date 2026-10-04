@@ -203,6 +203,32 @@ describe("oxlint linter", () => {
       expect(content).toContain(");\n\nexport default defineConfig({");
     });
 
+    test("maps TSDoc package selections to their Oxlint plugin aliases", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({
+        jsPlugins: ["eslint-plugin-jsdoc", "eslint-plugin-tsdoc"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      expect(content).toContain(
+        'const jsPlugins = selectJsPlugins(["jsdoc-js", "tsdoc"]);'
+      );
+      expect(content).toContain(
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+      );
+    });
+
     test("does not hoist jsPlugins without a js-plugins preset", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -897,7 +923,7 @@ import core from "ultracite/oxlint/core";
 import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
 
 export default defineConfig({
-  extends: [core, selectJsPlugins(["react-doctor"])],
+  extends: [core, selectJsPlugins(["react-doctor", "jsdoc-js", "tsdoc"])],
   ignorePatterns: core.ignorePatterns,
 });
 `;
@@ -919,7 +945,9 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const [, content] = writeCall;
-      expect(content).toContain('selectJsPlugins(["react-doctor"])');
+      expect(content).toContain(
+        'selectJsPlugins(["react-doctor", "jsdoc-js", "tsdoc"])'
+      );
     });
 
     test("preserves a selection reformatted across multiple lines", async () => {

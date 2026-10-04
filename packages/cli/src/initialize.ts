@@ -171,6 +171,8 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
   "@shadcn/lint": "design-system rules for Tailwind v4 components",
   "anti-slop": "vendored opinionated preset, nothing to install",
+  "eslint-plugin-jsdoc": "require docs for public TypeScript APIs",
+  "eslint-plugin-tsdoc": "validate TSDoc syntax in TypeScript comments",
 };
 
 const buildNoInstallDevDependencies = (

@@ -50,7 +50,9 @@ const shadcnPreset = "shadcn";
 // helper.
 const oxlintSelectableJsPluginNames = [
   "eslint-plugin-github",
+  "eslint-plugin-jsdoc",
   "eslint-plugin-sonarjs",
+  "eslint-plugin-tsdoc",
   "oxlint-plugin-react-doctor",
 ] as const;
 
@@ -75,7 +77,9 @@ interface OxlintOptions {
 
 const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
+  "eslint-plugin-jsdoc": { name: "jsdoc-js" },
   "eslint-plugin-sonarjs": { name: "sonarjs" },
+  "eslint-plugin-tsdoc": { name: "tsdoc" },
   "oxlint-plugin-react-doctor": { name: "react-doctor" },
 } satisfies Record<OxlintSelectableJsPlugin, { name: string }>;
 

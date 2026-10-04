@@ -21,7 +21,12 @@ export default config;
 // selectJsPlugins helper that generated configs use to apply react-doctor's
 // settings and enable a subset of the plugins.
 const oxlintJsPluginsDeclaration = `${oxlintDeclaration}
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
