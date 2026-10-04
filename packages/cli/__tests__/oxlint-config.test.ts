@@ -14,8 +14,16 @@ import { readdirSync, readFileSync as _readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import type { OxlintConfig, OxlintOverride } from "oxlint";
+import type { OxlintOverride } from "oxlint";
 
+import antiSlop from "../config/oxlint/anti-slop/index.mjs";
+import jsPlugins, {
+  selectJsPlugins,
+} from "../config/oxlint/js-plugins/index.mjs";
+import type { OxlintJsPluginName } from "../config/oxlint/js-plugins/index.mjs";
+import nextJsPlugins from "../config/oxlint/next/js-plugins/index.mjs";
+import shadcn from "../config/oxlint/shadcn/index.mjs";
+import tanstackJsPlugins from "../config/oxlint/tanstack/js-plugins/index.mjs";
 import packageJson from "../package.json";
 
 // The test preload mocks node:fs (readFileSync returns "{}"), so read real
@@ -90,19 +98,9 @@ const JS_PLUGINS = [
   { plugin: "eslint-plugin-tsdoc", prefix: "tsdoc" },
 ];
 
-const importSelectJsPlugins = async (): Promise<
-  (pluginNames: string[]) => OxlintConfig
-> => {
-  const { selectJsPlugins } = await import(
-    path.join(import.meta.dirname, "../config/oxlint/js-plugins")
-  );
-  return selectJsPlugins;
-};
-
 // Every rule the js-plugins preset can enable: the full preset's, plus the
 // documentation override that only an explicit selection adds.
-const readEverySelectableJsPluginRule = async () => {
-  const selectJsPlugins = await importSelectJsPlugins();
+const readEverySelectableJsPluginRule = () => {
   const config = selectJsPlugins([
     "github",
     "jsdoc-js",
@@ -119,15 +117,12 @@ const readEverySelectableJsPluginRule = async () => {
   ];
 };
 
-const readDocumentationRules = async (pluginNames: string[]) => {
-  const selectJsPlugins = await importSelectJsPlugins();
-
-  return selectJsPlugins(pluginNames).overrides?.find(
+const readDocumentationRules = (pluginNames: OxlintJsPluginName[]) =>
+  selectJsPlugins(pluginNames).overrides?.find(
     (override: OxlintOverride) =>
       override.files?.includes("**/*.{ts,tsx,mts,cts}") &&
       Object.keys(override.rules ?? {}).some((rule) => rule.startsWith("jsdoc"))
   )?.rules;
-};
 
 const pluginRuleDeprecations = new Map<string, Record<string, boolean>>();
 
@@ -313,14 +308,23 @@ describe("oxlint package exports", () => {
     expect(missing).toEqual([]);
   });
 
-  test("declares the selectable TSDoc plugin aliases", () => {
-    const declaration = readFileSync(
-      path.join(import.meta.dirname, "../config/oxlint/js-plugins/index.d.mts"),
-      "utf-8"
-    );
+  /**
+   * Generated configs spread these presets' jsPlugins onto the root config
+   * (#784), so their declarations must type it as non-null: `bun run types`
+   * fails here with TS2488 otherwise (#834), and the spreads throw at
+   * runtime if a preset stops shipping jsPlugins.
+   */
+  test("presets that ship plugins declare jsPlugins as non-null", () => {
+    const combined = [
+      ...jsPlugins.jsPlugins,
+      ...selectJsPlugins(["github"]).jsPlugins,
+      ...shadcn.jsPlugins,
+      ...antiSlop.jsPlugins,
+      ...nextJsPlugins.jsPlugins,
+      ...tanstackJsPlugins.jsPlugins,
+    ];
 
-    expect(declaration).toContain('"jsdoc-js"');
-    expect(declaration).toContain('"tsdoc"');
+    expect(combined.length).toBeGreaterThan(0);
   });
 });
 
@@ -598,11 +602,6 @@ describe("oxlint js-plugins config", () => {
   });
 
   test("selectJsPlugins narrows plugins and rules to the selection", async () => {
-    const configDir = path.join(
-      import.meta.dirname,
-      "../config/oxlint/js-plugins"
-    );
-    const { selectJsPlugins } = await import(configDir);
     const full = await readOxlintConfig("js-plugins");
 
     const selected = selectJsPlugins(["github", "sonarjs"]);
@@ -648,16 +647,14 @@ describe("oxlint js-plugins config", () => {
     expect(fullRules.filter((rule) => rule.startsWith("tsdoc/"))).toEqual([]);
   });
 
-  test("selects TSDoc and public API documentation rules by plugin alias", async () => {
-    const selectJsPlugins = await importSelectJsPlugins();
-
+  test("selects TSDoc and public API documentation rules by plugin alias", () => {
     expect(selectJsPlugins(["jsdoc-js"]).jsPlugins).toEqual([
       { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
     ]);
     expect(selectJsPlugins(["tsdoc"]).jsPlugins).toEqual([
       { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
     ]);
-    expect(await readDocumentationRules(["jsdoc-js"])).toEqual({
+    expect(readDocumentationRules(["jsdoc-js"])).toEqual({
       "jsdoc-js/require-jsdoc": [
         "error",
         {
@@ -668,7 +665,7 @@ describe("oxlint js-plugins config", () => {
       "jsdoc/require-param": "error",
       "jsdoc/require-returns": "error",
     });
-    expect(await readDocumentationRules(["tsdoc"])).toEqual({
+    expect(readDocumentationRules(["tsdoc"])).toEqual({
       "jsdoc/check-tag-names": [
         "error",
         { definedTags: expect.arrayContaining(["remarks", "typeParam"]) },
@@ -679,7 +676,7 @@ describe("oxlint js-plugins config", () => {
     });
     // TSDoc can't name destructured properties, so only the parameter
     // itself is required when both are selected.
-    const combinedRules = await readDocumentationRules(["jsdoc-js", "tsdoc"]);
+    const combinedRules = readDocumentationRules(["jsdoc-js", "tsdoc"]);
     expect(combinedRules?.["jsdoc/require-param"]).toEqual([
       "error",
       { checkDestructured: false },
@@ -816,9 +813,9 @@ describe("oxlint js-plugins config", () => {
   });
 
   for (const { plugin, prefix } of JS_PLUGINS) {
-    test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, async () => {
+    test(`js-plugins only references ${prefix} rules that exist in ${plugin}`, () => {
       const rules = readPluginRuleDeprecations(plugin);
-      const configuredRules = await readEverySelectableJsPluginRule();
+      const configuredRules = readEverySelectableJsPluginRule();
       const unknown = configuredRules
         .map(([rule]) => rule)
         .filter((key) => key.startsWith(`${prefix}/`))
@@ -827,9 +824,9 @@ describe("oxlint js-plugins config", () => {
       expect(unknown).toEqual([]);
     });
 
-    test(`js-plugins does not enable deprecated ${prefix} rules`, async () => {
+    test(`js-plugins does not enable deprecated ${prefix} rules`, () => {
       const rules = readPluginRuleDeprecations(plugin);
-      const configuredRules = await readEverySelectableJsPluginRule();
+      const configuredRules = readEverySelectableJsPluginRule();
       const deprecated = configuredRules
         .filter(([key]) => key.startsWith(`${prefix}/`))
         .filter(([, severity]) => severity !== "off")

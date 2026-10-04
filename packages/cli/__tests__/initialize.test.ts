@@ -836,6 +836,32 @@ describe("initialize", () => {
     expect(mockAddDep).not.toHaveBeenCalled();
   });
 
+  test("rejects invalid --workspace-framework values before installing", async () => {
+    const mockAddDep = mock(() => Promise.resolve());
+
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    const result = initialize({
+      linter: "oxlint",
+      pm: "npm",
+      quiet: true,
+      "workspace-framework": ["../outside=react"],
+    });
+
+    await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
+    await expect(result).rejects.toThrow(
+      'Invalid --workspace-framework value "../outside=react"'
+    );
+    expect(mockAddDep).not.toHaveBeenCalled();
+  });
+
   test("accepts nub as an explicit package manager", async () => {
     const mockAddDep = mock(
       (

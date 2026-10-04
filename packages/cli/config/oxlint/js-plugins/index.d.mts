@@ -1,8 +1,13 @@
 import type { OxlintConfig } from "oxlint";
 
-declare const config: OxlintConfig;
+declare const config: OxlintConfigWithJsPlugins;
 
 export default config;
+
+/** An Oxlint config whose `jsPlugins` is always set. */
+export type OxlintConfigWithJsPlugins = OxlintConfig & {
+  jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
+};
 
 export type OxlintJsPluginName =
   | "github"
@@ -25,4 +30,4 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfig;
+) => OxlintConfigWithJsPlugins;

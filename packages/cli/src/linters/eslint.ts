@@ -3,6 +3,7 @@ import { readFile, rm } from "node:fs/promises";
 import { log } from "@clack/prompts";
 
 import type { options } from "../data/options";
+import type { PackageJson } from "../schemas";
 import {
   canHoldEsmConfig,
   eslintConfigNames,
@@ -10,6 +11,8 @@ import {
   validateFrameworkName,
   writeProjectFile,
 } from "../utils";
+import { pathToRoot, readWorkspacePackageJson } from "../workspace-frameworks";
+import type { WorkspaceFrameworks } from "../workspace-frameworks";
 import { parseConfigModule, renderEntries } from "./config-module";
 import type { ConfigModule, RenderedEntry } from "./config-module";
 
@@ -124,15 +127,95 @@ const warnReplaced = (fileName: string): void => {
   );
 };
 
+// The identifier a workspace config imports the root config as.
+const rootConfigIdentifier = "root";
+
+// A workspace with its own package.json imports the presets and the root
+// config from the root package, which core's import-x rules flag: the presets
+// as a dependency the workspace doesn't declare, the root config as a
+// relative import into another package. Only the rules that would fire are
+// disabled, so the directive is never reported as unused.
+const getWorkspaceDirective = (
+  workspacePackage: PackageJson | undefined
+): string => {
+  if (!workspacePackage) {
+    return "";
+  }
+
+  const declaresUltracite = [
+    workspacePackage.dependencies,
+    workspacePackage.devDependencies,
+    workspacePackage.peerDependencies,
+  ].some((dependencies) => dependencies?.ultracite !== undefined);
+  const rules = [
+    ...(declaresUltracite ? [] : ["import-x/no-extraneous-dependencies"]),
+    "import-x/no-relative-packages",
+  ];
+
+  return `/* eslint-disable ${rules.join(", ")} -- imports the presets and config of the root package */\n`;
+};
+
+const generateWorkspaceConfig = (
+  rootConfigImport: string,
+  frameworks: string[],
+  workspacePackage: PackageJson | undefined
+): string => {
+  const presets = frameworks.map(validateFrameworkName);
+  const imports = presets
+    .map((preset) => `import ${preset} from "ultracite/eslint/${preset}";`)
+    .join("\n");
+  const entries = renderEntries(
+    [rootConfigIdentifier, ...presets].map((name) => ({
+      comment: null,
+      text: `...${name}`,
+    }))
+  );
+
+  return `${getWorkspaceDirective(workspacePackage)}${imports}
+
+import ${rootConfigIdentifier} from "${rootConfigImport}";
+
+// ESLint lints each file with its nearest config alone, so this spreads the
+// root config before the workspace's presets.
+export default [
+${entries}
+];
+`;
+};
+
 export const eslint = {
   create: async (opts?: EslintOptions) => {
     const config = generateEslintConfig(opts?.frameworks ?? []);
     await writeProjectFile(defaultConfigPath, config);
   },
+  // ESLint uses the config nearest each file instead of merging it with the
+  // root one, so a workspace config spreads the root config and adds the
+  // workspace's presets.
+  createWorkspace: async ({
+    dir,
+    frameworks,
+  }: WorkspaceFrameworks): Promise<string> => {
+    const rootConfigPath = getEslintConfigPath() ?? defaultConfigPath;
+    const configPath = `${dir}/eslint.config.mjs`;
+
+    await writeProjectFile(
+      `./${configPath}`,
+      generateWorkspaceConfig(
+        `${pathToRoot(dir)}/${rootConfigPath.slice(2)}`,
+        frameworks,
+        readWorkspacePackageJson(dir)
+      )
+    );
+    return configPath;
+  },
   exists: () => {
     const path = getEslintConfigPath();
     return path !== null;
   },
+  findWorkspaceConfig: (dir: string): string | null =>
+    eslintConfigNames
+      .map((name) => `${dir}/${name}`)
+      .find((configPath) => exists(`./${configPath}`)) ?? null,
   update: async (opts?: EslintOptions) => {
     const existingPath = getEslintConfigPath() ?? defaultConfigPath;
     const fileName = existingPath.slice(2);

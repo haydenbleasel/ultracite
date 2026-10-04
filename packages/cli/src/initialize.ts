@@ -74,6 +74,8 @@ import {
   stylelintConfigNames,
   updatePackageJson,
 } from "./utils";
+import { parseWorkspaceFrameworks } from "./workspace-frameworks";
+import type { WorkspaceFrameworks } from "./workspace-frameworks";
 
 const ultraciteVersion = packageJson.version;
 
@@ -99,6 +101,7 @@ interface InitializeFlags {
   quiet?: boolean;
   skipInstall?: boolean;
   "type-aware"?: boolean;
+  "workspace-framework"?: string[];
 }
 
 // @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
@@ -689,6 +692,51 @@ export const upsertPrettierConfig = async (
   }
 };
 
+const workspaceConfigWriters = { biome, eslint, oxlint } satisfies Record<
+  Linter,
+  {
+    createWorkspace: (workspace: WorkspaceFrameworks) => Promise<string>;
+    findWorkspaceConfig: (dir: string) => string | null;
+  }
+>;
+
+// Nested configs for workspaces with frameworks of their own. Each extends
+// the root config and adds the workspace's presets, so the editor
+// extensions and the linters run directly see the same rules as
+// `ultracite check`.
+export const upsertWorkspaceConfigs = async (
+  linter: Linter,
+  workspaces: WorkspaceFrameworks[],
+  quiet = false
+) => {
+  const writer = workspaceConfigWriters[linter];
+
+  await Promise.all(
+    workspaces.map(async (workspace) => {
+      const existing = writer.findWorkspaceConfig(workspace.dir);
+
+      if (existing) {
+        const presets = workspace.frameworks.map(
+          (framework) => `ultracite/${linter}/${framework}`
+        );
+        log.warn(
+          `${existing} already exists, so it was left unchanged. Add ${presets.join(", ")} to it yourself.`
+        );
+        return;
+      }
+
+      const s = spinner();
+      if (!quiet) {
+        s.start(`Creating the ${workspace.dir} configuration...`);
+      }
+      const configPath = await writer.createWorkspace(workspace);
+      if (!quiet) {
+        s.stop(`${configPath} created.`);
+      }
+    })
+  );
+};
+
 export const upsertStylelintConfig = async (quiet = false) => {
   const s = spinner();
 
@@ -1019,6 +1067,7 @@ export const initialize = async (flags?: InitializeFlags) => {
 
   try {
     validateInitializeFlags(opts);
+    const workspaces = parseWorkspaceFrameworks(opts["workspace-framework"]);
 
     let pmInfo: PackageManager;
 
@@ -1060,7 +1109,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
-        opts.frameworks !== undefined;
+        opts.frameworks !== undefined ||
+        opts["workspace-framework"] !== undefined;
 
       if (hasOtherCliOptions) {
         linter = defaultLinter;
@@ -1103,7 +1153,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.hooks ||
-        opts.integrations !== undefined;
+        opts.integrations !== undefined ||
+        opts["workspace-framework"] !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -1154,7 +1205,8 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
-        opts.frameworks !== undefined;
+        opts.frameworks !== undefined ||
+        opts["workspace-framework"] !== undefined;
 
       if (!hasOtherCliOptions) {
         const jsPluginsResult = await multiselect<OxlintJsPlugin>({
@@ -1325,6 +1377,16 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
     }
 
+    // Workspace frameworks need their plugins installed (and, for Prettier,
+    // configured) at the root, though their rules only apply in the
+    // workspace.
+    const allFrameworks = [
+      ...new Set([
+        ...frameworks,
+        ...workspaces.flatMap((workspace) => workspace.frameworks),
+      ]),
+    ];
+
     // These steps read-modify-write the shared package.json and emit ordered
     // installer progress, so they must run sequentially; parallelizing would
     // race on package.json and scramble output.
@@ -1334,7 +1396,7 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.skipInstall,
       quiet,
       opts["type-aware"],
-      frameworks,
+      allFrameworks,
       jsPlugins
     );
 
@@ -1348,7 +1410,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (linter === "eslint") {
       await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      await upsertPrettierConfig(frameworks, quiet);
+      await upsertPrettierConfig(allFrameworks, quiet);
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
@@ -1360,6 +1422,8 @@ export const initialize = async (flags?: InitializeFlags) => {
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
     }
+
+    await upsertWorkspaceConfigs(linter, workspaces, quiet);
 
     await Promise.all(
       selectedEditorFiles.map((target) =>

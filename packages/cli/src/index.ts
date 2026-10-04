@@ -74,6 +74,10 @@ program
     `Frameworks being used (${options.frameworks.join(", ")})`
   )
   .option(
+    "--workspace-framework <path=framework...>",
+    "Frameworks for one workspace only, as <path>=<framework> (e.g. apps/web=react)"
+  )
+  .option(
     "--integrations <integrations...>",
     `Integrations to enable (${options.integrations.join(", ")})`
   )
@@ -103,6 +107,7 @@ program
         opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
       skipInstall: opts.skipInstall,
       "type-aware": opts.typeAware,
+      "workspace-framework": opts.workspaceFramework,
     });
   });
 

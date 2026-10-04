@@ -1171,6 +1171,18 @@ const mockProject = (files: Record<string, string>) => {
   return { info, rm, warn, writeFile };
 };
 
+// The project files init writes for several jsPlugins sources. Updates must
+// recognise the combined jsPlugins value it generates, or they keep it as a
+// user override.
+const createCombinedJsPluginsConfig = async () => {
+  const created = mockProject({});
+  await oxlint.create({
+    jsPlugins: ["@shadcn/lint", "eslint-plugin-github"],
+  });
+  const [[configPath, content]] = created.writeFile.mock.calls;
+  return { [configPath]: content };
+};
+
 describe("oxlint update keeps user content", () => {
   test("carries over custom rules, extends, imports and comments", async () => {
     const project = mockProject({
@@ -1287,6 +1299,32 @@ export default defineConfig({
     expect(content).toContain('rules: { "eqeqeq": "off" },');
     expect(content).not.toContain('"eqeqeq": "error"');
     expect(content).toContain('"node": true');
+    expect(project.rm).toHaveBeenCalled();
+  });
+
+  test("regenerates a combined jsPlugins value when the selection shrinks", async () => {
+    const project = mockProject(await createCombinedJsPluginsConfig());
+
+    await oxlint.update({ jsPlugins: ["@shadcn/lint"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("jsPlugins: shadcn.jsPlugins,");
+    expect(content).not.toContain("selectJsPlugins");
+    expect(content).not.toContain("jsPlugins.jsPlugins");
+  });
+
+  test("adds .oxlintrc.json jsPlugins to a combined jsPlugins value", async () => {
+    const project = mockProject({
+      ...(await createCombinedJsPluginsConfig()),
+      "./.oxlintrc.json": '{ "jsPlugins": ["eslint-plugin-foo"] }',
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'jsPlugins: [\n    ...jsPlugins.jsPlugins,\n    ...shadcn.jsPlugins,\n    "eslint-plugin-foo",\n  ],'
+    );
     expect(project.rm).toHaveBeenCalled();
   });
 
