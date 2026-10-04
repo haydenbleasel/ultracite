@@ -1,5 +1,7 @@
 export const undocumented = (value: string): string => value;
 
+export declare function undocumentedDeclaration(): void;
+
 export interface PublicOptions {
   value: string;
 }

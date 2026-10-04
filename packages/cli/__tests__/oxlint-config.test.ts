@@ -626,7 +626,7 @@ describe("oxlint js-plugins config", () => {
   test("enforces public TSDoc without requiring duplicated TS types", () => {
     const { flaggedBy, output } = lintFixture("jsdoc-load", "sample.ts");
 
-    expect(flaggedBy("jsdoc-js(require-jsdoc)")).toHaveLength(4);
+    expect(flaggedBy("jsdoc-js(require-jsdoc)")).toHaveLength(5);
     expect(flaggedBy("tsdoc(syntax)")).toEqual(["sample.ts"]);
     expect(output).not.toContain("jsdoc/require-param-type");
     expect(output).not.toContain("jsdoc/require-returns-type");

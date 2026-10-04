@@ -72,6 +72,7 @@ const documentationOverride = {
           "FunctionDeclaration",
           "FunctionExpression",
           "MethodDefinition",
+          "TSDeclareFunction",
           "TSEnumDeclaration",
           "TSInterfaceDeclaration",
           "TSTypeAliasDeclaration",
