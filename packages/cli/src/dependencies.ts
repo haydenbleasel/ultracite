@@ -219,7 +219,9 @@ const eslintDevDependencyNames = new Set([
 
 export const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
-  eslint: eslintDevDependencyNames,
+  // Only the Oxlint setup installs eslint-plugin-tsdoc, but it's an ESLint
+  // plugin an ESLint config may load too, so ESLint setups don't prune it.
+  eslint: new Set([...eslintDevDependencyNames, "eslint-plugin-tsdoc"]),
   oxlint: new Set([
     "@shadcn/lint",
     "eslint-plugin-github",

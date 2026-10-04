@@ -914,6 +914,49 @@ export default defineConfig({
       expect(content).not.toContain("selectJsPlugins");
     });
 
+    test("adds a selection on top of the full js-plugins preset", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const existingConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
+  settings: jsPluginSettings,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(onlyOxlintConfig),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await oxlint.update({
+        jsPlugins: ["eslint-plugin-tsdoc", "eslint-plugin-jsdoc"],
+      });
+
+      expect(mockWriteFile).toHaveBeenCalled();
+      const [writeCall] = mockWriteFile.mock.calls;
+      const [, content] = writeCall;
+      // The preset's plugins and react-doctor's settings survive the new
+      // selection instead of being replaced by it.
+      expect(content).toContain(
+        'selectJsPlugins(["github", "sonarjs", "react-doctor", "tsdoc", "jsdoc-js"])'
+      );
+      expect(content).toContain("settings: jsPluginSettings,");
+    });
+
     test("preserves a selectJsPlugins selection during update", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

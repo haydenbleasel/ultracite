@@ -1,3 +1,5 @@
+declare function wrap<T>(fn: T): T;
+
 export const undocumented = (value: string): string => value;
 
 export declare function undocumentedDeclaration(): void;
@@ -29,3 +31,23 @@ export const malformedTSDoc = (value: string): string => value;
 export const documented = (value: string): string => value;
 
 const internalHelper = (value: string): string => value;
+
+export class PublicService {
+  run(): void {}
+
+  get label(): string {
+    return "";
+  }
+
+  set label(_value: string) {}
+
+  static create(): PublicService {
+    return new PublicService();
+  }
+
+  private hidden(): void {}
+}
+
+export const wrapped = wrap((value: string): string => value);
+
+export default wrap((): number => 1);

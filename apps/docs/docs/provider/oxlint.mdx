@@ -76,34 +76,6 @@ If you're adding the preset manually instead of through `init`, install the plug
 npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
-### TSDoc and Public API Documentation (Optional)
-
-Opt into `eslint-plugin-tsdoc` to validate TSDoc syntax in TypeScript files, and `eslint-plugin-jsdoc` to require documentation for public TypeScript APIs. The latter is registered as `jsdoc-js` because Oxlint reserves the `jsdoc` name for its native plugin. Ultracite continues to use Oxlint's native `jsdoc/*` rules for comment completeness; parameter and return types remain disabled so TypeScript types do not need to be repeated in comments.
-
-```package-install
-npm install -D eslint-plugin-tsdoc eslint-plugin-jsdoc
-```
-
-```package-install
-npx ultracite init --linter oxlint --js-plugins eslint-plugin-tsdoc eslint-plugin-jsdoc
-```
-
-These checks are scoped to `.ts`, `.tsx`, `.mts`, and `.cts` files and remain off unless selected. In a manual config, select both plugin aliases from the `js-plugins` preset:
-
-```ts
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
-
-const jsPlugins = selectJsPlugins(["tsdoc", "jsdoc-js"]);
-
-export default defineConfig({
-  extends: [core, jsPlugins],
-  ignorePatterns: core.ignorePatterns,
-  jsPlugins: jsPlugins.jsPlugins,
-});
-```
-
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
@@ -139,6 +111,43 @@ export default defineConfig({
   ignorePatterns: core.ignorePatterns,
   jsPlugins: jsPlugins.jsPlugins,
   settings: jsPluginSettings,
+});
+```
+
+### TSDoc and Public API Documentation (Optional)
+
+Two more JS plugins check the documentation in TypeScript files (`.ts`, `.tsx`, `.mts`, and `.cts`). They aren't part of the full `js-plugins` preset, so they only run when you select them:
+
+- `eslint-plugin-tsdoc`, registered as `tsdoc`, validates [TSDoc](https://tsdoc.org) syntax.
+- `eslint-plugin-jsdoc`, registered as `jsdoc-js` because Oxlint reserves `jsdoc` for its native plugin, requires a doc comment on every exported function, class, interface, type alias, and enum. It also covers the public methods and getters of exported classes, and exports that wrap a function, such as `export const Button = forwardRef(...)`.
+
+Selecting `eslint-plugin-jsdoc` also turns on Oxlint's native `jsdoc/require-param` and `jsdoc/require-returns`, so every JSDoc comment on a function, exported or not, must describe its parameters and return value. Parameter and return types stay off, so TypeScript types aren't repeated in comments.
+
+Selecting `eslint-plugin-tsdoc` adjusts core's native `jsdoc/*` rules to fit TSDoc: tags such as `@remarks` and `@typeParam` are allowed, and generators don't need `@yields`. With both plugins selected, a destructured parameter is documented by its own name (`@param props - ...`) rather than property by property. TSDoc has no `{Type}` syntax, so write the type on a `@throws` tag as a link: `@throws {@link RangeError} When the input is empty.`
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
+
+`--js-plugins` sets the whole selection, so list any plugins you already use, such as `eslint-plugin-github`. A config that extends the full `js-plugins` preset keeps its plugins.
+
+If you're configuring Oxlint manually, install the plugins and select them:
+
+```package-install
+npm install -D eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+const jsPlugins = selectJsPlugins(["tsdoc", "jsdoc-js"]);
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
 });
 ```
 

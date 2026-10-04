@@ -56,46 +56,82 @@ const documentationPluginEntries = [
   { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
 ];
 
-const documentationOverride = {
-  files: ["**/*.{ts,tsx,mts,cts}"],
-  rules: {
-    // Use the JS implementation only for the missing public API requirement;
-    // Oxlint's native jsdoc rules remain authoritative for comment completeness
-    // and do not require duplicated TS types.
-    "jsdoc-js/require-jsdoc": [
+const exportDeclaration =
+  ":matches(ExportNamedDeclaration, ExportDefaultDeclaration)";
+const publicMember =
+  ':not([accessibility="private"], [accessibility="protected"], [key.type="PrivateIdentifier"], [kind="set"])';
+
+// The exported declarations that make up a module's public API, as explicit
+// selectors rather than require-jsdoc's publicOnly option: Oxlint's AST gives
+// a class member without an access modifier `accessibility: null`, which
+// publicOnly reads as private, so it would only check members marked
+// `public`. Setters are skipped because TSDoc documents an accessor pair on
+// its getter.
+const publicApiContexts = [
+  `${exportDeclaration} > :matches(ClassDeclaration, FunctionDeclaration)`,
+  "ExportNamedDeclaration > :matches(TSDeclareFunction, TSEnumDeclaration, TSInterfaceDeclaration, TSTypeAliasDeclaration)",
+  "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > :matches(ArrowFunctionExpression, ClassExpression, FunctionExpression)",
+  "ExportDefaultDeclaration > :matches(ArrowFunctionExpression, ClassExpression, FunctionExpression)",
+  // A function passed to a wrapper, e.g. forwardRef(...), memo(...) or
+  // createServerFn().handler(...).
+  'ExportNamedDeclaration[declaration.declarations.0.init.type="CallExpression"][declaration.declarations.0.init.arguments.0.type=/FunctionExpression$/]',
+  'ExportDefaultDeclaration[declaration.type="CallExpression"][declaration.arguments.0.type=/FunctionExpression$/]',
+  `${exportDeclaration} > ClassDeclaration > ClassBody > :matches(MethodDefinition, TSAbstractMethodDefinition)${publicMember}`,
+];
+
+// TSDoc's standard tags that JSDoc doesn't define, which core's
+// jsdoc/check-tag-names would otherwise reject.
+const tsdocOnlyTags = [
+  "alpha",
+  "beta",
+  "decorator",
+  "defaultValue",
+  "eventProperty",
+  "experimental",
+  "packageDocumentation",
+  "privateRemarks",
+  "remarks",
+  "sealed",
+  "typeParam",
+  "virtual",
+];
+
+// The TypeScript override for the selected documentation plugins. Core's
+// native jsdoc/* rules keep checking comment content; this adds the selected
+// plugins' rules and adjusts the native ones so every combination can be
+// satisfied.
+const buildDocumentationOverride = (names) => {
+  const rules = {};
+
+  if (names.has("jsdoc-js")) {
+    // Only the missing-docs check is bridged; it has no native equivalent.
+    // FunctionDeclaration is required by default, exported or not.
+    rules["jsdoc-js/require-jsdoc"] = [
       "error",
-      {
-        contexts: [
-          "ArrowFunctionExpression",
-          "ClassDeclaration",
-          "ClassExpression",
-          "FunctionDeclaration",
-          "FunctionExpression",
-          "MethodDefinition",
-          "TSDeclareFunction",
-          "TSEnumDeclaration",
-          "TSInterfaceDeclaration",
-          "TSTypeAliasDeclaration",
-        ],
-        publicOnly: true,
-        require: {
-          ArrowFunctionExpression: true,
-          ClassDeclaration: true,
-          ClassExpression: true,
-          FunctionDeclaration: true,
-          FunctionExpression: true,
-          MethodDefinition: true,
-        },
-      },
-    ],
-    "jsdoc/require-param": "error",
-    "jsdoc/require-param-description": "error",
-    "jsdoc/require-param-type": "off",
-    "jsdoc/require-returns": "error",
-    "jsdoc/require-returns-description": "error",
-    "jsdoc/require-returns-type": "off",
-    "tsdoc/syntax": "error",
-  },
+      { contexts: publicApiContexts, require: { FunctionDeclaration: false } },
+    ];
+    // Core leaves these off. Every JSDoc block on a function, exported or
+    // not, must describe its parameters and return value; core keeps the
+    // *-type rules off, so TypeScript types aren't repeated. TSDoc has no
+    // dotted names for destructured properties (`@param options.a`), so with
+    // it selected only the parameter itself is documented.
+    rules["jsdoc/require-param"] = names.has("tsdoc")
+      ? ["error", { checkDestructured: false }]
+      : "error";
+    rules["jsdoc/require-returns"] = "error";
+  }
+
+  if (names.has("tsdoc")) {
+    rules["jsdoc/check-tag-names"] = ["error", { definedTags: tsdocOnlyTags }];
+    // TSDoc has no @yields tag, so a generator's docs can't satisfy both.
+    // require-yields-type would also want a `{Type}`, which TSDoc rejects
+    // even when tsdoc.json defines @yields.
+    rules["jsdoc/require-yields"] = "off";
+    rules["jsdoc/require-yields-type"] = "off";
+    rules["tsdoc/syntax"] = "error";
+  }
+
+  return { files: ["**/*.{ts,tsx,mts,cts}"], rules };
 };
 
 // react-doctor 0.9.x rewrote its ported oxc/react-refresh rules (notably
@@ -594,8 +630,8 @@ export default config;
 // jsPlugins entries are loaded and only their rules (top-level and
 // per-override) are kept. The documentation plugins are included only when
 // explicitly selected, so existing full-preset consumers gain no new
-// dependencies on upgrade. Selecting "jsdoc-js" also retains the native
-// "jsdoc/*" rules configured alongside the bridged public API rule.
+// dependencies on upgrade; selecting either adds a TypeScript override that
+// also adjusts core's native jsdoc/* rules (see buildDocumentationOverride).
 // `ultracite init` wires this into generated configs when a subset of the
 // plugins is chosen, so the generated file stays a one-line extend instead
 // of inlining the filtering logic:
@@ -611,37 +647,26 @@ export default config;
 //   });
 export const selectJsPlugins = (pluginNames) => {
   const names = new Set(pluginNames);
-  const isSelectedRule = ([ruleName]) => {
-    const [pluginName] = ruleName.split("/");
-    // eslint-plugin-jsdoc uses a non-reserved alias, but its companion rules
-    // use Oxlint's native jsdoc namespace.
-    return (
-      names.has(pluginName) || (names.has("jsdoc-js") && pluginName === "jsdoc")
-    );
-  };
-
-  const overrides = (config.overrides ?? []).map((override) => ({
-    ...override,
-    rules: Object.fromEntries(
-      Object.entries(override.rules ?? {}).filter(isSelectedRule)
-    ),
-  }));
-
-  if (names.has("jsdoc-js") || names.has("tsdoc")) {
-    overrides.push({
-      ...documentationOverride,
-      rules: Object.fromEntries(
-        Object.entries(documentationOverride.rules).filter(isSelectedRule)
-      ),
-    });
-  }
+  const isSelectedRule = ([ruleName]) => names.has(ruleName.split("/")[0]);
+  const documentationOverrides =
+    names.has("jsdoc-js") || names.has("tsdoc")
+      ? [buildDocumentationOverride(names)]
+      : [];
 
   return defineConfig({
     ...config,
     jsPlugins: [...jsPluginEntries, ...documentationPluginEntries].filter(
       (plugin) => names.has(plugin.name)
     ),
-    overrides,
+    overrides: [
+      ...(config.overrides ?? []).map((override) => ({
+        ...override,
+        rules: Object.fromEntries(
+          Object.entries(override.rules ?? {}).filter(isSelectedRule)
+        ),
+      })),
+      ...documentationOverrides,
+    ],
     rules: Object.fromEntries(
       Object.entries(config.rules ?? {}).filter(isSelectedRule)
     ),

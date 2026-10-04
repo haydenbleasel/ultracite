@@ -634,7 +634,7 @@ describe("initialize", () => {
 
     expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
-    expect(installedPackages).toContain("eslint-plugin-jsdoc@^62.4.0");
+    expect(installedPackages).toContain("eslint-plugin-jsdoc@^64.5.4");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.1");
     expect(installedPackages).toContain("eslint-plugin-tsdoc@^0.5.4");
     expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.14");
@@ -2418,6 +2418,47 @@ describe("helper functions", () => {
       });
       expect(packageJson.prettier).toBeUndefined();
       expect(packageJson.stylelint).toBeUndefined();
+    });
+
+    test("keeps eslint-plugin-tsdoc when moving to ESLint", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mockFileSystem({});
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              devDependencies: {
+                eslint: "latest",
+                "eslint-plugin-tsdoc": "latest",
+                oxlint: "latest",
+                "oxlint-plugin-react-doctor": "latest",
+              },
+            })
+          )
+        ),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mockWriteFile,
+      }));
+
+      try {
+        await migrateLinterConfig("eslint", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
+      );
+      // An ESLint config can load eslint-plugin-tsdoc too, so only the
+      // Oxlint-only packages are pruned.
+      expect(packageJson.devDependencies).toEqual({
+        eslint: "latest",
+        "eslint-plugin-tsdoc": "latest",
+      });
     });
 
     test("prunes other linters from devDependencies only, keeping key order", async () => {
