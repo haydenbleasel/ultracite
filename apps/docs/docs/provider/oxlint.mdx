@@ -53,7 +53,7 @@ export default defineConfig({
 
 ## ESLint Parity (Optional)
 
-The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
+The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), [`eslint-plugin-tsdoc`](https://github.com/microsoft/tsdoc/tree/main/eslint-plugin), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
 
 This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. You can enable it during setup: interactive `ultracite init` lets you choose individual JS plugins when you choose Oxlint, and non-interactive setup accepts package names via `--js-plugins`.
 
@@ -73,7 +73,31 @@ React Doctor's framework-specific rules are split into per-framework add-on pres
 If you're adding the preset manually instead of through `init`, install the plugins yourself:
 
 ```package-install
-npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
+npm install -D eslint-plugin-github eslint-plugin-jsdoc eslint-plugin-sonarjs eslint-plugin-tsdoc oxlint-plugin-react-doctor
+```
+
+### TSDoc and Public API Documentation (Optional)
+
+Opt into `eslint-plugin-tsdoc` to validate TSDoc syntax in TypeScript files, and `eslint-plugin-jsdoc` to require documentation for public TypeScript APIs. The latter is registered as `jsdoc-js` because Oxlint reserves the `jsdoc` name for its native plugin. Ultracite continues to use Oxlint's native `jsdoc/*` rules for comment completeness; parameter and return types remain disabled so TypeScript types do not need to be repeated in comments.
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
+
+These checks are scoped to `.ts`, `.tsx`, `.mts`, and `.cts` files and remain off unless selected. In a manual config, select both plugin aliases from the `js-plugins` preset:
+
+```ts
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+const jsPlugins = selectJsPlugins(["tsdoc", "jsdoc-js"]);
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
+});
 ```
 
 ```ts title="oxlint.config.ts"
@@ -253,7 +277,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`), **sonarjs** (`eslint-plugin-sonarjs`), and **react-doctor** (`oxlint-plugin-react-doctor`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
+For extra ESLint parity, the optional **js-plugins** preset adds **github**, **sonarjs**, and **react-doctor** via Oxlint's JS plugin support. It also offers opt-in TSDoc syntax and public API documentation checks through **tsdoc** and **jsdoc-js**. See [ESLint Parity](#eslint-parity-optional) and [TSDoc and Public API Documentation](#tsdoc-and-public-api-documentation-optional) — these JS plugins are not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
 
 ## Adding Third-Party Plugins
 
