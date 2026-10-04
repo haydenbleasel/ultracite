@@ -15,6 +15,8 @@ import {
   validateFrameworkName,
   writeProjectFile,
 } from "../utils";
+import { pathToRoot } from "../workspace-frameworks";
+import type { WorkspaceFrameworks } from "../workspace-frameworks";
 
 const biomeCoreConfig = "ultracite/biome/core";
 
@@ -113,10 +115,61 @@ export const biome = {
 
     return writeProjectFile(path, `${JSON.stringify(config, null, 2)}\n`);
   },
+  // A nested config can only inherit the root config through extends, and
+  // "//" (which inherits all of it) can't be combined with other entries.
+  // Extending the root config by path applies its own settings but not what
+  // it extends, so the workspace config repeats the root's extends first,
+  // then the root config, then the workspace's presets.
+  createWorkspace: async ({
+    dir,
+    frameworks,
+  }: WorkspaceFrameworks): Promise<string> => {
+    const toRoot = pathToRoot(dir);
+    const rootConfigPath = getBiomeConfigPath();
+    const rootConfig = exists(rootConfigPath)
+      ? parseJsoncStrict(
+          await readFile(rootConfigPath, "utf-8"),
+          biomeConfigSchema
+        )
+      : null;
+    // Relative entries are rebased onto the workspace; package specifiers
+    // resolve the same from anywhere in the project.
+    const rootExtends = [rootConfig?.extends ?? [biomeCoreConfig]]
+      .flat()
+      .filter((ext) => ext !== ROOT_CONFIG_EXTENDS)
+      .map((ext) => {
+        if (ext.startsWith("./")) {
+          return `${toRoot}/${ext.slice(2)}`;
+        }
+        return ext.startsWith("../") ? `${toRoot}/${ext}` : ext;
+      });
+    const configPath = `${dir}/biome.jsonc`;
+    const config = {
+      $schema: `${toRoot}/node_modules/@biomejs/biome/configuration_schema.json`,
+      extends: [
+        ...rootExtends,
+        `${toRoot}/${rootConfigPath.slice(2)}`,
+        ...frameworks.map(
+          (framework) => `ultracite/biome/${validateFrameworkName(framework)}`
+        ),
+      ],
+      root: false,
+    };
+
+    await writeProjectFile(
+      `./${configPath}`,
+      `${JSON.stringify(config, null, 2)}\n`
+    );
+    return configPath;
+  },
   exists: () => {
     const path = getBiomeConfigPath();
     return exists(path);
   },
+  findWorkspaceConfig: (dir: string): string | null =>
+    biomeConfigNames
+      .map((name) => `${dir}/${name}`)
+      .find((configPath) => exists(`./${configPath}`)) ?? null,
   update: async (opts?: BiomeOptions) => {
     const path = getBiomeConfigPath();
     const fileName = path.slice(2);

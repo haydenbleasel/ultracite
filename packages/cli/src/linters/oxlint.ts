@@ -5,13 +5,15 @@ import { z } from "zod";
 
 import type { options } from "../data/options";
 import type { JsonObject, JsonValue } from "../data/types";
-import { parseJsoncStrict } from "../schemas";
+import { parseJsoncStrict, readPackageJsonSync } from "../schemas";
 import {
   exists,
   resolveEsmConfigPath,
   validateFrameworkName,
   writeProjectFile,
 } from "../utils";
+import { pathToRoot, readWorkspacePackageJson } from "../workspace-frameworks";
+import type { WorkspaceFrameworks } from "../workspace-frameworks";
 import {
   arrayEntries,
   identifierName,
@@ -685,6 +687,54 @@ const readExistingOxlintConfig = async (
   };
 };
 
+// The identifier a workspace config imports the root config as.
+const rootConfigIdentifier = "root";
+
+const generateWorkspaceConfigContent = (
+  rootConfigImport: string,
+  presets: string[]
+): string => {
+  const imports = [
+    renderImport("oxlint", ["defineConfig"]),
+    ...presets.map(
+      (preset) =>
+        `import ${getOxlintConfigIdentifier(preset)} from "${preset}";`
+    ),
+  ].join("\n");
+  const extendsEntries = [
+    rootConfigIdentifier,
+    ...presets.map(getOxlintConfigIdentifier),
+  ];
+  const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
+  const extendsBlock =
+    singleLineExtends.length <= generatedLineWidth
+      ? singleLineExtends
+      : `  extends: [\n${renderEntries(
+          extendsEntries.map((text) => ({ comment: null, text })),
+          [],
+          "    "
+        )}\n  ],`;
+
+  return `${imports}
+
+import ${rootConfigIdentifier} from "${rootConfigImport}";
+
+// Oxlint lints each file with its nearest config alone, so this extends the
+// root config and repeats the properties that extends doesn't carry over.
+export default defineConfig({
+${extendsBlock}
+  ignorePatterns: ${rootConfigIdentifier}.ignorePatterns,
+  settings: ${rootConfigIdentifier}.settings,
+});
+`;
+};
+
+const workspaceConfigNames = [
+  "oxlint.config.ts",
+  "oxlint.config.mts",
+  oxlintRcFile,
+] as const;
+
 export const oxlint = {
   create: async (opts?: OxlintOptions) => {
     const extendsList = [getOxlintConfigPath("core")];
@@ -702,10 +752,60 @@ export const oxlint = {
       generateConfigContent(extendsList, opts?.jsPlugins)
     );
   },
+  // Oxlint doesn't merge a nested config with the root one, so a workspace
+  // config extends the root config and adds the workspace's presets.
+  createWorkspace: async ({
+    dir,
+    frameworks,
+  }: WorkspaceFrameworks): Promise<string> => {
+    const root = resolveOxlintConfigPath();
+    const rootConfigPath = root.existing ?? root.target;
+    const rootContents = exists(rootConfigPath)
+      ? await readFile(rootConfigPath, "utf-8")
+      : "";
+    const presets = frameworks.map((framework) =>
+      getOxlintConfigPath(validateFrameworkName(framework))
+    );
+
+    // The root config loads react-doctor through a selection or the full
+    // js-plugins preset; its framework rules live in add-on presets, wired up
+    // here the way the root config wires them for its own frameworks.
+    const hasReactDoctor =
+      parseExistingJsPlugins(rootContents).includes(
+        "oxlint-plugin-react-doctor"
+      ) ||
+      findPresetReferences(rootContents).includes(
+        getOxlintConfigPath("js-plugins")
+      );
+    if (hasReactDoctor) {
+      for (const framework of reactDoctorFrameworkAddOns) {
+        if (presets.includes(getOxlintConfigPath(framework))) {
+          presets.push(getOxlintConfigPath(`${framework}/js-plugins`));
+        }
+      }
+    }
+
+    // Like a root config: .ts in an ES module package, .mts otherwise.
+    const type = (readWorkspacePackageJson(dir) ?? readPackageJsonSync())?.type;
+    const configPath = `${dir}/oxlint.config.${type === "module" ? "ts" : "mts"}`;
+
+    await writeProjectFile(
+      `./${configPath}`,
+      generateWorkspaceConfigContent(
+        `${pathToRoot(dir)}/${fileName(rootConfigPath)}`,
+        presets
+      )
+    );
+    return configPath;
+  },
   exists: () =>
     exists(oxlintTsConfigPath) ||
     exists(oxlintMtsConfigPath) ||
     exists(oxlintRcPath),
+  findWorkspaceConfig: (dir: string): string | null =>
+    workspaceConfigNames
+      .map((name) => `${dir}/${name}`)
+      .find((configPath) => exists(`./${configPath}`)) ?? null,
   update: async (opts?: OxlintOptions) => {
     const paths = resolveOxlintConfigPath();
     const configFile = fileName(paths.target);

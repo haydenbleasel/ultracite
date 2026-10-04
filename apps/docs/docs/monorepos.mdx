@@ -17,6 +17,72 @@ my-turborepo/
 └── oxlint.config.ts + oxfmt.config.ts (or .mts, biome.jsonc, eslint.config.mjs, etc.)
 ```
 
+## Different frameworks per workspace
+
+When workspaces use different frameworks, scope each framework's rules to its workspace so, for example, React rules don't run on an Astro docs site. Pass `--workspace-framework <path>=<framework>` to `init` for each workspace and framework:
+
+```bash title="Terminal"
+npx ultracite init --frameworks vitest --workspace-framework apps/web=react apps/web=tanstack apps/docs=astro
+```
+
+`--frameworks` still applies to the whole repository. For each workspace, `init` writes a config in that directory that extends the root config and adds the workspace's presets, and installs what those presets need at the root. Editor extensions and the linters themselves read these configs too, so they report the same rules as `ultracite check`. Packages without a config of their own keep the root config.
+
+`init` leaves a workspace config that already exists unchanged and tells you which presets to add. The configs it writes look like this, so you can also write or update them yourself.
+
+### Oxlint
+
+```ts title="apps/web/oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import react from "ultracite/oxlint/react";
+import tanstack from "ultracite/oxlint/tanstack";
+
+import root from "../../oxlint.config.ts";
+
+// Oxlint lints each file with its nearest config alone, so this extends the
+// root config and repeats the properties that extends doesn't carry over.
+export default defineConfig({
+  extends: [root, react, tanstack],
+  ignorePatterns: root.ignorePatterns,
+  settings: root.settings,
+});
+```
+
+Oxlint uses the config nearest each file instead of merging it with the root one. Extending the root config brings in its presets, rules and JS plugins, but not its `ignorePatterns` or `settings`, so the workspace config repeats them. In a workspace whose `package.json` doesn't set `"type": "module"`, the file is `oxlint.config.mts`.
+
+### Biome
+
+```jsonc title="apps/web/biome.jsonc"
+{
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/vitest",
+    "../../biome.jsonc",
+    "ultracite/biome/react",
+    "ultracite/biome/tanstack",
+  ],
+  "root": false,
+}
+```
+
+Biome's `"//"` shorthand inherits the whole root config but can't be combined with other `extends` entries. Extending the root config by path applies its own settings but not the presets it extends, so the workspace config lists the root's `extends` first. When you change the root config's `extends`, update the workspace configs to match.
+
+### ESLint
+
+```js title="apps/web/eslint.config.mjs"
+/* eslint-disable import-x/no-extraneous-dependencies, import-x/no-relative-packages -- imports the presets and config of the root package */
+import react from "ultracite/eslint/react";
+import tanstack from "ultracite/eslint/tanstack";
+
+import root from "../../eslint.config.mjs";
+
+// ESLint lints each file with its nearest config alone, so this spreads the
+// root config before the workspace's presets.
+export default [...root, ...react, ...tanstack];
+```
+
+ESLint also uses the config nearest each file, so the workspace config spreads the root config before its presets. The presets come from the root package and the root config sits in another package, which core's `import-x` rules would flag. `init` disables only the rules that apply: none for a directory without its own `package.json`, and not `import-x/no-extraneous-dependencies` when the workspace lists `ultracite` as a dependency.
+
 ## Adding scripts
 
 Because Ultracite's underlying tools are fast (especially the Rust-based Biome and Oxlint), you can run a single root script rather than creating separate scripts in each package.
