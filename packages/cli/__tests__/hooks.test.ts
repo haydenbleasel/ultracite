@@ -1,6 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 import { createHooks } from "../src/hooks";
+import { restoreFileSystemMock } from "./mock-fs";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -13,6 +14,42 @@ const npmBiomeCommand =
   "npm run fix -- --skip=correctness/noUnusedImports --hook";
 const npmBiomeCommandWithoutHook =
   "npm run fix -- --skip=correctness/noUnusedImports";
+
+// Updates `path` holding `existing`; returns the parsed write, if any.
+const runUpdate = async (
+  hook: "claude" | "copilot",
+  existing: string,
+  packageManager: "bun" | "npm" | "pnpm" = "npm"
+) => {
+  const mockWriteFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.resolve()),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(existing)),
+    writeFile: mockWriteFile,
+  }));
+
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {}),
+    existsSync: mock(() => false),
+    readFileSync: mock(() => "{}"),
+  }));
+
+  await createHooks(hook, packageManager).update();
+
+  const [write] = mockWriteFile.mock.calls;
+  return write ? JSON.parse(write[1]) : undefined;
+};
+
+const claudeCommands = (settings: {
+  hooks: { PostToolUse: { hooks: { command: string }[] }[] };
+}) =>
+  settings.hooks.PostToolUse.flatMap((entry) =>
+    entry.hooks.map((hook) => hook.command)
+  );
 
 describe("createHooks", () => {
   // Note: We don't call mock.restore() here because it causes issues
@@ -220,14 +257,16 @@ describe("createHooks", () => {
       expect(writeCall[0]).toBe(".github/hooks/ultracite.json");
 
       const content = JSON.parse(writeCall[1]);
-      expect(content.hooks.PostToolUse).toHaveLength(1);
-      expect(content.hooks.PostToolUse[0].type).toBe("command");
-      expect(content.hooks.PostToolUse[0].command).toBe(npmBiomeCommand);
+      // The Copilot CLI and cloud agent only read this format.
+      expect(content.version).toBe(1);
+      expect(content.hooks.postToolUse).toHaveLength(1);
+      expect(content.hooks.postToolUse[0].type).toBe("command");
+      expect(content.hooks.postToolUse[0].command).toBe(npmBiomeCommand);
     });
 
     test("update merges hooks into existing config when ultracite not present", async () => {
       const existingConfig =
-        '{"hooks":{"PostToolUse":[{"type":"command","command":"echo test"}]}}';
+        '{"version":1,"hooks":{"postToolUse":[{"type":"command","command":"echo test"}]}}';
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -253,12 +292,12 @@ describe("createHooks", () => {
       expect(hooksWrite[0]).toBe(".github/hooks/ultracite.json");
 
       const merged = JSON.parse(hooksWrite[1]);
-      expect(merged.hooks.PostToolUse.length).toBe(2);
-      expect(merged.hooks.PostToolUse[1].command).toBe(npmBiomeCommand);
+      expect(merged.hooks.postToolUse.length).toBe(2);
+      expect(merged.hooks.postToolUse[1].command).toBe(npmBiomeCommand);
     });
 
     test("update skips when ultracite hook already exists", async () => {
-      const existingConfig = `{"hooks":{"PostToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]}}`;
+      const existingConfig = `{"hooks":{"postToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]},"version":1}`;
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -615,5 +654,114 @@ describe("createHooks", () => {
 
       expect(mockWriteFile).not.toHaveBeenCalled();
     });
+  });
+
+  describe("regressions", () => {
+    test("adds the hook when ultracite is only mentioned outside a hook", async () => {
+      const written = await runUpdate(
+        "claude",
+        '{"permissions":{"allow":["Bash(npx ultracite check)"]}}'
+      );
+
+      expect(written.permissions.allow).toEqual(["Bash(npx ultracite check)"]);
+      expect(claudeCommands(written)).toEqual([npmBiomeCommand]);
+    });
+
+    for (const [packageManager, legacy, current] of [
+      [
+        "pnpm",
+        "pnpm fix --skip=correctness/noUnusedImports",
+        "pnpm run fix --skip=correctness/noUnusedImports --hook",
+      ],
+      [
+        "bun",
+        "bun fix --skip=correctness/noUnusedImports",
+        "bun run fix --skip=correctness/noUnusedImports --hook",
+      ],
+      [
+        "npm",
+        "npm run fix --skip=correctness/noUnusedImports",
+        npmBiomeCommand,
+      ],
+    ] as const) {
+      test(`upgrades a hook written before 7.8.3 (${legacy})`, async () => {
+        const written = await runUpdate(
+          "claude",
+          `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"${legacy}"}]}]}}`,
+          packageManager
+        );
+
+        expect(claudeCommands(written)).toEqual([current]);
+      });
+    }
+
+    test("moves a Copilot hook from the old format instead of running it twice", async () => {
+      const written = await runUpdate(
+        "copilot",
+        `{"hooks":{"PostToolUse":[{"type":"command","command":"npm run fix -- --skip=correctness/noUnusedImports"},{"type":"command","command":"echo mine"}]}}`
+      );
+
+      expect(written).toEqual({
+        hooks: {
+          PostToolUse: [{ command: "echo mine", type: "command" }],
+          postToolUse: [{ command: npmBiomeCommand, type: "command" }],
+        },
+        version: 1,
+      });
+    });
+
+    test("drops the old Copilot event entirely when only ultracite used it", async () => {
+      const written = await runUpdate(
+        "copilot",
+        `{"hooks":{"PostToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]}}`
+      );
+
+      expect(written).toEqual({
+        hooks: {
+          postToolUse: [{ command: npmBiomeCommand, type: "command" }],
+        },
+        version: 1,
+      });
+    });
+  });
+});
+
+// A project whose `dir` is a symlink resolving outside it. Returns the
+// mkdirSync mock, which must not run before the write is refused.
+const mockEscapingDirectory = (dir: string) => {
+  const mkdirSync = mock(() => {});
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock(() => Promise.reject(new Error("ENOENT"))),
+    writeFile: mock(() => Promise.resolve()),
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock(() => {
+      throw new Error("ENOENT");
+    }),
+    existsSync: mock(() => false),
+    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    mkdirSync,
+    readFileSync: mock(() => "{}"),
+    realpathSync: mock((filePath: string) =>
+      String(filePath).includes(dir) ? `/elsewhere/${dir}` : filePath
+    ),
+  }));
+
+  return mkdirSync;
+};
+
+describe("writing outside the project", () => {
+  test("refuses before creating the hook's directory", async () => {
+    const mkdirSync = mockEscapingDirectory(".cursor");
+
+    try {
+      await expect(createHooks("cursor", "npm").create()).rejects.toThrow(
+        "Refusing to write"
+      );
+      expect(mkdirSync).not.toHaveBeenCalled();
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 });

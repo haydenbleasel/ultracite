@@ -1,3 +1,5 @@
+import { log } from "@clack/prompts";
+
 import { runAgentFix } from "../agent-fix";
 import {
   buildUnresolvableBiomeConfigMessage,
@@ -10,17 +12,31 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
-import { findPathConfigFiles, resolvePathConfig } from "../path-config";
-import { materializePathConfig } from "../path-config-adapters";
-import { exitOnCommandFailure, runSteps } from "../run-command";
+import {
+  exitOnCommandFailure,
+  NO_LINTER_CONFIG_MESSAGE,
+  runSteps,
+  STYLELINT_MISSING_MESSAGE,
+} from "../run-command";
 import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
 
-const runBiomeFix = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
+const UNSAFE_FLAG = "--unsafe";
+
+// ESLint has no unsafe tier of fixes and rejects an unknown --unsafe flag, so
+// it's dropped rather than failing the whole run.
+const dropUnsupportedUnsafe = (passthrough: string[]): string[] => {
+  if (!passthrough.includes(UNSAFE_FLAG)) {
+    return passthrough;
+  }
+
+  log.warn(
+    "ESLint has no unsafe fixes, so --unsafe was ignored. It applies Biome's unsafe fixes and Oxlint's dangerous fixes."
+  );
+  return passthrough.filter((arg) => arg !== UNSAFE_FLAG);
+};
+
+const runBiomeFix = (files: string[], passthrough: string[]): void => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
 
   if (unresolvableConfig) {
@@ -30,9 +46,6 @@ const runBiomeFix = (
   }
 
   const args = ["check", "--write", "--no-errors-on-unmatched", ...passthrough];
-  if (configPath) {
-    args.push(`--config-path=${configPath}`);
-  }
 
   if (files.length > 0) {
     args.push(...files);
@@ -46,16 +59,8 @@ const runBiomeFix = (
   exitOnCommandFailure("Biome", result);
 };
 
-const runEslintFix = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
-  const args = ["--fix", ...passthrough];
-  if (configPath) {
-    args.push("--config", configPath);
-  }
-  args.push(...(files.length > 0 ? files : ["."]));
+const runEslintFix = (files: string[], passthrough: string[]): void => {
+  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
 
   const result = spawnSync("eslint", args, {
     stdio: "inherit",
@@ -92,14 +97,16 @@ const runStylelintFix = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("stylelint", args, {
     stdio: "inherit",
   });
+
+  if (result.errorCode === "ENOENT") {
+    log.warn(STYLELINT_MISSING_MESSAGE);
+    return;
+  }
+
   exitOnCommandFailure("Stylelint", result);
 };
 
-const runOxlintFix = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
+const runOxlintFix = (files: string[], passthrough: string[]): void => {
   const targets = toOxlintTargets(files);
 
   if (targets.length === 0) {
@@ -107,13 +114,12 @@ const runOxlintFix = (
   }
 
   // Check if --unsafe is in passthrough, use --fix-dangerously instead
-  const hasUnsafe = passthrough.includes("--unsafe");
-  const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
+  const hasUnsafe = passthrough.includes(UNSAFE_FLAG);
+  const filteredPassthrough = passthrough.filter((arg) => arg !== UNSAFE_FLAG);
 
   const args = [
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
-    ...(configPath ? ["--config", configPath] : []),
     ...targets,
   ];
 
@@ -147,74 +153,26 @@ interface FixOptions {
 // mode returns a promise. The command action awaits either shape.
 export const fix = (
   files: string[],
-  passthrough: string[] = [],
+  linterArgs: string[] = [],
   { agent }: FixOptions = {}
 ): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
-  const configFiles = findPathConfigFiles(process.cwd());
 
   if (!linter) {
-    throw new Error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
+    throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);
   }
 
+  const passthrough =
+    linter === "eslint" ? dropUnsupportedUnsafe(linterArgs) : linterArgs;
+
   if (agent) {
-    if (configFiles.length > 0) {
-      return resolvePathConfig(process.cwd(), configFiles).then(
-        async (resolved) => {
-          if (!resolved) {
-            return;
-          }
-          const configPath = await materializePathConfig(linter, resolved);
-          await runAgentFix({
-            agent,
-            configPath,
-            files: normalizedFiles,
-            linter,
-            passthrough,
-          });
-        }
-      );
-    }
     return runAgentFix({
       agent,
       files: normalizedFiles,
       linter,
       passthrough,
     });
-  }
-
-  if (configFiles.length > 0) {
-    return resolvePathConfig(process.cwd(), configFiles).then(
-      async (resolved) => {
-        if (!resolved) {
-          return;
-        }
-        const configPath = await materializePathConfig(linter, resolved);
-        switch (linter) {
-          case "eslint": {
-            runSteps([
-              () => runEslintFix(normalizedFiles, passthrough, configPath),
-              () => runStylelintFix(normalizedFiles, []),
-              () => runPrettierFix(normalizedFiles, []),
-            ]);
-            break;
-          }
-          case "oxlint": {
-            runSteps([
-              () => runOxlintFix(normalizedFiles, passthrough, configPath),
-              () => runOxfmtFix(normalizedFiles, []),
-            ]);
-            break;
-          }
-          default: {
-            runBiomeFix(normalizedFiles, passthrough, configPath);
-          }
-        }
-      }
-    );
   }
 
   switch (linter) {

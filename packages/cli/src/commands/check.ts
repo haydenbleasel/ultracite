@@ -1,20 +1,25 @@
+import { log } from "@clack/prompts";
+
 import {
   buildUnresolvableBiomeConfigMessage,
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
-import { normalizeFileArgs, toStylelintTargets } from "../linter-args";
-import { findPathConfigFiles, resolvePathConfig } from "../path-config";
-import { materializePathConfig } from "../path-config-adapters";
-import { exitOnCommandFailure, runSteps } from "../run-command";
+import {
+  normalizeFileArgs,
+  toOxlintTargets,
+  toStylelintTargets,
+} from "../linter-args";
+import {
+  exitOnCommandFailure,
+  NO_LINTER_CONFIG_MESSAGE,
+  runSteps,
+  STYLELINT_MISSING_MESSAGE,
+} from "../run-command";
 import { spawnSync } from "../spawn-sync";
 import { detectLinter } from "../utils";
 
-const runBiomeCheck = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
+const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
 
   if (unresolvableConfig) {
@@ -24,9 +29,6 @@ const runBiomeCheck = (
   }
 
   const args = ["check", "--no-errors-on-unmatched", ...passthrough];
-  if (configPath) {
-    args.push(`--config-path=${configPath}`);
-  }
 
   if (files.length > 0) {
     args.push(...files);
@@ -40,16 +42,8 @@ const runBiomeCheck = (
   exitOnCommandFailure("Biome", result);
 };
 
-const runEslintCheck = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
-  const args = [...passthrough];
-  if (configPath) {
-    args.push("--config", configPath);
-  }
-  args.push(...(files.length > 0 ? files : ["."]));
+const runEslintCheck = (files: string[], passthrough: string[]): void => {
+  const args = [...passthrough, ...(files.length > 0 ? files : ["."])];
 
   const result = spawnSync("eslint", args, {
     stdio: "inherit",
@@ -58,8 +52,11 @@ const runEslintCheck = (
 };
 
 const runPrettierCheck = (files: string[], passthrough: string[]): void => {
+  // An explicit file Prettier has no parser for (a Dockerfile, .env) is an
+  // error without --ignore-unknown, as it is for `fix`.
   const args = [
     "--check",
+    "--ignore-unknown",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
@@ -82,19 +79,25 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("stylelint", args, {
     stdio: "inherit",
   });
+
+  if (result.errorCode === "ENOENT") {
+    log.warn(STYLELINT_MISSING_MESSAGE);
+    return;
+  }
+
   exitOnCommandFailure("Stylelint", result);
 };
 
-const runOxlintCheck = (
-  files: string[],
-  passthrough: string[],
-  configPath?: string
-): void => {
-  const args = [...passthrough];
-  if (configPath) {
-    args.push("--config", configPath);
+const runOxlintCheck = (files: string[], passthrough: string[]): void => {
+  // Oxlint exits 1 on an explicit file it doesn't lint (a README, a
+  // Dockerfile), so those are dropped as they are for `fix`.
+  const targets = toOxlintTargets(files);
+
+  if (targets.length === 0) {
+    return;
   }
-  args.push(...(files.length > 0 ? files : ["."]));
+
+  const args = [...passthrough, ...targets];
 
   const result = spawnSync("oxlint", args, {
     stdio: "inherit",
@@ -103,8 +106,11 @@ const runOxlintCheck = (
 };
 
 const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
+  // An explicit file oxfmt does not format is an error without
+  // --no-error-on-unmatched-pattern, as it is for `fix`.
   const args = [
     "--check",
+    "--no-error-on-unmatched-pattern",
     ...passthrough,
     ...(files.length > 0 ? files : ["."]),
   ];
@@ -118,46 +124,12 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
 export const check = (
   files: string[] = [],
   passthrough: string[] = []
-): void | Promise<void> => {
+): void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
-  const configFiles = findPathConfigFiles(process.cwd());
 
   if (!linter) {
-    throw new Error(
-      "No linter configuration found. Run `ultracite init` to set up a linter."
-    );
-  }
-
-  if (configFiles.length > 0) {
-    return resolvePathConfig(process.cwd(), configFiles).then(
-      async (resolved) => {
-        if (!resolved) {
-          return;
-        }
-        const configPath = await materializePathConfig(linter, resolved);
-        switch (linter) {
-          case "eslint": {
-            runSteps([
-              () => runPrettierCheck(normalizedFiles, []),
-              () => runEslintCheck(normalizedFiles, passthrough, configPath),
-              () => runStylelintCheck(normalizedFiles, []),
-            ]);
-            break;
-          }
-          case "oxlint": {
-            runSteps([
-              () => runOxfmtCheck(normalizedFiles, []),
-              () => runOxlintCheck(normalizedFiles, passthrough, configPath),
-            ]);
-            break;
-          }
-          default: {
-            runBiomeCheck(normalizedFiles, passthrough, configPath);
-          }
-        }
-      }
-    );
+    throw new UltraciteSetupError(NO_LINTER_CONFIG_MESSAGE);
   }
 
   switch (linter) {

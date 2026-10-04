@@ -1,5 +1,5 @@
 /* Homepage-only presentational CSS (imported by pages/index.astro). Plain CSS
-   only — no @theme/@apply here; token utilities live in ../theme.css. */
+   only — no @theme/@apply here; the token utilities come from Blume's theme. */
 
 /* Tailwind v4 makes the bare `border`/`divide-*` utilities fall back to
    currentColor (black in light mode). Restore a token default — inside
@@ -56,7 +56,7 @@
   border-color: var(--blume-border);
   color: var(--blume-muted-foreground);
 }
-.hp-provider[aria-selected="true"] {
+.hp-provider[aria-pressed="true"] {
   border-color: var(--blume-accent);
   color: var(--blume-foreground);
   background-color: color-mix(in oklch, var(--blume-accent) 8%, transparent);

@@ -11,9 +11,9 @@ Ultracite v7 introduces support for multiple linting providers: Biome, ESLint + 
 
 Ultracite now supports three linting toolchains:
 
-- **[Biome](/docs/provider/biome)** — The modern, all-in-one toolchain (default)
+- **[Oxlint + Oxfmt](/docs/provider/oxlint)** — The fastest option, recommended and the default since v7.11
+- **[Biome](/docs/provider/biome)** — The modern, all-in-one toolchain (the default before v7.11)
 - **[ESLint + Prettier + Stylelint](/docs/provider/eslint)** — The most mature ecosystem
-- **[Oxlint + Oxfmt](/docs/provider/oxlint)** — The fastest option
 
 ### Updated Preset Paths
 
@@ -44,17 +44,25 @@ npx ultracite init --linter oxlint
 
 ## Migration
 
-### For Biome Users (Default)
+### For Biome Users
 
-Update your `biome.jsonc` to use the new preset paths:
+Update your `biome.jsonc` to use the new preset paths. A v6 config like this:
 
 ```jsonc title="biome.jsonc"
 {
-  // Before (v6)
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
+}
+```
 
-  // After (v7)
-  "extends": ["ultracite/biome/core", "ultracite/biome/react", "ultracite/biome/next"]
+becomes:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next",
+  ],
 }
 ```
 
@@ -84,7 +92,7 @@ If you'd like to switch to the fastest option:
 npx ultracite init --linter oxlint
 ```
 
-This will create `oxlint.config.ts` and `oxfmt.config.ts` files:
+This will create `oxlint.config.ts` and `oxfmt.config.ts` files (`.mts` if your `package.json` doesn't set `"type": "module"`):
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -18,13 +19,18 @@ import {
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
 } from "../dependencies";
 import {
-  assertSupportedPackageManagerName,
   getRootInstallOptions,
   normalizePackageManager,
+  resolveRequestedPackageManager,
 } from "../package-manager";
 import { readPackageJson } from "../schemas";
 import { spawnSync } from "../spawn-sync";
-import { detectLinter, exists } from "../utils";
+import {
+  detectLinter,
+  eslintConfigNames,
+  exists,
+  findNearestFile,
+} from "../utils";
 import type { Linter } from "../utils";
 import { DOCTOR_FAILED, reportDiagnostics, runDiagnostics } from "./doctor";
 
@@ -49,8 +55,7 @@ const resolvePackageManager = async (
   requested?: string
 ): Promise<PackageManager> => {
   if (requested) {
-    const name = assertSupportedPackageManagerName(requested);
-    return { command: name, name };
+    return await resolveRequestedPackageManager(requested);
   }
 
   const detected = await detectPackageManager(process.cwd());
@@ -65,7 +70,7 @@ const resolvePackageManager = async (
     log.warn(warning);
   }
 
-  log.info(`Detected lockfile, using ${detected.name}`);
+  log.info(`Using ${detected.name} (detected from the project)`);
   return normalizePackageManager(detected);
 };
 
@@ -78,6 +83,32 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
   ]);
 };
 
+const ESLINT_PRESET_RE = /ultracite\/eslint\/(?<preset>[a-z-]+)/gu;
+
+/**
+ * The framework presets the project's ESLint config imports. Their plugins are
+ * reinstalled even when package.json lacks them, so a preset that gained a
+ * plugin in a newer release (e.g. nestjs) gets it on upgrade.
+ */
+export const getConfiguredEslintFrameworks = (): Set<string> => {
+  const found = findNearestFile(eslintConfigNames);
+
+  if (!found) {
+    return new Set();
+  }
+
+  try {
+    const content = readFileSync(found.path, "utf-8");
+    return new Set(
+      [...content.matchAll(ESLINT_PRESET_RE)].map(
+        (match) => match.groups?.preset ?? ""
+      )
+    );
+  } catch {
+    return new Set();
+  }
+};
+
 /**
  * The `name@version` specs to (re)install for a toolchain: everything the
  * preset requires — including packages newer presets added — plus the
@@ -87,7 +118,8 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
  */
 export const getToolchainPackages = (
   linter: Linter,
-  projectDependencies: ReadonlySet<string>
+  projectDependencies: ReadonlySet<string>,
+  configuredFrameworks: ReadonlySet<string> = new Set()
 ): string[] => {
   const packages = new Map<string, string>();
 
@@ -100,11 +132,12 @@ export const getToolchainPackages = (
       for (const [name, version] of Object.entries(eslintCoreDevDependencies)) {
         packages.set(name, version);
       }
-      for (const dependencies of Object.values(
+      for (const [framework, dependencies] of Object.entries(
         eslintFrameworkDevDependencies
       )) {
+        const configured = configuredFrameworks.has(framework);
         for (const [name, version] of Object.entries(dependencies)) {
-          if (projectDependencies.has(name)) {
+          if (configured || projectDependencies.has(name)) {
             packages.set(name, version);
           }
         }
@@ -192,7 +225,7 @@ const updateSelf = async (
  */
 const handOffToInstalled = (
   installed: InstalledPackage,
-  packageManager: PackageManager
+  requestedPackageManager: string | undefined
 ): number | null => {
   const bin = resolveInstalledBin(installed);
 
@@ -204,9 +237,17 @@ const handOffToInstalled = (
     `Handing off to Ultracite ${installed.manifest.version} to sync the toolchain...`
   );
 
+  // Forward --pm only when the user passed it. Otherwise the new CLI
+  // detects the package manager itself, with the details (like the Yarn
+  // major version) a bare name would lose.
   const result = spawnSync(
     process.execPath,
-    [bin, "upgrade", "--skip-self", "--pm", packageManager.name],
+    [
+      bin,
+      "upgrade",
+      "--skip-self",
+      ...(requestedPackageManager ? ["--pm", requestedPackageManager] : []),
+    ],
     { stdio: "inherit" }
   );
 
@@ -225,7 +266,8 @@ const syncToolchain = async (
 ): Promise<void> => {
   const packages = getToolchainPackages(
     linter,
-    await collectProjectDependencyNames()
+    await collectProjectDependencyNames(),
+    linter === "eslint" ? getConfiguredEslintFrameworks() : new Set()
   );
 
   const s = spinner();
@@ -261,9 +303,7 @@ export const upgrade = async (
 
   if (!options.skipSelf) {
     const newer = await updateSelf(installOptions);
-    const handOffStatus = newer
-      ? handOffToInstalled(newer, packageManager)
-      : null;
+    const handOffStatus = newer ? handOffToInstalled(newer, options.pm) : null;
 
     if (handOffStatus !== null) {
       return handOffStatus;

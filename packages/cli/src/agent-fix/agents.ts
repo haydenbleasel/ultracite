@@ -3,7 +3,13 @@ import type { FixAgent } from "../linter-args";
 import { spawnSync } from "../spawn-sync";
 
 export interface AgentAdapter {
-  buildArgs: (prompt: string) => string[];
+  /**
+   * Arguments for a non-interactive run. The prompt is written to stdin, not
+   * passed as an argument: it spans many lines, and on Windows an npm-installed
+   * CLI is a `.cmd` shim run through cmd.exe, which cuts an argument at its
+   * first newline.
+   */
+  args: readonly string[];
   command: string;
   id: FixAgent;
   installHint: string;
@@ -12,11 +18,11 @@ export interface AgentAdapter {
 
 export const agentAdapters = {
   claude: {
-    // acceptEdits auto-approves file edits; the allowed-tools list keeps the
-    // agent to reading and editing — Bash and network tools are denied.
-    buildArgs: (prompt) => [
+    // -p with no prompt argument reads the prompt from stdin. acceptEdits
+    // auto-approves file edits; the allowed-tools list keeps the agent to
+    // reading and editing — Bash and network tools are denied.
+    args: [
       "-p",
-      prompt,
       "--permission-mode",
       "acceptEdits",
       "--allowedTools",
@@ -28,9 +34,18 @@ export const agentAdapters = {
     label: "Claude Code",
   },
   codex: {
-    // exec is non-interactive; the workspace-write sandbox lets the agent edit
-    // files without prompting. (--full-auto was removed from recent Codex CLIs.)
-    buildArgs: (prompt) => ["exec", "--sandbox", "workspace-write", prompt],
+    // exec is non-interactive and reads the prompt from stdin for `-`; the
+    // workspace-write sandbox lets the agent edit files without prompting.
+    // (--full-auto was removed from recent Codex CLIs.) exec refuses to run
+    // outside a git repository unless told otherwise, which failed every file
+    // of a project that isn't one.
+    args: [
+      "exec",
+      "--sandbox",
+      "workspace-write",
+      "--skip-git-repo-check",
+      "-",
+    ],
     command: "codex",
     id: "codex",
     installHint: "npm install -g @openai/codex",

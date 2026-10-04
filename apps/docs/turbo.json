@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "$TURBO_ROOT$/skills/**",
+        "$TURBO_ROOT$/packages/cli/src/data/**",
+        "$TURBO_ROOT$/packages/cli/package.json"
+      ]
+    }
+  }
+}

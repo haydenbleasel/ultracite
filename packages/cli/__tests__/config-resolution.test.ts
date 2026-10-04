@@ -4,8 +4,10 @@ import path from "node:path";
 import {
   buildUnresolvableBiomeConfigMessage,
   canResolveUltracite,
+  findEffectiveBiomeConfig,
   findInstalledPackage,
   findUnresolvableBiomeConfig,
+  isYarnPnp,
 } from "../src/config-resolution";
 import type { ConfigFileSystem } from "../src/config-resolution";
 
@@ -158,6 +160,61 @@ describe("config-resolution", () => {
       writeFile("biome.jsonc", "not json");
 
       expect(findUnresolvableBiomeConfig(PROJECT, fileSystem)).toBeNull();
+    });
+
+    test("checks the root config a nested config extends with //", () => {
+      writeFile("biome.jsonc", biomeConfig);
+      writeFile(
+        "packages/app/biome.jsonc",
+        JSON.stringify({ extends: "//", root: false })
+      );
+
+      expect(
+        findUnresolvableBiomeConfig(
+          path.join(PROJECT, "packages/app"),
+          fileSystem
+        )
+      ).toBe(path.join(PROJECT, "biome.jsonc"));
+
+      installUltracite();
+      expect(
+        findUnresolvableBiomeConfig(
+          path.join(PROJECT, "packages/app"),
+          fileSystem
+        )
+      ).toBeNull();
+    });
+  });
+
+  describe("isYarnPnp", () => {
+    test("finds a Plug'n'Play manifest in the project or above it", () => {
+      expect(isYarnPnp(path.join(PROJECT, "packages/app"), fileSystem)).toBe(
+        false
+      );
+
+      writeFile(".pnp.cjs", "");
+      expect(isYarnPnp(path.join(PROJECT, "packages/app"), fileSystem)).toBe(
+        true
+      );
+    });
+  });
+
+  describe("findEffectiveBiomeConfig", () => {
+    test("follows a nested config that extends // to the root config", () => {
+      writeFile("biome.jsonc", biomeConfig);
+      writeFile("packages/app/biome.json", JSON.stringify({ extends: "//" }));
+
+      expect(
+        findEffectiveBiomeConfig(path.join(PROJECT, "packages/app"), fileSystem)
+      ).toBe(path.join(PROJECT, "biome.jsonc"));
+    });
+
+    test("keeps the nested config when there is no root config above it", () => {
+      writeFile("packages/app/biome.json", JSON.stringify({ extends: "//" }));
+
+      expect(
+        findEffectiveBiomeConfig(path.join(PROJECT, "packages/app"), fileSystem)
+      ).toBe(path.join(PROJECT, "packages/app/biome.json"));
     });
   });
 

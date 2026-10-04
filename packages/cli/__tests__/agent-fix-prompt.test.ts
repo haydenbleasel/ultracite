@@ -70,9 +70,9 @@ describe("agent adapters", () => {
   });
 
   test("claude adapter builds a non-interactive, edit-scoped invocation", () => {
-    expect(agentAdapters.claude.buildArgs("do the fix")).toEqual([
+    // No prompt argument: `claude -p` reads the prompt from stdin.
+    expect(agentAdapters.claude.args).toEqual([
       "-p",
-      "do the fix",
       "--permission-mode",
       "acceptEdits",
       "--allowedTools",
@@ -81,11 +81,14 @@ describe("agent adapters", () => {
   });
 
   test("codex adapter builds a workspace-write sandboxed exec invocation", () => {
-    expect(agentAdapters.codex.buildArgs("do the fix")).toEqual([
+    // `-` reads the prompt from stdin; the git check would fail every file
+    // of a project that isn't a repository.
+    expect(agentAdapters.codex.args).toEqual([
       "exec",
       "--sandbox",
       "workspace-write",
-      "do the fix",
+      "--skip-git-repo-check",
+      "-",
     ]);
   });
 

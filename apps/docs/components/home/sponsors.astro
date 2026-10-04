@@ -2,18 +2,21 @@
 // Sponsor wordmarks are inlined so they inherit currentColor and need no
 // extra assets. Cloudflare keeps its brand-orange cloud and a currentColor
 // wordmark, matching CodeRabbit.
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
 import SectionIntro from "./section-intro.astro";
 ---
 
 <div class="grid gap-8">
   <SectionIntro
-    description='Ultracite is a community-driven project, powered by the generosity of these companies. <a class="underline" href="https://github.com/sponsors/haydenbleasel" rel="noopener noreferrer" target="_blank">Become a sponsor</a>.'
+    description={`Ultracite is a community-driven project, powered by the generosity of these companies. <a aria-describedby="${NEW_TAB_HINT_ID}" class="underline" href="https://github.com/sponsors/haydenbleasel" rel="noopener noreferrer" target="_blank">Become a sponsor</a>.`}
     title="Supported by our sponsors"
   />
   <div
     class="mx-auto flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-foreground sm:gap-x-20"
   >
     <a
+      aria-describedby={NEW_TAB_HINT_ID}
       aria-label="CodeRabbit"
       class="transition-opacity hover:opacity-80"
       href="https://www.coderabbit.ai/"
@@ -76,6 +79,7 @@ import SectionIntro from "./section-intro.astro";
       </svg>
     </a>
     <a
+      aria-describedby={NEW_TAB_HINT_ID}
       aria-label="Photon HQ"
       class="transition-opacity hover:opacity-80"
       href="https://photon.codes/"
@@ -83,6 +87,7 @@ import SectionIntro from "./section-intro.astro";
       target="_blank"
     >
       <svg
+        aria-hidden="true"
         class="h-7 w-auto sm:h-8"
         viewBox="0 0 268 57"
         fill="none"
@@ -118,6 +123,7 @@ import SectionIntro from "./section-intro.astro";
       </svg>
     </a>
     <a
+      aria-describedby={NEW_TAB_HINT_ID}
       aria-label="Cloudflare"
       class="transition-opacity hover:opacity-80"
       href="https://www.cloudflare.com/"

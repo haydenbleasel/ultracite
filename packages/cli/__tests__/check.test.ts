@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { check } from "../src/commands/check";
+import { UltraciteSetupError } from "../src/config-resolution";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -166,7 +167,100 @@ describe("check", () => {
       detectLinter: mock(() => null),
     }));
 
-    expect(() => check()).toThrow("No linter configuration found");
+    expect(() => check()).toThrow(
+      new UltraciteSetupError(
+        "No linter configuration found. Run `ultracite init` to set up a linter."
+      )
+    );
+  });
+
+  test("handles files the tools don't support the way fix does", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: 0,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    check(["README.md", "Dockerfile", "src/index.ts"]);
+
+    const calls = new Map(
+      mockSpawn.mock.calls.map(([command, args]) => [command, args])
+    );
+    expect(calls.get("oxfmt")).toContain("--no-error-on-unmatched-pattern");
+    expect(calls.get("oxlint")).toEqual(["src/index.ts"]);
+
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+    mockSpawn.mockClear();
+    check(["Dockerfile"]);
+
+    const prettierArgs = mockSpawn.mock.calls.find(
+      ([command]) => command === "prettier"
+    )?.[1];
+    expect(prettierArgs).toContain("--ignore-unknown");
+  });
+
+  test("skips Oxlint when no file is one it lints", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        status: 0,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    check(["README.md"]);
+
+    expect(mockSpawn.mock.calls.map(([command]) => command)).toEqual(["oxfmt"]);
+  });
+
+  test("skips Stylelint when it isn't installed", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "stylelint"
+          ? {
+              error: new Error("Command failed with ENOENT: stylelint"),
+              errorCode: "ENOENT",
+              status: null,
+            }
+          : { status: 0 }
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    expect(() => check()).not.toThrow();
+  });
+
+  test("reports a missing tool after running the others", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "oxfmt"
+          ? {
+              error: new Error("Command failed with ENOENT: oxfmt"),
+              errorCode: "ENOENT",
+              status: null,
+            }
+          : { status: 0 }
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    expect(() => check()).toThrow(UltraciteSetupError);
+    expect(mockSpawn.mock.calls.map(([command]) => command)).toEqual([
+      "oxfmt",
+      "oxlint",
+    ]);
   });
 
   test("runs eslint check when linter is eslint (runs prettier, eslint, stylelint)", () => {
@@ -235,7 +329,7 @@ describe("check", () => {
     expect(stylelintCall[0]).toBe("stylelint");
     expect(stylelintCall[1]).toContain("--allow-empty-input");
     expect(stylelintCall[1]).toContain("src/styles.css");
-    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,sass,less}");
+    expect(stylelintCall[1]).toContain("lib/**/*.{css,scss,less}");
     expect(stylelintCall[1]).not.toContain("src/index.ts");
   });
 
@@ -261,7 +355,7 @@ describe("check", () => {
     expect(stylelintCall[0]).toBe("stylelint");
     expect(stylelintCall[1]).toEqual([
       "--allow-empty-input",
-      "**/*.{css,scss,sass,less}",
+      "**/*.{css,scss,less}",
     ]);
   });
 

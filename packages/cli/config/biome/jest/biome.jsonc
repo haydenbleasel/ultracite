@@ -17,5 +17,33 @@
         "noSkippedTests": "error"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      // Jest injects its globals into test files without imports, so
+      // noUndeclaredVariables reported every describe, it and expect. Mirrors
+      // the ESLint jest preset's globals.jest.
+      "includes": [
+        "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+        "**/__tests__/**/*"
+      ],
+      "javascript": {
+        "globals": [
+          "afterAll",
+          "afterEach",
+          "beforeAll",
+          "beforeEach",
+          "describe",
+          "expect",
+          "fit",
+          "it",
+          "jest",
+          "test",
+          "xdescribe",
+          "xit",
+          "xtest"
+        ]
+      }
+    }
+  ]
 }

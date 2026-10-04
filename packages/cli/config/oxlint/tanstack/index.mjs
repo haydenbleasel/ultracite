@@ -1,9 +1,11 @@
 import { defineConfig } from "oxlint";
 
+import { ROUTE_FILE_GLOB } from "../../shared/route-filenames.mjs";
+
 export default defineConfig({
   overrides: [
     {
-      files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      files: [ROUTE_FILE_GLOB],
       rules: {
         // File routes are mutually recursive: `Route` references the component
         // via `component`, and the component calls `Route.useParams()` etc.
@@ -14,6 +16,10 @@ export default defineConfig({
       },
     },
     {
+      // TanStack Router's generated route tree. The shared ignore list
+      // already skips `**/*.gen.*`, but oxlint does not apply ignorePatterns
+      // from extended configs, so this still matters for configs that do not
+      // re-declare `ignorePatterns: core.ignorePatterns`.
       files: ["**/routeTree.gen.ts"],
       rules: {
         "unicorn/filename-case": "off",

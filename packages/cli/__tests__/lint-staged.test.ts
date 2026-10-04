@@ -1,8 +1,11 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 
+import { log } from "@clack/prompts";
 import type { PackageManager } from "nypm";
+import YAML from "yaml";
 
 import { lintStaged } from "../src/integrations/lint-staged";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const npmPm = { command: "npm", name: "npm" } satisfies PackageManager;
 
@@ -18,6 +21,29 @@ mock.module("nypm", () => ({
   dlxCommand: mock(() => "npx ultracite fix"),
   removeDependency: mock(() => Promise.resolve()),
 }));
+
+// A project whose files are exactly `files`; returns what gets written.
+const mockProject = (files: Record<string, string>) => {
+  const written = new Map<string, string>();
+
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+    ),
+    readFile: mock((path: string) =>
+      path in files
+        ? Promise.resolve(files[path])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    writeFile: mock((path: string, content: string) => {
+      written.set(path, content);
+      return Promise.resolve();
+    }),
+  }));
+  mockFileSystem(files);
+
+  return written;
+};
 
 describe("lintStaged", () => {
   beforeEach(() => {
@@ -434,11 +460,18 @@ export default {
         readFileSync: mock(() => "{}"),
       }));
 
-      // This will try to require the .cjs file, which will fail
-      // It should fall back to creating a .lintstagedrc.json
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      // The .cjs file can't be imported here. Creating .lintstagedrc.json
+      // instead would shadow it (lint-staged uses one config per directory),
+      // so the user is told to add the task by hand.
       await lintStaged.update("npm");
 
-      expect(mockWriteFile).toHaveBeenCalled();
+      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("./lint-staged.config.cjs")
+      );
+      warn.mockRestore();
     });
 
     test("handles .js files in ESM projects", async () => {
@@ -506,9 +539,15 @@ export default {
         readFileSync: mock(() => "{}"),
       }));
 
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
       await lintStaged.update("npm");
 
-      expect(mockWriteFile).toHaveBeenCalled();
+      // The CommonJS config can't be imported in the test, so it is left
+      // alone with a warning rather than shadowed by a new config file.
+      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
     });
 
     test("handles YAML with inline arrays", async () => {
@@ -601,10 +640,14 @@ export default {
         readFileSync: mock(() => "{}"),
       }));
 
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
       await lintStaged.update("npm");
 
-      // Should create fallback config when JSON is invalid
-      expect(mockWriteFile).toHaveBeenCalled();
+      // Neither JSON nor a YAML mapping: leave the user's file untouched
+      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
     });
 
     test("handles invalid YAML in .lintstagedrc.yaml", async () => {
@@ -952,10 +995,15 @@ export default {
         readFileSync: mock(() => "{}"),
       }));
 
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
       await lintStaged.update("npm");
 
-      // parseSimpleYaml returns empty object {}, which is truthy, so updateYamlConfig will write
-      expect(mockWriteFile).toHaveBeenCalled();
+      // A bare YAML string is not a lint-staged config, so there is nothing
+      // to merge into and the file is left as it is
+      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
     });
 
     test("handles ESM config file successfully", async () => {
@@ -1093,7 +1141,7 @@ export default {
       expect(true).toBe(true);
     });
 
-    test("handles unparseable ESM config by creating fallback", async () => {
+    test("warns instead of shadowing an unparseable ESM config", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -1131,12 +1179,195 @@ export default {
         readFileSync: mock(() => "{}"),
       }));
 
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
       await lintStaged.update("npm");
 
-      // Should fall back to creating .lintstagedrc.json when parsing fails
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe(".lintstagedrc.json");
+      // A fallback .lintstagedrc.json would sort before lint-staged.config.mjs
+      // and silently replace it, so nothing is written
+      expect(mockWriteFile).not.toHaveBeenCalled();
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("./lint-staged.config.mjs")
+      );
+      warn.mockRestore();
+    });
+  });
+
+  describe("update (regressions)", () => {
+    test("keeps a YAML .lintstagedrc as YAML instead of overwriting it with JSON", async () => {
+      const written = mockProject({
+        "./.lintstagedrc": `# lint on commit
+"*.{js,ts}": eslint --fix
+"*.css": stylelint --fix
+`,
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      const output = written.get("./.lintstagedrc") ?? "";
+      expect(output).toContain("# lint on commit");
+      expect(YAML.parse(output)).toEqual({
+        "*.css": "stylelint --fix",
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
+        "*.{js,ts}": "eslint --fix",
+      });
+    });
+
+    test("adds ultracite to a single-quoted YAML .lintstagedrc", async () => {
+      const written = mockProject({
+        "./.lintstagedrc": "'*.js': eslint --fix\n",
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(YAML.parse(written.get("./.lintstagedrc") ?? "")).toEqual({
+        "*.js": "eslint --fix",
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
+      });
+    });
+
+    test("updates lint-staged.config.ts in place instead of shadowing it", async () => {
+      const written = mockProject({
+        "./lint-staged.config.ts": `import type { Configuration } from "lint-staged";
+
+export default {
+  "*.py": ["ruff check"],
+} satisfies Configuration;
+`,
+      });
+
+      await lintStaged.update("pnpm");
+      restoreFileSystemMock();
+
+      expect(written.has(".lintstagedrc.json")).toBe(false);
+      const output = written.get("./lint-staged.config.ts") ?? "";
+      expect(output).toContain("satisfies Configuration");
+      expect(output).toContain('"*.py"');
+      expect(output).toContain("pnpm exec ultracite fix");
+    });
+
+    test("reports a lint-staged.config.mts as existing config", async () => {
+      mockProject({ "./lint-staged.config.mts": "export default {};\n" });
+
+      const result = await lintStaged.exists();
+      restoreFileSystemMock();
+
+      expect(result).toBe(true);
+    });
+
+    test("updates the dedicated config lint-staged uses over a package.json key", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json": '{"*.md": ["prettier --write"]}',
+        "./package.json": '{"lint-staged": {"*.js": ["eslint"]}}',
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.has("./package.json")).toBe(false);
+      expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
+        "*.md": ["prettier --write"],
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
+      });
+    });
+
+    test("keeps an existing single command for the same glob", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json":
+          '{"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": "tsc --noEmit"}',
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+          "tsc --noEmit",
+          "npx ultracite fix",
+        ],
+      });
+    });
+
+    test("upgrades a dlx command from an earlier init to the installed ultracite", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json": JSON.stringify({
+          "*.py": ["ruff check"],
+          "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+            "yarn dlx ultracite fix",
+          ],
+        }),
+      });
+
+      await lintStaged.update("yarn");
+      restoreFileSystemMock();
+
+      expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
+        "*.py": ["ruff check"],
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["yarn ultracite fix"],
+      });
+    });
+
+    test("leaves a hand-written ultracite command alone", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json": '{"*.ts": ["npx ultracite fix --unsafe"]}',
+      });
+
+      await lintStaged.update("yarn");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+    });
+
+    test("upgrades a dlx command in a YAML config without touching comments", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.yml": `# keep me
+"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+  - pnpm dlx ultracite fix
+`,
+      });
+
+      await lintStaged.update("pnpm");
+      restoreFileSystemMock();
+
+      const output = written.get("./.lintstagedrc.yml") ?? "";
+      expect(output).toContain("# keep me");
+      expect(output).toContain("- pnpm exec ultracite fix");
+      expect(output).not.toContain("dlx");
+    });
+
+    test("adds ultracite under the lint-staged key of package.yaml", async () => {
+      const written = mockProject({
+        "./package.yaml": `name: app
+lint-staged:
+  "*.md": prettier --write
+`,
+      });
+
+      await lintStaged.update("pnpm");
+      restoreFileSystemMock();
+
+      expect(YAML.parse(written.get("./package.yaml") ?? "")).toEqual({
+        "lint-staged": {
+          "*.md": "prettier --write",
+          "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+            "pnpm exec ultracite fix",
+          ],
+        },
+        name: "app",
+      });
+    });
+
+    test("creates a config that runs the project's installed ultracite", async () => {
+      const written = mockProject({});
+
+      await lintStaged.create("yarn");
+      restoreFileSystemMock();
+
+      expect(JSON.parse(written.get(".lintstagedrc.json") ?? "{}")).toEqual({
+        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["yarn ultracite fix"],
+      });
     });
   });
 });

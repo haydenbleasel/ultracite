@@ -3,12 +3,12 @@ import path from "node:path";
 import { PassThrough } from "node:stream";
 
 import {
-  editedFileFromHookPayload,
+  editedFilesFromHookPayload,
   hookTargets,
   readHookStdin,
 } from "../src/hook-input";
 
-describe("editedFileFromHookPayload", () => {
+describe("editedFilesFromHookPayload", () => {
   test("reads tool_input.file_path from Claude Code and CodeBuddy", () => {
     const payload = JSON.stringify({
       hook_event_name: "PostToolUse",
@@ -16,7 +16,7 @@ describe("editedFileFromHookPayload", () => {
       tool_name: "Write",
     });
 
-    expect(editedFileFromHookPayload(payload)).toBe("/repo/src/a.ts");
+    expect(editedFilesFromHookPayload(payload)).toEqual(["/repo/src/a.ts"]);
   });
 
   test("reads file_path from Cursor's afterFileEdit", () => {
@@ -25,7 +25,7 @@ describe("editedFileFromHookPayload", () => {
       file_path: "/repo/src/b.ts",
     });
 
-    expect(editedFileFromHookPayload(payload)).toBe("/repo/src/b.ts");
+    expect(editedFilesFromHookPayload(payload)).toEqual(["/repo/src/b.ts"]);
   });
 
   test("reads tool_info.file_path from Windsurf's post_write_code", () => {
@@ -34,22 +34,109 @@ describe("editedFileFromHookPayload", () => {
       tool_info: { edits: [], file_path: "/repo/src/c.py" },
     });
 
-    expect(editedFileFromHookPayload(payload)).toBe("/repo/src/c.py");
+    expect(editedFilesFromHookPayload(payload)).toEqual(["/repo/src/c.py"]);
   });
 
   test("names no file for an unknown shape, an empty path, or non-JSON", () => {
-    expect(editedFileFromHookPayload('{"toolArgs":{"path":"a.ts"}}')).toBe(
+    expect(editedFilesFromHookPayload('{"toolArgs":{"lines":3}}')).toBe(null);
+    expect(editedFilesFromHookPayload('{"tool_input":{"file_path":""}}')).toBe(
       null
     );
-    expect(editedFileFromHookPayload('{"tool_input":{"file_path":""}}')).toBe(
-      null
-    );
-    expect(editedFileFromHookPayload("[]")).toBe(null);
-    expect(editedFileFromHookPayload("not json")).toBe(null);
+    expect(editedFilesFromHookPayload("[]")).toBe(null);
+    expect(editedFilesFromHookPayload("not json")).toBe(null);
     expect(
-      editedFileFromHookPayload('{"tool_input":{"file_path":"/repo/a.ts"')
+      editedFilesFromHookPayload('{"tool_input":{"file_path":"/repo/a.ts"')
     ).toBe(null);
-    expect(editedFileFromHookPayload("")).toBe(null);
+    expect(editedFilesFromHookPayload("")).toBe(null);
+  });
+});
+
+describe("editedFilesFromHookPayload (Copilot and VS Code)", () => {
+  test("reads toolArgs.path from the Copilot CLI, as a JSON string or object", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          toolArgs: JSON.stringify({
+            new_str: "b",
+            old_str: "a",
+            path: "src/a.ts",
+          }),
+          toolName: "edit",
+        })
+      )
+    ).toEqual(["src/a.ts"]);
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          toolArgs: { file_text: "x", path: "src/new.ts" },
+          toolName: "create",
+        })
+      )
+    ).toEqual(["src/new.ts"]);
+  });
+
+  test("reads tool_input.filePath from VS Code's edit tools", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          hook_event_name: "PostToolUse",
+          tool_input: { filePath: "/repo/src/a.ts", newString: "b" },
+          tool_name: "replace_string_in_file",
+        })
+      )
+    ).toEqual(["/repo/src/a.ts"]);
+  });
+
+  test("reads every file of a multi-file edit", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          tool_input: {
+            replacements: [
+              { filePath: "/repo/a.ts" },
+              { filePath: "/repo/b.ts" },
+              { filePath: "/repo/a.ts" },
+            ],
+          },
+          tool_name: "multi_replace_string_in_file",
+        })
+      )
+    ).toEqual(["/repo/a.ts", "/repo/b.ts"]);
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          tool_input: {
+            input:
+              "*** Begin Patch\n*** Update File: src/a.ts\n@@\n*** Add File: src/b.ts\n+x\n*** End Patch",
+          },
+          tool_name: "apply_patch",
+        })
+      )
+    ).toEqual(["src/a.ts", "src/b.ts"]);
+  });
+
+  test("names nothing to fix for a tool that edits no file", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          tool_input: { filePath: "/repo/src/a.ts", startLine: 1 },
+          tool_name: "read_file",
+        })
+      )
+    ).toEqual([]);
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({ toolArgs: '{"command":"ls"}', toolName: "bash" })
+      )
+    ).toEqual([]);
+  });
+
+  test("keeps the whole-project run for an edit tool without a path", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({ tool_input: {}, tool_name: "editFiles" })
+      )
+    ).toBe(null);
   });
 });
 
@@ -97,6 +184,10 @@ const exists = (target: string) => target;
 const repo = path.resolve("/repo");
 const inRepo = (...segments: string[]) => path.join(repo, ...segments);
 const edited = path.join("src", "a.ts");
+
+// `src-link` is a symlink to `src`; every other path resolves to itself.
+const throughSrcLink = (target: string) =>
+  target === inRepo("src-link") ? inRepo("src") : target;
 
 describe("hookTargets", () => {
   test("targets the edited file, relative to the project, when it exists inside it", async () => {
@@ -179,14 +270,11 @@ describe("hookTargets", () => {
   });
 
   test("narrows a symlinked directory target to the edited file under it", async () => {
-    const throughSymlink = (target: string) =>
-      target === inRepo("src-link") ? inRepo("src") : target;
-
     expect(
       await hookTargets({
         cwd: repo,
         read: () => payloadFor(inRepo("src", "a.ts")),
-        resolvePath: throughSymlink,
+        resolvePath: throughSrcLink,
         targets: ["src-link"],
       })
     ).toEqual([edited]);
@@ -207,9 +295,52 @@ describe("hookTargets", () => {
     expect(
       await hookTargets({
         cwd: repo,
-        read: () => '{"toolArgs":{"path":"a.ts"}}',
+        read: () => '{"hook_event_name":"Stop"}',
       })
     ).toBe(null);
+  });
+
+  test("targets a root file whose name starts with two dots", async () => {
+    expect(
+      await hookTargets({
+        cwd: repo,
+        read: () => payloadFor(inRepo("..eslintcache.ts")),
+        resolvePath: exists,
+      })
+    ).toEqual(["..eslintcache.ts"]);
+  });
+
+  test("targets every edited file inside the project", async () => {
+    expect(
+      await hookTargets({
+        cwd: repo,
+        read: () =>
+          JSON.stringify({
+            tool_input: {
+              replacements: [
+                { filePath: inRepo("src", "a.ts") },
+                { filePath: path.resolve("/tmp/notes.md") },
+              ],
+            },
+            tool_name: "multi_replace_string_in_file",
+          }),
+        resolvePath: exists,
+      })
+    ).toEqual([edited]);
+  });
+
+  test("targets nothing when the tool edited no file", async () => {
+    expect(
+      await hookTargets({
+        cwd: repo,
+        read: () =>
+          JSON.stringify({
+            tool_input: { filePath: inRepo("src", "a.ts") },
+            tool_name: "read_file",
+          }),
+        resolvePath: exists,
+      })
+    ).toEqual([]);
   });
 
   test("keeps the whole-project run when stdin cannot be read", async () => {

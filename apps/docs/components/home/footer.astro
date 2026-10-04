@@ -1,6 +1,11 @@
 ---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
 import Icon from "./icon.astro";
 import Logo from "./logo.astro";
+
+// Rendered into PageLayout's `footer` slot, after <main>, so it is the page's
+// contentinfo landmark. Its top margin matches the homepage grid's gap.
 
 const footerNav = [
   {
@@ -51,7 +56,9 @@ const footerNav = [
 ];
 ---
 
-<footer class="mb-24 flex flex-col gap-6">
+<footer
+  class="mx-auto mt-16 mb-24 flex w-full max-w-7xl flex-col gap-6 px-4 sm:mt-24 md:mt-32"
+>
   <div class="flex items-center justify-between gap-4">
     <div class="flex items-center gap-3">
       <Logo class="size-5" />
@@ -59,6 +66,7 @@ const footerNav = [
     </div>
     <div class="flex items-center gap-4">
       <a
+        aria-describedby={NEW_TAB_HINT_ID}
         aria-label="Follow on X"
         class="text-muted-foreground transition-colors hover:text-accent"
         href="https://x.com/haydenbleasel"
@@ -68,6 +76,7 @@ const footerNav = [
         <Icon class="size-4" name="x" />
       </a>
       <a
+        aria-describedby={NEW_TAB_HINT_ID}
         aria-label="View on GitHub"
         class="text-muted-foreground transition-colors hover:text-accent"
         href="https://github.com/haydenbleasel/ultracite"
@@ -79,7 +88,10 @@ const footerNav = [
     </div>
   </div>
 
-  <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+  <nav
+    aria-label="Footer"
+    class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5"
+  >
     {
       footerNav.map((section) => (
         <div class="flex flex-col gap-3">
@@ -99,5 +111,5 @@ const footerNav = [
         </div>
       ))
     }
-  </div>
+  </nav>
 </footer>

@@ -19,6 +19,8 @@ const overrideRules = {
   "@typescript-eslint/explicit-member-accessibility": "off",
   "@typescript-eslint/explicit-module-boundary-types": "off",
   "@typescript-eslint/init-declarations": "off",
+  // Matches max-params being off in the oxlint config.
+  "@typescript-eslint/max-params": "off",
   "@typescript-eslint/naming-convention": [
     "error",
     {

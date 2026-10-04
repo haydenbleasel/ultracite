@@ -6,6 +6,13 @@ import {
 
 import { spawnSync as _realSpawnSync } from "../src/spawn-sync";
 
+// Load the real nypm before any test file mocks it. Several suites mock nypm
+// with only the functions they use; when nypm is already loaded Bun patches
+// those over the real exports, but when a partial mock is the first thing to
+// provide nypm, a later module importing another export (e.g. hooks.ts and
+// runScriptCommand) fails to link.
+import "nypm";
+
 // Typed globals for the real implementations captured below, so consumers
 // (mock-fs.ts, spawn-sync.test.ts) can read them without type assertions.
 declare global {

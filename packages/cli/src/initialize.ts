@@ -1,4 +1,3 @@
-import path from "node:path";
 import process from "node:process";
 
 import {
@@ -16,6 +15,7 @@ import type { PackageManager, PackageManagerName } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { createAgents, getAgentFileTargets } from "./agents";
 import type { AgentFileTarget } from "./agents";
+import { UltraciteSetupError } from "./config-resolution";
 import { agents as agentsData } from "./data/agents";
 import { editors } from "./data/editors";
 import { hooks as hookIntegrations } from "./data/hooks";
@@ -40,6 +40,7 @@ import { husky } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
+import { chainScript } from "./integrations/project-command";
 import { biome } from "./linters/biome";
 import { eslint } from "./linters/eslint";
 import { oxfmt } from "./linters/oxfmt";
@@ -47,9 +48,10 @@ import { oxlint } from "./linters/oxlint";
 import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
-  assertSupportedPackageManagerName,
   getRootInstallOptions,
   normalizePackageManager,
+  resolveRequestedPackageManager,
+  supportedPackageManagers,
 } from "./package-manager";
 import { readPackageJson } from "./schemas";
 import {
@@ -60,21 +62,23 @@ import { tsconfig } from "./tsconfig";
 import {
   biomeConfigNames,
   detectFrameworks,
+  detectLinter,
   eslintConfigNames,
+  editPackageJson,
   exists,
+  isJsonObject,
   legacyEslintConfigNames,
   oxfmtConfigNames,
   oxlintConfigNames,
   prettierConfigNames,
   stylelintConfigNames,
-  validateFrameworkName,
   updatePackageJson,
-  writeProjectFile,
 } from "./utils";
 
 const ultraciteVersion = packageJson.version;
 
 const OPERATION_CANCELLED = "Operation cancelled.";
+const HUSKY_PREPARE_RE = /\bhusky\b/u;
 const LINT_STAGED = "lint-staged";
 
 type Linter = (typeof options.linters)[number];
@@ -95,7 +99,6 @@ interface InitializeFlags {
   quiet?: boolean;
   skipInstall?: boolean;
   "type-aware"?: boolean;
-  workspaceFrameworks?: string[];
 }
 
 // @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
@@ -103,6 +106,66 @@ interface InitializeFlags {
 // prompt's `T | symbol` result. Prompts only ever resolve to that one symbol,
 // so a `symbol` predicate stays truthful and restores the narrowing.
 const isCancelled = (value: unknown): value is symbol => isCancel(value);
+
+const UNIVERSAL = "universal";
+
+const quoteValues = (values: readonly string[]): string =>
+  values.map((value) => `"${value}"`).join(", ");
+
+// Commander hands flag values through as raw strings, so each one is checked
+// against its allowed list before init touches the project: an unknown
+// --linter used to fall through to the migration step, which deletes every
+// linter config that doesn't belong to the chosen linter.
+const assertAllowedValues = (
+  flag: string,
+  values: readonly string[] | string | undefined,
+  allowed: readonly string[]
+): void => {
+  if (values === undefined) {
+    return;
+  }
+
+  const invalid = [values].flat().filter((value) => !allowed.includes(value));
+
+  if (invalid.length === 0) {
+    return;
+  }
+
+  throw new UltraciteSetupError(
+    `Unknown ${flag} ${invalid.length === 1 ? "value" : "values"} ${quoteValues(invalid)}. Valid values: ${allowed.join(", ")}.`
+  );
+};
+
+// The list-valued and linter flags as Commander hands them over: raw strings
+// that haven't been checked against the option tables yet.
+interface RawInitializeFlags {
+  agents?: readonly string[];
+  editors?: readonly string[];
+  frameworks?: readonly string[];
+  hooks?: readonly string[];
+  integrations?: readonly string[];
+  "js-plugins"?: readonly string[];
+  linter?: string;
+  pm?: string;
+}
+
+export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
+  assertAllowedValues("--linter", flags.linter, options.linters);
+  assertAllowedValues("--pm", flags.pm, supportedPackageManagers);
+  assertAllowedValues("--frameworks", flags.frameworks, options.frameworks);
+  assertAllowedValues("--editors", flags.editors, [
+    UNIVERSAL,
+    ...options.editorConfigs,
+  ]);
+  assertAllowedValues("--agents", flags.agents, [UNIVERSAL, ...options.agents]);
+  assertAllowedValues("--hooks", flags.hooks, options.hooks);
+  assertAllowedValues(
+    "--integrations",
+    flags.integrations,
+    options.integrations
+  );
+  assertAllowedValues("--js-plugins", flags["js-plugins"], oxlintJsPlugins);
+};
 
 // Prompt hints for the JS plugins that need a word of explanation.
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
@@ -179,49 +242,36 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   // independently of linting — never prune it.
   dependencyNamesToRemove.delete("storybook");
 
-  let changed = false;
-  const nextPackageJson = { ...packageJsonObject };
+  return await editPackageJson((manifest) => {
+    let changed = false;
 
-  for (const key of [
-    "dependencies",
-    "devDependencies",
-    "peerDependencies",
-  ] as const) {
-    const dependencies = nextPackageJson[key];
-    if (!dependencies) {
-      continue;
+    // Only devDependencies are pruned: a package in dependencies or
+    // peerDependencies (prettier used at runtime, eslint as the peer of a
+    // published plugin) is there for a reason other than linting.
+    const { devDependencies } = manifest;
+    if (isJsonObject(devDependencies)) {
+      const kept = Object.entries(devDependencies).filter(
+        ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
+      );
+      if (kept.length !== Object.keys(devDependencies).length) {
+        manifest.devDependencies = Object.fromEntries(kept);
+        changed = true;
+      }
     }
 
-    const dependencyEntries = Object.entries(dependencies);
-    const nextDependencyEntries = dependencyEntries.filter(
-      ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
-    );
-    if (nextDependencyEntries.length !== dependencyEntries.length) {
+    // Moving off ESLint + Prettier + Stylelint drops their package.json
+    // configs too; staying on it, their writers update them instead.
+    if (linter !== "eslint" && "prettier" in manifest) {
+      delete manifest.prettier;
       changed = true;
     }
-    const nextDependencies = Object.fromEntries(nextDependencyEntries);
+    if (linter !== "eslint" && "stylelint" in manifest) {
+      delete manifest.stylelint;
+      changed = true;
+    }
 
-    nextPackageJson[key] = nextDependencies;
-  }
-
-  if ("prettier" in nextPackageJson) {
-    delete nextPackageJson.prettier;
-    changed = true;
-  }
-  if ("stylelint" in nextPackageJson) {
-    delete nextPackageJson.stylelint;
-    changed = true;
-  }
-
-  if (!changed) {
-    return false;
-  }
-
-  await writeProjectFile(
-    "package.json",
-    `${JSON.stringify(nextPackageJson, null, 2)}\n`
-  );
-  return true;
+    return changed;
+  });
 };
 
 export const migrateLinterConfig = async (
@@ -287,6 +337,38 @@ export const migrateLinterConfig = async (
   }
 };
 
+const ultraciteScripts = {
+  check: "ultracite check",
+  fix: "ultracite fix",
+};
+
+/**
+ * The `check`/`fix` scripts to add. A project's own script with the same
+ * name (e.g. `"check": "tsc --noEmit"`) is left alone, and so is one that
+ * already runs Ultracite with extra flags.
+ */
+const getScriptsToAdd = async (
+  quiet: boolean
+): Promise<Record<string, string> | undefined> => {
+  const existingPackageJson = await readPackageJson();
+  const existingScripts = existingPackageJson?.scripts ?? {};
+  const scripts: Record<string, string> = {};
+
+  for (const [name, command] of Object.entries(ultraciteScripts)) {
+    const existing = existingScripts[name];
+
+    if (existing === undefined) {
+      scripts[name] = command;
+    } else if (!existing.includes("ultracite") && !quiet) {
+      log.warn(
+        `package.json already has a "${name}" script (\`${existing}\`), so it was left unchanged. Run \`${command}\` directly or add it to that script.`
+      );
+    }
+  }
+
+  return Object.keys(scripts).length > 0 ? scripts : undefined;
+};
+
 export const installDependencies = async (
   packageManager: PackageManager,
   linter: Linter = "biome",
@@ -335,10 +417,7 @@ export const installDependencies = async (
     );
   }
 
-  const scripts = {
-    check: "ultracite check",
-    fix: "ultracite fix",
-  };
+  const scripts = await getScriptsToAdd(quiet);
 
   if (install) {
     await addDevDependency(packages, {
@@ -347,7 +426,9 @@ export const installDependencies = async (
       ...getRootInstallOptions(packageManager),
     });
     // Add ultracite scripts to package.json
-    await updatePackageJson({ scripts });
+    if (scripts) {
+      await updatePackageJson({ scripts });
+    }
   } else {
     const devDependencies = buildNoInstallDevDependencies(
       linter,
@@ -360,7 +441,11 @@ export const installDependencies = async (
   }
 
   if (!quiet) {
-    s.stop("Dependencies installed.");
+    s.stop(
+      install
+        ? "Dependencies installed."
+        : "Dependencies added to package.json."
+    );
   }
 };
 
@@ -385,6 +470,12 @@ export const upsertTsConfig = async (quiet = false) => {
   if (!quiet) {
     s.stop("No tsconfig.json files found, skipping.");
   }
+};
+
+// The ESLint toolchain formats with Prettier, and its VS Code settings make
+// the Prettier extension the default formatter, so it's installed too.
+const additionalVscodeExtensions: Partial<Record<Linter, string[]>> = {
+  eslint: ["esbenp.prettier-vscode"],
 };
 
 export const upsertEditorConfig = async (
@@ -425,6 +516,7 @@ export const upsertEditorConfig = async (
 
   // Install extension for VS Code-based editors
   if (editorConfig.extension) {
+    const { extension } = editorConfig;
     const linterExtension = providers.find(
       (provider) => provider.id === linter
     )?.vscodeExtensionId;
@@ -433,27 +525,29 @@ export const upsertEditorConfig = async (
       throw new Error(`Linter extension not found for ${linter}`);
     }
 
+    const extensionIds = [
+      linterExtension,
+      ...(additionalVscodeExtensions[linter] ?? []),
+    ];
+    const extensionList = extensionIds.join(" and ");
+
     if (!quiet) {
-      s.message(`Installing ${linterExtension} extension...`);
+      s.message(`Installing ${extensionList}...`);
     }
 
-    try {
-      const result = editorConfig.extension(linterExtension);
-      if (result.status === 0) {
-        if (!quiet) {
-          s.stop(
-            `${editor.config.path} created and ${linterExtension} extension installed.`
-          );
-        }
-        return;
+    const installed = extensionIds.every((extensionId) => {
+      try {
+        return extension(extensionId).status === 0;
+      } catch {
+        return false;
       }
-    } catch {
-      // Fall through to manual install message
-    }
+    });
 
     if (!quiet) {
       s.stop(
-        `${editor.config.path} created. Install ${linterExtension} extension manually.`
+        installed
+          ? `${editor.config.path} created and ${extensionList} installed.`
+          : `${editor.config.path} created. Install ${extensionList} manually.`
       );
     }
     return;
@@ -660,12 +754,23 @@ export const initializePrecommitHook = async (
     s.message("Installing Husky...");
   }
 
-  await (install
-    ? husky.install(packageManager)
-    : updatePackageJson({
-        devDependencies: { husky: "latest" },
-        scripts: { prepare: "husky" },
-      }));
+  if (install) {
+    await husky.install(packageManager);
+  } else {
+    // Keep a prepare script the project already has (e.g. `svelte-kit
+    // sync`), as husky.install does.
+    const existingPackageJson = await readPackageJson();
+    await updatePackageJson({
+      devDependencies: { husky: "latest" },
+      scripts: {
+        prepare: chainScript(
+          existingPackageJson?.scripts?.prepare,
+          "husky",
+          HUSKY_PREPARE_RE
+        ),
+      },
+    });
+  }
 
   if (!quiet) {
     s.message("Initializing Husky...");
@@ -711,23 +816,27 @@ export const initializeLefthook = async (
         devDependencies: { lefthook: "latest" },
       }));
 
+  // Whichever lefthook config file name the project uses (lefthook.yml,
+  // .lefthook.yaml, ...), or lefthook.yml when there is none yet.
+  const configFile = lefthook.configPath();
+
   if (await lefthook.exists()) {
     if (!quiet) {
-      s.message("lefthook.yml found, updating...");
+      s.message(`${configFile} found, updating...`);
     }
     await lefthook.update(packageManager.name);
     if (!quiet) {
-      s.stop("lefthook.yml updated.");
+      s.stop(`${configFile} updated.`);
     }
     return;
   }
 
   if (!quiet) {
-    s.message("lefthook.yml not found, creating...");
+    s.message(`${configFile} not found, creating...`);
   }
   await lefthook.create(packageManager.name);
   if (!quiet) {
-    s.stop("lefthook.yml created.");
+    s.stop(`${configFile} created.`);
   }
 };
 
@@ -897,81 +1006,29 @@ export const upsertHooks = async (
   }
 };
 
-export const createPathConfigSource = (
-  workspaceFrameworks: { framework: Frameworks; workspace: string }[],
-  frameworks: Frameworks[]
-): string => {
-  const extendsList = [
-    '"ultracite/core"',
-    ...frameworks.map(
-      (framework) => `"ultracite/${validateFrameworkName(framework)}"`
-    ),
-  ];
-  const overrides = workspaceFrameworks
-    .map(
-      ({ framework, workspace }) =>
-        `    { files: [${JSON.stringify(`${workspace}/**/*`)}], extends: [${JSON.stringify(`ultracite/${framework}`)}] },`
-    )
-    .join("\n");
-  return `import { defineConfig } from "ultracite/config";\n\nexport default defineConfig({\n  extends: [${extendsList.join(", ")}],\n  overrides: [\n${overrides}\n  ],\n});\n`;
-};
-
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: "will fix later"
 export const initialize = async (flags?: InitializeFlags) => {
   const opts = flags ?? {};
   const quiet = opts.quiet ?? false;
-  const workspaceFrameworks = (opts.workspaceFrameworks ?? []).map(
-    (selection) => {
-      const [workspace, framework, extra] = selection.split("=");
-      if (
-        !workspace ||
-        !framework ||
-        extra ||
-        path.isAbsolute(workspace) ||
-        path.win32.isAbsolute(workspace) ||
-        workspace.split(/[\\/]/u).includes("..")
-      ) {
-        throw new Error(
-          `Invalid --workspace-framework "${selection}". Use <project-relative-path>=<framework>.`
-        );
-      }
-      validateFrameworkName(framework);
-      const knownFramework = options.frameworks.find(
-        (item) => item === framework
-      );
-      if (!knownFramework) {
-        throw new Error(
-          `Unsupported framework "${framework}" in --workspace-framework.`
-        );
-      }
-      return {
-        framework: knownFramework,
-        workspace: workspace.replaceAll("\\", "/"),
-      };
-    }
-  );
-  if (workspaceFrameworks.length > 0 && exists("./ultracite.config.ts")) {
-    throw new Error(
-      "ultracite.config.ts already exists. Add the workspace overrides to it instead of replacing the existing config."
-    );
-  }
 
   if (!quiet) {
     intro(`Ultracite v${ultraciteVersion} Initialization`);
   }
 
   try {
-    let pm: PackageManagerName;
+    validateInitializeFlags(opts);
+
     let pmInfo: PackageManager;
 
     if (opts.pm) {
-      pm = assertSupportedPackageManagerName(opts.pm);
-      pmInfo = { command: pm, name: pm };
+      pmInfo = await resolveRequestedPackageManager(opts.pm);
     } else {
       const detected = await detectPackageManager(process.cwd());
 
       if (!detected) {
-        throw new Error("No package manager specified or detected");
+        throw new UltraciteSetupError(
+          "No package manager detected. Pass one with `--pm` (e.g. `ultracite init --pm npm`)."
+        );
       }
 
       if (!quiet && detected.warnings) {
@@ -981,15 +1038,19 @@ export const initialize = async (flags?: InitializeFlags) => {
       }
 
       if (!quiet) {
-        log.info(`Detected lockfile, using ${detected.name}`);
+        log.info(`Using ${detected.name} (detected from the project)`);
       }
       pmInfo = normalizePackageManager(detected);
-      pm = pmInfo.name;
     }
+
+    const pm: PackageManagerName = pmInfo.name;
 
     let { linter } = opts;
     if (linter === undefined) {
-      // If quiet mode or other CLI options are provided, default to oxlint only
+      // A project that already has a linter keeps it, so re-running init to
+      // add agents or editors doesn't migrate the project to another linter.
+      const defaultLinter = detectLinter() ?? "oxlint";
+      // If quiet mode or other CLI options are provided, don't prompt
       const hasOtherCliOptions =
         quiet ||
         opts.pm ||
@@ -997,13 +1058,13 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
-        opts.workspaceFrameworks !== undefined ||
         opts.frameworks !== undefined;
 
       if (hasOtherCliOptions) {
-        linter = "oxlint";
+        linter = defaultLinter;
       } else {
         const linterResult = await select<Linter>({
+          initialValue: defaultLinter,
           message: "Which linter do you want to use?",
           options: [
             {
@@ -1040,8 +1101,7 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.editors ||
         opts.agents ||
         opts.hooks ||
-        opts.integrations !== undefined ||
-        opts.workspaceFrameworks !== undefined;
+        opts.integrations !== undefined;
 
       if (hasOtherCliOptions) {
         frameworks = [];
@@ -1092,7 +1152,6 @@ export const initialize = async (flags?: InitializeFlags) => {
         opts.agents ||
         opts.hooks ||
         opts.integrations !== undefined ||
-        opts.workspaceFrameworks !== undefined ||
         opts.frameworks !== undefined;
 
       if (!hasOtherCliOptions) {
@@ -1273,67 +1332,29 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.skipInstall,
       quiet,
       opts["type-aware"],
-      [
-        ...new Set([
-          ...frameworks,
-          ...workspaceFrameworks.map(({ framework }) => framework),
-        ]),
-      ],
+      frameworks,
       jsPlugins
     );
 
     await upsertTsConfig(quiet);
     await migrateLinterConfig(linter, quiet);
 
-    if (workspaceFrameworks.length > 0) {
-      await writeProjectFile(
-        "./ultracite.config.ts",
-        createPathConfigSource(workspaceFrameworks, frameworks)
-      );
-    }
-
     // Create config for selected linter
     if (linter === "biome") {
-      await upsertBiomeConfig(
-        workspaceFrameworks.length > 0 ? [] : frameworks,
-        quiet,
-        opts["type-aware"]
-      );
+      await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
     }
     if (linter === "eslint") {
-      await upsertEslintConfig(
-        workspaceFrameworks.length > 0 ? [] : frameworks,
-        quiet
-      );
+      await upsertEslintConfig(frameworks, quiet);
       // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-      await upsertPrettierConfig(
-        workspaceFrameworks.length > 0
-          ? [
-              ...frameworks,
-              ...workspaceFrameworks.map(({ framework }) => framework),
-            ]
-          : frameworks,
-        quiet
-      );
+      await upsertPrettierConfig(frameworks, quiet);
       await upsertStylelintConfig(quiet);
     }
     if (linter === "oxlint") {
-      // Oxlint + Oxfmt config files use ESM imports, so ensure
-      // "type": "module" is set — but never flip an explicit "commonjs",
-      // which would change how every .js file in the project is interpreted.
-      const pkgJsonForType = await readPackageJson();
-      if (pkgJsonForType?.type === undefined) {
-        await updatePackageJson({ type: "module" });
-      } else if (pkgJsonForType.type !== "module" && !quiet) {
-        log.warn(
-          'package.json sets "type": "commonjs" — the generated oxlint/oxfmt configs use ESM imports and may not load. Consider "type": "module".'
-        );
-      }
-      await upsertOxlintConfig(
-        workspaceFrameworks.length > 0 ? [] : frameworks,
-        quiet,
-        jsPlugins
-      );
+      // The Oxlint and oxfmt configs use ES module syntax. Init never changes
+      // package.json's "type" to make them load, since that changes how
+      // every .js file is loaded; outside an ES module package the configs
+      // are written as .mts instead (see resolveEsmConfigPath).
+      await upsertOxlintConfig(frameworks, quiet, jsPlugins);
       // Oxlint is only a linter, so we need oxfmt for formatting
       await upsertOxfmtConfig(quiet);
     }
@@ -1401,8 +1422,9 @@ export const initialize = async (flags?: InitializeFlags) => {
       );
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    if (!quiet) {
+    // Setup errors are reported by the CLI entry point as a plain message.
+    if (!quiet && !(error instanceof UltraciteSetupError)) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       log.error(`Failed to initialize Ultracite configuration: ${message}`);
     }
     throw error;

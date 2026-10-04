@@ -37,6 +37,53 @@ describe("linter args", () => {
     });
   });
 
+  test("keeps a known value flag's value with it even when it looks like a file", () => {
+    const cases: [string[], { files: string[]; passthrough: string[] }][] = [
+      [
+        ["--tsconfig", "tsconfig.json"],
+        { files: [], passthrough: ["--tsconfig", "tsconfig.json"] },
+      ],
+      [
+        ["-c", ".oxlintrc.json", "src"],
+        { files: ["src"], passthrough: ["-c", ".oxlintrc.json"] },
+      ],
+      [
+        ["--only", "lint/suspicious/noDebugger", "src/index.ts"],
+        {
+          files: ["src/index.ts"],
+          passthrough: ["--only", "lint/suspicious/noDebugger"],
+        },
+      ],
+      [
+        ["--since", "origin/main"],
+        { files: [], passthrough: ["--since", "origin/main"] },
+      ],
+    ];
+
+    for (const [args, expected] of cases) {
+      expect(
+        splitLinterArgs({
+          commandName: "check",
+          parsedArgs: args,
+          pathExists: (path) => path === "src" || path === "tsconfig.json",
+        })
+      ).toEqual(expected);
+    }
+  });
+
+  test("never treats the token after a boolean flag as its value", () => {
+    expect(
+      splitLinterArgs({
+        commandName: "fix",
+        parsedArgs: ["--hook", "Makefile2", "--unsafe", "app"],
+        pathExists: () => false,
+      })
+    ).toEqual({
+      files: ["Makefile2", "app"],
+      passthrough: ["--hook", "--unsafe"],
+    });
+  });
+
   test("keeps positional files listed before the separator as files", () => {
     const result = splitLinterArgs({
       commandName: "fix",
@@ -92,7 +139,7 @@ describe("linter args", () => {
   });
 
   test("returns a style glob when no files are given", () => {
-    expect(toStylelintTargets([])).toEqual(["**/*.{css,scss,sass,less}"]);
+    expect(toStylelintTargets([])).toEqual(["**/*.{css,scss,less}"]);
   });
 
   test("keeps style files and drops other files", () => {
@@ -103,9 +150,22 @@ describe("linter args", () => {
 
   test("maps directories to style-scoped globs", () => {
     expect(toStylelintTargets(["src", "./lib/", "."])).toEqual([
-      "src/**/*.{css,scss,sass,less}",
-      "./lib/**/*.{css,scss,sass,less}",
-      "**/*.{css,scss,sass,less}",
+      "src/**/*.{css,scss,less}",
+      "./lib/**/*.{css,scss,less}",
+      "**/*.{css,scss,less}",
+    ]);
+  });
+
+  test("escapes glob metacharacters in directory names", () => {
+    expect(toStylelintTargets(["app/(marketing)", "src/[slug]/"])).toEqual([
+      String.raw`app/\(marketing\)/**/*.{css,scss,less}`,
+      String.raw`src/\[slug\]/**/*.{css,scss,less}`,
+    ]);
+  });
+
+  test("drops indented .sass files, which have no maintained parser", () => {
+    expect(toStylelintTargets(["theme.sass", "theme.scss"])).toEqual([
+      "theme.scss",
     ]);
   });
 

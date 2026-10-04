@@ -18,7 +18,7 @@ If you're already using ESLint and want to switch to Ultracite's preconfigured s
 Make sure you have:
 
 - An existing project using ESLint
-- Node.js 20+
+- Node.js 20.19+ (or 22.13+ on Node 22)
 - An ESLint configuration file (e.g., `.eslintrc`, `eslint.config.js`)
 
 ## Migration Options
@@ -33,19 +33,22 @@ npx ultracite init
 
 This will:
 
-- Prompt you to choose a linting provider (Biome, ESLint, or Oxlint)
+- Prompt you to choose a linting provider (Oxlint, Biome, or ESLint), with ESLint preselected if init finds your flat config
 - Install Ultracite and the necessary dependencies
-- Create or merge your linter configuration with Ultracite's preset
-- Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
+- Create your linter configuration from Ultracite's presets (see below for what happens to your existing config)
+- Add `check` and `fix` scripts to `package.json` (an existing `check` or `fix` script that doesn't run Ultracite is kept, with a warning)
+- Update your `.vscode/settings.json` in place, keeping your settings and comments (if you set up a VS Code-based editor)
+- Enable `strictNullChecks` in your `tsconfig.json` files, unless it's already on (directly or through `extends`) or explicitly set to `false`, which init leaves alone with a warning
 - Set up editor integrations
 
-If you switch to Biome or Oxlint, Ultracite automatically removes the existing ESLint configuration. This will:
+If you switch to Biome or Oxlint, Ultracite automatically removes the existing ESLint setup. This will:
 
-- Remove ESLint and any related dependencies
-- Remove any ESLint configuration files (including legacy `.eslintrc*` files)
+- Remove the ESLint, Prettier, and Stylelint packages Ultracite installs from `devDependencies` (anything in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, are left alone)
+- Remove any ESLint, Prettier, and Stylelint configuration files (including legacy `.eslintrc*` files) and the `"prettier"` and `"stylelint"` keys in `package.json`
 
-If you choose ESLint as your provider, Ultracite will update your existing ESLint flat config to use Ultracite's preset instead (legacy `.eslintrc*` files are replaced by an `eslint.config.mjs`). If you also select an editor to configure, your `.vscode/settings.json` is rewritten to match the new linter.
+Your `.vscode/settings.json` is merged rather than replaced, so settings for your previous tools (such as a default formatter) may remain; remove any that conflict with the new toolchain.
+
+If you choose ESLint as your provider, Ultracite writes a flat config that uses its presets: your ES module config is updated in place, while a CommonJS config is replaced by `eslint.config.mjs`, and legacy `.eslintrc*` files are removed. An existing config that doesn't use Ultracite's presets yet is replaced, and a warning names the file, so copy back any custom rules or plugins you want to keep (after the Ultracite presets). Once your config spreads an `ultracite/eslint/*` preset, re-running init keeps your additions: other presets, your own config objects, and a `defineConfig` wrapper. A config init can't parse is left unchanged with a warning. Prettier and Stylelint configs are handled similarly (see the [Prettier](/docs/migrate/prettier) and [Stylelint](/docs/migrate/stylelint) guides).
 
 ### Option 2: Manual Migration
 

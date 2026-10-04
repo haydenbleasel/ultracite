@@ -1,11 +1,11 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 
 import type { PackageManager } from "nypm";
 
 import type { AgentFileTarget } from "../src/agents";
 import { getAgentFileTargets } from "../src/agents";
+import { UltraciteSetupError } from "../src/config-resolution";
 import {
-  createPathConfigSource,
   initialize,
   initializeLefthook,
   initializeLintStaged,
@@ -24,9 +24,26 @@ import {
   upsertPrettierConfig,
   upsertStylelintConfig,
   upsertTsConfig,
+  validateInitializeFlags,
 } from "../src/initialize";
+import * as utils from "../src/utils";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const npmPm: PackageManager = { command: "npm", name: "npm" };
+
+// Other suites mock utils.detectLinter and the mock outlives them, so pin it
+// here: init only falls back to the detected linter when no --linter is given,
+// and these tests expect a project with no linter config.
+const realUtils = { ...utils };
+const mockDetectLinter = mock((): utils.Linter | null => null);
+mock.module("../src/utils", () => ({
+  ...realUtils,
+  detectLinter: mockDetectLinter,
+}));
+
+afterAll(() => {
+  mock.module("../src/utils", () => realUtils);
+});
 
 // Data package mocks are in preload.ts (must run before imports)
 
@@ -88,36 +105,6 @@ mock.module("@clack/prompts", () => ({
 describe("initialize", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
-
-  test("rejects unsafe or unknown workspace-framework selections", async () => {
-    await expect(
-      initialize({ workspaceFrameworks: ["../outside=react"] })
-    ).rejects.toThrow("Invalid --workspace-framework");
-    await expect(
-      initialize({ workspaceFrameworks: ["C:\\outside=react"] })
-    ).rejects.toThrow("Invalid --workspace-framework");
-    await expect(
-      initialize({ workspaceFrameworks: ["apps/web=unknown"] })
-    ).rejects.toThrow("Unsupported framework");
-    await expect(
-      initialize({ workspaceFrameworks: ["C:\\outside=react"] })
-    ).rejects.toThrow("Invalid --workspace-framework");
-  });
-
-  test("generates centralized workspace framework scopes", () => {
-    const pathConfig = createPathConfigSource(
-      [
-        { framework: "react", workspace: "apps/web" },
-        { framework: "astro", workspace: "apps/docs" },
-      ],
-      []
-    );
-    expect(pathConfig).toContain('"ultracite/core"');
-    expect(pathConfig).toContain('"apps/web/**/*"');
-    expect(pathConfig).toContain('"ultracite/react"');
-    expect(pathConfig).toContain('"apps/docs/**/*"');
-    expect(pathConfig).toContain('"ultracite/astro"');
-  });
 
   test("shows editor config prompt when editors not specified", async () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
@@ -547,6 +534,7 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
+    restoreFileSystemMock();
     await initialize({ skipInstall: true });
 
     expect(mockMultiselect).toHaveBeenCalledWith(
@@ -630,10 +618,10 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
-    expect(installedPackages).toContain("@shadcn/lint@^0.1.0");
+    expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
-    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.0");
-    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.13");
+    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.1");
+    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.14");
     // anti-slop is vendored inside ultracite — nothing to install for it.
     expect(installedPackages.every((pkg) => !pkg.includes("anti-slop"))).toBe(
       true
@@ -802,7 +790,7 @@ describe("initialize", () => {
         pm: "node",
         quiet: true,
       })
-    ).rejects.toThrow('Unsupported package manager "node"');
+    ).rejects.toThrow('Unknown --pm value "node"');
     expect(mockAddDep).not.toHaveBeenCalled();
   });
 
@@ -1820,7 +1808,7 @@ describe("initialize", () => {
         integrations: [],
         skipInstall: true,
       });
-    }).toThrow("No package manager specified or detected");
+    }).toThrow("No package manager detected");
   });
 
   test("exits with error on failure", async () => {
@@ -1875,6 +1863,89 @@ describe("helper functions", () => {
   // with module re-loading when the tests transition between each other
 
   describe("installDependencies", () => {
+    test("keeps a project's own check script and adds the missing fix script", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const warn = mock((_message: string) => {});
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              name: "app",
+              scripts: { check: "tsc --noEmit && vitest run" },
+            })
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "oxlint", false, false);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
+      );
+      expect(packageJson.scripts).toEqual({
+        check: "tsc --noEmit && vitest run",
+        fix: "ultracite fix",
+      });
+      expect(warn.mock.calls[0]?.[0]).toContain(
+        'package.json already has a "check" script'
+      );
+    });
+
+    test("leaves Ultracite scripts with extra flags alone without warning", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      const warn = mock((_message: string) => {});
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            JSON.stringify({
+              name: "app",
+              scripts: {
+                check: "ultracite check --type-aware",
+                fix: "ultracite fix --type-aware",
+              },
+            })
+          )
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "oxlint", false, false);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.at(-1)?.[1] ?? ""
+      );
+      expect(packageJson.scripts).toEqual({
+        check: "ultracite check --type-aware",
+        fix: "ultracite fix --type-aware",
+      });
+      expect(warn).not.toHaveBeenCalled();
+    });
+
     test("installs dependencies when install is true", async () => {
       const mockAddDep = mock(() => Promise.resolve());
       mock.module("nypm", () => ({
@@ -2205,10 +2276,9 @@ describe("helper functions", () => {
       expect(calls.some((c) => c.workspace === true)).toBe(true);
     });
 
-    test("presents nub as pnpm so nypm adds --workspace-root in a monorepo", async () => {
-      // nypm only knows how to select the workspace root for pnpm/npm/yarn,
-      // and nub refuses root installs without `-w`. nypm builds flags from
-      // `name` but runs `command`, so we hand it pnpm's name with nub's binary.
+    test("installs at the workspace root with nub in a monorepo", async () => {
+      // nub refuses root installs without `--workspace-root`, which nypm
+      // passes for nub (as for pnpm and aube) when `workspace` is set.
       const nubPm: PackageManager = { command: "nub", name: "nub" };
       const calls: { packageManager: PackageManager; workspace: boolean }[] =
         [];
@@ -2256,7 +2326,7 @@ describe("helper functions", () => {
       expect(calls[0]?.workspace).toBe(true);
       expect(calls[0]?.packageManager).toEqual({
         command: "nub",
-        name: "pnpm",
+        name: "nub",
       });
     });
   });
@@ -2332,6 +2402,82 @@ describe("helper functions", () => {
       });
       expect(packageJson.prettier).toBeUndefined();
       expect(packageJson.stylelint).toBeUndefined();
+    });
+
+    test("prunes other linters from devDependencies only, keeping key order", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mockFileSystem({});
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            `{
+	"name": "plugin",
+	"version": "1.0.0",
+	"dependencies": { "prettier": "^3.0.0", "globals": "^15.0.0" },
+	"peerDependencies": { "eslint": ">=9" },
+	"devDependencies": { "eslint": "^10.0.0", "typescript": "^5.0.0" },
+	"main": "index.js"
+}
+`
+          )
+        ),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mockWriteFile,
+      }));
+
+      try {
+        await migrateLinterConfig("oxlint", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      const written = mockWriteFile.mock.calls.at(-1)?.[1] ?? "";
+      const packageJson = JSON.parse(written);
+      expect(Object.keys(packageJson)).toEqual([
+        "name",
+        "version",
+        "dependencies",
+        "peerDependencies",
+        "devDependencies",
+        "main",
+      ]);
+      expect(packageJson.dependencies).toEqual({
+        globals: "^15.0.0",
+        prettier: "^3.0.0",
+      });
+      expect(packageJson.peerDependencies).toEqual({ eslint: ">=9" });
+      expect(packageJson.devDependencies).toEqual({ typescript: "^5.0.0" });
+      expect(written).toStartWith('{\n\t"name": "plugin",');
+    });
+
+    test("leaves package.json Prettier and Stylelint configs to their writers on ESLint", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mockFileSystem({});
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() =>
+          Promise.resolve(
+            '{"name": "app", "prettier": "ultracite/prettier", "stylelint": {"extends": "ultracite/stylelint"}}'
+          )
+        ),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mockWriteFile,
+      }));
+
+      try {
+        await migrateLinterConfig("eslint", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
     });
 
     test("removes stale Oxlint config when migrating to biome", async () => {
@@ -2451,6 +2597,33 @@ describe("helper functions", () => {
       await expect(async () => {
         await upsertEditorConfig("invalid-editor");
       }).toThrow('Editor "invalid-editor" not found');
+    });
+
+    test("installs the Prettier extension too for the ESLint toolchain", async () => {
+      const mockSpawn = mock((_command: string, _args: string[]) => ({
+        status: 0,
+      }));
+      mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+      restoreFileSystemMock();
+
+      await upsertEditorConfig("vscode", "eslint");
+
+      expect(mockSpawn.mock.calls.map(([, args]) => args.at(-1))).toEqual([
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+      ]);
     });
 
     test("creates vscode settings when not exists", async () => {
@@ -2732,11 +2905,17 @@ describe("helper functions", () => {
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve('{"extends": []}')),
+        readFile: mock(() =>
+          Promise.resolve(
+            'import { defineConfig } from "oxlint";\n\nexport default defineConfig({ extends: [] });\n'
+          )
+        ),
         writeFile: mockWriteFile,
       }));
+      mockFileSystem({ "./oxlint.config.ts": "" });
 
       mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
         spinner: mock(() => ({
           message: mock(noop),
           start: mock(noop),
@@ -2744,7 +2923,11 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertOxlintConfig();
+      try {
+        await upsertOxlintConfig();
+      } finally {
+        restoreFileSystemMock();
+      }
       expect(mockWriteFile).toHaveBeenCalled();
     });
   });
@@ -3010,6 +3193,43 @@ describe("helper functions", () => {
   });
 
   describe("initializePrecommitHook", () => {
+    test("keeps an existing prepare script when skipping the install", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock((filePath: string) =>
+          String(filePath).includes("package.json")
+            ? Promise.resolve(
+                '{"name": "app", "scripts": {"prepare": "svelte-kit sync"}}'
+              )
+            : Promise.reject(new Error("ENOENT"))
+        ),
+        writeFile: mockWriteFile,
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+      restoreFileSystemMock();
+
+      await initializePrecommitHook(npmPm, false, true);
+
+      const packageJson = JSON.parse(
+        mockWriteFile.mock.calls.find(
+          ([filePath]) => filePath === "package.json"
+        )?.[1] ?? "{}"
+      );
+      expect(packageJson.scripts.prepare).toBe("svelte-kit sync && husky");
+      expect(packageJson.devDependencies).toEqual({ husky: "latest" });
+    });
+
     test("installs and creates husky hook", async () => {
       const mockAddDep = mock(() => Promise.resolve());
       const mockWriteFile = mock((_path: string, _content: string) =>
@@ -3081,6 +3301,44 @@ describe("helper functions", () => {
   });
 
   describe("initializeLefthook", () => {
+    test("names the lefthook config file the project actually uses", async () => {
+      const messages: string[] = [];
+      const record = (message: string) => {
+        messages.push(message);
+      };
+
+      mock.module("node:fs/promises", () => ({
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock((filePath: string) =>
+          Promise.resolve(
+            String(filePath).includes("package.json")
+              ? '{"name": "app"}'
+              : "pre-commit:\n  jobs:\n    - run: echo hi\n"
+          )
+        ),
+        writeFile: mock(() => Promise.resolve()),
+      }));
+      mock.module("@clack/prompts", () => ({
+        log: { info: mock(noop), warn: mock(noop) },
+        spinner: mock(() => ({
+          message: mock(record),
+          start: mock(noop),
+          stop: mock(record),
+        })),
+      }));
+      mockFileSystem({ "./.lefthook.yaml": "" });
+
+      try {
+        await initializeLefthook(npmPm, false);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      expect(messages).toContain(".lefthook.yaml found, updating...");
+      expect(messages).toContain(".lefthook.yaml updated.");
+      expect(messages.join("\n")).not.toContain("lefthook.yml");
+    });
+
     test("creates lefthook config", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -3590,6 +3848,7 @@ describe("helper functions", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
+      restoreFileSystemMock();
       await initialize({
         pm: "npm",
         quiet: true,
@@ -3600,10 +3859,264 @@ describe("helper functions", () => {
         String(path)
       );
 
-      expect(writtenPaths.some((p) => p.endsWith("oxlint.config.ts"))).toBe(
+      // No "type": "module" in package.json, so the config is .mts.
+      expect(writtenPaths.some((p) => p.endsWith("oxlint.config.mts"))).toBe(
         true
       );
       expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(false);
     });
+  });
+});
+
+const quietPrompts = () => ({
+  cancel: mock(noop),
+  confirm: mock(() => Promise.resolve(false)),
+  intro: mock(noop),
+  isCancel: mock(() => false),
+  log: {
+    error: mock(noop),
+    info: mock(noop),
+    success: mock(noop),
+    warn: mock(noop),
+  },
+  multiselect: mock(() => Promise.resolve([])),
+  outro: mock(noop),
+  select: mock(() => Promise.resolve("biome")),
+  spinner: mock(() => ({
+    message: mock(noop),
+    start: mock(noop),
+    stop: mock(noop),
+  })),
+});
+
+describe("init flag validation", () => {
+  test("rejects an unknown --linter before touching the project", async () => {
+    const mockAddDep = mock(() => Promise.resolve());
+    const mockRm = mock(() => Promise.resolve());
+    const mockWriteFile = mock(() => Promise.resolve());
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mockRm,
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", quietPrompts);
+    mock.module("nypm", () => ({
+      addDevDependency: mockAddDep,
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+
+    const flags: Parameters<typeof initialize>[0] = { pm: "npm", quiet: true };
+    // Commander passes flag values through unchecked, so plant a value
+    // outside the Linter union the way a mistyped flag arrives.
+    Reflect.set(flags ?? {}, "linter", "Biome");
+    const result = initialize(flags);
+
+    await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
+    await expect(result).rejects.toThrow(
+      'Unknown --linter value "Biome". Valid values: biome, eslint, oxlint.'
+    );
+    expect(mockAddDep).not.toHaveBeenCalled();
+    expect(mockRm).not.toHaveBeenCalled();
+    expect(mockWriteFile).not.toHaveBeenCalled();
+  });
+
+  test("rejects unknown values for every list flag", () => {
+    const cases: [Parameters<typeof validateInitializeFlags>[0], string][] = [
+      [
+        { frameworks: ["react", "nextjs"] },
+        'Unknown --frameworks value "nextjs"',
+      ],
+      [{ editors: ["vsc"] }, 'Unknown --editors value "vsc"'],
+      [
+        { agents: ["claude-code", "x"] },
+        'Unknown --agents values "claude-code", "x"',
+      ],
+      [{ hooks: ["vim"] }, 'Unknown --hooks value "vim"'],
+      [
+        { integrations: ["simple-git-hooks"] },
+        'Unknown --integrations value "simple-git-hooks"',
+      ],
+      [
+        { "js-plugins": ["eslint-plugin-foo"] },
+        'Unknown --js-plugins value "eslint-plugin-foo"',
+      ],
+      [{ pm: "pip" }, 'Unknown --pm value "pip"'],
+    ];
+
+    for (const [flags, message] of cases) {
+      expect(() => validateInitializeFlags(flags)).toThrow(message);
+    }
+  });
+
+  test("accepts known values, including universal editors and agents", () => {
+    expect(() =>
+      validateInitializeFlags({
+        agents: ["universal", "claude"],
+        editors: ["universal", "zed"],
+        frameworks: ["react", "next"],
+        hooks: ["cursor"],
+        integrations: ["husky", "lint-staged"],
+        "js-plugins": ["anti-slop"],
+        linter: "eslint",
+        pm: "bun",
+      })
+    ).not.toThrow();
+  });
+
+  test("keeps the detected linter when prompts are skipped", async () => {
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+    const mockRm = mock((_path: string) => Promise.resolve());
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mockRm,
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", quietPrompts);
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+    mockDetectLinter.mockImplementation(() => "biome");
+
+    try {
+      await initialize({ agents: [], pm: "npm", skipInstall: true });
+    } finally {
+      mockDetectLinter.mockImplementation(() => null);
+    }
+
+    const writtenPaths = mockWriteFile.mock.calls.map(([filePath]) =>
+      String(filePath)
+    );
+    const removedPaths = mockRm.mock.calls.map(([filePath]) =>
+      String(filePath)
+    );
+
+    expect(writtenPaths.some((p) => p.endsWith("biome.jsonc"))).toBe(true);
+    expect(writtenPaths.some((p) => p.endsWith("oxlint.config.ts"))).toBe(
+      false
+    );
+    expect(removedPaths.some((p) => p.includes("biome"))).toBe(false);
+  });
+
+  test("preselects the detected linter in the prompt", async () => {
+    const prompts = quietPrompts();
+    const mockSelect = mock(() => Promise.resolve("eslint"));
+
+    mock.module("@clack/prompts", () => ({ ...prompts, select: mockSelect }));
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+    mockDetectLinter.mockImplementation(() => "eslint");
+
+    try {
+      await initialize({ skipInstall: true });
+    } finally {
+      mockDetectLinter.mockImplementation(() => null);
+    }
+
+    expect(mockSelect).toHaveBeenCalledWith(
+      expect.objectContaining({ initialValue: "eslint" })
+    );
+  });
+});
+
+// Runs a prompt-free oxlint init on a package.json with the given contents.
+// Returns the package.json documents init wrote and every path it wrote.
+const runOxlintInit = async (packageJson: string) => {
+  const mockWriteFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(packageJson)),
+    rm: mock(() => Promise.resolve()),
+    writeFile: mockWriteFile,
+  }));
+  mock.module("@clack/prompts", quietPrompts);
+  mock.module("nypm", () => ({
+    addDevDependency: mock(() => Promise.resolve()),
+    detectPackageManager: mock(() =>
+      Promise.resolve({ name: "npm", warnings: [] })
+    ),
+    dlxCommand: mock(() => "npx ultracite fix"),
+  }));
+  mockFileSystem({ "package.json": packageJson });
+
+  try {
+    await initialize({
+      agents: [],
+      editors: [],
+      hooks: [],
+      integrations: [],
+      linter: "oxlint",
+      pm: "npm",
+      skipInstall: true,
+    });
+  } finally {
+    restoreFileSystemMock();
+  }
+
+  const writes = mockWriteFile.mock.calls.map(([filePath, content]) => ({
+    content,
+    filePath: String(filePath),
+  }));
+
+  return {
+    packageJsons: writes
+      .filter(({ filePath }) => filePath === "package.json")
+      .map(({ content }) => JSON.parse(content)),
+    paths: writes.map(({ filePath }) => filePath),
+  };
+};
+
+describe("package.json module type", () => {
+  test("keeps a package without a type as it is and writes .mts configs", async () => {
+    const { packageJsons, paths } = await runOxlintInit('{"name": "app"}');
+
+    expect(packageJsons.length).toBeGreaterThan(0);
+    for (const packageJson of packageJsons) {
+      expect(packageJson.type).toBeUndefined();
+    }
+    expect(paths).toContain("./oxlint.config.mts");
+    expect(paths).toContain("./oxfmt.config.mts");
+  });
+
+  test("writes .mts configs in a CommonJS package", async () => {
+    const { packageJsons, paths } = await runOxlintInit(
+      '{"name": "app", "type": "commonjs"}'
+    );
+
+    for (const packageJson of packageJsons) {
+      expect(packageJson.type).toBe("commonjs");
+    }
+    expect(paths).toContain("./oxlint.config.mts");
+    expect(paths).toContain("./oxfmt.config.mts");
+  });
+
+  test("writes .ts configs in an ES module package", async () => {
+    const { paths } = await runOxlintInit('{"name": "app", "type": "module"}');
+
+    expect(paths).toContain("./oxlint.config.ts");
+    expect(paths).toContain("./oxfmt.config.ts");
   });
 });

@@ -1,4 +1,7 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+
+import { log } from "@clack/prompts";
+import YAML from "yaml";
 
 import { preCommit } from "../src/integrations/pre-commit";
 
@@ -12,6 +15,31 @@ mock.module("nypm", () => ({
   detectPackageManager: mock(() => Promise.resolve({ name: "npm" })),
   dlxCommand: mock(() => "npx ultracite fix"),
 }));
+
+// Updates a config whose content is `existing`; returns what's written.
+const runUpdate = async (
+  existing: string,
+  packageManager: "npm" | "pnpm" | "yarn" = "npm"
+): Promise<string | undefined> => {
+  let written: string | undefined;
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(existing)),
+    writeFile: mock((_path: string, content: string) => {
+      written = content;
+      return Promise.resolve();
+    }),
+  }));
+
+  await preCommit.update(packageManager);
+
+  return written;
+};
+
+const hookIds = (config: string): string[] =>
+  YAML.parse(config).repos.flatMap((repo: { hooks: { id: string }[] }) =>
+    repo.hooks.map((hook) => hook.id)
+  );
 
 describe("pre-commit", () => {
   beforeEach(() => {
@@ -163,6 +191,101 @@ describe("pre-commit", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("repos:");
       expect(writeCall[1]).toContain("id: ultracite");
+    });
+  });
+
+  describe("update (regressions)", () => {
+    test("keeps a zero-indent repos list (pre-commit sample-config) valid", async () => {
+      const output =
+        await runUpdate(`# See https://pre-commit.com for more information
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+`);
+
+      expect(output).toBeDefined();
+      expect(output).toContain("# See https://pre-commit.com");
+      expect(output).toContain("\n- repo: local\n");
+      expect(hookIds(output ?? "")).toEqual([
+        "ultracite",
+        "trailing-whitespace",
+      ]);
+    });
+
+    test("keeps a four-space indented repos list valid", async () => {
+      const output = await runUpdate(`repos:
+    - repo: https://github.com/psf/black
+      rev: 22.10.0
+      hooks:
+          - id: black
+`);
+
+      expect(hookIds(output ?? "")).toEqual(["ultracite", "black"]);
+    });
+
+    test("fills an empty inline repos list", async () => {
+      const output = await runUpdate("repos: []\n");
+
+      expect(hookIds(output ?? "")).toEqual(["ultracite"]);
+    });
+
+    test("upgrades a dlx entry from an earlier init", async () => {
+      const output = await runUpdate(
+        `repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: yarn dlx ultracite fix
+        language: system
+`,
+        "yarn"
+      );
+
+      expect(output).toContain("entry: yarn ultracite fix");
+      expect(output).not.toContain("dlx");
+    });
+
+    test("leaves a hand-written ultracite entry alone", async () => {
+      const output = await runUpdate(`repos:
+  - repo: local
+    hooks:
+      - id: ultracite
+        name: ultracite
+        entry: npx ultracite fix --unsafe
+        language: system
+`);
+
+      expect(output).toBeUndefined();
+    });
+
+    test("warns instead of writing when the YAML can't be parsed", async () => {
+      const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+      const output = await runUpdate("repos: [\n");
+
+      expect(output).toBeUndefined();
+      expect(warn).toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
+    test("creates a hook that runs the project's installed ultracite", async () => {
+      let written = "";
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mock((_path: string, content: string) => {
+          written = content;
+          return Promise.resolve();
+        }),
+      }));
+
+      await preCommit.create("pnpm");
+
+      expect(written).toContain("entry: pnpm exec ultracite fix");
+      expect(hookIds(written)).toEqual(["ultracite"]);
     });
   });
 });

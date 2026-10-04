@@ -1,4 +1,6 @@
 ---
+import data from "blume:data";
+
 import Icon from "./icon.astro";
 import Installer from "./installer.astro";
 
@@ -8,13 +10,21 @@ interface Props {
 }
 
 const { description, version } = Astro.props;
+
+// Link straight to this release's changelog entry (the GitHub release tag
+// `ultracite@7.12.1` becomes /changelog/ultracite-7-12-1). If the release
+// fetch failed and there is no such page, fall back to the changelog index.
+const releasePath = `/changelog/ultracite-${version.replaceAll(".", "-")}`;
+const releaseHref = data.routes.some((route) => route.path === releasePath)
+  ? releasePath
+  : "/changelog";
 ---
 
 <div class="grid gap-8 sm:gap-20">
   <div class="grid justify-items-center gap-4 text-center">
     <a
       class="group flex w-fit items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
-      href="/changelog"
+      href={releaseHref}
     >
       <span
         aria-hidden="true"

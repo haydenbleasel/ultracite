@@ -1,27 +1,7 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
+// The version the homepage announces is the CLI package's own. Importing its
+// package.json lets Vite inline the value at build time, so the lookup no
+// longer depends on the build's working directory. The docs build lists the
+// file as a turbo input, so a version bump invalidates the cached site.
+import cliPackage from "../../../packages/cli/package.json";
 
-const packageJsonPath = path.join(
-  process.cwd(),
-  "..",
-  "..",
-  "packages",
-  "cli",
-  "package.json"
-);
-
-let cached: string | undefined;
-
-export const getLatestVersion = async (): Promise<string> => {
-  if (cached) {
-    return cached;
-  }
-
-  const raw = await readFile(packageJsonPath, "utf-8");
-  // SAFETY: this reads packages/cli/package.json from this workspace, whose
-  // string `version` field is maintained by changesets.
-  const { version } = JSON.parse(raw) as { version: string };
-
-  cached = version;
-  return version;
-};
+export const latestVersion: string = cliPackage.version;

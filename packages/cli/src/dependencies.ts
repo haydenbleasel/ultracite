@@ -1,4 +1,5 @@
 import packageJson from "../package.json" with { type: "json" };
+import { UltraciteSetupError } from "./config-resolution";
 import type { options } from "./data/options";
 
 type Linter = (typeof options.linters)[number];
@@ -63,10 +64,10 @@ export const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
     return value;
   }
 
-  throw new Error(
+  throw new UltraciteSetupError(
     `Unsupported Oxlint JS plugin "${value}". Supported plugins: ${oxlintJsPlugins.join(
       ", "
-    )}`
+    )}.`
   );
 };
 
@@ -102,6 +103,9 @@ export const eslintCoreDevDependencies = {
   "eslint-plugin-unused-imports":
     packageJson.devDependencies["eslint-plugin-unused-imports"],
   globals: packageJson.devDependencies.globals,
+  // The Stylelint preset parses .less and .scss files with these syntaxes.
+  "postcss-less": packageJson.devDependencies["postcss-less"],
+  "postcss-scss": packageJson.devDependencies["postcss-scss"],
   prettier: toolchainPeerRanges.prettier,
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
@@ -124,14 +128,20 @@ export const eslintFrameworkDevDependencies = {
   },
   astro: {
     "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
+    // Loaded by the astro/jsx-a11y/* rules the Astro preset enables; without
+    // it every .astro file reports "you need to install eslint-plugin-jsx-a11y".
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "prettier-plugin-astro":
       packageJson.devDependencies["prettier-plugin-astro"],
   },
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
   },
-  // NestJS needs no ESLint plugins beyond the core set.
-  nestjs: {},
+  nestjs: {
+    "@darraghor/eslint-plugin-nestjs-typed":
+      packageJson.devDependencies["@darraghor/eslint-plugin-nestjs-typed"],
+  },
   next: {
     "@next/eslint-plugin-next":
       packageJson.devDependencies["@next/eslint-plugin-next"],

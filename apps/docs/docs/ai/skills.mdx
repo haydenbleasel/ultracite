@@ -12,13 +12,15 @@ Use the global skill when your AI tool understands `SKILL.md`-style skills and y
 
 ## Install the skill
 
-If you already run `npx ultracite init`, the interactive setup can offer to install the skill for you. For non-interactive flows, you can also pass:
+When you run `npx ultracite init`, it offers to install the skill (and skips the question if the skill is already installed). Pass `--install-skill` to install it without being asked, for example in a `--quiet` run:
 
 ```bash
 npx ultracite init --install-skill
 ```
 
-If your AI tool supports installable skills, you can always add Ultracite directly with:
+`init` installs the skill into your project without prompting. It runs `skills add haydenbleasel/ultracite --yes --agent universal`, plus the agents whose project folders already exist (such as `.claude`, `.windsurf`, `.codebuddy`, or `.roo`). `universal` is the shared `.agents/skills` folder that Codex, Cursor, GitHub Copilot, Gemini CLI, Amp, Cline, OpenCode, and more read.
+
+To choose the agents and scope yourself, including a global install that carries across repositories, run the skills CLI directly:
 
 ```bash
 npx skills add haydenbleasel/ultracite

@@ -1,1 +1,0 @@
-alert("preserved native configuration");

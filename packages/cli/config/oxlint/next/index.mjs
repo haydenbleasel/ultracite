@@ -4,14 +4,6 @@ import { defineConfig } from "oxlint";
 // (mirroring the core config's philosophy), with decisions matching the
 // ESLint next preset.
 export default defineConfig({
-  overrides: [
-    {
-      files: ["**/next-env.d.ts"],
-      rules: {
-        "import/no-unassigned-import": "off",
-      },
-    },
-  ],
   plugins: ["nextjs"],
   rules: {
     "nextjs/google-font-display": "error",

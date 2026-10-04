@@ -1,9 +1,14 @@
 import { readFile } from "node:fs/promises";
 
-import deepmerge from "deepmerge";
+import { log } from "@clack/prompts";
+import { applyEdits, modify } from "jsonc-parser";
 
 import type { options } from "../data/options";
-import { biomeConfigSchema, parseJsonc } from "../schemas";
+import {
+  biomeConfigSchema,
+  detectJsonFormatting,
+  parseJsoncStrict,
+} from "../schemas";
 import {
   biomeConfigNames,
   exists,
@@ -17,6 +22,10 @@ const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
   extends: [biomeCoreConfig],
 };
+
+// A nested config in a Biome monorepo extends "//" to inherit the root
+// configuration, which is where the Ultracite presets belong.
+const ROOT_CONFIG_EXTENDS = "//";
 
 const LEGACY_EXTEND_RE = /^ultracite\/(?!biome\/)(?<rest>.+)$/u;
 
@@ -35,6 +44,49 @@ interface BiomeOptions {
   frameworks?: (typeof options.frameworks)[number][];
   typeAware?: boolean;
 }
+
+const getUpdatedExtends = (
+  existingExtends: string[],
+  opts?: BiomeOptions
+): string[] => {
+  // Migrate legacy ultracite/<name> entries to ultracite/biome/<name>,
+  // deduping in case both legacy and new forms coexist. The bare "ultracite"
+  // form (the original documented format) maps to the core config — the
+  // package has no root export, so leaving it would break Biome's module
+  // resolution.
+  const remapped = existingExtends.map((ext) => {
+    if (ext === "ultracite") {
+      return biomeCoreConfig;
+    }
+    const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
+    return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
+  });
+  const newExtends = [...new Set(remapped)];
+  // Track membership in a Set for constant-time lookups while preserving
+  // the array's insertion order.
+  const seenExtends = new Set(newExtends);
+  const addExtend = (ext: string) => {
+    if (!seenExtends.has(ext)) {
+      seenExtends.add(ext);
+      newExtends.push(ext);
+    }
+  };
+
+  // Add ultracite/biome/core if not present
+  addExtend(biomeCoreConfig);
+
+  // Add type-aware config for project/scanner rules
+  if (opts?.typeAware) {
+    addExtend("ultracite/biome/type-aware");
+  }
+
+  // Add framework-specific configs if provided
+  for (const framework of opts?.frameworks ?? []) {
+    addExtend(`ultracite/biome/${validateFrameworkName(framework)}`);
+  }
+
+  return newExtends;
+};
 
 export const biome = {
   create: (opts?: BiomeOptions) => {
@@ -67,61 +119,53 @@ export const biome = {
   },
   update: async (opts?: BiomeOptions) => {
     const path = getBiomeConfigPath();
+    const fileName = path.slice(2);
     const existingContents = await readFile(path, "utf-8");
-    const existingConfig = parseJsonc(existingContents, biomeConfigSchema);
+    const parsed = parseJsoncStrict(existingContents, biomeConfigSchema);
 
-    // If parsing fails (invalid JSON), treat as empty config and proceed gracefully
-    const configToWork = existingConfig || {};
-
-    // Check if ultracite is already in the extends array
-    const existingExtends = configToWork.extends ?? [];
-
-    // Migrate legacy ultracite/<name> entries to ultracite/biome/<name>,
-    // deduping in case both legacy and new forms coexist. The bare "ultracite"
-    // form (the original documented format) maps to the core config — the
-    // package has no root export, so leaving it would break Biome's module
-    // resolution.
-    const remapped = existingExtends.map((ext) => {
-      if (ext === "ultracite") {
-        return biomeCoreConfig;
-      }
-      const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
-      return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
-    });
-    const newExtends = [...new Set(remapped)];
-    // Track membership in a Set for constant-time lookups while preserving
-    // the array's insertion order.
-    const seenExtends = new Set(newExtends);
-    const addExtend = (ext: string) => {
-      if (!seenExtends.has(ext)) {
-        seenExtends.add(ext);
-        newExtends.push(ext);
-      }
-    };
-
-    // Add ultracite/biome/core if not present
-    addExtend(biomeCoreConfig);
-
-    // Add type-aware config for project/scanner rules
-    if (opts?.typeAware) {
-      addExtend("ultracite/biome/type-aware");
+    // Rewriting a config that doesn't parse would drop whatever the parser
+    // couldn't recover, so leave it for the user to fix.
+    if (!parsed) {
+      log.warn(
+        `Could not parse ${fileName}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\` to add the Ultracite presets.`
+      );
+      return;
     }
 
-    // Add framework-specific configs if provided
-    if (opts?.frameworks && opts.frameworks.length > 0) {
-      for (const framework of opts.frameworks) {
-        addExtend(`ultracite/biome/${validateFrameworkName(framework)}`);
-      }
+    const existingExtends = [parsed.extends ?? []].flat();
+
+    if (existingExtends.includes(ROOT_CONFIG_EXTENDS)) {
+      log.info(
+        `${fileName} inherits the root Biome config ("${ROOT_CONFIG_EXTENDS}"), so it was left unchanged. Add the Ultracite presets to the root config instead.`
+      );
+      return;
     }
 
-    configToWork.extends = newExtends;
+    // Edit the document in place so comments and formatting survive.
+    const formattingOptions = detectJsonFormatting(existingContents);
+    let contents = applyEdits(
+      existingContents,
+      modify(
+        existingContents,
+        ["extends"],
+        getUpdatedExtends(existingExtends, opts),
+        {
+          formattingOptions,
+          // A new extends list goes at the top, after any $schema.
+          getInsertionIndex: (properties) =>
+            properties[0] === "$schema" ? 1 : 0,
+        }
+      )
+    );
+    contents = applyEdits(
+      contents,
+      modify(contents, ["$schema"], defaultConfig.$schema, {
+        formattingOptions,
+        // A new $schema key goes first, where editors and Biome expect it.
+        getInsertionIndex: () => 0,
+      })
+    );
 
-    // Merge other properties from defaultConfig
-    const configToMerge = {
-      $schema: defaultConfig.$schema,
-    };
-    const newConfig = deepmerge(configToWork, configToMerge);
-
-    await writeProjectFile(path, `${JSON.stringify(newConfig, null, 2)}\n`);
+    await writeProjectFile(path, contents);
   },
 };

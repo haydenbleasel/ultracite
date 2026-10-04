@@ -1,3 +1,7 @@
+// Example config files for the homepage, written to match byte for byte what
+// `ultracite init` generates today (packages/cli/src/linters/*.ts). Keep them
+// in step when a generator's output changes.
+
 export type ProviderId = "eslint" | "biome" | "oxlint";
 
 export interface ConfigFile {
@@ -12,16 +16,32 @@ export interface Provider {
   name: string;
 }
 
+// linters/oxlint.ts puts the extends array on one line while it fits oxfmt's
+// 80-column print width, and one entry per line beyond that.
+const OXLINT_LINE_WIDTH = 80;
+
+const oxlintExtends = (presets: string[]): string => {
+  const singleLine = `  extends: [${presets.join(", ")}],`;
+  if (singleLine.length <= OXLINT_LINE_WIDTH) {
+    return singleLine;
+  }
+  return `  extends: [\n${presets.map((preset) => `    ${preset},`).join("\n")}\n  ],`;
+};
+
 export const providers: Provider[] = [
   {
     configFiles: [
       {
-        code: (presets: string[]) => `{
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": [
-    ${presets.map((p) => `"ultracite/biome/${p}"`).join(",\n    ")}
-  ]
-}`,
+        code: (presets: string[]) =>
+          JSON.stringify(
+            {
+              $schema:
+                "./node_modules/@biomejs/biome/configuration_schema.json",
+              extends: presets.map((preset) => `ultracite/biome/${preset}`),
+            },
+            null,
+            2
+          ),
         lang: "json",
         name: "biome.jsonc",
       },
@@ -32,23 +52,25 @@ export const providers: Provider[] = [
   {
     configFiles: [
       {
-        code: (
-          presets: string[]
-        ) => `import { defineConfig } from "eslint/config";
-${presets.map((p) => `import ${p} from "ultracite/eslint/${p}";`).join("\n")}
+        code: (presets: string[]) => `${presets
+          .map(
+            (preset) => `import ${preset} from "ultracite/eslint/${preset}";`
+          )
+          .join("\n")}
 
-export default defineConfig([
-  {
-    extends: [
-      ${presets.join(",\n      ")}
-    ],
-  },
-]);`,
+export default [
+  ${presets.map((preset) => `...${preset}`).join(",\n  ")},
+];`,
         lang: "javascript",
         name: "eslint.config.mjs",
       },
       {
-        code: () => `export { default } from "ultracite/prettier";`,
+        code: () => `import config from "ultracite/prettier";
+
+export default {
+  ...config,
+  plugins: ["prettier-plugin-tailwindcss"],
+};`,
         lang: "javascript",
         name: "prettier.config.mjs",
       },
@@ -65,13 +87,10 @@ export default defineConfig([
     configFiles: [
       {
         code: (presets: string[]) => `import { defineConfig } from "oxlint";
-
-${presets.map((p) => `import ${p} from "ultracite/oxlint/${p}";`).join("\n")}
+${presets.map((preset) => `import ${preset} from "ultracite/oxlint/${preset}";`).join("\n")}
 
 export default defineConfig({
-  extends: [
-    ${presets.join(",\n    ")}
-  ],
+${oxlintExtends(presets)}
   ignorePatterns: core.ignorePatterns,
 });`,
         lang: "typescript",

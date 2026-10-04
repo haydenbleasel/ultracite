@@ -34,6 +34,8 @@ const overrideRules = {
   // flags builtin (bun:test) and workspace imports as missing dependencies.
   // Off in both linters to keep parity.
   "sonarjs/no-implicit-dependencies": "off",
+  // sonarjs 4.2.1 raised the default threshold to 5; keep the stricter 4.
+  "sonarjs/no-nested-functions": ["error", { threshold: 4 }],
   // Conflicts with sort-keys.
   "sonarjs/shorthand-property-grouping": "off",
 };

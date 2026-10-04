@@ -11,6 +11,7 @@ import type { InstalledPackage } from "../src/config-resolution";
 import { biomeVersion } from "../src/dependencies";
 import * as schemas from "../src/schemas";
 import * as utils from "../src/utils";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 // mock.module rewrites a module's live bindings, so the namespace imports
 // above turn into the stubs the moment they're mocked. Snapshot the exports
@@ -181,6 +182,43 @@ describe("getToolchainPackages", () => {
     );
   });
 
+  test("eslint installs the plugins of every framework preset the config imports", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    const packages = getToolchainPackages(
+      "eslint",
+      new Set(),
+      new Set(["nestjs"])
+    );
+
+    expect(
+      packages.some((pkg) =>
+        pkg.startsWith("@darraghor/eslint-plugin-nestjs-typed@")
+      )
+    ).toBe(true);
+    expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-vue@"))).toBe(
+      false
+    );
+  });
+
+  test("reads the framework presets the ESLint config imports", async () => {
+    const { getConfiguredEslintFrameworks } = await loadUpgrade();
+    mockFileSystem({
+      [path.join(process.cwd(), "eslint.config.mjs")]: [
+        'import core from "ultracite/eslint/core";',
+        'import nestjs from "ultracite/eslint/nestjs";',
+        "",
+        "export default [...core, ...nestjs];",
+      ].join("\n"),
+    });
+
+    try {
+      expect([...getConfiguredEslintFrameworks()]).toEqual(["core", "nestjs"]);
+    } finally {
+      restoreFileSystemMock();
+    }
+  });
+
   test("oxlint tracks latest and bumps opted-in extras only", async () => {
     const { getToolchainPackages } = await loadUpgrade();
 
@@ -255,6 +293,22 @@ describe("upgrade", () => {
       "npm",
     ]);
     expect(options).toEqual({ stdio: "inherit" });
+  });
+
+  test("lets the handed-off CLI detect the package manager when --pm wasn't passed", async () => {
+    const harness = setup({
+      versions: [installed("7.4.2"), installed("99.0.0")],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade()).resolves.toBe(0);
+
+    const [[, args]] = harness.spawnSync.mock.calls;
+    expect(args).toEqual([
+      path.join("/project/node_modules/ultracite", "dist/index.js"),
+      "upgrade",
+      "--skip-self",
+    ]);
   });
 
   test("carries the handed-off CLI's exit code", async () => {

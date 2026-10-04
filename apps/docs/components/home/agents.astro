@@ -13,9 +13,10 @@ const featuredAgentIds = [
   "copilot",
 ];
 
+// Only agents the CLI still supports and that have a logo are featured.
 const featuredAgents = featuredAgentIds.flatMap((id) => {
   const agent = agents.find((a) => a.id === id);
-  return agent ? [agent] : [];
+  return agent && agentLogos[id] ? [agent] : [];
 });
 
 const remainingCount = agents.length - featuredAgents.length;
@@ -23,13 +24,13 @@ const remainingCount = agents.length - featuredAgents.length;
 
 <div class="grid gap-8">
   <SectionIntro
-    description="Ultracite can generate rules files for all these popular IDEs and agents, so you can get the most of out of your AI integrations."
-    title="Works with all your favourite agents..."
+    description="Ultracite writes a rules file for every one of these agents, so the code they generate follows the same standards your linter enforces."
+    title="Works with all your favorite agents…"
   />
-  <div class="mx-auto flex items-center justify-center -space-x-1">
+  <ul class="mx-auto flex items-center justify-center -space-x-1">
     {
       featuredAgents.map((agent, index) => (
-        <span class="hp-tt inline-flex" tabindex="0">
+        <li class="hp-tt inline-flex">
           <img
             alt={agent.name}
             class:list={[
@@ -40,19 +41,22 @@ const remainingCount = agents.length - featuredAgents.length;
             src={agentLogos[agent.id]}
             width="56"
           />
-          <span data-tt>{agent.name}</span>
-        </span>
+          <span aria-hidden="true" data-tt>
+            {agent.name}
+          </span>
+        </li>
       ))
     }
-    <span class="hp-tt inline-flex" tabindex="0">
+    <li class="hp-tt inline-flex">
       <span
+        aria-hidden="true"
         class="flex size-10 items-center justify-center overflow-hidden rounded-full border bg-muted ring-2 ring-background transition-transform will-change-transform hover:-translate-y-2 hover:-rotate-3 sm:size-14"
       >
         <span class="text-muted-foreground text-xs sm:text-sm">
           + {remainingCount}
         </span>
       </span>
-      <span data-tt>+ {remainingCount} more agents</span>
-    </span>
-  </div>
+      <span data-tt>{remainingCount} more agents</span>
+    </li>
+  </ul>
 </div>

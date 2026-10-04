@@ -1,5 +1,51 @@
 ---
-// Static terminal mock of `npx ultracite@latest init`.
+// Static terminal mock of `npx ultracite@latest init`, frozen at its last
+// prompt. Every line is what the CLI prints for these answers: the prompts and
+// option labels come from packages/cli/src/initialize.ts (agent and editor
+// labels from its agents.ts/editors.ts), laid out the way @clack/prompts
+// renders them — `◇` for an answered prompt with its choices dimmed below, `◆`
+// for the open one with its options and key hints.
+interface Props {
+  version: string;
+}
+
+const { version } = Astro.props;
+
+const answered = [
+  {
+    answer: "Oxlint + Oxfmt (Recommended)",
+    question: "Which linter do you want to use?",
+  },
+  {
+    answer: "React, Next.js, Vitest / Bun",
+    question: "Which frameworks are you using (optional)?",
+  },
+  {
+    answer: "none",
+    question: "Which JS plugins would you like to add (optional)?",
+  },
+  {
+    answer:
+      "Universal (creates .vscode/settings.json for Visual Studio Code, Cursor, Windsurf, and more)",
+    question: "Which editors do you want to configure (recommended)?",
+  },
+  {
+    answer:
+      "Universal (creates AGENTS.md for Codex, Jules, Devin, and more), Claude (creates .claude/CLAUDE.md)",
+    question: "Which agent files do you want to add (optional)?",
+  },
+  {
+    answer: "Cursor, Claude Code",
+    question: "Which agent hooks do you want to enable (optional)?",
+  },
+];
+
+const integrations = [
+  "Husky pre-commit hook",
+  "Lefthook pre-commit hook",
+  "Lint-staged",
+  "pre-commit (Python framework)",
+];
 ---
 
 <div
@@ -8,13 +54,14 @@
   <img
     alt=""
     class="absolute top-0 left-0 size-full object-cover"
-    height="738"
-    src="/demo-background.jpg"
-    width="1600"
+    decoding="async"
+    height="886"
+    src="/demo-background.webp"
+    width="1920"
   />
   <div class="size-full sm:px-16 sm:pt-16">
     <div
-      class="max-h-128 overflow-hidden rounded-t-xl border border-border bg-background/90 p-8 backdrop-blur-sm sm:rounded-t-2xl"
+      class="max-h-152 overflow-hidden rounded-t-xl border border-border bg-background/90 p-8 backdrop-blur-sm sm:rounded-t-2xl"
     >
       <div
         class="pointer-events-none mb-8 grid select-none grid-cols-3 items-center"
@@ -28,7 +75,8 @@
           <p class="font-mono text-muted-foreground text-xs">Terminal</p>
         </div>
       </div>
-      <pre class="font-mono text-foreground text-xs sm:text-sm"><code><div class="mb-4"><span class="text-muted-foreground">$</span> npx ultracite@latest init</div><div><span class="text-cyan-600 dark:text-cyan-400">●</span> <span class="text-muted-foreground">Detected lockfile, using <span class="text-cyan-600 dark:text-cyan-400">bun</span></span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span> Which formatters / linters do you want to use?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">Oxlint + Oxfmt</span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span> Which frameworks are you using?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">React, Next.js, Bun</span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span> Which editors do you want to configure?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">Universal</span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span> Which agent files do you want to add?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">Universal, Claude</span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-green-600 dark:text-green-400">◇</span> Which agent hooks do you want to enable?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">Cursor, Claude Code</span></div><div><span class="text-muted-foreground">│</span></div><div><span class="text-cyan-600 dark:text-cyan-400">◆</span> Would you like any of the following Git hooks?</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">◻</span> Husky</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">◻</span> Lefthook</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">◻</span> Lint-staged</div><div><span class="text-muted-foreground">│</span> <span class="text-muted-foreground">◻</span> pre-commit (Python framework)</div></code></pre>
+      <pre
+        class="whitespace-pre-wrap break-words font-mono text-foreground text-xs sm:text-sm"><code><span class="mb-4 block"><span class="text-muted-foreground">$</span> npx ultracite@latest init</span><span class="block"><span class="text-muted-foreground">┌</span>  Ultracite v{version} Initialization</span><span class="block text-muted-foreground">│</span><span class="block"><span class="text-blue-600 dark:text-blue-400">●</span>  Detected lockfile, using bun</span>{answered.map((prompt) => (<><span class="block text-muted-foreground">│</span><span class="block pl-[3ch] -indent-[3ch]"><span class="text-green-600 dark:text-green-400">◇</span>  {prompt.question}</span><span class="block pl-[3ch] -indent-[3ch] text-muted-foreground">│  {prompt.answer}</span></>))}<span class="block text-muted-foreground">│</span><span class="block"><span class="text-cyan-600 dark:text-cyan-400">◆</span>  Would you like any of the following (optional)?</span>{integrations.map((option, index) => (<span class="block"><span class="text-cyan-600 dark:text-cyan-400">│</span>  <span class={index === 0 ? "text-cyan-600 dark:text-cyan-400" : "text-muted-foreground"}>◻</span> <span class:list={[index !== 0 && "text-muted-foreground"]}>{option}</span></span>))}<span class="block"><span class="text-cyan-600 dark:text-cyan-400">│</span>  <span class="text-muted-foreground">↑/↓</span> to navigate • <span class="text-muted-foreground">Space:</span> select • <span class="text-muted-foreground">Enter:</span> confirm</span><span class="block text-cyan-600 dark:text-cyan-400">└</span></code></pre>
     </div>
   </div>
 </div>

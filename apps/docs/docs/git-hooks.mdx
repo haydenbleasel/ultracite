@@ -13,13 +13,17 @@ During initialization, you can select which Git hook tool to use:
 npx ultracite init --integrations husky lint-staged
 ```
 
-Or select them interactively when prompted.
+Or select them interactively when prompted. In a project that's already set up, this keeps its current linter and your changes to its configs.
 
 ## Supported Tools
 
+Every hook runs the `ultracite` installed in your project rather than downloading the latest release, so commits use the version your lockfile pins. The command depends on your package manager: `npx ultracite fix` (npm), `yarn ultracite fix`, `pnpm exec ultracite fix`, `bunx ultracite fix`, `deno run -A npm:ultracite fix`, `nub exec ultracite fix`, or `aube exec ultracite fix`. The examples below use npm.
+
+Re-running `ultracite init` updates a hook it wrote earlier (for example, one that used `pnpm dlx` or `yarn dlx`) instead of adding a second one, and leaves commands you wrote yourself alone.
+
 ### Husky
 
-[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file that runs `ultracite fix` on your staged files, re-stages them, and fails the commit if any issues couldn't be auto-fixed:
+[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file. When files are staged, it runs `ultracite fix` on the whole project, re-stages the files that were already staged, and fails the commit if any issues couldn't be auto-fixed:
 
 ```bash title=".husky/pre-commit"
 # ultracite
@@ -28,67 +32,72 @@ Or select them interactively when prompted.
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
 if [ -z "$STAGED_FILES" ]; then
   echo "No staged files to format"
-  exit 0
-fi
+else
+  # Run formatter, capturing the exit code so we can still re-stage and report
+  FORMAT_EXIT_CODE=0
+  npx ultracite fix || FORMAT_EXIT_CODE=$?
 
-# Run formatter, capturing the exit code so we can still re-stage and report
-FORMAT_EXIT_CODE=0
-npx ultracite fix || FORMAT_EXIT_CODE=$?
+  # Re-stage files that were already staged
+  echo "$STAGED_FILES" | while IFS= read -r file; do
+    if [ -f "$file" ]; then
+      git add -- "$file"
+    fi
+  done
 
-# Re-stage files that were already staged
-echo "$STAGED_FILES" | while IFS= read -r file; do
-  if [ -f "$file" ]; then
-    git add -- "$file"
+  if [ $FORMAT_EXIT_CODE -ne 0 ]; then
+    echo "Ultracite found issues that could not be auto-fixed."
+    exit $FORMAT_EXIT_CODE
   fi
-done
 
-if [ $FORMAT_EXIT_CODE -ne 0 ]; then
-  echo "Ultracite found issues that could not be auto-fixed."
-  exit $FORMAT_EXIT_CODE
+  echo "✨ Files formatted by Ultracite"
 fi
-
-echo "✨ Files formatted by Ultracite"
 # ultracite end
 ```
 
-Anything you've added to the hook outside the `# ultracite` markers is preserved when Ultracite updates it. If you also select lint-staged, the hook runs lint-staged instead of the script above.
+Anything you've added to the hook outside the `# ultracite` markers is preserved when Ultracite updates it, and still runs when nothing is staged. If you also select lint-staged, the section runs lint-staged (`npx lint-staged`) instead of the script above.
 
-### lefthook
+Ultracite also adds `husky` to your `prepare` script so hooks are installed on `npm install`. An existing `prepare` script is kept, with `&& husky` appended.
 
-[lefthook](https://lefthook.dev/) is a fast Git hooks manager written in Go. Ultracite creates a `lefthook.yml` configuration:
+### Lefthook
+
+[Lefthook](https://lefthook.dev/) is a fast Git hooks manager written in Go. If your project has no Lefthook config, Ultracite creates a `lefthook.yml`:
 
 ```yaml title="lefthook.yml"
 pre-commit:
   jobs:
     - run: npx ultracite fix
       glob:
-        - "**/*.js"
-        - "**/*.jsx"
-        - "**/*.ts"
-        - "**/*.tsx"
-        - "**/*.json"
-        - "**/*.jsonc"
-        - "**/*.css"
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
       stage_fixed: true
 ```
 
+With Lefthook's default glob matcher, `*.js` matches files in every directory, including the project root. If your config sets `glob_matcher: doublestar`, Ultracite writes `**/*.js`-style globs instead.
+
+If you already have a Lefthook config, Ultracite edits the one Lefthook actually loads (`lefthook.yml`, `.lefthook.yml`, `.config/lefthook.yml`, or their `.yaml` variants) and adds the job first in `pre-commit`, keeping your comments and formatting. JSON and TOML configs aren't edited: Ultracite prints the job to add instead. Ultracite also appends `lefthook install` to your `prepare` script, keeping any existing command.
+
 ### lint-staged
 
-[lint-staged](https://github.com/okonet/lint-staged) runs linters only on staged files. Ultracite adds configuration to your existing lint-staged config (or `package.json`), or creates a `.lintstagedrc.json` file:
+[lint-staged](https://github.com/lint-staged/lint-staged) runs linters only on staged files. If your project has no lint-staged config, Ultracite creates a `.lintstagedrc.json`:
 
-```json title="package.json"
+```json title=".lintstagedrc.json"
 {
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
-  }
+  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
 }
 ```
 
-Note: lint-staged is typically used alongside Husky or lefthook to trigger the pre-commit hook.
+If you already have one, Ultracite adds its task to the config lint-staged actually uses: a dedicated config file (`.lintstagedrc` in any format, including `.ts`, `.mts`, and `.cts`, or `lint-staged.config.*`) wins over a `"lint-staged"` key in `package.json`, which wins over one in `package.yaml`. YAML configs keep their comments, ES module and TypeScript configs are edited in place, and CommonJS configs are rewritten from their loaded values. If a config can't be merged safely (for example, one that exports a function or wraps its object in `defineConfig()`), Ultracite leaves it untouched and prints the command to add, rather than creating a second config that would shadow yours.
+
+lint-staged needs a Git hook to trigger it, so it's typically used alongside Husky or Lefthook.
 
 ### pre-commit
 
-[pre-commit](https://pre-commit.com/) is a Python-based framework for managing Git hooks. Ultracite creates a `.pre-commit-config.yaml`:
+[pre-commit](https://pre-commit.com/) is a Python-based framework for managing Git hooks. Ultracite creates a `.pre-commit-config.yaml`, or adds a local repo entry to the top of your existing one, keeping its comments and indentation style:
 
 ```yaml title=".pre-commit-config.yaml"
 repos:
@@ -108,9 +117,9 @@ After setup, run `pre-commit install` to activate the hooks.
 
 1. You make changes and stage files with `git add`
 2. You run `git commit`
-3. The pre-commit hook runs `npx ultracite fix`
-4. Code is formatted and auto-fixable issues are resolved
-5. The commit proceeds with properly formatted code
+3. The pre-commit hook runs `ultracite fix`: on the files you staged with lint-staged, or on the whole project with Husky, Lefthook, and pre-commit
+4. Code is formatted, auto-fixable issues are resolved, and the fixed files are re-staged (Husky, Lefthook, and lint-staged)
+5. The commit proceeds, or stops if issues remain that couldn't be auto-fixed
 
 ## Benefits
 

@@ -12,6 +12,9 @@ export interface SpawnSyncOptions {
  */
 export interface SpawnSyncResult {
   error?: Error;
+  // The system error code of a spawn failure, e.g. "ENOENT" for a command
+  // that isn't installed.
+  errorCode?: string;
   signal?: string;
   status: number | null;
   stdout?: string;
@@ -21,7 +24,9 @@ export interface SpawnSyncResult {
  * Run a command synchronously through execa (which owns Windows spawn
  * semantics), adapted to the spawnSync result shape. Output is always decoded
  * as UTF-8 strings; `shell` is always off so arguments can't be interpreted
- * by a shell.
+ * by a shell. Binaries installed in the project's node_modules/.bin (or a
+ * parent's) are found even when the CLI isn't run through a package manager
+ * script, npx or bunx, which are what normally put them on PATH.
  */
 export const spawnSync = (
   command: string,
@@ -30,6 +35,7 @@ export const spawnSync = (
 ): SpawnSyncResult => {
   const result = execaSync(command, args, {
     ...options,
+    preferLocal: true,
     reject: false,
     shell: false,
   });
@@ -41,6 +47,7 @@ export const spawnSync = (
   if (result.exitCode === undefined && result.signal === undefined) {
     return {
       error: new Error(result.shortMessage ?? `Failed to run ${command}`),
+      errorCode: result.code,
       status: null,
       stdout,
     };

@@ -3,7 +3,7 @@ title: Oxlint
 description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritize lint speed, shared presets, and lightweight editor defaults.
 ---
 
-[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) is part of the [Oxc project](https://oxc.rs/), a collection of high-performance JavaScript tools written in Rust. Paired with [Oxfmt](https://oxc.rs/) for formatting, this toolchain is ideal for large codebases where speed is critical.
+[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) is part of the [Oxc project](https://oxc.rs/), a collection of high-performance JavaScript tools written in Rust. Paired with [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) for formatting, this toolchain is ideal for large codebases where speed is critical.
 
 ## Benefits
 
@@ -16,9 +16,7 @@ description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritiz
 
 ## Usage
 
-In mixed-framework monorepos, the shared `ultracite.config.ts` format translates presets into Oxlint native scoped overrides. JS plugins and settings are hoisted to the root config as required by Oxlint, while framework rules stay limited to their matching files. See [Monorepos](/docs/monorepos) for both config placement styles.
-
-Ultracite generates two TypeScript config files for Oxlint:
+Ultracite generates two TypeScript config files for Oxlint. They're named `oxlint.config.ts` and `oxfmt.config.ts` in an ES module package (`"type": "module"` in `package.json`) and `oxlint.config.mts` and `oxfmt.config.mts` otherwise, because Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`. The examples on this page use `.ts`:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
@@ -63,7 +61,9 @@ This is **off by default** because it adds dependencies and runs a slower JavaSc
 npx ultracite init --linter oxlint --js-plugins eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
-> **Note:** The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
+:::note
+The React Doctor rules used to be bundled into the `react`, `next`, and `tanstack` presets. They now live in `js-plugins` so those framework presets stay on the fast native path. Extend `js-plugins` alongside your framework preset to keep them.
+:::
 
 React Doctor's framework-specific rules are split into per-framework add-on presets so they only run where they apply — `nextjs-*` rules like `nextjs-no-img-element` fire on plain `<img>`/`<a>` JSX and would false-positive in non-Next.js apps. `init` wires these up automatically when you pick the matching framework together with `oxlint-plugin-react-doctor`:
 
@@ -89,9 +89,13 @@ export default defineConfig({
 });
 ```
 
-> **Note:** `jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on your root config. Oxlint already loads them from the extended preset, but dependency analyzers such as [Knip](https://knip.dev) only read `jsPlugins` from the root config and would otherwise report the packages as unused devDependencies. `ultracite init` emits this line for you.
+:::note
+`jsPlugins: jsPlugins.jsPlugins` re-declares the plugin packages on your root config. Oxlint already loads them from the extended preset, but dependency analyzers such as [Knip](https://knip.dev) only read `jsPlugins` from the root config and would otherwise report the packages as unused devDependencies. `ultracite init` emits this line for you.
+:::
 
-> **Note:** `settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
+:::note
+`settings: jsPluginSettings` must live on your root config — Oxlint does not merge `settings` from extended configs. It keeps React Doctor's ported rules (such as `only-export-components`) in their framework-aware "curated" mode, so Next.js route-segment exports like `export const dynamic = "force-static"` are not flagged as non-component exports.
+:::
 
 In a Next.js or TanStack app, add the matching add-on preset as well:
 
@@ -274,6 +278,50 @@ export default defineConfig({
 ```
 
 This approach lets you opt in to additional checks without Ultracite taking on third-party dependencies in its core preset.
+
+### Effect
+
+[Effect](https://effect.website/)'s type-aware diagnostics — floating Effects, unhandled error and requirement channels, Layer and Scope mistakes, and Effect-native alternatives to `console`, `Date`, `process.env`, and friends — are available to Oxlint through [`@effect/tsgo`](https://github.com/Effect-TS/tsgo). Ultracite doesn't ship an Effect preset because the `effecttsgo` plugin isn't part of stock Oxlint: `@effect/tsgo` replaces the installed `oxlint` and `oxlint-tsgolint` binaries with builds that include it, and only supports specific versions of each. Layer it on top of `core` yourself:
+
+```package-install
+npm install -D @effect/tsgo oxlint-tsgolint
+```
+
+Patch the binaries after every install with a `prepare` script (`--no-typescript` limits the patch to Oxlint; drop it if you also want Effect's TypeScript-Go integration):
+
+```json title="package.json"
+{
+  "scripts": {
+    "prepare": "effect-tsgo patch --no-typescript --oxlint"
+  }
+}
+```
+
+Then extend one of the presets `@effect/tsgo` ships:
+
+```ts title="oxlint.config.ts"
+import { strict } from "@effect/tsgo/oxlint-presets";
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core, strict],
+  ignorePatterns: core.ignorePatterns,
+  rules: {
+    "effecttsgo/global-console-in-effect": "error",
+    "effecttsgo/global-date-in-effect": "error",
+  },
+});
+```
+
+`strict` raises every Effect diagnostic that is on by default to `error`; use `recommended` instead to keep upstream's severities. Both presets turn on Oxlint's type-aware mode, so `--type-aware` isn't needed — and core's type-aware rules, such as `typescript/no-floating-promises`, run too. Upstream leaves some rules off, like the `*-in-effect` family above; enable the ones you want in `rules`, but skip `effecttsgo/strict-boolean-expressions`, which duplicates core's `typescript/strict-boolean-expressions`. Some rules only apply to Effect 3 or Effect 4 and do nothing on the other major version — see the [rule list](https://github.com/Effect-TS/tsgo#diagnostic-status).
+
+A few things to keep in mind:
+
+- Unpatched Oxlint fails the whole run with `Unknown plugin: 'effecttsgo'`, so the patch has to be in place everywhere you lint, CI included.
+- Reinstalling or upgrading `oxlint` or `oxlint-tsgolint` (including through `ultracite upgrade`) can restore the stock binaries without re-running `prepare`. Run `npx effect-tsgo patch --no-typescript --oxlint` again afterwards.
+- The patch refuses versions it doesn't support, which fails the install. Check the supported versions in the [`@effect/tsgo` README](https://github.com/Effect-TS/tsgo#supported-package-versions) before upgrading either package.
+- Effect's fixes are reported as suggestions, so `ultracite fix` only applies them with `--unsafe`.
 
 ## Enforcing Path Aliases
 

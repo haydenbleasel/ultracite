@@ -1,13 +1,15 @@
 ---
 title: Agent Hooks
-description: Run Ultracite after AI-assisted file edits with editor hooks so formatting and safe fixes happen automatically before review.
+description: Run Ultracite after AI-assisted file edits with agent hooks so formatting and safe fixes happen automatically before review.
 ---
 
 Ultracite can automatically format and fix code after AI coding assistants make edits through hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
 The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs your project's `fix` script (which runs `ultracite fix`) to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
 
-> **Note:** Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+:::note
+Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
+:::
 
 ## Setup
 
@@ -15,9 +17,9 @@ Some tools like Cursor, Windsurf, CodeBuddy, Claude Code, and GitHub Copilot sup
 
 ### Automatic Setup
 
-When you run `npx ultracite init`, you'll be prompted to select which editor hooks you want to enable:
+When you run `npx ultracite init`, you'll be prompted to select which agent hooks you want to enable:
 
-```bash
+```text
 ? Which agent hooks do you want to enable (optional)?
   ◯ Cursor
   ◯ Windsurf
@@ -36,6 +38,22 @@ Ultracite writes the following files:
 - Claude Code: `.claude/settings.json`
 - GitHub Copilot: `.github/hooks/ultracite.json`
 
+The GitHub Copilot file uses the format the Copilot CLI and cloud agent read (a numeric `version` and camelCase events), which VS Code also understands:
+
+```json title=".github/hooks/ultracite.json"
+{
+  "hooks": {
+    "postToolUse": [
+      {
+        "command": "npm run fix -- --hook",
+        "type": "command"
+      }
+    ]
+  },
+  "version": 1
+}
+```
+
 ### Manual Setup
 
 If you want to manually set things up or add hooks after initialization, run:
@@ -44,19 +62,19 @@ If you want to manually set things up or add hooks after initialization, run:
 npx ultracite init --hooks cursor windsurf codebuddy claude copilot
 ```
 
-Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
+This keeps the project's current linter and your changes to its configs. Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
 
 ## How It Works
 
 1. **Automatic Execution**: After the AI agent edits a file, the hook automatically runs your project's `fix` script (added to `package.json` during init) with `--hook`. On Biome projects, the hook also passes `--skip=correctness/noUnusedImports` to avoid removing imports mid-edit.
-2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor and Windsurf send the path. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
+2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Windsurf, GitHub Copilot in VS Code, and the Copilot CLI all send the path; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
 3. **Code Formatting**: Ultracite formats the edited code according to your linter configuration
 4. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
 5. **Seamless Integration**: The process happens transparently without interrupting your workflow
 
 ## Benefits
 
-Using Ultracite editor hooks provides several advantages:
+Using Ultracite agent hooks provides several advantages:
 
 - **Consistency**: All AI-generated code is automatically formatted to match your style
 - **Quality**: Linting issues are fixed immediately after code generation
@@ -69,7 +87,8 @@ Using Ultracite editor hooks provides several advantages:
 Ultracite intelligently merges with existing hook configurations:
 
 - **Preserves existing hooks**: All existing hooks and their commands remain intact
-- **Avoids duplicates**: If Ultracite is already configured, it won't be added again
+- **Avoids duplicates**: If a hook command already runs Ultracite, it won't be added again. Only hook commands are checked, so a settings file that mentions Ultracite elsewhere (in a permission rule, say) still gets the hook
+- **Upgrades old hooks**: Re-running init replaces a hook command written by an earlier version (including the commands written by 7.8.2 and earlier, and GitHub Copilot's old `PostToolUse` format) instead of adding a second hook next to it
 - **Non-destructive**: Your existing hook configuration structure is maintained
 
 You can also customize the hook behavior by modifying the hook configuration files directly if you need different formatting commands or additional post-edit actions.

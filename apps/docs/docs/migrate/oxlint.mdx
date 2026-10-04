@@ -18,8 +18,8 @@ If you're already using Oxlint and want to switch to Ultracite's preconfigured s
 Make sure you have:
 
 - An existing project using Oxlint
-- Node.js 20+
-- An Oxlint configuration file (e.g., `oxlint.config.ts`)
+- Node.js 20.19+ (or 22.13+ on Node 22)
+- An Oxlint configuration file (`.oxlintrc.json`, `oxlint.config.ts`, or `oxlint.config.mts`)
 
 ## Migration Options
 
@@ -31,21 +31,25 @@ The fastest way is to run the [automatic setup script](/docs/setup#installation)
 npx ultracite init
 ```
 
-When prompted, select **Oxlint** as your linting provider. This will:
+When prompted, select **Oxlint** as your linting provider (it's preselected when init finds your Oxlint config). This will:
 
-- Install Ultracite as a dependency
-- Merge your existing `oxlint.config.ts` with Ultracite's preset
-- Create an `oxfmt.config.ts` for formatting configuration
-- Merge your existing `.vscode/settings.json` with Ultracite's preset
-- Enable `strictNullChecks` in your existing `tsconfig.json` files (skipped if your project has none)
-- Preserve your custom rules and settings
+- Install Ultracite, Oxlint, and Oxfmt as dependencies
+- Add Ultracite's presets to your existing `oxlint.config.ts` or `oxlint.config.mts`, keeping your own imports, extra `extends` entries, `rules`, `overrides`, `ignorePatterns`, `jsPlugins`, `settings`, and comments
+- Move the rules and options from an `.oxlintrc.json`, `.oxfmtrc.json`, or `.oxfmtrc.jsonc` into the TypeScript configs and delete the JSON files (Oxlint and Oxfmt refuse to run with two configs in one directory)
+- Create or update an `oxfmt.config.ts` (or `.mts`) that builds on Ultracite's formatting preset, keeping your own options
+- Update your `.vscode/settings.json` in place, keeping your settings and comments (if you set up a VS Code-based editor)
+- Enable `strictNullChecks` in your `tsconfig.json` files, unless it's already on (directly or through `extends`) or explicitly set to `false`, which init leaves alone with a warning
 - Set up editor integrations
 
-Following the upgrade, you may want to review your `oxlint.config.ts` file to remove any overrides that are now handled by Ultracite's preset.
+New configs are named `.ts` in an ES module package (`"type": "module"` in `package.json`) and `.mts` otherwise, since Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`. An existing config keeps its name, except a `.ts` config in a `"commonjs"` package, which is renamed to `.mts`.
+
+If a config can't be parsed, init leaves it unchanged and warns; if it doesn't export a config object init can update, it's replaced with the Ultracite config and a warning names the file. An `.oxlintrc.json` that extends other files by path gets a warning listing them, so you can import them yourself.
+
+After migrating, you may want to review your Oxlint config to remove any overrides that are now handled by Ultracite's preset.
 
 ### Option 2: Manual Migration
 
-If you prefer more control over the process, create an `oxlint.config.ts` that extends Ultracite:
+If you prefer more control over the process, create an `oxlint.config.ts` (or `oxlint.config.mts` if your `package.json` doesn't set `"type": "module"`) that extends Ultracite, and move over anything you need from `.oxlintrc.json` before deleting it:
 
 ```ts title="oxlint.config.ts"
 import { defineConfig } from "oxlint";
@@ -58,7 +62,7 @@ export default defineConfig({
 });
 ```
 
-Then create an `oxfmt.config.ts` that imports Ultracite's formatting preset:
+Then create an `oxfmt.config.ts` (or `.mts`) that imports Ultracite's formatting preset:
 
 ```ts title="oxfmt.config.ts"
 import { defineConfig } from "oxfmt";

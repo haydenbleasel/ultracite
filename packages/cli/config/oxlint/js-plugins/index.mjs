@@ -1,5 +1,10 @@
 import { defineConfig } from "oxlint";
 
+import {
+  PAGE_ROUTE_FILENAME_PATTERN,
+  ROUTE_FILE_GLOB,
+} from "../../shared/route-filenames.mjs";
+
 // eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
 // run through oxlint's JS plugin support to close the gap with the ESLint
 // preset and to add React Doctor's extra checks. This preset is opt-in: extend
@@ -65,12 +70,6 @@ export const jsPluginSettings = {
   },
 };
 
-// Filename grammar for file-based page routes: one or more kebab-case tokens
-// or bracketed route params (`[slug]`, `[...slug]`, `[[...slug]]`), followed
-// by at most one extra dotted segment (`rss.xml`, `[slug].json`).
-const PAGE_ROUTE_FILENAME_PATTERN =
-  "^(?:\\[\\[\\.\\.\\.[a-z0-9-]+\\]\\]|\\[(?:\\.\\.\\.)?[a-z0-9-]+\\]|[a-z0-9-]+)+(?:\\.[a-z0-9-]+)?$";
-
 const config = defineConfig({
   jsPlugins: jsPluginEntries,
   // Inert until oxlint merges settings from extends; the root config applies
@@ -79,8 +78,8 @@ const config = defineConfig({
   overrides: [
     {
       files: [
-        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
-        "**/__tests__/**/*.{ts,tsx,js,jsx}",
+        "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+        "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
       ],
       rules: {
         // Repeated string literals (test titles, expected values) are normal
@@ -89,11 +88,12 @@ const config = defineConfig({
       },
     },
     {
-      files: ["**/routes/**/*.{tsx,ts}", "**/app/routes/**/*.{tsx,ts}"],
+      files: [ROUTE_FILE_GLOB],
       rules: {
-        // File-based routers (TanStack Router, React Router) encode routing
-        // in the filename: `__root.tsx`, `$.tsx`, `posts.$postId.tsx`,
-        // `_layout.tsx`, `{-$slug}.tsx`. The GitHub kebab-case regex cannot
+        // File-based routers (TanStack Router, React Router, SvelteKit)
+        // encode routing in the filename: `__root.tsx`, `$.tsx`,
+        // `posts.$postId.tsx`, `_layout.tsx`, `{-$slug}.tsx`, `+page.ts`.
+        // The GitHub kebab-case regex cannot
         // express that grammar, and the tanstack preset already exempts these
         // globs from unicorn/filename-case for the same reason (#799). This
         // lives here rather than in tanstack/js-plugins because selectJsPlugins
@@ -109,10 +109,11 @@ const config = defineConfig({
         // Astro and Next.js (pages router) encode dynamic, rest and optional
         // route parameters in bracketed page filenames: `[slug].astro`,
         // `[...slug].astro`, `[[...slug]].tsx`, `[lang]-[version].astro`
-        // (#804). Rather than switching the rule off, pass a bracket-aware
-        // regex so non-route names in `pages/` (`BadPage.ts`) are still
-        // rejected. Like the default, one extra dotted segment is allowed for
-        // endpoints such as `rss.xml.ts` and `[slug].json.ts`.
+        // (#804), and Next.js requires `_app`, `_document` and `_error`.
+        // Rather than switching the rule off, pass a route-aware regex so
+        // non-route names in `pages/` (`BadPage.ts`) are still rejected. Like
+        // the default, one extra dotted segment is allowed for endpoints such
+        // as `rss.xml.ts` and `[slug].json.ts`.
         "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
       },
     },
@@ -149,17 +150,16 @@ const config = defineConfig({
     "github/unescaped-html-literal": "off",
 
     // ── sonarjs ────────────────────────────────────────────────────────
-    // These sonarjs rules exist in eslint-plugin-sonarjs but oxlint's JS
-    // plugin bridge does not register them, so listing them fails config
-    // parsing. They are intentionally omitted here (still enabled in the
-    // ESLint preset): async-test-assertions, hooks-before-test-cases,
-    // no-duplicate-test-title, no-empty-test-title, no-floating-point-equality,
-    // no-forced-browser-interaction, no-trivial-assertions,
-    // prefer-specific-assertions, super-linear-regex.
+    // Every non-deprecated sonarjs rule that does not require type checking
+    // (the JS plugin bridge has no type information); the type-aware rules
+    // stay enabled in the ESLint preset only.
     "sonarjs/arguments-usage": "error",
     "sonarjs/array-constructor": "error",
     // Fights the formatter (arrowParentheses: always).
     "sonarjs/arrow-function-convention": "off",
+    "sonarjs/assertions-in-test-cases": "error",
+    "sonarjs/async-test-assertions": "error",
+    "sonarjs/avoid-mutating-nested-properties-of-shallow-clones": "error",
     "sonarjs/aws-apigateway-public-api": "error",
     "sonarjs/aws-ec2-rds-dms-public": "error",
     "sonarjs/aws-ec2-unencrypted-ebs-volume": "error",
@@ -188,6 +188,7 @@ const config = defineConfig({
     "sonarjs/cognitive-complexity": ["error", 20],
     "sonarjs/comma-or-logical-or-case": "error",
     "sonarjs/comment-regex": "error",
+    "sonarjs/composite-assertions": "error",
     "sonarjs/constructor-for-side-effects": "error",
     "sonarjs/content-length": "error",
     "sonarjs/content-security-policy": "error",
@@ -203,6 +204,7 @@ const config = defineConfig({
     // Mirrors the ESLint preset.
     "sonarjs/elseif-without-else": "off",
     "sonarjs/encryption-secure-mode": "error",
+    "sonarjs/explicit-test-skip": "error",
     "sonarjs/expression-complexity": "error",
     // Requires a headerFormat option; errors on every file without one.
     "sonarjs/file-header": "off",
@@ -220,6 +222,7 @@ const config = defineConfig({
     "sonarjs/generator-without-yield": "error",
     "sonarjs/hardcoded-secret-signatures": "error",
     "sonarjs/hashing": "error",
+    "sonarjs/hooks-before-test-cases": "error",
     "sonarjs/inconsistent-function-call": "error",
     "sonarjs/insecure-cookie": "error",
     "sonarjs/insecure-jwt-token": "error",
@@ -232,6 +235,7 @@ const config = defineConfig({
     "sonarjs/max-lines-per-function": "off",
     "sonarjs/max-switch-cases": "error",
     "sonarjs/max-union-size": "error",
+    "sonarjs/memoize-cache-key": "error",
     "sonarjs/misplaced-loop-counter": "error",
     // Duplicate of max-depth, which is off.
     "sonarjs/nested-control-flow": "off",
@@ -244,17 +248,27 @@ const config = defineConfig({
     "sonarjs/no-collapsible-if": "error",
     "sonarjs/no-commented-code": "error",
     "sonarjs/no-dead-store": "error",
+    "sonarjs/no-debounce-throttle-in-render": "error",
+    "sonarjs/no-debug-commands-in-ui-tests": "error",
+    "sonarjs/no-default-utility-imports": "error",
     "sonarjs/no-delete-var": "error",
     "sonarjs/no-duplicate-in-composite": "error",
+    "sonarjs/no-duplicate-parameterized-test-case": "error",
     "sonarjs/no-duplicate-string": "error",
+    "sonarjs/no-duplicate-test-title": "error",
     "sonarjs/no-duplicated-branches": "error",
     "sonarjs/no-element-overwrite": "error",
     "sonarjs/no-empty-collection": "error",
+    "sonarjs/no-empty-parameterized-test-dataset": "error",
     "sonarjs/no-empty-test-file": "error",
+    "sonarjs/no-empty-test-title": "error",
     "sonarjs/no-equals-in-for-termination": "error",
     "sonarjs/no-exclusive-tests": "error",
     "sonarjs/no-extra-arguments": "error",
     "sonarjs/no-fallthrough": "error",
+    "sonarjs/no-fixed-wait-in-tests": "error",
+    "sonarjs/no-floating-point-equality": "error",
+    "sonarjs/no-forced-browser-interaction": "error",
     "sonarjs/no-function-declaration-in-block": "error",
     "sonarjs/no-global-this": "error",
     "sonarjs/no-globals-shadowing": "error",
@@ -273,17 +287,22 @@ const config = defineConfig({
     "sonarjs/no-implicit-global": "error",
     "sonarjs/no-incomplete-assertions": "error",
     "sonarjs/no-internal-api-use": "error",
+    "sonarjs/no-interpolation-in-inline-snapshots": "error",
     "sonarjs/no-invariant-returns": "error",
     "sonarjs/no-inverted-boolean-check": "error",
     "sonarjs/no-labels": "error",
     "sonarjs/no-literal-call": "error",
     "sonarjs/no-mime-sniff": "error",
+    "sonarjs/no-mixed-completion-style": "error",
+    "sonarjs/no-mutate-reactive-state-in-updated-hook": "error",
     "sonarjs/no-nested-assignment": "error",
     "sonarjs/no-nested-conditional": "error",
-    "sonarjs/no-nested-functions": "error",
+    // sonarjs 4.2.1 raised the default threshold to 5; keep the stricter 4.
+    "sonarjs/no-nested-functions": ["error", { threshold: 4 }],
     "sonarjs/no-nested-incdec": "error",
     "sonarjs/no-nested-switch": "error",
     "sonarjs/no-nested-template-literals": "error",
+    "sonarjs/no-networkidle-wait": "error",
     "sonarjs/no-os-command-from-path": "error",
     "sonarjs/no-parameter-reassignment": "error",
     "sonarjs/no-primitive-wrappers": "error",
@@ -299,6 +318,7 @@ const config = defineConfig({
     "sonarjs/no-skipped-tests": "error",
     "sonarjs/no-sonar-comments": "error",
     "sonarjs/no-table-as-layout": "error",
+    "sonarjs/no-trivial-assertions": "error",
     "sonarjs/no-undefined-assignment": "error",
     "sonarjs/no-unenclosed-multiline-block": "error",
     "sonarjs/no-uniq-key": "error",
@@ -311,15 +331,23 @@ const config = defineConfig({
     "sonarjs/no-useless-increment": "error",
     "sonarjs/no-useless-react-setstate": "error",
     "sonarjs/no-variable-usage-before-declaration": "error",
+    "sonarjs/no-vue-class-component": "error",
+    "sonarjs/no-vue-mixins": "error",
     "sonarjs/no-weak-cipher": "error",
     "sonarjs/no-weak-keys": "error",
     "sonarjs/no-wildcard-import": "error",
     "sonarjs/non-existent-operator": "error",
     "sonarjs/object-alt-content": "error",
+    "sonarjs/parameterized-tests": "error",
+    "sonarjs/prefer-cypress-should": "error",
     "sonarjs/prefer-default-last": "error",
+    "sonarjs/prefer-native-axios-alternative": "error",
+    "sonarjs/prefer-native-jquery-alternative": "error",
+    "sonarjs/prefer-native-lodash-alternative": "error",
     "sonarjs/prefer-object-literal": "error",
     "sonarjs/prefer-promise-shorthand": "error",
     "sonarjs/prefer-single-boolean-return": "error",
+    "sonarjs/prefer-specific-assertions": "error",
     "sonarjs/prefer-type-guard": "error",
     "sonarjs/prefer-while": "error",
     "sonarjs/production-debug": "error",
@@ -334,9 +362,13 @@ const config = defineConfig({
     "sonarjs/stable-tests": "error",
     "sonarjs/stateful-regex": "error",
     "sonarjs/strict-transport-security": "error",
+    "sonarjs/super-linear-regex": "error",
+    "sonarjs/synchronous-suite-callback": "error",
     "sonarjs/table-header": "error",
     "sonarjs/table-header-reference": "error",
     "sonarjs/test-check-exception": "error",
+    "sonarjs/testing-library-prefer-query-by-disappearance": "error",
+    "sonarjs/testing-library-query-assertion": "error",
     "sonarjs/todo-tag": "error",
     "sonarjs/too-many-break-or-continue-in-loop": "error",
     "sonarjs/unverified-certificate": "error",
@@ -345,6 +377,7 @@ const config = defineConfig({
     "sonarjs/updated-loop-counter": "error",
     "sonarjs/use-type-alias": "error",
     "sonarjs/variable-name": "error",
+    "sonarjs/vitest-mock-at-module-scope": "error",
     "sonarjs/weak-ssl": "error",
     "sonarjs/x-powered-by": "error",
     "sonarjs/xml-parser-xxe": "error",

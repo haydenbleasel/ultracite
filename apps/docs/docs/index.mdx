@@ -43,7 +43,7 @@ Ultracite should be as invisible as possible. Preferably, it should not require 
 
 ### Maximum type safety
 
-Ultracite is designed to be as type-safe as possible. It uses TypeScript's strict mode and additional lint rules to catch errors and provide suggestions for improvements.
+Ultracite is designed to be as type-safe as possible. Setup turns on `strictNullChecks` in your `tsconfig.json` files (unless it's already on through `extends` or you've explicitly turned it off), and the presets add lint rules that catch unsafe typing and suggest improvements.
 
 ### Plays nice with others
 

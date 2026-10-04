@@ -2,8 +2,6 @@ import typescript from "@typescript-eslint/eslint-plugin";
 // biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import eslintPrettier from "eslint-config-prettier";
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint plugin compatibility
-import * as importTypescriptResolver from "eslint-import-resolver-typescript"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint resolver compatibility
 import compat from "eslint-plugin-compat";
 import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
@@ -20,6 +18,10 @@ import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 
 import { ignorePatterns } from "../../shared/ignores.mjs";
+import {
+  PAGE_ROUTE_FILENAME_PATTERN,
+  ROUTE_FILE_GLOB,
+} from "../../shared/route-filenames.mjs";
 import compatRules from "./rules/compat.mjs";
 import cypressRules from "./rules/cypress.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
@@ -36,26 +38,25 @@ import typescriptRules from "./rules/typescript.mjs";
 import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
-const config = [
+const core = [
   importX.flatConfigs.typescript,
   {
     ignores: ignorePatterns,
   },
   {
-    files: [
-      "**/*.js",
-      "**/*.ts",
-      "**/*.json",
-      "**/*.mjs",
-      "**/*.cjs",
-      "**/*.html",
-    ],
+    // Every JavaScript and TypeScript module extension, plus inline scripts
+    // in HTML. JSON is deliberately absent: espree cannot parse it, and the
+    // oxlint benchmark does not lint JSON either.
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/*.html"],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
       },
       parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
         ecmaVersion: "latest",
         sourceType: "module",
       },
@@ -80,22 +81,31 @@ const config = [
       ...promiseRules,
       ...nRules,
       ...prettierRules,
+      ...unusedImportsRules,
+      ...sonarjsRules,
+      ...compatRules,
+      ...unicornRules,
+      ...githubRules,
+      // eslint-config-prettier goes after every plugin spread: the all-on
+      // plugin rule sets would otherwise re-enable the formatting rules it
+      // turns off. unicorn/number-literal-case was the visible casualty —
+      // it demands `0xABCD` while Prettier prints `0xabcd`, so no hex
+      // literal could satisfy both.
       ...eslintPrettier.rules,
       // eslint-config-prettier disables these defensively, but they don't
       // conflict with our Prettier settings and the oxlint config enforces
       // them alongside oxfmt.
       curly: "error",
       "no-unexpected-multiline": "error",
-      ...unusedImportsRules,
-      ...sonarjsRules,
-      ...compatRules,
-      ...unicornRules,
-      ...githubRules,
+      // Prettier prints empty braces as `{}` too, so this cannot fight it.
+      "unicorn/empty-brace-spaces": "error",
     },
 
     settings: {
+      // TypeScript extensions are mapped to @typescript-eslint/parser by
+      // importX.flatConfigs.typescript above.
       "import-x/parsers": {
-        espree: [".js", ".cjs", ".mjs", ".ts"],
+        espree: [".js", ".jsx", ".cjs", ".mjs"],
       },
       "import-x/resolver": {
         node: true,
@@ -104,16 +114,20 @@ const config = [
     },
   },
   {
-    files: ["**/*.ts"],
+    files: ["**/*.{ts,tsx,mts,cts}"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
-        project: "./tsconfig.json",
+        // The project service finds the nearest tsconfig for each file, so
+        // solution-style configs (`"files": []` plus `references`, as in the
+        // Vite templates) and monorepo packages get type information. A
+        // fixed `project: "./tsconfig.json"` failed every file in those
+        // layouts.
+        projectService: true,
       },
     },
     plugins: {
       "@typescript-eslint": typescript,
-      "import/typescript": importTypescriptResolver,
     },
     rules: {
       ...eslintTypescriptRules,
@@ -121,21 +135,19 @@ const config = [
     },
   },
   {
-    files: ["**/*.cy.js"],
-    languageOptions: {
-      globals: {
-        ...globals.cypress,
-      },
-    },
-    plugins: {
-      cypress,
-    },
+    // Registers the plugin plus the cy, Cypress, Mocha and Chai globals that
+    // specs and support files use without importing them.
+    ...cypress.configs.globals,
+    files: [
+      "**/*.cy.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+      "**/cypress/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+    ],
     rules: {
       ...cypressRules,
     },
   },
   {
-    files: ["**/*.stories.js", "**/*.stories.ts"],
+    files: ["**/*.{stories,story}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
     plugins: {
       storybook,
     },
@@ -156,13 +168,31 @@ const config = [
     // Repeated string literals (test titles, expected values) are normal and
     // idiomatic in test files. Mirrors the oxlint core test override.
     files: [
-      "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}",
-      "**/__tests__/**/*.{ts,tsx,js,jsx}",
+      "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+      "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
     ],
     rules: {
       "sonarjs/no-duplicate-string": "off",
     },
   },
+  {
+    // File-based routers encode the URL in route filenames (`__root.tsx`,
+    // `$.tsx`, `posts.$postId.tsx`, `+page.ts`), which the kebab-case regex
+    // cannot express. Mirrors the oxlint js-plugins preset (#799).
+    files: [ROUTE_FILE_GLOB],
+    rules: {
+      "github/filenames-match-regex": "off",
+    },
+  },
+  {
+    // Page routes (`[slug].ts`, `[...slug].ts`, `_app.tsx`) get a
+    // route-aware regex instead, so other names in `pages/` are still
+    // checked. Mirrors the oxlint js-plugins preset (#804).
+    files: ["**/pages/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
+    rules: {
+      "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
+    },
+  },
 ];
 
-export default config;
+export default core;

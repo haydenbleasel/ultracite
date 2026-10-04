@@ -1,13 +1,21 @@
 import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
 import { any as findUpAny } from "empathic/find";
 import { findWorkspaces } from "find-workspaces";
+import { z } from "zod";
 
 import type { Framework } from "./data/options";
-import { readPackageJson, readPackageJsonSync } from "./schemas";
+import type { JsonObject, JsonValue } from "./data/types";
+import {
+  detectJsonFormatting,
+  packageJsonSchema,
+  parseJsoncStrict,
+  readPackageJson,
+  readPackageJsonSync,
+} from "./schemas";
 
 const pnpmWorkspaceFile = "pnpm-workspace.yaml";
 
@@ -134,6 +142,78 @@ export const writeProjectFile = async (
   await writeFile(filePath, content);
 };
 
+const packageJsonPath = "package.json";
+
+const jsonObjectSchema = z.record(z.string(), z.json());
+
+export const isJsonObject = (
+  value: JsonValue | undefined
+): value is JsonObject =>
+  value !== undefined &&
+  value !== null &&
+  !Array.isArray(value) &&
+  jsonObjectSchema.safeParse(value).success;
+
+/**
+ * Read package.json, let `edit` change it in place, and write it back with the
+ * file's own indentation and line endings. The raw document is edited rather
+ * than a schema-parsed copy so every key keeps its position; new keys are
+ * appended. Returning false from `edit` skips the write.
+ */
+export const editPackageJson = async (
+  edit: (packageJson: JsonObject) => boolean | undefined
+): Promise<boolean> => {
+  let content: string | undefined;
+
+  try {
+    content = await readFile(packageJsonPath, "utf-8");
+  } catch {
+    content = undefined;
+  }
+
+  const packageJson =
+    content === undefined
+      ? undefined
+      : parseJsoncStrict(content, jsonObjectSchema);
+
+  if (
+    content === undefined ||
+    !packageJson ||
+    !packageJsonSchema.safeParse(packageJson).success
+  ) {
+    throw new Error("Failed to parse package.json: file is missing or invalid");
+  }
+
+  if (edit(packageJson) === false) {
+    return false;
+  }
+
+  const { eol = "\n", insertSpaces, tabSize } = detectJsonFormatting(content);
+  const indent = insertSpaces ? tabSize : "\t";
+  const serialized = JSON.stringify(packageJson, null, indent).replaceAll(
+    "\n",
+    eol
+  );
+
+  await writeProjectFile(packageJsonPath, `${serialized}${eol}`);
+  return true;
+};
+
+const mergeInto = (
+  packageJson: JsonObject,
+  key: string,
+  values: Record<string, string>
+): void => {
+  const existing = packageJson[key];
+  const merged: JsonObject = {};
+
+  if (isJsonObject(existing)) {
+    Object.assign(merged, existing);
+  }
+
+  packageJson[key] = Object.assign(merged, values);
+};
+
 export const updatePackageJson = async ({
   dependencies,
   devDependencies,
@@ -145,47 +225,25 @@ export const updatePackageJson = async ({
   scripts?: Record<string, string>;
   type?: string;
 }) => {
-  const packageJsonObject = await readPackageJson();
-  if (!packageJsonObject) {
-    throw new Error("Failed to parse package.json: file is missing or invalid");
-  }
+  await editPackageJson((packageJson) => {
+    if (type) {
+      packageJson.type = type;
+    }
 
-  const newPackageJsonObject = {
-    ...packageJsonObject,
-  };
+    if (devDependencies) {
+      mergeInto(packageJson, "devDependencies", devDependencies);
+    }
 
-  if (type) {
-    newPackageJsonObject.type = type;
-  }
+    if (dependencies) {
+      mergeInto(packageJson, "dependencies", dependencies);
+    }
 
-  // Only add devDependencies if they exist in the original package.json or are being added
-  if (packageJsonObject.devDependencies || devDependencies) {
-    newPackageJsonObject.devDependencies = {
-      ...packageJsonObject.devDependencies,
-      ...devDependencies,
-    };
-  }
+    if (scripts) {
+      mergeInto(packageJson, "scripts", scripts);
+    }
 
-  // Only add dependencies if they exist in the original package.json or are being added
-  if (packageJsonObject.dependencies || dependencies) {
-    newPackageJsonObject.dependencies = {
-      ...packageJsonObject.dependencies,
-      ...dependencies,
-    };
-  }
-
-  // Only add scripts if they exist in the original package.json or are being added
-  if (packageJsonObject.scripts || scripts) {
-    newPackageJsonObject.scripts = {
-      ...packageJsonObject.scripts,
-      ...scripts,
-    };
-  }
-
-  await writeProjectFile(
-    "package.json",
-    `${JSON.stringify(newPackageJsonObject, null, 2)}\n`
-  );
+    return true;
+  });
 };
 
 /**
@@ -233,11 +291,12 @@ export const biomeConfigNames = [
   ".biome.jsonc",
 ] as const;
 
-// ESLint flat config file locations.
+// ESLint flat config file locations, in the order ESLint looks for them
+// (FLAT_CONFIG_FILENAMES in eslint/lib/config/config-loader.js).
 // https://eslint.org/docs/latest/use/configure/configuration-files
 export const eslintConfigNames = [
-  "eslint.config.mjs",
   "eslint.config.js",
+  "eslint.config.mjs",
   "eslint.config.cjs",
   "eslint.config.ts",
   "eslint.config.mts",
@@ -254,58 +313,113 @@ export const legacyEslintConfigNames = [
   ".eslintrc.yml",
 ] as const;
 
-// Prettier config file locations.
-// https://prettier.io/docs/en/configuration.html
+// Prettier config file locations, in the order Prettier searches a
+// directory (after the "prettier" key in package.json).
+// https://prettier.io/docs/configuration
 export const prettierConfigNames = [
-  // JS/TS configs (ESM)
-  ".prettierrc.mjs",
-  "prettier.config.mjs",
-  ".prettierrc.mts",
-  "prettier.config.mts",
-  // JS/TS configs (CJS)
-  ".prettierrc.cjs",
-  "prettier.config.cjs",
-  ".prettierrc.cts",
-  "prettier.config.cts",
-  // JS/TS configs (depends on package.json type)
+  ".prettierrc",
+  ".prettierrc.json",
+  ".prettierrc.yml",
+  ".prettierrc.yaml",
+  ".prettierrc.json5",
   ".prettierrc.js",
   "prettier.config.js",
   ".prettierrc.ts",
   "prettier.config.ts",
-  // JSON/YAML configs
-  ".prettierrc",
-  ".prettierrc.json",
-  ".prettierrc.json5",
-  ".prettierrc.yml",
-  ".prettierrc.yaml",
-  // TOML config
+  ".prettierrc.mjs",
+  "prettier.config.mjs",
+  ".prettierrc.mts",
+  "prettier.config.mts",
+  ".prettierrc.cjs",
+  "prettier.config.cjs",
+  ".prettierrc.cts",
+  "prettier.config.cts",
   ".prettierrc.toml",
 ] as const;
 
-// Stylelint config file locations.
+// Stylelint config file locations, in the order Stylelint (through
+// cosmiconfig) searches a directory, after the "stylelint" key in
+// package.json.
 // https://stylelint.io/user-guide/configure
 export const stylelintConfigNames = [
-  // JS configs (ESM)
-  ".stylelintrc.mjs",
-  "stylelint.config.mjs",
-  // JS configs (CJS)
-  ".stylelintrc.cjs",
-  "stylelint.config.cjs",
-  // JS configs (depends on package.json type)
-  ".stylelintrc.js",
-  "stylelint.config.js",
-  // JSON/YAML configs
   ".stylelintrc",
   ".stylelintrc.json",
-  ".stylelintrc.yml",
   ".stylelintrc.yaml",
+  ".stylelintrc.yml",
+  ".stylelintrc.js",
+  ".stylelintrc.ts",
+  ".stylelintrc.cjs",
+  ".stylelintrc.mjs",
+  "stylelint.config.js",
+  "stylelint.config.ts",
+  "stylelint.config.cjs",
+  "stylelint.config.mjs",
 ] as const;
 
+// Oxlint and oxfmt each load exactly one config per directory and refuse to
+// run when two of these sit side by side. Ultracite writes the .ts form in an
+// ES module package and the .mts form otherwise (see resolveEsmConfigPath);
+// the JSON forms are what `oxlint --init` / `oxfmt --init` create.
 export const oxlintConfigNames = [
   ".oxlintrc.json",
   "oxlint.config.ts",
+  "oxlint.config.mts",
 ] as const;
-export const oxfmtConfigNames = ["oxfmt.config.ts"] as const;
+export const oxfmtConfigNames = [
+  "oxfmt.config.ts",
+  "oxfmt.config.mts",
+  ".oxfmtrc.json",
+  ".oxfmtrc.jsonc",
+] as const;
+
+export interface EsmConfigPaths {
+  // Both forms exist, which the tools refuse to load; nothing can be written.
+  conflict: boolean;
+  existing: string | null;
+  target: string;
+}
+
+/**
+ * Which of a TS config's two names (`name.ts` / `name.mts`) to read and
+ * write. Node loads ES module syntax from a .ts file only when package.json
+ * says "type": "module": without a "type" it prints a
+ * MODULE_TYPELESS_PACKAGE_JSON warning on every run, and with "commonjs" it
+ * can't load it at all. A .mts file is always an ES module, so a new config
+ * gets .ts in an ES module package and .mts otherwise. An existing config
+ * keeps its name, except a .ts config in a "commonjs" package, which can't
+ * load and moves to .mts. init never changes "type" itself: that would
+ * change how every .js file in the package is loaded.
+ */
+export const resolveEsmConfigPath = (
+  tsPath: string,
+  mtsPath: string
+): EsmConfigPaths => {
+  const hasTs = exists(tsPath);
+  const hasMts = exists(mtsPath);
+  const type = readPackageJsonSync()?.type;
+
+  if (hasTs && hasMts) {
+    return { conflict: true, existing: null, target: tsPath };
+  }
+
+  if (hasMts) {
+    return { conflict: false, existing: mtsPath, target: mtsPath };
+  }
+
+  if (hasTs) {
+    return {
+      conflict: false,
+      existing: tsPath,
+      target: type === "commonjs" ? mtsPath : tsPath,
+    };
+  }
+
+  return {
+    conflict: false,
+    existing: null,
+    target: type === "module" ? tsPath : mtsPath,
+  };
+};
 
 // Map dep package names → framework IDs to enable. Multiple IDs cover
 // meta-frameworks (e.g. Next.js implies React).

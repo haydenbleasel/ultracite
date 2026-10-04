@@ -24,17 +24,16 @@ const here = import.meta.dirname;
  * Intentional divergences between the ESLint and oxlint presets.
  * Keyed by oxlint-normalized rule name.
  */
-const allowlist = new Map([
-  // Off in oxlint because the JS plugin bridge provides no globals, so
-  // the rule flags every identifier. ESLint resolves globals correctly.
-  ["sonarjs/no-reference-error", "jsPlugins bridge provides no globals"],
-  // Off in oxlint due to https://github.com/oxc-project/oxc/issues/21949.
-  ["unicorn/number-literal-case", "oxc autofix bug"],
-]);
+const allowlist = new Map<string, string>();
 
-// Base rules whose @typescript-eslint twin has a different name.
-const twinAliases = new Map([
+// Base rules whose @typescript-eslint twin has a different name, looked up
+// in both directions so either name finds the other.
+const twinAliasPairs: [string, string][] = [
   ["no-throw-literal", "typescript/only-throw-error"],
+];
+const twinAliases = new Map([
+  ...twinAliasPairs,
+  ...twinAliasPairs.map(([base, twin]): [string, string] => [twin, base]),
 ]);
 
 /** A rule options value decoded from JSON (options round-trip through JSON). */

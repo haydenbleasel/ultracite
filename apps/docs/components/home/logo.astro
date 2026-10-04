@@ -1,15 +1,22 @@
 ---
 interface Props {
   class?: string;
+  /**
+   * Accessible name. Omit it when the mark sits next to the visible
+   * "Ultracite" wordmark, so screen readers don't announce the name twice.
+   */
+  label?: string;
 }
-const { class: className } = Astro.props;
+const { class: className, label } = Astro.props;
+const a11y = label
+  ? { "aria-label": label, role: "img" }
+  : { "aria-hidden": "true" as const };
 ---
 
 <svg
+  {...a11y}
   class={className}
   fill="none"
-  role="img"
-  aria-label="Ultracite"
   viewBox="0 0 507 508"
   xmlns="http://www.w3.org/2000/svg"
 >

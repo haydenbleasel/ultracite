@@ -458,8 +458,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -471,8 +470,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
@@ -570,15 +568,14 @@ describe("oxlint js-plugins config", () => {
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
-  }, 15_000);
+  });
 
   test("disables github/filenames-match-regex for route files", async () => {
     const config = await readOxlintConfig("js-plugins");
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{tsx,ts}") &&
-        override.files?.includes("**/app/routes/**/*.{tsx,ts}")
+        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -601,7 +598,7 @@ describe("oxlint js-plugins config", () => {
       "BadName.tsx",
       "Button.test.tsx",
     ]);
-  }, 15_000);
+  });
 
   test("uses a bracket-aware filenames-match-regex for page route files", async () => {
     const config = await readOxlintConfig("js-plugins");
@@ -627,10 +624,21 @@ describe("oxlint js-plugins config", () => {
       "rss.xml",
       "index",
       "404",
+      "_app",
+      "_document",
+      "_error",
     ]) {
       expect(regex.test(name), name).toBe(true);
     }
-    for (const name of ["BadPage", "[Slug]", "[slug", "a.b.c", "_app"]) {
+    for (const name of [
+      "BadPage",
+      "[Slug]",
+      "[slug",
+      "a.b.c",
+      "__app",
+      "_BadPage",
+      "[postId]",
+    ]) {
       expect(regex.test(name), name).toBe(false);
     }
   });
@@ -955,6 +963,42 @@ describe("oxlint react config", () => {
   });
 });
 
+describe("oxlint vue config", () => {
+  test("contains all non-nursery vue rules", async () => {
+    const expectedRules = getOxlintRulesForPlugins(["vue"]);
+    const config = await readOxlintConfig("vue");
+    const configRules = new Set(Object.keys(config.rules ?? {}));
+
+    const missingRules = expectedRules.filter((rule) => !configRules.has(rule));
+    expect(
+      missingRules,
+      `Vue config is missing ${missingRules.length} vue rules: ${missingRules.join(", ")}`
+    ).toEqual([]);
+  });
+});
+
+describe("oxlint test framework configs", () => {
+  for (const plugin of ["jest", "vitest"]) {
+    test(`${plugin} contains all non-nursery ${plugin} rules`, async () => {
+      const expectedRules = getOxlintRulesForPlugins([plugin]);
+      const config = await readOxlintConfig(plugin);
+      const configRules = new Set(
+        config.overrides?.flatMap((override: { rules?: object }) =>
+          Object.keys(override.rules ?? {})
+        )
+      );
+
+      const missingRules = expectedRules.filter(
+        (rule) => !configRules.has(rule)
+      );
+      expect(
+        missingRules,
+        `${plugin} config is missing ${missingRules.length} rules: ${missingRules.join(", ")}`
+      ).toEqual([]);
+    });
+  }
+});
+
 describe("oxlint next config", () => {
   test("contains all non-nursery nextjs rules", async () => {
     const expectedRules = getOxlintRulesForPlugins(["nextjs"]);
@@ -970,8 +1014,9 @@ describe("oxlint next config", () => {
 });
 
 describe("test file globs", () => {
-  const TEST_FILE_GLOB = "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}";
-  const TESTS_DIR_GLOB = "**/__tests__/**/*.{ts,tsx,js,jsx}";
+  const TEST_FILE_GLOB =
+    "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}";
+  const TESTS_DIR_GLOB = "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}";
 
   interface FilesEntry {
     files?: string[];
@@ -1030,6 +1075,19 @@ describe("test file globs", () => {
     const biome = readFileSync(biomePath, "utf-8");
 
     expect(biome).toContain(`"${TEST_FILE_GLOB}"`);
+  });
+
+  test("biome jest declares the Jest globals for test files", () => {
+    const biomePath = path.join(
+      import.meta.dirname,
+      "../config/biome/jest/biome.jsonc"
+    );
+    const biome = readFileSync(biomePath, "utf-8");
+
+    expect(biome).toContain('"**/__tests__/**/*"');
+    for (const name of ["describe", "expect", "it", "jest", "test"]) {
+      expect(biome, name).toContain(`"${name}"`);
+    }
   });
 
   test("eslint vitest enables typecheck so expectTypeOf counts as an assertion", async () => {

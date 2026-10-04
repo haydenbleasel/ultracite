@@ -6,10 +6,11 @@ import { providerLogos, prettierLogo, stylelintLogo } from "../../lib/logos";
 import { providers } from "../../lib/providers";
 import SectionIntro from "./section-intro.astro";
 
-// A representative, fixed preset set. The live multi-select from the old React
-// homepage is replaced by build-time-highlighted examples so the page ships no
+// A representative, fixed preset set: what `ultracite init` writes after picking
+// React, Next.js and Vitest / Bun (in the prompt's order) — the same answers the
+// hero's terminal mock shows. Highlighted at build time, so the page ships no
 // client-side highlighter.
-const PRESETS = ["core", "next", "react", "vitest"];
+const PRESETS = ["core", "react", "next", "vitest"];
 
 const langFor = (lang: string): string => {
   if (lang === "json") {
@@ -37,10 +38,10 @@ const logos = [
 ---
 
 <div class="grid gap-8">
-  <span class="flex justify-center items-center -space-x-1">
+  <ul class="flex items-center justify-center -space-x-1">
     {
       logos.map((logo) => (
-        <span class="hp-tt inline-flex" tabindex="0">
+        <li class="hp-tt inline-flex">
           <img
             alt={logo.name}
             class="size-7 overflow-hidden rounded-full object-cover ring-2 ring-background md:size-10 lg:size-12"
@@ -48,24 +49,32 @@ const logos = [
             src={logo.src}
             width="48"
           />
-          <span data-tt>{logo.name}</span>
-        </span>
+          <span aria-hidden="true" data-tt>
+            {logo.name}
+          </span>
+        </li>
       ))
     }
-  </span>
+  </ul>
   <SectionIntro
     description="Hundreds of rules for your framework to optimize your JavaScript / TypeScript code, while still allowing you to customize when needed."
     maxWidth="max-w-xl"
-    title="Works with your favourite tools"
+    title="Works with your favorite tools"
   />
 
   <div class="flex flex-col items-center justify-center gap-3">
-    <span class="text-muted-foreground text-sm">I'm using</span>
-    <div class="flex flex-wrap items-center justify-center gap-2">
+    <span class="text-muted-foreground text-sm" id="hp-provider-label">
+      I'm using
+    </span>
+    <div
+      aria-labelledby="hp-provider-label"
+      class="flex flex-wrap items-center justify-center gap-2"
+      role="group"
+    >
       {
         ordered.map((provider) => (
           <button
-            aria-selected={provider.id === defaultProvider}
+            aria-pressed={String(provider.id === defaultProvider)}
             class="hp-provider flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
             data-provider={provider.id}
             type="button"
@@ -108,32 +117,46 @@ const logos = [
       ))
     }
     <p class="mt-3 text-center text-muted-foreground text-xs">
-      Example config with the <code>core</code>, Next.js, React and Vitest
-      presets.
+      What <code>ultracite init</code> writes with the React, Next.js and
+      Vitest presets.
     </p>
   </div>
 </div>
 
 <script>
-  const panels = document.querySelectorAll<HTMLElement>("[data-hp-panel]");
-  const providerButtons =
-    document.querySelectorAll<HTMLButtonElement>(".hp-provider");
-
   const showProvider = (id: string) => {
-    for (const button of providerButtons) {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      ".hp-provider",
+    )) {
       button.setAttribute(
-        "aria-selected",
+        "aria-pressed",
         String(button.dataset.provider === id),
       );
     }
-    for (const panel of panels) {
+    for (const panel of document.querySelectorAll<HTMLElement>(
+      "[data-hp-panel]",
+    )) {
       panel.hidden = panel.dataset.hpPanel !== id;
     }
   };
 
-  for (const button of providerButtons) {
-    button.addEventListener("click", () =>
-      showProvider(button.dataset.provider ?? ""),
-    );
-  }
+  // Runs now and on every `astro:page-load`: the client router executes this
+  // module once, so a homepage swapped back in after a navigation would
+  // otherwise get buttons with no listeners. `hpBound` prevents double binding.
+  const init = () => {
+    for (const button of document.querySelectorAll<HTMLButtonElement>(
+      ".hp-provider",
+    )) {
+      if (button.dataset.hpBound) {
+        continue;
+      }
+      button.dataset.hpBound = "true";
+      button.addEventListener("click", () =>
+        showProvider(button.dataset.provider ?? ""),
+      );
+    }
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
 </script>

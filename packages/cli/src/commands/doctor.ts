@@ -10,12 +10,11 @@ import packageJson from "../../package.json" with { type: "json" };
 import {
   canResolveUltracite,
   findInstalledPackage,
+  isYarnPnp,
 } from "../config-resolution";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
-import { findPathConfigFiles, resolvePathConfig } from "../path-config";
-import { assertPathConfigPresetsAvailable } from "../path-config-adapters";
-import { readPackageJsonSync } from "../schemas";
+import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
   biomeConfigNames,
@@ -96,7 +95,9 @@ const checkToolVersion = (
     }
 
     return {
-      message: `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
+      message: isYarnPnp()
+        ? `Could not determine the installed ${packageName} version — Yarn Plug'n'Play keeps packages out of node_modules, where doctor looks. Check that it satisfies ${range} with \`yarn why ${packageName}\``
+        : `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
       name,
       status: "warn",
     };
@@ -104,7 +105,7 @@ const checkToolVersion = (
 
   if (!valid(version)) {
     return {
-      message: `${packageName} reports an unrecognised version (${version}); Ultracite ${packageJson.version} was verified against ${range}`,
+      message: `${packageName} reports an unrecognized version (${version}); Ultracite ${packageJson.version} was verified against ${range}`,
       name,
       status: "warn",
     };
@@ -137,10 +138,44 @@ const checkToolVersion = (
 // Config checks
 // ---------------------------------------------------------------------------
 
+// A nested Biome config that extends "//" inherits the root config of the
+// monorepo, which is the one that has to extend Ultracite.
+const extendsBiomeRoot = (configPath: string): boolean => {
+  try {
+    const config = biomeConfigSchema.safeParse(
+      parse(readFileSync(configPath, "utf-8"))
+    );
+    return config.success && [config.data.extends].flat().includes("//");
+  } catch {
+    return false;
+  }
+};
+
+const findRootBiomeConfig = (): ReturnType<typeof findNearestFile> => {
+  let found = findNearestFile(biomeConfigNames);
+
+  while (found && extendsBiomeRoot(found.path)) {
+    const parentDir = path.dirname(found.dir);
+    const rootConfig =
+      parentDir === found.dir
+        ? null
+        : findNearestFile(biomeConfigNames, parentDir);
+
+    if (!rootConfig) {
+      return found;
+    }
+
+    found = rootConfig;
+  }
+
+  return found;
+};
+
 const checkBiomeConfig = (): DiagnosticCheck => {
   // Walk up like detectLinter (and Biome itself) so monorepo packages that
-  // inherit a root config don't fail the check.
-  const found = findNearestFile(biomeConfigNames);
+  // inherit a root config — directly or through a nested config extending
+  // "//" — don't fail the check.
+  const found = findRootBiomeConfig();
   const configPath = found?.path ?? null;
   const biomeConfigFile = found?.fileName ?? null;
 
@@ -274,87 +309,119 @@ const checkStylelintConfig = (): DiagnosticCheck => {
   };
 };
 
-const checkOxlintConfig = (): DiagnosticCheck => {
-  const found = findNearestFile(oxlintConfigNames);
+// Oxlint and oxfmt each load one config per directory and refuse to run when
+// two of their config files (JSON or TS) sit in the same directory.
+const findConflictingConfigs = (
+  dir: string,
+  names: readonly string[]
+): string[] => names.filter((name) => existsSync(path.join(dir, name)));
+
+interface OxcConfigCheck {
+  checkName: string;
+  // The base name of the TS config, e.g. "oxlint.config".
+  configName: string;
+  names: readonly string[];
+  // Text an Ultracite-based config contains.
+  presetMarker: string;
+  tool: string;
+}
+
+const checkOxcConfig = ({
+  checkName,
+  configName,
+  names,
+  presetMarker,
+  tool,
+}: OxcConfigCheck): DiagnosticCheck => {
+  const found = findNearestFile(names);
 
   if (!found) {
     return {
-      message: `No oxlint config file found (expected one of: ${oxlintConfigNames.join(", ")})`,
-      name: OXLINT_CHECK,
+      message: `No ${tool} config file found (expected one of: ${names.join(", ")})`,
+      name: checkName,
       status: "fail",
     };
   }
 
-  // detectLinter accepts .oxlintrc.json, so its presence must not hard-fail —
-  // but the ultracite setup uses oxlint.config.ts, so suggest migrating.
-  if (found.fileName !== "oxlint.config.ts") {
+  const tsName = `${configName}.ts`;
+  const mtsName = `${configName}.mts`;
+  const conflicting = findConflictingConfigs(found.dir, names);
+
+  if (conflicting.length > 1) {
+    const hasJsonConfig = conflicting.some((name) => name.endsWith("json"));
     return {
-      message: `${found.fileName} found — run \`ultracite init\` to migrate to oxlint.config.ts`,
-      name: OXLINT_CHECK,
+      message: `${conflicting.join(" and ")} are both present, so ${tool} won't load either — ${hasJsonConfig ? "run `ultracite init` to migrate the JSON config into the TS one" : "delete one of them"}`,
+      name: checkName,
+      status: "fail",
+    };
+  }
+
+  const packageType = readPackageJsonSync(
+    path.join(found.dir, "package.json")
+  )?.type;
+
+  // detectLinter accepts the JSON configs, so their presence must not
+  // hard-fail — but the Ultracite setup uses a TS config, so suggest
+  // migrating.
+  if (found.fileName !== tsName && found.fileName !== mtsName) {
+    return {
+      message: `${found.fileName} found — run \`ultracite init\` to migrate to ${packageType === "module" ? tsName : mtsName}`,
+      name: checkName,
       status: "warn",
+    };
+  }
+
+  // Node can't load ES module syntax from a .ts file in a CommonJS package.
+  if (found.fileName === tsName && packageType === "commonjs") {
+    return {
+      message: `${tsName} can't load because package.json sets "type": "commonjs" — run \`ultracite init\` to rename it to ${mtsName}`,
+      name: checkName,
+      status: "fail",
     };
   }
 
   try {
     const configContent = readFileSync(found.path, "utf-8");
 
-    if (configContent.includes("ultracite/oxlint/")) {
+    if (configContent.includes(presetMarker)) {
       return {
-        message: "oxlint.config.ts extends ultracite oxlint config",
-        name: OXLINT_CHECK,
+        message: `${found.fileName} extends ultracite ${tool} config`,
+        name: checkName,
         status: "pass",
       };
     }
 
     return {
-      message: "oxlint.config.ts exists but doesn't extend ultracite config",
-      name: OXLINT_CHECK,
+      message: `${found.fileName} exists but doesn't extend ultracite config`,
+      name: checkName,
       status: "warn",
     };
   } catch {
     return {
-      message: "Could not read oxlint.config.ts file",
-      name: OXLINT_CHECK,
+      message: `Could not read ${found.fileName} file`,
+      name: checkName,
       status: "fail",
     };
   }
 };
 
-const checkOxfmtConfig = (): DiagnosticCheck => {
-  const found = findNearestFile(oxfmtConfigNames);
+const checkOxlintConfig = (): DiagnosticCheck =>
+  checkOxcConfig({
+    checkName: OXLINT_CHECK,
+    configName: "oxlint.config",
+    names: oxlintConfigNames,
+    presetMarker: "ultracite/oxlint/",
+    tool: "oxlint",
+  });
 
-  if (!found) {
-    return {
-      message: "No oxfmt.config.ts file found",
-      name: OXFMT_CHECK,
-      status: "fail",
-    };
-  }
-
-  try {
-    const configContent = readFileSync(found.path, "utf-8");
-
-    if (configContent.includes("ultracite/oxfmt")) {
-      return {
-        message: "oxfmt.config.ts extends ultracite oxfmt config",
-        name: OXFMT_CHECK,
-        status: "pass",
-      };
-    }
-
-    return {
-      message: "oxfmt.config.ts exists but doesn't extend ultracite config",
-      name: OXFMT_CHECK,
-      status: "warn",
-    };
-  } catch {
-    return {
-      message: "Could not read oxfmt.config.ts file",
-      name: OXFMT_CHECK,
-      status: "fail",
-    };
-  }
-};
+const checkOxfmtConfig = (): DiagnosticCheck =>
+  checkOxcConfig({
+    checkName: OXFMT_CHECK,
+    configName: "oxfmt.config",
+    names: oxfmtConfigNames,
+    presetMarker: "ultracite/oxfmt",
+    tool: "oxfmt",
+  });
 
 // ---------------------------------------------------------------------------
 // Shared checks
@@ -390,6 +457,16 @@ const checkUltraciteDependency = (linter: Linter): DiagnosticCheck => {
   // resolved out of the project's node_modules by Biome/ESLint/Oxlint
   // themselves, so an uninstalled dependency fails there with an opaque error.
   if (!canResolveUltracite(linter)) {
+    // Plug'n'Play resolves packages without node_modules, so an Ultracite
+    // listed in package.json may well be installed.
+    if (version && isYarnPnp()) {
+      return {
+        message: `Ultracite is in package.json (${version}), but this project uses Yarn Plug'n'Play, so doctor can't confirm it's installed`,
+        name: ULTRACITE_DEP_CHECK,
+        status: "warn",
+      };
+    }
+
     return {
       message: version
         ? `Ultracite is in package.json (${version}) but isn't installed — run your package manager's install`
@@ -551,34 +628,6 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
   return checks;
 };
 
-/** Validate DSL files before check/fix needs to materialize a provider config. */
-export const validatePathConfigs = async (
-  root = process.cwd(),
-  configFiles = findPathConfigFiles(root),
-  linter?: Linter
-): Promise<DiagnosticCheck | null> => {
-  if (configFiles.length === 0) {
-    return null;
-  }
-  try {
-    const config = await resolvePathConfig(root, configFiles);
-    if (config && linter) {
-      assertPathConfigPresetsAvailable(linter, config);
-    }
-    return {
-      message: `Validated ${configFiles.length} path-scoped Ultracite config${configFiles.length === 1 ? "" : "s"}${config ? ` across ${config.scopes.length} preset scopes` : ""}`,
-      name: "Path-scoped Ultracite configuration",
-      status: "pass",
-    };
-  } catch (error) {
-    return {
-      message: error instanceof Error ? error.message : String(error),
-      name: "Path-scoped Ultracite configuration",
-      status: "fail",
-    };
-  }
-};
-
 // ---------------------------------------------------------------------------
 // Main doctor function
 // ---------------------------------------------------------------------------
@@ -632,30 +681,7 @@ export const reportDiagnostics = (
   return { failCount, passCount, warnCount };
 };
 
-const finishDoctor = (checks: DiagnosticCheck[]): void => {
-  const { failCount, warnCount } = reportDiagnostics(checks);
-
-  if (failCount > 0) {
-    log.error(
-      "Some checks failed. Run 'ultracite upgrade' for version mismatches or 'ultracite init' for configuration issues."
-    );
-    outro(DOCTOR_COMPLETE);
-    throw new Error(DOCTOR_FAILED);
-  }
-
-  if (warnCount > 0) {
-    log.warn(
-      "Some optional improvements available. Run 'ultracite init' to configure."
-    );
-    outro(DOCTOR_COMPLETE);
-    return;
-  }
-
-  log.success("Everything looks good!");
-  outro(DOCTOR_COMPLETE);
-};
-
-export const doctor = (): void | Promise<void> => {
+export const doctor = (): void => {
   intro(`Ultracite v${packageJson.version} Doctor`);
 
   const linter = detectLinter();
@@ -674,19 +700,27 @@ export const doctor = (): void | Promise<void> => {
   s.start("Running diagnostics...");
 
   const checks = runDiagnostics(linter);
-  const pathConfigFiles = findPathConfigFiles(process.cwd());
-  if (pathConfigFiles.length > 0) {
-    return validatePathConfigs(process.cwd(), pathConfigFiles, linter).then(
-      (pathConfigCheck) => {
-        if (pathConfigCheck) {
-          checks.push(pathConfigCheck);
-        }
-        s.stop("Diagnostics complete.");
-        finishDoctor(checks);
-      }
-    );
-  }
 
   s.stop("Diagnostics complete.");
-  finishDoctor(checks);
+
+  const { failCount, warnCount } = reportDiagnostics(checks);
+
+  if (failCount > 0) {
+    log.error(
+      "Some checks failed. Run `ultracite upgrade` for version mismatches or `ultracite init` for configuration issues."
+    );
+    outro(DOCTOR_COMPLETE);
+    throw new Error(DOCTOR_FAILED);
+  }
+
+  if (warnCount > 0) {
+    log.warn(
+      "Some checks have warnings. Run `ultracite init` to update the configuration."
+    );
+    outro(DOCTOR_COMPLETE);
+    return;
+  }
+
+  log.success("Everything looks good!");
+  outro(DOCTOR_COMPLETE);
 };

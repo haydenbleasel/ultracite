@@ -14,6 +14,27 @@ mock.module("node:fs", () => ({
   readFileSync: mock(() => "{}"),
 }));
 
+// Point biome.update at ./biome.jsonc with the given contents.
+const mockBiomeConfig = (
+  contents: string,
+  writeFile: (path: string, content: string) => Promise<void>
+) => {
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(contents)),
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      if (path !== "./biome.jsonc") {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(() => false),
+    readFileSync: mock(() => "{}"),
+  }));
+};
+
 describe("biome", () => {
   beforeEach(() => {
     mock.restore();
@@ -450,38 +471,75 @@ describe("biome", () => {
       ]);
     });
 
-    test("handles invalid JSON gracefully", async () => {
+    test("leaves a config it can't parse unchanged", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
-      mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
-          if (path === "./biome.jsonc") {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error("ENOENT"));
-        }),
-        readFile: mock(() => Promise.resolve("invalid json")),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock((path: string) => {
-          if (path === "./biome.jsonc") {
-            return;
-          }
-          throw new Error("ENOENT");
-        }),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
+      mockBiomeConfig(
+        '{\n  "linter": { "enabled": true },\n  "files": {',
+        mockWriteFile
+      );
 
       await biome.update();
 
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      const writtenContent = JSON.parse(writeCall[1]);
-      expect(writtenContent.extends).toContain("ultracite/biome/core");
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("leaves a nested config that extends the root config unchanged", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mockBiomeConfig(
+        '{\n  "root": false,\n  "extends": "//",\n  "linter": { "rules": { "style": { "noNonNullAssertion": "off" } } }\n}\n',
+        mockWriteFile
+      );
+
+      await biome.update({ frameworks: ["react"] });
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    });
+
+    test("turns a string extends into a list", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mockBiomeConfig('{ "extends": "./shared.json" }', mockWriteFile);
+
+      await biome.update();
+
+      const [[, written]] = mockWriteFile.mock.calls;
+      expect(JSON.parse(written).extends).toEqual([
+        "./shared.json",
+        "ultracite/biome/core",
+      ]);
+    });
+
+    test("keeps comments and unrelated settings when updating", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mockBiomeConfig(
+        [
+          "{",
+          "  // Shared settings for the app",
+          '  "extends": ["ultracite"],',
+          '  "files": { "includes": ["src/**"] } // only src',
+          "}",
+          "",
+        ].join("\n"),
+        mockWriteFile
+      );
+
+      await biome.update({ frameworks: ["react"] });
+
+      const [[, written]] = mockWriteFile.mock.calls;
+      expect(written).toContain("// Shared settings for the app");
+      expect(written).toContain("// only src");
+      expect(written).toContain('"files": { "includes": ["src/**"] }');
+      expect(written).toContain('"ultracite/biome/react"');
+      expect(written.indexOf('"$schema"')).toBeLessThan(
+        written.indexOf('"extends"')
+      );
     });
   });
 });

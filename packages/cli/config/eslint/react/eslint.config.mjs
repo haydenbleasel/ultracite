@@ -1,8 +1,8 @@
-/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import/no-extraneous-dependencies, id-length */
+/* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import eslintPrettier from "eslint-config-prettier";
 import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
+import reactPlugin from "eslint-plugin-react";
 import reactDoctor from "eslint-plugin-react-doctor";
 import reactHooks from "eslint-plugin-react-hooks";
 
@@ -21,7 +21,7 @@ const reactPrettierOverrides = Object.fromEntries(
   )
 );
 
-const config = [
+const react = [
   {
     files: ["**/*.jsx", "**/*.tsx"],
     languageOptions: {
@@ -33,7 +33,7 @@ const config = [
     },
     plugins: {
       "jsx-a11y": jsxA11y,
-      react,
+      react: reactPlugin,
       "react-doctor": reactDoctor,
       "react-hooks": reactHooks,
     },
@@ -64,4 +64,4 @@ const config = [
   },
 ];
 
-export default config;
+export default react;

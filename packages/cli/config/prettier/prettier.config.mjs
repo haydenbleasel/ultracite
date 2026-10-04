@@ -7,6 +7,9 @@ const config = {
   semi: true,
   singleQuote: false,
   tabWidth: 2,
+  // prettier-plugin-tailwindcss (added by `ultracite init`) also sorts class
+  // strings passed to these helpers, matching the Oxfmt and Biome presets.
+  tailwindFunctions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
   trailingComma: "es5",
   useTabs: false,
 };

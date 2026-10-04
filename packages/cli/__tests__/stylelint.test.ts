@@ -132,3 +132,99 @@ describe("stylelint linter", () => {
     });
   });
 });
+
+// A project whose files are given as path → contents; every other path is
+// missing. Returns the mocks that record writes, removals and warnings.
+const mockProject = (files: Record<string, string>) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  const rm = mock((_path: string) => Promise.resolve());
+  const warn = mock((_message: string) => {});
+  const has = (filePath: string) => String(filePath) in files;
+  const read = (filePath: string) => {
+    if (!has(filePath)) {
+      throw new Error("ENOENT");
+    }
+    return files[String(filePath)];
+  };
+
+  mock.module("node:fs/promises", () => ({
+    readFile: mock((filePath: string) => Promise.resolve(read(filePath))),
+    rm,
+    writeFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((filePath: string) => {
+      read(filePath);
+    }),
+    existsSync: mock(() => false),
+    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    mkdirSync: mock(() => {}),
+    readFileSync: mock(read),
+    realpathSync: mock((filePath: string) => filePath),
+  }));
+  mock.module("@clack/prompts", () => ({
+    log: { error: mock(), info: mock(), success: mock(), warn },
+  }));
+
+  return { rm, warn, writeFile };
+};
+
+describe("stylelint update keeps user content", () => {
+  test("leaves a config that builds on Ultracite's unchanged", async () => {
+    const project = mockProject({
+      "./stylelint.config.mjs": `import ultracite from "ultracite/stylelint";
+
+export default { ...ultracite, rules: { ...ultracite.rules, "color-named": null } };
+`,
+    });
+
+    await stylelint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("leaves a package.json key that extends Ultracite's config", async () => {
+    const packageJson = '{"stylelint": {"extends": ["ultracite/stylelint"]}}';
+    const project = mockProject({
+      "./package.json": packageJson,
+      "package.json": packageJson,
+    });
+
+    await stylelint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+  });
+
+  test("replaces a config that doesn't use Ultracite and says so", async () => {
+    const project = mockProject({
+      "./.stylelintrc.json": '{ "extends": "stylelint-config-standard" }',
+    });
+
+    await stylelint.update();
+
+    expect(project.writeFile.mock.calls[0]?.[0]).toBe("./stylelint.config.mjs");
+    expect(project.rm.mock.calls[0]?.[0]).toBe("./.stylelintrc.json");
+    expect(project.warn.mock.calls[0]?.[0]).toContain(
+      "Replaced .stylelintrc.json with stylelint.config.mjs"
+    );
+  });
+});
+
+describe("stylelint config precedence", () => {
+  test("replaces the .stylelintrc.json Stylelint loads before stylelint.config.mjs", async () => {
+    const project = mockProject({
+      "./.stylelintrc.json": '{ "extends": "stylelint-config-standard" }',
+      "./stylelint.config.mjs":
+        'export { default } from "ultracite/stylelint";\n',
+    });
+
+    await stylelint.update();
+
+    expect(project.rm.mock.calls.map(([filePath]) => filePath)).toEqual([
+      "./.stylelintrc.json",
+    ]);
+  });
+});

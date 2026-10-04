@@ -11,7 +11,7 @@ const STDERR_CAP = 8192;
 
 /** Adapter that runs the current runtime binary instead of a real agent CLI. */
 const scriptAdapter = (script: string): AgentAdapter => ({
-  buildArgs: () => ["-e", script],
+  args: ["-e", script],
   command: process.execPath,
   id: "claude",
   installHint: "",
@@ -99,13 +99,26 @@ describe("runAgent", () => {
     const [call] = execaMock.mock.calls;
     expect(call[0]).toBe("claude");
     expect(call[1]).toContain("-p");
-    expect(call[1]).toContain("prompt");
+    expect(call[1]).not.toContain("prompt");
     expect(call[2]).toMatchObject({
       cwd: "/some/project",
       forceKillAfterDelay: 1234,
+      input: "prompt",
       reject: false,
       timeout: 5678,
     });
+  });
+
+  test("hands a multi-line prompt to the agent intact on stdin", async () => {
+    // A `.cmd` shim on Windows would cut an argument at its first newline.
+    // The script echoes stdin back on stderr, which runAgent captures.
+    const prompt = "line one\nline two\nline three";
+    const result = await runAgent(
+      scriptAdapter("process.exitCode=1;process.stdin.pipe(process.stderr)"),
+      prompt
+    );
+
+    expect(result).toEqual({ ok: false, stderr: prompt, timedOut: false });
   });
 
   test("caps captured stderr at the tail", async () => {

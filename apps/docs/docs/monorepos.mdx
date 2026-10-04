@@ -9,55 +9,19 @@ Ultracite is designed to work out of the box with monorepos. Here's how to use i
 
 When initializing Ultracite, it will create the appropriate config file(s) in the root of your repository based on your chosen linter. This configuration applies to your entire monorepo.
 
-For repositories with multiple frameworks, add an `ultracite.config.ts` at the root. The root config is the shared baseline; path overrides apply only to matching files. `ultracite check` and `ultracite fix` resolve this file before invoking the selected provider.
-
-```ts title="ultracite.config.ts"
-import { defineConfig } from "ultracite/config";
-
-export default defineConfig({
-  extends: ["ultracite/core"],
-  overrides: [
-    {
-      files: ["apps/web/**/*"],
-      extends: ["ultracite/react", "ultracite/tanstack"],
-    },
-    { files: ["apps/docs/**/*"], extends: ["ultracite/astro"] },
-  ],
-});
-```
-
-Shared packages outside those paths receive only `core`. Provider-native configs are materialized under `node_modules/.cache/ultracite` when `check` or `fix` runs; the source config remains the single source of truth and is not rewritten.
-
-You can also place `ultracite.config.ts` at a workspace package root (the directory containing its `package.json`). Its scope is that directory and its descendants, and it can explicitly extend the root config:
-
-```ts title="apps/web/ultracite.config.ts"
-import { defineConfig } from "ultracite/config";
-
-export default defineConfig({
-  extends: [
-    "../../ultracite.config.ts",
-    "ultracite/react",
-    "ultracite/tanstack",
-  ],
-});
-```
-
-The root config is resolved before workspace configs. Within a config, `extends` is applied before its `overrides`; child configs are applied after their explicit parents. Sibling workspace configs do not inherit from one another. `ultracite doctor` validates these config files and reports invalid scopes or inheritance. `ultracite init --workspace-framework apps/web=react` can create centralized path overrides; add more framework selections with repeated `--workspace-framework <path>=<framework>` options. Projects without `ultracite.config.ts` keep using their provider-native config as before.
-
 ```
 my-turborepo/
 ├── apps/
 ├── packages/
 ├── turbo.json
-├── ultracite.config.ts (optional path-scoped presets)
-└── biome.jsonc (or eslint.config.mjs, oxlint.config.ts, etc.)
+└── oxlint.config.ts + oxfmt.config.ts (or .mts, biome.jsonc, eslint.config.mjs, etc.)
 ```
 
 ## Adding scripts
 
 Because Ultracite's underlying tools are fast (especially the Rust-based Biome and Oxlint), you can run a single root script rather than creating separate scripts in each package.
 
-Add the `check` and `fix` scripts to your root `package.json`:
+`ultracite init` adds `check` and `fix` scripts to your root `package.json`. If you set Ultracite up by hand, add them yourself:
 
 ```json title="package.json"
 {

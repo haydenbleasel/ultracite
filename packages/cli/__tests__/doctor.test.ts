@@ -1,4 +1,6 @@
 import { describe, expect, mock, spyOn, test } from "bun:test";
+import nodePath from "node:path";
+import process from "node:process";
 
 import { doctor, runDiagnostics } from "../src/commands/doctor";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
@@ -203,6 +205,45 @@ describe("doctor", () => {
     }));
 
     expect(() => doctor()).toThrow("Doctor checks failed");
+  });
+
+  test("checks the root config when a nested biome config extends //", () => {
+    const nestedDir = process.cwd();
+    const rootConfig = nodePath.join(
+      nodePath.dirname(nestedDir),
+      "biome.jsonc"
+    );
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock(
+        (filePath: string) =>
+          filePath === nodePath.join(nestedDir, "biome.json") ||
+          filePath === rootConfig
+      ),
+      readFileSync: mock((filePath: string) => {
+        if (filePath === rootConfig) {
+          return '{"extends": ["ultracite/biome/core"]}';
+        }
+        if (String(filePath).includes("biome.json")) {
+          return '{"root": false, "extends": "//"}';
+        }
+        if (isNodeModulesPath(String(filePath))) {
+          return ULTRACITE_PACKAGE_JSON;
+        }
+        return '{"devDependencies": {"ultracite": "1.0.0"}}';
+      }),
+    }));
+
+    const checks = runDiagnostics("biome");
+    const biomeCheck = checks.find(
+      (check) => check.name === "Biome configuration"
+    );
+
+    expect(biomeCheck?.status).toBe("pass");
+    expect(biomeCheck?.message).toBe(
+      "biome.jsonc extends ultracite/biome/core"
+    );
   });
 
   test("warns when biome config does not extend ultracite", () => {
@@ -450,6 +491,175 @@ describe("doctor", () => {
 
     doctor();
     consoleLogSpy.mockRestore();
+  });
+
+  test("fails when JSON and TS oxc configs sit side by side", () => {
+    const present = new Set([
+      ".oxlintrc.json",
+      "oxlint.config.ts",
+      ".oxfmtrc.json",
+      "oxfmt.config.ts",
+    ]);
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        present.has(nodePath.basename(String(filePath)))
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.includes("oxlint.config.ts")) {
+          return 'import core from "ultracite/oxlint/core";';
+        }
+        if (p.includes("oxfmt.config.ts")) {
+          return 'import ultracite from "ultracite/oxfmt";';
+        }
+        return "{}";
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        ".oxlintrc.json and oxlint.config.ts are both present"
+      ),
+      status: "fail",
+    });
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "oxfmt.config.ts and .oxfmtrc.json are both present"
+      ),
+      status: "fail",
+    });
+  });
+
+  test("finds .mts configs", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.mts", "oxfmt.config.mts"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) =>
+        String(filePath).includes("oxfmt")
+          ? 'import ultracite from "ultracite/oxfmt";'
+          : 'import core from "ultracite/oxlint/core";'
+      ),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: "oxlint.config.mts extends ultracite oxlint config",
+      status: "pass",
+    });
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message: "oxfmt.config.mts extends ultracite oxfmt config",
+      status: "pass",
+    });
+  });
+
+  test("fails a .ts config in a CommonJS package, which can't load it", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.ts", "oxfmt.config.mts", "package.json"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.endsWith("package.json")) {
+          return '{"type": "commonjs"}';
+        }
+        return p.includes("oxfmt")
+          ? 'import ultracite from "ultracite/oxfmt";'
+          : 'import core from "ultracite/oxlint/core";';
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Oxlint configuration")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        'oxlint.config.ts can\'t load because package.json sets "type": "commonjs"'
+      ),
+      status: "fail",
+    });
+  });
+
+  test("only warns about unverifiable packages in a Yarn Plug'n'Play project", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock((filePath: string) => {
+        if (!String(filePath).endsWith(".pnp.cjs")) {
+          throw new Error("ENOENT");
+        }
+      }),
+      existsSync: mock((filePath: string) =>
+        ["oxlint.config.ts", "oxfmt.config.ts", "package.json"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock((filePath: string) => {
+        const p = String(filePath);
+        if (p.includes("oxlint.config.ts")) {
+          return 'import core from "ultracite/oxlint/core";';
+        }
+        if (p.includes("oxfmt.config.ts")) {
+          return 'import ultracite from "ultracite/oxfmt";';
+        }
+        return '{"devDependencies": {"ultracite": "7.0.0"}}';
+      }),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "Ultracite dependency")
+    ).toMatchObject({
+      message: expect.stringContaining("Yarn Plug'n'Play"),
+      status: "warn",
+    });
+    expect(
+      checks.find((check) => check.name === "oxlint version")
+    ).toMatchObject({
+      message: expect.stringContaining("yarn why oxlint"),
+      status: "warn",
+    });
+    expect(checks.some((check) => check.status === "fail")).toBe(false);
+  });
+
+  test("suggests migrating a lone .oxfmtrc.json", () => {
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) =>
+        [".oxfmtrc.json", "oxlint.config.ts"].includes(
+          nodePath.basename(String(filePath))
+        )
+      ),
+      readFileSync: mock(() => 'import core from "ultracite/oxlint/core";'),
+    }));
+
+    const checks = runDiagnostics("oxlint");
+
+    expect(
+      checks.find((check) => check.name === "oxfmt configuration")
+    ).toMatchObject({
+      message:
+        ".oxfmtrc.json found — run `ultracite init` to migrate to oxfmt.config.mts",
+      status: "warn",
+    });
   });
 
   test("warns when oxlint config does not extend ultracite", () => {
@@ -792,11 +1002,11 @@ describe("doctor", () => {
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mock(() => ({ status: 0, stdout: "1.0.0" })),
     }));
-    // Nothing under node_modules: ultracite is declared but never installed,
-    // which is the state Biome fails on.
+    // Nothing under node_modules (and no Plug'n'Play manifest): ultracite is
+    // declared but never installed, which is the state Biome fails on.
     mock.module("node:fs", () => ({
       accessSync: mock((path: string) => {
-        if (isNodeModulesPath(String(path))) {
+        if (isNodeModulesPath(String(path)) || String(path).includes(".pnp.")) {
           throw new Error("ENOENT");
         }
       }),
@@ -931,11 +1141,20 @@ describe("doctor", () => {
   });
 
   test("checks oxlint and oxfmt versions for oxlint setups", () => {
-    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.81.0" });
+    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.82.0" });
 
     expect(versionCheck("oxlint", "oxlint")).toMatchObject({ status: "pass" });
     expect(versionCheck("oxlint", "oxfmt")).toMatchObject({
       message: expect.stringContaining("oxfmt 0.30.0 is older"),
+      status: "fail",
+    });
+  });
+
+  test("fails oxlint releases that can't load the presets", () => {
+    mockInstalledVersions({ oxlint: "1.81.0" });
+
+    expect(versionCheck("oxlint", "oxlint")).toMatchObject({
+      message: expect.stringContaining("oxlint 1.81.0 is older"),
       status: "fail",
     });
   });

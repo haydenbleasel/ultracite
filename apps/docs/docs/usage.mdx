@@ -1,6 +1,6 @@
 ---
 title: Usage
-description: This section covers how to use Ultracite on a day-to-day basis — covering the command-line interface, editor integration details, and typical workflows.
+description: How to use Ultracite day to day, covering the command-line interface, editor integration details, and typical workflows.
 ---
 
 ## IDE Integration
@@ -33,7 +33,9 @@ In many cases, the VS Code extension for your linter provides quick fix suggesti
 
 Ultracite comes with a CLI that wraps your chosen linter. The commands work the same regardless of which toolchain you're using.
 
-Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome). If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
+Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome), and flags that take a value keep it (e.g. `--tsconfig tsconfig.json` or `--only lint/suspicious/noDebugger`). If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
+
+Both `check` and `fix` accept any file paths: files your tools don't handle, like a `Dockerfile`, `.env`, or `README`, are skipped rather than failing the run, so you can pass a list of changed files as is. With the ESLint toolchain, a missing Stylelint install skips CSS linting with a warning instead of stopping the other tools.
 
 ### Checking Code
 
@@ -57,6 +59,8 @@ You can also apply unsafe fixes (fixes that may change code behavior):
 npx ultracite fix --unsafe
 ```
 
+With Biome, this applies Biome's unsafe fixes; with Oxlint, it runs `oxlint --fix-dangerously`. ESLint has no unsafe tier of fixes, so with the ESLint toolchain the flag is ignored with a warning.
+
 Some Biome fixes are intentionally marked unsafe because they can change runtime behavior. For example, Ultracite already enables Biome's `noSubstr` rule, but rewriting `substring()` or `substr()` to `slice()` only happens when you run `ultracite fix --unsafe`.
 
 ### AI-Powered Fixing
@@ -73,9 +77,9 @@ The flow: Ultracite runs its normal autofix pass, collects the remaining (unfixa
 Requirements and behavior:
 
 - `--claude` requires the [Claude Code CLI](https://claude.com/claude-code) (`npm install -g @anthropic-ai/claude-code`); `--codex` requires the [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`). Both must be authenticated.
-- Agents run non-interactively with scoped permissions: Claude Code uses `--permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --sandbox workspace-write`.
+- Agents run non-interactively with scoped permissions: Claude Code uses `claude -p --permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --sandbox workspace-write --skip-git-repo-check`, so it also works in a project that isn't a Git repository. The prompt is sent on stdin.
 - Each agent attempt gets a 5-minute budget, and the re-lint decides the outcome either way — even a failed or timed-out run gets credit for diagnostics it managed to clear. Whatever remains unfixed after the attempts is marked ✗ and the run continues with the next file.
-- Other flags combine as usual, e.g. `npx ultracite fix --claude --type-aware --unsafe`.
+- Other flags combine as usual, e.g. `npx ultracite fix --claude --type-aware --unsafe` on an Oxlint project.
 
 ### Type-Aware Linting
 
@@ -83,7 +87,7 @@ Type-aware linting enables deeper analysis rules that leverage TypeScript's type
 
 #### Biome
 
-For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables project/scanner rules like `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, and `noDeprecatedImports`.
+For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, and `useArraySortCompare`.
 
 ```bash title="Terminal"
 npx ultracite init --linter biome --type-aware
@@ -129,6 +133,8 @@ npx ultracite doctor
 
 Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt. A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
 
+For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both. Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's version.
+
 ### Upgrading
 
 Ultracite's presets are pinned to specific linter releases, so bumping `ultracite` on its own can leave the linter behind. The `upgrade` command moves both together:
@@ -141,9 +147,9 @@ It:
 
 1. Installs the latest `ultracite` release and prints a link to the release notes between your previous and new versions.
 2. Hands off to the freshly installed CLI, so the rest of the upgrade uses the versions that release was verified with rather than the ones baked into the older copy.
-3. Reinstalls your toolchain at those versions — Biome; ESLint, Prettier, Stylelint and every plugin the preset imports; or Oxlint and Oxfmt. Optional extras you've already opted into (framework plugins, Oxlint JS plugins, `oxlint-tsgolint`) are bumped too; ones you never installed are left alone.
+3. Reinstalls your toolchain at those versions — Biome; ESLint, Prettier, Stylelint, and the plugins for every Ultracite preset your `eslint.config.*` imports (installing any that are missing); or Oxlint and Oxfmt. Optional extras you've already opted into (other framework plugins, Oxlint JS plugins, `oxlint-tsgolint`) are bumped too; ones you never installed are left alone.
 4. Runs the same diagnostics as `doctor` and exits non-zero if anything still fails.
 
-Your configuration files are never rewritten. If the release notes call out preset changes, re-run `npx ultracite init` to regenerate them.
+Your configuration files are never rewritten. If the release notes call out preset changes, re-run `npx ultracite init` to regenerate Ultracite's parts of them; it keeps your own additions.
 
 Pass `--pm <pm>` to choose the package manager when it can't be detected from a lockfile.
