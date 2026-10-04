@@ -20,9 +20,9 @@ import {
 // ultracite/oxlint/next/js-plugins or ultracite/oxlint/tanstack/js-plugins
 // alongside this preset when using those frameworks.
 //
-// Install the plugins in your project, then extend the preset:
+// Install the base plugins in your project, then extend the preset:
 //
-//   npm install -D eslint-plugin-github eslint-plugin-jsdoc eslint-plugin-sonarjs eslint-plugin-tsdoc oxlint-plugin-react-doctor
+//   npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 //
 //   import { defineConfig } from "oxlint";
 //   import core from "ultracite/oxlint/core";
@@ -44,11 +44,58 @@ import {
 // the full preset — see its doc comment below.
 const jsPluginEntries = [
   { name: "github", specifier: "eslint-plugin-github" },
-  { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
   { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
-  { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
   { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
 ];
+
+// These documentation plugins are selected separately so upgrading a project
+// that already extends the full js-plugins preset does not add dependencies
+// without an explicit opt-in.
+const documentationPluginEntries = [
+  { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
+  { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
+];
+
+const documentationOverride = {
+  files: ["**/*.{ts,tsx,mts,cts}"],
+  rules: {
+    // Use the JS implementation only for the missing public API requirement;
+    // Oxlint's native jsdoc rules remain authoritative for comment completeness
+    // and do not require duplicated TS types.
+    "jsdoc-js/require-jsdoc": [
+      "error",
+      {
+        contexts: [
+          "ArrowFunctionExpression",
+          "ClassDeclaration",
+          "ClassExpression",
+          "FunctionDeclaration",
+          "FunctionExpression",
+          "MethodDefinition",
+          "TSEnumDeclaration",
+          "TSInterfaceDeclaration",
+          "TSTypeAliasDeclaration",
+        ],
+        publicOnly: true,
+        require: {
+          ArrowFunctionExpression: true,
+          ClassDeclaration: true,
+          ClassExpression: true,
+          FunctionDeclaration: true,
+          FunctionExpression: true,
+          MethodDefinition: true,
+        },
+      },
+    ],
+    "jsdoc/require-param": "error",
+    "jsdoc/require-param-description": "error",
+    "jsdoc/require-param-type": "off",
+    "jsdoc/require-returns": "error",
+    "jsdoc/require-returns-description": "error",
+    "jsdoc/require-returns-type": "off",
+    "tsdoc/syntax": "error",
+  },
+};
 
 // react-doctor 0.9.x rewrote its ported oxc/react-refresh rules (notably
 // only-export-components) with a stripped-down default mode: no framework
@@ -79,46 +126,6 @@ const config = defineConfig({
   // jsPluginSettings itself (see above).
   settings: jsPluginSettings,
   overrides: [
-    {
-      files: ["**/*.{ts,tsx,mts,cts}"],
-      rules: {
-        // Use the JS implementation only for the missing public API
-        // requirement; Oxlint's native jsdoc rules remain authoritative for
-        // comment completeness and do not require duplicated TS types.
-        "jsdoc-js/require-jsdoc": [
-          "error",
-          {
-            contexts: [
-              "ArrowFunctionExpression",
-              "ClassDeclaration",
-              "ClassExpression",
-              "FunctionDeclaration",
-              "FunctionExpression",
-              "MethodDefinition",
-              "TSEnumDeclaration",
-              "TSInterfaceDeclaration",
-              "TSTypeAliasDeclaration",
-            ],
-            publicOnly: true,
-            require: {
-              ArrowFunctionExpression: true,
-              ClassDeclaration: true,
-              ClassExpression: true,
-              FunctionDeclaration: true,
-              FunctionExpression: true,
-              MethodDefinition: true,
-            },
-          },
-        ],
-        "jsdoc/require-param": "error",
-        "jsdoc/require-param-description": "error",
-        "jsdoc/require-param-type": "off",
-        "jsdoc/require-returns": "error",
-        "jsdoc/require-returns-description": "error",
-        "jsdoc/require-returns-type": "off",
-        "tsdoc/syntax": "error",
-      },
-    },
     {
       files: [
         "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
@@ -584,7 +591,9 @@ export default config;
 // Returns a copy of this preset narrowed to the given plugin names ("github",
 // "jsdoc-js", "sonarjs", "tsdoc", "react-doctor"): only the selected
 // jsPlugins entries are loaded and only their rules (top-level and
-// per-override) are kept. Selecting "jsdoc-js" also retains the native
+// per-override) are kept. The documentation plugins are included only when
+// explicitly selected, so existing full-preset consumers gain no new
+// dependencies on upgrade. Selecting "jsdoc-js" also retains the native
 // "jsdoc/*" rules configured alongside the bridged public API rule.
 // `ultracite init` wires this into generated configs when a subset of the
 // plugins is chosen, so the generated file stays a one-line extend instead
@@ -610,15 +619,28 @@ export const selectJsPlugins = (pluginNames) => {
     );
   };
 
+  const overrides = (config.overrides ?? []).map((override) => ({
+    ...override,
+    rules: Object.fromEntries(
+      Object.entries(override.rules ?? {}).filter(isSelectedRule)
+    ),
+  }));
+
+  if (names.has("jsdoc-js") || names.has("tsdoc")) {
+    overrides.push({
+      ...documentationOverride,
+      rules: Object.fromEntries(
+        Object.entries(documentationOverride.rules).filter(isSelectedRule)
+      ),
+    });
+  }
+
   return defineConfig({
     ...config,
-    jsPlugins: jsPluginEntries.filter((plugin) => names.has(plugin.name)),
-    overrides: config.overrides?.map((override) => ({
-      ...override,
-      rules: Object.fromEntries(
-        Object.entries(override.rules ?? {}).filter(isSelectedRule)
-      ),
-    })),
+    jsPlugins: [...jsPluginEntries, ...documentationPluginEntries].filter(
+      (plugin) => names.has(plugin.name)
+    ),
+    overrides,
     rules: Object.fromEntries(
       Object.entries(config.rules ?? {}).filter(isSelectedRule)
     ),

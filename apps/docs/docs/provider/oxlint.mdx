@@ -53,7 +53,7 @@ export default defineConfig({
 
 ## ESLint Parity (Optional)
 
-The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), [`eslint-plugin-tsdoc`](https://github.com/microsoft/tsdoc/tree/main/eslint-plugin), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
+The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support. TSDoc syntax and public API documentation checks are available as separate, explicitly selected plugins below; they are not added to the full preset, so existing users do not gain new dependencies when upgrading.
 
 This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. You can enable it during setup: interactive `ultracite init` lets you choose individual JS plugins when you choose Oxlint, and non-interactive setup accepts package names via `--js-plugins`.
 
@@ -73,12 +73,16 @@ React Doctor's framework-specific rules are split into per-framework add-on pres
 If you're adding the preset manually instead of through `init`, install the plugins yourself:
 
 ```package-install
-npm install -D eslint-plugin-github eslint-plugin-jsdoc eslint-plugin-sonarjs eslint-plugin-tsdoc oxlint-plugin-react-doctor
+npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 ```
 
 ### TSDoc and Public API Documentation (Optional)
 
 Opt into `eslint-plugin-tsdoc` to validate TSDoc syntax in TypeScript files, and `eslint-plugin-jsdoc` to require documentation for public TypeScript APIs. The latter is registered as `jsdoc-js` because Oxlint reserves the `jsdoc` name for its native plugin. Ultracite continues to use Oxlint's native `jsdoc/*` rules for comment completeness; parameter and return types remain disabled so TypeScript types do not need to be repeated in comments.
+
+```package-install
+npm install -D eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
 
 ```package-install
 npx ultracite init --linter oxlint --js-plugins eslint-plugin-tsdoc eslint-plugin-jsdoc

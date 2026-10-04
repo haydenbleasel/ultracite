@@ -523,9 +523,7 @@ describe("oxlint js-plugins config", () => {
 
     expect(config.jsPlugins).toEqual([
       { name: "github", specifier: "eslint-plugin-github" },
-      { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
       { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
-      { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
       { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
     ]);
   });
@@ -569,7 +567,14 @@ describe("oxlint js-plugins config", () => {
     }
 
     // The full preset export is left untouched.
-    expect(full.jsPlugins?.length).toBe(5);
+    expect(full.jsPlugins?.length).toBe(3);
+    expect(
+      Object.keys(
+        full.overrides?.find((override: OxlintOverride) =>
+          override.files?.includes("**/*.{ts,tsx,mts,cts}")
+        )?.rules ?? {}
+      )
+    ).not.toContain("tsdoc/syntax");
   });
 
   test("selects TSDoc and public API documentation rules by plugin alias", async () => {
