@@ -9,6 +9,8 @@ const ultraciteSkillRepo = "haydenbleasel/ultracite";
 const ultraciteSkillName = "ultracite";
 
 interface MaybeInstallUltraciteSkillOptions {
+  /** Whether to ask when `shouldInstall` is unset. Defaults to `!quiet`. */
+  interactive?: boolean;
   packageManager: PackageManagerName;
   quiet?: boolean;
   shouldInstall?: boolean;
@@ -126,6 +128,7 @@ export const getUltraciteSkillInstallCommand = (
 ) => buildUltraciteSkillInstallCommand(packageManager);
 
 export const maybeInstallUltraciteSkill = async ({
+  interactive,
   packageManager,
   quiet = false,
   shouldInstall,
@@ -139,7 +142,8 @@ export const maybeInstallUltraciteSkill = async ({
   }
 
   const wantsInstall =
-    shouldInstall ?? (!quiet && (await promptToInstallUltraciteSkill()));
+    shouldInstall ??
+    ((interactive ?? !quiet) && (await promptToInstallUltraciteSkill()));
 
   if (!wantsInstall) {
     return false;

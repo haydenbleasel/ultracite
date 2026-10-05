@@ -1,5 +1,4 @@
 import packageJson from "../package.json" with { type: "json" };
-import { UltraciteSetupError } from "./config-resolution";
 import type { options } from "./data/options";
 
 type Linter = (typeof options.linters)[number];
@@ -56,24 +55,6 @@ export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "oxlint-plugin-react-doctor":
     packageJson.devDependencies["oxlint-plugin-react-doctor"],
 } satisfies Record<OxlintNpmJsPlugin, string>;
-
-// Widened view of the list so `.includes` can take an arbitrary string.
-const oxlintJsPluginNames: readonly string[] = oxlintJsPlugins;
-
-const isOxlintJsPlugin = (value: string): value is OxlintJsPlugin =>
-  oxlintJsPluginNames.includes(value);
-
-export const assertOxlintJsPlugin = (value: string): OxlintJsPlugin => {
-  if (isOxlintJsPlugin(value)) {
-    return value;
-  }
-
-  throw new UltraciteSetupError(
-    `Unsupported Oxlint JS plugin "${value}". Supported plugins: ${oxlintJsPlugins.join(
-      ", "
-    )}.`
-  );
-};
 
 // eslint-plugin-unicorn@72 and eslint-plugin-astro@3 require ESLint >= 10;
 // the whole preset is verified against ESLint 10.

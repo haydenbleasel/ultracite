@@ -22,7 +22,6 @@ import { hooks as hookIntegrations } from "./data/hooks";
 import { options } from "./data/options";
 import { providers } from "./data/providers";
 import {
-  assertOxlintJsPlugin,
   asDependencyVersionMap,
   biomeVersion,
   buildEslintDevDependencies,
@@ -152,6 +151,21 @@ interface RawInitializeFlags {
   pm?: string;
 }
 
+// Only Oxlint runs JS plugins, so on any other linter --js-plugins would be
+// left out without a word.
+const assertJsPluginsMatchLinter = (
+  linter: string | undefined,
+  jsPlugins: readonly string[] | undefined
+): void => {
+  if (linter === undefined || linter === "oxlint" || !jsPlugins?.length) {
+    return;
+  }
+
+  throw new UltraciteSetupError(
+    `--js-plugins only works with Oxlint, but the linter is "${linter}". Pass --linter oxlint to use JS plugins.`
+  );
+};
+
 export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
   assertAllowedValues("--linter", flags.linter, options.linters);
   assertAllowedValues("--pm", flags.pm, supportedPackageManagers);
@@ -168,6 +182,7 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
     options.integrations
   );
   assertAllowedValues("--js-plugins", flags["js-plugins"], oxlintJsPlugins);
+  assertJsPluginsMatchLinter(flags.linter, flags["js-plugins"]);
 };
 
 // Prompt hints for the JS plugins that need a word of explanation.
@@ -1056,23 +1071,47 @@ export const upsertHooks = async (
 };
 
 interface EditorSelections {
-  editorConfig: EditorSelection[];
+  editorConfig: (typeof options.editorConfigs)[number][];
   selectedEditorFiles: EditorFileTarget[];
 }
 
 interface AgentSelections {
-  agents: AgentSelection[] | undefined;
-  agentsOptions: Record<string, string>;
-  hooks: (typeof options.hooks)[number][] | undefined;
+  agents: (typeof options.agents)[number][];
   selectedAgentFiles: AgentFileTarget[];
 }
 
 interface InitializeSelections extends EditorSelections, AgentSelections {
   frameworks: Frameworks[];
+  hooks: (typeof options.hooks)[number][];
   integrations: (typeof options.integrations)[number][];
   jsPlugins: OxlintJsPlugin[];
   linter: Linter;
 }
+
+// Thrown when the user cancels a prompt, so initialize() stops before it
+// changes anything without each prompt's caller checking for it.
+class InitializeCancelledError extends Error {
+  override readonly name = "InitializeCancelledError";
+}
+
+const cancelInitialize = (): InitializeCancelledError => {
+  cancel(OPERATION_CANCELLED);
+  return new InitializeCancelledError(OPERATION_CANCELLED);
+};
+
+// Passing any of these answers init's questions up front, so every question
+// they leave out takes its default instead of prompting. That lets a
+// scaffolding CLI run init without a TTY. --linter and --js-plugins don't
+// count: they only settle the linter questions.
+const nonInteractiveFlags = [
+  "agents",
+  "editors",
+  "frameworks",
+  "hooks",
+  "integrations",
+  "pm",
+  "workspace-framework",
+] as const satisfies readonly (keyof InitializeFlags)[];
 
 const resolvePackageManager = async (
   opts: InitializeFlags,
@@ -1103,8 +1142,8 @@ const resolvePackageManager = async (
 
 const selectLinter = async (
   opts: InitializeFlags,
-  quiet: boolean
-): Promise<Linter | undefined> => {
+  interactive: boolean
+): Promise<Linter> => {
   if (opts.linter !== undefined) {
     return opts.linter;
   }
@@ -1112,22 +1151,20 @@ const selectLinter = async (
   // A project that already has a linter keeps it, so re-running init to add
   // agents or editors doesn't migrate the project to another linter.
   const defaultLinter = detectLinter() ?? "oxlint";
-  // If quiet mode or other CLI options are provided, don't prompt
-  const hasOtherCliOptions =
-    quiet ||
-    opts.pm ||
-    opts.editors ||
-    opts.agents ||
-    opts.hooks ||
-    opts.integrations !== undefined ||
-    opts.frameworks !== undefined ||
-    opts["workspace-framework"] !== undefined;
 
-  if (hasOtherCliOptions) {
+  // Only Oxlint runs JS plugins, so --js-plugins settles the question. On a
+  // project that uses another linter it's a mistake to report, not a reason
+  // to migrate the project.
+  if (opts["js-plugins"] !== undefined) {
+    assertJsPluginsMatchLinter(defaultLinter, opts["js-plugins"]);
     return defaultLinter;
   }
 
-  const linterResult = await select<Linter>({
+  if (!interactive) {
+    return defaultLinter;
+  }
+
+  const linter = await select<Linter>({
     initialValue: defaultLinter,
     message: "Which linter do you want to use?",
     options: [
@@ -1136,39 +1173,26 @@ const selectLinter = async (
       { label: "ESLint + Prettier + Stylelint", value: "eslint" },
     ],
   });
-
-  if (isCancelled(linterResult)) {
-    cancel(OPERATION_CANCELLED);
-    return;
+  if (isCancelled(linter)) {
+    throw cancelInitialize();
   }
-  return linterResult;
+  return linter;
 };
 
 const selectFrameworks = async (
   opts: InitializeFlags,
-  quiet: boolean
-): Promise<Frameworks[] | undefined> => {
+  interactive: boolean
+): Promise<Frameworks[]> => {
   if (opts.frameworks !== undefined) {
     return opts.frameworks;
   }
 
-  // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
-  // This allows programmatic usage without interactive prompts
-  const hasOtherCliOptions =
-    quiet ||
-    opts.pm ||
-    opts.editors ||
-    opts.agents ||
-    opts.hooks ||
-    opts.integrations !== undefined ||
-    opts["workspace-framework"] !== undefined;
-
-  if (hasOtherCliOptions) {
+  if (!interactive) {
     return [];
   }
 
   const detected = await detectFrameworks();
-  const frameworksResult = await multiselect<Frameworks>({
+  const frameworks = await multiselect<Frameworks>({
     initialValues: detected,
     message: "Which frameworks are you using (optional)?",
     options: [
@@ -1191,38 +1215,28 @@ const selectFrameworks = async (
     ],
     required: false,
   });
-
-  if (isCancelled(frameworksResult)) {
-    cancel(OPERATION_CANCELLED);
-    return;
+  if (isCancelled(frameworks)) {
+    throw cancelInitialize();
   }
-  return frameworksResult;
+  return frameworks;
 };
 
 const selectJsPlugins = async (
   opts: InitializeFlags,
   linter: Linter,
-  quiet: boolean
-): Promise<OxlintJsPlugin[] | undefined> => {
-  let jsPlugins = (opts["js-plugins"] ?? []).map(assertOxlintJsPlugin);
-  if (linter !== "oxlint" || opts["js-plugins"] !== undefined) {
-    return jsPlugins;
+  interactive: boolean
+): Promise<OxlintJsPlugin[]> => {
+  // A --js-plugins list on another linter was already rejected, by
+  // validateInitializeFlags or selectLinter.
+  if (linter !== "oxlint") {
+    return [];
   }
 
-  const hasOtherCliOptions =
-    quiet ||
-    opts.pm ||
-    opts.editors ||
-    opts.agents ||
-    opts.hooks ||
-    opts.integrations !== undefined ||
-    opts.frameworks !== undefined ||
-    opts["workspace-framework"] !== undefined;
-  if (hasOtherCliOptions) {
-    return jsPlugins;
+  if (opts["js-plugins"] !== undefined || !interactive) {
+    return opts["js-plugins"] ?? [];
   }
 
-  const jsPluginsResult = await multiselect<OxlintJsPlugin>({
+  const jsPlugins = await multiselect<OxlintJsPlugin>({
     message: "Which JS plugins would you like to add (optional)?",
     options: oxlintJsPlugins.map((jsPlugin) => ({
       hint: oxlintJsPluginHints[jsPlugin],
@@ -1231,165 +1245,152 @@ const selectJsPlugins = async (
     })),
     required: false,
   });
-  if (isCancelled(jsPluginsResult)) {
-    cancel(OPERATION_CANCELLED);
-    return;
+  if (isCancelled(jsPlugins)) {
+    throw cancelInitialize();
   }
-
-  jsPlugins = jsPluginsResult;
   return jsPlugins;
 };
 
-const selectEditorFiles = async (
-  opts: InitializeFlags,
-  quiet: boolean
-): Promise<EditorSelections | undefined> => {
-  let editorConfig = opts.editors;
-  let selectedEditorFiles: EditorFileTarget[] = [];
-  const editorFileTargets = getEditorFileTargets();
-  const universalEditorTarget = editorFileTargets.find(
-    (target) => target.id === "universal"
+// The universal target writes one file that several editors or agents read,
+// so choosing it also covers each of those on its own.
+const resolveUniversalTarget = <
+  Id extends string,
+  Target extends { id: string },
+>(
+  selection: readonly (Id | typeof UNIVERSAL)[],
+  targets: readonly Target[],
+  getCoveredIds: (target: Target) => readonly string[]
+) => {
+  const universalTarget = selection.includes(UNIVERSAL)
+    ? targets.find((target) => target.id === UNIVERSAL)
+    : undefined;
+  const coveredIds = new Set(
+    universalTarget ? getCoveredIds(universalTarget) : []
   );
 
-  if (!editorConfig) {
-    // Quiet mode defaults to no editor config
-    if (!quiet) {
-      const editorConfigResult = await multiselect({
-        message: "Which editors do you want to configure (recommended)?",
-        options: editorFileTargets.map((target) => ({
-          label: target.promptLabel,
-          value: target.id,
-        })),
-        required: false,
-      });
-
-      if (isCancelled(editorConfigResult)) {
-        cancel(OPERATION_CANCELLED);
-        return;
-      }
-
-      selectedEditorFiles = editorFileTargets.filter((target) =>
-        editorConfigResult.includes(target.id)
-      );
-    }
-    editorConfig = [];
-  } else if (editorConfig.includes("universal") && universalEditorTarget) {
-    selectedEditorFiles = [universalEditorTarget];
-    const coveredEditorIds = new Set(universalEditorTarget.editorIds);
-
-    editorConfig = editorConfig.filter(
-      (
-        editor
-      ): editor is Exclude<EditorSelection, "universal"> &
-        (typeof options.editorConfigs)[number] =>
-        editor !== "universal" && !coveredEditorIds.has(editor)
-    );
-  }
-
-  return { editorConfig, selectedEditorFiles };
+  return {
+    ids: selection.filter(
+      (id): id is Id => id !== UNIVERSAL && !coveredIds.has(id)
+    ),
+    targets: universalTarget ? [universalTarget] : [],
+  };
 };
 
-const selectAgentFilesAndHooks = async (
+const promptForTargets = async <
+  Target extends { id: string; promptLabel: string },
+>(
+  message: string,
+  targets: readonly Target[]
+): Promise<Target[]> => {
+  const selected = await multiselect({
+    message,
+    options: targets.map((target) => ({
+      label: target.promptLabel,
+      value: target.id,
+    })),
+    required: false,
+  });
+  if (isCancelled(selected)) {
+    throw cancelInitialize();
+  }
+
+  return targets.filter((target) => selected.includes(target.id));
+};
+
+const selectEditors = async (
   opts: InitializeFlags,
-  quiet: boolean
-): Promise<AgentSelections | undefined> => {
-  let { agents } = opts;
-  let selectedAgentFiles: AgentFileTarget[] = [];
-  let { hooks } = opts;
-  const agentFileTargets = getAgentFileTargets();
-  const universalAgentTarget = agentFileTargets.find(
-    (target) => target.id === "universal"
-  );
+  interactive: boolean
+): Promise<EditorSelections> => {
+  const targets = getEditorFileTargets();
 
-  // Build agent options from shared data
-  const agentsOptions = Object.fromEntries(
-    agentsData.map((agent) => [agent.id, agent.name])
-  );
-
-  if (!agents) {
-    if (quiet) {
-      // In quiet mode, default to no agents
-      agents = [];
-    } else {
-      const agentsResult = await multiselect({
-        message: "Which agent files do you want to add (optional)?",
-        options: agentFileTargets.map((target) => ({
-          label: target.promptLabel,
-          value: target.id,
-        })),
-        required: false,
-      });
-
-      if (isCancelled(agentsResult)) {
-        cancel(OPERATION_CANCELLED);
-        return;
-      }
-
-      selectedAgentFiles = agentFileTargets.filter((target) =>
-        agentsResult.includes(target.id)
-      );
-    }
-  } else if (agents.includes("universal") && universalAgentTarget) {
-    selectedAgentFiles = [universalAgentTarget];
-    const coveredAgentIds = new Set(universalAgentTarget.agentIds);
-
-    agents = agents.filter(
-      (
-        agent
-      ): agent is Exclude<AgentSelection, "universal"> &
-        (typeof options.agents)[number] =>
-        agent !== "universal" && !coveredAgentIds.has(agent)
+  if (opts.editors !== undefined) {
+    const universal = resolveUniversalTarget(
+      opts.editors,
+      targets,
+      (target) => target.editorIds
     );
+    return {
+      editorConfig: universal.ids,
+      selectedEditorFiles: universal.targets,
+    };
   }
 
-  // Build hooks options from supported hook integrations
-  const hooksOptions = Object.fromEntries(
-    hookIntegrations.map((hook) => [hook.id, hook.name])
-  );
+  return {
+    editorConfig: [],
+    selectedEditorFiles: interactive
+      ? await promptForTargets(
+          "Which editors do you want to configure (recommended)?",
+          targets
+        )
+      : [],
+  };
+};
 
-  if (!hooks) {
-    if (quiet) {
-      // In quiet mode, default to no hooks
-      hooks = [];
-    } else {
-      const hooksResult = await multiselect({
-        message: "Which agent hooks do you want to enable (optional)?",
-        options: Object.entries(hooksOptions).map(([value, label]) => ({
-          label,
-          value,
-        })),
-        required: false,
-      });
+const selectAgents = async (
+  opts: InitializeFlags,
+  interactive: boolean
+): Promise<AgentSelections> => {
+  const targets = getAgentFileTargets();
 
-      if (isCancelled(hooksResult)) {
-        cancel(OPERATION_CANCELLED);
-        return;
-      }
-
-      hooks = hooksResult;
-    }
+  if (opts.agents !== undefined) {
+    const universal = resolveUniversalTarget(
+      opts.agents,
+      targets,
+      (target) => target.agentIds
+    );
+    return { agents: universal.ids, selectedAgentFiles: universal.targets };
   }
 
-  return { agents, agentsOptions, hooks, selectedAgentFiles };
+  return {
+    agents: [],
+    selectedAgentFiles: interactive
+      ? await promptForTargets(
+          "Which agent files do you want to add (optional)?",
+          targets
+        )
+      : [],
+  };
+};
+
+const selectHooks = async (
+  opts: InitializeFlags,
+  interactive: boolean
+): Promise<(typeof options.hooks)[number][]> => {
+  if (opts.hooks !== undefined) {
+    return opts.hooks;
+  }
+
+  if (!interactive) {
+    return [];
+  }
+
+  const hooks = await multiselect({
+    message: "Which agent hooks do you want to enable (optional)?",
+    options: hookIntegrations.map((hook) => ({
+      label: hook.name,
+      value: hook.id,
+    })),
+    required: false,
+  });
+  if (isCancelled(hooks)) {
+    throw cancelInitialize();
+  }
+  return hooks;
 };
 
 const selectIntegrations = async (
   opts: InitializeFlags,
-  quiet: boolean
-): Promise<(typeof options.integrations)[number][] | undefined> => {
+  interactive: boolean
+): Promise<(typeof options.integrations)[number][]> => {
   if (opts.integrations !== undefined) {
     return opts.integrations;
   }
 
-  // If quiet mode or other CLI options are provided, default to empty array to avoid prompting
-  // This allows programmatic usage without interactive prompts
-  const hasOtherCliOptions =
-    quiet || opts.pm || opts.editors || opts.agents || opts.hooks;
-  if (hasOtherCliOptions) {
+  if (!interactive) {
     return [];
   }
 
-  const integrationsResult = await multiselect({
+  const integrations = await multiselect({
     message: "Would you like any of the following (optional)?",
     options: [
       { label: "Husky pre-commit hook", value: "husky" },
@@ -1399,52 +1400,29 @@ const selectIntegrations = async (
     ],
     required: false,
   });
-
-  if (isCancelled(integrationsResult)) {
-    cancel(OPERATION_CANCELLED);
-    return;
+  if (isCancelled(integrations)) {
+    throw cancelInitialize();
   }
-  return integrationsResult;
+  return integrations;
 };
 
 const selectInitializeOptions = async (
   opts: InitializeFlags,
-  quiet: boolean
-): Promise<InitializeSelections | undefined> => {
-  const linter = await selectLinter(opts, quiet);
-  if (!linter) {
-    return;
-  }
-
-  const frameworks = await selectFrameworks(opts, quiet);
-  if (!frameworks) {
-    return;
-  }
-
-  const jsPlugins = await selectJsPlugins(opts, linter, quiet);
-  if (!jsPlugins) {
-    return;
-  }
-
-  const editorSelections = await selectEditorFiles(opts, quiet);
-  if (!editorSelections) {
-    return;
-  }
-
-  const agentSelections = await selectAgentFilesAndHooks(opts, quiet);
-  if (!agentSelections) {
-    return;
-  }
-
-  const integrations = await selectIntegrations(opts, quiet);
-  if (!integrations) {
-    return;
-  }
+  interactive: boolean
+): Promise<InitializeSelections> => {
+  const linter = await selectLinter(opts, interactive);
+  const frameworks = await selectFrameworks(opts, interactive);
+  const jsPlugins = await selectJsPlugins(opts, linter, interactive);
+  const editorSelections = await selectEditors(opts, interactive);
+  const agentSelections = await selectAgents(opts, interactive);
+  const hooks = await selectHooks(opts, interactive);
+  const integrations = await selectIntegrations(opts, interactive);
 
   return {
     ...editorSelections,
     ...agentSelections,
     frameworks,
+    hooks,
     integrations,
     jsPlugins,
     linter,
@@ -1452,21 +1430,29 @@ const selectInitializeOptions = async (
 };
 
 interface InitializeContext {
-  opts: InitializeFlags;
+  install: boolean;
+  installSkill: boolean | undefined;
+  interactive: boolean;
   pmInfo: PackageManager;
   quiet: boolean;
   selections: InitializeSelections;
+  typeAware: boolean | undefined;
   workspaces: WorkspaceFrameworks[];
 }
 
 const setupLinting = async ({
-  opts,
+  install,
   pmInfo,
   quiet,
   selections,
+  typeAware,
   workspaces,
 }: InitializeContext): Promise<void> => {
   const { frameworks, jsPlugins, linter } = selections;
+
+  // Workspace frameworks need their plugins installed (and, for Prettier,
+  // configured) at the root, though their rules only apply in the
+  // workspace.
   const allFrameworks = [
     ...new Set([
       ...frameworks,
@@ -1480,9 +1466,9 @@ const setupLinting = async ({
   await installDependencies(
     pmInfo,
     linter,
-    !opts.skipInstall,
+    install,
     quiet,
-    opts["type-aware"],
+    typeAware,
     allFrameworks,
     jsPlugins
   );
@@ -1492,7 +1478,7 @@ const setupLinting = async ({
 
   // Create config for selected linter
   if (linter === "biome") {
-    await upsertBiomeConfig(frameworks, quiet, opts["type-aware"]);
+    await upsertBiomeConfig(frameworks, quiet, typeAware);
   }
   if (linter === "eslint") {
     await upsertEslintConfig(frameworks, quiet);
@@ -1520,67 +1506,61 @@ const setupSelectedFiles = async ({
 }: InitializeContext): Promise<void> => {
   const {
     agents,
-    agentsOptions,
+    editorConfig,
     hooks,
     linter,
     selectedAgentFiles,
     selectedEditorFiles,
   } = selections;
-  const pm: PackageManagerName = pmInfo.name;
+  const agentNames = Object.fromEntries(
+    agentsData.map((agent) => [agent.id, agent.name])
+  );
 
   await Promise.all(
     selectedEditorFiles.map((target) => upsertEditorFile(target, linter, quiet))
   );
 
   await Promise.all(
-    selections.editorConfig.map((editorId) =>
-      upsertEditorConfig(editorId, linter, quiet)
-    )
+    editorConfig.map((editorId) => upsertEditorConfig(editorId, linter, quiet))
   );
 
   await Promise.all(
     selectedAgentFiles.map((target) =>
-      upsertAgentFile(target, pm, linter, quiet)
+      upsertAgentFile(target, pmInfo.name, linter, quiet)
     )
   );
 
   await Promise.all(
-    (agents ?? []).map((ruleName) =>
-      upsertAgents(ruleName, agentsOptions[ruleName], pm, linter, quiet)
+    agents.map((agentId) =>
+      upsertAgents(agentId, agentNames[agentId], pmInfo.name, linter, quiet)
     )
   );
 
   await Promise.all(
-    (hooks ?? []).map((hookName) => upsertHooks(hookName, pm, linter, quiet))
+    hooks.map((hookName) => upsertHooks(hookName, pmInfo.name, linter, quiet))
   );
 };
 
 const setupIntegrations = async ({
-  opts,
+  install,
   pmInfo,
   quiet,
   selections,
 }: InitializeContext): Promise<void> => {
   const { integrations } = selections;
-  const pm: PackageManagerName = pmInfo.name;
 
   if (integrations.includes("husky")) {
     const useLintStaged = integrations.includes(LINT_STAGED);
-    await initializePrecommitHook(
-      pmInfo,
-      !opts.skipInstall,
-      quiet,
-      useLintStaged
-    );
+    await initializePrecommitHook(pmInfo, install, quiet, useLintStaged);
   }
   if (integrations.includes("lefthook")) {
-    await initializeLefthook(pmInfo, !opts.skipInstall, quiet);
+    await initializeLefthook(pmInfo, install, quiet);
   }
   if (integrations.includes(LINT_STAGED)) {
-    await initializeLintStaged(pmInfo, !opts.skipInstall, quiet);
+    await initializeLintStaged(pmInfo, install, quiet);
   }
   if (integrations.includes("pre-commit")) {
-    await initializePreCommit(pm, quiet);
+    await initializePreCommit(pmInfo.name, quiet);
   }
 };
 
@@ -1590,24 +1570,26 @@ const setupProject = async (context: InitializeContext): Promise<void> => {
   await setupIntegrations(context);
 };
 
-const completeInitialization = async (
-  pm: PackageManagerName,
-  opts: InitializeFlags,
-  quiet: boolean
-): Promise<void> => {
+const completeInitialization = async ({
+  installSkill,
+  interactive,
+  pmInfo,
+  quiet,
+}: InitializeContext): Promise<void> => {
   if (!quiet) {
     log.success("Successfully initialized Ultracite!");
   }
 
   const hasUltraciteSkill = await maybeInstallUltraciteSkill({
-    packageManager: pm,
+    interactive,
+    packageManager: pmInfo.name,
     quiet,
-    shouldInstall: opts.installSkill,
+    shouldInstall: installSkill,
   });
 
   if (!quiet && !hasUltraciteSkill) {
     log.info(
-      `You can install the Ultracite skill later with \`${getUltraciteSkillInstallCommand(pm)}\`.`
+      `You can install the Ultracite skill later with \`${getUltraciteSkillInstallCommand(pmInfo.name)}\`.`
     );
   }
 };
@@ -1624,15 +1606,26 @@ export const initialize = async (flags?: InitializeFlags) => {
     validateInitializeFlags(opts);
     const workspaces = parseWorkspaceFrameworks(opts["workspace-framework"]);
     const pmInfo = await resolvePackageManager(opts, quiet);
-    const selections = await selectInitializeOptions(opts, quiet);
-    if (!selections) {
+    const interactive =
+      !quiet && nonInteractiveFlags.every((flag) => opts[flag] === undefined);
+    const selections = await selectInitializeOptions(opts, interactive);
+    const context: InitializeContext = {
+      install: !opts.skipInstall,
+      installSkill: opts.installSkill,
+      interactive,
+      pmInfo,
+      quiet,
+      selections,
+      typeAware: opts["type-aware"],
+      workspaces,
+    };
+
+    await setupProject(context);
+    await completeInitialization(context);
+  } catch (error) {
+    if (error instanceof InitializeCancelledError) {
       return;
     }
-
-    const context = { opts, pmInfo, quiet, selections, workspaces };
-    await setupProject(context);
-    await completeInitialization(pmInfo.name, opts, quiet);
-  } catch (error) {
     // Setup errors are reported by the CLI entry point as a plain message.
     if (!quiet && !(error instanceof UltraciteSetupError)) {
       const message = error instanceof Error ? error.message : "Unknown error";

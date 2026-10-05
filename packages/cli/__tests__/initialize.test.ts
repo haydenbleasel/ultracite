@@ -102,6 +102,72 @@ mock.module("@clack/prompts", () => ({
   })),
 }));
 
+const CANCEL = Symbol.for("cancel");
+
+// Runs init with every prompt answered (Oxlint for the linter, nothing for
+// the rest) except the one whose message contains `cancelledPrompt`, which
+// the user cancels. Returns the spies that show whether setup went ahead.
+const runCancelledInit = async (
+  cancelledPrompt: string,
+  flags: Parameters<typeof initialize>[0]
+) => {
+  const mockCancel = mock(noop);
+  const mockSuccess = mock(noop);
+  const mockWriteFile = mock(() => Promise.resolve());
+  const answer = <Value>(prompt: { message: string }, value: Value) =>
+    prompt.message.includes(cancelledPrompt) ? CANCEL : Promise.resolve(value);
+
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve('{"name": "test"}')),
+    rm: mock(() => Promise.resolve()),
+    writeFile: mockWriteFile,
+  }));
+  mock.module("@clack/prompts", () => ({
+    cancel: mockCancel,
+    confirm: mock(() => Promise.resolve(false)),
+    intro: mock(noop),
+    isCancel: mock((value) => value === CANCEL),
+    log: {
+      error: mock(noop),
+      info: mock(noop),
+      success: mockSuccess,
+      warn: mock(noop),
+    },
+    multiselect: mock((prompt: { message: string }) => answer(prompt, [])),
+    outro: mock(noop),
+    select: mock((prompt: { message: string }) => answer(prompt, "oxlint")),
+    spinner: mock(() => ({
+      message: mock(noop),
+      start: mock(noop),
+      stop: mock(noop),
+    })),
+  }));
+  mock.module("nypm", () => ({
+    addDevDependency: mock(() => Promise.resolve()),
+    detectPackageManager: mock(() =>
+      Promise.resolve({ name: "npm", warnings: [] })
+    ),
+    dlxCommand: mock(() => "npx ultracite fix"),
+    removeDependency: mock(() => Promise.resolve()),
+  }));
+
+  await initialize(flags);
+
+  return { mockCancel, mockSuccess, mockWriteFile };
+};
+
+const expectStoppedBeforeSetup = ({
+  mockCancel,
+  mockSuccess,
+  mockWriteFile,
+}: Awaited<ReturnType<typeof runCancelledInit>>) => {
+  expect(mockCancel).toHaveBeenCalledWith("Operation cancelled.");
+  expect(mockWriteFile).not.toHaveBeenCalled();
+  expect(mockSuccess).not.toHaveBeenCalled();
+};
+
 describe("initialize", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
@@ -139,18 +205,14 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
-    // Pass all options except editors to trigger just the editor prompt
-    await initialize({
-      agents: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves the rest of init interactive.
+    await initialize({ linter: "biome", skipInstall: true });
 
-    expect(mockMultiselect).toHaveBeenCalled();
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Which editors do you want to configure (recommended)?",
+      })
+    );
   });
 
   test("shows agent file prompt when agents not specified", async () => {
@@ -186,16 +248,8 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
-    // Pass all options except agents to trigger just the agents prompt
-    await initialize({
-      editors: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves the rest of init interactive.
+    await initialize({ linter: "biome", skipInstall: true });
 
     expect(mockMultiselect).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -248,87 +302,48 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
-    // Pass all options except hooks to trigger just the hooks prompt
-    await initialize({
-      agents: [],
-      editors: [],
-      frameworks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves the rest of init interactive.
+    await initialize({ linter: "biome", skipInstall: true });
 
-    expect(mockMultiselect).toHaveBeenCalled();
+    expect(mockMultiselect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Which agent hooks do you want to enable (optional)?",
+      })
+    );
   });
 
   test("cancels when user cancels editor config prompt", async () => {
-    const mockCancel = mock(noop);
-    const mockMultiselect = mock(() => Symbol.for("cancel"));
-
-    mock.module("@clack/prompts", () => ({
-      cancel: mockCancel,
-      confirm: mock(() => Promise.resolve(false)),
-      intro: mock(noop),
-      isCancel: mock((val) => val === Symbol.for("cancel")),
-      log: {
-        error: mock(noop),
-        info: mock(noop),
-        success: mock(noop),
-        warn: mock(noop),
-      },
-      multiselect: mockMultiselect,
-      outro: mock(noop),
-      select: mock(() => Promise.resolve("biome")),
-      spinner: mock(() => ({
-        message: mock(noop),
-        start: mock(noop),
-        stop: mock(noop),
-      })),
-    }));
-
-    mock.module("nypm", () => ({
-      addDevDependency: mock(() => Promise.resolve()),
-      detectPackageManager: mock(() =>
-        Promise.resolve({ name: "npm", warnings: [] })
-      ),
-      dlxCommand: mock(() => "npx ultracite fix"),
-      removeDependency: mock(() => Promise.resolve()),
-    }));
-
-    // Pass all options except editors to trigger just the editor prompt (and cancel it)
-    await initialize({
-      agents: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
-
-    expect(mockCancel).toHaveBeenCalled();
+    expectStoppedBeforeSetup(
+      await runCancelledInit("editors", { linter: "biome", skipInstall: true })
+    );
   });
 
   test("cancels when user cancels agents prompt", async () => {
-    const mockCancel = mock(noop);
-    let callCount = 0;
-    const mockMultiselect = mock(() => {
-      callCount += 1;
-      // First call is for editors, second for agents
-      if (callCount === 1) {
-        // Return empty for editors
-        return Promise.resolve([]);
-      }
-      // Cancel for agents
-      return Symbol.for("cancel");
-    });
+    expectStoppedBeforeSetup(
+      await runCancelledInit("agent files", {
+        linter: "biome",
+        skipInstall: true,
+      })
+    );
+  });
+
+  test.each<Parameters<typeof initialize>[0]>([
+    { pm: "npm" },
+    { agents: [] },
+    { editors: [] },
+    { hooks: [] },
+    { integrations: [] },
+    { frameworks: [] },
+    { "workspace-framework": [] },
+  ])("skips every prompt when %p is passed", async (flags) => {
+    const mockMultiselect = mock(() => Promise.resolve([]));
+    const mockSelect = mock(() => Promise.resolve("biome"));
 
     mock.module("@clack/prompts", () => ({
-      cancel: mockCancel,
+      cancel: mock(noop),
       confirm: mock(() => Promise.resolve(false)),
       intro: mock(noop),
-      isCancel: mock((val) => val === Symbol.for("cancel")),
+      isCancel: mock(() => false),
       log: {
         error: mock(noop),
         info: mock(noop),
@@ -337,14 +352,13 @@ describe("initialize", () => {
       },
       multiselect: mockMultiselect,
       outro: mock(noop),
-      select: mock(() => Promise.resolve("biome")),
+      select: mockSelect,
       spinner: mock(() => ({
         message: mock(noop),
         start: mock(noop),
         stop: mock(noop),
       })),
     }));
-
     mock.module("nypm", () => ({
       addDevDependency: mock(() => Promise.resolve()),
       detectPackageManager: mock(() =>
@@ -354,17 +368,10 @@ describe("initialize", () => {
       removeDependency: mock(() => Promise.resolve()),
     }));
 
-    // Pass all options except editors and agents to trigger those prompts
-    await initialize({
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    await initialize({ ...flags, skipInstall: true });
 
-    expect(mockCancel).toHaveBeenCalled();
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockMultiselect).not.toHaveBeenCalled();
   });
 
   test("uses eslint linter when selected", async () => {
@@ -1205,16 +1212,8 @@ describe("initialize", () => {
       })),
     }));
 
-    await initialize({
-      agents: [],
-      editors: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves init interactive, so it would ask about the skill.
+    await initialize({ linter: "biome", skipInstall: true });
 
     expect(mockSelect).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -1297,16 +1296,8 @@ describe("initialize", () => {
       })),
     }));
 
-    await initialize({
-      agents: [],
-      editors: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves init interactive, so it would ask about the skill.
+    await initialize({ linter: "biome", skipInstall: true });
 
     expect(mockSelect).not.toHaveBeenCalled();
     expect(mockSpawn).toHaveBeenCalledWith(
@@ -1393,16 +1384,8 @@ describe("initialize", () => {
       })),
     }));
 
-    await initialize({
-      agents: [],
-      editors: [],
-      frameworks: [],
-      hooks: [],
-      integrations: [],
-      linter: "biome",
-      pm: "npm",
-      skipInstall: true,
-    });
+    // --linter alone leaves init interactive, so it would ask about the skill.
+    await initialize({ linter: "biome", skipInstall: true });
 
     expect(mockSelect).not.toHaveBeenCalled();
     expect(mockSpawn).toHaveBeenCalledWith(
@@ -3657,192 +3640,35 @@ describe("helper functions", () => {
 
   describe("interactive prompts", () => {
     test("cancels when user cancels linter prompt in fully interactive mode", async () => {
-      const mockCancel = mock(noop);
-
-      mock.module("@clack/prompts", () => ({
-        cancel: mockCancel,
-        confirm: mock(() => Promise.resolve(false)),
-        intro: mock(noop),
-        isCancel: mock((val) => val === Symbol.for("cancel")),
-        log: {
-          error: mock(noop),
-          info: mock(noop),
-          success: mock(noop),
-          warn: mock(noop),
-        },
-        multiselect: mock(() => Promise.resolve([])),
-        outro: mock(noop),
-        select: mock(() => Symbol.for("cancel")),
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        removeDependency: mock(() => Promise.resolve()),
-      }));
-
-      // Fully interactive mode - no options at all triggers all prompts
-      await initialize({
-        skipInstall: true,
-      });
-
-      expect(mockCancel).toHaveBeenCalled();
+      expectStoppedBeforeSetup(
+        await runCancelledInit("linter", { skipInstall: true })
+      );
     });
 
     test("cancels when user cancels frameworks prompt in fully interactive mode", async () => {
-      const mockCancel = mock(noop);
-      // In fully interactive mode, frameworks is the first multiselect call
-      const mockMultiselect = mock(() => Symbol.for("cancel"));
+      expectStoppedBeforeSetup(
+        await runCancelledInit("frameworks", { skipInstall: true })
+      );
+    });
 
-      mock.module("@clack/prompts", () => ({
-        cancel: mockCancel,
-        confirm: mock(() => Promise.resolve(false)),
-        intro: mock(noop),
-        isCancel: mock((val) => val === Symbol.for("cancel")),
-        log: {
-          error: mock(noop),
-          info: mock(noop),
-          success: mock(noop),
-          warn: mock(noop),
-        },
-        multiselect: mockMultiselect,
-        outro: mock(noop),
-        select: mock(() => Promise.resolve("biome")),
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        removeDependency: mock(() => Promise.resolve()),
-      }));
-
-      // Fully interactive mode - no options except linter to skip select prompt
-      await initialize({
-        linter: "biome",
-        skipInstall: true,
-      });
-
-      expect(mockCancel).toHaveBeenCalled();
+    test("cancels when user cancels JS plugins prompt in fully interactive mode", async () => {
+      expectStoppedBeforeSetup(
+        await runCancelledInit("JS plugins", { skipInstall: true })
+      );
     });
 
     test("cancels when user cancels hooks prompt in fully interactive mode", async () => {
-      const mockCancel = mock(noop);
-      let multiselectCallCount = 0;
-      const mockMultiselect = mock(() => {
-        multiselectCallCount += 1;
-        // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4)
-        if (multiselectCallCount <= 3) {
-          return Promise.resolve([]);
-        }
-        // Cancel on hooks prompt
-        return Symbol.for("cancel");
-      });
-
-      mock.module("@clack/prompts", () => ({
-        cancel: mockCancel,
-        confirm: mock(() => Promise.resolve(false)),
-        intro: mock(noop),
-        isCancel: mock((val) => val === Symbol.for("cancel")),
-        log: {
-          error: mock(noop),
-          info: mock(noop),
-          success: mock(noop),
-          warn: mock(noop),
-        },
-        multiselect: mockMultiselect,
-        outro: mock(noop),
-        select: mock(() => Promise.resolve("biome")),
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        removeDependency: mock(() => Promise.resolve()),
-      }));
-
-      // Fully interactive mode - no options except linter to skip select prompt
-      await initialize({
-        linter: "biome",
-        skipInstall: true,
-      });
-
-      expect(mockCancel).toHaveBeenCalled();
+      expectStoppedBeforeSetup(
+        await runCancelledInit("agent hooks", { skipInstall: true })
+      );
     });
 
     test("cancels when user cancels integrations prompt in fully interactive mode", async () => {
-      const mockCancel = mock(noop);
-      let multiselectCallCount = 0;
-      const mockMultiselect = mock(() => {
-        multiselectCallCount += 1;
-        // In fully interactive mode: frameworks(1), editors(2), agents(3), hooks(4), integrations(5)
-        if (multiselectCallCount <= 4) {
-          return Promise.resolve([]);
-        }
-        // Cancel on integrations prompt
-        return Symbol.for("cancel");
-      });
-
-      mock.module("@clack/prompts", () => ({
-        cancel: mockCancel,
-        confirm: mock(() => Promise.resolve(false)),
-        intro: mock(noop),
-        isCancel: mock((val) => val === Symbol.for("cancel")),
-        log: {
-          error: mock(noop),
-          info: mock(noop),
-          success: mock(noop),
-          warn: mock(noop),
-        },
-        multiselect: mockMultiselect,
-        outro: mock(noop),
-        select: mock(() => Promise.resolve("biome")),
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      mock.module("nypm", () => ({
-        addDevDependency: mock(() => Promise.resolve()),
-        detectPackageManager: mock(() =>
-          Promise.resolve({ name: "npm", warnings: [] })
-        ),
-        dlxCommand: mock(() => "npx ultracite fix"),
-        removeDependency: mock(() => Promise.resolve()),
-      }));
-
-      // Fully interactive mode - no options except linter to skip select prompt
-      await initialize({
-        linter: "biome",
-        skipInstall: true,
-      });
-
-      expect(mockCancel).toHaveBeenCalled();
+      expectStoppedBeforeSetup(
+        await runCancelledInit("Would you like any of the following", {
+          skipInstall: true,
+        })
+      );
     });
 
     test("defaults options in quiet mode without prompting", async () => {
@@ -4046,10 +3872,102 @@ describe("init flag validation", () => {
         hooks: ["cursor"],
         integrations: ["husky", "lint-staged"],
         "js-plugins": ["anti-slop"],
-        linter: "eslint",
+        linter: "oxlint",
         pm: "bun",
       })
     ).not.toThrow();
+  });
+
+  test("rejects --js-plugins with a linter other than Oxlint", () => {
+    for (const linter of ["biome", "eslint"]) {
+      expect(() =>
+        validateInitializeFlags({ "js-plugins": ["anti-slop"], linter })
+      ).toThrow(
+        `--js-plugins only works with Oxlint, but the linter is "${linter}". Pass --linter oxlint to use JS plugins.`
+      );
+    }
+  });
+
+  test("rejects --js-plugins on a project that keeps another linter", async () => {
+    const mockSelect = mock(() => Promise.resolve("biome"));
+    const mockWriteFile = mock(() => Promise.resolve());
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mock(() => Promise.resolve()),
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", () => ({
+      ...quietPrompts(),
+      select: mockSelect,
+    }));
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+    mockDetectLinter.mockImplementation(() => "biome");
+
+    try {
+      const result = initialize({
+        "js-plugins": ["anti-slop"],
+        skipInstall: true,
+      });
+
+      await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
+      await expect(result).rejects.toThrow(
+        '--js-plugins only works with Oxlint, but the linter is "biome".'
+      );
+    } finally {
+      mockDetectLinter.mockImplementation(() => null);
+    }
+
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockWriteFile).not.toHaveBeenCalled();
+  });
+
+  test("uses Oxlint for --js-plugins without asking for a linter", async () => {
+    const mockSelect = mock(() => Promise.resolve("biome"));
+    const mockWriteFile = mock((_path: string, _content: string) =>
+      Promise.resolve()
+    );
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mock(() => Promise.resolve()),
+      writeFile: mockWriteFile,
+    }));
+    mock.module("@clack/prompts", () => ({
+      ...quietPrompts(),
+      select: mockSelect,
+    }));
+    mock.module("nypm", () => ({
+      addDevDependency: mock(() => Promise.resolve()),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+    }));
+
+    restoreFileSystemMock();
+    await initialize({ "js-plugins": ["anti-slop"], skipInstall: true });
+
+    expect(mockSelect).not.toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Which linter do you want to use?" })
+    );
+    expect(
+      mockWriteFile.mock.calls.some(
+        ([filePath, content]) =>
+          String(filePath).endsWith("oxlint.config.mts") &&
+          content.includes('"ultracite/oxlint/anti-slop"')
+      )
+    ).toBe(true);
   });
 
   test("keeps the detected linter when prompts are skipped", async () => {
