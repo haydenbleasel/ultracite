@@ -224,7 +224,12 @@ describe("getToolchainPackages", () => {
 
     const packages = getToolchainPackages(
       "oxlint",
-      new Set(["oxlint-tsgolint", "eslint-plugin-sonarjs"])
+      new Set([
+        "eslint-plugin-jsdoc",
+        "eslint-plugin-sonarjs",
+        "eslint-plugin-tsdoc",
+        "oxlint-tsgolint",
+      ])
     );
 
     expect(packages).toContain("oxlint@latest");
@@ -233,6 +238,12 @@ describe("getToolchainPackages", () => {
     expect(
       packages.some((pkg) => pkg.startsWith("eslint-plugin-sonarjs@"))
     ).toBe(true);
+    expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-jsdoc@"))).toBe(
+      true
+    );
+    expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-tsdoc@"))).toBe(
+      true
+    );
     expect(
       packages.some((pkg) => pkg.startsWith("eslint-plugin-github@"))
     ).toBe(false);

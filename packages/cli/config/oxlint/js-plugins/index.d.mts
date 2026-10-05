@@ -1,10 +1,20 @@
 import type { OxlintConfig } from "oxlint";
 
-declare const config: OxlintConfig;
+declare const config: OxlintConfigWithJsPlugins;
 
 export default config;
 
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+/** An Oxlint config whose `jsPlugins` is always set. */
+export type OxlintConfigWithJsPlugins = OxlintConfig & {
+  jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
+};
+
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
@@ -20,4 +30,4 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfig;
+) => OxlintConfigWithJsPlugins;

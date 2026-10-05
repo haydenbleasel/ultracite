@@ -31,7 +31,9 @@ export const oxlintJsPlugins = [
   "@shadcn/lint",
   "anti-slop",
   "eslint-plugin-github",
+  "eslint-plugin-jsdoc",
   "eslint-plugin-sonarjs",
+  "eslint-plugin-tsdoc",
   "oxlint-plugin-react-doctor",
 ] as const;
 
@@ -48,7 +50,9 @@ export const isOxlintNpmJsPlugin = (
 export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "@shadcn/lint": packageJson.devDependencies["@shadcn/lint"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
+  "eslint-plugin-jsdoc": packageJson.devDependencies["eslint-plugin-jsdoc"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
+  "eslint-plugin-tsdoc": packageJson.devDependencies["eslint-plugin-tsdoc"],
   "oxlint-plugin-react-doctor":
     packageJson.devDependencies["oxlint-plugin-react-doctor"],
 } satisfies Record<OxlintNpmJsPlugin, string>;
@@ -215,11 +219,15 @@ const eslintDevDependencyNames = new Set([
 
 export const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
-  eslint: eslintDevDependencyNames,
+  // Only the Oxlint setup installs eslint-plugin-tsdoc, but it's an ESLint
+  // plugin an ESLint config may load too, so ESLint setups don't prune it.
+  eslint: new Set([...eslintDevDependencyNames, "eslint-plugin-tsdoc"]),
   oxlint: new Set([
     "@shadcn/lint",
     "eslint-plugin-github",
+    "eslint-plugin-jsdoc",
     "eslint-plugin-sonarjs",
+    "eslint-plugin-tsdoc",
     "oxfmt",
     "oxlint",
     "oxlint-plugin-react-doctor",
