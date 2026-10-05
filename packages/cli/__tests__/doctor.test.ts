@@ -1134,6 +1134,15 @@ describe("doctor", () => {
     });
   });
 
+  test("fails eslint releases that can't load the presets", () => {
+    mockInstalledVersions({ eslint: "10.8.1", prettier: "3.8.1" });
+
+    expect(versionCheck("eslint", "eslint")).toMatchObject({
+      message: expect.stringContaining("eslint 10.8.1 is older"),
+      status: "fail",
+    });
+  });
+
   test("skips the optional stylelint version check when it isn't installed", () => {
     mockInstalledVersions({ eslint: "10.9.1", prettier: "3.8.1" });
 
