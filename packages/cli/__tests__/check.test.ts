@@ -268,7 +268,12 @@ describe("check", () => {
       detectLinter: mock(() => "eslint"),
     }));
     mockFileSystem({
-      [path.join(process.cwd(), "node_modules", ".bin", "stylelint.CMD")]: "",
+      [path.join(
+        process.cwd(),
+        "node_modules",
+        ".bin",
+        process.platform === "win32" ? "stylelint.CMD" : "stylelint"
+      )]: "",
     });
 
     try {

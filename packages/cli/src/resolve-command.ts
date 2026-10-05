@@ -2,6 +2,8 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
+type PathApi = Pick<typeof path.posix, "dirname" | "join" | "resolve">;
+
 export interface ResolveCommandOptions {
   cwd?: string;
   env?: NodeJS.ProcessEnv;
@@ -45,16 +47,20 @@ const getWindowsExtensions = (env: NodeJS.ProcessEnv): string[] =>
     .map((extension) => extension.trim())
     .filter((extension) => extension !== "");
 
-const ancestorBinDirs = (cwd: string, pathEntries: string[]): string[] => {
+const ancestorBinDirs = (
+  cwd: string,
+  pathEntries: string[],
+  pathApi: PathApi
+): string[] => {
   const dirs: string[] = [];
-  let current = path.resolve(cwd);
+  let current = pathApi.resolve(cwd);
 
   while (true) {
-    const bin = path.join(current, "node_modules", ".bin");
+    const bin = pathApi.join(current, "node_modules", ".bin");
     if (!pathEntries.includes(bin) && !dirs.includes(bin)) {
       dirs.push(bin);
     }
-    const parent = path.dirname(current);
+    const parent = pathApi.dirname(current);
     if (parent === current) {
       break;
     }
@@ -96,9 +102,10 @@ export const resolveCommand = (
   const cwd = options.cwd ?? process.cwd();
   const env = options.env ?? process.env;
   const platform = options.platform ?? process.platform;
+  const pathApi = platform === "win32" ? path.win32 : path.posix;
 
   if (hasSeparator(command, platform)) {
-    const base = path.resolve(cwd, command);
+    const base = pathApi.resolve(cwd, command);
     if (platform !== "win32") {
       return existsSync(base) ? base : undefined;
     }
@@ -113,15 +120,15 @@ export const resolveCommand = (
   const searchDirs =
     platform === "win32"
       ? [
-          path.resolve(cwd),
-          ...ancestorBinDirs(cwd, pathEntries),
+          pathApi.resolve(cwd),
+          ...ancestorBinDirs(cwd, pathEntries, pathApi),
           ...pathEntries,
         ]
-      : [...ancestorBinDirs(cwd, pathEntries), ...pathEntries];
+      : [...ancestorBinDirs(cwd, pathEntries, pathApi), ...pathEntries];
 
   if (platform !== "win32") {
     for (const directory of searchDirs) {
-      const candidate = path.join(directory, command);
+      const candidate = pathApi.join(directory, command);
       if (firstExisting([candidate]) !== undefined) {
         return candidate;
       }
@@ -131,7 +138,7 @@ export const resolveCommand = (
 
   const extensions = getWindowsExtensions(env);
   for (const directory of searchDirs) {
-    const base = path.join(directory, command);
+    const base = pathApi.join(directory, command);
     const match = firstExisting(
       extensions.map((extension) => `${base}${extension}`)
     );

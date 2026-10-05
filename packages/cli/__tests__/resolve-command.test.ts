@@ -11,8 +11,8 @@ const winEnv = (pathValue: string) => ({
 
 describe("resolve-command", () => {
   test("finds stylelint in an ancestor node_modules/.bin on Windows", () => {
-    const cwd = path.join("C:\\", "proj", "sub");
-    const binStylelint = path.join(
+    const cwd = path.win32.join("C:\\", "proj", "sub");
+    const binStylelint = path.win32.join(
       "C:\\",
       "proj",
       "node_modules",
@@ -58,8 +58,13 @@ describe("resolve-command", () => {
   });
 
   test("searches quoted PATH entries and case-insensitive Path on Windows", () => {
-    const cwd = path.join("C:\\", "proj");
-    const toolStylelint = path.join("C:\\", "my tools", "bin", "stylelint.CMD");
+    const cwd = path.win32.join("C:\\", "proj");
+    const toolStylelint = path.win32.join(
+      "C:\\",
+      "my tools",
+      "bin",
+      "stylelint.CMD"
+    );
     mockFileSystem({ [toolStylelint]: "" });
 
     try {
@@ -76,9 +81,14 @@ describe("resolve-command", () => {
   });
 
   test("prefers project binaries over PATH entries", () => {
-    const cwd = path.join("C:\\", "proj");
-    const localBin = path.join(cwd, "node_modules", ".bin", "stylelint.CMD");
-    const pathBin = path.join("C:\\", "tools", "bin", "stylelint.CMD");
+    const cwd = path.win32.join("C:\\", "proj");
+    const localBin = path.win32.join(
+      cwd,
+      "node_modules",
+      ".bin",
+      "stylelint.CMD"
+    );
+    const pathBin = path.win32.join("C:\\", "tools", "bin", "stylelint.CMD");
     mockFileSystem({ [localBin]: "", [pathBin]: "" });
 
     try {
@@ -95,8 +105,13 @@ describe("resolve-command", () => {
   });
 
   test("finds a bare executable on POSIX", () => {
-    const cwd = path.resolve("test-posix-proj");
-    const binStylelint = path.join(cwd, "node_modules", ".bin", "stylelint");
+    const cwd = "/test-posix-proj";
+    const binStylelint = path.posix.join(
+      cwd,
+      "node_modules",
+      ".bin",
+      "stylelint"
+    );
     mockFileSystem({ [binStylelint]: "" });
 
     try {
