@@ -190,6 +190,12 @@ const surfaces: Surface[] = [
     name: "next (TSX)",
     oxlintConfigs: ["core", "js-plugins", "react", "next", "next/js-plugins"],
   },
+  {
+    eslintConfigs: ["core", "gdp"],
+    file: "src/example.ts",
+    name: "gdp (TypeScript)",
+    oxlintConfigs: ["core", "js-plugins", "gdp"],
+  },
 ];
 
 const nativeRules = getNativeOxlintRules();

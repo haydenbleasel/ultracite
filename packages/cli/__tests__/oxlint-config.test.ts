@@ -17,6 +17,7 @@ import path from "node:path";
 import type { OxlintOverride } from "oxlint";
 
 import antiSlop from "../config/oxlint/anti-slop/index.mjs";
+import gdp from "../config/oxlint/gdp/index.mjs";
 import jsPlugins, {
   selectJsPlugins,
 } from "../config/oxlint/js-plugins/index.mjs";
@@ -355,6 +356,7 @@ describe("oxlint package exports", () => {
       ...selectJsPlugins(["github"]).jsPlugins,
       ...shadcn.jsPlugins,
       ...antiSlop.jsPlugins,
+      ...gdp.jsPlugins,
       ...nextJsPlugins.jsPlugins,
       ...tanstackJsPlugins.jsPlugins,
     ];
@@ -1103,6 +1105,117 @@ describe("oxlint shadcn config", () => {
     ]) {
       expect(flaggedBy(rule)).not.toContain("card.tsx");
       expect(flaggedBy(rule)).not.toContain("button.tsx");
+    }
+  });
+});
+
+describe("oxlint gdp config", () => {
+  test("declares the gdp-ts JS plugin shipped by @gdp-ts/core", async () => {
+    const config = await readOxlintConfig("gdp");
+
+    expect(config.jsPlugins).toEqual([
+      { name: "gdp-ts", specifier: "@gdp-ts/core/lint/plugin" },
+    ]);
+  });
+
+  test("configures every rule the plugin registers except the redundant no-any", async () => {
+    const config = await readOxlintConfig("gdp");
+    const mod = await import("@gdp-ts/core/lint/plugin");
+    const registered = Object.keys(mod.default.rules)
+      .map((name) => `gdp-ts/${name}`)
+      .toSorted();
+
+    const overrides: OxlintOverride[] = config.overrides ?? [];
+    const configured = new Set(
+      [config.rules ?? {}, ...overrides.map((override) => override.rules ?? {})]
+        .flatMap((rules) => Object.keys(rules))
+        .filter((name) => name.startsWith("gdp-ts/"))
+    );
+
+    // Core's typescript/no-explicit-any already bans `any` everywhere, so
+    // upstream's strict-mode no-any would only report each `any` twice.
+    expect([...configured].toSorted()).toEqual(
+      registered.filter((name) => name !== "gdp-ts/no-any")
+    );
+    for (const [name, severity] of Object.entries(config.rules ?? {})) {
+      expect(name.startsWith("gdp-ts/")).toBe(true);
+      expect(severity).toBe("error");
+    }
+  });
+
+  test("enables upstream strict mode outside the trusted modules", async () => {
+    const config = await readOxlintConfig("gdp");
+
+    expect(config.rules).toEqual({
+      "gdp-ts/no-define-proof": "error",
+      "gdp-ts/no-proof-assertion": "error",
+      "gdp-ts/no-type-assertion": "error",
+    });
+  });
+
+  test("lets trusted modules mint proofs and declare them as empty interfaces", async () => {
+    const config = await readOxlintConfig("gdp");
+    const overrides: OxlintOverride[] = config.overrides ?? [];
+    const proofs = overrides.find((override) =>
+      override.files.includes("**/proofs/**")
+    );
+
+    expect(proofs?.rules).toEqual({
+      "gdp-ts/no-define-proof": "off",
+      "gdp-ts/no-exported-prover": "error",
+      "gdp-ts/no-proof-assertion": "off",
+      "gdp-ts/no-type-assertion": "off",
+      "typescript/no-empty-interface": ["error", { allowSingleExtends: true }],
+      "typescript/no-empty-object-type": [
+        "error",
+        { allowInterfaces: "with-single-extends" },
+      ],
+    });
+  });
+
+  test("allows assertions in branded-id constructors", async () => {
+    const config = await readOxlintConfig("gdp");
+    const overrides: OxlintOverride[] = config.overrides ?? [];
+    const ids = overrides.find((override) =>
+      override.files.includes("**/lib/ids.ts")
+    );
+
+    expect(ids?.rules).toEqual({ "gdp-ts/no-type-assertion": "off" });
+  });
+
+  // Run oxlint for real with core + gdp loaded via a committed fixture and
+  // assert the plugin's diagnostics actually fire — a config that loads but
+  // silently registers nothing would pass the static checks.
+  test("gdp loads through oxlint and reports forged proofs", () => {
+    const { flaggedBy, output } = lintFixture("gdp-load", "src");
+
+    expect(output).not.toContain("Failed to parse oxlint configuration");
+    expect(output).not.toContain("Failed to load JS plugin");
+    for (const rule of [
+      "gdp-ts(no-define-proof)",
+      "gdp-ts(no-proof-assertion)",
+      "gdp-ts(no-type-assertion)",
+    ]) {
+      expect(flaggedBy(rule)).toContain("forge.ts");
+    }
+    expect(flaggedBy("gdp-ts(no-exported-prover)")).toEqual([
+      "user-is-admin.ts",
+    ]);
+  });
+
+  test("trusted-module and branded-id overrides carry through extends", () => {
+    const { flaggedBy } = lintFixture("gdp-load", "src");
+
+    // user-is-admin.ts calls defineProof, asserts, and declares its proof as
+    // an empty interface; ids.ts asserts a branded id. None may be reported.
+    for (const rule of [
+      "gdp-ts(no-define-proof)",
+      "gdp-ts(no-type-assertion)",
+      "typescript(no-empty-interface)",
+      "typescript(no-empty-object-type)",
+    ]) {
+      expect(flaggedBy(rule)).not.toContain("user-is-admin.ts");
+      expect(flaggedBy(rule)).not.toContain("ids.ts");
     }
   });
 });

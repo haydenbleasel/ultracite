@@ -20,7 +20,7 @@ declare const config: ${configType};
 export default config;
 `;
 
-// Presets that always ship plugins (js-plugins, shadcn, anti-slop and the
+// Presets that always ship plugins (js-plugins, shadcn, anti-slop, gdp and the
 // framework js-plugins add-ons) declare jsPlugins as non-null, so generated
 // configs can spread several of them onto the root config (#834).
 const oxlintConfigWithJsPluginsType = `OxlintConfig & {

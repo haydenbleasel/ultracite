@@ -244,6 +244,36 @@ export default defineConfig({
 
 Per-component policies (`contracts`), custom messages, and exceptions for external stylesheets are configured on the rules themselves — see the [`@shadcn/lint` documentation](https://github.com/shadcn-ui/lint/blob/main/docs/rules.md). `no-unknown-classes` asks your installed Tailwind v4 which classes exist; when Tailwind or the theme cannot be loaded it falls back to a bundled grammar and warns once.
 
+## Authorization Proofs with gdp-ts (Optional)
+
+Ultracite also ships an opt-in `gdp` preset for [gdp-ts](https://github.com/rauchg/gdp-ts), a TypeScript take on Ghosts of Departed Proofs. Sensitive functions demand a proof about their exact arguments (`UserIsProjectAdmin<U, P>`) that only a trusted module in `proofs/` can mint, so a skipped or mismatched authorization check is a compile error. TypeScript can't stop a proof being forged with `{} as UserIsProjectAdmin<U, P>`; these rules close that gap.
+
+The lint plugin ships inside `@gdp-ts/core`, so once your codebase uses gdp-ts there is nothing extra to install. Add the preset after core:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import gdp from "ultracite/oxlint/gdp";
+
+export default defineConfig({
+  extends: [core, gdp],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+The preset follows upstream's strict mode:
+
+| Rule | Applies | What it catches |
+| --- | --- | --- |
+| `gdp-ts/no-define-proof` | outside `proofs/` | Importing or calling `defineProof` to mint a proof outside a trusted module. |
+| `gdp-ts/no-proof-assertion` | outside `proofs/` | Type assertions to `Named`, `Proof`, or any type imported from a `proofs` path. |
+| `gdp-ts/no-type-assertion` | outside `proofs/` and `lib/ids.ts` | Every other type assertion except `as const`. The honest path never needs one. |
+| `gdp-ts/no-exported-prover` | inside `proofs/` | Exporting a prover, which would let any module mint the proof. |
+
+Upstream's strict-mode `no-any` is left off because core's `typescript/no-explicit-any` already bans `any` everywhere. Inside `proofs/`, `typescript/no-empty-interface` and `typescript/no-empty-object-type` allow an empty interface that extends a single type, which is how gdp-ts declares a proof (`interface UserIsProjectAdmin<U, P> extends Proof<"UserIsProjectAdmin", [U, P]> {}`). Core's `no-redeclare` stays on, so give the prover its own name (`const prover = defineProof("UserIsProjectAdmin")`) instead of reusing the proof interface's name as the upstream recipe does.
+
+The preset follows the upstream layout: trusted modules in `proofs/` and branded-id constructors in `lib/ids.ts`. For a different layout, add overrides with the same shape in your own config.
+
 ## Configuration Approach
 
 Ultracite's Oxlint configuration uses an **opt-out** approach. This means we explicitly enable rules from every category at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
@@ -290,7 +320,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-For extra ESLint parity, the optional **js-plugins** preset adds **github**, **sonarjs**, and **react-doctor** via Oxlint's JS plugin support. It also offers opt-in TSDoc syntax and public API documentation checks through **tsdoc** and **jsdoc-js**. See [ESLint Parity](#eslint-parity-optional) and [TSDoc and Public API Documentation](#tsdoc-and-public-api-documentation-optional) — these JS plugins are not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
+For extra ESLint parity, the optional **js-plugins** preset adds **github**, **sonarjs**, and **react-doctor** via Oxlint's JS plugin support. It also offers opt-in TSDoc syntax and public API documentation checks through **tsdoc** and **jsdoc-js**. See [ESLint Parity](#eslint-parity-optional) and [TSDoc and Public API Documentation](#tsdoc-and-public-api-documentation-optional) — these JS plugins are not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional) — and the optional **gdp** preset adds **gdp-ts** (from `@gdp-ts/core`) — see [Authorization Proofs](#authorization-proofs-with-gdp-ts-optional).
 
 ## Adding Third-Party Plugins
 

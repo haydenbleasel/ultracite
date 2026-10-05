@@ -93,7 +93,7 @@ config/stylelint/stylelint.config.mjs ->  "ultracite/stylelint"
 config/shared/ignores.mjs             ->  canonical ignore list for every tool
 ```
 
-Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `svelte`, `tanstack`, `vitest`, `vue`), and for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for biome `type-aware`.
+Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `svelte`, `tanstack`, `vitest`, `vue`), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for biome `type-aware`.
 
 ### Rules for changing rules
 
@@ -121,7 +121,7 @@ Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `
 
 ### Oxlint JS plugins
 
-`js-plugins` bridges `eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` through oxlint's `jsPlugins`. They are opt-in via `init --js-plugins` because they are much slower (issue #741 is why the benchmark exists). Their npm packages must be **root** devDependencies so a clean install can load `oxlint.config.ts`. `anti-slop` and `@shadcn/lint` are standalone presets extended directly, not through `selectJsPlugins`.
+`js-plugins` bridges `eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` through oxlint's `jsPlugins`. They are opt-in via `init --js-plugins` because they are much slower (issue #741 is why the benchmark exists). Their npm packages must be **root** devDependencies so a clean install can load `oxlint.config.ts`. `anti-slop`, `@shadcn/lint` and `gdp` are standalone presets extended directly, not through `selectJsPlugins`. `gdp` loads its plugin from `@gdp-ts/core`, which is a runtime library in user projects, so init must never install or prune it.
 
 ## The CLI (`packages/cli/src`)
 

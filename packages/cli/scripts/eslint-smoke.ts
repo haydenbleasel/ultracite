@@ -223,6 +223,61 @@ export const View = ({ name }: { readonly name: string }) => <p>{name}</p>;
     },
     presets: [],
   },
+  gdp: {
+    files: {
+      "src/forge.ts": {
+        content: `import { defineProof } from "@gdp-ts/core";
+
+import type { UserIsAdmin } from "./proofs/user-is-admin.ts";
+
+export const forged = {} as UserIsAdmin<"u">;
+export const sneaky = defineProof("Sneaky");
+`,
+        expect: [
+          "gdp-ts/no-define-proof",
+          "gdp-ts/no-proof-assertion",
+          "gdp-ts/no-type-assertion",
+        ],
+      },
+      "src/lib/ids.ts": {
+        content: `export type UserId = string & { readonly brand: "UserId" };
+
+export const toUserId = (id: string) => id as UserId;
+`,
+        expect: [],
+        forbid: ["gdp-ts/no-type-assertion"],
+      },
+      "src/projects.ts": {
+        // Sensitive functions take proofs they never read at runtime.
+        content: `import type { UserIsAdmin } from "./proofs/user-is-admin.ts";
+
+export const deleteProject = <U>(
+  id: string,
+  _proof: UserIsAdmin<U>
+): string => id;
+`,
+        expect: [],
+        forbid: ["@typescript-eslint/no-unused-vars"],
+      },
+      "src/proofs/user-is-admin.ts": {
+        content: `import { defineProof } from "@gdp-ts/core";
+import type { Proof } from "@gdp-ts/core";
+
+const prover = defineProof("UserIsAdmin");
+
+export interface UserIsAdmin<U> extends Proof<"UserIsAdmin", [U]> {}
+
+export { prover };
+`,
+        expect: ["gdp-ts/no-exported-prover"],
+        forbid: [
+          "@typescript-eslint/no-empty-object-type",
+          "gdp-ts/no-define-proof",
+        ],
+      },
+    },
+    presets: ["gdp"],
+  },
   jest: {
     files: {
       "src/sum.test.mts": {

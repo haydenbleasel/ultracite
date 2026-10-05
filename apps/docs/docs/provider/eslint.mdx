@@ -51,6 +51,19 @@ import next from "ultracite/eslint/next";
 export default [...core, ...react, ...next];
 ```
 
+## Authorization Proofs with gdp-ts (Optional)
+
+Ultracite also ships an opt-in `gdp` preset for [gdp-ts](https://github.com/rauchg/gdp-ts), which makes authorization checks visible to the type checker: sensitive functions demand a proof that only a trusted module in `proofs/` can mint. The lint plugin ships inside `@gdp-ts/core`, so once your codebase uses gdp-ts there is nothing extra to install. Spread the preset after core:
+
+```javascript title="eslint.config.mjs"
+import core from "ultracite/eslint/core";
+import gdp from "ultracite/eslint/gdp";
+
+export default [...core, ...gdp];
+```
+
+It matches the [Oxlint preset](/docs/provider/oxlint#authorization-proofs-with-gdp-ts-optional): upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. It also sets `@typescript-eslint/no-unused-vars` to ignore `_`-prefixed arguments, as Oxlint does by default, because sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`).
+
 ## Configuration Approach
 
 Ultracite's ESLint configuration uses an **opt-out** approach. This means we enable every non-deprecated rule from each plugin at the `error` level, then selectively disable or adjust rules that don't fit our opinionated defaults. This ensures maximum coverage while avoiding overly strict or conflicting rules.

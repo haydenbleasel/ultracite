@@ -33,6 +33,9 @@ export default defineConfig({
     // Deliberately violates the @shadcn/lint rules so the plugin load test
     // can assert the design-system diagnostics actually fire.
     "packages/cli/__tests__/fixtures/shadcn-load",
+    // Deliberately forges and leaks gdp-ts proofs so the plugin load test can
+    // assert the gdp diagnostics actually fire.
+    "packages/cli/__tests__/fixtures/gdp-load",
     // Deliberately contains missing docs and malformed TSDoc so the opt-in
     // public API and TSDoc rules can assert their diagnostics.
     "packages/cli/__tests__/fixtures/jsdoc-load",
