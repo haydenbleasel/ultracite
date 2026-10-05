@@ -1134,6 +1134,15 @@ describe("doctor", () => {
     });
   });
 
+  test("fails eslint releases that can't load the presets", () => {
+    mockInstalledVersions({ eslint: "10.8.1", prettier: "3.8.1" });
+
+    expect(versionCheck("eslint", "eslint")).toMatchObject({
+      message: expect.stringContaining("eslint 10.8.1 is older"),
+      status: "fail",
+    });
+  });
+
   test("skips the optional stylelint version check when it isn't installed", () => {
     mockInstalledVersions({ eslint: "10.9.1", prettier: "3.8.1" });
 
@@ -1141,7 +1150,7 @@ describe("doctor", () => {
   });
 
   test("checks oxlint and oxfmt versions for oxlint setups", () => {
-    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.82.0" });
+    mockInstalledVersions({ oxfmt: "0.30.0", oxlint: "1.86.0" });
 
     expect(versionCheck("oxlint", "oxlint")).toMatchObject({ status: "pass" });
     expect(versionCheck("oxlint", "oxfmt")).toMatchObject({
@@ -1151,10 +1160,10 @@ describe("doctor", () => {
   });
 
   test("fails oxlint releases that can't load the presets", () => {
-    mockInstalledVersions({ oxlint: "1.81.0" });
+    mockInstalledVersions({ oxlint: "1.85.0" });
 
     expect(versionCheck("oxlint", "oxlint")).toMatchObject({
-      message: expect.stringContaining("oxlint 1.81.0 is older"),
+      message: expect.stringContaining("oxlint 1.85.0 is older"),
       status: "fail",
     });
   });

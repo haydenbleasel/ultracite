@@ -46,6 +46,12 @@ const overrideRules = {
   "unicorn/no-nested-ternary": "off",
   "unicorn/no-null": "off",
   "unicorn/no-process-exit": "off",
+  // Also combine guards whose bodies repeat the same statements before the
+  // same exit. oxlint has no prefer-combined-guards, so this is ESLint-only.
+  "unicorn/prefer-combined-guards": [
+    "error",
+    { checkMultiStatementBodies: true },
+  ],
   "unicorn/prefer-global-this": "off",
   "unicorn/prefer-string-raw": "off",
   // Enforces Temporal over Date, but Temporal still lacks broad runtime

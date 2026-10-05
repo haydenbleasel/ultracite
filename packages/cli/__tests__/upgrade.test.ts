@@ -166,7 +166,7 @@ describe("getToolchainPackages", () => {
       new Set(["eslint-plugin-react", "react"])
     );
 
-    expect(packages).toContain("eslint@^10.0.0");
+    expect(packages).toContain("eslint@^10.9.0");
     expect(packages).toContain("prettier@^3.0.0");
     expect(packages).toContain("stylelint@^17.0.0");
     // Newer presets can require plugins an older setup never installed.
@@ -356,7 +356,7 @@ describe("upgrade", () => {
     expect(harness.findInstalledPackage).not.toHaveBeenCalled();
     expect(harness.addDevDependency).toHaveBeenCalledTimes(1);
     const [[packages]] = harness.addDevDependency.mock.calls;
-    expect(packages).toContain("eslint@^10.0.0");
+    expect(packages).toContain("eslint@^10.9.0");
     expect(
       packages.some((pkg: string) => pkg.startsWith("eslint-plugin-react@"))
     ).toBe(true);

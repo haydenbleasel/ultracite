@@ -634,10 +634,10 @@ describe("initialize", () => {
 
     expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
-    expect(installedPackages).toContain("eslint-plugin-jsdoc@^64.5.4");
-    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.1");
+    expect(installedPackages).toContain("eslint-plugin-jsdoc@^65.1.0");
+    expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.2");
     expect(installedPackages).toContain("eslint-plugin-tsdoc@^0.5.4");
-    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.14");
+    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.16");
     // anti-slop is vendored inside ultracite — nothing to install for it.
     expect(installedPackages.every((pkg) => !pkg.includes("anti-slop"))).toBe(
       true
@@ -2060,8 +2060,8 @@ describe("helper functions", () => {
 
       await installDependencies(npmPm, "eslint", true);
       expect(mockAddDep).toHaveBeenCalled();
-      expect(installedPackages).toContain("eslint@^10.0.0");
-      expect(installedPackages).toContain("@eslint/js@^10.0.0");
+      expect(installedPackages).toContain("eslint@^10.9.0");
+      expect(installedPackages).toContain("@eslint/js@^10.0.1");
       expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
       expect(installedPackages).not.toContain("eslint@latest");
     });
@@ -2115,7 +2115,7 @@ describe("helper functions", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       expect(
         writtenContents.some((content) =>
-          content.includes('"eslint": "^10.0.0"')
+          content.includes('"eslint": "^10.9.0"')
         )
       ).toBe(true);
       expect(
