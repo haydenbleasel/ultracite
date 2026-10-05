@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, setDefaultTimeout, test } from "bun:test";
 /**
  * Oxlint config rule conflict tests
  *
@@ -35,6 +35,15 @@ const readFileSync =
   (globalThis as { __realReadFileSync?: typeof _readFileSync })
     .__realReadFileSync ?? _readFileSync;
 
+// Many tests here spawn oxlint or load ESLint plugins in a subprocess, and a
+// cold JS plugin load on a Windows runner comes close to Bun's 5s default.
+// Fixture runs give up before the test does, so a hung oxlint fails naming
+// its fixture rather than as a bare test timeout.
+const SUBPROCESS_TIMEOUT_MS = 20_000;
+const TEST_TIMEOUT_MS = 30_000;
+
+setDefaultTimeout(TEST_TIMEOUT_MS);
+
 const readOxlintConfig = async (name: string) => {
   const configPath = path.join(import.meta.dirname, `../config/oxlint/${name}`);
   const mod = await import(configPath);
@@ -43,11 +52,19 @@ const readOxlintConfig = async (name: string) => {
 
 type OxlintRuleSeverity = "error" | "warn" | "off";
 
-// Runs oxlint over a committed fixture using the fixture's entry config and
-// returns the spawn result, the combined output, and the basenames flagged by
-// a given rule. oxlint resolves any JS plugin specifiers relative to the entry
-// config's directory, which walks up to the repo's node_modules.
-const lintFixture = (fixture: string, target = "src") => {
+const fixtureRuns = new Map<string, { exitCode: number; output: string }>();
+
+// Runs oxlint over a committed fixture using the fixture's entry config.
+// oxlint resolves any JS plugin specifiers relative to the entry config's
+// directory, which walks up to the repo's node_modules. Fixtures don't change
+// during a run, so each fixture and target is linted once.
+const runFixture = (fixture: string, target: string) => {
+  const key = `${fixture}/${target}`;
+  const cached = fixtureRuns.get(key);
+  if (cached) {
+    return cached;
+  }
+
   const cliDir = path.join(import.meta.dirname, "..");
   const oxlintBin = path.join(cliDir, "node_modules/.bin/oxlint");
   const fixtureDir = path.join(import.meta.dirname, "fixtures", fixture);
@@ -60,9 +77,27 @@ const lintFixture = (fixture: string, target = "src") => {
       "--format=unix",
       path.join(fixtureDir, target),
     ],
-    { cwd: cliDir }
+    { cwd: cliDir, timeout: SUBPROCESS_TIMEOUT_MS }
   );
-  const output = result.stdout.toString() + result.stderr.toString();
+  if (result.exitedDueToTimeout) {
+    throw new Error(
+      `oxlint did not finish linting fixtures/${key} within ${SUBPROCESS_TIMEOUT_MS}ms`
+    );
+  }
+
+  const run = {
+    exitCode: result.exitCode,
+    output: result.stdout.toString() + result.stderr.toString(),
+  };
+  fixtureRuns.set(key, run);
+
+  return run;
+};
+
+// Lints a fixture and returns oxlint's exit code, its combined output, and
+// the basenames flagged by a given rule.
+const lintFixture = (fixture: string, target = "src") => {
+  const { exitCode, output } = runFixture(fixture, target);
   const flaggedBy = (rule: string) =>
     output
       .split("\n")
@@ -70,7 +105,7 @@ const lintFixture = (fixture: string, target = "src") => {
       .map((line) => path.basename(line.split(":")[0] ?? ""))
       .toSorted();
 
-  return { flaggedBy, output, result };
+  return { exitCode, flaggedBy, output };
 };
 
 const isEnabled = (rule: OxlintRuleSeverity | undefined) =>
@@ -400,13 +435,13 @@ describe("oxlint core config", () => {
   });
 
   test("allows top-level returns in Astro frontmatter", () => {
-    const { output, result } = lintFixture(
+    const { exitCode, output } = lintFixture(
       "astro-prefer-module",
       "src/response.astro"
     );
 
     expect(output).not.toContain("unicorn(prefer-module)");
-    expect(result.exitCode).toBe(0);
+    expect(exitCode).toBe(0);
   });
 
   // prefer-module has no option to allow only `return`, so turning it off
@@ -689,12 +724,13 @@ describe("oxlint js-plugins config", () => {
   // can't catch this, so actually run oxlint with core + js-plugins loaded via
   // a committed fixture.
   test("js-plugins loads through oxlint with all bridged rules registered", () => {
-    const { output } = lintFixture("js-plugins-load", "sample.ts");
+    const { exitCode, output } = lintFixture("js-plugins-load", "sample.ts");
 
     expect(output).not.toContain("not found in plugin");
     expect(output).not.toContain("Failed to parse oxlint configuration");
     expect(output).not.toContain("Failed to load JS plugin");
-  }, 15_000);
+    expect(exitCode).toBe(0);
+  });
 
   test("enforces public TSDoc without requiring duplicated TS types", () => {
     const { flaggedBy, output } = lintFixture("jsdoc-load", "sample.ts");
