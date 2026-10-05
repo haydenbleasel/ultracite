@@ -56,11 +56,13 @@ export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
     packageJson.devDependencies["oxlint-plugin-react-doctor"],
 } satisfies Record<OxlintNpmJsPlugin, string>;
 
-// eslint-plugin-unicorn@72 and eslint-plugin-astro@3 require ESLint >= 10;
-// the whole preset is verified against ESLint 10.
+// The core preset sets no-unmodified-loop-condition's
+// checkConditionalExpressions option, which ESLint 10.9 added, so the peer
+// range starts there. @eslint/js is versioned separately from ESLint since 10
+// (its latest is 10.0.x), so it takes its own range.
 const supportedEslintVersion = toolchainPeerRanges.eslint;
 export const eslintCoreDevDependencies = {
-  "@eslint/js": supportedEslintVersion,
+  "@eslint/js": packageJson.devDependencies["@eslint/js"],
   "@typescript-eslint/eslint-plugin":
     packageJson.devDependencies["@typescript-eslint/eslint-plugin"],
   "@typescript-eslint/parser":

@@ -1,12 +1,12 @@
-diff --git a/dist/markdown-BMigo7Hm.js b/dist/markdown-BMigo7Hm.js
-index bc9037f6c0de5516b139d8cdb195b1e25cd33bc0..a73981bdbdeefa77f93379b8aa7434bbc2c04c57 100644
---- a/dist/markdown-BMigo7Hm.js
-+++ b/dist/markdown-BMigo7Hm.js
-@@ -4872,7 +4872,14 @@ function lu(e, t, r) {
+diff --git a/dist/markdown-gizI1LFO.js b/dist/markdown-gizI1LFO.js
+index 95a638402fa6f73b29ebb8d7a7ef229bee68a690..d2591cfd791ef417e39040f57120a2291eb4e830 100644
+--- a/dist/markdown-gizI1LFO.js
++++ b/dist/markdown-gizI1LFO.js
+@@ -4898,7 +4898,14 @@ function lu(e, t, r) {
  		case "sentence": return Oh(e, r);
  		case "word": return t.parser !== "mdx" ? zh(e, t) : Uh(e);
  		case "whitespace": {
--			let { next: a } = e, u = a && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(a.value) && !NE(e) && !(t.proseWrap === "preserve" && RE(e)) ? "never" : t.proseWrap;
+-			let { next: a } = e, u = a && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(a.value) && !RE(e) && !(t.proseWrap === "preserve" && ME(e)) ? "never" : t.proseWrap;
 +			let { next: a, previous: oxfmtFencePrev } = e;
 +			// Preserve line breaks that sit directly against a `:::` container
 +			// directive fence, so `proseWrap: "never"` keeps the opening/closing
@@ -14,7 +14,7 @@ index bc9037f6c0de5516b139d8cdb195b1e25cd33bc0..a73981bdbdeefa77f93379b8aa7434bb
 +			// breaks the directive). Ordinary prose still wraps per proseWrap.
 +			// See prettier/prettier#19040.
 +			let oxfmtIsFence = (w) => w != null && typeof w.value === "string" && w.value.startsWith(":::");
-+			let u = oxfmtIsFence(oxfmtFencePrev) || oxfmtIsFence(a) ? "preserve" : a && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(a.value) && !NE(e) && !(t.proseWrap === "preserve" && RE(e)) ? "never" : t.proseWrap;
++			let u = oxfmtIsFence(oxfmtFencePrev) || oxfmtIsFence(a) ? "preserve" : a && /^>|^(?:[*+-]|#{1,6}|\d+[).])$/.test(a.value) && !RE(e) && !(t.proseWrap === "preserve" && ME(e)) ? "never" : t.proseWrap;
  			return ou(e, n.value, u, !1, t);
  		}
  		case "emphasis": {
